@@ -13,14 +13,23 @@
   },
   "rail": {
     "tasks": "Tareas",
+    "meetingRecords": "Registros de reuniones",
     "messages": "Mensajes",
     "cloudDocs": "Documentos en la nube",
     "projects": "Proyectos",
-    "more": "Más",
-    "customerSupport": "Soporte",
-    "customerSupportTitle": "Contactar con soporte",
-    "customerSupportHint": "Escanee con WeChat para agregarnos a WeCom",
-    "customerSupportQrAlt": "Código QR de atención al cliente de WeCom"
+    "more": "Más"
+  },
+  "meetingRecords": {
+    "title": "Registros de reuniones",
+    "all": "Todos los registros",
+    "setup": "Preparar un nuevo registro",
+    "preview": "Vista previa de páginas",
+    "live": "Grabación en curso",
+    "detail": "Detalles posteriores",
+    "description": "Graba, revisa y organiza lo que realmente ocurrió en una reunión.",
+    "start": "Iniciar grabación",
+    "emptyTitle": "Aún no hay registros de reuniones",
+    "emptyDescription": "Las grabaciones, transcripciones y notas posteriores aparecerán aquí."
   },
   "cloudDocs": {
     "browse": {

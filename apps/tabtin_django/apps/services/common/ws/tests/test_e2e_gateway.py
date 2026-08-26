@@ -461,6 +461,29 @@ async def test_ping_exempt_from_rate_limit():
         await communicator.disconnect()
 
 
+@pytest.mark.asyncio
+async def test_asr_audio_uses_its_dedicated_stream_rate_limit():
+    """场景 3.3: ASR PCM 不被普通业务消息窗口误杀。"""
+    with _patch_auth():
+        communicator, consumer = await _create_authed_communicator()
+
+        _fill_rate_limit_window(consumer)
+
+        msg = _make_envelope(
+            "asr.stream.audio",
+            {"stream_id": "missing-stream", "data": "AA=="},
+            request_id="asr_after_limit",
+        )
+        await communicator.send_to(text_data=msg)
+        resp = await communicator.receive_from(timeout=5)
+        data = json.loads(resp)
+
+        assert data["type"] == "error"
+        assert data["payload"]["code"] == ERROR_SCHEMA_INVALID
+
+        await communicator.disconnect()
+
+
 # ===========================================================================
 # 场景 4: RLS 过滤端到端
 # ===========================================================================

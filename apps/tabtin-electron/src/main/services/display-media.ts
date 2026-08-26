@@ -21,34 +21,20 @@ export interface DesktopCapturerLike {
 }
 
 export interface DisplayMediaInstallOptions {
-  targetSession?: Pick<
-    Session,
-    'setDisplayMediaRequestHandler' | 'setPermissionRequestHandler' | 'setPermissionCheckHandler'
-  > | null
+  targetSession?: Pick<Session, 'setDisplayMediaRequestHandler' | 'setPermissionRequestHandler' | 'setPermissionCheckHandler'> | null
   desktopCapturerApi?: DesktopCapturerLike
   rendererUrl?: string
   trustedOrigins?: string[]
   isDev?: boolean
-  captureMode?: 'current-tab' | 'main-display'
+  captureMode?: 'current-tab' | 'main-display' | 'loopback-audio'
   allowScreenFallback?: boolean
   log?: DisplayMediaLogger
   platform?: NodeJS.Platform
 }
 
-const ALWAYS_ALLOW_PERMISSION_REQUESTS = new Set<PermissionRequestPermission>([
-  'fullscreen',
-  'pointerLock',
-  'keyboardLock',
-  'storage-access',
-  'top-level-storage-access',
-])
+const ALWAYS_ALLOW_PERMISSION_REQUESTS = new Set<PermissionRequestPermission>(['fullscreen', 'pointerLock', 'keyboardLock', 'storage-access', 'top-level-storage-access'])
 
-const ALWAYS_ALLOW_PERMISSION_CHECKS = new Set<PermissionCheckPermission>([
-  'fullscreen',
-  'pointerLock',
-  'storage-access',
-  'top-level-storage-access',
-])
+const ALWAYS_ALLOW_PERMISSION_CHECKS = new Set<PermissionCheckPermission>(['fullscreen', 'pointerLock', 'storage-access', 'top-level-storage-access'])
 
 const resolveLogger = (log?: DisplayMediaLogger): Required<DisplayMediaLogger> => ({
   info: log?.info ?? (() => {}),
@@ -89,19 +75,13 @@ export function normalizeOrigin(candidate?: string | null): string | null {
 const isLoopbackOrigin = (origin: string): boolean => {
   try {
     const url = new URL(origin)
-    return (
-      (url.protocol === 'http:' || url.protocol === 'https:') &&
-      (url.hostname === 'localhost' || url.hostname === '127.0.0.1')
-    )
+    return (url.protocol === 'http:' || url.protocol === 'https:') && (url.hostname === 'localhost' || url.hostname === '127.0.0.1')
   } catch {
     return false
   }
 }
 
-export function isTrustedDisplayMediaOrigin(
-  origin: string | null | undefined,
-  options: Pick<DisplayMediaInstallOptions, 'trustedOrigins' | 'rendererUrl' | 'isDev'> = {},
-): boolean {
+export function isTrustedDisplayMediaOrigin(origin: string | null | undefined, options: Pick<DisplayMediaInstallOptions, 'trustedOrigins' | 'rendererUrl' | 'isDev'> = {}): boolean {
   const normalized = normalizeOrigin(origin)
   if (!normalized) {
     return false
@@ -111,11 +91,7 @@ export function isTrustedDisplayMediaOrigin(
     return true
   }
 
-  const trusted = new Set(
-    [options.rendererUrl, ...(options.trustedOrigins ?? [])]
-      .map(item => normalizeOrigin(item))
-      .filter((item): item is string => Boolean(item)),
-  )
+  const trusted = new Set([options.rendererUrl, ...(options.trustedOrigins ?? [])].map((item) => normalizeOrigin(item)).filter((item): item is string => Boolean(item)))
 
   if (trusted.has(normalized)) {
     return true
@@ -124,11 +100,7 @@ export function isTrustedDisplayMediaOrigin(
   return options.isDev === true && isLoopbackOrigin(normalized)
 }
 
-export function resolvePermissionOrigin(args: {
-  securityOrigin?: string | null
-  requestingUrl?: string | null
-  webContents?: { getURL?: () => string; isDestroyed?: () => boolean } | null
-}): string | null {
+export function resolvePermissionOrigin(args: { securityOrigin?: string | null; requestingUrl?: string | null; webContents?: { getURL?: () => string; isDestroyed?: () => boolean } | null }): string | null {
   const direct = normalizeOrigin(args.securityOrigin) ?? normalizeOrigin(args.requestingUrl)
   if (direct) {
     return direct
@@ -141,24 +113,14 @@ export function resolvePermissionOrigin(args: {
   return null
 }
 
-export function shouldGrantPermissionRequest(args: {
-  permission: PermissionRequestPermission
-  details: PermissionRequestDetails
-  webContents?: { getURL?: () => string; isDestroyed?: () => boolean } | null
-  trustedOrigins?: string[]
-  rendererUrl?: string
-  isDev?: boolean
-}): boolean {
+export function shouldGrantPermissionRequest(args: { permission: PermissionRequestPermission; details: PermissionRequestDetails; webContents?: { getURL?: () => string; isDestroyed?: () => boolean } | null; trustedOrigins?: string[]; rendererUrl?: string; isDev?: boolean }): boolean {
   if (ALWAYS_ALLOW_PERMISSION_REQUESTS.has(args.permission)) {
     return true
   }
 
   // 网页唤起 bitbrowser: 等会走 openExternal；可信渲染源也不放行自定义协议
   if (args.permission === 'openExternal') {
-    const externalURL =
-      args.details && typeof args.details === 'object' && 'externalURL' in args.details
-        ? (args.details as { externalURL?: string }).externalURL
-        : undefined
+    const externalURL = args.details && typeof args.details === 'object' && 'externalURL' in args.details ? (args.details as { externalURL?: string }).externalURL : undefined
     return shouldAllowWebOpenExternal(externalURL)
   }
 
@@ -171,24 +133,13 @@ export function shouldGrantPermissionRequest(args: {
   return isTrustedDisplayMediaOrigin(origin, args)
 }
 
-export function shouldGrantPermissionCheck(args: {
-  permission: PermissionCheckPermission
-  requestingOrigin: string
-  details: PermissionCheckDetails
-  webContents?: { getURL?: () => string; isDestroyed?: () => boolean } | null
-  trustedOrigins?: string[]
-  rendererUrl?: string
-  isDev?: boolean
-}): boolean {
+export function shouldGrantPermissionCheck(args: { permission: PermissionCheckPermission; requestingOrigin: string; details: PermissionCheckDetails; webContents?: { getURL?: () => string; isDestroyed?: () => boolean } | null; trustedOrigins?: string[]; rendererUrl?: string; isDev?: boolean }): boolean {
   if (ALWAYS_ALLOW_PERMISSION_CHECKS.has(args.permission)) {
     return true
   }
 
   if (args.permission === 'openExternal') {
-    const externalURL =
-      args.details && typeof args.details === 'object' && 'externalURL' in args.details
-        ? (args.details as { externalURL?: string }).externalURL
-        : undefined
+    const externalURL = args.details && typeof args.details === 'object' && 'externalURL' in args.details ? (args.details as { externalURL?: string }).externalURL : undefined
     return shouldAllowWebOpenExternal(externalURL)
   }
 
@@ -201,33 +152,26 @@ export function shouldGrantPermissionCheck(args: {
   return isTrustedDisplayMediaOrigin(origin, args)
 }
 
-const pickPrimaryScreenSource = async (
-  desktopCapturerApi: DesktopCapturerLike,
-): Promise<Streams['video'] | undefined> => {
+const pickPrimaryScreenSource = async (desktopCapturerApi: DesktopCapturerLike): Promise<Streams['video'] | undefined> => {
   const sources = await desktopCapturerApi.getSources({
     types: ['screen'],
     fetchWindowIcons: false,
     thumbnailSize: { width: 0, height: 0 },
   })
 
-  const primary = sources.find(source => source.display_id) ?? sources[0]
+  const primary = sources.find((source) => source.display_id) ?? sources[0]
   if (!primary) {
     return undefined
   }
 
-  return {
-    id: primary.id,
-    name: primary.name,
-  }
+  // Electron validates that callback.video is the original
+  // DesktopCapturerSource object. Rebuilding it as a plain {id, name} object
+  // looks structurally correct to TypeScript but is rejected by Chromium with
+  // AbortError: Invalid capture constraints after a cold main-process start.
+  return primary
 }
 
-export async function resolveDisplayMediaStreams(
-  request: DisplayMediaRequest,
-  options: Pick<
-    DisplayMediaInstallOptions,
-    'captureMode' | 'allowScreenFallback' | 'desktopCapturerApi' | 'platform'
-  > = {},
-): Promise<Streams> {
+export async function resolveDisplayMediaStreams(request: DisplayMediaRequest, options: Pick<DisplayMediaInstallOptions, 'captureMode' | 'allowScreenFallback' | 'desktopCapturerApi' | 'platform'> = {}): Promise<Streams> {
   const captureMode = options.captureMode ?? 'current-tab'
   const streams: Streams = {}
 
@@ -238,6 +182,22 @@ export async function resolveDisplayMediaStreams(
     if (request.audioRequested) {
       streams.audio = request.frame
       streams.enableLocalEcho = true
+    }
+    return streams
+  }
+
+  if (request.frame && captureMode === 'loopback-audio') {
+    if (request.videoRequested) {
+      streams.video = request.frame
+    }
+    if (request.audioRequested) {
+      const platform = options.platform ?? process.platform
+      if (platform === 'win32' || platform === 'darwin') {
+        streams.audio = 'loopback'
+      } else {
+        streams.audio = request.frame
+        streams.enableLocalEcho = true
+      }
     }
     return streams
   }
@@ -256,7 +216,8 @@ export async function resolveDisplayMediaStreams(
   }
 
   if (request.audioRequested) {
-    if ((options.platform ?? process.platform) === 'win32') {
+    const platform = options.platform ?? process.platform
+    if (platform === 'win32' || platform === 'darwin') {
       streams.audio = 'loopback'
     } else if (request.frame) {
       streams.audio = request.frame
@@ -311,36 +272,39 @@ export function installDisplayMediaHandlers(options: DisplayMediaInstallOptions 
     callback(granted)
   })
 
-  targetSession.setDisplayMediaRequestHandler((request, callback) => {
-    const trusted = isTrustedDisplayMediaOrigin(request.securityOrigin, {
-      trustedOrigins: options.trustedOrigins,
-      rendererUrl: options.rendererUrl,
-      isDev: options.isDev,
-    })
+  targetSession.setDisplayMediaRequestHandler(
+    (request, callback) => {
+      const trusted = isTrustedDisplayMediaOrigin(request.securityOrigin, {
+        trustedOrigins: options.trustedOrigins,
+        rendererUrl: options.rendererUrl,
+        isDev: options.isDev,
+      })
 
-    if (!trusted) {
-      log.warn?.('[display-media] 拒绝不受信任来源的媒体捕获:', request.securityOrigin)
-      callback({})
-      return
-    }
-
-    void resolveDisplayMediaStreams(request, {
-      captureMode: options.captureMode,
-      allowScreenFallback: options.allowScreenFallback,
-      desktopCapturerApi: options.desktopCapturerApi,
-      platform: options.platform,
-    }).then((streams) => {
-      if (!streams.video && !streams.audio) {
-        log.warn?.('[display-media] 没有可授予的媒体流:', request.securityOrigin)
+      if (!trusted) {
+        log.warn?.('[display-media] 拒绝不受信任来源的媒体捕获:', request.securityOrigin)
+        callback({})
+        return
       }
-      callback(streams)
-    }).catch((error) => {
-      log.error?.('[display-media] 处理媒体捕获请求失败:', error)
-      callback({})
-    })
-  }, {
-    useSystemPicker: false,
-  })
+
+      void resolveDisplayMediaStreams(request, {
+        captureMode: options.captureMode,
+        allowScreenFallback: options.allowScreenFallback,
+        desktopCapturerApi: options.desktopCapturerApi,
+        platform: options.platform,
+      })
+        .then((streams) => {
+          if (!streams.video && !streams.audio) {
+            log.warn?.('[display-media] 没有可授予的媒体流:', request.securityOrigin)
+          }
+          callback(streams)
+        })
+        .catch((error) => {
+          log.error?.('[display-media] 处理媒体捕获请求失败:', error)
+          callback({})
+        })
+    },
+    { useSystemPicker: false }
+  )
 
   log.info?.('[display-media] 已安装 defaultSession 媒体捕获策略')
 }

@@ -2,14 +2,14 @@
 ASR streaming handler — asr.stream.start / asr.stream.audio / asr.stream.stop
 
 前端通过 Gateway WebSocket 发送音频数据，后端作为代理连接到
-字节跳动 WebSocket ASR，将识别结果实时推回前端。
+已配置的 Seed Speech WebSocket ASR，将识别结果实时推回前端。
 
 协议流程：
-  1. 前端发 asr.stream.start → 后端建立到 ByteDance 的 WS 连接
+  1. 前端发 asr.stream.start → 后端建立到 ASR Provider 的 WS 连接
      → 返回 asr.stream.started (含 stream_id)
   2. 前端发 asr.stream.audio (payload.data = base64 音频块)
      → 后端转发给 ByteDance
-     → ByteDance 返回识别结果
+     → Provider 返回识别结果
      → 后端推 asr.stream.event 给前端
   3. 前端发 asr.stream.stop → 后端发最后一包并关闭
      → 最终结果 asr.stream.done
@@ -19,7 +19,9 @@ from __future__ import annotations
 
 import asyncio
 import base64
+from collections import deque
 import logging
+import time
 import uuid
 from typing import Any, Dict, Optional
 
@@ -30,8 +32,6 @@ from apps.services.speech.exceptions import SpeechUpstreamError as _SpeechUpstre
 
 from apps.services.speech.asr.providers.bytedance.base import (
     build_audio_packet,
-    build_auth_headers,
-    build_full_client_request,
     new_request_id,
     parse_stream_event,
     parse_ws_binary_frame,
@@ -41,6 +41,7 @@ from ._base_stream import _BaseStreamSession, cleanup_streams_for_consumer
 from ..protocol import (
     ERROR_CONNECTION_LIMIT,
     ERROR_PERMISSION_DENIED,
+    ERROR_RATE_LIMITED,
     ERROR_SCHEMA_INVALID,
     ERROR_INTERNAL,
     build_envelope,
@@ -51,6 +52,9 @@ logger = logging.getLogger(__name__)
 _active_streams: dict[str, "_ASRStreamSession"] = {}
 _MAX_CONCURRENT_STREAMS = 200
 _MAX_AUDIO_CHUNK_BYTES = 1 * 1024 * 1024  # 1 MB per chunk
+_AUDIO_RATE_WINDOW_SECONDS = 10.0
+_MAX_AUDIO_MESSAGES_PER_WINDOW = 200
+_MAX_AUDIO_BYTES_PER_WINDOW = 1_280_000
 _UPSTREAM_IDLE_TIMEOUT_CODE = 45000081
 
 _USER_FACING_ERRORS = {
@@ -63,6 +67,81 @@ _USER_FACING_ERRORS = {
 async def cleanup_asr_streams_for_consumer(channel_name: str) -> None:
     """Clean up all ASR stream sessions owned by a disconnecting consumer."""
     await cleanup_streams_for_consumer(_active_streams, channel_name, "ASR WS")
+
+
+def create_asr_config_check_handler(consumer):
+    """Return ASR configuration readiness without opening an upstream stream."""
+
+    async def handle_asr_config_check(envelope: Dict[str, Any]) -> None:
+        request_id = envelope["request_id"]
+        payload = envelope.get("payload", {})
+        provider = str(payload.get("provider") or "byteplus").strip().lower()
+
+        from apps.services.speech.asr.factory import (
+            ASRConfigError,
+            ASRCredentialError,
+            get_asr_service,
+        )
+
+        try:
+            service = await sync_to_async(get_asr_service)(
+                provider=provider,
+                mode="streaming",
+            )
+        except ASRCredentialError as exc:
+            logger.warning(
+                "[ASR Config] credential unavailable provider=%s reason=%s",
+                provider,
+                exc,
+            )
+            response = build_envelope(
+                "asr.config.status",
+                request_id,
+                {
+                    "ready": False,
+                    "provider": provider,
+                    "reason": "credential_error",
+                    "message": str(exc),
+                },
+            )
+        except ASRConfigError as exc:
+            logger.info("[ASR Config] not ready provider=%s reason=%s", provider, exc)
+            response = build_envelope(
+                "asr.config.status",
+                request_id,
+                {
+                    "ready": False,
+                    "provider": provider,
+                    "reason": "not_configured",
+                    "message": _USER_FACING_ERRORS["config"],
+                },
+            )
+        except Exception as exc:
+            logger.exception("[ASR Config] readiness check failed: %s", exc)
+            response = build_envelope(
+                "asr.config.status",
+                request_id,
+                {
+                    "ready": False,
+                    "provider": provider,
+                    "reason": "internal_error",
+                    "message": _USER_FACING_ERRORS["internal"],
+                },
+            )
+        else:
+            response = build_envelope(
+                "asr.config.status",
+                request_id,
+                {
+                    "ready": True,
+                    "provider": provider,
+                    "resource_id": service.resource_id,
+                    "ws_endpoint": service.ws_endpoint,
+                },
+            )
+        await consumer._send_envelope(response)
+
+    return handle_asr_config_check
 
 
 def create_asr_stream_handler(consumer):
@@ -216,6 +295,14 @@ def create_asr_stream_handler(consumer):
             )
             return
 
+        if not session.accept_audio_chunk(len(audio_bytes)):
+            await consumer._send_error(
+                request_id,
+                ERROR_RATE_LIMITED,
+                "too many ASR audio chunks, slow down",
+            )
+            return
+
         is_last = payload.get("is_last", False)
         await session.send_audio(audio_bytes, is_last=is_last)
 
@@ -239,7 +326,7 @@ def create_asr_stream_handler(consumer):
 
 
 class _ASRStreamSession(_BaseStreamSession):
-    """管理一次 ASR 流式会话：维护到字节跳动的 WS 连接和状态。"""
+    """管理一次 ASR 流式会话：维护到 Seed Speech Provider 的 WS 连接和状态。"""
 
     _log_prefix = "ASR WS"
     _stream_error_event = "asr.stream.error"
@@ -263,15 +350,33 @@ class _ASRStreamSession(_BaseStreamSession):
         self.extra_params = extra_params
         self.seq = 1
         self.log_id: str = ""
+        self._audio_rate_window: deque[tuple[float, int]] = deque()
+        self._audio_rate_window_bytes = 0
+
+    def accept_audio_chunk(self, byte_count: int) -> bool:
+        now = time.monotonic()
+        cutoff = now - _AUDIO_RATE_WINDOW_SECONDS
+        while (
+            self._audio_rate_window
+            and self._audio_rate_window[0][0] <= cutoff
+        ):
+            _, expired_bytes = self._audio_rate_window.popleft()
+            self._audio_rate_window_bytes -= expired_bytes
+
+        if (
+            len(self._audio_rate_window) >= _MAX_AUDIO_MESSAGES_PER_WINDOW
+            or self._audio_rate_window_bytes + byte_count
+            > _MAX_AUDIO_BYTES_PER_WINDOW
+        ):
+            return False
+
+        self._audio_rate_window.append((now, byte_count))
+        self._audio_rate_window_bytes += byte_count
+        return True
 
     async def connect(self) -> None:
         connect_id = new_request_id()
-        headers = build_auth_headers(
-            app_id=self.svc.app_id,
-            access_token=self.svc.access_token,
-            resource_id=self.svc.resource_id,
-            connect_id=connect_id,
-        )
+        headers = self.svc.build_auth_headers(connect_id=connect_id)
 
         ws_timeout = getattr(self.svc, "timeout_seconds", 300)
         self._http_session = aiohttp.ClientSession(
@@ -288,14 +393,12 @@ class _ASRStreamSession(_BaseStreamSession):
                 self.log_id, connect_id, self.stream_id,
             )
 
-        packet = build_full_client_request(
-            app_id=self.svc.app_id,
+        packet = self.svc.build_full_client_request(
             audio_format=self.audio_format,
             sample_rate=self.sample_rate,
             language=self.language,
-            ws_endpoint=self.ws_endpoint,
             seq=self.seq,
-            extra_params=self.extra_params,
+            **self.extra_params,
         )
         self.seq += 1
 

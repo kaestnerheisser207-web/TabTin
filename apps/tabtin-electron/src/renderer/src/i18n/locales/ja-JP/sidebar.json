@@ -13,14 +13,23 @@
   },
   "rail": {
     "tasks": "タスク",
+    "meetingRecords": "会議記録",
     "messages": "メッセージ",
     "cloudDocs": "クラウドドキュメント",
     "projects": "プロジェクト",
-    "more": "もっと見る",
-    "customerSupport": "サポート",
-    "customerSupportTitle": "サポートに連絡する",
-    "customerSupportHint": "WeChat でスキャンして WeCom に追加してください",
-    "customerSupportQrAlt": "WeComカスタマーサポートQRコード"
+    "more": "もっと見る"
+  },
+  "meetingRecords": {
+    "title": "会議記録",
+    "all": "すべての記録",
+    "setup": "新しい記録を準備",
+    "preview": "ページプレビュー",
+    "live": "記録中",
+    "detail": "会議後の詳細",
+    "description": "会議で実際に起きたことを記録、確認、整理します。",
+    "start": "記録を開始",
+    "emptyTitle": "会議記録はまだありません",
+    "emptyDescription": "記録を開始すると、音声、文字起こし、会議後の整理がここに表示されます。"
   },
   "cloudDocs": {
     "browse": {

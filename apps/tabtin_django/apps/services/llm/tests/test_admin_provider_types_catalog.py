@@ -19,6 +19,13 @@ from apps.services.llm.schemas import AdminProviderCreateRequest
 
 
 class AdminProviderTypesCatalogTest(SimpleTestCase):
+    def test_byteplus_asr_is_available_in_create_catalog(self):
+        metadata = ProviderRegistry.get("byteplus")
+
+        self.assertIsNotNone(metadata)
+        self.assertEqual(metadata.display_name, "BytePlus Seed Speech")
+        self.assertEqual(metadata.capability_domains, frozenset({"asr"}))
+
     def test_lists_full_registry_catalog_not_db_first(self):
         expected = set(ProviderRegistry.all_metadata().keys())
         self.assertGreater(len(expected), 2, "注册表应已自动加载多个 provider")

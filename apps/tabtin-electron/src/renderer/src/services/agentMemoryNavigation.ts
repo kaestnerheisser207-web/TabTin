@@ -169,6 +169,10 @@ export function openCollaborationHub(): void {
   openAppPageNavigation('collaboration')
 }
 
+export function openMeetingRecords(): void {
+  openAppPageNavigation('meeting-records')
+}
+
 export function openAgentSettings(agentId: string, organizationId?: string | null): void {
   useAgentMemoryFocusStore.getState().setFocus({ agentId, organizationId })
   openAgentHub()

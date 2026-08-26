@@ -224,6 +224,30 @@ SCENES: dict[str, SceneSpec] = {
         policy=_user_selectable_policy("commit_message_generation"),
     ),
 
+    "meeting_copilot_quick_answer": SceneSpec(
+        scene_key="meeting_copilot_quick_answer",
+        display_name="会议 Copilot 快速回答",
+        description="基于最近逐字稿、会前 Brief 与已授权 Project 资料生成建议答案",
+        capability_domain="chat",
+        capability_requirements={
+            "requires_json_mode": True,
+            "requires_vision": False,
+            "requires_function_calling": False,
+            "min_context_tokens": 8000,
+            "max_output_tokens": 1200,
+            "latency_class": "interactive",
+            "cost_class": "cheap",
+        },
+        default_params={
+            "temperature": 0.2,
+            "max_tokens": 160,
+            "response_format": {"type": "json_object"},
+            "timeout_sec": 12,
+            "thinking": {"type": "disabled"},
+        },
+        policy=_user_selectable_policy("meeting_copilot_quick_answer"),
+    ),
+
     "summarization": SceneSpec(
         scene_key="summarization",
         display_name="Django 对话摘要",
@@ -982,7 +1006,7 @@ SCENES: dict[str, SceneSpec] = {
     ),
 }
 
-assert len(SCENES) == 37, f"SCENES 应有 37 个 scene，实际 {len(SCENES)}"
+assert len(SCENES) == 38, f"SCENES 应有 38 个 scene，实际 {len(SCENES)}"
 
 
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━

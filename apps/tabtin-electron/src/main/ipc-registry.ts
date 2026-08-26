@@ -8,10 +8,7 @@ import { app, BrowserWindow, dialog, ipcMain, nativeTheme, powerSaveBlocker } fr
 import { buildSystemUserAgent } from './utils/system-ua'
 import { getDeviceFingerprint } from './utils/deviceFingerprint'
 import { collectLocalNetworkAddresses } from './local-network-addresses'
-import {
-  DEVICE_IDENTITY_IPC_CHANNEL,
-  registerDeviceIdentityIpcHandler,
-} from './device-identity-ipc'
+import { DEVICE_IDENTITY_IPC_CHANNEL, registerDeviceIdentityIpcHandler } from './device-identity-ipc'
 import { registerRunSessionIpcHandlers } from './run-session/ipc'
 import { registerSessionIpcHandlers } from './session/ipc'
 import { registerTerminalIpcHandlers } from './terminal/ipc'
@@ -24,11 +21,7 @@ import { setSearchEngineTemplate } from './context-menu/browser-search-engine'
 import { okResponse, errResponse } from '@tabtin/agent-wire'
 import { guardedHandle, guardedOn } from './utils/guarded-handle'
 import { registerSurfaceAsIpc } from './wire/register-surface-as-ipc'
-import {
-  registerAgentImportSurfaces,
-  IMPORT_SURFACE_CHANNELS,
-  IMPORT_ARCHIVE_CHANNELS,
-} from './agent-import'
+import { registerAgentImportSurfaces, IMPORT_SURFACE_CHANNELS, IMPORT_ARCHIVE_CHANNELS } from './agent-import'
 import { createSpaceSetActiveSurface } from '@tabtin/cli-server-core/surfaces/space-set-active'
 import { createSkillInstallSurface } from '@tabtin/cli-server-core/surfaces/skill-install'
 import { createSkillUninstallSurface } from '@tabtin/cli-server-core/surfaces/skill-uninstall'
@@ -37,11 +30,7 @@ import { getCLIOrganizationId } from './cli/cli-context'
 import { requestSpacePrewarm } from './agent/space-prewarm'
 import { setCurrentSpaceDevicePermissions } from './cli/cli-space-desktop-cache'
 import { resolveSpacesRoot, resolveDataRoot } from '@tabtin/terminal-core'
-import {
-  resolveSpaceWorkspaceRoot,
-  resolveOrganizationSkillDir,
-  resolveUserSkillDir,
-} from '@tabtin/agent-runtime'
+import { resolveSpaceWorkspaceRoot, resolveOrganizationSkillDir, resolveUserSkillDir } from '@tabtin/agent-runtime'
 import { installSkillFromBundle, uninstallSkillLocal, isValidSkillKey } from '@tabtin/agent-host/skills'
 import { TokenManager } from './auth'
 import { stat } from 'node:fs/promises'
@@ -53,14 +42,10 @@ import type { UpdateManager } from './services/UpdateManager'
 import { registerOssPresignedUploadIpc } from './services/OssPresignedUploadIpc'
 import { registerOpenAICodexIpc, OPENAI_CODEX_IPC_CHANNELS } from './llm/openai-codex-ipc'
 import { registerCodexSessionShareIpc } from './codex-session-share-ipc'
+import { MEETING_RECORDING_IPC_CHANNELS, registerMeetingRecordingIpc } from './meeting/ipc'
 import { createLogger } from './logger'
-import {
-  readAppearanceThemeSnapshot,
-  type AppearanceThemeSnapshot,
-} from './appearance-theme-snapshot'
-import type {
-  MainWindowAppearance,
-} from './types/runtime'
+import { readAppearanceThemeSnapshot, type AppearanceThemeSnapshot } from './appearance-theme-snapshot'
+import type { MainWindowAppearance } from './types/runtime'
 
 const mainLog = createLogger('Main')
 const ipcLog = createLogger('MainIPC')
@@ -74,15 +59,14 @@ export interface MainProcessIpcRegistryDependencies {
   openIMWindow: () => BrowserWindow
 }
 
-export function registerMainProcessIPCHandlers(
-  dependencies: MainProcessIpcRegistryDependencies,
-): void {
+export function registerMainProcessIPCHandlers(dependencies: MainProcessIpcRegistryDependencies): void {
   let sleepBlockerId: number | null = null
 
   ipcMain.handle('ping', () => 'pong')
   registerOssPresignedUploadIpc()
   registerOpenAICodexIpc()
   registerCodexSessionShareIpc()
+  registerMeetingRecordingIpc()
 
   guardedOn('browser-prefs:search-engine-template', (_event, template: string) => {
     setSearchEngineTemplate(template)
@@ -100,12 +84,14 @@ export function registerMainProcessIPCHandlers(
   })
 
   guardedHandle('system:getHostname', () => {
-    try { return hostname() } catch { return '' }
+    try {
+      return hostname()
+    } catch {
+      return ''
+    }
   })
 
-  guardedHandle('system:get-local-network-addresses', () =>
-    okResponse(collectLocalNetworkAddresses()),
-  )
+  guardedHandle('system:get-local-network-addresses', () => okResponse(collectLocalNetworkAddresses()))
 
   guardedHandle('device:getFingerprint', () => getDeviceFingerprint())
   registerDeviceIdentityIpcHandler()
@@ -120,11 +106,7 @@ export function registerMainProcessIPCHandlers(
 
   guardedHandle('clipboard:writeImage', async (_event, rawBytes: ArrayBuffer | Uint8Array) => {
     try {
-      const byteLength = rawBytes instanceof ArrayBuffer
-        ? rawBytes.byteLength
-        : ArrayBuffer.isView(rawBytes)
-          ? rawBytes.byteLength
-          : 0
+      const byteLength = rawBytes instanceof ArrayBuffer ? rawBytes.byteLength : ArrayBuffer.isView(rawBytes) ? rawBytes.byteLength : 0
       if (byteLength <= 0 || byteLength > 100 * 1024 * 1024) {
         return { success: false, error: 'invalid image data' }
       }
@@ -132,7 +114,10 @@ export function registerMainProcessIPCHandlers(
       copyImageBufferToClipboard(rawBytes)
       return { success: true }
     } catch (error) {
-      return { success: false, error: error instanceof Error ? error.message : String(error) }
+      return {
+        success: false,
+        error: error instanceof Error ? error.message : String(error),
+      }
     }
   })
 
@@ -179,18 +164,12 @@ export function registerMainProcessIPCHandlers(
   // ── skill:install / skill:uninstall（：users/{userId}/[organizations/…/]skills）
   const resolveAuthUserId = async (): Promise<string | undefined> => {
     const userInfo = await TokenManager.getUserInfo()
-    const raw =
-      (userInfo?.id as unknown) ??
-      (userInfo?.user_id as unknown) ??
-      (userInfo?.userId as unknown)
+    const raw = (userInfo?.id as unknown) ?? (userInfo?.user_id as unknown) ?? (userInfo?.userId as unknown)
     if (raw === undefined || raw === null || raw === '') return undefined
     return String(raw)
   }
 
-  const resolveSkillDirForUser = (
-    skillKey: string,
-    ctx: { userId: string; organizationId?: string },
-  ): string => {
+  const resolveSkillDirForUser = (skillKey: string, ctx: { userId: string; organizationId?: string }): string => {
     const orgId = ctx.organizationId ?? getCLIOrganizationId() ?? undefined
     if (orgId) {
       return resolveOrganizationSkillDir(resolveDataRoot(), ctx.userId, orgId, skillKey)
@@ -238,7 +217,10 @@ export function registerMainProcessIPCHandlers(
       if (!result) {
         return {
           ok: false as const,
-          error: { code: 'OUT_OF_SCOPE', message: 'workspaceRoot out of allowed scope' },
+          error: {
+            code: 'OUT_OF_SCOPE',
+            message: 'workspaceRoot out of allowed scope',
+          },
         }
       }
       return {
@@ -291,10 +273,7 @@ export function registerMainProcessIPCHandlers(
     }
   })
 
-  const SAFE_OPEN_PROPERTIES = new Set([
-    'openFile', 'openDirectory', 'multiSelections',
-    'showHiddenFiles', 'createDirectory', 'dontAddToRecent',
-  ])
+  const SAFE_OPEN_PROPERTIES = new Set(['openFile', 'openDirectory', 'multiSelections', 'showHiddenFiles', 'createDirectory', 'dontAddToRecent'])
 
   function sanitizeDefaultPath(raw: unknown, defaultDirectory?: unknown): string | undefined {
     if (typeof raw !== 'string' || !raw) return undefined
@@ -307,7 +286,7 @@ export function registerMainProcessIPCHandlers(
       return join(downloadsPath, basename(raw))
     }
     const resolved = resolve(raw)
-    if (allowedRoots.some(root => resolved.startsWith(root))) return resolved
+    if (allowedRoots.some((root) => resolved.startsWith(root))) return resolved
     return documentsPath
   }
 
@@ -327,7 +306,7 @@ export function registerMainProcessIPCHandlers(
   guardedHandle('dialog:showOpen', async (_event, options: any) => {
     try {
       const rawProps: string[] = Array.isArray(options?.properties) ? options.properties : ['openFile']
-      const safeProps = rawProps.filter(p => SAFE_OPEN_PROPERTIES.has(p))
+      const safeProps = rawProps.filter((p) => SAFE_OPEN_PROPERTIES.has(p))
       if (safeProps.length === 0) safeProps.push('openFile')
 
       const result = await dialog.showOpenDialog({
@@ -413,7 +392,9 @@ export function registerMainProcessIPCHandlers(
     for (const win of targets) {
       if (!win || win.isDestroyed()) continue
       if (win.webContents === event.sender) continue
-      win.webContents.send('im:organizationSynced', { organizationId: payload.organizationId })
+      win.webContents.send('im:organizationSynced', {
+        organizationId: payload.organizationId,
+      })
     }
   })
 
@@ -451,13 +432,10 @@ export function registerMainProcessIPCHandlers(
   // 入参：{ perms: Record<string, 'allow'|'confirm'|'block'> | null }。非对象 /
   // 字段缺失一律视作"未推送"，路由层回退到现有策略评估（保守允许，避免冷启动
   // 打不开）。合法键见 packages/security-policy/src/types.ts DevicePermissionKey。
-  guardedHandle(
-    'desktop:setDevicePermissions',
-    async (_event, params: { perms: Record<string, string> | null }) => {
-      setCurrentSpaceDevicePermissions(params?.perms ?? null)
-      return { success: true }
-    },
-  )
+  guardedHandle('desktop:setDevicePermissions', async (_event, params: { perms: Record<string, string> | null }) => {
+    setCurrentSpaceDevicePermissions(params?.perms ?? null)
+    return { success: true }
+  })
 
   // TabDesktop Wave 2 · 规范 § 6.3 D5：渲染侧设置面板查询当前桌面操控授权状态。
   // 返回 ~/.tabtin/desktop-approval.json 的基本元数据（授权时间、剩余 TTL），
@@ -473,7 +451,10 @@ export function registerMainProcessIPCHandlers(
       DesktopUseGuard.revokeDesktopApproval()
       return { success: true }
     } catch (err) {
-      return { success: false, error: err instanceof Error ? err.message : String(err) }
+      return {
+        success: false,
+        error: err instanceof Error ? err.message : String(err),
+      }
     }
   })
 
@@ -608,6 +589,7 @@ export function unregisterMainProcessIPCHandlers(): void {
     'osPermissions:check',
     'osPermissions:request',
     'osPermissions:openSettings',
+    ...MEETING_RECORDING_IPC_CHANNELS,
     'slideshow:enterFullscreen',
     'slideshow:exitFullscreen',
     'screenshot:readFileAsDataURL',
@@ -617,9 +599,11 @@ export function unregisterMainProcessIPCHandlers(): void {
 
   // W6 surface 注销（registerSurfaceAsIpc 内部也用 guardedHandle）
   const surfaceChannels = [
-    'skill:install', 'skill:uninstall',
+    'skill:install',
+    'skill:uninstall',
     // W6 批次 1
-    'space:set-active', 'space:setActive',
+    'space:set-active',
+    'space:setActive',
     // 外部 Agent 导入（Layer B + 本机档案）
     ...IMPORT_SURFACE_CHANNELS,
     ...IMPORT_ARCHIVE_CHANNELS,

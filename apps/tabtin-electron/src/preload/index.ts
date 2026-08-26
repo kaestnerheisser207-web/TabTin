@@ -3,62 +3,46 @@ import { electronAPI } from '@electron-toolkit/preload'
 import type { Device } from '@tabtin/app-shell'
 import { buildDevInspectorBridge } from './dev-inspector-bridge'
 import type { LocalNetworkAddress } from '../shared/types/local-network'
-import {
-  invokeIpc,
-  sendIpc,
-  PlatformIpcError,
-  LEGACY_HANDLERS,
-  subscribeIpcCalls,
-} from './ipc-shim'
-import {
-  getAccessTokenDeduped,
-  installAuthTokenInvalidationListeners,
-} from './auth-token-dedup'
+import { invokeIpc, sendIpc, PlatformIpcError, LEGACY_HANDLERS, subscribeIpcCalls } from './ipc-shim'
+import { getAccessTokenDeduped, installAuthTokenInvalidationListeners } from './auth-token-dedup'
 import { createLoginRelayPreloadApi } from './login-relay'
 import type { LoginRelayAPI } from '../shared/types/login-relay'
 import {
-  BROWSER_CONTEXT_MENU_ADD_TO_CONTEXT_CHANNEL,
-  type BrowserContextMenuAddToContextPayload,
-} from '../shared/browser-context-menu-channels'
-import {
-  OSS_CANCEL_PRESIGNED_DOWNLOAD_CHANNEL,
-  OSS_CANCEL_PRESIGNED_OBJECT_CHANNEL,
-  OSS_GET_PRESIGNED_OBJECT_CHANNEL,
-  OSS_PUT_PRESIGNED_OBJECT_CHANNEL,
-  OSS_PUT_PRESIGNED_OBJECT_PROGRESS_CHANNEL,
-  type OssGetPresignedObjectPayload,
-  type OssGetPresignedObjectResult,
-  type OssPutPresignedObjectPayload,
-  type OssPutPresignedObjectProgress,
-  type OssPutPresignedObjectResult,
-} from '../shared/oss-presigned-upload-ipc'
+  MEETING_CAPTURE_LEVEL_CHANNEL,
+  MEETING_MICROPHONE_TEST_LEVEL_CHANNEL,
+  MEETING_RECORDING_STATUS_CHANNEL,
+  type AppendMeetingAudioChunkInput,
+  type AppendMeetingPcmChunkInput,
+  type MeetingArchiveManifestV1,
+  type MeetingArchiveListScope,
+  type MeetingArchiveScope,
+  type MeetingAsrProbeInput,
+  type MeetingAsrProbeResult,
+  type MeetingCaptureLevelEvent,
+  type MeetingCopilotAnswerResult,
+  type MeetingMediaProbeResult,
+  type MeetingMediaProbeInput,
+  type MeetingMicrophoneTestInput,
+  type MeetingMicrophoneTestResult,
+  type MeetingMicrophoneDevice,
+  type MeetingSystemAudioSource,
+  type MeetingMicrophoneTestLevelEvent,
+  type MeetingLocalArchive,
+  type MeetingRecordingStatus,
+  type MeetingStorageProbeResult,
+  type MeetingTranscriptCheckpoint,
+  type PrepareMeetingArchiveInput,
+  type SwitchMeetingMicrophoneInput,
+  type SwitchMeetingSystemAudioInput,
+} from '../shared/meeting-recording-contract'
+import { BROWSER_CONTEXT_MENU_ADD_TO_CONTEXT_CHANNEL, type BrowserContextMenuAddToContextPayload } from '../shared/browser-context-menu-channels'
+import { OSS_CANCEL_PRESIGNED_DOWNLOAD_CHANNEL, OSS_CANCEL_PRESIGNED_OBJECT_CHANNEL, OSS_GET_PRESIGNED_OBJECT_CHANNEL, OSS_PUT_PRESIGNED_OBJECT_CHANNEL, OSS_PUT_PRESIGNED_OBJECT_PROGRESS_CHANNEL, type OssGetPresignedObjectPayload, type OssGetPresignedObjectResult, type OssPutPresignedObjectPayload, type OssPutPresignedObjectProgress, type OssPutPresignedObjectResult } from '../shared/oss-presigned-upload-ipc'
 import { hasAgentEngineUserInputContent } from '../shared/agent-engine-query-validation'
 import { parseBrowserContainerModeFromArgv } from '../shared/browser-container-mode'
-import type {
-  ReplaceInFilesRequest,
-  ReplaceInFilesResponse,
-  RipgrepSearchOptions,
-  RipgrepSearchResponse,
-} from '../shared/ripgrep-search-types'
-import {
-  SESSION_CODE_ROOT_CHANGED_CHANNEL,
-  type SessionCodeRootChangedEvent,
-} from '../shared/session-code-root-events'
+import type { ReplaceInFilesRequest, ReplaceInFilesResponse, RipgrepSearchOptions, RipgrepSearchResponse } from '../shared/ripgrep-search-types'
+import { SESSION_CODE_ROOT_CHANGED_CHANNEL, type SessionCodeRootChangedEvent } from '../shared/session-code-root-events'
 // 外部 Agent 导入 surface 契约类型（type-only，构建期擦除、零运行时字节）。
-import type {
-  ImportDetectOutput,
-  ImportScanInput,
-  ImportScanResult,
-  ImportRunInput,
-  ImportRunOutput,
-  ImportStatusInput,
-  ImportStatusOutput,
-  ImportCancelInput,
-  ImportCancelOutput,
-  ImportRollbackInput,
-  ImportRollbackOutput,
-  ImportProgressEvent,
-} from '@tabtin/cli-server-core'
+import type { ImportDetectOutput, ImportScanInput, ImportScanResult, ImportRunInput, ImportRunOutput, ImportStatusInput, ImportStatusOutput, ImportCancelInput, ImportCancelOutput, ImportRollbackInput, ImportRollbackOutput, ImportProgressEvent } from '@tabtin/cli-server-core'
 
 installAuthTokenInvalidationListeners()
 
@@ -104,7 +88,12 @@ type ApiProxyRequest = {
   method: string
   headers?: Record<string, string>
   body?: string
-  multipartEntries?: Array<{ name: string; filename?: string; contentType?: string; base64: string }>
+  multipartEntries?: Array<{
+    name: string
+    filename?: string
+    contentType?: string
+    base64: string
+  }>
   retryConfig?: {
     maxRetries?: number
     retryDelay?: number
@@ -132,9 +121,7 @@ type AuthStorageData = {
   userInfo?: any | null
 }
 
-type AuthGetLegacyResult =
-  | { success: true; data?: AuthStorageData | null }
-  | { success: false; error?: string }
+type AuthGetLegacyResult = { success: true; data?: AuthStorageData | null } | { success: false; error?: string }
 
 type AuthLoadResult = {
   accessToken: string | null
@@ -150,7 +137,12 @@ type AuthRefreshResult = {
 
 type AuthRefreshLegacyResult =
   | { success: true; accessToken: string }
-  | { success: false; errorCode: string; message: string; isTransient: boolean }
+  | {
+      success: false
+      errorCode: string
+      message: string
+      isTransient: boolean
+    }
 
 function unwrapAuthGetResult(result: AuthGetLegacyResult): AuthStorageData | null {
   if (result.success) return result.data ?? null
@@ -252,14 +244,7 @@ export function validateAgentEngineQuery(req: unknown): void {
   }
   if (r.executionTarget !== undefined) {
     const target = r.executionTarget as Record<string, unknown> | null
-    if (
-      !target
-      || typeof target !== 'object'
-      || Array.isArray(target)
-      || target.kind !== 'bound_device'
-      || typeof target.device_identity_key !== 'string'
-      || !target.device_identity_key
-    ) {
+    if (!target || typeof target !== 'object' || Array.isArray(target) || target.kind !== 'bound_device' || typeof target.device_identity_key !== 'string' || !target.device_identity_key) {
       throw new Error('Invalid agentEngine.query payload: executionTarget is invalid')
     }
   }
@@ -268,7 +253,10 @@ export function validateAgentEngineQuery(req: unknown): void {
   }
   //  斜杠命令直链 Skill：skillSlashInvoke 可选，形态 { skillKey: string, args?: string }。
   if (r.skillSlashInvoke !== undefined) {
-    const ssi = r.skillSlashInvoke as { skillKey?: unknown; args?: unknown } | null
+    const ssi = r.skillSlashInvoke as {
+      skillKey?: unknown
+      args?: unknown
+    } | null
     if (!ssi || typeof ssi !== 'object' || Array.isArray(ssi) || typeof ssi.skillKey !== 'string' || !ssi.skillKey) {
       throw new Error('Invalid agentEngine.query payload: skillSlashInvoke.skillKey must be a non-empty string')
     }
@@ -277,14 +265,10 @@ export function validateAgentEngineQuery(req: unknown): void {
     }
   }
   if (r.agentMode !== undefined && !VALID_AGENT_MODES.has(r.agentMode as string)) {
-    throw new Error(
-      `Invalid agentEngine.query payload: agentMode must be one of ${[...VALID_AGENT_MODES].join(', ')}; got "${String(r.agentMode)}"`,
-    )
+    throw new Error(`Invalid agentEngine.query payload: agentMode must be one of ${[...VALID_AGENT_MODES].join(', ')}; got "${String(r.agentMode)}"`)
   }
   if (r.approvalMode !== undefined && !VALID_APPROVAL_MODES.has(r.approvalMode as string)) {
-    throw new Error(
-      `Invalid agentEngine.query payload: approvalMode must be one of ${[...VALID_APPROVAL_MODES].join(', ')}; got "${String(r.approvalMode)}"`,
-    )
+    throw new Error(`Invalid agentEngine.query payload: approvalMode must be one of ${[...VALID_APPROVAL_MODES].join(', ')}; got "${String(r.approvalMode)}"`)
   }
   if (r.maxTurns !== undefined && (typeof r.maxTurns !== 'number' || r.maxTurns < 1)) {
     throw new Error('Invalid agentEngine.query payload: maxTurns must be a positive number')
@@ -334,12 +318,7 @@ export function validateAgentEngineQuery(req: unknown): void {
   // work_mode：workingDirType 驱动 system prompt 的 `<work_mode>` 段。边界只挡
   // 形式（必须是合法枚举或缺省）；非法值在 main 装配阶段被 normalize 成
   // undefined（跳过段注入），与 memoryCapability 边界宽松校验同构。
-  if (
-    r.workingDirType !== undefined
-    && r.workingDirType !== 'code'
-    && r.workingDirType !== 'doc'
-    && r.workingDirType !== 'mixed'
-  ) {
+  if (r.workingDirType !== undefined && r.workingDirType !== 'code' && r.workingDirType !== 'doc' && r.workingDirType !== 'mixed') {
     throw new Error('Invalid agentEngine.query payload: workingDirType must be one of code/doc/mixed')
   }
   if (r.workingDir !== undefined && (typeof r.workingDir !== 'string' || !r.workingDir.trim())) {
@@ -361,28 +340,17 @@ export function validateAgentEngineQuery(req: unknown): void {
   if (r.boundCodeRoot !== undefined && (typeof r.boundCodeRoot !== 'string' || !r.boundCodeRoot.trim())) {
     throw new Error('Invalid agentEngine.query payload: boundCodeRoot must be a non-empty string when provided')
   }
-  if (
-    r.boundCodeRootRevision !== undefined
-    && (typeof r.boundCodeRootRevision !== 'number' || !Number.isFinite(r.boundCodeRootRevision))
-  ) {
+  if (r.boundCodeRootRevision !== undefined && (typeof r.boundCodeRootRevision !== 'number' || !Number.isFinite(r.boundCodeRootRevision))) {
     throw new Error('Invalid agentEngine.query payload: boundCodeRootRevision must be a finite number when provided')
   }
-  if (r.operationSwitches !== undefined && (
-    r.operationSwitches === null
-    || typeof r.operationSwitches !== 'object'
-    || Array.isArray(r.operationSwitches)
-  )) {
+  if (r.operationSwitches !== undefined && (r.operationSwitches === null || typeof r.operationSwitches !== 'object' || Array.isArray(r.operationSwitches))) {
     throw new Error('Invalid agentEngine.query payload: operationSwitches must be a plain object')
   }
   // W2.3-fix（F8）：v2 cost.execution_limits 透传给主进程装配 CostCap.config。
   // preload 只挡形式（必须是 plain object 或缺省）；字段类型 / 范围由主进程
   // `normalizeExecutionLimitsForCostCap` 统一归一（含 string max_credits 接受、
   // 0 / 负数视作未配置等业务规则）。这样规则只在一处维护，避免双端 drift。
-  if (r.executionLimits !== undefined && (
-    r.executionLimits === null
-    || typeof r.executionLimits !== 'object'
-    || Array.isArray(r.executionLimits)
-  )) {
+  if (r.executionLimits !== undefined && (r.executionLimits === null || typeof r.executionLimits !== 'object' || Array.isArray(r.executionLimits))) {
     throw new Error('Invalid agentEngine.query payload: executionLimits must be a plain object')
   }
   // W1b：模型能力数据校验 — 可选有限正整数。旧版渲染层不传（undefined），主进程 fallback。
@@ -413,9 +381,7 @@ export function validateAgentEngineQuery(req: unknown): void {
         throw new Error(`Invalid agentEngine.query payload: history[${i}] must be an object`)
       }
       if (item.role !== 'user' && item.role !== 'assistant') {
-        throw new Error(
-          `Invalid agentEngine.query payload: history[${i}].role must be "user" or "assistant"; got "${String(item.role)}"`,
-        )
+        throw new Error(`Invalid agentEngine.query payload: history[${i}].role must be "user" or "assistant"; got "${String(item.role)}"`)
       }
       // Wave "连续对话成熟化 P · 事 1"：content 升级到 `string | ContentBlock[]`，
       // 历史 tool_use / tool_result 对通过 block 数组形态跨 IPC 透传到 main → runtime。
@@ -425,22 +391,16 @@ export function validateAgentEngineQuery(req: unknown): void {
       const content = item.content
       if (typeof content === 'string') {
         if (content.trim().length === 0) {
-          throw new Error(
-            `Invalid agentEngine.query payload: history[${i}].content must be non-empty`,
-          )
+          throw new Error(`Invalid agentEngine.query payload: history[${i}].content must be non-empty`)
         }
       } else if (Array.isArray(content)) {
         if (content.length === 0) {
-          throw new Error(
-            `Invalid agentEngine.query payload: history[${i}].content must be a non-empty array`,
-          )
+          throw new Error(`Invalid agentEngine.query payload: history[${i}].content must be a non-empty array`)
         }
         for (let j = 0; j < content.length; j++) {
           const block = content[j] as { type?: unknown } | null | undefined
           if (!block || typeof block !== 'object' || typeof block.type !== 'string') {
-            throw new Error(
-              `Invalid agentEngine.query payload: history[${i}].content[${j}] must be an object with string type`,
-            )
+            throw new Error(`Invalid agentEngine.query payload: history[${i}].content[${j}] must be an object with string type`)
           }
           // 只接受 runtime `ContentBlock` union 认识的 type。thinking 虽在
           // whitelist 但 @tabtin/agent-runtime/history 的装填逻辑会显式丢弃——
@@ -448,48 +408,32 @@ export function validateAgentEngineQuery(req: unknown): void {
           // 不是鼓励当前 renderer 传 thinking。
           const t = block.type
           if (!VALID_CONTENT_BLOCK_TYPES.has(t)) {
-            throw new Error(
-              `Invalid agentEngine.query payload: history[${i}].content[${j}].type "${t}" is not a supported ContentBlock type`,
-            )
+            throw new Error(`Invalid agentEngine.query payload: history[${i}].content[${j}].type "${t}" is not a supported ContentBlock type`)
           }
           if (t === 'tool_use') {
             const b = block as { id?: unknown; name?: unknown }
             if (typeof b.id !== 'string' || b.id.length === 0) {
-              throw new Error(
-                `Invalid agentEngine.query payload: history[${i}].content[${j}] tool_use.id must be a non-empty string`,
-              )
+              throw new Error(`Invalid agentEngine.query payload: history[${i}].content[${j}] tool_use.id must be a non-empty string`)
             }
             if (typeof b.name !== 'string' || b.name.length === 0) {
-              throw new Error(
-                `Invalid agentEngine.query payload: history[${i}].content[${j}] tool_use.name must be a non-empty string`,
-              )
+              throw new Error(`Invalid agentEngine.query payload: history[${i}].content[${j}] tool_use.name must be a non-empty string`)
             }
           }
           if (t === 'tool_result') {
             const b = block as { tool_use_id?: unknown; content?: unknown }
             if (typeof b.tool_use_id !== 'string' || b.tool_use_id.length === 0) {
-              throw new Error(
-                `Invalid agentEngine.query payload: history[${i}].content[${j}] tool_result.tool_use_id must be a non-empty string`,
-              )
+              throw new Error(`Invalid agentEngine.query payload: history[${i}].content[${j}] tool_result.tool_use_id must be a non-empty string`)
             }
             // Review B P2 · preload 二次防线：runtime `ToolResultBlock.content`
             // 契约是 `string | ContentBlock[]`，旧 MVP 不校验会让 null / number /
             // object 穿过 IPC 边界到 LLM provider 才 400。
-            if (
-              b.content !== undefined
-              && typeof b.content !== 'string'
-              && !Array.isArray(b.content)
-            ) {
-              throw new Error(
-                `Invalid agentEngine.query payload: history[${i}].content[${j}] tool_result.content must be a string or an array of ContentBlock (got ${typeof b.content})`,
-              )
+            if (b.content !== undefined && typeof b.content !== 'string' && !Array.isArray(b.content)) {
+              throw new Error(`Invalid agentEngine.query payload: history[${i}].content[${j}] tool_result.content must be a string or an array of ContentBlock (got ${typeof b.content})`)
             }
           }
         }
       } else {
-        throw new Error(
-          `Invalid agentEngine.query payload: history[${i}].content must be a string or an array of ContentBlock`,
-        )
+        throw new Error(`Invalid agentEngine.query payload: history[${i}].content must be a string or an array of ContentBlock`)
       }
     }
   }
@@ -572,12 +516,7 @@ function validateUpsertHostTurnStatePayload(payload: unknown): void {
     if (typeof agent.id !== 'string' || !agent.id.trim()) {
       throw new Error('Invalid upsertHostTurnState payload: agent.id must be a non-empty string')
     }
-    if (
-      agent.detail !== undefined
-      && (typeof agent.detail !== 'object'
-        || agent.detail === null
-        || Array.isArray(agent.detail))
-    ) {
+    if (agent.detail !== undefined && (typeof agent.detail !== 'object' || agent.detail === null || Array.isArray(agent.detail))) {
       throw new Error('Invalid upsertHostTurnState payload: agent.detail must be an object')
     }
   }
@@ -616,25 +555,36 @@ const _consoleInterceptScript = `(function(){
   ['log','info','warn','error','debug'].forEach(function(l){
     var orig=_c[l];console[l]=function(){return orig.apply(console,ser([].slice.call(arguments)))}
   });
-})()`;
+})()`
 
 // Preload context 拦截
 ;(() => {
   const _console = { ...console }
   function safeStringify(obj: unknown): string {
     if (obj instanceof Error) return JSON.stringify({ message: obj.message, stack: obj.stack })
-    try { return JSON.stringify(obj, null, 0) } catch {
+    try {
+      return JSON.stringify(obj, null, 0)
+    } catch {
       try {
         const seen = new WeakSet()
-        return JSON.stringify(obj, (_k, v) => {
-          if (typeof v === 'object' && v !== null) { if (seen.has(v)) return '[Circular]'; seen.add(v) }
-          return v
-        }, 0)
-      } catch { return String(obj) }
+        return JSON.stringify(
+          obj,
+          (_k, v) => {
+            if (typeof v === 'object' && v !== null) {
+              if (seen.has(v)) return '[Circular]'
+              seen.add(v)
+            }
+            return v
+          },
+          0
+        )
+      } catch {
+        return String(obj)
+      }
     }
   }
   function serialize(args: unknown[]): unknown[] {
-    return args.map(a => a === undefined ? 'undefined' : (typeof a === 'object' && a !== null) ? safeStringify(a) : a)
+    return args.map((a) => (a === undefined ? 'undefined' : typeof a === 'object' && a !== null ? safeStringify(a) : a))
   }
   for (const level of ['log', 'info', 'warn', 'error', 'debug'] as const) {
     const orig = _console[level]
@@ -644,63 +594,15 @@ const _consoleInterceptScript = `(function(){
 
 // Renderer 主世界注入（跨越 contextIsolation 边界）
 webFrame.executeJavaScript(_consoleInterceptScript).catch(() => {})
-import type {
-  RecommendationGeneratorResult,
-  HistoryRecommendationResponse
-} from '@tabtin/crawl-contracts/recommendation'
-import {
-  DownloadIPCChannels,
-  type DownloadItemData,
-  type DownloadIPCResult,
-  type StreamProgressEvent,
-  type StreamCompletedEvent,
-  type StreamFailedEvent,
-} from '@shared/types/download'
-import type {
-  PaneStatus,
-  PaneStatusEvent,
-  TerminalSnapshot,
-  SnapshotManifest,
-} from '@shared/types/terminal'
-import type {
-  DetectedBrowser,
-  DetectBrowsersResult,
-  IPCCookie,
-  ExtractCookiesResult,
-  ExtractPasswordsResult,
-  CookieDomainSummary,
-  PartitionCookieSummary,
-} from '@shared/types/credential'
-import type {
-  BrowserEnvBinding,
-  BrowserEnvBindResult,
-  BrowserEnvDeleteResult,
-  BrowserEnvGetPartitionResult,
-  BrowserEnvironment,
-  BrowserEnvWriteResult,
-} from '@shared/types/browser-env'
-import type {
-  NavigateTarget,
-  NotificationPayload,
-  NotificationPermissionStatus,
-} from '../main/services/notification/types'
-import type {
-  LocalMcpConnectionDetail,
-  LocalMcpConnectionSummary,
-  LocalMcpDiscoveryResult,
-  LocalMcpManualConnectionInput,
-  LocalMcpOrganizationMirrorInput,
-  LocalMcpProbeSummary,
-} from '@shared/types/mcp'
-import type {
-  ResourceMonitorSnapshot,
-  ResourceMonitorSnapshotMode,
-} from '@shared/types/resource-monitor'
-import type {
-  AgentEngineCompactSessionRequest,
-  AgentEngineCompactSessionResponse,
-  AgentEngineQueryRequest,
-} from '@shared/types/agent-engine'
+import type { RecommendationGeneratorResult, HistoryRecommendationResponse } from '@tabtin/crawl-contracts/recommendation'
+import { DownloadIPCChannels, type DownloadItemData, type DownloadIPCResult, type StreamProgressEvent, type StreamCompletedEvent, type StreamFailedEvent } from '@shared/types/download'
+import type { PaneStatus, PaneStatusEvent, TerminalSnapshot, SnapshotManifest } from '@shared/types/terminal'
+import type { DetectedBrowser, DetectBrowsersResult, IPCCookie, ExtractCookiesResult, ExtractPasswordsResult, CookieDomainSummary, PartitionCookieSummary } from '@shared/types/credential'
+import type { BrowserEnvBinding, BrowserEnvBindResult, BrowserEnvDeleteResult, BrowserEnvGetPartitionResult, BrowserEnvironment, BrowserEnvWriteResult } from '@shared/types/browser-env'
+import type { NavigateTarget, NotificationPayload, NotificationPermissionStatus } from '../main/services/notification/types'
+import type { LocalMcpConnectionDetail, LocalMcpConnectionSummary, LocalMcpDiscoveryResult, LocalMcpManualConnectionInput, LocalMcpOrganizationMirrorInput, LocalMcpProbeSummary } from '@shared/types/mcp'
+import type { ResourceMonitorSnapshot, ResourceMonitorSnapshotMode } from '@shared/types/resource-monitor'
+import type { AgentEngineCompactSessionRequest, AgentEngineCompactSessionResponse, AgentEngineQueryRequest } from '@shared/types/agent-engine'
 // 只 import 字面量常量；必须从 `@tabtin/agent-modes/types` 子路径导入，
 // 不能走 index / agent-runtime barrel（会拉到 permission-path → node:fs）。
 import { AGENT_MODE_NAMES, APPROVAL_MODE_NAMES } from '@tabtin/agent-modes/types'
@@ -733,10 +635,7 @@ type ScreenshotCaptureOptions = {
   rect?: { x: number; y: number; width: number; height: number }
 }
 
-function assertCrawlViewOptions(
-  options: CrawlViewOptions | undefined,
-  _source: string
-): CrawlViewOptions {
+function assertCrawlViewOptions(options: CrawlViewOptions | undefined, _source: string): CrawlViewOptions {
   if (!options) {
     return { kind: 'normal-view', profile: 'user-tab' }
   }
@@ -746,42 +645,9 @@ function assertCrawlViewOptions(
   return options
 }
 
-export type {
-  GitBranchMeta,
-  GitBranchItem,
-  GitRemoteInfo as GitRemoteItem,
-  GitWorktreeInfo as GitWorktreeItem,
-  GitDiffFileSummary as GitDiffSummaryFileItem,
-  GitDiffSummary,
-  GitDiffStatGroup,
-  GitDiffStatResult,
-  GitStatusEntry,
-  GitStatusResult,
-  GitWorktreeMergeResult,
-  WorktreeRemovePreflightResult,
-  WorktreeRemoveResult,
-  GitStashEntry,
-  GitFullStatusResult,
-  GitCommitListItem,
-  GitCommitDetailResult,
-} from '@shared/git-types'
+export type { GitBranchMeta, GitBranchItem, GitRemoteInfo as GitRemoteItem, GitWorktreeInfo as GitWorktreeItem, GitDiffFileSummary as GitDiffSummaryFileItem, GitDiffSummary, GitDiffStatGroup, GitDiffStatResult, GitStatusEntry, GitStatusResult, GitWorktreeMergeResult, WorktreeRemovePreflightResult, WorktreeRemoveResult, GitStashEntry, GitFullStatusResult, GitCommitListItem, GitCommitDetailResult } from '@shared/git-types'
 
-import type {
-  GitBranchMeta,
-  GitBranchItem,
-  GitRemoteInfo as GitRemoteItem,
-  GitWorktreeInfo as GitWorktreeItem,
-  GitDiffSummary,
-  GitDiffStatResult,
-  GitStatusEntry,
-  GitWorktreeMergeResult,
-  WorktreeRemovePreflightResult,
-  WorktreeRemoveResult,
-  GitStashEntry,
-  GitFullStatusResult,
-  GitCommitListItem,
-  GitCommitDetailResult,
-} from '@shared/git-types'
+import type { GitBranchMeta, GitBranchItem, GitRemoteInfo as GitRemoteItem, GitWorktreeInfo as GitWorktreeItem, GitDiffSummary, GitDiffStatResult, GitStatusEntry, GitWorktreeMergeResult, WorktreeRemovePreflightResult, WorktreeRemoveResult, GitStashEntry, GitFullStatusResult, GitCommitListItem, GitCommitDetailResult } from '@shared/git-types'
 
 // preload API 契约形状（内部约束用，不直接导出）
 /**
@@ -851,13 +717,25 @@ interface TabTinAPIShape {
     clear: () => Promise<{ success: boolean; error?: string }>
     clearTokens: () => Promise<{ success: boolean; error?: string }>
     clearUserInfo: () => Promise<{ success: boolean; error?: string }>
-    check: () => Promise<{ success: boolean; isValid?: boolean; error?: string }>
+    check: () => Promise<{
+      success: boolean
+      isValid?: boolean
+      error?: string
+    }>
     saveAccessToken: (token: string) => Promise<{ success: boolean; error?: string }>
-    getAccessToken: () => Promise<{ success: boolean; token?: string | null; error?: string }>
+    getAccessToken: () => Promise<{
+      success: boolean
+      token?: string | null
+      error?: string
+    }>
     saveRefreshToken: (token: string) => Promise<{ success: boolean; error?: string }>
     refreshAccessToken: () => Promise<AuthRefreshResult>
     saveUserInfo: (userInfo: any) => Promise<{ success: boolean; error?: string }>
-    getUserInfo: () => Promise<{ success: boolean; userInfo?: any | null; error?: string }>
+    getUserInfo: () => Promise<{
+      success: boolean
+      userInfo?: any | null
+      error?: string
+    }>
     isTokenExpiringSoon: (bufferMinutes?: number) => Promise<{ success: boolean; isExpiring?: boolean; error?: string }>
     onForceLogout: (callback: () => void) => () => void
     onTokenRefreshed: (callback: () => void) => () => void
@@ -870,21 +748,19 @@ interface TabTinAPIShape {
       models: Array<{ id: string; displayName: string }>
     }>
     loginBrowser: () => Promise<{ started: true }>
-    loginDeviceCode: () => Promise<{ userCode: string; verificationUri: string }>
+    loginDeviceCode: () => Promise<{
+      userCode: string
+      verificationUri: string
+    }>
     logout: () => Promise<{ loggedOut: true }>
     cancelLogin: () => Promise<{ cancelled: true }>
-    onStatusChanged: (
-      callback: (payload: { status: 'connected' | 'disconnected' }) => void,
-    ) => () => void
+    onStatusChanged: (callback: (payload: { status: 'connected' | 'disconnected' }) => void) => () => void
   }
 
   oss: {
     getPresignedObject: (payload: OssGetPresignedObjectPayload) => Promise<OssGetPresignedObjectResult>
     cancelPresignedDownload: (requestId: string) => Promise<{ cancelled: boolean }>
-    putPresignedObject: (
-      payload: OssPutPresignedObjectPayload,
-      onProgress?: (progress: OssPutPresignedObjectProgress) => void,
-    ) => Promise<OssPutPresignedObjectResult>
+    putPresignedObject: (payload: OssPutPresignedObjectPayload, onProgress?: (progress: OssPutPresignedObjectProgress) => void) => Promise<OssPutPresignedObjectResult>
     cancelPresignedObject: (uploadId: string) => Promise<{ cancelled: boolean }>
   }
 
@@ -934,7 +810,10 @@ interface TabTinAPIShape {
       }>
       error?: string
     }>
-    readFilePreview: (path: string, options?: { maxBytes?: number }) => Promise<{
+    readFilePreview: (
+      path: string,
+      options?: { maxBytes?: number }
+    ) => Promise<{
       success: boolean
       data?: {
         kind: 'text' | 'image' | 'pdf' | 'doc' | 'docx' | 'xlsx' | 'pptx' | 'binary'
@@ -963,10 +842,7 @@ interface TabTinAPIShape {
       code?: string
       error?: string
     }>
-    renderOfficePreviewData: (input: {
-      fileName: string
-      data: ArrayBuffer | Uint8Array
-    }) => Promise<{
+    renderOfficePreviewData: (input: { fileName: string; data: ArrayBuffer | Uint8Array }) => Promise<{
       success: boolean
       data?: {
         kind: 'rendered-office'
@@ -988,11 +864,17 @@ interface TabTinAPIShape {
       data?: ArrayBuffer
       error?: string
     }>
-    writeFile: (path: string, content: string) => Promise<{
+    writeFile: (
+      path: string,
+      content: string
+    ) => Promise<{
       success: boolean
       error?: string
     }>
-    writeBinaryFile: (path: string, base64Data: string) => Promise<{
+    writeBinaryFile: (
+      path: string,
+      base64Data: string
+    ) => Promise<{
       success: boolean
       error?: string
     }>
@@ -1000,9 +882,36 @@ interface TabTinAPIShape {
     rename: (oldPath: string, newPath: string) => Promise<{ success: boolean; error?: string }>
     deleteFile: (path: string) => Promise<{ success: boolean; error?: string }>
     deleteDir: (path: string) => Promise<{ success: boolean; error?: string }>
-    ensureSpaceSandbox: (spaceId: string, organizationId?: string) => Promise<{ success: boolean; path?: string; skillsPath?: string; dataRoot?: string; userId?: string; error?: string }>
-    ensureDefaultAgentDir: (input: string | { agentName?: string | null; spaceName?: string | null; organizationName?: string | null }) => Promise<{ success: boolean; path?: string; error?: string }>
-    lookupSpaceSandbox: (spaceId: string, organizationId?: string) => Promise<{ success: boolean; path?: string; exists?: boolean; hasContent?: boolean; error?: string }>
+    ensureSpaceSandbox: (
+      spaceId: string,
+      organizationId?: string
+    ) => Promise<{
+      success: boolean
+      path?: string
+      skillsPath?: string
+      dataRoot?: string
+      userId?: string
+      error?: string
+    }>
+    ensureDefaultAgentDir: (
+      input:
+        | string
+        | {
+            agentName?: string | null
+            spaceName?: string | null
+            organizationName?: string | null
+          }
+    ) => Promise<{ success: boolean; path?: string; error?: string }>
+    lookupSpaceSandbox: (
+      spaceId: string,
+      organizationId?: string
+    ) => Promise<{
+      success: boolean
+      path?: string
+      exists?: boolean
+      hasContent?: boolean
+      error?: string
+    }>
     watch: (path: string, options?: { recursive?: boolean }) => Promise<{ success: boolean; watchId?: string; error?: string }>
     unwatch: (watchId: string) => Promise<{ success: boolean }>
     computeSkillContentHash: (skillDir: string) => Promise<{ success: boolean; hash?: string; error?: string }>
@@ -1030,7 +939,12 @@ interface TabTinAPIShape {
     }>
     checkoutBranch: (
       cwd: string,
-      options: { branch: string; create?: boolean; startPoint?: string; allowDirty?: boolean }
+      options: {
+        branch: string
+        create?: boolean
+        startPoint?: string
+        allowDirty?: boolean
+      }
     ) => Promise<{ success: boolean; error?: string }>
     getStatus: (cwd: string) => Promise<{
       success: boolean
@@ -1040,49 +954,76 @@ interface TabTinAPIShape {
     getDiffStat: (cwd: string) => Promise<{ success: boolean; stat: GitDiffStatResult }>
     getFileAtHead: (cwd: string, filePath: string) => Promise<{ success: boolean; content: string }>
     getFileAtStaged: (cwd: string, filePath: string) => Promise<{ success: boolean; content: string }>
-    getFileAtCommit: (
-      cwd: string,
-      options: { filePath: string; commitHash: string; parent?: boolean },
-    ) => Promise<{ success: boolean; content: string }>
+    getFileAtCommit: (cwd: string, options: { filePath: string; commitHash: string; parent?: boolean }) => Promise<{ success: boolean; content: string }>
     rawDiff: (cwd: string, extraArgs?: string[]) => Promise<{ success: boolean; diff?: string; error?: string }>
-    stageFiles: (cwd: string, paths?: string[]) => Promise<{
+    stageFiles: (
+      cwd: string,
+      paths?: string[]
+    ) => Promise<{
       success: boolean
       error?: string
       skippedPaths?: string[]
       skippedCount?: number
     }>
-    unstageFiles: (cwd: string, paths?: string[]) => Promise<{
+    unstageFiles: (
+      cwd: string,
+      paths?: string[]
+    ) => Promise<{
       success: boolean
       error?: string
       skippedPaths?: string[]
       skippedCount?: number
     }>
     commit: (cwd: string, message: string) => Promise<{ success: boolean; commitHash?: string; error?: string }>
-    push: (cwd: string, options?: {
-      remote?: string
-      branch?: string
-      setUpstream?: boolean
-      allowDirty?: boolean
-      allowBehind?: boolean
-      allowNoAhead?: boolean
-    }) => Promise<{ success: boolean; error?: string }>
-    pull: (cwd: string, options?: {
-      remote?: string
-      branch?: string
-      rebase?: boolean
-    }) => Promise<{ success: boolean; behind?: number; error?: string }>
-    fetch: (cwd: string, options?: {
-      remote?: string
-      prune?: boolean
-    }) => Promise<{ success: boolean; error?: string }>
-    stash: (cwd: string, action: 'save' | 'pop' | 'list' | 'drop', options?: {
-      message?: string
-      includeUntracked?: boolean
-      index?: number
-    }) => Promise<{ success: boolean; entries?: GitStashEntry[]; error?: string }>
+    push: (
+      cwd: string,
+      options?: {
+        remote?: string
+        branch?: string
+        setUpstream?: boolean
+        allowDirty?: boolean
+        allowBehind?: boolean
+        allowNoAhead?: boolean
+      }
+    ) => Promise<{ success: boolean; error?: string }>
+    pull: (
+      cwd: string,
+      options?: {
+        remote?: string
+        branch?: string
+        rebase?: boolean
+      }
+    ) => Promise<{ success: boolean; behind?: number; error?: string }>
+    fetch: (
+      cwd: string,
+      options?: {
+        remote?: string
+        prune?: boolean
+      }
+    ) => Promise<{ success: boolean; error?: string }>
+    stash: (
+      cwd: string,
+      action: 'save' | 'pop' | 'list' | 'drop',
+      options?: {
+        message?: string
+        includeUntracked?: boolean
+        index?: number
+      }
+    ) => Promise<{
+      success: boolean
+      entries?: GitStashEntry[]
+      error?: string
+    }>
     discardFiles: (cwd: string, paths: string[]) => Promise<{ success: boolean; discardedCount?: number; error?: string }>
-    listRemotes: (cwd: string) => Promise<{ success: boolean; remotes: GitRemoteItem[]; error?: string }>
-    getPullRequestUrl: (cwd: string, options?: { remote?: string; baseBranch?: string; headBranch?: string }) => Promise<{
+    listRemotes: (cwd: string) => Promise<{
+      success: boolean
+      remotes: GitRemoteItem[]
+      error?: string
+    }>
+    getPullRequestUrl: (
+      cwd: string,
+      options?: { remote?: string; baseBranch?: string; headBranch?: string }
+    ) => Promise<{
       success: boolean
       provider?: 'github' | 'gitlab'
       remote?: string
@@ -1091,14 +1032,17 @@ interface TabTinAPIShape {
       url?: string
       error?: string
     }>
-    createPullRequest: (cwd: string, options?: {
-      remote?: string
-      baseBranch?: string
-      headBranch?: string
-      title?: string
-      body?: string
-      draft?: boolean
-    }) => Promise<{
+    createPullRequest: (
+      cwd: string,
+      options?: {
+        remote?: string
+        baseBranch?: string
+        headBranch?: string
+        title?: string
+        body?: string
+        draft?: boolean
+      }
+    ) => Promise<{
       success: boolean
       provider?: 'github' | 'gitlab'
       remote?: string
@@ -1108,18 +1052,36 @@ interface TabTinAPIShape {
       diffSummary?: GitDiffSummary | null
       error?: string
     }>
-    listWorktrees: (cwd: string) => Promise<{ success: boolean; worktrees: GitWorktreeItem[]; error?: string }>
-    createWorktree: (cwd: string, options: { path: string; branch?: string; createBranch?: boolean; baseBranch?: string }) => Promise<{ success: boolean; error?: string }>
+    listWorktrees: (cwd: string) => Promise<{
+      success: boolean
+      worktrees: GitWorktreeItem[]
+      error?: string
+    }>
+    createWorktree: (
+      cwd: string,
+      options: {
+        path: string
+        branch?: string
+        createBranch?: boolean
+        baseBranch?: string
+      }
+    ) => Promise<{ success: boolean; error?: string }>
     preflightRemoveWorktree: (cwd: string, options: { path: string }) => Promise<WorktreeRemovePreflightResult>
     removeWorktree: (cwd: string, options: { path: string; force?: boolean; assessmentToken?: string }) => Promise<WorktreeRemoveResult>
-    mergeWorktree: (cwd: string, options: {
-      sourceWorktreePath: string
-      targetBranch: string
-      deleteAfterMerge?: boolean
-      deleteSourceBranch?: boolean
-    }) => Promise<GitWorktreeMergeResult>
+    mergeWorktree: (
+      cwd: string,
+      options: {
+        sourceWorktreePath: string
+        targetBranch: string
+        deleteAfterMerge?: boolean
+        deleteSourceBranch?: boolean
+      }
+    ) => Promise<GitWorktreeMergeResult>
     fullStatus: (cwd: string) => Promise<GitFullStatusResult>
-    listCommits: (cwd: string, options?: { limit?: number; graph?: boolean }) => Promise<{
+    listCommits: (
+      cwd: string,
+      options?: { limit?: number; graph?: boolean }
+    ) => Promise<{
       success: boolean
       commits: GitCommitListItem[]
       error?: string
@@ -1164,12 +1126,7 @@ interface TabTinAPIShape {
 
   // Space 上下文
   space: {
-    setActive: (
-      spaceId: string | null,
-      crawlspaceId?: string | null,
-      organizationId?: string | null,
-      organizationRoot?: string | null
-    ) => Promise<{ success: boolean }>
+    setActive: (spaceId: string | null, crawlspaceId?: string | null, organizationId?: string | null, organizationRoot?: string | null) => Promise<{ success: boolean }>
   }
 
   // TabDesktop 授权管理
@@ -1189,6 +1146,40 @@ interface TabTinAPIShape {
     openSettings: (kind: string) => Promise<unknown>
   }
 
+  meetingRecording: {
+    probeStorage: () => Promise<MeetingStorageProbeResult>
+    probeMedia: (input?: MeetingMediaProbeInput) => Promise<MeetingMediaProbeResult>
+    probeAsr: (input?: MeetingAsrProbeInput) => Promise<MeetingAsrProbeResult>
+    listMicrophones: () => Promise<MeetingMicrophoneDevice[]>
+    listSystemAudioSources: () => Promise<MeetingSystemAudioSource[]>
+    testMicrophone: (input?: MeetingMicrophoneTestInput) => Promise<MeetingMicrophoneTestResult>
+    switchMicrophone: (input: SwitchMeetingMicrophoneInput) => Promise<MeetingRecordingStatus>
+    switchSystemAudio: (input: SwitchMeetingSystemAudioInput) => Promise<MeetingRecordingStatus>
+    reportCaptureLevel: (event: MeetingCaptureLevelEvent) => Promise<void>
+    onCaptureLevel: (callback: (event: MeetingCaptureLevelEvent) => void) => () => void
+    reportMicrophoneTestLevel: (event: MeetingMicrophoneTestLevelEvent) => Promise<void>
+    onMicrophoneTestLevel: (callback: (event: MeetingMicrophoneTestLevelEvent) => void) => () => void
+    prepare: (input: PrepareMeetingArchiveInput) => Promise<MeetingRecordingStatus>
+    start: (scope: MeetingArchiveScope) => Promise<MeetingRecordingStatus>
+    pause: (scope: MeetingArchiveScope) => Promise<MeetingRecordingStatus>
+    resume: (scope: MeetingArchiveScope) => Promise<MeetingRecordingStatus>
+    stop: (scope: MeetingArchiveScope) => Promise<MeetingRecordingStatus>
+    cancel: (scope: MeetingArchiveScope) => Promise<MeetingRecordingStatus>
+    getStatus: () => Promise<MeetingRecordingStatus>
+    appendAudioChunk: (input: AppendMeetingAudioChunkInput) => Promise<MeetingRecordingStatus>
+    appendPcmChunk: (input: AppendMeetingPcmChunkInput) => Promise<void>
+    appendTranscript: (scope: MeetingArchiveScope, checkpoint: MeetingTranscriptCheckpoint) => Promise<void>
+    recoverInterrupted: () => Promise<MeetingArchiveManifestV1[]>
+    listArchives: (scope: MeetingArchiveListScope) => Promise<MeetingLocalArchive[]>
+    getArchive: (scope: MeetingArchiveScope) => Promise<MeetingLocalArchive>
+    setCopilotEnabled: (scope: MeetingArchiveScope, enabled: boolean) => Promise<MeetingRecordingStatus>
+    answerCopilotQuestion: (
+      scope: MeetingArchiveScope,
+      questionSegmentId: string,
+    ) => Promise<MeetingCopilotAnswerResult>
+    onStatusChanged: (callback: (status: MeetingRecordingStatus) => void) => () => void
+  }
+
   // 窗口外观（跟随系统时以主进程 shouldUseDarkColors 为准，见 ）
   setAppearance: (appearance: 'light' | 'dark' | 'system') => Promise<{
     success: boolean
@@ -1206,14 +1197,7 @@ interface TabTinAPIShape {
     shouldUseDarkColorsForSystemIntegratedUI?: boolean | null
     error?: string
   }>
-  onNativeThemeUpdated: (
-    callback: (payload: {
-      appearance: 'light' | 'dark' | 'system'
-      themeSource: 'system' | 'light' | 'dark'
-      shouldUseDarkColors: boolean
-      shouldUseDarkColorsForSystemIntegratedUI: boolean | null
-    }) => void,
-  ) => () => void
+  onNativeThemeUpdated: (callback: (payload: { appearance: 'light' | 'dark' | 'system'; themeSource: 'system' | 'light' | 'dark'; shouldUseDarkColors: boolean; shouldUseDarkColorsForSystemIntegratedUI: boolean | null }) => void) => () => void
 
   // 放映全屏控制
   slideshow: {
@@ -1232,9 +1216,7 @@ interface TabTinAPIShape {
   // renderer 弹合并对话框让用户三选（save-all / discard / cancel），结果回传 main 决定是否继续退出。
   exitGuard: {
     /** main → renderer：触发合并对话框；payload 含 reason（区分 ⌘Q vs 关窗口）+ requestId */
-    onRequest: (
-      callback: (payload: { reason: 'app-quit' | 'window-close'; requestId: string }) => void,
-    ) => () => void
+    onRequest: (callback: (payload: { reason: 'app-quit' | 'window-close'; requestId: string }) => void) => () => void
     /** renderer → main：用户做出选择，'continue' = 继续退出/关闭，'cancel' = 用户取消 */
     sendResponse: (payload: { requestId: string; choice: 'continue' | 'cancel' }) => void
   }
@@ -1244,7 +1226,17 @@ interface TabTinAPIShape {
     create: (runId?: string, sessionId?: string) => Promise<any>
     get: (runId: string) => Promise<any>
     hasActiveRunForView: (viewId: string) => Promise<{ active: boolean; runId?: string }>
-    registerView: (runId: string, viewInfo: { viewId: string; profile?: string; partition?: string; userAgent?: string; proxy?: any; metadata?: Record<string, any> }) => Promise<any>
+    registerView: (
+      runId: string,
+      viewInfo: {
+        viewId: string
+        profile?: string
+        partition?: string
+        userAgent?: string
+        proxy?: any
+        metadata?: Record<string, any>
+      }
+    ) => Promise<any>
     setActiveView: (runId: string, viewId?: string | null) => Promise<any>
     addEvent: (payload: { runId?: string; viewId?: string; type: string; data?: any; timestamp?: number }) => Promise<any>
     openTab: (payload: { runId?: string; id?: string; url?: string; profile?: string; partition?: string; userAgent?: string; proxy?: any; metadata?: Record<string, any> }) => Promise<any>
@@ -1257,13 +1249,7 @@ interface TabTinAPIShape {
 
   // 🆕 嵌入式爬虫视图
   crawlView: {
-    show: (
-      urlOrTabId: string,
-      boundsOrUrl: { x: number; y: number; width: number; height: number } | string,
-      maybeBounds?: { x: number; y: number; width: number; height: number },
-      runId?: string,
-      options?: CrawlViewOptions
-    ) => Promise<{ success: boolean; error?: string }>
+    show: (urlOrTabId: string, boundsOrUrl: { x: number; y: number; width: number; height: number } | string, maybeBounds?: { x: number; y: number; width: number; height: number }, runId?: string, options?: CrawlViewOptions) => Promise<{ success: boolean; error?: string }>
     // 🆕 支持 runId 参数（第四位），便于主进程绑定 run/session
     hide: (tabId?: string) => Promise<{ success: boolean; error?: string }>
     setViewBounds: (tabId: string, bounds: { x: number; y: number; width: number; height: number }) => Promise<{ success: boolean; error?: string }>
@@ -1272,8 +1258,16 @@ interface TabTinAPIShape {
     hasView: (tabId: string) => Promise<{ success: boolean; exists?: boolean; error?: string }>
     touch: (tabId: string, reason?: string) => Promise<{ success: boolean; error?: string }>
     reconcileOrphans: (payload: { knownTabIds?: string[]; knownViewIds?: string[]; knownWorkspaceIds?: string[]; reason?: string }) => Promise<{ success: boolean; summary?: any; error?: string }>
-    getCacheStats: () => Promise<{ success: boolean; stats?: any; error?: string }>
-    cleanupCache: () => Promise<{ success: boolean; stats?: any; error?: string }>
+    getCacheStats: () => Promise<{
+      success: boolean
+      stats?: any
+      error?: string
+    }>
+    cleanupCache: () => Promise<{
+      success: boolean
+      stats?: any
+      error?: string
+    }>
 
     // 🆕 导航控制
     goBack: (tabId?: string) => Promise<{ success: boolean; canGoBack?: boolean; error?: string }>
@@ -1320,29 +1314,23 @@ interface TabTinAPIShape {
     ) => Promise<{ success: boolean; elapsedMs?: number; error?: string }>
 
     // 🆕 页面读取（Phase 3）
-    getHTML: (
-      tabId?: string,
-      url?: string,
-      runId?: string,
-      options?: CrawlViewOptions
-    ) => Promise<{ success: boolean; html?: string; error?: string }>
+    getHTML: (tabId?: string, url?: string, runId?: string, options?: CrawlViewOptions) => Promise<{ success: boolean; html?: string; error?: string }>
     getPageInfo: (
       tabId?: string,
       url?: string,
       runId?: string,
       options?: CrawlViewOptions
-    ) => Promise<{ success: boolean; pageInfo?: { html: string; url: string; title: string }; error?: string }>
+    ) => Promise<{
+      success: boolean
+      pageInfo?: { html: string; url: string; title: string }
+      error?: string
+    }>
 
     // 🆕 事件监听（Phase 2）
-    onEvent: (callback: (event: any) => void) => () => void  // 返回取消订阅函数
+    onEvent: (callback: (event: any) => void) => () => void // 返回取消订阅函数
 
     // 🆕 内容操作（Phase 2）
-    executeScript: (
-      script: string,
-      tabId?: string,
-      url?: string,
-      options?: CrawlViewOptions
-    ) => Promise<{ success: boolean; result?: any; error?: string }>
+    executeScript: (script: string, tabId?: string, url?: string, options?: CrawlViewOptions) => Promise<{ success: boolean; result?: any; error?: string }>
     cancelAnnotation: (tabId: string) => Promise<{ success: boolean; result?: any; error?: string }>
     getProcessedContent: (
       tabId?: string,
@@ -1364,16 +1352,39 @@ interface TabTinAPIShape {
       url?: string,
       runId?: string,
       viewOptions?: CrawlViewOptions
-    ) => Promise<{ success: boolean; data?: string; format?: string; error?: string }>
+    ) => Promise<{
+      success: boolean
+      data?: string
+      format?: string
+      error?: string
+    }>
 
     // 🆕 CDP 集成（Phase 3）
-    getCDPEndpoint: () => Promise<{ success: boolean; endpoint?: string; error?: string }>
-    getWebContentsId: () => Promise<{ success: boolean; id?: number; error?: string }>
+    getCDPEndpoint: () => Promise<{
+      success: boolean
+      endpoint?: string
+      error?: string
+    }>
+    getWebContentsId: () => Promise<{
+      success: boolean
+      id?: number
+      error?: string
+    }>
 
     // 🆕 Find-in-Page & Zoom
     findInPage: (tabId: string, text: string, options?: { forward?: boolean; findNext?: boolean; matchCase?: boolean }) => Promise<{ success: boolean; requestId?: number; error?: string }>
     stopFindInPage: (tabId: string, action?: 'clearSelection' | 'keepSelection' | 'activateSelection') => Promise<{ success: boolean; error?: string }>
-    onFoundInPage: (callback: (event: any, data: { viewId: string; activeMatchOrdinal: number; matches: number; finalUpdate?: boolean }) => void) => () => void
+    onFoundInPage: (
+      callback: (
+        event: any,
+        data: {
+          viewId: string
+          activeMatchOrdinal: number
+          matches: number
+          finalUpdate?: boolean
+        }
+      ) => void
+    ) => () => void
     onCrashRecovered: (callback: (payload: { viewId: string; reason: string; url: string }) => void) => () => void
     /**
      * 监听"env 绑定变更触发的 workspace view 重建"事件。
@@ -1410,15 +1421,22 @@ interface TabTinAPIShape {
   /** <webview> tag 容器的主进程协调 API（仅 flag=webview 时由 WebviewManager 使用） */
   webviewHost: {
     /** 创建 <webview> 元素前声明配置；返回元素应使用的完整 partition 字符串 */
-    announce: (tabId: string, options: {
-      url: string
-      profile?: string
-      partition?: string
-      crawlspaceId?: string
-      kind?: string
-      isPreview?: boolean
-      runId?: string
-    }) => Promise<{ success: boolean; effectivePartition?: string; error?: string }>
+    announce: (
+      tabId: string,
+      options: {
+        url: string
+        profile?: string
+        partition?: string
+        crawlspaceId?: string
+        kind?: string
+        isPreview?: boolean
+        runId?: string
+      }
+    ) => Promise<{
+      success: boolean
+      effectivePartition?: string
+      error?: string
+    }>
     /** dom-ready 后上报 webContentsId 完成 tabId↔guest 权威绑定 */
     bind: (tabId: string, webContentsId: number) => Promise<{ success: boolean; already?: boolean; error?: string }>
     /**
@@ -1426,7 +1444,16 @@ interface TabTinAPIShape {
      * expectedPartition：调用方 store 中的最新 partition，主进程比对权威条目，
      * 不一致返回 code='partition-mismatch' 要求销毁元素重建（env 绑定切换）。
      */
-    navigate: (tabId: string, url: string, options?: { expectedPartition?: string }) => Promise<{ success: boolean; skipped?: string; code?: string; error?: string }>
+    navigate: (
+      tabId: string,
+      url: string,
+      options?: { expectedPartition?: string }
+    ) => Promise<{
+      success: boolean
+      skipped?: string
+      code?: string
+      error?: string
+    }>
     /** 元素未 attach 就被销毁时清理主进程 pending 登记 */
     discardAnnounce: (tabId: string) => Promise<{ success: boolean; error?: string }>
     /** guest 渲染进程崩溃 → renderer 应执行 webview.reload() 恢复 */
@@ -1467,15 +1494,28 @@ interface TabTinAPIShape {
   taskAPI: {
     create: (config: any) => Promise<{ success: boolean; task?: any; error?: string }>
     get: (taskId: string) => Promise<{ success: boolean; task?: any; error?: string }>
-    query: (options: any) => Promise<{ success: boolean; tasks?: any[]; total?: number; error?: string }>
+    query: (options: any) => Promise<{
+      success: boolean
+      tasks?: any[]
+      total?: number
+      error?: string
+    }>
     getAll: (filter?: any) => Promise<{ success: boolean; tasks?: any[]; error?: string }>
     update: (taskId: string, updates: any) => Promise<{ success: boolean; task?: any; error?: string }>
     updateMetadata: (taskId: string, metadata: Record<string, any>) => Promise<{ success: boolean; task?: any; error?: string }>
     delete: (taskId: string) => Promise<{ success: boolean; error?: string }>
-    getStatistics: () => Promise<{ success: boolean; statistics?: any; error?: string }>
+    getStatistics: () => Promise<{
+      success: boolean
+      statistics?: any
+      error?: string
+    }>
     cleanup: (olderThan?: number) => Promise<{ success: boolean; cleaned?: number; error?: string }>
     clear: () => Promise<{ success: boolean; error?: string }>
-    getStoreInfo: () => Promise<{ success: boolean; info?: any; error?: string }>
+    getStoreInfo: () => Promise<{
+      success: boolean
+      info?: any
+      error?: string
+    }>
     onStateChange: (callback: (event: any) => void) => () => void
     // 生命周期操作
     enqueue: (taskId: string) => Promise<{ success: boolean; task?: any; error?: string }>
@@ -1483,16 +1523,7 @@ interface TabTinAPIShape {
     pause: (taskId: string) => Promise<{ success: boolean; task?: any; error?: string }>
     resume: (taskId: string) => Promise<{ success: boolean; task?: any; error?: string }>
     resumeWithPagination: (params: { taskId: string; pages: number; method: 'click' | 'scroll' | 'both' }) => Promise<{ success: boolean; task?: any; error?: string }>
-    selectRecommendation: (params: {
-      taskId: string
-      recommendationId: string
-      instruction: string
-      selectionType?: 'history' | 'recommendation'
-      selectionSource?: string
-      schema?: any
-      metadata?: Record<string, any>
-      skeletonHtml?: string
-    }) => Promise<{ success: boolean; task?: any; error?: string }>
+    selectRecommendation: (params: { taskId: string; recommendationId: string; instruction: string; selectionType?: 'history' | 'recommendation'; selectionSource?: string; schema?: any; metadata?: Record<string, any>; skeletonHtml?: string }) => Promise<{ success: boolean; task?: any; error?: string }>
     cancel: (taskId: string) => Promise<{ success: boolean; task?: any; error?: string }>
   }
 
@@ -1528,13 +1559,7 @@ interface TabTinAPIShape {
      * @param action - 动作数据（task_id, type, params）
      * @returns Promise<ActionResult>
      */
-    executeAction: (action: {
-      task_id: string
-      action: string
-      params: Record<string, any>
-      crawlTabId?: string
-      sandbox_policy?: Record<string, any>
-    }) => Promise<{
+    executeAction: (action: { task_id: string; action: string; params: Record<string, any>; crawlTabId?: string; sandbox_policy?: Record<string, any> }) => Promise<{
       success: boolean
       clean_html?: string
       skeleton_html?: string
@@ -1552,14 +1577,7 @@ interface TabTinAPIShape {
      * main 端校验路径存在 / 是 Git 工作树 / 会话未 busy；失败时返回
      * `{ success: false, reason }`，不抛异常。
      */
-    bindSessionCodeRoot: (payload: {
-      sessionId: string
-      rootPath: string
-      revision?: number
-      tabKey?: string
-      branch?: string
-      title?: string
-    }) => Promise<{
+    bindSessionCodeRoot: (payload: { sessionId: string; rootPath: string; revision?: number; tabKey?: string; branch?: string; title?: string }) => Promise<{
       success: boolean
       rootPath?: string
       revision?: number
@@ -1586,21 +1604,21 @@ interface TabTinAPIShape {
     /** 批量拉取会话代码根（启动 hydration / 会话列表恢复）。 */
     listSessionCodeRoots: (payload: { sessionIds: string[] }) => Promise<{
       success: boolean
-      bindings?: Record<string, {
-        rootPath: string
-        revision: number
-        tabKey?: string
-        branch?: string
-        title?: string
-        boundAt: number
-      }>
+      bindings?: Record<
+        string,
+        {
+          rootPath: string
+          revision: number
+          tabKey?: string
+          branch?: string
+          title?: string
+          boundAt: number
+        }
+      >
       error?: string
     }>
     /** 草稿转正：把代码根绑定从临时 sessionId 原子迁到真 sessionId。 */
-    rehomeSessionCodeRoot: (payload: {
-      fromSessionId: string
-      toSessionId: string
-    }) => Promise<{
+    rehomeSessionCodeRoot: (payload: { fromSessionId: string; toSessionId: string }) => Promise<{
       success: boolean
       binding?: {
         rootPath: string
@@ -1639,17 +1657,12 @@ interface TabTinAPIShape {
         queuedRunIds: string[]
       }>
     }>
-    rollbackTranscript: (payload: {
-      sessionId: string
-      targetMessageId?: string
-      targetRole?: 'user' | 'assistant'
-      targetContent?: string
-      targetOccurrenceIndex?: number
-      mode?: 'rollback' | 'editAndResend'
-      keepMessageCount?: number
-      spaceId?: string
-      organizationId?: string
-    }) => Promise<{ success: boolean; applied?: boolean; keepMessageCount?: number | null; error?: string }>
+    rollbackTranscript: (payload: { sessionId: string; targetMessageId?: string; targetRole?: 'user' | 'assistant'; targetContent?: string; targetOccurrenceIndex?: number; mode?: 'rollback' | 'editAndResend'; keepMessageCount?: number; spaceId?: string; organizationId?: string }) => Promise<{
+      success: boolean
+      applied?: boolean
+      keepMessageCount?: number | null
+      error?: string
+    }>
     rollbackSessionTimeline: (payload: {
       sessionId: string
       targetMessageId: string
@@ -1667,14 +1680,17 @@ interface TabTinAPIShape {
       safetySnapshotHash?: string
       spaceId?: string
       organizationId?: string
-    }) => Promise<{ success: boolean; applied?: boolean; keepMessageCount?: number | null; backend?: unknown; error?: string }>
+    }) => Promise<{
+      success: boolean
+      applied?: boolean
+      keepMessageCount?: number | null
+      backend?: unknown
+      error?: string
+    }>
     unrevertTranscript: (payload: { sessionId: string; spaceId?: string; organizationId?: string }) => Promise<{ success: boolean; error?: string }>
     onStreamEvent: (callback: (data: { sessionId: string; event: { type: string; payload: Record<string, unknown> } }) => void) => () => void
     /** ：声明对某 session 的实时流观察意图（主进程据此订阅 WS 观察源）。 */
-    watchSession: (
-      sessionId: string,
-      options?: { shareId?: string },
-    ) => Promise<{ success: boolean }>
+    watchSession: (sessionId: string, options?: { shareId?: string }) => Promise<{ success: boolean }>
     /** ：撤销对某 session 的实时流观察意图。 */
     unwatchSession: (sessionId: string) => Promise<{ success: boolean }>
     registerProvisionalSession: (sessionId: string) => Promise<{ registered: boolean }>
@@ -1683,18 +1699,12 @@ interface TabTinAPIShape {
       tracked: boolean
       reason?: string
     }>
-    completeProvisionalSessionClaim: (
-      sessionId: string,
-      accepted: boolean,
-    ) => Promise<{ completed: boolean }>
+    completeProvisionalSessionClaim: (sessionId: string, accepted: boolean) => Promise<{ completed: boolean }>
     beginProvisionalSessionDiscard: (sessionId: string) => Promise<{
       accepted: boolean
       reason?: string
     }>
-    completeProvisionalSessionDiscard: (
-      sessionId: string,
-      deleted: boolean,
-    ) => Promise<{ completed: boolean }>
+    completeProvisionalSessionDiscard: (sessionId: string, deleted: boolean) => Promise<{ completed: boolean }>
     /** ：出站遥控发送经主进程 WS 网关执行，回传 GatewayResponse（caller 自判 ok）。 */
     gatewaySend: (payload: { messageType: string; payload: Record<string, unknown>; requestOptions?: Record<string, unknown> }) => Promise<{
       ok: boolean
@@ -1731,14 +1741,7 @@ interface TabTinAPIShape {
      * ：Composer Stop 撤回未答轮次（经 runtime：abort + rewind commit + 主进程投影）。
      * 渲染进程不得直打 Django。
      */
-    withdrawUnansweredTurn: (payload: {
-      sessionId: string
-      clientMessageId: string
-      localMessageId?: string
-      targetContent?: string
-      spaceId?: string
-      organizationId?: string
-    }) => Promise<{
+    withdrawUnansweredTurn: (payload: { sessionId: string; clientMessageId: string; localMessageId?: string; targetContent?: string; spaceId?: string; organizationId?: string }) => Promise<{
       success: boolean
       aborted: {
         localHit: boolean
@@ -1762,9 +1765,7 @@ interface TabTinAPIShape {
      */
     onApprovalMemoChanged: (callback: (data: { workspaceId: string }) => void) => () => void
     /** Agent CLI 在安全边界提交 worktree 切换后，驱动 TabCode/Changes 同步。 */
-    onSessionCodeRootChanged: (
-      callback: (data: SessionCodeRootChangedEvent) => void,
-    ) => () => void
+    onSessionCodeRootChanged: (callback: (data: SessionCodeRootChangedEvent) => void) => () => void
     /**
      * v0.4 W1.5（PRD §6.7 / §7.4）：批量审批提交通道。
      * - batchId：runtime 端 LocalPermissionHandler.requestPermissionsBatch 注册的 pending key。
@@ -1779,7 +1780,7 @@ interface TabTinAPIShape {
         scope?: 'once' | 'thread' | 'always'
         rejection_message?: string
       }>,
-      threadId?: string,
+      threadId?: string
     ) => Promise<{ success: boolean; error?: string; code?: string }>
     /** ask_user 单 request 通道（开放式问答路径，独立保留）。 */
     submitAskUserResponse: (requestId: string, response: unknown, threadId?: string) => Promise<{ success: boolean; error?: string; code?: string }>
@@ -1788,16 +1789,8 @@ interface TabTinAPIShape {
      * （HitlInteractionEvent status='cancelled'）。区别于 skipped（LLM 换问再问）：
      * cancelled 让 LLM 知道用户不想再回答同一件事，不去 re-open。
      */
-    cancelHitlInteraction: (payload: {
-      kind: 'approval' | 'ask'
-      requestKey: string
-      reason?: string
-    }) => Promise<{ success: boolean; error?: string; code?: string }>
-    executeModeSwitch: (payload: {
-      sessionId: string
-      proposalId: string
-      outcome: 'approved' | 'cancelled'
-    }) => Promise<{
+    cancelHitlInteraction: (payload: { kind: 'approval' | 'ask'; requestKey: string; reason?: string }) => Promise<{ success: boolean; error?: string; code?: string }>
+    executeModeSwitch: (payload: { sessionId: string; proposalId: string; outcome: 'approved' | 'cancelled' }) => Promise<{
       success: boolean
       outcome?: 'approved' | 'cancelled'
       error?: string
@@ -1807,11 +1800,7 @@ interface TabTinAPIShape {
      *   - cancel 该 session 的 pending HITL（F8）
      *   - 任意合法 mode 切换后记录一次 mode transition reminder（F9）
      */
-    notifyModeSwitched: (payload: {
-      sessionId: string
-      fromMode?: string
-      toMode: string
-    }) => Promise<{
+    notifyModeSwitched: (payload: { sessionId: string; fromMode?: string; toMode: string }) => Promise<{
       success: boolean
       cancelledHitlBatchCount?: number
       modeTransitionReminderSet?: boolean
@@ -1822,19 +1811,13 @@ interface TabTinAPIShape {
      * live 更新运行中 session 的 `policyContext.requestedApprovalMode` + 重拉权威
      * grant，使同轮下一个工具即按新档判决（不必等下一条消息）。
      */
-    notifyApprovalModeChanged: (payload: {
-      sessionId: string
-      approvalMode: string
-    }) => Promise<{
+    notifyApprovalModeChanged: (payload: { sessionId: string; approvalMode: string }) => Promise<{
       success: boolean
       applied?: boolean
       error?: string
     }>
     /** Settings / chat 授权写入成功后，主动失效 main 进程的权威 agent_config cache。 */
-    invalidateAgentConfigCache: (payload?: {
-      agentId?: string
-      workspaceId?: string
-    }) => Promise<{ success: true }>
+    invalidateAgentConfigCache: (payload?: { agentId?: string; workspaceId?: string }) => Promise<{ success: true }>
     /**
      * 前端维护的 Agent / Workspace 变更推送到 Host turn 状态仓库。
      * 发送路径优先读此状态，避免每轮 DETAIL。
@@ -1874,7 +1857,29 @@ interface TabTinAPIShape {
      */
     listRunningBackgroundTasks: (input: { sessionId: string; spaceId?: string }) => Promise<Array<{ sessionId: string; command: string; startedAt: number }>>
     retryTool: (sessionId: string, toolName: string, args: Record<string, unknown>) => Promise<{ success: boolean; result?: unknown; error?: string }>
-    updateContext: (sessionId: string, appContext: { appType?: string | null; appMeta?: Record<string, unknown> | null; openTabs?: Array<{ type: string; id?: string; title?: string; active?: boolean; group_id?: string; app_key?: string; display_name?: string; is_home?: boolean; app_home?: string; path?: string; kind?: string; url?: string; session_id?: string }> | null; spaceId?: string | null }) => Promise<{ success: boolean }>
+    updateContext: (
+      sessionId: string,
+      appContext: {
+        appType?: string | null
+        appMeta?: Record<string, unknown> | null
+        openTabs?: Array<{
+          type: string
+          id?: string
+          title?: string
+          active?: boolean
+          group_id?: string
+          app_key?: string
+          display_name?: string
+          is_home?: boolean
+          app_home?: string
+          path?: string
+          kind?: string
+          url?: string
+          session_id?: string
+        }> | null
+        spaceId?: string | null
+      }
+    ) => Promise<{ success: boolean }>
     /**
      * LH2-D2：登出 / 切账号时调用，清主进程对应账号的 sync 目录与
      * 正在运行的 SyncQueue。**严格按 owner 匹配**——只动当前账号的桶，
@@ -1886,10 +1891,7 @@ interface TabTinAPIShape {
      * 渲染层本地缓存（ActiveRunBinding / superseded / HostTurnPush）由
      * `initCapabilityIdentity` 服务一并清；本 IPC 只打主进程。
      */
-    initCapabilityIdentity: (payload?: {
-      reason?: 'login' | 'logout' | 'auth-changed' | 'organization-switch' | 'manual'
-      organizationId?: string | null
-    }) => Promise<{ success: true; rewarmed: boolean }>
+    initCapabilityIdentity: (payload?: { reason?: 'login' | 'logout' | 'auth-changed' | 'organization-switch' | 'manual'; organizationId?: string | null }) => Promise<{ success: true; rewarmed: boolean }>
     checkPending: (threadId: string) => Promise<{ pending_count: number; thread_ids: string[] }>
     onProactiveReport: (callback: (data: { threadId: string; content: string; runIds: string[] }) => void) => () => void
     /**
@@ -1902,16 +1904,12 @@ interface TabTinAPIShape {
      * 不传 filter / filter 字段都为空 → 清空所有缓存（删凭据时用，影响面最广）。
      * 仅传 spaceId / 仅传 skillKey / 同时传 → 由 resolver 各自匹配清单条。
      */
-    invalidateSkillCredentialCache: (
-      filter?: { spaceId?: string; skillKey?: string },
-    ) => Promise<{ success: boolean; sessions?: number; error?: string }>
+    invalidateSkillCredentialCache: (filter?: { spaceId?: string; skillKey?: string }) => Promise<{ success: boolean; sessions?: number; error?: string }>
     /**
      * ：失效主进程 Agent Skill 启用快照（SkillEnablementMapCache）。
      * 面板启用/停用/携带集变更后调用，避免斜杠直链读到旧 map。
      */
-    invalidateSkillEnablementCache: (
-      filter?: { agentId?: string },
-    ) => Promise<{ success: boolean; error?: string }>
+    invalidateSkillEnablementCache: (filter?: { agentId?: string }) => Promise<{ success: boolean; error?: string }>
     /**
      * M1.4 / v0.2 per-Organization：手动失效主进程 USER 画像缓存。
      *
@@ -1961,10 +1959,7 @@ interface TabTinAPIShape {
     getDeviceModelPreferences: (organizationId: string) => Promise<{
       preferences: OrganizationDeviceModelPreferences
     }>
-    setDeviceModelPreferences: (
-      organizationId: string,
-      preferences: OrganizationDeviceModelPreferences,
-    ) => Promise<{ preferences: OrganizationDeviceModelPreferences }>
+    setDeviceModelPreferences: (organizationId: string, preferences: OrganizationDeviceModelPreferences) => Promise<{ preferences: OrganizationDeviceModelPreferences }>
     setSessionContextTier: (sessionId: string, tierId: string | null) => Promise<{ success: true }>
     setSessionModelParamOverrides: (sessionId: string, overrides: Record<string, unknown> | null) => Promise<{ success: true }>
     readSnapshots: (sessionId: string, ctx?: { spaceId?: string; organizationId?: string }) => Promise<{ success: boolean; snapshots?: unknown[]; error?: string }>
@@ -1977,14 +1972,7 @@ interface TabTinAPIShape {
      * ：云端 fork 后复制本机 SessionStorage 归档到新 session，并 remap
      * tool_use id。源无本机正文时 skipped（success 仍为 true）。
      */
-    forkLocalSession: (input: {
-      sourceSessionId: string
-      newSessionId: string
-      spaceId?: string
-      organizationId?: string
-      forkAnchorMessageId?: string
-      toolIdRemap?: Record<string, string>
-    }) => Promise<{
+    forkLocalSession: (input: { sourceSessionId: string; newSessionId: string; spaceId?: string; organizationId?: string; forkAnchorMessageId?: string; toolIdRemap?: Record<string, string> }) => Promise<{
       success: boolean
       copied?: boolean
       skipped?: boolean
@@ -2045,11 +2033,7 @@ interface TabTinAPIShape {
      * SUBAGENT_PROGRESS 事件流里有，索引文件不持久化。展开历史卡片看不到
      * "每一步工具调用"是当前架构的妥协，待后续从子 events.jsonl 扫描补全。
      */
-    listSubagentRuns: (input: {
-      parentSessionId: string
-      organizationId?: string
-      spaceId?: string
-    }) => Promise<
+    listSubagentRuns: (input: { parentSessionId: string; organizationId?: string; spaceId?: string }) => Promise<
       | {
           ok: true
           runs: Array<{
@@ -2085,11 +2069,13 @@ interface TabTinAPIShape {
   }
 
   cli: {
-    getCoreCommandCatalog: () => Promise<Array<{
-      name: string
-      description: string
-      examples: string[]
-    }>>
+    getCoreCommandCatalog: () => Promise<
+      Array<{
+        name: string
+        description: string
+        examples: string[]
+      }>
+    >
   }
 
   capabilityDiscovery: {
@@ -2098,75 +2084,29 @@ interface TabTinAPIShape {
   }
 
   resourceMonitor: {
-    getSnapshot: (options?: {
-      mode?: ResourceMonitorSnapshotMode
-      force?: boolean
-    }) => Promise<ResourceMonitorSnapshot>
+    getSnapshot: (options?: { mode?: ResourceMonitorSnapshotMode; force?: boolean }) => Promise<ResourceMonitorSnapshot>
   }
 
   localMcp: {
     discover: () => Promise<LocalMcpDiscoveryResult>
     listConnections: () => Promise<LocalMcpConnectionSummary[]>
-    getConnectionDetail: (
-      connectionId: string,
-      options?: { includeSecrets?: boolean },
-    ) => Promise<LocalMcpConnectionDetail>
-    shareConnectionToOrganization: (
-      connectionId: string,
-      organizationId: string,
-    ) => Promise<{ id: string; name: string }>
-    importCandidate: (
-      candidateId: string,
-      options?: { attachToAgentId?: string; name?: string }
-    ) => Promise<LocalMcpConnectionSummary>
-    saveManualConnection: (
-      input: LocalMcpManualConnectionInput
-    ) => Promise<LocalMcpConnectionSummary>
-    upsertOrganizationMirror: (
-      input: LocalMcpOrganizationMirrorInput
-    ) => Promise<LocalMcpConnectionSummary>
-    attachConnection: (
-      connectionId: string,
-      agentId: string,
-      attached: boolean
-    ) => Promise<LocalMcpConnectionSummary>
-    setConnectionEnabled: (
-      connectionId: string,
-      enabled: boolean
-    ) => Promise<LocalMcpConnectionSummary>
+    getConnectionDetail: (connectionId: string, options?: { includeSecrets?: boolean }) => Promise<LocalMcpConnectionDetail>
+    shareConnectionToOrganization: (connectionId: string, organizationId: string) => Promise<{ id: string; name: string }>
+    importCandidate: (candidateId: string, options?: { attachToAgentId?: string; name?: string }) => Promise<LocalMcpConnectionSummary>
+    saveManualConnection: (input: LocalMcpManualConnectionInput) => Promise<LocalMcpConnectionSummary>
+    upsertOrganizationMirror: (input: LocalMcpOrganizationMirrorInput) => Promise<LocalMcpConnectionSummary>
+    attachConnection: (connectionId: string, agentId: string, attached: boolean) => Promise<LocalMcpConnectionSummary>
+    setConnectionEnabled: (connectionId: string, enabled: boolean) => Promise<LocalMcpConnectionSummary>
     deleteConnection: (connectionId: string) => Promise<{ ok: true }>
-    probeConnection: (
-      connectionId: string,
-      options?: { timeoutMs?: number; openOAuthWindow?: boolean },
-    ) => Promise<LocalMcpProbeSummary>
+    probeConnection: (connectionId: string, options?: { timeoutMs?: number; openOAuthWindow?: boolean }) => Promise<LocalMcpProbeSummary>
     cancelProbe: (connectionId: string) => Promise<{ cancelled: boolean }>
-    waitForPlatformOAuthTicket: (input: {
-      authorizeUrl: string
-      donePathIncludes?: string
-      timeoutMs?: number
-    }) => Promise<{ ticket: string; login?: string }>
+    waitForPlatformOAuthTicket: (input: { authorizeUrl: string; donePathIncludes?: string; timeoutMs?: number }) => Promise<{ ticket: string; login?: string }>
     closePlatformOAuthWindow: () => Promise<{ ok: true }>
   }
 
   resourceDetection: {
-    getResources: (payload: {
-      viewId: string
-      category?: string
-      captureStatus?: string
-      capability?: string
-      limit?: number
-      probeMedia?: boolean
-      hideSegments?: boolean
-    }) => Promise<any>
-    listResources: (payload: {
-      viewId: string
-      category?: string
-      captureStatus?: string
-      capability?: string
-      limit?: number
-      probeMedia?: boolean
-      hideSegments?: boolean
-    }) => Promise<any>
+    getResources: (payload: { viewId: string; category?: string; captureStatus?: string; capability?: string; limit?: number; probeMedia?: boolean; hideSegments?: boolean }) => Promise<any>
+    listResources: (payload: { viewId: string; category?: string; captureStatus?: string; capability?: string; limit?: number; probeMedia?: boolean; hideSegments?: boolean }) => Promise<any>
     inspectResource: (payload: { resourceId: string; viewId?: string }) => Promise<any>
     captureResource: (payload: { resourceId?: string; url?: string; viewId?: string; force?: boolean }) => Promise<any>
     downloadResource: (payload: { resourceId?: string; url?: string; viewId?: string; filename?: string; headers?: Record<string, string> }) => Promise<any>
@@ -2174,34 +2114,15 @@ interface TabTinAPIShape {
      * 远程媒体拉进内存（不落盘）。第三方 CDN 不走 api-proxy 白名单。
      *  file-ref 拖回 Composer / 附件 blob 缓存。
      */
-    fetchBuffer: (payload: {
-      url: string
-      headers?: Record<string, string>
-      maxBytes?: number
-    }) => Promise<{
+    fetchBuffer: (payload: { url: string; headers?: Record<string, string>; maxBytes?: number }) => Promise<{
       success: boolean
       data?: { buffer: ArrayBuffer; mimeType: string; size: number }
       error?: string
     }>
-    downloadBatch: (payload: {
-      resourceIds?: string[]
-      urls?: string[]
-      headers?: Record<string, string>
-      concurrency?: number
-      viewId?: string
-    }) => Promise<any>
+    downloadBatch: (payload: { resourceIds?: string[]; urls?: string[]; headers?: Record<string, string>; concurrency?: number; viewId?: string }) => Promise<any>
     parseM3U8: (payload: { resourceId?: string; url?: string; viewId?: string; headers?: Record<string, string> }) => Promise<any>
     parseStream: (payload: { resourceId?: string; url?: string; viewId?: string; headers?: Record<string, string> }) => Promise<any>
-    downloadStream: (payload: {
-      resourceId?: string
-      url?: string
-      viewId?: string
-      quality?: string
-      filename?: string
-      outputPath?: string
-      headers?: Record<string, string>
-      concurrency?: number
-    }) => Promise<any>
+    downloadStream: (payload: { resourceId?: string; url?: string; viewId?: string; quality?: string; filename?: string; outputPath?: string; headers?: Record<string, string>; concurrency?: number }) => Promise<any>
   }
 
   // PTY API（交互式终端）
@@ -2209,14 +2130,17 @@ interface TabTinAPIShape {
     /**
      * 创建 pty 会话
      */
-    spawn: (sessionId: string, options?: {
-      cwd?: string
-      env?: Record<string, string>
-      cols?: number
-      rows?: number
-      /** 真实执行 Space；主进程据此设置 shell 的 TABTIN_SPACE_ID（桌面终端不传） */
-      spaceId?: string
-    }) => Promise<{ success: boolean }>
+    spawn: (
+      sessionId: string,
+      options?: {
+        cwd?: string
+        env?: Record<string, string>
+        cols?: number
+        rows?: number
+        /** 真实执行 Space；主进程据此设置 shell 的 TABTIN_SPACE_ID（桌面终端不传） */
+        spaceId?: string
+      }
+    ) => Promise<{ success: boolean }>
 
     /**
      * 向 pty 写入数据
@@ -2250,7 +2174,10 @@ interface TabTinAPIShape {
 
     list: () => Promise<{ sessions: string[] }>
 
-    readOutput: (sessionId: string, options?: { tail?: number }) => Promise<{
+    readOutput: (
+      sessionId: string,
+      options?: { tail?: number }
+    ) => Promise<{
       success: boolean
       output?: string
       pid?: number
@@ -2297,35 +2224,15 @@ interface TabTinAPIShape {
     }
 
     onAgentSessionClosed: {
-      (callback: (info: {
-        sessionId: string
-        spaceId?: string
-        reason?: 'exit' | 'kill' | 'cleanup' | 'idle_timeout'
-      }) => void): () => void
-      (spaceId: string, callback: (info: {
-        sessionId: string
-        spaceId?: string
-        reason?: 'exit' | 'kill' | 'cleanup' | 'idle_timeout'
-      }) => void): () => void
+      (callback: (info: { sessionId: string; spaceId?: string; reason?: 'exit' | 'kill' | 'cleanup' | 'idle_timeout' }) => void): () => void
+      (spaceId: string, callback: (info: { sessionId: string; spaceId?: string; reason?: 'exit' | 'kill' | 'cleanup' | 'idle_timeout' }) => void): () => void
     }
 
     // P1-H (WP2)：onAgentSessionTitle 已退役（D3 决策 + agent-bridge.ts L168-174）。
 
     onAutoRespondTriggered: {
-      (callback: (info: {
-        sessionId: string
-        spaceId?: string | null
-        pattern: string
-        responseLength: number
-        timestamp: number
-      }) => void): () => void
-      (spaceId: string, callback: (info: {
-        sessionId: string
-        spaceId?: string | null
-        pattern: string
-        responseLength: number
-        timestamp: number
-      }) => void): () => void
+      (callback: (info: { sessionId: string; spaceId?: string | null; pattern: string; responseLength: number; timestamp: number }) => void): () => void
+      (spaceId: string, callback: (info: { sessionId: string; spaceId?: string | null; pattern: string; responseLength: number; timestamp: number }) => void): () => void
     }
 
     releaseThreadSession: (threadId: string) => Promise<{ success: boolean }>
@@ -2339,7 +2246,10 @@ interface TabTinAPIShape {
 
     snapshotSave: (snapshots: TerminalSnapshot[]) => Promise<{ success: boolean; saved?: number; failed?: number }>
 
-    snapshotLoad: (sessionId: string, currentSize?: { cols: number; rows: number }) => Promise<{
+    snapshotLoad: (
+      sessionId: string,
+      currentSize?: { cols: number; rows: number }
+    ) => Promise<{
       success: boolean
       snapshot?: TerminalSnapshot | null
     }>
@@ -2349,7 +2259,11 @@ interface TabTinAPIShape {
       manifest?: SnapshotManifest | null
     }>
 
-    snapshotSaveSync: (snapshots: TerminalSnapshot[]) => { success: boolean; saved?: number; failed?: number }
+    snapshotSaveSync: (snapshots: TerminalSnapshot[]) => {
+      success: boolean
+      saved?: number
+      failed?: number
+    }
 
     snapshotDelete: (sessionId: string) => Promise<{ success: boolean }>
 
@@ -2358,11 +2272,7 @@ interface TabTinAPIShape {
     /**
      * 粘贴图片到终端：保存剪贴板图片到本地，返回文件路径
      */
-    pasteImage: (params: {
-      imageBase64: string
-      mimeType: string
-      spaceId?: string
-    }) => Promise<{ success: boolean; filePath?: string; error?: string }>
+    pasteImage: (params: { imageBase64: string; mimeType: string; spaceId?: string }) => Promise<{ success: boolean; filePath?: string; error?: string }>
   }
 
   // 🆕 原生菜单 API（解决右键菜单被 WebContentsView 遮挡的问题）
@@ -2375,20 +2285,22 @@ interface TabTinAPIShape {
      * @returns 清理函数，用于移除事件监听器
      */
     open: (
-      template: Array<Array<{
-        id: string
-        label?: string
-        type?: 'normal' | 'separator' | 'submenu' | 'checkbox' | 'radio'
-        checked?: boolean
-        enabled?: boolean
-        accelerator?: string
-        submenu?: Array<{
+      template: Array<
+        Array<{
           id: string
           label?: string
-          type?: 'normal' | 'separator'
+          type?: 'normal' | 'separator' | 'submenu' | 'checkbox' | 'radio'
+          checked?: boolean
           enabled?: boolean
+          accelerator?: string
+          submenu?: Array<{
+            id: string
+            label?: string
+            type?: 'normal' | 'separator'
+            enabled?: boolean
+          }>
         }>
-      }>>,
+      >,
       callbacks: Record<string, () => void>,
       x?: number,
       y?: number,
@@ -2399,9 +2311,7 @@ interface TabTinAPIShape {
   // 右键上下文菜单（主进程侧 locale 同步）
   contextMenu: {
     setLocale: (locale: string) => void
-    onAddToContextRequest: (
-      callback: (payload: BrowserContextMenuAddToContextPayload) => void,
-    ) => () => void
+    onAddToContextRequest: (callback: (payload: BrowserContextMenuAddToContextPayload) => void) => () => void
   }
 
   // 透明 overlay view：toast / 全局模态
@@ -2410,16 +2320,10 @@ interface TabTinAPIShape {
     notifyReady: () => void
     focusOverlay: () => Promise<{ success: boolean }>
     syncGlobalSearchClosed: () => void
-    subscribePush: (
-      callback: (payload: import('@shared/overlay/types').OverlayPushPayload) => void,
-    ) => () => void
-    onConfirmResult: (
-      callback: (payload: import('@shared/overlay/types').OverlayConfirmResultPayload) => void,
-    ) => () => void
+    subscribePush: (callback: (payload: import('@shared/overlay/types').OverlayPushPayload) => void) => () => void
+    onConfirmResult: (callback: (payload: import('@shared/overlay/types').OverlayConfirmResultPayload) => void) => () => void
     sendUpdatePromptAction: (payload: import('@shared/overlay/types').OverlayUpdatePromptActionPayload) => void
-    onUpdatePromptAction: (
-      callback: (payload: import('@shared/overlay/types').OverlayUpdatePromptActionPayload) => void,
-    ) => () => void
+    onUpdatePromptAction: (callback: (payload: import('@shared/overlay/types').OverlayUpdatePromptActionPayload) => void) => () => void
     onGlobalSearchClosed: (callback: () => void) => () => void
     sendConfirmResult: (payload: import('@shared/overlay/types').OverlayConfirmResultPayload) => void
     navigateSearchResult: (payload: unknown) => void
@@ -2439,49 +2343,44 @@ interface TabTinAPIShape {
      * false（撤出该 source，无其他 source 时 hide、网页恢复交互）。
      * source 只能是 renderer 自己拥有的浮层（主进程侧白名单校验）。
      */
-    setModalSourceOpen: (
-      source: 'save-password' | 'autofill-suggest',
-      open: boolean,
-    ) => Promise<{ success: boolean; error?: string }>
+    setModalSourceOpen: (source: 'save-password' | 'autofill-suggest', open: boolean) => Promise<{ success: boolean; error?: string }>
     /**
      * 提示型浮层（自动填充建议）上报卡片实际尺寸，主进程据此把贴角小窗调整到
      * 刚好覆盖卡片（渲染进程用 ResizeObserver 驱动）。
      */
-    setHintSize: (
-      size: { width: number; height: number },
-    ) => Promise<{ success: boolean; error?: string }>
+    setHintSize: (size: { width: number; height: number }) => Promise<{ success: boolean; error?: string }>
     /**
      * toast 子窗口按命中区切换鼠标穿透（ 过渡期兜底）。
      * 仅 toast overlay renderer 应调用；指针在卡片上传 false，离开传 true。
      * 贴卡片收窗启用后主路径改走 setToastStackSize。
      */
-    setToastIgnoreMouseEvents: (
-      ignore: boolean,
-    ) => Promise<{ success: boolean; error?: string }>
+    setToastIgnoreMouseEvents: (ignore: boolean) => Promise<{ success: boolean; error?: string }>
     /**
      * 当前指针相对 toast 内容区的 client 坐标。
      * toast 刚出现且指针静止时，用此结果做一次命中同步。
      */
-    getToastCursorClientPoint: () => Promise<{ clientX: number; clientY: number } | null>
+    getToastCursorClientPoint: () => Promise<{
+      clientX: number
+      clientY: number
+    } | null>
     /**
      * toast 贴卡片：上报可见栈尺寸，主进程收成顶栏小窗并捕获点击。
      * 无可见 toast 时传 null，恢复全屏穿透。
      */
-    setToastStackSize: (
-      size: { width: number; height: number } | null,
-    ) => Promise<{ success: boolean; error?: string }>
+    setToastStackSize: (size: { width: number; height: number } | null) => Promise<{ success: boolean; error?: string }>
     /**
      * toast 是否有可见卡片（仅 toast overlay renderer）。
      * Windows 上无卡片时主进程隐藏子窗，避免 OLE HTML5 拖拽被顶层 HWND 打断。
      */
-    setToastContentVisible: (
-      visible: boolean,
-    ) => Promise<{ success: boolean; error?: string }>
+    setToastContentVisible: (visible: boolean) => Promise<{ success: boolean; error?: string }>
     /**
      * HTML5 拖拽会话屏蔽 toast（主 renderer，同步 IPC）。
      * dragstart 内必须同步完成，否则 Win32 OLE 会话会在 hide 前取消。
      */
-    setHtml5DragShieldSync: (active: boolean) => { success: boolean; error?: string }
+    setHtml5DragShieldSync: (active: boolean) => {
+      success: boolean
+      error?: string
+    }
   }
 
   // 🔔 统一通知服务
@@ -2496,11 +2395,14 @@ interface TabTinAPIShape {
       soundEnabled: boolean
       dndEnabled: boolean
       dndSchedule?: { start: string; end: string; days: number[] }
-      categoryOverrides: Record<string, {
-        desktopEnabled?: boolean
-        soundEnabled?: boolean
-        dockBadgeEnabled?: boolean
-      }>
+      categoryOverrides: Record<
+        string,
+        {
+          desktopEnabled?: boolean
+          soundEnabled?: boolean
+          dockBadgeEnabled?: boolean
+        }
+      >
     }>
     setPrefs: (prefs: Record<string, unknown>) => Promise<{ success: boolean }>
     setBadgeCount: (count: number) => Promise<{ success: boolean }>
@@ -2542,17 +2444,7 @@ interface TabTinAPIShape {
    * 新窗口请求转发给 renderer ResourceRouter 接管派发，避免 main 进程重新实现一套。
    */
   resourceRouter: {
-    onOpenFallback: (
-      callback: (data: {
-        url: string
-        source: string
-        viewId?: string
-        disposition?: string
-        filename?: string
-        mimeType?: string
-        assetId?: string
-      }) => void,
-    ) => () => void
+    onOpenFallback: (callback: (data: { url: string; source: string; viewId?: string; disposition?: string; filename?: string; mimeType?: string; assetId?: string }) => void) => () => void
   }
 
   // NOTE: W7 resource_open 埋点 IPC 通道 contract 在下方 `resourceTelemetry` 块（行 ~1726）
@@ -2568,13 +2460,7 @@ interface TabTinAPIShape {
   updater: {
     getAppVersion: () => Promise<string>
     getState: () => Promise<any>
-    getReleaseHistory: (options?: {
-      platform?: 'mac' | 'win' | 'linux'
-      arch?: 'x64' | 'arm64'
-      channel?: 'stable' | 'beta' | 'alpha'
-      limit?: number
-      locale?: string
-    }) => Promise<any[]>
+    getReleaseHistory: (options?: { platform?: 'mac' | 'win' | 'linux'; arch?: 'x64' | 'arm64'; channel?: 'stable' | 'beta' | 'alpha'; limit?: number; locale?: string }) => Promise<any[]>
     checkForUpdates: () => Promise<any>
     downloadUpdate: () => Promise<any>
     quitAndInstall: () => void
@@ -2585,12 +2471,8 @@ interface TabTinAPIShape {
   diagnostics: {
     readLogs: () => Promise<import('../shared/diagnostics-types').DiagnosticsLogSnapshot>
     getHostEnv: () => Promise<import('../shared/diagnostics-types').DiagnosticsHostEnv>
-    saveBundle: (
-      payload: import('../shared/diagnostics-types').DiagnosticsBundlePayload,
-    ) => Promise<import('../shared/diagnostics-types').DiagnosticsSaveResult>
-    queueSupportUpload: (
-      payload: import('../shared/diagnostics-types').DiagnosticsBundlePayload,
-    ) => Promise<import('../shared/diagnostics-types').DiagnosticsSupportUploadResult>
+    saveBundle: (payload: import('../shared/diagnostics-types').DiagnosticsBundlePayload) => Promise<import('../shared/diagnostics-types').DiagnosticsSaveResult>
+    queueSupportUpload: (payload: import('../shared/diagnostics-types').DiagnosticsBundlePayload) => Promise<import('../shared/diagnostics-types').DiagnosticsSupportUploadResult>
     openLogDir: () => Promise<import('../shared/diagnostics-types').DiagnosticsOpenDirResult>
     onTriggerExport: (callback: () => void) => () => void
     onTriggerCopy: (callback: () => void) => () => void
@@ -2609,33 +2491,43 @@ interface TabTinAPIShape {
     wipeCredentials: () => Promise<{
       ok: boolean
       removed: string[]
-      failed: Array<{ path: string; errorCode: 'busy' | 'permission' | 'unknown' }>
+      failed: Array<{
+        path: string
+        errorCode: 'busy' | 'permission' | 'unknown'
+      }>
       credentialsCleared?: boolean
     }>
     wipeLocalData: () => Promise<{
       ok: boolean
       removed: string[]
-      failed: Array<{ path: string; errorCode: 'busy' | 'permission' | 'unknown' }>
+      failed: Array<{
+        path: string
+        errorCode: 'busy' | 'permission' | 'unknown'
+      }>
       credentialsCleared?: boolean
       /** 已预约重启清理，应用即将退出并自动重启（安装包） */
       willRelaunch?: boolean
       /** 开发模式无法自动 relaunch：需手动重启 pnpm dev */
       needsManualDevRestart?: boolean
     }>
-    uninstallApp: (options?: {
-      deleteLocalData?: boolean
-    }) => Promise<{
+    uninstallApp: (options?: { deleteLocalData?: boolean }) => Promise<{
       ok: boolean
       credentials: {
         ok: boolean
         removed: string[]
-        failed: Array<{ path: string; errorCode: 'busy' | 'permission' | 'unknown' }>
+        failed: Array<{
+          path: string
+          errorCode: 'busy' | 'permission' | 'unknown'
+        }>
         credentialsCleared?: boolean
       }
       localData: {
         ok: boolean
         removed: string[]
-        failed: Array<{ path: string; errorCode: 'busy' | 'permission' | 'unknown' }>
+        failed: Array<{
+          path: string
+          errorCode: 'busy' | 'permission' | 'unknown'
+        }>
         credentialsCleared?: boolean
       } | null
       willExit: boolean
@@ -2663,10 +2555,7 @@ interface TabTinAPIShape {
 
   appDiscovery: {
     /** 推送 url patterns 到 main 端 AppDiscoveryService（fire-and-forget）。 */
-    updatePatterns: (
-      patterns: Array<{ appId: string; appName: string; patterns: string[] }>,
-      sourceId?: string,
-    ) => void
+    updatePatterns: (patterns: Array<{ appId: string; appName: string; patterns: string[] }>, sourceId?: string) => void
   }
 
   screenshot: {
@@ -2703,8 +2592,14 @@ interface TabTinAPIShape {
   sandbox: {
     clearApprovalCache: (target?: 'session' | 'persisted') => Promise<{ sessionCount: number; persistedCount: number }>
     clearApprovalByActionType: (actionType: string) => Promise<{ sessionCount: number; persistedCount: number }>
-    getApprovalCacheStats: () => Promise<{ sessionCount: number; persistedCount: number }>
-    syncApprovalPreferences: () => Promise<{ sessionCount: number; persistedCount: number }>
+    getApprovalCacheStats: () => Promise<{
+      sessionCount: number
+      persistedCount: number
+    }>
+    syncApprovalPreferences: () => Promise<{
+      sessionCount: number
+      persistedCount: number
+    }>
     notifyRemoteApprovalPreferencesChanged: (preferences: Record<string, unknown>) => void
   }
 
@@ -2726,38 +2621,15 @@ interface TabTinAPIShape {
     cancel: (input: ImportCancelInput) => Promise<ImportCancelOutput>
     rollback: (input: ImportRollbackInput) => Promise<ImportRollbackOutput>
     listArchives: (organizationId: string) => Promise<unknown[]>
-    getArchive: (input: {
-      organizationId: string
-      source: string
-      sourceSessionId: string
-    }) => Promise<{ meta: unknown; messages: unknown[] } | null>
+    getArchive: (input: { organizationId: string; source: string; sourceSessionId: string }) => Promise<{ meta: unknown; messages: unknown[] } | null>
     /** 删除单条本机外部档案。 */
-    deleteArchive: (input: {
-      organizationId: string
-      source: string
-      sourceSessionId: string
-    }) => Promise<{ deleted: number }>
+    deleteArchive: (input: { organizationId: string; source: string; sourceSessionId: string }) => Promise<{ deleted: number }>
     /** 删 Workspace 时顺带清本机外部档案（按 workspaceId 或同 workingDir）。 */
-    deleteArchivesForWorkspace: (input: {
-      organizationId: string
-      workspaceId: string
-      workingDir?: string | null
-    }) => Promise<{ deleted: number }>
+    deleteArchivesForWorkspace: (input: { organizationId: string; workspaceId: string; workingDir?: string | null }) => Promise<{ deleted: number }>
     /** 绑定档案首次展开后的真会话，再次点击复用。 */
-    bindOpenedSession: (input: {
-      organizationId: string
-      source: string
-      sourceSessionId: string
-      sessionId: string
-    }) => Promise<{ ok: boolean; seeded?: boolean; reason?: string }>
+    bindOpenedSession: (input: { organizationId: string; source: string; sourceSessionId: string; sessionId: string }) => Promise<{ ok: boolean; seeded?: boolean; reason?: string }>
     /** 把本机导入档案写入 session transcript，供 Agent 跨轮读取。 */
-    seedSessionTranscript: (input: {
-      organizationId: string
-      source: string
-      sourceSessionId: string
-      sessionId: string
-      spaceId?: string
-    }) => Promise<{ seeded: boolean; reason?: string }>
+    seedSessionTranscript: (input: { organizationId: string; source: string; sourceSessionId: string; sessionId: string; spaceId?: string }) => Promise<{ seeded: boolean; reason?: string }>
     /** 订阅导入进度事件；返回取消订阅函数。 */
     onProgress: (callback: (payload: ImportProgressEvent) => void) => () => void
   }
@@ -2771,13 +2643,7 @@ interface TabTinAPIShape {
       size: number
       buffer: ArrayBuffer
     }>
-    import: (input: {
-      filePath: string
-      projectId: string
-      projectPath: string
-      expectedSessionId?: string
-      expectedSessionName?: string
-    }) => Promise<{
+    import: (input: { filePath: string; projectId: string; projectPath: string; expectedSessionId?: string; expectedSessionName?: string }) => Promise<{
       sessionId: string
       importedPath: string
       alreadyImported: boolean
@@ -2787,30 +2653,20 @@ interface TabTinAPIShape {
 
   credentialVault: {
     detectBrowsers: () => Promise<DetectBrowsersResult>
-    extractCookies: (payload: {
-      browser: string
-      profilePath: string
-      options?: { domains?: string[]; includeExpired?: boolean }
-    }) => Promise<ExtractCookiesResult>
-    injectCookies: (payload: {
-      partition: string
-      cookies: IPCCookie[]
-    }) => Promise<{ success: boolean; injected: number; failed: number; error?: string }>
-    getPartitionCookies: (payload: {
-      partition: string
-    }) => Promise<{
+    extractCookies: (payload: { browser: string; profilePath: string; options?: { domains?: string[]; includeExpired?: boolean } }) => Promise<ExtractCookiesResult>
+    injectCookies: (payload: { partition: string; cookies: IPCCookie[] }) => Promise<{
+      success: boolean
+      injected: number
+      failed: number
+      error?: string
+    }>
+    getPartitionCookies: (payload: { partition: string }) => Promise<{
       success: boolean
       summary?: PartitionCookieSummary
       error?: string
     }>
-    clearPartitionCookies: (payload: {
-      partition: string
-      domain?: string
-    }) => Promise<{ success: boolean; removed: number; error?: string }>
-    checkLoginStatus: (payload: {
-      partition: string
-      domain: string
-    }) => Promise<{
+    clearPartitionCookies: (payload: { partition: string; domain?: string }) => Promise<{ success: boolean; removed: number; error?: string }>
+    checkLoginStatus: (payload: { partition: string; domain: string }) => Promise<{
       success: boolean
       domain?: string
       hasCookies?: boolean
@@ -2818,24 +2674,35 @@ interface TabTinAPIShape {
       hasSessionCookie?: boolean
       error?: string
     }>
-    exportCookiesJson: (payload: {
-      partition: string
-    }) => Promise<{ success: boolean; path?: string; count?: number; error?: string }>
+    exportCookiesJson: (payload: { partition: string }) => Promise<{
+      success: boolean
+      path?: string
+      count?: number
+      error?: string
+    }>
     importCookiesJson: () => Promise<{
       success: boolean
       cookies?: IPCCookie[]
       count?: number
       error?: string
     }>
-    extractPasswords: (payload: {
-      browser: string
-      profilePath: string
-    }) => Promise<ExtractPasswordsResult>
-    onAutofillSuggest: (callback: (payload: {
-      tabId: string
-      credentials: Array<{ id: string; url: string; username: string; masked_password: string }>
-      formInfo: { hasPassword: boolean; hasUsername: boolean; domain: string }
-    }) => void) => () => void
+    extractPasswords: (payload: { browser: string; profilePath: string }) => Promise<ExtractPasswordsResult>
+    onAutofillSuggest: (
+      callback: (payload: {
+        tabId: string
+        credentials: Array<{
+          id: string
+          url: string
+          username: string
+          masked_password: string
+        }>
+        formInfo: {
+          hasPassword: boolean
+          hasUsername: boolean
+          domain: string
+        }
+      }) => void
+    ) => () => void
     /**
      * 主进程通知「清掉该 tab 的自动填充建议卡片」。用于用户在提示上没操作、
      * 但页面已真实跳转（如手动登录成功）时，避免卡片残留在角落。
@@ -2851,22 +2718,17 @@ interface TabTinAPIShape {
      * `pendingSavePasswords` map，renderer 通过 saveConfirm({tabId}) 触发
      * 主进程内部反查取密码 + 调后端。
      */
-    onSavePrompt: (callback: (payload: {
-      tabId: string
-      mode: 'save' | 'update' | 'new-account'
-      domain: string
-      url: string
-      username: string
-      credentialId?: string
-      existingUsernames?: string[]
-    }) => void) => () => void
+    onSavePrompt: (callback: (payload: { tabId: string; mode: 'save' | 'update' | 'new-account'; domain: string; url: string; username: string; credentialId?: string; existingUsernames?: string[] }) => void) => () => void
     /**
      * 用户点"保存" — renderer 只发 tabId，主进程根据 pending map 取密码 + 走
      * POST /website/create 或 PUT /{id}。密码全程不出主进程。
      */
-    saveConfirm: (payload: {
-      tabId: string
-    }) => Promise<{ success: boolean; mode?: string; data?: unknown; error?: string }>
+    saveConfirm: (payload: { tabId: string }) => Promise<{
+      success: boolean
+      mode?: string
+      data?: unknown
+      error?: string
+    }>
     /** 用户点"不为此网站保存"——主进程把 domain 入黑名单（PD-8 后端持久化） */
     saveDismiss: (payload: { domain: string }) => Promise<{ success: boolean; error?: string }>
     /**
@@ -2887,19 +2749,21 @@ interface TabTinAPIShape {
      *   - credential-unavailable：后端 410 / 401 / 网络失败 → 凭据可能失效
      *   - fill-failed：表单填充失败（域名不匹配 / DOM 不可达）
      */
-    onAgentAutofillFailed: (callback: (payload: {
-      tabId: string
-      code: string
-      credentialId?: string
-      domain?: string
-      detail?: string
-      /**
-       * Wave 4 真·真 Review 视角 2 P1 发现 3 自修：透传 spaceId 让 renderer
-       * 通过 useSpaceStore 反查 Agent 名字，多 Agent 协作场景下用户能区分
-       * "是哪个 Agent 在动"。spaceId 不是敏感数据，零安全风险。
-       */
-      spaceId?: string
-    }) => void) => () => void
+    onAgentAutofillFailed: (
+      callback: (payload: {
+        tabId: string
+        code: string
+        credentialId?: string
+        domain?: string
+        detail?: string
+        /**
+         * Wave 4 真·真 Review 视角 2 P1 发现 3 自修：透传 spaceId 让 renderer
+         * 通过 useSpaceStore 反查 Agent 名字，多 Agent 协作场景下用户能区分
+         * "是哪个 Agent 在动"。spaceId 不是敏感数据，零安全风险。
+         */
+        spaceId?: string
+      }) => void
+    ) => () => void
 
     /**
      * Wave 4 三视角 Review 视角 2 P1 发现 2 自修：成功路径也通知用户。
@@ -2910,17 +2774,19 @@ interface TabTinAPIShape {
      * payload **不含密码** 且 ``maskedUsername`` 已经在主进程脱敏
      * （`alice@example.com → a***@example.com`）。
      */
-    onAgentAutofillSucceeded: (callback: (payload: {
-      tabId: string
-      domain: string
-      maskedUsername: string
-      credentialId: string
-      /**
-       * Wave 4 真·真 Review 视角 2 P1 发现 3 自修：透传 spaceId 让 renderer
-       * 反查 Agent 名字。
-       */
-      spaceId?: string
-    }) => void) => () => void
+    onAgentAutofillSucceeded: (
+      callback: (payload: {
+        tabId: string
+        domain: string
+        maskedUsername: string
+        credentialId: string
+        /**
+         * Wave 4 真·真 Review 视角 2 P1 发现 3 自修：透传 spaceId 让 renderer
+         * 反查 Agent 名字。
+         */
+        spaceId?: string
+      }) => void
+    ) => () => void
   }
 
   loginRelay: LoginRelayAPI
@@ -2933,7 +2799,11 @@ interface TabTinAPIShape {
      * 立即返回,不再有 HTTP / pending 概念。
      */
     list: () => Promise<
-      | ({ success: true; environments: BrowserEnvironment[]; bindings: BrowserEnvBinding[] })
+      | {
+          success: true
+          environments: BrowserEnvironment[]
+          bindings: BrowserEnvBinding[]
+        }
       | { success: false; code?: string; error?: string }
     >
     create: (payload: { name: string }) => Promise<BrowserEnvWriteResult>
@@ -2948,7 +2818,10 @@ interface TabTinAPIShape {
   }
 
   tabsite: {
-    initTemplate: (siteId: string, spaceId: string) => Promise<{
+    initTemplate: (
+      siteId: string,
+      spaceId: string
+    ) => Promise<{
       success: boolean
       code_project_path?: string
       already_exists?: boolean
@@ -2958,7 +2831,10 @@ interface TabTinAPIShape {
       token_expires_soon?: boolean
       error?: string
     }>
-    startDevServer: (siteId: string, projectPath: string) => Promise<{
+    startDevServer: (
+      siteId: string,
+      projectPath: string
+    ) => Promise<{
       success: boolean
       url?: string
       port?: number
@@ -2980,7 +2856,11 @@ interface TabTinAPIShape {
     prepareSandbox: (instanceId: string) => Promise<{ htmlPath: string; preloadPath: string } | null>
     cleanupSandbox: (instanceId: string) => Promise<void>
     getResolvedVariables: (instanceId: string) => Promise<Record<string, unknown>>
-    getPageContext: () => Promise<{ url: string; title: string; language?: string }>
+    getPageContext: () => Promise<{
+      url: string
+      title: string
+      language?: string
+    }>
     syncPageContext: (context: { url: string; title: string }) => Promise<void>
     onActivationChanged: (callback: (data: { states: unknown[] }) => void) => () => void
     onPersistVariable: (callback: (data: { instanceId: string; name: string; value: unknown }) => void) => () => void
@@ -3039,10 +2919,7 @@ interface TabTinAPIShape {
 
   skill: {
     /** 列出当前 Space 的本地 Skills catalog（host 会先 ensureSpaceSkills）。 */
-    list: (params: {
-      spaceId: string
-      organizationId: string
-    }) => Promise<{
+    list: (params: { spaceId: string; organizationId: string }) => Promise<{
       skills: Array<{
         skill_id: string
         name: string
@@ -3068,17 +2945,26 @@ interface TabTinAPIShape {
       /** ：必填真实 userId（禁止落到 `_unscoped`） */
       userId?: string
       organizationId?: string
-      files: Array<{ path: string; sha256: string; size: number; download_url: string; content_type: string }>
-      meta?: { source: string; version: string; installedAt: string; packageId: string; slug?: string; canonicalKey?: string; versionSeq?: number; bundleSha256?: string }
+      files: Array<{
+        path: string
+        sha256: string
+        size: number
+        download_url: string
+        content_type: string
+      }>
+      meta?: {
+        source: string
+        version: string
+        installedAt: string
+        packageId: string
+        slug?: string
+        canonicalKey?: string
+        versionSeq?: number
+        bundleSha256?: string
+      }
     }) => Promise<{ ok: boolean; filesWritten: number; error?: string }>
     /** ：从 npm 包安装到 ~/.agents/skills（面板「从 npm」页签）。 */
-    installNpm: (params: {
-      package: string
-      spaceId?: string
-      organizationId?: string | null
-      importToSpace?: boolean
-      enableSpaceIds?: string[]
-    }) => Promise<{
+    installNpm: (params: { package: string; spaceId?: string; organizationId?: string | null; importToSpace?: boolean; enableSpaceIds?: string[] }) => Promise<{
       success: boolean
       data?: {
         package: string
@@ -3105,26 +2991,16 @@ interface TabTinAPIShape {
       userId?: string
       organizationId?: string
     }) => Promise<{ ok: boolean }>
-    readContent: (params: {
-      skillKey: string
-      spaceId?: string | null
-      organizationId?: string | null
-      userId?: string | null
-      sourceDocPath?: string | null
-    }) => Promise<{ content: string | null }>
+    readContent: (params: { skillKey: string; spaceId?: string | null; organizationId?: string | null; userId?: string | null; sourceDocPath?: string | null }) => Promise<{ content: string | null }>
     /** 把草稿 SKILL.md 写入 platform-data；organizationId 必传，避免落到 `_unscoped`。 */
-    writeContent: (params: {
-      spaceId: string
-      organizationId: string
-      skillKey: string
-      content: string
-    }) => Promise<{ mdPath: string; skillDir: string }>
+    writeContent: (params: { spaceId: string; organizationId: string; skillKey: string; content: string }) => Promise<{ mdPath: string; skillDir: string }>
     /** 查询 skill 在本地的绝对路径（不创建目录） */
-    resolvePath: (params: {
-      spaceId: string
-      organizationId: string
-      skillKey: string
-    }) => Promise<{ skillDir: string; mdPath: string; exists: boolean; mdExists: boolean }>
+    resolvePath: (params: { spaceId: string; organizationId: string; skillKey: string }) => Promise<{
+      skillDir: string
+      mdPath: string
+      exists: boolean
+      mdExists: boolean
+    }>
     /**
      * ：扫描 Workspace 根下目录自带 Skill。纯发现无 Trust 门控。
      * invokeIpc 已 unwrap envelope → 成功直接得 data；失败抛 PlatformIpcError。
@@ -3160,14 +3036,7 @@ interface TabTinAPIShape {
    * sendPrompt 后 fire-and-forget 调本 API 把事件落 `~/.tabtin/widget-audit.log`。
    */
   widgetAudit: {
-    append: (entry: {
-      timestamp: number
-      session_id: string
-      widget_id: string
-      text: string
-      meta?: unknown
-      trigger_source?: 'widget'
-    }) => Promise<{ ok: boolean }>
+    append: (entry: { timestamp: number; session_id: string; widget_id: string; text: string; meta?: unknown; trigger_source?: 'widget' }) => Promise<{ ok: boolean }>
   }
 
   /**
@@ -3188,19 +3057,8 @@ interface TabTinAPIShape {
     // setYoloMode / revokeMemo 已移除：状态变更统一走 useSpaceStore action
     // （见 ElectronAgentHost.ts L-10 的历史背景注释）。本接口只保留只读查询。
     getWorkspaceSnapshot: (spaceId: string) => Promise<any>
-    buildApprovalKey: (params: {
-      toolName: string
-      subcmd: string
-      input: unknown
-      inWorkspace: boolean
-      scope: 'exact' | 'scoped' | 'wildcard'
-      kind?: string
-    }) => Promise<string>
-    buildScopeDescription: (params: {
-      toolName: string
-      subcmd: string
-      scope: string
-    }) => Promise<string>
+    buildApprovalKey: (params: { toolName: string; subcmd: string; input: unknown; inWorkspace: boolean; scope: 'exact' | 'scoped' | 'wildcard'; kind?: string }) => Promise<string>
+    buildScopeDescription: (params: { toolName: string; subcmd: string; scope: string }) => Promise<string>
   }
 
   workspace: {
@@ -3217,10 +3075,7 @@ interface TabTinAPIShape {
      * 调用时机：renderer store mutate / 启动 hydrate / Space 切换 hydrate /
      * Agent working_dir 修改后。
      */
-    notifyPathsChanged: (payload: {
-      spaceId: string
-      workingDir: string
-    }) => Promise<void>
+    notifyPathsChanged: (payload: { spaceId: string; workingDir: string }) => Promise<void>
     /**
      * 把审批通过的路径加进当前 session 的 `allowedPaths`（不持久化）。
      *
@@ -3231,11 +3086,7 @@ interface TabTinAPIShape {
      * 不写 store、不进 UI 列表（避免污染单根契约）。过宽路径（`/`、`/Users` 等）
      * 在 main 端被 fail-closed 过滤。
      */
-    appendSessionAllowedPath: (payload: {
-      spaceId: string
-      sessionId?: string
-      path: string
-    }) => Promise<{ ok: boolean; data?: { mutated: boolean } } | void>
+    appendSessionAllowedPath: (payload: { spaceId: string; sessionId?: string; path: string }) => Promise<{ ok: boolean; data?: { mutated: boolean } } | void>
   }
 
   /**
@@ -3256,12 +3107,7 @@ interface TabTinAPIShape {
 }
 
 // P1-H (WP2)：'agent-session-title' 已退役（D3 + agent-bridge.ts L168-174）。
-type PtyScopedSubscriptionEventType =
-  | 'data'
-  | 'exit'
-  | 'agent-session-created'
-  | 'agent-session-closed'
-  | 'auto-respond-triggered'
+type PtyScopedSubscriptionEventType = 'data' | 'exit' | 'agent-session-created' | 'agent-session-closed' | 'auto-respond-triggered'
 
 const ptySubscriptionRefCounts: Record<PtyScopedSubscriptionEventType, Map<string, number>> = {
   data: new Map<string, number>(),
@@ -3278,10 +3124,7 @@ const normalizePtySubscriptionScopeId = (scopeId?: string): string | undefined =
   return normalized ? normalized : undefined
 }
 
-const retainPtySubscription = (
-  eventType: PtyScopedSubscriptionEventType,
-  scopeId?: string,
-) => {
+const retainPtySubscription = (eventType: PtyScopedSubscriptionEventType, scopeId?: string) => {
   const normalizedScopeId = normalizePtySubscriptionScopeId(scopeId)
   const key = normalizedScopeId || GLOBAL_PTY_SUBSCRIPTION_KEY
   const bucket = ptySubscriptionRefCounts[eventType]
@@ -3293,17 +3136,12 @@ const retainPtySubscription = (
   return key
 }
 
-const releasePtySubscription = (
-  eventType: PtyScopedSubscriptionEventType,
-  subscriptionKey: string,
-) => {
+const releasePtySubscription = (eventType: PtyScopedSubscriptionEventType, subscriptionKey: string) => {
   const bucket = ptySubscriptionRefCounts[eventType]
   const currentCount = bucket.get(subscriptionKey) ?? 0
   if (currentCount <= 1) {
     bucket.delete(subscriptionKey)
-    const scopeId = subscriptionKey === GLOBAL_PTY_SUBSCRIPTION_KEY
-      ? undefined
-      : subscriptionKey
+    const scopeId = subscriptionKey === GLOBAL_PTY_SUBSCRIPTION_KEY ? undefined : subscriptionKey
     sendIpc(`pty:unsubscribe-${eventType}`, scopeId)
     return
   }
@@ -3312,16 +3150,9 @@ const releasePtySubscription = (
 
 function ptyOnData(callback: (sessionId: string, data: string) => void): () => void
 function ptyOnData(sessionId: string, callback: (data: string) => void): () => void
-function ptyOnData(
-  sessionIdOrCallback: string | ((sessionId: string, data: string) => void),
-  maybeCallback?: (data: string) => void,
-): () => void {
-  const scopedSessionId = typeof sessionIdOrCallback === 'string'
-    ? normalizePtySubscriptionScopeId(sessionIdOrCallback)
-    : undefined
-  const callback = typeof sessionIdOrCallback === 'function'
-    ? sessionIdOrCallback
-    : maybeCallback
+function ptyOnData(sessionIdOrCallback: string | ((sessionId: string, data: string) => void), maybeCallback?: (data: string) => void): () => void {
+  const scopedSessionId = typeof sessionIdOrCallback === 'string' ? normalizePtySubscriptionScopeId(sessionIdOrCallback) : undefined
+  const callback = typeof sessionIdOrCallback === 'function' ? sessionIdOrCallback : maybeCallback
 
   if (!callback) return () => {}
 
@@ -3345,16 +3176,9 @@ function ptyOnData(
 
 function ptyOnExit(callback: (sessionId: string, exitCode: number, signal?: number) => void): () => void
 function ptyOnExit(sessionId: string, callback: (exitCode: number, signal?: number) => void): () => void
-function ptyOnExit(
-  sessionIdOrCallback: string | ((sessionId: string, exitCode: number, signal?: number) => void),
-  maybeCallback?: (exitCode: number, signal?: number) => void,
-): () => void {
-  const scopedSessionId = typeof sessionIdOrCallback === 'string'
-    ? normalizePtySubscriptionScopeId(sessionIdOrCallback)
-    : undefined
-  const callback = typeof sessionIdOrCallback === 'function'
-    ? sessionIdOrCallback
-    : maybeCallback
+function ptyOnExit(sessionIdOrCallback: string | ((sessionId: string, exitCode: number, signal?: number) => void), maybeCallback?: (exitCode: number, signal?: number) => void): () => void {
+  const scopedSessionId = typeof sessionIdOrCallback === 'string' ? normalizePtySubscriptionScopeId(sessionIdOrCallback) : undefined
+  const callback = typeof sessionIdOrCallback === 'function' ? sessionIdOrCallback : maybeCallback
 
   if (!callback) return () => {}
 
@@ -3388,23 +3212,11 @@ type AgentSessionCreatedPayload = {
   command?: string | null
 }
 
-function ptyOnAgentSessionCreated(
-  callback: (info: AgentSessionCreatedPayload) => void,
-): () => void
-function ptyOnAgentSessionCreated(
-  spaceId: string,
-  callback: (info: AgentSessionCreatedPayload) => void,
-): () => void
-function ptyOnAgentSessionCreated(
-  spaceIdOrCallback: string | ((info: AgentSessionCreatedPayload) => void),
-  maybeCallback?: (info: AgentSessionCreatedPayload) => void,
-): () => void {
-  const scopedSpaceId = typeof spaceIdOrCallback === 'string'
-    ? normalizePtySubscriptionScopeId(spaceIdOrCallback)
-    : undefined
-  const callback = typeof spaceIdOrCallback === 'function'
-    ? spaceIdOrCallback
-    : maybeCallback
+function ptyOnAgentSessionCreated(callback: (info: AgentSessionCreatedPayload) => void): () => void
+function ptyOnAgentSessionCreated(spaceId: string, callback: (info: AgentSessionCreatedPayload) => void): () => void
+function ptyOnAgentSessionCreated(spaceIdOrCallback: string | ((info: AgentSessionCreatedPayload) => void), maybeCallback?: (info: AgentSessionCreatedPayload) => void): () => void {
+  const scopedSpaceId = typeof spaceIdOrCallback === 'string' ? normalizePtySubscriptionScopeId(spaceIdOrCallback) : undefined
+  const callback = typeof spaceIdOrCallback === 'function' ? spaceIdOrCallback : maybeCallback
 
   if (!callback) return () => {}
 
@@ -3423,50 +3235,23 @@ function ptyOnAgentSessionCreated(
   }
 }
 
-function ptyOnAgentSessionClosed(
-  callback: (info: {
-    sessionId: string
-    spaceId?: string
-    reason?: 'exit' | 'kill' | 'cleanup' | 'idle_timeout'
-  }) => void,
-): () => void
-function ptyOnAgentSessionClosed(
-  spaceId: string,
-  callback: (info: {
-    sessionId: string
-    spaceId?: string
-    reason?: 'exit' | 'kill' | 'cleanup' | 'idle_timeout'
-  }) => void,
-): () => void
-function ptyOnAgentSessionClosed(
-  spaceIdOrCallback:
-    | string
-    | ((info: {
-      sessionId: string
-      spaceId?: string
-      reason?: 'exit' | 'kill' | 'cleanup' | 'idle_timeout'
-    }) => void),
-  maybeCallback?: (info: {
-    sessionId: string
-    spaceId?: string
-    reason?: 'exit' | 'kill' | 'cleanup' | 'idle_timeout'
-  }) => void,
-): () => void {
-  const scopedSpaceId = typeof spaceIdOrCallback === 'string'
-    ? normalizePtySubscriptionScopeId(spaceIdOrCallback)
-    : undefined
-  const callback = typeof spaceIdOrCallback === 'function'
-    ? spaceIdOrCallback
-    : maybeCallback
+function ptyOnAgentSessionClosed(callback: (info: { sessionId: string; spaceId?: string; reason?: 'exit' | 'kill' | 'cleanup' | 'idle_timeout' }) => void): () => void
+function ptyOnAgentSessionClosed(spaceId: string, callback: (info: { sessionId: string; spaceId?: string; reason?: 'exit' | 'kill' | 'cleanup' | 'idle_timeout' }) => void): () => void
+function ptyOnAgentSessionClosed(spaceIdOrCallback: string | ((info: { sessionId: string; spaceId?: string; reason?: 'exit' | 'kill' | 'cleanup' | 'idle_timeout' }) => void), maybeCallback?: (info: { sessionId: string; spaceId?: string; reason?: 'exit' | 'kill' | 'cleanup' | 'idle_timeout' }) => void): () => void {
+  const scopedSpaceId = typeof spaceIdOrCallback === 'string' ? normalizePtySubscriptionScopeId(spaceIdOrCallback) : undefined
+  const callback = typeof spaceIdOrCallback === 'function' ? spaceIdOrCallback : maybeCallback
 
   if (!callback) return () => {}
 
   const subscriptionKey = retainPtySubscription('agent-session-closed', scopedSpaceId)
-  const listener = (_event: any, info: {
-    sessionId: string
-    spaceId?: string
-    reason?: 'exit' | 'kill' | 'cleanup' | 'idle_timeout'
-  }) => {
+  const listener = (
+    _event: any,
+    info: {
+      sessionId: string
+      spaceId?: string
+      reason?: 'exit' | 'kill' | 'cleanup' | 'idle_timeout'
+    }
+  ) => {
     if (scopedSpaceId && info.spaceId !== scopedSpaceId) {
       return
     }
@@ -3483,60 +3268,25 @@ function ptyOnAgentSessionClosed(
 // P1-H (WP2)：ptyOnAgentSessionTitle 已退役（agent-bridge.ts L168-174 硬契约
 // — D3 决策每次命令独立 session 后标题在 created 时一次定死）。
 
-function ptyOnAutoRespondTriggered(
-  callback: (info: {
-    sessionId: string
-    spaceId?: string | null
-    pattern: string
-    responseLength: number
-    timestamp: number
-  }) => void,
-): () => void
-function ptyOnAutoRespondTriggered(
-  spaceId: string,
-  callback: (info: {
-    sessionId: string
-    spaceId?: string | null
-    pattern: string
-    responseLength: number
-    timestamp: number
-  }) => void,
-): () => void
-function ptyOnAutoRespondTriggered(
-  spaceIdOrCallback:
-    | string
-    | ((info: {
+function ptyOnAutoRespondTriggered(callback: (info: { sessionId: string; spaceId?: string | null; pattern: string; responseLength: number; timestamp: number }) => void): () => void
+function ptyOnAutoRespondTriggered(spaceId: string, callback: (info: { sessionId: string; spaceId?: string | null; pattern: string; responseLength: number; timestamp: number }) => void): () => void
+function ptyOnAutoRespondTriggered(spaceIdOrCallback: string | ((info: { sessionId: string; spaceId?: string | null; pattern: string; responseLength: number; timestamp: number }) => void), maybeCallback?: (info: { sessionId: string; spaceId?: string | null; pattern: string; responseLength: number; timestamp: number }) => void): () => void {
+  const scopedSpaceId = typeof spaceIdOrCallback === 'string' ? normalizePtySubscriptionScopeId(spaceIdOrCallback) : undefined
+  const callback = typeof spaceIdOrCallback === 'function' ? spaceIdOrCallback : maybeCallback
+
+  if (!callback) return () => {}
+
+  const subscriptionKey = retainPtySubscription('auto-respond-triggered', scopedSpaceId)
+  const listener = (
+    _event: any,
+    info: {
       sessionId: string
       spaceId?: string | null
       pattern: string
       responseLength: number
       timestamp: number
-    }) => void),
-  maybeCallback?: (info: {
-    sessionId: string
-    spaceId?: string | null
-    pattern: string
-    responseLength: number
-    timestamp: number
-  }) => void,
-): () => void {
-  const scopedSpaceId = typeof spaceIdOrCallback === 'string'
-    ? normalizePtySubscriptionScopeId(spaceIdOrCallback)
-    : undefined
-  const callback = typeof spaceIdOrCallback === 'function'
-    ? spaceIdOrCallback
-    : maybeCallback
-
-  if (!callback) return () => {}
-
-  const subscriptionKey = retainPtySubscription('auto-respond-triggered', scopedSpaceId)
-  const listener = (_event: any, info: {
-    sessionId: string
-    spaceId?: string | null
-    pattern: string
-    responseLength: number
-    timestamp: number
-  }) => {
+    }
+  ) => {
     if (scopedSpaceId && info.spaceId !== scopedSpaceId) {
       return
     }
@@ -3556,8 +3306,7 @@ const api = {
   getHostname: () => invokeIpc('system:getHostname'),
   getPlatform: () => process.platform,
   getArch: () => process.arch,
-  getLocalNetworkAddresses: () =>
-    invokeIpc<LocalNetworkAddress[]>('system:get-local-network-addresses'),
+  getLocalNetworkAddresses: () => invokeIpc<LocalNetworkAddress[]>('system:get-local-network-addresses'),
 
   // 自绘窗口控件 — 见 TabTinAPIShape.windowControls 说明
   windowControls: {
@@ -3568,13 +3317,17 @@ const api = {
     onMaximizeChange: (callback: (isMaximized: boolean) => void) => {
       const handler = (_event: unknown, isMaximized: boolean) => callback(Boolean(isMaximized))
       ipcRenderer.on('window:maximize-changed', handler)
-      return () => { ipcRenderer.removeListener('window:maximize-changed', handler) }
+      return () => {
+        ipcRenderer.removeListener('window:maximize-changed', handler)
+      }
     },
     isFullScreen: () => invokeIpc<boolean>('window:isFullScreen'),
     onFullScreenChange: (callback: (isFullScreen: boolean) => void) => {
       const handler = (_event: unknown, isFullScreen: boolean) => callback(Boolean(isFullScreen))
       ipcRenderer.on('window:fullscreen-changed', handler)
-      return () => { ipcRenderer.removeListener('window:fullscreen-changed', handler) }
+      return () => {
+        ipcRenderer.removeListener('window:fullscreen-changed', handler)
+      }
     },
   },
 
@@ -3585,8 +3338,7 @@ const api = {
 
   // 认证管理
   auth: {
-    save: (accessToken: string | null, refreshToken: string | null, userInfo: any, expiresAt?: number | null) =>
-      invokeIpc('auth:save', accessToken, refreshToken, userInfo, expiresAt ?? null),
+    save: (accessToken: string | null, refreshToken: string | null, userInfo: any, expiresAt?: number | null) => invokeIpc('auth:save', accessToken, refreshToken, userInfo, expiresAt ?? null),
     get: async () => {
       const result = await invokeIpc<AuthGetLegacyResult>('auth:get')
       return unwrapAuthGetResult(result)
@@ -3629,37 +3381,36 @@ const api = {
     },
     saveUserInfo: (userInfo: any) => invokeIpc('auth:saveUserInfo', userInfo),
     getUserInfo: () => invokeIpc('auth:getUserInfo'),
-    isTokenExpiringSoon: (bufferMinutes: number = 5) =>
-      invokeIpc('auth:isTokenExpiringSoon', bufferMinutes),
+    isTokenExpiringSoon: (bufferMinutes: number = 5) => invokeIpc('auth:isTokenExpiringSoon', bufferMinutes),
     onForceLogout: (callback: () => void) => {
       const handler = () => callback()
       ipcRenderer.on('auth:force-logout', handler)
-      return () => { ipcRenderer.removeListener('auth:force-logout', handler) }
+      return () => {
+        ipcRenderer.removeListener('auth:force-logout', handler)
+      }
     },
     onTokenRefreshed: (callback: () => void) => {
       const handler = () => callback()
       ipcRenderer.on('auth:token-refreshed-signal', handler)
-      return () => { ipcRenderer.removeListener('auth:token-refreshed-signal', handler) }
+      return () => {
+        ipcRenderer.removeListener('auth:token-refreshed-signal', handler)
+      }
     },
   },
 
   openaiCodex: {
-    getStatus: () => invokeIpc<{
-      connected: boolean
-      expiresAt?: number
-      models: Array<{ id: string; displayName: string }>
-    }>('openai-codex:get-status'),
+    getStatus: () =>
+      invokeIpc<{
+        connected: boolean
+        expiresAt?: number
+        models: Array<{ id: string; displayName: string }>
+      }>('openai-codex:get-status'),
     loginBrowser: () => invokeIpc<{ started: true }>('openai-codex:login-browser'),
-    loginDeviceCode: () => invokeIpc<{ userCode: string; verificationUri: string }>(
-      'openai-codex:login-device-code',
-    ),
+    loginDeviceCode: () => invokeIpc<{ userCode: string; verificationUri: string }>('openai-codex:login-device-code'),
     logout: () => invokeIpc<{ loggedOut: true }>('openai-codex:logout'),
     cancelLogin: () => invokeIpc<{ cancelled: true }>('openai-codex:cancel-login'),
     onStatusChanged: (callback) => {
-      const handler = (
-        _event: Electron.IpcRendererEvent,
-        payload: { status: 'connected' | 'disconnected' },
-      ) => {
+      const handler = (_event: Electron.IpcRendererEvent, payload: { status: 'connected' | 'disconnected' }) => {
         callback(payload)
       }
       ipcRenderer.on('openai-codex:status-changed', handler)
@@ -3670,14 +3421,8 @@ const api = {
   },
 
   oss: {
-    getPresignedObject: (payload) => invokeIpc<OssGetPresignedObjectResult>(
-      OSS_GET_PRESIGNED_OBJECT_CHANNEL,
-      payload,
-    ),
-    cancelPresignedDownload: (requestId) => invokeIpc<{ cancelled: boolean }>(
-      OSS_CANCEL_PRESIGNED_DOWNLOAD_CHANNEL,
-      requestId,
-    ),
+    getPresignedObject: (payload) => invokeIpc<OssGetPresignedObjectResult>(OSS_GET_PRESIGNED_OBJECT_CHANNEL, payload),
+    cancelPresignedDownload: (requestId) => invokeIpc<{ cancelled: boolean }>(OSS_CANCEL_PRESIGNED_DOWNLOAD_CHANNEL, requestId),
     putPresignedObject: async (payload, onProgress) => {
       const handler = (_event: unknown, progress: OssPutPresignedObjectProgress) => {
         if (progress?.uploadId === payload.uploadId) {
@@ -3690,18 +3435,14 @@ const api = {
       }
 
       try {
-        return await invokeIpc<OssPutPresignedObjectResult>(
-          OSS_PUT_PRESIGNED_OBJECT_CHANNEL,
-          payload,
-        )
+        return await invokeIpc<OssPutPresignedObjectResult>(OSS_PUT_PRESIGNED_OBJECT_CHANNEL, payload)
       } finally {
         if (onProgress) {
           ipcRenderer.removeListener(OSS_PUT_PRESIGNED_OBJECT_PROGRESS_CHANNEL, handler)
         }
       }
     },
-    cancelPresignedObject: (uploadId) =>
-      invokeIpc<{ cancelled: boolean }>(OSS_CANCEL_PRESIGNED_OBJECT_CHANNEL, uploadId),
+    cancelPresignedObject: (uploadId) => invokeIpc<{ cancelled: boolean }>(OSS_CANCEL_PRESIGNED_OBJECT_CHANNEL, uploadId),
   },
 
   // 组织管理
@@ -3725,42 +3466,40 @@ const api = {
     pathExists: (targetPath: string) => invokeIpc('fs:pathExists', targetPath),
     realpath: (targetPath: string) => invokeIpc('fs:realpath', targetPath),
     readDir: (dirPath: string) => invokeIpc('fs:readDir', dirPath),
-    readFilePreview: (filePath: string, options?: { maxBytes?: number }) =>
-      invokeIpc('fs:readFilePreview', filePath, options),
-    renderOfficePreview: (filePath: string) =>
-      invokeIpc('fs:renderOfficePreview', filePath),
-    renderOfficePreviewData: (input: { fileName: string; data: ArrayBuffer | Uint8Array }) =>
-      invokeIpc('fs:renderOfficePreviewData', input),
-    readBinaryFile: (filePath: string) =>
-      invokeIpc('fs:readBinaryFile', filePath),
-    writeFile: (filePath: string, content: string) =>
-      invokeIpc('fs:writeFile', filePath, content),
-    writeBinaryFile: (filePath: string, base64Data: string) =>
-      invokeIpc('fs:writeBinaryFile', filePath, base64Data),
+    readFilePreview: (filePath: string, options?: { maxBytes?: number }) => invokeIpc('fs:readFilePreview', filePath, options),
+    renderOfficePreview: (filePath: string) => invokeIpc('fs:renderOfficePreview', filePath),
+    renderOfficePreviewData: (input: { fileName: string; data: ArrayBuffer | Uint8Array }) => invokeIpc('fs:renderOfficePreviewData', input),
+    readBinaryFile: (filePath: string) => invokeIpc('fs:readBinaryFile', filePath),
+    writeFile: (filePath: string, content: string) => invokeIpc('fs:writeFile', filePath, content),
+    writeBinaryFile: (filePath: string, base64Data: string) => invokeIpc('fs:writeBinaryFile', filePath, base64Data),
     createDir: (dirPath: string) => invokeIpc('fs:createDir', dirPath),
     rename: (oldPath: string, newPath: string) => invokeIpc('fs:rename', oldPath, newPath),
     deleteFile: (filePath: string) => invokeIpc('fs:deleteFile', filePath),
     deleteDir: (dirPath: string) => invokeIpc('fs:deleteDir', dirPath),
     ensureSpaceSandbox: (spaceId: string, organizationId?: string) => invokeIpc('fs:ensureSpaceSandbox', spaceId, organizationId),
-    ensureDefaultAgentDir: (input: string | { agentName?: string | null; spaceName?: string | null; organizationName?: string | null }) =>
-      invokeIpc('fs:ensureDefaultAgentDir', input),
+    ensureDefaultAgentDir: (
+      input:
+        | string
+        | {
+            agentName?: string | null
+            spaceName?: string | null
+            organizationName?: string | null
+          }
+    ) => invokeIpc('fs:ensureDefaultAgentDir', input),
     lookupSpaceSandbox: (spaceId: string, organizationId?: string) => invokeIpc('fs:lookupSpaceSandbox', spaceId, organizationId),
     watch: (dirPath: string, options?: { recursive?: boolean }) => invokeIpc('fs:watch', dirPath, options),
     unwatch: (watchId: string) => invokeIpc('fs:unwatch', watchId),
     computeSkillContentHash: (skillDir: string) => invokeIpc('fs:computeSkillContentHash', skillDir),
-    ripgrepSearch: (options: RipgrepSearchOptions) =>
-      invokeIpc('fs:ripgrepSearch', options),
-    ripgrepSearchCancel: (requestId: string) =>
-      invokeIpc('fs:ripgrepSearchCancel', requestId),
-    replaceInFiles: (input: ReplaceInFilesRequest) =>
-      invokeIpc('fs:replaceInFiles', input),
+    ripgrepSearch: (options: RipgrepSearchOptions) => invokeIpc('fs:ripgrepSearch', options),
+    ripgrepSearchCancel: (requestId: string) => invokeIpc('fs:ripgrepSearchCancel', requestId),
+    replaceInFiles: (input: ReplaceInFilesRequest) => invokeIpc('fs:replaceInFiles', input),
     onWatchEvent: (callback) => {
       const handler = (_event: unknown, payload: any) => {
         callback(payload)
       }
       ipcRenderer.on('fs:watch-event', handler)
       return () => ipcRenderer.removeListener('fs:watch-event', handler)
-    }
+    },
   },
 
   // 💻 Git 操作 API（TabCode 用）
@@ -3769,69 +3508,84 @@ const api = {
     getBranch: (cwd: string) => invokeIpc('git:branch', cwd),
     getBranchMeta: (cwd: string) => invokeIpc('git:branchMeta', cwd),
     listBranches: (cwd: string) => invokeIpc('git:branches', cwd),
-    checkoutBranch: (cwd: string, options: { branch: string; create?: boolean; startPoint?: string; allowDirty?: boolean }) =>
-      invokeIpc('git:checkout', cwd, options),
+    checkoutBranch: (
+      cwd: string,
+      options: {
+        branch: string
+        create?: boolean
+        startPoint?: string
+        allowDirty?: boolean
+      }
+    ) => invokeIpc('git:checkout', cwd, options),
     getStatus: (cwd: string) => invokeIpc('git:status', cwd),
     getDiffStat: (cwd: string) => invokeIpc('git:diffStat', cwd),
     getFileAtHead: (cwd: string, filePath: string) => invokeIpc('git:showFile', cwd, filePath),
     getFileAtStaged: (cwd: string, filePath: string) => invokeIpc('git:showStaged', cwd, filePath),
-    getFileAtCommit: (
-      cwd: string,
-      options: { filePath: string; commitHash: string; parent?: boolean },
-    ) => invokeIpc('git:showAtCommit', cwd, options),
+    getFileAtCommit: (cwd: string, options: { filePath: string; commitHash: string; parent?: boolean }) => invokeIpc('git:showAtCommit', cwd, options),
     rawDiff: (cwd: string, extraArgs?: string[]) => invokeIpc('git:rawDiff', cwd, extraArgs),
     stageFiles: (cwd: string, paths?: string[]) => invokeIpc('git:stage', cwd, paths),
     unstageFiles: (cwd: string, paths?: string[]) => invokeIpc('git:unstage', cwd, paths),
     commit: (cwd: string, message: string) => invokeIpc('git:commit', cwd, message),
-    push: (cwd: string, options?: {
-      remote?: string
-      branch?: string
-      setUpstream?: boolean
-      allowDirty?: boolean
-      allowBehind?: boolean
-      allowNoAhead?: boolean
-    }) =>
-      invokeIpc('git:push', cwd, options),
+    push: (
+      cwd: string,
+      options?: {
+        remote?: string
+        branch?: string
+        setUpstream?: boolean
+        allowDirty?: boolean
+        allowBehind?: boolean
+        allowNoAhead?: boolean
+      }
+    ) => invokeIpc('git:push', cwd, options),
     listRemotes: (cwd: string) => invokeIpc('git:remotes', cwd),
-    getPullRequestUrl: (cwd: string, options?: { remote?: string; baseBranch?: string; headBranch?: string }) =>
-      invokeIpc('git:pullRequestUrl', cwd, options),
-    createPullRequest: (cwd: string, options?: {
-      remote?: string
-      baseBranch?: string
-      headBranch?: string
-      title?: string
-      body?: string
-      draft?: boolean
-    }) =>
-      invokeIpc('git:createPullRequest', cwd, options),
+    getPullRequestUrl: (cwd: string, options?: { remote?: string; baseBranch?: string; headBranch?: string }) => invokeIpc('git:pullRequestUrl', cwd, options),
+    createPullRequest: (
+      cwd: string,
+      options?: {
+        remote?: string
+        baseBranch?: string
+        headBranch?: string
+        title?: string
+        body?: string
+        draft?: boolean
+      }
+    ) => invokeIpc('git:createPullRequest', cwd, options),
     listWorktrees: (cwd: string) => invokeIpc('git:worktrees', cwd),
-    createWorktree: (cwd: string, options: { path: string; branch?: string; createBranch?: boolean; baseBranch?: string }) =>
-      invokeIpc('git:worktreeCreate', cwd, options),
-    preflightRemoveWorktree: (cwd: string, options: { path: string }) =>
-      invokeIpc('git:worktreeRemovePreflight', cwd, options),
-    removeWorktree: (cwd: string, options: { path: string; force?: boolean; assessmentToken?: string }) =>
-      invokeIpc('git:worktreeRemove', cwd, options),
-    mergeWorktree: (cwd: string, options: {
-      sourceWorktreePath: string
-      targetBranch: string
-      deleteAfterMerge?: boolean
-      deleteSourceBranch?: boolean
-    }) =>
-      invokeIpc('git:worktreeMerge', cwd, options),
-    pull: (cwd: string, options?: { remote?: string; branch?: string; rebase?: boolean }) =>
-      invokeIpc('git:pull', cwd, options),
-    fetch: (cwd: string, options?: { remote?: string; prune?: boolean }) =>
-      invokeIpc('git:fetch', cwd, options),
-    stash: (cwd: string, action: string, options?: { message?: string; includeUntracked?: boolean; index?: number }) =>
-      invokeIpc('git:stash', cwd, action, options),
-    discardFiles: (cwd: string, paths: string[]) =>
-      invokeIpc('git:discardFiles', cwd, paths),
-    fullStatus: (cwd: string) =>
-      invokeIpc('git:fullStatus', cwd),
-    listCommits: (cwd: string, options?: { limit?: number; graph?: boolean }) =>
-      invokeIpc('git:log', cwd, options),
-    getCommitDetail: (cwd: string, options: { commitHash: string }) =>
-      invokeIpc('git:commitDetail', cwd, options),
+    createWorktree: (
+      cwd: string,
+      options: {
+        path: string
+        branch?: string
+        createBranch?: boolean
+        baseBranch?: string
+      }
+    ) => invokeIpc('git:worktreeCreate', cwd, options),
+    preflightRemoveWorktree: (cwd: string, options: { path: string }) => invokeIpc('git:worktreeRemovePreflight', cwd, options),
+    removeWorktree: (cwd: string, options: { path: string; force?: boolean; assessmentToken?: string }) => invokeIpc('git:worktreeRemove', cwd, options),
+    mergeWorktree: (
+      cwd: string,
+      options: {
+        sourceWorktreePath: string
+        targetBranch: string
+        deleteAfterMerge?: boolean
+        deleteSourceBranch?: boolean
+      }
+    ) => invokeIpc('git:worktreeMerge', cwd, options),
+    pull: (cwd: string, options?: { remote?: string; branch?: string; rebase?: boolean }) => invokeIpc('git:pull', cwd, options),
+    fetch: (cwd: string, options?: { remote?: string; prune?: boolean }) => invokeIpc('git:fetch', cwd, options),
+    stash: (
+      cwd: string,
+      action: string,
+      options?: {
+        message?: string
+        includeUntracked?: boolean
+        index?: number
+      }
+    ) => invokeIpc('git:stash', cwd, action, options),
+    discardFiles: (cwd: string, paths: string[]) => invokeIpc('git:discardFiles', cwd, paths),
+    fullStatus: (cwd: string) => invokeIpc('git:fullStatus', cwd),
+    listCommits: (cwd: string, options?: { limit?: number; graph?: boolean }) => invokeIpc('git:log', cwd, options),
+    getCommitDetail: (cwd: string, options: { commitHash: string }) => invokeIpc('git:commitDetail', cwd, options),
   },
 
   // Checkpoint 检查点系统 API 实现
@@ -3862,13 +3616,17 @@ const api = {
   // 设备标识
   getDeviceFingerprint: () => invokeIpc('device:getFingerprint'),
   getDeviceIdentity: () => invokeIpc('device:getIdentity'),
-  ensureDeviceRegistered: (organizationId: string) =>
-    invokeIpc('device:ensureRegistered', { organizationId }),
+  ensureDeviceRegistered: (organizationId: string) => invokeIpc('device:ensureRegistered', { organizationId }),
 
   // Space 上下文
   space: {
     setActive: (spaceId: string | null, crawlspaceId?: string | null, organizationId?: string | null, organizationRoot?: string | null) =>
-      invokeIpc('space:setActive', { spaceId, crawlspaceId, organizationId, organizationRoot }),
+      invokeIpc('space:setActive', {
+        spaceId,
+        crawlspaceId,
+        organizationId,
+        organizationRoot,
+      }),
   },
 
   // TabDesktop 授权管理（Wave 2 · 规范 § 6.3 / § 6.4）
@@ -3882,8 +3640,7 @@ const api = {
      * Space 切换时推送当前 device_permissions 到主进程（Wave 2.1 · 规范 § 6.5）。
      * 主进程缓存后 `/desktop/*` 路由在入口读 `desktop_observe`，block 则直接拒绝。
      */
-    setDevicePermissions: (perms: Record<string, string> | null) =>
-      invokeIpc('desktop:setDevicePermissions', { perms }),
+    setDevicePermissions: (perms: Record<string, string> | null) => invokeIpc('desktop:setDevicePermissions', { perms }),
   },
 
   // OS 系统权限管理（macOS TCC / Windows 应用权限）
@@ -3893,6 +3650,68 @@ const api = {
     check: (kind: string) => invokeIpc('osPermissions:check', kind),
     request: (kind: string) => invokeIpc('osPermissions:request', kind),
     openSettings: (kind: string) => invokeIpc('osPermissions:openSettings', kind),
+  },
+
+  meetingRecording: {
+    probeStorage: () => invokeIpc('meeting-recording:probe-storage'),
+    probeMedia: (input = {}) => invokeIpc('meeting-recording:probe-media', input),
+    probeAsr: (input = {}) => invokeIpc('meeting-recording:probe-asr', input),
+    listMicrophones: () => invokeIpc('meeting-recording:list-microphones'),
+    listSystemAudioSources: () =>
+      invokeIpc('meeting-recording:list-system-audio-sources'),
+    testMicrophone: (input = {}) => invokeIpc('meeting-recording:test-microphone', input),
+    switchMicrophone: (input) =>
+      invokeIpc('meeting-recording:switch-microphone', input),
+    switchSystemAudio: (input) =>
+      invokeIpc('meeting-recording:switch-system-audio', input),
+    reportCaptureLevel: (event) =>
+      invokeIpc('meeting-recording:report-capture-level', event),
+    onCaptureLevel: (callback) => {
+      const handler = (
+        _event: Electron.IpcRendererEvent,
+        level: MeetingCaptureLevelEvent
+      ) => callback(level)
+      ipcRenderer.on(MEETING_CAPTURE_LEVEL_CHANNEL, handler)
+      return () => {
+        ipcRenderer.removeListener(MEETING_CAPTURE_LEVEL_CHANNEL, handler)
+      }
+    },
+    reportMicrophoneTestLevel: (event) =>
+      invokeIpc('meeting-recording:report-microphone-test-level', event),
+    onMicrophoneTestLevel: (callback) => {
+      const handler = (
+        _event: Electron.IpcRendererEvent,
+        level: MeetingMicrophoneTestLevelEvent
+      ) => callback(level)
+      ipcRenderer.on(MEETING_MICROPHONE_TEST_LEVEL_CHANNEL, handler)
+      return () => {
+        ipcRenderer.removeListener(
+          MEETING_MICROPHONE_TEST_LEVEL_CHANNEL,
+          handler
+        )
+      }
+    },
+    prepare: (input) => invokeIpc('meeting-recording:prepare', input),
+    start: (scope) => invokeIpc('meeting-recording:start', scope),
+    pause: (scope) => invokeIpc('meeting-recording:pause', scope),
+    resume: (scope) => invokeIpc('meeting-recording:resume', scope),
+    stop: (scope) => invokeIpc('meeting-recording:stop', scope),
+    cancel: (scope) => invokeIpc('meeting-recording:cancel', scope),
+    getStatus: () => invokeIpc('meeting-recording:status'),
+    appendAudioChunk: (input) => invokeIpc('meeting-recording:append-audio-chunk', input),
+    appendPcmChunk: (input) => invokeIpc('meeting-recording:append-pcm-chunk', input),
+    appendTranscript: (scope, checkpoint) => invokeIpc('meeting-recording:append-transcript', scope, checkpoint),
+    recoverInterrupted: () => invokeIpc('meeting-recording:recover-interrupted'),
+    listArchives: (scope) => invokeIpc('meeting-recording:list-archives', scope),
+    getArchive: (scope) => invokeIpc('meeting-recording:get-archive', scope),
+    setCopilotEnabled: (scope, enabled) => invokeIpc('meeting-recording:set-copilot', scope, enabled),
+    answerCopilotQuestion: (scope, questionSegmentId) =>
+      invokeIpc('meeting-recording:answer-copilot', scope, questionSegmentId),
+    onStatusChanged: (callback) => {
+      const handler = (_event: Electron.IpcRendererEvent, status: MeetingRecordingStatus) => callback(status)
+      ipcRenderer.on(MEETING_RECORDING_STATUS_CHANNEL, handler)
+      return () => ipcRenderer.removeListener(MEETING_RECORDING_STATUS_CHANNEL, handler)
+    },
   },
 
   // 窗口外观（ 回传 shouldUseDarkColors）
@@ -3906,7 +3725,7 @@ const api = {
         themeSource: 'system' | 'light' | 'dark'
         shouldUseDarkColors: boolean
         shouldUseDarkColorsForSystemIntegratedUI: boolean | null
-      },
+      }
     ) => {
       callback(payload)
     }
@@ -3927,21 +3746,20 @@ const api = {
     onFlushBeforeClose: (callback: () => void) => {
       const handler = () => callback()
       ipcRenderer.on('slide:flush-before-close', handler)
-      return () => { ipcRenderer.removeListener('slide:flush-before-close', handler) }
+      return () => {
+        ipcRenderer.removeListener('slide:flush-before-close', handler)
+      }
     },
     flushComplete: () => sendIpc('slide:flush-complete'),
   },
 
   exitGuard: {
-    onRequest: (
-      callback: (payload: { reason: 'app-quit' | 'window-close'; requestId: string }) => void,
-    ) => {
-      const handler = (
-        _event: unknown,
-        payload: { reason: 'app-quit' | 'window-close'; requestId: string },
-      ) => callback(payload)
+    onRequest: (callback: (payload: { reason: 'app-quit' | 'window-close'; requestId: string }) => void) => {
+      const handler = (_event: unknown, payload: { reason: 'app-quit' | 'window-close'; requestId: string }) => callback(payload)
       ipcRenderer.on('app:exit-guard:request', handler)
-      return () => { ipcRenderer.removeListener('app:exit-guard:request', handler) }
+      return () => {
+        ipcRenderer.removeListener('app:exit-guard:request', handler)
+      }
     },
     sendResponse: (payload: { requestId: string; choice: 'continue' | 'cancel' }) => {
       sendIpc('app:exit-guard:response', payload)
@@ -3954,19 +3772,23 @@ const api = {
     get: (runId: string) => invokeIpc('run-session:get', runId),
     //  Phase 3：webview 容器 keepalive 判定——该 view 是否有进行中的 Agent run
     hasActiveRunForView: (viewId: string) => invokeIpc('run-session:hasActiveRunForView', viewId),
-    registerView: (runId: string, viewInfo: { viewId: string; profile?: string; partition?: string; userAgent?: string; proxy?: any; metadata?: Record<string, any> }) =>
-      invokeIpc('run-session:registerView', runId, viewInfo),
+    registerView: (
+      runId: string,
+      viewInfo: {
+        viewId: string
+        profile?: string
+        partition?: string
+        userAgent?: string
+        proxy?: any
+        metadata?: Record<string, any>
+      }
+    ) => invokeIpc('run-session:registerView', runId, viewInfo),
     setActiveView: (runId: string, viewId?: string | null) => invokeIpc('run-session:setActiveView', runId, viewId),
-    addEvent: (payload: { runId?: string; viewId?: string; type: string; data?: any; timestamp?: number }) =>
-      invokeIpc('run-session:addEvent', payload),
-    openTab: (payload: { runId?: string; id?: string; url?: string; profile?: string; partition?: string; userAgent?: string; proxy?: any; metadata?: Record<string, any> }) =>
-      invokeIpc('run-session:openTab', payload),
-    switchTab: (payload: { runId?: string; viewId: string; bounds?: any }) =>
-      invokeIpc('run-session:switchTab', payload),
-    closeTab: (payload: { runId?: string; viewId: string; force?: boolean }) =>
-      invokeIpc('run-session:closeTab', payload),
-    endRun: (runId: string, options?: { destroyViews?: boolean; reason?: string }) =>
-      invokeIpc('run-session:endRun', runId, options),
+    addEvent: (payload: { runId?: string; viewId?: string; type: string; data?: any; timestamp?: number }) => invokeIpc('run-session:addEvent', payload),
+    openTab: (payload: { runId?: string; id?: string; url?: string; profile?: string; partition?: string; userAgent?: string; proxy?: any; metadata?: Record<string, any> }) => invokeIpc('run-session:openTab', payload),
+    switchTab: (payload: { runId?: string; viewId: string; bounds?: any }) => invokeIpc('run-session:switchTab', payload),
+    closeTab: (payload: { runId?: string; viewId: string; force?: boolean }) => invokeIpc('run-session:closeTab', payload),
+    endRun: (runId: string, options?: { destroyViews?: boolean; reason?: string }) => invokeIpc('run-session:endRun', runId, options),
   },
 
   // ========== 🆕 爬虫模块 API 实现 ==========
@@ -3983,28 +3805,23 @@ const api = {
     },
     hide: (tabId) => invokeIpc('crawl-view:hide', tabId),
     setViewBounds: (tabId, bounds) => invokeIpc('crawl-view:setViewBounds', tabId, bounds),
-    setIgnoreMouseEventsForAttached: (ignore: boolean) =>
-      invokeIpc('crawl-view:setIgnoreMouseEventsForAttached', ignore),
+    setIgnoreMouseEventsForAttached: (ignore: boolean) => invokeIpc('crawl-view:setIgnoreMouseEventsForAttached', ignore),
     destroyTabView: (tabId) => invokeIpc('crawl-view:destroyTabView', tabId),
     hasView: (tabId) => invokeIpc('crawl-view:hasView', tabId),
     touch: (tabId, reason) => invokeIpc('crawl-view:touch', tabId, reason),
     // 🆕 Renderer 重载兜底：清理孤儿 View/Run（仅清理非用户视图/工作区相关资源）
-    reconcileOrphans: (payload: { knownTabIds?: string[]; knownViewIds?: string[]; knownWorkspaceIds?: string[]; reason?: string }) =>
-      invokeIpc('crawl-view:reconcileOrphans', payload),
+    reconcileOrphans: (payload: { knownTabIds?: string[]; knownViewIds?: string[]; knownWorkspaceIds?: string[]; reason?: string }) => invokeIpc('crawl-view:reconcileOrphans', payload),
     getCacheStats: () => invokeIpc('crawl-view:getCacheStats'),
     cleanupCache: () => invokeIpc('crawl-view:cleanupCache'),
 
     // 🆕 导航控制
     goBack: (tabId?: string) => invokeIpc('crawl-view:goBack', tabId),
     goForward: (tabId?: string) => invokeIpc('crawl-view:goForward', tabId),
-    reload: (ignoreCache = false, tabId?: string) =>
-      invokeIpc('crawl-view:reload', ignoreCache, tabId),
+    reload: (ignoreCache = false, tabId?: string) => invokeIpc('crawl-view:reload', ignoreCache, tabId),
     stop: (tabId?: string) => invokeIpc('crawl-view:stop', tabId),
     getNavigationState: (tabId?: string) => invokeIpc('crawl-view:getNavigationState', tabId),
-    loadUrl: (tabId: string, url: string, options?: any) =>
-      invokeIpc('crawl-view:loadUrl', tabId, url, options),
-    waitForSelector: (tabId: string, options: any) =>
-      invokeIpc('crawl-view:waitForSelector', tabId, options),
+    loadUrl: (tabId: string, url: string, options?: any) => invokeIpc('crawl-view:loadUrl', tabId, url, options),
+    waitForSelector: (tabId: string, options: any) => invokeIpc('crawl-view:waitForSelector', tabId, options),
 
     // 🆕 页面读取（Phase 3）
     getHTML: (tabId?: string, url?: string, runId?: string, options?: any) => {
@@ -4026,7 +3843,9 @@ const api = {
     onCrashRecovered: (callback: (payload: { viewId: string; reason: string; url: string }) => void) => {
       const handler = (_event: any, payload: any) => callback(payload)
       ipcRenderer.on('crawl-view:crash-recovered', handler)
-      return () => { ipcRenderer.removeListener('crawl-view:crash-recovered', handler) }
+      return () => {
+        ipcRenderer.removeListener('crawl-view:crash-recovered', handler)
+      }
     },
     /**
      * 监听"主进程因 env 绑定变更主动重建 workspace view"事件。
@@ -4038,7 +3857,9 @@ const api = {
     onPartitionRebuilt: (callback: (payload: { tabId: string; oldPartition: string; newPartition: string; reason: string }) => void) => {
       const handler = (_event: any, payload: any) => callback(payload)
       ipcRenderer.on('crawl-view:partition-rebuilt', handler)
-      return () => { ipcRenderer.removeListener('crawl-view:partition-rebuilt', handler) }
+      return () => {
+        ipcRenderer.removeListener('crawl-view:partition-rebuilt', handler)
+      }
     },
     /**
      * 监听"partition 重建锁释放"事件（Wave 3 B2 收敛）。
@@ -4050,7 +3871,9 @@ const api = {
     onPartitionRebuildReleased: (callback: (payload: { tabId: string; actualPartition: string }) => void) => {
       const handler = (_event: any, payload: any) => callback(payload)
       ipcRenderer.on('crawl-view:partition-rebuild-released', handler)
-      return () => { ipcRenderer.removeListener('crawl-view:partition-rebuild-released', handler) }
+      return () => {
+        ipcRenderer.removeListener('crawl-view:partition-rebuild-released', handler)
+      }
     },
 
     // 🆕 内容操作（Phase 2）
@@ -4074,24 +3897,34 @@ const api = {
     getWebContentsId: () => invokeIpc('crawl-view:getWebContentsId'),
 
     // 🆕 页面内查找 (Find-in-Page)
-    findInPage: (tabId: string, text: string, options?: { forward?: boolean; findNext?: boolean; matchCase?: boolean }) =>
-      invokeIpc('crawl-view:findInPage', tabId, text, options),
-    stopFindInPage: (tabId: string, action?: 'clearSelection' | 'keepSelection' | 'activateSelection') =>
-      invokeIpc('crawl-view:stopFindInPage', tabId, action),
-    onFoundInPage: (callback: (event: any, result: { viewId: string; activeMatchOrdinal: number; matches: number; finalUpdate: boolean }) => void) => {
+    findInPage: (tabId: string, text: string, options?: { forward?: boolean; findNext?: boolean; matchCase?: boolean }) => invokeIpc('crawl-view:findInPage', tabId, text, options),
+    stopFindInPage: (tabId: string, action?: 'clearSelection' | 'keepSelection' | 'activateSelection') => invokeIpc('crawl-view:stopFindInPage', tabId, action),
+    onFoundInPage: (
+      callback: (
+        event: any,
+        result: {
+          viewId: string
+          activeMatchOrdinal: number
+          matches: number
+          finalUpdate: boolean
+        }
+      ) => void
+    ) => {
       ipcRenderer.on('crawl-view:found-in-page', callback)
-      return () => { ipcRenderer.removeListener('crawl-view:found-in-page', callback) }
+      return () => {
+        ipcRenderer.removeListener('crawl-view:found-in-page', callback)
+      }
     },
 
     // 🆕 缩放控制
-    setZoomLevel: (tabId: string, level: number) =>
-      invokeIpc('crawl-view:setZoomLevel', tabId, level),
-    getZoomLevel: (tabId: string) =>
-      invokeIpc('crawl-view:getZoomLevel', tabId),
+    setZoomLevel: (tabId: string, level: number) => invokeIpc('crawl-view:setZoomLevel', tabId, level),
+    getZoomLevel: (tabId: string) => invokeIpc('crawl-view:getZoomLevel', tabId),
     onZoomLevelChanged: (callback: (payload: BrowserZoomLevelChangedPayload) => void) => {
       const handler = (_event: Electron.IpcRendererEvent, payload: BrowserZoomLevelChangedPayload) => callback(payload)
       ipcRenderer.on('crawl-view:zoom-level-changed', handler)
-      return () => { ipcRenderer.removeListener('crawl-view:zoom-level-changed', handler) }
+      return () => {
+        ipcRenderer.removeListener('crawl-view:zoom-level-changed', handler)
+      }
     },
     onAgentTabLockChanged: overlayOn<{ lockedViewIds: string[] }>('browser-tab-lock:changed'),
   },
@@ -4103,23 +3936,23 @@ const api = {
   },
 
   webviewHost: {
-    announce: (tabId: string, options) =>
-      invokeIpc('webview-host:announce', tabId, options),
-    bind: (tabId: string, webContentsId: number) =>
-      invokeIpc('webview-host:bind', tabId, webContentsId),
-    navigate: (tabId: string, url: string, options?: { expectedPartition?: string }) =>
-      invokeIpc('webview-host:navigate', tabId, url, options),
-    discardAnnounce: (tabId: string) =>
-      invokeIpc('webview-host:discard-announce', tabId),
+    announce: (tabId: string, options) => invokeIpc('webview-host:announce', tabId, options),
+    bind: (tabId: string, webContentsId: number) => invokeIpc('webview-host:bind', tabId, webContentsId),
+    navigate: (tabId: string, url: string, options?: { expectedPartition?: string }) => invokeIpc('webview-host:navigate', tabId, url, options),
+    discardAnnounce: (tabId: string) => invokeIpc('webview-host:discard-announce', tabId),
     onGuestCrashed: (callback: (payload: { tabId: string; reason: string; url: string }) => void) => {
       const handler = (_event: Electron.IpcRendererEvent, payload: { tabId: string; reason: string; url: string }) => callback(payload)
       ipcRenderer.on('webview-host:guest-crashed', handler)
-      return () => { ipcRenderer.removeListener('webview-host:guest-crashed', handler) }
+      return () => {
+        ipcRenderer.removeListener('webview-host:guest-crashed', handler)
+      }
     },
     onDestroyRequest: (callback: (payload: { tabId: string }) => void) => {
       const handler = (_event: Electron.IpcRendererEvent, payload: { tabId: string }) => callback(payload)
       ipcRenderer.on('webview-host:destroy-request', handler)
-      return () => { ipcRenderer.removeListener('webview-host:destroy-request', handler) }
+      return () => {
+        ipcRenderer.removeListener('webview-host:destroy-request', handler)
+      }
     },
   },
 
@@ -4127,7 +3960,9 @@ const api = {
     onInterventionRequired: (callback: (payload: { tabId: string; captchaType: string; message: string }) => void) => {
       const handler = (_event: any, payload: any) => callback(payload)
       ipcRenderer.on('captcha:intervention-required', handler)
-      return () => { ipcRenderer.removeListener('captcha:intervention-required', handler) }
+      return () => {
+        ipcRenderer.removeListener('captcha:intervention-required', handler)
+      }
     },
     resolveIntervention: (tabId: string) => {
       sendIpc('captcha:intervention-resolved', { tabId })
@@ -4136,20 +3971,15 @@ const api = {
 
   // WebContentsView 管理
   webcontentsview: {
-    getCDPEndpoint: (viewId: string) =>
-      invokeIpc('webcontentsview:getCDPEndpoint', viewId),
+    getCDPEndpoint: (viewId: string) => invokeIpc('webcontentsview:getCDPEndpoint', viewId),
 
-    getView: (viewId: string) =>
-      invokeIpc('webcontentsview:getView', viewId),
+    getView: (viewId: string) => invokeIpc('webcontentsview:getView', viewId),
 
-    getAllViews: () =>
-      invokeIpc('webcontentsview:getAllViews'),
+    getAllViews: () => invokeIpc('webcontentsview:getAllViews'),
 
-    openDevTools: (viewId: string) =>
-      invokeIpc('webcontentsview:openDevTools', viewId),
+    openDevTools: (viewId: string) => invokeIpc('webcontentsview:openDevTools', viewId),
 
-    closeDevTools: (viewId: string) =>
-      invokeIpc('webcontentsview:closeDevTools', viewId),
+    closeDevTools: (viewId: string) => invokeIpc('webcontentsview:closeDevTools', viewId),
 
     // ✅ Phase 3: 已移除池化相关 API (acquire/release/getPoolStatus)
   },
@@ -4169,12 +3999,12 @@ const api = {
     getStoreInfo: () => invokeIpc('task:storeInfo'),
     onStateChange: (callback) => {
       const listener = (_event: any, data: any) => {
-        callback(data);
-      };
-      ipcRenderer.on('task:state:change', listener);
+        callback(data)
+      }
+      ipcRenderer.on('task:state:change', listener)
       return () => {
-        ipcRenderer.removeListener('task:state:change', listener);
-      };
+        ipcRenderer.removeListener('task:state:change', listener)
+      }
     },
     // 生命周期操作
     enqueue: (taskId) => invokeIpc('task:enqueue', taskId),
@@ -4194,13 +4024,13 @@ const api = {
         url: params.url,
         skeletonHtml: params.skeletonHtml,
         maxRecommendations: params.maxRecommendations,
-        pageMeta: params.pageMeta
+        pageMeta: params.pageMeta,
       }),
     recordUsage: (params) =>
       invokeIpc('recommendation:record-usage', {
         historyId: params.historyId,
-        userId: params.userId
-      })
+        userId: params.userId,
+      }),
   },
 
   // 🆕 Agent Tools API 实现
@@ -4247,17 +4077,7 @@ const api = {
       return invokeIpc('agent-engine:get-state', input ?? {})
     },
     //  对话回退（本地宿主）：截断 / 撤销本机 transcript 软标记。
-    rollbackTranscript: (payload: {
-      sessionId: string
-      targetMessageId?: string
-      targetRole?: 'user' | 'assistant'
-      targetContent?: string
-      targetOccurrenceIndex?: number
-      mode?: 'rollback' | 'editAndResend'
-      keepMessageCount?: number
-      spaceId?: string
-      organizationId?: string
-    }) => invokeIpc('agent-engine:rollback-transcript', payload),
+    rollbackTranscript: (payload: { sessionId: string; targetMessageId?: string; targetRole?: 'user' | 'assistant'; targetContent?: string; targetOccurrenceIndex?: number; mode?: 'rollback' | 'editAndResend'; keepMessageCount?: number; spaceId?: string; organizationId?: string }) => invokeIpc('agent-engine:rollback-transcript', payload),
     rollbackSessionTimeline: (payload: {
       sessionId: string
       targetMessageId: string
@@ -4276,52 +4096,52 @@ const api = {
       spaceId?: string
       organizationId?: string
     }) => invokeIpc('agent-engine:rollback-session-timeline', payload),
-    unrevertTranscript: (payload: { sessionId: string; spaceId?: string; organizationId?: string }) =>
-      invokeIpc('agent-engine:unrevert-transcript', payload),
+    unrevertTranscript: (payload: { sessionId: string; spaceId?: string; organizationId?: string }) => invokeIpc('agent-engine:unrevert-transcript', payload),
     onStreamEvent: (callback: (data: { sessionId: string; event: { type: string; payload: Record<string, unknown> } }) => void) => {
       const handler = (_event: any, data: any) => callback(data)
       ipcRenderer.on('agent-engine:stream-event', handler)
-      return () => { ipcRenderer.removeListener('agent-engine:stream-event', handler) }
+      return () => {
+        ipcRenderer.removeListener('agent-engine:stream-event', handler)
+      }
     },
     // ：声明 / 撤销某 session 的 IPC stream 投递 target。后端 WS 观察
     // 只允许由主进程 agent-host 的执行路径显式开启。
-    watchSession: (sessionId: string, options?: { shareId?: string }) => invokeIpc(
-      'agent-engine:watch-session',
-      { sessionId, ...(options?.shareId ? { shareId: options.shareId } : {}) },
-    ),
+    watchSession: (sessionId: string, options?: { shareId?: string }) =>
+      invokeIpc('agent-engine:watch-session', {
+        sessionId,
+        ...(options?.shareId ? { shareId: options.shareId } : {}),
+      }),
     unwatchSession: (sessionId: string) => invokeIpc('agent-engine:unwatch-session', { sessionId }),
-    registerProvisionalSession: (sessionId: string) =>
-      invokeIpc('agent-engine:register-provisional-session', { sessionId }),
-    beginProvisionalSessionClaim: (sessionId: string) =>
-      invokeIpc('agent-engine:begin-provisional-session-claim', { sessionId }),
+    registerProvisionalSession: (sessionId: string) => invokeIpc('agent-engine:register-provisional-session', { sessionId }),
+    beginProvisionalSessionClaim: (sessionId: string) => invokeIpc('agent-engine:begin-provisional-session-claim', { sessionId }),
     completeProvisionalSessionClaim: (sessionId: string, accepted: boolean) =>
-      invokeIpc('agent-engine:complete-provisional-session-claim', { sessionId, accepted }),
+      invokeIpc('agent-engine:complete-provisional-session-claim', {
+        sessionId,
+        accepted,
+      }),
     beginProvisionalSessionDiscard: (sessionId: string) =>
-      invokeIpc('agent-engine:begin-provisional-session-discard', { sessionId }),
+      invokeIpc('agent-engine:begin-provisional-session-discard', {
+        sessionId,
+      }),
     completeProvisionalSessionDiscard: (sessionId: string, deleted: boolean) =>
-      invokeIpc('agent-engine:complete-provisional-session-discard', { sessionId, deleted }),
+      invokeIpc('agent-engine:complete-provisional-session-discard', {
+        sessionId,
+        deleted,
+      }),
     // ：出站遥控发送（chat.send_message 等）经主进程 WS 网关执行，回传 GatewayResponse。
-    gatewaySend: (payload: { messageType: string; payload: Record<string, unknown>; requestOptions?: Record<string, unknown> }) =>
-      invokeIpc('agent-engine:gateway-send', payload),
+    gatewaySend: (payload: { messageType: string; payload: Record<string, unknown>; requestOptions?: Record<string, unknown> }) => invokeIpc('agent-engine:gateway-send', payload),
     // ：出站 abort——本机 IPC 快路径 + 后端 chat.cancel 兜底一次收口，回传 AbortRunResult。
     abortRun: (sessionId: string) => invokeIpc('agent-engine:abort-run', { sessionId }),
-    promoteRun: (payload: { sessionId: string; runId: string }) =>
-      invokeIpc('agent-engine:promote-run', payload),
-    cancelQueuedRun: (payload: { sessionId: string; runId: string }) =>
-      invokeIpc('agent-engine:cancel-queued-run', payload),
+    promoteRun: (payload: { sessionId: string; runId: string }) => invokeIpc('agent-engine:promote-run', payload),
+    cancelQueuedRun: (payload: { sessionId: string; runId: string }) => invokeIpc('agent-engine:cancel-queued-run', payload),
     // ：撤回未答轮次——经主进程 runtime，不经 renderer→Django。
-    withdrawUnansweredTurn: (payload: {
-      sessionId: string
-      clientMessageId: string
-      localMessageId?: string
-      targetContent?: string
-      spaceId?: string
-      organizationId?: string
-    }) => invokeIpc('agent-engine:withdraw-unanswered-turn', payload),
+    withdrawUnansweredTurn: (payload: { sessionId: string; clientMessageId: string; localMessageId?: string; targetContent?: string; spaceId?: string; organizationId?: string }) => invokeIpc('agent-engine:withdraw-unanswered-turn', payload),
     onApprovalMemoChanged: (callback: (data: { workspaceId: string }) => void) => {
       const handler = (_event: any, data: any) => callback(data)
       ipcRenderer.on('agent-engine:approval-memo-changed', handler)
-      return () => { ipcRenderer.removeListener('agent-engine:approval-memo-changed', handler) }
+      return () => {
+        ipcRenderer.removeListener('agent-engine:approval-memo-changed', handler)
+      }
     },
     onSessionCodeRootChanged: (callback: (data: SessionCodeRootChangedEvent) => void) => {
       const handler = (_event: Electron.IpcRendererEvent, data: SessionCodeRootChangedEvent) => {
@@ -4341,49 +4161,39 @@ const api = {
         scope?: 'once' | 'thread' | 'always'
         rejection_message?: string
       }>,
-      threadId?: string,
+      threadId?: string
     ) => {
-      return invokeIpc('agent-engine:submit-hitl-batch', { batchId, decisions, threadId })
+      return invokeIpc('agent-engine:submit-hitl-batch', {
+        batchId,
+        decisions,
+        threadId,
+      })
     },
     submitAskUserResponse: (requestId: string, response: unknown, threadId?: string) => {
-      return invokeIpc('agent-engine:submit-ask-user-response', { requestId, response, threadId })
+      return invokeIpc('agent-engine:submit-ask-user-response', {
+        requestId,
+        response,
+        threadId,
+      })
     },
     // cancel-hitl IPC 绑定——语义 / 与 skipped 的区别见 API 表面注释与
     // ElectronAgentHost.handleCancelHitlInteraction docstring。
-    cancelHitlInteraction: (payload: {
-      kind: 'approval' | 'ask'
-      requestKey: string
-      reason?: string
-    }) => {
+    cancelHitlInteraction: (payload: { kind: 'approval' | 'ask'; requestKey: string; reason?: string }) => {
       return invokeIpc('agent-engine:cancel-hitl-interaction', payload)
     },
-    executeModeSwitch: (payload: {
-      sessionId: string
-      proposalId: string
-      outcome: 'approved' | 'cancelled'
-    }) => {
+    executeModeSwitch: (payload: { sessionId: string; proposalId: string; outcome: 'approved' | 'cancelled' }) => {
       validateModeSwitchExecutePayload(payload)
       return invokeIpc('agent-engine:mode-switch-execute', payload)
     },
-    notifyModeSwitched: (payload: {
-      sessionId: string
-      fromMode?: string
-      toMode: string
-    }) => {
+    notifyModeSwitched: (payload: { sessionId: string; fromMode?: string; toMode: string }) => {
       validateNotifyModeSwitchedPayload(payload)
       return invokeIpc('agent-engine:notify-mode-switched', payload)
     },
-    notifyApprovalModeChanged: (payload: {
-      sessionId: string
-      approvalMode: string
-    }) => {
+    notifyApprovalModeChanged: (payload: { sessionId: string; approvalMode: string }) => {
       validateNotifyApprovalModeChangedPayload(payload)
       return invokeIpc('agent-engine:notify-approval-mode-changed', payload)
     },
-    invalidateAgentConfigCache: (payload?: {
-      agentId?: string
-      workspaceId?: string
-    }) => {
+    invalidateAgentConfigCache: (payload?: { agentId?: string; workspaceId?: string }) => {
       validateInvalidateAgentConfigCachePayload(payload)
       return invokeIpc('agent-engine:invalidate-agent-config-cache', payload ?? {})
     },
@@ -4419,16 +4229,42 @@ const api = {
       return invokeIpc('agent-engine:cancel-subagent', input)
     },
     listRunningBackgroundTasks: (input: { sessionId: string; spaceId?: string }) => {
-      return invokeIpc<Array<{ sessionId: string; command: string; startedAt: number }>>(
-        'agent-engine:list-running-background-tasks',
-        input,
-      )
+      return invokeIpc<Array<{ sessionId: string; command: string; startedAt: number }>>('agent-engine:list-running-background-tasks', input)
     },
     retryTool: (sessionId: string, toolName: string, args: Record<string, unknown>) => {
-      return invokeIpc('agent-engine:retry-tool', { sessionId, toolName, args })
+      return invokeIpc('agent-engine:retry-tool', {
+        sessionId,
+        toolName,
+        args,
+      })
     },
-    updateContext: (sessionId: string, appContext: { appType?: string | null; appMeta?: Record<string, unknown> | null; openTabs?: Array<{ type: string; id?: string; title?: string; active?: boolean; group_id?: string; app_key?: string; display_name?: string; is_home?: boolean; app_home?: string; path?: string; kind?: string; url?: string; session_id?: string }> | null; spaceId?: string | null }) => {
-      return invokeIpc('agent-engine:update-context', { sessionId, appContext })
+    updateContext: (
+      sessionId: string,
+      appContext: {
+        appType?: string | null
+        appMeta?: Record<string, unknown> | null
+        openTabs?: Array<{
+          type: string
+          id?: string
+          title?: string
+          active?: boolean
+          group_id?: string
+          app_key?: string
+          display_name?: string
+          is_home?: boolean
+          app_home?: string
+          path?: string
+          kind?: string
+          url?: string
+          session_id?: string
+        }> | null
+        spaceId?: string | null
+      }
+    ) => {
+      return invokeIpc('agent-engine:update-context', {
+        sessionId,
+        appContext,
+      })
     },
     /**
      * LH2-D2：登出 / 切账号时由 renderer 调用，清主进程对应账号的 sync 目录
@@ -4440,10 +4276,7 @@ const api = {
     resetAccountSync: (payload: { userId: string; organizationId: string }) => {
       return invokeIpc('agent-engine:reset-account-sync', payload)
     },
-    initCapabilityIdentity: (payload?: {
-      reason?: 'login' | 'logout' | 'auth-changed' | 'organization-switch' | 'manual'
-      organizationId?: string | null
-    }) => {
+    initCapabilityIdentity: (payload?: { reason?: 'login' | 'logout' | 'auth-changed' | 'organization-switch' | 'manual'; organizationId?: string | null }) => {
       return invokeIpc('agent-engine:init-capability-identity', payload)
     },
     checkPending: (threadId: string) => {
@@ -4452,7 +4285,9 @@ const api = {
     onProactiveReport: (callback: (data: { threadId: string; content: string; runIds: string[] }) => void) => {
       const handler = (_event: any, data: any) => callback(data)
       ipcRenderer.on('agent-engine:proactive-report-ready', handler)
-      return () => { ipcRenderer.removeListener('agent-engine:proactive-report-ready', handler) }
+      return () => {
+        ipcRenderer.removeListener('agent-engine:proactive-report-ready', handler)
+      }
     },
     /**
      * Wave 5b S2 review#1：Skill 凭据缓存主动失效。
@@ -4513,15 +4348,12 @@ const api = {
       return invokeIpc('agent-engine:prewarm-runtime', input)
     },
 
-    getDeviceModelPreferences: (
-      organizationId: string,
-    ): Promise<{ preferences: OrganizationDeviceModelPreferences }> => {
-      return invokeIpc('agent-engine:get-device-model-preferences', { organizationId })
+    getDeviceModelPreferences: (organizationId: string): Promise<{ preferences: OrganizationDeviceModelPreferences }> => {
+      return invokeIpc('agent-engine:get-device-model-preferences', {
+        organizationId,
+      })
     },
-    setDeviceModelPreferences: (
-      organizationId: string,
-      preferences: OrganizationDeviceModelPreferences,
-    ): Promise<{ preferences: OrganizationDeviceModelPreferences }> => {
+    setDeviceModelPreferences: (organizationId: string, preferences: OrganizationDeviceModelPreferences): Promise<{ preferences: OrganizationDeviceModelPreferences }> => {
       return invokeIpc('agent-engine:set-device-model-preferences', {
         organizationId,
         preferences,
@@ -4539,7 +4371,10 @@ const api = {
      * @param tierId 档位 ID（如 'long_1m'）；传 null / 空字符串重置为默认档
      */
     setSessionContextTier: (sessionId: string, tierId: string | null): Promise<{ success: true }> => {
-      return invokeIpc('agent-engine:set-session-context-tier', { sessionId, tierId })
+      return invokeIpc('agent-engine:set-session-context-tier', {
+        sessionId,
+        tierId,
+      })
     },
     /**
      * 设置 / 重置某个 session 的模型运行时参数覆盖。
@@ -4547,16 +4382,13 @@ const api = {
      * 参数 key 来自模型 catalog 的 runtime_controls；Django wire adapter 负责
      * 将 canonical 参数映射到各 provider 的真实 wire 格式。
      */
-    setSessionModelParamOverrides: (
-      sessionId: string,
-      overrides: Record<string, unknown> | null,
-    ): Promise<{ success: true }> => {
-      return invokeIpc('agent-engine:set-session-model-param-overrides', { sessionId, overrides })
+    setSessionModelParamOverrides: (sessionId: string, overrides: Record<string, unknown> | null): Promise<{ success: true }> => {
+      return invokeIpc('agent-engine:set-session-model-param-overrides', {
+        sessionId,
+        overrides,
+      })
     },
-    readSnapshots: (
-      sessionId: string,
-      ctx?: { spaceId?: string; organizationId?: string },
-    ): Promise<{ success: boolean; snapshots?: unknown[]; error?: string }> => {
+    readSnapshots: (sessionId: string, ctx?: { spaceId?: string; organizationId?: string }): Promise<{ success: boolean; snapshots?: unknown[]; error?: string }> => {
       // Forward spaceId / organizationId so the main process can resolve the
       // archive path directly instead of falling back to a full scan.
       return invokeIpc('agent-engine:read-snapshots', {
@@ -4565,20 +4397,11 @@ const api = {
         organizationId: ctx?.organizationId,
       })
     },
-    readSubagentSession: (input: {
-      parentSessionId: string
-      subagentRunId: string
-      kind: 'messages' | 'snapshots' | 'events'
-      organizationId?: string
-      spaceId?: string
-    }) => {
+    readSubagentSession: (input: { parentSessionId: string; subagentRunId: string; kind: 'messages' | 'snapshots' | 'events'; organizationId?: string; spaceId?: string }) => {
       return invokeIpc('agent-engine:read-subagent-session', input)
     },
     // ：判据探盘——该会话盘上是否有非空 messages.jsonl（冷启动区分本机/观察端）。
-    hasLocalTranscript: (
-      sessionId: string,
-      ctx?: { spaceId?: string; organizationId?: string },
-    ): Promise<{ success: boolean; hasLocal?: boolean; error?: string }> => {
+    hasLocalTranscript: (sessionId: string, ctx?: { spaceId?: string; organizationId?: string }): Promise<{ success: boolean; hasLocal?: boolean; error?: string }> => {
       return invokeIpc('agent-engine:has-local-transcript', {
         sessionId,
         spaceId: ctx?.spaceId,
@@ -4586,38 +4409,32 @@ const api = {
       })
     },
     // ：云端 fork 后本机归档分叉 + tool id remap。
-    forkLocalSession: (input: {
-      sourceSessionId: string
-      newSessionId: string
-      spaceId?: string
-      organizationId?: string
-      forkAnchorMessageId?: string
-      toolIdRemap?: Record<string, string>
-    }) => {
+    forkLocalSession: (input: { sourceSessionId: string; newSessionId: string; spaceId?: string; organizationId?: string; forkAnchorMessageId?: string; toolIdRemap?: Record<string, string> }) => {
       return invokeIpc('agent-engine:fork-local-session', input)
     },
     // ：读本机 transcript（messages.jsonl 重建），本机会话正文唯一权威。
-    readSessionTranscript: (
-      sessionId: string,
-      ctx?: { spaceId?: string; organizationId?: string },
-    ): Promise<{ success: boolean; messages?: unknown[]; error?: string }> => {
+    readSessionTranscript: (sessionId: string, ctx?: { spaceId?: string; organizationId?: string }): Promise<{ success: boolean; messages?: unknown[]; error?: string }> => {
       return invokeIpc('agent-engine:read-session-transcript', {
         sessionId,
         spaceId: ctx?.spaceId,
         organizationId: ctx?.organizationId,
       })
     },
-    listSubagentRuns: (input: {
-      parentSessionId: string
-      organizationId?: string
-      spaceId?: string
-    }) => {
+    listSubagentRuns: (input: { parentSessionId: string; organizationId?: string; spaceId?: string }) => {
       return invokeIpc('agent-engine:list-subagent-runs', input)
     },
   },
 
   telemetry: {
-    mttrStart: (req: { incident_id?: string; description?: string; reporter?: string; session_id?: string; severity?: string } = {}) => {
+    mttrStart: (
+      req: {
+        incident_id?: string
+        description?: string
+        reporter?: string
+        session_id?: string
+        severity?: string
+      } = {}
+    ) => {
       return invokeIpc('telemetry:mttr:start', req)
     },
     mttrResolved: (req: { incident_id: string; resolution?: string; duration_ms?: number; resolver?: string; session_id?: string; error_class?: string }) => {
@@ -4644,59 +4461,26 @@ const api = {
   localMcp: {
     discover: () => invokeIpc('localMcp:discover'),
     listConnections: () => invokeIpc('localMcp:listConnections'),
-    getConnectionDetail: (connectionId, options) =>
-      invokeIpc('localMcp:getConnectionDetail', connectionId, options),
-    shareConnectionToOrganization: (connectionId, organizationId) =>
-      invokeIpc('localMcp:shareConnectionToOrganization', connectionId, organizationId),
-    importCandidate: (candidateId, options) =>
-      invokeIpc('localMcp:importCandidate', candidateId, options),
-    saveManualConnection: (input) =>
-      invokeIpc('localMcp:saveManualConnection', input),
-    upsertOrganizationMirror: (input) =>
-      invokeIpc('localMcp:upsertOrganizationMirror', input),
-    attachConnection: (connectionId, agentId, attached) =>
-      invokeIpc('localMcp:attachConnection', connectionId, agentId, attached),
-    setConnectionEnabled: (connectionId, enabled) =>
-      invokeIpc('localMcp:setConnectionEnabled', connectionId, enabled),
-    deleteConnection: (connectionId) =>
-      invokeIpc('localMcp:deleteConnection', connectionId),
-    probeConnection: (
-      connectionId: string,
-      options?: { timeoutMs?: number; openOAuthWindow?: boolean },
-    ) => invokeIpc('localMcp:probeConnection', connectionId, options),
-    cancelProbe: (connectionId: string) =>
-      invokeIpc('localMcp:cancelProbe', connectionId),
-    waitForPlatformOAuthTicket: (input: {
-      authorizeUrl: string
-      donePathIncludes?: string
-      timeoutMs?: number
-    }) => invokeIpc('localMcp:waitForPlatformOAuthTicket', input),
-    closePlatformOAuthWindow: () =>
-      invokeIpc('localMcp:closePlatformOAuthWindow'),
+    getConnectionDetail: (connectionId, options) => invokeIpc('localMcp:getConnectionDetail', connectionId, options),
+    shareConnectionToOrganization: (connectionId, organizationId) => invokeIpc('localMcp:shareConnectionToOrganization', connectionId, organizationId),
+    importCandidate: (candidateId, options) => invokeIpc('localMcp:importCandidate', candidateId, options),
+    saveManualConnection: (input) => invokeIpc('localMcp:saveManualConnection', input),
+    upsertOrganizationMirror: (input) => invokeIpc('localMcp:upsertOrganizationMirror', input),
+    attachConnection: (connectionId, agentId, attached) => invokeIpc('localMcp:attachConnection', connectionId, agentId, attached),
+    setConnectionEnabled: (connectionId, enabled) => invokeIpc('localMcp:setConnectionEnabled', connectionId, enabled),
+    deleteConnection: (connectionId) => invokeIpc('localMcp:deleteConnection', connectionId),
+    probeConnection: (connectionId: string, options?: { timeoutMs?: number; openOAuthWindow?: boolean }) => invokeIpc('localMcp:probeConnection', connectionId, options),
+    cancelProbe: (connectionId: string) => invokeIpc('localMcp:cancelProbe', connectionId),
+    waitForPlatformOAuthTicket: (input: { authorizeUrl: string; donePathIncludes?: string; timeoutMs?: number }) => invokeIpc('localMcp:waitForPlatformOAuthTicket', input),
+    closePlatformOAuthWindow: () => invokeIpc('localMcp:closePlatformOAuthWindow'),
   },
 
   // 🆕 资源检测 API
   resourceDetection: {
-    getResources: (payload: {
-      viewId: string
-      category?: string
-      captureStatus?: string
-      capability?: string
-      limit?: number
-      probeMedia?: boolean
-      hideSegments?: boolean
-    }) => {
+    getResources: (payload: { viewId: string; category?: string; captureStatus?: string; capability?: string; limit?: number; probeMedia?: boolean; hideSegments?: boolean }) => {
       return invokeIpc('resourceDetection:getResources', payload)
     },
-    listResources: (payload: {
-      viewId: string
-      category?: string
-      captureStatus?: string
-      capability?: string
-      limit?: number
-      probeMedia?: boolean
-      hideSegments?: boolean
-    }) => {
+    listResources: (payload: { viewId: string; category?: string; captureStatus?: string; capability?: string; limit?: number; probeMedia?: boolean; hideSegments?: boolean }) => {
       return invokeIpc('resourceDetection:listResources', payload)
     },
     inspectResource: (payload: { resourceId: string; viewId?: string }) => {
@@ -4711,13 +4495,7 @@ const api = {
     fetchBuffer: (payload: { url: string; headers?: Record<string, string>; maxBytes?: number }) => {
       return invokeIpc('resourceDetection:fetchBuffer', payload)
     },
-    downloadBatch: (payload: {
-      resourceIds?: string[]
-      urls?: string[]
-      headers?: Record<string, string>
-      concurrency?: number
-      viewId?: string
-    }) => {
+    downloadBatch: (payload: { resourceIds?: string[]; urls?: string[]; headers?: Record<string, string>; concurrency?: number; viewId?: string }) => {
       return invokeIpc('resourceDetection:downloadBatch', payload)
     },
     parseM3U8: (payload: { resourceId?: string; url?: string; viewId?: string; headers?: Record<string, string> }) => {
@@ -4726,16 +4504,7 @@ const api = {
     parseStream: (payload: { resourceId?: string; url?: string; viewId?: string; headers?: Record<string, string> }) => {
       return invokeIpc('resourceDetection:parseStream', payload)
     },
-    downloadStream: (payload: {
-      resourceId?: string
-      url?: string
-      viewId?: string
-      quality?: string
-      filename?: string
-      outputPath?: string
-      headers?: Record<string, string>
-      concurrency?: number
-    }) => {
+    downloadStream: (payload: { resourceId?: string; url?: string; viewId?: string; quality?: string; filename?: string; outputPath?: string; headers?: Record<string, string>; concurrency?: number }) => {
       return invokeIpc('resourceDetection:downloadStream', payload)
     },
   },
@@ -4782,11 +4551,14 @@ const api = {
       return invokeIpc('pty:releaseThreadSession', threadId)
     },
     onPaneStatus: (callback) => {
-      const listener = (_event: any, event: {
-        sessionId: string
-        status: 'idle' | 'running' | 'exited'
-        exitCode?: number | null
-      }) => {
+      const listener = (
+        _event: any,
+        event: {
+          sessionId: string
+          status: 'idle' | 'running' | 'exited'
+          exitCode?: number | null
+        }
+      ) => {
         callback(event)
       }
       ipcRenderer.on('pty:pane-status', listener)
@@ -4794,7 +4566,10 @@ const api = {
         ipcRenderer.removeListener('pty:pane-status', listener)
       }
     },
-    getPaneStatuses: (): Promise<{ success: boolean; statuses: Record<string, PaneStatus> }> => {
+    getPaneStatuses: (): Promise<{
+      success: boolean
+      statuses: Record<string, PaneStatus>
+    }> => {
       return invokeIpc('pty:getPaneStatuses')
     },
     snapshotSave: (snapshots) => {
@@ -4845,8 +4620,7 @@ const api = {
     onSyncLocale: overlayOn('overlay:sync-locale'),
     setModalSourceOpen: (source, open) => invokeIpc('overlay:set-modal-source-open', { source, open }),
     setHintSize: (size) => invokeIpc('overlay:set-hint-size', size),
-    setToastIgnoreMouseEvents: (ignore) =>
-      invokeIpc('overlay:set-toast-ignore-mouse-events', { ignore }),
+    setToastIgnoreMouseEvents: (ignore) => invokeIpc('overlay:set-toast-ignore-mouse-events', { ignore }),
     getToastCursorClientPoint: async () => {
       const result = await invokeIpc<{
         success: boolean
@@ -4859,18 +4633,24 @@ const api = {
       return { clientX, clientY }
     },
     setToastStackSize: (size) => invokeIpc('overlay:set-toast-stack-size', size),
-    setToastContentVisible: (visible) =>
-      invokeIpc('overlay:set-toast-content-visible', { visible }),
+    setToastContentVisible: (visible) => invokeIpc('overlay:set-toast-content-visible', { visible }),
     setHtml5DragShieldSync: (active) => {
       const result = ipcRenderer.sendSync('overlay:set-html5-drag-shield-sync', { active }) as
-        | { ok?: boolean; data?: { success?: boolean }; error?: { message?: string } }
+        | {
+            ok?: boolean
+            data?: { success?: boolean }
+            error?: { message?: string }
+          }
         | { success?: boolean; error?: string }
         | undefined
       if (result && typeof result === 'object' && 'ok' in result) {
         if (result.ok && result.data) {
           return { success: Boolean(result.data.success) }
         }
-        return { success: false, error: result.error?.message ?? 'shield-failed' }
+        return {
+          success: false,
+          error: result.error?.message ?? 'shield-failed',
+        }
       }
       if (result && typeof result === 'object' && 'success' in result) {
         return {
@@ -4913,7 +4693,7 @@ const api = {
         menuId,
         template,
         x,
-        y
+        y,
       })
 
       // 返回清理函数
@@ -4921,7 +4701,7 @@ const api = {
         ipcRenderer.removeListener('native-menu:item-clicked', itemClickHandler)
         ipcRenderer.removeListener('native-menu:closed', closeHandler)
       }
-    }
+    },
   },
 
   // 右键上下文菜单
@@ -4979,12 +4759,12 @@ const api = {
       const listener = (_event: Electron.IpcRendererEvent, data: StreamFailedEvent) => callback(data)
       ipcRenderer.on(DownloadIPCChannels.onStreamFailed, listener)
       return () => ipcRenderer.removeListener(DownloadIPCChannels.onStreamFailed, listener)
-    }
+    },
   },
 
   zoom: {
     setZoomFactor: (factor: number) => webFrame.setZoomFactor(factor),
-    getZoomFactor: () => webFrame.getZoomFactor()
+    getZoomFactor: () => webFrame.getZoomFactor(),
   },
 
   notification: {
@@ -4994,8 +4774,7 @@ const api = {
     getPermissionStatus: () => invokeIpc('notification:getPermissionStatus'),
     getHostState: () => invokeIpc('notification:getHostState'),
     getPrefs: () => invokeIpc('notification:getPrefs'),
-    setPrefs: (prefs: Record<string, unknown>) =>
-      invokeIpc('notification:setPrefs', prefs),
+    setPrefs: (prefs: Record<string, unknown>) => invokeIpc('notification:setPrefs', prefs),
     setBadgeCount: (count: number) => invokeIpc('notification:setBadgeCount', count),
     clearBadge: () => invokeIpc('notification:clearBadge'),
     checkPermission: () => invokeIpc('notification:checkPermission'),
@@ -5003,38 +4782,46 @@ const api = {
     onHostStateChanged: (callback: (data: { hasMainWindow: boolean }) => void) => {
       const handler = (_event: Electron.IpcRendererEvent, data: { hasMainWindow: boolean }) => callback(data)
       ipcRenderer.on('notification:host-state', handler)
-      return () => { ipcRenderer.removeListener('notification:host-state', handler) }
+      return () => {
+        ipcRenderer.removeListener('notification:host-state', handler)
+      }
     },
     onShown: (callback: (data: Record<string, unknown>) => void) => {
       const handler = (_event: Electron.IpcRendererEvent, data: Record<string, unknown>) => callback(data)
       ipcRenderer.on('notification:shown', handler)
-      return () => { ipcRenderer.removeListener('notification:shown', handler) }
+      return () => {
+        ipcRenderer.removeListener('notification:shown', handler)
+      }
     },
     onToastFallback: (callback: (data: { type: string; title: string; body: string }) => void) => {
       const handler = (_event: Electron.IpcRendererEvent, data: { type: string; title: string; body: string }) => callback(data)
       ipcRenderer.on('notification:toast-fallback', handler)
-      return () => { ipcRenderer.removeListener('notification:toast-fallback', handler) }
+      return () => {
+        ipcRenderer.removeListener('notification:toast-fallback', handler)
+      }
     },
     onSessionViewed: (callback: (data: { sessionId: string }) => void) => {
       const handler = (_event: Electron.IpcRendererEvent, data: { sessionId: string }) => callback(data)
       ipcRenderer.on('notification:session-viewed', handler)
-      return () => { ipcRenderer.removeListener('notification:session-viewed', handler) }
+      return () => {
+        ipcRenderer.removeListener('notification:session-viewed', handler)
+      }
     },
     // IA Phase 2：通知偏好跨设备同步
     syncPrefsFromServer: () => invokeIpc('notification:syncPrefsFromServer'),
-    notifyRemotePrefsChanged: (data: { value?: unknown; updatedAt?: number }) =>
-      sendIpc('notification:applyRemotePrefs', data),
+    notifyRemotePrefsChanged: (data: { value?: unknown; updatedAt?: number }) => sendIpc('notification:applyRemotePrefs', data),
     onPrefsChanged: (callback: (prefs: Record<string, unknown>) => void) => {
       const handler = (_event: Electron.IpcRendererEvent, data: Record<string, unknown>) => callback(data)
       ipcRenderer.on('notification:prefs-changed', handler)
-      return () => { ipcRenderer.removeListener('notification:prefs-changed', handler) }
+      return () => {
+        ipcRenderer.removeListener('notification:prefs-changed', handler)
+      }
     },
   },
 
   appSettings: {
     get: () => invokeIpc('app-settings:get'),
-    set: (partial: { minimizeToTray?: boolean; autoStart?: boolean }) =>
-      invokeIpc('app-settings:set', partial),
+    set: (partial: { minimizeToTray?: boolean; autoStart?: boolean }) => invokeIpc('app-settings:set', partial),
   },
 
   // 深链接事件
@@ -5056,17 +4843,7 @@ const api = {
     // 'other' }；'foreground-tab' 表示 ⌘+click / middle-click，是 D2 第 5
     // 层「⌘ 修饰键短路」的唯一可靠跨平台信号（renderer 收不到 metaKey 因
     // 为 click 已经被吞）。renderer 端按 disposition 计算 modifierExternal。
-    onOpenFallback: (
-      callback: (data: {
-        url: string
-        source: string
-        viewId?: string
-        disposition?: string
-        filename?: string
-        mimeType?: string
-        assetId?: string
-      }) => void,
-    ) => {
+    onOpenFallback: (callback: (data: { url: string; source: string; viewId?: string; disposition?: string; filename?: string; mimeType?: string; assetId?: string }) => void) => {
       const handler = (
         _event: any,
         data: {
@@ -5077,7 +4854,7 @@ const api = {
           filename?: string
           mimeType?: string
           assetId?: string
-        },
+        }
       ) => callback(data)
       ipcRenderer.on('main:resource-router:open-fallback', handler)
       return () => {
@@ -5104,16 +4881,12 @@ const api = {
   updater: {
     getAppVersion: () => invokeIpc('get-app-version'),
     getState: () => invokeIpc('get-update-state'),
-    getReleaseHistory: (options?: {
-      platform?: 'mac' | 'win' | 'linux'
-      arch?: 'x64' | 'arm64'
-      channel?: 'stable' | 'beta' | 'alpha'
-      limit?: number
-      locale?: string
-    }) => invokeIpc('get-release-history', options),
+    getReleaseHistory: (options?: { platform?: 'mac' | 'win' | 'linux'; arch?: 'x64' | 'arm64'; channel?: 'stable' | 'beta' | 'alpha'; limit?: number; locale?: string }) => invokeIpc('get-release-history', options),
     checkForUpdates: () => invokeIpc('check-for-updates'),
     downloadUpdate: () => invokeIpc('download-update'),
-    quitAndInstall: () => { invokeIpc('quit-and-install') },
+    quitAndInstall: () => {
+      invokeIpc('quit-and-install')
+    },
     onUpdateEvent: (callback) => {
       const listener = (_event: any, payload: { event: string; data?: any }) => {
         callback(payload)
@@ -5122,7 +4895,7 @@ const api = {
       return () => {
         ipcRenderer.removeListener('update-event', listener)
       }
-    }
+    },
   },
 
   // 🆕 客户端诊断日志导出 API 实现
@@ -5165,17 +4938,13 @@ const api = {
   },
 
   marketplace: {
-    installApp: (appId: string, manifest: Record<string, unknown>) =>
-      invokeIpc('marketplace:install-app', appId, manifest),
+    installApp: (appId: string, manifest: Record<string, unknown>) => invokeIpc('marketplace:install-app', appId, manifest),
     uninstallApp: (appId: string) => invokeIpc('marketplace:uninstall-app', appId),
     listInstalled: () => invokeIpc('marketplace:list-installed'),
   },
 
   appDiscovery: {
-    updatePatterns: (
-      patterns: Array<{ appId: string; appName: string; patterns: string[] }>,
-      sourceId?: string,
-    ) => {
+    updatePatterns: (patterns: Array<{ appId: string; appName: string; patterns: string[] }>, sourceId?: string) => {
       sendIpc('app-discovery:update-patterns', patterns, sourceId)
     },
   },
@@ -5186,13 +4955,25 @@ const api = {
 
   sandbox: {
     clearApprovalCache: (target?: 'session' | 'persisted') =>
-      invokeIpc('sandbox:clear-approval-cache', target) as Promise<{ sessionCount: number; persistedCount: number }>,
+      invokeIpc('sandbox:clear-approval-cache', target) as Promise<{
+        sessionCount: number
+        persistedCount: number
+      }>,
     clearApprovalByActionType: (actionType: string) =>
-      invokeIpc('sandbox:clear-approval-by-action-type', actionType) as Promise<{ sessionCount: number; persistedCount: number }>,
+      invokeIpc('sandbox:clear-approval-by-action-type', actionType) as Promise<{
+        sessionCount: number
+        persistedCount: number
+      }>,
     getApprovalCacheStats: () =>
-      invokeIpc('sandbox:get-approval-cache-stats') as Promise<{ sessionCount: number; persistedCount: number }>,
+      invokeIpc('sandbox:get-approval-cache-stats') as Promise<{
+        sessionCount: number
+        persistedCount: number
+      }>,
     syncApprovalPreferences: () =>
-      invokeIpc('sandbox:sync-approval-preferences') as Promise<{ sessionCount: number; persistedCount: number }>,
+      invokeIpc('sandbox:sync-approval-preferences') as Promise<{
+        sessionCount: number
+        persistedCount: number
+      }>,
     notifyRemoteApprovalPreferencesChanged: (preferences: Record<string, unknown>) => {
       sendIpc('sandbox:remote-approval-preferences-changed', preferences)
     },
@@ -5208,56 +4989,26 @@ const api = {
     cancel: (input) => invokeIpc('import:cancel', input),
     rollback: (input) => invokeIpc('import:rollback', input),
     /** 本机特化档案列表（不上云）。 */
-    listArchives: (organizationId: string) =>
-      invokeIpc('import:listArchives', organizationId),
-    getArchive: (input: {
-      organizationId: string
-      source: string
-      sourceSessionId: string
-    }) => invokeIpc('import:getArchive', input),
-    deleteArchive: (input: {
-      organizationId: string
-      source: string
-      sourceSessionId: string
-    }) => invokeIpc('import:deleteArchive', input),
-    deleteArchivesForWorkspace: (input: {
-      organizationId: string
-      workspaceId: string
-      workingDir?: string | null
-    }) => invokeIpc('import:deleteArchivesForWorkspace', input),
-    bindOpenedSession: (input: {
-      organizationId: string
-      source: string
-      sourceSessionId: string
-      sessionId: string
-    }) => invokeIpc('import:bindOpenedSession', input),
-    seedSessionTranscript: (input: {
-      organizationId: string
-      source: string
-      sourceSessionId: string
-      sessionId: string
-      spaceId?: string
-    }) => invokeIpc('import:seedSessionTranscript', input),
+    listArchives: (organizationId: string) => invokeIpc('import:listArchives', organizationId),
+    getArchive: (input: { organizationId: string; source: string; sourceSessionId: string }) => invokeIpc('import:getArchive', input),
+    deleteArchive: (input: { organizationId: string; source: string; sourceSessionId: string }) => invokeIpc('import:deleteArchive', input),
+    deleteArchivesForWorkspace: (input: { organizationId: string; workspaceId: string; workingDir?: string | null }) => invokeIpc('import:deleteArchivesForWorkspace', input),
+    bindOpenedSession: (input: { organizationId: string; source: string; sourceSessionId: string; sessionId: string }) => invokeIpc('import:bindOpenedSession', input),
+    seedSessionTranscript: (input: { organizationId: string; source: string; sourceSessionId: string; sessionId: string; spaceId?: string }) => invokeIpc('import:seedSessionTranscript', input),
     onProgress: (callback) => {
       const handler = (_event: any, payload: any) => callback(payload)
       ipcRenderer.on('import:progress', handler)
-      return () => { ipcRenderer.removeListener('import:progress', handler) }
+      return () => {
+        ipcRenderer.removeListener('import:progress', handler)
+      }
     },
   },
 
   codexSessionShare: {
     projects: () => invokeIpc('codex-session-share:projects'),
     read: (sessionId: string) => invokeIpc('codex-session-share:read', sessionId),
-    import: (input: {
-      filePath: string
-      projectId: string
-      projectPath: string
-      expectedSessionId?: string
-      expectedSessionName?: string
-    }) =>
-      invokeIpc('codex-session-share:import', input),
-    open: (sessionId: string, projectId: string, projectPath: string) =>
-      invokeIpc('codex-session-share:open', sessionId, projectId, projectPath),
+    import: (input: { filePath: string; projectId: string; projectPath: string; expectedSessionId?: string; expectedSessionName?: string }) => invokeIpc('codex-session-share:import', input),
+    open: (sessionId: string, projectId: string, projectPath: string) => invokeIpc('codex-session-share:open', sessionId, projectId, projectPath),
   },
 
   credentialVault: {
@@ -5273,12 +5024,16 @@ const api = {
     onAutofillSuggest: (callback) => {
       const handler = (_event: any, payload: any) => callback(payload)
       ipcRenderer.on('credential-vault:autofill-suggest', handler)
-      return () => { ipcRenderer.removeListener('credential-vault:autofill-suggest', handler) }
+      return () => {
+        ipcRenderer.removeListener('credential-vault:autofill-suggest', handler)
+      }
     },
     onAutofillClear: (callback) => {
       const handler = (_event: any, payload: any) => callback(payload)
       ipcRenderer.on('credential-vault:autofill-clear', handler)
-      return () => { ipcRenderer.removeListener('credential-vault:autofill-clear', handler) }
+      return () => {
+        ipcRenderer.removeListener('credential-vault:autofill-clear', handler)
+      }
     },
     autofillSelect: (payload) => invokeIpc('credential-vault:autofill-select', payload),
     autofillDismiss: (payload) => invokeIpc('credential-vault:autofill-dismiss', payload),
@@ -5286,7 +5041,9 @@ const api = {
     onSavePrompt: (callback) => {
       const handler = (_event: any, payload: any) => callback(payload)
       ipcRenderer.on('credential-vault:save-prompt', handler)
-      return () => { ipcRenderer.removeListener('credential-vault:save-prompt', handler) }
+      return () => {
+        ipcRenderer.removeListener('credential-vault:save-prompt', handler)
+      }
     },
     saveConfirm: (payload) => invokeIpc('credential-vault:save-confirm', payload),
     saveDismiss: (payload) => invokeIpc('credential-vault:save-dismiss', payload),
@@ -5302,7 +5059,9 @@ const api = {
     onAgentAutofillFailed: (callback) => {
       const handler = (_event: any, payload: any) => callback(payload)
       ipcRenderer.on('credential-vault:agent-autofill-failed', handler)
-      return () => { ipcRenderer.removeListener('credential-vault:agent-autofill-failed', handler) }
+      return () => {
+        ipcRenderer.removeListener('credential-vault:agent-autofill-failed', handler)
+      }
     },
     // Wave 4 三视角 Review 视角 2 P1 发现 2 自修：Agent 自动登录成功通知。
     // 主进程发 ``credential-vault:agent-autofill-succeeded`` —— payload **不含密码**
@@ -5311,7 +5070,9 @@ const api = {
     onAgentAutofillSucceeded: (callback) => {
       const handler = (_event: any, payload: any) => callback(payload)
       ipcRenderer.on('credential-vault:agent-autofill-succeeded', handler)
-      return () => { ipcRenderer.removeListener('credential-vault:agent-autofill-succeeded', handler) }
+      return () => {
+        ipcRenderer.removeListener('credential-vault:agent-autofill-succeeded', handler)
+      }
     },
   },
 
@@ -5328,19 +5089,17 @@ const api = {
     onChanged: (callback) => {
       const handler = (_event: any, payload: any) => callback(payload)
       ipcRenderer.on('browser-env:changed', handler)
-      return () => { ipcRenderer.removeListener('browser-env:changed', handler) }
+      return () => {
+        ipcRenderer.removeListener('browser-env:changed', handler)
+      }
     },
   },
 
   tabsite: {
-    initTemplate: (siteId: string, spaceId: string) =>
-      invokeIpc('tabsite:initTemplate', siteId, spaceId),
-    startDevServer: (siteId: string, projectPath: string) =>
-      invokeIpc('tabsite:startDevServer', siteId, projectPath),
-    stopDevServer: (siteId: string) =>
-      invokeIpc('tabsite:stopDevServer', siteId),
-    getDevServerStatus: (siteId: string) =>
-      invokeIpc('tabsite:getDevServerStatus', siteId),
+    initTemplate: (siteId: string, spaceId: string) => invokeIpc('tabsite:initTemplate', siteId, spaceId),
+    startDevServer: (siteId: string, projectPath: string) => invokeIpc('tabsite:startDevServer', siteId, projectPath),
+    stopDevServer: (siteId: string) => invokeIpc('tabsite:stopDevServer', siteId),
+    getDevServerStatus: (siteId: string) => invokeIpc('tabsite:getDevServerStatus', siteId),
   },
 
   tins: {
@@ -5355,22 +5114,30 @@ const api = {
     onActivationChanged: (callback) => {
       const handler = (_event: any, data: any) => callback(data)
       ipcRenderer.on('tins:activation-changed', handler)
-      return () => { ipcRenderer.removeListener('tins:activation-changed', handler) }
+      return () => {
+        ipcRenderer.removeListener('tins:activation-changed', handler)
+      }
     },
     onPersistVariable: (callback) => {
       const handler = (_event: any, data: any) => callback(data)
       ipcRenderer.on('tins:persist-variable', handler)
-      return () => { ipcRenderer.removeListener('tins:persist-variable', handler) }
+      return () => {
+        ipcRenderer.removeListener('tins:persist-variable', handler)
+      }
     },
     onToast: (callback) => {
       const handler = (_event: any, data: any) => callback(data)
       ipcRenderer.on('tins:toast', handler)
-      return () => { ipcRenderer.removeListener('tins:toast', handler) }
+      return () => {
+        ipcRenderer.removeListener('tins:toast', handler)
+      }
     },
     onAgentRequest: (callback) => {
       const handler = (_event: any, data: any) => callback(data)
       ipcRenderer.on('tins:agent-request', handler)
-      return () => { ipcRenderer.removeListener('tins:agent-request', handler) }
+      return () => {
+        ipcRenderer.removeListener('tins:agent-request', handler)
+      }
     },
     respondAgent: (requestId, result) => sendIpc('tins:agent-response', requestId, result),
     registerWebview: (instanceId, contentsId) => invokeIpc('tins:register-webview', instanceId, contentsId),
@@ -5378,12 +5145,16 @@ const api = {
     onTriggerGoal: (callback) => {
       const handler = (_event: any, data: any) => callback(data)
       ipcRenderer.on('tins:trigger-goal', handler)
-      return () => { ipcRenderer.removeListener('tins:trigger-goal', handler) }
+      return () => {
+        ipcRenderer.removeListener('tins:trigger-goal', handler)
+      }
     },
     onWriteTable: (callback) => {
       const handler = (_event: any, data: any) => callback(data)
       ipcRenderer.on('tins:write-table', handler)
-      return () => { ipcRenderer.removeListener('tins:write-table', handler) }
+      return () => {
+        ipcRenderer.removeListener('tins:write-table', handler)
+      }
     },
   },
 
@@ -5391,12 +5162,16 @@ const api = {
     onSuspend: (callback) => {
       const handler = () => callback()
       ipcRenderer.on('system:suspend', handler)
-      return () => { ipcRenderer.removeListener('system:suspend', handler) }
+      return () => {
+        ipcRenderer.removeListener('system:suspend', handler)
+      }
     },
     onResume: (callback) => {
       const handler = () => callback()
       ipcRenderer.on('system:resume', handler)
-      return () => { ipcRenderer.removeListener('system:resume', handler) }
+      return () => {
+        ipcRenderer.removeListener('system:resume', handler)
+      }
     },
   },
 
@@ -5409,84 +5184,65 @@ const api = {
     onStatusChange: (callback: (status: string) => void) => {
       const handler = (_event: any, status: string) => callback(status)
       ipcRenderer.on('ws:agent-gateway-status', handler)
-      return () => { ipcRenderer.removeListener('ws:agent-gateway-status', handler) }
+      return () => {
+        ipcRenderer.removeListener('ws:agent-gateway-status', handler)
+      }
     },
     getStatus: () => invokeIpc('ws:agent-gateway-status-get'),
     onEvent: (callback: (envelope: Record<string, unknown>) => void) => {
       const handler = (_event: any, envelope: Record<string, unknown>) => callback(envelope)
       ipcRenderer.on('ws:agent-gateway-event', handler)
-      return () => { ipcRenderer.removeListener('ws:agent-gateway-event', handler) }
+      return () => {
+        ipcRenderer.removeListener('ws:agent-gateway-event', handler)
+      }
     },
     onReconnected: (callback: () => void) => {
       const handler = () => callback()
       ipcRenderer.on('ws:agent-gateway-reconnected', handler)
-      return () => { ipcRenderer.removeListener('ws:agent-gateway-reconnected', handler) }
+      return () => {
+        ipcRenderer.removeListener('ws:agent-gateway-reconnected', handler)
+      }
     },
-    request: (payload: { messageType: string; payload?: Record<string, unknown>; requestOptions?: Record<string, unknown> }) =>
-      invokeIpc('ws:agent-gateway-request', payload),
-    send: (payload: { messageType: string; payload?: Record<string, unknown>; requestOptions?: Record<string, unknown> }) =>
-      invokeIpc('ws:agent-gateway-send', payload),
-    subscribe: (payload: { topics: string[]; options?: { topicContexts?: Record<string, Record<string, unknown>> } }) =>
-      invokeIpc('ws:agent-gateway-subscribe', payload),
-    unsubscribe: (payload: { topics: string[] }) =>
-      invokeIpc('ws:agent-gateway-unsubscribe', payload),
+    request: (payload: { messageType: string; payload?: Record<string, unknown>; requestOptions?: Record<string, unknown> }) => invokeIpc('ws:agent-gateway-request', payload),
+    send: (payload: { messageType: string; payload?: Record<string, unknown>; requestOptions?: Record<string, unknown> }) => invokeIpc('ws:agent-gateway-send', payload),
+    subscribe: (payload: { topics: string[]; options?: { topicContexts?: Record<string, Record<string, unknown>> } }) => invokeIpc('ws:agent-gateway-subscribe', payload),
+    unsubscribe: (payload: { topics: string[] }) => invokeIpc('ws:agent-gateway-unsubscribe', payload),
     reconnect: () => invokeIpc<boolean>('ws:agent-gateway-reconnect'),
     getOrganizationIds: () => invokeIpc<string[]>('ws:agent-gateway-organization-ids'),
   },
 
   skill: {
-    list: (params: {
-      spaceId: string
-      organizationId: string
-    }) => invokeIpc('skill:list', params),
+    list: (params: { spaceId: string; organizationId: string }) => invokeIpc('skill:list', params),
     install: (params: {
       skillKey: string
       spaceId?: string
       userId?: string
       organizationId?: string
-      files: Array<{ path: string; sha256: string; size: number; download_url: string; content_type: string }>
-      meta?: { source: string; version: string; installedAt: string; packageId: string; slug?: string; canonicalKey?: string; versionSeq?: number; bundleSha256?: string }
+      files: Array<{
+        path: string
+        sha256: string
+        size: number
+        download_url: string
+        content_type: string
+      }>
+      meta?: {
+        source: string
+        version: string
+        installedAt: string
+        packageId: string
+        slug?: string
+        canonicalKey?: string
+        versionSeq?: number
+        bundleSha256?: string
+      }
     }) => invokeIpc('skill:install', params),
-    installNpm: (params: {
-      package: string
-      spaceId?: string
-      organizationId?: string | null
-      importToSpace?: boolean
-      enableSpaceIds?: string[]
-    }) => invokeIpc('skill:install-npm', params),
-    materializeApp: (params: {
-      spaceId?: string
-      organizationId: string
-      userId?: string
-      appId: string
-      slug: string
-    }) => invokeIpc('skill:materialize-app', params),
-    uninstall: (params: {
-      skillKey: string
-      spaceId?: string
-      userId?: string
-      organizationId?: string
-    }) => invokeIpc('skill:uninstall', params),
-    readContent: (params: {
-      skillKey: string
-      spaceId?: string | null
-      organizationId?: string | null
-      userId?: string | null
-      sourceDocPath?: string | null
-    }) => invokeIpc('skill:read-content', params),
-    writeContent: (params: {
-      spaceId: string
-      organizationId: string
-      skillKey: string
-      content: string
-    }) => invokeIpc('skill:write-content', params),
-    resolvePath: (params: {
-      spaceId: string
-      organizationId: string
-      skillKey: string
-    }) => invokeIpc('skill:resolve-path', params),
-    workspaceScan: (params: { workspaceRoot: string; force?: boolean }) =>
-      invokeIpc('skill:workspace-scan', params),
+    installNpm: (params: { package: string; spaceId?: string; organizationId?: string | null; importToSpace?: boolean; enableSpaceIds?: string[] }) => invokeIpc('skill:install-npm', params),
+    materializeApp: (params: { spaceId?: string; organizationId: string; userId?: string; appId: string; slug: string }) => invokeIpc('skill:materialize-app', params),
+    uninstall: (params: { skillKey: string; spaceId?: string; userId?: string; organizationId?: string }) => invokeIpc('skill:uninstall', params),
+    readContent: (params: { skillKey: string; spaceId?: string | null; organizationId?: string | null; userId?: string | null; sourceDocPath?: string | null }) => invokeIpc('skill:read-content', params),
+    writeContent: (params: { spaceId: string; organizationId: string; skillKey: string; content: string }) => invokeIpc('skill:write-content', params),
+    resolvePath: (params: { spaceId: string; organizationId: string; skillKey: string }) => invokeIpc('skill:resolve-path', params),
+    workspaceScan: (params: { workspaceRoot: string; force?: boolean }) => invokeIpc('skill:workspace-scan', params),
   },
 
   uiTheme: {
@@ -5494,53 +5250,26 @@ const api = {
   },
 
   widgetAudit: {
-    append: (entry: {
-      timestamp: number
-      session_id: string
-      widget_id: string
-      text: string
-      meta?: unknown
-      trigger_source?: 'widget'
-    }) => invokeIpc('widget-audit:append', entry),
+    append: (entry: { timestamp: number; session_id: string; widget_id: string; text: string; meta?: unknown; trigger_source?: 'widget' }) => invokeIpc('widget-audit:append', entry),
   },
 
   resourceTelemetry: {
-    emit: (event: ResourceOpenEventPayload) =>
-      ipcRenderer.invoke('telemetry:resource-open:emit', event),
+    emit: (event: ResourceOpenEventPayload) => ipcRenderer.invoke('telemetry:resource-open:emit', event),
   },
 
   agentSecurity: {
     // setYoloMode / revokeMemo 已移除：状态变更统一走 useSpaceStore action
     // （见 ElectronAgentHost.ts L-10 的历史背景注释）。本接口只保留只读查询。
-    getWorkspaceSnapshot: (spaceId: string) =>
-      invokeIpc('agent-security:get-workspace-snapshot', { spaceId }),
-    buildApprovalKey: (params: {
-      toolName: string
-      subcmd: string
-      input: unknown
-      inWorkspace: boolean
-      scope: 'exact' | 'scoped' | 'wildcard'
-      kind?: string
-    }) => invokeIpc('agent-security:build-approval-key', params),
-    buildScopeDescription: (params: {
-      toolName: string
-      subcmd: string
-      scope: string
-    }) => invokeIpc('agent-security:build-scope-description', params),
+    getWorkspaceSnapshot: (spaceId: string) => invokeIpc('agent-security:get-workspace-snapshot', { spaceId }),
+    buildApprovalKey: (params: { toolName: string; subcmd: string; input: unknown; inWorkspace: boolean; scope: 'exact' | 'scoped' | 'wildcard'; kind?: string }) => invokeIpc('agent-security:build-approval-key', params),
+    buildScopeDescription: (params: { toolName: string; subcmd: string; scope: string }) => invokeIpc('agent-security:build-scope-description', params),
   },
 
   workspace: {
-    notifyPathsChanged: (payload: {
-      spaceId: string
-      workingDir: string
-    }) => {
+    notifyPathsChanged: (payload: { spaceId: string; workingDir: string }) => {
       return invokeIpc('workspace:paths-changed:invoke', payload)
     },
-    appendSessionAllowedPath: (payload: {
-      spaceId: string
-      sessionId?: string
-      path: string
-    }) => {
+    appendSessionAllowedPath: (payload: { spaceId: string; sessionId?: string; path: string }) => {
       return invokeIpc('workspace:append-session-allowed-path:invoke', payload)
     },
   },

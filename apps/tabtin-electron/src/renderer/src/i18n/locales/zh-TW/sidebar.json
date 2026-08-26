@@ -13,14 +13,23 @@
   },
   "rail": {
     "tasks": "任務",
+    "meetingRecords": "會議記錄",
     "messages": "訊息",
     "cloudDocs": "雲端文檔",
     "projects": "專案",
-    "more": "更多",
-    "customerSupport": "客服",
-    "customerSupportTitle": "聯絡客服",
-    "customerSupportHint": "微信掃碼新增企業微信",
-    "customerSupportQrAlt": "企業微信客服二維碼"
+    "more": "更多"
+  },
+  "meetingRecords": {
+    "title": "會議記錄",
+    "all": "全部記錄",
+    "setup": "準備新記錄",
+    "preview": "頁面預覽",
+    "live": "記錄進行中",
+    "detail": "會後詳情",
+    "description": "記錄、回看和整理會議中的真實內容。",
+    "start": "開始記錄",
+    "emptyTitle": "暫無會議記錄",
+    "emptyDescription": "開始記錄後，錄音、逐字稿和會後整理會顯示在這裡。"
   },
   "cloudDocs": {
     "browse": {

@@ -44,6 +44,11 @@ const LazySidebarAuthInline = React.lazy(() =>
 const LazyProjectSidebarContent = React.lazy(() =>
   import('./ProjectWorkspacePanel').then(m => ({ default: m.ProjectSidebarContent }))
 )
+const LazyMeetingRecordsSidebar = React.lazy(() =>
+  import('@components/meeting/MeetingRecordsSidebar').then(m => ({
+    default: m.MeetingRecordsSidebar,
+  }))
+)
 
 // ── 未登录侧边栏（登录/注册表单） ──
 //
@@ -134,6 +139,7 @@ export function shouldShowPersonalTaskSidebar(input: {
   if (effectiveMainNavTab === 'im') return false
   if (effectiveMainNavTab === 'agents') return false
   if (activeAppPage === 'collaboration') return false
+  if (activeAppPage === 'meeting-records') return false
   return !isProjectNavActive
 }
 
@@ -258,6 +264,12 @@ export const SpaceSidebarGlobal: React.FC<SpaceSidebarGlobalProps> = ({
           <div className={cn('flex min-h-0 flex-1 flex-col', SHELL_SIDEBAR_PANEL_TOP_CLASS)} data-testid="collaboration-hub-sidebar">
             <React.Suspense fallback={null}>
               <LazyProjectSidebarContent />
+            </React.Suspense>
+          </div>
+        ) : activeAppPage === 'meeting-records' ? (
+          <div className={cn('flex min-h-0 flex-1 flex-col', SHELL_SIDEBAR_PANEL_TOP_CLASS)} data-testid="meeting-records-sidebar">
+            <React.Suspense fallback={null}>
+              <LazyMeetingRecordsSidebar />
             </React.Suspense>
           </div>
         ) : isProjectNavActive ? (

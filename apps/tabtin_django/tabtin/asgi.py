@@ -33,6 +33,14 @@ init_sentry()
 django_asgi_app = get_asgi_application()
 configure_utf8_standard_streams()
 
+# 标准启动器会先跑 safe_migrate；这里再做最后一道机械守卫，防止开发者或
+# 运维直接裸启 Daphne，导致服务表面健康、访问新功能时才因缺表失败。
+from django.conf import settings  # noqa: E402
+from tabtin.migration_readiness import assert_database_schema_ready  # noqa: E402
+
+if not getattr(settings, "RUNNING_TESTS", False):
+    assert_database_schema_ready()
+
 from tabtin.urls_deferred import register_deferred_routers  # noqa: E402
 from tabtin.middleware import DeferredRouterMiddleware  # noqa: E402
 

@@ -6,15 +6,14 @@
  * ShellTopBar（TopBarOrganizationSwitcher）。
  */
 
-import React, { useCallback, useState } from 'react'
-import { Check, ChevronDown, Plus } from 'lucide-react'
-import { useTranslation } from 'react-i18next'
-import { useShallow } from 'zustand/react/shallow'
-import { useAuthStore } from '@stores/useAuthStore'
-import { useOrganizationStore } from '@stores/useOrganizationStore'
-import { useSettingsSpaceStore } from '@stores/useSettingsSpaceStore'
-import { runWithAgentContextSwitchGuard } from '@/services/agentContextSwitchGuard'
-import { CreateOrganizationDialog } from '@components/organization/CreateOrganizationDialog'
+import React, { useCallback, useState } from 'react';
+import { Check, ChevronDown, Plus } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
+import { useShallow } from 'zustand/react/shallow';
+import { useOrganizationStore } from '@stores/useOrganizationStore';
+import { useSettingsSpaceStore } from '@stores/useSettingsSpaceStore';
+import { runWithAgentContextSwitchGuard } from '@/services/agentContextSwitchGuard';
+import { CreateOrganizationDialog } from '@components/organization/CreateOrganizationDialog';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -23,15 +22,16 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
   UserAvatar,
-} from '@components/ui'
-import type { Organization } from '@tabtin/app-shell'
-import { cn } from '@utils/cn'
-import { RailIconTooltip } from './activityRailTooltip'
+} from '@components/ui';
+import type { Organization } from '@tabtin/app-shell';
+import { cn } from '@utils/cn';
+import { RailIconTooltip } from './activityRailTooltip';
 import {
   ACTIVITY_RAIL_ITEM,
   ACTIVITY_RAIL_ITEM_ACTIVE,
   ACTIVITY_RAIL_ITEM_INACTIVE,
-} from './sidebarUi'
+} from './sidebarUi';
+import { useIdentityLabels } from './useIdentityLabels';
 
 /**
  * 窄栏身份入口的固定锚点：人 → 个人资料，组织 → 组织资料。
@@ -39,41 +39,23 @@ import {
  */
 function openSettingsCategoryAnchor(category: 'profile' | 'organization') {
   if (category === 'profile') {
-    useSettingsSpaceStore.getState().openSettings({ category: 'profile', section: 'account' })
-    return
+    useSettingsSpaceStore
+      .getState()
+      .openSettings({ category: 'profile', section: 'account' });
+    return;
   }
-  useSettingsSpaceStore.getState().openSettings({ category: 'organization', section: 'team' })
+  useSettingsSpaceStore
+    .getState()
+    .openSettings({ category: 'organization', section: 'team' });
 }
 
 interface OrganizationProfileButtonProps {
-  className?: string
-  dropdownSide?: 'top' | 'bottom'
-  dropdownAlign?: 'start' | 'center' | 'end'
+  className?: string;
+  dropdownSide?: 'top' | 'bottom';
+  dropdownAlign?: 'start' | 'center' | 'end';
   /** 隐藏「新建团队」入口（如独立私信窗口里不提供建团队） */
-  hideCreateOrganization?: boolean
-  compact?: boolean
-}
-
-/**
- * 当前用户展示名 + 当前组织标签的统一推导。
- * 供 OrganizationProfileButton（私信独立窗口）、TopBarOrganizationSwitcher
- * 与 UserAvatarRailButton 共用，保证各处身份文案一致。
- */
-export function useIdentityLabels(): {
-  user: ReturnType<typeof useAuthStore.getState>['user']
-  displayName: string
-  organizationLabel: string
-} {
-  const { t } = useTranslation(['sidebar', 'settings'])
-  const user = useAuthStore((state) => state.user)
-  const selectedOrganization = useOrganizationStore((s) => s.selectedOrganization)
-  const displayName = user?.nickname || user?.username || ''
-  const organizationLabel = selectedOrganization
-    ? selectedOrganization.type === 'personal'
-      ? t('teamSwitcher.personalLabel', { ns: 'settings', defaultValue: '个人账号' })
-      : selectedOrganization.name
-    : t('teamSwitcher.empty', { ns: 'settings', defaultValue: '暂无组织' })
-  return { user, displayName, organizationLabel }
+  hideCreateOrganization?: boolean;
+  compact?: boolean;
 }
 
 /**
@@ -82,22 +64,28 @@ export function useIdentityLabels(): {
  * 由调用方持有（下拉选中后即关闭，Dialog 必须挂在 DropdownMenu 外层）。
  */
 export const OrganizationSwitcherMenuItems: React.FC<{
-  hideCreateOrganization?: boolean
-  onCreateOrganization: () => void
+  hideCreateOrganization?: boolean;
+  onCreateOrganization: () => void;
 }> = ({ hideCreateOrganization = false, onCreateOrganization }) => {
-  const { t } = useTranslation(['sidebar', 'settings'])
-  const { organizations, selectedOrganization, selectOrganization } = useOrganizationStore(
-    useShallow((s) => ({
-      organizations: s.organizations,
-      selectedOrganization: s.selectedOrganization,
-      selectOrganization: s.selectOrganization,
-    })),
-  )
+  const { t } = useTranslation(['sidebar', 'settings']);
+  const { organizations, selectedOrganization, selectOrganization } =
+    useOrganizationStore(
+      useShallow((s) => ({
+        organizations: s.organizations,
+        selectedOrganization: s.selectedOrganization,
+        selectOrganization: s.selectOrganization,
+      })),
+    );
 
-  const handleSelectOrganization = useCallback((organization: Organization) => {
-    if (organization.id === selectedOrganization?.id) return
-    void runWithAgentContextSwitchGuard('organization', () => selectOrganization(organization))
-  }, [selectOrganization, selectedOrganization?.id])
+  const handleSelectOrganization = useCallback(
+    (organization: Organization) => {
+      if (organization.id === selectedOrganization?.id) return;
+      void runWithAgentContextSwitchGuard('organization', () =>
+        selectOrganization(organization),
+      );
+    },
+    [selectOrganization, selectedOrganization?.id],
+  );
 
   return (
     <>
@@ -106,10 +94,14 @@ export const OrganizationSwitcherMenuItems: React.FC<{
       </DropdownMenuLabel>
       <DropdownMenuSeparator />
       {organizations.map((organization) => {
-        const isCurrent = organization.id === selectedOrganization?.id
-        const label = organization.type === 'personal'
-          ? t('teamSwitcher.personalLabel', { ns: 'settings', defaultValue: '个人账号' })
-          : organization.name
+        const isCurrent = organization.id === selectedOrganization?.id;
+        const label =
+          organization.type === 'personal'
+            ? t('teamSwitcher.personalLabel', {
+                ns: 'settings',
+                defaultValue: '个人账号',
+              })
+            : organization.name;
         return (
           <DropdownMenuItem
             key={organization.id}
@@ -121,7 +113,7 @@ export const OrganizationSwitcherMenuItems: React.FC<{
             </span>
             <span className="truncate flex-1">{label}</span>
           </DropdownMenuItem>
-        )
+        );
       })}
       {!hideCreateOrganization && (
         <>
@@ -139,19 +131,26 @@ export const OrganizationSwitcherMenuItems: React.FC<{
         </>
       )}
     </>
-  )
-}
+  );
+};
 
-export const OrganizationProfileButton: React.FC<OrganizationProfileButtonProps> = ({
+export const OrganizationProfileButton: React.FC<
+  OrganizationProfileButtonProps
+> = ({
   className,
   dropdownSide = 'top',
   dropdownAlign = 'start',
   hideCreateOrganization = false,
   compact = false,
 }) => {
-  const { t } = useTranslation(['sidebar', 'settings'])
-  const { user, displayName, organizationLabel: selectedOrganizationLabel } = useIdentityLabels()
-  const [isCreateOrganizationOpen, setIsCreateOrganizationOpen] = useState(false)
+  const { t } = useTranslation(['sidebar', 'settings']);
+  const {
+    user,
+    displayName,
+    organizationLabel: selectedOrganizationLabel,
+  } = useIdentityLabels();
+  const [isCreateOrganizationOpen, setIsCreateOrganizationOpen] =
+    useState(false);
 
   return (
     <>
@@ -164,8 +163,14 @@ export const OrganizationProfileButton: React.FC<OrganizationProfileButtonProps>
               compact ? 'gap-2.5 px-2 py-1.5' : 'gap-3 px-2.5 py-2',
               className,
             )}
-            aria-label={t('teamSwitcher.tooltip', { ns: 'settings', defaultValue: '切换当前组织' })}
-            title={t('teamSwitcher.tooltip', { ns: 'settings', defaultValue: '切换当前组织' })}
+            aria-label={t('teamSwitcher.tooltip', {
+              ns: 'settings',
+              defaultValue: '切换当前组织',
+            })}
+            title={t('teamSwitcher.tooltip', {
+              ns: 'settings',
+              defaultValue: '切换当前组织',
+            })}
             data-onboarding-target="new-user-organization-me-entry"
           >
             <UserAvatar
@@ -175,18 +180,27 @@ export const OrganizationProfileButton: React.FC<OrganizationProfileButtonProps>
               size={compact ? 40 : 48}
               className="border border-border/30"
             />
-            <div className={cn(
-              'min-w-0 flex-1 flex flex-col justify-center py-0.5',
-              compact ? 'gap-0.5' : 'gap-1',
-            )}>
+            <div
+              className={cn(
+                'min-w-0 flex-1 flex flex-col justify-center py-0.5',
+                compact ? 'gap-0.5' : 'gap-1',
+              )}
+            >
               <div className="truncate text-body font-medium text-foreground">
                 {displayName || t('untitled', { defaultValue: '未命名用户' })}
               </div>
-              <div className="truncate text-caption text-muted-foreground/60">{selectedOrganizationLabel}</div>
+              <div className="truncate text-caption text-muted-foreground/60">
+                {selectedOrganizationLabel}
+              </div>
             </div>
           </button>
         </DropdownMenuTrigger>
-        <DropdownMenuContent align={dropdownAlign} side={dropdownSide} sideOffset={8} className="min-w-[220px]">
+        <DropdownMenuContent
+          align={dropdownAlign}
+          side={dropdownSide}
+          sideOffset={8}
+          className="min-w-[220px]"
+        >
           <OrganizationSwitcherMenuItems
             hideCreateOrganization={hideCreateOrganization}
             onCreateOrganization={() => setIsCreateOrganizationOpen(true)}
@@ -198,17 +212,21 @@ export const OrganizationProfileButton: React.FC<OrganizationProfileButtonProps>
         onClose={() => setIsCreateOrganizationOpen(false)}
       />
     </>
-  )
-}
+  );
+};
 
-OrganizationProfileButton.displayName = 'OrganizationProfileButton'
+OrganizationProfileButton.displayName = 'OrganizationProfileButton';
 
 /** ShellTopBar 左侧：当前组织切换按钮（折叠入口在其左侧）。 */
 export const TopBarOrganizationSwitcher: React.FC = () => {
-  const { t } = useTranslation(['sidebar', 'settings'])
-  const { displayName, organizationLabel } = useIdentityLabels()
-  const [isCreateOrganizationOpen, setIsCreateOrganizationOpen] = useState(false)
-  const tooltip = t('teamSwitcher.tooltip', { ns: 'settings', defaultValue: '切换当前组织' })
+  const { t } = useTranslation(['sidebar', 'settings']);
+  const { displayName, organizationLabel } = useIdentityLabels();
+  const [isCreateOrganizationOpen, setIsCreateOrganizationOpen] =
+    useState(false);
+  const tooltip = t('teamSwitcher.tooltip', {
+    ns: 'settings',
+    defaultValue: '切换当前组织',
+  });
 
   return (
     <>
@@ -235,7 +253,12 @@ export const TopBarOrganizationSwitcher: React.FC = () => {
             />
           </button>
         </DropdownMenuTrigger>
-        <DropdownMenuContent align="start" side="bottom" sideOffset={4} className="min-w-[220px]">
+        <DropdownMenuContent
+          align="start"
+          side="bottom"
+          sideOffset={4}
+          className="min-w-[220px]"
+        >
           <OrganizationSwitcherMenuItems
             onCreateOrganization={() => setIsCreateOrganizationOpen(true)}
           />
@@ -246,32 +269,37 @@ export const TopBarOrganizationSwitcher: React.FC = () => {
         onClose={() => setIsCreateOrganizationOpen(false)}
       />
     </>
-  )
-}
+  );
+};
 
-TopBarOrganizationSwitcher.displayName = 'TopBarOrganizationSwitcher'
+TopBarOrganizationSwitcher.displayName = 'TopBarOrganizationSwitcher';
 
 /** ActivityRail 顶部：当前组织头像（复用 UserAvatar 色块/首字算法），点击切到组织设置锚点。 */
 export const OrganizationAvatarRailButton: React.FC<{ active?: boolean }> = ({
   active = false,
 }) => {
-  const { t } = useTranslation(['sidebar', 'settings'])
-  const { organizationLabel } = useIdentityLabels()
-  const selectedOrganization = useOrganizationStore((s) => s.selectedOrganization)
+  const { t } = useTranslation(['sidebar', 'settings']);
+  const { organizationLabel } = useIdentityLabels();
+  const selectedOrganization = useOrganizationStore(
+    (s) => s.selectedOrganization,
+  );
   const orgName = selectedOrganization
-    ? (selectedOrganization.type === 'personal'
-      ? t('teamSwitcher.personalLabel', { ns: 'settings', defaultValue: '个人账号' })
-      : selectedOrganization.name)
-    : organizationLabel
+    ? selectedOrganization.type === 'personal'
+      ? t('teamSwitcher.personalLabel', {
+          ns: 'settings',
+          defaultValue: '个人账号',
+        })
+      : selectedOrganization.name
+    : organizationLabel;
   const tooltipLabel = t('rail.organizationProfile', {
     ns: 'sidebar',
     defaultValue: '组织资料',
-  })
-  const ariaLabel = `${tooltipLabel} · ${orgName}`
+  });
+  const ariaLabel = `${tooltipLabel} · ${orgName}`;
 
   const handleOpenOrganizationSettings = useCallback(() => {
-    openSettingsCategoryAnchor('organization')
-  }, [])
+    openSettingsCategoryAnchor('organization');
+  }, []);
 
   return (
     <RailIconTooltip label={`${tooltipLabel} · ${orgName}`}>
@@ -298,26 +326,27 @@ export const OrganizationAvatarRailButton: React.FC<{ active?: boolean }> = ({
         />
       </button>
     </RailIconTooltip>
-  )
-}
+  );
+};
 
-OrganizationAvatarRailButton.displayName = 'OrganizationAvatarRailButton'
+OrganizationAvatarRailButton.displayName = 'OrganizationAvatarRailButton';
 
 /** ActivityRail 底部：用户头像，点击切到个人设置锚点。 */
 export const UserAvatarRailButton: React.FC<{ active?: boolean }> = ({
   active = false,
 }) => {
-  const { t } = useTranslation(['sidebar'])
-  const { user, displayName } = useIdentityLabels()
-  const tooltipLabel = displayName || t('untitled', { ns: 'sidebar', defaultValue: '未命名用户' })
+  const { t } = useTranslation(['sidebar']);
+  const { user, displayName } = useIdentityLabels();
+  const tooltipLabel =
+    displayName || t('untitled', { ns: 'sidebar', defaultValue: '未命名用户' });
   const ariaLabel = t('rail.profileSettings', {
     ns: 'sidebar',
     defaultValue: '个人资料',
-  })
+  });
 
   const handleOpenProfileSettings = useCallback(() => {
-    openSettingsCategoryAnchor('profile')
-  }, [])
+    openSettingsCategoryAnchor('profile');
+  }, []);
 
   return (
     <RailIconTooltip label={tooltipLabel}>
@@ -343,7 +372,7 @@ export const UserAvatarRailButton: React.FC<{ active?: boolean }> = ({
         />
       </button>
     </RailIconTooltip>
-  )
-}
+  );
+};
 
-UserAvatarRailButton.displayName = 'UserAvatarRailButton'
+UserAvatarRailButton.displayName = 'UserAvatarRailButton';
