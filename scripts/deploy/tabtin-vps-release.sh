@@ -88,8 +88,8 @@ compose run --rm --no-deps --user 0:0 \
   --entrypoint python django \
   manage.py safe_migrate --plan --no-input
 
-log "stopping Celery before migration"
-compose stop celery
+log "entering maintenance window before migration"
+compose stop celery django
 
 log "applying release migrations"
 compose run --rm --no-deps --user 0:0 \
