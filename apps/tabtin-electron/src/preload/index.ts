@@ -13,7 +13,7 @@ import {
   MEETING_RECORDING_STATUS_CHANNEL,
   type AppendMeetingAudioChunkInput,
   type AppendMeetingPcmChunkInput,
-  type MeetingArchiveManifestV1,
+  type MeetingArchiveManifestV2,
   type MeetingArchiveListScope,
   type MeetingArchiveScope,
   type MeetingAsrProbeInput,
@@ -1167,9 +1167,11 @@ interface TabTinAPIShape {
     appendAudioChunk: (input: AppendMeetingAudioChunkInput) => Promise<MeetingRecordingStatus>
     appendPcmChunk: (input: AppendMeetingPcmChunkInput) => Promise<void>
     appendTranscript: (scope: MeetingArchiveScope, checkpoint: MeetingTranscriptCheckpoint) => Promise<void>
-    recoverInterrupted: () => Promise<MeetingArchiveManifestV1[]>
+    recoverInterrupted: () => Promise<MeetingArchiveManifestV2[]>
     listArchives: (scope: MeetingArchiveListScope) => Promise<MeetingLocalArchive[]>
     getArchive: (scope: MeetingArchiveScope) => Promise<MeetingLocalArchive>
+    deleteArchiveAudio: (scope: MeetingArchiveScope) => Promise<void>
+    deleteArchive: (scope: MeetingArchiveScope) => Promise<void>
     setCopilotEnabled: (scope: MeetingArchiveScope, enabled: boolean) => Promise<MeetingRecordingStatus>
     answerCopilotQuestion: (
       scope: MeetingArchiveScope,
@@ -3700,6 +3702,9 @@ const api = {
     recoverInterrupted: () => invokeIpc('meeting-recording:recover-interrupted'),
     listArchives: (scope) => invokeIpc('meeting-recording:list-archives', scope),
     getArchive: (scope) => invokeIpc('meeting-recording:get-archive', scope),
+    deleteArchiveAudio: (scope) =>
+      invokeIpc('meeting-recording:delete-archive-audio', scope),
+    deleteArchive: (scope) => invokeIpc('meeting-recording:delete-archive', scope),
     setCopilotEnabled: (scope, enabled) => invokeIpc('meeting-recording:set-copilot', scope, enabled),
     answerCopilotQuestion: (scope, questionSegmentId) =>
       invokeIpc('meeting-recording:answer-copilot', scope, questionSegmentId),

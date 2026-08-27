@@ -175,30 +175,10 @@ export class MeetingCaptureController {
 
   private async openMicrophone(deviceId?: string): Promise<MediaStream> {
     const normalizedDeviceId = deviceId?.trim() ?? '';
-    const useSpecificDevice =
-      normalizedDeviceId.length > 0 && normalizedDeviceId !== 'default';
-    try {
-      return await this.mediaDevices.getUserMedia({
-        audio: this.microphoneConstraints(normalizedDeviceId),
-        video: false,
-      });
-    } catch (error) {
-      const value =
-        error && typeof error === 'object'
-          ? (error as { name?: unknown })
-          : null;
-      const name = typeof value?.name === 'string' ? value.name : '';
-      if (
-        !useSpecificDevice ||
-        (name !== 'OverconstrainedError' && name !== 'NotFoundError')
-      ) {
-        throw error;
-      }
-      return this.mediaDevices.getUserMedia({
-        audio: this.microphoneConstraints(),
-        video: false,
-      });
-    }
+    return this.mediaDevices.getUserMedia({
+      audio: this.microphoneConstraints(normalizedDeviceId),
+      video: false,
+    });
   }
 
   async listMicrophones(): Promise<MeetingMicrophoneDevice[]> {

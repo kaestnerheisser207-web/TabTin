@@ -16,7 +16,7 @@ class CommunitySceneCatalogContractTests(SimpleTestCase):
         entries = catalog["scenes"]
 
         self.assertEqual(len(entries), len(SCENES))
-        self.assertEqual(len(SCENES), 38)
+        self.assertEqual(len(SCENES), 39)
         self.assertEqual({entry["scene_key"] for entry in entries}, set(SCENES))
         self.assertEqual(
             {entry["classification"] for entry in entries},

@@ -55,6 +55,7 @@ class ScenePolicyResolverTests(SimpleTestCase):
                 "title_generation": (True, "user", ("byok", "official"), "existing_user_funding", "preserve_selected_source", "title_generation"),
                 "commit_message_generation": (True, "user", ("byok", "official"), "existing_user_funding", "preserve_selected_source", "commit_message_generation"),
                 "meeting_copilot_quick_answer": (True, "user", ("byok", "official"), "existing_user_funding", "preserve_selected_source", "meeting_copilot_quick_answer"),
+                "meeting_post_analysis": (True, "user", ("byok", "official"), "existing_user_funding", "preserve_selected_source", "meeting_post_analysis"),
                 "checkpoint_intent_summary": (True, "platform", ("official",), "none", "official_binding_only", "checkpoint_summary"),
                 "checkpoint_decision_summary": (True, "platform", ("official",), "none", "official_binding_only", "checkpoint_summary"),
                 "tool_risk_classify": (True, "platform", ("official",), "none", "official_binding_only", "tool_risk_classify"),

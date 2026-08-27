@@ -76,7 +76,6 @@ export const MeetingSetupView: React.FC<{
   const [title, setTitle] = React.useState('');
   const [brief, setBrief] = React.useState('');
   const [copilotEnabled, setCopilotEnabled] = React.useState(false);
-  const copilotChoiceTouchedRef = React.useRef(false);
   const [copilotModelState, setCopilotModelState] = React.useState<
     'checking' | 'ready' | 'missing' | 'failed'
   >('checking');
@@ -162,7 +161,6 @@ export const MeetingSetupView: React.FC<{
         setCopilotModels(readyModels);
         setCopilotModelState(readyModels.length > 0 ? 'ready' : 'missing');
         if (readyModels.length === 0) setCopilotEnabled(false);
-        else if (!copilotChoiceTouchedRef.current) setCopilotEnabled(true);
         const preferredId =
           result.default_model_id ||
           result.organization_default_model_id ||
@@ -608,10 +606,7 @@ export const MeetingSetupView: React.FC<{
                   <Switch
                     checked={copilotEnabled}
                     disabled={copilotModelState !== 'ready'}
-                    onCheckedChange={(enabled) => {
-                      copilotChoiceTouchedRef.current = true;
-                      setCopilotEnabled(enabled);
-                    }}
+                    onCheckedChange={setCopilotEnabled}
                     aria-label={t('setup.enableCopilot')}
                   />
                 </div>

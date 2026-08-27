@@ -9,7 +9,7 @@ import {
   MEETING_ARCHIVE_SCHEMA_VERSION,
   type AppendMeetingAudioChunkInput,
   type MeetingArchiveLifecycleStatus,
-  type MeetingArchiveManifestV1,
+  type MeetingArchiveManifestV2,
   type MeetingArchiveTrackManifest,
   type MeetingAudioSource,
   type MeetingCopilotAnswerResult,
@@ -111,11 +111,17 @@ function createTrack(source: MeetingAudioSource): MeetingArchiveTrackManifest {
     lastCheckpointAt: null,
     finalizedRelativePath: null,
     contentHash: '',
+    storageStatus: 'local_only',
+    fileRecordId: null,
+    objectKey: '',
+    uploadError: '',
+    uploadAttempts: 0,
+    lastUploadAttemptAt: null,
   };
 }
 
-function parseManifest(raw: string): MeetingArchiveManifestV1 {
-  const parsed = JSON.parse(raw) as Partial<MeetingArchiveManifestV1>;
+function parseManifest(raw: string): MeetingArchiveManifestV2 {
+  const parsed = JSON.parse(raw) as Partial<MeetingArchiveManifestV2>;
   if (
     parsed.schemaVersion !== MEETING_ARCHIVE_SCHEMA_VERSION ||
     typeof parsed.sessionId !== 'string' ||
@@ -126,7 +132,7 @@ function parseManifest(raw: string): MeetingArchiveManifestV1 {
   ) {
     throw new Error('unsupported or corrupt meeting archive manifest');
   }
-  return parsed as MeetingArchiveManifestV1;
+  return parsed as MeetingArchiveManifestV2;
 }
 
 export interface MeetingArchiveStoreOptions {
@@ -248,7 +254,7 @@ export class MeetingArchiveStore {
 
   async prepare(
     input: PrepareMeetingArchiveInput,
-  ): Promise<MeetingArchiveManifestV1> {
+  ): Promise<MeetingArchiveManifestV2> {
     return this.enqueueSessionWrite(input.sessionId, async () => {
       const manifestPath = this.manifestPath(input);
       try {
@@ -261,7 +267,7 @@ export class MeetingArchiveStore {
       if (!input.consentConfirmed) {
         throw new Error('meeting recording consent is required');
       }
-      const manifest: MeetingArchiveManifestV1 = {
+      const manifest: MeetingArchiveManifestV2 = {
         schemaVersion: MEETING_ARCHIVE_SCHEMA_VERSION,
         sessionId: requireSafeSegment(input.sessionId, 'sessionId'),
         organizationId: requireSafeSegment(
@@ -315,14 +321,14 @@ export class MeetingArchiveStore {
     organizationId: string;
     userId: string;
     sessionId: string;
-  }): Promise<MeetingArchiveManifestV1> {
+  }): Promise<MeetingArchiveManifestV2> {
     return parseManifest(await fs.readFile(this.manifestPath(scope), 'utf8'));
   }
 
   async listManifests(scope: {
     organizationId: string;
     userId: string;
-  }): Promise<MeetingArchiveManifestV1[]> {
+  }): Promise<MeetingArchiveManifestV2[]> {
     const directory = path.join(
       this.rootPath,
       requireSafeSegment(scope.organizationId, 'organizationId'),
@@ -346,10 +352,51 @@ export class MeetingArchiveStore {
         }),
     );
     return manifests
-      .filter((manifest): manifest is MeetingArchiveManifestV1 =>
+      .filter((manifest): manifest is MeetingArchiveManifestV2 =>
         Boolean(manifest),
       )
       .sort((left, right) => right.createdAt.localeCompare(left.createdAt));
+  }
+
+  async listAllManifests(): Promise<MeetingArchiveManifestV2[]> {
+    const manifests: MeetingArchiveManifestV2[] = [];
+    const organizationDirectories = await fs
+      .readdir(this.rootPath, { withFileTypes: true })
+      .catch(() => []);
+    for (const organizationEntry of organizationDirectories) {
+      if (!organizationEntry.isDirectory() || organizationEntry.name.startsWith('.'))
+        continue;
+      const organizationId = organizationEntry.name;
+      const userDirectories = await fs
+        .readdir(path.join(this.rootPath, organizationId), { withFileTypes: true })
+        .catch(() => []);
+      for (const userEntry of userDirectories) {
+        if (!userEntry.isDirectory()) continue;
+        const userId = userEntry.name;
+        const sessionDirectories = await fs
+          .readdir(path.join(this.rootPath, organizationId, userId), {
+            withFileTypes: true,
+          })
+          .catch(() => []);
+        for (const sessionEntry of sessionDirectories) {
+          if (!sessionEntry.isDirectory()) continue;
+          try {
+            manifests.push(
+              await this.readManifest({
+                organizationId,
+                userId,
+                sessionId: sessionEntry.name,
+              }),
+            );
+          } catch {
+            // Unsupported/corrupt archives remain untouched for diagnostics.
+          }
+        }
+      }
+    }
+    return manifests.sort((left, right) =>
+      right.createdAt.localeCompare(left.createdAt),
+    );
   }
 
   resolveSessionFile(
@@ -363,7 +410,7 @@ export class MeetingArchiveStore {
   async appendAudioChunk(input: AppendMeetingAudioChunkInput): Promise<{
     relativePath: string;
     sequence: number;
-    manifest: MeetingArchiveManifestV1;
+    manifest: MeetingArchiveManifestV2;
   }> {
     return this.enqueueSessionWrite(input.sessionId, async () => {
       requireNonNegativeInteger(input.durationMs, 'durationMs');
@@ -415,7 +462,7 @@ export class MeetingArchiveStore {
   }, options: {
     reconcileParts?: boolean;
     bestEffort?: boolean;
-  } = {}): Promise<MeetingArchiveManifestV1> {
+  } = {}): Promise<MeetingArchiveManifestV2> {
     return this.enqueueSessionWrite(scope.sessionId, async () => {
       const manifestPath = this.manifestPath(scope);
       const manifest = parseManifest(await fs.readFile(manifestPath, 'utf8'));
@@ -538,7 +585,7 @@ export class MeetingArchiveStore {
   async appendTranscriptCheckpoint(
     scope: { organizationId: string; userId: string; sessionId: string },
     checkpoint: MeetingTranscriptCheckpoint,
-  ): Promise<MeetingArchiveManifestV1> {
+  ): Promise<MeetingArchiveManifestV2> {
     return this.enqueueSessionWrite(scope.sessionId, async () => {
       requireNonNegativeInteger(checkpoint.startMs, 'startMs');
       requireNonNegativeInteger(checkpoint.endMs, 'endMs');
@@ -678,9 +725,9 @@ export class MeetingArchiveStore {
 
   async updateTranscriptionStatus(
     scope: { organizationId: string; userId: string; sessionId: string },
-    status: MeetingArchiveManifestV1['transcriptionStatus'],
+    status: MeetingArchiveManifestV2['transcriptionStatus'],
     errorMessage = '',
-  ): Promise<MeetingArchiveManifestV1> {
+  ): Promise<MeetingArchiveManifestV2> {
     return this.enqueueSessionWrite(scope.sessionId, async () => {
       const manifestPath = this.manifestPath(scope);
       const manifest = parseManifest(await fs.readFile(manifestPath, 'utf8'));
@@ -691,10 +738,81 @@ export class MeetingArchiveStore {
     });
   }
 
+  async updateTrackUploadState(
+    scope: { organizationId: string; userId: string; sessionId: string },
+    source: MeetingAudioSource,
+    patch: Partial<
+      Pick<
+        MeetingArchiveTrackManifest,
+        | 'storageStatus'
+        | 'fileRecordId'
+        | 'objectKey'
+        | 'uploadError'
+        | 'uploadAttempts'
+        | 'lastUploadAttemptAt'
+      >
+    >,
+  ): Promise<MeetingArchiveManifestV2> {
+    return this.enqueueSessionWrite(scope.sessionId, async () => {
+      const manifestPath = this.manifestPath(scope);
+      const manifest = parseManifest(await fs.readFile(manifestPath, 'utf8'));
+      const track = manifest.tracks[source];
+      Object.assign(track, patch);
+      await atomicWriteJson(manifestPath, manifest);
+      return manifest;
+    });
+  }
+
+  async deleteAudioFiles(scope: {
+    organizationId: string;
+    userId: string;
+    sessionId: string;
+  }): Promise<MeetingArchiveManifestV2> {
+    return this.enqueueSessionWrite(scope.sessionId, async () => {
+      const manifestPath = this.manifestPath(scope);
+      const manifest = parseManifest(await fs.readFile(manifestPath, 'utf8'));
+      const sessionDirectory = this.sessionDirectory(scope);
+      for (const source of ['local', 'remote'] as const) {
+        const track = manifest.tracks[source];
+        if (track.finalizedRelativePath) {
+          await fs
+            .unlink(path.join(sessionDirectory, track.finalizedRelativePath))
+            .catch(() => undefined);
+        }
+        await fs
+          .rm(path.join(sessionDirectory, source), {
+            recursive: true,
+            force: true,
+          })
+          .catch(() => undefined);
+        track.storageStatus = 'deleted';
+        track.fileRecordId = null;
+        track.objectKey = '';
+        track.uploadError = '';
+        track.finalizedRelativePath = null;
+        track.bytes = 0;
+        track.contentHash = '';
+      }
+      await atomicWriteJson(manifestPath, manifest);
+      return manifest;
+    });
+  }
+
+  async deleteArchive(scope: {
+    organizationId: string;
+    userId: string;
+    sessionId: string;
+  }): Promise<void> {
+    await this.enqueueSessionWrite(scope.sessionId, async () => {
+      await fs.rm(this.sessionDirectory(scope), { recursive: true, force: true });
+    });
+    this.finalTranscriptText.delete(scope.sessionId);
+  }
+
   async updateCopilotEnabled(
     scope: { organizationId: string; userId: string; sessionId: string },
     enabled: boolean,
-  ): Promise<MeetingArchiveManifestV1> {
+  ): Promise<MeetingArchiveManifestV2> {
     return this.enqueueSessionWrite(scope.sessionId, async () => {
       const manifestPath = this.manifestPath(scope);
       const manifest = parseManifest(await fs.readFile(manifestPath, 'utf8'));
@@ -709,7 +827,7 @@ export class MeetingArchiveStore {
     source: MeetingAudioSource,
     sourceId: string,
     label: string,
-  ): Promise<MeetingArchiveManifestV1> {
+  ): Promise<MeetingArchiveManifestV2> {
     return this.enqueueSessionWrite(scope.sessionId, async () => {
       const manifestPath = this.manifestPath(scope);
       const manifest = parseManifest(await fs.readFile(manifestPath, 'utf8'));
@@ -727,9 +845,9 @@ export class MeetingArchiveStore {
 
   async updateServerSyncStatus(
     scope: { organizationId: string; userId: string; sessionId: string },
-    status: MeetingArchiveManifestV1['serverSyncStatus'],
+    status: MeetingArchiveManifestV2['serverSyncStatus'],
     errorMessage = '',
-  ): Promise<MeetingArchiveManifestV1> {
+  ): Promise<MeetingArchiveManifestV2> {
     return this.enqueueSessionWrite(scope.sessionId, async () => {
       const manifestPath = this.manifestPath(scope);
       const manifest = parseManifest(await fs.readFile(manifestPath, 'utf8'));
@@ -743,7 +861,7 @@ export class MeetingArchiveStore {
   async updateLifecycle(
     scope: { organizationId: string; userId: string; sessionId: string },
     lifecycleStatus: MeetingArchiveLifecycleStatus,
-  ): Promise<MeetingArchiveManifestV1> {
+  ): Promise<MeetingArchiveManifestV2> {
     return this.enqueueSessionWrite(scope.sessionId, async () => {
       const manifestPath = this.manifestPath(scope);
       const manifest = parseManifest(await fs.readFile(manifestPath, 'utf8'));
@@ -770,8 +888,8 @@ export class MeetingArchiveStore {
     });
   }
 
-  async recoverInterrupted(): Promise<MeetingArchiveManifestV1[]> {
-    const recovered: MeetingArchiveManifestV1[] = [];
+  async recoverInterrupted(): Promise<MeetingArchiveManifestV2[]> {
+    const recovered: MeetingArchiveManifestV2[] = [];
     const organizationDirectories = await fs
       .readdir(this.rootPath, {
         withFileTypes: true,

@@ -205,7 +205,7 @@ class HandoffReference(models.Model):
     """受控材料引用：快照摘要 + 回源读取 + 查看时鉴权。
 
     两种材料形态：
-    - 回源型（im_message / document / table）：只存快照摘要，正文查看时回源读取
+    - 回源型（im_message / document / table / meeting）：只存快照摘要，正文查看时回源读取
       并按查看者权限实时校验，无权返回结构化 access_denied（不静默消失）。
     - 快照型（chat_session）：源是发起人个人资产（Agent 会话），接收人无法回源
       读取。创建时以发起人权限读取并冻结成清洗版快照存进 ``frozen_snapshot_json``，
@@ -218,6 +218,7 @@ class HandoffReference(models.Model):
         TABLE = "table", "表格"
         ATTACHMENT = "attachment", "附件"
         CHAT_SESSION = "chat_session", "Agent 会话"
+        MEETING = "meeting", "会议档案"
 
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     package = models.ForeignKey(
@@ -258,6 +259,77 @@ class HandoffReference(models.Model):
         return f"Ref {self.ref_type}:{self.resource_id} of {self.package_id}"
 
 
+class HandoffResourceGrant(models.Model):
+    """交接包为接收人带来的可追溯资源授权来源。
+
+    资源 ACL 仍是真实执行面；本表只记录哪个 Handoff 来源需要该
+    权限，以便 revoke / supersede 仅回收它自己带来的访问权，
+    不影响用户原有权限或其他仍有效的 Handoff 来源。
+    """
+
+    RESOURCE_TYPE_CHOICES = (
+        (HandoffReference.RefType.MEETING, "会议档案"),
+    )
+
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    package = models.ForeignKey(
+        HandoffPackage,
+        on_delete=models.CASCADE,
+        related_name="resource_grants",
+    )
+    reference = models.ForeignKey(
+        HandoffReference,
+        on_delete=models.CASCADE,
+        related_name="resource_grants",
+    )
+    resource_type = models.CharField(max_length=20, choices=RESOURCE_TYPE_CHOICES)
+    resource_id = models.UUIDField()
+    grantee_user_id = models.CharField(max_length=100, db_index=True)
+    permission_id = models.UUIDField(null=True, blank=True)
+    permission_updated_at_snapshot = models.DateTimeField(null=True, blank=True)
+    permission_granted_by_snapshot = models.CharField(
+        max_length=100,
+        blank=True,
+        default="",
+    )
+    is_active = models.BooleanField(default=True, db_index=True)
+    manages_resource_permission = models.BooleanField(
+        default=False,
+        help_text="该来源需要维持资源 ACL；最后一个有效来源撤销时才能回收。",
+    )
+    has_independent_access = models.BooleanField(
+        default=False,
+        help_text="发送交接前用户已通过非 Handoff 来源拥有访问权。",
+    )
+    independent_permission = models.CharField(
+        max_length=20,
+        blank=True,
+        default="",
+    )
+    created_permission = models.BooleanField(default=False)
+    previous_is_active = models.BooleanField(null=True, blank=True)
+    previous_permission = models.CharField(max_length=20, blank=True, default="")
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    revoked_at = models.DateTimeField(null=True, blank=True)
+
+    class Meta:
+        app_label = "tabchat"
+        db_table = "tabchat_handoff_resource_grant"
+        constraints = [
+            models.UniqueConstraint(
+                fields=["package", "reference", "grantee_user_id"],
+                name="tabchat_handoff_grant_source_uq",
+            ),
+        ]
+        indexes = [
+            models.Index(
+                fields=["resource_type", "resource_id", "grantee_user_id", "is_active"],
+                name="tabchat_handoff_grant_acl_idx",
+            ),
+        ]
+
+
 class HandoffEvent(models.Model):
     """审计流水（append-only）。
 
@@ -272,6 +344,7 @@ class HandoffEvent(models.Model):
         TAKEN_OVER = "taken_over", "由我继续"
         DELEGATED = "delegated", "交给 Agent"
         SUPPLEMENTED = "supplemented", "补充"
+        SUPERSEDED = "superseded", "已被新版本取代"
         REVOKED = "revoked", "撤销"
         REJECTED = "rejected", "拒绝"
 

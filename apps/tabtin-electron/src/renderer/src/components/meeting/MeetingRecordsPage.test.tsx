@@ -5,6 +5,7 @@ import {
   render,
   screen,
   waitFor,
+  within,
 } from '@testing-library/react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
@@ -31,6 +32,7 @@ import { MeetingRecordsSidebar } from './MeetingRecordsSidebar';
 import { MeetingDetailSessionView } from './MeetingDetailSessionView';
 import type { MeetingLocalArchive } from '@shared/meeting-recording-contract';
 import { useAuthStore } from '@stores/useAuthStore';
+import { useOrganizationStore } from '@stores/useOrganizationStore';
 import {
   SIDEBAR_LIST_ICON_SIZE,
   SIDEBAR_MENU_ICON_STROKE,
@@ -47,6 +49,84 @@ import {
   MEETING_LIVE_PREVIEW_ID,
   useMeetingViewNavigation,
 } from './meetingViewNavigation';
+
+function createMeetingArchive(
+  storageStatus: 'synced' | 'deleted' = 'synced',
+): MeetingLocalArchive {
+  const audioDeleted = storageStatus === 'deleted';
+  const track = (source: 'local' | 'remote') => ({
+    source,
+    status: 'completed' as const,
+    nextSequence: 2,
+    durationMs: 20_000,
+    bytes: audioDeleted ? 0 : 100,
+    sampleRate: 16_000,
+    channelCount: 1,
+    codec: 'opus',
+    container: 'webm',
+    lastCheckpointAt: '2026-08-26T00:00:20.000Z',
+    finalizedRelativePath: audioDeleted ? null : `${source}.webm`,
+    contentHash: audioDeleted ? '' : `${source}-hash`,
+    storageStatus,
+    fileRecordId: audioDeleted ? null : `${source}-file`,
+    objectKey: audioDeleted ? '' : `meeting/${source}.webm`,
+    uploadError: '',
+    uploadAttempts: 1,
+    lastUploadAttemptAt: '2026-08-26T00:00:20.000Z',
+  });
+  return {
+    manifest: {
+      schemaVersion: 2,
+      sessionId: '11111111-1111-4111-8111-111111111111',
+      organizationId: 'org-1',
+      userId: 'user-1',
+      projectId: null,
+      projectName: '',
+      title: '真实记录',
+      brief: '',
+      consentConfirmedAt: '2026-08-26T00:00:00.000Z',
+      microphoneDeviceId: 'default',
+      microphoneDeviceLabel: 'Default microphone',
+      systemAudioSourceId: 'main-display',
+      systemAudioSourceLabel: 'System audio',
+      copilotInitiallyEnabled: false,
+      copilotEnabled: false,
+      copilotModelId: '',
+      copilotModelLabel: '',
+      transcriptionStatus: 'completed',
+      transcriptRevision: 1,
+      transcriptFinalCount: 1,
+      transcriptRunId: 'transcript-run-1',
+      transcriptionError: '',
+      lifecycleStatus: 'stopped',
+      createdAt: '2026-08-26T00:00:00.000Z',
+      startedAt: '2026-08-26T00:00:00.000Z',
+      endedAt: '2026-08-26T00:00:20.000Z',
+      durationMs: 20_000,
+      serverSyncStatus: 'synced',
+      serverSyncError: '',
+      tracks: { local: track('local'), remote: track('remote') },
+    },
+    audioUrls: audioDeleted
+      ? {}
+      : {
+          local: 'tabtin-file:///local.webm',
+          remote: 'tabtin-file:///remote.webm',
+        },
+    transcript: [
+      {
+        externalId: 'local-1',
+        source: 'local',
+        startMs: 2_000,
+        endMs: 5_000,
+        text: '保留的真实逐字稿。',
+        isFinal: true,
+        recordedAt: '2026-08-26T00:00:02.000Z',
+      },
+    ],
+    copilotRecords: [],
+  };
+}
 
 describe('MeetingRecordsPage', () => {
   beforeEach(() => {
@@ -213,6 +293,201 @@ describe('MeetingRecordsPage', () => {
     expect(screen.getByRole('tab', { name: '逐字稿与录音' })).toBeTruthy();
     expect(screen.queryByRole('tab', { name: '录音' })).toBeNull();
     expect(screen.getByRole('tab', { name: /会议 Copilot/ })).toBeTruthy();
+  });
+
+  it('requires explicit confirmation and prevents duplicate audio deletion', async () => {
+    let resolveDelete: (() => void) | undefined;
+    const onDeleteAudio = vi.fn(
+      () =>
+        new Promise<void>((resolve) => {
+          resolveDelete = resolve;
+        }),
+    );
+    render(
+      <MeetingDetailSessionView
+        archive={createMeetingArchive()}
+        onDeleteAudio={onDeleteAudio}
+        onDeleteArchive={vi.fn()}
+      />,
+    );
+
+    fireEvent.click(screen.getByRole('button', { name: '删除录音，保留文字' }));
+    const dialog = screen.getByRole('dialog');
+    expect(within(dialog).getByText('删除这场会议的录音？')).toBeTruthy();
+    expect(
+      within(dialog).getByText(
+        /麦克风与系统音频都会永久删除；逐字稿、会后分析、Copilot 记录和关联资料将保留/,
+      ),
+    ).toBeTruthy();
+
+    fireEvent.click(
+      within(dialog).getByRole('button', { name: '删除录音，保留文字' }),
+    );
+    expect(onDeleteAudio).toHaveBeenCalledOnce();
+    const processing = within(dialog).getByRole('button', { name: /处理中/ });
+    expect(processing.hasAttribute('disabled')).toBe(true);
+    fireEvent.click(processing);
+    expect(onDeleteAudio).toHaveBeenCalledOnce();
+
+    await act(async () => resolveDelete?.());
+    await waitFor(() => expect(screen.queryByRole('dialog')).toBeNull());
+  });
+
+  it('keeps the destructive confirmation open with an explicit failure', async () => {
+    const onDeleted = vi.fn();
+    const consoleError = vi
+      .spyOn(console, 'error')
+      .mockImplementation(() => {});
+    try {
+      render(
+        <MeetingDetailSessionView
+          archive={createMeetingArchive()}
+          onDeleteAudio={vi.fn()}
+          onDeleteArchive={vi
+            .fn()
+            .mockRejectedValue(new Error('provider unavailable'))}
+          onDeleted={onDeleted}
+        />,
+      );
+
+      fireEvent.click(screen.getByRole('button', { name: '删除整场会议' }));
+      const dialog = screen.getByRole('dialog');
+      expect(within(dialog).getByText('删除整场会议？')).toBeTruthy();
+      fireEvent.click(
+        within(dialog).getByRole('button', { name: '删除整场会议' }),
+      );
+
+      await waitFor(() =>
+        expect(within(dialog).getByRole('alert').textContent).toContain(
+          '删除整场会议失败，请重试: provider unavailable',
+        ),
+      );
+      expect(onDeleted).not.toHaveBeenCalled();
+      expect(screen.getByRole('dialog')).toBeTruthy();
+    } finally {
+      consoleError.mockRestore();
+    }
+  });
+
+  it('wires both deletion paths to the real archive scope and returns after full deletion', async () => {
+    const previousTabtin = window.tabtin;
+    const previousUser = useAuthStore.getState().user;
+    const previousOrganization =
+      useOrganizationStore.getState().selectedOrganization;
+    const archive = createMeetingArchive();
+    const deletedArchive = createMeetingArchive('deleted');
+    const getArchive = vi
+      .fn()
+      .mockResolvedValueOnce(archive)
+      .mockResolvedValueOnce(deletedArchive);
+    const deleteArchiveAudio = vi.fn().mockResolvedValue(undefined);
+    const deleteArchive = vi.fn().mockResolvedValue(undefined);
+    Object.defineProperty(window, 'tabtin', {
+      configurable: true,
+      value: {
+        ...previousTabtin,
+        meetingRecording: {
+          ...previousTabtin.meetingRecording,
+          getStatus: vi
+            .fn()
+            .mockResolvedValue({ active: false, manifest: null }),
+          getArchive,
+          deleteArchiveAudio,
+          deleteArchive,
+        },
+      },
+    });
+    act(() => {
+      useAuthStore.setState({
+        user: {
+          id: 'user-1',
+          username: 'meeting-user',
+          nickname: '会议用户',
+          is_verified_email: false,
+          is_verified_phone: false,
+          date_joined: '2026-08-23T00:00:00.000Z',
+          login_count: 1,
+        },
+      });
+      useOrganizationStore.setState({
+        selectedOrganization: {
+          id: 'org-1',
+          name: 'Meeting Org',
+          type: 'team',
+          owner_id: 'user-1',
+          is_default: false,
+          created_at: '2026-08-23T00:00:00.000Z',
+          updated_at: '2026-08-23T00:00:00.000Z',
+        },
+      });
+    });
+    const onBack = vi.fn();
+
+    try {
+      render(
+        <MeetingSessionView
+          sessionId={archive.manifest.sessionId}
+          onBack={onBack}
+        />,
+      );
+      await waitFor(() =>
+        expect(
+          screen.getByRole('button', { name: '删除录音，保留文字' }),
+        ).toBeTruthy(),
+      );
+
+      fireEvent.click(
+        screen.getByRole('button', { name: '删除录音，保留文字' }),
+      );
+      fireEvent.click(
+        within(screen.getByRole('dialog')).getByRole('button', {
+          name: '删除录音，保留文字',
+        }),
+      );
+      const expectedScope = {
+        sessionId: archive.manifest.sessionId,
+        organizationId: 'org-1',
+        userId: 'user-1',
+      };
+      await waitFor(() =>
+        expect(deleteArchiveAudio).toHaveBeenCalledWith(expectedScope),
+      );
+      await waitFor(() =>
+        expect(
+          screen.getByText('录音已删除，逐字稿、会后内容和关联资料仍然保留。'),
+        ).toBeTruthy(),
+      );
+      const transcriptTab = screen.getByRole('tab', {
+        name: '逐字稿与录音',
+      });
+      fireEvent.mouseDown(transcriptTab, { button: 0, ctrlKey: false });
+      await waitFor(() =>
+        expect(transcriptTab.getAttribute('aria-selected')).toBe('true'),
+      );
+      expect(screen.getByText('保留的真实逐字稿。')).toBeTruthy();
+
+      fireEvent.click(screen.getByRole('button', { name: '删除整场会议' }));
+      fireEvent.click(
+        within(screen.getByRole('dialog')).getByRole('button', {
+          name: '删除整场会议',
+        }),
+      );
+      await waitFor(() =>
+        expect(deleteArchive).toHaveBeenCalledWith(expectedScope),
+      );
+      expect(onBack).toHaveBeenCalledOnce();
+    } finally {
+      Object.defineProperty(window, 'tabtin', {
+        configurable: true,
+        value: previousTabtin,
+      });
+      act(() => {
+        useAuthStore.setState({ user: previousUser });
+        useOrganizationStore.setState({
+          selectedOrganization: previousOrganization,
+        });
+      });
+    }
   });
 
   it('seeks from a transcript timestamp and follows text during playback', async () => {

@@ -576,6 +576,7 @@ class FileUsage(models.Model):
         ('media_generation', '媒体生成'),
         ('crawl', 'Crawl 采集'),
         ('tabfiles', 'TabFiles 文件管理'),
+        ('meeting', '会议录音'),
         ('package_registry', 'Package Registry 包管理'),
         ('other', '其他'),
     ]

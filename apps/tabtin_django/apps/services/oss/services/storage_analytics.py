@@ -114,6 +114,7 @@ MODULE_DISPLAY = {
     "media_generation": "AI 生成",
     "crawl": "采集",
     "updater": "桌面更新",
+    "meeting": "会议录音",
 }
 
 

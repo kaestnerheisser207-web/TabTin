@@ -1,7 +1,10 @@
+import { MEETING_ARCHIVE_SCHEMA_VERSION } from '../../shared/meeting-recording-contract';
+import { randomUUID } from 'node:crypto';
+
 import type {
   AppendMeetingAudioChunkInput,
   AppendMeetingPcmChunkInput,
-  MeetingArchiveManifestV1,
+  MeetingArchiveManifestV2,
   MeetingArchiveScope,
   MeetingMediaProbeResult,
   MeetingMediaProbeInput,
@@ -20,15 +23,104 @@ import type {
   SwitchMeetingSystemAudioInput,
 } from '../../shared/meeting-recording-contract';
 import { MeetingArchiveStore } from './MeetingArchiveStore';
+import type { MeetingAudioUploader } from './MeetingAudioUploader';
 import type { MeetingCaptureHost } from './MeetingCaptureWindow';
-import type {
-  MeetingServerSync,
-  MeetingSyncFlushResult,
-  MeetingTranscriptSegmentInput,
+import {
+  MeetingServerRequestError,
+  type MeetingServerSync,
+  type MeetingSyncFlushResult,
+  type MeetingServerSession,
+  type MeetingTranscriptSegmentInput,
 } from './MeetingServerSync';
 
 const ACTIVE_STATES = new Set(['preparing', 'recording'] as const);
 const DEFAULT_SOURCE_SWITCH_TIMEOUT_MS = 10_000;
+
+function readString(value: unknown, fallback = ''): string {
+  return typeof value === 'string' ? value : fallback;
+}
+
+function readNumber(value: unknown, fallback = 0): number {
+  return typeof value === 'number' && Number.isFinite(value) ? value : fallback;
+}
+
+function serverSessionManifest(
+  session: MeetingServerSession,
+  userId: string,
+): MeetingArchiveManifestV2 {
+  const tracks = Array.isArray(session.tracks) ? session.tracks : [];
+  const buildTrack = (source: 'local' | 'remote') => {
+    const remote = tracks.find(
+      (value) =>
+        value !== null &&
+        typeof value === 'object' &&
+        (value as Record<string, unknown>).source === source,
+    ) as Record<string, unknown> | undefined;
+    return {
+      source,
+      status: (readString(remote?.capture_status, 'pending') || 'pending') as
+        MeetingArchiveManifestV2['tracks']['local']['status'],
+      nextSequence: 0,
+      durationMs: readNumber(remote?.duration_ms),
+      bytes: readNumber(remote?.file_size),
+      sampleRate: readNumber(remote?.sample_rate),
+      channelCount: readNumber(remote?.channel_count),
+      codec: readString(remote?.codec),
+      container: readString(remote?.container),
+      lastCheckpointAt: remote?.last_checkpoint_at
+        ? String(remote.last_checkpoint_at)
+        : null,
+      finalizedRelativePath: null,
+      contentHash: readString(remote?.content_hash),
+      storageStatus: (readString(remote?.storage_status, 'local_only') ||
+        'local_only') as MeetingArchiveManifestV2['tracks']['local']['storageStatus'],
+      fileRecordId: remote?.file_record_id
+        ? String(remote.file_record_id)
+        : null,
+      objectKey: '',
+      uploadError: '',
+      uploadAttempts: 0,
+      lastUploadAttemptAt: null,
+      errorCode: readString(remote?.error_code),
+      errorMessage: readString(remote?.error_message),
+    };
+  };
+  const createdAt = readString(session.created_at, new Date(0).toISOString());
+  return {
+    schemaVersion: MEETING_ARCHIVE_SCHEMA_VERSION,
+    sessionId: session.id,
+    organizationId: readString(session.organization_id),
+    userId,
+    projectId: session.project_id ? String(session.project_id) : null,
+    projectName: readString(session.project_name),
+    title: readString(session.title, '未命名会议'),
+    brief: readString(session.brief),
+    consentConfirmedAt: readString(session.consent_confirmed_at),
+    microphoneDeviceId: '',
+    microphoneDeviceLabel: '',
+    systemAudioSourceId: '',
+    systemAudioSourceLabel: '',
+    copilotInitiallyEnabled: session.copilot_initially_enabled === true,
+    copilotEnabled: session.copilot_enabled === true,
+    transcriptionStatus: 'idle',
+    transcriptRevision: 0,
+    transcriptFinalCount: 0,
+    transcriptRunId: '',
+    transcriptionError: '',
+    lifecycleStatus: (readString(session.lifecycle_status, 'stopped') ||
+      'stopped') as MeetingArchiveManifestV2['lifecycleStatus'],
+    createdAt,
+    startedAt: session.started_at ? String(session.started_at) : null,
+    endedAt: session.ended_at ? String(session.ended_at) : null,
+    durationMs: readNumber(session.duration_ms),
+    serverSyncStatus: 'synced',
+    serverSyncError: '',
+    tracks: {
+      local: buildTrack('local'),
+      remote: buildTrack('remote'),
+    },
+  };
+}
 
 export interface MeetingRecordingManagerOptions {
   archiveStore?: MeetingArchiveStore;
@@ -38,11 +130,12 @@ export interface MeetingRecordingManagerOptions {
     scope: MeetingArchiveScope;
     onTranscript: (checkpoint: MeetingTranscriptCheckpoint) => Promise<void>;
     onStatus: (
-      status: MeetingArchiveManifestV1['transcriptionStatus'],
+      status: MeetingArchiveManifestV2['transcriptionStatus'],
       errorMessage?: string,
     ) => Promise<MeetingRecordingStatus>;
   }) => MeetingAsrRuntime;
   serverSync?: MeetingServerSync;
+  audioUploader?: MeetingAudioUploader;
   sourceSwitchTimeoutMs?: number;
 }
 
@@ -61,9 +154,10 @@ export class MeetingRecordingManager {
   private readonly captureHost?: MeetingCaptureHost;
   private readonly createAsrRuntime?: MeetingRecordingManagerOptions['createAsrRuntime'];
   private readonly serverSync?: MeetingServerSync;
+  private readonly audioUploader?: MeetingAudioUploader;
   private readonly sourceSwitchTimeoutMs: number;
   private activeScope: MeetingArchiveScope | null = null;
-  private activeManifest: MeetingArchiveManifestV1 | null = null;
+  private activeManifest: MeetingArchiveManifestV2 | null = null;
   private operationChain: Promise<unknown> = Promise.resolve();
   private stopPromise: Promise<MeetingRecordingStatus> | null = null;
   private activeAsrRuntime: MeetingAsrRuntime | null = null;
@@ -71,6 +165,7 @@ export class MeetingRecordingManager {
     string,
     MeetingTranscriptSegmentInput
   >();
+  private readonly uploadTasks = new Map<string, Promise<void>>();
   private transcriptSyncTimer: ReturnType<typeof setTimeout> | null = null;
 
   constructor(options: MeetingRecordingManagerOptions = {}) {
@@ -79,6 +174,7 @@ export class MeetingRecordingManager {
     this.captureHost = options.captureHost;
     this.createAsrRuntime = options.createAsrRuntime;
     this.serverSync = options.serverSync;
+    this.audioUploader = options.audioUploader;
     this.sourceSwitchTimeoutMs =
       options.sourceSwitchTimeoutMs ?? DEFAULT_SOURCE_SWITCH_TIMEOUT_MS;
   }
@@ -146,7 +242,7 @@ export class MeetingRecordingManager {
   }
 
   private checkpointServerTrack(
-    manifest: MeetingArchiveManifestV1,
+    manifest: MeetingArchiveManifestV2,
     source: 'local' | 'remote',
   ): void {
     if (!this.serverSync) return;
@@ -170,7 +266,161 @@ export class MeetingRecordingManager {
       durationMs: track.durationMs,
       fileSize: track.bytes,
       contentHash: track.contentHash,
+      storageStatus:
+        track.fileRecordId || track.storageStatus === 'synced'
+          ? 'synced'
+          : track.storageStatus === 'deleted'
+            ? 'deleted'
+            : track.storageStatus === 'uploading' ||
+                track.storageStatus === 'confirming'
+              ? 'uploading'
+              : 'local_only',
+      fileRecordId: track.fileRecordId,
     });
+  }
+
+  private updateActiveManifest(manifest: MeetingArchiveManifestV2): void {
+    if (this.activeManifest?.sessionId !== manifest.sessionId) return;
+    this.activeManifest = manifest;
+    this.emitStatus();
+  }
+
+  private async uploadFinalizedTracks(scope: MeetingArchiveScope): Promise<void> {
+    const existing = this.uploadTasks.get(scope.sessionId);
+    if (existing) return existing;
+    const task = this.performFinalizedTrackUploads(scope);
+    this.uploadTasks.set(scope.sessionId, task);
+    try {
+      await task;
+    } finally {
+      if (this.uploadTasks.get(scope.sessionId) === task) {
+        this.uploadTasks.delete(scope.sessionId);
+      }
+    }
+  }
+
+  private async performFinalizedTrackUploads(
+    scope: MeetingArchiveScope,
+  ): Promise<void> {
+    if (!this.audioUploader) return;
+    let manifest = await this.archiveStore.readManifest(scope);
+    for (const source of ['local', 'remote'] as const) {
+      let track = manifest.tracks[source];
+      if (
+        !track.finalizedRelativePath ||
+        track.bytes <= 0 ||
+        track.storageStatus === 'synced' ||
+        track.storageStatus === 'deleted'
+      ) {
+        continue;
+      }
+      const filePath = this.archiveStore.resolveSessionFile(
+        scope,
+        track.finalizedRelativePath,
+      );
+      const common = {
+        sessionId: scope.sessionId,
+        organizationId: scope.organizationId,
+        source,
+        fileName: track.finalizedRelativePath,
+        fileSize: track.bytes,
+        contentType: 'audio/webm',
+        fileHash: track.contentHash || undefined,
+      };
+      let failureStatus: MeetingArchiveManifestV2['tracks']['local']['storageStatus'] =
+        'failed';
+      try {
+        let result = null;
+        if (track.objectKey && track.storageStatus === 'confirming') {
+          failureStatus = 'confirming';
+          try {
+            manifest = await this.archiveStore.updateTrackUploadState(
+              scope,
+              source,
+              {
+                storageStatus: 'confirming',
+                uploadError: '',
+                uploadAttempts: track.uploadAttempts + 1,
+                lastUploadAttemptAt: new Date().toISOString(),
+              },
+            );
+            this.updateActiveManifest(manifest);
+            result = await this.audioUploader.confirmTrack({
+              ...common,
+              objectKey: track.objectKey,
+            });
+          } catch (error) {
+            throw error;
+          }
+        }
+        if (!result) {
+          failureStatus = 'failed';
+          manifest = await this.archiveStore.updateTrackUploadState(
+            scope,
+            source,
+            {
+              storageStatus: 'pending',
+              uploadError: '',
+              uploadAttempts: track.uploadAttempts + 1,
+              lastUploadAttemptAt: new Date().toISOString(),
+            },
+          );
+          this.updateActiveManifest(manifest);
+          result = await this.audioUploader.uploadTrack({
+            ...common,
+            filePath,
+            onPresigned: async (objectKey) => {
+              const updated = await this.archiveStore.updateTrackUploadState(
+                scope,
+                source,
+                { storageStatus: 'uploading', objectKey, uploadError: '' },
+              );
+              this.updateActiveManifest(updated);
+            },
+            onPutCompleted: async (objectKey) => {
+              failureStatus = 'confirming';
+              const updated = await this.archiveStore.updateTrackUploadState(
+                scope,
+                source,
+                { storageStatus: 'confirming', objectKey },
+              );
+              this.updateActiveManifest(updated);
+            },
+          });
+        }
+        manifest = await this.archiveStore.updateTrackUploadState(scope, source, {
+          storageStatus: 'confirming',
+          fileRecordId: result.fileId,
+          objectKey: result.fileKey,
+          uploadError: '',
+        });
+        this.updateActiveManifest(manifest);
+        this.checkpointServerTrack(manifest, source);
+        if (!this.serverSync) {
+          throw new Error('meeting server sync is unavailable');
+        }
+        const syncResult = await this.serverSync.retrySession(scope.sessionId);
+        if (syncResult.status !== 'synced' || syncResult.pendingCount !== 0) {
+          throw new Error(
+            syncResult.failure?.message ||
+              syncResult.conflict?.message ||
+              'meeting track binding is pending',
+          );
+        }
+        manifest = await this.archiveStore.updateTrackUploadState(scope, source, {
+          storageStatus: 'synced',
+          uploadError: '',
+        });
+        this.updateActiveManifest(manifest);
+      } catch (error) {
+        manifest = await this.archiveStore.updateTrackUploadState(scope, source, {
+          storageStatus: failureStatus,
+          uploadError: error instanceof Error ? error.message : String(error),
+        });
+        this.updateActiveManifest(manifest);
+      }
+      track = manifest.tracks[source];
+    }
   }
 
   private queueTranscriptServerSync(
@@ -328,8 +578,75 @@ export class MeetingRecordingManager {
   async listArchives(
     scope: MeetingArchiveListScope,
   ): Promise<MeetingLocalArchive[]> {
-    const manifests = await this.archiveStore.listManifests(scope);
-    return manifests.map((manifest) => {
+    const localManifests = await this.archiveStore.listManifests(scope);
+    const manifestsById = new Map(
+      localManifests.map((manifest) => [manifest.sessionId, manifest]),
+    );
+    if (this.serverSync?.listSessions) {
+      let remoteSessions: MeetingServerSession[] | null = null;
+      try {
+        remoteSessions = await this.serverSync.listSessions({
+          organizationId: scope.organizationId,
+        });
+      } catch {
+        remoteSessions = null;
+      }
+      if (remoteSessions) {
+        const remoteIds = new Set(remoteSessions.map((session) => session.id));
+        for (const [sessionId, local] of manifestsById) {
+          const safelyServerBacked =
+            !['preparing', 'recording', 'interrupted'].includes(
+              local.lifecycleStatus,
+            ) &&
+            Object.values(local.tracks).every((track) =>
+              ['synced', 'deleted'].includes(track.storageStatus),
+            );
+          if (safelyServerBacked && !remoteIds.has(sessionId)) {
+            manifestsById.delete(sessionId);
+            void this.archiveStore
+              .deleteArchive({ ...scope, sessionId })
+              .catch(() => undefined);
+          }
+        }
+      }
+      for (const session of remoteSessions ?? []) {
+        const local = manifestsById.get(session.id);
+        if (!local) {
+          manifestsById.set(
+            session.id,
+            serverSessionManifest(session, scope.userId),
+          );
+          continue;
+        }
+        const hasUnsyncedLocalState =
+          ['preparing', 'recording', 'interrupted'].includes(
+            local.lifecycleStatus,
+          ) ||
+          Object.values(local.tracks).some(
+            (track) => !['synced', 'deleted'].includes(track.storageStatus),
+          );
+        if (!hasUnsyncedLocalState) {
+          const remote = serverSessionManifest(session, scope.userId);
+          manifestsById.set(session.id, {
+            ...local,
+            title: remote.title,
+            brief: remote.brief,
+            projectId: remote.projectId,
+            projectName: remote.projectName,
+            lifecycleStatus: remote.lifecycleStatus,
+            startedAt: remote.startedAt,
+            endedAt: remote.endedAt,
+            durationMs: remote.durationMs,
+            copilotEnabled: remote.copilotEnabled,
+            serverSyncStatus: 'synced',
+            serverSyncError: '',
+          });
+        }
+      }
+    }
+    return [...manifestsById.values()]
+      .sort((left, right) => right.createdAt.localeCompare(left.createdAt))
+      .map((manifest) => {
       const archiveScope = {
         ...scope,
         sessionId: manifest.sessionId,
@@ -349,17 +666,106 @@ export class MeetingRecordingManager {
         audioUrls[source] = `tabtin-file://${encoded}`;
       }
       return { manifest, audioUrls, transcript: [], copilotRecords: [] };
-    });
+      });
   }
 
   async getArchive(scope: MeetingArchiveScope): Promise<MeetingLocalArchive> {
-    const manifest = await this.archiveStore.readManifest(scope);
-    const [transcript, copilotRecords] = await Promise.all([
-      this.archiveStore.readTranscript(scope),
-      this.archiveStore.readCopilotRecords(scope),
+    const localManifest = await this.archiveStore.readManifest(scope).catch(() => null);
+    let remoteSession: MeetingServerSession | null = null;
+    if (this.serverSync?.getSession) {
+      try {
+        remoteSession = await this.serverSync.getSession(scope.sessionId);
+      } catch (error) {
+        if (
+          error instanceof MeetingServerRequestError &&
+          (error.status === 403 || error.status === 404)
+        ) {
+          const serverBacked = Boolean(
+            localManifest &&
+              Object.values(localManifest.tracks).every((track) =>
+                ['synced', 'deleted'].includes(track.storageStatus),
+              ),
+          );
+          if (serverBacked) {
+            await this.archiveStore.deleteArchive(scope).catch(() => undefined);
+            throw new Error('meeting archive not found');
+          }
+        }
+      }
+    }
+    if (!localManifest && !remoteSession) {
+      throw new Error('meeting archive not found');
+    }
+    const manifest =
+      localManifest ?? serverSessionManifest(remoteSession!, scope.userId);
+    const remoteManifest = remoteSession
+      ? serverSessionManifest(remoteSession, scope.userId)
+      : null;
+    if (localManifest && remoteManifest) {
+      for (const source of ['local', 'remote'] as const) {
+        const remoteTrack = remoteManifest.tracks[source];
+        if (remoteTrack.fileRecordId || remoteTrack.storageStatus === 'deleted') {
+          manifest.tracks[source].storageStatus = remoteTrack.storageStatus;
+          manifest.tracks[source].fileRecordId = remoteTrack.fileRecordId;
+        }
+      }
+    }
+    const [localTranscript, localCopilotRecords, remoteTranscript, remoteCopilot] = await Promise.all([
+      localManifest ? this.archiveStore.readTranscript(scope) : Promise.resolve([]),
+      localManifest
+        ? this.archiveStore.readCopilotRecords(scope)
+        : Promise.resolve([]),
+      this.serverSync?.getTranscript && remoteSession
+        ? this.serverSync.getTranscript(scope.sessionId).catch(() => null)
+        : Promise.resolve(null),
+      this.serverSync?.getCopilotAnswers && remoteSession
+        ? this.serverSync.getCopilotAnswers(scope.sessionId).catch(() => [])
+        : Promise.resolve([]),
     ]);
+    const copilotRecords =
+      localCopilotRecords.length > 0
+        ? localCopilotRecords
+        : remoteCopilot
+            .map((answer) => {
+              const result = answer.result_snapshot;
+              const questionSegmentId = readString(answer.question_segment_id);
+              if (
+                !questionSegmentId ||
+                result === null ||
+                typeof result !== 'object'
+              ) {
+                return null;
+              }
+              return {
+                questionSegmentId,
+                evaluatedAt: readString(answer.created_at, manifest.createdAt),
+                result: result as MeetingCopilotAnswerResult,
+              };
+            })
+            .filter((record): record is NonNullable<typeof record> => Boolean(record));
+    const transcript =
+      localTranscript.length > 0
+        ? localTranscript
+        : (remoteTranscript?.segments ?? []).map((segment) => ({
+            externalId: readString(segment.external_id, readString(segment.id)),
+            source: readString(segment.source, 'remote') as 'local' | 'remote',
+            speakerKey: readString(segment.speaker_key) || undefined,
+            startMs: readNumber(segment.start_ms),
+            endMs: readNumber(segment.end_ms),
+            text: readString(segment.display_text, readString(segment.raw_text)),
+            isFinal: segment.is_final !== false,
+            confidence:
+              typeof segment.confidence === 'number'
+                ? segment.confidence
+                : null,
+            recordedAt: readString(
+              segment.created_at,
+              manifest.createdAt,
+            ),
+          }));
     const audioUrls: MeetingLocalArchive['audioUrls'] = {};
     for (const source of ['local', 'remote'] as const) {
+      if (manifest.tracks[source].storageStatus === 'deleted') continue;
       const relativeName = manifest.tracks[source].finalizedRelativePath;
       if (!relativeName) continue;
       const absolutePath = this.archiveStore.resolveSessionFile(
@@ -372,7 +778,41 @@ export class MeetingRecordingManager {
         .join('/');
       audioUrls[source] = `tabtin-file://${encoded}`;
     }
+    if (
+      localManifest &&
+      remoteManifest &&
+      (['local', 'remote'] as const).every(
+        (source) => remoteManifest.tracks[source].storageStatus === 'deleted',
+      )
+    ) {
+      void this.archiveStore.deleteAudioFiles(scope).catch(() => undefined);
+    }
+    if (this.serverSync?.getTrackAudio && remoteSession) {
+      for (const source of ['local', 'remote'] as const) {
+        if (audioUrls[source]) continue;
+        const audio = await this.serverSync
+          .getTrackAudio(scope.sessionId, source)
+          .catch(() => null);
+        if (audio?.url) audioUrls[source] = audio.url;
+      }
+    }
     return { manifest, audioUrls, transcript, copilotRecords };
+  }
+
+  async deleteArchiveAudio(scope: MeetingArchiveScope): Promise<void> {
+    if (!this.serverSync?.deleteAudio) {
+      throw new Error('meeting server is unavailable');
+    }
+    await this.serverSync.deleteAudio(scope.sessionId);
+    await this.archiveStore.deleteAudioFiles(scope).catch(() => undefined);
+  }
+
+  async deleteArchive(scope: MeetingArchiveScope): Promise<void> {
+    if (!this.serverSync?.deleteSession) {
+      throw new Error('meeting server is unavailable');
+    }
+    await this.serverSync.deleteSession(scope.sessionId);
+    await this.archiveStore.deleteArchive(scope).catch(() => undefined);
   }
 
   async testMicrophone(
@@ -577,6 +1017,7 @@ export class MeetingRecordingManager {
     })();
     try {
       const status = await this.stopPromise;
+      void this.uploadFinalizedTracks(activeScope).catch(() => undefined);
       if (this.serverSync) {
         void this.serverSync
           .retrySession(activeScope.sessionId)
@@ -663,7 +1104,7 @@ export class MeetingRecordingManager {
   }
 
   async updateTranscriptionStatus(
-    status: MeetingArchiveManifestV1['transcriptionStatus'],
+    status: MeetingArchiveManifestV2['transcriptionStatus'],
     errorMessage = '',
   ): Promise<MeetingRecordingStatus> {
     return this.enqueue(async () => {
@@ -740,6 +1181,7 @@ export class MeetingRecordingManager {
       archive.transcript,
       questionSegmentId,
       this.activeManifest.copilotModelId,
+      randomUUID(),
     );
     if (result.status === 'answered' || result.status === 'no_action') {
       await this.archiveStore.appendCopilotRecord(scope, result);
@@ -748,13 +1190,25 @@ export class MeetingRecordingManager {
   }
 
   async interruptForShutdown(): Promise<void> {
+    return this.interruptActiveRecording(true);
+  }
+
+  async interruptForCaptureTermination(): Promise<void> {
+    return this.interruptActiveRecording(false);
+  }
+
+  private async interruptActiveRecording(
+    stopCaptureHost: boolean,
+  ): Promise<void> {
     if (!this.activeScope || !this.activeManifest) return;
     if (!ACTIVE_STATES.has(
       this.activeManifest.lifecycleStatus as 'preparing' | 'recording',
     )) return;
     const scope = this.activeScope;
     if (this.activeManifest.lifecycleStatus === 'recording') {
-      await this.captureHost?.stop().catch(() => undefined);
+      if (stopCaptureHost) {
+        await this.captureHost?.stop().catch(() => undefined);
+      }
       await this.activeAsrRuntime?.stop().catch(() => undefined);
       this.activeAsrRuntime = null;
     }
@@ -774,10 +1228,10 @@ export class MeetingRecordingManager {
     });
   }
 
-  async recoverInterrupted(): Promise<MeetingArchiveManifestV1[]> {
+  async recoverInterrupted(): Promise<MeetingArchiveManifestV2[]> {
     return this.enqueue(async () => {
       const recovered = await this.archiveStore.recoverInterrupted();
-      const finalized: MeetingArchiveManifestV1[] = [];
+      const finalized: MeetingArchiveManifestV2[] = [];
       for (const manifest of recovered) {
         const scope = {
           organizationId: manifest.organizationId,
@@ -790,14 +1244,55 @@ export class MeetingRecordingManager {
         });
         finalized.push(await this.archiveStore.readManifest(scope));
       }
+      const uploadCandidates = await this.archiveStore.listAllManifests();
+      for (const manifest of uploadCandidates) {
+        if (!['stopped', 'interrupted'].includes(manifest.lifecycleStatus)) continue;
+        const scope = {
+          organizationId: manifest.organizationId,
+          userId: manifest.userId,
+          sessionId: manifest.sessionId,
+        };
+        if (
+          Object.values(manifest.tracks).some(
+            (track) =>
+              Boolean(track.finalizedRelativePath) &&
+              !['synced', 'deleted'].includes(track.storageStatus),
+          )
+        ) {
+          void this.uploadFinalizedTracks(scope).catch(() => undefined);
+        }
+      }
       return finalized;
     });
   }
 
   async retryActiveServerSync(): Promise<void> {
+    await this.retryPendingUploads();
     if (!this.serverSync || !this.activeScope) return;
     const scope = this.activeScope;
     const result = await this.serverSync.retrySession(scope.sessionId);
     await this.applyServerFlushResult(scope, result);
+  }
+
+  async retryPendingUploads(): Promise<void> {
+    if (!this.audioUploader) return;
+    const manifests = await this.archiveStore.listAllManifests();
+    for (const manifest of manifests) {
+      if (!['stopped', 'interrupted'].includes(manifest.lifecycleStatus)) continue;
+      if (
+        !Object.values(manifest.tracks).some(
+          (track) =>
+            Boolean(track.finalizedRelativePath) &&
+            !['synced', 'deleted'].includes(track.storageStatus),
+        )
+      ) {
+        continue;
+      }
+      await this.uploadFinalizedTracks({
+        organizationId: manifest.organizationId,
+        userId: manifest.userId,
+        sessionId: manifest.sessionId,
+      });
+    }
   }
 }

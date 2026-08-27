@@ -842,7 +842,7 @@ class OssBatchConfirmScopeSecurityTestCase(SimpleTestCase):
         }])
         request = RequestFactory().post('/api/services/oss/confirm-upload-batch')
 
-        def check_permission(_request, organization_id):
+        def check_permission(_request, organization_id, **_scope):
             return forbidden if organization_id == 'organization-forbidden' else None
 
         with patch('apps.services.oss.api._get_user_id', return_value='user-1'), \

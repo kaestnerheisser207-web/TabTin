@@ -129,6 +129,8 @@ def _effective_is_public_for_module(module: str = '', requested_is_public: bool 
     signed upload response into an expiring persisted URL.
     """
     normalized_module = (module or '').strip()
+    if normalized_module == 'meeting':
+        return False
     if normalized_module in _LONG_LIVED_PUBLIC_MODULES:
         return True
     return bool(requested_is_public)
@@ -174,6 +176,8 @@ def _is_instant_hit_compatible_with_upload_scope(
     永久 URL 上；与强制 private + set_object_private 的目标冲突，故禁止秒传。
     """
     if not is_public and file_record.is_public:
+        if (module or "").strip() == "meeting" and (context_type or "").strip() == "meeting_track":
+            return False
         if _is_space_tabfiles_upload(module, context_type):
             return False
         if _is_tabdoc_html_upload(module=module, folder=folder, object_key=object_key):
@@ -403,7 +407,49 @@ _PRESIGN_CACHE_BUFFER_SECONDS = 600
 # PA-2: 上传接口 Organization 角色检查
 # ---------------------------------------------------------------------------
 
-def _check_upload_permission(request: HttpRequest, organization_id: str) -> dict | None:
+def _is_creator_meeting_track_upload(
+    request: HttpRequest,
+    organization_id: str,
+    *,
+    module: str = "",
+    context_type: str = "",
+    context_id: str = "",
+) -> bool:
+    if module != "meeting" or context_type != "meeting_track":
+        return False
+    try:
+        session_id, source = context_id.rsplit(":", 1)
+        session_uuid = uuid.UUID(session_id)
+    except (AttributeError, TypeError, ValueError):
+        return False
+    if source not in {"local", "remote"}:
+        return False
+    try:
+        from apps.meetings.models import MeetingSession
+
+        return MeetingSession.objects.filter(
+            id=session_uuid,
+            organization_id=organization_id,
+            created_by_id=request.auth.id,
+        ).exists()
+    except Exception:
+        logger.warning(
+            "Meeting upload scope validation failed closed: organization=%s context=%s",
+            organization_id,
+            context_id,
+            exc_info=True,
+        )
+        return False
+
+
+def _check_upload_permission(
+    request: HttpRequest,
+    organization_id: str,
+    *,
+    module: str = "",
+    context_type: str = "",
+    context_id: str = "",
+) -> dict | None:
     """检查用户是否有在指定 Organization 上传文件的权限。
 
     viewer 角色不允许上传。返回 None 表示通过，否则返回 403 错误响应。
@@ -412,7 +458,13 @@ def _check_upload_permission(request: HttpRequest, organization_id: str) -> dict
     if not organization_id:
         return None
     user_role = _get_user_role(request, organization_id)
-    if user_role == "viewer":
+    if user_role == "viewer" and not _is_creator_meeting_track_upload(
+        request,
+        organization_id,
+        module=(module or "").strip(),
+        context_type=(context_type or "").strip(),
+        context_id=(context_id or "").strip(),
+    ):
         return {
             "success": False,
             "message": "查看者无权上传文件",
@@ -2716,7 +2768,13 @@ def presign_upload(request: HttpRequest, data: PresignUploadRequest):
     if policy_err is not None:
         return policy_err
 
-    perm_err = _check_upload_permission(request, organization_id)
+    perm_err = _check_upload_permission(
+        request,
+        organization_id,
+        module=data.module or "",
+        context_type=data.context_type or "",
+        context_id=data.context_id or "",
+    )
     if perm_err is not None:
         return perm_err
     policy_err = _check_organization_resource_write_policy(organization_id)
@@ -2932,9 +2990,16 @@ def presign_upload_batch(request: HttpRequest, data: PresignUploadBatchRequest):
     if policy_err is not None:
         return policy_err
 
-    perm_err = _check_upload_permission(request, organization_id)
-    if perm_err is not None:
-        return perm_err
+    for item in data.files:
+        perm_err = _check_upload_permission(
+            request,
+            organization_id,
+            module=item.module or "",
+            context_type=item.context_type or "",
+            context_id=item.context_id or "",
+        )
+        if perm_err is not None:
+            return perm_err
 
     try:
         batch_quota_decision = None
@@ -3131,7 +3196,13 @@ def confirm_upload(request: HttpRequest, data: ConfirmUploadRequest):
     user_id = _get_user_id(request)
     organization_id = _oss_resolve_organization(data.organization_id or '', request)
 
-    perm_err = _check_upload_permission(request, organization_id)
+    perm_err = _check_upload_permission(
+        request,
+        organization_id,
+        module=data.module or "",
+        context_type=data.context_type or "",
+        context_id=data.context_id or "",
+    )
     if perm_err is not None:
         return perm_err
     policy_err = _check_organization_resource_write_policy(organization_id)
@@ -3382,9 +3453,6 @@ def confirm_upload_batch(request: HttpRequest, data: ConfirmUploadBatchRequest):
     user_id = _get_user_id(request)
     default_organization_id = _oss_resolve_organization('', request)
 
-    perm_err = _check_upload_permission(request, default_organization_id)
-    if perm_err is not None:
-        return perm_err
     policy_err = _check_organization_resource_write_policy(default_organization_id)
     if policy_err is not None:
         return policy_err
@@ -3404,7 +3472,13 @@ def confirm_upload_batch(request: HttpRequest, data: ConfirmUploadBatchRequest):
         _batch_organization_sizes = defaultdict(int)
         for item in data.items:
             _ws = getattr(item, 'organization_id', None) or default_organization_id
-            perm_err = _check_upload_permission(request, _ws)
+            perm_err = _check_upload_permission(
+                request,
+                _ws,
+                module=item.module or "",
+                context_type=item.context_type or "",
+                context_id=item.context_id or "",
+            )
             if perm_err is not None:
                 return perm_err
             policy_err = _check_organization_resource_write_policy(_ws)

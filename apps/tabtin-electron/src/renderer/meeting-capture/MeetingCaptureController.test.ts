@@ -197,63 +197,57 @@ describe('MeetingCaptureController', () => {
     });
   });
 
-  it('falls back to the system default when a selected microphone disappears', async () => {
-    const fallbackMicrophone = new FakeStream(
-      true,
-      'Built-in microphone',
-      'built-in-mic',
-    );
-    const display = new FakeStream(true, 'System audio', 'display-1');
-    const getUserMedia = vi
-      .fn()
-      .mockRejectedValueOnce(
-        new DOMException('selected device disappeared', 'OverconstrainedError'),
-      )
-      .mockResolvedValueOnce(fallbackMicrophone);
-    const controller = new MeetingCaptureController({
-      mediaDevices: {
-        getUserMedia,
-        getDisplayMedia: vi.fn().mockResolvedValue(display),
-        enumerateDevices: vi.fn().mockResolvedValue([]),
-      },
-      mediaRecorderFactory: (stream, options) =>
-        new FakeRecorder(stream, options) as unknown as MediaRecorder,
-      mediaStreamFactory: (tracks) =>
-        ({ getAudioTracks: () => tracks }) as unknown as MediaStream,
-      isTypeSupported: () => true,
-      pcmCaptureFactory: () => createPcmRuntime(),
-      sink: {
-        appendAudioChunk: vi.fn().mockResolvedValue(undefined),
-        appendPcmChunk: vi.fn().mockResolvedValue(undefined),
-      },
-    });
+  it.each(['OverconstrainedError', 'NotFoundError'])(
+    'does not fall back when a selected microphone fails with %s',
+    async (errorName) => {
+      const display = new FakeStream(true, 'System audio', 'display-1');
+      const getUserMedia = vi
+        .fn()
+        .mockRejectedValue(
+          new DOMException('selected device disappeared', errorName),
+        );
+      const controller = new MeetingCaptureController({
+        mediaDevices: {
+          getUserMedia,
+          getDisplayMedia: vi.fn().mockResolvedValue(display),
+          enumerateDevices: vi.fn().mockResolvedValue([]),
+        },
+        mediaRecorderFactory: (stream, options) =>
+          new FakeRecorder(stream, options) as unknown as MediaRecorder,
+        mediaStreamFactory: (tracks) =>
+          ({ getAudioTracks: () => tracks }) as unknown as MediaStream,
+        isTypeSupported: () => true,
+        pcmCaptureFactory: () => createPcmRuntime(),
+        sink: {
+          appendAudioChunk: vi.fn().mockResolvedValue(undefined),
+          appendPcmChunk: vi.fn().mockResolvedValue(undefined),
+        },
+      });
 
-    const selections = await controller.start({
-      scope: {
-        organizationId: 'org-1',
-        userId: 'user-1',
-        sessionId: 'session-1',
-      },
-      microphoneDeviceId: 'continuity-phone-mic',
-    });
+      await expect(
+        controller.start({
+          scope: {
+            organizationId: 'org-1',
+            userId: 'user-1',
+            sessionId: 'session-1',
+          },
+          microphoneDeviceId: 'continuity-phone-mic',
+        }),
+      ).rejects.toThrow(
+        `microphone capture failed: ${errorName}: selected device disappeared`,
+      );
 
-    expect(getUserMedia).toHaveBeenNthCalledWith(1, {
-      audio: expect.objectContaining({
-        deviceId: { exact: 'continuity-phone-mic' },
-      }),
-      video: false,
-    });
-    expect(getUserMedia).toHaveBeenNthCalledWith(2, {
-      audio: expect.not.objectContaining({ deviceId: expect.anything() }),
-      video: false,
-    });
-    expect(selections[0]).toEqual({
-      source: 'local',
-      sourceId: 'built-in-mic',
-      label: 'Built-in microphone',
-    });
-    await controller.stop();
-  });
+      expect(getUserMedia).toHaveBeenNthCalledWith(1, {
+        audio: expect.objectContaining({
+          deviceId: { exact: 'continuity-phone-mic' },
+        }),
+        video: false,
+      });
+      expect(getUserMedia).toHaveBeenCalledTimes(1);
+      expect(display.audioTrack.stopped).toBe(true);
+      expect(controller.getState()).toBe('idle');
+    },
+  );
 
   it('reports microphone and system audio independently during readiness probe', async () => {
     const microphone = new FakeStream();

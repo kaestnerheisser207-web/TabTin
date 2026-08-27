@@ -6,21 +6,23 @@ import {
   CircleDot,
   Clock3,
   Download,
+  FileX2,
   FileText,
   FolderKanban,
   Headphones,
   Link2,
   ListChecks,
-  MoreHorizontal,
   Pause,
   Play,
   Search,
   Share2,
+  Trash2,
   Users,
 } from 'lucide-react';
 
 import {
   Button,
+  ConfirmDialog,
   EmptyState,
   Input,
   PanelRangeSlider,
@@ -607,9 +609,17 @@ const ResourcesTab: React.FC<{
 
 export const MeetingDetailSessionView: React.FC<{
   archive?: MeetingLocalArchive;
-}> = ({ archive }) => {
+  onDeleteAudio?: () => Promise<void>;
+  onDeleteArchive?: () => Promise<void>;
+  onDeleted?: () => void;
+}> = ({ archive, onDeleteAudio, onDeleteArchive, onDeleted }) => {
   const { t } = useTranslation('meeting');
   const manifest = archive?.manifest;
+  const [deleteTarget, setDeleteTarget] = React.useState<
+    'audio' | 'archive' | null
+  >(null);
+  const [deleting, setDeleting] = React.useState(false);
+  const [deleteError, setDeleteError] = React.useState('');
   const [resolvedProjectName, setResolvedProjectName] = React.useState(
     manifest?.projectName?.trim() || '',
   );
@@ -641,9 +651,46 @@ export const MeetingDetailSessionView: React.FC<{
         ? t('setup.projectLoading')
         : t('detail.linkedProjectUnavailable'))
     : t('detail.noLinkedProject');
+  const audioDeleted = Boolean(
+    manifest &&
+    manifest.tracks.local.storageStatus === 'deleted' &&
+    manifest.tracks.remote.storageStatus === 'deleted',
+  );
   const tracksComplete =
+    !audioDeleted &&
     manifest?.tracks.local.status === 'completed' &&
     manifest.tracks.remote.status === 'completed';
+  const openDeleteConfirmation = (target: 'audio' | 'archive'): void => {
+    setDeleteError('');
+    setDeleteTarget(target);
+  };
+  const confirmDelete = async (): Promise<void> => {
+    if (!deleteTarget || deleting) return;
+    setDeleting(true);
+    setDeleteError('');
+    try {
+      if (deleteTarget === 'audio') {
+        if (!onDeleteAudio) throw new Error(t('detail.deleteUnavailable'));
+        await onDeleteAudio();
+      } else {
+        if (!onDeleteArchive) throw new Error(t('detail.deleteUnavailable'));
+        await onDeleteArchive();
+        onDeleted?.();
+      }
+    } catch (error) {
+      const fallback =
+        deleteTarget === 'audio'
+          ? t('detail.deleteAudioFailed')
+          : t('detail.deleteMeetingFailed');
+      const reason = error instanceof Error ? error.message.trim() : '';
+      setDeleteError(
+        reason && reason !== fallback ? `${fallback}: ${reason}` : fallback,
+      );
+      throw error;
+    } finally {
+      setDeleting(false);
+    }
+  };
   return (
     <StandaloneModulePage
       icon={<MeetingPageIcon />}
@@ -655,7 +702,7 @@ export const MeetingDetailSessionView: React.FC<{
           : t('detail.meta')
       }
       actions={
-        <div className="flex items-center gap-2">
+        <div className="flex flex-wrap items-center justify-end gap-2">
           <Button
             type="button"
             variant="outline"
@@ -676,15 +723,34 @@ export const MeetingDetailSessionView: React.FC<{
             <Share2 className="h-4 w-4" aria-hidden />
             {t('detail.share')}
           </Button>
-          <Button
-            type="button"
-            variant="ghost"
-            size="icon"
-            disabled
-            aria-label={t('detail.more')}
-          >
-            <MoreHorizontal className="h-4 w-4" aria-hidden />
-          </Button>
+          {archive && onDeleteAudio ? (
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              disabled={deleting || audioDeleted}
+              className="gap-1.5"
+              onClick={() => openDeleteConfirmation('audio')}
+            >
+              <FileX2 className="h-4 w-4" aria-hidden />
+              {audioDeleted
+                ? t('detail.audioDeletedAction')
+                : t('detail.deleteAudio')}
+            </Button>
+          ) : null}
+          {archive && onDeleteArchive ? (
+            <Button
+              type="button"
+              variant="destructive"
+              size="sm"
+              disabled={deleting}
+              className="gap-1.5"
+              onClick={() => openDeleteConfirmation('archive')}
+            >
+              <Trash2 className="h-4 w-4" aria-hidden />
+              {t('detail.deleteMeeting')}
+            </Button>
+          ) : null}
         </div>
       }
       testId="meeting-records-detail"
@@ -694,6 +760,15 @@ export const MeetingDetailSessionView: React.FC<{
           <MeetingPreviewBanner>
             {t('detail.previewNotice')}
           </MeetingPreviewBanner>
+        ) : null}
+        {audioDeleted ? (
+          <div
+            role="status"
+            className="flex items-start gap-2 rounded-[12px] border border-foreground/[0.08] bg-foreground/[0.025] px-4 py-3 text-body text-muted-foreground"
+          >
+            <FileX2 className="mt-0.5 h-4 w-4 shrink-0" aria-hidden />
+            <span>{t('detail.audioDeletedNotice')}</span>
+          </div>
         ) : null}
         {!archive ||
         manifest?.transcriptionStatus === 'partial' ||
@@ -727,10 +802,16 @@ export const MeetingDetailSessionView: React.FC<{
               : t('detail.meetingCapability')}
           </span>
           <span className="inline-flex items-center gap-1.5">
-            <CheckCircle2 className="h-4 w-4 text-success" aria-hidden />
-            {tracksComplete || !manifest
-              ? t('detail.originalComplete')
-              : t('detail.originalIncomplete')}
+            {audioDeleted ? (
+              <FileX2 className="h-4 w-4 text-muted-foreground" aria-hidden />
+            ) : (
+              <CheckCircle2 className="h-4 w-4 text-success" aria-hidden />
+            )}
+            {audioDeleted
+              ? t('detail.audioDeletedStatus')
+              : tracksComplete || !manifest
+                ? t('detail.originalComplete')
+                : t('detail.originalIncomplete')}
           </span>
         </div>
 
@@ -788,6 +869,37 @@ export const MeetingDetailSessionView: React.FC<{
           </TabsContent>
         </TabsRoot>
       </div>
+      <ConfirmDialog
+        open={deleteTarget !== null}
+        onOpenChange={(open) => {
+          if (!open && !deleting) setDeleteTarget(null);
+        }}
+        title={
+          deleteTarget === 'audio'
+            ? t('detail.deleteAudioConfirmTitle')
+            : t('detail.deleteMeetingConfirmTitle')
+        }
+        description={
+          deleteTarget === 'audio'
+            ? t('detail.deleteAudioConfirmDescription')
+            : t('detail.deleteMeetingConfirmDescription')
+        }
+        confirmText={
+          deleteTarget === 'audio'
+            ? t('detail.deleteAudioConfirmAction')
+            : t('detail.deleteMeetingConfirmAction')
+        }
+        cancelText={t('setup.cancel')}
+        variant="destructive"
+        isLoading={deleting}
+        onConfirm={confirmDelete}
+      >
+        {deleteError ? (
+          <p role="alert" className="text-body text-destructive">
+            {deleteError}
+          </p>
+        ) : null}
+      </ConfirmDialog>
     </StandaloneModulePage>
   );
 };
