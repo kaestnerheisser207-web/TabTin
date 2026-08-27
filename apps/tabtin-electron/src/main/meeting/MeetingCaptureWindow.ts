@@ -11,6 +11,7 @@ import type {
   MeetingMicrophoneTestResult,
   MeetingSystemAudioSource,
 } from '../../shared/meeting-recording-contract';
+import { registerTabtinFileProtocol } from '../file-system/protocol';
 import { installDisplayMediaHandlers } from '../services/display-media';
 
 const CAPTURE_PARTITION = 'persist:tabtin:meeting-capture';
@@ -72,6 +73,7 @@ export class MeetingCaptureWindow implements MeetingCaptureHost {
   private installCapturePolicy(): void {
     if (this.capturePolicyInstalled) return;
     const captureSession = session.fromPartition(CAPTURE_PARTITION);
+    registerTabtinFileProtocol(captureSession);
     installDisplayMediaHandlers({
       targetSession: captureSession,
       rendererUrl: this.rendererUrl,
