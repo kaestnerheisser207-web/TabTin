@@ -62,16 +62,12 @@ describe('MeetingRecordingManager', () => {
         label: 'System audio (main display)',
       },
     ]),
-    pause: vi.fn().mockResolvedValue(undefined),
-    resume: vi.fn().mockResolvedValue(undefined),
     stop: vi.fn().mockResolvedValue(undefined),
     destroy: vi.fn(),
   };
   const asrRuntime = {
     start: vi.fn().mockResolvedValue(undefined),
     appendPcm: vi.fn(),
-    pause: vi.fn(),
-    resume: vi.fn(),
     stop: vi.fn().mockResolvedValue(undefined),
   };
   const createAsrRuntime = vi.fn(() => asrRuntime);
@@ -89,8 +85,6 @@ describe('MeetingRecordingManager', () => {
       'switchMicrophone',
       'switchSystemAudio',
       'start',
-      'pause',
-      'resume',
       'stop',
       'destroy',
     ] as const) {
@@ -100,8 +94,6 @@ describe('MeetingRecordingManager', () => {
     for (const method of [
       'start',
       'appendPcm',
-      'pause',
-      'resume',
       'stop',
     ] as const) {
       asrRuntime[method].mockClear();
@@ -123,7 +115,7 @@ describe('MeetingRecordingManager', () => {
     await fs.rm(rootPath, { recursive: true, force: true });
   });
 
-  it('owns the prepare, start, pause, resume, and stop lifecycle', async () => {
+  it('owns the prepare, start, and stop lifecycle', async () => {
     expect(
       (
         await manager.prepare({
@@ -139,25 +131,15 @@ describe('MeetingRecordingManager', () => {
       microphoneDeviceId: 'built-in-mic',
       microphoneDeviceLabel: 'Built-in microphone',
     });
-    expect((await manager.pause(scope)).manifest?.lifecycleStatus).toBe(
-      'paused',
-    );
-    expect((await manager.resume(scope)).manifest?.lifecycleStatus).toBe(
-      'recording',
-    );
     const stopped = await manager.stop(scope);
     expect(stopped.active).toBe(false);
     expect(stopped.manifest?.lifecycleStatus).toBe('stopped');
-    expect(onStatusChanged).toHaveBeenCalledTimes(5);
+    expect(onStatusChanged).toHaveBeenCalledTimes(3);
     expect(captureHost.start).toHaveBeenCalledWith(scope, {
       microphoneDeviceId: 'default',
     });
-    expect(captureHost.pause).toHaveBeenCalledTimes(1);
-    expect(captureHost.resume).toHaveBeenCalledTimes(1);
     expect(captureHost.stop).toHaveBeenCalledTimes(1);
     expect(asrRuntime.start).toHaveBeenCalledTimes(1);
-    expect(asrRuntime.pause).toHaveBeenCalledTimes(1);
-    expect(asrRuntime.resume).toHaveBeenCalledTimes(1);
     expect(asrRuntime.stop).toHaveBeenCalledTimes(1);
   });
 
@@ -224,10 +206,12 @@ describe('MeetingRecordingManager', () => {
     await expect(
       manager.switchMicrophone({ ...scope, deviceId: 'mic-hung' }),
     ).rejects.toThrow('meeting capture source switch timed out');
-    await expect(manager.pause(scope)).resolves.toMatchObject({
-      manifest: { lifecycleStatus: 'paused' },
+    await expect(
+      manager.switchSystemAudio({ ...scope, sourceId: 'main-display' }),
+    ).resolves.toMatchObject({
+      manifest: { lifecycleStatus: 'recording' },
     });
-    expect(captureHost.pause).toHaveBeenCalledTimes(1);
+    expect(captureHost.switchSystemAudio).toHaveBeenCalledTimes(1);
   });
 
   it('rejects a second active meeting', async () => {
@@ -266,10 +250,6 @@ describe('MeetingRecordingManager', () => {
     await manager.start(scope);
     await expect(manager.appendAudioChunk(input)).resolves.toMatchObject({
       manifest: { tracks: { local: { bytes: 2 } } },
-    });
-    await manager.pause(scope);
-    await expect(manager.appendAudioChunk(input)).resolves.toMatchObject({
-      manifest: { tracks: { local: { bytes: 4 } } },
     });
   });
 
@@ -532,8 +512,8 @@ describe('MeetingRecordingManager', () => {
       '',
     );
 
-    await expect(syncManager.pause(scope)).resolves.toMatchObject({
-      manifest: { lifecycleStatus: 'paused' },
+    await expect(syncManager.stop(scope)).resolves.toMatchObject({
+      manifest: { lifecycleStatus: 'stopped' },
     });
     resolveAnswer({
       status: 'failed',
@@ -543,6 +523,5 @@ describe('MeetingRecordingManager', () => {
       status: 'failed',
       message: 'model timeout',
     });
-    await syncManager.stop(scope);
   });
 });

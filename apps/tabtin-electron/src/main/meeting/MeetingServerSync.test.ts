@@ -256,12 +256,12 @@ describe('MeetingServerSync', () => {
         jsonResponse({
           id: 'session-1',
           version: 8,
-          lifecycle_status: 'paused',
+          lifecycle_status: 'stopped',
         }),
       );
     const sync = createSync({ fetch: fetchImpl });
     sync.updateLifecycle('session-1', {
-      status: 'paused',
+      status: 'stopped',
       durationMs: 8_000,
     });
 
@@ -272,7 +272,7 @@ describe('MeetingServerSync', () => {
     });
     expect((fetchImpl.mock.calls[0][1] as RequestInit).method).toBe('GET');
     expect(requestBody(fetchImpl.mock.calls[1])).toEqual({
-      status: 'paused',
+      status: 'stopped',
       duration_ms: 8_000,
       expected_version: 7,
     });
@@ -353,7 +353,7 @@ describe('MeetingServerSync', () => {
       operationIds: ['lifecycle-1'],
     });
     sync.updateLifecycle('session-1', {
-      status: 'paused',
+      status: 'stopped',
       durationMs: 5_000,
       expectedVersion: 2,
     });
@@ -376,7 +376,7 @@ describe('MeetingServerSync', () => {
       },
     });
     expect(requestBody(fetchImpl.mock.calls[0])).toEqual({
-      status: 'paused',
+      status: 'stopped',
       duration_ms: 5_000,
       expected_version: 2,
     });

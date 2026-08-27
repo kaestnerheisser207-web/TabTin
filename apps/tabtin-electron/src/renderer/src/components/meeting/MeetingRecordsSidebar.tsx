@@ -18,7 +18,10 @@ import {
   SIDEBAR_MENU_ICON_STROKE,
   SIDEBAR_ROW_LIST,
 } from '@components/layout/sidebarUi';
-import { useMeetingViewNavigation } from './meetingViewNavigation';
+import {
+  resolveContinuableMeetingSessionId,
+  useMeetingViewNavigation,
+} from './meetingViewNavigation';
 import { useAuthStore } from '@stores/useAuthStore';
 import { useOrganizationStore } from '@stores/useOrganizationStore';
 
@@ -78,17 +81,13 @@ export const MeetingRecordsSidebar: React.FC = () => {
       .getStatus()
       .then((status) => {
         if (!cancelled) {
-          setActiveSessionId(
-            status.active ? (status.manifest?.sessionId ?? null) : null,
-          );
+          setActiveSessionId(resolveContinuableMeetingSessionId(status));
         }
       })
       .catch(() => undefined);
     const unsubscribe = bridge.onStatusChanged((status) => {
       if (cancelled) return;
-      setActiveSessionId(
-        status.active ? (status.manifest?.sessionId ?? null) : null,
-      );
+      setActiveSessionId(resolveContinuableMeetingSessionId(status));
     });
     return () => {
       cancelled = true;
@@ -97,7 +96,7 @@ export const MeetingRecordsSidebar: React.FC = () => {
   }, [organizationId, userId]);
 
   const libraryActive = view.kind === 'library';
-  const setupActive = view.kind === 'setup';
+  const setupActive = view.kind === 'setup' && !activeSessionId;
   const liveActive =
     view.kind === 'session' && view.sessionId === activeSessionId;
 
@@ -118,16 +117,16 @@ export const MeetingRecordsSidebar: React.FC = () => {
           Icon={Plus}
           label={t('sidebar.setup')}
           onClick={openSetup}
+          disabled={Boolean(activeSessionId)}
         />
-        <MeetingSidebarItem
-          active={liveActive}
-          Icon={CircleDot}
-          label={t('sidebar.live')}
-          onClick={() => {
-            if (activeSessionId) openSession(activeSessionId);
-          }}
-          disabled={!activeSessionId}
-        />
+        {activeSessionId ? (
+          <MeetingSidebarItem
+            active={liveActive}
+            Icon={CircleDot}
+            label={t('sidebar.live')}
+            onClick={() => openSession(activeSessionId)}
+          />
+        ) : null}
       </nav>
     </div>
   );

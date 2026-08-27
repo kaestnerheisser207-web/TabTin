@@ -32,6 +32,7 @@
   "library": {
     "description": "記錄、回顧並整理會議中實際發生的內容。",
     "start": "開始記錄",
+    "continue": "返回正在進行的記錄",
     "searchPlaceholder": "搜尋標題、與會者或逐字稿…",
     "searchLabel": "搜尋會議記錄",
     "filter": "篩選",
@@ -43,6 +44,7 @@
   },
   "setup": {
     "title": "準備新記錄",
+    "activeMeetingConflict": "已有一筆記錄正在進行，請先繼續或結束該記錄",
     "description": "確認記錄資訊、兩路音訊與 Meeting Copilot 的準備狀態。",
     "basicInfo": "基本資訊",
     "recordOnlyDescription": "這裡只會建立一份記錄，不會發起、加入或控制外部會議。",
@@ -137,8 +139,6 @@
     "reconnectSystemAudio": "重新連接系統音訊",
     "sourceSwitchFailed": "切換音訊來源失敗",
     "sourceSwitchTimedOut": "切換音訊來源逾時，請重試",
-    "pause": "暫停",
-    "resume": "繼續",
     "runtimeDescription": "正在記錄 {{duration}} · 音訊持續寫入本機恢復點",
     "transcriptPending": "即時轉寫尚未連線；原始音訊繼續保存",
     "runtimeTranscriptEmpty": "即時轉寫尚未連線。本機與系統原始音訊正分別保存，接入或恢復轉寫後，真實內容會顯示在這裡。",
@@ -146,7 +146,6 @@
     "trackStatus": {
       "pending": "準備中",
       "active": "錄製中",
-      "paused": "已暫停",
       "completed": "完整",
       "interrupted": "已中斷",
       "failed": "失敗",

@@ -22,9 +22,10 @@ function formatDuration(durationMs: number): string {
 }
 
 export const MeetingLibraryView: React.FC<{
+  activeSessionId?: string | null;
   onStart: () => void;
   onOpen: (sessionId: string) => void;
-}> = ({ onStart, onOpen }) => {
+}> = ({ activeSessionId = null, onStart, onOpen }) => {
   const { t } = useTranslation('meeting');
   const [search, setSearch] = React.useState('');
   const [archives, setArchives] = React.useState<MeetingLocalArchive[]>([]);
@@ -75,7 +76,7 @@ export const MeetingLibraryView: React.FC<{
       actions={
         <Button type="button" size="sm" className="gap-2" onClick={onStart}>
           <Mic2 className="h-4 w-4" aria-hidden />
-          {t('library.start')}
+          {activeSessionId ? t('library.continue') : t('library.start')}
         </Button>
       }
       testId="meeting-records-library"
@@ -125,7 +126,9 @@ export const MeetingLibraryView: React.FC<{
               action={
                 !loading && !search.trim() ? (
                   <Button type="button" size="sm" onClick={onStart}>
-                    {t('library.start')}
+                    {activeSessionId
+                      ? t('library.continue')
+                      : t('library.start')}
                   </Button>
                 ) : undefined
               }

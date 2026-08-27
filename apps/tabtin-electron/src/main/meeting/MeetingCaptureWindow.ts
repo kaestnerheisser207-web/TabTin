@@ -24,8 +24,6 @@ type CaptureMethod =
   | 'switchMicrophone'
   | 'switchSystemAudio'
   | 'start'
-  | 'pause'
-  | 'resume'
   | 'stop'
   | 'getState';
 
@@ -42,8 +40,6 @@ export interface MeetingCaptureHost {
     scope: MeetingArchiveScope,
     options?: { microphoneDeviceId?: string },
   ): Promise<MeetingCaptureSourceSelection[]>;
-  pause(): Promise<void>;
-  resume(): Promise<void>;
   stop(): Promise<void>;
   destroy(): void;
 }
@@ -185,14 +181,6 @@ export class MeetingCaptureWindow implements MeetingCaptureHost {
     return (await this.invoke('switchSystemAudio', {
       sourceId,
     })) as MeetingCaptureSourceSelection;
-  }
-
-  async pause(): Promise<void> {
-    await this.invoke('pause');
-  }
-
-  async resume(): Promise<void> {
-    await this.invoke('resume');
   }
 
   async stop(): Promise<void> {

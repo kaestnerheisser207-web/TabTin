@@ -25,6 +25,7 @@ MAX_RECENT_SEGMENTS = 12
 MAX_TRANSCRIPT_CHARS = 4_000
 MAX_PROJECT_SOURCES = 3
 MAX_SOURCE_EXCERPT_CHARS = 400
+MAX_MODEL_ATTEMPTS = 2
 
 
 class MeetingCopilotError(RuntimeError):
@@ -295,21 +296,43 @@ def generate_meeting_copilot_answer(
         for source in sources
         if source.kind == "project_resource"
     ) or "（当前没有已准备且有权访问的 Project 资料）"
-    result = llm_call(
-        scene_key="meeting_copilot_quick_answer",
-        variables={
+    call_kwargs = {
+        "scene_key": "meeting_copilot_quick_answer",
+        "variables": {
             "candidate_utterance": candidate["text"],
             "transcript_context": _transcript_context(segments),
             "brief": brief or "（未提供）",
             "project_context": project_context,
             "allowed_source_ids": list(source_map),
         },
-        user_id=str(user.id),
-        organization_id=str(session.organization_id),
-        selected_model_id=str(model.id),
-        timeout_sec=12,
-    )
-    parsed = _parse_answer(result.content, source_map)
+        "user_id": str(user.id),
+        "organization_id": str(session.organization_id),
+        "selected_model_id": str(model.id),
+        "timeout_sec": 12,
+        "result_validator": lambda content: _parse_answer(content, source_map),
+    }
+    result = None
+    parsed = None
+    for attempt in range(MAX_MODEL_ATTEMPTS):
+        try:
+            result = llm_call(**call_kwargs)
+            parsed = _parse_answer(result.content, source_map)
+            break
+        except MeetingCopilotError as exc:
+            if exc.code != "invalid_model_response" or attempt + 1 >= MAX_MODEL_ATTEMPTS:
+                raise
+            logger.info(
+                "[MeetingCopilot] retrying invalid structured response "
+                "session=%s attempt=%s",
+                session.id,
+                attempt + 1,
+            )
+
+    if result is None or parsed is None:
+        raise MeetingCopilotError(
+            "invalid_model_response",
+            "回答模型没有返回有效 JSON",
+        )
     if not parsed.pop("should_answer"):
         return {
             "status": "no_action",

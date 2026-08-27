@@ -9,6 +9,7 @@ const DEFAULT_MAX_QUEUED_CHUNKS_PER_SOURCE = 256;
 const DEFAULT_SAMPLE_RATE = 16_000;
 const START_TIMEOUT_MS = 10_000;
 const DEFAULT_STOP_GRACE_PERIOD_MS = 1_500;
+const RECOVERY_RETRY_DELAYS_MS = [1_000, 2_000, 5_000, 10_000] as const;
 
 interface GatewayResponse {
   ok: boolean;
@@ -68,7 +69,6 @@ interface SourceState {
   queue: Uint8Array[];
   timelineCursorMs: number;
   streamTimelineOffsetMs: number;
-  streamPauseAdjustmentMs: number;
 }
 
 function createSourceState(): SourceState {
@@ -78,7 +78,6 @@ function createSourceState(): SourceState {
     queue: [],
     timelineCursorMs: 0,
     streamTimelineOffsetMs: 0,
-    streamPauseAdjustmentMs: 0,
   };
 }
 
@@ -193,13 +192,23 @@ export class MeetingAsrCoordinator {
   private started = false;
   private stopped = false;
   private stopping = false;
-  private paused = false;
-  private pausedAtMs: number | null = null;
   private streamGeneration = 0;
   private startPromise: Promise<void> | null = null;
   private sinkChain: Promise<void> = Promise.resolve();
   private readonly unsubscribe: Array<() => void> = [];
   private stopDoneResolver: (() => void) | null = null;
+  private readonly recoveryAttempts: Record<MeetingAudioSource, number> = {
+    local: 0,
+    remote: 0,
+  };
+  private readonly recoveryTimers: Record<
+    MeetingAudioSource,
+    ReturnType<typeof setTimeout> | null
+  > = {
+    local: null,
+    remote: null,
+  };
+  private readonly recoveringSources = new Set<MeetingAudioSource>();
 
   constructor(options: MeetingAsrCoordinatorOptions) {
     this.gateway = options.gateway;
@@ -267,7 +276,7 @@ export class MeetingAsrCoordinator {
 
     const bytes = Uint8Array.from(pcm);
     const state = this.sources[source];
-    if (this.paused || !state.streamId) {
+    if (!state.streamId) {
       this.enqueue(state, bytes);
       return;
     }
@@ -275,27 +284,7 @@ export class MeetingAsrCoordinator {
     if (!this.sendAudio(state, bytes)) {
       state.streamId = null;
       this.enqueue(state, bytes);
-    }
-  }
-
-  pause(): void {
-    if (this.stopped) return;
-    this.paused = true;
-    this.pausedAtMs = this.now().getTime();
-  }
-
-  resume(): void {
-    if (this.stopped || !this.paused) return;
-    const pausedDurationMs = Math.max(
-      0,
-      this.now().getTime() - (this.pausedAtMs ?? this.now().getTime()),
-    );
-    this.paused = false;
-    this.pausedAtMs = null;
-    for (const source of AUDIO_SOURCES) {
-      this.sources[source].timelineCursorMs += pausedDurationMs;
-      this.sources[source].streamPauseAdjustmentMs += pausedDurationMs;
-      this.flushQueue(this.sources[source]);
+      this.restartSource(source);
     }
   }
 
@@ -307,8 +296,8 @@ export class MeetingAsrCoordinator {
 
     this.stopping = true;
     this.started = false;
-    this.paused = true;
     this.streamGeneration += 1;
+    this.clearRecoveryTimers();
     const activeStreamIds = AUDIO_SOURCES.flatMap((source) => {
       const streamId = this.sources[source].streamId;
       return streamId ? [streamId] : [];
@@ -433,41 +422,92 @@ export class MeetingAsrCoordinator {
     state.streamId = streamId;
     state.streamOrdinal += 1;
     state.streamTimelineOffsetMs = state.timelineCursorMs;
-    state.streamPauseAdjustmentMs = 0;
-    this.flushQueue(state);
+    if (!this.flushQueue(state)) {
+      this.gateway.send(
+        'asr.stream.stop',
+        { stream_id: streamId },
+        this.requestOptions,
+      );
+      throw new Error('realtime transcription audio send failed');
+    }
   }
 
   private restartStreamsAfterReconnect(): void {
     if (this.stopped || !this.started) return;
 
-    const generation = ++this.streamGeneration;
+    this.streamGeneration += 1;
+    this.clearRecoveryTimers();
     this.onStatusChange?.('recovering');
     for (const source of AUDIO_SOURCES) {
       this.sources[source].streamId = null;
+      this.recoveryAttempts[source] = 0;
+      this.restartSource(source);
     }
-    void Promise.all(
-      AUDIO_SOURCES.map((source) => this.createStream(source, generation)),
-    )
-      .then(() => this.onStatusChange?.('active'))
-      .catch((error) =>
-        this.onStatusChange?.(
-          'failed',
-          error instanceof Error ? error.message : String(error),
-        ),
-      );
   }
 
   private restartSource(source: MeetingAudioSource): void {
-    if (this.stopped || this.stopping || !this.started) return;
+    if (
+      this.stopped ||
+      this.stopping ||
+      !this.started ||
+      this.recoveringSources.has(source) ||
+      this.recoveryTimers[source]
+    ) {
+      return;
+    }
     const generation = this.streamGeneration;
+    this.recoveringSources.add(source);
     void this.createStream(source, generation)
-      .then(() => this.onStatusChange?.('active'))
-      .catch((error) =>
+      .then(() => {
+        this.recoveryAttempts[source] = 0;
+        if (AUDIO_SOURCES.every((candidate) => this.sources[candidate].streamId)) {
+          this.onStatusChange?.('active');
+        }
+      })
+      .catch((error) => {
+        if (this.stopped || this.stopping || generation !== this.streamGeneration) {
+          return;
+        }
         this.onStatusChange?.(
-          'failed',
+          'recovering',
           error instanceof Error ? error.message : String(error),
-        ),
-      );
+        );
+        this.scheduleSourceRecovery(source);
+      })
+      .finally(() => {
+        this.recoveringSources.delete(source);
+        if (
+          !this.stopped &&
+          !this.stopping &&
+          this.started &&
+          !this.sources[source].streamId &&
+          !this.recoveryTimers[source]
+        ) {
+          this.restartSource(source);
+        }
+      });
+  }
+
+  private scheduleSourceRecovery(source: MeetingAudioSource): void {
+    if (this.stopped || this.stopping || this.recoveryTimers[source]) return;
+    const attempt = this.recoveryAttempts[source];
+    const delay =
+      RECOVERY_RETRY_DELAYS_MS[
+        Math.min(attempt, RECOVERY_RETRY_DELAYS_MS.length - 1)
+      ];
+    this.recoveryAttempts[source] = attempt + 1;
+    this.recoveryTimers[source] = setTimeout(() => {
+      this.recoveryTimers[source] = null;
+      this.restartSource(source);
+    }, delay);
+  }
+
+  private clearRecoveryTimers(): void {
+    for (const source of AUDIO_SOURCES) {
+      const timer = this.recoveryTimers[source];
+      if (timer) clearTimeout(timer);
+      this.recoveryTimers[source] = null;
+    }
   }
 
   private resolveStopWhenStreamsFinish(): void {
@@ -490,16 +530,18 @@ export class MeetingAsrCoordinator {
     state.queue.push(bytes);
   }
 
-  private flushQueue(state: SourceState): void {
-    if (this.paused || !state.streamId) return;
+  private flushQueue(state: SourceState): boolean {
+    if (!state.streamId) return false;
 
     while (state.queue.length > 0 && state.streamId) {
       const bytes = state.queue.shift()!;
       if (!this.sendAudio(state, bytes)) {
         state.queue.unshift(bytes);
         state.streamId = null;
+        return false;
       }
     }
+    return true;
   }
 
   private sendAudio(state: SourceState, bytes: Uint8Array): boolean {
@@ -547,15 +589,12 @@ export class MeetingAsrCoordinator {
 
       const relativeStartMs = Math.max(0, toFiniteNumber(data.startTime, 0));
       const startMs = Math.round(
-        state.streamTimelineOffsetMs +
-          state.streamPauseAdjustmentMs +
-          relativeStartMs,
+        state.streamTimelineOffsetMs + relativeStartMs,
       );
       const endMs = Math.max(
         startMs,
         Math.round(
           state.streamTimelineOffsetMs +
-            state.streamPauseAdjustmentMs +
             toFiniteNumber(data.endTime, relativeStartMs),
         ),
       );
@@ -583,7 +622,7 @@ export class MeetingAsrCoordinator {
       toFiniteNumber(audioInfo.duration, 0),
     );
     const startMs = Math.round(
-      state.streamTimelineOffsetMs + state.streamPauseAdjustmentMs,
+      state.streamTimelineOffsetMs,
     );
     const durationMs = Math.round(startMs + relativeDurationMs);
     this.emitCheckpoint({
@@ -604,6 +643,8 @@ export class MeetingAsrCoordinator {
   }
 
   private disposeStreamsAndListeners(sendStop = true): void {
+    this.clearRecoveryTimers();
+    this.recoveringSources.clear();
     for (const source of AUDIO_SOURCES) {
       const state = this.sources[source];
       if (sendStop && state.streamId) {

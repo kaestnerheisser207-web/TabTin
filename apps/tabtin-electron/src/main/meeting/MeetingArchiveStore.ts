@@ -21,7 +21,6 @@ const SAFE_SEGMENT = /^[A-Za-z0-9_][A-Za-z0-9._@-]*$/;
 const INTERRUPTIBLE_STATES = new Set<MeetingArchiveLifecycleStatus>([
   'preparing',
   'recording',
-  'paused',
 ]);
 
 function requireSafeSegment(value: string, label: string): string {
@@ -388,8 +387,7 @@ export class MeetingArchiveStore {
       }
 
       const checkpointAt = this.now().toISOString();
-      track.status =
-        manifest.lifecycleStatus === 'paused' ? 'paused' : 'active';
+      track.status = 'active';
       track.nextSequence += 1;
       track.durationMs += input.durationMs;
       track.bytes += input.bytes.byteLength;
@@ -634,7 +632,6 @@ export class MeetingArchiveStore {
       }
       for (const track of Object.values(manifest.tracks)) {
         if (lifecycleStatus === 'recording') track.status = 'active';
-        if (lifecycleStatus === 'paused') track.status = 'paused';
         if (lifecycleStatus === 'stopped' && track.status !== 'failed') {
           track.status = track.bytes > 0 ? 'completed' : 'missing';
         }

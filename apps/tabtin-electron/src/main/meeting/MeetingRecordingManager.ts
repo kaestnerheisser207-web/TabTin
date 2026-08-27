@@ -27,7 +27,7 @@ import type {
   MeetingTranscriptSegmentInput,
 } from './MeetingServerSync';
 
-const ACTIVE_STATES = new Set(['preparing', 'recording', 'paused'] as const);
+const ACTIVE_STATES = new Set(['preparing', 'recording'] as const);
 const DEFAULT_SOURCE_SWITCH_TIMEOUT_MS = 10_000;
 
 export interface MeetingRecordingManagerOptions {
@@ -52,8 +52,6 @@ export interface MeetingAsrRuntime {
     source: AppendMeetingPcmChunkInput['source'],
     bytes: Uint8Array,
   ): void;
-  pause(): void;
-  resume(): void;
   stop(): Promise<void>;
 }
 
@@ -233,7 +231,6 @@ export class MeetingRecordingManager {
           this.activeManifest.lifecycleStatus as
             | 'preparing'
             | 'recording'
-            | 'paused',
         ),
       ),
       manifest: this.activeManifest,
@@ -273,7 +270,7 @@ export class MeetingRecordingManager {
     return this.enqueue(async () => {
       const scope = this.requireActiveScope(input);
       if (
-        !['recording', 'paused'].includes(this.activeManifest!.lifecycleStatus)
+        this.activeManifest!.lifecycleStatus !== 'recording'
       ) {
         throw new Error(
           'microphone can only change during an active recording',
@@ -303,7 +300,7 @@ export class MeetingRecordingManager {
     return this.enqueue(async () => {
       const scope = this.requireActiveScope(input);
       if (
-        !['recording', 'paused'].includes(this.activeManifest!.lifecycleStatus)
+        this.activeManifest!.lifecycleStatus !== 'recording'
       ) {
         throw new Error(
           'system audio can only change during an active recording',
@@ -393,7 +390,6 @@ export class MeetingRecordingManager {
           this.activeManifest.lifecycleStatus as
             | 'preparing'
             | 'recording'
-            | 'paused',
         ) &&
         this.activeManifest.sessionId !== input.sessionId
       ) {
@@ -509,65 +505,11 @@ export class MeetingRecordingManager {
     });
   }
 
-  async pause(scope?: MeetingArchiveScope): Promise<MeetingRecordingStatus> {
-    return this.enqueue(async () => {
-      const activeScope = this.requireActiveScope(scope);
-      if (this.activeManifest!.lifecycleStatus !== 'recording') {
-        throw new Error('meeting recording can only pause while recording');
-      }
-      await this.captureHost?.pause();
-      this.activeAsrRuntime?.pause();
-      try {
-        this.activeManifest = await this.archiveStore.updateLifecycle(
-          activeScope,
-          'paused',
-        );
-        this.serverSync?.updateLifecycle(activeScope.sessionId, {
-          status: 'paused',
-          durationMs: this.activeManifest.durationMs,
-        });
-        this.scheduleServerFlush(activeScope);
-      } catch (error) {
-        await this.captureHost?.resume().catch(() => undefined);
-        this.activeAsrRuntime?.resume();
-        throw error;
-      }
-      return this.emitStatus();
-    });
-  }
-
-  async resume(scope?: MeetingArchiveScope): Promise<MeetingRecordingStatus> {
-    return this.enqueue(async () => {
-      const activeScope = this.requireActiveScope(scope);
-      if (this.activeManifest!.lifecycleStatus !== 'paused') {
-        throw new Error('meeting recording can only resume while paused');
-      }
-      await this.captureHost?.resume();
-      this.activeAsrRuntime?.resume();
-      try {
-        this.activeManifest = await this.archiveStore.updateLifecycle(
-          activeScope,
-          'recording',
-        );
-        this.serverSync?.updateLifecycle(activeScope.sessionId, {
-          status: 'recording',
-          durationMs: this.activeManifest.durationMs,
-        });
-        this.scheduleServerFlush(activeScope);
-      } catch (error) {
-        await this.captureHost?.pause().catch(() => undefined);
-        this.activeAsrRuntime?.pause();
-        throw error;
-      }
-      return this.emitStatus();
-    });
-  }
-
   async stop(scope?: MeetingArchiveScope): Promise<MeetingRecordingStatus> {
     if (this.stopPromise) return this.stopPromise;
     const activeScope = this.requireActiveScope(scope);
     if (
-      !['recording', 'paused', 'interrupted'].includes(
+      !['recording', 'interrupted'].includes(
         this.activeManifest!.lifecycleStatus,
       )
     ) {
@@ -672,10 +614,10 @@ export class MeetingRecordingManager {
     return this.enqueue(async () => {
       this.requireActiveScope(input);
       if (
-        !['recording', 'paused'].includes(this.activeManifest!.lifecycleStatus)
+        this.activeManifest!.lifecycleStatus !== 'recording'
       ) {
         throw new Error(
-          'audio chunks are accepted only while recording or flushing a pause',
+          'audio chunks are accepted only while recording',
         );
       }
       const result = await this.archiveStore.appendAudioChunk(input);
@@ -689,12 +631,12 @@ export class MeetingRecordingManager {
   appendPcmChunk(input: AppendMeetingPcmChunkInput): void {
     this.requireActiveScope(input);
     if (
-      !['preparing', 'recording', 'paused'].includes(
+      !['preparing', 'recording'].includes(
         this.activeManifest!.lifecycleStatus,
       )
     ) {
       throw new Error(
-        'PCM chunks are accepted only while preparing, recording, or paused',
+        'PCM chunks are accepted only while preparing or recording',
       );
     }
     this.activeAsrRuntime?.appendPcm(input.source, input.bytes);
@@ -737,7 +679,7 @@ export class MeetingRecordingManager {
     return this.enqueue(async () => {
       this.requireActiveScope(scope);
       if (
-        !['preparing', 'recording', 'paused'].includes(
+        !['preparing', 'recording'].includes(
           this.activeManifest!.lifecycleStatus,
         )
       ) {

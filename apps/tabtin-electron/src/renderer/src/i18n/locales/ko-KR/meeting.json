@@ -32,6 +32,7 @@
   "library": {
     "description": "회의에서 실제로 오간 내용을 기록하고 검토하며 정리합니다.",
     "start": "기록 시작",
+    "continue": "진행 중인 기록으로 돌아가기",
     "searchPlaceholder": "제목, 참가자 또는 전사 내용 검색…",
     "searchLabel": "회의 기록 검색",
     "filter": "필터",
@@ -43,6 +44,7 @@
   },
   "setup": {
     "title": "새 기록 준비",
+    "activeMeetingConflict": "다른 기록이 진행 중입니다. 먼저 계속하거나 종료하세요.",
     "description": "기록 정보, 두 오디오 소스, Meeting Copilot의 준비 상태를 확인합니다.",
     "basicInfo": "기본 정보",
     "recordOnlyDescription": "여기서는 기록만 생성합니다. 외부 회의를 시작하거나 참여하거나 제어하지 않습니다.",
@@ -137,8 +139,6 @@
     "reconnectSystemAudio": "시스템 오디오 다시 연결",
     "sourceSwitchFailed": "오디오 소스를 전환하지 못했습니다",
     "sourceSwitchTimedOut": "오디오 소스 전환 시간이 초과되었습니다. 다시 시도하세요.",
-    "pause": "일시 중지",
-    "resume": "계속",
     "runtimeDescription": "기록 중 {{duration}} · 오디오를 로컬 복구 지점에 계속 저장하고 있습니다",
     "transcriptPending": "실시간 전사가 아직 연결되지 않았습니다. 원본 오디오는 계속 저장됩니다",
     "runtimeTranscriptEmpty": "실시간 전사가 아직 연결되지 않았습니다. 마이크와 시스템 오디오는 각각 저장되며, 전사가 연결되거나 복구되면 실제 내용이 여기에 표시됩니다.",
@@ -146,7 +146,6 @@
     "trackStatus": {
       "pending": "준비 중",
       "active": "녹음 중",
-      "paused": "일시 중지됨",
       "completed": "완료",
       "interrupted": "중단됨",
       "failed": "실패",

@@ -114,26 +114,6 @@ describe('MeetingPcmCapture', () => {
     expect(readPcm16Le(chunks[4]!)[3_199]).toBe(8_192);
   });
 
-  it('drops input while paused and starts a fresh chunk after resume', async () => {
-    const context = new FakeAudioContext(16_000);
-    const chunks: ArrayBuffer[] = [];
-    const capture = createCapture(context, {
-      onChunk: (pcm) => chunks.push(pcm),
-    });
-    const { stream } = createStream();
-    await capture.start(stream);
-
-    context.processor.emit(new Float32Array(1_000).fill(0.1));
-    capture.pause();
-    context.processor.emit(new Float32Array(6_400).fill(-1));
-    expect(chunks).toHaveLength(0);
-
-    capture.resume();
-    context.processor.emit(new Float32Array(3_200).fill(0.5));
-    expect(chunks).toHaveLength(1);
-    expect(readPcm16Le(chunks[0]!)[0]).toBe(16_384);
-  });
-
   it('disconnects and closes the Web Audio graph without stopping the stream', async () => {
     const context = new FakeAudioContext(48_000);
     const capture = createCapture(context);

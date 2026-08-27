@@ -34,6 +34,7 @@ import {
   type MeetingReadinessState,
   useMeetingReadiness,
 } from './useMeetingReadiness';
+import { resolveContinuableMeetingSessionId } from './meetingViewNavigation';
 import {
   MeetingMicrophoneTestDialog,
   type MeetingMicrophoneTestPhase,
@@ -224,6 +225,12 @@ export const MeetingSetupView: React.FC<{
     setStartError(null);
     try {
       const currentStatus = await bridge.getStatus();
+      const activeSessionId = resolveContinuableMeetingSessionId(currentStatus);
+      if (activeSessionId) {
+        pendingSessionIdRef.current = null;
+        onStarted(activeSessionId);
+        return;
+      }
       const reusableSessionId =
         currentStatus.manifest?.lifecycleStatus === 'preparing' &&
         currentStatus.manifest.organizationId === String(organizationId) &&
@@ -255,7 +262,19 @@ export const MeetingSetupView: React.FC<{
       pendingSessionIdRef.current = null;
       onStarted(sessionId);
     } catch (error) {
-      setStartError(meetingSetupErrorMessage(error));
+      const message = meetingSetupErrorMessage(error);
+      if (message.includes('another meeting recording is already active')) {
+        const status = await bridge.getStatus().catch(() => null);
+        const activeSessionId = resolveContinuableMeetingSessionId(status);
+        if (activeSessionId) {
+          pendingSessionIdRef.current = null;
+          onStarted(activeSessionId);
+          return;
+        }
+        setStartError(t('setup.activeMeetingConflict'));
+      } else {
+        setStartError(message);
+      }
     } finally {
       setIsStarting(false);
     }

@@ -32,6 +32,7 @@
   "library": {
     "description": "会議で実際に話された内容を記録、振り返り、整理します。",
     "start": "記録を開始",
+    "continue": "進行中の記録に戻る",
     "searchPlaceholder": "タイトル、参加者、文字起こしを検索…",
     "searchLabel": "会議記録を検索",
     "filter": "絞り込み",
@@ -43,6 +44,7 @@
   },
   "setup": {
     "title": "新しい記録を準備",
+    "activeMeetingConflict": "別の記録が進行中です。先に続行するか終了してください。",
     "description": "記録情報、2 系統のオーディオ、Meeting Copilot の準備状況を確認します。",
     "basicInfo": "基本情報",
     "recordOnlyDescription": "ここでは記録だけを作成します。外部会議の開始、参加、操作は行いません。",
@@ -137,8 +139,6 @@
     "reconnectSystemAudio": "システム音声を再接続",
     "sourceSwitchFailed": "音声ソースの切り替えに失敗しました",
     "sourceSwitchTimedOut": "音声ソースの切り替えがタイムアウトしました。もう一度お試しください。",
-    "pause": "一時停止",
-    "resume": "再開",
     "runtimeDescription": "記録中 {{duration}} · 音声をローカル復元ポイントへ継続保存しています",
     "transcriptPending": "リアルタイム文字起こしは未接続です。元の音声は記録を継続します",
     "runtimeTranscriptEmpty": "リアルタイム文字起こしは未接続です。マイク音声とシステム音声は個別に保存され、接続または復旧後に実際の文字起こしがここに表示されます。",
@@ -146,7 +146,6 @@
     "trackStatus": {
       "pending": "準備中",
       "active": "録音中",
-      "paused": "一時停止中",
       "completed": "完了",
       "interrupted": "中断",
       "failed": "失敗",

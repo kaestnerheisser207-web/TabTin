@@ -240,7 +240,7 @@ SCENES: dict[str, SceneSpec] = {
         },
         default_params={
             "temperature": 0.2,
-            "max_tokens": 160,
+            "max_tokens": 512,
             "response_format": {"type": "json_object"},
             "timeout_sec": 12,
             "thinking": {"type": "disabled"},

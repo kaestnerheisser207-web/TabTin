@@ -51,7 +51,6 @@ export type MeetingLifecycleStatus =
   | 'draft'
   | 'preparing'
   | 'recording'
-  | 'paused'
   | 'stopped'
   | 'cancelled'
   | 'interrupted';
@@ -84,7 +83,6 @@ export interface MeetingTrackCheckpointInput {
   captureStatus:
     | 'pending'
     | 'active'
-    | 'paused'
     | 'completed'
     | 'interrupted'
     | 'failed'

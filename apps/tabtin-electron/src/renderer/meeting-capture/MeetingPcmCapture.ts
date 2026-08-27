@@ -7,7 +7,6 @@ export type MeetingPcmCaptureState =
   | 'idle'
   | 'starting'
   | 'recording'
-  | 'paused'
   | 'stopping';
 
 export interface MeetingPcmCaptureOptions {
@@ -114,25 +113,9 @@ export class MeetingPcmCapture {
     }
   }
 
-  pause(): void {
-    if (this.state !== 'recording') {
-      throw new Error('meeting PCM capture can only pause while recording');
-    }
-    this.state = 'paused';
-    this.resetBuffers(this.sourceSampleRate);
-  }
-
-  resume(): void {
-    if (this.state !== 'paused') {
-      throw new Error('meeting PCM capture can only resume while paused');
-    }
-    this.resetBuffers(this.sourceSampleRate);
-    this.state = 'recording';
-  }
-
   async stop(): Promise<void> {
     if (this.state === 'idle') return;
-    if (this.state !== 'recording' && this.state !== 'paused') {
+    if (this.state !== 'recording') {
       throw new Error('meeting PCM capture is not ready to stop');
     }
 

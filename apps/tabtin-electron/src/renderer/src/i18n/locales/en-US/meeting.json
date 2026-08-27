@@ -32,6 +32,7 @@
   "library": {
     "description": "Record, review, and organize what actually happened in a meeting.",
     "start": "Start recording",
+    "continue": "Return to active recording",
     "searchPlaceholder": "Search titles, participants, or transcripts…",
     "searchLabel": "Search meeting records",
     "filter": "Filter",
@@ -43,6 +44,7 @@
   },
   "setup": {
     "title": "Prepare a new record",
+    "activeMeetingConflict": "Another record is active. Continue or end it before starting a new one.",
     "description": "Confirm record details, both audio sources, and Meeting Copilot readiness.",
     "basicInfo": "Basic information",
     "recordOnlyDescription": "This creates a record only. It does not start, join, or control an external meeting.",
@@ -137,8 +139,6 @@
     "reconnectSystemAudio": "Reconnect system audio",
     "sourceSwitchFailed": "Failed to change audio source",
     "sourceSwitchTimedOut": "Audio source switch timed out. Try again.",
-    "pause": "Pause",
-    "resume": "Resume",
     "runtimeDescription": "Recording {{duration}} · Audio is continuously written to local recovery checkpoints",
     "transcriptPending": "Live transcription is not connected yet; original audio keeps recording",
     "runtimeTranscriptEmpty": "Live transcription is not connected yet. Microphone and system audio continue saving independently, and real transcript content will appear here after transcription connects or recovers.",
@@ -146,7 +146,6 @@
     "trackStatus": {
       "pending": "Preparing",
       "active": "Recording",
-      "paused": "Paused",
       "completed": "Complete",
       "interrupted": "Interrupted",
       "failed": "Failed",

@@ -4,8 +4,6 @@ import {
   ChevronUp,
   Copy,
   Mic2,
-  Pause,
-  Play,
   RefreshCw,
   Sparkles,
   Square,
@@ -188,7 +186,6 @@ export const MeetingLiveSessionView: React.FC<{
     [manifestOrganizationId, manifestSessionId, manifestUserId],
   );
   const lifecycleStatus = manifest?.lifecycleStatus ?? 'recording';
-  const paused = lifecycleStatus === 'paused';
   const resolvedTranscript = React.useMemo(
     () => resolveMeetingTranscript(transcript),
     [transcript],
@@ -303,18 +300,6 @@ export const MeetingLiveSessionView: React.FC<{
       cancelled = true;
     };
   }, [isPreview, scope]);
-  const control = async (action: 'pause' | 'resume') => {
-    if (!scope) return;
-    setControlError(null);
-    try {
-      const bridge = window.tabtin.meetingRecording;
-      const next = await bridge[action](scope);
-      setRuntimeStatus(next);
-    } catch (error) {
-      setControlError(error instanceof Error ? error.message : String(error));
-    }
-  };
-
   const stopRecording = async () => {
     if (!scope || stopping) return;
     setStopping(true);
@@ -624,21 +609,6 @@ export const MeetingLiveSessionView: React.FC<{
         <div className="flex items-center gap-2">
           {audioSourceActions}
           <span className="mx-0.5 h-5 w-px bg-foreground/[0.1]" aria-hidden />
-          <Button
-            type="button"
-            variant="outline"
-            size="sm"
-            disabled={isPreview || !scope || stopping}
-            className="gap-1.5"
-            onClick={() => void control(paused ? 'resume' : 'pause')}
-          >
-            {paused ? (
-              <Play className="h-4 w-4" aria-hidden />
-            ) : (
-              <Pause className="h-4 w-4" aria-hidden />
-            )}
-            {paused ? t('live.resume') : t('live.pause')}
-          </Button>
           <Button
             type="button"
             variant="destructive"

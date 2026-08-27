@@ -17,6 +17,7 @@ class FakeGateway implements MeetingAsrGateway {
   readonly startPayloads: Record<string, unknown>[] = [];
   readonly unsubscribed: string[] = [];
   readonly startStreamIds: string[] = [];
+  readonly startFailures: Error[] = [];
   sendResult = true;
 
   private startCount = 0;
@@ -36,6 +37,8 @@ class FakeGateway implements MeetingAsrGateway {
   }> {
     expect(type).toBe('asr.stream.start');
     this.startPayloads.push(payload);
+    const failure = this.startFailures.shift();
+    if (failure) throw failure;
     const streamId = `stream-${++this.startCount}`;
     this.startStreamIds.push(streamId);
     return {
@@ -382,20 +385,22 @@ describe('MeetingAsrCoordinator', () => {
     gateway.reconnect();
     await flushAsyncWork();
 
+    const [localReplacement, remoteReplacement] =
+      gateway.startStreamIds.slice(-2);
     const replayed = audioMessages(gateway).filter(
       (message) =>
-        message.payload.stream_id === 'stream-3' ||
-        message.payload.stream_id === 'stream-4',
+        message.payload.stream_id === localReplacement ||
+        message.payload.stream_id === remoteReplacement,
     );
     expect(replayed.map((message) => message.payload.stream_id)).toEqual([
-      'stream-3',
-      'stream-3',
-      'stream-4',
+      localReplacement,
+      localReplacement,
+      remoteReplacement,
     ]);
     expect(replayed.map(decodeAudio)).toEqual([[2], [3], [9]]);
   });
 
-  it('does not send while paused, flushes on resume, and stops both streams', async () => {
+  it('keeps sending until stop and then closes both streams', async () => {
     const gateway = new FakeGateway();
     const transcriptSink = vi.fn();
     const coordinator = new MeetingAsrCoordinator({
@@ -406,12 +411,8 @@ describe('MeetingAsrCoordinator', () => {
     });
     await coordinator.start();
 
-    coordinator.pause();
     coordinator.appendPcm('local', new Uint8Array([4]));
     coordinator.appendPcm('remote', new Uint8Array([5]));
-    expect(audioMessages(gateway)).toHaveLength(0);
-
-    coordinator.resume();
     expect(audioMessages(gateway).map(decodeAudio)).toEqual([[4], [5]]);
 
     await coordinator.stop();
@@ -480,15 +481,13 @@ describe('MeetingAsrCoordinator', () => {
     ]);
   });
 
-  it('keeps transcript time absolute across reconnect and pause gaps', async () => {
+  it('keeps transcript time absolute across stream reconnects', async () => {
     const gateway = new FakeGateway();
     const checkpoints: MeetingTranscriptCheckpoint[] = [];
-    let nowMs = 1_000;
     const coordinator = new MeetingAsrCoordinator({
       gateway,
       transcriptSink: (checkpoint) => checkpoints.push(checkpoint),
       sessionId: 'meeting-timeline',
-      now: () => new Date(nowMs),
     });
     await coordinator.start();
 
@@ -498,27 +497,64 @@ describe('MeetingAsrCoordinator', () => {
     gateway.sendResult = true;
     gateway.reconnect();
     await flushAsyncWork();
+    const localReplacement = audioMessages(gateway).at(-1)?.payload.stream_id;
 
     gateway.emit('asr.stream.event', {
-      stream_id: 'stream-3',
+      stream_id: localReplacement,
       utterances: [
         { startTime: 0, endTime: 200, text: 'after reconnect', definite: true },
       ],
     });
-    coordinator.pause();
-    nowMs += 1_000;
-    coordinator.resume();
     gateway.emit('asr.stream.event', {
-      stream_id: 'stream-3',
+      stream_id: localReplacement,
       utterances: [
-        { startTime: 200, endTime: 400, text: 'after pause', definite: true },
+        { startTime: 200, endTime: 400, text: 'continued', definite: true },
       ],
     });
     await flushAsyncWork();
 
     expect(checkpoints).toEqual([
       expect.objectContaining({ startMs: 200, endMs: 400 }),
-      expect.objectContaining({ startMs: 1_400, endMs: 1_600 }),
+      expect.objectContaining({ startMs: 400, endMs: 600 }),
     ]);
+  });
+
+  it('retries an expired ASR stream after a transient restart timeout', async () => {
+    vi.useFakeTimers();
+    try {
+      const gateway = new FakeGateway();
+      const onStatusChange = vi.fn();
+      const coordinator = new MeetingAsrCoordinator({
+        gateway,
+        transcriptSink: vi.fn(),
+        sessionId: 'meeting-timeout-recovery',
+        onStatusChange,
+        stopGracePeriodMs: 0,
+      });
+      await coordinator.start();
+
+      gateway.startFailures.push(new Error('request timeout'));
+      gateway.emit('asr.stream.error', {
+        stream_id: 'stream-1',
+        error: 'record timeout',
+      });
+      await vi.advanceTimersByTimeAsync(0);
+
+      expect(onStatusChange).toHaveBeenLastCalledWith(
+        'recovering',
+        'request timeout',
+      );
+      await vi.advanceTimersByTimeAsync(1_000);
+
+      expect(gateway.startStreamIds).toEqual([
+        'stream-1',
+        'stream-2',
+        'stream-3',
+      ]);
+      expect(onStatusChange).toHaveBeenLastCalledWith('active');
+      await coordinator.stop();
+    } finally {
+      vi.useRealTimers();
+    }
   });
 });

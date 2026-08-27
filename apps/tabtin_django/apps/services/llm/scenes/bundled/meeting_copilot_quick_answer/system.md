@@ -14,3 +14,9 @@
 - `warning`：资料不足、冲突或需要用户确认的边界，没有则为空字符串。
 
 当 `should_answer=false` 时，`answer`、`key_points`、`source_ids` 和 `warning` 都返回空值。不要输出 Markdown，不要替用户自动作出承诺，也不要声称已经检索未提供的资料。
+
+格式示例：
+
+`{"should_answer":false,"answer":"","key_points":[],"source_ids":[],"reliability":"low","warning":""}`
+
+`{"should_answer":true,"answer":"建议先确认事实，再给出简短回答。","key_points":["先核实资料","避免未经确认的承诺"],"source_ids":["transcript:example"],"reliability":"medium","warning":"资料不足时需要明确说明"}`

@@ -28,8 +28,6 @@ Object.assign(globalThis, {
     switchMicrophone: controller.switchMicrophone.bind(controller),
     switchSystemAudio: controller.switchSystemAudio.bind(controller),
     start: controller.start.bind(controller),
-    pause: controller.pause.bind(controller),
-    resume: controller.resume.bind(controller),
     stop: controller.stop.bind(controller),
     getState: controller.getState.bind(controller),
   },

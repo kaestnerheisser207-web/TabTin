@@ -111,9 +111,9 @@ class MeetingApiPostgresTests(TestCase):
             update_meeting_lifecycle(
                 self.request(self.owner),
                 session_id,
-                MeetingLifecycleIn(status="paused", expected_version=2),
+                MeetingLifecycleIn(status="paused", expected_version=3),
             )
-        self.assertEqual(raised.exception.status_code, 409)
+        self.assertEqual(raised.exception.status_code, 422)
 
     def test_project_membership_is_enforced(self):
         with self.assertRaises(HttpError) as raised:

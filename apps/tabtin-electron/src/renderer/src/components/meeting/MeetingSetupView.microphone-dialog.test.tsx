@@ -78,7 +78,9 @@ vi.mock('@/services/organizationLlmApi', () => ({
 import type {
   MeetingMicrophoneTestLevelEvent,
   MeetingMicrophoneTestResult,
+  MeetingRecordingStatus,
 } from '@shared/meeting-recording-contract';
+import { MeetingRecordsSidebar } from './MeetingRecordsSidebar';
 import { MeetingSetupView } from './MeetingSetupView';
 
 describe('MeetingSetupView microphone dialog', () => {
@@ -87,6 +89,7 @@ describe('MeetingSetupView microphone dialog', () => {
     | ((event: MeetingMicrophoneTestLevelEvent) => void)
     | undefined;
   let resolveTest: ((result: MeetingMicrophoneTestResult) => void) | undefined;
+  let statusListener: ((status: MeetingRecordingStatus) => void) | undefined;
   const testMicrophone = vi.fn(
     () =>
       new Promise<MeetingMicrophoneTestResult>((resolve) => {
@@ -97,6 +100,7 @@ describe('MeetingSetupView microphone dialog', () => {
   beforeEach(() => {
     vi.clearAllMocks();
     levelListener = undefined;
+    statusListener = undefined;
     resolveTest = undefined;
     Object.defineProperty(window, 'tabtin', {
       configurable: true,
@@ -129,6 +133,12 @@ describe('MeetingSetupView microphone dialog', () => {
           }),
           prepare: vi.fn().mockResolvedValue({ active: true, manifest: {} }),
           start: vi.fn().mockResolvedValue({ active: true, manifest: {} }),
+          onStatusChanged: vi.fn((listener) => {
+            statusListener = listener;
+            return () => {
+              statusListener = undefined;
+            };
+          }),
           onMicrophoneTestLevel: vi.fn((listener) => {
             levelListener = listener;
             return () => {
@@ -209,6 +219,115 @@ describe('MeetingSetupView microphone dialog', () => {
     await waitFor(() => expect(start.hasAttribute('disabled')).toBe(false));
     expect(window.tabtin.meetingRecording.probeMedia).not.toHaveBeenCalled();
     expect(testMicrophone).not.toHaveBeenCalled();
+  });
+
+  it('returns to an active recording instead of preparing a second session', async () => {
+    const activeSessionId = '11111111-1111-4111-8111-111111111111';
+    vi.mocked(window.tabtin.meetingRecording.getStatus).mockResolvedValue({
+      active: true,
+      manifest: {
+        sessionId: activeSessionId,
+        lifecycleStatus: 'recording',
+      },
+    });
+    const onStarted = vi.fn();
+    render(<MeetingSetupView onBack={vi.fn()} onStarted={onStarted} />);
+
+    fireEvent.change(screen.getByLabelText('记录标题'), {
+      target: { value: '不应创建的新记录' },
+    });
+    fireEvent.click(
+      screen.getByRole('checkbox', {
+        name: '确认参会者已知情并同意录音和转写',
+      }),
+    );
+    await waitFor(() =>
+      expect(
+        screen
+          .getByRole('button', { name: '开始记录' })
+          .hasAttribute('disabled'),
+      ).toBe(false),
+    );
+    fireEvent.click(screen.getByRole('button', { name: '开始记录' }));
+
+    await waitFor(() => expect(onStarted).toHaveBeenCalledWith(activeSessionId));
+    expect(window.tabtin.meetingRecording.prepare).not.toHaveBeenCalled();
+    expect(window.tabtin.meetingRecording.start).not.toHaveBeenCalled();
+    expect(
+      screen.queryByText(/another meeting recording is already active/),
+    ).toBeNull();
+  });
+
+  it('shows the active-recording entry only until the recording ends', async () => {
+    const activeSessionId = '11111111-1111-4111-8111-111111111111';
+    vi.mocked(window.tabtin.meetingRecording.getStatus).mockResolvedValue({
+      active: true,
+      manifest: {
+        sessionId: activeSessionId,
+        lifecycleStatus: 'recording',
+      },
+    });
+    render(<MeetingRecordsSidebar />);
+
+    await waitFor(() =>
+      expect(
+        screen.getByRole('button', { name: '记录进行中' }),
+      ).toBeTruthy(),
+    );
+    act(() => {
+      statusListener?.({
+        active: false,
+        manifest: {
+          sessionId: activeSessionId,
+          lifecycleStatus: 'stopped',
+        },
+      } as MeetingRecordingStatus);
+    });
+
+    expect(screen.queryByRole('button', { name: '记录进行中' })).toBeNull();
+  });
+
+  it('translates a prepare race into a plain business message', async () => {
+    vi.mocked(window.tabtin.meetingRecording.getStatus).mockResolvedValue({
+      active: false,
+      manifest: null,
+    });
+    vi.mocked(window.tabtin.meetingRecording.prepare).mockRejectedValueOnce(
+      new Error(
+        "Error invoking remote method 'meeting-recording:prepare': " +
+          'Error: another meeting recording is already active',
+      ),
+    );
+    render(<MeetingSetupView onBack={vi.fn()} onStarted={vi.fn()} />);
+
+    fireEvent.change(screen.getByLabelText('记录标题'), {
+      target: { value: '并发竞态测试' },
+    });
+    fireEvent.click(
+      screen.getByRole('checkbox', {
+        name: '确认参会者已知情并同意录音和转写',
+      }),
+    );
+    await waitFor(() =>
+      expect(
+        screen
+          .getByRole('button', { name: '开始记录' })
+          .hasAttribute('disabled'),
+      ).toBe(false),
+    );
+    fireEvent.click(screen.getByRole('button', { name: '开始记录' }));
+
+    await waitFor(() =>
+      expect(window.tabtin.meetingRecording.prepare).toHaveBeenCalled(),
+    );
+    await waitFor(() =>
+      expect(
+        screen.getByText(/已有一条记录正在进行，请先继续或结束该记录/),
+      ).toBeTruthy(),
+    );
+    expect(
+      screen.queryByText(/another meeting recording is already active/),
+    ).toBeNull();
   });
 
   it('stores the explicitly selected Copilot answer model in the local meeting', async () => {

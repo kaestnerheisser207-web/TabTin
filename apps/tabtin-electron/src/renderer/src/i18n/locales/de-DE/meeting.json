@@ -32,6 +32,7 @@
   "library": {
     "description": "Zeichnen Sie den tatsächlichen Verlauf einer Besprechung auf, prüfen und strukturieren Sie ihn.",
     "start": "Aufzeichnung starten",
+    "continue": "Zur laufenden Aufzeichnung zurückkehren",
     "searchPlaceholder": "Titel, Teilnehmende oder Transkripte durchsuchen…",
     "searchLabel": "Besprechungsaufzeichnungen durchsuchen",
     "filter": "Filtern",
@@ -43,6 +44,7 @@
   },
   "setup": {
     "title": "Neue Aufzeichnung vorbereiten",
+    "activeMeetingConflict": "Eine andere Aufzeichnung läuft bereits. Setzen Sie sie fort oder beenden Sie sie zuerst.",
     "description": "Prüfen Sie die Aufzeichnungsdetails, beide Audioquellen und die Bereitschaft von Meeting Copilot.",
     "basicInfo": "Grundlegende Informationen",
     "recordOnlyDescription": "Hier wird nur eine Aufzeichnung erstellt. Eine externe Besprechung wird weder gestartet noch betreten oder gesteuert.",
@@ -137,8 +139,6 @@
     "reconnectSystemAudio": "Systemaudio erneut verbinden",
     "sourceSwitchFailed": "Audioquelle konnte nicht gewechselt werden",
     "sourceSwitchTimedOut": "Zeitüberschreitung beim Wechseln der Audioquelle. Bitte erneut versuchen.",
-    "pause": "Pausieren",
-    "resume": "Fortsetzen",
     "runtimeDescription": "Aufzeichnung {{duration}} · Audio wird fortlaufend in lokale Wiederherstellungspunkte geschrieben",
     "transcriptPending": "Live-Transkription ist noch nicht verbunden; das Originalaudio wird weiter aufgezeichnet",
     "runtimeTranscriptEmpty": "Die Live-Transkription ist noch nicht verbunden. Mikrofon- und Systemaudio werden unabhängig gespeichert; echte Transkriptinhalte erscheinen hier nach Verbindung oder Wiederherstellung.",
@@ -146,7 +146,6 @@
     "trackStatus": {
       "pending": "Vorbereitung",
       "active": "Aufzeichnung",
-      "paused": "Pausiert",
       "completed": "Vollständig",
       "interrupted": "Unterbrochen",
       "failed": "Fehlgeschlagen",

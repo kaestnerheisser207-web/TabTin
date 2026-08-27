@@ -5,7 +5,6 @@ export type MeetingArchiveLifecycleStatus =
   | 'draft'
   | 'preparing'
   | 'recording'
-  | 'paused'
   | 'stopped'
   | 'cancelled'
   | 'interrupted';
@@ -13,7 +12,6 @@ export type MeetingArchiveLifecycleStatus =
 export type MeetingArchiveTrackStatus =
   | 'pending'
   | 'active'
-  | 'paused'
   | 'completed'
   | 'interrupted'
   | 'failed'

@@ -32,6 +32,7 @@
   "library": {
     "description": "Graba, revisa y organiza lo que ocurrió realmente en una reunión.",
     "start": "Iniciar grabación",
+    "continue": "Volver a la grabación activa",
     "searchPlaceholder": "Buscar títulos, participantes o transcripciones…",
     "searchLabel": "Buscar registros de reuniones",
     "filter": "Filtrar",
@@ -43,6 +44,7 @@
   },
   "setup": {
     "title": "Preparar un nuevo registro",
+    "activeMeetingConflict": "Ya hay una grabación activa. Continúala o finalízala antes de iniciar otra.",
     "description": "Comprueba los datos del registro, las dos fuentes de audio y el estado de Meeting Copilot.",
     "basicInfo": "Información básica",
     "recordOnlyDescription": "Esta acción solo crea un registro. No inicia, se une ni controla ninguna reunión externa.",
@@ -137,8 +139,6 @@
     "reconnectSystemAudio": "Volver a conectar el audio del sistema",
     "sourceSwitchFailed": "No se pudo cambiar la fuente de audio",
     "sourceSwitchTimedOut": "Se agotó el tiempo para cambiar la fuente de audio. Inténtalo de nuevo.",
-    "pause": "Pausar",
-    "resume": "Reanudar",
     "runtimeDescription": "Grabando {{duration}} · El audio se escribe continuamente en puntos de recuperación locales",
     "transcriptPending": "La transcripción en directo aún no está conectada; el audio original sigue grabándose",
     "runtimeTranscriptEmpty": "La transcripción en directo aún no está conectada. El micrófono y el audio del sistema se guardan por separado; el contenido real aparecerá aquí cuando la transcripción se conecte o se recupere.",
@@ -146,7 +146,6 @@
     "trackStatus": {
       "pending": "Preparando",
       "active": "Grabando",
-      "paused": "En pausa",
       "completed": "Completo",
       "interrupted": "Interrumpido",
       "failed": "Fallido",

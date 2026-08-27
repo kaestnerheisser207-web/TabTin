@@ -48,12 +48,6 @@ class FakeRecorder extends EventTarget {
   start = vi.fn((_timeslice?: number) => {
     this.state = 'recording';
   });
-  pause = vi.fn(() => {
-    this.state = 'paused';
-  });
-  resume = vi.fn(() => {
-    this.state = 'recording';
-  });
   stop = vi.fn(() => {
     this.state = 'inactive';
     this.dispatchEvent(new Event('stop'));
@@ -73,13 +67,24 @@ class FakeRecorder extends EventTarget {
 function createPcmRuntime() {
   return {
     start: vi.fn().mockResolvedValue(undefined),
-    pause: vi.fn(),
-    resume: vi.fn(),
     stop: vi.fn().mockResolvedValue(undefined),
   };
 }
 
 describe('MeetingCaptureController', () => {
+  it('treats stop as idempotent after the hidden capture runtime is lost', async () => {
+    const controller = new MeetingCaptureController({
+      isTypeSupported: () => true,
+      sink: {
+        appendAudioChunk: vi.fn(),
+        appendPcmChunk: vi.fn(),
+      },
+    });
+
+    await expect(controller.stop()).resolves.toBeUndefined();
+    expect(controller.getState()).toBe('idle');
+  });
+
   it('chooses Opus WebM before the generic WebM fallback', () => {
     expect(chooseMeetingAudioMimeType(() => true)).toBe(
       'audio/webm;codecs=opus',
@@ -534,7 +539,7 @@ describe('MeetingCaptureController', () => {
     expect(getDisplayMedia).not.toHaveBeenCalled();
   });
 
-  it('pauses, resumes, and stops both recorders together', async () => {
+  it('stops both recorders together', async () => {
     const microphone = new FakeStream();
     const display = new FakeStream();
     const recorders: FakeRecorder[] = [];
@@ -566,15 +571,6 @@ describe('MeetingCaptureController', () => {
         sessionId: 'session-1',
       },
     });
-    controller.pause();
-    expect(controller.getState()).toBe('paused');
-    expect(
-      recorders.every((recorder) => recorder.pause.mock.calls.length === 1),
-    ).toBe(true);
-    controller.resume();
-    expect(
-      recorders.every((recorder) => recorder.resume.mock.calls.length === 1),
-    ).toBe(true);
     await controller.stop();
 
     expect(controller.getState()).toBe('idle');

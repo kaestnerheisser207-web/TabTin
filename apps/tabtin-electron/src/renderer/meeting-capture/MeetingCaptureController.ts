@@ -19,7 +19,7 @@ const DEFAULT_CHUNK_DURATION_MS = 5_000;
 const MIME_TYPE_CANDIDATES = ['audio/webm;codecs=opus', 'audio/webm'] as const;
 const MAIN_DISPLAY_AUDIO_SOURCE_ID = 'main-display';
 
-type CaptureState = 'idle' | 'recording' | 'paused' | 'stopping';
+type CaptureState = 'idle' | 'recording' | 'stopping';
 
 export interface MeetingCaptureSink {
   appendAudioChunk: (input: AppendMeetingAudioChunkInput) => Promise<unknown>;
@@ -30,8 +30,6 @@ export interface MeetingCaptureSink {
 
 interface MeetingPcmCaptureRuntime {
   start(stream: MediaStream): Promise<void>;
-  pause(): void;
-  resume(): void;
   stop(): Promise<void>;
 }
 
@@ -564,7 +562,7 @@ export class MeetingCaptureController {
     source: MeetingAudioSource,
     stream: MediaStream,
   ): Promise<MeetingCaptureSourceSelection> {
-    if (this.state !== 'recording' && this.state !== 'paused') {
+    if (this.state !== 'recording') {
       this.stopStream(stream);
       throw new Error('meeting capture source can only change while active');
     }
@@ -578,10 +576,6 @@ export class MeetingCaptureController {
     try {
       await nextCapture.pcmCapture.start(nextCapture.stream);
       nextCapture.recorder.start(this.chunkDurationMs);
-      if (this.state === 'paused') {
-        nextCapture.recorder.pause();
-        nextCapture.pcmCapture.pause();
-      }
     } catch (error) {
       await nextCapture.pcmCapture.stop().catch(() => undefined);
       this.stopStream(stream);
@@ -696,30 +690,9 @@ export class MeetingCaptureController {
     }
   }
 
-  pause(): void {
-    if (this.state !== 'recording') {
-      throw new Error('meeting capture can only pause while recording');
-    }
-    for (const capture of this.captures) {
-      capture.recorder.pause();
-      capture.pcmCapture.pause();
-    }
-    this.state = 'paused';
-  }
-
-  resume(): void {
-    if (this.state !== 'paused') {
-      throw new Error('meeting capture can only resume while paused');
-    }
-    for (const capture of this.captures) {
-      capture.recorder.resume();
-      capture.pcmCapture.resume();
-    }
-    this.state = 'recording';
-  }
-
   async stop(): Promise<void> {
-    if (this.state !== 'recording' && this.state !== 'paused') {
+    if (this.state === 'idle') return;
+    if (this.state !== 'recording') {
       throw new Error('meeting capture is not active');
     }
     this.state = 'stopping';

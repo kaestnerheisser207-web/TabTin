@@ -1161,8 +1161,6 @@ interface TabTinAPIShape {
     onMicrophoneTestLevel: (callback: (event: MeetingMicrophoneTestLevelEvent) => void) => () => void
     prepare: (input: PrepareMeetingArchiveInput) => Promise<MeetingRecordingStatus>
     start: (scope: MeetingArchiveScope) => Promise<MeetingRecordingStatus>
-    pause: (scope: MeetingArchiveScope) => Promise<MeetingRecordingStatus>
-    resume: (scope: MeetingArchiveScope) => Promise<MeetingRecordingStatus>
     stop: (scope: MeetingArchiveScope) => Promise<MeetingRecordingStatus>
     cancel: (scope: MeetingArchiveScope) => Promise<MeetingRecordingStatus>
     getStatus: () => Promise<MeetingRecordingStatus>
@@ -3693,8 +3691,6 @@ const api = {
     },
     prepare: (input) => invokeIpc('meeting-recording:prepare', input),
     start: (scope) => invokeIpc('meeting-recording:start', scope),
-    pause: (scope) => invokeIpc('meeting-recording:pause', scope),
-    resume: (scope) => invokeIpc('meeting-recording:resume', scope),
     stop: (scope) => invokeIpc('meeting-recording:stop', scope),
     cancel: (scope) => invokeIpc('meeting-recording:cancel', scope),
     getStatus: () => invokeIpc('meeting-recording:status'),

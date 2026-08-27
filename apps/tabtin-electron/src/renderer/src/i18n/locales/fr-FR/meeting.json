@@ -32,6 +32,7 @@
   "library": {
     "description": "Enregistrez, consultez et organisez le contenu réel d’une réunion.",
     "start": "Démarrer l’enregistrement",
+    "continue": "Revenir à l’enregistrement en cours",
     "searchPlaceholder": "Rechercher dans les titres, les participants ou les transcriptions…",
     "searchLabel": "Rechercher dans les enregistrements de réunions",
     "filter": "Filtrer",
@@ -43,6 +44,7 @@
   },
   "setup": {
     "title": "Préparer un nouvel enregistrement",
+    "activeMeetingConflict": "Un autre enregistrement est en cours. Continuez-le ou terminez-le avant d’en démarrer un nouveau.",
     "description": "Vérifiez les informations de l’enregistrement, les deux sources audio et l’état de préparation de Meeting Copilot.",
     "basicInfo": "Informations générales",
     "recordOnlyDescription": "Cette action crée uniquement un enregistrement. Elle ne démarre, ne rejoint ni ne contrôle aucune réunion externe.",
@@ -137,8 +139,6 @@
     "reconnectSystemAudio": "Reconnecter l’audio système",
     "sourceSwitchFailed": "Échec du changement de source audio",
     "sourceSwitchTimedOut": "Le changement de source audio a expiré. Réessayez.",
-    "pause": "Mettre en pause",
-    "resume": "Reprendre",
     "runtimeDescription": "Enregistrement {{duration}} · L’audio est écrit en continu dans les points de récupération locaux",
     "transcriptPending": "La transcription en direct n’est pas encore connectée ; l’audio original continue d’être enregistré",
     "runtimeTranscriptEmpty": "La transcription en direct n’est pas encore connectée. Le microphone et l’audio système sont enregistrés séparément ; le contenu réel apparaîtra ici après connexion ou récupération.",
@@ -146,7 +146,6 @@
     "trackStatus": {
       "pending": "Préparation",
       "active": "Enregistrement",
-      "paused": "En pause",
       "completed": "Complet",
       "interrupted": "Interrompu",
       "failed": "Échec",

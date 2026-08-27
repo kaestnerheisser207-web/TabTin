@@ -9,7 +9,6 @@ class MeetingSession(models.Model):
         DRAFT = "draft", "草稿"
         PREPARING = "preparing", "准备中"
         RECORDING = "recording", "记录中"
-        PAUSED = "paused", "已暂停"
         STOPPED = "stopped", "已停止"
         CANCELLED = "cancelled", "已取消"
         INTERRUPTED = "interrupted", "异常中断"
@@ -83,7 +82,6 @@ class MeetingTrack(models.Model):
     class CaptureStatus(models.TextChoices):
         PENDING = "pending", "待采集"
         ACTIVE = "active", "采集中"
-        PAUSED = "paused", "已暂停"
         COMPLETED = "completed", "完整"
         INTERRUPTED = "interrupted", "已中断"
         FAILED = "failed", "失败"

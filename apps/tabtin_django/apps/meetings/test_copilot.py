@@ -25,6 +25,16 @@ class MeetingCopilotQuickAnswerTests(SimpleTestCase):
     def _user(self):
         return SimpleNamespace(id="user-1")
 
+    def test_runtime_scene_reserves_a_complete_json_budget(self):
+        from apps.services.llm.scenes.registry import SCENES
+
+        scene = SCENES["meeting_copilot_quick_answer"]
+        self.assertEqual(scene.default_params["max_tokens"], 512)
+        self.assertEqual(
+            scene.default_params["response_format"],
+            {"type": "json_object"},
+        )
+
     def test_returns_no_question_when_selected_turn_is_missing(self):
         result = generate_meeting_copilot_answer(
             session=self._session(),
@@ -106,6 +116,7 @@ class MeetingCopilotQuickAnswerTests(SimpleTestCase):
         call = llm_call.call_args.kwargs
         self.assertEqual(call["scene_key"], "meeting_copilot_quick_answer")
         self.assertEqual(call["selected_model_id"], "model-1")
+        call["result_validator"](llm_call.return_value.content)
         self.assertEqual(
             call["variables"]["candidate_utterance"],
             "Explain the delivery plan.",
@@ -171,6 +182,51 @@ class MeetingCopilotQuickAnswerTests(SimpleTestCase):
                 llm_call=llm_call,
             )
         self.assertEqual(raised.exception.code, "invalid_model_response")
+        self.assertEqual(llm_call.call_count, 2)
+
+    @patch("apps.meetings.copilot._select_chat_model")
+    def test_retries_one_invalid_json_response(self, select_model):
+        select_model.return_value = SimpleNamespace(id="model-1")
+        llm_call = Mock(side_effect=[
+            SimpleNamespace(
+                content="",
+                telemetry=SimpleNamespace(
+                    model_used="deepseek-v4-flash",
+                    provider_used="deepseek",
+                    latency_ms=100,
+                ),
+            ),
+            SimpleNamespace(
+                content=(
+                    '{"should_answer":true,"answer":"Use an array of buckets.",'
+                    '"key_points":["Hash keys into buckets"],"source_ids":[],'
+                    '"reliability":"medium","warning":""}'
+                ),
+                telemetry=SimpleNamespace(
+                    model_used="deepseek-v4-flash",
+                    provider_used="deepseek",
+                    latency_ms=120,
+                ),
+            ),
+        ])
+
+        result = generate_meeting_copilot_answer(
+            session=self._session(),
+            user=self._user(),
+            question_segment_id="remote-1",
+            recent_segments=[{
+                "external_id": "remote-1",
+                "source": "remote",
+                "start_ms": 1_000,
+                "text": "How does a hash map work?",
+                "is_final": True,
+            }],
+            llm_call=llm_call,
+        )
+
+        self.assertEqual(result["status"], "answered")
+        self.assertEqual(result["answer"], "Use an array of buckets.")
+        self.assertEqual(llm_call.call_count, 2)
 
 
 class MeetingCopilotApiTests(SimpleTestCase):

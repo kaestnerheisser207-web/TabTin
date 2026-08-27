@@ -5,10 +5,12 @@ from .models import MeetingSession, MeetingTrack, MeetingTranscriptSegment
 
 
 class MeetingLifecycleTests(SimpleTestCase):
-    def test_recording_can_pause_resume_and_stop(self):
-        self.assertTrue(is_lifecycle_transition_allowed("recording", "paused"))
-        self.assertTrue(is_lifecycle_transition_allowed("paused", "recording"))
+    def test_recording_can_only_end_or_be_interrupted(self):
         self.assertTrue(is_lifecycle_transition_allowed("recording", "stopped"))
+        self.assertTrue(is_lifecycle_transition_allowed("recording", "interrupted"))
+        self.assertFalse(is_lifecycle_transition_allowed("recording", "paused"))
+        self.assertFalse(is_lifecycle_transition_allowed("paused", "recording"))
+        self.assertFalse(is_lifecycle_transition_allowed("interrupted", "recording"))
 
     def test_terminal_states_cannot_restart(self):
         self.assertFalse(is_lifecycle_transition_allowed("stopped", "recording"))

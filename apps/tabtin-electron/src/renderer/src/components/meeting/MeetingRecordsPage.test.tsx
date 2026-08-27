@@ -53,7 +53,7 @@ describe('MeetingRecordsPage', () => {
     useMeetingViewNavigation.getState().openLibrary();
   });
 
-  it('uses the confirmed product wording and enters record setup', () => {
+  it('uses the confirmed product wording and enters record setup', async () => {
     render(<MeetingRecordsPage />);
 
     expect(screen.getByRole('heading', { name: '会议记录' })).toBeTruthy();
@@ -62,7 +62,9 @@ describe('MeetingRecordsPage', () => {
     ).toContain('h-7 w-7');
     fireEvent.click(screen.getAllByRole('button', { name: '开始记录' })[0]!);
 
-    expect(screen.getByRole('heading', { name: '准备新记录' })).toBeTruthy();
+    await waitFor(() =>
+      expect(screen.getByRole('heading', { name: '准备新记录' })).toBeTruthy(),
+    );
     expect(
       screen.getByTestId('meeting-page-icon').getAttribute('class'),
     ).toContain('h-7 w-7');
@@ -71,6 +73,48 @@ describe('MeetingRecordsPage', () => {
     ).toContain('text-title font-semibold');
     expect(screen.queryByText('发起会议')).toBeNull();
     expect(screen.getByText('会议 Copilot')).toBeTruthy();
+  });
+
+  it('redirects setup to an existing recording before showing the form', async () => {
+    const previousTabtin = window.tabtin;
+    const activeSessionId = '11111111-1111-4111-8111-111111111111';
+    const recordingStatus = {
+      active: true,
+      manifest: {
+        sessionId: activeSessionId,
+        lifecycleStatus: 'recording',
+      },
+    };
+    const getStatus = vi
+      .fn()
+      .mockResolvedValueOnce(recordingStatus)
+      .mockImplementation(() => new Promise(() => undefined));
+    Object.defineProperty(window, 'tabtin', {
+      configurable: true,
+      value: {
+        ...previousTabtin,
+        meetingRecording: {
+          getStatus,
+          onStatusChanged: vi.fn(() => vi.fn()),
+        },
+      },
+    });
+    useMeetingViewNavigation.getState().openSetup();
+
+    const rendered = render(<MeetingRecordsPage />);
+    await waitFor(() =>
+      expect(useMeetingViewNavigation.getState().view).toEqual({
+        kind: 'session',
+        sessionId: activeSessionId,
+      }),
+    );
+
+    expect(screen.queryByRole('heading', { name: '准备新记录' })).toBeNull();
+    rendered.unmount();
+    Object.defineProperty(window, 'tabtin', {
+      configurable: true,
+      value: previousTabtin,
+    });
   });
 
   it('keeps sidebar selection in the shared meeting navigation store', () => {
@@ -98,7 +142,7 @@ describe('MeetingRecordsPage', () => {
       String(SIDEBAR_MENU_ICON_STROKE),
     );
     expect(screen.queryByText('页面预览')).toBeNull();
-    expect(screen.getByRole('button', { name: '记录进行中' })).toBeTruthy();
+    expect(screen.queryByRole('button', { name: '记录进行中' })).toBeNull();
     expect(screen.queryByRole('button', { name: '会后详情' })).toBeNull();
 
     fireEvent.click(setup);

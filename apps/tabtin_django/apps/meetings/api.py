@@ -34,17 +34,10 @@ ALLOWED_LIFECYCLE_TRANSITIONS = {
         MeetingSession.LifecycleStatus.INTERRUPTED,
     },
     MeetingSession.LifecycleStatus.RECORDING: {
-        MeetingSession.LifecycleStatus.PAUSED,
-        MeetingSession.LifecycleStatus.STOPPED,
-        MeetingSession.LifecycleStatus.INTERRUPTED,
-    },
-    MeetingSession.LifecycleStatus.PAUSED: {
-        MeetingSession.LifecycleStatus.RECORDING,
         MeetingSession.LifecycleStatus.STOPPED,
         MeetingSession.LifecycleStatus.INTERRUPTED,
     },
     MeetingSession.LifecycleStatus.INTERRUPTED: {
-        MeetingSession.LifecycleStatus.RECORDING,
         MeetingSession.LifecycleStatus.STOPPED,
         MeetingSession.LifecycleStatus.CANCELLED,
     },
@@ -337,7 +330,6 @@ def update_meeting_copilot(request, session_id: UUID, data: MeetingCopilotStateI
     if session.lifecycle_status not in {
         MeetingSession.LifecycleStatus.PREPARING,
         MeetingSession.LifecycleStatus.RECORDING,
-        MeetingSession.LifecycleStatus.PAUSED,
     }:
         raise HttpError(409, "Copilot cannot be changed in the current meeting state")
     session.copilot_enabled = data.enabled
@@ -355,10 +347,7 @@ def answer_meeting_copilot(request, session_id: UUID, data: MeetingCopilotAnswer
             "status": "disabled",
             "message": "会议 Copilot 当前已关闭",
         }
-    if session.lifecycle_status not in {
-        MeetingSession.LifecycleStatus.RECORDING,
-        MeetingSession.LifecycleStatus.PAUSED,
-    }:
+    if session.lifecycle_status != MeetingSession.LifecycleStatus.RECORDING:
         return {
             "status": "unavailable",
             "message": "会议不在记录中，暂时无法生成建议答案",

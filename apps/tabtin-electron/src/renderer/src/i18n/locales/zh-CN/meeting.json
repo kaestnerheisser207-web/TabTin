@@ -32,6 +32,7 @@
   "library": {
     "description": "记录、回看和整理会议中的真实内容。",
     "start": "开始记录",
+    "continue": "返回正在进行的记录",
     "searchPlaceholder": "搜索标题、参与者或逐字稿…",
     "searchLabel": "搜索会议记录",
     "filter": "筛选",
@@ -43,6 +44,7 @@
   },
   "setup": {
     "title": "准备新记录",
+    "activeMeetingConflict": "已有一条记录正在进行，请先继续或结束该记录",
     "description": "确认记录信息、两路音频与会议 Copilot 的准备状态。",
     "basicInfo": "基本信息",
     "recordOnlyDescription": "这里只创建一份记录，不会发起、加入或控制外部会议。",
@@ -137,8 +139,6 @@
     "reconnectSystemAudio": "重新连接系统音频",
     "sourceSwitchFailed": "切换音频来源失败",
     "sourceSwitchTimedOut": "切换音频来源超时，请重试",
-    "pause": "暂停",
-    "resume": "继续",
     "runtimeDescription": "正在记录 {{duration}} · 音频持续写入本地恢复点",
     "transcriptPending": "实时转写尚未连接；原始音频继续保存",
     "runtimeTranscriptEmpty": "实时转写尚未连接。本地与系统原始音频正在独立保存，接入或恢复转写后，真实内容会显示在这里。",
@@ -146,7 +146,6 @@
     "trackStatus": {
       "pending": "准备中",
       "active": "录制中",
-      "paused": "已暂停",
       "completed": "完整",
       "interrupted": "已中断",
       "failed": "失败",

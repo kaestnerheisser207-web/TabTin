@@ -158,11 +158,10 @@ describe('MeetingLiveSessionView timer', () => {
     ).toBeTruthy();
   });
 
-  it('keeps pause and stop enabled from the parent-confirmed active status', async () => {
+  it('keeps source switching and stop enabled from the parent-confirmed active status', async () => {
     const initialStatus = await window.tabtin.meetingRecording.getStatus();
-    const pause = vi.fn().mockResolvedValue(initialStatus);
     const stop = vi.fn().mockResolvedValue(initialStatus);
-    Object.assign(window.tabtin.meetingRecording, { pause, stop });
+    Object.assign(window.tabtin.meetingRecording, { stop });
     const onBack = vi.fn();
     render(
       <MeetingLiveSessionView
@@ -172,9 +171,7 @@ describe('MeetingLiveSessionView timer', () => {
       />,
     );
 
-    expect(
-      screen.getByRole('button', { name: '暂停' }).hasAttribute('disabled'),
-    ).toBe(false);
+    expect(screen.queryByRole('button', { name: '暂停' })).toBeNull();
     expect(
       screen.getByRole('button', { name: '结束记录' }).hasAttribute('disabled'),
     ).toBe(false);
@@ -188,16 +185,6 @@ describe('MeetingLiveSessionView timer', () => {
         .getByRole('button', { name: '切换系统音频来源' })
         .hasAttribute('disabled'),
     ).toBe(false);
-    await act(async () => {
-      fireEvent.click(screen.getByRole('button', { name: '暂停' }));
-      await Promise.resolve();
-    });
-    expect(pause).toHaveBeenCalledWith({
-      sessionId,
-      organizationId: 'org-1',
-      userId: 'user-1',
-    });
-
     await act(async () => {
       fireEvent.click(screen.getByRole('button', { name: '结束记录' }));
       await Promise.resolve();

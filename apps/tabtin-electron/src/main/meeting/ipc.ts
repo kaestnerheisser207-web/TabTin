@@ -42,8 +42,6 @@ export const MEETING_RECORDING_IPC_CHANNELS = [
   'meeting-recording:report-capture-level',
   'meeting-recording:prepare',
   'meeting-recording:start',
-  'meeting-recording:pause',
-  'meeting-recording:resume',
   'meeting-recording:stop',
   'meeting-recording:cancel',
   'meeting-recording:status',
@@ -166,16 +164,6 @@ export function registerMeetingRecordingIpc(): void {
     'meeting-recording:start',
     async (_event, scope: MeetingArchiveScope) =>
       okResponse(await getManager().start(scope)),
-  );
-  guardedHandle(
-    'meeting-recording:pause',
-    async (_event, scope: MeetingArchiveScope) =>
-      okResponse(await getManager().pause(scope)),
-  );
-  guardedHandle(
-    'meeting-recording:resume',
-    async (_event, scope: MeetingArchiveScope) =>
-      okResponse(await getManager().resume(scope)),
   );
   guardedHandle(
     'meeting-recording:stop',
