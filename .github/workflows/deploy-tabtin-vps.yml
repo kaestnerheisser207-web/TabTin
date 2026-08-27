@@ -1,0 +1,61 @@
+name: Deploy TabTin VPS
+
+on:
+  workflow_dispatch:
+    inputs:
+      confirmation:
+        description: Type deploy to publish the selected commit to production
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+concurrency:
+  group: tabtin-vps-production
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    if: inputs.confirmation == 'deploy'
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    environment: production
+    steps:
+      - name: Configure restricted SSH access
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.TABTIN_VPS_SSH_KEY }}
+          SSH_KNOWN_HOSTS: ${{ secrets.TABTIN_VPS_KNOWN_HOSTS }}
+        run: |
+          set -euo pipefail
+          install -d -m 0700 "$HOME/.ssh"
+          printf '%s\n' "$SSH_PRIVATE_KEY" > "$HOME/.ssh/tabtin_deploy"
+          chmod 0600 "$HOME/.ssh/tabtin_deploy"
+          printf '%s\n' "$SSH_KNOWN_HOSTS" > "$HOME/.ssh/known_hosts"
+          chmod 0600 "$HOME/.ssh/known_hosts"
+
+      - name: Deploy selected commit
+        env:
+          DEPLOY_HOST: ${{ vars.TABTIN_VPS_HOST }}
+          DEPLOY_PORT: ${{ vars.TABTIN_VPS_PORT }}
+          DEPLOY_USER: ${{ vars.TABTIN_VPS_USER }}
+        run: |
+          set -euo pipefail
+          test -n "$DEPLOY_HOST"
+          test -n "$DEPLOY_PORT"
+          test -n "$DEPLOY_USER"
+          ssh \
+            -o BatchMode=yes \
+            -o IdentitiesOnly=yes \
+            -o StrictHostKeyChecking=yes \
+            -i "$HOME/.ssh/tabtin_deploy" \
+            -p "$DEPLOY_PORT" \
+            "$DEPLOY_USER@$DEPLOY_HOST" \
+            "deploy $GITHUB_SHA"
+
+      - name: Verify public readiness
+        run: |
+          set -euo pipefail
+          response="$(curl --fail --silent --show-error --max-time 20 https://tabtin.dovelora.com/health/ready)"
+          printf '%s\n' "$response"
+          printf '%s' "$response" | grep -q '"status"[[:space:]]*:[[:space:]]*"ready"'
