@@ -15,7 +15,7 @@ import type {
 } from '../../shared/meeting-recording-contract';
 import { MeetingPcmCapture } from './MeetingPcmCapture';
 
-const DEFAULT_CHUNK_DURATION_MS = 5_000;
+const DEFAULT_CHUNK_DURATION_MS = 1_000;
 const MIME_TYPE_CANDIDATES = ['audio/webm;codecs=opus', 'audio/webm'] as const;
 const MAIN_DISPLAY_AUDIO_SOURCE_ID = 'main-display';
 

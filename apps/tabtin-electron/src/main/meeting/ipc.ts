@@ -232,6 +232,10 @@ export function registerMeetingRecordingIpc(): void {
   );
 }
 
+export async function flushActiveMeetingRecordingOnExit(): Promise<void> {
+  await manager?.interruptForShutdown();
+}
+
 export function resetMeetingRecordingManagerForTests(): void {
   unsubscribeServerReconnect?.();
   unsubscribeServerReconnect = null;

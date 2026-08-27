@@ -291,8 +291,8 @@ describe('MeetingLiveSessionView timer', () => {
     const getArchive = vi.fn().mockResolvedValue({
       transcript: [
         {
-          externalId: 'local-question-1',
-          source: 'local',
+          externalId: 'remote-question-1',
+          source: 'remote',
           startMs: 1_000,
           endMs: 2_000,
           text: 'Hash map implementation principles.',
@@ -354,7 +354,7 @@ describe('MeetingLiveSessionView timer', () => {
         organizationId: 'org-1',
         userId: 'user-1',
       },
-      'local-question-1',
+      'remote-question-1',
     );
     expect(
       screen.getByText('需要先核对项目计划，再确认是否承诺下周五交付。'),
@@ -363,12 +363,130 @@ describe('MeetingLiveSessionView timer', () => {
     expect(screen.getByText('会前 Brief')).toBeTruthy();
   });
 
+  it('does not send the local microphone answer back to Copilot', async () => {
+    const initialStatus = await window.tabtin.meetingRecording.getStatus();
+    initialStatus.manifest!.copilotEnabled = true;
+    const answerCopilotQuestion = vi.fn();
+    Object.assign(window.tabtin.meetingRecording, {
+      getArchive: vi.fn().mockResolvedValue({
+        transcript: [
+          {
+            externalId: 'local-answer-1',
+            source: 'local',
+            startMs: 1_000,
+            endMs: 2_000,
+            text: '哈希表通过哈希函数把键映射到桶。',
+            isFinal: true,
+            recordedAt: '2026-08-27T00:00:00.000Z',
+          },
+        ],
+        copilotRecords: [],
+      }),
+      answerCopilotQuestion,
+    });
+
+    render(
+      <MeetingLiveSessionView
+        sessionId={sessionId}
+        onBack={vi.fn()}
+        initialStatus={initialStatus}
+      />,
+    );
+    await act(async () => {
+      await Promise.resolve();
+      await Promise.resolve();
+      vi.advanceTimersByTime(500);
+      await Promise.resolve();
+    });
+
+    expect(answerCopilotQuestion).not.toHaveBeenCalled();
+  });
+
+  it('keeps an in-flight remote turn evaluated across stale archive refreshes', async () => {
+    const initialStatus = await window.tabtin.meetingRecording.getStatus();
+    initialStatus.manifest!.copilotEnabled = true;
+    const remoteTurn = {
+      externalId: 'remote-pending-1',
+      source: 'remote' as const,
+      startMs: 1_000,
+      endMs: 2_000,
+      text: 'Explain red-black trees.',
+      isFinal: true,
+      recordedAt: '2026-08-27T00:00:00.000Z',
+    };
+    const getArchive = vi.fn().mockResolvedValue({
+      transcript: [remoteTurn],
+      copilotRecords: [],
+    });
+    let resolveAnswer!: (result: {
+      status: 'no_action';
+      message: string;
+      candidate_segment_id: string;
+    }) => void;
+    const answerCopilotQuestion = vi.fn(
+      () =>
+        new Promise((resolve) => {
+          resolveAnswer = resolve;
+        }),
+    );
+    Object.assign(window.tabtin.meetingRecording, {
+      getArchive,
+      answerCopilotQuestion,
+    });
+
+    render(
+      <MeetingLiveSessionView
+        sessionId={sessionId}
+        onBack={vi.fn()}
+        initialStatus={initialStatus}
+      />,
+    );
+    await act(async () => {
+      await Promise.resolve();
+      await Promise.resolve();
+    });
+    await act(async () => {
+      vi.advanceTimersByTime(250);
+      await Promise.resolve();
+      await Promise.resolve();
+    });
+    expect(answerCopilotQuestion).toHaveBeenCalledTimes(1);
+
+    act(() => {
+      statusListener?.({
+        ...initialStatus,
+        manifest: {
+          ...initialStatus.manifest!,
+          transcriptRevision: 2,
+        },
+      });
+    });
+    await act(async () => {
+      await Promise.resolve();
+      await Promise.resolve();
+    });
+    expect(getArchive).toHaveBeenCalledTimes(2);
+
+    await act(async () => {
+      resolveAnswer({
+        status: 'no_action',
+        message: 'No answer needed.',
+        candidate_segment_id: remoteTurn.externalId,
+      });
+      await Promise.resolve();
+      vi.advanceTimersByTime(500);
+      await Promise.resolve();
+    });
+
+    expect(answerCopilotQuestion).toHaveBeenCalledTimes(1);
+  });
+
   it('analyzes the newest completed turn after an earlier AI request finishes', async () => {
     const initialStatus = await window.tabtin.meetingRecording.getStatus();
     initialStatus.manifest!.copilotEnabled = true;
     const firstTurn = {
       externalId: 'turn-1',
-      source: 'local' as const,
+      source: 'remote' as const,
       startMs: 1_000,
       endMs: 2_000,
       text: 'Opening the document now.',

@@ -11,6 +11,7 @@ const mocks = vi.hoisted(() => ({
   unregisterTerminalIpcHandlers: vi.fn(),
   unregisterMainProcessIPCHandlers: vi.fn(),
   flushRunningBackgroundTasksOnExit: vi.fn(),
+  flushSessionCodeRootBindingsOnExit: vi.fn(),
   startupPerf: {
     sinceStart: vi.fn(),
     mark: vi.fn(),
@@ -66,6 +67,13 @@ vi.mock('./terminal/ipc', () => ({
 
 vi.mock('./ipc-registry', () => ({
   unregisterMainProcessIPCHandlers: mocks.unregisterMainProcessIPCHandlers,
+}))
+
+vi.mock('./agent/ElectronAgentHost', () => ({
+  electronAgentHost: {
+    flushRunningBackgroundTasksOnExit: mocks.flushRunningBackgroundTasksOnExit,
+    flushSessionCodeRootBindingsOnExit: mocks.flushSessionCodeRootBindingsOnExit,
+  },
 }))
 
 import { createMainAppLifecycleHandlers } from './main-app-handlers'
@@ -209,6 +217,7 @@ describe('main-app-handlers', () => {
   it('before-quit 时会上报在线状态、关闭窗口并完成 IPC 清理', async () => {
     const executeJavaScript = vi.fn().mockResolvedValue(undefined)
     const stop = vi.fn()
+    const flushActiveMeetingRecordingOnExit = vi.fn().mockResolvedValue(undefined)
     let onClosed: (() => void) | undefined
     const close = vi.fn(() => {
       onClosed?.()
@@ -234,6 +243,7 @@ describe('main-app-handlers', () => {
         stop,
       },
       flushRunningBackgroundTasksOnExit: mocks.flushRunningBackgroundTasksOnExit,
+      flushActiveMeetingRecordingOnExit,
     })
 
     mocks.getAllWindows.mockReturnValue([
@@ -261,6 +271,7 @@ describe('main-app-handlers', () => {
     expect(executeJavaScript).toHaveBeenCalledWith(
       'try { window.__tabtin_report_offline?.() } catch(e) {}',
     )
+    expect(flushActiveMeetingRecordingOnExit).toHaveBeenCalledTimes(1)
     expect(mocks.notificationDestroy).toHaveBeenCalledTimes(1)
     expect(mocks.destroyPtyManager).toHaveBeenCalledTimes(1)
     expect(close).toHaveBeenCalledTimes(1)

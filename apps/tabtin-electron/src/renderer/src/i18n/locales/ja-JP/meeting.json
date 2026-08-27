@@ -215,6 +215,10 @@
     "pointThree": "Meeting Copilot のタイムアウトは現在の候補だけに影響します。",
     "source": "出典：要件ベースライン §2.3、§5.11",
     "copy": "コピー",
+    "copilotHistory": "Copilot の回答履歴",
+    "copilotNoHistory": "回答が必要な質問はまだありません。",
+    "expandAnswer": "回答を展開：{{question}}",
+    "collapseAnswer": "回答を折りたたむ：{{question}}",
     "deepResearch": "詳しく調べる"
   },
   "detail": {
@@ -276,7 +280,8 @@
     "relatedProject": "関連 Project",
     "meetingCapability": "会議機能",
     "currentProject": "現在の Project",
-    "linkedProjectId": "関連 Project ID",
+    "linkedProjectId": "関連 Project",
+    "linkedProjectUnavailable": "関連する Project を利用できません",
     "noLinkedProject": "関連 Project なし",
     "resourcesUnavailable": "この記録には表示できる許可済み資料がありません。",
     "copilotUnavailable": "この記録では Meeting Copilot が有効でなかったため、表示できる会議後の回答はありません。",

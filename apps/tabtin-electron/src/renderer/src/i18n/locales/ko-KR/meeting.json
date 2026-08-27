@@ -215,6 +215,10 @@
     "pointThree": "Meeting Copilot 시간 초과는 현재 제안에만 영향을 줍니다.",
     "source": "출처: 요구사항 기준선 §2.3, §5.11",
     "copy": "복사",
+    "copilotHistory": "Copilot 답변 기록",
+    "copilotNoHistory": "아직 답변이 필요한 질문이 없습니다.",
+    "expandAnswer": "답변 펼치기: {{question}}",
+    "collapseAnswer": "답변 접기: {{question}}",
     "deepResearch": "심층 검색"
   },
   "detail": {
@@ -276,7 +280,8 @@
     "relatedProject": "연결된 Project",
     "meetingCapability": "회의 기능",
     "currentProject": "현재 Project",
-    "linkedProjectId": "연결된 Project ID",
+    "linkedProjectId": "연결된 Project",
+    "linkedProjectUnavailable": "연결된 Project를 사용할 수 없습니다",
     "noLinkedProject": "연결된 Project 없음",
     "resourcesUnavailable": "이 기록에는 표시할 수 있는 승인된 자료가 없습니다.",
     "copilotUnavailable": "이 기록에서는 Meeting Copilot을 켜지 않아 표시할 회의 후 답변이 없습니다.",

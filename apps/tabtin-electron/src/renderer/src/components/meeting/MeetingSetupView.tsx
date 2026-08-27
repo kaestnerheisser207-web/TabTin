@@ -116,6 +116,7 @@ export const MeetingSetupView: React.FC<{
   const selectedCopilotModel = copilotModels.find(
     (model) => model.id === copilotModelId,
   );
+  const selectedProject = projects.find((project) => project.id === projectId);
 
   React.useEffect(() => {
     if (!organizationId) {
@@ -245,6 +246,7 @@ export const MeetingSetupView: React.FC<{
         organizationId: String(organizationId),
         userId: String(userId),
         projectId: projectId === NO_PROJECT_VALUE ? null : projectId,
+        projectName: selectedProject?.name ?? '',
         title: title.trim(),
         brief: brief.trim(),
         consentConfirmed,

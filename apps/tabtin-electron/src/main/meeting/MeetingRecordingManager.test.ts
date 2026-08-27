@@ -143,6 +143,87 @@ describe('MeetingRecordingManager', () => {
     expect(asrRuntime.stop).toHaveBeenCalledTimes(1);
   });
 
+  it('flushes active capture on exit and finalizes interrupted parts on restart', async () => {
+    await manager.prepare({
+      ...scope,
+      title: 'Update interruption',
+      consentConfirmed: true,
+    });
+    await manager.start(scope);
+    for (const source of ['local', 'remote'] as const) {
+      await manager.appendAudioChunk({
+        ...scope,
+        source,
+        bytes: new Uint8Array(source === 'local' ? [1, 2] : [3, 4]),
+        durationMs: 1_000,
+        sampleRate: 48_000,
+        channelCount: 1,
+        codec: 'opus',
+        container: 'webm',
+      });
+    }
+
+    await manager.interruptForShutdown();
+
+    expect(captureHost.stop).toHaveBeenCalledTimes(1);
+    expect(asrRuntime.stop).toHaveBeenCalledTimes(1);
+    expect(manager.getStatus().manifest?.lifecycleStatus).toBe('interrupted');
+
+    const restarted = new MeetingRecordingManager({
+      archiveStore: new MeetingArchiveStore({
+        rootPath,
+        finalizeMediaFile: async (inputPath, outputPath) => {
+          await fs.copyFile(inputPath, outputPath);
+        },
+      }),
+    });
+    await restarted.recoverInterrupted();
+    const archive = await restarted.getArchive(scope);
+    expect(archive.audioUrls).toMatchObject({
+      local: expect.stringContaining('local.webm'),
+      remote: expect.stringContaining('remote.webm'),
+    });
+    expect(archive.manifest.lifecycleStatus).toBe('interrupted');
+  });
+
+  it('recovers orphaned parts from an already interrupted zero-byte manifest', async () => {
+    const archiveStore = new MeetingArchiveStore({
+      rootPath,
+      finalizeMediaFile: async (inputPath, outputPath) => {
+        await fs.copyFile(inputPath, outputPath);
+      },
+    });
+    await archiveStore.prepare({
+      ...scope,
+      title: 'Orphan part recovery',
+      consentConfirmed: true,
+    });
+    await archiveStore.updateLifecycle(scope, 'recording');
+    await fs.writeFile(
+      path.join(
+        rootPath,
+        'org-1/user-1/session-1/local/00000001.webm.part',
+      ),
+      new Uint8Array([1, 2, 3]),
+    );
+    await archiveStore.recoverInterrupted();
+    const interrupted = await archiveStore.readManifest(scope);
+    expect(interrupted.lifecycleStatus).toBe('interrupted');
+    expect(interrupted.tracks.local.bytes).toBe(0);
+
+    const restarted = new MeetingRecordingManager({ archiveStore });
+    await restarted.recoverInterrupted();
+    const recovered = await restarted.getArchive(scope);
+
+    expect(recovered.audioUrls.local).toContain('local.webm');
+    expect(recovered.manifest.tracks.local.status).toBe('interrupted');
+    const contentHash = recovered.manifest.tracks.local.contentHash;
+    await expect(restarted.recoverInterrupted()).resolves.toEqual([]);
+    expect(
+      (await restarted.getArchive(scope)).manifest.tracks.local.contentHash,
+    ).toBe(contentHash);
+  });
+
   it('returns independent media readiness from the capture host', async () => {
     await expect(manager.probeMedia()).resolves.toEqual({
       local: { available: true },
@@ -350,6 +431,49 @@ describe('MeetingRecordingManager', () => {
     expect(stopped.manifest?.tracks.remote.status).toBe('completed');
   });
 
+  it('does not wait for remote server retry after the local archive is stopped', async () => {
+    const flushResult = {
+      sessionId: scope.sessionId,
+      status: 'pending' as const,
+      syncedCount: 0,
+      pendingCount: 1,
+    };
+    const retrySession = vi.fn(() => new Promise<never>(() => undefined));
+    const serverSync = {
+      createSession: vi.fn(),
+      updateLifecycle: vi.fn(),
+      createTranscriptRun: vi.fn(),
+      checkpointTrack: vi.fn(),
+      upsertTranscriptSegments: vi.fn(),
+      updateTranscriptRun: vi.fn(),
+      updateCopilotState: vi.fn(),
+      flushSession: vi.fn().mockResolvedValue(flushResult),
+      retrySession,
+    } as unknown as MeetingServerSync;
+    const syncManager = new MeetingRecordingManager({
+      archiveStore: new MeetingArchiveStore({
+        rootPath,
+        finalizeMediaFile: async (inputPath, outputPath) => {
+          await fs.copyFile(inputPath, outputPath);
+        },
+      }),
+      captureHost,
+      createAsrRuntime,
+      serverSync,
+    });
+    await syncManager.prepare({
+      ...scope,
+      title: 'Offline finalization',
+      consentConfirmed: true,
+    });
+    await syncManager.start(scope);
+
+    await expect(syncManager.stop(scope)).resolves.toMatchObject({
+      manifest: { lifecycleStatus: 'stopped' },
+    });
+    expect(retrySession).toHaveBeenCalledWith(scope.sessionId);
+  });
+
   it('projects lifecycle, tracks, transcript, and Copilot to the ordered server queue', async () => {
     const flushResult = {
       sessionId: scope.sessionId,
@@ -444,6 +568,92 @@ describe('MeetingRecordingManager', () => {
       scope.sessionId,
       expect.objectContaining({ status: 'stopped' }),
     );
+  });
+
+  it('only sends remote turns to Copilot and persists answered history', async () => {
+    const flushResult = {
+      sessionId: scope.sessionId,
+      status: 'synced' as const,
+      syncedCount: 1,
+      pendingCount: 0,
+    };
+    const answered = {
+      status: 'answered' as const,
+      question: 'Explain a hash map.',
+      question_segment_id: 'remote-question-1',
+      answer: 'A hash map places keys into buckets using a hash function.',
+      key_points: ['hash', 'bucket'],
+      sources: [],
+      reliability: 'high' as const,
+      warning: '',
+      model: 'deepseek-v4-flash',
+      provider: 'deepseek',
+      latency_ms: 250,
+    };
+    const serverSync = {
+      createSession: vi.fn(),
+      updateLifecycle: vi.fn(),
+      createTranscriptRun: vi.fn(),
+      checkpointTrack: vi.fn(),
+      upsertTranscriptSegments: vi.fn(),
+      updateTranscriptRun: vi.fn(),
+      updateCopilotState: vi.fn(),
+      answerCopilot: vi.fn().mockResolvedValue(answered),
+      flushSession: vi.fn().mockResolvedValue(flushResult),
+      retrySession: vi.fn().mockResolvedValue(flushResult),
+    } as unknown as MeetingServerSync;
+    const syncManager = new MeetingRecordingManager({
+      archiveStore: new MeetingArchiveStore({
+        rootPath,
+        finalizeMediaFile: async (inputPath, outputPath) => {
+          await fs.copyFile(inputPath, outputPath);
+        },
+      }),
+      captureHost,
+      createAsrRuntime,
+      serverSync,
+    });
+    await syncManager.prepare({
+      ...scope,
+      title: 'Role boundary',
+      consentConfirmed: true,
+      copilotEnabled: true,
+    });
+    await syncManager.start(scope);
+    await syncManager.appendTranscriptCheckpoint(scope, {
+      externalId: 'local-answer-1',
+      source: 'local',
+      startMs: 1_000,
+      endMs: 2_000,
+      text: 'A hash map uses buckets.',
+      isFinal: true,
+      recordedAt: '2026-08-27T00:00:00.000Z',
+    });
+
+    await expect(
+      syncManager.answerCopilotQuestion(scope, 'local-answer-1'),
+    ).resolves.toMatchObject({
+      status: 'no_action',
+      candidate_segment_id: 'local-answer-1',
+    });
+    expect(serverSync.answerCopilot).not.toHaveBeenCalled();
+
+    await syncManager.appendTranscriptCheckpoint(scope, {
+      externalId: 'remote-question-1',
+      source: 'remote',
+      startMs: 2_100,
+      endMs: 3_000,
+      text: 'Explain a hash map.',
+      isFinal: true,
+      recordedAt: '2026-08-27T00:00:01.000Z',
+    });
+    await expect(
+      syncManager.answerCopilotQuestion(scope, 'remote-question-1'),
+    ).resolves.toEqual(answered);
+
+    const archive = await syncManager.getArchive(scope);
+    expect(archive.copilotRecords).toHaveLength(1);
+    expect(archive.copilotRecords[0]?.result).toEqual(answered);
   });
 
   it('does not put a slow Copilot answer request on the recording control queue', async () => {

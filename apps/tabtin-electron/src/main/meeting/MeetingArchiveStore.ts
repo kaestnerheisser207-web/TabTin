@@ -12,6 +12,8 @@ import {
   type MeetingArchiveManifestV1,
   type MeetingArchiveTrackManifest,
   type MeetingAudioSource,
+  type MeetingCopilotAnswerResult,
+  type MeetingCopilotRecord,
   type MeetingStorageProbeResult,
   type MeetingTranscriptCheckpoint,
   type PrepareMeetingArchiveInput,
@@ -270,6 +272,7 @@ export class MeetingArchiveStore {
         projectId: input.projectId
           ? requireSafeSegment(input.projectId, 'projectId')
           : null,
+        projectName: input.projectName?.trim() || '',
         title: input.title.trim(),
         brief: input.brief?.trim() || '',
         consentConfirmedAt: timestamp,
@@ -409,7 +412,10 @@ export class MeetingArchiveStore {
     organizationId: string;
     userId: string;
     sessionId: string;
-  }): Promise<MeetingArchiveManifestV1> {
+  }, options: {
+    reconcileParts?: boolean;
+    bestEffort?: boolean;
+  } = {}): Promise<MeetingArchiveManifestV1> {
     return this.enqueueSessionWrite(scope.sessionId, async () => {
       const manifestPath = this.manifestPath(scope);
       const manifest = parseManifest(await fs.readFile(manifestPath, 'utf8'));
@@ -417,59 +423,111 @@ export class MeetingArchiveStore {
 
       for (const source of ['local', 'remote'] as const) {
         const track = manifest.tracks[source];
-        if (!track.container || track.bytes === 0) continue;
         const trackDirectory = path.join(sessionDirectory, source);
-        const partNames = (await fs.readdir(trackDirectory))
-          .filter((name) => name.endsWith(`.${track.container}.part`))
+        const directoryNames = await fs.readdir(trackDirectory).catch(() => []);
+        const inferredContainer = directoryNames
+          .map((name) => name.match(/^\d{8}\.([a-z0-9]{1,12})\.part$/)?.[1])
+          .find(Boolean);
+        const container = track.container || inferredContainer;
+        if (!container) continue;
+        track.container = container;
+        const partNames = directoryNames
+          .filter((name) => {
+            const match = name.match(
+              /^(\d{8})\.([a-z0-9]{1,12})\.part$/,
+            );
+            return match?.[2] === container;
+          })
           .sort();
+        const finalName = `${source}.${container}`;
+        const finalPath = path.join(sessionDirectory, finalName);
+        const existingFinal = await fs.stat(finalPath).catch(() => null);
+        if (existingFinal?.isFile() && existingFinal.size > 0) {
+          track.finalizedRelativePath = finalName;
+          track.bytes = existingFinal.size;
+          track.contentHash = await hashFile(finalPath);
+          if (manifest.lifecycleStatus === 'interrupted') {
+            track.status = 'interrupted';
+          }
+          await atomicWriteJson(manifestPath, manifest);
+          continue;
+        }
         if (partNames.length === 0) {
-          throw new Error(`meeting ${source} track has no recoverable parts`);
+          if (track.bytes === 0) continue;
+          const error = new Error(
+            `meeting ${source} track has no recoverable parts`,
+          );
+          if (!options.bestEffort) throw error;
+          track.status = 'failed';
+          track.errorCode = 'finalize_failed';
+          track.errorMessage = error.message;
+          await atomicWriteJson(manifestPath, manifest);
+          continue;
         }
 
-        const finalName = `${source}.${track.container}`;
-        const finalPath = path.join(sessionDirectory, finalName);
         const combinedPath = `${finalPath}.${randomUUID()}.combined`;
         const finalizedPath = `${finalPath}.${randomUUID()}.finalized`;
-        let writtenBytes = 0;
-        const output = await fs.open(combinedPath, 'wx');
         try {
-          for (const partName of partNames) {
-            const bytes = await fs.readFile(
-              path.join(trackDirectory, partName),
-            );
-            writtenBytes += bytes.byteLength;
-            await output.write(bytes);
+          let writtenBytes = 0;
+          const output = await fs.open(combinedPath, 'wx');
+          try {
+            for (const partName of partNames) {
+              const bytes = await fs.readFile(
+                path.join(trackDirectory, partName),
+              );
+              writtenBytes += bytes.byteLength;
+              await output.write(bytes);
+            }
+            await output.sync();
+          } finally {
+            await output.close();
           }
-          await output.sync();
-        } finally {
-          await output.close();
-        }
 
-        try {
           if (writtenBytes !== track.bytes) {
-            throw new Error(
-              `meeting ${source} track byte count mismatch: expected=${track.bytes} actual=${writtenBytes}`,
+            if (!options.reconcileParts) {
+              throw new Error(
+                `meeting ${source} track byte count mismatch: expected=${track.bytes} actual=${writtenBytes}`,
+              );
+            }
+            track.bytes = writtenBytes;
+            const lastSequence = Number.parseInt(
+              partNames.at(-1)?.slice(0, 8) ?? '0',
+              10,
             );
+            track.nextSequence = Math.max(track.nextSequence, lastSequence + 1);
           }
           await this.finalizeMediaFile(
             combinedPath,
             finalizedPath,
-            track.container,
+            container,
           );
           const finalizedStat = await fs.stat(finalizedPath);
           if (finalizedStat.size === 0) {
             throw new Error(`meeting ${source} finalized track is empty`);
           }
           await fs.rename(finalizedPath, finalPath);
+          track.finalizedRelativePath = finalName;
+          track.bytes = finalizedStat.size;
+          track.contentHash = await hashFile(finalPath);
+          if (manifest.lifecycleStatus === 'interrupted') {
+            track.status = 'interrupted';
+          }
+          delete track.errorCode;
+          delete track.errorMessage;
+          await atomicWriteJson(manifestPath, manifest);
+        } catch (error) {
+          if (!options.bestEffort) throw error;
+          track.status = 'failed';
+          track.errorCode = 'finalize_failed';
+          track.errorMessage =
+            error instanceof Error ? error.message : String(error);
+          await atomicWriteJson(manifestPath, manifest);
         } finally {
           await Promise.allSettled([
             fs.unlink(combinedPath),
             fs.unlink(finalizedPath),
           ]);
         }
-        track.finalizedRelativePath = finalName;
-        track.bytes = (await fs.stat(finalPath)).size;
-        track.contentHash = await hashFile(finalPath);
       }
 
       await atomicWriteJson(manifestPath, manifest);
@@ -548,6 +606,74 @@ export class MeetingArchiveStore {
       .split('\n')
       .filter(Boolean)
       .map((line) => JSON.parse(line) as MeetingTranscriptCheckpoint);
+  }
+
+  async appendCopilotRecord(
+    scope: { organizationId: string; userId: string; sessionId: string },
+    result: MeetingCopilotAnswerResult,
+  ): Promise<MeetingCopilotRecord> {
+    return this.enqueueSessionWrite(scope.sessionId, async () => {
+      const questionSegmentId =
+        result.status === 'answered'
+          ? result.question_segment_id
+          : result.status === 'no_action'
+            ? result.candidate_segment_id
+            : undefined;
+      if (!questionSegmentId) {
+        throw new Error('Copilot record requires a question segment');
+      }
+      const normalizedQuestionSegmentId = questionSegmentId.trim();
+      if (
+        !normalizedQuestionSegmentId ||
+        normalizedQuestionSegmentId !== questionSegmentId ||
+        normalizedQuestionSegmentId.length > 512
+      ) {
+        throw new Error('invalid Copilot question segment');
+      }
+      const record: MeetingCopilotRecord = {
+        questionSegmentId: normalizedQuestionSegmentId,
+        evaluatedAt: this.now().toISOString(),
+        result,
+      };
+      const recordPath = path.join(
+        this.sessionDirectory(scope),
+        'copilot.jsonl',
+      );
+      await durableAppend(recordPath, `${JSON.stringify(record)}\n`);
+      return record;
+    });
+  }
+
+  async readCopilotRecords(scope: {
+    organizationId: string;
+    userId: string;
+    sessionId: string;
+  }): Promise<MeetingCopilotRecord[]> {
+    const recordPath = path.join(
+      this.sessionDirectory(scope),
+      'copilot.jsonl',
+    );
+    const raw = await fs.readFile(recordPath, 'utf8').catch((error) => {
+      if ((error as NodeJS.ErrnoException).code === 'ENOENT') return '';
+      throw error;
+    });
+    const latestByQuestion = new Map<string, MeetingCopilotRecord>();
+    const lines = raw.split('\n');
+    for (const [index, line] of lines.entries()) {
+      if (!line.trim()) continue;
+      let record: MeetingCopilotRecord;
+      try {
+        record = JSON.parse(line) as MeetingCopilotRecord;
+      } catch (error) {
+        const isInterruptedTail =
+          index === lines.length - 1 && !raw.endsWith('\n');
+        if (isInterruptedTail) continue;
+        throw error;
+      }
+      if (!record.questionSegmentId || !record.result) continue;
+      latestByQuestion.set(record.questionSegmentId, record);
+    }
+    return [...latestByQuestion.values()];
   }
 
   async updateTranscriptionStatus(
@@ -676,8 +802,30 @@ export class MeetingArchiveStore {
           };
           try {
             const manifest = await this.readManifest(scope);
-            if (!INTERRUPTIBLE_STATES.has(manifest.lifecycleStatus)) continue;
-            recovered.push(await this.updateLifecycle(scope, 'interrupted'));
+            if (INTERRUPTIBLE_STATES.has(manifest.lifecycleStatus)) {
+              recovered.push(await this.updateLifecycle(scope, 'interrupted'));
+              continue;
+            }
+            if (
+              manifest.lifecycleStatus === 'interrupted'
+            ) {
+              const hasRecoverableParts = (
+                await Promise.all(
+                  (['local', 'remote'] as const).map(async (source) => {
+                    if (manifest.tracks[source].finalizedRelativePath) {
+                      return false;
+                    }
+                    const names = await fs
+                      .readdir(path.join(this.sessionDirectory(scope), source))
+                      .catch(() => []);
+                    return names.some((name) =>
+                      /^\d{8}\.[a-z0-9]{1,12}\.part$/.test(name),
+                    );
+                  }),
+                )
+              ).some(Boolean);
+              if (hasRecoverableParts) recovered.push(manifest);
+            }
           } catch {
             // A corrupt directory is left untouched for diagnostics and manual recovery.
           }

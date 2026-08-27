@@ -215,6 +215,10 @@
     "pointThree": "Un dépassement de délai de Copilot affecte uniquement la suggestion en cours.",
     "source": "Source : référentiel des exigences §2.3 et §5.11",
     "copy": "Copier",
+    "copilotHistory": "Historique des réponses Copilot",
+    "copilotNoHistory": "Aucune question n’a encore nécessité de réponse.",
+    "expandAnswer": "Développer la réponse : {{question}}",
+    "collapseAnswer": "Réduire la réponse : {{question}}",
     "deepResearch": "Recherche approfondie"
   },
   "detail": {
@@ -276,7 +280,8 @@
     "relatedProject": "Project associé",
     "meetingCapability": "Fonctionnalité de réunion",
     "currentProject": "Project actuel",
-    "linkedProjectId": "ID du Project associé",
+    "linkedProjectId": "Project associé",
+    "linkedProjectUnavailable": "Le Project associé est indisponible",
     "noLinkedProject": "Aucun Project associé",
     "resourcesUnavailable": "Cet enregistrement ne contient aucune ressource autorisée à afficher.",
     "copilotUnavailable": "Meeting Copilot n’était pas activé pour cet enregistrement ; aucune réponse après réunion n’est disponible.",

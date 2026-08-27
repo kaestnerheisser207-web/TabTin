@@ -114,9 +114,10 @@ export class MeetingRecordingManager {
 
   private scheduleServerFlush(scope: MeetingArchiveScope): void {
     if (!this.serverSync) return;
-    void this.serverSync.flushSession(scope.sessionId).then((result) => {
-      void this.applyServerFlushResult(scope, result);
-    });
+    void this.serverSync
+      .flushSession(scope.sessionId)
+      .then((result) => this.applyServerFlushResult(scope, result))
+      .catch(() => undefined);
   }
 
   private async applyServerFlushResult(
@@ -347,13 +348,16 @@ export class MeetingRecordingManager {
           .join('/');
         audioUrls[source] = `tabtin-file://${encoded}`;
       }
-      return { manifest, audioUrls, transcript: [] };
+      return { manifest, audioUrls, transcript: [], copilotRecords: [] };
     });
   }
 
   async getArchive(scope: MeetingArchiveScope): Promise<MeetingLocalArchive> {
     const manifest = await this.archiveStore.readManifest(scope);
-    const transcript = await this.archiveStore.readTranscript(scope);
+    const [transcript, copilotRecords] = await Promise.all([
+      this.archiveStore.readTranscript(scope),
+      this.archiveStore.readCopilotRecords(scope),
+    ]);
     const audioUrls: MeetingLocalArchive['audioUrls'] = {};
     for (const source of ['local', 'remote'] as const) {
       const relativeName = manifest.tracks[source].finalizedRelativePath;
@@ -368,7 +372,7 @@ export class MeetingRecordingManager {
         .join('/');
       audioUrls[source] = `tabtin-file://${encoded}`;
     }
-    return { manifest, audioUrls, transcript };
+    return { manifest, audioUrls, transcript, copilotRecords };
   }
 
   async testMicrophone(
@@ -572,13 +576,14 @@ export class MeetingRecordingManager {
       });
     })();
     try {
-      let status = await this.stopPromise;
+      const status = await this.stopPromise;
       if (this.serverSync) {
-        const syncResult = await this.serverSync.retrySession(
-          activeScope.sessionId,
-        );
-        await this.applyServerFlushResult(activeScope, syncResult);
-        status = this.getStatus();
+        void this.serverSync
+          .retrySession(activeScope.sessionId)
+          .then((syncResult) =>
+            this.applyServerFlushResult(activeScope, syncResult),
+          )
+          .catch(() => undefined);
       }
       return status;
     } finally {
@@ -713,26 +718,80 @@ export class MeetingRecordingManager {
       };
     }
     const archive = await this.getArchive(scope);
-    const questionExists = archive.transcript.some(
+    const question = archive.transcript.find(
       (checkpoint) =>
         checkpoint.externalId === questionSegmentId && checkpoint.isFinal,
     );
-    if (!questionExists) {
+    if (!question) {
       return {
         status: 'no_question',
         message: '这个问题尚未转写完成，请稍后再试',
       };
     }
-    return this.serverSync.answerCopilot(
+    if (question.source !== 'remote') {
+      return {
+        status: 'no_action',
+        message: '本地麦克风内容属于你的回答，不需要 Copilot 再次解答',
+        candidate_segment_id: question.externalId,
+      };
+    }
+    const result = await this.serverSync.answerCopilot(
       scope.sessionId,
       archive.transcript,
       questionSegmentId,
       this.activeManifest.copilotModelId,
     );
+    if (result.status === 'answered' || result.status === 'no_action') {
+      await this.archiveStore.appendCopilotRecord(scope, result);
+    }
+    return result;
+  }
+
+  async interruptForShutdown(): Promise<void> {
+    if (!this.activeScope || !this.activeManifest) return;
+    if (!ACTIVE_STATES.has(
+      this.activeManifest.lifecycleStatus as 'preparing' | 'recording',
+    )) return;
+    const scope = this.activeScope;
+    if (this.activeManifest.lifecycleStatus === 'recording') {
+      await this.captureHost?.stop().catch(() => undefined);
+      await this.activeAsrRuntime?.stop().catch(() => undefined);
+      this.activeAsrRuntime = null;
+    }
+    await this.enqueue(async () => {
+      if (!this.activeManifest || this.activeScope?.sessionId !== scope.sessionId)
+        return;
+      this.activeManifest = await this.archiveStore.updateLifecycle(
+        scope,
+        'interrupted',
+      );
+      this.serverSync?.updateLifecycle(scope.sessionId, {
+        status: 'interrupted',
+        durationMs: this.activeManifest.durationMs,
+      });
+      this.scheduleServerFlush(scope);
+      this.emitStatus();
+    });
   }
 
   async recoverInterrupted(): Promise<MeetingArchiveManifestV1[]> {
-    return this.enqueue(async () => this.archiveStore.recoverInterrupted());
+    return this.enqueue(async () => {
+      const recovered = await this.archiveStore.recoverInterrupted();
+      const finalized: MeetingArchiveManifestV1[] = [];
+      for (const manifest of recovered) {
+        const scope = {
+          organizationId: manifest.organizationId,
+          userId: manifest.userId,
+          sessionId: manifest.sessionId,
+        };
+        await this.archiveStore.finalizeAudioTracks(scope, {
+          reconcileParts: true,
+          bestEffort: true,
+        });
+        finalized.push(await this.archiveStore.readManifest(scope));
+      }
+      return finalized;
+    });
   }
 
   async retryActiveServerSync(): Promise<void> {

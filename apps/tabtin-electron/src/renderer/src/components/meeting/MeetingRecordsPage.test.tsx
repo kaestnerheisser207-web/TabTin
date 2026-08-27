@@ -244,7 +244,8 @@ describe('MeetingRecordsPage', () => {
         title: '真实记录',
         createdAt: '2026-08-26T00:00:00.000Z',
         durationMs: 20_000,
-        projectId: null,
+        projectId: 'project-1',
+        projectName: '面试准备',
         brief: '',
         transcriptionStatus: 'completed',
         transcriptionError: '',
@@ -287,10 +288,31 @@ describe('MeetingRecordsPage', () => {
           recordedAt: '2026-08-26T00:00:12.000Z',
         },
       ],
+      copilotRecords: [
+        {
+          questionSegmentId: 'remote-question-1',
+          evaluatedAt: '2026-08-26T00:00:16.000Z',
+          result: {
+            status: 'answered',
+            question: '请解释哈希表的实现原理。',
+            question_segment_id: 'remote-question-1',
+            answer: '哈希表通过哈希函数把键映射到桶，并处理哈希冲突。',
+            key_points: ['哈希函数', '冲突处理'],
+            sources: [],
+            reliability: 'high',
+            warning: '',
+            model: 'deepseek-v4-flash',
+            provider: 'deepseek',
+            latency_ms: 260,
+          },
+        },
+      ],
     } as MeetingLocalArchive;
 
     try {
       render(<MeetingDetailSessionView archive={archive} />);
+      expect(screen.getByText('面试准备')).toBeTruthy();
+      expect(screen.queryByText('project-1')).toBeNull();
       const transcriptTab = screen.getByRole('tab', {
         name: '逐字稿与录音',
       });
@@ -321,6 +343,16 @@ describe('MeetingRecordsPage', () => {
       expect(
         screen.getByText('第二段真实逐字稿。').closest('article')?.className,
       ).toContain('bg-accent/10');
+
+      const copilotTab = screen.getByRole('tab', { name: '会议 Copilot' });
+      fireEvent.mouseDown(copilotTab, { button: 0, ctrlKey: false });
+      await waitFor(() =>
+        expect(copilotTab.getAttribute('aria-selected')).toBe('true'),
+      );
+      expect(screen.getByText('请解释哈希表的实现原理。')).toBeTruthy();
+      expect(
+        screen.getByText('哈希表通过哈希函数把键映射到桶，并处理哈希冲突。'),
+      ).toBeTruthy();
     } finally {
       play.mockRestore();
       pause.mockRestore();

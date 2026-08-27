@@ -151,7 +151,7 @@ describe('MeetingCaptureController', () => {
     expect(recorders).toHaveLength(2);
     expect(
       recorders.every(
-        (recorder) => recorder.start.mock.calls[0]?.[0] === 5_000,
+        (recorder) => recorder.start.mock.calls[0]?.[0] === 1_000,
       ),
     ).toBe(true);
 

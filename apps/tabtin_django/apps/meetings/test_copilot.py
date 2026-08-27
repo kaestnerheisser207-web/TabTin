@@ -124,7 +124,7 @@ class MeetingCopilotQuickAnswerTests(SimpleTestCase):
         self.assertIn("[transcript:remote-1] 对方", call["variables"]["transcript_context"])
 
     @patch("apps.meetings.copilot._select_chat_model")
-    def test_model_can_ignore_ordinary_speech_without_a_separate_classifier(self, select_model):
+    def test_local_user_speech_is_rejected_before_model_selection(self, select_model):
         select_model.return_value = SimpleNamespace(id="model-1")
         llm_call = Mock(return_value=SimpleNamespace(
             content=(
@@ -154,6 +154,8 @@ class MeetingCopilotQuickAnswerTests(SimpleTestCase):
 
         self.assertEqual(result["status"], "no_action")
         self.assertEqual(result["candidate_segment_id"], "statement-1")
+        select_model.assert_not_called()
+        llm_call.assert_not_called()
 
     @patch("apps.meetings.copilot._select_chat_model")
     def test_rejects_invalid_model_output(self, select_model):
