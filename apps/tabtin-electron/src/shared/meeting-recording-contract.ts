@@ -40,6 +40,7 @@ export interface MeetingArchiveManifestV1 {
   organizationId: string;
   userId: string;
   projectId: string | null;
+  projectName?: string;
   title: string;
   brief: string;
   consentConfirmedAt: string;
@@ -78,6 +79,7 @@ export interface PrepareMeetingArchiveInput {
   organizationId: string;
   userId: string;
   projectId?: string | null;
+  projectName?: string;
   title: string;
   brief?: string;
   consentConfirmed: boolean;
@@ -258,6 +260,12 @@ export type MeetingCopilotAnswerResult =
       candidate_segment_id?: string;
     };
 
+export interface MeetingCopilotRecord {
+  questionSegmentId: string;
+  evaluatedAt: string;
+  result: MeetingCopilotAnswerResult;
+}
+
 export interface SwitchMeetingMicrophoneInput extends MeetingArchiveScope {
   deviceId: string;
 }
@@ -280,6 +288,7 @@ export interface MeetingLocalArchive {
   manifest: MeetingArchiveManifestV1;
   audioUrls: Partial<Record<MeetingAudioSource, string>>;
   transcript: MeetingTranscriptCheckpoint[];
+  copilotRecords: MeetingCopilotRecord[];
 }
 
 export const MEETING_RECORDING_STATUS_CHANNEL =

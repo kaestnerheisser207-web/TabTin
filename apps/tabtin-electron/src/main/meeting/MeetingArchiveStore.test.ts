@@ -36,6 +36,8 @@ describe('MeetingArchiveStore', () => {
   it('prepares an idempotent manifest with separate local and remote tracks', async () => {
     const first = await store.prepare({
       ...scope,
+      projectId: 'project-1',
+      projectName: 'Interview prep',
       title: 'Product review',
       consentConfirmed: true,
     });
@@ -55,6 +57,8 @@ describe('MeetingArchiveStore', () => {
       transcriptRevision: 0,
       transcriptFinalCount: 0,
       serverSyncStatus: 'pending',
+      projectId: 'project-1',
+      projectName: 'Interview prep',
     });
     expect(first.transcriptRunId).toMatch(/^[0-9a-f-]{36}$/);
     expect(first.tracks.local.source).toBe('local');
@@ -233,6 +237,84 @@ describe('MeetingArchiveStore', () => {
         manifest.tracks.remote.finalizedRelativePath!,
       ),
     ).toBe(path.join(rootPath, 'org-1/user-1/session-1/remote.webm'));
+  });
+
+  it('persists Copilot evaluations and keeps the latest answer per question', async () => {
+    await store.prepare({
+      ...scope,
+      title: 'Interview',
+      consentConfirmed: true,
+    });
+    const answer = {
+      status: 'answered' as const,
+      question: 'How does a hash map work?',
+      question_segment_id: `${scope.sessionId}:remote:asr:1:0`,
+      answer: 'It maps a hashed key into a bucket.',
+      key_points: ['hash', 'bucket'],
+      sources: [],
+      reliability: 'high' as const,
+      warning: '',
+      model: 'deepseek-v4-flash',
+      provider: 'deepseek',
+      latency_ms: 320,
+    };
+    await store.appendCopilotRecord(scope, answer);
+    await store.appendCopilotRecord(scope, {
+      ...answer,
+      answer: 'It uses a hash function and resolves collisions.',
+    });
+    await fs.appendFile(
+      path.join(rootPath, 'org-1/user-1/session-1/copilot.jsonl'),
+      '{"questionSegmentId":"interrupted-tail"',
+    );
+
+    const records = await store.readCopilotRecords(scope);
+
+    expect(records).toHaveLength(1);
+    expect(records[0]).toMatchObject({
+      questionSegmentId: answer.question_segment_id,
+      evaluatedAt: '2026-08-26T00:00:00.000Z',
+      result: {
+        status: 'answered',
+        answer: 'It uses a hash function and resolves collisions.',
+      },
+    });
+  });
+
+  it('reconciles orphaned parts while recovering a playable interrupted track', async () => {
+    await store.prepare({
+      ...scope,
+      title: 'Interrupted interview',
+      consentConfirmed: true,
+    });
+    await store.updateLifecycle(scope, 'recording');
+    await fs.writeFile(
+      path.join(
+        rootPath,
+        'org-1/user-1/session-1/local/00000001.webm.part',
+      ),
+      new Uint8Array([1, 2]),
+    );
+    await fs.writeFile(
+      path.join(
+        rootPath,
+        'org-1/user-1/session-1/local/00000002.webm.part',
+      ),
+      new Uint8Array([3, 4, 5]),
+    );
+    await store.updateLifecycle(scope, 'interrupted');
+
+    const manifest = await store.finalizeAudioTracks(scope, {
+      reconcileParts: true,
+      bestEffort: true,
+    });
+
+    await expect(
+      fs.readFile(path.join(rootPath, 'org-1/user-1/session-1/local.webm')),
+    ).resolves.toEqual(Buffer.from([1, 2, 3, 4, 5]));
+    expect(manifest.tracks.local.finalizedRelativePath).toBe('local.webm');
+    expect(manifest.tracks.local.nextSequence).toBe(3);
+    expect(manifest.tracks.local.status).toBe('interrupted');
   });
 
   it('marks unfinished archives interrupted without deleting completed chunks', async () => {

@@ -1,4 +1,4 @@
-import { app, session } from 'electron'
+import { app, session, type Session } from 'electron'
 import fs from 'node:fs'
 import fsPromises from 'node:fs/promises'
 import path from 'node:path'
@@ -253,7 +253,7 @@ const respondWithLocalFile = async (
   })
 }
 
-let hasRegistered = false
+const registeredSessions = new WeakSet<Session>()
 
 /**
  * 注册 `tabtin-file://` 协议，承担两种用途：
@@ -270,11 +270,13 @@ let hasRegistered = false
  *    - 路径白名单：spaces / platformData / userData / temp / downloads / home
  *    - 防路径遍历：解析后的真实路径必须命中白名单
  */
-export const registerTabtinFileProtocol = () => {
-  if (hasRegistered) return
-  hasRegistered = true
+export const registerTabtinFileProtocol = (
+  targetSession: Session = session.defaultSession,
+) => {
+  if (registeredSessions.has(targetSession)) return
+  registeredSessions.add(targetSession)
 
-  const protocol = session.defaultSession.protocol
+  const protocol = targetSession.protocol
   protocol.registerStreamProtocol('tabtin-file', async (request, callback) => {
     try {
       const url = new URL(request.url)

@@ -215,6 +215,10 @@
     "pointThree": "Copilot 超时只影响当前建议卡。",
     "source": "来源：需求基线 §2.3、§5.11",
     "copy": "复制",
+    "copilotHistory": "Copilot 回答记录",
+    "copilotNoHistory": "还没有需要回答的问题。",
+    "expandAnswer": "展开回答：{{question}}",
+    "collapseAnswer": "收起回答：{{question}}",
     "deepResearch": "深入检索"
   },
   "detail": {
@@ -276,7 +280,8 @@
     "relatedProject": "关联 Project",
     "meetingCapability": "会议能力",
     "currentProject": "当前 Project",
-    "linkedProjectId": "关联 Project ID",
+    "linkedProjectId": "关联 Project",
+    "linkedProjectUnavailable": "关联的 Project 暂不可用",
     "noLinkedProject": "未关联 Project",
     "resourcesUnavailable": "这条记录没有保存可展示的授权资料。",
     "copilotUnavailable": "本次记录未开启会议 Copilot，因此没有可展示的会后回答。",

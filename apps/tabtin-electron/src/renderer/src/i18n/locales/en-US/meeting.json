@@ -215,6 +215,10 @@
     "pointThree": "A Copilot timeout affects only the current suggestion.",
     "source": "Source: Requirements baseline §2.3 and §5.11",
     "copy": "Copy",
+    "copilotHistory": "Copilot answer history",
+    "copilotNoHistory": "No questions have needed an answer yet.",
+    "expandAnswer": "Expand answer: {{question}}",
+    "collapseAnswer": "Collapse answer: {{question}}",
     "deepResearch": "Deep research"
   },
   "detail": {
@@ -276,7 +280,8 @@
     "relatedProject": "Related Project",
     "meetingCapability": "Meeting capability",
     "currentProject": "Current Project",
-    "linkedProjectId": "Linked Project ID",
+    "linkedProjectId": "Linked Project",
+    "linkedProjectUnavailable": "The linked Project is unavailable",
     "noLinkedProject": "No linked Project",
     "resourcesUnavailable": "This record does not contain any authorized resources to display.",
     "copilotUnavailable": "Meeting Copilot was not enabled for this record, so there are no post-meeting answers to display.",

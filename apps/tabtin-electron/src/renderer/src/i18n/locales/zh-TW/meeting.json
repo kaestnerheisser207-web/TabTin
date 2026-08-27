@@ -215,6 +215,10 @@
     "pointThree": "Meeting Copilot 逾時只會影響目前的建議卡片。",
     "source": "來源：需求基線 §2.3、§5.11",
     "copy": "複製",
+    "copilotHistory": "Copilot 回答記錄",
+    "copilotNoHistory": "目前還沒有需要回答的問題。",
+    "expandAnswer": "展開回答：{{question}}",
+    "collapseAnswer": "收起回答：{{question}}",
     "deepResearch": "深入檢索"
   },
   "detail": {
@@ -276,7 +280,8 @@
     "relatedProject": "關聯 Project",
     "meetingCapability": "會議能力",
     "currentProject": "目前 Project",
-    "linkedProjectId": "關聯 Project ID",
+    "linkedProjectId": "關聯 Project",
+    "linkedProjectUnavailable": "關聯的 Project 暫時無法使用",
     "noLinkedProject": "未關聯 Project",
     "resourcesUnavailable": "這筆記錄沒有儲存可顯示的授權資料。",
     "copilotUnavailable": "本次記錄未開啟 Meeting Copilot，因此沒有可顯示的會後回答。",

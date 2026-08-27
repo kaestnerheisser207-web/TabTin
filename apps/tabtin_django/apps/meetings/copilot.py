@@ -267,6 +267,12 @@ def generate_meeting_copilot_answer(
             "status": "no_question",
             "message": "还没有识别到完整问题",
         }
+    if candidate["source"] != "remote":
+        return {
+            "status": "no_action",
+            "message": "本地麦克风内容属于用户回答，不需要 Copilot 再次解答",
+            "candidate_segment_id": candidate["external_id"],
+        }
 
     question_source = MeetingCopilotSource(
         id=f"transcript:{candidate['external_id']}",

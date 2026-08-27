@@ -6,6 +6,7 @@ import { createMainWindowRuntimeContext } from './main-window-runtime'
 import type { CapabilityDiscoveryService } from './services/CapabilityDiscoveryService'
 import type { MainWindowLogger } from './main-window'
 import type { MainWindowRegistry } from './main-window-registry'
+import { flushActiveMeetingRecordingOnExit } from './meeting/ipc'
 
 export interface MainRuntimeContextLogger extends MainWindowLogger {}
 
@@ -78,6 +79,7 @@ export function createMainRuntimeContext(
     }),
     mainWindowRegistry: mainWindowRuntime.mainWindowRegistry,
     runtimeServices: mainWindowRuntime.runtimeServices,
+    flushActiveMeetingRecordingOnExit,
   })
 
   return {

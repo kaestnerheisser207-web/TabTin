@@ -215,6 +215,10 @@
     "pointThree": "Eine Zeitüberschreitung von Copilot betrifft nur den aktuellen Vorschlag.",
     "source": "Quelle: Anforderungsbaseline §2.3 und §5.11",
     "copy": "Kopieren",
+    "copilotHistory": "Copilot-Antwortverlauf",
+    "copilotNoHistory": "Bisher musste keine Frage beantwortet werden.",
+    "expandAnswer": "Antwort aufklappen: {{question}}",
+    "collapseAnswer": "Antwort einklappen: {{question}}",
     "deepResearch": "Vertiefte Recherche"
   },
   "detail": {
@@ -276,7 +280,8 @@
     "relatedProject": "Verknüpftes Project",
     "meetingCapability": "Besprechungsfunktion",
     "currentProject": "Aktuelles Project",
-    "linkedProjectId": "Verknüpfte Project-ID",
+    "linkedProjectId": "Verknüpftes Project",
+    "linkedProjectUnavailable": "Das verknüpfte Project ist nicht verfügbar",
     "noLinkedProject": "Kein verknüpftes Project",
     "resourcesUnavailable": "Diese Aufzeichnung enthält keine anzeigbaren autorisierten Ressourcen.",
     "copilotUnavailable": "Meeting Copilot war für diese Aufzeichnung nicht aktiviert; daher sind keine nachträglichen Antworten verfügbar.",

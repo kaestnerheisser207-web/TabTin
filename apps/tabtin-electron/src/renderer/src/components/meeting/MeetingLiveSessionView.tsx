@@ -2,7 +2,6 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import {
   ChevronUp,
-  Copy,
   Mic2,
   RefreshCw,
   Sparkles,
@@ -27,6 +26,7 @@ import {
 import type {
   MeetingMicrophoneDevice,
   MeetingCopilotAnswerResult,
+  MeetingCopilotRecord,
   MeetingRecordingStatus,
   MeetingSystemAudioSource,
   MeetingTranscriptCheckpoint,
@@ -40,6 +40,7 @@ import {
   MeetingTranscriptTurn,
 } from './meetingUi';
 import { MEETING_LIVE_PREVIEW_ID } from './meetingViewNavigation';
+import { MeetingCopilotHistory } from './MeetingCopilotHistory';
 import {
   formatMeetingTranscriptTime,
   groupMeetingTranscriptTurns,
@@ -110,6 +111,9 @@ export const MeetingLiveSessionView: React.FC<{
   const [copilotEnabled, setCopilotEnabled] = React.useState(false);
   const [copilotAnswer, setCopilotAnswer] =
     React.useState<MeetingCopilotAnswerResult | null>(null);
+  const [copilotRecords, setCopilotRecords] = React.useState<
+    MeetingCopilotRecord[]
+  >([]);
   const [copilotAnswerPending, setCopilotAnswerPending] = React.useState(false);
   const [copilotRequestedQuestion, setCopilotRequestedQuestion] =
     React.useState<MeetingTranscriptCheckpoint | null>(null);
@@ -195,9 +199,12 @@ export const MeetingLiveSessionView: React.FC<{
     [resolvedTranscript],
   );
   const latestTranscriptTurn = resolvedTranscript.at(-1) ?? null;
-  const latestCompleteTurn =
-    [...resolvedTranscript].reverse().find((checkpoint) => checkpoint.isFinal) ??
-    null;
+  const latestRemoteCompleteTurn =
+    [...resolvedTranscript]
+      .reverse()
+      .find(
+        (checkpoint) => checkpoint.isFinal && checkpoint.source === 'remote',
+      ) ?? null;
 
   React.useEffect(() => {
     const container = transcriptScrollRef.current;
@@ -238,7 +245,24 @@ export const MeetingLiveSessionView: React.FC<{
     void window.tabtin.meetingRecording
       .getArchive(scope)
       .then((archive) => {
-        if (!cancelled) setTranscript(archive.transcript);
+        if (cancelled) return;
+        setTranscript(archive.transcript);
+        const nextCopilotRecords = archive.copilotRecords ?? [];
+        setCopilotRecords((current) => {
+          const merged = new Map(
+            nextCopilotRecords.map((record) => [
+              record.questionSegmentId,
+              record,
+            ]),
+          );
+          for (const record of current) {
+            merged.set(record.questionSegmentId, record);
+          }
+          return [...merged.values()];
+        });
+        for (const record of nextCopilotRecords) {
+          evaluatedCopilotTurnsRef.current.add(record.questionSegmentId);
+        }
       })
       .catch(() => undefined);
     return () => {
@@ -363,6 +387,18 @@ export const MeetingLiveSessionView: React.FC<{
           question.externalId,
         );
       setCopilotAnswer(answer);
+      if (answer.status === 'answered' || answer.status === 'no_action') {
+        setCopilotRecords((current) => [
+          ...current.filter(
+            (record) => record.questionSegmentId !== question.externalId,
+          ),
+          {
+            questionSegmentId: question.externalId,
+            evaluatedAt: new Date().toISOString(),
+            result: answer,
+          },
+        ]);
+      }
     } catch (error) {
       setCopilotAnswer({
         status: 'failed',
@@ -379,17 +415,19 @@ export const MeetingLiveSessionView: React.FC<{
   React.useEffect(() => {
     if (
       !copilotEnabled ||
-      !latestCompleteTurn ||
+      !latestRemoteCompleteTurn ||
       copilotAnswerPending ||
       isPreview ||
       !scope
     )
       return;
-    if (evaluatedCopilotTurnsRef.current.has(latestCompleteTurn.externalId)) {
+    if (
+      evaluatedCopilotTurnsRef.current.has(latestRemoteCompleteTurn.externalId)
+    ) {
       return;
     }
     const timer = window.setTimeout(() => {
-      void answerCopilotQuestion(latestCompleteTurn);
+      void answerCopilotQuestion(latestRemoteCompleteTurn);
     }, 250);
     return () => window.clearTimeout(timer);
   }, [
@@ -397,7 +435,7 @@ export const MeetingLiveSessionView: React.FC<{
     copilotAnswerPending,
     copilotEnabled,
     isPreview,
-    latestCompleteTurn,
+    latestRemoteCompleteTurn,
     scope,
   ]);
 
@@ -799,12 +837,12 @@ export const MeetingLiveSessionView: React.FC<{
                       disabled={
                         isPreview ||
                         !scope ||
-                        !latestCompleteTurn ||
+                        !latestRemoteCompleteTurn ||
                         copilotAnswerPending
                       }
                       onClick={() => {
-                        if (latestCompleteTurn) {
-                          void answerCopilotQuestion(latestCompleteTurn, {
+                        if (latestRemoteCompleteTurn) {
+                          void answerCopilotQuestion(latestRemoteCompleteTurn, {
                             retry: true,
                           });
                         }
@@ -837,77 +875,11 @@ export const MeetingLiveSessionView: React.FC<{
                       </div>
                     ) : null}
 
-                    {copilotAnswer?.status === 'answered' ? (
-                      <div className="rounded-[12px] border border-accent/15 bg-accent/5 p-4">
-                        <div className="mb-3 rounded-lg bg-background/80 px-3 py-2">
-                          <p className="text-caption font-medium text-muted-foreground">
-                            {t('live.answeredQuestion')}
-                          </p>
-                          <p className="mt-1 text-body leading-6 text-foreground">
-                            {copilotAnswer.question}
-                          </p>
-                        </div>
-                        <div className="flex items-center justify-between gap-2">
-                          <span className="text-caption font-medium text-accent-text">
-                            {t('live.suggestedAnswer')}
-                          </span>
-                          <span className="text-caption text-muted-foreground">
-                            {t(`live.reliability.${copilotAnswer.reliability}`)}
-                          </span>
-                        </div>
-                        <p className="mt-2 text-body font-medium leading-6 text-foreground">
-                          {copilotAnswer.answer}
-                        </p>
-                        {copilotAnswer.key_points.length > 0 ? (
-                          <ul className="mt-3 space-y-2 text-body leading-6 text-foreground/85">
-                            {copilotAnswer.key_points.map((point) => (
-                              <li key={point}>• {point}</li>
-                            ))}
-                          </ul>
-                        ) : null}
-                        {copilotAnswer.warning ? (
-                          <p className="mt-3 rounded-lg bg-warning/10 px-3 py-2 text-caption leading-5 text-warning-foreground">
-                            {copilotAnswer.warning}
-                          </p>
-                        ) : null}
-                        <div className="mt-4 border-t border-foreground/[0.06] pt-3">
-                          <div className="flex flex-wrap items-center justify-between gap-2 text-caption text-muted-foreground">
-                            <span>
-                              {t('live.answerModel', {
-                                model: copilotAnswer.model,
-                              })}
-                            </span>
-                            <Button
-                              type="button"
-                              variant="ghost"
-                              size="sm"
-                              className="h-7 gap-1.5"
-                              onClick={() =>
-                                void navigator.clipboard.writeText(
-                                  copilotAnswer.answer,
-                                )
-                              }
-                            >
-                              <Copy className="h-3.5 w-3.5" aria-hidden />
-                              {t('live.copy')}
-                            </Button>
-                          </div>
-                          {copilotAnswer.sources.length > 0 ? (
-                            <div className="mt-2 flex flex-wrap gap-1.5">
-                              {copilotAnswer.sources.map((source) => (
-                                <span
-                                  key={source.id}
-                                  className="rounded-full border border-foreground/[0.08] bg-background px-2 py-1 text-caption text-muted-foreground"
-                                  title={source.excerpt}
-                                >
-                                  {source.title}
-                                </span>
-                              ))}
-                            </div>
-                          ) : null}
-                        </div>
-                      </div>
-                    ) : copilotAnswer ? (
+                    <MeetingCopilotHistory records={copilotRecords} />
+
+                    {copilotAnswer &&
+                    copilotAnswer.status !== 'answered' &&
+                    copilotAnswer.status !== 'no_action' ? (
                       <div
                         role={
                           copilotAnswer.status === 'failed'

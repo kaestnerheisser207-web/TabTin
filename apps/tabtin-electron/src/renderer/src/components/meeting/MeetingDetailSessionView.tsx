@@ -32,6 +32,7 @@ import {
 import { StandaloneModulePage } from '@components/context-space/StandaloneModulePage';
 import { useIdentityLabels } from '@components/layout/useIdentityLabels';
 import type { MeetingLocalArchive } from '@shared/meeting-recording-contract';
+import { ProjectApiService } from '@/services/projectApi';
 import {
   MeetingPageIcon,
   MeetingPartialNotice,
@@ -44,6 +45,7 @@ import {
   groupMeetingTranscriptTurns,
   resolveMeetingTranscript,
 } from './meetingTranscript';
+import { MeetingCopilotHistory } from './MeetingCopilotHistory';
 
 function formatDuration(durationMs: number): string {
   const totalSeconds = Math.max(0, Math.floor(durationMs / 1000));
@@ -526,11 +528,7 @@ const CopilotTab: React.FC<{ archive?: MeetingLocalArchive }> = ({
       description={t('detail.copilotDescription')}
     >
       {archive ? (
-        <p className="text-body leading-6 text-muted-foreground">
-          {archive.manifest.copilotEnabled
-            ? t('detail.analysisPending')
-            : t('detail.copilotUnavailable')}
-        </p>
+        <MeetingCopilotHistory records={archive.copilotRecords ?? []} />
       ) : (
         <div className="space-y-3">
           <div className="rounded-[12px] border border-foreground/[0.06] bg-background p-4 dark:border-foreground/[0.08]">
@@ -556,9 +554,10 @@ const CopilotTab: React.FC<{ archive?: MeetingLocalArchive }> = ({
   );
 };
 
-const ResourcesTab: React.FC<{ archive?: MeetingLocalArchive }> = ({
-  archive,
-}) => {
+const ResourcesTab: React.FC<{
+  archive?: MeetingLocalArchive;
+  projectDisplayName: string;
+}> = ({ archive, projectDisplayName }) => {
   const { t } = useTranslation('meeting');
   return (
     <div className="grid gap-4 lg:grid-cols-2">
@@ -568,7 +567,7 @@ const ResourcesTab: React.FC<{ archive?: MeetingLocalArchive }> = ({
           <div>
             <p className="text-body font-medium text-foreground">
               {archive
-                ? archive.manifest.projectId || t('detail.noLinkedProject')
+                ? projectDisplayName
                 : t('detail.meetingCapability')}
             </p>
             <p className="text-caption text-muted-foreground">
@@ -611,6 +610,37 @@ export const MeetingDetailSessionView: React.FC<{
 }> = ({ archive }) => {
   const { t } = useTranslation('meeting');
   const manifest = archive?.manifest;
+  const [resolvedProjectName, setResolvedProjectName] = React.useState(
+    manifest?.projectName?.trim() || '',
+  );
+  const [projectLookupPending, setProjectLookupPending] = React.useState(false);
+  React.useEffect(() => {
+    const snapshotName = manifest?.projectName?.trim() || '';
+    setResolvedProjectName(snapshotName);
+    if (!manifest?.projectId || snapshotName) {
+      setProjectLookupPending(false);
+      return;
+    }
+    let cancelled = false;
+    setProjectLookupPending(true);
+    void ProjectApiService.getProject(manifest.projectId)
+      .then((project) => {
+        if (!cancelled) setResolvedProjectName(project.name.trim());
+      })
+      .catch(() => undefined)
+      .finally(() => {
+        if (!cancelled) setProjectLookupPending(false);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [manifest?.projectId, manifest?.projectName]);
+  const projectDisplayName = manifest?.projectId
+    ? resolvedProjectName ||
+      (projectLookupPending
+        ? t('setup.projectLoading')
+        : t('detail.linkedProjectUnavailable'))
+    : t('detail.noLinkedProject');
   const tracksComplete =
     manifest?.tracks.local.status === 'completed' &&
     manifest.tracks.remote.status === 'completed';
@@ -693,7 +723,7 @@ export const MeetingDetailSessionView: React.FC<{
               aria-hidden
             />
             {manifest
-              ? manifest.projectId || t('detail.noLinkedProject')
+              ? projectDisplayName
               : t('detail.meetingCapability')}
           </span>
           <span className="inline-flex items-center gap-1.5">
@@ -751,7 +781,10 @@ export const MeetingDetailSessionView: React.FC<{
             value="resources"
             className="mt-4 min-h-0 flex-1 overflow-y-auto pr-1 scrollbar-hover"
           >
-            <ResourcesTab archive={archive} />
+            <ResourcesTab
+              archive={archive}
+              projectDisplayName={projectDisplayName}
+            />
           </TabsContent>
         </TabsRoot>
       </div>

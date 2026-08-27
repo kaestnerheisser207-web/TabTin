@@ -35,6 +35,7 @@ export interface CreateMainAppLifecycleHandlersOptions {
   mainWindowRegistry: Pick<MainWindowRegistry, 'createAndRegister' | 'ensureForNotification' | 'restoreMainWindow'>
   runtimeServices: Pick<MainRuntimeServicesController, 'startBackgroundServices' | 'stop'>
   flushRunningBackgroundTasksOnExit?: () => Promise<void>
+  flushActiveMeetingRecordingOnExit?: () => Promise<void>
 }
 
 const reportAllWindowsOffline = (): void => {
@@ -112,6 +113,12 @@ export function createMainAppLifecycleHandlers(
     },
     onBeforeQuit: async () => {
       reportAllWindowsOffline()
+
+      try {
+        await options.flushActiveMeetingRecordingOnExit?.()
+      } catch (err) {
+        options.log.warn?.('退出 flush 会议录音分片时出错:', err)
+      }
 
       // 终端假运行根治 v3 路线 A / F-EXIT：在 destroyPtyManager（杀 PTY）之前，
       // 先枚举所有 running 后台 shell 命令 → 杀整组 + **同步 flush** "已终止"

@@ -215,6 +215,10 @@
     "pointThree": "Un tiempo de espera agotado de Copilot solo afecta a la sugerencia actual.",
     "source": "Fuente: base de requisitos §2.3 y §5.11",
     "copy": "Copiar",
+    "copilotHistory": "Historial de respuestas de Copilot",
+    "copilotNoHistory": "Todavía no ha habido preguntas que requieran respuesta.",
+    "expandAnswer": "Expandir respuesta: {{question}}",
+    "collapseAnswer": "Contraer respuesta: {{question}}",
     "deepResearch": "Investigación exhaustiva"
   },
   "detail": {
@@ -276,7 +280,8 @@
     "relatedProject": "Project relacionado",
     "meetingCapability": "Funcionalidad de reuniones",
     "currentProject": "Project actual",
-    "linkedProjectId": "ID del Project vinculado",
+    "linkedProjectId": "Project vinculado",
+    "linkedProjectUnavailable": "El Project vinculado no está disponible",
     "noLinkedProject": "Sin Project vinculado",
     "resourcesUnavailable": "Este registro no contiene recursos autorizados que se puedan mostrar.",
     "copilotUnavailable": "Meeting Copilot no estaba activado para este registro, por lo que no hay respuestas posteriores que mostrar.",
