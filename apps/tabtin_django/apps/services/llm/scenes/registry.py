@@ -1,4 +1,4 @@
-"""SceneRegistry 中央枚举 — 38 个 scene 全集。
+"""SceneRegistry 中央枚举 — 39 个 scene 全集。
 
 capability_requirements 逐字段对齐。
 validate_registry_at_startup() 在 Django LLMConfig.ready() 中调用。
@@ -246,6 +246,30 @@ SCENES: dict[str, SceneSpec] = {
             "thinking": {"type": "disabled"},
         },
         policy=_user_selectable_policy("meeting_copilot_quick_answer"),
+    ),
+
+    "meeting_post_analysis": SceneSpec(
+        scene_key="meeting_post_analysis",
+        display_name="会议会后分析",
+        description="基于完整 final 逐字稿生成摘要、主题、决策、行动项、待解问题与风险",
+        capability_domain="chat",
+        capability_requirements={
+            "requires_json_mode": True,
+            "requires_vision": False,
+            "requires_function_calling": False,
+            "min_context_tokens": 32_000,
+            "max_output_tokens": 5000,
+            "latency_class": "batch",
+            "cost_class": "standard",
+        },
+        default_params={
+            "temperature": 0.1,
+            "max_tokens": 4096,
+            "response_format": {"type": "json_object"},
+            "timeout_sec": 120,
+            "max_input_chars": 120_000,
+        },
+        policy=_user_selectable_policy("meeting_post_analysis"),
     ),
 
     "summarization": SceneSpec(
@@ -1006,7 +1030,7 @@ SCENES: dict[str, SceneSpec] = {
     ),
 }
 
-assert len(SCENES) == 38, f"SCENES 应有 38 个 scene，实际 {len(SCENES)}"
+assert len(SCENES) == 39, f"SCENES 应有 39 个 scene，实际 {len(SCENES)}"
 
 
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━

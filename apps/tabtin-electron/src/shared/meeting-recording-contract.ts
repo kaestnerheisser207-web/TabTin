@@ -1,4 +1,4 @@
-export const MEETING_ARCHIVE_SCHEMA_VERSION = 1 as const;
+export const MEETING_ARCHIVE_SCHEMA_VERSION = 2 as const;
 
 export type MeetingAudioSource = 'local' | 'remote';
 export type MeetingArchiveLifecycleStatus =
@@ -30,11 +30,24 @@ export interface MeetingArchiveTrackManifest {
   lastCheckpointAt: string | null;
   finalizedRelativePath: string | null;
   contentHash: string;
+  storageStatus:
+    | 'local_only'
+    | 'pending'
+    | 'uploading'
+    | 'confirming'
+    | 'synced'
+    | 'failed'
+    | 'deleted';
+  fileRecordId: string | null;
+  objectKey: string;
+  uploadError: string;
+  uploadAttempts: number;
+  lastUploadAttemptAt: string | null;
   errorCode?: string;
   errorMessage?: string;
 }
 
-export interface MeetingArchiveManifestV1 {
+export interface MeetingArchiveManifestV2 {
   schemaVersion: typeof MEETING_ARCHIVE_SCHEMA_VERSION;
   sessionId: string;
   organizationId: string;
@@ -276,7 +289,7 @@ export interface SwitchMeetingSystemAudioInput extends MeetingArchiveScope {
 
 export interface MeetingRecordingStatus {
   active: boolean;
-  manifest: MeetingArchiveManifestV1 | null;
+  manifest: MeetingArchiveManifestV2 | null;
 }
 
 export interface MeetingArchiveListScope {
@@ -285,7 +298,7 @@ export interface MeetingArchiveListScope {
 }
 
 export interface MeetingLocalArchive {
-  manifest: MeetingArchiveManifestV1;
+  manifest: MeetingArchiveManifestV2;
   audioUrls: Partial<Record<MeetingAudioSource, string>>;
   transcript: MeetingTranscriptCheckpoint[];
   copilotRecords: MeetingCopilotRecord[];

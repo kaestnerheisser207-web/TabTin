@@ -17,7 +17,7 @@ from typing import Any
 from uuid import UUID
 
 from django.contrib.auth import get_user_model
-from django.db import transaction
+from django.db import models, transaction
 from django.utils import timezone
 
 from apps.services.common.db_router import postgres_app_db_alias
@@ -27,6 +27,7 @@ from apps.tabchat.handoff.models import (
     HandoffPackage,
     HandoffRecipient,
     HandoffReference,
+    HandoffResourceGrant,
 )
 from apps.tabchat.models import Conversation, Message
 from apps.tabchat.services.conversation_access import ConversationAccessResolver
@@ -298,6 +299,40 @@ class HandoffService:
                         "organization_id": organization_id,
                     },
                 })
+            elif ref_type == HandoffReference.RefType.MEETING:
+                try:
+                    UUID(resource_id)
+                except (ValueError, TypeError):
+                    raise ValueError("会议引用不是合法 UUID")
+                if actor is None:
+                    raise ValueError("Agent 发起暂不支持引用会议档案")
+
+                from apps.meetings.models import MeetingSession
+                from apps.meetings.services import MeetingAccessService
+
+                session = (
+                    MeetingSession.objects.select_related("organization", "project")
+                    .filter(id=resource_id)
+                    .first()
+                )
+                if session is None:
+                    raise ValueError("会议档案不存在")
+                if conv is not None and str(session.organization_id) != str(conv.organization_id):
+                    raise ValueError("会议档案不属于当前组织")
+                if not MeetingAccessService.has_access(session, actor, "viewer"):
+                    raise ValueError("无权转交该会议档案")
+
+                specs.append({
+                    "ref_type": ref_type,
+                    "resource_id": resource_id,
+                    "title_snapshot": session.title[:300],
+                    "summary_snapshot": (session.brief or "")[:500],
+                    "source_link": {
+                        "session_id": resource_id,
+                        "organization_id": str(session.organization_id),
+                        "project_id": str(session.project_id) if session.project_id else None,
+                    },
+                })
             elif ref_type == HandoffReference.RefType.CHAT_SESSION:
                 # 快照型材料：源是发起人个人 Agent 会话，接收人无法回源读取。
                 # 创建时以发起人权限读取并冻结清洗版快照（见方案「快照冻结」决策）。
@@ -323,6 +358,191 @@ class HandoffService:
             else:
                 raise ValueError(f"暂不支持的材料类型: {ref_type}")
         return specs
+
+    @staticmethod
+    def _upsert_meeting_viewer_permission(
+        *, session, user_id: str, granted_by: str,
+    ) -> dict | None:
+        """为会议接收人补 viewer，保留已有更强权限并返回可回滚快照。"""
+        from django.db import IntegrityError
+        from apps.meetings.models import MeetingPermission
+
+        queryset = MeetingPermission.objects.filter(
+            session=session,
+            subject_type="user",
+            subject_id=str(user_id),
+        )
+        alias = queryset.db
+        existing = queryset.order_by("-is_active", "-updated_at").first()
+        if existing is not None:
+            previous_permission = existing.permission
+            previous_is_active = existing.is_active
+            update_fields: list[str] = []
+            if not existing.is_active:
+                existing.is_active = True
+                update_fields.append("is_active")
+                # 历史失活行只是回滚快照，不能让 Handoff 把它恢复成
+                # editor/admin；本来源仅需 viewer，撤销时再恢复原值。
+                if existing.permission != "viewer":
+                    existing.permission = "viewer"
+                    update_fields.append("permission")
+            elif existing.permission not in ("viewer", "editor", "admin", "owner"):
+                existing.permission = "viewer"
+                update_fields.append("permission")
+            if not update_fields:
+                return None
+            existing.save(using=alias, update_fields=[*update_fields, "updated_at"])
+            return {
+                "permission_id": existing.pk,
+                "db_alias": alias,
+                "created": False,
+                "previous_permission": previous_permission,
+                "previous_is_active": previous_is_active,
+            }
+
+        try:
+            with transaction.atomic(using=alias):
+                permission = MeetingPermission.objects.using(alias).create(
+                    session=session,
+                    subject_type="user",
+                    subject_id=str(user_id),
+                    permission="viewer",
+                    is_active=True,
+                    granted_by=str(granted_by),
+                )
+        except IntegrityError:
+            return HandoffService._upsert_meeting_viewer_permission(
+                session=session,
+                user_id=user_id,
+                granted_by=granted_by,
+            )
+        return {
+            "permission_id": permission.pk,
+            "db_alias": alias,
+            "created": True,
+            "previous_permission": "",
+            "previous_is_active": None,
+        }
+
+    @staticmethod
+    def _rollback_meeting_permission_changes(changes: list[dict]) -> None:
+        """发送失败时精确恢复 meeting ACL，不碰本次未改动的权限。"""
+        if not changes:
+            return
+        from apps.meetings.models import MeetingPermission
+
+        for change in reversed(changes):
+            alias = change["db_alias"]
+            permission = (
+                MeetingPermission.objects.using(alias)
+                .filter(pk=change["permission_id"])
+                .first()
+            )
+            if permission is None:
+                continue
+            if change.get("created"):
+                permission.delete(using=alias)
+                continue
+            permission.permission = change["previous_permission"]
+            permission.is_active = change["previous_is_active"]
+            permission.save(
+                using=alias,
+                update_fields=["permission", "is_active", "updated_at"],
+            )
+
+    @staticmethod
+    def _grant_meeting_reference_to_users(
+        *,
+        package: HandoffPackage,
+        reference: HandoffReference,
+        recipient_user_ids: list[str],
+        granted_by: str,
+    ) -> tuple[list[dict], list[str]]:
+        """为会议交接建立 ACL 与持久授权来源，返回可回滚变更。"""
+        from apps.meetings.models import MeetingPermission, MeetingSession
+        from apps.meetings.services import MeetingAccessService
+
+        session = (
+            MeetingSession.objects.select_related("organization")
+            .filter(id=reference.resource_id)
+            .first()
+        )
+        if session is None:
+            return [], []
+
+        User = get_user_model()
+        users = {
+            str(user.id): user
+            for user in User.objects.filter(id__in=recipient_user_ids)
+        }
+        permission_changes: list[dict] = []
+        grant_ids: list[str] = []
+        try:
+            for user_id in recipient_user_ids:
+                user = users.get(str(user_id))
+                if user is None:
+                    continue
+                role_before = MeetingAccessService.role_for(session, user)
+                managed_source_exists = HandoffResourceGrant.objects.filter(
+                    resource_type=HandoffReference.RefType.MEETING,
+                    resource_id=session.id,
+                    grantee_user_id=str(user_id),
+                    is_active=True,
+                    manages_resource_permission=True,
+                ).exists()
+                had_viewer_access = MeetingAccessService.has_access(
+                    session, user, "viewer",
+                )
+                has_independent_access = bool(
+                    had_viewer_access and not managed_source_exists,
+                )
+
+                change = None
+                if not had_viewer_access:
+                    change = HandoffService._upsert_meeting_viewer_permission(
+                        session=session,
+                        user_id=str(user_id),
+                        granted_by=granted_by,
+                    )
+                    if change:
+                        permission_changes.append(change)
+
+                permission = (
+                    MeetingPermission.objects.filter(
+                        session=session,
+                        subject_type="user",
+                        subject_id=str(user_id),
+                    )
+                    .order_by("-is_active", "-updated_at")
+                    .first()
+                )
+                grant = HandoffResourceGrant.objects.create(
+                    package=package,
+                    reference=reference,
+                    resource_type=HandoffReference.RefType.MEETING,
+                    resource_id=session.id,
+                    grantee_user_id=str(user_id),
+                    permission_id=permission.pk if permission is not None else None,
+                    permission_updated_at_snapshot=(
+                        permission.updated_at if permission is not None else None
+                    ),
+                    permission_granted_by_snapshot=(
+                        permission.granted_by if permission is not None else ""
+                    ),
+                    manages_resource_permission=not has_independent_access,
+                    has_independent_access=has_independent_access,
+                    independent_permission=role_before if has_independent_access else "",
+                    created_permission=bool(change and change.get("created")),
+                    previous_is_active=(change or {}).get("previous_is_active"),
+                    previous_permission=(change or {}).get("previous_permission", ""),
+                )
+                grant_ids.append(str(grant.id))
+        except Exception:
+            if grant_ids:
+                HandoffResourceGrant.objects.filter(id__in=grant_ids).delete()
+            HandoffService._rollback_meeting_permission_changes(permission_changes)
+            raise
+        return permission_changes, grant_ids
 
     # ── 发送 ──
 
@@ -361,6 +581,9 @@ class HandoffService:
         message_ref = str(package.card_message_ref or package.id)
         legacy_message = None
         permission_changes: list[dict] = []
+        meeting_permission_changes: list[dict] = []
+        meeting_grant_ids: list[str] = []
+        meeting_references: list[HandoffReference] = []
         try:
             recipient_user_ids = [
                 str(recipient.user_id)
@@ -368,19 +591,20 @@ class HandoffService:
                 if recipient.user_id
             ]
             for ref in package.references.all():
-                if ref.ref_type not in (
+                if ref.ref_type in (
                     HandoffReference.RefType.DOCUMENT,
                     HandoffReference.RefType.TABLE,
                 ):
-                    continue
-                permission_changes.extend(
-                    grant_resource_viewer_access_to_users(
-                        resource_type=ref.ref_type,
-                        resource_id=str(ref.resource_id),
-                        recipient_ids=recipient_user_ids,
-                        granted_by=str(actor_user_id or actor_agent_id or ""),
+                    permission_changes.extend(
+                        grant_resource_viewer_access_to_users(
+                            resource_type=ref.ref_type,
+                            resource_id=str(ref.resource_id),
+                            recipient_ids=recipient_user_ids,
+                            granted_by=str(actor_user_id or actor_agent_id or ""),
+                        )
                     )
-                )
+                elif ref.ref_type == HandoffReference.RefType.MEETING:
+                    meeting_references.append(ref)
 
             if package.conversation is not None:
                 legacy_message = MessageService.send_message(
@@ -406,6 +630,17 @@ class HandoffService:
                 )
 
             with transaction.atomic(using=postgres_app_db_alias()):
+                # Meeting ACL 来源账本与 package=sent 同一事务提交：
+                # 进程在二者之间崩溃时由数据库回滚，不留无主 viewer。
+                for ref in meeting_references:
+                    changes, grant_ids = HandoffService._grant_meeting_reference_to_users(
+                        package=package,
+                        reference=ref,
+                        recipient_user_ids=recipient_user_ids,
+                        granted_by=str(actor_user_id or actor_agent_id or ""),
+                    )
+                    meeting_permission_changes.extend(changes)
+                    meeting_grant_ids.extend(grant_ids)
                 package.status = HandoffPackage.Status.SENT
                 package.card_message = legacy_message
                 package.card_message_ref = None if legacy_message else message_ref
@@ -426,6 +661,11 @@ class HandoffService:
                 )
                 HandoffService._broadcast_update(package)
         except Exception:
+            if meeting_grant_ids:
+                HandoffResourceGrant.objects.filter(id__in=meeting_grant_ids).delete()
+            HandoffService._rollback_meeting_permission_changes(
+                meeting_permission_changes,
+            )
             rollback_resource_permission_changes(permission_changes)
             if legacy_message is not None:
                 _soft_delete_message(
@@ -869,6 +1109,114 @@ class HandoffService:
         return fallback
 
     @staticmethod
+    def _revoke_meeting_resource_grants(package: HandoffPackage) -> None:
+        """停用该 Handoff 的 meeting 授权来源，最后一个来源才恢复 ACL。"""
+        from apps.meetings.models import MeetingPermission
+
+        grants = list(
+            HandoffResourceGrant.objects.select_for_update().filter(
+                package=package,
+                resource_type=HandoffReference.RefType.MEETING,
+                is_active=True,
+            ),
+        )
+        if not grants:
+            return
+
+        now = timezone.now()
+        HandoffResourceGrant.objects.filter(
+            id__in=[grant.id for grant in grants],
+        ).update(is_active=False, revoked_at=now, updated_at=now)
+
+        resource_users = {
+            (str(grant.resource_id), grant.grantee_user_id)
+            for grant in grants
+        }
+        for resource_id, user_id in resource_users:
+            sibling_source_exists = HandoffResourceGrant.objects.filter(
+                resource_type=HandoffReference.RefType.MEETING,
+                resource_id=resource_id,
+                grantee_user_id=user_id,
+                is_active=True,
+                manages_resource_permission=True,
+            ).exists()
+            if sibling_source_exists:
+                continue
+
+            # 任一 Handoff 发送时已确认的非 Handoff 权限都是保护边界。
+            if HandoffResourceGrant.objects.filter(
+                resource_type=HandoffReference.RefType.MEETING,
+                resource_id=resource_id,
+                grantee_user_id=user_id,
+                has_independent_access=True,
+            ).exists():
+                continue
+
+            origin = (
+                HandoffResourceGrant.objects.filter(
+                    resource_type=HandoffReference.RefType.MEETING,
+                    resource_id=resource_id,
+                    grantee_user_id=user_id,
+                    permission_id__isnull=False,
+                )
+                .filter(
+                    models.Q(created_permission=True)
+                    | models.Q(previous_is_active__isnull=False)
+                )
+                .order_by("created_at", "id")
+                .first()
+            )
+            if origin is None:
+                continue
+            permission = MeetingPermission.objects.filter(
+                pk=origin.permission_id,
+                session_id=resource_id,
+                subject_type="user",
+                subject_id=user_id,
+            ).first()
+            if permission is None:
+                continue
+
+            permission_was_externally_regranted = bool(
+                origin.permission_updated_at_snapshot
+                and (
+                    permission.updated_at != origin.permission_updated_at_snapshot
+                    or permission.granted_by
+                    != origin.permission_granted_by_snapshot
+                )
+            )
+            if permission_was_externally_regranted:
+                # 管理员/其他流程在 Handoff 之后显式 touch 或同级
+                # regrant viewer，该 ACL 已成为独立来源，后续撤销交接不得失活。
+                HandoffResourceGrant.objects.filter(
+                    resource_type=HandoffReference.RefType.MEETING,
+                    resource_id=resource_id,
+                    grantee_user_id=user_id,
+                ).update(
+                    has_independent_access=True,
+                    independent_permission=permission.permission,
+                    updated_at=timezone.now(),
+                )
+                continue
+
+            if origin.created_permission:
+                # Handoff 创建的 viewer 若已被升级，视为新的独立授权不降级。
+                if permission.permission == "viewer" and permission.is_active:
+                    permission.is_active = False
+                    permission.save(update_fields=["is_active", "updated_at"])
+                continue
+
+            previous_permission = origin.previous_permission or "viewer"
+            # Handoff 只会授 viewer；后续升级为 editor/admin/owner 时保留新授权。
+            if permission.permission != "viewer":
+                continue
+            permission.is_active = bool(origin.previous_is_active)
+            permission.permission = previous_permission
+            permission.save(
+                update_fields=["permission", "is_active", "updated_at"],
+            )
+
+    @staticmethod
     def revoke(
         *,
         package_id: str,
@@ -885,6 +1233,7 @@ class HandoffService:
             raise ValueError("当前状态不允许撤销")
 
         with transaction.atomic(using=postgres_app_db_alias()):
+            HandoffService._revoke_meeting_resource_grants(package)
             package.status = HandoffPackage.Status.REVOKED
             package.save(update_fields=["status", "updated_at"])
             HandoffEvent.objects.create(
@@ -892,6 +1241,35 @@ class HandoffService:
                 actor_user_id=actor_user_id,
                 actor_agent_id=actor_agent_id,
                 event_type=HandoffEvent.EventType.REVOKED,
+            )
+            HandoffService._broadcast_update(package)
+        return package
+
+    @staticmethod
+    def supersede(
+        *,
+        package_id: str,
+        actor_user_id: str | None = None,
+        actor_agent_id: str | None = None,
+    ) -> HandoffPackage:
+        """发起人将已发送包标记为被新版本取代，对称回收其 meeting 授权。"""
+        package = HandoffService._get_owned_package(
+            package_id, actor_user_id, actor_agent_id,
+        )
+        if package.status == HandoffPackage.Status.SUPERSEDED:
+            return package
+        if package.status != HandoffPackage.Status.SENT:
+            raise ValueError("只有已发送的交接包可以被新版本取代")
+
+        with transaction.atomic(using=postgres_app_db_alias()):
+            HandoffService._revoke_meeting_resource_grants(package)
+            package.status = HandoffPackage.Status.SUPERSEDED
+            package.save(update_fields=["status", "updated_at"])
+            HandoffEvent.objects.create(
+                package=package,
+                actor_user_id=actor_user_id,
+                actor_agent_id=actor_agent_id,
+                event_type=HandoffEvent.EventType.SUPERSEDED,
             )
             HandoffService._broadcast_update(package)
         return package
@@ -1044,7 +1422,10 @@ class HandoffService:
         """材料引用：查看时逐条实时鉴权，无权/失效给结构化占位。"""
         User = get_user_model()
         viewer = User.objects.filter(id=viewer_user_id).first() if viewer_user_id else None
-        revoked = package.status == HandoffPackage.Status.REVOKED
+        terminal_denied_reason = {
+            HandoffPackage.Status.REVOKED: "revoked",
+            HandoffPackage.Status.SUPERSEDED: "superseded",
+        }.get(package.status)
 
         result: list[dict] = []
         for ref in package.references.all().order_by("created_at"):
@@ -1058,8 +1439,8 @@ class HandoffService:
                 "accessible": False,
                 "denied_reason": None,
             }
-            if revoked:
-                entry["denied_reason"] = "revoked"
+            if terminal_denied_reason:
+                entry["denied_reason"] = terminal_denied_reason
                 result.append(entry)
                 continue
             if ref.ref_type == HandoffReference.RefType.CHAT_SESSION:
@@ -1080,6 +1461,24 @@ class HandoffService:
                     ).exists()
                     if not entry["accessible"]:
                         entry["denied_reason"] = "deleted"
+            elif ref.ref_type == HandoffReference.RefType.MEETING:
+                if viewer is None:
+                    entry["denied_reason"] = "access_denied"
+                else:
+                    from apps.meetings.models import MeetingSession
+                    from apps.meetings.services import MeetingAccessService
+
+                    session = (
+                        MeetingSession.objects.select_related("organization")
+                        .filter(id=ref.resource_id)
+                        .first()
+                    )
+                    if session is None:
+                        entry["denied_reason"] = "deleted"
+                    elif MeetingAccessService.has_access(session, viewer, "viewer"):
+                        entry["accessible"] = True
+                    else:
+                        entry["denied_reason"] = "access_denied"
             elif viewer is not None:
                 from apps.tabchat.services.message_service import _load_card_resource
 

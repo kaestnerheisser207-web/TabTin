@@ -157,6 +157,32 @@ export interface MeetingServerSession {
   [key: string]: unknown;
 }
 
+export interface MeetingServerTranscript {
+  runs: Array<Record<string, unknown>>;
+  segments: Array<Record<string, unknown>>;
+  total: number;
+  offset: number;
+  limit: number;
+  next_offset: number | null;
+}
+
+export interface MeetingServerTrackAudio {
+  track: Record<string, unknown>;
+  url: string;
+  access_mode: string;
+  expires_at: string | null;
+  expires_in: number | null;
+}
+
+export interface MeetingServerPermission {
+  id: string;
+  subject_type: string;
+  subject_id: string;
+  permission: 'viewer' | 'editor' | 'admin';
+  is_active: boolean;
+  granted_by: string;
+}
+
 export interface MeetingSyncConflict {
   sessionId: string;
   operation: MeetingQueuedOperation;
@@ -225,6 +251,22 @@ type HttpResult =
       retryable: boolean;
       status?: number;
     };
+
+export class MeetingServerRequestError extends Error {
+  readonly status?: number;
+  readonly reason: MeetingSyncFailure['reason'];
+
+  constructor(input: {
+    message: string;
+    reason: MeetingSyncFailure['reason'];
+    status?: number;
+  }) {
+    super(input.message);
+    this.name = 'MeetingServerRequestError';
+    this.reason = input.reason;
+    this.status = input.status;
+  }
+}
 
 function isRecord(value: unknown): value is JsonRecord {
   return value !== null && typeof value === 'object' && !Array.isArray(value);
@@ -382,6 +424,7 @@ export class MeetingServerSync {
     transcript: MeetingTranscriptCheckpoint[],
     questionSegmentId: string,
     modelId?: string,
+    requestId?: string,
   ): Promise<MeetingCopilotAnswerResult> {
     const context = selectMeetingCopilotContext(
       transcript,
@@ -393,6 +436,7 @@ export class MeetingServerSync {
         `/meetings/sessions/${encodeURIComponent(sessionId)}/copilot/answer`,
         {
           model_id: modelId || null,
+          ...(requestId ? { request_id: requestId } : {}),
           question_segment_id: questionSegmentId,
           recent_segments: context.map((segment) => ({
             external_id: segment.externalId,
@@ -421,6 +465,21 @@ export class MeetingServerSync {
       throw new Error('meeting server returned an invalid Copilot response');
     }
     return payload as unknown as MeetingCopilotAnswerResult;
+  }
+
+  async getCopilotAnswers(
+    sessionId: string,
+  ): Promise<Array<Record<string, unknown>>> {
+    const response = await this.request(
+      'GET',
+      `/meetings/sessions/${encodeURIComponent(sessionId)}/copilot-answers`,
+    );
+    if (!response.ok) throw new Error(response.message);
+    const payload = unwrapApiPayload(response.payload);
+    if (!isRecord(payload) || !Array.isArray(payload.answers)) {
+      throw new Error('meeting server returned invalid Copilot history');
+    }
+    return payload.answers.filter(isRecord);
   }
 
   checkpointTrack(
@@ -531,6 +590,145 @@ export class MeetingServerSync {
         error_message: input.errorMessage ?? '',
       },
     });
+  }
+
+  async listSessions(input: {
+    organizationId: string;
+    projectId?: string | null;
+    lifecycleStatus?: string;
+  }): Promise<MeetingServerSession[]> {
+    const query = new URLSearchParams({ organization_id: input.organizationId });
+    if (input.projectId) query.set('project_id', input.projectId);
+    if (input.lifecycleStatus) {
+      query.set('lifecycle_status', input.lifecycleStatus);
+    }
+    const response = await this.request('GET', `/meetings/sessions?${query}`);
+    if (!response.ok) throw new Error(response.message);
+    const payload = unwrapApiPayload(response.payload);
+    if (!isRecord(payload) || !Array.isArray(payload.sessions)) {
+      throw new Error('meeting server returned an invalid session list');
+    }
+    return payload.sessions.filter(isRecord) as MeetingServerSession[];
+  }
+
+  async getSession(sessionId: string): Promise<MeetingServerSession> {
+    const response = await this.request(
+      'GET',
+      `/meetings/sessions/${encodeURIComponent(sessionId)}`,
+    );
+    if (!response.ok) {
+      throw new MeetingServerRequestError({
+        message: response.message,
+        reason: response.reason,
+        status: response.status,
+      });
+    }
+    const session = readServerSession(response.payload);
+    if (!session) throw new Error('meeting server returned an invalid session');
+    return session;
+  }
+
+  async getTranscript(
+    sessionId: string,
+    offset = 0,
+    limit = 1_000,
+  ): Promise<MeetingServerTranscript> {
+    const query = new URLSearchParams({
+      offset: String(Math.max(0, offset)),
+      limit: String(Math.max(1, Math.min(limit, 1_000))),
+    });
+    const response = await this.request(
+      'GET',
+      `/meetings/sessions/${encodeURIComponent(sessionId)}/transcript?${query}`,
+    );
+    if (!response.ok) throw new Error(response.message);
+    const payload = unwrapApiPayload(response.payload);
+    if (
+      !isRecord(payload) ||
+      !Array.isArray(payload.runs) ||
+      !Array.isArray(payload.segments)
+    ) {
+      throw new Error('meeting server returned an invalid transcript');
+    }
+    return payload as unknown as MeetingServerTranscript;
+  }
+
+  async getTrackAudio(
+    sessionId: string,
+    source: MeetingTrackSource,
+  ): Promise<MeetingServerTrackAudio> {
+    const response = await this.request(
+      'GET',
+      `/meetings/sessions/${encodeURIComponent(sessionId)}/tracks/${source}/audio`,
+    );
+    if (!response.ok) throw new Error(response.message);
+    const payload = unwrapApiPayload(response.payload);
+    if (!isRecord(payload) || typeof payload.url !== 'string') {
+      throw new Error('meeting server returned an invalid audio response');
+    }
+    return payload as unknown as MeetingServerTrackAudio;
+  }
+
+  async listPermissions(sessionId: string): Promise<MeetingServerPermission[]> {
+    const response = await this.request(
+      'GET',
+      `/meetings/sessions/${encodeURIComponent(sessionId)}/permissions`,
+    );
+    if (!response.ok) throw new Error(response.message);
+    const payload = unwrapApiPayload(response.payload);
+    if (!isRecord(payload) || !Array.isArray(payload.permissions)) {
+      throw new Error('meeting server returned invalid permissions');
+    }
+    return payload.permissions.filter(isRecord) as unknown as MeetingServerPermission[];
+  }
+
+  async grantPermission(
+    sessionId: string,
+    input: {
+      subjectType: 'user' | 'role';
+      subjectId: string;
+      permission: 'viewer' | 'editor' | 'admin';
+    },
+  ): Promise<MeetingServerPermission> {
+    const response = await this.request(
+      'POST',
+      `/meetings/sessions/${encodeURIComponent(sessionId)}/permissions`,
+      {
+        subject_type: input.subjectType,
+        subject_id: input.subjectId,
+        permission: input.permission,
+      },
+    );
+    if (!response.ok) throw new Error(response.message);
+    const payload = unwrapApiPayload(response.payload);
+    if (!isRecord(payload) || typeof payload.id !== 'string') {
+      throw new Error('meeting server returned an invalid permission');
+    }
+    return payload as unknown as MeetingServerPermission;
+  }
+
+  async revokePermission(sessionId: string, permissionId: string): Promise<void> {
+    const response = await this.request(
+      'DELETE',
+      `/meetings/sessions/${encodeURIComponent(sessionId)}/permissions/${encodeURIComponent(permissionId)}`,
+    );
+    if (!response.ok) throw new Error(response.message);
+  }
+
+  async deleteAudio(sessionId: string): Promise<void> {
+    const response = await this.request(
+      'DELETE',
+      `/meetings/sessions/${encodeURIComponent(sessionId)}/audio`,
+    );
+    if (!response.ok) throw new Error(response.message);
+  }
+
+  async deleteSession(sessionId: string): Promise<void> {
+    const response = await this.request(
+      'DELETE',
+      `/meetings/sessions/${encodeURIComponent(sessionId)}`,
+    );
+    if (!response.ok) throw new Error(response.message);
   }
 
   getPendingOperations(sessionId: string): MeetingQueuedOperation[] {
@@ -880,7 +1078,7 @@ export class MeetingServerSync {
   }
 
   private async request(
-    method: 'GET' | 'POST' | 'PUT' | 'PATCH',
+    method: 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE',
     path: string,
     body?: JsonRecord,
     timeoutMs = this.requestTimeoutMs,

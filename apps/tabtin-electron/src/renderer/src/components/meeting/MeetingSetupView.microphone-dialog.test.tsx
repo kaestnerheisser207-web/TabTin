@@ -330,7 +330,7 @@ describe('MeetingSetupView microphone dialog', () => {
     ).toBeNull();
   });
 
-  it('stores the explicitly selected Copilot answer model in the local meeting', async () => {
+  it('keeps Copilot off by default and stores the model after explicit enablement', async () => {
     const onStarted = vi.fn();
     render(<MeetingSetupView onBack={vi.fn()} onStarted={onStarted} />);
 
@@ -354,8 +354,14 @@ describe('MeetingSetupView microphone dialog', () => {
         screen
           .getByRole('switch', { name: '启用会议 Copilot' })
           .getAttribute('aria-checked'),
-      ).toBe('true'),
+      ).toBe('false'),
     );
+    fireEvent.click(screen.getByRole('switch', { name: '启用会议 Copilot' }));
+    expect(
+      screen
+        .getByRole('switch', { name: '启用会议 Copilot' })
+        .getAttribute('aria-checked'),
+    ).toBe('true');
 
     await act(async () => {
       fireEvent.click(screen.getByRole('button', { name: '开始记录' }));

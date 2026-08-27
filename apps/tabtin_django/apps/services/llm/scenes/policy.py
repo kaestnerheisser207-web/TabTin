@@ -19,6 +19,7 @@ PAYER_POLICY_MANAGED_SCENE_KEYS = frozenset({
     "title_generation",
     "commit_message_generation",
     "meeting_copilot_quick_answer",
+    "meeting_post_analysis",
     "checkpoint_intent_summary",
     "checkpoint_decision_summary",
     "tool_risk_classify",

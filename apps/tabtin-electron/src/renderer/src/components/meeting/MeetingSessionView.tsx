@@ -1,6 +1,7 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import type {
+  MeetingArchiveScope,
   MeetingLocalArchive,
   MeetingRecordingStatus,
 } from '@shared/meeting-recording-contract';
@@ -46,6 +47,14 @@ export const MeetingSessionView: React.FC<{
     null,
   );
   const [loading, setLoading] = React.useState(runtimeSession);
+  const archiveScope = React.useMemo<MeetingArchiveScope | null>(() => {
+    if (!runtimeSession || !organizationId || !userId) return null;
+    return {
+      sessionId,
+      organizationId: String(organizationId),
+      userId: String(userId),
+    };
+  }, [organizationId, runtimeSession, sessionId, userId]);
 
   React.useEffect(() => {
     if (!runtimeSession) return;
@@ -63,15 +72,11 @@ export const MeetingSessionView: React.FC<{
         setLoading(false);
         return;
       }
-      if (!organizationId || !userId) {
+      if (!archiveScope) {
         setLoading(false);
         return;
       }
-      const loadedArchive = await bridge.getArchive({
-        sessionId,
-        organizationId: String(organizationId),
-        userId: String(userId),
-      });
+      const loadedArchive = await bridge.getArchive(archiveScope);
       if (!cancelled) {
         setArchive(loadedArchive);
         setLoading(false);
@@ -82,7 +87,24 @@ export const MeetingSessionView: React.FC<{
     return () => {
       cancelled = true;
     };
-  }, [organizationId, runtimeSession, sessionId, userId]);
+  }, [archiveScope, runtimeSession, sessionId]);
+
+  const deleteArchiveAudio = React.useCallback(async () => {
+    const bridge = window.tabtin?.meetingRecording;
+    if (!bridge || !archiveScope) {
+      throw new Error(t('detail.deleteUnavailable'));
+    }
+    await bridge.deleteArchiveAudio(archiveScope);
+    setArchive(await bridge.getArchive(archiveScope));
+  }, [archiveScope, t]);
+
+  const deleteArchive = React.useCallback(async () => {
+    const bridge = window.tabtin?.meetingRecording;
+    if (!bridge || !archiveScope) {
+      throw new Error(t('detail.deleteUnavailable'));
+    }
+    await bridge.deleteArchive(archiveScope);
+  }, [archiveScope, t]);
 
   if (surface === 'live' && !runtimeSession) {
     return <MeetingLiveSessionView sessionId={sessionId} onBack={onBack} />;
@@ -97,7 +119,16 @@ export const MeetingSessionView: React.FC<{
       />
     );
   }
-  if (archive) return <MeetingDetailSessionView archive={archive} />;
+  if (archive) {
+    return (
+      <MeetingDetailSessionView
+        archive={archive}
+        onDeleteAudio={deleteArchiveAudio}
+        onDeleteArchive={deleteArchive}
+        onDeleted={onBack}
+      />
+    );
+  }
 
   if (loading) {
     return (

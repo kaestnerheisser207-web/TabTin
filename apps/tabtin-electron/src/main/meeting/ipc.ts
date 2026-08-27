@@ -27,6 +27,7 @@ import {
   probeMeetingAsrReadiness,
 } from './MeetingAsrCoordinator';
 import { MeetingServerSync } from './MeetingServerSync';
+import { MeetingAudioUploader } from './MeetingAudioUploader';
 import { electronWsGateway } from '../ws/ElectronWsGateway';
 
 export const MEETING_RECORDING_IPC_CHANNELS = [
@@ -51,6 +52,8 @@ export const MEETING_RECORDING_IPC_CHANNELS = [
   'meeting-recording:recover-interrupted',
   'meeting-recording:list-archives',
   'meeting-recording:get-archive',
+  'meeting-recording:delete-archive-audio',
+  'meeting-recording:delete-archive',
   'meeting-recording:set-copilot',
   'meeting-recording:answer-copilot',
 ] as const;
@@ -66,6 +69,9 @@ function getManager(): MeetingRecordingManager {
       captureHost: new MeetingCaptureWindow({
         isDev: !app.isPackaged,
         rendererUrl: process.env.ELECTRON_RENDERER_URL,
+        onUnexpectedTermination: () => {
+          void manager?.interruptForCaptureTermination();
+        },
       }),
       createAsrRuntime: ({ scope, onTranscript, onStatus }) =>
         new MeetingAsrCoordinator({
@@ -78,6 +84,7 @@ function getManager(): MeetingRecordingManager {
           },
         }),
       serverSync,
+      audioUploader: new MeetingAudioUploader(),
       onStatusChanged: (status) => {
         for (const window of BrowserWindow.getAllWindows()) {
           if (!window.isDestroyed()) {
@@ -213,6 +220,20 @@ export function registerMeetingRecordingIpc(): void {
     'meeting-recording:get-archive',
     async (_event, scope: MeetingArchiveScope) =>
       okResponse(await getManager().getArchive(scope)),
+  );
+  guardedHandle(
+    'meeting-recording:delete-archive-audio',
+    async (_event, scope: MeetingArchiveScope) => {
+      await getManager().deleteArchiveAudio(scope);
+      return okResponse(null);
+    },
+  );
+  guardedHandle(
+    'meeting-recording:delete-archive',
+    async (_event, scope: MeetingArchiveScope) => {
+      await getManager().deleteArchive(scope);
+      return okResponse(null);
+    },
   );
   guardedHandle(
     'meeting-recording:set-copilot',

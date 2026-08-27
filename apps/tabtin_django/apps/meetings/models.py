@@ -3,6 +3,8 @@ import uuid
 from django.conf import settings
 from django.db import models
 
+from apps.services.common.base_models import ResourcePermission
+
 
 class MeetingSession(models.Model):
     class LifecycleStatus(models.TextChoices):
@@ -12,10 +14,6 @@ class MeetingSession(models.Model):
         STOPPED = "stopped", "已停止"
         CANCELLED = "cancelled", "已取消"
         INTERRUPTED = "interrupted", "异常中断"
-
-    class AudioSyncPolicy(models.TextChoices):
-        LOCAL_ONLY = "local_only", "仅本地"
-        SYNC_AUDIO = "sync_audio", "同步音频"
 
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     organization = models.ForeignKey(
@@ -44,17 +42,13 @@ class MeetingSession(models.Model):
         default=LifecycleStatus.DRAFT,
         db_index=True,
     )
-    audio_sync_policy = models.CharField(
-        max_length=20,
-        choices=AudioSyncPolicy.choices,
-        default=AudioSyncPolicy.LOCAL_ONLY,
-    )
     copilot_initially_enabled = models.BooleanField(default=False)
     copilot_enabled = models.BooleanField(default=False)
     consent_confirmed_at = models.DateTimeField(null=True, blank=True)
     started_at = models.DateTimeField(null=True, blank=True)
     ended_at = models.DateTimeField(null=True, blank=True)
     duration_ms = models.PositiveBigIntegerField(default=0)
+    transcript_revision = models.PositiveIntegerField(default=0)
     version = models.PositiveIntegerField(default=0)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -70,6 +64,39 @@ class MeetingSession(models.Model):
             models.Index(
                 fields=["project", "-created_at"],
                 name="meet_sess_project_idx",
+            ),
+        ]
+
+
+class MeetingPermission(ResourcePermission):
+    """会议档案的显式资源权限。
+
+    Organization 只是归属边界，不自动授予会议内容访问权。
+    创建者是隐式 owner；其他组织成员必须命中本表的 user/role ACL。
+    """
+
+    session = models.ForeignKey(
+        MeetingSession,
+        on_delete=models.CASCADE,
+        related_name="permissions",
+    )
+
+    class Meta(ResourcePermission.Meta):
+        db_table = "meeting_permission"
+        constraints = [
+            models.UniqueConstraint(
+                fields=["session", "subject_type", "subject_id"],
+                name="meet_perm_session_subject_uq",
+            ),
+        ]
+        indexes = [
+            models.Index(
+                fields=["session", "is_active"],
+                name="meet_perm_session_active_idx",
+            ),
+            models.Index(
+                fields=["subject_type", "subject_id"],
+                name="meet_perm_subject_idx",
             ),
         ]
 
@@ -273,3 +300,136 @@ class MeetingTranscriptSegment(models.Model):
     @property
     def display_text(self) -> str:
         return self.edited_text or self.raw_text
+
+
+class MeetingAnalysis(models.Model):
+    class Status(models.TextChoices):
+        PENDING = "pending", "待分析"
+        RUNNING = "running", "分析中"
+        COMPLETED = "completed", "已完成"
+        PARTIAL = "partial", "部分完成"
+        FAILED = "failed", "失败"
+
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    session = models.OneToOneField(
+        MeetingSession,
+        on_delete=models.CASCADE,
+        related_name="analysis",
+    )
+    status = models.CharField(
+        max_length=20,
+        choices=Status.choices,
+        default=Status.PENDING,
+        db_index=True,
+    )
+    summary = models.TextField(blank=True, default="")
+    topics = models.JSONField(default=list, blank=True)
+    decisions = models.JSONField(default=list, blank=True)
+    action_items = models.JSONField(default=list, blank=True)
+    open_questions = models.JSONField(default=list, blank=True)
+    risks = models.JSONField(default=list, blank=True)
+    source_transcript_revision = models.PositiveIntegerField(default=0)
+    provider = models.CharField(max_length=64, blank=True, default="")
+    model = models.CharField(max_length=128, blank=True, default="")
+    error_code = models.CharField(max_length=64, blank=True, default="")
+    error_message = models.TextField(blank=True, default="")
+    requested_by = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="requested_meeting_analyses",
+    )
+    started_at = models.DateTimeField(null=True, blank=True)
+    completed_at = models.DateTimeField(null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        db_table = "meeting_analysis"
+        indexes = [
+            models.Index(
+                fields=["status", "updated_at"],
+                name="meet_analysis_status_idx",
+            ),
+        ]
+
+
+class MeetingReference(models.Model):
+    class ReferenceType(models.TextChoices):
+        DOCUMENT = "document", "文档"
+        TASK = "task", "任务"
+
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    session = models.ForeignKey(
+        MeetingSession,
+        on_delete=models.CASCADE,
+        related_name="references",
+    )
+    reference_type = models.CharField(max_length=20, choices=ReferenceType.choices)
+    resource_id = models.UUIDField()
+    title_snapshot = models.CharField(max_length=255, blank=True, default="")
+    metadata = models.JSONField(default=dict, blank=True)
+    created_by = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="created_meeting_references",
+    )
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        db_table = "meeting_reference"
+        ordering = ["created_at", "id"]
+        constraints = [
+            models.UniqueConstraint(
+                fields=["session", "reference_type", "resource_id"],
+                name="meet_ref_session_type_resource_uq",
+            ),
+        ]
+        indexes = [
+            models.Index(
+                fields=["reference_type", "resource_id"],
+                name="meet_ref_type_resource_idx",
+            ),
+        ]
+
+
+class MeetingCopilotAnswer(models.Model):
+    class Status(models.TextChoices):
+        PENDING = "pending", "生成中"
+        ANSWERED = "answered", "已回答"
+        NO_ACTION = "no_action", "无需回答"
+
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    session = models.ForeignKey(
+        MeetingSession,
+        on_delete=models.CASCADE,
+        related_name="copilot_answers",
+    )
+    request_id = models.UUIDField()
+    question_segment_id = models.CharField(max_length=128)
+    question_text = models.TextField(blank=True, default="")
+    status = models.CharField(max_length=20, choices=Status.choices)
+    result_snapshot = models.JSONField(default=dict)
+    model = models.CharField(max_length=128, blank=True, default="")
+    provider = models.CharField(max_length=64, blank=True, default="")
+    latency_ms = models.PositiveIntegerField(default=0)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        db_table = "meeting_copilot_answer"
+        ordering = ["created_at", "id"]
+        constraints = [
+            models.UniqueConstraint(
+                fields=["session", "request_id"],
+                name="meet_copilot_session_request_uq",
+            ),
+        ]
+        indexes = [
+            models.Index(
+                fields=["session", "created_at"],
+                name="meet_copilot_session_time_idx",
+            ),
+        ]

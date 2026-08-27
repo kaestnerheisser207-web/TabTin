@@ -48,18 +48,22 @@ export interface MeetingCaptureHost {
 export interface MeetingCaptureWindowOptions {
   isDev?: boolean;
   rendererUrl?: string;
+  onUnexpectedTermination?: (reason: string) => void;
 }
 
 export class MeetingCaptureWindow implements MeetingCaptureHost {
   private readonly isDev: boolean;
   private readonly rendererUrl?: string;
+  private readonly onUnexpectedTermination?: (reason: string) => void;
   private window: BrowserWindow | null = null;
   private loadPromise: Promise<BrowserWindow> | null = null;
   private capturePolicyInstalled = false;
+  private readonly expectedClosures = new WeakSet<BrowserWindow>();
 
   constructor(options: MeetingCaptureWindowOptions = {}) {
     this.isDev = options.isDev ?? !app.isPackaged;
     this.rendererUrl = options.rendererUrl ?? process.env.ELECTRON_RENDERER_URL;
+    this.onUnexpectedTermination = options.onUnexpectedTermination;
   }
 
   private resolveUrl(): string {
@@ -104,8 +108,22 @@ export class MeetingCaptureWindow implements MeetingCaptureHost {
           sandbox: false,
         },
       });
+      let terminationReported = false;
+      const reportUnexpectedTermination = (reason: string): void => {
+        if (terminationReported) return;
+        terminationReported = true;
+        this.onUnexpectedTermination?.(reason);
+      };
+      window.webContents.on('render-process-gone', (_event, details) => {
+        reportUnexpectedTermination(
+          `render-process-gone:${details.reason}:${details.exitCode}`,
+        );
+      });
       window.on('closed', () => {
         if (this.window === window) this.window = null;
+        if (!this.expectedClosures.delete(window)) {
+          reportUnexpectedTermination('window-closed');
+        }
       });
       await window.loadURL(this.resolveUrl());
       this.window = window;
@@ -191,7 +209,10 @@ export class MeetingCaptureWindow implements MeetingCaptureHost {
   }
 
   destroy(): void {
-    if (this.window && !this.window.isDestroyed()) this.window.destroy();
+    if (this.window && !this.window.isDestroyed()) {
+      this.expectedClosures.add(this.window);
+      this.window.destroy();
+    }
     this.window = null;
     this.loadPromise = null;
   }

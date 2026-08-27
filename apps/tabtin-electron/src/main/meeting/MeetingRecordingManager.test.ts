@@ -6,7 +6,11 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { MeetingArchiveStore } from './MeetingArchiveStore';
 import { MeetingRecordingManager } from './MeetingRecordingManager';
-import type { MeetingServerSync } from './MeetingServerSync';
+import {
+  MeetingServerRequestError,
+  type MeetingServerSync,
+} from './MeetingServerSync';
+import type { MeetingAudioUploader } from './MeetingAudioUploader';
 
 const scope = {
   organizationId: 'org-1',
@@ -143,6 +147,227 @@ describe('MeetingRecordingManager', () => {
     expect(asrRuntime.stop).toHaveBeenCalledTimes(1);
   });
 
+  it('uploads finalized tracks and persists the exact server file binding', async () => {
+    const serverSync = {
+      createSession: vi.fn(),
+      updateLifecycle: vi.fn(),
+      createTranscriptRun: vi.fn(),
+      updateTranscriptRun: vi.fn(),
+      checkpointTrack: vi.fn(),
+      flushSession: vi.fn().mockResolvedValue({
+        sessionId: scope.sessionId,
+        status: 'synced',
+        syncedCount: 1,
+        pendingCount: 0,
+      }),
+      retrySession: vi.fn().mockResolvedValue({
+        sessionId: scope.sessionId,
+        status: 'synced',
+        syncedCount: 0,
+        pendingCount: 0,
+      }),
+    } as unknown as MeetingServerSync;
+    const audioUploader = {
+      uploadTrack: vi
+        .fn()
+        .mockImplementation(async (input: { source: 'local' | 'remote' }) => ({
+          fileId: `file-${input.source}`,
+          fileName: `${input.source}.webm`,
+          fileKey: `meeting/org-1/session-1/${input.source}.webm`,
+          fileSize: 4,
+          accessUrl: '',
+          cdnUrl: '',
+        })),
+      confirmTrack: vi.fn(),
+    } as unknown as MeetingAudioUploader;
+    const archiveStore = new MeetingArchiveStore({
+      rootPath,
+      finalizeMediaFile: async (inputPath, outputPath) => {
+        await fs.copyFile(inputPath, outputPath);
+      },
+    });
+    const syncManager = new MeetingRecordingManager({
+      archiveStore,
+      captureHost,
+      createAsrRuntime,
+      serverSync,
+      audioUploader,
+    });
+    await syncManager.prepare({
+      ...scope,
+      title: 'Cloud archive',
+      consentConfirmed: true,
+    });
+    await syncManager.start(scope);
+    for (const source of ['local', 'remote'] as const) {
+      await syncManager.appendAudioChunk({
+        ...scope,
+        source,
+        bytes: new TextEncoder().encode('test'),
+        durationMs: 1_000,
+        sampleRate: 48_000,
+        channelCount: 1,
+        codec: 'opus',
+        container: 'webm',
+      });
+    }
+    await syncManager.stop(scope);
+
+    await vi.waitFor(() => expect(audioUploader.uploadTrack).toHaveBeenCalledTimes(2));
+    await vi.waitFor(async () => {
+      const manifest = await archiveStore.readManifest(scope);
+      expect(manifest.tracks.local).toMatchObject({
+        storageStatus: 'synced',
+        fileRecordId: 'file-local',
+      });
+      expect(manifest.tracks.remote).toMatchObject({
+        storageStatus: 'synced',
+        fileRecordId: 'file-remote',
+      });
+    });
+    expect(serverSync.checkpointTrack).toHaveBeenCalledWith(
+      scope.sessionId,
+      expect.objectContaining({
+        source: 'local',
+        storageStatus: 'synced',
+        fileRecordId: 'file-local',
+      }),
+    );
+  });
+
+  it('opens a server-only archive on another device', async () => {
+    const remoteSession = {
+      id: scope.sessionId,
+      version: 2,
+      organization_id: scope.organizationId,
+      project_id: null,
+      title: 'Remote archive',
+      brief: 'Stored on the VPS',
+      lifecycle_status: 'stopped',
+      copilot_initially_enabled: false,
+      copilot_enabled: false,
+      duration_ms: 5_000,
+      created_at: '2026-08-28T00:00:00.000Z',
+      started_at: '2026-08-28T00:00:00.000Z',
+      ended_at: '2026-08-28T00:00:05.000Z',
+      tracks: [
+        {
+          source: 'local',
+          capture_status: 'completed',
+          storage_status: 'synced',
+          duration_ms: 5_000,
+          file_size: 100,
+          file_record_id: 'file-local',
+          codec: 'opus',
+          container: 'webm',
+        },
+        {
+          source: 'remote',
+          capture_status: 'completed',
+          storage_status: 'synced',
+          duration_ms: 5_000,
+          file_size: 100,
+          file_record_id: 'file-remote',
+          codec: 'opus',
+          container: 'webm',
+        },
+      ],
+    };
+    const serverSync = {
+      listSessions: vi.fn().mockResolvedValue([remoteSession]),
+      getSession: vi.fn().mockResolvedValue(remoteSession),
+      getTranscript: vi.fn().mockResolvedValue({
+        runs: [],
+        segments: [
+          {
+            external_id: 'remote-segment',
+            source: 'remote',
+            start_ms: 1_000,
+            end_ms: 2_000,
+            display_text: 'Can we open this on another device?',
+            is_final: true,
+            created_at: '2026-08-28T00:00:02.000Z',
+          },
+        ],
+        total: 1,
+        offset: 0,
+        limit: 1_000,
+        next_offset: null,
+      }),
+      getTrackAudio: vi
+        .fn()
+        .mockImplementation(async (_sessionId: string, source: string) => ({
+          track: {},
+          url: `https://vps.example.test/audio/${source}`,
+          access_mode: 'signed',
+          expires_at: null,
+          expires_in: 3_600,
+        })),
+    } as unknown as MeetingServerSync;
+    const remoteManager = new MeetingRecordingManager({
+      archiveStore: new MeetingArchiveStore({ rootPath }),
+      serverSync,
+    });
+
+    await expect(
+      remoteManager.listArchives({
+        organizationId: scope.organizationId,
+        userId: scope.userId,
+      }),
+    ).resolves.toMatchObject([
+      { manifest: { sessionId: scope.sessionId, title: 'Remote archive' } },
+    ]);
+    await expect(remoteManager.getArchive(scope)).resolves.toMatchObject({
+      manifest: {
+        sessionId: scope.sessionId,
+        serverSyncStatus: 'synced',
+      },
+      transcript: [
+        {
+          externalId: 'remote-segment',
+          text: 'Can we open this on another device?',
+        },
+      ],
+      audioUrls: {
+        local: 'https://vps.example.test/audio/local',
+        remote: 'https://vps.example.test/audio/remote',
+      },
+    });
+  });
+
+  it('rejects and removes a server-backed local cache after remote deletion', async () => {
+    const archiveStore = new MeetingArchiveStore({ rootPath });
+    await archiveStore.prepare({
+      ...scope,
+      title: 'Deleted elsewhere',
+      consentConfirmed: true,
+    });
+    for (const source of ['local', 'remote'] as const) {
+      await archiveStore.updateTrackUploadState(scope, source, {
+        storageStatus: 'synced',
+        fileRecordId: `file-${source}`,
+      });
+    }
+    const serverSync = {
+      getSession: vi.fn().mockRejectedValue(
+        new MeetingServerRequestError({
+          message: 'meeting session not found',
+          reason: 'http',
+          status: 404,
+        }),
+      ),
+    } as unknown as MeetingServerSync;
+    const remoteManager = new MeetingRecordingManager({
+      archiveStore,
+      serverSync,
+    });
+
+    await expect(remoteManager.getArchive(scope)).rejects.toThrow(
+      'meeting archive not found',
+    );
+    await expect(archiveStore.readManifest(scope)).rejects.toThrow();
+  });
+
   it('flushes active capture on exit and finalizes interrupted parts on restart', async () => {
     await manager.prepare({
       ...scope,
@@ -184,6 +409,39 @@ describe('MeetingRecordingManager', () => {
       remote: expect.stringContaining('remote.webm'),
     });
     expect(archive.manifest.lifecycleStatus).toBe('interrupted');
+  });
+
+  it('interrupts recording and stops ASR when the capture renderer terminates', async () => {
+    await manager.prepare({
+      ...scope,
+      title: 'Capture renderer failure',
+      consentConfirmed: true,
+    });
+    await manager.start(scope);
+    await manager.appendAudioChunk({
+      ...scope,
+      source: 'local',
+      bytes: new Uint8Array([1, 2, 3]),
+      durationMs: 1_000,
+      sampleRate: 48_000,
+      channelCount: 1,
+      codec: 'opus',
+      container: 'webm',
+    });
+
+    await manager.interruptForCaptureTermination();
+
+    expect(captureHost.stop).not.toHaveBeenCalled();
+    expect(asrRuntime.stop).toHaveBeenCalledTimes(1);
+    await manager.interruptForCaptureTermination();
+    expect(asrRuntime.stop).toHaveBeenCalledTimes(1);
+    expect(manager.getStatus()).toMatchObject({
+      active: false,
+      manifest: {
+        lifecycleStatus: 'interrupted',
+        tracks: { local: { bytes: 3, status: 'interrupted' } },
+      },
+    });
   });
 
   it('recovers orphaned parts from an already interrupted zero-byte manifest', async () => {
@@ -720,6 +978,7 @@ describe('MeetingRecordingManager', () => {
       expect.any(Array),
       'question-1',
       '',
+      expect.any(String),
     );
 
     await expect(syncManager.stop(scope)).resolves.toMatchObject({

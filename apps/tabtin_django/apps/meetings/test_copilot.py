@@ -232,6 +232,38 @@ class MeetingCopilotQuickAnswerTests(SimpleTestCase):
 
 
 class MeetingCopilotApiTests(SimpleTestCase):
+    def test_request_id_returns_persisted_answer_without_repeating_model_call(self):
+        request = SimpleNamespace(auth=SimpleNamespace(id="user-1"))
+        session = SimpleNamespace(
+            copilot_enabled=True,
+            lifecycle_status=MeetingSession.LifecycleStatus.RECORDING,
+        )
+        persisted = SimpleNamespace(
+            result_snapshot={
+                "status": "answered",
+                "question": "Can we ship?",
+                "answer": "Confirm the plan first.",
+            }
+        )
+        with (
+            patch("apps.meetings.api._owned_session", return_value=session),
+            patch("apps.meetings.api.MeetingCopilotAnswer.objects") as answers,
+            patch("apps.meetings.copilot.generate_meeting_copilot_answer") as generate,
+        ):
+            answers.filter.return_value.first.return_value = persisted
+            result = answer_meeting_copilot(
+                request,
+                "00000000-0000-4000-8000-000000000001",
+                MeetingCopilotAnswerIn(
+                    request_id="00000000-0000-4000-8000-000000000099",
+                    question_segment_id="question-1",
+                    recent_segments=[],
+                ),
+            )
+
+        self.assertEqual(result["answer"], "Confirm the plan first.")
+        generate.assert_not_called()
+
     def test_disabled_copilot_returns_without_invoking_model(self):
         request = SimpleNamespace(auth=SimpleNamespace(id="user-1"))
         session = SimpleNamespace(

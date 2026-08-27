@@ -20,6 +20,7 @@ from __future__ import annotations
 import asyncio
 import base64
 from collections import deque
+from decimal import Decimal
 import logging
 import time
 import uuid
@@ -226,6 +227,11 @@ def create_asr_stream_handler(consumer):
             sample_rate=payload.get("sample_rate", 16000),
             ws_endpoint=ws_endpoint,
             extra_params=extra_params,
+            billing_user_id=str(getattr(consumer, "user_id", "") or ""),
+            billing_organization_id=getattr(
+                consumer, "organization_id", None
+            ),
+            provider=provider,
         )
 
         _active_streams[stream_id] = session
@@ -341,6 +347,9 @@ class _ASRStreamSession(_BaseStreamSession):
         sample_rate: int,
         ws_endpoint: str,
         extra_params: dict,
+        billing_user_id: str = "",
+        billing_organization_id: Optional[str] = None,
+        provider: str = "bytedance",
     ):
         super().__init__(stream_id, consumer, svc)
         self.language = language
@@ -348,10 +357,17 @@ class _ASRStreamSession(_BaseStreamSession):
         self.sample_rate = sample_rate
         self.ws_endpoint = ws_endpoint
         self.extra_params = extra_params
+        self.billing_user_id = billing_user_id
+        self.billing_organization_id = billing_organization_id
+        self.provider = provider
         self.seq = 1
         self.log_id: str = ""
         self._audio_rate_window: deque[tuple[float, int]] = deque()
         self._audio_rate_window_bytes = 0
+        self._audio_bytes_total = 0
+        self._started_monotonic = time.monotonic()
+        self._final_duration_ms = 0
+        self._billing_settled = False
 
     def accept_audio_chunk(self, byte_count: int) -> bool:
         now = time.monotonic()
@@ -429,6 +445,8 @@ class _ASRStreamSession(_BaseStreamSession):
             await self._ws.send_bytes(packet)
         except Exception as exc:
             logger.warning("[ASR WS] send_audio failed: %s", exc)
+        else:
+            self._audio_bytes_total += len(audio_bytes)
 
     async def _dispatch_binary(self, data: bytes) -> bool:
         """处理一个 ASR BINARY WS 帧。返回 True 继续接收，False 终止循环。"""
@@ -451,6 +469,11 @@ class _ASRStreamSession(_BaseStreamSession):
             return False
 
         is_final = event.get("isFinal", False)
+        if is_final:
+            audio_info = event.get("audioInfo") or {}
+            final_duration_ms = audio_info.get("duration", 0)
+            if final_duration_ms:
+                self._final_duration_ms = int(final_duration_ms)
         msg_type = "asr.stream.done" if is_final else "asr.stream.event"
         await self._send_event(msg_type, {
             "stream_id": self.stream_id,
@@ -481,6 +504,57 @@ class _ASRStreamSession(_BaseStreamSession):
             pass
 
         await self._wait_and_cleanup()
+
+    def _estimate_duration_ms(self) -> int:
+        """回退估算：PCM 只按成功发送的字节数换算，非 PCM 用墙钟时间。"""
+        if self.audio_format == "pcm":
+            if self.sample_rate <= 0:
+                return 0
+            bytes_per_second = self.sample_rate * 2  # PCM16 单声道
+            return int(self._audio_bytes_total / bytes_per_second * 1000)
+        return max(int((time.monotonic() - self._started_monotonic) * 1000), 0)
+
+    async def _settle_billing(self) -> None:
+        """流结束时按 speech.asr.seconds 记一次费（幂等，失败不中断主流程）。
+
+        与 HTTP flash/standard 路径共用 _charge_speech_usage 入口；
+        idempotency_key 绑定 stream_id，重复结算不会重复扣费。
+        时长优先用 provider 最终事件上报的 audioInfo.duration，
+        缺失时回退到累计音频字节 / 墙钟估算。
+        """
+        if self._billing_settled:
+            return
+        self._billing_settled = True
+        if not self.billing_user_id:
+            return
+        duration_ms = self._final_duration_ms or self._estimate_duration_ms()
+        if duration_ms <= 0:
+            return
+
+        from apps.services.speech.api import _charge_speech_usage
+
+        await sync_to_async(_charge_speech_usage)(
+            user_id=self.billing_user_id,
+            organization_id=self.billing_organization_id,
+            meter_key="speech.asr.seconds",
+            quantity=Decimal(str(max(duration_ms / 1000, 1))),
+            unit="seconds",
+            provider=self.provider,
+            biz_type="asr_stream",
+            biz_id=self.stream_id,
+            idempotency_key=f"speech:asr_stream:{self.stream_id}",
+        )
+
+    async def _cleanup(self) -> None:
+        """释放资源后结算费用——正常/异常/断连等所有终结路径都经过 _cleanup。"""
+        await super()._cleanup()
+        try:
+            await self._settle_billing()
+        except Exception as exc:
+            logger.warning(
+                "[ASR WS] billing settlement failed without affecting stream cleanup: %s",
+                exc,
+            )
 
     @staticmethod
     def _parse_response(data: bytes) -> Optional[dict]:

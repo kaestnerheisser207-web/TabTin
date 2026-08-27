@@ -32,6 +32,8 @@ from apps.tabchat.handoff.models import (
     HandoffEvent,
     HandoffPackage,
     HandoffRecipient,
+    HandoffReference,
+    HandoffResourceGrant,
 )
 from apps.tabchat.handoff.service import HandoffService
 from apps.tabchat.models import IMEventOutbox, Message
@@ -830,3 +832,325 @@ class HandoffListTests(HandoffTestBase):
         )
         self.assertEqual(len(items), 1)
         self.assertEqual(items[0]["id"], str(sent.id))
+
+
+class HandoffMeetingReferenceTests(HandoffTestBase):
+    def _meeting(self, *, owner=None, title="项目评审会", brief="已确认下周交付"):
+        from apps.meetings.models import MeetingSession
+
+        return MeetingSession.objects.create(
+            organization=self.organization,
+            created_by=owner or self.alice,
+            title=title,
+            brief=brief,
+        )
+
+    def _meeting_package(self, meeting, *, send=True):
+        package = HandoffService.create_package(
+            conversation_id=str(self.conv.id),
+            actor_user_id=str(self.alice.id),
+            goal="继续跟进会议决策",
+            recipients=[str(self.bob.id)],
+            references=[{
+                "ref_type": "meeting",
+                "resource_id": str(meeting.id),
+            }],
+        )
+        if send:
+            return HandoffService.send_package(
+                package_id=str(package.id),
+                actor_user_id=str(self.alice.id),
+            )
+        return package
+
+    def test_create_validates_viewer_and_freezes_meeting_link_snapshot(self):
+        meeting = self._meeting()
+
+        package = self._meeting_package(meeting, send=False)
+
+        reference = package.references.get()
+        self.assertEqual(reference.ref_type, HandoffReference.RefType.MEETING)
+        self.assertEqual(reference.title_snapshot, "项目评审会")
+        self.assertEqual(reference.summary_snapshot, "已确认下周交付")
+        self.assertEqual(reference.source_link, {
+            "session_id": str(meeting.id),
+            "organization_id": str(self.organization.id),
+            "project_id": None,
+        })
+
+        inaccessible = self._meeting(owner=self.bob, title="Bob 的会议")
+        with self.assertRaisesRegex(ValueError, "无权转交"):
+            self._meeting_package(inaccessible, send=False)
+
+    def test_send_grants_viewer_and_view_rechecks_live_access(self):
+        from apps.meetings.models import MeetingPermission
+        from apps.meetings.services import MeetingAccessService
+
+        meeting = self._meeting()
+        package = self._meeting_package(meeting)
+
+        self.assertTrue(MeetingAccessService.has_access(meeting, self.bob, "viewer"))
+        permission = MeetingPermission.objects.get(
+            session=meeting,
+            subject_type="user",
+            subject_id=str(self.bob.id),
+        )
+        self.assertEqual(permission.permission, "viewer")
+        grant = package.resource_grants.get()
+        self.assertTrue(grant.is_active)
+        self.assertTrue(grant.manages_resource_permission)
+        self.assertTrue(grant.created_permission)
+
+        data = HandoffService.get_package(
+            package_id=str(package.id),
+            viewer_user_id=str(self.bob.id),
+        )
+        self.assertTrue(data["references"][0]["accessible"])
+
+        permission.is_active = False
+        permission.save(update_fields=["is_active", "updated_at"])
+        data = HandoffService.get_package(
+            package_id=str(package.id),
+            viewer_user_id=str(self.bob.id),
+        )
+        self.assertFalse(data["references"][0]["accessible"])
+        self.assertEqual(data["references"][0]["denied_reason"], "access_denied")
+
+    def test_deleted_meeting_returns_deleted_placeholder(self):
+        meeting = self._meeting()
+        package = self._meeting_package(meeting)
+
+        meeting.delete()
+        data = HandoffService.get_package(
+            package_id=str(package.id),
+            viewer_user_id=str(self.bob.id),
+        )
+
+        self.assertFalse(data["references"][0]["accessible"])
+        self.assertEqual(data["references"][0]["denied_reason"], "deleted")
+
+    def test_revoke_only_deactivates_permission_created_by_this_handoff(self):
+        from apps.meetings.models import MeetingPermission
+        from apps.meetings.services import MeetingAccessService
+
+        meeting = self._meeting()
+        package = self._meeting_package(meeting)
+
+        HandoffService.revoke(
+            package_id=str(package.id),
+            actor_user_id=str(self.alice.id),
+        )
+
+        permission = MeetingPermission.objects.get(
+            session=meeting,
+            subject_type="user",
+            subject_id=str(self.bob.id),
+        )
+        self.assertFalse(permission.is_active)
+        self.assertFalse(MeetingAccessService.has_access(meeting, self.bob, "viewer"))
+        self.assertFalse(package.resource_grants.get().is_active)
+
+    def test_external_same_level_viewer_regrant_survives_handoff_revoke(self):
+        from datetime import timedelta
+        from apps.meetings.models import MeetingPermission
+
+        meeting = self._meeting()
+        package = self._meeting_package(meeting)
+        grant = package.resource_grants.get()
+        permission = MeetingPermission.objects.get(pk=grant.permission_id)
+        self.assertEqual(permission.permission, "viewer")
+
+        # 模拟会议权限 API 在交接之后显式同级 regrant viewer：
+        # 即便 permission/granted_by 值未变，updated_at touch 也是新的独立来源。
+        touched_at = grant.permission_updated_at_snapshot + timedelta(seconds=1)
+        MeetingPermission.objects.filter(pk=permission.pk).update(
+            permission="viewer",
+            is_active=True,
+            granted_by=str(self.alice.id),
+            updated_at=touched_at,
+        )
+
+        HandoffService.revoke(
+            package_id=str(package.id),
+            actor_user_id=str(self.alice.id),
+        )
+
+        permission.refresh_from_db()
+        grant.refresh_from_db()
+        self.assertTrue(permission.is_active)
+        self.assertEqual(permission.permission, "viewer")
+        self.assertTrue(grant.has_independent_access)
+        self.assertEqual(grant.independent_permission, "viewer")
+
+    def test_revoke_preserves_preexisting_active_permission(self):
+        from apps.meetings.models import MeetingPermission
+
+        meeting = self._meeting()
+        permission = MeetingPermission.objects.create(
+            session=meeting,
+            subject_type="user",
+            subject_id=str(self.bob.id),
+            permission="editor",
+            is_active=True,
+            granted_by=str(self.alice.id),
+        )
+        package = self._meeting_package(meeting)
+        grant = package.resource_grants.get()
+        self.assertTrue(grant.has_independent_access)
+        self.assertFalse(grant.manages_resource_permission)
+
+        HandoffService.revoke(
+            package_id=str(package.id),
+            actor_user_id=str(self.alice.id),
+        )
+
+        permission.refresh_from_db()
+        self.assertTrue(permission.is_active)
+        self.assertEqual(permission.permission, "editor")
+
+    def test_revoke_restores_preexisting_inactive_permission(self):
+        from apps.meetings.models import MeetingPermission
+
+        meeting = self._meeting()
+        permission = MeetingPermission.objects.create(
+            session=meeting,
+            subject_type="user",
+            subject_id=str(self.bob.id),
+            permission="admin",
+            is_active=False,
+            granted_by=str(self.alice.id),
+        )
+        package = self._meeting_package(meeting)
+        permission.refresh_from_db()
+        self.assertTrue(permission.is_active)
+        self.assertEqual(permission.permission, "viewer")
+
+        HandoffService.revoke(
+            package_id=str(package.id),
+            actor_user_id=str(self.alice.id),
+        )
+
+        permission.refresh_from_db()
+        self.assertFalse(permission.is_active)
+        self.assertEqual(permission.permission, "admin")
+
+    def test_sibling_handoff_source_keeps_acl_until_last_source_revoked(self):
+        from apps.meetings.services import MeetingAccessService
+
+        meeting = self._meeting()
+        first = self._meeting_package(meeting)
+        second = self._meeting_package(meeting)
+
+        HandoffService.revoke(
+            package_id=str(first.id),
+            actor_user_id=str(self.alice.id),
+        )
+        self.assertTrue(MeetingAccessService.has_access(meeting, self.bob, "viewer"))
+
+        HandoffService.revoke(
+            package_id=str(second.id),
+            actor_user_id=str(self.alice.id),
+        )
+        self.assertFalse(MeetingAccessService.has_access(meeting, self.bob, "viewer"))
+
+    def test_send_failure_rolls_back_meeting_acl_and_grant_bookkeeping(self):
+        from apps.meetings.models import MeetingPermission
+
+        meeting = self._meeting()
+        package = self._meeting_package(meeting, send=False)
+        with patch.object(
+            HandoffService,
+            "_broadcast_update",
+            side_effect=RuntimeError("send failed"),
+        ):
+            with self.assertRaisesRegex(RuntimeError, "send failed"):
+                HandoffService.send_package(
+                    package_id=str(package.id),
+                    actor_user_id=str(self.alice.id),
+                )
+
+        package.refresh_from_db()
+        self.assertEqual(package.status, HandoffPackage.Status.DRAFT)
+        self.assertFalse(MeetingPermission.objects.filter(
+            session=meeting,
+            subject_type="user",
+            subject_id=str(self.bob.id),
+        ).exists())
+        self.assertFalse(HandoffResourceGrant.objects.filter(package=package).exists())
+
+    def test_grant_bookkeeping_failure_rolls_back_meeting_acl(self):
+        from apps.meetings.models import MeetingPermission
+
+        meeting = self._meeting()
+        package = self._meeting_package(meeting, send=False)
+        with patch.object(
+            HandoffResourceGrant.objects,
+            "create",
+            side_effect=RuntimeError("grant ledger failed"),
+        ):
+            with self.assertRaisesRegex(RuntimeError, "grant ledger failed"):
+                HandoffService.send_package(
+                    package_id=str(package.id),
+                    actor_user_id=str(self.alice.id),
+                )
+
+        self.assertFalse(MeetingPermission.objects.filter(
+            session=meeting,
+            subject_type="user",
+            subject_id=str(self.bob.id),
+        ).exists())
+
+    def test_sent_persist_crash_rolls_back_grant_without_compensation(self):
+        from apps.meetings.models import MeetingPermission
+
+        meeting = self._meeting()
+        package = self._meeting_package(meeting, send=False)
+        # 禁用外层补偿，证明 grant ledger + MeetingPermission + package=sent
+        # 本身就是一个原子事务，不依赖 except 才清理泄漏。
+        with patch.object(
+            HandoffService,
+            "_rollback_meeting_permission_changes",
+            return_value=None,
+        ):
+            with patch.object(
+                HandoffPackage,
+                "save",
+                side_effect=RuntimeError("sent persist crashed"),
+            ):
+                with self.assertRaisesRegex(RuntimeError, "sent persist crashed"):
+                    HandoffService.send_package(
+                        package_id=str(package.id),
+                        actor_user_id=str(self.alice.id),
+                    )
+
+        package.refresh_from_db()
+        self.assertEqual(package.status, HandoffPackage.Status.DRAFT)
+        self.assertFalse(MeetingPermission.objects.filter(
+            session=meeting,
+            subject_type="user",
+            subject_id=str(self.bob.id),
+        ).exists())
+        self.assertFalse(HandoffResourceGrant.objects.filter(package=package).exists())
+
+    def test_supersede_reuses_same_precise_grant_revoke(self):
+        from apps.meetings.models import MeetingPermission
+
+        meeting = self._meeting()
+        package = self._meeting_package(meeting)
+
+        HandoffService.supersede(
+            package_id=str(package.id),
+            actor_user_id=str(self.alice.id),
+        )
+
+        package.refresh_from_db()
+        permission = MeetingPermission.objects.get(
+            session=meeting,
+            subject_type="user",
+            subject_id=str(self.bob.id),
+        )
+        self.assertEqual(package.status, HandoffPackage.Status.SUPERSEDED)
+        self.assertFalse(permission.is_active)
+        self.assertTrue(package.events.filter(
+            event_type=HandoffEvent.EventType.SUPERSEDED,
+        ).exists())

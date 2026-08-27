@@ -42,6 +42,43 @@ function createSync(input: {
 }
 
 describe('MeetingServerSync', () => {
+  it('reads cloud archives and uses explicit delete endpoints', async () => {
+    const fetchImpl = vi
+      .fn<typeof fetch>()
+      .mockResolvedValueOnce(jsonResponse({ sessions: [{ id: 'session-1', version: 2 }] }))
+      .mockResolvedValueOnce(
+        jsonResponse({
+          runs: [],
+          segments: [{ external_id: 'segment-1', display_text: 'Hello' }],
+          total: 1,
+          offset: 0,
+          limit: 1000,
+          next_offset: null,
+        }),
+      )
+      .mockResolvedValueOnce(jsonResponse({ deleted_audio_tracks: 2 }))
+      .mockResolvedValueOnce(jsonResponse({ deleted: true }));
+    const sync = createSync({ fetch: fetchImpl });
+
+    await expect(
+      sync.listSessions({ organizationId: 'org-1' }),
+    ).resolves.toEqual([{ id: 'session-1', version: 2 }]);
+    await expect(sync.getTranscript('session-1')).resolves.toMatchObject({
+      total: 1,
+      segments: [{ external_id: 'segment-1' }],
+    });
+    await sync.deleteAudio('session-1');
+    await sync.deleteSession('session-1');
+
+    expect(String(fetchImpl.mock.calls[0][0])).toContain(
+      '/meetings/sessions?organization_id=org-1',
+    );
+    expect((fetchImpl.mock.calls[2][1] as RequestInit).method).toBe('DELETE');
+    expect(String(fetchImpl.mock.calls[2][0])).toContain(
+      '/meetings/sessions/session-1/audio',
+    );
+    expect((fetchImpl.mock.calls[3][1] as RequestInit).method).toBe('DELETE');
+  });
   it('keeps the selected question when later transcript turns fill the context window', () => {
     const transcript = Array.from(
       { length: MAX_MEETING_COPILOT_CONTEXT_SEGMENTS + 2 },
@@ -168,6 +205,7 @@ describe('MeetingServerSync', () => {
         ],
         'remote-1',
         'model-1',
+        '00000000-0000-4000-8000-000000000099',
       ),
     ).resolves.toMatchObject({
       status: 'answered',
@@ -178,6 +216,7 @@ describe('MeetingServerSync', () => {
     );
     expect(requestBody(fetchImpl.mock.calls[0])).toEqual({
       model_id: 'model-1',
+      request_id: '00000000-0000-4000-8000-000000000099',
       question_segment_id: 'remote-1',
       recent_segments: [
         {
