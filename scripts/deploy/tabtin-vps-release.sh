@@ -61,6 +61,9 @@ fi
 
 [[ -f "$release_dir/apps/tabtin_django/apps/meetings/migrations/0002_remove_meeting_pause.py" ]] ||
   die "release does not contain the expected meeting migration"
+dependency_fingerprint="$(sha256sum "$release_dir/apps/tabtin_django/requirements.txt" | awk '{print $1}')"
+[[ "$dependency_fingerprint" =~ ^[0-9a-f]{64}$ ]] ||
+  die "cannot calculate the Django dependency fingerprint"
 
 running_image_id="$(docker inspect tabtin-community-django-1 --format '{{.Image}}')"
 [[ -n "$running_image_id" ]] || die "cannot resolve the running Django image"
@@ -78,7 +81,7 @@ if ! docker image inspect "$release_image" >/dev/null 2>&1; then
   docker build \
     --build-arg BASE_IMAGE=python:3.11-slim \
     --build-arg INSTALL_PLAYWRIGHT=true \
-    --build-arg "TABTIN_DEV_DEPENDENCY_FINGERPRINT=release-$short_sha" \
+    --build-arg "TABTIN_DEV_DEPENDENCY_FINGERPRINT=$dependency_fingerprint" \
     --file "$release_dir/apps/tabtin_django/Dockerfile" \
     --tag "$release_image" \
     "$release_dir"
