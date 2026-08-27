@@ -1,14 +1,16 @@
 from __future__ import annotations
 
-from unittest.mock import MagicMock, patch
+from unittest.mock import MagicMock, PropertyMock, patch
 
 import pytest
 from django.test import SimpleTestCase, override_settings
 
 from apps.services.speech.asr.factory import (
     ASRConfigError,
+    ASRCredentialError,
     ASRServiceFactory,
     _resolve_config,
+    _try_load_from_db,
     get_asr_service,
 )
 from apps.services.speech.config_types import ASRProviderConfig
@@ -54,6 +56,25 @@ class TestASRServiceFactory(SimpleTestCase):
         self.assertIn("standard", modes)
         self.assertIn("streaming", modes)
 
+    def test_byteplus_requires_only_api_key(self):
+        svc = ASRServiceFactory.create_service(
+            "byteplus",
+            "streaming",
+            ASRProviderConfig(access_token="test-api-key"),
+        )
+        self.assertEqual(svc.provider_name, "byteplus")
+        self.assertEqual(svc.access_token, "test-api-key")
+
+    def test_byteplus_supported_modes_exclude_flash(self):
+        providers = ASRServiceFactory.get_supported_providers()
+        self.assertEqual(providers["byteplus"], ["standard", "streaming"])
+
+    def test_byteplus_missing_api_key_raises(self):
+        with self.assertRaises(ASRConfigError):
+            ASRServiceFactory.create_service(
+                "byteplus", "streaming", ASRProviderConfig(),
+            )
+
 
 class TestResolveConfig(SimpleTestCase):
     """v0.1.x：删除 settings fallback 后，未配置 DB 应直接抛错。"""
@@ -81,6 +102,32 @@ class TestResolveConfig(SimpleTestCase):
         with self.assertRaises(ASRConfigError) as ctx:
             _resolve_config("bytedance", "flash")
         self.assertIn("未在 DB 配置", str(ctx.exception))
+
+    @patch("apps.services.speech.asr.factory._discover_provider")
+    @patch("apps.services.llm.models.LLMModel.objects.filter")
+    def test_credential_decryption_failure_remains_actionable(
+        self,
+        filter_models,
+        discover_provider,
+    ):
+        from apps.services.llm.models import LLMCredentialDecryptionError
+
+        provider = MagicMock()
+        type(provider).api_key = PropertyMock(
+            side_effect=LLMCredentialDecryptionError("cannot decrypt")
+        )
+        discover_provider.return_value = provider
+        filter_models.return_value.first.return_value = MagicMock(
+            capabilities_config={
+                "resource_ids": {"streaming": "volc.seedasr.sauc.duration"},
+                "ws_endpoint": "bigmodel_async",
+            }
+        )
+
+        with self.assertRaises(ASRCredentialError) as ctx:
+            _try_load_from_db("byteplus", "streaming")
+
+        self.assertIn("重新保存 API Key", str(ctx.exception))
 
 
 class TestGetASRService(SimpleTestCase):

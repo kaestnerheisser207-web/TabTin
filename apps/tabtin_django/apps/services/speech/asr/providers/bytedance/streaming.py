@@ -20,6 +20,7 @@ import aiohttp
 from ...base import BaseASRService
 from ....config_types import ASRProviderConfig
 from ...types import ASRStreamEvent
+from ....exceptions import SpeechUpstreamError
 from .base import (
     WS_BIGMODEL_NOSTREAM,
     WS_ENDPOINTS,
@@ -75,12 +76,7 @@ class ByteDanceStreamingASR(BaseASRService):
             **kwargs: enable_itn, enable_punc, show_utterances 等
         """
         connect_id = new_request_id()
-        headers = build_auth_headers(
-            app_id=self.app_id,
-            access_token=self.access_token,
-            resource_id=self.resource_id,
-            connect_id=connect_id,
-        )
+        headers = self.build_auth_headers(connect_id=connect_id)
 
         session = aiohttp.ClientSession(
             timeout=aiohttp.ClientTimeout(total=self.timeout_seconds, connect=10),
@@ -95,7 +91,7 @@ class ByteDanceStreamingASR(BaseASRService):
             try:
                 seq = 1
 
-                full_request = self._build_full_client_request(
+                full_request = self.build_full_client_request(
                     seq=seq,
                     language=language,
                     audio_format=audio_format,
@@ -162,6 +158,53 @@ class ByteDanceStreamingASR(BaseASRService):
 
     # ── 二进制协议构建 ────────────────────────────────────────────
 
+    def build_auth_headers(self, *, connect_id: str) -> dict[str, str]:
+        return build_auth_headers(
+            app_id=self.app_id,
+            access_token=self.access_token,
+            resource_id=self.resource_id,
+            connect_id=connect_id,
+        )
+
+    async def probe_connection(self) -> dict[str, str]:
+        """Validate credentials, endpoint and initialization without sending audio."""
+        connect_id = new_request_id()
+        headers = self.build_auth_headers(connect_id=connect_id)
+        session = aiohttp.ClientSession(
+            timeout=aiohttp.ClientTimeout(total=15, connect=10),
+        )
+        try:
+            ws = await session.ws_connect(self.ws_url, headers=headers)
+            try:
+                await ws.send_bytes(
+                    self.build_full_client_request(
+                        seq=1,
+                        language="",
+                        audio_format="pcm",
+                        sample_rate=DEFAULT_SAMPLE_RATE,
+                    )
+                )
+                init_msg = await asyncio.wait_for(ws.receive(), timeout=10)
+                if init_msg.type != aiohttp.WSMsgType.BINARY:
+                    raise SpeechUpstreamError(
+                        f"ASR 初始化返回意外消息类型: {init_msg.type}"
+                    )
+                parsed = parse_ws_binary_frame(init_msg.data)
+                if parsed is None:
+                    raise SpeechUpstreamError("ASR 初始化返回空响应")
+                if "error" in parsed:
+                    raise SpeechUpstreamError(
+                        "ASR 初始化失败: "
+                        f"code={parsed.get('error_code', 0)} msg={parsed['error']}"
+                    )
+                ws_resp = getattr(ws, "response", None) or getattr(ws, "_response", None)
+                log_id = ws_resp.headers.get("X-Tt-Logid", "") if ws_resp else ""
+                return {"connect_id": connect_id, "log_id": log_id}
+            finally:
+                await ws.close()
+        finally:
+            await session.close()
+
     @staticmethod
     def _build_header(
         message_type: int,
@@ -170,7 +213,7 @@ class ByteDanceStreamingASR(BaseASRService):
     ) -> bytes:
         return build_ws_header(message_type, flags, **kwargs)
 
-    def _build_full_client_request(
+    def build_full_client_request(
         self,
         seq: int,
         language: str,
@@ -186,6 +229,23 @@ class ByteDanceStreamingASR(BaseASRService):
             ws_endpoint=self.ws_endpoint,
             seq=seq,
             extra_params=kwargs,
+        )
+
+    # 兼容已有的内部调用和测试；Gateway 使用上面的公开协议方法。
+    def _build_full_client_request(
+        self,
+        seq: int,
+        language: str,
+        audio_format: str,
+        sample_rate: int,
+        **kwargs: Any,
+    ) -> bytes:
+        return self.build_full_client_request(
+            seq=seq,
+            language=language,
+            audio_format=audio_format,
+            sample_rate=sample_rate,
+            **kwargs,
         )
 
     def _build_audio_packet(

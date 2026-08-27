@@ -72,6 +72,7 @@ from .handlers import (
     create_action_result_handler,
     create_approval_request_handler,
     create_approval_response_handler,
+    create_asr_config_check_handler,
     create_asr_stream_handler,
     create_tts_stream_handler,
     create_git_status_report_handler,
@@ -134,8 +135,17 @@ JWT_RECHECK_INTERVAL_SECONDS = int(
     getattr(settings, "WS_JWT_RECHECK_INTERVAL_SECONDS", 60)
 )  # RB-014: 从 300s 降至 60s，缩短权限撤销检测窗口；可通过 settings 覆盖
 
-# G-035: 控制帧不计入速率限制（弱网重连时批量发送不应被限流）
-_RATE_LIMIT_EXEMPT_TYPES = frozenset({"ping", "auth", "resume"})
+# G-035: 控制帧和已有独立配额的流量不计入通用业务限流。
+_RATE_LIMIT_EXEMPT_TYPES = frozenset({
+    "ping",
+    "auth",
+    "resume",
+    # Realtime PCM has a dedicated per-stream packet/byte quota in
+    # handlers/asr_stream.py. Counting both 200 ms meeting tracks against the
+    # generic 10 msg/s business budget drops valid audio as soon as any normal
+    # subscription traffic shares the connection.
+    "asr.stream.audio",
+})
 
 # G-003: 并发连接总数限制，防止慢速 DDoS
 MAX_TOTAL_CONNECTIONS = getattr(settings, "WS_MAX_TOTAL_CONNECTIONS", 10000)
@@ -1098,6 +1108,7 @@ class GatewayConsumer(UpdateWSMixin, AsyncWebsocketConsumer):
     def _handlers(self) -> Dict[str, Any]:
         if self._cached_handlers is None:
             asr_start, asr_audio, asr_stop = create_asr_stream_handler(self)
+            asr_config_check = create_asr_config_check_handler(self)
             tts_start, tts_text, tts_stop = create_tts_stream_handler(self)
             self._cached_handlers = {
                 "auth":                     create_auth_handler(self),
@@ -1115,6 +1126,7 @@ class GatewayConsumer(UpdateWSMixin, AsyncWebsocketConsumer):
                 "asr.stream.start":         asr_start,
                 "asr.stream.audio":         asr_audio,
                 "asr.stream.stop":          asr_stop,
+                "asr.config.check":         asr_config_check,
                 "tts.stream.start":         tts_start,
                 "tts.stream.text":          tts_text,
                 "tts.stream.stop":          tts_stop,

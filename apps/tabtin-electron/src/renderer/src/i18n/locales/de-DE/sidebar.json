@@ -13,14 +13,23 @@
   },
   "rail": {
     "tasks": "Aufgaben",
+    "meetingRecords": "Besprechungsaufzeichnungen",
     "messages": "Nachrichten",
     "cloudDocs": "Cloud-Dokumente",
     "projects": "Projekte",
-    "more": "Mehr",
-    "customerSupport": "Unterstützung",
-    "customerSupportTitle": "Kontaktieren Sie den Support",
-    "customerSupportHint": "Scannen Sie mit WeChat, um uns auf WeCom hinzuzufügen",
-    "customerSupportQrAlt": "WeCom-Kundensupport-QR-Code"
+    "more": "Mehr"
+  },
+  "meetingRecords": {
+    "title": "Besprechungsaufzeichnungen",
+    "all": "Alle Aufzeichnungen",
+    "setup": "Neue Aufzeichnung vorbereiten",
+    "preview": "Seitenvorschau",
+    "live": "Aufzeichnung läuft",
+    "detail": "Details nach der Besprechung",
+    "description": "Den tatsächlichen Gesprächsverlauf aufzeichnen, prüfen und ordnen.",
+    "start": "Aufzeichnung starten",
+    "emptyTitle": "Noch keine Besprechungsaufzeichnungen",
+    "emptyDescription": "Aufnahmen, Transkripte und Nachbereitung erscheinen nach dem Start hier."
   },
   "cloudDocs": {
     "browse": {

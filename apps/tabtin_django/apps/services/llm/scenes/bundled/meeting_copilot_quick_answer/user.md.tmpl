@@ -1,0 +1,18 @@
+当前需要判断和处理的发言：
+{{ candidate_utterance }}
+
+最近会议逐字稿：
+{{ transcript_context }}
+
+会前 Brief：
+{{ brief }}
+
+已授权且已准备的 Project 资料：
+{{ project_context }}
+
+允许引用的 source id：
+{% for source_id in allowed_source_ids %}
+- {{ source_id }}
+{% endfor %}
+
+请返回严格 JSON。

@@ -54,6 +54,7 @@ vi.mock('./primaryNavigation', () => ({
 
 vi.mock('@/utils/featureFlags', () => ({
   PROJECTS_UI_ENABLED: true,
+  MEETING_RECORDS_UI_ENABLED: true,
 }))
 
 vi.mock('@/components/common/dnd-kit', () => ({
@@ -98,10 +99,6 @@ vi.mock('./OrganizationProfileButton', () => ({
   UserAvatarRailButton: () => null,
 }))
 
-vi.mock('./CustomerSupportRailButton', () => ({
-  CustomerSupportRailButton: () => null,
-}))
-
 vi.mock('@components/notification/NotificationBell', () => ({
   NotificationBell: () => null,
 }))
@@ -129,6 +126,22 @@ describe('ActivityRail domain ordering', () => {
     expect(navigationMock).toHaveBeenCalledWith('messages')
   })
 
+  it('opens the meeting records domain from its explicit label', () => {
+    render(<ActivityRail executionSpaceId="space-1" />)
+
+    const meetingButton = screen.getByRole('button', { name: '会议记录' })
+    const taskButton = screen.getByRole('button', { name: '任务' })
+
+    expect(meetingButton.querySelector('[data-testid="meeting-rail-icon-frame"]')).toBeTruthy()
+    expect(meetingButton.querySelector('svg')?.getAttribute('width'))
+      .toBe(taskButton.querySelector('svg')?.getAttribute('width'))
+
+    fireEvent.click(meetingButton)
+
+    expect(navigationMock).toHaveBeenCalledOnce()
+    expect(navigationMock).toHaveBeenCalledWith('meeting-records')
+  })
+
   it('persists a drag reorder without dispatching navigation', () => {
     render(<ActivityRail executionSpaceId="space-1" />)
 
@@ -141,6 +154,7 @@ describe('ActivityRail domain ordering', () => {
     expect(setOrderMock).toHaveBeenCalledWith([
       'messages',
       'tasks',
+      'meeting-records',
       'agents',
       'cloud-docs',
       'projects',
@@ -160,7 +174,7 @@ describe('ActivityRail domain ordering', () => {
     render(<ActivityRail executionSpaceId="space-1" />)
 
     expect(screen.getAllByRole('button').map(button => button.getAttribute('aria-label')))
-      .toEqual(['云文档', '任务', '消息', 'AI 分身', '项目'])
+      .toEqual(['云文档', '任务', '消息', 'AI 分身', '项目', '会议记录'])
   })
 
   it('ignores a drag that ends outside the rail', () => {

@@ -114,6 +114,11 @@ describe('shouldShowPersonalTaskSidebar', () => {
     })).toBe(false)
     expect(shouldShowPersonalTaskSidebar({
       effectiveMainNavTab: 'agent',
+      activeAppPage: 'meeting-records',
+      isProjectNavActive: false,
+    })).toBe(false)
+    expect(shouldShowPersonalTaskSidebar({
+      effectiveMainNavTab: 'agent',
       activeAppPage: 'project',
       isProjectNavActive: true,
     })).toBe(false)
@@ -289,15 +294,28 @@ describe('resolveEffectiveMainNavTab', () => {
 })
 
 describe('resolveVisibleRailDomainIds', () => {
-  it('Projects 关闭时只隐藏项目域，任务 / 消息 / AI 分身仍在', () => {
-    const ids = resolveVisibleRailDomainIds({ projectsEnabled: false })
+  it('Projects 关闭时只隐藏项目域，任务 / 会议记录 / 消息 / AI 分身仍在', () => {
+    const ids = resolveVisibleRailDomainIds({
+      projectsEnabled: false,
+      meetingRecordsEnabled: true,
+    })
     expect(ids).not.toContain('projects')
-    expect(ids).toEqual(['tasks', 'messages', 'agents', 'cloud-docs'])
+    expect(ids).toEqual(['tasks', 'meeting-records', 'messages', 'agents', 'cloud-docs'])
   })
 
-  it('Projects 打开时五大域齐全', () => {
-    expect(resolveVisibleRailDomainIds({ projectsEnabled: true }))
-      .toEqual(['tasks', 'messages', 'agents', 'cloud-docs', 'projects'])
+  it('Projects 打开时六大域齐全', () => {
+    expect(resolveVisibleRailDomainIds({
+      projectsEnabled: true,
+      meetingRecordsEnabled: true,
+    }))
+      .toEqual(['tasks', 'meeting-records', 'messages', 'agents', 'cloud-docs', 'projects'])
+  })
+
+  it('正式包未开放能力时隐藏整个会议记录域', () => {
+    expect(resolveVisibleRailDomainIds({
+      projectsEnabled: true,
+      meetingRecordsEnabled: false,
+    })).toEqual(['tasks', 'messages', 'agents', 'cloud-docs', 'projects'])
   })
 })
 
@@ -321,6 +339,10 @@ describe('resolveActivityRailActive', () => {
         activeAppPage: page,
       })).toBe('tasks')
     }
+    expect(resolveActivityRailActive({
+      effectiveMainNavTab: 'agent',
+      activeAppPage: 'meeting-records',
+    })).toBe('meeting-records')
   })
 
   it('设置态最优先：按 category 高亮组织/个人头像，而非残留 app-page', () => {

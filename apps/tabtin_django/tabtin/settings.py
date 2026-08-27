@@ -283,6 +283,7 @@ _CREATION_APPS = [
     'apps.user_portrait.apps.UserPortraitConfig',          # User 用户画像（USER 层）
     'apps.tabsite.apps.TabsiteConfig',
     'apps.tabchat.apps.TabchatConfig',                          # TabChat 即时通讯
+    'apps.meetings.apps.MeetingsConfig',                    # 会议记录事实与转写
 ]
 
 # ── AI / Agent ────────────────────────────────────────

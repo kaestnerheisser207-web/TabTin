@@ -45,9 +45,10 @@ import {
   openCollaborationHub,
   openExternalArchives,
   openImportHub,
+  openMeetingRecords,
   openSkillLibrary,
 } from '@/services/agentMemoryNavigation'
-import { PROJECTS_UI_ENABLED } from '@/utils/featureFlags'
+import { MEETING_RECORDS_UI_ENABLED, PROJECTS_UI_ENABLED } from '@/utils/featureFlags'
 
 export type PrimaryNavId =
   | 'new-task'
@@ -60,6 +61,7 @@ export type PrimaryNavId =
   | 'agents'
   | 'skills'
   | 'collaboration'
+  | 'meeting-records'
   | 'messages'
   | 'cloud-docs'
 
@@ -220,6 +222,7 @@ export function resolveActivePrimaryNavId(input: {
   if (input.activeAppPage === 'import') return 'import-data'
   if (input.activeAppPage === 'external-archives') return 'external-history'
   if (input.activeAppPage === 'collaboration') return 'collaboration'
+  if (input.activeAppPage === 'meeting-records') return 'meeting-records'
   if (input.effectiveMainNavTab === 'agents') return 'agents'
   if (
     (input.effectiveMainNavTab === 'agent' || input.isProjectNavActive) &&
@@ -419,6 +422,7 @@ export function usePrimaryNavigation(input: {
 
   const handlePrimaryNavigation = useCallback((target: PrimaryNavId) => {
     if (target === 'collaboration' && !PROJECTS_UI_ENABLED) return
+    if (target === 'meeting-records' && !MEETING_RECORDS_UI_ENABLED) return
     // 在任何 closeAppPage 之前快照沉浸态：离开 Project 必须统一走 exit 编排，
     // 否则执行工作空间交接会被「先关页、后读态」的时序吞掉（#P1）。
     const wasProjectImmersive = useAppPageStore.getState().activePage === 'project'
@@ -427,7 +431,7 @@ export function usePrimaryNavigation(input: {
 
     // 三大域是「面板即内容」：点域图标时若第二列折叠则自动展开（例如点消息
     // 应弹出会话列表），否则消息域会停在指向空侧栏的「从左侧选择会话」死态。
-    if (target === 'tasks' || target === 'messages' || target === 'agents' || target === 'collaboration' || target === 'cloud-docs') {
+    if (target === 'tasks' || target === 'messages' || target === 'agents' || target === 'collaboration' || target === 'meeting-records' || target === 'cloud-docs') {
       const uiStore = useUIStore.getState()
       if (uiStore.sidebarCollapsed) uiStore.toggleSidebar()
     }
@@ -478,6 +482,10 @@ export function usePrimaryNavigation(input: {
     }
     if (target === 'collaboration') {
       openCollaborationHub()
+      return
+    }
+    if (target === 'meeting-records') {
+      openMeetingRecords()
       return
     }
 

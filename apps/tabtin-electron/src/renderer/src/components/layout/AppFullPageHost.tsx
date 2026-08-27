@@ -32,6 +32,12 @@ const NotificationCenterPage = React.lazy(() =>
   })),
 )
 
+const MeetingRecordsPage = React.lazy(() =>
+  import('@components/meeting/MeetingRecordsPage').then((m) => ({
+    default: m.MeetingRecordsPage,
+  })),
+)
+
 const AppPageEmpty: React.FC<{ title: string }> = ({ title }) => {
   const { t } = useTranslation('chat')
   return (
@@ -125,6 +131,16 @@ export const AppFullPageHost: React.FC = () => {
       <div className="flex h-full min-h-0 w-full flex-col">
         <Suspense fallback={fallback}>
           <NotificationCenterPage />
+        </Suspense>
+      </div>
+    )
+  }
+
+  if (activePage === 'meeting-records') {
+    return (
+      <div className="flex h-full min-h-0 w-full flex-col">
+        <Suspense fallback={fallback}>
+          <MeetingRecordsPage />
         </Suspense>
       </div>
     )

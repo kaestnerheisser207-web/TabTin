@@ -155,6 +155,28 @@ def build_auth_headers(
     return headers
 
 
+def build_api_key_auth_headers(
+    *,
+    api_key: str,
+    resource_id: str,
+    request_id: Optional[str] = None,
+    sequence: Optional[str] = None,
+    connect_id: Optional[str] = None,
+) -> dict[str, str]:
+    """构造 BytePlus Global 新版 ``X-Api-Key`` 鉴权 Header。"""
+    headers: dict[str, str] = {
+        "X-Api-Key": api_key,
+        "X-Api-Resource-Id": resource_id,
+    }
+    if request_id:
+        headers["X-Api-Request-Id"] = request_id
+    if sequence is not None:
+        headers["X-Api-Sequence"] = sequence
+    if connect_id:
+        headers["X-Api-Connect-Id"] = connect_id
+    return headers
+
+
 def new_request_id() -> str:
     return str(uuid.uuid4())
 

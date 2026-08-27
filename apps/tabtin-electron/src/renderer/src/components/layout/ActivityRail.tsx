@@ -2,7 +2,7 @@
  * ActivityRail —— 常驻窄栏（56px，与宽侧栏共享实色底）。
  *
  * 自上而下：组织头像 → 五大域（任务 / 消息 / AI分身 / 云文档 / 项目）→
- * 底部客服 + 通知 + 个人头像。侧栏展开/折叠在 ShellTopBar 组织名旁。
+ * 底部通知 + 个人头像。侧栏展开/折叠在 ShellTopBar 组织名旁。
  *
  * 组织 / 个人头像点击固定落到组织资料 / 个人资料，不经齿轮中转、不复用上次 section。
  * 域切换派发与未读徽标和第二列内容面板同源（usePrimaryNavigation）；
@@ -10,7 +10,7 @@
  * 窄栏常驻不可折叠；折叠语义只作用于第二列（useUIStore.sidebarCollapsed）。
  *
  * 五大域按钮支持拖拽换序（dnd-kit，8px 触发阈值保住点击语义），顺序持久化在
- * useSpaceViewPrefsStore.activityRailDomainOrder；顶部组织头像与底部客服/通知/
+ * useSpaceViewPrefsStore.activityRailDomainOrder；顶部组织头像与底部通知/
  * 个人头像是固定锚点，不参与排序。
  */
 
@@ -32,13 +32,12 @@ import {
   verticalListSortingStrategy,
   type DragEndEvent,
 } from '@/components/common/dnd-kit'
-import { CustomerSupportRailButton } from './CustomerSupportRailButton'
 import {
   OrganizationAvatarRailButton,
   UserAvatarRailButton,
 } from './OrganizationProfileButton'
 import { usePrimaryNavigation } from './primaryNavigation'
-import { PROJECTS_UI_ENABLED } from '@/utils/featureFlags'
+import { MEETING_RECORDS_UI_ENABLED, PROJECTS_UI_ENABLED } from '@/utils/featureFlags'
 import {
   DEFAULT_ACTIVITY_RAIL_DOMAIN_ORDER,
   isActivityRailDomainId,
@@ -52,6 +51,7 @@ import {
   RailCloudDocsIcon,
   RailFolderIcon,
   RailHomeIcon,
+  RailMeetingRecordIcon,
   type ActivityRailIconProps,
 } from './activityRailIcons'
 import { RailIconTooltip } from './activityRailTooltip'
@@ -65,6 +65,7 @@ import {
 
 export type ActivityRailItemId =
   | 'tasks'
+  | 'meeting-records'
   | 'messages'
   | 'agents'
   | 'cloud-docs'
@@ -94,6 +95,7 @@ export function resolveActivityRailActive(input: {
     return null
   }
   if (activeAppPage === 'collaboration' || activeAppPage === 'project') return 'projects'
+  if (activeAppPage === 'meeting-records') return 'meeting-records'
   // 自动化 / 技能库是任务域次级入口，窄栏仍归任务域高亮。
   if (activeAppPage === 'skill' || activeAppPage === 'automation') return 'tasks'
   if (effectiveMainNavTab === 'agents') return 'agents'
@@ -110,6 +112,7 @@ const DOMAIN_NAV_ITEMS: Array<{
   Icon: React.FC<ActivityRailIconProps>
 }> = [
   { id: 'tasks', labelKey: 'sidebar:rail.tasks', defaultLabel: '任务', Icon: RailHomeIcon },
+  { id: 'meeting-records', labelKey: 'sidebar:rail.meetingRecords', defaultLabel: '会议记录', Icon: RailMeetingRecordIcon },
   { id: 'messages', labelKey: 'sidebar:rail.messages', defaultLabel: '消息', Icon: RailChatIcon },
   { id: 'agents', labelKey: 'sidebar:primaryNav.agents', defaultLabel: 'AI 分身', Icon: RailAgentIcon },
   { id: 'cloud-docs', labelKey: 'sidebar:rail.cloudDocs', defaultLabel: '云文档', Icon: RailCloudDocsIcon },
@@ -119,9 +122,13 @@ const DOMAIN_NAV_ITEMS: Array<{
 /** Projects 开关关闭时隐藏「项目」域；消息 / 任务 / AI分身不受开关控制。 */
 export function resolveVisibleRailDomainIds(input: {
   projectsEnabled: boolean
+  meetingRecordsEnabled: boolean
 }): DomainRailItemId[] {
   return DOMAIN_NAV_ITEMS
-    .filter(item => item.id !== 'projects' || input.projectsEnabled)
+    .filter(item => (
+      (item.id !== 'projects' || input.projectsEnabled)
+      && (item.id !== 'meeting-records' || input.meetingRecordsEnabled)
+    ))
     .map(item => item.id)
 }
 
@@ -161,6 +168,10 @@ export const ActivityRail: React.FC<ActivityRailProps> = ({
       handlePrimaryNavigation('tasks')
       return
     }
+    if (id === 'meeting-records') {
+      handlePrimaryNavigation('meeting-records')
+      return
+    }
     if (id === 'messages') {
       handlePrimaryNavigation('messages')
       return
@@ -182,7 +193,10 @@ export const ActivityRail: React.FC<ActivityRailProps> = ({
   const setRailDomainOrder = useSpaceViewPrefsStore(s => s.setActivityRailDomainOrder)
 
   const visibleDomainIds = useMemo(
-    () => resolveVisibleRailDomainIds({ projectsEnabled: PROJECTS_UI_ENABLED }),
+    () => resolveVisibleRailDomainIds({
+      projectsEnabled: PROJECTS_UI_ENABLED,
+      meetingRecordsEnabled: MEETING_RECORDS_UI_ENABLED,
+    }),
     [],
   )
   const orderedDomainIds = useMemo(
@@ -326,7 +340,6 @@ export const ActivityRail: React.FC<ActivityRailProps> = ({
       <div className="flex-1" />
 
       <div className="flex flex-col items-center gap-2">
-        <CustomerSupportRailButton />
         <NotificationBell size="rail" />
         <UserAvatarRailButton active={activeRailItem === 'profile'} />
       </div>

@@ -288,6 +288,9 @@ def _register_social_and_misc_routers():
     from apps.diagnostics.api import router as diagnostics_router
     _safe_add_router("/diagnostics", diagnostics_router, tags=["Client Diagnostics"])
 
+    from apps.meetings.api import router as meetings_router
+    _safe_add_router("/meetings", meetings_router, tags=["Meeting Records"])
+
     # 通用埋点采集（官网 beacon / 客户端上报），匿名 + IP 限流。
     from apps.analytics.api import router as analytics_router
     _safe_add_router("/analytics", analytics_router, tags=["Analytics"])

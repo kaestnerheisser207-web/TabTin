@@ -71,25 +71,15 @@ const explicitDevEnvFile = process.env.TABTIN_ELECTRON_DEV_ENV_FILE?.trim() || '
 // （例：profile='local' → viteMode='localdev'，因 vite 拒绝 'local' 这个保留字）。
 // envFileLoaded 段优先读 .env.<viteMode> 与 vite 自身 loadEnv 对齐。
 const viteMode = process.env.TABTIN_VITE_MODE?.trim() || ''
-const initialProcessEnv: Record<string, string | undefined> = { ...process.env }
+const initialProcessEnv: Record<string, string | undefined> = {
+  ...process.env,
+}
 const ENV_REFERENCE_PATTERN = /\$\{([A-Za-z_][A-Za-z0-9_]*)\}/g
-const expandEnvReferences = (value: string, scope: Record<string, string | undefined>): string =>
-  value.replace(ENV_REFERENCE_PATTERN, (match, key: string) => scope[key] ?? match)
-const isDevOnly = process.env.NODE_ENV !== 'production'
-  && !buildProfile
-  && (!viteMode || viteMode === 'development')
+const expandEnvReferences = (value: string, scope: Record<string, string | undefined>): string => value.replace(ENV_REFERENCE_PATTERN, (match, key: string) => scope[key] ?? match)
+const isDevOnly = process.env.NODE_ENV !== 'production' && !buildProfile && (!viteMode || viteMode === 'development')
 const skipPackagedBuildTypecheck = process.env.TABTIN_PACKAGED_BUILD_SKIP_TYPECHECK === '1'
 const skipPackagedBuildSourcemaps = process.env.TABTIN_PACKAGED_BUILD_SKIP_SOURCEMAPS === '1'
-const devProcessEnvWinsKeys = new Set([
-  'TABTIN_API_BASE_URL',
-  'TABTIN_DAEMON_CONTROL_API_BASE_URL',
-  'VITE_API_BASE_URL',
-  'VITE_COLLAB_WS_BASE',
-  'VITE_CENTRIFUGO_WS_URL',
-  'TABTIN_PUBLIC_WEB_BASE_URL',
-  'VITE_PUBLIC_WEB_BASE_URL',
-  'VITE_WEBSITE_BASE_URL',
-])
+const devProcessEnvWinsKeys = new Set(['TABTIN_API_BASE_URL', 'TABTIN_DAEMON_CONTROL_API_BASE_URL', 'VITE_API_BASE_URL', 'VITE_COLLAB_WS_BASE', 'VITE_CENTRIFUGO_WS_URL', 'TABTIN_PUBLIC_WEB_BASE_URL', 'VITE_PUBLIC_WEB_BASE_URL', 'VITE_WEBSITE_BASE_URL'])
 const explicitBuildProcessEnvWinsKeys = new Set([
   // Community build 脚本已完成 endpoint 安全校验；其显式输入必须压过
   // .env.community 的本地默认值。其他 profile 仍以各自文件为 SSoT。
@@ -121,10 +111,7 @@ const readInitialDevProcessOverride = (key: string): string | undefined => {
   if (!isDevOnly || !devProcessEnvWinsKeys.has(key)) return undefined
   return initialProcessEnv[key]
 }
-const readInitialBuildProcessOverride = (
-  key: string,
-  candidatePath: string,
-): string | undefined => {
+const readInitialBuildProcessOverride = (key: string, candidatePath: string): string | undefined => {
   if (isDevOnly || !explicitBuildProcessEnvWinsKeys.has(key)) return undefined
   if (buildProfile === 'community') return initialProcessEnv[key]
   // profile 文件显式键是渠道 SSoT；ambient shell 不得盖掉。
@@ -160,7 +147,7 @@ for (const candidate of envCandidates) {
   if (!existsSync(candidate)) continue
   const envContent = readFileSync(candidate, 'utf-8')
   const candidateVars: Record<string, string> = {}
-  envContent.split('\n').forEach(line => {
+  envContent.split('\n').forEach((line) => {
     const trimmed = line.trim()
     if (trimmed && !trimmed.startsWith('#')) {
       const [key, ...valueParts] = trimmed.split('=')
@@ -168,9 +155,7 @@ for (const candidate of envCandidates) {
         const normalizedKey = key.trim()
         // 只尊重启动 electron-vite 前真实存在的 shell override。
         // 不能读 process.env 当前值：根 .env 会先写入 process.env，否则会误挡 .env.local 覆盖。
-        const processOverrideValue =
-          readInitialDevProcessOverride(normalizedKey) ??
-          readInitialBuildProcessOverride(normalizedKey, candidate)
+        const processOverrideValue = readInitialDevProcessOverride(normalizedKey) ?? readInitialBuildProcessOverride(normalizedKey, candidate)
         if (processOverrideValue) {
           setRuntimeEnv(normalizedKey, processOverrideValue, 'process')
           candidateVars[normalizedKey] = processOverrideValue
@@ -239,19 +224,13 @@ function applyDevModePresets(scope: Record<string, string>) {
 }
 applyDevModePresets(envVars)
 
-const normalizeEnvUrl = (value: string | undefined): string | undefined =>
-  value?.trim().replace(/\/+$/, '') || undefined
+const normalizeEnvUrl = (value: string | undefined): string | undefined => value?.trim().replace(/\/+$/, '') || undefined
 
-const isRootDefaultEnv = (key: string): boolean =>
-  !envVarSources[key] || envVarSources[key] === rootEnvPath
+const isRootDefaultEnv = (key: string): boolean => !envVarSources[key] || envVarSources[key] === rootEnvPath
 
 const isLoopbackHost = (hostname: string): boolean => {
   const normalized = hostname.toLowerCase()
-  return normalized === 'localhost' ||
-    normalized.endsWith('.localhost') ||
-    normalized === '127.0.0.1' ||
-    normalized === '::1' ||
-    normalized === '[::1]'
+  return normalized === 'localhost' || normalized.endsWith('.localhost') || normalized === '127.0.0.1' || normalized === '::1' || normalized === '[::1]'
 }
 
 const classifyEndpointFamily = (value: string | undefined): 'local' | 'test' | 'unknown' => {
@@ -260,11 +239,7 @@ const classifyEndpointFamily = (value: string | undefined): 'local' | 'test' | '
   try {
     const hostname = new URL(normalized).hostname.toLowerCase()
     if (isLoopbackHost(hostname)) return 'local'
-    if (
-      hostname === 'api-test.example.com' ||
-      hostname === 'collab-test.example.com' ||
-      hostname === 'centrifugo-test.example.com'
-    ) {
+    if (hostname === 'api-test.example.com' || hostname === 'collab-test.example.com' || hostname === 'centrifugo-test.example.com') {
       return 'test'
     }
   } catch {
@@ -302,7 +277,7 @@ function resolveDevEndpointPreset(scope: Record<string, string>, apiBaseUrl: str
     },
   ]
 
-  return presets.find(preset => normalizeEnvUrl(preset.apiBaseUrl) === normalizedApiBaseUrl) ?? null
+  return presets.find((preset) => normalizeEnvUrl(preset.apiBaseUrl) === normalizedApiBaseUrl) ?? null
 }
 
 function normalizeDevApiBaseAliases(scope: Record<string, string>): void {
@@ -325,10 +300,7 @@ function normalizeDevApiBaseAliases(scope: Record<string, string>): void {
     return
   }
 
-  console.warn(
-    `[Config] ⚠️  TABTIN_API_BASE_URL(${tabtinApiBaseUrl}) 与 ` +
-    `VITE_API_BASE_URL(${viteApiBaseUrl}) 不一致；请只覆盖其中一个或保持相同。`,
-  )
+  console.warn(`[Config] ⚠️  TABTIN_API_BASE_URL(${tabtinApiBaseUrl}) 与 ` + `VITE_API_BASE_URL(${viteApiBaseUrl}) 不一致；请只覆盖其中一个或保持相同。`)
 }
 
 function normalizeDevPublicWebAliases(scope: Record<string, string>): void {
@@ -351,10 +323,7 @@ function normalizeDevPublicWebAliases(scope: Record<string, string>): void {
     return
   }
 
-  console.warn(
-    `[Config] ⚠️  TABTIN_PUBLIC_WEB_BASE_URL(${tabtinPublicWebBaseUrl}) 与 ` +
-    `VITE_PUBLIC_WEB_BASE_URL(${vitePublicWebBaseUrl}) 不一致；请只覆盖其中一个或保持相同。`,
-  )
+  console.warn(`[Config] ⚠️  TABTIN_PUBLIC_WEB_BASE_URL(${tabtinPublicWebBaseUrl}) 与 ` + `VITE_PUBLIC_WEB_BASE_URL(${vitePublicWebBaseUrl}) 不一致；请只覆盖其中一个或保持相同。`)
 }
 
 function normalizeDevRealtimeEndpoints(scope: Record<string, string>): void {
@@ -366,21 +335,13 @@ function normalizeDevRealtimeEndpoints(scope: Record<string, string>): void {
   const currentCentrifugoWsUrl = normalizeEnvUrl(scope.VITE_CENTRIFUGO_WS_URL)
   const apiFamily = classifyEndpointFamily(apiBaseUrl)
   const collabFamily = classifyEndpointFamily(currentCollabWsBase)
-  const shouldReplaceDefaultCollab =
-    Boolean(preset?.collabWsBase) &&
-    (
-      !currentCollabWsBase ||
-      isRootDefaultEnv('VITE_COLLAB_WS_BASE')
-    )
+  const shouldReplaceDefaultCollab = Boolean(preset?.collabWsBase) && (!currentCollabWsBase || isRootDefaultEnv('VITE_COLLAB_WS_BASE'))
 
   if (shouldReplaceDefaultCollab && preset?.collabWsBase) {
     setRuntimeEnv('VITE_COLLAB_WS_BASE', preset.collabWsBase, `auto:${preset.mode}`)
     console.log(`[Config] 🔁 VITE_COLLAB_WS_BASE 自动跟随 ${preset.mode} API: ${preset.collabWsBase}`)
   } else if (apiFamily !== 'unknown' && collabFamily !== 'unknown' && apiFamily !== collabFamily) {
-    console.warn(
-      `[Config] ⚠️  API 与协作 WS 环境不一致：API=${apiBaseUrl}, ` +
-      `VITE_COLLAB_WS_BASE=${currentCollabWsBase}。这会导致 TabDoc/TabData 协作鉴权失败。`,
-    )
+    console.warn(`[Config] ⚠️  API 与协作 WS 环境不一致：API=${apiBaseUrl}, ` + `VITE_COLLAB_WS_BASE=${currentCollabWsBase}。这会导致 TabDoc/TabData 协作鉴权失败。`)
   }
 
   if (preset?.centrifugoWsUrl && (!currentCentrifugoWsUrl || isRootDefaultEnv('VITE_CENTRIFUGO_WS_URL'))) {
@@ -404,29 +365,15 @@ function normalizeDevRealtimeEndpoints(scope: Record<string, string>): void {
  * 应与该 profile 的 API Gateway 同源。
  */
 function normalizeDaemonControlEndpoint(scope: Record<string, string>): void {
-  setRuntimeEnv(
-    'VITE_DAEMON_CONTROL_ENABLED',
-    scope.DAEMON_CONTROL_ENABLED?.trim() === 'true' ? 'true' : 'false',
-    'auto:daemon-control',
-  )
+  setRuntimeEnv('VITE_DAEMON_CONTROL_ENABLED', scope.DAEMON_CONTROL_ENABLED?.trim() === 'true' ? 'true' : 'false', 'auto:daemon-control')
   const apiBaseUrl = normalizeEnvUrl(scope.VITE_API_BASE_URL || scope.TABTIN_API_BASE_URL)
   const configuredBaseUrl = normalizeEnvUrl(scope.TABTIN_DAEMON_CONTROL_API_BASE_URL)
   const shouldUseApiGateway = !isDevOnly && isRootDefaultEnv('TABTIN_DAEMON_CONTROL_API_BASE_URL')
-  const resolvedBaseUrl = shouldUseApiGateway
-    ? apiBaseUrl
-    : configuredBaseUrl ?? apiBaseUrl
+  const resolvedBaseUrl = shouldUseApiGateway ? apiBaseUrl : (configuredBaseUrl ?? apiBaseUrl)
   if (!resolvedBaseUrl) return
 
-  setRuntimeEnv(
-    'TABTIN_DAEMON_CONTROL_API_BASE_URL',
-    resolvedBaseUrl,
-    shouldUseApiGateway ? 'auto:api-gateway' : 'auto:daemon-control',
-  )
-  setRuntimeEnv(
-    'VITE_DAEMON_CONTROL_API_BASE_URL',
-    resolvedBaseUrl,
-    shouldUseApiGateway ? 'auto:api-gateway' : 'auto:daemon-control',
-  )
+  setRuntimeEnv('TABTIN_DAEMON_CONTROL_API_BASE_URL', resolvedBaseUrl, shouldUseApiGateway ? 'auto:api-gateway' : 'auto:daemon-control')
+  setRuntimeEnv('VITE_DAEMON_CONTROL_API_BASE_URL', resolvedBaseUrl, shouldUseApiGateway ? 'auto:api-gateway' : 'auto:daemon-control')
 }
 
 normalizeDevApiBaseAliases(envVars)
@@ -443,25 +390,22 @@ if (rendererHmrDisabled) {
 // Vite 通用解法应走 package.json `exports` conditions：
 // workspace 包声明 source/development 条件，dev 在 `resolve.conditions` 里选择源码；
 // 没声明条件的包继续走 package 自身默认 import/dist。
-const sourceResolveConditions = (conditions: readonly string[]): string[] | undefined => isDevOnly
-  ? ['source', ...conditions]
-  : undefined
-const sourceSsrResolve = (conditions: string[] | undefined) => conditions
-  ? {
-      resolve: {
-        conditions,
-        externalConditions: conditions,
-      },
-    }
-  : undefined
+const sourceResolveConditions = (conditions: readonly string[]): string[] | undefined => (isDevOnly ? ['source', ...conditions] : undefined)
+const sourceSsrResolve = (conditions: string[] | undefined) =>
+  conditions
+    ? {
+        resolve: {
+          conditions,
+          externalConditions: conditions,
+        },
+      }
+    : undefined
 const mainResolveConditions = sourceResolveConditions(defaultServerConditions)
 const preloadResolveConditions = sourceResolveConditions(defaultServerConditions)
 const rendererResolveConditions = sourceResolveConditions(defaultClientConditions)
 const mainSsrResolve = sourceSsrResolve(mainResolveConditions)
 const preloadSsrResolve = sourceSsrResolve(preloadResolveConditions)
-const electronPackageManifest = JSON.parse(
-  readFileSync(resolve(__dirname, 'package.json'), 'utf8'),
-) as {
+const electronPackageManifest = JSON.parse(readFileSync(resolve(__dirname, 'package.json'), 'utf8')) as {
   dependencies?: Record<string, string>
   devDependencies?: Record<string, string>
 }
@@ -480,11 +424,7 @@ const mainDependencyExternalExcludes = [
   // out/main chunk，不能让终端用户额外安装 Node/npm/npx 或外部 npm 包。
   'mcp-remote',
 ]
-const workspaceDependencyExternalPattern = new RegExp(
-  `^(?:${workspaceDependencyExternalExcludes
-    .map((name) => name.replace(/[.*+?^${}()|[\\]\\]/g, '\\$&'))
-    .join('|')})(?:/.*)?$`,
-)
+const workspaceDependencyExternalPattern = new RegExp(`^(?:${workspaceDependencyExternalExcludes.map((name) => name.replace(/[.*+?^${}()|[\\]\\]/g, '\\$&')).join('|')})(?:/.*)?$`)
 
 // ✅ 自定义插件：复制 main 进程运行时需要按相对路径读取的资产到输出目录
 function copyMainRuntimeAssetsPlugin() {
@@ -492,34 +432,34 @@ function copyMainRuntimeAssetsPlugin() {
     name: 'copy-main-runtime-assets',
     writeBundle() {
       try {
-        const srcPath = resolve(__dirname, 'src/main/anti-detect/fingerprint-preload.js');
-        const destDir = resolve(__dirname, 'out/main/anti-detect');
-        const destPath = resolve(destDir, 'fingerprint-preload.js');
+        const srcPath = resolve(__dirname, 'src/main/anti-detect/fingerprint-preload.js')
+        const destDir = resolve(__dirname, 'out/main/anti-detect')
+        const destPath = resolve(destDir, 'fingerprint-preload.js')
 
         // 确保目录存在
-        mkdirSync(destDir, { recursive: true });
+        mkdirSync(destDir, { recursive: true })
 
         // 复制文件
-        copyFileSync(srcPath, destPath);
+        copyFileSync(srcPath, destPath)
 
-        console.log('[Build] ✅ 已复制 fingerprint-preload.js 到输出目录');
+        console.log('[Build] ✅ 已复制 fingerprint-preload.js 到输出目录')
       } catch (error) {
-        console.error('[Build] ⚠️  复制 fingerprint-preload.js 失败:', error);
+        console.error('[Build] ⚠️  复制 fingerprint-preload.js 失败:', error)
       }
       try {
-        const srcPath = resolve(__dirname, '../../packages/security-policy/src/hardline-v3-rules.json');
-        const destDir = resolve(__dirname, 'out/main');
-        const destPath = resolve(destDir, 'hardline-v3-rules.json');
+        const srcPath = resolve(__dirname, '../../packages/security-policy/src/hardline-v3-rules.json')
+        const destDir = resolve(__dirname, 'out/main')
+        const destPath = resolve(destDir, 'hardline-v3-rules.json')
 
-        mkdirSync(destDir, { recursive: true });
-        copyFileSync(srcPath, destPath);
+        mkdirSync(destDir, { recursive: true })
+        copyFileSync(srcPath, destPath)
 
-        console.log('[Build] ✅ 已复制 hardline-v3-rules.json 到输出目录');
+        console.log('[Build] ✅ 已复制 hardline-v3-rules.json 到输出目录')
       } catch (error) {
-        console.error('[Build] ⚠️  复制 hardline-v3-rules.json 失败:', error);
+        console.error('[Build] ⚠️  复制 hardline-v3-rules.json 失败:', error)
       }
-    }
-  };
+    },
+  }
 }
 
 // S3-04: 生产构建时将开发 CSP 替换为严格版本
@@ -546,16 +486,9 @@ function hardenCspPlugin() {
       order: 'post' as const,
       handler(html: string) {
         if (process.env.NODE_ENV !== 'production') return html
-        const hardened = html.replace(
-          /<meta\s+http-equiv="Content-Security-Policy"\s+content="[^"]*"\s*\/?>/i,
-          `<meta http-equiv="Content-Security-Policy" content="${PRODUCTION_CSP}" />`,
-        )
+        const hardened = html.replace(/<meta\s+http-equiv="Content-Security-Policy"\s+content="[^"]*"\s*\/?>/i, `<meta http-equiv="Content-Security-Policy" content="${PRODUCTION_CSP}" />`)
         if (hardened === html) {
-          throw new Error(
-            '[harden-csp] CSP meta tag not found in index.html — ' +
-            'the production build will ship without hardened CSP. ' +
-            'Ensure index.html contains <meta http-equiv="Content-Security-Policy" ...>.',
-          )
+          throw new Error('[harden-csp] CSP meta tag not found in index.html — ' + 'the production build will ship without hardened CSP. ' + 'Ensure index.html contains <meta http-equiv="Content-Security-Policy" ...>.')
         }
         return hardened
       },
@@ -624,9 +557,7 @@ function createTabDocProbeLogPlugin(): Plugin {
           try {
             const events = JSON.parse(Buffer.concat(chunks).toString('utf8')) as unknown[]
             const receivedAt = Date.now()
-            const lines = (Array.isArray(events) ? events : [events])
-              .map((e) => JSON.stringify({ receivedAt, ...(e as object) }))
-              .join('\n') + '\n'
+            const lines = (Array.isArray(events) ? events : [events]).map((e) => JSON.stringify({ receivedAt, ...(e as object) })).join('\n') + '\n'
             mkdirSync(resolve(logPath, '..'), { recursive: true })
             appendFileSync(logPath, lines)
             res.statusCode = 204
@@ -665,9 +596,7 @@ function createTabDataProbeLogPlugin(): Plugin {
           try {
             const events = JSON.parse(Buffer.concat(chunks).toString('utf8')) as unknown[]
             const receivedAt = Date.now()
-            const lines = (Array.isArray(events) ? events : [events])
-              .map((e) => JSON.stringify({ receivedAt, ...(e as object) }))
-              .join('\n') + '\n'
+            const lines = (Array.isArray(events) ? events : [events]).map((e) => JSON.stringify({ receivedAt, ...(e as object) })).join('\n') + '\n'
             mkdirSync(resolve(logPath, '..'), { recursive: true })
             appendFileSync(logPath, lines)
             res.statusCode = 204
@@ -684,17 +613,9 @@ function createTabDataProbeLogPlugin(): Plugin {
 
 const RENDERER_SRC_DIR = resolve(__dirname, 'src/renderer/src')
 
-const PROSEMIRROR_SINGLETON_DEPS = [
-  'prosemirror-model',
-  'prosemirror-state',
-  'prosemirror-transform',
-  'prosemirror-view',
-]
+const PROSEMIRROR_SINGLETON_DEPS = ['prosemirror-model', 'prosemirror-state', 'prosemirror-transform', 'prosemirror-view']
 const requireFromElectronConfig = createRequire(resolve(__dirname, 'package.json'))
-const tiptapPmNodeModules = resolve(
-  dirname(requireFromElectronConfig.resolve('@tiptap/pm/view')),
-  '../../../..',
-)
+const tiptapPmNodeModules = resolve(dirname(requireFromElectronConfig.resolve('@tiptap/pm/view')), '../../../..')
 const PROSEMIRROR_SINGLETON_ALIASES = PROSEMIRROR_SINGLETON_DEPS.map((dep) => ({
   find: dep,
   replacement: resolve(tiptapPmNodeModules, dep),
@@ -702,10 +623,7 @@ const PROSEMIRROR_SINGLETON_ALIASES = PROSEMIRROR_SINGLETON_DEPS.map((dep) => ({
 
 // ProseMirror uses instanceof checks for DecorationSet/DecorationGroup. Keep
 // the collaboration stack and @tiptap/pm on the same module instances.
-const EDITOR_SINGLETON_DEPS = [
-  ...PROSEMIRROR_SINGLETON_DEPS,
-  'yjs',
-]
+const EDITOR_SINGLETON_DEPS = [...PROSEMIRROR_SINGLETON_DEPS, 'yjs']
 
 export default defineConfig({
   main: {
@@ -724,9 +642,7 @@ export default defineConfig({
     ],
     resolve: {
       ...(mainResolveConditions ? { conditions: mainResolveConditions } : {}),
-      alias: [
-        { find: '@shared', replacement: resolve(__dirname, 'src/shared') },
-      ]
+      alias: [{ find: '@shared', replacement: resolve(__dirname, 'src/shared') }],
     },
     ...(mainSsrResolve ? { ssr: mainSsrResolve } : {}),
     build: {
@@ -774,16 +690,16 @@ export default defineConfig({
           // ✅ 保留 .js 文件（如 fingerprint-preload.js）
           assetFileNames: (assetInfo) => {
             if (assetInfo.name?.endsWith('.js')) {
-              return '[name][extname]';
+              return '[name][extname]'
             }
-            return 'assets/[name]-[hash][extname]';
-          }
-        }
+            return 'assets/[name]-[hash][extname]'
+          },
+        },
       },
       // ✅ 复制 anti-detect 目录下的所有文件
       copyPublicDir: false,
-      assetsInlineLimit: 0
-    }
+      assetsInlineLimit: 0,
+    },
   },
   preload: {
     // Preload is an IPC contract boundary. Minify its implementation while retaining
@@ -814,7 +730,7 @@ export default defineConfig({
           find: '@tabtin/agent-modes/types',
           replacement: resolve(__dirname, '../../packages/agent-modes/dist/types.js'),
         },
-      ]
+      ],
     },
     ...(preloadSsrResolve ? { ssr: preloadSsrResolve } : {}),
     build: {
@@ -823,14 +739,14 @@ export default defineConfig({
       sourcemap: skipPackagedBuildSourcemaps ? false : 'hidden',
       rollupOptions: {
         input: {
-          index: resolve(__dirname, 'src/preload/index.ts')
+          index: resolve(__dirname, 'src/preload/index.ts'),
         },
         output: {
           format: 'cjs',
           entryFileNames: '[name].cjs',
-        }
-      }
-    }
+        },
+      },
+    },
   },
   renderer: {
     // Renderer has no Node-side reflection contract, so use full identifier minification.
@@ -850,13 +766,7 @@ export default defineConfig({
       host: '127.0.0.1',
       // dev server 就绪后预编译 renderer 入口，避免 Electron 窗口打开后才开始按需 transform 数千模块。
       warmup: {
-        clientFiles: [
-          resolve(__dirname, 'src/renderer/index.html'),
-          resolve(__dirname, 'src/renderer/overlay.html'),
-          resolve(__dirname, 'src/renderer/src/main.tsx'),
-          resolve(__dirname, 'src/renderer/overlay/main.tsx'),
-          resolve(__dirname, 'src/renderer/src/App.tsx'),
-        ],
+        clientFiles: [resolve(__dirname, 'src/renderer/index.html'), resolve(__dirname, 'src/renderer/overlay.html'), resolve(__dirname, 'src/renderer/meeting-capture.html'), resolve(__dirname, 'src/renderer/src/main.tsx'), resolve(__dirname, 'src/renderer/overlay/main.tsx'), resolve(__dirname, 'src/renderer/src/App.tsx')],
       },
       // App 平台 H1 / Wave B-B2：允许 renderer 直接 glob 扫描 packages/apps/*/tool-cards/* 等
       // marketplace App 物料；workspace root 之外路径不放行。
@@ -872,19 +782,40 @@ export default defineConfig({
         ...PROSEMIRROR_SINGLETON_ALIASES,
         { find: '@shared', replacement: resolve(__dirname, 'src/shared') },
         { find: '@', replacement: RENDERER_SRC_DIR },
-        { find: '@components', replacement: resolve(__dirname, 'src/renderer/src/components') },
+        {
+          find: '@components',
+          replacement: resolve(__dirname, 'src/renderer/src/components'),
+        },
         // `@/stores/*` 与 `@stores/*` 必须解析到同一绝对路径，避免 Vite 拆成两套 zustand 单例
         // （登录写进一套、侧栏读另一套 → 点登录「没反应」）。
         {
           find: /^@\/stores\/(.*)/,
           replacement: `${resolve(__dirname, 'src/renderer/src/stores')}/$1`,
         },
-        { find: '@stores', replacement: resolve(__dirname, 'src/renderer/src/stores') },
-        { find: '@services', replacement: resolve(__dirname, 'src/renderer/src/services') },
-        { find: '@hooks', replacement: resolve(__dirname, 'src/renderer/src/hooks') },
-        { find: '@utils', replacement: resolve(__dirname, 'src/renderer/src/utils') },
-        { find: '@types', replacement: resolve(__dirname, 'src/renderer/src/types') },
-        { find: '@styles', replacement: resolve(__dirname, 'src/renderer/src/styles') },
+        {
+          find: '@stores',
+          replacement: resolve(__dirname, 'src/renderer/src/stores'),
+        },
+        {
+          find: '@services',
+          replacement: resolve(__dirname, 'src/renderer/src/services'),
+        },
+        {
+          find: '@hooks',
+          replacement: resolve(__dirname, 'src/renderer/src/hooks'),
+        },
+        {
+          find: '@utils',
+          replacement: resolve(__dirname, 'src/renderer/src/utils'),
+        },
+        {
+          find: '@types',
+          replacement: resolve(__dirname, 'src/renderer/src/types'),
+        },
+        {
+          find: '@styles',
+          replacement: resolve(__dirname, 'src/renderer/src/styles'),
+        },
         {
           find: '@tabtin/smartsheet-ui/toast',
           replacement: resolve(__dirname, 'src/renderer/src/shims/smartsheet-ui-toast.ts'),
@@ -912,32 +843,41 @@ export default defineConfig({
           replacement: resolve(__dirname, 'src/renderer/src/shims/smartsheet-ui-entry.ts'),
         },
         // App 平台 H1 / Wave B-B2：marketplace App 物料根目录别名，给 import.meta.glob 跨包扫描提供入口
-        { find: '@apps-marketplace', replacement: resolve(__dirname, '../../packages/apps') },
+        {
+          find: '@apps-marketplace',
+          replacement: resolve(__dirname, '../../packages/apps'),
+        },
         // App 平台 H1 / Wave B-B2：marketplace App 物料 (packages/apps/<id>/) 不是独立 npm 包，
         // pnpm 下其内部 import '@tabtin/chat-client' 无法通过 node_modules 解析；显式 alias 兜底。
-        { find: /^@tabtin\/chat-client$/, replacement: resolve(__dirname, '../../packages/tabtin-chat-client/src/index.ts') },
-        { find: /^@tabtin\/app-shell$/, replacement: resolve(__dirname, '../../packages/app-shell/src/index.ts') },
-        { find: /^@tabtin\/smartsheet-ui\/styles$/, replacement: resolve(__dirname, '../../packages/smartsheet-ui/dist/smartsheet-ui.css') },
-        { find: '@tabtin/tabdoc-ui/editor/prosemirror.css', replacement: resolve(__dirname, '../../packages/tabdoc-ui/src/editor/prosemirror.css') },
-        { find: 'util', replacement: resolve(__dirname, 'src/renderer/src/shims/util-browser.js') },
-      ]
+        {
+          find: /^@tabtin\/chat-client$/,
+          replacement: resolve(__dirname, '../../packages/tabtin-chat-client/src/index.ts'),
+        },
+        {
+          find: /^@tabtin\/app-shell$/,
+          replacement: resolve(__dirname, '../../packages/app-shell/src/index.ts'),
+        },
+        {
+          find: /^@tabtin\/smartsheet-ui\/styles$/,
+          replacement: resolve(__dirname, '../../packages/smartsheet-ui/dist/smartsheet-ui.css'),
+        },
+        {
+          find: '@tabtin/tabdoc-ui/editor/prosemirror.css',
+          replacement: resolve(__dirname, '../../packages/tabdoc-ui/src/editor/prosemirror.css'),
+        },
+        {
+          find: 'util',
+          replacement: resolve(__dirname, 'src/renderer/src/shims/util-browser.js'),
+        },
+      ],
     },
     // 🔧 Force Vite to pre-bundle CJS deps upfront.
     // Lazy-loaded modules (tabslide, tabdoc, etc.) import CJS packages that Vite's
     // startup scanner can't discover. Without explicit inclusion, Vite discovers
     // them at runtime and forces a full page reload.
     optimizeDeps: {
-      entries: [
-        resolve(__dirname, 'src/renderer/index.html'),
-        resolve(__dirname, 'src/renderer/overlay.html'),
-        resolve(__dirname, 'src/renderer/src/main.tsx'),
-        resolve(__dirname, 'src/renderer/overlay/main.tsx'),
-      ],
-      exclude: [
-        '@tiptap/pm',
-        ...PROSEMIRROR_SINGLETON_DEPS,
-        'yoga-layout',
-      ],
+      entries: [resolve(__dirname, 'src/renderer/index.html'), resolve(__dirname, 'src/renderer/overlay.html'), resolve(__dirname, 'src/renderer/src/main.tsx'), resolve(__dirname, 'src/renderer/overlay/main.tsx')],
+      exclude: ['@tiptap/pm', ...PROSEMIRROR_SINGLETON_DEPS, 'yoga-layout'],
       include: [
         // Only packages resolvable from tabtin-electron's node_modules.
         // Transitive deps from workspace packages need explicit devDependencies.
@@ -987,7 +927,7 @@ export default defineConfig({
       esbuildOptions: {
         // Ensure esbuild also resolves `util` to our shim during pre-bundling
         alias: {
-          'util': resolve(__dirname, 'src/renderer/src/shims/util-browser.js'),
+          util: resolve(__dirname, 'src/renderer/src/shims/util-browser.js'),
         },
       },
     },
@@ -1017,14 +957,9 @@ export default defineConfig({
         input: {
           index: resolve(__dirname, 'src/renderer/index.html'),
           overlay: resolve(__dirname, 'src/renderer/overlay.html'),
+          meetingCapture: resolve(__dirname, 'src/renderer/meeting-capture.html'),
         },
-        external: [
-          '@TabTabwebbase/core',
-          '@TabTabwebbase/shared',
-          '@TabTabwebbase/web',
-          '@tabtin/data-extraction',
-          '@tabtin/security-policy',
-        ],
+        external: ['@TabTabwebbase/core', '@TabTabwebbase/shared', '@TabTabwebbase/web', '@tabtin/data-extraction', '@tabtin/security-policy'],
         output: {
           manualChunks(id) {
             // 避免 Vite 的 preload helper 被落进 vendor-monaco，
@@ -1032,70 +967,26 @@ export default defineConfig({
             if (id.includes('vite/preload-helper')) return 'vendor-runtime'
             if (id.includes('monaco-editor')) return 'vendor-monaco'
             if (id.includes('@xterm')) return 'vendor-xterm'
-            if (
-              id.includes('highlight.js') ||
-              id.includes('rehype-highlight') ||
-              id.includes('node_modules/lowlight')
-            )
-              return 'vendor-highlight'
-            if (id.includes('node_modules/lodash/'))
-              return 'vendor-lodash'
-            if (id.includes('@glideapps/glide-data-grid'))
-              return 'vendor-glide-grid'
-            if (
-              id.includes('react-markdown') ||
-              id.includes('remark-gfm') ||
-              id.includes('remark-parse') ||
-              id.includes('node_modules/unified') ||
-              id.includes('node_modules/mdast') ||
-              id.includes('node_modules/micromark') ||
-              id.includes('node_modules/hast')
-            )
-              return 'vendor-markdown'
-            if (/node_modules\/d3-[^/]+/.test(id))
-              return 'vendor-d3'
-            if (
-              id.includes('node_modules/react/') ||
-              id.includes('node_modules/react-dom/') ||
-              id.includes('node_modules/scheduler/')
-            )
-              return 'vendor-react'
-            if (id.includes('framer-motion') || id.includes('node_modules/motion'))
-              return 'vendor-motion'
+            if (id.includes('highlight.js') || id.includes('rehype-highlight') || id.includes('node_modules/lowlight')) return 'vendor-highlight'
+            if (id.includes('node_modules/lodash/')) return 'vendor-lodash'
+            if (id.includes('@glideapps/glide-data-grid')) return 'vendor-glide-grid'
+            if (id.includes('react-markdown') || id.includes('remark-gfm') || id.includes('remark-parse') || id.includes('node_modules/unified') || id.includes('node_modules/mdast') || id.includes('node_modules/micromark') || id.includes('node_modules/hast')) return 'vendor-markdown'
+            if (/node_modules\/d3-[^/]+/.test(id)) return 'vendor-d3'
+            if (id.includes('node_modules/react/') || id.includes('node_modules/react-dom/') || id.includes('node_modules/scheduler/')) return 'vendor-react'
+            if (id.includes('framer-motion') || id.includes('node_modules/motion')) return 'vendor-motion'
             if (id.includes('lucide-react')) return 'vendor-icons'
             if (id.includes('@teable/ui-lib')) return 'vendor-teable-ui'
-            if (id.includes('@teable/core') || id.includes('@teable/icons'))
-              return 'vendor-teable-core'
+            if (id.includes('@teable/core') || id.includes('@teable/icons')) return 'vendor-teable-core'
             if (id.includes('@teable/')) return 'vendor-teable-misc'
             if (id.includes('@dnd-kit')) return 'vendor-dnd'
-            if (
-              id.includes('node_modules/clsx') ||
-              id.includes('class-variance-authority') ||
-              id.includes('tailwind-merge') ||
-              id.includes('node_modules/prop-types/')
-            )
-              return 'vendor-utils'
-            if (
-              id.includes('@radix-ui') ||
-              id.includes('node_modules/cmdk') ||
-              id.includes('node_modules/novel') ||
-              id.includes('@tiptap/') ||
-              id.includes('tiptap-markdown') ||
-              id.includes('prosemirror')
-            )
-              return 'vendor-editor'
-            if (
-              id.includes('node_modules/yjs') ||
-              id.includes('@hocuspocus/')
-            )
-              return 'vendor-collab'
-            if (id.includes('react-pdf') || id.includes('pdfjs-dist'))
-              return 'vendor-pdf'
-            if (id.includes('node_modules/i18next') || id.includes('react-i18next'))
-              return 'vendor-i18n'
-          }
-        }
-      }
-    }
-  }
+            if (id.includes('node_modules/clsx') || id.includes('class-variance-authority') || id.includes('tailwind-merge') || id.includes('node_modules/prop-types/')) return 'vendor-utils'
+            if (id.includes('@radix-ui') || id.includes('node_modules/cmdk') || id.includes('node_modules/novel') || id.includes('@tiptap/') || id.includes('tiptap-markdown') || id.includes('prosemirror')) return 'vendor-editor'
+            if (id.includes('node_modules/yjs') || id.includes('@hocuspocus/')) return 'vendor-collab'
+            if (id.includes('react-pdf') || id.includes('pdfjs-dist')) return 'vendor-pdf'
+            if (id.includes('node_modules/i18next') || id.includes('react-i18next')) return 'vendor-i18n'
+          },
+        },
+      },
+    },
+  },
 })

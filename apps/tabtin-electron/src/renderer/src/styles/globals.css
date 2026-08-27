@@ -2,6 +2,37 @@
 @tailwind components;
 @tailwind utilities;
 
+.meeting-timeline-slider.sui-range-slider::-webkit-slider-runnable-track {
+  background: linear-gradient(
+    to right,
+    hsl(var(--foreground) / 0.72) 0 var(--meeting-progress),
+    hsl(var(--foreground) / 0.22) var(--meeting-progress) 100%
+  ) !important;
+}
+
+.meeting-timeline-slider.sui-range-slider::-webkit-slider-thumb {
+  width: 12px;
+  height: 12px;
+  margin-top: -4px;
+  background: hsl(var(--foreground) / 0.82);
+}
+
+.meeting-timeline-slider.sui-range-slider::-moz-range-track {
+  background: hsl(var(--foreground) / 0.22) !important;
+}
+
+.meeting-timeline-slider.sui-range-slider::-moz-range-progress {
+  height: 4px;
+  border-radius: 2px;
+  background: hsl(var(--foreground) / 0.72);
+}
+
+.meeting-timeline-slider.sui-range-slider::-moz-range-thumb {
+  width: 12px;
+  height: 12px;
+  background: hsl(var(--foreground) / 0.82);
+}
+
 @layer base {
   /* ============================================================
    * 基础色板 — 暖中性 (Warm Neutral)
@@ -52,14 +83,26 @@
     /* 主题色用在「文字 / 图标」上时的降饱和版本：保留品牌色相，掺入少量中性灰（~15%）
        略降饱和，避免满饱和文字刺眼（design-system §6.8）。引用 var(--primary)/var(--accent)
        与 --muted-foreground，随 scheme/明暗自动重算。用 text-primary-text / text-accent-text。 */
-    --primary-text: color-mix(in srgb, hsl(var(--primary)) 85%, hsl(var(--muted-foreground)) 15%);
-    --accent-text: color-mix(in srgb, hsl(var(--accent)) 85%, hsl(var(--muted-foreground)) 15%);
+    --primary-text: color-mix(
+      in srgb,
+      hsl(var(--primary)) 85%,
+      hsl(var(--muted-foreground)) 15%
+    );
+    --accent-text: color-mix(
+      in srgb,
+      hsl(var(--accent)) 85%,
+      hsl(var(--muted-foreground)) 15%
+    );
 
     /* 次正文档（secondary）：介于 --foreground（正文）与 --muted-foreground（次文字）之间，
        比正文略弱、比 hint 明显更清晰。用于表单 label、说明性正文等「次要但需清晰」的文字。
        color-mix 混合 foreground/muted-foreground，随 scheme/明暗自动重算（同 --primary-text 模式）。
        token 出口：tailwind `text-foreground-secondary`。 */
-    --foreground-secondary: color-mix(in srgb, hsl(var(--foreground)) 80%, hsl(var(--muted-foreground)) 20%);
+    --foreground-secondary: color-mix(
+      in srgb,
+      hsl(var(--foreground)) 80%,
+      hsl(var(--muted-foreground)) 20%
+    );
 
     /* Shell 玻璃面 + 画布氛围（见 components/layout/shellUi.ts）。
        L2 上浮面只靠「半透明 + blur + 内高光」勾边，无外边框、无外投影
@@ -85,7 +128,7 @@
     /* L0 下沉内阴影（输入井、终端、折叠展开区） */
     --surface-recessed-inset: inset 0 1px 2px hsl(30 10% 15% / 0.06);
     /* 浮层单层投影（Popover / Dropdown / Dialog / Toast）—— 布局流内禁止使用 */
-    --shadow-overlay: 0 8px 24px hsl(30 10% 15% / 0.10);
+    --shadow-overlay: 0 8px 24px hsl(30 10% 15% / 0.1);
     /* composer focus-within 的「上浮」反馈专用（见 ChatInput），非布局流默认材质 */
     --glass-shadow-elevation: 0 8px 32px hsl(30 10% 15% / 0.07);
     --ambient-primary: 0.14;
@@ -123,11 +166,15 @@
     /* TabSlide 模块专用（画布编辑器特殊需求） */
     --tabslide-bg: 0 0% 100%;
     --tabslide-canvas: 0 0% 96%;
-    --tabslide-floating-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.08), 0 2px 4px -2px rgb(0 0 0 / 0.04);
-    --tabslide-canvas-shadow: 0 8px 24px rgba(0,0,0,0.08), 0 4px 8px rgba(0,0,0,0.04);
+    --tabslide-floating-shadow:
+      0 4px 6px -1px rgb(0 0 0 / 0.08), 0 2px 4px -2px rgb(0 0 0 / 0.04);
+    --tabslide-canvas-shadow:
+      0 8px 24px rgba(0, 0, 0, 0.08), 0 4px 8px rgba(0, 0, 0, 0.04);
 
     /* 表格字体（表格引擎 canvas 渲染使用） */
-    --table-font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+    --table-font-family:
+      -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Segoe UI',
+      'PingFang SC', 'Microsoft YaHei', sans-serif;
     --table-font-weight: 400;
     --table-header-font-weight: 500;
     --table-font-size: 12px;
@@ -138,8 +185,8 @@
     --type-agent: 280 55% 48%;
 
     /* 阴影（仅浮层使用） */
-    --shadow-float: 0 2px 8px rgba(0,0,0,0.08);
-    --shadow-dialog: 0 4px 16px rgba(0,0,0,0.12);
+    --shadow-float: 0 2px 8px rgba(0, 0, 0, 0.08);
+    --shadow-dialog: 0 4px 16px rgba(0, 0, 0, 0.12);
 
     /* 全屏模态 clickaway 遮罩 — 对齐 design-system-migration（Light ~30%），略透便于见底层 */
     --modal-scrim: 0 0 0 / 0.25;
@@ -210,7 +257,7 @@
     --shadow-overlay: 0 10px 28px rgba(0, 0, 0, 0.45);
     --glass-shadow-elevation: 0 8px 32px rgba(0, 0, 0, 0.38);
     --ambient-primary: 0.18;
-    --ambient-secondary: 0.10;
+    --ambient-secondary: 0.1;
 
     /* 深色三级灰阶：backplate 托盘更深（框住输入井、从内容面板里托出来），
        surface 输入井相对更亮一档，成为三层里最亮的一档，与浅色梯度方向一致。
@@ -225,10 +272,14 @@
 
     --tabslide-bg: 30 6% 12%;
     --tabslide-canvas: 0 0% 11%;
-    --tabslide-floating-shadow: 0 8px 20px -8px rgb(0 0 0 / 0.5), 0 4px 12px -6px rgb(0 0 0 / 0.4);
-    --tabslide-canvas-shadow: 0 12px 32px rgba(0,0,0,0.4), 0 6px 14px rgba(0,0,0,0.3);
+    --tabslide-floating-shadow:
+      0 8px 20px -8px rgb(0 0 0 / 0.5), 0 4px 12px -6px rgb(0 0 0 / 0.4);
+    --tabslide-canvas-shadow:
+      0 12px 32px rgba(0, 0, 0, 0.4), 0 6px 14px rgba(0, 0, 0, 0.3);
 
-    --table-font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+    --table-font-family:
+      -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Segoe UI',
+      'PingFang SC', 'Microsoft YaHei', sans-serif;
     --table-font-weight: 400;
     --table-header-font-weight: 500;
     --table-font-size: 12px;
@@ -237,8 +288,8 @@
     --type-webhook: 270 55% 65%;
     --type-agent: 280 55% 62%;
 
-    --shadow-float: 0 2px 8px rgba(0,0,0,0.2);
-    --shadow-dialog: 0 4px 16px rgba(0,0,0,0.3);
+    --shadow-float: 0 2px 8px rgba(0, 0, 0, 0.2);
+    --shadow-dialog: 0 4px 16px rgba(0, 0, 0, 0.3);
 
     --modal-scrim: 0 0 0 / 0.32;
 
@@ -260,7 +311,7 @@
    * 饱和度统一控制在 55-75%，避免过于鲜艳
    * ============================================================ */
 
-  :root[data-color-scheme="blue"] {
+  :root[data-color-scheme='blue'] {
     --canvas: 215 15% 97%;
     --background: 215 18% 99%;
     --foreground: 215 10% 15%;
@@ -293,7 +344,7 @@
     --brand-950: 215 65% 20%;
   }
 
-  .dark[data-color-scheme="blue"] {
+  .dark[data-color-scheme='blue'] {
     --canvas: 215 8% 8%;
     --background: 215 6% 9%;
     --foreground: 215 10% 90%;
@@ -320,7 +371,7 @@
     --brand-950: 215 65% 30%;
   }
 
-  :root[data-color-scheme="teal"] {
+  :root[data-color-scheme='teal'] {
     --canvas: 175 12% 97%;
     --background: 175 15% 99%;
     --foreground: 175 8% 15%;
@@ -353,7 +404,7 @@
     --brand-950: 178 55% 16%;
   }
 
-  .dark[data-color-scheme="teal"] {
+  .dark[data-color-scheme='teal'] {
     --canvas: 175 6% 8%;
     --background: 175 5% 9%;
     --foreground: 175 8% 90%;
@@ -380,7 +431,7 @@
     --brand-950: 178 55% 24%;
   }
 
-  :root[data-color-scheme="orange"] {
+  :root[data-color-scheme='orange'] {
     --canvas: 40 20% 97%;
     --background: 40 25% 99%;
     --foreground: 30 10% 15%;
@@ -413,7 +464,7 @@
     --brand-950: 28 75% 20%;
   }
 
-  .dark[data-color-scheme="orange"] {
+  .dark[data-color-scheme='orange'] {
     --canvas: 30 8% 8%;
     --background: 30 6% 9%;
     --foreground: 36 14% 90%;
@@ -440,7 +491,7 @@
     --brand-950: 28 75% 28%;
   }
 
-  :root[data-color-scheme="rose"] {
+  :root[data-color-scheme='rose'] {
     --canvas: 350 12% 97%;
     --background: 350 15% 99%;
     --foreground: 350 6% 15%;
@@ -473,7 +524,7 @@
     --brand-950: 350 55% 20%;
   }
 
-  .dark[data-color-scheme="rose"] {
+  .dark[data-color-scheme='rose'] {
     --canvas: 350 6% 8%;
     --background: 350 5% 9%;
     --foreground: 350 8% 90%;
@@ -500,7 +551,7 @@
     --brand-950: 350 55% 30%;
   }
 
-  :root[data-color-scheme="slate"] {
+  :root[data-color-scheme='slate'] {
     --canvas: 220 6% 97%;
     --background: 220 8% 99%;
     --foreground: 220 6% 15%;
@@ -534,7 +585,7 @@
     --brand-950: 220 10% 16%;
   }
 
-  .dark[data-color-scheme="slate"] {
+  .dark[data-color-scheme='slate'] {
     --canvas: 220 5% 8%;
     --background: 220 4% 9%;
     --foreground: 220 6% 90%;
@@ -562,7 +613,7 @@
     --brand-950: 220 10% 28%;
   }
 
-  :root[data-color-scheme="violet"] {
+  :root[data-color-scheme='violet'] {
     --canvas: 270 8% 97%;
     --background: 270 10% 99%;
     --foreground: 270 6% 15%;
@@ -595,7 +646,7 @@
     --brand-950: 270 16% 13%;
   }
 
-  .dark[data-color-scheme="violet"] {
+  .dark[data-color-scheme='violet'] {
     --canvas: 270 6% 8%;
     --background: 270 5% 9%;
     --foreground: 270 8% 90%;
@@ -622,7 +673,7 @@
     --brand-950: 270 16% 24%;
   }
 
-  :root[data-color-scheme="sky"] {
+  :root[data-color-scheme='sky'] {
     --canvas: 200 4% 98%;
     --background: 0 0% 100%;
     --foreground: 210 8% 12%;
@@ -655,7 +706,7 @@
     --brand-950: 194 76% 18%;
   }
 
-  .dark[data-color-scheme="sky"] {
+  .dark[data-color-scheme='sky'] {
     --canvas: 210 6% 7%;
     --background: 210 5% 8%;
     --foreground: 210 6% 92%;
@@ -694,7 +745,9 @@
   body {
     @apply text-foreground;
     background: hsl(var(--canvas)) !important;
-    font-feature-settings: "rlig" 1, "calt" 1;
+    font-feature-settings:
+      'rlig' 1,
+      'calt' 1;
   }
 
   /* Electron 窗口拖拽区域 */
@@ -811,24 +864,24 @@
     height: 0;
   }
 
-  .tt-grid-scrollbar[data-enabled="true"][data-scrolling="true"]::-webkit-scrollbar-track {
+  .tt-grid-scrollbar[data-enabled='true'][data-scrolling='true']::-webkit-scrollbar-track {
     background: transparent;
   }
 
-  .tt-grid-scrollbar[data-enabled="true"][data-scrolling="true"]::-webkit-scrollbar-thumb {
+  .tt-grid-scrollbar[data-enabled='true'][data-scrolling='true']::-webkit-scrollbar-thumb {
     background: hsl(var(--muted-foreground) / 0.4);
     border-radius: 9999px;
   }
 
-  .tt-grid-scrollbar[data-enabled="true"][data-scrolling="true"]::-webkit-scrollbar-thumb:hover {
+  .tt-grid-scrollbar[data-enabled='true'][data-scrolling='true']::-webkit-scrollbar-thumb:hover {
     background: hsl(var(--muted-foreground) / 0.6);
   }
 
-  .tt-grid-scrollbar-horizontal[data-enabled="true"][data-scrolling="true"]::-webkit-scrollbar {
+  .tt-grid-scrollbar-horizontal[data-enabled='true'][data-scrolling='true']::-webkit-scrollbar {
     height: 10px;
   }
 
-  .tt-grid-scrollbar-vertical[data-enabled="true"][data-scrolling="true"]::-webkit-scrollbar {
+  .tt-grid-scrollbar-vertical[data-enabled='true'][data-scrolling='true']::-webkit-scrollbar {
     width: 10px;
   }
 
@@ -837,7 +890,7 @@
       scrollbar-width: none;
     }
 
-    .tt-grid-scrollbar[data-enabled="true"][data-scrolling="true"] {
+    .tt-grid-scrollbar[data-enabled='true'][data-scrolling='true'] {
       scrollbar-width: thin;
       scrollbar-color: hsl(var(--muted-foreground) / 0.4) transparent;
     }
@@ -1000,10 +1053,10 @@
   /* 鼠标 hover 激活的菜单 / 选项 / tab 项用背景高亮表示，不显示焦点环
      （radix 在 pointermove 时会编程聚焦这些项，避免悬停时出现焦点环） */
   [data-highlighted],
-  [role="menuitem"]:focus-visible,
-  [role="menuitemcheckbox"]:focus-visible,
-  [role="menuitemradio"]:focus-visible,
-  [role="option"]:focus-visible {
+  [role='menuitem']:focus-visible,
+  [role='menuitemcheckbox']:focus-visible,
+  [role='menuitemradio']:focus-visible,
+  [role='option']:focus-visible {
     @apply outline-none ring-0;
   }
 
@@ -1013,15 +1066,15 @@
      保证输入与可编辑内容仍可选；也不纳入 cursor-pointer（常挂在含正文的可点元素上，
      一刀切会挡掉用户想复制的内容）。 */
   button,
-  [role="button"],
-  [role="tab"],
-  [role="menuitem"],
-  [role="menuitemcheckbox"],
-  [role="menuitemradio"],
-  [role="option"],
-  [role="switch"],
-  [role="radio"],
-  [role="checkbox"],
+  [role='button'],
+  [role='tab'],
+  [role='menuitem'],
+  [role='menuitemcheckbox'],
+  [role='menuitemradio'],
+  [role='option'],
+  [role='switch'],
+  [role='radio'],
+  [role='checkbox'],
   label,
   summary {
     -webkit-user-select: none;
@@ -1038,12 +1091,14 @@
    * The handle stays at z-sticky by default, so ordinary modal dialogs still
    * block layout changes. Dropdown is the first shared layer above z-modal.
    */
-  [data-shell-resizable-split]:has([data-shell-overlay-allows-resize]) [data-shell-resize-handle] {
+  [data-shell-resizable-split]:has([data-shell-overlay-allows-resize])
+    [data-shell-resize-handle] {
     z-index: var(--z-dropdown);
   }
 
   /** A real scoped modal always wins, even if an opt-in non-modal remains mounted. */
-  [data-shell-resizable-split]:has([role="dialog"][aria-modal="true"]) [data-shell-resize-handle] {
+  [data-shell-resizable-split]:has([role='dialog'][aria-modal='true'])
+    [data-shell-resize-handle] {
     z-index: var(--z-sticky);
   }
 
@@ -1051,7 +1106,8 @@
    * 消息悬停条只停在 z-floating。弹层打开时再收起，避免半透明遮罩下
    * 仍露出赞 / 表情 / 回复条（续接向导等 Dialog 与操作条同屏）。
    */
-  body:has([data-radix-dialog-overlay][data-state="open"]) [data-im-message-action-bar] {
+  body:has([data-radix-dialog-overlay][data-state='open'])
+    [data-im-message-action-bar] {
     opacity: 0 !important;
     pointer-events: none !important;
   }
@@ -1079,7 +1135,10 @@
       ),
       radial-gradient(
         ellipse 95% 80% at 100% 100%,
-        hsl(var(--ambient-hue-secondary) var(--ambient-secondary-s) var(--ambient-secondary-l) / var(--ambient-secondary)),
+        hsl(
+          var(--ambient-hue-secondary) var(--ambient-secondary-s)
+            var(--ambient-secondary-l) / var(--ambient-secondary)
+        ),
         transparent 84%
       );
   }
@@ -1091,20 +1150,23 @@
   .surface-glass {
     background-color: hsl(var(--glass-bg));
     backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
-    -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
+    -webkit-backdrop-filter: blur(var(--glass-blur))
+      saturate(var(--glass-saturate));
   }
 
   /** 略实玻璃 — 底栏、composer，减少底层文字干扰（同 L2，无外边框、无外投影、无内高光） */
   .surface-glass-strong {
     background-color: hsl(var(--glass-bg-strong));
     backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
-    -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
+    -webkit-backdrop-filter: blur(var(--glass-blur))
+      saturate(var(--glass-saturate));
   }
 
   .chat-composer-backplate {
     background-color: hsl(var(--chat-composer-backplate));
     backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
-    -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
+    -webkit-backdrop-filter: blur(var(--glass-blur))
+      saturate(var(--glass-saturate));
   }
 
   /**
@@ -1140,13 +1202,17 @@
        需要"贴合卡片底色"的子元素复用（见 TabScrollIndicator surfaceColor）。 */
     --surface-canvas-card: 0 0% 100%;
     background-color: hsl(var(--surface-canvas-card));
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05), 0 1px 2px rgba(0, 0, 0, 0.03);
+    box-shadow:
+      0 1px 3px rgba(0, 0, 0, 0.05),
+      0 1px 2px rgba(0, 0, 0, 0.03);
   }
 
   .dark .surface-canvas-card {
     --surface-canvas-card: 0 0% 0%;
     background: hsl(var(--surface-canvas-card));
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.45), 0 1px 2px rgba(0, 0, 0, 0.35);
+    box-shadow:
+      0 1px 3px rgba(0, 0, 0, 0.45),
+      0 1px 2px rgba(0, 0, 0, 0.35);
   }
 
   /**
@@ -1162,10 +1228,14 @@
    * 主区用 -fill 填不透明白/黑底。三块在同一外层内无缝相邻 → 整体仍是一张卡。
    */
   .surface-canvas-card-frame {
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05), 0 1px 2px rgba(0, 0, 0, 0.03);
+    box-shadow:
+      0 1px 3px rgba(0, 0, 0, 0.05),
+      0 1px 2px rgba(0, 0, 0, 0.03);
   }
   .dark .surface-canvas-card-frame {
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.45), 0 1px 2px rgba(0, 0, 0, 0.35);
+    box-shadow:
+      0 1px 3px rgba(0, 0, 0, 0.45),
+      0 1px 2px rgba(0, 0, 0, 0.35);
   }
   .surface-canvas-card-fill {
     background-color: hsl(var(--workspace-main-fill));
@@ -1180,7 +1250,8 @@
   .capability-banner-surface {
     background-color: hsl(0 0% 100% / 0.74);
     backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
-    -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
+    -webkit-backdrop-filter: blur(var(--glass-blur))
+      saturate(var(--glass-saturate));
   }
 
   .dark .capability-banner-surface {
@@ -1196,14 +1267,30 @@
     inset: -28%;
     pointer-events: none;
     background:
-      radial-gradient(ellipse 92% 88% at 10% 6%, hsl(var(--primary) / 0.028), transparent 76%),
-      radial-gradient(ellipse 88% 86% at 92% 104%, hsl(var(--accent) / 0.018), transparent 80%);
+      radial-gradient(
+        ellipse 92% 88% at 10% 6%,
+        hsl(var(--primary) / 0.028),
+        transparent 76%
+      ),
+      radial-gradient(
+        ellipse 88% 86% at 92% 104%,
+        hsl(var(--accent) / 0.018),
+        transparent 80%
+      );
   }
 
   .dark .resource-card-theme-glow {
     background:
-      radial-gradient(ellipse 92% 88% at 10% 6%, hsl(var(--primary) / 0.045), transparent 76%),
-      radial-gradient(ellipse 88% 86% at 92% 104%, hsl(var(--accent) / 0.028), transparent 80%);
+      radial-gradient(
+        ellipse 92% 88% at 10% 6%,
+        hsl(var(--primary) / 0.045),
+        transparent 76%
+      ),
+      radial-gradient(
+        ellipse 88% 86% at 92% 104%,
+        hsl(var(--accent) / 0.028),
+        transparent 80%
+      );
   }
 
   /**
@@ -1226,7 +1313,9 @@
    */
   .surface-glass-overlay {
     background-color: hsl(var(--glass-bg-overlay));
-    box-shadow: var(--shadow-overlay), inset 0 0 0 1px hsl(var(--border));
+    box-shadow:
+      var(--shadow-overlay),
+      inset 0 0 0 1px hsl(var(--border));
   }
 
   /**
@@ -1240,7 +1329,7 @@
   }
   .sidebar-segment-active {
     background-color: hsl(var(--background));
-    box-shadow: 0 1px 2px hsl(var(--foreground) / 0.10);
+    box-shadow: 0 1px 2px hsl(var(--foreground) / 0.1);
   }
   .dark .sidebar-segment-active {
     background-color: hsl(var(--foreground) / 0.12);
@@ -1263,8 +1352,10 @@
 
   .preview-backdrop-blur {
     background-color: rgb(0 0 0 / 0.78);
-    backdrop-filter: blur(var(--glass-blur-overlay)) saturate(var(--glass-saturate));
-    -webkit-backdrop-filter: blur(var(--glass-blur-overlay)) saturate(var(--glass-saturate));
+    backdrop-filter: blur(var(--glass-blur-overlay))
+      saturate(var(--glass-saturate));
+    -webkit-backdrop-filter: blur(var(--glass-blur-overlay))
+      saturate(var(--glass-saturate));
   }
 
   .app-layout {
@@ -1401,9 +1492,16 @@
  * 挂在 TabChat 各挂载根（侧栏 IM 面板 / ChatView / 欢迎页 / 全屏面板）。
  * ============================================================ */
 .tabchat-skin {
-  font-family: "Inter Variable", "Inter", -apple-system, BlinkMacSystemFont,
-    "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
-  font-feature-settings: "cv11", "ss01";
+  font-family:
+    'Inter Variable',
+    'Inter',
+    -apple-system,
+    BlinkMacSystemFont,
+    'Segoe UI',
+    'PingFang SC',
+    'Microsoft YaHei',
+    sans-serif;
+  font-feature-settings: 'cv11', 'ss01';
   font-optical-sizing: auto;
 }
 
@@ -1501,14 +1599,21 @@
  * 独立 class（非 .markdown-body）避免背上 markdown 的字号/行高/间距；
  * 颜色值与上方 .markdown-body 主题保持一致，改色请两处同步。
  * ------------------------------------------------------------------ */
-.tabtin-code-hl .hljs { color: hsl(var(--foreground)); }
+.tabtin-code-hl .hljs {
+  color: hsl(var(--foreground));
+}
 .tabtin-code-hl .hljs-comment,
-.tabtin-code-hl .hljs-quote { color: hsl(var(--muted-foreground)); font-style: italic; }
+.tabtin-code-hl .hljs-quote {
+  color: hsl(var(--muted-foreground));
+  font-style: italic;
+}
 .tabtin-code-hl .hljs-keyword,
 .tabtin-code-hl .hljs-selector-tag,
 .tabtin-code-hl .hljs-built_in,
 .tabtin-code-hl .hljs-name,
-.tabtin-code-hl .hljs-tag { color: #8250df; }
+.tabtin-code-hl .hljs-tag {
+  color: #8250df;
+}
 .tabtin-code-hl .hljs-string,
 .tabtin-code-hl .hljs-title,
 .tabtin-code-hl .hljs-section,
@@ -1517,25 +1622,42 @@
 .tabtin-code-hl .hljs-template-tag,
 .tabtin-code-hl .hljs-template-variable,
 .tabtin-code-hl .hljs-type,
-.tabtin-code-hl .hljs-addition { color: #0a3069; }
+.tabtin-code-hl .hljs-addition {
+  color: #0a3069;
+}
 .tabtin-code-hl .hljs-deletion,
 .tabtin-code-hl .hljs-selector-attr,
 .tabtin-code-hl .hljs-selector-pseudo,
-.tabtin-code-hl .hljs-meta { color: #cf222e; }
+.tabtin-code-hl .hljs-meta {
+  color: #cf222e;
+}
 .tabtin-code-hl .hljs-number,
 .tabtin-code-hl .hljs-symbol,
 .tabtin-code-hl .hljs-bullet,
-.tabtin-code-hl .hljs-link { color: #0550ae; }
-.tabtin-code-hl .hljs-emphasis { font-style: italic; }
-.tabtin-code-hl .hljs-strong { font-weight: 700; }
-.dark .tabtin-code-hl .hljs { color: hsl(var(--foreground)); }
+.tabtin-code-hl .hljs-link {
+  color: #0550ae;
+}
+.tabtin-code-hl .hljs-emphasis {
+  font-style: italic;
+}
+.tabtin-code-hl .hljs-strong {
+  font-weight: 700;
+}
+.dark .tabtin-code-hl .hljs {
+  color: hsl(var(--foreground));
+}
 .dark .tabtin-code-hl .hljs-comment,
-.dark .tabtin-code-hl .hljs-quote { color: hsl(var(--muted-foreground)); font-style: italic; }
+.dark .tabtin-code-hl .hljs-quote {
+  color: hsl(var(--muted-foreground));
+  font-style: italic;
+}
 .dark .tabtin-code-hl .hljs-keyword,
 .dark .tabtin-code-hl .hljs-selector-tag,
 .dark .tabtin-code-hl .hljs-built_in,
 .dark .tabtin-code-hl .hljs-name,
-.dark .tabtin-code-hl .hljs-tag { color: #d2a8ff; }
+.dark .tabtin-code-hl .hljs-tag {
+  color: #d2a8ff;
+}
 .dark .tabtin-code-hl .hljs-string,
 .dark .tabtin-code-hl .hljs-title,
 .dark .tabtin-code-hl .hljs-section,
@@ -1544,15 +1666,21 @@
 .dark .tabtin-code-hl .hljs-template-tag,
 .dark .tabtin-code-hl .hljs-template-variable,
 .dark .tabtin-code-hl .hljs-type,
-.dark .tabtin-code-hl .hljs-addition { color: #a5d6ff; }
+.dark .tabtin-code-hl .hljs-addition {
+  color: #a5d6ff;
+}
 .dark .tabtin-code-hl .hljs-deletion,
 .dark .tabtin-code-hl .hljs-selector-attr,
 .dark .tabtin-code-hl .hljs-selector-pseudo,
-.dark .tabtin-code-hl .hljs-meta { color: #ffa198; }
+.dark .tabtin-code-hl .hljs-meta {
+  color: #ffa198;
+}
 .dark .tabtin-code-hl .hljs-number,
 .dark .tabtin-code-hl .hljs-symbol,
 .dark .tabtin-code-hl .hljs-bullet,
-.dark .tabtin-code-hl .hljs-link { color: #79c0ff; }
+.dark .tabtin-code-hl .hljs-link {
+  color: #79c0ff;
+}
 
 .markdown-body > *:first-child {
   margin-top: 0 !important;
@@ -1574,20 +1702,26 @@
   line-height: 1.62;
 }
 
-.markdown-body ul:has(> li > input[type="checkbox"]) {
+.markdown-body ul:has(> li > input[type='checkbox']) {
   list-style: none;
   padding-left: 0.25rem;
 }
-.markdown-body li > input[type="checkbox"] {
+.markdown-body li > input[type='checkbox'] {
   margin-right: 0.4rem;
   accent-color: hsl(var(--primary));
 }
 
 /* Message scroll-to highlight animation (PRD 4.4.3) */
 @keyframes message-highlight {
-  0%   { background-color: hsl(var(--accent) / 0.15); }
-  60%  { background-color: hsl(var(--accent) / 0.15); }
-  100% { background-color: transparent; }
+  0% {
+    background-color: hsl(var(--accent) / 0.15);
+  }
+  60% {
+    background-color: hsl(var(--accent) / 0.15);
+  }
+  100% {
+    background-color: transparent;
+  }
 }
 .animate-message-highlight {
   animation: message-highlight 1.5s ease-out forwards;
@@ -1623,7 +1757,7 @@
 
 /* Collapsed AI capability card: shadcn-style diagonal shine sweep. */
 .capability-banner-collapsed-shine::before {
-  content: "";
+  content: '';
   position: absolute;
   top: -45%;
   bottom: -45%;
@@ -1644,7 +1778,8 @@
 }
 
 @keyframes capability-banner-shine-sweep {
-  0%, 42% {
+  0%,
+  42% {
     transform: skewX(-20deg) translateX(0);
   }
   100% {
@@ -1655,7 +1790,7 @@
 @media (prefers-reduced-motion: reduce) {
   .animate-message-highlight {
     animation: none;
-    background-color: hsl(var(--accent) / 0.10);
+    background-color: hsl(var(--accent) / 0.1);
   }
   .capability-banner-collapsed-shine::before {
     animation: none;
@@ -1687,8 +1822,13 @@
 
 /* Terminal pane running indicator pulse */
 @keyframes pane-pulse {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.35; }
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.35;
+  }
 }
 
 /* ── Image generating：画布持续 loop 已退役（#6221）；状态 Hero 交给 ShinyText ── */
@@ -1709,10 +1849,10 @@
 
 .thinking-shiny-text {
   display: inline-block;
-  color: hsl(var(--muted-foreground) / 0.60);
+  color: hsl(var(--muted-foreground) / 0.6);
 }
 
-.thinking-shiny-text[data-shiny-active="true"] {
+.thinking-shiny-text[data-shiny-active='true'] {
   background-image: linear-gradient(
     120deg,
     hsl(var(--muted-foreground) / 0.55) 0%,
@@ -1730,10 +1870,10 @@
 }
 
 /* 正文流式光标接管注意力时，同一消息内的进行中文本立即静止。 */
-.chat-motion-streaming-body .thinking-shiny-text[data-shiny-active="true"] {
+.chat-motion-streaming-body .thinking-shiny-text[data-shiny-active='true'] {
   animation: none;
   background-image: none;
-  color: hsl(var(--muted-foreground) / 0.60);
+  color: hsl(var(--muted-foreground) / 0.6);
   -webkit-text-fill-color: currentColor;
 }
 
@@ -1747,7 +1887,7 @@
   --chat-motion-state: 240ms;
   --chat-motion-enter: 320ms;
   --chat-motion-grow: 400ms;
-  --chat-motion-ease-out: cubic-bezier(.215,.61,.355,1);
+  --chat-motion-ease-out: cubic-bezier(0.215, 0.61, 0.355, 1);
   --chat-motion-shimmer: 1.6s linear infinite;
   --chat-motion-caret: 1s steps(2, start) infinite;
   --chat-motion-breathe: 1.8s ease-in-out infinite;
@@ -1830,7 +1970,8 @@
 
 /* 消息入场：rise 8px + fade，D-enter + E-out */
 .chat-motion-message-enter {
-  animation: chat-motion-rise-in var(--chat-motion-enter) var(--chat-motion-ease-out) both;
+  animation: chat-motion-rise-in var(--chat-motion-enter)
+    var(--chat-motion-ease-out) both;
 }
 
 /* 失败黄点：一次性 pop，随后静止（L3）；色由组件 bg-warning 承担 */
@@ -1857,14 +1998,20 @@
 
 /* 审批卡入场：升起 D-grow + E-out，随后静止 */
 .chat-motion-approval-enter {
-  animation: chat-motion-appr-in var(--chat-motion-grow) var(--chat-motion-ease-out) both;
+  animation: chat-motion-appr-in var(--chat-motion-grow)
+    var(--chat-motion-ease-out) both;
 }
 
 /* 流式段尾光标：伪元素落在 Markdown 最后一个块末尾，不另占一行。 */
 .chat-motion-streaming-caret,
-.chat-motion-streaming-body:not(:has([data-testid="block-timeline"])) .markdown-body.is-streaming > :last-child::after,
-.chat-motion-streaming-body [data-streaming-text="true"]:not(:has(~ [data-streaming-text="true"])) .markdown-body.is-streaming > :last-child::after {
-  content: "";
+.chat-motion-streaming-body:not(:has([data-testid='block-timeline']))
+  .markdown-body.is-streaming
+  > :last-child::after,
+.chat-motion-streaming-body
+  [data-streaming-text='true']:not(:has(~ [data-streaming-text='true']))
+  .markdown-body.is-streaming
+  > :last-child::after {
+  content: '';
   display: inline-block;
   width: 2px;
   height: 14px;
@@ -1876,12 +2023,14 @@
 
 /* 子 Agent 行生长入场：D-state */
 .chat-motion-subagent-enter {
-  animation: chat-motion-expand-in var(--chat-motion-state) var(--chat-motion-ease-out) both;
+  animation: chat-motion-expand-in var(--chat-motion-state)
+    var(--chat-motion-ease-out) both;
 }
 
 /* meta / 耗时等淡入：D-state */
 .chat-motion-meta-enter {
-  animation: chat-motion-fade-in var(--chat-motion-state) var(--chat-motion-ease-out) both;
+  animation: chat-motion-fade-in var(--chat-motion-state)
+    var(--chat-motion-ease-out) both;
 }
 
 /* 降级：仅关闭上述会话动效，直接呈现终态；不碰全局 * */
@@ -1891,8 +2040,13 @@
   .chat-motion-awaiting-line,
   .chat-motion-approval-enter,
   .chat-motion-streaming-caret,
-  .chat-motion-streaming-body:not(:has([data-testid="block-timeline"])) .markdown-body.is-streaming > :last-child::after,
-  .chat-motion-streaming-body [data-streaming-text="true"]:not(:has(~ [data-streaming-text="true"])) .markdown-body.is-streaming > :last-child::after,
+  .chat-motion-streaming-body:not(:has([data-testid='block-timeline']))
+    .markdown-body.is-streaming
+    > :last-child::after,
+  .chat-motion-streaming-body
+    [data-streaming-text='true']:not(:has(~ [data-streaming-text='true']))
+    .markdown-body.is-streaming
+    > :last-child::after,
   .chat-motion-subagent-enter,
   .chat-motion-meta-enter,
   .thinking-shiny-text {
@@ -1914,8 +2068,13 @@
   }
 
   .chat-motion-streaming-caret,
-  .chat-motion-streaming-body:not(:has([data-testid="block-timeline"])) .markdown-body.is-streaming > :last-child::after,
-  .chat-motion-streaming-body [data-streaming-text="true"]:not(:has(~ [data-streaming-text="true"])) .markdown-body.is-streaming > :last-child::after {
+  .chat-motion-streaming-body:not(:has([data-testid='block-timeline']))
+    .markdown-body.is-streaming
+    > :last-child::after,
+  .chat-motion-streaming-body
+    [data-streaming-text='true']:not(:has(~ [data-streaming-text='true']))
+    .markdown-body.is-streaming
+    > :last-child::after {
     opacity: 1;
   }
 
@@ -1925,7 +2084,7 @@
 
   .thinking-shiny-text {
     background-image: none;
-    color: hsl(var(--muted-foreground) / 0.60);
+    color: hsl(var(--muted-foreground) / 0.6);
     -webkit-text-fill-color: currentColor;
   }
 }
@@ -1941,26 +2100,44 @@
   animation: mascot-breathe 3.6s ease-in-out infinite;
 }
 @keyframes mascot-breathe {
-  0%, 100% { transform: translateY(0) scale(1); }
-  50%      { transform: translateY(-1px) scale(1.05); }
+  0%,
+  100% {
+    transform: translateY(0) scale(1);
+  }
+  50% {
+    transform: translateY(-1px) scale(1.05);
+  }
 }
 /* 思考：左右歪头 */
 .composer-mascot--thinking {
   animation: mascot-think 1.5s ease-in-out infinite;
 }
 @keyframes mascot-think {
-  0%   { transform: rotate(-8deg); }
-  50%  { transform: rotate(8deg); }
-  100% { transform: rotate(-8deg); }
+  0% {
+    transform: rotate(-8deg);
+  }
+  50% {
+    transform: rotate(8deg);
+  }
+  100% {
+    transform: rotate(-8deg);
+  }
 }
 /* 输出：上下点头「说话」 */
 .composer-mascot--streaming {
   animation: mascot-talk 0.55s ease-in-out infinite;
 }
 @keyframes mascot-talk {
-  0%, 100% { transform: translateY(0) scaleY(1); }
-  30%      { transform: translateY(-3px) scaleY(1.05); }
-  60%      { transform: translateY(0) scaleY(0.95); }
+  0%,
+  100% {
+    transform: translateY(0) scaleY(1);
+  }
+  30% {
+    transform: translateY(-3px) scaleY(1.05);
+  }
+  60% {
+    transform: translateY(0) scaleY(0.95);
+  }
 }
 
 /* 首次进入欢迎页：从输入框后轻轻探出。 */
@@ -1968,8 +2145,14 @@
   animation: mascot-enter 420ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
 }
 @keyframes mascot-enter {
-  from { opacity: 0; transform: translateY(10px); }
-  to   { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 /* 点击反馈：角色保持同一张图，只做克制回弹；星光避开鼠标遮挡的脸部。 */
@@ -1988,16 +2171,31 @@
   animation: mascot-tap-reaction 280ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
 }
 @keyframes mascot-tap-reaction {
-  0%   { transform: translateY(1px) scale(0.99); }
-  45%  { transform: translateY(-2px) scale(1); }
-  100% { transform: translateY(0) scale(1); }
+  0% {
+    transform: translateY(1px) scale(0.99);
+  }
+  45% {
+    transform: translateY(-2px) scale(1);
+  }
+  100% {
+    transform: translateY(0) scale(1);
+  }
 }
 
 .composer-mascot-sparkle {
   position: absolute;
   display: block;
   background: rgb(239 74 37);
-  clip-path: polygon(50% 0, 61% 38%, 100% 50%, 61% 62%, 50% 100%, 39% 62%, 0 50%, 39% 38%);
+  clip-path: polygon(
+    50% 0,
+    61% 38%,
+    100% 50%,
+    61% 62%,
+    50% 100%,
+    39% 62%,
+    0 50%,
+    39% 38%
+  );
   opacity: 0;
   animation: mascot-sparkle-pop 380ms ease-out both;
 }
@@ -2015,7 +2213,15 @@
   animation-delay: 55ms;
 }
 @keyframes mascot-sparkle-pop {
-  0%   { opacity: 0; transform: translate(0, 4px) scale(0.35) rotate(0); }
-  32%  { opacity: 1; }
-  100% { opacity: 0; transform: translate(4px, -7px) scale(1.1) rotate(24deg); }
+  0% {
+    opacity: 0;
+    transform: translate(0, 4px) scale(0.35) rotate(0);
+  }
+  32% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translate(4px, -7px) scale(1.1) rotate(24deg);
+  }
 }

@@ -41,6 +41,10 @@ class ASRConfigError(SpeechConfigError):
     pass
 
 
+class ASRCredentialError(ASRConfigError):
+    """ASR Provider 凭证存在，但当前运行时无法解密。"""
+
+
 class ASRUpstreamError(SpeechUpstreamError):
     """上游 ASR 服务（字节跳动等）返回错误时抛出。"""
     pass
@@ -52,6 +56,11 @@ BYTEDANCE_MODES = {
     "streaming": "apps.services.speech.asr.providers.bytedance.streaming.ByteDanceStreamingASR",
 }
 
+BYTEPLUS_MODES = {
+    "standard": "apps.services.speech.asr.providers.byteplus.standard.BytePlusStandardASR",
+    "streaming": "apps.services.speech.asr.providers.byteplus.streaming.BytePlusStreamingASR",
+}
+
 # 与 providers/bytedance/base.py VALID_WS_ENDPOINT_KEYS 保持同步
 VALID_WS_ENDPOINTS = frozenset({"bigmodel", "bigmodel_async", "bigmodel_nostream"})
 
@@ -61,6 +70,7 @@ class ASRServiceFactory:
 
     PROVIDER_MODES: dict[str, dict[str, str]] = {
         "bytedance": BYTEDANCE_MODES,
+        "byteplus": BYTEPLUS_MODES,
     }
 
     @classmethod
@@ -81,11 +91,20 @@ class ASRServiceFactory:
                 f"可选: {list(modes.keys())}"
             )
 
-        if not config.app_id or not config.access_token:
+        missing_credentials = (
+            not config.access_token
+            or (provider_name == "bytedance" and not config.app_id)
+        )
+        if missing_credentials:
+            credential_hint = (
+                "Provider.api_key"
+                if provider_name == "byteplus"
+                else "LLMModel.capabilities_config.app_id 和 Provider.api_key"
+            )
             raise ASRConfigError(
                 f"ASR 凭证未配置（provider={provider_name}）。"
-                f"请在 AdminDash 配置 bytedance Provider 的 capability_domains 包含 'asr'、"
-                f"并在对应 LLMModel.capabilities_config 中填写 app_id（access_token 来自 Provider.api_key）。"
+                f"请在 AdminDash 配置 {provider_name} Provider 的 capability_domains 包含 'asr'、"
+                f"并补齐 {credential_hint}。"
             )
 
         service_class = cls._import_class(class_path)
@@ -216,8 +235,9 @@ def _resolve_config(provider: str, mode: str = "flash") -> ASRProviderConfig:
         return db_config
     raise ASRConfigError(
         f"ASR Provider '{provider}' 未在 DB 配置（v0.1.x 已删除 settings.BYTEDANCE_* fallback）。"
-        f"请在 AdminDash 配置 bytedance Provider 的 capability_domains 包含 'asr'、"
-        f"并补齐 LLMModel.capabilities_config（app_id / resource_ids / ws_endpoint）。"
+        f"请在 AdminDash 配置 {provider} Provider 的 capability_domains 包含 'asr'、"
+        f"并补齐 LLMModel.capabilities_config（resource_ids / ws_endpoint；"
+        f"bytedance 还需要 app_id）。"
     )
 
 
@@ -259,6 +279,12 @@ def _try_load_from_db(provider: str, mode: str = "flash") -> Optional[ASRProvide
             rate_limit=int(getattr(provider_obj, "rate_limit", 0) or 0),
         )
     except Exception as e:
+        from apps.services.llm.models import LLMCredentialDecryptionError
+
+        if isinstance(e, LLMCredentialDecryptionError):
+            raise ASRCredentialError(
+                f"{provider} API Key 无法解密，请在 AdminDash 重新保存 API Key"
+            ) from e
         # v0.1.x：env fallback 已删（_resolve_config 在 DB miss 时直接 raise）；
         # 本 log 仅用于通知运营 DB 查询本身异常（如 DB 不可达 / schema 不一致），
         # 调用方拿到 None 后会立即抛 ASRConfigError 阻断业务，不会有任何隐性兜底。

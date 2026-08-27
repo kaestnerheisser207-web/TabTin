@@ -63,6 +63,24 @@ class ByteDanceStandardASR(BaseASRService):
         self.poll_interval: float = config.poll_interval
         self.poll_max_attempts: int = config.poll_max_attempts
 
+    def build_auth_headers(
+        self,
+        *,
+        request_id: str,
+        sequence: Optional[str] = None,
+    ) -> dict[str, str]:
+        return build_auth_headers(
+            app_id=self.app_id,
+            access_token=self.access_token,
+            resource_id=self.resource_id,
+            request_id=request_id,
+            sequence=sequence,
+        )
+
+    @property
+    def result_provider(self) -> str:
+        return "bytedance"
+
     def submit(
         self,
         *,
@@ -82,10 +100,7 @@ class ByteDanceStandardASR(BaseASRService):
         self._raise_if_rate_limited()
 
         request_id = new_request_id()
-        headers = build_auth_headers(
-            app_id=self.app_id,
-            access_token=self.access_token,
-            resource_id=self.resource_id,
+        headers = self.build_auth_headers(
             request_id=request_id,
             sequence="-1",
         )
@@ -166,12 +181,7 @@ class ByteDanceStandardASR(BaseASRService):
 
     def query(self, task_id: str, **kwargs: Any) -> ASRTaskStatus:
         """查询识别任务结果。"""
-        headers = build_auth_headers(
-            app_id=self.app_id,
-            access_token=self.access_token,
-            resource_id=self.resource_id,
-            request_id=task_id,
-        )
+        headers = self.build_auth_headers(request_id=task_id)
 
         response = requests.post(
             self.query_url,
@@ -188,7 +198,9 @@ class ByteDanceStandardASR(BaseASRService):
 
         if status_code == BYTEDANCE_STATUS_SUCCESS:
             data = response.json()
-            result = parse_asr_response(data, provider="bytedance", mode="standard")
+            result = parse_asr_response(
+                data, provider=self.result_provider, mode="standard",
+            )
             return ASRTaskStatus(
                 task_id=task_id,
                 status="completed",
@@ -208,7 +220,7 @@ class ByteDanceStandardASR(BaseASRService):
                 task_id=task_id,
                 status="silent",
                 result=ASRResult(
-                    text="", provider="bytedance", mode="standard",
+                    text="", provider=self.result_provider, mode="standard",
                     raw_response={"status_code": status_code, "message": "静音音频"},
                 ),
                 log_id=log_id,

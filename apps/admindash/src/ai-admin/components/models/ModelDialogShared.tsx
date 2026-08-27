@@ -1590,17 +1590,21 @@ function SpeechPanel({
         />
       </Field>
 
-      {/* v0.1.x：vendor 凭据字段（字节跳动 ASR/TTS 必填） */}
+      {/* v0.1.x：vendor 凭据字段 */}
       <div className="col-span-2 mt-2 border-t pt-3">
         <p className="text-caption font-medium mb-1">
           Vendor 凭据（写入 capabilities_config 顶层，runtime 实际调用时读取）
         </p>
         <p className="text-[10px] text-muted-foreground mb-3">
-          字节跳动 ASR/TTS 必填 app_id；其他厂商按需补 secret_key / resource_ids / ws_endpoint。
-          api_key（access_token）来自所在 Provider 的 api_key 字段，不在此填。
+          {
+            'BytePlus ASR 只读取所在 Provider 的 API Key，app_id 与 secret_key 留空。字节跳动中国区 ASR/TTS 仍需填写 app_id。'
+          }
         </p>
       </div>
-      <Field label="app_id" hint={domain === 'asr' ? '字节 ASR App ID' : '字节 TTS App ID'}>
+      <Field
+        label="app_id"
+        hint={domain === 'asr' ? 'BytePlus 留空；字节中国区 ASR 填 App ID' : '字节 TTS App ID'}
+      >
         <input
           type="text"
           className="w-full rounded-md border px-3 py-2 text-body font-mono bg-background"
@@ -1622,7 +1626,7 @@ function SpeechPanel({
         className="col-span-2"
         hint={
           domain === 'asr'
-            ? '例：flash=volc.bigasr.auc_turbo,standard=volc.bigasr.auc,streaming=volc.bigasr.sauc.duration'
+            ? 'BytePlus：standard=volc.seedasr.auc,streaming=volc.seedasr.sauc.duration'
             : '例：http=seed-tts-2.0,ws_bidirectional=seed-tts-2.0（来源：tts/providers/bytedance/base.py 顶部 RESOURCE_* 常量）'
         }
       >
@@ -1644,7 +1648,7 @@ function SpeechPanel({
       {domain === 'asr' && (
         <Field
           label="ws_endpoint"
-          hint="字节 ASR 流式：bigmodel / bigmodel_async / bigmodel_nostream"
+          hint="Seed ASR 流式：bigmodel / bigmodel_async / bigmodel_nostream"
         >
           <input
             type="text"

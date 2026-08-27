@@ -47,14 +47,7 @@ vi.mock('electron', () => ({
   },
 }))
 
-import {
-  installDisplayMediaHandlers,
-  isTrustedDisplayMediaOrigin,
-  normalizeOrigin,
-  resolveDisplayMediaStreams,
-  shouldGrantPermissionCheck,
-  shouldGrantPermissionRequest,
-} from '../display-media'
+import { installDisplayMediaHandlers, isTrustedDisplayMediaOrigin, normalizeOrigin, resolveDisplayMediaStreams, shouldGrantPermissionCheck, shouldGrantPermissionRequest } from '../display-media'
 
 describe('display-media service', () => {
   beforeEach(() => {
@@ -68,17 +61,17 @@ describe('display-media service', () => {
     expect(
       isTrustedDisplayMediaOrigin('http://localhost:5173', {
         isDev: true,
-      }),
+      })
     ).toBe(true)
     expect(
       isTrustedDisplayMediaOrigin('https://app.tabtin.local', {
         trustedOrigins: ['https://app.tabtin.local'],
-      }),
+      })
     ).toBe(true)
     expect(
       isTrustedDisplayMediaOrigin('https://example.com', {
         trustedOrigins: ['https://app.tabtin.local'],
-      }),
+      })
     ).toBe(false)
   })
 
@@ -89,7 +82,7 @@ describe('display-media service', () => {
         details: {
           securityOrigin: 'file:///renderer/index.html',
         } as any,
-      }),
+      })
     ).toBe(true)
 
     expect(
@@ -98,7 +91,7 @@ describe('display-media service', () => {
         details: {
           securityOrigin: 'https://example.com',
         } as any,
-      }),
+      })
     ).toBe(false)
 
     expect(
@@ -107,7 +100,7 @@ describe('display-media service', () => {
         details: {
           securityOrigin: 'https://example.com',
         } as any,
-      }),
+      })
     ).toBe(true)
 
     expect(
@@ -118,7 +111,7 @@ describe('display-media service', () => {
           isMainFrame: true,
           requestingUrl: 'https://example.com',
         } as any,
-      }),
+      })
     ).toBe(false)
   })
 
@@ -130,7 +123,7 @@ describe('display-media service', () => {
           securityOrigin: 'file:///renderer/index.html',
           externalURL: 'bitbrowser://open',
         } as any,
-      }),
+      })
     ).toBe(false)
 
     expect(
@@ -140,7 +133,7 @@ describe('display-media service', () => {
           securityOrigin: 'https://www.douyin.com',
           externalURL: 'mailto:a@b.com',
         } as any,
-      }),
+      })
     ).toBe(true)
 
     expect(
@@ -152,7 +145,7 @@ describe('display-media service', () => {
           requestingUrl: 'https://www.douyin.com',
           externalURL: 'douyin-pc://launch',
         } as any,
-      }),
+      })
     ).toBe(false)
   })
 
@@ -172,25 +165,69 @@ describe('display-media service', () => {
   })
 
   it('当前 frame 不可用时回退到主屏 source', async () => {
-    const streams = await resolveDisplayMediaStreams({
-      frame: null,
-      securityOrigin: 'file://',
-      videoRequested: true,
-      audioRequested: true,
-      userGesture: true,
-    } as any, {
-      captureMode: 'main-display',
-      platform: 'win32',
-      desktopCapturerApi: {
-        getSources: mocks.desktopCapturerGetSources,
-      },
+    const streams = await resolveDisplayMediaStreams(
+      {
+        frame: null,
+        securityOrigin: 'file://',
+        videoRequested: true,
+        audioRequested: true,
+        userGesture: true,
+      } as any,
+      {
+        captureMode: 'main-display',
+        platform: 'win32',
+        desktopCapturerApi: {
+          getSources: mocks.desktopCapturerGetSources,
+        },
+      }
+    )
+
+    expect(streams.video).toEqual(
+      expect.objectContaining({
+        id: 'screen:1:0',
+        name: 'Entire Screen',
+        display_id: '1',
+      }),
+    )
+    expect(streams.audio).toBe('loopback')
+  })
+
+  it('macOS custom handler uses the validated Core Audio loopback source', async () => {
+    const frame = { id: 12 }
+    const streams = await resolveDisplayMediaStreams(
+      {
+        frame,
+        securityOrigin: 'file://',
+        videoRequested: true,
+        audioRequested: true,
+        userGesture: true,
+      } as any,
+      {
+        captureMode: 'loopback-audio',
+        platform: 'darwin',
+        desktopCapturerApi: {
+          getSources: mocks.desktopCapturerGetSources,
+        },
+      }
+    )
+
+    expect(streams.video).toBe(frame)
+    expect(streams.audio).toBe('loopback')
+    expect(streams.enableLocalEcho).toBeUndefined()
+    expect(mocks.desktopCapturerGetSources).not.toHaveBeenCalled()
+  })
+
+  it('keeps the native screen-sharing picker disabled for meeting audio', () => {
+    installDisplayMediaHandlers({
+      rendererUrl: 'http://localhost:5173',
+      isDev: true,
+      platform: 'darwin',
     })
 
-    expect(streams.video).toEqual({
-      id: 'screen:1:0',
-      name: 'Entire Screen',
-    })
-    expect(streams.audio).toBe('loopback')
+    expect(mocks.targetSession.setDisplayMediaRequestHandler).toHaveBeenCalledWith(
+      expect.any(Function),
+      { useSystemPicker: false },
+    )
   })
 
   it('安装后会注册权限处理器与媒体流处理器', async () => {
@@ -221,7 +258,7 @@ describe('display-media service', () => {
       permissionCallback,
       {
         securityOrigin: 'http://localhost:5173',
-      },
+      }
     )
     expect(permissionCallback).toHaveBeenCalledWith(true)
 
@@ -235,7 +272,7 @@ describe('display-media service', () => {
       deniedCallback,
       {
         securityOrigin: 'https://example.com',
-      },
+      }
     )
     expect(deniedCallback).toHaveBeenCalledWith(false)
 
@@ -251,7 +288,7 @@ describe('display-media service', () => {
           audioRequested: false,
           userGesture: true,
         },
-        resolve,
+        resolve
       )
     })
 
@@ -266,7 +303,7 @@ describe('display-media service', () => {
           audioRequested: false,
           userGesture: true,
         },
-        resolve,
+        resolve
       )
     })
 

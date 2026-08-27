@@ -127,6 +127,7 @@ export function useChatSessionSwitcherOrchestration(props: ChatSessionSwitcherPr
     || s.activePage === 'import'
     || s.activePage === 'external-archives'
     || s.activePage === 'notification'
+    || s.activePage === 'meeting-records'
   ))
 
   const draft = useSessionDraftState({

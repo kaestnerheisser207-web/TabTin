@@ -13,14 +13,23 @@
   },
   "rail": {
     "tasks": "任务",
+    "meetingRecords": "会议记录",
     "messages": "消息",
     "cloudDocs": "云文档",
     "projects": "项目",
-    "more": "更多",
-    "customerSupport": "客服",
-    "customerSupportTitle": "联系客服",
-    "customerSupportHint": "微信扫码添加企业微信",
-    "customerSupportQrAlt": "企业微信客服二维码"
+    "more": "更多"
+  },
+  "meetingRecords": {
+    "title": "会议记录",
+    "all": "全部记录",
+    "setup": "准备新记录",
+    "preview": "页面预览",
+    "live": "记录进行中",
+    "detail": "会后详情",
+    "description": "记录、回看和整理会议中的真实内容。",
+    "start": "开始记录",
+    "emptyTitle": "暂无会议记录",
+    "emptyDescription": "开始记录后，录音、逐字稿和会后整理会显示在这里。"
   },
   "cloudDocs": {
     "browse": {

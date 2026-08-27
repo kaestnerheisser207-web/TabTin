@@ -159,6 +159,7 @@ export default defineConfig({
       '@tabtin/markdown-resource-autolink': resolve(packagesRoot, 'markdown-resource-autolink/src/index.ts'),
       '@tabtin/terminal-core': resolve(packagesRoot, 'terminal-core/src/index.ts'),
       '@tabtin/env-sanitize': resolve(packagesRoot, 'env-sanitize/src/index.ts'),
+      '@tabtin/shared/auth-forms': resolve(packagesRoot, 'tabtin-shared/src/auth-forms/index.ts'),
       '@tabtin/shared/use-countdown': resolve(packagesRoot, 'tabtin-shared/src/use-countdown.ts'),
       '@tabtin/shared/use-caps-lock-warning': resolve(packagesRoot, 'tabtin-shared/src/use-caps-lock-warning.ts'),
       '@tabtin/shared/storage-paths': resolve(packagesRoot, 'tabtin-shared/src/storage-paths.ts'),

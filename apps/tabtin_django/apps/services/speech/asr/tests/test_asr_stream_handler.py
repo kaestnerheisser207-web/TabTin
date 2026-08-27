@@ -32,8 +32,11 @@ from apps.services.speech.asr.providers.bytedance.base import (
 from apps.services.common.ws.handlers.asr_stream import (
     _ASRStreamSession,
     _MAX_AUDIO_CHUNK_BYTES,
+    create_asr_config_check_handler,
     create_asr_stream_handler,
 )
+from apps.services.common.ws.gateway import _RATE_LIMIT_EXEMPT_TYPES
+from apps.services.speech.asr.factory import ASRConfigError
 from apps.services.common.ws.protocol import ERROR_SCHEMA_INVALID
 
 
@@ -320,6 +323,88 @@ class TestASRAudioChunkLimit(unittest.IsolatedAsyncioTestCase):
             self.assertIn("超限", args[0][2])
         finally:
             asr_mod._active_streams.pop(stream_id, None)
+
+    async def test_stream_quota_limits_bursts_without_using_gateway_budget(self):
+        from apps.services.common.ws.handlers import asr_stream as asr_mod
+
+        session = _build_session()
+        with (
+            patch.object(asr_mod, "_MAX_AUDIO_MESSAGES_PER_WINDOW", 2),
+            patch.object(asr_mod, "_MAX_AUDIO_BYTES_PER_WINDOW", 10),
+            patch.object(
+                asr_mod.time,
+                "monotonic",
+                side_effect=[0.0, 0.1, 0.2, 11.0],
+            ),
+        ):
+            self.assertTrue(session.accept_audio_chunk(4))
+            self.assertTrue(session.accept_audio_chunk(4))
+            self.assertFalse(session.accept_audio_chunk(1))
+            self.assertTrue(session.accept_audio_chunk(6))
+
+    def test_realtime_audio_uses_the_dedicated_stream_quota(self):
+        self.assertIn("asr.stream.audio", _RATE_LIMIT_EXEMPT_TYPES)
+
+
+class TestASRConfigReadiness(unittest.IsolatedAsyncioTestCase):
+    @patch("apps.services.speech.asr.factory.get_asr_service")
+    async def test_ready_config_returns_non_secret_runtime_metadata(self, get_service):
+        get_service.return_value = MagicMock(
+            resource_id="volc.seedasr.sauc.duration",
+            ws_endpoint="bigmodel_async",
+        )
+        consumer = _make_consumer()
+        handler = create_asr_config_check_handler(consumer)
+
+        await handler({
+            "request_id": "req-config-ready",
+            "payload": {"provider": "byteplus"},
+        })
+
+        envelope = consumer._send_envelope.call_args.args[0]
+        self.assertEqual(envelope["type"], "asr.config.status")
+        self.assertEqual(envelope["payload"], {
+            "ready": True,
+            "provider": "byteplus",
+            "resource_id": "volc.seedasr.sauc.duration",
+            "ws_endpoint": "bigmodel_async",
+        })
+
+    @patch("apps.services.speech.asr.factory.get_asr_service")
+    async def test_missing_model_returns_explicit_not_configured_status(self, get_service):
+        get_service.side_effect = ASRConfigError("model missing")
+        consumer = _make_consumer()
+        handler = create_asr_config_check_handler(consumer)
+
+        await handler({
+            "request_id": "req-config-missing",
+            "payload": {"provider": "byteplus"},
+        })
+
+        envelope = consumer._send_envelope.call_args.args[0]
+        self.assertEqual(envelope["type"], "asr.config.status")
+        self.assertFalse(envelope["payload"]["ready"])
+        self.assertEqual(envelope["payload"]["reason"], "not_configured")
+
+    @patch("apps.services.speech.asr.factory.get_asr_service")
+    async def test_credential_failure_is_not_reported_as_missing_config(self, get_service):
+        from apps.services.speech.asr.factory import ASRCredentialError
+
+        get_service.side_effect = ASRCredentialError(
+            "byteplus API Key 无法解密，请在 AdminDash 重新保存 API Key"
+        )
+        consumer = _make_consumer()
+        handler = create_asr_config_check_handler(consumer)
+
+        await handler({
+            "request_id": "req-config-credential",
+            "payload": {"provider": "byteplus"},
+        })
+
+        envelope = consumer._send_envelope.call_args.args[0]
+        self.assertFalse(envelope["payload"]["ready"])
+        self.assertEqual(envelope["payload"]["reason"], "credential_error")
+        self.assertIn("无法解密", envelope["payload"]["message"])
 
 
 if __name__ == "__main__":

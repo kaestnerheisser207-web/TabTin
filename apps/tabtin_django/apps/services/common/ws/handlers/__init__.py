@@ -17,7 +17,10 @@ from .approval import (                                                 # noqa: 
     create_approval_request_handler,
     create_approval_response_handler,
 )
-from .asr_stream import create_asr_stream_handler                      # noqa: F401
+from .asr_stream import (                                               # noqa: F401
+    create_asr_config_check_handler,
+    create_asr_stream_handler,
+)
 from .tts_stream import create_tts_stream_handler                      # noqa: F401
 from .git_status import (                                               # noqa: F401
     create_git_status_report_handler,
@@ -55,6 +58,7 @@ __all__ = [
     "create_approval_request_handler",
     "create_approval_response_handler",
     "create_asr_stream_handler",
+    "create_asr_config_check_handler",
     "create_tts_stream_handler",
     "create_git_status_report_handler",
     "create_git_diff_request_handler",

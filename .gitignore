@@ -297,6 +297,10 @@ tools/daemon-control-deploy/
 # Agent 执行过程文档不入库
 /docs/*
 
+# 已确认的产品需求基线进入公开文档快照
+!/docs/product/
+!/docs/product/meeting-recording-and-copilot-requirements.md
+
 # 社区公开安装指南属于开源文档快照
 !/docs/development/
 !/docs/development/community-installation-guide.docx

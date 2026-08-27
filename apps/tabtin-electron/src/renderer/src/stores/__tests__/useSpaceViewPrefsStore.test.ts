@@ -271,17 +271,17 @@ describe('useSpaceViewPrefsStore', () => {
       expect(useSpaceViewPrefsStore.getState().activityRailDomainOrder).toBeUndefined()
 
       useSpaceViewPrefsStore.getState().setActivityRailDomainOrder(
-        ['messages', 'tasks', 'agents', 'cloud-docs', 'projects'],
+        ['messages', 'tasks', 'meeting-records', 'agents', 'cloud-docs', 'projects'],
       )
 
       expect(useSpaceViewPrefsStore.getState().activityRailDomainOrder)
-        .toEqual(['messages', 'tasks', 'agents', 'cloud-docs', 'projects'])
+        .toEqual(['messages', 'tasks', 'meeting-records', 'agents', 'cloud-docs', 'projects'])
     })
 
     it('相同顺序重复写入是幂等空操作', async () => {
       const { useSpaceViewPrefsStore } = await import('../useSpaceViewPrefsStore')
-      const order: Array<'tasks' | 'messages' | 'agents' | 'cloud-docs' | 'projects'> =
-        ['messages', 'tasks', 'agents', 'cloud-docs', 'projects']
+      const order: Array<'tasks' | 'meeting-records' | 'messages' | 'agents' | 'cloud-docs' | 'projects'> =
+        ['messages', 'tasks', 'meeting-records', 'agents', 'cloud-docs', 'projects']
 
       useSpaceViewPrefsStore.getState().setActivityRailDomainOrder(order)
       const before = useSpaceViewPrefsStore.getState()
@@ -304,7 +304,7 @@ describe('useSpaceViewPrefsStore', () => {
       }
       expect(notArray.activityRailDomainOrder).toBeUndefined()
 
-      const legalOrder = ['messages', 'tasks', 'agents', 'cloud-docs', 'projects']
+      const legalOrder = ['messages', 'tasks', 'meeting-records', 'agents', 'cloud-docs', 'projects']
       const legal = migrate({ activityRailDomainOrder: legalOrder }, 18) as {
         activityRailDomainOrder?: string[]
       }

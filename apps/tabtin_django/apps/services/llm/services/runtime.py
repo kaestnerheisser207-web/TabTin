@@ -253,6 +253,12 @@ def probe_provider_health(
 ) -> Dict[str, Any]:
     """执行一次渠道健康探测并更新运行态。"""
     if not provider_supports_llm_capability(provider.name):
+        if "asr" in (provider.capability_domains or []):
+            return _probe_asr_provider_health(
+                provider,
+                check_type=check_type,
+                extra_details=extra_details,
+            )
         message = f"Provider '{provider.name}' 不支持 LLM 能力，跳过探测"
         logger.info("[LLM Runtime] skip non-llm provider probe: provider=%s", provider.id)
         return {
@@ -371,6 +377,71 @@ def probe_provider_health(
             persist_log=True,
         )
 
+        return {
+            "success": False,
+            "provider_id": str(provider.id),
+            "provider_name": provider.display_name,
+            "error": message,
+            "probe": feedback,
+            "diagnostic": diagnostic,
+        }
+
+
+def _probe_asr_provider_health(
+    provider: LLMProvider,
+    *,
+    check_type: str,
+    extra_details: Optional[Dict[str, Any]] = None,
+) -> Dict[str, Any]:
+    """Use the provider's Streaming ASR handshake instead of an LLM chat probe."""
+    from asgiref.sync import async_to_sync
+
+    from apps.services.speech.asr.factory import get_asr_service
+
+    start = time.perf_counter()
+    try:
+        service = get_asr_service(provider=provider.name, mode="streaming")
+        result = async_to_sync(service.probe_connection)()
+        latency_ms = int((time.perf_counter() - start) * 1000)
+        details = {
+            "probe_protocol": "asr_streaming_websocket",
+            "resource_id": service.resource_id,
+            "ws_endpoint": service.ws_endpoint,
+            "upstream_log_id": result.get("log_id", ""),
+            **(extra_details or {}),
+        }
+        feedback = apply_provider_runtime_feedback(
+            provider,
+            is_success=True,
+            latency_ms=latency_ms,
+            check_type=check_type,
+            details=details,
+            persist_log=True,
+        )
+        return {
+            "success": True,
+            "provider_id": str(provider.id),
+            "provider_name": provider.display_name,
+            "probe": feedback,
+            "diagnostic": None,
+        }
+    except Exception as exc:
+        latency_ms = int((time.perf_counter() - start) * 1000)
+        message = str(exc)
+        diagnostic = build_probe_failure_diagnostic(error=message)
+        feedback = apply_provider_runtime_feedback(
+            provider,
+            is_success=False,
+            latency_ms=latency_ms,
+            error_message=message,
+            check_type=check_type,
+            details={
+                "probe_protocol": "asr_streaming_websocket",
+                "exception": message,
+                **(extra_details or {}),
+            },
+            persist_log=True,
+        )
         return {
             "success": False,
             "provider_id": str(provider.id),

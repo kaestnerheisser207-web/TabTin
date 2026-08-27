@@ -13,14 +13,23 @@
   },
   "rail": {
     "tasks": "작업",
+    "meetingRecords": "회의 기록",
     "messages": "메시지",
     "cloudDocs": "클라우드 문서",
     "projects": "프로젝트",
-    "more": "더보기",
-    "customerSupport": "지원",
-    "customerSupportTitle": "지원팀에 문의",
-    "customerSupportHint": "WeChat으로 스캔하여 WeCom에 추가하세요",
-    "customerSupportQrAlt": "WeCom 고객 지원 QR 코드"
+    "more": "더보기"
+  },
+  "meetingRecords": {
+    "title": "회의 기록",
+    "all": "모든 기록",
+    "setup": "새 기록 준비",
+    "preview": "페이지 미리보기",
+    "live": "기록 중",
+    "detail": "회의 후 상세",
+    "description": "회의에서 실제로 오간 내용을 기록하고 검토하며 정리합니다.",
+    "start": "기록 시작",
+    "emptyTitle": "아직 회의 기록이 없습니다",
+    "emptyDescription": "기록을 시작하면 녹음, 전사 및 회의 후 정리가 여기에 표시됩니다."
   },
   "cloudDocs": {
     "browse": {

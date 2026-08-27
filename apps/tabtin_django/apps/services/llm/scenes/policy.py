@@ -18,6 +18,7 @@ POLICY_VERSION = "ai_scene_policy_v1"
 PAYER_POLICY_MANAGED_SCENE_KEYS = frozenset({
     "title_generation",
     "commit_message_generation",
+    "meeting_copilot_quick_answer",
     "checkpoint_intent_summary",
     "checkpoint_decision_summary",
     "tool_risk_classify",

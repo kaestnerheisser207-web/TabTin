@@ -17,6 +17,7 @@ export type AppPageId =
   | 'import'
   | 'external-archives'
   | 'collaboration'
+  | 'meeting-records'
   | 'notification'
   | 'project'
 

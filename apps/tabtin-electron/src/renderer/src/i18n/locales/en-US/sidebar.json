@@ -13,14 +13,23 @@
   },
   "rail": {
     "tasks": "Tasks",
+    "meetingRecords": "Meeting Records",
     "messages": "Messages",
     "cloudDocs": "Cloud Documents",
     "projects": "Projects",
-    "more": "More",
-    "customerSupport": "Support",
-    "customerSupportTitle": "Contact Support",
-    "customerSupportHint": "Scan with WeChat to add us on WeCom",
-    "customerSupportQrAlt": "WeCom customer support QR code"
+    "more": "More"
+  },
+  "meetingRecords": {
+    "title": "Meeting Records",
+    "all": "All records",
+    "setup": "Prepare new record",
+    "preview": "Page previews",
+    "live": "Recording in progress",
+    "detail": "Post-meeting details",
+    "description": "Record, review, and organize what actually happened in a meeting.",
+    "start": "Start recording",
+    "emptyTitle": "No meeting records yet",
+    "emptyDescription": "Recordings, transcripts, and post-meeting notes will appear here."
   },
   "cloudDocs": {
     "browse": {
