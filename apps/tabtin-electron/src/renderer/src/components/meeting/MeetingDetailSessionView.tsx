@@ -26,6 +26,8 @@ import {
   EmptyState,
   Input,
   PanelRangeSlider,
+  RadioGroup,
+  RadioGroupItem,
   TabsContent,
   TabsList,
   TabsRoot,
@@ -568,9 +570,7 @@ const ResourcesTab: React.FC<{
           <FolderKanban className="h-5 w-5 text-accent-text" aria-hidden />
           <div>
             <p className="text-body font-medium text-foreground">
-              {archive
-                ? projectDisplayName
-                : t('detail.meetingCapability')}
+              {archive ? projectDisplayName : t('detail.meetingCapability')}
             </p>
             <p className="text-caption text-muted-foreground">
               {archive
@@ -615,9 +615,10 @@ export const MeetingDetailSessionView: React.FC<{
 }> = ({ archive, onDeleteAudio, onDeleteArchive, onDeleted }) => {
   const { t } = useTranslation('meeting');
   const manifest = archive?.manifest;
-  const [deleteTarget, setDeleteTarget] = React.useState<
-    'audio' | 'archive' | null
-  >(null);
+  const [deleteDialogOpen, setDeleteDialogOpen] = React.useState(false);
+  const [deleteTarget, setDeleteTarget] = React.useState<'audio' | 'archive'>(
+    'audio',
+  );
   const [deleting, setDeleting] = React.useState(false);
   const [deleteError, setDeleteError] = React.useState('');
   const [resolvedProjectName, setResolvedProjectName] = React.useState(
@@ -660,12 +661,13 @@ export const MeetingDetailSessionView: React.FC<{
     !audioDeleted &&
     manifest?.tracks.local.status === 'completed' &&
     manifest.tracks.remote.status === 'completed';
-  const openDeleteConfirmation = (target: 'audio' | 'archive'): void => {
+  const openDeleteDialog = (): void => {
     setDeleteError('');
-    setDeleteTarget(target);
+    setDeleteTarget(!audioDeleted && onDeleteAudio ? 'audio' : 'archive');
+    setDeleteDialogOpen(true);
   };
   const confirmDelete = async (): Promise<void> => {
-    if (!deleteTarget || deleting) return;
+    if (deleting) return;
     setDeleting(true);
     setDeleteError('');
     try {
@@ -723,32 +725,17 @@ export const MeetingDetailSessionView: React.FC<{
             <Share2 className="h-4 w-4" aria-hidden />
             {t('detail.share')}
           </Button>
-          {archive && onDeleteAudio ? (
-            <Button
-              type="button"
-              variant="outline"
-              size="sm"
-              disabled={deleting || audioDeleted}
-              className="gap-1.5"
-              onClick={() => openDeleteConfirmation('audio')}
-            >
-              <FileX2 className="h-4 w-4" aria-hidden />
-              {audioDeleted
-                ? t('detail.audioDeletedAction')
-                : t('detail.deleteAudio')}
-            </Button>
-          ) : null}
-          {archive && onDeleteArchive ? (
+          {archive && ((!audioDeleted && onDeleteAudio) || onDeleteArchive) ? (
             <Button
               type="button"
               variant="destructive"
               size="sm"
               disabled={deleting}
               className="gap-1.5"
-              onClick={() => openDeleteConfirmation('archive')}
+              onClick={openDeleteDialog}
             >
               <Trash2 className="h-4 w-4" aria-hidden />
-              {t('detail.deleteMeeting')}
+              {t('detail.delete')}
             </Button>
           ) : null}
         </div>
@@ -797,9 +784,7 @@ export const MeetingDetailSessionView: React.FC<{
               className="h-4 w-4 text-muted-foreground"
               aria-hidden
             />
-            {manifest
-              ? projectDisplayName
-              : t('detail.meetingCapability')}
+            {manifest ? projectDisplayName : t('detail.meetingCapability')}
           </span>
           <span className="inline-flex items-center gap-1.5">
             {audioDeleted ? (
@@ -870,20 +855,12 @@ export const MeetingDetailSessionView: React.FC<{
         </TabsRoot>
       </div>
       <ConfirmDialog
-        open={deleteTarget !== null}
+        open={deleteDialogOpen}
         onOpenChange={(open) => {
-          if (!open && !deleting) setDeleteTarget(null);
+          if (!deleting) setDeleteDialogOpen(open);
         }}
-        title={
-          deleteTarget === 'audio'
-            ? t('detail.deleteAudioConfirmTitle')
-            : t('detail.deleteMeetingConfirmTitle')
-        }
-        description={
-          deleteTarget === 'audio'
-            ? t('detail.deleteAudioConfirmDescription')
-            : t('detail.deleteMeetingConfirmDescription')
-        }
+        title={t('detail.deleteChoiceTitle')}
+        description={t('detail.deleteChoiceDescription')}
         confirmText={
           deleteTarget === 'audio'
             ? t('detail.deleteAudioConfirmAction')
@@ -894,6 +871,56 @@ export const MeetingDetailSessionView: React.FC<{
         isLoading={deleting}
         onConfirm={confirmDelete}
       >
+        <RadioGroup
+          value={deleteTarget}
+          onValueChange={(value) => {
+            setDeleteError('');
+            setDeleteTarget(value as 'audio' | 'archive');
+          }}
+          aria-label={t('detail.deleteChoiceLabel')}
+          className="gap-2"
+        >
+          {!audioDeleted && onDeleteAudio ? (
+            <label
+              htmlFor="meeting-delete-audio"
+              className="flex cursor-pointer items-start gap-3 rounded-[12px] border border-foreground/[0.1] px-3.5 py-3 transition-colors hover:bg-foreground/[0.035]"
+            >
+              <RadioGroupItem
+                id="meeting-delete-audio"
+                value="audio"
+                className="mt-0.5 shrink-0"
+              />
+              <span className="space-y-1">
+                <span className="block text-body font-medium text-foreground">
+                  {t('detail.deleteAudio')}
+                </span>
+                <span className="block text-small leading-5 text-muted-foreground">
+                  {t('detail.deleteAudioConfirmDescription')}
+                </span>
+              </span>
+            </label>
+          ) : null}
+          {onDeleteArchive ? (
+            <label
+              htmlFor="meeting-delete-archive"
+              className="flex cursor-pointer items-start gap-3 rounded-[12px] border border-destructive/20 px-3.5 py-3 transition-colors hover:bg-destructive/[0.04]"
+            >
+              <RadioGroupItem
+                id="meeting-delete-archive"
+                value="archive"
+                className="mt-0.5 shrink-0"
+              />
+              <span className="space-y-1">
+                <span className="block text-body font-medium text-destructive">
+                  {t('detail.deleteMeeting')}
+                </span>
+                <span className="block text-small leading-5 text-muted-foreground">
+                  {t('detail.deleteMeetingConfirmDescription')}
+                </span>
+              </span>
+            </label>
+          ) : null}
+        </RadioGroup>
         {deleteError ? (
           <p role="alert" className="text-body text-destructive">
             {deleteError}
