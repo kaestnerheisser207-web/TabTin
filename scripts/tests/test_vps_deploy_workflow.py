@@ -30,7 +30,7 @@ def test_vps_only_pulls_and_switches_the_prebuilt_image() -> None:
     assert "github.com/$repository/archive" not in script
     assert "rollback" not in script.lower()
     assert "compose stop celery" in script
-    assert script.count("--no-build") == 4
+    assert script.count("--no-build") == 2
     assert "manage.py safe_migrate --plan --no-input" in script
     assert "manage.py safe_migrate --no-input" in script
 
