@@ -311,9 +311,17 @@ describe('MeetingRecordsPage', () => {
       />,
     );
 
-    fireEvent.click(screen.getByRole('button', { name: '删除录音，保留文字' }));
+    fireEvent.click(screen.getByRole('button', { name: '删除' }));
     const dialog = screen.getByRole('dialog');
-    expect(within(dialog).getByText('删除这场会议的录音？')).toBeTruthy();
+    expect(within(dialog).getByText('删除会议内容')).toBeTruthy();
+    expect(
+      within(dialog).getByRole('radio', {
+        name: /删除录音，保留文字/,
+      }),
+    ).toBeTruthy();
+    expect(
+      within(dialog).getByRole('radio', { name: /删除完整记录/ }),
+    ).toBeTruthy();
     expect(
       within(dialog).getByText(
         /麦克风与系统音频都会永久删除；逐字稿、会后分析、Copilot 记录和关联资料将保留/,
@@ -350,16 +358,19 @@ describe('MeetingRecordsPage', () => {
         />,
       );
 
-      fireEvent.click(screen.getByRole('button', { name: '删除整场会议' }));
+      fireEvent.click(screen.getByRole('button', { name: '删除' }));
       const dialog = screen.getByRole('dialog');
-      expect(within(dialog).getByText('删除整场会议？')).toBeTruthy();
+      expect(within(dialog).getByText('删除会议内容')).toBeTruthy();
       fireEvent.click(
-        within(dialog).getByRole('button', { name: '删除整场会议' }),
+        within(dialog).getByRole('radio', { name: /删除完整记录/ }),
+      );
+      fireEvent.click(
+        within(dialog).getByRole('button', { name: '删除完整记录' }),
       );
 
       await waitFor(() =>
         expect(within(dialog).getByRole('alert').textContent).toContain(
-          '删除整场会议失败，请重试: provider unavailable',
+          '删除完整记录失败，请重试: provider unavailable',
         ),
       );
       expect(onDeleted).not.toHaveBeenCalled();
@@ -431,14 +442,10 @@ describe('MeetingRecordsPage', () => {
         />,
       );
       await waitFor(() =>
-        expect(
-          screen.getByRole('button', { name: '删除录音，保留文字' }),
-        ).toBeTruthy(),
+        expect(screen.getByRole('button', { name: '删除' })).toBeTruthy(),
       );
 
-      fireEvent.click(
-        screen.getByRole('button', { name: '删除录音，保留文字' }),
-      );
+      fireEvent.click(screen.getByRole('button', { name: '删除' }));
       fireEvent.click(
         within(screen.getByRole('dialog')).getByRole('button', {
           name: '删除录音，保留文字',
@@ -466,10 +473,10 @@ describe('MeetingRecordsPage', () => {
       );
       expect(screen.getByText('保留的真实逐字稿。')).toBeTruthy();
 
-      fireEvent.click(screen.getByRole('button', { name: '删除整场会议' }));
+      fireEvent.click(screen.getByRole('button', { name: '删除' }));
       fireEvent.click(
         within(screen.getByRole('dialog')).getByRole('button', {
-          name: '删除整场会议',
+          name: '删除完整记录',
         }),
       );
       await waitFor(() =>
