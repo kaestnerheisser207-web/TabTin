@@ -95,11 +95,20 @@ export const PROJECTS_UI_ENABLED: boolean = IS_DEV_LIKE_BUILD
   ? import.meta.env.VITE_ENABLE_PROJECTS_UI !== 'false'
   : import.meta.env.VITE_ENABLE_PROJECTS_UI === 'true'
 
-/**
- * 会议记录已接入双轨录音、持续落盘、实时 ASR 与 Copilot。
- * 当前仍只在 dev / local 包开放，完成发布验收后再显式开启正式包入口。
- */
-export const MEETING_RECORDS_UI_ENABLED: boolean = IS_DEV_LIKE_BUILD
+/** 会议记录已接入双轨录音、持续落盘、实时 ASR 与 Copilot。 */
+export function isMeetingRecordsUiEnabled(
+  isDevLikeBuild: boolean,
+  configuredValue: string | undefined,
+): boolean {
+  return isDevLikeBuild
+    ? configuredValue !== 'false'
+    : configuredValue === 'true'
+}
+
+export const MEETING_RECORDS_UI_ENABLED: boolean = isMeetingRecordsUiEnabled(
+  IS_DEV_LIKE_BUILD,
+  import.meta.env.VITE_ENABLE_MEETING_RECORDS_UI,
+)
 
 /**
  * ChatGPT Codex 账号登录（订阅套餐入口）是否对用户可见。
