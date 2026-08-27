@@ -82,7 +82,7 @@ wait_for_health() {
 }
 
 log "checking migration plan"
-compose run --rm --no-deps --no-build --user 0:0 \
+compose run --rm --no-deps --user 0:0 \
   -e PG_DB_USER=tabtin_migrator \
   -e PG_DB_PASSWORD_FILE=/run/tabtin-community-secrets/PG_MIGRATOR_PASSWORD \
   --entrypoint python django \
@@ -92,7 +92,7 @@ log "stopping Celery before migration"
 compose stop celery
 
 log "applying release migrations"
-compose run --rm --no-deps --no-build --user 0:0 \
+compose run --rm --no-deps --user 0:0 \
   -e PG_DB_USER=tabtin_migrator \
   -e PG_DB_PASSWORD_FILE=/run/tabtin-community-secrets/PG_MIGRATOR_PASSWORD \
   --entrypoint python django \
