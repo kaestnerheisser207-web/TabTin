@@ -58,8 +58,9 @@ describe('MeetingRecordingManager', () => {
       sourceId: 'main-display',
       label: 'System audio (main display)',
     }),
-    commitSourceSwitch: vi.fn().mockImplementation(
-      async (input: { source: 'local' | 'remote' }) =>
+    commitSourceSwitch: vi
+      .fn()
+      .mockImplementation(async (input: { source: 'local' | 'remote' }) =>
         input.source === 'local'
           ? {
               source: 'local' as const,
@@ -71,10 +72,11 @@ describe('MeetingRecordingManager', () => {
               sourceId: 'main-display',
               label: 'System audio (main display)',
             },
-    ),
+      ),
     abortSourceSwitch: vi.fn().mockResolvedValue(undefined),
-    finalizeSourceSwitch: vi.fn().mockImplementation(
-      async (input: { source: 'local' | 'remote' }) =>
+    finalizeSourceSwitch: vi
+      .fn()
+      .mockImplementation(async (input: { source: 'local' | 'remote' }) =>
         input.source === 'local'
           ? {
               source: 'local' as const,
@@ -86,7 +88,7 @@ describe('MeetingRecordingManager', () => {
               sourceId: 'main-display',
               label: 'System audio (main display)',
             },
-    ),
+      ),
     rollbackSourceSwitch: vi.fn().mockResolvedValue({
       source: 'local' as const,
       sourceId: 'built-in-mic',
@@ -139,11 +141,7 @@ describe('MeetingRecordingManager', () => {
       captureHost[method].mockClear();
     }
     createAsrRuntime.mockClear();
-    for (const method of [
-      'start',
-      'appendPcm',
-      'stop',
-    ] as const) {
+    for (const method of ['start', 'appendPcm', 'stop'] as const) {
       asrRuntime[method].mockClear();
     }
     manager = new MeetingRecordingManager({
@@ -259,7 +257,9 @@ describe('MeetingRecordingManager', () => {
     }
     await syncManager.stop(scope);
 
-    await vi.waitFor(() => expect(audioUploader.uploadTrack).toHaveBeenCalledTimes(2));
+    await vi.waitFor(() =>
+      expect(audioUploader.uploadTrack).toHaveBeenCalledTimes(2),
+    );
     await vi.waitFor(async () => {
       const manifest = await archiveStore.readManifest(scope);
       expect(manifest.tracks.local).toMatchObject({
@@ -504,10 +504,7 @@ describe('MeetingRecordingManager', () => {
     });
     await archiveStore.updateLifecycle(scope, 'recording');
     await fs.writeFile(
-      path.join(
-        rootPath,
-        'org-1/user-1/session-1/local/00000001.webm.part',
-      ),
+      path.join(rootPath, 'org-1/user-1/session-1/local/00000001.webm.part'),
       new Uint8Array([1, 2, 3]),
     );
     await archiveStore.recoverInterrupted();
@@ -1471,7 +1468,7 @@ describe('MeetingRecordingManager', () => {
     );
   });
 
-  it('only sends remote turns to Copilot and persists answered history', async () => {
+  it('sends local and remote final turns with local transcript context and persists results', async () => {
     const flushResult = {
       sessionId: scope.sessionId,
       status: 'synced' as const,
@@ -1491,6 +1488,14 @@ describe('MeetingRecordingManager', () => {
       provider: 'deepseek',
       latency_ms: 250,
     };
+    const noAction = {
+      status: 'no_action' as const,
+      message: 'No answer is needed.',
+      candidate_segment_id: 'local-answer-1',
+    };
+    const getSession = vi.fn();
+    const getTranscript = vi.fn();
+    const getCopilotAnswers = vi.fn();
     const serverSync = {
       createSession: vi.fn(),
       updateLifecycle: vi.fn(),
@@ -1499,7 +1504,129 @@ describe('MeetingRecordingManager', () => {
       upsertTranscriptSegments: vi.fn(),
       updateTranscriptRun: vi.fn(),
       updateCopilotState: vi.fn(),
-      answerCopilot: vi.fn().mockResolvedValue(answered),
+      answerCopilot: vi.fn(
+        async (
+          _sessionId: string,
+          _transcript: unknown[],
+          questionSegmentId: string,
+        ) => (questionSegmentId === 'local-answer-1' ? noAction : answered),
+      ),
+      getSession,
+      getTranscript,
+      getCopilotAnswers,
+      flushSession: vi.fn().mockResolvedValue(flushResult),
+      retrySession: vi.fn().mockResolvedValue(flushResult),
+    } as unknown as MeetingServerSync;
+    const archiveStore = new MeetingArchiveStore({
+      rootPath,
+      finalizeMediaFile: async (inputPath, outputPath) => {
+        await fs.copyFile(inputPath, outputPath);
+      },
+    });
+    const syncManager = new MeetingRecordingManager({
+      archiveStore,
+      captureHost,
+      createAsrRuntime,
+      serverSync,
+    });
+    await syncManager.prepare({
+      ...scope,
+      title: 'Role boundary',
+      consentConfirmed: true,
+      copilotEnabled: true,
+    });
+    await syncManager.start(scope);
+    const getArchive = vi.spyOn(syncManager, 'getArchive');
+    await syncManager.appendTranscriptCheckpoint(scope, {
+      externalId: 'local-answer-1',
+      source: 'local',
+      startMs: 1_000,
+      endMs: 2_000,
+      text: 'A hash map uses buckets.',
+      isFinal: true,
+      recordedAt: '2026-08-27T00:00:00.000Z',
+    });
+
+    await expect(
+      syncManager.answerCopilotQuestion(scope, 'local-answer-1'),
+    ).resolves.toEqual(noAction);
+    expect(serverSync.answerCopilot).toHaveBeenNthCalledWith(
+      1,
+      scope.sessionId,
+      [
+        expect.objectContaining({
+          externalId: 'local-answer-1',
+          source: 'local',
+          isFinal: true,
+        }),
+      ],
+      'local-answer-1',
+      '',
+      expect.any(String),
+    );
+
+    await syncManager.appendTranscriptCheckpoint(scope, {
+      externalId: 'remote-question-1',
+      source: 'remote',
+      startMs: 2_100,
+      endMs: 3_000,
+      text: 'Explain a hash map.',
+      isFinal: true,
+      recordedAt: '2026-08-27T00:00:01.000Z',
+    });
+    await expect(
+      syncManager.answerCopilotQuestion(scope, 'remote-question-1'),
+    ).resolves.toEqual(answered);
+    expect(serverSync.answerCopilot).toHaveBeenNthCalledWith(
+      2,
+      scope.sessionId,
+      [
+        expect.objectContaining({ externalId: 'local-answer-1' }),
+        expect.objectContaining({
+          externalId: 'remote-question-1',
+          source: 'remote',
+          isFinal: true,
+        }),
+      ],
+      'remote-question-1',
+      '',
+      expect.any(String),
+    );
+
+    const records = await archiveStore.readCopilotRecords(scope);
+    expect(records.map((record) => record.result)).toEqual([
+      noAction,
+      answered,
+    ]);
+    expect(getSession).not.toHaveBeenCalled();
+    expect(getTranscript).not.toHaveBeenCalled();
+    expect(getCopilotAnswers).not.toHaveBeenCalled();
+    expect(getArchive).not.toHaveBeenCalled();
+  });
+
+  it('does not call Copilot or server reads for missing and non-final questions', async () => {
+    const flushResult = {
+      sessionId: scope.sessionId,
+      status: 'synced' as const,
+      syncedCount: 1,
+      pendingCount: 0,
+    };
+    const answerCopilot = vi.fn();
+    const getSession = vi.fn();
+    const getTranscript = vi.fn();
+    const getCopilotAnswers = vi.fn();
+    const serverSync = {
+      createSession: vi.fn(),
+      updateLifecycle: vi.fn(),
+      createTranscriptRun: vi.fn(),
+      checkpointTrack: vi.fn(),
+      upsertTranscriptSegments: vi.fn(),
+      updateTranscriptRun: vi.fn(),
+      updateCopilotState: vi.fn(),
+      answerCopilot,
+      getSession,
+      getTranscript,
+      getCopilotAnswers,
       flushSession: vi.fn().mockResolvedValue(flushResult),
       retrySession: vi.fn().mockResolvedValue(flushResult),
     } as unknown as MeetingServerSync;
@@ -1516,45 +1643,33 @@ describe('MeetingRecordingManager', () => {
     });
     await syncManager.prepare({
       ...scope,
-      title: 'Role boundary',
+      title: 'Incomplete question',
       consentConfirmed: true,
       copilotEnabled: true,
     });
     await syncManager.start(scope);
+    const getArchive = vi.spyOn(syncManager, 'getArchive');
     await syncManager.appendTranscriptCheckpoint(scope, {
-      externalId: 'local-answer-1',
+      externalId: 'partial-question',
       source: 'local',
       startMs: 1_000,
-      endMs: 2_000,
-      text: 'A hash map uses buckets.',
-      isFinal: true,
+      endMs: 1_500,
+      text: 'Incomplete question',
+      isFinal: false,
       recordedAt: '2026-08-27T00:00:00.000Z',
     });
 
     await expect(
-      syncManager.answerCopilotQuestion(scope, 'local-answer-1'),
-    ).resolves.toMatchObject({
-      status: 'no_action',
-      candidate_segment_id: 'local-answer-1',
-    });
-    expect(serverSync.answerCopilot).not.toHaveBeenCalled();
-
-    await syncManager.appendTranscriptCheckpoint(scope, {
-      externalId: 'remote-question-1',
-      source: 'remote',
-      startMs: 2_100,
-      endMs: 3_000,
-      text: 'Explain a hash map.',
-      isFinal: true,
-      recordedAt: '2026-08-27T00:00:01.000Z',
-    });
+      syncManager.answerCopilotQuestion(scope, 'partial-question'),
+    ).resolves.toMatchObject({ status: 'no_question' });
     await expect(
-      syncManager.answerCopilotQuestion(scope, 'remote-question-1'),
-    ).resolves.toEqual(answered);
-
-    const archive = await syncManager.getArchive(scope);
-    expect(archive.copilotRecords).toHaveLength(1);
-    expect(archive.copilotRecords[0]?.result).toEqual(answered);
+      syncManager.answerCopilotQuestion(scope, 'missing-question'),
+    ).resolves.toMatchObject({ status: 'no_question' });
+    expect(answerCopilot).not.toHaveBeenCalled();
+    expect(getSession).not.toHaveBeenCalled();
+    expect(getTranscript).not.toHaveBeenCalled();
+    expect(getCopilotAnswers).not.toHaveBeenCalled();
+    expect(getArchive).not.toHaveBeenCalled();
   });
 
   it('does not put a slow Copilot answer request on the recording control queue', async () => {
@@ -1571,6 +1686,9 @@ describe('MeetingRecordingManager', () => {
       syncedCount: 1,
       pendingCount: 0,
     };
+    const getSession = vi.fn();
+    const getTranscript = vi.fn();
+    const getCopilotAnswers = vi.fn();
     const serverSync = {
       createSession: vi.fn(),
       updateLifecycle: vi.fn(),
@@ -1580,6 +1698,9 @@ describe('MeetingRecordingManager', () => {
       updateTranscriptRun: vi.fn(),
       updateCopilotState: vi.fn(),
       answerCopilot: vi.fn(() => answerPromise),
+      getSession,
+      getTranscript,
+      getCopilotAnswers,
       flushSession: vi.fn().mockResolvedValue(flushResult),
       retrySession: vi.fn().mockResolvedValue(flushResult),
     } as unknown as MeetingServerSync;
@@ -1602,6 +1723,7 @@ describe('MeetingRecordingManager', () => {
       copilotEnabled: true,
     });
     await syncManager.start(scope);
+    const getArchive = vi.spyOn(syncManager, 'getArchive');
     await syncManager.appendTranscriptCheckpoint(scope, {
       externalId: 'question-1',
       source: 'remote',
@@ -1635,5 +1757,9 @@ describe('MeetingRecordingManager', () => {
       status: 'failed',
       message: 'model timeout',
     });
+    expect(getSession).not.toHaveBeenCalled();
+    expect(getTranscript).not.toHaveBeenCalled();
+    expect(getCopilotAnswers).not.toHaveBeenCalled();
+    expect(getArchive).not.toHaveBeenCalled();
   });
 });

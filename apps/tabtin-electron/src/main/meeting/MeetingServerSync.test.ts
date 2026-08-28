@@ -3,6 +3,7 @@ import { describe, expect, it, vi } from 'vitest';
 import {
   MAX_MEETING_COPILOT_CONTEXT_SEGMENTS,
   MAX_MEETING_TRANSCRIPT_SEGMENTS_PER_BATCH,
+  MEETING_COPILOT_REQUEST_TIMEOUT_MS,
   MeetingServerSync,
   selectMeetingCopilotContext,
   type MeetingTranscriptSegmentInput,
@@ -45,7 +46,9 @@ describe('MeetingServerSync', () => {
   it('reads cloud archives and uses explicit delete endpoints', async () => {
     const fetchImpl = vi
       .fn<typeof fetch>()
-      .mockResolvedValueOnce(jsonResponse({ sessions: [{ id: 'session-1', version: 2 }] }))
+      .mockResolvedValueOnce(
+        jsonResponse({ sessions: [{ id: 'session-1', version: 2 }] }),
+      )
       .mockResolvedValueOnce(
         jsonResponse({
           runs: [],
@@ -159,6 +162,7 @@ describe('MeetingServerSync', () => {
   });
 
   it('requests a Copilot answer with the latest local transcript snapshot', async () => {
+    const timeout = vi.spyOn(AbortSignal, 'timeout');
     const fetchImpl = vi.fn<typeof fetch>().mockResolvedValue(
       jsonResponse({
         success: true,
@@ -229,6 +233,8 @@ describe('MeetingServerSync', () => {
       ],
     });
     expect(retrySession).not.toHaveBeenCalled();
+    expect(timeout).toHaveBeenCalledWith(MEETING_COPILOT_REQUEST_TIMEOUT_MS);
+    timeout.mockRestore();
   });
 
   it('serializes lifecycle and Copilot mutations and advances optimistic versions', async () => {

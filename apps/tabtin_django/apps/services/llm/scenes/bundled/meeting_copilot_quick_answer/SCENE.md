@@ -26,6 +26,9 @@ template_variables:
   - name: candidate_utterance
     type: str
     required: true
+  - name: candidate_source
+    type: str
+    required: true
   - name: transcript_context
     type: str
     required: true

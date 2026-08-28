@@ -123,6 +123,24 @@ export const MeetingLiveSessionView: React.FC<{
     React.useState<MeetingTranscriptCheckpoint | null>(null);
   const copilotAnswerPendingRef = React.useRef(false);
   const evaluatedCopilotTurnsRef = React.useRef(new Set<string>());
+  const queuedCopilotTurnsRef = React.useRef(new Set<string>());
+  const autoSkippedCopilotTurnsRef = React.useRef(new Set<string>());
+  const copilotSessionIdRef = React.useRef(initialStatus?.manifest?.sessionId);
+  const [copilotSessionReadyId, setCopilotSessionReadyId] = React.useState(
+    initialStatus?.manifest?.sessionId,
+  );
+  const [copilotFinalQueue, setCopilotFinalQueue] = React.useState<
+    MeetingTranscriptCheckpoint[]
+  >([]);
+  const pendingCopilotLatencyRef = React.useRef<{
+    externalId: string;
+    source: 'local' | 'remote';
+    trigger: 'auto' | 'manual';
+    status: MeetingCopilotAnswerResult['status'];
+    finalRecordedAt: number;
+    requestStartedAt: number;
+    resultReceivedAt: number;
+  } | null>(null);
   const [runtimeStatus, setRuntimeStatus] =
     React.useState<MeetingRecordingStatus | null>(initialStatus);
   const [controlError, setControlError] = React.useState<string | null>(null);
@@ -205,12 +223,35 @@ export const MeetingLiveSessionView: React.FC<{
     [resolvedTranscript],
   );
   const latestTranscriptTurn = resolvedTranscript.at(-1) ?? null;
-  const latestRemoteCompleteTurn =
-    [...resolvedTranscript]
+  const finalTranscriptTurns = React.useMemo(
+    () =>
+      resolvedTranscript
+        .filter((checkpoint) => checkpoint.isFinal)
+        .sort((left, right) => {
+          const leftRecordedAt = Date.parse(left.recordedAt);
+          const rightRecordedAt = Date.parse(right.recordedAt);
+          const recordedAtOrder =
+            Number.isFinite(leftRecordedAt) && Number.isFinite(rightRecordedAt)
+              ? leftRecordedAt - rightRecordedAt
+              : 0;
+          return (
+            recordedAtOrder ||
+            left.startMs - right.startMs ||
+            left.externalId.localeCompare(right.externalId)
+          );
+        }),
+    [resolvedTranscript],
+  );
+  const latestFinalTurn = finalTranscriptTurns.at(-1) ?? null;
+  const latestUnevaluatedFinalTurn =
+    [...finalTranscriptTurns]
       .reverse()
       .find(
-        (checkpoint) => checkpoint.isFinal && checkpoint.source === 'remote',
+        (checkpoint) =>
+          !evaluatedCopilotTurnsRef.current.has(checkpoint.externalId),
       ) ?? null;
+  const manualCopilotTurn = latestUnevaluatedFinalTurn ?? latestFinalTurn;
+  const nextQueuedCopilotTurn = copilotFinalQueue[0] ?? null;
 
   React.useEffect(() => {
     const container = transcriptScrollRef.current;
@@ -228,6 +269,27 @@ export const MeetingLiveSessionView: React.FC<{
     if (manifestDurationMs === undefined) return;
     setDisplayDurationMs((current) => Math.max(current, manifestDurationMs));
   }, [manifestDurationMs, manifestSessionId]);
+
+  React.useEffect(() => {
+    if (
+      !manifestSessionId ||
+      copilotSessionIdRef.current === manifestSessionId
+    ) {
+      return;
+    }
+    copilotSessionIdRef.current = manifestSessionId;
+    evaluatedCopilotTurnsRef.current.clear();
+    queuedCopilotTurnsRef.current.clear();
+    autoSkippedCopilotTurnsRef.current.clear();
+    pendingCopilotLatencyRef.current = null;
+    copilotAnswerPendingRef.current = false;
+    setCopilotFinalQueue([]);
+    setCopilotAnswer(null);
+    setCopilotRecords([]);
+    setCopilotRequestedQuestion(null);
+    setCopilotAnswerPending(false);
+    setCopilotSessionReadyId(manifestSessionId);
+  }, [manifestSessionId]);
 
   React.useEffect(() => {
     if (isPreview || !manifestSessionId || lifecycleStatus !== 'recording')
@@ -285,8 +347,7 @@ export const MeetingLiveSessionView: React.FC<{
           captureToAsrMs:
             Number.isFinite(asrReceivedAtMs) &&
             Number.isFinite(meetingStartedAtMs)
-              ? asrReceivedAtMs -
-                (meetingStartedAtMs + event.checkpoint.endMs)
+              ? asrReceivedAtMs - (meetingStartedAtMs + event.checkpoint.endMs)
               : null,
         });
         setTranscript((current) =>
@@ -386,23 +447,23 @@ export const MeetingLiveSessionView: React.FC<{
     let refreshGeneration = 0;
     const refreshCaptureDevices = () => {
       const generation = ++refreshGeneration;
-    void Promise.all([
-      bridge.listMicrophones(),
-      bridge.listSystemAudioSources(),
-    ])
-      .then(([nextMicrophones, nextSystemAudioSources]) => {
+      void Promise.all([
+        bridge.listMicrophones(),
+        bridge.listSystemAudioSources(),
+      ])
+        .then(([nextMicrophones, nextSystemAudioSources]) => {
           if (cancelled || generation !== refreshGeneration) return;
           setMicrophones(nextMicrophones);
           setSystemAudioSources(nextSystemAudioSources);
           setSourceSwitchError((current) =>
             current === 'list' ? null : current,
           );
-      })
+        })
         .catch(() => {
           if (!cancelled && generation === refreshGeneration) {
             setSourceSwitchError('list');
-        }
-      });
+          }
+        });
     };
     refreshCaptureDevices();
     const unsubscribeDevices = bridge.onCaptureDevicesChanged(() => {
@@ -444,9 +505,24 @@ export const MeetingLiveSessionView: React.FC<{
     }
   };
 
+  const baselineAndClearCopilotAutoQueue = React.useCallback(() => {
+    for (const checkpoint of finalTranscriptTurns) {
+      autoSkippedCopilotTurnsRef.current.add(checkpoint.externalId);
+    }
+    queuedCopilotTurnsRef.current.clear();
+    setCopilotFinalQueue([]);
+  }, [finalTranscriptTurns]);
+
   const setCopilot = async (enabled: boolean) => {
+    const previousQueue = [...copilotFinalQueue];
+    const previousQueuedIds = new Set(queuedCopilotTurnsRef.current);
+    const previousSkippedIds = new Set(autoSkippedCopilotTurnsRef.current);
+    if (!enabled) {
+      setCopilotEnabled(false);
+      baselineAndClearCopilotAutoQueue();
+    }
     if (isPreview || !scope) {
-      setCopilotEnabled(enabled);
+      if (enabled) setCopilotEnabled(true);
       return;
     }
     setControlError(null);
@@ -456,84 +532,180 @@ export const MeetingLiveSessionView: React.FC<{
         enabled,
       );
       setRuntimeStatus(next);
-      setCopilotEnabled(enabled);
+      if (enabled) setCopilotEnabled(true);
     } catch (error) {
+      if (!enabled) {
+        queuedCopilotTurnsRef.current.clear();
+        for (const externalId of previousQueuedIds) {
+          queuedCopilotTurnsRef.current.add(externalId);
+        }
+        autoSkippedCopilotTurnsRef.current.clear();
+        for (const externalId of previousSkippedIds) {
+          autoSkippedCopilotTurnsRef.current.add(externalId);
+        }
+        setCopilotFinalQueue(previousQueue);
+        setCopilotEnabled(true);
+      }
       setControlError(error instanceof Error ? error.message : String(error));
     }
   };
 
+  React.useEffect(() => {
+    if (
+      isPreview ||
+      !manifestSessionId ||
+      copilotSessionReadyId !== manifestSessionId
+    ) {
+      return;
+    }
+    if (!copilotEnabled) {
+      baselineAndClearCopilotAutoQueue();
+      return;
+    }
+    const nextFinals = finalTranscriptTurns.filter(
+      (checkpoint) =>
+        !evaluatedCopilotTurnsRef.current.has(checkpoint.externalId) &&
+        !autoSkippedCopilotTurnsRef.current.has(checkpoint.externalId) &&
+        !queuedCopilotTurnsRef.current.has(checkpoint.externalId),
+    );
+    if (nextFinals.length === 0) return;
+    for (const checkpoint of nextFinals) {
+      queuedCopilotTurnsRef.current.add(checkpoint.externalId);
+    }
+    setCopilotFinalQueue((current) => [...current, ...nextFinals]);
+  }, [
+    baselineAndClearCopilotAutoQueue,
+    copilotEnabled,
+    copilotSessionReadyId,
+    finalTranscriptTurns,
+    isPreview,
+    manifestSessionId,
+  ]);
+
   const answerCopilotQuestion = React.useCallback(
     async (
-    question: MeetingTranscriptCheckpoint,
-    options: { retry?: boolean } = {},
-  ) => {
-    if (
-      !scope ||
-      isPreview ||
-      copilotAnswerPendingRef.current ||
-      !question.isFinal
-    )
-      return;
+      question: MeetingTranscriptCheckpoint,
+      options: {
+        retry?: boolean;
+        trigger?: 'auto' | 'manual';
+      } = {},
+    ) => {
+      if (
+        !scope ||
+        isPreview ||
+        copilotAnswerPendingRef.current ||
+        !question.isFinal
+      )
+        return;
       if (
         !options.retry &&
         evaluatedCopilotTurnsRef.current.has(question.externalId)
       ) {
-      return;
-    }
-    evaluatedCopilotTurnsRef.current.add(question.externalId);
-    copilotAnswerPendingRef.current = true;
-    setCopilotRequestedQuestion(question);
-    setCopilotAnswerPending(true);
-    try {
-      const answer =
-        await window.tabtin.meetingRecording.answerCopilotQuestion(
-          scope,
-          question.externalId,
-        );
-      setCopilotAnswer(answer);
-      if (answer.status === 'answered' || answer.status === 'no_action') {
-        setCopilotRecords((current) => [
-          ...current.filter(
-            (record) => record.questionSegmentId !== question.externalId,
-          ),
-          {
-            questionSegmentId: question.externalId,
-            evaluatedAt: new Date().toISOString(),
-            result: answer,
-          },
-        ]);
+        return;
       }
-    } catch (error) {
-      setCopilotAnswer({
-        status: 'failed',
-        error_code: 'request_failed',
-        message: error instanceof Error ? error.message : String(error),
-      });
-    } finally {
-      copilotAnswerPendingRef.current = false;
-      setCopilotAnswerPending(false);
-      setCopilotRequestedQuestion(null);
-    }
+      evaluatedCopilotTurnsRef.current.add(question.externalId);
+      copilotAnswerPendingRef.current = true;
+      setCopilotRequestedQuestion(question);
+      setCopilotAnswerPending(true);
+      const requestSessionId = scope.sessionId;
+      const requestStartedAt = Date.now();
+      const finalRecordedAt = Date.parse(question.recordedAt);
+      const stageLatency = (status: MeetingCopilotAnswerResult['status']) => {
+        pendingCopilotLatencyRef.current = {
+          externalId: question.externalId,
+          source: question.source,
+          trigger: options.trigger ?? (options.retry ? 'manual' : 'auto'),
+          status,
+          finalRecordedAt,
+          requestStartedAt,
+          resultReceivedAt: Date.now(),
+        };
+      };
+      try {
+        const answer =
+          await window.tabtin.meetingRecording.answerCopilotQuestion(
+            scope,
+            question.externalId,
+          );
+        if (copilotSessionIdRef.current !== requestSessionId) return;
+        stageLatency(answer.status);
+        setCopilotAnswer(answer);
+        if (answer.status === 'answered' || answer.status === 'no_action') {
+          setCopilotRecords((current) => [
+            ...current.filter(
+              (record) => record.questionSegmentId !== question.externalId,
+            ),
+            {
+              questionSegmentId: question.externalId,
+              evaluatedAt: new Date().toISOString(),
+              result: answer,
+            },
+          ]);
+        }
+      } catch (error) {
+        if (copilotSessionIdRef.current !== requestSessionId) return;
+        stageLatency('failed');
+        setCopilotAnswer({
+          status: 'failed',
+          error_code: 'request_failed',
+          message: error instanceof Error ? error.message : String(error),
+        });
+      } finally {
+        if (copilotSessionIdRef.current === requestSessionId) {
+          copilotAnswerPendingRef.current = false;
+          setCopilotAnswerPending(false);
+          setCopilotRequestedQuestion(null);
+        }
+      }
     },
     [isPreview, scope],
   );
 
   React.useEffect(() => {
+    if (!copilotAnswer) return;
+    const latency = pendingCopilotLatencyRef.current;
+    if (!latency || latency.status !== copilotAnswer.status) return;
+    pendingCopilotLatencyRef.current = null;
+    const displayedAt = Date.now();
+    log.info('copilot_latency', {
+      externalId: latency.externalId,
+      source: latency.source,
+      trigger: latency.trigger,
+      status: latency.status,
+      finalToRequestStartMs: Number.isFinite(latency.finalRecordedAt)
+        ? Math.max(0, latency.requestStartedAt - latency.finalRecordedAt)
+        : null,
+      requestDurationMs: Math.max(
+        0,
+        latency.resultReceivedAt - latency.requestStartedAt,
+      ),
+      resultToUiMs: Math.max(0, displayedAt - latency.resultReceivedAt),
+      finalToResultUiMs: Number.isFinite(latency.finalRecordedAt)
+        ? Math.max(0, displayedAt - latency.finalRecordedAt)
+        : null,
+    });
+  }, [copilotAnswer]);
+
+  React.useEffect(() => {
     if (
       !copilotEnabled ||
-      !latestRemoteCompleteTurn ||
+      !nextQueuedCopilotTurn ||
       copilotAnswerPending ||
       isPreview ||
       !scope
     )
       return;
-    if (
-      evaluatedCopilotTurnsRef.current.has(latestRemoteCompleteTurn.externalId)
-    ) {
-      return;
-    }
     const timer = window.setTimeout(() => {
-      void answerCopilotQuestion(latestRemoteCompleteTurn);
+      if (copilotAnswerPendingRef.current) return;
+      setCopilotFinalQueue((current) =>
+        current[0]?.externalId === nextQueuedCopilotTurn.externalId
+          ? current.slice(1)
+          : current.filter(
+              (checkpoint) =>
+                checkpoint.externalId !== nextQueuedCopilotTurn.externalId,
+            ),
+      );
+      void answerCopilotQuestion(nextQueuedCopilotTurn, { trigger: 'auto' });
     }, 250);
     return () => window.clearTimeout(timer);
   }, [
@@ -541,7 +713,7 @@ export const MeetingLiveSessionView: React.FC<{
     copilotAnswerPending,
     copilotEnabled,
     isPreview,
-    latestRemoteCompleteTurn,
+    nextQueuedCopilotTurn,
     scope,
   ]);
 
@@ -556,7 +728,7 @@ export const MeetingLiveSessionView: React.FC<{
     try {
       const bridge = window.tabtin.meetingRecording;
       const next = await (source === 'local'
-          ? bridge.switchMicrophone({ ...scope, deviceId: sourceId })
+        ? bridge.switchMicrophone({ ...scope, deviceId: sourceId })
         : bridge.switchSystemAudio({ ...scope, sourceId }));
       setRuntimeStatus(next);
     } catch {
@@ -726,53 +898,53 @@ export const MeetingLiveSessionView: React.FC<{
   return (
     <>
       <StandaloneModulePage
-      icon={<MeetingPageIcon />}
-      title={manifest?.title || t('common.productReviewTitle')}
-      titleAs="h1"
-      description={
-        manifest
-          ? t('live.runtimeDescription', {
-              duration: formatDuration(displayDurationMs),
-            })
-          : t('live.description')
-      }
-      actions={
-        <div className="flex items-center gap-2">
-          {audioSourceActions}
-          <span className="mx-0.5 h-5 w-px bg-foreground/[0.1]" aria-hidden />
-          <Button
-            type="button"
-            variant="destructive"
-            size="sm"
-            disabled={isPreview || !scope || stopping}
-            className="gap-1.5"
-            onClick={() => {
-              setStopError(null);
-              setStopConfirmationOpen(true);
-            }}
-          >
-            <Square className="h-3.5 w-3.5" aria-hidden />
-            {t('live.end')}
-          </Button>
-        </div>
-      }
-      testId="meeting-records-live"
-    >
-      <div className="flex min-h-0 flex-1 flex-col gap-3 overflow-hidden">
-        <div className="contents">
-          {isPreview ? (
-            <MeetingPreviewBanner>
-              {t('live.previewNotice')}
-            </MeetingPreviewBanner>
-          ) : null}
+        icon={<MeetingPageIcon />}
+        title={manifest?.title || t('common.productReviewTitle')}
+        titleAs="h1"
+        description={
+          manifest
+            ? t('live.runtimeDescription', {
+                duration: formatDuration(displayDurationMs),
+              })
+            : t('live.description')
+        }
+        actions={
+          <div className="flex items-center gap-2">
+            {audioSourceActions}
+            <span className="mx-0.5 h-5 w-px bg-foreground/[0.1]" aria-hidden />
+            <Button
+              type="button"
+              variant="destructive"
+              size="sm"
+              disabled={isPreview || !scope || stopping}
+              className="gap-1.5"
+              onClick={() => {
+                setStopError(null);
+                setStopConfirmationOpen(true);
+              }}
+            >
+              <Square className="h-3.5 w-3.5" aria-hidden />
+              {t('live.end')}
+            </Button>
+          </div>
+        }
+        testId="meeting-records-live"
+      >
+        <div className="flex min-h-0 flex-1 flex-col gap-3 overflow-hidden">
+          <div className="contents">
+            {isPreview ? (
+              <MeetingPreviewBanner>
+                {t('live.previewNotice')}
+              </MeetingPreviewBanner>
+            ) : null}
 
-          {controlError ? (
-            <p role="alert" className="text-body text-destructive">
-              {controlError}
-            </p>
-          ) : null}
-          {sourceSwitchError ? (
-            <p role="alert" className="text-caption text-destructive">
+            {controlError ? (
+              <p role="alert" className="text-body text-destructive">
+                {controlError}
+              </p>
+            ) : null}
+            {sourceSwitchError ? (
+              <p role="alert" className="text-caption text-destructive">
                 {sourceSwitchError === 'local'
                   ? t('live.microphoneSwitchFailedPreserved')
                   : sourceSwitchError === 'remote'
@@ -804,237 +976,245 @@ export const MeetingLiveSessionView: React.FC<{
                         source: captureSourceNotice.currentLabel,
                       })
                     : t('live.systemAudioFallbackFailed')}
-            </p>
-          ) : null}
+              </p>
+            ) : null}
 
-          <div className="grid min-h-0 flex-1 gap-4 xl:grid-cols-[minmax(0,1.45fr)_minmax(320px,0.75fr)]">
-            <MeetingSection
-              title={t('live.transcriptTitle')}
-              description={t('live.transcriptDescription')}
-              className="flex min-h-0 flex-col bg-background"
-              contentClassName="flex min-h-0 flex-1 flex-col"
-            >
-              {!isPreview && manifest?.transcriptionStatus === 'failed' ? (
-                <div className="mb-2 shrink-0 rounded-interactive bg-destructive/5 px-3 py-2 text-caption text-destructive">
-                  {manifest.transcriptionError ||
-                    t('live.runtimeTranscriptEmpty')}
-                </div>
-              ) : null}
-              {isPreview ? (
-                <div className="min-h-0 flex-1 overflow-y-auto divide-y divide-foreground/[0.06] pr-1 scrollbar-hover dark:divide-foreground/[0.08]">
-                  <MeetingTranscriptTurn
-                    speaker={t('common.speakerOther')}
-                    speakerId="meeting-remote"
-                    time="00:21:42"
-                  >
-                    {t('live.questionOne')}
-                  </MeetingTranscriptTurn>
-                  <MeetingTranscriptTurn
-                    speaker={localSpeakerName}
-                    speakerId={user?.id}
-                    avatarUrl={user?.avatar}
-                    time="00:21:51"
-                  >
-                    {t('live.answerOne')}
-                  </MeetingTranscriptTurn>
-                  <MeetingTranscriptTurn
-                    speaker={t('common.speakerOther')}
-                    speakerId="meeting-remote"
-                    time="00:22:16"
-                  >
-                    {t('live.questionTwo')}
-                  </MeetingTranscriptTurn>
-                  <MeetingTranscriptTurn
-                    speaker={localSpeakerName}
-                    speakerId={user?.id}
-                    avatarUrl={user?.avatar}
-                    time="00:22:29"
-                    pending
-                  >
-                    {t('live.answerTwo')}
-                  </MeetingTranscriptTurn>
-                </div>
-              ) : visibleTranscript.length > 0 ? (
-                <div
-                  ref={transcriptScrollRef}
-                  className="min-h-0 flex-1 overflow-y-auto pr-1 scrollbar-hover"
-                  onScroll={(event) => {
-                    const container = event.currentTarget;
-                    transcriptAutoFollowRef.current =
-                      container.scrollHeight -
-                        container.scrollTop -
-                        container.clientHeight <
-                      64;
-                  }}
-                >
-                  <div className="divide-y divide-foreground/[0.06] dark:divide-foreground/[0.08]">
-                    {visibleTranscript.map((checkpoint) => (
-                      <MeetingTranscriptTurn
-                        key={`${checkpoint.source}:${checkpoint.externalId}`}
-                        speaker={
-                          checkpoint.source === 'local'
-                            ? localSpeakerName
-                            : t('common.speakerOther')
-                        }
-                        speakerId={
-                          checkpoint.source === 'local'
-                            ? user?.id
-                            : 'meeting-remote'
-                        }
-                        avatarUrl={
-                          checkpoint.source === 'local' ? user?.avatar : null
-                        }
-                        time={formatMeetingTranscriptTime(checkpoint.startMs)}
-                        pending={!checkpoint.isFinal}
-                      >
-                        {checkpoint.text}
-                      </MeetingTranscriptTurn>
-                    ))}
+            <div className="grid min-h-0 flex-1 gap-4 xl:grid-cols-[minmax(0,1.45fr)_minmax(320px,0.75fr)]">
+              <MeetingSection
+                title={t('live.transcriptTitle')}
+                description={t('live.transcriptDescription')}
+                className="flex min-h-0 flex-col bg-background"
+                contentClassName="flex min-h-0 flex-1 flex-col"
+              >
+                {!isPreview && manifest?.transcriptionStatus === 'failed' ? (
+                  <div className="mb-2 shrink-0 rounded-interactive bg-destructive/5 px-3 py-2 text-caption text-destructive">
+                    {manifest.transcriptionError ||
+                      t('live.runtimeTranscriptEmpty')}
                   </div>
-                </div>
-              ) : (
-                <div className="min-h-0 flex-1 rounded-[12px] border border-foreground/[0.06] bg-foreground/[0.025] px-4 py-4 text-body leading-6 text-muted-foreground dark:border-foreground/[0.08] dark:bg-foreground/[0.035]">
-                  {manifest?.transcriptionStatus === 'failed'
-                    ? t('live.transcriptAudioContinues')
-                    : manifest?.transcriptionStatus === 'connecting' ||
-                        manifest?.transcriptionStatus === 'recovering'
-                      ? t('live.transcriptPending')
-                      : t('live.waitingForSpeech')}
-                </div>
-              )}
-            </MeetingSection>
-
-            <MeetingSection
-              title={t('common.meetingCopilot')}
-              description={t('live.copilotDescription')}
-              className="flex min-h-0 flex-col bg-background"
-              contentClassName="min-h-0 flex-1 overflow-y-auto pr-1 scrollbar-hover"
-            >
-              <div className="space-y-4">
-                <div className="flex items-center justify-between gap-4 rounded-[12px] border border-foreground/[0.06] bg-background px-4 py-3 dark:border-foreground/[0.08]">
-                  <div className="min-w-0">
-                    <p className="text-body font-medium text-foreground">
-                      {copilotEnabled
-                        ? copilotAnswerPending
-                          ? t('live.copilotUnderstanding')
-                          : t('live.copilotReady')
-                        : t('live.copilotDisabled')}
-                    </p>
-                    <p className="mt-0.5 text-caption leading-5 text-muted-foreground">
-                      {copilotEnabled
-                        ? t('live.copilotReadyDetail')
-                        : t('live.copilotToggleDescription')}
-                    </p>
-                  </div>
-                  <Switch
-                    checked={copilotEnabled}
-                    onCheckedChange={(enabled) => void setCopilot(enabled)}
-                    aria-label={t('live.copilotToggleAria')}
-                  />
-                </div>
-
-                {copilotEnabled ? (
-                  <>
-                    <div className="rounded-[12px] border border-foreground/[0.06] bg-foreground/[0.025] p-4 dark:border-foreground/[0.08] dark:bg-foreground/[0.035]">
-                      <p className="text-caption font-medium text-muted-foreground">
-                        {t('live.currentContext')}
-                      </p>
-                      <p className="mt-1 text-body font-medium leading-6 text-foreground">
-                        {isPreview
-                          ? t('live.question')
-                          : latestTranscriptTurn?.text ||
-                            t('live.waitingForSpeech')}
-                      </p>
-                      {!isPreview &&
-                      latestTranscriptTurn &&
-                      !latestTranscriptTurn.isFinal ? (
-                        <p className="mt-2 text-caption text-muted-foreground">
-                          {t('live.listening')}
-                        </p>
-                      ) : null}
-                    </div>
-
-                    <Button
-                      type="button"
-                      className="w-full gap-2"
-                      disabled={
-                        isPreview ||
-                        !scope ||
-                        !latestRemoteCompleteTurn ||
-                        copilotAnswerPending
-                      }
-                      onClick={() => {
-                        if (latestRemoteCompleteTurn) {
-                            void answerCopilotQuestion(
-                              latestRemoteCompleteTurn,
-                              {
-                            retry: true,
-                              },
-                            );
-                        }
-                      }}
+                ) : null}
+                {isPreview ? (
+                  <div className="min-h-0 flex-1 overflow-y-auto divide-y divide-foreground/[0.06] pr-1 scrollbar-hover dark:divide-foreground/[0.08]">
+                    <MeetingTranscriptTurn
+                      speaker={t('common.speakerOther')}
+                      speakerId="meeting-remote"
+                      time="00:21:42"
                     >
-                      {copilotAnswerPending ? (
-                        <RefreshCw
-                          className="h-4 w-4 animate-spin motion-reduce:animate-none"
-                          aria-hidden
-                        />
-                      ) : (
-                        <Sparkles className="h-4 w-4" aria-hidden />
-                      )}
-                      {copilotAnswerPending
-                        ? t('live.understandingContext')
-                        : t('live.analyzeNow')}
-                    </Button>
-
-                    {copilotAnswerPending && copilotRequestedQuestion ? (
-                      <div className="rounded-[12px] border border-accent/15 bg-accent/5 px-4 py-3">
-                        <p className="text-caption font-medium text-accent-text">
-                          {t('live.understandingContext')}
-                        </p>
-                        <p className="mt-1 text-body leading-6 text-foreground">
-                          {copilotRequestedQuestion.text}
-                        </p>
-                        <p className="mt-2 text-caption text-muted-foreground">
-                          {t('live.recordingContinues')}
-                        </p>
-                      </div>
-                    ) : null}
-
-                    <MeetingCopilotHistory records={copilotRecords} />
-
-                    {copilotAnswer &&
-                    copilotAnswer.status !== 'answered' &&
-                    copilotAnswer.status !== 'no_action' ? (
-                      <div
-                        role={
-                          copilotAnswer.status === 'failed'
-                            ? 'alert'
-                            : undefined
-                        }
-                        className={`rounded-[12px] border px-4 py-4 text-body leading-6 ${
-                          copilotAnswer.status === 'failed'
-                            ? 'border-destructive/15 bg-destructive/5 text-destructive'
-                            : 'border-foreground/[0.06] bg-foreground/[0.025] text-muted-foreground'
-                        }`}
-                      >
-                        {copilotAnswer.message}
-                        <p className="mt-1 text-caption opacity-80">
-                          {t('live.recordingContinues')}
-                        </p>
-                      </div>
-                    ) : null}
-                  </>
+                      {t('live.questionOne')}
+                    </MeetingTranscriptTurn>
+                    <MeetingTranscriptTurn
+                      speaker={localSpeakerName}
+                      speakerId={user?.id}
+                      avatarUrl={user?.avatar}
+                      time="00:21:51"
+                    >
+                      {t('live.answerOne')}
+                    </MeetingTranscriptTurn>
+                    <MeetingTranscriptTurn
+                      speaker={t('common.speakerOther')}
+                      speakerId="meeting-remote"
+                      time="00:22:16"
+                    >
+                      {t('live.questionTwo')}
+                    </MeetingTranscriptTurn>
+                    <MeetingTranscriptTurn
+                      speaker={localSpeakerName}
+                      speakerId={user?.id}
+                      avatarUrl={user?.avatar}
+                      time="00:22:29"
+                      pending
+                    >
+                      {t('live.answerTwo')}
+                    </MeetingTranscriptTurn>
+                  </div>
+                ) : visibleTranscript.length > 0 ? (
+                  <div
+                    ref={transcriptScrollRef}
+                    className="min-h-0 flex-1 overflow-y-auto pr-1 scrollbar-hover"
+                    onScroll={(event) => {
+                      const container = event.currentTarget;
+                      transcriptAutoFollowRef.current =
+                        container.scrollHeight -
+                          container.scrollTop -
+                          container.clientHeight <
+                        64;
+                    }}
+                  >
+                    <div className="divide-y divide-foreground/[0.06] dark:divide-foreground/[0.08]">
+                      {visibleTranscript.map((checkpoint) => (
+                        <MeetingTranscriptTurn
+                          key={`${checkpoint.source}:${checkpoint.externalId}`}
+                          speaker={
+                            checkpoint.source === 'local'
+                              ? localSpeakerName
+                              : t('common.speakerOther')
+                          }
+                          speakerId={
+                            checkpoint.source === 'local'
+                              ? user?.id
+                              : 'meeting-remote'
+                          }
+                          avatarUrl={
+                            checkpoint.source === 'local' ? user?.avatar : null
+                          }
+                          time={formatMeetingTranscriptTime(checkpoint.startMs)}
+                          pending={!checkpoint.isFinal}
+                        >
+                          {checkpoint.text}
+                        </MeetingTranscriptTurn>
+                      ))}
+                    </div>
+                  </div>
                 ) : (
-                  <div className="rounded-[12px] border border-foreground/[0.06] bg-foreground/[0.025] px-4 py-5 text-body leading-6 text-muted-foreground dark:border-foreground/[0.08] dark:bg-foreground/[0.035]">
-                    {t('live.copilotDisabledNotice')}
+                  <div className="min-h-0 flex-1 rounded-[12px] border border-foreground/[0.06] bg-foreground/[0.025] px-4 py-4 text-body leading-6 text-muted-foreground dark:border-foreground/[0.08] dark:bg-foreground/[0.035]">
+                    {manifest?.transcriptionStatus === 'failed'
+                      ? t('live.transcriptAudioContinues')
+                      : manifest?.transcriptionStatus === 'connecting' ||
+                          manifest?.transcriptionStatus === 'recovering'
+                        ? t('live.transcriptPending')
+                        : t('live.waitingForSpeech')}
                   </div>
                 )}
-              </div>
-            </MeetingSection>
+              </MeetingSection>
+
+              <MeetingSection
+                title={t('common.meetingCopilot')}
+                description={t('live.copilotDescription')}
+                className="flex min-h-0 flex-col bg-background"
+                contentClassName="min-h-0 flex-1 overflow-y-auto pr-1 scrollbar-hover"
+              >
+                <div className="space-y-4">
+                  <div className="flex items-center justify-between gap-4 rounded-[12px] border border-foreground/[0.06] bg-background px-4 py-3 dark:border-foreground/[0.08]">
+                    <div className="min-w-0">
+                      <p className="text-body font-medium text-foreground">
+                        {copilotEnabled
+                          ? copilotAnswerPending
+                            ? t('live.copilotUnderstanding')
+                            : t('live.copilotReady')
+                          : t('live.copilotDisabled')}
+                      </p>
+                      <p className="mt-0.5 text-caption leading-5 text-muted-foreground">
+                        {copilotEnabled
+                          ? t('live.copilotReadyDetail')
+                          : t('live.copilotToggleDescription')}
+                      </p>
+                    </div>
+                    <Switch
+                      checked={copilotEnabled}
+                      onCheckedChange={(enabled) => void setCopilot(enabled)}
+                      aria-label={t('live.copilotToggleAria')}
+                    />
+                  </div>
+
+                  {copilotEnabled ? (
+                    <>
+                      <div className="rounded-[12px] border border-foreground/[0.06] bg-foreground/[0.025] p-4 dark:border-foreground/[0.08] dark:bg-foreground/[0.035]">
+                        <p className="text-caption font-medium text-muted-foreground">
+                          {t('live.currentContext')}
+                        </p>
+                        <p className="mt-1 text-body font-medium leading-6 text-foreground">
+                          {isPreview
+                            ? t('live.question')
+                            : latestTranscriptTurn?.text ||
+                              t('live.waitingForSpeech')}
+                        </p>
+                        {!isPreview &&
+                        latestTranscriptTurn &&
+                        !latestTranscriptTurn.isFinal ? (
+                          <p className="mt-2 text-caption text-muted-foreground">
+                            {t('live.listening')}
+                          </p>
+                        ) : null}
+                      </div>
+
+                      <Button
+                        type="button"
+                        className="w-full gap-2"
+                        disabled={
+                          isPreview ||
+                          !scope ||
+                          !manualCopilotTurn ||
+                          copilotAnswerPending
+                        }
+                        onClick={() => {
+                          if (manualCopilotTurn) {
+                            const retry = evaluatedCopilotTurnsRef.current.has(
+                              manualCopilotTurn.externalId,
+                            );
+                            setCopilotFinalQueue((current) =>
+                              current.filter(
+                                (checkpoint) =>
+                                  checkpoint.externalId !==
+                                  manualCopilotTurn.externalId,
+                              ),
+                            );
+                            void answerCopilotQuestion(manualCopilotTurn, {
+                              retry,
+                              trigger: 'manual',
+                            });
+                          }
+                        }}
+                      >
+                        {copilotAnswerPending ? (
+                          <RefreshCw
+                            className="h-4 w-4 animate-spin motion-reduce:animate-none"
+                            aria-hidden
+                          />
+                        ) : (
+                          <Sparkles className="h-4 w-4" aria-hidden />
+                        )}
+                        {copilotAnswerPending
+                          ? t('live.understandingContext')
+                          : t('live.analyzeNow')}
+                      </Button>
+
+                      {copilotAnswerPending && copilotRequestedQuestion ? (
+                        <div className="rounded-[12px] border border-accent/15 bg-accent/5 px-4 py-3">
+                          <p className="text-caption font-medium text-accent-text">
+                            {t('live.understandingContext')}
+                          </p>
+                          <p className="mt-1 text-body leading-6 text-foreground">
+                            {copilotRequestedQuestion.text}
+                          </p>
+                          <p className="mt-2 text-caption text-muted-foreground">
+                            {t('live.recordingContinues')}
+                          </p>
+                        </div>
+                      ) : null}
+
+                      <MeetingCopilotHistory records={copilotRecords} />
+
+                      {copilotAnswer &&
+                      copilotAnswer.status !== 'answered' &&
+                      copilotAnswer.status !== 'no_action' ? (
+                        <div
+                          role={
+                            copilotAnswer.status === 'failed'
+                              ? 'alert'
+                              : undefined
+                          }
+                          className={`rounded-[12px] border px-4 py-4 text-body leading-6 ${
+                            copilotAnswer.status === 'failed'
+                              ? 'border-destructive/15 bg-destructive/5 text-destructive'
+                              : 'border-foreground/[0.06] bg-foreground/[0.025] text-muted-foreground'
+                          }`}
+                        >
+                          {copilotAnswer.message}
+                          <p className="mt-1 text-caption opacity-80">
+                            {t('live.recordingContinues')}
+                          </p>
+                        </div>
+                      ) : null}
+                    </>
+                  ) : (
+                    <div className="rounded-[12px] border border-foreground/[0.06] bg-foreground/[0.025] px-4 py-5 text-body leading-6 text-muted-foreground dark:border-foreground/[0.08] dark:bg-foreground/[0.035]">
+                      {t('live.copilotDisabledNotice')}
+                    </div>
+                  )}
+                </div>
+              </MeetingSection>
+            </div>
           </div>
         </div>
-      </div>
       </StandaloneModulePage>
       <ConfirmDialog
         open={stopConfirmationOpen}

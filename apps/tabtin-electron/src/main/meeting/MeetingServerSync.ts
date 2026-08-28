@@ -12,6 +12,7 @@ import type {
 const DEFAULT_RETRY_BASE_DELAY_MS = 1_000;
 const DEFAULT_RETRY_MAX_DELAY_MS = 60_000;
 const DEFAULT_REQUEST_TIMEOUT_MS = 10_000;
+export const MEETING_COPILOT_REQUEST_TIMEOUT_MS = 30_000;
 export const MAX_MEETING_TRANSCRIPT_SEGMENTS_PER_BATCH = 500;
 export const MAX_MEETING_COPILOT_CONTEXT_SEGMENTS = 12;
 
@@ -33,7 +34,9 @@ export function selectMeetingCopilotContext(
         left.externalId.localeCompare(right.externalId),
     );
   const recent = finalized.slice(-MAX_MEETING_COPILOT_CONTEXT_SEGMENTS);
-  if (recent.some((checkpoint) => checkpoint.externalId === questionSegmentId)) {
+  if (
+    recent.some((checkpoint) => checkpoint.externalId === questionSegmentId)
+  ) {
     return recent;
   }
   const selected = finalized.find(
@@ -426,10 +429,7 @@ export class MeetingServerSync {
     modelId?: string,
     requestId?: string,
   ): Promise<MeetingCopilotAnswerResult> {
-    const context = selectMeetingCopilotContext(
-      transcript,
-      questionSegmentId,
-    );
+    const context = selectMeetingCopilotContext(transcript, questionSegmentId);
     const requestAnswer = () =>
       this.request(
         'POST',
@@ -446,7 +446,7 @@ export class MeetingServerSync {
             is_final: segment.isFinal,
           })),
         },
-        25_000,
+        MEETING_COPILOT_REQUEST_TIMEOUT_MS,
       );
     let response = await requestAnswer();
     const initialPayload = response.ok
@@ -597,7 +597,9 @@ export class MeetingServerSync {
     projectId?: string | null;
     lifecycleStatus?: string;
   }): Promise<MeetingServerSession[]> {
-    const query = new URLSearchParams({ organization_id: input.organizationId });
+    const query = new URLSearchParams({
+      organization_id: input.organizationId,
+    });
     if (input.projectId) query.set('project_id', input.projectId);
     if (input.lifecycleStatus) {
       query.set('lifecycle_status', input.lifecycleStatus);
@@ -679,7 +681,9 @@ export class MeetingServerSync {
     if (!isRecord(payload) || !Array.isArray(payload.permissions)) {
       throw new Error('meeting server returned invalid permissions');
     }
-    return payload.permissions.filter(isRecord) as unknown as MeetingServerPermission[];
+    return payload.permissions.filter(
+      isRecord,
+    ) as unknown as MeetingServerPermission[];
   }
 
   async grantPermission(
@@ -707,7 +711,10 @@ export class MeetingServerSync {
     return payload as unknown as MeetingServerPermission;
   }
 
-  async revokePermission(sessionId: string, permissionId: string): Promise<void> {
+  async revokePermission(
+    sessionId: string,
+    permissionId: string,
+  ): Promise<void> {
     const response = await this.request(
       'DELETE',
       `/meetings/sessions/${encodeURIComponent(sessionId)}/permissions/${encodeURIComponent(permissionId)}`,

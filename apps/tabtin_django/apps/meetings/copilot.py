@@ -8,6 +8,7 @@ from __future__ import annotations
 
 import json
 import logging
+import time
 from dataclasses import dataclass
 from typing import Any, Callable
 
@@ -101,7 +102,7 @@ def _transcript_context(segments: list[dict[str, Any]]) -> str:
     lines: list[str] = []
     total = 0
     for segment in reversed(segments):
-        speaker = "对方" if segment["source"] == "remote" else "我"
+        speaker = "系统音频" if segment["source"] == "remote" else "本地麦克风"
         source_id = f"transcript:{segment['external_id']}"
         line = f"[{source_id}] {speaker}: {segment['text']}"
         if lines and total + len(line) > MAX_TRANSCRIPT_CHARS:
@@ -260,6 +261,7 @@ def generate_meeting_copilot_answer(
     selected_model_id: str | None = None,
     llm_call: Callable[..., Any] | None = None,
 ) -> dict[str, Any]:
+    started_at = time.perf_counter()
     segments = _normalize_segments(recent_segments)
     candidate = _selected_turn(segments, question_segment_id)
     if candidate is None:
@@ -267,17 +269,14 @@ def generate_meeting_copilot_answer(
             "status": "no_question",
             "message": "还没有识别到完整问题",
         }
-    if candidate["source"] != "remote":
-        return {
-            "status": "no_action",
-            "message": "本地麦克风内容属于用户回答，不需要 Copilot 再次解答",
-            "candidate_segment_id": candidate["external_id"],
-        }
-
     question_source = MeetingCopilotSource(
         id=f"transcript:{candidate['external_id']}",
         kind="transcript",
-        title="当前发言",
+        title=(
+            "当前发言（系统音频）"
+            if candidate["source"] == "remote"
+            else "当前发言（本地麦克风）"
+        ),
         excerpt=candidate["text"],
     )
     sources = [question_source]
@@ -291,6 +290,7 @@ def generate_meeting_copilot_answer(
         ))
     sources.extend(_project_sources(session, user))
     source_map = {source.id: source for source in sources}
+    context_ready_at = time.perf_counter()
 
     if llm_call is None:
         from apps.services.llm.services.chat import unified_llm_call
@@ -306,6 +306,7 @@ def generate_meeting_copilot_answer(
         "scene_key": "meeting_copilot_quick_answer",
         "variables": {
             "candidate_utterance": candidate["text"],
+            "candidate_source": candidate["source"],
             "transcript_context": _transcript_context(segments),
             "brief": brief or "（未提供）",
             "project_context": project_context,
@@ -319,7 +320,10 @@ def generate_meeting_copilot_answer(
     }
     result = None
     parsed = None
+    model_started_at = time.perf_counter()
+    attempts = 0
     for attempt in range(MAX_MODEL_ATTEMPTS):
+        attempts = attempt + 1
         try:
             result = llm_call(**call_kwargs)
             parsed = _parse_answer(result.content, source_map)
@@ -339,7 +343,23 @@ def generate_meeting_copilot_answer(
             "invalid_model_response",
             "回答模型没有返回有效 JSON",
         )
-    if not parsed.pop("should_answer"):
+    should_answer = parsed.pop("should_answer")
+    completed_at = time.perf_counter()
+    logger.info(
+        "[MeetingCopilot] completed session=%s segment=%s source=%s "
+        "status=%s context_ms=%s model_roundtrip_ms=%s total_ms=%s "
+        "provider_latency_ms=%s attempts=%s",
+        session.id,
+        candidate["external_id"],
+        candidate["source"],
+        "answered" if should_answer else "no_action",
+        round((context_ready_at - started_at) * 1_000),
+        round((completed_at - model_started_at) * 1_000),
+        round((completed_at - started_at) * 1_000),
+        max(int(result.telemetry.latency_ms or 0), 0),
+        attempts,
+    )
+    if not should_answer:
         return {
             "status": "no_action",
             "message": "已同步当前会议上下文，暂时不需要建议回答",

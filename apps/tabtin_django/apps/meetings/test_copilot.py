@@ -121,10 +121,17 @@ class MeetingCopilotQuickAnswerTests(SimpleTestCase):
             call["variables"]["candidate_utterance"],
             "Explain the delivery plan.",
         )
-        self.assertIn("[transcript:remote-1] 对方", call["variables"]["transcript_context"])
+        self.assertEqual(call["variables"]["candidate_source"], "remote")
+        self.assertIn(
+            "[transcript:remote-1] 系统音频",
+            call["variables"]["transcript_context"],
+        )
 
     @patch("apps.meetings.copilot._select_chat_model")
-    def test_local_user_speech_is_rejected_before_model_selection(self, select_model):
+    def test_local_statement_is_sent_to_model_for_semantic_no_action(
+        self,
+        select_model,
+    ):
         select_model.return_value = SimpleNamespace(id="model-1")
         llm_call = Mock(return_value=SimpleNamespace(
             content=(
@@ -154,8 +161,54 @@ class MeetingCopilotQuickAnswerTests(SimpleTestCase):
 
         self.assertEqual(result["status"], "no_action")
         self.assertEqual(result["candidate_segment_id"], "statement-1")
-        select_model.assert_not_called()
-        llm_call.assert_not_called()
+        select_model.assert_called_once()
+        llm_call.assert_called_once()
+        variables = llm_call.call_args.kwargs["variables"]
+        self.assertEqual(variables["candidate_source"], "local")
+        self.assertIn(
+            "[transcript:statement-1] 本地麦克风",
+            variables["transcript_context"],
+        )
+
+    @patch("apps.meetings.copilot._select_chat_model")
+    def test_local_question_is_sent_to_model_and_answered(self, select_model):
+        select_model.return_value = SimpleNamespace(id="model-1")
+        llm_call = Mock(return_value=SimpleNamespace(
+            content=(
+                '{"should_answer":true,'
+                '"answer":"A hash map hashes keys into buckets and resolves collisions.",'
+                '"key_points":["hashing","buckets","collision handling"],'
+                '"source_ids":["transcript:local-question"],'
+                '"reliability":"high","warning":""}'
+            ),
+            telemetry=SimpleNamespace(
+                model_used="deepseek-v4-flash",
+                provider_used="deepseek",
+                latency_ms=180,
+            ),
+        ))
+
+        result = generate_meeting_copilot_answer(
+            session=self._session(),
+            user=self._user(),
+            question_segment_id="local-question",
+            recent_segments=[{
+                "external_id": "local-question",
+                "source": "local",
+                "start_ms": 1_000,
+                "text": "Connection 里的 hash map 是怎么实现的？",
+                "is_final": True,
+            }],
+            llm_call=llm_call,
+        )
+
+        self.assertEqual(result["status"], "answered")
+        self.assertEqual(result["question_segment_id"], "local-question")
+        self.assertEqual(result["latency_ms"], 180)
+        self.assertEqual(
+            llm_call.call_args.kwargs["variables"]["candidate_source"],
+            "local",
+        )
 
     @patch("apps.meetings.copilot._select_chat_model")
     def test_rejects_invalid_model_output(self, select_model):

@@ -1161,7 +1161,7 @@ def update_meeting_copilot(request, session_id: UUID, data: MeetingCopilotStateI
 
 @router.post("/sessions/{session_id}/copilot/answer", auth=jwt_auth)
 def answer_meeting_copilot(request, session_id: UUID, data: MeetingCopilotAnswerIn):
-    """Answer the latest remote question without touching recording state."""
+    """Evaluate a final meeting utterance without touching recording state."""
     session = _owned_session(request, session_id)
     request_id = data.request_id
     if request_id is not None:
