@@ -838,6 +838,28 @@ export class MeetingArchiveStore {
         manifest.systemAudioSourceId = sourceId;
         manifest.systemAudioSourceLabel = label;
       }
+      const track = manifest.tracks[source];
+      if (manifest.lifecycleStatus === 'recording') track.status = 'active';
+      delete track.errorCode;
+      delete track.errorMessage;
+      await atomicWriteJson(manifestPath, manifest);
+      return manifest;
+    });
+  }
+
+  async markCaptureSourceUnavailable(
+    scope: { organizationId: string; userId: string; sessionId: string },
+    source: MeetingAudioSource,
+    errorCode: string,
+    errorMessage: string,
+  ): Promise<MeetingArchiveManifestV2> {
+    return this.enqueueSessionWrite(scope.sessionId, async () => {
+      const manifestPath = this.manifestPath(scope);
+      const manifest = parseManifest(await fs.readFile(manifestPath, 'utf8'));
+      const track = manifest.tracks[source];
+      track.status = 'failed';
+      track.errorCode = errorCode;
+      track.errorMessage = errorMessage;
       await atomicWriteJson(manifestPath, manifest);
       return manifest;
     });

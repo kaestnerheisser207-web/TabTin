@@ -111,4 +111,102 @@ describe('MeetingCaptureWindow', () => {
 
     expect(onUnexpectedTermination).not.toHaveBeenCalled();
   });
+
+  it('routes source switching through prepare, commit, and abort methods', async () => {
+    const captureWindow = new MeetingCaptureWindow({
+      isDev: true,
+      rendererUrl: 'http://127.0.0.1:5173',
+    });
+    await captureWindow.start(scope);
+    const executeJavaScript = createdWindows[0]!.webContents.executeJavaScript;
+    executeJavaScript
+      .mockResolvedValueOnce({
+        operationId: 'local-op-1',
+        source: 'local',
+        sourceId: 'mic-2',
+        label: 'USB microphone',
+      })
+      .mockResolvedValueOnce({
+        source: 'local',
+        sourceId: 'mic-2',
+        label: 'USB microphone',
+      })
+      .mockResolvedValueOnce(undefined)
+      .mockResolvedValueOnce({
+        source: 'local',
+        sourceId: 'mic-2',
+        label: 'USB microphone',
+      })
+      .mockResolvedValueOnce({
+        source: 'local',
+        sourceId: 'built-in-mic',
+        label: 'Built-in microphone',
+      });
+
+    await expect(
+      captureWindow.prepareMicrophoneSwitch('mic-2'),
+    ).resolves.toMatchObject({ operationId: 'local-op-1' });
+    await expect(
+      captureWindow.commitSourceSwitch({
+        operationId: 'local-op-1',
+        source: 'local',
+      }),
+    ).resolves.toMatchObject({ sourceId: 'mic-2' });
+    await captureWindow.abortSourceSwitch({
+      operationId: 'local-op-1',
+      source: 'local',
+    });
+    await captureWindow.finalizeSourceSwitch({
+      operationId: 'local-op-1',
+      source: 'local',
+    });
+    await captureWindow.rollbackSourceSwitch({
+      operationId: 'local-op-1',
+      source: 'local',
+    });
+
+    expect(executeJavaScript.mock.calls.at(-5)?.[0]).toContain(
+      '__TABTIN_MEETING_CAPTURE__.prepareMicrophoneSwitch({"deviceId":"mic-2"})',
+    );
+    expect(executeJavaScript.mock.calls.at(-4)?.[0]).toContain(
+      '__TABTIN_MEETING_CAPTURE__.commitSourceSwitch({"operationId":"local-op-1","source":"local"})',
+    );
+    expect(executeJavaScript.mock.calls.at(-3)?.[0]).toContain(
+      '__TABTIN_MEETING_CAPTURE__.abortSourceSwitch({"operationId":"local-op-1","source":"local"})',
+    );
+    expect(executeJavaScript.mock.calls.at(-2)?.[0]).toContain(
+      '__TABTIN_MEETING_CAPTURE__.finalizeSourceSwitch({"operationId":"local-op-1","source":"local"})',
+    );
+    expect(executeJavaScript.mock.calls.at(-1)?.[0]).toContain(
+      '__TABTIN_MEETING_CAPTURE__.rollbackSourceSwitch({"operationId":"local-op-1","source":"local"})',
+    );
+  });
+
+  it('reports a renderer watchdog failure without issuing a business abort', async () => {
+    vi.useFakeTimers();
+    try {
+      const captureWindow = new MeetingCaptureWindow({
+        isDev: true,
+        rendererUrl: 'http://127.0.0.1:5173',
+        captureRuntimeWatchdogMs: 30,
+      });
+      await captureWindow.start(scope);
+      createdWindows[0]!.webContents.executeJavaScript.mockImplementationOnce(
+        () => new Promise(() => undefined),
+      );
+
+      const preparation = captureWindow.prepareMicrophoneSwitch('mic-hung');
+      const expectation = expect(preparation).rejects.toThrow(
+        'meeting capture renderer is unresponsive',
+      );
+      await vi.advanceTimersByTimeAsync(30);
+
+      await expectation;
+      expect(createdWindows[0]!.webContents.executeJavaScript).toHaveBeenCalledTimes(
+        2,
+      );
+    } finally {
+      vi.useRealTimers();
+    }
+  });
 });

@@ -27,12 +27,15 @@ import type {
   MeetingMicrophoneDevice,
   MeetingCopilotAnswerResult,
   MeetingCopilotRecord,
+  MeetingCaptureSourceNoticeEvent,
   MeetingRecordingStatus,
   MeetingSystemAudioSource,
   MeetingTranscriptCheckpoint,
+  MeetingTranscriptChangedEvent,
 } from '@shared/meeting-recording-contract';
 import { StandaloneModulePage } from '@components/context-space/StandaloneModulePage';
 import { useIdentityLabels } from '@components/layout/useIdentityLabels';
+import { createLogger } from '@/utils/logger';
 import {
   MeetingPageIcon,
   MeetingPreviewBanner,
@@ -45,6 +48,7 @@ import {
   formatMeetingTranscriptTime,
   groupMeetingTranscriptTurns,
   resolveMeetingTranscript,
+  upsertMeetingTranscript,
 } from './meetingTranscript';
 
 function formatDuration(durationMs: number): string {
@@ -57,8 +61,8 @@ function formatDuration(durationMs: number): string {
     .join(':');
 }
 
-const SOURCE_SWITCH_TIMEOUT_MS = 15_000;
 const AUDIO_LEVEL_IDLE_TIMEOUT_MS = 450;
+const log = createLogger('MeetingLive');
 
 const MeetingAudioLevelGlyph: React.FC<{
   source: 'local' | 'remote';
@@ -122,8 +126,7 @@ export const MeetingLiveSessionView: React.FC<{
   const [runtimeStatus, setRuntimeStatus] =
     React.useState<MeetingRecordingStatus | null>(initialStatus);
   const [controlError, setControlError] = React.useState<string | null>(null);
-  const [stopConfirmationOpen, setStopConfirmationOpen] =
-    React.useState(false);
+  const [stopConfirmationOpen, setStopConfirmationOpen] = React.useState(false);
   const [stopping, setStopping] = React.useState(false);
   const [stopError, setStopError] = React.useState<string | null>(null);
   const [transcript, setTranscript] = React.useState<
@@ -140,8 +143,10 @@ export const MeetingLiveSessionView: React.FC<{
     'local' | 'remote' | null
   >(null);
   const [sourceSwitchError, setSourceSwitchError] = React.useState<
-    string | null
+    'local' | 'remote' | 'list' | null
   >(null);
+  const [captureSourceNotice, setCaptureSourceNotice] =
+    React.useState<MeetingCaptureSourceNoticeEvent | null>(null);
   const [captureLevels, setCaptureLevels] = React.useState({
     local: 0,
     remote: 0,
@@ -178,6 +183,7 @@ export const MeetingLiveSessionView: React.FC<{
   const manifestOrganizationId = manifest?.organizationId;
   const manifestUserId = manifest?.userId;
   const manifestDurationMs = manifest?.durationMs;
+  const manifestStartedAt = manifest?.startedAt;
   const scope = React.useMemo(
     () =>
       manifestSessionId && manifestOrganizationId && manifestUserId
@@ -240,13 +246,61 @@ export const MeetingLiveSessionView: React.FC<{
   }, [manifestCopilotEnabled]);
 
   React.useEffect(() => {
-    if (!scope || isPreview) return;
+    if (
+      !manifestSessionId ||
+      !manifestOrganizationId ||
+      !manifestUserId ||
+      isPreview
+    )
+      return;
+    const activeScope = {
+      sessionId: manifestSessionId,
+      organizationId: manifestOrganizationId,
+      userId: manifestUserId,
+    };
+    const bridge = window.tabtin.meetingRecording;
     let cancelled = false;
-    void window.tabtin.meetingRecording
-      .getArchive(scope)
+    setTranscript([]);
+    const unsubscribe = bridge.onTranscriptChanged(
+      (event: MeetingTranscriptChangedEvent) => {
+        if (
+          event.sessionId !== activeScope.sessionId ||
+          event.organizationId !== activeScope.organizationId ||
+          event.userId !== activeScope.userId
+        ) {
+          return;
+        }
+        const displayedAtMs = Date.now();
+        const asrReceivedAtMs = Date.parse(event.checkpoint.recordedAt);
+        const meetingStartedAtMs = manifestStartedAt
+          ? Date.parse(manifestStartedAt)
+          : Number.NaN;
+        log.debug('transcript_latency', {
+          source: event.checkpoint.source,
+          isFinal: event.checkpoint.isFinal,
+          externalId: event.checkpoint.externalId,
+          asrToUiMs: Number.isFinite(asrReceivedAtMs)
+            ? Math.max(0, displayedAtMs - asrReceivedAtMs)
+            : null,
+          captureToAsrMs:
+            Number.isFinite(asrReceivedAtMs) &&
+            Number.isFinite(meetingStartedAtMs)
+              ? asrReceivedAtMs -
+                (meetingStartedAtMs + event.checkpoint.endMs)
+              : null,
+        });
+        setTranscript((current) =>
+          upsertMeetingTranscript(current, event.checkpoint),
+        );
+      },
+    );
+    void bridge
+      .getArchive(activeScope)
       .then((archive) => {
         if (cancelled) return;
-        setTranscript(archive.transcript);
+        setTranscript((current) =>
+          upsertMeetingTranscript(archive.transcript, current),
+        );
         const nextCopilotRecords = archive.copilotRecords ?? [];
         setCopilotRecords((current) => {
           const merged = new Map(
@@ -267,15 +321,34 @@ export const MeetingLiveSessionView: React.FC<{
       .catch(() => undefined);
     return () => {
       cancelled = true;
+      unsubscribe();
     };
-  }, [isPreview, manifest?.transcriptRevision, scope]);
+  }, [
+    isPreview,
+    manifestOrganizationId,
+    manifestSessionId,
+    manifestStartedAt,
+    manifestUserId,
+  ]);
 
   React.useEffect(() => {
     const bridge = window.tabtin?.meetingRecording;
-    if (!scope || isPreview || !bridge?.onCaptureLevel) return;
+    if (
+      !manifestSessionId ||
+      !manifestOrganizationId ||
+      !manifestUserId ||
+      isPreview ||
+      !bridge?.onCaptureLevel
+    )
+      return;
     const timers = captureLevelTimersRef.current;
     const unsubscribe = bridge.onCaptureLevel((event) => {
-      if (event.sessionId !== scope.sessionId) return;
+      if (
+        event.sessionId !== manifestSessionId ||
+        event.organizationId !== manifestOrganizationId ||
+        event.userId !== manifestUserId
+      )
+        return;
       const source = event.source;
       const rms = Math.min(1, Math.max(0, event.rms));
       setCaptureLevels((current) => ({ ...current, [source]: rms }));
@@ -293,7 +366,7 @@ export const MeetingLiveSessionView: React.FC<{
       }
       captureLevelTimersRef.current = {};
     };
-  }, [isPreview, scope]);
+  }, [isPreview, manifestOrganizationId, manifestSessionId, manifestUserId]);
 
   React.useEffect(() => {
     if (lifecycleStatus === 'recording') return;
@@ -301,29 +374,56 @@ export const MeetingLiveSessionView: React.FC<{
   }, [lifecycleStatus]);
 
   React.useEffect(() => {
-    if (!scope || isPreview) return;
+    if (
+      !manifestSessionId ||
+      !manifestOrganizationId ||
+      !manifestUserId ||
+      isPreview
+    )
+      return;
     let cancelled = false;
     const bridge = window.tabtin.meetingRecording;
+    let refreshGeneration = 0;
+    const refreshCaptureDevices = () => {
+      const generation = ++refreshGeneration;
     void Promise.all([
       bridge.listMicrophones(),
       bridge.listSystemAudioSources(),
     ])
       .then(([nextMicrophones, nextSystemAudioSources]) => {
-        if (cancelled) return;
-        setMicrophones(nextMicrophones);
-        setSystemAudioSources(nextSystemAudioSources);
-      })
-      .catch((error) => {
-        if (!cancelled) {
-          setSourceSwitchError(
-            error instanceof Error ? error.message : String(error),
+          if (cancelled || generation !== refreshGeneration) return;
+          setMicrophones(nextMicrophones);
+          setSystemAudioSources(nextSystemAudioSources);
+          setSourceSwitchError((current) =>
+            current === 'list' ? null : current,
           );
+      })
+        .catch(() => {
+          if (!cancelled && generation === refreshGeneration) {
+            setSourceSwitchError('list');
         }
       });
+    };
+    refreshCaptureDevices();
+    const unsubscribeDevices = bridge.onCaptureDevicesChanged(() => {
+      refreshCaptureDevices();
+    });
+    const unsubscribeNotice = bridge.onCaptureSourceNotice((notice) => {
+      if (
+        notice.sessionId !== manifestSessionId ||
+        notice.organizationId !== manifestOrganizationId ||
+        notice.userId !== manifestUserId
+      ) {
+        return;
+      }
+      setCaptureSourceNotice(notice);
+    });
     return () => {
       cancelled = true;
+      unsubscribeDevices();
+      unsubscribeNotice();
     };
-  }, [isPreview, scope]);
+  }, [isPreview, manifestOrganizationId, manifestSessionId, manifestUserId]);
   const stopRecording = async () => {
     if (!scope || stopping) return;
     setStopping(true);
@@ -362,7 +462,8 @@ export const MeetingLiveSessionView: React.FC<{
     }
   };
 
-  const answerCopilotQuestion = React.useCallback(async (
+  const answerCopilotQuestion = React.useCallback(
+    async (
     question: MeetingTranscriptCheckpoint,
     options: { retry?: boolean } = {},
   ) => {
@@ -373,7 +474,10 @@ export const MeetingLiveSessionView: React.FC<{
       !question.isFinal
     )
       return;
-    if (!options.retry && evaluatedCopilotTurnsRef.current.has(question.externalId)) {
+      if (
+        !options.retry &&
+        evaluatedCopilotTurnsRef.current.has(question.externalId)
+      ) {
       return;
     }
     evaluatedCopilotTurnsRef.current.add(question.externalId);
@@ -410,7 +514,9 @@ export const MeetingLiveSessionView: React.FC<{
       setCopilotAnswerPending(false);
       setCopilotRequestedQuestion(null);
     }
-  }, [isPreview, scope]);
+    },
+    [isPreview, scope],
+  );
 
   React.useEffect(() => {
     if (
@@ -445,30 +551,17 @@ export const MeetingLiveSessionView: React.FC<{
   ) => {
     if (!scope || isPreview || switchingSource) return;
     setSourceSwitchError(null);
+    setCaptureSourceNotice(null);
     setSwitchingSource(source);
-    let timeoutId: number | null = null;
     try {
       const bridge = window.tabtin.meetingRecording;
-      const operation =
-        source === 'local'
+      const next = await (source === 'local'
           ? bridge.switchMicrophone({ ...scope, deviceId: sourceId })
-          : bridge.switchSystemAudio({ ...scope, sourceId });
-      const next = await Promise.race([
-        operation,
-        new Promise<never>((_, reject) => {
-          timeoutId = window.setTimeout(
-            () => reject(new Error(t('live.sourceSwitchTimedOut'))),
-            SOURCE_SWITCH_TIMEOUT_MS,
-          );
-        }),
-      ]);
+        : bridge.switchSystemAudio({ ...scope, sourceId }));
       setRuntimeStatus(next);
-    } catch (error) {
-      setSourceSwitchError(
-        error instanceof Error ? error.message : String(error),
-      );
+    } catch {
+      setSourceSwitchError(source);
     } finally {
-      if (timeoutId !== null) window.clearTimeout(timeoutId);
       setSwitchingSource(null);
     }
   };
@@ -680,7 +773,37 @@ export const MeetingLiveSessionView: React.FC<{
           ) : null}
           {sourceSwitchError ? (
             <p role="alert" className="text-caption text-destructive">
-              {t('live.sourceSwitchFailed')}: {sourceSwitchError}
+                {sourceSwitchError === 'local'
+                  ? t('live.microphoneSwitchFailedPreserved')
+                  : sourceSwitchError === 'remote'
+                    ? t('live.systemAudioSwitchFailedPreserved')
+                    : t('live.audioSourceListFailed')}
+              </p>
+            ) : null}
+            {captureSourceNotice ? (
+              <p
+                role={
+                  captureSourceNotice.kind === 'fallback_failed'
+                    ? 'alert'
+                    : 'status'
+                }
+                className={`text-caption ${
+                  captureSourceNotice.kind === 'fallback_failed'
+                    ? 'text-destructive'
+                    : 'text-success'
+                }`}
+              >
+                {captureSourceNotice.source === 'local'
+                  ? captureSourceNotice.kind === 'fallback_succeeded'
+                    ? t('live.microphoneFallbackSucceeded', {
+                        device: captureSourceNotice.currentLabel,
+                      })
+                    : t('live.microphoneFallbackFailed')
+                  : captureSourceNotice.kind === 'fallback_succeeded'
+                    ? t('live.systemAudioFallbackSucceeded', {
+                        source: captureSourceNotice.currentLabel,
+                      })
+                    : t('live.systemAudioFallbackFailed')}
             </p>
           ) : null}
 
@@ -842,9 +965,12 @@ export const MeetingLiveSessionView: React.FC<{
                       }
                       onClick={() => {
                         if (latestRemoteCompleteTurn) {
-                          void answerCopilotQuestion(latestRemoteCompleteTurn, {
+                            void answerCopilotQuestion(
+                              latestRemoteCompleteTurn,
+                              {
                             retry: true,
-                          });
+                              },
+                            );
                         }
                       }}
                     >

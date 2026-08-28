@@ -347,6 +347,38 @@ describe('MeetingArchiveStore', () => {
     ).resolves.toEqual(Buffer.from([7, 8]));
   });
 
+  it('persists capture-source failure and clears it after a successful fallback', async () => {
+    await store.prepare({
+      ...scope,
+      title: 'Device recovery',
+      consentConfirmed: true,
+    });
+    await store.updateLifecycle(scope, 'recording');
+
+    const failed = await store.markCaptureSourceUnavailable(
+      scope,
+      'local',
+      'source_unavailable',
+      'microphone disconnected',
+    );
+    expect(failed.tracks.local).toMatchObject({
+      status: 'failed',
+      errorCode: 'source_unavailable',
+      errorMessage: 'microphone disconnected',
+    });
+
+    const recovered = await store.updateCaptureSource(
+      scope,
+      'local',
+      'default',
+      'MacBook Pro Microphone',
+    );
+    expect(recovered.microphoneDeviceId).toBe('default');
+    expect(recovered.tracks.local.status).toBe('active');
+    expect(recovered.tracks.local.errorCode).toBeUndefined();
+    expect(recovered.tracks.local.errorMessage).toBeUndefined();
+  });
+
   it('probes durable write, rename, readback, and available capacity', async () => {
     const result = await store.probeLocalStorage();
 

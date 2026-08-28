@@ -4,6 +4,7 @@ import {
   formatMeetingTranscriptTime,
   groupMeetingTranscriptTurns,
   resolveMeetingTranscript,
+  upsertMeetingTranscript,
 } from './meetingTranscript';
 
 describe('meeting transcript projection', () => {
@@ -24,6 +25,29 @@ describe('meeting transcript projection', () => {
 
     expect(projected).toHaveLength(1);
     expect(projected[0]).toMatchObject({ text: 'hello', isFinal: true });
+  });
+
+  it('upserts repeated live revisions without growing past the utterance count', () => {
+    const base = {
+      externalId: 'one',
+      source: 'remote' as const,
+      startMs: 100,
+      endMs: 400,
+      recordedAt: '2026-08-26T00:00:00.000Z',
+    };
+    const partial = { ...base, text: 'hel', isFinal: false };
+    const final = { ...base, text: 'hello', isFinal: true };
+
+    const withPartial = upsertMeetingTranscript([], partial);
+    const withFinal = upsertMeetingTranscript(withPartial, final);
+    const afterStalePartial = upsertMeetingTranscript(withFinal, {
+      ...partial,
+      text: 'stale',
+    });
+
+    expect(withPartial).toHaveLength(1);
+    expect(withFinal).toHaveLength(1);
+    expect(afterStalePartial).toEqual([final]);
   });
 
   it('orders both sources by capture time and formats an absolute timestamp', () => {
@@ -72,7 +96,10 @@ describe('meeting transcript projection', () => {
       'provider segment situation!',
       'Next sentence.',
     ]);
-    expect(raw[0]).toMatchObject({ externalId: 'one', text: 'provider segment' });
+    expect(raw[0]).toMatchObject({
+      externalId: 'one',
+      text: 'provider segment',
+    });
   });
 
   it('does not merge different speakers or long silence gaps', () => {
@@ -109,5 +136,4 @@ describe('meeting transcript projection', () => {
 
     expect(turns).toHaveLength(3);
   });
-
 });

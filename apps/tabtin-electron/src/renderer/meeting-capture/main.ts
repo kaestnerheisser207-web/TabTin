@@ -11,6 +11,16 @@ const controller = new MeetingCaptureController({
         .reportCaptureLevel(event)
         .catch(() => undefined);
     },
+    reportCaptureSourceEnded: (event) => {
+      void window.tabtin.meetingRecording
+        .reportCaptureSourceEnded(event)
+        .catch(() => undefined);
+    },
+    reportCaptureDevicesChanged: (event) => {
+      void window.tabtin.meetingRecording
+        .reportCaptureDevicesChanged(event)
+        .catch(() => undefined);
+    },
     reportMicrophoneTestLevel: (event) => {
       void window.tabtin.meetingRecording
         .reportMicrophoneTestLevel(event)
@@ -25,8 +35,14 @@ Object.assign(globalThis, {
     listMicrophones: controller.listMicrophones.bind(controller),
     listSystemAudioSources: controller.listSystemAudioSources.bind(controller),
     testMicrophone: controller.testMicrophone.bind(controller),
-    switchMicrophone: controller.switchMicrophone.bind(controller),
-    switchSystemAudio: controller.switchSystemAudio.bind(controller),
+    prepareMicrophoneSwitch:
+      controller.prepareMicrophoneSwitch.bind(controller),
+    prepareSystemAudioSwitch:
+      controller.prepareSystemAudioSwitch.bind(controller),
+    commitSourceSwitch: controller.commitSourceSwitch.bind(controller),
+    abortSourceSwitch: controller.abortSourceSwitch.bind(controller),
+    finalizeSourceSwitch: controller.finalizeSourceSwitch.bind(controller),
+    rollbackSourceSwitch: controller.rollbackSourceSwitch.bind(controller),
     start: controller.start.bind(controller),
     stop: controller.stop.bind(controller),
     getState: controller.getState.bind(controller),

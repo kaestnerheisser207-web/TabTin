@@ -22,6 +22,8 @@ describe('MeetingRecordingManager', () => {
   let rootPath = '';
   let manager: MeetingRecordingManager;
   const onStatusChanged = vi.fn();
+  const onTranscriptChanged = vi.fn();
+  const onCaptureSourceNotice = vi.fn();
   const captureHost = {
     listMicrophones: vi.fn().mockResolvedValue([]),
     listSystemAudioSources: vi.fn().mockResolvedValue([
@@ -44,15 +46,51 @@ describe('MeetingRecordingManager', () => {
       nonSilentFrames: 40,
       maxRms: 0.2,
     }),
-    switchMicrophone: vi.fn().mockResolvedValue({
+    prepareMicrophoneSwitch: vi.fn().mockResolvedValue({
+      operationId: 'local-op-1',
       source: 'local',
       sourceId: 'mic-2',
       label: 'USB microphone',
     }),
-    switchSystemAudio: vi.fn().mockResolvedValue({
+    prepareSystemAudioSwitch: vi.fn().mockResolvedValue({
+      operationId: 'remote-op-1',
       source: 'remote',
       sourceId: 'main-display',
       label: 'System audio (main display)',
+    }),
+    commitSourceSwitch: vi.fn().mockImplementation(
+      async (input: { source: 'local' | 'remote' }) =>
+        input.source === 'local'
+          ? {
+              source: 'local' as const,
+              sourceId: 'mic-2',
+              label: 'USB microphone',
+            }
+          : {
+              source: 'remote' as const,
+              sourceId: 'main-display',
+              label: 'System audio (main display)',
+            },
+    ),
+    abortSourceSwitch: vi.fn().mockResolvedValue(undefined),
+    finalizeSourceSwitch: vi.fn().mockImplementation(
+      async (input: { source: 'local' | 'remote' }) =>
+        input.source === 'local'
+          ? {
+              source: 'local' as const,
+              sourceId: 'mic-2',
+              label: 'USB microphone',
+            }
+          : {
+              source: 'remote' as const,
+              sourceId: 'main-display',
+              label: 'System audio (main display)',
+            },
+    ),
+    rollbackSourceSwitch: vi.fn().mockResolvedValue({
+      source: 'local' as const,
+      sourceId: 'built-in-mic',
+      label: 'Built-in microphone',
     }),
     start: vi.fn().mockResolvedValue([
       {
@@ -81,13 +119,19 @@ describe('MeetingRecordingManager', () => {
       path.join(os.tmpdir(), 'tabtin-meeting-manager-'),
     );
     onStatusChanged.mockClear();
+    onTranscriptChanged.mockClear();
+    onCaptureSourceNotice.mockClear();
     for (const method of [
       'probe',
       'listMicrophones',
       'listSystemAudioSources',
       'testMicrophone',
-      'switchMicrophone',
-      'switchSystemAudio',
+      'prepareMicrophoneSwitch',
+      'prepareSystemAudioSwitch',
+      'commitSourceSwitch',
+      'abortSourceSwitch',
+      'finalizeSourceSwitch',
+      'rollbackSourceSwitch',
       'start',
       'stop',
       'destroy',
@@ -110,6 +154,8 @@ describe('MeetingRecordingManager', () => {
         },
       }),
       onStatusChanged,
+      onTranscriptChanged,
+      onCaptureSourceNotice,
       captureHost,
       createAsrRuntime,
     });
@@ -508,8 +554,27 @@ describe('MeetingRecordingManager', () => {
       sourceId: 'main-display',
     });
 
-    expect(captureHost.switchMicrophone).toHaveBeenCalledWith('mic-2');
-    expect(captureHost.switchSystemAudio).toHaveBeenCalledWith('main-display');
+    expect(captureHost.prepareMicrophoneSwitch).toHaveBeenCalledWith('mic-2');
+    expect(captureHost.prepareSystemAudioSwitch).toHaveBeenCalledWith(
+      'main-display',
+    );
+    expect(captureHost.commitSourceSwitch).toHaveBeenNthCalledWith(1, {
+      operationId: 'local-op-1',
+      source: 'local',
+    });
+    expect(captureHost.commitSourceSwitch).toHaveBeenNthCalledWith(2, {
+      operationId: 'remote-op-1',
+      source: 'remote',
+    });
+    expect(captureHost.finalizeSourceSwitch).toHaveBeenNthCalledWith(1, {
+      operationId: 'local-op-1',
+      source: 'local',
+    });
+    expect(captureHost.finalizeSourceSwitch).toHaveBeenNthCalledWith(2, {
+      operationId: 'remote-op-1',
+      source: 'remote',
+    });
+    expect(captureHost.rollbackSourceSwitch).not.toHaveBeenCalled();
     expect(microphoneStatus.manifest).toMatchObject({
       microphoneDeviceId: 'mic-2',
       microphoneDeviceLabel: 'USB microphone',
@@ -520,9 +585,330 @@ describe('MeetingRecordingManager', () => {
     });
   });
 
-  it('releases the lifecycle queue when a capture source switch hangs', async () => {
-    captureHost.switchMicrophone.mockImplementationOnce(
-      () => new Promise(() => undefined),
+  it('rolls back a committed source when manifest persistence fails', async () => {
+    const archiveStore = new MeetingArchiveStore({
+      rootPath,
+      finalizeMediaFile: async (inputPath, outputPath) => {
+        await fs.copyFile(inputPath, outputPath);
+      },
+    });
+    manager = new MeetingRecordingManager({
+      archiveStore,
+      captureHost,
+      createAsrRuntime,
+    });
+    await manager.prepare({
+      ...scope,
+      title: 'Source persistence failure',
+      consentConfirmed: true,
+    });
+    await manager.start(scope);
+    vi.spyOn(archiveStore, 'updateCaptureSource').mockRejectedValueOnce(
+      new Error('manifest write failed'),
+    );
+
+    await expect(
+      manager.switchMicrophone({ ...scope, deviceId: 'mic-2' }),
+    ).rejects.toThrow('manifest write failed');
+
+    expect(captureHost.commitSourceSwitch).toHaveBeenCalledWith({
+      operationId: 'local-op-1',
+      source: 'local',
+    });
+    expect(captureHost.rollbackSourceSwitch).toHaveBeenCalledOnce();
+    expect(captureHost.rollbackSourceSwitch).toHaveBeenCalledWith({
+      operationId: 'local-op-1',
+      source: 'local',
+    });
+    expect(captureHost.finalizeSourceSwitch).not.toHaveBeenCalled();
+    expect(captureHost.abortSourceSwitch).not.toHaveBeenCalled();
+    expect(manager.getStatus().manifest).toMatchObject({
+      lifecycleStatus: 'recording',
+      microphoneDeviceId: 'built-in-mic',
+      microphoneDeviceLabel: 'Built-in microphone',
+    });
+  });
+
+  it('keeps a persisted source successful when finalization cleanup fails', async () => {
+    captureHost.finalizeSourceSwitch.mockRejectedValueOnce(
+      new Error('finalize response was lost'),
+    );
+    await manager.prepare({
+      ...scope,
+      title: 'Source finalize failure',
+      consentConfirmed: true,
+    });
+    await manager.start(scope);
+
+    await expect(
+      manager.switchMicrophone({ ...scope, deviceId: 'mic-2' }),
+    ).resolves.toMatchObject({
+      manifest: {
+        lifecycleStatus: 'recording',
+        microphoneDeviceId: 'mic-2',
+        microphoneDeviceLabel: 'USB microphone',
+      },
+    });
+    expect(captureHost.finalizeSourceSwitch).toHaveBeenCalledOnce();
+    expect(captureHost.rollbackSourceSwitch).not.toHaveBeenCalled();
+    expect(captureHost.abortSourceSwitch).not.toHaveBeenCalled();
+  });
+
+  it('retries the same rollback intent before the next source preparation', async () => {
+    const archiveStore = new MeetingArchiveStore({
+      rootPath,
+      finalizeMediaFile: async (inputPath, outputPath) => {
+        await fs.copyFile(inputPath, outputPath);
+      },
+    });
+    manager = new MeetingRecordingManager({
+      archiveStore,
+      captureHost,
+      createAsrRuntime,
+    });
+    await manager.prepare({
+      ...scope,
+      title: 'Rollback response loss',
+      consentConfirmed: true,
+    });
+    await manager.start(scope);
+    vi.spyOn(archiveStore, 'updateCaptureSource').mockRejectedValueOnce(
+      new Error('manifest write failed'),
+    );
+    captureHost.rollbackSourceSwitch.mockRejectedValueOnce(
+      new Error('rollback response was lost'),
+    );
+
+    await expect(
+      manager.switchMicrophone({ ...scope, deviceId: 'mic-2' }),
+    ).rejects.toThrow('manifest write failed');
+    captureHost.prepareMicrophoneSwitch.mockRejectedValueOnce(
+      new Error('next preparation stopped'),
+    );
+    await expect(
+      manager.switchMicrophone({ ...scope, deviceId: 'mic-3' }),
+    ).rejects.toThrow('next preparation stopped');
+
+    expect(captureHost.rollbackSourceSwitch).toHaveBeenCalledTimes(2);
+    expect(captureHost.finalizeSourceSwitch).not.toHaveBeenCalled();
+    expect(
+      captureHost.rollbackSourceSwitch.mock.invocationCallOrder[1],
+    ).toBeLessThan(
+      captureHost.prepareMicrophoneSwitch.mock.invocationCallOrder[1]!,
+    );
+    expect(manager.getStatus().manifest).toMatchObject({
+      lifecycleStatus: 'recording',
+      microphoneDeviceId: 'built-in-mic',
+      microphoneDeviceLabel: 'Built-in microphone',
+    });
+  });
+
+  it('retries a lost rollback response before recorder stop', async () => {
+    const archiveStore = new MeetingArchiveStore({
+      rootPath,
+      finalizeMediaFile: async (inputPath, outputPath) => {
+        await fs.copyFile(inputPath, outputPath);
+      },
+    });
+    manager = new MeetingRecordingManager({
+      archiveStore,
+      captureHost,
+      createAsrRuntime,
+    });
+    await manager.prepare({
+      ...scope,
+      title: 'Rollback retry before stop',
+      consentConfirmed: true,
+    });
+    await manager.start(scope);
+    vi.spyOn(archiveStore, 'updateCaptureSource').mockRejectedValueOnce(
+      new Error('manifest write failed'),
+    );
+    captureHost.rollbackSourceSwitch.mockRejectedValueOnce(
+      new Error('rollback response was lost'),
+    );
+
+    await expect(
+      manager.switchMicrophone({ ...scope, deviceId: 'mic-2' }),
+    ).rejects.toThrow('manifest write failed');
+    await expect(manager.stop(scope)).resolves.toMatchObject({
+      manifest: {
+        lifecycleStatus: 'stopped',
+        microphoneDeviceId: 'built-in-mic',
+      },
+    });
+
+    expect(captureHost.rollbackSourceSwitch).toHaveBeenCalledTimes(2);
+    expect(captureHost.finalizeSourceSwitch).not.toHaveBeenCalled();
+    expect(
+      captureHost.rollbackSourceSwitch.mock.invocationCallOrder[1],
+    ).toBeLessThan(captureHost.stop.mock.invocationCallOrder[0]!);
+  });
+
+  it('retries the same finalize intent before the next source preparation', async () => {
+    captureHost.finalizeSourceSwitch.mockRejectedValueOnce(
+      new Error('finalize response was lost'),
+    );
+    await manager.prepare({
+      ...scope,
+      title: 'Finalize response loss',
+      consentConfirmed: true,
+    });
+    await manager.start(scope);
+
+    await expect(
+      manager.switchMicrophone({ ...scope, deviceId: 'mic-2' }),
+    ).resolves.toMatchObject({
+      manifest: { microphoneDeviceId: 'mic-2' },
+    });
+    captureHost.prepareMicrophoneSwitch.mockRejectedValueOnce(
+      new Error('next preparation stopped'),
+    );
+    await expect(
+      manager.switchMicrophone({ ...scope, deviceId: 'mic-3' }),
+    ).rejects.toThrow('next preparation stopped');
+
+    expect(captureHost.finalizeSourceSwitch).toHaveBeenCalledTimes(2);
+    expect(captureHost.rollbackSourceSwitch).not.toHaveBeenCalled();
+    expect(
+      captureHost.finalizeSourceSwitch.mock.invocationCallOrder[1],
+    ).toBeLessThan(
+      captureHost.prepareMicrophoneSwitch.mock.invocationCallOrder[1]!,
+    );
+    expect(manager.getStatus().manifest).toMatchObject({
+      lifecycleStatus: 'recording',
+      microphoneDeviceId: 'mic-2',
+    });
+  });
+
+  it('waits for source persistence and finalize before stopping capture', async () => {
+    const archiveStore = new MeetingArchiveStore({
+      rootPath,
+      finalizeMediaFile: async (inputPath, outputPath) => {
+        await fs.copyFile(inputPath, outputPath);
+      },
+    });
+    manager = new MeetingRecordingManager({
+      archiveStore,
+      captureHost,
+      createAsrRuntime,
+    });
+    await manager.prepare({
+      ...scope,
+      title: 'Commit barrier success',
+      consentConfirmed: true,
+    });
+    await manager.start(scope);
+    const persistSource = archiveStore.updateCaptureSource.bind(archiveStore);
+    let releasePersistence!: () => void;
+    const persistenceGate = new Promise<void>((resolve) => {
+      releasePersistence = resolve;
+    });
+    const updateCaptureSource = vi
+      .spyOn(archiveStore, 'updateCaptureSource')
+      .mockImplementationOnce(async (...args) => {
+        await persistenceGate;
+        return persistSource(...args);
+      });
+
+    const switchPromise = manager.switchMicrophone({
+      ...scope,
+      deviceId: 'mic-2',
+    });
+    await vi.waitFor(() => {
+      expect(updateCaptureSource).toHaveBeenCalledOnce();
+    });
+    const stopPromise = manager.stop(scope);
+    await Promise.resolve();
+    expect(captureHost.stop).not.toHaveBeenCalled();
+
+    releasePersistence();
+    await expect(switchPromise).resolves.toMatchObject({
+      manifest: { microphoneDeviceId: 'mic-2' },
+    });
+    await expect(stopPromise).resolves.toMatchObject({
+      manifest: {
+        lifecycleStatus: 'stopped',
+        microphoneDeviceId: 'mic-2',
+      },
+    });
+    expect(captureHost.finalizeSourceSwitch).toHaveBeenCalledOnce();
+    expect(captureHost.rollbackSourceSwitch).not.toHaveBeenCalled();
+    expect(
+      captureHost.finalizeSourceSwitch.mock.invocationCallOrder[0],
+    ).toBeLessThan(captureHost.stop.mock.invocationCallOrder[0]!);
+  });
+
+  it('waits for rollback after source persistence failure before stopping capture', async () => {
+    const archiveStore = new MeetingArchiveStore({
+      rootPath,
+      finalizeMediaFile: async (inputPath, outputPath) => {
+        await fs.copyFile(inputPath, outputPath);
+      },
+    });
+    manager = new MeetingRecordingManager({
+      archiveStore,
+      captureHost,
+      createAsrRuntime,
+    });
+    await manager.prepare({
+      ...scope,
+      title: 'Commit barrier rollback',
+      consentConfirmed: true,
+    });
+    await manager.start(scope);
+    let releasePersistence!: () => void;
+    const persistenceGate = new Promise<void>((resolve) => {
+      releasePersistence = resolve;
+    });
+    const updateCaptureSource = vi
+      .spyOn(archiveStore, 'updateCaptureSource')
+      .mockImplementationOnce(async () => {
+        await persistenceGate;
+        throw new Error('manifest write failed after commit');
+      });
+
+    const switchPromise = manager.switchMicrophone({
+      ...scope,
+      deviceId: 'mic-2',
+    });
+    const switchFailure = expect(switchPromise).rejects.toThrow(
+      'manifest write failed after commit',
+    );
+    await vi.waitFor(() => {
+      expect(updateCaptureSource).toHaveBeenCalledOnce();
+    });
+    const stopPromise = manager.stop(scope);
+    await Promise.resolve();
+    expect(captureHost.stop).not.toHaveBeenCalled();
+
+    releasePersistence();
+    await switchFailure;
+    await expect(stopPromise).resolves.toMatchObject({
+      manifest: {
+        lifecycleStatus: 'stopped',
+        microphoneDeviceId: 'built-in-mic',
+      },
+    });
+    expect(captureHost.rollbackSourceSwitch).toHaveBeenCalledOnce();
+    expect(captureHost.finalizeSourceSwitch).not.toHaveBeenCalled();
+    expect(
+      captureHost.rollbackSourceSwitch.mock.invocationCallOrder[0],
+    ).toBeLessThan(captureHost.stop.mock.invocationCallOrder[0]!);
+  });
+
+  it('lets stop and the final audio append finish while source preparation hangs', async () => {
+    let resolvePreparation!: (value: {
+      operationId: string;
+      source: 'local';
+      sourceId: string;
+      label: string;
+    }) => void;
+    captureHost.prepareMicrophoneSwitch.mockImplementationOnce(
+      () =>
+        new Promise((resolve) => {
+          resolvePreparation = resolve;
+        }),
     );
     manager = new MeetingRecordingManager({
       archiveStore: new MeetingArchiveStore({
@@ -533,7 +919,6 @@ describe('MeetingRecordingManager', () => {
       }),
       captureHost,
       createAsrRuntime,
-      sourceSwitchTimeoutMs: 10,
     });
     await manager.prepare({
       ...scope,
@@ -542,15 +927,265 @@ describe('MeetingRecordingManager', () => {
     });
     await manager.start(scope);
 
-    await expect(
-      manager.switchMicrophone({ ...scope, deviceId: 'mic-hung' }),
-    ).rejects.toThrow('meeting capture source switch timed out');
-    await expect(
-      manager.switchSystemAudio({ ...scope, sourceId: 'main-display' }),
-    ).resolves.toMatchObject({
-      manifest: { lifecycleStatus: 'recording' },
+    const switchPromise = manager.switchMicrophone({
+      ...scope,
+      deviceId: 'mic-hung',
     });
-    expect(captureHost.switchSystemAudio).toHaveBeenCalledTimes(1);
+    await vi.waitFor(() => {
+      expect(captureHost.prepareMicrophoneSwitch).toHaveBeenCalledOnce();
+    });
+    captureHost.stop.mockImplementationOnce(async () => {
+      await manager.appendAudioChunk({
+        ...scope,
+        source: 'local',
+        bytes: new Uint8Array([1, 2, 3]),
+        durationMs: 200,
+        sampleRate: 48_000,
+        channelCount: 1,
+        codec: 'opus',
+        container: 'webm',
+      });
+    });
+
+    await expect(manager.stop(scope)).resolves.toMatchObject({
+      manifest: { lifecycleStatus: 'stopped' },
+    });
+    expect(captureHost.commitSourceSwitch).not.toHaveBeenCalled();
+    expect(captureHost.abortSourceSwitch).not.toHaveBeenCalled();
+    resolvePreparation({
+      operationId: 'late-local-op',
+      source: 'local',
+      sourceId: 'mic-hung',
+      label: 'Late microphone',
+    });
+    await expect(switchPromise).rejects.toThrow(
+      'meeting local source switch was cancelled',
+    );
+    expect(captureHost.abortSourceSwitch).toHaveBeenCalledWith({
+      operationId: 'late-local-op',
+      source: 'local',
+    });
+    expect(manager.getStatus().manifest).toMatchObject({
+      lifecycleStatus: 'stopped',
+      microphoneDeviceId: 'built-in-mic',
+    });
+  });
+
+  it('waits for a failed commit before stopping the prior source', async () => {
+    let rejectCommit!: (reason: Error) => void;
+    captureHost.commitSourceSwitch.mockImplementationOnce(
+      () =>
+        new Promise((_resolve, reject) => {
+          rejectCommit = reject;
+        }),
+    );
+    await manager.prepare({
+      ...scope,
+      title: 'Stop wins commit race',
+      consentConfirmed: true,
+    });
+    await manager.start(scope);
+
+    const switchPromise = manager.switchMicrophone({
+      ...scope,
+      deviceId: 'mic-2',
+    });
+    await vi.waitFor(() => {
+      expect(captureHost.commitSourceSwitch).toHaveBeenCalledOnce();
+    });
+    const stopPromise = manager.stop(scope);
+    await Promise.resolve();
+    expect(captureHost.stop).not.toHaveBeenCalled();
+    rejectCommit(new Error('source switch commit failed'));
+
+    await expect(switchPromise).rejects.toThrow('source switch commit failed');
+    await expect(stopPromise).resolves.toMatchObject({
+      manifest: {
+        lifecycleStatus: 'stopped',
+        microphoneDeviceId: 'built-in-mic',
+      },
+    });
+  });
+
+  it('persists a successful commit before stop finalization', async () => {
+    let resolveCommit!: (value: {
+      source: 'local';
+      sourceId: string;
+      label: string;
+    }) => void;
+    captureHost.commitSourceSwitch.mockImplementationOnce(
+      () =>
+        new Promise((resolve) => {
+          resolveCommit = resolve;
+        }),
+    );
+    await manager.prepare({
+      ...scope,
+      title: 'Commit wins stop race',
+      consentConfirmed: true,
+    });
+    await manager.start(scope);
+
+    const switchPromise = manager.switchMicrophone({
+      ...scope,
+      deviceId: 'mic-2',
+    });
+    await vi.waitFor(() => {
+      expect(captureHost.commitSourceSwitch).toHaveBeenCalledOnce();
+    });
+    resolveCommit({
+      source: 'local',
+      sourceId: 'mic-2',
+      label: 'USB microphone',
+    });
+    const stopPromise = manager.stop(scope);
+
+    await expect(switchPromise).resolves.toMatchObject({
+      manifest: {
+        lifecycleStatus: 'recording',
+        microphoneDeviceId: 'mic-2',
+      },
+    });
+    await expect(stopPromise).resolves.toMatchObject({
+      manifest: {
+        lifecycleStatus: 'stopped',
+        microphoneDeviceId: 'mic-2',
+      },
+    });
+  });
+
+  it('commits only the latest rapid microphone switch', async () => {
+    let resolveLatest!: (value: {
+      operationId: string;
+      source: 'local';
+      sourceId: string;
+      label: string;
+    }) => void;
+    captureHost.prepareMicrophoneSwitch.mockImplementationOnce(
+      () =>
+        new Promise((resolve) => {
+          resolveLatest = resolve;
+        }),
+    );
+    captureHost.commitSourceSwitch.mockImplementationOnce(async () => ({
+      source: 'local' as const,
+      sourceId: 'mic-3',
+      label: 'Latest microphone',
+    }));
+    await manager.prepare({
+      ...scope,
+      title: 'Rapid switching',
+      consentConfirmed: true,
+    });
+    await manager.start(scope);
+
+    const first = manager.switchMicrophone({ ...scope, deviceId: 'mic-2' });
+    const firstFailure = expect(first).rejects.toThrow(
+      'meeting local source switch was cancelled',
+    );
+    const second = manager.switchMicrophone({ ...scope, deviceId: 'mic-3' });
+    await vi.waitFor(() => {
+      expect(captureHost.prepareMicrophoneSwitch).toHaveBeenCalledOnce();
+    });
+    resolveLatest({
+      operationId: 'local-op-latest',
+      source: 'local',
+      sourceId: 'mic-3',
+      label: 'Latest microphone',
+    });
+
+    await firstFailure;
+    await expect(second).resolves.toMatchObject({
+      manifest: {
+        microphoneDeviceId: 'mic-3',
+        microphoneDeviceLabel: 'Latest microphone',
+      },
+    });
+    expect(captureHost.abortSourceSwitch).not.toHaveBeenCalled();
+    expect(captureHost.commitSourceSwitch).toHaveBeenCalledOnce();
+    expect(captureHost.commitSourceSwitch).toHaveBeenCalledWith({
+      operationId: 'local-op-latest',
+      source: 'local',
+    });
+  });
+
+  it('falls back to the default microphone after the active source ends', async () => {
+    captureHost.prepareMicrophoneSwitch.mockResolvedValueOnce({
+      operationId: 'fallback-op',
+      source: 'local',
+      sourceId: 'default',
+      label: 'MacBook Pro Microphone',
+    });
+    captureHost.commitSourceSwitch.mockResolvedValueOnce({
+      source: 'local',
+      sourceId: 'default',
+      label: 'MacBook Pro Microphone',
+    });
+    await manager.prepare({
+      ...scope,
+      title: 'Microphone fallback',
+      consentConfirmed: true,
+    });
+    await manager.start(scope);
+
+    await manager.handleCaptureSourceEnded({
+      ...scope,
+      source: 'local',
+      sourceId: 'built-in-mic',
+      label: 'Built-in microphone',
+    });
+
+    expect(captureHost.prepareMicrophoneSwitch).toHaveBeenCalledWith('default');
+    expect(manager.getStatus().manifest).toMatchObject({
+      lifecycleStatus: 'recording',
+      microphoneDeviceId: 'default',
+      microphoneDeviceLabel: 'MacBook Pro Microphone',
+      tracks: { local: { status: 'active' } },
+    });
+    expect(onCaptureSourceNotice).toHaveBeenCalledWith({
+      ...scope,
+      source: 'local',
+      kind: 'fallback_succeeded',
+      previousLabel: 'Built-in microphone',
+      currentLabel: 'MacBook Pro Microphone',
+    });
+  });
+
+  it('marks only the local track unavailable when default fallback fails', async () => {
+    captureHost.prepareMicrophoneSwitch.mockRejectedValueOnce(
+      new Error('default microphone is unavailable'),
+    );
+    await manager.prepare({
+      ...scope,
+      title: 'Microphone fallback failure',
+      consentConfirmed: true,
+    });
+    await manager.start(scope);
+
+    await manager.handleCaptureSourceEnded({
+      ...scope,
+      source: 'local',
+      sourceId: 'built-in-mic',
+      label: 'Built-in microphone',
+    });
+
+    expect(manager.getStatus().manifest).toMatchObject({
+      lifecycleStatus: 'recording',
+      tracks: {
+        local: {
+          status: 'failed',
+          errorCode: 'source_unavailable',
+          errorMessage: 'default microphone is unavailable',
+        },
+        remote: { status: 'active' },
+      },
+    });
+    expect(onCaptureSourceNotice).toHaveBeenCalledWith({
+      ...scope,
+      source: 'local',
+      kind: 'fallback_failed',
+      previousLabel: 'Built-in microphone',
+    });
   });
 
   it('rejects a second active meeting', async () => {
@@ -600,17 +1235,25 @@ describe('MeetingRecordingManager', () => {
     });
     await manager.start(scope);
 
+    const checkpoint = {
+      externalId: 'segment-1',
+      source: 'remote' as const,
+      startMs: 0,
+      endMs: 800,
+      text: 'Question',
+      isFinal: true,
+      recordedAt: new Date().toISOString(),
+    };
+
     await expect(
-      manager.appendTranscriptCheckpoint(scope, {
-        externalId: 'segment-1',
-        source: 'remote',
-        startMs: 0,
-        endMs: 800,
-        text: 'Question',
-        isFinal: true,
-        recordedAt: new Date().toISOString(),
-      }),
+      manager.appendTranscriptCheckpoint(scope, checkpoint),
     ).resolves.toBeUndefined();
+    await expect(
+      manager.appendTranscriptCheckpoint(scope, checkpoint),
+    ).resolves.toBeUndefined();
+
+    expect(onTranscriptChanged).toHaveBeenCalledTimes(1);
+    expect(onTranscriptChanged).toHaveBeenCalledWith({ ...scope, checkpoint });
   });
 
   it('forwards source-specific PCM to ASR without writing it as archive audio', async () => {
