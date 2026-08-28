@@ -10,14 +10,26 @@ function joinTranscriptText(left: string, right: string): string {
   if (!normalizedLeft) return normalizedRight;
   if (!normalizedRight) return normalizedLeft;
   const needsSpace =
-    /[A-Za-z0-9]$/u.test(normalizedLeft) && /^[A-Za-z0-9]/u.test(normalizedRight);
+    /[A-Za-z0-9]$/u.test(normalizedLeft) &&
+    /^[A-Za-z0-9]/u.test(normalizedRight);
   return `${normalizedLeft}${needsSpace ? ' ' : ''}${normalizedRight}`;
 }
 
 export function resolveMeetingTranscript(
   checkpoints: MeetingTranscriptCheckpoint[],
 ): MeetingTranscriptCheckpoint[] {
+  return upsertMeetingTranscript([], checkpoints);
+}
+
+export function upsertMeetingTranscript(
+  current: MeetingTranscriptCheckpoint[],
+  incoming: MeetingTranscriptCheckpoint | MeetingTranscriptCheckpoint[],
+): MeetingTranscriptCheckpoint[] {
   const latest = new Map<string, MeetingTranscriptCheckpoint>();
+  for (const checkpoint of current) {
+    latest.set(checkpoint.externalId, checkpoint);
+  }
+  const checkpoints = Array.isArray(incoming) ? incoming : [incoming];
   for (const checkpoint of checkpoints) {
     const current = latest.get(checkpoint.externalId);
     if (current?.isFinal && !checkpoint.isFinal) continue;
@@ -53,10 +65,10 @@ export function groupMeetingTranscriptTurns(
       : current.text;
     const shouldMerge = Boolean(
       previous &&
-        previous.source === current.source &&
-        gapMs <= TURN_MERGE_MAX_GAP_MS &&
-        !STRONG_SENTENCE_END.test(previous.text.trim()) &&
-        combinedText.length <= TURN_MERGE_MAX_TEXT_LENGTH,
+      previous.source === current.source &&
+      gapMs <= TURN_MERGE_MAX_GAP_MS &&
+      !STRONG_SENTENCE_END.test(previous.text.trim()) &&
+      combinedText.length <= TURN_MERGE_MAX_TEXT_LENGTH,
     );
     if (!previous || !shouldMerge) {
       turns.push(current);

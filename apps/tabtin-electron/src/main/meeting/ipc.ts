@@ -2,15 +2,20 @@ import { app, BrowserWindow } from 'electron';
 import { okResponse } from '@tabtin/agent-wire';
 
 import {
+  MEETING_CAPTURE_DEVICES_CHANGED_CHANNEL,
   MEETING_CAPTURE_LEVEL_CHANNEL,
+  MEETING_CAPTURE_SOURCE_NOTICE_CHANNEL,
   MEETING_MICROPHONE_TEST_LEVEL_CHANNEL,
   MEETING_RECORDING_STATUS_CHANNEL,
+  MEETING_TRANSCRIPT_CHANGED_CHANNEL,
   type AppendMeetingAudioChunkInput,
   type AppendMeetingPcmChunkInput,
   type MeetingArchiveListScope,
   type MeetingArchiveScope,
   type MeetingAsrProbeInput,
   type MeetingCaptureLevelEvent,
+  type MeetingCaptureDevicesChangedEvent,
+  type MeetingCaptureSourceEndedEvent,
   type MeetingMediaProbeInput,
   type MeetingMicrophoneTestInput,
   type MeetingMicrophoneTestLevelEvent,
@@ -41,6 +46,8 @@ export const MEETING_RECORDING_IPC_CHANNELS = [
   'meeting-recording:switch-system-audio',
   'meeting-recording:report-microphone-test-level',
   'meeting-recording:report-capture-level',
+  'meeting-recording:report-capture-source-ended',
+  'meeting-recording:report-capture-devices-changed',
   'meeting-recording:prepare',
   'meeting-recording:start',
   'meeting-recording:stop',
@@ -89,6 +96,23 @@ function getManager(): MeetingRecordingManager {
         for (const window of BrowserWindow.getAllWindows()) {
           if (!window.isDestroyed()) {
             window.webContents.send(MEETING_RECORDING_STATUS_CHANNEL, status);
+          }
+        }
+      },
+      onTranscriptChanged: (event) => {
+        for (const window of BrowserWindow.getAllWindows()) {
+          if (!window.isDestroyed()) {
+            window.webContents.send(MEETING_TRANSCRIPT_CHANGED_CHANNEL, event);
+          }
+        }
+      },
+      onCaptureSourceNotice: (notice) => {
+        for (const window of BrowserWindow.getAllWindows()) {
+          if (!window.isDestroyed()) {
+            window.webContents.send(
+              MEETING_CAPTURE_SOURCE_NOTICE_CHANNEL,
+              notice,
+            );
           }
         }
       },
@@ -157,6 +181,27 @@ export function registerMeetingRecordingIpc(): void {
       for (const window of BrowserWindow.getAllWindows()) {
         if (!window.isDestroyed()) {
           window.webContents.send(MEETING_CAPTURE_LEVEL_CHANNEL, level);
+        }
+      }
+      return okResponse(null);
+    },
+  );
+  guardedHandle(
+    'meeting-recording:report-capture-source-ended',
+    async (_event, ended: MeetingCaptureSourceEndedEvent) => {
+      void getManager().handleCaptureSourceEnded(ended);
+      return okResponse(null);
+    },
+  );
+  guardedHandle(
+    'meeting-recording:report-capture-devices-changed',
+    async (_event, changed: MeetingCaptureDevicesChangedEvent) => {
+      for (const window of BrowserWindow.getAllWindows()) {
+        if (!window.isDestroyed()) {
+          window.webContents.send(
+            MEETING_CAPTURE_DEVICES_CHANGED_CHANNEL,
+            changed,
+          );
         }
       }
       return okResponse(null);

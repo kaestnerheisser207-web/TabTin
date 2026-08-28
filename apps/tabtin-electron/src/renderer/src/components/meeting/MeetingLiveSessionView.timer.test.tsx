@@ -1,7 +1,13 @@
 import React from 'react';
 import { act, fireEvent, render, screen } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import type { MeetingRecordingStatus } from '@shared/meeting-recording-contract';
+import type {
+  MeetingCaptureDevicesChangedEvent,
+  MeetingCaptureSourceNoticeEvent,
+  MeetingRecordingStatus,
+  MeetingTranscriptCheckpoint,
+  MeetingTranscriptChangedEvent,
+} from '@shared/meeting-recording-contract';
 
 vi.mock('react-i18next', async () => {
   const translations = (await import('@/i18n/locales/zh-CN/meeting.json'))
@@ -43,14 +49,24 @@ describe('MeetingLiveSessionView timer', () => {
         rms: number;
       }) => void)
     | undefined;
-  let statusListener:
-    | ((status: MeetingRecordingStatus) => void)
+  let statusListener: ((status: MeetingRecordingStatus) => void) | undefined;
+  let transcriptListener:
+    | ((event: MeetingTranscriptChangedEvent) => void)
+    | undefined;
+  let captureDevicesChangedListener:
+    | ((event: MeetingCaptureDevicesChangedEvent) => void)
+    | undefined;
+  let captureSourceNoticeListener:
+    | ((event: MeetingCaptureSourceNoticeEvent) => void)
     | undefined;
 
   beforeEach(() => {
     vi.useFakeTimers();
     captureLevelListener = undefined;
     statusListener = undefined;
+    transcriptListener = undefined;
+    captureDevicesChangedListener = undefined;
+    captureSourceNoticeListener = undefined;
     Object.defineProperty(window, 'tabtin', {
       configurable: true,
       value: {
@@ -82,8 +98,20 @@ describe('MeetingLiveSessionView timer', () => {
             statusListener = listener;
             return vi.fn();
           }),
+          onTranscriptChanged: vi.fn((listener) => {
+            transcriptListener = listener;
+            return vi.fn();
+          }),
           onCaptureLevel: vi.fn((listener) => {
             captureLevelListener = listener;
+            return vi.fn();
+          }),
+          onCaptureDevicesChanged: vi.fn((listener) => {
+            captureDevicesChangedListener = listener;
+            return vi.fn();
+          }),
+          onCaptureSourceNotice: vi.fn((listener) => {
+            captureSourceNoticeListener = listener;
             return vi.fn();
           }),
           getArchive: vi.fn().mockResolvedValue({ transcript: [] }),
@@ -153,9 +181,272 @@ describe('MeetingLiveSessionView timer', () => {
       await Promise.resolve();
       await Promise.resolve();
     });
+    expect(screen.getByText('实时转写尚未连接；原始音频继续保存')).toBeTruthy();
+  });
+
+  it('applies live transcript increments without reloading the full archive', async () => {
+    const initialStatus = await window.tabtin.meetingRecording.getStatus();
+    let resolveArchive!: (archive: {
+      transcript: MeetingTranscriptCheckpoint[];
+      copilotRecords: [];
+    }) => void;
+    const getArchive = vi.fn(
+      () =>
+        new Promise<{
+          transcript: MeetingTranscriptCheckpoint[];
+          copilotRecords: [];
+        }>((resolve) => {
+          resolveArchive = resolve;
+        }),
+    );
+    Object.assign(window.tabtin.meetingRecording, { getArchive });
+
+    render(
+      <MeetingLiveSessionView
+        sessionId={sessionId}
+        onBack={vi.fn()}
+        initialStatus={initialStatus}
+      />,
+    );
+    await act(async () => {
+      await Promise.resolve();
+      await Promise.resolve();
+    });
+
+    const scope = {
+      sessionId,
+      organizationId: 'org-1',
+      userId: 'user-1',
+    };
+    act(() => {
+      statusListener?.({
+        ...initialStatus,
+        manifest: { ...initialStatus.manifest!, transcriptRevision: 1 },
+      });
+      transcriptListener?.({
+        ...scope,
+        checkpoint: {
+          externalId: 'live-1',
+          source: 'remote',
+          startMs: 1_000,
+          endMs: 1_500,
+          text: '第一段实时逐字稿',
+          isFinal: false,
+          recordedAt: '2026-08-28T00:00:00.000Z',
+        },
+      });
+      statusListener?.({
+        ...initialStatus,
+        manifest: { ...initialStatus.manifest!, transcriptRevision: 2 },
+      });
+      transcriptListener?.({
+        ...scope,
+        checkpoint: {
+          externalId: 'live-1',
+          source: 'remote',
+          startMs: 1_000,
+          endMs: 2_000,
+          text: '第一段实时逐字稿已经完成',
+          isFinal: true,
+          recordedAt: '2026-08-28T00:00:01.000Z',
+        },
+      });
+    });
+
+    await act(async () => {
+      resolveArchive({
+        transcript: [
+          {
+            externalId: 'live-1',
+            source: 'remote',
+            startMs: 1_000,
+            endMs: 1_200,
+            text: '归档中的旧版本',
+            isFinal: false,
+            recordedAt: '2026-08-28T00:00:00.000Z',
+          },
+        ],
+        copilotRecords: [],
+      });
+      await Promise.resolve();
+      await Promise.resolve();
+    });
+
+    act(() => {
+      transcriptListener?.({
+        ...scope,
+        checkpoint: {
+          externalId: 'live-1',
+          source: 'remote',
+          startMs: 1_000,
+          endMs: 1_600,
+          text: '迟到的非最终版本',
+          isFinal: false,
+          recordedAt: '2026-08-28T00:00:02.000Z',
+        },
+      });
+    });
+
+    expect(screen.getAllByText('第一段实时逐字稿已经完成')).toHaveLength(1);
+    expect(screen.queryByText('归档中的旧版本')).toBeNull();
+    expect(screen.queryByText('迟到的非最终版本')).toBeNull();
+    expect(getArchive).toHaveBeenCalledTimes(1);
+  });
+
+  it('trusts the bridge switch deadline and hides raw IPC failures', async () => {
+    const initialStatus = await window.tabtin.meetingRecording.getStatus();
+    const rawError =
+      "Error invoking remote method 'meeting-recording:switch-microphone': capture timed out";
+    let rejectSwitch!: (error: Error) => void;
+    const switchMicrophone = vi.fn(
+      () =>
+        new Promise<MeetingRecordingStatus>((_, reject) => {
+          rejectSwitch = reject;
+        }),
+    );
+    Object.assign(window.tabtin.meetingRecording, {
+      listMicrophones: vi.fn().mockResolvedValue([
+        {
+          deviceId: 'default',
+          groupId: '',
+          label: 'Default microphone',
+          isDefault: true,
+        },
+        {
+          deviceId: 'usb-microphone',
+          groupId: 'usb',
+          label: 'USB microphone',
+          isDefault: false,
+        },
+      ]),
+      switchMicrophone,
+    });
+
+    render(
+      <MeetingLiveSessionView
+        sessionId={sessionId}
+        onBack={vi.fn()}
+        initialStatus={initialStatus}
+      />,
+    );
+    await act(async () => {
+      await Promise.resolve();
+      await Promise.resolve();
+    });
+
+    fireEvent.pointerDown(screen.getByRole('button', { name: '切换麦克风' }), {
+      button: 0,
+      ctrlKey: false,
+    });
+    fireEvent.click(
+      screen.getByRole('menuitemradio', { name: 'USB microphone' }),
+    );
+    expect(switchMicrophone).toHaveBeenCalledTimes(1);
+
+    act(() => vi.advanceTimersByTime(15_000));
+    expect(screen.queryByRole('alert')).toBeNull();
+
+    await act(async () => {
+      rejectSwitch(new Error(rawError));
+      await Promise.resolve();
+      await Promise.resolve();
+    });
+
+    expect(screen.getByRole('alert').textContent).toBe(
+      '切换麦克风失败，原麦克风仍在使用',
+    );
+    expect(screen.queryByText(rawError)).toBeNull();
+    expect(screen.queryByText(/Error invoking remote method/)).toBeNull();
+  });
+
+  it('refreshes device choices and reports scoped fallback outcomes without switching', async () => {
+    const initialStatus = await window.tabtin.meetingRecording.getStatus();
+    const listMicrophones = vi
+      .fn()
+      .mockRejectedValueOnce(new Error('temporary device enumeration failure'))
+      .mockResolvedValue([]);
+    const listSystemAudioSources = vi.fn().mockResolvedValue([]);
+    const switchMicrophone = vi.fn();
+    const switchSystemAudio = vi.fn();
+    Object.assign(window.tabtin.meetingRecording, {
+      listMicrophones,
+      listSystemAudioSources,
+      switchMicrophone,
+      switchSystemAudio,
+    });
+
+    render(
+      <MeetingLiveSessionView
+        sessionId={sessionId}
+        onBack={vi.fn()}
+        initialStatus={initialStatus}
+      />,
+    );
+    await act(async () => {
+      await Promise.resolve();
+      await Promise.resolve();
+    });
+    expect(listMicrophones).toHaveBeenCalledTimes(1);
+    expect(listSystemAudioSources).toHaveBeenCalledTimes(1);
+    expect(screen.getByRole('alert').textContent).toBe(
+      '无法加载音频来源，当前音频来源仍在继续记录',
+    );
+
+    await act(async () => {
+      captureDevicesChangedListener?.({
+        changedAt: '2026-08-28T00:00:00.000Z',
+      });
+      await Promise.resolve();
+      await Promise.resolve();
+    });
+    expect(listMicrophones).toHaveBeenCalledTimes(2);
+    expect(listSystemAudioSources).toHaveBeenCalledTimes(2);
     expect(
-      screen.getByText('实时转写尚未连接；原始音频继续保存'),
-    ).toBeTruthy();
+      screen.queryByText('无法加载音频来源，当前音频来源仍在继续记录'),
+    ).toBeNull();
+    expect(switchMicrophone).not.toHaveBeenCalled();
+    expect(switchSystemAudio).not.toHaveBeenCalled();
+
+    act(() => {
+      captureSourceNoticeListener?.({
+        sessionId: 'other-session',
+        organizationId: 'org-1',
+        userId: 'user-1',
+        source: 'local',
+        kind: 'fallback_failed',
+        previousLabel: 'USB microphone',
+      });
+    });
+    expect(screen.queryByText(/麦克风不可用/)).toBeNull();
+
+    act(() => {
+      captureSourceNoticeListener?.({
+        sessionId,
+        organizationId: 'org-1',
+        userId: 'user-1',
+        source: 'local',
+        kind: 'fallback_succeeded',
+        previousLabel: 'USB microphone',
+        currentLabel: 'MacBook microphone',
+      });
+    });
+    expect(screen.getByRole('status').textContent).toBe(
+      '麦克风已断开，已切换到 MacBook microphone',
+    );
+
+    act(() => {
+      captureSourceNoticeListener?.({
+        sessionId,
+        organizationId: 'org-1',
+        userId: 'user-1',
+        source: 'local',
+        kind: 'fallback_failed',
+        previousLabel: 'MacBook microphone',
+      });
+    });
+    expect(screen.getByRole('alert').textContent).toBe(
+      '麦克风不可用，系统音频和录音仍在继续',
+    );
   });
 
   it('keeps source switching and stop enabled from the parent-confirmed active status', async () => {
@@ -233,9 +524,7 @@ describe('MeetingLiveSessionView timer', () => {
       await Promise.resolve();
     });
 
-    expect(
-      screen.getByText('正在保存音频、逐字稿和恢复点…'),
-    ).toBeTruthy();
+    expect(screen.getByText('正在保存音频、逐字稿和恢复点…')).toBeTruthy();
     expect(onBack).not.toHaveBeenCalled();
 
     await act(async () => {
@@ -402,7 +691,7 @@ describe('MeetingLiveSessionView timer', () => {
     expect(answerCopilotQuestion).not.toHaveBeenCalled();
   });
 
-  it('keeps an in-flight remote turn evaluated across stale archive refreshes', async () => {
+  it('keeps an in-flight remote turn evaluated across transcript status increments', async () => {
     const initialStatus = await window.tabtin.meetingRecording.getStatus();
     initialStatus.manifest!.copilotEnabled = true;
     const remoteTurn = {
@@ -465,7 +754,7 @@ describe('MeetingLiveSessionView timer', () => {
       await Promise.resolve();
       await Promise.resolve();
     });
-    expect(getArchive).toHaveBeenCalledTimes(2);
+    expect(getArchive).toHaveBeenCalledTimes(1);
 
     await act(async () => {
       resolveAnswer({
@@ -500,10 +789,7 @@ describe('MeetingLiveSessionView timer', () => {
       endMs: 4_000,
       text: 'Explain the hash map implementation principles.',
     };
-    const getArchive = vi
-      .fn()
-      .mockResolvedValueOnce({ transcript: [firstTurn] })
-      .mockResolvedValue({ transcript: [firstTurn, secondTurn] });
+    const getArchive = vi.fn().mockResolvedValue({ transcript: [firstTurn] });
     let resolveFirst!: (result: {
       status: 'no_action';
       message: string;
@@ -551,13 +837,19 @@ describe('MeetingLiveSessionView timer', () => {
           transcriptRevision: 2,
         },
       });
+      transcriptListener?.({
+        sessionId,
+        organizationId: 'org-1',
+        userId: 'user-1',
+        checkpoint: secondTurn,
+      });
     });
     await act(async () => {
       for (let index = 0; index < 5; index += 1) {
         await Promise.resolve();
       }
     });
-    expect(getArchive).toHaveBeenCalledTimes(2);
+    expect(getArchive).toHaveBeenCalledTimes(1);
     expect(answerCopilotQuestion).toHaveBeenCalledTimes(1);
 
     await act(async () => {

@@ -8,9 +8,12 @@ import { getAccessTokenDeduped, installAuthTokenInvalidationListeners } from './
 import { createLoginRelayPreloadApi } from './login-relay'
 import type { LoginRelayAPI } from '../shared/types/login-relay'
 import {
+  MEETING_CAPTURE_DEVICES_CHANGED_CHANNEL,
   MEETING_CAPTURE_LEVEL_CHANNEL,
+  MEETING_CAPTURE_SOURCE_NOTICE_CHANNEL,
   MEETING_MICROPHONE_TEST_LEVEL_CHANNEL,
   MEETING_RECORDING_STATUS_CHANNEL,
+  MEETING_TRANSCRIPT_CHANGED_CHANNEL,
   type AppendMeetingAudioChunkInput,
   type AppendMeetingPcmChunkInput,
   type MeetingArchiveManifestV2,
@@ -19,6 +22,9 @@ import {
   type MeetingAsrProbeInput,
   type MeetingAsrProbeResult,
   type MeetingCaptureLevelEvent,
+  type MeetingCaptureDevicesChangedEvent,
+  type MeetingCaptureSourceEndedEvent,
+  type MeetingCaptureSourceNoticeEvent,
   type MeetingCopilotAnswerResult,
   type MeetingMediaProbeResult,
   type MeetingMediaProbeInput,
@@ -31,6 +37,7 @@ import {
   type MeetingRecordingStatus,
   type MeetingStorageProbeResult,
   type MeetingTranscriptCheckpoint,
+  type MeetingTranscriptChangedEvent,
   type PrepareMeetingArchiveInput,
   type SwitchMeetingMicrophoneInput,
   type SwitchMeetingSystemAudioInput,
@@ -1157,6 +1164,10 @@ interface TabTinAPIShape {
     switchSystemAudio: (input: SwitchMeetingSystemAudioInput) => Promise<MeetingRecordingStatus>
     reportCaptureLevel: (event: MeetingCaptureLevelEvent) => Promise<void>
     onCaptureLevel: (callback: (event: MeetingCaptureLevelEvent) => void) => () => void
+    reportCaptureSourceEnded: (event: MeetingCaptureSourceEndedEvent) => Promise<void>
+    reportCaptureDevicesChanged: (event: MeetingCaptureDevicesChangedEvent) => Promise<void>
+    onCaptureDevicesChanged: (callback: (event: MeetingCaptureDevicesChangedEvent) => void) => () => void
+    onCaptureSourceNotice: (callback: (event: MeetingCaptureSourceNoticeEvent) => void) => () => void
     reportMicrophoneTestLevel: (event: MeetingMicrophoneTestLevelEvent) => Promise<void>
     onMicrophoneTestLevel: (callback: (event: MeetingMicrophoneTestLevelEvent) => void) => () => void
     prepare: (input: PrepareMeetingArchiveInput) => Promise<MeetingRecordingStatus>
@@ -1167,6 +1178,7 @@ interface TabTinAPIShape {
     appendAudioChunk: (input: AppendMeetingAudioChunkInput) => Promise<MeetingRecordingStatus>
     appendPcmChunk: (input: AppendMeetingPcmChunkInput) => Promise<void>
     appendTranscript: (scope: MeetingArchiveScope, checkpoint: MeetingTranscriptCheckpoint) => Promise<void>
+    onTranscriptChanged: (callback: (event: MeetingTranscriptChangedEvent) => void) => () => void
     recoverInterrupted: () => Promise<MeetingArchiveManifestV2[]>
     listArchives: (scope: MeetingArchiveListScope) => Promise<MeetingLocalArchive[]>
     getArchive: (scope: MeetingArchiveScope) => Promise<MeetingLocalArchive>
@@ -3676,6 +3688,33 @@ const api = {
         ipcRenderer.removeListener(MEETING_CAPTURE_LEVEL_CHANNEL, handler)
       }
     },
+    reportCaptureSourceEnded: (event) =>
+      invokeIpc('meeting-recording:report-capture-source-ended', event),
+    reportCaptureDevicesChanged: (event) =>
+      invokeIpc('meeting-recording:report-capture-devices-changed', event),
+    onCaptureDevicesChanged: (callback) => {
+      const handler = (
+        _event: Electron.IpcRendererEvent,
+        changedEvent: MeetingCaptureDevicesChangedEvent
+      ) => callback(changedEvent)
+      ipcRenderer.on(MEETING_CAPTURE_DEVICES_CHANGED_CHANNEL, handler)
+      return () => {
+        ipcRenderer.removeListener(
+          MEETING_CAPTURE_DEVICES_CHANGED_CHANNEL,
+          handler
+        )
+      }
+    },
+    onCaptureSourceNotice: (callback) => {
+      const handler = (
+        _event: Electron.IpcRendererEvent,
+        notice: MeetingCaptureSourceNoticeEvent
+      ) => callback(notice)
+      ipcRenderer.on(MEETING_CAPTURE_SOURCE_NOTICE_CHANNEL, handler)
+      return () => {
+        ipcRenderer.removeListener(MEETING_CAPTURE_SOURCE_NOTICE_CHANNEL, handler)
+      }
+    },
     reportMicrophoneTestLevel: (event) =>
       invokeIpc('meeting-recording:report-microphone-test-level', event),
     onMicrophoneTestLevel: (callback) => {
@@ -3699,6 +3738,16 @@ const api = {
     appendAudioChunk: (input) => invokeIpc('meeting-recording:append-audio-chunk', input),
     appendPcmChunk: (input) => invokeIpc('meeting-recording:append-pcm-chunk', input),
     appendTranscript: (scope, checkpoint) => invokeIpc('meeting-recording:append-transcript', scope, checkpoint),
+    onTranscriptChanged: (callback) => {
+      const handler = (
+        _event: Electron.IpcRendererEvent,
+        transcriptEvent: MeetingTranscriptChangedEvent
+      ) => callback(transcriptEvent)
+      ipcRenderer.on(MEETING_TRANSCRIPT_CHANGED_CHANNEL, handler)
+      return () => {
+        ipcRenderer.removeListener(MEETING_TRANSCRIPT_CHANGED_CHANNEL, handler)
+      }
+    },
     recoverInterrupted: () => invokeIpc('meeting-recording:recover-interrupted'),
     listArchives: (scope) => invokeIpc('meeting-recording:list-archives', scope),
     getArchive: (scope) => invokeIpc('meeting-recording:get-archive', scope),

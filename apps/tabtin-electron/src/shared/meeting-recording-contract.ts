@@ -238,6 +238,27 @@ export interface MeetingCaptureLevelEvent extends MeetingArchiveScope {
   rms: number;
 }
 
+export interface MeetingCaptureSourceEndedEvent extends MeetingArchiveScope {
+  source: MeetingAudioSource;
+  sourceId: string;
+  label: string;
+}
+
+export interface MeetingCaptureDevicesChangedEvent {
+  changedAt: string;
+}
+
+export interface MeetingCaptureSourceNoticeEvent extends MeetingArchiveScope {
+  source: MeetingAudioSource;
+  kind: 'fallback_succeeded' | 'fallback_failed';
+  previousLabel: string;
+  currentLabel?: string;
+}
+
+export interface MeetingTranscriptChangedEvent extends MeetingArchiveScope {
+  checkpoint: MeetingTranscriptCheckpoint;
+}
+
 export interface MeetingCopilotAnswerSource {
   id: string;
   kind: 'transcript' | 'meeting_brief' | 'project_resource';
@@ -306,6 +327,12 @@ export interface MeetingLocalArchive {
 
 export const MEETING_RECORDING_STATUS_CHANNEL =
   'meeting-recording:status-changed';
+export const MEETING_TRANSCRIPT_CHANGED_CHANNEL =
+  'meeting-recording:transcript-changed';
 export const MEETING_MICROPHONE_TEST_LEVEL_CHANNEL =
   'meeting-recording:microphone-test-level';
 export const MEETING_CAPTURE_LEVEL_CHANNEL = 'meeting-recording:capture-level';
+export const MEETING_CAPTURE_DEVICES_CHANGED_CHANNEL =
+  'meeting-recording:capture-devices-changed';
+export const MEETING_CAPTURE_SOURCE_NOTICE_CHANNEL =
+  'meeting-recording:capture-source-notice';

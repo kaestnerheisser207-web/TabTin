@@ -16,17 +16,32 @@ import { installDisplayMediaHandlers } from '../services/display-media';
 
 const CAPTURE_PARTITION = 'persist:tabtin:meeting-capture';
 const PACKAGED_CAPTURE_URL = 'tabtin-file://app/meeting-capture.html';
+const DEFAULT_CAPTURE_RUNTIME_WATCHDOG_MS = 30_000;
 
 type CaptureMethod =
   | 'probe'
   | 'listMicrophones'
   | 'listSystemAudioSources'
   | 'testMicrophone'
-  | 'switchMicrophone'
-  | 'switchSystemAudio'
+  | 'prepareMicrophoneSwitch'
+  | 'prepareSystemAudioSwitch'
+  | 'commitSourceSwitch'
+  | 'abortSourceSwitch'
+  | 'finalizeSourceSwitch'
+  | 'rollbackSourceSwitch'
   | 'start'
   | 'stop'
   | 'getState';
+
+export interface PreparedMeetingCaptureSource
+  extends MeetingCaptureSourceSelection {
+  operationId: string;
+}
+
+export interface MeetingCaptureSourceSwitchReference {
+  operationId: string;
+  source: MeetingCaptureSourceSelection['source'];
+}
 
 export interface MeetingCaptureHost {
   listMicrophones(): Promise<MeetingMicrophoneDevice[]>;
@@ -35,8 +50,22 @@ export interface MeetingCaptureHost {
   testMicrophone(
     input?: MeetingMicrophoneTestInput,
   ): Promise<MeetingMicrophoneTestResult>;
-  switchMicrophone(deviceId: string): Promise<MeetingCaptureSourceSelection>;
-  switchSystemAudio(sourceId: string): Promise<MeetingCaptureSourceSelection>;
+  prepareMicrophoneSwitch(
+    deviceId: string,
+  ): Promise<PreparedMeetingCaptureSource>;
+  prepareSystemAudioSwitch(
+    sourceId: string,
+  ): Promise<PreparedMeetingCaptureSource>;
+  commitSourceSwitch(
+    input: MeetingCaptureSourceSwitchReference,
+  ): Promise<MeetingCaptureSourceSelection>;
+  abortSourceSwitch(input: MeetingCaptureSourceSwitchReference): Promise<void>;
+  finalizeSourceSwitch(
+    input: MeetingCaptureSourceSwitchReference,
+  ): Promise<MeetingCaptureSourceSelection>;
+  rollbackSourceSwitch(
+    input: MeetingCaptureSourceSwitchReference,
+  ): Promise<MeetingCaptureSourceSelection>;
   start(
     scope: MeetingArchiveScope,
     options?: { microphoneDeviceId?: string },
@@ -49,12 +78,14 @@ export interface MeetingCaptureWindowOptions {
   isDev?: boolean;
   rendererUrl?: string;
   onUnexpectedTermination?: (reason: string) => void;
+  captureRuntimeWatchdogMs?: number;
 }
 
 export class MeetingCaptureWindow implements MeetingCaptureHost {
   private readonly isDev: boolean;
   private readonly rendererUrl?: string;
   private readonly onUnexpectedTermination?: (reason: string) => void;
+  private readonly captureRuntimeWatchdogMs: number;
   private window: BrowserWindow | null = null;
   private loadPromise: Promise<BrowserWindow> | null = null;
   private capturePolicyInstalled = false;
@@ -64,6 +95,8 @@ export class MeetingCaptureWindow implements MeetingCaptureHost {
     this.isDev = options.isDev ?? !app.isPackaged;
     this.rendererUrl = options.rendererUrl ?? process.env.ELECTRON_RENDERER_URL;
     this.onUnexpectedTermination = options.onUnexpectedTermination;
+    this.captureRuntimeWatchdogMs =
+      options.captureRuntimeWatchdogMs ?? DEFAULT_CAPTURE_RUNTIME_WATCHDOG_MS;
   }
 
   private resolveUrl(): string {
@@ -152,6 +185,25 @@ export class MeetingCaptureWindow implements MeetingCaptureHost {
     );
   }
 
+  private async invokeWithRuntimeWatchdog(
+    method: CaptureMethod,
+    argument?: unknown,
+  ): Promise<unknown> {
+    let timeoutId: ReturnType<typeof setTimeout> | null = null;
+    try {
+      return await Promise.race([
+        this.invoke(method, argument),
+        new Promise<never>((_, reject) => {
+          timeoutId = setTimeout(() => {
+            reject(new Error('meeting capture renderer is unresponsive'));
+          }, this.captureRuntimeWatchdogMs);
+        }),
+      ]);
+    } finally {
+      if (timeoutId) clearTimeout(timeoutId);
+    }
+  }
+
   async start(
     scope: MeetingArchiveScope,
     options: { microphoneDeviceId?: string } = {},
@@ -187,20 +239,53 @@ export class MeetingCaptureWindow implements MeetingCaptureHost {
     )) as MeetingMicrophoneTestResult;
   }
 
-  async switchMicrophone(
+  async prepareMicrophoneSwitch(
     deviceId: string,
-  ): Promise<MeetingCaptureSourceSelection> {
-    return (await this.invoke('switchMicrophone', {
+  ): Promise<PreparedMeetingCaptureSource> {
+    return (await this.invokeWithRuntimeWatchdog('prepareMicrophoneSwitch', {
       deviceId,
-    })) as MeetingCaptureSourceSelection;
+    })) as PreparedMeetingCaptureSource;
   }
 
-  async switchSystemAudio(
+  async prepareSystemAudioSwitch(
     sourceId: string,
-  ): Promise<MeetingCaptureSourceSelection> {
-    return (await this.invoke('switchSystemAudio', {
+  ): Promise<PreparedMeetingCaptureSource> {
+    return (await this.invokeWithRuntimeWatchdog('prepareSystemAudioSwitch', {
       sourceId,
-    })) as MeetingCaptureSourceSelection;
+    })) as PreparedMeetingCaptureSource;
+  }
+
+  async commitSourceSwitch(
+    input: MeetingCaptureSourceSwitchReference,
+  ): Promise<MeetingCaptureSourceSelection> {
+    return (await this.invokeWithRuntimeWatchdog(
+      'commitSourceSwitch',
+      input,
+    )) as MeetingCaptureSourceSelection;
+  }
+
+  async abortSourceSwitch(
+    input: MeetingCaptureSourceSwitchReference,
+  ): Promise<void> {
+    await this.invokeWithRuntimeWatchdog('abortSourceSwitch', input);
+  }
+
+  async finalizeSourceSwitch(
+    input: MeetingCaptureSourceSwitchReference,
+  ): Promise<MeetingCaptureSourceSelection> {
+    return (await this.invokeWithRuntimeWatchdog(
+      'finalizeSourceSwitch',
+      input,
+    )) as MeetingCaptureSourceSelection;
+  }
+
+  async rollbackSourceSwitch(
+    input: MeetingCaptureSourceSwitchReference,
+  ): Promise<MeetingCaptureSourceSelection> {
+    return (await this.invokeWithRuntimeWatchdog(
+      'rollbackSourceSwitch',
+      input,
+    )) as MeetingCaptureSourceSelection;
   }
 
   async stop(): Promise<void> {

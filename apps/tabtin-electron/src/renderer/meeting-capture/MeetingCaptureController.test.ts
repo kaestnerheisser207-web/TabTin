@@ -5,17 +5,28 @@ import {
   chooseMeetingAudioMimeType,
 } from './MeetingCaptureController';
 
-class FakeTrack {
+class FakeTrack extends EventTarget {
   stopped = false;
+  private state: MediaStreamTrackState = 'live';
   constructor(
     readonly label = 'USB microphone',
     private readonly deviceId = 'mic-2',
-  ) {}
+  ) {
+    super();
+  }
   stop() {
     this.stopped = true;
+    this.state = 'ended';
+  }
+  get readyState(): MediaStreamTrackState {
+    return this.state;
   }
   getSettings() {
     return { sampleRate: 48_000, channelCount: 1, deviceId: this.deviceId };
+  }
+  end() {
+    this.state = 'ended';
+    this.dispatchEvent(new Event('ended'));
   }
 }
 
@@ -71,6 +82,143 @@ function createPcmRuntime() {
   };
 }
 
+function createAudioContextHarness() {
+  const contexts: Array<{
+    sources: Array<{
+      stream: MediaStream;
+      connect: ReturnType<typeof vi.fn>;
+      disconnect: ReturnType<typeof vi.fn>;
+    }>;
+    gains: Array<{
+      gain: { setValueAtTime: ReturnType<typeof vi.fn> };
+      connect: ReturnType<typeof vi.fn>;
+      disconnect: ReturnType<typeof vi.fn>;
+    }>;
+    outputStream: FakeStream;
+    close: ReturnType<typeof vi.fn>;
+  }> = [];
+  const factory = () => {
+    const sources: (typeof contexts)[number]['sources'] = [];
+    const gains: (typeof contexts)[number]['gains'] = [];
+    const outputStream = new FakeStream(true, 'Stable audio bus', 'bus');
+    const outputNode = { stream: outputStream };
+    const close = vi.fn().mockResolvedValue(undefined);
+    const context = {
+      state: 'running',
+      currentTime: 42,
+      createMediaStreamSource: vi.fn((stream: MediaStream) => {
+        const source = {
+          stream,
+          connect: vi.fn(),
+          disconnect: vi.fn(),
+        };
+        sources.push(source);
+        return source;
+      }),
+      createGain: vi.fn(() => {
+        const gain = {
+          gain: { setValueAtTime: vi.fn() },
+          connect: vi.fn(),
+          disconnect: vi.fn(),
+        };
+        gains.push(gain);
+        return gain;
+      }),
+      createMediaStreamDestination: vi.fn(() => outputNode),
+      resume: vi.fn().mockResolvedValue(undefined),
+      close,
+    };
+    contexts.push({ sources, gains, outputStream, close });
+    return context as unknown as AudioContext;
+  };
+  return { contexts, factory };
+}
+
+function deferred<T>() {
+  let resolve!: (value: T) => void;
+  let reject!: (reason?: unknown) => void;
+  const promise = new Promise<T>((resolvePromise, rejectPromise) => {
+    resolve = resolvePromise;
+    reject = rejectPromise;
+  });
+  return { promise, resolve, reject };
+}
+
+async function flushMicrotasks(): Promise<void> {
+  for (let index = 0; index < 8; index += 1) await Promise.resolve();
+}
+
+async function createSwitchHarness(options: {
+  openReplacement: () => Promise<FakeStream>;
+  mediaDeviceEvents?: EventTarget;
+  devices?: MediaDeviceInfo[];
+}) {
+  const microphone = new FakeStream(true, 'Built-in microphone', 'mic-1');
+  const display = new FakeStream(true, 'System audio', 'display-1');
+  const getUserMedia = vi
+    .fn()
+    .mockResolvedValueOnce(microphone)
+    .mockImplementation(options.openReplacement);
+  const recorders: FakeRecorder[] = [];
+  const audioContexts = createAudioContextHarness();
+  const reportCaptureSourceEnded = vi.fn();
+  const reportCaptureDevicesChanged = vi.fn();
+  const controller = new MeetingCaptureController({
+    mediaDevices: {
+      getUserMedia,
+      getDisplayMedia: vi.fn().mockResolvedValue(display),
+      enumerateDevices: vi.fn().mockResolvedValue(
+        options.devices ?? [
+          {
+            kind: 'audioinput',
+            deviceId: 'mic-1',
+            groupId: 'group-1',
+            label: 'Built-in microphone',
+            toJSON: () => ({}),
+          } as MediaDeviceInfo,
+        ],
+      ),
+      addEventListener: options.mediaDeviceEvents?.addEventListener.bind(
+        options.mediaDeviceEvents,
+      ),
+      removeEventListener: options.mediaDeviceEvents?.removeEventListener.bind(
+        options.mediaDeviceEvents,
+      ),
+    },
+    mediaRecorderFactory: (stream, recorderOptions) => {
+      const recorder = new FakeRecorder(stream, recorderOptions);
+      recorders.push(recorder);
+      return recorder as unknown as MediaRecorder;
+    },
+    isTypeSupported: () => true,
+    audioContextFactory: audioContexts.factory,
+    pcmCaptureFactory: () => createPcmRuntime(),
+    sink: {
+      appendAudioChunk: vi.fn().mockResolvedValue(undefined),
+      appendPcmChunk: vi.fn().mockResolvedValue(undefined),
+      reportCaptureSourceEnded,
+      reportCaptureDevicesChanged,
+    },
+  });
+  await controller.start({
+    scope: {
+      organizationId: 'org-1',
+      userId: 'user-1',
+      sessionId: 'session-1',
+    },
+    microphoneDeviceId: 'mic-1',
+  });
+  return {
+    controller,
+    microphone,
+    display,
+    recorders,
+    audioContexts,
+    reportCaptureSourceEnded,
+    reportCaptureDevicesChanged,
+  };
+}
+
 describe('MeetingCaptureController', () => {
   it('treats stop as idempotent after the hidden capture runtime is lost', async () => {
     const controller = new MeetingCaptureController({
@@ -104,6 +252,7 @@ describe('MeetingCaptureController', () => {
     const pcmEmitters: Array<(bytes: ArrayBuffer) => void> = [];
     const pcmLevelEmitters: Array<(level: number) => void> = [];
     let now = 1_000;
+    const audioContexts = createAudioContextHarness();
     const controller = new MeetingCaptureController({
       mediaDevices: {
         getUserMedia: vi.fn().mockResolvedValue(microphone),
@@ -115,9 +264,8 @@ describe('MeetingCaptureController', () => {
         recorders.push(recorder);
         return recorder as unknown as MediaRecorder;
       },
-      mediaStreamFactory: (tracks) =>
-        ({ getAudioTracks: () => tracks }) as unknown as MediaStream,
       isTypeSupported: () => true,
+      audioContextFactory: audioContexts.factory,
       now: () => now,
       pcmCaptureFactory: ({ onChunk, onLevel }) => {
         pcmEmitters.push(onChunk);
@@ -214,8 +362,6 @@ describe('MeetingCaptureController', () => {
         },
         mediaRecorderFactory: (stream, options) =>
           new FakeRecorder(stream, options) as unknown as MediaRecorder,
-        mediaStreamFactory: (tracks) =>
-          ({ getAudioTracks: () => tracks }) as unknown as MediaStream,
         isTypeSupported: () => true,
         pcmCaptureFactory: () => createPcmRuntime(),
         sink: {
@@ -273,8 +419,6 @@ describe('MeetingCaptureController', () => {
         ]),
       },
       mediaRecorderFactory: vi.fn(),
-      mediaStreamFactory: (tracks) =>
-        ({ getAudioTracks: () => tracks }) as unknown as MediaStream,
       isTypeSupported: () => true,
       sink: { appendAudioChunk: vi.fn(), appendPcmChunk: vi.fn() },
     });
@@ -318,8 +462,6 @@ describe('MeetingCaptureController', () => {
         enumerateDevices: vi.fn().mockResolvedValue([]),
       },
       mediaRecorderFactory: vi.fn(),
-      mediaStreamFactory: (tracks) =>
-        ({ getAudioTracks: () => tracks }) as unknown as MediaStream,
       isTypeSupported: () => true,
       sink: { appendAudioChunk: vi.fn(), appendPcmChunk: vi.fn() },
     });
@@ -347,8 +489,6 @@ describe('MeetingCaptureController', () => {
         enumerateDevices: vi.fn().mockResolvedValue([]),
       },
       mediaRecorderFactory: vi.fn(),
-      mediaStreamFactory: (tracks) =>
-        ({ getAudioTracks: () => tracks }) as unknown as MediaStream,
       isTypeSupported: () => true,
       sink: { appendAudioChunk: vi.fn(), appendPcmChunk: vi.fn() },
     });
@@ -395,8 +535,6 @@ describe('MeetingCaptureController', () => {
           enumerateDevices: vi.fn().mockResolvedValue([]),
         },
         mediaRecorderFactory: vi.fn(),
-        mediaStreamFactory: (tracks) =>
-          ({ getAudioTracks: () => tracks }) as unknown as MediaStream,
         audioContextFactory: () => context as unknown as AudioContext,
         isTypeSupported: () => true,
         now: () => Date.now(),
@@ -472,8 +610,6 @@ describe('MeetingCaptureController', () => {
         enumerateDevices: vi.fn().mockResolvedValue([]),
       },
       mediaRecorderFactory: vi.fn(),
-      mediaStreamFactory: (tracks) =>
-        ({ getAudioTracks: () => tracks }) as unknown as MediaStream,
       isTypeSupported: () => true,
       now: () => 10,
       sink: {
@@ -515,8 +651,6 @@ describe('MeetingCaptureController', () => {
         ]),
       },
       mediaRecorderFactory: vi.fn(),
-      mediaStreamFactory: (tracks) =>
-        ({ getAudioTracks: () => tracks }) as unknown as MediaStream,
       isTypeSupported: () => true,
       sink: { appendAudioChunk: vi.fn(), appendPcmChunk: vi.fn() },
     });
@@ -537,6 +671,7 @@ describe('MeetingCaptureController', () => {
     const microphone = new FakeStream();
     const display = new FakeStream();
     const recorders: FakeRecorder[] = [];
+    const audioContexts = createAudioContextHarness();
     const controller = new MeetingCaptureController({
       mediaDevices: {
         getUserMedia: vi.fn().mockResolvedValue(microphone),
@@ -548,9 +683,8 @@ describe('MeetingCaptureController', () => {
         recorders.push(recorder);
         return recorder as unknown as MediaRecorder;
       },
-      mediaStreamFactory: (tracks) =>
-        ({ getAudioTracks: () => tracks }) as unknown as MediaStream,
       isTypeSupported: () => true,
+      audioContextFactory: audioContexts.factory,
       pcmCaptureFactory: () => createPcmRuntime(),
       sink: {
         appendAudioChunk: vi.fn().mockResolvedValue(undefined),
@@ -573,6 +707,12 @@ describe('MeetingCaptureController', () => {
     ).toBe(true);
     expect(microphone.audioTrack.stopped).toBe(true);
     expect(display.videoTrack.stopped).toBe(true);
+    expect(audioContexts.contexts).toHaveLength(2);
+    expect(
+      audioContexts.contexts.every(
+        (context) => context.close.mock.calls.length === 1,
+      ),
+    ).toBe(true);
   });
 
   it('hot-switches microphone and system audio without restarting capture', async () => {
@@ -597,6 +737,8 @@ describe('MeetingCaptureController', () => {
       .mockResolvedValueOnce(display)
       .mockResolvedValueOnce(replacementDisplay);
     const recorders: FakeRecorder[] = [];
+    const pcmRuntimes = [createPcmRuntime(), createPcmRuntime()];
+    const audioContexts = createAudioContextHarness();
     const controller = new MeetingCaptureController({
       mediaDevices: {
         getUserMedia,
@@ -608,10 +750,10 @@ describe('MeetingCaptureController', () => {
         recorders.push(recorder);
         return recorder as unknown as MediaRecorder;
       },
-      mediaStreamFactory: (tracks) =>
-        ({ getAudioTracks: () => tracks }) as unknown as MediaStream,
       isTypeSupported: () => true,
-      pcmCaptureFactory: () => createPcmRuntime(),
+      audioContextFactory: audioContexts.factory,
+      pcmCaptureFactory: ({ source }) =>
+        pcmRuntimes[source === 'local' ? 0 : 1]!,
       sink: {
         appendAudioChunk: vi.fn().mockResolvedValue(undefined),
         appendPcmChunk: vi.fn().mockResolvedValue(undefined),
@@ -626,10 +768,21 @@ describe('MeetingCaptureController', () => {
       },
       microphoneDeviceId: 'mic-1',
     });
+    const localRecorder = recorders[0];
+    const localDestinationTrack = localRecorder?.stream.getAudioTracks()[0];
 
+    const preparedMicrophone = await controller.prepareMicrophoneSwitch({
+      deviceId: 'mic-2',
+    });
     await expect(
-      controller.switchMicrophone({ deviceId: 'mic-2' }),
+      controller.commitSourceSwitch(preparedMicrophone),
     ).resolves.toEqual({
+      source: 'local',
+      sourceId: 'mic-2',
+      label: 'USB microphone',
+    });
+    expect(microphone.audioTrack.stopped).toBe(false);
+    expect(controller.finalizeSourceSwitch(preparedMicrophone)).toEqual({
       source: 'local',
       sourceId: 'mic-2',
       label: 'USB microphone',
@@ -637,21 +790,439 @@ describe('MeetingCaptureController', () => {
     expect(microphone.audioTrack.stopped).toBe(true);
     expect(replacementMicrophone.audioTrack.stopped).toBe(false);
 
+    const preparedSystemAudio = await controller.prepareSystemAudioSwitch({
+      sourceId: 'main-display',
+    });
     await expect(
-      controller.switchSystemAudio({ sourceId: 'main-display' }),
+      controller.commitSourceSwitch(preparedSystemAudio),
     ).resolves.toEqual({
       source: 'remote',
       sourceId: 'main-display',
       label: 'System audio',
     });
+    expect(display.audioTrack.stopped).toBe(false);
+    await controller.finalizeSourceSwitch(preparedSystemAudio);
     expect(display.audioTrack.stopped).toBe(true);
     expect(replacementDisplay.audioTrack.stopped).toBe(false);
-    expect(recorders).toHaveLength(4);
+    expect(recorders).toHaveLength(2);
+    expect(recorders[0]).toBe(localRecorder);
+    expect(recorders[0]?.stream.getAudioTracks()[0]).toBe(
+      localDestinationTrack,
+    );
+    expect(recorders.every((recorder) => recorder.stop.mock.calls.length === 0)).toBe(
+      true,
+    );
+    expect(pcmRuntimes.every((runtime) => runtime.start.mock.calls.length === 1)).toBe(
+      true,
+    );
+    expect(pcmRuntimes.every((runtime) => runtime.stop.mock.calls.length === 0)).toBe(
+      true,
+    );
+    expect(audioContexts.contexts[0]?.sources).toHaveLength(2);
+    expect(audioContexts.contexts[0]?.gains).toHaveLength(2);
+    expect(audioContexts.contexts[0]?.gains[1]?.gain.setValueAtTime).toHaveBeenCalledWith(
+      1,
+      42,
+    );
+    expect(audioContexts.contexts[0]?.gains[0]?.gain.setValueAtTime).toHaveBeenLastCalledWith(
+      0,
+      42,
+    );
+    expect(audioContexts.contexts[0]?.sources[0]?.disconnect).toHaveBeenCalledOnce();
+    expect(audioContexts.contexts[1]?.sources).toHaveLength(2);
+    expect(audioContexts.contexts[1]?.sources[0]?.disconnect).toHaveBeenCalledOnce();
     expect(controller.getState()).toBe('recording');
 
     await controller.stop();
     expect(replacementMicrophone.audioTrack.stopped).toBe(true);
     expect(replacementDisplay.audioTrack.stopped).toBe(true);
+  });
+
+  it('stops a late microphone stream after its renderer-owned deadline', async () => {
+    vi.useFakeTimers();
+    try {
+      const replacement = new FakeStream(true, 'USB microphone', 'mic-2');
+      const pending = deferred<FakeStream>();
+      const harness = await createSwitchHarness({
+        openReplacement: () => pending.promise,
+      });
+      const switchPromise = harness.controller.prepareMicrophoneSwitch({
+        deviceId: 'mic-2',
+      });
+      const rejection = expect(switchPromise).rejects.toThrow(
+        'meeting capture source switch timed out',
+      );
+      await vi.advanceTimersByTimeAsync(15_000);
+      await rejection;
+      pending.resolve(replacement);
+      await flushMicrotasks();
+
+      expect(harness.microphone.audioTrack.stopped).toBe(false);
+      expect(replacement.audioTrack.stopped).toBe(true);
+      expect(harness.audioContexts.contexts[0]?.sources).toHaveLength(1);
+      expect(harness.recorders).toHaveLength(2);
+      await harness.controller.stop();
+    } finally {
+      vi.useRealTimers();
+    }
+  });
+
+  it('lets a same-deadline device resolution win when it settles first', async () => {
+    vi.useFakeTimers();
+    try {
+      const replacement = new FakeStream(true, 'USB microphone', 'mic-2');
+      const pending = deferred<FakeStream>();
+      const harness = await createSwitchHarness({
+        openReplacement: () => pending.promise,
+      });
+      const switchPromise = harness.controller.prepareMicrophoneSwitch({
+        deviceId: 'mic-2',
+      });
+      pending.resolve(replacement);
+      await Promise.resolve();
+      await Promise.resolve();
+      await vi.advanceTimersByTimeAsync(15_000);
+
+      const prepared = await switchPromise;
+      await harness.controller.commitSourceSwitch(prepared);
+      expect(replacement.audioTrack.stopped).toBe(false);
+      harness.controller.finalizeSourceSwitch(prepared);
+      expect(harness.microphone.audioTrack.stopped).toBe(true);
+      await harness.controller.stop();
+    } finally {
+      vi.useRealTimers();
+    }
+  });
+
+  it('keeps the active input when a prepared track ends before commit', async () => {
+    const replacement = new FakeStream(true, 'USB microphone', 'mic-2');
+    const harness = await createSwitchHarness({
+      openReplacement: () => Promise.resolve(replacement),
+    });
+    const prepared = await harness.controller.prepareMicrophoneSwitch({
+      deviceId: 'mic-2',
+    });
+    replacement.audioTrack.end();
+
+    await expect(
+      harness.controller.commitSourceSwitch(prepared),
+    ).rejects.toThrow('meeting capture source switch was cancelled');
+    expect(harness.microphone.audioTrack.stopped).toBe(false);
+    expect(replacement.audioTrack.stopped).toBe(true);
+    expect(harness.audioContexts.contexts[0]?.sources[0]?.disconnect).not.toHaveBeenCalled();
+
+    await harness.controller.stop();
+  });
+
+  it('keeps only the newest rapid microphone preparation', async () => {
+    const first = deferred<FakeStream>();
+    const firstReplacement = new FakeStream(true, 'First USB', 'mic-2');
+    const secondReplacement = new FakeStream(true, 'Second USB', 'mic-3');
+    const microphone = new FakeStream(true, 'Built-in microphone', 'mic-1');
+    const display = new FakeStream(true, 'System audio', 'display-1');
+    const getUserMedia = vi
+      .fn()
+      .mockResolvedValueOnce(microphone)
+      .mockImplementationOnce(() => first.promise)
+      .mockResolvedValueOnce(secondReplacement);
+    const audioContexts = createAudioContextHarness();
+    const controller = new MeetingCaptureController({
+      mediaDevices: {
+        getUserMedia,
+        getDisplayMedia: vi.fn().mockResolvedValue(display),
+        enumerateDevices: vi.fn().mockResolvedValue([]),
+      },
+      mediaRecorderFactory: (stream, options) =>
+        new FakeRecorder(stream, options) as unknown as MediaRecorder,
+      isTypeSupported: () => true,
+      audioContextFactory: audioContexts.factory,
+      pcmCaptureFactory: () => createPcmRuntime(),
+      sink: {
+        appendAudioChunk: vi.fn().mockResolvedValue(undefined),
+        appendPcmChunk: vi.fn().mockResolvedValue(undefined),
+      },
+    });
+    await controller.start({
+      scope: {
+        organizationId: 'org-1',
+        userId: 'user-1',
+        sessionId: 'session-1',
+      },
+    });
+
+    const firstPromise = controller.prepareMicrophoneSwitch({
+      deviceId: 'mic-2',
+    });
+    const firstRejection = expect(firstPromise).rejects.toThrow(
+      'meeting capture source switch was cancelled',
+    );
+    const secondPrepared = await controller.prepareMicrophoneSwitch({
+      deviceId: 'mic-3',
+    });
+    await firstRejection;
+    first.resolve(firstReplacement);
+    await flushMicrotasks();
+    await controller.commitSourceSwitch(secondPrepared);
+    await controller.finalizeSourceSwitch(secondPrepared);
+
+    expect(firstReplacement.audioTrack.stopped).toBe(true);
+    expect(secondReplacement.audioTrack.stopped).toBe(false);
+    expect(microphone.audioTrack.stopped).toBe(true);
+    expect(audioContexts.contexts[0]?.sources).toHaveLength(2);
+    await controller.stop();
+  });
+
+  it('preserves the active input when replacement preparation fails', async () => {
+    const harness = await createSwitchHarness({
+      openReplacement: () =>
+        Promise.reject(new DOMException('denied', 'NotAllowedError')),
+    });
+
+    await expect(
+      harness.controller.prepareMicrophoneSwitch({ deviceId: 'mic-2' }),
+    ).rejects.toMatchObject({ name: 'NotAllowedError' });
+    expect(harness.microphone.audioTrack.stopped).toBe(false);
+    expect(harness.audioContexts.contexts[0]?.sources).toHaveLength(1);
+    expect(
+      harness.audioContexts.contexts[0]?.gains[0]?.gain.setValueAtTime,
+    ).toHaveBeenLastCalledWith(1, 42);
+    await harness.controller.stop();
+  });
+
+  it('stops immediately without waiting for a pending device request', async () => {
+    const pending = deferred<FakeStream>();
+    const replacement = new FakeStream(true, 'USB microphone', 'mic-2');
+    const harness = await createSwitchHarness({
+      openReplacement: () => pending.promise,
+    });
+    const preparePromise = harness.controller.prepareMicrophoneSwitch({
+      deviceId: 'mic-2',
+    });
+    const prepareRejection = expect(preparePromise).rejects.toThrow(
+      'meeting capture source switch was cancelled',
+    );
+
+    await harness.controller.stop();
+    await prepareRejection;
+    expect(
+      harness.recorders.every(
+        (recorder) => recorder.stop.mock.calls.length === 1,
+      ),
+    ).toBe(true);
+    pending.resolve(replacement);
+    await flushMicrotasks();
+    expect(replacement.audioTrack.stopped).toBe(true);
+    expect(harness.controller.getState()).toBe('idle');
+  });
+
+  it('rolls back a committed switch when persistence fails', async () => {
+    const replacement = new FakeStream(true, 'USB microphone', 'mic-2');
+    const harness = await createSwitchHarness({
+      openReplacement: () => Promise.resolve(replacement),
+    });
+    const recorder = harness.recorders[0];
+    const destinationTrack = recorder?.stream.getAudioTracks()[0];
+    const prepared = await harness.controller.prepareMicrophoneSwitch({
+      deviceId: 'mic-2',
+    });
+    await harness.controller.commitSourceSwitch(prepared);
+
+    expect(harness.microphone.audioTrack.stopped).toBe(false);
+    expect(replacement.audioTrack.stopped).toBe(false);
+    const rolledBack = {
+      source: 'local',
+      sourceId: 'mic-1',
+      label: 'Built-in microphone',
+    } as const;
+    expect(harness.controller.rollbackSourceSwitch(prepared)).toEqual(
+      rolledBack,
+    );
+    expect(harness.controller.rollbackSourceSwitch(prepared)).toEqual(
+      rolledBack,
+    );
+    expect(() => harness.controller.finalizeSourceSwitch(prepared)).toThrow(
+      'meeting capture source switch was already rolled back',
+    );
+    expect(harness.microphone.audioTrack.stopped).toBe(false);
+    expect(replacement.audioTrack.stopped).toBe(true);
+    expect(harness.recorders[0]).toBe(recorder);
+    expect(harness.recorders[0]?.stream.getAudioTracks()[0]).toBe(
+      destinationTrack,
+    );
+    expect(
+      harness.audioContexts.contexts[0]?.gains[0]?.gain.setValueAtTime,
+    ).toHaveBeenLastCalledWith(1, 42);
+    expect(
+      harness.audioContexts.contexts[0]?.gains[1]?.gain.setValueAtTime,
+    ).toHaveBeenLastCalledWith(0, 42);
+    await harness.controller.stop();
+  });
+
+  it('finalizes a committed switch only after persistence succeeds', async () => {
+    const replacement = new FakeStream(true, 'USB microphone', 'mic-2');
+    const harness = await createSwitchHarness({
+      openReplacement: () => Promise.resolve(replacement),
+    });
+    const prepared = await harness.controller.prepareMicrophoneSwitch({
+      deviceId: 'mic-2',
+    });
+    await harness.controller.commitSourceSwitch(prepared);
+
+    expect(harness.microphone.audioTrack.stopped).toBe(false);
+    const finalized = {
+      source: 'local',
+      sourceId: 'mic-2',
+      label: 'USB microphone',
+    } as const;
+    expect(harness.controller.finalizeSourceSwitch(prepared)).toEqual(
+      finalized,
+    );
+    expect(harness.controller.finalizeSourceSwitch(prepared)).toEqual(
+      finalized,
+    );
+    expect(() => harness.controller.rollbackSourceSwitch(prepared)).toThrow(
+      'meeting capture source switch was already finalized',
+    );
+    expect(harness.microphone.audioTrack.stopped).toBe(true);
+    expect(replacement.audioTrack.stopped).toBe(false);
+    await harness.controller.stop();
+  });
+
+  it('recovers a lost finalize response before accepting the next switch', async () => {
+    const firstReplacement = new FakeStream(true, 'First USB', 'mic-2');
+    const secondReplacement = new FakeStream(true, 'Second USB', 'mic-3');
+    const replacements = [firstReplacement, secondReplacement];
+    const harness = await createSwitchHarness({
+      openReplacement: () => Promise.resolve(replacements.shift()!),
+    });
+    const firstPrepared = await harness.controller.prepareMicrophoneSwitch({
+      deviceId: 'mic-2',
+    });
+    await harness.controller.commitSourceSwitch(firstPrepared);
+    const finalized = harness.controller.finalizeSourceSwitch(firstPrepared);
+    expect(harness.controller.finalizeSourceSwitch(firstPrepared)).toEqual(
+      finalized,
+    );
+
+    const secondPrepared = await harness.controller.prepareMicrophoneSwitch({
+      deviceId: 'mic-3',
+    });
+
+    expect(harness.microphone.audioTrack.stopped).toBe(true);
+    expect(firstReplacement.audioTrack.stopped).toBe(false);
+    harness.controller.abortSourceSwitch(secondPrepared);
+    expect(secondReplacement.audioTrack.stopped).toBe(true);
+    await harness.controller.stop();
+  });
+
+  it('blocks prepare and stop while a committed transaction is unresolved', async () => {
+    const replacement = new FakeStream(true, 'USB microphone', 'mic-2');
+    const harness = await createSwitchHarness({
+      openReplacement: () => Promise.resolve(replacement),
+    });
+    const prepared = await harness.controller.prepareMicrophoneSwitch({
+      deviceId: 'mic-2',
+    });
+    await harness.controller.commitSourceSwitch(prepared);
+
+    await expect(
+      harness.controller.prepareMicrophoneSwitch({ deviceId: 'mic-3' }),
+    ).rejects.toThrow('meeting capture source switch is awaiting finalization');
+    await expect(harness.controller.stop()).rejects.toThrow(
+      'meeting capture source switch is awaiting transaction resolution',
+    );
+    expect(harness.controller.getState()).toBe('recording');
+    expect(harness.microphone.audioTrack.stopped).toBe(false);
+    expect(replacement.audioTrack.stopped).toBe(false);
+    expect(
+      harness.audioContexts.contexts[0]?.gains[0]?.gain.setValueAtTime,
+    ).toHaveBeenLastCalledWith(0, 42);
+    expect(
+      harness.audioContexts.contexts[0]?.gains[1]?.gain.setValueAtTime,
+    ).toHaveBeenLastCalledWith(1, 42);
+    expect(
+      harness.recorders.every(
+        (candidate) => candidate.stop.mock.calls.length === 0,
+      ),
+    ).toBe(true);
+    harness.controller.finalizeSourceSwitch(prepared);
+    await harness.controller.stop();
+    expect(replacement.audioTrack.stopped).toBe(true);
+  });
+
+  it('reports ended only for the currently committed source', async () => {
+    const replacement = new FakeStream(true, 'USB microphone', 'mic-2');
+    const harness = await createSwitchHarness({
+      openReplacement: () => Promise.resolve(replacement),
+    });
+    const prepared = await harness.controller.prepareMicrophoneSwitch({
+      deviceId: 'mic-2',
+    });
+    await harness.controller.commitSourceSwitch(prepared);
+
+    harness.microphone.audioTrack.end();
+    expect(harness.reportCaptureSourceEnded).not.toHaveBeenCalled();
+    replacement.audioTrack.end();
+    expect(harness.reportCaptureSourceEnded).toHaveBeenCalledOnce();
+    expect(harness.reportCaptureSourceEnded).toHaveBeenCalledWith({
+      organizationId: 'org-1',
+      userId: 'user-1',
+      sessionId: 'session-1',
+      source: 'local',
+      sourceId: 'mic-2',
+      label: 'USB microphone',
+    });
+    harness.controller.finalizeSourceSwitch(prepared);
+    await harness.controller.stop();
+  });
+
+  it('reports device-list changes without replacing the active capture', async () => {
+    const mediaDeviceEvents = new EventTarget();
+    const replacement = new FakeStream(true, 'Unused microphone', 'mic-2');
+    const harness = await createSwitchHarness({
+      openReplacement: () => Promise.resolve(replacement),
+      mediaDeviceEvents,
+    });
+
+    mediaDeviceEvents.dispatchEvent(new Event('devicechange'));
+    await flushMicrotasks();
+    expect(harness.reportCaptureDevicesChanged).toHaveBeenCalledOnce();
+    expect(harness.reportCaptureDevicesChanged).toHaveBeenCalledWith({
+      changedAt: expect.stringMatching(/^\d{4}-\d{2}-\d{2}T/),
+    });
+    expect(harness.microphone.audioTrack.stopped).toBe(false);
+    expect(harness.audioContexts.contexts[0]?.sources).toHaveLength(1);
+    expect(harness.reportCaptureSourceEnded).not.toHaveBeenCalled();
+
+    await harness.controller.stop();
+    mediaDeviceEvents.dispatchEvent(new Event('devicechange'));
+    expect(harness.reportCaptureDevicesChanged).toHaveBeenCalledOnce();
+  });
+
+  it('reports the active microphone unavailable when it disappears from the device list', async () => {
+    const mediaDeviceEvents = new EventTarget();
+    const harness = await createSwitchHarness({
+      openReplacement: () =>
+        Promise.resolve(new FakeStream(true, 'Unused microphone', 'mic-2')),
+      mediaDeviceEvents,
+      devices: [],
+    });
+
+    mediaDeviceEvents.dispatchEvent(new Event('devicechange'));
+    await flushMicrotasks();
+
+    expect(harness.reportCaptureDevicesChanged).toHaveBeenCalledOnce();
+    expect(harness.reportCaptureSourceEnded).toHaveBeenCalledOnce();
+    expect(harness.reportCaptureSourceEnded).toHaveBeenCalledWith(
+      expect.objectContaining({
+        source: 'local',
+        sourceId: 'mic-1',
+        label: 'Built-in microphone',
+      }),
+    );
+    expect(harness.microphone.audioTrack.stopped).toBe(false);
+
+    await harness.controller.stop();
   });
 
   it('fails closed when either required audio track is missing', async () => {
@@ -664,8 +1235,6 @@ describe('MeetingCaptureController', () => {
         enumerateDevices: vi.fn().mockResolvedValue([]),
       },
       mediaRecorderFactory: vi.fn(),
-      mediaStreamFactory: (tracks) =>
-        ({ getAudioTracks: () => tracks }) as unknown as MediaStream,
       isTypeSupported: () => true,
       sink: { appendAudioChunk: vi.fn(), appendPcmChunk: vi.fn() },
     });
@@ -697,8 +1266,6 @@ describe('MeetingCaptureController', () => {
         enumerateDevices: vi.fn().mockResolvedValue([]),
       },
       mediaRecorderFactory: vi.fn(),
-      mediaStreamFactory: (tracks) =>
-        ({ getAudioTracks: () => tracks }) as unknown as MediaStream,
       isTypeSupported: () => true,
       sink: { appendAudioChunk: vi.fn(), appendPcmChunk: vi.fn() },
     });

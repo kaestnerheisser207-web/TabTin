@@ -10,6 +10,8 @@ import type {
   MeetingMediaProbeInput,
   MeetingArchiveListScope,
   MeetingCopilotAnswerResult,
+  MeetingCaptureSourceEndedEvent,
+  MeetingCaptureSourceNoticeEvent,
   MeetingLocalArchive,
   MeetingMicrophoneTestInput,
   MeetingMicrophoneTestResult,
@@ -18,13 +20,18 @@ import type {
   MeetingRecordingStatus,
   MeetingStorageProbeResult,
   MeetingTranscriptCheckpoint,
+  MeetingTranscriptChangedEvent,
   PrepareMeetingArchiveInput,
   SwitchMeetingMicrophoneInput,
   SwitchMeetingSystemAudioInput,
 } from '../../shared/meeting-recording-contract';
 import { MeetingArchiveStore } from './MeetingArchiveStore';
 import type { MeetingAudioUploader } from './MeetingAudioUploader';
-import type { MeetingCaptureHost } from './MeetingCaptureWindow';
+import type {
+  MeetingCaptureHost,
+  MeetingCaptureSourceSwitchReference,
+  PreparedMeetingCaptureSource,
+} from './MeetingCaptureWindow';
 import {
   MeetingServerRequestError,
   type MeetingServerSync,
@@ -32,9 +39,17 @@ import {
   type MeetingServerSession,
   type MeetingTranscriptSegmentInput,
 } from './MeetingServerSync';
+import { createLogger } from '../logger';
 
 const ACTIVE_STATES = new Set(['preparing', 'recording'] as const);
-const DEFAULT_SOURCE_SWITCH_TIMEOUT_MS = 10_000;
+const log = createLogger('MeetingRecording');
+
+class MeetingSourceSwitchSupersededError extends Error {}
+
+interface PendingSourceResolution {
+  reference: MeetingCaptureSourceSwitchReference;
+  resolution: 'finalize' | 'rollback';
+}
 
 function readString(value: unknown, fallback = ''): string {
   return typeof value === 'string' ? value : fallback;
@@ -125,6 +140,8 @@ function serverSessionManifest(
 export interface MeetingRecordingManagerOptions {
   archiveStore?: MeetingArchiveStore;
   onStatusChanged?: (status: MeetingRecordingStatus) => void;
+  onTranscriptChanged?: (event: MeetingTranscriptChangedEvent) => void;
+  onCaptureSourceNotice?: (event: MeetingCaptureSourceNoticeEvent) => void;
   captureHost?: MeetingCaptureHost;
   createAsrRuntime?: (input: {
     scope: MeetingArchiveScope;
@@ -136,7 +153,6 @@ export interface MeetingRecordingManagerOptions {
   }) => MeetingAsrRuntime;
   serverSync?: MeetingServerSync;
   audioUploader?: MeetingAudioUploader;
-  sourceSwitchTimeoutMs?: number;
 }
 
 export interface MeetingAsrRuntime {
@@ -151,11 +167,16 @@ export interface MeetingAsrRuntime {
 export class MeetingRecordingManager {
   private readonly archiveStore: MeetingArchiveStore;
   private readonly onStatusChanged?: (status: MeetingRecordingStatus) => void;
+  private readonly onTranscriptChanged?: (
+    event: MeetingTranscriptChangedEvent,
+  ) => void;
+  private readonly onCaptureSourceNotice?: (
+    event: MeetingCaptureSourceNoticeEvent,
+  ) => void;
   private readonly captureHost?: MeetingCaptureHost;
   private readonly createAsrRuntime?: MeetingRecordingManagerOptions['createAsrRuntime'];
   private readonly serverSync?: MeetingServerSync;
   private readonly audioUploader?: MeetingAudioUploader;
-  private readonly sourceSwitchTimeoutMs: number;
   private activeScope: MeetingArchiveScope | null = null;
   private activeManifest: MeetingArchiveManifestV2 | null = null;
   private operationChain: Promise<unknown> = Promise.resolve();
@@ -166,17 +187,34 @@ export class MeetingRecordingManager {
     MeetingTranscriptSegmentInput
   >();
   private readonly uploadTasks = new Map<string, Promise<void>>();
+  private readonly sourceSwitchGeneration: Record<'local' | 'remote', number> = {
+    local: 0,
+    remote: 0,
+  };
+  private readonly activeSourceCommitPhases = new Set<Promise<unknown>>();
+  private readonly activeSourceCommitPhaseBySource = new Map<
+    'local' | 'remote',
+    Promise<unknown>
+  >();
+  private readonly pendingSourceResolutions = new Map<
+    'local' | 'remote',
+    PendingSourceResolution
+  >();
+  private readonly activeSourceResolutionAttempts = new Map<
+    'local' | 'remote',
+    Promise<void>
+  >();
   private transcriptSyncTimer: ReturnType<typeof setTimeout> | null = null;
 
   constructor(options: MeetingRecordingManagerOptions = {}) {
     this.archiveStore = options.archiveStore ?? new MeetingArchiveStore();
     this.onStatusChanged = options.onStatusChanged;
+    this.onTranscriptChanged = options.onTranscriptChanged;
+    this.onCaptureSourceNotice = options.onCaptureSourceNotice;
     this.captureHost = options.captureHost;
     this.createAsrRuntime = options.createAsrRuntime;
     this.serverSync = options.serverSync;
     this.audioUploader = options.audioUploader;
-    this.sourceSwitchTimeoutMs =
-      options.sourceSwitchTimeoutMs ?? DEFAULT_SOURCE_SWITCH_TIMEOUT_MS;
   }
 
   private enqueue<T>(operation: () => Promise<T>): Promise<T> {
@@ -185,21 +223,250 @@ export class MeetingRecordingManager {
     return current;
   }
 
-  private async withSourceSwitchTimeout<T>(operation: Promise<T>): Promise<T> {
-    let timeoutId: ReturnType<typeof setTimeout> | null = null;
-    try {
-      return await Promise.race([
-        operation,
-        new Promise<never>((_, reject) => {
-          timeoutId = setTimeout(
-            () => reject(new Error('meeting capture source switch timed out')),
-            this.sourceSwitchTimeoutMs,
-          );
-        }),
-      ]);
-    } finally {
-      if (timeoutId) clearTimeout(timeoutId);
+  private invalidateSourceSwitches(): void {
+    this.sourceSwitchGeneration.local += 1;
+    this.sourceSwitchGeneration.remote += 1;
+  }
+
+  private trackSourceCommitPhase<T>(
+    source: 'local' | 'remote',
+    operation: Promise<T>,
+  ): Promise<T> {
+    const tracked = operation.finally(() => {
+      this.activeSourceCommitPhases.delete(tracked);
+      if (this.activeSourceCommitPhaseBySource.get(source) === tracked) {
+        this.activeSourceCommitPhaseBySource.delete(source);
+      }
+    });
+    this.activeSourceCommitPhases.add(tracked);
+    this.activeSourceCommitPhaseBySource.set(source, tracked);
+    return tracked;
+  }
+
+  private reconcilePendingSourceResolution(
+    source: 'local' | 'remote',
+  ): Promise<void> {
+    const active = this.activeSourceResolutionAttempts.get(source);
+    if (active) return active;
+    const pending = this.pendingSourceResolutions.get(source);
+    if (!pending) return Promise.resolve();
+    if (!this.captureHost) {
+      return Promise.reject(
+        new Error('meeting media capture host is unavailable'),
+      );
     }
+    const attempt = (async () => {
+      if (pending.resolution === 'finalize') {
+        await this.captureHost!.finalizeSourceSwitch(pending.reference);
+      } else {
+        await this.captureHost!.rollbackSourceSwitch(pending.reference);
+      }
+      if (this.pendingSourceResolutions.get(source) === pending) {
+        this.pendingSourceResolutions.delete(source);
+      }
+    })().finally(() => {
+      if (this.activeSourceResolutionAttempts.get(source) === attempt) {
+        this.activeSourceResolutionAttempts.delete(source);
+      }
+    });
+    this.activeSourceResolutionAttempts.set(source, attempt);
+    return attempt;
+  }
+
+  private async reconcileAllPendingSourceResolutions(): Promise<void> {
+    for (const source of ['local', 'remote'] as const) {
+      await this.reconcilePendingSourceResolution(source);
+    }
+  }
+
+  private isSourceSwitchCurrent(
+    source: 'local' | 'remote',
+    generation: number,
+    scope: MeetingArchiveScope,
+  ): boolean {
+    return (
+      this.sourceSwitchGeneration[source] === generation &&
+      this.stopPromise === null &&
+      this.activeScope?.sessionId === scope.sessionId &&
+      this.activeScope.organizationId === scope.organizationId &&
+      this.activeScope.userId === scope.userId &&
+      this.activeManifest?.lifecycleStatus === 'recording'
+    );
+  }
+
+  private async abortPreparedSourceSwitch(
+    prepared: PreparedMeetingCaptureSource,
+  ): Promise<void> {
+    await this.captureHost
+      ?.abortSourceSwitch({
+        operationId: prepared.operationId,
+        source: prepared.source,
+      })
+      .catch(() => undefined);
+  }
+
+  private async switchCaptureSource(
+    source: 'local' | 'remote',
+    scope: MeetingArchiveScope,
+    requestedSourceId: string,
+    prepare: () => Promise<PreparedMeetingCaptureSource>,
+  ): Promise<MeetingRecordingStatus> {
+    if (!this.captureHost) {
+      throw new Error('meeting media capture host is unavailable');
+    }
+    const generation = ++this.sourceSwitchGeneration[source];
+    const startedAt = Date.now();
+    log.info('source_switch', {
+      phase: 'prepare_start',
+      source,
+      generation,
+      requestedSourceId,
+      sessionId: scope.sessionId,
+    });
+    let prepared: PreparedMeetingCaptureSource | null = null;
+    let committed = false;
+    try {
+      const activeCommit = this.activeSourceCommitPhaseBySource.get(source);
+      if (activeCommit) await Promise.allSettled([activeCommit]);
+      await this.reconcilePendingSourceResolution(source);
+      if (!this.isSourceSwitchCurrent(source, generation, scope)) {
+        throw new MeetingSourceSwitchSupersededError();
+      }
+      prepared = await prepare();
+      log.info('source_switch', {
+        phase: 'prepare_complete',
+        source,
+        generation,
+        operationId: prepared.operationId,
+        elapsedMs: Date.now() - startedAt,
+      });
+      if (prepared.source !== source) {
+        throw new Error('meeting capture returned the wrong audio source');
+      }
+      return await this.trackSourceCommitPhase(source, this.enqueue(async () => {
+        if (!this.isSourceSwitchCurrent(source, generation, scope)) {
+          throw new MeetingSourceSwitchSupersededError();
+        }
+        const selected = await this.captureHost!.commitSourceSwitch({
+          operationId: prepared!.operationId,
+          source,
+        });
+        committed = true;
+        log.info('source_switch', {
+          phase: 'commit_complete',
+          source,
+          generation,
+          operationId: prepared!.operationId,
+          selectedSourceId: selected.sourceId,
+          elapsedMs: Date.now() - startedAt,
+        });
+        const reference = {
+          operationId: prepared!.operationId,
+          source,
+        };
+        try {
+          if (selected.source !== source) {
+            throw new Error('meeting capture committed the wrong audio source');
+          }
+          this.activeManifest = await this.archiveStore.updateCaptureSource(
+            scope,
+            source,
+            selected.sourceId,
+            selected.label,
+          );
+        } catch (error) {
+          this.pendingSourceResolutions.set(source, {
+            reference,
+            resolution: 'rollback',
+          });
+          try {
+            await this.reconcilePendingSourceResolution(source);
+            log.warn('source_switch', {
+              phase: 'rollback_complete',
+              source,
+              generation,
+              operationId: prepared!.operationId,
+              elapsedMs: Date.now() - startedAt,
+            });
+          } catch (resolutionError) {
+            log.warn('source_switch', {
+              phase: 'rollback_pending',
+              source,
+              generation,
+              operationId: prepared!.operationId,
+              errorName:
+                resolutionError instanceof Error
+                  ? resolutionError.name
+                  : 'UnknownError',
+              elapsedMs: Date.now() - startedAt,
+            });
+          }
+          throw error;
+        }
+        this.pendingSourceResolutions.set(source, {
+          reference,
+          resolution: 'finalize',
+        });
+        try {
+          await this.reconcilePendingSourceResolution(source);
+          log.info('source_switch', {
+            phase: 'finalize_complete',
+            source,
+            generation,
+            operationId: prepared!.operationId,
+            elapsedMs: Date.now() - startedAt,
+          });
+        } catch (error) {
+          // The new source and manifest already agree. Finalization only
+          // releases the old input, so do not report the switch as failed or
+          // roll the actual source back behind the persisted selection.
+          log.warn('source_switch', {
+            phase: 'finalize_failed',
+            source,
+            generation,
+            operationId: prepared!.operationId,
+            errorName: error instanceof Error ? error.name : 'UnknownError',
+            elapsedMs: Date.now() - startedAt,
+          });
+        }
+        this.checkpointServerTrack(this.activeManifest, source);
+        this.scheduleServerFlush(scope);
+        return this.emitStatus();
+      }));
+    } catch (error) {
+      if (prepared && !committed) await this.abortPreparedSourceSwitch(prepared);
+      const logFailure =
+        error instanceof MeetingSourceSwitchSupersededError
+          ? log.info.bind(log)
+          : log.warn.bind(log);
+      logFailure('source_switch', {
+        phase: 'failed',
+        source,
+        generation,
+        operationId: prepared?.operationId,
+        errorName: error instanceof Error ? error.name : 'UnknownError',
+        elapsedMs: Date.now() - startedAt,
+      });
+      if (error instanceof MeetingSourceSwitchSupersededError) {
+        throw new Error(`meeting ${source} source switch was cancelled`);
+      }
+      throw error;
+    }
+  }
+
+  private isCurrentCaptureSource(event: MeetingCaptureSourceEndedEvent): boolean {
+    if (
+      event.source !== 'local' ||
+      this.activeManifest?.lifecycleStatus !== 'recording'
+    ) {
+      return false;
+    }
+    return (
+      this.activeScope?.sessionId === event.sessionId &&
+      this.activeScope.organizationId === event.organizationId &&
+      this.activeScope.userId === event.userId &&
+      this.activeManifest.microphoneDeviceId === event.sourceId
+    );
   }
 
   private emitStatus(): MeetingRecordingStatus {
@@ -518,61 +785,86 @@ export class MeetingRecordingManager {
   async switchMicrophone(
     input: SwitchMeetingMicrophoneInput,
   ): Promise<MeetingRecordingStatus> {
-    return this.enqueue(async () => {
-      const scope = this.requireActiveScope(input);
-      if (
-        this.activeManifest!.lifecycleStatus !== 'recording'
-      ) {
-        throw new Error(
-          'microphone can only change during an active recording',
-        );
-      }
-      if (!this.captureHost) {
-        throw new Error('meeting media capture host is unavailable');
-      }
-      const selected = await this.withSourceSwitchTimeout(
-        this.captureHost.switchMicrophone(input.deviceId),
-      );
-      this.activeManifest = await this.archiveStore.updateCaptureSource(
-        scope,
-        'local',
-        selected.sourceId,
-        selected.label,
-      );
-      this.checkpointServerTrack(this.activeManifest, 'local');
-      this.scheduleServerFlush(scope);
-      return this.emitStatus();
-    });
+    const scope = { ...this.requireActiveScope(input) };
+    if (
+      this.activeManifest!.lifecycleStatus !== 'recording' ||
+      this.stopPromise
+    ) {
+      throw new Error('microphone can only change during an active recording');
+    }
+    return this.switchCaptureSource('local', scope, input.deviceId, () =>
+      this.captureHost!.prepareMicrophoneSwitch(input.deviceId),
+    );
   }
 
   async switchSystemAudio(
     input: SwitchMeetingSystemAudioInput,
   ): Promise<MeetingRecordingStatus> {
-    return this.enqueue(async () => {
-      const scope = this.requireActiveScope(input);
-      if (
-        this.activeManifest!.lifecycleStatus !== 'recording'
-      ) {
-        throw new Error(
-          'system audio can only change during an active recording',
-        );
-      }
-      if (!this.captureHost) {
-        throw new Error('meeting media capture host is unavailable');
-      }
-      const selected = await this.withSourceSwitchTimeout(
-        this.captureHost.switchSystemAudio(input.sourceId),
+    const scope = { ...this.requireActiveScope(input) };
+    if (
+      this.activeManifest!.lifecycleStatus !== 'recording' ||
+      this.stopPromise
+    ) {
+      throw new Error(
+        'system audio can only change during an active recording',
       );
-      this.activeManifest = await this.archiveStore.updateCaptureSource(
-        scope,
-        'remote',
-        selected.sourceId,
-        selected.label,
-      );
-      this.checkpointServerTrack(this.activeManifest, 'remote');
-      this.scheduleServerFlush(scope);
-      return this.emitStatus();
+    }
+    return this.switchCaptureSource('remote', scope, input.sourceId, () =>
+      this.captureHost!.prepareSystemAudioSwitch(input.sourceId),
+    );
+  }
+
+  async handleCaptureSourceEnded(
+    event: MeetingCaptureSourceEndedEvent,
+  ): Promise<void> {
+    if (!this.isCurrentCaptureSource(event)) return;
+    const fallback = this.switchMicrophone({
+      sessionId: event.sessionId,
+      organizationId: event.organizationId,
+      userId: event.userId,
+      deviceId: 'default',
     });
+    const fallbackGeneration = this.sourceSwitchGeneration.local;
+    try {
+      const status = await fallback;
+      const currentLabel = status.manifest?.microphoneDeviceLabel;
+      this.onCaptureSourceNotice?.({
+        sessionId: event.sessionId,
+        organizationId: event.organizationId,
+        userId: event.userId,
+        source: 'local',
+        kind: 'fallback_succeeded',
+        previousLabel: event.label,
+        ...(currentLabel ? { currentLabel } : {}),
+      });
+    } catch (error) {
+      await this.enqueue(async () => {
+        if (
+          this.sourceSwitchGeneration.local !== fallbackGeneration ||
+          !this.isCurrentCaptureSource(event)
+        ) {
+          return;
+        }
+        this.activeManifest =
+          await this.archiveStore.markCaptureSourceUnavailable(
+            event,
+            'local',
+            'source_unavailable',
+            error instanceof Error ? error.message : String(error),
+          );
+        this.checkpointServerTrack(this.activeManifest, 'local');
+        this.scheduleServerFlush(event);
+        this.emitStatus();
+        this.onCaptureSourceNotice?.({
+          sessionId: event.sessionId,
+          organizationId: event.organizationId,
+          userId: event.userId,
+          source: 'local',
+          kind: 'fallback_failed',
+          previousLabel: event.label,
+        });
+      });
+    }
   }
 
   async listArchives(
@@ -960,11 +1252,29 @@ export class MeetingRecordingManager {
       throw new Error('meeting recording cannot stop in the current state');
     }
 
+    this.invalidateSourceSwitches();
+    const stopStartedAt = Date.now();
+    log.info('recording_stop', {
+      phase: 'requested',
+      sessionId: activeScope.sessionId,
+    });
     this.stopPromise = (async () => {
+      // A committed source keeps its previous input alive until manifest
+      // persistence finishes. Let that short transaction finalize or roll back
+      // before renderer stop discards the rollback state. Device preparation is
+      // deliberately outside this set, so a hung permission prompt never blocks
+      // stop.
+      await Promise.allSettled([...this.activeSourceCommitPhases]);
+      await this.reconcileAllPendingSourceResolutions();
       // MediaRecorder.stop() emits a final dataavailable event. Do not hold the
       // manager operation queue while waiting, otherwise that final chunk's IPC
       // call cannot enter appendAudioChunk and both sides deadlock.
       await this.captureHost?.stop();
+      log.info('recording_stop', {
+        phase: 'capture_flushed',
+        sessionId: activeScope.sessionId,
+        elapsedMs: Date.now() - stopStartedAt,
+      });
       await this.activeAsrRuntime?.stop();
       this.activeAsrRuntime = null;
       if (this.transcriptSyncTimer) {
@@ -1012,7 +1322,13 @@ export class MeetingRecordingManager {
           this.emitStatus();
           throw error;
         }
-        return this.emitStatus();
+        const status = this.emitStatus();
+        log.info('recording_stop', {
+          phase: 'archive_finalized',
+          sessionId: activeScope.sessionId,
+          elapsedMs: Date.now() - stopStartedAt,
+        });
+        return status;
       });
     })();
     try {
@@ -1094,12 +1410,16 @@ export class MeetingRecordingManager {
   ): Promise<void> {
     return this.enqueue(async () => {
       this.requireActiveScope(scope);
+      const previousRevision = this.activeManifest!.transcriptRevision;
       this.activeManifest = await this.archiveStore.appendTranscriptCheckpoint(
         scope,
         checkpoint,
       );
       this.queueTranscriptServerSync(scope, checkpoint);
       this.emitStatus();
+      if (this.activeManifest.transcriptRevision > previousRevision) {
+        this.onTranscriptChanged?.({ ...scope, checkpoint });
+      }
     });
   }
 
@@ -1205,6 +1525,7 @@ export class MeetingRecordingManager {
       this.activeManifest.lifecycleStatus as 'preparing' | 'recording',
     )) return;
     const scope = this.activeScope;
+    this.invalidateSourceSwitches();
     if (this.activeManifest.lifecycleStatus === 'recording') {
       if (stopCaptureHost) {
         await this.captureHost?.stop().catch(() => undefined);
