@@ -401,6 +401,7 @@ class MeetingCopilotAnswer(models.Model):
         PENDING = "pending", "生成中"
         ANSWERED = "answered", "已回答"
         NO_ACTION = "no_action", "无需回答"
+        NEEDS_CLARIFICATION = "needs_clarification", "需要澄清"
 
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     session = models.ForeignKey(

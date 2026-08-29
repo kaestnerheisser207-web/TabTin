@@ -1,21 +1,13 @@
-当前需要判断和处理的发言：
-{{ candidate_utterance }}
+当前候选语义 turn：
+{{ candidate_json }}
 
-当前发言的采集通道：
-{{ candidate_source }}
+候选发生之前的会议上下文：
+{{ transcript_context_before_candidate }}
 
-最近会议逐字稿：
-{{ transcript_context }}
+允许引用的证据目录：
+{{ evidence_catalog_json }}
 
-会前 Brief：
-{{ brief }}
+分段与稳定性信号：
+{{ stability_signals_json }}
 
-已授权且已准备的 Project 资料：
-{{ project_context }}
-
-允许引用的 source id：
-{% for source_id in allowed_source_ids %}
-- {{ source_id }}
-{% endfor %}
-
-请返回严格 JSON。
+执行 system 中的决策、事实边界和 JSON 契约。

@@ -268,34 +268,58 @@ export interface MeetingCopilotAnswerSource {
   resource_id: string;
 }
 
-export type MeetingCopilotAnswerResult =
-  | {
-      status: 'answered';
-      question: string;
-      question_segment_id: string;
-      answer: string;
-      key_points: string[];
-      sources: MeetingCopilotAnswerSource[];
-      reliability: 'high' | 'medium' | 'low';
-      warning: string;
-      model: string;
-      provider: string;
-      latency_ms: number;
-    }
-  | {
-      status:
-        | 'disabled'
-        | 'unavailable'
-        | 'no_question'
-        | 'no_action'
-        | 'failed';
-      message: string;
-      error_code?: string;
-      candidate_segment_id?: string;
-    };
+export interface MeetingCopilotCandidateMetadata {
+  candidate_id?: string;
+  candidate_revision?: number;
+  candidate_segment_ids?: string[];
+}
+
+export type MeetingCopilotAnswerResult = MeetingCopilotCandidateMetadata &
+  (
+    | {
+        status: 'answered';
+        question: string;
+        question_segment_id: string;
+        answer: string;
+        key_points: string[];
+        sources: MeetingCopilotAnswerSource[];
+        reliability: 'high' | 'medium' | 'low';
+        warning: string;
+        reason_code?: string;
+        knowledge_basis?: 'general_knowledge' | 'provided_context' | 'mixed';
+        uncertainty?: string;
+        model: string;
+        provider: string;
+        latency_ms: number;
+      }
+    | {
+        status: 'no_action' | 'wait_for_more';
+        message: string;
+        candidate_segment_id: string;
+        reason_code?: string;
+      }
+    | {
+        status: 'needs_clarification';
+        question: string;
+        question_segment_id: string;
+        clarifying_question: string;
+        reason_code: string;
+        uncertainty?: string;
+        model: string;
+        provider: string;
+        latency_ms: number;
+      }
+    | {
+        status: 'disabled' | 'unavailable' | 'no_question' | 'failed';
+        message: string;
+        error_code?: string;
+      }
+  );
 
 export interface MeetingCopilotRecord {
   questionSegmentId: string;
+  candidateId?: string;
+  revision?: number;
   evaluatedAt: string;
   result: MeetingCopilotAnswerResult;
 }
@@ -323,6 +347,7 @@ export interface MeetingLocalArchive {
   audioUrls: Partial<Record<MeetingAudioSource, string>>;
   transcript: MeetingTranscriptCheckpoint[];
   copilotRecords: MeetingCopilotRecord[];
+  localAudioCleanupPending?: boolean;
 }
 
 export const MEETING_RECORDING_STATUS_CHANNEL =

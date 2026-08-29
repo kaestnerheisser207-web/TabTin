@@ -1,0 +1,149 @@
+[
+  {
+    "id": "greeting_hello",
+    "context": [],
+    "candidate": "大家晚上好。",
+    "expected_action": "no_action",
+    "expected_reason": "greeting"
+  },
+  {
+    "id": "operational_audio_check",
+    "context": [],
+    "candidate": "现在音量正常吗？",
+    "expected_action": "no_action",
+    "expected_reason": "operational_check"
+  },
+  {
+    "id": "filler_acknowledgement",
+    "context": [],
+    "candidate": "好的。",
+    "expected_action": "no_action",
+    "expected_reason": "acknowledgement"
+  },
+  {
+    "id": "isolated_term",
+    "context": [],
+    "candidate": "向量数据库。",
+    "expected_action": "no_action",
+    "expected_reason": "statement_without_request"
+  },
+  {
+    "id": "explicit_hash_map_question",
+    "context": [],
+    "candidate": "散列表为什么能快速查找，它内部怎样组织数据？",
+    "expected_action": "answer",
+    "expected_reason": "explicit_question",
+    "answer_must_include_groups": [
+      ["哈希"],
+      ["桶", "槽位", "数组"],
+      ["冲突", "碰撞"],
+      ["O(1)", "常数"]
+    ]
+  },
+  {
+    "id": "implicit_hash_map_request",
+    "context": [],
+    "candidate": "请解释散列表的数据组织与查找过程。",
+    "expected_action": "answer",
+    "expected_reason": "implicit_request",
+    "answer_must_include_groups": [
+      ["哈希"],
+      ["桶", "槽位", "数组"],
+      ["冲突", "碰撞"]
+    ]
+  },
+  {
+    "id": "incomplete_choice_prefix",
+    "context": [],
+    "candidate": "你帮我判断究竟是……",
+    "expected_action": "wait_for_more",
+    "expected_reason": "incomplete_fragment"
+  },
+  {
+    "id": "completed_latency_diagnosis",
+    "context": ["实时字幕出现了明显延迟。"],
+    "candidate": "请判断耗时主要发生在终端上传、转写服务，还是结果回传。",
+    "expected_action": "answer",
+    "expected_reason": "troubleshooting_request"
+  },
+  {
+    "id": "incomplete_question_intro",
+    "context": [],
+    "candidate": "接下来想问的是……",
+    "expected_action": "wait_for_more",
+    "expected_reason": "continuation_expected"
+  },
+  {
+    "id": "pronoun_follow_up",
+    "context": ["我们正在讨论缓存索引采用的散列表结构。"],
+    "candidate": "那这个结构的插入和查询过程是怎样的？",
+    "expected_action": "answer",
+    "expected_reason": "follow_up_question",
+    "resolved_question_must_include_any": ["散列表", "哈希表"]
+  },
+  {
+    "id": "active_partial",
+    "context": ["智能助手的反馈时间偏长。"],
+    "candidate": "我在想请求是不是先经过……",
+    "expected_action": "wait_for_more",
+    "expected_reason": "active_partial"
+  },
+  {
+    "id": "completed_pipeline_question",
+    "context": ["智能助手的反馈时间偏长。"],
+    "candidate": "请求是直接发给模型，还是会先经过检索和重排？",
+    "expected_action": "answer",
+    "expected_reason": "explicit_question"
+  },
+  {
+    "id": "multi_part_segmentation_question",
+    "context": [],
+    "candidate": "实时转写按语义切句，还是按停顿时长切句？",
+    "expected_action": "answer",
+    "expected_reason": "comparison_request"
+  },
+  {
+    "id": "troubleshooting_request_without_question_mark",
+    "context": ["字幕持续比声音晚几秒。"],
+    "candidate": "请帮我定位整条链路中最慢的环节。",
+    "expected_action": "answer",
+    "expected_reason": "troubleshooting_request"
+  },
+  {
+    "id": "product_feedback_statement",
+    "context": [],
+    "candidate": "列表图标放左边，更新时间放右边，正文维持现有排版。",
+    "expected_action": "no_action",
+    "expected_reason": "statement_without_request"
+  },
+  {
+    "id": "copilot_meta_question_with_continuation",
+    "context": ["会议助手偶尔只输出回答话术。"],
+    "candidate": "为什么它没有直接解决问题，反而只告诉我应该怎么回答？",
+    "expected_action": "answer",
+    "expected_reason": "troubleshooting_request"
+  },
+  {
+    "id": "ambiguous_reference",
+    "context": ["我们比较了消息队列、数据库轮询和事件流三个方案。"],
+    "candidate": "这个方案的维护成本如何？",
+    "expected_action": "answer",
+    "expected_reason": "comparison_request",
+    "answer_must_include": ["消息队列", "数据库轮询", "事件流"]
+  },
+  {
+    "id": "missing_private_constraint",
+    "context": ["可选部署区域包括中国区、欧洲区和北美区。"],
+    "candidate": "按这位客户的数据驻留要求应该部署到哪里？",
+    "expected_action": "clarify",
+    "expected_reason": "missing_required_context"
+  },
+  {
+    "id": "already_answered_confirmation",
+    "context": ["平衡二叉搜索树的查询复杂度通常是 O(log n)。"],
+    "candidate": "所以正常查询就是 O(log n)，对吗？",
+    "expected_action": "answer",
+    "expected_reason": "follow_up_question",
+    "answer_must_include": ["O(log n)"]
+  }
+]

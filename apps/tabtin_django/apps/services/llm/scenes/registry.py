@@ -227,7 +227,7 @@ SCENES: dict[str, SceneSpec] = {
     "meeting_copilot_quick_answer": SceneSpec(
         scene_key="meeting_copilot_quick_answer",
         display_name="会议 Copilot 快速回答",
-        description="基于最近逐字稿、会前 Brief 与已授权 Project 资料生成建议答案",
+        description="识别会议中的完整问题并直接生成专业答案",
         capability_domain="chat",
         capability_requirements={
             "requires_json_mode": True,
@@ -239,8 +239,8 @@ SCENES: dict[str, SceneSpec] = {
             "cost_class": "cheap",
         },
         default_params={
-            "temperature": 0.2,
-            "max_tokens": 512,
+            "temperature": 0.1,
+            "max_tokens": 320,
             "response_format": {"type": "json_object"},
             "timeout_sec": 12,
             "thinking": {"type": "disabled"},

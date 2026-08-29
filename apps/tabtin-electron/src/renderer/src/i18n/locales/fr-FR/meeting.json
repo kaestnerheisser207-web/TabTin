@@ -205,6 +205,9 @@
     "analyzeNow": "Analyser le contexte actuel",
     "understandingContext": "Analyse du contexte et préparation d’une suggestion…",
     "answeredQuestion": "Question traitée",
+    "clarificationNeeded": "Clarification nécessaire",
+    "clarifyingQuestion": "Question à clarifier",
+    "clarificationUncertainty": "Incertitude restante : {{uncertainty}}",
     "reliability": {
       "high": "Fiabilité : élevée",
       "medium": "Fiabilité : moyenne",
@@ -306,6 +309,8 @@
     "audioDeletedAction": "Audio supprimé",
     "audioDeletedStatus": "Audio supprimé",
     "audioDeletedNotice": "L’audio a été supprimé. La transcription, le contenu d’après-réunion et les ressources associées sont conservés.",
+    "audioCleanupPendingStatus": "Nettoyage local en attente",
+    "audioCleanupPendingNotice": "L’audio du serveur a été supprimé, mais cet appareil n’a pas pu effacer les fichiers locaux. Fermez les applications qui utilisent l’enregistrement, puis réessayez la suppression. La copie locale ne sera pas indiquée comme supprimée avant la réussite du nettoyage.",
     "deleteAudioConfirmTitle": "Supprimer l’audio de cette réunion ?",
     "deleteAudioConfirmDescription": "L’audio du microphone et du système sera supprimé définitivement. La transcription, l’analyse d’après-réunion, les enregistrements Copilot et les ressources associées seront conservés.",
     "deleteAudioConfirmAction": "Supprimer l’audio, conserver le texte",

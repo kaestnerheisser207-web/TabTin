@@ -1,5 +1,7 @@
 import { MEETING_ARCHIVE_SCHEMA_VERSION } from '../../shared/meeting-recording-contract';
 import { randomUUID } from 'node:crypto';
+import { constants as fsConstants, type Stats } from 'node:fs';
+import fs from 'node:fs/promises';
 
 import type {
   AppendMeetingAudioChunkInput,
@@ -49,6 +51,103 @@ class MeetingSourceSwitchSupersededError extends Error {}
 interface PendingSourceResolution {
   reference: MeetingCaptureSourceSwitchReference;
   resolution: 'finalize' | 'rollback';
+}
+
+type MeetingLocalAudioFileState =
+  | 'available'
+  | 'deleted'
+  | 'not_declared'
+  | 'missing'
+  | 'empty'
+  | 'not_file'
+  | 'unreadable'
+  | 'cleanup_pending';
+
+function timestampValue(value: string): number {
+  const timestamp = Date.parse(value);
+  return Number.isFinite(timestamp) ? timestamp : Number.NEGATIVE_INFINITY;
+}
+
+function mergeTranscriptCheckpoints(
+  local: MeetingTranscriptCheckpoint[],
+  remote: MeetingTranscriptCheckpoint[],
+): MeetingTranscriptCheckpoint[] {
+  const merged = new Map<string, MeetingTranscriptCheckpoint>();
+  for (const checkpoint of [...local, ...remote]) {
+    const current = merged.get(checkpoint.externalId);
+    if (!current) {
+      merged.set(checkpoint.externalId, checkpoint);
+      continue;
+    }
+    if (current.isFinal !== checkpoint.isFinal) {
+      if (checkpoint.isFinal) merged.set(checkpoint.externalId, checkpoint);
+      continue;
+    }
+    if (
+      timestampValue(checkpoint.recordedAt) > timestampValue(current.recordedAt)
+    ) {
+      merged.set(checkpoint.externalId, checkpoint);
+    }
+  }
+  return [...merged.values()].sort(
+    (left, right) =>
+      left.startMs - right.startMs ||
+      left.source.localeCompare(right.source) ||
+      left.externalId.localeCompare(right.externalId),
+  );
+}
+
+function mergeCopilotRecords(
+  local: MeetingLocalArchive['copilotRecords'],
+  remote: MeetingLocalArchive['copilotRecords'],
+): MeetingLocalArchive['copilotRecords'] {
+  const merged = new Map<
+    string,
+    MeetingLocalArchive['copilotRecords'][number]
+  >();
+  for (const record of [...local, ...remote]) {
+    const candidateId =
+      record.candidateId?.trim() ||
+      record.result.candidate_id?.trim() ||
+      record.questionSegmentId;
+    const current = merged.get(candidateId);
+    if (!current) {
+      merged.set(candidateId, record);
+      continue;
+    }
+    const currentRevision = Math.max(
+      current.revision ?? current.result.candidate_revision ?? 1,
+      1,
+    );
+    const candidateRevision = Math.max(
+      record.revision ?? record.result.candidate_revision ?? 1,
+      1,
+    );
+    if (candidateRevision !== currentRevision) {
+      if (candidateRevision > currentRevision) {
+        merged.set(candidateId, record);
+      }
+      continue;
+    }
+    const currentTimestamp = timestampValue(current.evaluatedAt);
+    const candidateTimestamp = timestampValue(record.evaluatedAt);
+    if (candidateTimestamp !== currentTimestamp) {
+      if (candidateTimestamp > currentTimestamp) {
+        merged.set(candidateId, record);
+      }
+      continue;
+    }
+    const currentTieBreaker = `${current.result.status}\u0000${JSON.stringify(current.result)}`;
+    const candidateTieBreaker = `${record.result.status}\u0000${JSON.stringify(record.result)}`;
+    if (candidateTieBreaker > currentTieBreaker) {
+      merged.set(candidateId, record);
+    }
+  }
+  return [...merged.values()].sort(
+    (left, right) =>
+      timestampValue(left.evaluatedAt) - timestampValue(right.evaluatedAt) ||
+      left.questionSegmentId.localeCompare(right.questionSegmentId),
+  );
 }
 
 function readString(value: unknown, fallback = ''): string {
@@ -982,6 +1081,46 @@ export class MeetingRecordingManager {
       });
   }
 
+  private async resolveLocalArchiveAudio(
+    scope: MeetingArchiveScope,
+    manifest: MeetingArchiveManifestV2,
+    source: 'local' | 'remote',
+  ): Promise<{ state: MeetingLocalAudioFileState; url?: string }> {
+    const track = manifest.tracks[source];
+    if (track.errorCode === 'audio_cleanup_pending') {
+      return { state: 'cleanup_pending' };
+    }
+    if (track.storageStatus === 'deleted') return { state: 'deleted' };
+    if (!track.finalizedRelativePath) return { state: 'not_declared' };
+    const absolutePath = this.archiveStore.resolveSessionFile(
+      scope,
+      track.finalizedRelativePath,
+    );
+    let fileStat: Stats;
+    try {
+      fileStat = await fs.stat(absolutePath);
+    } catch (error) {
+      return {
+        state:
+          (error as NodeJS.ErrnoException).code === 'ENOENT'
+            ? 'missing'
+            : 'unreadable',
+      };
+    }
+    if (!fileStat.isFile()) return { state: 'not_file' };
+    if (fileStat.size <= 0) return { state: 'empty' };
+    try {
+      await fs.access(absolutePath, fsConstants.R_OK);
+    } catch {
+      return { state: 'unreadable' };
+    }
+    const encoded = absolutePath
+      .split('/')
+      .map((segment) => encodeURIComponent(segment))
+      .join('/');
+    return { state: 'available', url: `tabtin-file://${encoded}` };
+  }
+
   async getArchive(scope: MeetingArchiveScope): Promise<MeetingLocalArchive> {
     const localManifest = await this.archiveStore
       .readManifest(scope)
@@ -1011,12 +1150,60 @@ export class MeetingRecordingManager {
     if (!localManifest && !remoteSession) {
       throw new Error('meeting archive not found');
     }
-    const manifest =
+    let manifest =
       localManifest ?? serverSessionManifest(remoteSession!, scope.userId);
     const remoteManifest = remoteSession
       ? serverSessionManifest(remoteSession, scope.userId)
       : null;
-    if (localManifest && remoteManifest) {
+    const remoteAudioDeleted = Boolean(
+      remoteManifest &&
+      (['local', 'remote'] as const).every(
+        (source) => remoteManifest.tracks[source].storageStatus === 'deleted',
+      ),
+    );
+    const persistedCleanupPending = Boolean(
+      localManifest &&
+      Object.values(localManifest.tracks).some(
+        (track) => track.errorCode === 'audio_cleanup_pending',
+      ),
+    );
+    const localAudioDeleted = Boolean(
+      localManifest &&
+      Object.values(localManifest.tracks).every(
+        (track) => track.storageStatus === 'deleted',
+      ),
+    );
+    const cleanupRequired = Boolean(
+      localManifest &&
+      (persistedCleanupPending || (remoteAudioDeleted && !localAudioDeleted)),
+    );
+    let localAudioCleanupPending = false;
+    if (localManifest && cleanupRequired) {
+      let pendingManifest = localManifest;
+      if (!persistedCleanupPending) {
+        try {
+          pendingManifest =
+            await this.archiveStore.markAudioCleanupPending(scope);
+        } catch (error) {
+          throw new Error(
+            'meeting local audio cleanup state could not be saved',
+            { cause: error },
+          );
+        }
+      }
+      try {
+        manifest = await this.archiveStore.deleteAudioFiles(scope);
+      } catch (error) {
+        manifest = pendingManifest;
+        localAudioCleanupPending = true;
+        log.warn('archive_audio_cleanup', {
+          phase: 'pending',
+          sessionId: scope.sessionId,
+          errorName: error instanceof Error ? error.name : 'UnknownError',
+        });
+      }
+    }
+    if (localManifest && remoteManifest && !cleanupRequired) {
       for (const source of ['local', 'remote'] as const) {
         const remoteTrack = remoteManifest.tracks[source];
         if (
@@ -1047,83 +1234,112 @@ export class MeetingRecordingManager {
         ? this.serverSync.getCopilotAnswers(scope.sessionId).catch(() => [])
         : Promise.resolve([]),
     ]);
-    const copilotRecords =
-      localCopilotRecords.length > 0
-        ? localCopilotRecords
-        : remoteCopilot
-            .map((answer) => {
-              const result = answer.result_snapshot;
-              const questionSegmentId = readString(answer.question_segment_id);
-              if (
-                !questionSegmentId ||
-                result === null ||
-                typeof result !== 'object'
-              ) {
-                return null;
-              }
-              return {
-                questionSegmentId,
-                evaluatedAt: readString(answer.created_at, manifest.createdAt),
-                result: result as MeetingCopilotAnswerResult,
-              };
-            })
-            .filter((record): record is NonNullable<typeof record> =>
-              Boolean(record),
-            );
-    const transcript =
-      localTranscript.length > 0
-        ? localTranscript
-        : (remoteTranscript?.segments ?? []).map((segment) => ({
-            externalId: readString(segment.external_id, readString(segment.id)),
-            source: readString(segment.source, 'remote') as 'local' | 'remote',
-            speakerKey: readString(segment.speaker_key) || undefined,
-            startMs: readNumber(segment.start_ms),
-            endMs: readNumber(segment.end_ms),
-            text: readString(
-              segment.display_text,
-              readString(segment.raw_text),
-            ),
-            isFinal: segment.is_final !== false,
-            confidence:
-              typeof segment.confidence === 'number'
-                ? segment.confidence
-                : null,
-            recordedAt: readString(segment.created_at, manifest.createdAt),
-          }));
-    const audioUrls: MeetingLocalArchive['audioUrls'] = {};
-    for (const source of ['local', 'remote'] as const) {
-      if (manifest.tracks[source].storageStatus === 'deleted') continue;
-      const relativeName = manifest.tracks[source].finalizedRelativePath;
-      if (!relativeName) continue;
-      const absolutePath = this.archiveStore.resolveSessionFile(
-        scope,
-        relativeName,
+    const remoteCopilotRecords = remoteCopilot
+      .map((answer) => {
+        const result = answer.result_snapshot;
+        const questionSegmentId = readString(answer.question_segment_id);
+        if (
+          !questionSegmentId ||
+          result === null ||
+          typeof result !== 'object'
+        ) {
+          return null;
+        }
+        const resultRecord = result as Record<string, unknown>;
+        return {
+          questionSegmentId,
+          candidateId: readString(resultRecord.candidate_id, questionSegmentId),
+          revision: Math.max(readNumber(resultRecord.candidate_revision, 1), 1),
+          evaluatedAt: readString(answer.created_at, manifest.createdAt),
+          result: result as MeetingCopilotAnswerResult,
+        };
+      })
+      .filter((record): record is NonNullable<typeof record> =>
+        Boolean(record),
       );
-      const encoded = absolutePath
-        .split('/')
-        .map((segment) => encodeURIComponent(segment))
-        .join('/');
-      audioUrls[source] = `tabtin-file://${encoded}`;
-    }
-    if (
-      localManifest &&
-      remoteManifest &&
-      (['local', 'remote'] as const).every(
-        (source) => remoteManifest.tracks[source].storageStatus === 'deleted',
-      )
-    ) {
-      void this.archiveStore.deleteAudioFiles(scope).catch(() => undefined);
+    const copilotRecords = mergeCopilotRecords(
+      localCopilotRecords,
+      remoteCopilotRecords,
+    );
+    const remoteTranscriptCheckpoints = (remoteTranscript?.segments ?? []).map(
+      (segment) => ({
+        externalId: readString(segment.external_id, readString(segment.id)),
+        source: readString(segment.source, 'remote') as 'local' | 'remote',
+        speakerKey: readString(segment.speaker_key) || undefined,
+        startMs: readNumber(segment.start_ms),
+        endMs: readNumber(segment.end_ms),
+        text: readString(segment.display_text, readString(segment.raw_text)),
+        isFinal: segment.is_final !== false,
+        confidence:
+          typeof segment.confidence === 'number' ? segment.confidence : null,
+        recordedAt: readString(segment.created_at, manifest.createdAt),
+      }),
+    );
+    const transcript = mergeTranscriptCheckpoints(
+      localTranscript,
+      remoteTranscriptCheckpoints,
+    );
+    const audioUrls: MeetingLocalArchive['audioUrls'] = {};
+    const localFileState: Record<
+      'local' | 'remote',
+      MeetingLocalAudioFileState
+    > = {
+      local: 'not_declared',
+      remote: 'not_declared',
+    };
+    const audioUrlKind: Record<'local' | 'remote', 'local' | 'cloud' | 'none'> =
+      {
+        local: 'none',
+        remote: 'none',
+      };
+    for (const source of ['local', 'remote'] as const) {
+      const localAudio = await this.resolveLocalArchiveAudio(
+        scope,
+        manifest,
+        source,
+      );
+      localFileState[source] = localAudio.state;
+      if (localAudio.url) {
+        audioUrls[source] = localAudio.url;
+        audioUrlKind[source] = 'local';
+      }
     }
     if (this.serverSync?.getTrackAudio && remoteSession) {
       for (const source of ['local', 'remote'] as const) {
-        if (audioUrls[source]) continue;
+        if (
+          audioUrls[source] ||
+          manifest.tracks[source].storageStatus === 'deleted'
+        ) {
+          continue;
+        }
         const audio = await this.serverSync
           .getTrackAudio(scope.sessionId, source)
           .catch(() => null);
-        if (audio?.url) audioUrls[source] = audio.url;
+        if (audio?.url) {
+          audioUrls[source] = audio.url;
+          audioUrlKind[source] = 'cloud';
+        }
       }
     }
-    return { manifest, audioUrls, transcript, copilotRecords };
+    log.info('archive_read', {
+      sessionId: scope.sessionId,
+      hasLocalManifest: Boolean(localManifest),
+      localFileState,
+      audioUrlKind,
+      localTranscriptCount: localTranscript.length,
+      remoteTranscriptCount: remoteTranscriptCheckpoints.length,
+      mergedTranscriptCount: transcript.length,
+      localCopilotCount: localCopilotRecords.length,
+      remoteCopilotCount: remoteCopilotRecords.length,
+      mergedCopilotCount: copilotRecords.length,
+    });
+    return {
+      manifest,
+      audioUrls,
+      transcript,
+      copilotRecords,
+      ...(localAudioCleanupPending ? { localAudioCleanupPending: true } : {}),
+    };
   }
 
   async deleteArchiveAudio(scope: MeetingArchiveScope): Promise<void> {
@@ -1131,7 +1347,29 @@ export class MeetingRecordingManager {
       throw new Error('meeting server is unavailable');
     }
     await this.serverSync.deleteAudio(scope.sessionId);
-    await this.archiveStore.deleteAudioFiles(scope).catch(() => undefined);
+    try {
+      const localManifest = await this.archiveStore
+        .readManifest(scope)
+        .catch((error) => {
+          if ((error as NodeJS.ErrnoException).code === 'ENOENT') return null;
+          throw error;
+        });
+      if (!localManifest) return;
+      if (
+        Object.values(localManifest.tracks).every(
+          (track) => track.storageStatus === 'deleted',
+        )
+      ) {
+        return;
+      }
+      await this.archiveStore.markAudioCleanupPending(scope);
+      await this.archiveStore.deleteAudioFiles(scope);
+    } catch (error) {
+      throw new Error(
+        'meeting audio was deleted from the server, but local cleanup failed',
+        { cause: error },
+      );
+    }
   }
 
   async deleteArchive(scope: MeetingArchiveScope): Promise<void> {
@@ -1590,7 +1828,11 @@ export class MeetingRecordingManager {
       resultStatus: result.status,
       elapsedMs: Date.now() - serverStartedAt,
     });
-    if (result.status === 'answered' || result.status === 'no_action') {
+    if (
+      result.status === 'answered' ||
+      result.status === 'no_action' ||
+      result.status === 'needs_clarification'
+    ) {
       await this.archiveStore.appendCopilotRecord(scope, result);
     }
     log.info('copilot_answer', {

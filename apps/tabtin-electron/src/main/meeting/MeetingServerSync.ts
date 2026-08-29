@@ -8,6 +8,10 @@ import type {
   MeetingCopilotAnswerResult,
   MeetingTranscriptCheckpoint,
 } from '../../shared/meeting-recording-contract';
+import {
+  buildMeetingCopilotTurns,
+  type MeetingCopilotTurn,
+} from '../../shared/meeting-copilot-turns';
 
 const DEFAULT_RETRY_BASE_DELAY_MS = 1_000;
 const DEFAULT_RETRY_MAX_DELAY_MS = 60_000;
@@ -19,34 +23,18 @@ export const MAX_MEETING_COPILOT_CONTEXT_SEGMENTS = 12;
 export function selectMeetingCopilotContext(
   transcript: MeetingTranscriptCheckpoint[],
   questionSegmentId: string,
-): MeetingTranscriptCheckpoint[] {
-  const latestByExternalId = new Map<string, MeetingTranscriptCheckpoint>();
-  for (const checkpoint of transcript) {
-    const current = latestByExternalId.get(checkpoint.externalId);
-    if (current?.isFinal && !checkpoint.isFinal) continue;
-    latestByExternalId.set(checkpoint.externalId, checkpoint);
-  }
-  const finalized = [...latestByExternalId.values()]
-    .filter((checkpoint) => checkpoint.isFinal)
-    .sort(
-      (left, right) =>
-        left.startMs - right.startMs ||
-        left.externalId.localeCompare(right.externalId),
-    );
-  const recent = finalized.slice(-MAX_MEETING_COPILOT_CONTEXT_SEGMENTS);
-  if (
-    recent.some((checkpoint) => checkpoint.externalId === questionSegmentId)
-  ) {
-    return recent;
-  }
-  const selected = finalized.find(
-    (checkpoint) => checkpoint.externalId === questionSegmentId,
+): MeetingCopilotTurn[] {
+  const turns = buildMeetingCopilotTurns(transcript);
+  const candidateIndex = turns.findIndex(
+    (turn) =>
+      turn.requestSegmentId === questionSegmentId ||
+      turn.candidateId === questionSegmentId ||
+      turn.segmentIds.includes(questionSegmentId),
   );
-  if (!selected) return recent;
-  return [selected, ...recent.slice(1)].sort(
-    (left, right) =>
-      left.startMs - right.startMs ||
-      left.externalId.localeCompare(right.externalId),
+  if (candidateIndex < 0) return [];
+  return turns.slice(
+    Math.max(0, candidateIndex - MAX_MEETING_COPILOT_CONTEXT_SEGMENTS + 1),
+    candidateIndex + 1,
   );
 }
 
@@ -430,6 +418,9 @@ export class MeetingServerSync {
     requestId?: string,
   ): Promise<MeetingCopilotAnswerResult> {
     const context = selectMeetingCopilotContext(transcript, questionSegmentId);
+    const candidate = context.at(-1);
+    const requestQuestionSegmentId =
+      candidate?.requestSegmentId ?? questionSegmentId;
     const requestAnswer = () =>
       this.request(
         'POST',
@@ -437,13 +428,20 @@ export class MeetingServerSync {
         {
           model_id: modelId || null,
           ...(requestId ? { request_id: requestId } : {}),
-          question_segment_id: questionSegmentId,
-          recent_segments: context.map((segment) => ({
-            external_id: segment.externalId,
-            source: segment.source,
-            start_ms: segment.startMs,
-            text: segment.text,
-            is_final: segment.isFinal,
+          question_segment_id: requestQuestionSegmentId,
+          recent_segments: context.map((turn) => ({
+            external_id: turn.requestSegmentId,
+            source: turn.source,
+            start_ms: turn.startMs,
+            end_ms: turn.endMs,
+            text: turn.text,
+            is_final: true,
+            recorded_at: turn.recordedAt,
+            candidate_id: turn.candidateId,
+            segment_ids: turn.segmentIds,
+            revision: turn.revision,
+            stability: turn.stability.semanticOpen ? 'open' : 'stable',
+            close_reason: turn.stability.closeReason,
           })),
         },
         MEETING_COPILOT_REQUEST_TIMEOUT_MS,

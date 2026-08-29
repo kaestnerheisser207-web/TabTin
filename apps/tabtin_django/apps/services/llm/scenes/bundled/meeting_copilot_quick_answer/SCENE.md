@@ -1,7 +1,7 @@
 ---
 scene_key: meeting_copilot_quick_answer
 display_name: 会议 Copilot 快速回答
-description: 基于最近会议逐字稿、会前 Brief 与已授权 Project 资料生成可说出口的建议答案
+description: 识别会议中的完整问题并直接生成专业答案
 capability_domain: chat
 
 capability_requirements:
@@ -14,8 +14,8 @@ capability_requirements:
   cost_class: cheap
 
 default_params:
-  temperature: 0.2
-  max_tokens: 512
+  temperature: 0.1
+  max_tokens: 320
   response_format:
     type: json_object
   timeout_sec: 12
@@ -23,22 +23,16 @@ default_params:
     type: disabled
 
 template_variables:
-  - name: candidate_utterance
+  - name: candidate_json
     type: str
     required: true
-  - name: candidate_source
+  - name: transcript_context_before_candidate
     type: str
     required: true
-  - name: transcript_context
+  - name: evidence_catalog_json
     type: str
     required: true
-  - name: brief
+  - name: stability_signals_json
     type: str
-    required: true
-  - name: project_context
-    type: str
-    required: true
-  - name: allowed_source_ids
-    type: "list[str]"
     required: true
 ---

@@ -205,6 +205,9 @@
     "analyzeNow": "現在の文脈をすぐに分析",
     "understandingContext": "文脈を理解し、提案を準備中…",
     "answeredQuestion": "回答した質問",
+    "clarificationNeeded": "確認が必要",
+    "clarifyingQuestion": "確認する質問",
+    "clarificationUncertainty": "不確かな点：{{uncertainty}}",
     "reliability": {
       "high": "信頼性：高",
       "medium": "信頼性：中",
@@ -306,6 +309,8 @@
     "audioDeletedAction": "音声は削除済み",
     "audioDeletedStatus": "音声は削除済み",
     "audioDeletedNotice": "音声は削除されました。文字起こし、会議後の内容、関連資料は保持されています。",
+    "audioCleanupPendingStatus": "ローカル削除の再試行待ち",
+    "audioCleanupPendingNotice": "サーバー上の音声は削除されましたが、このデバイスのローカル音声を削除できませんでした。録音を使用中のアプリを閉じて削除を再試行してください。クリーンアップが成功するまでローカルコピーは削除済みと表示されません。",
     "deleteAudioConfirmTitle": "この会議の音声を削除しますか？",
     "deleteAudioConfirmDescription": "マイク音声とシステム音声は完全に削除されます。文字起こし、会議後の分析、Copilot の記録、関連資料は保持されます。",
     "deleteAudioConfirmAction": "音声を削除してテキストを保持",

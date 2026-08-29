@@ -1,7 +1,7 @@
 import logging
 import json
 from datetime import date, datetime, time, timedelta
-from typing import Optional
+from typing import Annotated, Optional
 from uuid import UUID
 
 from django.db import IntegrityError, transaction
@@ -10,6 +10,7 @@ from django.http import HttpResponse
 from django.utils import timezone
 from ninja import Router, Schema
 from ninja.errors import HttpError
+from pydantic import Field
 
 from apps.services.oss.models import FileRecord, FileUsage
 from apps.services.oss.services.file_access import resolve_authorized_file
@@ -87,18 +88,30 @@ class MeetingCopilotStateIn(Schema):
 
 
 class MeetingCopilotTranscriptSegmentIn(Schema):
-    external_id: str
-    source: str
+    external_id: Annotated[str, Field(min_length=1, max_length=128)]
+    source: Annotated[str, Field(min_length=1, max_length=16)]
     start_ms: int = 0
-    text: str
+    end_ms: int = 0
+    text: Annotated[str, Field(min_length=1, max_length=1500)]
     is_final: bool = True
+    recorded_at: Annotated[str, Field(max_length=64)] = ""
+    candidate_id: Annotated[str, Field(max_length=256)] = ""
+    segment_ids: list[
+        Annotated[str, Field(min_length=1, max_length=128)]
+    ] = Field(default_factory=list, max_length=64)
+    revision: int = 1
+    stability: str = "stable"
+    close_reason: str = ""
 
 
 class MeetingCopilotAnswerIn(Schema):
     request_id: Optional[UUID] = None
-    question_segment_id: str
+    question_segment_id: Annotated[str, Field(min_length=1, max_length=128)]
     model_id: Optional[UUID] = None
-    recent_segments: list[MeetingCopilotTranscriptSegmentIn] = []
+    recent_segments: list[MeetingCopilotTranscriptSegmentIn] = Field(
+        default_factory=list,
+        max_length=12,
+    )
 
 
 class MeetingPermissionIn(Schema):
@@ -1220,9 +1233,39 @@ def answer_meeting_copilot(request, session_id: UUID, data: MeetingCopilotAnswer
             question_segment_id=data.question_segment_id,
             recent_segments=[segment.dict() for segment in data.recent_segments],
         )
+        if result.get("status") in {
+            MeetingCopilotAnswer.Status.ANSWERED,
+            MeetingCopilotAnswer.Status.NO_ACTION,
+            MeetingCopilotAnswer.Status.NEEDS_CLARIFICATION,
+        }:
+            candidate = next(
+                (
+                    segment
+                    for segment in reversed(data.recent_segments)
+                    if segment.external_id == data.question_segment_id
+                ),
+                None,
+            )
+            result = {
+                **result,
+                "candidate_id": str(candidate.candidate_id if candidate else "").strip()
+                or data.question_segment_id,
+                "candidate_revision": max(
+                    int(candidate.revision if candidate else 1),
+                    1,
+                ),
+                "candidate_segment_ids": list(
+                    dict.fromkeys(
+                        candidate.segment_ids
+                        if candidate and candidate.segment_ids
+                        else [data.question_segment_id]
+                    )
+                ),
+            }
         if reservation is not None and result.get("status") in {
             MeetingCopilotAnswer.Status.ANSWERED,
             MeetingCopilotAnswer.Status.NO_ACTION,
+            MeetingCopilotAnswer.Status.NEEDS_CLARIFICATION,
         }:
             reservation.question_text = str(result.get("question") or "")
             reservation.status = result["status"]
@@ -1272,6 +1315,7 @@ def get_meeting_copilot_answers(request, session_id: UUID):
         status__in=[
             MeetingCopilotAnswer.Status.ANSWERED,
             MeetingCopilotAnswer.Status.NO_ACTION,
+            MeetingCopilotAnswer.Status.NEEDS_CLARIFICATION,
         ],
     )
     return {"answers": [_serialize_copilot_answer(answer) for answer in answers]}

@@ -205,6 +205,9 @@
     "analyzeNow": "立即分析当前内容",
     "understandingContext": "正在理解并准备建议…",
     "answeredQuestion": "回答的问题",
+    "clarificationNeeded": "需要澄清",
+    "clarifyingQuestion": "待确认问题",
+    "clarificationUncertainty": "尚不确定：{{uncertainty}}",
     "reliability": {
       "high": "可靠性：高",
       "medium": "可靠性：中",
@@ -306,6 +309,8 @@
     "audioDeletedAction": "录音已删除",
     "audioDeletedStatus": "录音已删除",
     "audioDeletedNotice": "录音已删除，逐字稿、会后内容和关联资料仍然保留。",
+    "audioCleanupPendingStatus": "本地清理待重试",
+    "audioCleanupPendingNotice": "云端录音已删除，但此设备未能移除本地音频。请关闭正在占用录音的程序后重试删除；清理成功前不会把本地副本标记为已删除。",
     "deleteAudioConfirmTitle": "删除这场会议的录音？",
     "deleteAudioConfirmDescription": "麦克风与系统音频都会永久删除；逐字稿、会后分析、Copilot 记录和关联资料将保留。",
     "deleteAudioConfirmAction": "删除录音，保留文字",

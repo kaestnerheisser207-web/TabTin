@@ -33,6 +33,10 @@ import type {
   MeetingTranscriptCheckpoint,
   MeetingTranscriptChangedEvent,
 } from '@shared/meeting-recording-contract';
+import {
+  buildMeetingCopilotTurns,
+  type MeetingCopilotTurn,
+} from '@shared/meeting-copilot-turns';
 import { StandaloneModulePage } from '@components/context-space/StandaloneModulePage';
 import { useIdentityLabels } from '@components/layout/useIdentityLabels';
 import { createLogger } from '@/utils/logger';
@@ -120,17 +124,23 @@ export const MeetingLiveSessionView: React.FC<{
   >([]);
   const [copilotAnswerPending, setCopilotAnswerPending] = React.useState(false);
   const [copilotRequestedQuestion, setCopilotRequestedQuestion] =
-    React.useState<MeetingTranscriptCheckpoint | null>(null);
+    React.useState<MeetingCopilotTurn | null>(null);
   const copilotAnswerPendingRef = React.useRef(false);
-  const evaluatedCopilotTurnsRef = React.useRef(new Set<string>());
-  const queuedCopilotTurnsRef = React.useRef(new Set<string>());
-  const autoSkippedCopilotTurnsRef = React.useRef(new Set<string>());
+  const evaluatedCopilotTurnsRef = React.useRef(new Map<string, number>());
+  const attemptedCopilotTurnsRef = React.useRef(new Map<string, number>());
+  const queuedCopilotTurnsRef = React.useRef(new Map<string, number>());
+  const autoSkippedCopilotTurnsRef = React.useRef(new Map<string, number>());
+  const pendingCopilotTurnRef = React.useRef<MeetingCopilotTurn | null>(null);
+  const latestCopilotTurnsRef = React.useRef(
+    new Map<string, MeetingCopilotTurn>(),
+  );
+  const copilotQueuedAtRef = React.useRef(new Map<string, number>());
   const copilotSessionIdRef = React.useRef(initialStatus?.manifest?.sessionId);
   const [copilotSessionReadyId, setCopilotSessionReadyId] = React.useState(
     initialStatus?.manifest?.sessionId,
   );
   const [copilotFinalQueue, setCopilotFinalQueue] = React.useState<
-    MeetingTranscriptCheckpoint[]
+    MeetingCopilotTurn[]
   >([]);
   const pendingCopilotLatencyRef = React.useRef<{
     externalId: string;
@@ -223,35 +233,34 @@ export const MeetingLiveSessionView: React.FC<{
     [resolvedTranscript],
   );
   const latestTranscriptTurn = resolvedTranscript.at(-1) ?? null;
-  const finalTranscriptTurns = React.useMemo(
-    () =>
-      resolvedTranscript
-        .filter((checkpoint) => checkpoint.isFinal)
-        .sort((left, right) => {
-          const leftRecordedAt = Date.parse(left.recordedAt);
-          const rightRecordedAt = Date.parse(right.recordedAt);
-          const recordedAtOrder =
-            Number.isFinite(leftRecordedAt) && Number.isFinite(rightRecordedAt)
-              ? leftRecordedAt - rightRecordedAt
-              : 0;
-          return (
-            recordedAtOrder ||
-            left.startMs - right.startMs ||
-            left.externalId.localeCompare(right.externalId)
-          );
-        }),
+  const copilotTurns = React.useMemo(
+    () => buildMeetingCopilotTurns(resolvedTranscript),
     [resolvedTranscript],
   );
-  const latestFinalTurn = finalTranscriptTurns.at(-1) ?? null;
+  latestCopilotTurnsRef.current = new Map(
+    copilotTurns.map((turn) => [turn.candidateId, turn]),
+  );
+  const latestFinalTurn = copilotTurns.at(-1) ?? null;
   const latestUnevaluatedFinalTurn =
-    [...finalTranscriptTurns]
+    [...copilotTurns]
       .reverse()
       .find(
-        (checkpoint) =>
-          !evaluatedCopilotTurnsRef.current.has(checkpoint.externalId),
+        (turn) =>
+          (evaluatedCopilotTurnsRef.current.get(turn.candidateId) ?? 0) <
+          turn.revision,
       ) ?? null;
   const manualCopilotTurn = latestUnevaluatedFinalTurn ?? latestFinalTurn;
   const nextQueuedCopilotTurn = copilotFinalQueue[0] ?? null;
+  const nextQueuedHasFollowingPartial = Boolean(
+    nextQueuedCopilotTurn &&
+    resolvedTranscript.some(
+      (checkpoint) =>
+        !checkpoint.isFinal &&
+        checkpoint.source === nextQueuedCopilotTurn.source &&
+        checkpoint.startMs >= nextQueuedCopilotTurn.endMs &&
+        checkpoint.startMs - nextQueuedCopilotTurn.endMs <= 1_800,
+    ),
+  );
 
   React.useEffect(() => {
     const container = transcriptScrollRef.current;
@@ -279,9 +288,12 @@ export const MeetingLiveSessionView: React.FC<{
     }
     copilotSessionIdRef.current = manifestSessionId;
     evaluatedCopilotTurnsRef.current.clear();
+    attemptedCopilotTurnsRef.current.clear();
     queuedCopilotTurnsRef.current.clear();
+    copilotQueuedAtRef.current.clear();
     autoSkippedCopilotTurnsRef.current.clear();
     pendingCopilotLatencyRef.current = null;
+    pendingCopilotTurnRef.current = null;
     copilotAnswerPendingRef.current = false;
     setCopilotFinalQueue([]);
     setCopilotAnswer(null);
@@ -366,17 +378,51 @@ export const MeetingLiveSessionView: React.FC<{
         setCopilotRecords((current) => {
           const merged = new Map(
             nextCopilotRecords.map((record) => [
-              record.questionSegmentId,
+              record.candidateId ||
+                record.result.candidate_id ||
+                record.questionSegmentId,
               record,
             ]),
           );
           for (const record of current) {
-            merged.set(record.questionSegmentId, record);
+            merged.set(
+              record.candidateId ||
+                record.result.candidate_id ||
+                record.questionSegmentId,
+              record,
+            );
           }
           return [...merged.values()];
         });
+        const archiveTurns = buildMeetingCopilotTurns(archive.transcript);
         for (const record of nextCopilotRecords) {
-          evaluatedCopilotTurnsRef.current.add(record.questionSegmentId);
+          const turn = archiveTurns.find((candidate) =>
+            candidate.segmentIds.includes(record.questionSegmentId),
+          );
+          const candidateId =
+            record.candidateId ||
+            record.result.candidate_id ||
+            turn?.candidateId ||
+            record.questionSegmentId;
+          const revision =
+            record.revision ??
+            record.result.candidate_revision ??
+            turn?.segmentRevisions[record.questionSegmentId] ??
+            1;
+          evaluatedCopilotTurnsRef.current.set(
+            candidateId,
+            Math.max(
+              evaluatedCopilotTurnsRef.current.get(candidateId) ?? 0,
+              revision,
+            ),
+          );
+          attemptedCopilotTurnsRef.current.set(
+            candidateId,
+            Math.max(
+              attemptedCopilotTurnsRef.current.get(candidateId) ?? 0,
+              revision,
+            ),
+          );
         }
       })
       .catch(() => undefined);
@@ -506,17 +552,19 @@ export const MeetingLiveSessionView: React.FC<{
   };
 
   const baselineAndClearCopilotAutoQueue = React.useCallback(() => {
-    for (const checkpoint of finalTranscriptTurns) {
-      autoSkippedCopilotTurnsRef.current.add(checkpoint.externalId);
+    for (const turn of copilotTurns) {
+      autoSkippedCopilotTurnsRef.current.set(turn.candidateId, turn.revision);
     }
     queuedCopilotTurnsRef.current.clear();
+    copilotQueuedAtRef.current.clear();
     setCopilotFinalQueue([]);
-  }, [finalTranscriptTurns]);
+  }, [copilotTurns]);
 
   const setCopilot = async (enabled: boolean) => {
     const previousQueue = [...copilotFinalQueue];
-    const previousQueuedIds = new Set(queuedCopilotTurnsRef.current);
-    const previousSkippedIds = new Set(autoSkippedCopilotTurnsRef.current);
+    const previousQueuedIds = new Map(queuedCopilotTurnsRef.current);
+    const previousQueuedAt = new Map(copilotQueuedAtRef.current);
+    const previousSkippedIds = new Map(autoSkippedCopilotTurnsRef.current);
     if (!enabled) {
       setCopilotEnabled(false);
       baselineAndClearCopilotAutoQueue();
@@ -536,12 +584,16 @@ export const MeetingLiveSessionView: React.FC<{
     } catch (error) {
       if (!enabled) {
         queuedCopilotTurnsRef.current.clear();
-        for (const externalId of previousQueuedIds) {
-          queuedCopilotTurnsRef.current.add(externalId);
+        for (const [candidateId, revision] of previousQueuedIds) {
+          queuedCopilotTurnsRef.current.set(candidateId, revision);
+        }
+        copilotQueuedAtRef.current.clear();
+        for (const [candidateId, queuedAt] of previousQueuedAt) {
+          copilotQueuedAtRef.current.set(candidateId, queuedAt);
         }
         autoSkippedCopilotTurnsRef.current.clear();
-        for (const externalId of previousSkippedIds) {
-          autoSkippedCopilotTurnsRef.current.add(externalId);
+        for (const [candidateId, revision] of previousSkippedIds) {
+          autoSkippedCopilotTurnsRef.current.set(candidateId, revision);
         }
         setCopilotFinalQueue(previousQueue);
         setCopilotEnabled(true);
@@ -562,48 +614,63 @@ export const MeetingLiveSessionView: React.FC<{
       baselineAndClearCopilotAutoQueue();
       return;
     }
-    const nextFinals = finalTranscriptTurns.filter(
-      (checkpoint) =>
-        !evaluatedCopilotTurnsRef.current.has(checkpoint.externalId) &&
-        !autoSkippedCopilotTurnsRef.current.has(checkpoint.externalId) &&
-        !queuedCopilotTurnsRef.current.has(checkpoint.externalId),
+    const nextTurns = copilotTurns.filter(
+      (turn) =>
+        (attemptedCopilotTurnsRef.current.get(turn.candidateId) ?? 0) <
+          turn.revision &&
+        (autoSkippedCopilotTurnsRef.current.get(turn.candidateId) ?? 0) <
+          turn.revision &&
+        (queuedCopilotTurnsRef.current.get(turn.candidateId) ?? 0) <
+          turn.revision,
     );
-    if (nextFinals.length === 0) return;
-    for (const checkpoint of nextFinals) {
-      queuedCopilotTurnsRef.current.add(checkpoint.externalId);
+    if (nextTurns.length === 0) return;
+    for (const turn of nextTurns) {
+      queuedCopilotTurnsRef.current.set(turn.candidateId, turn.revision);
+      if (!copilotQueuedAtRef.current.has(turn.candidateId)) {
+        copilotQueuedAtRef.current.set(turn.candidateId, Date.now());
+      }
     }
-    setCopilotFinalQueue((current) => [...current, ...nextFinals]);
+    setCopilotFinalQueue((current) => {
+      const next = [...current];
+      for (const turn of nextTurns) {
+        const index = next.findIndex(
+          (candidate) => candidate.candidateId === turn.candidateId,
+        );
+        if (index >= 0) next[index] = turn;
+        else next.push(turn);
+      }
+      return next;
+    });
   }, [
     baselineAndClearCopilotAutoQueue,
     copilotEnabled,
     copilotSessionReadyId,
-    finalTranscriptTurns,
+    copilotTurns,
     isPreview,
     manifestSessionId,
   ]);
 
   const answerCopilotQuestion = React.useCallback(
     async (
-      question: MeetingTranscriptCheckpoint,
+      question: MeetingCopilotTurn,
       options: {
         retry?: boolean;
         trigger?: 'auto' | 'manual';
       } = {},
     ) => {
-      if (
-        !scope ||
-        isPreview ||
-        copilotAnswerPendingRef.current ||
-        !question.isFinal
-      )
-        return;
+      if (!scope || isPreview || copilotAnswerPendingRef.current) return;
       if (
         !options.retry &&
-        evaluatedCopilotTurnsRef.current.has(question.externalId)
+        (attemptedCopilotTurnsRef.current.get(question.candidateId) ?? 0) >=
+          question.revision
       ) {
         return;
       }
-      evaluatedCopilotTurnsRef.current.add(question.externalId);
+      attemptedCopilotTurnsRef.current.set(
+        question.candidateId,
+        question.revision,
+      );
+      pendingCopilotTurnRef.current = question;
       copilotAnswerPendingRef.current = true;
       setCopilotRequestedQuestion(question);
       setCopilotAnswerPending(true);
@@ -612,7 +679,7 @@ export const MeetingLiveSessionView: React.FC<{
       const finalRecordedAt = Date.parse(question.recordedAt);
       const stageLatency = (status: MeetingCopilotAnswerResult['status']) => {
         pendingCopilotLatencyRef.current = {
-          externalId: question.externalId,
+          externalId: question.candidateId,
           source: question.source,
           trigger: options.trigger ?? (options.retry ? 'manual' : 'auto'),
           status,
@@ -625,18 +692,42 @@ export const MeetingLiveSessionView: React.FC<{
         const answer =
           await window.tabtin.meetingRecording.answerCopilotQuestion(
             scope,
-            question.externalId,
+            question.requestSegmentId,
           );
         if (copilotSessionIdRef.current !== requestSessionId) return;
+        const latestRevision =
+          latestCopilotTurnsRef.current.get(question.candidateId)?.revision ??
+          question.revision;
+        if (latestRevision > question.revision) return;
+        if (answer.status === 'wait_for_more') return;
         stageLatency(answer.status);
         setCopilotAnswer(answer);
-        if (answer.status === 'answered' || answer.status === 'no_action') {
+        if (
+          answer.status === 'answered' ||
+          answer.status === 'no_action' ||
+          answer.status === 'needs_clarification'
+        ) {
+          evaluatedCopilotTurnsRef.current.set(
+            question.candidateId,
+            question.revision,
+          );
+        }
+        if (
+          answer.status === 'answered' ||
+          answer.status === 'no_action' ||
+          answer.status === 'needs_clarification'
+        ) {
           setCopilotRecords((current) => [
             ...current.filter(
-              (record) => record.questionSegmentId !== question.externalId,
+              (record) =>
+                (record.candidateId ||
+                  record.result.candidate_id ||
+                  record.questionSegmentId) !== question.candidateId,
             ),
             {
-              questionSegmentId: question.externalId,
+              questionSegmentId: question.requestSegmentId,
+              candidateId: question.candidateId,
+              revision: question.revision,
               evaluatedAt: new Date().toISOString(),
               result: answer,
             },
@@ -652,6 +743,11 @@ export const MeetingLiveSessionView: React.FC<{
         });
       } finally {
         if (copilotSessionIdRef.current === requestSessionId) {
+          if (
+            pendingCopilotTurnRef.current?.candidateId === question.candidateId
+          ) {
+            pendingCopilotTurnRef.current = null;
+          }
           copilotAnswerPendingRef.current = false;
           setCopilotAnswerPending(false);
           setCopilotRequestedQuestion(null);
@@ -695,24 +791,33 @@ export const MeetingLiveSessionView: React.FC<{
       !scope
     )
       return;
+    const queuedAt =
+      copilotQueuedAtRef.current.get(nextQueuedCopilotTurn.candidateId) ??
+      Date.now();
+    const targetDelayMs = nextQueuedHasFollowingPartial
+      ? nextQueuedCopilotTurn.stability.hardDeadlineMs
+      : nextQueuedCopilotTurn.stability.recommendedDelayMs;
+    const delayMs = Math.max(0, targetDelayMs - (Date.now() - queuedAt));
     const timer = window.setTimeout(() => {
       if (copilotAnswerPendingRef.current) return;
       setCopilotFinalQueue((current) =>
-        current[0]?.externalId === nextQueuedCopilotTurn.externalId
+        current[0]?.candidateId === nextQueuedCopilotTurn.candidateId
           ? current.slice(1)
           : current.filter(
-              (checkpoint) =>
-                checkpoint.externalId !== nextQueuedCopilotTurn.externalId,
+              (candidate) =>
+                candidate.candidateId !== nextQueuedCopilotTurn.candidateId,
             ),
       );
+      copilotQueuedAtRef.current.delete(nextQueuedCopilotTurn.candidateId);
       void answerCopilotQuestion(nextQueuedCopilotTurn, { trigger: 'auto' });
-    }, 250);
+    }, delayMs);
     return () => window.clearTimeout(timer);
   }, [
     answerCopilotQuestion,
     copilotAnswerPending,
     copilotEnabled,
     isPreview,
+    nextQueuedHasFollowingPartial,
     nextQueuedCopilotTurn,
     scope,
   ]);
@@ -1137,15 +1242,19 @@ export const MeetingLiveSessionView: React.FC<{
                         }
                         onClick={() => {
                           if (manualCopilotTurn) {
-                            const retry = evaluatedCopilotTurnsRef.current.has(
-                              manualCopilotTurn.externalId,
-                            );
+                            const retry =
+                              (attemptedCopilotTurnsRef.current.get(
+                                manualCopilotTurn.candidateId,
+                              ) ?? 0) >= manualCopilotTurn.revision;
                             setCopilotFinalQueue((current) =>
                               current.filter(
-                                (checkpoint) =>
-                                  checkpoint.externalId !==
-                                  manualCopilotTurn.externalId,
+                                (candidate) =>
+                                  candidate.candidateId !==
+                                  manualCopilotTurn.candidateId,
                               ),
+                            );
+                            copilotQueuedAtRef.current.delete(
+                              manualCopilotTurn.candidateId,
                             );
                             void answerCopilotQuestion(manualCopilotTurn, {
                               retry,
@@ -1198,7 +1307,9 @@ export const MeetingLiveSessionView: React.FC<{
                               : 'border-foreground/[0.06] bg-foreground/[0.025] text-muted-foreground'
                           }`}
                         >
-                          {copilotAnswer.message}
+                          {copilotAnswer.status === 'needs_clarification'
+                            ? copilotAnswer.clarifying_question
+                            : copilotAnswer.message}
                           <p className="mt-1 text-caption opacity-80">
                             {t('live.recordingContinues')}
                           </p>

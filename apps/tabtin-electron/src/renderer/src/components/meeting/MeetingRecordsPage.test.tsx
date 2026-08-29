@@ -380,15 +380,46 @@ describe('MeetingRecordsPage', () => {
     }
   });
 
+  it('shows local cleanup pending instead of claiming audio was deleted', () => {
+    const archive = {
+      ...createMeetingArchive('deleted'),
+      localAudioCleanupPending: true,
+    };
+
+    render(
+      <MeetingDetailSessionView
+        archive={archive}
+        onDeleteAudio={vi.fn()}
+        onDeleteArchive={vi.fn()}
+      />,
+    );
+
+    expect(screen.getByRole('alert').textContent).toContain(
+      '云端录音已删除，但此设备未能移除本地音频',
+    );
+    expect(screen.getByText('本地清理待重试')).toBeTruthy();
+    expect(
+      screen.queryByText('录音已删除，逐字稿、会后内容和关联资料仍然保留。'),
+    ).toBeNull();
+    expect(screen.getByRole('button', { name: '删除' })).toBeTruthy();
+  });
+
   it('wires both deletion paths to the real archive scope and returns after full deletion', async () => {
     const previousTabtin = window.tabtin;
     const previousUser = useAuthStore.getState().user;
     const previousOrganization =
       useOrganizationStore.getState().selectedOrganization;
     const archive = createMeetingArchive();
+    const emptyArchive = {
+      ...archive,
+      audioUrls: {},
+      transcript: [],
+      copilotRecords: [],
+    };
     const deletedArchive = createMeetingArchive('deleted');
     const getArchive = vi
       .fn()
+      .mockResolvedValueOnce(emptyArchive)
       .mockResolvedValueOnce(archive)
       .mockResolvedValueOnce(deletedArchive);
     const deleteArchiveAudio = vi.fn().mockResolvedValue(undefined);
@@ -444,6 +475,7 @@ describe('MeetingRecordsPage', () => {
       await waitFor(() =>
         expect(screen.getByRole('button', { name: '删除' })).toBeTruthy(),
       );
+      expect(getArchive).toHaveBeenCalledTimes(2);
 
       fireEvent.click(screen.getByRole('button', { name: '删除' }));
       fireEvent.click(
