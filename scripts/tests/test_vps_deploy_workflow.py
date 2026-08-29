@@ -13,12 +13,33 @@ def test_action_builds_and_pushes_an_immutable_amd64_image() -> None:
     assert "docker/build-push-action@v6" in workflow
     assert "platforms: linux/amd64" in workflow
     assert "push: true" in workflow
-    assert "TABTIN_SOURCE_SHA=${{ github.sha }}" in workflow
+    assert "tags: ${{ env.IMAGE_NAME }}:sha-${{ env.RELEASE_SHA }}" in workflow
+    assert "org.opencontainers.image.revision=${{ env.RELEASE_SHA }}" in workflow
+    assert "TABTIN_SOURCE_SHA=${{ env.RELEASE_SHA }}" in workflow
     assert "IMAGE_DIGEST: ${{ steps.build.outputs.digest }}" in workflow
     assert "image_ref=\"$IMAGE_NAME@$IMAGE_DIGEST\"" in workflow
+    assert "${{ github.sha }}" not in workflow
+    assert "$GITHUB_SHA" not in workflow
     assert workflow.index("docker/build-push-action@v6") < workflow.index(
         "Pull and deploy selected image"
     )
+
+
+def test_action_tracks_the_merged_pull_request_and_waits_for_production() -> None:
+    workflow = WORKFLOW.read_text(encoding="utf-8")
+
+    assert "pull_request_target:" in workflow
+    assert "types: [closed]" in workflow
+    assert "branches: [main]" in workflow
+    assert "workflow_dispatch:" not in workflow
+    assert "if: github.event.pull_request.merged == true" in workflow
+    assert "run-name: >-" in workflow
+    assert "Deploy PR #${{ github.event.pull_request.number }} ·" in workflow
+    assert "${{ github.event.pull_request.title }}" in workflow
+    assert "RELEASE_SHA: ${{ github.event.pull_request.merge_commit_sha }}" in workflow
+    assert "ref: ${{ env.RELEASE_SHA }}" in workflow
+    assert "environment: production" in workflow
+    assert '"deploy $RELEASE_SHA $image_ref $REGISTRY_USER"' in workflow
 
 
 def test_vps_only_pulls_and_switches_the_prebuilt_image() -> None:
