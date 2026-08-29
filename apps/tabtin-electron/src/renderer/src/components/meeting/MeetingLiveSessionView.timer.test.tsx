@@ -9,6 +9,27 @@ import type {
   MeetingTranscriptChangedEvent,
 } from '@shared/meeting-recording-contract';
 
+const logDebug = vi.hoisted(() => vi.fn());
+const logInfo = vi.hoisted(() => vi.fn());
+
+vi.mock('@/utils/logger', () => ({
+  logger: {
+    log: vi.fn(),
+    debug: vi.fn(),
+    info: logInfo,
+    warn: vi.fn(),
+    error: vi.fn(),
+  },
+  createLogger: () => ({
+    log: vi.fn(),
+    debug: logDebug,
+    info: logInfo,
+    warn: vi.fn(),
+    error: vi.fn(),
+  }),
+  perf: { start: vi.fn(), end: vi.fn() },
+}));
+
 vi.mock('react-i18next', async () => {
   const translations = (await import('@/i18n/locales/zh-CN/meeting.json'))
     .default as Record<string, unknown>;
@@ -62,6 +83,8 @@ describe('MeetingLiveSessionView timer', () => {
 
   beforeEach(() => {
     vi.useFakeTimers();
+    logDebug.mockReset();
+    logInfo.mockReset();
     captureLevelListener = undefined;
     statusListener = undefined;
     transcriptListener = undefined;
@@ -652,10 +675,14 @@ describe('MeetingLiveSessionView timer', () => {
     expect(screen.getByText('会前 Brief')).toBeTruthy();
   });
 
-  it('does not send the local microphone answer back to Copilot', async () => {
+  it('sends a local statement to the model and accepts no_action', async () => {
     const initialStatus = await window.tabtin.meetingRecording.getStatus();
     initialStatus.manifest!.copilotEnabled = true;
-    const answerCopilotQuestion = vi.fn();
+    const answerCopilotQuestion = vi.fn().mockResolvedValue({
+      status: 'no_action',
+      message: 'No answer needed.',
+      candidate_segment_id: 'local-answer-1',
+    });
     Object.assign(window.tabtin.meetingRecording, {
       getArchive: vi.fn().mockResolvedValue({
         transcript: [
@@ -684,11 +711,438 @@ describe('MeetingLiveSessionView timer', () => {
     await act(async () => {
       await Promise.resolve();
       await Promise.resolve();
+    });
+    await act(async () => {
       vi.advanceTimersByTime(500);
+      await Promise.resolve();
       await Promise.resolve();
     });
 
+    expect(answerCopilotQuestion).toHaveBeenCalledWith(
+      {
+        sessionId,
+        organizationId: 'org-1',
+        userId: 'user-1',
+      },
+      'local-answer-1',
+    );
+    expect(logInfo).toHaveBeenCalledWith(
+      'copilot_latency',
+      expect.objectContaining({
+        externalId: 'local-answer-1',
+        source: 'local',
+        trigger: 'auto',
+        status: 'no_action',
+        finalToRequestStartMs: expect.any(Number),
+        requestDurationMs: expect.any(Number),
+        finalToResultUiMs: expect.any(Number),
+      }),
+    );
+    const latencyPayload = logInfo.mock.calls.find(
+      ([event]) => event === 'copilot_latency',
+    )?.[1] as Record<string, unknown>;
+    expect(latencyPayload).not.toHaveProperty('text');
+  });
+
+  it('automatically submits a clear local question', async () => {
+    const initialStatus = await window.tabtin.meetingRecording.getStatus();
+    initialStatus.manifest!.copilotEnabled = true;
+    const answerCopilotQuestion = vi.fn().mockResolvedValue({
+      status: 'answered',
+      question: '这个接口为什么会超时？',
+      question_segment_id: 'local-question-1',
+      answer: '先检查设备切换事务是否阻塞。',
+      key_points: [],
+      sources: [],
+      reliability: 'medium',
+      warning: '',
+      model: 'test-model',
+      provider: 'test-provider',
+      latency_ms: 10,
+    });
+    Object.assign(window.tabtin.meetingRecording, {
+      getArchive: vi.fn().mockResolvedValue({
+        transcript: [
+          {
+            externalId: 'local-question-1',
+            source: 'local',
+            startMs: 1_000,
+            endMs: 2_000,
+            text: '这个接口为什么会超时？',
+            isFinal: true,
+            recordedAt: '2026-08-27T00:00:00.000Z',
+          },
+        ],
+        copilotRecords: [],
+      }),
+      answerCopilotQuestion,
+    });
+
+    render(
+      <MeetingLiveSessionView
+        sessionId={sessionId}
+        onBack={vi.fn()}
+        initialStatus={initialStatus}
+      />,
+    );
+    await act(async () => {
+      await Promise.resolve();
+      await Promise.resolve();
+    });
+    await act(async () => {
+      vi.advanceTimersByTime(250);
+      await Promise.resolve();
+      await Promise.resolve();
+    });
+
+    expect(answerCopilotQuestion).toHaveBeenCalledWith(
+      {
+        sessionId,
+        organizationId: 'org-1',
+        userId: 'user-1',
+      },
+      'local-question-1',
+    );
+  });
+
+  it('submits the latest final turn when analyze now is clicked', async () => {
+    const initialStatus = await window.tabtin.meetingRecording.getStatus();
+    initialStatus.manifest!.copilotEnabled = true;
+    const answerCopilotQuestion = vi.fn().mockResolvedValue({
+      status: 'no_action',
+      message: 'No answer needed.',
+      candidate_segment_id: 'local-manual-1',
+    });
+    Object.assign(window.tabtin.meetingRecording, {
+      getArchive: vi.fn().mockResolvedValue({
+        transcript: [
+          {
+            externalId: 'local-manual-1',
+            source: 'local',
+            startMs: 1_000,
+            endMs: 2_000,
+            text: '先继续记录。',
+            isFinal: true,
+            recordedAt: '2026-08-27T00:00:00.000Z',
+          },
+          {
+            externalId: 'remote-partial-1',
+            source: 'remote',
+            startMs: 2_100,
+            endMs: 2_500,
+            text: '尚未结束',
+            isFinal: false,
+            recordedAt: '2026-08-27T00:00:01.000Z',
+          },
+        ],
+        copilotRecords: [],
+      }),
+      answerCopilotQuestion,
+    });
+
+    render(
+      <MeetingLiveSessionView
+        sessionId={sessionId}
+        onBack={vi.fn()}
+        initialStatus={initialStatus}
+      />,
+    );
+    await act(async () => {
+      await Promise.resolve();
+      await Promise.resolve();
+    });
+    fireEvent.click(screen.getByRole('button', { name: '立即分析当前内容' }));
+    await act(async () => {
+      await Promise.resolve();
+      await Promise.resolve();
+    });
+
+    expect(answerCopilotQuestion).toHaveBeenCalledWith(
+      {
+        sessionId,
+        organizationId: 'org-1',
+        userId: 'user-1',
+      },
+      'local-manual-1',
+    );
+    expect(logInfo).toHaveBeenCalledWith(
+      'copilot_latency',
+      expect.objectContaining({ trigger: 'manual' }),
+    );
+  });
+
+  it('manual analysis prefers the latest unevaluated final before retrying', async () => {
+    const initialStatus = await window.tabtin.meetingRecording.getStatus();
+    initialStatus.manifest!.copilotEnabled = true;
+    const answerCopilotQuestion = vi.fn((_, externalId: string) =>
+      Promise.resolve({
+        status: 'no_action' as const,
+        message: 'No answer needed.',
+        candidate_segment_id: externalId,
+      }),
+    );
+    Object.assign(window.tabtin.meetingRecording, {
+      getArchive: vi.fn().mockResolvedValue({
+        transcript: [
+          {
+            externalId: 'manual-unevaluated',
+            source: 'local',
+            startMs: 1_000,
+            endMs: 1_500,
+            text: 'Still needs evaluation.',
+            isFinal: true,
+            recordedAt: '2026-08-27T00:00:01.000Z',
+          },
+          {
+            externalId: 'manual-latest-evaluated',
+            source: 'remote',
+            startMs: 2_000,
+            endMs: 2_500,
+            text: 'Already evaluated.',
+            isFinal: true,
+            recordedAt: '2026-08-27T00:00:02.000Z',
+          },
+        ],
+        copilotRecords: [
+          {
+            questionSegmentId: 'manual-latest-evaluated',
+            evaluatedAt: '2026-08-27T00:00:03.000Z',
+            result: {
+              status: 'no_action',
+              message: 'Already evaluated.',
+              candidate_segment_id: 'manual-latest-evaluated',
+            },
+          },
+        ],
+      }),
+      answerCopilotQuestion,
+    });
+
+    render(
+      <MeetingLiveSessionView
+        sessionId={sessionId}
+        onBack={vi.fn()}
+        initialStatus={initialStatus}
+      />,
+    );
+    await act(async () => {
+      await Promise.resolve();
+      await Promise.resolve();
+    });
+    const analyzeNow = screen.getByRole('button', {
+      name: '立即分析当前内容',
+    });
+    fireEvent.click(analyzeNow);
+    await act(async () => {
+      await Promise.resolve();
+      await Promise.resolve();
+    });
+    fireEvent.click(analyzeNow);
+    await act(async () => {
+      await Promise.resolve();
+      await Promise.resolve();
+    });
+
+    expect(
+      answerCopilotQuestion.mock.calls.map(([, externalId]) => externalId),
+    ).toEqual(['manual-unevaluated', 'manual-latest-evaluated']);
+  });
+
+  it('does not backfill finals from a disabled Copilot window', async () => {
+    const initialStatus = await window.tabtin.meetingRecording.getStatus();
+    initialStatus.manifest!.copilotEnabled = true;
+    const answerCopilotQuestion = vi.fn((_, externalId: string) =>
+      Promise.resolve({
+        status: 'no_action' as const,
+        message: 'No answer needed.',
+        candidate_segment_id: externalId,
+      }),
+    );
+    const final = (
+      externalId: string,
+      recordedAt: string,
+    ): MeetingTranscriptCheckpoint => ({
+      externalId,
+      source: externalId === 'disabled-b' ? 'local' : 'remote',
+      startMs: Date.parse(recordedAt) % 10_000,
+      endMs: (Date.parse(recordedAt) % 10_000) + 500,
+      text: externalId,
+      isFinal: true,
+      recordedAt,
+    });
+    Object.assign(window.tabtin.meetingRecording, {
+      getArchive: vi.fn().mockResolvedValue({
+        transcript: [final('queued-a', '2026-08-27T00:00:01.000Z')],
+        copilotRecords: [],
+      }),
+      answerCopilotQuestion,
+    });
+
+    render(
+      <MeetingLiveSessionView
+        sessionId={sessionId}
+        onBack={vi.fn()}
+        initialStatus={initialStatus}
+      />,
+    );
+    await act(async () => {
+      await Promise.resolve();
+      await Promise.resolve();
+    });
+    act(() => {
+      statusListener?.({
+        ...initialStatus,
+        manifest: { ...initialStatus.manifest!, copilotEnabled: false },
+      });
+    });
+    await act(async () => {
+      await Promise.resolve();
+      await Promise.resolve();
+    });
+    act(() => {
+      transcriptListener?.({
+        sessionId,
+        organizationId: 'org-1',
+        userId: 'user-1',
+        checkpoint: final('disabled-b', '2026-08-27T00:00:02.000Z'),
+      });
+    });
+    await act(async () => {
+      await Promise.resolve();
+      await Promise.resolve();
+    });
+    act(() => {
+      statusListener?.({
+        ...initialStatus,
+        manifest: { ...initialStatus.manifest!, copilotEnabled: true },
+      });
+    });
+    await act(async () => {
+      await Promise.resolve();
+      vi.advanceTimersByTime(500);
+      await Promise.resolve();
+    });
     expect(answerCopilotQuestion).not.toHaveBeenCalled();
+
+    act(() => {
+      transcriptListener?.({
+        sessionId,
+        organizationId: 'org-1',
+        userId: 'user-1',
+        checkpoint: final('enabled-c', '2026-08-27T00:00:03.000Z'),
+      });
+    });
+    await act(async () => {
+      await Promise.resolve();
+      await Promise.resolve();
+    });
+    await act(async () => {
+      vi.advanceTimersByTime(250);
+      await Promise.resolve();
+      await Promise.resolve();
+    });
+    expect(
+      answerCopilotQuestion.mock.calls.map(([, externalId]) => externalId),
+    ).toEqual(['enabled-c']);
+
+    fireEvent.click(screen.getByRole('button', { name: '立即分析当前内容' }));
+    await act(async () => {
+      await Promise.resolve();
+      await Promise.resolve();
+    });
+    expect(
+      answerCopilotQuestion.mock.calls.map(([, externalId]) => externalId),
+    ).toEqual(['enabled-c', 'disabled-b']);
+  });
+
+  it('drops the old final queue when the rendered session changes', async () => {
+    const firstStatus = await window.tabtin.meetingRecording.getStatus();
+    firstStatus.manifest!.copilotEnabled = true;
+    const secondSessionId = '22222222-2222-4222-8222-222222222222';
+    const secondStatus: MeetingRecordingStatus = {
+      ...firstStatus,
+      manifest: {
+        ...firstStatus.manifest!,
+        sessionId: secondSessionId,
+        organizationId: 'org-2',
+        userId: 'user-2',
+        copilotEnabled: true,
+      },
+    };
+    const firstFinal: MeetingTranscriptCheckpoint = {
+      externalId: 'old-session-final',
+      source: 'remote',
+      startMs: 1_000,
+      endMs: 1_500,
+      text: 'Old session content.',
+      isFinal: true,
+      recordedAt: '2026-08-27T00:00:01.000Z',
+    };
+    const secondFinal: MeetingTranscriptCheckpoint = {
+      externalId: 'new-session-final',
+      source: 'local',
+      startMs: 500,
+      endMs: 900,
+      text: 'New session content.',
+      isFinal: true,
+      recordedAt: '2026-08-27T00:00:02.000Z',
+    };
+    const getStatus = vi.mocked(window.tabtin.meetingRecording.getStatus);
+    getStatus.mockResolvedValue(firstStatus);
+    const getArchive = vi.fn((scope: { sessionId: string }) =>
+      Promise.resolve({
+        transcript:
+          scope.sessionId === secondSessionId ? [secondFinal] : [firstFinal],
+        copilotRecords: [],
+      }),
+    );
+    const answerCopilotQuestion = vi.fn().mockResolvedValue({
+      status: 'no_action',
+      message: 'No answer needed.',
+      candidate_segment_id: 'new-session-final',
+    });
+    Object.assign(window.tabtin.meetingRecording, {
+      getArchive,
+      answerCopilotQuestion,
+    });
+
+    const { rerender } = render(
+      <MeetingLiveSessionView
+        sessionId={sessionId}
+        onBack={vi.fn()}
+        initialStatus={firstStatus}
+      />,
+    );
+    await act(async () => {
+      await Promise.resolve();
+      await Promise.resolve();
+    });
+    getStatus.mockResolvedValue(secondStatus);
+    rerender(
+      <MeetingLiveSessionView
+        sessionId={secondSessionId}
+        onBack={vi.fn()}
+        initialStatus={secondStatus}
+      />,
+    );
+    await act(async () => {
+      for (let index = 0; index < 6; index += 1) await Promise.resolve();
+    });
+    await act(async () => {
+      vi.advanceTimersByTime(250);
+      await Promise.resolve();
+      await Promise.resolve();
+    });
+
+    expect(answerCopilotQuestion).toHaveBeenCalledTimes(1);
+    expect(answerCopilotQuestion).toHaveBeenCalledWith(
+      {
+        sessionId: secondSessionId,
+        organizationId: 'org-2',
+        userId: 'user-2',
+      },
+      'new-session-final',
+    );
   });
 
   it('keeps an in-flight remote turn evaluated across transcript status increments', async () => {
@@ -749,12 +1203,24 @@ describe('MeetingLiveSessionView timer', () => {
           transcriptRevision: 2,
         },
       });
+      transcriptListener?.({
+        sessionId,
+        organizationId: 'org-1',
+        userId: 'user-1',
+        checkpoint: {
+          ...remoteTurn,
+          text: 'Explain red-black',
+          isFinal: false,
+          recordedAt: '2026-08-27T00:00:01.000Z',
+        },
+      });
     });
     await act(async () => {
       await Promise.resolve();
       await Promise.resolve();
     });
     expect(getArchive).toHaveBeenCalledTimes(1);
+    expect(answerCopilotQuestion).toHaveBeenCalledTimes(1);
 
     await act(async () => {
       resolveAnswer({
@@ -770,14 +1236,84 @@ describe('MeetingLiveSessionView timer', () => {
     expect(answerCopilotQuestion).toHaveBeenCalledTimes(1);
   });
 
-  it('analyzes the newest completed turn after an earlier AI request finishes', async () => {
+  it('evaluates every initial final in recordedAt order', async () => {
+    const initialStatus = await window.tabtin.meetingRecording.getStatus();
+    initialStatus.manifest!.copilotEnabled = true;
+    const answerCopilotQuestion = vi.fn((_, externalId: string) =>
+      Promise.resolve({
+        status: 'no_action' as const,
+        message: 'No answer needed.',
+        candidate_segment_id: externalId,
+      }),
+    );
+    Object.assign(window.tabtin.meetingRecording, {
+      getArchive: vi.fn().mockResolvedValue({
+        transcript: [
+          {
+            externalId: 'initial-third',
+            source: 'remote',
+            startMs: 500,
+            endMs: 900,
+            text: 'Third final.',
+            isFinal: true,
+            recordedAt: '2026-08-27T00:00:03.000Z',
+          },
+          {
+            externalId: 'initial-first',
+            source: 'local',
+            startMs: 4_000,
+            endMs: 4_500,
+            text: 'First final.',
+            isFinal: true,
+            recordedAt: '2026-08-27T00:00:01.000Z',
+          },
+          {
+            externalId: 'initial-second',
+            source: 'remote',
+            startMs: 2_000,
+            endMs: 2_500,
+            text: 'Second final.',
+            isFinal: true,
+            recordedAt: '2026-08-27T00:00:02.000Z',
+          },
+        ],
+        copilotRecords: [],
+      }),
+      answerCopilotQuestion,
+    });
+
+    render(
+      <MeetingLiveSessionView
+        sessionId={sessionId}
+        onBack={vi.fn()}
+        initialStatus={initialStatus}
+      />,
+    );
+    await act(async () => {
+      await Promise.resolve();
+      await Promise.resolve();
+    });
+    for (let index = 0; index < 3; index += 1) {
+      await act(async () => {
+        vi.advanceTimersByTime(250);
+        await Promise.resolve();
+        await Promise.resolve();
+      });
+    }
+
+    expect(
+      answerCopilotQuestion.mock.calls.map(([, externalId]) => externalId),
+    ).toEqual(['initial-first', 'initial-second', 'initial-third']);
+  });
+
+  it('queues a later cross-source final even when its startMs is smaller', async () => {
     const initialStatus = await window.tabtin.meetingRecording.getStatus();
     initialStatus.manifest!.copilotEnabled = true;
     const firstTurn = {
       externalId: 'turn-1',
       source: 'remote' as const,
-      startMs: 1_000,
-      endMs: 2_000,
+      startMs: 3_000,
+      endMs: 4_000,
       text: 'Opening the document now.',
       isFinal: true,
       recordedAt: '2026-08-26T00:00:00.000Z',
@@ -785,9 +1321,11 @@ describe('MeetingLiveSessionView timer', () => {
     const secondTurn = {
       ...firstTurn,
       externalId: 'turn-2',
-      startMs: 3_000,
-      endMs: 4_000,
+      source: 'local' as const,
+      startMs: 1_000,
+      endMs: 2_000,
       text: 'Explain the hash map implementation principles.',
+      recordedAt: '2026-08-26T00:00:02.000Z',
     };
     const getArchive = vi.fn().mockResolvedValue({ transcript: [firstTurn] });
     let resolveFirst!: (result: {

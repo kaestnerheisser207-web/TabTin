@@ -73,8 +73,8 @@ function serverSessionManifest(
     ) as Record<string, unknown> | undefined;
     return {
       source,
-      status: (readString(remote?.capture_status, 'pending') || 'pending') as
-        MeetingArchiveManifestV2['tracks']['local']['status'],
+      status: (readString(remote?.capture_status, 'pending') ||
+        'pending') as MeetingArchiveManifestV2['tracks']['local']['status'],
       nextSequence: 0,
       durationMs: readNumber(remote?.duration_ms),
       bytes: readNumber(remote?.file_size),
@@ -187,10 +187,11 @@ export class MeetingRecordingManager {
     MeetingTranscriptSegmentInput
   >();
   private readonly uploadTasks = new Map<string, Promise<void>>();
-  private readonly sourceSwitchGeneration: Record<'local' | 'remote', number> = {
-    local: 0,
-    remote: 0,
-  };
+  private readonly sourceSwitchGeneration: Record<'local' | 'remote', number> =
+    {
+      local: 0,
+      remote: 0,
+    };
   private readonly activeSourceCommitPhases = new Set<Promise<unknown>>();
   private readonly activeSourceCommitPhaseBySource = new Map<
     'local' | 'remote',
@@ -343,98 +344,104 @@ export class MeetingRecordingManager {
       if (prepared.source !== source) {
         throw new Error('meeting capture returned the wrong audio source');
       }
-      return await this.trackSourceCommitPhase(source, this.enqueue(async () => {
-        if (!this.isSourceSwitchCurrent(source, generation, scope)) {
-          throw new MeetingSourceSwitchSupersededError();
-        }
-        const selected = await this.captureHost!.commitSourceSwitch({
-          operationId: prepared!.operationId,
-          source,
-        });
-        committed = true;
-        log.info('source_switch', {
-          phase: 'commit_complete',
-          source,
-          generation,
-          operationId: prepared!.operationId,
-          selectedSourceId: selected.sourceId,
-          elapsedMs: Date.now() - startedAt,
-        });
-        const reference = {
-          operationId: prepared!.operationId,
-          source,
-        };
-        try {
-          if (selected.source !== source) {
-            throw new Error('meeting capture committed the wrong audio source');
+      return await this.trackSourceCommitPhase(
+        source,
+        this.enqueue(async () => {
+          if (!this.isSourceSwitchCurrent(source, generation, scope)) {
+            throw new MeetingSourceSwitchSupersededError();
           }
-          this.activeManifest = await this.archiveStore.updateCaptureSource(
-            scope,
+          const selected = await this.captureHost!.commitSourceSwitch({
+            operationId: prepared!.operationId,
             source,
-            selected.sourceId,
-            selected.label,
-          );
-        } catch (error) {
+          });
+          committed = true;
+          log.info('source_switch', {
+            phase: 'commit_complete',
+            source,
+            generation,
+            operationId: prepared!.operationId,
+            selectedSourceId: selected.sourceId,
+            elapsedMs: Date.now() - startedAt,
+          });
+          const reference = {
+            operationId: prepared!.operationId,
+            source,
+          };
+          try {
+            if (selected.source !== source) {
+              throw new Error(
+                'meeting capture committed the wrong audio source',
+              );
+            }
+            this.activeManifest = await this.archiveStore.updateCaptureSource(
+              scope,
+              source,
+              selected.sourceId,
+              selected.label,
+            );
+          } catch (error) {
+            this.pendingSourceResolutions.set(source, {
+              reference,
+              resolution: 'rollback',
+            });
+            try {
+              await this.reconcilePendingSourceResolution(source);
+              log.warn('source_switch', {
+                phase: 'rollback_complete',
+                source,
+                generation,
+                operationId: prepared!.operationId,
+                elapsedMs: Date.now() - startedAt,
+              });
+            } catch (resolutionError) {
+              log.warn('source_switch', {
+                phase: 'rollback_pending',
+                source,
+                generation,
+                operationId: prepared!.operationId,
+                errorName:
+                  resolutionError instanceof Error
+                    ? resolutionError.name
+                    : 'UnknownError',
+                elapsedMs: Date.now() - startedAt,
+              });
+            }
+            throw error;
+          }
           this.pendingSourceResolutions.set(source, {
             reference,
-            resolution: 'rollback',
+            resolution: 'finalize',
           });
           try {
             await this.reconcilePendingSourceResolution(source);
-            log.warn('source_switch', {
-              phase: 'rollback_complete',
+            log.info('source_switch', {
+              phase: 'finalize_complete',
               source,
               generation,
               operationId: prepared!.operationId,
               elapsedMs: Date.now() - startedAt,
             });
-          } catch (resolutionError) {
+          } catch (error) {
+            // The new source and manifest already agree. Finalization only
+            // releases the old input, so do not report the switch as failed or
+            // roll the actual source back behind the persisted selection.
             log.warn('source_switch', {
-              phase: 'rollback_pending',
+              phase: 'finalize_failed',
               source,
               generation,
               operationId: prepared!.operationId,
-              errorName:
-                resolutionError instanceof Error
-                  ? resolutionError.name
-                  : 'UnknownError',
+              errorName: error instanceof Error ? error.name : 'UnknownError',
               elapsedMs: Date.now() - startedAt,
             });
           }
-          throw error;
-        }
-        this.pendingSourceResolutions.set(source, {
-          reference,
-          resolution: 'finalize',
-        });
-        try {
-          await this.reconcilePendingSourceResolution(source);
-          log.info('source_switch', {
-            phase: 'finalize_complete',
-            source,
-            generation,
-            operationId: prepared!.operationId,
-            elapsedMs: Date.now() - startedAt,
-          });
-        } catch (error) {
-          // The new source and manifest already agree. Finalization only
-          // releases the old input, so do not report the switch as failed or
-          // roll the actual source back behind the persisted selection.
-          log.warn('source_switch', {
-            phase: 'finalize_failed',
-            source,
-            generation,
-            operationId: prepared!.operationId,
-            errorName: error instanceof Error ? error.name : 'UnknownError',
-            elapsedMs: Date.now() - startedAt,
-          });
-        }
-        this.checkpointServerTrack(this.activeManifest, source);
-        this.scheduleServerFlush(scope);
-        return this.emitStatus();
-      }));
+          this.checkpointServerTrack(this.activeManifest, source);
+          this.scheduleServerFlush(scope);
+          return this.emitStatus();
+        }),
+      );
     } catch (error) {
-      if (prepared && !committed) await this.abortPreparedSourceSwitch(prepared);
+      if (prepared && !committed)
+        await this.abortPreparedSourceSwitch(prepared);
       const logFailure =
         error instanceof MeetingSourceSwitchSupersededError
           ? log.info.bind(log)
@@ -454,7 +461,9 @@ export class MeetingRecordingManager {
     }
   }
 
-  private isCurrentCaptureSource(event: MeetingCaptureSourceEndedEvent): boolean {
+  private isCurrentCaptureSource(
+    event: MeetingCaptureSourceEndedEvent,
+  ): boolean {
     if (
       event.source !== 'local' ||
       this.activeManifest?.lifecycleStatus !== 'recording'
@@ -552,7 +561,9 @@ export class MeetingRecordingManager {
     this.emitStatus();
   }
 
-  private async uploadFinalizedTracks(scope: MeetingArchiveScope): Promise<void> {
+  private async uploadFinalizedTracks(
+    scope: MeetingArchiveScope,
+  ): Promise<void> {
     const existing = this.uploadTasks.get(scope.sessionId);
     if (existing) return existing;
     const task = this.performFinalizedTrackUploads(scope);
@@ -655,12 +666,16 @@ export class MeetingRecordingManager {
             },
           });
         }
-        manifest = await this.archiveStore.updateTrackUploadState(scope, source, {
-          storageStatus: 'confirming',
-          fileRecordId: result.fileId,
-          objectKey: result.fileKey,
-          uploadError: '',
-        });
+        manifest = await this.archiveStore.updateTrackUploadState(
+          scope,
+          source,
+          {
+            storageStatus: 'confirming',
+            fileRecordId: result.fileId,
+            objectKey: result.fileKey,
+            uploadError: '',
+          },
+        );
         this.updateActiveManifest(manifest);
         this.checkpointServerTrack(manifest, source);
         if (!this.serverSync) {
@@ -674,16 +689,24 @@ export class MeetingRecordingManager {
               'meeting track binding is pending',
           );
         }
-        manifest = await this.archiveStore.updateTrackUploadState(scope, source, {
-          storageStatus: 'synced',
-          uploadError: '',
-        });
+        manifest = await this.archiveStore.updateTrackUploadState(
+          scope,
+          source,
+          {
+            storageStatus: 'synced',
+            uploadError: '',
+          },
+        );
         this.updateActiveManifest(manifest);
       } catch (error) {
-        manifest = await this.archiveStore.updateTrackUploadState(scope, source, {
-          storageStatus: failureStatus,
-          uploadError: error instanceof Error ? error.message : String(error),
-        });
+        manifest = await this.archiveStore.updateTrackUploadState(
+          scope,
+          source,
+          {
+            storageStatus: failureStatus,
+            uploadError: error instanceof Error ? error.message : String(error),
+          },
+        );
         this.updateActiveManifest(manifest);
       }
       track = manifest.tracks[source];
@@ -746,9 +769,7 @@ export class MeetingRecordingManager {
       active: Boolean(
         this.activeManifest &&
         ACTIVE_STATES.has(
-          this.activeManifest.lifecycleStatus as
-            | 'preparing'
-            | 'recording'
+          this.activeManifest.lifecycleStatus as 'preparing' | 'recording',
         ),
       ),
       manifest: this.activeManifest,
@@ -939,30 +960,32 @@ export class MeetingRecordingManager {
     return [...manifestsById.values()]
       .sort((left, right) => right.createdAt.localeCompare(left.createdAt))
       .map((manifest) => {
-      const archiveScope = {
-        ...scope,
-        sessionId: manifest.sessionId,
-      };
-      const audioUrls: MeetingLocalArchive['audioUrls'] = {};
-      for (const source of ['local', 'remote'] as const) {
-        const relativeName = manifest.tracks[source].finalizedRelativePath;
-        if (!relativeName) continue;
-        const absolutePath = this.archiveStore.resolveSessionFile(
-          archiveScope,
-          relativeName,
-        );
-        const encoded = absolutePath
-          .split('/')
-          .map((segment) => encodeURIComponent(segment))
-          .join('/');
-        audioUrls[source] = `tabtin-file://${encoded}`;
-      }
-      return { manifest, audioUrls, transcript: [], copilotRecords: [] };
+        const archiveScope = {
+          ...scope,
+          sessionId: manifest.sessionId,
+        };
+        const audioUrls: MeetingLocalArchive['audioUrls'] = {};
+        for (const source of ['local', 'remote'] as const) {
+          const relativeName = manifest.tracks[source].finalizedRelativePath;
+          if (!relativeName) continue;
+          const absolutePath = this.archiveStore.resolveSessionFile(
+            archiveScope,
+            relativeName,
+          );
+          const encoded = absolutePath
+            .split('/')
+            .map((segment) => encodeURIComponent(segment))
+            .join('/');
+          audioUrls[source] = `tabtin-file://${encoded}`;
+        }
+        return { manifest, audioUrls, transcript: [], copilotRecords: [] };
       });
   }
 
   async getArchive(scope: MeetingArchiveScope): Promise<MeetingLocalArchive> {
-    const localManifest = await this.archiveStore.readManifest(scope).catch(() => null);
+    const localManifest = await this.archiveStore
+      .readManifest(scope)
+      .catch(() => null);
     let remoteSession: MeetingServerSession | null = null;
     if (this.serverSync?.getSession) {
       try {
@@ -974,9 +997,9 @@ export class MeetingRecordingManager {
         ) {
           const serverBacked = Boolean(
             localManifest &&
-              Object.values(localManifest.tracks).every((track) =>
-                ['synced', 'deleted'].includes(track.storageStatus),
-              ),
+            Object.values(localManifest.tracks).every((track) =>
+              ['synced', 'deleted'].includes(track.storageStatus),
+            ),
           );
           if (serverBacked) {
             await this.archiveStore.deleteArchive(scope).catch(() => undefined);
@@ -996,14 +1019,24 @@ export class MeetingRecordingManager {
     if (localManifest && remoteManifest) {
       for (const source of ['local', 'remote'] as const) {
         const remoteTrack = remoteManifest.tracks[source];
-        if (remoteTrack.fileRecordId || remoteTrack.storageStatus === 'deleted') {
+        if (
+          remoteTrack.fileRecordId ||
+          remoteTrack.storageStatus === 'deleted'
+        ) {
           manifest.tracks[source].storageStatus = remoteTrack.storageStatus;
           manifest.tracks[source].fileRecordId = remoteTrack.fileRecordId;
         }
       }
     }
-    const [localTranscript, localCopilotRecords, remoteTranscript, remoteCopilot] = await Promise.all([
-      localManifest ? this.archiveStore.readTranscript(scope) : Promise.resolve([]),
+    const [
+      localTranscript,
+      localCopilotRecords,
+      remoteTranscript,
+      remoteCopilot,
+    ] = await Promise.all([
+      localManifest
+        ? this.archiveStore.readTranscript(scope)
+        : Promise.resolve([]),
       localManifest
         ? this.archiveStore.readCopilotRecords(scope)
         : Promise.resolve([]),
@@ -1034,7 +1067,9 @@ export class MeetingRecordingManager {
                 result: result as MeetingCopilotAnswerResult,
               };
             })
-            .filter((record): record is NonNullable<typeof record> => Boolean(record));
+            .filter((record): record is NonNullable<typeof record> =>
+              Boolean(record),
+            );
     const transcript =
       localTranscript.length > 0
         ? localTranscript
@@ -1044,16 +1079,16 @@ export class MeetingRecordingManager {
             speakerKey: readString(segment.speaker_key) || undefined,
             startMs: readNumber(segment.start_ms),
             endMs: readNumber(segment.end_ms),
-            text: readString(segment.display_text, readString(segment.raw_text)),
+            text: readString(
+              segment.display_text,
+              readString(segment.raw_text),
+            ),
             isFinal: segment.is_final !== false,
             confidence:
               typeof segment.confidence === 'number'
                 ? segment.confidence
                 : null,
-            recordedAt: readString(
-              segment.created_at,
-              manifest.createdAt,
-            ),
+            recordedAt: readString(segment.created_at, manifest.createdAt),
           }));
     const audioUrls: MeetingLocalArchive['audioUrls'] = {};
     for (const source of ['local', 'remote'] as const) {
@@ -1123,9 +1158,7 @@ export class MeetingRecordingManager {
       if (
         this.activeManifest &&
         ACTIVE_STATES.has(
-          this.activeManifest.lifecycleStatus as
-            | 'preparing'
-            | 'recording'
+          this.activeManifest.lifecycleStatus as 'preparing' | 'recording',
         ) &&
         this.activeManifest.sessionId !== input.sessionId
       ) {
@@ -1375,12 +1408,8 @@ export class MeetingRecordingManager {
   ): Promise<MeetingRecordingStatus> {
     return this.enqueue(async () => {
       this.requireActiveScope(input);
-      if (
-        this.activeManifest!.lifecycleStatus !== 'recording'
-      ) {
-        throw new Error(
-          'audio chunks are accepted only while recording',
-        );
+      if (this.activeManifest!.lifecycleStatus !== 'recording') {
+        throw new Error('audio chunks are accepted only while recording');
       }
       const result = await this.archiveStore.appendAudioChunk(input);
       this.activeManifest = result.manifest;
@@ -1393,9 +1422,7 @@ export class MeetingRecordingManager {
   appendPcmChunk(input: AppendMeetingPcmChunkInput): void {
     this.requireActiveScope(input);
     if (
-      !['preparing', 'recording'].includes(
-        this.activeManifest!.lifecycleStatus,
-      )
+      !['preparing', 'recording'].includes(this.activeManifest!.lifecycleStatus)
     ) {
       throw new Error(
         'PCM chunks are accepted only while preparing or recording',
@@ -1466,46 +1493,114 @@ export class MeetingRecordingManager {
     questionSegmentId: string,
   ): Promise<MeetingCopilotAnswerResult> {
     this.requireActiveScope(scope);
+    const requestId = randomUUID();
+    const startedAt = Date.now();
+    log.info('copilot_answer', {
+      phase: 'request_received',
+      requestId,
+      sessionId: scope.sessionId,
+      questionSegmentId,
+    });
     if (!this.activeManifest?.copilotEnabled) {
-      return {
+      const result: MeetingCopilotAnswerResult = {
         status: 'disabled',
         message: '会议 Copilot 当前已关闭',
       };
+      log.info('copilot_answer', {
+        phase: 'completed',
+        requestId,
+        sessionId: scope.sessionId,
+        resultStatus: result.status,
+        totalMs: Date.now() - startedAt,
+      });
+      return result;
     }
     if (!this.serverSync) {
-      return {
+      const result: MeetingCopilotAnswerResult = {
         status: 'unavailable',
         message: '会议 Copilot 服务暂时不可用，录音与转写会继续运行',
       };
+      log.info('copilot_answer', {
+        phase: 'completed',
+        requestId,
+        sessionId: scope.sessionId,
+        resultStatus: result.status,
+        totalMs: Date.now() - startedAt,
+      });
+      return result;
     }
-    const archive = await this.getArchive(scope);
-    const question = archive.transcript.find(
+    const contextReadStartedAt = Date.now();
+    const transcript = await this.archiveStore.readTranscript(scope);
+    const question = transcript.find(
       (checkpoint) =>
         checkpoint.externalId === questionSegmentId && checkpoint.isFinal,
     );
+    log.info('copilot_answer', {
+      phase: 'local_context_read',
+      requestId,
+      sessionId: scope.sessionId,
+      candidateSource: question?.source,
+      segmentCount: transcript.length,
+      elapsedMs: Date.now() - contextReadStartedAt,
+    });
     if (!question) {
-      return {
+      const result: MeetingCopilotAnswerResult = {
         status: 'no_question',
         message: '这个问题尚未转写完成，请稍后再试',
       };
+      log.info('copilot_answer', {
+        phase: 'completed',
+        requestId,
+        sessionId: scope.sessionId,
+        resultStatus: result.status,
+        totalMs: Date.now() - startedAt,
+      });
+      return result;
     }
-    if (question.source !== 'remote') {
-      return {
-        status: 'no_action',
-        message: '本地麦克风内容属于你的回答，不需要 Copilot 再次解答',
-        candidate_segment_id: question.externalId,
-      };
+    const modelId = this.activeManifest.copilotModelId;
+    const serverStartedAt = Date.now();
+    let result: MeetingCopilotAnswerResult;
+    try {
+      result = await this.serverSync.answerCopilot(
+        scope.sessionId,
+        transcript,
+        questionSegmentId,
+        modelId,
+        requestId,
+      );
+    } catch (error) {
+      log.warn('copilot_answer', {
+        phase: 'server_model_failed',
+        requestId,
+        sessionId: scope.sessionId,
+        candidateSource: question.source,
+        modelId: modelId || 'default',
+        errorName: error instanceof Error ? error.name : 'UnknownError',
+        elapsedMs: Date.now() - serverStartedAt,
+        totalMs: Date.now() - startedAt,
+      });
+      throw error;
     }
-    const result = await this.serverSync.answerCopilot(
-      scope.sessionId,
-      archive.transcript,
-      questionSegmentId,
-      this.activeManifest.copilotModelId,
-      randomUUID(),
-    );
+    log.info('copilot_answer', {
+      phase: 'server_model_roundtrip',
+      requestId,
+      sessionId: scope.sessionId,
+      candidateSource: question.source,
+      modelId: modelId || 'default',
+      resultStatus: result.status,
+      elapsedMs: Date.now() - serverStartedAt,
+    });
     if (result.status === 'answered' || result.status === 'no_action') {
       await this.archiveStore.appendCopilotRecord(scope, result);
     }
+    log.info('copilot_answer', {
+      phase: 'completed',
+      requestId,
+      sessionId: scope.sessionId,
+      candidateSource: question.source,
+      resultStatus: result.status,
+      totalMs: Date.now() - startedAt,
+    });
     return result;
   }
 
@@ -1521,9 +1616,12 @@ export class MeetingRecordingManager {
     stopCaptureHost: boolean,
   ): Promise<void> {
     if (!this.activeScope || !this.activeManifest) return;
-    if (!ACTIVE_STATES.has(
-      this.activeManifest.lifecycleStatus as 'preparing' | 'recording',
-    )) return;
+    if (
+      !ACTIVE_STATES.has(
+        this.activeManifest.lifecycleStatus as 'preparing' | 'recording',
+      )
+    )
+      return;
     const scope = this.activeScope;
     this.invalidateSourceSwitches();
     if (this.activeManifest.lifecycleStatus === 'recording') {
@@ -1534,7 +1632,10 @@ export class MeetingRecordingManager {
       this.activeAsrRuntime = null;
     }
     await this.enqueue(async () => {
-      if (!this.activeManifest || this.activeScope?.sessionId !== scope.sessionId)
+      if (
+        !this.activeManifest ||
+        this.activeScope?.sessionId !== scope.sessionId
+      )
         return;
       this.activeManifest = await this.archiveStore.updateLifecycle(
         scope,
@@ -1567,7 +1668,8 @@ export class MeetingRecordingManager {
       }
       const uploadCandidates = await this.archiveStore.listAllManifests();
       for (const manifest of uploadCandidates) {
-        if (!['stopped', 'interrupted'].includes(manifest.lifecycleStatus)) continue;
+        if (!['stopped', 'interrupted'].includes(manifest.lifecycleStatus))
+          continue;
         const scope = {
           organizationId: manifest.organizationId,
           userId: manifest.userId,
@@ -1599,7 +1701,8 @@ export class MeetingRecordingManager {
     if (!this.audioUploader) return;
     const manifests = await this.archiveStore.listAllManifests();
     for (const manifest of manifests) {
-      if (!['stopped', 'interrupted'].includes(manifest.lifecycleStatus)) continue;
+      if (!['stopped', 'interrupted'].includes(manifest.lifecycleStatus))
+        continue;
       if (
         !Object.values(manifest.tracks).some(
           (track) =>
