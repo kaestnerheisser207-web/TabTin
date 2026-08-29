@@ -80,4 +80,43 @@ describe('MeetingCopilotHistory', () => {
     expect(screen.getByText('First answer')).toBeTruthy();
     expect(screen.getByText('Second answer')).toBeTruthy();
   });
+
+  it('renders a persisted clarification as terminal history', () => {
+    render(
+      <MeetingCopilotHistory
+        records={[
+          {
+            ...answerRecord('clarify-0', '它为什么慢？', '旧 revision 回答'),
+            candidateId: 'clarify-candidate',
+            revision: 1,
+          },
+          {
+            questionSegmentId: 'clarify-1',
+            candidateId: 'clarify-candidate',
+            revision: 2,
+            evaluatedAt: '2026-08-27T00:00:00.000Z',
+            result: {
+              status: 'needs_clarification',
+              question: '它为什么慢？',
+              question_segment_id: 'clarify-1',
+              clarifying_question: '你指的是转写延迟还是回答延迟？',
+              reason_code: 'ambiguous_reference',
+              uncertainty: '当前问题中的“慢”没有指明链路。',
+              model: 'deepseek-v4-flash',
+              provider: 'deepseek',
+              latency_ms: 200,
+            },
+          },
+        ]}
+      />,
+    );
+
+    expect(screen.getByText('需要澄清')).toBeTruthy();
+    expect(screen.getByText('它为什么慢？')).toBeTruthy();
+    expect(screen.queryByText('旧 revision 回答')).toBeNull();
+    expect(screen.getByText('你指的是转写延迟还是回答延迟？')).toBeTruthy();
+    expect(
+      screen.getByText('尚不确定：当前问题中的“慢”没有指明链路。'),
+    ).toBeTruthy();
+  });
 });

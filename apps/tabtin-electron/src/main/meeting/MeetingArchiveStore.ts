@@ -364,11 +364,16 @@ export class MeetingArchiveStore {
       .readdir(this.rootPath, { withFileTypes: true })
       .catch(() => []);
     for (const organizationEntry of organizationDirectories) {
-      if (!organizationEntry.isDirectory() || organizationEntry.name.startsWith('.'))
+      if (
+        !organizationEntry.isDirectory() ||
+        organizationEntry.name.startsWith('.')
+      )
         continue;
       const organizationId = organizationEntry.name;
       const userDirectories = await fs
-        .readdir(path.join(this.rootPath, organizationId), { withFileTypes: true })
+        .readdir(path.join(this.rootPath, organizationId), {
+          withFileTypes: true,
+        })
         .catch(() => []);
       for (const userEntry of userDirectories) {
         if (!userEntry.isDirectory()) continue;
@@ -455,14 +460,17 @@ export class MeetingArchiveStore {
     });
   }
 
-  async finalizeAudioTracks(scope: {
-    organizationId: string;
-    userId: string;
-    sessionId: string;
-  }, options: {
-    reconcileParts?: boolean;
-    bestEffort?: boolean;
-  } = {}): Promise<MeetingArchiveManifestV2> {
+  async finalizeAudioTracks(
+    scope: {
+      organizationId: string;
+      userId: string;
+      sessionId: string;
+    },
+    options: {
+      reconcileParts?: boolean;
+      bestEffort?: boolean;
+    } = {},
+  ): Promise<MeetingArchiveManifestV2> {
     return this.enqueueSessionWrite(scope.sessionId, async () => {
       const manifestPath = this.manifestPath(scope);
       const manifest = parseManifest(await fs.readFile(manifestPath, 'utf8'));
@@ -480,9 +488,7 @@ export class MeetingArchiveStore {
         track.container = container;
         const partNames = directoryNames
           .filter((name) => {
-            const match = name.match(
-              /^(\d{8})\.([a-z0-9]{1,12})\.part$/,
-            );
+            const match = name.match(/^(\d{8})\.([a-z0-9]{1,12})\.part$/);
             return match?.[2] === container;
           })
           .sort();
@@ -543,11 +549,7 @@ export class MeetingArchiveStore {
             );
             track.nextSequence = Math.max(track.nextSequence, lastSequence + 1);
           }
-          await this.finalizeMediaFile(
-            combinedPath,
-            finalizedPath,
-            container,
-          );
+          await this.finalizeMediaFile(combinedPath, finalizedPath, container);
           const finalizedStat = await fs.stat(finalizedPath);
           if (finalizedStat.size === 0) {
             throw new Error(`meeting ${source} finalized track is empty`);
@@ -661,7 +663,7 @@ export class MeetingArchiveStore {
   ): Promise<MeetingCopilotRecord> {
     return this.enqueueSessionWrite(scope.sessionId, async () => {
       const questionSegmentId =
-        result.status === 'answered'
+        result.status === 'answered' || result.status === 'needs_clarification'
           ? result.question_segment_id
           : result.status === 'no_action'
             ? result.candidate_segment_id
@@ -679,6 +681,8 @@ export class MeetingArchiveStore {
       }
       const record: MeetingCopilotRecord = {
         questionSegmentId: normalizedQuestionSegmentId,
+        candidateId: result.candidate_id?.trim() || normalizedQuestionSegmentId,
+        revision: Math.max(result.candidate_revision ?? 1, 1),
         evaluatedAt: this.now().toISOString(),
         result,
       };
@@ -696,10 +700,7 @@ export class MeetingArchiveStore {
     userId: string;
     sessionId: string;
   }): Promise<MeetingCopilotRecord[]> {
-    const recordPath = path.join(
-      this.sessionDirectory(scope),
-      'copilot.jsonl',
-    );
+    const recordPath = path.join(this.sessionDirectory(scope), 'copilot.jsonl');
     const raw = await fs.readFile(recordPath, 'utf8').catch((error) => {
       if ((error as NodeJS.ErrnoException).code === 'ENOENT') return '';
       throw error;
@@ -718,7 +719,21 @@ export class MeetingArchiveStore {
         throw error;
       }
       if (!record.questionSegmentId || !record.result) continue;
-      latestByQuestion.set(record.questionSegmentId, record);
+      const candidateId =
+        record.candidateId ||
+        record.result.candidate_id ||
+        record.questionSegmentId;
+      const current = latestByQuestion.get(candidateId);
+      const revision = record.revision ?? record.result.candidate_revision ?? 1;
+      const currentRevision =
+        current?.revision ?? current?.result.candidate_revision ?? 1;
+      if (!current || revision >= currentRevision) {
+        latestByQuestion.set(candidateId, {
+          ...record,
+          candidateId,
+          revision,
+        });
+      }
     }
     return [...latestByQuestion.values()];
   }
@@ -772,19 +787,44 @@ export class MeetingArchiveStore {
       const manifestPath = this.manifestPath(scope);
       const manifest = parseManifest(await fs.readFile(manifestPath, 'utf8'));
       const sessionDirectory = this.sessionDirectory(scope);
+      const cleanupTargets: string[] = [];
       for (const source of ['local', 'remote'] as const) {
         const track = manifest.tracks[source];
-        if (track.finalizedRelativePath) {
-          await fs
-            .unlink(path.join(sessionDirectory, track.finalizedRelativePath))
-            .catch(() => undefined);
+        const finalizedRelativePath =
+          track.finalizedRelativePath ||
+          (track.container ? `${source}.${track.container}` : null);
+        if (finalizedRelativePath) {
+          const finalizedPath = path.join(
+            sessionDirectory,
+            finalizedRelativePath,
+          );
+          cleanupTargets.push(finalizedPath);
+          await fs.unlink(finalizedPath).catch((error) => {
+            if ((error as NodeJS.ErrnoException).code !== 'ENOENT') throw error;
+          });
         }
+        const partsDirectory = path.join(sessionDirectory, source);
+        cleanupTargets.push(partsDirectory);
         await fs
-          .rm(path.join(sessionDirectory, source), {
+          .rm(partsDirectory, {
             recursive: true,
             force: true,
           })
-          .catch(() => undefined);
+          .catch((error) => {
+            if ((error as NodeJS.ErrnoException).code !== 'ENOENT') throw error;
+          });
+      }
+      for (const target of cleanupTargets) {
+        const remaining = await fs.lstat(target).catch((error) => {
+          if ((error as NodeJS.ErrnoException).code === 'ENOENT') return null;
+          throw error;
+        });
+        if (remaining) {
+          throw new Error('meeting audio cleanup did not remove every target');
+        }
+      }
+      for (const source of ['local', 'remote'] as const) {
+        const track = manifest.tracks[source];
         track.storageStatus = 'deleted';
         track.fileRecordId = null;
         track.objectKey = '';
@@ -792,6 +832,26 @@ export class MeetingArchiveStore {
         track.finalizedRelativePath = null;
         track.bytes = 0;
         track.contentHash = '';
+        delete track.errorCode;
+        delete track.errorMessage;
+      }
+      await atomicWriteJson(manifestPath, manifest);
+      return manifest;
+    });
+  }
+
+  async markAudioCleanupPending(scope: {
+    organizationId: string;
+    userId: string;
+    sessionId: string;
+  }): Promise<MeetingArchiveManifestV2> {
+    return this.enqueueSessionWrite(scope.sessionId, async () => {
+      const manifestPath = this.manifestPath(scope);
+      const manifest = parseManifest(await fs.readFile(manifestPath, 'utf8'));
+      for (const source of ['local', 'remote'] as const) {
+        const track = manifest.tracks[source];
+        track.errorCode = 'audio_cleanup_pending';
+        track.errorMessage = 'Local audio cleanup is pending';
       }
       await atomicWriteJson(manifestPath, manifest);
       return manifest;
@@ -804,7 +864,10 @@ export class MeetingArchiveStore {
     sessionId: string;
   }): Promise<void> {
     await this.enqueueSessionWrite(scope.sessionId, async () => {
-      await fs.rm(this.sessionDirectory(scope), { recursive: true, force: true });
+      await fs.rm(this.sessionDirectory(scope), {
+        recursive: true,
+        force: true,
+      });
     });
     this.finalTranscriptText.delete(scope.sessionId);
   }
@@ -946,9 +1009,7 @@ export class MeetingArchiveStore {
               recovered.push(await this.updateLifecycle(scope, 'interrupted'));
               continue;
             }
-            if (
-              manifest.lifecycleStatus === 'interrupted'
-            ) {
+            if (manifest.lifecycleStatus === 'interrupted') {
               const hasRecoverableParts = (
                 await Promise.all(
                   (['local', 'remote'] as const).map(async (source) => {

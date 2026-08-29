@@ -205,6 +205,9 @@
     "analyzeNow": "Aktuellen Kontext jetzt analysieren",
     "understandingContext": "Kontext wird verstanden und ein Vorschlag vorbereitet…",
     "answeredQuestion": "Beantwortete Frage",
+    "clarificationNeeded": "Klärung erforderlich",
+    "clarifyingQuestion": "Zu klärende Frage",
+    "clarificationUncertainty": "Noch unklar: {{uncertainty}}",
     "reliability": {
       "high": "Zuverlässigkeit: hoch",
       "medium": "Zuverlässigkeit: mittel",
@@ -306,6 +309,8 @@
     "audioDeletedAction": "Audio gelöscht",
     "audioDeletedStatus": "Audio gelöscht",
     "audioDeletedNotice": "Das Audio wurde gelöscht. Transkript, Inhalte nach dem Meeting und verknüpfte Ressourcen bleiben erhalten.",
+    "audioCleanupPendingStatus": "Lokale Bereinigung ausstehend",
+    "audioCleanupPendingNotice": "Das Server-Audio wurde gelöscht, aber die lokalen Dateien auf diesem Gerät konnten nicht entfernt werden. Schließen Sie Apps, die die Aufnahme verwenden, und versuchen Sie die Löschung erneut. Die lokale Kopie wird erst nach erfolgreicher Bereinigung als gelöscht markiert.",
     "deleteAudioConfirmTitle": "Audio dieses Meetings löschen?",
     "deleteAudioConfirmDescription": "Mikrofon- und Systemaudio werden dauerhaft gelöscht. Transkript, Analyse nach dem Meeting, Copilot-Aufzeichnungen und verknüpfte Ressourcen bleiben erhalten.",
     "deleteAudioConfirmAction": "Audio löschen, Text behalten",

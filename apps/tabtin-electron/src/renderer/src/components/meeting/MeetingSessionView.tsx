@@ -20,6 +20,40 @@ import { MeetingPageIcon } from './meetingUi';
 
 export type MeetingSessionSurface = 'live' | 'detail';
 
+const ARCHIVE_REFRESH_DELAYS_MS = [250, 750] as const;
+
+function archiveNeedsFinalizeRefresh(
+  archive: MeetingLocalArchive,
+  status: MeetingRecordingStatus,
+): boolean {
+  const emptySnapshot =
+    archive.transcript.length === 0 &&
+    archive.copilotRecords.length === 0 &&
+    Object.keys(archive.audioUrls).length === 0;
+  if (archive.localAudioCleanupPending) return true;
+  const manifest = archive.manifest;
+  const statusStillSettling =
+    status.manifest?.sessionId === manifest.sessionId &&
+    (status.active || status.manifest.serverSyncStatus === 'pending');
+  const archiveStillSettling =
+    manifest.serverSyncStatus === 'pending' ||
+    manifest.transcriptionStatus === 'connecting' ||
+    manifest.transcriptionStatus === 'active' ||
+    manifest.transcriptionStatus === 'recovering' ||
+    Object.values(manifest.tracks).some(
+      (track) => track.status === 'pending' || track.status === 'active',
+    );
+  return emptySnapshot || statusStillSettling || archiveStillSettling;
+}
+
+async function waitForArchiveRefresh(
+  delayMs: number,
+  cancelled: () => boolean,
+): Promise<void> {
+  await new Promise<void>((resolve) => window.setTimeout(resolve, delayMs));
+  if (cancelled()) throw new Error('meeting archive refresh cancelled');
+}
+
 export function resolveMeetingSessionSurface(
   sessionId: string,
 ): MeetingSessionSurface | null {
@@ -76,7 +110,12 @@ export const MeetingSessionView: React.FC<{
         setLoading(false);
         return;
       }
-      const loadedArchive = await bridge.getArchive(archiveScope);
+      let loadedArchive = await bridge.getArchive(archiveScope);
+      for (const delayMs of ARCHIVE_REFRESH_DELAYS_MS) {
+        if (!archiveNeedsFinalizeRefresh(loadedArchive, status)) break;
+        await waitForArchiveRefresh(delayMs, () => cancelled);
+        loadedArchive = await bridge.getArchive(archiveScope);
+      }
       if (!cancelled) {
         setArchive(loadedArchive);
         setLoading(false);

@@ -805,6 +805,105 @@ describe('MeetingLiveSessionView timer', () => {
     );
   });
 
+  it('restores clarification history without requesting the candidate again', async () => {
+    const initialStatus = await window.tabtin.meetingRecording.getStatus();
+    initialStatus.manifest!.copilotEnabled = true;
+    const shortTurn = {
+      externalId: 'clarify-local-1',
+      source: 'local' as const,
+      startMs: 1_000,
+      endMs: 2_000,
+      text: '它为什么',
+      isFinal: true,
+      recordedAt: '2026-08-27T00:00:01.000Z',
+    };
+    const turn = {
+      ...shortTurn,
+      externalId: 'clarify-local-2',
+      startMs: 1_100,
+      endMs: 2_500,
+      text: '它为什么这么慢？',
+      recordedAt: '2026-08-27T00:00:02.000Z',
+    };
+    const clarification = {
+      status: 'needs_clarification' as const,
+      question: turn.text,
+      question_segment_id: turn.externalId,
+      clarifying_question: '你指的是转写延迟还是回答延迟？',
+      reason_code: 'ambiguous_reference',
+      model: 'test-model',
+      provider: 'test-provider',
+      latency_ms: 10,
+    };
+    const answerCopilotQuestion = vi.fn().mockResolvedValue(clarification);
+    const getArchive = vi.fn().mockResolvedValue({
+      transcript: [shortTurn, turn],
+      copilotRecords: [],
+    });
+    Object.assign(window.tabtin.meetingRecording, {
+      getArchive,
+      answerCopilotQuestion,
+    });
+
+    const first = render(
+      <MeetingLiveSessionView
+        sessionId={sessionId}
+        onBack={vi.fn()}
+        initialStatus={initialStatus}
+      />,
+    );
+    await act(async () => {
+      await Promise.resolve();
+      await Promise.resolve();
+    });
+    await act(async () => {
+      vi.advanceTimersByTime(250);
+      await Promise.resolve();
+      await Promise.resolve();
+    });
+    expect(
+      screen.getAllByText('你指的是转写延迟还是回答延迟？').length,
+    ).toBeGreaterThan(0);
+    expect(answerCopilotQuestion).toHaveBeenCalledWith(
+      {
+        sessionId,
+        organizationId: 'org-1',
+        userId: 'user-1',
+      },
+      'clarify-local-2',
+    );
+    first.unmount();
+    answerCopilotQuestion.mockClear();
+    getArchive.mockResolvedValue({
+      transcript: [shortTurn, turn],
+      copilotRecords: [
+        {
+          questionSegmentId: turn.externalId,
+          evaluatedAt: '2026-08-27T00:00:02.000Z',
+          result: clarification,
+        },
+      ],
+    });
+
+    render(
+      <MeetingLiveSessionView
+        sessionId={sessionId}
+        onBack={vi.fn()}
+        initialStatus={initialStatus}
+      />,
+    );
+    await act(async () => {
+      await Promise.resolve();
+      await Promise.resolve();
+      vi.advanceTimersByTime(500);
+      await Promise.resolve();
+    });
+    expect(answerCopilotQuestion).not.toHaveBeenCalled();
+    expect(
+      screen.getAllByText('你指的是转写延迟还是回答延迟？').length,
+    ).toBeGreaterThan(0);
+  });
+
   it('submits the latest final turn when analyze now is clicked', async () => {
     const initialStatus = await window.tabtin.meetingRecording.getStatus();
     initialStatus.manifest!.copilotEnabled = true;
@@ -1037,7 +1136,7 @@ describe('MeetingLiveSessionView timer', () => {
       await Promise.resolve();
     });
     await act(async () => {
-      vi.advanceTimersByTime(250);
+      vi.advanceTimersByTime(800);
       await Promise.resolve();
       await Promise.resolve();
     });
@@ -1234,6 +1333,195 @@ describe('MeetingLiveSessionView timer', () => {
     });
 
     expect(answerCopilotQuestion).toHaveBeenCalledTimes(1);
+  });
+
+  it('drops a stale pending result and evaluates the merged revision', async () => {
+    const initialStatus = await window.tabtin.meetingRecording.getStatus();
+    initialStatus.manifest!.copilotEnabled = true;
+    const first = {
+      externalId: 'dirty-first',
+      source: 'local' as const,
+      startMs: 1_000,
+      endMs: 2_000,
+      text: '你确认一下到底是',
+      isFinal: true,
+      recordedAt: '2026-08-27T00:00:01.000Z',
+    };
+    let resolveFirst!: (result: {
+      status: 'answered';
+      question: string;
+      question_segment_id: string;
+      answer: string;
+      key_points: string[];
+      sources: [];
+      reliability: 'low';
+      warning: string;
+      model: string;
+      provider: string;
+      latency_ms: number;
+    }) => void;
+    const answerCopilotQuestion = vi
+      .fn()
+      .mockImplementationOnce(
+        () =>
+          new Promise((resolve) => {
+            resolveFirst = resolve;
+          }),
+      )
+      .mockResolvedValueOnce({
+        status: 'answered',
+        question: '完整问题',
+        question_segment_id: 'dirty-second',
+        answer: '新 revision 的回答',
+        key_points: [],
+        sources: [],
+        reliability: 'low',
+        warning: '',
+        model: 'test',
+        provider: 'test',
+        latency_ms: 1,
+      });
+    Object.assign(window.tabtin.meetingRecording, {
+      getArchive: vi.fn().mockResolvedValue({
+        transcript: [first],
+        copilotRecords: [],
+      }),
+      answerCopilotQuestion,
+    });
+    render(
+      <MeetingLiveSessionView
+        sessionId={sessionId}
+        onBack={vi.fn()}
+        initialStatus={initialStatus}
+      />,
+    );
+    await act(async () => {
+      await Promise.resolve();
+      await Promise.resolve();
+    });
+    await act(async () => {
+      vi.advanceTimersByTime(800);
+      await Promise.resolve();
+    });
+    expect(answerCopilotQuestion).toHaveBeenCalledTimes(1);
+
+    act(() => {
+      transcriptListener?.({
+        sessionId,
+        organizationId: 'org-1',
+        userId: 'user-1',
+        checkpoint: {
+          ...first,
+          externalId: 'dirty-second',
+          startMs: 2_500,
+          endMs: 4_000,
+          text: 'VPS 慢还是云服务返回慢？',
+          recordedAt: '2026-08-27T00:00:02.000Z',
+        },
+      });
+    });
+    await act(async () => {
+      resolveFirst({
+        status: 'answered',
+        question: '不完整问题',
+        question_segment_id: 'dirty-first',
+        answer: '旧 revision 的回答',
+        key_points: [],
+        sources: [],
+        reliability: 'low',
+        warning: '',
+        model: 'test',
+        provider: 'test',
+        latency_ms: 1,
+      });
+      await Promise.resolve();
+      await Promise.resolve();
+    });
+    expect(screen.queryByText('旧 revision 的回答')).toBeNull();
+    await act(async () => {
+      vi.advanceTimersByTime(250);
+      await Promise.resolve();
+      await Promise.resolve();
+    });
+
+    expect(
+      answerCopilotQuestion.mock.calls.map(([, externalId]) => externalId),
+    ).toEqual(['dirty-first', 'dirty-second']);
+    expect(screen.getByText('新 revision 的回答')).toBeTruthy();
+  });
+
+  it('re-evaluates a candidate only after wait_for_more gains a revision', async () => {
+    const initialStatus = await window.tabtin.meetingRecording.getStatus();
+    initialStatus.manifest!.copilotEnabled = true;
+    const first = {
+      externalId: 'wait-first',
+      source: 'local' as const,
+      startMs: 1_000,
+      endMs: 2_000,
+      text: '它是怎么构造的？',
+      isFinal: true,
+      recordedAt: '2026-08-27T00:00:01.000Z',
+    };
+    const answerCopilotQuestion = vi
+      .fn()
+      .mockResolvedValueOnce({
+        status: 'wait_for_more',
+        message: 'Need more context.',
+        candidate_segment_id: 'wait-first',
+      })
+      .mockResolvedValueOnce({
+        status: 'no_action',
+        message: 'No direct answer needed.',
+        candidate_segment_id: 'wait-second',
+      });
+    Object.assign(window.tabtin.meetingRecording, {
+      getArchive: vi.fn().mockResolvedValue({
+        transcript: [first],
+        copilotRecords: [],
+      }),
+      answerCopilotQuestion,
+    });
+    render(
+      <MeetingLiveSessionView
+        sessionId={sessionId}
+        onBack={vi.fn()}
+        initialStatus={initialStatus}
+      />,
+    );
+    await act(async () => {
+      await Promise.resolve();
+      await Promise.resolve();
+    });
+    await act(async () => {
+      vi.advanceTimersByTime(250);
+      await Promise.resolve();
+      await Promise.resolve();
+    });
+    expect(answerCopilotQuestion).toHaveBeenCalledTimes(1);
+    act(() => {
+      transcriptListener?.({
+        sessionId,
+        organizationId: 'org-1',
+        userId: 'user-1',
+        checkpoint: {
+          ...first,
+          externalId: 'wait-second',
+          startMs: 2_000,
+          endMs: 3_000,
+          text: '它内部结构是什么样子的？',
+          recordedAt: '2026-08-27T00:00:02.000Z',
+        },
+      });
+    });
+    await act(async () => {
+      await Promise.resolve();
+      vi.advanceTimersByTime(250);
+      await Promise.resolve();
+      await Promise.resolve();
+    });
+    expect(
+      answerCopilotQuestion.mock.calls.map(([, externalId]) => externalId),
+    ).toEqual(['wait-first', 'wait-second']);
   });
 
   it('evaluates every initial final in recordedAt order', async () => {

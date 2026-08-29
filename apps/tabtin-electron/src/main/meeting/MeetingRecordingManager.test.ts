@@ -381,6 +381,459 @@ describe('MeetingRecordingManager', () => {
     });
   });
 
+  it('keeps only the latest semantic candidate revision across server record ids', async () => {
+    const archiveStore = new MeetingArchiveStore({ rootPath });
+    const remoteSession = {
+      id: scope.sessionId,
+      organization_id: scope.organizationId,
+      lifecycle_status: 'stopped',
+      created_at: '2026-08-30T00:00:00.000Z',
+      tracks: [],
+    };
+    const archiveManager = new MeetingRecordingManager({
+      archiveStore,
+      serverSync: {
+        getSession: vi.fn().mockResolvedValue(remoteSession),
+        getCopilotAnswers: vi.fn().mockResolvedValue([
+          {
+            question_segment_id: 'candidate-part-1',
+            created_at: '2026-08-30T00:00:05.000Z',
+            result_snapshot: {
+              status: 'no_action',
+              message: 'Waiting for a complete question',
+              candidate_segment_id: 'candidate-part-1',
+              candidate_id: 'candidate-root',
+              candidate_revision: 1,
+              candidate_segment_ids: ['candidate-part-1'],
+            },
+          },
+          {
+            question_segment_id: 'candidate-part-2',
+            created_at: '2026-08-30T00:00:04.000Z',
+            result_snapshot: {
+              status: 'answered',
+              question: 'What is the complete question?',
+              question_segment_id: 'candidate-part-2',
+              answer: 'The second revision is authoritative.',
+              key_points: [],
+              sources: [],
+              reliability: 'high',
+              warning: '',
+              model: 'test-model',
+              provider: 'test-provider',
+              latency_ms: 10,
+              candidate_id: 'candidate-root',
+              candidate_revision: 2,
+              candidate_segment_ids: ['candidate-part-1', 'candidate-part-2'],
+            },
+          },
+        ]),
+        getTrackAudio: vi.fn().mockRejectedValue(new Error('not uploaded')),
+      } as unknown as MeetingServerSync,
+    });
+
+    const archive = await archiveManager.getArchive(scope);
+
+    expect(archive.copilotRecords).toHaveLength(1);
+    expect(archive.copilotRecords[0]).toMatchObject({
+      questionSegmentId: 'candidate-part-2',
+      candidateId: 'candidate-root',
+      revision: 2,
+      result: {
+        status: 'answered',
+        answer: 'The second revision is authoritative.',
+      },
+    });
+  });
+
+  it('falls back to cloud audio when a finalized local path is stale', async () => {
+    const archiveStore = new MeetingArchiveStore({
+      rootPath,
+      finalizeMediaFile: async (inputPath, outputPath) => {
+        await fs.copyFile(inputPath, outputPath);
+      },
+    });
+    await archiveStore.prepare({
+      ...scope,
+      title: 'Stale local audio',
+      consentConfirmed: true,
+    });
+    await archiveStore.updateLifecycle(scope, 'recording');
+    await archiveStore.appendAudioChunk({
+      ...scope,
+      source: 'local',
+      bytes: new Uint8Array([1, 2, 3]),
+      durationMs: 1_000,
+      sampleRate: 48_000,
+      channelCount: 1,
+      codec: 'opus',
+      container: 'webm',
+    });
+    const finalized = await archiveStore.finalizeAudioTracks(scope);
+    await archiveStore.updateLifecycle(scope, 'stopped');
+    await fs.unlink(
+      archiveStore.resolveSessionFile(
+        scope,
+        finalized.tracks.local.finalizedRelativePath!,
+      ),
+    );
+    const remoteSession = {
+      id: scope.sessionId,
+      organization_id: scope.organizationId,
+      lifecycle_status: 'stopped',
+      created_at: '2026-08-30T00:00:00.000Z',
+      tracks: [
+        {
+          source: 'local',
+          capture_status: 'completed',
+          storage_status: 'synced',
+          file_record_id: 'file-local',
+          file_size: 3,
+        },
+      ],
+    };
+    const getTrackAudio = vi
+      .fn()
+      .mockImplementation(async (_sessionId: string, source: string) => ({
+        url: `https://vps.example.test/audio/${source}`,
+      }));
+    const archiveManager = new MeetingRecordingManager({
+      archiveStore,
+      serverSync: {
+        getSession: vi.fn().mockResolvedValue(remoteSession),
+        getTrackAudio,
+      } as unknown as MeetingServerSync,
+    });
+
+    const archive = await archiveManager.getArchive(scope);
+
+    expect(archive.audioUrls.local).toBe(
+      'https://vps.example.test/audio/local',
+    );
+    expect(getTrackAudio).toHaveBeenCalledWith(scope.sessionId, 'local');
+  });
+
+  it('merges partial local and complete server transcript and Copilot history', async () => {
+    let currentTime = new Date('2026-08-30T00:00:03.000Z');
+    const archiveStore = new MeetingArchiveStore({
+      rootPath,
+      now: () => currentTime,
+      finalizeMediaFile: async (inputPath, outputPath) => {
+        await fs.copyFile(inputPath, outputPath);
+      },
+    });
+    await archiveStore.prepare({
+      ...scope,
+      title: 'Merged meeting archive',
+      consentConfirmed: true,
+    });
+    await archiveStore.updateLifecycle(scope, 'recording');
+    await archiveStore.appendAudioChunk({
+      ...scope,
+      source: 'local',
+      bytes: new Uint8Array([7, 8, 9]),
+      durationMs: 1_000,
+      sampleRate: 48_000,
+      channelCount: 1,
+      codec: 'opus',
+      container: 'webm',
+    });
+    await archiveStore.finalizeAudioTracks(scope);
+    await archiveStore.updateLifecycle(scope, 'stopped');
+    for (const checkpoint of [
+      {
+        externalId: 'turn-a',
+        source: 'remote' as const,
+        startMs: 1_000,
+        endMs: 1_500,
+        text: 'local partial',
+        isFinal: false,
+        recordedAt: '2026-08-30T00:00:03.000Z',
+      },
+      {
+        externalId: 'turn-b',
+        source: 'local' as const,
+        startMs: 2_000,
+        endMs: 2_500,
+        text: 'local final',
+        isFinal: true,
+        recordedAt: '2026-08-30T00:00:03.000Z',
+      },
+      {
+        externalId: 'turn-c',
+        source: 'remote' as const,
+        startMs: 3_000,
+        endMs: 3_500,
+        text: 'local older final',
+        isFinal: true,
+        recordedAt: '2026-08-30T00:00:03.000Z',
+      },
+    ]) {
+      await archiveStore.appendTranscriptCheckpoint(scope, checkpoint);
+    }
+    const answered = (questionSegmentId: string, answer: string) => ({
+      status: 'answered' as const,
+      question: `Question ${questionSegmentId}`,
+      question_segment_id: questionSegmentId,
+      answer,
+      key_points: [],
+      sources: [],
+      reliability: 'high' as const,
+      warning: '',
+      model: 'test-model',
+      provider: 'test-provider',
+      latency_ms: 10,
+    });
+    const noAction = (questionSegmentId: string) => ({
+      status: 'no_action' as const,
+      message: 'No action',
+      candidate_segment_id: questionSegmentId,
+    });
+    currentTime = new Date('2026-08-30T00:00:03.000Z');
+    await archiveStore.appendCopilotRecord(scope, noAction('question-a'));
+    currentTime = new Date('2026-08-30T00:00:01.000Z');
+    await archiveStore.appendCopilotRecord(
+      scope,
+      answered('question-b', 'local answered'),
+    );
+    await archiveStore.appendCopilotRecord(
+      scope,
+      answered('question-c', 'local older answered'),
+    );
+    const remoteSession = {
+      id: scope.sessionId,
+      organization_id: scope.organizationId,
+      lifecycle_status: 'stopped',
+      created_at: '2026-08-30T00:00:00.000Z',
+      tracks: [],
+    };
+    const archiveManager = new MeetingRecordingManager({
+      archiveStore,
+      serverSync: {
+        getSession: vi.fn().mockResolvedValue(remoteSession),
+        getTranscript: vi.fn().mockResolvedValue({
+          runs: [],
+          total: 3,
+          offset: 0,
+          limit: 1_000,
+          next_offset: null,
+          segments: [
+            {
+              external_id: 'turn-a',
+              source: 'remote',
+              start_ms: 1_000,
+              end_ms: 1_800,
+              display_text: 'server final',
+              is_final: true,
+              created_at: '2026-08-30T00:00:01.000Z',
+            },
+            {
+              external_id: 'turn-b',
+              source: 'local',
+              start_ms: 2_000,
+              end_ms: 2_800,
+              display_text: 'server newer partial',
+              is_final: false,
+              created_at: '2026-08-30T00:00:04.000Z',
+            },
+            {
+              external_id: 'turn-c',
+              source: 'remote',
+              start_ms: 3_000,
+              end_ms: 3_800,
+              display_text: 'server newer final',
+              is_final: true,
+              created_at: '2026-08-30T00:00:04.000Z',
+            },
+          ],
+        }),
+        getCopilotAnswers: vi.fn().mockResolvedValue([
+          {
+            question_segment_id: 'question-a',
+            created_at: '2026-08-30T00:00:01.000Z',
+            result_snapshot: answered('question-a', 'server answered'),
+          },
+          {
+            question_segment_id: 'question-b',
+            created_at: '2026-08-30T00:00:04.000Z',
+            result_snapshot: noAction('question-b'),
+          },
+          {
+            question_segment_id: 'question-c',
+            created_at: '2026-08-30T00:00:04.000Z',
+            result_snapshot: answered('question-c', 'server newer answered'),
+          },
+        ]),
+        getTrackAudio: vi.fn().mockRejectedValue(new Error('not uploaded')),
+      } as unknown as MeetingServerSync,
+    });
+
+    const archive = await archiveManager.getArchive(scope);
+
+    expect(archive.audioUrls.local).toContain('tabtin-file://');
+    expect(
+      archive.transcript.map(({ externalId, text, isFinal }) => ({
+        externalId,
+        text,
+        isFinal,
+      })),
+    ).toEqual([
+      { externalId: 'turn-a', text: 'server final', isFinal: true },
+      { externalId: 'turn-b', text: 'local final', isFinal: true },
+      { externalId: 'turn-c', text: 'server newer final', isFinal: true },
+    ]);
+    expect(
+      archive.copilotRecords.map((record) => ({
+        questionSegmentId: record.questionSegmentId,
+        status: record.result.status,
+        answer:
+          record.result.status === 'answered'
+            ? record.result.answer
+            : undefined,
+      })),
+    ).toEqual([
+      {
+        questionSegmentId: 'question-a',
+        status: 'no_action',
+        answer: undefined,
+      },
+      {
+        questionSegmentId: 'question-b',
+        status: 'no_action',
+        answer: undefined,
+      },
+      {
+        questionSegmentId: 'question-c',
+        status: 'answered',
+        answer: 'server newer answered',
+      },
+    ]);
+  });
+
+  it('reports partial failure when cloud audio deletion succeeds but local cleanup fails', async () => {
+    const archiveStore = new MeetingArchiveStore({ rootPath });
+    await archiveStore.prepare({
+      ...scope,
+      title: 'Local cleanup failure',
+      consentConfirmed: true,
+    });
+    const denied = Object.assign(new Error('local audio is still in use'), {
+      code: 'EACCES',
+    });
+    vi.spyOn(archiveStore, 'deleteAudioFiles').mockRejectedValueOnce(denied);
+    const deleteAudio = vi.fn().mockResolvedValue(undefined);
+    const archiveManager = new MeetingRecordingManager({
+      archiveStore,
+      serverSync: { deleteAudio } as unknown as MeetingServerSync,
+    });
+
+    await expect(archiveManager.deleteArchiveAudio(scope)).rejects.toThrow(
+      'meeting audio was deleted from the server, but local cleanup failed',
+    );
+    expect(deleteAudio).toHaveBeenCalledWith(scope.sessionId);
+    expect(archiveStore.deleteAudioFiles).toHaveBeenCalledWith(scope);
+    await expect(archiveStore.readManifest(scope)).resolves.toMatchObject({
+      tracks: {
+        local: { errorCode: 'audio_cleanup_pending' },
+        remote: { errorCode: 'audio_cleanup_pending' },
+      },
+    });
+  });
+
+  it('deletes a server-only archive without inventing a local cleanup failure', async () => {
+    const archiveStore = new MeetingArchiveStore({ rootPath });
+    const deleteAudio = vi.fn().mockResolvedValue(undefined);
+    const archiveManager = new MeetingRecordingManager({
+      archiveStore,
+      serverSync: { deleteAudio } as unknown as MeetingServerSync,
+    });
+
+    await expect(
+      archiveManager.deleteArchiveAudio(scope),
+    ).resolves.toBeUndefined();
+    expect(deleteAudio).toHaveBeenCalledWith(scope.sessionId);
+  });
+
+  it('persists and retries local cleanup after audio was deleted elsewhere', async () => {
+    const archiveStore = new MeetingArchiveStore({
+      rootPath,
+      finalizeMediaFile: async (inputPath, outputPath) => {
+        await fs.copyFile(inputPath, outputPath);
+      },
+    });
+    await archiveStore.prepare({
+      ...scope,
+      title: 'Deleted on another device',
+      consentConfirmed: true,
+    });
+    await archiveStore.updateLifecycle(scope, 'recording');
+    await archiveStore.appendAudioChunk({
+      ...scope,
+      source: 'local',
+      bytes: new Uint8Array([1, 2, 3]),
+      durationMs: 1_000,
+      sampleRate: 48_000,
+      channelCount: 1,
+      codec: 'opus',
+      container: 'webm',
+    });
+    await archiveStore.finalizeAudioTracks(scope);
+    await archiveStore.updateLifecycle(scope, 'stopped');
+    const remoteSession = {
+      id: scope.sessionId,
+      organization_id: scope.organizationId,
+      lifecycle_status: 'stopped',
+      created_at: '2026-08-30T00:00:00.000Z',
+      tracks: [
+        { source: 'local', storage_status: 'deleted' },
+        { source: 'remote', storage_status: 'deleted' },
+      ],
+    };
+    const denied = Object.assign(new Error('local audio is still in use'), {
+      code: 'EACCES',
+    });
+    const deleteAudioFiles = vi
+      .spyOn(archiveStore, 'deleteAudioFiles')
+      .mockRejectedValueOnce(denied);
+    const archiveManager = new MeetingRecordingManager({
+      archiveStore,
+      serverSync: {
+        getSession: vi.fn().mockResolvedValue(remoteSession),
+      } as unknown as MeetingServerSync,
+    });
+
+    const pendingArchive = await archiveManager.getArchive(scope);
+
+    expect(pendingArchive.localAudioCleanupPending).toBe(true);
+    expect(pendingArchive.audioUrls).toEqual({});
+    expect(pendingArchive.manifest.tracks.local.storageStatus).not.toBe(
+      'deleted',
+    );
+    await expect(archiveStore.readManifest(scope)).resolves.toMatchObject({
+      tracks: {
+        local: { errorCode: 'audio_cleanup_pending' },
+        remote: { errorCode: 'audio_cleanup_pending' },
+      },
+    });
+
+    const cleanedArchive = await archiveManager.getArchive(scope);
+
+    expect(cleanedArchive.localAudioCleanupPending).toBeUndefined();
+    expect(cleanedArchive.manifest.tracks.local.storageStatus).toBe('deleted');
+    expect(cleanedArchive.manifest.tracks.remote.storageStatus).toBe('deleted');
+    expect(deleteAudioFiles).toHaveBeenCalledTimes(2);
+
+    await expect(archiveManager.getArchive(scope)).resolves.toMatchObject({
+      manifest: {
+        tracks: {
+          local: { storageStatus: 'deleted' },
+          remote: { storageStatus: 'deleted' },
+        },
+      },
+    });
+    expect(deleteAudioFiles).toHaveBeenCalledTimes(2);
+  });
+
   it('rejects and removes a server-backed local cache after remote deletion', async () => {
     const archiveStore = new MeetingArchiveStore({ rootPath });
     await archiveStore.prepare({
@@ -1493,6 +1946,16 @@ describe('MeetingRecordingManager', () => {
       message: 'No answer is needed.',
       candidate_segment_id: 'local-answer-1',
     };
+    const needsClarification = {
+      status: 'needs_clarification' as const,
+      question: 'Which rollout do you mean?',
+      question_segment_id: 'clarify-question-1',
+      clarifying_question: 'Do you mean the desktop or server rollout?',
+      reason_code: 'ambiguous_reference',
+      model: 'deepseek-v4-flash',
+      provider: 'deepseek',
+      latency_ms: 180,
+    };
     const getSession = vi.fn();
     const getTranscript = vi.fn();
     const getCopilotAnswers = vi.fn();
@@ -1509,7 +1972,12 @@ describe('MeetingRecordingManager', () => {
           _sessionId: string,
           _transcript: unknown[],
           questionSegmentId: string,
-        ) => (questionSegmentId === 'local-answer-1' ? noAction : answered),
+        ) =>
+          questionSegmentId === 'local-answer-1'
+            ? noAction
+            : questionSegmentId === 'clarify-question-1'
+              ? needsClarification
+              : answered,
       ),
       getSession,
       getTranscript,
@@ -1593,10 +2061,24 @@ describe('MeetingRecordingManager', () => {
       expect.any(String),
     );
 
+    await syncManager.appendTranscriptCheckpoint(scope, {
+      externalId: 'clarify-question-1',
+      source: 'remote',
+      startMs: 3_100,
+      endMs: 4_000,
+      text: 'Which rollout?',
+      isFinal: true,
+      recordedAt: '2026-08-27T00:00:02.000Z',
+    });
+    await expect(
+      syncManager.answerCopilotQuestion(scope, 'clarify-question-1'),
+    ).resolves.toEqual(needsClarification);
+
     const records = await archiveStore.readCopilotRecords(scope);
     expect(records.map((record) => record.result)).toEqual([
       noAction,
       answered,
+      needsClarification,
     ]);
     expect(getSession).not.toHaveBeenCalled();
     expect(getTranscript).not.toHaveBeenCalled();

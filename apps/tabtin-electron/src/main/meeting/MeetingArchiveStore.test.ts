@@ -2,7 +2,7 @@ import fs from 'node:fs/promises';
 import os from 'node:os';
 import path from 'node:path';
 
-import { afterEach, beforeEach, describe, expect, it } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { MeetingArchiveStore } from './MeetingArchiveStore';
 
@@ -30,8 +30,32 @@ describe('MeetingArchiveStore', () => {
   });
 
   afterEach(async () => {
+    vi.restoreAllMocks();
     await fs.rm(rootPath, { recursive: true, force: true });
   });
+
+  const prepareFinalizedAudio = async (): Promise<void> => {
+    await store.prepare({
+      ...scope,
+      title: 'Audio deletion',
+      consentConfirmed: true,
+    });
+    await store.updateLifecycle(scope, 'recording');
+    for (const source of ['local', 'remote'] as const) {
+      await store.appendAudioChunk({
+        ...scope,
+        source,
+        bytes: new Uint8Array(source === 'local' ? [1, 2] : [3, 4]),
+        durationMs: 1_000,
+        sampleRate: 48_000,
+        channelCount: 1,
+        codec: 'opus',
+        container: 'webm',
+      });
+    }
+    await store.finalizeAudioTracks(scope);
+    await store.updateLifecycle(scope, 'stopped');
+  };
 
   it('prepares an idempotent manifest with separate local and remote tracks', async () => {
     const first = await store.prepare({
@@ -239,6 +263,84 @@ describe('MeetingArchiveStore', () => {
     ).toBe(path.join(rootPath, 'org-1/user-1/session-1/remote.webm'));
   });
 
+  it('preserves manifest audio state when unlink is denied', async () => {
+    await prepareFinalizedAudio();
+    const denied = Object.assign(new Error('permission denied'), {
+      code: 'EACCES',
+    });
+    vi.spyOn(fs, 'unlink').mockRejectedValueOnce(denied);
+
+    await expect(store.deleteAudioFiles(scope)).rejects.toThrow(
+      'permission denied',
+    );
+
+    const manifest = await store.readManifest(scope);
+    expect(manifest.tracks.local).toMatchObject({
+      storageStatus: 'local_only',
+      finalizedRelativePath: 'local.webm',
+      bytes: 2,
+    });
+    await expect(
+      fs.readFile(path.join(rootPath, 'org-1/user-1/session-1/local.webm')),
+    ).resolves.toEqual(Buffer.from([1, 2]));
+  });
+
+  it('keeps manifest retryable after a partial directory deletion failure', async () => {
+    await prepareFinalizedAudio();
+    const remove = fs.rm.bind(fs);
+    const denied = Object.assign(new Error('remote directory is busy'), {
+      code: 'EACCES',
+    });
+    const removeSpy = vi
+      .spyOn(fs, 'rm')
+      .mockImplementation(async (target, options) => {
+        if (String(target).endsWith(`${path.sep}remote`)) throw denied;
+        return remove(target, options);
+      });
+
+    await expect(store.deleteAudioFiles(scope)).rejects.toThrow(
+      'remote directory is busy',
+    );
+
+    const retained = await store.readManifest(scope);
+    expect(retained.tracks.local.finalizedRelativePath).toBe('local.webm');
+    expect(retained.tracks.remote.finalizedRelativePath).toBe('remote.webm');
+    await expect(
+      fs.stat(path.join(rootPath, 'org-1/user-1/session-1/local')),
+    ).rejects.toMatchObject({ code: 'ENOENT' });
+    await expect(
+      fs.stat(path.join(rootPath, 'org-1/user-1/session-1/remote')),
+    ).resolves.toBeTruthy();
+
+    removeSpy.mockRestore();
+    const deleted = await store.deleteAudioFiles(scope);
+    expect(deleted.tracks.local).toMatchObject({
+      storageStatus: 'deleted',
+      finalizedRelativePath: null,
+      bytes: 0,
+    });
+    expect(deleted.tracks.remote.storageStatus).toBe('deleted');
+  });
+
+  it('does not mark audio deleted when a filesystem call reports false success', async () => {
+    await prepareFinalizedAudio();
+    vi.spyOn(fs, 'unlink').mockResolvedValue(undefined);
+
+    await expect(store.deleteAudioFiles(scope)).rejects.toThrow(
+      'meeting audio cleanup did not remove every target',
+    );
+
+    const manifest = await store.readManifest(scope);
+    expect(manifest.tracks.local).toMatchObject({
+      storageStatus: 'local_only',
+      finalizedRelativePath: 'local.webm',
+      bytes: 2,
+    });
+    await expect(
+      fs.readFile(path.join(rootPath, 'org-1/user-1/session-1/local.webm')),
+    ).resolves.toEqual(Buffer.from([1, 2]));
+  });
+
   it('persists Copilot evaluations and keeps the latest answer per question', async () => {
     await store.prepare({
       ...scope,
@@ -263,6 +365,33 @@ describe('MeetingArchiveStore', () => {
       ...answer,
       answer: 'It uses a hash function and resolves collisions.',
     });
+    await store.appendCopilotRecord(scope, {
+      status: 'needs_clarification',
+      question: 'Why is it slow?',
+      question_segment_id: 'clarify-1',
+      clarifying_question: 'Do you mean transcription or answer latency?',
+      reason_code: 'ambiguous_reference',
+      candidate_id: 'clarify-candidate',
+      candidate_revision: 1,
+      candidate_segment_ids: ['clarify-1'],
+      model: 'deepseek-v4-flash',
+      provider: 'deepseek',
+      latency_ms: 180,
+    });
+    await store.appendCopilotRecord(scope, {
+      status: 'needs_clarification',
+      question: 'Why is this request slow?',
+      question_segment_id: 'clarify-2',
+      clarifying_question:
+        'Is the delay before ASR or after the model request?',
+      reason_code: 'ambiguous_reference',
+      candidate_id: 'clarify-candidate',
+      candidate_revision: 2,
+      candidate_segment_ids: ['clarify-1', 'clarify-2'],
+      model: 'deepseek-v4-flash',
+      provider: 'deepseek',
+      latency_ms: 180,
+    });
     await fs.appendFile(
       path.join(rootPath, 'org-1/user-1/session-1/copilot.jsonl'),
       '{"questionSegmentId":"interrupted-tail"',
@@ -270,7 +399,7 @@ describe('MeetingArchiveStore', () => {
 
     const records = await store.readCopilotRecords(scope);
 
-    expect(records).toHaveLength(1);
+    expect(records).toHaveLength(2);
     expect(records[0]).toMatchObject({
       questionSegmentId: answer.question_segment_id,
       evaluatedAt: '2026-08-26T00:00:00.000Z',
@@ -279,6 +408,48 @@ describe('MeetingArchiveStore', () => {
         answer: 'It uses a hash function and resolves collisions.',
       },
     });
+    expect(records[1]).toMatchObject({
+      questionSegmentId: 'clarify-2',
+      candidateId: 'clarify-candidate',
+      revision: 2,
+      result: {
+        status: 'needs_clarification',
+        clarifying_question:
+          'Is the delay before ASR or after the model request?',
+      },
+    });
+    await expect(
+      store.appendCopilotRecord(scope, {
+        status: 'wait_for_more',
+        message: 'Need more context.',
+        candidate_segment_id: 'wait-1',
+      }),
+    ).rejects.toThrow('Copilot record requires a question segment');
+  });
+
+  it('persists a needs-clarification Copilot terminal result', async () => {
+    await store.prepare({
+      ...scope,
+      title: 'Clarification',
+      consentConfirmed: true,
+    });
+    await store.appendCopilotRecord(scope, {
+      status: 'needs_clarification',
+      question: 'Which rollout do you mean?',
+      question_segment_id: 'question-clarify',
+      clarifying_question: 'Do you mean the desktop or server rollout?',
+      reason_code: 'ambiguous_reference',
+      model: 'test-model',
+      provider: 'test-provider',
+      latency_ms: 20,
+    });
+
+    await expect(store.readCopilotRecords(scope)).resolves.toEqual([
+      expect.objectContaining({
+        questionSegmentId: 'question-clarify',
+        result: expect.objectContaining({ status: 'needs_clarification' }),
+      }),
+    ]);
   });
 
   it('reconciles orphaned parts while recovering a playable interrupted track', async () => {
@@ -289,17 +460,11 @@ describe('MeetingArchiveStore', () => {
     });
     await store.updateLifecycle(scope, 'recording');
     await fs.writeFile(
-      path.join(
-        rootPath,
-        'org-1/user-1/session-1/local/00000001.webm.part',
-      ),
+      path.join(rootPath, 'org-1/user-1/session-1/local/00000001.webm.part'),
       new Uint8Array([1, 2]),
     );
     await fs.writeFile(
-      path.join(
-        rootPath,
-        'org-1/user-1/session-1/local/00000002.webm.part',
-      ),
+      path.join(rootPath, 'org-1/user-1/session-1/local/00000002.webm.part'),
       new Uint8Array([3, 4, 5]),
     );
     await store.updateLifecycle(scope, 'interrupted');

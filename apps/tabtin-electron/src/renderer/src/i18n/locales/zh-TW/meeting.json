@@ -205,6 +205,9 @@
     "analyzeNow": "立即分析目前內容",
     "understandingContext": "正在理解並準備建議…",
     "answeredQuestion": "已回答的問題",
+    "clarificationNeeded": "需要釐清",
+    "clarifyingQuestion": "待確認問題",
+    "clarificationUncertainty": "尚不確定：{{uncertainty}}",
     "reliability": {
       "high": "可靠性：高",
       "medium": "可靠性：中",
@@ -306,6 +309,8 @@
     "audioDeletedAction": "錄音已刪除",
     "audioDeletedStatus": "錄音已刪除",
     "audioDeletedNotice": "錄音已刪除，逐字稿、會後內容和關聯資料仍然保留。",
+    "audioCleanupPendingStatus": "本機清理待重試",
+    "audioCleanupPendingNotice": "雲端錄音已刪除，但此裝置未能移除本機音訊。請關閉正在使用錄音的程式後重試刪除；清理成功前不會把本機副本標記為已刪除。",
     "deleteAudioConfirmTitle": "刪除這場會議的錄音？",
     "deleteAudioConfirmDescription": "麥克風與系統音訊都會永久刪除；逐字稿、會後分析、Copilot 記錄和關聯資料將保留。",
     "deleteAudioConfirmAction": "刪除錄音，保留文字",

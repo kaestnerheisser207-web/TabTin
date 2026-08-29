@@ -82,12 +82,12 @@ describe('MeetingServerSync', () => {
     );
     expect((fetchImpl.mock.calls[3][1] as RequestInit).method).toBe('DELETE');
   });
-  it('keeps the selected question when later transcript turns fill the context window', () => {
+  it('cuts Copilot context off at the selected turn without future pollution', () => {
     const transcript = Array.from(
       { length: MAX_MEETING_COPILOT_CONTEXT_SEGMENTS + 2 },
       (_, index) => ({
         externalId: `segment-${index}`,
-        source: 'remote' as const,
+        source: index % 2 === 0 ? ('remote' as const) : ('local' as const),
         startMs: index * 1_000,
         endMs: index * 1_000 + 500,
         text: `Question ${index}?`,
@@ -98,9 +98,109 @@ describe('MeetingServerSync', () => {
 
     const context = selectMeetingCopilotContext(transcript, 'segment-0');
 
+    expect(context).toHaveLength(1);
+    expect(context[0]?.candidateId).toBe('segment-0');
+    expect(context.some((turn) => turn.segmentIds.includes('segment-1'))).toBe(
+      false,
+    );
+  });
+
+  it('keeps at most eleven prior turns plus the selected candidate', () => {
+    const transcript = Array.from({ length: 15 }, (_, index) => ({
+      externalId: `segment-${index}`,
+      source: index % 2 === 0 ? ('remote' as const) : ('local' as const),
+      startMs: index * 3_000,
+      endMs: index * 3_000 + 500,
+      text: `Turn ${index}.`,
+      isFinal: true,
+      recordedAt: new Date(Date.UTC(2026, 7, 30, 0, 0, index)).toISOString(),
+    }));
+
+    const context = selectMeetingCopilotContext(transcript, 'segment-12');
+
     expect(context).toHaveLength(MAX_MEETING_COPILOT_CONTEXT_SEGMENTS);
-    expect(context.some((item) => item.externalId === 'segment-0')).toBe(true);
-    expect(context.some((item) => item.externalId === 'segment-2')).toBe(false);
+    expect(context[0]?.candidateId).toBe('segment-1');
+    expect(context.at(-1)?.candidateId).toBe('segment-12');
+    expect(context.some((turn) => turn.candidateId === 'segment-13')).toBe(
+      false,
+    );
+  });
+
+  it('selects a merged follow-up turn by any of its segment ids', () => {
+    const transcript = [
+      {
+        externalId: 'opening',
+        source: 'remote' as const,
+        startMs: 1_000,
+        endMs: 2_000,
+        text: '请帮我判断究竟是',
+        isFinal: true,
+        recordedAt: '2026-08-30T00:00:01.000Z',
+      },
+      {
+        externalId: 'follow-up',
+        source: 'remote' as const,
+        startMs: 2_300,
+        endMs: 3_500,
+        text: '上传链路慢，还是识别结果回传慢？',
+        isFinal: true,
+        recordedAt: '2026-08-30T00:00:02.000Z',
+      },
+    ];
+
+    expect(selectMeetingCopilotContext(transcript, 'opening')).toEqual([
+      expect.objectContaining({
+        candidateId: 'opening',
+        requestSegmentId: 'follow-up',
+        segmentIds: ['opening', 'follow-up'],
+        revision: 2,
+        text: '请帮我判断究竟是上传链路慢，还是识别结果回传慢？',
+      }),
+    ]);
+  });
+
+  it('deduplicates replay finals and an overlapping channel echo', () => {
+    const replay = Array.from({ length: 13 }, (_, index) => ({
+      externalId: `replay-${index}`,
+      source: 'local' as const,
+      startMs: 10_000 + index * 20,
+      endMs: 13_000 + index * 20,
+      text: '散列表为什么能快速查询？',
+      isFinal: true,
+      recordedAt: `2026-08-30T00:00:${String(index).padStart(2, '0')}.000Z`,
+    }));
+    const channelEcho = [
+      {
+        externalId: 'echo-local',
+        source: 'local' as const,
+        startMs: 194_522,
+        endMs: 196_072,
+        text: '向量数据库。',
+        isFinal: true,
+        recordedAt: '2026-08-30T00:01:00.000Z',
+      },
+      {
+        externalId: 'echo-remote',
+        source: 'remote' as const,
+        startMs: 194_882,
+        endMs: 196_612,
+        text: '向量数据库。',
+        isFinal: true,
+        recordedAt: '2026-08-30T00:01:01.000Z',
+      },
+    ];
+
+    expect(selectMeetingCopilotContext(replay, 'replay-0')).toHaveLength(1);
+    expect(selectMeetingCopilotContext(channelEcho, 'echo-local')).toEqual([
+      expect.objectContaining({
+        candidateId: 'echo-local',
+        segmentIds: ['echo-local', 'echo-remote'],
+        segmentRevisions: {
+          'echo-local': 1,
+          'echo-remote': 1,
+        },
+      }),
+    ]);
   });
 
   it('creates a meeting session with the existing main-process auth and URL shape', async () => {
@@ -227,14 +327,79 @@ describe('MeetingServerSync', () => {
           external_id: 'remote-1',
           source: 'remote',
           start_ms: 1_000,
+          end_ms: 2_000,
           text: 'Can we deliver Friday?',
           is_final: true,
+          recorded_at: '2026-08-26T00:00:00.000Z',
+          candidate_id: 'remote-1',
+          segment_ids: ['remote-1'],
+          revision: 1,
+          stability: 'stable',
+          close_reason: 'terminal_punctuation',
         },
       ],
     });
     expect(retrySession).not.toHaveBeenCalled();
     expect(timeout).toHaveBeenCalledWith(MEETING_COPILOT_REQUEST_TIMEOUT_MS);
     timeout.mockRestore();
+  });
+
+  it('sends a merged follow-up under its latest request segment id', async () => {
+    const fetchImpl = vi.fn<typeof fetch>().mockResolvedValue(
+      jsonResponse({
+        success: true,
+        data: {
+          status: 'no_action',
+          message: 'No answer needed',
+          candidate_segment_id: 'follow-up',
+        },
+      }),
+    );
+    const sync = createSync({ fetch: fetchImpl });
+
+    await sync.answerCopilot(
+      'session-1',
+      [
+        {
+          externalId: 'opening',
+          source: 'remote',
+          startMs: 1_000,
+          endMs: 2_000,
+          text: '请帮我判断究竟是',
+          isFinal: true,
+          recordedAt: '2026-08-30T00:00:01.000Z',
+        },
+        {
+          externalId: 'follow-up',
+          source: 'remote',
+          startMs: 2_300,
+          endMs: 3_500,
+          text: '上传链路慢，还是识别结果回传慢？',
+          isFinal: true,
+          recordedAt: '2026-08-30T00:00:02.000Z',
+        },
+      ],
+      'opening',
+    );
+
+    expect(requestBody(fetchImpl.mock.calls[0])).toMatchObject({
+      question_segment_id: 'follow-up',
+      recent_segments: [
+        {
+          external_id: 'follow-up',
+          candidate_id: 'opening',
+          segment_ids: ['opening', 'follow-up'],
+          revision: 2,
+          source: 'remote',
+          start_ms: 1_000,
+          end_ms: 3_500,
+          text: '请帮我判断究竟是上传链路慢，还是识别结果回传慢？',
+          recorded_at: '2026-08-30T00:00:02.000Z',
+          stability: 'stable',
+          close_reason: 'terminal_punctuation',
+        },
+      ],
+    });
   });
 
   it('serializes lifecycle and Copilot mutations and advances optimistic versions', async () => {

@@ -652,13 +652,16 @@ export const MeetingDetailSessionView: React.FC<{
         ? t('setup.projectLoading')
         : t('detail.linkedProjectUnavailable'))
     : t('detail.noLinkedProject');
-  const audioDeleted = Boolean(
+  const localAudioCleanupPending = archive?.localAudioCleanupPending === true;
+  const remoteAudioDeleted = Boolean(
     manifest &&
     manifest.tracks.local.storageStatus === 'deleted' &&
     manifest.tracks.remote.storageStatus === 'deleted',
   );
+  const audioDeleted = remoteAudioDeleted && !localAudioCleanupPending;
   const tracksComplete =
-    !audioDeleted &&
+    !remoteAudioDeleted &&
+    !localAudioCleanupPending &&
     manifest?.tracks.local.status === 'completed' &&
     manifest.tracks.remote.status === 'completed';
   const openDeleteDialog = (): void => {
@@ -748,7 +751,15 @@ export const MeetingDetailSessionView: React.FC<{
             {t('detail.previewNotice')}
           </MeetingPreviewBanner>
         ) : null}
-        {audioDeleted ? (
+        {localAudioCleanupPending ? (
+          <div
+            role="alert"
+            className="flex items-start gap-2 rounded-[12px] border border-warning/25 bg-warning/10 px-4 py-3 text-body text-warning-foreground"
+          >
+            <FileX2 className="mt-0.5 h-4 w-4 shrink-0" aria-hidden />
+            <span>{t('detail.audioCleanupPendingNotice')}</span>
+          </div>
+        ) : audioDeleted ? (
           <div
             role="status"
             className="flex items-start gap-2 rounded-[12px] border border-foreground/[0.08] bg-foreground/[0.025] px-4 py-3 text-body text-muted-foreground"
@@ -787,16 +798,18 @@ export const MeetingDetailSessionView: React.FC<{
             {manifest ? projectDisplayName : t('detail.meetingCapability')}
           </span>
           <span className="inline-flex items-center gap-1.5">
-            {audioDeleted ? (
+            {audioDeleted || localAudioCleanupPending ? (
               <FileX2 className="h-4 w-4 text-muted-foreground" aria-hidden />
             ) : (
               <CheckCircle2 className="h-4 w-4 text-success" aria-hidden />
             )}
-            {audioDeleted
-              ? t('detail.audioDeletedStatus')
-              : tracksComplete || !manifest
-                ? t('detail.originalComplete')
-                : t('detail.originalIncomplete')}
+            {localAudioCleanupPending
+              ? t('detail.audioCleanupPendingStatus')
+              : audioDeleted
+                ? t('detail.audioDeletedStatus')
+                : tracksComplete || !manifest
+                  ? t('detail.originalComplete')
+                  : t('detail.originalIncomplete')}
           </span>
         </div>
 
