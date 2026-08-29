@@ -16,6 +16,10 @@ def test_action_builds_and_pushes_an_immutable_amd64_image() -> None:
     assert "tags: ${{ env.IMAGE_NAME }}:sha-${{ env.RELEASE_SHA }}" in workflow
     assert "org.opencontainers.image.revision=${{ env.RELEASE_SHA }}" in workflow
     assert "TABTIN_SOURCE_SHA=${{ env.RELEASE_SHA }}" in workflow
+    assert (
+        "cache-to: type=gha,mode=max,scope=tabtin-community-django,ignore-error=true"
+        in workflow
+    )
     assert "IMAGE_DIGEST: ${{ steps.build.outputs.digest }}" in workflow
     assert "image_ref=\"$IMAGE_NAME@$IMAGE_DIGEST\"" in workflow
     assert "${{ github.sha }}" not in workflow

@@ -68,7 +68,7 @@ jobs:
             TABTIN_DEV_DEPENDENCY_FINGERPRINT=${{ steps.dependencies.outputs.fingerprint }}
             TABTIN_SOURCE_SHA=${{ env.RELEASE_SHA }}
           cache-from: type=gha,scope=tabtin-community-django
-          cache-to: type=gha,mode=max,scope=tabtin-community-django
+          cache-to: type=gha,mode=max,scope=tabtin-community-django,ignore-error=true
 
       - name: Configure restricted SSH access
         env:
