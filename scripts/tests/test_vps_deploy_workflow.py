@@ -197,6 +197,8 @@ def test_cloud_host_bootstrap_keeps_worker_rootless_and_quota_gated() -> None:
     assert 'volume create --opt o=size=1M "$probe_volume"' in bootstrap
     assert "TABTIN_CLOUD_XFS_SIZE_GB" in bootstrap
     assert "TABTIN_CLOUD_CAPACITY_STORAGE_GB" in bootstrap
+    assert "mkfs.xfs -f -L tabtin-cloud" in bootstrap
+    assert 'runtime_fstype="$(blkid -s TYPE -o value' in bootstrap
     assert 'host_config_file="/etc/tabtin/cloud-host.env"' in bootstrap
     assert "TABTIN_NGINX_CONFIG" in bootstrap
     assert "/Project/infrastructure/nginx/current/nginx.conf" in bootstrap
