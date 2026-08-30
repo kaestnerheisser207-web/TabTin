@@ -7,7 +7,10 @@ import type {
   ProvisionWorkspaceInput,
   WorkspaceRuntimeStatus,
 } from './contracts.js'
-import type { StorageQuotaMode } from './storage-quota.js'
+import {
+  XfsProjectQuotaManager,
+  type StorageQuotaMode,
+} from './storage-quota.js'
 
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i
 const SAFE_VOLUME = /^[a-zA-Z0-9][a-zA-Z0-9_.-]{0,127}$/
@@ -34,10 +37,17 @@ export class DockerWorkspaceManager {
     private readonly network = 'tabtin-cloud-runtime',
     private readonly storageQuotaMode: StorageQuotaMode = 'none',
     private readonly runtimeStorageGb = 2,
+    private readonly quotaManager: XfsProjectQuotaManager | null = null,
   ) {}
 
   async provision(input: ProvisionWorkspaceInput): Promise<WorkspaceRuntimeStatus> {
     validateProvisionInput(input)
+    if (
+      this.storageQuotaMode === 'podman-xfs'
+      && input.volumeRef !== workspaceVolume(input.allocationId)
+    ) {
+      throw new Error('volumeRef must match the allocation id')
+    }
     const container = containerName(input.allocationId)
     const existing = await this.inspect(container)
     if (existing) {
@@ -131,6 +141,16 @@ export class DockerWorkspaceManager {
     if (current.state !== 'missing') {
       await this.runner.run(['rm', '--force', containerName(identity.allocationId)])
     }
+    if (this.storageQuotaMode === 'podman-xfs') {
+      const workspace = workspaceVolume(identity.allocationId)
+      for (const volume of [workspace, runtimeVolume(workspace)]) {
+        if (await this.dockerVolumeExists(volume)) {
+          await this.runner.run(['volume', 'rm', volume])
+        }
+        await this.requireQuotaManager().delete(volume)
+      }
+      return
+    }
     const volumes = await this.findAllocationVolumes(identity.allocationId)
     for (const volume of volumes) await this.runner.run(['volume', 'rm', volume])
   }
@@ -190,13 +210,25 @@ export class DockerWorkspaceManager {
       '--label', `${LABEL_ALLOCATION}=${allocationId}`,
     ]
     if (this.storageQuotaMode === 'podman-xfs') {
-      args.push('--opt', `o=size=${storageGb}G`)
+      const quotaVolume = await this.requireQuotaManager().ensure(volume, storageGb)
+      args.push(
+        '--opt', 'type=none',
+        '--opt', `device=${quotaVolume.path}`,
+        '--opt', 'o=bind',
+      )
     }
     args.push(volume)
     await this.runner.run(args)
   }
 
   private async volumeExists(volume: string): Promise<boolean> {
+    if (this.storageQuotaMode === 'podman-xfs') {
+      return await this.requireQuotaManager().inspect(volume) !== null
+    }
+    return await this.dockerVolumeExists(volume)
+  }
+
+  private async dockerVolumeExists(volume: string): Promise<boolean> {
     try {
       await this.runner.run(['volume', 'inspect', volume])
       return true
@@ -211,6 +243,11 @@ export class DockerWorkspaceManager {
       'volume', 'ls', '--quiet', '--filter', `label=${LABEL_ALLOCATION}=${allocationId}`,
     ])
     return result.stdout.split('\n').map(value => value.trim()).filter(Boolean)
+  }
+
+  private requireQuotaManager(): XfsProjectQuotaManager {
+    if (!this.quotaManager) throw new Error('podman-xfs requires the quota helper')
+    return this.quotaManager
   }
 
   private async inspect(container: string): Promise<DockerInspect | null> {
@@ -277,6 +314,10 @@ function containerName(allocationId: string): string {
 
 function runtimeVolume(volume: string): string {
   return `${volume}-runtime`
+}
+
+function workspaceVolume(allocationId: string): string {
+  return `cloud-workspace-${allocationId}`
 }
 
 function isNotFound(error: unknown): boolean {

@@ -20,7 +20,7 @@ export class CommandFailedError extends Error {
   }
 }
 
-export class DockerCommandRunner implements CommandRunner {
+export class ProcessCommandRunner implements CommandRunner {
   constructor(private readonly executable = 'docker') {}
 
   run(args: readonly string[], stdin?: string): Promise<CommandResult> {

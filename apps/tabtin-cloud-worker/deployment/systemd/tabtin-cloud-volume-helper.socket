@@ -1,0 +1,13 @@
+[Unit]
+Description=TabTin Cloud XFS Volume Helper Socket
+
+[Socket]
+ListenStream=/run/tabtin-cloud-volume-helper.sock
+SocketUser=root
+SocketGroup=tabtin-cloud-worker
+SocketMode=0660
+Accept=yes
+RemoveOnStop=true
+
+[Install]
+WantedBy=sockets.target
