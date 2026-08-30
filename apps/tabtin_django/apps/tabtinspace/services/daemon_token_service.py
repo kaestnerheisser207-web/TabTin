@@ -473,7 +473,9 @@ class DaemonTokenService(BaseService):
             'status': 'online',
         }
         try:
-            if not control_enabled:
+            # Cloud Devices are pre-provisioned and allocation-bound even when
+            # the optional daemon control plane is disabled for Community.
+            if not control_enabled and normalized_device_type != 'cloud':
                 device, created = Device.objects.update_or_create(
                     fingerprint=fingerprint,
                     user_id=user.id,

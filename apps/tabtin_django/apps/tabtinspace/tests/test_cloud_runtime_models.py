@@ -729,10 +729,10 @@ class CloudWorkspaceServiceTests(TransactionTestCase):
         self.assertIsNotNone(created.allocation.next_retry_at)
 
     @override_settings(
-        DAEMON_CONTROL_ENABLED=True,
+        DAEMON_CONTROL_ENABLED=False,
         DAEMON_TOKEN_SECRET="cloud-test-secret",
     )
-    def test_cloud_install_token_activates_only_preprovisioned_device(self):
+    def test_community_cloud_token_activates_only_preprovisioned_device(self):
         created = self.service.create_cloud_workspace(
             request_key=uuid4(),
             organization_id=self.organization.id,
