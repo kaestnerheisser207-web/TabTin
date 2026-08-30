@@ -2,6 +2,7 @@ import { randomUUID } from 'node:crypto'
 import {
   ContentBlockEvents,
   StreamEvents,
+  nextArrivalSeq,
   type StreamEvent,
 } from '@tabtin/agent-runtime'
 
@@ -27,6 +28,7 @@ export class DshEventTranslator {
   private seq = 0
   private readonly messages = new Map<string, MessageState>()
   private finalText = ''
+  private finalUsage?: Record<string, number>
 
   constructor(
     private readonly threadId: string,
@@ -133,6 +135,22 @@ export class DshEventTranslator {
     if (state.finalText) this.finalText = state.finalText
     const finalUsage = usage ?? state.usage
     if (finalUsage) {
+      const previous = this.finalUsage
+      const inputTokens = Number(finalUsage.inputTokens ?? 0)
+      const outputTokens = Number(finalUsage.outputTokens ?? 0)
+      const cacheReadTokens = Number(finalUsage.cacheReadTokens ?? 0)
+      const cacheWriteTokens = Number(finalUsage.cacheWriteTokens ?? 0)
+      const reasoningTokens = Number(finalUsage.reasoningTokens ?? 0)
+      this.finalUsage = {
+        input_tokens: Number(previous?.input_tokens ?? 0) + inputTokens,
+        output_tokens: Number(previous?.output_tokens ?? 0) + outputTokens,
+        cache_read_input_tokens: Number(previous?.cache_read_input_tokens ?? 0) + cacheReadTokens,
+        cache_creation_input_tokens: Number(previous?.cache_creation_input_tokens ?? 0) + cacheWriteTokens,
+        reasoning_tokens: Number(previous?.reasoning_tokens ?? 0) + reasoningTokens,
+        last_input_tokens: inputTokens,
+        last_cache_read_input_tokens: cacheReadTokens,
+        last_cache_creation_input_tokens: cacheWriteTokens,
+      }
       events.push(this.meta(ContentBlockEvents.MESSAGE_DELTA, {
         message_id: state.messageId,
         delta: { stop_reason: interrupted ? 'aborted' : state.stopReason },
@@ -148,6 +166,54 @@ export class DshEventTranslator {
       message_id: state.messageId,
       ...(interrupted ? {
         error_info: {
+          error_class: 'ABORT',
+          category: 'aborted',
+          partial_reason: 'aborted',
+        },
+      } : {}),
+    }))
+    const arrivalSeq = nextArrivalSeq()
+    const persistedBlocks = blocks.flatMap((block: any, index: number) => {
+      const blockArrivalSeq = arrivalSeq + index
+      if (block?.type === 'text') {
+        return [{ type: 'text', text: String(block.text ?? ''), arrival_seq: blockArrivalSeq }]
+      }
+      if (block?.type === 'reasoning') {
+        return [{
+          type: 'thinking',
+          thinking: String(block.text ?? ''),
+          signature: '',
+          arrival_seq: blockArrivalSeq,
+        }]
+      }
+      if (block?.type === 'tool-call') {
+        const parsed = parseToolArguments(String(block.arguments ?? ''))
+        return [{
+          type: 'tool_use',
+          id: String(block.id ?? `dsh-call-${index}`),
+          name: String(block.name ?? 'unknown'),
+          input: parsed.input,
+          ...(parsed.error ? { input_parse_error: parsed.error } : {}),
+          arrival_seq: blockArrivalSeq,
+        }]
+      }
+      return []
+    })
+    const modelName = String(message?.source?.model ?? 'DeepSeek Harness')
+    events.push(this.meta(StreamEvents.PERSIST_MESSAGE, {
+      message_id: state.messageId,
+      client_event_id: state.messageId,
+      role: 'assistant',
+      blocks_json: persistedBlocks,
+      agent_run_id: this.runId,
+      arrival_seq: arrivalSeq,
+      message_kind: 'llm',
+      stop_reason: interrupted ? 'aborted' : state.stopReason ?? 'end_turn',
+      model_id: modelName,
+      model_name: modelName,
+      ...(interrupted ? {
+        partial: true,
+        error_info_json: {
           error_class: 'ABORT',
           category: 'aborted',
           partial_reason: 'aborted',
@@ -203,6 +269,7 @@ export class DshEventTranslator {
       this.meta(StreamEvents.DONE, {
         content: this.finalText,
         error,
+        ...(this.finalUsage ? { usage: this.finalUsage } : {}),
         ...(message ? { error_message: message } : {}),
         ...(aborted ? { error_class: 'ABORT' } : error ? { error_class: 'INTERNAL' } : {}),
         trace_id: this.runId,
@@ -311,7 +378,7 @@ export class DshEventTranslator {
     let state = this.messages.get(key)
     if (!state) {
       state = {
-        messageId: `dsh-${this.threadId}-${turn}-${step}`,
+        messageId: randomUUID(),
         started: false,
         startedBlocks: new Set(),
         stoppedBlocks: new Set(),
