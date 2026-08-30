@@ -1,0 +1,146 @@
+"""Explicit Cloud Workspace stop/restart/restore/permanent-delete lifecycle."""
+
+from __future__ import annotations
+
+from datetime import timedelta
+
+from django.conf import settings
+from django.db import models, transaction
+from django.utils import timezone
+
+from apps.services.agent_engine.models import RuntimeBinding
+from apps.services.common.db_router import postgres_app_db_alias
+from apps.tabtinspace.models import CloudRuntimeAllocation, Workspace
+from apps.tabtinspace.services.base import ServiceError
+from apps.tabtinspace.services.cloud_worker_client import CloudWorkerClient
+from apps.tabtinspace.services.workspace_service import WorkspaceService
+
+
+class CloudWorkspaceLifecycleService:
+    def __init__(self, *, user, client: CloudWorkerClient | None = None):
+        self.user = user
+        self.client = client or CloudWorkerClient()
+
+    def disable(self, workspace_id) -> Workspace:
+        workspace, allocation = self._owned_cloud(workspace_id)
+        response = self.client.disable(allocation)
+        if response.get("state") not in {"stopped", "missing"}:
+            raise ServiceError("CLOUD_DISABLE_FAILED", "Cloud Runtime 未停止", 502)
+        retention_days = int(
+            getattr(settings, "TABTIN_CLOUD_DISABLED_RETENTION_DAYS", 30)
+        )
+        with transaction.atomic(using=postgres_app_db_alias()):
+            allocation = CloudRuntimeAllocation.objects.select_for_update().get(
+                id=allocation.id
+            )
+            allocation.state = CloudRuntimeAllocation.State.DISABLED
+            allocation.retention_deadline = timezone.now() + timedelta(
+                days=retention_days
+            )
+            allocation.save(
+                update_fields=["state", "retention_deadline", "updated_at"]
+            )
+            allocation.device.status = "offline"
+            allocation.device.save(update_fields=["status", "updated_at"])
+            RuntimeBinding.objects.filter(allocation=allocation).update(
+                state=RuntimeBinding.State.SUSPENDED,
+                revision=models.F("revision") + 1,
+            )
+        return workspace
+
+    def restart(self, workspace_id) -> Workspace:
+        workspace, allocation = self._owned_cloud(workspace_id)
+        if allocation.state not in {
+            CloudRuntimeAllocation.State.READY,
+            CloudRuntimeAllocation.State.DISABLED,
+            CloudRuntimeAllocation.State.ERROR,
+        }:
+            raise ServiceError(
+                "CLOUD_RESTART_NOT_ALLOWED",
+                "Cloud Runtime 当前状态不允许重启",
+                409,
+            )
+        response = self.client.restart(allocation)
+        if response.get("state") != "running":
+            raise ServiceError("CLOUD_RESTART_FAILED", "Cloud Runtime 未恢复运行", 502)
+        with transaction.atomic(using=postgres_app_db_alias()):
+            allocation = CloudRuntimeAllocation.objects.select_for_update().get(
+                id=allocation.id
+            )
+            allocation.state = CloudRuntimeAllocation.State.PROVISIONING
+            allocation.retention_deadline = None
+            allocation.last_error = ""
+            allocation.next_retry_at = timezone.now()
+            allocation.save(
+                update_fields=[
+                    "state",
+                    "retention_deadline",
+                    "last_error",
+                    "next_retry_at",
+                    "updated_at",
+                ]
+            )
+            allocation.device.status = "offline"
+            allocation.device.last_heartbeat_at = None
+            allocation.device.save(
+                update_fields=["status", "last_heartbeat_at", "updated_at"]
+            )
+            RuntimeBinding.objects.filter(allocation=allocation).update(
+                state=RuntimeBinding.State.SUSPENDED,
+                revision=models.F("revision") + 1,
+            )
+        return workspace
+
+    def restore(self, workspace_id) -> Workspace:
+        _workspace, allocation = self._owned_cloud(workspace_id)
+        if allocation.state != CloudRuntimeAllocation.State.DISABLED:
+            raise ServiceError(
+                "CLOUD_RESTORE_NOT_ALLOWED",
+                "只有已停用的 Cloud Workspace 可以恢复",
+                409,
+            )
+        if (
+            allocation.retention_deadline
+            and allocation.retention_deadline <= timezone.now()
+        ):
+            raise ServiceError(
+                "CLOUD_RETENTION_EXPIRED",
+                "Cloud Workspace 保留期已过",
+                410,
+            )
+        return self.restart(workspace_id)
+
+    def delete_permanently(self, workspace_id, *, confirmation: str) -> None:
+        workspace, allocation = self._owned_cloud(workspace_id)
+        if confirmation != (workspace.name or workspace.working_dir):
+            raise ServiceError(
+                "CLOUD_DELETE_CONFIRMATION_MISMATCH",
+                "永久删除确认名称不匹配",
+                400,
+            )
+        response = self.client.delete_permanently(allocation)
+        if response.get("deleted") is not True:
+            raise ServiceError("CLOUD_DELETE_FAILED", "Worker 未确认永久删除", 502)
+        device_id = allocation.device_id
+        with transaction.atomic(using=postgres_app_db_alias()):
+            RuntimeBinding.objects.filter(allocation=allocation).delete()
+            allocation.delete()
+            workspace.delete()
+            from apps.tabtinspace.models import Device
+
+            Device.objects.filter(id=device_id).delete()
+
+    def _owned_cloud(self, workspace_id) -> tuple[Workspace, CloudRuntimeAllocation]:
+        workspace = WorkspaceService(user=self.user).get_workspace(workspace_id)
+        try:
+            allocation = CloudRuntimeAllocation.objects.select_related(
+                "worker",
+                "device",
+            ).get(workspace=workspace)
+        except CloudRuntimeAllocation.DoesNotExist as exc:
+            raise ServiceError(
+                "CLOUD_ALLOCATION_NOT_FOUND",
+                "该 Workspace 不是 Cloud Workspace",
+                404,
+            ) from exc
+        return workspace, allocation

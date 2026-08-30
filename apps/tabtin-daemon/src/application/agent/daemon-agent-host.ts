@@ -41,12 +41,15 @@ import {
 } from '@tabtin/agent-host/conversation'
 import type { AgentTransportEnvelope } from '@tabtin/agent-host/realtime'
 import { DaemonAgentTransport } from './daemon-agent-transport.js'
+import {
+  RunHostLeaseCoordinator,
+  createRunHostLeaseHttpApi,
+} from './run-host-lease-coordinator.js'
 import type {
   AgentEngineCompactSessionInput,
   AgentEngineCompactSessionOutput,
 } from '@tabtin/cli-server-core/surfaces/agent-engine';
 import type {
-  AgentRuntime,
   ContentBlock,
   EngineConfig,
   Message,
@@ -84,6 +87,7 @@ import {
 } from '@tabtin/agent-host/delivery'
 import {
   executionOwnerScopeId,
+  type HostedRuntime,
   type RuntimeCacheKey,
   type RuntimeResourceFactory,
   type RuntimeSessionRequest,
@@ -689,7 +693,7 @@ export interface RuntimeCarryForward extends RuntimeCarryForwardContract {
 }
 
 export interface DaemonHostState extends RuntimeCacheKey, DaemonHostStateContract {
-  runtime: AgentRuntime;
+  runtime: HostedRuntime;
   sessionId: string;
   /**
    * 稳定业务对话 id（与 ElectronHostState.businessThreadId 同名，同语义）。
@@ -1035,6 +1039,8 @@ export class DaemonAgentHost {
   }
   private sharedHost: AgentHost<DaemonQueryRequest, DaemonQueryResult, DaemonHostState> | null = null;
   private agentTransport: DaemonAgentTransport | null = null;
+  private readonly runHostLeaseCoordinator: RunHostLeaseCoordinator;
+  private readonly forwardLeaseAbortKeys = new Map<string, string>();
   /**
    * Bound by TabTinDaemon so prompt.forward keeps daemon-specific
    * DaemonQueryRequest mapping. Shared zod 校验（PromptForwardPayloadSchema）
@@ -1371,6 +1377,31 @@ export class DaemonAgentHost {
     this.getPtyManagerBridge = deps.getPtyManagerBridge;
     this.docParser = deps.docParser;
     this.workspaceRoot = normalizeWorkspaceRoot(deps.workspaceRoot);
+    const leaseHostId = this.config.device_type === 'cloud'
+      ? `${this.config.fingerprint}:generation:${this.config.cloud_generation ?? 1}`
+      : this.config.fingerprint;
+    this.runHostLeaseCoordinator = new RunHostLeaseCoordinator(
+      createRunHostLeaseHttpApi({
+        apiBaseUrl: deriveApiBaseUrl(this.config.server_url),
+        getAccessToken: () => this.getAccessToken() || null,
+      }),
+      leaseHostId,
+      (runId, reason) => {
+        const sessionId = this.forwardLeaseAbortKeys.get(runId);
+        if (!sessionId) return;
+        this.handleAbort(sessionId);
+        void this.sharedHost?.cancelSessionDelivery(sessionId);
+        this.logger.warn('[RunHostLease] fenced daemon run', {
+          runId,
+          sessionId,
+          reason,
+        });
+      },
+      {
+        info: (message, details) => this.logger.info(message, details),
+        warn: (message, details) => this.logger.warn(message, details),
+      },
+    );
 
     // per-file 回退引擎：注入 daemon logger 到模块级 registry（与 setCheckpointLogger
     // 同款）。host 与 action-bridge 在 daemon 里独立组装，故 registry 走模块级单例共享。
@@ -1816,6 +1847,7 @@ export class DaemonAgentHost {
     // 这里再调用一次确保 Host 独立启动场景（单元测试 / 嵌入式 fixture）也能落地埋点。
     installDaemonTelemetrySink(this.logger);
     await this.startSharedHost();
+    await this.runHostLeaseCoordinator.start();
     this.hostTrackerScheduler.start();
     if (!this.hostTrackerReconnectRegistered) {
       this.hostTrackerReconnectRegistered = true;
@@ -2250,6 +2282,8 @@ export class DaemonAgentHost {
   }
 
   async stop(): Promise<void> {
+    this.runHostLeaseCoordinator.stop();
+    this.forwardLeaseAbortKeys.clear();
     this.hostTrackerScheduler.stop();
     setHumanInteractionHooks(undefined);
     const sharedHost = this.sharedHost;
@@ -3019,6 +3053,7 @@ export class DaemonAgentHost {
     const modelId = request.modelId ?? 'default';
     const workspaceId = request.workspaceId ?? '';
     const cacheKeyInput = {
+      harness: request.harness,
       modelId,
       customRules: request.customRules,
       personalRules: request.personalRules,
@@ -3098,6 +3133,23 @@ export class DaemonAgentHost {
     if (!sharedHost) {
       return { success: false, error: 'AgentHost is not started' };
     }
+    let leaseClaimed = false;
+    if (request.runId) {
+      try {
+        const decision = await this.runHostLeaseCoordinator.claim(request.runId);
+        if (decision === 'duplicate') return { success: true };
+        if (decision === 'rejected') {
+          return { success: false, error: 'Run ownership was rejected by the server' };
+        }
+        leaseClaimed = true;
+        this.forwardLeaseAbortKeys.set(request.runId, sessionId);
+      } catch (error) {
+        return {
+          success: false,
+          error: error instanceof Error ? error.message : String(error),
+        };
+      }
+    }
     if (this.relayPersistence.activateOwner(owner)) {
       void this.sharedHost?.kickRecoverAndBackfill({ activateOwner: false });
     }
@@ -3125,7 +3177,13 @@ export class DaemonAgentHost {
             );
           }
         })
-        .finally(() => this.sessionState.deletePendingTurn(runId));
+        .finally(() => {
+          this.sessionState.deletePendingTurn(runId);
+          if (request.runId) {
+            this.runHostLeaseCoordinator.stopTracking(request.runId);
+            this.forwardLeaseAbortKeys.delete(request.runId);
+          }
+        });
       return { success: true };
     } catch (error) {
       if (error instanceof ConversationRunCancelledError) {
@@ -3133,7 +3191,13 @@ export class DaemonAgentHost {
       }
       throw error;
     } finally {
-      if (!admitted) this.sessionState.deletePendingTurn(runId);
+      if (!admitted) {
+        this.sessionState.deletePendingTurn(runId);
+        if (request.runId && leaseClaimed) {
+          this.runHostLeaseCoordinator.stopTracking(request.runId);
+          this.forwardLeaseAbortKeys.delete(request.runId);
+        }
+      }
     }
   }
 
@@ -3486,13 +3550,16 @@ export class DaemonAgentHost {
     if (messages.length === 0) {
       return { success: false, error: 'no history to compact' };
     }
+    if (!session.runtime.compactCheckpoint) {
+      return { success: false, error: 'current harness does not support checkpoint compaction' };
+    }
 
     // 阶段 4 · 门面 + 旁路收口：compact 走 `sharedHost.submitRun` 让本轮进入
     // coordinator FIFO——与业务 query 用同一条串行链，避免"compact 与用户消息
     // 同时抢 runtime 状态"。sharedHost 未起时直接 fail-fast 返回
     // `AgentHost is not ready`（见下方 submitRun 前的 guard），不做任何旁路兜底。
     const execute = async (): Promise<AgentEngineCompactSessionOutput> => {
-      const result = await session.runtime.compactCheckpoint({
+      const result = await session.runtime.compactCheckpoint!({
         messages,
         summaryFocus: input.summaryFocus,
         keepLastN: input.keepLastN,

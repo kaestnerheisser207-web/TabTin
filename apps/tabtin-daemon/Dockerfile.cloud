@@ -1,0 +1,38 @@
+ARG NODE_BUILD_IMAGE=node@sha256:83f487e0a63425e5b4d146fb5e5be574bcbe1b7b843d3ebafdd95eaf7767a7e5
+ARG NODE_RUNTIME_IMAGE=node@sha256:83f487e0a63425e5b4d146fb5e5be574bcbe1b7b843d3ebafdd95eaf7767a7e5
+FROM ${NODE_BUILD_IMAGE} AS build
+
+WORKDIR /src
+RUN corepack enable
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends g++ git make python3 \
+    && rm -rf /var/lib/apt/lists/*
+COPY . .
+RUN --mount=type=cache,id=tabtin-cloud-pnpm,target=/root/.local/share/pnpm/store \
+    pnpm --filter @tabtin/daemon... install --frozen-lockfile
+RUN pnpm --filter '@tabtin/daemon^...' build
+RUN pnpm --filter @tabtin/daemon build
+RUN pnpm --filter @tabtin/daemon deploy --prod /opt/tabtin-daemon
+
+FROM ${NODE_RUNTIME_IMAGE} AS runtime
+
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends bash ca-certificates git ripgrep tini tmux \
+    && rm -rf /var/lib/apt/lists/*
+
+COPY --from=build /opt/tabtin-daemon /opt/tabtin-daemon
+COPY apps/tabtin-daemon/scripts/cloud-entrypoint.sh /usr/local/bin/tabtin-cloud-entrypoint
+RUN chmod 0755 /usr/local/bin/tabtin-cloud-entrypoint \
+    && chmod 0755 /opt/tabtin-daemon/dist/index.js \
+    && ln -s /opt/tabtin-daemon/dist/index.js /usr/local/bin/tabtin-daemon \
+    && ln -s /opt/tabtin-daemon/node_modules/@deepseek-ai/dsh/lib/bin.js /usr/local/bin/dsh
+
+ENV NODE_ENV=production \
+    TABTIN_WORKSPACE_ROOT=/workspace \
+    TABTIN_DAEMON_CONFIG_DIR=/var/lib/tabtin/daemon \
+    DSH_HOME=/var/lib/tabtin/dsh \
+    DSH_TELEMETRY_MODE=DISABLED
+
+WORKDIR /workspace
+USER 1000:1000
+ENTRYPOINT ["/usr/bin/tini", "--", "/usr/local/bin/tabtin-cloud-entrypoint"]

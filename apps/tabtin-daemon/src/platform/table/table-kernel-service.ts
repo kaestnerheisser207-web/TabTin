@@ -157,7 +157,7 @@ export class TableKernelService {
           id: f.id,
           name: f.name,
           fieldType: f.fieldType,
-          isRequired: f.isRequired,
+          defaultValue: f.defaultValue,
           options: f.options,
         }))
       },

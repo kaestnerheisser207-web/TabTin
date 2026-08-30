@@ -52,6 +52,7 @@ import {
 } from '@components/settings/panels/MyAgentsPanel'
 import { personaFirstLinePreview } from '@components/chat/model/AgentModeSelector'
 import type { OrganizationAgentSummary } from '@/services/organizationAgentsApi'
+import type { UpdateAgentRequest } from '@tabtin/app-shell'
 import { AGENT_NAME_OWNER_TOKEN } from '@utils/agentNameInterpolation'
 import { extractAgentCustomAvatarUrl } from '@/utils/resolveAgentAvatar'
 import {
@@ -136,7 +137,7 @@ export interface AgentWorkbenchDetailProps {
   skillContextSpaceId: string | null
   updateAgent: (
     agentId: string,
-    updates: { name?: string; custom_rules?: string; avatar_key?: string },
+    updates: UpdateAgentRequest,
   ) => Promise<boolean>
   deleteAgent: (agentId: string) => Promise<boolean>
   onUpdated: () => void
@@ -177,6 +178,10 @@ export const AgentWorkbenchDetail: React.FC<AgentWorkbenchDetailProps> = ({
   const [deactivating, setDeactivating] = useState(false)
   const [avatarEditorOpen, setAvatarEditorOpen] = useState(false)
   const [savingAvatar, setSavingAvatar] = useState(false)
+  const [savingHarness, setSavingHarness] = useState(false)
+  const [harness, setHarness] = useState<'builtin' | 'dsh'>(
+    () => fullAgent?.agent_config?.harness?.type ?? 'builtin',
+  )
   const [localAvatarKey, setLocalAvatarKey] = useState<string | null>(
     () => agent.settings?.avatar_key?.trim() || null,
   )
@@ -225,6 +230,10 @@ export const AgentWorkbenchDetail: React.FC<AgentWorkbenchDetailProps> = ({
     setAvatarDraftKey(nextAvatarKey || DEFAULT_AGENT_AVATAR_PRESET_KEY)
     setLocalAvatarUrl(extractAgentCustomAvatarUrl(agent.settings))
   }, [agent.id, agent.name, agent.settings])
+
+  useEffect(() => {
+    setHarness(fullAgent?.agent_config?.harness?.type ?? 'builtin')
+  }, [fullAgent?.agent_config?.harness?.type])
 
   const identityAgent: OrganizationAgentSummary = {
     ...agent,
@@ -357,6 +366,37 @@ export const AgentWorkbenchDetail: React.FC<AgentWorkbenchDetailProps> = ({
       onUpdated()
     } finally {
       setSavingAvatar(false)
+    }
+  }
+
+  const handleHarnessChange = async (next: 'builtin' | 'dsh') => {
+    if (next === harness || savingHarness) return
+    setSavingHarness(true)
+    try {
+      const ok = await updateAgent(agent.id, {
+        agent_config: {
+          ...(fullAgent?.agent_config ?? {}),
+          harness: { type: next },
+        },
+      })
+      if (!ok) {
+        toast({
+          title: t('myAgents.harnessSaveFailed', {
+            defaultValue: 'Agent Runtime 保存失败，请重试',
+          }),
+          variant: 'destructive',
+        })
+        return
+      }
+      setHarness(next)
+      toast({
+        title: next === 'dsh'
+          ? '已切换为 DeepSeek Harness'
+          : '已切换为 TabTin Builtin',
+      })
+      onUpdated()
+    } finally {
+      setSavingHarness(false)
     }
   }
 
@@ -639,6 +679,35 @@ export const AgentWorkbenchDetail: React.FC<AgentWorkbenchDetailProps> = ({
             {editingName && nameError ? (
               <p className={cn(SETTINGS_TEXT_META_BASE, 'mt-1 text-destructive')}>{nameError}</p>
             ) : null}
+            <div
+              className="mt-2 inline-flex rounded-md bg-foreground/[0.045] p-0.5"
+              role="radiogroup"
+              aria-label="Agent Runtime"
+              data-testid="agent-harness-switch"
+            >
+              {(['builtin', 'dsh'] as const).map((value) => (
+                <button
+                  key={value}
+                  type="button"
+                  role="radio"
+                  aria-checked={harness === value}
+                  disabled={savingHarness}
+                  onClick={() => { void handleHarnessChange(value) }}
+                  className={cn(
+                    SETTINGS_TEXT_MICRO,
+                    'rounded px-2 py-1 transition-colors',
+                    harness === value
+                      ? 'bg-background text-foreground shadow-sm'
+                      : 'text-muted-foreground hover:text-foreground',
+                  )}
+                >
+                  {value === 'builtin' ? 'Builtin' : 'DSH'}
+                </button>
+              ))}
+            </div>
+            <p className={cn(SETTINGS_TEXT_META_BASE, 'mt-1.5 max-w-md text-muted-foreground')}>
+              DSH 仅在 Cloud Workspace 运行；本地 Workspace 会明确拒绝，不会静默改用 Builtin。
+            </p>
           </div>
         </div>
       </section>

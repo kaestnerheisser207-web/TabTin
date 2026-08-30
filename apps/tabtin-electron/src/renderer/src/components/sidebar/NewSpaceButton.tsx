@@ -18,6 +18,10 @@ import {
   Settings2,
   Info,
   Server,
+  Cloud,
+  HardDrive,
+  GitBranch,
+  Cpu,
 } from 'lucide-react'
 import {
   Dialog,
@@ -249,16 +253,24 @@ const CreateSpaceDialog: React.FC<CreateSpaceDialogProps> = ({
   const [isCreating, setIsCreating] = useState(false)
   const [workingDir, setWorkingDir] = useState('')
   const [workingDirType, setWorkingDirType] = useState<WorkingDirType>('mixed')
+  const [runtimePlane, setRuntimePlane] = useState<'local' | 'cloud'>('local')
+  const [cloudSource, setCloudSource] = useState<'empty' | 'git'>('empty')
+  const [cloudHarness, setCloudHarness] = useState<'dsh' | 'builtin'>('dsh')
+  const [gitUrl, setGitUrl] = useState('')
+  const [gitRef, setGitRef] = useState('')
   const [isPickingDir, setIsPickingDir] = useState(false)
   // ：冲突/失败要在对话框内可见；仅靠顶部 toast 容易被 Dialog 挡住或 2s 闪过。
   const [formError, setFormError] = useState<string | null>(null)
   /** 编辑态：打开时已有工作目录则锁定路径，只允许改类型（与设置页一致）。 */
   const [pathLocked, setPathLocked] = useState(false)
   const createSpace = useSpaceStore((state) => state.createSpace)
+  const createCloudSpace = useSpaceStore((state) => state.createCloudSpace)
   const updateSpace = useSpaceStore((state) => state.updateSpace)
   const updateAgent = useSpaceStore((state) => state.updateAgent)
   const loadAgent = useSpaceStore((state) => state.loadAgent)
   const refreshSpace = useSpaceStore((state) => state.refreshSpace)
+  const selectedAgent = useSpaceStore((state) => state.selectedAgent)
+  const isCloudCreate = !isEditMode && !daemonTarget && runtimePlane === 'cloud'
 
   const applyAgentFields = useCallback(
     (agent: {
@@ -328,6 +340,11 @@ const CreateSpaceDialog: React.FC<CreateSpaceDialogProps> = ({
     setCustomRules('')
     setWorkingDir('')
     setWorkingDirType('mixed')
+    setRuntimePlane('local')
+    setCloudSource('empty')
+    setCloudHarness('dsh')
+    setGitUrl('')
+    setGitRef('')
     setIsPickingDir(false)
     setPathLocked(false)
   }, [open, isEditMode, spaceId, daemonTarget, loadAgent, applyAgentFields])
@@ -415,14 +432,14 @@ const CreateSpaceDialog: React.FC<CreateSpaceDialogProps> = ({
   // 硬规则：本机路径已被占用 → 不允许创建/改绑到该路径（与名字无关）。
   const createBlocker = useMemo(
     () =>
-      daemonTarget
+      daemonTarget || isCloudCreate
         ? { blocked: false as const }
         : getSelectedWorkingDirCreateBlocker({
             organizationId: resolveCreateOrganizationId(),
             selectedWorkingDir: workingDir,
             excludeSpaceId: isEditMode ? spaceId ?? undefined : undefined,
           }),
-    [workingDir, isEditMode, spaceId, daemonTarget],
+    [workingDir, isEditMode, spaceId, daemonTarget, isCloudCreate],
   )
   const occupiedBySpace = createBlocker.blocked ? createBlocker.existing : undefined
 
@@ -437,7 +454,7 @@ const CreateSpaceDialog: React.FC<CreateSpaceDialogProps> = ({
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
 
-    if (daemonTarget && !isValidRemoteWorkingDir(workingDir)) {
+    if (!isCloudCreate && daemonTarget && !isValidRemoteWorkingDir(workingDir)) {
       const message = t('create.remoteWorkingDirInvalid', {
         ns: 'space',
         defaultValue: '请输入执行设备上的非根绝对路径',
@@ -446,7 +463,7 @@ const CreateSpaceDialog: React.FC<CreateSpaceDialogProps> = ({
       return
     }
 
-    if (occupiedBySpace) {
+    if (!isCloudCreate && occupiedBySpace) {
       const message =
         pathOccupiedMessage ??
         t('create.workingDirConflict', {
@@ -603,7 +620,7 @@ const CreateSpaceDialog: React.FC<CreateSpaceDialogProps> = ({
       }
 
       const currentDeviceId = useDeviceStore.getState().currentDevice?.id ?? null
-      if (!daemonTarget && !currentDeviceId) {
+      if (!isCloudCreate && !daemonTarget && !currentDeviceId) {
         toast({
           title: t('create.errors.deviceRequired', {
             ns: 'space',
@@ -626,7 +643,7 @@ const CreateSpaceDialog: React.FC<CreateSpaceDialogProps> = ({
         ? workingDirType
         : 'mixed'
 
-      if (!effectiveWorkingDir && !daemonTarget) {
+      if (!isCloudCreate && !effectiveWorkingDir && !daemonTarget) {
         const defaultDir = await window.tabtin?.fileSystem?.ensureDefaultAgentDir({
           organizationName: resolveCreateOrganizationName(organizationId),
           spaceName: effectiveName,
@@ -645,16 +662,71 @@ const CreateSpaceDialog: React.FC<CreateSpaceDialogProps> = ({
         effectiveWorkingDir = defaultDir.path
       }
 
-      const created = await createSpace({
-        organization_id: organizationId,
-        name: effectiveName,
-        description: description.trim() || undefined,
-        device_id: daemonTarget ? undefined : currentDeviceId ?? undefined,
-        device_installation_id: daemonTarget?.installationId,
-        working_dir: effectiveWorkingDir,
-        working_dir_type: effectiveWorkingDirType,
-        custom_rules: customRules.trim() || undefined,
-      })
+      if (isCloudCreate && cloudSource === 'git' && !gitUrl.trim()) {
+        const message = t('create.cloud.gitUrlRequired', {
+          ns: 'space',
+          defaultValue: 'Git 来源必须填写仓库地址',
+        })
+        setFormError(message)
+        return
+      }
+
+      if (isCloudCreate) {
+        const agentState = useSpaceStore.getState()
+        const selectedAgent = agentState.selectedAgent
+        if (!selectedAgent || selectedAgent.organization_id !== organizationId) {
+          const message = t('create.cloud.agentRequired', {
+            ns: 'space',
+            defaultValue: '请先选择当前组织中的 Agent，再创建 Cloud Workspace',
+          })
+          setFormError(message)
+          return
+        }
+        const fullAgent = (
+          agentState.agentCache[selectedAgent.id]
+          ?? await loadAgent(selectedAgent.id, { force: true })
+          ?? selectedAgent
+        )
+        if (fullAgent.agent_config?.harness?.type !== cloudHarness) {
+          const switched = await updateAgent(fullAgent.id, {
+            agent_config: {
+              ...(fullAgent.agent_config ?? {}),
+              harness: { type: cloudHarness },
+            },
+          })
+          if (!switched) {
+            const message = t('create.cloud.harnessSaveFailed', {
+              ns: 'space',
+              defaultValue: 'Cloud Agent Runtime 保存失败，尚未创建 Workspace',
+            })
+            setFormError(message)
+            return
+          }
+        }
+      }
+
+      const created = isCloudCreate
+        ? await createCloudSpace({
+            request_key: crypto.randomUUID(),
+            organization_id: organizationId,
+            name: effectiveName,
+            description: description.trim() || undefined,
+            custom_rules: customRules.trim() || undefined,
+            working_dir_type: workingDirType === 'mixed' ? 'code' : workingDirType,
+            source_type: cloudSource,
+            git_url: cloudSource === 'git' ? gitUrl.trim() : undefined,
+            git_ref: cloudSource === 'git' ? gitRef.trim() || undefined : undefined,
+          })
+        : await createSpace({
+            organization_id: organizationId,
+            name: effectiveName,
+            description: description.trim() || undefined,
+            device_id: daemonTarget ? undefined : currentDeviceId ?? undefined,
+            device_installation_id: daemonTarget?.installationId,
+            working_dir: effectiveWorkingDir,
+            working_dir_type: effectiveWorkingDirType,
+            custom_rules: customRules.trim() || undefined,
+          })
 
       if (!created) {
         const storeError = useSpaceStore.getState().error
@@ -830,6 +902,64 @@ const CreateSpaceDialog: React.FC<CreateSpaceDialogProps> = ({
                   disabled={isCreating}
                 />
               </div>
+              {!isEditMode && !daemonTarget ? (
+                <div className="space-y-2">
+                  <span className="text-body font-medium">
+                    {t('create.runtime.title', {
+                      ns: 'space',
+                      defaultValue: '运行环境',
+                    })}
+                  </span>
+                  <div className="grid grid-cols-2 gap-2">
+                    <button
+                      type="button"
+                      onClick={() => setRuntimePlane('local')}
+                      disabled={isCreating}
+                      className={cn(
+                        'flex items-start gap-2 rounded-md border px-3 py-2 text-left transition-colors',
+                        runtimePlane === 'local'
+                          ? 'border-accent bg-accent/10 text-foreground'
+                          : 'border-border/40 text-muted-foreground hover:border-accent/40',
+                      )}
+                    >
+                      <HardDrive className="mt-0.5 h-4 w-4 shrink-0" />
+                      <span>
+                        <span className="block text-body font-medium">
+                          {t('create.runtime.local', { ns: 'space', defaultValue: '本地' })}
+                        </span>
+                        <span className="block text-caption text-muted-foreground/70">
+                          {t('create.runtime.localHint', { ns: 'space', defaultValue: '使用这台 Mac 的目录' })}
+                        </span>
+                      </span>
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setRuntimePlane('cloud')
+                        setWorkingDirType('code')
+                        setFormError(null)
+                      }}
+                      disabled={isCreating}
+                      className={cn(
+                        'flex items-start gap-2 rounded-md border px-3 py-2 text-left transition-colors',
+                        runtimePlane === 'cloud'
+                          ? 'border-accent bg-accent/10 text-foreground'
+                          : 'border-border/40 text-muted-foreground hover:border-accent/40',
+                      )}
+                    >
+                      <Cloud className="mt-0.5 h-4 w-4 shrink-0" />
+                      <span>
+                        <span className="block text-body font-medium">
+                          {t('create.runtime.cloud', { ns: 'space', defaultValue: '云端托管' })}
+                        </span>
+                        <span className="block text-caption text-muted-foreground/70">
+                          {t('create.runtime.cloudHint', { ns: 'space', defaultValue: '只安装 TabTin，Agent 在云端持续运行' })}
+                        </span>
+                      </span>
+                    </button>
+                  </div>
+                </div>
+              ) : null}
               <div className="space-y-2">
                 <div className="flex items-center gap-1.5">
                   <label
@@ -880,6 +1010,112 @@ const CreateSpaceDialog: React.FC<CreateSpaceDialogProps> = ({
                   </div>
                 </div>
               ) : null}
+              {isCloudCreate ? (
+                <div className="space-y-3 rounded-md border border-border/40 bg-muted/10 p-3">
+                  <div>
+                    <p className="text-body font-medium">
+                      {t('create.cloud.workspaceTitle', {
+                        ns: 'space',
+                        defaultValue: '云端工作目录 /workspace',
+                      })}
+                    </p>
+                    <p className="text-caption text-muted-foreground/70">
+                      {t('create.cloud.authorityHint', {
+                        ns: 'space',
+                        defaultValue: '云端文件是唯一权威；不会强制同步到本机。',
+                      })}
+                    </p>
+                  </div>
+                  <div className="grid grid-cols-2 gap-2">
+                    <button
+                      type="button"
+                      onClick={() => setCloudSource('empty')}
+                      className={cn(
+                        'rounded-md border px-3 py-2 text-caption font-medium',
+                        cloudSource === 'empty'
+                          ? 'border-accent bg-accent/10'
+                          : 'border-border/40 text-muted-foreground',
+                      )}
+                    >
+                      {t('create.cloud.empty', { ns: 'space', defaultValue: '空目录' })}
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setCloudSource('git')}
+                      className={cn(
+                        'flex items-center justify-center gap-1.5 rounded-md border px-3 py-2 text-caption font-medium',
+                        cloudSource === 'git'
+                          ? 'border-accent bg-accent/10'
+                          : 'border-border/40 text-muted-foreground',
+                      )}
+                    >
+                      <GitBranch className="h-3.5 w-3.5" />
+                      Git
+                    </button>
+                  </div>
+                  {cloudSource === 'git' ? (
+                    <div className="space-y-2">
+                      <Input
+                        value={gitUrl}
+                        onChange={(event: React.ChangeEvent<HTMLInputElement>) => setGitUrl(event.target.value)}
+                        placeholder="https://github.com/org/repo.git"
+                        disabled={isCreating}
+                        autoComplete="off"
+                      />
+                      <Input
+                        value={gitRef}
+                        onChange={(event: React.ChangeEvent<HTMLInputElement>) => setGitRef(event.target.value)}
+                        placeholder={t('create.cloud.gitRef', { ns: 'space', defaultValue: '分支或 ref（可选）' })}
+                        disabled={isCreating}
+                        autoComplete="off"
+                      />
+                    </div>
+                  ) : null}
+                  <div
+                    className="space-y-2 border-t border-border/40 pt-3"
+                    data-testid="cloud-harness-selector"
+                  >
+                    <div className="flex items-start gap-2">
+                      <Cpu className="mt-0.5 h-4 w-4 shrink-0 text-muted-foreground" />
+                      <div>
+                        <p className="text-body font-medium">
+                          {t('create.cloud.agentRuntime', {
+                            ns: 'space',
+                            defaultValue: 'Cloud Agent Runtime',
+                          })}
+                        </p>
+                        <p className="text-caption text-muted-foreground/70">
+                          {selectedAgent
+                            ? `当前 Agent：${selectedAgent.name}`
+                            : '尚未选择 Agent'}
+                        </p>
+                      </div>
+                    </div>
+                    <div className="grid grid-cols-2 gap-2">
+                      {(['dsh', 'builtin'] as const).map((value) => (
+                        <button
+                          key={value}
+                          type="button"
+                          onClick={() => setCloudHarness(value)}
+                          disabled={isCreating}
+                          aria-pressed={cloudHarness === value}
+                          className={cn(
+                            'rounded-md border px-3 py-2 text-caption font-medium',
+                            cloudHarness === value
+                              ? 'border-accent bg-accent/10'
+                              : 'border-border/40 text-muted-foreground',
+                          )}
+                        >
+                          {value === 'dsh' ? 'DeepSeek DSH（默认）' : 'TabTin Builtin'}
+                        </button>
+                      ))}
+                    </div>
+                    <p className="text-caption text-muted-foreground/70">
+                      DSH 只在 Cloud Workspace 运行；该选择会保存到当前 Agent，本地 Workspace 不会静默降级为 Builtin。
+                    </p>
+                  </div>
+                </div>
+              ) : (
               <div className="space-y-2">
                 <div className="flex items-center gap-1.5">
                   <span className="flex items-center gap-1.5 text-body font-medium">
@@ -1060,6 +1296,7 @@ const CreateSpaceDialog: React.FC<CreateSpaceDialogProps> = ({
                   </div>
                 ) : null}
               </div>
+              )}
               {pathOccupiedMessage || formError ? (
                 <p
                   role="alert"

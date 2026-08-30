@@ -57,11 +57,7 @@ class AgentService(BaseService):
     VALID_PRESETS = {'cautious', 'collaborative', 'full_auto'}
     VALID_CATEGORIES = {'read', 'write', 'install', 'delete_system', 'script'}
     VALID_ACTIONS = {'auto', 'confirm'}
-    VALID_AGENT_BACKEND_TYPES = {'builtin'}
-    CURRENT_BACKEND_CONFIG_VERSION = V2_SCHEMA_VERSION
-    _DEPRECATED_BACKEND_FIELDS = {'execution_mode', 'legacy_mode', 'skip_permissions'}
-
-    VALID_RUNTIME_PLANES = {'local', 'cloud'}
+    VALID_HARNESS_TYPES = {'builtin', 'dsh'}
     VALID_COMMAND_EXECUTION = {'sandboxed', 'regular', 'blocked'}
     VALID_TERMINAL_MODES = {'tabtin_only', 'sandboxed', 'regular', 'blocked'}
     VALID_SANDBOX_LEVEL = {'filesystem', 'complete'}
@@ -86,9 +82,9 @@ class AgentService(BaseService):
 
     # ── v2 形状 SSoT（W2.1.0 决议 §2）─────────────────────────────────
     # DEFAULT_AGENT_CONFIG 由 build_default_agent_config_v2 构造，保证：
-    #   - schema_version=2 / runtime_plane=local / capabilities.overrides 7 分组
+    #   - schema_version=2 / capabilities.overrides 7 分组
     #   - conversation.cross_turn_memory + max_history_messages
-    #   - agent_backend.type=builtin（VALID_AGENT_BACKEND_TYPES）
+    #   - harness.type=builtin（VALID_HARNESS_TYPES）
     #   - 顶层 workspace_root + git_status
     #   - **不带** memory（D2 / 由 TabMemo 后续专题处理）
     # 调用方应把它当不可变模板：每次 prepare 用 deepcopy。
@@ -662,17 +658,20 @@ class AgentService(BaseService):
                 else:
                     security['allow_yolo_mode'] = grant != 'always_ask'
 
-        rp = incoming.get('runtime_plane')
-        if rp is not None and rp not in self.VALID_RUNTIME_PLANES:
-            incoming['runtime_plane'] = 'local'
-
-        agent_backend = incoming.get('agent_backend')
-        if isinstance(agent_backend, dict):
-            backend_type = agent_backend.get('type', 'builtin')
-            if backend_type not in self.VALID_AGENT_BACKEND_TYPES:
-                agent_backend['type'] = 'builtin'
-            self._migrate_backend_config(agent_backend)
-            incoming['agent_backend'] = agent_backend
+        # Agent owns only the Harness choice. Runtime plane is an execution
+        # projection derived from Workspace.device.type and is never persisted
+        # or accepted here. Drop retired keys on internal service call paths as
+        # defense in depth; the public Pydantic boundary rejects them.
+        incoming.pop('runtime_plane', None)
+        incoming.pop('agent_backend', None)
+        harness = incoming.get('harness')
+        if isinstance(harness, dict):
+            harness_type = harness.get('type', 'builtin')
+            incoming['harness'] = {
+                'type': harness_type
+                if harness_type in self.VALID_HARNESS_TYPES
+                else 'builtin',
+            }
 
         # ── 2. capabilities.overrides 各分组校验 ─────────────────────────
         capabilities = incoming.get('capabilities')
@@ -855,23 +854,6 @@ class AgentService(BaseService):
                     k: v for k, v in rules.items()
                     if k in self.VALID_CATEGORIES and v in self.VALID_ACTIONS
                 }
-
-    def _migrate_backend_config(self, agent_backend: Dict[str, Any]) -> None:
-        config_version = agent_backend.get('config_version', 1)
-        if config_version < self.CURRENT_BACKEND_CONFIG_VERSION:
-            _logger.info(
-                "Migrating agent_backend config from v%d to v%d",
-                config_version, self.CURRENT_BACKEND_CONFIG_VERSION,
-            )
-        for field in self._DEPRECATED_BACKEND_FIELDS:
-            if field in agent_backend:
-                del agent_backend[field]
-
-        # ACP cleanup: drop legacy acp_config sub-dict if present
-        if 'acp_config' in agent_backend:
-            del agent_backend['acp_config']
-
-        agent_backend['config_version'] = self.CURRENT_BACKEND_CONFIG_VERSION
 
     @staticmethod
     def _deep_merge(base: Dict[str, Any], patch: Dict[str, Any]) -> None:

@@ -228,6 +228,72 @@ class RunHostLease(models.Model):
         ]
 
 
+class RuntimeBinding(models.Model):
+    """Persistent Driver session binding for one Workspace conversation."""
+
+    class Harness(models.TextChoices):
+        BUILTIN = 'builtin', 'Builtin'
+        DSH = 'dsh', 'DSH'
+
+    class State(models.TextChoices):
+        ACTIVE = 'active', 'Active'
+        SUSPENDED = 'suspended', 'Suspended'
+        CLOSED = 'closed', 'Closed'
+        ERROR = 'error', 'Error'
+
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    organization = models.ForeignKey(
+        'tabtinspace.Organization',
+        on_delete=models.CASCADE,
+        related_name='+',
+    )
+    workspace = models.ForeignKey(
+        'tabtinspace.Workspace',
+        on_delete=models.CASCADE,
+        related_name='runtime_bindings',
+    )
+    allocation = models.ForeignKey(
+        'tabtinspace.CloudRuntimeAllocation',
+        on_delete=models.CASCADE,
+        null=True,
+        blank=True,
+        related_name='runtime_bindings',
+    )
+    thread_id = models.CharField(max_length=128)
+    harness = models.CharField(max_length=16, choices=Harness.choices)
+    driver_session_ref = models.JSONField(default=dict, blank=True)
+    state = models.CharField(
+        max_length=16,
+        choices=State.choices,
+        default=State.ACTIVE,
+        db_index=True,
+    )
+    host_generation = models.PositiveBigIntegerField(default=1)
+    revision = models.PositiveBigIntegerField(default=1)
+    last_error = models.TextField(blank=True, default='')
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        db_table = 'agent_engine_runtime_bindings'
+        constraints = [
+            models.UniqueConstraint(
+                fields=['organization', 'workspace', 'thread_id', 'harness'],
+                name='uq_runtime_binding_identity',
+            ),
+        ]
+        indexes = [
+            models.Index(
+                fields=['allocation', 'state'],
+                name='idx_runtime_binding_alloc',
+            ),
+            models.Index(
+                fields=['organization', 'state'],
+                name='idx_runtime_binding_org',
+            ),
+        ]
+
+
 class SessionReadReceipt(models.Model):
     """用户在会话上的单调阅读水位；同一账号的所有设备共享。"""
 

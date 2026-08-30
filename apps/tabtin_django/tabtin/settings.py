@@ -45,6 +45,25 @@ TABTIN_EDITION = TABTIN_EDITION_CONFIGURATION.edition.value
 TABTIN_STARTUP_POLICY = resolve_startup_policy(os.environ)
 IS_COMMUNITY_EDITION = TABTIN_EDITION_CONFIGURATION.edition is TabTinEdition.COMMUNITY
 
+# Cloud Agent v1. Runtime images must be immutable digests in deployed
+# environments; an empty value disables provisioning instead of floating to
+# an unpinned image.
+TABTIN_CLOUD_RUNTIME_IMAGE = os.getenv('TABTIN_CLOUD_RUNTIME_IMAGE', '').strip()
+TABTIN_CLOUD_WORKER_PROTOCOL_VERSION = os.getenv(
+    'TABTIN_CLOUD_WORKER_PROTOCOL_VERSION',
+    '1',
+).strip()
+TABTIN_CLOUD_MAX_ACTIVE_WORKSPACES_PER_USER = int(
+    os.getenv('TABTIN_CLOUD_MAX_ACTIVE_WORKSPACES_PER_USER', '1')
+)
+TABTIN_CLOUD_DISABLED_RETENTION_DAYS = int(
+    os.getenv('TABTIN_CLOUD_DISABLED_RETENTION_DAYS', '30')
+)
+# Secret JSON map: {"node-key":{"endpoint":"https://...","token":"..."}}.
+# Endpoint and token are bound in one server-owned config so a database-only
+# endpoint mutation can never redirect Worker credentials.
+TABTIN_CLOUD_WORKERS_JSON = os.getenv('TABTIN_CLOUD_WORKERS_JSON', '{}')
+
 
 def _edition_endpoint(
     key: str,

@@ -42,6 +42,16 @@ def restore_organization_member_im_access_task(
 
 
 TABTINSPACE_BEAT_SCHEDULE = {
+    "reconcile-cloud-runtime-allocations": {
+        "task": "tabtinspace.reconcile_cloud_runtime_allocations",
+        "schedule": 10,
+        "options": {"expires": 8},
+    },
+    "heartbeat-cloud-worker-nodes": {
+        "task": "tabtinspace.heartbeat_cloud_worker_nodes",
+        "schedule": 30,
+        "options": {"expires": 25},
+    },
     "reconcile-context-items": {
         "task": "tabtinspace.reconcile_context_items",
         "schedule": 3600,
@@ -88,6 +98,96 @@ TABTINSPACE_BEAT_SCHEDULE = {
         "options": {"expires": 240},
     },
 }
+
+
+@shared_task(
+    name="tabtinspace.reconcile_cloud_runtime_allocations",
+    ignore_result=True,
+    time_limit=240,
+    soft_time_limit=220,
+)
+def reconcile_cloud_runtime_allocations():
+    from apps.tabtinspace.services.cloud_allocation_reconciler import (
+        CloudAllocationReconciler,
+    )
+
+    result = CloudAllocationReconciler().reconcile_due(limit=20)
+    if result["ready"] or result["error"]:
+        logger.info("[CloudRuntime] allocation reconcile result=%s", result)
+    return result
+
+
+@shared_task(
+    name="tabtinspace.heartbeat_cloud_worker_nodes",
+    ignore_result=True,
+    time_limit=60,
+    soft_time_limit=50,
+)
+def heartbeat_cloud_worker_nodes():
+    from django.conf import settings
+    from django.utils import timezone
+
+    from apps.tabtinspace.models import CloudWorkerNode
+    from apps.tabtinspace.services.cloud_worker_client import CloudWorkerClient
+    from apps.tabtinspace.services.cloud_worker_registry import CloudWorkerRegistry
+
+    registry = CloudWorkerRegistry().sync_configured()
+    active_keys = registry["active_keys"]
+    client = CloudWorkerClient(timeout_seconds=5)
+    expected_protocol = str(
+        getattr(settings, "TABTIN_CLOUD_WORKER_PROTOCOL_VERSION", "1")
+    )
+    result = {"ready": 0, "error": 0}
+    for worker in CloudWorkerNode.objects.filter(
+        node_key__in=active_keys,
+    ).exclude(state=CloudWorkerNode.State.DRAINING).iterator():
+        try:
+            health = client.health(worker)
+            if (
+                health.get("ok") is not True
+                or str(health.get("protocolVersion")) != expected_protocol
+                or str(health.get("runtimeVersion") or "")
+                != str(
+                    (worker.metadata_json or {}).get("expected_runtime_version")
+                    or ""
+                )
+                or str(health.get("storageQuotaMode") or "")
+                != str(
+                    (worker.metadata_json or {}).get(
+                        "expected_storage_quota_mode"
+                    )
+                    or ""
+                )
+                or str(health.get("resourceIsolationMode") or "")
+                != str(
+                    (worker.metadata_json or {}).get(
+                        "expected_resource_isolation_mode"
+                    )
+                    or ""
+                )
+            ):
+                raise RuntimeError("Cloud Worker protocol/runtime/storage mismatch")
+            worker.state = CloudWorkerNode.State.READY
+            worker.runtime_version = str(health.get("runtimeVersion") or "")
+            worker.last_heartbeat_at = timezone.now()
+            worker.save(
+                update_fields=[
+                    "state",
+                    "runtime_version",
+                    "last_heartbeat_at",
+                    "updated_at",
+                ]
+            )
+            result["ready"] += 1
+        except Exception:
+            worker.state = CloudWorkerNode.State.ERROR
+            worker.save(update_fields=["state", "updated_at"])
+            result["error"] += 1
+            logger.warning(
+                "[CloudRuntime] Worker heartbeat failed node=%s",
+                worker.node_key,
+            )
+    return result
 
 
 @shared_task(

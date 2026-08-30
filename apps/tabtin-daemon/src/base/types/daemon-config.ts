@@ -1,4 +1,7 @@
 export interface DaemonConfig {
+  device_type?: 'daemon' | 'cloud'
+  cloud_generation?: number
+  workspace_root?: string
   server_url: string
   ws_url: string
   device_id: string
@@ -13,7 +16,6 @@ export interface DaemonConfig {
   log_file: string | null
   heartbeat_interval_ms: number
   proxy: string | null
-  workspace_root?: string
   sentry_dsn?: string | null
   daemon_control_enabled?: boolean
   daemon_control_api_base_url?: string | null
@@ -24,6 +26,7 @@ export const DEFAULT_CONFIG: Omit<
   DaemonConfig,
   'server_url' | 'ws_url' | 'device_id' | 'fingerprint' | 'credential' | 'organization_id' | 'device_name'
 > = {
+  device_type: 'daemon',
   plugins: [],
   capabilities: ['terminal_execute', 'file'],
   log_level: 'info',
@@ -39,6 +42,11 @@ export interface InstallToken {
   device_name: string
   expires_at: string
   scope: 'device_register'
+  device_type?: 'daemon' | 'cloud'
+  expected_fingerprint?: string
+  cloud_allocation_id?: string
+  cloud_generation?: number
+  workspace_root?: string
   server_url: string
   ws_url: string
 }

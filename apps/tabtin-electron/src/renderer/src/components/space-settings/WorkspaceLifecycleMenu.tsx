@@ -10,6 +10,8 @@ import {
   AlertTriangle,
   Trash2,
   Archive,
+  Power,
+  RotateCcw,
 } from 'lucide-react'
 import {
   Button,
@@ -32,6 +34,7 @@ import {
 } from '@components/settings/settingsUi'
 import { cn } from '@utils/cn'
 import type { Space } from '@tabtin/app-shell'
+import { WorkspaceApiService } from '@tabtin/app-shell'
 import { useSpaceDeleteGuard } from './hooks/useSpaceDeleteGuard'
 
 interface WorkspaceLifecycleMenuProps {
@@ -43,11 +46,12 @@ export const WorkspaceLifecycleMenu: React.FC<WorkspaceLifecycleMenuProps> = ({
 }) => {
   const { t } = useTranslation('space')
   const agent = useSpaceStore((state) => state.selectedAgent)
-  const { deleteSpace, archiveSpace, loadSpaces, isLoading } = useSpaceStore(
+  const { deleteSpace, archiveSpace, loadSpaces, watchCloudSpace, isLoading } = useSpaceStore(
     useShallow((s) => ({
       deleteSpace: s.deleteSpace,
       archiveSpace: s.archiveSpace,
       loadSpaces: s.loadSpaces,
+      watchCloudSpace: s.watchCloudSpace,
       isLoading: s.isLoading,
     })),
   )
@@ -72,13 +76,17 @@ export const WorkspaceLifecycleMenu: React.FC<WorkspaceLifecycleMenuProps> = ({
 
   const deleteGuard = useSpaceDeleteGuard(space)
   const lifecycleDisabled =
-    deleteGuard.isResolving || deleteGuard.isRemoteViewer
+    space.runtime_plane === 'cloud'
+      ? false
+      : deleteGuard.isResolving || deleteGuard.isRemoteViewer
+  const isCloud = space.runtime_plane === 'cloud' && Boolean(space.cloud)
 
   const [trashConfirmOpen, setTrashConfirmOpen] = useState(false)
   const [archiveConfirmOpen, setArchiveConfirmOpen] = useState(false)
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
   const [deleteInputValue, setDeleteInputValue] = useState('')
   const [dangerError, setDangerError] = useState('')
+  const [cloudBusy, setCloudBusy] = useState(false)
 
   if (!canManage) return null
 
@@ -119,15 +127,23 @@ export const WorkspaceLifecycleMenu: React.FC<WorkspaceLifecycleMenuProps> = ({
       setDangerError(msg)
       throw new Error(msg)
     }
-    const ok = await confirmDirtyBeforeSpaceDelete({
-      spaceId: space.id,
-      spaceName: space.name,
-    })
-    if (!ok) {
-      const msg = t('errors.deleteCancelled', { defaultValue: '删除已取消' })
-      setDangerError(msg)
-      throw new Error(msg)
+    if (isCloud) {
+      await WorkspaceApiService.permanentlyDeleteCloud(
+        space.id,
+        deleteInputValue.trim(),
+      )
+      if (space.organization_id) await loadSpaces(space.organization_id)
+      return
     }
+    const ok = await confirmDirtyBeforeSpaceDelete({
+        spaceId: space.id,
+        spaceName: space.name,
+      })
+    if (!ok) {
+        const msg = t('errors.deleteCancelled', { defaultValue: '删除已取消' })
+        setDangerError(msg)
+        throw new Error(msg)
+      }
     const deleted = await deleteSpace(space.id)
     if (!deleted) {
       const msg = useSpaceStore.getState().error ?? t('errors.deleteFailed')
@@ -136,6 +152,29 @@ export const WorkspaceLifecycleMenu: React.FC<WorkspaceLifecycleMenuProps> = ({
     }
     if (space.organization_id) {
       void loadSpaces(space.organization_id).catch(() => {})
+    }
+  }
+
+  const handleCloudAction = async (
+    action: 'disable' | 'restart' | 'restore',
+  ) => {
+    setCloudBusy(true)
+    setDangerError('')
+    try {
+      await WorkspaceApiService.cloudAction(space.id, action)
+      if (space.organization_id) await loadSpaces(space.organization_id)
+      watchCloudSpace(space.id)
+      toast({
+        title: action === 'disable'
+          ? '云端运行环境已停用，文件保留 30 天'
+          : action === 'restore'
+            ? '已恢复容器，等待 Cloud Agent 心跳确认'
+            : '已重启容器，等待 Cloud Agent 心跳确认',
+      })
+    } catch (error) {
+      setDangerError(error instanceof Error ? error.message : String(error))
+    } finally {
+      setCloudBusy(false)
     }
   }
 
@@ -197,6 +236,58 @@ export const WorkspaceLifecycleMenu: React.FC<WorkspaceLifecycleMenuProps> = ({
           </div>
         )}
 
+        {isCloud ? (
+          <div className="space-y-2 py-2" data-testid="cloud-workspace-lifecycle">
+            <div className="flex items-center justify-between gap-4">
+              <div className="min-w-0">
+                <div className="text-body font-medium text-foreground">
+                  云端运行环境
+                </div>
+                <div className={SETTINGS_HINT}>
+                  当前状态：{space.cloud?.state}。停用后云端文件保留 30 天，不同步到本机。
+                </div>
+              </div>
+              <div className="flex shrink-0 gap-2">
+                {space.cloud?.state === 'disabled' ? (
+                  <Button
+                    type="button"
+                    variant="outline"
+                    onClick={() => void handleCloudAction('restore')}
+                    disabled={cloudBusy}
+                    className={cn('gap-1', SETTINGS_CONTROL_SM)}
+                  >
+                    <RotateCcw className="h-3.5 w-3.5" />
+                    恢复
+                  </Button>
+                ) : (
+                  <>
+                    <Button
+                      type="button"
+                      variant="outline"
+                      onClick={() => void handleCloudAction('restart')}
+                      disabled={cloudBusy || space.cloud?.state !== 'ready'}
+                      className={cn('gap-1', SETTINGS_CONTROL_SM)}
+                    >
+                      <RotateCcw className="h-3.5 w-3.5" />
+                      重启
+                    </Button>
+                    <Button
+                      type="button"
+                      variant="outline"
+                      onClick={() => void handleCloudAction('disable')}
+                      disabled={cloudBusy || space.cloud?.state !== 'ready'}
+                      className={cn('gap-1', SETTINGS_CONTROL_SM)}
+                    >
+                      <Power className="h-3.5 w-3.5" />
+                      停用
+                    </Button>
+                  </>
+                )}
+              </div>
+            </div>
+          </div>
+        ) : null}
+
         <div className="flex items-center justify-between gap-4 py-2">
           <div className="min-w-0">
             <div className="text-body font-medium text-foreground">
@@ -212,7 +303,7 @@ export const WorkspaceLifecycleMenu: React.FC<WorkspaceLifecycleMenuProps> = ({
               setDeleteInputValue('')
               setDeleteDialogOpen(true)
             }}
-            disabled={isLoading || !deleteGuard.canDelete}
+            disabled={isLoading || cloudBusy || (!isCloud && !deleteGuard.canDelete)}
             className={cn(
               'shrink-0 gap-1 text-destructive/70 hover:text-destructive hover:bg-destructive/5',
               SETTINGS_CONTROL_SM,
@@ -223,7 +314,7 @@ export const WorkspaceLifecycleMenu: React.FC<WorkspaceLifecycleMenuProps> = ({
           </Button>
         </div>
 
-        {deleteGuard.blockReason === 'remote' && (
+        {!isCloud && deleteGuard.blockReason === 'remote' && (
           <p className={cn(SETTINGS_HINT, 'pt-1')}>
             {deleteGuard.controlDeviceName
               ? t('danger.remoteLifecycleHintWithDevice', {
@@ -236,7 +327,7 @@ export const WorkspaceLifecycleMenu: React.FC<WorkspaceLifecycleMenuProps> = ({
                 })}
           </p>
         )}
-        {deleteGuard.blockReason === 'last-space' && (
+        {!isCloud && deleteGuard.blockReason === 'last-space' && (
           <p className={cn(SETTINGS_HINT, 'pt-1')}>
             {t('danger.lastSpaceHint', {
               defaultValue:
@@ -244,7 +335,7 @@ export const WorkspaceLifecycleMenu: React.FC<WorkspaceLifecycleMenuProps> = ({
             })}
           </p>
         )}
-        {deleteGuard.blockReason === 'resolving' && (
+        {!isCloud && deleteGuard.blockReason === 'resolving' && (
           <p className={cn(SETTINGS_HINT, 'pt-1')}>
             {t('danger.deviceResolvingHint', {
               defaultValue: '正在识别本机设备，请稍候再试删除或移入回收站。',
@@ -267,7 +358,11 @@ export const WorkspaceLifecycleMenu: React.FC<WorkspaceLifecycleMenuProps> = ({
         }}
         title={t('confirm.title')}
         subtitle={t('confirm.subtitle')}
-        items={[
+        items={isCloud ? [
+          `永久删除云端工作目录 /workspace 及其全部文件：${space.name}`,
+          '删除后不可恢复；Agent 身份与组织文档不受影响',
+          '本机没有必须保留的同步副本',
+        ] : [
           t('confirm.items.spaceOnly', {
             name: space.name,
             defaultValue: `只删除工作空间记录和必要关系：${space.name}`,
@@ -287,14 +382,16 @@ export const WorkspaceLifecycleMenu: React.FC<WorkspaceLifecycleMenuProps> = ({
                 defaultValue: '本机工作目录不会被删除',
               }),
         ]}
-        warning={t('confirm.warning')}
+        warning={isCloud
+          ? '这是不可逆操作：云端卷和 Runtime Binding 会被永久删除。'
+          : t('confirm.warning')}
         inputLabel={t('confirm.inputLabel')}
         inputPlaceholder={space.name}
         inputValue={deleteInputValue}
         onInputChange={setDeleteInputValue}
         expectedValue={space.name}
         error={dangerError}
-        isLoading={isLoading}
+        isLoading={isLoading || cloudBusy}
         confirmText={t('actions.confirmDelete')}
         cancelText={t('actions.cancel')}
         onConfirm={handleDelete}
