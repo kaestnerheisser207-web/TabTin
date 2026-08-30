@@ -29,6 +29,8 @@
     "clean": "rm -rf dist"
   },
   "dependencies": {
+    "@deepseek-ai/dsh": "0.1.1-rc.2",
+    "@deepseek-ai/dsh-host-apiproxy": "0.1.1-rc.2",
     "@anush008/tokenizers": "0.6.0",
     "@electric-sql/pglite": "^0.2.0",
     "@sentry/node": "^10.62.0",

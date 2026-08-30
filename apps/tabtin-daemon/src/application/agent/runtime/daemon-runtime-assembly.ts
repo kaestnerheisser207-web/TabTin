@@ -273,6 +273,8 @@ import {
   daemonRuntimeExtraKeysMatch,
   normalizeDaemonRuntimeExtraKey
 } from './daemon-runtime-key.js'
+import { DshApiClient } from './dsh-api-client.js'
+import { DshRuntimeDriver } from './dsh-runtime-driver.js'
 
 // pending-input 超时常量（仅装配路径 createRuntimeForSession → waitForUserInput 使用）。
 const PENDING_INPUT_TIMEOUT_MS = 24 * 60 * 60 * 1000;
@@ -385,6 +387,7 @@ export class DaemonRuntimeAssembly {
   private backendRegistry: ExecutionBackendRegistry | null = null;
   private lspInitialized = false;
   private readonly contextCatalog = new RuntimeContextCatalog();
+  private _dshDriver: DshRuntimeDriver | null = null
 
   /**
    * 懒建 RuntimeSessionFactory：session bag = DaemonHostState 直挂
@@ -470,6 +473,7 @@ export class DaemonRuntimeAssembly {
    * factory 内部按 teardown 后是否仍指向旧引用统一删除（与 Electron 对称）。
    */
   private async teardownForRebuild(existing: DaemonHostState): Promise<void> {
+    await Promise.resolve(existing.runtime.abort()).catch(() => undefined)
     // Phase 3 F1 语义：只清本 session 的 HITL，别误杀其它 session。
     cancelAllPendingHitlRequests({
       hitlMap: this.ports.session.interactionRegistry,
@@ -651,7 +655,7 @@ export class DaemonRuntimeAssembly {
     const normalizedWorkingDirType = cacheKey.workingDirType;
 
     const {
-      runtime,
+      runtime: builtinRuntime,
       sessionStorage,
       snapshotStorage,
       eventStorage,
@@ -695,6 +699,19 @@ export class DaemonRuntimeAssembly {
       input.cloudPressureThresholds,
       carryForward?.subagentManager,
     );
+    let runtime: import('@tabtin/agent-host/runtime').HostedRuntime = builtinRuntime
+    if (cacheKey.harness === 'dsh') {
+      const dshSession = await this.getDshDriver().create({
+        threadId: input.threadId ?? sessionId,
+        workspaceId: input.workspaceId,
+        workspaceRoot: this.ports.workspaceRoot ?? '/workspace',
+        owner: {
+          userId: input.owner.userId,
+          organizationId: input.owner.organizationId,
+        },
+      })
+      runtime = dshSession.runtime
+    }
     const abortController = new AbortController();
     const existing = this.ports.session.sessions.get(sessionId);
     const pauseController = existing?.pauseController ?? new SessionPauseController();
@@ -732,9 +749,26 @@ export class DaemonRuntimeAssembly {
     this.ports.applyPendingPauseToSession(sessionId, fileHistoryThreadId, pauseController);
 
     this.ports.logger.info(
-      `[DaemonAgentHost] Runtime created for session=${sessionId.slice(0, 8)}…, model=${input.modelId}, mode=${agentMode}, space=${input.spaceId ?? 'n/a'}`,
+      `[DaemonAgentHost] Runtime created for session=${sessionId.slice(0, 8)}…, harness=${cacheKey.harness}, model=${input.modelId}, mode=${agentMode}, space=${input.spaceId ?? 'n/a'}`,
     );
     return state;
+  }
+
+  private getDshDriver(): DshRuntimeDriver {
+    if (!this._dshDriver) {
+      const client = new DshApiClient(
+        process.env.TABTIN_DSH_API_URL ?? 'http://127.0.0.1:3080',
+      )
+      this._dshDriver = new DshRuntimeDriver(client, {
+        request: input => this.ports.session.getHost().interactions.waitForInput({
+          requestId: input.requestId,
+          conversationId: input.conversationId,
+          timeoutMs: input.timeoutMs,
+          timeoutValue: input.timeoutValue,
+        }),
+      })
+    }
+    return this._dshDriver
   }
 
   private async createRuntimeForSession(

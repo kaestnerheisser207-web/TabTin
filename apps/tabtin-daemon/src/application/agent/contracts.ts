@@ -1,11 +1,10 @@
 import type { AgentModeName } from '@tabtin/agent-modes'
 import type { AppContext } from '@tabtin/agent-host/hooks'
 import type { NativeBackendBootstrapResult } from '@tabtin/agent-host/native'
-import type { RuntimeCacheKey } from '@tabtin/agent-host/runtime'
+import type { HostedRuntime, RuntimeCacheKey } from '@tabtin/agent-host/runtime'
 import type { AttachmentStrategy } from '@tabtin/agent-host/configuration'
 import type { WorkingDirType } from '@tabtin/agent-prompt'
 import type {
-  AgentRuntime,
   ContentBlock,
   EngineConfig,
   EventEmitter,
@@ -31,6 +30,8 @@ import type {
 import type { DaemonToolProvider } from './daemon-tool-provider.js'
 
 export interface DaemonQueryRequestContract {
+  /** Agent Harness; local/cloud execution plane is resolved from Workspace. */
+  harness?: import('@tabtin/agent-host/runtime').RuntimeHarness
   prompt: string
   runId?: string
   sessionId: string
@@ -122,7 +123,7 @@ export interface RuntimeCarryForwardContract {
 }
 
 export interface DaemonHostStateContract extends RuntimeCacheKey {
-  runtime: AgentRuntime
+  runtime: HostedRuntime
   sessionId: string
   businessThreadId: string
   fileHistoryThreadId: string

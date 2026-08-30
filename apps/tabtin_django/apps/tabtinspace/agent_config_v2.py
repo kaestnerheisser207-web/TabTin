@@ -28,6 +28,7 @@ from copy import deepcopy
 from typing import Any, Dict, List, Optional
 
 V2_SCHEMA_VERSION = 2
+VALID_HARNESS_TYPES = {"builtin", "dsh"}
 
 CAPABILITY_GROUPS: List[str] = [
     "cost",
@@ -50,7 +51,9 @@ def build_default_agent_config_v2() -> Dict[str, Any]:
     """
     return {
         "schema_version": V2_SCHEMA_VERSION,
-        "runtime_plane": "local",
+        "harness": {
+            "type": "builtin",
+        },
         "security": {
             "allow_yolo_mode": None,
         },
@@ -70,10 +73,6 @@ def build_default_agent_config_v2() -> Dict[str, Any]:
         },
         "workspace_root": "",
         "git_status": {},
-        "agent_backend": {
-            "type": "builtin",
-            "config_version": V2_SCHEMA_VERSION,
-        },
     }
 
 
@@ -199,17 +198,11 @@ def migrate_v1_to_v2(cfg: Optional[Dict[str, Any]]) -> Dict[str, Any]:
     if isinstance(cfg.get("git_status"), dict):
         out["git_status"] = deepcopy(cfg["git_status"])
 
-    # agent_backend
-    v1_backend = cfg.get("agent_backend")
-    if isinstance(v1_backend, dict):
-        backend_out = deepcopy(v1_backend)
-    else:
-        backend_out = {}
-    backend_out["type"] = "builtin"
-    backend_out["config_version"] = V2_SCHEMA_VERSION
-    for deprecated in ("execution_mode", "legacy_mode", "skip_permissions", "acp_config"):
-        backend_out.pop(deprecated, None)
-    out["agent_backend"] = backend_out
+    # Harness belongs to Agent. Runtime plane belongs to Workspace Device and
+    # must never be copied into Agent configuration.
+    harness = cfg.get("harness")
+    if isinstance(harness, dict) and harness.get("type") in VALID_HARNESS_TYPES:
+        out["harness"] = {"type": harness["type"]}
 
     # conversation
     conv = cfg.get("conversation")
@@ -250,7 +243,7 @@ def migrate_v1_to_v2(cfg: Optional[Dict[str, Any]]) -> Dict[str, Any]:
     # 保留未知顶层字段
     _SKIP_KEYS = (
         "schema_version", "runtime_plane", "authorization_preset",
-        "capabilities", "conversation", "soul", "agent_backend",
+        "capabilities", "conversation", "soul", "agent_backend", "harness",
         "workspace_root", "git_status", "memory", "security",
         "execution_env", "permission_mode", "approval_memo",
         "terminal_mode", "operation_switches", "sandbox", "sql_mode",
@@ -282,7 +275,7 @@ def strip_retired_agent_config_fields(
       - ``security.yolo_mode``（v3 改名前的旧键；归一到 allow_yolo_mode 后丢弃）
 
     **保留**一切活跃字段：cost / security（``approval_grant`` + legacy
-    ``allow_yolo_mode``）/ conversation / agent_backend / memory /
+    ``allow_yolo_mode``）/ conversation / harness / memory /
     workspace_root / git_status / approval_memo 等——尤其 ``approval_memo``
     与  的 ``approval_grant`` 是用户授权数据，本函数绝不触碰。
 

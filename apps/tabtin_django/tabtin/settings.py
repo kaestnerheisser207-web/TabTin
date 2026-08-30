@@ -46,6 +46,55 @@ TABTIN_STARTUP_POLICY = resolve_startup_policy(os.environ)
 IS_COMMUNITY_EDITION = TABTIN_EDITION_CONFIGURATION.edition is TabTinEdition.COMMUNITY
 
 
+def _bounded_text_env_or_file(key: str, default: str, *, max_bytes: int) -> str:
+    """Resolve bounded structured config from KEY or KEY_FILE."""
+
+    file_name = os.environ.get(f'{key}_FILE', '').strip()
+    if file_name:
+        try:
+            raw = Path(file_name).read_bytes()
+        except OSError as exc:
+            raise ImproperlyConfigured(f'无法读取配置文件: {key}_FILE') from exc
+        if not raw or len(raw) > max_bytes or b'\x00' in raw:
+            raise ImproperlyConfigured(f'配置文件内容无效: {key}_FILE')
+        try:
+            value = raw.decode('utf-8').strip()
+        except UnicodeDecodeError as exc:
+            raise ImproperlyConfigured(f'配置文件必须是 UTF-8: {key}_FILE') from exc
+        if not value:
+            raise ImproperlyConfigured(f'配置文件内容为空: {key}_FILE')
+        return value
+    value = os.environ.get(key)
+    if value is None:
+        return default
+    encoded = value.encode('utf-8')
+    if not value.strip() or len(encoded) > max_bytes or b'\x00' in encoded:
+        raise ImproperlyConfigured(f'环境变量内容无效: {key}')
+    return value.strip()
+
+
+# Cloud Agent v1. Runtime images must be immutable digests in deployed
+# environments; an empty value disables provisioning instead of floating to
+# an unpinned image.
+TABTIN_CLOUD_RUNTIME_IMAGE = os.getenv('TABTIN_CLOUD_RUNTIME_IMAGE', '').strip()
+TABTIN_CLOUD_WORKER_PROTOCOL_VERSION = os.getenv(
+    'TABTIN_CLOUD_WORKER_PROTOCOL_VERSION',
+    '1',
+).strip()
+TABTIN_CLOUD_MAX_ACTIVE_WORKSPACES_PER_USER = int(
+    os.getenv('TABTIN_CLOUD_MAX_ACTIVE_WORKSPACES_PER_USER', '1')
+)
+TABTIN_CLOUD_DISABLED_RETENTION_DAYS = int(
+    os.getenv('TABTIN_CLOUD_DISABLED_RETENTION_DAYS', '30')
+)
+# Secret JSON map: {"node-key":{"endpoint":"https://...","token":"..."}}.
+# Endpoint and token are bound in one server-owned config so a database-only
+# endpoint mutation can never redirect Worker credentials.
+TABTIN_CLOUD_WORKERS_JSON = _bounded_text_env_or_file(
+    'TABTIN_CLOUD_WORKERS_JSON',
+    '{}',
+    max_bytes=64 * 1024,
+)
 def _edition_endpoint(
     key: str,
     *,

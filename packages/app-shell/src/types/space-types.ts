@@ -7,17 +7,6 @@
 
 export type SpaceStatus = 'active' | 'paused' | 'completed' | 'archived'
 
-/**
- * agent_config v2 顶层语义：执行平面（W2.1.0 决议 D2.1）
- *
- * - `local`：electron / daemon / 本机 runtime
- * - `cloud`：未来 Cloud Backend
- *
- * **不要**与 `Agent.runtime_type`（'electron' / 'daemon' / 'cloud'）混淆——
- * `runtime_plane` 是**执行平面**抽象层，`runtime_type` 是**具体设备类型**。
- */
-export type RuntimePlane = 'local' | 'cloud'
-
 /** @see {@link @tabtin/security-policy#AuthorizationPreset} — SSOT 在 security-policy */
 export type AuthorizationPreset = 'cautious' | 'collaborative' | 'full_auto' | 'server_auto'
 
@@ -30,11 +19,10 @@ export type OperationCategory = 'read' | 'write' | 'install' | 'delete_system' |
 /** @see {@link @tabtin/security-policy#AuthorizationRules} — SSOT 在 security-policy */
 export type AuthorizationRules = Partial<Record<OperationCategory, AuthorizationAction>>
 
-export type AgentBackendType = 'builtin'
+export type AgentHarnessType = 'builtin' | 'dsh'
 
-export interface AgentBackendConfig {
-  type: AgentBackendType
-  config_version?: number
+export interface AgentHarnessConfig {
+  type: AgentHarnessType
 }
 
 // ── Memory ──
@@ -282,7 +270,7 @@ export interface ConversationConfig {
  * agent_config v2 形状（W2.1.0 决议 §2）。
  *
  * 与 v1 的关键差异：
- * - **新增** `schema_version` / `runtime_plane` / `capabilities` / `conversation` 顶层字段
+ * - **新增** `schema_version` / `harness` / `capabilities` / `conversation` 顶层字段
  * - **删除** `execution_env` / `permission_mode`（由 authorization_preset 派生）
  * - 顶层 `terminal_mode` / `operation_switches` / `sandbox` / `sql_mode` /
  *   `execution_limits` / `device_permissions` / `authorization_rules` 全部
@@ -315,8 +303,6 @@ export interface AgentSecurityConfig {
 export interface AgentConfig {
   /** 形状版本号（migration 幂等门闸 + 审计），v2 = 2 */
   schema_version?: number
-  /** 执行平面（local/cloud）— 不要与 Agent.runtime_type 混淆 */
-  runtime_plane?: RuntimePlane
   /** 安全预设（顶层保留，不放进 capabilities）—— UI 编辑入口 */
   authorization_preset?: AuthorizationPreset
   /**
@@ -327,8 +313,8 @@ export interface AgentConfig {
   capabilities?: CapabilitiesConfig
   /** 对话/历史相关配置 */
   conversation?: ConversationConfig
-  /** Agent backend 协议字段（forward 透传）—— 库内仍校验 type='builtin' */
-  agent_backend?: AgentBackendConfig
+  /** Agent 使用的执行 Harness；执行平面由 Workspace Device 派生。 */
+  harness?: AgentHarnessConfig
   /** 工作目录兜底（顶层，非 capabilities 内）*/
   workspace_root?: string
   /** 远程 Daemon 上报的 git 状态快照（顶层，非 capabilities 内）*/
@@ -537,6 +523,8 @@ export interface Space {
   working_dir?: string
   normalized_working_dir?: string
   working_dir_type?: WorkingDirType | ''
+  runtime_plane?: 'local' | 'cloud'
+  cloud?: CloudWorkspaceRuntime | null
   approval_grant?: 'always_ask' | 'auto' | 'full_access'
   approval_memo_generation?: number
   /** ：现场自定义规则（Workspace.custom_rules，不复用 Agent） */
@@ -585,6 +573,8 @@ export interface WorkspaceSummary {
   working_dir_type?: WorkingDirType | ''
   device_id?: string | null
   device_online: boolean
+  runtime_plane: 'local' | 'cloud'
+  cloud?: CloudWorkspaceRuntime | null
   is_home: boolean
   trust_status: 'trusted' | 'untrusted'
   trust_source?: string
@@ -602,6 +592,30 @@ export interface WorkspaceSummary {
   /** ：同 id 个人 Space 壳上的执行 Agent（壳 DROP 前由后端投影） */
   agent_id?: string | null
   execution_agent_id?: string | null
+}
+
+export interface CloudWorkspaceRuntime {
+  allocation_id: string
+  state: 'pending' | 'provisioning' | 'ready' | 'disabled' | 'error' | 'deleting' | 'deleted'
+  generation: number
+  source_type: 'empty' | 'git'
+  runtime_version: string
+  protocol_version: string
+  retention_deadline?: string | null
+  last_error?: string
+}
+
+export interface CreateCloudWorkspaceRequest {
+  request_key: string
+  organization_id: string
+  name: string
+  description?: string
+  custom_rules?: string
+  working_dir_type?: WorkingDirType
+  source_type?: 'empty' | 'git'
+  git_url?: string
+  git_ref?: string
+  git_credential_ref?: string
 }
 
 export interface CreateSpaceRequest {

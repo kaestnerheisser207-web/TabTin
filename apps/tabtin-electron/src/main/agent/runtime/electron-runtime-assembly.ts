@@ -691,6 +691,7 @@ export class ElectronRuntimeAssembly {
     const normalizedDisabledApps = disabledApps ?? []
     const normalizedDisabledToolPrefixes = disabledToolPrefixes ?? []
     const cacheKeyInput = {
+      harness: 'builtin' as const,
       modelId,
       customRules,
       personalRules,
@@ -776,6 +777,11 @@ export class ElectronRuntimeAssembly {
     sender: StreamEventSink,
     owner: PersistedEntryOwner,
   ): RuntimeSessionRequest<RuntimeBuildInput, AgentModeName, ElectronRuntimeExtraKey> {
+    if (request.harness === 'dsh') {
+      throw new Error(
+        'DSH harness requires a Cloud Workspace and cannot run in Electron',
+      )
+    }
     const workspaceId = request.workspaceId?.trim()
     if (!workspaceId) {
       throw new Error('workspaceId is required to initialize session runtime')
@@ -847,6 +853,7 @@ export class ElectronRuntimeAssembly {
       ? projectIdCandidate.trim() || undefined
       : existing?.projectId
     const cacheKeyInput = {
+      harness: request.harness,
       modelId,
       customRules: request.customRules,
       personalRules: request.personalRules,

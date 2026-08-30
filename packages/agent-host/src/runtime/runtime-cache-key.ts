@@ -3,6 +3,7 @@ import {
   ownersMatch,
   type PersistedEntryOwner,
 } from '@tabtin/agent-runtime'
+import type { RuntimeHarness } from './runtime-driver.js'
 
 type OperationSwitches = Record<string, 'allow' | 'confirm' | 'block'>
 
@@ -12,6 +13,7 @@ interface EnabledApp {
 }
 
 export interface RuntimeCacheKey {
+  harness: RuntimeHarness
   modelId: string
   customRules: string | undefined
   personalRules: string | undefined
@@ -26,6 +28,7 @@ export interface RuntimeCacheKey {
 }
 
 export interface CreateRuntimeCacheKeyInput {
+  harness?: RuntimeHarness
   modelId: string
   customRules?: string
   personalRules?: string
@@ -43,6 +46,7 @@ export function createRuntimeCacheKey(
   input: CreateRuntimeCacheKeyInput,
 ): RuntimeCacheKey {
   return {
+    harness: input.harness ?? 'builtin',
     modelId: input.modelId,
     customRules: input.customRules?.trim() || undefined,
     personalRules: input.personalRules?.trim() || undefined,
@@ -61,7 +65,8 @@ export function runtimeCacheKeysMatch(
   existing: RuntimeCacheKey,
   requested: RuntimeCacheKey,
 ): boolean {
-  return existing.modelId === requested.modelId
+  return existing.harness === requested.harness
+    && existing.modelId === requested.modelId
     && existing.customRules === requested.customRules
     && existing.personalRules === requested.personalRules
     && existing.workspaceRoot === requested.workspaceRoot

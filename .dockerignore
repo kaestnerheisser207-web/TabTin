@@ -20,6 +20,10 @@
 **/.pytest_cache
 **/.mypy_cache
 **/.ruff_cache
+**/tests
+**/__tests__
+**/*.test.ts
+**/*.test.tsx
 
 # 本地密钥 / 环境（运行时注入，INFRA-1）
 **/.env
@@ -33,9 +37,16 @@
 dev-db-dumps
 **/staticfiles
 **/media
+!apps/tabtin-daemon/src/transport/cli/routes/media/
+!apps/tabtin-daemon/src/transport/cli/routes/media/**
 
 # 客户端原生 / 大资源（后端镜像用不到）
-apps/tabtin-electron
+apps/tabtin-electron/**
+!apps/tabtin-electron/src/
+!apps/tabtin-electron/src/renderer/
+!apps/tabtin-electron/src/renderer/src/
+!apps/tabtin-electron/src/renderer/src/styles/
+!apps/tabtin-electron/src/renderer/src/styles/globals.css
 apps/tabtin-ios
 apps/tabtin-android
 apps/tabtin-harmony

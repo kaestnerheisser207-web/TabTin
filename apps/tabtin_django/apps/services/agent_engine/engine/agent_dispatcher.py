@@ -37,12 +37,12 @@ def _normalize_user_message_blocks(blocks: Optional[list]) -> Optional[list]:
     return normalized or None
 
 
-def get_agent_backend_type(space) -> str:
-    """Return the agent backend type. Always `'local'` (or legacy stored value)."""
+def get_agent_harness_type(space) -> str:
+    """Return the Agent Harness selected independently of execution plane."""
     agent = getattr(space, "agent", None)
     config = getattr(agent, "agent_config", None) or {} if agent else {}
-    backend = config.get("agent_backend", {})
-    return backend.get("type", "builtin")
+    harness = config.get("harness", {})
+    return harness.get("type", "builtin")
 
 
 def get_yolo_mode(space) -> bool:
@@ -198,9 +198,19 @@ class AgentDispatcher:
             if is_team_execution
             else getattr(session, "workspace", None)
         )
-        backend_config = effective_config.agent_config.get("agent_backend", {})
-        backend_type = backend_config.get("type", "builtin")
+        harness_config = effective_config.agent_config.get("harness", {})
+        harness_type = harness_config.get("type", "builtin")
         effective_thread_id = thread_id or getattr(session, "effective_thread_id", None) or str(session.id)
+        if runtime_target is not None:
+            from apps.services.agent_engine.runtime_binding_service import (
+                RuntimeBindingService,
+            )
+
+            RuntimeBindingService().freeze_for_dispatch(
+                workspace=runtime_target,
+                thread_id=effective_thread_id,
+                harness=harness_type,
+            )
         execution_owner_user_id = (
             execution_context.execution_owner_user_id
             if is_team_execution
@@ -331,7 +341,7 @@ class AgentDispatcher:
         yolo_mode = effective_config.approval_mode == "full_access"
 
         agent_backend_config: Dict[str, Any] = {
-            "type": backend_type,
+            "type": harness_type,
         }
         if disabled_apps:
             agent_backend_config["disabled_apps"] = disabled_apps

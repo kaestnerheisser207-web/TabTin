@@ -353,6 +353,7 @@ class DaemonTokenService(BaseService):
             'device_name': device_name,
             'expires_at': expires_at.isoformat(),
             'scope': 'device_register',
+            'device_type': 'daemon',
             'server_url': server_url,
             'ws_url': ws_url,
         }
@@ -367,6 +368,26 @@ class DaemonTokenService(BaseService):
             'token': token,
             'expires_at': expires_at.isoformat(),
         }
+
+    @staticmethod
+    def create_cloud_install_token(allocation) -> str:
+        """Issue a short-lived token bound to one pre-provisioned Cloud Device."""
+        workspace = allocation.workspace
+        expires_at = datetime.now(timezone.utc) + timedelta(minutes=10)
+        return _sign_token({
+            'organization_id': str(workspace.organization_id),
+            'user_id': str(workspace.created_by_id),
+            'device_name': workspace.name or 'Cloud Workspace',
+            'expires_at': expires_at.isoformat(),
+            'scope': 'device_register',
+            'device_type': 'cloud',
+            'expected_fingerprint': allocation.device.fingerprint,
+            'cloud_allocation_id': str(allocation.id),
+            'cloud_generation': allocation.generation,
+            'workspace_root': '/workspace',
+            'server_url': settings.DAEMON_SERVER_URL,
+            'ws_url': settings.DAEMON_WS_URL,
+        })
 
     def activate_device(
         self,
@@ -407,11 +428,30 @@ class DaemonTokenService(BaseService):
             getattr(settings, 'DAEMON_CONTROL_ENABLED', False)
         )
         normalized_device_type = normalize_device_type(device_type, default='daemon')
-        if control_enabled and normalized_device_type not in {'daemon', 'cloud'}:
+        token_device_type = normalize_device_type(
+            payload.get('device_type'),
+            default='daemon',
+        )
+        if normalized_device_type != token_device_type:
             logger.warning(
-                "[DaemonToken] activation rejected for non-daemon type=%s",
+                "[DaemonToken] activation type mismatch requested=%s token=%s",
                 normalized_device_type,
+                token_device_type,
             )
+            return None
+        expected_fingerprint = str(payload.get('expected_fingerprint') or '')
+        if normalized_device_type == 'cloud' and (
+            not expected_fingerprint
+            or not payload.get('cloud_allocation_id')
+            or not payload.get('cloud_generation')
+        ):
+            logger.warning("[DaemonToken] cloud activation token is not allocation-bound")
+            return None
+        if expected_fingerprint and not hmac.compare_digest(
+            expected_fingerprint,
+            fingerprint,
+        ):
+            logger.warning("[DaemonToken] activation fingerprint does not match token")
             return None
         normalized_capabilities = normalize_device_capabilities(
             capabilities or ['terminal_execute', 'file'],
@@ -450,26 +490,60 @@ class DaemonTokenService(BaseService):
                         )
                         created = True
                     else:
+                        metadata = dict(device.metadata_json or {})
                         stored_digest = str(
-                            (device.metadata_json or {}).get(_ACTIVATION_TOKEN_DIGEST_KEY)
+                            metadata.get(_ACTIVATION_TOKEN_DIGEST_KEY)
                             or ""
+                        )
+                        try:
+                            payload_generation = int(payload.get('cloud_generation') or 0)
+                            stored_generation = int(metadata.get('cloud_generation') or 0)
+                        except (TypeError, ValueError):
+                            payload_generation = 0
+                            stored_generation = 0
+                        same_cloud_allocation = (
+                            normalized_device_type == 'cloud'
+                            and str(metadata.get('cloud_allocation_id') or '')
+                            == str(payload.get('cloud_allocation_id') or '')
+                            and expected_fingerprint == fingerprint
+                        )
+                        preprovisioned_cloud = (
+                            same_cloud_allocation
+                            and not stored_digest
+                            and payload_generation == stored_generation
+                        )
+                        cloud_token_rotation = (
+                            same_cloud_allocation
+                            and stored_generation >= 1
+                            and payload_generation >= stored_generation
                         )
                         if (
                             device.user_id != user.id
+                            or device.organization_id != organization.id
                             or device.device_type != normalized_device_type
                             or device.control_status != 'active'
                             or (
                                 stored_digest
                                 and not hmac.compare_digest(stored_digest, token_digest)
+                                and not cloud_token_rotation
                             )
-                            or not stored_digest
+                            or (not stored_digest and not preprovisioned_cloud)
                         ):
                             raise DeviceFingerprintConflictError(
                                 f"Device fingerprint {fingerprint} is already registered"
                             )
                         for field, value in defaults.items():
                             setattr(device, field, value)
-                        device.save(update_fields=[*defaults, 'updated_at'])
+                        metadata[_ACTIVATION_TOKEN_DIGEST_KEY] = token_digest
+                        if normalized_device_type == 'cloud':
+                            metadata['cloud_generation'] = payload_generation
+                            metadata['workspace_root'] = str(
+                                payload.get('workspace_root') or '/workspace'
+                            )
+                        device.metadata_json = metadata
+                        device.save(
+                            update_fields=[*defaults, 'metadata_json', 'updated_at']
+                        )
                         created = False
         except IntegrityError:
             logger.warning(

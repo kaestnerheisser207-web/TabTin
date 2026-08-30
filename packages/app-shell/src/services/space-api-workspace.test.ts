@@ -43,6 +43,75 @@ describe('WorkspaceApiService.create', () => {
       }),
     })
   })
+
+  it('creates a Cloud Workspace without sending a local directory or device id', async () => {
+    authenticatedRequest.mockResolvedValue({
+      status: 202,
+      data: {
+        success: true,
+        data: {
+          id: 'cloud-workspace-1',
+          runtime_plane: 'cloud',
+          cloud: { state: 'pending' },
+        },
+      },
+    })
+
+    await WorkspaceApiService.createCloud({
+      request_key: 'request-1',
+      organization_id: 'organization-1',
+      name: 'Cloud Dev',
+      source_type: 'git',
+      git_url: 'https://github.com/org/repo.git',
+    })
+
+    expect(authenticatedRequest).toHaveBeenCalledWith({
+      url: 'https://api.tabtin.test/api/context/workspaces/cloud',
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        request_key: 'request-1',
+        organization_id: 'organization-1',
+        name: 'Cloud Dev',
+        source_type: 'git',
+        git_url: 'https://github.com/org/repo.git',
+      }),
+    })
+  })
+})
+
+describe('WorkspaceApiService Cloud lifecycle', () => {
+  beforeEach(() => authenticatedRequest.mockReset())
+
+  it('uses explicit cloud lifecycle endpoints', async () => {
+    authenticatedRequest.mockResolvedValue({
+      status: 200,
+      data: { success: true, data: { id: 'workspace-1' } },
+    })
+
+    await WorkspaceApiService.cloudAction('workspace-1', 'disable')
+
+    expect(authenticatedRequest).toHaveBeenCalledWith({
+      url: 'https://api.tabtin.test/api/context/workspaces/workspace-1/cloud/disable',
+      method: 'POST',
+    })
+  })
+
+  it('requires the typed confirmation body for permanent delete', async () => {
+    authenticatedRequest.mockResolvedValue({
+      status: 200,
+      data: { success: true },
+    })
+
+    await WorkspaceApiService.permanentlyDeleteCloud('workspace-1', 'Cloud Dev')
+
+    expect(authenticatedRequest).toHaveBeenCalledWith({
+      url: 'https://api.tabtin.test/api/context/workspaces/workspace-1/cloud/permanent',
+      method: 'DELETE',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ confirmation: 'Cloud Dev' }),
+    })
+  })
 })
 
 describe('WorkspaceApiService.update', () => {

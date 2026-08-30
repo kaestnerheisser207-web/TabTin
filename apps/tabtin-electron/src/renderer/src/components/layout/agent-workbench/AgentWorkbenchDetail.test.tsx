@@ -205,4 +205,22 @@ describe('AgentWorkbenchDetail', () => {
 
     expect(updateAgent).not.toHaveBeenCalled()
   })
+
+  it('可在 Agent 身份上切换 Builtin 与 DSH Harness', async () => {
+    const updateAgent = vi.fn(async () => true)
+    const onUpdated = vi.fn()
+    renderDetail({ updateAgent, onUpdated })
+
+    expect(screen.getByTestId('agent-harness-switch')).toBeTruthy()
+    fireEvent.click(screen.getByRole('radio', { name: 'DSH' }))
+
+    await waitFor(() => {
+      expect(updateAgent).toHaveBeenCalledWith('agent-1', {
+        agent_config: expect.objectContaining({
+          harness: { type: 'dsh' },
+        }),
+      })
+      expect(onUpdated).toHaveBeenCalled()
+    })
+  })
 })

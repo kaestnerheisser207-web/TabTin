@@ -4,6 +4,9 @@ import { beforeEach, describe, expect, it, vi } from 'vitest'
 
 const mocks = vi.hoisted(() => ({
   createSpace: vi.fn(),
+  createCloudSpace: vi.fn(),
+  updateAgent: vi.fn(),
+  loadAgent: vi.fn(),
   refreshSpace: vi.fn(),
   openCreatedWorkspaceAsNewTask: vi.fn(),
   dialogState: {
@@ -18,12 +21,18 @@ const mocks = vi.hoisted(() => ({
 const spaceState = {
   spaces: [],
   agentCache: {},
-  selectedAgent: null,
+  selectedAgent: {
+    id: 'agent-1',
+    name: 'Cloud Agent',
+    organization_id: 'organization-1',
+    agent_config: { harness: { type: 'builtin' } },
+  },
   error: null,
   createSpace: mocks.createSpace,
+  createCloudSpace: mocks.createCloudSpace,
   updateSpace: vi.fn(),
-  updateAgent: vi.fn(),
-  loadAgent: vi.fn(),
+  updateAgent: mocks.updateAgent,
+  loadAgent: mocks.loadAgent,
   refreshSpace: mocks.refreshSpace,
 }
 
@@ -119,7 +128,14 @@ import { CreateSpaceDialog } from './NewSpaceButton'
 describe('CreateSpaceDialog 远程执行设备 Workspace', () => {
   beforeEach(() => {
     mocks.createSpace.mockReset().mockResolvedValue({ id: 'workspace-1' })
+    mocks.createCloudSpace.mockReset().mockResolvedValue({
+      id: 'cloud-workspace-1',
+      runtime_plane: 'cloud',
+      cloud: { state: 'pending' },
+    })
     mocks.refreshSpace.mockReset().mockResolvedValue(undefined)
+    mocks.updateAgent.mockReset().mockResolvedValue(true)
+    mocks.loadAgent.mockReset().mockResolvedValue(spaceState.selectedAgent)
     mocks.openCreatedWorkspaceAsNewTask.mockReset().mockResolvedValue(undefined)
     mocks.dialogState.createOptions = null
   })
@@ -188,5 +204,34 @@ describe('CreateSpaceDialog 远程执行设备 Workspace', () => {
       expect(onCreated).toHaveBeenCalledWith('workspace-1')
     })
     expect(mocks.openCreatedWorkspaceAsNewTask).not.toHaveBeenCalled()
+  })
+
+  it('云端托管创建不要求本机目录或 device id', async () => {
+    render(<CreateSpaceDialog open onOpenChange={vi.fn()} />)
+
+    fireEvent.click(screen.getByRole('button', { name: /云端托管/ }))
+    fireEvent.click(screen.getByRole('button', { name: 'create.actions.create' }))
+
+    await waitFor(() => {
+      expect(mocks.createCloudSpace).toHaveBeenCalledWith(expect.objectContaining({
+        organization_id: 'organization-1',
+        name: 'Generated Workspace',
+        source_type: 'empty',
+        working_dir_type: 'code',
+      }))
+    })
+    const payload = mocks.createCloudSpace.mock.calls[0][0]
+    expect(payload).not.toHaveProperty('device_id')
+    expect(payload).not.toHaveProperty('working_dir')
+    expect(mocks.createSpace).not.toHaveBeenCalled()
+    expect(screen.getByTestId('cloud-harness-selector')).toBeTruthy()
+    expect(mocks.updateAgent).toHaveBeenCalledWith(
+      'agent-1',
+      expect.objectContaining({
+        agent_config: expect.objectContaining({
+          harness: { type: 'dsh' },
+        }),
+      }),
+    )
   })
 })

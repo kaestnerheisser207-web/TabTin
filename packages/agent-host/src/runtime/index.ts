@@ -5,6 +5,14 @@ export {
   type RuntimeCacheKey,
 } from './runtime-cache-key.js'
 export {
+  RuntimeDriverRegistry,
+  type HostedRuntime,
+  type RuntimeDriver,
+  type RuntimeDriverContext,
+  type RuntimeDriverSession,
+  type RuntimeHarness,
+} from './runtime-driver.js'
+export {
   decideRuntimeReuse,
   type RuntimeReuseDecision,
   type RuntimeReuseInput,

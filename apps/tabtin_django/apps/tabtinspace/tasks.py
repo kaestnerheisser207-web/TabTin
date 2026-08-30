@@ -6,9 +6,11 @@ cleanup_stale_online_devices: 清理因 TCP 半开连接等原因导致的假在
 compensate_missing_default_organization: 补偿因 signal 异常导致缺少默认组织的用户。
 """
 import logging
-from apps.services.common.db_router import postgres_app_db_alias
+
 from celery import shared_task
 from celery.schedules import crontab
+
+from apps.services.common.db_router import postgres_app_db_alias
 
 logger = logging.getLogger(__name__)
 
@@ -42,6 +44,16 @@ def restore_organization_member_im_access_task(
 
 
 TABTINSPACE_BEAT_SCHEDULE = {
+    "reconcile-cloud-runtime-allocations": {
+        "task": "tabtinspace.reconcile_cloud_runtime_allocations",
+        "schedule": 10,
+        "options": {"expires": 8},
+    },
+    "heartbeat-cloud-worker-nodes": {
+        "task": "tabtinspace.heartbeat_cloud_worker_nodes",
+        "schedule": 30,
+        "options": {"expires": 25},
+    },
     "reconcile-context-items": {
         "task": "tabtinspace.reconcile_context_items",
         "schedule": 3600,
@@ -88,6 +100,113 @@ TABTINSPACE_BEAT_SCHEDULE = {
         "options": {"expires": 240},
     },
 }
+
+
+@shared_task(
+    name="tabtinspace.reconcile_cloud_runtime_allocations",
+    ignore_result=True,
+    time_limit=240,
+    soft_time_limit=220,
+)
+def reconcile_cloud_runtime_allocations():
+    from apps.tabtinspace.services.cloud_allocation_reconciler import (
+        CloudAllocationReconciler,
+    )
+
+    result = CloudAllocationReconciler().reconcile_due(limit=20)
+    if result["ready"] or result["error"]:
+        logger.info("[CloudRuntime] allocation reconcile result=%s", result)
+    return result
+
+
+@shared_task(
+    name="tabtinspace.heartbeat_cloud_worker_nodes",
+    ignore_result=True,
+    time_limit=60,
+    soft_time_limit=50,
+)
+def heartbeat_cloud_worker_nodes():
+    from django.conf import settings
+    from django.utils import timezone
+
+    from apps.tabtinspace.models import CloudWorkerNode
+    from apps.tabtinspace.services.cloud_worker_client import CloudWorkerClient
+    from apps.tabtinspace.services.cloud_worker_registry import CloudWorkerRegistry
+
+    registry = CloudWorkerRegistry().sync_configured()
+    active_keys = registry["active_keys"]
+    client = CloudWorkerClient(timeout_seconds=5)
+    expected_protocol = str(
+        getattr(settings, "TABTIN_CLOUD_WORKER_PROTOCOL_VERSION", "1")
+    )
+    result = {"ready": 0, "error": 0}
+    for worker in CloudWorkerNode.objects.filter(
+        node_key__in=active_keys,
+    ).exclude(state=CloudWorkerNode.State.DRAINING).iterator():
+        failure_reason = "request_failed"
+        try:
+            health = client.health(worker)
+            failure_reason = _cloud_worker_health_failure_reason(
+                health=health,
+                expected_protocol=expected_protocol,
+                expected=worker.metadata_json or {},
+            )
+            if failure_reason:
+                raise RuntimeError("Cloud Worker protocol/runtime/storage mismatch")
+            worker.state = CloudWorkerNode.State.READY
+            worker.runtime_version = str(health.get("runtimeVersion") or "")
+            worker.last_heartbeat_at = timezone.now()
+            worker.save(
+                update_fields=[
+                    "state",
+                    "runtime_version",
+                    "last_heartbeat_at",
+                    "updated_at",
+                ]
+            )
+            result["ready"] += 1
+        except Exception as exc:  # noqa: BLE001 -- remote Worker failures share one health state
+            worker.state = CloudWorkerNode.State.ERROR
+            worker.save(update_fields=["state", "updated_at"])
+            result["error"] += 1
+            logger.warning(
+                "[CloudRuntime] Worker heartbeat failed node=%s reason=%s error_type=%s",
+                worker.node_key,
+                failure_reason or "request_failed",
+                type(exc).__name__,
+            )
+    return result
+
+
+def _cloud_worker_health_failure_reason(
+    *,
+    health: dict,
+    expected_protocol: str,
+    expected: dict,
+) -> str:
+    checks = (
+        ("health_not_ok", health.get("ok") is True),
+        (
+            "protocol_mismatch",
+            str(health.get("protocolVersion")) == expected_protocol,
+        ),
+        (
+            "runtime_mismatch",
+            str(health.get("runtimeVersion") or "")
+            == str(expected.get("expected_runtime_version") or ""),
+        ),
+        (
+            "storage_quota_mismatch",
+            str(health.get("storageQuotaMode") or "")
+            == str(expected.get("expected_storage_quota_mode") or ""),
+        ),
+        (
+            "resource_isolation_mismatch",
+            str(health.get("resourceIsolationMode") or "")
+            == str(expected.get("expected_resource_isolation_mode") or ""),
+        ),
+    )
+    return next((reason for reason, passed in checks if not passed), "")
 
 
 @shared_task(

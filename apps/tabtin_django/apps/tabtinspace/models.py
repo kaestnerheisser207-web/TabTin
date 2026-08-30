@@ -1039,6 +1039,137 @@ class Workspace(models.Model):
         return f"{self.name or self.working_dir} ({self.get_kind_display()})"
 
 
+class CloudWorkerNode(models.Model):
+    """A VPS worker capable of hosting isolated Cloud Workspaces."""
+
+    class Edition(models.TextChoices):
+        SAAS = 'saas', 'SaaS 托管'
+        COMMUNITY = 'community', 'Community 自托管'
+
+    class State(models.TextChoices):
+        REGISTERING = 'registering', '注册中'
+        READY = 'ready', '可调度'
+        DRAINING = 'draining', '排空中'
+        OFFLINE = 'offline', '离线'
+        ERROR = 'error', '异常'
+
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    organization = models.ForeignKey(
+        Organization,
+        on_delete=models.CASCADE,
+        null=True,
+        blank=True,
+        related_name='cloud_worker_nodes',
+        help_text='Community Worker 的组织边界；SaaS 共享池为空。',
+    )
+    node_key = models.CharField(max_length=128, unique=True)
+    name = models.CharField(max_length=200)
+    edition = models.CharField(
+        max_length=16,
+        choices=Edition.choices,
+        default=Edition.SAAS,
+    )
+    state = models.CharField(
+        max_length=16,
+        choices=State.choices,
+        default=State.REGISTERING,
+        db_index=True,
+    )
+    control_endpoint = models.CharField(
+        max_length=500,
+        help_text='仅服务端可达的 Worker Supervisor 地址。',
+    )
+    protocol_version = models.CharField(max_length=64)
+    runtime_version = models.CharField(max_length=128)
+    capacity_cpu_millicores = models.PositiveIntegerField(default=0)
+    capacity_memory_mb = models.PositiveIntegerField(default=0)
+    capacity_storage_gb = models.PositiveIntegerField(default=0)
+    last_heartbeat_at = models.DateTimeField(null=True, blank=True, db_index=True)
+    metadata_json = models.JSONField(default=dict, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        db_table = 'tabtinspace_cloud_worker_node'
+        indexes = [
+            models.Index(
+                fields=['edition', 'state'],
+                name='ctx_cloud_worker_sched_idx',
+            ),
+        ]
+
+
+class CloudRuntimeAllocation(models.Model):
+    """One isolated, persistent Cloud runtime allocated to a Workspace."""
+
+    class State(models.TextChoices):
+        PENDING = 'pending', '等待分配'
+        PROVISIONING = 'provisioning', '创建中'
+        READY = 'ready', '可用'
+        DISABLED = 'disabled', '已停用'
+        ERROR = 'error', '异常'
+        DELETING = 'deleting', '删除中'
+        DELETED = 'deleted', '已删除'
+
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    request_key = models.UUIDField(
+        unique=True,
+        help_text='客户端生成的 Cloud Workspace 创建幂等键。',
+    )
+    workspace = models.OneToOneField(
+        Workspace,
+        on_delete=models.CASCADE,
+        related_name='cloud_allocation',
+    )
+    worker = models.ForeignKey(
+        CloudWorkerNode,
+        on_delete=models.PROTECT,
+        related_name='allocations',
+    )
+    device = models.OneToOneField(
+        Device,
+        on_delete=models.PROTECT,
+        related_name='cloud_allocation',
+        help_text='Workspace 绑定的逻辑 cloud Device。',
+    )
+    state = models.CharField(
+        max_length=16,
+        choices=State.choices,
+        default=State.PENDING,
+        db_index=True,
+    )
+    generation = models.PositiveBigIntegerField(default=1)
+    volume_ref = models.CharField(max_length=255, unique=True)
+    runtime_image = models.CharField(max_length=500)
+    source_type = models.CharField(
+        max_length=16,
+        choices=[('empty', '空目录'), ('git', 'Git 仓库')],
+        default='empty',
+    )
+    git_url = models.CharField(max_length=2000, blank=True, default='')
+    git_ref = models.CharField(max_length=255, blank=True, default='')
+    git_credential_ref = models.CharField(max_length=255, blank=True, default='')
+    cpu_millicores = models.PositiveIntegerField(default=2000)
+    memory_mb = models.PositiveIntegerField(default=4096)
+    storage_gb = models.PositiveIntegerField(default=20)
+    last_error = models.TextField(blank=True, default='')
+    reconcile_attempts = models.PositiveIntegerField(default=0)
+    next_retry_at = models.DateTimeField(null=True, blank=True, db_index=True)
+    provisioned_at = models.DateTimeField(null=True, blank=True)
+    retention_deadline = models.DateTimeField(null=True, blank=True, db_index=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        db_table = 'tabtinspace_cloud_runtime_allocation'
+        indexes = [
+            models.Index(
+                fields=['worker', 'state'],
+                name='ctx_cloud_alloc_worker_idx',
+            ),
+        ]
+
+
 
 class SpaceType:
     """#3266：历史 Space.type 枚举，供退役窗口调用方兼容读取。"""

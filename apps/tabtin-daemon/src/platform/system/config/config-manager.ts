@@ -54,14 +54,39 @@ export class ConfigManager {
   }
 
   getOrCreateFingerprint(): string {
-    const fpPath = path.join(this.configDir, FINGERPRINT_FILE_NAME);
-    if (fs.existsSync(fpPath)) {
-      return fs.readFileSync(fpPath, 'utf-8').trim();
-    }
+    const existing = this.getFingerprint();
+    if (existing) return existing;
     this.ensureConfigDir();
     const fp = `daemon-${crypto.randomUUID()}`;
-    atomicWriteFileSync(fpPath, fp, 0o600);
+    atomicWriteFileSync(path.join(this.configDir, FINGERPRINT_FILE_NAME), fp, 0o600);
     return fp;
+  }
+
+  getFingerprint(): string | null {
+    const fpPath = path.join(this.configDir, FINGERPRINT_FILE_NAME);
+    if (!fs.existsSync(fpPath)) return null;
+    const value = fs.readFileSync(fpPath, 'utf-8').trim();
+    return value || null;
+  }
+
+  bindFingerprint(expected: string): string {
+    const fingerprint = expected.trim();
+    if (!fingerprint || fingerprint.length > 255) {
+      throw new Error('Invalid token-bound device fingerprint');
+    }
+    const existing = this.getFingerprint();
+    if (existing && existing !== fingerprint) {
+      throw new Error('Cloud install token is bound to a different device fingerprint');
+    }
+    if (!existing) {
+      this.ensureConfigDir();
+      atomicWriteFileSync(
+        path.join(this.configDir, FINGERPRINT_FILE_NAME),
+        fingerprint,
+        0o600,
+      );
+    }
+    return fingerprint;
   }
 
   initFromToken(token: {
@@ -75,6 +100,9 @@ export class ConfigManager {
      */
     user_id?: string;
     device_name: string;
+    device_type?: 'daemon' | 'cloud';
+    cloud_generation?: number;
+    workspace_root?: string;
   }, credential: {
     device_id: string;
     access_token: string;
@@ -82,6 +110,9 @@ export class ConfigManager {
     const fingerprint = this.getOrCreateFingerprint();
     const config: DaemonConfig = {
       ...DEFAULT_CONFIG,
+      device_type: token.device_type ?? 'daemon',
+      ...(token.cloud_generation ? { cloud_generation: token.cloud_generation } : {}),
+      ...(token.workspace_root ? { workspace_root: token.workspace_root } : {}),
       server_url: token.server_url,
       ws_url: token.ws_url,
       device_id: credential.device_id,

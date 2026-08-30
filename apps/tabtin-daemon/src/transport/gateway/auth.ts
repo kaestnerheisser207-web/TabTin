@@ -14,9 +14,15 @@ export class TokenAuth {
     const tokenData = this.decodeToken(rawToken);
     const serverUrl = serverOverride ?? tokenData.server_url;
 
-    const fingerprint = this.configManager.getOrCreateFingerprint();
+    const expectedFingerprint = tokenData.expected_fingerprint?.trim();
+    const existingFingerprint = this.configManager.getFingerprint();
+    if (expectedFingerprint && existingFingerprint && expectedFingerprint !== existingFingerprint) {
+      throw new Error('Cloud install token is bound to a different device fingerprint');
+    }
+    const fingerprint = expectedFingerprint || this.configManager.getOrCreateFingerprint();
     const capabilities = await this.capabilityDetector.detect();
     const credential = await this.registerDevice(serverUrl, rawToken, fingerprint, tokenData, capabilities);
+    if (expectedFingerprint) this.configManager.bindFingerprint(expectedFingerprint);
 
     const config = this.configManager.initFromToken(
       {
@@ -27,6 +33,11 @@ export class TokenAuth {
         // 后续 DaemonAgentHost.resolveOwner 用此值构造 SyncQueue.owner。
         user_id: tokenData.user_id,
         device_name: tokenData.device_name,
+        device_type: tokenData.device_type ?? 'daemon',
+        cloud_generation: tokenData.cloud_generation,
+        workspace_root:
+          tokenData.workspace_root
+          ?? (tokenData.device_type === 'cloud' ? '/workspace' : undefined),
       },
       {
         device_id: credential.device_id,
@@ -142,7 +153,7 @@ export class TokenAuth {
     const body = {
       token,
       fingerprint,
-      device_type: 'daemon',
+      device_type: tokenData.device_type ?? 'daemon',
       device_name: tokenData.device_name,
       os_info: {
         os: process.platform,

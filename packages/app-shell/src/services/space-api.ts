@@ -4,6 +4,7 @@
 
 import type {
   CreateSpaceRequest,
+  CreateCloudWorkspaceRequest,
   Space,
   SpaceContextItem,
   SpaceContextSearchItem,
@@ -988,6 +989,60 @@ export class WorkspaceApiService {
       throw new Error(response?.data?.message || 'Failed to create workspace')
     }
     return response.data.data as WorkspaceSummary
+  }
+
+  static async createCloud(
+    data: CreateCloudWorkspaceRequest,
+  ): Promise<WorkspaceSummary> {
+    const response = await authenticatedRequest({
+      url: joinApiPath(apiBaseUrl(), '/context/workspaces/cloud'),
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data),
+    })
+    if (
+      !response
+      || ![200, 202].includes(response.status)
+      || !response.data?.success
+    ) {
+      throw new Error(response?.data?.message || 'Failed to create Cloud Workspace')
+    }
+    return response.data.data as WorkspaceSummary
+  }
+
+  static async cloudAction(
+    workspaceId: string,
+    action: 'disable' | 'restart' | 'restore',
+  ): Promise<WorkspaceSummary> {
+    const response = await authenticatedRequest({
+      url: joinApiPath(
+        apiBaseUrl(),
+        `/context/workspaces/${workspaceId}/cloud/${action}`,
+      ),
+      method: 'POST',
+    })
+    if (!response || response.status !== 200 || !response.data?.success) {
+      throw new Error(response?.data?.message || `Failed to ${action} Cloud Workspace`)
+    }
+    return response.data.data as WorkspaceSummary
+  }
+
+  static async permanentlyDeleteCloud(
+    workspaceId: string,
+    confirmation: string,
+  ): Promise<void> {
+    const response = await authenticatedRequest({
+      url: joinApiPath(
+        apiBaseUrl(),
+        `/context/workspaces/${workspaceId}/cloud/permanent`,
+      ),
+      method: 'DELETE',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ confirmation }),
+    })
+    if (!response || response.status !== 200 || !response.data?.success) {
+      throw new Error(response?.data?.message || 'Failed to permanently delete Cloud Workspace')
+    }
   }
 
   static async ensureHome(data: {

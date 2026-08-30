@@ -4,28 +4,38 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[2]
 WORKFLOW = ROOT / ".github/workflows/deploy-tabtin-vps.yml"
 DEPLOY_SCRIPT = ROOT / "scripts/deploy/tabtin-vps-release.sh"
+CLOUD_DEPLOY_SCRIPT = ROOT / "scripts/deploy/tabtin-cloud-vps-release.sh"
+BOOTSTRAP_SCRIPT = ROOT / "scripts/deploy/tabtin-cloud-host-bootstrap.sh"
 
 
-def test_action_builds_and_pushes_an_immutable_amd64_image() -> None:
+def test_action_builds_and_pushes_three_immutable_amd64_images() -> None:
     workflow = WORKFLOW.read_text(encoding="utf-8")
+    deploy_section, cloud_section = workflow.split("  publish-cloud-images:\n", 1)
 
     assert "packages: write" in workflow
     assert "docker/build-push-action@v6" in workflow
     assert "platforms: linux/amd64" in workflow
     assert "push: true" in workflow
-    assert "tags: ${{ env.IMAGE_NAME }}:sha-${{ env.RELEASE_SHA }}" in workflow
+    assert workflow.count("docker/build-push-action@v6") == 3
+    assert "tags: ${{ env.DJANGO_IMAGE_NAME }}:sha-${{ env.RELEASE_SHA }}" in workflow
+    assert "tags: ${{ env.CLOUD_RUNTIME_IMAGE_NAME }}:sha-${{ env.RELEASE_SHA }}" in workflow
+    assert "tags: ${{ env.CLOUD_WORKER_IMAGE_NAME }}:sha-${{ env.RELEASE_SHA }}" in workflow
     assert "org.opencontainers.image.revision=${{ env.RELEASE_SHA }}" in workflow
     assert "TABTIN_SOURCE_SHA=${{ env.RELEASE_SHA }}" in workflow
     assert (
         "cache-to: type=gha,mode=max,scope=tabtin-community-django,ignore-error=true"
         in workflow
     )
-    assert "IMAGE_DIGEST: ${{ steps.build.outputs.digest }}" in workflow
-    assert "image_ref=\"$IMAGE_NAME@$IMAGE_DIGEST\"" in workflow
+    assert "DJANGO_IMAGE_DIGEST: ${{ steps.build_django.outputs.digest }}" in workflow
+    assert "django_ref=\"$DJANGO_IMAGE_NAME@$DJANGO_IMAGE_DIGEST\"" in workflow
     assert "${{ github.sha }}" not in workflow
     assert "$GITHUB_SHA" not in workflow
+    assert "apps/tabtin-daemon/Dockerfile.cloud" not in deploy_section
+    assert "apps/tabtin-cloud-worker/Dockerfile" not in deploy_section
+    assert "Configure restricted SSH access" not in cloud_section
+    assert "needs:" not in cloud_section
     assert workflow.index("docker/build-push-action@v6") < workflow.index(
-        "Pull and deploy selected image"
+        "Pull and deploy selected Django image"
     )
 
 
@@ -43,7 +53,9 @@ def test_action_tracks_the_merged_pull_request_and_waits_for_production() -> Non
     assert "RELEASE_SHA: ${{ github.event.pull_request.merge_commit_sha }}" in workflow
     assert "ref: ${{ env.RELEASE_SHA }}" in workflow
     assert "environment: production" in workflow
-    assert '"deploy $RELEASE_SHA $image_ref $REGISTRY_USER"' in workflow
+    assert '"deploy $RELEASE_SHA $django_ref $REGISTRY_USER"' in workflow
+    assert "$runtime_ref" not in workflow
+    assert "$worker_ref" not in workflow
 
 
 def test_vps_only_pulls_and_switches_the_prebuilt_image() -> None:
@@ -78,3 +90,34 @@ def test_cleanup_is_scoped_to_old_tabtin_images_and_runs_after_health() -> None:
     assert 'docker image rm --force "$image_id"' in script
     assert "docker builder prune" not in script
     assert "docker image prune" not in script
+
+
+def test_cloud_host_release_is_separate_and_requires_all_three_digests() -> None:
+    script = CLOUD_DEPLOY_SCRIPT.read_text(encoding="utf-8")
+
+    assert "deploy <commit-sha> <django-digest-ref> <runtime-digest-ref> <worker-digest-ref>" in script
+    assert 'docker pull "$requested_django"' in script
+    assert 'run_worker pull "$requested_runtime"' in script
+    assert 'run_worker pull "$requested_worker"' in script
+    assert '"$worker_endpoint/v1/metrics"' in script
+    assert "tabtin_cloud_worker_up 1" in script
+    assert "docker build" not in script
+    assert "source.tar.gz" not in script
+    assert "rollback" not in script.lower()
+
+
+def test_cloud_host_bootstrap_keeps_worker_rootless_and_quota_gated() -> None:
+    bootstrap = BOOTSTRAP_SCRIPT.read_text(encoding="utf-8")
+    service = (
+        ROOT
+        / "apps/tabtin-cloud-worker/deployment/systemd/tabtin-cloud-worker.service"
+    ).read_text(encoding="utf-8")
+
+    assert "loginctl enable-linger" in bootstrap
+    assert "systemctl --user enable --now podman.socket" in bootstrap
+    assert 'mount -o loop,pquota "$runtime_image" "$runtime_root"' in bootstrap
+    assert 'volume create --opt o=size=1M "$probe_volume"' in bootstrap
+    assert "User=tabtin-cloud-worker" in service
+    assert "NoNewPrivileges=true" in service
+    assert "ProtectSystem=strict" in service
+    assert "/var/run/docker.sock" not in bootstrap

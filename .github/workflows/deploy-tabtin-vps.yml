@@ -17,14 +17,16 @@ concurrency:
   cancel-in-progress: false
 
 env:
-  IMAGE_NAME: ghcr.io/kaestnerheisser207-web/tabtin-community-django
+  DJANGO_IMAGE_NAME: ghcr.io/kaestnerheisser207-web/tabtin-community-django
+  CLOUD_RUNTIME_IMAGE_NAME: ghcr.io/kaestnerheisser207-web/tabtin-cloud-runtime
+  CLOUD_WORKER_IMAGE_NAME: ghcr.io/kaestnerheisser207-web/tabtin-cloud-worker
   RELEASE_SHA: ${{ github.event.pull_request.merge_commit_sha }}
 
 jobs:
   deploy:
     if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
-    timeout-minutes: 60
+    timeout-minutes: 90
     environment: production
     steps:
       - name: Check out selected commit
@@ -51,14 +53,14 @@ jobs:
           printf 'fingerprint=%s\n' "$fingerprint" >> "$GITHUB_OUTPUT"
 
       - name: Build and push immutable Django image
-        id: build
+        id: build_django
         uses: docker/build-push-action@v6
         with:
           context: .
           file: apps/tabtin_django/Dockerfile
           platforms: linux/amd64
           push: true
-          tags: ${{ env.IMAGE_NAME }}:sha-${{ env.RELEASE_SHA }}
+          tags: ${{ env.DJANGO_IMAGE_NAME }}:sha-${{ env.RELEASE_SHA }}
           labels: |
             org.opencontainers.image.source=https://github.com/${{ github.repository }}
             org.opencontainers.image.revision=${{ env.RELEASE_SHA }}
@@ -82,12 +84,12 @@ jobs:
           printf '%s\n' "$SSH_KNOWN_HOSTS" > "$HOME/.ssh/known_hosts"
           chmod 0600 "$HOME/.ssh/known_hosts"
 
-      - name: Pull and deploy selected image
+      - name: Pull and deploy selected Django image
         env:
           DEPLOY_HOST: ${{ vars.TABTIN_VPS_HOST }}
           DEPLOY_PORT: ${{ vars.TABTIN_VPS_PORT }}
           DEPLOY_USER: ${{ vars.TABTIN_VPS_USER }}
-          IMAGE_DIGEST: ${{ steps.build.outputs.digest }}
+          DJANGO_IMAGE_DIGEST: ${{ steps.build_django.outputs.digest }}
           REGISTRY_TOKEN: ${{ github.token }}
           REGISTRY_USER: ${{ github.actor }}
         run: |
@@ -95,8 +97,8 @@ jobs:
           test -n "$DEPLOY_HOST"
           test -n "$DEPLOY_PORT"
           test -n "$DEPLOY_USER"
-          [[ "$IMAGE_DIGEST" =~ ^sha256:[0-9a-f]{64}$ ]]
-          image_ref="$IMAGE_NAME@$IMAGE_DIGEST"
+          [[ "$DJANGO_IMAGE_DIGEST" =~ ^sha256:[0-9a-f]{64}$ ]]
+          django_ref="$DJANGO_IMAGE_NAME@$DJANGO_IMAGE_DIGEST"
           printf '%s\n' "$REGISTRY_TOKEN" | ssh \
             -o BatchMode=yes \
             -o IdentitiesOnly=yes \
@@ -104,7 +106,7 @@ jobs:
             -i "$HOME/.ssh/tabtin_deploy" \
             -p "$DEPLOY_PORT" \
             "$DEPLOY_USER@$DEPLOY_HOST" \
-            "deploy $RELEASE_SHA $image_ref $REGISTRY_USER"
+            "deploy $RELEASE_SHA $django_ref $REGISTRY_USER"
 
       - name: Verify public readiness
         run: |
@@ -112,3 +114,53 @@ jobs:
           response="$(curl --fail --silent --show-error --max-time 20 https://tabtin.dovelora.com/health/ready)"
           printf '%s\n' "$response"
           printf '%s' "$response" | grep -q '"status"[[:space:]]*:[[:space:]]*"ready"'
+
+  publish-cloud-images:
+    if: github.event.pull_request.merged == true
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - name: Check out selected commit
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ env.RELEASE_SHA }}
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Log in to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ github.token }}
+
+      - name: Build and push immutable Cloud Runtime image
+        id: build_cloud_runtime
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: apps/tabtin-daemon/Dockerfile.cloud
+          platforms: linux/amd64
+          push: true
+          tags: ${{ env.CLOUD_RUNTIME_IMAGE_NAME }}:sha-${{ env.RELEASE_SHA }}
+          labels: |
+            org.opencontainers.image.source=https://github.com/${{ github.repository }}
+            org.opencontainers.image.revision=${{ env.RELEASE_SHA }}
+          cache-from: type=gha,scope=tabtin-cloud-runtime
+          cache-to: type=gha,mode=max,scope=tabtin-cloud-runtime,ignore-error=true
+
+      - name: Build and push immutable Cloud Worker image
+        id: build_cloud_worker
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: apps/tabtin-cloud-worker/Dockerfile
+          platforms: linux/amd64
+          push: true
+          tags: ${{ env.CLOUD_WORKER_IMAGE_NAME }}:sha-${{ env.RELEASE_SHA }}
+          labels: |
+            org.opencontainers.image.source=https://github.com/${{ github.repository }}
+            org.opencontainers.image.revision=${{ env.RELEASE_SHA }}
+          cache-from: type=gha,scope=tabtin-cloud-worker
+          cache-to: type=gha,mode=max,scope=tabtin-cloud-worker,ignore-error=true

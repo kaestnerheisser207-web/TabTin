@@ -42,9 +42,8 @@ class AgentConfigV2BuildDefaultTests(unittest.TestCase):
     def test_schema_version_is_2(self):
         self.assertEqual(self.cfg["schema_version"], 2)
 
-    def test_runtime_plane_is_local(self):
-        # D2.1 命名修订
-        self.assertEqual(self.cfg["runtime_plane"], "local")
+    def test_runtime_plane_is_not_agent_config(self):
+        self.assertNotIn("runtime_plane", self.cfg)
         self.assertNotIn("runtime", self.cfg)  # 不能用 'runtime'（与 Agent.runtime_type 冲突）
 
     def test_no_authorization_preset_top_level(self):
@@ -91,9 +90,9 @@ class AgentConfigV2BuildDefaultTests(unittest.TestCase):
         self.assertNotIn("operation_switches", self.cfg)
         self.assertNotIn("sql_mode", self.cfg)
 
-    def test_agent_backend_builtin(self):
-        self.assertEqual(self.cfg["agent_backend"]["type"], "builtin")
-        self.assertEqual(self.cfg["agent_backend"]["config_version"], 2)
+    def test_harness_defaults_to_builtin(self):
+        self.assertEqual(self.cfg["harness"], {"type": "builtin"})
+        self.assertNotIn("agent_backend", self.cfg)
 
 
 class GetCapabilityOverrideTests(unittest.TestCase):
@@ -242,11 +241,15 @@ class MigrateV1ToV2Tests(unittest.TestCase):
         result = migrate_v1_to_v2(v1)
         self.assertEqual(result["memory"], {"enabled": True, "version": "v2.0"})
 
-    def test_v1_agent_backend_type_normalized(self):
+    def test_v1_agent_backend_is_replaced_by_harness(self):
         v1 = {"agent_backend": {"type": "claude_code", "execution_mode": "stub"}}
         result = migrate_v1_to_v2(v1)
-        self.assertEqual(result["agent_backend"]["type"], "builtin")
-        self.assertNotIn("execution_mode", result["agent_backend"])
+        self.assertEqual(result["harness"], {"type": "builtin"})
+        self.assertNotIn("agent_backend", result)
+
+    def test_dsh_harness_is_preserved(self):
+        result = migrate_v1_to_v2({"harness": {"type": "dsh"}})
+        self.assertEqual(result["harness"], {"type": "dsh"})
 
     def test_v1_authorization_preset_dropped_no_yolo_inference(self):
         # Hilt W4：authorization_preset 已删除。#3836：不再推断 security.allow_yolo_mode。
@@ -376,13 +379,14 @@ class MigrateV1ToV2Tests(unittest.TestCase):
         }
         result = migrate_v1_to_v2(v1)
 
-        # v2 顶层：schema_version / runtime_plane 固定；旧授权字段全部丢弃
+        # v2 顶层：Harness 属于 Agent；执行平面不再存入 Agent 配置。
         self.assertEqual(result["schema_version"], 2)
-        self.assertEqual(result["runtime_plane"], "local")
+        self.assertEqual(result["harness"], {"type": "builtin"})
+        self.assertNotIn("runtime_plane", result)
+        self.assertNotIn("agent_backend", result)
         self.assertNotIn("authorization_preset", result)
         self.assertNotIn("execution_env", result)
         self.assertNotIn("permission_mode", result)
-        self.assertNotIn("security", result)
 
         # capabilities.overrides：唯一存活的 cost；退役分组不产出
         ov = result["capabilities"]["overrides"]
@@ -466,6 +470,34 @@ class AgentServiceValidateV2Tests(unittest.TestCase):
         incoming = {"schema_version": V2_SCHEMA_VERSION, "permission_mode": "default"}
         self.svc._validate_and_merge_config(target, incoming)
         self.assertNotIn("permission_mode", target)
+
+    def test_dsh_harness_is_accepted(self):
+        target = build_default_agent_config_v2()
+        self.svc._validate_and_merge_config(
+            target,
+            {"harness": {"type": "dsh"}},
+        )
+        self.assertEqual(target["harness"], {"type": "dsh"})
+
+    def test_invalid_harness_fails_closed_to_builtin(self):
+        target = build_default_agent_config_v2()
+        self.svc._validate_and_merge_config(
+            target,
+            {"harness": {"type": "unknown"}},
+        )
+        self.assertEqual(target["harness"], {"type": "builtin"})
+
+    def test_retired_agent_execution_keys_are_not_persisted(self):
+        target = build_default_agent_config_v2()
+        self.svc._validate_and_merge_config(
+            target,
+            {
+                "runtime_plane": "cloud",
+                "agent_backend": {"type": "dsh"},
+            },
+        )
+        self.assertNotIn("runtime_plane", target)
+        self.assertNotIn("agent_backend", target)
 
     def test_incoming_soul_tolerated_and_dropped_not_422(self):
         """Soul 已整体移除，但作为 bleed-back 容忍（对齐 authorization_preset 模式）：
@@ -601,6 +633,33 @@ class AgentServiceValidateV2Tests(unittest.TestCase):
         self.assertNotIn("cross_turn_memory", target)
         self.assertNotIn("shell", target["capabilities"]["overrides"])
         self.assertFalse(target["conversation"]["cross_turn_memory"])
+
+
+class AgentHarnessSchemaTests(unittest.TestCase):
+    def test_builtin_and_dsh_are_valid(self):
+        from apps.tabtinspace.schemas.agent_config_v3 import AgentConfigUpdateSchema
+
+        for harness_type in ("builtin", "dsh"):
+            parsed = AgentConfigUpdateSchema(harness={"type": harness_type})
+            self.assertEqual(parsed.harness.type, harness_type)
+
+    def test_unknown_harness_is_rejected(self):
+        from pydantic import ValidationError
+
+        from apps.tabtinspace.schemas.agent_config_v3 import AgentConfigUpdateSchema
+
+        with self.assertRaises(ValidationError):
+            AgentConfigUpdateSchema(harness={"type": "unknown"})
+
+    def test_agent_level_runtime_plane_and_backend_are_rejected(self):
+        from pydantic import ValidationError
+
+        from apps.tabtinspace.schemas.agent_config_v3 import AgentConfigUpdateSchema
+
+        with self.assertRaises(ValidationError):
+            AgentConfigUpdateSchema(runtime_plane="cloud")
+        with self.assertRaises(ValidationError):
+            AgentConfigUpdateSchema(agent_backend={"type": "builtin"})
 
 
 class StripRetiredAgentConfigFieldsTests(unittest.TestCase):

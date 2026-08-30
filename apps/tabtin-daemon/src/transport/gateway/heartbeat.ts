@@ -135,7 +135,7 @@ export class HeartbeatService {
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${this.gateway.getAccessToken()}`,
-          'X-Client-Type': 'daemon',
+          'X-Client-Type': this.config.device_type ?? 'daemon',
           'X-Organization-Id': this.config.organization_id,
           'X-Device-Id': this.config.fingerprint,
         },
@@ -262,7 +262,7 @@ export class HeartbeatService {
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${this.gateway.getAccessToken()}`,
-          'X-Client-Type': 'daemon',
+          'X-Client-Type': this.config.device_type ?? 'daemon',
           'X-Organization-Id': this.config.organization_id,
           'X-Device-Id': this.config.fingerprint,
         },
