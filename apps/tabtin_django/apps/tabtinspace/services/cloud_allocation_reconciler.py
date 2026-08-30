@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import logging
 from datetime import timedelta
 
 from django.db import transaction
@@ -12,6 +13,8 @@ from apps.services.agent_engine.models import RuntimeBinding
 from apps.services.common.db_router import postgres_app_db_alias
 from apps.tabtinspace.models import CloudRuntimeAllocation
 from apps.tabtinspace.services.cloud_worker_client import CloudWorkerClient
+
+logger = logging.getLogger(__name__)
 
 
 class CloudAllocationReconciler:
@@ -63,8 +66,25 @@ class CloudAllocationReconciler:
                 raise RuntimeError("Cloud Worker returned mismatched allocation state")
         except Exception as exc:  # noqa: BLE001 -- external Worker failures share one retry path
             self._record_failure(allocation_id, generation, exc)
+            logger.warning(
+                "[CloudRuntime] reconcile allocation=%s worker=%s generation=%s operation=%s result=error error_type=%s",
+                allocation.id,
+                allocation.worker.node_key,
+                generation,
+                "provision" if needs_provision else "status",
+                type(exc).__name__,
+            )
             return "error"
-        return "ready" if self._record_ready(allocation_id, generation) else "skipped"
+        ready = self._record_ready(allocation_id, generation)
+        logger.info(
+            "[CloudRuntime] reconcile allocation=%s worker=%s generation=%s operation=%s result=%s",
+            allocation.id,
+            allocation.worker.node_key,
+            generation,
+            "provision" if needs_provision else "status",
+            "ready" if ready else "awaiting_heartbeat",
+        )
+        return "ready" if ready else "skipped"
 
     @transaction.atomic(using=postgres_app_db_alias())
     def _claim(self, allocation_id) -> tuple[int, bool] | None:

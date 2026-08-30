@@ -165,6 +165,12 @@ grep -q '"protocolVersion":"1"' <<<"$worker_health" || die "Worker protocol heal
 grep -q "\"runtimeVersion\":\"$requested_sha\"" <<<"$worker_health" || die "Worker runtime health gate failed"
 grep -q '"storageQuotaMode":"podman-xfs"' <<<"$worker_health" || die "Worker quota health gate failed"
 grep -q '"resourceIsolationMode":"cgroup-v2"' <<<"$worker_health" || die "Worker isolation health gate failed"
+worker_metrics="$(curl --fail --silent --show-error --max-time 20 \
+  --resolve tabtin.dovelora.com:443:127.0.0.1 \
+  --config "$curl_config" "$worker_endpoint/v1/metrics")" ||
+  die "Cloud Worker metrics request failed"
+grep -q '^tabtin_cloud_worker_up 1$' <<<"$worker_metrics" ||
+  die "Cloud Worker metrics readiness gate failed"
 
 printf '{"sg01-cloud-1":{"name":"TabTin sg01 Cloud Worker","edition":"saas","endpoint":"%s","token":"%s","protocol_version":"1","runtime_version":"%s","storage_quota_mode":"podman-xfs","resource_isolation_mode":"cgroup-v2","capacity_cpu_millicores":2000,"capacity_memory_mb":4096,"capacity_storage_gb":20}}\n' \
   "$worker_endpoint" "$worker_token" "$requested_sha" > "$worker_json_tmp"

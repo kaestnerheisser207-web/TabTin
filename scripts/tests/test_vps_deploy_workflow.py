@@ -63,6 +63,8 @@ def test_vps_only_pulls_and_switches_the_prebuilt_image() -> None:
     assert 'docker pull "$requested_django"' in script
     assert 'run_worker pull "$requested_runtime"' in script
     assert 'run_worker pull "$requested_worker"' in script
+    assert '"$worker_endpoint/v1/metrics"' in script
+    assert "tabtin_cloud_worker_up 1" in script
     assert "docker build" not in script
     assert "source.tar.gz" not in script
     assert "github.com/$repository/archive" not in script

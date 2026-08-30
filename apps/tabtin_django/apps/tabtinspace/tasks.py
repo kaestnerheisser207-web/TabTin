@@ -6,9 +6,11 @@ cleanup_stale_online_devices: 清理因 TCP 半开连接等原因导致的假在
 compensate_missing_default_organization: 补偿因 signal 异常导致缺少默认组织的用户。
 """
 import logging
-from apps.services.common.db_router import postgres_app_db_alias
+
 from celery import shared_task
 from celery.schedules import crontab
+
+from apps.services.common.db_router import postgres_app_db_alias
 
 logger = logging.getLogger(__name__)
 
@@ -141,31 +143,15 @@ def heartbeat_cloud_worker_nodes():
     for worker in CloudWorkerNode.objects.filter(
         node_key__in=active_keys,
     ).exclude(state=CloudWorkerNode.State.DRAINING).iterator():
+        failure_reason = "request_failed"
         try:
             health = client.health(worker)
-            if (
-                health.get("ok") is not True
-                or str(health.get("protocolVersion")) != expected_protocol
-                or str(health.get("runtimeVersion") or "")
-                != str(
-                    (worker.metadata_json or {}).get("expected_runtime_version")
-                    or ""
-                )
-                or str(health.get("storageQuotaMode") or "")
-                != str(
-                    (worker.metadata_json or {}).get(
-                        "expected_storage_quota_mode"
-                    )
-                    or ""
-                )
-                or str(health.get("resourceIsolationMode") or "")
-                != str(
-                    (worker.metadata_json or {}).get(
-                        "expected_resource_isolation_mode"
-                    )
-                    or ""
-                )
-            ):
+            failure_reason = _cloud_worker_health_failure_reason(
+                health=health,
+                expected_protocol=expected_protocol,
+                expected=worker.metadata_json or {},
+            )
+            if failure_reason:
                 raise RuntimeError("Cloud Worker protocol/runtime/storage mismatch")
             worker.state = CloudWorkerNode.State.READY
             worker.runtime_version = str(health.get("runtimeVersion") or "")
@@ -179,15 +165,48 @@ def heartbeat_cloud_worker_nodes():
                 ]
             )
             result["ready"] += 1
-        except Exception:
+        except Exception as exc:  # noqa: BLE001 -- remote Worker failures share one health state
             worker.state = CloudWorkerNode.State.ERROR
             worker.save(update_fields=["state", "updated_at"])
             result["error"] += 1
             logger.warning(
-                "[CloudRuntime] Worker heartbeat failed node=%s",
+                "[CloudRuntime] Worker heartbeat failed node=%s reason=%s error_type=%s",
                 worker.node_key,
+                failure_reason or "request_failed",
+                type(exc).__name__,
             )
     return result
+
+
+def _cloud_worker_health_failure_reason(
+    *,
+    health: dict,
+    expected_protocol: str,
+    expected: dict,
+) -> str:
+    checks = (
+        ("health_not_ok", health.get("ok") is True),
+        (
+            "protocol_mismatch",
+            str(health.get("protocolVersion")) == expected_protocol,
+        ),
+        (
+            "runtime_mismatch",
+            str(health.get("runtimeVersion") or "")
+            == str(expected.get("expected_runtime_version") or ""),
+        ),
+        (
+            "storage_quota_mismatch",
+            str(health.get("storageQuotaMode") or "")
+            == str(expected.get("expected_storage_quota_mode") or ""),
+        ),
+        (
+            "resource_isolation_mismatch",
+            str(health.get("resourceIsolationMode") or "")
+            == str(expected.get("expected_resource_isolation_mode") or ""),
+        ),
+    )
+    return next((reason for reason, passed in checks if not passed), "")
 
 
 @shared_task(

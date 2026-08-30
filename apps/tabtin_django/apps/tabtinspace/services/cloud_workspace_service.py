@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import logging
 import re
 import uuid
 from dataclasses import dataclass
@@ -34,6 +35,8 @@ _ACTIVE_ALLOCATION_STATES = {
     CloudRuntimeAllocation.State.PROVISIONING,
     CloudRuntimeAllocation.State.READY,
 }
+
+logger = logging.getLogger(__name__)
 
 
 @dataclass(frozen=True)
@@ -82,6 +85,12 @@ class CloudWorkspaceService(BaseService):
 
         existing = self._find_idempotent(request_key, organization)
         if existing:
+            logger.info(
+                "[CloudRuntime] create organization=%s workspace=%s allocation=%s result=idempotent",
+                organization.id,
+                existing.workspace.id,
+                existing.allocation.id,
+            )
             return existing
 
         runtime_image = str(
@@ -165,6 +174,14 @@ class CloudWorkspaceService(BaseService):
             git_url=source["git_url"],
             git_ref=source["git_ref"],
             git_credential_ref=source["git_credential_ref"],
+        )
+        logger.info(
+            "[CloudRuntime] create organization=%s workspace=%s allocation=%s worker=%s source=%s result=created",
+            organization.id,
+            workspace.id,
+            allocation.id,
+            worker.node_key,
+            source["source_type"],
         )
         return CloudWorkspaceResult(
             workspace=workspace,

@@ -42,4 +42,6 @@ Community 版的 Cloud Worker Supervisor 直接运行在管理员的 VPS 上，�
 
 token 只存在于 Django secret 与 Worker env，不写入 `CloudWorkerNode`；从 JSON 移除的 settings 托管节点会自动标为 `offline`。
 
+Worker 的 `/v1/health` 与 `/v1/metrics` 使用同一个 Bearer 边界；metrics 只暴露有界 operation/result 请求计数、耗时和不可变版本能力，不使用 organization、user、Workspace、allocation 或 thread 作为 Prometheus label。systemd stdout/stderr 为单行 JSON 事件，可携带 allocation/generation 诊断字段，但不记录请求 body、token、命令 stderr 或文件内容。
+
 此目录只定义 Community Worker Supervisor；Cloud Runtime 镜像仍由 `apps/tabtin-daemon/Dockerfile.cloud` 构建并以 `image@sha256:<digest>` 供给，禁止 floating tag。

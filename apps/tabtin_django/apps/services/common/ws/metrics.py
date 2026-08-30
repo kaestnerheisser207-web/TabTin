@@ -24,11 +24,15 @@ import ipaddress
 import logging
 import os
 
-from prometheus_client import Counter, Gauge, Histogram, generate_latest, CONTENT_TYPE_LATEST
 from django.conf import settings
 from django.http import HttpResponse
+from prometheus_client import Counter, Gauge, Histogram, generate_latest, CONTENT_TYPE_LATEST
+
+from apps.tabtinspace.cloud_metrics import register_cloud_state_collector
 
 _logger = logging.getLogger(__name__)
+
+register_cloud_state_collector()
 
 # G-073: configurable whitelist via settings.METRICS_ALLOWED_NETWORKS.
 # Defaults to localhost + RFC1918 private ranges. Override in settings to restrict further.
@@ -292,6 +296,7 @@ def _collect_metrics_payload() -> bytes:
             from prometheus_client.multiprocess import MultiProcessCollector
             registry = CollectorRegistry()
             MultiProcessCollector(registry)
+            register_cloud_state_collector(registry)
             return generate_latest(registry)
         except Exception:  # pragma: no cover - 严重异常也别崩 endpoint
             _logger.exception(

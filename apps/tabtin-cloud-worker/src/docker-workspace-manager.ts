@@ -101,9 +101,7 @@ export class DockerWorkspaceManager {
       return { ...identity, state: 'missing' }
     }
     const currentGeneration = readGeneration(inspected)
-    if (currentGeneration > identity.generation) {
-      throw new StaleGenerationError(currentGeneration)
-    }
+    requireCurrentGeneration(currentGeneration, identity.generation)
     return statusOf(
       identity,
       inspected,
@@ -178,6 +176,7 @@ export class DockerWorkspaceManager {
     if (!inspected?.State?.Running) {
       throw new Error('workspace runtime failed to reach running state')
     }
+    requireCurrentGeneration(readGeneration(inspected), identity.generation)
     return statusOf(identity, inspected, 'running')
   }
 
@@ -251,6 +250,13 @@ function readGeneration(inspect: DockerInspect): number {
     throw new Error('container has no valid TabTin generation label')
   }
   return generation
+}
+
+function requireCurrentGeneration(current: number, expected: number): void {
+  if (current > expected) throw new StaleGenerationError(current)
+  if (current !== expected) {
+    throw new Error(`workspace runtime generation mismatch; current=${current} expected=${expected}`)
+  }
 }
 
 function statusOf(

@@ -14,6 +14,7 @@ class FakeRunner implements CommandRunner {
   readonly stdins: Array<string | undefined> = []
   inspectResult: object[] | null = null
   volumes: string[] = []
+  createdGeneration: number | null = null
 
   async run(args: readonly string[], stdin?: string) {
     this.calls.push([...args])
@@ -28,10 +29,20 @@ class FakeRunner implements CommandRunner {
     if (args[0] === 'volume' && args[1] === 'ls') {
       return { stdout: this.volumes.join('\n'), stderr: '' }
     }
+    if (args[0] === 'create') {
+      const generationLabel = args.find(value => value.startsWith('com.tabtin.cloud.generation='))
+      this.createdGeneration = Number(generationLabel?.split('=')[1])
+      return { stdout: 'container-id\n', stderr: '' }
+    }
     if (args[0] === 'start') {
+      const current = this.inspectResult?.[0] as {
+        Config?: { Labels?: Record<string, string> }
+      } | undefined
+      const generation = this.createdGeneration
+        ?? Number(current?.Config?.Labels?.['com.tabtin.cloud.generation'])
       this.inspectResult = [{
         Id: 'container-id',
-        Config: { Labels: { 'com.tabtin.cloud.generation': '1' } },
+        Config: { Labels: { 'com.tabtin.cloud.generation': String(generation) } },
         State: { Running: true },
       }]
       return { stdout: 'container-id\n', stderr: '' }
@@ -101,6 +112,68 @@ describe('DockerWorkspaceManager', () => {
     await expect(manager.provision(provisionInput({ generation: 2 })))
       .rejects.toBeInstanceOf(StaleGenerationError)
     expect(runner.calls.some(args => args[0] === 'rm')).toBe(false)
+  })
+
+  it('reattaches after a Worker process restart without recreating the same generation', async () => {
+    const runner = new FakeRunner()
+    runner.inspectResult = [{
+      Id: 'existing',
+      Config: { Labels: { 'com.tabtin.cloud.generation': '1' } },
+      State: { Running: true },
+    }]
+
+    const restartedManager = new DockerWorkspaceManager(runner)
+    const status = await restartedManager.provision(provisionInput())
+
+    expect(status).toMatchObject({
+      state: 'running',
+      containerId: 'existing',
+      generation: 1,
+    })
+    expect(runner.calls).toEqual([['inspect', `tabtin-cloud-${ALLOCATION_ID}`]])
+  })
+
+  it('replaces an older generation while preserving the named workspace volumes', async () => {
+    const runner = new FakeRunner()
+    runner.inspectResult = [{
+      Id: 'generation-1',
+      Config: { Labels: { 'com.tabtin.cloud.generation': '1' } },
+      State: { Running: true },
+    }]
+    const manager = new DockerWorkspaceManager(runner, 'tabtin-cloud-runtime', 'podman-xfs')
+
+    const status = await manager.provision(provisionInput({
+      generation: 2,
+      bootstrapToken: 'generation-2-token',
+    }))
+
+    expect(status.generation).toBe(2)
+    expect(runner.calls).toContainEqual(['rm', '--force', `tabtin-cloud-${ALLOCATION_ID}`])
+    expect(runner.calls).toContainEqual([
+      'volume', 'create',
+      '--label', `com.tabtin.cloud.allocation=${ALLOCATION_ID}`,
+      '--opt', 'o=size=20G',
+      'cloud-workspace-test',
+    ])
+    expect(runner.calls.some(args => args[0] === 'volume' && args[1] === 'rm')).toBe(false)
+    const create = runner.calls.find(args => args[0] === 'create')
+    expect(create).toContain('com.tabtin.cloud.generation=2')
+    expect(create).toContain('type=volume,src=cloud-workspace-test,dst=/workspace')
+    expect(runner.stdins).toContain('generation-2-token')
+  })
+
+  it('refuses lifecycle operations when the backend still exposes an older generation', async () => {
+    const runner = new FakeRunner()
+    runner.inspectResult = [{
+      Id: 'generation-1',
+      Config: { Labels: { 'com.tabtin.cloud.generation': '1' } },
+      State: { Running: false },
+    }]
+    const manager = new DockerWorkspaceManager(runner)
+
+    await expect(manager.restart({ allocationId: ALLOCATION_ID, generation: 2 }))
+      .rejects.toThrow('generation mismatch')
+    expect(runner.calls.some(args => args[0] === 'restart')).toBe(false)
   })
 
   it('permanent delete removes only volumes carrying the allocation label', async () => {

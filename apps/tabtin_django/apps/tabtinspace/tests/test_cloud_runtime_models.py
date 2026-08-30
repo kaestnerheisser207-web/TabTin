@@ -8,6 +8,7 @@ from django.utils import timezone
 
 from apps.services.agent_engine.models import RuntimeBinding
 from apps.services.agent_engine.runtime_binding_service import RuntimeBindingService
+from apps.tabtinspace.cloud_metrics import CloudStateCollector
 from apps.tabtinspace.models import CloudRuntimeAllocation, CloudWorkerNode, Workspace
 from apps.tabtinspace.services.base import ServiceError
 from apps.tabtinspace.services.cloud_allocation_reconciler import (
@@ -30,6 +31,7 @@ from apps.tabtinspace.services.runtime_plane import (
     UnsupportedExecutionDevice,
     derive_runtime_plane,
 )
+from apps.tabtinspace.tasks import _cloud_worker_health_failure_reason
 
 
 class RuntimePlaneProjectionTests(SimpleTestCase):
@@ -47,6 +49,53 @@ class RuntimePlaneProjectionTests(SimpleTestCase):
 
 
 class CloudRuntimeModelContractTests(SimpleTestCase):
+    def test_worker_health_mismatch_reason_is_bounded_and_actionable(self):
+        expected = {
+            "expected_runtime_version": "runtime-1",
+            "expected_storage_quota_mode": "podman-xfs",
+            "expected_resource_isolation_mode": "cgroup-v2",
+        }
+        healthy = {
+            "ok": True,
+            "protocolVersion": "1",
+            "runtimeVersion": "runtime-1",
+            "storageQuotaMode": "podman-xfs",
+            "resourceIsolationMode": "cgroup-v2",
+        }
+
+        self.assertEqual(
+            _cloud_worker_health_failure_reason(
+                health=healthy,
+                expected_protocol="1",
+                expected=expected,
+            ),
+            "",
+        )
+        self.assertEqual(
+            _cloud_worker_health_failure_reason(
+                health={**healthy, "resourceIsolationMode": "unverified"},
+                expected_protocol="1",
+                expected=expected,
+            ),
+            "resource_isolation_mismatch",
+        )
+
+    def test_cloud_metrics_fail_closed_without_breaking_the_metrics_endpoint(self):
+        collector = CloudStateCollector()
+        with patch.object(
+            collector,
+            "_collect_state",
+            side_effect=RuntimeError("database unavailable"),
+        ):
+            families = list(collector.collect())
+
+        self.assertEqual(len(families), 1)
+        self.assertEqual(
+            families[0].samples[0].name,
+            "tabtin_cloud_state_collection_success",
+        )
+        self.assertEqual(families[0].samples[0].value, 0)
+
     def test_allocation_is_one_to_one_with_workspace_and_device(self):
         self.assertTrue(
             CloudRuntimeAllocation._meta.get_field("workspace").one_to_one
@@ -373,6 +422,71 @@ class CloudWorkspaceServiceTests(TransactionTestCase):
         self.assertEqual(first.workspace.device.device_type, "cloud")
         self.assertEqual(first.allocation.state, "pending")
         self.assertEqual(first.allocation.generation, 1)
+
+    def test_cloud_state_collector_exposes_bounded_capacity_and_recovery_state(self):
+        created = self.service.create_cloud_workspace(
+            request_key=uuid4(),
+            organization_id=self.organization.id,
+            name="Metrics",
+        )
+        created.allocation.state = CloudRuntimeAllocation.State.READY
+        created.allocation.save(update_fields=["state", "updated_at"])
+        self.worker.last_heartbeat_at = timezone.now()
+        self.worker.save(update_fields=["last_heartbeat_at", "updated_at"])
+        RuntimeBindingService().freeze_for_dispatch(
+            workspace=created.workspace,
+            thread_id="thread-metrics",
+            harness="dsh",
+        )
+
+        families = {
+            family.name: family for family in CloudStateCollector().collect()
+        }
+
+        def value(family_name: str, labels: dict[str, str]) -> float:
+            family = families[family_name]
+            return next(
+                sample.value
+                for sample in family.samples
+                if sample.labels == labels
+            )
+
+        self.assertEqual(
+            value("tabtin_cloud_state_collection_success", {}),
+            1,
+        )
+        self.assertEqual(
+            value(
+                "tabtin_cloud_worker_nodes",
+                {"edition": "saas", "state": "ready"},
+            ),
+            1,
+        )
+        self.assertEqual(
+            value("tabtin_cloud_allocations", {"state": "ready"}),
+            1,
+        )
+        self.assertEqual(
+            value(
+                "tabtin_cloud_runtime_bindings",
+                {"harness": "dsh", "state": "active"},
+            ),
+            1,
+        )
+        self.assertEqual(
+            value(
+                "tabtin_cloud_worker_capacity",
+                {"node": self.worker.node_key, "resource": "cpu_millicores"},
+            ),
+            4000,
+        )
+        self.assertEqual(
+            value(
+                "tabtin_cloud_worker_allocated",
+                {"node": self.worker.node_key, "resource": "cpu_millicores"},
+            ),
+            2000,
+        )
 
     def test_saas_active_workspace_quota_is_enforced(self):
         self.service.create_cloud_workspace(

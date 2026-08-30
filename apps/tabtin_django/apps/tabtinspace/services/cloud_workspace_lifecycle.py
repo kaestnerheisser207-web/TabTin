@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import logging
 from datetime import timedelta
 
 from django.conf import settings
@@ -14,6 +15,8 @@ from apps.tabtinspace.models import CloudRuntimeAllocation, Workspace
 from apps.tabtinspace.services.base import ServiceError
 from apps.tabtinspace.services.cloud_worker_client import CloudWorkerClient
 from apps.tabtinspace.services.workspace_service import WorkspaceService
+
+logger = logging.getLogger(__name__)
 
 
 class CloudWorkspaceLifecycleService:
@@ -46,6 +49,12 @@ class CloudWorkspaceLifecycleService:
                 state=RuntimeBinding.State.SUSPENDED,
                 revision=models.F("revision") + 1,
             )
+        logger.info(
+            "[CloudRuntime] lifecycle action=disable workspace=%s allocation=%s generation=%s result=disabled",
+            workspace.id,
+            allocation.id,
+            allocation.generation,
+        )
         return workspace
 
     def restart(self, workspace_id) -> Workspace:
@@ -89,6 +98,12 @@ class CloudWorkspaceLifecycleService:
                 state=RuntimeBinding.State.SUSPENDED,
                 revision=models.F("revision") + 1,
             )
+        logger.info(
+            "[CloudRuntime] lifecycle action=restart workspace=%s allocation=%s generation=%s result=awaiting_heartbeat",
+            workspace.id,
+            allocation.id,
+            allocation.generation,
+        )
         return workspace
 
     def restore(self, workspace_id) -> Workspace:
@@ -121,6 +136,9 @@ class CloudWorkspaceLifecycleService:
         response = self.client.delete_permanently(allocation)
         if response.get("deleted") is not True:
             raise ServiceError("CLOUD_DELETE_FAILED", "Worker 未确认永久删除", 502)
+        deleted_workspace_id = workspace.id
+        deleted_allocation_id = allocation.id
+        deleted_generation = allocation.generation
         device_id = allocation.device_id
         with transaction.atomic(using=postgres_app_db_alias()):
             RuntimeBinding.objects.filter(allocation=allocation).delete()
@@ -129,6 +147,12 @@ class CloudWorkspaceLifecycleService:
             from apps.tabtinspace.models import Device
 
             Device.objects.filter(id=device_id).delete()
+        logger.info(
+            "[CloudRuntime] lifecycle action=delete workspace=%s allocation=%s generation=%s result=deleted",
+            deleted_workspace_id,
+            deleted_allocation_id,
+            deleted_generation,
+        )
 
     def _owned_cloud(self, workspace_id) -> tuple[Workspace, CloudRuntimeAllocation]:
         workspace = WorkspaceService(user=self.user).get_workspace(workspace_id)

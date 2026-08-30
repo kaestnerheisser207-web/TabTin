@@ -3,13 +3,11 @@ from __future__ import annotations
 import base64
 import hashlib
 import json
-import os
-from pathlib import Path
 import subprocess
 import sys
+from pathlib import Path
 
 from tabtin.community_secrets import ensure_installation_secrets, secret_file_paths
-
 
 DJANGO_ROOT = Path(__file__).resolve().parents[2]
 _TEST_CREDENTIAL_KEY = base64.urlsafe_b64encode(
@@ -81,6 +79,7 @@ def _import_settings(
     env.update(extra_env or {})
 
     script = """
+import hashlib
 import json
 import dotenv
 
@@ -108,6 +107,9 @@ print("EDITION_RESULT=" + json.dumps({
     "email_provider_configured": settings.EMAIL_PROVIDER_CONFIGURED,
     "database_name": settings.DATABASES["default"]["NAME"],
     "database_user": settings.DATABASES["default"]["USER"],
+    "cloud_workers_sha256": hashlib.sha256(
+        settings.TABTIN_CLOUD_WORKERS_JSON.encode("utf-8")
+    ).hexdigest(),
 }, sort_keys=True))
 """
     return subprocess.run(
@@ -141,6 +143,7 @@ def test_community_settings_start_without_ai_or_email_provider() -> None:
         "daemon_ws_url": "",
         "database_name": "tabtin",
         "database_user": "tabtin_runtime",
+        "cloud_workers_sha256": hashlib.sha256(b"{}").hexdigest(),
         "edition": "community",
         "email_backend": "django.core.mail.backends.console.EmailBackend",
         "email_host": "",
@@ -156,6 +159,28 @@ def test_community_settings_start_without_ai_or_email_provider() -> None:
         "updater_cdn_endpoint": "",
         "updater_oss_endpoint": "",
     }
+
+
+def test_community_settings_load_cloud_worker_registry_from_file(
+    tmp_path: Path,
+) -> None:
+    registry = (
+        '{"worker-1":{"endpoint":"https://worker.example.test",'
+        '"token":"test-worker-token"}}'
+    )
+    registry_file = tmp_path / "TABTIN_CLOUD_WORKERS_JSON"
+    registry_file.write_text(registry, encoding="utf-8")
+
+    payload = _payload(
+        _import_settings(
+            edition="community",
+            include_saas_secrets=False,
+            extra_env={"TABTIN_CLOUD_WORKERS_JSON_FILE": str(registry_file)},
+        )
+    )
+
+    expected_hash = hashlib.sha256(registry.encode("utf-8")).hexdigest()
+    assert payload["cloud_workers_sha256"] == expected_hash
 
 
 def test_community_settings_keep_explicit_third_party_endpoints() -> None:
