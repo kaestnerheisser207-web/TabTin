@@ -16,6 +16,7 @@ class FakeRunner implements CommandRunner {
   inspectResult: object[] | null = null
   volumes: string[] = []
   createdGeneration: number | null = null
+  daemonInitialized = true
 
   async run(args: readonly string[], stdin?: string) {
     this.calls.push([...args])
@@ -32,6 +33,15 @@ class FakeRunner implements CommandRunner {
     }
     if (args[0] === 'volume' && args[1] === 'ls') {
       return { stdout: this.volumes.join('\n'), stderr: '' }
+    }
+    if (
+      args[0] === 'run'
+      && args.some(value => value.includes('printf initialized; else printf uninitialized'))
+    ) {
+      return {
+        stdout: this.daemonInitialized ? 'initialized' : 'uninitialized',
+        stderr: '',
+      }
     }
     if (args[0] === 'create') {
       const generationLabel = args.find(value => value.startsWith('com.tabtin.cloud.generation='))
@@ -202,7 +212,37 @@ describe('DockerWorkspaceManager', () => {
       containerId: 'existing',
       generation: 1,
     })
-    expect(runner.calls).toEqual([['inspect', `tabtin-cloud-${ALLOCATION_ID}`]])
+    expect(runner.calls).toEqual([
+      ['inspect', `tabtin-cloud-${ALLOCATION_ID}`],
+      expect.arrayContaining([
+        'run', '--rm',
+        '--pids-limit', '256',
+        '--network', 'none',
+        `type=volume,src=cloud-workspace-${ALLOCATION_ID}-runtime,dst=/var/lib/tabtin,readonly`,
+      ]),
+    ])
+  })
+
+  it('refreshes an expired bootstrap token for a running uninitialized generation', async () => {
+    const runner = new FakeRunner()
+    runner.daemonInitialized = false
+    runner.inspectResult = [{
+      Id: 'existing',
+      Config: { Labels: { 'com.tabtin.cloud.generation': '1' } },
+      State: { Running: true },
+    }]
+
+    const manager = new DockerWorkspaceManager(runner)
+    const status = await manager.provision(provisionInput({
+      bootstrapToken: 'replacement-install-token',
+    }))
+
+    expect(status).toMatchObject({ state: 'running', generation: 1 })
+    expect(runner.calls).toContainEqual([
+      'stop', '--time', '30', `tabtin-cloud-${ALLOCATION_ID}`,
+    ])
+    expect(runner.stdins).toContain('replacement-install-token')
+    expect(runner.calls).toContainEqual(['start', `tabtin-cloud-${ALLOCATION_ID}`])
   })
 
   it('replaces an older generation while preserving the named workspace volumes', async () => {
