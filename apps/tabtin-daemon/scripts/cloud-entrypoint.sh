@@ -9,7 +9,16 @@ if [ ! -f "$config_dir/config.json" ]; then
     echo "Cloud daemon bootstrap token is missing" >&2
     exit 1
   fi
-  tabtin-daemon init --token-stdin --config-dir "$config_dir" < "$token_file"
+  init_attempt=1
+  until tabtin-daemon init --token-stdin --config-dir "$config_dir" < "$token_file"; do
+    if [ "$init_attempt" -ge 8 ]; then
+      echo "Cloud daemon bootstrap failed after $init_attempt attempts" >&2
+      exit 1
+    fi
+    echo "Cloud daemon bootstrap retrying in 60 seconds" >&2
+    sleep 60
+    init_attempt=$((init_attempt + 1))
+  done
 fi
 
 rm -f "$token_file"

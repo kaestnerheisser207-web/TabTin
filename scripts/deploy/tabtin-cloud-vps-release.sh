@@ -248,6 +248,8 @@ upsert_runtime_env TABTIN_CLOUD_WORKERS_JSON_FILE /run/tabtin-community-secrets/
 upsert_runtime_env DAEMON_TOKEN_SECRET_FILE /run/tabtin-community-secrets/DAEMON_TOKEN_SECRET
 upsert_runtime_env TABTIN_CLOUD_RUNTIME_STORAGE_GB "$TABTIN_CLOUD_RUNTIME_STORAGE_GB"
 upsert_runtime_env TABTIN_CLOUD_WORKER_EDITION "$TABTIN_CLOUD_WORKER_EDITION"
+upsert_runtime_env DAEMON_SERVER_URL https://tabtin.dovelora.com
+upsert_runtime_env DAEMON_WS_URL wss://tabtin.dovelora.com
 
 run_worker logout ghcr.io >/dev/null 2>&1 || true
 rm -f "$worker_env_tmp" "$worker_json_tmp" "$curl_config"

@@ -188,6 +188,8 @@ def test_cloud_host_release_is_separate_and_requires_runtime_worker_digests() ->
     assert 'worker_health=""' in script
     assert '"$worker_direct_endpoint/v1/health" 2>/dev/null' in script
     assert 'journalctl -u tabtin-cloud-worker -n 120' in script
+    assert "upsert_runtime_env DAEMON_SERVER_URL https://tabtin.dovelora.com" in script
+    assert "upsert_runtime_env DAEMON_WS_URL wss://tabtin.dovelora.com" in script
     assert "tabtin-community-celery-beat-1" in script
     assert "candidate=raw.strip()" in script
     assert 're.fullmatch(r"[A-Za-z0-9_=-]{32,256}", candidate)' in script
@@ -214,7 +216,8 @@ def test_cloud_host_bootstrap_keeps_worker_rootless_and_quota_gated() -> None:
     volume_helper = VOLUME_HELPER_SCRIPT.read_text(encoding="utf-8")
 
     assert "loginctl enable-linger" in bootstrap
-    assert "ca-certificates fuse-overlayfs nodejs passt podman" in bootstrap
+    assert "aardvark-dns ca-certificates fuse-overlayfs nodejs passt podman" in bootstrap
+    assert '[[ -x /usr/lib/podman/aardvark-dns ]]' in bootstrap
     assert 'command -v pasta >/dev/null' in bootstrap
     assert "systemctl --user enable --now podman.socket" in bootstrap
     assert "systemctl --user enable podman-restart.service" in bootstrap
@@ -289,6 +292,17 @@ def test_cloud_nginx_route_insertion_is_indentation_safe_and_idempotent(tmp_path
     assert "proxy_pass http://172.18.0.1:8090/;" in rendered
     assert "proxy_pass http://172.17.0.1:8090/;" not in rendered
     assert rendered.index("Cloud Worker control plane") < rendered.index("location / {")
+
+
+def test_cloud_runtime_entrypoint_bounds_activation_retries() -> None:
+    entrypoint = (
+        ROOT / "apps/tabtin-daemon/scripts/cloud-entrypoint.sh"
+    ).read_text(encoding="utf-8")
+
+    assert "until tabtin-daemon init --token-stdin" in entrypoint
+    assert 'if [ "$init_attempt" -ge 8 ]' in entrypoint
+    assert "Cloud daemon bootstrap retrying in 60 seconds" in entrypoint
+    assert "sleep 60" in entrypoint
 
 
 def test_restricted_gateway_dispatches_only_validated_standard_or_cloud_releases() -> None:
