@@ -231,6 +231,8 @@ def test_cloud_host_bootstrap_keeps_worker_rootless_and_quota_gated() -> None:
     assert "User=tabtin-cloud-worker" in service
     assert "NoNewPrivileges=true" in service
     assert "ProtectSystem=strict" in service
+    assert "ProtectHome=read-only" in service
+    assert "ProtectHome=true" not in service
     assert "SocketGroup=tabtin-cloud-worker" in volume_socket
     assert "SocketMode=0660" in volume_socket
     assert "Accept=yes" in volume_socket
