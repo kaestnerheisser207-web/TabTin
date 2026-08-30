@@ -3,6 +3,7 @@ from typing import ClassVar
 from unittest.mock import patch
 from uuid import uuid4
 
+from django.db import transaction
 from django.test import SimpleTestCase, TransactionTestCase, override_settings
 from django.utils import timezone
 
@@ -360,6 +361,8 @@ class CloudRuntimePersistenceTests(TransactionTestCase):
     ),
     TABTIN_CLOUD_WORKER_PROTOCOL_VERSION="1",
     TABTIN_CLOUD_MAX_ACTIVE_WORKSPACES_PER_USER=1,
+    TABTIN_CLOUD_RUNTIME_STORAGE_GB=2,
+    TABTIN_CLOUD_WORKER_EDITION="saas",
 )
 class CloudWorkspaceServiceTests(TransactionTestCase):
     databases: ClassVar[set[str]] = {"default", "postgresql"}
@@ -487,6 +490,40 @@ class CloudWorkspaceServiceTests(TransactionTestCase):
             ),
             2000,
         )
+        self.assertEqual(
+            value(
+                "tabtin_cloud_worker_allocated",
+                {"node": self.worker.node_key, "resource": "storage_gb"},
+            ),
+            22,
+        )
+
+    def test_disabled_allocation_releases_compute_but_retains_both_volumes(self):
+        created = self.service.create_cloud_workspace(
+            request_key=uuid4(),
+            organization_id=self.organization.id,
+            name="Retained",
+        )
+        created.allocation.state = CloudRuntimeAllocation.State.DISABLED
+        created.allocation.save(update_fields=["state", "updated_at"])
+
+        usage = self.service._worker_usage(self.worker)
+
+        self.assertEqual(usage, {"cpu": 0, "memory": 0, "storage": 22})
+        self.worker.capacity_storage_gb = 43
+        self.assertFalse(self.service._worker_has_capacity(self.worker))
+        self.worker.capacity_storage_gb = 44
+        self.assertTrue(self.service._worker_has_capacity(self.worker))
+
+    @override_settings(
+        TABTIN_EDITION="community",
+        TABTIN_CLOUD_WORKER_EDITION="saas",
+    )
+    def test_hosted_cloud_pool_can_run_on_community_control_plane(self):
+        with transaction.atomic(using=self.db_alias):
+            selected = self.service._select_worker(self.organization)
+
+        self.assertEqual(selected.id, self.worker.id)
 
     def test_saas_active_workspace_quota_is_enforced(self):
         self.service.create_cloud_workspace(

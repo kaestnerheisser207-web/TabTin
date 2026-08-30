@@ -12,7 +12,7 @@ from uuid import UUID
 
 from django.conf import settings
 from django.db import transaction
-from django.db.models import Sum
+from django.db.models import Count, Sum
 
 from apps.services.common.db_router import postgres_app_db_alias
 from apps.tabtinspace.models import (
@@ -35,6 +35,17 @@ _ACTIVE_ALLOCATION_STATES = {
     CloudRuntimeAllocation.State.PROVISIONING,
     CloudRuntimeAllocation.State.READY,
 }
+_RETAINED_STORAGE_STATES = {
+    CloudRuntimeAllocation.State.PENDING,
+    CloudRuntimeAllocation.State.PROVISIONING,
+    CloudRuntimeAllocation.State.READY,
+    CloudRuntimeAllocation.State.DISABLED,
+    CloudRuntimeAllocation.State.ERROR,
+    CloudRuntimeAllocation.State.DELETING,
+}
+_DEFAULT_CPU_MILLICORES = 2000
+_DEFAULT_MEMORY_MB = 4096
+_DEFAULT_WORKSPACE_STORAGE_GB = 20
 
 logger = logging.getLogger(__name__)
 
@@ -109,6 +120,9 @@ class CloudWorkspaceService(BaseService):
             git_ref=git_ref,
             git_credential_ref=git_credential_ref,
         )
+        # Fail with the user-owned entitlement before disclosing shared Worker
+        # capacity. The check is repeated under the Worker row lock below.
+        self._enforce_user_quota()
         worker = self._select_worker(organization)
         # Recheck under the Worker row lock: concurrent retries and per-user
         # quota decisions now serialize on the scheduling authority.
@@ -218,7 +232,11 @@ class CloudWorkspaceService(BaseService):
         )
 
     def _select_worker(self, organization: Organization) -> CloudWorkerNode:
-        edition = getattr(settings, "TABTIN_EDITION", "saas")
+        edition = getattr(
+            settings,
+            "TABTIN_CLOUD_WORKER_EDITION",
+            getattr(settings, "TABTIN_EDITION", "saas"),
+        )
         workers = CloudWorkerNode.objects.select_for_update().filter(
             edition=edition,
             state=CloudWorkerNode.State.READY,
@@ -247,7 +265,11 @@ class CloudWorkspaceService(BaseService):
         )
 
     def _enforce_user_quota(self) -> None:
-        if getattr(settings, "TABTIN_EDITION", "saas") != "saas":
+        if getattr(
+            settings,
+            "TABTIN_CLOUD_WORKER_EDITION",
+            getattr(settings, "TABTIN_EDITION", "saas"),
+        ) != "saas":
             return
         limit = int(
             getattr(settings, "TABTIN_CLOUD_MAX_ACTIVE_WORKSPACES_PER_USER", 1)
@@ -265,23 +287,46 @@ class CloudWorkspaceService(BaseService):
 
     @staticmethod
     def _worker_usage(worker: CloudWorkerNode) -> dict[str, int]:
-        usage = CloudRuntimeAllocation.objects.filter(
+        active_usage = CloudRuntimeAllocation.objects.filter(
             worker=worker,
             state__in=_ACTIVE_ALLOCATION_STATES,
         ).aggregate(
             cpu=Sum("cpu_millicores"),
             memory=Sum("memory_mb"),
-            storage=Sum("storage_gb"),
         )
-        return {key: int(value or 0) for key, value in usage.items()}
+        retained_storage = CloudRuntimeAllocation.objects.filter(
+            worker=worker,
+            state__in=_RETAINED_STORAGE_STATES,
+        ).aggregate(
+            workspace_storage=Sum("storage_gb"),
+            allocation_count=Count("id"),
+        )
+        runtime_storage_gb = int(
+            getattr(settings, "TABTIN_CLOUD_RUNTIME_STORAGE_GB", 2)
+        )
+        return {
+            "cpu": int(active_usage["cpu"] or 0),
+            "memory": int(active_usage["memory"] or 0),
+            "storage": int(retained_storage["workspace_storage"] or 0)
+            + int(retained_storage["allocation_count"] or 0)
+            * runtime_storage_gb,
+        }
 
     @classmethod
     def _worker_has_capacity(cls, worker: CloudWorkerNode) -> bool:
         usage = cls._worker_usage(worker)
+        runtime_storage_gb = int(
+            getattr(settings, "TABTIN_CLOUD_RUNTIME_STORAGE_GB", 2)
+        )
         return (
-            usage["cpu"] + 2000 <= worker.capacity_cpu_millicores
-            and usage["memory"] + 4096 <= worker.capacity_memory_mb
-            and usage["storage"] + 20 <= worker.capacity_storage_gb
+            usage["cpu"] + _DEFAULT_CPU_MILLICORES
+            <= worker.capacity_cpu_millicores
+            and usage["memory"] + _DEFAULT_MEMORY_MB
+            <= worker.capacity_memory_mb
+            and usage["storage"]
+            + _DEFAULT_WORKSPACE_STORAGE_GB
+            + runtime_storage_gb
+            <= worker.capacity_storage_gb
         )
 
     @classmethod
