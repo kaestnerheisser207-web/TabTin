@@ -56,12 +56,15 @@ export class DockerWorkspaceManager {
         throw new StaleGenerationError(currentGeneration)
       }
       if (currentGeneration === input.generation) {
-        if (!existing.State?.Running) {
-          await this.writeBootstrapToken(input)
-          await this.runner.run(['start', container])
-          return await this.requireRunning(input)
+        if (existing.State?.Running && await this.isDaemonInitialized(input)) {
+          return statusOf(input, existing, 'running')
         }
-        return statusOf(input, existing, 'running')
+        if (existing.State?.Running) {
+          await this.runner.run(['stop', '--time', '30', container])
+        }
+        await this.writeBootstrapToken(input)
+        await this.runner.run(['start', container])
+        return await this.requireRunning(input)
       }
       await this.runner.run(['rm', '--force', container])
     }
@@ -191,6 +194,22 @@ export class DockerWorkspaceManager {
       '-c',
       'umask 077; mkdir -p /var/lib/tabtin/bootstrap; cat > /var/lib/tabtin/bootstrap/install-token; chown -R 1000:1000 /var/lib/tabtin /workspace',
     ], input.bootstrapToken)
+  }
+
+  private async isDaemonInitialized(input: ProvisionWorkspaceInput): Promise<boolean> {
+    const result = await this.runner.run([
+      'run', '--rm',
+      '--pids-limit', '256',
+      '--network', 'none',
+      '--cap-drop', 'ALL',
+      '--security-opt', 'no-new-privileges',
+      '--mount', `type=volume,src=${runtimeVolume(input.volumeRef)},dst=/var/lib/tabtin,readonly`,
+      '--entrypoint', 'sh',
+      input.image,
+      '-c',
+      'if [ -f /var/lib/tabtin/daemon/config.json ]; then printf initialized; else printf uninitialized; fi',
+    ])
+    return result.stdout.trim() === 'initialized'
   }
 
   private async requireRunning(identity: AllocationIdentity): Promise<WorkspaceRuntimeStatus> {
