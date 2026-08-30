@@ -200,6 +200,7 @@ class AgentDispatcher:
         )
         harness_config = effective_config.agent_config.get("harness", {})
         harness_type = harness_config.get("type", "builtin")
+        backend_type = harness_type
         effective_thread_id = thread_id or getattr(session, "effective_thread_id", None) or str(session.id)
         if runtime_target is not None:
             from apps.services.agent_engine.runtime_binding_service import (
