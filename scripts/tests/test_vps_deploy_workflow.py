@@ -90,9 +90,9 @@ def test_vps_only_pulls_and_switches_the_prebuilt_images() -> None:
     assert "source.tar.gz" not in script
     assert "github.com/$repository/archive" not in script
     assert "rollback" not in script.lower()
-    assert "compose stop collab-live centrifugo tabtin-web celery django" in script
+    assert "compose stop collab-live centrifugo tabtin-web celery-beat celery django" in script
     maintenance = script.index(
-        "compose stop collab-live centrifugo tabtin-web celery django"
+        "compose stop collab-live centrifugo tabtin-web celery-beat celery django"
     )
     migrate = script.index("manage.py safe_migrate --no-input")
     recreate = script.index("recreating Django")
@@ -102,6 +102,7 @@ def test_vps_only_pulls_and_switches_the_prebuilt_images() -> None:
     assert "manage.py safe_migrate --no-input" in script
     assert "docker inspect tabtin-community-django-1" not in script
     assert "recreating Web, Collab, and Centrifugo" in script
+    assert "tabtin-community-celery-beat-1" in script
     assert "local readiness response did not report ready" in script
 
 
@@ -187,6 +188,7 @@ def test_cloud_host_release_is_separate_and_requires_runtime_worker_digests() ->
     assert 'worker_health=""' in script
     assert '"$worker_direct_endpoint/v1/health" 2>/dev/null' in script
     assert 'journalctl -u tabtin-cloud-worker -n 120' in script
+    assert "tabtin-community-celery-beat-1" in script
     assert "candidate=raw.strip()" in script
     assert 're.fullmatch(r"[A-Za-z0-9_=-]{32,256}", candidate)' in script
     assert 'DEPLOYED_COMMIT" 2>/dev/null' in script

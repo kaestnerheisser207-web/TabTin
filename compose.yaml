@@ -157,6 +157,33 @@ services:
       start_period: 60s
     networks: [community]
 
+  celery-beat:
+    <<: *django-image
+    env_file:
+      - ./.env.community-runtime
+    user: '10001:10001'
+    restart: unless-stopped
+    command: ['beat']
+    environment:
+      <<: *django-environment
+    volumes:
+      - installation-secrets:/run/tabtin-community-secrets:ro
+      - local-objects:/var/lib/tabtin/objects
+    depends_on:
+      django: { condition: service_healthy }
+      redis: { condition: service_healthy }
+    healthcheck:
+      test:
+        [
+          'CMD-SHELL',
+          'test -s /tmp/celerybeat.pid && kill -0 "$$(cat /tmp/celerybeat.pid)"',
+        ]
+      interval: 20s
+      timeout: 5s
+      retries: 6
+      start_period: 30s
+    networks: [community]
+
   centrifugo:
     image: centrifugo/centrifugo:v6
     user: '10001:10001'

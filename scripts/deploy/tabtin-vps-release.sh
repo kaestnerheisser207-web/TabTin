@@ -109,7 +109,7 @@ compose run --rm --no-deps --user 0:0 \
   manage.py safe_migrate --plan --no-input
 
 log "entering maintenance window before migration"
-compose stop collab-live centrifugo tabtin-web celery django
+compose stop collab-live centrifugo tabtin-web celery-beat celery django
 
 log "applying release migrations"
 compose run --rm --no-deps --user 0:0 \
@@ -125,11 +125,15 @@ if ! wait_for_health tabtin-community-django-1 48; then
   die "new Django container did not become healthy"
 fi
 
-log "recreating Celery"
-compose up -d --no-deps --no-build --force-recreate celery
+log "recreating Celery worker and beat"
+compose up -d --no-deps --no-build --force-recreate celery celery-beat
 if ! wait_for_health tabtin-community-celery-1 24; then
   docker logs --tail 200 tabtin-community-celery-1 >&2 || true
   die "new Celery container did not become healthy"
+fi
+if ! wait_for_health tabtin-community-celery-beat-1 24; then
+  docker logs --tail 200 tabtin-community-celery-beat-1 >&2 || true
+  die "new Celery beat container did not become healthy"
 fi
 
 log "recreating Web, Collab, and Centrifugo"
@@ -200,6 +204,6 @@ log "commit: $requested_sha"
 log "Django image: $requested_django ($django_image_id)"
 log "Web image: $requested_web ($web_image_id)"
 log "Collab image: $requested_collab ($collab_image_id)"
-compose ps django celery tabtin-web collab-live centrifugo
+compose ps django celery celery-beat tabtin-web collab-live centrifugo
 printf '%s\n' "$local_health_response"
 printf '%s\n' "$health_response"
