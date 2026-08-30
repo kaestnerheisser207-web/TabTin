@@ -184,6 +184,11 @@ def test_cloud_host_release_is_separate_and_requires_runtime_worker_digests() ->
     assert "systemctl enable tabtin-cloud-worker" in script
     assert "systemctl restart tabtin-cloud-worker" in script
     assert "systemctl enable --now tabtin-cloud-worker" not in script
+    assert 'worker_health=""' in script
+    assert '"$worker_direct_endpoint/v1/health" 2>/dev/null' in script
+    assert 'journalctl -u tabtin-cloud-worker -n 120' in script
+    assert "candidate=raw.strip()" in script
+    assert 're.fullmatch(r"[A-Za-z0-9_=-]{32,256}", candidate)' in script
     assert 'DEPLOYED_COMMIT" 2>/dev/null' in script
     assert "docker build" not in script
     assert "source.tar.gz" not in script

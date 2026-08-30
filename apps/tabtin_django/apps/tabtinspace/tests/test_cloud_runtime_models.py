@@ -163,6 +163,45 @@ class CloudWorkerClientBoundaryTests(SimpleTestCase):
         with self.assertRaises(CloudWorkerClientError):
             CloudWorkerClient._connection_for(worker)
 
+    @override_settings(
+        TABTIN_CLOUD_WORKERS_JSON=(
+            '{"worker-1":{"endpoint":"https://worker.internal",'
+            '"token":"secret"}}'
+        )
+    )
+    def test_request_uses_an_explicit_product_user_agent(self):
+        worker = CloudWorkerNode(
+            node_key="worker-1",
+            control_endpoint="https://worker.internal",
+        )
+        captured = []
+
+        class Response:
+            def __enter__(self):
+                return self
+
+            def __exit__(self, *_args):
+                return False
+
+            @staticmethod
+            def read(_limit):
+                return b'{"ok":true}'
+
+        class Opener:
+            @staticmethod
+            def open(request, *, timeout):
+                captured.append((request, timeout))
+                return Response()
+
+        client = CloudWorkerClient(timeout_seconds=7)
+        client._opener = Opener()
+
+        self.assertEqual(client.health(worker), {"ok": True})
+        request, timeout = captured[0]
+        self.assertEqual(request.get_header("User-agent"), "TabTin-Cloud-Control/1.0")
+        self.assertEqual(request.get_header("Authorization"), "Bearer secret")
+        self.assertEqual(timeout, 7)
+
 
 class CloudWorkerRegistryTests(TransactionTestCase):
     databases: ClassVar[set[str]] = {"default", "postgresql"}
