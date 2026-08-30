@@ -253,6 +253,9 @@ importers:
       '@tabtin/doc-editor':
         specifier: workspace:*
         version: link:../../packages/doc-editor
+      '@tabtin/table-core':
+        specifier: workspace:*
+        version: link:../../packages/table-core
       '@tabtin/table-engine':
         specifier: workspace:*
         version: link:../../packages/table-engine
