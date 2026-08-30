@@ -134,6 +134,9 @@ def _verify_token(token: str) -> Optional[dict]:
 def _get_redis_client():
     """获取 Redis 客户端（复用 _claim_token 连接参数）。"""
     import redis as _redis
+    redis_url = str(getattr(settings, "REDIS_URL", "") or "").strip()
+    if redis_url:
+        return _redis.Redis.from_url(redis_url, decode_responses=True)
     return _redis.Redis(
         host=getattr(settings, "REDIS_HOST", "localhost"),
         port=getattr(settings, "REDIS_PORT", 6379),
@@ -578,15 +581,7 @@ class DaemonTokenService(BaseService):
         但不同 fingerprint 不能重放同一 token。
         """
         try:
-            import redis as _redis
-            from django.conf import settings as _settings
-
-            client = _redis.Redis(
-                host=getattr(_settings, "REDIS_HOST", "localhost"),
-                port=getattr(_settings, "REDIS_PORT", 6379),
-                db=getattr(_settings, "REDIS_DB", 0),
-                decode_responses=True,
-            )
+            client = _get_redis_client()
 
             token_hash = hashlib.sha256(token.encode()).hexdigest()[:32]
             key = f"daemon:token:used:{token_hash}"

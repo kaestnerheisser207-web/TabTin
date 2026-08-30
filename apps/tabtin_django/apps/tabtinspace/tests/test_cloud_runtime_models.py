@@ -27,6 +27,7 @@ from apps.tabtinspace.services.cloud_workspace_service import CloudWorkspaceServ
 from apps.tabtinspace.services.daemon_token_service import (
     DaemonTokenService,
     DeviceFingerprintConflictError,
+    _get_redis_client,
 )
 from apps.tabtinspace.services.runtime_plane import (
     UnsupportedExecutionDevice,
@@ -133,6 +134,18 @@ class CloudRuntimeModelContractTests(SimpleTestCase):
 
 
 class CloudWorkerClientBoundaryTests(SimpleTestCase):
+    @override_settings(REDIS_URL="redis://redis:6379/10")
+    @patch("redis.Redis.from_url")
+    def test_daemon_token_claim_uses_configured_redis_url(self, from_url):
+        expected = object()
+        from_url.return_value = expected
+
+        self.assertIs(_get_redis_client(), expected)
+        from_url.assert_called_once_with(
+            "redis://redis:6379/10",
+            decode_responses=True,
+        )
+
     @override_settings(
         TABTIN_CLOUD_WORKERS_JSON=(
             '{"worker-1":{"endpoint":"https://worker.internal",'
