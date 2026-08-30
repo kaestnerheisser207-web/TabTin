@@ -44,4 +44,6 @@ token 只存在于 Django secret 与 Worker env，不写入 `CloudWorkerNode`；
 
 Worker 的 `/v1/health` 与 `/v1/metrics` 使用同一个 Bearer 边界；metrics 只暴露有界 operation/result 请求计数、耗时和不可变版本能力，不使用 organization、user、Workspace、allocation 或 thread 作为 Prometheus label。systemd stdout/stderr 为单行 JSON 事件，可携带 allocation/generation 诊断字段，但不记录请求 body、token、命令 stderr 或文件内容。
 
+当前稳定 VPS 继续使用 `scripts/deploy/tabtin-vps-release.sh` 的 Django-only 三参数强制命令；替换主机完成本目录的 bootstrap 后，才安装并绑定独立的 `scripts/deploy/tabtin-cloud-vps-release.sh` 五参数命令。两条发布入口不能指向同一把尚未切换完成的强制命令。
+
 此目录只定义 Community Worker Supervisor；Cloud Runtime 镜像仍由 `apps/tabtin-daemon/Dockerfile.cloud` 构建并以 `image@sha256:<digest>` 供给，禁止 floating tag。

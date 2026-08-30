@@ -4,11 +4,13 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[2]
 WORKFLOW = ROOT / ".github/workflows/deploy-tabtin-vps.yml"
 DEPLOY_SCRIPT = ROOT / "scripts/deploy/tabtin-vps-release.sh"
+CLOUD_DEPLOY_SCRIPT = ROOT / "scripts/deploy/tabtin-cloud-vps-release.sh"
 BOOTSTRAP_SCRIPT = ROOT / "scripts/deploy/tabtin-cloud-host-bootstrap.sh"
 
 
 def test_action_builds_and_pushes_three_immutable_amd64_images() -> None:
     workflow = WORKFLOW.read_text(encoding="utf-8")
+    deploy_section, cloud_section = workflow.split("  publish-cloud-images:\n", 1)
 
     assert "packages: write" in workflow
     assert "docker/build-push-action@v6" in workflow
@@ -25,15 +27,15 @@ def test_action_builds_and_pushes_three_immutable_amd64_images() -> None:
         in workflow
     )
     assert "DJANGO_IMAGE_DIGEST: ${{ steps.build_django.outputs.digest }}" in workflow
-    assert "CLOUD_RUNTIME_IMAGE_DIGEST: ${{ steps.build_cloud_runtime.outputs.digest }}" in workflow
-    assert "CLOUD_WORKER_IMAGE_DIGEST: ${{ steps.build_cloud_worker.outputs.digest }}" in workflow
     assert "django_ref=\"$DJANGO_IMAGE_NAME@$DJANGO_IMAGE_DIGEST\"" in workflow
-    assert "runtime_ref=\"$CLOUD_RUNTIME_IMAGE_NAME@$CLOUD_RUNTIME_IMAGE_DIGEST\"" in workflow
-    assert "worker_ref=\"$CLOUD_WORKER_IMAGE_NAME@$CLOUD_WORKER_IMAGE_DIGEST\"" in workflow
     assert "${{ github.sha }}" not in workflow
     assert "$GITHUB_SHA" not in workflow
+    assert "apps/tabtin-daemon/Dockerfile.cloud" not in deploy_section
+    assert "apps/tabtin-cloud-worker/Dockerfile" not in deploy_section
+    assert "Configure restricted SSH access" not in cloud_section
+    assert "needs:" not in cloud_section
     assert workflow.index("docker/build-push-action@v6") < workflow.index(
-        "Pull and deploy selected image"
+        "Pull and deploy selected Django image"
     )
 
 
@@ -51,20 +53,15 @@ def test_action_tracks_the_merged_pull_request_and_waits_for_production() -> Non
     assert "RELEASE_SHA: ${{ github.event.pull_request.merge_commit_sha }}" in workflow
     assert "ref: ${{ env.RELEASE_SHA }}" in workflow
     assert "environment: production" in workflow
-    assert (
-        '"deploy $RELEASE_SHA $django_ref $runtime_ref $worker_ref $REGISTRY_USER"'
-        in workflow
-    )
+    assert '"deploy $RELEASE_SHA $django_ref $REGISTRY_USER"' in workflow
+    assert "$runtime_ref" not in workflow
+    assert "$worker_ref" not in workflow
 
 
 def test_vps_only_pulls_and_switches_the_prebuilt_image() -> None:
     script = DEPLOY_SCRIPT.read_text(encoding="utf-8")
 
-    assert 'docker pull "$requested_django"' in script
-    assert 'run_worker pull "$requested_runtime"' in script
-    assert 'run_worker pull "$requested_worker"' in script
-    assert '"$worker_endpoint/v1/metrics"' in script
-    assert "tabtin_cloud_worker_up 1" in script
+    assert 'docker pull "$requested_image"' in script
     assert "docker build" not in script
     assert "source.tar.gz" not in script
     assert "github.com/$repository/archive" not in script
@@ -89,10 +86,24 @@ def test_cleanup_is_scoped_to_old_tabtin_images_and_runs_after_health() -> None:
     assert health_verified < cleanup
     assert '[[ "$image_id" != "$new_image_id" ]] || continue' in script
     assert 'repository" == "tabtin/community-django"' in script
-    assert 'repository" == "$django_repository"' in script
+    assert 'repository" == "$registry_repository"' in script
     assert 'docker image rm --force "$image_id"' in script
     assert "docker builder prune" not in script
     assert "docker image prune" not in script
+
+
+def test_cloud_host_release_is_separate_and_requires_all_three_digests() -> None:
+    script = CLOUD_DEPLOY_SCRIPT.read_text(encoding="utf-8")
+
+    assert "deploy <commit-sha> <django-digest-ref> <runtime-digest-ref> <worker-digest-ref>" in script
+    assert 'docker pull "$requested_django"' in script
+    assert 'run_worker pull "$requested_runtime"' in script
+    assert 'run_worker pull "$requested_worker"' in script
+    assert '"$worker_endpoint/v1/metrics"' in script
+    assert "tabtin_cloud_worker_up 1" in script
+    assert "docker build" not in script
+    assert "source.tar.gz" not in script
+    assert "rollback" not in script.lower()
 
 
 def test_cloud_host_bootstrap_keeps_worker_rootless_and_quota_gated() -> None:
