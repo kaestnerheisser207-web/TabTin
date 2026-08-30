@@ -116,6 +116,7 @@ describe('DshRuntimeDriver', () => {
       'agent.stream.content_block_delta',
       'agent.stream.content_block_stop',
       'agent.stream.message_stop',
+      'agent.stream.persist_message',
       'agent.stream.done',
     ]))
     const delta = events.find(event => event.type === 'agent.stream.content_block_delta')
@@ -123,6 +124,22 @@ describe('DshRuntimeDriver', () => {
     const done = events.find(event => event.type === 'agent.stream.done')
     expect((done?.payload as any).content).toBe('你好')
     expect((done?.payload as any).agent_type).toBe('dsh')
+    expect((done?.payload as any).usage).toMatchObject({
+      input_tokens: 10,
+      output_tokens: 2,
+      last_input_tokens: 10,
+    })
+    const persisted = events.find(event => event.type === 'agent.stream.persist_message')
+    expect((persisted?.payload as any).message_id).toMatch(
+      /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/,
+    )
+    expect((persisted?.payload as any)).toMatchObject({
+      role: 'assistant',
+      message_kind: 'llm',
+      stop_reason: 'end_turn',
+      model_id: 'deepseek-v4-flash',
+      blocks_json: [{ type: 'text', text: '你好' }],
+    })
   })
 
   it('bridges DSH approval requests through TabTin HITL and responds on the same rpc id', async () => {

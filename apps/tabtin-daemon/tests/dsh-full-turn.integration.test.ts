@@ -35,7 +35,7 @@ describe.skipIf(!enabled)('DSH full turn integration', () => {
         return
       }
       expect(request.headers.authorization).toBe('Bearer daemon-secret')
-      expect(request.headers['x-organization-id']).toBe('organization-1')
+      expect(request.headers['x-tabtin-organization-id']).toBe('organization-1')
       response.writeHead(200, { 'content-type': 'text/event-stream' })
       response.write(`data: ${JSON.stringify({
         id: 'chatcmpl-test',
@@ -114,6 +114,7 @@ describe.skipIf(!enabled)('DSH full turn integration', () => {
       .join('')
     expect(text).toContain('你好')
     expect(events.some(event => event.type === 'agent.stream.message_stop')).toBe(true)
+    expect(events.some(event => event.type === 'agent.stream.persist_message')).toBe(true)
     const done = events.find(event => event.type === 'agent.stream.done')
     expect((done?.payload as any).error).toBe(false)
     expect((done?.payload as any).agent_type).toBe('dsh')
