@@ -644,6 +644,7 @@ class CloudWorkspaceServiceTests(TransactionTestCase):
 
         self.assertEqual(outcome, "skipped")
         self.assertEqual(created.allocation.state, "provisioning")
+        self.assertEqual(created.allocation.reconcile_attempts, 1)
         self.assertEqual(created.workspace.device.status, "offline")
 
         metadata = dict(created.workspace.device.metadata_json or {})
@@ -666,7 +667,45 @@ class CloudWorkspaceServiceTests(TransactionTestCase):
         self.assertEqual(result["ready"], 1)
         created.allocation.refresh_from_db()
         self.assertEqual(created.allocation.state, "ready")
+        self.assertEqual(created.allocation.reconcile_attempts, 0)
         self.assertEqual(created.workspace.device.status, "online")
+
+    def test_reconciler_reprovisions_after_activation_heartbeat_deadline(self):
+        created = self.service.create_cloud_workspace(
+            request_key=uuid4(),
+            organization_id=self.organization.id,
+            name="Activation timeout",
+        )
+
+        class RunningClient:
+            provision_calls = 0
+            status_calls = 0
+
+            def provision(self, allocation):
+                self.provision_calls += 1
+                return {"state": "running", "generation": allocation.generation}
+
+            def status(self, allocation):
+                self.status_calls += 1
+                return {"state": "running", "generation": allocation.generation}
+
+        client = RunningClient()
+        reconciler = CloudAllocationReconciler(client)
+        for _ in range(12):
+            created.allocation.next_retry_at = timezone.now()
+            created.allocation.save(update_fields=["next_retry_at", "updated_at"])
+            self.assertEqual(reconciler.reconcile_one(created.allocation.id), "skipped")
+
+        created.allocation.refresh_from_db()
+        self.assertEqual(created.allocation.state, "error")
+        self.assertEqual(created.allocation.reconcile_attempts, 0)
+        self.assertIn("heartbeat deadline", created.allocation.last_error)
+
+        self.assertEqual(reconciler.reconcile_one(created.allocation.id), "skipped")
+        created.allocation.refresh_from_db()
+        self.assertEqual(created.allocation.state, "provisioning")
+        self.assertEqual(client.provision_calls, 2)
+        self.assertEqual(client.status_calls, 11)
 
     def test_reconciler_failure_records_bounded_retry(self):
         created = self.service.create_cloud_workspace(

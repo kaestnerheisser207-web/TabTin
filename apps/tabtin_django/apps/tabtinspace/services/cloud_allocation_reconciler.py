@@ -16,6 +16,9 @@ from apps.tabtinspace.services.cloud_worker_client import CloudWorkerClient
 
 logger = logging.getLogger(__name__)
 
+_MAX_AWAITING_HEARTBEAT_ATTEMPTS = 12
+_ACTIVATION_TIMEOUT_ERROR = "Cloud Runtime did not activate before the heartbeat deadline"
+
 
 class CloudAllocationReconciler:
     def __init__(self, client: CloudWorkerClient | None = None):
@@ -140,16 +143,33 @@ class CloudAllocationReconciler:
             and correct_allocation
             and heartbeat_ready
         ):
-            allocation.next_retry_at = now + timedelta(seconds=5)
-            allocation.save(update_fields=["next_retry_at", "updated_at"])
+            allocation.reconcile_attempts += 1
+            update_fields = [
+                "reconcile_attempts",
+                "next_retry_at",
+                "updated_at",
+            ]
+            if allocation.reconcile_attempts >= _MAX_AWAITING_HEARTBEAT_ATTEMPTS:
+                allocation.state = CloudRuntimeAllocation.State.ERROR
+                allocation.reconcile_attempts = 0
+                allocation.next_retry_at = now
+                allocation.last_error = _ACTIVATION_TIMEOUT_ERROR
+                update_fields.extend(["state", "last_error"])
+                allocation.device.status = "offline"
+                allocation.device.save(update_fields=["status", "updated_at"])
+            else:
+                allocation.next_retry_at = now + timedelta(seconds=5)
+            allocation.save(update_fields=update_fields)
             return False
         allocation.state = CloudRuntimeAllocation.State.READY
+        allocation.reconcile_attempts = 0
         allocation.provisioned_at = now
         allocation.next_retry_at = None
         allocation.last_error = ""
         allocation.save(
             update_fields=[
                 "state",
+                "reconcile_attempts",
                 "provisioned_at",
                 "next_retry_at",
                 "last_error",
