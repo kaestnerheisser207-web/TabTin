@@ -302,6 +302,9 @@ describe('Daemon business run id', () => {
       resolve(__dirname, '../src/application/agent/daemon-agent-host.ts'),
       'utf8',
     );
+    expect(hostSource).toContain(
+      'bindAttributionStore(() => this.requireSharedHost().state.attribution)',
+    );
     expect(hostSource).toContain('sharedHost.beginSubmitHostQuery(');
     expect(hostSource).toContain('PromptEvents.ADMITTED');
     expect(hostSource).toContain('buffered_event_id: eventId');
