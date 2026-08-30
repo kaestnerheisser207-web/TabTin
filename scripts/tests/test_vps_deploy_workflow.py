@@ -181,6 +181,9 @@ def test_cloud_host_release_is_separate_and_requires_runtime_worker_digests() ->
     assert "TABTIN_CLOUD_CAPACITY_CPU_MILLICORES" in script
     assert "TABTIN_CLOUD_WORKER_BIND_ADDRESS" in script
     assert "systemctl enable --now tabtin-cloud-volume-helper.socket" in script
+    assert "systemctl enable tabtin-cloud-worker" in script
+    assert "systemctl restart tabtin-cloud-worker" in script
+    assert "systemctl enable --now tabtin-cloud-worker" not in script
     assert 'DEPLOYED_COMMIT" 2>/dev/null' in script
     assert "docker build" not in script
     assert "source.tar.gz" not in script
