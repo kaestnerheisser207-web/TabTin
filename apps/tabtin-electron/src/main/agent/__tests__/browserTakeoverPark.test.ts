@@ -66,7 +66,7 @@ vi.mock('electron-log', () => {
   }
 })
 
-vi.mock('../../auth', () => ({
+vi.mock('../../auth.js', () => ({
   TokenManager: {
     getAccessToken: vi.fn().mockResolvedValue('test-token'),
     getCachedUserInfo: vi.fn(() => null),
@@ -74,16 +74,28 @@ vi.mock('../../auth', () => ({
   },
 }))
 
-vi.mock('../../config/api', () => ({
+vi.mock('../../config/api.js', async (importOriginal) => ({
+  ...(await importOriginal<typeof import('../../config/api.js')>()),
   API_BASE_URL: 'https://api.test.local',
   WS_BASE_URL: 'wss://api.test.local',
 }))
 
-vi.mock('../../window-manager', () => ({
+vi.mock('../../app-identity', () => ({
+  resolveRuntimeProfile: () => 'development',
+  resolveIsDevRuntime: () => true,
+  resolveDevInstanceId: () => undefined,
+  resolveDefaultWorkspaceDirectoryName: () => 'TabTin Dev',
+}))
+
+vi.mock('../../window-manager.js', () => ({
   getMainWindow: () => null,
 }))
 
-vi.mock('../../ws/ElectronWsGateway', () => ({
+vi.mock('../../utils/deviceFingerprint.js', () => ({
+  getDeviceFingerprint: () => 'test-device-fingerprint',
+}))
+
+vi.mock('../../ws/ElectronWsGateway.js', () => ({
   electronWsGateway: {
     getDeviceId: () => 'device-test',
     on: () => () => undefined,
@@ -92,7 +104,7 @@ vi.mock('../../ws/ElectronWsGateway', () => ({
   },
 }))
 
-vi.mock('../../cli/cli-server', () => ({
+vi.mock('../../cli/cli-server.js', () => ({
   getCLIOrganizationRoot: () => null,
   getCLISpaceId: () => undefined,
   getCLIOrganizationId: () => undefined,
