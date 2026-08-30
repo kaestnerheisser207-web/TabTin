@@ -86,7 +86,8 @@ fi
 export DEBIAN_FRONTEND=noninteractive
 apt-get update
 apt-get install -y --no-install-recommends \
-  ca-certificates fuse-overlayfs nodejs podman slirp4netns uidmap xfsprogs
+  ca-certificates fuse-overlayfs nodejs passt podman slirp4netns uidmap xfsprogs
+command -v pasta >/dev/null || die "Podman pasta network backend is unavailable"
 
 if ! id "$worker_user" >/dev/null 2>&1; then
   useradd --system --create-home --home-dir "$worker_home" \
