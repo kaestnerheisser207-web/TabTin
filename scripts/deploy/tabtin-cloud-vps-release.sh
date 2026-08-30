@@ -166,7 +166,8 @@ sudo -n install -o root -g root -m 0600 "$worker_env_tmp" "$worker_env_file"
 sudo -n systemctl enable --now tabtin-cloud-volume-helper.socket
 [[ "$(sudo -n systemctl is-active tabtin-cloud-volume-helper.socket)" == "active" ]] ||
   die "Cloud volume helper socket is not active"
-sudo -n systemctl enable --now tabtin-cloud-worker
+sudo -n systemctl enable tabtin-cloud-worker
+sudo -n systemctl restart tabtin-cloud-worker
 for _attempt in $(seq 1 30); do
   [[ "$(sudo -n systemctl is-active tabtin-cloud-worker 2>/dev/null || true)" == "active" ]] && break
   sleep 2
