@@ -167,6 +167,58 @@ describe('IES-013: git IPC 接 path-access-checker（Wave 2 单源化）', () =>
     })
   })
 
+  describe('git:showAtCommit', () => {
+    it('文件超过 Git 预览缓冲区时返回明确的 too_large 结果', async () => {
+      const maxBufferError = Object.assign(
+        new Error('stdout maxBuffer length exceeded'),
+        { code: 'ERR_CHILD_PROCESS_STDIO_MAXBUFFER' },
+      )
+      gitMocks.execFileAsync.mockRejectedValueOnce(maxBufferError)
+
+      const handler = getGitHandler('git:showAtCommit')
+      const result = await handler(
+        { senderFrame: { url: 'file:///app/index.html' } },
+        '/tmp/home/project',
+        { filePath: 'src/large.ts', commitHash: 'abc123' },
+      )
+
+      expect(result).toEqual({
+        success: false,
+        content: '',
+        reason: 'too_large',
+        error: 'file content exceeds 2 MiB preview limit',
+      })
+      expect(gitMocks.execFileAsync).toHaveBeenCalledWith(
+        'git',
+        ['cat-file', 'blob', 'abc123:src/large.ts'],
+        expect.objectContaining({
+          cwd: '/tmp/home/project',
+          maxBuffer: 2 * 1024 * 1024,
+        }),
+      )
+    })
+
+    it('文件或父提交不存在时继续返回空内容，保留新增删除 Diff 语义', async () => {
+      gitMocks.execFileAsync.mockRejectedValueOnce(
+        Object.assign(new Error('path does not exist in commit'), { code: 128 }),
+      )
+
+      const handler = getGitHandler('git:showAtCommit')
+      const result = await handler(
+        { senderFrame: { url: 'file:///app/index.html' } },
+        '/tmp/home/project',
+        { filePath: 'src/missing.ts', commitHash: 'abc123', parent: true },
+      )
+
+      expect(result).toEqual({ success: true, content: '' })
+      expect(gitMocks.execFileAsync).toHaveBeenCalledWith(
+        'git',
+        ['cat-file', 'blob', 'abc123^:src/missing.ts'],
+        expect.objectContaining({ cwd: '/tmp/home/project' }),
+      )
+    })
+  })
+
   describe('git:rawDiff', () => {
     it('path-access-checker 拒绝某个文件参数 → 返回 "invalid file path"', async () => {
       gitMocks.pathAccessCheck
