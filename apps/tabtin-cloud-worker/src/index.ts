@@ -10,6 +10,7 @@ const port = Number(process.env.TABTIN_CLOUD_WORKER_PORT ?? '8090')
 const protocolVersion = process.env.TABTIN_CLOUD_WORKER_PROTOCOL_VERSION ?? '1'
 const runtimeVersion = process.env.TABTIN_CLOUD_WORKER_RUNTIME_VERSION ?? 'dev'
 const network = process.env.TABTIN_CLOUD_RUNTIME_NETWORK ?? 'tabtin-cloud-runtime'
+const containerCli = process.env.TABTIN_CLOUD_CONTAINER_CLI ?? 'docker'
 const storageQuotaMode = process.env.TABTIN_CLOUD_STORAGE_QUOTA_MODE === 'podman-xfs'
   ? 'podman-xfs'
   : 'none'
@@ -21,7 +22,7 @@ if (!Number.isSafeInteger(runtimeStorageGb) || runtimeStorageGb < 1) {
   throw new Error('TABTIN_CLOUD_RUNTIME_STORAGE_GB must be a positive integer')
 }
 
-const runner = new DockerCommandRunner()
+const runner = new DockerCommandRunner(containerCli)
 await verifyStorageQuotaSupport(runner, storageQuotaMode)
 await verifyResourceIsolationSupport(runner, resourceIsolationMode)
 const manager = new DockerWorkspaceManager(

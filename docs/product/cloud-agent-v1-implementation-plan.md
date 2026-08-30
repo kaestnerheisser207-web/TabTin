@@ -208,6 +208,9 @@ Client
 ## 七、发布与观测
 
 - Organization 级 `cloud_agent_enabled` 控制灰度；Cloud 不兼容旧客户端直接拒绝，不保留双协议。
+- 生产发布由合并 PR 触发：Actions 同一 release SHA 构建 Django、Cloud Runtime、Cloud Worker 三个 `linux/amd64` 镜像，部署端只接受指定 GHCR repository 的 digest ref，不在 VPS 现场构建。
+- sg01 dogfood 节点使用专用 `tabtin-cloud-worker` systemd 服务连接同账号的 rootless Podman socket；Podman graphroot 位于独立 XFS `pquota` 文件系统，Worker 启动前必须通过真实 volume quota 与 cgroup v2/systemd 探针。
+- Worker 端口只绑定宿主 Docker bridge，Django 通过 `https://tabtin.dovelora.com/_internal/cloud-worker` 的现有 TLS 入口访问；Bearer token 只存在于 Worker 私有 env 与 Django file secret，不写数据库、不进 Action 参数或日志。
 - 指标至少覆盖 provisioning latency、allocation state、active Workspace、Worker capacity/version、lease expiry/fence、Runtime/DSH restart、relay backlog、模型 usage、存储用量和导出状态。
 - 日志统一带 organization、workspace、allocation、generation、thread、run、harness；不得记录 token、模型 Key、Git 凭证或文件正文。
 - 先内部 dogfood 单 Worker，再小范围 Organization Beta；只有全链验收通过后扩大 Worker Pool。
@@ -218,6 +221,6 @@ Client
 
 已完成：Harness/执行平面解耦、Runtime Driver/缓存硬重建、Cloud Worker 与持久卷、逻辑 Cloud Device/一次性激活、token 验证成功后原子绑定 Cloud fingerprint、Allocation/RuntimeBinding/generation fencing、RunHostLease、Model Gateway、真实 DSH ApiProxy 完整轮次、TabTin MCP 发现、HITL/Cancel、Cloud 创建与生命周期 UI、创建时当前 Agent 默认 DSH/Builtin 显式切换、Electron 收到 DSH 时 fail-closed、2 秒有界状态刷新、settings 自动注册/health 激活 Worker（token 不落库）、Podman XFS project quota startup probe 与每卷硬配额、cgroup v2/systemd CPU/内存/PID 门禁，以及不暴露 rootful Docker Socket 的 Community rootless systemd 部署定义。
 
-已验证：Cloud 后端 PostgreSQL 套件 23/23（包含“容器 running 不等于 ready”、真实 heartbeat、generation token 轮换、DSH local fail-closed 与 Worker 自动注册→版本/配额/资源门禁匹配 ready→错配置 error→移除配置 offline）、Harness 聚焦契约 10/10、Agent Host Runtime 5/5、Daemon DSH/租约 9/9、真实 DSH ApiProxy/Model Gateway/MCP 3/3、Electron Cloud 创建/Harness/Runtime 聚焦回归 26/26、Cloud Worker 单测 10/10；真实 Docker provision/disable/restart/permanent-delete 通过且无容器/卷残留。Cloud Runtime 已从固定 Node 22 Debian digest 完整构建，成品以 UID 1000 运行，`tabtin-daemon 0.1.0`、`dsh 0.1.1-rc.2` 与 loopback ApiProxy 真启动通过；真实镜像 bootstrap→Cloud activation→fingerprint/generation 配置落盘→TabTin MCP/DSH→WebSocket 鉴权订阅→HTTP heartbeat E2E 1/1 通过。Cloud Worker 固定 Node 22 Alpine digest、UID 1000、Bearer health 401/200 门禁通过。
+已验证：Cloud 后端 PostgreSQL 套件 23/23（包含“容器 running 不等于 ready”、真实 heartbeat、generation token 轮换、DSH local fail-closed 与 Worker 自动注册→版本/配额/资源门禁匹配 ready→错配置 error→移除配置 offline）、Harness 聚焦契约 10/10、Agent Host Runtime 5/5、Daemon DSH/租约 9/9、真实 DSH ApiProxy/Model Gateway/MCP 3/3、Electron Cloud 创建/Harness/Runtime 聚焦回归 26/26、Cloud Worker 单测 10/10；真实 Docker provision/disable/restart/permanent-delete 通过且无容器/卷残留。Cloud Runtime 已从固定 Node 22 Debian digest 完整构建，成品以 UID 1000 运行，`tabtin-daemon 0.1.0`、`dsh 0.1.1-rc.2` 与 loopback ApiProxy 真启动通过；真实镜像 bootstrap→Cloud activation→fingerprint/generation 配置落盘→TabTin MCP/DSH→WebSocket 鉴权订阅→HTTP heartbeat E2E 1/1 通过。Cloud Worker 固定 Node 22 Alpine digest、UID 1000、Bearer health 401/200 门禁通过；新增发布 Dockerfile 已在本地 Docker 从干净 build context 完整构建，三镜像 digest/受限 SSH/XFS bootstrap 发布契约测试 5/5 通过。
 
-尚未完成：完整 `/workspace` tar/manifest 导出会把可能含私密源码的目录发送到对象存储预签名地址，必须获得产品开发者对这一类敏感数据外发的明确授权后实施；私有 Git 目前在控制面明确拒绝并等待一次性 Credential Broker 授权。GHCR 多架构发布、真实 VPS 的 rootless Podman + XFS project quota/cgroup v2 实机 probe、节点注册/远程网络、SaaS/Community 安装和客户端端到端验收仍属于发布阶段，不能用本地 Docker 结果替代。
+尚未完成：完整 `/workspace` tar/manifest 导出会把可能含私密源码的目录发送到对象存储预签名地址，必须获得产品开发者对这一类敏感数据外发的明确授权后实施；私有 Git 目前在控制面明确拒绝并等待一次性 Credential Broker 授权。GHCR `linux/amd64` 实际推送、sg01 的 rootless Podman + XFS project quota/cgroup v2 实机 probe、节点注册和客户端端到端验收仍属于发布阶段，不能用本地 Docker 结果替代。

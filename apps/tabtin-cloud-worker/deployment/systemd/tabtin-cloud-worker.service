@@ -9,8 +9,8 @@ User=tabtin-cloud-worker
 Group=tabtin-cloud-worker
 Environment=NODE_ENV=production
 EnvironmentFile=/etc/tabtin/cloud-worker.env
-WorkingDirectory=/opt/tabtin-cloud-worker
-ExecStart=/usr/bin/node /opt/tabtin-cloud-worker/dist/index.js
+WorkingDirectory=/opt/tabtin-cloud-worker/current
+ExecStart=/usr/bin/node /opt/tabtin-cloud-worker/current/dist/index.js
 Restart=on-failure
 RestartSec=5
 TimeoutStopSec=45

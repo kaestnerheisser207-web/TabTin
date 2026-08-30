@@ -13,8 +13,9 @@ export class CommandFailedError extends Error {
   constructor(
     readonly exitCode: number,
     readonly stderr: string,
+    readonly executable = 'container runtime',
   ) {
-    super(`docker command failed with exit code ${exitCode}: ${stderr.trim()}`)
+    super(`${executable} command failed with exit code ${exitCode}: ${stderr.trim()}`)
     this.name = 'CommandFailedError'
   }
 }
@@ -44,7 +45,7 @@ export class DockerCommandRunner implements CommandRunner {
       child.once('error', reject)
       child.once('close', code => {
         if (code === 0) resolve({ stdout, stderr })
-        else reject(new CommandFailedError(code ?? -1, stderr))
+        else reject(new CommandFailedError(code ?? -1, stderr, this.executable))
       })
       if (stdin !== undefined) {
         if (!child.stdin) {

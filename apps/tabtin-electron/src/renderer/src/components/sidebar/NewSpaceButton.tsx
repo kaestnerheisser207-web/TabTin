@@ -927,7 +927,7 @@ const CreateSpaceDialog: React.FC<CreateSpaceDialogProps> = ({
                         <span className="block text-body font-medium">
                           {t('create.runtime.local', { ns: 'space', defaultValue: '本地' })}
                         </span>
-                        <span className="block text-caption text-muted-foreground/70">
+                        <span className="block text-caption text-muted-foreground/60">
                           {t('create.runtime.localHint', { ns: 'space', defaultValue: '使用这台 Mac 的目录' })}
                         </span>
                       </span>
@@ -952,7 +952,7 @@ const CreateSpaceDialog: React.FC<CreateSpaceDialogProps> = ({
                         <span className="block text-body font-medium">
                           {t('create.runtime.cloud', { ns: 'space', defaultValue: '云端托管' })}
                         </span>
-                        <span className="block text-caption text-muted-foreground/70">
+                        <span className="block text-caption text-muted-foreground/60">
                           {t('create.runtime.cloudHint', { ns: 'space', defaultValue: '只安装 TabTin，Agent 在云端持续运行' })}
                         </span>
                       </span>
@@ -1019,7 +1019,7 @@ const CreateSpaceDialog: React.FC<CreateSpaceDialogProps> = ({
                         defaultValue: '云端工作目录 /workspace',
                       })}
                     </p>
-                    <p className="text-caption text-muted-foreground/70">
+                    <p className="text-caption text-muted-foreground/60">
                       {t('create.cloud.authorityHint', {
                         ns: 'space',
                         defaultValue: '云端文件是唯一权威；不会强制同步到本机。',
@@ -1084,7 +1084,7 @@ const CreateSpaceDialog: React.FC<CreateSpaceDialogProps> = ({
                             defaultValue: 'Cloud Agent Runtime',
                           })}
                         </p>
-                        <p className="text-caption text-muted-foreground/70">
+                        <p className="text-caption text-muted-foreground/60">
                           {selectedAgent
                             ? `当前 Agent：${selectedAgent.name}`
                             : '尚未选择 Agent'}
@@ -1110,7 +1110,7 @@ const CreateSpaceDialog: React.FC<CreateSpaceDialogProps> = ({
                         </button>
                       ))}
                     </div>
-                    <p className="text-caption text-muted-foreground/70">
+                    <p className="text-caption text-muted-foreground/60">
                       DSH 只在 Cloud Workspace 运行；该选择会保存到当前 Agent，本地 Workspace 不会静默降级为 Builtin。
                     </p>
                   </div>

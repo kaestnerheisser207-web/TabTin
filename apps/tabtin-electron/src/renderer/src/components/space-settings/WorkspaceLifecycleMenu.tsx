@@ -305,7 +305,7 @@ export const WorkspaceLifecycleMenu: React.FC<WorkspaceLifecycleMenuProps> = ({
             }}
             disabled={isLoading || cloudBusy || (!isCloud && !deleteGuard.canDelete)}
             className={cn(
-              'shrink-0 gap-1 text-destructive/70 hover:text-destructive hover:bg-destructive/5',
+              'shrink-0 gap-1 text-destructive/80 hover:text-destructive hover:bg-destructive/5',
               SETTINGS_CONTROL_SM,
             )}
           >

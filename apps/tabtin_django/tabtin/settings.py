@@ -62,7 +62,11 @@ TABTIN_CLOUD_DISABLED_RETENTION_DAYS = int(
 # Secret JSON map: {"node-key":{"endpoint":"https://...","token":"..."}}.
 # Endpoint and token are bound in one server-owned config so a database-only
 # endpoint mutation can never redirect Worker credentials.
-TABTIN_CLOUD_WORKERS_JSON = os.getenv('TABTIN_CLOUD_WORKERS_JSON', '{}')
+TABTIN_CLOUD_WORKERS_JSON = _secret_env_or_file(
+    'TABTIN_CLOUD_WORKERS_JSON',
+    '{}',
+    required=False,
+)
 
 
 def _edition_endpoint(
