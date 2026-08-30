@@ -86,7 +86,8 @@ fi
 export DEBIAN_FRONTEND=noninteractive
 apt-get update
 apt-get install -y --no-install-recommends \
-  ca-certificates fuse-overlayfs nodejs passt podman slirp4netns uidmap xfsprogs
+  aardvark-dns ca-certificates fuse-overlayfs nodejs passt podman slirp4netns uidmap xfsprogs
+[[ -x /usr/lib/podman/aardvark-dns ]] || die "Podman aardvark DNS backend is unavailable"
 command -v pasta >/dev/null || die "Podman pasta network backend is unavailable"
 
 if ! id "$worker_user" >/dev/null 2>&1; then
