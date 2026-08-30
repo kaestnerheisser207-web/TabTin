@@ -198,6 +198,8 @@ def test_cloud_host_bootstrap_keeps_worker_rootless_and_quota_gated() -> None:
     assert "TABTIN_CLOUD_XFS_SIZE_GB" in bootstrap
     assert "TABTIN_CLOUD_CAPACITY_STORAGE_GB" in bootstrap
     assert 'host_config_file="/etc/tabtin/cloud-host.env"' in bootstrap
+    assert "TABTIN_NGINX_CONFIG" in bootstrap
+    assert "/Project/infrastructure/nginx/current/nginx.conf" in bootstrap
     assert 'install -o root -g tabtin-deploy -m 0750 "$deploy_gateway_source"' in bootstrap
     assert 'install -o root -g root -m 0700 "$cloud_release_source"' in bootstrap
     assert 'visudo -cf "$sudoers_tmp"' in bootstrap
