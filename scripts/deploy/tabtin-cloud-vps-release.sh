@@ -282,10 +282,14 @@ if ! wait_for_health tabtin-community-django-1 48; then
   docker logs --tail 200 tabtin-community-django-1 >&2 || true
   die "Django did not become healthy with Cloud settings"
 fi
-compose up -d --no-deps --no-build --force-recreate celery
+compose up -d --no-deps --no-build --force-recreate celery celery-beat
 if ! wait_for_health tabtin-community-celery-1 24; then
   docker logs --tail 200 tabtin-community-celery-1 >&2 || true
   die "Celery did not become healthy with Cloud settings"
+fi
+if ! wait_for_health tabtin-community-celery-beat-1 24; then
+  docker logs --tail 200 tabtin-community-celery-beat-1 >&2 || true
+  die "Celery beat did not become healthy with Cloud settings"
 fi
 
 log "materializing and verifying the configured Cloud Worker"
