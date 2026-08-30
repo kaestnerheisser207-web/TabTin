@@ -118,6 +118,10 @@ describe('DockerWorkspaceManager', () => {
     expect(create).toContain('DSH_HOME=/var/lib/tabtin/dsh')
     expect(create).not.toContain('short-lived-install-token')
     expect(runner.stdins).toContain('short-lived-install-token')
+    const bootstrap = runner.calls.find(
+      args => args[0] === 'run' && args.includes('--interactive'),
+    )
+    expect(bootstrap).toEqual(expect.arrayContaining(['--pids-limit', '256']))
     expect(runner.calls).toContainEqual([
       'volume', 'create',
       '--label', `com.tabtin.cloud.allocation=${ALLOCATION_ID}`,
@@ -154,6 +158,25 @@ describe('DockerWorkspaceManager', () => {
     await expect(manager.provision(provisionInput({ generation: 2 })))
       .rejects.toBeInstanceOf(StaleGenerationError)
     expect(runner.calls.some(args => args[0] === 'rm')).toBe(false)
+  })
+
+  it('bounds transient bootstrap and Git clone helper processes', async () => {
+    const runner = new FakeRunner()
+    const manager = new DockerWorkspaceManager(runner, 'tabtin-cloud-runtime')
+
+    await manager.provision(provisionInput({
+      source: {
+        type: 'git',
+        gitUrl: 'https://example.com/repository.git',
+        gitRef: 'main',
+      },
+    }))
+
+    const transientRuns = runner.calls.filter(args => args[0] === 'run')
+    expect(transientRuns).toHaveLength(2)
+    for (const args of transientRuns) {
+      expect(args).toEqual(expect.arrayContaining(['--pids-limit', '256']))
+    }
   })
 
   it('reattaches after a Worker process restart without recreating the same generation', async () => {

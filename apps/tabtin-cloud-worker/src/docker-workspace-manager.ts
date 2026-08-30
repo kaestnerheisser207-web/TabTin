@@ -164,6 +164,7 @@ export class DockerWorkspaceManager {
     gitArgs.push(input.source.gitUrl!, '/workspace')
     await this.runner.run([
       'run', '--rm',
+      '--pids-limit', '256',
       '--network', this.network,
       '--mount', `type=volume,src=${input.volumeRef},dst=/workspace`,
       '--entrypoint', 'git',
@@ -175,6 +176,7 @@ export class DockerWorkspaceManager {
   private async writeBootstrapToken(input: ProvisionWorkspaceInput): Promise<void> {
     await this.runner.run([
       'run', '--rm', '--interactive',
+      '--pids-limit', '256',
       '--network', 'none',
       '--cap-drop', 'ALL',
       '--cap-add', 'CHOWN',
