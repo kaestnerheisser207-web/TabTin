@@ -304,7 +304,8 @@ function statusOf(
   state: 'running' | 'stopped',
 ): WorkspaceRuntimeStatus {
   return {
-    ...identity,
+    allocationId: identity.allocationId,
+    generation: identity.generation,
     state,
     containerId: inspect.Id,
   }

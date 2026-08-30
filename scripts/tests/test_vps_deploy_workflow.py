@@ -214,6 +214,8 @@ def test_cloud_host_bootstrap_keeps_worker_rootless_and_quota_gated() -> None:
     volume_helper = VOLUME_HELPER_SCRIPT.read_text(encoding="utf-8")
 
     assert "loginctl enable-linger" in bootstrap
+    assert "ca-certificates fuse-overlayfs nodejs passt podman" in bootstrap
+    assert 'command -v pasta >/dev/null' in bootstrap
     assert "systemctl --user enable --now podman.socket" in bootstrap
     assert "systemctl --user enable podman-restart.service" in bootstrap
     assert "enable --now podman.socket podman-restart.service" not in bootstrap

@@ -109,7 +109,14 @@ describe('DockerWorkspaceManager', () => {
 
     const status = await manager.provision(provisionInput())
 
-    expect(status.state).toBe('running')
+    expect(status).toEqual({
+      allocationId: ALLOCATION_ID,
+      generation: 1,
+      state: 'running',
+      containerId: 'container-id',
+    })
+    expect(status).not.toHaveProperty('bootstrapToken')
+    expect(status).not.toHaveProperty('image')
     const create = runner.calls.find(args => args[0] === 'create')
     expect(create).toContain('--cap-drop')
     expect(create).toContain('no-new-privileges')
