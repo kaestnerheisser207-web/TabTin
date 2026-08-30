@@ -12,6 +12,15 @@ from apps.services.billing.tests.org_test_utils import fake_org_id
 
 
 class BillingGatewayPrecheckTests(SimpleTestCase):
+    def setUp(self):
+        funding_mode_patcher = patch.object(
+            BillingGateway,
+            "_snapshot_funding_mode",
+            return_value="legacy_budget_wallet",
+        )
+        self.addCleanup(funding_mode_patcher.stop)
+        funding_mode_patcher.start()
+
     def test_precheck_allows_when_monthly_quota_covers_estimate(self):
         with patch(
             "apps.services.billing.services.gateway.MeterPricingService.get_unit_price",
@@ -352,6 +361,14 @@ class BillingGatewayPrecheckTests(SimpleTestCase):
 
 class BillingGatewaySettleTests(SimpleTestCase):
     def setUp(self):
+        funding_mode_patcher = patch.object(
+            BillingGateway,
+            "_snapshot_funding_mode",
+            return_value="legacy_budget_wallet",
+        )
+        self.addCleanup(funding_mode_patcher.stop)
+        funding_mode_patcher.start()
+
         warning_patcher = patch(
             "apps.services.billing.services.llm_topup_service.LlmQuotaTopupService.warning_threshold_credits",
             return_value=Decimal("0"),
