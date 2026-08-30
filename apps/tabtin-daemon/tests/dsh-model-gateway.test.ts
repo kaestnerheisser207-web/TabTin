@@ -43,6 +43,7 @@ describe('DshModelGateway', () => {
       expect(headers.get('authorization')).toBe('Bearer daemon-secret')
       expect(headers.get('x-organization-id')).toBe('organization-1')
       expect(headers.get('x-tabtin-session-id')).toBe('session-1')
+      expect(headers.has('x-tabtin-billing-idempotency-key')).toBe(false)
       return new Response(sseBody('data: {"choices":[]}\n\ndata: [DONE]\n\n'), {
         status: 200,
         headers: { 'content-type': 'text/event-stream' },

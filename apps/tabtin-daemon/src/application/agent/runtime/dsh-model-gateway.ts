@@ -1,4 +1,4 @@
-import { createHash, timingSafeEqual } from 'node:crypto'
+import { timingSafeEqual } from 'node:crypto'
 import { createServer, type IncomingMessage, type Server, type ServerResponse } from 'node:http'
 import { deriveApiBaseUrl, joinApiPath } from '@tabtin/config'
 
@@ -77,7 +77,6 @@ export class DshModelGateway {
       const sessionId = String(
         request.headers['x-deepseek-harness-session-id'] ?? '',
       ).slice(0, 255)
-      const bodyHash = createHash('sha256').update(body).digest('hex')
       const upstreamUrl = joinApiPath(
         deriveApiBaseUrl(this.options.serverUrl),
         '/llm/proxy',
@@ -92,7 +91,6 @@ export class DshModelGateway {
           'x-organization-id': this.options.organizationId,
           'x-tabtin-session-id': sessionId,
           'x-tabtin-request-source': 'dsh',
-          'x-tabtin-billing-idempotency-key': `dsh:${sessionId || 'none'}:${bodyHash}`,
         },
         body: JSON.stringify(parsed),
         signal: abort.signal,
