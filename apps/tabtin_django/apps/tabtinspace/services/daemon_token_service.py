@@ -134,7 +134,9 @@ def _verify_token(token: str) -> Optional[dict]:
 def _get_redis_client():
     """获取 Redis 客户端（复用 _claim_token 连接参数）。"""
     import redis as _redis
-    redis_url = str(getattr(settings, "REDIS_URL", "") or "").strip()
+    redis_url = str(
+        getattr(settings, "DAEMON_TOKEN_REDIS_URL", "") or ""
+    ).strip()
     if redis_url:
         return _redis.Redis.from_url(redis_url, decode_responses=True)
     return _redis.Redis(

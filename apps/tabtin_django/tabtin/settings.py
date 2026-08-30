@@ -637,6 +637,10 @@ DATABASE_ROUTERS = [
 
 # Cache Configuration
 REDIS_DB = int(os.getenv('REDIS_DB', '0'))
+DAEMON_TOKEN_REDIS_URL = os.getenv(
+    'DAEMON_TOKEN_REDIS_URL',
+    os.getenv('REDIS_URL', f'redis://localhost:6379/{REDIS_DB}'),
+)
 
 CACHES = {
     'default': {

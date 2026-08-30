@@ -134,7 +134,7 @@ class CloudRuntimeModelContractTests(SimpleTestCase):
 
 
 class CloudWorkerClientBoundaryTests(SimpleTestCase):
-    @override_settings(REDIS_URL="redis://redis:6379/10")
+    @override_settings(DAEMON_TOKEN_REDIS_URL="redis://redis:6379/10")
     @patch("redis.Redis.from_url")
     def test_daemon_token_claim_uses_configured_redis_url(self, from_url):
         expected = object()
