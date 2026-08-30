@@ -88,7 +88,7 @@ export class DshModelGateway {
         headers: {
           'content-type': 'application/json',
           authorization: `Bearer ${this.credential}`,
-          'x-organization-id': this.options.organizationId,
+          'x-tabtin-organization-id': this.options.organizationId,
           'x-tabtin-session-id': sessionId,
           'x-tabtin-request-source': 'dsh',
         },

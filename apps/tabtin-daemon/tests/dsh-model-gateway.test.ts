@@ -41,7 +41,7 @@ describe('DshModelGateway', () => {
     const upstreamFetch = vi.fn(async (_url: string | URL | Request, init?: RequestInit) => {
       const headers = new Headers(init?.headers)
       expect(headers.get('authorization')).toBe('Bearer daemon-secret')
-      expect(headers.get('x-organization-id')).toBe('organization-1')
+      expect(headers.get('x-tabtin-organization-id')).toBe('organization-1')
       expect(headers.get('x-tabtin-session-id')).toBe('session-1')
       expect(headers.has('x-tabtin-billing-idempotency-key')).toBe(false)
       return new Response(sseBody('data: {"choices":[]}\n\ndata: [DONE]\n\n'), {
