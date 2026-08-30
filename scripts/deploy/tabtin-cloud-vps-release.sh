@@ -6,7 +6,6 @@ compose_file="$application_root/config/compose.shared.yml"
 runtime_env_file="$application_root/source-snapshot/.env.community-runtime"
 host_config_file="/etc/tabtin/cloud-host.env"
 worker_endpoint="https://tabtin.dovelora.com/_internal/cloud-worker"
-worker_direct_endpoint="http://172.17.0.1:8090"
 local_django_image="tabtin/community-django:local"
 runtime_repository="ghcr.io/kaestnerheisser207-web/tabtin-cloud-runtime"
 worker_repository="ghcr.io/kaestnerheisser207-web/tabtin-cloud-worker"
@@ -62,10 +61,16 @@ source "$host_config_file"
 : "${TABTIN_CLOUD_CAPACITY_MEMORY_MB:?missing memory capacity}"
 : "${TABTIN_CLOUD_CAPACITY_STORAGE_GB:?missing storage capacity}"
 : "${TABTIN_CLOUD_RUNTIME_STORAGE_GB:?missing runtime storage size}"
+: "${TABTIN_CLOUD_WORKER_BIND_ADDRESS:?missing Worker bind address}"
 [[ "$TABTIN_CLOUD_WORKER_NODE_KEY" =~ ^[A-Za-z0-9][A-Za-z0-9_.-]{0,127}$ ]] ||
   die "invalid Worker node key"
 [[ "$TABTIN_CLOUD_WORKER_EDITION" == "saas" || "$TABTIN_CLOUD_WORKER_EDITION" == "community" ]] ||
   die "invalid Worker edition"
+[[ "$TABTIN_CLOUD_WORKER_BIND_ADDRESS" =~ ^([0-9]{1,3}\.){3}[0-9]{1,3}$ ]] ||
+  die "invalid Worker bind address"
+ip -4 -o address show | awk '{ sub(/\/.*/, "", $4); print $4 }' |
+  grep -Fqx "$TABTIN_CLOUD_WORKER_BIND_ADDRESS" || die "Worker bind address is not present on the host"
+worker_direct_endpoint="http://$TABTIN_CLOUD_WORKER_BIND_ADDRESS:8090"
 for value in \
   "$TABTIN_CLOUD_CAPACITY_CPU_MILLICORES" \
   "$TABTIN_CLOUD_CAPACITY_MEMORY_MB" \
@@ -144,7 +149,7 @@ curl_config="$(mktemp)"
 trap 'rm -f "$worker_env_tmp" "$worker_json_tmp" "$curl_config"; run_worker logout ghcr.io >/dev/null 2>&1 || true' EXIT
 umask 077
 {
-  printf 'TABTIN_CLOUD_WORKER_HOST=172.17.0.1\n'
+  printf 'TABTIN_CLOUD_WORKER_HOST=%s\n' "$TABTIN_CLOUD_WORKER_BIND_ADDRESS"
   printf 'TABTIN_CLOUD_WORKER_PORT=8090\n'
   printf 'TABTIN_CLOUD_WORKER_TOKEN=%s\n' "$worker_token"
   printf 'TABTIN_CLOUD_WORKER_PROTOCOL_VERSION=1\n'
@@ -158,6 +163,9 @@ umask 077
 } > "$worker_env_tmp"
 sudo -n install -o root -g root -m 0600 "$worker_env_tmp" "$worker_env_file"
 
+sudo -n systemctl enable --now tabtin-cloud-volume-helper.socket
+[[ "$(sudo -n systemctl is-active tabtin-cloud-volume-helper.socket)" == "active" ]] ||
+  die "Cloud volume helper socket is not active"
 sudo -n systemctl enable --now tabtin-cloud-worker
 for _attempt in $(seq 1 30); do
   [[ "$(sudo -n systemctl is-active tabtin-cloud-worker 2>/dev/null || true)" == "active" ]] && break

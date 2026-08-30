@@ -1,6 +1,6 @@
 import { randomUUID } from 'node:crypto'
 import { describe, expect, it } from 'vitest'
-import { DockerCommandRunner } from '../src/command-runner.js'
+import { ProcessCommandRunner } from '../src/command-runner.js'
 import { DockerWorkspaceManager } from '../src/docker-workspace-manager.js'
 
 const IMAGE = process.env.TABTIN_CLOUD_WORKER_DOCKER_TEST_IMAGE
@@ -8,7 +8,7 @@ const IMAGE = process.env.TABTIN_CLOUD_WORKER_DOCKER_TEST_IMAGE
 describe.skipIf(!IMAGE)('DockerWorkspaceManager integration', () => {
   it('provisions, stops, restarts, and permanently removes one labelled allocation', async () => {
     const allocationId = randomUUID()
-    const runner = new DockerCommandRunner()
+    const runner = new ProcessCommandRunner()
     const manager = new DockerWorkspaceManager(runner, 'bridge')
     let identity = { allocationId, generation: 1 }
 
@@ -33,7 +33,7 @@ describe.skipIf(!IMAGE)('DockerWorkspaceManager integration', () => {
       ])
 
       const restartedManager = new DockerWorkspaceManager(
-        new DockerCommandRunner(),
+        new ProcessCommandRunner(),
         'bridge',
       )
       const reattached = await restartedManager.provision({

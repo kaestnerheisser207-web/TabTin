@@ -1,7 +1,11 @@
-import { DockerCommandRunner } from './command-runner.js'
+import { ProcessCommandRunner } from './command-runner.js'
 import { DockerWorkspaceManager } from './docker-workspace-manager.js'
 import { createWorkerServer, listenWorkerServer } from './server.js'
-import { verifyStorageQuotaSupport } from './storage-quota.js'
+import {
+  UnixSocketQuotaCommandRunner,
+  verifyStorageQuotaSupport,
+  XfsProjectQuotaManager,
+} from './storage-quota.js'
 import { verifyResourceIsolationSupport } from './resource-isolation.js'
 import {
   createJsonEventLogger,
@@ -29,9 +33,12 @@ try {
     throw new Error('TABTIN_CLOUD_RUNTIME_STORAGE_GB must be a positive integer')
   }
 
-  const runner = new DockerCommandRunner(containerCli)
+  const runner = new ProcessCommandRunner(containerCli)
+  const quotaManager = storageQuotaMode === 'podman-xfs'
+    ? new XfsProjectQuotaManager(new UnixSocketQuotaCommandRunner())
+    : null
   startupStage = 'storage_quota_probe'
-  await verifyStorageQuotaSupport(runner, storageQuotaMode)
+  await verifyStorageQuotaSupport(runner, quotaManager, storageQuotaMode)
   startupStage = 'resource_isolation_probe'
   await verifyResourceIsolationSupport(runner, resourceIsolationMode)
   const manager = new DockerWorkspaceManager(
@@ -39,6 +46,7 @@ try {
     network,
     storageQuotaMode,
     runtimeStorageGb,
+    quotaManager,
   )
   startupStage = 'server_init'
   activeServer = createWorkerServer({

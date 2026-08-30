@@ -9,6 +9,7 @@ WORKFLOW = ROOT / ".github/workflows/deploy-tabtin-vps.yml"
 DEPLOY_SCRIPT = ROOT / "scripts/deploy/tabtin-vps-release.sh"
 CLOUD_DEPLOY_SCRIPT = ROOT / "scripts/deploy/tabtin-cloud-vps-release.sh"
 BOOTSTRAP_SCRIPT = ROOT / "scripts/deploy/tabtin-cloud-host-bootstrap.sh"
+VOLUME_HELPER_SCRIPT = ROOT / "scripts/deploy/tabtin-cloud-volume-helper.sh"
 GATEWAY_SCRIPT = ROOT / "scripts/deploy/tabtin-deploy-gateway.sh"
 SUDOERS_TEMPLATE = ROOT / "scripts/deploy/tabtin-deploy.sudoers"
 WEB_DOCKERFILE = ROOT / "apps/tabtin-web/Dockerfile"
@@ -178,6 +179,8 @@ def test_cloud_host_release_is_separate_and_requires_runtime_worker_digests() ->
     assert "DAEMON_TOKEN_SECRET_FILE" in script
     assert "TABTIN_CLOUD_WORKER_EDITION" in script
     assert "TABTIN_CLOUD_CAPACITY_CPU_MILLICORES" in script
+    assert "TABTIN_CLOUD_WORKER_BIND_ADDRESS" in script
+    assert "systemctl enable --now tabtin-cloud-volume-helper.socket" in script
     assert 'DEPLOYED_COMMIT" 2>/dev/null' in script
     assert "docker build" not in script
     assert "source.tar.gz" not in script
@@ -190,13 +193,32 @@ def test_cloud_host_bootstrap_keeps_worker_rootless_and_quota_gated() -> None:
         ROOT
         / "apps/tabtin-cloud-worker/deployment/systemd/tabtin-cloud-worker.service"
     ).read_text(encoding="utf-8")
+    volume_socket = (
+        ROOT
+        / "apps/tabtin-cloud-worker/deployment/systemd/tabtin-cloud-volume-helper.socket"
+    ).read_text(encoding="utf-8")
+    volume_service = (
+        ROOT
+        / "apps/tabtin-cloud-worker/deployment/systemd/tabtin-cloud-volume-helper@.service"
+    ).read_text(encoding="utf-8")
+    volume_helper = VOLUME_HELPER_SCRIPT.read_text(encoding="utf-8")
 
     assert "loginctl enable-linger" in bootstrap
     assert "systemctl --user enable --now podman.socket" in bootstrap
+    assert "systemctl --user enable podman-restart.service" in bootstrap
+    assert "enable --now podman.socket podman-restart.service" not in bootstrap
+    assert '"$worker_home/.config"' in bootstrap
+    assert '"$worker_home/.config/systemd"' in bootstrap
+    assert '"$worker_home/.config/systemd/user"' in bootstrap
     assert 'mount -o loop,pquota "$runtime_image" "$runtime_root"' in bootstrap
-    assert 'volume create --opt o=size=1M "$probe_volume"' in bootstrap
+    assert '"$volume_helper" create "$probe_volume" 1' in bootstrap
+    assert "--opt type=none" in bootstrap
+    assert '--opt "device=$probe_path"' in bootstrap
+    assert "--opt o=bind" in bootstrap
     assert "TABTIN_CLOUD_XFS_SIZE_GB" in bootstrap
     assert "TABTIN_CLOUD_CAPACITY_STORAGE_GB" in bootstrap
+    assert "TABTIN_CLOUD_WORKER_BIND_ADDRESS" in bootstrap
+    assert "host.docker.internal" not in bootstrap
     assert "mkfs.xfs -f -L tabtin-cloud" in bootstrap
     assert 'runtime_fstype="$(blkid -s TYPE -o value' in bootstrap
     assert 'host_config_file="/etc/tabtin/cloud-host.env"' in bootstrap
@@ -204,11 +226,55 @@ def test_cloud_host_bootstrap_keeps_worker_rootless_and_quota_gated() -> None:
     assert "/Project/infrastructure/nginx/current/nginx.conf" in bootstrap
     assert 'install -o root -g tabtin-deploy -m 0750 "$deploy_gateway_source"' in bootstrap
     assert 'install -o root -g root -m 0700 "$cloud_release_source"' in bootstrap
+    assert 'install -o root -g root -m 0755 "$volume_helper_source"' in bootstrap
     assert 'visudo -cf "$sudoers_tmp"' in bootstrap
     assert "User=tabtin-cloud-worker" in service
     assert "NoNewPrivileges=true" in service
     assert "ProtectSystem=strict" in service
+    assert "SocketGroup=tabtin-cloud-worker" in volume_socket
+    assert "SocketMode=0660" in volume_socket
+    assert "Accept=yes" in volume_socket
+    assert "User=root" in volume_service
+    assert "NoNewPrivileges=true" in volume_service
+    assert "CapabilityBoundingSet=CAP_CHOWN CAP_DAC_OVERRIDE CAP_FOWNER CAP_SYS_ADMIN" in volume_service
+    assert "ReadWritePaths=/Project/infra/tabtin-cloud-runtime/volumes" in volume_service
+    assert "flock -x" in volume_helper
+    assert "xfs_quota -x -c" in volume_helper
+    assert "find \"$volume_path\" -xdev -depth -delete" in volume_helper
+    assert "sudo" not in volume_helper
     assert "/var/run/docker.sock" not in bootstrap
+
+
+def test_cloud_nginx_route_insertion_is_indentation_safe_and_idempotent(tmp_path: Path) -> None:
+    bootstrap = BOOTSTRAP_SCRIPT.read_text(encoding="utf-8")
+    program = bootstrap.split(
+        'python3 - "$nginx_config" "$worker_bind_address" <<\'PY\'\n', 1
+    )[1].split("\nPY\n", 1)[0]
+    nginx = tmp_path / "nginx.conf"
+    nginx.write_text(
+        "http {\n"
+        "    server {\n"
+        "        location / {\n"
+        "            proxy_pass http://tabtin_web_upstream;\n"
+        "        }\n"
+        "    }\n"
+        "}\n",
+        encoding="utf-8",
+    )
+
+    for address in ["172.17.0.1", "172.18.0.1"]:
+        subprocess.run(
+            ["python3", "-", str(nginx), address],
+            input=program,
+            text=True,
+            check=True,
+        )
+
+    rendered = nginx.read_text(encoding="utf-8")
+    assert rendered.count("# TabTin Cloud Worker control plane") == 1
+    assert "proxy_pass http://172.18.0.1:8090/;" in rendered
+    assert "proxy_pass http://172.17.0.1:8090/;" not in rendered
+    assert rendered.index("Cloud Worker control plane") < rendered.index("location / {")
 
 
 def test_restricted_gateway_dispatches_only_validated_standard_or_cloud_releases() -> None:
