@@ -178,9 +178,18 @@ if [[ "$(sudo -n systemctl is-active tabtin-cloud-worker 2>/dev/null || true)" !
 fi
 
 printf 'header = "Authorization: Bearer %s"\n' "$worker_token" > "$curl_config"
-worker_health="$(curl --fail --silent --show-error --max-time 20 \
-  --config "$curl_config" "$worker_direct_endpoint/v1/health")" ||
+worker_health=""
+for _attempt in $(seq 1 30); do
+  if worker_health="$(curl --fail --silent --max-time 5 \
+    --config "$curl_config" "$worker_direct_endpoint/v1/health" 2>/dev/null)"; then
+    break
+  fi
+  sleep 1
+done
+if [[ -z "$worker_health" ]]; then
+  sudo -n journalctl -u tabtin-cloud-worker -n 120 --no-pager >&2 || true
   die "Cloud Worker direct health request failed"
+fi
 grep -q '"protocolVersion":"1"' <<<"$worker_health" || die "Worker protocol health gate failed"
 grep -q "\"runtimeVersion\":\"$requested_sha\"" <<<"$worker_health" || die "Worker runtime health gate failed"
 grep -q '"storageQuotaMode":"podman-xfs"' <<<"$worker_health" || die "Worker quota health gate failed"
@@ -205,7 +214,7 @@ printf '{"%s":{"name":"%s","edition":"%s","endpoint":"%s","token":"%s","protocol
 docker run --rm --interactive --user 0:0 \
   --volume tabtin-community-installation-secrets:/secrets \
   --entrypoint sh "$local_django_image" \
-  -c 'umask 077; cat > /secrets/TABTIN_CLOUD_WORKERS_JSON; if [ ! -s /secrets/DAEMON_TOKEN_SECRET ]; then python -c '\''from pathlib import Path; import secrets; Path("/secrets/DAEMON_TOKEN_SECRET").write_text(secrets.token_urlsafe(48), encoding="utf-8")'\''; fi; chown 10001:10001 /secrets/TABTIN_CLOUD_WORKERS_JSON /secrets/DAEMON_TOKEN_SECRET; chmod 0400 /secrets/TABTIN_CLOUD_WORKERS_JSON /secrets/DAEMON_TOKEN_SECRET' \
+  -c 'umask 077; cat > /secrets/TABTIN_CLOUD_WORKERS_JSON; python -c '\''from pathlib import Path; import re, secrets; path=Path("/secrets/DAEMON_TOKEN_SECRET"); raw=path.read_text(encoding="utf-8") if path.exists() else ""; candidate=raw.strip(); value=candidate if re.fullmatch(r"[A-Za-z0-9_=-]{32,256}", candidate) else secrets.token_urlsafe(48); path.write_text(value, encoding="utf-8")'\''; chown 10001:10001 /secrets/TABTIN_CLOUD_WORKERS_JSON /secrets/DAEMON_TOKEN_SECRET; chmod 0400 /secrets/TABTIN_CLOUD_WORKERS_JSON /secrets/DAEMON_TOKEN_SECRET' \
   < "$worker_json_tmp"
 
 upsert_runtime_env() {

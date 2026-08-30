@@ -11,6 +11,8 @@ from django.conf import settings
 
 from apps.tabtinspace.models import CloudRuntimeAllocation, CloudWorkerNode
 
+_USER_AGENT = "TabTin-Cloud-Control/1.0"
+
 
 class CloudWorkerClientError(RuntimeError):
     pass
@@ -101,6 +103,7 @@ class CloudWorkerClient:
                 "Authorization": f"Bearer {token}",
                 "Content-Type": "application/json",
                 "Accept": "application/json",
+                "User-Agent": _USER_AGENT,
             },
         )
         try:
