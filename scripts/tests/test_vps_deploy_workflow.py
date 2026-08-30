@@ -109,9 +109,12 @@ def test_web_and_collab_images_are_reproducible_from_repo_dockerfiles() -> None:
         "npm_config_ignore_scripts=true pnpm --filter collab-live deploy --prod /opt/collab-live"
         in collab
     )
-    assert "COPY --from=build --chown=node:node /opt/collab-live ./" in collab
+    assert (
+        "COPY --from=build --chown=node:node /opt/collab-live ./apps/collab-live"
+        in collab
+    )
     assert 'USER node' in collab
-    assert 'CMD ["node", "dist/start.js"]' in collab
+    assert 'CMD ["node", "apps/collab-live/dist/start.js"]' in collab
 
     collab_package = json.loads(COLLAB_PACKAGE.read_text(encoding="utf-8"))
     assert collab_package["dependencies"]["@tabtin/table-core"] == "workspace:*"
@@ -142,6 +145,17 @@ def test_cleanup_is_scoped_to_old_tabtin_images_and_runs_after_health() -> None:
     assert 'docker image rm --force "$image_id"' in script
     assert "docker builder prune" not in script
     assert "docker image prune" not in script
+
+
+def test_nginx_reload_follows_local_health_and_precedes_public_health() -> None:
+    script = DEPLOY_SCRIPT.read_text(encoding="utf-8")
+
+    local_health = script.index("local readiness response did not report ready")
+    nginx_test = script.index("docker exec nginx nginx -t")
+    nginx_reload = script.index("docker exec nginx nginx -s reload")
+    public_health = script.index("public readiness request failed")
+
+    assert local_health < nginx_test < nginx_reload < public_health
 
 
 def test_cloud_host_release_is_separate_and_requires_all_three_digests() -> None:

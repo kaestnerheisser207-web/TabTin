@@ -18,8 +18,8 @@ FROM node:22-bookworm-slim
 
 WORKDIR /app
 
-COPY --from=build --chown=node:node /opt/collab-live ./
+COPY --from=build --chown=node:node /opt/collab-live ./apps/collab-live
 
 USER node
 
-CMD ["node", "dist/start.js"]
+CMD ["node", "apps/collab-live/dist/start.js"]

@@ -157,6 +157,12 @@ if ! grep -q '"status"[[:space:]]*:[[:space:]]*"ready"' <<<"$local_health_respon
   die "local readiness response did not report ready"
 fi
 
+if docker inspect nginx >/dev/null 2>&1; then
+  log "validating and reloading Nginx upstreams"
+  docker exec nginx nginx -t
+  docker exec nginx nginx -s reload
+fi
+
 if ! health_response="$(curl --fail --silent --show-error --max-time 20 "$public_health_url")"; then
   die "public readiness request failed"
 fi
