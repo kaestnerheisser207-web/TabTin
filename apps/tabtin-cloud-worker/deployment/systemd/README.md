@@ -1,6 +1,6 @@
-# Community Cloud Worker（rootless）
+# Cloud Worker（rootless）
 
-Community 版的 Cloud Worker Supervisor 直接运行在管理员的 VPS 上，并只连接同一专用账号拥有的 rootless Podman Docker-compatible socket。终端用户不部署 Worker，只安装 TabTin 客户端；Django 控制面通过现有域名的 TLS 反向代理访问 Worker 控制 API。
+Cloud Worker Supervisor 直接运行在管理员的 VPS 上，并只连接同一专用账号拥有的 rootless Podman Docker-compatible socket。终端用户不部署 Worker，只安装 TabTin 客户端；Django 控制面通过现有域名的 TLS 反向代理访问 Worker 控制 API。控制面 edition 与 Worker pool edition 独立，Community 安装也可显式接入平台托管的 SaaS Worker pool。
 
 ## 安全边界
 
@@ -13,11 +13,11 @@ Community 版的 Cloud Worker Supervisor 直接运行在管理员的 VPS 上，�
 
 ## 安装轮廓
 
-1. 构建 `@tabtin/cloud-worker`，将 `dist/` 部署到 `/opt/tabtin-cloud-worker/dist/`。
-2. 安装 rootless Podman 与 Docker-compatible socket，把 graphroot 与 volume storage 放在 XFS `prjquota`/`pquota` 挂载点；使用专用账号验证 `DOCKER_HOST=... docker info` 成功，并创建 `tabtin-cloud-runtime` 网络。
-3. 从 `cloud-worker.env.example` 生成 `/etc/tabtin/cloud-worker.env`，替换 UID、随机 token 与不可变 Runtime 版本。
-4. 安装 `tabtin-cloud-worker.service` 后执行 `systemctl daemon-reload`、`systemctl enable --now tabtin-cloud-worker`。
-5. 在 Django 侧通过 `TABTIN_CLOUD_WORKERS_JSON_FILE` 配置同一个 token；周期 heartbeat 会自动物化 `CloudWorkerNode`，只有 HTTPS `/v1/health` 的 protocol/runtime/storageQuotaMode 三重门禁通过后才置为 `ready`，无需手工插数据库。
+1. 用 `tabtin-cloud-host-bootstrap.sh <systemd-unit> <deploy-gateway> <cloud-release> <sudoers-template>` 安装 rootless Podman、XFS `pquota`、专用账号、systemd unit、受限发布入口与 TLS 路由；XFS 大小、Host 保留、Worker node key/edition 和 CPU/内存/存储容量都通过显式环境变量传入并写入 root-owned `/etc/tabtin/cloud-host.env`。
+2. Bootstrap 使用专用账号真实验证 `DOCKER_HOST=... docker info`、cgroup v2/systemd、`1 MiB` quota volume 与 `tabtin-cloud-runtime` 网络；任一门禁失败均不写入可启动状态。
+3. 合并 PR 先发布同一 release SHA 的不可变 Runtime/Worker 镜像；手动 `workflow_dispatch(release_sha)` 通过受限 `deploy-cloud` 命令，将 Worker `dist/` 原子部署到 `/opt/tabtin-cloud-worker/current/`。
+4. Cloud 发布生成独立 `DAEMON_TOKEN_SECRET` file secret，写入 Runtime digest、Worker registry file、runtime volume 大小与 Worker pool edition 后，仅重建 Django/Celery 加载配置。
+5. 周期 heartbeat 自动物化 `CloudWorkerNode`；只有 HTTPS `/v1/health` 的 protocol/runtime/storage/resource 四重门禁通过后才置为 `ready`，无需手工插数据库。
 
 `TABTIN_CLOUD_WORKERS_JSON` 的 Community 节点示例（生产 endpoint 必须是 HTTPS）：
 
@@ -44,6 +44,6 @@ token 只存在于 Django secret 与 Worker env，不写入 `CloudWorkerNode`；
 
 Worker 的 `/v1/health` 与 `/v1/metrics` 使用同一个 Bearer 边界；metrics 只暴露有界 operation/result 请求计数、耗时和不可变版本能力，不使用 organization、user、Workspace、allocation 或 thread 作为 Prometheus label。systemd stdout/stderr 为单行 JSON 事件，可携带 allocation/generation 诊断字段，但不记录请求 body、token、命令 stderr 或文件内容。
 
-当前稳定 VPS 继续使用 `scripts/deploy/tabtin-vps-release.sh` 的 Django-only 三参数强制命令；替换主机完成本目录的 bootstrap 后，才安装并绑定独立的 `scripts/deploy/tabtin-cloud-vps-release.sh` 五参数命令。两条发布入口不能指向同一把尚未切换完成的强制命令。
+受限 SSH key 只进入 root-owned `tabtin-deploy-gateway.sh`：标准 `deploy` 精确校验 Django/Web/Collab 三个 digest，`deploy-cloud` 精确校验 Runtime/Worker 两个 digest；sudoers 只授权对应的两条固定发布脚本，不给 `tabtin-deploy` 任意 sudo。
 
 此目录只定义 Community Worker Supervisor；Cloud Runtime 镜像仍由 `apps/tabtin-daemon/Dockerfile.cloud` 构建并以 `image@sha256:<digest>` 供给，禁止 floating tag。

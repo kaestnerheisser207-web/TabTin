@@ -2,13 +2,12 @@
 set -euo pipefail
 
 application_root="/Project/applications/tabtin"
-releases_root="$application_root/releases"
 compose_file="$application_root/config/compose.shared.yml"
 runtime_env_file="$application_root/source-snapshot/.env.community-runtime"
-public_health_url="https://tabtin.dovelora.com/health/ready"
+host_config_file="/etc/tabtin/cloud-host.env"
 worker_endpoint="https://tabtin.dovelora.com/_internal/cloud-worker"
-local_image="tabtin/community-django:local"
-django_repository="ghcr.io/kaestnerheisser207-web/tabtin-community-django"
+worker_direct_endpoint="http://172.17.0.1:8090"
+local_django_image="tabtin/community-django:local"
 runtime_repository="ghcr.io/kaestnerheisser207-web/tabtin-cloud-runtime"
 worker_repository="ghcr.io/kaestnerheisser207-web/tabtin-cloud-worker"
 worker_user="tabtin-cloud-worker"
@@ -19,43 +18,68 @@ worker_release_root="/opt/tabtin-cloud-worker/releases"
 lock_file="$application_root/.deploy.lock"
 
 log() {
-  printf '[tabtin-deploy] %s\n' "$*"
+  printf '[tabtin-cloud-deploy] %s\n' "$*"
 }
 
 die() {
-  printf '[tabtin-deploy] ERROR: %s\n' "$*" >&2
+  printf '[tabtin-cloud-deploy] ERROR: %s\n' "$*" >&2
   exit 1
 }
 
 requested_sha="${1:-}"
-requested_django="${2:-}"
-requested_runtime="${3:-}"
-requested_worker="${4:-}"
-registry_user="${5:-}"
+requested_runtime="${2:-}"
+requested_worker="${3:-}"
+registry_user="${4:-}"
 if [[ -n "${SSH_ORIGINAL_COMMAND:-}" ]]; then
-  read -r command requested_sha requested_django requested_runtime requested_worker registry_user extra <<<"$SSH_ORIGINAL_COMMAND"
-  [[ "$command" == "deploy" && -z "${extra:-}" ]] ||
-    die "restricted key accepts only: deploy <commit-sha> <django-digest-ref> <runtime-digest-ref> <worker-digest-ref> <registry-user>"
+  read -r command requested_sha requested_runtime requested_worker registry_user extra <<<"$SSH_ORIGINAL_COMMAND"
+  [[ "$command" == "deploy-cloud" && -z "${extra:-}" ]] ||
+    die "restricted key accepts only: deploy-cloud <commit-sha> <runtime-digest-ref> <worker-digest-ref> <registry-user>"
 fi
 
 [[ "$requested_sha" =~ ^[0-9a-f]{40}$ ]] ||
   die "release commit must be a full lowercase SHA"
-[[ "$requested_django" =~ ^ghcr\.io/kaestnerheisser207-web/tabtin-community-django@sha256:[0-9a-f]{64}$ ]] ||
-  die "Django image must use the approved GHCR repository and digest"
 [[ "$requested_runtime" =~ ^ghcr\.io/kaestnerheisser207-web/tabtin-cloud-runtime@sha256:[0-9a-f]{64}$ ]] ||
   die "Cloud Runtime image must use the approved GHCR repository and digest"
 [[ "$requested_worker" =~ ^ghcr\.io/kaestnerheisser207-web/tabtin-cloud-worker@sha256:[0-9a-f]{64}$ ]] ||
   die "Cloud Worker image must use the approved GHCR repository and digest"
-[[ "$registry_user" =~ ^[A-Za-z0-9-]{1,39}$ ]] ||
-  die "invalid registry user"
+[[ "$registry_user" =~ ^[A-Za-z0-9-]{1,39}$ ]] || die "invalid registry user"
 
-mkdir -p "$application_root"
 exec 9>"$lock_file"
 flock -n 9 || die "another TabTin deployment is already running"
 [[ -f "$compose_file" ]] || die "missing compose file: $compose_file"
 [[ -f "$runtime_env_file" ]] || die "missing runtime env file: $runtime_env_file"
 [[ -f "$worker_token_file" ]] || die "Cloud host bootstrap has not installed the Worker token"
-id "$worker_user" >/dev/null 2>&1 || die "Cloud host bootstrap has not installed the Worker account"
+[[ -f "$host_config_file" ]] || die "Cloud host bootstrap has not installed capacity config"
+[[ "$(stat -c %u "$host_config_file")" -eq 0 ]] || die "Cloud host config must be root-owned"
+host_config_mode="$(stat -c %a "$host_config_file")"
+(( (8#$host_config_mode & 022) == 0 )) || die "Cloud host config must not be group/world writable"
+# shellcheck source=/dev/null
+source "$host_config_file"
+
+: "${TABTIN_CLOUD_WORKER_NODE_KEY:?missing Worker node key}"
+: "${TABTIN_CLOUD_WORKER_EDITION:?missing Worker edition}"
+: "${TABTIN_CLOUD_CAPACITY_CPU_MILLICORES:?missing CPU capacity}"
+: "${TABTIN_CLOUD_CAPACITY_MEMORY_MB:?missing memory capacity}"
+: "${TABTIN_CLOUD_CAPACITY_STORAGE_GB:?missing storage capacity}"
+: "${TABTIN_CLOUD_RUNTIME_STORAGE_GB:?missing runtime storage size}"
+[[ "$TABTIN_CLOUD_WORKER_NODE_KEY" =~ ^[A-Za-z0-9][A-Za-z0-9_.-]{0,127}$ ]] ||
+  die "invalid Worker node key"
+[[ "$TABTIN_CLOUD_WORKER_EDITION" == "saas" || "$TABTIN_CLOUD_WORKER_EDITION" == "community" ]] ||
+  die "invalid Worker edition"
+for value in \
+  "$TABTIN_CLOUD_CAPACITY_CPU_MILLICORES" \
+  "$TABTIN_CLOUD_CAPACITY_MEMORY_MB" \
+  "$TABTIN_CLOUD_CAPACITY_STORAGE_GB" \
+  "$TABTIN_CLOUD_RUNTIME_STORAGE_GB"; do
+  [[ "$value" =~ ^[1-9][0-9]*$ ]] || die "capacity values must be positive integers"
+done
+
+[[ "$(cat "$application_root/DEPLOYED_COMMIT" 2>/dev/null || true)" == "$requested_sha" ]] ||
+  die "Django deployment must already match the requested Cloud release"
+django_revision="$(docker image inspect "$local_django_image" --format '{{index .Config.Labels "org.opencontainers.image.revision"}}' 2>/dev/null || true)"
+[[ "$django_revision" == "$requested_sha" ]] ||
+  die "local Django image revision does not match the requested Cloud release"
+id "$worker_user" >/dev/null 2>&1 || die "Cloud Worker account is missing"
 worker_uid="$(id -u "$worker_user")"
 podman_socket="/run/user/$worker_uid/podman/podman.sock"
 [[ -S "$podman_socket" ]] || die "rootless Podman socket is unavailable"
@@ -72,27 +96,15 @@ registry_token=""
 IFS= read -r registry_token || true
 [[ -n "$registry_token" ]] || die "missing one-time registry token"
 printf '%s\n' "$registry_token" |
-  docker login ghcr.io --username "$registry_user" --password-stdin >/dev/null
-printf '%s\n' "$registry_token" |
   sudo -n -u "$worker_user" env \
     HOME="$worker_home" \
     XDG_RUNTIME_DIR="/run/user/$worker_uid" \
     DOCKER_HOST="unix://$podman_socket" \
     /usr/bin/docker login ghcr.io --username "$registry_user" --password-stdin >/dev/null
 unset registry_token
-trap 'docker logout ghcr.io >/dev/null 2>&1 || true; run_worker logout ghcr.io >/dev/null 2>&1 || true' EXIT
+trap 'run_worker logout ghcr.io >/dev/null 2>&1 || true' EXIT
 
-old_image_id="$(docker inspect tabtin-community-django-1 --format '{{.Image}}')"
-[[ "$old_image_id" =~ ^sha256:[0-9a-f]{64}$ ]] ||
-  die "cannot resolve the running Django image"
-
-log "pulling immutable Django image"
-docker pull "$requested_django"
-new_image_id="$(docker image inspect "$requested_django" --format '{{.Id}}')"
-[[ "$new_image_id" =~ ^sha256:[0-9a-f]{64}$ ]] ||
-  die "cannot resolve the pulled image"
-
-log "pulling immutable Cloud Runtime and Worker images into rootless Podman"
+log "pulling immutable Cloud Runtime and Worker images"
 run_worker pull "$requested_runtime"
 run_worker pull "$requested_worker"
 
@@ -106,7 +118,7 @@ cleanup_worker_staging() {
     sudo -n -u "$worker_user" rm -r -- "$worker_staging" >/dev/null 2>&1 || true
   fi
 }
-trap 'cleanup_worker_staging; docker logout ghcr.io >/dev/null 2>&1 || true; run_worker logout ghcr.io >/dev/null 2>&1 || true' EXIT
+trap 'cleanup_worker_staging; run_worker logout ghcr.io >/dev/null 2>&1 || true' EXIT
 run_worker cp "$worker_container:/app/dist" "$worker_staging/"
 run_worker rm "$worker_container" >/dev/null
 worker_container=""
@@ -129,7 +141,7 @@ worker_token="$(sudo -n cat "$worker_token_file")"
 worker_env_tmp="$(mktemp)"
 worker_json_tmp="$(mktemp)"
 curl_config="$(mktemp)"
-trap 'rm -f "$worker_env_tmp" "$worker_json_tmp" "$curl_config"; docker logout ghcr.io >/dev/null 2>&1 || true; run_worker logout ghcr.io >/dev/null 2>&1 || true' EXIT
+trap 'rm -f "$worker_env_tmp" "$worker_json_tmp" "$curl_config"; run_worker logout ghcr.io >/dev/null 2>&1 || true' EXIT
 umask 077
 {
   printf 'TABTIN_CLOUD_WORKER_HOST=172.17.0.1\n'
@@ -140,7 +152,7 @@ umask 077
   printf 'TABTIN_CLOUD_RUNTIME_NETWORK=tabtin-cloud-runtime\n'
   printf 'TABTIN_CLOUD_CONTAINER_CLI=/usr/bin/docker\n'
   printf 'TABTIN_CLOUD_STORAGE_QUOTA_MODE=podman-xfs\n'
-  printf 'TABTIN_CLOUD_RUNTIME_STORAGE_GB=2\n'
+  printf 'TABTIN_CLOUD_RUNTIME_STORAGE_GB=%s\n' "$TABTIN_CLOUD_RUNTIME_STORAGE_GB"
   printf 'TABTIN_CLOUD_RESOURCE_ISOLATION_MODE=cgroup-v2\n'
   printf 'DOCKER_HOST=unix://%s\n' "$podman_socket"
 } > "$worker_env_tmp"
@@ -158,26 +170,33 @@ fi
 
 printf 'header = "Authorization: Bearer %s"\n' "$worker_token" > "$curl_config"
 worker_health="$(curl --fail --silent --show-error --max-time 20 \
-  --resolve tabtin.dovelora.com:443:127.0.0.1 \
-  --config "$curl_config" "$worker_endpoint/v1/health")" ||
-  die "Cloud Worker HTTPS health request failed"
+  --config "$curl_config" "$worker_direct_endpoint/v1/health")" ||
+  die "Cloud Worker direct health request failed"
 grep -q '"protocolVersion":"1"' <<<"$worker_health" || die "Worker protocol health gate failed"
 grep -q "\"runtimeVersion\":\"$requested_sha\"" <<<"$worker_health" || die "Worker runtime health gate failed"
 grep -q '"storageQuotaMode":"podman-xfs"' <<<"$worker_health" || die "Worker quota health gate failed"
 grep -q '"resourceIsolationMode":"cgroup-v2"' <<<"$worker_health" || die "Worker isolation health gate failed"
 worker_metrics="$(curl --fail --silent --show-error --max-time 20 \
-  --resolve tabtin.dovelora.com:443:127.0.0.1 \
-  --config "$curl_config" "$worker_endpoint/v1/metrics")" ||
-  die "Cloud Worker metrics request failed"
+  --config "$curl_config" "$worker_direct_endpoint/v1/metrics")" ||
+  die "Cloud Worker direct metrics request failed"
 grep -q '^tabtin_cloud_worker_up 1$' <<<"$worker_metrics" ||
   die "Cloud Worker metrics readiness gate failed"
 
-printf '{"sg01-cloud-1":{"name":"TabTin sg01 Cloud Worker","edition":"saas","endpoint":"%s","token":"%s","protocol_version":"1","runtime_version":"%s","storage_quota_mode":"podman-xfs","resource_isolation_mode":"cgroup-v2","capacity_cpu_millicores":2000,"capacity_memory_mb":4096,"capacity_storage_gb":20}}\n' \
-  "$worker_endpoint" "$worker_token" "$requested_sha" > "$worker_json_tmp"
+printf '{"%s":{"name":"%s","edition":"%s","endpoint":"%s","token":"%s","protocol_version":"1","runtime_version":"%s","storage_quota_mode":"podman-xfs","resource_isolation_mode":"cgroup-v2","capacity_cpu_millicores":%s,"capacity_memory_mb":%s,"capacity_storage_gb":%s}}\n' \
+  "$TABTIN_CLOUD_WORKER_NODE_KEY" \
+  "$TABTIN_CLOUD_WORKER_NODE_KEY" \
+  "$TABTIN_CLOUD_WORKER_EDITION" \
+  "$worker_endpoint" \
+  "$worker_token" \
+  "$requested_sha" \
+  "$TABTIN_CLOUD_CAPACITY_CPU_MILLICORES" \
+  "$TABTIN_CLOUD_CAPACITY_MEMORY_MB" \
+  "$TABTIN_CLOUD_CAPACITY_STORAGE_GB" > "$worker_json_tmp"
+
 docker run --rm --interactive --user 0:0 \
   --volume tabtin-community-installation-secrets:/secrets \
-  --entrypoint sh "$requested_django" \
-  -c 'umask 077; cat > /secrets/TABTIN_CLOUD_WORKERS_JSON; chown 10001:10001 /secrets/TABTIN_CLOUD_WORKERS_JSON; chmod 0400 /secrets/TABTIN_CLOUD_WORKERS_JSON' \
+  --entrypoint sh "$local_django_image" \
+  -c 'umask 077; cat > /secrets/TABTIN_CLOUD_WORKERS_JSON; if [ ! -s /secrets/DAEMON_TOKEN_SECRET ]; then python -c '\''from pathlib import Path; import secrets; Path("/secrets/DAEMON_TOKEN_SECRET").write_text(secrets.token_urlsafe(48), encoding="utf-8")'\''; fi; chown 10001:10001 /secrets/TABTIN_CLOUD_WORKERS_JSON /secrets/DAEMON_TOKEN_SECRET; chmod 0400 /secrets/TABTIN_CLOUD_WORKERS_JSON /secrets/DAEMON_TOKEN_SECRET' \
   < "$worker_json_tmp"
 
 upsert_runtime_env() {
@@ -208,9 +227,10 @@ except BaseException:
 }
 upsert_runtime_env TABTIN_CLOUD_RUNTIME_IMAGE "$requested_runtime"
 upsert_runtime_env TABTIN_CLOUD_WORKERS_JSON_FILE /run/tabtin-community-secrets/TABTIN_CLOUD_WORKERS_JSON
+upsert_runtime_env DAEMON_TOKEN_SECRET_FILE /run/tabtin-community-secrets/DAEMON_TOKEN_SECRET
+upsert_runtime_env TABTIN_CLOUD_RUNTIME_STORAGE_GB "$TABTIN_CLOUD_RUNTIME_STORAGE_GB"
+upsert_runtime_env TABTIN_CLOUD_WORKER_EDITION "$TABTIN_CLOUD_WORKER_EDITION"
 
-docker image tag "$new_image_id" "$local_image"
-docker logout ghcr.io >/dev/null 2>&1 || true
 run_worker logout ghcr.io >/dev/null 2>&1 || true
 rm -f "$worker_env_tmp" "$worker_json_tmp" "$curl_config"
 unset worker_token
@@ -237,72 +257,33 @@ wait_for_health() {
   return 1
 }
 
-log "checking migration plan"
-compose run --rm --no-deps --user 0:0 \
-  -e PG_DB_USER=tabtin_migrator \
-  -e PG_DB_PASSWORD_FILE=/run/tabtin-community-secrets/PG_MIGRATOR_PASSWORD \
-  --entrypoint python django \
-  manage.py safe_migrate --plan --no-input
-
-log "entering maintenance window before migration"
-compose stop celery django
-
-log "applying release migrations"
-compose run --rm --no-deps --user 0:0 \
-  -e PG_DB_USER=tabtin_migrator \
-  -e PG_DB_PASSWORD_FILE=/run/tabtin-community-secrets/PG_MIGRATOR_PASSWORD \
-  --entrypoint python django \
-  manage.py safe_migrate --no-input
-
-log "recreating Django"
+compose config --quiet
+log "recreating Django and Celery with Cloud settings"
 compose up -d --no-deps --no-build --force-recreate django
 if ! wait_for_health tabtin-community-django-1 48; then
   docker logs --tail 200 tabtin-community-django-1 >&2 || true
-  die "new Django container did not become healthy"
+  die "Django did not become healthy with Cloud settings"
 fi
-
-log "recreating Celery"
 compose up -d --no-deps --no-build --force-recreate celery
 if ! wait_for_health tabtin-community-celery-1 24; then
   docker logs --tail 200 tabtin-community-celery-1 >&2 || true
-  die "new Celery container did not become healthy"
+  die "Celery did not become healthy with Cloud settings"
 fi
 
 log "materializing and verifying the configured Cloud Worker"
 docker exec tabtin-community-django-1 python manage.py shell -c \
   'from apps.tabtinspace.services.cloud_worker_registry import CloudWorkerRegistry; from apps.tabtinspace.tasks import heartbeat_cloud_worker_nodes; CloudWorkerRegistry().sync_configured(); result=heartbeat_cloud_worker_nodes(); assert result.get("ready") == 1, result'
 
-if ! health_response="$(curl --fail --silent --show-error --max-time 20 "$public_health_url")"; then
+if ! health_response="$(curl --fail --silent --show-error --max-time 20 https://tabtin.dovelora.com/health/ready)"; then
   die "public readiness request failed"
 fi
-if ! grep -q '"status"[[:space:]]*:[[:space:]]*"ready"' <<<"$health_response"; then
+grep -q '"status"[[:space:]]*:[[:space:]]*"ready"' <<<"$health_response" ||
   die "public readiness response did not report ready"
-fi
 
-printf '%s\n' "$requested_sha" > "$application_root/DEPLOYED_COMMIT"
-
-log "removing previous application images"
-declare -A removed_image_ids=()
-while read -r repository image_id; do
-  [[ "$repository" == "tabtin/community-django" ||
-    "$repository" == "$django_repository" ]] || continue
-  [[ "$image_id" != "$new_image_id" ]] || continue
-  [[ -z "${removed_image_ids[$image_id]:-}" ]] || continue
-  removed_image_ids[$image_id]=1
-  docker image rm --force "$image_id"
-done < <(docker image ls --no-trunc --format '{{.Repository}} {{.ID}}')
-
-if [[ -d "$releases_root" ]]; then
-  log "removing obsolete source releases"
-  rm -f "$application_root/current"
-  find "$releases_root" -mindepth 1 -maxdepth 1 -type d -exec rm -rf -- {} +
-fi
-
-log "deployment complete"
+printf '%s\n' "$requested_sha" > "$application_root/CLOUD_DEPLOYED_COMMIT"
+log "Cloud deployment complete"
 log "commit: $requested_sha"
-log "Django image: $requested_django ($new_image_id)"
-log "Cloud Runtime image: $requested_runtime"
-log "Cloud Worker image: $requested_worker"
-compose ps django celery
+log "Runtime image: $requested_runtime"
+log "Worker image: $requested_worker"
 sudo -n systemctl --no-pager --full status tabtin-cloud-worker | sed -n '1,12p'
 printf '%s\n' "$health_response"

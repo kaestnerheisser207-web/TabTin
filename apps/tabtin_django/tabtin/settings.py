@@ -87,6 +87,19 @@ TABTIN_CLOUD_MAX_ACTIVE_WORKSPACES_PER_USER = int(
 TABTIN_CLOUD_DISABLED_RETENTION_DAYS = int(
     os.getenv('TABTIN_CLOUD_DISABLED_RETENTION_DAYS', '30')
 )
+TABTIN_CLOUD_RUNTIME_STORAGE_GB = int(
+    os.getenv('TABTIN_CLOUD_RUNTIME_STORAGE_GB', '2')
+)
+if TABTIN_CLOUD_RUNTIME_STORAGE_GB < 1:
+    raise ImproperlyConfigured('TABTIN_CLOUD_RUNTIME_STORAGE_GB 必须大于 0')
+TABTIN_CLOUD_WORKER_EDITION = os.getenv(
+    'TABTIN_CLOUD_WORKER_EDITION',
+    TABTIN_EDITION,
+).strip().lower()
+if TABTIN_CLOUD_WORKER_EDITION not in {'saas', 'community'}:
+    raise ImproperlyConfigured(
+        'TABTIN_CLOUD_WORKER_EDITION 必须是 saas 或 community'
+    )
 # Secret JSON map: {"node-key":{"endpoint":"https://...","token":"..."}}.
 # Endpoint and token are bound in one server-owned config so a database-only
 # endpoint mutation can never redirect Worker credentials.
@@ -754,7 +767,11 @@ if _ssh_fernet_raw:
         _ssh_fernet_raw, env_var_name='SSH_CREDENTIAL_ENCRYPTION_KEY'
     )
 SSH_CREDENTIAL_ENCRYPTION_KEY = _ssh_fernet_raw or CREDENTIAL_ENCRYPTION_KEY
-DAEMON_TOKEN_SECRET = os.getenv('DAEMON_TOKEN_SECRET', '')
+DAEMON_TOKEN_SECRET = _secret_env_or_file(
+    'DAEMON_TOKEN_SECRET',
+    '',
+    required=False,
+)
 
 # 反向代理层数：get_client_ip 从 X-Forwarded-For 右起第 N 个 IP 提取客户端真实 IP
 # 0 = 忽略 XFF，仅用 REMOTE_ADDR；生产环境有 Nginx 代理时至少设为 1

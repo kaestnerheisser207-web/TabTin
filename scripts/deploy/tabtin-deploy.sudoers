@@ -1,0 +1,2 @@
+tabtin-deploy ALL=(root) NOPASSWD: /Project/applications/tabtin/bin/tabtin-vps-release.sh
+tabtin-deploy ALL=(root) NOPASSWD: /Project/applications/tabtin/bin/tabtin-cloud-vps-release.sh

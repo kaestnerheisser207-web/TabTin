@@ -5,6 +5,7 @@ from __future__ import annotations
 import logging
 from collections.abc import Iterable
 
+from django.conf import settings
 from django.db.models import Count, Sum
 
 from apps.services.common.db_router import postgres_app_db_alias
@@ -164,11 +165,16 @@ class CloudStateCollector:
             CloudRuntimeAllocation.State.PROVISIONING,
             CloudRuntimeAllocation.State.READY,
         }
-        usage = {
+        retained_storage_states = {
+            *active_states,
+            CloudRuntimeAllocation.State.DISABLED,
+            CloudRuntimeAllocation.State.ERROR,
+            CloudRuntimeAllocation.State.DELETING,
+        }
+        active_usage = {
             row["worker_id"]: {
                 "cpu_millicores": int(row["cpu"] or 0),
                 "memory_mb": int(row["memory"] or 0),
-                "storage_gb": int(row["storage"] or 0),
             }
             for row in CloudRuntimeAllocation.objects.using(db_alias)
             .filter(state__in=active_states)
@@ -176,7 +182,20 @@ class CloudStateCollector:
             .annotate(
                 cpu=Sum("cpu_millicores"),
                 memory=Sum("memory_mb"),
-                storage=Sum("storage_gb"),
+            )
+        }
+        runtime_storage_gb = int(
+            getattr(settings, "TABTIN_CLOUD_RUNTIME_STORAGE_GB", 2)
+        )
+        retained_storage = {
+            row["worker_id"]: int(row["workspace_storage"] or 0)
+            + int(row["allocation_count"] or 0) * runtime_storage_gb
+            for row in CloudRuntimeAllocation.objects.using(db_alias)
+            .filter(state__in=retained_storage_states)
+            .values("worker_id")
+            .annotate(
+                workspace_storage=Sum("storage_gb"),
+                allocation_count=Count("id"),
             )
         }
         capacity_family = GaugeMetricFamily(
@@ -202,7 +221,8 @@ class CloudStateCollector:
         }
         for worker in workers:
             node_key = str(worker["node_key"])
-            worker_usage = usage.get(worker["id"], {})
+            worker_usage = active_usage.get(worker["id"], {})
+            worker_usage["storage_gb"] = retained_storage.get(worker["id"], 0)
             for resource, field in capacity_fields.items():
                 capacity_family.add_metric([node_key, resource], int(worker[field] or 0))
                 allocated_family.add_metric(

@@ -110,6 +110,9 @@ print("EDITION_RESULT=" + json.dumps({
     "cloud_workers_sha256": hashlib.sha256(
         settings.TABTIN_CLOUD_WORKERS_JSON.encode("utf-8")
     ).hexdigest(),
+    "cloud_runtime_storage_gb": settings.TABTIN_CLOUD_RUNTIME_STORAGE_GB,
+    "cloud_worker_edition": settings.TABTIN_CLOUD_WORKER_EDITION,
+    "daemon_token_secret_configured": bool(settings.DAEMON_TOKEN_SECRET),
 }, sort_keys=True))
 """
     return subprocess.run(
@@ -144,6 +147,9 @@ def test_community_settings_start_without_ai_or_email_provider() -> None:
         "database_name": "tabtin",
         "database_user": "tabtin_runtime",
         "cloud_workers_sha256": hashlib.sha256(b"{}").hexdigest(),
+        "cloud_runtime_storage_gb": 2,
+        "cloud_worker_edition": "community",
+        "daemon_token_secret_configured": False,
         "edition": "community",
         "email_backend": "django.core.mail.backends.console.EmailBackend",
         "email_host": "",
@@ -181,6 +187,39 @@ def test_community_settings_load_cloud_worker_registry_from_file(
 
     expected_hash = hashlib.sha256(registry.encode("utf-8")).hexdigest()
     assert payload["cloud_workers_sha256"] == expected_hash
+
+
+def test_community_control_plane_can_select_hosted_cloud_pool() -> None:
+    payload = _payload(
+        _import_settings(
+            edition="community",
+            include_saas_secrets=False,
+            extra_env={
+                "TABTIN_CLOUD_WORKER_EDITION": "saas",
+                "TABTIN_CLOUD_RUNTIME_STORAGE_GB": "3",
+            },
+        )
+    )
+
+    assert payload["cloud_worker_edition"] == "saas"
+    assert payload["cloud_runtime_storage_gb"] == 3
+
+
+def test_community_settings_load_daemon_token_secret_from_file(
+    tmp_path: Path,
+) -> None:
+    daemon_secret_file = tmp_path / "DAEMON_TOKEN_SECRET"
+    daemon_secret_file.write_text("d" * 64, encoding="utf-8")
+
+    payload = _payload(
+        _import_settings(
+            edition="community",
+            include_saas_secrets=False,
+            extra_env={"DAEMON_TOKEN_SECRET_FILE": str(daemon_secret_file)},
+        )
+    )
+
+    assert payload["daemon_token_secret_configured"] is True
 
 
 def test_community_settings_keep_explicit_third_party_endpoints() -> None:
