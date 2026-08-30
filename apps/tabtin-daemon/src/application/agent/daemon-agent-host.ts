@@ -27,6 +27,7 @@ import {
   HostTrackerScheduler,
   MessageDeliveryOutbox,
 } from '@tabtin/agent-host'
+import { bindAttributionStore } from '@tabtin/agent-host/state'
 import type {
   AgentOwnerAdapter,
   HostQuery,
@@ -1650,6 +1651,7 @@ export class DaemonAgentHost {
         },
       },
     });
+    bindAttributionStore(() => this.requireSharedHost().state.attribution);
     // agent-host-full-migration: compose the three deep modules as the query
     // engine (reusing the single runtime factory + owner teardown). Query flows
     // through submitHostQuery, not conversation.execute.
