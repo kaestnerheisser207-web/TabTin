@@ -95,11 +95,16 @@ fi
 install -d -m 0755 /Project/infra "$runtime_root"
 if [[ ! -e "$runtime_image" ]]; then
   truncate -s "${runtime_size_gb}G" "$runtime_image"
-  mkfs.xfs -f -L tabtin-cloud-runtime "$runtime_image"
 else
   expected_runtime_bytes="$((runtime_size_gb * 1024 * 1024 * 1024))"
   [[ "$(stat -c %s "$runtime_image")" -eq "$expected_runtime_bytes" ]] ||
     die "existing XFS image size does not match TABTIN_CLOUD_XFS_SIZE_GB"
+fi
+runtime_fstype="$(blkid -s TYPE -o value "$runtime_image" 2>/dev/null || true)"
+if [[ -z "$runtime_fstype" ]]; then
+  mkfs.xfs -f -L tabtin-cloud "$runtime_image"
+elif [[ "$runtime_fstype" != "xfs" ]]; then
+  die "existing quota store has an unexpected filesystem"
 fi
 blkid "$runtime_image" | grep -q 'TYPE="xfs"' || die "quota store is not XFS"
 if ! mountpoint -q "$runtime_root"; then
