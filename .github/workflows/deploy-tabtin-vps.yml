@@ -18,6 +18,8 @@ concurrency:
 
 env:
   DJANGO_IMAGE_NAME: ghcr.io/kaestnerheisser207-web/tabtin-community-django
+  WEB_IMAGE_NAME: ghcr.io/kaestnerheisser207-web/tabtin-web
+  COLLAB_IMAGE_NAME: ghcr.io/kaestnerheisser207-web/tabtin-collab-live
   CLOUD_RUNTIME_IMAGE_NAME: ghcr.io/kaestnerheisser207-web/tabtin-cloud-runtime
   CLOUD_WORKER_IMAGE_NAME: ghcr.io/kaestnerheisser207-web/tabtin-cloud-worker
   RELEASE_SHA: ${{ github.event.pull_request.merge_commit_sha }}
@@ -72,6 +74,36 @@ jobs:
           cache-from: type=gha,scope=tabtin-community-django
           cache-to: type=gha,mode=max,scope=tabtin-community-django,ignore-error=true
 
+      - name: Build and push immutable Web image
+        id: build_web
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: apps/tabtin-web/Dockerfile
+          platforms: linux/amd64
+          push: true
+          tags: ${{ env.WEB_IMAGE_NAME }}:sha-${{ env.RELEASE_SHA }}
+          labels: |
+            org.opencontainers.image.source=https://github.com/${{ github.repository }}
+            org.opencontainers.image.revision=${{ env.RELEASE_SHA }}
+          cache-from: type=gha,scope=tabtin-web
+          cache-to: type=gha,mode=max,scope=tabtin-web,ignore-error=true
+
+      - name: Build and push immutable Collab image
+        id: build_collab
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: apps/collab-live/Dockerfile
+          platforms: linux/amd64
+          push: true
+          tags: ${{ env.COLLAB_IMAGE_NAME }}:sha-${{ env.RELEASE_SHA }}
+          labels: |
+            org.opencontainers.image.source=https://github.com/${{ github.repository }}
+            org.opencontainers.image.revision=${{ env.RELEASE_SHA }}
+          cache-from: type=gha,scope=tabtin-collab-live
+          cache-to: type=gha,mode=max,scope=tabtin-collab-live,ignore-error=true
+
       - name: Configure restricted SSH access
         env:
           SSH_PRIVATE_KEY: ${{ secrets.TABTIN_VPS_SSH_KEY }}
@@ -90,6 +122,8 @@ jobs:
           DEPLOY_PORT: ${{ vars.TABTIN_VPS_PORT }}
           DEPLOY_USER: ${{ vars.TABTIN_VPS_USER }}
           DJANGO_IMAGE_DIGEST: ${{ steps.build_django.outputs.digest }}
+          WEB_IMAGE_DIGEST: ${{ steps.build_web.outputs.digest }}
+          COLLAB_IMAGE_DIGEST: ${{ steps.build_collab.outputs.digest }}
           REGISTRY_TOKEN: ${{ github.token }}
           REGISTRY_USER: ${{ github.actor }}
         run: |
@@ -98,7 +132,11 @@ jobs:
           test -n "$DEPLOY_PORT"
           test -n "$DEPLOY_USER"
           [[ "$DJANGO_IMAGE_DIGEST" =~ ^sha256:[0-9a-f]{64}$ ]]
+          [[ "$WEB_IMAGE_DIGEST" =~ ^sha256:[0-9a-f]{64}$ ]]
+          [[ "$COLLAB_IMAGE_DIGEST" =~ ^sha256:[0-9a-f]{64}$ ]]
           django_ref="$DJANGO_IMAGE_NAME@$DJANGO_IMAGE_DIGEST"
+          web_ref="$WEB_IMAGE_NAME@$WEB_IMAGE_DIGEST"
+          collab_ref="$COLLAB_IMAGE_NAME@$COLLAB_IMAGE_DIGEST"
           printf '%s\n' "$REGISTRY_TOKEN" | ssh \
             -o BatchMode=yes \
             -o IdentitiesOnly=yes \
@@ -106,7 +144,7 @@ jobs:
             -i "$HOME/.ssh/tabtin_deploy" \
             -p "$DEPLOY_PORT" \
             "$DEPLOY_USER@$DEPLOY_HOST" \
-            "deploy $RELEASE_SHA $django_ref $REGISTRY_USER"
+            "deploy $RELEASE_SHA $django_ref $web_ref $collab_ref $REGISTRY_USER"
 
       - name: Verify public readiness
         run: |
