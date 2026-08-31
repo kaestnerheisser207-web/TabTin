@@ -1027,25 +1027,6 @@ export class WorkspaceApiService {
     return response.data.data as WorkspaceSummary
   }
 
-  static async attachCloudGitCredential(
-    workspaceId: string,
-    credentialRef: string,
-  ): Promise<WorkspaceSummary> {
-    const response = await authenticatedRequest({
-      url: joinApiPath(
-        apiBaseUrl(),
-        `/context/workspaces/${workspaceId}/cloud/git-credential`,
-      ),
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ credential_ref: credentialRef }),
-    })
-    if (!response || response.status !== 200 || !response.data?.success) {
-      throw new Error(response?.data?.message || 'Failed to attach Cloud Git credential')
-    }
-    return response.data.data as WorkspaceSummary
-  }
-
   static async permanentlyDeleteCloud(
     workspaceId: string,
     confirmation: string,

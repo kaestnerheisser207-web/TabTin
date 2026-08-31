@@ -1562,7 +1562,6 @@
         "reuseHint": "승인되면 Stripe / Notion과 동일한 \"웹 승인 → 프로브 도구\" 흐름을 재사용합니다.",
         "gotIt": "알았어요",
         "generic": "이 커넥터는 승인 전에 공급업체 온보딩이 필요합니다. 나중에 다시 시도해 주세요.",
-        "github": "GitHub 원격 MCP는 동적 클라이언트 등록을 지원하지 않습니다. TabTin이 GitHub 앱 및 콜백을 등록한 후 승인이 열립니다.",
         "vercel": "Vercel MCP는 승인된 AI 클라이언트로 제한됩니다. TabTin이 승인된 후 승인이 열립니다.",
         "canva": "Canva에서는 MCP 허용 목록에 콜백 URI가 필요합니다. 검토 후 승인이 열립니다."
       },
@@ -1574,7 +1573,7 @@
         "apiKeyPlaceholder": "API 키 붙여넣기",
         "apiKeyRequired": "API 키를 붙여넣으세요.",
         "githubTokenTitle": "{{name}} 토큰을 입력하세요",
-        "githubTokenDescription": "이 서버에 GitHub OAuth 앱이 구성되어 있지 않으면 개인 액세스 토큰을 붙여넣으세요. 이 장치에 남아 있습니다.",
+        "githubTokenDescription": "GitHub MCP는 Agent 도구 전용의 별도 개인 액세스 토큰을 사용합니다. Cloud Workspace 소스 코드에는 사용되지 않으며 이 장치에만 저장됩니다.",
         "githubTokenSteps": "토큰 생성 → 붙여넣기 → 안전하게 저장 → 자동 프로브",
         "githubTokenLabel": "개인 액세스 토큰",
         "githubTokenPlaceholder": "ghp_… 또는 github_pat_…",
@@ -1622,7 +1621,7 @@
       },
       "recommendedCatalog": {
         "vercel": "mcp-remote(stdio)를 통한 공식 원격 MCP. TabTin이 승인된 Vercel MCP 클라이언트 이후에 지원되는 OAuth입니다.",
-        "github": "공식 GitHub 원격 MCP. 프로덕션 중인 플랫폼 OAuth OAuth 앱이 로컬로 구성되지 않은 경우 개인 액세스 토큰을 붙여넣습니다.",
+        "github": "공식 GitHub 원격 MCP로, Agent 도구 전용의 별도 개인 액세스 토큰을 사용합니다.",
         "stripe": "mcp-remote(stdio)를 통한 공식 스트라이프 원격 MCP. 연결 후 브라우저에서 표준 MCP OAuth를 완료합니다.",
         "notion": "mcp-remote(stdio)를 통한 공식 Notion 원격 MCP. 대화형 클라이언트는 OAuth(PAT도 사용 가능)를 선호합니다.",
         "canva": "mcp-remote(stdio)를 통한 공식 Canva 원격 MCP. 콜백 URI가 허용 목록에 추가되면 OAuth가 열립니다.",

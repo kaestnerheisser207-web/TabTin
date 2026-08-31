@@ -72,7 +72,6 @@ vi.mock('../mcp-oauth-window', () => ({
   createOAuthAuthorizeUrlParser: vi.fn(() => vi.fn()),
   openConnectorOAuthWindow: vi.fn(),
   restoreConnectorOAuthClient: vi.fn(),
-  waitForPlatformOAuthTicket: vi.fn(),
   withMcpOpenShimPath: vi.fn((env: Record<string, string>) => env),
 }))
 

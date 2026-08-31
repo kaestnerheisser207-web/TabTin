@@ -8,13 +8,6 @@ export { createOAuthAuthorizeUrlParser } from './mcp-oauth-url'
 
 const log = createLogger('McpOAuthWindow')
 
-type PlatformOAuthWaiter = {
-  finish: (result: PlatformOAuthTicketResult | Error) => void
-  donePathIncludes: string
-}
-
-let platformOAuthWaiter: PlatformOAuthWaiter | null = null
-
 /**
  * mcp-remote 会调用系统 `open` 跳出默认浏览器。
  * 探测用 stdio 子进程把本 shim 插到 PATH 最前，吞掉 http(s) URL；
@@ -105,105 +98,4 @@ export function restoreConnectorOAuthClient(): void {
   app.focus({ steal: true })
   mainWindow.focus()
   log.info('connector oauth completed; restored client window')
-}
-
-export type PlatformOAuthTicketResult = {
-  ticket: string
-  login?: string
-}
-
-function extractPlatformOAuthTicket(
-  rawUrl: string,
-  donePathIncludes: string,
-): PlatformOAuthTicketResult | null {
-  const normalized = rawUrl.startsWith('tabtin://')
-    ? rawUrl.replace(/^tabtin:\/\//, 'https://tabtin.local/')
-    : rawUrl
-  try {
-    const parsed = new URL(normalized)
-    const ticket = parsed.searchParams.get('ticket')
-    if (!ticket || ticket.length < 16) return null
-    const isDonePage =
-      parsed.pathname.includes(donePathIncludes)
-      || rawUrl.includes(donePathIncludes)
-      || rawUrl.startsWith('tabtin://integrations/github/')
-    if (!isDonePage) return null
-    return {
-      ticket,
-      login: parsed.searchParams.get('login') || undefined,
-    }
-  } catch {
-    return null
-  }
-}
-
-/** 由统一 deep-link 入口调用；命中正在等待的平台代理 OAuth 时消费该链接。 */
-export function consumePlatformOAuthDeepLink(rawUrl: string): boolean {
-  const waiter = platformOAuthWaiter
-  if (!waiter) return false
-  const result = extractPlatformOAuthTicket(rawUrl, waiter.donePathIncludes)
-  if (!result) return false
-  log.info('received platform oauth callback', { hasLogin: Boolean(result.login) })
-  waiter.finish(result)
-  return true
-}
-
-/**
- * 使用系统浏览器打开平台代理 OAuth 页，等待 tabtin:// 深链接带回一次性 ticket。
- */
-export function waitForPlatformOAuthTicket(input: {
-  authorizeUrl: string
-  donePathIncludes?: string
-  timeoutMs?: number
-}): Promise<PlatformOAuthTicketResult> {
-  const doneNeedle = input.donePathIncludes ?? '/integrations/github/oauth/done'
-  const timeoutMs = input.timeoutMs ?? 180_000
-
-  return new Promise((resolve, reject) => {
-    let settled = false
-    let timer: ReturnType<typeof setTimeout> | null = null
-
-    const finish = (result: PlatformOAuthTicketResult | Error) => {
-      if (settled) return
-      settled = true
-      if (timer) clearTimeout(timer)
-      if (platformOAuthWaiter?.finish === finish) platformOAuthWaiter = null
-      if (result instanceof Error) reject(result)
-      else resolve(result)
-    }
-
-    platformOAuthWaiter?.finish(new Error('已开始新的授权，请在新打开的页面中继续'))
-    platformOAuthWaiter = { finish, donePathIncludes: doneNeedle }
-
-    let parsed: URL
-    try {
-      parsed = new URL(input.authorizeUrl)
-    } catch {
-      finish(new Error('授权地址无效'))
-      return
-    }
-    if (parsed.protocol !== 'https:' && parsed.protocol !== 'http:') {
-      finish(new Error('授权地址协议不受支持'))
-      return
-    }
-
-    const startedAt = Date.now()
-    log.info('opening platform oauth in system browser', { host: parsed.hostname })
-    void shell.openExternal(parsed.toString()).then(() => {
-      log.info('system browser accepted platform oauth url', {
-        host: parsed.hostname,
-        durationMs: Date.now() - startedAt,
-      })
-    }).catch(error => {
-      log.error('system browser open failed for platform oauth', {
-        host: parsed.hostname,
-        error,
-      })
-      finish(new Error('无法打开系统浏览器'))
-    })
-
-    timer = setTimeout(() => {
-      finish(new Error('授权超时，请重试'))
-    }, timeoutMs)
-  })
 }

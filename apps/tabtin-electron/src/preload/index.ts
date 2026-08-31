@@ -2119,7 +2119,6 @@ interface TabTinAPIShape {
     listConnections: () => Promise<LocalMcpConnectionSummary[]>
     getConnectionDetail: (connectionId: string, options?: { includeSecrets?: boolean }) => Promise<LocalMcpConnectionDetail>
     shareConnectionToOrganization: (connectionId: string, organizationId: string) => Promise<{ id: string; name: string }>
-    createCloudGitCredential: (connectionId: string, organizationId: string) => Promise<{ credentialRef: string }>
     importCandidate: (candidateId: string, options?: { attachToAgentId?: string; name?: string }) => Promise<LocalMcpConnectionSummary>
     saveManualConnection: (input: LocalMcpManualConnectionInput) => Promise<LocalMcpConnectionSummary>
     upsertOrganizationMirror: (input: LocalMcpOrganizationMirrorInput) => Promise<LocalMcpConnectionSummary>
@@ -2128,8 +2127,6 @@ interface TabTinAPIShape {
     deleteConnection: (connectionId: string) => Promise<{ ok: true }>
     probeConnection: (connectionId: string, options?: { timeoutMs?: number; openOAuthWindow?: boolean }) => Promise<LocalMcpProbeSummary>
     cancelProbe: (connectionId: string) => Promise<{ cancelled: boolean }>
-    waitForPlatformOAuthTicket: (input: { authorizeUrl: string; donePathIncludes?: string; timeoutMs?: number }) => Promise<{ ticket: string; login?: string }>
-    closePlatformOAuthWindow: () => Promise<{ ok: true }>
   }
 
   resourceDetection: {
@@ -4533,7 +4530,6 @@ const api = {
     listConnections: () => invokeIpc('localMcp:listConnections'),
     getConnectionDetail: (connectionId, options) => invokeIpc('localMcp:getConnectionDetail', connectionId, options),
     shareConnectionToOrganization: (connectionId, organizationId) => invokeIpc('localMcp:shareConnectionToOrganization', connectionId, organizationId),
-    createCloudGitCredential: (connectionId, organizationId) => invokeIpc('localMcp:createCloudGitCredential', connectionId, organizationId),
     importCandidate: (candidateId, options) => invokeIpc('localMcp:importCandidate', candidateId, options),
     saveManualConnection: (input) => invokeIpc('localMcp:saveManualConnection', input),
     upsertOrganizationMirror: (input) => invokeIpc('localMcp:upsertOrganizationMirror', input),
@@ -4542,8 +4538,6 @@ const api = {
     deleteConnection: (connectionId) => invokeIpc('localMcp:deleteConnection', connectionId),
     probeConnection: (connectionId: string, options?: { timeoutMs?: number; openOAuthWindow?: boolean }) => invokeIpc('localMcp:probeConnection', connectionId, options),
     cancelProbe: (connectionId: string) => invokeIpc('localMcp:cancelProbe', connectionId),
-    waitForPlatformOAuthTicket: (input: { authorizeUrl: string; donePathIncludes?: string; timeoutMs?: number }) => invokeIpc('localMcp:waitForPlatformOAuthTicket', input),
-    closePlatformOAuthWindow: () => invokeIpc('localMcp:closePlatformOAuthWindow'),
   },
 
   // 🆕 资源检测 API

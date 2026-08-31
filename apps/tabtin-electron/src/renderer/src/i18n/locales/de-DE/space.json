@@ -1562,7 +1562,6 @@
         "reuseHint": "Nach der Genehmigung wird derselbe „Web-Autorisierung → Prüftools“-Ablauf wie Stripe/Notion wiederverwendet.",
         "gotIt": "Verstanden",
         "generic": "Dieser Connector erfordert vor der Autorisierung ein Onboarding des Anbieters. Bitte versuchen Sie es später noch einmal.",
-        "github": "GitHub Remote MCP unterstützt keine dynamische Client-Registrierung. Die Autorisierung wird geöffnet, nachdem TabTin eine GitHub-App und einen Rückruf registriert hat.",
         "vercel": "Vercel MCP ist auf zugelassene KI-Clients beschränkt. Die Autorisierung wird geöffnet, nachdem TabTin genehmigt wurde.",
         "canva": "Canva benötigt den Rückruf-URI auf seiner MCP-Zulassungsliste. Die Autorisierung wird nach Überprüfung geöffnet."
       },
@@ -1574,7 +1573,7 @@
         "apiKeyPlaceholder": "API-Schlüssel einfügen",
         "apiKeyRequired": "Bitte fügen Sie einen API-Schlüssel ein",
         "githubTokenTitle": "Geben Sie {{name}} Token ein",
-        "githubTokenDescription": "Wenn die GitHub OAuth-App auf diesem Server nicht konfiguriert ist, fügen Sie ein persönliches Zugriffstoken ein. Es bleibt auf diesem Gerät.",
+        "githubTokenDescription": "GitHub MCP verwendet ein separates persönliches Zugriffstoken nur für Agent-Tools. Es wird nie für Cloud-Workspace-Quellcode verwendet und bleibt auf diesem Gerät.",
         "githubTokenSteps": "Token erstellen → Einfügen → Sicher speichern → Automatische Prüfung",
         "githubTokenLabel": "Persönliches Zugriffstoken",
         "githubTokenPlaceholder": "ghp_… oder github_pat_…",
@@ -1622,7 +1621,7 @@
       },
       "recommendedCatalog": {
         "vercel": "Offizielles Remote-MCP über mcp-remote (stdio). OAuth wird unterstützt, nachdem TabTin ein zugelassener Vercel MCP-Client ist.",
-        "github": "Offizieller GitHub-Remote-MCP. Plattform-OAuth in der Produktion; Fügen Sie ein persönliches Zugriffstoken ein, wenn die OAuth-App nicht lokal konfiguriert ist.",
+        "github": "Offizieller GitHub-Remote-MCP mit separatem persönlichem Zugriffstoken nur für Agent-Tools.",
         "stripe": "Offizielles Stripe-Remote-MCP über mcp-remote (stdio). Schließen Sie nach der Verbindung den Standard-MCP-OAuth im Browser ab.",
         "notion": "Offizielles Notion-Remote-MCP über mcp-remote (stdio). Interaktive Clients bevorzugen OAuth (PAT ebenfalls verfügbar).",
         "canva": "Offizielles Canva-Remote-MCP über mcp-remote (stdio). OAuth wird geöffnet, nachdem der Rückruf-URI auf die Zulassungsliste gesetzt wurde.",

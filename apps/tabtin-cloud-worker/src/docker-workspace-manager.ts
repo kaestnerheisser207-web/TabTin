@@ -32,14 +32,11 @@ export class StaleGenerationError extends Error {
 }
 
 export class GitWorkspaceInitializationError extends Error {
-  readonly code: 'git_source_unavailable' | 'git_credential_rejected'
+  readonly code = 'git_source_unavailable'
 
-  constructor(withCredential = false) {
-    super(withCredential
-      ? 'Git repository could not be cloned with the selected credential; verify repository access and ref'
-      : 'Git repository could not be cloned without credentials; verify that the URL and ref are publicly accessible')
+  constructor() {
+    super('Git repository could not be cloned without credentials; verify that the URL and ref are publicly accessible')
     this.name = 'GitWorkspaceInitializationError'
-    this.code = withCredential ? 'git_credential_rejected' : 'git_source_unavailable'
   }
 }
 
@@ -173,44 +170,25 @@ export class DockerWorkspaceManager {
   }
 
   private async initializeGitWorkspace(input: ProvisionWorkspaceInput): Promise<void> {
-    const credential = input.source.credential
-    const gitArgs = credential
-      ? ['-c', 'http.followRedirects=false', 'clone', '--depth', '1']
-      : ['clone', '--depth', '1']
+    const gitArgs = ['clone', '--depth', '1']
     if (input.source.gitRef) gitArgs.push('--branch', input.source.gitRef)
     gitArgs.push(input.source.gitUrl!, '/workspace')
-    const cloneScript = credential
-      ? [
-          'set -eu',
-          'umask 077',
-          'IFS= read -r username',
-          'IFS= read -r password',
-          'printf %s "$username" > /tmp/git-username',
-          'printf %s "$password" > /tmp/git-password',
-          "printf '%s\\n' '#!/bin/sh' 'case \"$1\" in' '*Username*) cat /tmp/git-username ;;' '*) cat /tmp/git-password ;;' 'esac' > /tmp/git-askpass",
-          'chmod 700 /tmp/git-askpass',
-          'GIT_LFS_SKIP_SMUDGE=1 GIT_TERMINAL_PROMPT=0 GIT_ASKPASS=/tmp/git-askpass git "$@"',
-          'rm -f /tmp/git-askpass /tmp/git-username /tmp/git-password',
-          'touch /workspace/.tabtin-git-initialized',
-        ].join('; ')
-      : 'GIT_LFS_SKIP_SMUDGE=1 GIT_TERMINAL_PROMPT=0 git "$@" && touch /workspace/.tabtin-git-initialized'
     try {
       await this.runner.run([
         'run', '--rm',
         '--pids-limit', '256',
         '--network', this.network,
         '--mount', `type=volume,src=${input.volumeRef},dst=/workspace`,
-        ...(credential ? ['--tmpfs', '/tmp:rw,nosuid,nodev,size=1048576'] : []),
         '--entrypoint', 'sh',
         input.image,
         '-c',
-        cloneScript,
+        'GIT_LFS_SKIP_SMUDGE=1 GIT_TERMINAL_PROMPT=0 git "$@" && touch /workspace/.tabtin-git-initialized',
         'sh',
         ...gitArgs,
-      ], credential ? `${credential.username}\n${credential.password}\n` : undefined)
+      ])
     } catch (error) {
       if (error instanceof CommandFailedError) {
-        throw new GitWorkspaceInitializationError(Boolean(credential))
+        throw new GitWorkspaceInitializationError()
       }
       throw error
     }
@@ -346,20 +324,6 @@ function validateProvisionInput(input: ProvisionWorkspaceInput): void {
   if (!Number.isInteger(input.memoryMb) || input.memoryMb < 256) throw new Error('invalid memoryMb')
   if (!Number.isInteger(input.storageGb) || input.storageGb < 1) throw new Error('invalid storageGb')
   if (input.source.type === 'git' && !input.source.gitUrl) throw new Error('gitUrl is required')
-  const credential = input.source.credential
-  if (credential) {
-    if (input.source.type !== 'git') throw new Error('credential requires a Git source')
-    if (
-      !credential.username
-      || credential.username.length > 256
-      || /[\r\n]/.test(credential.username)
-      || !credential.password
-      || credential.password.length > 4096
-      || /[\r\n]/.test(credential.password)
-    ) {
-      throw new Error('invalid Git credential')
-    }
-  }
   if (!input.bootstrapToken || input.bootstrapToken.length > 8192) throw new Error('invalid bootstrapToken')
 }
 

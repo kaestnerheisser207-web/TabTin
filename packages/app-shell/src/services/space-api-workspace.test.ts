@@ -112,25 +112,6 @@ describe('WorkspaceApiService Cloud lifecycle', () => {
       body: JSON.stringify({ confirmation: 'Cloud Dev' }),
     })
   })
-
-  it('attaches an opaque personal Git credential reference', async () => {
-    authenticatedRequest.mockResolvedValue({
-      status: 200,
-      data: { success: true, data: { id: 'workspace-1' } },
-    })
-
-    await WorkspaceApiService.attachCloudGitCredential(
-      'workspace-1',
-      'credential-ref-1',
-    )
-
-    expect(authenticatedRequest).toHaveBeenCalledWith({
-      url: 'https://api.tabtin.test/api/context/workspaces/workspace-1/cloud/git-credential',
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ credential_ref: 'credential-ref-1' }),
-    })
-  })
 })
 
 describe('WorkspaceApiService.update', () => {

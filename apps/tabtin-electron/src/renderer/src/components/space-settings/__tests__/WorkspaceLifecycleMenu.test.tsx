@@ -131,28 +131,4 @@ describe('WorkspaceLifecycleMenu', () => {
     expect(screen.getByRole('button', { name: '停用' })).toBeTruthy()
     expect(screen.getByText(/不同步到本机/)).toBeTruthy()
   })
-
-  it('私有 Git 初始化失败时提供个人 GitHub 连接重试入口', () => {
-    render(
-      <WorkspaceLifecycleMenu
-        space={{
-          ...space,
-          runtime_plane: 'cloud',
-          cloud: {
-            allocation_id: 'allocation-1',
-            state: 'error',
-            generation: 1,
-            source_type: 'git',
-            runtime_version: 'test',
-            protocol_version: '1',
-            last_error: 'git_source_unavailable',
-          },
-        }}
-      />,
-    )
-
-    expect(screen.getByRole('button', {
-      name: '使用我的 GitHub 连接重试',
-    })).toBeTruthy()
-  })
 })

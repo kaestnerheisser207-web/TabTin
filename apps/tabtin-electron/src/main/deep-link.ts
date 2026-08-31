@@ -5,7 +5,6 @@ import {
   resolveTabTinProtocolScheme,
 } from './services/notification/notify-launch'
 import type { NavigateTarget } from './services/notification/types'
-import { consumePlatformOAuthDeepLink } from './services/mcp-oauth-window'
 
 export interface DeepLinkLogger {
   debug: (...args: unknown[]) => void
@@ -140,12 +139,6 @@ export function createDeepLinkController(
       const parsed = new URL(url)
       if (parsed.protocol !== `${deepLinkScheme}:`) {
         options.log.debug('非 tabtin 协议，忽略:', parsed.protocol)
-        return true
-      }
-
-      if (consumePlatformOAuthDeepLink(url)) {
-        const win = await resolveMainWindow()
-        if (win) focusWindow(win)
         return true
       }
 

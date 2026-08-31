@@ -42,9 +42,7 @@ export function resolveCloudRuntimeStatus(
       label: t('desktop.cloudRuntime.initializationFailed', { defaultValue: '初始化失败' }),
       title: errorCode === 'git_source_unavailable'
         ? t('desktop.cloudRuntime.gitCredentialRequired', { defaultValue: '私有仓库缺少访问凭证，无法初始化云端工作空间' })
-        : errorCode === 'git_credential_rejected'
-          ? t('desktop.cloudRuntime.gitCredentialRejected', { defaultValue: '当前 GitHub 连接无权访问该仓库，请检查仓库权限后重试' })
-          : t('desktop.cloudRuntime.initializationFailedTitle', { defaultValue: '云端工作空间初始化失败，请在设置中检查后重试' }),
+        : t('desktop.cloudRuntime.initializationFailedTitle', { defaultValue: '云端工作空间初始化失败，请在设置中检查后重试' }),
       tone: 'offline',
     }
   }

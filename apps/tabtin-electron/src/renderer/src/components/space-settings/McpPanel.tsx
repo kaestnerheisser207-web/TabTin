@@ -88,13 +88,11 @@ import { ConnectorCredentialDialog } from '@components/context-space/capability-
 import { ConnectorVendorGateDialog } from '@components/context-space/capability-marketplace/ConnectorVendorGateDialog'
 import {
   applyAppCredentialsToTransport,
-  applyBearerTokenToTransport,
   applyCredentialSecretToTransport,
 } from '@components/context-space/capability-marketplace/connectorCredentialTransport'
 import {
   connectorIsOAuthReady,
   connectorIsOAuthVendorGated,
-  connectorIsPlatformOAuth,
   connectorNeedsCredentialForm,
   findConnectionForRecommendedConnector,
   findRecommendedCatalogEntryForConnection,
@@ -109,10 +107,6 @@ import {
   brandIconQueryFromRecommended,
 } from './ConnectorBrandIcon'
 import type { ConnectorBrandIconQuery } from '@tabtin/connector-brand-icons'
-import {
-  runGitHubConnectorOAuth,
-  shouldUseGitHubPatFallback,
-} from '@components/context-space/capability-marketplace/githubConnectorOAuth'
 import { MarketplaceCardText } from '@components/context-space/capability-marketplace/MarketplaceCardText'
 import {
   canCurrentUserUnshareOrgConnection,
@@ -1057,39 +1051,13 @@ export const McpPanel: React.FC<Props> = ({
       prev ? { ...prev, step: 'authorizing', errorDetail: undefined } : null,
     )
     try {
-      let transport = entry.transport
-      if (connectorIsPlatformOAuth(entry)) {
-        if (await shouldUseGitHubPatFallback(entry)) {
-          if (epoch !== oauthProbeEpochRef.current) return
-          setOauthFlow(null)
-          setCredentialFlow({
-            entry,
-            connectionId,
-            mode: 'api_key',
-            createdInFlow,
-            pendingAttachAgentId,
-            pendingAgentAssignments,
-          })
-          return
-        }
-        if (!organizationId) {
-          throw new Error('缺少组织信息，无法完成 GitHub 授权')
-        }
-        const claim = await runGitHubConnectorOAuth({
-          organizationId,
-          timeoutMs: OAUTH_PROBE_TIMEOUT_MS,
-        })
-        if (epoch !== oauthProbeEpochRef.current) return
-        transport = applyBearerTokenToTransport(entry.transport, claim.accessToken)
-      }
-
-      // 授权前同步货架 transport（钉版本 / OAuth scope metadata / Bearer）
+      // 授权前同步货架 transport（钉版本 / OAuth scope metadata）
       await window.tabtin.localMcp.saveManualConnection({
         connectionId,
         name: entry.name,
         description: recommendedCatalogDescription(entry),
         enabled: true,
-        transport,
+        transport: entry.transport,
       })
       if (epoch !== oauthProbeEpochRef.current) return
       const summary = await window.tabtin.localMcp.probeConnection(connectionId, {
@@ -1478,16 +1446,6 @@ export const McpPanel: React.FC<Props> = ({
 
       if (connectorIsOAuthReady(entry)) {
         setToolPickerOpen(false)
-        if (await shouldUseGitHubPatFallback(entry)) {
-          setCredentialFlow({
-            entry,
-            connectionId: createdId,
-            mode: 'api_key',
-            createdInFlow: true,
-            pendingAttachAgentId: scopeAgentId,
-          })
-          return
-        }
         setOauthFlow({
           entry,
           connectionId: createdId,
@@ -1884,16 +1842,6 @@ export const McpPanel: React.FC<Props> = ({
 
     // 未授权 / 探测失败：先过 OAuth 或凭证闸门；成功后再提交 Agent 增删（失败则原配置不变）
     if (authGate === 'oauth' && catalogEntry) {
-      if (await shouldUseGitHubPatFallback(catalogEntry)) {
-        setCredentialFlow({
-          entry: catalogEntry,
-          connectionId: managedConnection.id,
-          mode: 'api_key',
-          createdInFlow: false,
-          pendingAgentAssignments: hasAssignmentDiff ? pendingAgentAssignments : undefined,
-        })
-        return
-      }
       setOauthFlow({
         entry: catalogEntry,
         connectionId: managedConnection.id,
