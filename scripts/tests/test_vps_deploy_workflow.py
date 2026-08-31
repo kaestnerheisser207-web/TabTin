@@ -265,6 +265,8 @@ def test_cloud_host_bootstrap_keeps_worker_rootless_and_quota_gated() -> None:
     assert legacy_runtime_root not in volume_helper
     assert "flock -x" in volume_helper
     assert "xfs_quota -x -c" in volume_helper
+    assert volume_helper.count('"$runtime_root" >/dev/null 2>&1') == 2
+    assert volume_helper.count("tail -c 2048") == 2
     assert "find \"$volume_path\" -xdev -depth -delete" in volume_helper
     assert "sudo" not in volume_helper
     assert "/var/run/docker.sock" not in bootstrap
