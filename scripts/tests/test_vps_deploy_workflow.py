@@ -217,7 +217,7 @@ def test_cloud_host_bootstrap_keeps_worker_rootless_and_quota_gated() -> None:
     volume_helper = VOLUME_HELPER_SCRIPT.read_text(encoding="utf-8")
 
     assert "loginctl enable-linger" in bootstrap
-    assert "aardvark-dns ca-certificates fuse-overlayfs nodejs passt podman" in bootstrap
+    assert "aardvark-dns acl ca-certificates fuse-overlayfs nodejs passt podman" in bootstrap
     assert '[[ -x /usr/lib/podman/aardvark-dns ]]' in bootstrap
     assert 'command -v pasta >/dev/null' in bootstrap
     assert "systemctl --user enable --now podman.socket" in bootstrap
@@ -230,6 +230,8 @@ def test_cloud_host_bootstrap_keeps_worker_rootless_and_quota_gated() -> None:
     assert 'runtime_root="/Project/infrastructure/tabtin-cloud-runtime"' in bootstrap
     assert 'runtime_image="/Project/infrastructure/tabtin-cloud-runtime.xfs"' in bootstrap
     assert legacy_runtime_root not in bootstrap
+    assert 'setfacl -m "u:${worker_user}:--x" /Project/infrastructure' in bootstrap
+    assert 'getfacl -cp /Project/infrastructure' in bootstrap
     assert '"$volume_helper" create "$probe_volume" 1' in bootstrap
     assert "--opt type=none" in bootstrap
     assert '--opt "device=$probe_path"' in bootstrap
