@@ -82,8 +82,8 @@ handle_action() {
     fi
 
     install -d -o "$worker_user" -g "$worker_user" -m 0700 "$volume_path"
-    xfs_quota -x -c "project -s -p $volume_path $project_id" "$runtime_root" >/dev/null
-    xfs_quota -x -c "limit -p bhard=${size_gb}g $project_id" "$runtime_root" >/dev/null
+    xfs_quota -x -c "project -s -p $volume_path $project_id" "$runtime_root" >/dev/null 2>&1
+    xfs_quota -x -c "limit -p bhard=${size_gb}g $project_id" "$runtime_root" >/dev/null 2>&1
     printf '%s\n' "$volume_path"
     ;;
   inspect)
@@ -116,7 +116,7 @@ serve_socket() {
   IFS=$'\t' read -r -a request_args <<<"$request"
   local response
   if response="$(handle_action "${request_args[@]}" 2>&1)"; then
-    response="$(tr '\t\n' '  ' <<<"$response")"
+    response="$(tr '\t\n' '  ' <<<"$response" | tail -c 2048)"
     printf 'OK\t%s\n' "$response"
   else
     response="$(tr '\t\n' '  ' <<<"$response" | tail -c 2048)"
