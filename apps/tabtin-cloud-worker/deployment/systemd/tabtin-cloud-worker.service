@@ -1,0 +1,31 @@
+[Unit]
+Description=TabTin Cloud Worker Supervisor
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=tabtin-cloud-worker
+Group=tabtin-cloud-worker
+Environment=NODE_ENV=production
+EnvironmentFile=/etc/tabtin/cloud-worker.env
+WorkingDirectory=/opt/tabtin-cloud-worker/current
+ExecStart=/usr/bin/node /opt/tabtin-cloud-worker/current/dist/index.js
+Restart=on-failure
+RestartSec=5
+TimeoutStopSec=45
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=read-only
+ProtectKernelTunables=true
+ProtectKernelModules=true
+ProtectControlGroups=true
+RestrictSUIDSGID=true
+LockPersonality=true
+RestrictRealtime=true
+SystemCallArchitectures=native
+UMask=0077
+
+[Install]
+WantedBy=multi-user.target

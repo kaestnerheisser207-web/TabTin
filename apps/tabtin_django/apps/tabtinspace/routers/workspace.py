@@ -16,7 +16,7 @@ Workspace 的独立供给（不再经 create_agent_workspace 隐式配对建 Age
   列表应将主场置顶并默认选中。
 """
 
-from typing import Optional
+from typing import Literal, Optional
 from uuid import UUID
 
 from ninja import Router, Schema
@@ -35,6 +35,10 @@ from apps.tabtinspace.services.workspace_service import (
     WorkspaceService,
     serialize_workspace,
     serialize_workspaces,
+)
+from apps.tabtinspace.services.cloud_workspace_service import CloudWorkspaceService
+from apps.tabtinspace.services.cloud_workspace_lifecycle import (
+    CloudWorkspaceLifecycleService,
 )
 
 router = Router(tags=["Tabtin Space"])
@@ -55,6 +59,26 @@ class WorkspaceCreate(Schema):
     working_dir: str = Field(..., description="设备上的工作目录绝对路径（客户端解析后传入）")
     working_dir_type: Optional[str] = Field(default="", description="code/mixed/doc")
     name: Optional[str] = Field(default="", description="展示名（可空，目录才是身份）")
+
+
+class CloudWorkspaceCreate(Schema):
+    request_key: UUID = Field(..., description="客户端生成的幂等键")
+    organization_id: UUID = Field(..., description="所属组织 ID")
+    name: str = Field(..., min_length=1, max_length=200)
+    description: str = Field(default="", max_length=500)
+    custom_rules: str = Field(default="", max_length=5000)
+    working_dir_type: Literal["code", "mixed", "doc"] = "code"
+    source_type: Literal["empty", "git"] = "empty"
+    git_url: str = Field(default="", max_length=2000)
+    git_ref: str = Field(default="", max_length=255)
+    git_credential_ref: str = Field(default="", max_length=255)
+
+
+class CloudWorkspacePermanentDelete(Schema):
+    confirmation: str = Field(
+        ...,
+        description="必须与 Workspace 展示名完全一致",
+    )
 
 
 class HomeWorkspaceEnsure(Schema):
@@ -152,6 +176,114 @@ def create_workspace(request: HttpRequest, data: WorkspaceCreate):
     except ServiceError as e:
         return error_response(e.code, e.message, status_code=e.status)
     return 201, success_response(data=serialize_workspace(workspace))
+
+
+@router.post(
+    "/workspaces/cloud",
+    auth=jwt_auth,
+    response={
+        200: dict,
+        202: dict,
+        400: ErrorResponse,
+        401: ErrorResponse,
+        403: ErrorResponse,
+        404: ErrorResponse,
+        409: ErrorResponse,
+        503: ErrorResponse,
+    },
+    summary="幂等创建 Cloud Workspace",
+)
+def create_cloud_workspace(request: HttpRequest, data: CloudWorkspaceCreate):
+    """Create a persistent `/workspace`; Worker reconciliation is asynchronous."""
+    service = CloudWorkspaceService(user=request.auth)
+    try:
+        result = service.create_cloud_workspace(
+            request_key=data.request_key,
+            organization_id=data.organization_id,
+            name=data.name,
+            description=data.description,
+            custom_rules=data.custom_rules,
+            working_dir_type=data.working_dir_type,
+            source_type=data.source_type,
+            git_url=data.git_url,
+            git_ref=data.git_ref,
+            git_credential_ref=data.git_credential_ref,
+        )
+    except ServiceError as e:
+        return error_response(e.code, e.message, status_code=e.status)
+    payload = serialize_workspace(result.workspace)
+    payload["created"] = result.created
+    return (202 if result.created else 200), success_response(data=payload)
+
+
+def _cloud_lifecycle(request: HttpRequest) -> CloudWorkspaceLifecycleService:
+    return CloudWorkspaceLifecycleService(user=request.auth)
+
+
+@router.post(
+    "/workspaces/{workspace_id}/cloud/disable",
+    auth=jwt_auth,
+    response={200: dict, 400: ErrorResponse, 401: ErrorResponse,
+              403: ErrorResponse, 404: ErrorResponse, 409: ErrorResponse,
+              502: ErrorResponse},
+)
+def disable_cloud_workspace(request: HttpRequest, workspace_id: UUID):
+    try:
+        workspace = _cloud_lifecycle(request).disable(workspace_id)
+    except ServiceError as e:
+        return error_response(e.code, e.message, status_code=e.status)
+    return success_response(data=serialize_workspace(workspace))
+
+
+@router.post(
+    "/workspaces/{workspace_id}/cloud/restart",
+    auth=jwt_auth,
+    response={200: dict, 400: ErrorResponse, 401: ErrorResponse,
+              403: ErrorResponse, 404: ErrorResponse, 409: ErrorResponse,
+              502: ErrorResponse},
+)
+def restart_cloud_workspace(request: HttpRequest, workspace_id: UUID):
+    try:
+        workspace = _cloud_lifecycle(request).restart(workspace_id)
+    except ServiceError as e:
+        return error_response(e.code, e.message, status_code=e.status)
+    return success_response(data=serialize_workspace(workspace))
+
+
+@router.post(
+    "/workspaces/{workspace_id}/cloud/restore",
+    auth=jwt_auth,
+    response={200: dict, 400: ErrorResponse, 401: ErrorResponse,
+              403: ErrorResponse, 404: ErrorResponse, 409: ErrorResponse,
+              410: ErrorResponse, 502: ErrorResponse},
+)
+def restore_cloud_workspace(request: HttpRequest, workspace_id: UUID):
+    try:
+        workspace = _cloud_lifecycle(request).restore(workspace_id)
+    except ServiceError as e:
+        return error_response(e.code, e.message, status_code=e.status)
+    return success_response(data=serialize_workspace(workspace))
+
+
+@router.delete(
+    "/workspaces/{workspace_id}/cloud/permanent",
+    auth=jwt_auth,
+    response={200: dict, 400: ErrorResponse, 401: ErrorResponse,
+              403: ErrorResponse, 404: ErrorResponse, 502: ErrorResponse},
+)
+def permanently_delete_cloud_workspace(
+    request: HttpRequest,
+    workspace_id: UUID,
+    data: CloudWorkspacePermanentDelete,
+):
+    try:
+        _cloud_lifecycle(request).delete_permanently(
+            workspace_id,
+            confirmation=data.confirmation,
+        )
+    except ServiceError as e:
+        return error_response(e.code, e.message, status_code=e.status)
+    return success_response(data={"deleted": True, "recoverable": False})
 
 
 @router.post(

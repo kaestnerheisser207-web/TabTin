@@ -18,6 +18,7 @@
     "@hocuspocus/server": "^2.15.2",
     "@tabtin/config": "workspace:*",
     "@tabtin/doc-editor": "workspace:*",
+    "@tabtin/table-core": "workspace:*",
     "@tabtin/table-engine": "workspace:*",
     "@tiptap/core": "^2.10.0",
     "@tiptap/extension-link": "^2.26.1",

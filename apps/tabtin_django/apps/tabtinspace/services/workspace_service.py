@@ -109,6 +109,26 @@ def serialize_workspace(
 
     _ = agent_id_by_workspace  # 兼容旧调用方，不再使用
     device = workspace.device
+    from apps.tabtinspace.services.runtime_plane import derive_runtime_plane
+
+    runtime_plane = derive_runtime_plane(device.device_type)
+    allocation = getattr(workspace, 'cloud_allocation', None)
+    cloud = None
+    if allocation is not None:
+        worker = allocation.worker
+        cloud = {
+            'allocation_id': str(allocation.id),
+            'state': allocation.state,
+            'generation': allocation.generation,
+            'source_type': allocation.source_type,
+            'runtime_version': worker.runtime_version,
+            'protocol_version': worker.protocol_version,
+            'retention_deadline': (
+                allocation.retention_deadline.isoformat()
+                if allocation.retention_deadline else None
+            ),
+            'last_error': allocation.last_error or '',
+        }
 
     resolved_project_id = project_id
     if resolved_project_id is None and project_id_by_workspace is not None:
@@ -139,6 +159,8 @@ def serialize_workspace(
             device is not None
             and getattr(device, "status", None) in DEVICE_AVAILABLE_STATUSES
         ),
+        "runtime_plane": runtime_plane,
+        "cloud": cloud,
         "is_home": workspace.kind == Workspace.Kind.HOME,
         # Workspace Trust（ W3）：目录自带规约/Skill 可注入的总开关。
         "trust_status": workspace.trust_status,
@@ -405,7 +427,10 @@ class WorkspaceService(BaseService):
             organization_id=organization_id,
         )
         rows = (
-            Workspace.objects.select_related('device')
+            Workspace.objects.select_related(
+                'device',
+                'cloud_allocation__worker',
+            )
             .filter(id__in=accessible_ids)
             # 仍要求当前是 Organization 成员（与历史 list 口径一致）；
             # membership 可见性不能绕过「已被移出组织」。

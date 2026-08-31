@@ -118,13 +118,14 @@ class AgentDispatcherWorkspaceSnapshotForwardTests(SimpleTestCase):
         instance = mock_pfs_cls.return_value
         instance.forward_prompt.return_value = {"task_id": "tid", "published": 1}
 
-        AgentDispatcher().dispatch_external(
+        result = AgentDispatcher().dispatch_external(
             _make_session(),
             "run here",
             _make_space(),
             thread_id="chat-session-sess-1",
         )
 
+        self.assertEqual(result["backend_type"], "builtin")
         self.assertEqual(
             instance.forward_prompt.call_args.kwargs["target_device_fingerprint"],
             "electron-installation-1",

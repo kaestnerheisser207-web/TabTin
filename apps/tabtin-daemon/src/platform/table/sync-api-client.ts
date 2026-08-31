@@ -236,7 +236,6 @@ export function createTableSchemaFetcher(
           fieldType: (detail?.field_type ?? field.type) as TableSchema['fields'][number]['fieldType'],
           dbColumnName: field.db_column_name || field.name,
           isPrimary: Boolean(field.is_primary ?? detail?.is_primary),
-          isRequired: Boolean(detail?.is_required),
           options: isRecord(detail?.options) ? detail.options : undefined,
         }
       }),

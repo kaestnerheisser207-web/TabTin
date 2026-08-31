@@ -46,6 +46,68 @@ TABTIN_STARTUP_POLICY = resolve_startup_policy(os.environ)
 IS_COMMUNITY_EDITION = TABTIN_EDITION_CONFIGURATION.edition is TabTinEdition.COMMUNITY
 
 
+def _bounded_text_env_or_file(key: str, default: str, *, max_bytes: int) -> str:
+    """Resolve bounded structured config from KEY or KEY_FILE."""
+
+    file_name = os.environ.get(f'{key}_FILE', '').strip()
+    if file_name:
+        try:
+            raw = Path(file_name).read_bytes()
+        except OSError as exc:
+            raise ImproperlyConfigured(f'无法读取配置文件: {key}_FILE') from exc
+        if not raw or len(raw) > max_bytes or b'\x00' in raw:
+            raise ImproperlyConfigured(f'配置文件内容无效: {key}_FILE')
+        try:
+            value = raw.decode('utf-8').strip()
+        except UnicodeDecodeError as exc:
+            raise ImproperlyConfigured(f'配置文件必须是 UTF-8: {key}_FILE') from exc
+        if not value:
+            raise ImproperlyConfigured(f'配置文件内容为空: {key}_FILE')
+        return value
+    value = os.environ.get(key)
+    if value is None:
+        return default
+    encoded = value.encode('utf-8')
+    if not value.strip() or len(encoded) > max_bytes or b'\x00' in encoded:
+        raise ImproperlyConfigured(f'环境变量内容无效: {key}')
+    return value.strip()
+
+
+# Cloud Agent v1. Runtime images must be immutable digests in deployed
+# environments; an empty value disables provisioning instead of floating to
+# an unpinned image.
+TABTIN_CLOUD_RUNTIME_IMAGE = os.getenv('TABTIN_CLOUD_RUNTIME_IMAGE', '').strip()
+TABTIN_CLOUD_WORKER_PROTOCOL_VERSION = os.getenv(
+    'TABTIN_CLOUD_WORKER_PROTOCOL_VERSION',
+    '1',
+).strip()
+TABTIN_CLOUD_MAX_ACTIVE_WORKSPACES_PER_USER = int(
+    os.getenv('TABTIN_CLOUD_MAX_ACTIVE_WORKSPACES_PER_USER', '1')
+)
+TABTIN_CLOUD_DISABLED_RETENTION_DAYS = int(
+    os.getenv('TABTIN_CLOUD_DISABLED_RETENTION_DAYS', '30')
+)
+TABTIN_CLOUD_RUNTIME_STORAGE_GB = int(
+    os.getenv('TABTIN_CLOUD_RUNTIME_STORAGE_GB', '2')
+)
+if TABTIN_CLOUD_RUNTIME_STORAGE_GB < 1:
+    raise ImproperlyConfigured('TABTIN_CLOUD_RUNTIME_STORAGE_GB 必须大于 0')
+TABTIN_CLOUD_WORKER_EDITION = os.getenv(
+    'TABTIN_CLOUD_WORKER_EDITION',
+    TABTIN_EDITION,
+).strip().lower()
+if TABTIN_CLOUD_WORKER_EDITION not in {'saas', 'community'}:
+    raise ImproperlyConfigured(
+        'TABTIN_CLOUD_WORKER_EDITION 必须是 saas 或 community'
+    )
+# Secret JSON map: {"node-key":{"endpoint":"https://...","token":"..."}}.
+# Endpoint and token are bound in one server-owned config so a database-only
+# endpoint mutation can never redirect Worker credentials.
+TABTIN_CLOUD_WORKERS_JSON = _bounded_text_env_or_file(
+    'TABTIN_CLOUD_WORKERS_JSON',
+    '{}',
+    max_bytes=64 * 1024,
+)
 def _edition_endpoint(
     key: str,
     *,
@@ -575,6 +637,10 @@ DATABASE_ROUTERS = [
 
 # Cache Configuration
 REDIS_DB = int(os.getenv('REDIS_DB', '0'))
+DAEMON_TOKEN_REDIS_URL = os.getenv(
+    'DAEMON_TOKEN_REDIS_URL',
+    os.getenv('REDIS_URL', f'redis://localhost:6379/{REDIS_DB}'),
+)
 
 CACHES = {
     'default': {
@@ -705,7 +771,11 @@ if _ssh_fernet_raw:
         _ssh_fernet_raw, env_var_name='SSH_CREDENTIAL_ENCRYPTION_KEY'
     )
 SSH_CREDENTIAL_ENCRYPTION_KEY = _ssh_fernet_raw or CREDENTIAL_ENCRYPTION_KEY
-DAEMON_TOKEN_SECRET = os.getenv('DAEMON_TOKEN_SECRET', '')
+DAEMON_TOKEN_SECRET = _secret_env_or_file(
+    'DAEMON_TOKEN_SECRET',
+    '',
+    required=False,
+)
 
 # 反向代理层数：get_client_ip 从 X-Forwarded-For 右起第 N 个 IP 提取客户端真实 IP
 # 0 = 忽略 XFF，仅用 REMOTE_ADDR；生产环境有 Nginx 代理时至少设为 1

@@ -1,0 +1,27 @@
+[Unit]
+Description=TabTin Cloud XFS Volume Helper Connection
+
+[Service]
+Type=oneshot
+User=root
+Group=root
+ExecStart=/Project/applications/tabtin/bin/tabtin-cloud-volume-helper.sh serve
+StandardInput=socket
+StandardOutput=socket
+StandardError=journal
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+ProtectKernelTunables=true
+ProtectKernelModules=true
+ProtectControlGroups=true
+RestrictSUIDSGID=true
+LockPersonality=true
+RestrictRealtime=true
+RestrictAddressFamilies=AF_UNIX
+SystemCallArchitectures=native
+CapabilityBoundingSet=CAP_CHOWN CAP_DAC_OVERRIDE CAP_FOWNER CAP_SYS_ADMIN
+ReadWritePaths=/Project/infrastructure/tabtin-cloud-runtime/volumes
+ReadWritePaths=/var/lib/tabtin-cloud-volume-helper
+UMask=0077

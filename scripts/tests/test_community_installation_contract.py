@@ -14,17 +14,27 @@ def _compose() -> dict:
     return yaml.safe_load((ROOT / "compose.yaml").read_text(encoding="utf-8"))
 
 
-def test_five_service_installation_is_serial_and_runtime_only() -> None:
+def test_six_service_installation_is_serial_and_runtime_only() -> None:
     compose = _compose()
     services = compose["services"]
-    assert set(services) == {"postgres", "redis", "django", "celery", "centrifugo"}
+    assert set(services) == {
+        "postgres",
+        "redis",
+        "django",
+        "celery",
+        "celery-beat",
+        "centrifugo",
+    }
 
     django = services["django"]
     celery = services["celery"]
+    celery_beat = services["celery-beat"]
     assert django["command"] == ["community-web"]
     assert django["user"] == "0:0"
     assert celery["command"] == ["worker"]
     assert celery["user"] == "10001:10001"
+    assert celery_beat["command"] == ["beat"]
+    assert celery_beat["user"] == "10001:10001"
     assert services["centrifugo"]["user"] == "10001:10001"
 
     runtime_environment = celery["environment"]
@@ -34,11 +44,14 @@ def test_five_service_installation_is_serial_and_runtime_only() -> None:
     assert "PG_MIGRATOR_PASSWORD_FILE" not in runtime_environment
     assert django["env_file"] == ["./.env.community-runtime"]
     assert celery["env_file"] == ["./.env.community-runtime"]
+    assert celery_beat["env_file"] == ["./.env.community-runtime"]
     for key in ("OPENAI_API_KEY", "AWS_SECRET_ACCESS_KEY"):
         assert key not in django["environment"]
         assert key not in celery["environment"]
+        assert key not in celery_beat["environment"]
     assert not any("/.env:" in volume for volume in django["volumes"])
     assert not any("/.env:" in volume for volume in celery["volumes"])
+    assert not any("/.env:" in volume for volume in celery_beat["volumes"])
 
     entrypoint = (
         ROOT / "apps/tabtin_django/docker-entrypoint.sh"

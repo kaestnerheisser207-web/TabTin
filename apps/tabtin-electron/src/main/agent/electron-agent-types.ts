@@ -72,6 +72,8 @@ export const NOOP_STREAM_SINK: StreamEventSink = {
 }
 
 export interface QueryRequest {
+  /** Agent Harness; local/cloud execution plane is resolved from Workspace. */
+  harness?: import('@tabtin/agent-host/runtime').RuntimeHarness
   prompt: string
   /** 群聊 @ 等高优先级 forward 可抢占同一 Agent 的当前 run。 */
   interruptActive?: boolean

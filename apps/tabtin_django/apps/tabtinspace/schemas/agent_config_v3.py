@@ -152,17 +152,16 @@ class ConversationSchema(BaseModel):
 
 
 # ---------------------------------------------------------------------------
-# agent_backend
+# harness
 # ---------------------------------------------------------------------------
 
 
-class AgentBackendSchema(BaseModel):
-    """agent_backend 协议字段。service 层会强制 type='builtin' + config_version。"""
+class AgentHarnessSchema(BaseModel):
+    """Agent execution harness. Runtime plane is derived from Workspace Device."""
 
     model_config = ConfigDict(extra="forbid")
 
-    type: Optional[str] = None
-    config_version: Optional[int] = None
+    type: Literal["builtin", "dsh"]
 
 
 # ---------------------------------------------------------------------------
@@ -192,16 +191,11 @@ class AgentConfigUpdateSchema(BaseModel):
         default=None,
         description="形状版本号(service 层强制 fixed=2,客户端传入会被覆盖)",
     )
-    runtime_plane: Optional[str] = Field(
-        default=None,
-        pattern=r"^(local|cloud)$",
-        description="执行平面",
-    )
+    harness: Optional[AgentHarnessSchema] = None
     security: Optional[SecuritySchema] = None
     capabilities: Optional[CapabilitiesSchema] = None
     conversation: Optional[ConversationSchema] = None
     workspace_root: Optional[str] = None
-    agent_backend: Optional[AgentBackendSchema] = None
 
     # bleed-back 兼容字段(只读,但前端可能 echo)
     git_status: Optional[Dict[str, Any]] = None

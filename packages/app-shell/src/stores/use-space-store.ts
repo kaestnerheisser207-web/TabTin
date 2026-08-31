@@ -21,6 +21,7 @@ import { withPersistSafety } from '@tabtin/shared'
 import {
   type Space,
   type CreateSpaceRequest,
+  type CreateCloudWorkspaceRequest,
   type UpdateSpaceRequest,
   type UpdateAgentRequest,
   type SpaceStats,
@@ -94,6 +95,8 @@ function workspaceToSpaceLike(
     status: 'active',
     working_dir: workspace.working_dir,
     working_dir_type: workingDirType,
+    runtime_plane: workspace.runtime_plane,
+    cloud: workspace.cloud ?? null,
     icon: '',
     owner_execution_device_id: workspace.device_id ?? null,
     owner_execution_device_status: workspace.device_online ? 'online' : 'offline',
@@ -119,10 +122,33 @@ function workspaceToSpaceLike(
 
 const spaceLoadPromises = new Map<string, Promise<void>>()
 const latestSpaceLoadRequestIdByOrganization = new Map<string, number>()
+const cloudWorkspaceRefreshTimers = new Map<string, ReturnType<typeof setTimeout>>()
 let _batchLoadCounter = 0
 let _spaceRetryTimer: ReturnType<typeof setTimeout> | null = null
 let _spaceRefreshDebounceTimer: ReturnType<typeof setTimeout> | null = null
 let _spaceWsInitialized = false
+
+function scheduleCloudWorkspaceRefresh(
+  workspaceId: string,
+  refresh: () => Promise<void>,
+  readState: () => Space['cloud'] | null | undefined,
+  attempt = 0,
+): void {
+  const state = readState()?.state
+  if (state === 'ready' || state === 'disabled' || state === 'error' || state === 'deleted') {
+    const timer = cloudWorkspaceRefreshTimers.get(workspaceId)
+    if (timer) clearTimeout(timer)
+    cloudWorkspaceRefreshTimers.delete(workspaceId)
+    return
+  }
+  if (attempt >= 60 || cloudWorkspaceRefreshTimers.has(workspaceId)) return
+  const timer = setTimeout(async () => {
+    cloudWorkspaceRefreshTimers.delete(workspaceId)
+    await refresh()
+    scheduleCloudWorkspaceRefresh(workspaceId, refresh, readState, attempt + 1)
+  }, 2_000)
+  cloudWorkspaceRefreshTimers.set(workspaceId, timer)
+}
 
 function resolveCrawlspaceId(spaceId: string): string | null {
   const bridge = getRuntime().bridge
@@ -162,6 +188,7 @@ interface SpaceStoreState extends LoadingState {
   selectedAgent: Agent | null
 
   createSpace: (data: CreateSpaceRequest) => Promise<Space | null>
+  createCloudSpace: (data: CreateCloudWorkspaceRequest) => Promise<Space | null>
   updateSpace: (id: string, updates: UpdateSpaceRequest) => Promise<boolean>
   deleteSpace: (id: string) => Promise<boolean>
   selectSpace: (space: Space | null) => void
@@ -189,6 +216,7 @@ interface SpaceStoreState extends LoadingState {
   loadSpaces: (organizationId?: string) => Promise<void>
   loadAllOrganizationSpaces: (organizationIds: string[]) => Promise<void>
   refreshSpace: (id: string) => Promise<void>
+  watchCloudSpace: (id: string) => void
   getSpaceStats: (id: string) => Promise<SpaceStats | null>
 
   clearSpaces: () => void
@@ -243,6 +271,33 @@ export const useSpaceStore = create<SpaceStoreState>()(
         } catch (error) {
           const errorMessage = error instanceof Error ? error.message : 'Failed to create space'
           log.error('Failed to create Workspace:', error)
+          set({ error: errorMessage, isLoading: false })
+          return null
+        }
+      },
+
+      createCloudSpace: async (data) => {
+        set({ isLoading: true, error: null })
+        try {
+          const newSpace = workspaceToSpaceLike(
+            await WorkspaceApiService.createCloud(data),
+            data.organization_id,
+          )
+          set((state) => ({
+            spaces: [...state.spaces, newSpace],
+            isLoading: false,
+          }))
+          log.info('Cloud Workspace created:', {
+            id: newSpace.id,
+            state: newSpace.cloud?.state,
+          })
+          get().watchCloudSpace(newSpace.id)
+          return newSpace
+        } catch (error) {
+          const errorMessage = error instanceof Error
+            ? error.message
+            : 'Failed to create Cloud Workspace'
+          log.error('Failed to create Cloud Workspace:', error)
           set({ error: errorMessage, isLoading: false })
           return null
         }
@@ -844,6 +899,14 @@ export const useSpaceStore = create<SpaceStoreState>()(
         }
       },
 
+      watchCloudSpace: (id) => {
+        scheduleCloudWorkspaceRefresh(
+          id,
+          () => get().refreshSpace(id),
+          () => get().spaces.find(space => space.id === id)?.cloud,
+        )
+      },
+
       getSpaceStats: async (id) => {
         // ：/spaces/{id}/stats 已 410；统计能力随 Space 壳退役，返回空壳避免调用方崩。
         const current = get().spaces.find((space) => space.id === id)
@@ -870,6 +933,8 @@ export const useSpaceStore = create<SpaceStoreState>()(
           clearTimeout(_spaceRefreshDebounceTimer)
           _spaceRefreshDebounceTimer = null
         }
+        for (const timer of cloudWorkspaceRefreshTimers.values()) clearTimeout(timer)
+        cloudWorkspaceRefreshTimers.clear()
         spaceLoadPromises.clear()
         latestSpaceLoadRequestIdByOrganization.clear()
         _spaceWsInitialized = false

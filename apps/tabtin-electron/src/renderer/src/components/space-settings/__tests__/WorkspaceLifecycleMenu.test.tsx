@@ -29,6 +29,7 @@ vi.mock('@stores/useSpaceStore', () => ({
         deleteSpace: vi.fn(),
         archiveSpace: vi.fn(),
         loadSpaces: vi.fn(),
+        watchCloudSpace: vi.fn(),
         isLoading: false,
         error: null,
       }),
@@ -105,5 +106,29 @@ describe('WorkspaceLifecycleMenu', () => {
     canManageSpaceLifecycleMock.mockReturnValue(false)
     const { container } = render(<WorkspaceLifecycleMenu space={space} />)
     expect(container.childElementCount).toBe(0)
+  })
+
+  it('云端 Workspace 显示重启、停用和云端唯一权威提示', () => {
+    render(
+      <WorkspaceLifecycleMenu
+        space={{
+          ...space,
+          runtime_plane: 'cloud',
+          cloud: {
+            allocation_id: 'allocation-1',
+            state: 'ready',
+            generation: 1,
+            source_type: 'empty',
+            runtime_version: 'test',
+            protocol_version: '1',
+          },
+        }}
+      />,
+    )
+
+    expect(screen.getByTestId('cloud-workspace-lifecycle')).toBeTruthy()
+    expect(screen.getByRole('button', { name: '重启' })).toBeTruthy()
+    expect(screen.getByRole('button', { name: '停用' })).toBeTruthy()
+    expect(screen.getByText(/不同步到本机/)).toBeTruthy()
   })
 })

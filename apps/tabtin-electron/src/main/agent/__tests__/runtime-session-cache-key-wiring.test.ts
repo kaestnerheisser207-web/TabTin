@@ -158,6 +158,16 @@ describe('ElectronAgentHost runtime cache key wiring', () => {
     expect(block).not.toContain("request.modelId ?? 'default'")
   })
 
+  it('fails closed instead of silently running Builtin when Electron receives DSH', () => {
+    const start = runtimeSource.indexOf('buildRequestFromQuery(')
+    expect(start).toBeGreaterThan(-1)
+    const block = runtimeSource.slice(start, start + 1200)
+    expect(block).toContain("if (request.harness === 'dsh')")
+    expect(block).toContain(
+      'DSH harness requires a Cloud Workspace and cannot run in Electron',
+    )
+  })
+
   it('#7894 runtime workspaceRoot comes only from Space.working_dir, never CLI organizationRoot', () => {
     expect(runtimeSource).toContain('function resolveExecutionWorkspaceRoot(')
     expect(runtimeSource).toContain('resolveExecutionWorkspaceRoot({')

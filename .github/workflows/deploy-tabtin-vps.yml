@@ -1,12 +1,19 @@
 name: Deploy TabTin VPS
 run-name: >-
-  Deploy PR #${{ github.event.pull_request.number }} ·
-  ${{ github.event.pull_request.title }}
+  ${{ github.event_name == 'workflow_dispatch'
+    && format('Deploy Cloud Host · {0}', inputs.release_sha)
+    || format('Deploy PR #{0} · {1}', github.event.pull_request.number, github.event.pull_request.title) }}
 
 on:
   pull_request_target:
     types: [closed]
     branches: [main]
+  workflow_dispatch:
+    inputs:
+      release_sha:
+        description: Full main commit SHA already deployed by the standard VPS job
+        required: true
+        type: string
 
 permissions:
   contents: read
@@ -17,14 +24,18 @@ concurrency:
   cancel-in-progress: false
 
 env:
-  IMAGE_NAME: ghcr.io/kaestnerheisser207-web/tabtin-community-django
-  RELEASE_SHA: ${{ github.event.pull_request.merge_commit_sha }}
+  DJANGO_IMAGE_NAME: ghcr.io/kaestnerheisser207-web/tabtin-community-django
+  WEB_IMAGE_NAME: ghcr.io/kaestnerheisser207-web/tabtin-web
+  COLLAB_IMAGE_NAME: ghcr.io/kaestnerheisser207-web/tabtin-collab-live
+  CLOUD_RUNTIME_IMAGE_NAME: ghcr.io/kaestnerheisser207-web/tabtin-cloud-runtime
+  CLOUD_WORKER_IMAGE_NAME: ghcr.io/kaestnerheisser207-web/tabtin-cloud-worker
+  RELEASE_SHA: ${{ github.event_name == 'workflow_dispatch' && inputs.release_sha || github.event.pull_request.merge_commit_sha }}
 
 jobs:
   deploy:
-    if: github.event.pull_request.merged == true
+    if: github.event_name == 'pull_request_target' && github.event.pull_request.merged == true
     runs-on: ubuntu-latest
-    timeout-minutes: 60
+    timeout-minutes: 90
     environment: production
     steps:
       - name: Check out selected commit
@@ -51,14 +62,14 @@ jobs:
           printf 'fingerprint=%s\n' "$fingerprint" >> "$GITHUB_OUTPUT"
 
       - name: Build and push immutable Django image
-        id: build
+        id: build_django
         uses: docker/build-push-action@v6
         with:
           context: .
           file: apps/tabtin_django/Dockerfile
           platforms: linux/amd64
           push: true
-          tags: ${{ env.IMAGE_NAME }}:sha-${{ env.RELEASE_SHA }}
+          tags: ${{ env.DJANGO_IMAGE_NAME }}:sha-${{ env.RELEASE_SHA }}
           labels: |
             org.opencontainers.image.source=https://github.com/${{ github.repository }}
             org.opencontainers.image.revision=${{ env.RELEASE_SHA }}
@@ -69,6 +80,36 @@ jobs:
             TABTIN_SOURCE_SHA=${{ env.RELEASE_SHA }}
           cache-from: type=gha,scope=tabtin-community-django
           cache-to: type=gha,mode=max,scope=tabtin-community-django,ignore-error=true
+
+      - name: Build and push immutable Web image
+        id: build_web
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: apps/tabtin-web/Dockerfile
+          platforms: linux/amd64
+          push: true
+          tags: ${{ env.WEB_IMAGE_NAME }}:sha-${{ env.RELEASE_SHA }}
+          labels: |
+            org.opencontainers.image.source=https://github.com/${{ github.repository }}
+            org.opencontainers.image.revision=${{ env.RELEASE_SHA }}
+          cache-from: type=gha,scope=tabtin-web
+          cache-to: type=gha,mode=max,scope=tabtin-web,ignore-error=true
+
+      - name: Build and push immutable Collab image
+        id: build_collab
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: apps/collab-live/Dockerfile
+          platforms: linux/amd64
+          push: true
+          tags: ${{ env.COLLAB_IMAGE_NAME }}:sha-${{ env.RELEASE_SHA }}
+          labels: |
+            org.opencontainers.image.source=https://github.com/${{ github.repository }}
+            org.opencontainers.image.revision=${{ env.RELEASE_SHA }}
+          cache-from: type=gha,scope=tabtin-collab-live
+          cache-to: type=gha,mode=max,scope=tabtin-collab-live,ignore-error=true
 
       - name: Configure restricted SSH access
         env:
@@ -82,12 +123,14 @@ jobs:
           printf '%s\n' "$SSH_KNOWN_HOSTS" > "$HOME/.ssh/known_hosts"
           chmod 0600 "$HOME/.ssh/known_hosts"
 
-      - name: Pull and deploy selected image
+      - name: Pull and deploy selected Django image
         env:
           DEPLOY_HOST: ${{ vars.TABTIN_VPS_HOST }}
           DEPLOY_PORT: ${{ vars.TABTIN_VPS_PORT }}
           DEPLOY_USER: ${{ vars.TABTIN_VPS_USER }}
-          IMAGE_DIGEST: ${{ steps.build.outputs.digest }}
+          DJANGO_IMAGE_DIGEST: ${{ steps.build_django.outputs.digest }}
+          WEB_IMAGE_DIGEST: ${{ steps.build_web.outputs.digest }}
+          COLLAB_IMAGE_DIGEST: ${{ steps.build_collab.outputs.digest }}
           REGISTRY_TOKEN: ${{ github.token }}
           REGISTRY_USER: ${{ github.actor }}
         run: |
@@ -95,8 +138,12 @@ jobs:
           test -n "$DEPLOY_HOST"
           test -n "$DEPLOY_PORT"
           test -n "$DEPLOY_USER"
-          [[ "$IMAGE_DIGEST" =~ ^sha256:[0-9a-f]{64}$ ]]
-          image_ref="$IMAGE_NAME@$IMAGE_DIGEST"
+          [[ "$DJANGO_IMAGE_DIGEST" =~ ^sha256:[0-9a-f]{64}$ ]]
+          [[ "$WEB_IMAGE_DIGEST" =~ ^sha256:[0-9a-f]{64}$ ]]
+          [[ "$COLLAB_IMAGE_DIGEST" =~ ^sha256:[0-9a-f]{64}$ ]]
+          django_ref="$DJANGO_IMAGE_NAME@$DJANGO_IMAGE_DIGEST"
+          web_ref="$WEB_IMAGE_NAME@$WEB_IMAGE_DIGEST"
+          collab_ref="$COLLAB_IMAGE_NAME@$COLLAB_IMAGE_DIGEST"
           printf '%s\n' "$REGISTRY_TOKEN" | ssh \
             -o BatchMode=yes \
             -o IdentitiesOnly=yes \
@@ -104,7 +151,121 @@ jobs:
             -i "$HOME/.ssh/tabtin_deploy" \
             -p "$DEPLOY_PORT" \
             "$DEPLOY_USER@$DEPLOY_HOST" \
-            "deploy $RELEASE_SHA $image_ref $REGISTRY_USER"
+            "deploy $RELEASE_SHA $django_ref $web_ref $collab_ref $REGISTRY_USER"
+
+      - name: Verify public readiness
+        run: |
+          set -euo pipefail
+          response="$(curl --fail --silent --show-error --max-time 20 https://tabtin.dovelora.com/health/ready)"
+          printf '%s\n' "$response"
+          printf '%s' "$response" | grep -q '"status"[[:space:]]*:[[:space:]]*"ready"'
+
+  publish-cloud-images:
+    if: >-
+      (github.event_name == 'pull_request_target' && github.event.pull_request.merged == true)
+      || github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    outputs:
+      runtime_digest: ${{ steps.build_cloud_runtime.outputs.digest }}
+      worker_digest: ${{ steps.build_cloud_worker.outputs.digest }}
+    steps:
+      - name: Validate selected release
+        run: |
+          set -euo pipefail
+          [[ "$RELEASE_SHA" =~ ^[0-9a-f]{40}$ ]]
+
+      - name: Check out selected commit
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ env.RELEASE_SHA }}
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Log in to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ github.token }}
+
+      - name: Build and push immutable Cloud Runtime image
+        id: build_cloud_runtime
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: apps/tabtin-daemon/Dockerfile.cloud
+          platforms: linux/amd64
+          push: true
+          tags: ${{ env.CLOUD_RUNTIME_IMAGE_NAME }}:sha-${{ env.RELEASE_SHA }}
+          labels: |
+            org.opencontainers.image.source=https://github.com/${{ github.repository }}
+            org.opencontainers.image.revision=${{ env.RELEASE_SHA }}
+          cache-from: type=gha,scope=tabtin-cloud-runtime
+          cache-to: type=gha,mode=max,scope=tabtin-cloud-runtime,ignore-error=true
+
+      - name: Build and push immutable Cloud Worker image
+        id: build_cloud_worker
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: apps/tabtin-cloud-worker/Dockerfile
+          platforms: linux/amd64
+          push: true
+          tags: ${{ env.CLOUD_WORKER_IMAGE_NAME }}:sha-${{ env.RELEASE_SHA }}
+          labels: |
+            org.opencontainers.image.source=https://github.com/${{ github.repository }}
+            org.opencontainers.image.revision=${{ env.RELEASE_SHA }}
+          cache-from: type=gha,scope=tabtin-cloud-worker
+          cache-to: type=gha,mode=max,scope=tabtin-cloud-worker,ignore-error=true
+
+  deploy-cloud:
+    if: github.event_name == 'workflow_dispatch'
+    needs: publish-cloud-images
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    environment: production
+    steps:
+      - name: Configure restricted SSH access
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.TABTIN_VPS_SSH_KEY }}
+          SSH_KNOWN_HOSTS: ${{ secrets.TABTIN_VPS_KNOWN_HOSTS }}
+        run: |
+          set -euo pipefail
+          install -d -m 0700 "$HOME/.ssh"
+          printf '%s\n' "$SSH_PRIVATE_KEY" > "$HOME/.ssh/tabtin_deploy"
+          chmod 0600 "$HOME/.ssh/tabtin_deploy"
+          printf '%s\n' "$SSH_KNOWN_HOSTS" > "$HOME/.ssh/known_hosts"
+          chmod 0600 "$HOME/.ssh/known_hosts"
+
+      - name: Deploy selected Cloud Runtime and Worker images
+        env:
+          DEPLOY_HOST: ${{ vars.TABTIN_VPS_HOST }}
+          DEPLOY_PORT: ${{ vars.TABTIN_VPS_PORT }}
+          DEPLOY_USER: ${{ vars.TABTIN_VPS_USER }}
+          CLOUD_RUNTIME_IMAGE_DIGEST: ${{ needs.publish-cloud-images.outputs.runtime_digest }}
+          CLOUD_WORKER_IMAGE_DIGEST: ${{ needs.publish-cloud-images.outputs.worker_digest }}
+          REGISTRY_TOKEN: ${{ github.token }}
+          REGISTRY_USER: ${{ github.actor }}
+        run: |
+          set -euo pipefail
+          test -n "$DEPLOY_HOST"
+          test -n "$DEPLOY_PORT"
+          test -n "$DEPLOY_USER"
+          [[ "$RELEASE_SHA" =~ ^[0-9a-f]{40}$ ]]
+          [[ "$CLOUD_RUNTIME_IMAGE_DIGEST" =~ ^sha256:[0-9a-f]{64}$ ]]
+          [[ "$CLOUD_WORKER_IMAGE_DIGEST" =~ ^sha256:[0-9a-f]{64}$ ]]
+          runtime_ref="$CLOUD_RUNTIME_IMAGE_NAME@$CLOUD_RUNTIME_IMAGE_DIGEST"
+          worker_ref="$CLOUD_WORKER_IMAGE_NAME@$CLOUD_WORKER_IMAGE_DIGEST"
+          printf '%s\n' "$REGISTRY_TOKEN" | ssh \
+            -o BatchMode=yes \
+            -o IdentitiesOnly=yes \
+            -o StrictHostKeyChecking=yes \
+            -i "$HOME/.ssh/tabtin_deploy" \
+            -p "$DEPLOY_PORT" \
+            "$DEPLOY_USER@$DEPLOY_HOST" \
+            "deploy-cloud $RELEASE_SHA $runtime_ref $worker_ref $REGISTRY_USER"
 
       - name: Verify public readiness
         run: |

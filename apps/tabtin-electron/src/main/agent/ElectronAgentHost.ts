@@ -5679,10 +5679,12 @@ export class ElectronAgentHost {
       replyToMessageId,
       replyToPreview,
       skillSlashInvoke,
+      agentConfig,
       ...rest
     } = forward
     return {
       ...(rest as QueryRequest),
+      harness: agentConfig?.type === 'dsh' ? 'dsh' : 'builtin',
       ...(skillSlashInvoke?.skillKey ? { skillSlashInvoke } : {}),
       ...(replyToMessageId
         ? {

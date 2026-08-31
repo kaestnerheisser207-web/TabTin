@@ -54,6 +54,7 @@ export type {
 export {
   RuntimeSessionFactory,
   RuntimeOwnerQuiescedError,
+  RuntimeDriverRegistry,
   canSoftReconfigureByShellTier,
   isShellRestrictedAgentMode,
   resolveRuntimeModeAgainstSticky,
@@ -74,6 +75,11 @@ export {
   type RuntimeSessionResolution,
   type RuntimeSessionFactoryAdapter,
   type RuntimeBuildContext,
+  type HostedRuntime,
+  type RuntimeDriver,
+  type RuntimeDriverContext,
+  type RuntimeDriverSession,
+  type RuntimeHarness,
 } from './runtime/index.js'
 export {
   applyAuthoritativeSecurityMutate,
