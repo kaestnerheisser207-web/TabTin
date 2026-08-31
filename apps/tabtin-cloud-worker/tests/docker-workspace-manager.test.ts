@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest'
 import { CommandFailedError, type CommandRunner } from '../src/command-runner.js'
 import {
   DockerWorkspaceManager,
+  GitWorkspaceInitializationError,
   StaleGenerationError,
 } from '../src/docker-workspace-manager.js'
 import { XfsProjectQuotaManager } from '../src/storage-quota.js'
@@ -17,6 +18,8 @@ class FakeRunner implements CommandRunner {
   volumes: string[] = []
   createdGeneration: number | null = null
   daemonInitialized = true
+  gitInitialized = false
+  failGitClone = false
 
   async run(args: readonly string[], stdin?: string) {
     this.calls.push([...args])
@@ -42,6 +45,15 @@ class FakeRunner implements CommandRunner {
         stdout: this.daemonInitialized ? 'initialized' : 'uninitialized',
         stderr: '',
       }
+    }
+    if (args[0] === 'run' && args.includes('test -e /workspace/.tabtin-git-initialized')) {
+      if (!this.gitInitialized) throw new CommandFailedError(1, '')
+      return { stdout: '', stderr: '' }
+    }
+    if (args[0] === 'run' && args.includes('clone')) {
+      if (this.failGitClone) throw new CommandFailedError(128, 'clone failed')
+      this.gitInitialized = true
+      return { stdout: '', stderr: '' }
     }
     if (args[0] === 'create') {
       const generationLabel = args.find(value => value.startsWith('com.tabtin.cloud.generation='))
@@ -190,10 +202,54 @@ describe('DockerWorkspaceManager', () => {
     }))
 
     const transientRuns = runner.calls.filter(args => args[0] === 'run')
-    expect(transientRuns).toHaveLength(2)
+    expect(transientRuns).toHaveLength(3)
     for (const args of transientRuns) {
       expect(args).toEqual(expect.arrayContaining(['--pids-limit', '256']))
     }
+    expect(runner.calls.find(args => args.includes('clone'))).toContain(
+      'git "$@" && touch /workspace/.tabtin-git-initialized',
+    )
+  })
+
+  it('retries Git initialization instead of treating an existing quota volume as initialized', async () => {
+    const runner = new FakeRunner()
+    runner.failGitClone = true
+    const manager = new DockerWorkspaceManager(runner, 'tabtin-cloud-runtime')
+    const input = provisionInput({
+      source: {
+        type: 'git',
+        gitUrl: 'https://example.com/private/repository.git',
+      },
+    })
+
+    await expect(manager.provision(input)).rejects.toBeInstanceOf(GitWorkspaceInitializationError)
+    await expect(manager.provision(input)).rejects.toBeInstanceOf(GitWorkspaceInitializationError)
+
+    expect(runner.calls.filter(args => args[0] === 'run' && args.includes('clone'))).toHaveLength(2)
+    expect(runner.calls.some(args => args[0] === 'create')).toBe(false)
+  })
+
+  it('does not report an existing running container ready when its Git workspace never initialized', async () => {
+    const runner = new FakeRunner()
+    runner.failGitClone = true
+    runner.inspectResult = [{
+      Id: 'existing',
+      Config: { Labels: { 'com.tabtin.cloud.generation': '1' } },
+      State: { Running: true },
+    }]
+    const manager = new DockerWorkspaceManager(runner, 'tabtin-cloud-runtime')
+
+    await expect(manager.provision(provisionInput({
+      source: {
+        type: 'git',
+        gitUrl: 'https://example.com/private/repository.git',
+      },
+    }))).rejects.toBeInstanceOf(GitWorkspaceInitializationError)
+
+    expect(runner.calls).toContainEqual([
+      'stop', '--time', '30', `tabtin-cloud-${ALLOCATION_ID}`,
+    ])
+    expect(runner.calls.filter(args => args[0] === 'run' && args.includes('clone'))).toHaveLength(1)
   })
 
   it('reattaches after a Worker process restart without recreating the same generation', async () => {

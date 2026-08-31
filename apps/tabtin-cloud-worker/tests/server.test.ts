@@ -1,5 +1,6 @@
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import { createWorkerServer, listenWorkerServer } from '../src/server.js'
+import { GitWorkspaceInitializationError } from '../src/docker-workspace-manager.js'
 import type { DockerWorkspaceManager } from '../src/docker-workspace-manager.js'
 
 const servers: Array<ReturnType<typeof createWorkerServer>> = []
@@ -79,6 +80,39 @@ describe('Cloud Worker HTTP server', () => {
 
     expect(response.status).toBe(400)
     expect(manager.deletePermanently).not.toHaveBeenCalled()
+  })
+
+  it('returns an actionable status when Git initialization cannot complete', async () => {
+    const manager = {
+      provision: vi.fn(async () => { throw new GitWorkspaceInitializationError() }),
+    } as unknown as DockerWorkspaceManager
+    const server = createWorkerServer({
+      manager,
+      token: 'test-token',
+      protocolVersion: '1',
+      runtimeVersion: 'test',
+      storageQuotaMode: 'none',
+      resourceIsolationMode: 'unverified',
+    })
+    servers.push(server)
+    const address = await listenWorkerServer(server, '127.0.0.1', 0)
+    const response = await fetch(
+      `http://127.0.0.1:${address.port}/v1/allocations/11111111-1111-4111-8111-111111111111`,
+      {
+        method: 'PUT',
+        headers: {
+          authorization: 'Bearer test-token',
+          'content-type': 'application/json',
+        },
+        body: JSON.stringify({ generation: 1 }),
+      },
+    )
+
+    expect(response.status).toBe(422)
+    expect(await response.json()).toEqual({
+      code: 'git_source_unavailable',
+      error: 'Git repository could not be cloned without credentials; verify that the URL and ref are publicly accessible',
+    })
   })
 
   it('emits bounded structured observations without request bodies or bearer tokens', async () => {

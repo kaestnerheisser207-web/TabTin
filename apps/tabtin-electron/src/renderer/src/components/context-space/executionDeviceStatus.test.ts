@@ -153,4 +153,23 @@ describe('computeExecutionDeviceStatus', () => {
       secondaryTone: 'offline',
     })
   })
+
+  it('uses the polled Workspace status when a Cloud Device WS event was missed', () => {
+    expect(resolveCurrentMemberProjectCompanionDeviceStatus(
+      {
+        id: 'workspace-cloud',
+        type: 'workspace',
+        control_device_id: 'device-cloud',
+        owner_execution_device_status: 'online',
+      },
+      [],
+      devices[0],
+      devices,
+      t,
+    )).toEqual({
+      label: '远程',
+      title: 'Agent 在「执行设备」上工作，需切换到该设备才能操作这个应用',
+      tone: 'remote',
+    })
+  })
 })

@@ -269,15 +269,18 @@ export const SpaceSwitcherPopover: React.FC<SpaceSwitcherPopoverProps> = ({
               const isLocal = isCurrentDeviceControl(ctrlDevId, currentDevice, devices)
               const displayDevice = dev ?? (isLocal ? currentDevice : null)
               const deviceName = displayDevice?.name?.trim()
+                || (fullSp?.runtime_plane === 'cloud' ? fullSp.name : undefined)
+              const effectiveDeviceStatus = displayDevice?.status
+                ?? fullSp?.owner_execution_device_status
               const deviceState = isLocal
                 ? t('sidebar.deviceLocal', { defaultValue: '本机' })
-                : displayDevice?.status === 'online'
+                : effectiveDeviceStatus === 'online'
                   ? t('sidebar.deviceOnline', { defaultValue: '在线' })
-                  : displayDevice?.status === 'busy'
+                  : effectiveDeviceStatus === 'busy'
                     ? t('sidebar.deviceBusy', { defaultValue: '忙碌' })
-                    : displayDevice?.status === 'offline'
+                    : effectiveDeviceStatus === 'offline'
                       ? t('sidebar.deviceOffline', { defaultValue: '离线' })
-                      : displayDevice?.status === 'draining'
+                      : effectiveDeviceStatus === 'draining'
                         ? t('sidebar.deviceDraining', { defaultValue: '暂停接单' })
                         : t('sidebar.deviceUnknown', { defaultValue: '状态未知' })
               const deviceSummary = ctrlDevId

@@ -2,7 +2,10 @@ import { timingSafeEqual } from 'node:crypto'
 import { createServer, type IncomingMessage, type ServerResponse } from 'node:http'
 import type { AddressInfo } from 'node:net'
 import { performance } from 'node:perf_hooks'
-import type { DockerWorkspaceManager } from './docker-workspace-manager.js'
+import {
+  GitWorkspaceInitializationError,
+  type DockerWorkspaceManager,
+} from './docker-workspace-manager.js'
 import type { AllocationIdentity, ProvisionWorkspaceInput } from './contracts.js'
 import type { StorageQuotaMode } from './storage-quota.js'
 import type { ResourceIsolationMode } from './resource-isolation.js'
@@ -111,11 +114,13 @@ export function createWorkerServer(options: WorkerServerOptions) {
       result = 'method_not_allowed'
       return send(response, statusCode, { error: 'method_not_allowed' })
     } catch (error) {
-      statusCode = 400
+      const gitSourceUnavailable = error instanceof GitWorkspaceInitializationError
+      statusCode = gitSourceUnavailable ? 422 : 400
       result = 'error'
       errorType = safeErrorType(error)
       return send(response, statusCode, {
         error: error instanceof Error ? error.message : String(error),
+        ...(gitSourceUnavailable ? { code: 'git_source_unavailable' } : {}),
       })
     } finally {
       const observation: WorkerRequestObservation = {

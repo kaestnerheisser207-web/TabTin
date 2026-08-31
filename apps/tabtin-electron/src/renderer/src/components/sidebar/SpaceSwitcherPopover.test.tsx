@@ -28,6 +28,18 @@ const workspaces = [
     unread_count: 0,
     control_device_id: 'device-remote',
   },
+  {
+    id: 'workspace-cloud',
+    source_id: 'workspace-cloud',
+    organization_id: 'org-1',
+    navigationKind: 'workspace',
+    type: 'workspace',
+    name: 'Cloud Flow',
+    unread_count: 0,
+    control_device_id: 'device-cloud',
+    runtime_plane: 'cloud',
+    owner_execution_device_status: 'online',
+  },
 ]
 
 const devices = [
@@ -176,6 +188,7 @@ describe('SpaceSwitcherPopover', () => {
 
     expect(await screen.findByText('Local Mac · 本机')).toBeTruthy()
     expect(screen.getByText('Remote Mac · 在线')).toBeTruthy()
+    expect(screen.getByText('Cloud Flow · 在线')).toBeTruthy()
     expect(screen.queryByRole('note')).toBeNull()
     expect(screen.queryByText('Home Server')).toBeNull()
     expect(screen.queryByText('Unmapped Device')).toBeNull()
