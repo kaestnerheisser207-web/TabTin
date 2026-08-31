@@ -1,4 +1,6 @@
+import io
 import json
+import urllib.error
 from typing import ClassVar
 from unittest.mock import patch
 from uuid import uuid4
@@ -214,6 +216,41 @@ class CloudWorkerClientBoundaryTests(SimpleTestCase):
         self.assertEqual(request.get_header("User-agent"), "TabTin-Cloud-Control/1.0")
         self.assertEqual(request.get_header("Authorization"), "Bearer secret")
         self.assertEqual(timeout, 7)
+
+    @override_settings(
+        TABTIN_CLOUD_WORKERS_JSON=(
+            '{"worker-1":{"endpoint":"https://worker.internal",'
+            '"token":"secret"}}'
+        )
+    )
+    def test_worker_http_error_preserves_bounded_actionable_error(self):
+        worker = CloudWorkerNode(
+            node_key="worker-1",
+            control_endpoint="https://worker.internal",
+        )
+
+        class Opener:
+            @staticmethod
+            def open(request, *, timeout):
+                raise urllib.error.HTTPError(
+                    request.full_url,
+                    422,
+                    "Unprocessable Entity",
+                    {},
+                    io.BytesIO(json.dumps({
+                        "code": "git_source_unavailable",
+                        "error": "Git repository is not publicly accessible",
+                    }).encode("utf-8")),
+                )
+
+        client = CloudWorkerClient()
+        client._opener = Opener()
+
+        with self.assertRaisesRegex(
+            CloudWorkerClientError,
+            "git_source_unavailable: Git repository is not publicly accessible",
+        ):
+            client.health(worker)
 
 
 class CloudWorkerRegistryTests(TransactionTestCase):

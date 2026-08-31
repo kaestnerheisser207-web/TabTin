@@ -31,6 +31,13 @@ export class StaleGenerationError extends Error {
   }
 }
 
+export class GitWorkspaceInitializationError extends Error {
+  constructor() {
+    super('Git repository could not be cloned without credentials; verify that the URL and ref are publicly accessible')
+    this.name = 'GitWorkspaceInitializationError'
+  }
+}
+
 export class DockerWorkspaceManager {
   constructor(
     private readonly runner: CommandRunner,
@@ -56,20 +63,22 @@ export class DockerWorkspaceManager {
         throw new StaleGenerationError(currentGeneration)
       }
       if (currentGeneration === input.generation) {
-        if (existing.State?.Running && await this.isDaemonInitialized(input)) {
+        const runtimeReady = existing.State?.Running && await this.isDaemonInitialized(input)
+        const workspaceReady = await this.isWorkspaceInitialized(input)
+        if (runtimeReady && workspaceReady) {
           return statusOf(input, existing, 'running')
         }
         if (existing.State?.Running) {
           await this.runner.run(['stop', '--time', '30', container])
         }
         await this.writeBootstrapToken(input)
+        if (!workspaceReady) await this.initializeGitWorkspace(input)
         await this.runner.run(['start', container])
         return await this.requireRunning(input)
       }
       await this.runner.run(['rm', '--force', container])
     }
 
-    const volumeExisted = await this.volumeExists(input.volumeRef)
     await this.createVolume(input.volumeRef, input.allocationId, input.storageGb)
     await this.createVolume(
       runtimeVolume(input.volumeRef),
@@ -77,7 +86,7 @@ export class DockerWorkspaceManager {
       this.runtimeStorageGb,
     )
     await this.writeBootstrapToken(input)
-    if (!volumeExisted && input.source.type === 'git') {
+    if (!await this.isWorkspaceInitialized(input)) {
       await this.initializeGitWorkspace(input)
     }
 
@@ -165,15 +174,47 @@ export class DockerWorkspaceManager {
     const gitArgs = ['clone', '--depth', '1']
     if (input.source.gitRef) gitArgs.push('--branch', input.source.gitRef)
     gitArgs.push(input.source.gitUrl!, '/workspace')
-    await this.runner.run([
-      'run', '--rm',
-      '--pids-limit', '256',
-      '--network', this.network,
-      '--mount', `type=volume,src=${input.volumeRef},dst=/workspace`,
-      '--entrypoint', 'git',
-      input.image,
-      ...gitArgs,
-    ])
+    try {
+      await this.runner.run([
+        'run', '--rm',
+        '--pids-limit', '256',
+        '--network', this.network,
+        '--mount', `type=volume,src=${input.volumeRef},dst=/workspace`,
+        '--entrypoint', 'sh',
+        input.image,
+        '-c',
+        'git "$@" && touch /workspace/.tabtin-git-initialized',
+        'sh',
+        ...gitArgs,
+      ])
+    } catch (error) {
+      if (error instanceof CommandFailedError) {
+        throw new GitWorkspaceInitializationError()
+      }
+      throw error
+    }
+  }
+
+  private async isWorkspaceInitialized(input: ProvisionWorkspaceInput): Promise<boolean> {
+    if (input.source.type !== 'git') return true
+    try {
+      await this.runner.run([
+        'run', '--rm',
+        '--pids-limit', '256',
+        '--network', 'none',
+        '--cap-drop', 'ALL',
+        '--security-opt', 'no-new-privileges',
+        '--mount', `type=volume,src=${input.volumeRef},dst=/workspace,readonly`,
+        '--entrypoint', 'sh',
+        input.image,
+        '-c',
+        'test -e /workspace/.tabtin-git-initialized',
+      ])
+      return true
+    } catch (error) {
+      if (error instanceof CommandFailedError && error.exitCode === 1) return false
+      throw error
+    }
   }
 
   private async writeBootstrapToken(input: ProvisionWorkspaceInput): Promise<void> {
@@ -240,13 +281,6 @@ export class DockerWorkspaceManager {
     }
     args.push(volume)
     await this.runner.run(args)
-  }
-
-  private async volumeExists(volume: string): Promise<boolean> {
-    if (this.storageQuotaMode === 'podman-xfs') {
-      return await this.requireQuotaManager().inspect(volume) !== null
-    }
-    return await this.dockerVolumeExists(volume)
   }
 
   private async dockerVolumeExists(volume: string): Promise<boolean> {

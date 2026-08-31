@@ -14,6 +14,7 @@ export type SpaceWithDeviceBinding = {
   bound_device_id?: string | null
   execution_agent_id?: string | null
   agent_id?: string | null
+  owner_execution_device_status?: string | null
 }
 
 export type AgentWithDeviceBinding = {
@@ -42,6 +43,7 @@ export function computeExecutionDeviceStatus(
   currentDevice: DeviceControlView | null,
   devices: DeviceLike[],
   t: TFunction,
+  authoritativeStatus?: string | null,
 ): ExecutionDeviceStatus | null {
   if (!controlDeviceId) {
     return {
@@ -55,9 +57,9 @@ export function computeExecutionDeviceStatus(
   if (isCurrentDeviceControl(controlDeviceId, currentDevice, devices)) return null
   const controlDevice = devices.find(d => d.id === controlDeviceId)
   const deviceName = controlDevice?.name || t('desktop.deviceStatus.remoteDevice', { defaultValue: '执行设备' })
-  // 不在当前用户设备列表 = 对本人不可达（含登记在他人账号下），按离线而不是在线远程。
-  // 列表里有设备但 status 暂缺时不误标离线，与 isWorkspaceExecutionSelectable 一致。
-  if (!controlDevice || (controlDevice.status && !isDeviceReachable(controlDevice.status))) {
+  const effectiveStatus = controlDevice?.status ?? authoritativeStatus
+  // WS 丢事件时设备列表可能暂缺：优先使用 Workspace 轮询的权威状态；两边都缺才按离线。
+  if ((!controlDevice && !effectiveStatus) || (effectiveStatus && !isDeviceReachable(effectiveStatus))) {
     return {
       label: t('desktop.deviceStatus.remote', { defaultValue: '远程' }),
       secondaryLabel: t('desktop.deviceStatus.offline', { defaultValue: '离线' }),
@@ -91,6 +93,7 @@ export function resolveSpaceExecutionDeviceStatus(
     currentDevice,
     devices,
     t,
+    space?.owner_execution_device_status,
   )
 }
 

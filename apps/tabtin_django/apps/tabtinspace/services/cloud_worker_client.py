@@ -111,6 +111,21 @@ class CloudWorkerClient:
                 raw = response.read(64 * 1024 + 1)
         except CloudWorkerClientError:
             raise
+        except urllib.error.HTTPError as exc:
+            raw = exc.read(64 * 1024 + 1)
+            if len(raw) > 64 * 1024:
+                raise CloudWorkerClientError(
+                    "Cloud Worker error response exceeded 64 KiB"
+                ) from exc
+            try:
+                error_body = json.loads(raw or b"{}")
+            except json.JSONDecodeError:
+                error_body = {}
+            if not isinstance(error_body, dict):
+                error_body = {}
+            code = str(error_body.get("code") or "worker_request_failed")
+            message = str(error_body.get("error") or f"HTTP {exc.code}")
+            raise CloudWorkerClientError(f"{code}: {message}") from exc
         except (urllib.error.URLError, TimeoutError, OSError) as exc:
             raise CloudWorkerClientError(
                 f"Cloud Worker request failed for node {worker.node_key}"
