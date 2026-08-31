@@ -4,8 +4,8 @@ set -euo pipefail
 application_root="/Project/applications/tabtin"
 worker_user="tabtin-cloud-worker"
 worker_home="/var/lib/tabtin-cloud-worker"
-runtime_root="/Project/infra/tabtin-cloud-runtime"
-runtime_image="/Project/infra/tabtin-cloud-runtime.xfs"
+runtime_root="/Project/infrastructure/tabtin-cloud-runtime"
+runtime_image="/Project/infrastructure/tabtin-cloud-runtime.xfs"
 runtime_size_gb="${TABTIN_CLOUD_XFS_SIZE_GB:-26}"
 host_free_reserve_gb="${TABTIN_CLOUD_HOST_FREE_RESERVE_GB:-64}"
 host_memory_reserve_mb="${TABTIN_CLOUD_HOST_MEMORY_RESERVE_MB:-8192}"
@@ -108,7 +108,8 @@ if ! grep -q "^${worker_user}:" /etc/subgid; then
   usermod --add-subgids 300000-365535 "$worker_user"
 fi
 
-install -d -m 0755 /Project/infra "$runtime_root"
+install -d -m 0700 /Project/infrastructure
+install -d -m 0755 "$runtime_root"
 if [[ ! -e "$runtime_image" ]]; then
   truncate -s "${runtime_size_gb}G" "$runtime_image"
 else

@@ -201,6 +201,7 @@ def test_cloud_host_release_is_separate_and_requires_runtime_worker_digests() ->
 
 def test_cloud_host_bootstrap_keeps_worker_rootless_and_quota_gated() -> None:
     bootstrap = BOOTSTRAP_SCRIPT.read_text(encoding="utf-8")
+    legacy_runtime_root = "/Project/" + "infra/"
     service = (
         ROOT
         / "apps/tabtin-cloud-worker/deployment/systemd/tabtin-cloud-worker.service"
@@ -226,6 +227,9 @@ def test_cloud_host_bootstrap_keeps_worker_rootless_and_quota_gated() -> None:
     assert '"$worker_home/.config/systemd"' in bootstrap
     assert '"$worker_home/.config/systemd/user"' in bootstrap
     assert 'mount -o loop,pquota "$runtime_image" "$runtime_root"' in bootstrap
+    assert 'runtime_root="/Project/infrastructure/tabtin-cloud-runtime"' in bootstrap
+    assert 'runtime_image="/Project/infrastructure/tabtin-cloud-runtime.xfs"' in bootstrap
+    assert legacy_runtime_root not in bootstrap
     assert '"$volume_helper" create "$probe_volume" 1' in bootstrap
     assert "--opt type=none" in bootstrap
     assert '--opt "device=$probe_path"' in bootstrap
@@ -254,7 +258,9 @@ def test_cloud_host_bootstrap_keeps_worker_rootless_and_quota_gated() -> None:
     assert "User=root" in volume_service
     assert "NoNewPrivileges=true" in volume_service
     assert "CapabilityBoundingSet=CAP_CHOWN CAP_DAC_OVERRIDE CAP_FOWNER CAP_SYS_ADMIN" in volume_service
-    assert "ReadWritePaths=/Project/infra/tabtin-cloud-runtime/volumes" in volume_service
+    assert "ReadWritePaths=/Project/infrastructure/tabtin-cloud-runtime/volumes" in volume_service
+    assert legacy_runtime_root not in volume_service
+    assert legacy_runtime_root not in volume_helper
     assert "flock -x" in volume_helper
     assert "xfs_quota -x -c" in volume_helper
     assert "find \"$volume_path\" -xdev -depth -delete" in volume_helper

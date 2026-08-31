@@ -66,7 +66,7 @@ export class XfsProjectQuotaManager {
     const existing = await this.inspect(volume)
     const result = await this.runner.run(['create', volume, String(sizeGb)])
     const path = result.stdout.trim()
-    const expectedPath = `/Project/infra/tabtin-cloud-runtime/volumes/${volume}`
+    const expectedPath = `/Project/infrastructure/tabtin-cloud-runtime/volumes/${volume}`
     if (path !== expectedPath) {
       throw new Error('quota helper returned an invalid volume path')
     }
