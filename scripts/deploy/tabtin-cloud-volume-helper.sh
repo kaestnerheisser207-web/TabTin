@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-runtime_root="/Project/infra/tabtin-cloud-runtime"
+runtime_root="/Project/infrastructure/tabtin-cloud-runtime"
 volume_root="$runtime_root/volumes"
 state_root="/var/lib/tabtin-cloud-volume-helper"
 registry_file="$state_root/registry"

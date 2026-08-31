@@ -73,7 +73,7 @@ class FakeQuotaRunner implements CommandRunner {
     this.calls.push([...args])
     const [action, volume] = args
     if (!volume) throw new Error('missing volume')
-    const path = `/Project/infra/tabtin-cloud-runtime/volumes/${volume}`
+    const path = `/Project/infrastructure/tabtin-cloud-runtime/volumes/${volume}`
     if (action === 'create') {
       this.volumes.add(volume)
       return { stdout: `${path}\n`, stderr: '' }
@@ -143,7 +143,7 @@ describe('DockerWorkspaceManager', () => {
       'volume', 'create',
       '--label', `com.tabtin.cloud.allocation=${ALLOCATION_ID}`,
       '--opt', 'type=none',
-      '--opt', `device=/Project/infra/tabtin-cloud-runtime/volumes/cloud-workspace-${ALLOCATION_ID}`,
+      '--opt', `device=/Project/infrastructure/tabtin-cloud-runtime/volumes/cloud-workspace-${ALLOCATION_ID}`,
       '--opt', 'o=bind',
       `cloud-workspace-${ALLOCATION_ID}`,
     ])
@@ -151,7 +151,7 @@ describe('DockerWorkspaceManager', () => {
       'volume', 'create',
       '--label', `com.tabtin.cloud.allocation=${ALLOCATION_ID}`,
       '--opt', 'type=none',
-      '--opt', `device=/Project/infra/tabtin-cloud-runtime/volumes/cloud-workspace-${ALLOCATION_ID}-runtime`,
+      '--opt', `device=/Project/infrastructure/tabtin-cloud-runtime/volumes/cloud-workspace-${ALLOCATION_ID}-runtime`,
       '--opt', 'o=bind',
       `cloud-workspace-${ALLOCATION_ID}-runtime`,
     ])
@@ -272,7 +272,7 @@ describe('DockerWorkspaceManager', () => {
       'volume', 'create',
       '--label', `com.tabtin.cloud.allocation=${ALLOCATION_ID}`,
       '--opt', 'type=none',
-      '--opt', `device=/Project/infra/tabtin-cloud-runtime/volumes/cloud-workspace-${ALLOCATION_ID}`,
+      '--opt', `device=/Project/infrastructure/tabtin-cloud-runtime/volumes/cloud-workspace-${ALLOCATION_ID}`,
       '--opt', 'o=bind',
       `cloud-workspace-${ALLOCATION_ID}`,
     ])

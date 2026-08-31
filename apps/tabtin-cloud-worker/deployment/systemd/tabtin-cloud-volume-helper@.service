@@ -22,6 +22,6 @@ RestrictRealtime=true
 RestrictAddressFamilies=AF_UNIX
 SystemCallArchitectures=native
 CapabilityBoundingSet=CAP_CHOWN CAP_DAC_OVERRIDE CAP_FOWNER CAP_SYS_ADMIN
-ReadWritePaths=/Project/infra/tabtin-cloud-runtime/volumes
+ReadWritePaths=/Project/infrastructure/tabtin-cloud-runtime/volumes
 ReadWritePaths=/var/lib/tabtin-cloud-volume-helper
 UMask=0077

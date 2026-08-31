@@ -22,7 +22,7 @@ class FakeRunner implements CommandRunner {
     if (args[0] === 'inspect') throw new CommandFailedError(1, 'volume not found')
     if (args[0] === 'create') {
       return {
-        stdout: `/Project/infra/tabtin-cloud-runtime/volumes/${args[1]}\n`,
+        stdout: `/Project/infrastructure/tabtin-cloud-runtime/volumes/${args[1]}\n`,
         stderr: '',
       }
     }
@@ -39,7 +39,7 @@ describe('storage quota startup probe', () => {
       socket.setEncoding('utf8')
       socket.on('data', chunk => { request += chunk })
       socket.once('end', () => socket.end(
-        'OK\t/Project/infra/tabtin-cloud-runtime/volumes/cloud-workspace-test\n',
+        'OK\t/Project/infrastructure/tabtin-cloud-runtime/volumes/cloud-workspace-test\n',
       ))
     })
     try {
@@ -50,7 +50,7 @@ describe('storage quota startup probe', () => {
       const runner = new UnixSocketQuotaCommandRunner(socketPath)
       const result = await runner.run(['inspect', 'cloud-workspace-test'])
       expect(request).toBe('inspect\tcloud-workspace-test\n')
-      expect(result.stdout).toContain('/Project/infra/tabtin-cloud-runtime/volumes/')
+      expect(result.stdout).toContain('/Project/infrastructure/tabtin-cloud-runtime/volumes/')
     } finally {
       await new Promise<void>(resolve => server.close(() => resolve()))
       await rm(directory, { recursive: true, force: true })
