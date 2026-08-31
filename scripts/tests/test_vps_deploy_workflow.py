@@ -8,6 +8,7 @@ ROOT = Path(__file__).resolve().parents[2]
 WORKFLOW = ROOT / ".github/workflows/deploy-tabtin-vps.yml"
 DEPLOY_SCRIPT = ROOT / "scripts/deploy/tabtin-vps-release.sh"
 CLOUD_DEPLOY_SCRIPT = ROOT / "scripts/deploy/tabtin-cloud-vps-release.sh"
+CLOUD_WORKER_DOCKERFILE = ROOT / "apps/tabtin-cloud-worker/Dockerfile"
 BOOTSTRAP_SCRIPT = ROOT / "scripts/deploy/tabtin-cloud-host-bootstrap.sh"
 VOLUME_HELPER_SCRIPT = ROOT / "scripts/deploy/tabtin-cloud-volume-helper.sh"
 GATEWAY_SCRIPT = ROOT / "scripts/deploy/tabtin-deploy-gateway.sh"
@@ -170,6 +171,7 @@ def test_nginx_reload_follows_local_health_and_precedes_public_health() -> None:
 
 def test_cloud_host_release_is_separate_and_requires_runtime_worker_digests() -> None:
     script = CLOUD_DEPLOY_SCRIPT.read_text(encoding="utf-8")
+    worker_dockerfile = CLOUD_WORKER_DOCKERFILE.read_text(encoding="utf-8")
 
     assert "deploy-cloud <commit-sha> <runtime-digest-ref> <worker-digest-ref>" in script
     assert 'docker pull "$requested_django"' not in script
@@ -182,6 +184,11 @@ def test_cloud_host_release_is_separate_and_requires_runtime_worker_digests() ->
     assert "TABTIN_CLOUD_CAPACITY_CPU_MILLICORES" in script
     assert "TABTIN_CLOUD_WORKER_BIND_ADDRESS" in script
     assert "systemctl enable --now tabtin-cloud-volume-helper.socket" in script
+    assert "deployment/tabtin-cloud-volume-helper.sh" in worker_dockerfile
+    assert '"$worker_container:/app/deployment/tabtin-cloud-volume-helper.sh"' in script
+    assert 'bash -n "$worker_staging/tabtin-cloud-volume-helper.sh"' in script
+    assert 'sudo -n mv -f -- "$helper_staging" "$helper_target"' in script
+    assert "installed Cloud volume helper checksum mismatch" in script
     assert "systemctl enable tabtin-cloud-worker" in script
     assert "systemctl restart tabtin-cloud-worker" in script
     assert "systemctl enable --now tabtin-cloud-worker" not in script

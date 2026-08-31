@@ -13,6 +13,7 @@ FROM ${NODE_IMAGE}
 RUN apk add --no-cache docker-cli
 WORKDIR /app
 COPY --from=build /src/apps/tabtin-cloud-worker/dist ./dist
+COPY --from=build /src/scripts/deploy/tabtin-cloud-volume-helper.sh ./deployment/tabtin-cloud-volume-helper.sh
 
 ENV NODE_ENV=production
 EXPOSE 8090

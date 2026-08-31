@@ -125,9 +125,16 @@ cleanup_worker_staging() {
 }
 trap 'cleanup_worker_staging; run_worker logout ghcr.io >/dev/null 2>&1 || true' EXIT
 run_worker cp "$worker_container:/app/dist" "$worker_staging/"
+run_worker cp \
+  "$worker_container:/app/deployment/tabtin-cloud-volume-helper.sh" \
+  "$worker_staging/tabtin-cloud-volume-helper.sh"
 run_worker rm "$worker_container" >/dev/null
 worker_container=""
 [[ -f "$worker_staging/dist/index.js" ]] || die "Worker image does not contain dist/index.js"
+[[ -f "$worker_staging/tabtin-cloud-volume-helper.sh" ]] ||
+  die "Worker image does not contain the Cloud volume helper"
+bash -n "$worker_staging/tabtin-cloud-volume-helper.sh" ||
+  die "Worker image contains an invalid Cloud volume helper"
 
 worker_release="$worker_release_root/$requested_sha"
 sudo -n install -d -o root -g root -m 0755 "$worker_release_root"
@@ -139,6 +146,14 @@ sudo -n cp -a "$worker_staging/dist" "$worker_release/dist"
 sudo -n chown -R root:root "$worker_release"
 sudo -n chmod -R a-w "$worker_release"
 sudo -n ln -sfn "$worker_release" /opt/tabtin-cloud-worker/current
+helper_target="$application_root/bin/tabtin-cloud-volume-helper.sh"
+helper_staging="$application_root/bin/.tabtin-cloud-volume-helper.$requested_sha"
+helper_sha="$(sha256sum "$worker_staging/tabtin-cloud-volume-helper.sh" | awk '{ print $1 }')"
+sudo -n install -o root -g root -m 0755 \
+  "$worker_staging/tabtin-cloud-volume-helper.sh" "$helper_staging"
+sudo -n mv -f -- "$helper_staging" "$helper_target"
+[[ "$(sha256sum "$helper_target" | awk '{ print $1 }')" == "$helper_sha" ]] ||
+  die "installed Cloud volume helper checksum mismatch"
 cleanup_worker_staging
 
 worker_token="$(sudo -n cat "$worker_token_file")"
