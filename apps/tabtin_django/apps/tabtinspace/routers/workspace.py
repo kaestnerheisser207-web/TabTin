@@ -79,7 +79,8 @@ class CloudWorkspaceCreate(Schema):
 
 class CloudGitCredentialCreate(Schema):
     organization_id: UUID = Field(..., description="所属组织 ID")
-    credential_value: str = Field(..., min_length=20, max_length=4096)
+    # 长度/换行由 service 用不回显输入值的稳定错误校验，避免验证错误携带 Token。
+    credential_value: str
 
 
 class CloudGitCredentialAttach(Schema):
