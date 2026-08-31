@@ -187,9 +187,5 @@ describe('computeExecutionDeviceStatus', () => {
       title: '私有仓库缺少访问凭证，无法初始化云端工作空间',
       tone: 'offline',
     })
-    expect(resolveCloudRuntimeStatus({
-      runtime_plane: 'cloud',
-      cloud: { state: 'error', last_error: 'git_credential_rejected: denied' },
-    }, t)?.title).toBe('当前 GitHub 连接无权访问该仓库，请检查仓库权限后重试')
   })
 })

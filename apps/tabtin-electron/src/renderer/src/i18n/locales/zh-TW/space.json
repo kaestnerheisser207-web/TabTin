@@ -1570,7 +1570,6 @@
         "reuseHint": "開通後將重複使用與 Stripe / Notion 相同的「網頁授權 → 探測工具」流程，無需另學一套。",
         "gotIt": "知道了",
         "generic": "此連接器需完成廠商准入後才可授權，請稍後再試。",
-        "github": "GitHub 遠端 MCP 不支援動態用戶端註冊。 TabTin 完成 GitHub App 註冊與回呼配置後即可開放授權。",
         "vercel": "Vercel MCP 僅對核准的 AI 用戶端開放。平台完成准入後即可在此授權。",
         "canva": "Canva 需將回呼地址加入 MCP 白名單。平台完成審核後即可開放授權。"
       },
@@ -1582,7 +1581,7 @@
         "apiKeyPlaceholder": "貼上金鑰",
         "apiKeyRequired": "請貼上 API Key",
         "githubTokenTitle": "填寫 {{name}} Token",
-        "githubTokenDescription": "本機未配置 GitHub OAuth App 時，貼上 Personal Access Token 即可連線。密鑰只保存在本機。",
+        "githubTokenDescription": "GitHub MCP 使用獨立 Personal Access Token，僅供 Agent 工具使用，不會用於 Cloud Workspace 原始碼存取。密鑰只保存在本機。",
         "githubTokenSteps": "建立 Token → 貼上 → 安全保存 → 自動探測",
         "githubTokenLabel": "Personal Access Token",
         "githubTokenPlaceholder": "ghp_… 或 github_pat_…",
@@ -1630,7 +1629,7 @@
       },
       "recommendedCatalog": {
         "vercel": "官方遠端 MCP（stdio / mcp-remote）。支援 OAuth，但須等 TabTin 完成 Vercel 用戶端准入。",
-        "github": "GitHub 官方遠端 MCP。生產環境走平台 OAuth；本機未配置時可貼上 Personal Access Token。",
+        "github": "GitHub 官方遠端 MCP。使用獨立 Personal Access Token，僅供 Agent 工具使用。",
         "stripe": "Stripe 官方遠端 MCP（stdio / mcp-remote）。點擊接入後在瀏覽器完成標準 MCP OAuth。",
         "notion": "Notion 官方遠端 MCP（stdio / mcp-remote）。互動式用戶端優先 OAuth（也支援 PAT）。",
         "canva": "Canva 官方遠端 MCP（stdio / mcp-remote）。支援 OAuth，須將回呼地址加入廠商白名單後開放。",

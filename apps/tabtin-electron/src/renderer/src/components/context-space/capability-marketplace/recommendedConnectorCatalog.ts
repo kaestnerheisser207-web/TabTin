@@ -9,9 +9,8 @@
  *
  * 产品授权分类（官网核对后）：
  * - `oauth` + `oauthGate: ready`：标准 MCP OAuth，可直接做引导流（Stripe / Notion / Supabase / Neon / Cloudflare / 天眼查）
- * - `oauth` + `oauthGate: ready` + `oauthHost: tabtin_backend`：须平台注册 App，后端保管 secret（GitHub）
  * - `oauth` + `oauthGate: vendor_pending`：支持 OAuth，但 TabTin 须先完成厂商注册/审核（Vercel / Canva）
- * - `api_key`：主路径粘贴密钥（同花顺）
+ * - `api_key`：主路径粘贴密钥（GitHub MCP / 同花顺）
  * - `app_credentials`：管理员建企业应用后填 Client ID/Secret（钉钉）
  */
 
@@ -33,11 +32,7 @@ export type RecommendedConnectorAuthKind =
 /** 仅 authKind=oauth 时有意义 */
 export type RecommendedConnectorOAuthGate = 'ready' | 'vendor_pending'
 
-/** OAuth 宿主：mcp-remote 本机动态注册，或 TabTin 后端代理（保管 client_secret） */
-export type RecommendedConnectorOAuthHost = 'mcp_remote' | 'tabtin_backend'
-
 export type RecommendedConnectorVendorGate =
-  | 'github_app'
   | 'vercel_approval'
   | 'canva_callback'
 
@@ -52,8 +47,6 @@ export interface RecommendedConnectorCatalogEntry {
   authKind: RecommendedConnectorAuthKind
   /** authKind=oauth 时必填 */
   oauthGate?: RecommendedConnectorOAuthGate
-  /** oauth ready 时默认 mcp_remote；GitHub 等走 tabtin_backend */
-  oauthHost?: RecommendedConnectorOAuthHost
   /** authKind=oauth 且 oauthGate=vendor_pending 时说明准入原因 */
   vendorGate?: RecommendedConnectorVendorGate
   /**
@@ -125,11 +118,10 @@ function withAuth(
   oauth?: {
     gate: RecommendedConnectorOAuthGate
     vendorGate?: RecommendedConnectorVendorGate
-    oauthHost?: RecommendedConnectorOAuthHost
   },
 ): Pick<
   RecommendedConnectorCatalogEntry,
-  'authKind' | 'auth' | 'oauthGate' | 'vendorGate' | 'oauthHost'
+  'authKind' | 'auth' | 'oauthGate' | 'vendorGate'
 > {
   const auth: RecommendedConnectorAuth =
     authKind === 'app_credentials' ? 'env' : authKind === 'api_key' ? 'api_key' : 'oauth'
@@ -140,13 +132,12 @@ function withAuth(
       ? {
           oauthGate: oauth.gate,
           ...(oauth.vendorGate ? { vendorGate: oauth.vendorGate } : {}),
-          ...(oauth.oauthHost ? { oauthHost: oauth.oauthHost } : {}),
         }
       : {}),
   }
 }
 
-/** GitHub 远程 MCP：HTTP + Bearer（平台 OAuth 注入）。 */
+/** GitHub 远程 MCP：独立 PAT，仅作为 Agent 工具连接。 */
 function githubHttpTransport(): LocalMcpTransportConfig {
   return {
     kind: 'http',
@@ -178,9 +169,9 @@ export const RECOMMENDED_CONNECTOR_CATALOG: readonly RecommendedConnectorCatalog
     name: 'GitHub',
     descriptionKey: 'github',
     category: 'dev',
-    // 官方远程 MCP；须 TabTin 注册的 GitHub OAuth App（不支持动态客户端注册）
+    // 官方远程 MCP；PAT 只保存在本机，不参与 Cloud Workspace clone。
     transport: githubHttpTransport(),
-    ...withAuth('oauth', { gate: 'ready', oauthHost: 'tabtin_backend' }),
+    ...withAuth('api_key'),
     docsUrl: 'https://github.com/github/github-mcp-server',
     credentialUrl: 'https://github.com/settings/tokens',
   },
@@ -311,12 +302,6 @@ export function connectorIsOAuthReady(
   entry: Pick<RecommendedConnectorCatalogEntry, 'authKind' | 'oauthGate'>,
 ): boolean {
   return entry.authKind === 'oauth' && entry.oauthGate === 'ready'
-}
-
-export function connectorIsPlatformOAuth(
-  entry: Pick<RecommendedConnectorCatalogEntry, 'authKind' | 'oauthGate' | 'oauthHost'>,
-): boolean {
-  return connectorIsOAuthReady(entry) && entry.oauthHost === 'tabtin_backend'
 }
 
 export function connectorIsOAuthVendorGated(

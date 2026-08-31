@@ -40,7 +40,6 @@ vi.mock('../mcp-oauth-window', () => ({
   createOAuthAuthorizeUrlParser: vi.fn(() => vi.fn()),
   openConnectorOAuthWindow: vi.fn(),
   restoreConnectorOAuthClient: vi.fn(),
-  waitForPlatformOAuthTicket: vi.fn(),
   withMcpOpenShimPath: vi.fn((env: Record<string, string>) => env),
 }))
 
@@ -106,8 +105,6 @@ const ALL_CHANNELS = [
   'localMcp:deleteConnection',
   'localMcp:probeConnection',
   'localMcp:cancelProbe',
-  'localMcp:waitForPlatformOAuthTicket',
-  'localMcp:closePlatformOAuthWindow',
 ]
 
 function findHandler(channel: string) {
@@ -135,7 +132,7 @@ describe('SD-009/SD-010/SD-029: LocalMcp IPC senderFrame 防护', () => {
   }
 
   it('所有 localMcp handler 均已注册', () => {
-    expect(ALL_CHANNELS).toHaveLength(14)
+    expect(ALL_CHANNELS).toHaveLength(12)
     for (const channel of ALL_CHANNELS) {
       const call = mocks.handle.mock.calls.find((c: unknown[]) => c[0] === channel)
       expect(call, `${channel} 未注册`).toBeDefined()

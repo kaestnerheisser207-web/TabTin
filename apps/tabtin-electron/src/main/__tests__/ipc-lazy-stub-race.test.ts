@@ -149,8 +149,6 @@ vi.mock('../services/LocalMcpService', () => ({
     'localMcp:deleteConnection': vi.fn(),
     'localMcp:probeConnection': vi.fn(),
     'localMcp:cancelProbe': vi.fn(),
-    'localMcp:waitForPlatformOAuthTicket': vi.fn(),
-    'localMcp:closePlatformOAuthWindow': vi.fn(),
   },
   registerLocalMcpIPC: vi.fn(),
 }))

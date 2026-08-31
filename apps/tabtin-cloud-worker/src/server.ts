@@ -120,7 +120,7 @@ export function createWorkerServer(options: WorkerServerOptions) {
       errorType = safeErrorType(error)
       return send(response, statusCode, {
         error: error instanceof Error ? error.message : String(error),
-        ...(gitSourceUnavailable ? { code: error.code } : {}),
+        ...(gitSourceUnavailable ? { code: 'git_source_unavailable' } : {}),
       })
     } finally {
       const observation: WorkerRequestObservation = {

@@ -1561,7 +1561,6 @@
         "reuseHint": "开通后将复用与 Stripe / Notion 相同的「网页授权 → 探测工具」流程，无需另学一套。",
         "gotIt": "知道了",
         "generic": "该连接器需完成厂商准入后才可授权，请稍后再试。",
-        "github": "GitHub 远程 MCP 不支持动态客户端注册。TabTin 完成 GitHub App 注册与回调配置后即可开放授权。",
         "vercel": "Vercel MCP 仅对批准的 AI 客户端开放。平台完成准入后即可在此授权。",
         "canva": "Canva 需将回调地址加入 MCP 白名单。平台完成审核后即可开放授权。"
       },
@@ -1573,7 +1572,7 @@
         "apiKeyPlaceholder": "粘贴密钥",
         "apiKeyRequired": "请粘贴 API Key",
         "githubTokenTitle": "填写 {{name}} Token",
-        "githubTokenDescription": "本机未配置 GitHub OAuth App 时，粘贴 Personal Access Token 即可连接。密钥只保存在本机。",
+        "githubTokenDescription": "GitHub MCP 使用独立 Personal Access Token，仅用于 Agent 工具，不用于 Cloud Workspace 源码访问。密钥只保存在本机。",
         "githubTokenSteps": "创建 Token → 粘贴 → 安全保存 → 自动探测",
         "githubTokenLabel": "Personal Access Token",
         "githubTokenPlaceholder": "ghp_… 或 github_pat_…",

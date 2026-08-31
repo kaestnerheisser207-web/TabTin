@@ -187,9 +187,6 @@ def _register_service_routers():
     # 飞书多维表 OAuth + 列表 + 一次性导入（与 Channel Gateway 飞书 Bot 分离）
     from apps.integrations_feishu.api import router as integrations_feishu_router
     _safe_add_router("/integrations/feishu", integrations_feishu_router, tags=["Feishu Bitable"])
-    from apps.integrations_github.api import router as integrations_github_router
-    _safe_add_router("/integrations/github", integrations_github_router, tags=["GitHub OAuth"])
-
     # ── Browser Environment ──
     # env 元数据 + Space 绑定全部回到 Electron 主进程本地 JSON 存储，后端 API
     # 与表已下线；当年挂在 /api/browser-env 与 /api/spaces/{id}/env-binding 的

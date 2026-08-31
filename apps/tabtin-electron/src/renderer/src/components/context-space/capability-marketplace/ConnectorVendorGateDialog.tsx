@@ -23,7 +23,6 @@ export interface ConnectorVendorGateDialogProps {
 }
 
 function vendorGateBodyKey(gate: RecommendedConnectorVendorGate | undefined): string {
-  if (gate === 'github_app') return 'mcpConnections.marketplace.vendorGate.github'
   if (gate === 'vercel_approval') return 'mcpConnections.marketplace.vendorGate.vercel'
   if (gate === 'canva_callback') return 'mcpConnections.marketplace.vendorGate.canva'
   return 'mcpConnections.marketplace.vendorGate.generic'

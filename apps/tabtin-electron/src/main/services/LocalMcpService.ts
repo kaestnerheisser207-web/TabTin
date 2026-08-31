@@ -44,7 +44,6 @@ import {
   createOAuthAuthorizeUrlParser,
   openConnectorOAuthWindow,
   restoreConnectorOAuthClient,
-  waitForPlatformOAuthTicket,
   withMcpOpenShimPath,
 } from './mcp-oauth-window'
 import {
@@ -705,57 +704,6 @@ export class LocalMcpService {
       throw new Error('MCP_ERR:ORG_SHARE_INVALID_RESPONSE')
     }
     return { id, name }
-  }
-
-  /**
-   * 将当前用户本机 GitHub 连接授权给其个人 Cloud Runtime。
-   * 明文只在 main 内读取和发送，renderer 仅得到不透明 credential_ref。
-   */
-  async createCloudGitCredential(
-    connectionId: string,
-    organizationId: string,
-  ): Promise<{ credentialRef: string }> {
-    const detail = this.getConnectionDetail(connectionId, { includeSecrets: true })
-    if (
-      !detail.enabled
-      || detail.transport.kind !== 'http'
-      || safeUrlHost(detail.transport.url) !== 'api.githubcopilot.com'
-    ) {
-      throw new Error('MCP_ERR:CLOUD_GIT_REQUIRES_GITHUB_CONNECTION')
-    }
-    const authorization = Object.entries(detail.transport.headers ?? {})
-      .find(([key]) => key.toLowerCase() === 'authorization')?.[1]
-    const token = authorization?.replace(/^(Bearer|token)\s+/i, '').trim() ?? ''
-    if (!token || token.length > 4096 || /[\r\n]/.test(token)) {
-      throw new Error('MCP_ERR:CLOUD_GIT_CREDENTIAL_INVALID')
-    }
-    const authToken = await TokenManager.getAccessToken()
-    if (!authToken) throw new Error('MCP_ERR:CLOUD_GIT_AUTH_REQUIRED')
-    const response = await fetch(
-      joinApiPath(API_BASE_URL, '/context/workspaces/cloud/git-credential'),
-      {
-        method: 'POST',
-        headers: {
-          Authorization: `Bearer ${authToken}`,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          organization_id: organizationId,
-          credential_value: token,
-        }),
-      },
-    )
-    const body = await response.json().catch(() => ({})) as {
-      data?: { credential_ref?: string }
-      message?: string
-      code?: string
-    }
-    if (!response.ok) {
-      throw new Error(body.message || body.code || `HTTP ${response.status}`)
-    }
-    const credentialRef = body.data?.credential_ref?.trim() ?? ''
-    if (!credentialRef) throw new Error('MCP_ERR:CLOUD_GIT_INVALID_RESPONSE')
-    return { credentialRef }
   }
 
   async saveManualConnection(input: LocalMcpManualConnectionInput): Promise<LocalMcpConnectionSummary> {
@@ -2216,11 +2164,6 @@ export const localMcpHandlers = {
     connectionId: string,
     organizationId: string,
   ) => getLocalMcpService().shareConnectionToOrganization(connectionId, organizationId),
-  'localMcp:createCloudGitCredential': (
-    _event: IpcMainInvokeEvent,
-    connectionId: string,
-    organizationId: string,
-  ) => getLocalMcpService().createCloudGitCredential(connectionId, organizationId),
   'localMcp:importCandidate': (
     _event: IpcMainInvokeEvent,
     candidateId: string,
@@ -2256,14 +2199,6 @@ export const localMcpHandlers = {
     _event: IpcMainInvokeEvent,
     connectionId: string,
   ) => getLocalMcpService().cancelProbe(connectionId).then(cancelled => ({ cancelled })),
-  'localMcp:waitForPlatformOAuthTicket': (
-    _event: IpcMainInvokeEvent,
-    input: { authorizeUrl: string; donePathIncludes?: string; timeoutMs?: number },
-  ) => waitForPlatformOAuthTicket(input),
-  'localMcp:closePlatformOAuthWindow': () => {
-    closeConnectorOAuthWindow()
-    return { ok: true as const }
-  },
 } satisfies Record<string, LocalMcpIpcHandler>
 
 export function registerLocalMcpIPC(): void {

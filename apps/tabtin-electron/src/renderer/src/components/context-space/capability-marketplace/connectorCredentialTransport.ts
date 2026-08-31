@@ -58,7 +58,7 @@ export function applyAppCredentialsToTransport(
   }
 }
 
-/** GitHub 等平台 OAuth / PAT：HTTP Bearer；stdio 则写 Authorization header 参数。 */
+/** GitHub PAT 等 API Key：HTTP Bearer；stdio 则写 Authorization header 参数。 */
 export function applyBearerTokenToTransport(
   transport: LocalMcpTransportConfig,
   accessToken: string,

@@ -295,18 +295,6 @@ APNS_PRIVATE_KEY = os.getenv('APNS_PRIVATE_KEY', '')
 APNS_PRIVATE_KEY_PATH = os.getenv('APNS_PRIVATE_KEY_PATH', '')
 APNS_BUNDLE_ID = os.getenv('APNS_BUNDLE_ID', 'com.example.tabtin')
 
-# ── GitHub OAuth（integrations_github；MCP 连接器平台代理，保管 client_secret）──
-GITHUB_OAUTH_CLIENT_ID = os.getenv('GITHUB_OAUTH_CLIENT_ID', '')
-GITHUB_OAUTH_CLIENT_SECRET = os.getenv('GITHUB_OAUTH_CLIENT_SECRET', '')
-GITHUB_OAUTH_REDIRECT_URI = os.getenv(
-    'GITHUB_OAUTH_REDIRECT_URI',
-    'http://localhost:6060/api/integrations/github/oauth/callback',
-)
-GITHUB_OAUTH_SUCCESS_REDIRECT = os.getenv(
-    'GITHUB_OAUTH_SUCCESS_REDIRECT',
-    'http://localhost:6060/api/integrations/github/oauth/done',
-)
-
 # Runtime Operations Console sampling flags. All default to off and must be
 # explicitly enabled per environment to avoid unexpected Redis write volume.
 WS_RUNTIME_SNAPSHOT_ENABLED = _env_bool('WS_RUNTIME_SNAPSHOT_ENABLED', False)
@@ -392,7 +380,6 @@ _INFRA_APPS = [
     'apps.credential_vault.apps.CredentialVaultConfig',       # Credential Vault 凭据管理
     'apps.login_relay.apps.LoginRelayConfig',               # 短期登录态接力包
     'apps.integrations_feishu.apps.IntegrationsFeishuConfig',  # 飞书多维表 OAuth / 一次性导入
-    'apps.integrations_github.apps.IntegrationsGithubConfig',  # GitHub OAuth（MCP 连接器平台代理）
     # v3.1（2026-04-19）：app_connect 已删除（Connect 模型作废，见 PRD-v3.1-方向锚）
     'apps.i18n',                                            # 国际化
     'apps.maintenance',                                     # 系统维护

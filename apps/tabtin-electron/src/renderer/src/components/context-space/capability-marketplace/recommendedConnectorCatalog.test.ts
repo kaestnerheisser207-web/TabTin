@@ -55,15 +55,14 @@ describe('recommendedConnectorCatalog', () => {
     }
   })
 
-  it('defaults recommended entries to stdio, except platform OAuth HTTP (GitHub)', () => {
+  it('defaults recommended entries to stdio, except PAT-authenticated GitHub HTTP', () => {
     for (const entry of RECOMMENDED_CONNECTOR_CATALOG) {
       expect(entry.docsUrl).toBeTruthy()
       expect(entry.credentialUrl).toBeTruthy()
       expect(entry.authKind).toBeTruthy()
       if (entry.id === 'github') {
         expect(entry.transport.kind).toBe('http')
-        expect(entry.oauthHost).toBe('tabtin_backend')
-        expect(entry.oauthGate).toBe('ready')
+        expect(entry.authKind).toBe('api_key')
       } else {
         expect(entry.transport.kind).toBe('stdio')
       }
@@ -79,10 +78,10 @@ describe('recommendedConnectorCatalog', () => {
     )
 
     expect(ready.sort()).toEqual(
-      ['cloudflare', 'github', 'neon', 'notion', 'stripe', 'supabase', 'tianyancha'].sort(),
+      ['cloudflare', 'neon', 'notion', 'stripe', 'supabase', 'tianyancha'].sort(),
     )
     expect(gated.sort()).toEqual(['canva', 'vercel'].sort())
-    expect(keys.sort()).toEqual(['hithink-a-share'].sort())
+    expect(keys.sort()).toEqual(['github', 'hithink-a-share'].sort())
     expect(apps).toEqual(['dingtalk'])
     expect(connectorNeedsCredentialForm({ authKind: 'api_key' })).toBe(true)
     expect(connectorNeedsCredentialForm({ authKind: 'app_credentials' })).toBe(true)

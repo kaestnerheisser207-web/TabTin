@@ -1553,7 +1553,6 @@
         "reuseHint": "Once approved, it will reuse the same “web authorize → probe tools” flow as Stripe / Notion.",
         "gotIt": "Got it",
         "generic": "This connector needs vendor onboarding before authorization. Please try again later.",
-        "github": "GitHub remote MCP does not support dynamic client registration. Authorization opens after TabTin registers a GitHub App and callback.",
         "vercel": "Vercel MCP is limited to approved AI clients. Authorization opens after TabTin is approved.",
         "canva": "Canva requires the callback URI on their MCP allowlist. Authorization opens after review."
       },
@@ -1565,7 +1564,7 @@
         "apiKeyPlaceholder": "Paste API key",
         "apiKeyRequired": "Please paste an API Key",
         "githubTokenTitle": "Enter {{name}} Token",
-        "githubTokenDescription": "When the GitHub OAuth App is not configured on this server, paste a Personal Access Token. It stays on this device.",
+        "githubTokenDescription": "GitHub MCP uses a separate Personal Access Token for Agent tools only. It is never used to access Cloud Workspace source code and stays on this device.",
         "githubTokenSteps": "Create Token → paste → save securely → auto probe",
         "githubTokenLabel": "Personal Access Token",
         "githubTokenPlaceholder": "ghp_… or github_pat_…",

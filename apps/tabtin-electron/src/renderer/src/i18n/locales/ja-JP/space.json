@@ -1562,7 +1562,6 @@
         "reuseHint": "承認後はStripe/Notionと同じ「Web認証→プローブツール」の流れを再利用します。",
         "gotIt": "わかりました",
         "generic": "このコネクタは、承認の前にベンダーのオンボーディングが必要です。後でもう一度試してください。",
-        "github": "GitHub リモート MCP は、動的クライアント登録をサポートしていません。 TabTin が GitHub アプリとコールバックを登録した後、承認が開きます。",
         "vercel": "Vercel MCP は、承認された AI クライアントに限定されます。 TabTin が承認されると承認が開始されます。",
         "canva": "Canva では、MCP 許可リストにコールバック URI が必要です。審査後に承認が開始されます。"
       },
@@ -1574,7 +1573,7 @@
         "apiKeyPlaceholder": "APIキーを貼り付けます",
         "apiKeyRequired": "API キーを貼り付けてください",
         "githubTokenTitle": "{{name}} トークンを入力してください",
-        "githubTokenDescription": "GitHub OAuth アプリがこのサーバーに構成されていない場合は、パーソナル アクセス トークンを貼り付けます。このデバイス上に残ります。",
+        "githubTokenDescription": "GitHub MCP は Agent ツール専用の独立した Personal Access Token を使用します。Cloud Workspace のソースコードには使用されず、このデバイスにのみ保存されます。",
         "githubTokenSteps": "トークンを作成 → 貼り付け → 安全に保存 → 自動プローブ",
         "githubTokenLabel": "パーソナルアクセストークン",
         "githubTokenPlaceholder": "ghp_… または github_pat_…",
@@ -1622,7 +1621,7 @@
       },
       "recommendedCatalog": {
         "vercel": "mcp-remote (stdio) 経由の公式リモート MCP。 TabTin が Vercel MCP クライアントとして承認された後、OAuth がサポートされます。",
-        "github": "公式 GitHub リモート MCP。本番環境のプラットフォーム OAuth。 OAuth アプリがローカルに構成されていない場合は、パーソナル アクセス トークンを貼り付けます。",
+        "github": "公式 GitHub リモート MCP。Agent ツール専用の独立した Personal Access Token を使用します。",
         "stripe": "mcp-remote (stdio) 経由の公式 Stripe リモート MCP。接続後、ブラウザで標準 MCP OAuth を完了します。",
         "notion": "mcp-remote (stdio) 経由の公式 Notion リモート MCP。対話型クライアントは OAuth を好みます (PAT も利用可能)。",
         "canva": "mcp-remote (stdio) 経由の公式 Canva リモート MCP。 OAuth は、コールバック URI が許可リストに登録された後に開きます。",

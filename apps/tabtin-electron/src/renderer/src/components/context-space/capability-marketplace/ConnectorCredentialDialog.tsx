@@ -106,10 +106,10 @@ export function ConnectorCredentialDialog({
   const description =
     mode === 'api_key'
       ? isGitHubPat
-        ? t('mcpConnections.marketplace.credentialDialog.githubTokenDescription', {
-            defaultValue:
-              '本机未配置 GitHub OAuth App 时，粘贴 Personal Access Token 即可连接。密钥只保存在本机。',
-          })
+            ? t('mcpConnections.marketplace.credentialDialog.githubTokenDescription', {
+              defaultValue:
+              'GitHub MCP 使用独立 Personal Access Token，仅用于 Agent 工具，不用于 Cloud Workspace 源码访问。密钥只保存在本机。',
+            })
         : t('mcpConnections.marketplace.credentialDialog.apiKeyDescription', {
             defaultValue: '在官方控制台申请密钥后粘贴到下方。保存后会自动探测连接，密钥只保存在本机。',
           })
