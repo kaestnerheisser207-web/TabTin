@@ -86,7 +86,7 @@ fi
 export DEBIAN_FRONTEND=noninteractive
 apt-get update
 apt-get install -y --no-install-recommends \
-  aardvark-dns ca-certificates fuse-overlayfs nodejs passt podman slirp4netns uidmap xfsprogs
+  aardvark-dns acl ca-certificates fuse-overlayfs nodejs passt podman slirp4netns uidmap xfsprogs
 [[ -x /usr/lib/podman/aardvark-dns ]] || die "Podman aardvark DNS backend is unavailable"
 command -v pasta >/dev/null || die "Podman pasta network backend is unavailable"
 
@@ -110,6 +110,9 @@ fi
 
 install -d -m 0700 /Project/infrastructure
 install -d -m 0755 "$runtime_root"
+setfacl -m "u:${worker_user}:--x" /Project/infrastructure
+getfacl -cp /Project/infrastructure | grep -Fqx "user:${worker_user}:--x" ||
+  die "Cloud Worker cannot traverse the infrastructure root"
 if [[ ! -e "$runtime_image" ]]; then
   truncate -s "${runtime_size_gb}G" "$runtime_image"
 else
