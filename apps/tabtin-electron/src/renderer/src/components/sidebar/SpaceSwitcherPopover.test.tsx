@@ -40,6 +40,19 @@ const workspaces = [
     runtime_plane: 'cloud',
     owner_execution_device_status: 'online',
   },
+  {
+    id: 'workspace-cloud-error',
+    source_id: 'workspace-cloud-error',
+    organization_id: 'org-1',
+    navigationKind: 'workspace',
+    type: 'workspace',
+    name: 'Cloud Private',
+    unread_count: 0,
+    control_device_id: 'device-cloud-error',
+    runtime_plane: 'cloud',
+    owner_execution_device_status: 'offline',
+    cloud: { state: 'error', last_error: 'git_source_unavailable: private' },
+  },
 ]
 
 const devices = [
@@ -189,6 +202,8 @@ describe('SpaceSwitcherPopover', () => {
     expect(await screen.findByText('Local Mac · 本机')).toBeTruthy()
     expect(screen.getByText('Remote Mac · 在线')).toBeTruthy()
     expect(screen.getByText('Cloud Flow · 在线')).toBeTruthy()
+    expect(screen.getByText('私有仓库缺少访问凭证，无法初始化云端工作空间')).toBeTruthy()
+    expect(screen.getByText('初始化失败')).toBeTruthy()
     expect(screen.queryByRole('note')).toBeNull()
     expect(screen.queryByText('Home Server')).toBeNull()
     expect(screen.queryByText('Unmapped Device')).toBeNull()

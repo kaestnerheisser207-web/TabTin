@@ -15,6 +15,54 @@ export type SpaceWithDeviceBinding = {
   execution_agent_id?: string | null
   agent_id?: string | null
   owner_execution_device_status?: string | null
+  runtime_plane?: string | null
+  cloud?: {
+    state?: string | null
+    last_error?: string | null
+  } | null
+}
+
+/** Cloud Allocation 生命周期比逻辑 Device 在线态更权威。 */
+export function resolveCloudRuntimeStatus(
+  space: SpaceWithDeviceBinding | null | undefined,
+  t: TFunction,
+): ExecutionDeviceStatus | null {
+  if (space?.runtime_plane !== 'cloud') return null
+  const state = space.cloud?.state
+  if (state === 'pending' || state === 'provisioning') {
+    return {
+      label: t('desktop.cloudRuntime.initializing', { defaultValue: '初始化中' }),
+      title: t('desktop.cloudRuntime.initializingTitle', { defaultValue: '云端工作空间正在准备，请稍候' }),
+      tone: 'remote',
+    }
+  }
+  if (state === 'error') {
+    const errorCode = space.cloud?.last_error?.split(':', 1)[0]?.trim()
+    return {
+      label: t('desktop.cloudRuntime.initializationFailed', { defaultValue: '初始化失败' }),
+      title: errorCode === 'git_source_unavailable'
+        ? t('desktop.cloudRuntime.gitCredentialRequired', { defaultValue: '私有仓库缺少访问凭证，无法初始化云端工作空间' })
+        : errorCode === 'git_credential_rejected'
+          ? t('desktop.cloudRuntime.gitCredentialRejected', { defaultValue: '当前 GitHub 连接无权访问该仓库，请检查仓库权限后重试' })
+          : t('desktop.cloudRuntime.initializationFailedTitle', { defaultValue: '云端工作空间初始化失败，请在设置中检查后重试' }),
+      tone: 'offline',
+    }
+  }
+  if (state === 'disabled') {
+    return {
+      label: t('desktop.cloudRuntime.disabled', { defaultValue: '已停用' }),
+      title: t('desktop.cloudRuntime.disabledTitle', { defaultValue: '云端运行环境已停用，可在工作空间设置中恢复' }),
+      tone: 'offline',
+    }
+  }
+  if (state === 'deleting' || state === 'deleted') {
+    return {
+      label: t('desktop.cloudRuntime.deleting', { defaultValue: '删除中' }),
+      title: t('desktop.cloudRuntime.deletingTitle', { defaultValue: '云端工作空间正在删除' }),
+      tone: 'offline',
+    }
+  }
+  return null
 }
 
 export type AgentWithDeviceBinding = {
@@ -88,6 +136,8 @@ export function resolveSpaceExecutionDeviceStatus(
   devices: DeviceLike[],
   t: TFunction,
 ): ExecutionDeviceStatus | null {
+  const cloudRuntimeStatus = resolveCloudRuntimeStatus(space, t)
+  if (cloudRuntimeStatus) return cloudRuntimeStatus
   return computeExecutionDeviceStatus(
     resolveSpaceControlDeviceId(space, agent),
     currentDevice,

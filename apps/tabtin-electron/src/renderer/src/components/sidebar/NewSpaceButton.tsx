@@ -39,6 +39,7 @@ import {
 } from '@components/ui'
 import { useTranslation } from 'react-i18next'
 import type { UpdateAgentRequest } from '@tabtin/app-shell'
+import type { LocalMcpConnectionSummary } from '@shared/types/mcp'
 import { useSpaceStore } from '@stores/useSpaceStore'
 import { useOrganizationStore } from '@stores/useOrganizationStore'
 import { useDeviceStore } from '@stores/useDeviceStore'
@@ -258,6 +259,8 @@ const CreateSpaceDialog: React.FC<CreateSpaceDialogProps> = ({
   const [cloudHarness, setCloudHarness] = useState<'dsh' | 'builtin'>('dsh')
   const [gitUrl, setGitUrl] = useState('')
   const [gitRef, setGitRef] = useState('')
+  const [githubConnection, setGithubConnection] = useState<LocalMcpConnectionSummary | null>(null)
+  const [useGithubConnection, setUseGithubConnection] = useState(false)
   const [isPickingDir, setIsPickingDir] = useState(false)
   // ：冲突/失败要在对话框内可见；仅靠顶部 toast 容易被 Dialog 挡住或 2s 闪过。
   const [formError, setFormError] = useState<string | null>(null)
@@ -271,6 +274,28 @@ const CreateSpaceDialog: React.FC<CreateSpaceDialogProps> = ({
   const refreshSpace = useSpaceStore((state) => state.refreshSpace)
   const selectedAgent = useSpaceStore((state) => state.selectedAgent)
   const isCloudCreate = !isEditMode && !daemonTarget && runtimePlane === 'cloud'
+
+  useEffect(() => {
+    if (!open || !isCloudCreate || cloudSource !== 'git') return
+    let cancelled = false
+    void window.tabtin.localMcp.listConnections().then((connections) => {
+      if (cancelled) return
+      const github = connections.find((connection) => (
+        connection.enabled
+        && connection.transportKind === 'http'
+        && connection.url === 'https://api.githubcopilot.com/mcp/'
+        && connection.lastProbe?.ok === true
+      )) ?? null
+      setGithubConnection(github)
+      if (!github) setUseGithubConnection(false)
+    }).catch(() => {
+      if (!cancelled) {
+        setGithubConnection(null)
+        setUseGithubConnection(false)
+      }
+    })
+    return () => { cancelled = true }
+  }, [open, isCloudCreate, cloudSource])
 
   const applyAgentFields = useCallback(
     (agent: {
@@ -705,6 +730,30 @@ const CreateSpaceDialog: React.FC<CreateSpaceDialogProps> = ({
         }
       }
 
+      let gitCredentialRef: string | undefined
+      if (isCloudCreate && cloudSource === 'git' && useGithubConnection) {
+        if (!githubConnection) {
+          setFormError(t('create.cloud.githubConnectionRequired', {
+            ns: 'space',
+            defaultValue: '未找到已连接且可用的个人 GitHub 连接',
+          }))
+          return
+        }
+        try {
+          const result = await window.tabtin.localMcp.createCloudGitCredential(
+            githubConnection.id,
+            organizationId,
+          )
+          gitCredentialRef = result.credentialRef
+        } catch {
+          setFormError(t('create.cloud.githubCredentialFailed', {
+            ns: 'space',
+            defaultValue: 'GitHub 凭证授权给个人 Cloud Runtime 失败',
+          }))
+          return
+        }
+      }
+
       const created = isCloudCreate
         ? await createCloudSpace({
             request_key: crypto.randomUUID(),
@@ -716,6 +765,7 @@ const CreateSpaceDialog: React.FC<CreateSpaceDialogProps> = ({
             source_type: cloudSource,
             git_url: cloudSource === 'git' ? gitUrl.trim() : undefined,
             git_ref: cloudSource === 'git' ? gitRef.trim() || undefined : undefined,
+            git_credential_ref: gitCredentialRef,
           })
         : await createSpace({
             organization_id: organizationId,
@@ -1029,7 +1079,10 @@ const CreateSpaceDialog: React.FC<CreateSpaceDialogProps> = ({
                   <div className="grid grid-cols-2 gap-2">
                     <button
                       type="button"
-                      onClick={() => setCloudSource('empty')}
+                      onClick={() => {
+                        setCloudSource('empty')
+                        setUseGithubConnection(false)
+                      }}
                       className={cn(
                         'rounded-md border px-3 py-2 text-caption font-medium',
                         cloudSource === 'empty'
@@ -1069,6 +1122,38 @@ const CreateSpaceDialog: React.FC<CreateSpaceDialogProps> = ({
                         disabled={isCreating}
                         autoComplete="off"
                       />
+                      {githubConnection ? (
+                        <label className="flex items-start gap-2 rounded-md border border-border/40 px-3 py-2 text-caption text-muted-foreground">
+                          <input
+                            type="checkbox"
+                            checked={useGithubConnection}
+                            onChange={(event) => setUseGithubConnection(event.target.checked)}
+                            disabled={isCreating}
+                            className="mt-0.5"
+                          />
+                          <span>
+                            <span className="block font-medium text-foreground">
+                              {t('create.cloud.useGithubConnection', {
+                                ns: 'space',
+                                defaultValue: `使用我的 ${githubConnection.name} 连接访问私有仓库`,
+                              })}
+                            </span>
+                            <span className="block text-muted-foreground/60">
+                              {t('create.cloud.githubConnectionPersonal', {
+                                ns: 'space',
+                                defaultValue: '凭证仅授权给你自己的隔离 Cloud Runtime，不会共享给组织成员。',
+                              })}
+                            </span>
+                          </span>
+                        </label>
+                      ) : (
+                        <p className="text-caption text-muted-foreground/60">
+                          {t('create.cloud.githubConnectionMissing', {
+                            ns: 'space',
+                            defaultValue: '私有仓库需要先在「技能和连接器」中连接个人 GitHub。',
+                          })}
+                        </p>
+                      )}
                     </div>
                   ) : null}
                   <div

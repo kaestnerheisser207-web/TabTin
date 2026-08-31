@@ -207,6 +207,7 @@ const DEFERRED_MODULES: readonly DeferredModule[] = [
       'localMcp:listConnections',
       'localMcp:getConnectionDetail',
       'localMcp:shareConnectionToOrganization',
+      'localMcp:createCloudGitCredential',
       'localMcp:importCandidate',
       'localMcp:saveManualConnection',
       'localMcp:upsertOrganizationMirror',

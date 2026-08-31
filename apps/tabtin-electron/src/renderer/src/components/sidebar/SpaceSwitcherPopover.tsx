@@ -50,6 +50,7 @@ import {
 import { SidebarMenuItem } from '@components/layout/SidebarMenuItem'
 import { ExecutionDeviceStatusTag } from '@components/context-space/ExecutionDeviceStatusTag'
 import {
+  resolveCloudRuntimeStatus,
   resolveSpaceControlDeviceId,
   resolveSpaceExecutionDeviceStatus,
 } from '@components/context-space/executionDeviceStatus'
@@ -254,6 +255,7 @@ export const SpaceSwitcherPopover: React.FC<SpaceSwitcherPopoverProps> = ({
                 currentDevice,
                 devices,
               })
+              const cloudRuntimeStatus = resolveCloudRuntimeStatus(fullSp, tContext)
               const deviceStatus = space.navigationKind === 'workspace'
                 ? resolveSpaceExecutionDeviceStatus(
                   fullSp,
@@ -283,9 +285,11 @@ export const SpaceSwitcherPopover: React.FC<SpaceSwitcherPopoverProps> = ({
                       : effectiveDeviceStatus === 'draining'
                         ? t('sidebar.deviceDraining', { defaultValue: '暂停接单' })
                         : t('sidebar.deviceUnknown', { defaultValue: '状态未知' })
-              const deviceSummary = ctrlDevId
-                ? `${deviceName || t('sidebar.unknownDevice', { defaultValue: '未知设备' })} · ${deviceState}`
-                : t('sidebar.unboundDevice', { defaultValue: '未绑定执行设备' })
+              const deviceSummary = cloudRuntimeStatus?.title ?? (
+                ctrlDevId
+                  ? `${deviceName || t('sidebar.unknownDevice', { defaultValue: '未知设备' })} · ${deviceState}`
+                  : t('sidebar.unboundDevice', { defaultValue: '未绑定执行设备' })
+              )
 
               return (
                 <SidebarMenuItem

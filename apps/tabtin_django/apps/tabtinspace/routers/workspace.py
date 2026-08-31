@@ -37,6 +37,9 @@ from apps.tabtinspace.services.workspace_service import (
     serialize_workspaces,
 )
 from apps.tabtinspace.services.cloud_workspace_service import CloudWorkspaceService
+from apps.tabtinspace.services.cloud_git_credential_service import (
+    CloudGitCredentialService,
+)
 from apps.tabtinspace.services.cloud_workspace_lifecycle import (
     CloudWorkspaceLifecycleService,
 )
@@ -72,6 +75,15 @@ class CloudWorkspaceCreate(Schema):
     git_url: str = Field(default="", max_length=2000)
     git_ref: str = Field(default="", max_length=255)
     git_credential_ref: str = Field(default="", max_length=255)
+
+
+class CloudGitCredentialCreate(Schema):
+    organization_id: UUID = Field(..., description="所属组织 ID")
+    credential_value: str = Field(..., min_length=20, max_length=4096)
+
+
+class CloudGitCredentialAttach(Schema):
+    credential_ref: str = Field(..., min_length=1, max_length=255)
 
 
 class CloudWorkspacePermanentDelete(Schema):
@@ -179,6 +191,23 @@ def create_workspace(request: HttpRequest, data: WorkspaceCreate):
 
 
 @router.post(
+    "/workspaces/cloud/git-credential",
+    auth=jwt_auth,
+    response={200: dict, 400: ErrorResponse, 401: ErrorResponse, 403: ErrorResponse, 404: ErrorResponse},
+    summary="保存当前用户的 GitHub Cloud 凭证",
+)
+def upsert_cloud_git_credential(request: HttpRequest, data: CloudGitCredentialCreate):
+    try:
+        credential = CloudGitCredentialService(user=request.auth).upsert_github(
+            organization_id=data.organization_id,
+            token=data.credential_value,
+        )
+    except ServiceError as e:
+        return error_response(e.code, e.message, status_code=e.status)
+    return success_response(data={"credential_ref": str(credential.id)})
+
+
+@router.post(
     "/workspaces/cloud",
     auth=jwt_auth,
     response={
@@ -218,6 +247,27 @@ def create_cloud_workspace(request: HttpRequest, data: CloudWorkspaceCreate):
 
 def _cloud_lifecycle(request: HttpRequest) -> CloudWorkspaceLifecycleService:
     return CloudWorkspaceLifecycleService(user=request.auth)
+
+
+@router.post(
+    "/workspaces/{workspace_id}/cloud/git-credential",
+    auth=jwt_auth,
+    response={200: dict, 400: ErrorResponse, 401: ErrorResponse, 403: ErrorResponse, 404: ErrorResponse, 409: ErrorResponse},
+    summary="为当前用户的 Cloud Workspace 绑定 GitHub 凭证并重试",
+)
+def attach_cloud_git_credential(
+    request: HttpRequest,
+    workspace_id: UUID,
+    data: CloudGitCredentialAttach,
+):
+    try:
+        workspace = _cloud_lifecycle(request).attach_git_credential(
+            workspace_id,
+            credential_ref=data.credential_ref,
+        )
+    except ServiceError as e:
+        return error_response(e.code, e.message, status_code=e.status)
+    return success_response(data=serialize_workspace(workspace))
 
 
 @router.post(

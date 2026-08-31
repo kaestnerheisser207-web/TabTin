@@ -12,7 +12,11 @@ from django.utils import timezone
 from apps.services.agent_engine.models import RuntimeBinding
 from apps.services.agent_engine.runtime_binding_service import RuntimeBindingService
 from apps.tabtinspace.cloud_metrics import CloudStateCollector
-from apps.tabtinspace.models import CloudRuntimeAllocation, CloudWorkerNode, Workspace
+from apps.tabtinspace.models import (
+    CloudRuntimeAllocation,
+    CloudWorkerNode,
+    Workspace,
+)
 from apps.tabtinspace.services.base import ServiceError
 from apps.tabtinspace.services.cloud_allocation_reconciler import (
     CloudAllocationReconciler,
@@ -22,6 +26,9 @@ from apps.tabtinspace.services.cloud_worker_client import (
     CloudWorkerClientError,
 )
 from apps.tabtinspace.services.cloud_worker_registry import CloudWorkerRegistry
+from apps.tabtinspace.services.cloud_git_credential_service import (
+    CloudGitCredentialService,
+)
 from apps.tabtinspace.services.cloud_workspace_lifecycle import (
     CloudWorkspaceLifecycleService,
 )
@@ -643,20 +650,103 @@ class CloudWorkspaceServiceTests(TransactionTestCase):
             "CLOUD_GIT_CREDENTIAL_INLINE_FORBIDDEN",
         )
 
-    def test_private_git_fails_at_admission_until_credential_broker_exists(self):
-        with self.assertRaises(ServiceError) as caught:
+    def test_private_git_accepts_only_the_current_users_personal_credential(self):
+        credential = CloudGitCredentialService(user=self.user).upsert_github(
+            organization_id=self.organization.id,
+            token="github_pat_test_private_value",
+        )
+        created = self.service.create_cloud_workspace(
+            request_key=uuid4(),
+            organization_id=self.organization.id,
+            name="Private Git",
+            source_type="git",
+            git_url="https://github.com/example/private.git",
+            git_credential_ref=str(credential.id),
+        )
+        self.assertEqual(created.allocation.git_credential_ref, str(credential.id))
+
+        with self.assertRaises(ServiceError) as wrong_host:
             self.service.create_cloud_workspace(
                 request_key=uuid4(),
                 organization_id=self.organization.id,
-                name="Private Git",
+                name="Wrong host",
                 source_type="git",
-                git_url="https://example.com/private/repo.git",
-                git_credential_ref="credential-1",
+                git_url="https://example.com/private.git",
+                git_credential_ref=str(credential.id),
             )
         self.assertEqual(
-            caught.exception.code,
-            "CLOUD_GIT_CREDENTIAL_BROKER_UNAVAILABLE",
+            wrong_host.exception.code,
+            "CLOUD_GIT_CREDENTIAL_HOST_FORBIDDEN",
         )
+
+        from apps.tabtinspace.tests.fixtures import create_test_user
+
+        other_user = create_test_user(prefix="cloudother")
+        with self.assertRaises(ServiceError) as caught:
+            CloudGitCredentialService(user=other_user).require_owned(
+                organization_id=self.organization.id,
+                credential_ref=str(credential.id),
+            )
+        self.assertEqual(caught.exception.code, "CLOUD_GIT_CREDENTIAL_NOT_FOUND")
+
+    def test_worker_provision_receives_secret_but_never_the_credential_ref(self):
+        token = "github_pat_test_private_value"
+        credential = CloudGitCredentialService(user=self.user).upsert_github(
+            organization_id=self.organization.id,
+            token=token,
+        )
+        created = self.service.create_cloud_workspace(
+            request_key=uuid4(),
+            organization_id=self.organization.id,
+            name="Private Git",
+            source_type="git",
+            git_url="https://github.com/example/private.git",
+            git_credential_ref=str(credential.id),
+        )
+        client = CloudWorkerClient()
+        with (
+            patch.object(client, "_request", return_value={"state": "running"}) as request,
+            patch.object(
+                DaemonTokenService,
+                "create_cloud_install_token",
+                return_value="bootstrap-token",
+            ),
+        ):
+            client.provision(created.allocation)
+
+        payload = request.call_args.args[3]
+        self.assertEqual(
+            payload["source"]["credential"],
+            {"username": "x-access-token", "password": token},
+        )
+        self.assertNotIn("credentialRef", payload["source"])
+
+    def test_attaching_personal_credential_requeues_existing_git_allocation(self):
+        created = self.service.create_cloud_workspace(
+            request_key=uuid4(),
+            organization_id=self.organization.id,
+            name="Retry Private Git",
+            source_type="git",
+            git_url="https://github.com/example/private.git",
+        )
+        created.allocation.state = CloudRuntimeAllocation.State.ERROR
+        created.allocation.last_error = "git_source_unavailable"
+        created.allocation.save(update_fields=["state", "last_error", "updated_at"])
+        credential = CloudGitCredentialService(user=self.user).upsert_github(
+            organization_id=self.organization.id,
+            token="github_pat_test_private_value",
+        )
+
+        CloudWorkspaceLifecycleService(user=self.user).attach_git_credential(
+            created.workspace.id,
+            credential_ref=str(credential.id),
+        )
+        created.allocation.refresh_from_db()
+
+        self.assertEqual(created.allocation.state, CloudRuntimeAllocation.State.PENDING)
+        self.assertEqual(created.allocation.generation, 2)
+        self.assertEqual(created.allocation.git_credential_ref, str(credential.id))
+        self.assertEqual(created.allocation.last_error, "")
 
     def test_reconciler_waits_for_real_cloud_daemon_heartbeat_before_ready(self):
         created = self.service.create_cloud_workspace(
