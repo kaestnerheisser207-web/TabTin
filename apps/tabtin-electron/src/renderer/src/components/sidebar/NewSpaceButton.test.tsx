@@ -8,6 +8,8 @@ const mocks = vi.hoisted(() => ({
   updateAgent: vi.fn(),
   loadAgent: vi.fn(),
   refreshSpace: vi.fn(),
+  listConnections: vi.fn(),
+  createCloudGitCredential: vi.fn(),
   openCreatedWorkspaceAsNewTask: vi.fn(),
   dialogState: {
     isOpen: true,
@@ -138,6 +140,19 @@ describe('CreateSpaceDialog 远程执行设备 Workspace', () => {
     mocks.loadAgent.mockReset().mockResolvedValue(spaceState.selectedAgent)
     mocks.openCreatedWorkspaceAsNewTask.mockReset().mockResolvedValue(undefined)
     mocks.dialogState.createOptions = null
+    mocks.listConnections.mockReset().mockResolvedValue([])
+    mocks.createCloudGitCredential.mockReset().mockResolvedValue({
+      credentialRef: 'credential-ref-1',
+    })
+    Object.defineProperty(window, 'tabtin', {
+      configurable: true,
+      value: {
+        localMcp: {
+          listConnections: mocks.listConnections,
+          createCloudGitCredential: mocks.createCloudGitCredential,
+        },
+      },
+    })
   })
 
   it('rejects paths that normalize to the remote root', () => {
@@ -233,5 +248,38 @@ describe('CreateSpaceDialog 远程执行设备 Workspace', () => {
         }),
       }),
     )
+  })
+
+  it('经个人 GitHub 连接为私有仓库创建 Cloud Workspace', async () => {
+    mocks.listConnections.mockResolvedValue([{
+      id: 'github-connection-1',
+      name: 'GitHub',
+      enabled: true,
+      transportKind: 'http',
+      url: 'https://api.githubcopilot.com/mcp/',
+      lastProbe: { ok: true },
+    }])
+    render(<CreateSpaceDialog open onOpenChange={vi.fn()} />)
+
+    fireEvent.click(screen.getByRole('button', { name: /云端托管/ }))
+    fireEvent.click(screen.getByRole('button', { name: 'Git' }))
+    fireEvent.change(screen.getByPlaceholderText('https://github.com/org/repo.git'), {
+      target: { value: 'https://github.com/example/private.git' },
+    })
+    const consent = await screen.findByText('使用我的 GitHub 连接访问私有仓库')
+    fireEvent.click(consent.closest('label')!.querySelector('input')!)
+    fireEvent.click(screen.getByRole('button', { name: 'create.actions.create' }))
+
+    await waitFor(() => {
+      expect(mocks.createCloudGitCredential).toHaveBeenCalledWith(
+        'github-connection-1',
+        'organization-1',
+      )
+      expect(mocks.createCloudSpace).toHaveBeenCalledWith(expect.objectContaining({
+        source_type: 'git',
+        git_url: 'https://github.com/example/private.git',
+        git_credential_ref: 'credential-ref-1',
+      }))
+    })
   })
 })

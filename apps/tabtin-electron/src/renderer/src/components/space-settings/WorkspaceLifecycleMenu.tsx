@@ -12,6 +12,7 @@ import {
   Archive,
   Power,
   RotateCcw,
+  GitBranch,
 } from 'lucide-react'
 import {
   Button,
@@ -178,6 +179,33 @@ export const WorkspaceLifecycleMenu: React.FC<WorkspaceLifecycleMenuProps> = ({
     }
   }
 
+  const handleCloudGitRetry = async () => {
+    setCloudBusy(true)
+    setDangerError('')
+    try {
+      const connections = await window.tabtin.localMcp.listConnections()
+      const github = connections.find((connection) => (
+        connection.enabled
+        && connection.transportKind === 'http'
+        && connection.url === 'https://api.githubcopilot.com/mcp/'
+        && connection.lastProbe?.ok === true
+      ))
+      if (!github) throw new Error('未找到已连接且可用的个人 GitHub 连接')
+      const { credentialRef } = await window.tabtin.localMcp.createCloudGitCredential(
+        github.id,
+        space.organization_id,
+      )
+      await WorkspaceApiService.attachCloudGitCredential(space.id, credentialRef)
+      await loadSpaces(space.organization_id)
+      watchCloudSpace(space.id)
+      toast({ title: '已授权个人 GitHub 连接，正在重新初始化云端工作空间' })
+    } catch (error) {
+      setDangerError(error instanceof Error ? error.message : String(error))
+    } finally {
+      setCloudBusy(false)
+    }
+  }
+
   return (
     <>
       <section
@@ -248,7 +276,18 @@ export const WorkspaceLifecycleMenu: React.FC<WorkspaceLifecycleMenuProps> = ({
                 </div>
               </div>
               <div className="flex shrink-0 gap-2">
-                {space.cloud?.state === 'disabled' ? (
+                {space.cloud?.state === 'error' && space.cloud.source_type === 'git' ? (
+                  <Button
+                    type="button"
+                    variant="outline"
+                    onClick={() => void handleCloudGitRetry()}
+                    disabled={cloudBusy}
+                    className={cn('gap-1', SETTINGS_CONTROL_SM)}
+                  >
+                    <GitBranch className="h-3.5 w-3.5" />
+                    使用我的 GitHub 连接重试
+                  </Button>
+                ) : space.cloud?.state === 'disabled' ? (
                   <Button
                     type="button"
                     variant="outline"

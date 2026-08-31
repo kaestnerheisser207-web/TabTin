@@ -2119,6 +2119,7 @@ interface TabTinAPIShape {
     listConnections: () => Promise<LocalMcpConnectionSummary[]>
     getConnectionDetail: (connectionId: string, options?: { includeSecrets?: boolean }) => Promise<LocalMcpConnectionDetail>
     shareConnectionToOrganization: (connectionId: string, organizationId: string) => Promise<{ id: string; name: string }>
+    createCloudGitCredential: (connectionId: string, organizationId: string) => Promise<{ credentialRef: string }>
     importCandidate: (candidateId: string, options?: { attachToAgentId?: string; name?: string }) => Promise<LocalMcpConnectionSummary>
     saveManualConnection: (input: LocalMcpManualConnectionInput) => Promise<LocalMcpConnectionSummary>
     upsertOrganizationMirror: (input: LocalMcpOrganizationMirrorInput) => Promise<LocalMcpConnectionSummary>
@@ -4532,6 +4533,7 @@ const api = {
     listConnections: () => invokeIpc('localMcp:listConnections'),
     getConnectionDetail: (connectionId, options) => invokeIpc('localMcp:getConnectionDetail', connectionId, options),
     shareConnectionToOrganization: (connectionId, organizationId) => invokeIpc('localMcp:shareConnectionToOrganization', connectionId, organizationId),
+    createCloudGitCredential: (connectionId, organizationId) => invokeIpc('localMcp:createCloudGitCredential', connectionId, organizationId),
     importCandidate: (candidateId, options) => invokeIpc('localMcp:importCandidate', candidateId, options),
     saveManualConnection: (input) => invokeIpc('localMcp:saveManualConnection', input),
     upsertOrganizationMirror: (input) => invokeIpc('localMcp:upsertOrganizationMirror', input),

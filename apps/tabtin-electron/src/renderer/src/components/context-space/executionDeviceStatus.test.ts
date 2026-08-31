@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import {
   computeExecutionDeviceStatus,
+  resolveCloudRuntimeStatus,
   resolveCurrentMemberProjectCompanionDeviceStatus,
 } from './executionDeviceStatus'
 
@@ -171,5 +172,24 @@ describe('computeExecutionDeviceStatus', () => {
       title: 'Agent 在「执行设备」上工作，需切换到该设备才能操作这个应用',
       tone: 'remote',
     })
+  })
+
+  it('shows Cloud provisioning and private Git failures instead of generic offline', () => {
+    expect(resolveCloudRuntimeStatus({
+      runtime_plane: 'cloud',
+      cloud: { state: 'provisioning' },
+    }, t)).toMatchObject({ label: '初始化中', tone: 'remote' })
+    expect(resolveCloudRuntimeStatus({
+      runtime_plane: 'cloud',
+      cloud: { state: 'error', last_error: 'git_source_unavailable: private' },
+    }, t)).toEqual({
+      label: '初始化失败',
+      title: '私有仓库缺少访问凭证，无法初始化云端工作空间',
+      tone: 'offline',
+    })
+    expect(resolveCloudRuntimeStatus({
+      runtime_plane: 'cloud',
+      cloud: { state: 'error', last_error: 'git_credential_rejected: denied' },
+    }, t)?.title).toBe('当前 GitHub 连接无权访问该仓库，请检查仓库权限后重试')
   })
 })

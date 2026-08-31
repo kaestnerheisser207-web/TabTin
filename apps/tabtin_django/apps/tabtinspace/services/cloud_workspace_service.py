@@ -27,6 +27,9 @@ from apps.tabtinspace.services.cloud_worker_client import (
     CloudWorkerClient,
     CloudWorkerClientError,
 )
+from apps.tabtinspace.services.cloud_git_credential_service import (
+    CloudGitCredentialService,
+)
 
 SourceType = Literal["empty", "git"]
 _IMMUTABLE_IMAGE = re.compile(r"^.+@sha256:[a-f0-9]{64}$", re.IGNORECASE)
@@ -120,6 +123,11 @@ class CloudWorkspaceService(BaseService):
             git_ref=git_ref,
             git_credential_ref=git_credential_ref,
         )
+        if source["git_credential_ref"]:
+            CloudGitCredentialService(user=self.user).require_owned(
+                organization_id=organization.id,
+                credential_ref=source["git_credential_ref"],
+            )
         # Fail with the user-owned entitlement before disclosing shared Worker
         # capacity. The check is repeated under the Worker row lock below.
         self._enforce_user_quota()
@@ -379,11 +387,11 @@ class CloudWorkspaceService(BaseService):
                 "Git 地址不能内嵌凭据，请使用 credential_ref",
                 400,
             )
-        if git_credential_ref.strip():
+        if git_credential_ref.strip() and parsed.hostname.lower() != "github.com":
             raise ServiceError(
-                "CLOUD_GIT_CREDENTIAL_BROKER_UNAVAILABLE",
-                "私有 Git 将在 Credential Broker 上线后开放",
-                503,
+                "CLOUD_GIT_CREDENTIAL_HOST_FORBIDDEN",
+                "个人 GitHub 凭证只能用于 github.com 仓库",
+                400,
             )
         return {
             "source_type": "git",
