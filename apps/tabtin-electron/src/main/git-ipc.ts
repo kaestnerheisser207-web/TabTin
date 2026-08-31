@@ -1182,6 +1182,7 @@ const PATH_ERROR = {
   code: 'INVALID_PATH',
   error: 'invalid file path',
 } as const
+const GIT_FILE_PREVIEW_MAX_BYTES = 2 * 1024 * 1024
 
 /** 归一化仓库根路径，供与 `rev-parse --show-toplevel` 结果比对（Windows 大小写不敏感）。 */
 function normalizeGitRepoRootPath(p: string): string {
@@ -1755,7 +1756,11 @@ export function registerGitIpcHandlers(): void {
     const fullPath = path.resolve(cwd, safePath)
     if (!checkAndFormat(fullPath, 'read').ok) return { ...PATH_ERROR, content: '' }
     try {
-      const content = await runGit(cwd, ['cat-file', 'blob', `HEAD:${safePath}`], 2 * 1024 * 1024)
+      const content = await runGit(
+        cwd,
+        ['cat-file', 'blob', `HEAD:${safePath}`],
+        GIT_FILE_PREVIEW_MAX_BYTES,
+      )
       return { success: true, content }
     } catch {
       return { success: true, content: '' }
@@ -1772,7 +1777,11 @@ export function registerGitIpcHandlers(): void {
     const fullPath = path.resolve(cwd, safePath)
     if (!checkAndFormat(fullPath, 'read').ok) return { ...PATH_ERROR, content: '' }
     try {
-      const content = await runGit(cwd, ['cat-file', 'blob', `:0:${safePath}`], 2 * 1024 * 1024)
+      const content = await runGit(
+        cwd,
+        ['cat-file', 'blob', `:0:${safePath}`],
+        GIT_FILE_PREVIEW_MAX_BYTES,
+      )
       return { success: true, content }
     } catch {
       return { success: true, content: '' }
@@ -1803,10 +1812,21 @@ export function registerGitIpcHandlers(): void {
         const content = await runGit(
           cwd,
           ['cat-file', 'blob', `${rev}:${safePath}`],
-          2 * 1024 * 1024,
+          GIT_FILE_PREVIEW_MAX_BYTES,
         )
         return { success: true, content }
-      } catch {
+      } catch (error) {
+        if (
+          (error as NodeJS.ErrnoException | undefined)?.code
+          === 'ERR_CHILD_PROCESS_STDIO_MAXBUFFER'
+        ) {
+          return {
+            success: false,
+            content: '',
+            reason: 'too_large' as const,
+            error: 'file content exceeds 2 MiB preview limit',
+          }
+        }
         return { success: true, content: '' }
       }
     },
