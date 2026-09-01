@@ -615,6 +615,7 @@ export interface CreateCloudWorkspaceRequest {
   source_type?: 'empty' | 'git'
   git_url?: string
   git_ref?: string
+  git_credential_ref?: string
 }
 
 export interface CreateSpaceRequest {

@@ -93,6 +93,14 @@ describe('WorkspaceLifecycleMenu', () => {
       blockReason: null,
       controlDeviceName: null,
     })
+    Object.defineProperty(window, 'tabtin', {
+      configurable: true,
+      value: {
+        localMcp: {
+          listConnections: vi.fn(async () => []),
+        },
+      },
+    })
   })
 
   it('有权限时渲染页底危险操作区与删除按钮', () => {
@@ -130,5 +138,29 @@ describe('WorkspaceLifecycleMenu', () => {
     expect(screen.getByRole('button', { name: '重启' })).toBeTruthy()
     expect(screen.getByRole('button', { name: '停用' })).toBeTruthy()
     expect(screen.getByText(/不同步到本机/)).toBeTruthy()
+  })
+
+  it('Git 初始化失败时提供个人 GitHub 授权并重试入口', () => {
+    render(
+      <WorkspaceLifecycleMenu
+        space={{
+          ...space,
+          runtime_plane: 'cloud',
+          cloud: {
+            allocation_id: 'allocation-1',
+            state: 'error',
+            generation: 1,
+            source_type: 'git',
+            runtime_version: 'test',
+            protocol_version: '1',
+            last_error: 'github_connection_required',
+          },
+        }}
+      />,
+    )
+
+    expect(screen.getByRole('button', {
+      name: '连接 GitHub 并重试',
+    })).toBeTruthy()
   })
 })

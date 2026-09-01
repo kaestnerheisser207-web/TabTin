@@ -73,6 +73,20 @@ function safeUrlHost(url: string): string {
   }
 }
 
+function parseGithubRepository(url: string): { owner: string; repo: string } | null {
+  try {
+    const parsed = new URL(url)
+    if (parsed.protocol !== 'https:' || parsed.hostname.toLowerCase() !== 'github.com') return null
+    const parts = parsed.pathname.split('/').filter(Boolean)
+    if (parts.length !== 2) return null
+    const owner = parts[0]
+    const repo = parts[1].replace(/\.git$/i, '')
+    return owner && repo ? { owner, repo } : null
+  } catch {
+    return null
+  }
+}
+
 function isMcpRemoteStdioTransport(transport: LocalMcpTransportConfig): boolean {
   return (
     transport.kind === 'stdio'
@@ -704,6 +718,82 @@ export class LocalMcpService {
       throw new Error('MCP_ERR:ORG_SHARE_INVALID_RESPONSE')
     }
     return { id, name }
+  }
+
+  /** Reuse the user's existing GitHub Connector for a personal Cloud Workspace. */
+  async createCloudGitCredential(
+    connectionId: string,
+    organizationId: string,
+    gitUrl?: string,
+  ): Promise<{ credentialRef: string }> {
+    const detail = this.getConnectionDetail(connectionId, { includeSecrets: true })
+    if (
+      !detail.enabled
+      || detail.transport.kind !== 'http'
+      || safeUrlHost(detail.transport.url) !== 'api.githubcopilot.com'
+    ) {
+      throw new Error('MCP_ERR:CLOUD_GIT_REQUIRES_GITHUB_CONNECTION')
+    }
+    const authorization = Object.entries(detail.transport.headers ?? {})
+      .find(([key]) => key.toLowerCase() === 'authorization')?.[1]
+    const token = authorization?.replace(/^(Bearer|token)\s+/i, '').trim() ?? ''
+    if (!token || token.length > 4096 || /[\r\n]/.test(token)) {
+      throw new Error('MCP_ERR:CLOUD_GIT_CREDENTIAL_INVALID')
+    }
+
+    if (gitUrl) {
+      const repository = parseGithubRepository(gitUrl)
+      if (!repository) throw new Error('MCP_ERR:CLOUD_GIT_REPOSITORY_INVALID')
+      const probe = await fetch(
+        `https://api.github.com/repos/${encodeURIComponent(repository.owner)}/${encodeURIComponent(repository.repo)}`,
+        {
+          method: 'GET',
+          headers: {
+            Authorization: `Bearer ${token}`,
+            Accept: 'application/vnd.github+json',
+            'X-GitHub-Api-Version': '2022-11-28',
+            'User-Agent': 'TabTin-Cloud-Workspace',
+          },
+        },
+      )
+      if (!probe.ok) {
+        if (probe.status === 401 || probe.status === 403) {
+          throw new Error('MCP_ERR:CLOUD_GIT_AUTHORIZATION_REQUIRED')
+        }
+        if (probe.status === 404) {
+          throw new Error('MCP_ERR:CLOUD_GIT_REPOSITORY_NOT_ACCESSIBLE')
+        }
+        throw new Error(`MCP_ERR:CLOUD_GIT_PREFLIGHT_FAILED:${probe.status}`)
+      }
+    }
+
+    const authToken = await TokenManager.getAccessToken()
+    if (!authToken) throw new Error('MCP_ERR:CLOUD_GIT_AUTH_REQUIRED')
+    const response = await fetch(
+      joinApiPath(API_BASE_URL, '/context/workspaces/cloud/git-credential'),
+      {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${authToken}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          organization_id: organizationId,
+          credential_value: token,
+        }),
+      },
+    )
+    const body = await response.json().catch(() => ({})) as {
+      data?: { credential_ref?: string }
+      message?: string
+      code?: string
+    }
+    if (!response.ok) {
+      throw new Error(body.message || body.code || `HTTP ${response.status}`)
+    }
+    const credentialRef = body.data?.credential_ref?.trim() ?? ''
+    if (!credentialRef) throw new Error('MCP_ERR:CLOUD_GIT_INVALID_RESPONSE')
+    return { credentialRef }
   }
 
   async saveManualConnection(input: LocalMcpManualConnectionInput): Promise<LocalMcpConnectionSummary> {
@@ -2164,6 +2254,12 @@ export const localMcpHandlers = {
     connectionId: string,
     organizationId: string,
   ) => getLocalMcpService().shareConnectionToOrganization(connectionId, organizationId),
+  'localMcp:createCloudGitCredential': (
+    _event: IpcMainInvokeEvent,
+    connectionId: string,
+    organizationId: string,
+    gitUrl?: string,
+  ) => getLocalMcpService().createCloudGitCredential(connectionId, organizationId, gitUrl),
   'localMcp:importCandidate': (
     _event: IpcMainInvokeEvent,
     candidateId: string,

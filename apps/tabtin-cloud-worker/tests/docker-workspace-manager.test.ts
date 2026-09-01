@@ -211,6 +211,49 @@ describe('DockerWorkspaceManager', () => {
     )
   })
 
+  it('injects private Git credentials through stdin and ephemeral tmpfs only', async () => {
+    const runner = new FakeRunner()
+    const manager = new DockerWorkspaceManager(runner, 'tabtin-cloud-runtime')
+    const password = 'github_pat_test_private_value'
+
+    await manager.provision(provisionInput({
+      source: {
+        type: 'git',
+        gitUrl: 'https://github.com/example/private.git',
+        credential: { username: 'x-access-token', password },
+      },
+    }))
+
+    const cloneIndex = runner.calls.findIndex(args => args.includes('clone'))
+    expect(cloneIndex).toBeGreaterThanOrEqual(0)
+    expect(runner.calls[cloneIndex]).toEqual(expect.arrayContaining([
+      '--tmpfs', '/tmp:rw,nosuid,nodev,size=1048576',
+      'http.followRedirects=false',
+    ]))
+    expect(runner.calls[cloneIndex].join(' ')).toContain('GIT_ASKPASS=/tmp/git-askpass')
+    expect(runner.calls[cloneIndex].join(' ')).not.toContain(password)
+    expect(runner.stdins[cloneIndex]).toBe(`x-access-token\n${password}\n`)
+    const persistentCreate = runner.calls.find(args => args[0] === 'create') ?? []
+    expect(persistentCreate.join(' ')).not.toContain(password)
+  })
+
+  it('distinguishes a rejected personal credential from a missing credential', async () => {
+    const runner = new FakeRunner()
+    runner.failGitClone = true
+    const manager = new DockerWorkspaceManager(runner, 'tabtin-cloud-runtime')
+
+    await expect(manager.provision(provisionInput({
+      source: {
+        type: 'git',
+        gitUrl: 'https://github.com/example/private.git',
+        credential: {
+          username: 'x-access-token',
+          password: 'github_pat_test_private_value',
+        },
+      },
+    }))).rejects.toMatchObject({ code: 'git_credential_rejected' })
+  })
+
   it('retries Git initialization instead of treating an existing quota volume as initialized', async () => {
     const runner = new FakeRunner()
     runner.failGitClone = true

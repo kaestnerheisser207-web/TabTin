@@ -596,6 +596,7 @@ export const LEGACY_HANDLERS: ReadonlySet<string> = new Set<string>([
   'localMcp:discover',
   'localMcp:getConnectionDetail',
   'localMcp:shareConnectionToOrganization',
+  'localMcp:createCloudGitCredential',
   'localMcp:importCandidate',
   'localMcp:listConnections',
   'localMcp:probeConnection',
