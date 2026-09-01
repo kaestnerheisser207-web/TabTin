@@ -14,6 +14,9 @@ from apps.services.common.db_router import postgres_app_db_alias
 from apps.tabtinspace.models import CloudRuntimeAllocation, Workspace
 from apps.tabtinspace.services.base import ServiceError
 from apps.tabtinspace.services.cloud_worker_client import CloudWorkerClient
+from apps.tabtinspace.services.cloud_git_credential_service import (
+    CloudGitCredentialService,
+)
 from apps.tabtinspace.services.workspace_service import WorkspaceService
 
 logger = logging.getLogger(__name__)
@@ -23,6 +26,59 @@ class CloudWorkspaceLifecycleService:
     def __init__(self, *, user, client: CloudWorkerClient | None = None):
         self.user = user
         self.client = client or CloudWorkerClient()
+
+    def attach_git_credential(self, workspace_id, *, credential_ref: str) -> Workspace:
+        workspace, allocation = self._owned_cloud(workspace_id)
+        if allocation.source_type != "git":
+            raise ServiceError(
+                "CLOUD_GIT_CREDENTIAL_NOT_ALLOWED",
+                "只有 Git 来源的 Cloud Workspace 可以绑定 GitHub 凭证",
+                409,
+            )
+        credential = CloudGitCredentialService(user=self.user).require_owned(
+            organization_id=workspace.organization_id,
+            credential_ref=credential_ref,
+        )
+        with transaction.atomic(using=postgres_app_db_alias()):
+            allocation = CloudRuntimeAllocation.objects.select_for_update().get(
+                id=allocation.id
+            )
+            allocation.git_credential_ref = str(credential.id)
+            allocation.generation += 1
+            allocation.state = CloudRuntimeAllocation.State.PENDING
+            allocation.reconcile_attempts = 0
+            allocation.next_retry_at = timezone.now()
+            allocation.last_error = ""
+            allocation.retention_deadline = None
+            allocation.save(
+                update_fields=[
+                    "git_credential_ref",
+                    "generation",
+                    "state",
+                    "reconcile_attempts",
+                    "next_retry_at",
+                    "last_error",
+                    "retention_deadline",
+                    "updated_at",
+                ]
+            )
+            allocation.device.status = "offline"
+            allocation.device.last_heartbeat_at = None
+            allocation.device.save(
+                update_fields=["status", "last_heartbeat_at", "updated_at"]
+            )
+            RuntimeBinding.objects.filter(allocation=allocation).update(
+                state=RuntimeBinding.State.SUSPENDED,
+                host_generation=allocation.generation,
+                revision=models.F("revision") + 1,
+            )
+        logger.info(
+            "[CloudRuntime] lifecycle action=attach_git_credential workspace=%s allocation=%s generation=%s result=pending",
+            workspace.id,
+            allocation.id,
+            allocation.generation,
+        )
+        return workspace
 
     def disable(self, workspace_id) -> Workspace:
         workspace, allocation = self._owned_cloud(workspace_id)

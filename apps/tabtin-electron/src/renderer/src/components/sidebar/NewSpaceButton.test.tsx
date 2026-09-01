@@ -8,6 +8,7 @@ const mocks = vi.hoisted(() => ({
   updateAgent: vi.fn(),
   loadAgent: vi.fn(),
   refreshSpace: vi.fn(),
+  listMcpConnections: vi.fn(),
   openCreatedWorkspaceAsNewTask: vi.fn(),
   dialogState: {
     isOpen: true,
@@ -137,6 +138,15 @@ describe('CreateSpaceDialog 远程执行设备 Workspace', () => {
     mocks.updateAgent.mockReset().mockResolvedValue(true)
     mocks.loadAgent.mockReset().mockResolvedValue(spaceState.selectedAgent)
     mocks.openCreatedWorkspaceAsNewTask.mockReset().mockResolvedValue(undefined)
+    mocks.listMcpConnections.mockReset().mockResolvedValue([])
+    Object.defineProperty(window, 'tabtin', {
+      configurable: true,
+      value: {
+        localMcp: {
+          listConnections: mocks.listMcpConnections,
+        },
+      },
+    })
     mocks.dialogState.createOptions = null
   })
 
@@ -233,5 +243,18 @@ describe('CreateSpaceDialog 远程执行设备 Workspace', () => {
         }),
       }),
     )
+  })
+
+  it('GitHub 来源在创建前显示个人授权入口', async () => {
+    render(<CreateSpaceDialog open onOpenChange={vi.fn()} />)
+
+    fireEvent.click(screen.getByRole('button', { name: /云端托管/ }))
+    fireEvent.click(screen.getByRole('button', { name: 'Git' }))
+    fireEvent.change(screen.getByPlaceholderText('https://github.com/org/repo.git'), {
+      target: { value: 'https://github.com/flowdos/flow.git' },
+    })
+
+    expect(await screen.findByRole('button', { name: '授权 GitHub' })).toBeTruthy()
+    expect(mocks.createCloudSpace).not.toHaveBeenCalled()
   })
 })

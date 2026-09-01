@@ -5,13 +5,14 @@
  * 避免右上角 ⋯ 把破坏性操作藏进菜单。Agent 停用仍只在「我的 Agent」详情危险区。
  */
 
-import React, { useState } from 'react'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 import {
   AlertTriangle,
   Trash2,
   Archive,
   Power,
   RotateCcw,
+  GitBranch,
 } from 'lucide-react'
 import {
   Button,
@@ -34,11 +35,26 @@ import {
 } from '@components/settings/settingsUi'
 import { cn } from '@utils/cn'
 import type { Space } from '@tabtin/app-shell'
+import type { LocalMcpConnectionSummary } from '@shared/types/mcp'
 import { WorkspaceApiService } from '@tabtin/app-shell'
 import { useSpaceDeleteGuard } from './hooks/useSpaceDeleteGuard'
+import { ConnectorCredentialDialog } from '@components/context-space/capability-marketplace/ConnectorCredentialDialog'
+import { applyCredentialSecretToTransport } from '@components/context-space/capability-marketplace/connectorCredentialTransport'
+import {
+  findConnectionForRecommendedConnector,
+  getRecommendedConnectorById,
+} from '@components/context-space/capability-marketplace/recommendedConnectorCatalog'
 
 interface WorkspaceLifecycleMenuProps {
   space: Space
+}
+
+function cloudGitErrorMessage(error: unknown): string {
+  const message = error instanceof Error ? error.message : String(error)
+  if (/HTTP 404/.test(message)) {
+    return '远程服务尚未发布 Cloud Git 授权接口，请先完成服务端升级'
+  }
+  return message
 }
 
 export const WorkspaceLifecycleMenu: React.FC<WorkspaceLifecycleMenuProps> = ({
@@ -87,8 +103,11 @@ export const WorkspaceLifecycleMenu: React.FC<WorkspaceLifecycleMenuProps> = ({
   const [deleteInputValue, setDeleteInputValue] = useState('')
   const [dangerError, setDangerError] = useState('')
   const [cloudBusy, setCloudBusy] = useState(false)
-
-  if (!canManage) return null
+  const [githubConnection, setGithubConnection] = useState<LocalMcpConnectionSummary | null>(null)
+  const [githubCredentialDialogOpen, setGithubCredentialDialogOpen] = useState(false)
+  const [githubCredentialSaving, setGithubCredentialSaving] = useState(false)
+  const autoSyncWorkspaceRef = useRef<string | null>(null)
+  const githubCatalog = getRecommendedConnectorById('github')
 
   const handleTrash = async () => {
     setDangerError('')
@@ -178,6 +197,91 @@ export const WorkspaceLifecycleMenu: React.FC<WorkspaceLifecycleMenuProps> = ({
     }
   }
 
+  const attachGithubConnection = useCallback(async (connection: LocalMcpConnectionSummary) => {
+    setCloudBusy(true)
+    setDangerError('')
+    try {
+      const { credentialRef } = await window.tabtin.localMcp.createCloudGitCredential(
+        connection.id,
+        space.organization_id,
+        undefined,
+      )
+      await WorkspaceApiService.attachCloudGitCredential(space.id, credentialRef)
+      await loadSpaces(space.organization_id)
+      watchCloudSpace(space.id)
+      toast({ title: '已授权个人 GitHub 连接，正在重新初始化云端工作空间' })
+    } catch (error) {
+      setDangerError(cloudGitErrorMessage(error))
+    } finally {
+      setCloudBusy(false)
+    }
+  }, [loadSpaces, space.id, space.organization_id, watchCloudSpace])
+
+  const resolveGithubConnection = useCallback(async () => {
+    if (!githubCatalog) return null
+    const connections = await window.tabtin.localMcp.listConnections()
+    const matched = findConnectionForRecommendedConnector(githubCatalog, connections) ?? null
+    const github = matched?.enabled ? matched : null
+    setGithubConnection(github)
+    return github
+  }, [githubCatalog])
+
+  const handleCloudGitRetry = async () => {
+    const github = await resolveGithubConnection()
+    if (!github) {
+      setGithubCredentialDialogOpen(true)
+      return
+    }
+    await attachGithubConnection(github)
+  }
+
+  const handleGithubCredentialSubmit = async (value: { apiKey?: string }) => {
+    if (!githubCatalog || !value.apiKey) return
+    setGithubCredentialSaving(true)
+    setDangerError('')
+    try {
+      const saved = await window.tabtin.localMcp.saveManualConnection({
+        ...(githubConnection ? { connectionId: githubConnection.id } : {}),
+        name: githubCatalog.name,
+        description: '个人 GitHub 连接',
+        enabled: true,
+        transport: applyCredentialSecretToTransport(githubCatalog.transport, value.apiKey),
+      })
+      const probe = await window.tabtin.localMcp.probeConnection(saved.id, { timeoutMs: 20_000 })
+      if (!probe.ok) throw new Error(probe.error || 'GitHub 连接探测失败')
+      const connections = await window.tabtin.localMcp.listConnections()
+      const connected = findConnectionForRecommendedConnector(githubCatalog, connections) ?? saved
+      setGithubConnection(connected)
+      setGithubCredentialDialogOpen(false)
+      await attachGithubConnection(connected)
+    } catch (error) {
+      setDangerError(error instanceof Error ? error.message : String(error))
+    } finally {
+      setGithubCredentialSaving(false)
+    }
+  }
+
+  useEffect(() => {
+    const error = space.cloud?.last_error ?? ''
+    const shouldSync = (
+      space.cloud?.state === 'error'
+      && space.cloud.source_type === 'git'
+      && /github_(?:app_)?connection_required/.test(error)
+    )
+    if (!shouldSync || autoSyncWorkspaceRef.current === space.id) return
+    let cancelled = false
+    void resolveGithubConnection().then((github) => {
+      if (cancelled || !github) return
+      autoSyncWorkspaceRef.current = space.id
+      return attachGithubConnection(github)
+    })
+    return () => {
+      cancelled = true
+    }
+  }, [attachGithubConnection, resolveGithubConnection, space.cloud?.last_error, space.cloud?.source_type, space.cloud?.state, space.id])
+
+  if (!canManage) return null
+
   return (
     <>
       <section
@@ -248,7 +352,18 @@ export const WorkspaceLifecycleMenu: React.FC<WorkspaceLifecycleMenuProps> = ({
                 </div>
               </div>
               <div className="flex shrink-0 gap-2">
-                {space.cloud?.state === 'disabled' ? (
+                {space.cloud?.state === 'error' && space.cloud.source_type === 'git' ? (
+                  <Button
+                    type="button"
+                    variant="outline"
+                    onClick={() => void handleCloudGitRetry()}
+                    disabled={cloudBusy}
+                    className={cn('gap-1', SETTINGS_CONTROL_SM)}
+                  >
+                    <GitBranch className="h-3.5 w-3.5" />
+                    {githubConnection ? '使用已连接的 GitHub 重试' : '连接 GitHub 并重试'}
+                  </Button>
+                ) : space.cloud?.state === 'disabled' ? (
                   <Button
                     type="button"
                     variant="outline"
@@ -428,6 +543,22 @@ export const WorkspaceLifecycleMenu: React.FC<WorkspaceLifecycleMenuProps> = ({
           onConfirm={handleArchive}
         />
       )}
+
+      {githubCatalog && githubCredentialDialogOpen ? (
+        <ConnectorCredentialDialog
+          open
+          mode="api_key"
+          connectorName={githubCatalog.name}
+          credentialUrl={githubCatalog.credentialUrl}
+          docsUrl={githubCatalog.docsUrl}
+          saving={githubCredentialSaving}
+          onCancel={() => setGithubCredentialDialogOpen(false)}
+          onSubmit={value => {
+            void handleGithubCredentialSubmit({ apiKey: value.apiKey })
+          }}
+          t={t}
+        />
+      ) : null}
     </>
   )
 }

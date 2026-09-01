@@ -2,6 +2,11 @@ export interface WorkspaceSource {
   type: 'empty' | 'git'
   gitUrl?: string
   gitRef?: string
+  /** One request only; never persisted into container configuration or volumes. */
+  credential?: {
+    username: string
+    password: string
+  }
 }
 
 export interface ProvisionWorkspaceInput {

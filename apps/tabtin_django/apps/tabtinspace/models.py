@@ -1143,11 +1143,12 @@ class CloudRuntimeAllocation(models.Model):
     runtime_image = models.CharField(max_length=500)
     source_type = models.CharField(
         max_length=16,
-        choices=[('empty', '空目录'), ('git', '公开 Git 仓库')],
+        choices=[('empty', '空目录'), ('git', 'Git 仓库')],
         default='empty',
     )
     git_url = models.CharField(max_length=2000, blank=True, default='')
     git_ref = models.CharField(max_length=255, blank=True, default='')
+    git_credential_ref = models.CharField(max_length=255, blank=True, default='')
     cpu_millicores = models.PositiveIntegerField(default=2000)
     memory_mb = models.PositiveIntegerField(default=4096)
     storage_gb = models.PositiveIntegerField(default=20)

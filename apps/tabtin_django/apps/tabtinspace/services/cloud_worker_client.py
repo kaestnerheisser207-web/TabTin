@@ -33,6 +33,11 @@ class CloudWorkerClient:
 
     def provision(self, allocation: CloudRuntimeAllocation) -> dict:
         from apps.tabtinspace.services.daemon_token_service import DaemonTokenService
+        from apps.tabtinspace.services.cloud_git_credential_service import (
+            resolve_allocation_git_credential,
+        )
+
+        git_credential = resolve_allocation_git_credential(allocation)
 
         return self._request(
             allocation.worker,
@@ -52,6 +57,7 @@ class CloudWorkerClient:
                     "type": allocation.source_type,
                     "gitUrl": allocation.git_url or None,
                     "gitRef": allocation.git_ref or None,
+                    "credential": git_credential,
                 },
             },
         )

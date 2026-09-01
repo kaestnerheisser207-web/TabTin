@@ -21,6 +21,7 @@ import {
   Cloud,
   HardDrive,
   Cpu,
+  GitBranch,
 } from 'lucide-react'
 import {
   Dialog,
@@ -38,6 +39,7 @@ import {
 } from '@components/ui'
 import { useTranslation } from 'react-i18next'
 import type { UpdateAgentRequest } from '@tabtin/app-shell'
+import type { LocalMcpConnectionSummary } from '@shared/types/mcp'
 import { useSpaceStore } from '@stores/useSpaceStore'
 import { useOrganizationStore } from '@stores/useOrganizationStore'
 import { useDeviceStore } from '@stores/useDeviceStore'
@@ -58,6 +60,12 @@ import {
 } from '@components/space-settings/profile/workingDirConflict'
 import { generateRandomWorkspaceName } from './generateRandomWorkspaceName'
 import { createLogger } from '@/utils/logger'
+import { ConnectorCredentialDialog } from '@components/context-space/capability-marketplace/ConnectorCredentialDialog'
+import { applyCredentialSecretToTransport } from '@components/context-space/capability-marketplace/connectorCredentialTransport'
+import {
+  findConnectionForRecommendedConnector,
+  getRecommendedConnectorById,
+} from '@components/context-space/capability-marketplace/recommendedConnectorCatalog'
 
 const log = createLogger('CreateWorkspaceDialog')
 
@@ -76,6 +84,14 @@ function getBasename(path: string): string {
   const trimmed = path.replace(/[\\/]+$/, '')
   const segments = trimmed.split(/[\\/]/)
   return segments[segments.length - 1] || ''
+}
+
+function isGithubRepositoryUrl(value: string): boolean {
+  try {
+    return new URL(value.trim()).hostname.toLowerCase() === 'github.com'
+  } catch {
+    return false
+  }
 }
 
 export function isValidRemoteWorkingDir(value: string): boolean {
@@ -253,7 +269,13 @@ const CreateSpaceDialog: React.FC<CreateSpaceDialogProps> = ({
   const [workingDir, setWorkingDir] = useState('')
   const [workingDirType, setWorkingDirType] = useState<WorkingDirType>('mixed')
   const [runtimePlane, setRuntimePlane] = useState<'local' | 'cloud'>('local')
+  const [cloudSource, setCloudSource] = useState<'empty' | 'git'>('empty')
   const [cloudHarness, setCloudHarness] = useState<'dsh' | 'builtin'>('dsh')
+  const [gitUrl, setGitUrl] = useState('')
+  const [gitRef, setGitRef] = useState('')
+  const [githubConnection, setGithubConnection] = useState<LocalMcpConnectionSummary | null>(null)
+  const [githubCredentialDialogOpen, setGithubCredentialDialogOpen] = useState(false)
+  const [githubCredentialSaving, setGithubCredentialSaving] = useState(false)
   const [isPickingDir, setIsPickingDir] = useState(false)
   // ：冲突/失败要在对话框内可见；仅靠顶部 toast 容易被 Dialog 挡住或 2s 闪过。
   const [formError, setFormError] = useState<string | null>(null)
@@ -267,6 +289,21 @@ const CreateSpaceDialog: React.FC<CreateSpaceDialogProps> = ({
   const refreshSpace = useSpaceStore((state) => state.refreshSpace)
   const selectedAgent = useSpaceStore((state) => state.selectedAgent)
   const isCloudCreate = !isEditMode && !daemonTarget && runtimePlane === 'cloud'
+  const githubCatalog = getRecommendedConnectorById('github')
+
+  const refreshGithubConnection = useCallback(async (): Promise<LocalMcpConnectionSummary | null> => {
+    if (!githubCatalog) return null
+    const connections = await window.tabtin.localMcp.listConnections()
+    const matched = findConnectionForRecommendedConnector(githubCatalog, connections) ?? null
+    const github = matched?.enabled ? matched : null
+    setGithubConnection(github)
+    return github
+  }, [githubCatalog])
+
+  useEffect(() => {
+    if (!open || !isCloudCreate || cloudSource !== 'git') return
+    void refreshGithubConnection().catch(() => setGithubConnection(null))
+  }, [cloudSource, isCloudCreate, open, refreshGithubConnection])
 
   const applyAgentFields = useCallback(
     (agent: {
@@ -444,6 +481,39 @@ const CreateSpaceDialog: React.FC<CreateSpaceDialogProps> = ({
       })
     : null
 
+  const handleGithubCredentialSubmit = async (value: { apiKey?: string }) => {
+    if (!githubCatalog || !value.apiKey) return
+    setGithubCredentialSaving(true)
+    try {
+      const transport = applyCredentialSecretToTransport(githubCatalog.transport, value.apiKey)
+      const saved = await window.tabtin.localMcp.saveManualConnection({
+        ...(githubConnection ? { connectionId: githubConnection.id } : {}),
+        name: githubCatalog.name,
+        description: '个人 GitHub 连接',
+        enabled: true,
+        transport,
+      })
+      const probe = await window.tabtin.localMcp.probeConnection(saved.id, { timeoutMs: 20_000 })
+      if (!probe.ok) {
+        throw new Error(probe.error || 'GitHub 连接探测失败')
+      }
+      const connected = await refreshGithubConnection()
+      setGithubConnection(connected ?? saved)
+      setGithubCredentialDialogOpen(false)
+      setFormError(null)
+      toast({
+        title: t('create.cloud.githubConnected', {
+          ns: 'space',
+          defaultValue: 'GitHub 已授权，可以创建云端 Git Workspace',
+        }),
+      })
+    } catch (error) {
+      setFormError(error instanceof Error ? error.message : String(error))
+    } finally {
+      setGithubCredentialSaving(false)
+    }
+  }
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
 
@@ -465,6 +535,28 @@ const CreateSpaceDialog: React.FC<CreateSpaceDialogProps> = ({
         })
       setFormError(message)
       toast({ title: message, variant: 'destructive' })
+      return
+    }
+
+    if (isCloudCreate && cloudSource === 'git' && !gitUrl.trim()) {
+      setFormError(t('create.cloud.gitUrlRequired', {
+        ns: 'space',
+        defaultValue: 'Git 来源必须填写仓库地址',
+      }))
+      return
+    }
+
+    if (
+      isCloudCreate
+      && cloudSource === 'git'
+      && isGithubRepositoryUrl(gitUrl)
+      && !githubConnection
+    ) {
+      setFormError(t('create.cloud.githubConnectionRequired', {
+        ns: 'space',
+        defaultValue: '请先授权个人 GitHub 连接，再创建云端 Git Workspace',
+      }))
+      setGithubCredentialDialogOpen(true)
       return
     }
 
@@ -689,6 +781,27 @@ const CreateSpaceDialog: React.FC<CreateSpaceDialogProps> = ({
         }
       }
 
+      let gitCredentialRef: string | undefined
+      if (
+        isCloudCreate
+        && cloudSource === 'git'
+        && isGithubRepositoryUrl(gitUrl)
+        && githubConnection
+      ) {
+        try {
+          const result = await window.tabtin.localMcp.createCloudGitCredential(
+            githubConnection.id,
+            organizationId,
+            gitUrl.trim(),
+          )
+          gitCredentialRef = result.credentialRef
+        } catch (error) {
+          const message = error instanceof Error ? error.message : String(error)
+          setFormError(message)
+          return
+        }
+      }
+
       const created = isCloudCreate
         ? await createCloudSpace({
             request_key: crypto.randomUUID(),
@@ -697,7 +810,10 @@ const CreateSpaceDialog: React.FC<CreateSpaceDialogProps> = ({
             description: description.trim() || undefined,
             custom_rules: customRules.trim() || undefined,
             working_dir_type: workingDirType === 'mixed' ? 'code' : workingDirType,
-            source_type: 'empty',
+            source_type: cloudSource,
+            git_url: cloudSource === 'git' ? gitUrl.trim() : undefined,
+            git_ref: cloudSource === 'git' ? gitRef.trim() || undefined : undefined,
+            git_credential_ref: gitCredentialRef,
           })
         : await createSpace({
             organization_id: organizationId,
@@ -1008,6 +1124,95 @@ const CreateSpaceDialog: React.FC<CreateSpaceDialogProps> = ({
                       })}
                     </p>
                   </div>
+                  <div className="grid grid-cols-2 gap-2">
+                    <button
+                      type="button"
+                      onClick={() => setCloudSource('empty')}
+                      className={cn(
+                        'rounded-md border px-3 py-2 text-caption font-medium',
+                        cloudSource === 'empty'
+                          ? 'border-accent bg-accent/10'
+                          : 'border-border/40 text-muted-foreground',
+                      )}
+                    >
+                      {t('create.cloud.empty', { ns: 'space', defaultValue: '空目录' })}
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setCloudSource('git')}
+                      className={cn(
+                        'flex items-center justify-center gap-1.5 rounded-md border px-3 py-2 text-caption font-medium',
+                        cloudSource === 'git'
+                          ? 'border-accent bg-accent/10'
+                          : 'border-border/40 text-muted-foreground',
+                      )}
+                    >
+                      <GitBranch className="h-3.5 w-3.5" />
+                      Git
+                    </button>
+                  </div>
+                  {cloudSource === 'git' ? (
+                    <div className="space-y-2">
+                      <Input
+                        value={gitUrl}
+                        onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                          setGitUrl(event.target.value)
+                          setFormError(null)
+                        }}
+                        placeholder="https://github.com/org/repo.git"
+                        disabled={isCreating}
+                        autoComplete="off"
+                      />
+                      <Input
+                        value={gitRef}
+                        onChange={(event: React.ChangeEvent<HTMLInputElement>) => setGitRef(event.target.value)}
+                        placeholder={t('create.cloud.gitRef', {
+                          ns: 'space',
+                          defaultValue: '分支或 ref（可选）',
+                        })}
+                        disabled={isCreating}
+                        autoComplete="off"
+                      />
+                      {isGithubRepositoryUrl(gitUrl) ? (
+                        githubConnection ? (
+                          <div className="rounded-md border border-success/30 bg-success/10 px-3 py-2 text-caption text-success">
+                            {t('create.cloud.githubAuthorized', {
+                              ns: 'space',
+                              name: githubConnection.name,
+                              defaultValue: `已授权个人 GitHub 连接：${githubConnection.name}`,
+                            })}
+                          </div>
+                        ) : (
+                          <div className="space-y-2 rounded-md border border-border/40 px-3 py-2">
+                            <p className="text-caption text-muted-foreground">
+                              {t('create.cloud.githubConnectionRequired', {
+                                ns: 'space',
+                                defaultValue: 'GitHub 仓库需要先授权你的个人 GitHub 连接。',
+                              })}
+                            </p>
+                            <UIButton
+                              type="button"
+                              size="sm"
+                              onClick={() => setGithubCredentialDialogOpen(true)}
+                              disabled={isCreating}
+                            >
+                              {t('create.cloud.authorizeGithub', {
+                                ns: 'space',
+                                defaultValue: '授权 GitHub',
+                              })}
+                            </UIButton>
+                          </div>
+                        )
+                      ) : (
+                        <p className="text-caption text-muted-foreground/60">
+                          {t('create.cloud.publicGitHint', {
+                            ns: 'space',
+                            defaultValue: '非 GitHub 地址仅支持无需凭据即可访问的公开 HTTPS Git 仓库。',
+                          })}
+                        </p>
+                      )}
+                    </div>
+                  ) : null}
                   <div
                     className="space-y-2 border-t border-border/40 pt-3"
                     data-testid="cloud-harness-selector"
@@ -1275,6 +1480,21 @@ const CreateSpaceDialog: React.FC<CreateSpaceDialogProps> = ({
           </DialogFooter>
         </form>
       </DialogContent>
+      {githubCatalog && githubCredentialDialogOpen ? (
+        <ConnectorCredentialDialog
+          open={githubCredentialDialogOpen}
+          mode="api_key"
+          connectorName={githubCatalog.name}
+          credentialUrl={githubCatalog.credentialUrl}
+          docsUrl={githubCatalog.docsUrl}
+          saving={githubCredentialSaving}
+          onCancel={() => setGithubCredentialDialogOpen(false)}
+          onSubmit={value => {
+            void handleGithubCredentialSubmit({ apiKey: value.apiKey })
+          }}
+          t={t}
+        />
+      ) : null}
     </Dialog>
   )
 }

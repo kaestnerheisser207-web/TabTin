@@ -27,6 +27,9 @@ from apps.tabtinspace.services.cloud_worker_client import (
     CloudWorkerClient,
     CloudWorkerClientError,
 )
+from apps.tabtinspace.services.cloud_git_credential_service import (
+    CloudGitCredentialService,
+)
 SourceType = Literal["empty", "git"]
 _IMMUTABLE_IMAGE = re.compile(r"^.+@sha256:[a-f0-9]{64}$", re.IGNORECASE)
 _ACTIVE_ALLOCATION_STATES = {
@@ -72,6 +75,7 @@ class CloudWorkspaceService(BaseService):
         source_type: SourceType = "empty",
         git_url: str = "",
         git_ref: str = "",
+        git_credential_ref: str = "",
     ) -> CloudWorkspaceResult:
         if not self.user:
             raise ServiceError("AUTH_REQUIRED", "用户未登录", 401)
@@ -116,7 +120,13 @@ class CloudWorkspaceService(BaseService):
             source_type=source_type,
             git_url=git_url,
             git_ref=git_ref,
+            git_credential_ref=git_credential_ref,
         )
+        if source["git_credential_ref"]:
+            CloudGitCredentialService(user=self.user).require_owned(
+                organization_id=organization.id,
+                credential_ref=source["git_credential_ref"],
+            )
         # Fail with the user-owned entitlement before disclosing shared Worker
         # capacity. The check is repeated under the Worker row lock below.
         self._enforce_user_quota()
@@ -184,6 +194,7 @@ class CloudWorkspaceService(BaseService):
             source_type=source["source_type"],
             git_url=source["git_url"],
             git_ref=source["git_ref"],
+            git_credential_ref=source["git_credential_ref"],
         )
         logger.info(
             "[CloudRuntime] create organization=%s workspace=%s allocation=%s worker=%s source=%s result=created",
@@ -340,9 +351,10 @@ class CloudWorkspaceService(BaseService):
         source_type: str,
         git_url: str,
         git_ref: str,
+        git_credential_ref: str,
     ) -> dict[str, str]:
         if source_type == "empty":
-            if any((git_url, git_ref)):
+            if any((git_url, git_ref, git_credential_ref)):
                 raise ServiceError(
                     "CLOUD_SOURCE_INVALID",
                     "空目录来源不能携带 Git 参数",
@@ -352,11 +364,12 @@ class CloudWorkspaceService(BaseService):
                 "source_type": "empty",
                 "git_url": "",
                 "git_ref": "",
+                "git_credential_ref": "",
             }
         if source_type != "git" or not git_url.strip():
             raise ServiceError(
                 "CLOUD_SOURCE_INVALID",
-                "公开 Git 来源必须只提供仓库地址",
+                "Git 来源必须提供仓库地址",
                 400,
             )
         normalized_url = git_url.strip()
@@ -364,7 +377,7 @@ class CloudWorkspaceService(BaseService):
         if parsed.scheme != "https" or not parsed.hostname:
             raise ServiceError(
                 "CLOUD_GIT_URL_INVALID",
-                "公开 Git 来源仅支持无需凭据的 HTTPS 地址",
+                "Git 来源仅支持 HTTPS 地址",
                 400,
             )
         if parsed.password or (parsed.scheme == "https" and parsed.username):
@@ -373,8 +386,15 @@ class CloudWorkspaceService(BaseService):
                 "Git 地址不能内嵌凭据",
                 400,
             )
+        if git_credential_ref.strip() and parsed.hostname.lower() != "github.com":
+            raise ServiceError(
+                "CLOUD_GIT_CREDENTIAL_HOST_FORBIDDEN",
+                "个人 GitHub 凭证只能用于 github.com 仓库",
+                400,
+            )
         return {
             "source_type": "git",
             "git_url": normalized_url,
             "git_ref": git_ref.strip(),
+            "git_credential_ref": git_credential_ref.strip(),
         }
