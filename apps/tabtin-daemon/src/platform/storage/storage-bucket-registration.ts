@@ -616,8 +616,8 @@ export function registerDaemonStorageBuckets(
           '⚠️ 与 Electron 客户端共享同一目录——清理会同时删除 Electron 截图',
           '已通过文件名后缀过滤，仅清图片文件；若仍想限定 owner，请等 v2 owner 隔离上线',
         ],
-        sizeFn: dirSizeFn(() => muse('screenshots'), isImageFile),
-        clearFn: dirClearFn(() => muse('screenshots'), isImageFile),
+        sizeFn: dirSizeFn(() => tabtin('screenshots'), isImageFile),
+        clearFn: dirClearFn(() => tabtin('screenshots'), isImageFile),
       }),
     ),
   );
@@ -637,8 +637,8 @@ export function registerDaemonStorageBuckets(
           '⚠️ 与 Electron 客户端共享同一目录——清理会同时删除 Electron 导出',
           '已通过文件名后缀过滤，仅清 .pdf 文件',
         ],
-        sizeFn: dirSizeFn(() => muse('exports'), isPdfFile),
-        clearFn: dirClearFn(() => muse('exports'), isPdfFile),
+        sizeFn: dirSizeFn(() => tabtin('exports'), isPdfFile),
+        clearFn: dirClearFn(() => tabtin('exports'), isPdfFile),
       }),
     ),
   );
@@ -654,8 +654,8 @@ export function registerDaemonStorageBuckets(
         description:
           'RecordingSession 的 CLI-level actions 录制（不是视频，是动作流 JSON）。',
         warnings: ['清理后历史录制不可见，无法用于回放或导出'],
-        sizeFn: dirSizeFn(() => muse('recordings')),
-        clearFn: dirClearFn(() => muse('recordings')),
+        sizeFn: dirSizeFn(() => tabtin('recordings')),
+        clearFn: dirClearFn(() => tabtin('recordings')),
       }),
     ),
   );
@@ -675,8 +675,8 @@ export function registerDaemonStorageBuckets(
           '⚠️ 与 Electron 客户端共享同一目录——清理会**同时删除 Electron 端同后缀下载文件**',
           '已通过文件名后缀过滤（mp4/mp3/zip/pdf 等），用户手动放入的其他类型文件不动',
         ],
-        sizeFn: dirSizeFn(() => muse('downloads'), isDaemonDownloadFile),
-        clearFn: dirClearFn(() => muse('downloads'), isDaemonDownloadFile),
+        sizeFn: dirSizeFn(() => tabtin('downloads'), isDaemonDownloadFile),
+        clearFn: dirClearFn(() => tabtin('downloads'), isDaemonDownloadFile),
       }),
     ),
   );
@@ -691,8 +691,8 @@ export function registerDaemonStorageBuckets(
         displayName: '流分片临时区',
         description:
           'HLS / DASH 流分片下载与合并临时目录。崩溃时可能遗留孤儿，可放心清。',
-        sizeFn: dirSizeFn(() => muse('tmp')),
-        clearFn: dirClearFn(() => muse('tmp')),
+        sizeFn: dirSizeFn(() => tabtin('tmp')),
+        clearFn: dirClearFn(() => tabtin('tmp')),
       }),
     ),
   );
@@ -708,8 +708,8 @@ export function registerDaemonStorageBuckets(
         displayName: 'Daemon 对话备份',
         description:
           'runtime done 后从 Django 拉回的 transcript（~/.tabtin/daemon/conversations/<sid>.jsonl），用于本地搜索。清理后失去离线搜索能力，但下次 done 时会重新拉回；Django 不可达时无法恢复。',
-        sizeFn: dirSizeFn(() => muse('daemon', 'conversations')),
-        clearFn: dirClearFn(() => muse('daemon', 'conversations')),
+        sizeFn: dirSizeFn(() => tabtin('daemon', 'conversations')),
+        clearFn: dirClearFn(() => tabtin('daemon', 'conversations')),
       }),
     ),
   );
