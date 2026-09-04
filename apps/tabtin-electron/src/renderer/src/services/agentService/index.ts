@@ -34,7 +34,7 @@ import {
   isControlEnvelope,
   type IpcStreamEnvelope,
 } from '@shared/ipc-stream'
-import { isAgentStreamEvent } from '@tabtin/ws-gateway-client'
+import { isAgentStreamEvent } from '@muse/ws-gateway-client'
 import { streamControlPorts } from './streamControlPorts'
 import { createLogger } from '@/utils/logger'
 //  阶段B：仅取类型（编译期擦除，无运行时 service→store 依赖）；handler 工厂
@@ -43,7 +43,7 @@ import type {
   AgentStreamMessage,
   StreamHandlerDeps,
 } from '@/stores/chat/stream/handlers/streamHandlerTypes'
-import type { ChatClient, ChatSession } from '@tabtin/chat-client'
+import type { ChatClient, ChatSession } from '@muse/chat-client'
 import type { ChatSessionTokenUsage } from '@/utils/chatSessionTokenUsage'
 import { runtimeStoreAccess } from './runtimeStoreAccess'
 import { getSessionMessagesFacade, type SessionMessagesFacade } from './sessionMessages'
@@ -121,7 +121,7 @@ function envelopeMatchesSession(envelopeSessionId: string, hubSessionId: string)
 }
 
 async function defaultProbeRuntime(sessionId: string): Promise<ExecutionRuntimeProbeResult> {
-  const getState = window.tabtin?.agentEngine?.getState
+  const getState = window.muse?.agentEngine?.getState
   if (typeof getState !== 'function') return 'unknown'
   try {
     const state = await Promise.resolve(getState({ sessionId }))
@@ -139,7 +139,7 @@ function defaultCancelOnStall(sessionId: string, idleMs: number): void {
     sessionId: sessionId.slice(0, 8),
     idleMs,
   })
-  const abortRun = window.tabtin?.agentEngine?.abortRun
+  const abortRun = window.muse?.agentEngine?.abortRun
   if (typeof abortRun === 'function') {
     void Promise.resolve(abortRun(sessionId)).catch((err) => {
       log.warn('stall cancel via abortRun failed (non-blocking)', {
@@ -149,7 +149,7 @@ function defaultCancelOnStall(sessionId: string, idleMs: number): void {
     })
     return
   }
-  const abort = window.tabtin?.agentEngine?.abort
+  const abort = window.muse?.agentEngine?.abort
   if (typeof abort === 'function') {
     void Promise.resolve(abort({ sessionId })).catch(() => undefined)
   }
@@ -654,12 +654,12 @@ export interface AbortRunResult {
 
 // ─── 出站：runtime bridge（本机 IPC）──────────────────────────────────────
 
-// 类型直接派生自全局 `window.tabtin.agentEngine`（TabTinAPI，由 preload 定义），
+// 类型直接派生自全局 `window.muse.agentEngine`（TabTinAPI，由 preload 定义），
 // 不手写 bridge 类型，避免与 preload 单源漂移。
-type AgentEngineApi = NonNullable<Window['tabtin']>['agentEngine']
+type AgentEngineApi = NonNullable<Window['muse']>['agentEngine']
 
 function requireAgentEngine(): AgentEngineApi {
-  const bridge = window.tabtin?.agentEngine
+  const bridge = window.muse?.agentEngine
   if (!bridge) {
     throw new Error('agentEngine bridge unavailable (no local runtime IPC)')
   }
@@ -668,10 +668,10 @@ function requireAgentEngine(): AgentEngineApi {
 
 /**
  * 本机 runtime IPC 通道是否可用（全局能力探测，非 per-session）。取代散落在各调用点
- * 的 `window.tabtin?.agentEngine?.xxx` 存在性判断。
+ * 的 `window.muse?.agentEngine?.xxx` 存在性判断。
  */
 export function hasRuntimeBridge(): boolean {
-  return !!window.tabtin?.agentEngine
+  return !!window.muse?.agentEngine
 }
 
 type ChatGateway = ReturnType<ReturnType<typeof getChatClient>['getGateway']>
@@ -746,7 +746,7 @@ function isRuntimeExecutionEnabled(agentConfig?: { use_local_runtime?: boolean }
 //
 // 一条 session 的所有出入站操作都是它的方法，调用方 `getSessionController(sessionId)`
 // 取用，签名不再重复携带 sessionId。无自身状态：真相在模块级 `_streamHubs` +
-// `window.tabtin.agentEngine`，控制器只是绑定 sessionId 的门面，可随用随建、无需缓存。
+// `window.muse.agentEngine`，控制器只是绑定 sessionId 的门面，可随用随建、无需缓存。
 //
 // **出站 IPC↔WS 兜底位置按操作语义分层**：
 //   - `abort`：renderer 侧 IPC 快路径 → 后端 WS `chat.cancel` 兜底（本控制器内）。
@@ -834,7 +834,7 @@ export class SessionController {
     const sessionId = this.sessionId
     const cancelTasks: Promise<unknown>[] = []
 
-    const localAbort = typeof window !== 'undefined' ? window.tabtin?.agentEngine?.abort : undefined
+    const localAbort = typeof window !== 'undefined' ? window.muse?.agentEngine?.abort : undefined
     if (typeof localAbort === 'function') {
       cancelTasks.push(localAbort({ sessionId }).catch(() => undefined))
     }
@@ -942,7 +942,7 @@ export class SessionController {
     }
     if (!sessionId) return result
 
-    const bridge = window.tabtin?.agentEngine
+    const bridge = window.muse?.agentEngine
     if (!bridge?.abortRun) {
       log.warn('[abortRun] abort-run bridge unavailable (no local runtime IPC)')
       return result
@@ -1042,7 +1042,7 @@ export class SessionController {
       _ensureLiveStreamIpc?.(this.sessionId)
       // ：出站执行下沉主进程——经 electronWsGateway 发出 chat.send_message，
       // 渲染进程不再自持这条 WS 请求。requestOptions.organizationId 覆盖 auth org。
-      const bridge = window.tabtin?.agentEngine
+      const bridge = window.muse?.agentEngine
       if (!bridge?.gatewaySend) {
         throw new Error('send: gateway-send bridge unavailable (no local runtime IPC)')
       }
@@ -1105,7 +1105,7 @@ export class SessionController {
 
   /** fire-and-forget 推送 app context 到本机 runtime；无 bridge 时静默 no-op。 */
   pushContext(appContext: Parameters<AgentEngineApi['updateContext']>[1]): void {
-    const bridge = window.tabtin?.agentEngine
+    const bridge = window.muse?.agentEngine
     if (!bridge) return
     void bridge.updateContext(this.sessionId, appContext).catch(() => {})
   }

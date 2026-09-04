@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from 'vitest'
-import type { StreamEvent } from '@tabtin/agent-runtime'
+import type { StreamEvent } from '@muse/agent-runtime'
 import { AgentHost } from '../src/agent-host.js'
 import type { AgentPlatformAdapter } from '../src/agent-platform-adapter.js'
 import type { RuntimeResourceFactory } from '../src/runtime/runtime-resource-factory.js'

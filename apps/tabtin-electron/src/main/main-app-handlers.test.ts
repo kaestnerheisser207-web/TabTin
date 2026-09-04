@@ -79,19 +79,19 @@ vi.mock('./agent/ElectronAgentHost', () => ({
 import { createMainAppLifecycleHandlers } from './main-app-handlers'
 
 describe('main-app-handlers', () => {
-  const originalAppId = process.env.TABTIN_APP_ID
+  const originalAppId = process.env.MUSE_APP_ID
 
   beforeEach(() => {
     vi.clearAllMocks()
     mocks.getAllWindows.mockReturnValue([])
-    delete process.env.TABTIN_APP_ID
+    delete process.env.MUSE_APP_ID
   })
 
   afterEach(() => {
     if (originalAppId === undefined) {
-      delete process.env.TABTIN_APP_ID
+      delete process.env.MUSE_APP_ID
     } else {
-      process.env.TABTIN_APP_ID = originalAppId
+      process.env.MUSE_APP_ID = originalAppId
     }
   })
 
@@ -269,7 +269,7 @@ describe('main-app-handlers', () => {
     await handlers.onBeforeQuit()
 
     expect(executeJavaScript).toHaveBeenCalledWith(
-      'try { window.__tabtin_report_offline?.() } catch(e) {}',
+      'try { window.__muse_report_offline?.() } catch(e) {}',
     )
     expect(flushActiveMeetingRecordingOnExit).toHaveBeenCalledTimes(1)
     expect(mocks.notificationDestroy).toHaveBeenCalledTimes(1)

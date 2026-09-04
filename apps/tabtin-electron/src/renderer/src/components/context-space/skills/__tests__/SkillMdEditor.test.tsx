@@ -18,7 +18,7 @@ vi.mock('react-i18next', () => ({
   useTranslation: () => ({ t: (k: string) => k }),
 }))
 
-vi.mock('@tabtin/smartsheet-ui', () => ({
+vi.mock('@muse/smartsheet-ui', () => ({
   Button: ({ children, onClick }: any) => <button onClick={onClick}>{children}</button>,
   ScrollArea: ({ children }: any) => <div>{children}</div>,
 }))
@@ -132,7 +132,7 @@ describe('SkillMdEditor entry button', () => {
     const marketplace = {
       ...baseSkill,
       skill_id: 'code-safety-audit',
-      skill_key: 'app:tabtin-dev-toolkit-pack/code-safety-audit',
+      skill_key: 'app:muse-dev-toolkit-pack/code-safety-audit',
       source: 'app',
       distribution: 'marketplace',
       owner_user_id: null,

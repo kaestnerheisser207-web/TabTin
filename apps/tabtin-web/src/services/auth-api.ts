@@ -1,4 +1,4 @@
-import { API_ENDPOINTS } from '@tabtin/config'
+import { API_ENDPOINTS } from '@muse/config'
 import { getApiClient } from './api-client'
 import type {
   LoginRequest,

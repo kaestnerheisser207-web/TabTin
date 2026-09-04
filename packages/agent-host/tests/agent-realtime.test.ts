@@ -1,4 +1,4 @@
-import { ContentBlockEvents } from '@tabtin/agent-wire'
+import { ContentBlockEvents } from '@muse/agent-wire'
 import { describe, expect, it, vi } from 'vitest'
 import {
   AGENT_REALTIME_EVENT_TYPES,

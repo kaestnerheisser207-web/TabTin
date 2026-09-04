@@ -7,7 +7,7 @@ export default defineConfig({
     conditions: ['source', 'import', 'module', 'default'],
     alias: {
       // 与 agent-runtime 同款：让 sharp / vi.mock 链路走 file-pipeline src。
-      '@tabtin/file-pipeline': path.resolve(__dirname, '../file-pipeline/src/index.ts'),
+      '@muse/file-pipeline': path.resolve(__dirname, '../file-pipeline/src/index.ts'),
     },
   },
   test: {

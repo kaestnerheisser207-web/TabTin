@@ -56,7 +56,7 @@ import {
   isPlanModeGuardActive,
   isAgentModeName,
   type AgentModeName,
-} from '@tabtin/agent-modes';
+} from '@muse/agent-modes';
 
 // ─────────────────────────────────────────────────────────────
 // 入口

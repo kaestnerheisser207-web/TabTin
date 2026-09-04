@@ -46,7 +46,7 @@ vi.mock('../config/api.js', () => ({
   API_BASE_URL: 'http://localhost:6060',
 }))
 
-vi.mock('@tabtin/config', () => ({
+vi.mock('@muse/config', () => ({
   joinApiPath: vi.fn((base: string, path: string) => base + path),
 }))
 

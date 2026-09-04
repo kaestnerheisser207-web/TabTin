@@ -104,7 +104,7 @@ export async function prepareElectronWorkspace({
 }) {
   const pathApi = platform === 'win32' ? path.win32 : path.posix;
   // 与 `pnpm --dir apps/tabtin-electron dev` 的 predev 同源：workspace dist、
-  // Go CLI、tabtin-filegen、desktop runtimes。只跑 predev-build 会漏掉 filegen，
+  // Go CLI、muse-filegen、desktop runtimes。只跑 predev-build 会漏掉 filegen，
   // 首次 `muse file create` 只能落到手动 build.sh。
   const args = [
     pathApi.join(
@@ -216,7 +216,7 @@ export function prepareOptionalElectronWorkspace({
     ].join(' '),
   ];
   const composeEnv = { ...process.env, COMPOSE_DISABLE_ENV_FILE: '1' };
-  delete composeEnv.TABTIN_EDITION;
+  delete composeEnv.MUSE_EDITION;
   delete composeEnv.AUTH_FIXED_VERIFICATION_CODE;
   const playwrightChild = spawnImpl('docker', composeArgs, {
     cwd: rootDir,
@@ -553,7 +553,7 @@ export async function startCommunityElectron({
     cwd: getElectronWorkspace(rootDir, platform),
     env: {
       ...createElectronProcessEnv({ rootDir, platform, env }),
-      TABTIN_COMMUNITY_DEV_BOOTSTRAP: '1',
+      MUSE_COMMUNITY_DEV_BOOTSTRAP: '1',
     },
     stdio: ['inherit', 'inherit', 'inherit', 'ipc'],
     shell: false,

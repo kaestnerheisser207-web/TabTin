@@ -1,5 +1,5 @@
 /**
- * @deprecated 请改用 `import { message } from '@tabtin/smartsheet-ui/message'`。
+ * @deprecated 请改用 `import { message } from '@muse/smartsheet-ui/message'`。
  * 本文件保留 toast() / useToast() 兼容壳，内部全部转发到统一 MessageController。
  */
 

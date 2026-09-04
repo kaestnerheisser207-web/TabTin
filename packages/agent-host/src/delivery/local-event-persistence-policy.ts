@@ -1,4 +1,4 @@
-import { StreamEvents } from '@tabtin/agent-wire'
+import { StreamEvents } from '@muse/agent-wire'
 
 /**
  * 子 Agent 正文与主 Agent 同构，但仍不属于父 session 历史。

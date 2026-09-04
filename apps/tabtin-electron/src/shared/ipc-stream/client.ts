@@ -3,7 +3,7 @@
  *
  * 用法（消费侧的唯一正确写法）：
  *   const stream = openIpcStream<MyEvent>(sessionId, {
- *     subscribe: (handler) => window.tabtin.myApi.onStreamEvent(handler),
+ *     subscribe: (handler) => window.muse.myApi.onStreamEvent(handler),
  *     isTerminalEvent: (e) => e.type === 'lifecycle.end',
  *   })
  *   try {
@@ -84,7 +84,7 @@ export interface OpenIpcStreamOptions<T> {
 
   /**
    * IPC 订阅入口。返回 unsubscribe 函数。typically 由 preload 暴露的
-   * `window.tabtin.xxx.onStreamEvent` 传入。
+   * `window.muse.xxx.onStreamEvent` 传入。
    *
    * handler 接收 envelope（不是裸事件）—— types.ts 的 IpcStreamEnvelope<T>。
    */

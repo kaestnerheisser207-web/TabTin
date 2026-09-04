@@ -16,7 +16,7 @@ import {
 import { cn } from '@utils/cn'
 import { useTranslation } from 'react-i18next'
 import type { CardRendererProps } from '../registry/types'
-import type { UpdateByFilterPreviewData } from '@tabtin/chat-client'
+import type { UpdateByFilterPreviewData } from '@muse/chat-client'
 import { ErrorBanner, LoadingPlaceholder } from './primitives'
 import {
   CARD_RADIUS,

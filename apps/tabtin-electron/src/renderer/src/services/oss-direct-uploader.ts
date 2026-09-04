@@ -1,7 +1,7 @@
 /**
  * Electron 端统一 OSS 直传服务
  *
- * 基于 @tabtin/oss-client 共享包，在浏览器环境下增加 XHR 进度回调。
+ * 基于 @muse/oss-client 共享包，在浏览器环境下增加 XHR 进度回调。
  * 所有前端模块（Chat、TabChat、TabDoc、TabSlide、Crawl）
  * 的文件/图片/媒体上传统一入口。
  *
@@ -25,10 +25,10 @@ import {
   type QuotaWarning,
   type PendingConfirmStorage,
   type PendingConfirm,
-} from '@tabtin/oss-client'
-import { getBucket, registerStorageBucket } from '@tabtin/storage-manager'
+} from '@muse/oss-client'
+import { getBucket, registerStorageBucket } from '@muse/storage-manager'
 import i18n from '@/i18n'
-import { toast } from '@tabtin/smartsheet-ui'
+import { toast } from '@muse/smartsheet-ui'
 import { createLogger } from '@/utils/logger'
 import {
   MainProcessOssUploadTimeoutError,
@@ -40,8 +40,8 @@ const log = createLogger('OssUpload')
 
 // ========== 重导出核心类型 ==========
 
-export { UploadAbortedError, StorageQuotaExceededError, BillingBlockedError, AuthExpiredError, PermissionDeniedError, RateLimitError, computeFileHash } from '@tabtin/oss-client'
-export type { UploadResult } from '@tabtin/oss-client'
+export { UploadAbortedError, StorageQuotaExceededError, BillingBlockedError, AuthExpiredError, PermissionDeniedError, RateLimitError, computeFileHash } from '@muse/oss-client'
+export type { UploadResult } from '@muse/oss-client'
 
 export type DirectUploadResult = UploadResult
 
@@ -90,7 +90,7 @@ async function getAuthToken(): Promise<string> {
   // 这是有意的双层兜底——主进程 keychain 偶发挂掉时仍能用 renderer 端缓存的 token 完成上传，
   // 避免上传任务因为 IPC 闪断而 fail。
   try {
-    const result = await window.tabtin.auth.getAccessToken()
+    const result = await window.muse.auth.getAccessToken()
     if (result?.token) {
       return result.token
     }

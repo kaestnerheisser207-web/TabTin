@@ -13,7 +13,7 @@
  * 同步层安全引用而不产生循环。
  */
 
-import type { ThemeMode } from '@tabtin/app-shell'
+import type { ThemeMode } from '@muse/app-shell'
 import type { ColorSchemeId } from '@/constants/color-schemes'
 import type { UIFontSize } from '@/stores/useUIStore'
 import type { ReplacementRule } from '@/stores/useVoiceSettingsStore'

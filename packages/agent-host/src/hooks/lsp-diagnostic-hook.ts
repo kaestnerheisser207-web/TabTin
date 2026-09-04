@@ -2,9 +2,9 @@
  * LSP Diagnostic Hook —— 每轮把 pending LSP 诊断注入 messages 尾部。
  *
  * **归属（ Phase 1）**：本 hook 原名 `buildLspDiagnosticInjectorHook`，
- * 住在 `@tabtin/agent-runtime` 的 `capability/injectors/lsp-diagnostic-injector.ts`。
- * 因它依赖 `@tabtin/lsp-runtime` + `@tabtin/agent-prompt`，随「引擎零业务依赖」重构
- * 迁到宿主 `@tabtin/agent-host/hooks`。行为逐字节一致，仅换归属与工厂名
+ * 住在 `@muse/agent-runtime` 的 `capability/injectors/lsp-diagnostic-injector.ts`。
+ * 因它依赖 `@muse/lsp-runtime` + `@muse/agent-prompt`，随「引擎零业务依赖」重构
+ * 迁到宿主 `@muse/agent-host/hooks`。行为逐字节一致，仅换归属与工厂名
  * （`buildLspDiagnosticInjectorHook` → `buildLspDiagnosticHook`）。
  *
  * 设计要点：
@@ -19,10 +19,10 @@ import {
   clearAllLSPDiagnostics,
   type DiagnosticFile,
   type Diagnostic,
-} from '@tabtin/lsp-runtime'
-import { buildUserContextWrapper } from '@tabtin/agent-prompt'
-import type { EngineHooks, IterationHookContext } from '@tabtin/agent-runtime/engine'
-import { INTERNAL_MESSAGE_MARKERS } from '@tabtin/agent-runtime/engine'
+} from '@muse/lsp-runtime'
+import { buildUserContextWrapper } from '@muse/agent-prompt'
+import type { EngineHooks, IterationHookContext } from '@muse/agent-runtime/engine'
+import { INTERNAL_MESSAGE_MARKERS } from '@muse/agent-runtime/engine'
 import { removeTaggedBlock, upsertTaggedBlock } from './message-inject.js'
 
 // ─── Public Types ────────────────────────────────────────────────────

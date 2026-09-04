@@ -31,8 +31,8 @@ import {
   checkSectionCharBudget,
   checkLanguageDiscipline,
   checkNoDeprecatedTerms,
-} from '@tabtin/prompt-contract';
-import type { SectionDescriptor } from '@tabtin/prompt-contract';
+} from '@muse/prompt-contract';
+import type { SectionDescriptor } from '@muse/prompt-contract';
 import {
   buildPrincipleSection,
   buildEnvironmentSection,
@@ -49,7 +49,7 @@ import {
   SECTION_SAFETY,
   SECTION_PLANNING,
 } from '../generated-content.js';
-import { AGENT_MODE_PROMPT_SECTIONS } from '@tabtin/agent-modes';
+import { AGENT_MODE_PROMPT_SECTIONS } from '@muse/agent-modes';
 
 // ─── Fixtures ─────────────────────────────────────────────────────────
 

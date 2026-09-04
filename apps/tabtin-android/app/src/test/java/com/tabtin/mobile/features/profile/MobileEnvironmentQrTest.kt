@@ -7,7 +7,7 @@ import org.junit.Test
 class MobileEnvironmentQrTest {
     @Test
     fun `parses versioned desktop payload`() {
-        val payload = "tabtin://mobile-environment?v=1&api=https%3A%2F%2Fapi.example.com%2Fapi&ws=wss%3A%2F%2Fapi.example.com%2Fws%2Fv1%2Fgateway&web=https%3A%2F%2Fapp.example.com&centrifugo=wss%3A%2F%2Fapi.example.com%2Fconnection%2Fwebsocket"
+        val payload = "muse://mobile-environment?v=1&api=https%3A%2F%2Fapi.example.com%2Fapi&ws=wss%3A%2F%2Fapi.example.com%2Fws%2Fv1%2Fgateway&web=https%3A%2F%2Fapp.example.com&centrifugo=wss%3A%2F%2Fapi.example.com%2Fconnection%2Fwebsocket"
 
         assertEquals(
             MobileEnvironmentConfiguration(
@@ -24,7 +24,7 @@ class MobileEnvironmentQrTest {
     fun `rejects unsupported version`() {
         assertNull(
             MobileEnvironmentQr.parse(
-                "tabtin://mobile-environment?v=2&api=https://api.example.com/api&ws=wss://api.example.com/ws&web=https://app.example.com&centrifugo=wss://api.example.com/connection/websocket",
+                "muse://mobile-environment?v=2&api=https://api.example.com/api&ws=wss://api.example.com/ws&web=https://app.example.com&centrifugo=wss://api.example.com/connection/websocket",
             ),
         )
     }
@@ -33,7 +33,7 @@ class MobileEnvironmentQrTest {
     fun `rejects incomplete payload`() {
         assertNull(
             MobileEnvironmentQr.parse(
-                "tabtin://mobile-environment?v=1&api=https://api.example.com/api&ws=wss://api.example.com/ws&web=https://app.example.com",
+                "muse://mobile-environment?v=1&api=https://api.example.com/api&ws=wss://api.example.com/ws&web=https://app.example.com",
             ),
         )
     }

@@ -1,5 +1,5 @@
 import { createElement } from 'react'
-import { toast, ToastAction } from '@tabtin/smartsheet-ui'
+import { toast, ToastAction } from '@muse/smartsheet-ui'
 import type { TFunction } from 'i18next'
 import { saveExportBlob } from '@/services/tableCoreRuntime'
 
@@ -7,7 +7,7 @@ function isRendererReadableDownloadUrl(url: string): boolean {
   return (
     url.startsWith('blob:') ||
     url.startsWith('data:') ||
-    url.startsWith('tabtin-file:')
+    url.startsWith('muse-file:')
   )
 }
 
@@ -16,7 +16,7 @@ function isRemoteHttpDownloadUrl(url: string): boolean {
 }
 
 async function downloadViaMainProcess(url: string, fileName: string) {
-  const downloadResource = window.tabtin?.resourceDetection?.downloadResource
+  const downloadResource = window.muse?.resourceDetection?.downloadResource
   if (!downloadResource) return null
 
   const result = await downloadResource({ url, filename: fileName })
@@ -76,7 +76,7 @@ async function downloadViaBlob(url: string, fileName: string) {
 }
 
 function showSavedToast(fileName: string, filePath: string | undefined, t: TFunction) {
-  const tabtin = window.tabtin
+  const tabtin = window.muse
   const message = t('fileDownloadSuccess', { fileName })
   if (filePath && tabtin?.showItemInFolder) {
     const label = t('fileDownloadShowInFolder')

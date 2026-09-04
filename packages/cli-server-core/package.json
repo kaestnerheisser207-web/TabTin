@@ -1,5 +1,5 @@
 {
-  "name": "@tabtin/cli-server-core",
+  "name": "@muse/cli-server-core",
   "version": "0.1.0",
   "description": "Shared HTTP-over-socket CLI server infrastructure for Electron and Daemon",
   "type": "module",
@@ -90,8 +90,8 @@
   "author": "Muse Team",
   "license": "MIT",
   "dependencies": {
-    "@tabtin/agent-wire": "workspace:*",
-    "@tabtin/shared": "workspace:*"
+    "@muse/agent-wire": "workspace:*",
+    "@muse/shared": "workspace:*"
   },
   "devDependencies": {
     "@types/node": "^22.0.0",

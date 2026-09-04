@@ -1,10 +1,10 @@
 import { describe, expect, it } from 'vitest'
-import type { Field, ViewMeta } from '@tabtin/table-core'
+import type { Field, ViewMeta } from '@muse/table-core'
 import {
   buildViewColumnMetaUpdate,
   getViewFieldOrderSnapshot,
   mergeReorderedSubsetIntoFieldOrder,
-} from '@tabtin/table-ui'
+} from '@muse/table-ui'
 
 const buildField = (
   id: string,

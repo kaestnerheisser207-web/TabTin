@@ -31,7 +31,7 @@ from apps.users.auth.utils import generate_jwt_token
 User = get_user_model()
 
 
-@override_settings(TABTIN_REQUIRE_INVITE_CODE=False)
+@override_settings(MUSE_REQUIRE_INVITE_CODE=False)
 class SessionArchiveRestoreTest(TransactionTestCase):
     """归档 / 恢复会话的完整闭环。"""
 

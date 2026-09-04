@@ -14,13 +14,13 @@ import {
   uninstallSkillLocal,
   isValidSkillKey,
   type PackageRegistryFile,
-} from '@tabtin/agent-host/skills'
-import { parseAppSkillCanonicalKey } from '@tabtin/agent-runtime/skills'
+} from '@muse/agent-host/skills'
+import { parseAppSkillCanonicalKey } from '@muse/agent-runtime/skills'
 import {
   resolveDataRoot,
   resolveOrganizationSkillDir,
   resolveUserSkillDir,
-} from '@tabtin/terminal-core'
+} from '@muse/terminal-core'
 import {
   getCLIOrganizationId,
   getCLISkillsMaterializer,

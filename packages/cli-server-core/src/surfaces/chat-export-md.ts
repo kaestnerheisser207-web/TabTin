@@ -3,7 +3,7 @@
  *
  * 这是 PlatformSurface 框架的第一个端到端 PoC surface，验证
  * "一份 service 多 binding"的完整故事：
- *   - IPC: renderer 通过 window.tabtin.chat.exportMd({sessionId}) 调用
+ *   - IPC: renderer 通过 window.muse.chat.exportMd({sessionId}) 调用
  *   - HTTP: Electron / Daemon CLI Server 通过 POST /chat/export-md 调用
  *   - alias: chat:export / /chat/export 也指向同一个 handler
  *

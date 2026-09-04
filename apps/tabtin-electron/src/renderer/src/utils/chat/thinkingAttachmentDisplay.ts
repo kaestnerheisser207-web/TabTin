@@ -1,4 +1,4 @@
-import type { ChatMessage } from '@tabtin/chat-client'
+import type { ChatMessage } from '@muse/chat-client'
 import type { ContentBlockEntry } from '@stores/useChatRuntimeStore'
 import { readMessageBlocks } from '@components/chat/blocks/messageContentBlocks'
 import { isFileContextRefBlock } from './fileContextRefBlock'

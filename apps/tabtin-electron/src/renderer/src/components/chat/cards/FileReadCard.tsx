@@ -10,7 +10,7 @@ import { useTranslation } from 'react-i18next'
 import { FileText } from 'lucide-react'
 import { cn } from '@utils/cn'
 import type { CardRendererProps } from '../registry/types'
-import type { FileReadData, MaterializedFilesData } from '@tabtin/chat-client'
+import type { FileReadData, MaterializedFilesData } from '@muse/chat-client'
 import { CodeBlock } from './primitives'
 import {
   ICON_SIZE,

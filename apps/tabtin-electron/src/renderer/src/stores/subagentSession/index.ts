@@ -109,7 +109,7 @@ export const useSubagentSessionStore = create<SubagentSessionState>((set, get) =
       }
     })
 
-    const bridge = window.tabtin?.agentEngine?.readSubagentSession
+    const bridge = window.muse?.agentEngine?.readSubagentSession
     if (!bridge) {
       set(state => {
         const prevEntry = state.subagentSessionDataBySubId[subagentRunId] ?? {}

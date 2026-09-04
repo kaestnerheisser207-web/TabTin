@@ -29,7 +29,7 @@ export function createCancelHostPendingActions(
   const cancelOnHost = async (sessionId: string, runId: string): Promise<boolean> => {
     if (!sessionId || !runId) return false
 
-    const cancelQueuedRun = window.tabtin?.agentEngine?.cancelQueuedRun
+    const cancelQueuedRun = window.muse?.agentEngine?.cancelQueuedRun
     if (typeof cancelQueuedRun !== 'function') {
       log.warn('[cancelQueuedRun] bridge unavailable')
       trackChatTelemetry('queue.cancel_queued.no_bridge', { runId }, {

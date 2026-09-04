@@ -9,7 +9,7 @@ import {
   DialogTitle,
   Button,
   Separator,
-} from '@tabtin/smartsheet-ui'
+} from '@muse/smartsheet-ui'
 import { AlertTriangle } from 'lucide-react'
 
 export interface CostConfirmDialogProps {

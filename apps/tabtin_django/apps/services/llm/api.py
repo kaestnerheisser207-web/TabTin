@@ -446,7 +446,7 @@ def _chat_billing_skip_layers() -> frozenset[str]:
     )
 
     layers = {LAYER_GUARD, LAYER_SERVICE_GUARD}
-    if settings.TABTIN_EDITION == "community":
+    if settings.MUSE_EDITION == "community":
         layers.add(LAYER_BALANCE)
     return frozenset(layers)
 

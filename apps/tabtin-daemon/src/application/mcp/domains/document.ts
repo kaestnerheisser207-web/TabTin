@@ -1,4 +1,4 @@
-import { API_ENDPOINTS } from '@tabtin/config'
+import { API_ENDPOINTS } from '@muse/config'
 import { McpDomainSupport } from './domain-support.js'
 interface DjangoDocEntry { id: string; title?: string; created_at?: string; updated_at?: string }
 interface DjangoDocListPayload { documents?: DjangoDocEntry[]; items?: DjangoDocEntry[] }

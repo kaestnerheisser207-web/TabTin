@@ -1,4 +1,4 @@
-/* eslint-disable tabtin/no-chat-design-violations -- 重要度星标（amber ★ 评分）是记忆卡的领域评级色，等同评分/标记约定色，非 UI 警示色 */
+/* eslint-disable muse/no-chat-design-violations -- 重要度星标（amber ★ 评分）是记忆卡的领域评级色，等同评分/标记约定色，非 UI 警示色 */
 /**
  * `memory_card` kind renderer (W7) — used by memory_search.
  *
@@ -10,7 +10,7 @@
 import React, { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Brain, Link2 } from 'lucide-react'
-import type { RichContentBlock } from '@tabtin/chat-client'
+import type { RichContentBlock } from '@muse/chat-client'
 import { openAgentMemory } from '@/services/agentMemoryNavigation'
 import { useOrganizationStore } from '@stores/useOrganizationStore'
 import { formatRichRelativeTime } from './relativeTime'

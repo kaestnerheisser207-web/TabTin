@@ -5,14 +5,14 @@
  * 谁先挂载谁触发加载，另一处复用缓存，刷新也只刷一次，避免重复请求 + 列表不同步。
  *
  * 数据来源与 SpaceHome 原实现一致：
- *   - 文档：@tabtin/tabdoc-ui/api-client listDocuments
- *   - 表格：@tabtin/table-core TableApiService.getTablesBySpace
+ *   - 文档：@muse/tabdoc-ui/api-client listDocuments
+ *   - 表格：@muse/table-core TableApiService.getTablesBySpace
  */
 
 import { create } from 'zustand'
-import { TableApiService, type Table } from '@tabtin/table-core'
-import { listDocuments, type TabdocDocument } from '@tabtin/tabdoc-ui/api-client'
-import { useTableViewUiStore } from '@tabtin/table-ui'
+import { TableApiService, type Table } from '@muse/table-core'
+import { listDocuments, type TabdocDocument } from '@muse/tabdoc-ui/api-client'
+import { useTableViewUiStore } from '@muse/table-ui'
 import { getSharedAppHostClient } from '@/adapters/sharedAppHostClient'
 import { configureWebTableRuntime } from '@/features/table/bootstrap'
 import i18n from '@/i18n'

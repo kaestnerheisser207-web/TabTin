@@ -180,7 +180,7 @@ public class MainActivity : AppCompatActivity() {
             }
             "resource" -> {
                 if (!data.scheme.equals("tabtin", ignoreCase = true)) return
-                // tabtin://resource/<type>/<id>（来自 RichResourceRef tap 或外部分享）
+                // muse://resource/<type>/<id>（来自 RichResourceRef tap 或外部分享）
                 // path segments: [<type>, <id>]
                 val segments = data.pathSegments
                 val type = segments.getOrNull(0)?.takeIf { it.isNotBlank() } ?: return
@@ -243,4 +243,4 @@ public class MainActivity : AppCompatActivity() {
 
 internal fun isSupportedInviteDeepLinkScheme(scheme: String?): Boolean =
     scheme.equals("tabtin", ignoreCase = true) ||
-        scheme.equals("tabtin-preprod", ignoreCase = true)
+        scheme.equals("muse-preprod", ignoreCase = true)

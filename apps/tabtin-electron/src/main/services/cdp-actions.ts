@@ -10,9 +10,9 @@ import {
   setCDPScreenshotAPI,
   setPdfAPI,
   setPageToMarkdownAPI,
-} from '@tabtin/action-tools/runtime'
-import { createTurndownInstance } from '@tabtin/action-tools/headless'
-import { getHomeTabtinPath } from '@tabtin/shared/storage-paths'
+} from '@muse/action-tools/runtime'
+import { createTurndownInstance } from '@muse/action-tools/headless'
+import { getHomeTabtinPath } from '@muse/shared/storage-paths'
 import { getViewFactory } from '../view-factory'
 
 function isWebContentsVisible(webContents: any): boolean {

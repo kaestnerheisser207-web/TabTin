@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
-import { isTemporarilyHiddenSkill } from '@tabtin/agent-runtime/skills';
+import { isTemporarilyHiddenSkill } from '@muse/agent-runtime/skills';
 import { TEMPORARILY_HIDDEN_SKILLS } from '../src/capabilities/hidden-skills.js';
 
 describe('TEMPORARILY_HIDDEN_SKILLS', () => {

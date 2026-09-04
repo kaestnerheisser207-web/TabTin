@@ -5,11 +5,11 @@ cd "$(dirname "$0")/.."
 # shellcheck disable=SC1091
 source ./filegen-arch.sh
 
-[ "$(filegen_generic_bin_name darwin)" = "tabtin-filegen" ]
-[ "$(filegen_generic_bin_name win32)" = "tabtin-filegen.exe" ]
-[ "$(filegen_arch_bin_name darwin arm64)" = "tabtin-filegen-darwin-arm64" ]
-[ "$(filegen_arch_bin_name darwin x64)" = "tabtin-filegen-darwin-x64" ]
-[ "$(filegen_arch_bin_name win32 x64)" = "tabtin-filegen-win32-x64.exe" ]
+[ "$(filegen_generic_bin_name darwin)" = "muse-filegen" ]
+[ "$(filegen_generic_bin_name win32)" = "muse-filegen.exe" ]
+[ "$(filegen_arch_bin_name darwin arm64)" = "muse-filegen-darwin-arm64" ]
+[ "$(filegen_arch_bin_name darwin x64)" = "muse-filegen-darwin-x64" ]
+[ "$(filegen_arch_bin_name win32 x64)" = "muse-filegen-win32-x64.exe" ]
 
 tmp="$(mktemp)"
 printf 'not-macho' >"$tmp"

@@ -6,8 +6,8 @@ import type {
   MessageBlockRecord,
   PersistedEntryOwner,
   TranscriptEntry,
-} from '@tabtin/agent-runtime'
-import { StreamEvents } from '@tabtin/agent-wire'
+} from '@muse/agent-runtime'
+import { StreamEvents } from '@muse/agent-wire'
 
 import {
   RelaySessionOrchestrator,

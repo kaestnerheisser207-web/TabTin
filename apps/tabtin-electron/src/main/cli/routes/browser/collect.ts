@@ -1,11 +1,11 @@
 import http from 'node:http'
-import { okResponse } from '@tabtin/agent-wire'
+import { okResponse } from '@muse/agent-wire'
 import {
   collectBrowserTableDataset,
   type BrowserToTableDataset,
   type BrowserToTableField,
-} from '@tabtin/browser-core'
-import { buildBulkImportResultPayload } from '@tabtin/cli-routes'
+} from '@muse/browser-core'
+import { buildBulkImportResultPayload } from '@muse/cli-routes'
 import type { SendJSON, ActionExecutor } from './_helpers'
 import {
   buildBrowserRequestScope,

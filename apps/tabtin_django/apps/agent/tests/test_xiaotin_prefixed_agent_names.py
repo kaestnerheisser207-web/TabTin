@@ -17,7 +17,7 @@ from apps.tabtinspace.signals import create_default_organization
 User = get_user_model()
 
 
-@override_settings(TABTIN_REQUIRE_INVITE_CODE=False)
+@override_settings(MUSE_REQUIRE_INVITE_CODE=False)
 class XiaotinPrefixedAgentNamesTests(TestCase):
     databases = {"default", "postgresql"}
 

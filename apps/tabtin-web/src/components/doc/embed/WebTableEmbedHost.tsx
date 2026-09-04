@@ -32,9 +32,9 @@ import {
   ConfirmDialog,
   LoadingSpinner,
   toast,
-} from '@tabtin/smartsheet-ui'
-import { useTabDocTableEmbedRuntime } from '@tabtin/tabdoc-ui'
-import { EMBED_LOADING_TIMEOUT_MS, isEmbedFieldsReady } from '@tabtin/tabdoc-ui/editor'
+} from '@muse/smartsheet-ui'
+import { useTabDocTableEmbedRuntime } from '@muse/tabdoc-ui'
+import { EMBED_LOADING_TIMEOUT_MS, isEmbedFieldsReady } from '@muse/tabdoc-ui/editor'
 import {
   TableStoreProvider,
   useTableStore,

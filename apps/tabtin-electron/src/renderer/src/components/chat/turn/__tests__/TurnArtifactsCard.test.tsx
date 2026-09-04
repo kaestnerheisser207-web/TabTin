@@ -42,7 +42,7 @@ const mockVirtualModule = vi.mock as unknown as (
   factory: () => unknown,
   options: { virtual: boolean },
 ) => void
-mockVirtualModule('@tabtin/resource-router', () => ({
+mockVirtualModule('@muse/resource-router', () => ({
   parseResourcePointer: (href: string) => {
     const match = /^tabtin:\/\/resource\/([^/?#]+)\/([^?#]+)(?:\?([^#]*))?/.exec(href)
     const params = new URLSearchParams(match?.[3] ?? '')
@@ -57,7 +57,7 @@ mockVirtualModule('@tabtin/resource-router', () => ({
   },
 }), { virtual: true })
 
-vi.mock('@tabtin/smartsheet-ui', () => ({
+vi.mock('@muse/smartsheet-ui', () => ({
   Dialog: ({ children }: { children: React.ReactNode }) => <div>{children}</div>,
   DialogContent: ({ children }: { children: React.ReactNode }) => <div>{children}</div>,
   DialogHeader: ({ children }: { children: React.ReactNode }) => <div>{children}</div>,
@@ -169,7 +169,7 @@ const LOCAL_FILE_ARTIFACT: TurnArtifact = {
   id: 'a1',
   kind: 'file',
   title: 'demo-table.xlsx',
-  href: 'tabtin://resource/file/artifacts%2Fdemo-table.xlsx?hint=tabfiles&title=demo-table.xlsx',
+  href: 'muse://resource/file/artifacts%2Fdemo-table.xlsx?hint=tabfiles&title=demo-table.xlsx',
   subtitleKey: 'previewFile',
 }
 
@@ -177,7 +177,7 @@ const LOCAL_HTML_ARTIFACT: TurnArtifact = {
   id: 'a-html',
   kind: 'file',
   title: 'spring.html',
-  href: 'tabtin://resource/file/artifacts%2Fspring.html?hint=tabfiles&title=spring.html',
+  href: 'muse://resource/file/artifacts%2Fspring.html?hint=tabfiles&title=spring.html',
   subtitleKey: 'previewFile',
 }
 
@@ -185,7 +185,7 @@ const UNSUPPORTED_LOCAL_ARTIFACT: TurnArtifact = {
   id: 'a-zip',
   kind: 'file',
   title: 'bundle.zip',
-  href: 'tabtin://resource/file/artifacts%2Fbundle.zip?hint=tabfiles&title=bundle.zip',
+  href: 'muse://resource/file/artifacts%2Fbundle.zip?hint=tabfiles&title=bundle.zip',
   subtitleKey: 'previewFile',
 }
 
@@ -193,7 +193,7 @@ const CLOUD_DOC_ARTIFACT: TurnArtifact = {
   id: 'a2',
   kind: 'doc',
   title: '随手文档',
-  href: 'tabtin://resource/document/doc_1?hint=tabdoc',
+  href: 'muse://resource/document/doc_1?hint=tabdoc',
   subtitleKey: 'previewDoc',
 }
 
@@ -208,7 +208,7 @@ function makeLocalFileArtifact(index: number): TurnArtifact {
     id: `local-file-${index}`,
     kind: 'file',
     title: `file-${index}.md`,
-    href: `tabtin://resource/file/artifacts%2Ffile-${index}.md?hint=tabfiles&title=file-${index}.md`,
+    href: `muse://resource/file/artifacts%2Ffile-${index}.md?hint=tabfiles&title=file-${index}.md`,
     subtitleKey: 'previewFile',
   }
 }
@@ -239,12 +239,12 @@ describe('TurnArtifactsCard — 与 create_file 卡统一的打开方式', () =>
       {
         ...makeLocalFileArtifact(1),
         title: 'file-1.xlsx',
-        href: 'tabtin://resource/file/artifacts%2Ffile-1.xlsx?hint=tabfiles&title=file-1.xlsx',
+        href: 'muse://resource/file/artifacts%2Ffile-1.xlsx?hint=tabfiles&title=file-1.xlsx',
       },
       {
         ...makeLocalFileArtifact(2),
         title: 'file-2.xlsx',
-        href: 'tabtin://resource/file/artifacts%2Ffile-2.xlsx?hint=tabfiles&title=file-2.xlsx',
+        href: 'muse://resource/file/artifacts%2Ffile-2.xlsx?hint=tabfiles&title=file-2.xlsx',
       },
     ]
     renderCard(artifacts)
@@ -297,7 +297,7 @@ describe('TurnArtifactsCard — 与 create_file 卡统一的打开方式', () =>
       id: 'older-file',
       kind: 'file',
       title: 'older.md',
-      href: 'tabtin://resource/file/older.md?hint=tabfiles&title=older.md',
+      href: 'muse://resource/file/older.md?hint=tabfiles&title=older.md',
       subtitleKey: 'previewFile',
     }
     renderCard([LOCAL_FILE_ARTIFACT], [LOCAL_FILE_ARTIFACT, older])
@@ -516,7 +516,7 @@ describe('TurnArtifactsCard — 与 create_file 卡统一的打开方式', () =>
       id: 'shared-table',
       kind: 'table',
       title: '今天天气',
-      href: 'tabtin://resource/table/324dc4f9-f459-4e9c-87dc-d3669fcc6a60?hint=tabdata',
+      href: 'muse://resource/table/324dc4f9-f459-4e9c-87dc-d3669fcc6a60?hint=tabdata',
       subtitleKey: 'previewTable',
     }
     render(

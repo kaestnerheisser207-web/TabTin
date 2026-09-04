@@ -17,8 +17,8 @@ class IncrementalSessionShareResourceGrantTests(SimpleTestCase):
             {
                 "type": "text",
                 "text": (
-                    "tabtin://resource/table/%3Ctable_id%3E "
-                    f"tabtin://resource/document/{valid_id}"
+                    "muse://resource/table/%3Ctable_id%3E "
+                    f"muse://resource/document/{valid_id}"
                 ),
             },
         ])

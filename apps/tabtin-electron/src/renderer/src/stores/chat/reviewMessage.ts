@@ -2,7 +2,7 @@
  * HITL review 提示文案构造（从 useChatStore 抽出，供组合根与 bootstrap 端口共用）。
  * 纯函数：只依赖入参 + i18n 文案，不触碰 store。
  */
-import type { ReviewRequiredEventData } from '@tabtin/chat-client'
+import type { ReviewRequiredEventData } from '@muse/chat-client'
 import i18n from '@/i18n'
 
 export function buildReviewMessage(data: ReviewRequiredEventData): string {

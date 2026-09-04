@@ -9,7 +9,7 @@ import React from 'react'
 import { FileText } from 'lucide-react'
 import { cn } from '@utils/cn'
 import { useTranslation } from 'react-i18next'
-import type { MessageBlock } from '@tabtin/chat-client'
+import type { MessageBlock } from '@muse/chat-client'
 
 interface DocumentRefChipProps {
   block: MessageBlock

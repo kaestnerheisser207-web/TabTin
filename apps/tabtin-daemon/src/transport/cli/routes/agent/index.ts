@@ -19,7 +19,7 @@
 
 import http from 'node:http';
 import WebSocket from 'ws';
-import { mapWsEventToSse, proxyChatSessionFork, isSuccessfulHttpStatus } from '@tabtin/agent-wire';
+import { mapWsEventToSse, proxyChatSessionFork, isSuccessfulHttpStatus } from '@muse/agent-wire';
 import { djangoRequest, errorResponse, okResponse, type SendJSON } from '../shared/error-handler.js';
 import type { CliRequestContext } from '../../cli-context.js';
 
@@ -612,4 +612,4 @@ async function handleFork(
   }
 }
 
-// mapWsEventToSse imported from @tabtin/agent-wire (single source of truth)
+// mapWsEventToSse imported from @muse/agent-wire (single source of truth)

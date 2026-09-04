@@ -229,7 +229,7 @@ final class NotificationTargetResolverTests: XCTestCase {
 
     func testExternalResourceURLStillRequiresLegacyHostContext() throws {
         let url = try XCTUnwrap(URL(string:
-            "tabtin://resource/tabdoc/doc-1?organization_id=org-1"
+            "muse://resource/tabdoc/doc-1?organization_id=org-1"
         ))
 
         XCTAssertEqual(ResourceDeepLinkParser.parse(url), .missingContext)

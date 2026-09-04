@@ -5,7 +5,7 @@ import {
   resolveDisabledToolPrefixes,
   matchDisabledToolDomain,
   matchDisabledToolPrefix,
-} from '@tabtin/agent-wire';
+} from '@muse/agent-wire';
 
 describe('AgentBackendConfigSchema — disabled_apps field', () => {
   it('preserves disabled_apps when present', () => {

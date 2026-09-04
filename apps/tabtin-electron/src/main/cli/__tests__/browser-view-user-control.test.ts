@@ -77,7 +77,7 @@ import { getEventPersistence } from '../../run-session/EventPersistence'
 import {
   getSharedBrowserJobManager,
   resetSharedBrowserJobManager,
-} from '@tabtin/browser-core'
+} from '@muse/browser-core'
 
 type BrowserRequestCase = {
   name: string
@@ -212,8 +212,8 @@ function requestBrowser(
 
 describe('Browser view 用户控制独占租约', () => {
   beforeAll(async () => {
-    previousDevInstance = process.env.TABTIN_DEV_INSTANCE
-    process.env.TABTIN_DEV_INSTANCE = 'browser-view-lease-test'
+    previousDevInstance = process.env.MUSE_DEV_INSTANCE
+    process.env.MUSE_DEV_INSTANCE = 'browser-view-lease-test'
     setCLIActionExecutor(mockExecutor)
     setCLIViewGetter(() => ({
       webContents: { isDestroyed: () => false },
@@ -228,9 +228,9 @@ describe('Browser view 用户控制独占租约', () => {
     await stopCLIServer()
     resetBrowserTabInputLockForTests()
     if (previousDevInstance === undefined) {
-      delete process.env.TABTIN_DEV_INSTANCE
+      delete process.env.MUSE_DEV_INSTANCE
     } else {
-      process.env.TABTIN_DEV_INSTANCE = previousDevInstance
+      process.env.MUSE_DEV_INSTANCE = previousDevInstance
     }
   })
 

@@ -60,7 +60,7 @@ export const CodexSessionShareDialog: React.FC<Props> = ({
     setStage('locating')
     setProgress(8)
     try {
-      const source = await window.tabtin.codexSessionShare.read(normalizedSessionId)
+      const source = await window.muse.codexSessionShare.read(normalizedSessionId)
       setStage('compressing')
       setProgress(10)
       const sourceBytes = new Uint8Array(source.buffer)

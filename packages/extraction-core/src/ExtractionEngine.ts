@@ -1,6 +1,6 @@
 import { load } from 'cheerio';
 import type { CheerioAPI } from 'cheerio';
-import type { ExtractionSchema } from '@tabtin/crawl-contracts';
+import type { ExtractionSchema } from '@muse/crawl-contracts';
 import { type CheerioEl, resolveSelector, textOf, attrOf, htmlOf } from './selectors/css';
 import { applyTransform, applyArrayTransform } from './transforms/index';
 import { validate } from './transforms/validators';

@@ -9,7 +9,7 @@ import {
   X, Paperclip, Loader2, FileSymlink, IdCard, Send, Code, FileText, Table2,
   SquareTerminal, Share2,
 } from 'lucide-react'
-import { toast } from '@tabtin/smartsheet-ui'
+import { toast } from '@muse/smartsheet-ui'
 import { cn } from '@utils/cn'
 import { useIMStore } from '@stores/useIMStore'
 import { useUserProfile, useUserProfileCache } from '@stores/useUserProfileCache'
@@ -49,7 +49,7 @@ import { OpenAIIcon } from './OpenAIIcon'
 import { isCodexSessionShareAvailable } from './codexSessionShareAvailability'
 import { EmojiPanel } from './EmojiPanel'
 import {
-  TABTIN_ROBOT_PACK_ID,
+  MUSE_ROBOT_PACK_ID,
   type TabtinRobotSticker,
 } from './stickers/tabtinRobotPack'
 import { stickerSrcToFile } from './stickers/stickerSrcToFile'
@@ -606,7 +606,7 @@ export const IMMessageInput: React.FC<Props> = ({
         file_name: result.file_name,
         file_size: result.file_size,
         file_type: result.file_type,
-        sticker: { pack: TABTIN_ROBOT_PACK_ID, id: sticker.id },
+        sticker: { pack: MUSE_ROBOT_PACK_ID, id: sticker.id },
       })
       onCancelReply?.()
     } catch (uploadErr) {

@@ -1,7 +1,7 @@
 // tracker_showcase_test.go — Tracker / 自动化 能力总览注册期 invariant + manifest 导出测试。
 //
 // 镜像 cmd/browser/browser_showcase_test.go 的 showcase 套件：把「漏登记命令 / registry
-// 不一致 / manifest 结构漂移」从「跑 ./dist/tabtin 才暴露」提前到 `go test`。
+// 不一致 / manifest 结构漂移」从「跑 ./dist/muse 才暴露」提前到 `go test`。
 // 自动化场景下「派活给 Agent + 全程可控」是核心诉求，所以 registry 必须覆盖全部叶子命令。
 package cmd
 

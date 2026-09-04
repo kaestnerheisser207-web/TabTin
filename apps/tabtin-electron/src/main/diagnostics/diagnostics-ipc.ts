@@ -29,7 +29,7 @@ import {
   handleQueueSupportUpload,
 } from './diagnostics-handlers'
 import { collectHostEnv } from './collect-host-env'
-import { okResponse } from '@tabtin/agent-wire'
+import { okResponse } from '@muse/agent-wire'
 
 const log = createLogger('DiagnosticsIPC')
 

@@ -10,9 +10,9 @@ import React, { useCallback, useMemo, useState } from 'react'
 import { Database, Copy, Check } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { cn } from '@utils/cn'
-import { ScrollArea } from '@tabtin/smartsheet-ui'
+import { ScrollArea } from '@muse/smartsheet-ui'
 import type { CardRendererProps } from '../registry/types'
-import type { SqlResultData } from '@tabtin/chat-client'
+import type { SqlResultData } from '@muse/chat-client'
 import {
   CARD_RADIUS,
   CARD_HEADER_PADDING,

@@ -5,4 +5,4 @@ export {
   normalizeOrganization as normalizeOrganization,
   normalizeOrganizationList as normalizeOrganizationList,
   normalizeString,
-} from '@tabtin/app-shell'
+} from '@muse/app-shell'

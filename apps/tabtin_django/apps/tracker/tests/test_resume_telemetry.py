@@ -25,7 +25,7 @@ Layer A — 纯函数 telemetry 上报路径单元测试（默认启用,LocMemCa
   6. test_resume_tracker_per_key_independent_failure
      — 4 个 cache key 各自独立 try/except，单 key 失败不影响其它 key
 
-Layer B — DB 副作用真路径（TABTIN_REAL_DB_TEST=1 守护）
+Layer B — DB 副作用真路径（MUSE_REAL_DB_TEST=1 守护）
 ──────────────────────────────────────────────────────
   7. test_resume_tracker_completes_despite_cache_failures（真 ORM Tracker）
 
@@ -43,7 +43,7 @@ from django.core.cache import cache
 from django.test import SimpleTestCase, TransactionTestCase, override_settings
 
 
-_REQUIRES_REAL_DB = os.getenv("TABTIN_REAL_DB_TEST") == "1"
+_REQUIRES_REAL_DB = os.getenv("MUSE_REAL_DB_TEST") == "1"
 
 
 # ─── Layer A：纯函数 telemetry 上报路径（默认启用）────────────────
@@ -180,7 +180,7 @@ class ResumeTrackerCacheFailureTelemetryTest(SimpleTestCase):
     本测试不真起 ORM,patch TrackerService 内部的 transaction / Tracker.objects /
     transition_status,聚焦"cache.delete 抛异常时 telemetry 链路"。
 
-    Layer B（守 TABTIN_REAL_DB_TEST=1）有真 ORM Tracker 用例。
+    Layer B（守 MUSE_REAL_DB_TEST=1）有真 ORM Tracker 用例。
     """
 
     def _build_fake_tracker(self, *, tracker_id=None, organization_id=None):
@@ -304,7 +304,7 @@ class ResumeTrackerCacheFailureTelemetryTest(SimpleTestCase):
             mock_warn.assert_not_called()
 
 
-# ─── Layer B：真 ORM resume_tracker 端到端（TABTIN_REAL_DB_TEST=1 守护）──
+# ─── Layer B：真 ORM resume_tracker 端到端（MUSE_REAL_DB_TEST=1 守护）──
 
 
 if _REQUIRES_REAL_DB:

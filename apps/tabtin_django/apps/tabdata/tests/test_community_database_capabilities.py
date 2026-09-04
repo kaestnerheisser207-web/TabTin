@@ -86,7 +86,7 @@ def test_community_initial_table_fields_use_one_capability_call(monkeypatch) -> 
         SimpleNamespace(id=uuid4(), field_type="multi_select", config={}),
     ]
 
-    with override_settings(TABTIN_EDITION="community"):
+    with override_settings(MUSE_EDITION="community"):
         DDLManager(db_alias="isolated").create_native_table(uuid4(), uuid4(), extra_fields=fields)
 
     statements = [statement for statement, _ in connection.recorder.calls]
@@ -101,7 +101,7 @@ def test_saas_ddl_path_remains_direct(monkeypatch) -> None:
     monkeypatch.setattr(ddl_manager_module.transaction, "on_commit", lambda callback, **_kwargs: callback())
     ddl_manager_module._ENSURED_SCHEMAS.clear()
 
-    with override_settings(TABTIN_EDITION="saas"):
+    with override_settings(MUSE_EDITION="saas"):
         DDLManager(db_alias="isolated").ensure_schema(uuid4())
 
     statements = [statement for statement, _ in connection.recorder.calls]

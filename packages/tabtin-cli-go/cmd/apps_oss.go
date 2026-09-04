@@ -50,7 +50,7 @@ PDF/Word 转成文档草稿（PDF/Word 导入链路的第一步）。
 		HasFormat:   true,
 		// DryRun plan 展示 CLI 实际发出的 1 步 POST /oss/upload——这是客户端可见的
 		// 调用形态。cli-server 内部会把这一次 POST 进一步走 presign-upload → PUT
-		// 对象 → confirm-upload 三步直传（非中转），用 @tabtin/action-tools 的
+		// 对象 → confirm-upload 三步直传（非中转），用 @muse/action-tools 的
 		// oss-upload utility 实现（详见 packages/cli-routes/src/routes/oss.ts）。
 		// 这层细节对 CLI 用户/Agent 是封装好的，dry-run 把它写在 description 里
 		// 当上下文，plan 主体保持与真实请求形态一致——避免"plan 是 3 步，实际是

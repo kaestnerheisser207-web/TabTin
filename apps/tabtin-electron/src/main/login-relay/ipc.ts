@@ -1,7 +1,7 @@
 import { randomUUID } from 'node:crypto'
 import { app, session, type IpcMainInvokeEvent } from 'electron'
-import { okResponse } from '@tabtin/agent-wire'
-import { joinApiPath } from '@tabtin/config'
+import { okResponse } from '@muse/agent-wire'
+import { joinApiPath } from '@muse/config'
 import { TokenManager } from '../auth'
 import { API_BASE_URL } from '../config/api'
 import {

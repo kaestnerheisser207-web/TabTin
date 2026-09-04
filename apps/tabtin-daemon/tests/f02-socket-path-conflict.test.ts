@@ -13,10 +13,10 @@ import { join } from 'node:path'
 import { homedir } from 'node:os'
 import { startCLIServer, stopCLIServer } from '../src/transport/cli/cli-server.js'
 
-const TABTIN_DIR = join(homedir(), '.tabtin')
-const DAEMON_SOCK = join(TABTIN_DIR, 'daemon-cli.sock')
-const ELECTRON_SOCK = join(TABTIN_DIR, 'cli.sock')
-const DAEMON_SERVER_JSON = join(TABTIN_DIR, 'daemon-server.json')
+const MUSE_DIR = join(homedir(), '.tabtin')
+const DAEMON_SOCK = join(MUSE_DIR, 'daemon-cli.sock')
+const ELECTRON_SOCK = join(MUSE_DIR, 'cli.sock')
+const DAEMON_SERVER_JSON = join(MUSE_DIR, 'daemon-server.json')
 const CLI_SERVER_SOURCE = fs.readFileSync(
   new URL('../src/transport/cli/cli-server.ts', import.meta.url),
   'utf-8',
@@ -59,8 +59,8 @@ describe('F02: Daemon socket path isolation (CC-001/ST-034/CT-014)', () => {
     if (process.platform === 'win32') return
 
     // 使用一个临时文件模拟 Electron 的 cli.sock（不能覆写真实 socket）
-    const tmpElectronSock = join(TABTIN_DIR, '_test_mock_electron.sock')
-    fs.mkdirSync(TABTIN_DIR, { recursive: true })
+    const tmpElectronSock = join(MUSE_DIR, '_test_mock_electron.sock')
+    fs.mkdirSync(MUSE_DIR, { recursive: true })
     fs.writeFileSync(tmpElectronSock, 'mock')
 
     try {

@@ -14,7 +14,7 @@ function createRequestId(): string {
 
 export const notify = {
   toast(payload: Omit<OverlayToastPayload, 'type'>): void {
-    void window.tabtin?.overlay?.push({
+    void window.muse?.overlay?.push({
       type: 'toast',
       ...payload,
     })
@@ -22,7 +22,7 @@ export const notify = {
 
   openGlobalSearch(): void {
     if (!GLOBAL_SEARCH_UI_ENABLED) return
-    void window.tabtin?.overlay?.push({
+    void window.muse?.overlay?.push({
       type: 'global-search',
       open: true,
       organizationId: useOrganizationStore.getState().selectedOrganization?.id ?? null,
@@ -31,11 +31,11 @@ export const notify = {
   },
 
   closeGlobalSearch(): void {
-    void window.tabtin?.overlay?.push({ type: 'global-search', open: false })
+    void window.muse?.overlay?.push({ type: 'global-search', open: false })
   },
 
   async confirm(options: NotifyConfirmOptions): Promise<boolean> {
-    const overlay = window.tabtin?.overlay
+    const overlay = window.muse?.overlay
     if (!overlay?.push || !overlay.onConfirmResult) {
       return window.confirm([options.title, options.description].filter(Boolean).join('\n\n'))
     }
@@ -53,7 +53,7 @@ export const notify = {
   },
 
   push(payload: OverlayPushPayload): void {
-    void window.tabtin?.overlay?.push(payload)
+    void window.muse?.overlay?.push(payload)
   },
 }
 

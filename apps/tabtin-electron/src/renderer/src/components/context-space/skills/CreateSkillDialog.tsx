@@ -85,7 +85,7 @@ export const CreateSkillDialog: React.FC<CreateSkillDialogProps> = ({
         const skillKey = result.skill_key || result.skill_id
         if (organizationId) {
           try {
-            const fs = window.tabtin?.fileSystem
+            const fs = window.muse?.fileSystem
             const resolvedSlug = result.slug || effectiveSlug
             // 本地落盘必须与后端首次发布字节一致，避免新建后立即 dirty。
             const fromNormalized = Array.isArray(result.normalized_files)

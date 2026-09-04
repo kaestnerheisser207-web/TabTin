@@ -1,4 +1,4 @@
-import type { TaskCapsuleStatusKind } from '@tabtin/contracts/agent';
+import type { TaskCapsuleStatusKind } from '@muse/contracts/agent';
 
 /**
  * Agent 状态 Orb —— 跨任务类型接缝。

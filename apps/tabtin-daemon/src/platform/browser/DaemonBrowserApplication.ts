@@ -2,14 +2,14 @@ import { execFile } from 'node:child_process';
 import { promisify } from 'node:util';
 import { join, basename } from 'node:path';
 import { unlink } from 'node:fs/promises';
-import { getHomeTabtinPath } from '@tabtin/shared/storage-paths';
+import { getHomeTabtinPath } from '@muse/shared/storage-paths';
 import {
   parseContentTypeWhitelist,
   filterHtmlByContentTypes,
   isPrintTextFormat,
   renderPrintContent,
   type ContentType,
-} from '@tabtin/action-tools/impl';
+} from '@muse/action-tools/impl';
 import {
   handleBrowserAction, BrowserActionError, getSharedBrowserJobManager, shutdownSharedBrowserJobManager,
   type BrowserActionResult, type BrowserContextInfo, type BrowserExecHooks,
@@ -22,7 +22,7 @@ import {
   normalizeBrowserNetworkEntries,
   getSharedRefCache,
   mergeActEmbedObserve,
-} from '@tabtin/browser-core';
+} from '@muse/browser-core';
 import { validateUrl, validateSavePath, type DaemonBrowserService } from './DaemonBrowserService.js';
 import type { M3U8Manifest } from './m3u8-parser.js';
 import type { MPDManifest } from './mpd-parser.js';
@@ -942,7 +942,7 @@ const daemonExecHooks: BrowserExecHooks = {
 
   async runAct(tabId: string | undefined, resolvedActions: any[], body: any): Promise<BrowserExecOutcome> {
     try {
-      const { getSharedBrowserToolImpl } = await import('@tabtin/browser-core');
+      const { getSharedBrowserToolImpl } = await import('@muse/browser-core');
       const impl = getSharedBrowserToolImpl();
       const result = await impl.executeAct({
         crawlTabId: tabId,
@@ -964,7 +964,7 @@ const daemonExecHooks: BrowserExecHooks = {
 
   async runObserve(tabId: string | undefined, params: BrowserObserveParams, body: any): Promise<BrowserExecOutcome> {
     try {
-      const { getSharedBrowserToolImpl } = await import('@tabtin/browser-core');
+      const { getSharedBrowserToolImpl } = await import('@muse/browser-core');
       const impl = getSharedBrowserToolImpl();
       const result = await impl.executeObserve({
         crawlTabId: tabId,
@@ -1004,7 +1004,7 @@ const daemonExecHooks: BrowserExecHooks = {
       return { success: true, raw: { degraded: true, data: responseData, crawlTabId: tabId } };
     }
 
-    const { getSharedBrowserToolImpl } = await import('@tabtin/browser-core');
+    const { getSharedBrowserToolImpl } = await import('@muse/browser-core');
     const impl = getSharedBrowserToolImpl();
     const result = await impl.requestSnapshot({
       crawlTabId: tabId,

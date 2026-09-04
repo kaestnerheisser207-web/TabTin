@@ -1,4 +1,4 @@
-import type { Model } from '@tabtin/chat-client'
+import type { Model } from '@muse/chat-client'
 import { filterSendableChatModels } from '@/utils/chatModelGuards'
 
 export interface ResolveChatModelDisabledReasonInput {

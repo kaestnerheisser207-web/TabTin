@@ -1,6 +1,6 @@
 import React, { useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Button, Input, Label, Select, SelectContent, SelectItem, SelectTrigger, SelectValue, toast } from '@tabtin/smartsheet-ui'
+import { Button, Input, Label, Select, SelectContent, SelectItem, SelectTrigger, SelectValue, toast } from '@muse/smartsheet-ui'
 import { Loader2 } from 'lucide-react'
 import { TabCodeConfirmDialog } from '../TabCodeConfirmDialog'
 import { NONE_VALUE } from './useGitWorkflowData'
@@ -95,7 +95,7 @@ export const BranchSection: React.FC<BranchSectionProps> = ({
     const startPoint = newBranchBase && newBranchBase !== NONE_VALUE ? newBranchBase : undefined
     const ok = await runGitAction(
       'create-branch',
-      () => window.tabtin.git.checkoutBranch(rootPath, { branch, create: true, startPoint }),
+      () => window.muse.git.checkoutBranch(rootPath, { branch, create: true, startPoint }),
       t('gitFlow.createBranchSuccess', { branch }),
     )
     if (ok) {

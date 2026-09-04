@@ -23,7 +23,7 @@ vi.mock('@components/context-space/registry/homeRegistry', () => ({}))
 vi.mock('@components/layout/project/teamSpaceProjectNavigation', () => ({
   enterTeamSpaceProject: vi.fn(),
 }))
-vi.mock('@tabtin/smartsheet-ui', () => ({
+vi.mock('@muse/smartsheet-ui', () => ({
   toast: Object.assign(vi.fn(), { success: vi.fn(), error: vi.fn() }),
   // TeamSpaceCreateTaskDialog → table-ui 会再取这个导出；缺了整文件 import 即红。
   resolveChoiceTagColors: () => ({ bg: '', text: '', border: '' }),

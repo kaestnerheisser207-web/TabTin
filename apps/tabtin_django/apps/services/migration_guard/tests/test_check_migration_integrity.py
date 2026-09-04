@@ -197,7 +197,7 @@ class CheckMigrationIntegrityTests(TestCase):
         with (
             patch.object(
                 settings,
-                "TABTIN_MIGRATION_DATABASE_ALIASES",
+                "MUSE_MIGRATION_DATABASE_ALIASES",
                 ["default", "postgresql"],
             ),
             patch(
@@ -249,7 +249,7 @@ class CheckMigrationIntegrityTests(TestCase):
         stdout = io.StringIO()
 
         with (
-            patch.object(settings, "TABTIN_MIGRATION_DATABASE_ALIASES", ["default"]),
+            patch.object(settings, "MUSE_MIGRATION_DATABASE_ALIASES", ["default"]),
             patch(
                 "apps.services.migration_guard.management.commands.check_migration_integrity.connections",
                 connections,
@@ -582,7 +582,7 @@ class SafeMigrateSmokeTest(TestCase):
             stdout = io.StringIO()
             call_command("safe_migrate", "--plan", stdout=stdout)
 
-            expected_aliases = list(settings.TABTIN_MIGRATION_DATABASE_ALIASES)
+            expected_aliases = list(settings.MUSE_MIGRATION_DATABASE_ALIASES)
             self.assertEqual(call_mock.call_count, len(expected_aliases))
             actual_aliases = [
                 call.kwargs.get("database") for call in call_mock.call_args_list

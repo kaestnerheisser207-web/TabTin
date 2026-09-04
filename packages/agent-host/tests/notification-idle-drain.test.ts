@@ -4,7 +4,7 @@ import {
   SHELL_NOTIFICATION_KIND,
   type NotificationEnvelope,
   type BackgroundTaskCompletedPayload,
-} from '@tabtin/terminal-core'
+} from '@muse/terminal-core'
 
 import {
   NotificationIdleDrain,

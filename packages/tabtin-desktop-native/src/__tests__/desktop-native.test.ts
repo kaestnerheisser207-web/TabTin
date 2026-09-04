@@ -1,5 +1,5 @@
 /**
- * @tabtin/desktop-native —— "包能 import"级别守约（规范 § 9.1 完成标准 3）。
+ * @muse/desktop-native —— "包能 import"级别守约（规范 § 9.1 完成标准 3）。
  *
  * 模块零阶段验证：
  * 1. `loadNativeBinding()` 返回 null（fallback）
@@ -23,7 +23,7 @@ const __filename = fileURLToPath(import.meta.url)
 // `src/__tests__/desktop-native.test.ts` → 包根 `../../`
 const PACKAGE_ROOT = join(dirname(__filename), '..', '..')
 
-describe('@tabtin/desktop-native · 包初始化（v2.1 模块零）', () => {
+describe('@muse/desktop-native · 包初始化（v2.1 模块零）', () => {
   it('loadNativeBinding() 返回 null（fallback 不抛错）', () => {
     const binding = loadNativeBinding()
     expect(binding).toBeNull()
@@ -56,7 +56,7 @@ describe('@tabtin/desktop-native · 包初始化（v2.1 模块零）', () => {
   })
 })
 
-describe('@tabtin/desktop-native · 占位文件存在（grep 验收锚点）', () => {
+describe('@muse/desktop-native · 占位文件存在（grep 验收锚点）', () => {
   it('占位 Swift 源文件存在 native/swift/HelloWorld.swift', () => {
     expect(existsSync(join(PACKAGE_ROOT, 'native', 'swift', 'HelloWorld.swift'))).toBe(true)
   })

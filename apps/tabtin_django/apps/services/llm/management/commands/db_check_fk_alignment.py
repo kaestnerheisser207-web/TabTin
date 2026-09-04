@@ -94,10 +94,10 @@ def _db_aliases_to_check() -> list[str]:
     单库（single-PG）下 ``default`` 与 ``postgresql`` 是同一物理库的镜像 alias，
     只查一次（``default``）即可——否则同一批物理 FK 会被读两遍，且读到的 alias 与
     router 的 ``local_db``（单库恒为 ``default``）对不上，导致 reverse_drift 全量误报。
-    优先取 ``TABTIN_MIGRATION_DATABASE_ALIASES``（与 ``check_migration_integrity`` 对齐），
+    优先取 ``MUSE_MIGRATION_DATABASE_ALIASES``（与 ``check_migration_integrity`` 对齐），
     缺省时回退到所有已配置连接。
     """
-    aliases = list(getattr(settings, "TABTIN_MIGRATION_DATABASE_ALIASES", None) or [])
+    aliases = list(getattr(settings, "MUSE_MIGRATION_DATABASE_ALIASES", None) or [])
     return aliases or list(connections.databases.keys())
 
 

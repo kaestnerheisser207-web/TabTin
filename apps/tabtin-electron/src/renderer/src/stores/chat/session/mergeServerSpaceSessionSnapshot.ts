@@ -8,7 +8,7 @@
  * 4. tombstone / overlay 由调用方注入，合并后统一过滤与钉回。
  */
 
-import type { ChatSession } from '@tabtin/chat-client'
+import type { ChatSession } from '@muse/chat-client'
 import { sortSessionsByActivity } from '@/utils/chat-session-sort'
 import { withPreservedLocalCodexModelSelection } from '@/utils/preserveLocalCodexModelSelection'
 import {

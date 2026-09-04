@@ -1,5 +1,5 @@
 /**
- * shell-bridge-contract ↔ @tabtin/terminal-core 关键常量/行为 parity（ /  Stage 6e）。
+ * shell-bridge-contract ↔ @muse/terminal-core 关键常量/行为 parity（ /  Stage 6e）。
  */
 
 import { describe, expect, it } from 'vitest';
@@ -9,7 +9,7 @@ import {
   SKILL_CREDENTIAL_PRESERVE_ENV_KEYS_MARKER as WireMarker,
   detectUnquotedWorkspacePath as wireDetect,
   resolveAgentShellInfo as wireResolveShell,
-} from '@tabtin/terminal-core';
+} from '@muse/terminal-core';
 
 import {
   DEFAULT_AGENT_COMMAND_TIMEOUT_MS,

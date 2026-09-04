@@ -50,7 +50,7 @@ import {
   resolveInitialEditorContent,
   type TabDocInitialEditorContent,
 } from './editor-body'
-import { useAppHostClient } from '@tabtin/app-host-sdk'
+import { useAppHostClient } from '@muse/app-host-sdk'
 import { getSuggestionItems, createSlashCommand } from './slash-command'
 import {
   createEditableExtensions,
@@ -67,7 +67,7 @@ import {
 } from './image-upload'
 import { reuploadOfflineImages } from './image-reupload'
 import { runHtmlUpload, isHtmlUploadFile } from './html-upload'
-import { HTML_BLOCK_DEFAULT_HEIGHT } from '@tabtin/doc-editor'
+import { HTML_BLOCK_DEFAULT_HEIGHT } from '@muse/doc-editor'
 import { snapshotEditorContentWithRepair } from './editor-content-snapshot'
 import { writePageContentToClipboard } from './page-content-clipboard'
 import type { EditorView } from '@tiptap/pm/view'
@@ -88,7 +88,7 @@ import { resolveMathNodeAtEvent } from './resolve-math-node-at-event'
 import { focusTitleFromBodyStart, isBodyStartTitleNavigationKey } from './editor-keyboard'
 import { countDocumentWords } from '../utils/word-count'
 import { handleCommandNavigation } from 'novel'
-import { toast } from '@tabtin/smartsheet-ui'
+import { toast } from '@muse/smartsheet-ui'
 import type * as Y from 'yjs'
 import type { HocuspocusProvider } from '@hocuspocus/provider'
 import {

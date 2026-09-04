@@ -1,6 +1,6 @@
 import React from 'react'
 import { cn } from '@utils/cn'
-import type { ChatMessage } from '@tabtin/chat-client'
+import type { ChatMessage } from '@muse/chat-client'
 import type { CheckpointFooterMeta } from '@stores/chat/presentation/messageBubble/checkpointFooterMeta'
 import { MessageCostLabel } from '../../../billing/MessageCostLabel'
 import { MessageActions } from './MessageActions'

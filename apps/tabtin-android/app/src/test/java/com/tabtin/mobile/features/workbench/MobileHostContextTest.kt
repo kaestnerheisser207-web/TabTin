@@ -33,7 +33,7 @@ class MobileHostContextTest {
         )
 
         assertTrue(script.contains("window.location.origin !== \"https://web.example/path'unsafe\""))
-        assertTrue(script.contains("window.__TABTIN_MOBILE_HOST__ = context"))
+        assertTrue(script.contains("window.__MUSE_MOBILE_HOST__ = context"))
         assertTrue(script.contains("new CustomEvent(\"tabtin:host-context\""))
         assertTrue(script.contains("\"formFactor\":\"phone\""))
     }

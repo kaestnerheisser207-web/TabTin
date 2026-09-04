@@ -11,13 +11,13 @@ describe('useToastOverlayMousePassthrough', () => {
     setToastIgnoreMouseEvents.mockClear()
     getToastCursorClientPoint.mockClear()
     getToastCursorClientPoint.mockResolvedValue(null)
-    ;(window as any).tabtin = {
+    ;(window as any).muse = {
       overlay: { setToastIgnoreMouseEvents, getToastCursorClientPoint },
     }
   })
 
   afterEach(() => {
-    delete (window as any).tabtin
+    delete (window as any).muse
     vi.useRealTimers()
   })
 

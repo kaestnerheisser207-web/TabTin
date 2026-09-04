@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next'
 import {
   PASSWORD_MIN_LENGTH,
   passwordMeetsCharClassRule,
-} from '@tabtin/shared'
+} from '@muse/shared'
 import { cn } from '@/utils/cn'
 
 interface PasswordRuleHintsProps {

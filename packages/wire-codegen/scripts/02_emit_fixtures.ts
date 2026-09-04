@@ -16,7 +16,7 @@ import {
   ContentBlockDeltaSchema,
   ContentBlockStopSchema,
   AnyContentBlockStreamEventSchema,
-} from '@tabtin/agent-wire';
+} from '@muse/agent-wire';
 import type {
   ContentBlock,
   MessageStart,
@@ -26,7 +26,7 @@ import type {
   ContentBlockDelta,
   ContentBlockStop,
   AnyContentBlockStreamEvent,
-} from '@tabtin/agent-wire';
+} from '@muse/agent-wire';
 import { FIXTURE_SAMPLES_DIR, REPO_ROOT } from './lib/paths.js';
 
 mkdirSync(FIXTURE_SAMPLES_DIR, { recursive: true });

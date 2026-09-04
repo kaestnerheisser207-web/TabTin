@@ -1,5 +1,5 @@
 /**
- * @tabtin/storage-manager — Muse 本地存储统一注册中心。
+ * @muse/storage-manager — Muse 本地存储统一注册中心。
  *
  * 各业务模块通过 `registerStorageBucket` 暴露 size/list/clear/export 能力，
  * UI（个人资料 → 存储管理面板）通过本包的 bridge 聚合渲染。

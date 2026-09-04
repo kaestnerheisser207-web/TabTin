@@ -21,8 +21,8 @@ vi.mock('react-i18next', () => ({
   }),
 }))
 
-vi.mock('@tabtin/smartsheet-ui', async () => {
-  const actual = await vi.importActual<typeof import('@tabtin/smartsheet-ui')>('@tabtin/smartsheet-ui')
+vi.mock('@muse/smartsheet-ui', async () => {
+  const actual = await vi.importActual<typeof import('@muse/smartsheet-ui')>('@muse/smartsheet-ui')
   return {
     ...actual,
     toast: (...args: unknown[]) => mocks.toast(...args),

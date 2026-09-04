@@ -1,6 +1,6 @@
 /**
  * Electron Host 侧发送前拼装薄包装：注入 TokenManager + API_BASE_URL。
- * 拼装逻辑在 `@tabtin/agent-host`；禁止再维护一份双协议实现。
+ * 拼装逻辑在 `@muse/agent-host`；禁止再维护一份双协议实现。
  */
 
 import {
@@ -11,8 +11,8 @@ import {
   type HostReplyToContext,
   type HostPromptLogger,
   type ResolveHostContextBlocksOptions,
-} from '@tabtin/agent-host/conversation'
-import { API_ENDPOINTS } from '@tabtin/config'
+} from '@muse/agent-host/conversation'
+import { API_ENDPOINTS } from '@muse/config'
 import { TokenManager } from '../auth.js'
 import { API_BASE_URL } from '../config/api.js'
 

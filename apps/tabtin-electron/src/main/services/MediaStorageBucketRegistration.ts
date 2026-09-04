@@ -18,7 +18,7 @@
  * 1. **路径决议**：
  *    - `~/.tabtin/...` 走 `getHomeTabtinPath` SSoT
  *    - Electron userData 走 `getUserDataPath` SSoT（W1.2 决策）
- *    - sandbox root 走 `@tabtin/terminal-core` 的 `resolveSpacesRoot`（内部已
+ *    - sandbox root 走 `@muse/terminal-core` 的 `resolveSpacesRoot`（内部已
  *      接 `getPlatformDataRoot` SSoT）
  *    - `app.getPath('temp')` 用于 Chromium 自身管理的临时目录（tabtin-stream 分片
  *      中转）—— Electron 内置路径，由 OS / Chromium 决定，目前无对应 SSoT helper
@@ -66,12 +66,12 @@ import {
   type ClearOptions,
   type ClearResult,
   type StorageBucket,
-} from '@tabtin/storage-manager'
-import { getHomeTabtinPath, getUserDataPath } from '@tabtin/shared/storage-paths'
+} from '@muse/storage-manager'
+import { getHomeTabtinPath, getUserDataPath } from '@muse/shared/storage-paths'
 import {
   resolveDataRoot,
   resolveWorkspaceDownloadsDir,
-} from '@tabtin/terminal-core'
+} from '@muse/terminal-core'
 
 import { configService } from './ConfigService'
 import { logger } from '../utils/logger'

@@ -24,7 +24,7 @@ function getMessagePatterns(): ReadonlyArray<[RegExp, ToolErrorCode]> {
 /**
  * 将字符串/消息映射为标准 ToolErrorCode。
  *
- * 与 @tabtin/action-tools utils/error.ts 逻辑保持一致。
+ * 与 @muse/action-tools utils/error.ts 逻辑保持一致。
  */
 export function mapToToolErrorCode(code?: string, message?: string): ToolErrorCode {
   const normalized = (code || '').toLowerCase();

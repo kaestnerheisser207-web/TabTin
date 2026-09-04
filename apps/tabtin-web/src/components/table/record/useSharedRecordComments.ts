@@ -1,6 +1,6 @@
 import * as React from 'react'
-import type { CommentItem, CommentMentionCandidate } from '@tabtin/smartsheet-ui'
-import { RecordCommentApiService } from '@tabtin/table-core'
+import type { CommentItem, CommentMentionCandidate } from '@muse/smartsheet-ui'
+import { RecordCommentApiService } from '@muse/table-core'
 import { API_BASE_URL } from '@/config/api'
 import { shareAuthHeaders } from '@/pages/shareAuth'
 import {

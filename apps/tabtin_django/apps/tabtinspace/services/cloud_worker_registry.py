@@ -26,7 +26,7 @@ class CloudWorkerRegistryError(RuntimeError):
 class CloudWorkerRegistry:
     @transaction.atomic(using=postgres_app_db_alias())
     def sync_configured(self) -> dict[str, int | list[str]]:
-        raw = getattr(settings, "TABTIN_CLOUD_WORKERS_JSON", "{}")
+        raw = getattr(settings, "MUSE_CLOUD_WORKERS_JSON", "{}")
         try:
             configured_workers = json.loads(raw)
         except json.JSONDecodeError as exc:
@@ -126,12 +126,12 @@ class CloudWorkerRegistry:
             ) from exc
         if not isinstance(config.get("token"), str) or not config["token"]:
             raise CloudWorkerRegistryError(f"Cloud Worker token is missing: {node_key}")
-        edition = str(config.get("edition") or getattr(settings, "TABTIN_EDITION", "saas"))
+        edition = str(config.get("edition") or getattr(settings, "MUSE_EDITION", "saas"))
         if edition not in {CloudWorkerNode.Edition.SAAS, CloudWorkerNode.Edition.COMMUNITY}:
             raise CloudWorkerRegistryError(f"Cloud Worker edition is invalid: {node_key}")
         protocol_version = str(config.get("protocol_version") or "")
         expected_protocol = str(
-            getattr(settings, "TABTIN_CLOUD_WORKER_PROTOCOL_VERSION", "1")
+            getattr(settings, "MUSE_CLOUD_WORKER_PROTOCOL_VERSION", "1")
         )
         if protocol_version != expected_protocol:
             raise CloudWorkerRegistryError(

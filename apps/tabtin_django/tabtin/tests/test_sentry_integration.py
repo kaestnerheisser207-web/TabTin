@@ -216,7 +216,7 @@ class InitSentryTests(SimpleTestCase):
             {
                 "SENTRY_DSN": "https://public@example.invalid/1",
                 "SENTRY_ENVIRONMENT": "test",
-                "TABTIN_SOURCE_SHA": "28d527e93bf3ed10337484f44a38684f862ce77b",
+                "MUSE_SOURCE_SHA": "28d527e93bf3ed10337484f44a38684f862ce77b",
                 "SENTRY_RELEASE": "",
             },
             clear=False,
@@ -273,7 +273,7 @@ class InitSentryTests(SimpleTestCase):
             {
                 "SENTRY_DSN": "https://public@example.invalid/1",
                 "SENTRY_ENVIRONMENT": "test-new",
-                "TABTIN_SOURCE_SHA": "28d527e93bf3ed10337484f44a38684f862ce77b",
+                "MUSE_SOURCE_SHA": "28d527e93bf3ed10337484f44a38684f862ce77b",
             },
             clear=False,
         ), mock.patch.dict("sys.modules", modules, clear=False), mock.patch.object(

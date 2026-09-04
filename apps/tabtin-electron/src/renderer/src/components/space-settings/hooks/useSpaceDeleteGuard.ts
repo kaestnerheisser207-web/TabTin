@@ -15,7 +15,7 @@
 import { useMemo } from 'react'
 import { useSpaceStore } from '@stores/useSpaceStore'
 import { useIsRemoteViewer } from '@components/context-space/hooks/useIsRemoteViewer'
-import type { Space } from '@tabtin/app-shell'
+import type { Space } from '@muse/app-shell'
 
 export type SpaceDeleteBlockReason = 'last-space' | 'remote' | 'resolving' | null
 

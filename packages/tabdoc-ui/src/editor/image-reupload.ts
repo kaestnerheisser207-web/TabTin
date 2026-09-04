@@ -5,7 +5,7 @@
  * and re-uploads them when connectivity is restored.
  */
 import type { EditorInstance } from 'novel'
-import { toast } from '@tabtin/smartsheet-ui'
+import { toast } from '@muse/smartsheet-ui'
 import type { TabDocImageUploadPort } from '../ports'
 
 type TranslateFn = (key: string, opts?: Record<string, unknown>) => string

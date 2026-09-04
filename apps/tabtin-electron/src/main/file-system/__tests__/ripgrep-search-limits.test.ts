@@ -60,7 +60,7 @@ vi.mock('../ripgrep-bundle-path', () => ({
   getBundledRipgrepPath: () => mocks.rgPath,
 }));
 
-vi.mock('@tabtin/terminal-core', () => ({
+vi.mock('@muse/terminal-core', () => ({
   resolveSpacesRoot: mocks.resolveSpacesRoot,
   resolvePlatformDataRoot: vi.fn(() => '/tmp/platform'),
   computeSkillContentHash: vi.fn().mockResolvedValue('hash'),

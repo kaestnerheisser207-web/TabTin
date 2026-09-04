@@ -17,7 +17,7 @@
 
 import type { BrowserWindow, WebContentsView } from 'electron'
 import type { ViewEntry, DestroyViewOptions } from './types'
-import type { ViewManager } from '@tabtin/browser-capabilities'
+import type { ViewManager } from '@muse/browser-capabilities'
 import type { DisplayContext } from './display-handler'
 import {
   removeFromMainWindow,

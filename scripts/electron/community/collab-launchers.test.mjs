@@ -15,7 +15,7 @@ for (const launcher of ['collab-live-start.sh', 'collab-live-start.bat']) {
       path.join(root, 'scripts', 'backend', launcher),
       'utf8',
     );
-    assert.match(source, /TABTIN_SKIP_COLLAB_WORKSPACE_BUILD/);
+    assert.match(source, /MUSE_SKIP_COLLAB_WORKSPACE_BUILD/);
     assert.match(source, /run-predev-build-with-lock\.mjs/);
     assert.match(source, /--seed collab-live/);
   });

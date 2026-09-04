@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { TableApiService, type Table } from '@tabtin/table-core'
+import { TableApiService, type Table } from '@muse/table-core'
 import { useAuthStore } from '@/stores/auth-store'
 import { getDisplayName } from '@/types/auth'
 import { useTranslation } from 'react-i18next'

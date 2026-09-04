@@ -20,8 +20,8 @@
 import React, { createContext, useCallback, useContext, useEffect, useId, useMemo, useRef, useState } from 'react'
 import { useShallow } from 'zustand/react/shallow'
 import { useTranslation } from 'react-i18next'
-import { toast } from '@tabtin/smartsheet-ui'
-import { CollabStatus } from '@tabtin/collab-core'
+import { toast } from '@muse/smartsheet-ui'
+import { CollabStatus } from '@muse/collab-core'
 import type {
   Field,
   FieldType,
@@ -32,13 +32,13 @@ import type {
   ViewCreateRequest,
   ViewMeta,
   ViewStore,
-} from '@tabtin/table-core'
+} from '@muse/table-core'
 import {
   getViewColumnMeta,
   insertFieldIntoViewConfig,
   reconcileCleanDraft,
   shouldSyncRestFieldsToYDoc,
-} from '@tabtin/table-core'
+} from '@muse/table-core'
 import {
   applyViewUpdatePayload,
   buildCollabViewRecords,
@@ -49,8 +49,8 @@ import {
   findFieldMetaIndex,
   orderFieldsMeta,
   COLLAB_ORIGIN_MIRROR,
-} from '@tabtin/table-engine/collab'
-import { useIncrementalViewMerge } from '@tabtin/table-engine/sync'
+} from '@muse/table-engine/collab'
+import { useIncrementalViewMerge } from '@muse/table-engine/sync'
 import { useTableStore } from '@stores/useTableStore'
 import { isReadonlyTableRole } from './tablePermissions'
 import { useRecordStore } from '@stores/useRecordStore'
@@ -1132,7 +1132,7 @@ export const TableCollabProvider: React.FC<{
       if (detail?.tableId && detail.tableId !== selectedTableId) return
       void (async () => {
         try {
-          const { RecordApiService } = await import('@tabtin/table-core')
+          const { RecordApiService } = await import('@muse/table-core')
           const result = await RecordApiService.getRecordsByTable(selectedTableId, {
             page_size: 500,
             field_key_type: 'id',

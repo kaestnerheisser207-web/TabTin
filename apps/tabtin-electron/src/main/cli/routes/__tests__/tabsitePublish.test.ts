@@ -50,7 +50,7 @@ vi.mock('../../cli-context', () => ({
   getCLIOrganizationRoot: mockGetCLIOrganizationRoot,
 }))
 
-vi.mock('@tabtin/terminal-core', () => ({
+vi.mock('@muse/terminal-core', () => ({
   resolveSpacesRoot: mockResolveSandboxRoot,
 }))
 

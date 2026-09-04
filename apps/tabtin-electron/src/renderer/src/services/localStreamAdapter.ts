@@ -3,7 +3,7 @@
  * 现有 streamMessageHandler + 流式 UI 更新。
  *
  * 本地 Runtime yield 的事件已采用 agent.stream.* 格式
- * （与 @tabtin/agent-wire StreamEvents 一致），
+ * （与 @muse/agent-wire StreamEvents 一致），
  * 因此可直接传给 createStreamMessageHandler。
  *
  * 适配器额外处理两件事：

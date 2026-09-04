@@ -16,8 +16,8 @@ import fsp from 'node:fs/promises'
 
 const TEST_ROOT = path.join(os.tmpdir(), '__tabtin_conversations_w33_test__')
 
-vi.mock('@tabtin/shared', async () => {
-  const actual = await vi.importActual<typeof import('@tabtin/shared')>('@tabtin/shared')
+vi.mock('@muse/shared', async () => {
+  const actual = await vi.importActual<typeof import('@muse/shared')>('@muse/shared')
   return {
     ...actual,
     getPlatformDataRoot: vi.fn(() => TEST_ROOT),
@@ -56,7 +56,7 @@ async function setupConversation(
 
 describe('ConversationSummaryExport · conversation:summary-export', () => {
   beforeEach(async () => {
-    const sm = await import('@tabtin/storage-manager')
+    const sm = await import('@muse/storage-manager')
     sm.__resetForTesting()
     if (fs.existsSync(TEST_ROOT)) {
       await fsp.rm(TEST_ROOT, { recursive: true, force: true })
@@ -70,7 +70,7 @@ describe('ConversationSummaryExport · conversation:summary-export', () => {
   })
 
   it('注册的 bucket 字段符合 D-5 §5 规范', async () => {
-    const sm = await import('@tabtin/storage-manager')
+    const sm = await import('@muse/storage-manager')
     const { registerConversationSummaryExportBucket } = await import(
       '../ConversationSummaryExport'
     )
@@ -86,7 +86,7 @@ describe('ConversationSummaryExport · conversation:summary-export', () => {
   })
 
   it('conversationsRoot 不存在时产出空 conversations 数组', async () => {
-    const sm = await import('@tabtin/storage-manager')
+    const sm = await import('@muse/storage-manager')
     const { registerConversationSummaryExportBucket } = await import(
       '../ConversationSummaryExport'
     )
@@ -117,7 +117,7 @@ describe('ConversationSummaryExport · conversation:summary-export', () => {
       { id: 'm3', role: 'user', content: 'PRIVATE_FOLLOWUP', created_at: '2026-05-01T11:00:00Z' },
     ])
 
-    const sm = await import('@tabtin/storage-manager')
+    const sm = await import('@muse/storage-manager')
     const { registerConversationSummaryExportBucket } = await import(
       '../ConversationSummaryExport'
     )

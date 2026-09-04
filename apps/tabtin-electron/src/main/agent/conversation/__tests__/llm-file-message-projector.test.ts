@@ -1,4 +1,4 @@
-import type { Message } from '@tabtin/agent-runtime'
+import type { Message } from '@muse/agent-runtime'
 import { describe, expect, it } from 'vitest'
 import { projectHistoricalFileBlocksAsResources } from '../llm-file-message-projector.js'
 

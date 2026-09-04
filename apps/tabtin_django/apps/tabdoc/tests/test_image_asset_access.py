@@ -223,7 +223,7 @@ class ImageAssetAccessTests(TestCase):
         }
         self.document.description_json = stable_json
         self.document.description_markdown = (
-            f"![private](tabtin-file://asset/{self.file_record.id})"
+            f"![private](muse-file://asset/{self.file_record.id})"
         )
         self.document.description_binary = None
 
@@ -311,7 +311,7 @@ class ImageAssetAccessTests(TestCase):
                 "content": [{
                     "type": "image",
                     "attrs": {
-                        "src": f"tabtin-file://asset/{self.file_record.id}",
+                        "src": f"muse-file://asset/{self.file_record.id}",
                         "alt": "private",
                     },
                 }],

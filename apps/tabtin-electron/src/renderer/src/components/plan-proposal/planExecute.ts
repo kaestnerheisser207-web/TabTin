@@ -8,8 +8,8 @@
  *      plan 只带指针，Agent 执行前按 ref 重读最新内容。
  */
 
-import type { PlanRef } from '@tabtin/agent-wire'
-import { planRefKey } from '@tabtin/agent-wire'
+import type { PlanRef } from '@muse/agent-wire'
+import { planRefKey } from '@muse/agent-wire'
 import { useChatStore } from '@/stores/chat/useChatStore'
 import { markPlanExecuted } from './planExecutedStore'
 import { createLogger } from '@/utils/logger'

@@ -1,7 +1,7 @@
 import type { ContextItem, ContextRegistry } from '@components/context-space/registry'
 import { emitContextInject } from '@components/chat/context/useContextInjection'
 import { useContextInjectionStore } from '@stores/useContextInjectionStore'
-import { toast } from '@tabtin/smartsheet-ui'
+import { toast } from '@muse/smartsheet-ui'
 import i18n from '@/i18n'
 
 type ContextTranslator = (key: string, options?: { defaultValue?: string }) => string

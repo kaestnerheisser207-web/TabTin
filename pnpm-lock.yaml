@@ -72,6 +72,39 @@ importers:
       '@floating-ui/react':
         specifier: 0.27.16
         version: 0.27.16(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
+      '@muse/api-client':
+        specifier: workspace:*
+        version: link:../../packages/api-client
+      '@muse/app-shell':
+        specifier: workspace:*
+        version: link:../../packages/app-shell
+      '@muse/config':
+        specifier: workspace:*
+        version: link:../../packages/tabtin-config
+      '@muse/doc-editor':
+        specifier: workspace:*
+        version: link:../../packages/doc-editor
+      '@muse/doc-renderer':
+        specifier: workspace:*
+        version: link:../../packages/doc-renderer
+      '@muse/shared':
+        specifier: workspace:*
+        version: link:../../packages/tabtin-shared
+      '@muse/smartsheet-ui':
+        specifier: workspace:*
+        version: link:../../packages/smartsheet-ui
+      '@muse/table-core':
+        specifier: workspace:*
+        version: link:../../packages/table-core
+      '@muse/table-ui':
+        specifier: workspace:*
+        version: link:../../packages/table-ui
+      '@muse/tailwind-preset':
+        specifier: workspace:*
+        version: link:../../packages/tailwind-preset
+      '@muse/ws-gateway-client':
+        specifier: workspace:*
+        version: link:../../packages/ws-gateway-client
       '@radix-ui/react-checkbox':
         specifier: ^1.3.11
         version: 1.3.11(@types/react-dom@19.2.3(@types/react@19.2.14))(@types/react@19.2.14)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
@@ -117,39 +150,6 @@ importers:
       '@radix-ui/react-tooltip':
         specifier: ^1.2.16
         version: 1.2.16(@types/react-dom@19.2.3(@types/react@19.2.14))(@types/react@19.2.14)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
-      '@tabtin/api-client':
-        specifier: workspace:*
-        version: link:../../packages/api-client
-      '@tabtin/app-shell':
-        specifier: workspace:*
-        version: link:../../packages/app-shell
-      '@tabtin/config':
-        specifier: workspace:*
-        version: link:../../packages/tabtin-config
-      '@tabtin/doc-editor':
-        specifier: workspace:*
-        version: link:../../packages/doc-editor
-      '@tabtin/doc-renderer':
-        specifier: workspace:*
-        version: link:../../packages/doc-renderer
-      '@tabtin/shared':
-        specifier: workspace:*
-        version: link:../../packages/tabtin-shared
-      '@tabtin/smartsheet-ui':
-        specifier: workspace:*
-        version: link:../../packages/smartsheet-ui
-      '@tabtin/table-core':
-        specifier: workspace:*
-        version: link:../../packages/table-core
-      '@tabtin/table-ui':
-        specifier: workspace:*
-        version: link:../../packages/table-ui
-      '@tabtin/tailwind-preset':
-        specifier: workspace:*
-        version: link:../../packages/tailwind-preset
-      '@tabtin/ws-gateway-client':
-        specifier: workspace:*
-        version: link:../../packages/ws-gateway-client
       '@tiptap/core':
         specifier: ^2.27.2
         version: 2.27.2(@tiptap/pm@2.27.2)
@@ -247,16 +247,16 @@ importers:
       '@hocuspocus/server':
         specifier: ^2.15.2
         version: 2.15.3(y-protocols@1.0.7(yjs@13.6.29))(yjs@13.6.29)
-      '@tabtin/config':
+      '@muse/config':
         specifier: workspace:*
         version: link:../../packages/tabtin-config
-      '@tabtin/doc-editor':
+      '@muse/doc-editor':
         specifier: workspace:*
         version: link:../../packages/doc-editor
-      '@tabtin/table-core':
+      '@muse/table-core':
         specifier: workspace:*
         version: link:../../packages/table-core
-      '@tabtin/table-engine':
+      '@muse/table-engine':
         specifier: workspace:*
         version: link:../../packages/table-engine
       '@tiptap/core':
@@ -371,108 +371,108 @@ importers:
       '@electric-sql/pglite':
         specifier: ^0.2.0
         version: 0.2.17
+      '@muse/action-tools':
+        specifier: workspace:*
+        version: link:../../packages/action-tools
+      '@muse/agent-host':
+        specifier: workspace:*
+        version: link:../../packages/agent-host
+      '@muse/agent-modes':
+        specifier: workspace:*
+        version: link:../../packages/agent-modes
+      '@muse/agent-prompt':
+        specifier: workspace:*
+        version: link:../../packages/agent-prompt
+      '@muse/agent-runtime':
+        specifier: workspace:*
+        version: link:../../packages/agent-runtime
+      '@muse/agent-wire':
+        specifier: workspace:*
+        version: link:../../packages/agent-wire
+      '@muse/anti-detect':
+        specifier: workspace:*
+        version: link:../../packages/anti-detect
+      '@muse/browser-core':
+        specifier: workspace:*
+        version: link:../../packages/browser-core
+      '@muse/checkpoint-core':
+        specifier: workspace:*
+        version: link:../../packages/checkpoint-core
+      '@muse/cli-routes':
+        specifier: workspace:*
+        version: link:../../packages/cli-routes
+      '@muse/cli-server-core':
+        specifier: workspace:*
+        version: link:../../packages/cli-server-core
+      '@muse/config':
+        specifier: workspace:*
+        version: link:../../packages/tabtin-config
+      '@muse/contracts':
+        specifier: workspace:*
+        version: link:../../packages/contracts
+      '@muse/doc-editor':
+        specifier: workspace:*
+        version: link:../../packages/doc-editor
+      '@muse/file-history-core':
+        specifier: workspace:*
+        version: link:../../packages/file-history-core
+      '@muse/file-pipeline':
+        specifier: workspace:*
+        version: link:../../packages/file-pipeline
+      '@muse/local-docparse':
+        specifier: workspace:*
+        version: link:../../packages/local-docparse
+      '@muse/local-embedding':
+        specifier: workspace:*
+        version: link:../../packages/local-embedding
+      '@muse/lsp-runtime':
+        specifier: workspace:*
+        version: link:../../packages/lsp-runtime
+      '@muse/media-capabilities':
+        specifier: workspace:*
+        version: link:../../packages/media-capabilities
+      '@muse/pty-core':
+        specifier: workspace:*
+        version: link:../../packages/pty-core
+      '@muse/python-runtime-host':
+        specifier: workspace:*
+        version: link:../../packages/python-runtime-host
+      '@muse/search':
+        specifier: workspace:*
+        version: link:../../packages/search
+      '@muse/security-policy':
+        specifier: workspace:*
+        version: link:../../packages/security-policy
+      '@muse/shared':
+        specifier: workspace:*
+        version: link:../../packages/tabtin-shared
+      '@muse/storage-manager':
+        specifier: workspace:*
+        version: link:../../packages/storage-manager
+      '@muse/table-kernel':
+        specifier: workspace:*
+        version: link:../../packages/table-kernel
+      '@muse/table-kernel-pglite':
+        specifier: workspace:*
+        version: link:../../packages/table-kernel-pglite
+      '@muse/tabsite-core':
+        specifier: workspace:*
+        version: link:../../packages/tabsite-core
+      '@muse/tabslide':
+        specifier: workspace:*
+        version: link:../../packages/tabslide
+      '@muse/terminal-core':
+        specifier: workspace:*
+        version: link:../../packages/terminal-core
+      '@muse/widget-tokens':
+        specifier: workspace:*
+        version: link:../../packages/widget-tokens
+      '@muse/ws-gateway-client':
+        specifier: workspace:*
+        version: link:../../packages/ws-gateway-client
       '@sentry/node':
         specifier: ^10.62.0
         version: 10.63.0(@opentelemetry/core@2.9.0(@opentelemetry/api@1.9.1))
-      '@tabtin/action-tools':
-        specifier: workspace:*
-        version: link:../../packages/action-tools
-      '@tabtin/agent-host':
-        specifier: workspace:*
-        version: link:../../packages/agent-host
-      '@tabtin/agent-modes':
-        specifier: workspace:*
-        version: link:../../packages/agent-modes
-      '@tabtin/agent-prompt':
-        specifier: workspace:*
-        version: link:../../packages/agent-prompt
-      '@tabtin/agent-runtime':
-        specifier: workspace:*
-        version: link:../../packages/agent-runtime
-      '@tabtin/agent-wire':
-        specifier: workspace:*
-        version: link:../../packages/agent-wire
-      '@tabtin/anti-detect':
-        specifier: workspace:*
-        version: link:../../packages/anti-detect
-      '@tabtin/browser-core':
-        specifier: workspace:*
-        version: link:../../packages/browser-core
-      '@tabtin/checkpoint-core':
-        specifier: workspace:*
-        version: link:../../packages/checkpoint-core
-      '@tabtin/cli-routes':
-        specifier: workspace:*
-        version: link:../../packages/cli-routes
-      '@tabtin/cli-server-core':
-        specifier: workspace:*
-        version: link:../../packages/cli-server-core
-      '@tabtin/config':
-        specifier: workspace:*
-        version: link:../../packages/tabtin-config
-      '@tabtin/contracts':
-        specifier: workspace:*
-        version: link:../../packages/contracts
-      '@tabtin/doc-editor':
-        specifier: workspace:*
-        version: link:../../packages/doc-editor
-      '@tabtin/file-history-core':
-        specifier: workspace:*
-        version: link:../../packages/file-history-core
-      '@tabtin/file-pipeline':
-        specifier: workspace:*
-        version: link:../../packages/file-pipeline
-      '@tabtin/local-docparse':
-        specifier: workspace:*
-        version: link:../../packages/local-docparse
-      '@tabtin/local-embedding':
-        specifier: workspace:*
-        version: link:../../packages/local-embedding
-      '@tabtin/lsp-runtime':
-        specifier: workspace:*
-        version: link:../../packages/lsp-runtime
-      '@tabtin/media-capabilities':
-        specifier: workspace:*
-        version: link:../../packages/media-capabilities
-      '@tabtin/pty-core':
-        specifier: workspace:*
-        version: link:../../packages/pty-core
-      '@tabtin/python-runtime-host':
-        specifier: workspace:*
-        version: link:../../packages/python-runtime-host
-      '@tabtin/search':
-        specifier: workspace:*
-        version: link:../../packages/search
-      '@tabtin/security-policy':
-        specifier: workspace:*
-        version: link:../../packages/security-policy
-      '@tabtin/shared':
-        specifier: workspace:*
-        version: link:../../packages/tabtin-shared
-      '@tabtin/storage-manager':
-        specifier: workspace:*
-        version: link:../../packages/storage-manager
-      '@tabtin/table-kernel':
-        specifier: workspace:*
-        version: link:../../packages/table-kernel
-      '@tabtin/table-kernel-pglite':
-        specifier: workspace:*
-        version: link:../../packages/table-kernel-pglite
-      '@tabtin/tabsite-core':
-        specifier: workspace:*
-        version: link:../../packages/tabsite-core
-      '@tabtin/tabslide':
-        specifier: workspace:*
-        version: link:../../packages/tabslide
-      '@tabtin/terminal-core':
-        specifier: workspace:*
-        version: link:../../packages/terminal-core
-      '@tabtin/widget-tokens':
-        specifier: workspace:*
-        version: link:../../packages/widget-tokens
-      '@tabtin/ws-gateway-client':
-        specifier: workspace:*
-        version: link:../../packages/ws-gateway-client
       commander:
         specifier: ^13.0.0
         version: 13.1.0
@@ -528,7 +528,7 @@ importers:
         specifier: 0.18.5
         version: 0.18.5
     devDependencies:
-      '@tabtin/app-shell':
+      '@muse/app-shell':
         specifier: workspace:*
         version: link:../../packages/app-shell
       '@types/node':
@@ -582,6 +582,12 @@ importers:
       '@modelcontextprotocol/sdk':
         specifier: 1.27.1
         version: 1.27.1(zod@4.5.4)
+      '@muse/media-capabilities':
+        specifier: workspace:*
+        version: link:../../packages/media-capabilities
+      '@muse/terminal-core':
+        specifier: workspace:*
+        version: link:../../packages/terminal-core
       '@nut-tree-fork/nut-js':
         specifier: 4.2.6
         version: 4.2.6(encoding@0.1.13)
@@ -591,12 +597,6 @@ importers:
       '@sentry/electron':
         specifier: 7.15.0
         version: 7.15.0(@opentelemetry/core@2.9.0(@opentelemetry/api@1.9.1))
-      '@tabtin/media-capabilities':
-        specifier: workspace:*
-        version: link:../../packages/media-capabilities
-      '@tabtin/terminal-core':
-        specifier: workspace:*
-        version: link:../../packages/terminal-core
       '@tanstack/react-query':
         specifier: 5.90.21
         version: 5.90.21(react@19.2.6)
@@ -760,6 +760,195 @@ importers:
       '@hugeicons/react':
         specifier: 1.1.5
         version: 1.1.5(react@19.2.6)
+      '@muse/action-tools':
+        specifier: workspace:*
+        version: link:../../packages/action-tools
+      '@muse/action-tools-adapter':
+        specifier: workspace:*
+        version: link:../../packages/action-tools-adapter
+      '@muse/agent-host':
+        specifier: workspace:*
+        version: link:../../packages/agent-host
+      '@muse/agent-import':
+        specifier: workspace:*
+        version: link:../../packages/agent-import
+      '@muse/agent-modes':
+        specifier: workspace:*
+        version: link:../../packages/agent-modes
+      '@muse/agent-orb':
+        specifier: workspace:*
+        version: link:../../packages/agent-orb
+      '@muse/agent-prompt':
+        specifier: workspace:*
+        version: link:../../packages/agent-prompt
+      '@muse/agent-runtime':
+        specifier: workspace:*
+        version: link:../../packages/agent-runtime
+      '@muse/agent-wire':
+        specifier: workspace:*
+        version: link:../../packages/agent-wire
+      '@muse/anti-detect':
+        specifier: workspace:*
+        version: link:../../packages/anti-detect
+      '@muse/api-client':
+        specifier: workspace:*
+        version: link:../../packages/api-client
+      '@muse/app-config':
+        specifier: workspace:*
+        version: link:../../packages/app-config
+      '@muse/app-host-sdk':
+        specifier: workspace:*
+        version: link:../../packages/app-host-sdk
+      '@muse/app-shell':
+        specifier: workspace:*
+        version: link:../../packages/app-shell
+      '@muse/browser-capabilities':
+        specifier: workspace:*
+        version: link:../../packages/browser-capabilities
+      '@muse/browser-core':
+        specifier: workspace:*
+        version: link:../../packages/browser-core
+      '@muse/chat-client':
+        specifier: workspace:*
+        version: link:../../packages/tabtin-chat-client
+      '@muse/checkpoint-core':
+        specifier: workspace:*
+        version: link:../../packages/checkpoint-core
+      '@muse/cli-routes':
+        specifier: workspace:*
+        version: link:../../packages/cli-routes
+      '@muse/cli-server-core':
+        specifier: workspace:*
+        version: link:../../packages/cli-server-core
+      '@muse/collab-core':
+        specifier: workspace:*
+        version: link:../../packages/collab-core
+      '@muse/config':
+        specifier: workspace:*
+        version: link:../../packages/tabtin-config
+      '@muse/connector-brand-icons':
+        specifier: workspace:*
+        version: link:../../packages/connector-brand-icons
+      '@muse/contracts':
+        specifier: workspace:*
+        version: link:../../packages/contracts
+      '@muse/crawl-contracts':
+        specifier: workspace:*
+        version: link:../../packages/crawl-contracts
+      '@muse/crawl-integration':
+        specifier: workspace:*
+        version: link:../../packages/crawl-integration
+      '@muse/crawlspace-core':
+        specifier: workspace:*
+        version: link:../../packages/crawlspace-core
+      '@muse/desktop-contracts':
+        specifier: workspace:*
+        version: link:../../packages/tabtin-desktop-contracts
+      '@muse/desktop-native':
+        specifier: workspace:*
+        version: link:../../packages/tabtin-desktop-native
+      '@muse/doc-editor':
+        specifier: workspace:*
+        version: link:../../packages/doc-editor
+      '@muse/file-history-core':
+        specifier: workspace:*
+        version: link:../../packages/file-history-core
+      '@muse/file-pipeline':
+        specifier: workspace:*
+        version: link:../../packages/file-pipeline
+      '@muse/local-docparse':
+        specifier: workspace:*
+        version: link:../../packages/local-docparse
+      '@muse/local-embedding':
+        specifier: workspace:*
+        version: link:../../packages/local-embedding
+      '@muse/lsp-runtime':
+        specifier: workspace:*
+        version: link:../../packages/lsp-runtime
+      '@muse/markdown-resource-autolink':
+        specifier: workspace:*
+        version: link:../../packages/markdown-resource-autolink
+      '@muse/os-errors':
+        specifier: workspace:*
+        version: link:../../packages/os-errors
+      '@muse/oss-client':
+        specifier: workspace:*
+        version: link:../../packages/oss-client
+      '@muse/platform-reach':
+        specifier: workspace:*
+        version: link:../../packages/platform-reach
+      '@muse/pty-core':
+        specifier: workspace:*
+        version: link:../../packages/pty-core
+      '@muse/python-runtime-host':
+        specifier: workspace:*
+        version: link:../../packages/python-runtime-host
+      '@muse/resource-router':
+        specifier: workspace:*
+        version: link:../../packages/resource-router
+      '@muse/runtime-reporter':
+        specifier: workspace:*
+        version: link:../../packages/runtime-reporter
+      '@muse/safe-fs':
+        specifier: workspace:*
+        version: link:../../packages/safe-fs
+      '@muse/search':
+        specifier: workspace:*
+        version: link:../../packages/search
+      '@muse/security-policy':
+        specifier: workspace:*
+        version: link:../../packages/security-policy
+      '@muse/shared':
+        specifier: workspace:*
+        version: link:../../packages/tabtin-shared
+      '@muse/smartsheet-adapter-electron':
+        specifier: workspace:*
+        version: link:../../packages/smartsheet-adapter-electron
+      '@muse/smartsheet-ui':
+        specifier: workspace:*
+        version: link:../../packages/smartsheet-ui
+      '@muse/storage-manager':
+        specifier: workspace:*
+        version: link:../../packages/storage-manager
+      '@muse/tabdoc-host-runtime':
+        specifier: workspace:*
+        version: link:../../packages/tabdoc-host-runtime
+      '@muse/tabdoc-ui':
+        specifier: workspace:*
+        version: link:../../packages/tabdoc-ui
+      '@muse/table-core':
+        specifier: workspace:*
+        version: link:../../packages/table-core
+      '@muse/table-engine':
+        specifier: workspace:*
+        version: link:../../packages/table-engine
+      '@muse/table-engine-canvas':
+        specifier: workspace:*
+        version: link:../../packages/table-engine-canvas
+      '@muse/table-host-runtime':
+        specifier: workspace:*
+        version: link:../../packages/table-host-runtime
+      '@muse/table-ui':
+        specifier: workspace:*
+        version: link:../../packages/table-ui
+      '@muse/tabsite-core':
+        specifier: workspace:*
+        version: link:../../packages/tabsite-core
+      '@muse/tabslide':
+        specifier: workspace:*
+        version: link:../../packages/tabslide
+      '@muse/tailwind-preset':
+        specifier: workspace:*
+        version: link:../../packages/tailwind-preset
+      '@muse/tool-errors':
+        specifier: workspace:*
+        version: link:../../packages/tool-errors
+      '@muse/widget-tokens':
+        specifier: workspace:*
+        version: link:../../packages/widget-tokens
+      '@muse/ws-gateway-client':
+        specifier: workspace:*
+        version: link:../../packages/ws-gateway-client
       '@radix-ui/react-dialog':
         specifier: ^1.1.23
         version: 1.1.23(@types/react-dom@19.2.3(@types/react@19.2.14))(@types/react@19.2.14)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
@@ -799,195 +988,6 @@ importers:
       '@sentry/cli':
         specifier: 2.58.6
         version: 2.58.6(encoding@0.1.13)
-      '@tabtin/action-tools':
-        specifier: workspace:*
-        version: link:../../packages/action-tools
-      '@tabtin/action-tools-adapter':
-        specifier: workspace:*
-        version: link:../../packages/action-tools-adapter
-      '@tabtin/agent-host':
-        specifier: workspace:*
-        version: link:../../packages/agent-host
-      '@tabtin/agent-import':
-        specifier: workspace:*
-        version: link:../../packages/agent-import
-      '@tabtin/agent-modes':
-        specifier: workspace:*
-        version: link:../../packages/agent-modes
-      '@tabtin/agent-orb':
-        specifier: workspace:*
-        version: link:../../packages/agent-orb
-      '@tabtin/agent-prompt':
-        specifier: workspace:*
-        version: link:../../packages/agent-prompt
-      '@tabtin/agent-runtime':
-        specifier: workspace:*
-        version: link:../../packages/agent-runtime
-      '@tabtin/agent-wire':
-        specifier: workspace:*
-        version: link:../../packages/agent-wire
-      '@tabtin/anti-detect':
-        specifier: workspace:*
-        version: link:../../packages/anti-detect
-      '@tabtin/api-client':
-        specifier: workspace:*
-        version: link:../../packages/api-client
-      '@tabtin/app-config':
-        specifier: workspace:*
-        version: link:../../packages/app-config
-      '@tabtin/app-host-sdk':
-        specifier: workspace:*
-        version: link:../../packages/app-host-sdk
-      '@tabtin/app-shell':
-        specifier: workspace:*
-        version: link:../../packages/app-shell
-      '@tabtin/browser-capabilities':
-        specifier: workspace:*
-        version: link:../../packages/browser-capabilities
-      '@tabtin/browser-core':
-        specifier: workspace:*
-        version: link:../../packages/browser-core
-      '@tabtin/chat-client':
-        specifier: workspace:*
-        version: link:../../packages/tabtin-chat-client
-      '@tabtin/checkpoint-core':
-        specifier: workspace:*
-        version: link:../../packages/checkpoint-core
-      '@tabtin/cli-routes':
-        specifier: workspace:*
-        version: link:../../packages/cli-routes
-      '@tabtin/cli-server-core':
-        specifier: workspace:*
-        version: link:../../packages/cli-server-core
-      '@tabtin/collab-core':
-        specifier: workspace:*
-        version: link:../../packages/collab-core
-      '@tabtin/config':
-        specifier: workspace:*
-        version: link:../../packages/tabtin-config
-      '@tabtin/connector-brand-icons':
-        specifier: workspace:*
-        version: link:../../packages/connector-brand-icons
-      '@tabtin/contracts':
-        specifier: workspace:*
-        version: link:../../packages/contracts
-      '@tabtin/crawl-contracts':
-        specifier: workspace:*
-        version: link:../../packages/crawl-contracts
-      '@tabtin/crawl-integration':
-        specifier: workspace:*
-        version: link:../../packages/crawl-integration
-      '@tabtin/crawlspace-core':
-        specifier: workspace:*
-        version: link:../../packages/crawlspace-core
-      '@tabtin/desktop-contracts':
-        specifier: workspace:*
-        version: link:../../packages/tabtin-desktop-contracts
-      '@tabtin/desktop-native':
-        specifier: workspace:*
-        version: link:../../packages/tabtin-desktop-native
-      '@tabtin/doc-editor':
-        specifier: workspace:*
-        version: link:../../packages/doc-editor
-      '@tabtin/file-history-core':
-        specifier: workspace:*
-        version: link:../../packages/file-history-core
-      '@tabtin/file-pipeline':
-        specifier: workspace:*
-        version: link:../../packages/file-pipeline
-      '@tabtin/local-docparse':
-        specifier: workspace:*
-        version: link:../../packages/local-docparse
-      '@tabtin/local-embedding':
-        specifier: workspace:*
-        version: link:../../packages/local-embedding
-      '@tabtin/lsp-runtime':
-        specifier: workspace:*
-        version: link:../../packages/lsp-runtime
-      '@tabtin/markdown-resource-autolink':
-        specifier: workspace:*
-        version: link:../../packages/markdown-resource-autolink
-      '@tabtin/os-errors':
-        specifier: workspace:*
-        version: link:../../packages/os-errors
-      '@tabtin/oss-client':
-        specifier: workspace:*
-        version: link:../../packages/oss-client
-      '@tabtin/platform-reach':
-        specifier: workspace:*
-        version: link:../../packages/platform-reach
-      '@tabtin/pty-core':
-        specifier: workspace:*
-        version: link:../../packages/pty-core
-      '@tabtin/python-runtime-host':
-        specifier: workspace:*
-        version: link:../../packages/python-runtime-host
-      '@tabtin/resource-router':
-        specifier: workspace:*
-        version: link:../../packages/resource-router
-      '@tabtin/runtime-reporter':
-        specifier: workspace:*
-        version: link:../../packages/runtime-reporter
-      '@tabtin/safe-fs':
-        specifier: workspace:*
-        version: link:../../packages/safe-fs
-      '@tabtin/search':
-        specifier: workspace:*
-        version: link:../../packages/search
-      '@tabtin/security-policy':
-        specifier: workspace:*
-        version: link:../../packages/security-policy
-      '@tabtin/shared':
-        specifier: workspace:*
-        version: link:../../packages/tabtin-shared
-      '@tabtin/smartsheet-adapter-electron':
-        specifier: workspace:*
-        version: link:../../packages/smartsheet-adapter-electron
-      '@tabtin/smartsheet-ui':
-        specifier: workspace:*
-        version: link:../../packages/smartsheet-ui
-      '@tabtin/storage-manager':
-        specifier: workspace:*
-        version: link:../../packages/storage-manager
-      '@tabtin/tabdoc-host-runtime':
-        specifier: workspace:*
-        version: link:../../packages/tabdoc-host-runtime
-      '@tabtin/tabdoc-ui':
-        specifier: workspace:*
-        version: link:../../packages/tabdoc-ui
-      '@tabtin/table-core':
-        specifier: workspace:*
-        version: link:../../packages/table-core
-      '@tabtin/table-engine':
-        specifier: workspace:*
-        version: link:../../packages/table-engine
-      '@tabtin/table-engine-canvas':
-        specifier: workspace:*
-        version: link:../../packages/table-engine-canvas
-      '@tabtin/table-host-runtime':
-        specifier: workspace:*
-        version: link:../../packages/table-host-runtime
-      '@tabtin/table-ui':
-        specifier: workspace:*
-        version: link:../../packages/table-ui
-      '@tabtin/tabsite-core':
-        specifier: workspace:*
-        version: link:../../packages/tabsite-core
-      '@tabtin/tabslide':
-        specifier: workspace:*
-        version: link:../../packages/tabslide
-      '@tabtin/tailwind-preset':
-        specifier: workspace:*
-        version: link:../../packages/tailwind-preset
-      '@tabtin/tool-errors':
-        specifier: workspace:*
-        version: link:../../packages/tool-errors
-      '@tabtin/widget-tokens':
-        specifier: workspace:*
-        version: link:../../packages/widget-tokens
-      '@tabtin/ws-gateway-client':
-        specifier: workspace:*
-        version: link:../../packages/ws-gateway-client
       '@tailwindcss/typography':
         specifier: 0.5.19
         version: 0.5.19(tailwindcss@3.4.19(tsx@4.21.0)(yaml@2.9.0))
@@ -1324,67 +1324,67 @@ importers:
       '@dnd-kit/utilities':
         specifier: 3.2.2
         version: 3.2.2(react@19.2.6)
-      '@tabtin/api-client':
+      '@muse/api-client':
         specifier: workspace:*
         version: link:../../packages/api-client
-      '@tabtin/app-host-sdk':
+      '@muse/app-host-sdk':
         specifier: workspace:*
         version: link:../../packages/app-host-sdk
-      '@tabtin/app-shell':
+      '@muse/app-shell':
         specifier: workspace:*
         version: link:../../packages/app-shell
-      '@tabtin/chat-client':
+      '@muse/chat-client':
         specifier: workspace:*
         version: link:../../packages/tabtin-chat-client
-      '@tabtin/collab-core':
+      '@muse/collab-core':
         specifier: workspace:*
         version: link:../../packages/collab-core
-      '@tabtin/config':
+      '@muse/config':
         specifier: workspace:*
         version: link:../../packages/tabtin-config
-      '@tabtin/contracts':
+      '@muse/contracts':
         specifier: workspace:*
         version: link:../../packages/contracts
-      '@tabtin/doc-renderer':
+      '@muse/doc-renderer':
         specifier: workspace:*
         version: link:../../packages/doc-renderer
-      '@tabtin/platform-adapter':
+      '@muse/platform-adapter':
         specifier: workspace:*
         version: link:../../packages/platform-adapter
-      '@tabtin/shared':
+      '@muse/shared':
         specifier: workspace:*
         version: link:../../packages/tabtin-shared
-      '@tabtin/smartsheet-ui':
+      '@muse/smartsheet-ui':
         specifier: workspace:*
         version: link:../../packages/smartsheet-ui
-      '@tabtin/tabdoc-host-runtime':
+      '@muse/tabdoc-host-runtime':
         specifier: workspace:*
         version: link:../../packages/tabdoc-host-runtime
-      '@tabtin/tabdoc-ui':
+      '@muse/tabdoc-ui':
         specifier: workspace:*
         version: link:../../packages/tabdoc-ui
-      '@tabtin/table-core':
+      '@muse/table-core':
         specifier: workspace:*
         version: link:../../packages/table-core
-      '@tabtin/table-engine':
+      '@muse/table-engine':
         specifier: workspace:*
         version: link:../../packages/table-engine
-      '@tabtin/table-engine-canvas':
+      '@muse/table-engine-canvas':
         specifier: workspace:*
         version: link:../../packages/table-engine-canvas
-      '@tabtin/table-host-runtime':
+      '@muse/table-host-runtime':
         specifier: workspace:*
         version: link:../../packages/table-host-runtime
-      '@tabtin/table-ui':
+      '@muse/table-ui':
         specifier: workspace:*
         version: link:../../packages/table-ui
-      '@tabtin/tabslide':
+      '@muse/tabslide':
         specifier: workspace:*
         version: link:../../packages/tabslide
-      '@tabtin/tailwind-preset':
+      '@muse/tailwind-preset':
         specifier: workspace:*
         version: link:../../packages/tailwind-preset
-      '@tabtin/ws-gateway-client':
+      '@muse/ws-gateway-client':
         specifier: workspace:*
         version: link:../../packages/ws-gateway-client
       clsx:
@@ -1454,34 +1454,34 @@ importers:
 
   packages/action-tools:
     dependencies:
-      '@tabtin/anti-detect':
+      '@muse/anti-detect':
         specifier: workspace:*
         version: link:../anti-detect
-      '@tabtin/browser-core':
+      '@muse/browser-core':
         specifier: workspace:*
         version: link:../browser-core
-      '@tabtin/config':
+      '@muse/config':
         specifier: workspace:*
         version: link:../tabtin-config
-      '@tabtin/crawl-integration':
+      '@muse/crawl-integration':
         specifier: workspace:*
         version: link:../crawl-integration
-      '@tabtin/extraction-core':
+      '@muse/extraction-core':
         specifier: workspace:*
         version: link:../extraction-core
-      '@tabtin/media-capabilities':
+      '@muse/media-capabilities':
         specifier: workspace:*
         version: link:../media-capabilities
-      '@tabtin/oss-client':
+      '@muse/oss-client':
         specifier: workspace:*
         version: link:../oss-client
-      '@tabtin/security-policy':
+      '@muse/security-policy':
         specifier: workspace:*
         version: link:../security-policy
-      '@tabtin/shared':
+      '@muse/shared':
         specifier: workspace:*
         version: link:../tabtin-shared
-      '@tabtin/terminal-core':
+      '@muse/terminal-core':
         specifier: workspace:*
         version: link:../terminal-core
       cheerio:
@@ -1521,7 +1521,7 @@ importers:
 
   packages/action-tools-adapter:
     dependencies:
-      '@tabtin/action-tools':
+      '@muse/action-tools':
         specifier: workspace:*
         version: link:../action-tools
     devDependencies:
@@ -1537,56 +1537,56 @@ importers:
 
   packages/agent-host:
     dependencies:
-      '@tabtin/action-tools':
+      '@muse/action-tools':
         specifier: workspace:*
         version: link:../action-tools
-      '@tabtin/agent-modes':
+      '@muse/agent-modes':
         specifier: workspace:*
         version: link:../agent-modes
-      '@tabtin/agent-prompt':
+      '@muse/agent-prompt':
         specifier: workspace:*
         version: link:../agent-prompt
-      '@tabtin/agent-runtime':
+      '@muse/agent-runtime':
         specifier: workspace:*
         version: link:../agent-runtime
-      '@tabtin/agent-wire':
+      '@muse/agent-wire':
         specifier: workspace:*
         version: link:../agent-wire
-      '@tabtin/file-pipeline':
+      '@muse/file-pipeline':
         specifier: workspace:*
         version: link:../file-pipeline
-      '@tabtin/file-pipeline-errors':
+      '@muse/file-pipeline-errors':
         specifier: workspace:*
         version: link:../file-pipeline-errors
-      '@tabtin/local-docparse':
+      '@muse/local-docparse':
         specifier: workspace:*
         version: link:../local-docparse
-      '@tabtin/lsp-runtime':
+      '@muse/lsp-runtime':
         specifier: workspace:*
         version: link:../lsp-runtime
-      '@tabtin/os-errors':
+      '@muse/os-errors':
         specifier: workspace:*
         version: link:../os-errors
-      '@tabtin/safe-fs':
+      '@muse/safe-fs':
         specifier: workspace:*
         version: link:../safe-fs
-      '@tabtin/search':
+      '@muse/search':
         specifier: workspace:*
         version: link:../search
-      '@tabtin/security-policy':
+      '@muse/security-policy':
         specifier: workspace:*
         version: link:../security-policy
-      '@tabtin/terminal-core':
+      '@muse/terminal-core':
         specifier: workspace:*
         version: link:../terminal-core
-      '@tabtin/tool-errors':
+      '@muse/tool-errors':
         specifier: workspace:*
         version: link:../tool-errors
       chokidar:
         specifier: ^5.0.0
         version: 5.0.0
     devDependencies:
-      '@tabtin/browser-core':
+      '@muse/browser-core':
         specifier: workspace:*
         version: link:../browser-core
       '@types/node':
@@ -1625,7 +1625,7 @@ importers:
 
   packages/agent-orb:
     dependencies:
-      '@tabtin/contracts':
+      '@muse/contracts':
         specifier: workspace:*
         version: link:../contracts
     devDependencies:
@@ -1638,13 +1638,13 @@ importers:
 
   packages/agent-prompt:
     dependencies:
-      '@tabtin/agent-modes':
+      '@muse/agent-modes':
         specifier: workspace:*
         version: link:../agent-modes
-      '@tabtin/agent-runtime':
+      '@muse/agent-runtime':
         specifier: workspace:*
         version: link:../agent-runtime
-      '@tabtin/prompt-contract':
+      '@muse/prompt-contract':
         specifier: workspace:*
         version: link:../prompt-contract
     devDependencies:
@@ -1673,37 +1673,37 @@ importers:
         specifier: ^3.25.76
         version: 3.25.76
     devDependencies:
-      '@tabtin/action-tools':
+      '@muse/action-tools':
         specifier: workspace:*
         version: link:../action-tools
-      '@tabtin/agent-modes':
+      '@muse/agent-modes':
         specifier: workspace:*
         version: link:../agent-modes
-      '@tabtin/agent-wire':
+      '@muse/agent-wire':
         specifier: workspace:*
         version: link:../agent-wire
-      '@tabtin/browser-core':
+      '@muse/browser-core':
         specifier: workspace:*
         version: link:../browser-core
-      '@tabtin/file-pipeline-errors':
+      '@muse/file-pipeline-errors':
         specifier: workspace:*
         version: link:../file-pipeline-errors
-      '@tabtin/os-errors':
+      '@muse/os-errors':
         specifier: workspace:*
         version: link:../os-errors
-      '@tabtin/prompt-contract':
+      '@muse/prompt-contract':
         specifier: workspace:*
         version: link:../prompt-contract
-      '@tabtin/safe-fs':
+      '@muse/safe-fs':
         specifier: workspace:*
         version: link:../safe-fs
-      '@tabtin/security-policy':
+      '@muse/security-policy':
         specifier: workspace:*
         version: link:../security-policy
-      '@tabtin/terminal-core':
+      '@muse/terminal-core':
         specifier: workspace:*
         version: link:../terminal-core
-      '@tabtin/ws-gateway-client':
+      '@muse/ws-gateway-client':
         specifier: workspace:*
         version: link:../ws-gateway-client
       '@types/js-yaml':
@@ -1727,7 +1727,7 @@ importers:
 
   packages/agent-wire:
     dependencies:
-      '@tabtin/contracts':
+      '@muse/contracts':
         specifier: workspace:*
         version: link:../contracts
       zod:
@@ -1743,7 +1743,7 @@ importers:
 
   packages/anti-detect:
     dependencies:
-      '@tabtin/crawl-integration':
+      '@muse/crawl-integration':
         specifier: workspace:*
         version: link:../crawl-integration
       axios:
@@ -1806,10 +1806,10 @@ importers:
         specifier: ^2.6.0
         version: 2.6.0
     devDependencies:
-      '@tabtin/config':
+      '@muse/config':
         specifier: workspace:*
         version: link:../tabtin-config
-      '@tabtin/shared':
+      '@muse/shared':
         specifier: workspace:*
         version: link:../tabtin-shared
       '@types/react':
@@ -1851,10 +1851,10 @@ importers:
 
   packages/browser-core:
     dependencies:
-      '@tabtin/crawl-contracts':
+      '@muse/crawl-contracts':
         specifier: workspace:*
         version: link:../crawl-contracts
-      '@tabtin/security-policy':
+      '@muse/security-policy':
         specifier: workspace:*
         version: link:../security-policy
     devDependencies:
@@ -1873,7 +1873,7 @@ importers:
 
   packages/checkpoint-core:
     dependencies:
-      '@tabtin/shared':
+      '@muse/shared':
         specifier: workspace:*
         version: link:../tabtin-shared
       simple-git:
@@ -1895,13 +1895,13 @@ importers:
 
   packages/cli-routes:
     dependencies:
-      '@tabtin/action-tools':
+      '@muse/action-tools':
         specifier: workspace:*
         version: link:../action-tools
-      '@tabtin/agent-wire':
+      '@muse/agent-wire':
         specifier: workspace:*
         version: link:../agent-wire
-      '@tabtin/cli-server-core':
+      '@muse/cli-server-core':
         specifier: workspace:*
         version: link:../cli-server-core
     devDependencies:
@@ -1914,10 +1914,10 @@ importers:
 
   packages/cli-server-core:
     dependencies:
-      '@tabtin/agent-wire':
+      '@muse/agent-wire':
         specifier: workspace:*
         version: link:../agent-wire
-      '@tabtin/shared':
+      '@muse/shared':
         specifier: workspace:*
         version: link:../tabtin-shared
     devDependencies:
@@ -1936,10 +1936,10 @@ importers:
       '@hocuspocus/provider':
         specifier: ^2.15.2
         version: 2.15.3(y-protocols@1.0.7(yjs@13.6.29))(yjs@13.6.29)
-      '@tabtin/config':
+      '@muse/config':
         specifier: workspace:*
         version: link:../tabtin-config
-      '@tabtin/shared':
+      '@muse/shared':
         specifier: workspace:*
         version: link:../tabtin-shared
       react:
@@ -2083,7 +2083,7 @@ importers:
 
   packages/crawlspace-core:
     dependencies:
-      '@tabtin/smartsheet-ui':
+      '@muse/smartsheet-ui':
         specifier: workspace:*
         version: link:../smartsheet-ui
       clsx:
@@ -2205,7 +2205,7 @@ importers:
 
   packages/extraction-core:
     dependencies:
-      '@tabtin/crawl-contracts':
+      '@muse/crawl-contracts':
         specifier: workspace:*
         version: link:../crawl-contracts
       cheerio:
@@ -2239,10 +2239,10 @@ importers:
 
   packages/file-pipeline:
     dependencies:
-      '@tabtin/file-pipeline-errors':
+      '@muse/file-pipeline-errors':
         specifier: workspace:*
         version: link:../file-pipeline-errors
-      '@tabtin/local-docparse':
+      '@muse/local-docparse':
         specifier: workspace:*
         version: link:../local-docparse
       sharp:
@@ -2279,7 +2279,7 @@ importers:
 
   packages/local-docparse:
     dependencies:
-      '@tabtin/file-pipeline-errors':
+      '@muse/file-pipeline-errors':
         specifier: workspace:*
         version: link:../file-pipeline-errors
       mammoth:
@@ -2307,7 +2307,7 @@ importers:
       '@anush008/tokenizers':
         specifier: 0.6.0
         version: 0.6.0
-      '@tabtin/search':
+      '@muse/search':
         specifier: workspace:*
         version: link:../search
       onnxruntime-node:
@@ -2385,7 +2385,7 @@ importers:
 
   packages/media-capabilities:
     dependencies:
-      '@tabtin/media-core':
+      '@muse/media-core':
         specifier: workspace:*
         version: link:../media-core
     devDependencies:
@@ -2423,7 +2423,7 @@ importers:
 
   packages/oss-client:
     dependencies:
-      '@tabtin/config':
+      '@muse/config':
         specifier: workspace:*
         version: link:../tabtin-config
     devDependencies:
@@ -2469,7 +2469,7 @@ importers:
 
   packages/pty-core:
     dependencies:
-      '@tabtin/env-sanitize':
+      '@muse/env-sanitize':
         specifier: workspace:*
         version: link:../env-sanitize
     devDependencies:
@@ -2506,7 +2506,7 @@ importers:
 
   packages/python-runtime-host:
     dependencies:
-      '@tabtin/python-runtime':
+      '@muse/python-runtime':
         specifier: workspace:*
         version: link:../python-runtime
     devDependencies:
@@ -2553,7 +2553,7 @@ importers:
 
   packages/safe-fs:
     dependencies:
-      '@tabtin/os-errors':
+      '@muse/os-errors':
         specifier: workspace:*
         version: link:../os-errors
     devDependencies:
@@ -2581,10 +2581,10 @@ importers:
 
   packages/security-policy:
     dependencies:
-      '@tabtin/agent-modes':
+      '@muse/agent-modes':
         specifier: workspace:*
         version: link:../agent-modes
-      '@tabtin/terminal-core':
+      '@muse/terminal-core':
         specifier: workspace:*
         version: link:../terminal-core
     devDependencies:
@@ -2628,7 +2628,7 @@ importers:
 
   packages/smartsheet-adapter-electron:
     dependencies:
-      '@tabtin/smartsheet':
+      '@muse/smartsheet':
         specifier: workspace:*
         version: link:../smartsheet
       '@types/node':
@@ -2644,7 +2644,7 @@ importers:
 
   packages/smartsheet-adapter-web:
     dependencies:
-      '@tabtin/smartsheet':
+      '@muse/smartsheet':
         specifier: workspace:*
         version: link:../smartsheet
     devDependencies:
@@ -2657,6 +2657,18 @@ importers:
       '@floating-ui/react':
         specifier: 0.27.16
         version: 0.27.16(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
+      '@muse/app-host-sdk':
+        specifier: workspace:*
+        version: link:../app-host-sdk
+      '@muse/app-shell':
+        specifier: workspace:*
+        version: link:../app-shell
+      '@muse/shared':
+        specifier: workspace:*
+        version: link:../tabtin-shared
+      '@muse/table-core':
+        specifier: workspace:*
+        version: link:../table-core
       '@radix-ui/react-checkbox':
         specifier: ^1.3.11
         version: 1.3.11(@types/react-dom@19.2.3(@types/react@19.2.14))(@types/react@19.2.14)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
@@ -2705,18 +2717,6 @@ importers:
       '@radix-ui/react-visually-hidden':
         specifier: ^1.2.11
         version: 1.2.11(@types/react-dom@19.2.3(@types/react@19.2.14))(@types/react@19.2.14)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
-      '@tabtin/app-host-sdk':
-        specifier: workspace:*
-        version: link:../app-host-sdk
-      '@tabtin/app-shell':
-        specifier: workspace:*
-        version: link:../app-shell
-      '@tabtin/shared':
-        specifier: workspace:*
-        version: link:../tabtin-shared
-      '@tabtin/table-core':
-        specifier: workspace:*
-        version: link:../table-core
       class-variance-authority:
         specifier: ^0.7.1
         version: 0.7.1
@@ -2808,13 +2808,13 @@ importers:
 
   packages/tabdoc-host-runtime:
     dependencies:
-      '@tabtin/app-host-sdk':
+      '@muse/app-host-sdk':
         specifier: workspace:*
         version: link:../app-host-sdk
-      '@tabtin/contracts':
+      '@muse/contracts':
         specifier: workspace:*
         version: link:../contracts
-      '@tabtin/tabdoc-ui':
+      '@muse/tabdoc-ui':
         specifier: workspace:*
         version: link:../tabdoc-ui
       react:
@@ -2833,22 +2833,22 @@ importers:
       '@hocuspocus/provider':
         specifier: ^2.0.0
         version: 2.15.3(y-protocols@1.0.7(yjs@13.6.29))(yjs@13.6.29)
-      '@tabtin/app-host-sdk':
+      '@muse/app-host-sdk':
         specifier: workspace:*
         version: link:../app-host-sdk
-      '@tabtin/collab-core':
+      '@muse/collab-core':
         specifier: workspace:*
         version: link:../collab-core
-      '@tabtin/doc-editor':
+      '@muse/doc-editor':
         specifier: workspace:*
         version: link:../doc-editor
-      '@tabtin/smartsheet-ui':
+      '@muse/smartsheet-ui':
         specifier: workspace:*
         version: link:../smartsheet-ui
-      '@tabtin/storage-manager':
+      '@muse/storage-manager':
         specifier: workspace:*
         version: link:../storage-manager
-      '@tabtin/table-core':
+      '@muse/table-core':
         specifier: workspace:*
         version: link:../table-core
       '@tiptap/core':
@@ -2957,10 +2957,10 @@ importers:
 
   packages/table-core:
     dependencies:
-      '@tabtin/app-host-sdk':
+      '@muse/app-host-sdk':
         specifier: workspace:*
         version: link:../app-host-sdk
-      '@tabtin/table-kernel':
+      '@muse/table-kernel':
         specifier: workspace:*
         version: link:../table-kernel
       xlsx:
@@ -2976,10 +2976,10 @@ importers:
 
   packages/table-engine:
     dependencies:
-      '@tabtin/collab-core':
+      '@muse/collab-core':
         specifier: workspace:*
         version: link:../collab-core
-      '@tabtin/table-core':
+      '@muse/table-core':
         specifier: workspace:*
         version: link:../table-core
       fractional-indexing:
@@ -3007,13 +3007,13 @@ importers:
       '@floating-ui/react':
         specifier: 0.27.16
         version: 0.27.16(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
-      '@tabtin/app-shell':
+      '@muse/app-shell':
         specifier: workspace:*
         version: link:../app-shell
-      '@tabtin/smartsheet-ui':
+      '@muse/smartsheet-ui':
         specifier: workspace:*
         version: link:../smartsheet-ui
-      '@tabtin/table-engine':
+      '@muse/table-engine':
         specifier: workspace:*
         version: link:../table-engine
       '@teable/core':
@@ -3089,13 +3089,13 @@ importers:
 
   packages/table-host-runtime:
     dependencies:
-      '@tabtin/app-host-sdk':
+      '@muse/app-host-sdk':
         specifier: workspace:*
         version: link:../app-host-sdk
-      '@tabtin/contracts':
+      '@muse/contracts':
         specifier: workspace:*
         version: link:../contracts
-      '@tabtin/table-core':
+      '@muse/table-core':
         specifier: workspace:*
         version: link:../table-core
     devDependencies:
@@ -3129,7 +3129,7 @@ importers:
       '@electric-sql/pglite':
         specifier: ^0.2.0
         version: 0.2.17
-      '@tabtin/table-kernel':
+      '@muse/table-kernel':
         specifier: workspace:*
         version: link:../table-kernel
       kysely:
@@ -3154,18 +3154,18 @@ importers:
       '@dnd-kit/utilities':
         specifier: 3.2.2
         version: 3.2.2(react@19.2.6)
+      '@muse/smartsheet-ui':
+        specifier: workspace:*
+        version: link:../smartsheet-ui
+      '@muse/table-core':
+        specifier: workspace:*
+        version: link:../table-core
+      '@muse/table-engine':
+        specifier: workspace:*
+        version: link:../table-engine
       '@radix-ui/react-dropdown-menu':
         specifier: ^2.1.24
         version: 2.1.24(@types/react-dom@19.2.3(@types/react@19.2.14))(@types/react@19.2.14)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
-      '@tabtin/smartsheet-ui':
-        specifier: workspace:*
-        version: link:../smartsheet-ui
-      '@tabtin/table-core':
-        specifier: workspace:*
-        version: link:../table-core
-      '@tabtin/table-engine':
-        specifier: workspace:*
-        version: link:../table-engine
       lucide-react:
         specifier: 0.487.0
         version: 0.487.0(react@19.2.6)
@@ -3200,7 +3200,7 @@ importers:
 
   packages/tabsite-core:
     dependencies:
-      '@tabtin/terminal-core':
+      '@muse/terminal-core':
         specifier: workspace:*
         version: link:../terminal-core
     devDependencies:
@@ -3284,7 +3284,7 @@ importers:
 
   packages/tabsite-templates/dashboard:
     dependencies:
-      '@tabtin/sdk':
+      '@muse/sdk':
         specifier: workspace:*
         version: link:../../tabtin-sdk
       react:
@@ -3429,27 +3429,27 @@ importers:
       '@mathjax/src':
         specifier: 4.1.0
         version: 4.1.0
+      '@muse/app-shell':
+        specifier: workspace:*
+        version: link:../app-shell
+      '@muse/collab-core':
+        specifier: workspace:*
+        version: link:../collab-core
+      '@muse/doc-editor':
+        specifier: workspace:*
+        version: link:../doc-editor
+      '@muse/media-core':
+        specifier: workspace:*
+        version: link:../media-core
+      '@muse/smartsheet-ui':
+        specifier: workspace:*
+        version: link:../smartsheet-ui
+      '@muse/storage-manager':
+        specifier: workspace:*
+        version: link:../storage-manager
       '@radix-ui/react-scroll-area':
         specifier: ^1.2.18
         version: 1.2.18(@types/react-dom@19.2.3(@types/react@19.2.14))(@types/react@19.2.14)(react-dom@19.2.6(react@19.2.6))(react@19.2.6)
-      '@tabtin/app-shell':
-        specifier: workspace:*
-        version: link:../app-shell
-      '@tabtin/collab-core':
-        specifier: workspace:*
-        version: link:../collab-core
-      '@tabtin/doc-editor':
-        specifier: workspace:*
-        version: link:../doc-editor
-      '@tabtin/media-core':
-        specifier: workspace:*
-        version: link:../media-core
-      '@tabtin/smartsheet-ui':
-        specifier: workspace:*
-        version: link:../smartsheet-ui
-      '@tabtin/storage-manager':
-        specifier: workspace:*
-        version: link:../storage-manager
       '@tiptap/core':
         specifier: ^2.11.0
         version: 2.27.2(@tiptap/pm@2.27.2)
@@ -3569,7 +3569,7 @@ importers:
 
   packages/tabtin-chat-client:
     dependencies:
-      '@tabtin/ws-gateway-client':
+      '@muse/ws-gateway-client':
         specifier: workspace:*
         version: link:../ws-gateway-client
     devDependencies:
@@ -3614,7 +3614,7 @@ importers:
 
   packages/tabtin-shared:
     devDependencies:
-      '@tabtin/api-client':
+      '@muse/api-client':
         specifier: workspace:*
         version: link:../api-client
       '@types/node':
@@ -3647,10 +3647,10 @@ importers:
 
   packages/terminal-core:
     dependencies:
-      '@tabtin/env-sanitize':
+      '@muse/env-sanitize':
         specifier: workspace:*
         version: link:../env-sanitize
-      '@tabtin/shared':
+      '@muse/shared':
         specifier: workspace:*
         version: link:../tabtin-shared
     devDependencies:
@@ -3702,7 +3702,7 @@ importers:
 
   packages/wire-codegen:
     dependencies:
-      '@tabtin/agent-wire':
+      '@muse/agent-wire':
         specifier: workspace:*
         version: link:../agent-wire
       zod:
@@ -3727,10 +3727,10 @@ importers:
 
   packages/ws-gateway-client:
     dependencies:
-      '@tabtin/agent-wire':
+      '@muse/agent-wire':
         specifier: workspace:*
         version: link:../agent-wire
-      '@tabtin/contracts':
+      '@muse/contracts':
         specifier: workspace:*
         version: link:../contracts
     devDependencies:
@@ -8039,19 +8039,16 @@ packages:
   '@nut-tree-fork/libnut-darwin@2.7.5':
     resolution: {integrity: sha512-LbqtPtMPTJUcg4XoPP2jsU1wc8flBcGyKTerKsIfK9cD7nBHROnO0QksbrsbSWEpLym8T8fRtuU7XEY83l6Z2Q==}
     engines: {node: '>=10.15.3'}
-    cpu: [x64, arm64]
     os: [darwin, linux, win32]
 
   '@nut-tree-fork/libnut-linux@2.7.5':
     resolution: {integrity: sha512-uxaXEcRKnFObAljsoR6tLOBUU1dJ2sctloG6gFgCBGN7+k6Jdv6jZfOuNjd/fpdq2C5WPMm0rtn9EE7h5J3Jcg==}
     engines: {node: '>=10.15.3'}
-    cpu: [x64, arm64]
     os: [darwin, linux, win32]
 
   '@nut-tree-fork/libnut-win32@2.7.5':
     resolution: {integrity: sha512-yqC87zvmFcDPwFrRU40DYhN0xmEVM3aSkOuyF0IX+y1x+HWSu/i0PNklATpPBhGid3QVb/TOHuVoaraMrUFCNw==}
     engines: {node: '>=10.15.3'}
-    cpu: [x64, arm64]
     os: [darwin, linux, win32]
 
   '@nut-tree-fork/libnut@4.2.6':
@@ -8065,7 +8062,6 @@ packages:
   '@nut-tree-fork/nut-js@4.2.6':
     resolution: {integrity: sha512-aI/WCX7gE1HFGPH3EZP/UWqpNMM1NMoM/EkXqp7pKMgXFCi8e5+o5p+jd/QOYpmALv9bQg7+s69nI7FONbMqDg==}
     engines: {node: '>=16'}
-    cpu: [x64, arm64]
     os: [linux, darwin, win32]
 
   '@nut-tree-fork/provider-interfaces@4.2.6':

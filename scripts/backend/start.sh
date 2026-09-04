@@ -49,10 +49,10 @@ done
 # Community Django deliberately does not read repository env files. Resolve
 # the non-secret local database settings at this trusted launcher boundary so
 # an inherited SaaS shell cannot select the wrong edition or database.
-export TABTIN_EDITION="${TABTIN_EDITION:-community}"
+export MUSE_EDITION="${MUSE_EDITION:-community}"
 for local_key in \
   DEBUG \
-  TABTIN_DATABASE_MODE \
+  MUSE_DATABASE_MODE \
   PG_DB_NAME \
   PG_DB_USER \
   PG_DB_HOST \

@@ -105,8 +105,8 @@ export function openTabCodeGitPanel(input: {
 
 if (typeof window !== 'undefined') {
   ;(window as unknown as {
-    __TABTIN_OPEN_TABCODE_GIT__?: typeof openTabCodeGitPanel
-  }).__TABTIN_OPEN_TABCODE_GIT__ = openTabCodeGitPanel
+    __MUSE_OPEN_TABCODE_GIT__?: typeof openTabCodeGitPanel
+  }).__MUSE_OPEN_TABCODE_GIT__ = openTabCodeGitPanel
 }
 
 /**

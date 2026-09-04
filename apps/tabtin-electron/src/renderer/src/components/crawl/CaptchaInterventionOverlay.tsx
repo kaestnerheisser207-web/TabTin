@@ -16,7 +16,7 @@ export const CaptchaInterventionOverlay: React.FC = () => {
   const [intervention, setIntervention] = useState<CaptchaIntervention | null>(null)
 
   useEffect(() => {
-    const tabtin = window.tabtin
+    const tabtin = window.muse
     if (!tabtin?.captcha?.onInterventionRequired) return
 
     const cleanup = tabtin.captcha.onInterventionRequired(
@@ -29,7 +29,7 @@ export const CaptchaInterventionOverlay: React.FC = () => {
 
   const handleResolved = useCallback(() => {
     if (!intervention) return
-    const tabtin = window.tabtin
+    const tabtin = window.muse
     tabtin?.captcha?.resolveIntervention(intervention.tabId)
     setIntervention(null)
   }, [intervention])

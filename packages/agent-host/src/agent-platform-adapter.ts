@@ -17,9 +17,9 @@ import type {
 import type {
   HumanInteractionContext,
   PlatformApprovalRequest,
-} from '@tabtin/agent-runtime/permissions'
-import type { StreamEvent } from '@tabtin/agent-runtime/engine'
-import type { AgentRunSyncPayload } from '@tabtin/agent-wire'
+} from '@muse/agent-runtime/permissions'
+import type { StreamEvent } from '@muse/agent-runtime/engine'
+import type { AgentRunSyncPayload } from '@muse/agent-wire'
 import type {
   ExecutionOwner,
   ExecutionOwnerLifecycleAdapter,

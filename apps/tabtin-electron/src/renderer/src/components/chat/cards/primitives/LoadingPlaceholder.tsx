@@ -5,7 +5,7 @@
  */
 
 import React from 'react'
-import { Skeleton } from '@tabtin/smartsheet-ui'
+import { Skeleton } from '@muse/smartsheet-ui'
 import { cn } from '@utils/cn'
 import { CARD_HEADER_PADDING } from '../../registry/chatDesignTokens'
 

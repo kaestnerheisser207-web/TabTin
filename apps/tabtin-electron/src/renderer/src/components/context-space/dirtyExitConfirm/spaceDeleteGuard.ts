@@ -23,7 +23,7 @@
  */
 import { collectAllDirty } from '../dirtyRegistry'
 import { requestDirtyExitConfirm } from './dirtyExitConfirmStore'
-import { toast } from '@tabtin/smartsheet-ui'
+import { toast } from '@muse/smartsheet-ui'
 import i18n from '@/i18n'
 
 export interface ConfirmDirtyBeforeSpaceDeleteParams {

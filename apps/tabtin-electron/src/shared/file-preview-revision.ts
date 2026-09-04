@@ -1,4 +1,4 @@
-import type { RewindFileFingerprint } from '@tabtin/file-history-core'
+import type { RewindFileFingerprint } from '@muse/file-history-core'
 
 export type FilePreviewStatus = 'available' | 'not_applicable' | 'unavailable'
 

@@ -1,5 +1,5 @@
 import type { TableApiPort, TableRuntimePorts } from './ports'
-import type { AppHostClient } from '@tabtin/app-host-sdk'
+import type { AppHostClient } from '@muse/app-host-sdk'
 
 let runtimePorts: Partial<TableRuntimePorts> = {}
 
@@ -26,7 +26,7 @@ export const getAppHostClient = (): AppHostClient | null => {
 // table-core 的导入导出、附件分片中转、公开表单等场景需要 fetch 的完整语义
 // （FormData / Blob / 透明 Response），无法套进 TableApiPort 的 JSON envelope
 // 形态。这些请求过去直接调全局 `fetch`，在 Electron 生产包里会因为 renderer
-// 自定义协议 origin（tabtin-file://app）被业务 API 的 CORS 拒绝。
+// 自定义协议 origin（muse-file://app）被业务 API 的 CORS 拒绝。
 //
 // 这里提供一个可注入的 fetch 实现：Electron 宿主注入 electronFetch（经主进程
 // 代理走 Node http，不受 CORS 约束、复用统一重试 / trace / token 链路）；

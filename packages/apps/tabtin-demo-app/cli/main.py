@@ -4,7 +4,7 @@
   - stdout 仅输出 envelope JSON（{ok, data} 或 {ok, error}）
   - stderr 输出诊断、进度、人类可读提示
   - exit code 跟随 envelope（成功 0，失败 1+）
-  - 业务错误码以 TABTIN_DEMO_APP_ 前缀（R7 规范）
+  - 业务错误码以 MUSE_DEMO_APP_ 前缀（R7 规范）
 
 子命令：
     issue create  --title TITLE --repo OWNER/REPO [--body BODY] [--labels L1,L2]
@@ -28,7 +28,7 @@ from . import auth, config, github_api
 # ── envelope 输出工具 ─────────────────────────────────────────────
 # 遵守 cli-protocol-spec.md + marketplace-app-boundary.md R2/R7
 
-APP_ID_UPPER = "TABTIN_DEMO_APP"
+APP_ID_UPPER = "MUSE_DEMO_APP"
 
 
 def emit_ok(data: Any) -> NoReturn:

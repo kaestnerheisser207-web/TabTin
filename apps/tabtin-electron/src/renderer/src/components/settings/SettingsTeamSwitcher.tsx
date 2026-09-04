@@ -17,10 +17,10 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from '@tabtin/smartsheet-ui'
+} from '@muse/smartsheet-ui'
 import { cn } from '@utils/cn'
 import { useOrganizationStore } from '@stores/useOrganizationStore'
-import type { Organization } from '@tabtin/app-shell'
+import type { Organization } from '@muse/app-shell'
 import { useShallow } from 'zustand/react/shallow'
 import { useSettingsSpaceStore } from '@stores/useSettingsSpaceStore'
 import { runWithAgentContextSwitchGuard } from '@/services/agentContextSwitchGuard'

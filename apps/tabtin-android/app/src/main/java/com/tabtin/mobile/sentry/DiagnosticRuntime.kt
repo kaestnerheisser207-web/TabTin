@@ -93,7 +93,7 @@ public object DiagnosticRuntime {
                 put("app_version", BuildConfig.VERSION_NAME)
                 put("build_number", BuildConfig.VERSION_CODE.toString())
                 put("environment", BuildConfig.OBSERVABILITY_ENVIRONMENT)
-                BuildConfig.TABTIN_GIT_SHA.takeIf { it.isNotEmpty() }?.let { put("git_sha", it) }
+                BuildConfig.MUSE_GIT_SHA.takeIf { it.isNotEmpty() }?.let { put("git_sha", it) }
             }
             ZipOutputStream(File(dir, "$bundleId.zip").outputStream()).use { zip ->
                 zip.putNextEntry(ZipEntry("meta.json"))

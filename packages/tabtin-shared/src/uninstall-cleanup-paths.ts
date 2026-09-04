@@ -23,7 +23,7 @@ import os from 'node:os'
 import path from 'node:path'
 
 /** Electron userData 目录名（与 app-identity.userDataDirName 对齐，含历史遗留） */
-export const TABTIN_USER_DATA_DIR_NAMES = [
+export const MUSE_USER_DATA_DIR_NAMES = [
   'TabTin',
   'TabTin Dev',
   'TabTin Local',
@@ -36,7 +36,7 @@ export const TABTIN_USER_DATA_DIR_NAMES = [
   'Muse Preprod',
 ] as const
 
-export type TabTinUserDataDirName = (typeof TABTIN_USER_DATA_DIR_NAMES)[number]
+export type TabTinUserDataDirName = (typeof MUSE_USER_DATA_DIR_NAMES)[number]
 
 /** 登录凭证落盘文件名（safe-credential-store） */
 export const CREDENTIALS_FILE_NAME = 'credentials.json'
@@ -47,10 +47,10 @@ export const DEVICE_CREDENTIAL_FILE_NAME = 'device-credential.json'
  * 受保护目录名：出现在 userData / platformBase 下时，清理逻辑不得递归删除。
  * `organizations` = 默认 workspace 根（用户项目静态文件）。
  */
-export const TABTIN_PROTECTED_DIR_NAMES = ['organizations'] as const
+export const MUSE_PROTECTED_DIR_NAMES = ['organizations'] as const
 
 /** userData 根下可删的配置文件（相对路径） */
-export const TABTIN_CONFIG_FILE_RELATIVE_PATHS = [
+export const MUSE_CONFIG_FILE_RELATIVE_PATHS = [
   CREDENTIALS_FILE_NAME,
   DEVICE_CREDENTIAL_FILE_NAME,
   'app-config.json',
@@ -67,7 +67,7 @@ export const TABTIN_CONFIG_FILE_RELATIVE_PATHS = [
  * userData 根下可删的配置 / 缓存目录（相对路径）。
  * 不含 organizations、platform-data。
  */
-export const TABTIN_CONFIG_DIR_RELATIVE_PATHS = [
+export const MUSE_CONFIG_DIR_RELATIVE_PATHS = [
   'mcp',
   'organization-configs',
   'logs',
@@ -88,14 +88,14 @@ export const TABTIN_CONFIG_DIR_RELATIVE_PATHS = [
 ] as const
 
 /** ~/.tabtin 下仅允许删除的配置文件（不含 checkpoints / file-history） */
-export const TABTIN_HOME_CONFIG_FILE_RELATIVE_PATHS = [
+export const MUSE_HOME_CONFIG_FILE_RELATIVE_PATHS = [
   'desktop-approval.json',
   'server.json',
   'cli.sock',
 ] as const
 
 /** electron-updater / electron-builder 可能留下的 updater 缓存目录名 */
-export const TABTIN_UPDATER_CACHE_DIR_NAMES = [
+export const MUSE_UPDATER_CACHE_DIR_NAMES = [
   'com.tabtin.app-updater',
   'com.tabtin.app.dev-updater',
   'com.tabtin.app.local-updater',
@@ -116,7 +116,7 @@ export const TABTIN_UPDATER_CACHE_DIR_NAMES = [
 ] as const
 
 /** macOS /Applications 下可能存在的 .app 名（卸载助手移入废纸篓用） */
-export const TABTIN_MAC_APP_BUNDLE_NAMES = [
+export const MUSE_MAC_APP_BUNDLE_NAMES = [
   'TabTin.app',
   'TabTin Local.app',
   'TabTin Dev.app',
@@ -177,7 +177,7 @@ export function resolveCredentialFilePaths(
   options: UninstallPathResolveOptions = {},
 ): string[] {
   const appData = getElectronAppDataRoot(options)
-  return TABTIN_USER_DATA_DIR_NAMES.map((name) =>
+  return MUSE_USER_DATA_DIR_NAMES.map((name) =>
     path.join(appData, name, CREDENTIALS_FILE_NAME),
   )
 }
@@ -187,7 +187,7 @@ export function resolveUpdaterCachePaths(
   options: UninstallPathResolveOptions = {},
 ): string[] {
   const cacheRoot = getLocalCacheRoot(options)
-  return TABTIN_UPDATER_CACHE_DIR_NAMES.map((name) => path.join(cacheRoot, name))
+  return MUSE_UPDATER_CACHE_DIR_NAMES.map((name) => path.join(cacheRoot, name))
 }
 
 /**
@@ -202,18 +202,18 @@ export function resolveConfigAndCacheWipePaths(
   const appData = getElectronAppDataRoot(options)
   const paths: string[] = []
 
-  for (const profile of TABTIN_USER_DATA_DIR_NAMES) {
+  for (const profile of MUSE_USER_DATA_DIR_NAMES) {
     const root = path.join(appData, profile)
-    for (const rel of TABTIN_CONFIG_FILE_RELATIVE_PATHS) {
+    for (const rel of MUSE_CONFIG_FILE_RELATIVE_PATHS) {
       paths.push(path.join(root, rel))
     }
-    for (const rel of TABTIN_CONFIG_DIR_RELATIVE_PATHS) {
+    for (const rel of MUSE_CONFIG_DIR_RELATIVE_PATHS) {
       paths.push(path.join(root, rel))
     }
   }
 
   const homeTabtin = path.join(home, '.tabtin')
-  for (const rel of TABTIN_HOME_CONFIG_FILE_RELATIVE_PATHS) {
+  for (const rel of MUSE_HOME_CONFIG_FILE_RELATIVE_PATHS) {
     paths.push(path.join(homeTabtin, rel))
   }
 
@@ -244,7 +244,7 @@ export function isProtectedWorkspacePath(
   const home = options.homeDir ?? os.homedir()
 
   const candidates = [
-    ...TABTIN_USER_DATA_DIR_NAMES.map((name) =>
+    ...MUSE_USER_DATA_DIR_NAMES.map((name) =>
       path.join(appData, name, 'organizations'),
     ),
     path.join(home, 'Library', 'Application Support', 'TabTin', 'organizations'),
@@ -270,7 +270,7 @@ export function isProtectedWorkspacePath(
 
 /** macOS /Applications 下候选 App bundle 路径 */
 export function resolveMacAppBundlePaths(): string[] {
-  return TABTIN_MAC_APP_BUNDLE_NAMES.map((name) => path.join('/Applications', name))
+  return MUSE_MAC_APP_BUNDLE_NAMES.map((name) => path.join('/Applications', name))
 }
 
 function uniqueAbsolutePaths(paths: string[]): string[] {

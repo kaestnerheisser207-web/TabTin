@@ -1,7 +1,7 @@
 import { useCallback, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { ImportExportApiService } from '@tabtin/table-core'
-import { createDocument, importDocumentFileDraft, importMarkdown } from '@tabtin/tabdoc-ui/api-client'
+import { ImportExportApiService } from '@muse/table-core'
+import { createDocument, importDocumentFileDraft, importMarkdown } from '@muse/tabdoc-ui/api-client'
 
 import { getSharedAppHostClient } from '@/adapters/sharedAppHostClient'
 import { apiService } from '@/services/api'

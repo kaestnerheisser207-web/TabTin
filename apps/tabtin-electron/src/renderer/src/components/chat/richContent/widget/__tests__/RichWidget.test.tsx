@@ -42,7 +42,7 @@ vi.mock('@stores/chat/useChatStore', () => ({ useChatStore: () => ({}) }))
 // 守 widget 子组件流式行为，直接渲染 RichWidget 即可，不需要外层 wrapper。
 import { RichWidget } from '../RichWidget'
 import { wrapWidgetCode } from '../wrapWidgetCode'
-import type { RichContentBlock } from '@tabtin/chat-client'
+import type { RichContentBlock } from '@muse/chat-client'
 
 function makeBlock(overrides: Partial<RichContentBlock> = {}): RichContentBlock {
   return {
@@ -1215,19 +1215,19 @@ describe('Widget Wave 4.10 — 桌面端右键菜单', () => {
 // CSP block"或反之的视觉漂移。
 describe('Widget Wave 4.6 — chat wrapper 接通 widget-tokens 包', () => {
   it('wrapWidgetCode 输出的 CSP 与 widget-tokens.WIDGET_CSP 字面相同', async () => {
-    const { WIDGET_CSP } = await import('@tabtin/widget-tokens')
+    const { WIDGET_CSP } = await import('@muse/widget-tokens')
     const html = wrapWidgetCode('<svg/>', 'svg', { theme: 'light' })
     expect(html).toContain(WIDGET_CSP)
   })
 
   it('wrapWidgetCode light 输出的 token bundle 与 widget-tokens.themeBundle.light 字面相同', async () => {
-    const { themeBundle } = await import('@tabtin/widget-tokens')
+    const { themeBundle } = await import('@muse/widget-tokens')
     const html = wrapWidgetCode('<svg/>', 'svg', { theme: 'light' })
     expect(html).toContain(themeBundle.light)
   })
 
   it('wrapWidgetCode dark 输出的 token bundle 与 widget-tokens.themeBundle.dark 字面相同', async () => {
-    const { themeBundle } = await import('@tabtin/widget-tokens')
+    const { themeBundle } = await import('@muse/widget-tokens')
     const html = wrapWidgetCode('<svg/>', 'svg', { theme: 'dark' })
     expect(html).toContain(themeBundle.dark)
     // 不应该混入 light token

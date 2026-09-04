@@ -12,7 +12,7 @@ import {
   PopoverContent,
   PopoverTrigger,
   toast,
-} from '@tabtin/smartsheet-ui'
+} from '@muse/smartsheet-ui'
 import { Download, Globe, Loader2, RefreshCw, RotateCw, Upload } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { BROWSER_ICONS } from './constants'
@@ -50,7 +50,7 @@ export const BrowserSyncPopover: React.FC<BrowserSyncPopoverProps> = ({ partitio
     }
     setJsonBusy('import')
     try {
-      const res = await window.tabtin.credentialVault.importCookiesJson()
+      const res = await window.muse.credentialVault.importCookiesJson()
       if (!res.success) {
         if (res.error !== 'cancelled') {
           toast({ title: t('credentialVault.browserCookies.importFailed'), description: res.error, variant: 'destructive' })
@@ -58,7 +58,7 @@ export const BrowserSyncPopover: React.FC<BrowserSyncPopoverProps> = ({ partitio
         return
       }
       if (res.cookies && res.cookies.length > 0) {
-        const inj = await window.tabtin.credentialVault.injectCookies({ partition, cookies: res.cookies })
+        const inj = await window.muse.credentialVault.injectCookies({ partition, cookies: res.cookies })
         if (inj.success) {
           toast({ title: t('credentialVault.browserCookies.importSuccess', { count: inj.injected }) })
           onSynced()
@@ -76,7 +76,7 @@ export const BrowserSyncPopover: React.FC<BrowserSyncPopoverProps> = ({ partitio
     if (!partition) return
     setJsonBusy('export')
     try {
-      const res = await window.tabtin.credentialVault.exportCookiesJson({ partition })
+      const res = await window.muse.credentialVault.exportCookiesJson({ partition })
       if (res.success) {
         toast({ title: t('credentialVault.browserCookies.exportSuccess', { count: res.count }) })
       } else if (res.error !== 'cancelled') {

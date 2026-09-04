@@ -1,5 +1,5 @@
 {
-  "name": "@tabtin/action-tools",
+  "name": "@muse/action-tools",
   "version": "0.1.0",
   "description": "统一的前端动作工具平台，支持 run 管理、事件归档、资源追踪",
   "keywords": [
@@ -129,16 +129,16 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@tabtin/anti-detect": "workspace:*",
-    "@tabtin/browser-core": "workspace:*",
-    "@tabtin/config": "workspace:*",
-    "@tabtin/crawl-integration": "workspace:*",
-    "@tabtin/extraction-core": "workspace:*",
-    "@tabtin/media-capabilities": "workspace:*",
-    "@tabtin/oss-client": "workspace:*",
-    "@tabtin/security-policy": "workspace:*",
-    "@tabtin/shared": "workspace:*",
-    "@tabtin/terminal-core": "workspace:*",
+    "@muse/anti-detect": "workspace:*",
+    "@muse/browser-core": "workspace:*",
+    "@muse/config": "workspace:*",
+    "@muse/crawl-integration": "workspace:*",
+    "@muse/extraction-core": "workspace:*",
+    "@muse/media-capabilities": "workspace:*",
+    "@muse/oss-client": "workspace:*",
+    "@muse/security-policy": "workspace:*",
+    "@muse/shared": "workspace:*",
+    "@muse/terminal-core": "workspace:*",
     "cheerio": "^1.0.0-rc.12",
     "diff": "8.0.2",
     "iconv-lite": "0.7.2",

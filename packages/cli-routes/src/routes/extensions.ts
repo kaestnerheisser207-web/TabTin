@@ -11,7 +11,7 @@
 
 import type { ServerResponse } from 'node:http';
 import path from 'node:path';
-import { errorResponse, sendDjangoResult, type SendJSON } from '@tabtin/cli-server-core';
+import { errorResponse, sendDjangoResult, type SendJSON } from '@muse/cli-server-core';
 import { djangoRequest } from '../host-bindings.js';
 
 const LOG_TAG = '[CLI Extensions]';

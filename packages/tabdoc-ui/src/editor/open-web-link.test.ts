@@ -30,7 +30,7 @@ describe('resolveTabDocWebLinkInput', () => {
     expect(resolveTabDocWebLinkInput(textOnly)?.openIntentHints?.filename).toBe('数据表.xlsx')
 
     const internal = document.createElement('a')
-    internal.setAttribute('href', 'tabtin://resource/document/doc-1')
+    internal.setAttribute('href', 'muse://resource/document/doc-1')
     expect(resolveTabDocWebLinkInput(internal)).toBeNull()
   })
 

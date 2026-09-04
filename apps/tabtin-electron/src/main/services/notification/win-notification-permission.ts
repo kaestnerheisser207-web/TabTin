@@ -30,7 +30,7 @@ export type WindowsNotificationProbeResult = {
 export type WindowsNotificationPermissionDeps = {
   platform?: NodeJS.Platform
   supported?: boolean
-  /** 当前进程候选 AUMID（优先 TABTIN_APP_ID） */
+  /** 当前进程候选 AUMID（优先 MUSE_APP_ID） */
   aumids?: string[]
   readGlobalToastEnabled?: () => number | null
   /** 返回 Enabled DWORD；键不存在 → undefined；键存在但无 Enabled → null */
@@ -114,8 +114,8 @@ function defaultReadAppEnabled(aumid: string): number | null | undefined {
 }
 
 function resolveCandidateAumids(explicit?: string[]): string[] {
-  const fromEnv = typeof process.env.TABTIN_APP_ID === 'string'
-    ? process.env.TABTIN_APP_ID.trim()
+  const fromEnv = typeof process.env.MUSE_APP_ID === 'string'
+    ? process.env.MUSE_APP_ID.trim()
     : ''
   const ordered = [
     ...(explicit ?? []),

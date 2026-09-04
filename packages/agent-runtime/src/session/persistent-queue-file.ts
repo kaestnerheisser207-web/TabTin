@@ -1,5 +1,5 @@
 /**
- * @tabtin/agent-runtime — 基于 fs JSONL 的 PersistentQueue 实现。
+ * @muse/agent-runtime — 基于 fs JSONL 的 PersistentQueue 实现。
  *
  * 选型理由（详见 `SYNC_QUEUE.md`）：
  * - **Electron main 进程没有 IndexedDB**（IndexedDB 是浏览器 API，仅

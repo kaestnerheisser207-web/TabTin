@@ -1,1 +1,1 @@
-export { sanitizeSchema, rehypeSanitizeCss } from '@tabtin/tabdoc-ui/rehype-sanitize-schema'
+export { sanitizeSchema, rehypeSanitizeCss } from '@muse/tabdoc-ui/rehype-sanitize-schema'

@@ -26,7 +26,7 @@ logger = logging.getLogger(__name__)
 # 全量回填缓存：创建共享 / 预览未命中时最多扫一次历史；写时增量索引不受此影响。
 _SWFR_INDEXED_CACHE_TTL_SECONDS = 60 * 60 * 24
 
-_FILE_SCHEME_PREFIX = "tabtin://resource/file/"
+_FILE_SCHEME_PREFIX = "muse://resource/file/"
 _MUTATING_TOOLS = frozenset({"write_file", "edit_file", "create_file", "open_file"})
 _DELETE_TOOLS = frozenset({"delete_file"})
 
@@ -147,7 +147,7 @@ def extract_local_file_candidates(
             if not isinstance(text, str) or _FILE_SCHEME_PREFIX not in text:
                 continue
             for match in re.finditer(
-                r"tabtin://resource/file/([^?\s\)\"']+)",
+                r"muse://resource/file/([^?\s\)\"']+)",
                 text,
             ):
                 raw = unquote(match.group(1))

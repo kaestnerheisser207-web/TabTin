@@ -3,9 +3,9 @@
  *
  * 重导出所有子模块，让消费者可以：
  * ```ts
- * import { downloadAsPPTX, downloadAsPDF, downloadAsJSON } from '@tabtin/tabslide/exports'
+ * import { downloadAsPPTX, downloadAsPDF, downloadAsJSON } from '@muse/tabslide/exports'
  * // 或
- * import { downloadAsPPTX } from '@tabtin/tabslide'
+ * import { downloadAsPPTX } from '@muse/tabslide'
  * ```
  */
 

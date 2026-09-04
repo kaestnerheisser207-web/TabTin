@@ -32,7 +32,7 @@ vi.mock('electron', () => ({
   },
 }))
 
-vi.mock('@tabtin/shared/storage-paths', () => ({
+vi.mock('@muse/shared/storage-paths', () => ({
   getHomeTabtinPath: (...segments: string[]) => join(mocks.tmpHome, '.tabtin', ...segments),
 }))
 

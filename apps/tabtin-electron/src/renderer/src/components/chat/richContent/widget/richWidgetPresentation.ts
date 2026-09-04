@@ -1,4 +1,4 @@
-import type { RichContentBlock } from '@tabtin/chat-client'
+import type { RichContentBlock } from '@muse/chat-client'
 import { htmlPreviewLooksUnsafe } from './htmlPreviewLooksUnsafe'
 
 export function normalizeWidgetFormat(format: unknown): 'svg' | 'html' | 'mermaid' {

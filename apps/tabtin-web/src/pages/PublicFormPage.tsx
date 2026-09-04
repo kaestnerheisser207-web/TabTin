@@ -11,7 +11,7 @@ import {
   ChevronDown,
   Check,
 } from 'lucide-react'
-import { resolveChoiceTagColors } from '@tabtin/smartsheet-ui'
+import { resolveChoiceTagColors } from '@muse/smartsheet-ui'
 import { API_BASE_URL } from '@/config/api'
 
 interface FormFieldMeta {

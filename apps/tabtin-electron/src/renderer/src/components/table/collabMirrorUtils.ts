@@ -5,7 +5,7 @@
  * （这正是  反复踩坑的地方）。无运行时重依赖，只引类型。
  */
 
-import type { Field, TableRecord } from '@tabtin/table-core'
+import type { Field, TableRecord } from '@muse/table-core'
 
 /** 字段名 → 字段 id */
 export function buildFieldIdByName(

@@ -17,7 +17,7 @@
 
 import { describe, expect, it, vi } from 'vitest'
 import { randomUUID } from 'node:crypto'
-import { StreamEvents } from '@tabtin/agent-wire'
+import { StreamEvents } from '@muse/agent-wire'
 import { LocalPermissionHandler } from '../src/permissions/local-permission-handler.js'
 import { createAskTools, __resetAskUserDedupForTest } from '../src/tools/ask-tools.js'
 import { createInterruptAdapter } from '../src/permissions/interrupt-adapter.js'

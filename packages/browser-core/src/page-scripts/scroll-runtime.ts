@@ -14,7 +14,7 @@ export const SCROLL_EPS = 1
 
 /** 注入页面的滚动辅助（IIFE 内可直接调用的函数声明串）。 */
 export const SCROLL_RUNTIME_SNIPPET = `
-            const __TABTIN_SCROLL_EPS = ${SCROLL_EPS};
+            const __MUSE_SCROLL_EPS = ${SCROLL_EPS};
 
             function __tabtinOverflowAllowsScroll(style) {
               const tokens = [style.overflow, style.overflowY].join(' ');
@@ -26,7 +26,7 @@ export const SCROLL_RUNTIME_SNIPPET = `
 
             function __tabtinIsScrollableEl(el) {
               if (!el || typeof el.scrollHeight !== 'number' || typeof el.clientHeight !== 'number') return false;
-              if (el.scrollHeight - el.clientHeight <= __TABTIN_SCROLL_EPS) return false;
+              if (el.scrollHeight - el.clientHeight <= __MUSE_SCROLL_EPS) return false;
               try {
                 return __tabtinOverflowAllowsScroll(getComputedStyle(el));
               } catch (_) {
@@ -89,7 +89,7 @@ export const SCROLL_RUNTIME_SNIPPET = `
                 }
               }
 
-              if (__tabtinDocScrollMax() > __TABTIN_SCROLL_EPS) {
+              if (__tabtinDocScrollMax() > __MUSE_SCROLL_EPS) {
                 return { kind: 'window' };
               }
 
@@ -121,8 +121,8 @@ export const SCROLL_RUNTIME_SNIPPET = `
             function __tabtinAtBoundary(target, deltaY) {
               const pos = __tabtinGetScrollPos(target);
               const max = __tabtinGetScrollMax(target);
-              if (deltaY > 0) return max - pos <= __TABTIN_SCROLL_EPS;
-              if (deltaY < 0) return pos <= __TABTIN_SCROLL_EPS;
+              if (deltaY > 0) return max - pos <= __MUSE_SCROLL_EPS;
+              if (deltaY < 0) return pos <= __MUSE_SCROLL_EPS;
               return false;
             }
 
@@ -134,7 +134,7 @@ export const SCROLL_RUNTIME_SNIPPET = `
               });
               const info = getInfo();
               const remainingDistance = info.max - info.current;
-              if (remainingDistance < Math.max(info.viewport * 0.1, __TABTIN_SCROLL_EPS)) {
+              if (remainingDistance < Math.max(info.viewport * 0.1, __MUSE_SCROLL_EPS)) {
                 return;
               }
               const segments = Math.min(
@@ -144,7 +144,7 @@ export const SCROLL_RUNTIME_SNIPPET = `
               for (let i = 0; i < segments; i++) {
                 const currentInfo = getInfo();
                 const remaining = currentInfo.max - currentInfo.current;
-                if (remaining <= __TABTIN_SCROLL_EPS) break;
+                if (remaining <= __MUSE_SCROLL_EPS) break;
                 const isLastSegment = i === segments - 1;
                 const scrollDistance = isLastSegment
                   ? remaining
@@ -175,7 +175,7 @@ export const SCROLL_RUNTIME_SNIPPET = `
               const targetLabel = target.kind === 'window' ? 'window' : 'element';
 
               if (intent && intent.kind === 'to_start') {
-                if (before <= __TABTIN_SCROLL_EPS) {
+                if (before <= __MUSE_SCROLL_EPS) {
                   return { success: true, delta: 0, atBoundary: true, target: targetLabel };
                 }
                 __tabtinScrollTo(target, 0, 'auto');
@@ -192,7 +192,7 @@ export const SCROLL_RUNTIME_SNIPPET = `
                 await sleep(50);
               } else {
                 // to_end（缺省）
-                if (max - before <= __TABTIN_SCROLL_EPS) {
+                if (max - before <= __MUSE_SCROLL_EPS) {
                   return { success: true, delta: 0, atBoundary: true, target: targetLabel };
                 }
                 await __tabtinScrollToEndHumanLike(target);
@@ -201,15 +201,15 @@ export const SCROLL_RUNTIME_SNIPPET = `
 
               const after = __tabtinGetScrollPos(target);
               const delta = after - before;
-              if (Math.abs(delta) < __TABTIN_SCROLL_EPS) {
+              if (Math.abs(delta) < __MUSE_SCROLL_EPS) {
                 // 执行后仍无位移：若已在边界则成功，否则 no_effect
                 if (intent && intent.kind === 'by' && __tabtinAtBoundary(target, intent.deltaY || 0)) {
                   return { success: true, delta: 0, atBoundary: true, target: targetLabel };
                 }
-                if ((!intent || intent.kind === 'to_end') && max - after <= __TABTIN_SCROLL_EPS) {
+                if ((!intent || intent.kind === 'to_end') && max - after <= __MUSE_SCROLL_EPS) {
                   return { success: true, delta: 0, atBoundary: true, target: targetLabel };
                 }
-                if (intent && intent.kind === 'to_start' && after <= __TABTIN_SCROLL_EPS) {
+                if (intent && intent.kind === 'to_start' && after <= __MUSE_SCROLL_EPS) {
                   return { success: true, delta: 0, atBoundary: true, target: targetLabel };
                 }
                 return {

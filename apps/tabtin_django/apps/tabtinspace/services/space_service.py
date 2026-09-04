@@ -159,7 +159,7 @@ class SpaceService(BaseService):
             return [], 0
 
         if effective_space_type == Space.SpaceType.TEAM_SPACE:
-            if not getattr(settings, 'TABTIN_ENABLE_PROJECTS', False):
+            if not getattr(settings, 'MUSE_ENABLE_PROJECTS', False):
                 return [], 0
             from apps.tabtinspace.services.space_visibility import get_accessible_space_ids
             accessible_ids = get_accessible_space_ids(self.user, organization_id=organization_id)

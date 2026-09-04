@@ -24,7 +24,7 @@ describe('isMediaImageGenerateCommand', () => {
 
   it('recognizes preprod and shell wrappers without matching quoted text', () => {
     expect(isMediaImageGenerateCommand(
-      'sudo exec tabtin-preprod media image generate --prompt x',
+      'sudo exec muse-preprod media image generate --prompt x',
     )).toBe(true)
     expect(isMediaImageGenerateCommand(
       "echo 'muse media image generate --prompt x'",

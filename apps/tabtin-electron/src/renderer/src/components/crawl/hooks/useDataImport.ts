@@ -8,11 +8,11 @@
  */
 
 import { useState, useCallback } from 'react'
-import type { ResourceRecord } from '@tabtin/action-tools/types'
-import { TableApiService, FieldApiService, ImportExportApiService } from '@tabtin/table-core'
+import type { ResourceRecord } from '@muse/action-tools/types'
+import { TableApiService, FieldApiService, ImportExportApiService } from '@muse/table-core'
 import { useResolvedOrganizationId } from '@/hooks/useResolvedOrganizationId'
 import type { TaskState, FieldConfig, NetworkResponse } from '../types'
-import type { FieldType } from '@tabtin/table-core'
+import type { FieldType } from '@muse/table-core'
 import { ResourceDownloader } from '@/services/resources/downloader'
 import type { DownloadTask } from '@/services/resources/downloader'
 import { directUploadBatch } from '@/services/oss-direct-uploader'

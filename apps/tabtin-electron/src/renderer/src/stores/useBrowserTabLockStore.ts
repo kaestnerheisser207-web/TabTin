@@ -33,7 +33,7 @@ export const useBrowserTabLockStore = create<BrowserTabLockStore>((set, get) => 
 }))
 
 export function subscribeBrowserTabControlSnapshots(): (() => void) | undefined {
-  return window.tabtin?.crawlView?.onAgentTabLockChanged((snapshot) => {
+  return window.muse?.crawlView?.onAgentTabLockChanged((snapshot) => {
     useBrowserTabLockStore.getState().setSnapshot(snapshot)
   })
 }

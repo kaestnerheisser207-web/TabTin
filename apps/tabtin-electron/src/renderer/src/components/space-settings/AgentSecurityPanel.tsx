@@ -7,7 +7,7 @@ import {
 } from '@components/ui'
 import { useShallow } from 'zustand/react/shallow'
 import { useSpaceStore } from '@stores/useSpaceStore'
-import { ApprovalMemoApiService } from '@tabtin/app-shell'
+import { ApprovalMemoApiService } from '@muse/app-shell'
 import { useTranslation } from 'react-i18next'
 import { SETTINGS_HINT, SETTINGS_SECTION_TITLE } from '@components/settings/settingsUi'
 import { SpaceSettingsSectionHeader } from '@components/space-settings/SpaceSettingsSectionHeader'
@@ -124,7 +124,7 @@ export const AgentSecurityPanel: React.FC<AgentSecurityPanelProps> = ({ spaceId,
         // notify 失败不阻塞读 —— main 可能仍有上次 hydrate 的旧值可用，
         // 读出来仍比"空白态"准；失败原因 notify 内部已 console.warn
       })
-      .then(() => window.tabtin?.agentSecurity?.getWorkspaceSnapshot?.(spaceId))
+      .then(() => window.muse?.agentSecurity?.getWorkspaceSnapshot?.(spaceId))
       .then(apply)
       .catch(() => {
         if (cancelled) return
@@ -190,7 +190,7 @@ export const AgentSecurityPanel: React.FC<AgentSecurityPanelProps> = ({ spaceId,
     // 撤销只清了 Django + store 显示；主进程 runtime memoStore 缓存仍持有旧 entry
     // （Django 广播不回发发起端），不刷新会导致对话里 getAlways 仍命中、撤销不生效。
     await refreshMemoEntries()
-    void window.tabtin?.agentEngine?.refreshApprovalMemo?.({ workspaceId: spaceId })
+    void window.muse?.agentEngine?.refreshApprovalMemo?.({ workspaceId: spaceId })
   }, [refreshMemoEntries, revokeApprovalMemoEntry, spaceId, t])
 
   const handleClearAllMemos = useCallback(async () => {
@@ -202,7 +202,7 @@ export const AgentSecurityPanel: React.FC<AgentSecurityPanelProps> = ({ spaceId,
     }
     // 同 handleRevokeMemo：刷新主进程 runtime memoStore，让撤销在对话中即时生效。
     await refreshMemoEntries()
-    void window.tabtin?.agentEngine?.refreshApprovalMemo?.({ workspaceId: spaceId })
+    void window.muse?.agentEngine?.refreshApprovalMemo?.({ workspaceId: spaceId })
   }, [refreshMemoEntries, revokeAllApprovalMemos, spaceId, t])
 
   return (

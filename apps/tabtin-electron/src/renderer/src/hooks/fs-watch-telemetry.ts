@@ -7,7 +7,7 @@
  * main 端 dispatch bug 长得一模一样，开发者无从分辨。
  *
  * 这个 helper 只做一件事：在内存里记下"哪条路径 watch 失败了 + 为什么"，
- * 通过 `window.__TABTIN_FS_WATCH_TELEMETRY__` 暴露给 dogfood 期排查。
+ * 通过 `window.__MUSE_FS_WATCH_TELEMETRY__` 暴露给 dogfood 期排查。
  *
  * 设计取向：
  * - 不上报后端，不持久化——dogfood 阶段开发者自己看 console / window 快照即可
@@ -55,7 +55,7 @@ const nextId = (): string =>
 
 const persistToWindow = (): void => {
   if (typeof window === 'undefined') return
-  window.__TABTIN_FS_WATCH_TELEMETRY__ = {
+  window.__MUSE_FS_WATCH_TELEMETRY__ = {
     events: [...events],
     counters: Object.fromEntries(counters.entries()),
   }

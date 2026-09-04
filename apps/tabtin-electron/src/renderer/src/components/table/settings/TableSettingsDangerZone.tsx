@@ -1,6 +1,6 @@
 import React from 'react'
 import { Archive, RotateCcw, Trash2 } from 'lucide-react'
-import { Button } from '@tabtin/smartsheet-ui'
+import { Button } from '@muse/smartsheet-ui'
 
 interface TableSettingsDangerZoneProps {
   t: (key: string, options?: Record<string, unknown>) => string

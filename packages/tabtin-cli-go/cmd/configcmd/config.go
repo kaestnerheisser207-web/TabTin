@@ -214,12 +214,12 @@ func newCmdConfigPath(f *cmdutil.Factory) *cobra.Command {
 	}
 }
 
-// newCmdConfigPurge 删除整个 config.Dir()（默认 ~/.tabtin，可被 TABTIN_CONFIG_DIR 覆盖）：
+// newCmdConfigPurge 删除整个 config.Dir()（默认 ~/.tabtin，可被 MUSE_CONFIG_DIR 覆盖）：
 // config.json（登录凭证）、cli-history.json、cli-outputs/、daemon 发现文件、已安装
 // skill 包（~/.tabtin/packages）等本地状态与缓存。
 //
 // 不动 Space 工作目录/业务文件——这些不在 config.Dir() 之下（详见 internal/config.Dir）。
-// `npm uninstall -g @tabtin/cli` 只删可执行文件，不会触达这里；purge 是唯一显式清配置的入口。
+// `npm uninstall -g @muse/cli` 只删可执行文件，不会触达这里；purge 是唯一显式清配置的入口。
 func newCmdConfigPurge(f *cmdutil.Factory) *cobra.Command {
 	var flagYes bool
 
@@ -277,7 +277,7 @@ func newCmdConfigPurge(f *cmdutil.Factory) *cobra.Command {
 }
 
 // validatePurgeDir 是删前的最后一道保险：只挡真正灾难性的路径（空串/家目录本身/
-// 文件系统根），不限制目录名——TABTIN_CONFIG_DIR 本就允许用户/测试/CI 指向任意
+// 文件系统根），不限制目录名——MUSE_CONFIG_DIR 本就允许用户/测试/CI 指向任意
 // 自定义目录做隔离（见 internal/config.Dir），purge 不该比 config 其余命令更挑剔。
 func validatePurgeDir(dir string) error {
 	if strings.TrimSpace(dir) == "" {
@@ -289,7 +289,7 @@ func validatePurgeDir(dir string) error {
 	}
 	if home, herr := os.UserHomeDir(); herr == nil && home != "" {
 		if absHome, aerr := filepath.Abs(home); aerr == nil && abs == absHome {
-			return fmt.Errorf("拒绝清除：配置目录解析为家目录本身 (%s)，请检查 TABTIN_CONFIG_DIR", abs)
+			return fmt.Errorf("拒绝清除：配置目录解析为家目录本身 (%s)，请检查 MUSE_CONFIG_DIR", abs)
 		}
 	}
 	if parent := filepath.Dir(abs); parent == abs {

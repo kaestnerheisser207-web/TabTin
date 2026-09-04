@@ -17,7 +17,7 @@ import { useTranslation } from 'react-i18next'
 import { Globe, ChevronDown, ChevronRight } from 'lucide-react'
 import type {
   ServerToolUseBlock,
-} from '@tabtin/agent-wire'
+} from '@muse/agent-wire'
 import { cn } from '@utils/cn'
 import {
   CARD_RADIUS,

@@ -155,7 +155,7 @@ def test_extract_message_attachments_user_and_agent_files():
                 "filename": "chart.png",
                 "mime_type": "image/png",
                 "access_url": "https://cdn.example.com/chart.png",
-                "url": "tabtin://resource/file/agent-1",
+                "url": "muse://resource/file/agent-1",
             },
         },
         {"type": "text", "text": "说明"},
@@ -174,7 +174,7 @@ def test_extract_message_attachments_from_markdown_resource_links():
 
     content = (
         "文档创建成功！\n\n"
-        "**[萌猫档案](tabtin://resource/document/056c501e-a833-4d2f-a86d-fd0ef84e9547?hint=tabdoc)**\n"
+        "**[萌猫档案](muse://resource/document/056c501e-a833-4d2f-a86d-fd0ef84e9547?hint=tabdoc)**\n"
     )
     out = _extract_message_attachments([], content)
     assert len(out) == 1
@@ -183,7 +183,7 @@ def test_extract_message_attachments_from_markdown_resource_links():
     assert out[0]["filename"] == "萌猫档案"
     assert out[0]["resource_type"] == "document"
     assert out[0]["resource_id"] == "056c501e-a833-4d2f-a86d-fd0ef84e9547"
-    assert out[0]["url"].startswith("tabtin://resource/document/")
+    assert out[0]["url"].startswith("muse://resource/document/")
 
 
 def test_extract_message_attachments_resource_ref_block():
@@ -199,7 +199,7 @@ def test_extract_message_attachments_resource_ref_block():
                 "resource_type": "document",
                 "resource_id": "doc-42",
                 "resource_name": "经营周报",
-                "url": "tabtin://resource/document/doc-42?hint=tabdoc",
+                "url": "muse://resource/document/doc-42?hint=tabdoc",
             },
         }
     ]
@@ -209,7 +209,7 @@ def test_extract_message_attachments_resource_ref_block():
             "kind": "document",
             "filename": "经营周报",
             "source": "agent",
-            "url": "tabtin://resource/document/doc-42?hint=tabdoc",
+            "url": "muse://resource/document/doc-42?hint=tabdoc",
             "resource_type": "document",
             "resource_id": "doc-42",
         }

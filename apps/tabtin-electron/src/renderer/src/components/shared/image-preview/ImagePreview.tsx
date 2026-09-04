@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { AlertCircle, Loader2 } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
-import { toast } from '@tabtin/smartsheet-ui/toast'
+import { toast } from '@muse/smartsheet-ui/toast'
 import { cn } from '@utils/cn'
 import { createLogger } from '@/utils/logger'
 import { ImageContextMenu } from './ImageContextMenu'

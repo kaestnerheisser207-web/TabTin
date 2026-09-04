@@ -6,7 +6,7 @@
 
 import React from 'react'
 import { cn } from '@utils/cn'
-import { ScrollArea } from '@tabtin/smartsheet-ui'
+import { ScrollArea } from '@muse/smartsheet-ui'
 import { useTranslation } from 'react-i18next'
 import {
   TEXT,

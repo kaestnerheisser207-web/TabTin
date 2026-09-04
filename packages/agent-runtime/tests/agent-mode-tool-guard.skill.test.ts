@@ -15,8 +15,8 @@ import {
   evaluateAgentModeToolAccess,
   isToolAllowedByPolicy,
   AGENT_MODE_CONFIGS,
-} from '@tabtin/agent-modes';
-import type { AgentModeName, ToolLike } from '@tabtin/agent-modes';
+} from '@muse/agent-modes';
+import type { AgentModeName, ToolLike } from '@muse/agent-modes';
 
 const RESTRICTED_MODES: AgentModeName[] = ['ask', 'plan', 'study'];
 

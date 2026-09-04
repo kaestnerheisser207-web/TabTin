@@ -303,7 +303,7 @@ def create_record(service: RecordService, table_id: UUID, data: dict) -> TableRe
 
 
 def prepare_case() -> None:
-    run_id = require_env("TABTIN_E2E_RUN_ID")
+    run_id = require_env("MUSE_E2E_RUN_ID")
     marker = f"[{run_id}]"
 
     user, user_created = ensure_owner_user()
@@ -388,9 +388,9 @@ def prepare_case() -> None:
 
 
 def verify_case() -> None:
-    record_id = UUID(require_env("TABTIN_E2E_RECORD_ID"))
-    field_id = require_env("TABTIN_E2E_FIELD_ID")
-    expected_user_id = require_env("TABTIN_E2E_EXPECTED_USER_ID")
+    record_id = UUID(require_env("MUSE_E2E_RECORD_ID"))
+    field_id = require_env("MUSE_E2E_FIELD_ID")
+    expected_user_id = require_env("MUSE_E2E_EXPECTED_USER_ID")
     record = TableRecord.objects.get(id=record_id, is_deleted=False)
     data = read_data(record)
     actual = data.get(field_id)
@@ -406,14 +406,14 @@ def verify_case() -> None:
 
 
 def main() -> None:
-    mode = require_env("TABTIN_E2E_MODE")
+    mode = require_env("MUSE_E2E_MODE")
     if mode == "prepare":
         prepare_case()
         return
     if mode == "verify":
         verify_case()
         return
-    raise RuntimeError(f"Unknown TABTIN_E2E_MODE: {mode}")
+    raise RuntimeError(f"Unknown MUSE_E2E_MODE: {mode}")
 
 
 main()

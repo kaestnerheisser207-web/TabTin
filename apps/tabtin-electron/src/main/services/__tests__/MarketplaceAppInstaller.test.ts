@@ -3,7 +3,7 @@
  *
  * 覆盖 PRD §4.1 N-3 ⑤ 与 §6.5 验收：
  * 1. 缺 checksums 时拒装（默认）
- * 2. 缺 checksums + TABTIN_ALLOW_UNCHECKED_INSTALL=1 → 允许（dev/CI 豁免）
+ * 2. 缺 checksums + MUSE_ALLOW_UNCHECKED_INSTALL=1 → 允许（dev/CI 豁免）
  * 3. 有 checksums 且匹配 → 安装成功
  * 4. 有 checksums 但 mismatch → 拒装
  * 5. 当前 platform 不在 platformMap 时拒装（先于 checksum 校验）
@@ -92,11 +92,11 @@ function manifestWithUnsupportedPlatform(): {
 describe('MarketplaceAppInstaller.installApp — Wave D SHA256 strong check', () => {
   beforeEach(() => {
     vi.clearAllMocks()
-    delete process.env.TABTIN_ALLOW_UNCHECKED_INSTALL
+    delete process.env.MUSE_ALLOW_UNCHECKED_INSTALL
   })
 
   afterEach(async () => {
-    delete process.env.TABTIN_ALLOW_UNCHECKED_INSTALL
+    delete process.env.MUSE_ALLOW_UNCHECKED_INSTALL
     // 清理本次安装目录，避免相邻用例干扰
     await rm(join(tmpRoot, 'marketplace-apps', 'demo-app'), {
       recursive: true,
@@ -154,8 +154,8 @@ describe('MarketplaceAppInstaller.installApp — Wave D SHA256 strong check', ()
     )
   })
 
-  it('allows install when TABTIN_ALLOW_UNCHECKED_INSTALL=1 and checksums missing', async () => {
-    process.env.TABTIN_ALLOW_UNCHECKED_INSTALL = '1'
+  it('allows install when MUSE_ALLOW_UNCHECKED_INSTALL=1 and checksums missing', async () => {
+    process.env.MUSE_ALLOW_UNCHECKED_INSTALL = '1'
     const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {})
     try {
       const { installer } = await loadInstallerWithDownloadStub(FAKE_BIN_CONTENT)
@@ -174,7 +174,7 @@ describe('MarketplaceAppInstaller.installApp — Wave D SHA256 strong check', ()
       // createLogger 会把 [模块前缀] 作为首个参数，消息在后续参数——整条 join 再匹配。
       const msg = String(warnSpy.mock.calls[0]?.join(' ') ?? '')
       expect(msg).toMatch(/SHA256 verification skipped/)
-      expect(msg).toMatch(/TABTIN_ALLOW_UNCHECKED_INSTALL=1/)
+      expect(msg).toMatch(/MUSE_ALLOW_UNCHECKED_INSTALL=1/)
     } finally {
       warnSpy.mockRestore()
     }
@@ -222,7 +222,7 @@ describe('MarketplaceAppInstaller.installApp — Wave D SHA256 strong check', ()
   })
 
   it('mismatch is rejected even when escape hatch is set (env var only excuses missing checksums)', async () => {
-    process.env.TABTIN_ALLOW_UNCHECKED_INSTALL = '1'
+    process.env.MUSE_ALLOW_UNCHECKED_INSTALL = '1'
     const platformKey = `${process.platform === 'win32' ? 'windows' : process.platform}-${
       process.arch === 'x64' ? 'amd64' : process.arch
     }`

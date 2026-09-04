@@ -8,7 +8,7 @@ export {
   // `summarize_context` and `retrieve_tool_result` tools.
   createPresentationTools,
   type PresentationToolsDeps,
-} from '@tabtin/agent-runtime/tools'
+} from '@muse/agent-runtime/tools'
 //  / ：data/document/tabcode 业务工具在宿主工具包。
 export {
   createDataTools,
@@ -19,4 +19,4 @@ export {
   type AttachmentToolsDeps,
   createTabCodeTools,
   type TabCodeToolsDeps,
-} from '@tabtin/agent-host/tools'
+} from '@muse/agent-host/tools'

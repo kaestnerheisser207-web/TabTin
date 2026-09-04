@@ -1,5 +1,5 @@
 {
-  "name": "@tabtin/runtime-reporter",
+  "name": "@muse/runtime-reporter",
   "version": "0.1.0",
   "description": "Shared runtime reporter for Muse host-bound panels",
   "type": "module",

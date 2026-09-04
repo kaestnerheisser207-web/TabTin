@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import { CONVERSATION_TYPE_DM, CONVERSATION_TYPE_GROUP } from '@/constants/tabchat'
 import type { Conversation } from '@/services/tabchatApi'
-import type { Space } from '@tabtin/app-shell'
+import type { Space } from '@muse/app-shell'
 import {
   spaceToListItem,
   buildSpaceSelectionId,
@@ -11,7 +11,7 @@ import {
   getSpaceVisibilityLabel,
   imConversationToListItem,
   parseSpaceSelectionId,
-} from '@tabtin/app-shell'
+} from '@muse/app-shell'
 
 const buildSpace = (overrides: Partial<Space> = {}): Space => ({
   id: 'space-1',

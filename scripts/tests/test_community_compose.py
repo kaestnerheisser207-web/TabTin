@@ -28,7 +28,7 @@ def _resolved_compose(
         "COMPOSE_DISABLE_ENV_FILE": "1",
     }
     if parent_edition is not None:
-        environment["TABTIN_EDITION"] = parent_edition
+        environment["MUSE_EDITION"] = parent_edition
     if parent_fixed_verification_code is not None:
         environment["AUTH_FIXED_VERIFICATION_CODE"] = (
             parent_fixed_verification_code
@@ -41,12 +41,12 @@ def _resolved_compose(
         runtime_env_file = project_root / ".env.community-runtime"
         shutil.copy2(COMPOSE_FILE, compose_file)
         env_file.write_text(
-            f"TABTIN_EDITION={edition}\n"
+            f"MUSE_EDITION={edition}\n"
             f"AUTH_FIXED_VERIFICATION_CODE={fixed_verification_code}\n",
             encoding="utf-8",
         )
         runtime_env_file.write_text(
-            f"TABTIN_EDITION={edition}\n"
+            f"MUSE_EDITION={edition}\n"
             f"AUTH_FIXED_VERIFICATION_CODE={fixed_verification_code}\n",
             encoding="utf-8",
         )
@@ -79,10 +79,10 @@ def _resolved_dev_compose(edition: str = "community") -> dict:
         "PATH": os.environ.get("PATH", ""),
         "HOME": os.environ.get("HOME", ""),
         "COMPOSE_DISABLE_ENV_FILE": "1",
-        "TABTIN_DEV_DEPENDENCY_FINGERPRINT": "contract-test",
+        "MUSE_DEV_DEPENDENCY_FINGERPRINT": "contract-test",
     }
     with tempfile.NamedTemporaryFile(mode="w", encoding="utf-8") as env_file:
-        env_file.write(f"TABTIN_EDITION={edition}\n")
+        env_file.write(f"MUSE_EDITION={edition}\n")
         env_file.flush()
         result = subprocess.run(
             [
@@ -175,8 +175,8 @@ def test_compose_reads_the_edition_from_the_explicit_env_file() -> None:
     for compose, expected_edition in ((community, "community"), (saas, "saas")):
         django = compose["services"]["django"]
         celery = compose["services"]["celery"]
-        assert django["environment"]["TABTIN_EDITION"] == expected_edition
-        assert celery["environment"]["TABTIN_EDITION"] == expected_edition
+        assert django["environment"]["MUSE_EDITION"] == expected_edition
+        assert celery["environment"]["MUSE_EDITION"] == expected_edition
         assert not any(
             mount["target"] == "/run/tabtin-community-config/root.env"
             for mount in django["volumes"] + celery["volumes"]
@@ -203,7 +203,7 @@ def test_root_env_switches_cannot_be_overridden_by_parent_shell() -> None:
 
     for service in ("django", "celery"):
         environment = compose["services"][service]["environment"]
-        assert environment["TABTIN_EDITION"] == "community"
+        assert environment["MUSE_EDITION"] == "community"
         assert environment["AUTH_FIXED_VERIFICATION_CODE"] == ""
         assert "OPENAI_API_KEY" not in environment
         assert "AWS_SECRET_ACCESS_KEY" not in environment
@@ -248,7 +248,7 @@ def test_compose_does_not_restore_a_hardcoded_edition_default() -> None:
     assert result.returncode == 0, result.stdout + result.stderr
     compose = json.loads(result.stdout)
     for service in ("django", "celery"):
-        assert "TABTIN_EDITION" not in compose["services"][service]["environment"]
+        assert "MUSE_EDITION" not in compose["services"][service]["environment"]
 
 
 def test_community_dev_uses_one_five_service_backend_with_source_mounts() -> None:
@@ -256,8 +256,8 @@ def test_community_dev_uses_one_five_service_backend_with_source_mounts() -> Non
     services = compose["services"]
 
     assert set(services) == {"postgres", "redis", "django", "celery", "centrifugo"}
-    assert services["django"]["image"] == "tabtin/community-django:dev"
-    assert services["celery"]["image"] == "tabtin/community-django:dev"
+    assert services["django"]["image"] == "muse/community-django:dev"
+    assert services["celery"]["image"] == "muse/community-django:dev"
     assert services["django"]["command"] == ["community-dev-web"]
     assert services["celery"]["user"] == "10001:10001"
 

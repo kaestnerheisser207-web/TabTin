@@ -42,7 +42,7 @@ vi.mock('@/services/spaceApi', () => ({
   },
 }))
 
-vi.mock('@tabtin/smartsheet-ui', () => ({
+vi.mock('@muse/smartsheet-ui', () => ({
   DropdownMenu: ({ children }: { children: React.ReactNode }) => <div>{children}</div>,
   DropdownMenuTrigger: ({ children }: { children: React.ReactNode }) => <>{children}</>,
   DropdownMenuContent: ({ children }: { children: React.ReactNode }) => <div>{children}</div>,
@@ -207,13 +207,13 @@ describe('TabFilesPaneRenderer', () => {
     getOrganizationFileDownloadUrl.mockReset()
     downloadPreviewResource.mockReset()
     downloadPreviewResource.mockResolvedValue('saved')
-    ;(window as unknown as { tabtin: Partial<Window['tabtin']> }).tabtin = {
+    ;(window as unknown as { tabtin: Partial<Window['muse']> }).tabtin = {
       openPath,
       showItemInFolder,
       fileSystem: {
         pathExists,
         readFilePreview,
-      } as Partial<Window['tabtin']['fileSystem']> as Window['tabtin']['fileSystem'],
+      } as Partial<Window['muse']['fileSystem']> as Window['muse']['fileSystem'],
     }
   })
 

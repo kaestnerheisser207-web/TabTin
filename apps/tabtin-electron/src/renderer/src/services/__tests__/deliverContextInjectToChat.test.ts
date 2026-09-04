@@ -18,7 +18,7 @@ const mainNavState = {
   currentTab: 'agent' as string,
 }
 
-vi.mock('@tabtin/smartsheet-ui', () => ({
+vi.mock('@muse/smartsheet-ui', () => ({
   toast: (...args: unknown[]) => toast(...args),
 }))
 

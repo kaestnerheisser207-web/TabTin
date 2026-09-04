@@ -1,6 +1,6 @@
 import React from 'react'
 import { act, fireEvent, render, screen, waitFor } from '@testing-library/react'
-import type { ChatSession } from '@tabtin/chat-client'
+import type { ChatSession } from '@muse/chat-client'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { ChatSessionSwitcher } from '../ChatSessionSwitcher'
 import { useSpaceStore } from '@/stores/useSpaceStore'
@@ -65,7 +65,7 @@ vi.mock('@tanstack/react-virtual', () => ({
   }),
 }))
 
-vi.mock('@tabtin/smartsheet-ui', () => ({
+vi.mock('@muse/smartsheet-ui', () => ({
   Button: ({ children, ...props }: React.ButtonHTMLAttributes<HTMLButtonElement>) => (
     <button {...props}>{children}</button>
   ),

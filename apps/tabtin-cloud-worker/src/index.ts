@@ -12,25 +12,25 @@ import {
   writeWorkerLifecycleEvent,
 } from './observability.js'
 
-const token = process.env.TABTIN_CLOUD_WORKER_TOKEN ?? ''
-const host = process.env.TABTIN_CLOUD_WORKER_HOST ?? '127.0.0.1'
-const port = Number(process.env.TABTIN_CLOUD_WORKER_PORT ?? '8090')
-const protocolVersion = process.env.TABTIN_CLOUD_WORKER_PROTOCOL_VERSION ?? '1'
-const runtimeVersion = process.env.TABTIN_CLOUD_WORKER_RUNTIME_VERSION ?? 'dev'
-const network = process.env.TABTIN_CLOUD_RUNTIME_NETWORK ?? 'tabtin-cloud-runtime'
-const containerCli = process.env.TABTIN_CLOUD_CONTAINER_CLI ?? 'docker'
-const storageQuotaMode = process.env.TABTIN_CLOUD_STORAGE_QUOTA_MODE === 'podman-xfs'
+const token = process.env.MUSE_CLOUD_WORKER_TOKEN ?? ''
+const host = process.env.MUSE_CLOUD_WORKER_HOST ?? '127.0.0.1'
+const port = Number(process.env.MUSE_CLOUD_WORKER_PORT ?? '8090')
+const protocolVersion = process.env.MUSE_CLOUD_WORKER_PROTOCOL_VERSION ?? '1'
+const runtimeVersion = process.env.MUSE_CLOUD_WORKER_RUNTIME_VERSION ?? 'dev'
+const network = process.env.MUSE_CLOUD_RUNTIME_NETWORK ?? 'tabtin-cloud-runtime'
+const containerCli = process.env.MUSE_CLOUD_CONTAINER_CLI ?? 'docker'
+const storageQuotaMode = process.env.MUSE_CLOUD_STORAGE_QUOTA_MODE === 'podman-xfs'
   ? 'podman-xfs'
   : 'none'
-const runtimeStorageGb = Number(process.env.TABTIN_CLOUD_RUNTIME_STORAGE_GB ?? '2')
-const resourceIsolationMode = process.env.TABTIN_CLOUD_RESOURCE_ISOLATION_MODE === 'cgroup-v2'
+const runtimeStorageGb = Number(process.env.MUSE_CLOUD_RUNTIME_STORAGE_GB ?? '2')
+const resourceIsolationMode = process.env.MUSE_CLOUD_RESOURCE_ISOLATION_MODE === 'cgroup-v2'
   ? 'cgroup-v2'
   : 'unverified'
 let startupStage = 'configuration'
 let activeServer: ReturnType<typeof createWorkerServer> | undefined
 try {
   if (!Number.isSafeInteger(runtimeStorageGb) || runtimeStorageGb < 1) {
-    throw new Error('TABTIN_CLOUD_RUNTIME_STORAGE_GB must be a positive integer')
+    throw new Error('MUSE_CLOUD_RUNTIME_STORAGE_GB must be a positive integer')
   }
 
   const runner = new ProcessCommandRunner(containerCli)

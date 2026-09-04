@@ -1,10 +1,10 @@
-import { AgentStreamEvents, LocalRuntimeEvents } from '@tabtin/ws-gateway-client';
+import { AgentStreamEvents, LocalRuntimeEvents } from '@muse/ws-gateway-client';
 import {
   CAPABILITY_DISCOVERY_SNAPSHOT_VERSION,
   createMcpToolItems,
   createRuntimeToolItems,
   type HostRuntimeSnapshot,
-} from '@tabtin/shared';
+} from '@muse/shared';
 
 // ── globalThis.tabtin type declaration ───────────────────────────────────────
 // Provides compile-time safety for the cross-module runtime bridge injected by
@@ -38,16 +38,16 @@ import { createSyncApiClient, createTableSchemaFetcher, createRemoteApiClient, c
 import { TabTinMcpServer } from '../transport/mcp/mcp-server.js';
 import { join } from 'node:path';
 import { mkdir } from 'node:fs/promises';
-import { deriveApiBaseUrl, joinApiPath, API_ENDPOINTS } from '@tabtin/config';
+import { deriveApiBaseUrl, joinApiPath, API_ENDPOINTS } from '@muse/config';
 import {
   setTableKernelAPI,
   setHttpCrawlAPI,
   resolveHttpCrawlAPI,
-} from '@tabtin/action-tools/headless';
+} from '@muse/action-tools/headless';
 import { setCheckpointLogger } from '../platform/workspace/checkpoint/CheckpointService.js';
-import { requestPlatformApproval } from '@tabtin/agent-runtime';
-import { wirePythonRuntimeHost } from '@tabtin/python-runtime-host';
-import { CheckpointService } from '@tabtin/checkpoint-core';
+import { requestPlatformApproval } from '@muse/agent-runtime';
+import { wirePythonRuntimeHost } from '@muse/python-runtime-host';
+import { CheckpointService } from '@muse/checkpoint-core';
 import { DaemonCliServer, type CLIServerInfo } from '../transport/cli/cli-server.js';
 import { updateDjangoProxyCredential } from '../transport/cli/routes/shared/error-handler.js';
 import {
@@ -59,7 +59,7 @@ import { validateUrl } from '../platform/browser/DaemonBrowserService.js';
 import { BrowserRuntime } from '../platform/browser/browser-runtime.js';
 import { DaemonBrowserApplication } from '../platform/browser/DaemonBrowserApplication.js';
 import { DaemonLifecycle } from '../application/lifecycle/daemon-lifecycle.js';
-import { setTerminalCoreLocale, atomicWriteFileSync } from '@tabtin/terminal-core';
+import { setTerminalCoreLocale, atomicWriteFileSync } from '@muse/terminal-core';
 import { DaemonAgentHost, type DaemonQueryRequest } from '../application/agent/daemon-agent-host.js';
 import { PromptForwardController } from '../application/agent/prompt-forward-controller.js';
 import { DshModelGateway } from '../application/agent/runtime/dsh-model-gateway.js';
@@ -68,29 +68,29 @@ import { DocParserRuntime } from '../platform/content/document/doc-parser-runner
 import {
   daemonHostRuntimeOptions,
   decodeAttachmentStrategyFromPayload,
-} from '@tabtin/agent-host/configuration'
+} from '@muse/agent-host/configuration'
 const { decodeCloudPressureThresholds } = daemonHostRuntimeOptions
 import { registerDaemonStorageBuckets } from '../platform/storage/storage-bucket-registration.js';
 import { NodeStorageFileSystem } from '../platform/storage/node-storage-file-system.js';
 import { createDaemonStorageApplication } from '../application/storage/daemon-storage.js';
 import { createMcpContentApiPort, createMcpTablePort } from './adapters/mcp-runtime-adapters.js';
-import { normalizeExecutionLimitsForCostCap } from '@tabtin/app-shell/agent-config-v2';
+import { normalizeExecutionLimitsForCostCap } from '@muse/app-shell/agent-config-v2';
 import {
   resolveDisabledToolPrefixes,
-} from '@tabtin/agent-wire';
+} from '@muse/agent-wire';
 import {
   isCrossTurnMemoryEnabled,
   selectRecentHistoryForRuntime,
   type HistorySourceMessage,
-} from '@tabtin/agent-runtime/history';
-import { decodeWirePendingApprovals, decodeWirePendingSingleHitl } from '@tabtin/agent-runtime';
+} from '@muse/agent-runtime/history';
+import { decodeWirePendingApprovals, decodeWirePendingSingleHitl } from '@muse/agent-runtime';
 import {
   decodeForwardWorkspaceSnapshot,
   deriveRelaySessionId,
   type ForwardConversationRequest,
   type ForwardDecodeFailure,
-} from '@tabtin/agent-host/conversation'
-import type { SerializedPendingApproval, SerializedPendingSingleHitl } from '@tabtin/agent-runtime/engine';
+} from '@muse/agent-host/conversation'
+import type { SerializedPendingApproval, SerializedPendingSingleHitl } from '@muse/agent-runtime/engine';
 
 /** sysexits EX_CONFIG — needs human intervention, systemd should NOT auto-restart. */
 const EXIT_CODE_AUTH_FATAL = 78;
@@ -246,10 +246,10 @@ export class TabTinDaemon {
   }
 
   private async startDshModelGateway(): Promise<void> {
-    const token = process.env.TABTIN_DSH_GATEWAY_TOKEN ?? ''
+    const token = process.env.MUSE_DSH_GATEWAY_TOKEN ?? ''
     if (!token) {
       if (this.config.device_type === 'cloud') {
-        throw new Error('TABTIN_DSH_GATEWAY_TOKEN is required for a Cloud runtime')
+        throw new Error('MUSE_DSH_GATEWAY_TOKEN is required for a Cloud runtime')
       }
       return
     }
@@ -258,7 +258,7 @@ export class TabTinDaemon {
       organizationId: this.config.organization_id,
       credential: this.config.credential,
       token,
-      port: Number(process.env.TABTIN_DSH_GATEWAY_PORT ?? '3090'),
+      port: Number(process.env.MUSE_DSH_GATEWAY_PORT ?? '3090'),
     })
     await gateway.start()
     this.dshModelGateway = gateway
@@ -278,12 +278,12 @@ export class TabTinDaemon {
     const processService = new DshProcessService({
       workspaceRoot: this.config.workspace_root ?? '/workspace',
       dshHome: process.env.DSH_HOME ?? '/var/lib/tabtin/dsh',
-      apiUrl: process.env.TABTIN_DSH_API_URL ?? 'http://127.0.0.1:3080',
-      modelGatewayUrl: `http://127.0.0.1:${process.env.TABTIN_DSH_GATEWAY_PORT ?? '3090'}/v1`,
-      modelGatewayToken: process.env.TABTIN_DSH_GATEWAY_TOKEN ?? '',
+      apiUrl: process.env.MUSE_DSH_API_URL ?? 'http://127.0.0.1:3080',
+      modelGatewayUrl: `http://127.0.0.1:${process.env.MUSE_DSH_GATEWAY_PORT ?? '3090'}/v1`,
+      modelGatewayToken: process.env.MUSE_DSH_GATEWAY_TOKEN ?? '',
       mcpUrl: mcpStatus.endpoint,
       mcpToken: this.mcpServer!.getBearerToken(),
-      executable: process.env.TABTIN_DSH_BIN,
+      executable: process.env.MUSE_DSH_BIN,
       logger: {
         info: message => this.logger.info(message),
         warn: message => this.logger.warn(message),
@@ -351,7 +351,7 @@ export class TabTinDaemon {
       this.detectedCapabilities = [...capabilities];
       this.logger.info(`Capabilities: ${capabilities.join(', ')}`);
 
-      // 自管 Python 运行时：设 process.env（PATH + TABTIN_PYTHON_RUNTIME）。
+      // 自管 Python 运行时：设 process.env（PATH + MUSE_PYTHON_RUNTIME）。
       // fire-and-forget，**不阻塞 daemon 启动**——即使下载慢/失败也不拖挂/影响正常运行
       // （函数内部全兜错、返回 null）。DaemonPtyManager 在每次 spawn 时读 process.env，
       // 故 provision 完成后新起的 agent 命令自然拿到；未完成前回落系统 python。
@@ -366,7 +366,7 @@ export class TabTinDaemon {
       await this.initializeBrowserIfAvailable();
       this.browserApplication = new DaemonBrowserApplication({
         resolveBrowser: () => this.browserRuntime?.getService() ?? null,
-        getSpaceId: () => process.env.TABTIN_SPACE_ID ?? null,
+        getSpaceId: () => process.env.MUSE_SPACE_ID ?? null,
         startRecording: async (runId, tabId) => {
           if (!this.browserRuntime) throw new Error('BrowserRuntime 尚未初始化');
           return this.browserRuntime.startRecording(runId, tabId);
@@ -839,7 +839,7 @@ export class TabTinDaemon {
   private async initDocEditor(): Promise<void> {
     try {
       const { DOC_EDITOR_MODULE_INFO, markdownToPmJson, pmJsonToMarkdown } =
-        await import('@tabtin/doc-editor');
+        await import('@muse/doc-editor');
       if (typeof markdownToPmJson !== 'function' || typeof pmJsonToMarkdown !== 'function') {
         throw new Error('doc-editor exports missing expected converter functions');
       }
@@ -1237,14 +1237,14 @@ export class TabTinDaemon {
   private buildPtyEnv(): Record<string, string> {
     const env: Record<string, string> = {};
 
-    // SD-039 Phase 1: 不再向 PTY 子进程注入 TABTIN_SOCK 环境变量。
+    // SD-039 Phase 1: 不再向 PTY 子进程注入 MUSE_SOCK 环境变量。
     // CLI 工具通过 ~/.tabtin/daemon-server.json 文件发现机制定位 socket（CB-02）。
-    // TABTIN_TOKEN / TABTIN_JWT 同样不注入，防止凭据泄漏到子进程。
+    // MUSE_TOKEN / MUSE_JWT 同样不注入，防止凭据泄漏到子进程。
     // 详见 support/strategy/2026-03-24-sd039-sock-assessment.md §6.1
 
     const ptyApiBase = deriveApiBaseUrl(this.config.server_url).replace(/\/api$/, '');
     if (ptyApiBase) {
-      env.TABTIN_API_URL = ptyApiBase;
+      env.MUSE_API_URL = ptyApiBase;
     }
 
     return env;
@@ -1365,7 +1365,7 @@ export class TabTinDaemon {
       skillSlashInvoke: request.skillSlashInvoke,
       // FR-18 Phase 2 (H2-E)：附件解析策略。Django 端可在 prompt.forward payload
       // 通过 `attachment_strategy: 'local_first' | 'cloud_first' | 'cloud_only'`
-      // 覆盖 Daemon 默认；缺省时 DaemonAgentHost 走 env `TABTIN_ATTACHMENT_STRATEGY`
+      // 覆盖 Daemon 默认；缺省时 DaemonAgentHost 走 env `MUSE_ATTACHMENT_STRATEGY`
       // 兜底（最终默认 'local_first'）。Decoder 抽到 host-knobs 便于单测，
       // 见 `decodeAttachmentStrategyFromPayload` 的 doc-string 解释为什么不在
       // 这里 inline。
@@ -1524,7 +1524,7 @@ export class TabTinDaemon {
   /**
    * W7b M3：从 prompt.forward payload 解出 execution_limits。
    *
-   * **W2.3-fix（F8 修复）**：复用 `@tabtin/app-shell` 的
+   * **W2.3-fix（F8 修复）**：复用 `@muse/app-shell` 的
    * `normalizeExecutionLimitsForCostCap` 作为 SSoT —— 该 helper 同时被
    * Electron 主进程装配 CostCap 时使用，确保两宿主对 v2 字段（含 Django
    * 校验后字符串化的 `max_credits_per_run`）的归一逻辑完全一致。
@@ -1546,7 +1546,7 @@ export class TabTinDaemon {
    * DaemonAgentHost 内部 `resolveAgentModeName(_, 'agent')` 兜底。
    *
    * 抽出独立方法（vs inline 三元）：未来加 mode（如 'group_lite'）只需改一处，
-   * 与 resolveAuthPreset 风格一致。Daemon 端不引 `@tabtin/agent-modes` 依赖
+   * 与 resolveAuthPreset 风格一致。Daemon 端不引 `@muse/agent-modes` 依赖
    * 是为了让 daemon.ts 顶层 import 保持精简（host 内部会做 strict resolve）。
    */
   private resolveAgentMode(
@@ -1622,7 +1622,7 @@ export class TabTinDaemon {
   /**
    * W7a：从 prompt.forward payload 解出 app_context（用户聚焦的 App + 打开标签）。
    *
-   * 字段语义见 `@tabtin/agent-runtime/engine` 的 `AppContext`（W2.3 后
+   * 字段语义见 `@muse/agent-runtime/engine` 的 `AppContext`（W2.3 后
    * SSoT 在 `engine/hooks/context-injector.ts`，原
    * `middleware/context-injector.ts` 已下线）。
    * 完全由远端客户端经 Django 携带（Daemon 自身没有 GUI 不知道用户在看什么）。

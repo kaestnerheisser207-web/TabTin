@@ -83,7 +83,7 @@ const installLogFilter = () => {
 
   const getTokens = (): string[] | null => {
     try {
-      const globalFilter = globalThis.__TABTIN_LOG_FILTER__
+      const globalFilter = globalThis.__MUSE_LOG_FILTER__
       const localFilter = localStorage.getItem('__tabtin_log_filter')
       const raw = typeof globalFilter === 'string' && globalFilter.trim()
         ? globalFilter
@@ -136,11 +136,11 @@ const safeInit = (fn: () => void, name: string): void => {
 }
 
 function getOrCreateRoot(container: HTMLElement) {
-  if (!globalThis.__TABTIN_REACT_ROOT__) {
+  if (!globalThis.__MUSE_REACT_ROOT__) {
     console.debug('[Main] 创建 React 根节点')
-    globalThis.__TABTIN_REACT_ROOT__ = createRoot(container)
+    globalThis.__MUSE_REACT_ROOT__ = createRoot(container)
   }
-  return globalThis.__TABTIN_REACT_ROOT__
+  return globalThis.__MUSE_REACT_ROOT__
 }
 
 const bootContainer = document.getElementById('root')
@@ -238,7 +238,7 @@ async function bootstrap(): Promise<void> {
       console.error('[Main] ⚠️ i18n 实例异常，跳过 window 注入:', typeof i18n, i18n)
     }
     window.__useUIStore = uiStoreModule.useUIStore
-    window.__tabtinNotify = notifyModule.notify
+    window.__museNotify = notifyModule.notify
     window.__COLOR_SCHEMES = colorSchemesModule.COLOR_SCHEMES as unknown as Record<string, unknown>
   }
   clearPrebootColorOverrides()
@@ -274,12 +274,12 @@ async function bootstrap(): Promise<void> {
   // 注册「帮助 → 导出诊断日志」菜单触发：主进程菜单 click 会向本窗口发
   // diagnostics:trigger-export，这里动态加载导出编排执行（不拖慢首屏）。
   try {
-    window.tabtin?.diagnostics?.onTriggerExport?.(() => {
+    window.muse?.diagnostics?.onTriggerExport?.(() => {
       void import('@/services/diagnostics/exportDiagnostics').then((m) =>
         m.exportDiagnostics({ reason: 'menu' }),
       )
     })
-    window.tabtin?.diagnostics?.onTriggerCopy?.(() => {
+    window.muse?.diagnostics?.onTriggerCopy?.(() => {
       void import('@/services/diagnostics/exportDiagnostics').then((m) =>
         m.copyDiagnosticsToClipboard({ reason: 'menu' }),
       )

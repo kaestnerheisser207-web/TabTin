@@ -16,8 +16,8 @@ import {
   standaloneEditableExtensions,
   type CommentYjsCodec,
   type EditorInstance,
-} from '@tabtin/tabdoc-ui/editor'
-import { Separator } from '@tabtin/smartsheet-ui'
+} from '@muse/tabdoc-ui/editor'
+import { Separator } from '@muse/smartsheet-ui'
 import { useSharedDocCollab } from './hooks/useShareCollab'
 
 const EMPTY_DOC = { type: 'doc', content: [] } as const

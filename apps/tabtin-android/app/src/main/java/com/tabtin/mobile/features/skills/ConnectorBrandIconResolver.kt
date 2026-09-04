@@ -7,7 +7,7 @@ import java.util.concurrent.atomic.AtomicReference
 
 /**
  * 连接器品牌标解析：规则来自 `assets/connector_brand_manifest.json`
- *（与 `@tabtin/connector-brand-icons` 同源）。UI 不要硬编码品牌 slug。
+ *（与 `@muse/connector-brand-icons` 同源）。UI 不要硬编码品牌 slug。
  */
 public object ConnectorBrandIconResolver {
     public data class Query(

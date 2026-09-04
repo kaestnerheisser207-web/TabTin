@@ -4,7 +4,7 @@
  * 从 Electron renderer 下沉而来。原位置：
  * apps/tabtin-electron/src/renderer/src/stores/chat/utils/selectRecentHistoryForRuntime.ts
  *
- * 核心变化：输入从 ChatMessage（@tabtin/chat-client）改为窄接口
+ * 核心变化：输入从 ChatMessage（@muse/chat-client）改为窄接口
  * HistorySourceMessage，不依赖任何 GUI 框架 / store / 环境变量。
  *
  * blocks_json → ContentBlock 的映射规则：

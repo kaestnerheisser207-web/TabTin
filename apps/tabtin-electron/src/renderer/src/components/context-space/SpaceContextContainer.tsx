@@ -11,7 +11,7 @@ import { useBrowserActions } from './hooks/useBrowserActions'
 import { useCloseHandlers } from './hooks/useCloseHandlers'
 import { useContextSession } from './hooks/useContextSession'
 import { useContextSpaceShortcuts } from './hooks/useContextSpaceShortcuts'
-import type { Table } from '@tabtin/table-core'
+import type { Table } from '@muse/table-core'
 import { SpaceContextArea } from './SpaceContextArea'
 import {
   SpaceContextAreaProvider,

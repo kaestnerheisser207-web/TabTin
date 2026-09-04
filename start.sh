@@ -5,7 +5,7 @@ repo_root="$(CDPATH= cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd -P)"
 compose_file="${repo_root}/compose.yaml"
 env_file="${repo_root}/.env"
 export COMPOSE_DISABLE_ENV_FILE=1
-unset TABTIN_EDITION AUTH_FIXED_VERIFICATION_CODE
+unset MUSE_EDITION AUTH_FIXED_VERIFICATION_CODE
 
 fail() {
   printf 'ERROR: %s\n' "$1" >&2
@@ -32,13 +32,13 @@ docker compose \
   -f "${compose_file}" \
   up -d --no-build
 
-timeout_seconds="${TABTIN_COMMUNITY_START_TIMEOUT_SECONDS:-600}"
-poll_seconds="${TABTIN_COMMUNITY_START_POLL_SECONDS:-5}"
+timeout_seconds="${MUSE_COMMUNITY_START_TIMEOUT_SECONDS:-600}"
+poll_seconds="${MUSE_COMMUNITY_START_POLL_SECONDS:-5}"
 if ! [[ "${timeout_seconds}" =~ ^[1-9][0-9]*$ ]]; then
-  fail "TABTIN_COMMUNITY_START_TIMEOUT_SECONDS must be a positive integer."
+  fail "MUSE_COMMUNITY_START_TIMEOUT_SECONDS must be a positive integer."
 fi
 if ! [[ "${poll_seconds}" =~ ^[1-9][0-9]*$ ]]; then
-  fail "TABTIN_COMMUNITY_START_POLL_SECONDS must be a positive integer."
+  fail "MUSE_COMMUNITY_START_POLL_SECONDS must be a positive integer."
 fi
 
 printf 'Waiting for Muse Server readiness'

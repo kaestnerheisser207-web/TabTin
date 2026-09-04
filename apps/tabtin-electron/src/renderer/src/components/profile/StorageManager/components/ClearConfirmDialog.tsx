@@ -35,7 +35,7 @@ import {
   DialogTitle,
   Input,
   Progress,
-} from '@tabtin/smartsheet-ui'
+} from '@muse/smartsheet-ui'
 import { AlertTriangle, ShieldAlert } from 'lucide-react'
 import { cn } from '@utils/cn'
 import { SETTINGS_CONTROL } from '@components/settings/settingsUi'

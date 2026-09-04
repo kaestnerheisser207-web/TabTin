@@ -59,7 +59,7 @@ for_mode` 行为保持原样，因为 D10 决策 lightweight 云端路径本期�
 mode_restricted enforcement（仅保证不真写入）。
 
 如果未来 Django 也实现 evaluate 路径，应当复用本文件 _decide() 的结果，并把"软拒"
-错误格式对齐 `@tabtin/agent-modes::ModeRestrictedError`（带 deny_code / remediation）。
+错误格式对齐 `@muse/agent-modes::ModeRestrictedError`（带 deny_code / remediation）。
 """
 
 from __future__ import annotations

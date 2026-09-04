@@ -88,7 +88,7 @@ function resolveRuntimeCommand(command, platform) {
 
 export function createCommunityDoctorRuntimeContext({
   rootDir = process.cwd(),
-  region = process.env.TABTIN_DEV_REGION || 'auto',
+  region = process.env.MUSE_DEV_REGION || 'auto',
   backendReconciliationRequired = false,
   platform = process.platform,
   commandExists: commandExistsImpl = commandExists,

@@ -69,7 +69,7 @@ describe('useSystemSleepRecovery', () => {
     deviceState.registered = true
     systemHandlers.suspend = null
     systemHandlers.resume = null
-    ;(window as any).tabtin = {
+    ;(window as any).muse = {
       system: {
         onSuspend: vi.fn((cb: () => void) => {
           systemHandlers.suspend = cb

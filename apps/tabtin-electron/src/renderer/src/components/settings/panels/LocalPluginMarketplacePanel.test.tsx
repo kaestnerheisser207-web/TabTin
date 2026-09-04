@@ -1,7 +1,7 @@
 import React from 'react'
 import { fireEvent, render, screen, waitFor, within } from '@testing-library/react'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
-import type { Organization } from '@tabtin/app-shell'
+import type { Organization } from '@muse/app-shell'
 import enSettings from '@/i18n/locales/en-US/settings.json'
 
 const setRoute = vi.fn()
@@ -112,7 +112,7 @@ vi.mock('@stores/useSettingsSpaceStore', () => ({
     selector({ setRoute }),
 }))
 
-vi.mock('@tabtin/smartsheet-ui', () => ({
+vi.mock('@muse/smartsheet-ui', () => ({
   Button: ({ children, type = 'button', ...props }: React.ButtonHTMLAttributes<HTMLButtonElement>) => (
     <button type={type} {...props}>{children}</button>
   ),
@@ -147,7 +147,7 @@ vi.mock('@tabtin/smartsheet-ui', () => ({
   TabsContent: ({ children }: { value: string; children: React.ReactNode }) => <div>{children}</div>,
 }))
 
-vi.mock('@tabtin/smartsheet-ui/toast', () => ({
+vi.mock('@muse/smartsheet-ui/toast', () => ({
   toast: toastMock,
 }))
 

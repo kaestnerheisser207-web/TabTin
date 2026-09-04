@@ -7,7 +7,7 @@
 import { useChatStore } from '@stores/chat/useChatStore'
 import { getCachedMessages } from '@stores/chat/messages/messageCache'
 import { readLocalTranscript } from '@/services/localTranscript'
-import type { ChatMessage } from '@tabtin/chat-client'
+import type { ChatMessage } from '@muse/chat-client'
 import {
   buildExternalArchiveChatMessages,
   ensureSessionAgentLikeNewChat,
@@ -24,7 +24,7 @@ import {
 const SEED_SKIP_REASONS = new Set(['already_present', 'empty_archive'])
 
 async function seedRehydratedArchiveTranscript(
-  api: NonNullable<typeof window.tabtin>['import'],
+  api: NonNullable<typeof window.muse>['import'],
   args: {
     organizationId: string
     source: string
@@ -112,7 +112,7 @@ export async function silentRehydrateFromArchive(input: {
     organizationId: input.organizationId,
   })
 
-  const api = window.tabtin?.import
+  const api = window.muse?.import
   if (!api?.getArchive) {
     // 无档案 API 时仍尝试本地迁移（补 LLM 边界）
     if (existing.length > 0) {

@@ -1,4 +1,4 @@
-import { resolveRecordId, type TableGridRow } from '@tabtin/table-engine';
+import { resolveRecordId, type TableGridRow } from '@muse/table-engine';
 import {
   resolveGridDisplayRowId,
   isCanvasDraggableDataRow,

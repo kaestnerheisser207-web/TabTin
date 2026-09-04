@@ -30,7 +30,7 @@
 import { appendFileSync, mkdirSync, renameSync, statSync, existsSync } from 'node:fs'
 import { join } from 'node:path'
 import { ipcMain } from 'electron'
-import { getHomeTabtinPath } from '@tabtin/shared/storage-paths'
+import { getHomeTabtinPath } from '@muse/shared/storage-paths'
 import { createLogger } from '../logger'
 
 const log = createLogger('widgetAuditLogger')

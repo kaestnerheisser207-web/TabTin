@@ -55,7 +55,7 @@ import type {
 } from '@shared/types/mcp'
 import { parseMcpError } from '@shared/types/mcp'
 import { parseMcpConfigEntries } from '@shared/mcp/parse-mcp-config'
-import { AgentApiService, type Agent } from '@tabtin/app-shell'
+import { AgentApiService, type Agent } from '@muse/app-shell'
 import { useOrganizationStore } from '@stores/useOrganizationStore'
 import { useAuthStore } from '@stores/useAuthStore'
 import { SETTINGS_CONTROL_SM, SETTINGS_GROUP_LABEL } from '@components/settings/settingsUi'
@@ -106,7 +106,7 @@ import {
   brandIconQueryFromConnection,
   brandIconQueryFromRecommended,
 } from './ConnectorBrandIcon'
-import type { ConnectorBrandIconQuery } from '@tabtin/connector-brand-icons'
+import type { ConnectorBrandIconQuery } from '@muse/connector-brand-icons'
 import { MarketplaceCardText } from '@components/context-space/capability-marketplace/MarketplaceCardText'
 import {
   canCurrentUserUnshareOrgConnection,
@@ -802,7 +802,7 @@ export const McpPanel: React.FC<Props> = ({
   useEffect(() => {
     if (!managedConnectionId) return
     let cancelled = false
-    void window.tabtin
+    void window.muse
       .getHostname()
       .then(name => {
         if (!cancelled) setRuntimeDeviceName(name.trim())
@@ -825,7 +825,7 @@ export const McpPanel: React.FC<Props> = ({
     setBusyKey(`edit:${connectionId}`)
     try {
       // 编辑表单需要明文 header；默认 getConnectionDetail 会 redact Authorization。
-      const detail = await window.tabtin.localMcp.getConnectionDetail(connectionId, {
+      const detail = await window.muse.localMcp.getConnectionDetail(connectionId, {
         includeSecrets: true,
       })
       if (detail.source.kind !== 'manual' && detail.source.kind !== 'organization') {
@@ -866,7 +866,7 @@ export const McpPanel: React.FC<Props> = ({
     }
 
     await runManagedAction(`manual:${manualForm.connectionId ?? 'new'}`, async () => {
-      await window.tabtin.localMcp.saveManualConnection({
+      await window.muse.localMcp.saveManualConnection({
         ...payload,
         ...(scopeAgentId && !manualForm.connectionId
           ? { attachToAgentId: scopeAgentId }
@@ -898,7 +898,7 @@ export const McpPanel: React.FC<Props> = ({
     await runManagedAction(`import:${candidate.id}`, async () => {
       // 设备域：仅接入，不隐式启用给任何 Agent。
       // 分身携带集：接入后直接挂到当前 Agent。
-      await window.tabtin.localMcp.importCandidate(candidate.id, {
+      await window.muse.localMcp.importCandidate(candidate.id, {
         ...(scopeAgentId ? { attachToAgentId: scopeAgentId } : {}),
       })
       toast({
@@ -937,10 +937,10 @@ export const McpPanel: React.FC<Props> = ({
     if (assignments && (assignments.additions.length > 0 || assignments.removals.length > 0)) {
       const results = await Promise.allSettled([
         ...assignments.additions.map(agentId =>
-          window.tabtin.localMcp.attachConnection(connectionId, agentId, true),
+          window.muse.localMcp.attachConnection(connectionId, agentId, true),
         ),
         ...assignments.removals.map(agentId =>
-          window.tabtin.localMcp.attachConnection(connectionId, agentId, false),
+          window.muse.localMcp.attachConnection(connectionId, agentId, false),
         ),
       ])
       const refreshed = await refreshConnectionsSilent()
@@ -978,7 +978,7 @@ export const McpPanel: React.FC<Props> = ({
     oauthProbeEpochRef.current += 1
     setOauthFlow(null)
     if (flow?.step === 'authorizing') {
-      await window.tabtin.localMcp.cancelProbe(flow.connectionId).catch(() => undefined)
+      await window.muse.localMcp.cancelProbe(flow.connectionId).catch(() => undefined)
     }
     if (options?.rollbackAgents && flow) {
       rollbackManagedAgentSelection(flow.connectionId)
@@ -989,7 +989,7 @@ export const McpPanel: React.FC<Props> = ({
       && flow.step !== 'success'
     ) {
       try {
-        await window.tabtin.localMcp.deleteConnection(flow.connectionId)
+        await window.muse.localMcp.deleteConnection(flow.connectionId)
         await refreshConnectionsSilent()
       } catch {
         // 丢弃失败不挡关闭；连接会留在「我的」里待用户手动删
@@ -1009,7 +1009,7 @@ export const McpPanel: React.FC<Props> = ({
     }
     if (options?.discardDraft && flow?.createdInFlow) {
       try {
-        await window.tabtin.localMcp.deleteConnection(flow.connectionId)
+        await window.muse.localMcp.deleteConnection(flow.connectionId)
         await refreshConnectionsSilent()
       } catch {
         // ignore
@@ -1023,7 +1023,7 @@ export const McpPanel: React.FC<Props> = ({
   ): Promise<number> => {
     if (!agentId) return 0
     try {
-      const summary = await window.tabtin.localMcp.attachConnection(connectionId, agentId, true)
+      const summary = await window.muse.localMcp.attachConnection(connectionId, agentId, true)
       upsertConnection(summary)
       return getManageableAttachedAgentIds(summary.attachedAgentIds, manageableAgentIdSet).length
     } catch (attachError) {
@@ -1052,7 +1052,7 @@ export const McpPanel: React.FC<Props> = ({
     )
     try {
       // 授权前同步货架 transport（钉版本 / OAuth scope metadata）
-      await window.tabtin.localMcp.saveManualConnection({
+      await window.muse.localMcp.saveManualConnection({
         connectionId,
         name: entry.name,
         description: recommendedCatalogDescription(entry),
@@ -1060,7 +1060,7 @@ export const McpPanel: React.FC<Props> = ({
         transport: entry.transport,
       })
       if (epoch !== oauthProbeEpochRef.current) return
-      const summary = await window.tabtin.localMcp.probeConnection(connectionId, {
+      const summary = await window.muse.localMcp.probeConnection(connectionId, {
         timeoutMs: OAUTH_PROBE_TIMEOUT_MS,
         openOAuthWindow: true,
       })
@@ -1141,7 +1141,7 @@ export const McpPanel: React.FC<Props> = ({
               clientId: value.clientId ?? '',
               clientSecret: value.clientSecret ?? '',
             })
-      const saved = await window.tabtin.localMcp.saveManualConnection({
+      const saved = await window.muse.localMcp.saveManualConnection({
         connectionId,
         name: entry.name,
         description: recommendedCatalogDescription(entry),
@@ -1149,7 +1149,7 @@ export const McpPanel: React.FC<Props> = ({
         transport,
       })
       upsertConnection(saved)
-      const summary = await window.tabtin.localMcp.probeConnection(connectionId, {
+      const summary = await window.muse.localMcp.probeConnection(connectionId, {
         timeoutMs: CREDENTIAL_PROBE_TIMEOUT_MS,
       })
       await refreshConnectionsSilent()
@@ -1219,7 +1219,7 @@ export const McpPanel: React.FC<Props> = ({
 
     let createdId: string | null = null
     const ok = await runManagedAction(`import:${entry.id}`, async () => {
-      const created = await window.tabtin.localMcp.saveManualConnection({
+      const created = await window.muse.localMcp.saveManualConnection({
         name: entry.name,
         description: recommendedCatalogDescription(entry),
         enabled: true,
@@ -1261,7 +1261,7 @@ export const McpPanel: React.FC<Props> = ({
     // 局部 upsert，避免 refresh 重跑 discover 导致列表闪一下。
     setBusyKey(`attach:${connectionId}:${agentId}`)
     try {
-      const summary = await window.tabtin.localMcp.attachConnection(connectionId, agentId, attached)
+      const summary = await window.muse.localMcp.attachConnection(connectionId, agentId, attached)
       upsertConnection(summary)
       toast({
         title: attached
@@ -1295,11 +1295,11 @@ export const McpPanel: React.FC<Props> = ({
       if (mounted) {
         const current = connections.find(connection => connection.id === connectionId)
         if (current && !current.enabled) {
-          const enabled = await window.tabtin.localMcp.setConnectionEnabled(connectionId, true)
+          const enabled = await window.muse.localMcp.setConnectionEnabled(connectionId, true)
           upsertConnection(enabled)
         }
       }
-      const summary = await window.tabtin.localMcp.attachConnection(
+      const summary = await window.muse.localMcp.attachConnection(
         connectionId,
         scopeAgentId,
         mounted,
@@ -1364,7 +1364,7 @@ export const McpPanel: React.FC<Props> = ({
       const headerKeys = orgConnection.has_credential
         ? Array.from(new Set(['Authorization', ...configHeaders]))
         : configHeaders
-      const mirrored = await window.tabtin.localMcp.upsertOrganizationMirror({
+      const mirrored = await window.muse.localMcp.upsertOrganizationMirror({
         orgConnectionId: orgConnection.id,
         name: orgConnection.name,
         description: orgConnection.description || undefined,
@@ -1373,12 +1373,12 @@ export const McpPanel: React.FC<Props> = ({
         enabled: orgConnection.enabled,
       })
       if (!mirrored.enabled) {
-        const enabled = await window.tabtin.localMcp.setConnectionEnabled(mirrored.id, true)
+        const enabled = await window.muse.localMcp.setConnectionEnabled(mirrored.id, true)
         upsertConnection(enabled)
       } else {
         upsertConnection(mirrored)
       }
-      const attached = await window.tabtin.localMcp.attachConnection(
+      const attached = await window.muse.localMcp.attachConnection(
         mirrored.id,
         scopeAgentId,
         true,
@@ -1421,7 +1421,7 @@ export const McpPanel: React.FC<Props> = ({
       let createdId: string | null = null
       const ok = await runManagedAction(`import:${entry.id}`, async () => {
         // 凭证 / OAuth 完成探测前不挂 Agent，避免半授权会话
-        const created = await window.tabtin.localMcp.saveManualConnection({
+        const created = await window.muse.localMcp.saveManualConnection({
           name: entry.name,
           description: recommendedCatalogDescription(entry),
           enabled: true,
@@ -1457,7 +1457,7 @@ export const McpPanel: React.FC<Props> = ({
         return
       }
 
-      const attached = await window.tabtin.localMcp.attachConnection(
+      const attached = await window.muse.localMcp.attachConnection(
         createdId,
         scopeAgentId,
         true,
@@ -1477,7 +1477,7 @@ export const McpPanel: React.FC<Props> = ({
   const handleSetEnabled = async (connectionId: string, enabled: boolean) => {
     setBusyKey(`enable:${connectionId}`)
     try {
-      const summary = await window.tabtin.localMcp.setConnectionEnabled(connectionId, enabled)
+      const summary = await window.muse.localMcp.setConnectionEnabled(connectionId, enabled)
       upsertConnection(summary)
       toast({
         title: enabled
@@ -1502,7 +1502,7 @@ export const McpPanel: React.FC<Props> = ({
   const handleProbeConnection = async (connectionId: string) => {
     setBusyKey(`probe:${connectionId}`)
     try {
-      const summary = await window.tabtin.localMcp.probeConnection(connectionId)
+      const summary = await window.muse.localMcp.probeConnection(connectionId)
       // probe 只返回 ProbeSummary；静默重拉 connections 写入 lastProbe，不跑 discover。
       await refreshConnectionsSilent()
       toast({
@@ -1611,7 +1611,7 @@ export const McpPanel: React.FC<Props> = ({
     setBusyKey(`share:${connectionId}`)
     try {
       // 凭据只在 main 内读取并 POST，不经 renderer。
-      const shared = await window.tabtin.localMcp.shareConnectionToOrganization(
+      const shared = await window.muse.localMcp.shareConnectionToOrganization(
         connectionId,
         organizationId,
       )
@@ -1728,10 +1728,10 @@ export const McpPanel: React.FC<Props> = ({
     if (toMigrate.length === 0 && mirror.attachedAgentIds.length === 0) return
     const results = await Promise.allSettled([
       ...toMigrate.map(agentId =>
-        window.tabtin.localMcp.attachConnection(mine.id, agentId, true),
+        window.muse.localMcp.attachConnection(mine.id, agentId, true),
       ),
       ...mirror.attachedAgentIds.map(agentId =>
-        window.tabtin.localMcp.attachConnection(mirror.id, agentId, false),
+        window.muse.localMcp.attachConnection(mirror.id, agentId, false),
       ),
     ])
     const failed = results.filter(result => result.status === 'rejected')
@@ -1803,7 +1803,7 @@ export const McpPanel: React.FC<Props> = ({
       const headerKeys = orgConnection.has_credential
         ? Array.from(new Set(['Authorization', ...configHeaders]))
         : configHeaders
-      const mirrored = await window.tabtin.localMcp.upsertOrganizationMirror({
+      const mirrored = await window.muse.localMcp.upsertOrganizationMirror({
         orgConnectionId: orgConnection.id,
         name: orgConnection.name,
         description: orgConnection.description || undefined,
@@ -1883,10 +1883,10 @@ export const McpPanel: React.FC<Props> = ({
     try {
       const results = await Promise.allSettled([
         ...additions.map(agentId =>
-          window.tabtin.localMcp.attachConnection(connectionId, agentId, true),
+          window.muse.localMcp.attachConnection(connectionId, agentId, true),
         ),
         ...removals.map(agentId =>
-          window.tabtin.localMcp.attachConnection(connectionId, agentId, false),
+          window.muse.localMcp.attachConnection(connectionId, agentId, false),
         ),
       ])
       // 并行 attach 后：先关弹层，再静默重拉 connections（不 discover），避免整页闪一下。

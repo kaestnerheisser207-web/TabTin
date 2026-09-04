@@ -38,18 +38,18 @@ describe('buildShellRuntimeSection · shell 身份注入', () => {
     expect(out).toContain('环境变量');
     expect(out).toContain('workspace/');
     expect(out).not.toContain('cd /abs/path &&');
-    expect(out).not.toContain('$TABTIN_WORKSPACE');
+    expect(out).not.toContain('$MUSE_WORKSPACE');
   });
 
-  it('zsh（macOS 主路径）→ 声明 zsh 身份 + POSIX 语法，路径走 $TABTIN_WORKSPACE', () => {
+  it('zsh（macOS 主路径）→ 声明 zsh 身份 + POSIX 语法，路径走 $MUSE_WORKSPACE', () => {
     const out = buildShellRuntimeSection(IDENTITY, info('zsh', '/bin/zsh'));
     expect(out).toContain('当前 shell：zsh（`/bin/zsh`）');
     expect(out).toContain('POSIX shell 语法');
     expect(out).toContain('按上方身份行的切目录语法内联');
-    expect(out).toContain('$TABTIN_WORKSPACE');
+    expect(out).toContain('$MUSE_WORKSPACE');
     expect(out).toContain('workspace/');
     expect(out).not.toContain('Test-Path');
-    expect(out).not.toContain('%TABTIN_WORKSPACE%');
+    expect(out).not.toContain('%MUSE_WORKSPACE%');
     expect(out).not.toContain('until ...; do ...; done');
     expect(out).not.toContain('while [ ! -f');
     // shared 不再重复写 cd /abs 配方
@@ -65,13 +65,13 @@ describe('buildShellRuntimeSection · shell 身份注入', () => {
     const out = buildShellRuntimeSection(IDENTITY, info('powershell', 'pwsh.exe'));
     expect(out).toContain('PowerShell（`pwsh.exe`），不是 bash');
     expect(out).toContain('Set-Location');
-    expect(out).toContain('$env:TABTIN_WORKSPACE');
+    expect(out).toContain('$env:MUSE_WORKSPACE');
     expect(out).toContain('wait_ms');
     expect(out).toContain('bash 专属');
     expect(out).toContain('按上方身份行的切目录语法内联');
     expect(out).not.toContain('若写 shell 侧循环');
     expect(out).not.toContain('cd /abs/path &&');
-    expect(out).not.toContain('cat $TABTIN_WORKSPACE');
+    expect(out).not.toContain('cat $MUSE_WORKSPACE');
     expect(out).not.toContain('Test-Path');
     expect(out).not.toContain('curl.exe');
     expect(out).not.toContain('Start-Sleep');
@@ -84,12 +84,12 @@ describe('buildShellRuntimeSection · shell 身份注入', () => {
     const out = buildShellRuntimeSection(IDENTITY, info('cmd', 'C:\\Windows\\System32\\cmd.exe'));
     expect(out).toContain('cmd.exe');
     expect(out).toContain('cd /d');
-    expect(out).toContain('%TABTIN_WORKSPACE%');
+    expect(out).toContain('%MUSE_WORKSPACE%');
     expect(out).toContain('wait_ms');
     expect(out).toContain('bash 专属');
     expect(out).toContain('按上方身份行的切目录语法内联');
     expect(out).not.toContain('cd /abs/path &&');
-    expect(out).not.toContain('cat $TABTIN_WORKSPACE');
+    expect(out).not.toContain('cat $MUSE_WORKSPACE');
     expect(out).not.toContain('timeout /t');
     expect(out).not.toContain('cd /d <path> && <cmd>` 内联');
   });

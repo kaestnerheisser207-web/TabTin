@@ -109,14 +109,14 @@ function useToolbarCollapseStage(forceCompact: boolean) {
   React.useEffect(() => {
     if (!controls) return
     lastWidthRef.current = controls.clientWidth
-    // eslint-disable-next-line tabtin/prefer-scoped-activity-effects -- Composer 已位于 React Activity 子树，hidden 时 effect 自动 cleanup；此处必须观察 callback ref 对应的可见实例。
+    // eslint-disable-next-line muse/prefer-scoped-activity-effects -- Composer 已位于 React Activity 子树，hidden 时 effect 自动 cleanup；此处必须观察 callback ref 对应的可见实例。
     const resizeObserver = new ResizeObserver(([entry]) => {
       const width = entry?.contentRect.width ?? controls.clientWidth
       if (Math.abs(width - lastWidthRef.current) <= 1) return
       lastWidthRef.current = width
       resetForContent()
     })
-    // eslint-disable-next-line tabtin/prefer-scoped-activity-effects -- 与上方 ResizeObserver 共用 Activity 管理的可见 Composer 生命周期，文本变化时需重新测量实际宽度。
+    // eslint-disable-next-line muse/prefer-scoped-activity-effects -- 与上方 ResizeObserver 共用 Activity 管理的可见 Composer 生命周期，文本变化时需重新测量实际宽度。
     const mutationObserver = new MutationObserver(resetForContent)
     resizeObserver.observe(controls)
     mutationObserver.observe(controls, {

@@ -1,6 +1,6 @@
 import { afterEach, describe, expect, it, vi } from 'vitest'
 
-import type { ToolContext } from '@tabtin/agent-runtime'
+import type { ToolContext } from '@muse/agent-runtime'
 import { createAttachmentTools } from '../src/tools/attachment-tools.js'
 
 const context: ToolContext = {

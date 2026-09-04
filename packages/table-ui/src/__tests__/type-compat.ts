@@ -1,7 +1,7 @@
 /**
  * 编译期类型兼容性测试
  *
- * 确保 @tabtin/table-core 的类型可以直接赋值给 @tabtin/table-ui 的对应类型。
+ * 确保 @muse/table-core 的类型可以直接赋值给 @muse/table-ui 的对应类型。
  * 无运行时代码，仅由 tsc 编译期检查。
  */
 
@@ -14,7 +14,7 @@ import type {
   ViewSort as CoreViewSort,
   ViewGroup as CoreViewGroup,
   TableRecord as CoreTableRecord,
-} from '@tabtin/table-core'
+} from '@muse/table-core'
 
 import type {
   Field as UiField,

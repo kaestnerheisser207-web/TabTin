@@ -1,7 +1,7 @@
 /**
  * 从父 `agent` tool_result 解析子代理交付物。
  *
- * 协议与 `@tabtin/agent-host/delivery` 的 `CHILD_DELIVERABLES_TAG` /
+ * 协议与 `@muse/agent-host/delivery` 的 `CHILD_DELIVERABLES_TAG` /
  * `ChildDeliverable` 对齐；前端自持常量，避免 renderer 硬依赖 runtime 实现细节。
  */
 import {
@@ -98,7 +98,7 @@ export function parseDeliverablesFromAgentToolContent(content: string): AgentToo
 }
 
 function widgetChatHref(widgetId: string): string {
-  return `tabtin://chat/widget/${encodeURIComponent(widgetId)}`
+  return `muse://chat/widget/${encodeURIComponent(widgetId)}`
 }
 
 /**
@@ -146,7 +146,7 @@ export function agentToolDeliverableToArtifact(
       }
     }
     if (deliverable.artifact_kind === 'oss_file') {
-      if (!deliverable.url.startsWith('tabtin://')) return null
+      if (!deliverable.url.startsWith('muse://')) return null
       return {
         id: `${toolCallId}::subagent-deliverable::${index}::${deliverable.url}`,
         kind: 'file',
@@ -156,7 +156,7 @@ export function agentToolDeliverableToArtifact(
         ...source,
       }
     }
-    if (!deliverable.url.startsWith('tabtin://')) return null
+    if (!deliverable.url.startsWith('muse://')) return null
     return {
       id: `${toolCallId}::subagent-deliverable::${index}::${deliverable.url}`,
       kind: mapResourceTypeToKind(deliverable.resource_type),

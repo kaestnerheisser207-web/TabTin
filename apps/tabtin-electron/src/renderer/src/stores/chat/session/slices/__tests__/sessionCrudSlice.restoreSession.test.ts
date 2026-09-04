@@ -6,7 +6,7 @@
  * （已在桶里则替换，否则 prepend），当前激活 space 同步刷新 sessions 视图。
  */
 import { describe, it, expect, vi, beforeEach } from 'vitest'
-import type { ChatSession } from '@tabtin/chat-client'
+import type { ChatSession } from '@muse/chat-client'
 import { createSessionCrudActions, type SessionCrudStore } from '../sessionCrudSlice'
 
 vi.mock('@/utils/logger', () => ({
@@ -35,7 +35,7 @@ vi.mock('../../../../useSpaceContextTabsStore', () => ({ useSpaceContextTabsStor
 vi.mock('../../../../useChatRuntimeStore', () => ({ useChatRuntimeStore: { getState: () => ({}) } }))
 vi.mock('../../../../useSessionReadStore', () => ({ useSessionReadStore: { getState: () => ({}) } }))
 vi.mock('@/services/sessionFreshness', () => ({ markSessionFresh: vi.fn(), markSessionStale: vi.fn() }))
-vi.mock('@tabtin/smartsheet-ui/toast', () => ({ toast: vi.fn() }))
+vi.mock('@muse/smartsheet-ui/toast', () => ({ toast: vi.fn() }))
 vi.mock('@/i18n', () => ({ default: { t: (k: string) => k } }))
 
 function makeSession(id: string, spaceId: string, status: string = 'active'): ChatSession {

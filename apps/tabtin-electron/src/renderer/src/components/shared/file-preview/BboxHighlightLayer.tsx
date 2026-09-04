@@ -6,7 +6,7 @@
  */
 
 import React from 'react'
-import { ZIndex } from '@tabtin/app-shell'
+import { ZIndex } from '@muse/app-shell'
 import { cn } from '@utils/cn'
 
 export interface BboxRect {

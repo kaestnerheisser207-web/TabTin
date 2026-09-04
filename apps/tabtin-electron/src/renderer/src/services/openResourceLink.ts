@@ -33,12 +33,12 @@
  */
 
 import type { MouseEvent } from 'react'
-import { parseResourcePointer, type OpenOutcome, type ResourcePointer } from '@tabtin/resource-router'
-import { toast } from '@tabtin/smartsheet-ui'
+import { parseResourcePointer, type OpenOutcome, type ResourcePointer } from '@muse/resource-router'
+import { toast } from '@muse/smartsheet-ui'
 import { resourceRouter } from '@/services/resourceRouter'
 import { openProjectTaskDocumentPreview } from '@/services/openProjectTaskDocumentPreview'
 import { useSpaceStore } from '@/stores/useSpaceStore'
-import { resolveSessionScopeId } from '@tabtin/app-shell'
+import { resolveSessionScopeId } from '@muse/app-shell'
 import { useChatStore } from '@/stores/chat/useChatStore'
 import { useSpaceViewPrefsStore } from '@/stores/useSpaceViewPrefsStore'
 import { showResourceLinkContextMenu } from '@/components/chat/context/ResourceLinkContextMenu'
@@ -261,7 +261,7 @@ export function openResourceUrlInSpace(
   return resourceRouter.open(spaceId, pointer, {
     triggerSource: 'window_open_fallback',
     // 没有关联 Space 的 IM 会话仍可能交付 TabTin 内部资源。此时必须让
-    // ResourceRouter 按内部载体分发，不能把 tabtin:// 交给 shell.openExternal
+    // ResourceRouter 按内部载体分发，不能把 muse:// 交给 shell.openExternal
     // （后者只允许 http/https/mailto）。外链则继续沿用原有外开兜底，协议
     // 白名单仍由 main IPC 统一执行。
     ...(spaceId || pointer.scheme === 'tabtin'

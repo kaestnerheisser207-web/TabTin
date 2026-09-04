@@ -21,8 +21,8 @@
 #
 # ⚠️ project 名必须显式，避免与同目录下的其他 Compose 项目共享默认项目名。
 # 推导的默认 project 名（如 tabtin），`up -d` 会把对方的同名服务（postgres/redis）
-# 误当本项目服务重建，互相摧毁容器。这里固定 name: tabtin-dev，与部署栈彻底隔离。
-name: tabtin-dev
+# 误当本项目服务重建，互相摧毁容器。这里固定 name: muse-dev，与部署栈彻底隔离。
+name: muse-dev
 
 services:
   postgres:
@@ -46,7 +46,7 @@ services:
       retries: 10
       start_period: 20s
     networks:
-      - tabtin-dev
+      - muse-dev
 
   redis:
     image: redis:8-alpine
@@ -62,11 +62,11 @@ services:
       timeout: 3s
       retries: 10
     networks:
-      - tabtin-dev
+      - muse-dev
 
 networks:
-  tabtin-dev:
-    name: tabtin-dev
+  muse-dev:
+    name: muse-dev
     driver: bridge
 
 volumes:

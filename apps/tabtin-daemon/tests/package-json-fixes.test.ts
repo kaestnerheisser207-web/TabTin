@@ -80,15 +80,15 @@ describe('B-03: build script delegates to tsup.config.ts', () => {
   });
 });
 
-// ── CE-P0-01: @tabtin/tabslide 在 dependencies 中声明 ──────────
+// ── CE-P0-01: @muse/tabslide 在 dependencies 中声明 ──────────
 
-describe('CE-P0-01: @tabtin/tabslide dependency declared', () => {
-  it('@tabtin/tabslide is in dependencies', () => {
-    expect(pkg.dependencies).toHaveProperty('@tabtin/tabslide');
+describe('CE-P0-01: @muse/tabslide dependency declared', () => {
+  it('@muse/tabslide is in dependencies', () => {
+    expect(pkg.dependencies).toHaveProperty('@muse/tabslide');
   });
 
-  it('@tabtin/tabslide uses workspace protocol', () => {
-    expect(pkg.dependencies['@tabtin/tabslide']).toBe('workspace:*');
+  it('@muse/tabslide uses workspace protocol', () => {
+    expect(pkg.dependencies['@muse/tabslide']).toBe('workspace:*');
   });
 });
 
@@ -96,17 +96,17 @@ describe('CE-P0-01: @tabtin/tabslide dependency declared', () => {
 
 describe('package.json overall integrity', () => {
   const requiredTabtinDeps = [
-    '@tabtin/action-tools',
-    '@tabtin/config',
-    '@tabtin/agent-runtime',
-    '@tabtin/agent-wire',
-    '@tabtin/pty-core',
-    '@tabtin/shared',
-    '@tabtin/table-kernel',
-    '@tabtin/table-kernel-pglite',
-    '@tabtin/tabslide',
-    '@tabtin/terminal-core',
-    '@tabtin/ws-gateway-client',
+    '@muse/action-tools',
+    '@muse/config',
+    '@muse/agent-runtime',
+    '@muse/agent-wire',
+    '@muse/pty-core',
+    '@muse/shared',
+    '@muse/table-kernel',
+    '@muse/table-kernel-pglite',
+    '@muse/tabslide',
+    '@muse/terminal-core',
+    '@muse/ws-gateway-client',
   ];
 
   it.each(requiredTabtinDeps)('%s is in dependencies', (dep) => {

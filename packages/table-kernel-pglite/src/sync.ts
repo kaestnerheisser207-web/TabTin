@@ -10,7 +10,7 @@ import type {
   SyncChange,
   SyncPushOptions,
   FieldColumnMap,
-} from '@tabtin/table-kernel'
+} from '@muse/table-kernel'
 import type { PGliteInstance } from './dialect.js'
 import type { ISyncStateStore } from './sync-state.js'
 import { isRetryableSyncError } from './sync-error.js'

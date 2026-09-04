@@ -1,7 +1,7 @@
 /**
  * ProseMirror JSON → HTML 转换器
  *
- * @architecture **互斥警告**：本模块的输出**不得**直接传入 `@tabtin/doc-renderer` 的
+ * @architecture **互斥警告**：本模块的输出**不得**直接传入 `@muse/doc-renderer` 的
  * `sanitizeHtml()` 进行消毒。两者的允许规则互斥：
  * - 本模块输出 `data:image/` base64 src、`<iframe sandbox>`、`data-*` 属性
  * - `sanitizeHtml` 的 SAFE_URL_RE 不允许 `data:` 协议，ALLOWED_TAGS 不含 iframe，

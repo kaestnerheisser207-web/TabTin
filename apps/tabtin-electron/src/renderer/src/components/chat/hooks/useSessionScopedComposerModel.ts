@@ -14,7 +14,7 @@ import type {
   Model,
   ModelParamOverrides,
   ModelParamValue,
-} from '@tabtin/chat-client'
+} from '@muse/chat-client'
 import { useChatModelStore } from '@/stores/useChatModelStore'
 import { useSpaceStore } from '@/stores/useSpaceStore'
 import {

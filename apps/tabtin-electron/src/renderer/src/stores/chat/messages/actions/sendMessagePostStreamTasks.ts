@@ -14,7 +14,7 @@
  * 参考 `support/electron/ipc-stream-invariant.md` §"异步尾巴"段。
  */
 
-import type { ChatMessage, ChatSession } from '@tabtin/chat-client'
+import type { ChatMessage, ChatSession } from '@muse/chat-client'
 import { createLogger } from '@/utils/logger'
 import { cacheMessages } from '../messageCache'
 

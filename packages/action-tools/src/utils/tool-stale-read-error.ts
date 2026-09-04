@@ -29,7 +29,7 @@
  * `tool_stale_read` + 同款 hint 文案，字节级一致到 LLM 看见的 envelope。
  *
  * **architecture note**：放在 `packages/action-tools/src/utils/` 是因为 action-tools
- * 不能反向依赖 agent-runtime；agent-runtime 一侧通过 `@tabtin/action-tools/headless`
+ * 不能反向依赖 agent-runtime；agent-runtime 一侧通过 `@muse/action-tools/headless`
  * import 本类。跟 file-lock.ts / canonical-path.ts 同模块位置（Wave 1.5 下沉
  * 后的「跨入口共享基础设施」聚集点）。
  */

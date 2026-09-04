@@ -77,7 +77,7 @@ export async function ensureCommunityCollab({
   const result = spawnSyncImpl(command.command, command.args, {
     cwd: rootDir,
     env: skipWorkspaceBuild
-      ? { ...process.env, TABTIN_SKIP_COLLAB_WORKSPACE_BUILD: '1' }
+      ? { ...process.env, MUSE_SKIP_COLLAB_WORKSPACE_BUILD: '1' }
       : process.env,
     stdio: 'inherit',
     shell: false,

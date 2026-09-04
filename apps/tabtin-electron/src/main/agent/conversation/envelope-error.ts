@@ -45,14 +45,14 @@
  *  与 wire envelope 的差异
  * ═══════════════════════════════════════════════════════════════════════
  *
- * `@tabtin/agent-wire/cli-envelope` 的 `errResponse(...)` 是 wire-format
+ * `@muse/agent-wire/cli-envelope` 的 `errResponse(...)` 是 wire-format
  * 的完整 envelope（带 trace_id / duration_ms / retryable / suggestions）。
  * 本 helper 只补 `error.code + error.message` 这两个 ipc-shim 必读字段，
  * **不带 trace_id**——main 端 IPC handler 不像 wire 调用那样跨进程网络，
  * trace_id 由 `guardedHandle` 链路另行注入到顶层 envelope，跟本 helper 解耦。
  *
  * 真正需要 wire 完整 envelope（含 retryable 等高级语义）的 handler 应直接
- * import `@tabtin/agent-wire`，不是用本 helper。本 helper 服务于"现存 raw
+ * import `@muse/agent-wire`，不是用本 helper。本 helper 服务于"现存 raw
  * string error 的快速规范化"场景。
  */
 

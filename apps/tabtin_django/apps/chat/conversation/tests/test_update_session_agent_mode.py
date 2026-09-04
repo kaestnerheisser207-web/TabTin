@@ -19,7 +19,7 @@ from apps.users.auth.session_manager import SessionManager
 User = get_user_model()
 
 
-@override_settings(TABTIN_REQUIRE_INVITE_CODE=False)
+@override_settings(MUSE_REQUIRE_INVITE_CODE=False)
 class UpdateSessionAgentModeTest(TransactionTestCase):
     databases = {"default", "postgresql"}
 

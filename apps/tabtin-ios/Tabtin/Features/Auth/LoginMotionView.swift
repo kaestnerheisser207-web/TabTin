@@ -139,7 +139,7 @@ private struct LoginMotionWebView: UIViewRepresentable {
 
         private func applyPlaybackState(to webView: WKWebView) {
             webView.evaluateJavaScript(
-                "window.tabtinMotion?.setActive(\(isActive ? "true" : "false"))",
+                "window.museMotion?.setActive(\(isActive ? "true" : "false"))",
                 completionHandler: nil
             )
         }

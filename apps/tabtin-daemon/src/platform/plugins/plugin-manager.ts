@@ -27,7 +27,7 @@ export class PluginManager {
     }
 
     try {
-      const moduleName = `@tabtin/daemon-plugin-${name}`;
+      const moduleName = `@muse/daemon-plugin-${name}`;
       const mod = await import(moduleName);
       const PluginClass = mod.default ?? mod[Object.keys(mod)[0]];
       if (!PluginClass) {

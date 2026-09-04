@@ -31,15 +31,15 @@ vi.mock('@/stores/useAuthStore', () => ({
 vi.mock('@/i18n', () => ({
   default: { t: (key: string, opts?: { defaultValue?: string }) => opts?.defaultValue ?? key },
 }))
-vi.mock('@tabtin/smartsheet-ui', () => ({
+vi.mock('@muse/smartsheet-ui', () => ({
   toast: {
     error: vi.fn(),
     warning: vi.fn(),
     info: vi.fn(),
   },
 }))
-vi.mock('@tabtin/storage-manager', () => storageManagerMock)
-vi.mock('@tabtin/oss-client', async () => {
+vi.mock('@muse/storage-manager', () => storageManagerMock)
+vi.mock('@muse/oss-client', async () => {
   return {
     createOSSClient: vi.fn(() => ossClientMock),
     computeFileHash: vi.fn(async () => 'hash'),
@@ -59,13 +59,13 @@ describe('oss:pending-confirms bucket registration', () => {
     vi.unstubAllGlobals()
     vi.resetModules()
     vi.clearAllMocks()
-    const sm = await import('@tabtin/storage-manager')
+    const sm = await import('@muse/storage-manager')
     sm.__resetForTesting()
   })
 
   it('oss-direct-uploader 加载后注册 oss:pending-confirms；category=data / group=system / hard', async () => {
     await import('../oss-direct-uploader')
-    const sm = await import('@tabtin/storage-manager')
+    const sm = await import('@muse/storage-manager')
 
     const bucket = sm.getBucket('oss:pending-confirms')
     expect(bucket).toBeDefined()
@@ -77,7 +77,7 @@ describe('oss:pending-confirms bucket registration', () => {
 
   it('sizeFn 用 TextEncoder 统计真实 UTF-8 字节（中文文件名不偏小）', async () => {
     await import('../oss-direct-uploader')
-    const sm = await import('@tabtin/storage-manager')
+    const sm = await import('@muse/storage-manager')
 
     const confirms = [
       { objectKey: 'key-1', fileName: '测试文件-中文名称.mp4', size: 1024 },
@@ -95,7 +95,7 @@ describe('oss:pending-confirms bucket registration', () => {
 
   it('clearFn 清空 localStorage', async () => {
     await import('../oss-direct-uploader')
-    const sm = await import('@tabtin/storage-manager')
+    const sm = await import('@muse/storage-manager')
 
     localStorage.setItem(
       'oss_pending_confirms',
@@ -109,7 +109,7 @@ describe('oss:pending-confirms bucket registration', () => {
 
   it('空状态 sizeFn 返回 0', async () => {
     await import('../oss-direct-uploader')
-    const sm = await import('@tabtin/storage-manager')
+    const sm = await import('@muse/storage-manager')
     const bucket = sm.getBucket('oss:pending-confirms')!
     const size = await bucket.sizeFn()
     expect(size.itemCount).toBe(0)

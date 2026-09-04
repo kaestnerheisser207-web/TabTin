@@ -1,7 +1,7 @@
 /**
  * normalizeImportResult 测试
  *
- * 自包含模式：不通过 barrel 导入（避免 @tabtin/table-kernel CJS 解析问题）。
+ * 自包含模式：不通过 barrel 导入（避免 @muse/table-kernel CJS 解析问题）。
  * 镜像 src/data/services/import-export-api.ts 中的 normalizeImportResult 逻辑。
  */
 import assert from 'node:assert/strict'

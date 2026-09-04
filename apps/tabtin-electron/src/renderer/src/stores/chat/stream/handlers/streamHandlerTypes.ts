@@ -1,11 +1,11 @@
 import type { ChatSessionTokenUsage } from '@/utils/chatSessionTokenUsage'
-import type { ChatSession, ChatMessage } from '@tabtin/chat-client'
+import type { ChatSession, ChatMessage } from '@muse/chat-client'
 import type {
   ContentBlock,
   ContentBlockDeltaPayload,
   MessageStopReason,
   MessageUsage,
-} from '@tabtin/agent-wire'
+} from '@muse/agent-wire'
 import type {
   AgentModeName,
   AgentStep,

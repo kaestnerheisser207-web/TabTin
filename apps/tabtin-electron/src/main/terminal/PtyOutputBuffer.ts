@@ -1,1 +1,1 @@
-export { PtyOutputBuffer } from '@tabtin/pty-core'
+export { PtyOutputBuffer } from '@muse/pty-core'

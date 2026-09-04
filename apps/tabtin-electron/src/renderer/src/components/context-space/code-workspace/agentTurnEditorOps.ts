@@ -4,7 +4,7 @@
  * 正文优先用写盘当下冻结的本机补丁；edit_file 可回退 tool_result 的 old_lines/new_lines。
  * 不读 diff_summary / Shadow Git / 当前磁盘；终端改动不入账。
  */
-import type { ChatMessage } from '@tabtin/chat-client'
+import type { ChatMessage } from '@muse/chat-client'
 import {
   pairToolResultsByBlock,
   stripApprovalNotePrefix,

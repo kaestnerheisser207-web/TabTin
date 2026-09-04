@@ -8,7 +8,7 @@
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { cn } from '@utils/cn'
-import type { ContextTier, Model } from '@tabtin/chat-client'
+import type { ContextTier, Model } from '@muse/chat-client'
 
 /** 多档且运营标记为可切换 → 渲染可点芯片 */
 export function canSelectContextTier(model: Model | null | undefined): boolean {

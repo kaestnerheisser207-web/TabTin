@@ -18,7 +18,7 @@
 
 import http from 'node:http'
 import WebSocket from 'ws'
-import { okResponse, mapWsEventToSse, proxyChatSessionFork, isSuccessfulHttpStatus } from '@tabtin/agent-wire'
+import { okResponse, mapWsEventToSse, proxyChatSessionFork, isSuccessfulHttpStatus } from '@muse/agent-wire'
 import { djangoRequest, errorResponse, type SendJSON } from './shared/error-handler'
 import { getCLISpaceId, getCLIOrganizationId } from '../cli-context'
 import { TokenManager } from '../../auth'
@@ -441,4 +441,4 @@ async function handleFork(
   }
 }
 
-// mapWsEventToSse imported from @tabtin/agent-wire (single source of truth)
+// mapWsEventToSse imported from @muse/agent-wire (single source of truth)

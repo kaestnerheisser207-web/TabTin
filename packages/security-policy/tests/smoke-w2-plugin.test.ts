@@ -8,7 +8,7 @@
  *     normalize,
  *     buildApprovalKey,
  *     lookupMemo,
- *   } from '@tabtin/security-policy';
+ *   } from '@muse/security-policy';
  *
  * 走完：构造 EffectivePolicy → 实现 MemoStore → 多场景判决 → 拼装 memo 写入 → 再判决命中 memo
  *
@@ -147,7 +147,7 @@ describe('W2 plug-in 冒烟：完整使用流程', () => {
     expect(typeof r.path).toBe('string');
   });
 
-  it('零封装：所有 import 都从 @tabtin/security-policy 入口直接拿', () => {
+  it('零封装：所有 import 都从 @muse/security-policy 入口直接拿', () => {
     expect(typeof judge).toBe('function');
     expect(typeof buildPolicyFromAgentConfigV2).toBe('function');
     expect(typeof normalize).toBe('function');

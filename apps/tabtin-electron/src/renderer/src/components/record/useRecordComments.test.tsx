@@ -9,7 +9,7 @@ import type {
   RecordCommentListResponse,
   RecordCommentMentionCandidate,
   UpdateRecordCommentThreadStatusResponse,
-} from '@tabtin/table-core'
+} from '@muse/table-core'
 import { useRecordComments, type RecordCommentsGateway } from './useRecordComments'
 
 const makeComment = (id: string, content: string): RecordComment => ({

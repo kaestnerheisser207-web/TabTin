@@ -9,9 +9,9 @@ import React, { useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Globe, Copy, Check, ChevronDown, ChevronRight } from 'lucide-react'
 import { cn } from '@utils/cn'
-import { ScrollArea } from '@tabtin/smartsheet-ui'
+import { ScrollArea } from '@muse/smartsheet-ui'
 import type { CardRendererProps } from '../registry/types'
-import type { WebFetchData } from '@tabtin/chat-client'
+import type { WebFetchData } from '@muse/chat-client'
 import {
   CARD_RADIUS,
   CARD_HEADER_PADDING,

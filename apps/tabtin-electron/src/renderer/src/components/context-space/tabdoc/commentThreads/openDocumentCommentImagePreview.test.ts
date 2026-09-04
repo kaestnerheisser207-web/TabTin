@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest'
-import type { CommentAttachment } from '@tabtin/tabdoc-ui/api-client'
+import type { CommentAttachment } from '@muse/tabdoc-ui/api-client'
 import { useResourcePreviewStore } from '@components/chat/preview/useResourcePreviewStore'
 import { openDocumentCommentImagePreview } from './openDocumentCommentImagePreview'
 

@@ -6,7 +6,7 @@
  * 等 dataRoot-based helper。本文件仅供未迁移调用方过渡期编译，
  * 迁移完成后将删除。
  *
- * 自 `@tabtin/terminal-core` `spacePaths.ts` 迁入；布局与算法保持对齐。
+ * 自 `@muse/terminal-core` `spacePaths.ts` 迁入；布局与算法保持对齐。
  * 改路径规则时请同步 terminal-core 同源文件。
  */
 

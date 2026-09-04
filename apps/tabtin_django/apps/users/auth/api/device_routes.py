@@ -127,7 +127,7 @@ class DeviceAuthorizationStore:
 
 
 def _verification_uri() -> str:
-    return getattr(settings, 'TABTIN_DEVICE_VERIFY_URL', 'http://localhost:5175/device')
+    return getattr(settings, 'MUSE_DEVICE_VERIFY_URL', 'http://localhost:5175/device')
 
 
 @router.post(

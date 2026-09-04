@@ -1,7 +1,7 @@
 import { app } from 'electron'
 import { join } from 'path'
 import { readFileSync, existsSync } from 'fs'
-import { atomicWriteFileSync } from '@tabtin/terminal-core'
+import { atomicWriteFileSync } from '@muse/terminal-core'
 
 import type { BrowserEnvironment, BrowserEnvBinding } from '../../shared/types/browser-env'
 import { createLogger } from '../logger'

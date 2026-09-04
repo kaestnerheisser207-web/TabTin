@@ -1,7 +1,7 @@
 /**
  * TabSlide Panel Shared Components
  *
- * Thin re-export layer over @tabtin/smartsheet-ui panel primitives.
+ * Thin re-export layer over @muse/smartsheet-ui panel primitives.
  * All components share the same borderless, compact Tailwind design
  * with design-engine and other modules.
  */
@@ -28,7 +28,7 @@ export {
   InsertCard,
   CategoryTitle,
   ColorSwatch as SharedColorSwatch,
-} from '@tabtin/smartsheet-ui'
+} from '@muse/smartsheet-ui'
 
 export type {
   PanelSectionProps,
@@ -48,11 +48,11 @@ export type {
   InsertCardGridProps,
   InsertCardProps,
   CategoryTitleProps,
-} from '@tabtin/smartsheet-ui'
+} from '@muse/smartsheet-ui'
 
 /* ── ToolbarIconButton — alias for PanelIconButton with md size ── */
 
-import { PanelIconButton } from '@tabtin/smartsheet-ui'
+import { PanelIconButton } from '@muse/smartsheet-ui'
 
 export const ToolbarIconBtn: React.FC<{
   active?: boolean
@@ -81,7 +81,7 @@ export const LayerBtn: React.FC<{
 
 /* ── ColorSwatch — compat wrapper for tabslide prop interface ── */
 
-import { ColorSwatch as SmartSheetColorSwatch } from '@tabtin/smartsheet-ui'
+import { ColorSwatch as SmartSheetColorSwatch } from '@muse/smartsheet-ui'
 
 export interface ColorSwatchProps {
   value: string

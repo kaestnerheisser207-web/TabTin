@@ -1,8 +1,8 @@
 /**
  * Host 侧拉取 AgentSkillLink → enabled map（供 prompt / tools 共用）。
  */
-import { joinApiPath } from '@tabtin/config'
-import { parseAgentSkillEnablementResponse } from '@tabtin/agent-runtime/skills'
+import { joinApiPath } from '@muse/config'
+import { parseAgentSkillEnablementResponse } from '@muse/agent-runtime/skills'
 
 export async function fetchSkillEnablementMap(params: {
   apiBaseUrl: string

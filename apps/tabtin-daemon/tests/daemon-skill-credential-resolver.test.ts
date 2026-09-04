@@ -18,17 +18,17 @@
  */
 
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import type { StreamEvent, ToolContext } from '@tabtin/agent-runtime/engine';
+import type { StreamEvent, ToolContext } from '@muse/agent-runtime/engine';
 import type {
   SkillCredentialResolver,
   SkillCredentialInjection,
-} from '@tabtin/agent-runtime/tools';
+} from '@muse/agent-runtime/tools';
 import {
   ShellCap,
   type SkillContextProvider,
-} from '@tabtin/agent-runtime/capability';
-import type { SkillCredentialResolverHandle } from '@tabtin/agent-host/credentials';
-import { StreamEvents } from '@tabtin/agent-wire';
+} from '@muse/agent-runtime/capability';
+import type { SkillCredentialResolverHandle } from '@muse/agent-host/credentials';
+import { StreamEvents } from '@muse/agent-wire';
 import type {
   AgentCommandRequest,
   AgentCommandResult,
@@ -40,9 +40,9 @@ import type {
   AgentSessionUnsubscribe,
   AgentSpawnDetachedResult,
   PtyManagerBridge,
-} from '@tabtin/terminal-core';
+} from '@muse/terminal-core';
 import { DaemonToolProvider } from '../src/application/agent/daemon-tool-provider.js';
-import { checkHardlineCommand } from '@tabtin/security-policy';
+import { checkHardlineCommand } from '@muse/security-policy';
 
 function makeBridgeMock(): {
   bridge: PtyManagerBridge;

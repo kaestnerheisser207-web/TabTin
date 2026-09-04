@@ -88,7 +88,7 @@ vi.mock('@/services/api', () => ({
   },
 }))
 
-vi.mock('@tabtin/shared/use-countdown', () => ({
+vi.mock('@muse/shared/use-countdown', () => ({
   useCountdown: () => ({
     countdown: 0,
     isRunning: false,

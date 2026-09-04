@@ -7,7 +7,7 @@
  */
 
 import { create } from 'zustand'
-import { toast } from '@tabtin/smartsheet-ui/toast'
+import { toast } from '@muse/smartsheet-ui/toast'
 import i18n from '@/i18n'
 import * as tinsApi from '../services/tinsApi'
 import type { TinDefinition, TinListItem, TinInstance } from '../services/tinsApi'
@@ -105,7 +105,7 @@ export const useTinsStore = create<TinsState>((set, get) => ({
       editorOpen: false,
       editorTinId: null,
     })
-    window.tabtin?.tins?.setInstances([])
+    window.muse?.tins?.setInstances([])
   },
 
   // ── 数据加载 ──────────────────────────────
@@ -290,14 +290,14 @@ export const useTinsStore = create<TinsState>((set, get) => ({
   setActivationStates: (states) => set({ activationStates: states }),
 
   togglePanel: (instanceId) => {
-    window.tabtin?.tins?.togglePanel(instanceId)
+    window.muse?.tins?.togglePanel(instanceId)
   },
 
   // ── 主进程同步 ─────────────────────────────
 
   syncInstancesToMain: () => {
     const { instances } = get()
-    window.tabtin?.tins?.setInstances(instances)
+    window.muse?.tins?.setInstances(instances)
   },
 }))
 
@@ -315,7 +315,7 @@ registerResetAction('tins', 'reset', () => {
     editorOpen: false,
     editorTinId: null,
   })
-  window.tabtin?.tins?.setInstances([])
+  window.muse?.tins?.setInstances([])
   clearTinsSessionCache()
 })
 

@@ -1,4 +1,4 @@
-import type { ViewSort } from '@tabtin/table-core'
+import type { ViewSort } from '@muse/table-core'
 import { describe, expect, it } from 'vitest'
 import {
   createSortBaselineOverride,

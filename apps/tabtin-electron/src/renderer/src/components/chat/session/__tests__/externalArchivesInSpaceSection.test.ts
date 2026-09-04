@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import { buildSessionListVirtualItems } from '../buildSessionListVirtualItems'
-import type { ChatSession } from '@tabtin/chat-client'
+import type { ChatSession } from '@muse/chat-client'
 
 function session(id: string, spaceId: string): ChatSession {
   return {

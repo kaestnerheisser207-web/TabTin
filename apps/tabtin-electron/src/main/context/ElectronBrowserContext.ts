@@ -6,8 +6,8 @@
  */
 
 import type { WebContents } from 'electron'
-import type { BrowserContext, ScreenshotOptions } from '@tabtin/browser-core'
-import { getCDPConnectionManager } from '@tabtin/browser-core'
+import type { BrowserContext, ScreenshotOptions } from '@muse/browser-core'
+import { getCDPConnectionManager } from '@muse/browser-core'
 import { createLogger } from '../logger'
 
 const log = createLogger('ElectronBrowserContext')

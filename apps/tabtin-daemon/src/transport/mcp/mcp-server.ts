@@ -4,9 +4,9 @@ import { randomBytes, timingSafeEqual } from 'node:crypto'
 import { mkdir, unlink } from 'node:fs/promises'
 import { join } from 'node:path'
 
-import { resolveDisabledToolPrefixes } from '@tabtin/agent-wire'
-import { getHomeTabtinPath } from '@tabtin/shared/storage-paths'
-import { atomicWriteFile } from '@tabtin/terminal-core'
+import { resolveDisabledToolPrefixes } from '@muse/agent-wire'
+import { getHomeTabtinPath } from '@muse/shared/storage-paths'
+import { atomicWriteFile } from '@muse/terminal-core'
 
 import {
   McpToolApplication,

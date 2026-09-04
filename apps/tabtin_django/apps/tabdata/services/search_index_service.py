@@ -104,7 +104,7 @@ class SearchIndexService(BaseService):
         return {str(index_name): str(index_def or '') for index_name, index_def in rows}
 
     def _ensure_pg_trgm_extension(self) -> None:
-        if getattr(settings, 'TABTIN_EDITION', 'saas') == 'community':
+        if getattr(settings, 'MUSE_EDITION', 'saas') == 'community':
             return
         connection = self._get_connection()
         with connection.cursor() as cursor:
@@ -112,7 +112,7 @@ class SearchIndexService(BaseService):
 
     def _create_single_index(self, table_id: UUID, field_id: UUID) -> None:
         connection = self._get_connection()
-        if getattr(settings, 'TABTIN_EDITION', 'saas') == 'community':
+        if getattr(settings, 'MUSE_EDITION', 'saas') == 'community':
             CommunityRecordIndexOperations(connection).create_search_index(
                 table_id,
                 field_id,
@@ -267,7 +267,7 @@ class SearchIndexService(BaseService):
                 for field in fields:
                     self._create_single_index(table_id, field.id)
             else:
-                if getattr(settings, 'TABTIN_EDITION', 'saas') == 'community':
+                if getattr(settings, 'MUSE_EDITION', 'saas') == 'community':
                     CommunityRecordIndexOperations(
                         connection
                     ).drop_search_indexes(table_id)
@@ -300,7 +300,7 @@ class SearchIndexService(BaseService):
             if not abnormalities:
                 return self.get_search_index_status(table_id)
 
-            if getattr(settings, 'TABTIN_EDITION', 'saas') == 'community':
+            if getattr(settings, 'MUSE_EDITION', 'saas') == 'community':
                 operations = CommunityRecordIndexOperations(connection)
                 operations.drop_search_indexes(table_id)
                 for field in searchable_fields:

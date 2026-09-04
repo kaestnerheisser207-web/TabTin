@@ -6,7 +6,7 @@ import {
   Loader2,
   Zap,
 } from 'lucide-react'
-import { Button } from '@tabtin/smartsheet-ui'
+import { Button } from '@muse/smartsheet-ui'
 import { cn } from '@utils/cn'
 import { COMPOSER_TOOLBAR_ICON_CLASS, COMPOSER_TOOLBAR_ICON_STROKE, COMPOSER_TEXT_MICRO } from '../registry/chatDesignTokens'
 import { useTranslation } from 'react-i18next'

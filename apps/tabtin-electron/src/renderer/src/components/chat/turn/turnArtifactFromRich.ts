@@ -6,7 +6,7 @@
  *   - kind === widget 且具备 code / rendered_code / image_url
  * 其余（裸 resource_ref / table_preview / present file·image）忽略。
  */
-import type { MessageBlock } from '@tabtin/chat-client'
+import type { MessageBlock } from '@muse/chat-client'
 import { stripShellPathQuotes } from '../../../services/localFileResourceResolver'
 import type { TurnArtifact, TurnArtifactKind } from './turnArtifactTypes'
 
@@ -87,8 +87,8 @@ function ossFileResourceUrl(block: Record<string, unknown>): string | null {
   if (block.artifact_kind !== OSS_FILE_ARTIFACT_KIND) return null
   const fileId = typeof block.file_id === 'string' ? block.file_id.trim() : ''
   if (!fileId) {
-    // 兜底：url 已是 tabtin://resource/file/<uuid>?...
-    if (typeof block.url === 'string' && block.url.startsWith('tabtin://resource/file/')) {
+    // 兜底：url 已是 muse://resource/file/<uuid>?...
+    if (typeof block.url === 'string' && block.url.startsWith('muse://resource/file/')) {
       return block.url
     }
     return null
@@ -101,7 +101,7 @@ function ossFileResourceUrl(block: Record<string, unknown>): string | null {
   if (typeof block.auto_open_token === 'string' && block.auto_open_token) {
     params.set('auto_open_token', block.auto_open_token)
   }
-  return `tabtin://resource/file/${encodeURIComponent(fileId)}?${params.toString()}`
+  return `muse://resource/file/${encodeURIComponent(fileId)}?${params.toString()}`
 }
 
 function resourceSpaceId(block: Record<string, unknown>): string | undefined {
@@ -114,11 +114,11 @@ function resourceSpaceId(block: Record<string, unknown>): string | undefined {
 }
 
 function resourceRefHref(block: Record<string, unknown>): string | null {
-  if (typeof block.url === 'string' && block.url.startsWith('tabtin://')) return block.url
+  if (typeof block.url === 'string' && block.url.startsWith('muse://')) return block.url
   const resourceType = typeof block.resource_type === 'string' ? block.resource_type : ''
   const resourceId = typeof block.resource_id === 'string' ? block.resource_id : ''
   if (!resourceType || !resourceId) return null
-  const base = `tabtin://resource/${resourceType}/${encodeURIComponent(resourceId)}`
+  const base = `muse://resource/${resourceType}/${encodeURIComponent(resourceId)}`
   const hint = typeof block.hint_carrier_app_id === 'string' ? block.hint_carrier_app_id : null
   return hint ? `${base}?hint=${encodeURIComponent(hint)}` : base
 }
@@ -131,7 +131,7 @@ export function mapResourceTypeToKind(resourceType: string): TurnArtifactKind {
 }
 
 function widgetChatHref(widgetId: string): string {
-  return `tabtin://chat/widget/${encodeURIComponent(widgetId)}`
+  return `muse://chat/widget/${encodeURIComponent(widgetId)}`
 }
 
 /** 可交付 local_file 的工作区相对路径；无效则 null。 */

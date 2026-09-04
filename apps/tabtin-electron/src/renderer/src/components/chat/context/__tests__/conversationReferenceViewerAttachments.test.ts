@@ -4,7 +4,7 @@
  */
 import { describe, it, expect, vi } from 'vitest'
 
-vi.mock('@tabtin/smartsheet-ui', () => ({
+vi.mock('@muse/smartsheet-ui', () => ({
   Dialog: () => null,
   DialogContent: () => null,
   DialogTitle: () => null,

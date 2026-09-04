@@ -1,6 +1,6 @@
 import { type FC, useEffect } from 'react'
 import { createPortal } from 'react-dom'
-import { ZIndex } from '@tabtin/app-shell'
+import { ZIndex } from '@muse/app-shell'
 import { useGridOverlayStore } from './store'
 
 const TOOLTIP_OFFSET_Y = 6

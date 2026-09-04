@@ -38,7 +38,7 @@
  * **与"过滤前即为空"区分**：那是合法的"用户没在 TabCode 打开任何项目"，由 mutate
  * 层 "empty as omit" 防御处理。
  *
- * 不做 zod 强校验：wire 包不反向依赖 `@tabtin/security-policy` 类型层，
+ * 不做 zod 强校验：wire 包不反向依赖 `@muse/security-policy` 类型层，
  * 跨包契约通过 type guard + `buildPolicyFromAgentConfigV2` 兜底（形态
  * 错误时 host 退化到"不 mutate 工作区"，与未传 `workspace_snapshot` 等价）。
  * 但运行时 `isDangerouslyBroadPath` helper 必须 import —— 这是 M3.1
@@ -51,7 +51,7 @@
  *      → 当作 omit，保留 session 现有工作区
  * 两层互补，不冲突。
  */
-import { isDangerouslyBroadPath } from '@tabtin/security-policy'
+import { isDangerouslyBroadPath } from '@muse/security-policy'
 
 function filterStrings(arr: unknown): string[] {
   if (!Array.isArray(arr)) return []
@@ -73,7 +73,7 @@ function filterAndDropDangerous(arr: string[], onDrop: (p: string) => void): str
 export function decodeForwardWorkspaceSnapshot(
   raw: unknown,
   logger: { warn(message: string): void } = console,
-): import('@tabtin/security-policy').WorkspaceSnapshot | undefined {
+): import('@muse/security-policy').WorkspaceSnapshot | undefined {
   if (!raw || typeof raw !== 'object' || Array.isArray(raw)) return undefined
   const obj = raw as Record<string, unknown>
   const rawSources = obj.sources && typeof obj.sources === 'object' && !Array.isArray(obj.sources)

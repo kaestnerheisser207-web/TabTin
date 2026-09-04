@@ -3,7 +3,7 @@ import {
   markdownToPmJson,
   normalizeMathPmJson,
   repairLeakedHtmlBlockInPmJson,
-} from '@tabtin/doc-editor'
+} from '@muse/doc-editor'
 
 import { normalizeMathForEditor } from '../utils/markdown'
 

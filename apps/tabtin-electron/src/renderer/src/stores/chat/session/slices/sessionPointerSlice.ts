@@ -13,8 +13,8 @@
  * （与 setSpaceSessions 共享同组 session-list 字段）。
  */
 
-import type { ChatSession } from '@tabtin/chat-client'
-import { resolveSessionScopeId } from '@tabtin/app-shell'
+import type { ChatSession } from '@muse/chat-client'
+import { resolveSessionScopeId } from '@muse/app-shell'
 import type { ChatSessionTokenUsage } from '@/utils/chatSessionTokenUsage'
 import { UPDATABLE_MONOTONIC_TOKENS } from '@/utils/chatSessionTokenUsage'
 import { sortSessionsByActivity } from '@/utils/chat-session-sort'

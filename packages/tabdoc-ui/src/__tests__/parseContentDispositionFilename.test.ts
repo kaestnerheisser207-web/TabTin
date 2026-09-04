@@ -1,4 +1,4 @@
-import type { AppHostClient } from '@tabtin/app-host-sdk'
+import type { AppHostClient } from '@muse/app-host-sdk'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import { exportDocumentBlob, parseContentDispositionFilename } from '../api-client'
 

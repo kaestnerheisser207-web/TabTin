@@ -8,7 +8,7 @@ import {
   DropdownMenuTrigger,
 } from '@components/ui'
 import { cn } from '@utils/cn'
-import type { ChatSession } from '@tabtin/chat-client'
+import type { ChatSession } from '@muse/chat-client'
 import { SIDEBAR_ICON_STROKE } from '@components/layout/sidebarUi'
 import { ChatIconTooltip } from '../panel/ChatIconTooltip'
 

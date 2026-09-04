@@ -4,7 +4,7 @@
  * 只读分页列表：GET /context/projects/{projectId}/activities
  * 后端事件表 append-only，事件在源对象删除后仍可追溯。
  */
-import { joinApiPath } from '@tabtin/config'
+import { joinApiPath } from '@muse/config'
 import { API_CONFIG, API_ENDPOINTS } from '@/config/api'
 import { apiRequest as adapterApiRequest, getAuthToken } from '@/adapters/api-adapter-instance'
 

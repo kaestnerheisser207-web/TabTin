@@ -52,7 +52,7 @@ vi.mock("../lib/collab-utils.js", async (importOriginal) => {
   };
 });
 
-vi.mock("@tabtin/doc-editor", () => ({
+vi.mock("@muse/doc-editor", () => ({
   DOC_SCHEMA_VERSION: 1,
 }));
 

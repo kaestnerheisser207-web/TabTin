@@ -6,7 +6,7 @@
  * 不含 text（text 由调用方单独处理 ）。
  */
 
-import type { ChatMessage } from '@tabtin/chat-client'
+import type { ChatMessage } from '@muse/chat-client'
 import {
   isUserAttachmentMediaBlock,
   isUserPreservedBlock,

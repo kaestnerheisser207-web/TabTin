@@ -37,8 +37,8 @@
 import path from 'node:path'
 import fs from 'node:fs'
 import fsp from 'node:fs/promises'
-import { getBucket, registerStorageBucket } from '@tabtin/storage-manager'
-import { getPlatformDataRoot } from '@tabtin/shared'
+import { getBucket, registerStorageBucket } from '@muse/storage-manager'
+import { getPlatformDataRoot } from '@muse/shared'
 import { createLogger } from '../logger'
 
 const log = createLogger('ConversationSummaryExport')

@@ -66,13 +66,13 @@ vi.mock('react-i18next', () => ({
   }),
 }))
 
-vi.mock('@tabtin/app-shell', () => ({
+vi.mock('@muse/app-shell', () => ({
   ZIndex: { global: 1 },
   cn: (...inputs: Array<string | false | null | undefined>) => inputs.filter(Boolean).join(' '),
   registerResetAction: () => () => {},
 }))
 
-vi.mock('@tabtin/smartsheet-ui', () => ({
+vi.mock('@muse/smartsheet-ui', () => ({
   toast: mockToast,
 }))
 
@@ -81,7 +81,7 @@ const mockVirtualModule = vi.mock as unknown as (
   factory: () => unknown,
   options: { virtual: boolean },
 ) => void
-mockVirtualModule('@tabtin/shared', () => ({
+mockVirtualModule('@muse/shared', () => ({
   createMigratingStorage: (storage: Storage) => storage,
   withPersistSafety: (options: unknown) => options,
 }), { virtual: true })

@@ -1,5 +1,5 @@
 import { useCallback, useMemo, useRef } from 'react'
-import { getTableSpaceId } from '@tabtin/table-core'
+import { getTableSpaceId } from '@muse/table-core'
 import { toast } from '@components/ui'
 import { useSpaceContextTabsStore } from '@stores/useSpaceContextTabsStore'
 import { useCrawlTabStore } from '@stores/useCrawlTabStore'
@@ -11,7 +11,7 @@ import { resolveAppHomeTabModel } from '@components/context-space/registry/resol
 import type { ContextItem, ContextItemType } from '@components/context-space/registry/types'
 import { getSpaceSettingsTitle } from '@components/space-settings/settingsTitle'
 import i18n from '@/i18n'
-import type { Table } from '@tabtin/table-core'
+import type { Table } from '@muse/table-core'
 import { createLogger } from '@/utils/logger'
 import { createTerminalSessionInScope, openTerminalTabInScope } from '../sources/terminal'
 import type { ContextItemMeta } from '@stores/contextTabs/types'
@@ -63,7 +63,7 @@ export function useSpaceContextNavigation({ spaceId, tabScopeKey, spaceName, tab
     return useSpaceContextTabsStore.getState().activeKeyBySpace[storageKey] ?? null
   }, [storageKey])
   const logTabSwitch = useCallback((stage: string, payload: Record<string, unknown>) => {
-    if (!globalThis.__TABTIN_DEBUG_TAB_SWITCH__) return
+    if (!globalThis.__MUSE_DEBUG_TAB_SWITCH__) return
     const now = typeof performance !== 'undefined' ? performance.now() : Date.now()
     log.debug(`${stage}`, { t: now, ...payload })
   }, [])

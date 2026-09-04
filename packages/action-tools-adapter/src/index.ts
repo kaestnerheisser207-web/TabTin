@@ -1,7 +1,7 @@
 import {
   requestSnapshotTool,
   executeActTool,
-} from '@tabtin/action-tools/tools';
+} from '@muse/action-tools/tools';
 import { t } from './i18n';
 
 export interface SnapshotResult {
@@ -28,7 +28,7 @@ export interface ActionResult {
 
 /**
  * ActionToolsAdapter
- * 薄封装 @tabtin/action-tools，方便在工作流中调用。
+ * 薄封装 @muse/action-tools，方便在工作流中调用。
  */
 
 export { setActionToolsAdapterLocale, setActionToolsAdapterTranslator } from './i18n';

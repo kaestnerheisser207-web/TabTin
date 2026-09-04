@@ -1,6 +1,6 @@
 import type { IpcMainInvokeEvent } from 'electron'
 import { Readable } from 'node:stream'
-import { okResponse, errResponse } from '@tabtin/agent-wire'
+import { okResponse, errResponse } from '@muse/agent-wire'
 
 import { guardedHandle } from '../utils/guarded-handle'
 import { createLogger } from '../logger'

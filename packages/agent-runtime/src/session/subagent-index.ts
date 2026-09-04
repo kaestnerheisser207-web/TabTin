@@ -1,5 +1,5 @@
 /**
- * @tabtin/agent-runtime — Subagent Index Writer（阶段 8 子 Agent 可观测性）
+ * @muse/agent-runtime — Subagent Index Writer（阶段 8 子 Agent 可观测性）
  *
  * 落盘形态：`{sessionDir}/{parentSessionId}/subagents.jsonl`
  *

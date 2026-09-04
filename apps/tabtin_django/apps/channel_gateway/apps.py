@@ -64,8 +64,8 @@ class ChannelGatewayConfig(AppConfig):
 
     @staticmethod
     def _get_configured_channels():
-        """Read TABTIN_CHANNELS env var; default to registering every adapter."""
-        env_val = os.getenv('TABTIN_CHANNELS', '').strip()
+        """Read MUSE_CHANNELS env var; default to registering every adapter."""
+        env_val = os.getenv('MUSE_CHANNELS', '').strip()
         policy = resolve_startup_policy(os.environ)
         if not policy.allows(
             StartupCapability.EXTERNAL_CHANNELS,

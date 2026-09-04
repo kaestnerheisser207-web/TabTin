@@ -12,11 +12,11 @@
  * 延迟初始化:在第一次调用时通过 requireTableApiPort() 拿到全局 HTTP transport,
  * 因此本模块必须在 initializeElectronApiAdapter() 之后才被访问。
  */
-import { createDirectAppClient } from '@tabtin/app-host-sdk/host'
-import type { AppHostClient } from '@tabtin/app-host-sdk'
-import type { AppHttpTransport } from '@tabtin/contracts/app'
-import { requireTableApiPort } from '@tabtin/table-core'
-import { message } from '@tabtin/smartsheet-ui/message'
+import { createDirectAppClient } from '@muse/app-host-sdk/host'
+import type { AppHostClient } from '@muse/app-host-sdk'
+import type { AppHttpTransport } from '@muse/contracts/app'
+import { requireTableApiPort } from '@muse/table-core'
+import { message } from '@muse/smartsheet-ui/message'
 import { API_CONFIG } from '@/config/api'
 
 let cached: AppHostClient | null = null

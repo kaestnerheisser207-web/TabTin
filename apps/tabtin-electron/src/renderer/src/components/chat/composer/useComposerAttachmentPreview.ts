@@ -20,7 +20,7 @@
 
 import { useCallback, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { toast } from '@tabtin/smartsheet-ui'
+import { toast } from '@muse/smartsheet-ui'
 import { useResourcePreviewStore } from '../preview/useResourcePreviewStore'
 import { inferPreviewableKind } from './AttachmentCard'
 import type { PreviewResourceKind } from '../preview/types'

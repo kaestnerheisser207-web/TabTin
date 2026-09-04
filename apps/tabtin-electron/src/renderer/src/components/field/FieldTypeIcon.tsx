@@ -23,7 +23,7 @@ import {
   UserPen,
 } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
-import type { FieldType } from '@tabtin/table-core'
+import type { FieldType } from '@muse/table-core'
 
 export type { FieldType }
 

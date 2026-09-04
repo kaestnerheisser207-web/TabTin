@@ -5,7 +5,7 @@ import { ToolUseBlockView } from '../ToolUseBlockView'
 import type { ContentBlockEntry } from '../types'
 import { useChatRuntimeStore } from '@stores/useChatRuntimeStore'
 import { useChatStore } from '@stores/chat/useChatStore'
-import type { ChatMessage } from '@tabtin/chat-client'
+import type { ChatMessage } from '@muse/chat-client'
 import { commitBlocks, __resetMessageBlocks } from '@stores/chat/messages/messageBlocks'
 
 /** 单一 store = message.blocks：commit 前须有消息壳（镜像生产 message_start 建壳）。 */

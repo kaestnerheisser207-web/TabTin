@@ -25,8 +25,8 @@ import {
   TooltipProvider,
   TooltipTrigger,
   toast,
-} from '@tabtin/smartsheet-ui'
-import { ViewApiService, buildTableApiUrl } from '@tabtin/table-core'
+} from '@muse/smartsheet-ui'
+import { ViewApiService, buildTableApiUrl } from '@muse/table-core'
 import { electronFetch } from '@/services/electronFetch'
 
 function FormTooltip({
@@ -107,7 +107,7 @@ export const FormToolBar: React.FC<FormToolBarProps> = ({
     setDisabling(true)
     try {
       const url = buildTableApiUrl(`/tabdata/views/${viewId}/form-share`)
-      const token = await import('@tabtin/table-core').then(m => m.getRequiredAccessToken())
+      const token = await import('@muse/table-core').then(m => m.getRequiredAccessToken())
       const res = await electronFetch(url, {
         method: 'DELETE',
         headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
@@ -132,7 +132,7 @@ export const FormToolBar: React.FC<FormToolBarProps> = ({
     setRefreshing(true)
     try {
       const url = buildTableApiUrl(`/tabdata/views/${viewId}/form-share/refresh`)
-      const token = await import('@tabtin/table-core').then(m => m.getRequiredAccessToken())
+      const token = await import('@muse/table-core').then(m => m.getRequiredAccessToken())
       const res = await electronFetch(url, {
         method: 'POST',
         headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },

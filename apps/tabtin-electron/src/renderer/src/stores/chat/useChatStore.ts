@@ -8,7 +8,7 @@
 
 import { create } from 'zustand'
 import { createJSONStorage, persist } from 'zustand/middleware'
-import { createMigratingStorage, withPersistSafety } from '@tabtin/shared'
+import { createMigratingStorage, withPersistSafety } from '@muse/shared'
 import { PERSIST_KEYS } from '../persist-key-registry'
 import { getChatClient } from '../../services/chatApi'
 import { getSessionController, hasRuntimeBridge, type AbortRunResult } from '../../services/agentService'
@@ -22,7 +22,7 @@ import { reconcileSessionMessages } from '../../services/sessionFreshness'
 import { markSessionsSuspended } from '../../services/sessionSuspended'
 import { useSessionFreshnessStore } from '../useSessionFreshnessStore'
 import { useWsConnectionStore } from '../useWsConnectionStore'
-import type { ChatSession, ChatMessage } from '@tabtin/chat-client'
+import type { ChatSession, ChatMessage } from '@muse/chat-client'
 import { useAuthStore } from '../useAuthStore'
 import i18n from '@/i18n'
 import type { ChatSessionTokenUsage } from '@/utils/chatSessionTokenUsage'
@@ -105,7 +105,7 @@ import type {
   SessionCreateTrigger,
   SessionLifecycleStore,
 } from './session/actions/sessionLifecycleAction'
-import { toast } from '@tabtin/smartsheet-ui/toast'
+import { toast } from '@muse/smartsheet-ui/toast'
 import * as chatExtraApi from '../../services/chatExtraApi'
 import type { RecoveryPlanConfirmation } from './checkpoint/recoveryPlan'
 import { preventSleep, allowSleep } from '../../services/powerService'
@@ -209,11 +209,11 @@ export interface ChatState extends HostPendingSendStore, InterruptHostPendingSto
   // W4 R3 (2026-05-11): ask 三件套并存——ask_user (choice) / ask_form / request_approval。
   // 三类 submit 各对应一个 wire payload：answers[] / field_values / approved。
   /** 提交 ask_user (choice) 回答（questions[] + 可选自由文本） */
-  submitAskUserAnswer: (answers: import('@tabtin/chat-client').AskUserAnswer[]) => Promise<void>
+  submitAskUserAnswer: (answers: import('@muse/chat-client').AskUserAnswer[]) => Promise<void>
   /** 为指定 session 提交 ask_user (choice) 回答 */
   submitAskUserAnswerForSession: (
     sessionId: string,
-    answers: import('@tabtin/chat-client').AskUserAnswer[],
+    answers: import('@muse/chat-client').AskUserAnswer[],
   ) => Promise<void>
   /** 提交 ask_form text_fallback 模式回答 */
   submitAskUserText: (text: string) => Promise<void>

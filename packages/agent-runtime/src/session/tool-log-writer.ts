@@ -1,5 +1,5 @@
 /**
- * @tabtin/agent-runtime — Tool Log Writer
+ * @muse/agent-runtime — Tool Log Writer
  *
  * Writes per-tool-call markdown files into the Agent sandbox so that
  * the Agent can reference full tool input/output via `read_file` in

@@ -16,7 +16,7 @@
  *           `tabtin-daemon mttr-resolved --incident <id> --duration-ms <ms>`
  *     实现：`apps/tabtin-daemon/src/index.ts` 末尾
  *     推荐用法：`tabtin-daemon mttr-start ... >> ~/.tabtin-daemon/daemon.log`
- *   - **程序内**：`import { emitMttrStart } from '@tabtin/agent-runtime'`
+ *   - **程序内**：`import { emitMttrStart } from '@muse/agent-runtime'`
  *     运行时侧已对 `description/resolution/reporter/error_class` 做长度兜底
  *     （`MAX_MTTR_*_LEN`），与 IPC / CLI 层三重防线呼应
  */

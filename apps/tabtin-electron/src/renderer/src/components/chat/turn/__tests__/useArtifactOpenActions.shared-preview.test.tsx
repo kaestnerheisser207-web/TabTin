@@ -49,7 +49,7 @@ const mockVirtualModule = vi.mock as unknown as (
   factory: () => unknown,
   options: { virtual: boolean },
 ) => void
-mockVirtualModule('@tabtin/resource-router', () => ({
+mockVirtualModule('@muse/resource-router', () => ({
   parseResourcePointer: (href: string) => {
     const match = /^tabtin:\/\/resource\/([^/?#]+)\/([^?#]+)(?:\?([^#]*))?/.exec(href)
     const params = new URLSearchParams(match?.[3] ?? '')
@@ -70,7 +70,7 @@ vi.mock('react-i18next', () => ({
   }),
 }))
 
-vi.mock('@tabtin/smartsheet-ui', () => ({
+vi.mock('@muse/smartsheet-ui', () => ({
   toast: (...args: unknown[]) => toast(...args),
 }))
 
@@ -165,7 +165,7 @@ vi.mock('@/components/chat/shared-view/preview', () => ({
 import { useArtifactOpenActions } from '../useArtifactOpenActions'
 
 const LOCAL_FILE_HREF =
-  'tabtin://resource/file/artifacts%2Fdemo-table.xlsx?hint=tabfiles&title=demo-table.xlsx'
+  'muse://resource/file/artifacts%2Fdemo-table.xlsx?hint=tabfiles&title=demo-table.xlsx'
 
 describe('useArtifactOpenActions — 共享会话本地文件预览', () => {
   beforeEach(() => {
@@ -337,7 +337,7 @@ describe('useArtifactOpenActions — 共享会话本地文件预览', () => {
     }
 
     const tableHref =
-      'tabtin://resource/table/324dc4f9-f459-4e9c-87dc-d3669fcc6a60?hint=tabdata'
+      'muse://resource/table/324dc4f9-f459-4e9c-87dc-d3669fcc6a60?hint=tabdata'
 
     const { result } = renderHook(() =>
       useArtifactOpenActions({
@@ -373,7 +373,7 @@ describe('useArtifactOpenActions — 共享会话本地文件预览', () => {
 
     const { result } = renderHook(() =>
       useArtifactOpenActions({
-        href: 'tabtin://resource/table/table-1?hint=tabdata',
+        href: 'muse://resource/table/table-1?hint=tabdata',
         tabScopeKey: 'conversation:shared-1',
       }),
     )
@@ -397,7 +397,7 @@ describe('useArtifactOpenActions — 共享会话本地文件预览', () => {
 
     const { result } = renderHook(() =>
       useArtifactOpenActions({
-        href: 'tabtin://resource/table/table-1?hint=tabdata',
+        href: 'muse://resource/table/table-1?hint=tabdata',
         tabScopeKey: 'conversation:shared-1',
       }),
     )
@@ -424,7 +424,7 @@ describe('useArtifactOpenActions — 共享会话本地文件预览', () => {
 
     const { result } = renderHook(() =>
       useArtifactOpenActions({
-        href: 'tabtin://resource/document/doc-1?hint=tabdoc',
+        href: 'muse://resource/document/doc-1?hint=tabdoc',
         tabScopeKey: 'conversation:shared-1',
       }),
     )

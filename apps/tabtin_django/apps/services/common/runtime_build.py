@@ -40,8 +40,8 @@ def parse_client_build(request) -> ClientBuild:
 
 def get_server_build() -> ServerBuild:
     return ServerBuild(
-        release_version=str(getattr(settings, "TABTIN_SERVER_VERSION", "") or "").strip(),
-        source_sha=str(getattr(settings, "TABTIN_GIT_SHA", "") or "").strip().lower(),
+        release_version=str(getattr(settings, "MUSE_SERVER_VERSION", "") or "").strip(),
+        source_sha=str(getattr(settings, "MUSE_GIT_SHA", "") or "").strip().lower(),
     )
 
 

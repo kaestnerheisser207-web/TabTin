@@ -1,7 +1,7 @@
 /**
  * 系统提示词装配的**权威真相源**（ /  Stage 2）。
  *
- * 段落顺序的 SSoT 一直在 `@tabtin/agent-prompt` 的 `buildSystemPrompt`；但
+ * 段落顺序的 SSoT 一直在 `@muse/agent-prompt` 的 `buildSystemPrompt`；但
  * 「host 烘焙输入 → `SystemPromptConfig` 入参」这一步过去由每个 host 各自手抄：
  * Electron 抄 4 处（主 prompt / setSubagentSystemPrompt / mode 热切换闭包 /
  * 软切换），Daemon 抄 2 处。每加一个新段落，这些字面量都要同步补一遍，漏一处
@@ -12,7 +12,7 @@
  * 走 `assembleSystemPrompt`。「按变体（mode / tools）派生 config」的逻辑——包括
  * group-only 的 `subagentCatalog` 门控——只在这里出现一次。
  *
- * 加新段落时只需：在 `@tabtin/agent-prompt` 的 `SystemPromptConfig` 加字段 + 在
+ * 加新段落时只需：在 `@muse/agent-prompt` 的 `SystemPromptConfig` 加字段 + 在
  * `buildSystemPrompt` 接顺序，然后各 host 在自己的 `BakedSystemPromptInputs` 里
  * 填一次数据源即可，不再有「一个字段抄 N 处」。
  */
@@ -21,8 +21,8 @@ import {
   buildSystemPrompt,
   type SystemPromptConfig,
   type ToolLike,
-} from '@tabtin/agent-prompt';
-import type { AgentModeName } from '@tabtin/agent-modes';
+} from '@muse/agent-prompt';
+import type { AgentModeName } from '@muse/agent-modes';
 
 /**
  * 创建期「烘焙输入」——`SystemPromptConfig` 去掉每次构建才变的变体字段

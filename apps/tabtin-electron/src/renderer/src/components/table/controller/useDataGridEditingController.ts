@@ -6,11 +6,11 @@ import {
   type DataGridEditingControllerResult,
   type DataGridRecordOrderContext,
   type UseDataGridEditingControllerInput as UseDataGridEditingControllerInputBase,
-} from '@tabtin/table-ui'
-import type { TableGridRuntimeApi } from '@tabtin/table-engine'
-import type { Field, TableRecord } from '@tabtin/table-core'
+} from '@muse/table-ui'
+import type { TableGridRuntimeApi } from '@muse/table-engine'
+import type { Field, TableRecord } from '@muse/table-core'
 import { createElement, type MutableRefObject } from 'react'
-import { toast, ToastAction } from '@tabtin/smartsheet-ui'
+import { toast, ToastAction } from '@muse/smartsheet-ui'
 
 export interface UseDataGridEditingControllerInput {
   orderedFields: Field[]

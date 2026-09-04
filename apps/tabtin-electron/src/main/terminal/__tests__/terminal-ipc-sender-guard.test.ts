@@ -3,7 +3,7 @@
  *
  * 验证 terminal IPC handler 在收到非信任来源调用时：
  * - ipcMain.handle 类 → 返回 envelope `{ ok:false, error:{ code:'UNAUTHORIZED', ... } }`
- *   （Wave 0 contract — guardedHandle 已收敛到 @tabtin/agent-wire 的 envelope 形状）
+ *   （Wave 0 contract — guardedHandle 已收敛到 @muse/agent-wire 的 envelope 形状）
  * - ipcMain.on 类（subscribe/unsubscribe）→ 静默拒绝（不执行订阅）
  * - ipcMain.on 同步路径（pty:snapshot-save-sync）→ event.returnValue 为 envelope
  *   `{ ok:false, error:{ code:'UNAUTHORIZED', ... }, trace_id }`（Wave 2 W2-δ
@@ -99,7 +99,7 @@ vi.mock('../snapshot', () => ({
   listAutoCheckpoints: vi.fn(async () => []),
 }))
 
-vi.mock('@tabtin/pty-core', () => ({
+vi.mock('@muse/pty-core', () => ({
   normalizeSize: vi.fn((cols?: number, rows?: number) => ({
     cols: cols ?? 80,
     rows: rows ?? 24,

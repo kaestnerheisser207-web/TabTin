@@ -10,15 +10,15 @@ export interface ApiRuntimeConfig {
   publicWebBaseUrl?: string;
 }
 
-const API_BASE_ENV_KEYS = ['TABTIN_API_BASE_URL', 'VITE_API_BASE_URL'] as const;
-const PUBLIC_WEB_BASE_ENV_KEYS = ['TABTIN_PUBLIC_WEB_BASE_URL', 'VITE_PUBLIC_WEB_BASE_URL'] as const;
+const API_BASE_ENV_KEYS = ['MUSE_API_BASE_URL', 'VITE_API_BASE_URL'] as const;
+const PUBLIC_WEB_BASE_ENV_KEYS = ['MUSE_PUBLIC_WEB_BASE_URL', 'VITE_PUBLIC_WEB_BASE_URL'] as const;
 const INVITE_TOKEN_PATTERN = /^[A-Za-z0-9_-]{16,64}$/;
 
-export const TABTIN_INVITE_BRIDGE_PATH = '/invite';
-export const TABTIN_DESKTOP_INVITE_SCHEME = 'tabtin://invite';
-const TABTIN_PREPROD_DESKTOP_INVITE_SCHEME = 'tabtin-preprod://invite';
-const TABTIN_DEV_DESKTOP_INVITE_SCHEME = 'tabtin-dev://invite';
-export const TABTIN_DOWNLOAD_URL = 'https://www.example.com/download/';
+export const MUSE_INVITE_BRIDGE_PATH = '/invite';
+export const MUSE_DESKTOP_INVITE_SCHEME = 'muse://invite';
+const MUSE_PREPROD_DESKTOP_INVITE_SCHEME = 'muse-preprod://invite';
+const MUSE_DEV_DESKTOP_INVITE_SCHEME = 'muse-dev://invite';
+export const MUSE_DOWNLOAD_URL = 'https://www.example.com/download/';
 
 function readEnv(env: EnvLike | undefined, key: string): string | undefined {
   if (env && key in env) return env[key];
@@ -104,17 +104,17 @@ function encodeInviteToken(token: string): string {
 }
 
 function resolveDesktopInviteScheme(publicWebBaseUrl?: string): string {
-  if (!publicWebBaseUrl) return TABTIN_DESKTOP_INVITE_SCHEME;
+  if (!publicWebBaseUrl) return MUSE_DESKTOP_INVITE_SCHEME;
 
   try {
     const hostname = new URL(publicWebBaseUrl).hostname.toLowerCase();
-    if (hostname === 'web-test.example.com') return TABTIN_PREPROD_DESKTOP_INVITE_SCHEME;
-    if (isPrivateLanHttpHost(hostname)) return TABTIN_DEV_DESKTOP_INVITE_SCHEME;
+    if (hostname === 'web-test.example.com') return MUSE_PREPROD_DESKTOP_INVITE_SCHEME;
+    if (isPrivateLanHttpHost(hostname)) return MUSE_DEV_DESKTOP_INVITE_SCHEME;
   } catch {
     // 调用方仍可使用历史单参数形式；无效环境地址不应破坏邀请 token 生成。
   }
 
-  return TABTIN_DESKTOP_INVITE_SCHEME;
+  return MUSE_DESKTOP_INVITE_SCHEME;
 }
 
 export function buildDesktopInviteDeepLink(token: string, publicWebBaseUrl?: string): string {
@@ -123,7 +123,7 @@ export function buildDesktopInviteDeepLink(token: string, publicWebBaseUrl?: str
 
 export function buildPublicInviteBridgeUrl(publicWebBaseUrl: string | undefined, token: string): string | undefined {
   if (!publicWebBaseUrl) return undefined;
-  return `${normalizePublicInviteWebBaseUrl(publicWebBaseUrl)}${TABTIN_INVITE_BRIDGE_PATH}/${encodeInviteToken(token)}`;
+  return `${normalizePublicInviteWebBaseUrl(publicWebBaseUrl)}${MUSE_INVITE_BRIDGE_PATH}/${encodeInviteToken(token)}`;
 }
 
 function ensureValidUrl(value: string, name: string): void {
@@ -208,9 +208,9 @@ export function resolveApiRuntimeConfig(env?: EnvLike): ApiRuntimeConfig {
   const apiBaseUrl = requireApiBaseUrl(env);
   const apiOrigin = deriveApiOrigin(apiBaseUrl);
 
-  const chatApiBaseUrl = resolveOptionalUrl(env, ['TABTIN_CHAT_API_URL', 'VITE_CHAT_API_URL'])
+  const chatApiBaseUrl = resolveOptionalUrl(env, ['MUSE_CHAT_API_URL', 'VITE_CHAT_API_URL'])
     ?? `${apiBaseUrl}/chat`;
-  const wsBaseUrl = resolveOptionalUrl(env, ['TABTIN_WS_BASE_URL', 'VITE_WS_BASE_URL'])
+  const wsBaseUrl = resolveOptionalUrl(env, ['MUSE_WS_BASE_URL', 'VITE_WS_BASE_URL'])
     ?? deriveWsBaseUrl(apiOrigin);
   const publicWebBaseUrl = resolvePublicWebBaseUrl(env);
 

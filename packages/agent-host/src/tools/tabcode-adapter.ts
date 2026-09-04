@@ -1,7 +1,7 @@
 /**
  * tabcode-adapter — PRD 08 W1
  *
- * 把 `@tabtin/action-tools/tools` 暴露的 TabCode 工具适配成
+ * 把 `@muse/action-tools/tools` 暴露的 TabCode 工具适配成
  * agent-runtime `Tool` 形态，并在适配层加 read-before-edit / write 加固。
  *
  * LLM 可见 6 件套：read_file / write_file / edit_file / delete_file /
@@ -32,7 +32,7 @@ import {
   clearDeliveredDiagnosticsForFile,
   registerPendingLSPDiagnostic,
   type Diagnostic as LspDiagnostic,
-} from '@tabtin/lsp-runtime';
+} from '@muse/lsp-runtime';
 import path from 'node:path';
 
 import {
@@ -44,8 +44,8 @@ import {
   codeGrepTool as actionCodeGrepTool,
   codeGlobTool as actionCodeGlobTool,
   readDiagnosticsTool as actionReadDiagnosticsTool,
-} from '@tabtin/action-tools/tools';
-import type { AgentTool } from '@tabtin/action-tools/types';
+} from '@muse/action-tools/tools';
+import type { AgentTool } from '@muse/action-tools/types';
 // 文件并发安全 Wave 2（2026-05-13）：ToolStaleReadError 是跨包 TOCTOU 校验
 // 错误信号 —— throw 点在本文件 enrichWithWorkspaceRoot 注入的
 // `_validate_before_write` hook，catch 点在 action-tools fileEditTool /
@@ -55,20 +55,20 @@ import type { AgentTool } from '@tabtin/action-tools/types';
 import {
   ToolStaleReadError,
   type ValidateBeforeWriteHook,
-} from '@tabtin/action-tools/headless';
+} from '@muse/action-tools/headless';
 import {
   classifyFsError,
   OS_ACCESS_ERRNO_CODES,
-} from '@tabtin/os-errors';
-import type { RunDocParserTask } from '@tabtin/local-docparse';
-import type { RunTempPptxParse } from '@tabtin/file-pipeline';
-import type { FilePipelineErrorCode } from '@tabtin/file-pipeline-errors';
+} from '@muse/os-errors';
+import type { RunDocParserTask } from '@muse/local-docparse';
+import type { RunTempPptxParse } from '@muse/file-pipeline';
+import type { FilePipelineErrorCode } from '@muse/file-pipeline-errors';
 
 import type {
   Tool,
   ToolContext,
   ToolResult,
-} from '@tabtin/agent-runtime';
+} from '@muse/agent-runtime';
 import {
   FileMaterializationTooLargeError,
   type FileMaterializationRef,
@@ -78,7 +78,7 @@ import {
   FILE_NOT_FOUND,
   INVALID_PARAM_FORMAT,
   TOOL_STALE_READ,
-} from '@tabtin/agent-runtime/tools';
+} from '@muse/agent-runtime/tools';
 import {
   canonicalizePath,
   errorResultEnvelope,
@@ -89,7 +89,7 @@ import {
   validateReadBeforeWrite,
   validateReadBeforeWriteSync,
 } from './read-file-state.js';
-import { withFileLock } from '@tabtin/action-tools/headless';
+import { withFileLock } from '@muse/action-tools/headless';
 import {
   buildFileEditPatch,
   captureFileBeforeSnapshot,
@@ -186,24 +186,24 @@ export interface TabCodeToolsDeps {
 
 /**
  * **W3 (2026-05-13) → W4 (2026-05-13)**：原 RunTempPptxParse 等类型已迁移到
- * `@tabtin/file-pipeline/src/types.ts`，让历史 host import 继续有稳定类型。
+ * `@muse/file-pipeline/src/types.ts`，让历史 host import 继续有稳定类型。
  * adapter 不再重新定义；下方 re-export 仅供历史 host 代码兼容。
  */
 export type {
   RunTempPptxParse,
   TempPptxParseChunkLike as TempPptxParseChunk,
   TempPptxParseResultLike as TempPptxParseResult,
-} from '@tabtin/file-pipeline';
+} from '@muse/file-pipeline';
 
 /**
  * **W3 时代 host shape**（W3 实施纪要写了 TempPptxParseSuccess / Failure 的具体
  * 字段，host 代码 import 这些 type 装配 fetch 返值）。W4 抽象层用 duck-type
- * 等价的 `TempPptxParseResultLike`（@tabtin/file-pipeline 内部）—— shape 相同
+ * 等价的 `TempPptxParseResultLike`（@muse/file-pipeline 内部）—— shape 相同
  * 字段相同，host 代码无需改 import。本两个 type 直接 alias 到新 SSoT。
  */
 export type TempPptxParseSuccess = {
   success: true;
-  chunks: import('@tabtin/file-pipeline').TempPptxParseChunkLike[];
+  chunks: import('@muse/file-pipeline').TempPptxParseChunkLike[];
   durationMs: number;
   pages: number;
   title: string;
@@ -286,7 +286,7 @@ function actionResultToToolResult(
 // edit_file / grep_search / glob_search 的失败语义是"业务错"而非"OS 拒绝"，
 // 进黑名单会误锁链路。
 
-// W11 TD-W11-3：errno 白名单合并到 `@tabtin/os-errors#OS_ACCESS_ERRNO_CODES`
+// W11 TD-W11-3：errno 白名单合并到 `@muse/os-errors#OS_ACCESS_ERRNO_CODES`
 // 单一源。`classifyFsError` 真正接受的就是这个集合——此处 regex 严格按同
 // 一列表构造，消除"两份白名单维护漂移"的风险。action-tools 把原始 Node fs
 // error message 二次加工（`normalizeActionError` / `mapActionErrorToRuntimeKind`）
@@ -333,9 +333,9 @@ function maybeRethrowAsOSAccessError(
   const osError = classifyFsError(fakeFsErr, path, process.platform);
   if (!osError) return;
 
-  // 抛 OSError-shaped error。agent-runtime 不直接 import @tabtin/safe-fs
+  // 抛 OSError-shaped error。agent-runtime 不直接 import @muse/safe-fs
   // 的 OSAccessError 类，用 duck-typed shape 兼容
-  // `@tabtin/os-errors#isOSError` 判断（与 ShellCap 同套约定）。
+  // `@muse/os-errors#isOSError` 判断（与 ShellCap 同套约定）。
   const err = new Error(`OSAccessError: ${osError.code}`);
   (err as Error & { osError: typeof osError }).osError = osError;
   err.name = 'OSAccessError';
@@ -772,7 +772,7 @@ function installValidateBeforeWriteHook(base: Record<string, unknown>, ctx: Tool
   if (!ctx.readFileState) return;
 
   // **Wave 3 整体收尾 L-32 修复**：用 `ValidateBeforeWriteHook` 类型契约（导出自
-  // `@tabtin/action-tools/headless`）跟 action-tools 一侧 invoke 保持类型一致。
+  // `@muse/action-tools/headless`）跟 action-tools 一侧 invoke 保持类型一致。
   // 未来 hook signature 改动时 TS 双侧报错强制对齐。
   const hook: ValidateBeforeWriteHook = (params) => {
     const errorResult = validateReadBeforeWriteSync(
@@ -1385,15 +1385,15 @@ function createFileReadTool(deps: TabCodeToolsDeps): Tool {
   };
 }
 
-// ─── env-gated debug log（零行为改动；TABTIN_DEBUG_TABCODE_DEDUP=1 启用） ──
+// ─── env-gated debug log（零行为改动；MUSE_DEBUG_TABCODE_DEDUP=1 启用） ──
 //
-// 用途：dogfood 现场观察 dedup 触发链路。生产默认关闭（process.env.TABTIN_DEBUG_TABCODE_DEDUP
+// 用途：dogfood 现场观察 dedup 触发链路。生产默认关闭（process.env.MUSE_DEBUG_TABCODE_DEDUP
 // 不为 '1' 时早 return），开销可忽略。
 //
 // 输出形态：`[tabcode-dedup] <stage> {json}` 到 stderr（console.warn）。
 // 用 `pnpm dev` / Electron 主进程 stdout buffer 可直接抓。
 function dlog(stage: string, data: Record<string, unknown>): void {
-  if (process.env.TABTIN_DEBUG_TABCODE_DEDUP !== '1') return;
+  if (process.env.MUSE_DEBUG_TABCODE_DEDUP !== '1') return;
 
   console.warn('[tabcode-dedup]', stage, JSON.stringify(data));
 }

@@ -1,5 +1,5 @@
 /**
- * @tabtin/os-errors — Public API
+ * @muse/os-errors — Public API
  *
  * 三类调用方：
  *   1. safe-fs / 文件操作 wrapper —— `classifyFsError` 把原始 errno 归一

@@ -1,5 +1,5 @@
 /**
- * @tabtin/prompt-contract ESLint plugin barrel
+ * @muse/prompt-contract ESLint plugin barrel
  *
  * 三条阶段 1.5 自定义规则，作为"加 prompt 的人写代码时立即被拦"的最前线护栏，
  * 跟 SectionDescriptor 类型层、extract_renderers.py 抽取层、audit.test.ts
@@ -46,7 +46,7 @@ import sectionNameMatch from './section-name-match.js'
 
 const plugin = {
   meta: {
-    name: '@tabtin/prompt-contract/eslint-plugin',
+    name: '@muse/prompt-contract/eslint-plugin',
     version: '0.1.0',
   },
   rules: {

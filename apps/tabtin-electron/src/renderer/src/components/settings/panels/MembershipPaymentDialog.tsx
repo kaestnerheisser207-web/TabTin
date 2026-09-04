@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react'
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@tabtin/smartsheet-ui'
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@muse/smartsheet-ui'
 import type { PaymentLaunchData } from '@/types/membership'
 import { PaymentMethodSelector, type MembershipPaymentMethod } from '../../payment/PaymentMethodSelector'
 import { PaymentSummary } from '../../payment/PaymentSummary'

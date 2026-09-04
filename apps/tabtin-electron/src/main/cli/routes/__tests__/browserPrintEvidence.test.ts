@@ -5,13 +5,13 @@ import { join } from 'node:path'
 
 const crawlCleanHtml = vi.hoisted(() => vi.fn())
 
-vi.mock('@tabtin/agent-wire', () => ({
+vi.mock('@muse/agent-wire', () => ({
   okResponse: (data: Record<string, unknown>) => ({ ok: true, data }),
 }))
 
-vi.mock('@tabtin/action-tools/impl', async () => {
+vi.mock('@muse/action-tools/impl', async () => {
   // 渲染器用真实实现（含 --include 白名单），只把 crawlCleanHtml 换成受控 mock。
-  const actual = await vi.importActual<typeof import('@tabtin/action-tools/impl')>('@tabtin/action-tools/impl')
+  const actual = await vi.importActual<typeof import('@muse/action-tools/impl')>('@muse/action-tools/impl')
   return {
     ...actual,
     getSharedCrawlToolImpl: () => ({ crawlCleanHtml }),

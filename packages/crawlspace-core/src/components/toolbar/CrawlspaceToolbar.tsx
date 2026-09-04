@@ -25,7 +25,7 @@ import {
   Puzzle,
   MoreHorizontal,
 } from 'lucide-react'
-import { Popover, PopoverContent, PopoverTrigger } from '@tabtin/smartsheet-ui'
+import { Popover, PopoverContent, PopoverTrigger } from '@muse/smartsheet-ui'
 import { cn } from '../../utils/cn'
 import { t } from '../../i18n'
 import { smartNavigate, isValidUrl as defaultIsValidUrl, isBlankLikeUrl } from '../../utils/helpers'

@@ -21,7 +21,7 @@ vi.mock('@stores/useAuthStore', () => ({
     selector({ logout: logoutMock }),
 }))
 
-vi.mock('@tabtin/smartsheet-ui', () => ({
+vi.mock('@muse/smartsheet-ui', () => ({
   Button: ({ children, onClick, disabled, ...rest }: any) => (
     <button type="button" onClick={onClick} disabled={disabled} {...rest}>
       {children}

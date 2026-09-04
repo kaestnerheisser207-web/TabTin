@@ -9,7 +9,7 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { Puzzle, X, Sparkles } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
-import { Button, EmptyState, PanelLoadingState } from '@tabtin/smartsheet-ui'
+import { Button, EmptyState, PanelLoadingState } from '@muse/smartsheet-ui'
 import { useTinsStore, type TinActivationState } from '@stores/useTinsStore'
 import { useResolvedOrganizationId } from '@/hooks/useResolvedOrganizationId'
 import { TinSandboxView } from '@components/tins/TinSandboxView'
@@ -45,7 +45,7 @@ export const TinsSidePanel: React.FC<TinsSidePanelProps> = ({
   }, [open, organizationId, spaceId])
 
   useEffect(() => {
-    const unsub = window.tabtin?.tins?.onActivationChanged((data: { states: unknown[] }) => {
+    const unsub = window.muse?.tins?.onActivationChanged((data: { states: unknown[] }) => {
       useTinsStore.getState().setActivationStates(data.states as TinActivationState[])
     })
     return () => { unsub?.() }
@@ -98,7 +98,7 @@ export const TinsSidePanel: React.FC<TinsSidePanelProps> = ({
     preparingIdRef.current = targetId
     setSandboxPaths(null)
 
-    const p = window.tabtin?.tins?.prepareSandbox?.(targetId)
+    const p = window.muse?.tins?.prepareSandbox?.(targetId)
     if (p) {
       p.then((result) => {
         if (preparingIdRef.current !== targetId) return
@@ -109,7 +109,7 @@ export const TinsSidePanel: React.FC<TinsSidePanelProps> = ({
     }
 
     return () => {
-      window.tabtin?.tins?.cleanupSandbox?.(targetId)?.catch(() => {})
+      window.muse?.tins?.cleanupSandbox?.(targetId)?.catch(() => {})
     }
   }, [selectedInstanceKey, open])
 

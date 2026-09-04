@@ -14,7 +14,7 @@
  *  phase=start 行为测见 lifecycleHandler.startDelivery.test.ts。
  */
 import { describe, expect, it } from 'vitest'
-import type { ChatMessage } from '@tabtin/chat-client'
+import type { ChatMessage } from '@muse/chat-client'
 import { findAssistantAfterPendingUser } from '../../../checkpoint/handlers/checkpointAnchor'
 
 function msg(overrides: Partial<ChatMessage> & { id: string; role: ChatMessage['role'] }): ChatMessage {

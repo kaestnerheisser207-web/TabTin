@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { KeyRound } from 'lucide-react'
-import { Button, Input, LoadingSpinner } from '@tabtin/smartsheet-ui'
+import { Button, Input, LoadingSpinner } from '@muse/smartsheet-ui'
 import { useAuthStore } from '@/stores/auth-store'
 
 interface InviteCodeGateProps {

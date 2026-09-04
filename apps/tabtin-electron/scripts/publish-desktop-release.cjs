@@ -546,7 +546,7 @@ async function readVersionFromDist(distDir, platform) {
  * 走的是与 build-packaged-app.sh / electron.vite.config.ts / upload-sourcemaps.sh
  * 同一份 SSOT helper（apps/tabtin-electron/scripts/resolve-app-version.mjs），
  * 同时把 dist 文件名作为**主权来源**做对账——
- * 这是为了挡住"开发者新开终端跑 release，TABTIN_BUILD_PROFILE 已丢失" 这种隐式约定漂移：
+ * 这是为了挡住"开发者新开终端跑 release，MUSE_BUILD_PROFILE 已丢失" 这种隐式约定漂移：
  *   1. 上一 shell：`pnpm build:mac:preprod` → 产出 `1.0.0-preprod.1` dmg
  *   2. 新 shell：`pnpm release:publish`（profile 丢失）→ helper 派生 source `1.0.0`
  *   3. release record 写 1.0.0、dmg 实际是 1.0.0-preprod.1 → electron-updater
@@ -562,8 +562,8 @@ async function readVersionFromDist(distDir, platform) {
 async function loadAppVersion(distDir, platform) {
   const helperPath = path.resolve(__dirname, 'resolve-app-version.mjs')
   const { resolveAppVersion } = await import(pathToFileURL(helperPath).href)
-  const profile = process.env.TABTIN_BUILD_PROFILE
-    ? String(process.env.TABTIN_BUILD_PROFILE).trim()
+  const profile = process.env.MUSE_BUILD_PROFILE
+    ? String(process.env.MUSE_BUILD_PROFILE).trim()
     : null
   const helperVersion = resolveAppVersion(profile)
 
@@ -578,9 +578,9 @@ async function loadAppVersion(distDir, platform) {
     throw new Error(
       `[release] dist-app 实际版本号 "${dmgVersion}" 与 helper 派生值 "${helperVersion}" ` +
       `(profile="${profile || '(none)'}") 不一致。\n` +
-      `常见根因：开发者在新 shell 里跑 release，TABTIN_BUILD_PROFILE 已丢失，helper 退到源 package.json#version。\n` +
+      `常见根因：开发者在新 shell 里跑 release，MUSE_BUILD_PROFILE 已丢失，helper 退到源 package.json#version。\n` +
       `修法（任选其一）：\n` +
-      `  1) export TABTIN_BUILD_PROFILE=<profile> 后再跑 release（推荐——与 build 同 shell）\n` +
+      `  1) export MUSE_BUILD_PROFILE=<profile> 后再跑 release（推荐——与 build 同 shell）\n` +
       `  2) --version=${dmgVersion}                 （显式 override，跳过 helper 派生）\n` +
       `  3) UPDATER_RELEASE_VERSION=${dmgVersion}    （环境变量 override，CI 友好）`
     )
@@ -627,7 +627,7 @@ async function main(argv = process.argv.slice(2)) {
   const adminBaseUrl = resolveUpdaterAdminBaseUrl(
     args['admin-base-url'] ||
       process.env.UPDATER_ADMIN_API_BASE_URL ||
-      process.env.TABTIN_API_BASE_URL ||
+      process.env.MUSE_API_BASE_URL ||
       process.env.API_BASE_URL
   )
   const adminToken = String(args['admin-token'] || process.env.UPDATER_ADMIN_TOKEN || '').trim()

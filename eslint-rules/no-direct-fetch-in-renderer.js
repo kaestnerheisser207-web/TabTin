@@ -1,5 +1,5 @@
 /**
- * tabtin/no-direct-fetch-in-renderer
+ * muse/no-direct-fetch-in-renderer
  *
  * 禁止 renderer 端直接 `fetch(...)` 拼后端 API URL。所有 HTTP 请求必须走主进程
  * 代理（统一 token 注入 / 401 自动刷新 / 错误封装 / 未来 trace_id 透传等）。
@@ -60,7 +60,7 @@ const API_BASE_TOKENS = new Set([
 /**
  * API URL 拼接 helper —— 任何调它再喂 fetch 的都视为违例。
  *
- * - `joinApiPath`：renderer / 通用配置层的 URL 拼接（@tabtin/config）。
+ * - `joinApiPath`：renderer / 通用配置层的 URL 拼接（@muse/config）。
  * - `buildTableApiUrl`：table-core 的业务 API URL 构造入口（ 根因 2：
  *   规则原先不认它，导致 table-core / 表单组件的 `fetch(buildTableApiUrl(...))`
  *   全部逃逸主进程代理收口）。
@@ -74,16 +74,16 @@ const rule = {
     docs: {
       description:
         '禁止 renderer 端直接 fetch(joinApiPath(...)) 或 fetch(`${API_CONFIG.baseURL}/...`)；改走 apiService.request / apiRequest / electronFetch。',
-      url: 'https://github.com/TabTin/TabTinAgent/blob/main/eslint-rules/README.md#tabtinno-direct-fetch-in-renderer',
+      url: 'https://github.com/TabTin/TabTinAgent/blob/main/eslint-rules/README.md#museno-direct-fetch-in-renderer',
     },
     schema: [],
     messages: {
       directFetchJoin:
-        'Renderer 不允许 `fetch(joinApiPath(...))` 直接拼 API URL。三选一：(1) JSON CRUD + envelope 解包用 `apiRequest({ url, method, ... })`（services/apiBase.ts，配 `unwrapData`，最常用）；(2) 复杂 token 注入 / 401 重试 / 重试策略用 `apiService.request<T>({ url, method, ... })`（services/api.ts，axios-like）；(3) blob 下载 / FormData / 透明 Response 语义用 `electronFetch(url, init)`（services/electronFetch.ts）。极少数 unload keepalive / preload bootstrap 等场景，加 `// eslint-disable-next-line tabtin/no-direct-fetch-in-renderer -- 理由` 标注例外（详见 eslint-rules/README.md#出口）。',
+        'Renderer 不允许 `fetch(joinApiPath(...))` 直接拼 API URL。三选一：(1) JSON CRUD + envelope 解包用 `apiRequest({ url, method, ... })`（services/apiBase.ts，配 `unwrapData`，最常用）；(2) 复杂 token 注入 / 401 重试 / 重试策略用 `apiService.request<T>({ url, method, ... })`（services/api.ts，axios-like）；(3) blob 下载 / FormData / 透明 Response 语义用 `electronFetch(url, init)`（services/electronFetch.ts）。极少数 unload keepalive / preload bootstrap 等场景，加 `// eslint-disable-next-line muse/no-direct-fetch-in-renderer -- 理由` 标注例外（详见 eslint-rules/README.md#出口）。',
       directFetchApiBase:
         'Renderer 不允许 `fetch(`${API_CONFIG.baseURL}/...`)` 直接拼 API URL。三选一：(1) JSON CRUD 用 `apiRequest({ url, method, ... })`（services/apiBase.ts）；(2) axios 形态用 `apiService.request<T>({ url, method, ... })`（services/api.ts）；(3) blob / Response 语义用 `electronFetch(url, init)`（services/electronFetch.ts）。例外场景见 eslint-rules/README.md#出口。',
       directFetchVariable:
-        'Renderer 不允许此处 `fetch(...)`：规则做了一层赋值溯源（"中间变量绕过"防护），发现该参数（或模板字符串内 `${x}` 占位）最终源自 API base URL 派生 —— 譬如解构 `const { chatApiBaseUrl: foo } = getApiRuntimeConfig()`、模块级 `const BILLING_BASE = joinApiPath(API_CONFIG.baseURL, ...)`、或局部 `const url = `${API_CONFIG.baseURL}/...``。换写法时三选一：(1) JSON CRUD 用 `apiRequest({ url, method, ... })`（services/apiBase.ts）；(2) axios 形态用 `apiService.request<T>({ url, method, ... })`（services/api.ts）；(3) blob / Response 语义用 `electronFetch(url, init)`（services/electronFetch.ts）。极少数 unload keepalive / preload bootstrap 等场景，加 `// eslint-disable-next-line tabtin/no-direct-fetch-in-renderer -- 理由` 标注例外（详见 eslint-rules/README.md#出口）。',
+        'Renderer 不允许此处 `fetch(...)`：规则做了一层赋值溯源（"中间变量绕过"防护），发现该参数（或模板字符串内 `${x}` 占位）最终源自 API base URL 派生 —— 譬如解构 `const { chatApiBaseUrl: foo } = getApiRuntimeConfig()`、模块级 `const BILLING_BASE = joinApiPath(API_CONFIG.baseURL, ...)`、或局部 `const url = `${API_CONFIG.baseURL}/...``。换写法时三选一：(1) JSON CRUD 用 `apiRequest({ url, method, ... })`（services/apiBase.ts）；(2) axios 形态用 `apiService.request<T>({ url, method, ... })`（services/api.ts）；(3) blob / Response 语义用 `electronFetch(url, init)`（services/electronFetch.ts）。极少数 unload keepalive / preload bootstrap 等场景，加 `// eslint-disable-next-line muse/no-direct-fetch-in-renderer -- 理由` 标注例外（详见 eslint-rules/README.md#出口）。',
     },
   },
 

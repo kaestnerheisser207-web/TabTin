@@ -1,9 +1,9 @@
 import { describe, expect, it } from 'vitest'
 import {
   buildTabtinWidgetQuickUsePrompt,
-  TABTIN_WIDGET_QUICK_USE_PRESET,
-  TABTIN_WIDGET_QUICK_USE_PRESET_ID,
-  TABTIN_WIDGET_SKILL_KEY,
+  MUSE_WIDGET_QUICK_USE_PRESET,
+  MUSE_WIDGET_QUICK_USE_PRESET_ID,
+  MUSE_WIDGET_SKILL_KEY,
 } from '../tabtinWidgetQuickUse'
 
 describe('tabtinWidgetQuickUse preset', () => {
@@ -21,7 +21,7 @@ describe('tabtinWidgetQuickUse preset', () => {
   })
 
   it('serializes skill key and rendered prompt for composer preset send', () => {
-    const block = TABTIN_WIDGET_QUICK_USE_PRESET.serializeForSend?.(
+    const block = MUSE_WIDGET_QUICK_USE_PRESET.serializeForSend?.(
       {
         subject: '新用户 onboarding 流程',
         style: '清晰简洁',
@@ -33,9 +33,9 @@ describe('tabtinWidgetQuickUse preset', () => {
 
     expect(block).toEqual({
       type: 'composer_preset',
-      preset_id: TABTIN_WIDGET_QUICK_USE_PRESET_ID,
+      preset_id: MUSE_WIDGET_QUICK_USE_PRESET_ID,
       params: {
-        skill_key: TABTIN_WIDGET_SKILL_KEY,
+        skill_key: MUSE_WIDGET_SKILL_KEY,
         subject: '新用户 onboarding 流程',
         style: '清晰简洁',
         focus: '',
@@ -51,9 +51,9 @@ describe('tabtinWidgetQuickUse preset', () => {
   })
 
   it('requires subject before submit', () => {
-    expect(TABTIN_WIDGET_QUICK_USE_PRESET.renderer).toBe('skillQuickUsePreview')
-    expect(TABTIN_WIDGET_QUICK_USE_PRESET.canSubmit?.({ subject: '产品增长飞轮' })).toBe(true)
-    expect(TABTIN_WIDGET_QUICK_USE_PRESET.canSubmit?.({ subject: '   ' })).toBe(false)
-    expect(TABTIN_WIDGET_QUICK_USE_PRESET.canSubmit?.({})).toBe(false)
+    expect(MUSE_WIDGET_QUICK_USE_PRESET.renderer).toBe('skillQuickUsePreview')
+    expect(MUSE_WIDGET_QUICK_USE_PRESET.canSubmit?.({ subject: '产品增长飞轮' })).toBe(true)
+    expect(MUSE_WIDGET_QUICK_USE_PRESET.canSubmit?.({ subject: '   ' })).toBe(false)
+    expect(MUSE_WIDGET_QUICK_USE_PRESET.canSubmit?.({})).toBe(false)
   })
 })

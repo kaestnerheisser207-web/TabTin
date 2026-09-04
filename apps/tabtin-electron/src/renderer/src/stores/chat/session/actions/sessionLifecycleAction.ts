@@ -16,7 +16,7 @@ import type {
   ChatMessage,
   QuickStartSessionResponse,
   GroupRuntimeConfig,
-} from '@tabtin/chat-client'
+} from '@muse/chat-client'
 import { trackChatTelemetry } from '../../execution/chatTelemetry'
 import {
   buildSendTimingPayload,
@@ -25,7 +25,7 @@ import {
 import { buildCheckpointMapFromMessages } from '../slices/sessionRuntimeState'
 import { useSpaceStore } from '@stores/useSpaceStore'
 import { useChatModelStore } from '../../../useChatModelStore'
-import { AgentApiService, type Agent, type Space } from '@tabtin/app-shell'
+import { AgentApiService, type Agent, type Space } from '@muse/app-shell'
 import { filterSendableChatModels } from '@/utils/chatModelGuards'
 import { isOpenAICodexModel } from '../../../../../../shared/openai-codex-models'
 import {

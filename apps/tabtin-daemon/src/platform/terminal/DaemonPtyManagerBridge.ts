@@ -56,8 +56,8 @@ import {
   type NotificationEnvelope,
   type NotificationPriority,
   type PtyManagerBridge,
-} from '@tabtin/terminal-core';
-import { cleanOutput, type PtyHostDisposable, type PtySession } from '@tabtin/pty-core';
+} from '@muse/terminal-core';
+import { cleanOutput, type PtyHostDisposable, type PtySession } from '@muse/pty-core';
 import type { DaemonPtyManager } from './daemon-pty-manager.js';
 import type { Logger } from '../observability/logging/logger.js';
 
@@ -536,7 +536,7 @@ export class DaemonPtyManagerBridge implements PtyManagerBridge {
 
     const sessionId = `agent-${spaceId}-${Date.now()}-${Math.random().toString(36).slice(2, 6)}`;
     // P1-E：Daemon 端 bridge 传 spaceId / env 到底层 spawn，让 transcript
-    // session 拿到 TABTIN_SPACE_ID env + 与 Electron 等价的 session 形态。
+    // session 拿到 MUSE_SPACE_ID env + 与 Electron 等价的 session 形态。
     const success = this.ptyManager.spawn(sessionId, {
       cwd: req.cwd,
       spaceId,

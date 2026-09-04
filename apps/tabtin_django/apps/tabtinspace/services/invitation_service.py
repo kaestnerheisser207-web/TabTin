@@ -26,7 +26,7 @@ logger = logging.getLogger(__name__)
 DEFAULT_EXPIRY_HOURS = 72
 DEFAULT_LINK_EXPIRY_HOURS = 168  # 7 days
 INVITE_TOKEN_PATTERN = re.compile(r'^[A-Za-z0-9_-]{16,64}$')
-PUBLIC_WEB_BASE_ENV_KEYS = ('TABTIN_PUBLIC_WEB_BASE_URL', 'VITE_PUBLIC_WEB_BASE_URL', 'PUBLIC_WEB_BASE_URL')
+PUBLIC_WEB_BASE_ENV_KEYS = ('MUSE_PUBLIC_WEB_BASE_URL', 'VITE_PUBLIC_WEB_BASE_URL', 'PUBLIC_WEB_BASE_URL')
 
 INVITE_RATE_LIMITS = {
     'email': {'per_hour': 20, 'per_day': 50},
@@ -124,7 +124,7 @@ def _resolve_public_web_base_url() -> str:
             return value.rstrip('/')
         raise ImproperlyConfigured(f'{key} must use HTTPS outside localhost or a private LAN')
     raise ImproperlyConfigured(
-        'TABTIN_PUBLIC_WEB_BASE_URL or VITE_PUBLIC_WEB_BASE_URL is required for invitation links'
+        'MUSE_PUBLIC_WEB_BASE_URL or VITE_PUBLIC_WEB_BASE_URL is required for invitation links'
     )
 
 

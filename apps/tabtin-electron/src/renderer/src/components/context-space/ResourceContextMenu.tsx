@@ -8,7 +8,7 @@ import {
   ShareDialog,
   toast,
 } from '@components/ui'
-import { updateDocument } from '@tabtin/tabdoc-ui/api-client'
+import { updateDocument } from '@muse/tabdoc-ui/api-client'
 import { buildSpaceItemChatContextDragPayload } from './hooks/chatContextDragPayload'
 import { deliverContextInjectToChat } from '@/services/deliverContextInjectToChat'
 import { useTranslation } from 'react-i18next'

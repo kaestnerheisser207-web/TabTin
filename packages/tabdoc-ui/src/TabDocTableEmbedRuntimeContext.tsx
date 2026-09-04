@@ -1,5 +1,5 @@
 import { createContext, useContext } from 'react'
-import type { RecordStore, TableStore, ViewStore } from '@tabtin/table-core'
+import type { RecordStore, TableStore, ViewStore } from '@muse/table-core'
 import type { StoreApi } from 'zustand'
 
 export interface TabDocTableEmbedStores {

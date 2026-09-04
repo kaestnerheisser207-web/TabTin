@@ -46,7 +46,7 @@ metadata:
 | 场景 | 怎么启动 |
 |------|---------|
 | 桌面用户 | 打开 Muse Electron App（最常见，无需额外操作） |
-| 无头服务器 | `npm i -g @tabtin/daemon && tabtin-daemon init --token <t> && tabtin-daemon start` |
+| 无头服务器 | `npm i -g @muse/daemon && tabtin-daemon init --token <t> && tabtin-daemon start` |
 | 本地开发 | `muse daemon start`（已桥接到 monorepo `apps/tabtin-daemon/dist/index.js`） |
 
 每条命令章节顶部都会再标 `**运行时**：桌面端 / Daemon`——看到就提示自己确认 daemon 在跑。

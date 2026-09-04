@@ -85,7 +85,7 @@ vi.mock('@components/ui', () => ({
   ),
 }))
 
-vi.mock('@tabtin/smartsheet-ui', () => ({
+vi.mock('@muse/smartsheet-ui', () => ({
   toast: vi.fn(),
 }))
 

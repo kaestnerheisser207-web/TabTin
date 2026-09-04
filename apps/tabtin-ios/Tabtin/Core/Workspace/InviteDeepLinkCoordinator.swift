@@ -13,7 +13,7 @@ enum InviteDeepLinkParser {
         }
         let segments: [Substring]
         switch url.scheme?.lowercased() {
-        case "tabtin", "tabtin-preprod":
+        case "tabtin", "muse-preprod":
             guard url.host?.lowercased() == "invite" else { return nil }
             segments = components.percentEncodedPath.split(separator: "/", omittingEmptySubsequences: true)
         case "https", "http":

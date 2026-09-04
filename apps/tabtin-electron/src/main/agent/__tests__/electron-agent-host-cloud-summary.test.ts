@@ -125,31 +125,31 @@ vi.mock('../../cli/cli-server', () => ({
   },
 }))
 
-vi.mock('@tabtin/cli-server-core/surfaces/agent-security', () => ({
+vi.mock('@muse/cli-server-core/surfaces/agent-security', () => ({
   createAgentSecuritySurfaces: () => [],
 }))
-vi.mock('@tabtin/cli-server-core/surfaces/skill-list', () => ({
+vi.mock('@muse/cli-server-core/surfaces/skill-list', () => ({
   createSkillListSurface: () => ({}),
 }))
-vi.mock('@tabtin/cli-server-core/surfaces/skill-materialize-app', () => ({
+vi.mock('@muse/cli-server-core/surfaces/skill-materialize-app', () => ({
   createSkillMaterializeAppSurface: () => ({}),
 }))
 
 // app-shell 的 normalizeExecutionLimitsForCostCap 装配 helper
-vi.mock('@tabtin/app-shell/agent-config-v2', () => ({
+vi.mock('@muse/app-shell/agent-config-v2', () => ({
   normalizeExecutionLimitsForCostCap: (v: unknown) => v,
 }))
 
 // 现在动态 import ElectronAgentHost；同时 import SSoT 用于断言
 const { ElectronAgentHost } = await import('../ElectronAgentHost')
 const { TokenManager } = await import('../../auth')
-// SSoT 通过 @tabtin/local-docparse 二次 re-export（与 electron localDocParse.ts
+// SSoT 通过 @muse/local-docparse 二次 re-export（与 electron localDocParse.ts
 // 同款入口；electron 没有直接 depend file-pipeline-errors）
 const {
   FILE_PIPELINE_ERROR_KINDS,
   FilePipelineErrorCode,
   formatFilePipelineErrorChinesePrompt,
-} = await import('@tabtin/local-docparse')
+} = await import('@muse/local-docparse')
 
 // ─── 测试 harness ────────────────────────────────────────────────────
 

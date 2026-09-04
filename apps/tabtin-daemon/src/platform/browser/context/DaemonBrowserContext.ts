@@ -6,7 +6,7 @@
  */
 
 import type { Page, CDPSession } from 'patchright-core';
-import type { BrowserContext, ScreenshotOptions } from '@tabtin/browser-core';
+import type { BrowserContext, ScreenshotOptions } from '@muse/browser-core';
 
 export class DaemonBrowserContext implements BrowserContext {
   private page: Page;

@@ -56,8 +56,8 @@ const metrics: ChangesPerfSnapshot = {
 
 function publish(): void {
   if (typeof window === 'undefined') return
-  ;(window as unknown as { __TABTIN_CHANGES_METRICS__?: ChangesPerfSnapshot })
-    .__TABTIN_CHANGES_METRICS__ = { ...metrics }
+  ;(window as unknown as { __MUSE_CHANGES_METRICS__?: ChangesPerfSnapshot })
+    .__MUSE_CHANGES_METRICS__ = { ...metrics }
 }
 
 type NumericMetricKey = {

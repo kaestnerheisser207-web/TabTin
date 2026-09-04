@@ -12,18 +12,18 @@ function normalizeEnvUrl(value: string | undefined): string {
  * 避免仍用根 .env 的 127.0.0.1:5176 拼出不可分享的本地链接。
  */
 function applyPublicWebPreset(env: Record<string, string>): void {
-  const apiBase = normalizeEnvUrl(env.VITE_API_BASE_URL || env.TABTIN_API_BASE_URL)
+  const apiBase = normalizeEnvUrl(env.VITE_API_BASE_URL || env.MUSE_API_BASE_URL)
   if (!apiBase) return
 
   const presets = [
     {
-      apiBaseUrl: env.TABTIN_LITE_API_BASE_URL,
-      publicWebBaseUrl: env.TABTIN_LITE_PUBLIC_WEB_BASE_URL,
+      apiBaseUrl: env.MUSE_LITE_API_BASE_URL,
+      publicWebBaseUrl: env.MUSE_LITE_PUBLIC_WEB_BASE_URL,
       mode: 'lite',
     },
     {
-      apiBaseUrl: env.TABTIN_DOCKER_API_BASE_URL,
-      publicWebBaseUrl: env.TABTIN_DOCKER_PUBLIC_WEB_BASE_URL,
+      apiBaseUrl: env.MUSE_DOCKER_API_BASE_URL,
+      publicWebBaseUrl: env.MUSE_DOCKER_PUBLIC_WEB_BASE_URL,
       mode: 'docker',
     },
   ] as const
@@ -32,10 +32,10 @@ function applyPublicWebPreset(env: Record<string, string>): void {
   if (!preset?.publicWebBaseUrl) return
 
   const current = normalizeEnvUrl(env.VITE_PUBLIC_WEB_BASE_URL)
-  const localDefault = normalizeEnvUrl(env.TABTIN_DOCKER_PUBLIC_WEB_BASE_URL) || 'http://127.0.0.1:5176'
+  const localDefault = normalizeEnvUrl(env.MUSE_DOCKER_PUBLIC_WEB_BASE_URL) || 'http://127.0.0.1:5176'
   if (!current || current === localDefault) {
     env.VITE_PUBLIC_WEB_BASE_URL = normalizeEnvUrl(preset.publicWebBaseUrl)
-    env.TABTIN_PUBLIC_WEB_BASE_URL = env.VITE_PUBLIC_WEB_BASE_URL
+    env.MUSE_PUBLIC_WEB_BASE_URL = env.VITE_PUBLIC_WEB_BASE_URL
     console.log(
       `[admindash] VITE_PUBLIC_WEB_BASE_URL 跟随 ${preset.mode} API → ${env.VITE_PUBLIC_WEB_BASE_URL}`,
     )
@@ -46,19 +46,19 @@ export default defineConfig(async ({ command, mode }) => {
   const repoRoot = path.resolve(__dirname, '../..')
   // 从仓库根目录加载统一的 .env
   const env = loadEnv(mode, repoRoot, '')
-  // 本地验 AdminDash↔Django：TABTIN_ADMINDASH_USE_LOCAL_API=1 时强制走本机 6060，
+  // 本地验 AdminDash↔Django：MUSE_ADMINDASH_USE_LOCAL_API=1 时强制走本机 6060，
   // 避免根 .env.local 的 lite/test 盖住存储组织名搜索等未部署接口。
-  const useLocalApi = process.env.TABTIN_ADMINDASH_USE_LOCAL_API === '1'
+  const useLocalApi = process.env.MUSE_ADMINDASH_USE_LOCAL_API === '1'
   if (useLocalApi) {
     env.VITE_API_BASE_URL = ''
-    env.TABTIN_API_BASE_URL = 'http://127.0.0.1:6060/api'
+    env.MUSE_API_BASE_URL = 'http://127.0.0.1:6060/api'
   }
   applyPublicWebPreset(env)
   Object.assign(process.env, env)
 
   let apiTarget = 'http://localhost:6060'
   if (command === 'serve') {
-    const { resolveApiRuntimeConfig } = await import('@tabtin/config')
+    const { resolveApiRuntimeConfig } = await import('@muse/config')
     // 获取 API 目标地址（从统一 API_BASE_URL 推导出 origin）
     const { apiOrigin } = resolveApiRuntimeConfig(env)
     apiTarget = useLocalApi ? 'http://127.0.0.1:6060' : apiOrigin
@@ -77,7 +77,7 @@ export default defineConfig(async ({ command, mode }) => {
     resolve: {
       alias: {
         '@': path.resolve(__dirname, './src'),
-        '@tabtin/app-shell': path.resolve(__dirname, '../../packages/app-shell/src'),
+        '@muse/app-shell': path.resolve(__dirname, '../../packages/app-shell/src'),
       },
     },
     optimizeDeps: {

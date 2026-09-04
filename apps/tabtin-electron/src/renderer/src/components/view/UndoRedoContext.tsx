@@ -2,4 +2,4 @@ export {
   UndoRedoProvider,
   useUndoRedoContext,
   type UndoRedoContextValue,
-} from '@tabtin/table-ui'
+} from '@muse/table-ui'

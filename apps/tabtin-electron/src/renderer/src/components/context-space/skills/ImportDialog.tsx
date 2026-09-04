@@ -98,7 +98,7 @@ export const ImportDialog: React.FC<ImportDialogProps> = ({
         !result?.already_exists || !resolved?.mdExists
       )
       if (shouldMaterialize && resolved?.skillDir) {
-        await materializeImportedSkill(window.tabtin.fileSystem, resolved.skillDir, normalizedFiles)
+        await materializeImportedSkill(window.muse.fileSystem, resolved.skillDir, normalizedFiles)
       } else if (!result?.already_exists && !resolved?.skillDir) {
         toast.warning(t('skills.importDialog.materializeFailed', {
           defaultValue: '已导入到云端，但本地文件写入失败；启用前请先打开编辑器确认内容',
@@ -271,7 +271,7 @@ export const ImportDialog: React.FC<ImportDialogProps> = ({
   const handleSubmit = useCallback(async () => {
     try {
       if (tab === 'npm') {
-        const api = window.tabtin?.skill?.installNpm
+        const api = window.muse?.skill?.installNpm
         if (!api) {
           toast.error(t('skills.importDialog.npmUnavailable'))
           return

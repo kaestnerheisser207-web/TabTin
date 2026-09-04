@@ -1,5 +1,5 @@
 /**
- * StorageManagerIpcService — 主进程把 `@tabtin/storage-manager` 注册中心
+ * StorageManagerIpcService — 主进程把 `@muse/storage-manager` 注册中心
  * 暴露给渲染进程。
  *
  * 设计要点：
@@ -13,7 +13,7 @@
  */
 
 import { ipcMain } from 'electron'
-import { registerStorageManagerIpc } from '@tabtin/storage-manager'
+import { registerStorageManagerIpc } from '@muse/storage-manager'
 import { createLogger } from '../logger'
 
 const log = createLogger('StorageManagerIpc')

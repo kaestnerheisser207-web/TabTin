@@ -4,7 +4,7 @@ import type {
   CheckpointDegradedReason,
   CheckpointRecordStatus,
   CheckpointRecordView,
-} from '@tabtin/chat-client'
+} from '@muse/chat-client'
 
 type Translate = (key: string, options?: Record<string, unknown>) => string
 

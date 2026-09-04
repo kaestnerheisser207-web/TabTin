@@ -1,4 +1,4 @@
-import type { ChatMessage } from '@tabtin/chat-client'
+import type { ChatMessage } from '@muse/chat-client'
 
 const SYSTEM_AUTHORED_MESSAGE_KINDS = new Set([
   'environment_context',

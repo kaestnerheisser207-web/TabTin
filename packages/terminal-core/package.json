@@ -1,5 +1,5 @@
 {
-  "name": "@tabtin/terminal-core",
+  "name": "@muse/terminal-core",
   "version": "0.1.0",
   "description": "Core terminal execution utilities for Muse",
   "type": "module",
@@ -38,8 +38,8 @@
     "test": "vitest run"
   },
   "dependencies": {
-    "@tabtin/env-sanitize": "workspace:*",
-    "@tabtin/shared": "workspace:*"
+    "@muse/env-sanitize": "workspace:*",
+    "@muse/shared": "workspace:*"
   },
   "devDependencies": {
     "@types/node": "^20.0.0",

@@ -24,7 +24,7 @@ import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import type {
   ReadFileState,
   ToolContext,
-} from '@tabtin/agent-runtime';
+} from '@muse/agent-runtime';
 import { createTabCodeTools } from '../../src/tools/tabcode-adapter.js';
 
 // ── 复用 tabcode-adapter.test.ts 同款 fixture ──

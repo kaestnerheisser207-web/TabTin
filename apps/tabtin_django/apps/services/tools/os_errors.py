@@ -2,7 +2,7 @@
 OS 访问错误的 Python 端镜像 — 与 packages/os-errors 保持同源。
 
 后端工具从 Electron Main / Daemon IPC / HTTP 收到的"OS 错误"载荷会是
-JSON 形式的 OSToolError（safe-fs / @tabtin/os-errors 序列化产物）。本模块
+JSON 形式的 OSToolError（safe-fs / @muse/os-errors 序列化产物）。本模块
 提供：
 
   1. 错误码常量 — 与 TS 端 `OSErrorCode` 一一对应；

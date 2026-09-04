@@ -12,7 +12,7 @@ const SAMPLE_POSTS = [
   {
     id: 2,
     title: '接入 TabData 实现动态内容',
-    excerpt: '通过 @tabtin/sdk 连接 TabData 数据表，将博客文章存储在云端，实现真正的动态博客。',
+    excerpt: '通过 @muse/sdk 连接 TabData 数据表，将博客文章存储在云端，实现真正的动态博客。',
     date: '2026-03-23',
     tag: '进阶',
     readTime: '8 分钟',

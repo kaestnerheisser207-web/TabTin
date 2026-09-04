@@ -4,7 +4,7 @@
 
 import React from 'react'
 import { cn } from '@utils/cn'
-import type { ChatMessage } from '@tabtin/chat-client'
+import type { ChatMessage } from '@muse/chat-client'
 import companionUrl from '@/assets/brand/tabtin-input-companion.png?url'
 import { IMPORT_SOURCE_LABELS } from '@components/onboarding/external-import/useExternalImportDetection'
 import { TEXT } from '../../../registry/chatDesignTokens'

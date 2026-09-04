@@ -72,7 +72,7 @@ CLI 命令名仍是 `muse tracker`（工程内部也可称 Tracker）。
 创建或启用成功后，在最终回复里用 markdown 链接指给用户，方便一键打开详情：
 
 ```
-[查看自动化任务「任务名」](tabtin://resource/tracker/<完整uuid>?hint=tabtracker)
+[查看自动化任务「任务名」](muse://resource/tracker/<完整uuid>?hint=tabtracker)
 ```
 
 - `<type>` 必须是 `tracker`（不是 `tabtracker` / `goal` / `cron`）

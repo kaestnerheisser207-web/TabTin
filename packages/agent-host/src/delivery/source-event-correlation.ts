@@ -1,4 +1,4 @@
-import type { StreamEvent } from '@tabtin/agent-runtime'
+import type { StreamEvent } from '@muse/agent-runtime'
 
 const MAIN_TURN_CORRELATED_EVENT_TYPES: ReadonlySet<string> = new Set([
   'agent.stream.lifecycle',

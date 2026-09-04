@@ -5,13 +5,13 @@ import {
   getSharedCaptchaGuard,
   projectCaptchaRequired,
   type CaptchaRequiredWire,
-} from '@tabtin/browser-core'
-import { okResponse } from '@tabtin/agent-wire'
+} from '@muse/browser-core'
+import { okResponse } from '@muse/agent-wire'
 import {
   getSharedCrawlToolImpl,
   isPrintTextFormat,
   renderPrintContent,
-} from '@tabtin/action-tools/impl'
+} from '@muse/action-tools/impl'
 import type { SendJSON, ActionExecutor } from './_helpers'
 import {
   buildBrowserRequestScope,

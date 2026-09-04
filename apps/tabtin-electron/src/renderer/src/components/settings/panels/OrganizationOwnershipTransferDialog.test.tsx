@@ -1,7 +1,7 @@
 import React from 'react'
 import { fireEvent, render, screen } from '@testing-library/react'
 import { describe, expect, it, vi } from 'vitest'
-import type { OrganizationMember } from '@tabtin/app-shell'
+import type { OrganizationMember } from '@muse/app-shell'
 
 vi.mock('react-i18next', () => ({
   useTranslation: () => ({

@@ -9,7 +9,7 @@ vi.mock('@components/chat/preview/downloadPreviewResource', () => ({
   downloadPreviewResource: (...args: unknown[]) => downloadPreviewResourceSpy(...args),
 }))
 
-vi.mock('@tabtin/smartsheet-ui', () => ({
+vi.mock('@muse/smartsheet-ui', () => ({
   toast: Object.assign(vi.fn(), {
     success: vi.fn(),
     error: vi.fn(),
@@ -17,7 +17,7 @@ vi.mock('@tabtin/smartsheet-ui', () => ({
   ToastAction: () => null,
 }))
 
-vi.mock('@tabtin/table-core', () => ({
+vi.mock('@muse/table-core', () => ({
   AttachmentApiService: {
     resolveAccessUrl: (...args: unknown[]) => resolveAccessUrlSpy(...args),
   },

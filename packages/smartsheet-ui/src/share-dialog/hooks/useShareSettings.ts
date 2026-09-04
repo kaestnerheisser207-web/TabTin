@@ -18,7 +18,7 @@
  */
 
 import { useCallback, useEffect, useMemo, useState } from 'react'
-import { useAppHostClient } from '@tabtin/app-host-sdk'
+import { useAppHostClient } from '@muse/app-host-sdk'
 import type { ResourceType, ShareSettings, ShareScope } from '../types'
 
 interface RawShareResponse {

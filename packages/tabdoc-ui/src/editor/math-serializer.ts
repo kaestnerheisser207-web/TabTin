@@ -1,7 +1,7 @@
 /**
  * TabDoc 平台公式节点
  *
- * Canonical 与 Django / @tabtin/doc-editor / serverSchema 对齐：
+ * Canonical 与 Django / @muse/doc-editor / serverSchema 对齐：
  * - `mathematics`：行内
  * - `mathematicsBlock`：块级
  *

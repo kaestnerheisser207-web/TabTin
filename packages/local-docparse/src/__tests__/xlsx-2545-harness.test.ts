@@ -4,14 +4,14 @@
  * 用真实 .xlsx fixture 跑 handleParseXlsx，解析返回的 markdown 表格提取行列维度，
  * 与云端 openpyxl 路径 (tests_2545_harness.py) 对比，定位"偶现 1×1"根因。
  *
- * 放在 packages/local-docparse/src/__tests__/ 下，被 `pnpm --filter @tabtin/local-docparse test`
+ * 放在 packages/local-docparse/src/__tests__/ 下，被 `pnpm --filter @muse/local-docparse test`
  * 发现。fixture 跨包引用 apps/tabtin-electron/fixtures/poc-xlsx/（沿用 daemon 测试的
  * 跨包 fixture 约定）。
  *
  * 结果 JSON 写到 apps/tabtin-electron/fixtures/poc-xlsx/_harness-results/local.json
  * （_harness-results/ 已 gitignore）。
  *
- * 复跑：pnpm --filter @tabtin/local-docparse test xlsx-2545
+ * 复跑：pnpm --filter @muse/local-docparse test xlsx-2545
  */
 import { describe, it, expect } from 'vitest'
 import { resolve, dirname } from 'node:path'

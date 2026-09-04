@@ -43,8 +43,8 @@ _tabtin_env_value_any() {
 
 _tabtin_db_mode() {
   local root_dir="${1:-.}"
-  local mode="${TABTIN_DATABASE_MODE:-}"
-  [[ -z "${mode}" ]] && mode="$(_tabtin_env_value_any TABTIN_DATABASE_MODE "${root_dir}")"
+  local mode="${MUSE_DATABASE_MODE:-}"
+  [[ -z "${mode}" ]] && mode="$(_tabtin_env_value_any MUSE_DATABASE_MODE "${root_dir}")"
   echo "${mode:-single_pg}" | tr '[:upper:]' '[:lower:]'
 }
 
@@ -199,7 +199,7 @@ _tcp_open() {
 
 # 本地基础设施是否都已可连。不区分 brew 原生还是已起的 docker 容器——「能连上就不必再起」。
 # 单库架构只 gate PostgreSQL + Redis。PG host/port 默认 127.0.0.1:5432（与
-# docker-compose.dev.yml + brew 默认一致），可用 TABTIN_PG_HOST/PORT 覆盖。
+# docker-compose.dev.yml + brew 默认一致），可用 MUSE_PG_HOST/PORT 覆盖。
 _infra_reachable() {
   local root_dir="${1:-.}"
   local env_file
@@ -207,8 +207,8 @@ _infra_reachable() {
   _redis_load_endpoint "${env_file}"
   _redis_ping || return 1
   local pg_host pg_port
-  pg_host="${TABTIN_PG_HOST:-$(_tabtin_env_value_any PG_DB_HOST "${root_dir}")}"
-  pg_port="${TABTIN_PG_PORT:-$(_tabtin_env_value_any PG_DB_PORT "${root_dir}")}"
+  pg_host="${MUSE_PG_HOST:-$(_tabtin_env_value_any PG_DB_HOST "${root_dir}")}"
+  pg_port="${MUSE_PG_PORT:-$(_tabtin_env_value_any PG_DB_PORT "${root_dir}")}"
   _tcp_open "${pg_host:-127.0.0.1}" "${pg_port:-5432}" || return 1
   return 0
 }

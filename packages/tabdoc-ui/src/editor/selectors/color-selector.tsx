@@ -1,7 +1,7 @@
 import { Check, ChevronDown } from 'lucide-react'
 import { EditorBubbleItem, useEditor } from 'novel'
 import { useTranslation } from 'react-i18next'
-import { Button, Popover, PopoverContent, PopoverTrigger, ScrollArea } from '@tabtin/smartsheet-ui'
+import { Button, Popover, PopoverContent, PopoverTrigger, ScrollArea } from '@muse/smartsheet-ui'
 import { BubbleToolbarTooltip } from './bubble-toolbar-tooltip'
 import { TABDOC_FLOATING_MENU_SURFACE_CLASS } from '../floating-menu-surface'
 

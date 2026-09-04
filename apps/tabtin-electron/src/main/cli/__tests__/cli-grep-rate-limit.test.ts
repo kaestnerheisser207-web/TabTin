@@ -52,10 +52,10 @@ vi.mock('../routes/skills', () => ({ handleSkillsRoute: vi.fn() }))
 vi.mock('../routes/speech', () => ({ handleSpeechRoute: vi.fn() }))
 
 // PlatformSurface 重构（2026-05）后，code / table / space / 等路由已迁移到
-// @tabtin/cli-routes。`handleCodeRoute` 用瞬时 200 mock，让本测试聚焦
+// @muse/cli-routes。`handleCodeRoute` 用瞬时 200 mock，让本测试聚焦
 // cli-server.ts 内嵌的 RP-018 SlidingWindowRateLimiter 行为，而不是真实
 // grep_search（真实跑 ~1s/次会触发 vitest test timeout）。
-vi.mock('@tabtin/cli-routes', () => ({
+vi.mock('@muse/cli-routes', () => ({
   configureCLIRoutes: vi.fn(),
   handleCodeRoute: vi.fn(async (_url: string, _method: string, _body: any, _res: any, sendJSON: any) => {
     sendJSON(_res, 200, { ok: true, data: { output: '' } })

@@ -19,7 +19,7 @@ import {
 import type { EditorView } from '@tiptap/pm/view'
 import type { Editor, Range } from '@tiptap/core'
 import { Command, createSuggestionItems, renderItems } from 'novel'
-import { OVERLAY_SURFACE_CLASS } from '@tabtin/smartsheet-ui'
+import { OVERLAY_SURFACE_CLASS } from '@muse/smartsheet-ui'
 import { TABDOC_FLOATING_MENU_SURFACE_CLASS } from './floating-menu-surface'
 import {
   createSlashRemoteOriginGate,

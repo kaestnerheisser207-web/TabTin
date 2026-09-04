@@ -19,12 +19,12 @@ import fs from 'node:fs'
 import fsPromises from 'node:fs/promises'
 import nodePath from 'node:path'
 import { randomUUID } from 'node:crypto'
-import { okResponse } from '@tabtin/agent-wire'
+import { okResponse } from '@muse/agent-wire'
 import { getCLISpaceId, getCLIOrganizationId, getCLIOrganizationRoot } from '../cli-context'
 import { djangoRequest, errorResponse, type SendJSON } from './shared/error-handler'
 import { copyDirSafe, resolveTemplatePath, provisionTokenAndWriteEnv, hasValidTokenInEnvFile, fixWorkspaceDeps } from '../../utils/tabsite-helpers'
-import { resolveDataRoot, resolveSpacesRoot } from '@tabtin/terminal-core'
-import { resolveWorkspaceSiteDir } from '@tabtin/agent-runtime'
+import { resolveDataRoot, resolveSpacesRoot } from '@muse/terminal-core'
+import { resolveWorkspaceSiteDir } from '@muse/agent-runtime'
 import { sanitizePathSegment } from '../../utils/path-sanitize'
 import { createLogger } from '../../logger'
 import { TokenManager } from '../../auth'
@@ -50,7 +50,7 @@ function getSpaceId(body?: any): string | null {
 }
 
 function getOrganizationId(body?: any): string | null {
-  return body?.organization_id || process.env.TABTIN_ORGANIZATION_ID || getCLIOrganizationId() || null
+  return body?.organization_id || process.env.MUSE_ORGANIZATION_ID || getCLIOrganizationId() || null
 }
 
 // ── Route handler ────────────────────────────────────────
@@ -431,11 +431,11 @@ export async function handleTabsiteRoute(
     // DVC-005: compute cdnBaseUrl deterministically from ENV + folder,
     // not from cdn_url (which differs for instant-upload / deduped files)
     let cdnBaseUrl = ''
-    const cdnDomain = process.env.TABTIN_CDN_DOMAIN || process.env.ALIYUN_OSS_CDN_DOMAIN || ''
+    const cdnDomain = process.env.MUSE_CDN_DOMAIN || process.env.ALIYUN_OSS_CDN_DOMAIN || ''
     if (cdnDomain) {
       cdnBaseUrl = `https://${cdnDomain}/${folder}`
     } else {
-      const ossDomain = process.env.ALIYUN_OSS_ENDPOINT || process.env.TABTIN_OSS_DOMAIN || ''
+      const ossDomain = process.env.ALIYUN_OSS_ENDPOINT || process.env.MUSE_OSS_DOMAIN || ''
       const bucket = process.env.ALIYUN_OSS_BUCKET || ''
       if (ossDomain && bucket) {
         cdnBaseUrl = `https://${bucket}.${ossDomain}/${folder}`
@@ -572,7 +572,7 @@ export async function handleTabsiteRoute(
     const distUrl = cdnBaseUrl ? `${cdnBaseUrl}/` : ''
 
     if (!distUrl) {
-      sendJSON(res, 500, errorResponse('UNAVAILABLE', '上传成功但无法推导 dist_url，请检查 CDN/OSS 域名环境变量（TABTIN_CDN_DOMAIN 或 ALIYUN_OSS_CDN_DOMAIN）', {
+      sendJSON(res, 500, errorResponse('UNAVAILABLE', '上传成功但无法推导 dist_url，请检查 CDN/OSS 域名环境变量（MUSE_CDN_DOMAIN 或 ALIYUN_OSS_CDN_DOMAIN）', {
         detail: {
           uploaded_keys: uploadedKeys,
           uploaded_count: uploadedCount,

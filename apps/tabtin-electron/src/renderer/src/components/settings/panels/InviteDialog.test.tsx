@@ -27,7 +27,7 @@ type MockButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {
   size?: string
 }
 
-vi.mock('@tabtin/smartsheet-ui', () => ({
+vi.mock('@muse/smartsheet-ui', () => ({
   Button: ({ children, type = 'button', variant: _variant, size: _size, ...props }: MockButtonProps) => (
     <button type={type} {...props}>{children}</button>
   ),
@@ -54,7 +54,7 @@ vi.mock('@/config/api', () => ({
   buildPublicInviteUrl: (token: string) => `https://tabtin.example.com/invite/${token}`,
 }))
 
-vi.mock('@tabtin/app-shell', () => ({
+vi.mock('@muse/app-shell', () => ({
   UI_ASSIGNABLE_ROLES: ['editor'],
 }))
 

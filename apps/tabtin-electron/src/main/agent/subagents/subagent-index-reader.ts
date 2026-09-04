@@ -33,8 +33,8 @@
 
 import * as fs from 'node:fs'
 import * as path from 'node:path'
-import { foldSubagentRuns } from '@tabtin/agent-runtime'
-import type { SubagentIndexEntry } from '@tabtin/agent-runtime'
+import { foldSubagentRuns } from '@muse/agent-runtime'
+import type { SubagentIndexEntry } from '@muse/agent-runtime'
 
 /**
  * 与 `SubagentRun`（renderer 端 chat/types.ts）形态对齐的"归档快照"。

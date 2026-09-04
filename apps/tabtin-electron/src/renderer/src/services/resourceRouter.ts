@@ -1,8 +1,8 @@
 /**
  * resourceRouter — renderer 侧 ResourceRouter 单例 + 接入 W2 协议骨架
  *
- * 把 `@tabtin/resource-router` 的核心 ResourceRouter / Registry 与 renderer 内
- * 真实运行时（contextRegistry / useSpaceContextTabsStore / window.tabtin.openExternal）
+ * 把 `@muse/resource-router` 的核心 ResourceRouter / Registry 与 renderer 内
+ * 真实运行时（contextRegistry / useSpaceContextTabsStore / window.muse.openExternal）
  * 接通，对外仅暴露：
  *   - `resourceRouter`     — 单例实例，chat MarkdownRenderer / 右键菜单 / open_in_space
  *                            等所有「在 Space 内打开」入口共用
@@ -12,7 +12,7 @@
  *   - ContextRegistryAdapter 直接读 contextRegistry，不另起一套 lookup
  *   - openResourceTab 直接走 useSpaceContextTabsStore.openResourceTab，
  *     不再"if type==='X' 分支调"——分支化是 D1 哲学反例
- *   - shellOpenExternal 走 preload `window.tabtin.openExternal`（IPC API 保留，
+ *   - shellOpenExternal 走 preload `window.muse.openExternal`（IPC API 保留，
  *     仅协议白名单删；详见 `apps/.../main/file-system/ipc.ts:shell:openExternal`）
  *   - preferenceStore 由 W4 wireResourceRouter() 注入 useResourceOpenPreferences
  *     zustand store 的 adapter（D2 第 1 层 user_pref + 第 2 层 session_override 数据源）
@@ -22,7 +22,7 @@
  * 函数闭包注入：renderer 启动期由 `wireResourceRouter()` 一次性绑定。
  */
 
-import { ResourceRouter, ResourceRouterRegistry } from '@tabtin/resource-router'
+import { ResourceRouter, ResourceRouterRegistry } from '@muse/resource-router'
 import { createLogger } from '@/utils/logger'
 import type {
   ContextRegistryAdapter,
@@ -32,7 +32,7 @@ import type {
   ResourceOpenEvent,
   ResourceOpenPreferenceStore,
   ResourcePointerType,
-} from '@tabtin/resource-router'
+} from '@muse/resource-router'
 
 const log = createLogger('resourceRouter')
 let recordFocusRequestSequence = 0

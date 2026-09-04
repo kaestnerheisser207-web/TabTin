@@ -8,7 +8,7 @@ import type {
   Model,
   ModelParamOverrides,
   ModelParamValue,
-} from '@tabtin/chat-client'
+} from '@muse/chat-client'
 import { ContextSelector, shouldShowContextSelector } from './ContextSelector'
 import { ModelFastToggle, shouldShowModelFastToggle } from './ModelFastToggle'
 import {

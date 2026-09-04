@@ -46,9 +46,9 @@ export function checkViewTaskLock(tabId: string | null): boolean {
   }
 }
 
-const shouldLogTabSwitch = process.env.TABTIN_DEBUG_TAB_SWITCH === '1'
-const shouldLogCrawlViewVerbose = process.env.TABTIN_DEBUG_CRAWLVIEW_VERBOSE === '1'
-const shouldLogCrawlBounds = process.env.TABTIN_DEBUG_CRAWL_BOUNDS === '1' || shouldLogCrawlViewVerbose
+const shouldLogTabSwitch = process.env.MUSE_DEBUG_TAB_SWITCH === '1'
+const shouldLogCrawlViewVerbose = process.env.MUSE_DEBUG_CRAWLVIEW_VERBOSE === '1'
+const shouldLogCrawlBounds = process.env.MUSE_DEBUG_CRAWL_BOUNDS === '1' || shouldLogCrawlViewVerbose
 const logCrawlViewVerbose = (message: string, payload?: Record<string, unknown>) => {
   if (!shouldLogCrawlViewVerbose) return
   if (payload) { logger.info(message, payload); return }
@@ -376,12 +376,12 @@ export async function showEmbeddedView(
     const viewUrl = view.webContents.getURL()
     // 防御主窗口 webContents 被错误地当成子视图重新挂载。覆盖三种主 renderer 形态：
     //   - dev: vite dev server (localhost:5170-5189)
-    //   - packaged: tabtin-file://app/index.html（主窗口/分离 chat 窗口都用这个 origin）
+    //   - packaged: muse-file://app/index.html（主窗口/分离 chat 窗口都用这个 origin）
     //   - 历史 file:// 加载（防回退）
     if (viewUrl && (
       viewUrl.includes('localhost:517') ||
       viewUrl.includes('localhost:518') ||
-      viewUrl.startsWith('tabtin-file://app/') ||
+      viewUrl.startsWith('muse-file://app/') ||
       viewUrl.includes('/renderer/index.html')
     )) {
       logger.error('🚨 阻止将主窗口添加为子视图！', { tabId, url: viewUrl })

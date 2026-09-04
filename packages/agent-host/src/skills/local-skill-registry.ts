@@ -57,7 +57,7 @@ import {
   type SkillResourceEntry,
   type SkillResourceReadResult,
   type HiddenSkillSets,
-} from '@tabtin/agent-runtime/skills';
+} from '@muse/agent-runtime/skills';
 
 /**
  * Tier-3 附属资源目录（相对 skill 根，即 SKILL.md 所在目录）。
@@ -121,7 +121,7 @@ export interface RegistryOptions {
   logger?: RegistryLogger;
   /**
    * Skill 召回端口（ /  Stage 6c）。宿主注入
-   * `@tabtin/search` 的 `RecallIndex`；单测可传 `createLexicalSkillRecall()`。
+   * `@muse/search` 的 `RecallIndex`；单测可传 `createLexicalSkillRecall()`。
    * 缺省不再静默建 BM25——避免生产双 scorer。
    */
   skillRecall?: SkillRecallPort;

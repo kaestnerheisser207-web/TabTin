@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { splitRegisterContact } from '@tabtin/shared/auth-forms'
+import { splitRegisterContact } from '@muse/shared/auth-forms'
 
 describe('admin login contact', () => {
   it('admin register payload uses email field', () => {

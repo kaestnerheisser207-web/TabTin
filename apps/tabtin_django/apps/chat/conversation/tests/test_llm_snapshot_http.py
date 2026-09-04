@@ -34,7 +34,7 @@ def _snapshot_body(**overrides):
     return body
 
 
-@override_settings(TABTIN_REQUIRE_INVITE_CODE=False)
+@override_settings(MUSE_REQUIRE_INVITE_CODE=False)
 class LlmSnapshotHttpTest(TransactionTestCase):
     databases = {"default", "postgresql"}
 

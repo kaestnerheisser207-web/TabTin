@@ -21,7 +21,7 @@ import {
   ToolbarIconBtn, FieldLabel, NumberInput, ColorSwatch, RangeSlider,
   PanelSelect, PanelInput,
 } from './right-sidebar/shared/components'
-import { SectionPanel } from '@tabtin/smartsheet-ui'
+import { SectionPanel } from '@muse/smartsheet-ui'
 import {
   PageIcon, MoveIcon, TransformIcon, CloseIcon,
 } from './right-sidebar/shared/icons'

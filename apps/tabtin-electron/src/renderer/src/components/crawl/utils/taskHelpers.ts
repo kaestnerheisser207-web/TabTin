@@ -17,7 +17,7 @@ import {
   isValidUrl,
   formatDuration,
   formatProgress
-} from '@tabtin/crawlspace-core'
+} from '@muse/crawlspace-core'
 
 // ✅ 重新导出供其他组件使用
 export { autocompleteUrl, isValidUrl, formatDuration, formatProgress }
@@ -203,7 +203,7 @@ export function getOptimalRatio(stage: TaskStage): number {
   }
 }
 
-// ✅ autocompleteUrl 和 isValidUrl 已迁移到 @tabtin/crawlspace-core
+// ✅ autocompleteUrl 和 isValidUrl 已迁移到 @muse/crawlspace-core
 
 /**
  * 自动生成字段映射
@@ -236,4 +236,4 @@ function formatFieldName(field: string): string {
   return key ? i18n.t(key) : field
 }
 
-// ✅ formatProgress 和 formatDuration 已迁移到 @tabtin/crawlspace-core
+// ✅ formatProgress 和 formatDuration 已迁移到 @muse/crawlspace-core

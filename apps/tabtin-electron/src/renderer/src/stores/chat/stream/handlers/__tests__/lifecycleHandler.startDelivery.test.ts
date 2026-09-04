@@ -2,7 +2,7 @@
  * ：lifecycle phase=start 清 sending 的行为断言（非源码嗅探）。
  */
 import { beforeEach, describe, expect, it, vi } from 'vitest'
-import type { ChatMessage } from '@tabtin/chat-client'
+import type { ChatMessage } from '@muse/chat-client'
 import type { HandlerContext } from '../streamHandlerTypes'
 
 const storeState = {

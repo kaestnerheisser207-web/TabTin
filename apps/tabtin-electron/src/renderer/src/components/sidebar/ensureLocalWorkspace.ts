@@ -20,7 +20,7 @@ import { useSpaceStore } from '@stores/useSpaceStore';
 import { useOrganizationStore } from '@stores/useOrganizationStore';
 import { registerResetAction } from '@stores/sessionResetRegistry';
 import { createLogger } from '@utils/logger';
-import { WorkspaceApiService } from '@tabtin/app-shell';
+import { WorkspaceApiService } from '@muse/app-shell';
 import { resolveLocalWorkspaceNeed } from './localWorkspaceNeed';
 
 export {
@@ -180,7 +180,7 @@ export async function ensureLocalWorkspaceForOrganization(
     const organizationName = resolveOrganizationName(organizationId);
     const spaceName = DEFAULT_LOCAL_WORKSPACE_NAME;
 
-    const dir = await window.tabtin?.fileSystem?.ensureDefaultAgentDir({
+    const dir = await window.muse?.fileSystem?.ensureDefaultAgentDir({
       organizationName,
       spaceName,
     });

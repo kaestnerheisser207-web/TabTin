@@ -892,7 +892,7 @@ export class StreamManager {
     }, 'stream.abort')
 
     // M5.Y：不再通过 HTTP 取消后端 run。主叫方若需要真正中断执行，
-    // 应走本地 Runtime IPC（`window.tabtin.agentEngine.abort`）或 Daemon
+    // 应走本地 Runtime IPC（`window.muse.agentEngine.abort`）或 Daemon
     // WS cancel。此处只解除本地监听和 WS 订阅。
     return {
       cancelRequested: false,

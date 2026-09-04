@@ -28,10 +28,10 @@ _DJANGO_ROOT = Path(__file__).resolve().parents[3]
 
 
 def _redis_server_binary() -> str:
-    configured = os.getenv("TABTIN_TEST_REDIS_SERVER_BIN", "").strip()
+    configured = os.getenv("MUSE_TEST_REDIS_SERVER_BIN", "").strip()
     binary = configured or shutil.which("redis-server")
     if not binary:
-        pytest.skip("set TABTIN_TEST_REDIS_SERVER_BIN to run real Redis tests")
+        pytest.skip("set MUSE_TEST_REDIS_SERVER_BIN to run real Redis tests")
     return binary
 
 

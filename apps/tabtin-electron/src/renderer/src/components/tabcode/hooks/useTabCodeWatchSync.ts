@@ -171,7 +171,7 @@ export function useTabCodeWatchSync<TData>({
           // 重读 fail-soft（parent 可能已被删除）—— isLegacyOk 收口。parent
           // 已删时 removeEntriesByParent 已清掉旧条目，readDir 失败走 catch
           // 不再 addEntry，正好达到"该目录下条目清零"的预期。
-          const parentDirRes = await window.tabtin.fileSystem.readDir(parent)
+          const parentDirRes = await window.muse.fileSystem.readDir(parent)
           if (!isLegacyOk(parentDirRes) || !parentDirRes.entries) continue
           if (renameRevisionByParentRef.current.get(parentKey) !== revision) {
             // 后续 rename 已开始：当前结果可能是旧快照，丢弃并触发全量重建

@@ -9,7 +9,7 @@
  */
 
 import { describe, it, expect, vi, beforeEach } from 'vitest'
-import type { ApprovalMemoStore } from '@tabtin/agent-runtime/permissions'
+import type { ApprovalMemoStore } from '@muse/agent-runtime/permissions'
 
 /** 每个 session 一份内存 memo store 模拟（always cache 全局可见，模拟 Django 同源）。 */
 const alwaysStore = new Map<string, { decision: string; scope_description?: string }>()

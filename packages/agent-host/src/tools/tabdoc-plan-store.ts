@@ -2,7 +2,7 @@
  * 云端 document 载体 PlanStore —— 宿主侧业务实现。
  *
  * agent-runtime 只保留中性的 `PlanStore` 接口 + 本地文件实现（LocalFilePlanStore）；
- * 打远端 `/api/plan/*` 落云文档的实现属于 Muse 宿主业务，故落在 `@tabtin/agent-host`。
+ * 打远端 `/api/plan/*` 落云文档的实现属于 Muse 宿主业务，故落在 `@muse/agent-host`。
  * 本类实现 runtime 的 `PlanStore` 接口（`kind='document'`），由宿主装配 plan 工具时
  * 显式注入 `createPlanTools({ planStore })`（云端运行时使用）。
  *
@@ -10,23 +10,23 @@
  * 与错误翻译（{@link translateBackendError}），保证两种载体错误质量一致。
  */
 
-import type { PlanRef } from '@tabtin/agent-wire';
+import type { PlanRef } from '@muse/agent-wire';
 import type {
   PlanContentInput,
   PlanSnapshot,
   PlanStore,
   ToolContext,
-} from '@tabtin/agent-runtime'
+} from '@muse/agent-runtime'
 import type {
   AgentModeName,
-} from '@tabtin/agent-modes'
-import { normalizePlanTodos } from '@tabtin/agent-runtime';
+} from '@muse/agent-modes'
+import { normalizePlanTodos } from '@muse/agent-runtime';
 import type {
   NormalizedPlanTodo,
   PlanStoreResult,
   PlanTodoInput,
   PlanTodoStatus,
-} from '@tabtin/agent-runtime';
+} from '@muse/agent-runtime';
 import {
   joinApiPath,
   jsonError,
@@ -34,7 +34,7 @@ import {
   toJsonErrorMetadata,
   translateBackendError,
   UPSTREAM_ERROR,
-} from '@tabtin/agent-runtime/tools';
+} from '@muse/agent-runtime/tools';
 
 // ── 本地私有 helper（随本实现一起，不回落 runtime 内部符号） ──────────
 

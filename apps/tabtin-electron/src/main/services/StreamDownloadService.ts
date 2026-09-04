@@ -28,7 +28,7 @@ import { getUniquePath, formatBytes } from '../utils/file-path'
 import { findFFmpegSync } from '../utils/ffmpeg'
 import { logger } from '../utils/logger'
 import { isPathSafe, normalizeDownloadFilename } from '../download-security'
-import type { StreamVariant, M3U8Segment, ResourceCategory, ResourceRecord } from '@tabtin/action-tools/types'
+import type { StreamVariant, M3U8Segment, ResourceCategory, ResourceRecord } from '@muse/action-tools/types'
 import { StreamErrorCode } from '@shared/types/download'
 import type { StreamProgressEvent } from '@shared/types/download'
 

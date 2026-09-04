@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
-import { toast, ToastAction } from '@tabtin/smartsheet-ui/toast'
+import { toast, ToastAction } from '@muse/smartsheet-ui/toast'
 import { useAuthStore, selectIsAuthenticated } from '@stores/useAuthStore'
 import { useInvitationInboxStore } from '@stores/useInvitationInboxStore'
 import { InvitationListDialog } from '@/components/invitation/InvitationListDialog'

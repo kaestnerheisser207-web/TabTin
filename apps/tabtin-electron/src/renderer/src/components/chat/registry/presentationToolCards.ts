@@ -19,7 +19,7 @@
  *   - `cli_output_*` — 这是 mini-message kind，不是 tool_use
  */
 
-import type { ToolCardDescriptor } from '@tabtin/chat-client'
+import type { ToolCardDescriptor } from '@muse/chat-client'
 import { resolvePresentToUserItemLabel } from '../richContent/resolveResourceRefDisplayName'
 import { truncate, getNestedArgs, basename } from './toolCardUtils'
 

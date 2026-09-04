@@ -641,7 +641,7 @@ describe('pmJsonToMarkdown', () => {
           attrs: { src: '', fileId, alt: 'private' },
         }],
       }
-      expect(pmJsonToMarkdown(doc)).toBe(`![private](tabtin-file://asset/${fileId})`)
+      expect(pmJsonToMarkdown(doc)).toBe(`![private](muse-file://asset/${fileId})`)
     })
 
     it('should use standard Markdown for inline image with dimensions', () => {

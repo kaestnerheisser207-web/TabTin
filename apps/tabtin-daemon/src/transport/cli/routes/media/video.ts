@@ -1,5 +1,5 @@
 /**
- * 视频管线路由 — 委托给 @tabtin/media-capabilities 共享实现。
+ * 视频管线路由 — 委托给 @muse/media-capabilities 共享实现。
  *
  * 保持原有导出签名不变，daemon.ts 无需任何改动。
  */
@@ -7,7 +7,7 @@
 import {
   createVideoHandler,
   type EventPublisher,
-} from '@tabtin/media-capabilities/routes';
+} from '@muse/media-capabilities/routes';
 import { djangoRequest } from '../shared/error-handler.js';
 
 const instance = createVideoHandler({ djangoRequest });

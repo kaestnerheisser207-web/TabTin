@@ -1,5 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
-import type { ChatMessage } from '@tabtin/chat-client'
+import type { ChatMessage } from '@muse/chat-client'
 
 // ：跳转到未加载的旧消息应经后端 around= 端点自动加载上下文窗口，
 // 而不是只弹「请向上滚动」把加载责任甩给用户。本测试锁定 scrollToMessage /
@@ -135,7 +135,7 @@ vi.mock('../useSpaceContextTabsStore', () => ({
   },
 }))
 
-vi.mock('@tabtin/smartsheet-ui/toast', () => ({
+vi.mock('@muse/smartsheet-ui/toast', () => ({
   toast: mockToast,
 }))
 

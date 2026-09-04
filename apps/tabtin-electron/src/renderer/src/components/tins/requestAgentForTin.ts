@@ -10,7 +10,7 @@
  *   3. 直接发送预设 prompt
  */
 
-import { toast } from '@tabtin/smartsheet-ui'
+import { toast } from '@muse/smartsheet-ui'
 import i18n from '@/i18n'
 import { useChatStore } from '@/stores/chat/useChatStore'
 import { useUIStore } from '@/stores/useUIStore'

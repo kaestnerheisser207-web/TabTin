@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest'
-import type { ChatMessage, MessageBlock } from '@tabtin/chat-client'
+import type { ChatMessage, MessageBlock } from '@muse/chat-client'
 
 const runtimeHarness = vi.hoisted(() => ({
   reconcile: vi.fn().mockResolvedValue(undefined),

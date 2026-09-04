@@ -13,7 +13,7 @@
  *   GET  /speech/tts/voices/      → TTS 音色列表
  */
 
-import { createAudioHandler } from '@tabtin/media-capabilities/routes'
+import { createAudioHandler } from '@muse/media-capabilities/routes'
 import { djangoRequest } from './shared/error-handler'
 
 export const handleSpeechRoute = createAudioHandler({

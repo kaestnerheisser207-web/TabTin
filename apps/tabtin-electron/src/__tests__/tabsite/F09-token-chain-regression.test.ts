@@ -28,31 +28,31 @@ import { hasValidTokenInEnvFile, provisionTokenAndWriteEnv } from '../../main/ut
 // ─── TC-011 + WFE-021: hasValidTokenInEnvFile ───────────────────────
 
 describe('TC-011: hasValidTokenInEnvFile 过滤注释行', () => {
-  it('注释行 "# VITE_TABTIN_TOKEN=disabled" 不应被判为有效', () => {
+  it('注释行 "# VITE_MUSE_TOKEN=disabled" 不应被判为有效', () => {
     const content = [
-      '# VITE_TABTIN_TOKEN=disabled',
-      'VITE_TABTIN_API_URL=https://api.example.com',
+      '# VITE_MUSE_TOKEN=disabled',
+      'VITE_MUSE_API_URL=https://api.example.com',
     ].join('\n')
     expect(hasValidTokenInEnvFile(content)).toBe(false)
   })
 
   it('行首带空格的注释行也应被过滤', () => {
-    const content = '  # VITE_TABTIN_TOKEN=old-token\n'
+    const content = '  # VITE_MUSE_TOKEN=old-token\n'
     expect(hasValidTokenInEnvFile(content)).toBe(false)
   })
 
   it('正常 Token 行应被识别为有效', () => {
     const content = [
-      'VITE_TABTIN_API_URL=https://api.example.com',
-      'VITE_TABTIN_TOKEN=tok_abc123xyz',
+      'VITE_MUSE_API_URL=https://api.example.com',
+      'VITE_MUSE_TOKEN=tok_abc123xyz',
     ].join('\n')
     expect(hasValidTokenInEnvFile(content)).toBe(true)
   })
 
   it('Token 和注释同时存在时，识别非注释行的 Token', () => {
     const content = [
-      '# VITE_TABTIN_TOKEN=old-disabled',
-      'VITE_TABTIN_TOKEN=tok_real_value',
+      '# VITE_MUSE_TOKEN=old-disabled',
+      'VITE_MUSE_TOKEN=tok_real_value',
     ].join('\n')
     expect(hasValidTokenInEnvFile(content)).toBe(true)
   })
@@ -68,18 +68,18 @@ describe('TC-011: hasValidTokenInEnvFile 过滤注释行', () => {
 })
 
 describe('WFE-021: hasValidTokenInEnvFile 校验 token 值非空', () => {
-  it('空值 "VITE_TABTIN_TOKEN=" 应被判为无效', () => {
-    const content = 'VITE_TABTIN_TOKEN=\n'
+  it('空值 "VITE_MUSE_TOKEN=" 应被判为无效', () => {
+    const content = 'VITE_MUSE_TOKEN=\n'
     expect(hasValidTokenInEnvFile(content)).toBe(false)
   })
 
-  it('仅含空格的值 "VITE_TABTIN_TOKEN=  " 应被判为无效', () => {
-    const content = 'VITE_TABTIN_TOKEN=  \n'
+  it('仅含空格的值 "VITE_MUSE_TOKEN=  " 应被判为无效', () => {
+    const content = 'VITE_MUSE_TOKEN=  \n'
     expect(hasValidTokenInEnvFile(content)).toBe(false)
   })
 
   it('有效 token 值返回 true', () => {
-    const content = 'VITE_TABTIN_TOKEN=tok_valid_123\n'
+    const content = 'VITE_MUSE_TOKEN=tok_valid_123\n'
     expect(hasValidTokenInEnvFile(content)).toBe(true)
   })
 })
@@ -104,9 +104,9 @@ describe('WFE-003: provisionTokenAndWriteEnv 幂等场景处理', () => {
       data: {
         success: true,
         data: {
-          VITE_TABTIN_API_URL: 'https://api.example.com',
-          VITE_TABTIN_TOKEN: 'tok_new_123',
-          VITE_TABTIN_SPACE_ID: 'sp-1',
+          VITE_MUSE_API_URL: 'https://api.example.com',
+          VITE_MUSE_TOKEN: 'tok_new_123',
+          VITE_MUSE_SPACE_ID: 'sp-1',
         },
       },
     })
@@ -117,13 +117,13 @@ describe('WFE-003: provisionTokenAndWriteEnv 幂等场景处理', () => {
     expect(result.error).toBeUndefined()
 
     const envContent = await fsPromises.readFile(path.join(tmpDir, '.env.local'), 'utf-8')
-    expect(envContent).toContain('VITE_TABTIN_TOKEN=tok_new_123')
+    expect(envContent).toContain('VITE_MUSE_TOKEN=tok_new_123')
   })
 
   it('幂等场景：Django 成功但无明文 + .env.local 已有 Token → tokenProvisioned=true, tokenAlreadyExists=true', async () => {
     await fsPromises.writeFile(
       path.join(tmpDir, '.env.local'),
-      'VITE_TABTIN_TOKEN=tok_existing_456\nVITE_TABTIN_API_URL=https://api.example.com\n',
+      'VITE_MUSE_TOKEN=tok_existing_456\nVITE_MUSE_API_URL=https://api.example.com\n',
     )
 
     mockDjangoRequest.mockResolvedValue({
@@ -131,8 +131,8 @@ describe('WFE-003: provisionTokenAndWriteEnv 幂等场景处理', () => {
       data: {
         success: true,
         data: {
-          VITE_TABTIN_API_URL: 'https://api.example.com',
-          VITE_TABTIN_SPACE_ID: 'sp-1',
+          VITE_MUSE_API_URL: 'https://api.example.com',
+          VITE_MUSE_SPACE_ID: 'sp-1',
         },
       },
     })
@@ -149,8 +149,8 @@ describe('WFE-003: provisionTokenAndWriteEnv 幂等场景处理', () => {
       data: {
         success: true,
         data: {
-          VITE_TABTIN_API_URL: 'https://api.example.com',
-          VITE_TABTIN_SPACE_ID: 'sp-1',
+          VITE_MUSE_API_URL: 'https://api.example.com',
+          VITE_MUSE_SPACE_ID: 'sp-1',
         },
       },
     })
@@ -193,8 +193,8 @@ describe('TC-008: provisionTokenAndWriteEnv 传播 token_expires_soon', () => {
       data: {
         success: true,
         data: {
-          VITE_TABTIN_TOKEN: 'tok_expiring_soon',
-          VITE_TABTIN_API_URL: 'https://api.example.com',
+          VITE_MUSE_TOKEN: 'tok_expiring_soon',
+          VITE_MUSE_API_URL: 'https://api.example.com',
           token_expires_soon: true,
         },
       },
@@ -211,8 +211,8 @@ describe('TC-008: provisionTokenAndWriteEnv 传播 token_expires_soon', () => {
       data: {
         success: true,
         data: {
-          VITE_TABTIN_TOKEN: 'tok_fresh',
-          VITE_TABTIN_API_URL: 'https://api.example.com',
+          VITE_MUSE_TOKEN: 'tok_fresh',
+          VITE_MUSE_API_URL: 'https://api.example.com',
         },
       },
     })

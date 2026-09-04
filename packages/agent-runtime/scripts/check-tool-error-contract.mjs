@@ -268,7 +268,7 @@ function collectAllowedErrorKinds() {
   ]);
   const symbols = new Set();
 
-  // Wave 2: tool-layer string literals live in @tabtin/tool-errors generated SSoT.
+  // Wave 2: tool-layer string literals live in @muse/tool-errors generated SSoT.
   collectStringLiteralsFromFile(
     join(repoRoot, 'packages/tool-errors/src/_generated/kinds.generated.ts'),
     values,

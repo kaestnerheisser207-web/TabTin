@@ -11,7 +11,7 @@
  *   本地 predev 比那条纯构建多需要三件 CI 故意不要的东西，本脚本一并保留：
  *     1) 增量跳过：dist 已最新的包不重 build——warm restart 才能秒级，而 tsc/tsup/vite
  *        都不是便宜的增量构建，裸 `^... build` 每次 `pnpm dev` 都会全量重建 63 个包。
- *     2) Go CLI 构建：packages/tabtin-cli-go/dist/tabtin(.exe)（不是 npm 包，`^...` 覆盖不到，
+ *     2) Go CLI 构建：packages/tabtin-cli-go/dist/muse(.exe)（不是 npm 包，`^...` 覆盖不到，
  *        但生产 `tabtin` 命令就指向它，必须跟 workspace 产物一起对齐）。
  *     3) workspace 构建锁：由 scripts/electron/run-predev-build-with-lock.mjs 持有，避免与
  *        tabtin-web 的 table 构建并行写 dist 导致竞态与虚假 TS 错误。
@@ -151,8 +151,8 @@ function normalizeBuildArch(value) {
 }
 
 function goBuildTargetEnv() {
-  const goos = normalizeBuildTarget(process.env.TABTIN_BUILD_TARGET);
-  const goarch = normalizeBuildArch(process.env.TABTIN_BUILD_ARCH);
+  const goos = normalizeBuildTarget(process.env.MUSE_BUILD_TARGET);
+  const goarch = normalizeBuildArch(process.env.MUSE_BUILD_ARCH);
   if (!goos || !goarch) return {};
   return { GOOS: goos, GOARCH: goarch };
 }
@@ -205,7 +205,7 @@ function discoverWorkspace() {
   return { nameToDir, nameToManifest };
 }
 
-/** 取 manifest 在指定字段里的 @tabtin/* workspace:* 依赖 */
+/** 取 manifest 在指定字段里的 @muse/* workspace:* 依赖 */
 function workspaceDepsOf(manifest, fields) {
   const out = [];
   if (!manifest) return out; // 防幻影依赖（声明了 workspace:* 但包不存在）导致后续崩溃
@@ -213,7 +213,7 @@ function workspaceDepsOf(manifest, fields) {
     const block = manifest[field];
     if (!block) continue;
     for (const [name, spec] of Object.entries(block)) {
-      if (typeof spec === 'string' && spec.startsWith('workspace:') && name.startsWith('@tabtin/')) {
+      if (typeof spec === 'string' && spec.startsWith('workspace:') && name.startsWith('@muse/')) {
         out.push(name);
       }
     }
@@ -559,21 +559,21 @@ async function buildLevel(layerIdx, names, ctx) {
   }
 }
 
-// ─── Go CLI binary（packages/tabtin-cli-go/dist/tabtin[.exe]）──────────────
+// ─── Go CLI binary（packages/tabtin-cli-go/dist/muse[.exe]）──────────────
 //
-// 不是 npm workspace 包，不进依赖图拓扑（go 工具链独立）。但生产 tabtin 命令路径就是
-// packages/tabtin-cli-go/dist/tabtin(.exe)（被 apps/tabtin-electron/src/main/cli/cli-server.ts
+// 不是 npm workspace 包，不进依赖图拓扑（go 工具链独立）。但生产 muse 命令路径就是
+// packages/tabtin-cli-go/dist/muse(.exe)（被 apps/tabtin-electron/src/main/cli/cli-server.ts
 // 加进 PATH），所以必须跟其他 workspace 产物一起在 predev 阶段对齐到最新源码。
 //
-// 历史教训（W3 v1/v4，2026-05-04）：dist/tabtin mtime 落后源码 25 天，新增 cli flag
+// 历史教训（W3 v1/v4，2026-05-04）：dist/muse mtime 落后源码 25 天，新增 cli flag
 // 全没编译进生产 binary，LLM 调到的一直是旧版报 unknown flag。故这里带 mtime guard。
 function buildGoCli() {
   const cliDir = path.join(ROOT, 'packages', 'tabtin-cli-go');
   // win32 下产物必须带 .exe：① Windows 只能把带 .exe/PATHEXT 后缀的文件当命令执行，
   // 裸 `tabtin`（无后缀）在 cmd/powershell 里就是「不是内部或外部命令」；
-  // ② cli-server.ts 把 dist 加进 PATH 前会 existsSync(tabtin.exe)，名字不带 .exe 就检测不到、
+  // ② cli-server.ts 把 dist 加进 PATH 前会 existsSync(muse.exe)，名字不带 .exe 就检测不到、
   // 整个 Go CLI 都不会进 PATH。go build 对显式 `-o` 名不会自动补 .exe，必须我们自己补。
-  const binaryName = process.platform === 'win32' ? 'tabtin.exe' : 'tabtin';
+  const binaryName = process.platform === 'win32' ? 'muse.exe' : 'muse';
   const binaryRel = path.join('dist', binaryName);
   const binary = path.join(cliDir, binaryRel);
   const targetEnv = goBuildTargetEnv();

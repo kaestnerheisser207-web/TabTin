@@ -1,5 +1,5 @@
 {
-  "name": "@tabtin/smartsheet-adapter-web",
+  "name": "@muse/smartsheet-adapter-web",
   "version": "0.1.0",
   "description": "Web platform adapter for Muse applications",
   "main": "dist/index.js",
@@ -18,13 +18,13 @@
   "author": "Muse Team",
   "license": "MIT",
   "peerDependencies": {
-    "@tabtin/smartsheet": "workspace:*"
+    "@muse/smartsheet": "workspace:*"
   },
   "devDependencies": {
     "typescript": "5.7.2"
   },
   "dependencies": {
-    "@tabtin/smartsheet": "workspace:*"
+    "@muse/smartsheet": "workspace:*"
   },
   "files": [
     "dist"

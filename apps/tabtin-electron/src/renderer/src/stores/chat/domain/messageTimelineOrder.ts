@@ -1,4 +1,4 @@
-import type { ChatMessage, MessageBlock } from '@tabtin/chat-client'
+import type { ChatMessage, MessageBlock } from '@muse/chat-client'
 import type { ContentBlockEntry } from '@stores/useChatRuntimeStore'
 import { appendMissingUserAttachmentMediaBlocks } from './userMediaMerge'
 import { shouldHideLegacyWebSearchArtifactMessage } from './webSearchArtifactPolicy'

@@ -599,7 +599,7 @@
     <string name="chat_error_class_unknown_suggestion">Please try again. If the issue persists, let us know.</string>
 
     <!--
-      W1 (2026-05-13) File pipeline tool errors (aligned with @tabtin/file-pipeline-errors SSoT).
+      W1 (2026-05-13) File pipeline tool errors (aligned with @muse/file-pipeline-errors SSoT).
       Used to route tool_call envelope failures by error_kind to short English text.
       Mirrors Electron chat.json toolError section one-to-one.
     -->

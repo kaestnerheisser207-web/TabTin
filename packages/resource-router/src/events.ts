@@ -1,5 +1,5 @@
 /**
- * @tabtin/resource-router · events
+ * @muse/resource-router · events
  *
  * 埋点事件 emit helper。
  *

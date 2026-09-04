@@ -511,7 +511,7 @@ class ProjectTaskService:
         if not thread_id:
             raise ServiceError('PROJECT_TASK_SESSION_REQUIRED', '缺少当前执行会话', 400)
 
-        # CLI 的 TABTIN_THREAD_ID 可能是 runtime thread_id，也可能是
+        # CLI 的 MUSE_THREAD_ID 可能是 runtime thread_id，也可能是
         # ``chat-session-<uuid>`` / 原始 session UUID；统一走既有解析约定。
         from django.core.exceptions import ValidationError
 

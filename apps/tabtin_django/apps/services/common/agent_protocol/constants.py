@@ -19,7 +19,7 @@
 
 前后端对齐
 ---------
-本模块的事件常量类与 TS 协议包 ``@tabtin/agent-wire``（路径
+本模块的事件常量类与 TS 协议包 ``@muse/agent-wire``（路径
 ``packages/agent-wire/src/events.ts``）中的常量对象一一对应。``agent-wire``
 是当前协议 SSOT；历史路径 ``packages/ws-gateway-client/src/events.ts``
 对客户端订阅辅助类型仍在用，但**事件常量定义已统一收敛到 agent-wire**——

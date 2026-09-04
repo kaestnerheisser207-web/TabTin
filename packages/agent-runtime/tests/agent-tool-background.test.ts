@@ -33,12 +33,12 @@ import {
   composeNotificationPrompt,
   type NotificationEnvelope,
   type SubagentCompletedPayload,
-} from '@tabtin/terminal-core';
+} from '@muse/terminal-core';
 import {
   normalize as normalizePolicyPath,
   type EffectivePolicy,
   type MemoStore,
-} from '@tabtin/security-policy';
+} from '@muse/security-policy';
 import { ContentBlockEvents, StreamEvents } from '../src/engine/contracts/stream-events.js';
 import { createMockProvider, createMockPermissionHandler, createMockToolProvider } from './test-utils.js';
 import type {

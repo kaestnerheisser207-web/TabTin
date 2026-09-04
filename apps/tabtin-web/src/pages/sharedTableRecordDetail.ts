@@ -1,4 +1,4 @@
-import type { Field, FieldType, Table } from '@tabtin/table-core'
+import type { Field, FieldType, Table } from '@muse/table-core'
 
 export interface ShareScopedField {
   id: string

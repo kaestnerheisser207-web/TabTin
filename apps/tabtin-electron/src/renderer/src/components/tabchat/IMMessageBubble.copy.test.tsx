@@ -18,7 +18,7 @@ vi.mock('react-markdown', () => ({
   default: ({ children }: { children: React.ReactNode }) => <>{children}</>,
 }))
 
-vi.mock('@tabtin/smartsheet-ui', () => ({
+vi.mock('@muse/smartsheet-ui', () => ({
   toast: mockToast,
   resolveChoiceTagColors: () => ({ bg: '', text: '', border: '' }),
   FALLBACK_TAG_BG: '',

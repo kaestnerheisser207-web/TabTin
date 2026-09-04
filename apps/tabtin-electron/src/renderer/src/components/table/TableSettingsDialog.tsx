@@ -2,7 +2,7 @@
  * 表格设置对话框
  */
 
-import { joinApiPath } from '@tabtin/config'
+import { joinApiPath } from '@muse/config'
 import React, { useCallback, useEffect, useState } from 'react'
 import {
   Dialog,
@@ -10,7 +10,7 @@ import {
   Button,
   ScrollArea,
   toast,
-} from '@tabtin/smartsheet-ui'
+} from '@muse/smartsheet-ui'
 import { Settings, X } from 'lucide-react'
 import { useShallow } from 'zustand/react/shallow'
 import { useTableStore } from '@/stores/useTableStore'

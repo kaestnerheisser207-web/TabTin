@@ -19,7 +19,7 @@ vi.mock('@/services/trackerApi', () => ({
   getTask: (...args: unknown[]) => getTask(...args),
 }))
 
-vi.mock('@tabtin/smartsheet-ui/toast', () => ({
+vi.mock('@muse/smartsheet-ui/toast', () => ({
   toast: { error: vi.fn(), success: vi.fn() },
 }))
 

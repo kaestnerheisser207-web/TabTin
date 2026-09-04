@@ -1,10 +1,10 @@
-import { joinApiPath } from '@tabtin/config'
+import { joinApiPath } from '@muse/config'
 import React from 'react'
 import {
   type SlidePresentation,
   type SlidePreset,
-} from '@tabtin/tabslide'
-import { convertPagesToBackend } from '@tabtin/tabslide/exports'
+} from '@muse/tabslide'
+import { convertPagesToBackend } from '@muse/tabslide/exports'
 import { apiService } from '@/services/api'
 import { useOrganizationStore } from '@/stores/useOrganizationStore'
 import { useSpaceStore } from '@/stores/useSpaceStore'
@@ -275,7 +275,7 @@ export function fireAndForgetSave(
         // 非 Electron 环境（web preview / 调试 BrowserWindow）下离场保存必须用
         // browser fetch + keepalive：electronFetch 走 IPC，page unload 后 IPC 通道
         // 立即关闭，最后一次保存会丢。这条分支在 Electron 主窗口里不会触发。
-        // eslint-disable-next-line tabtin/no-direct-fetch-in-renderer -- 非 Electron 环境 + fetch keepalive 语义保证 page unload 时仍能完成最后一次保存
+        // eslint-disable-next-line muse/no-direct-fetch-in-renderer -- 非 Electron 环境 + fetch keepalive 语义保证 page unload 时仍能完成最后一次保存
         fetch(url, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },

@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 
-vi.mock('@tabtin/smartsheet-ui/toast', () => ({
+vi.mock('@muse/smartsheet-ui/toast', () => ({
   toast: {
     info: vi.fn(),
     warning: vi.fn(),
@@ -22,7 +22,7 @@ vi.mock('@/i18n', () => ({
   },
 }))
 
-vi.mock('@tabtin/ws-gateway-client', () => ({
+vi.mock('@muse/ws-gateway-client', () => ({
   AgentStreamEvents: {
     SYSTEM_NOTICE: 'agent.stream.system_notice',
     CONTEXT_PRESSURE: 'agent.stream.context_pressure',

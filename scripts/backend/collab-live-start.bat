@@ -13,7 +13,7 @@ set "PORT=%COLLAB_LIVE_PORT%"
 set "DJANGO_API_URL=http://127.0.0.1:%DJANGO_BIND_PORT%"
 set "COLLAB_LIVE_DIR=%ROOT_DIR%\apps\collab-live"
 echo [COLLAB] Preparing workspace dependencies...
-if "%TABTIN_SKIP_COLLAB_WORKSPACE_BUILD%"=="1" (
+if "%MUSE_SKIP_COLLAB_WORKSPACE_BUILD%"=="1" (
   echo [COLLAB] Workspace dependencies already prepared by Community topology; skipping.
 ) else (
   node "%ROOT_DIR%\scripts\electron\run-predev-build-with-lock.mjs" --seed collab-live

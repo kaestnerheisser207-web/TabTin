@@ -9,7 +9,7 @@ vi.mock('@/constants/upload', () => ({
   validateUploadFile: (...args: unknown[]) => validateUploadFile(...args),
 }))
 
-vi.mock('@tabtin/tabdoc-ui/api-client', () => ({
+vi.mock('@muse/tabdoc-ui/api-client', () => ({
   presignCommentAttachmentUpload: (...args: unknown[]) => presignCommentAttachmentUpload(...args),
   confirmCommentAttachmentUpload: (...args: unknown[]) => confirmCommentAttachmentUpload(...args),
   isSignedCommentPreviewUrl: (url: string | null | undefined) => /^https?:\/\//i.test(String(url || '')),

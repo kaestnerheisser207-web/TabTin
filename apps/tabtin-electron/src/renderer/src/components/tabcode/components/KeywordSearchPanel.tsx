@@ -36,7 +36,7 @@ import {
   TooltipTrigger,
   toast,
   ToastAction,
-} from '@tabtin/smartsheet-ui'
+} from '@muse/smartsheet-ui'
 import { FileIcon } from '@components/shared/file-icon/FileIcon'
 import { cn } from '@utils/cn'
 import { createLogger } from '@/utils/logger'
@@ -646,7 +646,7 @@ export const KeywordSearchPanel: React.FC<KeywordSearchPanelProps> = ({
     }
     let shouldRefreshResults = false
     try {
-      const checkpointApi = window.tabtin?.checkpoint
+      const checkpointApi = window.muse?.checkpoint
       if (!checkpointApi) {
         toast({
           title: t('keywordSearch.replaceFailed'),
@@ -687,7 +687,7 @@ export const KeywordSearchPanel: React.FC<KeywordSearchPanelProps> = ({
         return
       }
 
-      const result = await window.tabtin.fileSystem.replaceInFiles({ rootPath, edits })
+      const result = await window.muse.fileSystem.replaceInFiles({ rootPath, edits })
       if (!result?.success && result.files.length === 0) {
         toast({
           title: t('keywordSearch.replaceFailed'),

@@ -3,9 +3,9 @@
 /**
  * 资源打开偏好 store —— W4「Agent 产物在 Space 内的打开」专题
  *
- * 同一份内容（如 `tabtin://resource/document/...` / `https://...` /
+ * 同一份内容（如 `muse://resource/document/...` / `https://...` /
  * `mailto:...`）可被多个 App 渲染。本 store 持有用户的两层选择，并按
- * `ResourceOpenPreferenceStore` 接口暴露给 `@tabtin/resource-router`：
+ * `ResourceOpenPreferenceStore` 接口暴露给 `@muse/resource-router`：
  *
  *   - **第 1 层 user_pref**（持久化）：用户在个人设置页"默认应用"配置的"始终用
  *     X 打开"——按 pointerKey 维度（`type:<ContextRefType>` 或
@@ -39,8 +39,8 @@
 
 import { create } from 'zustand'
 import { createJSONStorage, persist } from 'zustand/middleware'
-import { withPersistSafety } from '@tabtin/shared'
-import type { ResourceOpenPreferenceStore } from '@tabtin/resource-router'
+import { withPersistSafety } from '@muse/shared'
+import type { ResourceOpenPreferenceStore } from '@muse/resource-router'
 import { PERSIST_KEYS } from './persist-key-registry'
 import { markLocalChange, reconcileNamespace, scheduleNamespaceSave } from './uiSettingsSync'
 import { registerResetAction } from './sessionResetRegistry'

@@ -14,10 +14,10 @@ import { existsSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import type { Logger } from '../../platform/observability/logging/logger.js';
-import { checkHardlineCommand } from '@tabtin/security-policy';
+import { checkHardlineCommand } from '@muse/security-policy';
 import { checkDaemonPathAccess } from '../../application/security/path-access.js';
-import { getHomeTabtinPath } from '@tabtin/shared/storage-paths';
-import { okResponse } from '@tabtin/agent-wire';
+import { getHomeTabtinPath } from '@muse/shared/storage-paths';
+import { okResponse } from '@muse/agent-wire';
 import {
   SlidingWindowRateLimiter,
   parseBody,
@@ -35,7 +35,7 @@ import {
   configureSurfaceRuntime,
   createSurfacesEndpoint,
   scanMarketplaceManifests,
-} from '@tabtin/cli-server-core';
+} from '@muse/cli-server-core';
 import {
   configureCLIRoutes,
   handleTableRoute,
@@ -47,7 +47,7 @@ import {
   handleExtensionsRoute,
   handleOSSRoute,
   handleSearchRoute,
-} from '@tabtin/cli-routes';
+} from '@muse/cli-routes';
 import { configureDjangoProxy, clearDjangoProxy, updateDjangoProxyCredential } from './routes/shared/error-handler.js';
 import { handleSlideRoute } from './routes/media/slide.js';
 import { handleMediaRoute } from './routes/media/index.js';
@@ -60,7 +60,7 @@ import { handleAgentRoute } from './routes/agent/index.js';
 import { handleSkillsRoute } from './routes/skills/index.js';
 import { handleStorageRoute } from './routes/storage/index.js';
 import { djangoRequest, sendDjangoResult } from './routes/shared/error-handler.js';
-import { createHeadlessAdapter } from '@tabtin/action-tools/headless';
+import { createHeadlessAdapter } from '@muse/action-tools/headless';
 import {
   CliRequestContext,
   type CliRequestContextOptions,
@@ -69,7 +69,7 @@ import {
 import type { BrowserApplicationPort } from '../../base/browser/browser-application-port.js';
 import type { DaemonStorageApplication } from '../../application/storage/daemon-storage.js';
 // PlatformSurface 定义导入（Wave 3）：触发 chatExportMd 自动注册到 registry
-import '@tabtin/cli-server-core/surfaces/chat-export-md';
+import '@muse/cli-server-core/surfaces/chat-export-md';
 
 const LOG_TAG = '[CLI Server]';
 
@@ -278,12 +278,12 @@ function firstStringField(body: any, fields: readonly string[]): string {
  *
  * `evaluateCLIPolicy` 是模块顶层函数（被 handleRequest 直接调用），不持有
  * server 实例引用；用模块级单例 + setter 注入避免改动 evaluateCLIPolicy 的
- * 签名（避免破坏与 @tabtin/cli-routes 的契约）。
+ * 签名（避免破坏与 @muse/cli-routes 的契约）。
  *
  * 由 daemon.ts 在 startCLIServer 之后调 setCLIWorkspaceSnapshotResolver 注入。
  */
 export function setCLIWorkspaceSnapshotResolver(
-  resolver: () => import('@tabtin/security-policy').WorkspaceSnapshot | null,
+  resolver: () => import('@muse/security-policy').WorkspaceSnapshot | null,
 ): void {
   requireCliContext().setWorkspaceSnapshotResolver(resolver);
 }
@@ -608,7 +608,7 @@ function startCLIServerInstance(owner: DaemonCliServer, config?: DaemonCLIServer
 
   context.setActionAdapter(createHeadlessAdapter());
 
-  // Wave 4b：把宿主特有能力注入 @tabtin/cli-routes 共享路由模块。
+  // Wave 4b：把宿主特有能力注入 @muse/cli-routes 共享路由模块。
   // djangoRequest 走 Daemon 的 proxyConfig（device credential），
   // actionExecutor 走 createHeadlessAdapter().executeAction，
   // workspaceRoot 用 process.cwd() 让 git/grep 等命令拿到正确的工作目录。

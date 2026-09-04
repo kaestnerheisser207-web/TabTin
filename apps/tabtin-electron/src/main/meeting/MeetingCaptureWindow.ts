@@ -15,7 +15,7 @@ import { registerTabtinFileProtocol } from '../file-system/protocol';
 import { installDisplayMediaHandlers } from '../services/display-media';
 
 const CAPTURE_PARTITION = 'persist:tabtin:meeting-capture';
-const PACKAGED_CAPTURE_URL = 'tabtin-file://app/meeting-capture.html';
+const PACKAGED_CAPTURE_URL = 'muse-file://app/meeting-capture.html';
 const DEFAULT_CAPTURE_RUNTIME_WATCHDOG_MS = 30_000;
 
 type CaptureMethod =
@@ -180,7 +180,7 @@ export class MeetingCaptureWindow implements MeetingCaptureHost {
         ? ''
         : JSON.stringify(argument).replaceAll('<', '\\u003c');
     return window.webContents.executeJavaScript(
-      `globalThis.__TABTIN_MEETING_CAPTURE__.${method}(${serializedArgument})`,
+      `globalThis.__MUSE_MEETING_CAPTURE__.${method}(${serializedArgument})`,
       true,
     );
   }

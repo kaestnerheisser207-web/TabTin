@@ -24,7 +24,7 @@ import { useSkillsListQuery } from '@/hooks/queries/skills'
 import { normalizeSkillSource } from '@/skills/types'
 import { SubAgentTemplateApi, type SubAgentTemplate } from '@/services/subagentTemplateApi'
 import { RecordStyleApi, type AgentMemoStats } from '@/services/recordStyleApi'
-import type { Agent, Device } from '@tabtin/app-shell'
+import type { Agent, Device } from '@muse/app-shell'
 import { cn } from '@utils/cn'
 import { useIsRemoteViewer } from '@components/context-space/hooks/useIsRemoteViewer'
 import { ModulePreviewHint, ItemList } from './ProfileModuleRow'
@@ -360,7 +360,7 @@ export const WorkingDirPreview: React.FC<{
       return
     }
     let cancelled = false
-    const fs = window.tabtin?.fileSystem
+    const fs = window.muse?.fileSystem
     if (!fs?.pathExists) {
       setPathExists(null)
       return

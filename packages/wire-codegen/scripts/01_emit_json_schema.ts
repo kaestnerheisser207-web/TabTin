@@ -1,5 +1,5 @@
 /**
- * Step 1: zod schema (`@tabtin/agent-wire`) → JSON Schema (Draft 7) +
+ * Step 1: zod schema (`@muse/agent-wire`) → JSON Schema (Draft 7) +
  * 后处理（注入 `oneOf + discriminator: {propertyName: type}`，覆盖 zod-to-
  * json-schema 默认输出 anyOf 没 discriminator marker 的问题）。
  *
@@ -53,7 +53,7 @@ import {
   AskFormRequestSchema,
   RequestApprovalRequestSchema,
   DecisionReasonSchema,
-} from '@tabtin/agent-wire';
+} from '@muse/agent-wire';
 import { SCHEMAS_DIR } from './lib/paths.js';
 import { injectDiscriminatorMarkers } from './lib/inject_discriminator.js';
 

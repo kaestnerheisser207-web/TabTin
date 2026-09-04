@@ -11,14 +11,14 @@ import {
   RecordWriteFlow,
   LocalRecordRepository,
   buildFieldColumnMap,
-} from '@tabtin/table-kernel'
+} from '@muse/table-kernel'
 import type {
   TableSchema,
   FieldSchema,
   FieldColumnMap,
   ILocalDb,
   SyncDelta,
-} from '@tabtin/table-kernel'
+} from '@muse/table-kernel'
 import {
   initializeSchema,
   PGliteOutboxStore,

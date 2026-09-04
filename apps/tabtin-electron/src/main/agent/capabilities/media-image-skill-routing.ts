@@ -1,4 +1,4 @@
-import type { LocalSkill } from '@tabtin/agent-runtime/skills'
+import type { LocalSkill } from '@muse/agent-runtime/skills'
 
 type SkillIdentity = Pick<
   LocalSkill,

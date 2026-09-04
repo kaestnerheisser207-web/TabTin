@@ -1,7 +1,7 @@
 import {
   InMemoryPersistentQueue,
   type PersistedEntry,
-} from '@tabtin/agent-runtime'
+} from '@muse/agent-runtime'
 import { describe, expect, it, vi } from 'vitest'
 
 import {

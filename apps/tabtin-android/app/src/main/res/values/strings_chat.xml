@@ -618,7 +618,7 @@
     <string name="chat_error_class_unknown_suggestion">请重试，如果持续出现请反馈给我们。</string>
 
     <!--
-      W1（2026-05-13）File pipeline 工具错误 i18n（与 @tabtin/file-pipeline-errors SSoT 对齐）。
+      W1（2026-05-13）File pipeline 工具错误 i18n（与 @muse/file-pipeline-errors SSoT 对齐）。
       用于 tool_call envelope 失败时按 error_kind 路由到中文短文案。与 Electron
       chat.json toolError 段一一对应。
     -->

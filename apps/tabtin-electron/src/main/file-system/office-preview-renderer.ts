@@ -143,7 +143,7 @@ async function firstExistingFile(candidates: string[]): Promise<string | null> {
 async function resolveSofficePath(): Promise<string | null> {
   const resourcesPath = process.resourcesPath || ''
   const staticCandidates = [
-    ...pathCandidatesFromEnv('TABTIN_OFFICE_PREVIEW_SOFFICE_PATH', 'SOFFICE_PATH', 'LIBREOFFICE_PATH'),
+    ...pathCandidatesFromEnv('MUSE_OFFICE_PREVIEW_SOFFICE_PATH', 'SOFFICE_PATH', 'LIBREOFFICE_PATH'),
     path.join(resourcesPath, 'native', 'libreoffice-headless', 'bin', 'soffice'),
     path.join(resourcesPath, 'native', 'libreoffice-headless', 'bin', 'soffice.exe'),
     path.join(resourcesPath, 'native', 'libreoffice-headless', 'program', 'soffice.exe'),
@@ -171,7 +171,7 @@ async function resolveSofficePath(): Promise<string | null> {
 async function resolvePdfToPpmPath(): Promise<string | null> {
   const resourcesPath = process.resourcesPath || ''
   const staticCandidates = [
-    ...pathCandidatesFromEnv('TABTIN_OFFICE_PREVIEW_PDFTOPPM_PATH', 'PDFTOPPM_PATH'),
+    ...pathCandidatesFromEnv('MUSE_OFFICE_PREVIEW_PDFTOPPM_PATH', 'PDFTOPPM_PATH'),
     path.join(resourcesPath, 'native', 'poppler', 'bin', 'pdftoppm'),
     path.join(resourcesPath, 'native', 'poppler', 'bin', 'pdftoppm.exe'),
     path.join(resourcesPath, 'bin', 'pdftoppm'),
@@ -271,7 +271,7 @@ try {
 }
 `
   return {
-    executable: process.env.TABTIN_OFFICE_PREVIEW_POWERSHELL_PATH || 'powershell.exe',
+    executable: process.env.MUSE_OFFICE_PREVIEW_POWERSHELL_PATH || 'powershell.exe',
     args: [
       '-NoProfile',
       '-NonInteractive',

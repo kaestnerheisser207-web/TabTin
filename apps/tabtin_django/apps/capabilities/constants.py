@@ -4,7 +4,7 @@ from django.conf import settings
 注意：schemas.py 中的 Literal 类型必须与此处枚举值保持同步。
 """
 
-CAPABILITIES_DB = ('default' if getattr(settings, 'TABTIN_SINGLE_DATABASE_MODE', False) else 'postgresql')
+CAPABILITIES_DB = ('default' if getattr(settings, 'MUSE_SINGLE_DATABASE_MODE', False) else 'postgresql')
 # ─── 枚举值 ──────────────────────────────────────────
 # 修改此处枚举值时，必须同步更新 schemas.py 中对应的 Literal 定义
 

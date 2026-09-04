@@ -14,7 +14,7 @@ import { join } from 'node:path';
 import http from 'node:http';
 
 // ── Daemon route integration tests ─────────────────────────────────
-// These tests require pnpm build to resolve @tabtin/* workspace packages.
+// These tests require pnpm build to resolve @muse/* workspace packages.
 // They are conditionally skipped when the server cannot be started.
 
 describe('DU-011/015: Daemon TabSite route fixes', () => {
@@ -81,7 +81,7 @@ describe('DU-011/015: Daemon TabSite route fixes', () => {
   }
 
   // ── DU-011: init-template / upload-dist validation ──────────────
-  // Daemon now supports init-template and upload-dist via @tabtin/tabsite-core.
+  // Daemon now supports init-template and upload-dist via @muse/tabsite-core.
   // Verify parameter validation instead of 501 NOT_IMPLEMENTED.
 
   it('DU-011: init-template rejects missing space_id', async () => {

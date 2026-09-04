@@ -134,7 +134,7 @@ class OpenApiLoggingMiddleware:
                 'is_rate_limited': status_code == 429,
                 'ip_address': _get_client_ip(request),
                 'user_agent': request.META.get('HTTP_USER_AGENT', '')[:200],
-                'sdk_version': request.META.get('HTTP_X_TABTIN_SDK_VERSION', ''),
+                'sdk_version': request.META.get('HTTP_X_MUSE_SDK_VERSION', ''),
             }
 
             from apps.tabdata.tasks.api_log_tasks import write_api_log

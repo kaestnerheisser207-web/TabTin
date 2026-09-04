@@ -2,8 +2,8 @@
  * 分享页协作 token 获取与 collab provider 封装。
  */
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { CollabStatus, getUserColor, useCollabProvider } from '@tabtin/collab-core'
-import { useTableCollaboration } from '@tabtin/table-engine/collab'
+import { CollabStatus, getUserColor, useCollabProvider } from '@muse/collab-core'
+import { useTableCollaboration } from '@muse/table-engine/collab'
 import { API_BASE_URL, COLLAB_WS_URLS } from '@/config/api'
 import { useAuthStore } from '@/stores/auth-store'
 import type { UserInfo } from '@/types/auth'

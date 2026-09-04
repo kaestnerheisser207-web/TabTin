@@ -1,16 +1,16 @@
 import React, { useMemo, useState, useCallback, useEffect, useRef } from 'react'
 import { useTableStore } from '@stores/useTableStore'
 import { useViewStore } from '@stores/useViewStore'
-import { Button, Popover, PopoverContent, PopoverTrigger, toast } from '@tabtin/smartsheet-ui'
+import { Button, Popover, PopoverContent, PopoverTrigger, toast } from '@muse/smartsheet-ui'
 import { Filter, ArrowUpDown, Layers } from 'lucide-react'
 import {
   ViewFilterPanel,
   ViewGroupPanel,
   ViewSortRulesEditor,
   buildSortPanelTexts,
-} from '@tabtin/table-ui'
+} from '@muse/table-ui'
 import { useTranslation } from 'react-i18next'
-import type { ViewSortEditorRule } from '@tabtin/table-ui'
+import type { ViewSortEditorRule } from '@muse/table-ui'
 
 export const EmbedToolbar: React.FC = () => {
   const { t } = useTranslation(['view', 'table', 'common'])

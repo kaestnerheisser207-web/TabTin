@@ -86,7 +86,7 @@ vi.mock('react-i18next', () => ({
   }),
 }))
 
-vi.mock('@tabtin/smartsheet-ui', () => ({
+vi.mock('@muse/smartsheet-ui', () => ({
   Button: ({ children, ...props }: React.ButtonHTMLAttributes<HTMLButtonElement>) => (
     <button type="button" {...props}>{children}</button>
   ),
@@ -130,7 +130,7 @@ vi.mock('@stores/chat/presentation/todoTimeline', () => ({
   }),
 }))
 
-vi.mock('@tabtin/agent-modes', () => {
+vi.mock('@muse/agent-modes', () => {
   const AGENT_MODE_NAMES = ['ask', 'agent', 'plan', 'study', 'yolo', 'group'] as const
   const APPROVAL_MODE_NAMES = ['always_ask', 'auto', 'full_access'] as const
   return {

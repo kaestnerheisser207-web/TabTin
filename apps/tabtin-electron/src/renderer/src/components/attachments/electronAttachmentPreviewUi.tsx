@@ -2,7 +2,7 @@
  * TabData 附件字段 Electron 预览 UI
  *
  * 替换表格引擎默认 FilePreviewDialog：后者对 xlsx/docx/pdf 走 renderer
- * fetch(assets.example.com)，打包态 origin=tabtin-file://app 会 CORS 失败。
+ * fetch(assets.example.com)，打包态 origin=muse-file://app 会 CORS 失败。
  * 这里把附件列表交给聊天已验证的 ResourcePreview Lightbox
  * （getAttachmentBuffer → 主进程 fetchBuffer）。
  */
@@ -12,9 +12,9 @@ import type {
   AttachmentPreviewDialogRef,
   AttachmentPreviewFile,
   AttachmentPreviewUi,
-} from '@tabtin/table-engine-canvas'
-import type { TableGridAttachmentAccessContext } from '@tabtin/table-engine'
-import { AttachmentApiService } from '@tabtin/table-core'
+} from '@muse/table-engine-canvas'
+import type { TableGridAttachmentAccessContext } from '@muse/table-engine'
+import { AttachmentApiService } from '@muse/table-core'
 import { createLogger } from '@/utils/logger'
 import { inferPreviewableKind } from '@components/chat/preview/inferPreviewableKind'
 import type { PreviewResource } from '@components/chat/preview/types'

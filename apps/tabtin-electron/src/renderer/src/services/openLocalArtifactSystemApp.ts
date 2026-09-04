@@ -3,7 +3,7 @@
  * 与 RichFile「System app」同款：resolve working_dir 内绝对路径 → openPath。
  */
 
-import { parseResourcePointer } from '@tabtin/resource-router'
+import { parseResourcePointer } from '@muse/resource-router'
 import { resolveLocalFilePath } from '@/services/localFileResourceResolver'
 import { resolveSpaceIdForResourceLink } from '@/services/openResourceLink'
 import { useSpaceStore } from '@/stores/useSpaceStore'
@@ -39,7 +39,7 @@ export async function openLocalArtifactWithSystemApp(
       pointer,
       workingDir,
       pathExists: async (absolutePath) => {
-        const pathExists = window.tabtin?.fileSystem?.pathExists
+        const pathExists = window.muse?.fileSystem?.pathExists
         if (!pathExists) throw new Error('当前环境不支持本地文件检查')
         return pathExists(absolutePath)
       },
@@ -48,7 +48,7 @@ export async function openLocalArtifactWithSystemApp(
     if (!absolutePath) {
       return { ok: false, error: '文件已删除或不可用' }
     }
-    const openPath = window.tabtin?.openPath
+    const openPath = window.muse?.openPath
     if (!openPath) {
       return { ok: false, error: '当前环境不支持用系统应用打开' }
     }

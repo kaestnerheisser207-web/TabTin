@@ -15,7 +15,7 @@ const { resolveOssFileAccessUrl } = vi.hoisted(() => ({
   resolveOssFileAccessUrl: vi.fn(),
 }))
 
-vi.mock('@tabtin/smartsheet-ui', () => ({
+vi.mock('@muse/smartsheet-ui', () => ({
   toast: Object.assign(
     (...args: unknown[]) => toastCall(...args),
     {
@@ -51,10 +51,10 @@ describe('downloadPreviewResource URL helpers', () => {
   it('classifies renderer-readable vs remote http', () => {
     expect(isRendererReadableDownloadUrl('blob:abc')).toBe(true)
     expect(isRendererReadableDownloadUrl('data:image/png;base64,xx')).toBe(true)
-    expect(isRendererReadableDownloadUrl('tabtin-file://local/a.svg')).toBe(true)
+    expect(isRendererReadableDownloadUrl('muse-file://local/a.svg')).toBe(true)
     expect(isRendererReadableDownloadUrl('https://oss.example.com/a.png')).toBe(false)
     expect(isRemoteHttpDownloadUrl('https://oss.example.com/a.png')).toBe(true)
-    expect(isRemoteHttpDownloadUrl('tabtin-file://local/a.svg')).toBe(false)
+    expect(isRemoteHttpDownloadUrl('muse-file://local/a.svg')).toBe(false)
   })
 })
 
@@ -155,7 +155,7 @@ describe('downloadPreviewResource remote http', () => {
     expect(toastError).not.toHaveBeenCalled()
   })
 
-  it('tabtin-file: renderer fetch then silent main-process data: save ', async () => {
+  it('muse-file: renderer fetch then silent main-process data: save ', async () => {
     const { saveExportBlob } = await import('@/services/tableCoreRuntime')
     vi.mocked(saveExportBlob).mockResolvedValue({
       status: 'saved',
@@ -180,13 +180,13 @@ describe('downloadPreviewResource remote http', () => {
     vi.stubGlobal('fetch', fetchMock)
 
     const result = await downloadPreviewResource({
-      url: 'tabtin-file://local/diagram.svg',
+      url: 'muse-file://local/diagram.svg',
       fileName: 'diagram.svg',
       t,
     })
 
     expect(result).toBe('saved')
-    expect(fetchMock).toHaveBeenCalledWith('tabtin-file://local/diagram.svg')
+    expect(fetchMock).toHaveBeenCalledWith('muse-file://local/diagram.svg')
     expect(downloadResource).toHaveBeenCalled()
     expect(downloadResource.mock.calls[0][0].filename).toBe('diagram.svg')
     expect(String(downloadResource.mock.calls[0][0].url)).toMatch(/^data:/)

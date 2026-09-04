@@ -89,7 +89,7 @@ describe('terminalRuntime paste', () => {
 
     Object.defineProperty(window, 'tabtin', {
       value: {
-        ...(window.tabtin ?? {}),
+        ...(window.muse ?? {}),
         pty: {
           write: writeMock,
         },
@@ -138,7 +138,7 @@ describe('terminalRuntime paste', () => {
 
     Object.defineProperty(window, 'tabtin', {
       value: {
-        ...(window.tabtin ?? {}),
+        ...(window.muse ?? {}),
         pty: {
           write: writeMock,
         },
@@ -179,7 +179,7 @@ describe('terminalRuntime size sync', () => {
     const resizeMock = vi.fn()
     Object.defineProperty(window, 'tabtin', {
       value: {
-        ...(window.tabtin ?? {}),
+        ...(window.muse ?? {}),
         pty: {
           resize: resizeMock,
         },
@@ -214,7 +214,7 @@ describe('terminalRuntime size sync', () => {
     const resizeMock = vi.fn()
     Object.defineProperty(window, 'tabtin', {
       value: {
-        ...(window.tabtin ?? {}),
+        ...(window.muse ?? {}),
         pty: {
           resize: resizeMock,
         },

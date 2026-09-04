@@ -1178,7 +1178,7 @@ class AgentRunContextMiddleware(MiddlewareMixin):
     平台 ContextVar，供 tabdoc / tabdata / collab 等模块的 VersionHistory /
     ChangeLog 写入路径读取（`get_current_run_id()` / `get_current_session_id()`）。
 
-    数据流：agent-runtime 注入 TABTIN_AGENT_RUN_ID / TABTIN_THREAD_ID env →
+    数据流：agent-runtime 注入 MUSE_AGENT_RUN_ID / MUSE_THREAD_ID env →
     CLI 子进程透成 `X-Tabtin-Agent-Run-Id` / `X-Tabtin-Session-Id` 请求头 →
     本中间件还原 ContextVar。run id 是 per-turn 资源归因锚点，session id 是
     业务对话维度。
@@ -1191,11 +1191,11 @@ class AgentRunContextMiddleware(MiddlewareMixin):
     def process_request(self, request: HttpRequest) -> None:
         run_id = (
             request.headers.get("X-Tabtin-Agent-Run-Id")
-            or request.META.get("HTTP_X_TABTIN_AGENT_RUN_ID")
+            or request.META.get("HTTP_X_MUSE_AGENT_RUN_ID")
         )
         session_id = (
             request.headers.get("X-Tabtin-Session-Id")
-            or request.META.get("HTTP_X_TABTIN_SESSION_ID")
+            or request.META.get("HTTP_X_MUSE_SESSION_ID")
         )
         if not run_id and not session_id:
             return

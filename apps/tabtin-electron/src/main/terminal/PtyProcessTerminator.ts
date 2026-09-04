@@ -1,6 +1,6 @@
-export { PtyProcessTerminator, collectProcessSubtreeUsage } from '@tabtin/pty-core'
+export { PtyProcessTerminator, collectProcessSubtreeUsage } from '@muse/pty-core'
 export type {
   PtyProcessTerminationOptions,
   PtyProcessTerminatorDeps,
   ProcessUsageEntry,
-} from '@tabtin/pty-core'
+} from '@muse/pty-core'

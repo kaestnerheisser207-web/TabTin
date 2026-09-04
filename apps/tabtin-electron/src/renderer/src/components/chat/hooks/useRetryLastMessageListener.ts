@@ -6,7 +6,7 @@
  */
 
 import { useEffect } from 'react'
-import type { ChatMessage } from '@tabtin/chat-client'
+import type { ChatMessage } from '@muse/chat-client'
 import { hasRegularUserTurn } from '../message'
 
 const handledRetryEvents = new WeakSet<Event>()

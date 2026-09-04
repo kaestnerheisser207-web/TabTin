@@ -1,4 +1,4 @@
-import type { ChatSession } from '@tabtin/chat-client'
+import type { ChatSession } from '@muse/chat-client'
 import { isOpenAICodexModel } from '../../../shared/openai-codex-models'
 
 type ModelSelectionFields = Pick<ChatSession, 'current_model_id' | 'context_tier_id'>

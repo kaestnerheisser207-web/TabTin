@@ -19,16 +19,16 @@
 import { describe, expect, it, vi } from 'vitest';
 import { randomUUID } from 'node:crypto';
 import { StreamEvents } from '../src/engine/contracts/stream-events.js';
-import { judge as judgeV3 } from '@tabtin/security-policy';
+import { judge as judgeV3 } from '@muse/security-policy';
 import type {
   EffectivePolicy,
   JudgeContext,
   JudgeTool,
-} from '@tabtin/security-policy';
+} from '@muse/security-policy';
 import { LocalPermissionHandler } from '../src/permissions/local-permission-handler.js';
 import { InMemoryApprovalMemoStore } from '../src/permissions/memo-store.js';
 import { buildApprovalKey } from '../src/permissions/approval-key.js';
-import { buildApprovalKey as buildSecurityPolicyApprovalKey } from '@tabtin/security-policy';
+import { buildApprovalKey as buildSecurityPolicyApprovalKey } from '@muse/security-policy';
 import { createJudgeMemoStoreAdapter } from './helpers/judge-memo-store-adapter.js';
 import { buildTestMemoPatternKey } from './helpers/tool-risk-policy-port.js';
 import type { BuildMemoPatternKeyInput } from '../src/engine/contracts/tool-risk-policy.js';

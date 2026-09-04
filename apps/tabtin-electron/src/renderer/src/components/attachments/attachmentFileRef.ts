@@ -2,12 +2,12 @@
  * 对话 file-ref → 表格附件：优先 reuseAttachment，否则按 URL 下载再上传。
  */
 
-import { AttachmentApiService } from '@tabtin/table-core'
+import { AttachmentApiService } from '@muse/table-core'
 import type {
   TableGridAttachmentFileRef,
   TableGridAttachmentFileRefHandler,
   TableGridRow,
-} from '@tabtin/table-engine'
+} from '@muse/table-engine'
 import { createLogger } from '@/utils/logger'
 import { useAttachmentStore } from '@/stores/useAttachmentStore'
 

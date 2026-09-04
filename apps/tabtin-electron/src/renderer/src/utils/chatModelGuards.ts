@@ -1,4 +1,4 @@
-import type { Model } from '@tabtin/chat-client'
+import type { Model } from '@muse/chat-client'
 import { isOpenAICodexModel } from '../../../shared/openai-codex-models'
 
 const CHAT_MODEL_UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i

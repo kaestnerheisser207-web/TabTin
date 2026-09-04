@@ -10,31 +10,31 @@ import { buildTabtinFileUrl } from '@components/shared/file-utils'
 describe('MTP-004: path segment encoding for # and special chars', () => {
   it('encodes # in filename', () => {
     expect(buildTabtinFileUrl('/home/user/file#1.pdf')).toBe(
-      'tabtin-file:///home/user/file%231.pdf'
+      'muse-file:///home/user/file%231.pdf'
     )
   })
 
   it('encodes spaces in path', () => {
     expect(buildTabtinFileUrl('/home/user/My Documents/file.pdf')).toBe(
-      'tabtin-file:///home/user/My%20Documents/file.pdf'
+      'muse-file:///home/user/My%20Documents/file.pdf'
     )
   })
 
   it('handles Windows-style paths', () => {
     expect(buildTabtinFileUrl('C:\\Users\\test\\file.pdf')).toBe(
-      'tabtin-file://local/C%3A/Users/test/file.pdf'
+      'muse-file://local/C%3A/Users/test/file.pdf'
     )
   })
 
   it('preserves already-absolute Unix paths', () => {
     expect(buildTabtinFileUrl('/simple/path/file.pdf')).toBe(
-      'tabtin-file:///simple/path/file.pdf'
+      'muse-file:///simple/path/file.pdf'
     )
   })
 
   it('encodes ? in filename', () => {
     expect(buildTabtinFileUrl('/home/user/what?.pdf')).toBe(
-      'tabtin-file:///home/user/what%3F.pdf'
+      'muse-file:///home/user/what%3F.pdf'
     )
   })
 })
@@ -56,24 +56,24 @@ describe('MTP-001: resolveImageSrc path resolution', () => {
       .split('/')
       .map(seg => (seg ? encodeURIComponent(seg) : ''))
       .join('/')
-    return `tabtin-file://${encoded}`
+    return `muse-file://${encoded}`
   }
 
   it('resolves relative path with ./', () => {
     expect(resolveImageSrc('./images/photo.png', '/home/user/docs')).toBe(
-      'tabtin-file:///home/user/docs/images/photo.png'
+      'muse-file:///home/user/docs/images/photo.png'
     )
   })
 
   it('resolves relative path with ../', () => {
     expect(resolveImageSrc('../assets/logo.png', '/home/user/docs')).toBe(
-      'tabtin-file:///home/user/assets/logo.png'
+      'muse-file:///home/user/assets/logo.png'
     )
   })
 
   it('resolves bare relative path', () => {
     expect(resolveImageSrc('screenshot.png', '/home/user/docs')).toBe(
-      'tabtin-file:///home/user/docs/screenshot.png'
+      'muse-file:///home/user/docs/screenshot.png'
     )
   })
 
@@ -99,7 +99,7 @@ describe('MTP-001: resolveImageSrc path resolution', () => {
 
   it('encodes # in image filename', () => {
     expect(resolveImageSrc('img#1.png', '/home/user/docs')).toBe(
-      'tabtin-file:///home/user/docs/img%231.png'
+      'muse-file:///home/user/docs/img%231.png'
     )
   })
 })

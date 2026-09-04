@@ -9,7 +9,7 @@
  * - 内容优先用 PM JSON（contentJson）；缺失时退回 markdown（经 doc-editor 转换）。
  */
 import { useMemo } from 'react'
-import { markdownToPmJson, normalizeMathPmJson } from '@tabtin/doc-editor'
+import { markdownToPmJson, normalizeMathPmJson } from '@muse/doc-editor'
 import { EditorContent, EditorRoot, type EditorInstance } from 'novel'
 import { standaloneExtensions } from './extensions'
 

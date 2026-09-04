@@ -15,7 +15,7 @@
  */
 
 import { API_BASE_URL } from '@/config/api'
-import { joinApiPath } from '@tabtin/config'
+import { joinApiPath } from '@muse/config'
 import { getOrCreateDeviceId } from '@/utils/deviceId'
 
 // ── Types ──
@@ -374,9 +374,9 @@ async function sendToServer(events: ErrorEvent[], useAnonymous: boolean = false,
   }
 
   try {
-    if (window.tabtin?.apiRequest) {
+    if (window.muse?.apiRequest) {
       // 通过主进程代理发送
-      await window.tabtin.apiRequest({
+      await window.muse.apiRequest({
         url,
         method: 'POST',
         headers,
@@ -387,7 +387,7 @@ async function sendToServer(events: ErrorEvent[], useAnonymous: boolean = false,
       // 端点是 anonymous，无需 token 注入，所以不走 IPC 也不影响功能。
       // keepalive:true 保证 page unload 时仍能完成上报，这是错误上报的关键语义，
       // electronFetch / apiService.request 都不透传 keepalive。
-      // eslint-disable-next-line tabtin/no-direct-fetch-in-renderer -- IPC 不可用降级 + 需要 fetch keepalive 语义保证 unload 时仍上报
+      // eslint-disable-next-line muse/no-direct-fetch-in-renderer -- IPC 不可用降级 + 需要 fetch keepalive 语义保证 unload 时仍上报
       await fetch(url, {
         method: 'POST',
         headers,
@@ -438,8 +438,8 @@ async function flushErrors() {
   // 不应弹 toast 干扰用户（catch 黑洞是有意的）。
   let token: string | undefined
   try {
-    if (window.tabtin?.auth?.getAccessToken) {
-      const result = await window.tabtin.auth.getAccessToken()
+    if (window.muse?.auth?.getAccessToken) {
+      const result = await window.muse.auth.getAccessToken()
       if (result?.token) {
         token = result.token
       }
@@ -505,8 +505,8 @@ function collectDeviceInfoSync(): void {
   } catch { /* renderer sandbox 下 process 未定义 */ }
 
   try {
-    const platform = window.tabtin?.getPlatform?.() || ''
-    const arch = window.tabtin?.getArch?.() || ''
+    const platform = window.muse?.getPlatform?.() || ''
+    const arch = window.muse?.getArch?.() || ''
     // VITE_APP_VERSION 来源：apps/tabtin-electron/.env.<profile>（vite 自动注入到 import.meta.env）。
     // 关键：必须**精确**写 `import.meta.env.VITE_APP_VERSION`（不能加 `?.` 或 `as any`）——
     // vite/esbuild 的 env 注入是字面字符串替换，模式不严格匹配就退化成动态查 __vite_import_meta_env__
@@ -549,9 +549,9 @@ function collectDeviceInfoSync(): void {
  */
 async function refineDeviceInfoFromIpc(): Promise<void> {
   try {
-    if (!window.tabtin?.updater?.getAppVersion) return
+    if (!window.muse?.updater?.getAppVersion) return
     if (deviceInfo.app_version) return  // vite 已注入，不用 IPC 覆盖
-    const ipcVersion = await window.tabtin.updater.getAppVersion()
+    const ipcVersion = await window.muse.updater.getAppVersion()
     if (ipcVersion) {
       deviceInfo = { ...deviceInfo, app_version: ipcVersion }
     }

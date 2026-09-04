@@ -1,5 +1,5 @@
 /**
- * @tabtin/tool-errors registry contracts.
+ * @muse/tool-errors registry contracts.
  *
  * Locks: stable TOOL_LAYER_ERROR_KINDS order/uniqueness, catalog default
  * coverage, i18n key inventory, bridges, and codegen:verify freshness.
@@ -71,7 +71,7 @@ const EXPECTED_TOOL_LAYER_KINDS = [
   'todo_invalid_items',
 ] as const;
 
-describe('@tabtin/tool-errors registry', () => {
+describe('@muse/tool-errors registry', () => {
   it('TOOL_LAYER_ERROR_KINDS matches historical order, no duplicates', () => {
     expect([...TOOL_LAYER_ERROR_KINDS]).toEqual([...EXPECTED_TOOL_LAYER_KINDS]);
     expect(new Set(TOOL_LAYER_ERROR_KINDS).size).toBe(TOOL_LAYER_ERROR_KINDS.length);

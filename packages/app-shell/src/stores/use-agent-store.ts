@@ -15,7 +15,7 @@
 
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
-import { withPersistSafety } from '@tabtin/shared'
+import { withPersistSafety } from '@muse/shared'
 import type { Agent, UpdateAgentRequest } from '../types/space.js'
 import type { LoadingState } from '../types/common.js'
 import { AgentApiService } from '../services/space-api.js'

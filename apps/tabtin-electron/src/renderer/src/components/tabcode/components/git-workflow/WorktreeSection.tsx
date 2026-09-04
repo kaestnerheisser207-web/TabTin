@@ -185,7 +185,7 @@ export const WorktreeSection: React.FC<WorktreeSectionProps> = ({
     // 文件树/终端因路径未授权而拒绝访问。
     if (spaceId) {
       try {
-        await window.tabtin?.workspace?.appendSessionAllowedPath?.({
+        await window.muse?.workspace?.appendSessionAllowedPath?.({
           spaceId,
           path: pathValue,
         });
@@ -214,7 +214,7 @@ export const WorktreeSection: React.FC<WorktreeSectionProps> = ({
     const ok = await runGitAction(
       'create-worktree',
       () =>
-        window.tabtin.git.createWorktree(rootPath, {
+        window.muse.git.createWorktree(rootPath, {
           path: pathValue,
           branch: effectiveBranch || undefined,
           createBranch: worktreeCreateBranch,
@@ -313,7 +313,7 @@ export const WorktreeSection: React.FC<WorktreeSectionProps> = ({
       await runGitAction(
         `remove-worktree:${path}`,
         async () => {
-          const result = await window.tabtin.git.removeWorktree(rootPath, {
+          const result = await window.muse.git.removeWorktree(rootPath, {
             path,
             ...options,
           });
@@ -340,7 +340,7 @@ export const WorktreeSection: React.FC<WorktreeSectionProps> = ({
     async (path: string) => {
       let result: WorktreeRemovePreflightResult;
       try {
-        result = await window.tabtin.git.preflightRemoveWorktree(rootPath, {
+        result = await window.muse.git.preflightRemoveWorktree(rootPath, {
           path,
         });
       } catch (error) {

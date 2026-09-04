@@ -3,7 +3,7 @@ import { resolve } from 'node:path'
 import React, { createRef } from 'react'
 import { act, fireEvent, render, screen } from '@testing-library/react'
 import { beforeEach, describe, expect, it, vi, type Mock } from 'vitest'
-import type { ChatMessage } from '@tabtin/chat-client'
+import type { ChatMessage } from '@muse/chat-client'
 import type { ConversationViewportEvent, ViewportMode } from '../../viewport/types'
 import type { MessageListHandle } from '../MessageList'
 
@@ -201,14 +201,14 @@ vi.mock('framer-motion', () => ({
   },
 }))
 
-vi.mock('@tabtin/smartsheet-ui', () => ({
+vi.mock('@muse/smartsheet-ui', () => ({
   LoadingSpinner: () => <div data-testid="loading-spinner" />,
   // table-ui ViewFilterRulesEditor 经深依赖链可能被拉进本套件；补齐常用 export 避免 mock 缺口。
   resolveChoiceTagColors: () => ({}),
   FALLBACK_TAG_COLORS: {},
 }))
 
-vi.mock('@tabtin/smartsheet-ui/toast', () => ({
+vi.mock('@muse/smartsheet-ui/toast', () => ({
   toast: { info: vi.fn(), success: vi.fn(), error: vi.fn() },
 }))
 

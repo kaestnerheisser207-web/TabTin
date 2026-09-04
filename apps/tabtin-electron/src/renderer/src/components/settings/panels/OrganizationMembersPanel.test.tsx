@@ -1,7 +1,7 @@
 import React from 'react'
 import { describe, expect, it, vi, beforeEach } from 'vitest'
 import { act, fireEvent, render, screen, waitFor } from '@testing-library/react'
-import type { Organization } from '@tabtin/app-shell'
+import type { Organization } from '@muse/app-shell'
 
 const invitation = {
   id: 'invite-1',
@@ -165,7 +165,7 @@ vi.mock('../SettingsInfoTooltip', () => ({
   SettingsInfoTooltip: () => null,
 }))
 
-vi.mock('@tabtin/smartsheet-ui', () => ({
+vi.mock('@muse/smartsheet-ui', () => ({
   Button: ({ children, type = 'button', ...props }: React.ButtonHTMLAttributes<HTMLButtonElement>) => (
     <button type={type} {...props}>{children}</button>
   ),

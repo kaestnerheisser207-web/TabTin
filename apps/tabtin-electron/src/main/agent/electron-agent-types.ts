@@ -1,9 +1,9 @@
-import type { SkillCredentialResolverHandle } from '@tabtin/agent-host/credentials'
-import type { RelaySessionStorageView, SessionPauseController } from '@tabtin/agent-host/delivery'
-import type { RuntimeCacheKey } from '@tabtin/agent-host/runtime'
-import type { WorkingDirType, SystemPromptConfig } from '@tabtin/agent-prompt'
-import type { NativeBackendBootstrapResult } from '@tabtin/agent-host/native'
-import type { ShellCap } from '@tabtin/agent-runtime/capability'
+import type { SkillCredentialResolverHandle } from '@muse/agent-host/credentials'
+import type { RelaySessionStorageView, SessionPauseController } from '@muse/agent-host/delivery'
+import type { RuntimeCacheKey } from '@muse/agent-host/runtime'
+import type { WorkingDirType, SystemPromptConfig } from '@muse/agent-prompt'
+import type { NativeBackendBootstrapResult } from '@muse/agent-host/native'
+import type { ShellCap } from '@muse/agent-runtime/capability'
 import type {
   AgentRuntime,
   ContentBlock,
@@ -11,8 +11,8 @@ import type {
   SerializedPendingApproval,
   SerializedPendingSingleHitl,
   StreamEvent,
-} from '@tabtin/agent-runtime/engine'
-import type { AgentModeName } from '@tabtin/agent-modes'
+} from '@muse/agent-runtime/engine'
+import type { AgentModeName } from '@muse/agent-modes'
 import type {
   EventEmitter,
   EventStorage,
@@ -21,8 +21,8 @@ import type {
   SnapshotStorage,
   SubagentManager,
   ToolLogWriter,
-} from '@tabtin/agent-runtime'
-import type { AppContext, PendingModeTransition } from '@tabtin/agent-host/hooks'
+} from '@muse/agent-runtime'
+import type { AppContext, PendingModeTransition } from '@muse/agent-host/hooks'
 import type { ElectronToolProvider } from './capabilities/ElectronToolProvider.js'
 import type { AgentEngineExecutionTarget } from '../../shared/types/agent-engine.js'
 
@@ -73,7 +73,7 @@ export const NOOP_STREAM_SINK: StreamEventSink = {
 
 export interface QueryRequest {
   /** Agent Harness; local/cloud execution plane is resolved from Workspace. */
-  harness?: import('@tabtin/agent-host/runtime').RuntimeHarness
+  harness?: import('@muse/agent-host/runtime').RuntimeHarness
   prompt: string
   /** 群聊 @ 等高优先级 forward 可抢占同一 Agent 的当前 run。 */
   interruptActive?: boolean
@@ -236,14 +236,14 @@ export interface QueryRequest {
    *    workspace_snapshot 上传 → Django dispatcher / forward_runner 透传到
    *    `prompt.forward.workspace_snapshot`）。
    *
-   * 形态参考 `@tabtin/security-policy` 的 `WorkspaceSnapshot`；wire / IPC
+   * 形态参考 `@muse/security-policy` 的 `WorkspaceSnapshot`；wire / IPC
    * 不强校验，主进程做 type guard + buildPolicyFromAgentConfigV2 兜底。
    *
    * `handleQueryInternal` 入口若 session 已有 `workspaceSnapshotV3`，按
    * `daemon.ts:1276-1287` 的同款做法**就地 mutate**（不替换引用），让 PD-13
    * 工厂闭包持有的引用能在下一轮 runTools 入口立即拿到新值。
    */
-  workspaceSnapshot?: import('@tabtin/security-policy').WorkspaceSnapshot
+  workspaceSnapshot?: import('@muse/security-policy').WorkspaceSnapshot
   /**
    * M2.5: Renderer 为 user 消息生成的 client_event_id（UUID）。
    * 主进程将其附到 `agent.stream.user` relay event 的 payload 上，
@@ -297,7 +297,7 @@ export interface QueryRequest {
    *
    * **W4 (2026-05-13)** 移除 `cloud_first` 死配置字面值（T8 / 总控 §三 F5）—
    * 旧值与 `cloud_only` 完全等价（同一个 if 分支），D1 不留兼容直接删除。
-   * 省略时从 TABTIN_ATTACHMENT_STRATEGY 环境变量读取；再省略回退 `local_first`。
+   * 省略时从 MUSE_ATTACHMENT_STRATEGY 环境变量读取；再省略回退 `local_first`。
    */
   attachmentStrategy?: 'local_first' | 'cloud_only'
   /**
@@ -361,7 +361,7 @@ export interface QueryRequest {
    */
   workingDirType?: WorkingDirType
   /**
-   * ：会话 Space 的 `working_dir`。`$TABTIN_WORKSPACE` / runtime 执行根
+   * ：会话 Space 的 `working_dir`。`$MUSE_WORKSPACE` / runtime 执行根
    * 只能用此字段；缺省走平台沙箱，禁止读全局 organizationRoot。
    */
   workingDir?: string
@@ -376,7 +376,7 @@ export interface QueryRequest {
    * 解码校验）。仅 `agent.prompt.forward` 路径非空——Electron 本地 IPC 路径
    * 不经 Django forward，始终缺省，走 env 旋钮 / runtime 默认。
    *
-   * 优先级：云端 > env 旋钮（`TABTIN_PRESSURE_THRESHOLDS`）> runtime 默认。
+   * 优先级：云端 > env 旋钮（`MUSE_PRESSURE_THRESHOLDS`）> runtime 默认。
    */
   cloudPressureThresholds?: { microCompactStart: number; llmSummaryStart: number; emergencyStart: number }
   /**
@@ -430,7 +430,7 @@ export interface QueryRequest {
    * 处理（已批 inject + 未批重挂）。本字段仅在 `agent.prompt.forward.resume` 路径
    * 上非空——常规 IPC query 始终缺省，runtime 走"全新对话"行为。
    *
-   * 详见 `@tabtin/agent-runtime` `SerializedPendingApproval` 文档。
+   * 详见 `@muse/agent-runtime` `SerializedPendingApproval` 文档。
    */
   pendingApprovalsSerialized?: SerializedPendingApproval[]
   /**
@@ -552,7 +552,7 @@ export interface PrewarmRuntimeInput {
 export type AttachmentStrategy = 'local_first' | 'cloud_only'
 
 export function resolveDefaultAttachmentStrategy(): AttachmentStrategy {
-  const envValue = process.env.TABTIN_ATTACHMENT_STRATEGY?.trim().toLowerCase()
+  const envValue = process.env.MUSE_ATTACHMENT_STRATEGY?.trim().toLowerCase()
   if (envValue === 'local_first' || envValue === 'cloud_only') {
     return envValue
   }
@@ -651,7 +651,7 @@ export interface HostState extends RuntimeCacheKey {
   workspaceId: string
   /** 当前 Project 对话绑定的 Project；个人 Workspace 对话为空。 */
   projectId: string | undefined
-  workspaceSnapshot: import('@tabtin/security-policy').WorkspaceSnapshot | null
+  workspaceSnapshot: import('@muse/security-policy').WorkspaceSnapshot | null
   /**
    * Hilt v3 / W6 M1：本 session 的 AgentConfigV3 可变实例。
    *
@@ -662,7 +662,7 @@ export interface HostState extends RuntimeCacheKey {
    *
    * 与 `workspaceSnapshot` 同模式：两者都是宿主 mutate / runtime read 的可变源。
    */
-  agentConfigV3: import('@tabtin/security-policy').AgentConfigV3 | null
+  agentConfigV3: import('@muse/security-policy').AgentConfigV3 | null
   /**
    * YOLO 两步授权 PRD v3 §5.5.2：buildJudgePolicy 闭包每轮派生 EffectivePolicy
    * 时读这两个字段，与 `agentConfigV3.security.yolo_mode` 一起构成 effectiveMode
@@ -690,7 +690,7 @@ export interface HostState extends RuntimeCacheKey {
      * `undefined` = 消息未带该字段 → build-policy 走 legacy 归一
      * （requestedAgentMode='yolo' → 'auto'，否则 'always_ask'）。
      */
-    requestedApprovalMode?: import('@tabtin/security-policy').ApprovalMode
+    requestedApprovalMode?: import('@muse/security-policy').ApprovalMode
   }
   /**
    * W4a S1（2026-05-30）：本 session 的子 Agent 运行登记中心（session 维度）。

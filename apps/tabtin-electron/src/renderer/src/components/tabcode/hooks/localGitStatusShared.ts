@@ -134,7 +134,7 @@ function restorePendingContentBumps(
 
 async function runFetch(bucket: RootBucket): Promise<void> {
   const { rootPath } = bucket
-  const git = window.tabtin?.git
+  const git = window.muse?.git
   const pendingBumps = new Set(bucket.pendingContentBumpPaths)
   const bumpAllDirty = bucket.bumpAllDirtyContent
   bucket.pendingContentBumpPaths.clear()
@@ -292,7 +292,7 @@ function scheduleDebouncedFetch(bucket: RootBucket, delayMs = 200): void {
 
 function startWatch(bucket: RootBucket): void {
   if (bucket.watchId || bucket.unsubWatch) return
-  const fileSystem = window.tabtin?.fileSystem
+  const fileSystem = window.muse?.fileSystem
   if (!fileSystem?.watch || !fileSystem?.unwatch || !fileSystem?.onWatchEvent) return
 
   let cancelled = false
@@ -331,7 +331,7 @@ function startWatch(bucket: RootBucket): void {
 }
 
 function stopWatch(bucket: RootBucket): void {
-  const fileSystem = window.tabtin?.fileSystem
+  const fileSystem = window.muse?.fileSystem
   const watchId = bucket.watchId
   bucket.unsubWatch?.()
   bucket.unsubWatch = null

@@ -151,7 +151,7 @@
     --chat-composer-drop-ring: 0 0% 0% / 0.18;
     --chat-composer-drop-text: 0 0% 34%;
 
-    /* Z-Index 语义化变量 — 与 @tabtin/app-shell ZIndex 常量对齐 */
+    /* Z-Index 语义化变量 — 与 @muse/app-shell ZIndex 常量对齐 */
     --z-sticky: 10;
     --z-floating: 20;
     --z-banner: 30;

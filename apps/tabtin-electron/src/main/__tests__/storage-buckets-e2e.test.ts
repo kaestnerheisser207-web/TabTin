@@ -33,7 +33,7 @@ afterEach(() => {
 describe('W2.2-G2 北极星：listBuckets 计数（真实代码路径）', () => {
   it('调用真实 register 后 conversation 组 ≥ 7（main 端）+ checkpoint ≥ 1', async () => {
     // ─── 1. 重置 storage-manager singleton ─────────────────
-    const sm = await import('@tabtin/storage-manager')
+    const sm = await import('@muse/storage-manager')
     sm.__resetForTesting()
 
     // ─── 2. agent:* 7 个 bucket（走 agent-storage-buckets 真实模块） ─
@@ -135,7 +135,7 @@ describe('W2.2-G2 北极星：listBuckets 计数（真实代码路径）', () =>
   })
 
   it('agent-storage-buckets sizeFn 在空目录时不超时（< 1s）', async () => {
-    const sm = await import('@tabtin/storage-manager')
+    const sm = await import('@muse/storage-manager')
     sm.__resetForTesting()
     const dataRoot = join(tempUserData, 'data-root')
     const syncRoot = join(tempUserData, 'agent-sync')
@@ -169,7 +169,7 @@ describe('W2.2-G2 北极星：listBuckets 计数（真实代码路径）', () =>
   })
 
   it('agent:conversations:messages clearFn 按 (userId, organizationId, workspaceId) 精准过滤', async () => {
-    const sm = await import('@tabtin/storage-manager')
+    const sm = await import('@muse/storage-manager')
     sm.__resetForTesting()
     const dataRoot = join(tempUserData, 'data-root')
     const syncRoot = join(tempUserData, 'agent-sync')
@@ -218,7 +218,7 @@ describe('W2.2-G2 北极星：listBuckets 计数（真实代码路径）', () =>
   })
 
   it('存储统计、下钻和整桶清理覆盖当前账号的全部组织，但不包含其他账号', async () => {
-    const sm = await import('@tabtin/storage-manager')
+    const sm = await import('@muse/storage-manager')
     sm.__resetForTesting()
     const dataRoot = join(tempUserData, 'data-root')
     const syncRoot = join(tempUserData, 'agent-sync')
@@ -287,7 +287,7 @@ describe('W2.2-G2 北极星：listBuckets 计数（真实代码路径）', () =>
   })
 
   it('无法解析当前身份时拒绝统计、下钻和清理', async () => {
-    const sm = await import('@tabtin/storage-manager')
+    const sm = await import('@muse/storage-manager')
     sm.__resetForTesting()
     const dataRoot = join(tempUserData, 'data-root')
     const syncRoot = join(tempUserData, 'agent-sync')
@@ -326,7 +326,7 @@ describe('W2.2-G2 北极星：listBuckets 计数（真实代码路径）', () =>
 
 describe('checkpoint 存储按当前账号隔离', () => {
   it('组织切换不改变当前账号总量，账号切换后不会复用上一账号的缓存', async () => {
-    const sm = await import('@tabtin/storage-manager')
+    const sm = await import('@muse/storage-manager')
     sm.__resetForTesting()
 
     const rootA = join(tempUserData, 'users', 'u-a', 'organizations', 'org-a', 'checkpoints')

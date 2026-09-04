@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 
-import type { Agent, Space } from '@tabtin/app-shell'
+import type { Agent, Space } from '@muse/app-shell'
 
 import { canManageSpaceLifecycle } from './useCanManageSpaceLifecycle'
 

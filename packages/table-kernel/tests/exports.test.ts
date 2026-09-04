@@ -1,5 +1,5 @@
 /**
- * 导出链完整性验证 — 确保 @tabtin/table-kernel 的公开 API 保持稳定。
+ * 导出链完整性验证 — 确保 @muse/table-kernel 的公开 API 保持稳定。
  * 新增或迁移导出时，在此追加断言以防回归。
  */
 import { describe, it, expect } from 'vitest'

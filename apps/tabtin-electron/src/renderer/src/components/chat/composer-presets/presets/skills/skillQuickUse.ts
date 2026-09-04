@@ -24,11 +24,11 @@ import type { SkillIndexEntry } from '@/skills/types'
 import { normalizeSkillSource } from '@/skills/types'
 import { SKILL_QUICK_USE_PREVIEW_RENDERER } from './SkillQuickUsePreviewRenderer'
 import {
-  TABTIN_WIDGET_QUICK_USE_DEFAULT_STATE,
-  TABTIN_WIDGET_QUICK_USE_PRESET_ID,
-  TABTIN_WIDGET_QUICK_USE_TEMPLATE,
-  TABTIN_WIDGET_QUICK_USE_VARIABLES,
-  TABTIN_WIDGET_SKILL_KEY,
+  MUSE_WIDGET_QUICK_USE_DEFAULT_STATE,
+  MUSE_WIDGET_QUICK_USE_PRESET_ID,
+  MUSE_WIDGET_QUICK_USE_TEMPLATE,
+  MUSE_WIDGET_QUICK_USE_VARIABLES,
+  MUSE_WIDGET_SKILL_KEY,
 } from './tabtinWidgetQuickUse'
 
 export interface ResolvedSkillQuickUse {
@@ -112,13 +112,13 @@ function isBuiltinCatalogSkill(skill: SkillIndexEntry): boolean {
 }
 
 function matchTabtinWidget(skill: SkillIndexEntry): boolean {
-  if (skill.skill_key?.toLowerCase() === TABTIN_WIDGET_SKILL_KEY) return true
+  if (skill.skill_key?.toLowerCase() === MUSE_WIDGET_SKILL_KEY) return true
   if (!isBuiltinCatalogSkill(skill)) return false
   const canonicalValues = [skill.skill_id, skill.app_id, skill.slug]
     .filter((value): value is string => typeof value === 'string')
     .map(value => value.toLowerCase())
   return canonicalValues.some(value =>
-    value === TABTIN_WIDGET_SKILL_KEY
+    value === MUSE_WIDGET_SKILL_KEY
     || value === 'visualization/tabtin-widget'
     || value === 'tabtin-widget',
   )
@@ -188,12 +188,12 @@ function selectVar(
  */
 const BUILTIN_QUICK_USE: BuiltinQuickUse[] = [
   {
-    presetId: TABTIN_WIDGET_QUICK_USE_PRESET_ID,
+    presetId: MUSE_WIDGET_QUICK_USE_PRESET_ID,
     match: matchTabtinWidget,
     label: '快速使用 tabtin-widget',
-    promptTemplate: TABTIN_WIDGET_QUICK_USE_TEMPLATE,
-    variables: TABTIN_WIDGET_QUICK_USE_VARIABLES,
-    defaultState: TABTIN_WIDGET_QUICK_USE_DEFAULT_STATE,
+    promptTemplate: MUSE_WIDGET_QUICK_USE_TEMPLATE,
+    variables: MUSE_WIDGET_QUICK_USE_VARIABLES,
+    defaultState: MUSE_WIDGET_QUICK_USE_DEFAULT_STATE,
     requiredKeys: ['subject'],
     registerDescriptor: false,
   },

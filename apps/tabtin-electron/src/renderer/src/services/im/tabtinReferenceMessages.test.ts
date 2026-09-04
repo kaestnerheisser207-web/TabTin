@@ -11,7 +11,7 @@ import {
 } from './tabtinReferenceMessages'
 
 const MESSAGE_REF = '018f4b30-a7ad-7b32-b946-827ea2a26983'
-const TABTIN_MESSAGE_ID = '9223372036854775807'
+const MUSE_MESSAGE_ID = '9223372036854775807'
 const PROJECTION_REVISION = '019f4b30-a7ad-7b32-b946-827ea2a26984'
 
 function message(overrides: Partial<IMMessage> = {}): IMMessage {
@@ -34,22 +34,22 @@ describe('TabTin message references', () => {
   it('keeps the PostgreSQL identity as a decimal string', () => {
     const encoded = encodeTabTinMessageReference({
       messageRef: MESSAGE_REF,
-      tabtinMessageId: TABTIN_MESSAGE_ID,
+      tabtinMessageId: MUSE_MESSAGE_ID,
     })
 
     expect(JSON.parse(encoded)).toEqual({
       schema: 'tabtin.im.ref.v1',
       message_ref: MESSAGE_REF,
-      tabtin_message_id: TABTIN_MESSAGE_ID,
+      tabtin_message_id: MUSE_MESSAGE_ID,
     })
     expect(decodeTabTinMessageReference(encoded)).toEqual({
       status: 'valid',
       reference: {
         messageRef: MESSAGE_REF,
-        tabtinMessageId: TABTIN_MESSAGE_ID,
+        tabtinMessageId: MUSE_MESSAGE_ID,
       },
     })
-    expect(isTabTinMessageId(TABTIN_MESSAGE_ID)).toBe(true)
+    expect(isTabTinMessageId(MUSE_MESSAGE_ID)).toBe(true)
     expect(isTabTinMessageId(Number.MAX_SAFE_INTEGER)).toBe(false)
   })
 
@@ -68,7 +68,7 @@ describe('TabTin message references', () => {
     expect(getTabTinMessageReference({
       kind: 'tabtin_ref',
       message_ref: MESSAGE_REF,
-      tabtin_message_id: TABTIN_MESSAGE_ID,
+      tabtin_message_id: MUSE_MESSAGE_ID,
       business_projection_revision: 'not-a-uuid',
     })).toBeNull()
   })
@@ -76,7 +76,7 @@ describe('TabTin message references', () => {
   it('round-trips an optional business projection revision', () => {
     const encoded = encodeTabTinMessageReference({
       messageRef: MESSAGE_REF,
-      tabtinMessageId: TABTIN_MESSAGE_ID,
+      tabtinMessageId: MUSE_MESSAGE_ID,
       businessProjectionRevision: PROJECTION_REVISION,
     })
 
@@ -84,14 +84,14 @@ describe('TabTin message references', () => {
       status: 'valid',
       reference: {
         messageRef: MESSAGE_REF,
-        tabtinMessageId: TABTIN_MESSAGE_ID,
+        tabtinMessageId: MUSE_MESSAGE_ID,
         businessProjectionRevision: PROJECTION_REVISION,
       },
     })
     expect(decodeTabTinMessageReference(JSON.stringify({
       schema: 'tabtin.im.ref.v1',
       message_ref: MESSAGE_REF,
-      tabtin_message_id: TABTIN_MESSAGE_ID,
+      tabtin_message_id: MUSE_MESSAGE_ID,
       business_projection_revision: 'not-a-uuid',
     }))).toEqual({ status: 'invalid' })
   })
@@ -103,14 +103,14 @@ describe('TabTin message references', () => {
       metadata: {
         kind: 'tabtin_ref',
         message_ref: MESSAGE_REF,
-        tabtin_message_id: TABTIN_MESSAGE_ID,
+        tabtin_message_id: MUSE_MESSAGE_ID,
       },
     })
     const hydrated = message({
       content: 'resolved Agent response',
       metadata: {
         message_ref: MESSAGE_REF,
-        tabtin_message_id: TABTIN_MESSAGE_ID,
+        tabtin_message_id: MUSE_MESSAGE_ID,
       },
     })
 
@@ -121,7 +121,7 @@ describe('TabTin message references', () => {
         content: 'resolved Agent response',
         metadata: expect.objectContaining({
           kind: 'tabtin_ref',
-          tabtin_message_id: TABTIN_MESSAGE_ID,
+          tabtin_message_id: MUSE_MESSAGE_ID,
         }),
       }),
     )
@@ -135,7 +135,7 @@ describe('TabTin message references', () => {
       metadata: {
         kind: 'tabtin_ref',
         message_ref: MESSAGE_REF,
-        tabtin_message_id: TABTIN_MESSAGE_ID,
+        tabtin_message_id: MUSE_MESSAGE_ID,
       },
     })
     const hydratedWithoutStringId = message({

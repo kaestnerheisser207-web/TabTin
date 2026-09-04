@@ -55,7 +55,7 @@ export function runCommand(
 }
 
 export function resolvePythonCommand(repoRoot: string): string {
-  const explicit = process.env.TABTIN_E2E_PYTHON;
+  const explicit = process.env.MUSE_E2E_PYTHON;
   if (explicit) return explicit;
 
   const venvCandidates = process.platform === "win32"
@@ -76,7 +76,7 @@ export function resolvePythonCommand(repoRoot: string): string {
   throw new Error(
     [
       `Electron E2E requires a Python virtualenv with Django dependencies. Checked: ${venvCandidates.join(", ")}.`,
-      "Run `pnpm e2e:python:setup` first, or set TABTIN_E2E_PYTHON to a Python executable with Django dependencies installed.",
+      "Run `pnpm e2e:python:setup` first, or set MUSE_E2E_PYTHON to a Python executable with Django dependencies installed.",
     ].join(" "),
   );
 }

@@ -22,7 +22,7 @@ class ParsedDocument(models.Model):
         """
         失败原因结构化分类（W1 / L9：DocParseService.STATUS 失败原因结构化）。
 
-        与 `@tabtin/file-pipeline-errors` 的 `FilePipelineErrorCode` SSoT 严格对齐。
+        与 `@muse/file-pipeline-errors` 的 `FilePipelineErrorCode` SSoT 严格对齐。
         添加 / 改名前先改 TS 端，保证三端（客户端 / 后端 / 移动端）字面值不漂移。
 
         13 类对应关系：
@@ -90,7 +90,7 @@ class ParsedDocument(models.Model):
         db_index=True,
         verbose_name='失败结构化分类',
         help_text=(
-            'W1 / L9：与 @tabtin/file-pipeline-errors SSoT 对齐的 13 类失败码。'
+            'W1 / L9：与 @muse/file-pipeline-errors SSoT 对齐的 13 类失败码。'
             'status=FAILED 时必填，客户端 UI 按此字段路由到 i18n 文案。'
         ),
     )

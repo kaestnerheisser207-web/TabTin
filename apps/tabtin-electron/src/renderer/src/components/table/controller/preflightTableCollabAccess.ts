@@ -3,13 +3,13 @@
  */
 import { getAuthToken } from '@/adapters/api-adapter-instance'
 import { API_CONFIG } from '@/config/api'
-import { joinApiPath } from '@tabtin/config'
+import { joinApiPath } from '@muse/config'
 import {
   COLLAB_ACCESS_VERIFICATION_UNAVAILABLE,
   COLLAB_PERMISSION_DENIED,
   parseTableCollabAccessPayload,
   type TableCollabAccessDecision,
-} from '@tabtin/table-engine/collab'
+} from '@muse/table-engine/collab'
 import { electronFetch } from '@/services/electronFetch'
 import { createLogger } from '@/utils/logger'
 

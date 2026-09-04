@@ -13,8 +13,8 @@ import http from 'node:http'
 import {
   handleBrowserAction,
   type BrowserOrchestratorHostHooks,
-} from '@tabtin/browser-core'
-import { okResponse } from '@tabtin/agent-wire'
+} from '@muse/browser-core'
+import { okResponse } from '@muse/agent-wire'
 import type { SendJSON, ActionExecutor } from './_helpers'
 import { buildBrowserRequestScope, errorResponse, resolveTabId } from './_helpers'
 import { buildElectronJobHooks } from './resources'

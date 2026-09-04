@@ -8,21 +8,21 @@ import http from 'node:http';
 
 // ── B-01: tsup noExternal ────────────────────────────────────────
 
-describe('B-01: tsup noExternal covers all @tabtin/* workspace packages', () => {
+describe('B-01: tsup noExternal covers all @muse/* workspace packages', () => {
   const rootDir = join(__dirname, '..');
   const pkgJson = JSON.parse(readFileSync(join(rootDir, 'package.json'), 'utf-8'));
   const tsupConfigRaw = readFileSync(join(rootDir, 'tsup.config.ts'), 'utf-8');
 
   const workspaceDeps = Object.keys(pkgJson.dependencies ?? {})
-    .filter((dep: string) => dep.startsWith('@tabtin/'));
+    .filter((dep: string) => dep.startsWith('@muse/'));
 
-  it('package.json has @tabtin/* workspace dependencies', () => {
+  it('package.json has @muse/* workspace dependencies', () => {
     expect(workspaceDeps.length).toBeGreaterThanOrEqual(8);
   });
 
-  it('tsup.config.ts dynamically reads @tabtin/* from package.json', () => {
+  it('tsup.config.ts dynamically reads @muse/* from package.json', () => {
     expect(tsupConfigRaw).toContain('tabtinDeps');
-    expect(tsupConfigRaw).toContain("d.startsWith('@tabtin/')");
+    expect(tsupConfigRaw).toContain("d.startsWith('@muse/')");
     expect(tsupConfigRaw).toContain('noExternal: bundledTabtinDeps');
   });
 
@@ -32,13 +32,13 @@ describe('B-01: tsup noExternal covers all @tabtin/* workspace packages', () => 
     );
   });
 
-  it('all @tabtin/* deps start with @tabtin/', () => {
+  it('all @muse/* deps start with @muse/', () => {
     for (const dep of workspaceDeps) {
-      expect(dep.startsWith('@tabtin/')).toBe(true);
+      expect(dep.startsWith('@muse/')).toBe(true);
     }
   });
 
-  it('build output does not contain external @tabtin/* imports', () => {
+  it('build output does not contain external @muse/* imports', () => {
     const distPath = join(rootDir, 'dist', 'index.js');
     const distContent = readFileSync(distPath, 'utf-8');
     const externalImports = distContent.match(/from\s+["']@tabtin\/[^"']+["']/g) ?? [];

@@ -14,7 +14,7 @@
  */
 
 import { describe, expect, it, vi } from 'vitest';
-import { StreamEvents } from '@tabtin/agent-wire';
+import { StreamEvents } from '@muse/agent-wire';
 import {
   persistCurrentAssistantForHitlResume,
   requireAgentRunId,

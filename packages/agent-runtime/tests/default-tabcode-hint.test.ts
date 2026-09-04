@@ -6,7 +6,7 @@
  */
 import { describe, it, expect, vi, afterEach } from 'vitest';
 
-import * as filePipelineErrors from '@tabtin/file-pipeline-errors';
+import * as filePipelineErrors from '@muse/file-pipeline-errors';
 import { errorResultEnvelope } from '../src/tools/read-file-state.js';
 
 const USER_CANCEL_HINT =

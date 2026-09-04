@@ -28,8 +28,8 @@ import {
   listAutoCheckpoints,
   type TerminalSnapshot,
 } from './snapshot'
-import { normalizeSize } from '@tabtin/pty-core'
-import { resolvePtyManagerBridge } from '@tabtin/action-tools/runtime'
+import { normalizeSize } from '@muse/pty-core'
+import { resolvePtyManagerBridge } from '@muse/action-tools/runtime'
 import { createLogger } from '../logger'
 
 const log = createLogger('TerminalIPC')

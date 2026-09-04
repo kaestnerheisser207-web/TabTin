@@ -1,7 +1,7 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { PtyManager } from '../PtyManager'
 import type { PtyHostClient, PtyHostSession } from '../PtyHost'
-import { MARKER_PREFIX, wrapCommand, shellQuote } from '@tabtin/pty-core'
+import { MARKER_PREFIX, wrapCommand, shellQuote } from '@muse/pty-core'
 
 vi.mock('electron', () => ({
   app: {
@@ -14,8 +14,8 @@ const { getCLIServerInfoMock, resolveShellMock } = vi.hoisted(() => ({
   resolveShellMock: vi.fn(() => '/bin/bash'),
 }))
 
-vi.mock('@tabtin/pty-core', async (importOriginal) => {
-  const actual = await importOriginal<typeof import('@tabtin/pty-core')>()
+vi.mock('@muse/pty-core', async (importOriginal) => {
+  const actual = await importOriginal<typeof import('@muse/pty-core')>()
   return {
     ...actual,
     resolveShell: resolveShellMock,
@@ -113,12 +113,12 @@ describe('PtyManager pty-core alignment (PTY-008/009, D-01/02/03)', () => {
       await vi.waitFor(() => expect(host.write).toHaveBeenCalled())
 
       const written = host.write.mock.calls.at(-1)?.[0] as string
-      expect(written).toMatch(/echo "__TABTIN_CMD_START_[a-f0-9]{32}__"/)
-      expect(written).toMatch(/echo "__TABTIN_CMD_END_[a-f0-9]{32}_\$\?"\$'\\x1F'"\$\(pwd\)__"/)
+      expect(written).toMatch(/echo "__MUSE_CMD_START_[a-f0-9]{32}__"/)
+      expect(written).toMatch(/echo "__MUSE_CMD_END_[a-f0-9]{32}_\$\?"\$'\\x1F'"\$\(pwd\)__"/)
       expect(written).toContain('echo hello')
 
-      const startMarker = written.match(/__TABTIN_CMD_START_[a-f0-9]+__/)![0]
-      const endMarkerPrefix = written.match(/__TABTIN_CMD_END_[a-f0-9]+_/)![0]
+      const startMarker = written.match(/__MUSE_CMD_START_[a-f0-9]+__/)![0]
+      const endMarkerPrefix = written.match(/__MUSE_CMD_END_[a-f0-9]+_/)![0]
       host.triggerData(`${startMarker}\nhello\n${endMarkerPrefix}0_/tmp__\n`)
 
       const result = await resultP
@@ -134,8 +134,8 @@ describe('PtyManager pty-core alignment (PTY-008/009, D-01/02/03)', () => {
       await vi.waitFor(() => expect(host.write).toHaveBeenCalled())
 
       const written = host.write.mock.calls.at(-1)?.[0] as string
-      const startNonce = written.match(/__TABTIN_CMD_START_([a-f0-9]{32})__/)![1]
-      const endNonce = written.match(/__TABTIN_CMD_END_([a-f0-9]{32})_/)![1]
+      const startNonce = written.match(/__MUSE_CMD_START_([a-f0-9]{32})__/)![1]
+      const endNonce = written.match(/__MUSE_CMD_END_([a-f0-9]{32})_/)![1]
       expect(startNonce).toHaveLength(32)
       expect(endNonce).toHaveLength(32)
       expect(startNonce).not.toBe(endNonce)
@@ -158,8 +158,8 @@ describe('PtyManager pty-core alignment (PTY-008/009, D-01/02/03)', () => {
         'echo $MY_VAR',
         {
           nonce: 'endnonce',
-          startMarker: '__TABTIN_CMD_START_startnonce__',
-          endMarkerPrefix: '__TABTIN_CMD_END_endnonce_',
+          startMarker: '__MUSE_CMD_START_startnonce__',
+          endMarkerPrefix: '__MUSE_CMD_END_endnonce_',
         },
         {
           env: { MY_VAR: "hello 'world'" },
@@ -184,8 +184,8 @@ describe('PtyManager pty-core alignment (PTY-008/009, D-01/02/03)', () => {
       expect(written).toContain(`cd ${shellQuote('/path/with spaces')}`)
       expect(written).not.toContain(`cd "/path/with spaces"`)
 
-      const endMarkerPrefix = written.match(/__TABTIN_CMD_END_[a-f0-9]+_/)![0]
-      const startMarker = written.match(/__TABTIN_CMD_START_[a-f0-9]+__/)![0]
+      const endMarkerPrefix = written.match(/__MUSE_CMD_END_[a-f0-9]+_/)![0]
+      const startMarker = written.match(/__MUSE_CMD_START_[a-f0-9]+__/)![0]
       host.triggerData(`${startMarker}\n/path/with spaces\n${endMarkerPrefix}0_/path/with spaces__\n`)
       await resultP
     })
@@ -208,8 +208,8 @@ describe('PtyManager pty-core alignment (PTY-008/009, D-01/02/03)', () => {
       })
 
       const written = host.write.mock.calls.at(-1)?.[0] as string
-      const startMarker = written.match(/__TABTIN_CMD_START_[a-f0-9]+__/)![0]
-      const endMarkerPrefix = written.match(/__TABTIN_CMD_END_[a-f0-9]+_/)![0]
+      const startMarker = written.match(/__MUSE_CMD_START_[a-f0-9]+__/)![0]
+      const endMarkerPrefix = written.match(/__MUSE_CMD_END_[a-f0-9]+_/)![0]
 
       host.triggerData(
         `${startMarker}\n/my_project/sub_dir\n${endMarkerPrefix}0_/my_project/sub_dir__\n`,
@@ -228,8 +228,8 @@ describe('PtyManager pty-core alignment (PTY-008/009, D-01/02/03)', () => {
       const resultP = manager.executeCommand('s-exit', 'false', { blockUntilMs: 5_000 })
 
       const written = host.write.mock.calls.at(-1)?.[0] as string
-      const startMarker = written.match(/__TABTIN_CMD_START_[a-f0-9]+__/)![0]
-      const endMarkerPrefix = written.match(/__TABTIN_CMD_END_[a-f0-9]+_/)![0]
+      const startMarker = written.match(/__MUSE_CMD_START_[a-f0-9]+__/)![0]
+      const endMarkerPrefix = written.match(/__MUSE_CMD_END_[a-f0-9]+_/)![0]
 
       host.triggerData(`${startMarker}\n\n${endMarkerPrefix}1_/tmp__\n`)
 
@@ -247,8 +247,8 @@ describe('PtyManager pty-core alignment (PTY-008/009, D-01/02/03)', () => {
       expect(result.backgrounded).toBe(true)
 
       const written = host.write.mock.calls.at(-1)?.[0] as string
-      const endMarkerPrefix = written.match(/__TABTIN_CMD_END_[a-f0-9]+_/)![0]
-      const startMarker = written.match(/__TABTIN_CMD_START_[a-f0-9]+__/)![0]
+      const endMarkerPrefix = written.match(/__MUSE_CMD_END_[a-f0-9]+_/)![0]
+      const startMarker = written.match(/__MUSE_CMD_START_[a-f0-9]+__/)![0]
 
       host.triggerData(`${startMarker}\ndone\n${endMarkerPrefix}42_/home/user__\n`)
 
@@ -269,9 +269,9 @@ describe('PtyManager pty-core alignment (PTY-008/009, D-01/02/03)', () => {
       await vi.waitFor(() => expect(host.write).toHaveBeenCalled())
 
       const written = host.write.mock.calls.at(-1)?.[0] as string
-      const startMarker = written.match(/__TABTIN_CMD_START_[a-f0-9]{32}__/)![0]
-      const endMarkerPrefix = written.match(/__TABTIN_CMD_END_[a-f0-9]{32}_/)![0]
-      const endNonce = written.match(/__TABTIN_CMD_END_([a-f0-9]{32})_/)![1]
+      const startMarker = written.match(/__MUSE_CMD_START_[a-f0-9]{32}__/)![0]
+      const endMarkerPrefix = written.match(/__MUSE_CMD_END_[a-f0-9]{32}_/)![0]
+      const endNonce = written.match(/__MUSE_CMD_END_([a-f0-9]{32})_/)![1]
 
       const markers = {
         nonce: endNonce,
@@ -303,11 +303,11 @@ describe('PtyManager pty-core alignment (PTY-008/009, D-01/02/03)', () => {
       await vi.waitFor(() => expect(host.write).toHaveBeenCalled())
 
       const written = host.write.mock.calls.at(-1)?.[0] as string
-      expect(written).toContain(`export TABTIN_SOCK=${shellQuote('\\\\.\\pipe\\tabtin-electron-cli-11688')}`)
-      expect(written).toContain(`export _TABTIN_TRANSPORT_TOKEN=${shellQuote('transport-token')}`)
+      expect(written).toContain(`export MUSE_SOCK=${shellQuote('\\\\.\\pipe\\tabtin-electron-cli-11688')}`)
+      expect(written).toContain(`export _MUSE_TRANSPORT_TOKEN=${shellQuote('transport-token')}`)
 
-      const startMarker = written.match(/__TABTIN_CMD_START_[a-f0-9]{32}__/)![0]
-      const endMarkerPrefix = written.match(/__TABTIN_CMD_END_[a-f0-9]{32}_/)![0]
+      const startMarker = written.match(/__MUSE_CMD_START_[a-f0-9]{32}__/)![0]
+      const endMarkerPrefix = written.match(/__MUSE_CMD_END_[a-f0-9]{32}_/)![0]
       host.triggerData(`${startMarker}\n[]\n${endMarkerPrefix}0_/tmp__\n`)
       await resultP
     })
@@ -320,16 +320,16 @@ describe('PtyManager pty-core alignment (PTY-008/009, D-01/02/03)', () => {
 
       expect(manager.spawn('s-interactive-cli-env', { cwd: '/tmp' })).toBe(true)
       expect(hostClient.getLastSpawnEnv()).toMatchObject({
-        TABTIN_SOCK: '/tmp/cli-im-2.sock',
-        _TABTIN_TRANSPORT_TOKEN: 'instance-token',
+        MUSE_SOCK: '/tmp/cli-im-2.sock',
+        _MUSE_TRANSPORT_TOKEN: 'instance-token',
       })
 
       expect((manager as unknown as {
         restartSessionShell: (sessionId: string) => boolean
       }).restartSessionShell('s-interactive-cli-env')).toBe(true)
       expect(hostClient.getLastSpawnEnv()).toMatchObject({
-        TABTIN_SOCK: '/tmp/cli-im-2.sock',
-        _TABTIN_TRANSPORT_TOKEN: 'instance-token',
+        MUSE_SOCK: '/tmp/cli-im-2.sock',
+        _MUSE_TRANSPORT_TOKEN: 'instance-token',
       })
     })
 
@@ -341,21 +341,21 @@ describe('PtyManager pty-core alignment (PTY-008/009, D-01/02/03)', () => {
 
       expect(manager.spawn('s-interactive-explicit-cli-env', {
         cwd: '/tmp',
-        env: { TABTIN_SOCK: '/tmp/explicit.sock' },
+        env: { MUSE_SOCK: '/tmp/explicit.sock' },
       })).toBe(true)
 
       expect(hostClient.getLastSpawnEnv()).toMatchObject({
-        TABTIN_SOCK: '/tmp/explicit.sock',
+        MUSE_SOCK: '/tmp/explicit.sock',
       })
-      expect(hostClient.getLastSpawnEnv()._TABTIN_TRANSPORT_TOKEN).toBeUndefined()
+      expect(hostClient.getLastSpawnEnv()._MUSE_TRANSPORT_TOKEN).toBeUndefined()
 
       expect((manager as unknown as {
         restartSessionShell: (sessionId: string) => boolean
       }).restartSessionShell('s-interactive-explicit-cli-env')).toBe(true)
       expect(hostClient.getLastSpawnEnv()).toMatchObject({
-        TABTIN_SOCK: '/tmp/explicit.sock',
+        MUSE_SOCK: '/tmp/explicit.sock',
       })
-      expect(hostClient.getLastSpawnEnv()._TABTIN_TRANSPORT_TOKEN).toBeUndefined()
+      expect(hostClient.getLastSpawnEnv()._MUSE_TRANSPORT_TOKEN).toBeUndefined()
     })
 
     it('PowerShell shell 下使用 Windows 可生效的 env 语法', async () => {
@@ -376,12 +376,12 @@ describe('PtyManager pty-core alignment (PTY-008/009, D-01/02/03)', () => {
       await vi.waitFor(() => expect(host.write).toHaveBeenCalled())
 
       const written = host.write.mock.calls.at(-1)?.[0] as string
-      expect(written).toContain("$env:TABTIN_SOCK = '\\\\.\\pipe\\tabtin-electron-cli-11688'")
-      expect(written).toContain("$env:_TABTIN_TRANSPORT_TOKEN = 'transport-token'")
-      expect(written).not.toContain('export TABTIN_SOCK=')
+      expect(written).toContain("$env:MUSE_SOCK = '\\\\.\\pipe\\tabtin-electron-cli-11688'")
+      expect(written).toContain("$env:_MUSE_TRANSPORT_TOKEN = 'transport-token'")
+      expect(written).not.toContain('export MUSE_SOCK=')
 
-      const startMarker = written.match(/__TABTIN_CMD_START_[a-f0-9]{32}__/)![0]
-      const endMarkerPrefix = written.match(/__TABTIN_CMD_END_[a-f0-9]{32}_/)![0]
+      const startMarker = written.match(/__MUSE_CMD_START_[a-f0-9]{32}__/)![0]
+      const endMarkerPrefix = written.match(/__MUSE_CMD_END_[a-f0-9]{32}_/)![0]
       host.triggerData(`${startMarker}\n[]\n${endMarkerPrefix}0\x1fC:\\work__\n`)
       await resultP
     })
@@ -402,10 +402,10 @@ describe('PtyManager pty-core alignment (PTY-008/009, D-01/02/03)', () => {
 
       const written = host.write.mock.calls.at(-1)?.[0] as string
       expect(written).toContain('Write-Host')
-      expect(written).not.toContain('echo "__TABTIN_CMD_START_')
+      expect(written).not.toContain('echo "__MUSE_CMD_START_')
 
-      const startMarker = written.match(/__TABTIN_CMD_START_[a-f0-9]{32}__/)![0]
-      const endMarkerPrefix = written.match(/__TABTIN_CMD_END_[a-f0-9]{32}_/)![0]
+      const startMarker = written.match(/__MUSE_CMD_START_[a-f0-9]{32}__/)![0]
+      const endMarkerPrefix = written.match(/__MUSE_CMD_END_[a-f0-9]{32}_/)![0]
       host.triggerData(`${startMarker}\n[]\n${endMarkerPrefix}0\x1fC:\\work__\n`)
       await resultP
     })
@@ -423,21 +423,21 @@ describe('PtyManager pty-core alignment (PTY-008/009, D-01/02/03)', () => {
         blockUntilMs: 5_000,
         context: {
           env: {
-            TABTIN_SOCK: 'explicit-sock',
-            _TABTIN_TRANSPORT_TOKEN: 'explicit-token',
+            MUSE_SOCK: 'explicit-sock',
+            _MUSE_TRANSPORT_TOKEN: 'explicit-token',
           },
         } as any,
       })
       await vi.waitFor(() => expect(host.write).toHaveBeenCalled())
 
       const written = host.write.mock.calls.at(-1)?.[0] as string
-      expect(written).toContain(`export TABTIN_SOCK=${shellQuote('explicit-sock')}`)
-      expect(written).toContain(`export _TABTIN_TRANSPORT_TOKEN=${shellQuote('explicit-token')}`)
+      expect(written).toContain(`export MUSE_SOCK=${shellQuote('explicit-sock')}`)
+      expect(written).toContain(`export _MUSE_TRANSPORT_TOKEN=${shellQuote('explicit-token')}`)
       expect(written).not.toContain('tabtin-electron-cli-server')
       expect(written).not.toContain('server-token')
 
-      const startMarker = written.match(/__TABTIN_CMD_START_[a-f0-9]{32}__/)![0]
-      const endMarkerPrefix = written.match(/__TABTIN_CMD_END_[a-f0-9]{32}_/)![0]
+      const startMarker = written.match(/__MUSE_CMD_START_[a-f0-9]{32}__/)![0]
+      const endMarkerPrefix = written.match(/__MUSE_CMD_END_[a-f0-9]{32}_/)![0]
       host.triggerData(`${startMarker}\n[]\n${endMarkerPrefix}0_/tmp__\n`)
       await resultP
     })
@@ -455,19 +455,19 @@ describe('PtyManager pty-core alignment (PTY-008/009, D-01/02/03)', () => {
         blockUntilMs: 5_000,
         context: {
           env: {
-            TABTIN_SOCK: 'explicit-sock',
+            MUSE_SOCK: 'explicit-sock',
           },
         } as any,
       })
       await vi.waitFor(() => expect(host.write).toHaveBeenCalled())
 
       const written = host.write.mock.calls.at(-1)?.[0] as string
-      expect(written).toContain(`export TABTIN_SOCK=${shellQuote('explicit-sock')}`)
-      expect(written).not.toContain('_TABTIN_TRANSPORT_TOKEN')
+      expect(written).toContain(`export MUSE_SOCK=${shellQuote('explicit-sock')}`)
+      expect(written).not.toContain('_MUSE_TRANSPORT_TOKEN')
       expect(written).not.toContain('server-token')
 
-      const startMarker = written.match(/__TABTIN_CMD_START_[a-f0-9]{32}__/)![0]
-      const endMarkerPrefix = written.match(/__TABTIN_CMD_END_[a-f0-9]{32}_/)![0]
+      const startMarker = written.match(/__MUSE_CMD_START_[a-f0-9]{32}__/)![0]
+      const endMarkerPrefix = written.match(/__MUSE_CMD_END_[a-f0-9]{32}_/)![0]
       host.triggerData(`${startMarker}\n[]\n${endMarkerPrefix}0_/tmp__\n`)
       await resultP
     })
@@ -484,11 +484,11 @@ describe('PtyManager pty-core alignment (PTY-008/009, D-01/02/03)', () => {
       await vi.waitFor(() => expect(host.write).toHaveBeenCalled())
 
       const written = host.write.mock.calls.at(-1)?.[0] as string
-      expect(written).not.toContain('TABTIN_SOCK')
-      expect(written).not.toContain('_TABTIN_TRANSPORT_TOKEN')
+      expect(written).not.toContain('MUSE_SOCK')
+      expect(written).not.toContain('_MUSE_TRANSPORT_TOKEN')
 
-      const startMarker = written.match(/__TABTIN_CMD_START_[a-f0-9]{32}__/)![0]
-      const endMarkerPrefix = written.match(/__TABTIN_CMD_END_[a-f0-9]{32}_/)![0]
+      const startMarker = written.match(/__MUSE_CMD_START_[a-f0-9]{32}__/)![0]
+      const endMarkerPrefix = written.match(/__MUSE_CMD_END_[a-f0-9]{32}_/)![0]
       host.triggerData(`${startMarker}\n[]\n${endMarkerPrefix}0_/tmp__\n`)
       await resultP
     })

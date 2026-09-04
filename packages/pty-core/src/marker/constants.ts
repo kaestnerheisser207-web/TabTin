@@ -1,10 +1,10 @@
-export const MARKER_PREFIX = '__TABTIN_CMD_'
+export const MARKER_PREFIX = '__MUSE_CMD_'
 /**
  * PC-24 fix: removed the `g` flag to prevent lastIndex state bugs when
  * using exec/test across multiple calls. The `m` flag is retained for
  * multiline matching. Use createMarkerLineRE() when global matching is needed.
  */
-export const MARKER_LINE_RE = /^.*__TABTIN_CMD_(?:START|END)_[a-f0-9]+.*$/m
+export const MARKER_LINE_RE = /^.*__MUSE_CMD_(?:START|END)_[a-f0-9]+.*$/m
 
 /**
  * PC-24 fix: factory function that returns a fresh global regex for use in
@@ -12,7 +12,7 @@ export const MARKER_LINE_RE = /^.*__TABTIN_CMD_(?:START|END)_[a-f0-9]+.*$/m
  * lastIndex state.
  */
 export function createMarkerLineRE(): RegExp {
-  return /^.*__TABTIN_CMD_(?:START|END)_[a-f0-9]+.*$/gm
+  return /^.*__MUSE_CMD_(?:START|END)_[a-f0-9]+.*$/gm
 }
 export const ANSI_RE = /\x1B(?:[@-Z\\-_]|\[[0-?]*[ -/]*[@-~])/g
 export const DEFAULT_BLOCK_UNTIL_MS = 30_000

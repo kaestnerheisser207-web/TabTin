@@ -1,1 +1,1 @@
-export { onOrganizationSelected as onOrganizationSelected, emitOrganizationSelected as emitOrganizationSelected } from '@tabtin/app-shell'
+export { onOrganizationSelected as onOrganizationSelected, emitOrganizationSelected as emitOrganizationSelected } from '@muse/app-shell'

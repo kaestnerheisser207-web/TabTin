@@ -6,7 +6,7 @@
  * 快照对账在这里「缺失即清」误杀了等待中的活审批。
  */
 import { describe, it, expect, vi, beforeEach } from 'vitest'
-import type { ChatMessage } from '@tabtin/chat-client'
+import type { ChatMessage } from '@muse/chat-client'
 import { registerHitlStoreAccess, __resetHitlStoreAccessForTest } from '../../../shared/storeAccessRegistry'
 import {
   recordHitlResolvedKey,

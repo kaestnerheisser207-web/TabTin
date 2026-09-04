@@ -4,11 +4,11 @@ To add a new file type: create a module here, implement a ``Generator``, and
 register it below. The CLI and the Go proxy need no changes.
 """
 
-from tabtin_filegen.generators.docx import DocxGenerator, DocxReader
-from tabtin_filegen.generators.pdf import PdfGenerator, PdfReader
-from tabtin_filegen.generators.pptx import PptxGenerator, PptxReader
-from tabtin_filegen.generators.xlsx import XlsxGenerator, XlsxReader
-from tabtin_filegen.registry import register, register_reader
+from muse_filegen.generators.docx import DocxGenerator, DocxReader
+from muse_filegen.generators.pdf import PdfGenerator, PdfReader
+from muse_filegen.generators.pptx import PptxGenerator, PptxReader
+from muse_filegen.generators.xlsx import XlsxGenerator, XlsxReader
+from muse_filegen.registry import register, register_reader
 
 register(XlsxGenerator())
 register(DocxGenerator())

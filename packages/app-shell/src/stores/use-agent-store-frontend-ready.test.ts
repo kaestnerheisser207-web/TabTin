@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 
-vi.mock('@tabtin/shared', () => ({
+vi.mock('@muse/shared', () => ({
   withPersistSafety: (options: unknown) => options,
 }))
 

@@ -311,7 +311,7 @@ class ParentDocumentRequestContextTests(SimpleTestCase):
         middleware = TabDataRequestContextMiddleware(lambda request: None)
         request = RequestFactory().get(
             "/api/tabdata/tables/example",
-            HTTP_X_TABTIN_PARENT_DOCUMENT_ID=parent_id,
+            HTTP_X_MUSE_PARENT_DOCUMENT_ID=parent_id,
         )
 
         middleware.process_request(request)
@@ -338,7 +338,7 @@ class ParentDocumentRequestContextTests(SimpleTestCase):
         middleware = TabDataRequestContextMiddleware(lambda request: None)
         request = RequestFactory().get(
             "/api/tabdata/tables/example",
-            HTTP_X_TABTIN_PARENT_DOCUMENT_ID=str(uuid4()),
+            HTTP_X_MUSE_PARENT_DOCUMENT_ID=str(uuid4()),
         )
         middleware.process_request(request)
         mark_embedded_access_verification_unavailable()

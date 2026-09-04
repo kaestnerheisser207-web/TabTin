@@ -23,7 +23,7 @@ from apps.collab.models import VersionHistory
 
 logger = logging.getLogger("collab.migrate_histories")
 
-DB = ('default' if getattr(settings, 'TABTIN_SINGLE_DATABASE_MODE', False) else 'postgresql')
+DB = ('default' if getattr(settings, 'MUSE_SINGLE_DATABASE_MODE', False) else 'postgresql')
 # CSC-036: 迁移时对已过期记录赋予的最小 TTL（秒），避免迁移后立即被 cleanup 删除。
 _MIGRATE_MIN_TTL_SECONDS = 86400 * 7  # 7 天
 

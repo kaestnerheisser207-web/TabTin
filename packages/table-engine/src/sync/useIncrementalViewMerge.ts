@@ -4,7 +4,7 @@ import {
   patchVersionInEtag,
   type TableRecord,
   type ViewRecordsResponse,
-} from '@tabtin/table-core'
+} from '@muse/table-core'
 import type { IncrementalSyncSnapshot } from './types'
 
 export interface ViewStoreApiLike {

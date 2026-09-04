@@ -21,7 +21,7 @@ import { endSessionRun } from '@/stores/chat/stream/handlers/sessionCleanup'
 import { fetchSessionStatus } from '@/services/chatExtraApi'
 import { markSessionStale } from '@/services/sessionFreshness'
 import { isLocalRuntimeAvailable } from '@services/localAgentClient'
-import { toast } from '@tabtin/smartsheet-ui/toast'
+import { toast } from '@muse/smartsheet-ui/toast'
 import i18n from '@/i18n'
 import { createLogger } from '@/utils/logger'
 

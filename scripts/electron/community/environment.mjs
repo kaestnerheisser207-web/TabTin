@@ -1,8 +1,8 @@
 import { readFile, rename, unlink, writeFile } from 'node:fs/promises';
 
 export const COMMUNITY_ENV_DEFAULTS = Object.freeze({
-  TABTIN_LOCAL_DEV_MODE: 'native',
-  TABTIN_API_BASE_URL: 'http://127.0.0.1:6060/api',
+  MUSE_LOCAL_DEV_MODE: 'native',
+  MUSE_API_BASE_URL: 'http://127.0.0.1:6060/api',
   VITE_API_BASE_URL: 'http://127.0.0.1:6060/api',
   VITE_COLLAB_WS_BASE: 'ws://127.0.0.1:4100',
   VITE_CENTRIFUGO_WS_URL: 'ws://127.0.0.1:8100/connection/websocket',
@@ -12,7 +12,7 @@ export const COMMUNITY_ENV_DEFAULTS = Object.freeze({
 });
 
 const URL_ENV_KEYS = new Set([
-  'TABTIN_API_BASE_URL',
+  'MUSE_API_BASE_URL',
   'VITE_API_BASE_URL',
   'VITE_COLLAB_WS_BASE',
   'VITE_CENTRIFUGO_WS_URL',
@@ -21,7 +21,7 @@ const URL_ENV_KEYS = new Set([
 
 const LOCAL_HOSTS = new Set(['127.0.0.1', 'localhost', '[::1]']);
 const ROOT_ENV_PUBLIC_SWITCHES = [
-  'TABTIN_EDITION',
+  'MUSE_EDITION',
   'AUTH_FIXED_VERIFICATION_CODE',
 ];
 
@@ -52,7 +52,7 @@ export function parseEnvText(text) {
 
 export function validateCommunityEnv(values) {
   const issues = [];
-  const requiresLocalHosts = values.TABTIN_LOCAL_DEV_MODE === 'native';
+  const requiresLocalHosts = values.MUSE_LOCAL_DEV_MODE === 'native';
   const placeholderKeys = new Set();
 
   for (const key of Object.keys(COMMUNITY_ENV_DEFAULTS)) {
@@ -168,11 +168,11 @@ export async function ensureRootEnvFile(filePath, templatePath) {
 
 export async function writeCommunityRuntimeEnvFile(filePath, runtimeFilePath) {
   const values = parseEnvText(await readFile(filePath, 'utf8'));
-  const edition = String(values.TABTIN_EDITION ?? '')
+  const edition = String(values.MUSE_EDITION ?? '')
     .trim()
     .toLowerCase();
   if (!['community', 'saas'].includes(edition)) {
-    throw new Error('TABTIN_EDITION must be community or saas');
+    throw new Error('MUSE_EDITION must be community or saas');
   }
   const fixedCode = String(values.AUTH_FIXED_VERIFICATION_CODE ?? '').trim();
   if (fixedCode && !/^\d{6}$/.test(fixedCode)) {
@@ -182,7 +182,7 @@ export async function writeCommunityRuntimeEnvFile(filePath, runtimeFilePath) {
   }
 
   const runtimeText =
-    `TABTIN_EDITION=${edition}\n` +
+    `MUSE_EDITION=${edition}\n` +
     `AUTH_FIXED_VERIFICATION_CODE=${fixedCode}\n`;
   const temporaryFile = `${runtimeFilePath}.tmp-${process.pid}`;
   try {

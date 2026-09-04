@@ -5,7 +5,7 @@
  * 对应 Electron 的 apps/tabtin-electron/src/renderer/src/adapters/app-shell-init.ts
  */
 
-import { configureAppShell, initAppShellStores } from '@tabtin/app-shell';
+import { configureAppShell, initAppShellStores } from '@muse/app-shell';
 import { API_BASE_URL } from '@/config/api';
 import { STORAGE_KEYS } from '@/platform';
 import { useAuthStore } from '@/stores/auth-store';

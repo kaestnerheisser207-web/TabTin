@@ -43,15 +43,15 @@ import {
 } from './app-identity'
 
 describe('app-identity', () => {
-  const originalRuntimeProfile = process.env.TABTIN_RUNTIME_PROFILE
+  const originalRuntimeProfile = process.env.MUSE_RUNTIME_PROFILE
   const originalViteBuildProfile = process.env.VITE_BUILD_PROFILE
-  const originalBuildProfile = process.env.TABTIN_BUILD_PROFILE
-  const originalAppId = process.env.TABTIN_APP_ID
-  const originalProductName = process.env.TABTIN_APP_PRODUCT_NAME
-  const originalDataRoot = process.env.TABTIN_DATA_ROOT
-  const originalRuntimeRoot = process.env.TABTIN_RUNTIME_ROOT
-  const originalConfigDir = process.env.TABTIN_CONFIG_DIR
-  const originalDevInstance = process.env.TABTIN_DEV_INSTANCE
+  const originalBuildProfile = process.env.MUSE_BUILD_PROFILE
+  const originalAppId = process.env.MUSE_APP_ID
+  const originalProductName = process.env.MUSE_APP_PRODUCT_NAME
+  const originalDataRoot = process.env.MUSE_DATA_ROOT
+  const originalRuntimeRoot = process.env.MUSE_RUNTIME_ROOT
+  const originalConfigDir = process.env.MUSE_CONFIG_DIR
+  const originalDevInstance = process.env.MUSE_DEV_INSTANCE
   const originalResourcesPath = process.resourcesPath
 
   beforeEach(() => {
@@ -67,27 +67,27 @@ describe('app-identity', () => {
       configurable: true,
       value: undefined,
     })
-    delete process.env.TABTIN_RUNTIME_PROFILE
+    delete process.env.MUSE_RUNTIME_PROFILE
     delete process.env.VITE_BUILD_PROFILE
-    delete process.env.TABTIN_BUILD_PROFILE
-    delete process.env.TABTIN_APP_ID
-    delete process.env.TABTIN_APP_PRODUCT_NAME
-    delete process.env.TABTIN_DATA_ROOT
-    delete process.env.TABTIN_RUNTIME_ROOT
-    delete process.env.TABTIN_CONFIG_DIR
-    delete process.env.TABTIN_DEV_INSTANCE
+    delete process.env.MUSE_BUILD_PROFILE
+    delete process.env.MUSE_APP_ID
+    delete process.env.MUSE_APP_PRODUCT_NAME
+    delete process.env.MUSE_DATA_ROOT
+    delete process.env.MUSE_RUNTIME_ROOT
+    delete process.env.MUSE_CONFIG_DIR
+    delete process.env.MUSE_DEV_INSTANCE
   })
 
   afterEach(() => {
-    restoreEnv('TABTIN_RUNTIME_PROFILE', originalRuntimeProfile)
+    restoreEnv('MUSE_RUNTIME_PROFILE', originalRuntimeProfile)
     restoreEnv('VITE_BUILD_PROFILE', originalViteBuildProfile)
-    restoreEnv('TABTIN_BUILD_PROFILE', originalBuildProfile)
-    restoreEnv('TABTIN_APP_ID', originalAppId)
-    restoreEnv('TABTIN_APP_PRODUCT_NAME', originalProductName)
-    restoreEnv('TABTIN_DATA_ROOT', originalDataRoot)
-    restoreEnv('TABTIN_RUNTIME_ROOT', originalRuntimeRoot)
-    restoreEnv('TABTIN_CONFIG_DIR', originalConfigDir)
-    restoreEnv('TABTIN_DEV_INSTANCE', originalDevInstance)
+    restoreEnv('MUSE_BUILD_PROFILE', originalBuildProfile)
+    restoreEnv('MUSE_APP_ID', originalAppId)
+    restoreEnv('MUSE_APP_PRODUCT_NAME', originalProductName)
+    restoreEnv('MUSE_DATA_ROOT', originalDataRoot)
+    restoreEnv('MUSE_RUNTIME_ROOT', originalRuntimeRoot)
+    restoreEnv('MUSE_CONFIG_DIR', originalConfigDir)
+    restoreEnv('MUSE_DEV_INSTANCE', originalDevInstance)
     Object.defineProperty(process, 'resourcesPath', {
       configurable: true,
       value: originalResourcesPath,
@@ -107,18 +107,18 @@ describe('app-identity', () => {
       'userData',
       join('/Users/test/Library/Application Support', 'Muse Dev'),
     )
-    expect(process.env.TABTIN_APP_ID).toBe('com.muse.app.dev')
-    expect(process.env.TABTIN_DATA_ROOT).toBe(
+    expect(process.env.MUSE_APP_ID).toBe('com.muse.app.dev')
+    expect(process.env.MUSE_DATA_ROOT).toBe(
       join('/Users/test/Library/Application Support', 'Muse Dev'),
     )
-    expect(process.env.TABTIN_RUNTIME_ROOT).toBe(
+    expect(process.env.MUSE_RUNTIME_ROOT).toBe(
       join('/Users/test/Library/Application Support', 'Muse Dev', 'runtime'),
     )
-    expect(process.env.TABTIN_CONFIG_DIR).toBe(process.env.TABTIN_RUNTIME_ROOT)
+    expect(process.env.MUSE_CONFIG_DIR).toBe(process.env.MUSE_RUNTIME_ROOT)
   })
 
   it('development secondary instance gets an isolated userData directory', () => {
-    process.env.TABTIN_DEV_INSTANCE = 'im-2'
+    process.env.MUSE_DEV_INSTANCE = 'im-2'
 
     applyRuntimeAppIdentity()
 
@@ -143,7 +143,7 @@ describe('app-identity', () => {
   it('packaged preprod runtime is inferred from packaged metadata when app name is shared', () => {
     mocks.app.isPackaged = true
     mocks.app.getName.mockReturnValue('Muse')
-    mocks.app.getAppPath.mockReturnValue('/tmp/tabtin-preprod-app')
+    mocks.app.getAppPath.mockReturnValue('/tmp/muse-preprod-app')
     mocks.readFileSync.mockReturnValue(JSON.stringify({
       build: {
         extraMetadata: {
@@ -204,7 +204,7 @@ describe('app-identity', () => {
   it('explicit local profile overrides packaged app name inference', () => {
     mocks.app.isPackaged = true
     mocks.app.getName.mockReturnValue('Muse Preprod')
-    process.env.TABTIN_RUNTIME_PROFILE = 'local'
+    process.env.MUSE_RUNTIME_PROFILE = 'local'
 
     expect(resolveRuntimeAppIdentity()).toMatchObject({
       profile: 'local',
@@ -216,9 +216,9 @@ describe('app-identity', () => {
   it('packaged runtime defaults to production when no profile marker exists', () => {
     mocks.app.isPackaged = true
     mocks.app.getName.mockReturnValue('Muse')
-    delete process.env.TABTIN_RUNTIME_PROFILE
+    delete process.env.MUSE_RUNTIME_PROFILE
     delete process.env.VITE_BUILD_PROFILE
-    delete process.env.TABTIN_BUILD_PROFILE
+    delete process.env.MUSE_BUILD_PROFILE
 
     expect(resolveRuntimeAppIdentity()).toMatchObject({
       profile: 'production',
@@ -231,16 +231,16 @@ describe('app-identity', () => {
     mocks.app.isPackaged = true
 
     for (const profile of ['community', 'preprod', 'production'] as const) {
-      process.env.TABTIN_RUNTIME_PROFILE = profile
+      process.env.MUSE_RUNTIME_PROFILE = profile
       expect(resolveIsDevRuntime()).toBe(false)
     }
 
-    process.env.TABTIN_RUNTIME_PROFILE = 'local'
+    process.env.MUSE_RUNTIME_PROFILE = 'local'
     expect(resolveIsDevRuntime()).toBe(true)
   })
 
   it('keeps unpackaged and toolkit dev launches dev-like', () => {
-    process.env.TABTIN_RUNTIME_PROFILE = 'production'
+    process.env.MUSE_RUNTIME_PROFILE = 'production'
     expect(resolveIsDevRuntime()).toBe(true)
 
     mocks.app.isPackaged = true
@@ -251,13 +251,13 @@ describe('app-identity', () => {
   it('keeps every runtime profile in a distinct macOS Safe Storage namespace', () => {
     const profiles = ['development', 'local', 'community', 'preprod', 'production'] as const
     const safeStorageNames = profiles.map((profile) => {
-      process.env.TABTIN_RUNTIME_PROFILE = profile
+      process.env.MUSE_RUNTIME_PROFILE = profile
       return `${resolveRuntimeAppIdentity().productName} Safe Storage`
     })
 
     expect(new Set(safeStorageNames).size).toBe(profiles.length)
 
-    process.env.TABTIN_RUNTIME_PROFILE = 'preprod'
+    process.env.MUSE_RUNTIME_PROFILE = 'preprod'
     applyRuntimeAppIdentity()
     expect(mocks.app.setName).toHaveBeenLastCalledWith('Muse Preprod')
   })

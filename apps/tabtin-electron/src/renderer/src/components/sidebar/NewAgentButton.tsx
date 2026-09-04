@@ -25,7 +25,7 @@ import {
   listAgentTemplates,
   type AgentTemplate,
 } from '@/services/agentTemplatesApi'
-import type { Agent } from '@tabtin/app-shell'
+import type { Agent } from '@muse/app-shell'
 import {
   AGENT_AVATAR_PRESET_KEYS,
   DEFAULT_AGENT_AVATAR_PRESET_KEY,

@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, it, vi } from 'vitest'
-import type { WsGateway } from '@tabtin/chat-client'
+import type { WsGateway } from '@muse/chat-client'
 import { ASRStreamClient, buildDialogContext, buildASRPayload } from '../ASRStreamClient'
 
 describe('buildDialogContext', () => {

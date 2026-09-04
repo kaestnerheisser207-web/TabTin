@@ -1,5 +1,5 @@
 /**
- * tabtin/prefer-scoped-activity-effects
+ * muse/prefer-scoped-activity-effects
  *
  * 引导开发者把 React effect 内的"持续型副作用"换成 `useScoped*` 包装 hook，
  * 避免在 hot-Space 子树里写出 zombie effect（Space 隐藏后副作用仍在跑）。
@@ -38,7 +38,7 @@
  *
  * 此外本规则还二阶校验下列**注释级反模式**：
  *
- *   5) `// eslint-disable-next-line tabtin/prefer-scoped-activity-effects` 出口
+ *   5) `// eslint-disable-next-line muse/prefer-scoped-activity-effects` 出口
  *      没带 `-- 非空理由` —— 报 `disableMissingReason`。强制每次 disable
  *      都留下"为什么这里不走 useScoped\*"的人话给后续 reviewer。
  *
@@ -74,7 +74,7 @@
  *     新增 warning 同时变 error，直接 break baseline。
  *   - 治理是分级的——本 Wave 只引入信号，迁移由后续 Wave 配合 codemod 推进。
  *   - 合理例外（譬如组件本身就是"全局 hotkey 注册器"）走
- *     `// eslint-disable-next-line tabtin/prefer-scoped-activity-effects -- 理由`
+ *     `// eslint-disable-next-line muse/prefer-scoped-activity-effects -- 理由`
  *     标注，比 error 更尊重作者判断（且 disableMissingReason 二阶校验
  *     强制理由非空，避免裸 disable）。
  *
@@ -114,7 +114,7 @@ const OBSERVER_CTOR_NAMES = new Set([
 ])
 
 /** 本规则的"短名"——用于在 disable 注释里识别本规则，对前缀不敏感。
- *  生产配置为 `tabtin/prefer-scoped-activity-effects`，但 RuleTester 会
+ *  生产配置为 `muse/prefer-scoped-activity-effects`，但 RuleTester 会
  *  改成 `rule-to-test/prefer-scoped-activity-effects` 等其他前缀。 */
 const RULE_SHORT_NAME = 'prefer-scoped-activity-effects'
 
@@ -187,11 +187,11 @@ function isInsideEffectCallback(node) {
  * 解析单条 ESLint disable 注释里的规则名集合 + reason 段。
  *
  * 形态：
- *   - `// eslint-disable-next-line tabtin/foo`
- *   - `// eslint-disable-next-line tabtin/foo, react/bar -- 理由`
- *   - `/* eslint-disable-next-line tabtin/foo -- 理由 *\/`
- *   - `// eslint-disable-line tabtin/foo`
- *   - `/* eslint-disable tabtin/foo *\/`（块级 disable）
+ *   - `// eslint-disable-next-line muse/foo`
+ *   - `// eslint-disable-next-line muse/foo, react/bar -- 理由`
+ *   - `/* eslint-disable-next-line muse/foo -- 理由 *\/`
+ *   - `// eslint-disable-line muse/foo`
+ *   - `/* eslint-disable muse/foo *\/`（块级 disable）
  *
  * 返回：`{ rules: Set<string>, reason: string | null }`，或 `null`（不是
  * disable 注释）。
@@ -200,7 +200,7 @@ function parseDisableComment(commentValue) {
   const trimmed = commentValue.trim()
   const m = /^eslint-disable(?:-next-line|-line)?\s*(.*)$/.exec(trimmed)
   if (!m) return null
-  const rest = m[1] // "tabtin/foo, react/bar -- 理由"
+  const rest = m[1] // "muse/foo, react/bar -- 理由"
   // 切分 rules 和 reason：约定 ESLint 用 `--` 作为 reason 分隔符
   const dashIdx = rest.indexOf('--')
   let rulesPart, reasonPart
@@ -233,15 +233,15 @@ const rule = {
     messages: {
       // ─── 主报告：在 useEffect 内裸用 ─────────────────────────────────────
       windowEventListener:
-        '`{{global}}.addEventListener` 在 useEffect 内裸用 → hot-Space 切走时不会按业务语义启停。改用 `useScopedEventListener({{global}}, type, listener, { scope: \'foreground\' | \'hot\' })`（`hooks/spaceActivity/`）。App 级全局监听器加 `// eslint-disable-next-line tabtin/prefer-scoped-activity-effects -- 理由`。详见 `apps/tabtin-electron/src/renderer/src/hooks/spaceActivity/README.md`。',
+        '`{{global}}.addEventListener` 在 useEffect 内裸用 → hot-Space 切走时不会按业务语义启停。改用 `useScopedEventListener({{global}}, type, listener, { scope: \'foreground\' | \'hot\' })`（`hooks/spaceActivity/`）。App 级全局监听器加 `// eslint-disable-next-line muse/prefer-scoped-activity-effects -- 理由`。详见 `apps/tabtin-electron/src/renderer/src/hooks/spaceActivity/README.md`。',
       setInterval:
-        '`setInterval` 在 useEffect 内裸用 → hot-Space 切走时仍滴答。改用 `useScopedInterval(callback, delayMs, { scope: \'foreground\' | \'hot\' })`（`hooks/spaceActivity/`）：UI 刷新型选 `foreground`、Run 心跳/IPC 重试选 `hot`。App 级单例改 module-level、或加 `// eslint-disable-next-line tabtin/prefer-scoped-activity-effects -- 理由`。详见 `apps/tabtin-electron/src/renderer/src/hooks/spaceActivity/README.md`。',
+        '`setInterval` 在 useEffect 内裸用 → hot-Space 切走时仍滴答。改用 `useScopedInterval(callback, delayMs, { scope: \'foreground\' | \'hot\' })`（`hooks/spaceActivity/`）：UI 刷新型选 `foreground`、Run 心跳/IPC 重试选 `hot`。App 级单例改 module-level、或加 `// eslint-disable-next-line muse/prefer-scoped-activity-effects -- 理由`。详见 `apps/tabtin-electron/src/renderer/src/hooks/spaceActivity/README.md`。',
       observerCtor:
         '`new {{ctor}}` 在 useEffect 内裸用 → hot-Space 切走时仍观察。{{ctor}} 多用于 layout 测量 / 可见性追踪，后台 Space 一般不必跑——改用 `useScopedResizeObserver(target, callback)` 或裹一层 `useScopedEffect(() => { const o = new {{ctor}}(...); o.observe(target); return () => o.disconnect() }, deps)`（默认 `scope: \'foreground\'`）。详见 `apps/tabtin-electron/src/renderer/src/hooks/spaceActivity/README.md`。',
 
       // ─── 二阶报告：disable 注释缺理由 ───────────────────────────────────
       disableMissingReason:
-        '`// eslint-disable-next-line tabtin/prefer-scoped-activity-effects` 缺 `-- <理由>`。每次 disable 必须留下"为什么这里不走 useScoped*"的人话（譬如 `-- App 级 hotkey 注册器`）——给 PR reviewer 和未来维护者。改写：`// eslint-disable-next-line tabtin/prefer-scoped-activity-effects -- 理由`。详见 `eslint-rules/README.md#tabtinprefer-scoped-activity-effects` 出口章节。',
+        '`// eslint-disable-next-line muse/prefer-scoped-activity-effects` 缺 `-- <理由>`。每次 disable 必须留下"为什么这里不走 useScoped*"的人话（譬如 `-- App 级 hotkey 注册器`）——给 PR reviewer 和未来维护者。改写：`// eslint-disable-next-line muse/prefer-scoped-activity-effects -- 理由`。详见 `eslint-rules/README.md#tabtinprefer-scoped-activity-effects` 出口章节。',
     },
   },
 

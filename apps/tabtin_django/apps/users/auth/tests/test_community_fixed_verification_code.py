@@ -19,7 +19,7 @@ class CommunityFixedVerificationCodeTests(SimpleTestCase):
         self.redis.delete.side_effect = lambda key: self.redis_values.pop(key, None)
 
     @override_settings(
-        TABTIN_EDITION="community",
+        MUSE_EDITION="community",
         AUTH_FIXED_VERIFICATION_CODE="",
         SERVICES_SMS_PROVIDER="disabled",
     )
@@ -41,7 +41,7 @@ class CommunityFixedVerificationCodeTests(SimpleTestCase):
         self.assertEqual(code, "")
 
     @override_settings(
-        TABTIN_EDITION="community",
+        MUSE_EDITION="community",
         AUTH_FIXED_VERIFICATION_CODE="888888",
         SERVICES_SMS_PROVIDER="disabled",
     )
@@ -64,7 +64,7 @@ class CommunityFixedVerificationCodeTests(SimpleTestCase):
         self.assertIn("888888", response.message)
 
     @override_settings(
-        TABTIN_EDITION="community",
+        MUSE_EDITION="community",
         AUTH_FIXED_VERIFICATION_CODE="654321",
         SERVICES_SMS_PROVIDER="disabled",
     )
@@ -83,7 +83,7 @@ class CommunityFixedVerificationCodeTests(SimpleTestCase):
         self.assertEqual(code, "654321")
 
     @override_settings(
-        TABTIN_EDITION="community",
+        MUSE_EDITION="community",
         AUTH_FIXED_VERIFICATION_CODE="888888",
         SERVICES_SMS_PROVIDER="disabled",
     )
@@ -101,7 +101,7 @@ class CommunityFixedVerificationCodeTests(SimpleTestCase):
         self.assertEqual(code, "")
 
     @override_settings(
-        TABTIN_EDITION="saas",
+        MUSE_EDITION="saas",
         AUTH_FIXED_VERIFICATION_CODE="888888",
         SERVICES_SMS_PROVIDER="aliyun",
     )
@@ -127,7 +127,7 @@ class CommunityFixedVerificationCodeTests(SimpleTestCase):
         generate_code.assert_not_called()
 
     @override_settings(
-        TABTIN_EDITION="saas",
+        MUSE_EDITION="saas",
         AUTH_FIXED_VERIFICATION_CODE="",
         SERVICES_SMS_PROVIDER="aliyun",
     )

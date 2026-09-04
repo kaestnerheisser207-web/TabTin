@@ -1,7 +1,7 @@
 /**
  * ToolRiskPolicyPort 宿主适配器（ Stage 3a / 3b）。
  *
- * 包装 `@tabtin/security-policy` 的 EffectivePolicy + judge + MemoStore，
+ * 包装 `@muse/security-policy` 的 EffectivePolicy + judge + MemoStore，
  * 对外只暴露 runtime 中立端口。
  */
 
@@ -11,7 +11,7 @@ import {
   type EffectivePolicy,
   type MemoStore,
   type Decision,
-} from '@tabtin/security-policy'
+} from '@muse/security-policy'
 import type {
   BuildMemoPatternKeyInput,
   RiskDecision,
@@ -19,7 +19,7 @@ import type {
   ToolRiskPolicyPort,
   ToolRiskPolicySnapshot,
   WorkspaceBoundary,
-} from '@tabtin/agent-runtime/engine'
+} from '@muse/agent-runtime/engine'
 import { buildMemoPatternKey } from './build-memo-pattern-key.js'
 
 export interface CreateToolRiskPolicyPortDeps {

@@ -14,8 +14,8 @@ import {
   type GalleryCardSize,
   type ViewMeta,
   type ViewRecordsResponse,
-} from '@tabtin/table-ui'
-import type { Field } from '@tabtin/table-core'
+} from '@muse/table-ui'
+import type { Field } from '@muse/table-core'
 import { createLooseTranslate } from '@/types/table-adapters'
 import {
   readGridEmbedFieldValue,

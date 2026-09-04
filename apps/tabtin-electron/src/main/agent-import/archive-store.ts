@@ -15,7 +15,7 @@
 import * as fs from 'node:fs'
 import * as path from 'node:path'
 import { app } from 'electron'
-import { IMPORT_SOURCE_IDS, type ImportSourceId } from '@tabtin/cli-server-core'
+import { IMPORT_SOURCE_IDS, type ImportSourceId } from '@muse/cli-server-core'
 
 export interface ArchiveMessage {
   id: string

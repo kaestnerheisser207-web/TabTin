@@ -39,7 +39,7 @@
  * ```
  *
  * 接口契约：本地 `shell-bridge-contract.ts`（结构类型 / 常量；与 terminal-core
- * agent-bridge 行为对齐，生产不再 import `@tabtin/terminal-core`）。
+ * agent-bridge 行为对齐，生产不再 import `@muse/terminal-core`）。
  * ShellCap 构造时**必须**注入 `PtyManagerBridge`，未注入则同步 throw（D6
  * 不留 `child_process.spawn` 兼容性兜底）。
  *
@@ -280,7 +280,7 @@ export interface ShellCapInit {
   config?: ShellCapConfig;
   /**
    *  Stage 3c：硬红线检查器（必填）。
-   * 生产路径由宿主注入 `@tabtin/security-policy` 的 `checkHardlineCommand`；
+   * 生产路径由宿主注入 `@muse/security-policy` 的 `checkHardlineCommand`；
    * 内核不再直接依赖产品安全包。
    */
   checkHardlineCommand: HardlineCommandChecker;
@@ -299,7 +299,7 @@ export interface ShellCapInit {
    *
    * **注入路径**：
    *   - 宿主（ElectronAgentHost / DaemonAgentHost）装配 ShellCap 前调
-   *     `resolvePtyManagerBridge()`（`@tabtin/action-tools/runtime`）拿到
+   *     `resolvePtyManagerBridge()`（`@muse/action-tools/runtime`）拿到
    *     WP2 真实实现注入的 bridge 实例，作为 `ptyManagerBridge` 字段传入。
    *   - bridge 缺失（`resolvePtyManagerBridge()` 返回 `null`）→ 装配点
    *     **不要 fallback 到桩**，直接跳过 ShellCap 装配（用户看到的现象是
@@ -313,8 +313,8 @@ export interface ShellCapInit {
   ptyManagerBridge: PtyManagerBridge;
   /**
    *  RB2：host 装配期烘焙的业务身份（per-runtime 常量，切 Space
-   * 重建 runtime 保证一致）。凭据派生、`TABTIN_SPACE_ID` / `TABTIN_AGENT_ID` /
-   * `TABTIN_ORGANIZATION_ID` env 注入、`agentMeta.spaceId` / `agentId` 全部读
+   * 重建 runtime 保证一致）。凭据派生、`MUSE_SPACE_ID` / `MUSE_AGENT_ID` /
+   * `MUSE_ORGANIZATION_ID` env 注入、`agentMeta.spaceId` / `agentId` 全部读
    * 这些值，不再从运行时
    * `ToolContext` 取业务 id。缺失时 `run_terminal_command` 走原「缺 spaceId 即
    * throw」硬契约（见 `requireShellContext`）。
@@ -423,7 +423,7 @@ const STDOUT_TAIL_BYTES = 8 * 1024;
  *
  *  方案 2：shell 专属语法（POSIX / PowerShell / cmd）收敛到系统提示
  * `<shell_runtime>`。：本描述不得再内嵌 bash 等待示例（`until` /
- * `[[ ]]`）或伪通用的 `cd &&` / `$TABTIN_*`——那些会在 Windows 上盖过
+ * `[[ ]]`）或伪通用的 `cd &&` / `$MUSE_*`——那些会在 Windows 上盖过
  * `<shell_runtime>` 的 PowerShell 纪律。切目录 / env / 等待循环一律指向
  * `<shell_runtime>`。
  */
@@ -437,7 +437,7 @@ const EXEC_COMMAND_BASE_DESCRIPTION =
  * `run_terminal_command` 的工具描述——**shell 无关的纯功能描述**。
  *
  *  方案 2：shell 专属语法提示统一归口系统提示 `<shell_runtime>`
- * （`@tabtin/agent-prompt::buildShellRuntimeSection`）。：本函数
+ * （`@muse/agent-prompt::buildShellRuntimeSection`）。：本函数
  * 只保留功能说明与等待场景矩阵骨架，**不**内嵌任何具体 shell 的命令示例，
  * 避免工具描述与 `<shell_runtime>` 各说一套语法造成漂移 / Windows 误用 bash。
  *
@@ -695,7 +695,7 @@ function tryMatchPattern(
   pattern: RegExp,
   output: string,
 ): { matched: true; text: string; byte_offset: number } | { matched: false } | { redos: true } {
-  // ANSI 再 strip 一次（cleanOutput 来自 @tabtin/pty-core，幂等）
+  // ANSI 再 strip 一次（cleanOutput 来自 @muse/pty-core，幂等）
   const clean = output; // bridge readAgentSessionOutput 已 cleanOutput；这里直接用
   const t0 = performance.now();
   const m = pattern.exec(clean);
@@ -829,12 +829,12 @@ const executeCommandInputSchema = {
  * 校验调用方传入的 env 字典——必须是 Record<string, string>，
  * 任一非字符串值会被拒绝（避免 LLM 失误传 number / null 进 spawn）。
  *
- * **TABTIN_\* / _TABTIN_\* 前缀保留给平台契约**（TABTIN_WORKSPACE /
- * TABTIN_THREAD_ID / _TABTIN_TRANSPORT_TOKEN 等），由
+ * **MUSE_\* / _MUSE_\* 前缀保留给平台契约**（MUSE_WORKSPACE /
+ * MUSE_THREAD_ID / _MUSE_TRANSPORT_TOKEN 等），由
  * `buildTabtinRuntimeEnv` 从 `ToolContext` 派生注入。LLM 不得通过 env 参数设置或覆盖这些变量——
  * 若传了一律静默过滤（不报错，避免 LLM 因防御性拒绝而反复重试）。
  *
- * 平台 env（`TABTIN_*` / `_TABTIN_*`）由 spawn 逻辑直接写入，
+ * 平台 env（`MUSE_*` / `_MUSE_*`）由 spawn 逻辑直接写入，
  * LLM 无渠道覆盖。
  *
  * 仅 ShellCap 内部使用（其他 Cap 不接 env 入参），所以不抽到 _utils.ts。
@@ -845,13 +845,13 @@ function normalizeExecEnv(value: unknown): Record<string, string> | undefined {
   const out: Record<string, string> = {};
   for (const [k, v] of Object.entries(value as Record<string, unknown>)) {
     if (typeof v !== 'string') continue; // 静默丢弃非法项；命令通常仍可跑
-    if (k.startsWith('TABTIN_') || k.startsWith('_TABTIN_')) continue; // 平台契约，LLM 不能设置
-    // bugbot 评审  high：内部 marker __TABTIN_SKILL_CREDENTIAL_PRESERVE_KEYS__
-    // 以双下划线开头，不被上面的 TABTIN_ 前缀过滤。若不拦，LLM 可自行在 env 里塞
+    if (k.startsWith('MUSE_') || k.startsWith('_MUSE_')) continue; // 平台契约，LLM 不能设置
+    // bugbot 评审  high：内部 marker __MUSE_SKILL_CREDENTIAL_PRESERVE_KEYS__
+    // 以双下划线开头，不被上面的 MUSE_ 前缀过滤。若不拦，LLM 可自行在 env 里塞
     // 这个 marker + 任意 preserveKeys，经 buildEnv → sanitizeEnv(preserveKeys) 绕过
     // 敏感 env 黑名单注入 OPENAI_API_KEY 等。marker 只能由 ShellCap 内部写入，
-    // 故这里连同任何 __TABTIN_ 前缀的内部契约键一并从 LLM/用户 env 剔除。
-    if (k.startsWith('__TABTIN_')) continue;
+    // 故这里连同任何 __MUSE_ 前缀的内部契约键一并从 LLM/用户 env 剔除。
+    if (k.startsWith('__MUSE_')) continue;
     out[k] = v;
   }
   return Object.keys(out).length > 0 ? out : undefined;

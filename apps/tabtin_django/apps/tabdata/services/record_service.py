@@ -1361,7 +1361,7 @@ class RecordService(BaseService):
             )
             return
 
-        if getattr(settings, 'TABTIN_EDITION', 'saas') == 'community':
+        if getattr(settings, 'MUSE_EDITION', 'saas') == 'community':
             try:
                 created = CommunityRecordIndexOperations(
                     connection

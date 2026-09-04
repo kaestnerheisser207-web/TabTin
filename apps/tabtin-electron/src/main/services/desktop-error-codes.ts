@@ -5,11 +5,11 @@
  *
  * 位置选型（Wave 2 · v1.3 → v1.4 决策说明）：
  * - 规范 § 9.2 第 6 条指导放 `packages/tabtin-contracts/desktop/` 或等价契约包。
- * - 工作区当前无 `packages/tabtin-contracts` 包；现有的 `@tabtin/contracts` 是
+ * - 工作区当前无 `packages/tabtin-contracts` 包；现有的 `@muse/contracts` 是
  *   面向 SDK 跨边界（Web / Electron / 外部集成）共享的类型包（`packages/contracts/`），
  *   使用 `tsup` 打包为 runtime + types。
  * - TabDesktop 错误码的消费者仅限 Electron 主进程（路由 / Executor / 审计日志）
- *   + 同进程 TS 代码，**不跨 SDK 边界**；引入到 `@tabtin/contracts` 会扩展其
+ *   + 同进程 TS 代码，**不跨 SDK 边界**；引入到 `@muse/contracts` 会扩展其
  *   "跨端共享"语义并带来不必要的构建依赖。
  * - 对照对象 `TabPhoneErrorCode` 的位置正是
  *   `apps/tabtin-electron/src/main/tabphone/types.ts:270-303`（Electron 同进程、

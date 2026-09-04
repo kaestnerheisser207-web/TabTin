@@ -28,7 +28,7 @@ export async function notifyWorkspacePathsForSpace(spaceId: string): Promise<voi
   }
   const workingDir = await readAgentWorkingDirForSpace(spaceId)
   try {
-    await window.tabtin?.workspace?.notifyPathsChanged({
+    await window.muse?.workspace?.notifyPathsChanged({
       spaceId,
       workingDir,
     })

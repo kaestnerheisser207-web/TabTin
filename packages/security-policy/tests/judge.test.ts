@@ -1300,7 +1300,7 @@ describe('judge · shell 参数路径扫描', () => {
       const slashCwd = workspaceRoot.replace(/\\/g, '/');
       const d = judge(ctx({
         tool: shellTool,
-        input: { command: 'Get-ChildItem -Path $env:TABTIN_WORKSPACE', cwd: slashCwd },
+        input: { command: 'Get-ChildItem -Path $env:MUSE_WORKSPACE', cwd: slashCwd },
         policy: makePolicy({ workspace: makeWorkspace([workspaceRoot]) }),
       }));
       expect(d.behavior).toBe('allow');

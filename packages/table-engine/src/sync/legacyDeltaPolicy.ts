@@ -1,4 +1,4 @@
-import type { CollabSyncMode } from '@tabtin/collab-core'
+import type { CollabSyncMode } from '@muse/collab-core'
 
 export function shouldConsumeTableRecordDelta(syncMode: CollabSyncMode): boolean {
   return syncMode === 'legacy'

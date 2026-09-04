@@ -20,7 +20,7 @@ router = Router(tags=["Muse Space"])
 
 
 def _projects_enabled() -> bool:
-    return bool(getattr(settings, 'TABTIN_ENABLE_PROJECTS', False))
+    return bool(getattr(settings, 'MUSE_ENABLE_PROJECTS', False))
 
 
 def _project_feature_disabled_response():

@@ -76,7 +76,7 @@ export function useMeetingReadiness(
 
   const refresh = React.useCallback(
     async (requestedDeviceId = microphoneDeviceId) => {
-      const bridge = window.tabtin?.meetingRecording;
+      const bridge = window.muse?.meetingRecording;
       if (!bridge) {
         setSnapshot({
           ...initialSnapshot,
@@ -134,7 +134,7 @@ export function useMeetingReadiness(
   );
 
   const checkSystemAudio = React.useCallback(async () => {
-    const bridge = window.tabtin?.meetingRecording;
+    const bridge = window.muse?.meetingRecording;
     if (!bridge) return;
     setSnapshot((current) => ({
       ...current,
@@ -189,7 +189,7 @@ export function useMeetingReadiness(
   }, []);
 
   React.useEffect(() => {
-    const bridge = window.tabtin?.meetingRecording;
+    const bridge = window.muse?.meetingRecording;
     if (!bridge) return;
     let cancelled = false;
     let asrRetryTimer: number | null = null;

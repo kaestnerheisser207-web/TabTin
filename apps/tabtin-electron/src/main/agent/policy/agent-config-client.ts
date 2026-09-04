@@ -2,7 +2,7 @@
  * agent-config-client.ts — Electron Main 进程的权威 `agent_config` 拉取客户端
  * 薄包装。
  *
- * 权威 fetch 逻辑已下沉到 `@tabtin/agent-host/policy`（与 Daemon 共享，见
+ * 权威 fetch 逻辑已下沉到 `@muse/agent-host/policy`（与 Daemon 共享，见
  * `DaemonAgentHost.agentConfigClient`）。本文件只做「宿主特化注入」：
  *   - `getAccessToken` → `TokenManager.getAccessToken()`（Electron 主进程 token）
  *   - `buildAgentDetailUrl` → `joinApiPath(API_BASE_URL, API_ENDPOINTS.AGENT.DETAIL(agentId))`
@@ -26,21 +26,21 @@
 import {
   CACHE_TTL_MS,
   createAgentConfigClient as createSharedClient,
-} from '@tabtin/agent-host/policy'
+} from '@muse/agent-host/policy'
 import type {
   AgentConfigClient as SharedAgentConfigClient,
   AgentConfigClientLogger,
   AgentConfigClientOptions,
-} from '@tabtin/agent-host/policy'
-import type { AgentConfigV3 } from '@tabtin/security-policy'
-import { API_ENDPOINTS, joinApiPath } from '@tabtin/config'
+} from '@muse/agent-host/policy'
+import type { AgentConfigV3 } from '@muse/security-policy'
+import { API_ENDPOINTS, joinApiPath } from '@muse/config'
 
 import { TokenManager } from '../../auth.js'
 import { API_BASE_URL } from '../../config/api.js'
 import { createLogger } from '../../logger.js'
 
-export { CACHE_TTL_MS } from '@tabtin/agent-host/policy'
-export type { AgentConfigClientLogger } from '@tabtin/agent-host/policy'
+export { CACHE_TTL_MS } from '@muse/agent-host/policy'
+export type { AgentConfigClientLogger } from '@muse/agent-host/policy'
 
 const log = createLogger('agent-config-client')
 

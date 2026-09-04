@@ -1,12 +1,12 @@
 /**
  * 表格 Store 池化管理 — Web 宿主
  *
- * 使用 @tabtin/table-core 的共享 createTableStorePool 工厂，
+ * 使用 @muse/table-core 的共享 createTableStorePool 工厂，
  * 注入 Web 端的 store 创建函数和重置注册。
  */
 
-import { registerResetAction } from '@tabtin/app-shell'
-import { createTableStorePool } from '@tabtin/table-core'
+import { registerResetAction } from '@muse/app-shell'
+import { createTableStorePool } from '@muse/table-core'
 import { createRecordStore, type RecordStoreApi } from './useRecordStore'
 import { createTableStore, type TableStoreApi } from './useTableStore'
 import { createViewStore, type ViewStoreApi } from './useViewStore'

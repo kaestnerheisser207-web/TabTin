@@ -285,7 +285,7 @@ export class InMemoryApprovalMemoStore implements ApprovalMemoStore {
 /**
  * Django 广播的 ``approval_resolved`` envelope payload 单条 decision。
  *
- * 与 ``@tabtin/agent-wire`` 的 ``ApprovalDecision`` 形状对齐，但本 helper
+ * 与 ``@muse/agent-wire`` 的 ``ApprovalDecision`` 形状对齐，但本 helper
  * 故意不直接 import wire schema 避免循环依赖（runtime 包不依赖 wire）。
  */
 export interface CancelledByRollbackDecision {

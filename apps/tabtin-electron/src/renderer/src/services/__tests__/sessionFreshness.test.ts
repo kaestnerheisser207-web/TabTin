@@ -22,7 +22,7 @@ const mockState = vi.hoisted(() => ({
   messagesBySessionId: {} as Record<string, unknown[]>,
 }))
 
-vi.mock('@tabtin/chat-client', () => {
+vi.mock('@muse/chat-client', () => {
   class ChatAPIError extends Error {
     code?: string
     trace_id?: string
@@ -78,7 +78,7 @@ let ensureSessionFresh: typeof import('../sessionFreshness').ensureSessionFresh
 let _resetInFlightForTesting: typeof import('../sessionFreshness')._resetInFlightForTesting
 let _setRetryDelaysForTesting: typeof import('../sessionFreshness')._setRetryDelaysForTesting
 let useSessionFreshnessStore: typeof import('@/stores/useSessionFreshnessStore').useSessionFreshnessStore
-let ChatAPIError: typeof import('@tabtin/chat-client').ChatAPIError
+let ChatAPIError: typeof import('@muse/chat-client').ChatAPIError
 
 beforeEach(async () => {
   vi.resetModules()
@@ -95,7 +95,7 @@ beforeEach(async () => {
 
   // dynamic import 保证 ChatAPIError 和 service 内部用同一份模块实例
   // （vi.resetModules() 后 instanceof 检查依赖单例同源）
-  const errorMod = await import('@tabtin/chat-client')
+  const errorMod = await import('@muse/chat-client')
   ChatAPIError = errorMod.ChatAPIError
 
   const svcMod = await import('../sessionFreshness')

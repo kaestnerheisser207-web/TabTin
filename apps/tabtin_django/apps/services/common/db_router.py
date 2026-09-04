@@ -19,7 +19,7 @@ def is_single_database_mode() -> bool:
     """Return True when all relational business data lives in default PostgreSQL."""
     try:
         from django.conf import settings
-        return bool(getattr(settings, "TABTIN_SINGLE_DATABASE_MODE", False))
+        return bool(getattr(settings, "MUSE_SINGLE_DATABASE_MODE", False))
     except Exception:
         return False
 

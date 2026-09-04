@@ -26,7 +26,7 @@ import { useIMStore } from '@stores/useIMStore'
 import { useSettingsSpaceStore } from '@stores/useSettingsSpaceStore'
 import { useWorkbenchSceneStore } from '@/stores/useWorkbenchSceneStore'
 import { alignChatPointerToWorkspace } from '@/stores/chat/session/reconcileSpacePointer'
-import type { SpaceListItem } from '@tabtin/app-shell'
+import type { SpaceListItem } from '@muse/app-shell'
 import { compareWorkspaceListOrder } from '@/utils/workspace-list-sort'
 import { isProjectCompanionWorkspace } from '@/utils/projectExecutionTarget'
 import {

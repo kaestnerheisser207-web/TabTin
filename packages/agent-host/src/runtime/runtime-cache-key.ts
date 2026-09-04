@@ -1,8 +1,8 @@
-import type { WorkingDirType } from '@tabtin/agent-prompt'
+import type { WorkingDirType } from '@muse/agent-prompt'
 import {
   ownersMatch,
   type PersistedEntryOwner,
-} from '@tabtin/agent-runtime'
+} from '@muse/agent-runtime'
 import type { RuntimeHarness } from './runtime-driver.js'
 
 type OperationSwitches = Record<string, 'allow' | 'confirm' | 'block'>

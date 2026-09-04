@@ -2,7 +2,7 @@
  * 存储分析 API — Phase 1
  */
 
-import { joinApiPath } from '@tabtin/config'
+import { joinApiPath } from '@muse/config'
 import { API_CONFIG } from '@/config/api'
 import { apiRequest, unwrapData } from '@/services/apiBase'
 import i18n from '@/i18n'

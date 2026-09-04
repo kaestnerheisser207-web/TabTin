@@ -14,7 +14,7 @@ import React from 'react'
 import { createPortal } from 'react-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import { cn } from '../../utils/cn'
-import { ZIndex } from '@tabtin/app-shell'
+import { ZIndex } from '@muse/app-shell'
 import { OVERLAY_SURFACE_CLASS } from '../overlay-surface'
 
 // Wave 6.3 注：本组件**全仓 0 调用方**（grep 历史无活引用），且其内部用相对

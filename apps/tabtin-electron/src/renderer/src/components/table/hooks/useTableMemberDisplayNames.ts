@@ -1,5 +1,5 @@
 import { useMemo } from 'react'
-import { toOrganizationMembers } from '@tabtin/table-ui'
+import { toOrganizationMembers } from '@muse/table-ui'
 import { useOrganizationStore } from '@stores/useOrganizationStore'
 import { useUserProfileCache } from '@stores/useUserProfileCache'
 import { useMemberIdentitySnapshotsQuery, useMembersQuery } from '@/hooks/queries/members'

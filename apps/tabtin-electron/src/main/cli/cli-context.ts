@@ -14,7 +14,7 @@
  * importing from `../cli/cli-server` unchanged. Routes import from this file
  * directly to avoid reintroducing the cycle.
  *
- * Side effects: `setCLISpaceContextState` mutates `process.env.TABTIN_*_ID`
+ * Side effects: `setCLISpaceContextState` mutates `process.env.MUSE_*_ID`
  * to mirror the active Space context; downstream surface runtime
  * reconfiguration is the caller's responsibility (see `setCLISpaceContext`
  * in `cli-server.ts`).
@@ -154,7 +154,7 @@ export type CLIWorkspaceScopeTurnInput = {
 }
 
 /**
- * Update raw CLI Space context state and synchronize the related TABTIN_*_ID
+ * Update raw CLI Space context state and synchronize the related MUSE_*_ID
  * env vars. No other side effects — `cli-server.ts` wraps this in
  * `setCLISpaceContext()` to additionally re-configure surface runtime + log.
  */
@@ -170,21 +170,21 @@ export function setCLISpaceContextState(
   currentOrganizationRoot = organizationRoot ?? null
 
   if (spaceId) {
-    process.env.TABTIN_SPACE_ID = spaceId
+    process.env.MUSE_SPACE_ID = spaceId
   } else {
-    delete process.env.TABTIN_SPACE_ID
+    delete process.env.MUSE_SPACE_ID
   }
 
   if (crawlspaceId) {
-    process.env.TABTIN_CRAWLSPACE_ID = crawlspaceId
+    process.env.MUSE_CRAWLSPACE_ID = crawlspaceId
   } else {
-    delete process.env.TABTIN_CRAWLSPACE_ID
+    delete process.env.MUSE_CRAWLSPACE_ID
   }
 
   if (organizationId) {
-    process.env.TABTIN_ORGANIZATION_ID = organizationId
+    process.env.MUSE_ORGANIZATION_ID = organizationId
   } else {
-    delete process.env.TABTIN_ORGANIZATION_ID
+    delete process.env.MUSE_ORGANIZATION_ID
   }
 }
 
@@ -218,12 +218,12 @@ export function syncCLISpaceContextFromQueryRequest(
   let mutated = false
   if (spaceId && spaceId.length > 0 && spaceId !== currentSpaceId) {
     currentSpaceId = spaceId
-    process.env.TABTIN_SPACE_ID = spaceId
+    process.env.MUSE_SPACE_ID = spaceId
     mutated = true
   }
   if (organizationId && organizationId.length > 0 && organizationId !== currentOrganizationId) {
     currentOrganizationId = organizationId
-    process.env.TABTIN_ORGANIZATION_ID = organizationId
+    process.env.MUSE_ORGANIZATION_ID = organizationId
     mutated = true
   }
   if (mutated) {
@@ -407,7 +407,7 @@ export function acquireSubagentCLIWorkspaceScopeLease(
 
 // ── Agent worktree controller  ────────────────────────────────────
 
-export type CLICodeWorktreeController = import('@tabtin/cli-routes').CodeWorktreeController
+export type CLICodeWorktreeController = import('@muse/cli-routes').CodeWorktreeController
 
 let cliCodeWorktreeController: CLICodeWorktreeController | null = null
 
@@ -441,7 +441,7 @@ export function getCLICodeWorktreeController(): CLICodeWorktreeController | null
  *     它的 fallback 路径解析就是这条 chat 兜底用的同款算法
  *     （见 `packages/cli-server-core/src/surfaces/space-set-active.ts:91-107`），
  *     两条路径计算结果一致，不会出现"chat 兜底 vs space:set-active"打架。
- *   - **不动** spaceId / organizationId / crawlspaceId / process.env.TABTIN_*——
+ *   - **不动** spaceId / organizationId / crawlspaceId / process.env.MUSE_*——
  *     那些字段在 chat 路径已被 sync 处理，本函数单一职责只补 organizationRoot。
  *   - 计算 fallback 路径的责任在调用方（leaf module 不依赖 terminal-core）。
  *     调用方应传入与 `space:set-active` 等价的 fallback 路径

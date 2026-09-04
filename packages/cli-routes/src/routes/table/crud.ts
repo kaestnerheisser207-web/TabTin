@@ -1,5 +1,5 @@
 import type { ServerResponse } from 'node:http'
-import { errorResponse, okResponse, type SendJSON } from '@tabtin/cli-server-core'
+import { errorResponse, okResponse, type SendJSON } from '@muse/cli-server-core'
 import { djangoRequest } from '../../host-bindings.js'
 import { buildBulkImportResultPayload } from './bulk-import-result.js'
 import { buildBulkFieldPayload, validateFieldDefinitions } from './field-contract.js'

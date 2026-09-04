@@ -44,7 +44,7 @@ import {
   DEFAULT_MAX_MESSAGE_CHARS,
   DEFAULT_NORMALIZATION_LEVEL,
   DEFAULT_TOOL_SCHEMA_VALIDATION,
-} from '@tabtin/agent-runtime/engine'
+} from '@muse/agent-runtime/engine'
 
 function makeLogger(): HostRuntimeOptionsLogger & { warn: ReturnType<typeof vi.fn> } {
   return { warn: vi.fn() }
@@ -53,7 +53,7 @@ function makeLogger(): HostRuntimeOptionsLogger & { warn: ReturnType<typeof vi.f
 // ─── resolveDoomLoopPolicy ───────────────────────────────────────────
 
 describe('Electron host runtime options — resolveDoomLoopPolicy', () => {
-  it("defaults to 'soft' when TABTIN_DOOM_LOOP_POLICY is unset", () => {
+  it("defaults to 'soft' when MUSE_DOOM_LOOP_POLICY is unset", () => {
     const logger = makeLogger()
     const out = resolveDoomLoopPolicy({}, logger)
     expect(out).toBe('soft')
@@ -62,14 +62,14 @@ describe('Electron host runtime options — resolveDoomLoopPolicy', () => {
 
   it("defaults to 'soft' when env var is an empty string", () => {
     const logger = makeLogger()
-    expect(resolveDoomLoopPolicy({ TABTIN_DOOM_LOOP_POLICY: '' }, logger)).toBe('soft')
+    expect(resolveDoomLoopPolicy({ MUSE_DOOM_LOOP_POLICY: '' }, logger)).toBe('soft')
     expect(logger.warn).not.toHaveBeenCalled()
   })
 
   it("defaults to 'soft' when env var is whitespace-only", () => {
     const logger = makeLogger()
     expect(
-      resolveDoomLoopPolicy({ TABTIN_DOOM_LOOP_POLICY: '   \t  ' }, logger),
+      resolveDoomLoopPolicy({ MUSE_DOOM_LOOP_POLICY: '   \t  ' }, logger),
     ).toBe('soft')
     expect(logger.warn).not.toHaveBeenCalled()
   })
@@ -77,7 +77,7 @@ describe('Electron host runtime options — resolveDoomLoopPolicy', () => {
   it("accepts 'soft' (exact lower-case)", () => {
     const logger = makeLogger()
     expect(
-      resolveDoomLoopPolicy({ TABTIN_DOOM_LOOP_POLICY: 'soft' }, logger),
+      resolveDoomLoopPolicy({ MUSE_DOOM_LOOP_POLICY: 'soft' }, logger),
     ).toBe('soft')
     expect(logger.warn).not.toHaveBeenCalled()
   })
@@ -85,7 +85,7 @@ describe('Electron host runtime options — resolveDoomLoopPolicy', () => {
   it("accepts 'strict' (exact lower-case)", () => {
     const logger = makeLogger()
     expect(
-      resolveDoomLoopPolicy({ TABTIN_DOOM_LOOP_POLICY: 'strict' }, logger),
+      resolveDoomLoopPolicy({ MUSE_DOOM_LOOP_POLICY: 'strict' }, logger),
     ).toBe('strict')
     expect(logger.warn).not.toHaveBeenCalled()
   })
@@ -93,10 +93,10 @@ describe('Electron host runtime options — resolveDoomLoopPolicy', () => {
   it("accepts 'STRICT' / 'Soft' (case-insensitive)", () => {
     const logger = makeLogger()
     expect(
-      resolveDoomLoopPolicy({ TABTIN_DOOM_LOOP_POLICY: 'STRICT' }, logger),
+      resolveDoomLoopPolicy({ MUSE_DOOM_LOOP_POLICY: 'STRICT' }, logger),
     ).toBe('strict')
     expect(
-      resolveDoomLoopPolicy({ TABTIN_DOOM_LOOP_POLICY: 'Soft' }, logger),
+      resolveDoomLoopPolicy({ MUSE_DOOM_LOOP_POLICY: 'Soft' }, logger),
     ).toBe('soft')
     expect(logger.warn).not.toHaveBeenCalled()
   })
@@ -104,7 +104,7 @@ describe('Electron host runtime options — resolveDoomLoopPolicy', () => {
   it("trims surrounding whitespace before validation", () => {
     const logger = makeLogger()
     expect(
-      resolveDoomLoopPolicy({ TABTIN_DOOM_LOOP_POLICY: '  strict  ' }, logger),
+      resolveDoomLoopPolicy({ MUSE_DOOM_LOOP_POLICY: '  strict  ' }, logger),
     ).toBe('strict')
     expect(logger.warn).not.toHaveBeenCalled()
   })
@@ -112,13 +112,13 @@ describe('Electron host runtime options — resolveDoomLoopPolicy', () => {
   it("falls back to 'soft' on typo and warns once with offending value", () => {
     const logger = makeLogger()
     const out = resolveDoomLoopPolicy(
-      { TABTIN_DOOM_LOOP_POLICY: 'strictt' },
+      { MUSE_DOOM_LOOP_POLICY: 'strictt' },
       logger,
     )
     expect(out).toBe('soft')
     expect(logger.warn).toHaveBeenCalledTimes(1)
     const msg = (logger.warn as ReturnType<typeof vi.fn>).mock.calls[0][0]
-    expect(msg).toMatch(/TABTIN_DOOM_LOOP_POLICY/)
+    expect(msg).toMatch(/MUSE_DOOM_LOOP_POLICY/)
     expect(msg).toMatch(/strictt/)
     expect(msg).toMatch(/fall(ing)?\s+back to 'soft'/i)
   })
@@ -129,10 +129,10 @@ describe('Electron host runtime options — resolveDoomLoopPolicy', () => {
     // typo 处理，回到 soft。
     const logger = makeLogger()
     expect(
-      resolveDoomLoopPolicy({ TABTIN_DOOM_LOOP_POLICY: 'off' }, logger),
+      resolveDoomLoopPolicy({ MUSE_DOOM_LOOP_POLICY: 'off' }, logger),
     ).toBe('soft')
     expect(
-      resolveDoomLoopPolicy({ TABTIN_DOOM_LOOP_POLICY: 'disabled' }, logger),
+      resolveDoomLoopPolicy({ MUSE_DOOM_LOOP_POLICY: 'disabled' }, logger),
     ).toBe('soft')
     expect(logger.warn).toHaveBeenCalledTimes(2)
   })
@@ -150,7 +150,7 @@ describe('Electron host runtime options — resolveMaxMessageChars', () => {
   it('accepts a positive finite integer', () => {
     const logger = makeLogger()
     expect(
-      resolveMaxMessageChars({ TABTIN_MAX_MESSAGE_CHARS: '2000000' }, logger),
+      resolveMaxMessageChars({ MUSE_MAX_MESSAGE_CHARS: '2000000' }, logger),
     ).toBe(2_000_000)
     expect(logger.warn).not.toHaveBeenCalled()
   })
@@ -158,14 +158,14 @@ describe('Electron host runtime options — resolveMaxMessageChars', () => {
   it('floors a positive float (integer-only semantic)', () => {
     const logger = makeLogger()
     expect(
-      resolveMaxMessageChars({ TABTIN_MAX_MESSAGE_CHARS: '500000.9' }, logger),
+      resolveMaxMessageChars({ MUSE_MAX_MESSAGE_CHARS: '500000.9' }, logger),
     ).toBe(500_000)
   })
 
   it('trims whitespace before parsing', () => {
     const logger = makeLogger()
     expect(
-      resolveMaxMessageChars({ TABTIN_MAX_MESSAGE_CHARS: '  123456  ' }, logger),
+      resolveMaxMessageChars({ MUSE_MAX_MESSAGE_CHARS: '  123456  ' }, logger),
     ).toBe(123_456)
     expect(logger.warn).not.toHaveBeenCalled()
   })
@@ -173,7 +173,7 @@ describe('Electron host runtime options — resolveMaxMessageChars', () => {
   it('falls back + warns on 0 (FR-04 safety net must stay armed)', () => {
     const logger = makeLogger()
     const out = resolveMaxMessageChars(
-      { TABTIN_MAX_MESSAGE_CHARS: '0' },
+      { MUSE_MAX_MESSAGE_CHARS: '0' },
       logger,
     )
     expect(out).toBe(DEFAULT_MAX_MESSAGE_CHARS)
@@ -183,7 +183,7 @@ describe('Electron host runtime options — resolveMaxMessageChars', () => {
   it('falls back + warns on negative number', () => {
     const logger = makeLogger()
     expect(
-      resolveMaxMessageChars({ TABTIN_MAX_MESSAGE_CHARS: '-1' }, logger),
+      resolveMaxMessageChars({ MUSE_MAX_MESSAGE_CHARS: '-1' }, logger),
     ).toBe(DEFAULT_MAX_MESSAGE_CHARS)
     expect(logger.warn).toHaveBeenCalledTimes(1)
   })
@@ -191,11 +191,11 @@ describe('Electron host runtime options — resolveMaxMessageChars', () => {
   it('falls back + warns on non-numeric string', () => {
     const logger = makeLogger()
     expect(
-      resolveMaxMessageChars({ TABTIN_MAX_MESSAGE_CHARS: 'big' }, logger),
+      resolveMaxMessageChars({ MUSE_MAX_MESSAGE_CHARS: 'big' }, logger),
     ).toBe(DEFAULT_MAX_MESSAGE_CHARS)
     expect(logger.warn).toHaveBeenCalledTimes(1)
     const msg = (logger.warn as ReturnType<typeof vi.fn>).mock.calls[0][0]
-    expect(msg).toMatch(/TABTIN_MAX_MESSAGE_CHARS/)
+    expect(msg).toMatch(/MUSE_MAX_MESSAGE_CHARS/)
     expect(msg).toMatch(/big/)
   })
 
@@ -203,7 +203,7 @@ describe('Electron host runtime options — resolveMaxMessageChars', () => {
     const logger = makeLogger()
     expect(
       resolveMaxMessageChars(
-        { TABTIN_MAX_MESSAGE_CHARS: 'Infinity' },
+        { MUSE_MAX_MESSAGE_CHARS: 'Infinity' },
         logger,
       ),
     ).toBe(DEFAULT_MAX_MESSAGE_CHARS)
@@ -213,10 +213,10 @@ describe('Electron host runtime options — resolveMaxMessageChars', () => {
   it('returns default (no warn) on empty / whitespace-only env', () => {
     const logger = makeLogger()
     expect(
-      resolveMaxMessageChars({ TABTIN_MAX_MESSAGE_CHARS: '' }, logger),
+      resolveMaxMessageChars({ MUSE_MAX_MESSAGE_CHARS: '' }, logger),
     ).toBe(DEFAULT_MAX_MESSAGE_CHARS)
     expect(
-      resolveMaxMessageChars({ TABTIN_MAX_MESSAGE_CHARS: '   ' }, logger),
+      resolveMaxMessageChars({ MUSE_MAX_MESSAGE_CHARS: '   ' }, logger),
     ).toBe(DEFAULT_MAX_MESSAGE_CHARS)
     expect(logger.warn).not.toHaveBeenCalled()
   })
@@ -236,16 +236,16 @@ describe('Electron host runtime options — resolveNormalizationLevel', () => {
   it("accepts 'off' / 'conservative' / 'full' (exact lower-case)", () => {
     const logger = makeLogger()
     expect(
-      resolveNormalizationLevel({ TABTIN_NORMALIZATION_LEVEL: 'off' }, logger),
+      resolveNormalizationLevel({ MUSE_NORMALIZATION_LEVEL: 'off' }, logger),
     ).toBe('off')
     expect(
       resolveNormalizationLevel(
-        { TABTIN_NORMALIZATION_LEVEL: 'conservative' },
+        { MUSE_NORMALIZATION_LEVEL: 'conservative' },
         logger,
       ),
     ).toBe('conservative')
     expect(
-      resolveNormalizationLevel({ TABTIN_NORMALIZATION_LEVEL: 'full' }, logger),
+      resolveNormalizationLevel({ MUSE_NORMALIZATION_LEVEL: 'full' }, logger),
     ).toBe('full')
     expect(logger.warn).not.toHaveBeenCalled()
   })
@@ -254,13 +254,13 @@ describe('Electron host runtime options — resolveNormalizationLevel', () => {
     const logger = makeLogger()
     expect(
       resolveNormalizationLevel(
-        { TABTIN_NORMALIZATION_LEVEL: '  FULL  ' },
+        { MUSE_NORMALIZATION_LEVEL: '  FULL  ' },
         logger,
       ),
     ).toBe('full')
     expect(
       resolveNormalizationLevel(
-        { TABTIN_NORMALIZATION_LEVEL: 'Off' },
+        { MUSE_NORMALIZATION_LEVEL: 'Off' },
         logger,
       ),
     ).toBe('off')
@@ -271,19 +271,19 @@ describe('Electron host runtime options — resolveNormalizationLevel', () => {
     const logger = makeLogger()
     expect(
       resolveNormalizationLevel(
-        { TABTIN_NORMALIZATION_LEVEL: 'ful' },
+        { MUSE_NORMALIZATION_LEVEL: 'ful' },
         logger,
       ),
     ).toBe(DEFAULT_NORMALIZATION_LEVEL)
     expect(
       resolveNormalizationLevel(
-        { TABTIN_NORMALIZATION_LEVEL: 'conserv' },
+        { MUSE_NORMALIZATION_LEVEL: 'conserv' },
         logger,
       ),
     ).toBe(DEFAULT_NORMALIZATION_LEVEL)
     expect(logger.warn).toHaveBeenCalledTimes(2)
     const msg = (logger.warn as ReturnType<typeof vi.fn>).mock.calls[0][0]
-    expect(msg).toMatch(/TABTIN_NORMALIZATION_LEVEL/)
+    expect(msg).toMatch(/MUSE_NORMALIZATION_LEVEL/)
     expect(msg).toMatch(/ful/)
     expect(msg).toMatch(/falling back to 'conservative'/i)
   })
@@ -291,11 +291,11 @@ describe('Electron host runtime options — resolveNormalizationLevel', () => {
   it('does not warn on empty or whitespace-only env', () => {
     const logger = makeLogger()
     expect(
-      resolveNormalizationLevel({ TABTIN_NORMALIZATION_LEVEL: '' }, logger),
+      resolveNormalizationLevel({ MUSE_NORMALIZATION_LEVEL: '' }, logger),
     ).toBe(DEFAULT_NORMALIZATION_LEVEL)
     expect(
       resolveNormalizationLevel(
-        { TABTIN_NORMALIZATION_LEVEL: '   ' },
+        { MUSE_NORMALIZATION_LEVEL: '   ' },
         logger,
       ),
     ).toBe(DEFAULT_NORMALIZATION_LEVEL)
@@ -315,27 +315,27 @@ describe('Electron host runtime options — resolveToolSchemaValidation', () => 
 
   it('accepts off / warn / strict (case-insensitive, trimmed)', () => {
     const logger = makeLogger()
-    expect(resolveToolSchemaValidation({ TABTIN_TOOL_SCHEMA_VALIDATION: 'off' }, logger)).toBe('off')
-    expect(resolveToolSchemaValidation({ TABTIN_TOOL_SCHEMA_VALIDATION: 'WARN' }, logger)).toBe('warn')
-    expect(resolveToolSchemaValidation({ TABTIN_TOOL_SCHEMA_VALIDATION: '  Strict  ' }, logger)).toBe('strict')
+    expect(resolveToolSchemaValidation({ MUSE_TOOL_SCHEMA_VALIDATION: 'off' }, logger)).toBe('off')
+    expect(resolveToolSchemaValidation({ MUSE_TOOL_SCHEMA_VALIDATION: 'WARN' }, logger)).toBe('warn')
+    expect(resolveToolSchemaValidation({ MUSE_TOOL_SCHEMA_VALIDATION: '  Strict  ' }, logger)).toBe('strict')
     expect(logger.warn).not.toHaveBeenCalled()
   })
 
   it('warns + falls back when value is malformed', () => {
     const logger = makeLogger()
     expect(
-      resolveToolSchemaValidation({ TABTIN_TOOL_SCHEMA_VALIDATION: 'strikt' }, logger),
+      resolveToolSchemaValidation({ MUSE_TOOL_SCHEMA_VALIDATION: 'strikt' }, logger),
     ).toBe('warn')
     expect(logger.warn).toHaveBeenCalledTimes(1)
     const msg = (logger.warn as ReturnType<typeof vi.fn>).mock.calls[0][0]
-    expect(msg).toMatch(/TABTIN_TOOL_SCHEMA_VALIDATION/)
+    expect(msg).toMatch(/MUSE_TOOL_SCHEMA_VALIDATION/)
     expect(msg).toMatch(/falling back to 'warn'/)
   })
 
   it('does not warn on empty / whitespace-only env', () => {
     const logger = makeLogger()
-    expect(resolveToolSchemaValidation({ TABTIN_TOOL_SCHEMA_VALIDATION: '' }, logger)).toBe('warn')
-    expect(resolveToolSchemaValidation({ TABTIN_TOOL_SCHEMA_VALIDATION: '   ' }, logger)).toBe('warn')
+    expect(resolveToolSchemaValidation({ MUSE_TOOL_SCHEMA_VALIDATION: '' }, logger)).toBe('warn')
+    expect(resolveToolSchemaValidation({ MUSE_TOOL_SCHEMA_VALIDATION: '   ' }, logger)).toBe('warn')
     expect(logger.warn).not.toHaveBeenCalled()
   })
 })
@@ -350,23 +350,23 @@ describe('Electron host runtime options — resolveToolOutputScan', () => {
 
   it('parses common truthy / falsy aliases', () => {
     const logger = makeLogger()
-    expect(resolveToolOutputScan({ TABTIN_TOOL_OUTPUT_SCAN: 'on' }, logger)).toBe(true)
-    expect(resolveToolOutputScan({ TABTIN_TOOL_OUTPUT_SCAN: 'true' }, logger)).toBe(true)
-    expect(resolveToolOutputScan({ TABTIN_TOOL_OUTPUT_SCAN: '1' }, logger)).toBe(true)
-    expect(resolveToolOutputScan({ TABTIN_TOOL_OUTPUT_SCAN: 'enabled' }, logger)).toBe(true)
-    expect(resolveToolOutputScan({ TABTIN_TOOL_OUTPUT_SCAN: 'OFF' }, logger)).toBe(false)
-    expect(resolveToolOutputScan({ TABTIN_TOOL_OUTPUT_SCAN: 'false' }, logger)).toBe(false)
-    expect(resolveToolOutputScan({ TABTIN_TOOL_OUTPUT_SCAN: '0' }, logger)).toBe(false)
-    expect(resolveToolOutputScan({ TABTIN_TOOL_OUTPUT_SCAN: 'disabled' }, logger)).toBe(false)
+    expect(resolveToolOutputScan({ MUSE_TOOL_OUTPUT_SCAN: 'on' }, logger)).toBe(true)
+    expect(resolveToolOutputScan({ MUSE_TOOL_OUTPUT_SCAN: 'true' }, logger)).toBe(true)
+    expect(resolveToolOutputScan({ MUSE_TOOL_OUTPUT_SCAN: '1' }, logger)).toBe(true)
+    expect(resolveToolOutputScan({ MUSE_TOOL_OUTPUT_SCAN: 'enabled' }, logger)).toBe(true)
+    expect(resolveToolOutputScan({ MUSE_TOOL_OUTPUT_SCAN: 'OFF' }, logger)).toBe(false)
+    expect(resolveToolOutputScan({ MUSE_TOOL_OUTPUT_SCAN: 'false' }, logger)).toBe(false)
+    expect(resolveToolOutputScan({ MUSE_TOOL_OUTPUT_SCAN: '0' }, logger)).toBe(false)
+    expect(resolveToolOutputScan({ MUSE_TOOL_OUTPUT_SCAN: 'disabled' }, logger)).toBe(false)
     expect(logger.warn).not.toHaveBeenCalled()
   })
 
   it('warns + falls back to on when value is malformed', () => {
     const logger = makeLogger()
-    expect(resolveToolOutputScan({ TABTIN_TOOL_OUTPUT_SCAN: 'maybe' }, logger)).toBe(true)
+    expect(resolveToolOutputScan({ MUSE_TOOL_OUTPUT_SCAN: 'maybe' }, logger)).toBe(true)
     expect(logger.warn).toHaveBeenCalledTimes(1)
     const msg = (logger.warn as ReturnType<typeof vi.fn>).mock.calls[0][0]
-    expect(msg).toMatch(/TABTIN_TOOL_OUTPUT_SCAN/)
+    expect(msg).toMatch(/MUSE_TOOL_OUTPUT_SCAN/)
     expect(msg).toMatch(/falling back to 'on'/)
   })
 })
@@ -385,15 +385,15 @@ describe('Electron host runtime options — resolveSyncPersistence', () => {
 
   it('treats empty / whitespace env as unset (no warn, defaults true)', () => {
     const logger = makeLogger()
-    expect(resolveSyncPersistence({ TABTIN_SYNC_PERSISTENCE: '' }, logger)).toBe(true)
-    expect(resolveSyncPersistence({ TABTIN_SYNC_PERSISTENCE: '   ' }, logger)).toBe(true)
+    expect(resolveSyncPersistence({ MUSE_SYNC_PERSISTENCE: '' }, logger)).toBe(true)
+    expect(resolveSyncPersistence({ MUSE_SYNC_PERSISTENCE: '   ' }, logger)).toBe(true)
     expect(logger.warn).not.toHaveBeenCalled()
   })
 
   it("accepts truthy values: '1' / 'true' / 'on' (case-insensitive, trimmed)", () => {
     const logger = makeLogger()
     for (const raw of ['1', 'true', 'TRUE', 'on', ' On ']) {
-      expect(resolveSyncPersistence({ TABTIN_SYNC_PERSISTENCE: raw }, logger)).toBe(true)
+      expect(resolveSyncPersistence({ MUSE_SYNC_PERSISTENCE: raw }, logger)).toBe(true)
     }
     expect(logger.warn).not.toHaveBeenCalled()
   })
@@ -401,17 +401,17 @@ describe('Electron host runtime options — resolveSyncPersistence', () => {
   it("accepts falsy values: '0' / 'false' / 'off'", () => {
     const logger = makeLogger()
     for (const raw of ['0', 'false', 'FALSE', 'off']) {
-      expect(resolveSyncPersistence({ TABTIN_SYNC_PERSISTENCE: raw }, logger)).toBe(false)
+      expect(resolveSyncPersistence({ MUSE_SYNC_PERSISTENCE: raw }, logger)).toBe(false)
     }
     expect(logger.warn).not.toHaveBeenCalled()
   })
 
   it('warns + falls back to false on typo', () => {
     const logger = makeLogger()
-    expect(resolveSyncPersistence({ TABTIN_SYNC_PERSISTENCE: 'enabled' }, logger)).toBe(false)
+    expect(resolveSyncPersistence({ MUSE_SYNC_PERSISTENCE: 'enabled' }, logger)).toBe(false)
     expect(logger.warn).toHaveBeenCalledTimes(1)
     const msg = (logger.warn as ReturnType<typeof vi.fn>).mock.calls[0][0]
-    expect(String(msg)).toMatch(/TABTIN_SYNC_PERSISTENCE/)
+    expect(String(msg)).toMatch(/MUSE_SYNC_PERSISTENCE/)
     expect(String(msg)).toMatch(/falling back to false/)
   })
 })
@@ -427,35 +427,35 @@ describe('Electron host runtime options — resolveSummaryReuse', () => {
 
   it('treats empty / whitespace env as unset (no warn)', () => {
     const logger = makeLogger()
-    expect(resolveSummaryReuse({ TABTIN_SUMMARY_REUSE: '' }, logger)).toBe(true)
-    expect(resolveSummaryReuse({ TABTIN_SUMMARY_REUSE: '   ' }, logger)).toBe(true)
+    expect(resolveSummaryReuse({ MUSE_SUMMARY_REUSE: '' }, logger)).toBe(true)
+    expect(resolveSummaryReuse({ MUSE_SUMMARY_REUSE: '   ' }, logger)).toBe(true)
     expect(logger.warn).not.toHaveBeenCalled()
   })
 
   it('accepts on / true / 1 / enabled (case-insensitive, trimmed)', () => {
     const logger = makeLogger()
-    expect(resolveSummaryReuse({ TABTIN_SUMMARY_REUSE: 'on' }, logger)).toBe(true)
-    expect(resolveSummaryReuse({ TABTIN_SUMMARY_REUSE: 'TRUE' }, logger)).toBe(true)
-    expect(resolveSummaryReuse({ TABTIN_SUMMARY_REUSE: '1' }, logger)).toBe(true)
-    expect(resolveSummaryReuse({ TABTIN_SUMMARY_REUSE: '  Enabled  ' }, logger)).toBe(true)
+    expect(resolveSummaryReuse({ MUSE_SUMMARY_REUSE: 'on' }, logger)).toBe(true)
+    expect(resolveSummaryReuse({ MUSE_SUMMARY_REUSE: 'TRUE' }, logger)).toBe(true)
+    expect(resolveSummaryReuse({ MUSE_SUMMARY_REUSE: '1' }, logger)).toBe(true)
+    expect(resolveSummaryReuse({ MUSE_SUMMARY_REUSE: '  Enabled  ' }, logger)).toBe(true)
     expect(logger.warn).not.toHaveBeenCalled()
   })
 
   it('accepts off / false / 0 / disabled', () => {
     const logger = makeLogger()
-    expect(resolveSummaryReuse({ TABTIN_SUMMARY_REUSE: 'off' }, logger)).toBe(false)
-    expect(resolveSummaryReuse({ TABTIN_SUMMARY_REUSE: 'False' }, logger)).toBe(false)
-    expect(resolveSummaryReuse({ TABTIN_SUMMARY_REUSE: '0' }, logger)).toBe(false)
-    expect(resolveSummaryReuse({ TABTIN_SUMMARY_REUSE: 'disabled' }, logger)).toBe(false)
+    expect(resolveSummaryReuse({ MUSE_SUMMARY_REUSE: 'off' }, logger)).toBe(false)
+    expect(resolveSummaryReuse({ MUSE_SUMMARY_REUSE: 'False' }, logger)).toBe(false)
+    expect(resolveSummaryReuse({ MUSE_SUMMARY_REUSE: '0' }, logger)).toBe(false)
+    expect(resolveSummaryReuse({ MUSE_SUMMARY_REUSE: 'disabled' }, logger)).toBe(false)
     expect(logger.warn).not.toHaveBeenCalled()
   })
 
   it('falls back to true on typos and warns once', () => {
     const logger = makeLogger()
-    expect(resolveSummaryReuse({ TABTIN_SUMMARY_REUSE: 'maybe' }, logger)).toBe(true)
+    expect(resolveSummaryReuse({ MUSE_SUMMARY_REUSE: 'maybe' }, logger)).toBe(true)
     expect(logger.warn).toHaveBeenCalledTimes(1)
     const msg = (logger.warn as ReturnType<typeof vi.fn>).mock.calls[0][0]
-    expect(String(msg)).toMatch(/TABTIN_SUMMARY_REUSE/)
+    expect(String(msg)).toMatch(/MUSE_SUMMARY_REUSE/)
     expect(String(msg)).toMatch(/falling back to true/)
   })
 })
@@ -469,17 +469,17 @@ describe('Electron host runtime options — resolveSummaryReuseJudgeSampleRate',
 
   it('accepts valid floats in [0, 1]', () => {
     const logger = makeLogger()
-    expect(resolveSummaryReuseJudgeSampleRate({ TABTIN_SUMMARY_REUSE_JUDGE_SAMPLE_RATE: '0' }, logger)).toBe(0)
-    expect(resolveSummaryReuseJudgeSampleRate({ TABTIN_SUMMARY_REUSE_JUDGE_SAMPLE_RATE: '0.5' }, logger)).toBe(0.5)
-    expect(resolveSummaryReuseJudgeSampleRate({ TABTIN_SUMMARY_REUSE_JUDGE_SAMPLE_RATE: '1' }, logger)).toBe(1)
+    expect(resolveSummaryReuseJudgeSampleRate({ MUSE_SUMMARY_REUSE_JUDGE_SAMPLE_RATE: '0' }, logger)).toBe(0)
+    expect(resolveSummaryReuseJudgeSampleRate({ MUSE_SUMMARY_REUSE_JUDGE_SAMPLE_RATE: '0.5' }, logger)).toBe(0.5)
+    expect(resolveSummaryReuseJudgeSampleRate({ MUSE_SUMMARY_REUSE_JUDGE_SAMPLE_RATE: '1' }, logger)).toBe(1)
     expect(logger.warn).not.toHaveBeenCalled()
   })
 
   it('warns and falls back on out-of-range / invalid', () => {
     const logger = makeLogger()
-    expect(resolveSummaryReuseJudgeSampleRate({ TABTIN_SUMMARY_REUSE_JUDGE_SAMPLE_RATE: '1.5' }, logger)).toBeUndefined()
-    expect(resolveSummaryReuseJudgeSampleRate({ TABTIN_SUMMARY_REUSE_JUDGE_SAMPLE_RATE: '-0.1' }, logger)).toBeUndefined()
-    expect(resolveSummaryReuseJudgeSampleRate({ TABTIN_SUMMARY_REUSE_JUDGE_SAMPLE_RATE: 'abc' }, logger)).toBeUndefined()
+    expect(resolveSummaryReuseJudgeSampleRate({ MUSE_SUMMARY_REUSE_JUDGE_SAMPLE_RATE: '1.5' }, logger)).toBeUndefined()
+    expect(resolveSummaryReuseJudgeSampleRate({ MUSE_SUMMARY_REUSE_JUDGE_SAMPLE_RATE: '-0.1' }, logger)).toBeUndefined()
+    expect(resolveSummaryReuseJudgeSampleRate({ MUSE_SUMMARY_REUSE_JUDGE_SAMPLE_RATE: 'abc' }, logger)).toBeUndefined()
     expect(logger.warn).toHaveBeenCalledTimes(3)
   })
 })
@@ -490,56 +490,56 @@ describe('Electron host runtime options — resolveSummaryReuseJudgeWindowSize',
   })
 
   it('accepts integer ≥ 10', () => {
-    expect(resolveSummaryReuseJudgeWindowSize({ TABTIN_SUMMARY_REUSE_JUDGE_WINDOW_SIZE: '10' }, makeLogger())).toBe(10)
-    expect(resolveSummaryReuseJudgeWindowSize({ TABTIN_SUMMARY_REUSE_JUDGE_WINDOW_SIZE: '500' }, makeLogger())).toBe(500)
+    expect(resolveSummaryReuseJudgeWindowSize({ MUSE_SUMMARY_REUSE_JUDGE_WINDOW_SIZE: '10' }, makeLogger())).toBe(10)
+    expect(resolveSummaryReuseJudgeWindowSize({ MUSE_SUMMARY_REUSE_JUDGE_WINDOW_SIZE: '500' }, makeLogger())).toBe(500)
   })
 
   it('warns and falls back on < 10 / float / non-numeric', () => {
     const logger = makeLogger()
-    expect(resolveSummaryReuseJudgeWindowSize({ TABTIN_SUMMARY_REUSE_JUDGE_WINDOW_SIZE: '5' }, logger)).toBeUndefined()
-    expect(resolveSummaryReuseJudgeWindowSize({ TABTIN_SUMMARY_REUSE_JUDGE_WINDOW_SIZE: '10.5' }, logger)).toBeUndefined()
-    expect(resolveSummaryReuseJudgeWindowSize({ TABTIN_SUMMARY_REUSE_JUDGE_WINDOW_SIZE: 'abc' }, logger)).toBeUndefined()
+    expect(resolveSummaryReuseJudgeWindowSize({ MUSE_SUMMARY_REUSE_JUDGE_WINDOW_SIZE: '5' }, logger)).toBeUndefined()
+    expect(resolveSummaryReuseJudgeWindowSize({ MUSE_SUMMARY_REUSE_JUDGE_WINDOW_SIZE: '10.5' }, logger)).toBeUndefined()
+    expect(resolveSummaryReuseJudgeWindowSize({ MUSE_SUMMARY_REUSE_JUDGE_WINDOW_SIZE: 'abc' }, logger)).toBeUndefined()
     expect(logger.warn).toHaveBeenCalledTimes(3)
   })
 })
 
 describe('Electron host runtime options — resolveSummaryReuseJudgeThreshold', () => {
   it('accepts [0, 1] floats', () => {
-    expect(resolveSummaryReuseJudgeThreshold({ TABTIN_SUMMARY_REUSE_JUDGE_THRESHOLD: '0.9' }, makeLogger())).toBe(0.9)
-    expect(resolveSummaryReuseJudgeThreshold({ TABTIN_SUMMARY_REUSE_JUDGE_THRESHOLD: '0' }, makeLogger())).toBe(0)
+    expect(resolveSummaryReuseJudgeThreshold({ MUSE_SUMMARY_REUSE_JUDGE_THRESHOLD: '0.9' }, makeLogger())).toBe(0.9)
+    expect(resolveSummaryReuseJudgeThreshold({ MUSE_SUMMARY_REUSE_JUDGE_THRESHOLD: '0' }, makeLogger())).toBe(0)
   })
   it('falls back on out-of-range', () => {
     const logger = makeLogger()
-    expect(resolveSummaryReuseJudgeThreshold({ TABTIN_SUMMARY_REUSE_JUDGE_THRESHOLD: '1.1' }, logger)).toBeUndefined()
+    expect(resolveSummaryReuseJudgeThreshold({ MUSE_SUMMARY_REUSE_JUDGE_THRESHOLD: '1.1' }, logger)).toBeUndefined()
     expect(logger.warn).toHaveBeenCalledTimes(1)
   })
 })
 
 describe('Electron host runtime options — resolveSummaryReuseMaxAgeMs', () => {
   it('accepts non-negative integer', () => {
-    expect(resolveSummaryReuseMaxAgeMs({ TABTIN_SUMMARY_REUSE_MAX_AGE_MS: '60000' }, makeLogger())).toBe(60000)
+    expect(resolveSummaryReuseMaxAgeMs({ MUSE_SUMMARY_REUSE_MAX_AGE_MS: '60000' }, makeLogger())).toBe(60000)
   })
   it('treats 0 as "no limit" (returns undefined)', () => {
-    expect(resolveSummaryReuseMaxAgeMs({ TABTIN_SUMMARY_REUSE_MAX_AGE_MS: '0' }, makeLogger())).toBeUndefined()
+    expect(resolveSummaryReuseMaxAgeMs({ MUSE_SUMMARY_REUSE_MAX_AGE_MS: '0' }, makeLogger())).toBeUndefined()
   })
   it('falls back on negative / float / non-numeric', () => {
     const logger = makeLogger()
-    expect(resolveSummaryReuseMaxAgeMs({ TABTIN_SUMMARY_REUSE_MAX_AGE_MS: '-1' }, logger)).toBeUndefined()
-    expect(resolveSummaryReuseMaxAgeMs({ TABTIN_SUMMARY_REUSE_MAX_AGE_MS: '10.5' }, logger)).toBeUndefined()
+    expect(resolveSummaryReuseMaxAgeMs({ MUSE_SUMMARY_REUSE_MAX_AGE_MS: '-1' }, logger)).toBeUndefined()
+    expect(resolveSummaryReuseMaxAgeMs({ MUSE_SUMMARY_REUSE_MAX_AGE_MS: '10.5' }, logger)).toBeUndefined()
     expect(logger.warn).toHaveBeenCalledTimes(2)
   })
 })
 
 describe('Electron host runtime options — resolveSummaryReuseMinAddedMessages', () => {
   it('accepts integer ≥ 1', () => {
-    expect(resolveSummaryReuseMinAddedMessages({ TABTIN_SUMMARY_REUSE_MIN_ADDED_MESSAGES: '1' }, makeLogger())).toBe(1)
-    expect(resolveSummaryReuseMinAddedMessages({ TABTIN_SUMMARY_REUSE_MIN_ADDED_MESSAGES: '5' }, makeLogger())).toBe(5)
+    expect(resolveSummaryReuseMinAddedMessages({ MUSE_SUMMARY_REUSE_MIN_ADDED_MESSAGES: '1' }, makeLogger())).toBe(1)
+    expect(resolveSummaryReuseMinAddedMessages({ MUSE_SUMMARY_REUSE_MIN_ADDED_MESSAGES: '5' }, makeLogger())).toBe(5)
   })
   it('falls back on 0 / negative / float', () => {
     const logger = makeLogger()
-    expect(resolveSummaryReuseMinAddedMessages({ TABTIN_SUMMARY_REUSE_MIN_ADDED_MESSAGES: '0' }, logger)).toBeUndefined()
-    expect(resolveSummaryReuseMinAddedMessages({ TABTIN_SUMMARY_REUSE_MIN_ADDED_MESSAGES: '-1' }, logger)).toBeUndefined()
-    expect(resolveSummaryReuseMinAddedMessages({ TABTIN_SUMMARY_REUSE_MIN_ADDED_MESSAGES: '1.5' }, logger)).toBeUndefined()
+    expect(resolveSummaryReuseMinAddedMessages({ MUSE_SUMMARY_REUSE_MIN_ADDED_MESSAGES: '0' }, logger)).toBeUndefined()
+    expect(resolveSummaryReuseMinAddedMessages({ MUSE_SUMMARY_REUSE_MIN_ADDED_MESSAGES: '-1' }, logger)).toBeUndefined()
+    expect(resolveSummaryReuseMinAddedMessages({ MUSE_SUMMARY_REUSE_MIN_ADDED_MESSAGES: '1.5' }, logger)).toBeUndefined()
     expect(logger.warn).toHaveBeenCalledTimes(3)
   })
 })
@@ -555,18 +555,18 @@ describe('Electron host runtime options — resolveAttachmentStrategy', () => {
 
   it('treats empty / whitespace env as unset (no warn)', () => {
     const logger = makeLogger()
-    expect(resolveAttachmentStrategy({ TABTIN_ATTACHMENT_STRATEGY: '' }, logger)).toBe('local_first')
-    expect(resolveAttachmentStrategy({ TABTIN_ATTACHMENT_STRATEGY: '   ' }, logger)).toBe('local_first')
+    expect(resolveAttachmentStrategy({ MUSE_ATTACHMENT_STRATEGY: '' }, logger)).toBe('local_first')
+    expect(resolveAttachmentStrategy({ MUSE_ATTACHMENT_STRATEGY: '   ' }, logger)).toBe('local_first')
     expect(logger.warn).not.toHaveBeenCalled()
   })
 
   it('accepts the three valid values (case-insensitive, trimmed)', () => {
     const logger = makeLogger()
     expect(
-      resolveAttachmentStrategy({ TABTIN_ATTACHMENT_STRATEGY: 'local_first' }, logger),
+      resolveAttachmentStrategy({ MUSE_ATTACHMENT_STRATEGY: 'local_first' }, logger),
     ).toBe('local_first')
     expect(
-      resolveAttachmentStrategy({ TABTIN_ATTACHMENT_STRATEGY: '  cloud_only  ' }, logger),
+      resolveAttachmentStrategy({ MUSE_ATTACHMENT_STRATEGY: '  cloud_only  ' }, logger),
     ).toBe('cloud_only')
     expect(logger.warn).not.toHaveBeenCalled()
   })
@@ -576,7 +576,7 @@ describe('Electron host runtime options — resolveAttachmentStrategy', () => {
   it('rejects deprecated cloud_first env value with warn fallback (W4 T8)', () => {
     const logger = makeLogger()
     expect(
-      resolveAttachmentStrategy({ TABTIN_ATTACHMENT_STRATEGY: 'cloud_first' }, logger),
+      resolveAttachmentStrategy({ MUSE_ATTACHMENT_STRATEGY: 'cloud_first' }, logger),
     ).toBe('local_first')
     expect(logger.warn).toHaveBeenCalledTimes(1)
     const msg = String((logger.warn as ReturnType<typeof vi.fn>).mock.calls[0]?.[0] ?? '')
@@ -586,16 +586,16 @@ describe('Electron host runtime options — resolveAttachmentStrategy', () => {
   it('falls back + warns on common typos (local-first / localfirst)', () => {
     const logger = makeLogger()
     expect(
-      resolveAttachmentStrategy({ TABTIN_ATTACHMENT_STRATEGY: 'local-first' }, logger),
+      resolveAttachmentStrategy({ MUSE_ATTACHMENT_STRATEGY: 'local-first' }, logger),
     ).toBe('local_first')
     expect(
-      resolveAttachmentStrategy({ TABTIN_ATTACHMENT_STRATEGY: 'localfirst' }, logger),
+      resolveAttachmentStrategy({ MUSE_ATTACHMENT_STRATEGY: 'localfirst' }, logger),
     ).toBe('local_first')
     expect(logger.warn).toHaveBeenCalledTimes(2)
     for (const call of (logger.warn as ReturnType<typeof vi.fn>).mock.calls) {
       const msg = String(call[0])
       expect(msg).toMatch(/AgentHost/)
-      expect(msg).toMatch(/TABTIN_ATTACHMENT_STRATEGY/)
+      expect(msg).toMatch(/MUSE_ATTACHMENT_STRATEGY/)
     }
   })
 })
@@ -613,10 +613,10 @@ describe('Electron host runtime options — resolveMaxLocalFileSizeMb', () => {
   it('treats empty / whitespace as unset', () => {
     const logger = makeLogger()
     expect(
-      resolveMaxLocalFileSizeMb({ TABTIN_LOCAL_DOCPARSE_MAX_MB: '' }, logger),
+      resolveMaxLocalFileSizeMb({ MUSE_LOCAL_DOCPARSE_MAX_MB: '' }, logger),
     ).toBe(ELECTRON_DEFAULT_MAX_LOCAL_FILE_SIZE_MB)
     expect(
-      resolveMaxLocalFileSizeMb({ TABTIN_LOCAL_DOCPARSE_MAX_MB: '  ' }, logger),
+      resolveMaxLocalFileSizeMb({ MUSE_LOCAL_DOCPARSE_MAX_MB: '  ' }, logger),
     ).toBe(ELECTRON_DEFAULT_MAX_LOCAL_FILE_SIZE_MB)
     expect(logger.warn).not.toHaveBeenCalled()
   })
@@ -624,13 +624,13 @@ describe('Electron host runtime options — resolveMaxLocalFileSizeMb', () => {
   it('accepts a positive integer in (0, 200]', () => {
     const logger = makeLogger()
     expect(
-      resolveMaxLocalFileSizeMb({ TABTIN_LOCAL_DOCPARSE_MAX_MB: '100' }, logger),
+      resolveMaxLocalFileSizeMb({ MUSE_LOCAL_DOCPARSE_MAX_MB: '100' }, logger),
     ).toBe(100)
     expect(
-      resolveMaxLocalFileSizeMb({ TABTIN_LOCAL_DOCPARSE_MAX_MB: '200' }, logger),
+      resolveMaxLocalFileSizeMb({ MUSE_LOCAL_DOCPARSE_MAX_MB: '200' }, logger),
     ).toBe(200)
     expect(
-      resolveMaxLocalFileSizeMb({ TABTIN_LOCAL_DOCPARSE_MAX_MB: '  75  ' }, logger),
+      resolveMaxLocalFileSizeMb({ MUSE_LOCAL_DOCPARSE_MAX_MB: '  75  ' }, logger),
     ).toBe(75)
     expect(logger.warn).not.toHaveBeenCalled()
   })
@@ -639,20 +639,20 @@ describe('Electron host runtime options — resolveMaxLocalFileSizeMb', () => {
     const logger = makeLogger()
     for (const bad of ['0', '-5', 'big', 'NaN']) {
       expect(
-        resolveMaxLocalFileSizeMb({ TABTIN_LOCAL_DOCPARSE_MAX_MB: bad }, logger),
+        resolveMaxLocalFileSizeMb({ MUSE_LOCAL_DOCPARSE_MAX_MB: bad }, logger),
       ).toBe(ELECTRON_DEFAULT_MAX_LOCAL_FILE_SIZE_MB)
     }
     expect(logger.warn).toHaveBeenCalledTimes(4)
     for (const call of (logger.warn as ReturnType<typeof vi.fn>).mock.calls) {
       expect(String(call[0])).toMatch(/AgentHost/)
-      expect(String(call[0])).toMatch(/TABTIN_LOCAL_DOCPARSE_MAX_MB/)
+      expect(String(call[0])).toMatch(/MUSE_LOCAL_DOCPARSE_MAX_MB/)
     }
   })
 
   it('clamps + warns when exceeding hard cap (200MB)', () => {
     const logger = makeLogger()
     expect(
-      resolveMaxLocalFileSizeMb({ TABTIN_LOCAL_DOCPARSE_MAX_MB: '500' }, logger),
+      resolveMaxLocalFileSizeMb({ MUSE_LOCAL_DOCPARSE_MAX_MB: '500' }, logger),
     ).toBe(200)
     expect(logger.warn).toHaveBeenCalledTimes(1)
     expect(String((logger.warn as ReturnType<typeof vi.fn>).mock.calls[0][0])).toMatch(/exceeds hard cap/)
@@ -672,10 +672,10 @@ describe('Electron host runtime options — resolveMaxConcurrentChildren', () =>
   it('treats empty / whitespace as unset (no warn)', () => {
     const logger = makeLogger()
     expect(
-      resolveMaxConcurrentChildren({ TABTIN_MAX_CONCURRENT_CHILDREN: '' }, logger),
+      resolveMaxConcurrentChildren({ MUSE_MAX_CONCURRENT_CHILDREN: '' }, logger),
     ).toBe(DEFAULT_MAX_CONCURRENT_CHILDREN)
     expect(
-      resolveMaxConcurrentChildren({ TABTIN_MAX_CONCURRENT_CHILDREN: '  ' }, logger),
+      resolveMaxConcurrentChildren({ MUSE_MAX_CONCURRENT_CHILDREN: '  ' }, logger),
     ).toBe(DEFAULT_MAX_CONCURRENT_CHILDREN)
     expect(logger.warn).not.toHaveBeenCalled()
   })
@@ -683,10 +683,10 @@ describe('Electron host runtime options — resolveMaxConcurrentChildren', () =>
   it('accepts positive integer', () => {
     const logger = makeLogger()
     expect(
-      resolveMaxConcurrentChildren({ TABTIN_MAX_CONCURRENT_CHILDREN: '10' }, logger),
+      resolveMaxConcurrentChildren({ MUSE_MAX_CONCURRENT_CHILDREN: '10' }, logger),
     ).toBe(10)
     expect(
-      resolveMaxConcurrentChildren({ TABTIN_MAX_CONCURRENT_CHILDREN: '  3  ' }, logger),
+      resolveMaxConcurrentChildren({ MUSE_MAX_CONCURRENT_CHILDREN: '  3  ' }, logger),
     ).toBe(3)
     expect(logger.warn).not.toHaveBeenCalled()
   })
@@ -694,13 +694,13 @@ describe('Electron host runtime options — resolveMaxConcurrentChildren', () =>
   it("accepts 'unlimited' / 'infinity' / '0' as Infinity (disable)", () => {
     const logger = makeLogger()
     expect(
-      resolveMaxConcurrentChildren({ TABTIN_MAX_CONCURRENT_CHILDREN: 'unlimited' }, logger),
+      resolveMaxConcurrentChildren({ MUSE_MAX_CONCURRENT_CHILDREN: 'unlimited' }, logger),
     ).toBe(Number.POSITIVE_INFINITY)
     expect(
-      resolveMaxConcurrentChildren({ TABTIN_MAX_CONCURRENT_CHILDREN: 'INFINITY' }, logger),
+      resolveMaxConcurrentChildren({ MUSE_MAX_CONCURRENT_CHILDREN: 'INFINITY' }, logger),
     ).toBe(Number.POSITIVE_INFINITY)
     expect(
-      resolveMaxConcurrentChildren({ TABTIN_MAX_CONCURRENT_CHILDREN: '0' }, logger),
+      resolveMaxConcurrentChildren({ MUSE_MAX_CONCURRENT_CHILDREN: '0' }, logger),
     ).toBe(Number.POSITIVE_INFINITY)
     expect(logger.warn).not.toHaveBeenCalled()
   })
@@ -709,12 +709,12 @@ describe('Electron host runtime options — resolveMaxConcurrentChildren', () =>
     const logger = makeLogger()
     for (const bad of ['-1', 'NaN', 'foo']) {
       expect(
-        resolveMaxConcurrentChildren({ TABTIN_MAX_CONCURRENT_CHILDREN: bad }, logger),
+        resolveMaxConcurrentChildren({ MUSE_MAX_CONCURRENT_CHILDREN: bad }, logger),
       ).toBe(DEFAULT_MAX_CONCURRENT_CHILDREN)
     }
     expect(logger.warn).toHaveBeenCalledTimes(3)
     for (const call of (logger.warn as ReturnType<typeof vi.fn>).mock.calls) {
-      expect(String(call[0])).toMatch(/TABTIN_MAX_CONCURRENT_CHILDREN/)
+      expect(String(call[0])).toMatch(/MUSE_MAX_CONCURRENT_CHILDREN/)
       expect(String(call[0])).toMatch(/Falling back to 5/)
     }
   })
@@ -722,7 +722,7 @@ describe('Electron host runtime options — resolveMaxConcurrentChildren', () =>
   it('floors a positive float', () => {
     const logger = makeLogger()
     expect(
-      resolveMaxConcurrentChildren({ TABTIN_MAX_CONCURRENT_CHILDREN: '7.9' }, logger),
+      resolveMaxConcurrentChildren({ MUSE_MAX_CONCURRENT_CHILDREN: '7.9' }, logger),
     ).toBe(7)
   })
 })
@@ -738,23 +738,23 @@ describe('Electron host runtime options — resolveSubagentResultCompact', () =>
 
   it('accepts truthy / falsy aliases', () => {
     const logger = makeLogger()
-    expect(resolveSubagentResultCompact({ TABTIN_SUBAGENT_RESULT_COMPACT: 'on' }, logger)).toBe(true)
-    expect(resolveSubagentResultCompact({ TABTIN_SUBAGENT_RESULT_COMPACT: '1' }, logger)).toBe(true)
-    expect(resolveSubagentResultCompact({ TABTIN_SUBAGENT_RESULT_COMPACT: 'false' }, logger)).toBe(false)
-    expect(resolveSubagentResultCompact({ TABTIN_SUBAGENT_RESULT_COMPACT: '0' }, logger)).toBe(false)
-    expect(resolveSubagentResultCompact({ TABTIN_SUBAGENT_RESULT_COMPACT: 'OFF' }, logger)).toBe(false)
+    expect(resolveSubagentResultCompact({ MUSE_SUBAGENT_RESULT_COMPACT: 'on' }, logger)).toBe(true)
+    expect(resolveSubagentResultCompact({ MUSE_SUBAGENT_RESULT_COMPACT: '1' }, logger)).toBe(true)
+    expect(resolveSubagentResultCompact({ MUSE_SUBAGENT_RESULT_COMPACT: 'false' }, logger)).toBe(false)
+    expect(resolveSubagentResultCompact({ MUSE_SUBAGENT_RESULT_COMPACT: '0' }, logger)).toBe(false)
+    expect(resolveSubagentResultCompact({ MUSE_SUBAGENT_RESULT_COMPACT: 'OFF' }, logger)).toBe(false)
     expect(logger.warn).not.toHaveBeenCalled()
   })
 
   it('warns + falls back to on when value is malformed', () => {
     const logger = makeLogger()
     expect(
-      resolveSubagentResultCompact({ TABTIN_SUBAGENT_RESULT_COMPACT: 'maybe' }, logger),
+      resolveSubagentResultCompact({ MUSE_SUBAGENT_RESULT_COMPACT: 'maybe' }, logger),
     ).toBe(true)
     expect(logger.warn).toHaveBeenCalledTimes(1)
     expect(
       String((logger.warn as ReturnType<typeof vi.fn>).mock.calls[0][0]),
-    ).toMatch(/TABTIN_SUBAGENT_RESULT_COMPACT/)
+    ).toMatch(/MUSE_SUBAGENT_RESULT_COMPACT/)
   })
 })
 
@@ -823,10 +823,10 @@ describe('Electron host runtime options — resolveIterationBudget', () => {
     const logger = makeLogger()
     const out = resolveIterationBudget(
       {
-        TABTIN_ITERATION_BUDGET_WARN_ITER: '0.6',
-        TABTIN_ITERATION_BUDGET_GRACE_ITER: '0.85',
-        TABTIN_ITERATION_BUDGET_WARN_TOKEN: '0.8',
-        TABTIN_ITERATION_BUDGET_GRACE_TOKEN: '0.9',
+        MUSE_ITERATION_BUDGET_WARN_ITER: '0.6',
+        MUSE_ITERATION_BUDGET_GRACE_ITER: '0.85',
+        MUSE_ITERATION_BUDGET_WARN_TOKEN: '0.8',
+        MUSE_ITERATION_BUDGET_GRACE_TOKEN: '0.9',
       },
       logger,
     )
@@ -839,9 +839,9 @@ describe('Electron host runtime options — resolveIterationBudget', () => {
     const logger = makeLogger()
     const out = resolveIterationBudget(
       {
-        TABTIN_ITERATION_BUDGET_WARN_ITER: '0.6',
-        TABTIN_ITERATION_BUDGET_GRACE_ITER: '0.85',
-        // 没有 TABTIN_ITERATION_BUDGET_TERMINATE_ITER（不支持）
+        MUSE_ITERATION_BUDGET_WARN_ITER: '0.6',
+        MUSE_ITERATION_BUDGET_GRACE_ITER: '0.85',
+        // 没有 MUSE_ITERATION_BUDGET_TERMINATE_ITER（不支持）
       },
       logger,
     )
@@ -852,22 +852,22 @@ describe('Electron host runtime options — resolveIterationBudget', () => {
   it('warns and falls back when value is out of (0, 1] range', () => {
     const logger = makeLogger()
     const out = resolveIterationBudget(
-      { TABTIN_ITERATION_BUDGET_WARN_ITER: '1.5' },
+      { MUSE_ITERATION_BUDGET_WARN_ITER: '1.5' },
       logger,
     )
     expect(out.iteration.warn).toBe(DEFAULT_ITERATION_BUDGET.iteration.warn)
     expect(logger.warn).toHaveBeenCalledTimes(1)
     expect(
       String((logger.warn as ReturnType<typeof vi.fn>).mock.calls[0][0]),
-    ).toMatch(/TABTIN_ITERATION_BUDGET_WARN_ITER/)
+    ).toMatch(/MUSE_ITERATION_BUDGET_WARN_ITER/)
   })
 
   it('warns and falls back when value is non-numeric', () => {
     const logger = makeLogger()
     resolveIterationBudget(
       {
-        TABTIN_ITERATION_BUDGET_WARN_ITER: 'abc',
-        TABTIN_ITERATION_BUDGET_GRACE_TOKEN: 'NaN',
+        MUSE_ITERATION_BUDGET_WARN_ITER: 'abc',
+        MUSE_ITERATION_BUDGET_GRACE_TOKEN: 'NaN',
       },
       logger,
     )
@@ -878,8 +878,8 @@ describe('Electron host runtime options — resolveIterationBudget', () => {
     const logger = makeLogger()
     const out = resolveIterationBudget(
       {
-        TABTIN_ITERATION_BUDGET_WARN_ITER: '0',
-        TABTIN_ITERATION_BUDGET_GRACE_ITER: '-0.5',
+        MUSE_ITERATION_BUDGET_WARN_ITER: '0',
+        MUSE_ITERATION_BUDGET_GRACE_ITER: '-0.5',
       },
       logger,
     )
@@ -892,8 +892,8 @@ describe('Electron host runtime options — resolveIterationBudget', () => {
     const logger = makeLogger()
     const out = resolveIterationBudget(
       {
-        TABTIN_ITERATION_BUDGET_WARN_ITER: '',
-        TABTIN_ITERATION_BUDGET_GRACE_ITER: '   \t  ',
+        MUSE_ITERATION_BUDGET_WARN_ITER: '',
+        MUSE_ITERATION_BUDGET_GRACE_ITER: '   \t  ',
       },
       logger,
     )
@@ -904,13 +904,13 @@ describe('Electron host runtime options — resolveIterationBudget', () => {
   it('warning message contains the env key + bad value for ops debugging', () => {
     const logger = makeLogger()
     resolveIterationBudget(
-      { TABTIN_ITERATION_BUDGET_WARN_TOKEN: '2.0' },
+      { MUSE_ITERATION_BUDGET_WARN_TOKEN: '2.0' },
       logger,
     )
     const msg = String(
       (logger.warn as ReturnType<typeof vi.fn>).mock.calls[0][0],
     )
-    expect(msg).toContain('TABTIN_ITERATION_BUDGET_WARN_TOKEN')
+    expect(msg).toContain('MUSE_ITERATION_BUDGET_WARN_TOKEN')
     expect(msg).toContain('2.0')
     expect(msg).toMatch(/falling back/i)
   })
@@ -929,10 +929,10 @@ describe('Electron host runtime options — resolveTimeBasedMicroCompact', () =>
     expect(logger.warn).not.toHaveBeenCalled()
   })
 
-  it('honors TABTIN_TIME_BASED_MICROCOMPACT=off', () => {
+  it('honors MUSE_TIME_BASED_MICROCOMPACT=off', () => {
     const logger = makeLogger()
     expect(
-      resolveTimeBasedMicroCompact({ TABTIN_TIME_BASED_MICROCOMPACT: 'off' }, logger),
+      resolveTimeBasedMicroCompact({ MUSE_TIME_BASED_MICROCOMPACT: 'off' }, logger),
     ).toEqual({
       enabled: false,
       gapThresholdMinutes: 30,
@@ -943,7 +943,7 @@ describe('Electron host runtime options — resolveTimeBasedMicroCompact', () =>
   it('warns and falls back when env value is invalid', () => {
     const logger = makeLogger()
     expect(
-      resolveTimeBasedMicroCompact({ TABTIN_TIME_BASED_MICROCOMPACT: 'maybe' }, logger),
+      resolveTimeBasedMicroCompact({ MUSE_TIME_BASED_MICROCOMPACT: 'maybe' }, logger),
     ).toEqual({
       enabled: true,
       gapThresholdMinutes: 30,
@@ -991,7 +991,7 @@ describe('Electron host runtime options — resolvePressureThresholds', () => {
   it('parses three comma-separated thresholds', () => {
     const logger = makeLogger()
     expect(
-      resolvePressureThresholds({ TABTIN_PRESSURE_THRESHOLDS: '0.7, 0.8, 0.9' }, logger),
+      resolvePressureThresholds({ MUSE_PRESSURE_THRESHOLDS: '0.7, 0.8, 0.9' }, logger),
     ).toEqual({
       microCompactStart: 0.7,
       llmSummaryStart: 0.8,
@@ -1003,7 +1003,7 @@ describe('Electron host runtime options — resolvePressureThresholds', () => {
   it('accepts micro == summary (parallel tiers, same rule as cloud decode)', () => {
     const logger = makeLogger()
     expect(
-      resolvePressureThresholds({ TABTIN_PRESSURE_THRESHOLDS: '0.85,0.85,0.95' }, logger),
+      resolvePressureThresholds({ MUSE_PRESSURE_THRESHOLDS: '0.85,0.85,0.95' }, logger),
     ).toEqual({
       microCompactStart: 0.85,
       llmSummaryStart: 0.85,
@@ -1015,7 +1015,7 @@ describe('Electron host runtime options — resolvePressureThresholds', () => {
   it('warns and returns undefined on non-increasing values', () => {
     const logger = makeLogger()
     expect(
-      resolvePressureThresholds({ TABTIN_PRESSURE_THRESHOLDS: '0.9,0.8,0.95' }, logger),
+      resolvePressureThresholds({ MUSE_PRESSURE_THRESHOLDS: '0.9,0.8,0.95' }, logger),
     ).toBeUndefined()
     expect(logger.warn).toHaveBeenCalled()
   })
@@ -1023,7 +1023,7 @@ describe('Electron host runtime options — resolvePressureThresholds', () => {
   it('warns and returns undefined on malformed input', () => {
     const logger = makeLogger()
     expect(
-      resolvePressureThresholds({ TABTIN_PRESSURE_THRESHOLDS: '0.8,not-a-number' }, logger),
+      resolvePressureThresholds({ MUSE_PRESSURE_THRESHOLDS: '0.8,not-a-number' }, logger),
     ).toBeUndefined()
     expect(logger.warn).toHaveBeenCalled()
   })
@@ -1031,7 +1031,7 @@ describe('Electron host runtime options — resolvePressureThresholds', () => {
   it('warns and returns undefined on out-of-range values', () => {
     const logger = makeLogger()
     expect(
-      resolvePressureThresholds({ TABTIN_PRESSURE_THRESHOLDS: '0,0.85,1.5' }, logger),
+      resolvePressureThresholds({ MUSE_PRESSURE_THRESHOLDS: '0,0.85,1.5' }, logger),
     ).toBeUndefined()
     expect(logger.warn).toHaveBeenCalled()
   })

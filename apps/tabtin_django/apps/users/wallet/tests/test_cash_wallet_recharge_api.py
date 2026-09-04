@@ -24,7 +24,7 @@ def _auth_header() -> dict:
     return {"HTTP_AUTHORIZATION": "Bearer test-token"}
 
 
-@override_settings(TABTIN_REQUIRE_INVITE_CODE=False)
+@override_settings(MUSE_REQUIRE_INVITE_CODE=False)
 class CashWalletRechargeApiTests(TestCase):
     databases = {"default"}
 
@@ -307,7 +307,7 @@ class CashWalletRechargeApiTests(TestCase):
         mock_grant_task.delay.assert_called_once_with(old_order.id)
 
 
-@override_settings(TABTIN_REQUIRE_INVITE_CODE=False)
+@override_settings(MUSE_REQUIRE_INVITE_CODE=False)
 class CashWalletRechargeConcurrencyTests(TransactionTestCase):
     databases = {"default", "postgresql"}
 

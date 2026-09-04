@@ -16,7 +16,7 @@
 
 import { describe, it, expect, beforeEach, vi } from 'vitest'
 import { renderHook, act } from '@testing-library/react'
-import type { ChatMessage } from '@tabtin/chat-client'
+import type { ChatMessage } from '@muse/chat-client'
 
 //  / ：内容块单一 store = message.blocks。commit 经 Zustand setState
 // 不可变写入，故 mock 须提供 getState + setState；引擎测试先 seedShell 建壳。
@@ -111,7 +111,7 @@ import {
   useMessageBlocksById,
   __resetMessageBlocks,
 } from './chat/messages/messageBlocks'
-import type { ContentBlock } from '@tabtin/agent-wire'
+import type { ContentBlock } from '@muse/agent-wire'
 
 const SESSION = 'sess-cb-defense'
 const MID = 'msg_defense_1'

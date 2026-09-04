@@ -1,4 +1,4 @@
-import type { HostRuntimeSnapshot } from '@tabtin/shared'
+import type { HostRuntimeSnapshot } from '@muse/shared'
 import type { RuntimeToolGroup } from './types'
 
 export const MAX_CHIPS = 10

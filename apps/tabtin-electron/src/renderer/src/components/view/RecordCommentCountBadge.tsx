@@ -1,6 +1,6 @@
 import React, { useCallback, useMemo } from 'react'
 import { MessageSquare } from 'lucide-react'
-import type { ViewRecordsResponse } from '@tabtin/table-core'
+import type { ViewRecordsResponse } from '@muse/table-core'
 import { useTranslation } from 'react-i18next'
 import { formatNumber } from '@/utils/i18n/format'
 import { useRecordCommentCounts } from '@components/table/hooks/useRecordCommentCounts'

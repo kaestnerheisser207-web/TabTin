@@ -1,8 +1,8 @@
 import type { ReactNode } from 'react'
 import type { CanvasPaneContent, CanvasTabKey } from '@stores/useCanvasLayoutStore'
 import type { CrawlspaceConfig, CrawlspaceViewInfo } from '@stores/useCrawlTabStore'
-import type { Table } from '@tabtin/table-core'
-import type { SpaceContextItem } from '@tabtin/app-shell'
+import type { Table } from '@muse/table-core'
+import type { SpaceContextItem } from '@muse/app-shell'
 import type { CreateResourceOptions } from '../hooks/createResourceTypes'
 
 export type ContextItemType =

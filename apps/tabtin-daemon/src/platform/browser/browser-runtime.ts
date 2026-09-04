@@ -2,7 +2,7 @@ import {
   cleanHtml,
   generateSkeletonHtml,
   setCrawlToolRunnerFactory,
-} from '@tabtin/action-tools/headless'
+} from '@muse/action-tools/headless'
 
 import type { Logger } from '../observability/logging/logger.js'
 import { DaemonBrowserService } from './DaemonBrowserService.js'

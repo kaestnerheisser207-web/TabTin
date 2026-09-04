@@ -1,5 +1,5 @@
 {
-  "name": "@tabtin/collab-core",
+  "name": "@muse/collab-core",
   "version": "0.1.0",
   "description": "Muse 实时协作底座 — Provider 状态机、重连、IndexedDB、Stateless 事件",
   "private": true,
@@ -20,8 +20,8 @@
   },
   "dependencies": {
     "@hocuspocus/provider": "^2.15.2",
-    "@tabtin/config": "workspace:*",
-    "@tabtin/shared": "workspace:*",
+    "@muse/config": "workspace:*",
+    "@muse/shared": "workspace:*",
     "react": ">=18",
     "y-indexeddb": "^9.0.12",
     "yjs": "^13.6.29"

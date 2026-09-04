@@ -4,9 +4,9 @@ export {
   getOrganizationSelection,
   rememberOrganizationSelection,
   resolveSelectionBySpaceId,
-} from '@tabtin/app-shell'
+} from '@muse/app-shell'
 export type {
   SpaceSelectionSnapshot,
   OrganizationSpaceSelectionMap,
   ResolvedSpaceSelection,
-} from '@tabtin/app-shell'
+} from '@muse/app-shell'

@@ -26,7 +26,7 @@ export const AutofillSuggestionOverlay: React.FC = () => {
   const [filling, setFilling] = useState<string | null>(null)
 
   useEffect(() => {
-    const tabtin = window.tabtin
+    const tabtin = window.muse
     if (!tabtin?.credentialVault?.onAutofillSuggest) return
 
     const cleanupSuggest = tabtin.credentialVault.onAutofillSuggest(
@@ -54,13 +54,13 @@ export const AutofillSuggestionOverlay: React.FC = () => {
   // （不抢焦点、始终捕获点击），卡片以外的屏幕不被覆盖，底层网页照常可点/可输入；
   // 无建议时 open(false) 撤出 source、窗口 hide。主 renderer 环境下无 overlay，? 兜底。
   useEffect(() => {
-    window.tabtin?.overlay?.setModalSourceOpen?.('autofill-suggest', !!suggestion)
+    window.muse?.overlay?.setModalSourceOpen?.('autofill-suggest', !!suggestion)
   }, [suggestion])
 
   // 卸载时撤出 modal source，避免小窗卡在 show 状态。
   useEffect(() => {
     return () => {
-      window.tabtin?.overlay?.setModalSourceOpen?.('autofill-suggest', false)
+      window.muse?.overlay?.setModalSourceOpen?.('autofill-suggest', false)
     }
   }, [])
 
@@ -74,7 +74,7 @@ export const AutofillSuggestionOverlay: React.FC = () => {
     const report = () => {
       const w = Math.ceil(el.offsetWidth)
       const h = Math.ceil(el.offsetHeight)
-      if (w > 0 && h > 0) window.tabtin?.overlay?.setHintSize?.({ width: w, height: h })
+      if (w > 0 && h > 0) window.muse?.overlay?.setHintSize?.({ width: w, height: h })
     }
     report()
     const ro = new ResizeObserver(report)
@@ -86,7 +86,7 @@ export const AutofillSuggestionOverlay: React.FC = () => {
     if (!suggestion) return
     setFilling(credentialId)
     try {
-      const tabtin = window.tabtin
+      const tabtin = window.muse
       if (!tabtin) return
       const result = await tabtin.credentialVault.autofillSelect({
         tabId: suggestion.tabId,
@@ -104,7 +104,7 @@ export const AutofillSuggestionOverlay: React.FC = () => {
 
   const handleDismiss = useCallback(() => {
     if (!suggestion) return
-    const tabtin = window.tabtin
+    const tabtin = window.muse
     tabtin?.credentialVault?.autofillDismiss({ tabId: suggestion.tabId })
     setSuggestion(null)
   }, [suggestion])

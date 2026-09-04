@@ -8,10 +8,10 @@ import {
   unifiedBlockToContentBlock,
 } from '../block-conversion'
 import { materializeSessionImages } from '../materialize-images'
-import type { UnifiedMessage } from '@tabtin/agent-import'
+import type { UnifiedMessage } from '@muse/agent-import'
 
 describe('block-conversion image_ref', () => {
-  it('可读绝对路径转为 image 块 + tabtin-file URL', () => {
+  it('可读绝对路径转为 image 块 + muse-file URL', () => {
     const root = mkdtempSync(join(tmpdir(), 'tabtin-import-conv-'))
     const filePath = join(root, 'shot.png')
     writeFileSync(filePath, Buffer.from([0x89, 0x50, 0x4e, 0x47]))
@@ -27,7 +27,7 @@ describe('block-conversion image_ref', () => {
       expect(block.mime_type).toBe('image/png')
       expect(block.url).toBe(toTabtinFileUrl(filePath))
       expect(block.source).toEqual({ type: 'url', url: block.url })
-      expect(block.url.startsWith('tabtin-file://')).toBe(true)
+      expect(block.url.startsWith('muse-file://')).toBe(true)
     } finally {
       rmSync(root, { recursive: true, force: true })
     }
@@ -57,7 +57,7 @@ describe('block-conversion image_ref', () => {
   })
 
   it('toTabtinFileUrl 编码空格与中文段', () => {
-    expect(toTabtinFileUrl('/tmp/a b/图.png')).toBe('tabtin-file:///tmp/a%20b/%E5%9B%BE.png')
+    expect(toTabtinFileUrl('/tmp/a b/图.png')).toBe('muse-file:///tmp/a%20b/%E5%9B%BE.png')
   })
 })
 

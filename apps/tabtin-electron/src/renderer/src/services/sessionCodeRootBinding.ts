@@ -2,7 +2,7 @@
  * sessionCodeRootBinding —  会话代码根绑定（TabCode worktree
  * session root）的 renderer 薄封装。
  *
- * 只做一件事：调 `window.tabtin.agent.{bind,get,clear}SessionCodeRoot` IPC，
+ * 只做一件事：调 `window.muse.agent.{bind,get,clear}SessionCodeRoot` IPC，
  * 成功后把结果同步进本地镜像 `useSessionBoundCodeRootStore`——UI（文件树 /
  * TabFolder / ChatInput 执行根展示）读这个 store，不必等下一轮 query 的
  * `boundCodeRootRevision` 往返才刷新。
@@ -58,7 +58,7 @@ export interface SessionCodeRootBindingSnapshot {
 }
 
 function api() {
-  return window.tabtin?.agent
+  return window.muse?.agent
 }
 
 /** main 已提交绑定后的 renderer 镜像入口（IPC ack 与 main push 共用）。 */

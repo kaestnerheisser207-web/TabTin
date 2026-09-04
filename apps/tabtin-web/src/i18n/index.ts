@@ -1,11 +1,11 @@
 import i18n from 'i18next'
 import { initReactI18next } from 'react-i18next'
-import { tableSharedZhCN, tableSharedEnUS } from '@tabtin/table-ui'
+import { tableSharedZhCN, tableSharedEnUS } from '@muse/table-ui'
 import {
   recordSharedZhCN,
   recordSharedEnUS,
   deepMergeLocaleObjects,
-} from '@tabtin/table-core'
+} from '@muse/table-core'
 
 import zhCNCommon from './locales/zh-CN/common.json'
 import zhCNAuth from './locales/zh-CN/auth.json'
@@ -21,7 +21,7 @@ import enUSSpace from './locales/en-US/space.json'
 import enUSTable from './locales/en-US/table.json'
 import enUSView from './locales/en-US/view.json'
 import enUSField from './locales/en-US/field.json'
-import { tabdocLocaleZhCN, tabdocLocaleEnUS } from '@tabtin/tabdoc-ui'
+import { tabdocLocaleZhCN, tabdocLocaleEnUS } from '@muse/tabdoc-ui'
 
 const savedLang = localStorage.getItem('tabtin_language')
 const browserLang = navigator.language.startsWith('zh') ? 'zh-CN' : 'en-US'

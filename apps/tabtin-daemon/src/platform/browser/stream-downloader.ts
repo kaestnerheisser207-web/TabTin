@@ -8,7 +8,7 @@
 import { writeFile, mkdir, rm, open } from 'node:fs/promises';
 import { createReadStream } from 'node:fs';
 import { join, dirname } from 'node:path';
-import { getHomeTabtinPath } from '@tabtin/shared/storage-paths';
+import { getHomeTabtinPath } from '@muse/shared/storage-paths';
 import { execFile } from 'node:child_process';
 import { promisify } from 'node:util';
 import type { M3U8Segment } from './m3u8-parser.js';

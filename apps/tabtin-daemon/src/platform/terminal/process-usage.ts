@@ -1,6 +1,6 @@
 import { execFile } from 'node:child_process';
 import { promisify } from 'node:util';
-import type { ProcessUsageEntry } from '@tabtin/pty-core';
+import type { ProcessUsageEntry } from '@muse/pty-core';
 
 const execFileAsync = promisify(execFile);
 const PROCESS_LIST_TIMEOUT_MS = 5000;

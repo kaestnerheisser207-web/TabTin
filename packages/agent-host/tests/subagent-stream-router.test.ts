@@ -17,8 +17,8 @@
 
 import { describe, it, expect, vi } from 'vitest';
 import { createSubagentStreamRouter } from '../src/delivery/subagent-stream-router.js';
-import { ContentBlockEvents, StreamEvents } from '@tabtin/agent-wire';
-import type { StreamEvent } from '@tabtin/agent-runtime'
+import { ContentBlockEvents, StreamEvents } from '@muse/agent-wire';
+import type { StreamEvent } from '@muse/agent-runtime'
 
 function persistParentSession() {
   return vi.fn();

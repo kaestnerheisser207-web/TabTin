@@ -1,7 +1,7 @@
 import SwiftUI
 import UIKit
 
-/// 连接器品牌标：匹配规则来自 `@tabtin/connector-brand-icons` 的 manifest（打包进 Bundle）。
+/// 连接器品牌标：匹配规则来自 `@muse/connector-brand-icons` 的 manifest（打包进 Bundle）。
 /// 新增品牌只改 packages 侧并同步资源，不要在市场行硬编码 slug。
 enum ConnectorBrandIconResolver {
     struct RecommendedCatalogEntry: Identifiable, Equatable, Sendable {

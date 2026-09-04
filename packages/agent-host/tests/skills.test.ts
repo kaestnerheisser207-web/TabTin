@@ -16,8 +16,8 @@
  *  11. 构造时缺 fetchSkills → hooks() 返回 null（不注入 __skillsHint）
  *  12. 配置 contextWindowTokens 透传到 truncateSkillsWithinBudget
  *
- * ：SkillsCap 已从 agent-runtime 迁到 @tabtin/agent-host，本单测随源迁来；
- * 对源的 import 指向 host 的 `src/capabilities/skills.js`，契约类型走 @tabtin/agent-runtime 公共面。
+ * ：SkillsCap 已从 agent-runtime 迁到 @muse/agent-host，本单测随源迁来；
+ * 对源的 import 指向 host 的 `src/capabilities/skills.js`，契约类型走 @muse/agent-runtime 公共面。
  *  起 fetchSkills context 只含 `query`（spaceId/organizationId 已烘进 host 闭包）。
  */
 
@@ -33,19 +33,19 @@ import {
 import type {
   SkillRecord,
   SkillsToolsCallbackContext,
-} from '@tabtin/agent-runtime/tools';
+} from '@muse/agent-runtime/tools';
 // W2.2.3 解耦：协议类型 SSoT 在 skills/skill-listing-types.ts（经 /skills barrel 导出）。
 import type {
   SkillsFetchContext,
   SkillListingResult,
   SkillMeta,
-} from '@tabtin/agent-runtime/skills';
+} from '@muse/agent-runtime/skills';
 import type {
   Message,
   EngineState,
   ToolContext,
-} from '@tabtin/agent-runtime/engine';
-import { SYSTEM_SECTION_NAMES } from '@tabtin/agent-runtime/engine';
+} from '@muse/agent-runtime/engine';
+import { SYSTEM_SECTION_NAMES } from '@muse/agent-runtime/engine';
 
 async function skillsListingAfterBeforeRun(
   cap: SkillsCap,

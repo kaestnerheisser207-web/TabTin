@@ -4,7 +4,7 @@ export interface TableUiModuleInfo {
 }
 
 export const TABLE_UI_MODULE_INFO: TableUiModuleInfo = {
-  name: '@tabtin/table-ui',
+  name: '@muse/table-ui',
   version: '0.1.0',
 }
 
@@ -24,7 +24,7 @@ export * from './utils/restoreTableGridFocus'
 export * from './utils/attachmentFieldTypes'
 export * from './utils/attachmentReferences'
 export * from './utils/viewCardTitle'
-// createdRecordVisibility 从 @tabtin/table-ui/clipboard subpath 导出
+// createdRecordVisibility 从 @muse/table-ui/clipboard subpath 导出
 export * from './components/view/ViewFilterRulesEditor'
 export * from './components/view/ViewGroupRulesEditor'
 export * from './components/view/ViewSortRulesEditor'
@@ -56,7 +56,7 @@ export * from './controller/useViewEditorForm'
 export * from './controller/useHideFieldsState'
 export * from './controller/useSortEditorState'
 export * from './controller/ViewPopoverContext'
-// useDataGridClipboard 从 @tabtin/table-ui/clipboard subpath 导出
+// useDataGridClipboard 从 @muse/table-ui/clipboard subpath 导出
 export * from './controller/useTableInitFlow'
 
 export * from './components/common/TableLoadingView'

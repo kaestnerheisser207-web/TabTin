@@ -8,8 +8,8 @@
 
 import React from 'react'
 import { useTranslation } from 'react-i18next'
-import { ScrollArea } from '@tabtin/smartsheet-ui'
-import type { RichContentBlock } from '@tabtin/chat-client'
+import { ScrollArea } from '@muse/smartsheet-ui'
+import type { RichContentBlock } from '@muse/chat-client'
 import { SidebarTypeEmoji } from '@components/layout/sidebarTypeEmoji'
 import { RichFallback } from './RichFallback'
 

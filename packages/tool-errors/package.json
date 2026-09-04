@@ -1,5 +1,5 @@
 {
-  "name": "@tabtin/tool-errors",
+  "name": "@muse/tool-errors",
   "version": "0.1.0",
   "description": "Generative SSoT for tool error_kind literals, Electron catalog defaults, i18n key inventory, and browser/action string bridges. No numeric error_code (Wave 3).",
   "type": "module",

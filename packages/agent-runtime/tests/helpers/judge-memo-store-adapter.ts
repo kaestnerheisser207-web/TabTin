@@ -7,8 +7,8 @@ import type {
   MemoStore,
   ApprovalMemoEntry as V3Entry,
   ApprovalMemoLookupResult,
-} from '@tabtin/security-policy'
-import { lookupMemo } from '@tabtin/security-policy'
+} from '@muse/security-policy'
+import { lookupMemo } from '@muse/security-policy'
 import type { InMemoryApprovalMemoStore } from '../../src/permissions/memo-store.js'
 import type { ApprovalMemoEntry as OldEntry } from '../../src/permissions/types.js'
 

@@ -43,7 +43,7 @@
 import { describe, expect, it } from 'vitest';
 import { formatProactiveReportMessage } from '../src/delivery/proactive-report-message.js';
 import type { PendingSubtaskInfo } from '../src/delivery/proactive-report-message.js';
-import { TelemetryEvents } from '@tabtin/agent-runtime';
+import { TelemetryEvents } from '@muse/agent-runtime';
 
 let pendingSeq = 0;
 function makePending(overrides: Partial<PendingSubtaskInfo> = {}): PendingSubtaskInfo {

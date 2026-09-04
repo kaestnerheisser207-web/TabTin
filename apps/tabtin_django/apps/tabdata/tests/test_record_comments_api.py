@@ -800,9 +800,9 @@ class RecordCommentAPITests(TestCase):
         }
         headers = {
             **auth,
-            "HTTP_X_TABTIN_AGENT_ID": str(uuid.uuid4()),
-            "HTTP_X_TABTIN_AGENT_RUN_ID": "run-comment-1",
-            "HTTP_X_TABTIN_SESSION_ID": "session-comment-1",
+            "HTTP_X_MUSE_AGENT_ID": str(uuid.uuid4()),
+            "HTTP_X_MUSE_AGENT_RUN_ID": "run-comment-1",
+            "HTTP_X_MUSE_SESSION_ID": "session-comment-1",
         }
 
         first = self.client.post(

@@ -25,7 +25,7 @@
 
 import React, { useCallback, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { resolveSessionScopeId } from '@tabtin/app-shell'
+import { resolveSessionScopeId } from '@muse/app-shell'
 import { AlertTriangle, Loader2, RefreshCw, Crosshair, X, CheckCircle2, XCircle, Ban, HelpCircle, Clock, ChevronDown, ChevronRight, History, PanelRight } from 'lucide-react'
 import { cn } from '@utils/cn'
 import { useChatRuntimeStore } from '../../../stores/useChatRuntimeStore'
@@ -35,7 +35,7 @@ import { TEXT, BORDER, TEXT_COLOR, ICON_SIZE, ANIMATION } from '../registry/chat
 import { scrollToToolCall } from '../tool/scrollToToolCall'
 import { getToolDisplayName } from '../registry/toolDisplayName'
 import { logger } from '@/utils/logger'
-import { toast } from '@tabtin/smartsheet-ui/toast'
+import { toast } from '@muse/smartsheet-ui/toast'
 import type { SubagentSessionMeta } from '@/stores/contextTabs/types'
 import { MessageList } from '../message'
 import { EmbeddedMessageTimeline } from '../message'

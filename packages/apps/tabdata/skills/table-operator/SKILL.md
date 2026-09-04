@@ -151,22 +151,22 @@ muse table field bulk-add --table-id <id> --fields '[
 ### 记录操作
 
 TabData 右键「复制记录链接」会生成不携带 Space / Workspace 上下文的稳定
-`tabtin://` 资源链接；读取时把链接作为位置参数，更新时用 `--url`。旧版本复制的
+`muse://` 资源链接；读取时把链接作为位置参数，更新时用 `--url`。旧版本复制的
 本地页面 URL 也继续兼容，两种链接都会复用当前 Muse Profile 的授权
 （Electron 已登录时走 managed profile，**不必**先 `muse agent use`）：
 
 ```bash
-muse table record detail "tabtin://resource/table/<table-id>?hint=tabdata&recordIds=<record-id>" --format json
-muse table record update --url "tabtin://resource/table/<table-id>?hint=tabdata&recordIds=<record-id>" --set "状态=完成"
+muse table record detail "muse://resource/table/<table-id>?hint=tabdata&recordIds=<record-id>" --format json
+muse table record update --url "muse://resource/table/<table-id>?hint=tabdata&recordIds=<record-id>" --set "状态=完成"
 
 muse table record detail "http://127.0.0.1:5175/table/<table-id>/record/<record-id>" --format json
 muse table record update --url "http://127.0.0.1:5175/table/<table-id>/record/<record-id>" --set "状态=完成"
 ```
 
-`tabtin://` 链接必须通过 `recordIds` 指定恰好一条记录，不携带 Space / Workspace
+`muse://` 链接必须通过 `recordIds` 指定恰好一条记录，不携带 Space / Workspace
 上下文。旧的 `--table-id` + `--record-id` 方式继续支持；不要让 Agent 手工拆链接后再拼 ID。
 
-**硬约束（记录链接）**：看到 `tabtin://resource/table/...?recordIds=` 或
+**硬约束（记录链接）**：看到 `muse://resource/table/...?recordIds=` 或
 `/table/<id>/record/<id>` 时，**必须**用上面的 `table record detail` /
 `table record update --url`。**禁止**退回 `manage.py shell`、直连 Django ORM、
 或手工拆 UUID 后拼其它旁路。CLI 报错时先修 Profile / 鉴权 / 链接合法性，

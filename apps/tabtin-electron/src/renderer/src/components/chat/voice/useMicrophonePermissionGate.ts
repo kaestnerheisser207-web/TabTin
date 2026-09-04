@@ -5,7 +5,7 @@
  * 既无 Electron 权限通道又无浏览器采集能力时禁用并提示需在客户端使用。
  *
  * 权限来源分层（通用，不对具体运行环境写死）：
- *  1. Electron：走 window.tabtin.osPermissions.check（能读到 macOS TCC 真实态），
+ *  1. Electron：走 window.muse.osPermissions.check（能读到 macOS TCC 真实态），
  *     挂载时读一次 + 窗口 focus 时刷新（用户从系统设置切回来即时更新）。
  *  2. 浏览器：走标准 Permissions API（navigator.permissions.query），
  *     订阅 change 事件 + focus 兜底。

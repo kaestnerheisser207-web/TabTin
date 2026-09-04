@@ -13,7 +13,7 @@
  *      排序必须知道工作区命中状态，附录 D 字面 `lookup(toolName, subcmd, input)`
  *      会让实现方在 lookup 内部反推 inWorkspace（不可能，input 是不透明的）
  *   2. `JudgeContext.tool` 用本地最小 `JudgeTool` 接口而不是 `Tool & ToolPolicyMeta`
- *      —— 本包不依赖 `@tabtin/agent-runtime`（避免循环依赖），只声明 judge 实际
+ *      —— 本包不依赖 `@muse/agent-runtime`（避免循环依赖），只声明 judge 实际
  *      用到的字段（name / policyActionKind / extractPath / extractSubcmd / isWriteOp）
  */
 
@@ -25,13 +25,13 @@ import type { PermissionBehavior as LegacyPermissionBehavior } from './types.js'
 
 /**
  * 三档审批策略。字面量 SSoT 在
- * `@tabtin/agent-modes` 的 `APPROVAL_MODE_NAMES`（wire / IPC / renderer 共用）。
+ * `@muse/agent-modes` 的 `APPROVAL_MODE_NAMES`（wire / IPC / renderer 共用）。
  *
  * - `always_ask`：请求批准（默认）——工作区内自动，出界/敏感/破坏性/MCP/设备 ask
  * - `auto`：替我审批——除灾难级红线外自动批，风险操作 ask
  * - `full_access`：完全访问——仅灾难级命令 deny，其余放行
  */
-export type ApprovalMode = import('@tabtin/agent-modes').ApprovalModeName;
+export type ApprovalMode = import('@muse/agent-modes').ApprovalModeName;
 
 /** Agent 已授权的最高审批档位（就地升档确认后持久化）。 */
 export type ApprovalGrant = ApprovalMode;
@@ -248,7 +248,7 @@ export type DecisionReason =
    *
    * - `mode`: 当前 agentMode（'plan' / 'ask' / 'study'）
    * - `deny_code`: 细粒度 deny 原因（v3 新增；ModeDenyCode 枚举来自
-   *   `@tabtin/agent-modes::ModeDenyCode`，judge 这里不引该类型避免循环；
+   *   `@muse/agent-modes::ModeDenyCode`，judge 这里不引该类型避免循环；
    *   语义对齐：'mode_disallowed_tool' / 'mode_tool_only_in_plan' /
    *   'no_active_plan' / 'wrong_target_document' / 'invalid_document_id_type' /
    *   'mode_disallowed_path'）
@@ -352,7 +352,7 @@ export interface ToolPolicyMeta {
 /**
  * judge 实际需要的 Tool 投影（最小集）。
  *
- * 故意不 import `@tabtin/agent-runtime` 的 `Tool`，避免循环依赖。
+ * 故意不 import `@muse/agent-runtime` 的 `Tool`，避免循环依赖。
  * 调用方传入的 `Tool` 对象可以直接 satisfy 本接口（subset 兼容）。
  */
 export interface JudgeTool extends ToolPolicyMeta {

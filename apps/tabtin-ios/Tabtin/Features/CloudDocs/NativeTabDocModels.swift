@@ -1694,7 +1694,7 @@ struct NativeTabDocBody: Codable, Equatable, Sendable {
             case .image:
                 if block.image?.alt.isEmpty == false { return block.image?.alt }
                 if let fileId = block.image?.fileId, !fileId.isEmpty {
-                    return "tabtin-file://asset/\(fileId)"
+                    return "muse-file://asset/\(fileId)"
                 }
                 return block.image?.source
             case .table:
@@ -2521,7 +2521,7 @@ struct NativeTabDocBody: Codable, Equatable, Sendable {
             return "```\n\(block.text)\n```"
         case .image:
             guard let image = block.image else { return nil }
-            let source = image.fileId.flatMap { $0.isEmpty ? nil : "tabtin-file://asset/\($0)" }
+            let source = image.fileId.flatMap { $0.isEmpty ? nil : "muse-file://asset/\($0)" }
                 ?? image.source
             return "![\(image.alt)](\(source))"
         case .table:

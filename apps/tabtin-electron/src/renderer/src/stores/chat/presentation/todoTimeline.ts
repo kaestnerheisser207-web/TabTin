@@ -12,8 +12,8 @@
  * encounter。禁止「有 seq 优先于无 seq」造成收尾批与开批双出口。
  */
 
-import type { ChatMessage } from '@tabtin/chat-client'
-import { applyTodoAction, type TodoListState } from '@tabtin/agent-runtime/todo'
+import type { ChatMessage } from '@muse/chat-client'
+import { applyTodoAction, type TodoListState } from '@muse/agent-runtime/todo'
 import type { TodoItem } from '../shared/types'
 
 export interface TodoCompletedGroup {

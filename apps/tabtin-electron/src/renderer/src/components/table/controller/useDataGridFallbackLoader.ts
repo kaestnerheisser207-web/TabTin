@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef } from 'react'
-import type { RecordQueryParams } from '@tabtin/table-core'
+import type { RecordQueryParams } from '@muse/table-core'
 
 interface UseDataGridFallbackLoaderInput {
   selectedTableId: string | null

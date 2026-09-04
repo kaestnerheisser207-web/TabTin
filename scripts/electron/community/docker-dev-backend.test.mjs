@@ -10,7 +10,7 @@ test('Docker dev Compose uses the root env file and ignores shell edition overri
   const args = resolveDockerDevComposeArgs('/repo');
   const env = createDockerDevEnvironment({
     baseEnv: {
-      TABTIN_EDITION: 'saas',
+      MUSE_EDITION: 'saas',
       AUTH_FIXED_VERIFICATION_CODE: '123456',
       PATH: '/usr/bin',
     },
@@ -24,8 +24,8 @@ test('Docker dev Compose uses the root env file and ignores shell edition overri
     '--env-file',
     '/repo/.env',
   ]);
-  assert.equal(Object.hasOwn(env, 'TABTIN_EDITION'), false);
+  assert.equal(Object.hasOwn(env, 'MUSE_EDITION'), false);
   assert.equal(Object.hasOwn(env, 'AUTH_FIXED_VERIFICATION_CODE'), false);
   assert.equal(env.PATH, '/usr/bin');
-  assert.equal(env.TABTIN_DEV_DEPENDENCY_FINGERPRINT, 'fixture');
+  assert.equal(env.MUSE_DEV_DEPENDENCY_FINGERPRINT, 'fixture');
 });

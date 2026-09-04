@@ -1,5 +1,5 @@
 {
-  "name": "@tabtin/doc-editor",
+  "name": "@muse/doc-editor",
   "version": "0.1.0",
   "description": "Host-agnostic document editor core for Muse",
   "type": "module",

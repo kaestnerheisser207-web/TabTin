@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest'
-import type { FtsSearchResultItem } from '@tabtin/app-shell'
+import type { FtsSearchResultItem } from '@muse/app-shell'
 
 const {
   mockActivateSpace,
@@ -15,7 +15,7 @@ const {
   mockSetCurrentTab: vi.fn(),
 }))
 
-vi.mock('@tabtin/app-shell', () => ({
+vi.mock('@muse/app-shell', () => ({
   useSpaceListStore: {
     getState: () => ({
       activateSpace: mockActivateSpace,
@@ -79,7 +79,7 @@ vi.mock('@stores/useOrganizationStore', () => ({
   },
 }))
 
-vi.mock('@tabtin/smartsheet-ui/toast', () => ({
+vi.mock('@muse/smartsheet-ui/toast', () => ({
   toast: {
     error: vi.fn(),
     info: vi.fn(),

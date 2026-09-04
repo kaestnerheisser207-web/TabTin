@@ -1,4 +1,4 @@
-import type { AppHostClient } from '@tabtin/app-host-sdk'
+import type { AppHostClient } from '@muse/app-host-sdk'
 import { getDocument, saveContent, type TabdocDocument } from '../api-client'
 
 export interface ExportSaveBaseline {

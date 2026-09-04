@@ -8,7 +8,7 @@
  * No Electron dependency; manifest fetch via safeFetchText.
  */
 
-import { validateUrl } from '@tabtin/security-policy';
+import { validateUrl } from '@muse/security-policy';
 import { safeFetchText } from './safe-fetch.js';
 
 export interface MPDSegment {

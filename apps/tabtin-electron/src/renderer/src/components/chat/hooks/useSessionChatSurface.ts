@@ -20,7 +20,7 @@ import {
   type DecisionSummaryEventPayload,
 } from '@/hooks/useChatSessionEventStream'
 import { applyDecisionSummaryUpdate } from '@/stores/chat/checkpoint/handlers/checkpointHandler'
-import type { ChatMessage } from '@tabtin/chat-client'
+import type { ChatMessage } from '@muse/chat-client'
 import type { ChatInputProps } from '../composer/chatInputTypes'
 import { getChatClient } from '@/services/chatApi'
 

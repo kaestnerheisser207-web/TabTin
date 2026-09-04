@@ -79,7 +79,7 @@ function deps(): IpcHandlersDeps {
 const lastLoggedBounds = new Map<string, { width: number; height: number; timestamp: number }>()
 const BOUNDS_LOG_THROTTLE = 1000
 const BOUNDS_DIFF_THRESHOLD = 10
-const shouldLogCrawlBounds = process.env.TABTIN_DEBUG_CRAWL_BOUNDS === '1' || process.env.TABTIN_DEBUG_CRAWLVIEW_VERBOSE === '1'
+const shouldLogCrawlBounds = process.env.MUSE_DEBUG_CRAWL_BOUNDS === '1' || process.env.MUSE_DEBUG_CRAWLVIEW_VERBOSE === '1'
 
 function logBoundsIfSignificant(
   tabId: string,

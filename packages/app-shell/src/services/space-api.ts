@@ -22,7 +22,7 @@ import type {
   UpdateAgentRequest,
   WorkspaceSummary,
 } from '../types/space.js'
-import { API_ENDPOINTS, joinApiPath } from '@tabtin/config'
+import { API_ENDPOINTS, joinApiPath } from '@muse/config'
 import { authenticatedRequest, apiBaseUrl, formatApiErrorMessage } from './base.js'
 
 function normalizeAgentApiMessage(message: unknown, fallback: string): string {

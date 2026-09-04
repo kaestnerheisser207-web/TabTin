@@ -186,7 +186,7 @@ vi.mock('../download-security', () => ({
   isPathSafe: vi.fn(() => true),
 }))
 
-vi.mock('@tabtin/terminal-core', () => ({
+vi.mock('@muse/terminal-core', () => ({
   resolveSpacesRoot: () => '/tmp/mock-sandbox',
   resolvePlatformDataRoot: () => '/tmp/mock-platform',
   computeSkillContentHash: vi.fn().mockResolvedValue('hash'),

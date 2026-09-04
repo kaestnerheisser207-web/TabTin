@@ -9,7 +9,7 @@ import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Film, Music, Type, ChevronDown, ChevronRight, Clock } from 'lucide-react'
 import { cn } from '@utils/cn'
-import { ScrollArea } from '@tabtin/smartsheet-ui'
+import { ScrollArea } from '@muse/smartsheet-ui'
 import type { CardRendererProps } from '../registry/types'
 import {
   CARD_RADIUS,

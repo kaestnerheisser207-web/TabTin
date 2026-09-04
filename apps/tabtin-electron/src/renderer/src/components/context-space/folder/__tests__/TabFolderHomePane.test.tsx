@@ -100,7 +100,7 @@ vi.mock('../useFolderStore', () => ({
   useFolderContextStore: <Result,>(selector: Selector<typeof folderState, Result>) => selector(folderState),
 }))
 
-// 归一化 / canonical 用简化实现，避免测试依赖 window.tabtin.realpath
+// 归一化 / canonical 用简化实现，避免测试依赖 window.muse.realpath
 vi.mock('@utils/canonicalPath', () => {
   const normalize = (p?: string | null) =>
     (p ?? '').trim().replace(/\\/g, '/').replace(/\/+$/, '').toLowerCase()

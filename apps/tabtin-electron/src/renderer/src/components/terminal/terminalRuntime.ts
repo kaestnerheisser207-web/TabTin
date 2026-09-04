@@ -207,7 +207,7 @@ export function syncTerminalPtySize(
     return last
   }
 
-  const pty = window.tabtin?.pty
+  const pty = window.muse?.pty
   if (!pty?.resize) {
     log.debug('syncTerminalPtySize: PTY bridge 不可用', sessionId)
     return null
@@ -316,7 +316,7 @@ export function buildTerminalPasteSegments(
 }
 
 async function writePasteSegments(sessionId: string, segments: string[]): Promise<void> {
-  const pty = window.tabtin?.pty
+  const pty = window.muse?.pty
   if (!pty) {
     log.warn('pasteToTerminal: PTY bridge 不可用', sessionId)
     return
@@ -357,7 +357,7 @@ export const writeTerminalInput = (sessionId: string, data: string): Promise<voi
       return
     }
 
-    const pty = window.tabtin?.pty
+    const pty = window.muse?.pty
     if (!pty) {
       log.warn('writeTerminalInput: PTY bridge 不可用', sessionId)
       return

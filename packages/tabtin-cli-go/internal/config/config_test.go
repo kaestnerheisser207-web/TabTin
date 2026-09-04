@@ -14,13 +14,13 @@ func TestDir(t *testing.T) {
 	home, _ := os.UserHomeDir()
 	expected := filepath.Join(home, ".tabtin")
 	if d != expected {
-		t.Logf("Dir() = %q (possibly overridden by TABTIN_CONFIG_DIR)", d)
+		t.Logf("Dir() = %q (possibly overridden by MUSE_CONFIG_DIR)", d)
 	}
 }
 
 func TestDirFromEnv(t *testing.T) {
 	tmp := t.TempDir()
-	t.Setenv("TABTIN_CONFIG_DIR", tmp)
+	t.Setenv("MUSE_CONFIG_DIR", tmp)
 	if Dir() != tmp {
 		t.Errorf("Dir() = %q, want %q", Dir(), tmp)
 	}
@@ -35,7 +35,7 @@ func TestResolveProfileName(t *testing.T) {
 }
 
 func TestResolveProfileNameFromEnv(t *testing.T) {
-	t.Setenv("TABTIN_PROFILE", "staging")
+	t.Setenv("MUSE_PROFILE", "staging")
 	cfg := defaultConfig()
 	name := ResolveProfileName(cfg)
 	if name != "staging" {
@@ -52,7 +52,7 @@ func TestResolveToken(t *testing.T) {
 }
 
 func TestResolveTokenFromEnv(t *testing.T) {
-	t.Setenv("TABTIN_JWT", "env-token")
+	t.Setenv("MUSE_JWT", "env-token")
 	p := &ProfileConfig{Token: "file-token"}
 	token := ResolveToken(p)
 	if token != "env-token" {
@@ -69,7 +69,7 @@ func TestResolveSpaceID(t *testing.T) {
 }
 
 func TestResolveSpaceIDFromEnv(t *testing.T) {
-	t.Setenv("TABTIN_SPACE_ID", "env-space")
+	t.Setenv("MUSE_SPACE_ID", "env-space")
 	p := &ProfileConfig{DefaultSpace: "file-space"}
 	id := ResolveSpaceID(p)
 	if id != "env-space" {
@@ -78,7 +78,7 @@ func TestResolveSpaceIDFromEnv(t *testing.T) {
 }
 
 func TestResolveAgentIDFromProfile(t *testing.T) {
-	t.Setenv("TABTIN_AGENT_ID", "")
+	t.Setenv("MUSE_AGENT_ID", "")
 	p := &ProfileConfig{DefaultAgent: "agent-1"}
 	if id := ResolveAgentID(p); id != "agent-1" {
 		t.Errorf("agent ID = %q, want agent-1", id)
@@ -86,7 +86,7 @@ func TestResolveAgentIDFromProfile(t *testing.T) {
 }
 
 func TestResolveAgentIDFromEnv(t *testing.T) {
-	t.Setenv("TABTIN_AGENT_ID", "env-agent")
+	t.Setenv("MUSE_AGENT_ID", "env-agent")
 	p := &ProfileConfig{DefaultAgent: "file-agent"}
 	if id := ResolveAgentID(p); id != "env-agent" {
 		t.Errorf("agent ID = %q, want env-agent (env should take priority)", id)
@@ -96,8 +96,8 @@ func TestResolveAgentIDFromEnv(t *testing.T) {
 //  回归：ResolveAgentID 绝不能回落到 Space ID。
 // 只设 DefaultSpace、不设 DefaultAgent 时，应返回空，而不是把 space id 当 agent id。
 func TestResolveAgentIDDoesNotFallBackToSpace(t *testing.T) {
-	t.Setenv("TABTIN_AGENT_ID", "")
-	t.Setenv("TABTIN_SPACE_ID", "")
+	t.Setenv("MUSE_AGENT_ID", "")
+	t.Setenv("MUSE_SPACE_ID", "")
 	p := &ProfileConfig{DefaultSpace: "space-1"}
 	if id := ResolveAgentID(p); id != "" {
 		t.Errorf("agent ID = %q, want empty（不得回落 space id）", id)

@@ -20,8 +20,8 @@ import {
   Label,
   ScrollArea,
   toast,
-} from '@tabtin/smartsheet-ui'
-import { ImportExportApiService, type ExportFormat, type Field } from '@tabtin/table-core'
+} from '@muse/smartsheet-ui'
+import { ImportExportApiService, type ExportFormat, type Field } from '@muse/table-core'
 
 const EXPORT_FORMATS: { value: ExportFormat; label: string }[] = [
   { value: 'csv', label: 'CSV' },

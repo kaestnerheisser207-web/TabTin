@@ -1,4 +1,4 @@
-import type { AuthAdapter, AuthSnapshot } from '@tabtin/platform-adapter'
+import type { AuthAdapter, AuthSnapshot } from '@muse/platform-adapter'
 
 const STORAGE_KEYS = {
   ACCESS_TOKEN: 'tabtin_access_token',

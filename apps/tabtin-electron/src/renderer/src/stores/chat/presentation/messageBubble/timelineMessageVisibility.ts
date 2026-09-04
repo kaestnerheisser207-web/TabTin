@@ -1,4 +1,4 @@
-import type { ChatMessage } from '@tabtin/chat-client'
+import type { ChatMessage } from '@muse/chat-client'
 import { isCompactionSummaryPresentation } from './compactionSummaryPresentation'
 import { parseExternalArchivePrefix } from '../../../../components/chat/message/messages/system/ExternalArchivePrefixBubble'
 import { parsePushNotification, type ParsedPushNotification } from '@utils/chat/pushNotificationParse'

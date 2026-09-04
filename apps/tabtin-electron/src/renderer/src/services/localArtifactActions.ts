@@ -8,7 +8,7 @@
  * React 层的 toast / i18n / 遥控端拦截封装在 useArtifactOpenActions 里。
  */
 
-import { parseResourcePointer } from '@tabtin/resource-router'
+import { parseResourcePointer } from '@muse/resource-router'
 import { resolveLocalFilePath } from '@/services/localFileResourceResolver'
 import { expandCanvasForScope, resolveSpaceIdForResourceLink } from '@/services/openResourceLink'
 import { useSpaceStore } from '@/stores/useSpaceStore'
@@ -56,7 +56,7 @@ export async function resolveLocalArtifactAbsolutePath(
       pointer,
       workingDir: resolveArtifactWorkingDir(tabScopeKey, executionSpaceId)?.workingDir ?? null,
       pathExists: async (absolutePath) => {
-        const pathExists = window.tabtin?.fileSystem?.pathExists
+        const pathExists = window.muse?.fileSystem?.pathExists
         if (!pathExists) throw new Error('当前环境不支持本地文件检查')
         return pathExists(absolutePath)
       },
@@ -75,8 +75,8 @@ export async function revealArtifactInFinder(
 ): Promise<LocalArtifactActionResult> {
   const absolutePath = await resolveLocalArtifactAbsolutePath(href, tabScopeKey, executionSpaceId)
   if (!absolutePath) return { ok: false, error: '文件已删除或不可用' }
-  const showItemInFolder = window.tabtin?.showItemInFolder
-  const openPath = window.tabtin?.openPath
+  const showItemInFolder = window.muse?.showItemInFolder
+  const openPath = window.muse?.openPath
   try {
     const result = showItemInFolder
       ? await showItemInFolder(absolutePath)

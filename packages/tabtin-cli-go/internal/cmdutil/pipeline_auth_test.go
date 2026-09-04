@@ -40,9 +40,9 @@ func factoryWithTransport(tr transport.Transport) *Factory {
 }
 
 func TestRequiresAuthAllowsHostManagedTransportWithoutProfileToken(t *testing.T) {
-	t.Setenv("TABTIN_CONFIG_DIR", t.TempDir())
-	t.Setenv("TABTIN_JWT", "")
-	t.Setenv("TABTIN_TOKEN", "")
+	t.Setenv("MUSE_CONFIG_DIR", t.TempDir())
+	t.Setenv("MUSE_JWT", "")
+	t.Setenv("MUSE_TOKEN", "")
 
 	def := CommandDef{
 		Use:          "verify-host-managed-auth",
@@ -73,12 +73,12 @@ func TestRequiresAuthAllowsHostManagedTransportWithoutProfileToken(t *testing.T)
 }
 
 func TestRequiresAuthWithoutHostTransportStillReturnsUnauthorized(t *testing.T) {
-	t.Setenv("TABTIN_CONFIG_DIR", t.TempDir())
-	t.Setenv("TABTIN_SOCK", "")
-	t.Setenv("TABTIN_PORT", "")
-	t.Setenv("_TABTIN_TRANSPORT_TOKEN", "")
-	t.Setenv("TABTIN_JWT", "")
-	t.Setenv("TABTIN_TOKEN", "")
+	t.Setenv("MUSE_CONFIG_DIR", t.TempDir())
+	t.Setenv("MUSE_SOCK", "")
+	t.Setenv("MUSE_PORT", "")
+	t.Setenv("_MUSE_TRANSPORT_TOKEN", "")
+	t.Setenv("MUSE_JWT", "")
+	t.Setenv("MUSE_TOKEN", "")
 
 	executed := false
 	def := CommandDef{

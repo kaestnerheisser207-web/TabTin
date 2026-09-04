@@ -15,7 +15,7 @@ public class DeepLinkHandler @Inject constructor(
     public val pendingInviteToken: StateFlow<String?> = _pendingInviteToken.asStateFlow()
 
     /**
-     * Wave 3 (X3) — rich_content resource_ref 点击 → tabtin://resource/<type>/<id>
+     * Wave 3 (X3) — rich_content resource_ref 点击 → muse://resource/<type>/<id>
      * 的"目标资源"事件。
      *
      * **冷启动事件丢失问题**（独立验证发现）：原实现用 `MutableSharedFlow(replay=0,
@@ -75,7 +75,7 @@ public class DeepLinkHandler @Inject constructor(
     }
 
     /**
-     * 由 MainActivity 在收到 tabtin://resource/<type>/<id> 时调用。
+     * 由 MainActivity 在收到 muse://resource/<type>/<id> 时调用。
      * 直接覆盖 value——重复 emit 同一 target 时 distinctUntilChanged 会合并，
      * 但只要消费者在 LaunchedEffect 里处理完调 consumeResourceNavigation()
      * 复位为 null，下一次 emit 同 target 还是会触发（null → T(a) 是变化）。

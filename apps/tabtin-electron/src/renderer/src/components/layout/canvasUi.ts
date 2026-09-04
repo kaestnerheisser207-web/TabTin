@@ -15,23 +15,23 @@
 export const CANVAS_TEXT_SECONDARY = 'text-body leading-[22px] text-muted-foreground/70 antialiased'
 
 /** 面包屑、成员数、卡片 meta */
-// eslint-disable-next-line tabtin/no-design-system-violations -- canvas meta readable density @ zoom 0.9
+// eslint-disable-next-line muse/no-design-system-violations -- canvas meta readable density @ zoom 0.9
 export const CANVAS_TEXT_META_BASE = 'text-[13px] leading-[18px] antialiased'
 
 export const CANVAS_TEXT_META = `${CANVAS_TEXT_META_BASE} text-muted-foreground/70`
 
 /** 区块眉语 */
-// eslint-disable-next-line tabtin/no-design-system-violations -- canvas eyebrow readable density @ zoom 0.9
+// eslint-disable-next-line muse/no-design-system-violations -- canvas eyebrow readable density @ zoom 0.9
 export const CANVAS_TEXT_EYEBROW = 'text-[13px] leading-[18px] font-medium text-muted-foreground/70 antialiased'
 
 /** 时间戳、badge、tabular 计数 — 保持 design-system caption */
 export const CANVAS_TEXT_MICRO = 'text-caption'
 
 /** 详情侧栏 uppercase 分组标题（操作 / 属性） */
-// eslint-disable-next-line tabtin/no-design-system-violations -- canvas section readable density @ zoom 0.9
+// eslint-disable-next-line muse/no-design-system-violations -- canvas section readable density @ zoom 0.9
 export const CANVAS_TEXT_SECTION_LABEL =
   'text-[13px] leading-[18px] font-semibold uppercase tracking-[0.08em] text-muted-foreground/70 antialiased'
 
 /** ContextTabs 标签 — 13px，h-7 不变；颜色由 ACTIVE/INACTIVE class 承担 */
-// eslint-disable-next-line tabtin/no-design-system-violations -- canvas tabs readable density @ zoom 0.9
+// eslint-disable-next-line muse/no-design-system-violations -- canvas tabs readable density @ zoom 0.9
 export const CANVAS_TAB_TEXT = 'text-[13px] leading-[18px] antialiased'

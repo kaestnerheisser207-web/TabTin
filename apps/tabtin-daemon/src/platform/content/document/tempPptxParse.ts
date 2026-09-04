@@ -7,24 +7,24 @@
  *   - Daemon 走 `apiAuthToken` + `apiBaseUrl` 闭包注入（factory 模式与
  *     `DaemonToolProvider` 已有 web/data tools 同款）
  *
- * 共享 `RunTempPptxParse` 接口（`@tabtin/agent-host/tools` SSoT）。
+ * 共享 `RunTempPptxParse` 接口（`@muse/agent-host/tools` SSoT）。
  */
 import { promises as fsPromises, createReadStream } from 'node:fs';
 import { Readable } from 'node:stream';
 
-// 用 `@tabtin/local-docparse` re-exported SSoT（与 DaemonAgentHost
+// 用 `@muse/local-docparse` re-exported SSoT（与 DaemonAgentHost
 // `fetchCloudSummary` 同源）—— Daemon package.json 已声明 local-docparse
-// dependency，不需要新增 `@tabtin/file-pipeline-errors` 直接依赖。
+// dependency，不需要新增 `@muse/file-pipeline-errors` 直接依赖。
 import {
   FilePipelineErrorCode,
   isFilePipelineErrorCode,
-} from '@tabtin/local-docparse';
+} from '@muse/local-docparse';
 import type {
   RunTempPptxParse,
   TempPptxParseChunk,
   TempPptxParseResult,
-} from '@tabtin/agent-host/tools';
-import { joinApiPath } from '@tabtin/config';
+} from '@muse/agent-host/tools';
+import { joinApiPath } from '@muse/config';
 
 interface PresignResponseBody {
   success: boolean;

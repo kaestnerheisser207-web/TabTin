@@ -6,8 +6,8 @@
  */
 
 import { useCallback, useEffect, useMemo } from 'react'
-import { resolveSessionScopeId } from '@tabtin/app-shell'
-import type { ChatMessage } from '@tabtin/chat-client'
+import { resolveSessionScopeId } from '@muse/app-shell'
+import type { ChatMessage } from '@muse/chat-client'
 import { useChatStore } from '../../../stores/chat/useChatStore'
 import {
   useSubagentLiveStore,

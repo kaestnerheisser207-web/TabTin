@@ -12,7 +12,7 @@
 import { AccessLevel, buildAntiDetectConfig } from './AccessLevel';
 import { SiteAccessMemory } from './SiteAccessMemory';
 import type { EnhancedBlockSignal } from '../types/browser';
-import type { AntiDetectConfig } from '@tabtin/crawl-contracts';
+import type { AntiDetectConfig } from '@muse/crawl-contracts';
 
 export interface StrategyDecision {
   /** 本次应使用的访问等级 */

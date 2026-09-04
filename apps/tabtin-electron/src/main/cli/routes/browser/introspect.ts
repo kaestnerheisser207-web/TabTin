@@ -10,7 +10,7 @@
  * 这两条不依赖 action executor / View bridge，所以在 dispatcher 里放在 executor 闸门**之前**，
  * 即使前端尚未就绪也能回答「我是谁、能干什么」。
  *
- * BR-8 P1：响应拼装下沉到 `@tabtin/browser-core` 的契约驱动 Orchestrator
+ * BR-8 P1：响应拼装下沉到 `@muse/browser-core` 的契约驱动 Orchestrator
  * （`handleBrowserAction`），本文件只剩「取本端 hostHooks → 调 Orchestrator → 用本端
  * okResponse 落地」。**行为/输出与迁移前逐字段一致**（纯结构搬迁，零行为变更）：
  * Electron 这一端的「最后一公里」——活跃 tab、source、space/crawlspace/workspace——
@@ -19,12 +19,12 @@
 
 import http from 'node:http'
 import { app } from 'electron'
-import { okResponse } from '@tabtin/agent-wire'
+import { okResponse } from '@muse/agent-wire'
 import {
   handleBrowserAction,
   type BrowserContextInfo,
   type BrowserOrchestratorHostHooks,
-} from '@tabtin/browser-core'
+} from '@muse/browser-core'
 import type { SendJSON } from './_helpers'
 import { electronPolicyHooks } from './_helpers'
 import { getCLISpaceId, getCLICrawlspaceId, getCLIOrganizationRoot } from '../../cli-context'

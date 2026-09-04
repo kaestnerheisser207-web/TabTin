@@ -1,10 +1,10 @@
-import { joinApiPath } from '@tabtin/config'
+import { joinApiPath } from '@muse/config'
 import {
   RUN_HOST_LEASE_SECONDS,
   type RunHostLeaseApi,
-} from '@tabtin/agent-host/state'
+} from '@muse/agent-host/state'
 
-export { RunHostLeaseCoordinator } from '@tabtin/agent-host/state'
+export { RunHostLeaseCoordinator } from '@muse/agent-host/state'
 
 export function createRunHostLeaseHttpApi(input: {
   apiBaseUrl: string

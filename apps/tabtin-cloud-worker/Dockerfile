@@ -5,8 +5,8 @@ WORKDIR /src
 RUN corepack enable
 COPY . .
 RUN --mount=type=cache,id=tabtin-cloud-worker-pnpm,target=/root/.local/share/pnpm/store \
-    pnpm --filter @tabtin/cloud-worker install --frozen-lockfile
-RUN pnpm --filter @tabtin/cloud-worker build
+    pnpm --filter @muse/cloud-worker install --frozen-lockfile
+RUN pnpm --filter @muse/cloud-worker build
 
 FROM ${NODE_IMAGE}
 

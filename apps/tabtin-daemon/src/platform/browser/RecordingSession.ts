@@ -7,7 +7,7 @@
 
 import { writeFile, readFile, mkdir, readdir } from 'node:fs/promises';
 import { join } from 'node:path';
-import { getHomeTabtinPath } from '@tabtin/shared/storage-paths';
+import { getHomeTabtinPath } from '@muse/shared/storage-paths';
 
 export interface RecordedAction {
   type: string;

@@ -34,7 +34,7 @@ import {
   previewControlDeviceFiles,
   rewindControlDeviceFiles,
 } from './control-device-file-rewind'
-import { getBucket, registerStorageBucket } from '@tabtin/storage-manager'
+import { getBucket, registerStorageBucket } from '@muse/storage-manager'
 import { buildLocalFilePreviewRevision } from '@shared/file-preview-revision'
 import { getDeviceFingerprint } from '../utils/deviceFingerprint.js'
 
@@ -368,7 +368,7 @@ export function registerFileHistoryStorageBucket(): void {
 // ─── 磁盘 TTL GC（方案 §3.6：默认 30 天）─────────────────────────────
 /**
  * 回收超过 maxAgeMs 未写入的整个 thread 备份目录。判定口径（目录 mtime 超时 →
- * 删整目录）与 `@tabtin/file-history-core` 的 `FileHistoryService.gc(olderThanMs)`
+ * 删整目录）与 `@muse/file-history-core` 的 `FileHistoryService.gc(olderThanMs)`
  * 完全一致。
  *
  * 为什么在 host 层做、不直接调 core 的 gc()：

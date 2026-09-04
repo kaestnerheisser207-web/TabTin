@@ -1,4 +1,4 @@
-import { type TabTinApiClient, createApiClient } from '@tabtin/api-client'
+import { type TabTinApiClient, createApiClient } from '@muse/api-client'
 import { API_BASE_URL, buildApiUrl } from './client'
 
 let _client: TabTinApiClient | null = null

@@ -1,5 +1,5 @@
 {
-  "name": "@tabtin/crawlspace-core",
+  "name": "@muse/crawlspace-core",
   "version": "0.1.0",
   "description": "Core infrastructure for Muse crawlspace (workspace for crawling)",
   "type": "module",
@@ -36,12 +36,12 @@
     "typescript": "^5.7.2"
   },
   "peerDependencies": {
-    "@tabtin/smartsheet-ui": "workspace:*",
+    "@muse/smartsheet-ui": "workspace:*",
     "react": "^19.0.0",
     "react-dom": "^19.0.0"
   },
   "dependencies": {
-    "@tabtin/smartsheet-ui": "workspace:*",
+    "@muse/smartsheet-ui": "workspace:*",
     "clsx": "^2.1.1",
     "framer-motion": "^11.13.1",
     "lucide-react": "^0.487.0",

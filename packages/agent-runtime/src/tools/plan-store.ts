@@ -10,7 +10,7 @@
  *   - **云端运行时** → document 载体 PlanStore（由宿主注入，落远端计划文档；云端没有
  *     用户可见的本机磁盘，远端文档就是它的「本地文件」）。该实现属于宿主业务，不在本包内。
  *
- * 统一指针 {@link PlanRef}（来自 `@tabtin/agent-wire`）贯穿卡片 / tracker / 继续消息。
+ * 统一指针 {@link PlanRef}（来自 `@muse/agent-wire`）贯穿卡片 / tracker / 继续消息。
  *
  * 设计约束：
  *   - 校验（todos 去重、字段规则）统一在 TS 侧（{@link normalizePlanTodos}），

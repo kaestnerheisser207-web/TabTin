@@ -499,7 +499,7 @@ struct RichContentBlockCard: View {
                         .foregroundStyle(.tt.textTertiary)
                         .lineLimit(1)
                 }
-                // 本地交付物只有 tabtin:// 指针、无 https：文件在电脑执行设备上，手机不能预览。
+                // 本地交付物只有 muse:// 指针、无 https：文件在电脑执行设备上，手机不能预览。
                 if !canPreviewFile {
                     Text("请在电脑端打开")
                         .font(.tt.caption)

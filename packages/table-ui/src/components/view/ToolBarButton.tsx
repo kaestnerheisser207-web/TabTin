@@ -1,5 +1,5 @@
 import React from 'react'
-import { Button, cn } from '@tabtin/smartsheet-ui'
+import { Button, cn } from '@muse/smartsheet-ui'
 
 const TOOLBAR_BUTTON_LABEL_CLASS = 'whitespace-nowrap'
 

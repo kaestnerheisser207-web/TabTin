@@ -195,7 +195,7 @@ def ensure_context(run_id: str):
 
 
 def prepare_case() -> None:
-    context = ensure_context(require_env("TABTIN_E2E_RUN_ID"))
+    context = ensure_context(require_env("MUSE_E2E_RUN_ID"))
     source = context["sourceCollection"]
     target = context["targetCollection"]
     document = context["document"]
@@ -244,7 +244,7 @@ def prepare_case() -> None:
 
 
 def auth_case() -> None:
-    context = ensure_context(require_env("TABTIN_E2E_RUN_ID"))
+    context = ensure_context(require_env("MUSE_E2E_RUN_ID"))
     emit(build_electron_auth_payload(
         user=context["user"],
         organization=context["organization"],
@@ -256,12 +256,12 @@ def auth_case() -> None:
 
 
 def verify_case() -> None:
-    context_item_id = require_env("TABTIN_E2E_CONTEXT_ITEM_ID")
-    source_collection_id = require_env("TABTIN_E2E_SOURCE_COLLECTION_ID")
-    target_collection_id = require_env("TABTIN_E2E_TARGET_COLLECTION_ID")
+    context_item_id = require_env("MUSE_E2E_CONTEXT_ITEM_ID")
+    source_collection_id = require_env("MUSE_E2E_SOURCE_COLLECTION_ID")
+    target_collection_id = require_env("MUSE_E2E_TARGET_COLLECTION_ID")
     item = ContextItem.objects.get(id=context_item_id)
     emit({
-        "runId": require_env("TABTIN_E2E_RUN_ID"),
+        "runId": require_env("MUSE_E2E_RUN_ID"),
         "contextItemId": str(item.id),
         "resourceId": item.resource_id,
         "title": item.title,
@@ -274,7 +274,7 @@ def verify_case() -> None:
 
 
 def main() -> None:
-    mode = require_env("TABTIN_E2E_MODE")
+    mode = require_env("MUSE_E2E_MODE")
     if mode == "prepare":
         prepare_case()
         return
@@ -284,7 +284,7 @@ def main() -> None:
     if mode == "verify":
         verify_case()
         return
-    raise RuntimeError(f"Unknown TABTIN_E2E_MODE: {mode}")
+    raise RuntimeError(f"Unknown MUSE_E2E_MODE: {mode}")
 
 
 main()

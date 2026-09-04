@@ -6,7 +6,7 @@
  *
  * 入口: TableSettingsDialog → 已删除字段 tab
  */
-import { joinApiPath } from '@tabtin/config'
+import { joinApiPath } from '@muse/config'
 import React, { useCallback, useEffect, useState } from 'react'
 import {
   Dialog,
@@ -18,7 +18,7 @@ import {
   PanelLoadingState,
   StatusNotice,
   Badge,
-} from '@tabtin/smartsheet-ui'
+} from '@muse/smartsheet-ui'
 import { RotateCcw, RefreshCw, Trash2, X } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { apiRequest as adapterApiRequest, getAuthToken } from '@/adapters/api-adapter-instance'

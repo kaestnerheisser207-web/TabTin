@@ -1,9 +1,9 @@
 /**
- * `@tabtin/agent-host/tools` —— 宿主侧业务工具 barrel。
+ * `@muse/agent-host/tools` —— 宿主侧业务工具 barrel。
  *
  * data-tools / document-tools / TabDocPlanStore 与 tabcode 重工具
  * （createTabCodeTools / read-file-state / binary-dedup）从
- * `@tabtin/agent-runtime` 中性内核迁出，两宿主装配时从此处 import。
+ * `@muse/agent-runtime` 中性内核迁出，两宿主装配时从此处 import。
  */
 
 export {

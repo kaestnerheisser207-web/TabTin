@@ -7,7 +7,7 @@ import {
   normalizeViewFiltersForBackend,
   withTableRequestHeaders,
   type TableRecord,
-} from '@tabtin/table-core'
+} from '@muse/table-core'
 import type { IncrementalSyncSnapshot } from './types'
 
 export interface UseIncrementalSyncOptions {

@@ -24,7 +24,7 @@ type discoveryFile struct {
 //
 // Electron 优先于 Daemon（BR-20）：用户在 Electron 里和 Agent 对话时，期望 muse browser 等命令
 // 走内嵌浏览器（server.json / dev-server.json），而不是 Daemon 无头 Playwright（daemon-server.json）。
-// 仅 Electron 未运行时才会落到 Daemon。显式 TABTIN_SOCK 仍覆盖一切。
+// 仅 Electron 未运行时才会落到 Daemon。显式 MUSE_SOCK 仍覆盖一切。
 var discoveryFiles = []string{
 	"server.json",
 	"dev-server.json",
@@ -32,7 +32,7 @@ var discoveryFiles = []string{
 }
 
 func discoveryDebugEnabled() bool {
-	return os.Getenv("TABTIN_DISCOVERY_DEBUG") == "1" || os.Getenv("TABTIN_DEBUG") == "1"
+	return os.Getenv("MUSE_DISCOVERY_DEBUG") == "1" || os.Getenv("MUSE_DEBUG") == "1"
 }
 
 func discoveryDebugf(format string, args ...any) {
@@ -42,17 +42,17 @@ func discoveryDebugf(format string, args ...any) {
 	fmt.Fprintf(os.Stderr, "[tabtin-discovery] "+format+"\n", args...)
 }
 
-// maybeStrictEnvelope 按 TABTIN_STRICT_ENVELOPE 环境变量决定是否包 EnvelopeValidator。
+// maybeStrictEnvelope 按 MUSE_STRICT_ENVELOPE 环境变量决定是否包 EnvelopeValidator。
 //
 // **默认关闭** —— 因为 Django 后端 envelope 迁移（cli-migration-plan.md 阶段 2）还没完成，
 // 大量旧 endpoint 仍返回 {success, data} 旧 envelope。如果默认开启，所有调旧 endpoint 的
 // 命令（muse table list 等）会返回 LEGACY_SHAPE 错误，把现有 CLI 全部打废。
 //
-// 开启方式：export TABTIN_STRICT_ENVELOPE=1
+// 开启方式：export MUSE_STRICT_ENVELOPE=1
 //   - 用于测试新写的命令是否符合规范
 //   - Django 全栈迁完后改默认开启（届时删除本环境变量判断）
 func maybeStrictEnvelope(tr Transport) Transport {
-	if os.Getenv("TABTIN_STRICT_ENVELOPE") == "1" {
+	if os.Getenv("MUSE_STRICT_ENVELOPE") == "1" {
 		return WithEnvelopeValidation(tr)
 	}
 	return tr
@@ -63,25 +63,25 @@ func Discover() Transport {
 	//   底层 transport → [STRICT] EnvelopeValidator → AutoRecovery（仅 socket/http）
 	//   底层 transport → [STRICT] EnvelopeValidator → DjangoFallbackWarning（Django 直连）
 	//
-	// 默认不挂 EnvelopeValidator，仅当 TABTIN_STRICT_ENVELOPE=1 时挂。详见 maybeStrictEnvelope。
-	if sock := os.Getenv("TABTIN_SOCK"); sock != "" {
-		token := os.Getenv("_TABTIN_TRANSPORT_TOKEN")
+	// 默认不挂 EnvelopeValidator，仅当 MUSE_STRICT_ENVELOPE=1 时挂。详见 maybeStrictEnvelope。
+	if sock := os.Getenv("MUSE_SOCK"); sock != "" {
+		token := os.Getenv("_MUSE_TRANSPORT_TOKEN")
 		if token != "" {
-			discoveryDebugf("select env TABTIN_SOCK sock=%q token_present=true", sock)
+			discoveryDebugf("select env MUSE_SOCK sock=%q token_present=true", sock)
 			SetTransportState(sock, token)
 			return wrapAutoRecovery(maybeStrictEnvelope(NewSocketTransport(sock, token)))
 		}
-		discoveryDebugf("skip env TABTIN_SOCK sock=%q reason=missing_transport_token", sock)
+		discoveryDebugf("skip env MUSE_SOCK sock=%q reason=missing_transport_token", sock)
 	}
 
-	if port := os.Getenv("TABTIN_PORT"); port != "" {
-		token := os.Getenv("_TABTIN_TRANSPORT_TOKEN")
+	if port := os.Getenv("MUSE_PORT"); port != "" {
+		token := os.Getenv("_MUSE_TRANSPORT_TOKEN")
 		if token != "" {
-			discoveryDebugf("select env TABTIN_PORT port=%q token_present=true", port)
+			discoveryDebugf("select env MUSE_PORT port=%q token_present=true", port)
 			SetTransportState("", token)
 			return wrapAutoRecovery(maybeStrictEnvelope(NewHTTPTransport(fmt.Sprintf("http://127.0.0.1:%s", port), token)))
 		}
-		discoveryDebugf("skip env TABTIN_PORT port=%q reason=missing_transport_token", port)
+		discoveryDebugf("skip env MUSE_PORT port=%q reason=missing_transport_token", port)
 	}
 
 	for _, file := range discoveryFiles {

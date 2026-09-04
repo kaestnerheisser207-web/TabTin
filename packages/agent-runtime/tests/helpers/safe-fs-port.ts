@@ -1,5 +1,5 @@
 /**
- * 测试用 SafeFsPort：接 `@tabtin/safe-fs`（devDependency）。
+ * 测试用 SafeFsPort：接 `@muse/safe-fs`（devDependency）。
  */
 
 import {
@@ -10,7 +10,7 @@ import {
   safeRm,
   safeStat,
   safeWriteFile,
-} from '@tabtin/safe-fs';
+} from '@muse/safe-fs';
 
 import type { SafeFsPort } from '../../src/capability/native/safe-fs-port.js';
 

@@ -10,7 +10,7 @@
  *
  * 铃铛 balance_low 未读不在此处理。
  */
-import type { ChatMessage } from '@tabtin/chat-client'
+import type { ChatMessage } from '@muse/chat-client'
 import { useChatStore } from '@/stores/chat/useChatStore'
 import { resolveMessageErrorState } from '@/components/chat/message'
 

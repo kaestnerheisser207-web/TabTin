@@ -52,7 +52,7 @@ export const getSyncedDeviceIdentity = (): SyncedDeviceIdentity | null => _synce
 
 export const syncDeviceFingerprint = async (): Promise<string> => {
   try {
-    const tabtin = window.tabtin
+    const tabtin = window.muse
     if (tabtin?.getDeviceIdentity) {
       const identity = await tabtin.getDeviceIdentity()
       if (identity?.fingerprint) {

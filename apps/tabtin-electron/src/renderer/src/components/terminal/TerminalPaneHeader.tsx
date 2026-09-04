@@ -7,7 +7,7 @@
 
 import React, { useCallback } from 'react'
 import { cn } from '@utils/cn'
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@tabtin/smartsheet-ui'
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@muse/smartsheet-ui'
 import { X, Maximize2, Minimize2, Columns2, Rows2, RotateCcw } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import {

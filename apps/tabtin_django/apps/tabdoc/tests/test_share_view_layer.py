@@ -45,7 +45,7 @@ from apps.tabtinspace.models import Organization, Project
 User = get_user_model()
 TABDOC_DB = (
     "default"
-    if getattr(settings, "TABTIN_SINGLE_DATABASE_MODE", False)
+    if getattr(settings, "MUSE_SINGLE_DATABASE_MODE", False)
     else "postgresql"
 )
 

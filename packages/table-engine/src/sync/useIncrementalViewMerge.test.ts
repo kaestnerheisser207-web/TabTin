@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import type { TableRecord } from '@tabtin/table-core'
+import type { TableRecord } from '@muse/table-core'
 import { mergeCurrentViewRecords } from './useIncrementalViewMerge'
 
 const makeRecord = (id: string, fields: Record<string, unknown> = {}): TableRecord =>

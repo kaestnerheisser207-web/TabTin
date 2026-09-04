@@ -351,7 +351,7 @@ function validateRelativeRefs(skillDir, extName) {
       if (
         !href ||
         href.startsWith('http') ||
-        href.startsWith('tabtin://') ||
+        href.startsWith('muse://') ||
         href.startsWith('mailto:') ||
         href.startsWith('file:') ||
         href.startsWith('#')

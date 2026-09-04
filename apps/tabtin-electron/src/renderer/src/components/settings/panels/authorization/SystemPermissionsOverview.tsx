@@ -12,7 +12,7 @@
 import React, { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Loader2, RefreshCw, ShieldCheck, ShieldAlert } from 'lucide-react'
-import { Button } from '@tabtin/smartsheet-ui'
+import { Button } from '@muse/smartsheet-ui'
 import type { PermissionDescriptor } from './permissionConfig'
 import { computePermissionOverviewStats } from './permissionOverviewStats'
 import { SETTINGS_TEXT_META } from '../../settingsUi'

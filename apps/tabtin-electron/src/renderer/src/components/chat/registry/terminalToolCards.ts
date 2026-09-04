@@ -2,7 +2,7 @@
  * 终端执行 + SSH + 外部 Agent 终端类工具
  */
 
-import type { ToolCardDescriptor, ToolOutputData } from '@tabtin/chat-client'
+import type { ToolCardDescriptor, ToolOutputData } from '@muse/chat-client'
 import { truncate, getNestedArgs, unwrapData } from './toolCardUtils'
 
 /**

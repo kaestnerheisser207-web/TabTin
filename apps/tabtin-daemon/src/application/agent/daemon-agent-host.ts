@@ -16,7 +16,7 @@ import {
   join,
   dirname,
 } from 'node:path';
-import { getDaemonHomePath } from '@tabtin/shared/storage-paths';
+import { getDaemonHomePath } from '@muse/shared/storage-paths';
 import {
   existsSync,
   promises as fsPromises,
@@ -26,12 +26,12 @@ import {
   ConversationRunCancelledError,
   HostTrackerScheduler,
   MessageDeliveryOutbox,
-} from '@tabtin/agent-host'
-import { bindAttributionStore } from '@tabtin/agent-host/state'
+} from '@muse/agent-host'
+import { bindAttributionStore } from '@muse/agent-host/state'
 import type {
   AgentOwnerAdapter,
   HostQuery,
-} from '@tabtin/agent-host'
+} from '@muse/agent-host'
 import {
   assembleHostPromptContext,
   buildAttachmentMessageBlocks,
@@ -39,8 +39,8 @@ import {
   rememberAttributionFromPersistEvent,
   resolveComposerPresetSkillInvoke,
   resolveHostContextBlocks,
-} from '@tabtin/agent-host/conversation'
-import type { AgentTransportEnvelope } from '@tabtin/agent-host/realtime'
+} from '@muse/agent-host/conversation'
+import type { AgentTransportEnvelope } from '@muse/agent-host/realtime'
 import { DaemonAgentTransport } from './daemon-agent-transport.js'
 import {
   RunHostLeaseCoordinator,
@@ -49,7 +49,7 @@ import {
 import type {
   AgentEngineCompactSessionInput,
   AgentEngineCompactSessionOutput,
-} from '@tabtin/cli-server-core/surfaces/agent-engine';
+} from '@muse/cli-server-core/surfaces/agent-engine';
 import type {
   ContentBlock,
   EngineConfig,
@@ -58,18 +58,18 @@ import type {
   SerializedPendingApproval,
   SerializedPendingSingleHitl,
   StreamEvent,
-} from '@tabtin/agent-runtime/engine';
+} from '@muse/agent-runtime/engine';
 //  批次 13：engine barrel 收敛为 engine-only。非 engine 目录的符号
 // （runtime 组装根 / session / subagent / providers / telemetry / agent-modes /
-// permissions / host / capability injectors）改从包入口 `@tabtin/agent-runtime` import。
-import type { AgentModeName } from '@tabtin/agent-modes'
-import type { AppContext } from '@tabtin/agent-host/hooks';
+// permissions / host / capability injectors）改从包入口 `@muse/agent-runtime` import。
+import type { AgentModeName } from '@muse/agent-modes'
+import type { AppContext } from '@muse/agent-host/hooks';
 import {
   AgentError,
   clearAllActivePlansForSession,
   isValidModelRef,
   isInTurnPushNotificationUser,
-} from '@tabtin/agent-runtime';
+} from '@muse/agent-runtime';
 import {
   correlateSourceClientEvent,
   resolveRelaySessionIdForReconcile,
@@ -85,14 +85,14 @@ import {
   FileLlmSnapshotLedgerDirectory,
   postLlmSnapshotHttp,
   resolveLlmSnapshotLedgerDir,
-} from '@tabtin/agent-host/delivery'
+} from '@muse/agent-host/delivery'
 import {
   executionOwnerScopeId,
   type HostedRuntime,
   type RuntimeCacheKey,
   type RuntimeResourceFactory,
   type RuntimeSessionRequest,
-} from '@tabtin/agent-host/runtime'
+} from '@muse/agent-host/runtime'
 import {
   normalizeDaemonRuntimeExtraKey,
   type DaemonRuntimeExtraKey,
@@ -112,7 +112,7 @@ import {
   type QueryPipelineSession,
   type QueryTurnDataPort,
   type QueryTurnSessionView,
-} from '@tabtin/agent-host/conversation'
+} from '@muse/agent-host/conversation'
 // ：per-session 串行执行器 + FIFO 队列（host 侧 busy/queue 唯一真相源）。
 // 子代理历史恢复·方案 A：子/孙代理 persist_message 也落父会话 message-blocks.jsonl（判定事件类型用）。
 import { randomUUID } from 'node:crypto';
@@ -122,7 +122,7 @@ import {
   deriveReasoningHistoryPolicy,
   FALLBACK_MODEL_CAPABILITIES,
   isReportableRunError,
-} from '@tabtin/agent-runtime/engine';
+} from '@muse/agent-runtime/engine';
 // 路径权限治理 W7 / L1：派生 EffectivePolicy.planModeGuardActive
 // ：子 Agent 模板策略层快照 + 原始记录映射（agent-tool 经 template_id 消费）。
 import {
@@ -142,19 +142,19 @@ import {
   toolOutputToString,
   resolveWorkspaceSessionArchiveDir,
   setHumanInteractionHooks,
-} from '@tabtin/agent-runtime'
+} from '@muse/agent-runtime'
 //  / ：宿主启动期一次性把旧 platform-data 布局迁到新 dataRoot 布局
 // （与 ElectronAgentHost 同款；Daemon 单 owner，登录态在 config.user_id 就绪）。
-import { migrateLegacyPlatformDataToDataRoot } from '@tabtin/shared'
+import { migrateLegacyPlatformDataToDataRoot } from '@muse/shared'
 import {
   normalizeWorkspaceRoot,
   isToolLifecycleNotice,
-} from '@tabtin/agent-runtime/engine';
+} from '@muse/agent-runtime/engine';
 // ：系统提示词装配的权威真相源在 agent-runtime。Daemon 不再直接调
-import type { WorkingDirType } from '@tabtin/agent-prompt';
+import type { WorkingDirType } from '@muse/agent-prompt';
 // W7c · Stage 4 Daemon 路径对齐（治理 07 §F.4）：LSP runtime singleton + 诊断
 // 注入。与 ElectronAgentHost 同款使用 `initializeLspServerManager` lazy 启动
-// LSP server，第一次 session 创建时用当前 workspace root init；TABTIN_DISABLE_LSP=1
+// LSP server，第一次 session 创建时用当前 workspace root init；MUSE_DISABLE_LSP=1
 // 由 lsp-runtime 内部处理，与 Electron 行为一致。
 import {
   resolvePlatformDataRoot,
@@ -171,9 +171,9 @@ import {
   type ManagedTaskReconcileRecord,
   type ManagedTaskReconcileDeps,
   type ReconcileTerminalState,
-} from '@tabtin/terminal-core';
+} from '@muse/terminal-core';
 // W1.2 /  Stage 6d：RuntimeBundle 持有 bootstrap 结果类型（装配在 assembly）。
-import type { NativeBackendBootstrapResult } from '@tabtin/agent-host/native';
+import type { NativeBackendBootstrapResult } from '@muse/agent-host/native';
 // ShellCap 接 PtyManagerBridge — 装配点拿 bridge。
 // bootstrap 顺序（agent-bridge.ts L544-548）：
 //   PtyManager.initialize() 完成 → daemon.ts 调 setPtyManagerBridge →
@@ -202,45 +202,45 @@ import type {
 // - TabDocCap 已随 Wave 12 (2026-05-04) 退役（Agent 走 `muse doc *` CLI）
 // ：平台目录类 Cap（SkillsCap）已迁至共享宿主包。
 // ：临时隐藏 skill 名单（tabvideo）由宿主注入。
-import { TEMPORARILY_HIDDEN_SKILLS } from '@tabtin/agent-host/capabilities';
-import type { PersistedEntryOwner } from '@tabtin/agent-runtime';
+import { TEMPORARILY_HIDDEN_SKILLS } from '@muse/agent-host/capabilities';
+import type { PersistedEntryOwner } from '@muse/agent-runtime';
 // W4a S3-S5（PR2）：live 依赖重绑 + 完成回调契约类型（与 Electron 对称）。
 import {
   daemonHostRuntimeOptions,
   type AttachmentStrategy,
-} from '@tabtin/agent-host/configuration'
+} from '@muse/agent-host/configuration'
 const {
   resolveAttachmentStrategy,
   resolveMaxLocalFileSizeMb,
   resolveSyncPersistence
 } = daemonHostRuntimeOptions
-import type { TelemetryEventName } from '@tabtin/agent-runtime';
+import type { TelemetryEventName } from '@muse/agent-runtime';
 import { installDaemonTelemetrySink } from '../../platform/observability/telemetry/telemetry-sink.js';
 import type { AgentGatewayPort } from './agent-gateway-port.js';
 import type { DaemonConfig } from '../../base/types/daemon-config.js';
 import type { Logger } from '../../platform/observability/logging/logger.js';
-import { LocalRuntimeEvents } from '@tabtin/ws-gateway-client';
+import { LocalRuntimeEvents } from '@muse/ws-gateway-client';
 import {
   PromptEvents,
   PromptCancelPayloadSchema,
   SubagentCancelPayloadSchema,
-} from '@tabtin/agent-wire';
+} from '@muse/agent-wire';
 import { DaemonToolProvider } from './daemon-tool-provider.js';
-import { applyCancelledByRollbackToHitl } from '@tabtin/agent-runtime/permissions';
-import { type SkillCredentialResolverHandle } from '@tabtin/agent-host/credentials';
+import { applyCancelledByRollbackToHitl } from '@muse/agent-runtime/permissions';
+import { type SkillCredentialResolverHandle } from '@muse/agent-host/credentials';
 import {
   createAgentConfigClient,
   type AgentConfigClient,
-} from '@tabtin/agent-host/policy';
-import { RecallIndex } from '@tabtin/search';
+} from '@muse/agent-host/policy';
+import { RecallIndex } from '@muse/search';
 import { getDaemonSemanticScorer } from './semantic-scorer.js';
 import {
   initSkillsModule,
   disposeSkillsModule,
   resolveDefaultInteropRoots,
   type SkillsModuleHandle,
-} from '@tabtin/agent-host/skills';
-import { SkillEnablementMapCache } from '@tabtin/agent-runtime/skills';
+} from '@muse/agent-host/skills';
+import { SkillEnablementMapCache } from '@muse/agent-runtime/skills';
 import { fetchSkillEnablementMap } from './fetch-skill-enablement-map.js';
 import {
   fetchHostTrackerSnapshot,
@@ -257,28 +257,28 @@ import {
   deriveApiBaseUrl,
   joinApiPath,
   API_ENDPOINTS,
-} from '@tabtin/config';
+} from '@muse/config';
 import {
   isChatAudioAttachment,
   formatChatAudioTranscriptBody,
   transcribeChatAudioAttachment,
-} from '@tabtin/media-capabilities/audio';
+} from '@muse/media-capabilities/audio';
 import {
   isChatVideoAttachment,
   formatChatVideoUploadedBody,
   formatBlockedChatDocumentError,
   planChatAttachmentsForPromptInjection,
   runtimeTypeForChatVideoAttachment,
-} from '@tabtin/media-capabilities/video';
+} from '@muse/media-capabilities/video';
 // W3：UserInteractiveChannel 桥接 + ApprovalMemoStore 装配（与 Electron 同构）。
-// 生产链路 100% 走 `@tabtin/security-policy` `judge()` 主路径——历史 6 层
+// 生产链路 100% 走 `@muse/security-policy` `judge()` 主路径——历史 6 层
 // PermissionPipeline（driver / layers / 配套接口）已整体清退。
 import {
   buildBackgroundTaskTerminalResult,
   runBackgroundTaskExitFlush,
   killProcessGroupSafe as killProcessGroupSafeCore,
   type ExitFlushStore,
-} from '@tabtin/agent-runtime';
+} from '@muse/agent-runtime';
 import {
   FilePipelineErrorCode,
   formatFilePipelineErrorChinesePrompt,
@@ -291,15 +291,15 @@ import {
   clearAllFileHistory,
 } from '../../platform/workspace/file-history/file-history-registry.js';
 // W4 (2026-05-13)：持久通道改造——不再直接 import parseLocalAttachment，改走
-// `@tabtin/file-pipeline` 的 `FileResolver`。channel 只决定策略 + 装配 prompt。
+// `@muse/file-pipeline` 的 `FileResolver`。channel 只决定策略 + 装配 prompt。
 import {
   createDefaultFileResolver,
   type FileResolver,
-} from '@tabtin/file-pipeline';
+} from '@muse/file-pipeline';
 import {
   errorClassToFallback,
   assessCloudSummaryQuality,
-} from '@tabtin/local-docparse';
+} from '@muse/local-docparse';
 
 // W4 lazy singleton：Daemon 共享一个 FileResolver 实例（无状态）。
 let _daemonFileResolver: FileResolver | null = null;
@@ -360,7 +360,7 @@ export interface DaemonQueryRequest extends DaemonQueryRequestContract {
    * 缺省 → daemon 自己用 sandbox 目录兜底（详见 createRuntimeForSession 内
    * `workspaceSnapshotV3` 字面量旁的注释）。
    */
-  workspaceSnapshot?: import('@tabtin/security-policy').WorkspaceSnapshot;
+  workspaceSnapshot?: import('@muse/security-policy').WorkspaceSnapshot;
   /**
    * LH2-D3：用户 ID 覆盖（多租户 Daemon 场景预留）。
    *
@@ -416,7 +416,7 @@ export interface DaemonQueryRequest extends DaemonQueryRequestContract {
    *
    * 来源优先级：
    *   1. 本字段（Django `prompt.forward` payload.attachment_strategy）
-   *   2. env `TABTIN_ATTACHMENT_STRATEGY`
+   *   2. env `MUSE_ATTACHMENT_STRATEGY`
    *   3. 默认 `'local_first'`
    *
    * 与 Electron `QueryRequest.attachmentStrategy` 字段语义完全一致。
@@ -501,7 +501,7 @@ export interface DaemonQueryRequest extends DaemonQueryRequestContract {
    * W7a · 跨轮记忆 · 历史装填（按时间升序）。
    *
    * 与 Electron `QueryRequest.history` 完全对称。来源：客户端通过
-   * `@tabtin/agent-runtime/history` 的 `selectRecentHistoryForRuntime`
+   * `@muse/agent-runtime/history` 的 `selectRecentHistoryForRuntime`
    * 生成 → Django `prompt.forward` payload.history 透传。
    *
    * Daemon 调用 `buildInitialMessages(history, userMessage)` 拼成
@@ -569,7 +569,7 @@ export interface DaemonQueryRequest extends DaemonQueryRequestContract {
   /**
    *  第三波：云端 AdminDash 配置的压缩分档阈值（camelCase，已由
    * `decodeCloudPressureThresholds` 从 wire `payload.pressure_thresholds`
-   * 解码校验）。优先级：云端 > env 旋钮（`TABTIN_PRESSURE_THRESHOLDS`）>
+   * 解码校验）。优先级：云端 > env 旋钮（`MUSE_PRESSURE_THRESHOLDS`）>
    * runtime 默认。缺省 / 畸形 → undefined 回落 env / 默认（兼容旧 Django）。
    */
   cloudPressureThresholds?: { microCompactStart: number; llmSummaryStart: number; emergencyStart: number };
@@ -614,7 +614,7 @@ export interface DaemonQueryRequest extends DaemonQueryRequestContract {
    * 解码得来；DaemonAgentHost.handleQuery 把它透传给 runtime.query
    * （pending-approvals-restorer 处理已批 inject + 未批重挂）。
    *
-   * 详见 `@tabtin/agent-runtime` `SerializedPendingApproval` 文档。
+   * 详见 `@muse/agent-runtime` `SerializedPendingApproval` 文档。
    */
   pendingApprovalsSerialized?: SerializedPendingApproval[];
   /**
@@ -664,7 +664,7 @@ export interface RuntimeBuildInput extends RuntimeBuildInputContract {
   workingDirType: WorkingDirType | undefined;
   executionLimits: { max_iterations_per_run?: number; max_credits_per_run?: number } | undefined;
   yoloMode: boolean | undefined;
-  workspaceSnapshot: import('@tabtin/security-policy').WorkspaceSnapshot | undefined;
+  workspaceSnapshot: import('@muse/security-policy').WorkspaceSnapshot | undefined;
   isByokMode: boolean | undefined;
   enabledApps: ReadonlyArray<{ key: string; cliKey?: string; displayName: string; capability: string; aliases?: readonly string[] }> | undefined;
   isGroupSpace: boolean | undefined;
@@ -825,8 +825,8 @@ export interface DaemonHostState extends RuntimeCacheKey, DaemonHostStateContrac
    * 让 PD-13 工厂调用时即时反映用户最新选择 + 主控端最新工作区，无需重建
    * runtime。与 ElectronHostState 同构。
    */
-  agentConfigV3: import('@tabtin/security-policy').AgentConfigV3 | null;
-  workspaceSnapshot: import('@tabtin/security-policy').WorkspaceSnapshot | null;
+  agentConfigV3: import('@muse/security-policy').AgentConfigV3 | null;
+  workspaceSnapshot: import('@muse/security-policy').WorkspaceSnapshot | null;
   /**
    * YOLO 两步授权 PRD v3 §5.5.2：buildJudgePolicy 闭包派生 effectiveMode
    * 所需的两个入参（requestedAgentMode + isGroupSpace）。与 ElectronHostState
@@ -843,7 +843,7 @@ export interface DaemonHostState extends RuntimeCacheKey, DaemonHostStateContrac
      * wire `approval_mode` 派生后就地 mutate；undefined = 消息未带 → build-policy
      * legacy 归一）。与 ElectronAgentHost.HostState.policyContext 同构。
      */
-    requestedApprovalMode?: import('@tabtin/security-policy').ApprovalMode;
+    requestedApprovalMode?: import('@muse/security-policy').ApprovalMode;
   };
   /**
    * W4a S1（2026-05-30）：本 session 的子 Agent 运行登记中心（session 维度）。
@@ -1088,7 +1088,7 @@ export class DaemonAgentHost {
    */
   findWorkspaceSnapshotForSpace(
     spaceId: string,
-  ): import('@tabtin/security-policy').WorkspaceSnapshot | null {
+  ): import('@muse/security-policy').WorkspaceSnapshot | null {
     if (!spaceId) return null;
     for (const session of this.sessions.values()) {
       if (session.spaceId === spaceId && session.workspaceSnapshot) {
@@ -1106,7 +1106,7 @@ export class DaemonAgentHost {
    * 但接受任意 session"语义。返回 null 时 caller 应走 `config.workspace_root`
    * 单条目录兜底。
    */
-  findAnyActiveWorkspaceSnapshot(): import('@tabtin/security-policy').WorkspaceSnapshot | null {
+  findAnyActiveWorkspaceSnapshot(): import('@muse/security-policy').WorkspaceSnapshot | null {
     for (const session of this.sessions.values()) {
       if (session.workspaceSnapshot) return session.workspaceSnapshot;
     }
@@ -1335,7 +1335,7 @@ export class DaemonAgentHost {
   /**
    * FR-18 Phase 2 (H2-E)：本地解析的体积上限（MB）。
    *
-   * 构造期通过 `resolveMaxLocalFileSizeMb(env, logger)` 从 `TABTIN_LOCAL_DOCPARSE_MAX_MB`
+   * 构造期通过 `resolveMaxLocalFileSizeMb(env, logger)` 从 `MUSE_LOCAL_DOCPARSE_MAX_MB`
    * 解析；缺省 / 非法值回落 `DAEMON_DEFAULT_MAX_LOCAL_FILE_SIZE_MB`（20MB）。
    *
    * 与 Electron 的差异：Electron 走 packages 默认 50MB；Daemon 跑在 NAS / 公司服务器
@@ -1430,7 +1430,7 @@ export class DaemonAgentHost {
 
     // YOLO PRD v3 review M2：与 Electron 对称——handleQueryInternal 入口现拉
     // Django 权威 `agent_config`，wire yolo_mode / approval_grant 只作 telemetry。
-    // fetch 失败 deny-by-default；配置见 `@tabtin/agent-host/policy`。
+    // fetch 失败 deny-by-default；配置见 `@muse/agent-host/policy`。
     this.agentConfigClient = createAgentConfigClient({
       getAccessToken: () => this.getAccessToken(),
       getOrganizationId: () => this.config.organization_id,
@@ -1898,7 +1898,7 @@ export class DaemonAgentHost {
       const _appsRoot = resolveAppsRoot();
       const _bundledRoot = resolveBundledRoot();
       const _packageSkillsRoot = resolvePackageSkillsRoot();
-      const { collectPlatformSources, collectAppSources, collectPackageSkillSources } = await import('@tabtin/agent-host/skills');
+      const { collectPlatformSources, collectAppSources, collectPackageSkillSources } = await import('@muse/agent-host/skills');
       const preinstallSources = [
         ...(_bundledRoot ? await collectPlatformSources(_bundledRoot) : []),
         ...(_appsRoot ? await collectAppSources(_appsRoot) : []),
@@ -1961,7 +1961,7 @@ export class DaemonAgentHost {
             info: (msg: string) => this.logger.info(`[Skills] ${msg}`),
           },
           //  /  Stage 6c：宿主注入 RecallIndex（含语义 scorer），
-          // runtime 经 SkillRecallPort 消费，不再直接依赖 @tabtin/search。
+          // runtime 经 SkillRecallPort 消费，不再直接依赖 @muse/search。
           // 与 Electron 共享 ~/.tabtin/ 下同一份模型与向量缓存。
           skillRecall: new RecallIndex({
             scorer: getDaemonSemanticScorer((msg) => this.logger.info(msg)),
@@ -2489,7 +2489,7 @@ export class DaemonAgentHost {
 
   /** 定位 push notification queue；bridge 未就绪 / 未注入 → undefined，helper 打日志短路。 */
   private resolveNotificationQueue():
-    | import('@tabtin/terminal-core').NotificationQueue
+    | import('@muse/terminal-core').NotificationQueue
     | undefined {
     return this.getPtyManagerBridge()?.getNotificationQueue();
   }
@@ -2645,7 +2645,7 @@ export class DaemonAgentHost {
   }
 
   // W4a S0（2026-05-30）：原 `composeNotificationPrompt` 私有方法 +
-  // `escapeXmlForNotification` helper 已上提到 `@tabtin/terminal-core` 的
+  // `escapeXmlForNotification` helper 已上提到 `@muse/terminal-core` 的
   // `composeNotificationPrompt` 纯函数（两端 host 共用单一来源、按 env.kind
   // 分派，shell 段输出逐字节不变）。见文件顶部 import 与 `_tryDrain`。
 
@@ -3976,7 +3976,7 @@ export class DaemonAgentHost {
   }
 
   private async formatResolvedAttachment(
-    resolveResult: import('@tabtin/file-pipeline').ResolveResult,
+    resolveResult: import('@muse/file-pipeline').ResolveResult,
     attachment: { file_id?: string; filename?: string; mime_type?: string; size?: number; url?: string },
     filename: string,
     abortSignal?: AbortSignal,
@@ -4042,7 +4042,7 @@ export class DaemonAgentHost {
   }
 
   private logFileResolverResult(
-    result: import('@tabtin/file-pipeline').ResolveResult,
+    result: import('@muse/file-pipeline').ResolveResult,
     ctx: { mime: string; fileId: string; filename: string },
     telemetryCtx: { sessionId: string; agentId?: string },
   ): void {

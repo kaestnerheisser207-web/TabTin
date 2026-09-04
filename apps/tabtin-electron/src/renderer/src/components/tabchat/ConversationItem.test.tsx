@@ -41,9 +41,9 @@ vi.mock('@stores/useSpaceListStore', () => ({
 }))
 
 vi.mock('@hooks/spaceActivity', () => ({ useScopedEventListener: vi.fn() }))
-vi.mock('@tabtin/smartsheet-ui', () => ({ toast: mockToast }))
-vi.mock('@tabtin/app-shell', async (importOriginal) => ({
-  ...(await importOriginal<typeof import('@tabtin/app-shell')>()),
+vi.mock('@muse/smartsheet-ui', () => ({ toast: mockToast }))
+vi.mock('@muse/app-shell', async (importOriginal) => ({
+  ...(await importOriginal<typeof import('@muse/app-shell')>()),
   getConversationNavigationKind: () => 'conversation',
 }))
 vi.mock('@components/ui', () => ({ OVERLAY_SURFACE_CLASS: '' }))

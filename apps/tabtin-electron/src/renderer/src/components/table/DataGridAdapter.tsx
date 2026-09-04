@@ -10,13 +10,13 @@ import {
   type TableGridConfig,
   type TableGridRowControlItem,
   type TableGridRendererProps,
-} from '@tabtin/table-engine';
+} from '@muse/table-engine';
 import {
   CANVAS_TABLE_ENGINE,
-} from '@tabtin/table-engine-canvas/engine';
+} from '@muse/table-engine-canvas/engine';
 import {
   useGridOverlayStore,
-} from '@tabtin/table-engine-canvas/overlays';
+} from '@muse/table-engine-canvas/overlays';
 import {
   DataGridFullWidthRowRenderer,
   isDataGridFullWidthRow,
@@ -28,7 +28,7 @@ import {
   unregisterProbeIntent,
   isViewConfigMutationAllowed,
   isViewLocked,
-} from '@tabtin/table-ui';
+} from '@muse/table-ui';
 import {
   ConfirmDialog,
   normalizeSelectChoices,
@@ -36,7 +36,7 @@ import {
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from '@tabtin/smartsheet-ui';
+} from '@muse/smartsheet-ui';
 import { useTranslation } from 'react-i18next';
 import { useFieldSettingStore } from '@/stores/useFieldSettingStore';
 import { useAuthStore } from '@stores/useAuthStore';
@@ -51,10 +51,10 @@ import {
 } from '@/components/attachments/downloadTabDataAttachments';
 import { loadElectronAttachmentPreviewUi } from '@/components/attachments/electronAttachmentPreviewUi';
 import { formatNumber } from '@/utils/i18n/format';
-import type { SearchIndexHit, TableRecord, ViewMeta, ViewRecordsResponse } from '@tabtin/table-core';
-import { FieldApiService, type Field } from '@tabtin/table-core';
-import type { FieldChangeInfo } from '@tabtin/table-engine/sync';
-import { resolveRestSafeRecordId } from '@tabtin/table-engine/collab';
+import type { SearchIndexHit, TableRecord, ViewMeta, ViewRecordsResponse } from '@muse/table-core';
+import { FieldApiService, type Field } from '@muse/table-core';
+import type { FieldChangeInfo } from '@muse/table-engine/sync';
+import { resolveRestSafeRecordId } from '@muse/table-engine/collab';
 import { getChatClient } from '@/services/chatApi';
 import { openResourceUrlInSpace } from '@/services/openResourceLink';
 import { resolveBrowserOpenTabScopeKey } from '@/components/chat/subagent/openSubagentTab';
@@ -76,11 +76,11 @@ import { useUndoRedo } from './controller/useUndoRedo';
 import { useDataGridFallbackLoader } from './controller/useDataGridFallbackLoader';
 import { useDataGridRecordEditor } from './controller/useDataGridRecordEditor';
 import { RecordFormFocusTarget } from '@/components/record/recordFormFocusTarget';
-import { useIncrementalViewMerge as useDataGridIncrementalViewMerge } from '@tabtin/table-engine/sync';
+import { useIncrementalViewMerge as useDataGridIncrementalViewMerge } from '@muse/table-engine/sync';
 import { useDataGridPresentationModel } from './controller/useDataGridPresentationModel';
 import { useDataGridAdapterStores } from './controller/useDataGridAdapterStores';
 import { useDataGridViewRuntime } from './controller/useDataGridViewRuntime';
-import { CollabStatus } from '@tabtin/collab-core';
+import { CollabStatus } from '@muse/collab-core';
 import { useCollabPeerCursorsForTable } from '@stores/useTableCollabStore';
 import { useTableCollab } from './TableCollabContext';
 import { useTableReadonly } from './TableReadonlyContext';
@@ -98,7 +98,7 @@ import { useDataGridLinkEditor } from './hooks/useDataGridLinkEditor';
 import { useDataGridStatistics } from './hooks/useDataGridStatistics';
 import { useRecordCommentCounts } from './hooks/useRecordCommentCounts';
 import { useDataGridContextMenus } from './hooks/useDataGridContextMenus';
-import { resolveCreatedRecordVisibility } from '@tabtin/table-ui/clipboard';
+import { resolveCreatedRecordVisibility } from '@muse/table-ui/clipboard';
 import { resolveFreezeColumnCountFromViewConfig } from './utils/gridDisplayUtils';
 import { type TreeDataNodeMeta } from './utils/gridRowUtils';
 import { type LocalCreateOverlayOrderContext } from './utils/viewLocalCreateOverlay';

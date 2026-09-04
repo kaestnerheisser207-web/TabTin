@@ -1,4 +1,4 @@
-import type { ChatSession } from '@tabtin/chat-client'
+import type { ChatSession } from '@muse/chat-client'
 
 export function dedupeSessionsById(sessions: ChatSession[]): ChatSession[] {
   const seen = new Set<string>()

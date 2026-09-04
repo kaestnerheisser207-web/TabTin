@@ -6,7 +6,7 @@ const log = createLogger('TaskApiClient')
 
 function getApi(): any | null {
   if (typeof window === 'undefined') return null
-  return window.tabtin?.taskAPI ?? null
+  return window.muse?.taskAPI ?? null
 }
 
 export const taskApiClient = {

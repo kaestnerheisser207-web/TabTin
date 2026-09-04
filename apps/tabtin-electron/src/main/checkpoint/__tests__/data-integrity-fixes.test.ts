@@ -70,7 +70,7 @@ vi.mock('../../auth', () => ({
   isTrustedSender: vi.fn(() => true),
 }))
 
-import { CheckpointService, CHECKPOINT_EXCLUDE_PATTERNS, buildExcludeContent, type CheckpointLogger } from '@tabtin/checkpoint-core'
+import { CheckpointService, CHECKPOINT_EXCLUDE_PATTERNS, buildExcludeContent, type CheckpointLogger } from '@muse/checkpoint-core'
 import { categorizeCheckpointError } from '../checkpoint-ipc'
 
 // ── Helper ─────────────────────────────────────────────────────

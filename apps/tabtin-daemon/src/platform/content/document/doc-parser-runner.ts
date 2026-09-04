@@ -7,9 +7,9 @@
  * 因为常跑在 NAS / 老服务器上 CPU 弱）。
  *
  * 环境变量：
- *   - `TABTIN_DOC_PARSER_WORKERS`（1–4 并发；默认 1）
- *   - `TABTIN_DOC_PARSER_IDLE_MS`（0=永不缩容；默认 30 分钟）
- *   - `TABTIN_WORKER_DEBUG`（=1 开启调试日志）
+ *   - `MUSE_DOC_PARSER_WORKERS`（1–4 并发；默认 1）
+ *   - `MUSE_DOC_PARSER_IDLE_MS`（0=永不缩容；默认 30 分钟）
+ *   - `MUSE_WORKER_DEBUG`（=1 开启调试日志）
  */
 
 import { existsSync } from 'node:fs';
@@ -21,19 +21,19 @@ import {
   type DocParserResultMap,
   type DocParserTaskType,
   type WorkerTaskOptions,
-} from '@tabtin/local-docparse/workers';
+} from '@muse/local-docparse/workers';
 import type { DocParserPort } from '../../../base/content/doc-parser-port.js';
 
 /**
  * Daemon 默认 1 个 worker（vs Electron 2）。Daemon 跑在用户的 NAS / 公司服务器
  * / 个人 PC 后台，CPU 通常弱于桌面；同时 Daemon 一次只服务一个用户，并发解析
- * 收益不大。`TABTIN_DOC_PARSER_WORKERS=2` 可让具备多核服务器的部署放宽。
+ * 收益不大。`MUSE_DOC_PARSER_WORKERS=2` 可让具备多核服务器的部署放宽。
  */
 const WORKER_COUNT = Math.max(
   1,
-  Math.min(4, Number(process.env.TABTIN_DOC_PARSER_WORKERS) || 1),
+  Math.min(4, Number(process.env.MUSE_DOC_PARSER_WORKERS) || 1),
 );
-const WORKER_DEBUG = process.env.TABTIN_WORKER_DEBUG === '1';
+const WORKER_DEBUG = process.env.MUSE_WORKER_DEBUG === '1';
 
 /**
  * Worker 空闲回收时长。同 Electron 默认 30 分钟，平衡冷启动体感 vs 闲置内存
@@ -41,7 +41,7 @@ const WORKER_DEBUG = process.env.TABTIN_WORKER_DEBUG === '1';
  */
 const IDLE_TIMEOUT_MS = Math.max(
   0,
-  Number(process.env.TABTIN_DOC_PARSER_IDLE_MS) || 30 * 60 * 1000,
+  Number(process.env.MUSE_DOC_PARSER_IDLE_MS) || 30 * 60 * 1000,
 );
 
 /**

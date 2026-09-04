@@ -10,7 +10,7 @@ import { createHash } from 'node:crypto'
 import fs from 'node:fs/promises'
 import os from 'node:os'
 import path from 'node:path'
-import { FileHistoryService } from '@tabtin/file-history-core'
+import { FileHistoryService } from '@muse/file-history-core'
 import {
   previewControlDeviceFiles,
   rewindControlDeviceFiles,

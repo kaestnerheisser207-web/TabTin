@@ -27,7 +27,7 @@ export type HostTurnStateWorkspacePayload = {
 }
 
 export async function invalidateAgentConfigCache(agentId?: string): Promise<boolean> {
-  const ipc = window.tabtin?.agentEngine
+  const ipc = window.muse?.agentEngine
   if (!ipc?.invalidateAgentConfigCache) return false
   try {
     const ack = await ipc.invalidateAgentConfigCache(agentId ? { agentId } : undefined)
@@ -41,7 +41,7 @@ export async function upsertHostTurnState(payload: {
   agent?: HostTurnStateAgentPayload
   workspace?: HostTurnStateWorkspacePayload
 }): Promise<boolean> {
-  const ipc = window.tabtin?.agentEngine
+  const ipc = window.muse?.agentEngine
   if (!ipc?.upsertHostTurnState) return false
   try {
     const ack = await ipc.upsertHostTurnState(payload)

@@ -56,7 +56,7 @@ export async function persistAuthTokens(params: PersistAuthTokensParams): Promis
     expiresAt
   } = params
 
-  if (typeof window === 'undefined' || !window.tabtin?.auth) {
+  if (typeof window === 'undefined' || !window.muse?.auth) {
     throw new Error(i18n.t('common:errors.authUnavailable'))
   }
 
@@ -67,7 +67,7 @@ export async function persistAuthTokens(params: PersistAuthTokensParams): Promis
         ? Date.now() + expiresIn * 1000
         : null
 
-  await window.tabtin.auth.save(accessToken, refreshToken, userInfo, resolvedExpiresAt ?? null)
+  await window.muse.auth.save(accessToken, refreshToken, userInfo, resolvedExpiresAt ?? null)
 
   return resolvedExpiresAt ?? null
 }

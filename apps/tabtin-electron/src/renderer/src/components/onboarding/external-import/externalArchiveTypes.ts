@@ -1,4 +1,4 @@
-import type { ImportSourceId } from '@tabtin/cli-server-core'
+import type { ImportSourceId } from '@muse/cli-server-core'
 
 export interface ExternalArchiveIndexEntry {
   source: ImportSourceId

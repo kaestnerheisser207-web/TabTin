@@ -53,9 +53,9 @@ vi.mock('../../config/api', () => ({
   API_BASE_URL: 'http://127.0.0.1:6060',
 }))
 
-vi.mock('@tabtin/terminal-core', () => ({ atomicWriteFileSync: mocks.atomicWriteFileSync }))
+vi.mock('@muse/terminal-core', () => ({ atomicWriteFileSync: mocks.atomicWriteFileSync }))
 
-vi.mock('@tabtin/storage-manager', () => ({ registerStorageBucket: vi.fn() }))
+vi.mock('@muse/storage-manager', () => ({ registerStorageBucket: vi.fn() }))
 
 vi.mock('node:fs', async (importOriginal) => {
   const actual = await importOriginal<typeof import('node:fs')>()

@@ -28,7 +28,7 @@ const SlideEditorHost = React.lazy(loadSlideEditorHost)
 /**
  * TabSlide ContextType Handler
  *
- * 注册 'tabslide' 类型，使用 @tabtin/tabslide 的 SlideEditor 渲染演示文稿。
+ * 注册 'tabslide' 类型，使用 @muse/tabslide 的 SlideEditor 渲染演示文稿。
  */
 export const slideHandler: ContextTypeHandler = {
   type: 'tabslide',

@@ -1,4 +1,4 @@
-import { isEmptyGroupValue, type TableGridRow } from '@tabtin/table-engine'
+import { isEmptyGroupValue, type TableGridRow } from '@muse/table-engine'
 
 export interface GroupOrderSnapshotItem {
   index: number

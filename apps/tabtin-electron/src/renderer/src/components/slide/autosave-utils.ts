@@ -1,4 +1,4 @@
-import type { SlidePreset, SlidePresentation } from '@tabtin/tabslide'
+import type { SlidePreset, SlidePresentation } from '@muse/tabslide'
 import { apiService } from '@/services/api'
 
 const MAX_RETRY_DELAY_MS = 30000

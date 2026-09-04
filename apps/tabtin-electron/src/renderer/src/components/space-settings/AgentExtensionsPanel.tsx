@@ -6,7 +6,7 @@
  * 支持配置弹窗、probe 测试、已配置字段指标。
  */
 import React, { useEffect, useMemo, useState, useCallback } from 'react'
-import { ConfirmDialog, EmptyState, ScrollArea, StatusNotice, toast } from '@tabtin/smartsheet-ui'
+import { ConfirmDialog, EmptyState, ScrollArea, StatusNotice, toast } from '@muse/smartsheet-ui'
 import { SpaceSettingsSectionHeader } from '@components/space-settings/SpaceSettingsSectionHeader'
 import { useTranslation } from 'react-i18next'
 import { ManagementCardListSkeleton } from '@components/common/ListSkeletons'

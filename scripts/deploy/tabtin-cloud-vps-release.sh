@@ -6,9 +6,9 @@ compose_file="$application_root/config/compose.shared.yml"
 runtime_env_file="$application_root/source-snapshot/.env.community-runtime"
 host_config_file="/etc/tabtin/cloud-host.env"
 worker_endpoint="https://tabtin.dovelora.com/_internal/cloud-worker"
-local_django_image="tabtin/community-django:local"
-runtime_repository="ghcr.io/kaestnerheisser207-web/tabtin-cloud-runtime"
-worker_repository="ghcr.io/kaestnerheisser207-web/tabtin-cloud-worker"
+local_django_image="muse/community-django:local"
+runtime_repository="ghcr.io/kaestnerheisser207-web/muse-cloud-runtime"
+worker_repository="ghcr.io/kaestnerheisser207-web/muse-cloud-worker"
 worker_user="tabtin-cloud-worker"
 worker_home="/var/lib/tabtin-cloud-worker"
 worker_token_file="/etc/tabtin/cloud-worker.token"
@@ -55,27 +55,27 @@ host_config_mode="$(stat -c %a "$host_config_file")"
 # shellcheck source=/dev/null
 source "$host_config_file"
 
-: "${TABTIN_CLOUD_WORKER_NODE_KEY:?missing Worker node key}"
-: "${TABTIN_CLOUD_WORKER_EDITION:?missing Worker edition}"
-: "${TABTIN_CLOUD_CAPACITY_CPU_MILLICORES:?missing CPU capacity}"
-: "${TABTIN_CLOUD_CAPACITY_MEMORY_MB:?missing memory capacity}"
-: "${TABTIN_CLOUD_CAPACITY_STORAGE_GB:?missing storage capacity}"
-: "${TABTIN_CLOUD_RUNTIME_STORAGE_GB:?missing runtime storage size}"
-: "${TABTIN_CLOUD_WORKER_BIND_ADDRESS:?missing Worker bind address}"
-[[ "$TABTIN_CLOUD_WORKER_NODE_KEY" =~ ^[A-Za-z0-9][A-Za-z0-9_.-]{0,127}$ ]] ||
+: "${MUSE_CLOUD_WORKER_NODE_KEY:?missing Worker node key}"
+: "${MUSE_CLOUD_WORKER_EDITION:?missing Worker edition}"
+: "${MUSE_CLOUD_CAPACITY_CPU_MILLICORES:?missing CPU capacity}"
+: "${MUSE_CLOUD_CAPACITY_MEMORY_MB:?missing memory capacity}"
+: "${MUSE_CLOUD_CAPACITY_STORAGE_GB:?missing storage capacity}"
+: "${MUSE_CLOUD_RUNTIME_STORAGE_GB:?missing runtime storage size}"
+: "${MUSE_CLOUD_WORKER_BIND_ADDRESS:?missing Worker bind address}"
+[[ "$MUSE_CLOUD_WORKER_NODE_KEY" =~ ^[A-Za-z0-9][A-Za-z0-9_.-]{0,127}$ ]] ||
   die "invalid Worker node key"
-[[ "$TABTIN_CLOUD_WORKER_EDITION" == "saas" || "$TABTIN_CLOUD_WORKER_EDITION" == "community" ]] ||
+[[ "$MUSE_CLOUD_WORKER_EDITION" == "saas" || "$MUSE_CLOUD_WORKER_EDITION" == "community" ]] ||
   die "invalid Worker edition"
-[[ "$TABTIN_CLOUD_WORKER_BIND_ADDRESS" =~ ^([0-9]{1,3}\.){3}[0-9]{1,3}$ ]] ||
+[[ "$MUSE_CLOUD_WORKER_BIND_ADDRESS" =~ ^([0-9]{1,3}\.){3}[0-9]{1,3}$ ]] ||
   die "invalid Worker bind address"
 ip -4 -o address show | awk '{ sub(/\/.*/, "", $4); print $4 }' |
-  grep -Fqx "$TABTIN_CLOUD_WORKER_BIND_ADDRESS" || die "Worker bind address is not present on the host"
-worker_direct_endpoint="http://$TABTIN_CLOUD_WORKER_BIND_ADDRESS:8090"
+  grep -Fqx "$MUSE_CLOUD_WORKER_BIND_ADDRESS" || die "Worker bind address is not present on the host"
+worker_direct_endpoint="http://$MUSE_CLOUD_WORKER_BIND_ADDRESS:8090"
 for value in \
-  "$TABTIN_CLOUD_CAPACITY_CPU_MILLICORES" \
-  "$TABTIN_CLOUD_CAPACITY_MEMORY_MB" \
-  "$TABTIN_CLOUD_CAPACITY_STORAGE_GB" \
-  "$TABTIN_CLOUD_RUNTIME_STORAGE_GB"; do
+  "$MUSE_CLOUD_CAPACITY_CPU_MILLICORES" \
+  "$MUSE_CLOUD_CAPACITY_MEMORY_MB" \
+  "$MUSE_CLOUD_CAPACITY_STORAGE_GB" \
+  "$MUSE_CLOUD_RUNTIME_STORAGE_GB"; do
   [[ "$value" =~ ^[1-9][0-9]*$ ]] || die "capacity values must be positive integers"
 done
 
@@ -164,16 +164,16 @@ curl_config="$(mktemp)"
 trap 'rm -f "$worker_env_tmp" "$worker_json_tmp" "$curl_config"; run_worker logout ghcr.io >/dev/null 2>&1 || true' EXIT
 umask 077
 {
-  printf 'TABTIN_CLOUD_WORKER_HOST=%s\n' "$TABTIN_CLOUD_WORKER_BIND_ADDRESS"
-  printf 'TABTIN_CLOUD_WORKER_PORT=8090\n'
-  printf 'TABTIN_CLOUD_WORKER_TOKEN=%s\n' "$worker_token"
-  printf 'TABTIN_CLOUD_WORKER_PROTOCOL_VERSION=1\n'
-  printf 'TABTIN_CLOUD_WORKER_RUNTIME_VERSION=%s\n' "$requested_sha"
-  printf 'TABTIN_CLOUD_RUNTIME_NETWORK=tabtin-cloud-runtime\n'
-  printf 'TABTIN_CLOUD_CONTAINER_CLI=/usr/bin/docker\n'
-  printf 'TABTIN_CLOUD_STORAGE_QUOTA_MODE=podman-xfs\n'
-  printf 'TABTIN_CLOUD_RUNTIME_STORAGE_GB=%s\n' "$TABTIN_CLOUD_RUNTIME_STORAGE_GB"
-  printf 'TABTIN_CLOUD_RESOURCE_ISOLATION_MODE=cgroup-v2\n'
+  printf 'MUSE_CLOUD_WORKER_HOST=%s\n' "$MUSE_CLOUD_WORKER_BIND_ADDRESS"
+  printf 'MUSE_CLOUD_WORKER_PORT=8090\n'
+  printf 'MUSE_CLOUD_WORKER_TOKEN=%s\n' "$worker_token"
+  printf 'MUSE_CLOUD_WORKER_PROTOCOL_VERSION=1\n'
+  printf 'MUSE_CLOUD_WORKER_RUNTIME_VERSION=%s\n' "$requested_sha"
+  printf 'MUSE_CLOUD_RUNTIME_NETWORK=tabtin-cloud-runtime\n'
+  printf 'MUSE_CLOUD_CONTAINER_CLI=/usr/bin/docker\n'
+  printf 'MUSE_CLOUD_STORAGE_QUOTA_MODE=podman-xfs\n'
+  printf 'MUSE_CLOUD_RUNTIME_STORAGE_GB=%s\n' "$MUSE_CLOUD_RUNTIME_STORAGE_GB"
+  printf 'MUSE_CLOUD_RESOURCE_ISOLATION_MODE=cgroup-v2\n'
   printf 'DOCKER_HOST=unix://%s\n' "$podman_socket"
 } > "$worker_env_tmp"
 sudo -n install -o root -g root -m 0600 "$worker_env_tmp" "$worker_env_file"
@@ -216,20 +216,20 @@ grep -q '^tabtin_cloud_worker_up 1$' <<<"$worker_metrics" ||
   die "Cloud Worker metrics readiness gate failed"
 
 printf '{"%s":{"name":"%s","edition":"%s","endpoint":"%s","token":"%s","protocol_version":"1","runtime_version":"%s","storage_quota_mode":"podman-xfs","resource_isolation_mode":"cgroup-v2","capacity_cpu_millicores":%s,"capacity_memory_mb":%s,"capacity_storage_gb":%s}}\n' \
-  "$TABTIN_CLOUD_WORKER_NODE_KEY" \
-  "$TABTIN_CLOUD_WORKER_NODE_KEY" \
-  "$TABTIN_CLOUD_WORKER_EDITION" \
+  "$MUSE_CLOUD_WORKER_NODE_KEY" \
+  "$MUSE_CLOUD_WORKER_NODE_KEY" \
+  "$MUSE_CLOUD_WORKER_EDITION" \
   "$worker_endpoint" \
   "$worker_token" \
   "$requested_sha" \
-  "$TABTIN_CLOUD_CAPACITY_CPU_MILLICORES" \
-  "$TABTIN_CLOUD_CAPACITY_MEMORY_MB" \
-  "$TABTIN_CLOUD_CAPACITY_STORAGE_GB" > "$worker_json_tmp"
+  "$MUSE_CLOUD_CAPACITY_CPU_MILLICORES" \
+  "$MUSE_CLOUD_CAPACITY_MEMORY_MB" \
+  "$MUSE_CLOUD_CAPACITY_STORAGE_GB" > "$worker_json_tmp"
 
 docker run --rm --interactive --user 0:0 \
   --volume tabtin-community-installation-secrets:/secrets \
   --entrypoint sh "$local_django_image" \
-  -c 'umask 077; cat > /secrets/TABTIN_CLOUD_WORKERS_JSON; python -c '\''from pathlib import Path; import re, secrets; path=Path("/secrets/DAEMON_TOKEN_SECRET"); raw=path.read_text(encoding="utf-8") if path.exists() else ""; candidate=raw.strip(); value=candidate if re.fullmatch(r"[A-Za-z0-9_=-]{32,256}", candidate) else secrets.token_urlsafe(48); path.write_text(value, encoding="utf-8")'\''; chown 10001:10001 /secrets/TABTIN_CLOUD_WORKERS_JSON /secrets/DAEMON_TOKEN_SECRET; chmod 0400 /secrets/TABTIN_CLOUD_WORKERS_JSON /secrets/DAEMON_TOKEN_SECRET' \
+  -c 'umask 077; cat > /secrets/MUSE_CLOUD_WORKERS_JSON; python -c '\''from pathlib import Path; import re, secrets; path=Path("/secrets/DAEMON_TOKEN_SECRET"); raw=path.read_text(encoding="utf-8") if path.exists() else ""; candidate=raw.strip(); value=candidate if re.fullmatch(r"[A-Za-z0-9_=-]{32,256}", candidate) else secrets.token_urlsafe(48); path.write_text(value, encoding="utf-8")'\''; chown 10001:10001 /secrets/MUSE_CLOUD_WORKERS_JSON /secrets/DAEMON_TOKEN_SECRET; chmod 0400 /secrets/MUSE_CLOUD_WORKERS_JSON /secrets/DAEMON_TOKEN_SECRET' \
   < "$worker_json_tmp"
 
 upsert_runtime_env() {
@@ -258,11 +258,11 @@ except BaseException:
     raise
 ' "$runtime_env_file" "$key" "$value"
 }
-upsert_runtime_env TABTIN_CLOUD_RUNTIME_IMAGE "$requested_runtime"
-upsert_runtime_env TABTIN_CLOUD_WORKERS_JSON_FILE /run/tabtin-community-secrets/TABTIN_CLOUD_WORKERS_JSON
+upsert_runtime_env MUSE_CLOUD_RUNTIME_IMAGE "$requested_runtime"
+upsert_runtime_env MUSE_CLOUD_WORKERS_JSON_FILE /run/tabtin-community-secrets/MUSE_CLOUD_WORKERS_JSON
 upsert_runtime_env DAEMON_TOKEN_SECRET_FILE /run/tabtin-community-secrets/DAEMON_TOKEN_SECRET
-upsert_runtime_env TABTIN_CLOUD_RUNTIME_STORAGE_GB "$TABTIN_CLOUD_RUNTIME_STORAGE_GB"
-upsert_runtime_env TABTIN_CLOUD_WORKER_EDITION "$TABTIN_CLOUD_WORKER_EDITION"
+upsert_runtime_env MUSE_CLOUD_RUNTIME_STORAGE_GB "$MUSE_CLOUD_RUNTIME_STORAGE_GB"
+upsert_runtime_env MUSE_CLOUD_WORKER_EDITION "$MUSE_CLOUD_WORKER_EDITION"
 upsert_runtime_env DAEMON_SERVER_URL https://tabtin.dovelora.com
 upsert_runtime_env DAEMON_WS_URL wss://tabtin.dovelora.com
 

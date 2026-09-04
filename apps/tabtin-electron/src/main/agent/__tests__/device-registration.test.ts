@@ -147,7 +147,7 @@ describe('Electron 设备自动登记', () => {
     const fetchMock = vi.fn()
     vi.stubGlobal('fetch', fetchMock)
 
-    const { requireSecureCredentialApiBaseUrl } = await import('@tabtin/config')
+    const { requireSecureCredentialApiBaseUrl } = await import('@muse/config')
     expect(() => requireSecureCredentialApiBaseUrl('http://control.example.com/api'))
       .toThrow('HTTPS')
     expect(fetchMock).not.toHaveBeenCalled()

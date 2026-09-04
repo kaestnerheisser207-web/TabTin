@@ -3,7 +3,7 @@
  */
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { renderHook } from '@testing-library/react'
-import type { Agent, Space } from '@tabtin/app-shell'
+import type { Agent, Space } from '@muse/app-shell'
 
 const mocks = vi.hoisted(() => ({
   loadAgent: vi.fn(),

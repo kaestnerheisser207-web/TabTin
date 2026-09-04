@@ -178,7 +178,7 @@ export function buildPlatformResourceArtifactBlock(args: {
   const hint = args.resourceType === 'table' ? 'tabdata' : 'tabdoc'
   const pathType = args.resourceType === 'table' ? 'table' : 'document'
   const params = new URLSearchParams({ hint, title })
-  const url = `tabtin://resource/${pathType}/${encodeURIComponent(args.resourceId)}?${params.toString()}`
+  const url = `muse://resource/${pathType}/${encodeURIComponent(args.resourceId)}?${params.toString()}`
 
   return {
     kind: 'resource_ref',

@@ -3,12 +3,12 @@ import { NodeViewWrapper } from '@tiptap/react'
 import type { NodeViewProps } from '@tiptap/react'
 import { Code2, ExternalLink, Loader2, Trash2 } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
-import { toast } from '@tabtin/smartsheet-ui'
+import { toast } from '@muse/smartsheet-ui'
 import {
   sanitizeHtmlBlockSrc,
   normalizeHtmlBlockHeight,
   HTML_BLOCK_DEFAULT_TITLE,
-} from '@tabtin/doc-editor'
+} from '@muse/doc-editor'
 import { useTabDocHostActionsOptional } from '../../TabDocHostActionsContext'
 import { useHtmlBlockAccess } from './HtmlBlockAccessContext'
 import { useHtmlBlockObjectUrl } from './useHtmlBlockObjectUrl'

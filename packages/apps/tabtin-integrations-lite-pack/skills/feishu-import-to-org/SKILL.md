@@ -191,7 +191,7 @@ muse feishu import wait <task_id> --format json
 文档标题若出现在回复里，按 tabdoc 契约写成：
 
 ```markdown
-[<title>](tabtin://resource/document/<id>?hint=tabdoc)
+[<title>](muse://resource/document/<id>?hint=tabdoc)
 ```
 
 ## 禁止事项（硬）

@@ -15,10 +15,10 @@
  */
 
 import { openDB, type IDBPDatabase } from 'idb'
-import type { ChatMessage } from '@tabtin/chat-client'
+import type { ChatMessage } from '@muse/chat-client'
 import { isUnconfirmedLocalMessage } from '../shared/types'
 import { registerResetAction } from '../../sessionResetRegistry'
-import { getBucket, registerStorageBucket } from '@tabtin/storage-manager'
+import { getBucket, registerStorageBucket } from '@muse/storage-manager'
 import { sortMessagesForTimeline } from '@/stores/chat/domain/messageTimelineOrder'
 
 const DB_NAME = 'tabtin-chat-cache'

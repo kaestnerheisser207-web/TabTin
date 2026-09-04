@@ -8,11 +8,11 @@
  */
 
 import { describe, it, expect } from 'vitest';
-import { judge } from '@tabtin/security-policy';
-import type { EffectivePolicy, JudgeTool } from '@tabtin/security-policy';
+import { judge } from '@muse/security-policy';
+import type { EffectivePolicy, JudgeTool } from '@muse/security-policy';
 
-import { InMemoryApprovalMemoStore } from '@tabtin/agent-runtime';
-import type { ApprovalMemoEntry } from '@tabtin/agent-runtime';
+import { InMemoryApprovalMemoStore } from '@muse/agent-runtime';
+import type { ApprovalMemoEntry } from '@muse/agent-runtime';
 import { createJudgeMemoStoreAdapter } from '../src/policy/judge-memo-store-adapter.js';
 
 function entry(decision: 'allow' | 'deny' = 'allow'): ApprovalMemoEntry {

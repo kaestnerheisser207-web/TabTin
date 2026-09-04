@@ -9,10 +9,10 @@
  *   2. **字符串域分离** —— file pipeline kind 由本包
  *      `codegen/error-codes.yaml` 生成；edit/browser producer kind 由
  *      `packages/tool-errors/codegen/kinds/*.yaml` 与 `codegen/bridges.yaml`
- *      生成，并经 `@tabtin/tool-errors` bridge 映射到 runtime kind。
+ *      生成，并经 `@muse/tool-errors` bridge 映射到 runtime kind。
  *   3. **两层映射（Wave 3）** —— 每类有：
  *        - 字面 enum 名（FilePipelineErrorCode 成员）
- *        - 字符串 error_kind（与 `@tabtin/agent-runtime` `error-kinds.ts` 全局
+ *        - 字符串 error_kind（与 `@muse/agent-runtime` `error-kinds.ts` 全局
  *          ToolErrorKind 一致，UI / observability 用）
  *        - i18n key（`chat.toolError.<key>`，中文 / 英文文案同源派发）
  *      数字 `TabcodeErrorCode` / `FILE_PIPELINE_ERROR_NUMERIC` 协议已删除；
@@ -43,7 +43,7 @@
  * 同款 string kind 让 UI 不再多维护一份"aborted vs user_aborted"文案区分。
  *
  * **不要直接编辑 `_generated/error-codes.generated.ts`**——下次 codegen 会覆盖。
- * 改 yaml + 跑 `pnpm --filter @tabtin/file-pipeline-errors codegen`。
+ * 改 yaml + 跑 `pnpm --filter @muse/file-pipeline-errors codegen`。
  */
 export {
   FilePipelineErrorCode,

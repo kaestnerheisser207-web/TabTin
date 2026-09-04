@@ -32,7 +32,7 @@ cd /Users/tabtin-work/worktrees/tabtin/fix/12038-session-share-external-unconfir
 
 ```bash
 cd apps/tabtin_django
-USE_SQLITE_FOR_TESTS=0 TABTIN_DATABASE_MODE=single_pg \
+USE_SQLITE_FOR_TESTS=0 MUSE_DATABASE_MODE=single_pg \
   python manage.py test \
   apps.chat.conversation.tests.test_session_share.SessionShareTestCase.test_cross_org_grantee_rejected \
   apps.chat.conversation.tests.test_session_share.SessionShareTestCase.test_share_to_self_rejected \

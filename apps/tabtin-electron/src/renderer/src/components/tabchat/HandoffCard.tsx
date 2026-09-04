@@ -36,7 +36,7 @@ import {
   DialogContent,
   DialogTitle,
 } from '@components/ui'
-import { toast } from '@tabtin/smartsheet-ui'
+import { toast } from '@muse/smartsheet-ui'
 import { useAuthStore } from '@stores/useAuthStore'
 import { useIMStore } from '@stores/useIMStore'
 import { useUserProfileCache, useDisplayName } from '@stores/useUserProfileCache'

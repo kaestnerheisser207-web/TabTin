@@ -36,7 +36,7 @@ vi.mock('@/stores/chat/useChatStore', () => ({
   useChatStore: { getState: () => chatStoreState },
 }))
 vi.mock('@/services/agentService', () => ({
-  hasRuntimeBridge: () => !!window.tabtin?.agentEngine,
+  hasRuntimeBridge: () => !!window.muse?.agentEngine,
   getSessionController: () => ({
     settleExecutionCompleted: mockSettleExecutionCompleted,
   }),
@@ -64,7 +64,7 @@ import {
   isSessionBusy,
   getSessionRunProjection,
 } from '../sessionRunProjection'
-import type { ChatSession } from '@tabtin/chat-client'
+import type { ChatSession } from '@muse/chat-client'
 
 const SID = 'session-reconcile-test'
 

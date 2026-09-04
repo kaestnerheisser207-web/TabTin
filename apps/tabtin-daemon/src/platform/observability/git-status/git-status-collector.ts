@@ -173,9 +173,9 @@ export class GitStatusCollector {
         return;
       }
 
-      const envRoot = process.env.TABTIN_WORKSPACE_ROOT;
+      const envRoot = process.env.MUSE_WORKSPACE_ROOT;
       if (envRoot && await this.isGitRepo(envRoot)) {
-        this.logger.info(`GitStatusCollector: detected git repo from TABTIN_WORKSPACE_ROOT: ${envRoot}`);
+        this.logger.info(`GitStatusCollector: detected git repo from MUSE_WORKSPACE_ROOT: ${envRoot}`);
         this.repoPath = await this.resolveGitRoot(envRoot) ?? envRoot;
         return;
       }

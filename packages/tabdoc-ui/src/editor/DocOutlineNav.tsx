@@ -8,7 +8,7 @@
  * - 自动追踪当前可视区域的活跃标题
  */
 import { useCallback, useEffect, useRef, useState } from 'react'
-import { cn } from '@tabtin/smartsheet-ui'
+import { cn } from '@muse/smartsheet-ui'
 
 export interface TocHeading {
   /** React key */

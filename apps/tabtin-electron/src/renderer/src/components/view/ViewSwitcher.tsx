@@ -14,7 +14,7 @@ import {
   cn,
   ConfirmDialog,
   ScrollArea,
-} from '@tabtin/smartsheet-ui'
+} from '@muse/smartsheet-ui'
 import {
   List,
   Download,
@@ -29,8 +29,8 @@ import {
   useCollabViewCreatorForTable,
   useCollabViewUpdaterForTable,
 } from '@stores/useTableCollabStore'
-import { notifyBackendUndoable } from '@tabtin/table-ui'
-import type { ViewMeta, ViewCreateRequest, ViewUpdateRequest } from '@tabtin/table-core'
+import { notifyBackendUndoable } from '@muse/table-ui'
+import type { ViewMeta, ViewCreateRequest, ViewUpdateRequest } from '@muse/table-core'
 import { ViewEditorDialog } from './ViewEditorDialog'
 import { useTranslation } from 'react-i18next'
 import { ExportContainer } from '@/components/export'
@@ -47,7 +47,7 @@ import {
   horizontalListSortingStrategy,
   verticalListSortingStrategy,
   isViewLocked,
-} from '@tabtin/table-ui'
+} from '@muse/table-ui'
 import { selectViewCreator } from './viewCreationStrategy'
 
 interface ViewSwitcherProps {

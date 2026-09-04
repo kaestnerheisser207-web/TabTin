@@ -85,7 +85,7 @@ export async function switchSessionWorktree(
   const previousRootPath = input.previousRootPath?.trim() || null
   try {
     if (spaceId) {
-      await window.tabtin?.workspace?.appendSessionAllowedPath?.({
+      await window.muse?.workspace?.appendSessionAllowedPath?.({
         spaceId,
         sessionId,
         path: rootPath,

@@ -1,7 +1,7 @@
 import React from 'react'
 import { fireEvent, render, screen, waitFor, act } from '@testing-library/react'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
-import type { UnifiedSearchResponse, FtsSearchResultItem } from '@tabtin/app-shell'
+import type { UnifiedSearchResponse, FtsSearchResultItem } from '@muse/app-shell'
 
 // ── 模块顶层 mock：必须在被测组件 import 前注册 ──
 const { mockUnifiedSearch, mockActivateConversation, mockActivateSpace, mockEnterChatSession, mockDispatchSelect, mockIsKnownType, mockOrganizationState } =
@@ -15,8 +15,8 @@ const { mockUnifiedSearch, mockActivateConversation, mockActivateSpace, mockEnte
     mockOrganizationState: { selectedOrganization: { id: 'organization-1' } as { id: string } | null },
   }))
 
-vi.mock('@tabtin/app-shell', async () => {
-  const actual = await vi.importActual<typeof import('@tabtin/app-shell')>('@tabtin/app-shell')
+vi.mock('@muse/app-shell', async () => {
+  const actual = await vi.importActual<typeof import('@muse/app-shell')>('@muse/app-shell')
   return {
     ...actual,
     unifiedSearch: mockUnifiedSearch,
@@ -48,7 +48,7 @@ vi.mock('framer-motion', () => ({
   },
 }))
 
-vi.mock('@tabtin/smartsheet-ui', () => ({
+vi.mock('@muse/smartsheet-ui', () => ({
   ScrollArea: ({ children, className }: { children: React.ReactNode; className?: string }) => (
     <div className={className}>{children}</div>
   ),
@@ -422,7 +422,7 @@ describe('GlobalSearch (Wave 3)', () => {
         facets: { resources: 1 },
       }),
     )
-    const { toast } = await import('@tabtin/smartsheet-ui/toast')
+    const { toast } = await import('@muse/smartsheet-ui/toast')
     const errSpy = vi.spyOn(toast, 'error').mockImplementation(() => '')
     render(<GlobalSearch open onClose={vi.fn()} />)
     fireEvent.change(screen.getByRole('combobox'), { target: { value: '未知' } })
@@ -451,7 +451,7 @@ describe('GlobalSearch (Wave 3)', () => {
         facets: { resources: 1 },
       }),
     )
-    const { toast } = await import('@tabtin/smartsheet-ui/toast')
+    const { toast } = await import('@muse/smartsheet-ui/toast')
     const errSpy = vi.spyOn(toast, 'error').mockImplementation(() => '')
     render(<GlobalSearch open onClose={vi.fn()} />)
     fireEvent.change(screen.getByRole('combobox'), { target: { value: '缺类型' } })
@@ -582,7 +582,7 @@ describe('GlobalSearch (Wave 3)', () => {
         facets: { im: 1 },
       }),
     )
-    const { toast } = await import('@tabtin/smartsheet-ui/toast')
+    const { toast } = await import('@muse/smartsheet-ui/toast')
     const errSpy = vi.spyOn(toast, 'error').mockImplementation(() => '')
     render(<GlobalSearch open onClose={vi.fn()} />)
     fireEvent.change(screen.getByRole('combobox'), { target: { value: 'gone' } })

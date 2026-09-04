@@ -2,7 +2,7 @@
  * modeSwitchProposalHandler — 处理 `agent.stream.mode_switch_proposal` 事件
  */
 
-import type { ChatMessage } from '@tabtin/chat-client'
+import type { ChatMessage } from '@muse/chat-client'
 import { createLogger } from '@/utils/logger'
 import { resolveAgentModeName } from '@stores/chat/shared/types'
 import type { AgentStreamMessage, HandlerContext } from './streamHandlerTypes'

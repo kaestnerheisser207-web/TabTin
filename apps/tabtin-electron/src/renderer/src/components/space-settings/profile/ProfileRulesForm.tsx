@@ -7,7 +7,7 @@ import React, { useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useShallow } from 'zustand/react/shallow'
 import { Textarea } from '@components/ui'
-import { Button } from '@tabtin/smartsheet-ui'
+import { Button } from '@muse/smartsheet-ui'
 import { useSpaceStore } from '@stores/useSpaceStore'
 import {
   SETTINGS_HINT,

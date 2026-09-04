@@ -7,16 +7,16 @@
 
 export type SpaceStatus = 'active' | 'paused' | 'completed' | 'archived'
 
-/** @see {@link @tabtin/security-policy#AuthorizationPreset} — SSOT 在 security-policy */
+/** @see {@link @muse/security-policy#AuthorizationPreset} — SSOT 在 security-policy */
 export type AuthorizationPreset = 'cautious' | 'collaborative' | 'full_auto' | 'server_auto'
 
-/** @see {@link @tabtin/security-policy#AuthorizationAction} — SSOT 在 security-policy */
+/** @see {@link @muse/security-policy#AuthorizationAction} — SSOT 在 security-policy */
 export type AuthorizationAction = 'auto' | 'confirm'
 
-/** @see {@link @tabtin/security-policy#OperationCategory} — SSOT 在 security-policy */
+/** @see {@link @muse/security-policy#OperationCategory} — SSOT 在 security-policy */
 export type OperationCategory = 'read' | 'write' | 'install' | 'delete_system' | 'script'
 
-/** @see {@link @tabtin/security-policy#AuthorizationRules} — SSOT 在 security-policy */
+/** @see {@link @muse/security-policy#AuthorizationRules} — SSOT 在 security-policy */
 export type AuthorizationRules = Partial<Record<OperationCategory, AuthorizationAction>>
 
 export type AgentHarnessType = 'builtin' | 'dsh'
@@ -163,10 +163,10 @@ export type AgentPermissionMode = 'default' | 'auto-approve-reads' | 'auto-appro
 
 export type TerminalMode = 'tabtin_only' | 'sandboxed' | 'regular' | 'blocked'
 
-/** @see {@link @tabtin/security-policy#SqlMode} */
+/** @see {@link @muse/security-policy#SqlMode} */
 export type SqlMode = 'read_only' | 'read_write' | 'blocked'
 
-/** @see {@link @tabtin/security-policy#SandboxLevel} */
+/** @see {@link @muse/security-policy#SandboxLevel} */
 export type SandboxLevel = 'filesystem' | 'complete'
 
 export type FileAccess = 'workspace' | 'organization' | 'strict' | 'custom'

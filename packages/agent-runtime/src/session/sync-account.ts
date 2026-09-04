@@ -1,5 +1,5 @@
 /**
- * @tabtin/agent-runtime — Sync 目录的账号 / 租户分桶工具（LH2-D1 / LH2-D2）。
+ * @muse/agent-runtime — Sync 目录的账号 / 租户分桶工具（LH2-D1 / LH2-D2）。
  *
  * 解决的问题：
  *   v1 设计下 SyncQueue 把所有账号的 transcript 全丢同一目录

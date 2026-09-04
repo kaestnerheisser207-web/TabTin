@@ -2,7 +2,7 @@ import React from 'react'
 import {
   SelectChoicesEditor as SharedSelectChoicesEditor,
   type SelectChoiceOption,
-} from '@tabtin/smartsheet-ui'
+} from '@muse/smartsheet-ui'
 import { useTranslation } from 'react-i18next'
 
 interface SelectChoicesEditorProps {

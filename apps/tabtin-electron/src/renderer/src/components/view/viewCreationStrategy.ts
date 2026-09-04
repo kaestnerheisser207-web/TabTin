@@ -1,4 +1,4 @@
-import type { ViewMeta, ViewStore } from '@tabtin/table-core'
+import type { ViewMeta, ViewStore } from '@muse/table-core'
 
 type ViewCreatePayload = Parameters<ViewStore['createView']>[0]
 type ViewCreator = (payload: ViewCreatePayload) => Promise<ViewMeta | null>

@@ -6,7 +6,7 @@ import {
   useUndoRedo as useUndoRedoShared,
   type UseUndoRedoInput as SharedInput,
   type UseUndoRedoResult,
-} from '@tabtin/table-ui'
+} from '@muse/table-ui'
 import { useCollabUndoRedoForTable } from '@stores/useTableCollabStore'
 import { useRecordStore } from '@stores/useRecordStore'
 

@@ -1,7 +1,7 @@
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { History } from 'lucide-react'
-import type { ChatMessage } from '@tabtin/chat-client'
+import type { ChatMessage } from '@muse/chat-client'
 import { ShinyText } from '../../../markdown/ShinyText'
 
 export const SystemMessageBubble: React.FC<{

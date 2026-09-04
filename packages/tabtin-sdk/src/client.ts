@@ -12,7 +12,7 @@ import type {
  * Muse SDK client.
  *
  * ```ts
- * import { createClient } from '@tabtin/sdk'
+ * import { createClient } from '@muse/sdk'
  *
  * const tabtin = createClient({
  *   baseURL: 'https://api.example.com',

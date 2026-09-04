@@ -5,7 +5,7 @@
  * 半透明 mask 透出底层网页。主 renderer 仅把开关状态同步过去，并接收关闭回调。
  */
 import { useEffect } from 'react'
-import type { FtsSearchResultItem } from '@tabtin/app-shell'
+import type { FtsSearchResultItem } from '@muse/app-shell'
 import { useUIStore } from '@stores/useUIStore'
 import { useSpaceStore } from '@stores/useSpaceStore'
 import { useOrganizationStore } from '@stores/useOrganizationStore'
@@ -23,7 +23,7 @@ export function AppGlobalSearch() {
   const activeSpaceId = useSpaceStore((state) => state.selectedSpace?.id ?? null)
 
   useEffect(() => {
-    void window.tabtin?.overlay?.push({
+    void window.muse?.overlay?.push({
       type: 'global-search',
       open: globalSearchOpen,
       organizationId,
@@ -35,7 +35,7 @@ export function AppGlobalSearch() {
   }, [globalSearchOpen, organizationId, activeSpaceId])
 
   useEffect(() => {
-    const unsubscribe = window.tabtin?.overlay?.onGlobalSearchClosed?.(() => {
+    const unsubscribe = window.muse?.overlay?.onGlobalSearchClosed?.(() => {
       setGlobalSearchOpen(false)
     })
     return () => {
@@ -46,7 +46,7 @@ export function AppGlobalSearch() {
   // 主题跟随：把主窗口 documentElement 的主题快照广播给 overlay 子窗口 / overlay view。
   useEffect(() => {
     const broadcast = () => {
-      void window.tabtin?.overlay?.syncTheme?.(readThemeSnapshot())
+      void window.muse?.overlay?.syncTheme?.(readThemeSnapshot())
     }
     broadcast()
     const observer = new MutationObserver(broadcast)
@@ -59,7 +59,7 @@ export function AppGlobalSearch() {
 
   // 子窗口全局搜索点击结果 → 在主 renderer 执行真实导航（切 space / 开 tab / 进会话）。
   useEffect(() => {
-    const unsubscribe = window.tabtin?.overlay?.onNavigateSearchResult?.((raw) => {
+    const unsubscribe = window.muse?.overlay?.onNavigateSearchResult?.((raw) => {
       const payload = raw as NavigateSearchResultPayload | undefined
       if (!payload?.item) return
       void navigateSearchResult(payload.item as FtsSearchResultItem, {

@@ -25,7 +25,7 @@ class TaskWorkbenchProjectorTest {
             ChatMessage(
                 id = "m1",
                 role = "assistant",
-                content = "已创建 [问候文档](tabtin://resource/document/$docId)",
+                content = "已创建 [问候文档](muse://resource/document/$docId)",
                 createdAt = "2026-08-06T04:00:00Z",
             ),
         )
@@ -196,7 +196,7 @@ class TaskWorkbenchProjectorTest {
             ChatMessage(
                 id = "assistant-content-and-tools",
                 role = "assistant",
-                content = "已创建 [问候文档](tabtin://resource/document/doc-from-content)",
+                content = "已创建 [问候文档](muse://resource/document/doc-from-content)",
                 blocksJson = listOf(
                     BlockItem(
                         type = "tool_use",
@@ -261,7 +261,7 @@ class TaskWorkbenchProjectorTest {
                         "resource_id": "doc-001",
                         "resource_name": "项目周报",
                         "space_id": "space-001",
-                        "url": "tabtin://resource/document/doc-001"
+                        "url": "muse://resource/document/doc-001"
                       }
                     }
                   ]
@@ -382,9 +382,9 @@ class TaskWorkbenchProjectorTest {
     fun `link extractor ignores fenced code blocks`() {
         val text = """
             |```
-            |tabtin://resource/tabdoc/should-ignore
+            |muse://resource/tabdoc/should-ignore
             |```
-            |见 [真文档](tabtin://resource/tabdoc/real-doc)
+            |见 [真文档](muse://resource/tabdoc/real-doc)
         """.trimMargin()
         val links = TaskWorkbenchResourceLinkExtractor.extract(text)
         assertEquals(1, links.size)
@@ -446,7 +446,7 @@ class TaskWorkbenchProjectorTest {
                     ),
                     BlockItem(
                         type = "text",
-                        text = "附件见 [采集表](tabtin://resource/file/file-from-link)",
+                        text = "附件见 [采集表](muse://resource/file/file-from-link)",
                     ),
                 ),
                 createdAt = "2026-08-20T03:00:00Z",

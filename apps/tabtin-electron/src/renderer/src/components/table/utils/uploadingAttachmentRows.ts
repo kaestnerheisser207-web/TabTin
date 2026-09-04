@@ -1,4 +1,4 @@
-import { resolveRecordId } from '@tabtin/table-engine'
+import { resolveRecordId } from '@muse/table-engine'
 import { buildAttachmentUploadKey, type AttachmentTaskState } from '@/stores/useAttachmentStore'
 import type { GridDisplayRow, GridDisplayRows } from './gridDisplayUtils'
 

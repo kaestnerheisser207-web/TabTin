@@ -7,18 +7,18 @@
  * `tabtin-daemon config --set sentry_dsn=...`。不配置时不加载 SDK，零开销。
  *
  * 字段契约（tags 白名单 / 脱敏红线）：docs/agent/error-context-schema.md。
- * 脱敏与 Electron 同源（@tabtin/shared/sentry-scrub）；同指纹限频与 Django
+ * 脱敏与 Electron 同源（@muse/shared/sentry-scrub）；同指纹限频与 Django
  * 端 muse/sentry.py 同口径（每指纹每分钟最多 5 条），防止 relay/重试类
  * 高频错误路径打爆自部署 Sentry。
  *
- * Runtime（@tabtin/agent-runtime）本身不依赖 @sentry/*：run 级致命错误统一
+ * Runtime（@muse/agent-runtime）本身不依赖 @sentry/*：run 级致命错误统一
  * 由宿主 DaemonAgentHost.handleQuery 的 catch 调 `captureRunError` 收口，
  * capture 时显式带 run 上下文 tags——Daemon 并发多 session，全局 scope
  * setTag 会互相污染，收口处显式传 tags 才并发安全。
  */
 
 import { createRequire } from 'node:module';
-import { scrubSentryEvent } from '@tabtin/shared/sentry-scrub';
+import { scrubSentryEvent } from '@muse/shared/sentry-scrub';
 import type { DaemonConfig } from '../../../base/types/daemon-config.js';
 import { readDaemonVersion } from '../../../platform/system/update/daemon-version.js';
 import type { Logger } from './logger.js';

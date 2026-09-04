@@ -2,7 +2,7 @@
  * 统一错误类型定义（现阶段 Single Source of Truth）
  *
  * action-tools 通过 re-export 引用本文件，请勿在 action-tools / contracts 中重复定义。
- * `@tabtin/contracts/tool` 上的死镜像已删除；P2 将改为生成式单源。
+ * `@muse/contracts/tool` 上的死镜像已删除；P2 将改为生成式单源。
  */
 
 import { mapToToolErrorCode } from '../utils/error-mapping';
@@ -48,7 +48,7 @@ export enum ToolErrorCode {
   // code。adapter 经 bridge / 显式 case 映射为 runtime `tool_stale_read`，
   // 与入口校验 (validateReadBeforeWrite) 字节一致。
   STALE_READ = 'stale_read',
-  // W1 file pipeline 显式细分（与 `@tabtin/file-pipeline-errors` SSoT 对齐）。
+  // W1 file pipeline 显式细分（与 `@muse/file-pipeline-errors` SSoT 对齐）。
   // adapter 优先按这个 code 路由到 runtime `file_too_large`，让 25MB 大图等
   // 失败信号在 envelope 里精确呈现"图片过大"而非 generic "unsupported"。
   FILE_TOO_LARGE = 'file_too_large',

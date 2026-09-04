@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { LogIn } from 'lucide-react'
-import { Button, UserAvatar as IdentityAvatar } from '@tabtin/smartsheet-ui'
+import { Button, UserAvatar as IdentityAvatar } from '@muse/smartsheet-ui'
 import { AuthDialog } from '@/components/auth'
 import { useAuthStore, selectIsAuthenticated } from '@/stores/useAuthStore'
 import { useSettingsSpaceStore } from '@stores/useSettingsSpaceStore'

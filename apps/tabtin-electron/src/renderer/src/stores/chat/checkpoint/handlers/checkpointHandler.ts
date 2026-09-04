@@ -8,8 +8,8 @@
  * 消费；本文件仅保留 checkpoint_failed / success 两个事件。
  */
 
-import { AgentStreamEvents } from '@tabtin/ws-gateway-client'
-import type { DecisionSummary } from '@tabtin/chat-client'
+import { AgentStreamEvents } from '@muse/ws-gateway-client'
+import type { DecisionSummary } from '@muse/chat-client'
 import type { AgentStreamMessage, HandlerContext } from '../../stream/handlers/streamHandlerTypes'
 
 const DIFF_SYNC_DELAY_MS = 2000

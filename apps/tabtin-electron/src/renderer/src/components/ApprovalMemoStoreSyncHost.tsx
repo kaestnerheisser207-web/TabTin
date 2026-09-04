@@ -13,7 +13,7 @@ import { useEffect } from 'react'
  */
 export function ApprovalMemoStoreSyncHost(): null {
   useEffect(() => {
-    const api = window.tabtin?.agentEngine
+    const api = window.muse?.agentEngine
     if (!api?.onApprovalMemoChanged) return
     const unsubscribe = api.onApprovalMemoChanged(({ workspaceId }) => {
       if (!workspaceId) return

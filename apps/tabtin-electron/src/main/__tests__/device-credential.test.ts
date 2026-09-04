@@ -36,7 +36,7 @@ vi.mock('../logger', () => ({
 describe('Electron 设备凭据', () => {
   beforeEach(() => {
     vi.resetModules()
-    state.userData = mkdtempSync(join(tmpdir(), 'tabtin-device-credential-'))
+    state.userData = mkdtempSync(join(tmpdir(), 'muse-device-credential-'))
     state.encryptionAvailable = true
     state.decryptFails = false
     state.warn.mockClear()

@@ -1,4 +1,4 @@
-import { joinApiPath } from '@tabtin/config'
+import { joinApiPath } from '@muse/config'
 import type { RunHostLeaseResponse } from './run-host-lease-coordinator.js'
 
 export class SessionRunRegistrationHttpError extends Error {

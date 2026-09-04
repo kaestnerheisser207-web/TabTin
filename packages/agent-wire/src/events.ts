@@ -521,7 +521,7 @@ export function stripUserPrefix(eventType: string): string {
 // 识别契约升级为显式协议字段 `message_kind`（见
 // `stream-content-block.ts::MessageStartSchema.message_kind`），wire 层不再
 // 承载该字面量；daemon emit 时仍需要给 `model_id` 字段填占位字符串，该实现
-// 细节单点存活在 `@tabtin/agent-runtime::envelope-emitter.ts` 内部常量里，
+// 细节单点存活在 `@muse/agent-runtime::envelope-emitter.ts` 内部常量里，
 // 不再 cross-package export。
 
 export const ContentBlockEvents = {

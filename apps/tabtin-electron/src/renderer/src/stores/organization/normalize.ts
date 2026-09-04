@@ -1,1 +1,1 @@
-export { normalizeOrganization, normalizeOrganizationList, normalizeString } from '@tabtin/app-shell'
+export { normalizeOrganization, normalizeOrganizationList, normalizeString } from '@muse/app-shell'

@@ -18,7 +18,7 @@ TEST_CREDENTIAL_KEY = Fernet.generate_key().decode("ascii")
 
 
 @override_settings(
-    TABTIN_EDITION="community",
+    MUSE_EDITION="community",
     SERVICES_OSS_PROVIDER="local",
     CREDENTIAL_ENCRYPTION_KEY=TEST_CREDENTIAL_KEY,
 )
@@ -396,7 +396,7 @@ class CommunityBootstrapTests(TestCase):
         call_command("tabtin_bootstrap", edition="community", verbosity=0)
         call_command("tabtin_bootstrap", edition="community", verbosity=0)
 
-        with override_settings(TABTIN_EDITION="saas"):
+        with override_settings(MUSE_EDITION="saas"):
             with self.assertRaises(CommandError):
                 call_command("tabtin_bootstrap", edition="community", verbosity=0)
 
@@ -445,7 +445,7 @@ class CommunityBootstrapTests(TestCase):
             ).exists()
         )
 
-    @override_settings(TABTIN_EDITION="saas")
+    @override_settings(MUSE_EDITION="saas")
     def test_community_membership_hook_is_noop_in_saas(self):
         from apps.maintenance.community_bootstrap import (
             ensure_community_organization_membership,
@@ -459,7 +459,7 @@ class CommunityBootstrapTests(TestCase):
             MembershipTier.objects.filter(tier_type="community").exists(),
         )
 
-    @override_settings(TABTIN_EDITION="saas")
+    @override_settings(MUSE_EDITION="saas")
     def test_saas_legacy_seed_behavior_is_unchanged(self):
         from apps.services.llm.scenes.registry import SCENES
 

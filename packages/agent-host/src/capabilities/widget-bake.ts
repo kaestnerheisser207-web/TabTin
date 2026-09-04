@@ -2,8 +2,8 @@
  * show_widget 烤图 + OSS 上传实现（ 批4）。
  *
  * 归属：agent-runtime 是中性运行时内核，只定义 `BakeAndUploadFn` 注入契约
- * （见 `@tabtin/agent-runtime/tools` 的 BakeWidgetInput / BakeAndUploadResult）。
- * 具体的 offscreen 渲染、UI theme 解析、OSS 上传都依赖 `@tabtin/action-tools`
+ * （见 `@muse/agent-runtime/tools` 的 BakeWidgetInput / BakeAndUploadResult）。
+ * 具体的 offscreen 渲染、UI theme 解析、OSS 上传都依赖 `@muse/action-tools`
  * 业务包，属于宿主职责，故实现落在共享宿主包。装配 ToolProvider 时把
  * `bakeAndUploadWidget` 作为 `createShowWidgetTool`/`createPresentationTools`
  * 的 `bakeAndUpload` deps 注入。
@@ -19,11 +19,11 @@ import {
   resolveOffscreenRenderAPI,
   resolveUITheme,
   uploadFileToOSS,
-} from '@tabtin/action-tools/headless'
+} from '@muse/action-tools/headless'
 import type {
   BakeAndUploadResult,
   BakeWidgetInput,
-} from '@tabtin/agent-runtime/tools'
+} from '@muse/agent-runtime/tools'
 
 /**
  * 烤图 theme。Electron renderer 用 dark/light 时烤图跟着切；Daemon / headless

@@ -1,6 +1,6 @@
 /**
  * 目录自带 Skill 合成（ W3）：零 node 依赖，经
- * `@tabtin/agent-runtime/skills/workspace-skill-merge` 供 renderer / main 共用。
+ * `@muse/agent-runtime/skills/workspace-skill-merge` 供 renderer / main 共用。
  *
  * 遮蔽：按 `slug`；目录内同 slug 浅层优先；与基座冲突时目录版胜出。
  */

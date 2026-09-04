@@ -26,10 +26,10 @@ const FIXTURES = resolve(__dirname, '../../../../fixtures/poc-pdfs')
 /**
  * 性能断言放宽倍率（技术 Review P2-11 修复）。
  * 本地开发（M1 Pro）基线按 POC 数据，CI / 慢机器给 3× 余量避免 flaky。
- * 通过 `TABTIN_PERF_TOLERANCE` 可手动调整（例如 Intel Mac 跑 golden set）。
+ * 通过 `MUSE_PERF_TOLERANCE` 可手动调整（例如 Intel Mac 跑 golden set）。
  */
 const PERF_TOLERANCE = (() => {
-  const raw = process.env.TABTIN_PERF_TOLERANCE
+  const raw = process.env.MUSE_PERF_TOLERANCE
   if (raw) {
     const n = Number(raw)
     if (Number.isFinite(n) && n > 0) return n

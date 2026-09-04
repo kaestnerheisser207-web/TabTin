@@ -2,7 +2,7 @@
  * PPTElement → SceneObjects 适配器
  *
  * 将 TabSlide 的 PPTElement[] 转换为 media-core 的 SceneObjects 格式，
- * 使 tabslide 能直接使用 `@tabtin/media-core/fonts` 的 scanFonts 扫描能力。
+ * 使 tabslide 能直接使用 `@muse/media-core/fonts` 的 scanFonts 扫描能力。
  *
  * 映射策略：
  *   - PPTTextElement   → type:"text", fontFamily=defaultFontName, content 从 HTML 解析为树
@@ -11,9 +11,9 @@
  *   - 其他元素类型不含字体信息，跳过
  */
 
-import type { SceneObjects } from '@tabtin/media-core/fonts/types'
-import { scanFonts } from '@tabtin/media-core/fonts'
-import type { ScanResult } from '@tabtin/media-core/fonts'
+import type { SceneObjects } from '@muse/media-core/fonts/types'
+import { scanFonts } from '@muse/media-core/fonts'
+import type { ScanResult } from '@muse/media-core/fonts'
 import type {
   PPTElement,
   PPTTextElement,

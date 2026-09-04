@@ -25,7 +25,7 @@
  */
 
 import { useCallback } from 'react'
-import type { ChatMessage } from '@tabtin/chat-client'
+import type { ChatMessage } from '@muse/chat-client'
 import type { ContentBlockEntry } from '@stores/useChatRuntimeStore'
 import { setContentBlocksBridge } from './contentBlocksMirrorRegistry'
 import { useChatStore } from '@stores/chat/useChatStore'
@@ -34,7 +34,7 @@ import { ensureMessageRuntimeBlocks } from './ensureMessageRuntimeBlocks'
 export { ensureMessageRuntimeBlocks } from './ensureMessageRuntimeBlocks'
 
 // ── ChatMessage 旁挂前端内存字段 `blocks`（不入库） ─────────────────────
-declare module '@tabtin/chat-client' {
+declare module '@muse/chat-client' {
   interface ChatMessage {
     /**
      * 前端内存 SSoT（唯一 store）：实时 / 历史 / 子代理统一的 `ContentBlockEntry[]`

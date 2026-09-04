@@ -3,7 +3,7 @@ import { cleanup, render } from '@testing-library/react'
 import { afterEach, describe, expect, it } from 'vitest'
 import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
-import { remarkAutolinkResource } from '@tabtin/markdown-resource-autolink'
+import { remarkAutolinkResource } from '@muse/markdown-resource-autolink'
 
 afterEach(cleanup)
 

@@ -84,7 +84,7 @@ describe('MB-01: TableHistoryModal VH migration', () => {
   // ── UndoRedoApiService 方法存在性 ──
 
   it('UndoRedoApiService 应提供所有命名版本方法', async () => {
-    const { UndoRedoApiService } = await import('@tabtin/table-core')
+    const { UndoRedoApiService } = await import('@muse/table-core')
     expect(typeof UndoRedoApiService.listTableNamedVersions).toBe('function')
     expect(typeof UndoRedoApiService.createTableNamedVersion).toBe('function')
     expect(typeof UndoRedoApiService.renameTableNamedVersion).toBe('function')
@@ -94,7 +94,7 @@ describe('MB-01: TableHistoryModal VH migration', () => {
   // ── groupOperations 与命名版本 ID 匹配 ──
 
   it('命名版本 versionKey 能在 historyGroupById 中查找', async () => {
-    const { groupOperations } = await import('@tabtin/smartsheet-ui')
+    const { groupOperations } = await import('@muse/smartsheet-ui')
 
     const mockOps = [
       {

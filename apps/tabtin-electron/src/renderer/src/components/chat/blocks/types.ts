@@ -41,8 +41,8 @@
  */
 
 import type { MouseEvent } from 'react'
-import type { ContentBlock } from '@tabtin/agent-wire'
-import { ALL_BLOCK_TYPE_SET } from '@tabtin/agent-wire'
+import type { ContentBlock } from '@muse/agent-wire'
+import { ALL_BLOCK_TYPE_SET } from '@muse/agent-wire'
 import type { ContentBlockEntry } from '@stores/useChatRuntimeStore'
 import type { ToolPresentation } from '@stores/chat/shared/types'
 
@@ -169,7 +169,7 @@ export function blockEntryEqual(prev: BlockRendererProps, next: BlockRendererPro
  *
  * `dispatcher` 自身按 type 路由，不需要外面手判；该函数仅供单测断言用。
  *
- * **W4c · W4b-P1-1 子项 d 单源契约**：判定集合从 `@tabtin/agent-wire` 的
+ * **W4c · W4b-P1-1 子项 d 单源契约**：判定集合从 `@muse/agent-wire` 的
  * `ALL_BLOCK_TYPE_SET` 派生，与 dispatcher.ts 的 BLOCK_DISPATCH 列表必然
  * 一致——避免老版本"renderer / wire / Django 三处独立维护字符串列表"导致
  * 漏增 case 时 silent fallback。
@@ -243,7 +243,7 @@ export function partialReasonText(
 
 /**
  * @deprecated W4c · W4b-P1-1 子项 d：直接使用 `ALL_BLOCK_TYPE_SET`（来自
- * `@tabtin/agent-wire`），本 re-export 仅为不破坏老 import 路径而保留；
- * 任何新代码应直接 `import { ALL_BLOCK_TYPE_SET } from '@tabtin/agent-wire'`。
+ * `@muse/agent-wire`），本 re-export 仅为不破坏老 import 路径而保留；
+ * 任何新代码应直接 `import { ALL_BLOCK_TYPE_SET } from '@muse/agent-wire'`。
  */
 export const KNOWN_BLOCK_TYPES = ALL_BLOCK_TYPE_SET

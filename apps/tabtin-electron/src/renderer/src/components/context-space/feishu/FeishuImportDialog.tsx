@@ -10,7 +10,7 @@ import { useTranslation } from 'react-i18next'
 import {
   Building2, ChevronDown, ChevronRight, HelpCircle, Link2, Loader2, Trash2, Unplug,
 } from 'lucide-react'
-import { Skeleton } from '@tabtin/smartsheet-ui'
+import { Skeleton } from '@muse/smartsheet-ui'
 import {
   Button,
   Checkbox,
@@ -324,7 +324,7 @@ export const FeishuImportDialog: React.FC<FeishuImportDialogProps> = ({
 
   useEffect(() => {
     if (!open) return
-    const tabtin = window.tabtin
+    const tabtin = window.muse
     if (!tabtin?.deepLink?.onDeepLink) return
     return tabtin.deepLink.onDeepLink((data: { path: string; url: string }) => {
       if (!data.path.includes(FEISHU_CONNECTED_PATH)) return
@@ -339,7 +339,7 @@ export const FeishuImportDialog: React.FC<FeishuImportDialogProps> = ({
     setAuthorizing(true)
     try {
       const authorizeUrl = await startFeishuOAuth(organizationId)
-      const result = await window.tabtin?.openExternal?.(authorizeUrl)
+      const result = await window.muse?.openExternal?.(authorizeUrl)
       if (result && result.success === false) {
         throw new Error(result.error || 'openExternal failed')
       }
@@ -405,7 +405,7 @@ export const FeishuImportDialog: React.FC<FeishuImportDialogProps> = ({
 
   const handleOpenSetupGuide = useCallback(async () => {
     try {
-      const result = await window.tabtin?.openExternal?.(FEISHU_SETUP_GUIDE_URL)
+      const result = await window.muse?.openExternal?.(FEISHU_SETUP_GUIDE_URL)
       if (!result || result.success === false) {
         throw new Error(result?.error || 'openExternal unavailable')
       }

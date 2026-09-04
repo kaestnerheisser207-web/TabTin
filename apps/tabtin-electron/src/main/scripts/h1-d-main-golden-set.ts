@@ -61,7 +61,7 @@ const SAMPLES: Array<{
   { file: 'mixed.pdf', expected: { success: true }, notes: 'G1: 文本+图像混合（chars/page=487.8 > 100）' },
   {
     file: 'mostly-scanned.pdf',
-    // W1：errorClass 字面值与 `@tabtin/file-pipeline-errors` SSoT 对齐
+    // W1：errorClass 字面值与 `@muse/file-pipeline-errors` SSoT 对齐
     expected: { success: false, errorClass: 'scanned_pdf', fallbackToCloud: true },
     notes: 'G1+G2: 9 图 + 1 文，应被判扫描件切云端',
   },
@@ -112,7 +112,7 @@ async function runOne(sample: (typeof SAMPLES)[number]): Promise<SampleRun> {
     out.coldMs = coldMs
 
     // 分类决策（复制 localDocParse 逻辑，以便独立跑不 import 整个链路）。
-    // W1：errorClass 字面值与 `@tabtin/file-pipeline-errors` SSoT 对齐。
+    // W1：errorClass 字面值与 `@muse/file-pipeline-errors` SSoT 对齐。
     if (r.isScanned) {
       out.decision = { success: false, errorClass: 'scanned_pdf', fallbackToCloud: true }
     } else if ((out.qualityScore ?? 1) < 0.3) {
@@ -142,7 +142,7 @@ async function runOne(sample: (typeof SAMPLES)[number]): Promise<SampleRun> {
     const message = (err as Error)?.message ?? String(err)
     const nameL = name.toLowerCase()
     const msgL = message.toLowerCase()
-    // W1：errorClass 字面值与 `@tabtin/file-pipeline-errors` SSoT 对齐。
+    // W1：errorClass 字面值与 `@muse/file-pipeline-errors` SSoT 对齐。
     let errorClass: string = 'upstream_error'
     let fallback = true
     if (nameL.includes('password') || msgL.includes('password')) {

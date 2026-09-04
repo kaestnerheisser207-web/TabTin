@@ -85,9 +85,9 @@ export const DANGEROUS_INJECTION_PREFIXES: readonly string[] = [
  */
 export const SENSITIVE_ENV_VARS: ReadonlySet<string> = new Set([
   // Muse internal
-  'TABTIN_TOKEN',
-  'TABTIN_JWT',
-  'TABTIN_SOCK', // SD-039 Phase 1: socket 路径不应泄漏到子进程
+  'MUSE_TOKEN',
+  'MUSE_JWT',
+  'MUSE_SOCK', // SD-039 Phase 1: socket 路径不应泄漏到子进程
   // Cloud provider keys
   'AWS_SECRET_ACCESS_KEY',
   'AWS_SESSION_TOKEN',

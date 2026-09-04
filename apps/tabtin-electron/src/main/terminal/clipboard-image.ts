@@ -6,7 +6,7 @@
  */
 
 import { join } from 'path'
-import { getHomeTabtinPath } from '@tabtin/shared/storage-paths'
+import { getHomeTabtinPath } from '@muse/shared/storage-paths'
 import { mkdir, writeFile, readdir, stat, rm } from 'fs/promises'
 import { createHash } from 'crypto'
 

@@ -15,7 +15,7 @@
  * 了环境绑定"联系起来。这是一段 dogfood 期实测过的产品体验。
  */
 import { useEffect } from 'react'
-import { toast } from '@tabtin/smartsheet-ui/toast'
+import { toast } from '@muse/smartsheet-ui/toast'
 import { useTranslation } from 'react-i18next'
 import { createLogger } from '@/utils/logger'
 
@@ -26,7 +26,7 @@ export function usePartitionRebuildToast(enabled: boolean): void {
 
   useEffect(() => {
     if (!enabled) return
-    const onPartitionRebuilt = window.tabtin?.crawlView?.onPartitionRebuilt
+    const onPartitionRebuilt = window.muse?.crawlView?.onPartitionRebuilt
     if (typeof onPartitionRebuilt !== 'function') return
 
     const unsub = onPartitionRebuilt(({ tabId, oldPartition, newPartition, reason }) => {

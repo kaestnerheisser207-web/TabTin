@@ -5,7 +5,7 @@
  */
 import React, { useCallback, useMemo, useState } from 'react'
 import { Loader2, Plus } from 'lucide-react'
-import { Button, Popover, PopoverTrigger, PopoverContent } from '@tabtin/smartsheet-ui'
+import { Button, Popover, PopoverTrigger, PopoverContent } from '@muse/smartsheet-ui'
 import { useTranslation } from 'react-i18next'
 import { useSpaceApps } from '@stores/useSpaceApps'
 import { contextRegistry } from './registry'

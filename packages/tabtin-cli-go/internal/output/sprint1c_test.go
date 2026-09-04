@@ -396,21 +396,21 @@ func TestPrintResultForceBypassesQuiet(t *testing.T) {
 	}
 }
 
-// Q4：TABTIN_QUIET=1 env 等价于 --quiet flag
+// Q4：MUSE_QUIET=1 env 等价于 --quiet flag
 func TestQuietEnvVar(t *testing.T) {
-	t.Setenv("TABTIN_QUIET", "1")
+	t.Setenv("MUSE_QUIET", "1")
 	// 确保 quietMode flag 是 false（隔离 SetQuietMode 全局污染）
 	SetQuietMode(false)
 
 	if !IsQuietMode() {
-		t.Fatal("TABTIN_QUIET=1 时 IsQuietMode 应返 true")
+		t.Fatal("MUSE_QUIET=1 时 IsQuietMode 应返 true")
 	}
 
 	out := captureStdout(t, func() {
 		PrintResult(map[string]any{"a": 1}, FormatJSON)
 	})
 	if out != "" {
-		t.Errorf("TABTIN_QUIET=1 时 stdout 应空，得到 %q", out)
+		t.Errorf("MUSE_QUIET=1 时 stdout 应空，得到 %q", out)
 	}
 }
 
@@ -459,7 +459,7 @@ func TestGlobalOutputPathWritesFileNotStdout(t *testing.T) {
 
 // OUT8：手写命令 (`muse commands`) + 全局 --output 端到端 — 写盘 + stdout 抑制
 //
-// 用已编译的 dist/tabtin binary 真跑——这是 v10 P1 的核心证据：
+// 用已编译的 dist/muse binary 真跑——这是 v10 P1 的核心证据：
 // 之前手写命令不走全局写盘路径，现在必须生效。
 func TestGlobalOutputE2EHandwrittenCommands(t *testing.T) {
 	binPath := ensureTabtinBinary(t)
@@ -531,7 +531,7 @@ func min(a, b int) int {
 
 // E2E binary 包级单例——所有 E2E 测试共享一个 build 产物，避免重复 build。
 //
-// v10.4 P2 修复：之前 build 到 ../../dist/tabtin 会污染仓库工作区（与开发者
+// v10.4 P2 修复：之前 build 到 ../../dist/muse 会污染仓库工作区（与开发者
 // `make build` 互相覆盖；CI 上若并行跑也会竞争）。现在 build 到包级临时目录
 // 一次，所有 E2E 测试共用，干净退出时被 OS 清理。
 var (

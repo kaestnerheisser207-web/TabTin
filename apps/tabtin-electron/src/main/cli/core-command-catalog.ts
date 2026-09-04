@@ -1,7 +1,7 @@
 /**
  * Static CLI command catalog for UI/capability discovery.
  *
- * Previously generated dynamically by @tabtin/cli via Commander introspection.
+ * Previously generated dynamically by @muse/cli via Commander introspection.
  * Now maintained as static data — the single source of truth for UI-visible
  * command metadata. The Go CLI (packages/tabtin-cli-go) owns the runtime
  * implementation of these commands.

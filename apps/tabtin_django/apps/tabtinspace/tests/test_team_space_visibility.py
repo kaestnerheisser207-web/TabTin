@@ -19,7 +19,7 @@ from apps.tabtinspace.services.space_visibility import SpaceVisibility, user_can
 from apps.tabtinspace.tests.fixtures import create_test_user, create_test_organization
 
 
-@override_settings(TABTIN_ENABLE_PROJECTS=True)
+@override_settings(MUSE_ENABLE_PROJECTS=True)
 class TeamSpaceVisibilityTests(TestCase):
     databases = {"default", "postgresql"}
 

@@ -36,7 +36,7 @@ describe('editor content snapshot private images', () => {
 
     const snapshot = snapshotEditorContentWithRepair(editor as never)
 
-    expect(snapshot.markdown).toContain(`tabtin-file://asset/${fileId}`)
+    expect(snapshot.markdown).toContain(`muse-file://asset/${fileId}`)
     expect(editor.storage.markdown.getMarkdown).not.toHaveBeenCalled()
   })
 })

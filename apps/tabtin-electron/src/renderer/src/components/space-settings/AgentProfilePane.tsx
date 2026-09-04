@@ -21,7 +21,7 @@
 import React, { useMemo } from 'react'
 import {
   ScrollArea,
-} from '@tabtin/smartsheet-ui'
+} from '@muse/smartsheet-ui'
 import { useTranslation } from 'react-i18next'
 import { useSpaceStore } from '@stores/useSpaceStore'
 import { useOrganizationStore } from '@stores/useOrganizationStore'
@@ -39,7 +39,7 @@ import {
 } from '@stores/useAgentSettingsSheetStore'
 import { useChatStore } from '@stores/chat/useChatStore'
 import { useEffectiveSessionApprovalMode } from '@/stores/chat/session/sessionApprovalMode'
-import type { Space, Agent } from '@tabtin/app-shell'
+import type { Space, Agent } from '@muse/app-shell'
 import { cn } from '@utils/cn'
 import { ProfileModuleRow, SectionTitle } from './profile/ProfileModuleRow'
 import {

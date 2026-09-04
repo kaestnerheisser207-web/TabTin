@@ -4,7 +4,7 @@
  * 封装了创建流程中的公共关切：App 启用检查 + toast 提示。
  * 返回 true 表示可以继续执行，false 表示已被拦截。
  */
-import { toast } from '@tabtin/smartsheet-ui'
+import { toast } from '@muse/smartsheet-ui'
 import type { TFunction } from 'i18next'
 
 export function guardApp(

@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { AlertCircle, Clock, RefreshCw, Search } from 'lucide-react'
-import { AgentApiService } from '@tabtin/app-shell'
+import { AgentApiService } from '@muse/app-shell'
 import { Button, ScrollArea } from '@components/ui'
 import { useTranslation } from 'react-i18next'
 import { DetailedRowListSkeleton } from '@components/common/ListSkeletons'

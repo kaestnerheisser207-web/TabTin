@@ -2,7 +2,7 @@ import type { Conversation } from '@/services/tabchatApi';
 import {
   getConversationNavigationKind,
   type SpaceNavigationKind,
-} from '@tabtin/app-shell';
+} from '@muse/app-shell';
 import type { SpaceContext } from '@components/context-space/SpaceContextContainer';
 import type { CrawlspaceConfig } from '@stores/useCrawlTabStore';
 import { resolveSpaceCrawlspaceIdFromConfigs } from '@/crawlspace/registry';

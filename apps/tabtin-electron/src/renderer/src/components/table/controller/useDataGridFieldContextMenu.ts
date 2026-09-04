@@ -1,17 +1,17 @@
 import { useCallback, useState } from 'react'
-import { toast } from '@tabtin/smartsheet-ui'
+import { toast } from '@muse/smartsheet-ui'
 import {
   FieldApiService,
   isPrimaryFieldAllowedType,
   type Field,
   type ViewMeta,
   type ViewUpdateRequest,
-} from '@tabtin/table-core'
+} from '@muse/table-core'
 import {
   buildViewVisibilityColumnMetaOnlyUpdate,
   isPrimaryVisibilityLocked,
   getViewVisibilitySnapshot,
-} from '@tabtin/table-ui'
+} from '@muse/table-ui'
 import { useUndoRedoContext } from '@components/view/UndoRedoContext'
 
 interface UseDataGridFieldContextMenuInput {

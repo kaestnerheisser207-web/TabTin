@@ -12,7 +12,7 @@ import {
   isValidAuthIdentifier,
   normalizeAuthIdentifier,
   splitRegisterContact,
-} from '@tabtin/shared/auth-forms'
+} from '@muse/shared/auth-forms'
 
 type AuthMode = 'login' | 'register' | 'forgot'
 type LoginMethod = 'password' | 'verification'

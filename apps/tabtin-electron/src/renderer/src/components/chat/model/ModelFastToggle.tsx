@@ -6,7 +6,7 @@
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { cn } from '@utils/cn'
-import type { Model, ModelParamOverrides, ModelParamValue } from '@tabtin/chat-client'
+import type { Model, ModelParamOverrides, ModelParamValue } from '@muse/chat-client'
 import {
   isFastEnabledForModel,
   resolveModelFastToggle,

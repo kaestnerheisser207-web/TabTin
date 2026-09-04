@@ -2,8 +2,8 @@
  * Memory Hook —— 每轮把 AgentMemory 相关记忆注入 messages。
  *
  * **归属（ Phase 1）**：本 hook 原名 `buildMemoryInjectorHook`，住在
- * `@tabtin/agent-runtime` 的 `capability/injectors/memory-injector.ts`。因它依赖
- * `@tabtin/agent-prompt`，随「引擎零业务依赖」重构迁到宿主 `@tabtin/agent-host/hooks`。
+ * `@muse/agent-runtime` 的 `capability/injectors/memory-injector.ts`。因它依赖
+ * `@muse/agent-prompt`，随「引擎零业务依赖」重构迁到宿主 `@muse/agent-host/hooks`。
  * 行为逐字节一致，仅换归属与工厂名（`buildMemoryInjectorHook` → `buildMemoryHook`）。
  *
  * **行为（结构照抄 context hook）**：
@@ -20,26 +20,26 @@
  * 分数/新鲜度排序）完成——不是整句 `icontains`，也不是向量全文检索。
  * 低于候选阈值（零关键词命中）的行不会返回，hook 侧空数组即跳过注入。
  *
- * **段文本 SSoT**：渲染逻辑在 `@tabtin/agent-prompt` buildMemoryRecallSection。
+ * **段文本 SSoT**：渲染逻辑在 `@muse/agent-prompt` buildMemoryRecallSection。
  */
 
 import {
   buildMemoryRecallSection,
   buildUserContextWrapper,
   type MemoryRecallEntry,
-} from '@tabtin/agent-prompt'
-import type { Message, EngineHooks, IterationHookContext } from '@tabtin/agent-runtime/engine'
+} from '@muse/agent-prompt'
+import type { Message, EngineHooks, IterationHookContext } from '@muse/agent-runtime/engine'
 import {
   INTERNAL_MESSAGE_MARKERS,
   hasInternalMarker,
   findLastRealUserIndex,
-} from '@tabtin/agent-runtime/engine'
+} from '@muse/agent-runtime/engine'
 import { upsertTaggedBlock } from './message-inject.js'
 
 // ─── Public Types ────────────────────────────────────────────────────
 
 /**
- * 召回入参契约——同 `@tabtin/agent-runtime` `MemorySummary`（一份字段在
+ * 召回入参契约——同 `@muse/agent-runtime` `MemorySummary`（一份字段在
  * agent-prompt 包重复声明是为了不形成 runtime → prompt 反向依赖）。
  */
 export type MemoryRecallSummary = MemoryRecallEntry

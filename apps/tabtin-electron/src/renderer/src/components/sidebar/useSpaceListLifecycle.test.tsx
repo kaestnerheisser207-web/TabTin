@@ -214,12 +214,12 @@ vi.mock('@/services/membershipEventHandler', () => ({
 }));
 
 // Wave 3 收口：chatApi.ts → useWsConnectionStore → sessionResetRegistry
-// 这条链在 module 加载时会访问若干 @tabtin/app-shell 的顶层 export（
+// 这条链在 module 加载时会访问若干 @muse/app-shell 的顶层 export（
 // registerResetAction / ZIndex / useOrganizationStore / ...）。
 // 本测试只测 hook 行为，对 reset 注册表不关心，因此采用 importOriginal 模式
 // 保留真实 module，只 override `getRuntime` 注入测试 bridge。
-vi.mock('@tabtin/app-shell', async (importOriginal) => {
-  const actual = await importOriginal<typeof import('@tabtin/app-shell')>();
+vi.mock('@muse/app-shell', async (importOriginal) => {
+  const actual = await importOriginal<typeof import('@muse/app-shell')>();
   return {
     ...actual,
     AgentApiService: {

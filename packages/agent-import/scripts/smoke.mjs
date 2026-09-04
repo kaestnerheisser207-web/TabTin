@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 /**
  * 真实数据冒烟（本机只读）：detect 全家 → scan（近 30 天）→ 每家 parse 最新 2 条。
- * 用法：先 pnpm --filter @tabtin/agent-import build，再 node scripts/smoke.mjs [--all]
+ * 用法：先 pnpm --filter @muse/agent-import build，再 node scripts/smoke.mjs [--all]
  * 输出对账数字；不写入任何源目录（writeAttachment 落系统临时目录）。
  */
 

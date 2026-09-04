@@ -1,7 +1,7 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest'
-import { AgentStreamEvents } from '@tabtin/ws-gateway-client'
-import { StreamEvents } from '@tabtin/agent-wire'
-import type { ChatMessage } from '@tabtin/chat-client'
+import { AgentStreamEvents } from '@muse/ws-gateway-client'
+import { StreamEvents } from '@muse/agent-wire'
+import type { ChatMessage } from '@muse/chat-client'
 import type { RunState } from '../../../shared/types'
 
 const { mockAgentError } = vi.hoisted(() => ({

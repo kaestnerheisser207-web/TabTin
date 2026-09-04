@@ -10,7 +10,7 @@ import {
   compute429BackoffMs,
   extractRetryAfterFromProxyResult,
 } from '@shared/api-retry-config'
-import { errResponse, okResponse } from '@tabtin/agent-wire'
+import { errResponse, okResponse } from '@muse/agent-wire'
 import { API_BASE_URL, DISTRIBUTION_KIND } from './config/api'
 import { createLogger } from './logger'
 import { guardedHandle } from './utils/guarded-handle'
@@ -171,7 +171,7 @@ const SKILL_IMPORT_REQUEST_TIMEOUT_MS = 120_000
  */
 const DEV_SERVICE_BASE_ENV_KEYS = [
   'VITE_DAEMON_CONTROL_API_BASE_URL',
-  'TABTIN_DAEMON_CONTROL_API_BASE_URL',
+  'MUSE_DAEMON_CONTROL_API_BASE_URL',
 ] as const
 
 const allowedDevHosts: ReadonlySet<string> = (() => {

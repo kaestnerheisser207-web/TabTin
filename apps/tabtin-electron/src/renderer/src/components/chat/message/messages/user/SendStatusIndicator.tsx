@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { AlertCircle, Pencil, RotateCcw, Trash2 } from 'lucide-react'
 import { Popover, PopoverTrigger, PopoverContent } from '@components/ui'
-import type { ChatMessage } from '@tabtin/chat-client'
+import type { ChatMessage } from '@muse/chat-client'
 import {
   isProjectTaskEditAndResendBlocked,
   PROJECT_TASK_RUN_REQUIRED_MESSAGE,

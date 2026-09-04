@@ -4,7 +4,7 @@
  * 从 useDataImport.ts 提取，提供字段名映射、表名生成、图标、类型推断等能力。
  */
 
-import type { FieldType } from '@tabtin/table-core'
+import type { FieldType } from '@muse/table-core'
 import type { TaskState } from '../../types'
 import i18n from '@/i18n'
 

@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from 'vitest'
-import type { AgentConfigV3, WorkspaceSources } from '@tabtin/security-policy'
+import type { AgentConfigV3, WorkspaceSources } from '@muse/security-policy'
 import {
   applyAuthoritativeSecurityMutate,
   applyWorkspaceSnapshotMutate,

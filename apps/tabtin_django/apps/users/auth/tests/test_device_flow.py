@@ -89,8 +89,8 @@ class RequestDeviceCodeTests(DeviceFlowTestCase):
         self.assertEqual(record["device_name"], "MacBook")
 
     def test_verification_uri_configurable_via_settings(self):
-        """verification_uri 应读取 settings.TABTIN_DEVICE_VERIFY_URL"""
-        with self.settings(TABTIN_DEVICE_VERIFY_URL="https://tabtin.example.com/device"):
+        """verification_uri 应读取 settings.MUSE_DEVICE_VERIFY_URL"""
+        with self.settings(MUSE_DEVICE_VERIFY_URL="https://tabtin.example.com/device"):
             data = self._request_code()
             self.assertEqual(data["verification_uri"], "https://tabtin.example.com/device")
 

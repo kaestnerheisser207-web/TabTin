@@ -14,11 +14,11 @@ TrackerService 走 P0-1 三分支决策：
 **默认启用** —— 抓 P0-1 真实安全漏洞（tracker.space_id=None 时无任何鉴权
 导致跨 organization trigger_config 泄漏）的回归。
 
-Layer B — 真路径 dry-run 端点测试（TABTIN_REAL_DB_TEST=1 守护）
+Layer B — 真路径 dry-run 端点测试（MUSE_REAL_DB_TEST=1 守护）
 ──────────────────────────────────────────────────────
-守 ``TABTIN_REAL_DB_TEST=1``。**默认 SKIP**（项目客观无 PG/MySQL test
+守 ``MUSE_REAL_DB_TEST=1``。**默认 SKIP**（项目客观无 PG/MySQL test
 DB 基础设施 — 同 Wave 5 反思 16）。CI 接入 Django test workflow 后
-必须 ``env: TABTIN_REAL_DB_TEST: "1"`` 才能让真 ORM 路径生效。
+必须 ``env: MUSE_REAL_DB_TEST: "1"`` 才能让真 ORM 路径生效。
 
 Layer B 覆盖：
   7. 真 dry-run HTTP 端点（用 ninja TestClient）跨 organization 拒绝访问
@@ -36,7 +36,7 @@ Layer B 覆盖：
     4. ``test_dry_run_falls_back_to_synthetic_for_unsupported_app`` — P1-2 反向
     5. ``test_dry_run_unsupported_event_key_disclaimer`` — disclaimer 必返回
 
-  Layer B（TABTIN_REAL_DB_TEST=1 启用）：
+  Layer B（MUSE_REAL_DB_TEST=1 启用）：
     6. ``test_dry_run_loads_real_mail_events_for_tabmail``
     7. ``test_dry_run_loads_real_doc_events_for_tabdoc``
     8. ``test_dry_run_isolates_organization_in_real_events`` — 关键多租户隔离
@@ -51,7 +51,7 @@ from unittest.mock import MagicMock, patch
 from django.test import SimpleTestCase, TransactionTestCase
 
 
-_REQUIRES_REAL_DB = os.getenv("TABTIN_REAL_DB_TEST") == "1"
+_REQUIRES_REAL_DB = os.getenv("MUSE_REAL_DB_TEST") == "1"
 
 
 # ─── Layer A：权限决策路径单元测试（默认启用）─────────────────────
@@ -620,7 +620,7 @@ class DryRunDisclaimerTextTest(SimpleTestCase):
         self.assertNotIn("回放了", disclaimer)
 
 
-# ─── Layer B：真路径测试（TABTIN_REAL_DB_TEST=1 守护）──────────
+# ─── Layer B：真路径测试（MUSE_REAL_DB_TEST=1 守护）──────────
 
 
 if _REQUIRES_REAL_DB:

@@ -66,12 +66,12 @@ function withTimeout<T>(promise: Promise<T>, timeoutMs: number, message: string)
  * 调用 Electron 主进程的 invalidate-user-portrait-cache IPC。
  *
  * 故意不抛错——失效缓存失败不应阻塞用户操作；最坏情况是 Agent 在缓存 TTL
- * 过期前继续看到旧画像。Daemon / 浏览器宿主下 window.tabtin 不存在时同样 noop。
+ * 过期前继续看到旧画像。Daemon / 浏览器宿主下 window.muse 不存在时同样 noop。
  */
 async function invalidateMainProcessPortraitCache(organizationId: string, agentId: string): Promise<void> {
   try {
     const bridge = (typeof window !== 'undefined'
-      ? window.tabtin?.agentEngine?.invalidateUserPortraitCache
+      ? window.muse?.agentEngine?.invalidateUserPortraitCache
       : undefined)
     if (typeof bridge !== 'function') return
     await bridge(organizationId, agentId)

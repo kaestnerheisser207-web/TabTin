@@ -13,7 +13,7 @@ import {
   type FieldConversionResponse,
   type FieldConversionCheckResponse,
   type FieldDefaultValue,
-} from '@tabtin/table-core'
+} from '@muse/table-core'
 import type { ConversionPreviewData } from '../components/field/conversion-preview-dialog'
 
 const STRUCTURAL_TYPES: ReadonlySet<string> = new Set(['link'])

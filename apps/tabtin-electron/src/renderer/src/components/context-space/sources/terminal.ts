@@ -8,7 +8,7 @@
 import { useMemo, useCallback } from 'react'
 import { create } from 'zustand'
 import { createJSONStorage, persist } from 'zustand/middleware'
-import { withPersistSafety } from '@tabtin/shared'
+import { withPersistSafety } from '@muse/shared'
 import { contextRegistry } from '@components/context-space/registry/instance'
 import type { ContextItem } from '@components/context-space/registry/types'
 import i18n from '@/i18n'
@@ -39,7 +39,7 @@ export interface TerminalSession {
   cwd?: string
   /**
    * 真实执行 Space（PRD §1.5）。仅"执行 Agent 任务"上下文（对话绑定的执行 Space）
-   * 的终端才有值——用于 spawn 时设置 `TABTIN_SPACE_ID` 让 shell 内 CLI 知道在哪个
+   * 的终端才有值——用于 spawn 时设置 `MUSE_SPACE_ID` 让 shell 内 CLI 知道在哪个
    * Space 执行。桌面/本地沙箱终端无执行绑定 → undefined（不向 shell 注入 Space）。
    * 与 `spaceId`（标签桶 key）解耦：桶 key 可能是 desktop/conversation scope，
    * 而执行 Space 始终是真实 Space id。
@@ -537,7 +537,7 @@ export function createTerminalSessionInScope({
  * 「已停止」还是「请到对应设备停止」，避免静默 no-op 却弹成功 toast 的「假停止」。
  */
 export function killPtySession(sessionId: string): Promise<boolean> {
-  const tabtin = window.tabtin
+  const tabtin = window.muse
   const kill = tabtin?.pty?.kill
   if (!kill) return Promise.resolve(false)
 

@@ -9,7 +9,7 @@ from django.conf import settings
 # ── 数据库别名 ──
 TABDATA_DB_ALIAS = (
     'default'
-    if getattr(settings, 'TABTIN_SINGLE_DATABASE_MODE', False)
+    if getattr(settings, 'MUSE_SINGLE_DATABASE_MODE', False)
     else getattr(settings, 'TABDATA_DB', 'postgresql')
 )
 AITABLE_DB_ALIAS = TABDATA_DB_ALIAS  # 兼容旧引用

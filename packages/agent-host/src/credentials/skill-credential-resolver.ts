@@ -51,8 +51,8 @@
 import type {
   SkillCredentialInjection,
   SkillCredentialResolver,
-} from '@tabtin/agent-runtime/tools'
-import { joinApiPath } from '@tabtin/agent-runtime/tools'
+} from '@muse/agent-runtime/tools'
+import { joinApiPath } from '@muse/agent-runtime/tools'
 
 /**
  * 轻量 Logger 接口——宿主（electron-log / structured Logger / 测试 noop）

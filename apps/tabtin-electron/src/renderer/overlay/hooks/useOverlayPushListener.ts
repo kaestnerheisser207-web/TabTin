@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 
-import { getMessageController, message } from '@tabtin/smartsheet-ui/toast'
+import { getMessageController, message } from '@muse/smartsheet-ui/toast'
 import type {
   OverlayConfirmPayload,
   OverlayGlobalSearchPayload,
@@ -94,7 +94,7 @@ function handleToastControl(payload: OverlayToastControlPayload): void {
 
 export function useOverlayPushListener(options: UseOverlayPushListenerOptions = {}): void {
   useEffect(() => {
-    const unsubscribe = window.tabtin?.overlay?.subscribePush?.((payload: OverlayPushPayload) => {
+    const unsubscribe = window.muse?.overlay?.subscribePush?.((payload: OverlayPushPayload) => {
       if (payload.type === 'toast') {
         handleToastPayload(payload)
         return
@@ -106,19 +106,19 @@ export function useOverlayPushListener(options: UseOverlayPushListenerOptions = 
       if (payload.type === 'global-search') {
         options.onGlobalSearchChange?.(payload.open, payload)
         if (payload.open) {
-          window.tabtin?.overlay?.focusOverlay?.()
+          window.muse?.overlay?.focusOverlay?.()
         }
         return
       }
       if (payload.type === 'confirm') {
         options.onConfirmOpen?.(payload)
-        window.tabtin?.overlay?.focusOverlay?.()
+        window.muse?.overlay?.focusOverlay?.()
         return
       }
       if (payload.type === 'update-prompt') {
         options.onUpdatePromptChange?.(payload.open ? payload : null)
         if (payload.open) {
-          window.tabtin?.overlay?.focusOverlay?.()
+          window.muse?.overlay?.focusOverlay?.()
         }
         return
       }
@@ -134,7 +134,7 @@ export function useOverlayPushListener(options: UseOverlayPushListenerOptions = 
         }
         options.onNotificationChange?.(payload.open ? payload : null)
         if (payload.open) {
-          window.tabtin?.overlay?.focusOverlay?.()
+          window.muse?.overlay?.focusOverlay?.()
         }
         return
       }
@@ -143,7 +143,7 @@ export function useOverlayPushListener(options: UseOverlayPushListenerOptions = 
       }
     })
     const readyTimer = window.setTimeout(() => {
-      window.tabtin?.overlay?.notifyReady?.()
+      window.muse?.overlay?.notifyReady?.()
     }, 0)
 
     return () => {

@@ -6,7 +6,7 @@ import {
   type TableHttpResponse,
   configureTableDataClient,
   configureTableRuntime,
-} from '@tabtin/table-core'
+} from '@muse/table-core'
 
 let runtimeInitialized = false
 

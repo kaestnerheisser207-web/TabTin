@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
-import { Button, EmptyState, StatusNotice, Switch, toast } from '@tabtin/smartsheet-ui'
+import { Button, EmptyState, StatusNotice, Switch, toast } from '@muse/smartsheet-ui'
 import { Sparkles } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 

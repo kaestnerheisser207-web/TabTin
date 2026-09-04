@@ -1,5 +1,5 @@
 import { ipcMain, type IpcMainInvokeEvent, type IpcMainEvent } from 'electron'
-import { errResponse, type CliErrorResponse } from '@tabtin/agent-wire'
+import { errResponse, type CliErrorResponse } from '@muse/agent-wire'
 import { isTrustedSender, isTinSandboxSender } from '../auth'
 import { createLogger } from '../logger'
 import {
@@ -38,7 +38,7 @@ function deepFreeze<T>(value: T): T {
  *
  * Wave 0 contract — wire shape is the JSON form
  * `{"ok": false, "error": {"code": "UNAUTHORIZED", "message": "..."}}`
- * which matches `@tabtin/agent-wire`'s `CliErrorResponse`. Renderer code
+ * which matches `@muse/agent-wire`'s `CliErrorResponse`. Renderer code
  * branches on `ok === false` rather than the legacy `success` field.
  *
  * Wave 1 (D3) status: the rejection is **stamped per-call** with the
@@ -81,7 +81,7 @@ export function buildUnauthorizedReject(): Readonly<CliErrorResponse> {
  * 调用将被直接拒绝并记录日志。
  *
  * 拒绝路径返回的形状是 `{ ok:false, error:{ code:'UNAUTHORIZED', message }, trace_id }`
- * （`@tabtin/agent-wire` 的 envelope + W1 D3 trace_id stamp）。
+ * （`@muse/agent-wire` 的 envelope + W1 D3 trace_id stamp）。
  * renderer 端看到 ``ok === false`` 即可统一处理，不必再去 sniff 老的
  * `{ success:false, error:string }` 形状。
  *

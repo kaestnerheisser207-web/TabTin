@@ -1,7 +1,7 @@
 import React from 'react'
 import { fireEvent, render, screen, waitFor } from '@testing-library/react'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
-import type { RichContentBlock } from '@tabtin/chat-client'
+import type { RichContentBlock } from '@muse/chat-client'
 
 const handleResourceLinkClick = vi.fn()
 const handleResourceLinkContextMenu = vi.fn()
@@ -19,7 +19,7 @@ const mockVirtualModule = vi.mock as unknown as (
   factory: () => unknown,
   options: { virtual: boolean },
 ) => void
-mockVirtualModule('@tabtin/resource-router', () => ({
+mockVirtualModule('@muse/resource-router', () => ({
   parseResourcePointer: (href: string) => {
     const match = /^tabtin:\/\/resource\/([^/?#]+)\/([^?#]+)(?:\?([^#]*))?/.exec(href)
     const params = new URLSearchParams(match?.[3] ?? '')
@@ -34,7 +34,7 @@ mockVirtualModule('@tabtin/resource-router', () => ({
   },
 }), { virtual: true })
 
-vi.mock('@tabtin/smartsheet-ui', () => ({
+vi.mock('@muse/smartsheet-ui', () => ({
   DropdownMenu: ({ children }: { children: React.ReactNode }) => <div>{children}</div>,
   DropdownMenuTrigger: ({ children }: { children: React.ReactNode }) => <>{children}</>,
   DropdownMenuContent: ({ children }: { children: React.ReactNode }) => <div>{children}</div>,
@@ -177,12 +177,12 @@ describe('RichFile', () => {
     })
     openPath.mockResolvedValue({ success: true })
     showItemInFolder.mockResolvedValue({ success: true })
-    ;(window as unknown as { tabtin: Partial<Window['tabtin']> }).tabtin = {
+    ;(window as unknown as { tabtin: Partial<Window['muse']> }).tabtin = {
       openPath,
       showItemInFolder,
       fileSystem: {
         pathExists,
-      } as Partial<Window['tabtin']['fileSystem']> as Window['tabtin']['fileSystem'],
+      } as Partial<Window['muse']['fileSystem']> as Window['muse']['fileSystem'],
     }
   })
 
@@ -244,13 +244,13 @@ describe('RichFile', () => {
     expect(screen.queryByText('checked')).toBeNull()
 
     const card = screen.getByTestId('rich-file-card')
-    expect(card.getAttribute('data-href')).toBe('tabtin://resource/file/artifacts%2Freport.xlsx?hint=tabfiles&title=report.xlsx')
+    expect(card.getAttribute('data-href')).toBe('muse://resource/file/artifacts%2Freport.xlsx?hint=tabfiles&title=report.xlsx')
 
     // 普通点击走统一主动作（openPrimary → 可预览类型进 Space 预览）
     fireEvent.click(card)
     await waitFor(() => {
       expect(openResourceUrlInSpace).toHaveBeenCalledWith(
-        'tabtin://resource/file/artifacts%2Freport.xlsx?hint=tabfiles&title=report.xlsx',
+        'muse://resource/file/artifacts%2Freport.xlsx?hint=tabfiles&title=report.xlsx',
         null,
         expect.objectContaining({
           openIntentHints: expect.objectContaining({ filename: 'report.xlsx' }),
@@ -327,14 +327,14 @@ describe('RichFile', () => {
     expect(screen.getByText('card.openFile.format.csv · 5.0 KB')).toBeTruthy()
 
     const card = screen.getByTestId('rich-file-card')
-    expect(card.getAttribute('data-href')).toBe('tabtin://resource/file/artifacts%2Fdata.csv?hint=tabfiles&title=data.csv')
+    expect(card.getAttribute('data-href')).toBe('muse://resource/file/artifacts%2Fdata.csv?hint=tabfiles&title=data.csv')
   })
 
   it('uses provided url when present and shows non-passed self-check status', () => {
     render(
       <RichFile
         block={fileBlock({
-          url: 'tabtin://resource/file/artifacts%2Fbudget.xlsx?hint=tabfiles',
+          url: 'muse://resource/file/artifacts%2Fbudget.xlsx?hint=tabfiles',
           file_type: 'xlsx',
           filename: 'budget.xlsx',
           self_check: { status: 'warning', summary: '公式需要复查' },
@@ -347,7 +347,7 @@ describe('RichFile', () => {
     expect(screen.getByText('公式需要复查')).toBeTruthy()
 
     const card = screen.getByTestId('rich-file-card')
-    expect(card.getAttribute('data-href')).toBe('tabtin://resource/file/artifacts%2Fbudget.xlsx?hint=tabfiles')
+    expect(card.getAttribute('data-href')).toBe('muse://resource/file/artifacts%2Fbudget.xlsx?hint=tabfiles')
   })
 
   it('auto-opens newly created local file artifacts once', async () => {
@@ -365,7 +365,7 @@ describe('RichFile', () => {
 
     await waitFor(() => {
       expect(openResourceUrlInSpace).toHaveBeenCalledWith(
-        'tabtin://resource/file/artifacts%2Fauto.xlsx?hint=tabfiles&title=auto.xlsx&auto_open=1',
+        'muse://resource/file/artifacts%2Fauto.xlsx?hint=tabfiles&title=auto.xlsx&auto_open=1',
         undefined,
         expect.objectContaining({
           openIntentHints: { filename: 'auto.xlsx' },

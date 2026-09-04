@@ -53,7 +53,7 @@ logger = logging.getLogger(__name__)
 
 # ── tabtin_* 块类型常量集合（v3 §2.2 schema） ────────────────────────────
 
-TABTIN_BLOCK_TYPES: frozenset[str] = frozenset({
+MUSE_BLOCK_TYPES: frozenset[str] = frozenset({
     'tabtin_source_ref',
     'tabtin_rich_content',
     'tabtin_composer_preset',
@@ -315,7 +315,7 @@ def _transform_tabtin_approval_request(block: dict[str, Any]) -> dict[str, Any]:
 
 # ── 调度表：tabtin_* type → transform function ─────────────────────────
 
-_TABTIN_TRANSFORMERS: dict[str, Any] = {
+_MUSE_TRANSFORMERS: dict[str, Any] = {
     'tabtin_source_ref': _transform_tabtin_source_ref,
     'tabtin_rich_content': _transform_tabtin_rich_content,
     'tabtin_composer_preset': _transform_tabtin_composer_preset,
@@ -344,7 +344,7 @@ def strip_tabtin_blocks_for_llm(content_blocks: list[dict[str, Any]]) -> list[di
         content_blocks: ChatMessage.content_blocks_json 数组
 
     Returns:
-        新列表（不修改原列表）；tabtin_* 块按 _TABTIN_TRANSFORMERS 表转换；
+        新列表（不修改原列表）；tabtin_* 块按 _MUSE_TRANSFORMERS 表转换；
         Anthropic 标准块透传；未知块走 _transform_unknown fallback。
 
     幂等：纯函数，多次调用结果一致。
@@ -360,8 +360,8 @@ def strip_tabtin_blocks_for_llm(content_blocks: list[dict[str, Any]]) -> list[di
             )
             continue
         block_type = block.get('type', '')
-        if block_type in _TABTIN_TRANSFORMERS:
-            transformer = _TABTIN_TRANSFORMERS[block_type]
+        if block_type in _MUSE_TRANSFORMERS:
+            transformer = _MUSE_TRANSFORMERS[block_type]
             result.append(transformer(block))
         elif block_type in ANTHROPIC_STANDARD_BLOCK_TYPES:
             # 标准块保留协议字段，但剥离仅供 Muse UI 使用的展示元数据。

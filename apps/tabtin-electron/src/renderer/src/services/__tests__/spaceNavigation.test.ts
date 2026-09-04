@@ -9,7 +9,7 @@ vi.mock('../spaceSelection', () => ({
   ensureSpaceSelected: mockEnsureSpaceSelected,
 }));
 
-vi.mock('@tabtin/smartsheet-ui/toast', () => ({
+vi.mock('@muse/smartsheet-ui/toast', () => ({
   toast: mockToast,
 }));
 

@@ -58,8 +58,8 @@ vi.mock('lucide-react', async (importOriginal) => {
   }
 })
 
-vi.mock('@tabtin/smartsheet-ui', async (importOriginal) => {
-  const actual = await importOriginal<typeof import('@tabtin/smartsheet-ui')>()
+vi.mock('@muse/smartsheet-ui', async (importOriginal) => {
+  const actual = await importOriginal<typeof import('@muse/smartsheet-ui')>()
   return {
     ...actual,
     Sheet: ({ children }: { children: React.ReactNode }) => <div>{children}</div>,
@@ -155,7 +155,7 @@ vi.mock('@/components/table/utils/tableDrawerCoordinator', () => ({
   useCloseOnOtherTableDrawerOpen: vi.fn(),
 }))
 
-vi.mock('@tabtin/table-core', () => ({
+vi.mock('@muse/table-core', () => ({
   FieldApiService: {
     createField: mocks.createField,
     updateField: mocks.updateField,

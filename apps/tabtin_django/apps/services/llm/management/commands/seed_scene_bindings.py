@@ -432,7 +432,7 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         from django.conf import settings
 
-        if getattr(settings, "TABTIN_EDITION", "saas") == "community":
+        if getattr(settings, "MUSE_EDITION", "saas") == "community":
             if options.get("dry_run"):
                 self.stdout.write(
                     self.style.WARNING(

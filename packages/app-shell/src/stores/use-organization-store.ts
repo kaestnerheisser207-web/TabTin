@@ -3,13 +3,13 @@
  *
  * 平台差异通过 runtime bridge 注入：
  * - resetChatClient → bridge.resetChatClient()
- * - window.tabtin.space.setActive → bridge.setActiveSpace()
+ * - window.muse.space.setActive → bridge.setActiveSpace()
  * - useAuthStore.user.id → auth.getCurrentUserId()
  */
 
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
-import { withPersistSafety } from '@tabtin/shared'
+import { withPersistSafety } from '@muse/shared'
 import type {
   Organization,
   OrganizationMember,

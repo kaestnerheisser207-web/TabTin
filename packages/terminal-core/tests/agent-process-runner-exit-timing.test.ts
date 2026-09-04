@@ -14,7 +14,7 @@
  *      若有人把判定误改成 `close`、或 flush 卡死，本护栏立刻失败（observed ≈ 孙进程
  *      存活时长，远超阈值）。
  *
- *   2. **探针 smoke**（`exit timing probe ...`）：开 `TABTIN_DEBUG_EXIT_TIMING` 后，
+ *   2. **探针 smoke**（`exit timing probe ...`）：开 `MUSE_DEBUG_EXIT_TIMING` 后，
  *      关键时刻（spawn / child.exit / sidecar.observed / flush / result.resolve）都落
  *      带时间戳的行；关闭时零 IO（不建文件）。保证真机复现时拿得到可对照的数据。
  */
@@ -25,8 +25,8 @@ import * as os from 'node:os';
 import * as path from 'node:path';
 import { spawnAgentShellProcess } from '../src';
 
-const TIMING_ENV = 'TABTIN_DEBUG_EXIT_TIMING';
-const TIMING_FILE_ENV = 'TABTIN_DEBUG_EXIT_TIMING_FILE';
+const TIMING_ENV = 'MUSE_DEBUG_EXIT_TIMING';
+const TIMING_FILE_ENV = 'MUSE_DEBUG_EXIT_TIMING_FILE';
 
 function restoreEnv(key: string, prev: string | undefined): void {
   if (prev === undefined) delete process.env[key];
@@ -116,7 +116,7 @@ describe.skipIf(process.platform === 'win32')('spawnAgentShellProcess exit timin
       expect(lines).toContain('result.verdict');
       expect(lines).toContain('"verdict"');
       // 每行带相对 spawn 的毫秒差 + corr，可解析对照。
-      expect(lines).toMatch(/\[TABTIN_EXIT_TIMING\] corr=\S+ pid=\S+ t\+\d+ms /);
+      expect(lines).toMatch(/\[MUSE_EXIT_TIMING\] corr=\S+ pid=\S+ t\+\d+ms /);
 
       if (result.outputFilePath) {
         try {

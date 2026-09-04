@@ -1,6 +1,6 @@
 import type { ContextItem } from '@components/context-space/registry/types'
 import type { CrawlspaceViewInfo } from '@stores/useCrawlTabStore'
-import type { CreateTableRequest, Table } from '@tabtin/table-core'
+import type { CreateTableRequest, Table } from '@muse/table-core'
 
 export type BrowserContextSourceResult = {
   viewList: CrawlspaceViewInfo[]

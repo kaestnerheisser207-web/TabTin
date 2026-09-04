@@ -15,7 +15,7 @@ import {
   AccessStrategyService,
   setSharedAccessStrategyService,
   getSharedAccessStrategyService,
-} from '@tabtin/browser-core'
+} from '@muse/browser-core'
 import { createLogger } from '../logger'
 
 const log = createLogger('SiteAccessMemory')

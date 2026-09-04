@@ -5,7 +5,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
   cn,
-} from '@tabtin/smartsheet-ui'
+} from '@muse/smartsheet-ui'
 import { Plus } from 'lucide-react'
 import { VIEW_TYPE_ICONS } from './viewTypeIcons'
 

@@ -3,7 +3,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 vi.setConfig({ testTimeout: 20_000, hookTimeout: 20_000 })
 
 describe('useUIStore chat panel', () => {
-  const originalTabtin = window.tabtin
+  const originalTabtin = window.muse
 
   beforeEach(() => {
     vi.useFakeTimers()

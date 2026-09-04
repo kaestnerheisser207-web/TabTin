@@ -25,12 +25,12 @@ try {
   fs.writeFileSync(path.join(repo, 'pnpm-lock.yaml'), 'lockfileVersion: 9\n')
   fs.writeFileSync(
     path.join(repo, 'apps', 'tabtin-electron', 'package.json'),
-    JSON.stringify({ name: 'tabtin-electron', dependencies: { '@tabtin/example': 'workspace:*' } }),
+    JSON.stringify({ name: 'tabtin-electron', dependencies: { '@muse/example': 'workspace:*' } }),
   )
   fs.writeFileSync(
     path.join(repo, 'packages', 'example', 'package.json'),
     JSON.stringify({
-      name: '@tabtin/example',
+      name: '@muse/example',
       files: ['dist', 'src/styles'],
       dependencies: { alpha: '1.0.0' },
     }),
@@ -126,13 +126,13 @@ try {
 
   fs.writeFileSync(
     path.join(repo, 'packages', 'example', 'package.json'),
-    JSON.stringify({ name: '@tabtin/example', dependencies: { alpha: '2.0.0' } }),
+    JSON.stringify({ name: '@muse/example', dependencies: { alpha: '2.0.0' } }),
   )
   assert.equal(checkQuickDeployCache(repo, deploy).hit, false)
 
   fs.writeFileSync(
     path.join(repo, 'packages', 'example', 'package.json'),
-    JSON.stringify({ name: '@tabtin/example', dependencies: { alpha: '1.0.0' } }),
+    JSON.stringify({ name: '@muse/example', dependencies: { alpha: '1.0.0' } }),
   )
   writeQuickDeployCacheMarker(repo, deploy)
   const marker = path.join(deploy, '.tabtin-quick-deploy-cache.json')

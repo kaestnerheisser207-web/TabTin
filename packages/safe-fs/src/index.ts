@@ -1,5 +1,5 @@
 /**
- * @tabtin/safe-fs — node:fs 的薄包装，统一抛 OSAccessError
+ * @muse/safe-fs — node:fs 的薄包装，统一抛 OSAccessError
  *
  * 设计意图：
  *   - 所有本地文件操作都过这一层 → 任何 OS 拦截（macOS TCC / Windows ACL / 杀软 /
@@ -20,7 +20,7 @@ import {
   buildAVTimeoutError,
   classifyFsError,
   type OSError,
-} from '@tabtin/os-errors';
+} from '@muse/os-errors';
 
 /** 所有 safe-fs API 失败时抛的统一错误类型 */
 export class OSAccessError extends Error {
@@ -241,6 +241,6 @@ export function safeAccessSync(p: string, mode?: number): void {
   }
 }
 
-// 重新导出 os-errors 类型，方便调用方仅依赖 @tabtin/safe-fs
-export type { OSError, OSToolError } from '@tabtin/os-errors';
-export { toToolError, renderForAgent } from '@tabtin/os-errors';
+// 重新导出 os-errors 类型，方便调用方仅依赖 @muse/safe-fs
+export type { OSError, OSToolError } from '@muse/os-errors';
+export { toToolError, renderForAgent } from '@muse/os-errors';

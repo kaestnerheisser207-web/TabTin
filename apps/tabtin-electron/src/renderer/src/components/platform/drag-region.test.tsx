@@ -22,7 +22,7 @@ describe('window drag regions', () => {
 
     const region = screen.getByTestId('window-drag-region')
 
-    // eslint-disable-next-line tabtin/no-design-system-violations -- 断言源码渲染出 z-0 基线层，字面量本身不是样式
+    // eslint-disable-next-line muse/no-design-system-violations -- 断言源码渲染出 z-0 基线层，字面量本身不是样式
     expect(region.className).toContain('z-0')
     expect(region.getAttribute('style')).toContain(`height: ${WINDOW_DRAG_REGION_HEIGHT}px`)
     expect(region.getAttribute('style')).toContain(

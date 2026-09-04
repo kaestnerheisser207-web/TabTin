@@ -72,7 +72,7 @@ import {
   listBucketItems,
   registerStorageBucket,
   type BucketItem,
-} from '@tabtin/storage-manager'
+} from '@muse/storage-manager'
 
 const AGGREGATE_BUCKET_ID = 'drafts:all-unsaved'
 

@@ -19,7 +19,7 @@
  *   7. oss-url source 透传 declaredMimeType / sizeBytes 给 worker
  *   8. options.timeoutMs / channelLimitBytes 转换给 worker
  *
- * **mock 模式**：用 `vi.mock('@tabtin/local-docparse')` 替 parseLocalAttachment ——
+ * **mock 模式**：用 `vi.mock('@muse/local-docparse')` 替 parseLocalAttachment ——
  * 与 `tabcode-adapter-w2-dedup.test.ts:38-43` 同款。local-doc-parsers.ts 用
  * dynamic import 跨包 hoist，本 mock 100% 生效（W4 实施纪要明确说明）。
  */
@@ -32,18 +32,18 @@ import {
   XlsxParser,
 } from '../../index.js';
 import type { ParseDeps, RunTempPptxParse } from '../../index.js';
-import type { LocalDocParseResult, RunDocParserTask } from '@tabtin/local-docparse';
+import type { LocalDocParseResult, RunDocParserTask } from '@muse/local-docparse';
 
-vi.mock('@tabtin/local-docparse', async () => {
-  const actual = await vi.importActual<typeof import('@tabtin/local-docparse')>(
-    '@tabtin/local-docparse',
+vi.mock('@muse/local-docparse', async () => {
+  const actual = await vi.importActual<typeof import('@muse/local-docparse')>(
+    '@muse/local-docparse',
   );
   return { ...actual, parseLocalAttachment: vi.fn() };
 });
 
 // 拿到 mock 引用以便逐 case 设置返回值
 async function getParseLocalAttachmentMock() {
-  const mod = await import('@tabtin/local-docparse');
+  const mod = await import('@muse/local-docparse');
   return mod.parseLocalAttachment as unknown as ReturnType<typeof vi.fn>;
 }
 

@@ -1,4 +1,4 @@
-import type { ViewStore } from '@tabtin/table-core'
+import type { ViewStore } from '@muse/table-core'
 
 /** 离线 REST 或服务端限定查询参数（搜索/日历范围/看板分组分页等）。 */
 export const hasServerScopedRecordsQuery = (

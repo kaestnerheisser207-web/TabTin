@@ -22,7 +22,7 @@ type Factory struct {
 	GlobalTimeout time.Duration
 	JQExpr        string
 
-	// Quiet：--quiet / -Q / TABTIN_QUIET=1 时设 true。
+	// Quiet：--quiet / -Q / MUSE_QUIET=1 时设 true。
 	// 行为（Sprint 1.C）：
 	//   - 成功路径：stdout 抑制（含 batch 每行 + summary）
 	//   - 失败路径：error envelope 仍走 stderr（必出，agent 协议）
@@ -58,7 +58,7 @@ func (f *Factory) Transport() (transport.Transport, error) {
 			// Daemon 回退提示已挪到 transport.WithDjangoFallbackWarning，
 			// 在首次真实 Request 时触发，避免 `--help` 路径误打 stderr。
 			var mws []transport.Middleware
-			if os.Getenv("TABTIN_VERBOSE") == "1" || os.Getenv("TABTIN_DEBUG") == "1" {
+			if os.Getenv("MUSE_VERBOSE") == "1" || os.Getenv("MUSE_DEBUG") == "1" {
 				mws = append(mws, transport.WithVerboseLog())
 			}
 			if len(mws) > 0 {

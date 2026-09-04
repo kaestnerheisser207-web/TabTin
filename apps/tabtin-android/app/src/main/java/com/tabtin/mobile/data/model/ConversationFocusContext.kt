@@ -6,7 +6,7 @@ import kotlinx.serialization.json.JsonObject
 /**
  * Wire-neutral 不可变 Focus 快照。入队时冻结，重试只读本对象，不读此刻 Workbench。
  *
- * 字段对齐 `@tabtin/contracts` FocusSnapshot（camelCase）。revision 只能是可空 hint。
+ * 字段对齐 `@muse/contracts` FocusSnapshot（camelCase）。revision 只能是可空 hint。
  */
 @Serializable
 public data class ConversationFocusContext(

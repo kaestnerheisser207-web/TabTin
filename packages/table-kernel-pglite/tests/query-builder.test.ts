@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest'
 import { whereNodeToSql } from '../src/query-builder.js'
-import type { WhereNode } from '@tabtin/table-kernel'
+import type { WhereNode } from '@muse/table-kernel'
 
 describe('whereNodeToSql', () => {
   it('converts comparison node', () => {

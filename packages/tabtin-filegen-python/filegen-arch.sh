@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Shared arch helpers for tabtin-filegen packaging .
+# Shared arch helpers for muse-filegen packaging .
 # PyInstaller cannot cross-compile; callers must stamp and select per-OS/arch artifacts.
 
 filegen_detect_host_os() {
@@ -22,9 +22,9 @@ filegen_detect_host_arch() {
 filegen_generic_bin_name() {
   local os="${1:?}"
   if [ "$os" = "win32" ]; then
-    echo "tabtin-filegen.exe"
+    echo "muse-filegen.exe"
   else
-    echo "tabtin-filegen"
+    echo "muse-filegen"
   fi
 }
 
@@ -32,9 +32,9 @@ filegen_arch_bin_name() {
   local os="${1:?}"
   local arch="${2:?}"
   if [ "$os" = "win32" ]; then
-    echo "tabtin-filegen-${os}-${arch}.exe"
+    echo "muse-filegen-${os}-${arch}.exe"
   else
-    echo "tabtin-filegen-${os}-${arch}"
+    echo "muse-filegen-${os}-${arch}"
   fi
 }
 

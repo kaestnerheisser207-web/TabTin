@@ -51,8 +51,8 @@ export function normalizeOrigin(candidate?: string | null): string | null {
   if (value === 'file://' || value.startsWith('file:')) {
     return 'file://'
   }
-  if (value === 'tabtin-file://' || value.startsWith('tabtin-file:')) {
-    return 'tabtin-file://'
+  if (value === 'muse-file://' || value.startsWith('muse-file:')) {
+    return 'muse-file://'
   }
 
   try {
@@ -60,8 +60,8 @@ export function normalizeOrigin(candidate?: string | null): string | null {
     if (url.protocol === 'file:') {
       return 'file://'
     }
-    if (url.protocol === 'tabtin-file:') {
-      return 'tabtin-file://'
+    if (url.protocol === 'muse-file:') {
+      return 'muse-file://'
     }
     if (url.origin && url.origin !== 'null') {
       return url.origin
@@ -87,7 +87,7 @@ export function isTrustedDisplayMediaOrigin(origin: string | null | undefined, o
     return false
   }
 
-  if (normalized === 'file://' || normalized === 'tabtin-file://') {
+  if (normalized === 'file://' || normalized === 'muse-file://') {
     return true
   }
 

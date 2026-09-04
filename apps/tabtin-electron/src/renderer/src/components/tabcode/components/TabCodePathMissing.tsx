@@ -23,7 +23,7 @@
 import React, { useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
 import { FolderX, Settings } from 'lucide-react'
-import { Button, EmptyState } from '@tabtin/smartsheet-ui'
+import { Button, EmptyState } from '@muse/smartsheet-ui'
 import { useAgentSettingsSheetStore } from '@stores/useAgentSettingsSheetStore'
 import { useSpaceStore } from '@stores/useSpaceStore'
 

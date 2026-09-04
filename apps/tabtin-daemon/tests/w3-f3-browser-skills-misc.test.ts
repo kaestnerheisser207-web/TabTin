@@ -139,7 +139,7 @@ describe('BR-04: openTab() userAgent support', () => {
 describe('BR-05: skills.read projectId/spaceId compatibility', () => {
   /**
    * Unit-test the parameter normalisation logic without importing the
-   * full skills module (which requires @tabtin/terminal-core etc.).
+   * full skills module (which requires @muse/terminal-core etc.).
    * We extract the same logic used in execute():
    *   spaceId = (input.spaceId ?? (input as any).projectId)?.trim() || ''
    */

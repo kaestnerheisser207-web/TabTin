@@ -28,7 +28,7 @@ export interface WinRtToastInput {
    */
   bannerSeconds?: number
   /**
-   * 点击横幅时的 protocol 激活 URL（如 tabtin://notify?d=...）。
+   * 点击横幅时的 protocol 激活 URL（如 muse://notify?d=...）。
    * WinRT 在 Electron 外投递，必须靠系统协议唤起应用，不能依赖 Electron Notification click。
    */
   launchUrl?: string

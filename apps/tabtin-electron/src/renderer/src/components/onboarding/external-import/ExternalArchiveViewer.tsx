@@ -7,7 +7,7 @@
 
 import React, { useEffect, useState } from 'react'
 import { Archive, ArrowLeft } from 'lucide-react'
-import { Button } from '@tabtin/smartsheet-ui'
+import { Button } from '@muse/smartsheet-ui'
 import { cn } from '@utils/cn'
 
 interface ArchiveMessage {
@@ -55,7 +55,7 @@ export const ExternalArchiveViewer: React.FC<{
     let cancelled = false
     void (async () => {
       try {
-        const api = window.tabtin?.import
+        const api = window.muse?.import
         if (!api?.getArchive) {
           setError('当前客户端未暴露本机档案读取接口')
           return

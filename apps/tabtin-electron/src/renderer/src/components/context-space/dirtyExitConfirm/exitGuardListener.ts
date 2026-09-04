@@ -13,7 +13,7 @@
  * - requestDirtyExitConfirm 抛错 → 同上
  * - saveAll 部分失败 → toast 提示 + 仍 'cancel'（数据安全优先；用户可以手动重试）
  */
-import { toast } from '@tabtin/smartsheet-ui'
+import { toast } from '@muse/smartsheet-ui'
 import i18n from '@/i18n'
 import { collectAllDirty } from '../dirtyRegistry'
 import {
@@ -22,8 +22,8 @@ import {
 } from './dirtyExitConfirmStore'
 
 interface SetupOptions {
-  /** 测试钩子：覆盖 window.tabtin.exitGuard 接口 */
-  exitGuardBridge?: typeof window.tabtin.exitGuard
+  /** 测试钩子：覆盖 window.muse.exitGuard 接口 */
+  exitGuardBridge?: typeof window.muse.exitGuard
 }
 
 let cleanupFn: (() => void) | null = null
@@ -32,7 +32,7 @@ export function setupExitGuardListener(options: SetupOptions = {}): () => void {
   // 已注册过则先卸载（dev hot-reload 防 leak；生产场景 AppGlobalEffects 只 mount 一次）
   if (cleanupFn) cleanupFn()
 
-  const bridge = options.exitGuardBridge ?? window.tabtin?.exitGuard
+  const bridge = options.exitGuardBridge ?? window.muse?.exitGuard
   if (!bridge) {
     // 非 Electron 环境（test / web preview），跳过
     cleanupFn = null

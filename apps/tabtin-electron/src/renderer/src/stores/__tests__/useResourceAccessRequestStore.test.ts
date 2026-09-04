@@ -9,7 +9,7 @@ vi.mock('@/services/tabchatApi', () => ({
   approveResourceAccessRequest: mockApprove,
 }))
 
-vi.mock('@tabtin/smartsheet-ui/toast', () => ({
+vi.mock('@muse/smartsheet-ui/toast', () => ({
   toast: mockToast,
 }))
 

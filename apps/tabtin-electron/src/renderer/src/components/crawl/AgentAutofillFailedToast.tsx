@@ -51,9 +51,9 @@
  */
 import React, { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
-import { toast } from '@tabtin/smartsheet-ui/toast'
+import { toast } from '@muse/smartsheet-ui/toast'
 
-import { useSpaceStore } from '@tabtin/app-shell'
+import { useSpaceStore } from '@muse/app-shell'
 
 interface AgentAutofillFailedPayload {
   tabId: string
@@ -97,7 +97,7 @@ export const AgentAutofillFailedToast: React.FC = () => {
   const { t } = useTranslation('crawl')
 
   useEffect(() => {
-    const credentialVault = window.tabtin?.credentialVault
+    const credentialVault = window.muse?.credentialVault
     if (!credentialVault) return undefined
 
     const unsubs: Array<() => void> = []

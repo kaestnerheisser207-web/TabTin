@@ -9,7 +9,7 @@ import neutralSrc from '@/assets/stickers/tabtin-robot/neutral.svg?url'
 import sadSrc from '@/assets/stickers/tabtin-robot/sad.svg?url'
 import surpriseSrc from '@/assets/stickers/tabtin-robot/surprise.svg?url'
 
-export const TABTIN_ROBOT_PACK_ID = 'tabtin-robot' as const
+export const MUSE_ROBOT_PACK_ID = 'tabtin-robot' as const
 
 export type TabtinRobotStickerId =
   | 'neutral'
@@ -25,7 +25,7 @@ export interface TabtinRobotSticker {
   src: string
 }
 
-export const TABTIN_ROBOT_STICKERS: TabtinRobotSticker[] = [
+export const MUSE_ROBOT_STICKERS: TabtinRobotSticker[] = [
   { id: 'neutral', labelKey: 'stickers.neutral', src: neutralSrc },
   { id: 'happy', labelKey: 'stickers.happy', src: happySrc },
   { id: 'sad', labelKey: 'stickers.sad', src: sadSrc },
@@ -34,11 +34,11 @@ export const TABTIN_ROBOT_STICKERS: TabtinRobotSticker[] = [
 ]
 
 export function getTabtinRobotSticker(id: string): TabtinRobotSticker | undefined {
-  return TABTIN_ROBOT_STICKERS.find((item) => item.id === id)
+  return MUSE_ROBOT_STICKERS.find((item) => item.id === id)
 }
 
 export interface StickerMetadata {
-  pack: typeof TABTIN_ROBOT_PACK_ID
+  pack: typeof MUSE_ROBOT_PACK_ID
   id: TabtinRobotStickerId
 }
 
@@ -48,14 +48,14 @@ export function isTabtinRobotStickerMetadata(
   if (!value || typeof value !== 'object') return false
   const sticker = value as { pack?: unknown; id?: unknown }
   return (
-    sticker.pack === TABTIN_ROBOT_PACK_ID
+    sticker.pack === MUSE_ROBOT_PACK_ID
     && typeof sticker.id === 'string'
-    && TABTIN_ROBOT_STICKERS.some((item) => item.id === sticker.id)
+    && MUSE_ROBOT_STICKERS.some((item) => item.id === sticker.id)
   )
 }
 
 /** 发送产物文件名：tabtin-{id}.png（历史消息曾丢失 metadata.sticker 时的回退） */
-const TABTIN_STICKER_FILENAME_RE = /^tabtin-(neutral|happy|sad|surprise|cool)\.png$/i
+const MUSE_STICKER_FILENAME_RE = /^tabtin-(neutral|happy|sad|surprise|cool)\.png$/i
 
 /**
  * 解析气泡贴纸语义：优先 metadata.sticker；否则用发送时约定的文件名回退，
@@ -69,8 +69,8 @@ export function resolveTabtinRobotStickerMetadata(
   }
   const fileName = metadata?.file_name
   if (typeof fileName !== 'string') return null
-  const match = TABTIN_STICKER_FILENAME_RE.exec(fileName.trim())
+  const match = MUSE_STICKER_FILENAME_RE.exec(fileName.trim())
   if (!match) return null
   const id = match[1].toLowerCase() as TabtinRobotStickerId
-  return { pack: TABTIN_ROBOT_PACK_ID, id }
+  return { pack: MUSE_ROBOT_PACK_ID, id }
 }

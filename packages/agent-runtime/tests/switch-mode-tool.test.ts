@@ -14,7 +14,7 @@ import {
   isToolAllowedByPolicy,
   getAgentModeConfig,
   listFilteredToolNames,
-} from '@tabtin/agent-modes';
+} from '@muse/agent-modes';
 import type {
   Tool,
   ToolContext,

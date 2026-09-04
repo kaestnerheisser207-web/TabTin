@@ -8,8 +8,8 @@ const { bulkCreateRecordsMock } = vi.hoisted(() => ({
   }),
 }))
 
-vi.mock('@tabtin/table-core', async (importOriginal) => {
-  const actual = await importOriginal<typeof import('@tabtin/table-core')>()
+vi.mock('@muse/table-core', async (importOriginal) => {
+  const actual = await importOriginal<typeof import('@muse/table-core')>()
   return {
     ...actual,
     RecordApiService: {
@@ -31,7 +31,7 @@ import {
   MIN_NEW_TABLE_VISIBLE_ROW_COUNT,
   prefillNewTableRows,
 } from './prefillNewTableRows'
-import { RecordApiService } from '@tabtin/table-core'
+import { RecordApiService } from '@muse/table-core'
 
 describe('prefillNewTableRows', () => {
   beforeEach(() => {

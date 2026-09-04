@@ -1,4 +1,4 @@
-import { getRestrictedShellAllowlist, type AgentModeName } from '@tabtin/agent-modes'
+import { getRestrictedShellAllowlist, type AgentModeName } from '@muse/agent-modes'
 
 /**
  * ask / plan / study 都是 `tabtin-readonly` 受限模式。

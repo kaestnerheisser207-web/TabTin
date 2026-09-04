@@ -4,14 +4,14 @@ $ErrorActionPreference = 'Stop'
 
 $RepoRoot = Resolve-Path (Join-Path $PSScriptRoot '..\..\..')
 $SourcesJson = Join-Path $PSScriptRoot 'desktop-runtime-official-sources.json'
-$OfficeConfigJson = if ($env:TABTIN_OFFICE_RUNTIME_CONFIG) {
-    $env:TABTIN_OFFICE_RUNTIME_CONFIG
+$OfficeConfigJson = if ($env:MUSE_OFFICE_RUNTIME_CONFIG) {
+    $env:MUSE_OFFICE_RUNTIME_CONFIG
 } else {
     Join-Path $RepoRoot 'packages\office-preview-runtime\runtime.config.json'
 }
 $RegionResolver = Join-Path $PSScriptRoot 'resolve-office-runtime-region.mjs'
-$OfficeRoot = if ($env:TABTIN_OFFICE_RUNTIME_ROOT) {
-    $env:TABTIN_OFFICE_RUNTIME_ROOT
+$OfficeRoot = if ($env:MUSE_OFFICE_RUNTIME_ROOT) {
+    $env:MUSE_OFFICE_RUNTIME_ROOT
 } else {
     Join-Path $RepoRoot 'packages\office-preview-runtime\runtime'
 }
@@ -22,7 +22,7 @@ $Only = 'all'
 $Force = $false
 $Strict = $false
 $PlatformOverride = ''
-$Region = if ($env:TABTIN_RUNTIME_REGION) { $env:TABTIN_RUNTIME_REGION } else { 'auto' }
+$Region = if ($env:MUSE_RUNTIME_REGION) { $env:MUSE_RUNTIME_REGION } else { 'auto' }
 
 $i = 0
 while ($i -lt $args.Count) {
@@ -75,8 +75,8 @@ if ($Only -notin @('all', 'python', 'office')) {
     exit 2
 }
 
-if ($env:TABTIN_SKIP_DESKTOP_RUNTIME_FETCH -eq '1') {
-    Write-Host '⏭  TABTIN_SKIP_DESKTOP_RUNTIME_FETCH=1：跳过官方运行时拉取'
+if ($env:MUSE_SKIP_DESKTOP_RUNTIME_FETCH -eq '1') {
+    Write-Host '⏭  MUSE_SKIP_DESKTOP_RUNTIME_FETCH=1：跳过官方运行时拉取'
     exit 0
 }
 
@@ -114,8 +114,8 @@ if ($null -eq $resolvedRegion) {
 $Region = ([string]$resolvedRegion).Trim()
 Write-Host "  · Office 下载区域: $Region"
 
-$CacheDir = if ($env:TABTIN_DESKTOP_RUNTIME_CACHE_DIR) {
-    $env:TABTIN_DESKTOP_RUNTIME_CACHE_DIR
+$CacheDir = if ($env:MUSE_DESKTOP_RUNTIME_CACHE_DIR) {
+    $env:MUSE_DESKTOP_RUNTIME_CACHE_DIR
 } else {
     Join-Path $env:USERPROFILE '.cache\tabtin-desktop-runtimes'
 }
@@ -307,7 +307,7 @@ function Install-PythonRuntime {
     }
     $cfg = Get-Content -LiteralPath $PythonConfig -Raw | ConvertFrom-Json
     $archiveName = [string]$cfg.archives.$Platform
-    if (-not $archiveName) { $archiveName = "tabtin-python-runtime-$Platform.tar.gz" }
+    if (-not $archiveName) { $archiveName = "muse-python-runtime-$Platform.tar.gz" }
     $archivePath = Join-Path $PythonRuntimeDir $archiveName
     if ((Test-Path -LiteralPath $archivePath) -and -not $Force -and (Get-Item -LiteralPath $archivePath).Length -gt 0) {
         Write-Host "  · 跳过 Python 运行时构建：产物已存在 $archivePath"

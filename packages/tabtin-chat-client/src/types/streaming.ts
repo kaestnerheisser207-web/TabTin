@@ -352,7 +352,7 @@ export interface AskUserRequiredEventData {
 }
 
 /**
- * Access Barrier HITL payload——与 `@tabtin/agent-wire::AccessBarrierRequiredPayload` 同结构。
+ * Access Barrier HITL payload——与 `@muse/agent-wire::AccessBarrierRequiredPayload` 同结构。
  * 发起方是系统（能力层），不是模型，故不复用 `AskUserRequiredEventData`。
  */
 export interface AccessBarrierEventBarrier {

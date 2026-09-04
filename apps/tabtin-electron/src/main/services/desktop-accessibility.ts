@@ -14,7 +14,7 @@ import { execFile } from 'node:child_process'
 import { createLogger } from '../logger'
 import { DesktopError, DesktopErrorCode } from './desktop-error-codes'
 import { escapeAppleScript } from './desktop-window-helpers'
-import type { AccessibilityNode, AccessibilitySnapshot, AccessibilityTreeOpts } from '@tabtin/desktop-contracts'
+import type { AccessibilityNode, AccessibilitySnapshot, AccessibilityTreeOpts } from '@muse/desktop-contracts'
 
 const log = createLogger('DesktopAX')
 

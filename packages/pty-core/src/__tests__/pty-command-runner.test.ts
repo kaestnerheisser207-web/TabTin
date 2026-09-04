@@ -83,11 +83,11 @@ describe('PtyCommandRunner', () => {
       expect(writeFn).toHaveBeenCalled();
       const written = writeFn.mock.calls[0][1] as string;
 
-      const startMarkerMatch = written.match(/echo "(__TABTIN_CMD_START_[^"]+)"/);
+      const startMarkerMatch = written.match(/echo "(__MUSE_CMD_START_[^"]+)"/);
       expect(startMarkerMatch).not.toBeNull();
       const startMarker = startMarkerMatch![1];
 
-      const endMarkerMatch = written.match(/echo "(__TABTIN_CMD_END_[a-f0-9]+_)\$\?/);
+      const endMarkerMatch = written.match(/echo "(__MUSE_CMD_END_[a-f0-9]+_)\$\?/);
       expect(endMarkerMatch).not.toBeNull();
       const endMarkerPrefix = endMarkerMatch![1];
 
@@ -243,7 +243,7 @@ describe('PtyCommandRunner', () => {
       expect(result.backgrounded).toBe(true);
 
       const written = writeFn.mock.calls[0][1] as string;
-      const endMarkerMatch = written.match(/echo "(__TABTIN_CMD_END_[a-f0-9]+_)\$\?/);
+      const endMarkerMatch = written.match(/echo "(__MUSE_CMD_END_[a-f0-9]+_)\$\?/);
       expect(endMarkerMatch).not.toBeNull();
       const endMarkerPrefix = endMarkerMatch![1];
 

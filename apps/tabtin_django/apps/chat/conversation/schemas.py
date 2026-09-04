@@ -676,7 +676,7 @@ class CheckpointImpactDetailView(BaseModel):
 class CheckpointContextView(BaseModel):
     """决策上下文——回答「这个版本点为什么产生」。
 
-    字段对齐：本 schema 是后端 → 前端 `@tabtin/chat-client.CheckpointContext` 的契约。
+    字段对齐：本 schema 是后端 → 前端 `@muse/chat-client.CheckpointContext` 的契约。
     三端（Python Pydantic / TypeScript chat-client / VersionPanel item.checkpoint_context）
     字段名与语义必须严格一致；新增字段默认 `Optional` 以保证向后兼容。
 

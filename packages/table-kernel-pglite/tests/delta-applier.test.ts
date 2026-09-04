@@ -2,7 +2,7 @@ import { describe, it, expect, beforeEach, afterEach } from 'vitest'
 import { PGlite } from '@electric-sql/pglite'
 import { DeltaApplier } from '../src/index.js'
 import type { PGliteInstance } from '../src/index.js'
-import type { SyncRecordChange, FieldColumnMap } from '@tabtin/table-kernel'
+import type { SyncRecordChange, FieldColumnMap } from '@muse/table-kernel'
 
 describe('DeltaApplier', () => {
   let pg: PGliteInstance

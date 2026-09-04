@@ -25,7 +25,7 @@ vi.mock('@/config/api', () => ({
   },
 }))
 
-vi.mock('@tabtin/config', () => ({
+vi.mock('@muse/config', () => ({
   joinApiPath: (base: string, path: string) => `${base}${path}`,
 }))
 

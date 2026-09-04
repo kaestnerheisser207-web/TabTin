@@ -253,7 +253,7 @@ async function run() {
 
   const child = spawn('pnpm', ['build'], {
     cwd: appDir,
-    env: { ...process.env, TABTIN_BUILD_REPORT: '1' },
+    env: { ...process.env, MUSE_BUILD_REPORT: '1' },
     stdio: ['ignore', 'pipe', 'pipe'],
   });
 

@@ -9,8 +9,8 @@
 
 ## Resource Rules
 
-- Return TabDoc links as `tabtin://resource/document/<id>?hint=tabdoc`.
-- Return TabData links as `tabtin://resource/table/<id>?hint=tabdata` when a table id is available.
+- Return TabDoc links as `muse://resource/document/<id>?hint=tabdoc`.
+- Return TabData links as `muse://resource/table/<id>?hint=tabdata` when a table id is available.
 - Mention Tracker name/id only after creation succeeds.
 
 ## Do Not Guess

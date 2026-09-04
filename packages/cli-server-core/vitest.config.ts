@@ -8,8 +8,8 @@ export default defineConfig({
   },
   resolve: {
     alias: {
-      '@tabtin/cli-routes': resolve(__dirname, '../cli-routes/src/index.ts'),
-      '@tabtin/agent-wire': resolve(__dirname, '../agent-wire/src/index.ts'),
+      '@muse/cli-routes': resolve(__dirname, '../cli-routes/src/index.ts'),
+      '@muse/agent-wire': resolve(__dirname, '../agent-wire/src/index.ts'),
     },
   },
 })

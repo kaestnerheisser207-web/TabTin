@@ -13,7 +13,7 @@
  *   承接"点卡片外"= 关闭当前提示，让用户能立刻回到网页；modal 的 show/hide 由本
  *   组件按"是否有可见内容"通过 `overlay.setModalSourceOpen('save-password', ...)` 驱动（无内容即
  *   hide，网页恢复交互）。overlay 子窗口与主窗口共用同一 preload，故
- *   `window.tabtin.credentialVault.*` / `window.tabtin.overlay.*` 全部可用。
+ *   `window.muse.credentialVault.*` / `window.muse.overlay.*` 全部可用。
  *
  * 业务（PRD Story 2 + UI 5.3）：
  *   1. 用户在 TabWeb 提交登录表单 → 主进程 PASSWORD_CAPTURE_SCRIPT 捕获
@@ -117,21 +117,21 @@ export const SavePasswordBar: React.FC = () => {
 
   // 驱动 modal 子窗口 show/hide：有可见内容时 open(true) 让 modal
   // 显示且可点，无内容时 open(false) 撤出 modal source，无其他 source 时 modal
-  // hide、网页恢复交互。主 renderer 环境下 window.tabtin.overlay 不存在，? 链兜底。
+  // hide、网页恢复交互。主 renderer 环境下 window.muse.overlay 不存在，? 链兜底。
   useEffect(() => {
-    window.tabtin?.overlay?.setModalSourceOpen?.('save-password', isVisible)
+    window.muse?.overlay?.setModalSourceOpen?.('save-password', isVisible)
   }, [isVisible])
 
   // 卸载时确保撤出 modal source，避免 modal 卡在 show 状态挡住网页。
   useEffect(() => {
     return () => {
-      window.tabtin?.overlay?.setModalSourceOpen?.('save-password', false)
+      window.muse?.overlay?.setModalSourceOpen?.('save-password', false)
     }
   }, [])
 
   // 订阅 main 进程 save-prompt IPC
   useEffect(() => {
-    const tabtin = window.tabtin
+    const tabtin = window.muse
     if (!tabtin?.credentialVault?.onSavePrompt) return
     const cleanup = tabtin.credentialVault.onSavePrompt((payload: any) => {
       if (!payload || typeof payload.tabId !== 'string' || typeof payload.domain !== 'string') {
@@ -191,7 +191,7 @@ export const SavePasswordBar: React.FC = () => {
         pendingNeverTimerRef.current = null
         pendingNeverDomainRef.current = null
         if (domain) {
-          const tabtin = window.tabtin
+          const tabtin = window.muse
           void tabtin?.credentialVault?.saveDismiss?.({ domain })
         }
       }
@@ -227,7 +227,7 @@ export const SavePasswordBar: React.FC = () => {
     if (!prompt || submitting) return
     setSubmitting('save')
     try {
-      const tabtin = window.tabtin
+      const tabtin = window.muse
       if (!tabtin?.credentialVault?.saveConfirm) {
         throw new Error('saveConfirm IPC unavailable')
       }
@@ -264,14 +264,14 @@ export const SavePasswordBar: React.FC = () => {
       window.clearTimeout(pendingNeverTimerRef.current)
       const prevDomain = pendingNeverDomainRef.current
       if (prevDomain && prevDomain !== dismissedDomain) {
-        const tabtin = window.tabtin
+        const tabtin = window.muse
         // fire-and-forget：上一条立即下发；如果失败用户已看不到反馈，只能等 Wave 5 列表页
         void tabtin?.credentialVault?.saveDismiss?.({ domain: prevDomain })
       }
     }
     pendingNeverDomainRef.current = dismissedDomain
     pendingNeverTimerRef.current = window.setTimeout(() => {
-      const tabtin = window.tabtin
+      const tabtin = window.muse
       if (!tabtin?.credentialVault?.saveDismiss) {
         pendingNeverTimerRef.current = null
         pendingNeverDomainRef.current = null
@@ -320,7 +320,7 @@ export const SavePasswordBar: React.FC = () => {
     // 已超 5s 真写过了 → 走真 DELETE 反向写
     setSubmitting('undismiss')
     try {
-      const tabtin = window.tabtin as any
+      const tabtin = window.muse as any
       if (!tabtin?.credentialVault?.saveUndismiss) {
         throw new Error('saveUndismiss IPC unavailable')
       }

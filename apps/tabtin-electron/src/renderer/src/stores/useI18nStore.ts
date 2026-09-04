@@ -2,7 +2,7 @@
 
 import { create } from 'zustand'
 import { createJSONStorage, persist } from 'zustand/middleware'
-import { createMigratingStorage, withPersistSafety } from '@tabtin/shared'
+import { createMigratingStorage, withPersistSafety } from '@muse/shared'
 import { PERSIST_KEYS } from './persist-key-registry'
 import i18n from 'i18next'
 import apiService from '@/services/api'
@@ -40,7 +40,7 @@ const applyLanguage = (language: SupportedLanguage) => {
   }
   // overlay / 独立窗口是另一套 i18n 实例，切换后必须显式广播。
   try {
-    window.tabtin?.overlay?.syncLocale?.(language)
+    window.muse?.overlay?.syncLocale?.(language)
   } catch {
     /* overlay may not be ready */
   }

@@ -185,7 +185,7 @@ class CloudStateCollector:
             )
         }
         runtime_storage_gb = int(
-            getattr(settings, "TABTIN_CLOUD_RUNTIME_STORAGE_GB", 2)
+            getattr(settings, "MUSE_CLOUD_RUNTIME_STORAGE_GB", 2)
         )
         retained_storage = {
             row["worker_id"]: int(row["workspace_storage"] or 0)

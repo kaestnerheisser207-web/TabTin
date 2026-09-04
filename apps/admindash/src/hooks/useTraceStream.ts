@@ -1,13 +1,13 @@
 /**
  * useTraceStream Hook
- * 实时订阅 Trace 的 WS 事件流 — 基于 @tabtin/ws-gateway-client
+ * 实时订阅 Trace 的 WS 事件流 — 基于 @muse/ws-gateway-client
  */
 
 import { getApiClient } from '@/api/tabtin-client'
 import { ORGANIZATION_API } from '@/config/api'
 import type { SSEConnectedEvent, SSETraceEvent } from '@/types/agent-debug'
 import { getOrCreateDeviceId } from '@/utils/deviceId'
-import { type GatewayEnvelope, WsGatewayClient } from '@tabtin/ws-gateway-client'
+import { type GatewayEnvelope, WsGatewayClient } from '@muse/ws-gateway-client'
 import { useCallback, useEffect, useRef, useState } from 'react'
 
 interface UseTraceStreamOptions {

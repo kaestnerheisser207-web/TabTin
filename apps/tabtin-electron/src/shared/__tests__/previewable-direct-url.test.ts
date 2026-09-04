@@ -21,7 +21,7 @@ describe('previewable-direct-url', () => {
 
   it('only accepts https/blob/data direct schemes', () => {
     expect(isLegacyDirectPreviewUrl('https://x.com/a.xlsx')).toBe(true)
-    expect(isPreviewableDirectFileUrl('tabtin://resource/file/a.xlsx')).toBe(false)
+    expect(isPreviewableDirectFileUrl('muse://resource/file/a.xlsx')).toBe(false)
     expect(isPreviewableDirectFileUrl('file:///tmp/a.xlsx')).toBe(false)
   })
 })

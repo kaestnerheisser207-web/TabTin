@@ -88,9 +88,9 @@ function parseArgs(argv: string[]): CliArgs {
 
 async function commandDoctor(repoRoot: string, args: CliArgs): Promise<void> {
   const checks = [
-    await checkHttp("django", envUrl("TABTIN_API_BASE_URL", "http://127.0.0.1:6060/health")),
-    await checkHttp("collab-live", envUrl("TABTIN_COLLAB_HEALTH_URL", "http://127.0.0.1:4100/health")),
-    await checkTcp("centrifugo", envHost("TABTIN_CENTRIFUGO_HOST", "127.0.0.1"), envPort("CENTRIFUGO_PORT", 8100)),
+    await checkHttp("django", envUrl("MUSE_API_BASE_URL", "http://127.0.0.1:6060/health")),
+    await checkHttp("collab-live", envUrl("MUSE_COLLAB_HEALTH_URL", "http://127.0.0.1:4100/health")),
+    await checkTcp("centrifugo", envHost("MUSE_CENTRIFUGO_HOST", "127.0.0.1"), envPort("CENTRIFUGO_PORT", 8100)),
     await checkElectronCdp(repoRoot, Boolean(args.flags.get("require-electron"))),
     await checkPath(repoRoot, "apps/tabtin-electron/package.json"),
     await checkArtifactWritable(repoRoot),

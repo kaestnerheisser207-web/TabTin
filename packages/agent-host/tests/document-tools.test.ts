@@ -13,7 +13,7 @@ import { createDocumentTools } from '../src/tools/document-tools.js';
 import type {
   Tool,
   ToolContext,
-} from '@tabtin/agent-runtime';
+} from '@muse/agent-runtime';
 
 const noopContext: ToolContext = {
   threadId: 't',

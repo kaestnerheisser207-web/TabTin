@@ -3,14 +3,14 @@
  *
  * 将原 `ElectronAgentHost.ts:1246-1291` 中的三个只读查询 handler 迁移：
  *   - agent-security:get-workspace-snapshot — 遍历 sessions 查找匹配 spaceId 的快照
- *   - agent-security:build-approval-key    — 调 @tabtin/security-policy 构建审批 key
- *   - agent-security:build-scope-description — 调 @tabtin/security-policy 构建 scope 描述
+ *   - agent-security:build-approval-key    — 调 @muse/security-policy 构建审批 key
+ *   - agent-security:build-scope-description — 调 @muse/security-policy 构建 scope 描述
  *
  * 这三个都是只读操作（D-6 注释确认"保留的只读查询"），不发 HTTP、无 URL bug 隐患。
  *
  * 设计：工厂模式 `createAgentSecuritySurfaces(deps)`，通过闭包捕获
  * ElectronAgentHost 的 sessions 查询能力和 security-policy 函数。
- * cli-server-core 不直接依赖 @tabtin/security-policy，由宿主传入。
+ * cli-server-core 不直接依赖 @muse/security-policy，由宿主传入。
  */
 
 import { definePlatformSurface } from '../surface/define-platform-surface.js'
@@ -19,7 +19,7 @@ import { SurfaceError } from '../surface/types.js'
 // ─── 依赖接口 ─────────────────────────────────────────────────────
 
 /**
- * WorkspaceSnapshot 简化接口（与 @tabtin/security-policy WorkspaceSnapshot 对齐）。
+ * WorkspaceSnapshot 简化接口（与 @muse/security-policy WorkspaceSnapshot 对齐）。
  *
  * surface 仅透传整个 snapshot，不消费 `sources` 内部字段，所以这里把
  * `sources` 放宽成 `unknown`，避免对宿主的 `WorkspaceSources` 结构化类型
@@ -36,8 +36,8 @@ export interface WorkspaceSnapshotLike {
  *
  * 宿主（Electron / Daemon）在启动时传入：
  *   - findWorkspaceSnapshot: 从 AgentHost sessions Map 中查找匹配 spaceId 的快照
- *   - buildApprovalKey: @tabtin/security-policy 的 buildApprovalKey 函数
- *   - buildScopeDescription: @tabtin/security-policy 的 buildScopeDescription 函数
+ *   - buildApprovalKey: @muse/security-policy 的 buildApprovalKey 函数
+ *   - buildScopeDescription: @muse/security-policy 的 buildScopeDescription 函数
  */
 export interface AgentSecurityDeps {
   findWorkspaceSnapshot(spaceId: string): WorkspaceSnapshotLike | null

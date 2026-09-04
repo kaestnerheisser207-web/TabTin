@@ -1,24 +1,24 @@
 /**
- * @tabtin/markdown-resource-autolink — chat MarkdownRenderer 用的 remark plugin
+ * @muse/markdown-resource-autolink — chat MarkdownRenderer 用的 remark plugin
  *
  * 把 Agent 流式输出 / 用户粘贴的**裸资源链接与裸路径**升级为可点击 link 节点：
  *
  *   "看这个文件 /Users/developer/sandbox/log.json 里的统计"
- *     → "看这个文件 [/Users/developer/sandbox/log.json](tabtin://resource/file/...) 里的统计"
+ *     → "看这个文件 [/Users/developer/sandbox/log.json](muse://resource/file/...) 里的统计"
  *
  *   "Windows 路径 C:\\projects\\report.html 也支持"
- *     → "Windows 路径 [C:\\projects\\report.html](tabtin://resource/file/...) 也支持"
+ *     → "Windows 路径 [C:\\projects\\report.html](muse://resource/file/...) 也支持"
  *
- *   "打开 tabtin://resource/table/tbl_1?hint=tabdata"
- *     → "打开 [tabtin://resource/table/tbl_1?...](tabtin://resource/table/tbl_1?...)"
+ *   "打开 muse://resource/table/tbl_1?hint=tabdata"
+ *     → "打开 [muse://resource/table/tbl_1?...](muse://resource/table/tbl_1?...)"
  *
  * 设计取舍（参照专题 RFC §3.5 / W0 N1-9）：
  *   - 只识别**绝对路径**（^/ 或 ^[A-Z]:\\）。相对路径在渲染层无 baseDir 上下文，
  *     交给 D5 行业格式 `file://` 显式表达，本插件不猜
  *   - http(s) URL 由 remark-gfm 初步识别；本插件修正裸链接边界，并补 GFM
  *     不识别的 Muse 自有资源协议
- *   - 升级目标用 `tabtin://resource/file/<encoded>` 形态，让下游 Router 走
- *     自有格式 type=file 派发；与 iOS 已自约定的 `tabtin://resource/<type>/<id>`
+ *   - 升级目标用 `muse://resource/file/<encoded>` 形态，让下游 Router 走
+ *     自有格式 type=file 派发；与 iOS 已自约定的 `muse://resource/<type>/<id>`
  *     形态对齐（详见 RFC §10.1）
  *   - 路径里允许 ASCII / Unicode 文本字符，但不允许空格 — Agent 想要含空格
  *     路径必须用 markdown 链接 `[文本](file:///...)` 形态显式表达
@@ -75,8 +75,8 @@ const ABS_PATH_GLOBAL = new RegExp(
 )
 
 /** GFM 不识别的 Muse 自有资源协议；尾随句读不属于链接。 */
-const TABTIN_RESOURCE_GLOBAL = /(?:muse|tabtin-preprod|tabtin-dev):\/\/resource\/[^\s<>"'`]+/gu
-const TABTIN_RESOURCE_TRAILING = /[.,;:!?)\]}'"，。！？、；：）】]+$/u
+const MUSE_RESOURCE_GLOBAL = /(?:muse|muse-preprod|muse-dev):\/\/resource\/[^\s<>"'`]+/gu
+const MUSE_RESOURCE_TRAILING = /[.,;:!?)\]}'"，。！？、；：）】]+$/u
 
 /**
  * GFM autolink literal 会把紧邻 URL 的中文句读和说明一并放进 link 节点。
@@ -160,19 +160,19 @@ function splitBareHttpText(value: string): PhrasingContent[] {
 interface AutolinkOptions {
   /**
    * 自定义 URI builder（测试覆盖 / 跨端兼容用）；默认走
-   * `tabtin://resource/file/<encodeURIComponent(rawPath)>`。
+   * `muse://resource/file/<encodeURIComponent(rawPath)>`。
    */
   buildUri?: (rawPath: string) => string
 }
 
 /**
- * 默认 URI builder：升级裸路径为 D5 自有格式 `tabtin://resource/file/<id>`。
+ * 默认 URI builder：升级裸路径为 D5 自有格式 `muse://resource/file/<id>`。
  *
  * 与 W2 `packages/resource-router` parser 字符级对齐：parse 后还原 pointer.id =
  * 原始路径（urldecode）；scheme='muse' / type='file' / hint=null。
  */
 function defaultBuildUri(rawPath: string): string {
-  return `tabtin://resource/file/${encodeURIComponent(rawPath)}`
+  return `muse://resource/file/${encodeURIComponent(rawPath)}`
 }
 
 /**
@@ -218,10 +218,10 @@ export const remarkAutolinkResource: Plugin<[AutolinkOptions?], Root> = (
       // ── 扫描所有匹配点 ───────────────────────────────────────────
       const matches: Array<{ start: number; end: number; raw: string; url: string }> = []
       let m: RegExpExecArray | null
-      TABTIN_RESOURCE_GLOBAL.lastIndex = 0
-      while ((m = TABTIN_RESOURCE_GLOBAL.exec(value)) !== null) {
+      MUSE_RESOURCE_GLOBAL.lastIndex = 0
+      while ((m = MUSE_RESOURCE_GLOBAL.exec(value)) !== null) {
         const candidate = m[0]
-        const trailing = candidate.match(TABTIN_RESOURCE_TRAILING)?.[0] ?? ''
+        const trailing = candidate.match(MUSE_RESOURCE_TRAILING)?.[0] ?? ''
         const raw = trailing ? candidate.slice(0, candidate.length - trailing.length) : candidate
         if (!raw) continue
         matches.push({

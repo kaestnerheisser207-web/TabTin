@@ -15,7 +15,7 @@ import {
   resolvePlatformDataRoot,
   resolveSpaceSkillDir,
   resolveUserSkillDir,
-} from '@tabtin/terminal-core';
+} from '@muse/terminal-core';
 
 describe('skill installer target roots', () => {
   it('rejects legacy global target by default', async () => {

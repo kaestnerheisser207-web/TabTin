@@ -11,8 +11,8 @@ import {
   ScrollArea,
   Separator,
   StatusNotice,
-} from '@tabtin/smartsheet-ui'
-import { restoreTableGridFocus } from '@tabtin/table-ui'
+} from '@muse/smartsheet-ui'
+import { restoreTableGridFocus } from '@muse/table-ui'
 import {
   AlertTriangle,
   Link2,
@@ -27,8 +27,8 @@ import type {
   FieldExplainResponse,
   FieldUndoCapability,
   FieldUndoReasonCode,
-} from '@tabtin/table-core'
-import { FieldApiService } from '@tabtin/table-core'
+} from '@muse/table-core'
+import { FieldApiService } from '@muse/table-core'
 import { useTranslation } from 'react-i18next'
 
 interface FieldDeleteConfirmDialogProps {

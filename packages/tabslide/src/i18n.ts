@@ -1,7 +1,7 @@
 /**
  * TabSlide i18n 翻译配置
  *
- * 由于 @tabtin/tabslide 是一个独立的 React 包，
+ * 由于 @muse/tabslide 是一个独立的 React 包，
  * 它应该接受外部传入的 i18n 实例，而不是内部硬编码。
  *
  * 使用方式：

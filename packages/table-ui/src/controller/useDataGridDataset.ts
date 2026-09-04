@@ -1,10 +1,10 @@
 import { useMemo, useRef } from 'react'
-import type { TableGridRow } from '@tabtin/table-engine'
+import type { TableGridRow } from '@muse/table-engine'
 import {
   compareCanonicalGroupValues,
   RECORD_IDENTITY_KEY,
   resolveRecordId,
-} from '@tabtin/table-engine'
+} from '@muse/table-engine'
 import type { Field, TableRecord, ViewMeta, ViewRecordsResponse, LooseViewGroup } from '../types'
 import { resolveViewColumnMeta, resolveViewVisibilityMode } from '../utils/viewVisibility'
 import { resolveGroupValuePresentation } from './groupValueCodec'

@@ -1,11 +1,11 @@
 /**
- * @tabtin/local-docparse — error-classifier 纯函数单测
+ * @muse/local-docparse — error-classifier 纯函数单测
  *
  * 与 Electron 的 H1-D-MAIN classifyWorkerError 用例集合等价（含 Verifier-B
  * 必修 3 修复后的 HTTP status 归类规则）。共享包内最小化保留以保证独立可测。
  *
  * **W1（2026-05-13）**：测试断言值改为 `FilePipelineErrorCode` 全局 enum 字面
- * 值（与 `@tabtin/file-pipeline-errors` SSoT 对齐）。HTTP 5xx/429 现在返
+ * 值（与 `@muse/file-pipeline-errors` SSoT 对齐）。HTTP 5xx/429 现在返
  * `NETWORK_ERROR`（不再压扁到 `UNKNOWN_ERROR`），让 LLM 能拿到"网络问题"的精
  * 确信号。
  */
@@ -193,7 +193,7 @@ describe('errorClassToFallback (shared package)', () => {
 describe('W5 L32 — classifyWorkerError 返值在 FILE_PIPELINE_ERROR_KINDS SSoT 集合内', () => {
   it('多种代表性 worker 错误的返值都属于 FILE_PIPELINE_ERROR_KINDS（SSoT 集合）', async () => {
     const { FILE_PIPELINE_ERROR_KINDS } = await import(
-      '@tabtin/file-pipeline-errors'
+      '@muse/file-pipeline-errors'
     )
     const sampleErrors: unknown[] = [
       Object.assign(new Error('No password given'), { name: 'PasswordException' }),

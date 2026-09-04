@@ -236,7 +236,7 @@ extension WSEnvelope {
 // MARK: - Typed Wire Payload Decoding
 
 extension WSEnvelope {
-    /// 把 payload 里某个字段解码成强类型 wire DTO（生成自 `@tabtin/wire-codegen`）。
+    /// 把 payload 里某个字段解码成强类型 wire DTO（生成自 `@muse/wire-codegen`）。
     ///
     /// 用途：消费侧（StreamManager 等）把 `payload[...] as? String` 字典手解升级为
     /// 类型安全解码——字段名 / 类型 / discriminated union 穷尽由 zod SSoT 保证，

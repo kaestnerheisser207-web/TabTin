@@ -27,9 +27,9 @@
  *     UI 显式征询用户是否在本机接管（`reclaim()`）。
  */
 import { useCallback, useEffect, useState } from 'react'
-import { toast } from '@tabtin/smartsheet-ui'
+import { toast } from '@muse/smartsheet-ui'
 import i18n from '@/i18n'
-import type { Agent } from '@tabtin/app-shell'
+import type { Agent } from '@muse/app-shell'
 import { useDeviceStore } from '@stores/useDeviceStore'
 import { useSpaceStore } from '@stores/useSpaceStore'
 import { useOrganizationStore } from '@stores/useOrganizationStore'
@@ -193,7 +193,7 @@ export function useEnsureAgentReady(
                 ? organizationState.selectedOrganization.name
                 : '')
             : (organizationState.selectedOrganization?.name ?? '')
-          const res = await window.tabtin?.fileSystem?.ensureDefaultAgentDir({
+          const res = await window.muse?.fileSystem?.ensureDefaultAgentDir({
             organizationName,
             spaceName,
           })

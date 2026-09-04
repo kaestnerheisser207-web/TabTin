@@ -1,7 +1,7 @@
 /**
  * 协作文档编辑器 Hook (V3) — 宿主无关版本
  *
- * 基于 @tabtin/collab-core 的 useCollabProvider 实现：
+ * 基于 @muse/collab-core 的 useCollabProvider 实现：
  * - HocuspocusProvider: Y.js WebSocket 同步
  * - IndexedDB 本地缓存
  * - 协作光标展示
@@ -15,10 +15,10 @@
 import { useEffect, useMemo, useState, useCallback, useRef } from 'react'
 import type * as Y from 'yjs'
 import type { HocuspocusProvider } from '@hocuspocus/provider'
-import { recordProbeEvent } from '@tabtin/doc-editor'
+import { recordProbeEvent } from '@muse/doc-editor'
 import { useDocEditor, type UseDocEditorInput, type UseDocEditorReturn } from './useDocEditor'
 import { useTabDocEditorConfigOptional } from './TabDocEditorConfigContext'
-import { toast } from '@tabtin/smartsheet-ui'
+import { toast } from '@muse/smartsheet-ui'
 import { subscribeDocMultiTabPresence } from './docMultiTabPresence'
 import {
   useCollabProvider,
@@ -31,7 +31,7 @@ import {
   type CollabSyncMode,
   type CollabSyncModeReason,
   type ForceCloseMessage,
-} from '@tabtin/collab-core'
+} from '@muse/collab-core'
 import type { TabDocEventStreamEvent, TabDocEventStreamSubscription } from './ports'
 import type { TabDocCollaborationUser } from './editor/collaboration-extensions'
 import {

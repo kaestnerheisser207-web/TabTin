@@ -8,7 +8,7 @@
 import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Pin, X, ChevronDown } from 'lucide-react'
-import { toast } from '@tabtin/smartsheet-ui'
+import { toast } from '@muse/smartsheet-ui'
 import { useIMStore } from '@stores/useIMStore'
 import { unpinMessage, type IMMessage } from '@/services/tabchatApi'
 import { MESSAGE_TYPE_FILE, MESSAGE_TYPE_IMAGE } from '@/constants/tabchat'

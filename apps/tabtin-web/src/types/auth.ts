@@ -13,7 +13,7 @@ import type {
   ApiResponse,
   VerificationCodeType,
   LoginMethod,
-} from '@tabtin/shared'
+} from '@muse/shared'
 
 export type {
   UserInfo,

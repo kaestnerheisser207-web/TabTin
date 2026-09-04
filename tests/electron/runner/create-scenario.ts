@@ -545,8 +545,8 @@ export async function ${names.prepareIdentifier}(
       timeoutMs: 60000,
       env: {
         ...process.env,
-        TABTIN_E2E_MODE: "prepare",
-        TABTIN_E2E_RUN_ID: context.runId,
+        MUSE_E2E_MODE: "prepare",
+        MUSE_E2E_RUN_ID: context.runId,
       },
     },
   );
@@ -611,8 +611,8 @@ def emit(payload: dict) -> None:
 
 
 def main() -> None:
-    mode = require_env("TABTIN_E2E_MODE")
-    run_id = require_env("TABTIN_E2E_RUN_ID")
+    mode = require_env("MUSE_E2E_MODE")
+    run_id = require_env("MUSE_E2E_RUN_ID")
     marker = f"[{run_id}]"
     if mode == "prepare":
         emit({
@@ -629,7 +629,7 @@ def main() -> None:
             "todo": "TODO: verify persistence for ${args.id}",
         })
         return
-    raise RuntimeError(f"Unknown TABTIN_E2E_MODE: {mode}")
+    raise RuntimeError(f"Unknown MUSE_E2E_MODE: {mode}")
 
 
 main()

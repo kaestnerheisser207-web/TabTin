@@ -31,7 +31,7 @@ export interface WorkerServerOptions {
 }
 
 export function createWorkerServer(options: WorkerServerOptions) {
-  if (!options.token) throw new Error('TABTIN_CLOUD_WORKER_TOKEN is required')
+  if (!options.token) throw new Error('MUSE_CLOUD_WORKER_TOKEN is required')
   const metrics = options.metrics ?? new WorkerMetrics()
   return createServer(async (request, response) => {
     const startedAt = performance.now()

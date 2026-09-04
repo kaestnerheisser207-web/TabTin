@@ -161,7 +161,7 @@ describe('resolveLockedAssignedAgentIds', () => {
     expect(resolveLockedAssignedAgentIds(
       agents,
       ['default-agent', 'custom-agent'],
-      'app:tabtin-dev-toolkit-pack/code-safety-audit',
+      'app:muse-dev-toolkit-pack/code-safety-audit',
       'app',
     )).toEqual(new Set(['default-agent']))
 
@@ -184,7 +184,7 @@ describe('resolveLockedAssignedAgentIds', () => {
     expect(resolveLockedAssignedAgentIds(
       agents,
       ['custom-agent'],
-      'app:tabtin-dev-toolkit-pack/code-safety-audit',
+      'app:muse-dev-toolkit-pack/code-safety-audit',
       'app',
     )).toEqual(new Set())
   })

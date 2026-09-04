@@ -7,7 +7,7 @@ import {
   ScrollBar,
   cn,
   toast,
-} from '@tabtin/smartsheet-ui'
+} from '@muse/smartsheet-ui'
 import { Layers, Plus, ChevronDown, Minimize2, RefreshCw, Image as ImageIcon } from 'lucide-react'
 import {
   DndContext,
@@ -24,14 +24,14 @@ import {
 import { useViewStore, useViewStoreApi } from '@stores/useViewStore'
 import { useTableStore } from '@stores/useTableStore'
 import { RecordFormContainer } from '@components/record/RecordFormContainer'
-import { CollabStatus } from '@tabtin/collab-core'
+import { CollabStatus } from '@muse/collab-core'
 import { shouldProjectViewRecordsFromCollabYdoc, useTableCollab } from '@components/table/TableCollabContext'
-import { getKanbanOffsetKey, KANBAN_DEFAULT_PER_GROUP_LIMIT } from '@tabtin/table-engine/collab'
-import { RecordApiService } from '@tabtin/table-core'
+import { getKanbanOffsetKey, KANBAN_DEFAULT_PER_GROUP_LIMIT } from '@muse/table-engine/collab'
+import { RecordApiService } from '@muse/table-core'
 import {
   extractViewCoverUrl,
   isAttachmentFieldType,
-} from '@tabtin/table-ui'
+} from '@muse/table-ui'
 import { useTranslation } from 'react-i18next'
 import { formatNumber } from '@/utils/i18n/format'
 import { CellValueRenderer, ViewPaginationBar } from './ViewShared'

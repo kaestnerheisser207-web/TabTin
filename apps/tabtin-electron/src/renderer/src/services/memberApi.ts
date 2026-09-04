@@ -1,5 +1,5 @@
 /**
- * 成员管理 API 服务 — 从 @tabtin/app-shell 重导出
+ * 成员管理 API 服务 — 从 @muse/app-shell 重导出
  */
 
-export { MemberApiService } from '@tabtin/app-shell'
+export { MemberApiService } from '@muse/app-shell'

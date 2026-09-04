@@ -1,5 +1,5 @@
 {
-  "name": "@tabtin/media-capabilities",
+  "name": "@muse/media-capabilities",
   "version": "0.1.0",
   "description": "Unified media capability layer — wraps local FFmpeg / media-core helpers and cloud services (Django API) into a single consumable interface for all product lines",
   "type": "module",
@@ -55,7 +55,7 @@
     "test:watch": "vitest"
   },
   "dependencies": {
-    "@tabtin/media-core": "workspace:*"
+    "@muse/media-core": "workspace:*"
   },
   "devDependencies": {
     "typescript": "5.7.2",

@@ -60,11 +60,11 @@ vi.mock('../context-space/tabtracker/requestAgentForTracker', () => ({
     `PREFIX\n\n我的需求：\n${userRequest.trim()}`,
 }))
 
-vi.mock('@tabtin/smartsheet-ui/toast', () => ({
+vi.mock('@muse/smartsheet-ui/toast', () => ({
   toast: { info: toastInfo, error: toastError, success: toastSuccess },
 }))
 
-vi.mock('@tabtin/smartsheet-ui', () => {
+vi.mock('@muse/smartsheet-ui', () => {
   const passthrough = (tag: string) =>
     ({ children, ...rest }: React.PropsWithChildren<Record<string, unknown>>) =>
       React.createElement(tag, rest, children as React.ReactNode)
@@ -189,8 +189,8 @@ vi.mock('@tabtin/smartsheet-ui', () => {
   }
 })
 
-vi.mock('@tabtin/app-shell', async (importOriginal) => {
-  const actual = await importOriginal<typeof import('@tabtin/app-shell')>()
+vi.mock('@muse/app-shell', async (importOriginal) => {
+  const actual = await importOriginal<typeof import('@muse/app-shell')>()
   return {
     ...actual,
     AgentApiService: {

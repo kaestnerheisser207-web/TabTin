@@ -7,7 +7,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
   toast,
-} from '@tabtin/smartsheet-ui'
+} from '@muse/smartsheet-ui'
 import { ChevronDown, Loader2, Sparkles } from 'lucide-react'
 import { TabCodeConfirmDialog } from '../TabCodeConfirmDialog'
 import type { GitBranchMeta } from '@shared/git-types'
@@ -101,7 +101,7 @@ export const CommitBar: React.FC<CommitBarProps> = ({
   const doCommit = useCallback(async (showSuccessToast = true): Promise<boolean> => {
     const ok = await runGitAction(
       'commit',
-      () => window.tabtin.git.commit(rootPath, commitMessage.trim()),
+      () => window.muse.git.commit(rootPath, commitMessage.trim()),
       t('gitFlow.commitSuccess'),
       { showSuccessToast },
     )
@@ -114,7 +114,7 @@ export const CommitBar: React.FC<CommitBarProps> = ({
     const remote = upstream.includes('/') ? upstream.split('/')[0] : 'origin'
     return runGitAction(
       'push',
-      () => window.tabtin.git.push(rootPath, {
+      () => window.muse.git.push(rootPath, {
         remote,
         branch: currentBranchName || undefined,
         setUpstream: !upstream,
@@ -264,7 +264,7 @@ export const CommitBar: React.FC<CommitBarProps> = ({
   }, [doCommit, doPushAfterCommit, guardEmptyMessage, stagedCount, unstagedCount])
 
   const handleConfirmStageAndCommit = useCallback(async () => {
-    const stageResult = await window.tabtin.git.stageFiles(rootPath)
+    const stageResult = await window.muse.git.stageFiles(rootPath)
     if (!stageResult?.success) {
       logGitActionFailure('workflow:stage-all-before-commit', rootPath, [], stageResult?.error)
       toast({ title: t('gitFlow.errorTitle'), description: formatGitErrorForToast(stageResult?.error, t) })

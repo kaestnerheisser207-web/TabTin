@@ -1,4 +1,4 @@
-import type { ChatMessage } from '@tabtin/chat-client'
+import type { ChatMessage } from '@muse/chat-client'
 import type { SubagentRun } from '../../../stores/chat/shared/types'
 
 function escapeXml(value: string): string {

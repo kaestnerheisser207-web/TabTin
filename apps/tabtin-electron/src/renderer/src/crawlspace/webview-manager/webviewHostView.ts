@@ -23,7 +23,7 @@
  *   一律由 WebviewManager 自己测量 slot rect（单一事实来源）。
  */
 
-import type { CrawlspaceHost } from '@tabtin/crawlspace-core'
+import type { CrawlspaceHost } from '@muse/crawlspace-core'
 import { getWebviewManager, type WebviewManager } from './WebviewManager'
 import type { OpenIntentHints } from '@shared/open-intent'
 

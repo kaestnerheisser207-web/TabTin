@@ -1,4 +1,4 @@
-import { joinApiPath } from '@tabtin/config'
+import { joinApiPath } from '@muse/config'
 import React, { useState, useCallback, useEffect, useRef } from 'react'
 import { Trash2, Power, PowerOff, FolderKanban, Pencil, Copy, Check, AlertCircle, QrCode, RefreshCw } from 'lucide-react'
 import { useTranslation } from 'react-i18next'

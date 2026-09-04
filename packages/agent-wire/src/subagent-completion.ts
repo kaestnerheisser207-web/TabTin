@@ -101,7 +101,7 @@ export interface BuildSubagentCompletionEnvelopeInput {
 /**
  * 构造完成信封业务 payload：剥掉 undefined 可选字段，保证 JSON / XML / tool_result 同源。
  *
- * **镜像** `@tabtin/agent-runtime` 的 `buildChildCompletionEnvelope` 字段集；
+ * **镜像** `@muse/agent-runtime` 的 `buildChildCompletionEnvelope` 字段集；
  * runtime 禁依赖本包（AH-005），故两端各自持有实现，靠字段名对齐。
  *
  * 注意：terminal-core 另有 `buildSubagentCompletionEnvelope`，那是把本

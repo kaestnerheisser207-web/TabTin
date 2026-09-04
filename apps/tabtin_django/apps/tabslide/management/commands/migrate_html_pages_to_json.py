@@ -40,7 +40,7 @@ from apps.tabslide.models import SlidePage, SlideProject
 
 logger = logging.getLogger(__name__)
 
-DB = ('default' if getattr(settings, 'TABTIN_SINGLE_DATABASE_MODE', False) else 'postgresql')
+DB = ('default' if getattr(settings, 'MUSE_SINGLE_DATABASE_MODE', False) else 'postgresql')
 # 占位元素：转换失败时注入页面，避免用户看到空白画布
 _FAILURE_PLACEHOLDER_TEMPLATE = {
     "type": "text",

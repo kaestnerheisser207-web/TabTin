@@ -68,7 +68,7 @@ export interface SkillFsDirEntry {
   size?: number
 }
 
-/** collectSkillFiles 依赖的最小文件系统接口（= window.tabtin.fileSystem 子集，便于单测注入）。 */
+/** collectSkillFiles 依赖的最小文件系统接口（= window.muse.fileSystem 子集，便于单测注入）。 */
 export interface SkillFsLike {
   readDir(path: string): Promise<{
     success: boolean
@@ -152,7 +152,7 @@ function normalizeCollectedText(rel: string, content: string): string {
  * 递归收集 skillDir 下的文本文件成发布用 files[]。
  *
  * @param rootPath skill 目录绝对路径
- * @param fs       文件系统接口（运行时传 window.tabtin.fileSystem）
+ * @param fs       文件系统接口（运行时传 window.muse.fileSystem）
  * @param overrides 绝对路径 → 最新编辑缓冲内容；命中则用内存内容（保证发布的是用户刚保存的版本）
  */
 export async function collectSkillFiles(

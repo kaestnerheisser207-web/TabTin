@@ -17,7 +17,7 @@ import type {
   EffectivePolicy,
   MemoStore,
   WorkspaceSnapshot,
-} from '@tabtin/security-policy';
+} from '@muse/security-policy';
 
 import { createRuntime } from '../src/runtime-assembly.js';
 import type {

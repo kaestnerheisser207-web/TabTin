@@ -550,7 +550,7 @@ describe('PersonalPluginRuntimeManager', () => {
         COWART_MODE: 'canvas',
         COWART_MCP_MODE: 'fake',
         COWART_PROJECT_DIR: projectDir,
-        TABTIN_PLUGIN_INSTALL_PATH: installed.installPath,
+        MUSE_PLUGIN_INSTALL_PATH: installed.installPath,
       },
     });
     expect(processAdapter.starts[0]?.env.COWART_PROJECT_DIR).toBe(projectDir);

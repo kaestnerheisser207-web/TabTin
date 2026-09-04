@@ -156,8 +156,8 @@ describe('P0-F1: killOnTimeout + needsRestart', () => {
       // Complete the command so the promise resolves
       const newHostSession = hostClient.getLastSession()
       const wrappedCommand = newHostSession.write.mock.calls.at(-1)?.[0] as string
-      const startMarker = wrappedCommand.match(/__TABTIN_CMD_START_[a-f0-9]+__/)?.[0]
-      const endMarkerPrefix = wrappedCommand.match(/__TABTIN_CMD_END_[a-f0-9]+_/)?.[0]
+      const startMarker = wrappedCommand.match(/__MUSE_CMD_START_[a-f0-9]+__/)?.[0]
+      const endMarkerPrefix = wrappedCommand.match(/__MUSE_CMD_END_[a-f0-9]+_/)?.[0]
 
       if (startMarker && endMarkerPrefix) {
         newHostSession.triggerData(`${startMarker}\nhello\n${endMarkerPrefix}0_/tmp__\n`)
@@ -191,8 +191,8 @@ describe('P0-F1: killOnTimeout + needsRestart', () => {
       // Complete the command
       const newHostSession = hostClient.getLastSession()
       const wrappedCommand = newHostSession.write.mock.calls.at(-1)?.[0] as string
-      const startMarker = wrappedCommand.match(/__TABTIN_CMD_START_[a-f0-9]+__/)?.[0]
-      const endMarkerPrefix = wrappedCommand.match(/__TABTIN_CMD_END_[a-f0-9]+_/)?.[0]
+      const startMarker = wrappedCommand.match(/__MUSE_CMD_START_[a-f0-9]+__/)?.[0]
+      const endMarkerPrefix = wrappedCommand.match(/__MUSE_CMD_END_[a-f0-9]+_/)?.[0]
 
       if (startMarker && endMarkerPrefix) {
         newHostSession.triggerData(`${startMarker}\nok\n${endMarkerPrefix}0_/tmp__\n`)

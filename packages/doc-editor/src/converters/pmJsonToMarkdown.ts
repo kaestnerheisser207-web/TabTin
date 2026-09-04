@@ -21,7 +21,7 @@ const isSafeImageSrc = (value: unknown): boolean => {
   if (typeof value !== 'string') return false
   const src = value.trim()
   if (!src) return false
-  if (/^tabtin-file:\/\/asset\/[0-9a-f-]{36}$/i.test(src)) return true
+  if (/^muse-file:\/\/asset\/[0-9a-f-]{36}$/i.test(src)) return true
   if (/^https?:/i.test(src)) return true
   if (SAFE_DATA_IMAGE_RE.test(src)) return true
   if (src.startsWith('/') && !src.startsWith('//')) return true
@@ -92,7 +92,7 @@ const serializeInlineNode = (node: JSONContent): string => {
   }
   if (node.type === 'image') {
     const fileId = String(node.attrs?.fileId || '').trim()
-    const src = String(node.attrs?.src || '').trim() || (fileId ? `tabtin-file://asset/${fileId}` : '')
+    const src = String(node.attrs?.src || '').trim() || (fileId ? `muse-file://asset/${fileId}` : '')
     const alt = String(node.attrs?.alt || '')
     if (!isSafeImageSrc(src)) return ''
     const title = node.attrs?.title ? String(node.attrs.title) : ''
@@ -193,7 +193,7 @@ const serializeInlineNodeAsHtml = (node: JSONContent): string => {
   }
   if (node.type === 'image') {
     const fileId = String(node.attrs?.fileId || '').trim()
-    const src = String(node.attrs?.src || '').trim() || (fileId ? `tabtin-file://asset/${fileId}` : '')
+    const src = String(node.attrs?.src || '').trim() || (fileId ? `muse-file://asset/${fileId}` : '')
     const alt = String(node.attrs?.alt || '')
     if (!isSafeImageSrc(src)) return ''
     return `<img src="${escapeHtml(src)}" alt="${escapeHtml(alt)}">`
@@ -334,7 +334,7 @@ const serializeBlockNode = (node: JSONContent, depth = 0): string => {
       return '---'
     case 'image': {
       const fileId = String(node.attrs?.fileId || '').trim()
-      const src = String(node.attrs?.src || '').trim() || (fileId ? `tabtin-file://asset/${fileId}` : '')
+      const src = String(node.attrs?.src || '').trim() || (fileId ? `muse-file://asset/${fileId}` : '')
       const alt = String(node.attrs?.alt || '')
       if (!isSafeImageSrc(src)) return ''
       const title = node.attrs?.title ? String(node.attrs.title) : ''

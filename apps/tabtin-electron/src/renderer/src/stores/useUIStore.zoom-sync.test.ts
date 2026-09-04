@@ -5,7 +5,7 @@ import type { UISettingsMap } from '@/types/uiSettings'
 vi.setConfig({ testTimeout: 20_000, hookTimeout: 20_000 })
 
 describe('useUIStore UI zoom sync', () => {
-  const originalTabtin = window.tabtin
+  const originalTabtin = window.muse
 
   beforeEach(() => {
     vi.useFakeTimers()

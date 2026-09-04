@@ -10,7 +10,7 @@ import {
   useState,
 } from 'react';
 import { createPortal } from 'react-dom';
-import type { DateFieldOptionsLike } from '@tabtin/smartsheet-ui';
+import type { DateFieldOptionsLike } from '@muse/smartsheet-ui';
 import { GRID_CONTAINER_ATTR, GRID_DEFAULT } from '../../configs';
 import type { IInnerCell } from '../../renderers';
 import { useGridOverlayFloatingPosition } from '../../../overlays/useGridOverlayFloatingPosition';

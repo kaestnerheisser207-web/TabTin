@@ -12,7 +12,7 @@
  * Hilt v3 切换后 CLI 路由安全检查改为 stateless 的 hardline check（见
  * cli-server.ts::evaluateCLIPolicy），`setCLISecurityPolicy` 已是 no-op 并
  * 在 M5 Wave 3 旁路清理中被删除；这些断言不再适用，已随 setter 一并移除。
- * 真正的 v3 hardline 行为在 `@tabtin/security-policy` 自有测试覆盖。
+ * 真正的 v3 hardline 行为在 `@muse/security-policy` 自有测试覆盖。
  */
 import http from 'node:http';
 import { describe, it, expect, afterEach } from 'vitest';

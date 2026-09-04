@@ -11,8 +11,8 @@ const CURRENT_REVISION = '31fb996c27b18852c943c3da662fd53b6fd1b492'
 
 function buildInfo(revision = CURRENT_REVISION) {
   return [
-    'tabtin: go1.26.1',
-    '\tpath\tgithub.com/TabTin/tabtin-cli',
+    'muse: go1.26.1',
+    '\tpath\tgithub.com/Muse/muse-cli',
     '\tbuild\tGOOS=darwin',
     '\tbuild\tGOARCH=arm64',
     `\tbuild\tvcs.revision=${revision}`,
@@ -66,10 +66,10 @@ test('packaged CLI provenance rejects missing VCS identity', () => {
   ])
 })
 
-test('manual audit infers Windows from the sole tabtin.exe artifact', () => {
+test('manual audit infers Windows from the sole muse.exe artifact', () => {
   assert.deepEqual(
     resolvePackagedGoCliBinaryName({ target: '', hasBare: false, hasExe: true }),
-    { binaryName: 'tabtin.exe', inferredGoos: 'windows' },
+    { binaryName: 'muse.exe', inferredGoos: 'windows' },
   )
 })
 

@@ -6,15 +6,15 @@ import type {
   PaginationTelemetry,
   PaginationLogEntry,
   TaskPaginationExecutionMetadata
-} from '@tabtin/crawl-contracts/task'
-import type { SchemaGenerationStats } from '@tabtin/crawl-contracts/recommendation'
+} from '@muse/crawl-contracts/task'
+import type { SchemaGenerationStats } from '@muse/crawl-contracts/recommendation'
 import type {
   PaginationDetectionResult as PaginationInfo,
   PaginationType,
   PageNumberInfo,
   ScrollDetectionResult
-} from '@tabtin/crawl-contracts/pagination'
-import type { ResourceRecord } from '@tabtin/action-tools/types'
+} from '@muse/crawl-contracts/pagination'
+import type { ResourceRecord } from '@muse/action-tools/types'
 import type { UserAgentConfig } from '@/types/userAgent'
 
 /**

@@ -599,12 +599,12 @@ const STALL_TIMEOUT_MS = INITIAL_STALL_TIMEOUT_MS;
  * 这里给 createStream 的整条重试循环加总时长上限：超过即按 **non-retryable** 终止，
  * 让 query.ts catch 走 `endMessage` → emit `message_stop` → 落库已生成的 partial，
  * 把「挂死 30 分钟」压到本上限内、且结果不再全丢。默认 12 分钟（远大于正常单轮
- * LLM 生成，几乎不会误伤合法长输出）；可用 env `TABTIN_MAX_STREAM_WALL_MS` 调。
+ * LLM 生成，几乎不会误伤合法长输出）；可用 env `MUSE_MAX_STREAM_WALL_MS` 调。
  */
 const DEFAULT_MAX_TOTAL_STREAM_WALL_MS = 12 * 60 * 1000;
 
 function resolveMaxTotalStreamWallMs(): number {
-  const raw = Number(process.env.TABTIN_MAX_STREAM_WALL_MS);
+  const raw = Number(process.env.MUSE_MAX_STREAM_WALL_MS);
   return Number.isFinite(raw) && raw > 0 ? raw : DEFAULT_MAX_TOTAL_STREAM_WALL_MS;
 }
 

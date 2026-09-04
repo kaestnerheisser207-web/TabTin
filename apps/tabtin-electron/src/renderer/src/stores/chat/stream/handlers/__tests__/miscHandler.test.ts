@@ -6,7 +6,7 @@
  * mode 都走到显式 i18n 文案分支，不再默认落到 compactionComplete。
  */
 import { beforeEach, describe, expect, it, vi } from 'vitest'
-import { AgentStreamEvents } from '@tabtin/ws-gateway-client'
+import { AgentStreamEvents } from '@muse/ws-gateway-client'
 import type { AgentStep } from '../../../shared/types'
 
 const {
@@ -31,7 +31,7 @@ vi.mock('@/i18n', () => ({
   },
 }))
 
-vi.mock('@tabtin/ws-gateway-client', () => ({
+vi.mock('@muse/ws-gateway-client', () => ({
   AgentStreamEvents: {
     DONE: 'agent.stream.done',
     TODO: 'agent.stream.todo',

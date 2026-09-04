@@ -178,7 +178,7 @@ class DbConnectionService:
         """在 PostgreSQL 中创建只读角色并授权"""
         DbConnectionService._validate_pg_identifier(role_name, "role_name")
         DbConnectionService._validate_pg_identifier(schema_name, "schema_name")
-        if getattr(settings, 'TABTIN_EDITION', 'saas') == 'community':
+        if getattr(settings, 'MUSE_EDITION', 'saas') == 'community':
             if space_id is None or organization_id is None:
                 raise ValueError('Community readonly scope is required')
             if role_name != DbReadOnlyConnection.role_name_for_space(space_id):
@@ -245,7 +245,7 @@ class DbConnectionService:
         """
         DbConnectionService._validate_pg_identifier(role_name, "role_name")
         DbConnectionService._validate_pg_identifier(schema_name, "schema_name")
-        if getattr(settings, 'TABTIN_EDITION', 'saas') == 'community':
+        if getattr(settings, 'MUSE_EDITION', 'saas') == 'community':
             if space_id is None or organization_id is None:
                 raise ValueError('Community readonly scope is required')
             if role_name != DbReadOnlyConnection.role_name_for_space(space_id):
@@ -298,7 +298,7 @@ class DbConnectionService:
     ) -> None:
         """更新 PG 角色密码"""
         DbConnectionService._validate_pg_identifier(role_name, "role_name")
-        if getattr(settings, 'TABTIN_EDITION', 'saas') == 'community':
+        if getattr(settings, 'MUSE_EDITION', 'saas') == 'community':
             if space_id is None or organization_id is None:
                 raise ValueError('Community readonly scope is required')
             if role_name != DbReadOnlyConnection.role_name_for_space(space_id):

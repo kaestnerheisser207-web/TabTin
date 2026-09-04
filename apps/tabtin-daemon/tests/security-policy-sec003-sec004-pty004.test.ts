@@ -10,7 +10,7 @@ import {
   evaluateLocalTerminalPolicy,
   evaluateLocalFilePolicy,
   type TerminalExecutionPolicyPayload,
-} from '@tabtin/terminal-core'
+} from '@muse/terminal-core'
 
 // ---------------------------------------------------------------------------
 // PTY-004: executeCommand must reject policy.route === 'blocked' at the entry

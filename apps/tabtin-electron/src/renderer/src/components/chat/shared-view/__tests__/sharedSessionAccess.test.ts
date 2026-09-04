@@ -5,7 +5,7 @@ import {
   resolveSharedSessionAccess,
 } from '../sharedSessionAccess'
 
-vi.mock('@tabtin/chat-client', () => ({ ChatAPIError: class ChatAPIError {} }))
+vi.mock('@muse/chat-client', () => ({ ChatAPIError: class ChatAPIError {} }))
 vi.mock('@/services/sessionShareApi', () => ({ ShareApiError: class ShareApiError {} }))
 
 describe('resolveSharedSessionAccess', () => {

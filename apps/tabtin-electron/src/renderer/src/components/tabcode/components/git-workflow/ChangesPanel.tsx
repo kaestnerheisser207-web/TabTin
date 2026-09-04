@@ -245,7 +245,7 @@ export const ChangesPanel: React.FC<ChangesPanelProps> = ({
     const nextSections = await Promise.all(scopes.map(async (scope): Promise<DiffSection> => {
       try {
         if (scope === 'untracked') {
-          const result = await window.tabtin.fileSystem.readFilePreview(joinRootPath(rootPath, file.path), { maxBytes: MAX_DIFF_PREVIEW_CHARS })
+          const result = await window.muse.fileSystem.readFilePreview(joinRootPath(rootPath, file.path), { maxBytes: MAX_DIFF_PREVIEW_CHARS })
           if (!result?.success) {
             return { scope, diff: '', error: formatGitErrorForToast(result, t), truncated: false }
           }
@@ -256,7 +256,7 @@ export const ChangesPanel: React.FC<ChangesPanelProps> = ({
           return { scope, diff: preview.diff, truncated: preview.truncated || Boolean(result.data.truncated) }
         }
 
-        const result = await window.tabtin.git.rawDiff(rootPath, rawDiffArgs(file, scope))
+        const result = await window.muse.git.rawDiff(rootPath, rawDiffArgs(file, scope))
         if (!result?.success) {
           return { scope, diff: '', error: formatGitErrorForToast(result, t), truncated: false }
         }
@@ -305,7 +305,7 @@ export const ChangesPanel: React.FC<ChangesPanelProps> = ({
     const multi = paths.length > 1
     await runGitAction(
       multi ? 'stage-selected' : `stage:${paths[0]}`,
-      () => window.tabtin.git.stageFiles(rootPath, paths),
+      () => window.muse.git.stageFiles(rootPath, paths),
       multi ? t('gitFlow.stageManySuccess', { count: paths.length }) : t('gitFlow.stageOneSuccess'),
     )
   }, [clearDiffPreview, rootPath, runGitAction, t])
@@ -314,7 +314,7 @@ export const ChangesPanel: React.FC<ChangesPanelProps> = ({
     clearDiffPreview()
     await runGitAction(
       `resolve:${path}`,
-      () => window.tabtin.git.stageFiles(rootPath, [path]),
+      () => window.muse.git.stageFiles(rootPath, [path]),
       t('gitFlow.markResolvedSuccess'),
     )
   }, [clearDiffPreview, rootPath, runGitAction, t])
@@ -325,7 +325,7 @@ export const ChangesPanel: React.FC<ChangesPanelProps> = ({
     const multi = paths.length > 1
     await runGitAction(
       multi ? 'unstage-selected' : `unstage:${paths[0]}`,
-      () => window.tabtin.git.unstageFiles(rootPath, paths),
+      () => window.muse.git.unstageFiles(rootPath, paths),
       multi ? t('gitFlow.unstageManySuccess', { count: paths.length }) : t('gitFlow.unstageOneSuccess'),
     )
   }, [clearDiffPreview, rootPath, runGitAction, t])
@@ -336,7 +336,7 @@ export const ChangesPanel: React.FC<ChangesPanelProps> = ({
     clearDiffPreview()
     await runGitAction(
       'stage-all',
-      () => window.tabtin.git.stageFiles(rootPath, paths),
+      () => window.muse.git.stageFiles(rootPath, paths),
       t('gitFlow.stageAllSuccess'),
     )
   }, [clearDiffPreview, rootPath, runGitAction, sections.unstaged, t])
@@ -347,7 +347,7 @@ export const ChangesPanel: React.FC<ChangesPanelProps> = ({
     clearDiffPreview()
     await runGitAction(
       'unstage-all',
-      () => window.tabtin.git.unstageFiles(rootPath, paths),
+      () => window.muse.git.unstageFiles(rootPath, paths),
       t('gitFlow.unstageAllSuccess'),
     )
   }, [clearDiffPreview, rootPath, runGitAction, sections.staged, t])
@@ -375,7 +375,7 @@ export const ChangesPanel: React.FC<ChangesPanelProps> = ({
     const multi = target.paths.length > 1
     await runGitAction(
       multi ? 'discard-selected' : `discard:${target.paths[0]}`,
-      () => window.tabtin.git.discardFiles(rootPath, target.paths),
+      () => window.muse.git.discardFiles(rootPath, target.paths),
       multi
         ? t('gitFlow.discardManySuccess', { count: target.paths.length })
         : t('gitFlow.discardSuccess'),

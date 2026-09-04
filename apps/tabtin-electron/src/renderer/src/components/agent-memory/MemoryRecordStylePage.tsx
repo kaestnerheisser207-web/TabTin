@@ -6,7 +6,7 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { Brain, Loader2, ShieldCheck } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
-import { Button, Switch, toast, ConfirmDialog } from '@tabtin/smartsheet-ui'
+import { Button, Switch, toast, ConfirmDialog } from '@muse/smartsheet-ui'
 import { useOrganizationStore } from '@stores/useOrganizationStore'
 import { useMemoRecordStyleStore } from '@stores/useMemoRecordStyleStore'
 import {

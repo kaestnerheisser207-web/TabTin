@@ -228,7 +228,7 @@ export const TabCodePreview: React.FC<TabCodePreviewProps> = ({
     // 清空旧文件/旧 revision 的 decoration，直到 HEAD 基线抵达后再恢复。
     setGitGutterBaselineKey(null)
     setGitGutterBaseline(null)
-    window.tabtin.git.getFileAtHead(rootPath, filePathInRepo)
+    window.muse.git.getFileAtHead(rootPath, filePathInRepo)
       .then((result) => {
         if (cancelled) return
         if (!result || result.success === false) {
@@ -325,7 +325,7 @@ export const TabCodePreview: React.FC<TabCodePreviewProps> = ({
     } else {
       setIsLoading(true)
     }
-    window.tabtin.fileSystem.readFilePreview(filePath, { maxBytes: 512 * 1024 })
+    window.muse.fileSystem.readFilePreview(filePath, { maxBytes: 512 * 1024 })
       .then((result: { data?: FilePreviewData } | null) => {
         if (cancelled) return
         const data: FilePreviewData | undefined = result?.data
@@ -377,7 +377,7 @@ export const TabCodePreview: React.FC<TabCodePreviewProps> = ({
 
     let cancelled = false
     const filePathInRepo = relativePath(rootPath, filePath)
-    window.tabtin.git.getFileAtStaged(rootPath, filePathInRepo)
+    window.muse.git.getFileAtStaged(rootPath, filePathInRepo)
       .then((r) => {
         if (cancelled) return
         // 失败/空暂存时回退工作区 content，避免预览空白闪一下。

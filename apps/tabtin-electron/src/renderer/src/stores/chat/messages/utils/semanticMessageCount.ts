@@ -12,7 +12,7 @@
  * 用户轮分界用正向谓词 `isRegularUserMessage`：专用 message_kind 一律不算；
  * `llm` 桶内只排除 runtime 作者轴（非 user 的 triggered_by、skill_invoke）。
  */
-import type { ChatMessage } from '@tabtin/chat-client'
+import type { ChatMessage } from '@muse/chat-client'
 
 const LEGACY_USER_CONTEXT_INJECTION_KINDS = new Set([
   'environment_context',

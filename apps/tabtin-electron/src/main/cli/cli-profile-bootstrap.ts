@@ -33,7 +33,7 @@
 
 import { existsSync, mkdirSync, writeFileSync, chmodSync, renameSync, unlinkSync } from 'node:fs'
 import { join } from 'node:path'
-import { getHomeTabtinPath } from '@tabtin/shared/storage-paths'
+import { getHomeTabtinPath } from '@muse/shared/storage-paths'
 import { API_BASE_URL } from '../config/api'
 import { TokenManager } from '../auth'
 import { createLogger } from '../logger'

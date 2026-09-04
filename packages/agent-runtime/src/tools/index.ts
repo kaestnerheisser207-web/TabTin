@@ -62,7 +62,7 @@ export {
 } from '../engine/errors/error-kinds.js'
 export type { ToolErrorKind } from '../engine/errors/error-kinds.js'
 // 项目规则自动加载（AGENTS.md MVP）：读盘 helper，仿 memory 搜索范式
-// 经 `@tabtin/agent-runtime/tools` 暴露给两端宿主装配 rules-injector hook 时用。
+// 经 `@muse/agent-runtime/tools` 暴露给两端宿主装配 rules-injector hook 时用。
 // （`__resetProjectRulesCacheForTests` 不进公共 barrel——测试直接深 import
 // `./project-rules.js`，与 callMemorySearchAPI 一样保持公共面只暴露生产 API。）
 export {

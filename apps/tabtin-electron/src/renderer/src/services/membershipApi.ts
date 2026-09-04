@@ -1,4 +1,4 @@
-import { joinApiPath } from '@tabtin/config'
+import { joinApiPath } from '@muse/config'
 import { API_CONFIG, API_ENDPOINTS } from '@/config/api'
 import { apiRequest, getAuthHeaders, unwrapData } from '@/services/apiBase'
 import { electronFetch } from '@/services/electronFetch'

@@ -4,7 +4,7 @@
  * Stream Events（`agent.stream.*` 事件形态）+ ContentBlock envelope 6 件套 +
  * LLM Call Snapshot（debug observability）+ System Section Registry。
  * payload 形状由本地 `wire-payloads.ts` 持有（ Stage 5a），
- * 字段与 `@tabtin/agent-wire` 字节对齐；Zod 校验仍在 wire / host。
+ * 字段与 `@muse/agent-wire` 字节对齐；Zod 校验仍在 wire / host。
  *
  * 分层规则（ 批次 14）：contracts 内 7 层只允许后层 import 前层——
  * wire-protocol ← conversation ← model-llm ← tools ← hitl ←
@@ -29,7 +29,7 @@ import type {
 /**
  * detached mini-message 的 block / delta 类型。
  * 让 kernel / hook-runner 的通用 `emitDetachedMiniMessage` 原语从本地 contracts
- * 引用，而不依赖 `@tabtin/agent-wire`（ Stage 5a）。
+ * 引用，而不依赖 `@muse/agent-wire`（ Stage 5a）。
  */
 export type DetachedMiniMessageBlock = WireContentBlockStart['block'];
 export type DetachedMiniMessageDelta = WireContentBlockDelta['delta'];
@@ -136,7 +136,7 @@ export interface DoneEvent extends StreamEvent {
 export interface CompactionEvent extends StreamEvent {
   type: 'agent.stream.compaction';
   /**
-   * FR-11：`stats` 字段对齐 `@tabtin/agent-wire` `CompactionStats` schema。
+   * FR-11：`stats` 字段对齐 `@muse/agent-wire` `CompactionStats` schema。
    * `phase: 'end'` 时由 compaction-orchestrator / query.ts 三个 mode 路径
    * 分别填充 `messages_before/after`、`tokens_before/after`、`tool_uses_retained`。
    *
@@ -177,7 +177,7 @@ export interface SystemNoticeEvent extends StreamEvent {
 // ─── Wave 2 · ContentBlock envelope events ──────────────────────────
 //
 // query.ts 把 ContentBlockEvents 6 件套作为 StreamEvent yield 出去，envelope
-// payload 直接复用 `@tabtin/agent-wire` 的 schema infer 类型（含 protocol_version /
+// payload 直接复用 `@muse/agent-wire` 的 schema infer 类型（含 protocol_version /
 // min_compatible_version / trace_id / _seq / thread_id 等公共字段）。
 
 export interface MessageStartEvent extends StreamEvent {

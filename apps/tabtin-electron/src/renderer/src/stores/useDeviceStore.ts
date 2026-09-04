@@ -11,8 +11,8 @@
  */
 
 import { create } from 'zustand'
-import { DomainEvents } from '@tabtin/ws-gateway-client'
-import { Device, DeviceListResponse } from '@tabtin/app-shell'
+import { DomainEvents } from '@muse/ws-gateway-client'
+import { Device, DeviceListResponse } from '@muse/app-shell'
 import { DeviceApiService } from '@/services/deviceApi'
 import { getOrCreateDeviceId, getSyncedDeviceIdentity } from '@/utils/deviceId'
 import { logger } from '@/utils/logger'
@@ -22,7 +22,7 @@ import { isOrganizationPermissionMessage, recoverFromInvalidOrganizationAccess }
 import { useSpaceStore } from './useSpaceStore'
 import { useAuthStore } from './useAuthStore'
 import { useOrganizationStore } from './useOrganizationStore'
-import { toast } from '@tabtin/smartsheet-ui/toast'
+import { toast } from '@muse/smartsheet-ui/toast'
 import { registerResetAction } from './sessionResetRegistry'
 import { emitDeviceStatusMessage } from './deviceStatusEvents'
 import { onOrganizationSelected as onOrganizationSelected } from './organizationLifecycleEvents'
@@ -256,7 +256,7 @@ export function startHeartbeat() {
   if (!_beforeUnloadRegistered) {
     _beforeUnloadRegistered = true
     window.addEventListener('beforeunload', _handleBeforeUnload)
-    window.__tabtin_report_offline = _handleBeforeUnload
+    window.__muse_report_offline = _handleBeforeUnload
   }
 }
 
@@ -298,7 +298,7 @@ export const useDeviceStore = create<DeviceState>((set, get) => ({
     })
 
     try {
-      const register = window.tabtin?.ensureDeviceRegistered
+      const register = window.muse?.ensureDeviceRegistered
       if (!register) throw new Error('AgentHost device registration bridge unavailable')
       const device = await register(organizationId) as Device
       if (registrationGeneration !== _registrationGeneration) return null

@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import type { ChatMessage } from '@tabtin/chat-client'
+import type { ChatMessage } from '@muse/chat-client'
 import { isEmptyInterruptedAssistantShell } from '../../../messages/utils/emptyInterruptedAssistant'
 import { stripEmptyInterruptedAssistants } from '../stripEmptyInterruptedAssistants'
 

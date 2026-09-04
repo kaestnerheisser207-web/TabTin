@@ -25,7 +25,7 @@ const harness = vi.hoisted(() => ({
   },
 }))
 
-vi.mock('@tabtin/app-host-sdk', () => ({
+vi.mock('@muse/app-host-sdk', () => ({
   useAppHostClient: () => harness.client,
 }))
 
@@ -84,7 +84,7 @@ vi.mock('./openDocumentCommentImagePreview', () => ({
   openDocumentCommentImagePreview: vi.fn(async () => true),
 }))
 
-vi.mock('@tabtin/tabdoc-ui/api-client', () => ({
+vi.mock('@muse/tabdoc-ui/api-client', () => ({
   addDocumentCommentMessage: vi.fn(),
   createDocumentCommentThread: harness.createThread,
   deleteDocumentCommentMessage: vi.fn(),
@@ -100,7 +100,7 @@ vi.mock('@tabtin/tabdoc-ui/api-client', () => ({
   updateDocumentCommentThreadStatus: vi.fn(),
 }))
 
-vi.mock('@tabtin/tabdoc-ui/editor', () => ({
+vi.mock('@muse/tabdoc-ui/editor', () => ({
   CommentRail: (props: Record<string, unknown>) => {
     harness.railProps = props
     return null

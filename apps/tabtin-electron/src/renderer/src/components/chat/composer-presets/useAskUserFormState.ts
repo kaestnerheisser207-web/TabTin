@@ -8,7 +8,7 @@
  */
 
 import { useCallback, useMemo, useRef, useState } from 'react'
-import type { PresetFieldDef, AddonParamDef } from '@tabtin/chat-client'
+import type { PresetFieldDef, AddonParamDef } from '@muse/chat-client'
 import {
   applyAddonDefaults,
   buildGroupedPresetFields,

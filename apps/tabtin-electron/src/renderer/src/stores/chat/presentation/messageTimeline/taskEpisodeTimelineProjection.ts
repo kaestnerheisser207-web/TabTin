@@ -1,4 +1,4 @@
-import type { ChatMessage } from '@tabtin/chat-client'
+import type { ChatMessage } from '@muse/chat-client'
 import type { ContentBlockEntry } from '@stores/useChatRuntimeStore'
 import { materializeMessagesForTimeline } from '@/stores/chat/domain/messageTimelineOrder'
 import { isEmptyInterruptedAssistantShell } from '@/stores/chat/messages/utils/emptyInterruptedAssistant'

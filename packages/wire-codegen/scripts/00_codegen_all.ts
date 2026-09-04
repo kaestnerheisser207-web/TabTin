@@ -2,7 +2,7 @@
  * 总入口：跑全套 codegen 流水线。
  *
  * 步骤：
- *   00 build @tabtin/agent-wire (确保 dist/ 是最新 zod schema)
+ *   00 build @muse/agent-wire (确保 dist/ 是最新 zod schema)
  *   01 emit JSON Schema (含 oneOf+discriminator 注入)
  *   02 emit fixtures (22 case + 7 边界 case + 6 envelope)
  *   03 gen Python   (Pydantic v2 + extra=ignore + Annotated)
@@ -11,10 +11,10 @@
  *   06 gen TS       (re-export agent-wire)
  *   07 vendor in    (cp 各端 vendor 路径)
  *
- * 用法：pnpm --filter @tabtin/wire-codegen codegen
+ * 用法：pnpm --filter @muse/wire-codegen codegen
  *
  * 第 0 步必要性（W1 P1-A 真根因修复）：
- *   01_emit_json_schema.ts 通过 `import { ContentBlockSchema } from '@tabtin/agent-wire'`
+ *   01_emit_json_schema.ts 通过 `import { ContentBlockSchema } from '@muse/agent-wire'`
  *   读 zod schema —— 这个 import 解析到 `packages/agent-wire/dist/`（编译后产物）。
  *   如果开发者改了 src/stream-content-block.ts 但没 build agent-wire，codegen 读到的
  *   还是旧 dist —— schema 漂移 silent bypass。所以 codegen 第一步必须 build agent-wire，
@@ -25,15 +25,15 @@ import { resolve } from 'node:path';
 import { PKG_ROOT, REPO_ROOT } from './lib/paths.js';
 
 console.log('═══════════════════════════════════════════════════════════════');
-console.log('  @tabtin/wire-codegen — full codegen pipeline');
+console.log('  @muse/wire-codegen — full codegen pipeline');
 console.log('═══════════════════════════════════════════════════════════════\n');
 
 const startTime = Date.now();
 
-console.log('▶ 第 0 步：build @tabtin/agent-wire（确保 dist/ 是最新 zod schema）');
+console.log('▶ 第 0 步：build @muse/agent-wire（确保 dist/ 是最新 zod schema）');
 const buildResult = spawnSync(
   'pnpm',
-  ['--filter', '@tabtin/agent-wire', 'build'],
+  ['--filter', '@muse/agent-wire', 'build'],
   {
     stdio: 'inherit',
     cwd: REPO_ROOT,

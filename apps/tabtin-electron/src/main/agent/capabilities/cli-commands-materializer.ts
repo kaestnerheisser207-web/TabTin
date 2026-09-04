@@ -11,8 +11,8 @@ import {
   CatalogStore,
   CLI_COMMANDS_CACHE_TTL_MS,
   type CliCommandsMaterialized,
-} from '@tabtin/agent-host/state'
-import { parseTabtinCommandsJson } from '@tabtin/agent-runtime/capability'
+} from '@muse/agent-host/state'
+import { parseTabtinCommandsJson } from '@muse/agent-runtime/capability'
 import { createLogger } from '../../logger.js'
 
 const log = createLogger('cli-commands-materializer')

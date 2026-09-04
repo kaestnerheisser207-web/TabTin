@@ -156,10 +156,10 @@ class RecordCommentAgentAttributionTests(TestCase):
         comment = self._post_comment(
             headers={
                 **_jwt_headers(self.user),
-                "HTTP_X_TABTIN_AGENT_RUN_ID": str(run.run_id),
-                "HTTP_X_TABTIN_SESSION_ID": str(session.id),
+                "HTTP_X_MUSE_AGENT_RUN_ID": str(run.run_id),
+                "HTTP_X_MUSE_SESSION_ID": str(session.id),
                 # 裸 Agent 头不能参与选择；合法 actor 必须来自 run/session 绑定。
-                "HTTP_X_TABTIN_AGENT_ID": str(uuid.uuid4()),
+                "HTTP_X_MUSE_AGENT_ID": str(uuid.uuid4()),
             }
         )
 
@@ -193,8 +193,8 @@ class RecordCommentAgentAttributionTests(TestCase):
             reply_to_comment_id=parent.id,
             headers={
                 **_jwt_headers(self.user),
-                "HTTP_X_TABTIN_AGENT_RUN_ID": str(run.run_id),
-                "HTTP_X_TABTIN_SESSION_ID": str(session.id),
+                "HTTP_X_MUSE_AGENT_RUN_ID": str(run.run_id),
+                "HTTP_X_MUSE_SESSION_ID": str(session.id),
             },
         )
 
@@ -217,8 +217,8 @@ class RecordCommentAgentAttributionTests(TestCase):
         comment = self._post_comment(
             headers={
                 **_jwt_headers(self.user),
-                "HTTP_X_TABTIN_AGENT_RUN_ID": str(run.run_id),
-                "HTTP_X_TABTIN_SESSION_ID": str(session.id),
+                "HTTP_X_MUSE_AGENT_RUN_ID": str(run.run_id),
+                "HTTP_X_MUSE_SESSION_ID": str(session.id),
             }
         )
 
@@ -236,7 +236,7 @@ class RecordCommentAgentAttributionTests(TestCase):
         comment = self._post_comment(
             headers={
                 **_jwt_headers(self.user),
-                "HTTP_X_TABTIN_AGENT_ID": str(self.agent.id),
+                "HTTP_X_MUSE_AGENT_ID": str(self.agent.id),
             }
         )
 
@@ -255,8 +255,8 @@ class RecordCommentAgentAttributionTests(TestCase):
         comment = self._post_comment(
             headers={
                 **_jwt_headers(self.user),
-                "HTTP_X_TABTIN_AGENT_RUN_ID": str(run.run_id),
-                "HTTP_X_TABTIN_SESSION_ID": str(session.id),
+                "HTTP_X_MUSE_AGENT_RUN_ID": str(run.run_id),
+                "HTTP_X_MUSE_SESSION_ID": str(session.id),
             }
         )
 
@@ -291,8 +291,8 @@ class RecordCommentAgentAttributionTests(TestCase):
         comment = self._post_comment(
             headers={
                 **_jwt_headers(self.user),
-                "HTTP_X_TABTIN_AGENT_RUN_ID": str(old_run.run_id),
-                "HTTP_X_TABTIN_SESSION_ID": str(session.id),
+                "HTTP_X_MUSE_AGENT_RUN_ID": str(old_run.run_id),
+                "HTTP_X_MUSE_SESSION_ID": str(session.id),
             }
         )
 
@@ -316,8 +316,8 @@ class RecordCommentAgentAttributionTests(TestCase):
         mismatched_session_comment = self._post_comment(
             headers={
                 **_jwt_headers(self.user),
-                "HTTP_X_TABTIN_AGENT_RUN_ID": str(valid_run.run_id),
-                "HTTP_X_TABTIN_SESSION_ID": str(mismatched_session.id),
+                "HTTP_X_MUSE_AGENT_RUN_ID": str(valid_run.run_id),
+                "HTTP_X_MUSE_SESSION_ID": str(mismatched_session.id),
             }
         )
         self.assertEqual(mismatched_session_comment["actor"]["type"], "human")
@@ -340,8 +340,8 @@ class RecordCommentAgentAttributionTests(TestCase):
         cross_org_comment = self._post_comment(
             headers={
                 **_jwt_headers(self.user),
-                "HTTP_X_TABTIN_AGENT_RUN_ID": str(cross_org_run.run_id),
-                "HTTP_X_TABTIN_SESSION_ID": str(cross_org_session.id),
+                "HTTP_X_MUSE_AGENT_RUN_ID": str(cross_org_run.run_id),
+                "HTTP_X_MUSE_SESSION_ID": str(cross_org_session.id),
             }
         )
         self.assertEqual(cross_org_comment["actor"]["type"], "human")
@@ -351,8 +351,8 @@ class RecordCommentAgentAttributionTests(TestCase):
         inactive_comment = self._post_comment(
             headers={
                 **_jwt_headers(self.user),
-                "HTTP_X_TABTIN_AGENT_RUN_ID": str(valid_run.run_id),
-                "HTTP_X_TABTIN_SESSION_ID": str(valid_session.id),
+                "HTTP_X_MUSE_AGENT_RUN_ID": str(valid_run.run_id),
+                "HTTP_X_MUSE_SESSION_ID": str(valid_session.id),
             }
         )
         self.assertEqual(inactive_comment["actor"]["type"], "human")

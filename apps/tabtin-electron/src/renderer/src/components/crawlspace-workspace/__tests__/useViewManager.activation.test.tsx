@@ -1,7 +1,7 @@
 import { act, renderHook } from '@testing-library/react'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
-import { useViewManager } from '@tabtin/crawlspace-core'
-import type { ViewInfo } from '@tabtin/crawlspace-core'
+import { useViewManager } from '@muse/crawlspace-core'
+import type { ViewInfo } from '@muse/crawlspace-core'
 
 const views: ViewInfo[] = [
   { viewId: 'view-a', url: 'https://a.example', title: 'A' },

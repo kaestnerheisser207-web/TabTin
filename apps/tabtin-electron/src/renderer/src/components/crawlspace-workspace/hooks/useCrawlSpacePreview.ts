@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { useCrawlTabStore } from '@stores/useCrawlTabStore'
-import { autocompleteUrl, isValidUrl } from '@tabtin/crawlspace-core'
+import { autocompleteUrl, isValidUrl } from '@muse/crawlspace-core'
 import { crawlspaceViewClient } from '@/crawlspace/electron/crawlspace-view-client'
 import { crawlspaceContextClient } from '@/crawlspace/electron/crawlspace-context-client'
 import { getCrawlspaceConfig } from '@/crawlspace/registry'

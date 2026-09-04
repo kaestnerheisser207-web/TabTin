@@ -3,7 +3,7 @@ import type { RollbackPreviewResult } from '../../../../services/chatExtraApi'
 import * as fileHistoryIpc from '../../../../services/fileHistoryIpc'
 import { resolveRecoveryFileAnchor } from '../../../../stores/chat/checkpoint/recoveryPlan'
 import { resolveRewindAnchorId } from '../../../../stores/chat/checkpoint/utils/rewindAnchor'
-import type { ChatMessage } from '@tabtin/chat-client'
+import type { ChatMessage } from '@muse/chat-client'
 
 interface UseRewindFileImpactOptions {
   mode: 'rollback' | 'editAndResend'

@@ -33,14 +33,14 @@ class ChatApiSyncBoundaryTests(SimpleTestCase):
 
         self.assertEqual(layer_files, ["api_common.py", "decorators.py", "api.py"])
 
-    @override_settings(TABTIN_EDITION="community")
+    @override_settings(MUSE_EDITION="community")
     def test_community_byok_chat_skips_only_the_financial_balance_layer(self):
         self.assertEqual(
             _chat_billing_skip_layers(),
             frozenset({LAYER_GUARD, LAYER_SERVICE_GUARD, LAYER_BALANCE}),
         )
 
-    @override_settings(TABTIN_EDITION="saas")
+    @override_settings(MUSE_EDITION="saas")
     def test_saas_chat_keeps_the_existing_balance_precheck(self):
         self.assertEqual(
             _chat_billing_skip_layers(),
@@ -49,8 +49,8 @@ class ChatApiSyncBoundaryTests(SimpleTestCase):
 
 
 @override_settings(
-    TABTIN_EDITION="saas",
-    TABTIN_REQUIRE_INVITE_CODE=False,
+    MUSE_EDITION="saas",
+    MUSE_REQUIRE_INVITE_CODE=False,
     REQUIRE_INVITE_CODE=False,
 )
 class SaaSChatApiSyncCompatibilityTests(TestCase):

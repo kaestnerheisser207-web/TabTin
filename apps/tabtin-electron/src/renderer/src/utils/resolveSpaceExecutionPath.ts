@@ -4,7 +4,7 @@
  * workspace 类型 Space：只认 Space/Agent 的执行根，缺失时不静默回退 sandbox。
  * 非 workspace：保留 tab meta.path → sandbox 的 legacy fallback。
  */
-import { parseSpaceSelectionId } from '@tabtin/app-shell'
+import { parseSpaceSelectionId } from '@muse/app-shell'
 import { useSpaceStore } from '@stores/useSpaceStore'
 import { useSpaceListStore } from '@stores/useSpaceListStore'
 import { useSpaceContextTabsStore } from '@stores/useSpaceContextTabsStore'
@@ -77,7 +77,7 @@ export async function resolveSpaceExecutionPath(): Promise<string | null> {
       // tab store 读取异常，继续兜底到 sandbox
     }
 
-    const ensureSpaceSandbox = window.tabtin?.fileSystem?.ensureSpaceSandbox
+    const ensureSpaceSandbox = window.muse?.fileSystem?.ensureSpaceSandbox
     if (!ensureSpaceSandbox) {
       return null
     }

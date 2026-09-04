@@ -7,8 +7,8 @@
  */
 
 import { ipcMain, net, type IpcMainInvokeEvent } from 'electron'
-import { requestPlatformApproval } from '@tabtin/agent-runtime'
-import { joinApiPath } from '@tabtin/config'
+import { requestPlatformApproval } from '@muse/agent-runtime'
+import { joinApiPath } from '@muse/config'
 
 import { TokenManager } from '../auth'
 import { API_BASE_URL } from '../config/api'

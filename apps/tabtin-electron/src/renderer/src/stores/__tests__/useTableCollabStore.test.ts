@@ -9,9 +9,9 @@ import {
   useCollabUndoRedoForTable,
 } from '../useTableCollabStore'
 import { renderHook, act } from '@testing-library/react'
-import { CollabStatus } from '@tabtin/collab-core'
-import type { ViewMeta } from '@tabtin/table-core'
-import { COLLAB_PENDING_VIEW_TTL_MS } from '@tabtin/table-engine/collab'
+import { CollabStatus } from '@muse/collab-core'
+import type { ViewMeta } from '@muse/table-core'
+import { COLLAB_PENDING_VIEW_TTL_MS } from '@muse/table-engine/collab'
 
 const makePeer = (id: string, cursor?: { recordId: string; fieldId: string }) => ({
   user: { id, name: `User ${id}`, color: '#FF0000', type: 'user' as const },

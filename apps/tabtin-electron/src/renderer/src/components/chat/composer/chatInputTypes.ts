@@ -1,4 +1,4 @@
-import type { Model, AskUserAnswer, ContextTier, ModelParamOverrides, ModelParamValue } from '@tabtin/chat-client'
+import type { Model, AskUserAnswer, ContextTier, ModelParamOverrides, ModelParamValue } from '@muse/chat-client'
 import type {
   AgentModeName,
   AskUserRequestState,
@@ -147,7 +147,7 @@ export interface ChatInputChromeProps extends ChatInputProps {
   debugAgentOptions: Array<{ id: string; label: string }>
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   effectiveSnapshots: any[]
-  effectiveCloudMessages: import('@tabtin/chat-client').ChatMessage[]
+  effectiveCloudMessages: import('@muse/chat-client').ChatMessage[]
   cloudMessageCount: number
   showLlmSnapshotButton: boolean
   textareaRef: React.RefObject<HTMLTextAreaElement | null>

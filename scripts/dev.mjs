@@ -90,8 +90,8 @@ export function resolveElectronBuildCommand(platform = process.platform) {
 export function resolveFullPreviewBuildEnv(env = process.env) {
   return {
     ...env,
-    TABTIN_BUILD_PROFILE: 'local',
-    TABTIN_ELECTRON_DEV_ENV_FILE: path.join(rootDir, '.env.local'),
+    MUSE_BUILD_PROFILE: 'local',
+    MUSE_ELECTRON_DEV_ENV_FILE: path.join(rootDir, '.env.local'),
   };
 }
 

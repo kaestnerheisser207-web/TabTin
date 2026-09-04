@@ -12,13 +12,13 @@ PROD_ENV_MARKERS = frozenset({'production', 'prod'})
 
 
 def assert_dev_provision_allowed() -> None:
-    """provision_dev_agent_ready：DEBUG 或显式 TABTIN_DEV_AUTO_PROVISION=1。"""
+    """provision_dev_agent_ready：DEBUG 或显式 MUSE_DEV_AUTO_PROVISION=1。"""
     if settings.DEBUG:
         return
-    if os.getenv('TABTIN_DEV_AUTO_PROVISION', '').strip() == '1':
+    if os.getenv('MUSE_DEV_AUTO_PROVISION', '').strip() == '1':
         return
     raise CommandError(
-        '拒绝执行：非 DEBUG 环境且未设置 TABTIN_DEV_AUTO_PROVISION=1。'
+        '拒绝执行：非 DEBUG 环境且未设置 MUSE_DEV_AUTO_PROVISION=1。'
     )
 
 
@@ -42,7 +42,7 @@ def assert_dev_mock_recharge_allowed() -> dict[str, str]:
             f'{sorted(DEV_DB_NAME_WHITELIST)}。'
         )
 
-    for var in ('ENVIRONMENT', 'DJANGO_ENV', 'TABTIN_ENV'):
+    for var in ('ENVIRONMENT', 'DJANGO_ENV', 'MUSE_ENV'):
         val = os.getenv(var, '').strip().lower()
         if val in PROD_ENV_MARKERS:
             raise CommandError(f'拒绝执行：{var}={val!r} 含生产环境标记。')

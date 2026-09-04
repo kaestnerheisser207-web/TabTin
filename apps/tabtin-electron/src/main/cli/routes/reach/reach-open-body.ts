@@ -1,4 +1,4 @@
-import type { OpenInput } from '@tabtin/platform-reach'
+import type { OpenInput } from '@muse/platform-reach'
 
 export interface ReachBrowserPortScope {
   spaceId?: string

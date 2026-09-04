@@ -11,7 +11,7 @@
  * 返回的每条记录带 organization_id + 资源 id，足够前端在「分享给我」受限视图里
  * 按资源 id 复用现有编辑器打开，而不需要把资源所属的 workspace 纳入 Space 列表。
  */
-import { joinApiPath } from '@tabtin/config'
+import { joinApiPath } from '@muse/config'
 import { API_CONFIG } from '@/config/api'
 import { apiRequest as adapterApiRequest, getAuthToken } from '@/adapters/api-adapter-instance'
 import i18n from '@/i18n'

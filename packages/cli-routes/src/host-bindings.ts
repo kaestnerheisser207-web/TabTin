@@ -20,7 +20,7 @@ import type {
   DjangoRequestFn,
   DjangoRequestOptions,
   SendJSON,
-} from '@tabtin/cli-server-core';
+} from '@muse/cli-server-core';
 
 export type { DjangoProxyResult, DjangoRequestFn, DjangoRequestOptions };
 
@@ -104,7 +104,7 @@ export function configureCLIRoutes(b: CLIRoutesHostBindings): void {
 export function getBindings(): CLIRoutesHostBindings {
   if (!bindings) {
     throw new Error(
-      '[@tabtin/cli-routes] configureCLIRoutes() must be called before any route handler runs',
+      '[@muse/cli-routes] configureCLIRoutes() must be called before any route handler runs',
     );
   }
   return bindings;
@@ -116,7 +116,7 @@ export function getBindings(): CLIRoutesHostBindings {
  * **path 契约**：必须**不带** `/api` 前缀（譬如 `/tabdata/tables` 而非
  * `/api/tabdata/tables`）。Electron / Daemon 两端 djangoRequest 实现都会
  * 把 baseUrl 归一化成带 `/api` 结尾再用 `joinApiPath` 拼接，path 自带
- * `/api` 会触发 dev 告警（被自动剥前缀；详见 `@tabtin/config:joinApiPath`）。
+ * `/api` 会触发 dev 告警（被自动剥前缀；详见 `@muse/config:joinApiPath`）。
  * 由 ESLint 规则 `muse/no-api-prefix-in-cli-routes` 在 PR 阶段拦截。
  */
 export const djangoRequest: DjangoRequestFn = (method, path, body, opts) =>
@@ -142,7 +142,7 @@ export function requireSpaceId(
       400,
       errorResponse(
         'VALIDATION_ERROR',
-        '缺少 space_id。请设置 TABTIN_SPACE_ID 环境变量，或在请求中传入 space_id / project_id',
+        '缺少 space_id。请设置 MUSE_SPACE_ID 环境变量，或在请求中传入 space_id / project_id',
       ),
     );
   }

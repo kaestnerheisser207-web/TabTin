@@ -11,7 +11,7 @@ vi.mock('../../../session/draftMessageSessionCoordinator', () => ({
     mocks.preflightCommit(...args),
 }))
 
-vi.mock('@tabtin/smartsheet-ui/toast', () => ({
+vi.mock('@muse/smartsheet-ui/toast', () => ({
   toast: (...args: unknown[]) => mocks.toast(...args),
 }))
 

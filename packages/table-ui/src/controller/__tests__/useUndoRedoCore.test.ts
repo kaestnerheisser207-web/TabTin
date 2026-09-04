@@ -10,11 +10,11 @@ const mocks = vi.hoisted(() => ({
   redoTable: vi.fn(),
 }))
 
-vi.mock('@tabtin/smartsheet-ui', () => ({
+vi.mock('@muse/smartsheet-ui', () => ({
   useToast: () => ({ toast: mocks.toast }),
 }))
 
-vi.mock('@tabtin/table-core', () => ({
+vi.mock('@muse/table-core', () => ({
   UndoRedoApiService: {
     getUndoStack: mocks.getUndoStack,
     getRedoStack: mocks.getRedoStack,

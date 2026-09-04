@@ -1,4 +1,4 @@
-import { isParsableExpression } from '@tabtin/browser-core';
+import { isParsableExpression } from '@muse/browser-core';
 import type { AgentTool } from '../types';
 import type { ToolError } from '../types/errors';
 import { ToolErrorCode } from '../types/errors';

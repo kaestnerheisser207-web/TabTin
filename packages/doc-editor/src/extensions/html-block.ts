@@ -5,7 +5,7 @@
  * HTML 本体以文件形式上传到 OSS，文档块只存**引用**（fileId + access_url），
  * 阅读视图放进受控 sandbox iframe 在线渲染，脚本可交互。
  *
- * 模块职责（本文件 = @tabtin/doc-editor 的 Node 定义层）：
+ * 模块职责（本文件 = @muse/doc-editor 的 Node 定义层）：
  *   - 定义 ProseMirror schema：attrs / parseHTML / renderHTML / markdown 序列化
  *   - 提供 insertHtmlBlock / updateHtmlBlock 命令
  *   - renderHTML 产出**降级/公开分享**用的 sandbox iframe（无 React runtime 依赖）

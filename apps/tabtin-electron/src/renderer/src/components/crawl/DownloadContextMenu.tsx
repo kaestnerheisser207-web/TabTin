@@ -9,7 +9,7 @@ import {
   X,
   Trash2,
 } from 'lucide-react'
-import { ContextMenu, ContextMenuItem, ContextMenuDivider } from '@tabtin/smartsheet-ui'
+import { ContextMenu, ContextMenuItem, ContextMenuDivider } from '@muse/smartsheet-ui'
 import { useTranslation } from 'react-i18next'
 import type { DownloadItem } from '@stores/useDownloadStore'
 import { storeActions } from './DownloadRowShared'

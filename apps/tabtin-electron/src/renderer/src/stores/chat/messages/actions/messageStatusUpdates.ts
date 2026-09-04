@@ -4,7 +4,7 @@
  * 都是对 `ChatMessage[]` 做纯变换 / 通过注入的 updater 落地：标记发送成功 / 失败、
  * ACK 后回填服务端 id、拼接 assistant 错误详情、识别 abort 类错误。
  */
-import type { ChatMessage } from '@tabtin/chat-client'
+import type { ChatMessage } from '@muse/chat-client'
 import { getClientMessageId } from '@/stores/chat/domain/messageIdentity'
 import type { LocalChatMessage } from '../../shared/types'
 

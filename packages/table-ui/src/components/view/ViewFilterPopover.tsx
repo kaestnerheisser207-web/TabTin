@@ -8,7 +8,7 @@ import {
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from '@tabtin/smartsheet-ui'
+} from '@muse/smartsheet-ui'
 import type { ViewFilter, ViewFilterLogic } from '../../types'
 import type {
   ViewFilterEditorRule,

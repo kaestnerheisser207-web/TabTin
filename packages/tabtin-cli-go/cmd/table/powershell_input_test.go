@@ -52,7 +52,7 @@ func TestPowerShellQuotedAtFileNotSplatted(t *testing.T) {
 
 	script := `
 $ErrorActionPreference = 'Stop'
-$path = $env:TABTIN_PS_TEST_FILE
+$path = $env:MUSE_PS_TEST_FILE
 # 与 Skill / help 推荐写法一致：单引号包住 @file，避免 PowerShell splatting
 $arg = '@' + $path
 $argsList = @('--data', $arg)
@@ -63,7 +63,7 @@ if ($val.StartsWith('@{')) { throw "looks like splat hashtable: $val" }
 Write-Output $val
 `
 	cmd := exec.Command("powershell", "-NoProfile", "-Command", script)
-	cmd.Env = append(os.Environ(), "TABTIN_PS_TEST_FILE="+path)
+	cmd.Env = append(os.Environ(), "MUSE_PS_TEST_FILE="+path)
 	out, err := cmd.CombinedOutput()
 	if err != nil {
 		t.Fatalf("powershell failed: %v\n%s", err, out)

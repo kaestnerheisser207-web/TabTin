@@ -25,7 +25,7 @@ import {
 // useSpaceContextTabsStore 已不再用于侧栏打开路径
 import { cn } from '@utils/cn'
 import { migrateLegacyLocalStorageKey } from '@utils/localStorageMigration'
-import type { ChatSession, TrackerRunMeta } from '@tabtin/chat-client'
+import type { ChatSession, TrackerRunMeta } from '@muse/chat-client'
 import type { TrackerTask } from '@/services/trackerApi'
 import { displayFromRunStatus } from '@/services/trackerRunStatus'
 import {

@@ -1,7 +1,7 @@
 /**
  * useDataGridClipboard — Electron 端 thin wrapper
  *
- * 核心逻辑已迁移至 @tabtin/table-ui，此文件注入 Electron 的 RecordStore。
+ * 核心逻辑已迁移至 @muse/table-ui，此文件注入 Electron 的 RecordStore。
  */
 
 import {
@@ -13,10 +13,10 @@ import {
   type UseDataGridClipboardReturn,
   type PasteConfirmState,
   type ViewAwareCreatePlan,
-} from '@tabtin/table-ui/clipboard';
+} from '@muse/table-ui/clipboard';
 import React from 'react';
-import type { BulkCreateRecordsRequest, BulkUpdateRecordsRequest, CreateRecordRequest, TableRecord } from '@tabtin/table-core';
-import type { TableGridClipboardPayload } from '@tabtin/table-engine';
+import type { BulkCreateRecordsRequest, BulkUpdateRecordsRequest, CreateRecordRequest, TableRecord } from '@muse/table-core';
+import type { TableGridClipboardPayload } from '@muse/table-engine';
 import { useRecordStore } from '@stores/useRecordStore';
 
 export { planPasteOperations, convertPasteValue, parseTsvText };

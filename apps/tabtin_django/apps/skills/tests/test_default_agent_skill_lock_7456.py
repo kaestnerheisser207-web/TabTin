@@ -35,7 +35,7 @@ from apps.users.auth.utils import generate_jwt_token
 
 
 @pytest.mark.django_db(databases=["default", "postgresql"])
-@override_settings(TABTIN_REQUIRE_INVITE_CODE=False)
+@override_settings(MUSE_REQUIRE_INVITE_CODE=False)
 class DefaultAgentSkillLock7456Test(TransactionTestCase):
     databases = {"default", "postgresql"}
 

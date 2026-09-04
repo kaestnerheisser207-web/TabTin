@@ -8,7 +8,7 @@ import React, { useRef, useCallback, useEffect, useLayoutEffect, useState, useMe
 import { Virtuoso, type VirtuosoHandle } from 'react-virtuoso'
 import { Loader2, ArrowDown, MessageSquare } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
-import { toast } from '@tabtin/smartsheet-ui'
+import { toast } from '@muse/smartsheet-ui'
 import { IMMessageBubble } from './IMMessageBubble'
 import { useIMStore } from '@stores/useIMStore'
 import { useAuthStore } from '@stores/useAuthStore'

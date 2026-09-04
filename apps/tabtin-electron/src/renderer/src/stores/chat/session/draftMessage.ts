@@ -1,4 +1,4 @@
-import type { ModelParamOverrides, ModelParamValue } from '@tabtin/chat-client'
+import type { ModelParamOverrides, ModelParamValue } from '@muse/chat-client'
 import type { AgentModeName } from '../shared/types'
 
 export interface DraftMessageMetadata {

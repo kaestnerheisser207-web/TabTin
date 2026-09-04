@@ -376,7 +376,7 @@ def _resolve_from_request_attrs(request: Any) -> str:
 
     meta = getattr(request, "META", None)
     if meta:
-        header_wt = str(meta.get("HTTP_X_TABTIN_ORGANIZATION_ID", "") or "").strip()
+        header_wt = str(meta.get("HTTP_X_MUSE_ORGANIZATION_ID", "") or "").strip()
         if header_wt:
             logger.debug(
                 "[OrganizationResolver] resolved via HTTP header: wt=%s",

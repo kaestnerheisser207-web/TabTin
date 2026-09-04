@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react'
 import { RangeSlider } from '../panels/right-sidebar/shared/components'
 import { keymapManager, KeyboardPriority } from '../utils/keymap-manager'
 import * as theme from '../theme'
-import { ZIndex } from '@tabtin/app-shell'
+import { ZIndex } from '@muse/app-shell'
 
 const ZOOM_PRESETS = [0.25, 0.5, 0.75, 1, 1.5, 2, 3]
 const ZOOM_STEP = 0.1

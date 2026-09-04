@@ -14,7 +14,7 @@ import {
   isPrivateHost,
   isPrivateIPv4,
   parseAlternativeIPv4,
-} from '@tabtin/security-policy'
+} from '@muse/security-policy'
 import { createLogger } from './logger'
 
 const log = createLogger('CrawlView/utils')
@@ -151,7 +151,7 @@ export function validateNavigationUrl(
     /**
      * 受限放行 `file://` 的根目录（当前 Space 工作目录）。仅当 url 指向此目录内
      * 的文件时放行 file 协议；缺省则维持默认（拒绝所有 file://）。SSOT
-     * （@tabtin/security-policy）不改，只在本 Electron 包装层按需把 `file:`
+     * （@muse/security-policy）不改，只在本 Electron 包装层按需把 `file:`
      * 加进 allowedProtocols。
      */
     allowLocalFileRoot?: string

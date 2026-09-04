@@ -29,7 +29,7 @@ async function writeEntrypoint(root: string): Promise<void> {
   await fs.writeFile(full, '#!/bin/sh\necho fake-python\n')
 }
 
-const ARCHIVE = 'tabtin-python-runtime.tar.gz'
+const ARCHIVE = 'muse-python-runtime.tar.gz'
 
 async function makeRuntimeArchive(): Promise<string> {
   const payload = await mkTmp('pyrt-payload-')

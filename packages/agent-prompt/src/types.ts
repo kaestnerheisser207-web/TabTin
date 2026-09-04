@@ -1,4 +1,4 @@
-import type { AgentModeName } from '@tabtin/agent-modes';
+import type { AgentModeName } from '@muse/agent-modes';
 
 export type { AgentModeName };
 
@@ -17,7 +17,7 @@ export interface ToolLike {
 export type WorkingDirType = 'code' | 'doc' | 'mixed';
 
 /**
- * Agent 终端 shell 的归一化类别——与 `@tabtin/terminal-core` 的 `AgentShellKind`
+ * Agent 终端 shell 的归一化类别——与 `@muse/terminal-core` 的 `AgentShellKind`
  * 结构等价。此处**内联重声明**而非 import，是为保持 agent-prompt 作为系统提示
  * SSoT 包的纯净（只依赖 agent-modes / prompt-contract，不反向依赖 runtime 侧的
  * terminal-core）。宿主把 `resolveAgentShellInfo()` 的结果直接传入即可（结构兼容）。
@@ -224,7 +224,7 @@ export interface RuntimeIdentity {
   spaceName?: string;
   /** Human-readable Organization name. 同 spaceName，纯展示用，不参与路径派生。 */
   organizationName?: string;
-  /** Absolute user-facing workspace; mirrored in `$TABTIN_WORKSPACE` shell env. */
+  /** Absolute user-facing workspace; mirrored in `$MUSE_WORKSPACE` shell env. */
   workspaceRoot: string;
   /**
    * Directory containing per-session JSONL archives. Concrete files live at

@@ -292,11 +292,11 @@ describe('useAgentTerminalSync', () => {
       spaceId: 'space-1',
       threadId: null,
       cwd: '/work',
-      description: 'pnpm test --filter @tabtin/utils',
+      description: 'pnpm test --filter @muse/utils',
     })
 
     expect(mockTranscriptState.upsertTranscript).toHaveBeenCalledWith(
-      'space-1', 'agent-sess-future', 'pnpm test --filter @tabtin/utils', '/work',
+      'space-1', 'agent-sess-future', 'pnpm test --filter @muse/utils', '/work',
     )
 
     // 空 / 纯空格 description 应 fallback 到 sessionId 后缀（trim 后为空，command 也未传）
@@ -584,7 +584,7 @@ describe('useAgentTerminalSync', () => {
     )
   })
 
-  it('R1 P1-5：window.tabtin.pty / onAgentSessionCreated 未注入时 hook 不崩，cleanup 安全', async () => {
+  it('R1 P1-5：window.muse.pty / onAgentSessionCreated 未注入时 hook 不崩，cleanup 安全', async () => {
     // preload 初始化失败 / IPC API 缺失 / 测试环境裸跑等场景下，
     // hook 内部用可选链 `pty?.onAgentSessionCreated?.()` 防御。本用例锁住
     // 这条 silent-noop 路径：渲染 + 卸载全程不抛错。
@@ -608,8 +608,8 @@ describe('useAgentTerminalSync', () => {
     expect(mockTerminalState.markSpaceSessionClosed).not.toHaveBeenCalled()
   })
 
-  it('R1 P1-5：window.tabtin 整体缺失时 hook 不崩', async () => {
-    // 极端场景：preload 完全没注入 window.tabtin
+  it('R1 P1-5：window.muse 整体缺失时 hook 不崩', async () => {
+    // 极端场景：preload 完全没注入 window.muse
     Object.defineProperty(window, 'tabtin', {
       configurable: true,
       value: undefined,

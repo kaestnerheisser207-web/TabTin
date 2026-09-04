@@ -16,7 +16,7 @@ import {
   getDataRoot,
   getHomeTabtinPath,
   getPlatformDataRoot,
-} from '@tabtin/agent-runtime/paths';
+} from '@muse/agent-runtime/paths';
 
 // ─── Public types ────────────────────────────────────────────────────────────
 

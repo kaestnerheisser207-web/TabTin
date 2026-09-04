@@ -1,4 +1,4 @@
-import { DeviceIdentityStore } from '@tabtin/agent-host/state'
+import { DeviceIdentityStore } from '@muse/agent-host/state'
 import { getDeviceIdentity, type DeviceIdentity } from '../../utils/deviceFingerprint.js'
 
 export type DeviceIdentitySnapshot = DeviceIdentity

@@ -561,7 +561,7 @@ class CloseShareBodyShareTypeTests(TestCase):
 
         db = (
             "default"
-            if getattr(settings, "TABTIN_SINGLE_DATABASE_MODE", False)
+            if getattr(settings, "MUSE_SINGLE_DATABASE_MODE", False)
             else "postgresql"
         )
         return (

@@ -11,7 +11,7 @@
  * - 音量可视化
  * - 完成后：填入草稿 / 直接发送 / 取消
  */
-/* eslint-disable tabtin/no-chat-design-violations -- 录音红是动作色，跟 VoiceRecordingCapsule 同语言 */
+/* eslint-disable muse/no-chat-design-violations -- 录音红是动作色，跟 VoiceRecordingCapsule 同语言 */
 
 import React, { useState, useEffect, useRef, useCallback } from 'react'
 import {

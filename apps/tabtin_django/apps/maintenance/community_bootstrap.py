@@ -186,8 +186,8 @@ def build_community_scene_catalog() -> dict[str, Any]:
 
 
 def _assert_community_prerequisites() -> None:
-    if getattr(settings, "TABTIN_EDITION", "saas") != "community":
-        raise RuntimeError("Community bootstrap requires TABTIN_EDITION=community")
+    if getattr(settings, "MUSE_EDITION", "saas") != "community":
+        raise RuntimeError("Community bootstrap requires MUSE_EDITION=community")
     if connection.vendor != "postgresql":
         raise RuntimeError("Community bootstrap requires PostgreSQL")
     if getattr(settings, "SERVICES_OSS_PROVIDER", "") != "local":
@@ -348,7 +348,7 @@ def ensure_community_organization_membership(
     installation entitlement, not a purchase, so no order, wallet credit, or
     provider-credit record is created here.
     """
-    if getattr(settings, "TABTIN_EDITION", "saas") != "community":
+    if getattr(settings, "MUSE_EDITION", "saas") != "community":
         return None
 
     tier = tier or _upsert_community_membership_tier()

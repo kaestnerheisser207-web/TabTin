@@ -10,7 +10,7 @@ const refresh = vi.fn()
 const clear = vi.fn()
 const openCollaborationFromInvite = vi.fn()
 
-vi.mock('@tabtin/smartsheet-ui/toast', () => ({
+vi.mock('@muse/smartsheet-ui/toast', () => ({
   toast: (...args: unknown[]) => toast(...args),
   ToastAction: ({ children, onClick }: { children: React.ReactNode; onClick?: () => void }) => (
     <button type="button" onClick={onClick}>{children}</button>

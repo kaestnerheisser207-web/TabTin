@@ -1,5 +1,5 @@
 /**
- * @tabtin/agent-runtime/engine — Local Agent Engine（执行微内核 barrel）
+ * @muse/agent-runtime/engine — Local Agent Engine（执行微内核 barrel）
  *
  *  批次 13 收敛：本 barrel 只导出 `engine/**` 自己的符号——
  * contracts 分层契约（批次 14 由原 core/types.ts 拆分）、core
@@ -10,13 +10,13 @@
  * tools / permissions / skills / telemetry / agent-modes / state / host /
  * terminal / runtime-assembly / providers / capability injectors），是
  * 「engine 边界虚化」最大出口。这些出口已整体搬到包入口 `src/index.ts`
- * （`@tabtin/agent-runtime`），不留旧路径 re-export——从本子路径 import
+ * （`@muse/agent-runtime`），不留旧路径 re-export——从本子路径 import
  * 已搬走符号会直接编译报错。
  */
 
 // ─── Shared Contract（ 批次 14：types.ts 拆为 contracts/ 7 层契约）────
 // 对外导出符号集与拆分前保持一致（新增 ContentBlockEnvelopeHint 供原
-// `engine/types` 深路径消费者迁移）；包外 `@tabtin/agent-runtime/engine`
+// `engine/types` 深路径消费者迁移）；包外 `@muse/agent-runtime/engine`
 // 消费者零感知。
 
 // 第 1 层 wire-protocol：Stream Events + envelope 6 件套 + LLM Call Snapshot
@@ -371,7 +371,7 @@ export type {
 // ─── Tool system ────────────────────────────────────────────────────
 //  批次 13：`adaptActionTool` / `adaptActionTools` 已物理删除——生产链路
 // 零消费（action-tools 集成实际走 ShellCap / tabcode-adapter 直连
-// `@tabtin/action-tools`，不经 engine 内 adapter）。
+// `@muse/action-tools`，不经 engine 内 adapter）。
 export {
   ToolRegistry,
   sanitizeToolInput,

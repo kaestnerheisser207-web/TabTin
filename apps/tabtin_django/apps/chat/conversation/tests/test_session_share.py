@@ -1259,13 +1259,13 @@ class SessionShareTestCase(TestCase):
         self.assertIn("金价原始数据", briefing_text)
         self.assertIn("金价分析文档", briefing_text)
         self.assertIn("成都7天旅游攻略.pptx", briefing_text)
-        self.assertIn(f"tabtin://resource/table/{table.id}", briefing_text)
-        self.assertIn(f"tabtin://resource/document/{document.id}", briefing_text)
-        self.assertIn(f"tabtin://resource/file/{file_record.id}", briefing_text)
-        self.assertNotIn("tabtin://resource/tabdata/", briefing_text)
-        self.assertNotIn("tabtin://resource/tabdoc/", briefing_text)
-        self.assertNotIn("tabtin://resource/tabfiles/", briefing_text)
-        self.assertNotIn("tabtin://resource/local_file/", briefing_text)
+        self.assertIn(f"muse://resource/table/{table.id}", briefing_text)
+        self.assertIn(f"muse://resource/document/{document.id}", briefing_text)
+        self.assertIn(f"muse://resource/file/{file_record.id}", briefing_text)
+        self.assertNotIn("muse://resource/tabdata/", briefing_text)
+        self.assertNotIn("muse://resource/tabdoc/", briefing_text)
+        self.assertNotIn("muse://resource/tabfiles/", briefing_text)
+        self.assertNotIn("muse://resource/local_file/", briefing_text)
         snapshot_blocks = [
             block
             for message in new_session.messages.filter(metadata__share_snapshot=True)
@@ -1286,7 +1286,7 @@ class SessionShareTestCase(TestCase):
         restored_path = local_payloads[0]["relative_path"]
         self.assertTrue(restored_path.startswith("artifacts/continuations/"))
         self.assertIn(
-            f"tabtin://resource/file/{quote(restored_path, safe='')}",
+            f"muse://resource/file/{quote(restored_path, safe='')}",
             briefing_text,
         )
         self.assertEqual(str(local_payloads[0]["handoff_file_id"]), str(uploaded_local_file_id))

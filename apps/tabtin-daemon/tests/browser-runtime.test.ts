@@ -4,7 +4,7 @@ const runtimeAdapters = vi.hoisted(() => ({
   setCrawlToolRunnerFactory: vi.fn(),
 }))
 
-vi.mock('@tabtin/action-tools/headless', async (importOriginal) => ({
+vi.mock('@muse/action-tools/headless', async (importOriginal) => ({
   ...await importOriginal<any>(),
   setCrawlToolRunnerFactory: runtimeAdapters.setCrawlToolRunnerFactory,
 }))

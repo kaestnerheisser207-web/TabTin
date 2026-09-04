@@ -9,7 +9,7 @@
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { Terminal } from 'lucide-react'
-import type { RichContentBlock } from '@tabtin/chat-client'
+import type { RichContentBlock } from '@muse/chat-client'
 import { RichFallback } from './RichFallback'
 
 const MAX_NESTED_DEPTH = 2

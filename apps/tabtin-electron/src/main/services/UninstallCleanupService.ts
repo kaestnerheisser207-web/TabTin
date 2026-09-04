@@ -18,10 +18,10 @@ import {
   resolveConfigAndCacheWipePaths,
   resolveCredentialFilePaths,
   resolveUpdaterCachePaths,
-  TABTIN_CONFIG_DIR_RELATIVE_PATHS,
-  TABTIN_CONFIG_FILE_RELATIVE_PATHS,
-  TABTIN_HOME_CONFIG_FILE_RELATIVE_PATHS,
-} from '@tabtin/shared'
+  MUSE_CONFIG_DIR_RELATIVE_PATHS,
+  MUSE_CONFIG_FILE_RELATIVE_PATHS,
+  MUSE_HOME_CONFIG_FILE_RELATIVE_PATHS,
+} from '@muse/shared'
 import { TokenManager } from '../auth'
 import { createLogger } from '../logger'
 import { guardedHandle } from '../utils/guarded-handle'
@@ -280,19 +280,19 @@ export function resolveLocalDataWipePaths(
   if (scope === 'current') {
     if (!currentUserDataDir) {
       return uniqueWipePaths([
-        ...TABTIN_HOME_CONFIG_FILE_RELATIVE_PATHS.map((rel) => join(homedir(), '.tabtin', rel)),
+        ...MUSE_HOME_CONFIG_FILE_RELATIVE_PATHS.map((rel) => join(homedir(), '.tabtin', rel)),
         join(homedir(), '.tabtin-daemon'),
         ...resolveUpdaterCachePaths(),
       ])
     }
     const paths: string[] = []
-    for (const rel of TABTIN_CONFIG_FILE_RELATIVE_PATHS) {
+    for (const rel of MUSE_CONFIG_FILE_RELATIVE_PATHS) {
       paths.push(join(currentUserDataDir, rel))
     }
-    for (const rel of TABTIN_CONFIG_DIR_RELATIVE_PATHS) {
+    for (const rel of MUSE_CONFIG_DIR_RELATIVE_PATHS) {
       paths.push(join(currentUserDataDir, rel))
     }
-    for (const rel of TABTIN_HOME_CONFIG_FILE_RELATIVE_PATHS) {
+    for (const rel of MUSE_HOME_CONFIG_FILE_RELATIVE_PATHS) {
       paths.push(join(homedir(), '.tabtin', rel))
     }
     paths.push(join(homedir(), '.tabtin-daemon'))
@@ -302,10 +302,10 @@ export function resolveLocalDataWipePaths(
 
   const paths = [...resolveConfigAndCacheWipePaths()]
   if (currentUserDataDir) {
-    for (const rel of TABTIN_CONFIG_FILE_RELATIVE_PATHS) {
+    for (const rel of MUSE_CONFIG_FILE_RELATIVE_PATHS) {
       paths.push(join(currentUserDataDir, rel))
     }
-    for (const rel of TABTIN_CONFIG_DIR_RELATIVE_PATHS) {
+    for (const rel of MUSE_CONFIG_DIR_RELATIVE_PATHS) {
       paths.push(join(currentUserDataDir, rel))
     }
   }

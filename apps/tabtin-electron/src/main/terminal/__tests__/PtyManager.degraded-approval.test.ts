@@ -24,8 +24,8 @@ vi.mock('../../services/ApprovalManager', () => ({
   requestApproval: requestApprovalMock,
 }))
 
-vi.mock('@tabtin/terminal-core', async (importOriginal) => {
-  const actual = await importOriginal<typeof import('@tabtin/terminal-core')>()
+vi.mock('@muse/terminal-core', async (importOriginal) => {
+  const actual = await importOriginal<typeof import('@muse/terminal-core')>()
   return {
     ...actual,
     evaluateLocalTerminalPolicy: evaluateLocalTerminalPolicyMock,
@@ -37,7 +37,7 @@ vi.mock('@tabtin/terminal-core', async (importOriginal) => {
 
 import { PtyManager } from '../PtyManager'
 import type { PtyHostClient, PtyHostSession } from '../PtyHost'
-import { getHumanInteractionContext } from '@tabtin/agent-runtime'
+import { getHumanInteractionContext } from '@muse/agent-runtime'
 
 class MockHostSession implements PtyHostSession {
   pid = 9527
@@ -193,8 +193,8 @@ describe('PtyManager degraded approval fallback', () => {
         killOnTimeout: false,
         env: expect.objectContaining({
           FOO: 'bar',
-          TABTIN_SPACE_ID: 'space-1',
-          TABTIN_AGENT_SPACE_ID: 'space-1',
+          MUSE_SPACE_ID: 'space-1',
+          MUSE_AGENT_SPACE_ID: 'space-1',
         }),
       }),
     )

@@ -25,7 +25,7 @@ export function useDetectBrowsers(options: UseDetectBrowsersOptions = {}): UseDe
     }
     setDetecting(true)
     try {
-      const result = await window.tabtin.credentialVault.detectBrowsers()
+      const result = await window.muse.credentialVault.detectBrowsers()
       if (result.success) {
         cachedBrowsers = result.browsers
         setBrowsers(result.browsers)

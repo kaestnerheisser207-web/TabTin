@@ -1,1 +1,1 @@
-window.__TABTIN_RUNTIME_CONFIG__ = window.__TABTIN_RUNTIME_CONFIG__ || {};
+window.__MUSE_RUNTIME_CONFIG__ = window.__MUSE_RUNTIME_CONFIG__ || {};

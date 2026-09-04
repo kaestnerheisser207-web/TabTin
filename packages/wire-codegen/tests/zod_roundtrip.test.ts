@@ -25,7 +25,7 @@ import {
   ContentBlockDeltaSchema,
   ContentBlockStopSchema,
   ContentBlockDeltaPayloadSchema,
-} from '@tabtin/agent-wire';
+} from '@muse/agent-wire';
 import type { z } from 'zod';
 import { FIXTURE_SAMPLES_DIR } from '../scripts/lib/paths.js';
 

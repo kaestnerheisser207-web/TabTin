@@ -26,7 +26,7 @@ import {
 } from '../../src/tools/read-file-state.js';
 import type {
   ReadFileState,
-} from '@tabtin/agent-runtime';
+} from '@muse/agent-runtime';
 
 let workspaceRoot: string;
 

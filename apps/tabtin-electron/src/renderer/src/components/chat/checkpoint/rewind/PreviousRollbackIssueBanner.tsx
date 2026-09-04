@@ -1,6 +1,6 @@
 import React from 'react'
 import { AlertTriangle } from 'lucide-react'
-import type { SessionRollbackState } from '@tabtin/chat-client'
+import type { SessionRollbackState } from '@muse/chat-client'
 import type { getRollbackResourceDetailsFromState } from '../../../../stores/chat/checkpoint/utils/rollbackResult'
 import {
   derivePreviousRollbackIssueMessage,

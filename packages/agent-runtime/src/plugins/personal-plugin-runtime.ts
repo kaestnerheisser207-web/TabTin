@@ -538,7 +538,7 @@ export class PersonalPluginRuntimeManager {
         ...prepared.env,
         ...(normalizeMcpEnv(mcp.raw) ?? {}),
         COWART_PROJECT_DIR: prepared.projectDir,
-        TABTIN_PLUGIN_INSTALL_PATH: prepared.enabledPlugin.installPath,
+        MUSE_PLUGIN_INSTALL_PATH: prepared.enabledPlugin.installPath,
       };
       return await this.options.mcpRuntimeAdapter!.attach({
         runtimeId: prepared.id,

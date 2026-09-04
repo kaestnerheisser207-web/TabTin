@@ -6,10 +6,10 @@ export type { PersistSafetyEvent, PersistSafetyOptions } from './persist-safety.
 export { createMigratingStorage } from './persist-key-migration.js'
 export type { MigratingStorageOptions } from './persist-key-migration.js'
 // 注意：useCountdown 是 React hook（依赖 react），不再从顶层 index 导出。
-// main 进程 import '@tabtin/shared' 时会顺带触发 ESM eager re-export 解析，
+// main 进程 import '@muse/shared' 时会顺带触发 ESM eager re-export 解析，
 // 加载 use-countdown.js → import 'react' → 在 packaged app 里 react 不在 main
 // 的依赖图中导致 ERR_MODULE_NOT_FOUND，main 启动直接崩。
-// renderer 端请用：import { useCountdown } from '@tabtin/shared/use-countdown'
+// renderer 端请用：import { useCountdown } from '@muse/shared/use-countdown'
 export {
   createErrorExtractor,
   KNOWN_ERROR_CODES,
@@ -74,14 +74,14 @@ export {
   type StorageMigrationReport,
 } from './storage-migration.js'
 export {
-  TABTIN_USER_DATA_DIR_NAMES,
+  MUSE_USER_DATA_DIR_NAMES,
   CREDENTIALS_FILE_NAME,
-  TABTIN_PROTECTED_DIR_NAMES,
-  TABTIN_CONFIG_FILE_RELATIVE_PATHS,
-  TABTIN_CONFIG_DIR_RELATIVE_PATHS,
-  TABTIN_HOME_CONFIG_FILE_RELATIVE_PATHS,
-  TABTIN_UPDATER_CACHE_DIR_NAMES,
-  TABTIN_MAC_APP_BUNDLE_NAMES,
+  MUSE_PROTECTED_DIR_NAMES,
+  MUSE_CONFIG_FILE_RELATIVE_PATHS,
+  MUSE_CONFIG_DIR_RELATIVE_PATHS,
+  MUSE_HOME_CONFIG_FILE_RELATIVE_PATHS,
+  MUSE_UPDATER_CACHE_DIR_NAMES,
+  MUSE_MAC_APP_BUNDLE_NAMES,
   getElectronAppDataRoot,
   getLocalCacheRoot,
   resolveCredentialFilePaths,

@@ -5,7 +5,7 @@ import {
   withRetry,
   type OSSClient,
   type UploadResult,
-} from '@tabtin/oss-client';
+} from '@muse/oss-client';
 
 import { TokenManager } from '../auth.js';
 import { API_BASE_URL } from '../config/api.js';

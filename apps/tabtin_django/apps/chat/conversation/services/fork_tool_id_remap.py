@@ -12,7 +12,7 @@ import copy
 import uuid
 from typing import Any
 
-TABTIN_TOOL_ID_PREFIX = "tu_"
+MUSE_TOOL_ID_PREFIX = "tu_"
 
 # Anthropic content block + OpenAI tool_calls[].type=function（ConversationState）。
 # 须与 TS `FORK_TOOL_USE_TYPES` / `FORK_TOOL_REF_KEYS` 同集（ 双端契约）。
@@ -31,11 +31,11 @@ _TOOL_REF_KEYS = TOOL_REF_KEYS
 
 
 def is_tabtin_tool_use_id(value: str) -> bool:
-    return isinstance(value, str) and value.startswith(TABTIN_TOOL_ID_PREFIX)
+    return isinstance(value, str) and value.startswith(MUSE_TOOL_ID_PREFIX)
 
 
 def allocate_tabtin_tool_use_id() -> str:
-    return f"{TABTIN_TOOL_ID_PREFIX}{uuid.uuid4()}"
+    return f"{MUSE_TOOL_ID_PREFIX}{uuid.uuid4()}"
 
 
 def _is_openai_tool_call_item(value: dict) -> bool:

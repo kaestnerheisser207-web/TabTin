@@ -1,5 +1,5 @@
 import React from 'react'
-import { DocList as SharedDocList } from '@tabtin/tabdoc-ui/editor'
+import { DocList as SharedDocList } from '@muse/tabdoc-ui/editor'
 import { DetailedRowListSkeleton } from '@components/common/ListSkeletons'
 
 type SharedDocListProps = React.ComponentProps<typeof SharedDocList>

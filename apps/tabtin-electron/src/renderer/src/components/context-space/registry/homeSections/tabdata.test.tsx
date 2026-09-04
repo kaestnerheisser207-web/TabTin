@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import type { Table } from '@tabtin/table-core'
+import type { Table } from '@muse/table-core'
 import { tableToContextItem } from './tabdata'
 
 describe('tableToContextItem', () => {

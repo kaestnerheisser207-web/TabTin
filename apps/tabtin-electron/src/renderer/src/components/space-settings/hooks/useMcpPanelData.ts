@@ -28,8 +28,8 @@ const fetchPanelDataDeduped = (mode: 'initial' | 'refresh'): Promise<PanelLoadRe
   }
 
   const promise = Promise.allSettled([
-    window.tabtin.localMcp.discover() as Promise<LocalMcpDiscoveryResult>,
-    window.tabtin.localMcp.listConnections() as Promise<LocalMcpConnectionSummary[]>,
+    window.muse.localMcp.discover() as Promise<LocalMcpDiscoveryResult>,
+    window.muse.localMcp.listConnections() as Promise<LocalMcpConnectionSummary[]>,
   ]).then((results) => {
     const tuple = results as unknown as PanelLoadResults
     cachedLoad = { results: tuple, expiresAt: Date.now() + SHARED_TTL_MS }
@@ -169,7 +169,7 @@ export function useMcpPanelData(agentId?: string) {
    */
   const refreshConnectionsSilent = useCallback(async (): Promise<LocalMcpConnectionSummary[] | null> => {
     try {
-      const next = await window.tabtin.localMcp.listConnections() as LocalMcpConnectionSummary[]
+      const next = await window.muse.localMcp.listConnections() as LocalMcpConnectionSummary[]
       setConnections(next)
       writeCachedConnections(next)
       setDiscovery(prev => {

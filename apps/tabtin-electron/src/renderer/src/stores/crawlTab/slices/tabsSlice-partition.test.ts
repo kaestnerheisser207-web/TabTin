@@ -95,7 +95,7 @@ interface MockListResult {
 }
 
 /**
- * 安装 mock window.tabtin.browserEnv —— `list()` 返回快照，`onChanged` 模拟主进程
+ * 安装 mock window.muse.browserEnv —— `list()` 返回快照，`onChanged` 模拟主进程
  * 广播。返回 `fireChange` 用于测试主动触发 onChanged。
  */
 function installBrowserEnvMock(initialSnapshot: MockListResult | null) {
@@ -146,7 +146,7 @@ describe('tabsSlice · partition 解析（Wave 2 本地化退役）', () => {
   })
 
   it('启动期镜像未就绪 → createWorkspace fallback 到默认 env partition', () => {
-    // 不安装 window.tabtin → 镜像无 IPC 可调
+    // 不安装 window.muse → 镜像无 IPC 可调
     const { actions, state } = createTestStore()
 
     const tab = actions.createWorkspace({

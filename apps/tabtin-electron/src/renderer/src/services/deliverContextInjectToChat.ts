@@ -10,7 +10,7 @@
  */
 
 import i18n from '@/i18n'
-import { toast } from '@tabtin/smartsheet-ui'
+import { toast } from '@muse/smartsheet-ui'
 import { getDraftComposerPresetScopeId } from '@components/chat/composer-presets/scope'
 import { resolveNewTaskMainNavTab } from '@components/layout/primaryNavigation'
 import {

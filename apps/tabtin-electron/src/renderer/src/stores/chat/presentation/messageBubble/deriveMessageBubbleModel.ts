@@ -1,4 +1,4 @@
-import type { ChatMessage } from '@tabtin/chat-client'
+import type { ChatMessage } from '@muse/chat-client'
 import { deriveAssistantBubbleModel } from './deriveAssistantBubbleModel'
 import { deriveMessageErrorModel, resolveMessageBubbleErrorState } from './deriveMessageErrorModel'
 import { deriveMessageFooterModel } from './deriveMessageFooterModel'

@@ -1,6 +1,6 @@
 import { session as electronSession } from 'electron'
 
-import type { ResourceAuthContextRef, ResourceRecord } from '@tabtin/action-tools/types'
+import type { ResourceAuthContextRef, ResourceRecord } from '@muse/action-tools/types'
 
 import { getViewFactory } from '../view-factory'
 

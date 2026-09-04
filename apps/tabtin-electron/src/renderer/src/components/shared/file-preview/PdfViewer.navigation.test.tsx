@@ -83,7 +83,7 @@ describe('PdfViewer page navigation sync ', () => {
   })
 
   async function renderReadyViewer() {
-    render(<PdfViewer fileUrl="tabtin-file://local/C:/multi.pdf" />)
+    render(<PdfViewer fileUrl="muse-file://local/C:/multi.pdf" />)
     await act(async () => {
       await vi.runAllTimersAsync()
     })

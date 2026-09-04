@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import type { ChatSession } from '@tabtin/chat-client'
+import type { ChatSession } from '@muse/chat-client'
 import {
   isLocalCodexModelSelection,
   omitServerModelFieldsWhenLocalCodex,

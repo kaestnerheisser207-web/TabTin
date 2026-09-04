@@ -4,7 +4,7 @@
 import React from 'react'
 import { render } from '@testing-library/react'
 import { describe, expect, it, vi } from 'vitest'
-import type { ChatMessage } from '@tabtin/chat-client'
+import type { ChatMessage } from '@muse/chat-client'
 import {
   IDLE_TURN_END_LAYOUT,
   TurnEndLayoutProvider,
@@ -49,7 +49,7 @@ vi.mock('../messages/common/', () => ({
   CollapsibleMessage: ({ children }: { children: () => React.ReactNode }) => <>{children()}</>,
 }))
 
-vi.mock('@tabtin/smartsheet-ui', () => ({
+vi.mock('@muse/smartsheet-ui', () => ({
   Popover: ({ children }: { children: React.ReactNode }) => <>{children}</>,
   PopoverTrigger: ({ children }: { children: React.ReactNode }) => <>{children}</>,
   PopoverContent: () => null,

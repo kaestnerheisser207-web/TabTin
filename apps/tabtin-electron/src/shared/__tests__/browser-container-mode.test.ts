@@ -27,18 +27,18 @@ describe('browser-container-mode', () => {
     expect(parseBrowserContainerMode('webview')).toBe('webview')
   })
 
-  it('resolveBrowserContainerMode 读 TABTIN_BROWSER_CONTAINER', () => {
+  it('resolveBrowserContainerMode 读 MUSE_BROWSER_CONTAINER', () => {
     expect(resolveBrowserContainerMode({}, undefined)).toBe('wcv')
-    expect(resolveBrowserContainerMode({ TABTIN_BROWSER_CONTAINER: 'webview' }, undefined)).toBe('webview')
-    expect(resolveBrowserContainerMode({ TABTIN_BROWSER_CONTAINER: 'bogus' }, undefined)).toBe('wcv')
+    expect(resolveBrowserContainerMode({ MUSE_BROWSER_CONTAINER: 'webview' }, undefined)).toBe('webview')
+    expect(resolveBrowserContainerMode({ MUSE_BROWSER_CONTAINER: 'bogus' }, undefined)).toBe('wcv')
   })
 
   it('判定顺序：运行时 env > 构建期烘焙 > 默认 wcv', () => {
     // 无运行时 env → 用烘焙值（打包形态的唯一开启通道）
     expect(resolveBrowserContainerMode({}, 'webview')).toBe('webview')
     // 运行时 env 覆盖烘焙值（排障：终端启动 packaged app 强制回 wcv）
-    expect(resolveBrowserContainerMode({ TABTIN_BROWSER_CONTAINER: 'wcv' }, 'webview')).toBe('wcv')
-    expect(resolveBrowserContainerMode({ TABTIN_BROWSER_CONTAINER: 'webview' }, 'wcv')).toBe('webview')
+    expect(resolveBrowserContainerMode({ MUSE_BROWSER_CONTAINER: 'wcv' }, 'webview')).toBe('wcv')
+    expect(resolveBrowserContainerMode({ MUSE_BROWSER_CONTAINER: 'webview' }, 'wcv')).toBe('webview')
     // 烘焙值同样只认精确 webview 字面量，防 profile 配错误开
     expect(resolveBrowserContainerMode({}, 'bogus')).toBe('wcv')
     expect(resolveBrowserContainerMode({}, 'WEBVIEW')).toBe('wcv')

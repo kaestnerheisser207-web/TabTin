@@ -17,7 +17,7 @@ import { createLogger } from '@/utils/logger'
 const log = createLogger('TabSync')
 
 const shouldDebugTabSync =
-  typeof globalThis !== 'undefined' && Boolean((globalThis as Record<string, unknown>).__TABTIN_DEBUG_TAB_SWITCH__)
+  typeof globalThis !== 'undefined' && Boolean((globalThis as Record<string, unknown>).__MUSE_DEBUG_TAB_SWITCH__)
 
 /**
  * crawlspace activeViewId 变化时，是否应跟随切 Space 顶部 activeKey。

@@ -14,7 +14,7 @@
  * code MUST update all three files in the same change set.
  *
  * Why string union (not `const enum`, not zod):
- *   - preload bundle cannot import @tabtin/agent-wire (size budget); preload
+ *   - preload bundle cannot import @muse/agent-wire (size budget); preload
  *     keeps a static mirror of the value list (same pattern as VALID_AGENT_MODES)
  *   - `as const` array gives both the runtime tuple and the literal union with
  *     no runtime cost and full IDE auto-complete
@@ -57,7 +57,7 @@
  * ─── Cousin: GatewayEnvelope (D-7 out of scope) ──────────────────────
  *
  * `agent.stream.*` / `external.*` / `approval.*` traffic uses
- * `GatewayEnvelope` (canonical schema in `@tabtin/contracts/agent`,
+ * `GatewayEnvelope` (canonical schema in `@muse/contracts/agent`,
  * re-exported from this package's `index.ts`). That envelope has its own
  * error vocabulary in `payload.error` and is intentionally NOT unified here.
  * Wave 0 only covers request-response (IPC invoke / HTTP REST / CLI single

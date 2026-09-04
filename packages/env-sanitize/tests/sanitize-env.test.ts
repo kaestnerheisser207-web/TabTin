@@ -96,10 +96,10 @@ describe('sanitizeEnv — 注入变量过滤', () => {
 
 describe('sanitizeEnv — 敏感凭据过滤', () => {
   it('过滤 Muse 内部变量', () => {
-    const result = sanitizeEnv({ TABTIN_TOKEN: 'tok', TABTIN_JWT: 'jwt', TABTIN_SOCK: '/sock', PATH: '/usr/bin' })
-    expect(result).not.toHaveProperty('TABTIN_TOKEN')
-    expect(result).not.toHaveProperty('TABTIN_JWT')
-    expect(result).not.toHaveProperty('TABTIN_SOCK')
+    const result = sanitizeEnv({ MUSE_TOKEN: 'tok', MUSE_JWT: 'jwt', MUSE_SOCK: '/sock', PATH: '/usr/bin' })
+    expect(result).not.toHaveProperty('MUSE_TOKEN')
+    expect(result).not.toHaveProperty('MUSE_JWT')
+    expect(result).not.toHaveProperty('MUSE_SOCK')
   })
 
   it('过滤云厂商密钥', () => {
@@ -334,7 +334,7 @@ describe('SENSITIVE_SANDBOX_PATTERNS', () => {
 describe('导出常量完整性', () => {
   it('SENSITIVE_ENV_VARS 包含关键条目', () => {
     expect(SENSITIVE_ENV_VARS.has('OPENAI_API_KEY')).toBe(true)
-    expect(SENSITIVE_ENV_VARS.has('TABTIN_TOKEN')).toBe(true)
+    expect(SENSITIVE_ENV_VARS.has('MUSE_TOKEN')).toBe(true)
     expect(SENSITIVE_ENV_VARS.has('SSH_PRIVATE_KEY')).toBe(true)
   })
 

@@ -17,7 +17,7 @@ import {
 import { compactNotificationSummary } from '@/services/compactNotificationSummary'
 import { isSessionBusy } from '../../execution/sessionRunProjection'
 import { scheduleTerminalRunReconcile } from '../../execution/sessionRunReconcile'
-import type { ChatClient, ChatMessage, ChatSession } from '@tabtin/chat-client'
+import type { ChatClient, ChatMessage, ChatSession } from '@muse/chat-client'
 import type {
   AgentStepType,
   AgentStepStatus,
@@ -106,7 +106,7 @@ export async function triggerCheckpointAfterLifecycleEnd(sessionId: string, clie
       log.warn('lifecycle.end: no checkpoint pending context, skip', {
         sessionId: sessionId.slice(0, 8),
         remainingSessionQueues: remainingQueues,
-        bridgeAvailable: typeof window !== 'undefined' && !!window.tabtin?.checkpoint,
+        bridgeAvailable: typeof window !== 'undefined' && !!window.muse?.checkpoint,
       })
       return
     }

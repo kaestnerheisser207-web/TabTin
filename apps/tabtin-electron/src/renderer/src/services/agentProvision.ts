@@ -6,8 +6,8 @@
  */
 
 import i18n from '@/i18n'
-import { toast } from '@tabtin/smartsheet-ui/toast'
-import type { Agent } from '@tabtin/app-shell'
+import { toast } from '@muse/smartsheet-ui/toast'
+import type { Agent } from '@muse/app-shell'
 import { useOrganizationStore } from '@stores/useOrganizationStore'
 import { AGENT_LIMIT_EXCEEDED_CODE, createBotAgent } from './agentTemplatesApi'
 import { createLogger } from '@/utils/logger'

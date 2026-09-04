@@ -10,7 +10,7 @@ const payload = {
   file_type: 'xlsx',
   relative_path: 'artifacts/weather.xlsx',
   filename: 'weather.xlsx',
-  url: 'tabtin://resource/file/artifacts%2Fweather.xlsx?hint=tabfiles',
+  url: 'muse://resource/file/artifacts%2Fweather.xlsx?hint=tabfiles',
   mime_type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
   file_size: 12345,
   self_check: {
@@ -24,7 +24,7 @@ const docxPayload = {
   file_type: 'docx',
   relative_path: 'artifacts/report.docx',
   filename: 'report.docx',
-  url: 'tabtin://resource/file/artifacts%2Freport.docx?hint=tabfiles',
+  url: 'muse://resource/file/artifacts%2Freport.docx?hint=tabfiles',
   mime_type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
   file_size: 54321,
   self_check: {
@@ -38,7 +38,7 @@ const pdfPayload = {
   file_type: 'pdf',
   relative_path: 'artifacts/summary.pdf',
   filename: 'summary.pdf',
-  url: 'tabtin://resource/file/artifacts%2Fsummary.pdf?hint=tabfiles',
+  url: 'muse://resource/file/artifacts%2Fsummary.pdf?hint=tabfiles',
   mime_type: 'application/pdf',
   file_size: 98765,
   self_check: {
@@ -52,7 +52,7 @@ const pptxPayload = {
   file_type: 'pptx',
   relative_path: 'artifacts/deck.pptx',
   filename: 'deck.pptx',
-  url: 'tabtin://resource/file/artifacts%2Fdeck.pptx?hint=tabfiles',
+  url: 'muse://resource/file/artifacts%2Fdeck.pptx?hint=tabfiles',
   mime_type: 'application/vnd.openxmlformats-officedocument.presentationml.presentation',
   file_size: 24680,
   self_check: {
@@ -82,7 +82,7 @@ describe('ChatMessage local file artifact shape', () => {
 
     const artifact = message.content_blocks_json[0] as LocalFileArtifactRichContentBlock;
     expect(artifact.payload.relative_path).toBe('artifacts/weather.xlsx');
-    expect(artifact.payload.url).toContain('tabtin://resource/file/');
+    expect(artifact.payload.url).toContain('muse://resource/file/');
     expect(artifact.payload.self_check.status).toBe('passed');
   });
 

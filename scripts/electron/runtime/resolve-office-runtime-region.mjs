@@ -16,7 +16,7 @@ function localeRegion(locale) {
 }
 
 export function resolveOfficeRuntimeRegion({
-  requested = process.env.TABTIN_RUNTIME_REGION ?? 'auto',
+  requested = process.env.MUSE_RUNTIME_REGION ?? 'auto',
   locale = Intl.DateTimeFormat().resolvedOptions().locale,
   timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone,
 } = {}) {
@@ -35,7 +35,7 @@ export function resolveOfficeRuntimeRegion({
 }
 
 function parseArgs(argv) {
-  const options = { requested: process.env.TABTIN_RUNTIME_REGION ?? 'auto' };
+  const options = { requested: process.env.MUSE_RUNTIME_REGION ?? 'auto' };
   for (let index = 0; index < argv.length; index += 1) {
     const argument = argv[index];
     if (argument === '--region') {

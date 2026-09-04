@@ -13,7 +13,7 @@ node_path() {
     printf '%s' "$1"
   fi
 }
-PROFILE="${2:-${TABTIN_BUILD_PROFILE:-local}}"
+PROFILE="${2:-${MUSE_BUILD_PROFILE:-local}}"
 case "$PROFILE" in
   local|community) ;;
   *)
@@ -35,7 +35,7 @@ else
 fi
 TARGET="${1:-mac}"
 # 第二个参数 / 环境变量都可指定 profile（local / community，缺省 local）。
-TABTIN_DISTRIBUTION_KIND="official"
+MUSE_DISTRIBUTION_KIND="official"
 COMMUNITY_API_BASE_URL=""
 COMMUNITY_COLLAB_WS_BASE=""
 COMMUNITY_CENTRIFUGO_WS_URL=""
@@ -44,11 +44,11 @@ COMMUNITY_UPDATE_FEED_URL=""
 COMMUNITY_WS_BASE_URL=""
 COMMUNITY_IM_API_BASE_URL=""
 if [ "$PROFILE" = "community" ]; then
-  COMMUNITY_API_BASE_URL="${TABTIN_COMMUNITY_API_BASE_URL:-http://127.0.0.1:6060/api}"
-  COMMUNITY_COLLAB_WS_BASE="${TABTIN_COMMUNITY_COLLAB_WS_BASE:-ws://127.0.0.1:4100}"
-  COMMUNITY_CENTRIFUGO_WS_URL="${TABTIN_COMMUNITY_CENTRIFUGO_WS_URL:-ws://127.0.0.1:8100/connection/websocket}"
-  COMMUNITY_PUBLIC_WEB_BASE_URL="${TABTIN_COMMUNITY_PUBLIC_WEB_BASE_URL:-http://127.0.0.1:5176}"
-  COMMUNITY_UPDATE_FEED_URL="${TABTIN_COMMUNITY_UPDATE_FEED_URL:-}"
+  COMMUNITY_API_BASE_URL="${MUSE_COMMUNITY_API_BASE_URL:-http://127.0.0.1:6060/api}"
+  COMMUNITY_COLLAB_WS_BASE="${MUSE_COMMUNITY_COLLAB_WS_BASE:-ws://127.0.0.1:4100}"
+  COMMUNITY_CENTRIFUGO_WS_URL="${MUSE_COMMUNITY_CENTRIFUGO_WS_URL:-ws://127.0.0.1:8100/connection/websocket}"
+  COMMUNITY_PUBLIC_WEB_BASE_URL="${MUSE_COMMUNITY_PUBLIC_WEB_BASE_URL:-http://127.0.0.1:5176}"
+  COMMUNITY_UPDATE_FEED_URL="${MUSE_COMMUNITY_UPDATE_FEED_URL:-}"
   COMMUNITY_IM_API_BASE_URL="$COMMUNITY_API_BASE_URL"
   COMMUNITY_WS_BASE_URL="$(node -e '
     const parsed = new URL(process.argv[1])
@@ -83,11 +83,11 @@ if [ "$PROFILE" = "community" ]; then
     }
   }
 
-  validate_community_endpoint TABTIN_COMMUNITY_API_BASE_URL "$COMMUNITY_API_BASE_URL" "http:,https:"
-  validate_community_endpoint TABTIN_COMMUNITY_IM_API_BASE_URL "$COMMUNITY_IM_API_BASE_URL" "http:,https:"
-  validate_community_endpoint TABTIN_COMMUNITY_COLLAB_WS_BASE "$COMMUNITY_COLLAB_WS_BASE" "ws:,wss:"
-  validate_community_endpoint TABTIN_COMMUNITY_CENTRIFUGO_WS_URL "$COMMUNITY_CENTRIFUGO_WS_URL" "ws:,wss:"
-  validate_community_endpoint TABTIN_COMMUNITY_PUBLIC_WEB_BASE_URL "$COMMUNITY_PUBLIC_WEB_BASE_URL" "http:,https:"
+  validate_community_endpoint MUSE_COMMUNITY_API_BASE_URL "$COMMUNITY_API_BASE_URL" "http:,https:"
+  validate_community_endpoint MUSE_COMMUNITY_IM_API_BASE_URL "$COMMUNITY_IM_API_BASE_URL" "http:,https:"
+  validate_community_endpoint MUSE_COMMUNITY_COLLAB_WS_BASE "$COMMUNITY_COLLAB_WS_BASE" "ws:,wss:"
+  validate_community_endpoint MUSE_COMMUNITY_CENTRIFUGO_WS_URL "$COMMUNITY_CENTRIFUGO_WS_URL" "ws:,wss:"
+  validate_community_endpoint MUSE_COMMUNITY_PUBLIC_WEB_BASE_URL "$COMMUNITY_PUBLIC_WEB_BASE_URL" "http:,https:"
   if [ -n "$COMMUNITY_UPDATE_FEED_URL" ]; then
     node -e '
       const parsed = new URL(process.argv[1])
@@ -99,29 +99,29 @@ if [ "$PROFILE" = "community" ]; then
         process.exit(1)
       }
     ' "$COMMUNITY_UPDATE_FEED_URL" || {
-      echo "Invalid TABTIN_COMMUNITY_UPDATE_FEED_URL: expected an HTTPS URL without credentials" >&2
+      echo "Invalid MUSE_COMMUNITY_UPDATE_FEED_URL: expected an HTTPS URL without credentials" >&2
       exit 1
     }
   fi
-  TABTIN_DISTRIBUTION_KIND="community"
-  export TABTIN_API_BASE_URL="$COMMUNITY_API_BASE_URL"
+  MUSE_DISTRIBUTION_KIND="community"
+  export MUSE_API_BASE_URL="$COMMUNITY_API_BASE_URL"
   export VITE_API_BASE_URL="$COMMUNITY_API_BASE_URL"
-  export TABTIN_WS_BASE_URL="$COMMUNITY_WS_BASE_URL"
+  export MUSE_WS_BASE_URL="$COMMUNITY_WS_BASE_URL"
   export VITE_WS_BASE_URL="$COMMUNITY_WS_BASE_URL"
   # Community TabChat uses Django /api/im and therefore shares the API origin.
   export VITE_IM_API_BASE_URL="$COMMUNITY_API_BASE_URL"
   export VITE_COLLAB_WS_BASE="$COMMUNITY_COLLAB_WS_BASE"
   export VITE_CENTRIFUGO_WS_URL="$COMMUNITY_CENTRIFUGO_WS_URL"
-  export TABTIN_PUBLIC_WEB_BASE_URL="$COMMUNITY_PUBLIC_WEB_BASE_URL"
+  export MUSE_PUBLIC_WEB_BASE_URL="$COMMUNITY_PUBLIC_WEB_BASE_URL"
   export VITE_PUBLIC_WEB_BASE_URL="$COMMUNITY_PUBLIC_WEB_BASE_URL"
-  export VITE_WEBSITE_BASE_URL="${TABTIN_COMMUNITY_WEBSITE_BASE_URL:-http://127.0.0.1:6060}"
+  export VITE_WEBSITE_BASE_URL="${MUSE_COMMUNITY_WEBSITE_BASE_URL:-http://127.0.0.1:6060}"
   export VITE_SENTRY_DSN=""
   export SENTRY_URL=""
   export SOURCEMAP_API_URL=""
   export VITE_DISTRIBUTION_KIND="community"
   export SOURCEMAP_UPLOAD_SKIP=1
   export SENTRY_SYMBOL_UPLOAD_SKIP=1
-  if [ "${TABTIN_COMMUNITY_PROFILE_VALIDATE_ONLY:-0}" = "1" ]; then
+  if [ "${MUSE_COMMUNITY_PROFILE_VALIDATE_ONLY:-0}" = "1" ]; then
     echo "Community build profile validation passed API=${COMMUNITY_API_BASE_URL} WS=${COMMUNITY_WS_BASE_URL} IM=${COMMUNITY_IM_API_BASE_URL} Centrifugo=${COMMUNITY_CENTRIFUGO_WS_URL}"
     exit 0
   fi
@@ -134,7 +134,7 @@ case "$HOST_ARCH_RAW" in
   x86_64|amd64)  HOST_ARCH="x64" ;;
   *)             HOST_ARCH="x64" ;;
 esac
-ARCH="${3:-${TABTIN_BUILD_ARCH:-$HOST_ARCH}}"
+ARCH="${3:-${MUSE_BUILD_ARCH:-$HOST_ARCH}}"
 
 TARGET_NAME=""
 BUILD_TITLE=""
@@ -192,14 +192,14 @@ case "$(uname -s)" in
     ;;
 esac
 
-# TABTIN_PACK_QUICK=1：高频发包快路径（对齐 build-mac-dmg-quick）
+# MUSE_PACK_QUICK=1：高频发包快路径（对齐 build-mac-dmg-quick）
 #   - Windows 复用按依赖契约校验的 deploy；每次命中后刷新当前 workspace 包产物
 #   - local quick 跳过 sourcemap
-#   - Windows NSIS 默认 compression=normal（对齐 Mac DMG zlib 量级体积；可用 TABTIN_WIN_NSIS_COMPRESSION 覆盖）
+#   - Windows NSIS 默认 compression=normal（对齐 Mac DMG zlib 量级体积；可用 MUSE_WIN_NSIS_COMPRESSION 覆盖）
 #   - 清理只做正确性 prune
 #   - 仍跑完整资源 staging + packaged artifact audit
 PACK_QUICK=0
-if [ "${TABTIN_PACK_QUICK:-0}" = "1" ]; then
+if [ "${MUSE_PACK_QUICK:-0}" = "1" ]; then
   PACK_QUICK=1
 fi
 
@@ -212,12 +212,12 @@ if pack_may_skip_sentry_symbols "$PACK_QUICK" "$PROFILE"; then
   PACK_SKIP_SENTRY_SYMBOLS=1
 fi
 
-PACKAGED_RUN_ID="${TABTIN_PACKAGED_DEPLOY_RUN_ID:-$(date +%Y%m%d-%H%M%S)-$$}"
+PACKAGED_RUN_ID="${MUSE_PACKAGED_DEPLOY_RUN_ID:-$(date +%Y%m%d-%H%M%S)-$$}"
 
 allocate_packaged_deploy_dir() {
   local packaged_run_id="${PACKAGED_RUN_ID:-$(date +%Y%m%d-%H%M%S)-$$}"
-  if [ -n "${TABTIN_PACKAGED_DEPLOY_DIR:-}" ]; then
-    printf '%s\n' "$TABTIN_PACKAGED_DEPLOY_DIR"
+  if [ -n "${MUSE_PACKAGED_DEPLOY_DIR:-}" ]; then
+    printf '%s\n' "$MUSE_PACKAGED_DEPLOY_DIR"
     return 0
   fi
 
@@ -235,7 +235,7 @@ allocate_packaged_deploy_dir() {
   # pnpm deploy resolves its target from the workspace root. Keep the default
   # staging root there as well so pnpm, resource staging, and cleanup share the
   # same absolute directory.
-  local deploy_root="${TABTIN_PACKAGED_DEPLOY_ROOT:-$REPO_ROOT/.deploy-runs}"
+  local deploy_root="${MUSE_PACKAGED_DEPLOY_ROOT:-$REPO_ROOT/.deploy-runs}"
   printf '%s/%s-%s-%s-%s\n' "$deploy_root" "$PROFILE" "$TARGET_NAME" "$ARCH" "$packaged_run_id"
 }
 
@@ -377,7 +377,7 @@ ARTIFACT_DIR="$DEPLOY_DIR/$ARTIFACT_DIR_RELATIVE"
 PACK_QUICK_DEPLOY_CACHE=0
 QUICK_DEPLOY_CACHE_HIT=0
 if [ "$PACK_QUICK" = "1" ] && [ "$TARGET_RUNTIME" = "win32" ] && \
-   [ -z "${TABTIN_PACKAGED_DEPLOY_DIR:-}" ]; then
+   [ -z "${MUSE_PACKAGED_DEPLOY_DIR:-}" ]; then
   PACK_QUICK_DEPLOY_CACHE=1
 fi
 BUILD_COMPLETED=0
@@ -415,12 +415,12 @@ if [ "$HOST_RUNTIME" != "$TARGET_RUNTIME" ]; then
 fi
 
 # 注入 build profile 让 electron.vite.config.ts 能切换 .env.* 文件
-export TABTIN_BUILD_PROFILE="$PROFILE"
+export MUSE_BUILD_PROFILE="$PROFILE"
 if [ "$PROFILE" = "local" ]; then
   export VITE_BUILD_PROFILE="$PROFILE"
 fi
-export TABTIN_BUILD_TARGET="$TARGET_RUNTIME"
-export TABTIN_BUILD_ARCH="$ARCH"
+export MUSE_BUILD_TARGET="$TARGET_RUNTIME"
+export MUSE_BUILD_ARCH="$ARCH"
 export NODE_ENV="production"
 PROFILE_VERSION="${VITE_APP_VERSION:-$(node -p "require('$(node_path "$APP_DIR/package.json")').version")}" 
 export VITE_APP_VERSION="$PROFILE_VERSION"
@@ -449,8 +449,8 @@ office_runtime_has_pdftoppm() {
 resolve_office_preview_runtime_source() {
   local candidate
   local candidates=()
-  if [ -n "${TABTIN_OFFICE_PREVIEW_RUNTIME_SOURCE:-}" ]; then
-    candidates+=("$TABTIN_OFFICE_PREVIEW_RUNTIME_SOURCE")
+  if [ -n "${MUSE_OFFICE_PREVIEW_RUNTIME_SOURCE:-}" ]; then
+    candidates+=("$MUSE_OFFICE_PREVIEW_RUNTIME_SOURCE")
   fi
   candidates+=(
     "$REPO_ROOT/packages/office-preview-runtime/runtime"
@@ -476,14 +476,14 @@ resolve_office_preview_runtime_source() {
 
 print_missing_office_runtime_help() {
   echo "   可先跑 scripts/electron/runtime/fetch-desktop-runtimes.sh，从官方源准备 LibreOffice + Poppler + Python。" >&2
-  echo "   或设置 TABTIN_OFFICE_PREVIEW_RUNTIME_SOURCE 指向包含 bin/ 和 native/ 的 dependencies 目录。" >&2
-  if [ -n "${TABTIN_OFFICE_PREVIEW_RUNTIME_SOURCE:-}" ]; then
-    echo "   当前 TABTIN_OFFICE_PREVIEW_RUNTIME_SOURCE=${TABTIN_OFFICE_PREVIEW_RUNTIME_SOURCE}" >&2
-    if [ ! -d "$TABTIN_OFFICE_PREVIEW_RUNTIME_SOURCE" ]; then
+  echo "   或设置 MUSE_OFFICE_PREVIEW_RUNTIME_SOURCE 指向包含 bin/ 和 native/ 的 dependencies 目录。" >&2
+  if [ -n "${MUSE_OFFICE_PREVIEW_RUNTIME_SOURCE:-}" ]; then
+    echo "   当前 MUSE_OFFICE_PREVIEW_RUNTIME_SOURCE=${MUSE_OFFICE_PREVIEW_RUNTIME_SOURCE}" >&2
+    if [ ! -d "$MUSE_OFFICE_PREVIEW_RUNTIME_SOURCE" ]; then
       echo "   该目录不存在，Windows Git Bash 下建议使用 C:/... 或 /c/... 路径。" >&2
     else
-      office_runtime_has_soffice "$TABTIN_OFFICE_PREVIEW_RUNTIME_SOURCE" || echo "   该目录缺少 soffice 入口。" >&2
-      office_runtime_has_pdftoppm "$TABTIN_OFFICE_PREVIEW_RUNTIME_SOURCE" || echo "   该目录缺少 pdftoppm 入口。" >&2
+      office_runtime_has_soffice "$MUSE_OFFICE_PREVIEW_RUNTIME_SOURCE" || echo "   该目录缺少 soffice 入口。" >&2
+      office_runtime_has_pdftoppm "$MUSE_OFFICE_PREVIEW_RUNTIME_SOURCE" || echo "   该目录缺少 pdftoppm 入口。" >&2
     fi
   fi
   if [ "$TARGET_RUNTIME" = "win32" ]; then
@@ -495,8 +495,8 @@ print_missing_office_runtime_help() {
     echo "   注意：不要只把 exe 单独复制到 dependencies/bin；Windows DLL 查找依赖 exe 所在目录。" >&2
     echo "   dependencies/bin/soffice.exe / pdftoppm.exe 只适合做能设置好 PATH 的 wrapper。" >&2
     echo "   预检示例：" >&2
-    echo "     test -f \"\$TABTIN_OFFICE_PREVIEW_RUNTIME_SOURCE/bin/soffice.exe\" || test -f \"\$TABTIN_OFFICE_PREVIEW_RUNTIME_SOURCE/native/libreoffice-headless/program/soffice.exe\"" >&2
-    echo "     test -f \"\$TABTIN_OFFICE_PREVIEW_RUNTIME_SOURCE/bin/pdftoppm.exe\" || test -f \"\$TABTIN_OFFICE_PREVIEW_RUNTIME_SOURCE/native/poppler/bin/pdftoppm.exe\"" >&2
+    echo "     test -f \"\$MUSE_OFFICE_PREVIEW_RUNTIME_SOURCE/bin/soffice.exe\" || test -f \"\$MUSE_OFFICE_PREVIEW_RUNTIME_SOURCE/native/libreoffice-headless/program/soffice.exe\"" >&2
+    echo "     test -f \"\$MUSE_OFFICE_PREVIEW_RUNTIME_SOURCE/bin/pdftoppm.exe\" || test -f \"\$MUSE_OFFICE_PREVIEW_RUNTIME_SOURCE/native/poppler/bin/pdftoppm.exe\"" >&2
   fi
   echo "   默认也会尝试以下目录：" >&2
   echo "     $REPO_ROOT/packages/office-preview-runtime/runtime" >&2
@@ -549,8 +549,8 @@ resolve_office_preview_runtime_archive() {
   local source_root="$1"
   local candidate
   local candidates=()
-  if [ -n "${TABTIN_OFFICE_PREVIEW_RUNTIME_ARCHIVE:-}" ]; then
-    candidates+=("$TABTIN_OFFICE_PREVIEW_RUNTIME_ARCHIVE")
+  if [ -n "${MUSE_OFFICE_PREVIEW_RUNTIME_ARCHIVE:-}" ]; then
+    candidates+=("$MUSE_OFFICE_PREVIEW_RUNTIME_ARCHIVE")
   fi
   candidates+=(
     "$source_root/office-preview-runtime.tar.gz"
@@ -559,7 +559,7 @@ resolve_office_preview_runtime_archive() {
 
   for candidate in "${candidates[@]}"; do
     [ -s "$candidate" ] || continue
-    if [ "${TABTIN_SKIP_OFFICE_RUNTIME_ARCHIVE_VALIDATION:-0}" != "1" ]; then
+    if [ "${MUSE_SKIP_OFFICE_RUNTIME_ARCHIVE_VALIDATION:-0}" != "1" ]; then
       if ! office_preview_runtime_archive_has_tools "$candidate"; then
         echo "  ⚠ 忽略缺少 soffice/pdftoppm 的 Office preview runtime archive: $candidate" >&2
         continue
@@ -601,7 +601,7 @@ office_preview_runtime_archive_has_tools() {
 write_office_preview_runtime_archive_cache() {
   local source_root="$1"
   local archive="$2"
-  [ "${TABTIN_WRITE_OFFICE_RUNTIME_ARCHIVE_CACHE:-1}" = "1" ] || return 0
+  [ "${MUSE_WRITE_OFFICE_RUNTIME_ARCHIVE_CACHE:-1}" = "1" ] || return 0
   [ -s "$archive" ] || return 0
 
   local source_real
@@ -697,8 +697,8 @@ office_preview_runtime_platform() {
 }
 
 office_preview_runtime_version() {
-  if [ -n "${TABTIN_OFFICE_PREVIEW_RUNTIME_VERSION:-}" ]; then
-    printf '%s\n' "$TABTIN_OFFICE_PREVIEW_RUNTIME_VERSION"
+  if [ -n "${MUSE_OFFICE_PREVIEW_RUNTIME_VERSION:-}" ]; then
+    printf '%s\n' "$MUSE_OFFICE_PREVIEW_RUNTIME_VERSION"
     return 0
   fi
   printf '%s-%s\n' "$(date +%Y.%m.%d)" "$(office_preview_runtime_platform)"
@@ -823,7 +823,7 @@ case "$PROFILE" in
 esac
 
 if [ "$PROFILE" = "local" ]; then
-  UPDATE_PUBLISH_URL="${TABTIN_UPDATE_PUBLISH_URL:-http://127.0.0.1:6060/desktop-updates}"
+  UPDATE_PUBLISH_URL="${MUSE_UPDATE_PUBLISH_URL:-http://127.0.0.1:6060/desktop-updates}"
 else
   UPDATE_PUBLISH_URL="$COMMUNITY_UPDATE_FEED_URL"
 fi
@@ -873,8 +873,8 @@ configure_windows_nsis_blockmap() {
   [ "$TARGET_RUNTIME" = "win32" ] || return 0
   case "$PROFILE" in
     local|community)
-      if [ "${TABTIN_WIN_NSIS_BLOCKMAP:-0}" = "1" ]; then
-        echo "  · Windows NSIS blockmap: enabled by TABTIN_WIN_NSIS_BLOCKMAP=1"
+      if [ "${MUSE_WIN_NSIS_BLOCKMAP:-0}" = "1" ]; then
+        echo "  · Windows NSIS blockmap: enabled by MUSE_WIN_NSIS_BLOCKMAP=1"
         return 0
       fi
       echo "  · Windows NSIS blockmap: disabled for ${PROFILE} manual installer"
@@ -887,19 +887,19 @@ configure_windows_nsis_blockmap
 # quick：NSIS 默认 normal（约 mx=5）。
 # 对照 Mac quick DMG（UDZO/zlib）~440MB / 十几分钟——不要用 store 把 Win 包撑到 1GB+。
 # 完整链路保持 electron-builder 默认 maximum。
-# 覆盖：TABTIN_WIN_NSIS_COMPRESSION=store|normal|maximum
+# 覆盖：MUSE_WIN_NSIS_COMPRESSION=store|normal|maximum
 configure_windows_quick_compression() {
   [ "$TARGET_RUNTIME" = "win32" ] || return 0
   [ "$PACK_QUICK" = "1" ] || return 0
-  local level="${TABTIN_WIN_NSIS_COMPRESSION:-normal}"
+  local level="${MUSE_WIN_NSIS_COMPRESSION:-normal}"
   case "$level" in
     store|normal|maximum) ;;
     *)
-      echo "  ⚠ unknown TABTIN_WIN_NSIS_COMPRESSION=$level，回退 normal" >&2
+      echo "  ⚠ unknown MUSE_WIN_NSIS_COMPRESSION=$level，回退 normal" >&2
       level="normal"
       ;;
   esac
-  echo "  · Windows NSIS compression: ${level} (quick; override with TABTIN_WIN_NSIS_COMPRESSION)"
+  echo "  · Windows NSIS compression: ${level} (quick; override with MUSE_WIN_NSIS_COMPRESSION)"
   EXTRA_BUILDER_ARGS+=("--config.compression=${level}")
 }
 configure_windows_quick_compression
@@ -1231,10 +1231,10 @@ cd "$APP_DIR"
 if [ "$PACK_SKIP_SENTRY_SYMBOLS" = "1" ]; then
   # Quick builds never upload sourcemaps and delete them before deploy. Avoid
   # generating the large main/preload/renderer maps only to discard them.
-  export TABTIN_PACKAGED_BUILD_SKIP_SOURCEMAPS=1
+  export MUSE_PACKAGED_BUILD_SKIP_SOURCEMAPS=1
   echo "  · local quick pack: 跳过 sourcemap 生成"
 else
-  unset TABTIN_PACKAGED_BUILD_SKIP_SOURCEMAPS
+  unset MUSE_PACKAGED_BUILD_SKIP_SOURCEMAPS
 fi
 # 先把 out/ 整个删掉再让 vite 写。vite 自己的 emptyDir 在 macOS 26 + Spotlight
 # 索引大量小文件时偶发 ENOTEMPTY。手动清干净 + sync + sleep 1s 让 fs 真正落盘。
@@ -1246,15 +1246,15 @@ if [ "$TARGET_RUNTIME" = "win32" ] && [ "${PACK_RUN_TYPECHECK:-0}" != "1" ]; the
   echo "  · Windows packaged build: 先构建 workspace dist，避免 stale workspace package 进入安装包"
   pnpm run build:workspace
   echo "  · 如需强制检查：直接跑脚本设置 PACK_RUN_TYPECHECK=1；经 scripts/pack/windows.bat 还需 PACK_ALLOW_TYPECHECK_BLOCK=1"
-  export TABTIN_PACKAGED_BUILD_SKIP_TYPECHECK=1
+  export MUSE_PACKAGED_BUILD_SKIP_TYPECHECK=1
   node "$SCRIPT_DIR/run-electron-vite.mjs" build
-elif [ "${TABTIN_PACK_SKIP_PREBUILD:-0}" = "1" ]; then
-  echo "  · TABTIN_PACK_SKIP_PREBUILD=1：跳过 npm prebuild（typecheck / i18n），只跑 electron-vite"
+elif [ "${MUSE_PACK_SKIP_PREBUILD:-0}" = "1" ]; then
+  echo "  · MUSE_PACK_SKIP_PREBUILD=1：跳过 npm prebuild（typecheck / i18n），只跑 electron-vite"
   pnpm run build:workspace
-  export TABTIN_PACKAGED_BUILD_SKIP_TYPECHECK=1
+  export MUSE_PACKAGED_BUILD_SKIP_TYPECHECK=1
   node "$SCRIPT_DIR/run-electron-vite.mjs" build
 else
-  unset TABTIN_PACKAGED_BUILD_SKIP_TYPECHECK
+  unset MUSE_PACKAGED_BUILD_SKIP_TYPECHECK
   # Packaged builds keep type checking as a hard gate, but do not inherit the
   # repository-wide prebuild hook. The i18n completeness check covers every
   # locale in the monorepo and is run independently from desktop packaging.
@@ -1447,7 +1447,7 @@ fi
 CLI_GO_DIR="$REPO_ROOT/packages/tabtin-cli-go"
 CLI_GO_BIN_NAME="tabtin"
 if [ "$TARGET_RUNTIME" = "win32" ]; then
-  CLI_GO_BIN_NAME="tabtin.exe"
+  CLI_GO_BIN_NAME="muse.exe"
 fi
 CLI_GO_STAGE_DIR="$DEPLOY_DIR/tabtin-cli-go-dist-src"
 CLI_GO_BIN="$CLI_GO_STAGE_DIR/$CLI_GO_BIN_NAME"
@@ -1571,12 +1571,12 @@ if [ -d "$CLI_GO_DIR" ]; then
   smoke_go_cli_contract_if_runnable "$CLI_GO_BIN"
 fi
 
-# tabtin-filegen（PyInstaller 自包含二进制）：文件生成能力（xlsx/docx/pptx/pdf），
+# muse-filegen（PyInstaller 自包含二进制）：文件生成能力（xlsx/docx/pptx/pdf），
 # 运行期被 cli-server.ts 加进 Agent shell PATH。与 Go CLI 同：不是 npm 包、pnpm
 # deploy 不含它，这里手动拷进 deploy-src（prepare-deploy-package.mjs 会把
-# extraResources 的 from 重写成 ./tabtin-filegen-python-dist-src）。
+# extraResources 的 from 重写成 ./muse-filegen-python-dist-src）。
 # local/community 包均按 best-effort 置入目标架构二进制。
-FILEGEN_DIR="$REPO_ROOT/packages/tabtin-filegen-python"
+FILEGEN_DIR="$REPO_ROOT/packages/muse-filegen-python"
 # shellcheck disable=SC1091
 source "$FILEGEN_DIR/filegen-arch.sh"
 FILEGEN_BIN_NAME="$(filegen_generic_bin_name "$TARGET_RUNTIME")"
@@ -1623,30 +1623,30 @@ if [ -d "$FILEGEN_DIR" ]; then
     if can_build_filegen_on_host; then
       FILEGEN_PYTHON="$(resolve_filegen_python || true)"
       if [ -n "$FILEGEN_PYTHON" ]; then
-        echo "  · 构建 tabtin-filegen 二进制 (packages/tabtin-filegen-python/dist/$FILEGEN_ARCH_NAME)"
+        echo "  · 构建 muse-filegen 二进制 (packages/muse-filegen-python/dist/$FILEGEN_ARCH_NAME)"
         if ! ( cd "$FILEGEN_DIR" && PYTHON="$FILEGEN_PYTHON" bash build.sh ); then
-          echo "  ⚠ tabtin-filegen 构建失败：包内将缺少文件生成能力（非致命）" >&2
+          echo "  ⚠ muse-filegen 构建失败：包内将缺少文件生成能力（非致命）" >&2
         fi
         FILEGEN_SOURCE="$(resolve_filegen_source || true)"
       else
-        echo "  ⚠ 无法现场构建 tabtin-filegen（无 python3/python）：包内将缺少文件生成能力（非致命）" >&2
+        echo "  ⚠ 无法现场构建 muse-filegen（无 python3/python）：包内将缺少文件生成能力（非致命）" >&2
       fi
     else
-      echo "  ⚠ 无法现场构建目标架构 tabtin-filegen（host=${HOST_RUNTIME}/${HOST_ARCH} target=${TARGET_RUNTIME}/${ARCH}）：包内将缺少文件生成能力（非致命）" >&2
+      echo "  ⚠ 无法现场构建目标架构 muse-filegen（host=${HOST_RUNTIME}/${HOST_ARCH} target=${TARGET_RUNTIME}/${ARCH}）：包内将缺少文件生成能力（非致命）" >&2
     fi
   fi
-  rm -rf "$DEPLOY_DIR/tabtin-filegen-python-dist-src"
-  mkdir -p "$DEPLOY_DIR/tabtin-filegen-python-dist-src"
+  rm -rf "$DEPLOY_DIR/muse-filegen-python-dist-src"
+  mkdir -p "$DEPLOY_DIR/muse-filegen-python-dist-src"
   if [ -n "${FILEGEN_SOURCE:-}" ] && filegen_matches_target "$FILEGEN_SOURCE" "$TARGET_RUNTIME" "$ARCH"; then
-    cp "$FILEGEN_SOURCE" "$DEPLOY_DIR/tabtin-filegen-python-dist-src/$FILEGEN_BIN_NAME"
+    cp "$FILEGEN_SOURCE" "$DEPLOY_DIR/muse-filegen-python-dist-src/$FILEGEN_BIN_NAME"
     if [ "$FILEGEN_SOURCE" = "$FILEGEN_BIN" ]; then
       cp -f "$FILEGEN_SOURCE" "$FILEGEN_ARCH_BIN"
     fi
-    echo "  · staged tabtin-filegen from $FILEGEN_SOURCE → $FILEGEN_BIN_NAME (${TARGET_RUNTIME}/${ARCH})"
+    echo "  · staged muse-filegen from $FILEGEN_SOURCE → $FILEGEN_BIN_NAME (${TARGET_RUNTIME}/${ARCH})"
   fi
 fi
 
-if [ "${TABTIN_ENABLE_PACKAGED_OFFICE_PREVIEW_RUNTIME:-0}" = "1" ] && [ -n "$OFFICE_RUNTIME_SRC" ]; then
+if [ "${MUSE_ENABLE_PACKAGED_OFFICE_PREVIEW_RUNTIME:-0}" = "1" ] && [ -n "$OFFICE_RUNTIME_SRC" ]; then
   echo "  · 打包 Office preview runtime: $OFFICE_RUNTIME_SRC"
   stage_office_preview_runtime_bundle "$OFFICE_RUNTIME_SRC" "$OFFICE_RUNTIME_DEPLOY_SRC"
 elif stage_office_preview_runtime_download_manifest "$OFFICE_RUNTIME_DEPLOY_SRC"; then
@@ -1658,7 +1658,7 @@ else
 fi
 
 # ---- 自管 Python 运行时 staging（逻辑在 scripts/electron/package/prepare-python-runtime.sh）----
-PY_RUNTIME_DEPLOY_SRC="$DEPLOY_DIR/tabtin-python-runtime-src"
+PY_RUNTIME_DEPLOY_SRC="$DEPLOY_DIR/muse-python-runtime-src"
 bash "$REPO_ROOT/scripts/electron/package/prepare-python-runtime.sh" \
   --platform "${TARGET_RUNTIME}-${ARCH}" \
   --profile "$PROFILE" \
@@ -1681,9 +1681,9 @@ elif node "$EMBEDDING_MODEL_FETCH_SCRIPT" --out "$EMBEDDING_MODEL_CACHE"; then
   mkdir -p "$EMBEDDING_MODEL_DEPLOY_SRC"
   cp -R "$EMBEDDING_MODEL_CACHE/." "$EMBEDDING_MODEL_DEPLOY_SRC/"
 else
-  MODEL_REGION="${TABTIN_RUNTIME_REGION:-auto}"
+  MODEL_REGION="${MUSE_RUNTIME_REGION:-auto}"
   MODEL_REGION="$(node "$REPO_ROOT/scripts/electron/runtime/resolve-office-runtime-region.mjs" --region "$MODEL_REGION" 2>/dev/null || printf '%s' global)"
-  if [ -z "${HF_ENDPOINT:-}" ] && [ "$MODEL_REGION" = "cn" ] && [ "${TABTIN_DISABLE_HF_MIRROR_FALLBACK:-0}" != "1" ]; then
+  if [ -z "${HF_ENDPOINT:-}" ] && [ "$MODEL_REGION" = "cn" ] && [ "${MUSE_DISABLE_HF_MIRROR_FALLBACK:-0}" != "1" ]; then
     echo "  ↪ 官方模型源失败，使用已校验的国内镜像重试（HF_ENDPOINT 可显式覆盖）..."
     if HF_ENDPOINT="https://hf-mirror.com" node "$EMBEDDING_MODEL_FETCH_SCRIPT" --out "$EMBEDDING_MODEL_CACHE"; then
       rm -rf "$EMBEDDING_MODEL_DEPLOY_SRC"
@@ -1704,8 +1704,8 @@ fi
 
 PREPARE_DEPLOY_ARGS=(
   --package-json "$DEPLOY_DIR/package.json"
-  --update-channel "${TABTIN_UPDATE_CHANNEL:-stable}"
-  --distribution-kind "$TABTIN_DISTRIBUTION_KIND"
+  --update-channel "${MUSE_UPDATE_CHANNEL:-stable}"
+  --distribution-kind "$MUSE_DISTRIBUTION_KIND"
   --api-base-url "${COMMUNITY_API_BASE_URL:-${VITE_API_BASE_URL:-}}"
 )
 [ -n "$UPDATE_PUBLISH_URL" ] && PREPARE_DEPLOY_ARGS+=(--publish-url "$UPDATE_PUBLISH_URL")
@@ -1838,12 +1838,12 @@ else
     esac
   }
 
-  for pnpm_inner in "$DEPLOY_DIR"/node_modules/.pnpm/@tabtin+*/node_modules/@tabtin/*; do
+  for pnpm_inner in "$DEPLOY_DIR"/node_modules/.pnpm/@tabtin+*/node_modules/@muse/*; do
     [ -d "$pnpm_inner" ] || continue
     pkg_name=$(basename "$pnpm_inner")
     top_link="$DEPLOY_AT_DIR/$pkg_name"
     pnpm_dir=$(basename "$(dirname "$(dirname "$(dirname "$pnpm_inner")")")")
-    desired_target="../.pnpm/$pnpm_dir/node_modules/@tabtin/$pkg_name"
+    desired_target="../.pnpm/$pnpm_dir/node_modules/@muse/$pkg_name"
 
     if [ -L "$top_link" ]; then
       resolved_target="$(realpath "$top_link" 2>/dev/null || true)"
@@ -1860,7 +1860,7 @@ else
     fi
 
     ln -s "$desired_target" "$top_link"
-    echo "  · hoist 修正: @tabtin/$pkg_name"
+    echo "  · hoist 修正: @muse/$pkg_name"
   done
 fi
 

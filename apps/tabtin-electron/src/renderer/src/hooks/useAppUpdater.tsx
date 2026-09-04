@@ -1,13 +1,13 @@
 import { useEffect, useRef } from 'react'
-import { ToastAction, toast } from '@tabtin/smartsheet-ui/toast'
+import { ToastAction, toast } from '@muse/smartsheet-ui/toast'
 
 export function useAppUpdater() {
   const handledKeysRef = useRef<Set<string>>(new Set())
 
   useEffect(() => {
-    if (!window.tabtin?.updater?.onUpdateEvent) return
+    if (!window.muse?.updater?.onUpdateEvent) return
 
-    return window.tabtin.updater.onUpdateEvent((payload) => {
+    return window.muse.updater.onUpdateEvent((payload) => {
       const event = payload?.event
       const data = payload?.data ?? {}
       const version = typeof data?.version === 'string' ? data.version : ''
@@ -30,7 +30,7 @@ export function useAppUpdater() {
             <ToastAction
               altText="立即重启并安装"
               onClick={() => {
-                window.tabtin.updater.quitAndInstall()
+                window.muse.updater.quitAndInstall()
               }}
             >
               立即安装

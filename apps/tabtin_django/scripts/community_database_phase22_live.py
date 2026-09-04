@@ -13,8 +13,8 @@ from types import SimpleNamespace
 from uuid import uuid4
 
 
-if os.environ.get("TABTIN_COMMUNITY_PHASE22_LIVE_PROBE") != "1":
-    raise SystemExit("TABTIN_COMMUNITY_PHASE22_LIVE_PROBE=1 is required")
+if os.environ.get("MUSE_COMMUNITY_PHASE22_LIVE_PROBE") != "1":
+    raise SystemExit("MUSE_COMMUNITY_PHASE22_LIVE_PROBE=1 is required")
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "tabtin.settings")

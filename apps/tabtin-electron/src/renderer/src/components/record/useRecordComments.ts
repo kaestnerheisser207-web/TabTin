@@ -11,7 +11,7 @@ import {
   type RecordCommentStatus,
   type RecordCommentStatusFilter,
   type UpdateRecordCommentThreadStatusResponse,
-} from '@tabtin/table-core'
+} from '@muse/table-core'
 import i18n from '@/i18n'
 import { createLogger } from '@/utils/logger'
 

@@ -287,8 +287,8 @@ public object TaskWorkbenchConversationArtifactPolicy {
 
     private fun fileIdFromResourceUrl(url: String?): String? {
         val href = url?.trim().orEmpty()
-        if (!href.startsWith("tabtin://resource/file/")) return null
-        val rest = href.removePrefix("tabtin://resource/file/")
+        if (!href.startsWith("muse://resource/file/")) return null
+        val rest = href.removePrefix("muse://resource/file/")
         val id = rest.substringBefore('?').let { encoded ->
             runCatching { URLDecoder.decode(encoded, StandardCharsets.UTF_8) }.getOrDefault(encoded)
         }
@@ -310,7 +310,7 @@ public data class TaskWorkbenchSnapshot(
     }
 }
 
-/** 从 assistant 正文提取 `tabtin://resource/<type>/<id>`。对齐 iOS `TaskWorkbenchResourceLinkExtractor`。 */
+/** 从 assistant 正文提取 `muse://resource/<type>/<id>`。对齐 iOS `TaskWorkbenchResourceLinkExtractor`。 */
 public object TaskWorkbenchResourceLinkExtractor {
     public data class Link(
         val resourceType: String,
@@ -319,16 +319,16 @@ public object TaskWorkbenchResourceLinkExtractor {
     )
 
     private val mdLinkRegex =
-        Regex("""\[([^\]]+)\]\((tabtin://resource/[^)\s"'`]+)\)""")
+        Regex("""\[([^\]]+)\]\((muse://resource/[^)\s"'`]+)\)""")
     private val bareUriRegex =
-        Regex("""tabtin://resource/[^\s)\]"'`]+""")
+        Regex("""muse://resource/[^\s)\]"'`]+""")
     private val fencedCodeRegex = Regex("""```[\s\S]*?(?:```|$)""")
     private val inlineCodeRegex = Regex("""`[^`\n]*`""")
 
     public fun extract(rawText: String): List<Link> {
-        if (!rawText.contains("tabtin://resource/")) return emptyList()
+        if (!rawText.contains("muse://resource/")) return emptyList()
         val text = stripCodeSegments(rawText)
-        if (!text.contains("tabtin://resource/")) return emptyList()
+        if (!text.contains("muse://resource/")) return emptyList()
 
         val labelByUrl = linkedMapOf<String, String>()
         mdLinkRegex.findAll(text).forEach { match ->
@@ -371,8 +371,8 @@ public object TaskWorkbenchResourceLinkExtractor {
     }
 
     private fun parseResourceUri(href: String): Pair<String, String>? {
-        if (!href.startsWith("tabtin://resource/")) return null
-        val rest = href.removePrefix("tabtin://resource/")
+        if (!href.startsWith("muse://resource/")) return null
+        val rest = href.removePrefix("muse://resource/")
         val path = rest.substringBefore('?')
         val slash = path.indexOf('/')
         if (slash <= 0 || slash >= path.lastIndex) return null
@@ -528,7 +528,7 @@ internal object TaskWorkbenchCLIResourceExtractor {
 
 /**
  * 从会话消息 + Space 资源投影「本任务产出」。对齐 iOS `TaskWorkbenchProjector` 主路径
- *（rich_content + tabtin:// 链接 + CLI JSON + 跨消息 tool_result + 子 Agent 原文）。
+ *（rich_content + muse:// 链接 + CLI JSON + 跨消息 tool_result + 子 Agent 原文）。
  */
 public object TaskWorkbenchProjector {
     public fun project(

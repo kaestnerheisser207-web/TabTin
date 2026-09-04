@@ -3,7 +3,7 @@
  */
 
 import { describe, it, expect } from 'vitest'
-import { CHECKPOINT_EXCLUDE_PATTERNS, buildExcludeContent } from '@tabtin/checkpoint-core'
+import { CHECKPOINT_EXCLUDE_PATTERNS, buildExcludeContent } from '@muse/checkpoint-core'
 
 describe('CHECKPOINT_EXCLUDE_PATTERNS', () => {
   it('should include node_modules', () => {

@@ -16,7 +16,7 @@
  *
  * **read / write 性能 override + 结构化 OS 错误**：
  *   - 默认基类基于 exec 的组合实现，每次 `cat` 一次 spawn ~5-20ms
- *   - Native 走 `@tabtin/safe-fs::safeReadFile / safeWriteFile / safeReadDir
+ *   - Native 走 `@muse/safe-fs::safeReadFile / safeWriteFile / safeReadDir
  *     / safeMkdir / safeRm / safeStat / safeAccess`，绕过 spawn 成本
  *     的同时把 macOS TCC 拒绝 / Windows 杀软拦截 / 云盘占位等 OS 级
  *     错误归一成 `OSAccessError`（含 osError 字段）
@@ -184,7 +184,7 @@ export interface NativeBackendSessionInit {
    */
   readonly execImpl: (command: string, opts?: ExecOptions) => Promise<ExecResult>;
   /**
-   * 文件系统端口（宿主注入 `@tabtin/safe-fs` 或测试 mock）。
+   * 文件系统端口（宿主注入 `@muse/safe-fs` 或测试 mock）。
    * 生产路径不再硬依赖 safe-fs（ Stage 7a）。
    */
   readonly fs: SafeFsPort;

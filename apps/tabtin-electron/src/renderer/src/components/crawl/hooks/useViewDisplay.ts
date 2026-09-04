@@ -8,7 +8,7 @@ const handleError = createIPCErrorHandler('EmbeddedCrawlView')
 const log = createLogger('CrawlBounds')
 
 const isCrawlBoundsDebugEnabled = (): boolean => {
-  if (typeof globalThis !== 'undefined' && globalThis.__TABTIN_DEBUG_CRAWL_BOUNDS__) return true
+  if (typeof globalThis !== 'undefined' && globalThis.__MUSE_DEBUG_CRAWL_BOUNDS__) return true
   try {
     return window.localStorage?.getItem('debug:crawl-bounds') === '1'
   } catch {

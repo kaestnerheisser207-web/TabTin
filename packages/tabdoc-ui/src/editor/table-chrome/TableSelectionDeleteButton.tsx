@@ -4,7 +4,7 @@ import { useEditor, type EditorInstance } from 'novel'
 import { useTranslation } from 'react-i18next'
 import type { Node as PMNode } from '@tiptap/pm/model'
 import { TableMap } from '@tiptap/pm/tables'
-import { Button } from '@tabtin/smartsheet-ui'
+import { Button } from '@muse/smartsheet-ui'
 import { findTableLocation } from '../table-exit'
 import {
   canDeleteColumnAt,

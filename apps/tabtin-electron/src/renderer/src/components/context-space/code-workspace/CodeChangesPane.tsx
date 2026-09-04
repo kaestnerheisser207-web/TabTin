@@ -881,7 +881,7 @@ function CommitHistoryView({
       }
       setLoadError(null)
       try {
-        const result = await window.tabtin?.git?.listCommits?.(rootPath, { limit: 50 })
+        const result = await window.muse?.git?.listCommits?.(rootPath, { limit: 50 })
         if (cancelled) return
         if (!result) {
           setCommits([])
@@ -937,7 +937,7 @@ function CommitHistoryView({
       setDetailLoading(true)
       setDetailError(null)
       try {
-        const next = await window.tabtin?.git?.getCommitDetail?.(rootPath, {
+        const next = await window.muse?.git?.getCommitDetail?.(rootPath, {
           commitHash: selectedHash,
         })
         if (cancelled) return

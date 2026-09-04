@@ -93,7 +93,7 @@ class DDLManager:
         self.db_alias = db_alias
 
     def _community_operations(self) -> CommunitySchemaOperations | None:
-        if getattr(settings, 'TABTIN_EDITION', 'saas') != 'community':
+        if getattr(settings, 'MUSE_EDITION', 'saas') != 'community':
             return None
         return CommunitySchemaOperations(connections[self.db_alias])
 

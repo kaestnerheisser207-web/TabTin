@@ -2,8 +2,8 @@
  * Rules Hook —— 每轮把工作目录根部 `AGENTS.md`（项目规约）注入 messages 最前。
  *
  * **归属（ Phase 1）**：本 hook 原名 `buildRulesInjectorHook`，住在
- * `@tabtin/agent-runtime` 的 `capability/injectors/rules-injector.ts`。因它依赖
- * `@tabtin/agent-prompt`，随「引擎零业务依赖」重构迁到宿主 `@tabtin/agent-host/hooks`。
+ * `@muse/agent-runtime` 的 `capability/injectors/rules-injector.ts`。因它依赖
+ * `@muse/agent-prompt`，随「引擎零业务依赖」重构迁到宿主 `@muse/agent-host/hooks`。
  * 行为逐字节一致，仅换归属与工厂名（`buildRulesInjectorHook` → `buildRulesHook`）。
  *
  * **行为（结构照抄 memory / context hook）**：
@@ -19,10 +19,10 @@
  * **hook 本体不碰 fs**：读盘细节交给宿主注入的 `fetchProjectRules` 闭包。
  */
 
-import { buildProjectRulesSection } from '@tabtin/agent-prompt'
-import type { EngineHooks, IterationHookContext } from '@tabtin/agent-runtime/engine'
-import { INTERNAL_MESSAGE_MARKERS } from '@tabtin/agent-runtime/engine'
-import { RuntimeSystemNoticeEvent } from '@tabtin/agent-runtime'
+import { buildProjectRulesSection } from '@muse/agent-prompt'
+import type { EngineHooks, IterationHookContext } from '@muse/agent-runtime/engine'
+import { INTERNAL_MESSAGE_MARKERS } from '@muse/agent-runtime/engine'
+import { RuntimeSystemNoticeEvent } from '@muse/agent-runtime'
 import { removeTaggedBlock, upsertTaggedBlock } from './message-inject.js'
 
 // ─── Public Types ────────────────────────────────────────────────────

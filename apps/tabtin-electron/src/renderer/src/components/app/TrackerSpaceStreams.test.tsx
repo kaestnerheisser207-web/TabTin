@@ -14,7 +14,7 @@ vi.mock('@/services/trackerApi', () => ({
   listTasks: (...args: unknown[]) => mocks.listTasks(...args),
 }))
 
-vi.mock('@tabtin/smartsheet-ui/toast', () => ({
+vi.mock('@muse/smartsheet-ui/toast', () => ({
   toast: { error: vi.fn(), success: vi.fn() },
 }))
 

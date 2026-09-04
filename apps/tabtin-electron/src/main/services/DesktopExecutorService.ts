@@ -20,7 +20,7 @@ import { execFileSync } from 'node:child_process'
 import { join, dirname } from 'node:path'
 import { mkdirSync } from 'node:fs'
 import { writeFile } from 'node:fs/promises'
-import { getHomeTabtinPath } from '@tabtin/shared/storage-paths'
+import { getHomeTabtinPath } from '@muse/shared/storage-paths'
 import { createLogger } from '../logger'
 import { writeAuditLog } from './desktop-audit-logger'
 import { DesktopError, DesktopErrorCode } from './desktop-error-codes'
@@ -1376,11 +1376,11 @@ export class DesktopExecutorService {
             '-e', `tell application "${escapeAppleScript(target)}" to activate`,
           ], { timeout: 5000 })
         } else {
-          const ps = `$p = Get-Process | Where-Object { $_.MainWindowTitle -like "*$env:TABTIN_TARGET*" } | Select-Object -First 1; if ($p) { Add-Type -Name Win -Namespace Native -MemberDefinition '[DllImport("user32.dll")] public static extern bool SetForegroundWindow(IntPtr hWnd);'; [Native.Win]::SetForegroundWindow($p.MainWindowHandle) }`
+          const ps = `$p = Get-Process | Where-Object { $_.MainWindowTitle -like "*$env:MUSE_TARGET*" } | Select-Object -First 1; if ($p) { Add-Type -Name Win -Namespace Native -MemberDefinition '[DllImport("user32.dll")] public static extern bool SetForegroundWindow(IntPtr hWnd);'; [Native.Win]::SetForegroundWindow($p.MainWindowHandle) }`
           // windowsHide: 避免弹出控制台窗口抢前台，干扰 SetForegroundWindow
           execFileSync('powershell', ['-NoProfile', '-Command', ps], {
             timeout: 5000,
-            env: { ...process.env, TABTIN_TARGET: target },
+            env: { ...process.env, MUSE_TARGET: target },
             windowsHide: true,
           })
         }
@@ -1445,8 +1445,8 @@ export class DesktopExecutorService {
           // （"C:\\Program Files\\App\\app.exe"）；无需按 looksLikePath 区分。
           execFileSync('powershell', [
             '-NoProfile', '-Command',
-            'Start-Process -FilePath $env:TABTIN_APP -WindowStyle Normal',
-          ], { timeout: 10000, env: { ...process.env, TABTIN_APP: trimmed }, windowsHide: true })
+            'Start-Process -FilePath $env:MUSE_APP -WindowStyle Normal',
+          ], { timeout: 10000, env: { ...process.env, MUSE_APP: trimmed }, windowsHide: true })
         } else {
           // 打开应用仅在 macOS 和 Windows 可用，Linux 抛中文三段式
           throw linuxNotSupported('打开应用')
@@ -1956,8 +1956,8 @@ export class DesktopExecutorService {
    * Linux 不支持桌面操控，直接抛 `UNSUPPORTED_PLATFORM`。
    */
   async captureAccessibilityTree(
-    opts: import('@tabtin/desktop-contracts').AccessibilityTreeOpts = {},
-  ): Promise<import('@tabtin/desktop-contracts').AccessibilitySnapshot> {
+    opts: import('@muse/desktop-contracts').AccessibilityTreeOpts = {},
+  ): Promise<import('@muse/desktop-contracts').AccessibilitySnapshot> {
     if (process.platform !== 'darwin' && process.platform !== 'win32') {
       throw linuxNotSupported('AX 查询')
     }
@@ -1996,8 +1996,8 @@ export class DesktopExecutorService {
    * pixelCompare 跳过（AX 逻辑坐标无法与截图像素做 9×9 比对）。
    */
   async clickElement(
-    opts: import('@tabtin/desktop-contracts').ClickElementOpts,
-  ): Promise<import('@tabtin/desktop-contracts').ClickElementResult> {
+    opts: import('@muse/desktop-contracts').ClickElementOpts,
+  ): Promise<import('@muse/desktop-contracts').ClickElementResult> {
     this.checkAborted()
     this.touchActivity()
     this.audit('click_element', opts as unknown as Record<string, unknown>)
@@ -2064,8 +2064,8 @@ export class DesktopExecutorService {
    * macOS AX 的 AXValue 写入不如 click+type 可靠，所以走 click → type 路径。
    */
   async typeIntoElement(
-    opts: import('@tabtin/desktop-contracts').TypeIntoElementOpts,
-  ): Promise<import('@tabtin/desktop-contracts').TypeIntoElementResult> {
+    opts: import('@muse/desktop-contracts').TypeIntoElementOpts,
+  ): Promise<import('@muse/desktop-contracts').TypeIntoElementResult> {
     this.checkAborted()
     this.touchActivity()
     this.audit('type_into_element', opts as unknown as Record<string, unknown>)

@@ -3,26 +3,26 @@ import { MeetingCaptureController } from './MeetingCaptureController';
 const controller = new MeetingCaptureController({
   sink: {
     appendAudioChunk: (input) =>
-      window.tabtin.meetingRecording.appendAudioChunk(input),
+      window.muse.meetingRecording.appendAudioChunk(input),
     appendPcmChunk: (input) =>
-      window.tabtin.meetingRecording.appendPcmChunk(input),
+      window.muse.meetingRecording.appendPcmChunk(input),
     reportCaptureLevel: (event) => {
-      void window.tabtin.meetingRecording
+      void window.muse.meetingRecording
         .reportCaptureLevel(event)
         .catch(() => undefined);
     },
     reportCaptureSourceEnded: (event) => {
-      void window.tabtin.meetingRecording
+      void window.muse.meetingRecording
         .reportCaptureSourceEnded(event)
         .catch(() => undefined);
     },
     reportCaptureDevicesChanged: (event) => {
-      void window.tabtin.meetingRecording
+      void window.muse.meetingRecording
         .reportCaptureDevicesChanged(event)
         .catch(() => undefined);
     },
     reportMicrophoneTestLevel: (event) => {
-      void window.tabtin.meetingRecording
+      void window.muse.meetingRecording
         .reportMicrophoneTestLevel(event)
         .catch(() => undefined);
     },
@@ -30,7 +30,7 @@ const controller = new MeetingCaptureController({
 });
 
 Object.assign(globalThis, {
-  __TABTIN_MEETING_CAPTURE__: {
+  __MUSE_MEETING_CAPTURE__: {
     probe: controller.probe.bind(controller),
     listMicrophones: controller.listMicrophones.bind(controller),
     listSystemAudioSources: controller.listSystemAudioSources.bind(controller),

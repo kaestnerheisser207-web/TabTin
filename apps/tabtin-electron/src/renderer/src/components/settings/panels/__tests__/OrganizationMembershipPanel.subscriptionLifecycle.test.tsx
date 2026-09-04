@@ -16,7 +16,7 @@ const state = vi.hoisted(() => ({
   toggleOrganizationAutoRenew: vi.fn(),
 }))
 
-vi.mock('@tabtin/smartsheet-ui', () => ({
+vi.mock('@muse/smartsheet-ui', () => ({
   Button: ({ children, ...props }: any) => <button {...props}>{children}</button>,
   Dialog: ({ open, children }: any) => open ? <div data-testid="dialog">{children}</div> : null,
   DialogContent: ({ children }: any) => <div>{children}</div>,

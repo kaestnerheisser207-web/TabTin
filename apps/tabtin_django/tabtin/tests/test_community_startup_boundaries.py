@@ -17,7 +17,7 @@ class CommunityStartupBoundaryTests(SimpleTestCase):
     def test_external_channels_are_off_by_default_but_explicit_selection_survives(self):
         with patch.dict(
             os.environ,
-            {"TABTIN_EDITION": "community"},
+            {"MUSE_EDITION": "community"},
             clear=True,
         ):
             self.assertEqual(ChannelGatewayConfig._get_configured_channels(), [])
@@ -25,8 +25,8 @@ class CommunityStartupBoundaryTests(SimpleTestCase):
         with patch.dict(
             os.environ,
             {
-                "TABTIN_EDITION": "community",
-                "TABTIN_CHANNELS": "slack",
+                "MUSE_EDITION": "community",
+                "MUSE_CHANNELS": "slack",
             },
             clear=True,
         ):
@@ -54,7 +54,7 @@ class CommunityStartupBoundaryTests(SimpleTestCase):
             patch.dict(
                 os.environ,
                 {
-                    "TABTIN_EDITION": "community",
+                    "MUSE_EDITION": "community",
                     "SENTRY_DSN": "https://public@sentry.example.com/1",
                 },
                 clear=True,
@@ -81,7 +81,7 @@ class CommunityStartupBoundaryTests(SimpleTestCase):
             patch.dict(
                 os.environ,
                 {
-                    "TABTIN_EDITION": "community",
+                    "MUSE_EDITION": "community",
                     "SENTRY_DSN": "https://public@sentry.user.example/1",
                     "SENTRY_ENVIRONMENT": "production",
                 },
@@ -107,7 +107,7 @@ class CommunityStartupBoundaryTests(SimpleTestCase):
             patch.dict(
                 os.environ,
                 {
-                    "TABTIN_EDITION": "community",
+                    "MUSE_EDITION": "community",
                     "OTEL_EXPORTER_OTLP_ENDPOINT": "https://otel.example.com/v1/traces",
                 },
                 clear=True,
@@ -122,7 +122,7 @@ class CommunityStartupBoundaryTests(SimpleTestCase):
             patch.dict(
                 os.environ,
                 {
-                    "TABTIN_EDITION": "community",
+                    "MUSE_EDITION": "community",
                     "OTEL_EXPORTER_OTLP_ENDPOINT": "http://collector.user.example:4317",
                 },
                 clear=True,
@@ -145,7 +145,7 @@ class CommunityStartupBoundaryTests(SimpleTestCase):
         config = UpdaterConfig("apps.updater", app_module)
 
         with (
-            patch.dict(os.environ, {"TABTIN_EDITION": "community"}, clear=True),
+            patch.dict(os.environ, {"MUSE_EDITION": "community"}, clear=True),
             patch("apps.updater.apps.logger.warning") as warning,
         ):
             config.ready()

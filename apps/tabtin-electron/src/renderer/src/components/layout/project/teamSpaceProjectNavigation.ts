@@ -11,7 +11,7 @@ import { useIMStore } from '@stores/useIMStore'
 import { useMainNavStore } from '@stores/useMainNavStore'
 import { useAppPageStore } from '@stores/useAppPageStore'
 import { useSpaceListStore } from '@stores/useSpaceListStore'
-import { buildSpaceSelectionId } from '@tabtin/app-shell'
+import { buildSpaceSelectionId } from '@muse/app-shell'
 import { useProjectWorkspaceSelectionStore } from '../projectWorkspaceSelectionStore'
 import { openCollaborationHub } from '@/services/agentMemoryNavigation'
 

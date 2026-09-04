@@ -61,7 +61,7 @@ vi.mock('node:fs/promises', () => ({
   },
 }))
 
-vi.mock('@tabtin/shared', () => ({
+vi.mock('@muse/shared', () => ({
   isProtectedWorkspacePath: vi.fn(() => false),
   resolveConfigAndCacheWipePaths: vi.fn(() => [
     'C:\\Users\\tester\\AppData\\Roaming\\TabTin Preprod\\credentials.json',
@@ -71,9 +71,9 @@ vi.mock('@tabtin/shared', () => ({
   resolveCredentialFilePaths: vi.fn(() => [
     'C:\\Users\\tester\\AppData\\Roaming\\TabTin Preprod\\credentials.json',
   ]),
-  TABTIN_CONFIG_FILE_RELATIVE_PATHS: ['credentials.json', 'app-config.json'],
-  TABTIN_CONFIG_DIR_RELATIVE_PATHS: ['Cache', 'Local Storage'],
-  TABTIN_HOME_CONFIG_FILE_RELATIVE_PATHS: ['desktop-approval.json'],
+  MUSE_CONFIG_FILE_RELATIVE_PATHS: ['credentials.json', 'app-config.json'],
+  MUSE_CONFIG_DIR_RELATIVE_PATHS: ['Cache', 'Local Storage'],
+  MUSE_HOME_CONFIG_FILE_RELATIVE_PATHS: ['desktop-approval.json'],
   resolveUpdaterCachePaths: vi.fn(() => ['C:\\Users\\tester\\AppData\\Local\\TabTin-updater']),
 }))
 

@@ -34,7 +34,7 @@ vi.mock('../../cli-space-desktop-cache', () => ({
   getCurrentSpaceDevicePermissions: () => mockGetCurrentSpaceDevicePermissions(),
 }))
 
-vi.mock('@tabtin/agent-wire', () => ({
+vi.mock('@muse/agent-wire', () => ({
   okResponse: (data: unknown) => ({ ok: true, data }),
 }))
 

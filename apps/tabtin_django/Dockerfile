@@ -25,11 +25,11 @@ ENV PYTHONUNBUFFERED=1 \
     PYTHONDONTWRITEBYTECODE=1 \
     PIP_DISABLE_PIP_VERSION_CHECK=1 \
     DJANGO_SETTINGS_MODULE=tabtin.settings \
-    TABTIN_REPO_ROOT=/app \
+    MUSE_REPO_ROOT=/app \
     PLAYWRIGHT_BROWSERS_PATH=/ms-playwright
 
 # 显式锚点（INFRA-2 自包含）：后端经 apps.services.repo_root.get_repo_root() 解析
-# monorepo 根，优先读 TABTIN_REPO_ROOT，不再依赖写死的目录层级 parents[N]。
+# monorepo 根，优先读 MUSE_REPO_ROOT，不再依赖写死的目录层级 parents[N]。
 # 镜像里 monorepo 布局根 = /app（/app/apps/tabtin_django 与 /app/packages 同级）。
 
 # 系统依赖：
@@ -81,7 +81,7 @@ RUN --mount=type=cache,target=/root/.cache/pip \
 #   传值示例：--build-arg PLAYWRIGHT_DOWNLOAD_HOST=https://cdn.playwright.dev
 ARG PLAYWRIGHT_DOWNLOAD_HOST="https://npmmirror.com/mirrors/playwright"
 ARG INSTALL_PLAYWRIGHT=true
-ARG TABTIN_DEV_DEPENDENCY_FINGERPRINT="runtime"
+ARG MUSE_DEV_DEPENDENCY_FINGERPRINT="runtime"
 ENV PLAYWRIGHT_DOWNLOAD_HOST=${PLAYWRIGHT_DOWNLOAD_HOST}
 RUN if [ "$INSTALL_PLAYWRIGHT" = "true" ]; then \
         python -m playwright install --with-deps chromium \
@@ -115,13 +115,13 @@ RUN chmod +x /app/apps/tabtin_django/docker-entrypoint.sh \
     && mkdir -p /ms-playwright \
     && chown -R tabtin-community:tabtin-community /app /var/lib/tabtin/objects /ms-playwright
 
-LABEL com.tabtin.community.dev-dependency-fingerprint=${TABTIN_DEV_DEPENDENCY_FINGERPRINT}
+LABEL com.tabtin.community.dev-dependency-fingerprint=${MUSE_DEV_DEPENDENCY_FINGERPRINT}
 
 # 构建身份放在依赖与源码层之后，更新版号不会击穿 apt/pip/Playwright 缓存。
-ARG TABTIN_SERVER_VERSION=""
-ARG TABTIN_SOURCE_SHA=""
-ENV TABTIN_SERVER_VERSION=${TABTIN_SERVER_VERSION} \
-    TABTIN_SOURCE_SHA=${TABTIN_SOURCE_SHA}
+ARG MUSE_SERVER_VERSION=""
+ARG MUSE_SOURCE_SHA=""
+ENV MUSE_SERVER_VERSION=${MUSE_SERVER_VERSION} \
+    MUSE_SOURCE_SHA=${MUSE_SOURCE_SHA}
 
 USER tabtin-community
 

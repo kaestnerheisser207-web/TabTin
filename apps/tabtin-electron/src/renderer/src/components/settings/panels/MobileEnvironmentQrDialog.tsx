@@ -11,7 +11,7 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@tabtin/smartsheet-ui'
+} from '@muse/smartsheet-ui'
 import { useTranslation } from 'react-i18next'
 import type { LocalNetworkAddress } from '@shared/types/local-network'
 import {
@@ -64,7 +64,7 @@ export function MobileEnvironmentQrDialog({
     void (async () => {
       let addresses: LocalNetworkAddress[] = []
       try {
-        addresses = (await window.tabtin?.getLocalNetworkAddresses?.()) ?? []
+        addresses = (await window.muse?.getLocalNetworkAddresses?.()) ?? []
       } catch {
         addresses = []
       }

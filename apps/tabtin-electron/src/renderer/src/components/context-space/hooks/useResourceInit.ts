@@ -7,7 +7,7 @@ import { createElectronIpcAdapter } from '@components/crawlspace-workspace/hooks
 import { recordContextItemAccess, useUnifiedResources } from '@/stores/useUnifiedResources'
 import { useCollections } from '@/stores/useCollections'
 import { useSpaceApps } from '@stores/useSpaceApps'
-import type { SpaceContextItem } from '@tabtin/app-shell'
+import type { SpaceContextItem } from '@muse/app-shell'
 import { createTerminalSessionInScope } from '../sources/terminal'
 import { activateBrowserView } from '@/services/browserViewActivation'
 import { seedManager } from '@stores/seed-manager'

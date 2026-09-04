@@ -8,7 +8,7 @@
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { ArrowDown, PanelLeftClose, PanelLeft } from 'lucide-react'
-import { Switch } from '@tabtin/smartsheet-ui'
+import { Switch } from '@muse/smartsheet-ui'
 import type { GitBranchMeta } from '@shared/git-types'
 
 export type ViewMode = 'all' | 'changes' | 'unstaged' | 'staged'

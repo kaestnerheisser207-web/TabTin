@@ -5,7 +5,7 @@
  * 所有匹配路径必须 import 这里，禁止再手写 metadata 分支。
  */
 
-import type { ChatMessage } from '@tabtin/chat-client'
+import type { ChatMessage } from '@muse/chat-client'
 
 /** runtime 本机 emit 的 message_id 前缀（EnvelopeEmitter）。 */
 export const RUNTIME_LOCAL_ID_PREFIX = 'local-'

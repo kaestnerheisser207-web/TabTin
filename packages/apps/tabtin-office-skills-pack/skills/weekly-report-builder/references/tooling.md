@@ -28,5 +28,5 @@ If TabSlide commands surface Playwright or Chromium errors, do not tell the user
 
 ## Resource Rules
 
-- Reports: `tabtin://resource/document/<id>?hint=tabdoc`.
-- Slide projects: `tabtin://resource/slide/<id>?hint=tabslide` when a slide resource id/link is available.
+- Reports: `muse://resource/document/<id>?hint=tabdoc`.
+- Slide projects: `muse://resource/slide/<id>?hint=tabslide` when a slide resource id/link is available.

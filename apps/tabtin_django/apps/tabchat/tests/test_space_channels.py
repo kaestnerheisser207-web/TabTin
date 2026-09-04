@@ -74,7 +74,7 @@ def _ensure_free_tier() -> None:
     )
 
 
-@override_settings(TABTIN_ENABLE_PROJECTS=True)
+@override_settings(MUSE_ENABLE_PROJECTS=True)
 class TeamSpaceChannelTests(TestCase):
     databases = ["default", "postgresql"]
 

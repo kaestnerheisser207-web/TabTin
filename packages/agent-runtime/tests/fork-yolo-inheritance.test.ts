@@ -28,7 +28,7 @@ import type {
   EngineConfig,
 } from '../src/engine/contracts/kernel.js';
 import type { ToolRiskPolicyPort } from '../src/engine/contracts/tool-risk-policy.js';
-import type { EffectivePolicy, MemoStore, WorkspaceSnapshot } from '@tabtin/security-policy';
+import type { EffectivePolicy, MemoStore, WorkspaceSnapshot } from '@muse/security-policy';
 import { createMockProvider, createMockPermissionHandler, createMockToolProvider } from './test-utils.js';
 
 let capturedConfig: EngineConfig | undefined;

@@ -1,4 +1,4 @@
-import type { ImportSourceId } from '@tabtin/cli-server-core'
+import type { ImportSourceId } from '@muse/cli-server-core'
 
 /**
  * 外部 Agent 导入源平台图标（打包静态资源，publicDir static/import-sources）。

@@ -9,7 +9,7 @@
  *   - 单路径优先级仍最高（file_path / path / cwd 命中后不读 search 字段）
  */
 import { describe, expect, it } from 'vitest';
-import type { EffectivePolicy, MemoStore, WorkspaceSnapshot } from '@tabtin/security-policy';
+import type { EffectivePolicy, MemoStore, WorkspaceSnapshot } from '@muse/security-policy';
 import { ToolRegistry } from '../src/engine/tooling/tool-system.js';
 import { runTools } from '../src/engine/tooling/tool-orchestration.js';
 import type { ToolExecutionResult } from '../src/engine/tooling/tool-orchestration.js';

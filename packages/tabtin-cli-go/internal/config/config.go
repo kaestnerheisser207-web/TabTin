@@ -40,7 +40,7 @@ type CLIConfig struct {
 }
 
 func Dir() string {
-	if d := os.Getenv("TABTIN_CONFIG_DIR"); d != "" {
+	if d := os.Getenv("MUSE_CONFIG_DIR"); d != "" {
 		return d
 	}
 	home, _ := os.UserHomeDir()
@@ -168,7 +168,7 @@ func (c *CLIConfig) CurrentProfileConfig() *ProfileConfig {
 }
 
 func ResolveProfileName(cfg *CLIConfig) string {
-	if env := os.Getenv("TABTIN_PROFILE"); env != "" {
+	if env := os.Getenv("MUSE_PROFILE"); env != "" {
 		return env
 	}
 	if cfg.CurrentProfile != "" {
@@ -178,10 +178,10 @@ func ResolveProfileName(cfg *CLIConfig) string {
 }
 
 func ResolveToken(profile *ProfileConfig) string {
-	if v := os.Getenv("TABTIN_JWT"); v != "" {
+	if v := os.Getenv("MUSE_JWT"); v != "" {
 		return v
 	}
-	if v := os.Getenv("TABTIN_TOKEN"); v != "" {
+	if v := os.Getenv("MUSE_TOKEN"); v != "" {
 		return v
 	}
 	if profile == nil {
@@ -200,15 +200,15 @@ func ResolveRefreshToken(profile *ProfileConfig) string {
 
 // ResolveWorkspaceID 解析当前执行 Workspace ID（ Space 终态退役）。
 //
-// 读取顺序：TABTIN_WORKSPACE_ID > TABTIN_SPACE_ID（过渡期兜底） >
+// 读取顺序：MUSE_WORKSPACE_ID > MUSE_SPACE_ID（过渡期兜底） >
 // profile.DefaultSpace（历史字段名，实际存 Workspace ID）。
 //
 // 存量调用方可继续用 `ResolveSpaceID` 别名，新代码请用本函数以保持语义清晰。
 func ResolveWorkspaceID(profile *ProfileConfig) string {
-	if v := os.Getenv("TABTIN_WORKSPACE_ID"); v != "" {
+	if v := os.Getenv("MUSE_WORKSPACE_ID"); v != "" {
 		return v
 	}
-	if v := os.Getenv("TABTIN_SPACE_ID"); v != "" {
+	if v := os.Getenv("MUSE_SPACE_ID"); v != "" {
 		return v
 	}
 	if profile == nil {
@@ -224,11 +224,11 @@ func ResolveSpaceID(profile *ProfileConfig) string {
 	return ResolveWorkspaceID(profile)
 }
 
-// ResolveAgentID 解析当前执行 Agent 身份：环境变量 TABTIN_AGENT_ID 优先，
+// ResolveAgentID 解析当前执行 Agent 身份：环境变量 MUSE_AGENT_ID 优先，
 // 其次 profile.DefaultAgent（由 `muse agent use` 写入）。**不回落 Space ID**——
 // Agent 与 Space 是不同实体，把 Space ID 当 Agent ID 是  的根因。
 func ResolveAgentID(profile *ProfileConfig) string {
-	if v := os.Getenv("TABTIN_AGENT_ID"); v != "" {
+	if v := os.Getenv("MUSE_AGENT_ID"); v != "" {
 		return v
 	}
 	if profile != nil {
@@ -238,14 +238,14 @@ func ResolveAgentID(profile *ProfileConfig) string {
 }
 
 func ResolveOrganizationID(profile *ProfileConfig) string {
-	if v := os.Getenv("TABTIN_ORGANIZATION_ID"); v != "" {
+	if v := os.Getenv("MUSE_ORGANIZATION_ID"); v != "" {
 		return v
 	}
 	return profile.DefaultOrganization
 }
 
 func ResolveBaseURL(profile *ProfileConfig) string {
-	if v := os.Getenv("TABTIN_API_URL"); v != "" {
+	if v := os.Getenv("MUSE_API_URL"); v != "" {
 		return strings.TrimRight(v, "/")
 	}
 	if profile != nil && profile.BaseURL != "" {

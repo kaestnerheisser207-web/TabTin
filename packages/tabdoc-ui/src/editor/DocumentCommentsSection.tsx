@@ -1,7 +1,7 @@
-export { CommentsSection as DocumentCommentsSection } from '@tabtin/smartsheet-ui'
+export { CommentsSection as DocumentCommentsSection } from '@muse/smartsheet-ui'
 export type {
   CommentItem as DocumentCommentItem,
   CommentMentionCandidate as DocumentCommentMentionCandidate,
   CommentsLabels as DocumentCommentsLabels,
   CommentsSectionProps as DocumentCommentsSectionProps,
-} from '@tabtin/smartsheet-ui'
+} from '@muse/smartsheet-ui'

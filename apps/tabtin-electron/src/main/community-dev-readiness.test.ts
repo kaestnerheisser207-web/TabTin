@@ -11,7 +11,7 @@ describe('reportCommunityDevReady', () => {
 
     expect(
       reportCommunityDevReady({
-        env: { TABTIN_COMMUNITY_DEV_BOOTSTRAP: '1' },
+        env: { MUSE_COMMUNITY_DEV_BOOTSTRAP: '1' },
         write,
       }),
     ).toBe(true)

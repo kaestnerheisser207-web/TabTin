@@ -5,7 +5,7 @@
  * 成功写入后主动 invalidate，避免 TTL 内假失败 not_enabled_for_agent。
  */
 export async function invalidateSkillEnablementCache(agentId?: string): Promise<boolean> {
-  const ipc = window.tabtin?.agentEngine
+  const ipc = window.muse?.agentEngine
   if (!ipc?.invalidateSkillEnablementCache) return false
   try {
     const ack = await ipc.invalidateSkillEnablementCache(

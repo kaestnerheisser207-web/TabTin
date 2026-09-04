@@ -1,7 +1,7 @@
 import { useMemo } from 'react'
-import type { TableGridColumn } from '@tabtin/table-engine'
+import type { TableGridColumn } from '@muse/table-engine'
 import type { Field, ViewMeta } from '../types'
-import { getViewColumnMeta } from '@tabtin/table-core'
+import { getViewColumnMeta } from '@muse/table-core'
 import {
   formatAttachmentValue,
   formatDateCellValue,

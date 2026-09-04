@@ -8,11 +8,11 @@ import {
   normalize as normalizePolicyPath,
   UNKNOWN_WORKSPACE_OUT_PATH,
   type PolicyActionKind,
-} from '@tabtin/security-policy'
+} from '@muse/security-policy'
 import type {
   BuildMemoPatternKeyInput,
   RiskDecisionReason,
-} from '@tabtin/agent-runtime/engine'
+} from '@muse/agent-runtime/engine'
 
 function extractShellSubcmd(input: unknown): string {
   if (input === null || input === undefined || typeof input !== 'object') return ''

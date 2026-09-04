@@ -10,7 +10,7 @@
  */
 import React, { useState } from 'react'
 import { Globe, X } from 'lucide-react'
-import { Popover, PopoverTrigger, PopoverContent, ScrollArea } from '@tabtin/smartsheet-ui'
+import { Popover, PopoverTrigger, PopoverContent, ScrollArea } from '@muse/smartsheet-ui'
 import { cn } from '../../utils/cn'
 import { t } from '../../i18n'
 import type { ViewInfo } from '../../types'

@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Image, MessageSquare, X } from 'lucide-react'
-import { toast } from '@tabtin/smartsheet-ui'
+import { toast } from '@muse/smartsheet-ui'
 import type { IMMessage } from '@/services/tabchatApi'
 import { MESSAGE_TYPE_IMAGE } from '@/constants/tabchat'
 import { useFileAttachmentStore } from '@stores/useFileAttachmentStore'

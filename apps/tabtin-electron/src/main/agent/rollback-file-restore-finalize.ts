@@ -1,4 +1,4 @@
-import { joinApiPath } from '@tabtin/config'
+import { joinApiPath } from '@muse/config'
 
 export interface LocalFileRestoreFinalResult {
   status: 'success' | 'not_applicable' | 'partial' | 'failed' | 'unavailable'

@@ -43,7 +43,7 @@ vi.mock('@/hooks/useResolvedOrganizationId', () => ({
   useResolvedOrganizationId: () => 'org-1',
 }))
 
-vi.mock('@tabtin/app-shell', () => ({
+vi.mock('@muse/app-shell', () => ({
   AgentApiService: {
     listAgents: (...args: unknown[]) => listAgents(...args),
   },

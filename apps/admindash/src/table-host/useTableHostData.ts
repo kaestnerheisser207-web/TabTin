@@ -5,8 +5,8 @@ import {
   type Table,
   TableApiService,
   ViewApiService,
-} from '@tabtin/table-core'
-import type { TableField, TableRecord, ViewMeta, ViewRecordsResponse } from '@tabtin/table-ui'
+} from '@muse/table-core'
+import type { TableField, TableRecord, ViewMeta, ViewRecordsResponse } from '@muse/table-ui'
 import { useCallback, useEffect, useState } from 'react'
 
 interface UseTableHostDataParams {

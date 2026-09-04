@@ -9,7 +9,7 @@
  * 当前组 markFailed(retryable)，后续未尝试的组也 markFailed(retryable)
  * 恢复为 pending，下一轮 flush 可安全重试。
  */
-import type { IChangeOutbox, OutboxChangeEnvelope, SyncChange } from '@tabtin/table-kernel'
+import type { IChangeOutbox, OutboxChangeEnvelope, SyncChange } from '@muse/table-kernel'
 import type { SyncApiClient } from './sync.js'
 import type { ISyncStateStore } from './sync-state.js'
 import { isRetryableSyncError, toSyncErrorMessage } from './sync-error.js'

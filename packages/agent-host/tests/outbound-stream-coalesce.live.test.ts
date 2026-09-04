@@ -2,7 +2,7 @@
  * 墙钟 live：模拟三路并行子 Agent token 洪峰，看 deliver 合并后 IPC/WS 次数。
  */
 import { describe, expect, it } from 'vitest'
-import type { StreamEvent } from '@tabtin/agent-runtime'
+import type { StreamEvent } from '@muse/agent-runtime'
 import { DefaultDeliveryCoordinator } from '../src/delivery/delivery-coordinator.js'
 import type {
   DeliveryTransportPort,

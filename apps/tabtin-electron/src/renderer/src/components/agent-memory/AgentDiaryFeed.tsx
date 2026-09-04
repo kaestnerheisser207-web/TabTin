@@ -149,7 +149,7 @@ const DiaryCard: React.FC<{
               {formatRelativeTime(memo.created_at, t)}
             </span>
             <span
-              // eslint-disable-next-line tabtin/no-design-system-violations -- emoji 图标显示尺寸，非文字字号
+              // eslint-disable-next-line muse/no-design-system-violations -- emoji 图标显示尺寸，非文字字号
               className="text-[13px]"
               title={emotionLabel(emotion, t)}
             >

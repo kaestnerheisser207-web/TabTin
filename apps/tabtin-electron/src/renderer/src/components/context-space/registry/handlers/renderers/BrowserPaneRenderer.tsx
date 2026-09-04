@@ -35,7 +35,7 @@ export const BrowserPaneRenderer: React.FC<BrowserPaneRendererProps> = ({
   }, [activationState.phase, crawlspaceId, isDeferred, isGroupActive, isPaneActive, viewId])
 
   React.useEffect(() => {
-    const unsubscribe = window.tabtin?.contextMenu?.onAddToContextRequest?.(({ viewId: requestedViewId, selectionText }) => {
+    const unsubscribe = window.muse?.contextMenu?.onAddToContextRequest?.(({ viewId: requestedViewId, selectionText }) => {
       if (requestedViewId !== viewId) return
       const trimmedSelection = selectionText.trim()
       if (!trimmedSelection) return

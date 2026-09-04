@@ -140,7 +140,7 @@ describe('BR-02 — headless.ts exports browser tool groups', () => {
   })
 
   it('createHeadlessAdapter includes browser tools when browser capability is present', async () => {
-    const { createHeadlessAdapter } = await import('@tabtin/action-tools/headless')
+    const { createHeadlessAdapter } = await import('@muse/action-tools/headless')
     const adapter = createHeadlessAdapter({ capabilities: new Set(['terminal', 'file', 'browser']) })
     const tools = adapter.getRegisteredTools()
     expect(tools).toContain('open_tab')

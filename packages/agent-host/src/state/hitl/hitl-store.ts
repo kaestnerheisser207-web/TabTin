@@ -1,4 +1,4 @@
-import type { HumanInteractionContext } from '@tabtin/agent-runtime/permissions'
+import type { HumanInteractionContext } from '@muse/agent-runtime/permissions'
 import {
   ApprovalMemoRegistry,
   type ApprovalMemoRegistryOptions,

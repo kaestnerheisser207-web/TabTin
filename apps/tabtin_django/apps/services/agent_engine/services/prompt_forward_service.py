@@ -231,7 +231,7 @@ class PromptForwardService:
 
         与 Electron renderer 端 ``useSpaceApps.getEnabledApps`` + ``ContextRegistry``
         派生对齐 —— 字段集合（``key`` / ``cli_key`` / ``display_name`` / ``capability``
-        / ``aliases``）严格对齐 ``@tabtin/agent-prompt`` 的 ``EnabledAppInfo``。
+        / ``aliases``）严格对齐 ``@muse/agent-prompt`` 的 ``EnabledAppInfo``。
 
         **降级边界（必须在 99 文档登记）**：
 
@@ -489,7 +489,7 @@ class PromptForwardService:
         # Hilt v3 / W6 M2：客户端工作区快照（主要给 Daemon 用 —— Daemon 没有
         # 自己的 TabCode UI 来跟踪用户当前打开的项目，必须由调用方从主控端
         # 收集后透传过来）。Electron 主对话路径走 IPC，不需要走 forward。
-        # 形态参考 ``@tabtin/security-policy`` 的 ``WorkspaceSnapshot``；
+        # 形态参考 ``@muse/security-policy`` 的 ``WorkspaceSnapshot``；
         # service 这里不强校验，DaemonAgentHost 内做 type guard + sandbox 兜底。
         workspace_snapshot: Optional[Dict[str, Any]] = None,
         execution_limits: Optional[Dict[str, Any]] = None,

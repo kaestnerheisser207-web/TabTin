@@ -48,7 +48,7 @@ export interface PtySession {
    * 起的 session 携带的溯源信息。**仅 bridge 路径写入**：人控 4 件套
    * `spawnAgentSession` 路径不会设置该字段（即便 sessionId 也以 `agent-` 起头）。
    *
-   * 字段语义与 `@tabtin/terminal-core` 的 `AgentCommandRequest.agentMeta` 严格对齐，
+   * 字段语义与 `@muse/terminal-core` 的 `AgentCommandRequest.agentMeta` 严格对齐，
    * 在 PtySession 上做一份副本是为了：
    *   - bridge 实现层在 `agent-session-created` / `agent-session-closed`
    *     emit 时能从 session 反查 toolUseId / agentId（事件 payload 必填）
@@ -85,8 +85,8 @@ export interface PtySession {
    * shell 重启时必须原样恢复，不能混入当前实例的另一半 socket/token。
    */
   cliTransportEnv?: {
-    TABTIN_SOCK?: string
-    _TABTIN_TRANSPORT_TOKEN?: string
+    MUSE_SOCK?: string
+    _MUSE_TRANSPORT_TOKEN?: string
   }
 }
 

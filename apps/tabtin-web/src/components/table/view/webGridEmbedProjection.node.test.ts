@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict'
 import test from 'node:test'
-import type { Field, TableRecord, ViewMeta } from '@tabtin/table-core'
+import type { Field, TableRecord, ViewMeta } from '@muse/table-core'
 import {
   readGridEmbedFieldValue,
   resolveGridEmbedVisibleFields,

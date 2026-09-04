@@ -105,7 +105,7 @@ const TERMINAL_FONT_FAMILY =
 
 const MAX_IMAGE_PASTE_SIZE = 10 * 1024 * 1024 // 10MB
 
-type TabtinPtyBridge = NonNullable<NonNullable<Window['tabtin']>['pty']>
+type TabtinPtyBridge = NonNullable<NonNullable<Window['muse']>['pty']>
 
 function isAgentTranscriptSession(sessionId: string): boolean {
   return sessionId.startsWith('agent-')
@@ -271,7 +271,7 @@ export const XTerminal: React.FC<XTerminalProps> = ({
   useEffect(() => {
     if (!containerRef.current) return
 
-    const pty = window.tabtin?.pty
+    const pty = window.muse?.pty
     if (!pty) {
       log.error(i18n.t('terminal:errors.ptyUnavailable'))
       return
@@ -544,7 +544,7 @@ export const XTerminal: React.FC<XTerminalProps> = ({
       }
 
       // Phase 4：显式传 spaceId（真实执行 Space）消除 renderer/主进程口径不一致——
-      // 主进程据此设置 shell 的 TABTIN_SPACE_ID。桌面沙箱终端 spaceId 为空 → 不注入 Space。
+      // 主进程据此设置 shell 的 MUSE_SPACE_ID。桌面沙箱终端 spaceId 为空 → 不注入 Space。
       const result = await pty.spawn(sessionId, {
         cols,
         rows,
@@ -622,7 +622,7 @@ export const XTerminal: React.FC<XTerminalProps> = ({
     const wrapper = wrapperRef.current
     if (!wrapper) return
 
-    const pty = window.tabtin?.pty
+    const pty = window.muse?.pty
     if (!pty) return
 
     const readFileAsBase64 = (file: File): Promise<string> =>
@@ -733,7 +733,7 @@ export const XTerminal: React.FC<XTerminalProps> = ({
     const container = containerRef.current
     if (!container) return
 
-    if (!window.tabtin?.pty) return
+    if (!window.muse?.pty) return
 
     const MIN_PX = 40
     const MIN_COLS = 4
@@ -765,7 +765,7 @@ export const XTerminal: React.FC<XTerminalProps> = ({
       }
     }
 
-    // eslint-disable-next-line tabtin/prefer-scoped-activity-effects -- XTerminal 通过 Portal 跨 SpaceActivity 子树复用，是否工作由 isTerminalRenderable/active session 控制。
+    // eslint-disable-next-line muse/prefer-scoped-activity-effects -- XTerminal 通过 Portal 跨 SpaceActivity 子树复用，是否工作由 isTerminalRenderable/active session 控制。
     const resizeObserver = new ResizeObserver(() => {
       if (resizeRafId === null) {
         resizeRafId = requestAnimationFrame(doResize)
@@ -822,9 +822,9 @@ export const XTerminal: React.FC<XTerminalProps> = ({
     }
     const handleWindowFocus = () => scheduleRecovery()
 
-    // eslint-disable-next-line tabtin/prefer-scoped-activity-effects -- XTerminal Portal 需要监听全局可见性恢复，回调内用 isTerminalRenderable 过滤非当前终端。
+    // eslint-disable-next-line muse/prefer-scoped-activity-effects -- XTerminal Portal 需要监听全局可见性恢复，回调内用 isTerminalRenderable 过滤非当前终端。
     document.addEventListener('visibilitychange', handleVisibilityChange)
-    // eslint-disable-next-line tabtin/prefer-scoped-activity-effects -- XTerminal Portal 需要监听窗口重新聚焦，回调内用 isTerminalRenderable 过滤非当前终端。
+    // eslint-disable-next-line muse/prefer-scoped-activity-effects -- XTerminal Portal 需要监听窗口重新聚焦，回调内用 isTerminalRenderable 过滤非当前终端。
     window.addEventListener('focus', handleWindowFocus)
 
     return () => {

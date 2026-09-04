@@ -6,7 +6,7 @@
  * 落到 system_fallback。
  */
 
-import { parseResourcePointer, type ResourcePointer } from '@tabtin/resource-router'
+import { parseResourcePointer, type ResourcePointer } from '@muse/resource-router'
 
 export function buildRichResourcePointer(
   resourceType: string,
@@ -17,7 +17,7 @@ export function buildRichResourcePointer(
     ? `?hint=${encodeURIComponent(hint)}`
     : ''
   const raw =
-    `tabtin://resource/${encodeURIComponent(resourceType)}/` +
+    `muse://resource/${encodeURIComponent(resourceType)}/` +
     `${encodeURIComponent(resourceId)}${hintQuery}`
   return parseResourcePointer(raw)
 }

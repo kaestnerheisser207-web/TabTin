@@ -9,7 +9,7 @@ import {
   type RuntimeReporterHostState,
   type RuntimeReporterMetricState,
   type RuntimeReporterOwnerStrategy,
-} from '@tabtin/runtime-reporter'
+} from '@muse/runtime-reporter'
 
 export type TabDataRuntimeOwnerStrategy = RuntimeReporterOwnerStrategy
 

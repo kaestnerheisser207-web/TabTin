@@ -4,7 +4,7 @@ import {
   type AttachmentPartUploadResponse,
   type AttachmentReference,
   type AttachmentUploadTaskResponse,
-} from '@tabtin/table-core'
+} from '@muse/table-core'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { ApiError } from '@/services/api'
 import { useAttachmentStore } from './useAttachmentStore'

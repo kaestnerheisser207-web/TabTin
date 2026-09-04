@@ -9,7 +9,7 @@ import {
   ShieldCheck,
   Zap,
 } from 'lucide-react'
-import { AgentApiService } from '@tabtin/app-shell'
+import { AgentApiService } from '@muse/app-shell'
 import {
   Button,
   Switch,

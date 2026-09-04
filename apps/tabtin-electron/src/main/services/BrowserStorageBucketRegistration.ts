@@ -13,7 +13,7 @@
  *     - 各 partition 内的 HTTP/GPU/Code Cache  —— 聚合展示（cache）
  *
  * 本模块把上述五类 + renderer 两个 localStorage bucket（bookmarks / browsing-history）
- * 统一登记到 `@tabtin/storage-manager`，让「存储管理」UI 能按 partition 家族
+ * 统一登记到 `@muse/storage-manager`，让「存储管理」UI 能按 partition 家族
  * 分组展示。
  *
  * ## 设计约束
@@ -47,7 +47,7 @@
  *      clearFn 对每个 partition 调 `session.clearCache()`。
  *
  * 4. **路径决议**：
- *    所有 userData 路径通过 `@tabtin/shared/storage-paths` 的 `getUserDataPath`
+ *    所有 userData 路径通过 `@muse/shared/storage-paths` 的 `getUserDataPath`
  *    决议（W1.2 SSoT）。startup-services 在 app.whenReady() 后会调用
  *    `setUserDataOverride(app.getPath('userData'))`，确保所有模块共享同一根。
  *
@@ -67,8 +67,8 @@ import {
   type ClearOptions,
   type ClearResult,
   type StorageBucket,
-} from '@tabtin/storage-manager'
-import { getUserDataPath } from '@tabtin/shared/storage-paths'
+} from '@muse/storage-manager'
+import { getUserDataPath } from '@muse/shared/storage-paths'
 
 import { logger } from '../utils/logger'
 

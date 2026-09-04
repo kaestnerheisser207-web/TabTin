@@ -236,14 +236,14 @@ func TestRecordCommentReplyRoutesParentThroughCreateEndpoint(t *testing.T) {
 	}))
 	defer server.Close()
 
-	t.Setenv("TABTIN_CONFIG_DIR", t.TempDir())
-	t.Setenv("TABTIN_SOCK", "")
-	t.Setenv("TABTIN_PORT", "")
-	t.Setenv("_TABTIN_TRANSPORT_TOKEN", "")
-	t.Setenv("TABTIN_API_URL", server.URL)
-	t.Setenv("TABTIN_JWT", "test-token")
-	t.Setenv("TABTIN_TOKEN", "")
-	t.Setenv("TABTIN_QUIET", "1")
+	t.Setenv("MUSE_CONFIG_DIR", t.TempDir())
+	t.Setenv("MUSE_SOCK", "")
+	t.Setenv("MUSE_PORT", "")
+	t.Setenv("_MUSE_TRANSPORT_TOKEN", "")
+	t.Setenv("MUSE_API_URL", server.URL)
+	t.Setenv("MUSE_JWT", "test-token")
+	t.Setenv("MUSE_TOKEN", "")
+	t.Setenv("MUSE_QUIET", "1")
 
 	f := cmdutil.NewFactory()
 	f.Quiet = true

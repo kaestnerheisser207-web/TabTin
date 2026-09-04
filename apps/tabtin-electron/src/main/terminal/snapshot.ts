@@ -10,7 +10,7 @@ import path from 'path'
 import fs from 'fs'
 import fsp from 'fs/promises'
 import { randomUUID } from 'crypto'
-import { safeReadFileSync, isOSAccessError } from '@tabtin/safe-fs'
+import { safeReadFileSync, isOSAccessError } from '@muse/safe-fs'
 import { createLogger } from '../logger'
 import type { TerminalSnapshot, SnapshotManifest } from '@shared/types/terminal'
 

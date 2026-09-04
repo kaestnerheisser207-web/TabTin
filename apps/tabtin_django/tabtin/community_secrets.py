@@ -205,10 +205,10 @@ def _render_centrifugo_config(
 
 def initialize_community_installation(root: Path) -> None:
     """Converge installation secrets and their least-privilege ownership."""
-    runtime_uid = _integer_environment("TABTIN_COMMUNITY_RUNTIME_UID", 10001)
-    runtime_gid = _integer_environment("TABTIN_COMMUNITY_RUNTIME_GID", 10001)
-    postgres_uid = _integer_environment("TABTIN_COMMUNITY_POSTGRES_UID", 999)
-    postgres_gid = _integer_environment("TABTIN_COMMUNITY_POSTGRES_GID", 999)
+    runtime_uid = _integer_environment("MUSE_COMMUNITY_RUNTIME_UID", 10001)
+    runtime_gid = _integer_environment("MUSE_COMMUNITY_RUNTIME_GID", 10001)
+    postgres_uid = _integer_environment("MUSE_COMMUNITY_POSTGRES_UID", 999)
+    postgres_gid = _integer_environment("MUSE_COMMUNITY_POSTGRES_GID", 999)
     values = ensure_installation_secrets(root)
 
     # The directory is traversable, while every value remains protected by
@@ -227,7 +227,7 @@ def initialize_community_installation(root: Path) -> None:
 
     template = Path(
         os.environ.get(
-            "TABTIN_COMMUNITY_CENTRIFUGO_TEMPLATE",
+            "MUSE_COMMUNITY_CENTRIFUGO_TEMPLATE",
             "/app/community-assets/centrifugo.template.json",
         )
     )
@@ -267,7 +267,7 @@ def main() -> None:
         raise SystemExit("usage: python -m tabtin.community_secrets init")
     root = Path(
         os.environ.get(
-            "TABTIN_COMMUNITY_SECRET_ROOT",
+            "MUSE_COMMUNITY_SECRET_ROOT",
             "/run/tabtin-community-secrets",
         )
     )

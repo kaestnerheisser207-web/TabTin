@@ -12,7 +12,7 @@
 import React, { useState, useCallback, useRef, useEffect, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Search, X, Loader2, ChevronDown, ChevronRight } from 'lucide-react'
-import { toast } from '@tabtin/smartsheet-ui'
+import { toast } from '@muse/smartsheet-ui'
 import {
   getConversation,
   searchMessageGroups,
@@ -28,7 +28,7 @@ import { formatConversationTime } from '@/lib/dateUtils'
 import { sortConversations } from '@/lib/imFormat'
 import { useUserProfileCache, useDisplayNames } from '@stores/useUserProfileCache'
 import { CONVERSATION_TYPE_GROUP, SEARCH_DEBOUNCE_MS } from '@/constants/tabchat'
-import { getConversationNavigationKind } from '@tabtin/app-shell'
+import { getConversationNavigationKind } from '@muse/app-shell'
 import { DetailedRowListSkeleton } from '@components/common/ListSkeletons'
 import { useScopedEventListener } from '@hooks/spaceActivity'
 import { cn } from '@utils/cn'

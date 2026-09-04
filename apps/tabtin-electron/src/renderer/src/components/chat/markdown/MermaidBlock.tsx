@@ -5,7 +5,7 @@
  */
 
 import React, { useEffect, useRef, useState, useId } from 'react'
-import { ScrollArea } from '@tabtin/smartsheet-ui'
+import { ScrollArea } from '@muse/smartsheet-ui'
 import { useUIStore } from '@stores/useUIStore'
 import { mermaidConfigFor, sanitizeMermaidSvg } from './mermaidRender'
 

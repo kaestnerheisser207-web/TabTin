@@ -33,9 +33,9 @@
 import React, { useCallback } from 'react'
 import { useSafeVirtualizer } from '@hooks/useSafeVirtualizer'
 import { useTranslation } from 'react-i18next'
-import { EmptyState, formatCellValue, cn, ViewTypeIcon } from '@tabtin/smartsheet-ui'
-import { formatFieldDisplayValue, formatAttachmentValue } from '@tabtin/table-ui'
-/** Inline select choice normalizer to avoid @tabtin/table-kernel dependency */
+import { EmptyState, formatCellValue, cn, ViewTypeIcon } from '@muse/smartsheet-ui'
+import { formatFieldDisplayValue, formatAttachmentValue } from '@muse/table-ui'
+/** Inline select choice normalizer to avoid @muse/table-kernel dependency */
 const SELECT_PALETTE = [
   '#E53935', '#1E88E5', '#43A047', '#FB8C00', '#8E24AA',
   '#00ACC1', '#F4511E', '#3949AB', '#7CB342', '#C0CA33',
@@ -68,8 +68,8 @@ function normalizeSelectChoices(
   }
   return result
 }
-import type { HistoryGroup } from '@tabtin/smartsheet-ui'
-import type { Field, ViewMeta } from '@tabtin/table-core'
+import type { HistoryGroup } from '@muse/smartsheet-ui'
+import type { Field, ViewMeta } from '@muse/table-core'
 import { TablePreviewSkeleton } from '@components/common/ListSkeletons'
 
 export interface SnapshotRow {

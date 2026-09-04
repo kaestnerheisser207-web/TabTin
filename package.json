@@ -1,5 +1,5 @@
 {
-  "name": "tabtin-workspace",
+  "name": "muse-workspace",
   "version": "1.1.10",
   "description": "Muse - AI-powered creative workbench with Table, Docs, Design, Browser and more",
   "private": true,
@@ -52,8 +52,8 @@
     "package:tabtin-web": "node scripts/package.mjs tabtin-web",
     "package:ios": "node scripts/package.mjs ios",
     "package:android": "node scripts/package.mjs android",
-    "wire:codegen": "pnpm --filter @tabtin/wire-codegen codegen",
-    "wire:codegen:check": "pnpm --filter @tabtin/wire-codegen codegen:check"
+    "wire:codegen": "pnpm --filter @muse/wire-codegen codegen",
+    "wire:codegen:check": "pnpm --filter @muse/wire-codegen codegen:check"
   },
   "devDependencies": {
     "@eslint/js": "^9.0.0",

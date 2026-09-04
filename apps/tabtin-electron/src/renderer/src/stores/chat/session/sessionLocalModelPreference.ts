@@ -1,4 +1,4 @@
-import type { ChatSession } from '@tabtin/chat-client'
+import type { ChatSession } from '@muse/chat-client'
 import { PERSIST_KEYS } from '@/stores/persist-key-registry'
 import { isOpenAICodexModel } from '../../../../../shared/openai-codex-models'
 

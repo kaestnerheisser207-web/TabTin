@@ -1,7 +1,7 @@
 import React from 'react'
 import { describe, expect, it, vi } from 'vitest'
 import { fireEvent, render, screen, within } from '@testing-library/react'
-import type { Model } from '@tabtin/chat-client'
+import type { Model } from '@muse/chat-client'
 
 vi.mock('react-i18next', () => ({
   useTranslation: () => ({

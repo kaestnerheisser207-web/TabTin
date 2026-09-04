@@ -21,7 +21,7 @@ func AuthCommandSchemas() map[string]cmdutil.CommandDef {
 			Route: cmdutil.RouteDirect,
 			Risk:  cmdutil.RiskWrite, RiskDeclared: true, // ：写本地 profile 凭证
 			Flags: []cmdutil.FlagDef{
-				{Name: "url", Type: cmdutil.FlagString, Desc: "Muse API 地址（默认 TABTIN_API_URL 或 https://api.example.com）"},
+				{Name: "url", Type: cmdutil.FlagString, Desc: "Muse API 地址（默认 MUSE_API_URL 或 https://api.example.com）"},
 				{Name: "token", Type: cmdutil.FlagString, Desc: "API Token / UserApiKey（CI 非交互；与设备码二选一）"},
 				{Name: "profile", Type: cmdutil.FlagString, Desc: "目标 Profile 名称"},
 				{Name: "label", Type: cmdutil.FlagString, Desc: "Profile 标签"},
@@ -72,7 +72,7 @@ func newCmdLogin(f *cmdutil.Factory) *cobra.Command {
 		Use:   "login",
 		Short: "登录 Muse",
 		Long: `默认使用浏览器/设备码完成用户授权（OAuth Device Flow）。
-CI / 自动化可传 --url 与 --token（UserApiKey），或设置环境变量 TABTIN_API_URL + TABTIN_TOKEN。`,
+CI / 自动化可传 --url 与 --token（UserApiKey），或设置环境变量 MUSE_API_URL + MUSE_TOKEN。`,
 		Example: `  muse auth login
   muse auth login --url https://api.example.com
   muse auth login --url https://api.example.com --token ttn_xxx
@@ -97,10 +97,10 @@ CI / 自动化可传 --url 与 --token（UserApiKey），或设置环境变量 T
 			}
 			token := strings.TrimSpace(flagToken)
 			if token == "" {
-				token = strings.TrimSpace(os.Getenv("TABTIN_TOKEN"))
+				token = strings.TrimSpace(os.Getenv("MUSE_TOKEN"))
 			}
 
-			// --token / TABTIN_TOKEN：非交互 PAT 路径（CI）
+			// --token / MUSE_TOKEN：非交互 PAT 路径（CI）
 			if token != "" {
 				p, ok := cfg.Profiles[profileName]
 				if !ok {

@@ -1,10 +1,10 @@
 /**
- * Browser-safe subset of @tabtin/terminal-core.
+ * Browser-safe subset of @muse/terminal-core.
  *
  * Excludes modules that depend on Node.js built-ins (fs, child_process, crypto, os):
  *   atomicWrite, commandExecutor, outputCollector, sandboxManager, pathUtils, platform
  *
- * Used by renderer-side consumers (e.g. @tabtin/security-policy → AgentSecurityPanel)
+ * Used by renderer-side consumers (e.g. @muse/security-policy → AgentSecurityPanel)
  * via Vite alias to avoid pulling in fs/promises at import time.
  */
 export {

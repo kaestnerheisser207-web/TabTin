@@ -14,8 +14,8 @@
 
 import { useCallback, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
-import { parseResourcePointer } from '@tabtin/resource-router'
-import { toast } from '@tabtin/smartsheet-ui'
+import { parseResourcePointer } from '@muse/resource-router'
+import { toast } from '@muse/smartsheet-ui'
 import {
   expandCanvasForScope,
   openResourceUrlInSpace,

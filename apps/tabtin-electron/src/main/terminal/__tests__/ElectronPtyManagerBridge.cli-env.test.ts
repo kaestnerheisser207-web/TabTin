@@ -1,5 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import type { PtyHostClient, PtyHostSession } from '@tabtin/pty-core';
+import type { PtyHostClient, PtyHostSession } from '@muse/pty-core';
 import { PtyManager } from '../PtyManager';
 import { ElectronPtyManagerBridge } from '../ElectronPtyManagerBridge';
 
@@ -95,7 +95,7 @@ describe('ElectronPtyManagerBridge CLI server env', () => {
       'node',
       '-e',
       JSON.stringify(
-        'console.log(JSON.stringify({sock:process.env.TABTIN_SOCK||null,token:process.env._TABTIN_TRANSPORT_TOKEN||null}))',
+        'console.log(JSON.stringify({sock:process.env.MUSE_SOCK||null,token:process.env._MUSE_TRANSPORT_TOKEN||null}))',
       ),
     ].join(' ');
   }
@@ -183,7 +183,7 @@ describe('ElectronPtyManagerBridge CLI server env', () => {
     const result = await bridge.executeAgentCommand({
       command: printTransportEnvCommand(),
       env: {
-        TABTIN_SOCK: 'explicit-sock',
+        MUSE_SOCK: 'explicit-sock',
       },
       agentMeta: {
         toolUseId: 'tool-cli-env-explicit',
@@ -209,7 +209,7 @@ describe('ElectronPtyManagerBridge CLI server env', () => {
     const result = await bridge.executeAgentCommand({
       command: printTransportEnvCommand(),
       env: {
-        _TABTIN_TRANSPORT_TOKEN: 'explicit-token',
+        _MUSE_TRANSPORT_TOKEN: 'explicit-token',
       },
       agentMeta: {
         toolUseId: 'tool-cli-env-explicit-token',

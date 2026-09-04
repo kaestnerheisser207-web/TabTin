@@ -1,7 +1,7 @@
 /**
  * Native backend 宿主装配（ Stage 6d）。
  *
- * 自 agent-runtime 迁入：bootstrap 依赖 `@tabtin/terminal-core`，属宿主层。
+ * 自 agent-runtime 迁入：bootstrap 依赖 `@muse/terminal-core`，属宿主层。
  */
 
 export {

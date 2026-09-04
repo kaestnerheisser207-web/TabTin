@@ -9,14 +9,14 @@ const localDevExample = readFileSync(new URL('../.env.localdev.example', scriptD
 const packageConfig = JSON.parse(readFileSync(new URL('../package.json', scriptDirectory), 'utf8'))
 
 const COMMUNITY_ENDPOINTS = {
-  TABTIN_COMMUNITY_API_BASE_URL: [
-    'TABTIN_API_BASE_URL',
+  MUSE_COMMUNITY_API_BASE_URL: [
+    'MUSE_API_BASE_URL',
     'VITE_API_BASE_URL',
   ],
-  TABTIN_COMMUNITY_COLLAB_WS_BASE: ['VITE_COLLAB_WS_BASE'],
-  TABTIN_COMMUNITY_CENTRIFUGO_WS_URL: ['VITE_CENTRIFUGO_WS_URL'],
-  TABTIN_COMMUNITY_PUBLIC_WEB_BASE_URL: [
-    'TABTIN_PUBLIC_WEB_BASE_URL',
+  MUSE_COMMUNITY_COLLAB_WS_BASE: ['VITE_COLLAB_WS_BASE'],
+  MUSE_COMMUNITY_CENTRIFUGO_WS_URL: ['VITE_CENTRIFUGO_WS_URL'],
+  MUSE_COMMUNITY_PUBLIC_WEB_BASE_URL: [
+    'MUSE_PUBLIC_WEB_BASE_URL',
     'VITE_PUBLIC_WEB_BASE_URL',
   ],
 }
@@ -55,5 +55,5 @@ test('Mac packages declare why Community needs local-network access', () => {
 
 test('local packaged profile points public invitation links at tabtin-web port 5176', () => {
   assert.match(localDevExample, /^VITE_PUBLIC_WEB_BASE_URL=http:\/\/<YOUR_LAN_IP>:5176$/m)
-  assert.match(localDevExample, /^TABTIN_PUBLIC_WEB_BASE_URL=\$\{VITE_PUBLIC_WEB_BASE_URL\}$/m)
+  assert.match(localDevExample, /^MUSE_PUBLIC_WEB_BASE_URL=\$\{VITE_PUBLIC_WEB_BASE_URL\}$/m)
 })

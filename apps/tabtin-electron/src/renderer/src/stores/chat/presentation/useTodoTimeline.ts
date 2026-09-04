@@ -3,7 +3,7 @@
  */
 
 import { useCallback, useMemo } from 'react'
-import type { ChatMessage } from '@tabtin/chat-client'
+import type { ChatMessage } from '@muse/chat-client'
 import { useSessionBlocksRecord } from '../messages/messageBlocks'
 import { useChatStore } from '@stores/chat/useChatStore'
 import { deriveTodoTimeline, type TodoTimeline } from './todoTimeline'

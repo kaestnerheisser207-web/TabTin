@@ -21,8 +21,8 @@ import { useAppPageStore } from '@stores/useAppPageStore'
 import { useDeviceStore } from '@stores/useDeviceStore'
 import { openSpaceSettingsIntent } from '@components/space-settings/spaceSettingsNavigation'
 import { enterTeamSpaceProject } from '@components/layout/project/teamSpaceProjectNavigation'
-import { compareSpacesByStableOrder, resolveSessionScopeId } from '@tabtin/app-shell'
-import type { ChatSession } from '@tabtin/chat-client'
+import { compareSpacesByStableOrder, resolveSessionScopeId } from '@muse/app-shell'
+import type { ChatSession } from '@muse/chat-client'
 import { useWorkbenchSceneStore } from '@/stores/useWorkbenchSceneStore'
 import {
   isProjectCompanionWorkspace,

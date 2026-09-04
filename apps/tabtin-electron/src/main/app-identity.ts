@@ -115,9 +115,9 @@ export function resolvePackagedRuntimeProfileFromHost(): TabTinRuntimeProfile | 
 
 export function resolveRuntimeProfile(): TabTinRuntimeProfile {
   const explicitProfile =
-    normalizeProfile(process.env.TABTIN_RUNTIME_PROFILE) ??
+    normalizeProfile(process.env.MUSE_RUNTIME_PROFILE) ??
     normalizeProfile(process.env.VITE_BUILD_PROFILE) ??
-    normalizeProfile(process.env.TABTIN_BUILD_PROFILE)
+    normalizeProfile(process.env.MUSE_BUILD_PROFILE)
 
   if (explicitProfile) {
     return explicitProfile
@@ -170,10 +170,10 @@ export function resolveDefaultWorkspaceDirectoryName(
 export function resolveDevInstanceId(): string | undefined {
   if (app.isPackaged) return undefined
 
-  const instanceId = process.env.TABTIN_DEV_INSTANCE?.trim().toLowerCase()
+  const instanceId = process.env.MUSE_DEV_INSTANCE?.trim().toLowerCase()
   if (!instanceId) return undefined
   if (!/^[a-z0-9][a-z0-9-]{0,31}$/.test(instanceId)) {
-    throw new Error('TABTIN_DEV_INSTANCE 只能包含小写字母、数字和连字符，最长 32 位')
+    throw new Error('MUSE_DEV_INSTANCE 只能包含小写字母、数字和连字符，最长 32 位')
   }
   return instanceId
 }
@@ -193,19 +193,19 @@ export function applyRuntimeAppIdentity(): TabTinAppIdentity {
   // Keep managed/index data and execution-control state profile-scoped while
   // preserving the domain contract that Workspace.working_dir is external
   // and must never be derived from either root.
-  if (app.isPackaged || !process.env.TABTIN_DATA_ROOT) {
-    process.env.TABTIN_DATA_ROOT = profileRoot
+  if (app.isPackaged || !process.env.MUSE_DATA_ROOT) {
+    process.env.MUSE_DATA_ROOT = profileRoot
   }
-  if (app.isPackaged || !process.env.TABTIN_RUNTIME_ROOT) {
-    process.env.TABTIN_RUNTIME_ROOT = join(profileRoot, 'runtime')
+  if (app.isPackaged || !process.env.MUSE_RUNTIME_ROOT) {
+    process.env.MUSE_RUNTIME_ROOT = join(profileRoot, 'runtime')
   }
-  if (app.isPackaged || !process.env.TABTIN_CONFIG_DIR) {
-    process.env.TABTIN_CONFIG_DIR = process.env.TABTIN_RUNTIME_ROOT
+  if (app.isPackaged || !process.env.MUSE_CONFIG_DIR) {
+    process.env.MUSE_CONFIG_DIR = process.env.MUSE_RUNTIME_ROOT
   }
 
-  process.env.TABTIN_RUNTIME_PROFILE = identity.profile
-  process.env.TABTIN_APP_ID = identity.appId
-  process.env.TABTIN_APP_PRODUCT_NAME = productName
+  process.env.MUSE_RUNTIME_PROFILE = identity.profile
+  process.env.MUSE_APP_ID = identity.appId
+  process.env.MUSE_APP_PRODUCT_NAME = productName
 
   return identity
 }

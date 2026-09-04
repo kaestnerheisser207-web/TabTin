@@ -18,9 +18,9 @@ import {
   PopoverContent,
   Label,
   toast,
-} from '@tabtin/smartsheet-ui'
-import type { FormViewConfig } from '@tabtin/table-core'
-import type { FormFieldMeta } from '@tabtin/table-ui'
+} from '@muse/smartsheet-ui'
+import type { FormViewConfig } from '@muse/table-core'
+import type { FormFieldMeta } from '@muse/table-ui'
 import { useUpload } from '@/hooks/useUpload'
 import { useFieldSettingStore } from '@/stores/useFieldSettingStore'
 import { SortableItem } from './SortableItem'

@@ -33,7 +33,7 @@ import path from 'node:path'
 import fs from 'node:fs'
 import fsp from 'node:fs/promises'
 import simpleGit from 'simple-git'
-import { getBucket, registerStorageBucket } from '@tabtin/storage-manager'
+import { getBucket, registerStorageBucket } from '@muse/storage-manager'
 import { createLogger } from '../logger'
 import { getCurrentUserCheckpointRoots } from '../checkpoint/CheckpointService'
 

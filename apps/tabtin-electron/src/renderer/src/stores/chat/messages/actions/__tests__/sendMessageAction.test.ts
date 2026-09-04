@@ -1,5 +1,5 @@
 import { afterAll, beforeAll, beforeEach, describe, expect, it, vi } from 'vitest'
-import type { ChatClient, ChatMessage, ChatSession } from '@tabtin/chat-client'
+import type { ChatClient, ChatMessage, ChatSession } from '@muse/chat-client'
 
 const {
   runtimeState,
@@ -622,7 +622,7 @@ function createSendMessageAction(
   }
 }
 
-// hub 的 resolveSendRoute（本机 runtime 可用性判定）依赖 window.tabtin?.agentEngine。
+// hub 的 resolveSendRoute（本机 runtime 可用性判定）依赖 window.muse?.agentEngine。
 // 测试环境（jsdom）默认 window 存在但无 tabtin，需要手动注入。
 const submitAskUserResponseIpc = vi.fn().mockResolvedValue({ success: true })
 const beginProvisionalSessionClaimIpc = vi.fn().mockResolvedValue({
@@ -633,7 +633,7 @@ const completeProvisionalSessionClaimIpc = vi.fn().mockResolvedValue({ completed
 
 beforeAll(() => {
   ;(globalThis as any).window = (globalThis as any).window ?? {}
-  ;(globalThis as any).window.tabtin = {
+  ;(globalThis as any).window.muse = {
     agentEngine: {
       submitAskUserResponse: submitAskUserResponseIpc,
       beginProvisionalSessionClaim: beginProvisionalSessionClaimIpc,
@@ -668,7 +668,7 @@ beforeAll(() => {
 })
 
 afterAll(() => {
-  delete (globalThis as any).window.tabtin
+  delete (globalThis as any).window.muse
   runtimeStoreAccess.resetAccessForTest()
 })
 

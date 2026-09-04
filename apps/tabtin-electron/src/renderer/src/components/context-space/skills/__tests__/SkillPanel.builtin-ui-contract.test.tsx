@@ -52,7 +52,7 @@ describe('SkillPanel builtin UI contract', () => {
     expect(source).toContain('const canQuickUse = quickUseList.length > 0')
     expect(source).toContain('quickUseList.map(preset')
     expect(source).not.toContain('isTabtinWidgetQuickUseSkill')
-    expect(source).not.toContain('TABTIN_WIDGET_QUICK_USE_PRESET_ID')
+    expect(source).not.toContain('MUSE_WIDGET_QUICK_USE_PRESET_ID')
     expect(source).toContain('preset.presetId')
     expect(source).toContain('handleInsertQuickUse(preset)')
     expect(source).toContain('buildSkillQuickUseGeneratedState(preset)')

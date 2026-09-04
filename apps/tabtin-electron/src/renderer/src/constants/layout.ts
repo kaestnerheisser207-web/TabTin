@@ -1,1 +1,1 @@
-export { LayoutConstraints } from '@tabtin/app-shell'
+export { LayoutConstraints } from '@muse/app-shell'

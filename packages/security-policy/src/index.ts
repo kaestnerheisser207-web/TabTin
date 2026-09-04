@@ -1,5 +1,5 @@
 /**
- * @tabtin/security-policy — 跨端统一安全策略引擎
+ * @muse/security-policy — 跨端统一安全策略引擎
  *
  * 所有安全决策的 SSOT。
  * Django 作为策略源，Daemon / Electron / MCP / CLI / Mobile 统一消费。
@@ -63,7 +63,7 @@ export type { ValidationResult } from './url-validator';
 //
 // 与上方旧 API 共存；W2 起逐步淘汰旧 API。
 // 消费方导入示例：
-//   import { judge, buildPolicyFromAgentConfigV2, normalize } from '@tabtin/security-policy';
+//   import { judge, buildPolicyFromAgentConfigV2, normalize } from '@muse/security-policy';
 //
 // ===========================================================================
 
@@ -161,7 +161,7 @@ export {
 } from './platform-cli-deferral';
 export {
   CLI_OUTPUTS_DIR_NAME,
-  TABTIN_TOOL_RESULTS_DIR_NAME,
+  MUSE_TOOL_RESULTS_DIR_NAME,
   getPlatformArtifactRoots,
   isPlatformArtifactPath,
   isPlatformArtifactReadAllowed,

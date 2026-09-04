@@ -1,11 +1,11 @@
 import type {
   EventStorageEntry,
   TranscriptEntry,
-} from '@tabtin/agent-runtime'
+} from '@muse/agent-runtime'
 import {
   ContentBlockEvents,
   StreamEvents,
-} from '@tabtin/agent-wire'
+} from '@muse/agent-wire'
 import { describe, expect, it, vi } from 'vitest'
 
 import {

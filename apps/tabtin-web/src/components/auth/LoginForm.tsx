@@ -1,13 +1,13 @@
 import React, { useState } from 'react'
 import { motion } from 'framer-motion'
 import { Eye, EyeOff, KeyRound, Lock, Mail, Smartphone } from 'lucide-react'
-import { Button, Input, Form, FormField, FormLabel, FormMessage, LoadingSpinner } from '@tabtin/smartsheet-ui'
+import { Button, Input, Form, FormField, FormLabel, FormMessage, LoadingSpinner } from '@muse/smartsheet-ui'
 import { useAuthStore } from '@/stores/auth-store'
 import { authApi } from '@/services/auth-api'
 import { extractErrorMessage } from '@/utils/extract-api-error'
 import { useTranslation } from 'react-i18next'
-import { useLoginForm, CN_MOBILE_PHONE_MAX_LENGTH, parseEmailLoginEnabled } from '@tabtin/shared/auth-forms'
-import { useCapsLockWarning } from '@tabtin/shared/use-caps-lock-warning'
+import { useLoginForm, CN_MOBILE_PHONE_MAX_LENGTH, parseEmailLoginEnabled } from '@muse/shared/auth-forms'
+import { useCapsLockWarning } from '@muse/shared/use-caps-lock-warning'
 import { CapsLockHint } from './CapsLockHint'
 
 const AUTH_EMAIL_LOGIN_ENABLED = parseEmailLoginEnabled(

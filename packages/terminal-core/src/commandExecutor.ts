@@ -272,10 +272,10 @@ export class CommandExecutor {
 
     // ── W1（路径含空格保护）────────────────────────────────────────
     //
-    // 当 TABTIN_* 平台环境变量的值含有空格时（典型：macOS 的
+    // 当 MUSE_* 平台环境变量的值含有空格时（典型：macOS 的
     // `/Users/foo/Application Support/TabTin/spaces`），shell 对
-    // 未加引号的变量引用（`$TABTIN_WORKSPACE`）会做 word-splitting，
-    // 导致 `cp $TABTIN_WORKSPACE/file.txt /tmp/` 被拆成三个参数。
+    // 未加引号的变量引用（`$MUSE_WORKSPACE`）会做 word-splitting，
+    // 导致 `cp $MUSE_WORKSPACE/file.txt /tmp/` 被拆成三个参数。
     //
     // **不修改用户命令字符串**——只在命令前拼接一段 shell 初始化
     // 导言（export VARNAME='...'），让变量在 shell 上下文内被重新
@@ -285,13 +285,13 @@ export class CommandExecutor {
     // 保证 Node.js 层面的正确性。
     //
     // **关于 word-splitting 的根因**：即使在 shell 级别重新 export
-    // 了变量，`cp $TABTIN_WORKSPACE/file` 仍会 word-split，因为 shell
+    // 了变量，`cp $MUSE_WORKSPACE/file` 仍会 word-split，因为 shell
     // 是在命令执行前展开变量的。真正的兜底需要用户在命令中写
-    // `"$TABTIN_WORKSPACE"`。但 runtime 层能做的是：当 cwd 含空格时，
-    // 在命令前注入 `export TABTIN_WORKSPACE='...'`（单引号 POSIX 转义）
+    // `"$MUSE_WORKSPACE"`。但 runtime 层能做的是：当 cwd 含空格时，
+    // 在命令前注入 `export MUSE_WORKSPACE='...'`（单引号 POSIX 转义）
     // ——这不会修改用户命令，且是我们能在注入位置做到的最大保护。
     //
-    // 注意范围：仅 TABTIN_* 前缀变量。用户自定义变量的 quoting
+    // 注意范围：仅 MUSE_* 前缀变量。用户自定义变量的 quoting
     // 习惯保持不变（不干涉）。
     const tabtinVarPreamble = buildTabtinVarPreamble(env);
 
@@ -405,12 +405,12 @@ export class CommandExecutor {
 }
 
 /**
- * W1（路径含空格保护）：为含空格路径的 TABTIN_* 环境变量生成
+ * W1（路径含空格保护）：为含空格路径的 MUSE_* 环境变量生成
  * shell 初始化前缀，以 POSIX 单引号转义方式重新 export 变量。
  *
- * **目的**：当 TABTIN_WORKSPACE 等平台变量的值含空格时，在子进程
+ * **目的**：当 MUSE_WORKSPACE 等平台变量的值含空格时，在子进程
  * shell 内重新以 single-quote 形式赋值——这是"注入位置"能做的最大
- * 保护，确保如 `"$TABTIN_WORKSPACE"` 这类有意引用的场景能正确工作。
+ * 保护，确保如 `"$MUSE_WORKSPACE"` 这类有意引用的场景能正确工作。
  *
  * **不修改用户原命令**：preamble 是 PREPEND（前缀），用户命令字符
  * 串本身不变。无空格的变量不会出现在 preamble 里，避免无谓开销。
@@ -420,21 +420,21 @@ export class CommandExecutor {
  * 来处理。
  *
  * 例：path = `/Users/foo/Application Support` →
- *   `export TABTIN_WORKSPACE='/Users/foo/Application Support'`
+ *   `export MUSE_WORKSPACE='/Users/foo/Application Support'`
  *
  * @returns semicolon-separated shell statements, or empty string if no
- *          TABTIN_* var with spaces is present (caller skips the prefix).
+ *          MUSE_* var with spaces is present (caller skips the prefix).
  */
 /**
- * POSIX shell 前导：为值含空格的 TABTIN_* 环境变量生成 `export KEY='value'` 语句。
+ * POSIX shell 前导：为值含空格的 MUSE_* 环境变量生成 `export KEY='value'` 语句。
  *
  * 使用 POSIX 单引号转义：每个 `'` 替换为 `'\''`（关闭引号 + 字面单引号 + 重新开引号）。
- * 导出后，shell 展开 `"$TABTIN_WORKSPACE"` 时不会再做 word-splitting。
+ * 导出后，shell 展开 `"$MUSE_WORKSPACE"` 时不会再做 word-splitting。
  */
 export function buildTabtinVarPreamble(env: Record<string, string>): string {
   const parts: string[] = [];
   for (const [key, value] of Object.entries(env)) {
-    if (!key.startsWith('TABTIN_')) continue;
+    if (!key.startsWith('MUSE_')) continue;
     if (!value.includes(' ')) continue;
     // POSIX single-quote escape: replace every ' with '\''
     const escaped = value.replace(/'/g, "'\\''");
@@ -444,14 +444,14 @@ export function buildTabtinVarPreamble(env: Record<string, string>): string {
 }
 
 /**
- * PowerShell 前导（Win32）：为值含空格的 TABTIN_* 环境变量生成 `$env:KEY = 'value'` 语句。
+ * PowerShell 前导（Win32）：为值含空格的 MUSE_* 环境变量生成 `$env:KEY = 'value'` 语句。
  *
  * PowerShell 单引号字符串是字面量，内部 `'` 需用 `''` 转义。
  */
 export function buildPSTabtinVarPreamble(env: Record<string, string>): string {
   const parts: string[] = [];
   for (const [key, value] of Object.entries(env)) {
-    if (!key.startsWith('TABTIN_')) continue;
+    if (!key.startsWith('MUSE_')) continue;
     if (!value.includes(' ')) continue;
     // PowerShell single-quoted string escaping: ' → ''
     const escaped = value.replace(/'/g, "''");

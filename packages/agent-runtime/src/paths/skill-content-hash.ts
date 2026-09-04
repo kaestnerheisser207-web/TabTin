@@ -1,7 +1,7 @@
 /**
  * D11 Skill 内容 hash 算法（PRD V3.3 / W0 决策 4 V2）TypeScript 镜像。
  *
- *  Stage 6a：自 `@tabtin/terminal-core` 迁入 agent-runtime。
+ *  Stage 6a：自 `@muse/terminal-core` 迁入 agent-runtime。
  * 与 Python 端 `apps/tabtin_django/apps/skills/services/content_hash.py` 字面对齐：
  *
  * 1. 扫描 skill 目录，递归收集所有非 ignore 文件

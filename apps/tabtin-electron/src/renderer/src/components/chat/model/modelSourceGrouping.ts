@@ -1,4 +1,4 @@
-import type { Model } from '@tabtin/chat-client'
+import type { Model } from '@muse/chat-client'
 
 export type ModelSource = 'platform' | 'organizationByok' | 'userByok'
 

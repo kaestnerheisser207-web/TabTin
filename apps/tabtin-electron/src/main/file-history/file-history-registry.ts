@@ -7,11 +7,11 @@
  * - session 销毁调 `removeFileHistory`、host 停止调 `clearAllFileHistory` 防内存泄漏。
  *
  * 平台相关只在这一层（logger / historyRoot）；per-thread 缓存与生命周期逻辑下沉到
- * `@tabtin/file-history-core` 的平台无关 `FileHistoryRegistry`。
+ * `@muse/file-history-core` 的平台无关 `FileHistoryRegistry`。
  */
-import { FileHistoryRegistry, type FileHistoryService } from '@tabtin/file-history-core'
-import { resolveWorkspaceFileHistoryRoot } from '@tabtin/shared'
-import { resolveDataRoot } from '@tabtin/terminal-core'
+import { FileHistoryRegistry, type FileHistoryService } from '@muse/file-history-core'
+import { resolveWorkspaceFileHistoryRoot } from '@muse/shared'
+import { resolveDataRoot } from '@muse/terminal-core'
 import fs from 'node:fs'
 import path from 'node:path'
 import { createLogger } from '../logger'

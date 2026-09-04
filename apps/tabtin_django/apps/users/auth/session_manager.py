@@ -105,13 +105,13 @@ class SessionManager:
         """解析客户端会话元数据，兼容旧客户端未传头的登录请求。"""
         device_id = (
             request.META.get('HTTP_X_DEVICE_ID')
-            or request.META.get('HTTP_X_TABTIN_DEVICE_ID')
+            or request.META.get('HTTP_X_MUSE_DEVICE_ID')
             or device_info.get('device_id')
             or ''
         )
         client_type = (
             request.META.get('HTTP_X_CLIENT_TYPE')
-            or request.META.get('HTTP_X_TABTIN_CLIENT_TYPE')
+            or request.META.get('HTTP_X_MUSE_CLIENT_TYPE')
             or session_type
             or 'web'
         )

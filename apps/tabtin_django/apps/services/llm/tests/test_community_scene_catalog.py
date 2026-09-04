@@ -62,7 +62,7 @@ class CommunitySceneStartupValidationTests(TestCase):
 
         LLMSceneBinding.objects.all().delete()
 
-    @override_settings(TABTIN_EDITION="community")
+    @override_settings(MUSE_EDITION="community")
     def test_zero_binding_is_legal_without_manual_seed_hint(self):
         from apps.services.llm.scenes import registry
 
@@ -77,7 +77,7 @@ class CommunitySceneStartupValidationTests(TestCase):
         )
         self.assertTrue(any("合法状态" in str(call) for call in info.call_args_list))
 
-    @override_settings(TABTIN_EDITION="community")
+    @override_settings(MUSE_EDITION="community")
     def test_partial_binding_is_legal_when_its_catalog_metadata_matches(self):
         from apps.services.llm.models import LLMSceneBinding
         from apps.services.llm.scenes import registry
@@ -94,7 +94,7 @@ class CommunitySceneStartupValidationTests(TestCase):
 
         registry._validate_db_bindings_at_startup()
 
-    @override_settings(TABTIN_EDITION="saas")
+    @override_settings(MUSE_EDITION="saas")
     def test_saas_zero_binding_keeps_upstream_operator_hint(self):
         from apps.services.llm.scenes import registry
 

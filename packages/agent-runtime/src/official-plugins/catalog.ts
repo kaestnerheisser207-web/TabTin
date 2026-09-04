@@ -84,7 +84,7 @@ export function createBundledOfficialPluginCatalog(
       ],
       preparedRuntime: {
         environment: {
-          TABTIN_OFFICIAL_PLUGIN_ID: 'tabtin-minimal-codex-plugin',
+          MUSE_OFFICIAL_PLUGIN_ID: 'tabtin-minimal-codex-plugin',
         },
         warnings: ['Prepared runtime is metadata-only in this release slice.'],
       },

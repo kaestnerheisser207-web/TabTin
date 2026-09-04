@@ -52,14 +52,14 @@
  *      handlers map（详见 file-system/ipc.ts 实现）。
  *
  * ● 调试模式：
- *   设置环境变量 TABTIN_EAGER_IPC=1 在 stub 注册后立刻同步加载所有
+ *   设置环境变量 MUSE_EAGER_IPC=1 在 stub 注册后立刻同步加载所有
  *   模块（而不是非阻塞预热），便于排查"按需加载触发的副作用"相关
  *   问题。stub 永远先注册，跟时序无关。
  *
  * ═══════════════════════════════════════════════════════════
  */
 import { ipcMain, type IpcMainInvokeEvent } from 'electron'
-import { errResponse } from '@tabtin/agent-wire'
+import { errResponse } from '@muse/agent-wire'
 import { isTrustedSender } from './auth'
 import { createLogger } from './logger'
 import { buildUnauthorizedReject } from './utils/guarded-handle'
@@ -276,7 +276,7 @@ const moduleHandlersCache = new Map<
 >()
 const stubsRegistered = new Set<string>()
 let legacyRegistered = false
-const isEagerMode = process.env.TABTIN_EAGER_IPC === '1'
+const isEagerMode = process.env.MUSE_EAGER_IPC === '1'
 
 // ── 公共 API ──────────────────────────────────────────────
 
@@ -396,7 +396,7 @@ export async function registerDeferredIpcHandlers(): Promise<void> {
   }
 
   if (isEagerMode) {
-    ipcLog.info('TABTIN_EAGER_IPC=1: 同步加载全部 deferred 模块...')
+    ipcLog.info('MUSE_EAGER_IPC=1: 同步加载全部 deferred 模块...')
     // 旧路径模块
     for (const h of LEGACY_DEFERRED_HANDLERS) {
       try {

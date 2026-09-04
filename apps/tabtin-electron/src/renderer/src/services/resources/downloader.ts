@@ -416,7 +416,7 @@ export class ResourceDownloader {
 
     let resource = inspectedResource
     if (!resource?.contentRef) {
-      const response = await window.tabtin.resourceDetection.captureResource({
+      const response = await window.muse.resourceDetection.captureResource({
         resourceId: task.resourceId,
         viewId: task.viewId,
         force: (resource?.captureStatus || task.captureStatus) === 'page_bound_blob' || task.url.startsWith('blob:')
@@ -464,11 +464,11 @@ export class ResourceDownloader {
       return null
     }
 
-    if (!window.tabtin.resourceDetection.inspectResource) {
+    if (!window.muse.resourceDetection.inspectResource) {
       return null
     }
 
-    const response = await window.tabtin.resourceDetection.inspectResource({
+    const response = await window.muse.resourceDetection.inspectResource({
       resourceId: task.resourceId,
       viewId: task.viewId
     })
@@ -540,8 +540,8 @@ export class ResourceDownloader {
       // 让 caller 能区分"业务侧拒绝"和"通道不可用"两种情况（后者下面 throw "无法通过安全通道"）。
       let preview: { content?: string; kind?: string; mime?: string } | undefined
       try {
-        // @ts-ignore - window.tabtin is defined in preload
-        preview = await window.tabtin?.fileSystem?.readFilePreview?.(
+        // @ts-ignore - window.muse is defined in preload
+        preview = await window.muse?.fileSystem?.readFilePreview?.(
           contentRef.filePath,
           { maxBytes: 50 * 1024 * 1024 }
         )

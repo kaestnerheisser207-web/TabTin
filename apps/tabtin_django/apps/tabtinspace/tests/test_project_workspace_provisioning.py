@@ -32,7 +32,7 @@ from apps.tabtinspace.services.workspace_service import (
 User = get_user_model()
 
 
-@override_settings(TABTIN_ENABLE_PROJECTS=True)
+@override_settings(MUSE_ENABLE_PROJECTS=True)
 class ProjectWorkspaceProvisioningTests(TestCase):
     databases = {"default", "postgresql"}
 

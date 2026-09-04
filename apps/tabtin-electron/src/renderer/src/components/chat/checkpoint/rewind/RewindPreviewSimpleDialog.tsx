@@ -1,7 +1,7 @@
 import React from 'react'
 import { useTranslation } from 'react-i18next'
-import { OVERLAY_SURFACE_CLASS } from '@tabtin/smartsheet-ui'
-import type { SessionRollbackState } from '@tabtin/chat-client'
+import { OVERLAY_SURFACE_CLASS } from '@muse/smartsheet-ui'
+import type { SessionRollbackState } from '@muse/chat-client'
 import { cn } from '@utils/cn'
 
 interface RewindPreviewSimpleDialogProps {

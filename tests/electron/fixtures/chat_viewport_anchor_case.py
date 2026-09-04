@@ -251,7 +251,7 @@ def seed_history_messages(context: dict) -> dict:
 
 
 def prepare_case() -> None:
-    context = ensure_context(require_env("TABTIN_E2E_RUN_ID"))
+    context = ensure_context(require_env("MUSE_E2E_RUN_ID"))
     seeded = seed_history_messages(context)
     emit(
         {
@@ -278,7 +278,7 @@ def prepare_case() -> None:
 
 
 def auth_case() -> None:
-    context = ensure_context(require_env("TABTIN_E2E_RUN_ID"))
+    context = ensure_context(require_env("MUSE_E2E_RUN_ID"))
     emit(
         build_electron_auth_payload(
             user=context["user"],
@@ -292,14 +292,14 @@ def auth_case() -> None:
 
 
 def main() -> None:
-    mode = require_env("TABTIN_E2E_MODE")
+    mode = require_env("MUSE_E2E_MODE")
     if mode == "prepare":
         prepare_case()
         return
     if mode == "auth":
         auth_case()
         return
-    raise RuntimeError(f"Unknown TABTIN_E2E_MODE: {mode}")
+    raise RuntimeError(f"Unknown MUSE_E2E_MODE: {mode}")
 
 
 main()

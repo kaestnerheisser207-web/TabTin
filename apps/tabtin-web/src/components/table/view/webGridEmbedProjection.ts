@@ -1,5 +1,5 @@
-import type { Field, TableRecord, ViewMeta } from '@tabtin/table-core'
-import { getViewVisibilitySnapshot } from '@tabtin/table-ui'
+import type { Field, TableRecord, ViewMeta } from '@muse/table-core'
+import { getViewVisibilitySnapshot } from '@muse/table-ui'
 
 export function resolveGridEmbedVisibleFields(
   currentView: ViewMeta | null,

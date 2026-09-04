@@ -31,7 +31,7 @@ import type {
   MessageBlockRecord,
   PersistedEntryOwner,
   TranscriptEntry,
-} from '@tabtin/agent-runtime'
+} from '@muse/agent-runtime'
 
 import type { MessageDeliveryOutbox } from './message-delivery-outbox.js'
 import {

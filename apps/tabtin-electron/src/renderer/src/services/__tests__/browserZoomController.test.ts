@@ -109,7 +109,7 @@ describe('browserZoomController', () => {
     expect(getBrowserZoomLevel('view-A')).toBe(0)
   })
 
-  it('window.tabtin 缺失时静默 no-op（SSR / 测试启动序列）', () => {
+  it('window.muse 缺失时静默 no-op（SSR / 测试启动序列）', () => {
     delete (globalThis as unknown as { window?: unknown }).window
     expect(() => adjustBrowserZoom('view-A', 'in')).not.toThrow()
     expect(setZoomLevelMock).not.toHaveBeenCalled()

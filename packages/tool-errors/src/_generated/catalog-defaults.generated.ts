@@ -3,7 +3,7 @@
  *
  * Source: packages/tool-errors/codegen/kinds/*.yaml
  *        + file-pipeline-errors/codegen/error-codes.yaml (specific kinds)
- * Codegen: pnpm --filter @tabtin/tool-errors codegen
+ * Codegen: pnpm --filter @muse/tool-errors codegen
  *
  * Electron merges these defaults with hand-written UX overrides.
  * No hint copy / Factory / retry policy here.

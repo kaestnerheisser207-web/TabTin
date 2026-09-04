@@ -2,7 +2,7 @@
 //
 // 目的（cli-spec 收口 review A5 项）：把 cmdutil.MustRegisterCommand 注册期 panic
 // 提前到 `go test` 触发。当前框架下，注册期断言（Layer/Risk/RiskDeclared/Long≥3/
-// Example≥3/写命令 DryRun）只在跑 `./dist/tabtin --help` 这类 cobra 实际构造命令树
+// Example≥3/写命令 DryRun）只在跑 `./dist/muse --help` 这类 cobra 实际构造命令树
 // 的路径才会触发——`go test` 默认不构造，refactor 静默 drop 命令 / 漏字段 / 写命令
 // 忘补 DryRun 不会被 CI 抓到。本测试通过 newCmdDoc + 遍历叶子命令直接断言。
 //
@@ -172,7 +172,7 @@ func TestDocInsertBlockDryRunSupportsDocumentStart(t *testing.T) {
 // TestDocAllRiskDeclared 断言所有 doc 叶子命令都设了 RiskDeclared:true。
 //
 // 把注册期 MustRegisterCommand 的 panic 提前到 go test —— 避免新增命令忘加
-// RiskDeclared 后只能通过实跑 ./dist/tabtin --help 才暴露。
+// RiskDeclared 后只能通过实跑 ./dist/muse --help 才暴露。
 // 兼容性：namespace 父命令（doc / doc version 等）走 GetCommandDef 返回 nil，
 // 跳过（它们本来就不是 CommandDef，是手写 cobra.Command + AddCommand 挂的）。
 func TestDocAllRiskDeclared(t *testing.T) {

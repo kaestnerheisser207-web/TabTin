@@ -1,13 +1,13 @@
 /**
  * 分享页评论私有附件：presign → browser PUT → confirm → 解析短时预览。
  */
-import type { AppHostClient } from '@tabtin/app-host-sdk'
+import type { AppHostClient } from '@muse/app-host-sdk'
 import {
   confirmSharedCommentAttachmentUpload,
   isSignedCommentPreviewUrl,
   presignSharedCommentAttachmentUpload,
   resolveSharedCommentAttachmentPreview,
-} from '@tabtin/tabdoc-ui/api-client'
+} from '@muse/tabdoc-ui/api-client'
 import { validateShareCommentImage } from './validateShareCommentImage'
 
 export { validateShareCommentImage } from './validateShareCommentImage'

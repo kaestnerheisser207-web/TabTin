@@ -24,7 +24,7 @@ import {
   DialogTitle,
   toast,
   cn,
-} from '@tabtin/smartsheet-ui'
+} from '@muse/smartsheet-ui'
 import { ChevronDown, Globe, Loader2, Lock } from 'lucide-react'
 import {
   SETTINGS_HINT,
@@ -57,7 +57,7 @@ interface BrowserEnvAPI {
 
 function readBrowserEnvAPI(): BrowserEnvAPI | null {
   if (typeof window === 'undefined') return null
-  const tabtin = (window as any).tabtin
+  const tabtin = (window as any).muse
   return tabtin?.browserEnv ?? null
 }
 

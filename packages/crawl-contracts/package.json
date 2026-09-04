@@ -1,5 +1,5 @@
 {
-  "name": "@tabtin/crawl-contracts",
+  "name": "@muse/crawl-contracts",
   "version": "0.1.0",
   "description": "Shared contracts for crawl-related types",
   "type": "module",

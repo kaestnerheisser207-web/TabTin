@@ -14,7 +14,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import type {
   ToolContext,
-} from '@tabtin/agent-runtime';
+} from '@muse/agent-runtime';
 import { createTabCodeTools } from '../../src/tools/tabcode-adapter.js';
 
 let tmpDir: string;

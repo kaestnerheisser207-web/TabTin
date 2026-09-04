@@ -5,7 +5,7 @@ import { join } from 'node:path'
 import { afterEach, describe, expect, it } from 'vitest'
 import { DshProcessService } from '../src/application/agent/runtime/dsh-process-service.js'
 
-const enabled = process.env.TABTIN_DSH_INTEGRATION === '1'
+const enabled = process.env.MUSE_DSH_INTEGRATION === '1'
 const servers: Server[] = []
 const services: DshProcessService[] = []
 const temporaryDirectories: string[] = []

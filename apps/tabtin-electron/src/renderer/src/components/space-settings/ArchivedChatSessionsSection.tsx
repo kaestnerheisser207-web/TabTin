@@ -1,13 +1,13 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { MessageSquare, RefreshCw, RotateCcw, Trash2 } from 'lucide-react'
-import { ScrollArea, ConfirmDialog } from '@tabtin/smartsheet-ui'
-import { toast } from '@tabtin/smartsheet-ui/toast'
+import { ScrollArea, ConfirmDialog } from '@muse/smartsheet-ui'
+import { toast } from '@muse/smartsheet-ui/toast'
 import { useChatStore } from '@stores/chat/useChatStore'
 import { useAgentSettingsSheetStore } from '@stores/useAgentSettingsSheetStore'
 import { useTranslation } from 'react-i18next'
 import { cn } from '@utils/cn'
 import { SpaceSettingsSectionHeader } from '@components/space-settings/SpaceSettingsSectionHeader'
-import type { ChatSession } from '@tabtin/chat-client'
+import type { ChatSession } from '@muse/chat-client'
 
 interface ArchivedChatSessionsSectionProps {
   spaceId: string

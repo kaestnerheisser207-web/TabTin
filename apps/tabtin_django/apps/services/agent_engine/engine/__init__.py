@@ -2,7 +2,7 @@
 
 The builtin ReAct execution engine (NativeReactLoop, ReactAgent, TinAgent)
 was removed in M5. All Agent execution now happens on client devices
-(Electron/Daemon) via @tabtin/agent-runtime; Django only routes prompts
+(Electron/Daemon) via @muse/agent-runtime; Django only routes prompts
 to the bound device.
 
 Surviving modules:

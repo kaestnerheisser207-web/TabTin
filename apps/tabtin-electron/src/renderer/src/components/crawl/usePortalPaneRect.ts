@@ -40,7 +40,7 @@ export function usePortalPaneRect(
 
     const observePane = (pane: HTMLElement) => {
       if (typeof ResizeObserver === 'undefined') return
-      // eslint-disable-next-line tabtin/prefer-scoped-activity-effects -- portal 在 Activity 外，必须自己跟随面板尺寸。
+      // eslint-disable-next-line muse/prefer-scoped-activity-effects -- portal 在 Activity 外，必须自己跟随面板尺寸。
       observer = new ResizeObserver(updatePaneRect)
       observer.observe(pane)
     }
@@ -57,7 +57,7 @@ export function usePortalPaneRect(
       rafId = requestAnimationFrame(measureUntilReady)
     }
 
-    // eslint-disable-next-line tabtin/prefer-scoped-activity-effects -- portal 在 Activity 外，必须自己跟随窗口尺寸。
+    // eslint-disable-next-line muse/prefer-scoped-activity-effects -- portal 在 Activity 外，必须自己跟随窗口尺寸。
     window.addEventListener('resize', updatePaneRect)
     measureUntilReady()
 

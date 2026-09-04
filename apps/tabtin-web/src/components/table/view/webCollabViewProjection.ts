@@ -1,10 +1,10 @@
-import type { ViewRecordsQuery, ViewRecordsResponse } from '@tabtin/table-core'
+import type { ViewRecordsQuery, ViewRecordsResponse } from '@muse/table-core'
 import {
   buildCalendarViewRecords,
   buildCollabViewRecords,
   buildKanbanViewRecords,
   type BuildCollabViewRecordsInput,
-} from '@tabtin/table-engine/collab'
+} from '@muse/table-engine/collab'
 
 export interface BuildWebCollabViewRecordsInput
   extends Omit<BuildCollabViewRecordsInput, 'page' | 'pageSize'> {

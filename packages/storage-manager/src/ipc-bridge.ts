@@ -133,7 +133,7 @@ async function toExportPayload(id: string): Promise<ExportPayload> {
  * 用法（在 Electron 主进程启动时）：
  * ```ts
  * import { ipcMain } from 'electron'
- * import { registerStorageManagerIpc } from '@tabtin/storage-manager'
+ * import { registerStorageManagerIpc } from '@muse/storage-manager'
  *
  * const off = registerStorageManagerIpc(ipcMain)
  * // 应用退出时

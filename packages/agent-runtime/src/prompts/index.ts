@@ -15,10 +15,10 @@
 //
 // 历史 dead export 清理记录：
 //   - 2026-05-14: ENGINE_IDENTITY_PROMPT / SYSTEM_IDENTITY_PROMPT 删除
-//     （身份段由 `@tabtin/agent-prompt::buildIdentitySection` 提供）
+//     （身份段由 `@muse/agent-prompt::buildIdentitySection` 提供）
 //   - 阶段 2.1 (2026-05-20): ENGINE_EXECUTION_PROMPT / SYSTEM_PERSISTENCE_PROMPT /
 //     ENGINE_SAFETY_PROMPT / SYSTEM_SAFETY_PROMPT 删除（替代物：
-//     `@tabtin/agent-prompt::SECTION_EXECUTION` / `SECTION_SAFETY` 中文版）
+//     `@muse/agent-prompt::SECTION_EXECUTION` / `SECTION_SAFETY` 中文版）
 //   - 阶段 2.1 (2026-05-20): PROACTIVE_REPORT_RULES 删除（hook 注入路径
 //     从未接通，0 production caller）
 export {

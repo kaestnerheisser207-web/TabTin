@@ -1,6 +1,6 @@
 import { useCrawlTabStore } from '@stores/useCrawlTabStore'
-import type { CrawlspaceHost, OrphanReconcileResult } from '@tabtin/crawlspace-core'
-import { requestCloseWorkspace } from '@tabtin/crawlspace-core'
+import type { CrawlspaceHost, OrphanReconcileResult } from '@muse/crawlspace-core'
+import { requestCloseWorkspace } from '@muse/crawlspace-core'
 import { crawlViewClient } from '../electron/crawl-view-client'
 import { taskApiClient } from '../electron/task-api-client'
 import { runSessionClient } from '../electron/run-session-client'
@@ -11,7 +11,7 @@ import { createLogger } from '@/utils/logger'
 const log = createLogger('CrawlspaceHost')
 
 /**
- * 校验 window.tabtin 下各 API 命名空间是否正确注入。
+ * 校验 window.muse 下各 API 命名空间是否正确注入。
  * 在宿主初始化时调用，缺失的 API 会被记录到 console.warn。
  * 返回缺失 API 列表，空数组表示全部就绪。
  */
@@ -21,16 +21,16 @@ export function validateHostApis(): string[] {
     missing.push('window')
     return missing
   }
-  const tabtin = window.tabtin
+  const tabtin = window.muse
   if (!tabtin) {
-    missing.push('window.tabtin')
+    missing.push('window.muse')
     return missing
   }
 
   const requiredNamespaces = ['crawlView', 'taskAPI', 'runSession', 'agent'] as const
   for (const ns of requiredNamespaces) {
     if (!tabtin[ns]) {
-      missing.push(`window.tabtin.${ns}`)
+      missing.push(`window.muse.${ns}`)
     }
   }
 
@@ -419,7 +419,7 @@ export const electronCrawlspaceHost: CrawlspaceHost = {
     })
   },
   reconcileOrphans: async ({ knownTabIds, knownViewIds, knownWorkspaceIds, reason }): Promise<OrphanReconcileResult> => {
-    const api = window.tabtin?.crawlView
+    const api = window.muse?.crawlView
     if (!api || typeof api.reconcileOrphans !== 'function') {
       return { success: false, error: i18n.t('crawl:clients.apiUnavailable', { api: 'crawlView.reconcileOrphans' }) }
     }

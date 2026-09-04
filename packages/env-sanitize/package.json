@@ -1,5 +1,5 @@
 {
-  "name": "@tabtin/env-sanitize",
+  "name": "@muse/env-sanitize",
   "version": "0.1.0",
   "description": "Environment variable sanitization for Muse — strips dangerous injection vars and sensitive credentials",
   "type": "module",

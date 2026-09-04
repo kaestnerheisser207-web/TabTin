@@ -1,5 +1,5 @@
 /**
- * @tabtin/file-pipeline — 抽象层类型定义
+ * @muse/file-pipeline — 抽象层类型定义
  *
  * 三大概念：
  *   1. `FileSource` —— 通道传给 FileResolver 的字节来源。local-path（read_file
@@ -12,15 +12,15 @@
  *
  * 设计不变量（Review 必查；与总控 §九 对齐）：
  *   - parser 不知通道：纯字节进、结果出，不写 OSS、不写 message 历史
- *   - 错误从 W1 13 类 SSoT 派发（`@tabtin/file-pipeline-errors`），不引新错误码
+ *   - 错误从 W1 13 类 SSoT 派发（`@muse/file-pipeline-errors`），不引新错误码
  *   - size 决策归通道（parser 只负责"解析字节"，channel 决定"50MB 拒还是缩放"）
  *   - mime 优先扩展名 + 关键 magic bytes 兜底（FileResolver 内部跑 magic check）
  */
 
-import type { FilePipelineErrorCode, FilePipelineFileSubject } from '@tabtin/file-pipeline-errors';
+import type { FilePipelineErrorCode, FilePipelineFileSubject } from '@muse/file-pipeline-errors';
 import type {
   FilePipelineFailureMode,
-} from '@tabtin/file-pipeline-errors';
+} from '@muse/file-pipeline-errors';
 
 // ─── FileSource：通道→parser 的字节来源 ──────────────────────────────
 
@@ -61,7 +61,7 @@ export interface ResolveOptions {
    * `FILE_TOO_LARGE` envelope。
    *
    * **不变量 #5（size 上限按通道分）**：parser 不持有"hard limit"，由通道传入。
-   *   - 临时通道 (read_file): 50MB（@tabtin/file-pipeline-errors 的
+   *   - 临时通道 (read_file): 50MB（@muse/file-pipeline-errors 的
    *     `DEFAULT_CHANNEL_HARD_LIMIT_BYTES`）
    *   - 持久通道 (chat 拖文件): 50MB（与 OSS bucket 配置对齐；超过走 SSoT
    *     envelope 让用户走分页 / 后端长任务 RAG）
@@ -88,10 +88,10 @@ export interface ResolveOptions {
 
 // ─── ParseDeps：宿主注入的能力 ───────────────────────────────────────
 
-import type { RunDocParserTask } from '@tabtin/local-docparse';
+import type { RunDocParserTask } from '@muse/local-docparse';
 
 /**
- * `runTempPptxParse` 与 `@tabtin/agent-runtime/tools` 的同名类型保持
+ * `runTempPptxParse` 与 `@muse/agent-runtime/tools` 的同名类型保持
  * **结构等价**（duck-typing 兼容）—— FileResolver / PptxParser 不直接
  * import agent-runtime（避免循环依赖），让 host 注入时 TS 推断匹配。
  *

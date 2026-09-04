@@ -11,7 +11,7 @@ import { CrawlspaceViewTab } from './CrawlspaceViewTab'
 import { CrawlspaceTabsOverflowPopover } from './CrawlspaceTabsOverflowPopover'
 import { useTabsOverflowDetection } from '../../hooks/useTabsOverflowDetection'
 import type { ViewInfo } from '../../types'
-import { ScrollArea } from '@tabtin/smartsheet-ui'
+import { ScrollArea } from '@muse/smartsheet-ui'
 import { t } from '../../i18n'
 import { cn } from '../../utils/cn'
 

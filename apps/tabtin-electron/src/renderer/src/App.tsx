@@ -1,5 +1,5 @@
 import React from 'react'
-import { AppHostClientProvider } from '@tabtin/app-host-sdk'
+import { AppHostClientProvider } from '@muse/app-host-sdk'
 import { AppGlobalEffects } from '@components/app/AppGlobalEffects'
 import { AppChatSync } from '@components/app/AppChatSync'
 import { ApprovalMemoStoreSyncHost } from '@components/ApprovalMemoStoreSyncHost'
@@ -17,18 +17,18 @@ import { GlobalSharedSessionFilePreviewHost } from '@components/chat/shared-view
 import '@components/chat/blocks/BlockTimeline'
 import { ShellTitleBar } from '@components/platform/shell-title-bar'
 import { ErrorBoundary } from '@components/common/ErrorBoundary'
-import { LoadingSpinner } from '@tabtin/smartsheet-ui'
+import { LoadingSpinner } from '@muse/smartsheet-ui'
 import { getSharedAppHostClient } from '@/adapters/sharedAppHostClient'
 import { isDetachedIMWindow } from '@/utils/detachedIM'
 import { SHELL_CANVAS_CLASS } from '@components/layout/shellUi'
-import { Toaster } from '@tabtin/smartsheet-ui/toast'
+import { Toaster } from '@muse/smartsheet-ui/toast'
 import '@fontsource-variable/inter/index.css'
 // Noto Sans SC 400/700（SIL OFL）本地打包：与 HTML→TabSlide 抽取端量框字重一致，
 // 保证中文文本渲染字宽与量框相同，避免溢出/截断。不走 Google Fonts CDN。
 import '@fontsource/noto-sans-sc/400.css'
 import '@fontsource/noto-sans-sc/700.css'
 import '@styles/globals.css'
-import '@tabtin/smartsheet-ui/styles'
+import '@muse/smartsheet-ui/styles'
 import '@styles/table-components.css'
 
 let preloadedAppLayout: React.ComponentType | null = null

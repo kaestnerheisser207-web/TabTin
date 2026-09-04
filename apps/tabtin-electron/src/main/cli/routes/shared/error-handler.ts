@@ -1,7 +1,7 @@
 /**
  * Shared error handling utilities for Electron CLI route handlers.
  *
- * Uses @tabtin/cli-server-core for common error types and response builders.
+ * Uses @muse/cli-server-core for common error types and response builders.
  * The Django proxy uses Electron's TokenManager for JWT authentication
  * with automatic token refresh on 401.
  */
@@ -11,7 +11,7 @@ import https from 'node:https'
 import { URL } from 'node:url'
 import { TokenManager } from '../../../auth'
 import { API_BASE_URL } from '../../../config/api'
-import { joinApiPath } from '@tabtin/config'
+import { joinApiPath } from '@muse/config'
 import { getAgentRequestContextHeaders } from '../../agent-request-context'
 import {
   type ErrorCode as CoreErrorCode,
@@ -19,7 +19,7 @@ import {
   type DjangoProxyResult,
   decodeDjangoProxyBody,
   errorResponse as coreErrorResponse,
-} from '@tabtin/cli-server-core'
+} from '@muse/cli-server-core'
 import { createLogger } from '../../../logger'
 import {
   BROWSER_TAB_USER_IN_CONTROL_MESSAGE,
@@ -164,7 +164,7 @@ export async function djangoRequest(
   }
   const userInfo = await TokenManager.getUserInfo()
   const organizationId =
-    process.env.TABTIN_ORGANIZATION_ID ||
+    process.env.MUSE_ORGANIZATION_ID ||
     resolveOrganizationIdFromUserInfo(userInfo) ||
     ''
 

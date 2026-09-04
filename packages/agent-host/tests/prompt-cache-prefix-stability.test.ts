@@ -20,7 +20,7 @@ import {
   hasInternalMarker,
   type Message,
   type EngineState,
-} from '@tabtin/agent-runtime/engine';
+} from '@muse/agent-runtime/engine';
 
 function userMsg(text: string): Message {
   return { role: 'user', content: text };

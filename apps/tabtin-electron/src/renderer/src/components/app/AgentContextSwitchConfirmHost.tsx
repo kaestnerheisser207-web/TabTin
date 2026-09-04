@@ -9,7 +9,7 @@ import {
   DialogHeader,
   DialogTitle,
   LoadingSpinner,
-} from '@tabtin/smartsheet-ui'
+} from '@muse/smartsheet-ui'
 import {
   cancelAgentContextSwitchConfirm,
   confirmAgentContextSwitch,

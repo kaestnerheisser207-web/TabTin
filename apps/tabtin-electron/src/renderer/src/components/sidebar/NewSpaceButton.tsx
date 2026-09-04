@@ -38,7 +38,7 @@ import {
   TooltipTrigger,
 } from '@components/ui'
 import { useTranslation } from 'react-i18next'
-import type { UpdateAgentRequest } from '@tabtin/app-shell'
+import type { UpdateAgentRequest } from '@muse/app-shell'
 import type { LocalMcpConnectionSummary } from '@shared/types/mcp'
 import { useSpaceStore } from '@stores/useSpaceStore'
 import { useOrganizationStore } from '@stores/useOrganizationStore'
@@ -293,7 +293,7 @@ const CreateSpaceDialog: React.FC<CreateSpaceDialogProps> = ({
 
   const refreshGithubConnection = useCallback(async (): Promise<LocalMcpConnectionSummary | null> => {
     if (!githubCatalog) return null
-    const connections = await window.tabtin.localMcp.listConnections()
+    const connections = await window.muse.localMcp.listConnections()
     const matched = findConnectionForRecommendedConnector(githubCatalog, connections) ?? null
     const github = matched?.enabled ? matched : null
     setGithubConnection(github)
@@ -383,7 +383,7 @@ const CreateSpaceDialog: React.FC<CreateSpaceDialogProps> = ({
   // 名字为空时用目录名兜底。取消选择则保持「用默认沙箱」状态。
   const handlePickDir = useCallback(async () => {
     if (pathLocked) return
-    const tabtin = window.tabtin
+    const tabtin = window.muse
     if (!tabtin?.showOpenDialog) {
       toast({
         title: t('create.pickDirUnavailable', {
@@ -486,14 +486,14 @@ const CreateSpaceDialog: React.FC<CreateSpaceDialogProps> = ({
     setGithubCredentialSaving(true)
     try {
       const transport = applyCredentialSecretToTransport(githubCatalog.transport, value.apiKey)
-      const saved = await window.tabtin.localMcp.saveManualConnection({
+      const saved = await window.muse.localMcp.saveManualConnection({
         ...(githubConnection ? { connectionId: githubConnection.id } : {}),
         name: githubCatalog.name,
         description: '个人 GitHub 连接',
         enabled: true,
         transport,
       })
-      const probe = await window.tabtin.localMcp.probeConnection(saved.id, { timeoutMs: 20_000 })
+      const probe = await window.muse.localMcp.probeConnection(saved.id, { timeoutMs: 20_000 })
       if (!probe.ok) {
         throw new Error(probe.error || 'GitHub 连接探测失败')
       }
@@ -729,7 +729,7 @@ const CreateSpaceDialog: React.FC<CreateSpaceDialogProps> = ({
         : 'mixed'
 
       if (!isCloudCreate && !effectiveWorkingDir && !daemonTarget) {
-        const defaultDir = await window.tabtin?.fileSystem?.ensureDefaultAgentDir({
+        const defaultDir = await window.muse?.fileSystem?.ensureDefaultAgentDir({
           organizationName: resolveCreateOrganizationName(organizationId),
           spaceName: effectiveName,
         })
@@ -789,7 +789,7 @@ const CreateSpaceDialog: React.FC<CreateSpaceDialogProps> = ({
         && githubConnection
       ) {
         try {
-          const result = await window.tabtin.localMcp.createCloudGitCredential(
+          const result = await window.muse.localMcp.createCloudGitCredential(
             githubConnection.id,
             organizationId,
             gitUrl.trim(),

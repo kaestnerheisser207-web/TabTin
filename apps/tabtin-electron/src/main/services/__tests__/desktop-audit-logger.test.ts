@@ -130,10 +130,10 @@ import {
 import { DesktopErrorCode } from '../desktop-error-codes'
 
 const HOME = homedir()
-const TABTIN_DIR = join(HOME, '.tabtin')
-const LEGACY_PATH = join(TABTIN_DIR, 'desktop-audit.jsonl')
-const LEGACY_MIGRATING_PATH = join(TABTIN_DIR, 'desktop-audit.jsonl.migrating')
-const ARCHIVE_DIR = join(TABTIN_DIR, 'desktop-audit-archive')
+const MUSE_DIR = join(HOME, '.tabtin')
+const LEGACY_PATH = join(MUSE_DIR, 'desktop-audit.jsonl')
+const LEGACY_MIGRATING_PATH = join(MUSE_DIR, 'desktop-audit.jsonl.migrating')
+const ARCHIVE_DIR = join(MUSE_DIR, 'desktop-audit-archive')
 
 function resetAllMocks(): void {
   mockAppendFileSync.mockReset()
@@ -284,9 +284,9 @@ describe('desktop-audit-logger · W1.3 月份分片', () => {
 
   it('getActiveAuditLogPath 返回 ~/.tabtin/desktop-audit-{YYYY-MM}.jsonl', () => {
     const may = getActiveAuditLogPath(new Date(Date.UTC(2026, 4, 3, 12, 0, 0)))
-    expect(may).toBe(join(TABTIN_DIR, 'desktop-audit-2026-05.jsonl'))
+    expect(may).toBe(join(MUSE_DIR, 'desktop-audit-2026-05.jsonl'))
     const dec = getActiveAuditLogPath(new Date(Date.UTC(2025, 11, 31, 23, 0, 0)))
-    expect(dec).toBe(join(TABTIN_DIR, 'desktop-audit-2025-12.jsonl'))
+    expect(dec).toBe(join(MUSE_DIR, 'desktop-audit-2025-12.jsonl'))
   })
 
   it('writeAuditLog 默认走当月分片文件 desktop-audit-{YYYY-MM}.jsonl（路径含月份）', () => {
@@ -325,7 +325,7 @@ describe('desktop-audit-logger · W1.3 / R2 F1+F2 legacy migration（启动期�
     // 1. legacy 被 rename 成 sentinel
     expect(mockRenameSync).toHaveBeenCalledWith(LEGACY_PATH, LEGACY_MIGRATING_PATH)
     // 2. 流式管道：read sentinel → write 2026-04 月份分片（按 mtime）
-    const aprilFile = join(TABTIN_DIR, 'desktop-audit-2026-04.jsonl')
+    const aprilFile = join(MUSE_DIR, 'desktop-audit-2026-04.jsonl')
     expect(mockCreateReadStream).toHaveBeenCalledWith(
       LEGACY_MIGRATING_PATH,
       expect.objectContaining({ highWaterMark: 64 * 1024 }),
@@ -467,8 +467,8 @@ describe('desktop-audit-logger · W1.3 6 月保留窗口归档', () => {
 
     const renamedSrcs = mockRenameSync.mock.calls.map((c) => c[0] as string)
     expect(renamedSrcs.sort()).toEqual([
-      join(TABTIN_DIR, 'desktop-audit-2024-09.jsonl'),
-      join(TABTIN_DIR, 'desktop-audit-2025-11.jsonl'),
+      join(MUSE_DIR, 'desktop-audit-2024-09.jsonl'),
+      join(MUSE_DIR, 'desktop-audit-2025-11.jsonl'),
     ])
     // 目标都在 archive 目录下
     for (const call of mockRenameSync.mock.calls) {

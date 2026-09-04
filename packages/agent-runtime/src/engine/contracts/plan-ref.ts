@@ -1,7 +1,7 @@
 /**
  * PlanRef helpers（ Stage 5c）。
  *
- * 自 `@tabtin/agent-wire` plan-proposal 迁入；key 格式与 wire 对齐。
+ * 自 `@muse/agent-wire` plan-proposal 迁入；key 格式与 wire 对齐。
  */
 
 import type { PlanRef } from './wire-payloads.js';

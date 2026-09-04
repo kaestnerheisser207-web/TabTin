@@ -6,7 +6,7 @@
  */
 
 import React, { useEffect, useLayoutEffect, useRef, useCallback, useMemo, useState, useImperativeHandle, forwardRef } from 'react'
-import type { ChatMessage } from '@tabtin/chat-client'
+import type { ChatMessage } from '@muse/chat-client'
 import { MessageTimeTickProvider } from './MessageTimeTickContext'
 import { resolveStreamingTurnAgentFace } from '@/stores/chat/shared/resolveStreamingTurnAgentId'
 import { STREAMING_PREVIEW_HEIGHT_PX } from '../markdown/streamingPreviewHeight'

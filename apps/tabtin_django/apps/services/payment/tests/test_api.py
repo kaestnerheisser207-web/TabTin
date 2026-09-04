@@ -21,7 +21,7 @@ def _auth(token: str) -> dict:
     return {"HTTP_AUTHORIZATION": f"Bearer {token}"}
 
 
-@override_settings(TABTIN_REQUIRE_INVITE_CODE=False)
+@override_settings(MUSE_REQUIRE_INVITE_CODE=False)
 class CreatePaymentOrderApiTests(TestCase):
     databases = {"default"}
 

@@ -1,4 +1,4 @@
-# @tabtin/widget-tokens
+# @muse/widget-tokens
 
 Widget design tokens + sandbox iframe HTML wrapper — single source of truth shared between **chat preview**, **Electron offscreen render**, and **Daemon offscreen render**.
 
@@ -21,7 +21,7 @@ import {
   buildWrapper,          // (code, options?) => HTML string
   buildWrapperStyle,     // (options?) => <style> body string (for tests)
   DEFAULT_VIEWPORT,      // { width: 680, height: 400 }
-} from '@tabtin/widget-tokens'
+} from '@muse/widget-tokens'
 
 const html = buildWrapper(svgCode, { theme: 'dark', width: 680, reducedMotion: true })
 ```

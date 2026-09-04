@@ -3,8 +3,8 @@ import {
   type CalendarEventItem,
   type CalendarViewControllerState as CalendarViewControllerStateBase,
   type UseCalendarViewControllerInput as UseCalendarViewControllerInputBase,
-} from '@tabtin/table-ui'
-import type { ViewMeta, ViewRecordsResponse, Field } from '@tabtin/table-core'
+} from '@muse/table-ui'
+import type { ViewMeta, ViewRecordsResponse, Field } from '@muse/table-core'
 
 export interface UseCalendarViewControllerInput
   extends Omit<

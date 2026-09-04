@@ -13,7 +13,7 @@ import path from 'node:path';
 import {
   resolveOrganizationPluginDir,
   resolveOrganizationPluginRegistryFile,
-} from '@tabtin/terminal-core';
+} from '@muse/terminal-core';
 import { afterEach, describe, expect, it } from 'vitest';
 
 import {

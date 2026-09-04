@@ -18,7 +18,7 @@ import { SurfaceError } from '../surface/types.js'
 /**
  * Skill registry 中单个 skill 的最小信息。
  *
- * 不引用 @tabtin/agent-runtime 的完整类型，只声明 handler 用到的
+ * 不引用 @muse/agent-runtime 的完整类型，只声明 handler 用到的
  * 字段，避免 cli-server-core 引入重量级依赖。
  */
 interface _SkillEntry {

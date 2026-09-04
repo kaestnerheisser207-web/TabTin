@@ -1,5 +1,5 @@
 {
-  "name": "@tabtin/crawl-integration",
+  "name": "@muse/crawl-integration",
   "version": "0.1.0",
   "description": "Muse Crawl Integration - Browser control layer with Puppeteer Core + CDP",
   "type": "module",

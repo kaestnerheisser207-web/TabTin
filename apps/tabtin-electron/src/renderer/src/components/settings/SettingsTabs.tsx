@@ -2,7 +2,7 @@ import React from 'react'
 import { X } from 'lucide-react'
 import { cn } from '@utils/cn'
 import { SETTINGS_HOVER_ACTION } from './settingsUi'
-import { ScrollArea } from '@tabtin/smartsheet-ui'
+import { ScrollArea } from '@muse/smartsheet-ui'
 import { useTranslation } from 'react-i18next'
 
 export type SettingsTab = {

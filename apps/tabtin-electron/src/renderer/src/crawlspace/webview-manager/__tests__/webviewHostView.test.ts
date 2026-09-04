@@ -16,7 +16,7 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest'
 import { createWebviewHostView, getWebviewKeepaliveController } from '../webviewHostView'
 import type { WebviewManager } from '../WebviewManager'
-import type { CrawlspaceHost } from '@tabtin/crawlspace-core'
+import type { CrawlspaceHost } from '@muse/crawlspace-core'
 
 type HostView = NonNullable<CrawlspaceHost['view']>
 type HasActiveRunForView = (viewId: string) => Promise<{ active: boolean; runId?: string }>
@@ -45,7 +45,7 @@ const baseHostView = {} as HostView
 const BOUNDS = { x: 0, y: 0, width: 800, height: 600 }
 
 function installNavigateBridge(navigate: ReturnType<typeof vi.fn>): void {
-  ;(window as any).tabtin = { webviewHost: { navigate } }
+  ;(window as any).muse = { webviewHost: { navigate } }
 }
 
 function installRunSessionBridge(hasActiveRunForView: HasActiveRunForView): void {
@@ -55,7 +55,7 @@ function installRunSessionBridge(hasActiveRunForView: HasActiveRunForView): void
 
 describe('webview keepalive controller', () => {
   afterEach(() => {
-    delete (window as any).tabtin
+    delete (window as any).muse
     vi.useRealTimers()
   })
 
@@ -136,7 +136,7 @@ describe('webviewHostView.show', () => {
   })
 
   afterEach(() => {
-    delete (window as any).tabtin
+    delete (window as any).muse
     vi.restoreAllMocks()
   })
 
@@ -313,7 +313,7 @@ describe('webviewHostView.show', () => {
  */
 describe('webviewHostView stale-show race', () => {
   afterEach(() => {
-    delete (window as any).tabtin
+    delete (window as any).muse
     vi.restoreAllMocks()
   })
 
@@ -396,7 +396,7 @@ describe('webviewHostView.hide keepalive', () => {
   }
 
   afterEach(() => {
-    delete (window as any).tabtin
+    delete (window as any).muse
     vi.useRealTimers()
   })
 

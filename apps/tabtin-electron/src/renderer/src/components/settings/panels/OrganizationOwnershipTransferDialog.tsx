@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { Check, Loader2 } from 'lucide-react'
-import type { OrganizationMember } from '@tabtin/app-shell'
+import type { OrganizationMember } from '@muse/app-shell'
 import {
   Button,
   Dialog,

@@ -53,7 +53,7 @@ vi.mock('../../config/api', () => ({
 const { runTempPptxParse } = await import('../tempPptxParse')
 const { TokenManager } = await import('../../auth')
 const { FILE_PIPELINE_ERROR_KINDS, FilePipelineErrorCode } = await import(
-  '@tabtin/local-docparse'
+  '@muse/local-docparse'
 )
 
 const PPTX_MIME =

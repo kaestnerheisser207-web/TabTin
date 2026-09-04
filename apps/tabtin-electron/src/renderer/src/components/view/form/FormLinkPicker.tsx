@@ -21,9 +21,9 @@ import {
   cn,
   LoadingSpinner,
   formatLinkRecordLabel,
-} from '@tabtin/smartsheet-ui'
-import { LinkFieldApiService } from '@tabtin/table-core'
-import type { LinkableRecordItem } from '@tabtin/table-core'
+} from '@muse/smartsheet-ui'
+import { LinkFieldApiService } from '@muse/table-core'
+import type { LinkableRecordItem } from '@muse/table-core'
 
 export interface FormLinkPickerProps {
   open: boolean

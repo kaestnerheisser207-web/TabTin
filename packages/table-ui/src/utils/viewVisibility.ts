@@ -1,5 +1,5 @@
 import type { Field, ViewMeta, ViewUpdateRequest } from '../types'
-import { getViewColumnMeta, type ViewColumnMetaItem } from '@tabtin/table-core'
+import { getViewColumnMeta, type ViewColumnMetaItem } from '@muse/table-core'
 
 type ViewVisibilitySnapshot = {
   allFieldIds: string[]

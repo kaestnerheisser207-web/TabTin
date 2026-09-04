@@ -189,7 +189,7 @@ def test_restore_baseline_uses_transactional_filtered_restore(
     _write_manifest(tmp_path)
     calls: list[tuple[list[str], dict]] = []
 
-    monkeypatch.setenv("TABTIN_COMMUNITY_DATABASE_BASELINE_ROOT", str(tmp_path))
+    monkeypatch.setenv("MUSE_COMMUNITY_DATABASE_BASELINE_ROOT", str(tmp_path))
     monkeypatch.setenv("PG_DB_NAME", "tabtin")
     monkeypatch.setenv("PG_DB_HOST", "postgres")
     monkeypatch.setenv("PG_DB_PORT", "5432")
@@ -268,7 +268,7 @@ def test_restore_baseline_rejects_restored_table_count_mismatch(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
     _write_manifest(tmp_path)
-    monkeypatch.setenv("TABTIN_COMMUNITY_DATABASE_BASELINE_ROOT", str(tmp_path))
+    monkeypatch.setenv("MUSE_COMMUNITY_DATABASE_BASELINE_ROOT", str(tmp_path))
     monkeypatch.setattr(
         "tabtin.community_database._connect_as_init",
         lambda: _ServerConnection(),
@@ -320,7 +320,7 @@ def test_restore_baseline_failure_is_not_retried_or_fallbacked(
     _write_manifest(tmp_path)
     calls = 0
 
-    monkeypatch.setenv("TABTIN_COMMUNITY_DATABASE_BASELINE_ROOT", str(tmp_path))
+    monkeypatch.setenv("MUSE_COMMUNITY_DATABASE_BASELINE_ROOT", str(tmp_path))
     monkeypatch.setattr(
         "tabtin.community_database._connect_as_init",
         lambda: _ServerConnection(),

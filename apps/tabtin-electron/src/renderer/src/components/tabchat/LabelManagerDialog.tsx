@@ -8,7 +8,7 @@
 import React, { useState, useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
 import { X, Trash2, Loader2, Check, Pencil } from 'lucide-react'
-import { toast } from '@tabtin/smartsheet-ui'
+import { toast } from '@muse/smartsheet-ui'
 import { useIMStore } from '@stores/useIMStore'
 import { useOrganizationStore } from '@stores/useOrganizationStore'
 import type { ConversationLabel } from '@/services/tabchatApi'

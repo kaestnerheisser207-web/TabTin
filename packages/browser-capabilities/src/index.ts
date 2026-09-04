@@ -1,5 +1,5 @@
 /**
- * @tabtin/browser-capabilities
+ * @muse/browser-capabilities
  *
  * Browser capabilities abstraction layer for Muse
  * Based on Min Browser design

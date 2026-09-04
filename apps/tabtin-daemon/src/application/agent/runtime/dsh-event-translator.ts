@@ -4,7 +4,7 @@ import {
   StreamEvents,
   nextArrivalSeq,
   type StreamEvent,
-} from '@tabtin/agent-runtime'
+} from '@muse/agent-runtime'
 
 interface DshSessionEvent {
   type: string

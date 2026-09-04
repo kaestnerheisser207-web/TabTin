@@ -1,12 +1,12 @@
 x-community-dev-image: &community-dev-image
-  image: tabtin/community-django:dev
+  image: muse/community-django:dev
   build:
     context: .
     dockerfile: apps/tabtin_django/Dockerfile
     args:
       BASE_IMAGE: python:3.11-slim
       INSTALL_PLAYWRIGHT: 'false'
-      TABTIN_DEV_DEPENDENCY_FINGERPRINT: ${TABTIN_DEV_DEPENDENCY_FINGERPRINT:-unknown}
+      MUSE_DEV_DEPENDENCY_FINGERPRINT: ${MUSE_DEV_DEPENDENCY_FINGERPRINT:-unknown}
 
 services:
   django:
@@ -17,7 +17,7 @@ services:
       - ./packages:/app/packages:ro
       - ./community-assets:/app/community-assets:ro
       - installation-secrets:/run/tabtin-community-secrets
-      - local-objects:/var/lib/tabtin/objects
+      - local-objects:/var/lib/muse/objects
       - playwright-data:/ms-playwright
 
   celery:
@@ -26,7 +26,7 @@ services:
       - ./apps/tabtin_django:/app/apps/tabtin_django
       - ./packages:/app/packages:ro
       - installation-secrets:/run/tabtin-community-secrets:ro
-      - local-objects:/var/lib/tabtin/objects
+      - local-objects:/var/lib/muse/objects
       - playwright-data:/ms-playwright
 
 volumes:

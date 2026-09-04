@@ -16,9 +16,9 @@
 import { describe, it, expect, vi } from 'vitest';
 import { createTestToolRiskPolicyPort } from './helpers/tool-risk-policy-port.js';
 
-vi.mock('@tabtin/security-policy', async () => {
-  const actual = await vi.importActual<typeof import('@tabtin/security-policy')>(
-    '@tabtin/security-policy',
+vi.mock('@muse/security-policy', async () => {
+  const actual = await vi.importActual<typeof import('@muse/security-policy')>(
+    '@muse/security-policy',
   );
   return {
     ...actual,
@@ -46,7 +46,7 @@ vi.mock('@tabtin/security-policy', async () => {
 const { runTools } = await import('../src/engine/tooling/tool-orchestration.js');
 const { ToolRegistry } = await import('../src/engine/tooling/tool-system.js');
 const { createInterruptAdapter } = await import('../src/permissions/interrupt-adapter.js');
-import type { EffectivePolicy, MemoStore, WorkspaceSnapshot } from '@tabtin/security-policy';
+import type { EffectivePolicy, MemoStore, WorkspaceSnapshot } from '@muse/security-policy';
 import type { StreamEvent } from '../src/engine/contracts/wire-protocol.js';
 import type { ToolUseBlock } from '../src/engine/contracts/conversation.js';
 import type { Tool, ToolContext, ToolProvider } from '../src/engine/contracts/tools.js';

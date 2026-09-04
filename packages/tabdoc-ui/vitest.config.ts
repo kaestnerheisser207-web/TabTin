@@ -23,7 +23,7 @@ const DEBT_TEST_PATHS = [
 export default defineConfig({
   resolve: {
     alias: {
-      '@tabtin/app-host-sdk': fileURLToPath(new URL('../app-host-sdk/src/index.ts', import.meta.url)),
+      '@muse/app-host-sdk': fileURLToPath(new URL('../app-host-sdk/src/index.ts', import.meta.url)),
       // 协作 slash 集成测需要 StarterKit，但不想经过 novel→react-tweet CSS
       '@tiptap/starter-kit': fileURLToPath(
         new URL('../../node_modules/.pnpm/@tiptap+starter-kit@2.27.2/node_modules/@tiptap/starter-kit/dist/index.js', import.meta.url),

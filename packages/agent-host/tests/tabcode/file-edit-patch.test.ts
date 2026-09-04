@@ -3,7 +3,7 @@ import os from 'node:os';
 import path from 'node:path';
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 
-import type { ReadFileState, ToolContext } from '@tabtin/agent-runtime';
+import type { ReadFileState, ToolContext } from '@muse/agent-runtime';
 import {
   buildFileEditPatch,
   captureFileBeforeSnapshot,

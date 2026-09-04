@@ -41,7 +41,7 @@ vi.mock('@/services/deviceApi', () => ({
 vi.mock('@components/workspace/notifyWorkspacePaths', () => ({
   notifyWorkspacePathsForSpace: vi.fn(),
 }))
-vi.mock('@tabtin/smartsheet-ui', () => ({ toast: vi.fn() }))
+vi.mock('@muse/smartsheet-ui', () => ({ toast: vi.fn() }))
 vi.mock('@/i18n', () => ({ default: { t: (_k: string, o?: { defaultValue?: string }) => o?.defaultValue ?? _k } }))
 vi.mock('@/utils/logger', () => ({ logger: { warn: vi.fn(), info: vi.fn() } }))
 

@@ -10,12 +10,12 @@
 
 import { ipcMain } from 'electron'
 import { randomBytes } from 'crypto'
-import { okResponse, errResponse, type CliResponse } from '@tabtin/agent-wire'
+import { okResponse, errResponse, type CliResponse } from '@muse/agent-wire'
 import { logger } from '../utils/logger'
 import { guardedHandleAllowingTinSandbox } from '../utils/guarded-handle'
 import { getTinManager } from './tin-manager'
 import { UUID_RE, hasPermissionForApi, type TinBridgeMessage } from './types'
-import { stripDangerousUnicode, detectDangerousUnicode } from '@tabtin/terminal-core'
+import { stripDangerousUnicode, detectDangerousUnicode } from '@muse/terminal-core'
 
 const TAG = 'TinBridge'
 

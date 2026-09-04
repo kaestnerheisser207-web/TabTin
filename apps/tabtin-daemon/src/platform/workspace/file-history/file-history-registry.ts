@@ -10,10 +10,10 @@
  *
  * host 与 action-bridge 在 daemon 里独立组装（无直接引用），故走模块级单例共享
  * （与 checkpoint 完全对称）。平台相关只在这一层；缓存逻辑下沉
- * `@tabtin/file-history-core` 的平台无关 `FileHistoryRegistry`。
+ * `@muse/file-history-core` 的平台无关 `FileHistoryRegistry`。
  */
-import { FileHistoryRegistry, type FileHistoryService, type FileHistoryLogger } from '@tabtin/file-history-core'
-import { getFileHistoryRoot } from '@tabtin/shared'
+import { FileHistoryRegistry, type FileHistoryService, type FileHistoryLogger } from '@muse/file-history-core'
+import { getFileHistoryRoot } from '@muse/shared'
 
 /** 宽松 logger：daemon `KernelLogger`（无 debug）与 `Logger`（有 debug）都可注入。 */
 type LoggerLike = {

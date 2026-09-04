@@ -20,7 +20,7 @@ import {
   hasInternalMarker,
   type Message,
   type EngineState,
-} from '@tabtin/agent-runtime/engine';
+} from '@muse/agent-runtime/engine';
 
 const CONTEXT_MARKER = INTERNAL_MESSAGE_MARKERS.CONTEXT_INJECTION;
 

@@ -66,7 +66,7 @@ let _unsubscribe: (() => void) | null = null
 
 export function initPaneStatusListener(): void {
   if (_unsubscribe) return
-  const tabtin = window.tabtin
+  const tabtin = window.muse
   if (!tabtin?.pty?.onPaneStatus) return
 
   _unsubscribe = tabtin.pty.onPaneStatus((event) => {

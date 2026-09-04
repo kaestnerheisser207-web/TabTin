@@ -25,9 +25,9 @@ import { useChatRuntimeStore, flushRuntimeBatch } from '@/stores/useChatRuntimeS
 import { getCommittedBlocks, getSessionBlocksRecord, __resetMessageBlocks } from '@/stores/chat/messages/messageBlocks'
 import { useChatStore } from '@/stores/chat/useChatStore'
 import type { HandlerContext, AgentStreamMessage } from '../streamHandlerTypes'
-import { TabTinProxyProvider } from '@tabtin/agent-runtime/providers/proxy-provider'
-import { ContentBlockEvents } from '@tabtin/agent-wire'
-import type { ContentBlockEnvelopeHint } from '@tabtin/agent-runtime/engine'
+import { TabTinProxyProvider } from '@muse/agent-runtime/providers/proxy-provider'
+import { ContentBlockEvents } from '@muse/agent-wire'
+import type { ContentBlockEnvelopeHint } from '@muse/agent-runtime/engine'
 
 const SESSION = 'sess-realdaemon-w2'
 

@@ -14,7 +14,7 @@
  * 的优化，与"用户拖到 chat"流程无关）。
  */
 
-import { FilePipelineErrorCode } from '@tabtin/file-pipeline-errors';
+import { FilePipelineErrorCode } from '@muse/file-pipeline-errors';
 import type {
   FileParser,
   FileSource,
@@ -36,7 +36,7 @@ import {
 // 能在测试时挂到 ImageParser 实际调用的引用上。
 //
 // 设计取舍：vitest spyOn ES Module named export 在 Node ESM 模式下不可写
-// （exports 是 immutable bindings）；包外用 `await import('@tabtin/file-pipeline')`
+// （exports 是 immutable bindings）；包外用 `await import('@muse/file-pipeline')`
 // 拿到的 namespace 也是 frozen。把绑定收到本 module 的一个可变对象里、
 // 让 ImageParser 通过该对象访问，spy 就能正常替换属性。生产路径与测试
 // 路径完全同一套调用——读 `imageResizeBindings.resizeImageBufferIfNeeded`，
@@ -45,7 +45,7 @@ import * as _imageResizeModule from '../image/image-resize.js';
 
 /**
  * **仅供 W4 测试 vi.spyOn 用**。生产代码不要直接引用 .resizeImageBuffer 等属性，
- * 走 `import('@tabtin/file-pipeline').resizeImageBuffer` 公开 API。
+ * 走 `import('@muse/file-pipeline').resizeImageBuffer` 公开 API。
  */
 export const imageResizeBindings: {
   resizeImageBufferIfNeeded: typeof _imageResizeModule.resizeImageBufferIfNeeded;

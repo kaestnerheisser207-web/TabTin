@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { snapshotTableRequestHeaders } from '@tabtin/table-core'
+import { snapshotTableRequestHeaders } from '@muse/table-core'
 import {
   handleIncrementalFullReloadSignal,
   runIncrementalRequest,

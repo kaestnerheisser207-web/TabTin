@@ -19,7 +19,7 @@
  */
 import { useMemo } from 'react'
 import { useDeviceStore } from '@stores/useDeviceStore'
-import type { Agent } from '@tabtin/app-shell'
+import type { Agent } from '@muse/app-shell'
 import { isCurrentDeviceControl } from '@/services/deviceControlMatch'
 
 export interface AgentControlDeviceResult {

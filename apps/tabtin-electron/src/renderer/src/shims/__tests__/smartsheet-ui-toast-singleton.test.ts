@@ -4,8 +4,8 @@
  */
 import { describe, expect, it } from 'vitest'
 
-import { toast as rootToast, useToast as rootUseToast } from '@tabtin/smartsheet-ui'
-import { toast as shimToast, useToast as shimUseToast } from '@tabtin/smartsheet-ui/toast'
+import { toast as rootToast, useToast as rootUseToast } from '@muse/smartsheet-ui'
+import { toast as shimToast, useToast as shimUseToast } from '@muse/smartsheet-ui/toast'
 import { toast as uiToast } from '@components/ui'
 
 describe('smartsheet-ui toast singleton ', () => {

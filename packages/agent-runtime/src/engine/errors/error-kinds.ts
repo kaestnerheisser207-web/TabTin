@@ -230,7 +230,7 @@ export const OLD_STRING_NOT_UNIQUE = 'old_string_not_unique' as const;
 
 // ─── File pipeline 类 ─────────────────────────────────────────────────
 //
-// 字面量须与 `@tabtin/file-pipeline-errors` codegen 输出对齐（
+// 字面量须与 `@muse/file-pipeline-errors` codegen 输出对齐（
 // Stage 7a：runtime 不再生产依赖该包；新增码时两边同步改）。
 
 /** 文件 / URL 不存在。文案："文件不存在 · 请检查路径" */
@@ -287,7 +287,7 @@ export const MODE_RESTRICTED = 'mode_restricted' as const;
 // ─── 系统 / 操作类（W12 capability 层已用，W13 提升为前端可见） ────────
 
 /**
- * 命令被 **W12 hardline** 安全策略阻止 —— 来自 `@tabtin/security-policy::
+ * 命令被 **W12 hardline** 安全策略阻止 —— 来自 `@muse/security-policy::
  * checkHardlineCommand` 命中（典型：`rm -rf /`、`curl ... | sh`、`mkfs.*`、
  * `:(){ :|:&};:` fork bomb）。Hardline 是不可绕过的红线，**不受 relaxedRules
  * 影响**——这是和 `command_denied_by_validator` 的核心区别。
@@ -304,7 +304,7 @@ export const MODE_RESTRICTED = 'mode_restricted' as const;
 export const COMMAND_BLOCKED_BY_POLICY = 'command_blocked_by_policy' as const;
 
 /**
- * 命令被 **CommandValidator denylist** 拒绝 —— 来自 `@tabtin/terminal-core::
+ * 命令被 **CommandValidator denylist** 拒绝 —— 来自 `@muse/terminal-core::
  * CommandValidator.validate()` 命中（典型：`>` 重定向、`$VAR` env-var-expansion、
  * `python -c`、`rm`、`sudo`、`chmod` 等）。
  *

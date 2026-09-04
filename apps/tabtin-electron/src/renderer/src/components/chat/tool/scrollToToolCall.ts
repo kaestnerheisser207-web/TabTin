@@ -14,7 +14,7 @@
  * 不耦合 subagent：未来 canvas、错误提示、@提及 anchor 等都可用同一入口。
  */
 
-import { resolveSessionScopeId } from '@tabtin/app-shell'
+import { resolveSessionScopeId } from '@muse/app-shell'
 import { useChatStore } from '@/stores/chat/useChatStore'
 import { logger } from '@/utils/logger'
 import { readMessageBlocks } from '../blocks/messageContentBlocks'

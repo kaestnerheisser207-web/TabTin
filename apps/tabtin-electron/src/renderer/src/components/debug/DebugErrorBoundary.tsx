@@ -1,6 +1,6 @@
 import React from 'react'
 import i18n from '@/i18n'
-import { ScrollArea } from '@tabtin/smartsheet-ui'
+import { ScrollArea } from '@muse/smartsheet-ui'
 import { reportError } from '@/services/errorReporter'
 
 type DebugErrorBoundaryProps = {
@@ -37,7 +37,7 @@ export class DebugErrorBoundary extends React.Component<DebugErrorBoundaryProps,
     if (componentStack) {
       console.error('[DebugErrorBoundary] 组件栈:', componentStack)
     }
-    globalThis.__TABTIN_LAST_REACT_ERROR__ = {
+    globalThis.__MUSE_LAST_REACT_ERROR__ = {
       message: error.message,
       stack: error.stack,
       componentStack

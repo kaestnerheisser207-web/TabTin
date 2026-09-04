@@ -1,13 +1,13 @@
 import React from 'react'
-import { StatusNotice, toast } from '@tabtin/smartsheet-ui'
-import type { FieldDefinition } from '@tabtin/smartsheet-ui'
-import { GridAttachmentInlineEditor } from '@tabtin/table-engine-canvas'
+import { StatusNotice, toast } from '@muse/smartsheet-ui'
+import type { FieldDefinition } from '@muse/smartsheet-ui'
+import { GridAttachmentInlineEditor } from '@muse/table-engine-canvas'
 import type {
   TableGridAttachmentDownloadItem,
   TableGridAttachmentUploadHandler,
   TableGridAttachmentUploadProgressItem,
   TableGridRow,
-} from '@tabtin/table-engine'
+} from '@muse/table-engine'
 import {
   buildAttachmentKeyCounts,
   consumeAttachmentKeyCount,
@@ -15,8 +15,8 @@ import {
   filterCurrentFieldAttachments,
   findUniqueAttachmentNameMatch,
   normalizeAttachmentReferences,
-} from '@tabtin/table-ui'
-import { AttachmentApiService, type AttachmentReference } from '@tabtin/table-core'
+} from '@muse/table-ui'
+import { AttachmentApiService, type AttachmentReference } from '@muse/table-core'
 import { useTranslation } from 'react-i18next'
 import {
   useAttachmentStore,

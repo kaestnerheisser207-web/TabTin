@@ -376,8 +376,8 @@ vi.mock('@components/layout/project/teamSpaceProjectNavigation', () => ({
   enterTeamSpaceProject: mockEnterTeamSpaceProject,
 }))
 
-vi.mock('@tabtin/app-shell', async (importOriginal) => {
-  const mod = await importOriginal<typeof import('@tabtin/app-shell')>()
+vi.mock('@muse/app-shell', async (importOriginal) => {
+  const mod = await importOriginal<typeof import('@muse/app-shell')>()
   return {
     ...mod,
     getConversationNavigationKind: mockGetConversationNavigationKind,
@@ -399,7 +399,7 @@ vi.mock('@/services/agentContextSwitchGuard', () => ({
   runWithAgentContextSwitchGuard: mockRunWithAgentContextSwitchGuard,
 }))
 
-vi.mock('@tabtin/smartsheet-ui/toast', () => ({
+vi.mock('@muse/smartsheet-ui/toast', () => ({
   toast: mockToast,
 }))
 

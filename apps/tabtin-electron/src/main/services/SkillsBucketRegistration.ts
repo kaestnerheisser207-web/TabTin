@@ -25,9 +25,9 @@
 import { stat, readdir } from 'node:fs/promises'
 import { existsSync, rmSync } from 'node:fs'
 import { join } from 'node:path'
-import { registerStorageBucket } from '@tabtin/storage-manager'
-import { getDataRoot } from '@tabtin/shared/storage-paths'
-import { resolveUserSkillsDir, resolveOrganizationSkillsDir } from '@tabtin/terminal-core'
+import { registerStorageBucket } from '@muse/storage-manager'
+import { getDataRoot } from '@muse/shared/storage-paths'
+import { resolveUserSkillsDir, resolveOrganizationSkillsDir } from '@muse/terminal-core'
 import { logger } from '../utils/logger'
 
 const TAG = 'SkillsBucketRegistration'

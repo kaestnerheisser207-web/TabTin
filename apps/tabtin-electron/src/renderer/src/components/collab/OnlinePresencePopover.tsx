@@ -6,8 +6,8 @@
  */
 import React, { useCallback, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Popover, PopoverContent, PopoverTrigger, UserAvatar, cn } from '@tabtin/smartsheet-ui'
-import { identityAvatarColor, identityAvatarInitial } from '@tabtin/shared'
+import { Popover, PopoverContent, PopoverTrigger, UserAvatar, cn } from '@muse/smartsheet-ui'
+import { identityAvatarColor, identityAvatarInitial } from '@muse/shared'
 
 export interface OnlinePresenceUser {
   id: string

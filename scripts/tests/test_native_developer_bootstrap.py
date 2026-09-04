@@ -61,7 +61,7 @@ exit 77
         """#!/usr/bin/env bash
 set -euo pipefail
 mkdir -p "$(dirname "$0")/../../apps/tabtin_django/venv/bin"
-ln -s "$TABTIN_TEST_PYTHON" "$(dirname "$0")/../../apps/tabtin_django/venv/bin/python"
+ln -s "$MUSE_TEST_PYTHON" "$(dirname "$0")/../../apps/tabtin_django/venv/bin/python"
 printf 'setup\n' >> "$(dirname "$0")/../../setup.trace"
 """,
     )
@@ -75,7 +75,7 @@ def _run_prepare(root: Path) -> subprocess.CompletedProcess[str]:
         env={
             "PATH": "/usr/bin:/bin",
             "HOME": os.environ.get("HOME", ""),
-            "TABTIN_TEST_PYTHON": sys.executable,
+            "MUSE_TEST_PYTHON": sys.executable,
         },
         capture_output=True,
         text=True,
@@ -94,8 +94,8 @@ def test_fresh_native_checkout_creates_local_config_and_python_environment(
     env_file = root / ".env"
     assert env_file.is_file()
     generated = env_file.read_text(encoding="utf-8")
-    assert "TABTIN_EDITION=community" in generated
-    assert "TABTIN_REQUIRE_INVITE_CODE=false" in generated
+    assert "MUSE_EDITION=community" in generated
+    assert "MUSE_REQUIRE_INVITE_CODE=false" in generated
     assert "QWEN_BASE_URL=\n" in generated
     assert "dashscope.aliyuncs.com" not in generated
     for key in (
@@ -149,7 +149,7 @@ def test_standard_native_start_prepares_checkout_before_database_start(
         env={
             "PATH": "/usr/bin:/bin",
             "HOME": os.environ.get("HOME", ""),
-            "TABTIN_TEST_PYTHON": sys.executable,
+            "MUSE_TEST_PYTHON": sys.executable,
         },
         capture_output=True,
         text=True,
@@ -165,17 +165,17 @@ def _import_invite_setting(value: str | None) -> subprocess.CompletedProcess[str
     env = {
         "PYTHONPATH": str(ROOT / "apps/tabtin_django"),
         "DJANGO_SETTINGS_MODULE": "tabtin.settings",
-        "TABTIN_EDITION": "community",
+        "MUSE_EDITION": "community",
         "DEBUG": "true",
         "SECRET_KEY": "native-bootstrap-test-only",
     }
     if value is not None:
-        env["TABTIN_REQUIRE_INVITE_CODE"] = value
+        env["MUSE_REQUIRE_INVITE_CODE"] = value
     script = """
 import dotenv
 dotenv.load_dotenv = lambda *args, **kwargs: False
 from django.conf import settings
-print('enabled' if settings.TABTIN_REQUIRE_INVITE_CODE else 'disabled')
+print('enabled' if settings.MUSE_REQUIRE_INVITE_CODE else 'disabled')
 """
     return subprocess.run(
         [sys.executable, "-c", script],
@@ -205,7 +205,7 @@ def test_missing_invite_settings_fail_open_for_first_run() -> None:
     env = {
         "PYTHONPATH": str(ROOT / "apps/tabtin_django"),
         "DJANGO_SETTINGS_MODULE": "tabtin.settings",
-        "TABTIN_EDITION": "community",
+        "MUSE_EDITION": "community",
         "DEBUG": "true",
         "SECRET_KEY": "native-bootstrap-test-only",
     }
@@ -216,7 +216,7 @@ import django
 django.setup()
 from django.test import override_settings
 from apps.users.auth.services.invite_code_service import is_invite_gate_enabled
-with override_settings(TABTIN_REQUIRE_INVITE_CODE=None, REQUIRE_INVITE_CODE=None):
+with override_settings(MUSE_REQUIRE_INVITE_CODE=None, REQUIRE_INVITE_CODE=None):
     print('enabled' if is_invite_gate_enabled() else 'disabled')
 """
 

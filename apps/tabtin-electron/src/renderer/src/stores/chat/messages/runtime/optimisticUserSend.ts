@@ -6,7 +6,7 @@
  * 复用已有 failed 气泡（existingClientMessageId）时除外——那条已在时间线上。
  */
 
-import type { ChatClient, ChatMessage, ChatSession, MessageBlock } from '@tabtin/chat-client'
+import type { ChatClient, ChatMessage, ChatSession, MessageBlock } from '@muse/chat-client'
 import type { ChatAttachment } from '../../../../components/chat/types'
 import type { AgentModeName, LocalChatMessage } from '../../shared/types'
 import { applyBlocksArrival } from '@/stores/chat/domain/messageTimelineOrder'

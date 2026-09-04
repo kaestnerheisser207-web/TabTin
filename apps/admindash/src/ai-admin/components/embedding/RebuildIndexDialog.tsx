@@ -1,4 +1,4 @@
-import { ApiError } from '@tabtin/api-client'
+import { ApiError } from '@muse/api-client'
 import { useEffect, useMemo, useState } from 'react'
 import { llmAdminApi } from '@/api/llm-admin'
 import { embeddingApi } from '../../api/embedding'

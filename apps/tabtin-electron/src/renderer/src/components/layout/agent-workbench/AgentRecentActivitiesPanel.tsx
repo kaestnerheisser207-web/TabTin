@@ -5,7 +5,7 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { CheckSquare2, Loader2, MessageSquare } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
-import type { ChatSessionWithAgent } from '@tabtin/chat-client'
+import type { ChatSessionWithAgent } from '@muse/chat-client'
 import type { ProjectTask } from '@/types/project'
 import { cn } from '@utils/cn'
 import { CANVAS_TEXT_META, CANVAS_TEXT_MICRO, CANVAS_TEXT_SECONDARY } from '@components/layout/canvasUi'

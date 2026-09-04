@@ -1,11 +1,11 @@
-import { joinApiPath } from '@tabtin/config'
+import { joinApiPath } from '@muse/config'
 import {
   RUN_HOST_LEASE_SECONDS,
   type RunHostLeaseApi,
   type RunHostLeaseClaimDecision,
   type RunHostLeaseOutcome,
   type RunHostLeaseResponse,
-} from '@tabtin/agent-host/state'
+} from '@muse/agent-host/state'
 
 export {
   RunHostLeaseCoordinator,
@@ -17,7 +17,7 @@ export {
   FENCE_REASON_OWNERSHIP_TRANSFERRED,
   FENCE_REASON_PROJECTION_MISMATCH,
   FENCE_REASON_RELEASED,
-} from '@tabtin/agent-host/state'
+} from '@muse/agent-host/state'
 
 export type {
   RunHostLeaseApi,

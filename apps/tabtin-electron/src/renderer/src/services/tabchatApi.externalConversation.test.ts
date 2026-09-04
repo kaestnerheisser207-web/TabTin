@@ -5,7 +5,7 @@ const mocks = vi.hoisted(() => ({
   rememberConversationRoute: vi.fn(),
 }))
 
-vi.mock('@tabtin/config', () => ({ joinApiPath: (base: string, path: string) => `${base}${path}` }))
+vi.mock('@muse/config', () => ({ joinApiPath: (base: string, path: string) => `${base}${path}` }))
 vi.mock('@/config/api', () => ({ API_CONFIG: { baseURL: 'http://api' } }))
 vi.mock('@/adapters/api-adapter-instance', () => ({
   apiRequest: mocks.apiRequest,

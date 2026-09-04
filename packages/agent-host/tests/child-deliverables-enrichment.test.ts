@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from 'vitest'
-import type { SubagentCompletionInfo } from '@tabtin/agent-runtime'
+import type { SubagentCompletionInfo } from '@muse/agent-runtime'
 import {
   formatSettledChildCompletionLineWithDeliverables,
   wrapEnqueueSubagentCompletionWithDeliverables,

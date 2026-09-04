@@ -11,7 +11,7 @@ import { useHistoryStore } from '../../store/history'
 import { buildFlipTransform } from '../../utils/geometry'
 import { buildLineResizeUpdates } from '../../utils/line-geometry'
 import { useT } from '../../i18n'
-import { ZIndex } from '@tabtin/app-shell'
+import { ZIndex } from '@muse/app-shell'
 import type { PPTElement } from '../../types/slides'
 
 interface MoveableWrapperProps {

@@ -20,13 +20,13 @@ import {
   assertImportSourcePath,
   detectAll,
   getAdapter,
-} from '@tabtin/agent-import'
+} from '@muse/agent-import'
 import type {
   ImportIO,
   SessionRef,
   UnifiedMessage,
   ImportSource,
-} from '@tabtin/agent-import'
+} from '@muse/agent-import'
 import type {
   AgentImportRunner,
   ImportCancelInput,
@@ -48,7 +48,7 @@ import type {
   SurfaceContext,
   DjangoRequestFn,
   ImportSourceId,
-} from '@tabtin/cli-server-core'
+} from '@muse/cli-server-core'
 import { getCLIOrganizationId } from '../cli/cli-context'
 import { createLogger } from '../logger'
 import { unifiedBlocksToContentBlocks } from './block-conversion'

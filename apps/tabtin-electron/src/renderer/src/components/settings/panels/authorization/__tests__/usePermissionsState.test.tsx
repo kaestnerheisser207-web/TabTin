@@ -11,7 +11,7 @@ import { act, renderHook, waitFor } from '@testing-library/react'
 const toastSuccess = vi.fn()
 const toastError = vi.fn()
 
-vi.mock('@tabtin/smartsheet-ui', () => ({
+vi.mock('@muse/smartsheet-ui', () => ({
   toast: {
     success: (...args: unknown[]) => toastSuccess(...args),
     error: (...args: unknown[]) => toastError(...args),

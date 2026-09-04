@@ -256,7 +256,7 @@ export const MAX_OFFICE_FILE_BYTES = 50 * 1024 * 1024 // 50MB
 export const LOCAL_TEXT_PREVIEW_BYTES = 512 * 1024 // 512KB
 
 export async function checkFileSize(filePath: string): Promise<{ ok: boolean; size: number }> {
-  const res = await window.tabtin.fileSystem.readFilePreview(filePath, { maxBytes: 0 })
+  const res = await window.muse.fileSystem.readFilePreview(filePath, { maxBytes: 0 })
   if (!res.success) {
     throw new Error(res.error ?? `Cannot read file: ${filePath}`)
   }
@@ -266,7 +266,7 @@ export async function checkFileSize(filePath: string): Promise<{ ok: boolean; si
 }
 
 /**
- * 把绝对文件路径编码成 `tabtin-file://` 协议 URL，供 <img>/<video>/PdfViewer
+ * 把绝对文件路径编码成 `muse-file://` 协议 URL，供 <img>/<video>/PdfViewer
  * 等直接按路径加载（绕开 base64 / maxBytes 限制）。各段单独 encode 以兼容空格
  * 与中文路径。
  */
@@ -278,9 +278,9 @@ export function buildTabtinFileUrl(filePath: string): string {
     .join('/')
 
   if (/^[A-Za-z]:\//.test(normalized)) {
-    // Chromium fetch() rejects `tabtin-file:///C%3A/...`; keep the drive
+    // Chromium fetch() rejects `muse-file:///C%3A/...`; keep the drive
     // letter in the path under a stable host that the main protocol unwraps.
-    return `tabtin-file://local/${encodedPath}`
+    return `muse-file://local/${encodedPath}`
   }
 
   const withLeadingSlash = normalized.startsWith('/') ? normalized : `/${normalized}`
@@ -288,5 +288,5 @@ export function buildTabtinFileUrl(filePath: string): string {
     .split('/')
     .map(seg => (seg ? encodeURIComponent(seg) : ''))
     .join('/')
-  return `tabtin-file://${encoded}`
+  return `muse-file://${encoded}`
 }

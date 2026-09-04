@@ -84,7 +84,7 @@ export type AgentBridgeContractSetup = () =>
 
 /**
  * `AgentSessionCloseReason` 期望字面集合。该类型本身在 `agent-bridge.ts`
- * 中定义，与 `@tabtin/pty-core` 中 `PtySessionCloseReason` 字面对齐
+ * 中定义，与 `@muse/pty-core` 中 `PtySessionCloseReason` 字面对齐
  * （agent-bridge.ts L477-482 硬约束 — 任一端加新值必须双侧同步）。
  *
  * 这里把期望值落成 `AgentSessionCloseReason[]` 而非 import pty-core 的

@@ -50,9 +50,9 @@ describe('update-feed-config', () => {
     }
   })
 
-  it('会按 updateServerUrl > TABTIN_UPDATE_FEED_URL > UPDATE_SERVER_URL 的优先级解析', () => {
+  it('会按 updateServerUrl > MUSE_UPDATE_FEED_URL > UPDATE_SERVER_URL 的优先级解析', () => {
     const env = {
-      TABTIN_UPDATE_FEED_URL: 'https://env.example.com/feed',
+      MUSE_UPDATE_FEED_URL: 'https://env.example.com/feed',
       UPDATE_SERVER_URL: 'https://legacy.example.com/feed',
     }
 
@@ -99,7 +99,7 @@ describe('update-feed-config', () => {
       expect(loadPackagedUpdateChannel(packageJsonPath)).toBe('beta')
       expect(resolveUpdateChannel({
         env: {
-          TABTIN_UPDATE_CHANNEL: 'alpha',
+          MUSE_UPDATE_CHANNEL: 'alpha',
           UPDATE_CHANNEL: 'stable',
         },
         packageJsonPath,
@@ -114,7 +114,7 @@ describe('update-feed-config', () => {
     expect(normalizeUpdateChannel('preview')).toBeNull()
     expect(resolveUpdateChannel({
       env: {
-        TABTIN_UPDATE_CHANNEL: 'preview',
+        MUSE_UPDATE_CHANNEL: 'preview',
         UPDATE_CHANNEL: 'nightly',
       },
     })).toBe('stable')
@@ -136,7 +136,7 @@ describe('update-feed-config', () => {
 
       expect(resolvePackagedUpdaterConfig({
         packageJsonPath,
-        env: { TABTIN_UPDATE_FEED_URL: 'https://attacker.example/feed' },
+        env: { MUSE_UPDATE_FEED_URL: 'https://attacker.example/feed' },
       })).toEqual({ enabled: false })
     } finally {
       rmSync(tempDir, { recursive: true, force: true })

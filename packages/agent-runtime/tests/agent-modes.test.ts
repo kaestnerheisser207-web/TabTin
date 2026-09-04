@@ -18,7 +18,7 @@ import {
   serializeAgentModeContract,
   type AgentModeName,
   type SerializedAgentModeContract,
-} from '@tabtin/agent-modes';
+} from '@muse/agent-modes';
 import type {
   Tool,
 } from '../src/engine/contracts/tools.js';
@@ -495,7 +495,7 @@ describe('JSON contract round-trip (cross-runtime sync)', () => {
 
   it('JSON file content matches serialized TS SSoT', () => {
     // 任何 TS 端的修改都必须同步到 JSON 文件，否则此断言失败 → CI 拦截。
-    // 维护者：失败时执行 `pnpm --filter @tabtin/agent-runtime tsx -e "console.log(JSON.stringify(require('./dist/agent-modes/contract.js').serializeAgentModeContract(), null, 2))"`
+    // 维护者：失败时执行 `pnpm --filter @muse/agent-runtime tsx -e "console.log(JSON.stringify(require('./dist/agent-modes/contract.js').serializeAgentModeContract(), null, 2))"`
     // 复制输出覆盖 packages/agent-runtime/agent-mode-contract.json。
     expect(onDisk).toEqual(fromCode);
   });

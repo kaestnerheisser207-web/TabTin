@@ -320,16 +320,16 @@ export function useConversationViewport({
     container.addEventListener('touchcancel', clearTouch, { passive: true })
     container.addEventListener('pointerdown', onPointerDown, { passive: true })
     container.addEventListener('scroll', onScroll, { passive: true })
-    // eslint-disable-next-line tabtin/prefer-scoped-activity-effects -- 通用 hook 刻意与 spaceActivity 解耦；后台不绑由 enabled 开关保证
+    // eslint-disable-next-line muse/prefer-scoped-activity-effects -- 通用 hook 刻意与 spaceActivity 解耦；后台不绑由 enabled 开关保证
     window.addEventListener('pointerup', clearPointer, { passive: true })
-    // eslint-disable-next-line tabtin/prefer-scoped-activity-effects -- 同上；全局释放确保滚动条拖拽在 scroller 外结束也清状态
+    // eslint-disable-next-line muse/prefer-scoped-activity-effects -- 同上；全局释放确保滚动条拖拽在 scroller 外结束也清状态
     window.addEventListener('pointercancel', clearPointer, { passive: true })
-    // eslint-disable-next-line tabtin/prefer-scoped-activity-effects -- 同上
+    // eslint-disable-next-line muse/prefer-scoped-activity-effects -- 同上
     window.addEventListener('blur', clearPointer)
 
     let viewportObserver: ResizeObserver | null = null
     if (typeof ResizeObserver !== 'undefined') {
-      // eslint-disable-next-line tabtin/prefer-scoped-activity-effects -- 通用 hook 刻意与 spaceActivity 解耦；后台不观察由 enabled 开关保证
+      // eslint-disable-next-line muse/prefer-scoped-activity-effects -- 通用 hook 刻意与 spaceActivity 解耦；后台不观察由 enabled 开关保证
       viewportObserver = new ResizeObserver(() => {
         dispatch({ type: 'layout-changed', reason: 'viewport-resize' })
       })
@@ -359,7 +359,7 @@ export function useConversationViewport({
     if (!enabled || !contentElement || !scopeKey || !scrollElement) return
     if (typeof ResizeObserver === 'undefined') return
 
-    // eslint-disable-next-line tabtin/prefer-scoped-activity-effects -- 同上
+    // eslint-disable-next-line muse/prefer-scoped-activity-effects -- 同上
     const scheduleAnchoredMeasurement = () => {
       if (visualAnchorFrameRef.current != null) return
       visualAnchorFrameRef.current = window.requestAnimationFrame(() => {

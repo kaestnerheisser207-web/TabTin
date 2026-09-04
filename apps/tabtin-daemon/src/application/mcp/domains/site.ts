@@ -2,10 +2,10 @@ import { McpDomainSupport } from './domain-support.js'
 
 export class SiteMcpDomain extends McpDomainSupport {
   async toolSiteList(args: Record<string, unknown>): Promise<Record<string, unknown>> {
-    const spaceId = (args.space_id as string) || process.env.TABTIN_SPACE_ID
-    const organizationId = (args.organization_id as string) || process.env.TABTIN_ORGANIZATION_ID
+    const spaceId = (args.space_id as string) || process.env.MUSE_SPACE_ID
+    const organizationId = (args.organization_id as string) || process.env.MUSE_ORGANIZATION_ID
     if (!spaceId || !organizationId) {
-      return { content: [{ type: 'text', text: 'Error: space_id and organization_id are required. Set TABTIN_SPACE_ID and TABTIN_ORGANIZATION_ID env vars or pass them as arguments.' }], isError: true }
+      return { content: [{ type: 'text', text: 'Error: space_id and organization_id are required. Set MUSE_SPACE_ID and MUSE_ORGANIZATION_ID env vars or pass them as arguments.' }], isError: true }
     }
     const qs = new URLSearchParams({ organization_id: organizationId, space_id: spaceId })
     if (args.status) qs.set('status', String(args.status))
@@ -23,10 +23,10 @@ export class SiteMcpDomain extends McpDomainSupport {
   async toolSiteCreate(args: Record<string, unknown>): Promise<Record<string, unknown>> {
     const name = args.name as string
     if (!name) return { content: [{ type: 'text', text: 'Error: name is required' }], isError: true }
-    const spaceId = (args.space_id as string) || process.env.TABTIN_SPACE_ID
-    const organizationId = (args.organization_id as string) || process.env.TABTIN_ORGANIZATION_ID
+    const spaceId = (args.space_id as string) || process.env.MUSE_SPACE_ID
+    const organizationId = (args.organization_id as string) || process.env.MUSE_ORGANIZATION_ID
     if (!spaceId || !organizationId) {
-      return { content: [{ type: 'text', text: 'Error: space_id and organization_id are required. Set TABTIN_SPACE_ID and TABTIN_ORGANIZATION_ID env vars or pass them as arguments.' }], isError: true }
+      return { content: [{ type: 'text', text: 'Error: space_id and organization_id are required. Set MUSE_SPACE_ID and MUSE_ORGANIZATION_ID env vars or pass them as arguments.' }], isError: true }
     }
     const data = await this.request('/tabsite/sites/', {
       method: 'POST',

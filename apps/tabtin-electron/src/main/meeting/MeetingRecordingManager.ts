@@ -1075,7 +1075,7 @@ export class MeetingRecordingManager {
             .split('/')
             .map((segment) => encodeURIComponent(segment))
             .join('/');
-          audioUrls[source] = `tabtin-file://${encoded}`;
+          audioUrls[source] = `muse-file://${encoded}`;
         }
         return { manifest, audioUrls, transcript: [], copilotRecords: [] };
       });
@@ -1118,7 +1118,7 @@ export class MeetingRecordingManager {
       .split('/')
       .map((segment) => encodeURIComponent(segment))
       .join('/');
-    return { state: 'available', url: `tabtin-file://${encoded}` };
+    return { state: 'available', url: `muse-file://${encoded}` };
   }
 
   async getArchive(scope: MeetingArchiveScope): Promise<MeetingLocalArchive> {

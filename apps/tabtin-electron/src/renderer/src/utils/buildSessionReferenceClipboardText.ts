@@ -1,5 +1,5 @@
-import type { ChatSession } from '@tabtin/chat-client'
-import { buildConversationReferenceSection } from '@tabtin/agent-prompt'
+import type { ChatSession } from '@muse/chat-client'
+import { buildConversationReferenceSection } from '@muse/agent-prompt'
 import { resolveDeviceTimeZone } from './deviceTimeZone'
 
 export interface SessionReferenceContext {
@@ -65,7 +65,7 @@ export function warmSpacePathCache(spaceId: string, organizationId: string): voi
   const key = cacheKey(organizationId, spaceId)
   if (spacePathCache.has(key)) return
 
-  const ensure = window.tabtin?.fileSystem?.ensureSpaceSandbox
+  const ensure = window.muse?.fileSystem?.ensureSpaceSandbox
   if (!ensure) return
 
   void ensure(spaceId, organizationId).then((result) => {

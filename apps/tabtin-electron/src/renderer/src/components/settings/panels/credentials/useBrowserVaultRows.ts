@@ -78,7 +78,7 @@ export function useBrowserVaultRows(partition: string | null): UseBrowserVaultRo
     }
     setLoadingCookies(true)
     try {
-      const res = await window.tabtin.credentialVault.getPartitionCookies({ partition })
+      const res = await window.muse.credentialVault.getPartitionCookies({ partition })
       setCookieSummary(isLegacyOk(res) && res.summary ? res.summary : null)
     } catch (e) {
       console.error('[useBrowserVaultRows] load cookies failed:', e)

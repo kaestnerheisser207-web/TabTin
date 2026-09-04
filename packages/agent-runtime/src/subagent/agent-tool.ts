@@ -2446,7 +2446,7 @@ function buildChildForkConfig(
     maxTurns: config.maxChildTurns,
     signal: activeRun.timeoutController.signal,
     sessionConfig: config.sessionConfig,
-    // 子 storage 用 agent-*；CLI / TABTIN_THREAD_ID 仍跟父业务对话。
+    // 子 storage 用 agent-*；CLI / MUSE_THREAD_ID 仍跟父业务对话。
     businessThreadId: context.threadId,
     billingIdempotencyScope: context.billingIdempotencyScope
       ? `${context.billingIdempotencyScope}:subagent:${childId}`

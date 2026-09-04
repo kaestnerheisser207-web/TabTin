@@ -1,5 +1,5 @@
 /**
- * @tabtin/collab-core
+ * @muse/collab-core
  *
  * Muse 实时协作底座
  * - CollabProvider: 统一连接管理（HocuspocusProvider + IndexedDB + 状态机）

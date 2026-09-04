@@ -53,7 +53,7 @@ export function useSubagentLlmSnapshots(
       setLoading(false)
       return
     }
-    const bridge = window.tabtin?.agentEngine?.readSubagentSession
+    const bridge = window.muse?.agentEngine?.readSubagentSession
     if (!bridge) {
       setSnapshots(EMPTY)
       return

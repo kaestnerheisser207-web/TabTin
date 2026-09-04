@@ -8,7 +8,7 @@ network_name="tabtin-community-baseline-${probe_suffix}"
 postgres_name="tabtin-community-baseline-postgres-${probe_suffix}"
 source_database="tabtin_baseline_source_${probe_suffix}"
 restore_database="tabtin_baseline_restore_${probe_suffix}"
-django_image="tabtin/community-django:dev"
+django_image="muse/community-django:dev"
 temporary_root=""
 
 cleanup() {
@@ -52,9 +52,9 @@ manifest_path="${temporary_root}/community-baseline.json"
 
 echo "[baseline] building the Community Django dependency image"
 bash "${repo_root}/scripts/community/ensure-env-file.sh" "${repo_root}"
-unset TABTIN_EDITION AUTH_FIXED_VERIFICATION_CODE
+unset MUSE_EDITION AUTH_FIXED_VERIFICATION_CODE
 COMPOSE_DISABLE_ENV_FILE=1 \
-  TABTIN_DEV_DEPENDENCY_FINGERPRINT=baseline-builder \
+  MUSE_DEV_DEPENDENCY_FINGERPRINT=baseline-builder \
   docker compose \
     --project-directory "${repo_root}" \
     --env-file "${repo_root}/.env" \
@@ -94,8 +94,8 @@ run_django() {
     -v "${repo_root}/packages:/app/packages:ro" \
     -w /app/apps/tabtin_django \
     -e DJANGO_SETTINGS_MODULE=tabtin.settings \
-    -e TABTIN_EDITION=community \
-    -e TABTIN_DATABASE_MODE=single_pg \
+    -e MUSE_EDITION=community \
+    -e MUSE_DATABASE_MODE=single_pg \
     -e DEBUG=True \
     -e SECRET_KEY=community-baseline-build-secret-key \
     -e JWT_SECRET_KEY=community-baseline-build-jwt-secret \

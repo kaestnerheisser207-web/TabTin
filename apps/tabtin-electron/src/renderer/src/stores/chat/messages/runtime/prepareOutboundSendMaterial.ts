@@ -1,5 +1,5 @@
 import type { ChatAttachment } from '../../../../components/chat/types'
-import { message as notify } from '@tabtin/smartsheet-ui/message'
+import { message as notify } from '@muse/smartsheet-ui/message'
 import i18n from '@/i18n'
 import { resolvePresetBlocks } from '../../../../components/chat/composer-presets/resolvePresetBlocks'
 import { resolveComposerPresetSkillInvoke } from '../actions/composerPresetPrompt'

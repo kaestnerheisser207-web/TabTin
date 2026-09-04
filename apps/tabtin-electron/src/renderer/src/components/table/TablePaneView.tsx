@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
-import { toast } from '@tabtin/smartsheet-ui/toast'
+import { toast } from '@muse/smartsheet-ui/toast'
 import { ViewContainer } from '@components/view/ViewContainer'
 import { TablePaneHeader } from '@components/table/TablePaneHeader'
 import { AlertTriangle } from 'lucide-react'
@@ -27,14 +27,14 @@ import { useTranslation } from 'react-i18next'
 import {
   useTableInitFlow,
   TableLoadingView,
-} from '@tabtin/table-ui'
+} from '@muse/table-ui'
 import {
   RemovedFromResourceOverlay,
   useResourceShareDowngrade,
   isPermissionInsufficientForEditing,
   shouldShowRemovedOverlay,
   selectResourceShareNotifications,
-} from '@tabtin/smartsheet-ui'
+} from '@muse/smartsheet-ui'
 import { useNotificationStore } from '@stores/useNotificationStore'
 import { onResourceEvent } from '@/stores/useUnifiedResources'
 import {

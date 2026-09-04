@@ -1,5 +1,5 @@
 {
-  "name": "@tabtin/app-config",
+  "name": "@muse/app-config",
   "version": "0.1.0",
   "description": "Muse App configSchema 通用 runtime 读取层（v2.0 模块零交付）。把 packages/apps/<id>/app.json 的 configSchema 默认值 + 用户级 override 合并出 runtime config。当前 v2.1 阶段只实现「读取 app.json 默认值 + 实例化时显式 override」；Space 配置热更新留给后续 Wave。",
   "type": "module",

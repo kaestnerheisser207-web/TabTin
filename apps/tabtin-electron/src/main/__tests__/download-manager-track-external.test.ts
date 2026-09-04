@@ -47,13 +47,13 @@ vi.mock('../download-security', () => ({
   confirmDangerousDownload: vi.fn(async () => true),
 }))
 
-vi.mock('@tabtin/terminal-core', () => ({
+vi.mock('@muse/terminal-core', () => ({
   resolveSpacesRoot: vi.fn(() => '/tmp/spaces'),
   resolvePlatformDataRoot: vi.fn(() => '/tmp/platform-data'),
   resolveDataRoot: vi.fn(() => '/tmp/data-root'),
 }))
 
-vi.mock('@tabtin/agent-runtime', () => ({
+vi.mock('@muse/agent-runtime', () => ({
   resolveWorkspaceDownloadsDir: vi.fn(() => '/tmp/workspace-downloads'),
 }))
 

@@ -1,5 +1,5 @@
-import type { TableGridRendererProps } from '@tabtin/table-engine';
-import { resolveRecordId } from '@tabtin/table-engine';
+import type { TableGridRendererProps } from '@muse/table-engine';
+import { resolveRecordId } from '@muse/table-engine';
 
 export type GridDisplayRows = TableGridRendererProps['rows'];
 export type GridDisplayRow = GridDisplayRows[number];

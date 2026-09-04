@@ -7,7 +7,7 @@
  * 通用化：工具是白名单驱动的通用「提议切模式」机制，emit 的 payload
  * 带 `from_mode_id`（来源模式）+ `target_mode_id`（目标模式），二者均可为任意 AgentMode。
  * 本 schema 是 wire-codegen 的生成源（→ fixtures + iOS/Android 生成类型），改动后需重跑
- * `pnpm -F @tabtin/wire-codegen ...`。此处内联 6 个模式字面量（不 import @tabtin/agent-modes，
+ * `pnpm -F @muse/wire-codegen ...`。此处内联 6 个模式字面量（不 import @muse/agent-modes，
  * 避免底层 wire 包反向依赖 modes），与 `AGENT_MODE_NAMES`（agent-modes SSoT）保持一致。
  */
 

@@ -24,10 +24,10 @@ vi.mock('react-i18next', () => ({
     t: (key: string, options?: { defaultValue?: string }) => options?.defaultValue ?? key,
   }),
 }))
-vi.mock('@tabtin/table-core', () => ({
+vi.mock('@muse/table-core', () => ({
   ImportExportApiService: { import: mocks.importTable },
 }))
-vi.mock('@tabtin/tabdoc-ui/api-client', () => ({
+vi.mock('@muse/tabdoc-ui/api-client', () => ({
   createDocument: mocks.createDocument,
   importDocumentFileDraft: mocks.importDocumentFileDraft,
   importMarkdown: mocks.importMarkdown,

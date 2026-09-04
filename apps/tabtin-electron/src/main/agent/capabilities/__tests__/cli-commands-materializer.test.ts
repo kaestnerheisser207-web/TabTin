@@ -16,8 +16,8 @@ vi.mock('../../../logger.js', () => ({
   }),
 }))
 
-import { CatalogStore } from '@tabtin/agent-host/state'
-import { createTabtinReadonlyChecker } from '@tabtin/agent-runtime/capability'
+import { CatalogStore } from '@muse/agent-host/state'
+import { createTabtinReadonlyChecker } from '@muse/agent-runtime/capability'
 import {
   __resetCliCommandsMaterializerForTesting,
   __setCliCommandsExecForTesting,

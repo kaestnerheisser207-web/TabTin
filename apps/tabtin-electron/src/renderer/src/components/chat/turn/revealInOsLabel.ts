@@ -11,7 +11,7 @@ export type HostPlatform = 'darwin' | 'win32' | 'linux' | 'unknown'
 
 export function getHostPlatform(
   getPlatform: (() => string) | undefined = typeof window !== 'undefined'
-    ? window.tabtin?.getPlatform
+    ? window.muse?.getPlatform
     : undefined,
   userAgentPlatform: string = typeof navigator !== 'undefined'
     ? navigator.platform || ''

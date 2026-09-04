@@ -114,13 +114,13 @@ export function resolvePdfToolbarPage(
 type PdfFileSource = string | { data: Uint8Array }
 
 interface PdfViewerProps {
-  /** 自定义协议 / 同源的文件地址（本地 tabtin-file:// 等） */
+  /** 自定义协议 / 同源的文件地址（本地 muse-file:// 等） */
   fileUrl?: string
   /** base64 编码的 PDF 内容（兼容旧逻辑） */
   base64?: string
   /**
    * 二进制内容。聊天远程附件应优先走这条：先 fetch 整包再交给 pdf.js，
-   * 避免 pdf.js 对跨域 OSS URL 发 Range 请求在 `tabtin-file://app` 下 CORS 失败。
+   * 避免 pdf.js 对跨域 OSS URL 发 Range 请求在 `muse-file://app` 下 CORS 失败。
    */
   data?: ArrayBuffer | Uint8Array
   /** 文件名（用于下载） */
@@ -374,7 +374,7 @@ export const PdfViewer: React.FC<PdfViewerProps> = ({
    * 跨域 OSS / 打包态下 `<a download>` 会被 Chromium 忽略。
    * - 内存二进制：用 downloadBytes（独立拷贝）直接 saveExportBlob，避开
    *   pdf.js transfer 后的空 buffer，以及 blob: → 主进程 net.request 失败。
-   * - URL：走 downloadPreviewResource（https 主进程 / tabtin-file renderer）。
+   * - URL：走 downloadPreviewResource（https 主进程 / muse-file renderer）。
    */
   const handleDownload = useCallback(async () => {
     if (downloading) return

@@ -2,7 +2,7 @@
  * SQL / 记录操作 / 字段操作 / TabDoc / 文档操作 / 数据提取
  */
 
-import type { ToolCardDescriptor, ToolOutputData } from '@tabtin/chat-client'
+import type { ToolCardDescriptor, ToolOutputData } from '@muse/chat-client'
 import { truncate, getNestedArgs, unwrapData } from './toolCardUtils'
 import { extractUpdateByFilterOutput } from '../cards/UpdateByFilterPreviewCard'
 

@@ -31,7 +31,7 @@ import {
   vi,
   beforeEach,
 } from 'vitest';
-import { isToolLifecycleNotice } from '@tabtin/agent-runtime/engine';
+import { isToolLifecycleNotice } from '@muse/agent-runtime/engine';
 
 interface MockSessionStorage {
   recordToolResult: ReturnType<typeof vi.fn>;

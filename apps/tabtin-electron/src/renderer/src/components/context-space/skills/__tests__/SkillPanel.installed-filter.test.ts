@@ -12,7 +12,7 @@
 import { describe, it, expect, vi } from 'vitest'
 import type { SkillIndexEntry, SkillConfig } from '@/skills/types'
 
-vi.mock('@tabtin/smartsheet-ui', () => ({
+vi.mock('@muse/smartsheet-ui', () => ({
   Button: () => null,
   ScrollArea: ({ children }: any) => children,
   Input: () => null,

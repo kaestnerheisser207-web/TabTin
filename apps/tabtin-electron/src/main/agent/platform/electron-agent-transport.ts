@@ -2,7 +2,7 @@ import type {
   AgentTransportEnvelope,
   AgentTransportPort,
   AgentTransportReadyInfo,
-} from '@tabtin/agent-host/realtime'
+} from '@muse/agent-host/realtime'
 import { electronWsGateway } from '../../ws/ElectronWsGateway.js'
 
 export const electronAgentTransport: AgentTransportPort = {

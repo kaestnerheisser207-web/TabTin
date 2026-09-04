@@ -12,19 +12,19 @@ import { useCallback } from 'react'
 import type { ContextItem } from '../registry/types'
 import { contextRegistry } from '../registry'
 import { adjustBrowserZoom } from '@/services/browserZoomController'
-import { requestGridSearch } from '@tabtin/table-ui'
-import { requestTabDocFind } from '@tabtin/tabdoc-ui/find-request'
+import { requestGridSearch } from '@muse/table-ui'
+import { requestTabDocFind } from '@muse/tabdoc-ui/find-request'
 
 export function useBrowserActions() {
   const isBrowser = (item: ContextItem) =>
     Boolean(contextRegistry.getHandler(item.type)?.hasBrowserActions)
 
   const handleBackItem = useCallback((item: ContextItem) => {
-    if (isBrowser(item)) void window.tabtin?.crawlView?.goBack(item.id)
+    if (isBrowser(item)) void window.muse?.crawlView?.goBack(item.id)
   }, [])
 
   const handleForwardItem = useCallback((item: ContextItem) => {
-    if (isBrowser(item)) void window.tabtin?.crawlView?.goForward(item.id)
+    if (isBrowser(item)) void window.muse?.crawlView?.goForward(item.id)
   }, [])
 
   const handleFindItem = useCallback((item: ContextItem) => {

@@ -1,5 +1,5 @@
 /**
- * @tabtin/python-runtime —— L0 纯基础设施：Muse 自管 Python 运行时的解析 / provision。
+ * @muse/python-runtime —— L0 纯基础设施：Muse 自管 Python 运行时的解析 / provision。
  *
  * 自管 Python 运行时布局：<cacheDir>/tabtin-runtimes/.../dependencies/python。
  * 纯 muse 命名、零业务耦合（不认识 Space/Agent/Organization/app.json）。全部外部信息由 L1 宿主适配层注入。

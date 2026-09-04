@@ -5,12 +5,12 @@ import {
   type UseDataGridSearchParams,
 } from './useDataGridSearch';
 
-vi.mock('@tabtin/table-engine', () => ({
+vi.mock('@muse/table-engine', () => ({
   resolveRecordId: (row: Record<string, unknown> | undefined) =>
     row?.__recordId ?? row?.id ?? null,
 }));
 
-vi.mock('@tabtin/table-core', () => ({
+vi.mock('@muse/table-core', () => ({
   fieldCellTextMatchesSearchQuery: (
     query: string,
     _fieldType: string | undefined,
@@ -18,7 +18,7 @@ vi.mock('@tabtin/table-core', () => ({
   ) => String(value ?? '').toLowerCase().includes(query),
 }));
 
-vi.mock('@tabtin/table-ui', () => ({
+vi.mock('@muse/table-ui', () => ({
   shouldActivateGridForSearchMatch: () => false,
 }));
 

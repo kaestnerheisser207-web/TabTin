@@ -6,7 +6,7 @@ export default defineConfig({
   dts: true,
   external: [
     'electron',
-    // '@tabtin/crawl-extension' removed (Phase 3 cleanup)
+    // '@muse/crawl-extension' removed (Phase 3 cleanup)
     'puppeteer-core',
   ],
   target: 'es2020',

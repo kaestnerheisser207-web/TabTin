@@ -8,8 +8,8 @@
  */
 
 import { useState, useCallback, useEffect, useRef } from 'react'
-import { UndoRedoApiService } from '@tabtin/table-core'
-import { useToast } from '@tabtin/smartsheet-ui'
+import { UndoRedoApiService } from '@muse/table-core'
+import { useToast } from '@muse/smartsheet-ui'
 import {
   createUndoTimeline,
   type UndoTimeline,

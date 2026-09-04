@@ -360,7 +360,7 @@ internal data class FormalOssImagePayload(
 
 /**
  * 统一识别 Agent Host 的正式图片资产协议。
- * `tabtin://resource/file/...` 仅表达资源身份，永远不能进入 HTTP 图片加载器。
+ * `muse://resource/file/...` 仅表达资源身份，永远不能进入 HTTP 图片加载器。
  */
 internal fun formalOssImagePayload(kind: String?, payload: JsonObject?): FormalOssImagePayload? {
     if (kind != "image" || payload?.string("artifact_kind") != "oss_file") return null

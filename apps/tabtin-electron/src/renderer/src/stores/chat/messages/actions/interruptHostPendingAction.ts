@@ -7,7 +7,7 @@
  * 失败出口保持 HostPending 原顺序，不造孤儿气泡。
  */
 
-import type { ChatMessage } from '@tabtin/chat-client'
+import type { ChatMessage } from '@muse/chat-client'
 import { createLogger } from '@/utils/logger'
 import { isSendOnCooldown, useSendCooldownStore } from '../../execution/sendCooldown'
 import { trackChatTelemetry } from '../../execution/chatTelemetry'
@@ -61,7 +61,7 @@ export function createInterruptHostPendingActions(
       sessionId,
     })
 
-    const promoteRun = window.tabtin?.agentEngine?.promoteRun
+    const promoteRun = window.muse?.agentEngine?.promoteRun
     if (typeof promoteRun !== 'function') {
       log.warn('[promoteRun] bridge unavailable')
       trackChatTelemetry('queue.interrupt_promote.no_bridge', { runId }, {

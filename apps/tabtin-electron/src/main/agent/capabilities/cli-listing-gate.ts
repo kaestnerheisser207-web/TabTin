@@ -14,8 +14,8 @@
  * 故障把真实可用能力藏掉）。有旧缓存时优先用旧判定抗抖动。
  */
 
-import { joinApiPath } from '@tabtin/config'
-import type { CliCapFetcher, CliListing, CliCommandInfo } from '@tabtin/agent-host/capabilities'
+import { joinApiPath } from '@muse/config'
+import type { CliCapFetcher, CliListing, CliCommandInfo } from '@muse/agent-host/capabilities'
 import { TokenManager } from '../../auth.js'
 import { API_BASE_URL } from '../../config/api.js'
 import { createLogger } from '../../logger.js'

@@ -30,7 +30,7 @@ vi.mock('react-i18next', () => ({
   }),
 }))
 
-vi.mock('@tabtin/smartsheet-ui', () => ({
+vi.mock('@muse/smartsheet-ui', () => ({
   toast: vi.fn(),
 }))
 
@@ -89,7 +89,7 @@ vi.mock('@components/layout/workspaceContextState', () => ({
 }))
 
 // openSubagentTab 会拉入较重的 store / table-ui 传递依赖（ViewFilterRulesEditor 需
-// resolveChoiceTagColors），本测试的 @tabtin/smartsheet-ui mock 精简，直接 mock 掉这个
+// resolveChoiceTagColors），本测试的 @muse/smartsheet-ui mock 精简，直接 mock 掉这个
 // 纯函数模块以保持隔离。resolveForegroundTabScopeKey 在同 Space 分支才会被调用，
 // 这里按 identity 返回 spaceId（等价于旧行为）。
 vi.mock('@components/chat/subagent/openSubagentTab', () => ({

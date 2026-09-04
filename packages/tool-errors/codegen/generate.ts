@@ -1,6 +1,6 @@
 #!/usr/bin/env tsx
 /**
- * @tabtin/tool-errors codegen
+ * @muse/tool-errors codegen
  *
  * Layered YAML → generated TS:
  *   1. src/_generated/kinds.generated.ts
@@ -12,8 +12,8 @@
  * error-codes.yaml at codegen time (no runtime dependency) so catalog /
  * i18n key inventory stay complete while agent-runtime keeps re-export merge.
  *
- *   pnpm --filter @tabtin/tool-errors codegen
- *   pnpm --filter @tabtin/tool-errors codegen:verify
+ *   pnpm --filter @muse/tool-errors codegen
+ *   pnpm --filter @muse/tool-errors codegen:verify
  */
 
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
@@ -206,11 +206,11 @@ function generateKindsTs(entries: KindEntry[]): string {
  * **AUTO-GENERATED — DO NOT EDIT BY HAND**
  *
  * Source: packages/tool-errors/codegen/kinds/*.yaml
- * Codegen: pnpm --filter @tabtin/tool-errors codegen
+ * Codegen: pnpm --filter @muse/tool-errors codegen
  *
  * Tool-layer error_kind constants + TOOL_LAYER_ERROR_KINDS.
  * File-pipeline kinds are NOT listed here — agent-runtime re-exports
- * @tabtin/file-pipeline-errors and merges into TOOL_ERROR_KINDS.
+ * @muse/file-pipeline-errors and merges into TOOL_ERROR_KINDS.
  */
 
 ${constLines}
@@ -242,7 +242,7 @@ function generateCatalogTs(entries: KindEntry[]): string {
  *
  * Source: packages/tool-errors/codegen/kinds/*.yaml
  *        + file-pipeline-errors/codegen/error-codes.yaml (specific kinds)
- * Codegen: pnpm --filter @tabtin/tool-errors codegen
+ * Codegen: pnpm --filter @muse/tool-errors codegen
  *
  * Electron merges these defaults with hand-written UX overrides.
  * No hint copy / Factory / retry policy here.
@@ -280,7 +280,7 @@ function generateI18nKeysTs(entries: KindEntry[]): string {
  *
  * Source: packages/tool-errors/codegen/kinds/*.yaml
  *        + file-pipeline-errors specific kinds
- * Codegen: pnpm --filter @tabtin/tool-errors codegen
+ * Codegen: pnpm --filter @muse/tool-errors codegen
  *
  * Inventory of chat.toolError.* keys expected for translatable kinds.
  * Does not generate locale string values.
@@ -305,7 +305,7 @@ function generateBridgesTs(bridges: BridgeEntry[]): string {
  * **AUTO-GENERATED — DO NOT EDIT BY HAND**
  *
  * Source: packages/tool-errors/codegen/bridges.yaml
- * Codegen: pnpm --filter @tabtin/tool-errors codegen
+ * Codegen: pnpm --filter @muse/tool-errors codegen
  *
  * browser-core / action-tools string codes → runtime error_kind.
  * Does not mutate producers; network_error and network_failed stay distinct.
@@ -434,7 +434,7 @@ function main(): void {
 
   if (!verifyAll(tasks)) {
     console.error(
-      `\n[codegen:verify] FAIL — run \`pnpm --filter @tabtin/tool-errors codegen\`.`,
+      `\n[codegen:verify] FAIL — run \`pnpm --filter @muse/tool-errors codegen\`.`,
     );
     process.exit(1);
   }

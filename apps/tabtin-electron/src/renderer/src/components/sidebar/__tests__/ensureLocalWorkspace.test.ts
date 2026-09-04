@@ -85,7 +85,7 @@ vi.mock('@utils/logger', () => ({
   }),
 }));
 
-vi.mock('@tabtin/app-shell', () => ({
+vi.mock('@muse/app-shell', () => ({
   WorkspaceApiService: {
     ensureHome: mockEnsureHome,
   },

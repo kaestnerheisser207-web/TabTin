@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest'
-import type { ChatMessage } from '@tabtin/chat-client'
+import type { ChatMessage } from '@muse/chat-client'
 
 const { chatState, runtimeState, toastMock, telemetryMock, auditAppendMock } = vi.hoisted(() => ({
   chatState: {
@@ -27,7 +27,7 @@ vi.mock('@stores/useChatRuntimeStore', () => ({
   },
 }))
 
-vi.mock('@tabtin/smartsheet-ui/toast', () => ({
+vi.mock('@muse/smartsheet-ui/toast', () => ({
   toast: toastMock,
 }))
 
@@ -869,7 +869,7 @@ describe('widgetSendPromptHandler — Wave 7 补丁：audit log', () => {
       expect.objectContaining({ source: 'widget', widgetId: 'wgt_fail' }),
     )
 
-    // 没 preload（清 window.tabtin）也应该 noop 不抛
+    // 没 preload（清 window.muse）也应该 noop 不抛
     ;(window as unknown as { tabtin?: unknown }).tabtin = undefined
     auditAppendMock.mockClear()
     chatState.sendMessage.mockClear()

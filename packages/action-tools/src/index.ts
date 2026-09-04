@@ -1,16 +1,16 @@
 /**
- * @tabtin/action-tools — Public SDK Surface
+ * @muse/action-tools — Public SDK Surface
  *
  * Keep this entry intentionally tiny.
  * Internal consumers should use subpath imports:
- *   @tabtin/action-tools/types      — Type definitions
- *   @tabtin/action-tools/tools      — Tool instances and groups
- *   @tabtin/action-tools/runtime    — Runtime bridge injection (internal)
- *   @tabtin/action-tools/impl       — Implementation classes (internal)
- *   @tabtin/action-tools/adapters   — Adapter classes (internal)
- *   @tabtin/action-tools/cdp        — CDP connection management (internal)
- *   @tabtin/action-tools/manifest   — Tool manifest queries
- *   @tabtin/action-tools/errors     — Error codes and factories
+ *   @muse/action-tools/types      — Type definitions
+ *   @muse/action-tools/tools      — Tool instances and groups
+ *   @muse/action-tools/runtime    — Runtime bridge injection (internal)
+ *   @muse/action-tools/impl       — Implementation classes (internal)
+ *   @muse/action-tools/adapters   — Adapter classes (internal)
+ *   @muse/action-tools/cdp        — CDP connection management (internal)
+ *   @muse/action-tools/manifest   — Tool manifest queries
+ *   @muse/action-tools/errors     — Error codes and factories
  */
 
 // ===== Types =====

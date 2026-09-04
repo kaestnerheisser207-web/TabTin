@@ -34,10 +34,10 @@ import {
   EmptyState,
   Label,
   StatusNotice,
-} from '@tabtin/smartsheet-ui'
+} from '@muse/smartsheet-ui'
 import { Input, Select, SelectContent, SelectItem, SelectTrigger, SelectValue, Textarea } from '@components/ui'
 import { useTranslation } from 'react-i18next'
-import type { Organization } from '@tabtin/app-shell'
+import type { Organization } from '@muse/app-shell'
 import {
   listNotificationRules,
   createNotificationRule,

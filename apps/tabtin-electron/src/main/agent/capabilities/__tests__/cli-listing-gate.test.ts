@@ -6,7 +6,7 @@
  */
 
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
-import type { CliListing } from '@tabtin/agent-runtime/capability'
+import type { CliListing } from '@muse/agent-runtime/capability'
 
 vi.mock('../../../logger.js', () => ({
   createLogger: () => ({
@@ -21,7 +21,7 @@ vi.mock('../../../config/api.js', () => ({
   API_BASE_URL: 'http://api.test',
 }))
 
-vi.mock('@tabtin/config', () => ({
+vi.mock('@muse/config', () => ({
   joinApiPath: (base: string, path: string) => `${base.replace(/\/$/, '')}${path.startsWith('/') ? path : `/${path}`}`,
 }))
 

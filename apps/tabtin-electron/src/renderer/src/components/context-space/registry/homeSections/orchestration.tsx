@@ -20,7 +20,7 @@ import { cn } from '@utils/cn'
  */
 import React, { useCallback, useEffect, useState } from 'react'
 import { AlertTriangle, FolderSearch, RefreshCw } from 'lucide-react'
-import { Button } from '@tabtin/smartsheet-ui'
+import { Button } from '@muse/smartsheet-ui'
 import { useTranslation } from 'react-i18next'
 import { useDeviceStore } from '@stores/useDeviceStore'
 import { isCurrentDeviceControl } from '@/services/deviceControlMatch'
@@ -89,7 +89,7 @@ const OrchestrationSection: React.FC<HomeSectionProps> = ({
     }
     setProbeState('checking')
     let cancelled = false
-    const fs = window.tabtin?.fileSystem
+    const fs = window.muse?.fileSystem
     if (!fs?.pathExists) {
       setProbeState('idle')
       return

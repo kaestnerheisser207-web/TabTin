@@ -157,10 +157,10 @@ class Command(BaseCommand):
 
     @staticmethod
     def _validate_apply_options(table: Table, plan_hash: str, options: dict) -> None:
-        environment = os.environ.get("TABTIN_ENV", "").strip().lower()
+        environment = os.environ.get("MUSE_ENV", "").strip().lower()
         if environment != APPLY_ENVIRONMENT:
             raise CommandError(
-                f"--apply 仅允许 TABTIN_ENV={APPLY_ENVIRONMENT}，当前为 {environment or '<empty>'}"
+                f"--apply 仅允许 MUSE_ENV={APPLY_ENVIRONMENT}，当前为 {environment or '<empty>'}"
             )
 
         required_options = {

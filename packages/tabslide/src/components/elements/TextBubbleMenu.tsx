@@ -7,7 +7,7 @@ import { normalizeRichTextHyperlinkInput } from '../../utils/hyperlink'
 import { useSlideStore } from '../../store/slide'
 import { useT } from '../../i18n'
 import { ScrollArea } from '../ui/ScrollArea'
-import { ZIndex } from '@tabtin/app-shell'
+import { ZIndex } from '@muse/app-shell'
 import {
   FONT_SIZES,
   LINE_HEIGHTS,

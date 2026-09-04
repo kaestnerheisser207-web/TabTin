@@ -111,8 +111,8 @@ function finalizeContext(
 async function collectStagedScope(rootPath: string): Promise<CommitMessageContextResult> {
   const scope: CommitDiffScope = 'staged'
   const [namesResult, diffResult] = await Promise.all([
-    window.tabtin.git.rawDiff(rootPath, ['--cached', '--name-only']),
-    window.tabtin.git.rawDiff(rootPath, ['--cached']),
+    window.muse.git.rawDiff(rootPath, ['--cached', '--name-only']),
+    window.muse.git.rawDiff(rootPath, ['--cached']),
   ])
 
   if (!namesResult?.success && !diffResult?.success) {
@@ -160,7 +160,7 @@ async function collectUntrackedDiffs(
 
     try {
       // 预览按全局预算读取；内容先做敏感扫描再拼进 payload
-      const result = await window.tabtin.fileSystem.readFilePreview(
+      const result = await window.muse.fileSystem.readFilePreview(
         joinRootPath(rootPath, filePath),
         { maxBytes: MAX_UNTRACKED_PREVIEW_BYTES },
       )
@@ -202,9 +202,9 @@ async function collectUntrackedDiffs(
 async function collectWorkspaceScope(rootPath: string): Promise<CommitMessageContextResult> {
   const scope: CommitDiffScope = 'workspace'
   const [namesResult, diffResult, statusResult] = await Promise.all([
-    window.tabtin.git.rawDiff(rootPath, ['--name-only']),
-    window.tabtin.git.rawDiff(rootPath, []),
-    window.tabtin.git.getStatus(rootPath),
+    window.muse.git.rawDiff(rootPath, ['--name-only']),
+    window.muse.git.rawDiff(rootPath, []),
+    window.muse.git.getStatus(rootPath),
   ])
 
   if (!namesResult?.success && !diffResult?.success && !statusResult?.success) {

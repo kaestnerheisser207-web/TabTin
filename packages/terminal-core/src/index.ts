@@ -182,7 +182,7 @@ export type {
 // agent-bridge-contract.ts 是两端 contract test 共用的 describe runner。
 //
 // re-export 让下游消费者（runtime-bridge.ts / ShellCap / bridge 两端实现）
-// 都从 `@tabtin/terminal-core` 顶层 import，避免 subpath 漂移。
+// 都从 `@muse/terminal-core` 顶层 import，避免 subpath 漂移。
 export type {
   AgentBackgroundedReason,
   AgentCommandProgressSnapshot,
@@ -251,5 +251,5 @@ export type {
 // contract test 相关 export 故意**不在主 entry re-export**——它们 import
 // `'vitest'`，若进主 entry 会让生产 import 链触发 vitest 副作用，引起
 // `Cannot find module '@vitest/runner'` 或 ESM live binding 失败。
-// 下游消费者通过 sub-path `@tabtin/terminal-core/agent-bridge-contract`
+// 下游消费者通过 sub-path `@muse/terminal-core/agent-bridge-contract`
 // import（见 `package.json` exports + `tsup` 独立 entry + vitest external）。

@@ -7,9 +7,9 @@ import {
 } from '@/table-host/view-editor/field-visibility-draft'
 import { useViewFilterSortGroupDraft } from '@/table-host/view-editor/useViewFilterSortGroupDraft'
 import { useViewVisibilityDraft } from '@/table-host/view-editor/useViewVisibilityDraft'
-import { ViewApiService } from '@tabtin/table-core'
-import type { ViewMeta } from '@tabtin/table-ui'
-import { buildColumnMetaVisibilityUpdate } from '@tabtin/table-ui'
+import { ViewApiService } from '@muse/table-core'
+import type { ViewMeta } from '@muse/table-ui'
+import { buildColumnMetaVisibilityUpdate } from '@muse/table-ui'
 import { useCallback, useEffect, useState } from 'react'
 
 interface UseTableHostViewEditorStateInput {

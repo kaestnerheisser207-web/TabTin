@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
-import { AppHostClientProvider } from '@tabtin/app-host-sdk'
-import { Toaster } from '@tabtin/smartsheet-ui/toast'
+import { AppHostClientProvider } from '@muse/app-host-sdk'
+import { Toaster } from '@muse/smartsheet-ui/toast'
 import { AppGlobalEffects } from './AppGlobalEffects'
 import { AppErrorToast } from './AppErrorToast'
 import { ShellTitleBar } from '@components/platform/shell-title-bar'

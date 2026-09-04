@@ -42,7 +42,7 @@ vi.mock('react-i18next', () => ({
   }),
 }))
 
-vi.mock('@tabtin/smartsheet-ui', () => ({
+vi.mock('@muse/smartsheet-ui', () => ({
   Input: (props: any) => <input data-testid="manual-input" {...props} />,
   Label: ({ children }: any) => <label>{children}</label>,
   Select: ({ children, value, onValueChange }: any) => (

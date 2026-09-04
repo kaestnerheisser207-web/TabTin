@@ -32,7 +32,7 @@ import { resolve, relative } from 'node:path';
 import { GENERATED_DIR, PKG_ROOT, VENDOR_PATHS } from './lib/paths.js';
 
 console.log('═══════════════════════════════════════════════════════════════');
-console.log('  @tabtin/wire-codegen — check mode (content-hash drift detect)');
+console.log('  @muse/wire-codegen — check mode (content-hash drift detect)');
 console.log('═══════════════════════════════════════════════════════════════\n');
 
 type HashMap = Map<string, string>;
@@ -158,7 +158,7 @@ if (!isFreshLocal && newOnly.length) {
 
 console.error(`
 ═══════════════════════════════════════════════════════════════
-  ✘ Schema → generated 漂移：请跑 \`pnpm --filter @tabtin/wire-codegen codegen\`
+  ✘ Schema → generated 漂移：请跑 \`pnpm --filter @muse/wire-codegen codegen\`
     重新生成后 commit。判定基于内容 hash，不依赖 git status。
 ═══════════════════════════════════════════════════════════════`);
 process.exit(1);

@@ -83,7 +83,7 @@ public class SentryContextProvider @Inject constructor(
             "build_number" to BuildConfig.VERSION_CODE.toString(),
             "platform" to "android",
         )
-        BuildConfig.TABTIN_GIT_SHA.takeIf { it.isNotEmpty() }?.let { context["git_sha"] = it }
+        BuildConfig.MUSE_GIT_SHA.takeIf { it.isNotEmpty() }?.let { context["git_sha"] = it }
         organizationId?.let { context["organization_id"] = it }
         activeSpaceId?.let { context["space_id"] = it }
         Sentry.configureScope { sentryScope -> sentryScope.setContexts("tabtin", context) }

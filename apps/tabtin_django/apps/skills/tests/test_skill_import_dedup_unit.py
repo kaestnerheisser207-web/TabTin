@@ -213,7 +213,7 @@ def test_import_from_files_creates_when_same_slug_different_content(
     created = {}
     owner_user_id = str(import_user_ids["user_id"])
 
-    monkeypatch.setenv("TABTIN_SANDBOX_ROOT", str(tmp_path))
+    monkeypatch.setenv("MUSE_SANDBOX_ROOT", str(tmp_path))
     monkeypatch.setattr(
         SkillService,
         "_find_skill_by_import_source_url",

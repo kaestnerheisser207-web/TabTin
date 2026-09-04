@@ -1,7 +1,7 @@
 import React, { useCallback, useMemo, useState } from 'react'
 import { ChevronDown, ChevronUp, FileText, LayoutTemplate, Table2 } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
-import { toast } from '@tabtin/smartsheet-ui'
+import { toast } from '@muse/smartsheet-ui'
 import { cn } from '@utils/cn'
 import { isLocalFileArtifactHref } from '@/services/localFileResourceResolver'
 import type { TurnArtifact, TurnArtifactKind } from './turnArtifacts'

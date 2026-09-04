@@ -1,7 +1,7 @@
 import {
   areViewConfigValuesEqual,
   type ViewSort,
-} from '@tabtin/table-core'
+} from '@muse/table-core'
 
 export interface SortBaselineOverride {
   savedSorts: ViewSort[]

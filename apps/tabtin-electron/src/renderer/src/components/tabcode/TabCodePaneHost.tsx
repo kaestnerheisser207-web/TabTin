@@ -15,7 +15,7 @@ import React, {
   useMemo,
 } from 'react';
 import { useTranslation } from 'react-i18next';
-import { toast } from '@tabtin/smartsheet-ui';
+import { toast } from '@muse/smartsheet-ui';
 import { useFolderWatch } from '@hooks/useFolderWatch';
 import { useChatStore } from '@stores/chat/useChatStore';
 import { useSpaceContextTabsStore } from '@stores/useSpaceContextTabsStore';
@@ -112,7 +112,7 @@ async function findMissingPaths(paths: string[]): Promise<string[]> {
     const results = await Promise.all(
       batch.map(async (path) => {
         try {
-          const result = await window.tabtin.fileSystem.pathExists(path);
+          const result = await window.muse.fileSystem.pathExists(path);
           return result?.success === true && !result.exists ? path : null;
         } catch {
           return null;
@@ -231,7 +231,7 @@ export const TabCodePaneHost: React.FC<TabCodePaneHostProps> = ({
     setPathStatus('unknown');
     const check = async () => {
       try {
-        const fs = window.tabtin?.fileSystem;
+        const fs = window.muse?.fileSystem;
         if (!fs?.pathExists) {
           // 兜底：preload 没暴露 pathExists（理论上不可能，开发时 stale
           // bundle 可能出现）—— 当作存在，让原有逻辑走，不阻塞用户。
@@ -495,7 +495,7 @@ export const TabCodePaneHost: React.FC<TabCodePaneHostProps> = ({
       const results = await Promise.all(
         candidates.map(async ({ path, kind }) => {
           try {
-            const result = await window.tabtin.fileSystem.pathExists(path);
+            const result = await window.muse.fileSystem.pathExists(path);
             if (result?.success !== true) return null;
             const isExpectedType =
               kind === 'directory'
@@ -546,7 +546,7 @@ export const TabCodePaneHost: React.FC<TabCodePaneHostProps> = ({
         ?.requestId === pending.requestId;
     const applyPendingReveal = async () => {
       try {
-        const result = await window.tabtin.fileSystem.pathExists(
+        const result = await window.muse.fileSystem.pathExists(
           pending.filePath,
         );
         if (cancelled || !isCurrentPendingReveal()) return;
@@ -683,7 +683,7 @@ export const TabCodePaneHost: React.FC<TabCodePaneHostProps> = ({
     let cancelled = false;
     void (async () => {
       try {
-        const result = await window.tabtin?.git?.listWorktrees?.(rootPath);
+        const result = await window.muse?.git?.listWorktrees?.(rootPath);
         if (cancelled || !result?.success) return;
         const mainPath = result.worktrees?.[0]?.path;
         setIsLinkedWorktree(
@@ -760,7 +760,7 @@ export const TabCodePaneHost: React.FC<TabCodePaneHostProps> = ({
     if (!rootPath) return;
     void runStatusBarGitAction(
       'fetch',
-      () => window.tabtin.git.fetch(rootPath),
+      () => window.muse.git.fetch(rootPath),
       t('gitFlow.fetchSuccess'),
     );
   }, [rootPath, runStatusBarGitAction, t]);
@@ -770,7 +770,7 @@ export const TabCodePaneHost: React.FC<TabCodePaneHostProps> = ({
     const remote = resolvePushRemote(branchMeta?.upstream);
     void runStatusBarGitAction(
       'pull',
-      () => window.tabtin.git.pull(rootPath, { remote }),
+      () => window.muse.git.pull(rootPath, { remote }),
       t('gitFlow.pullSuccess'),
     );
   }, [branchMeta?.upstream, rootPath, runStatusBarGitAction, t]);
@@ -782,7 +782,7 @@ export const TabCodePaneHost: React.FC<TabCodePaneHostProps> = ({
     void runStatusBarGitAction(
       'push',
       () =>
-        window.tabtin.git.push(rootPath, {
+        window.muse.git.push(rootPath, {
           remote,
           branch: branch || undefined,
           setUpstream: !upstream,
@@ -1273,7 +1273,7 @@ export const TabCodePaneHost: React.FC<TabCodePaneHostProps> = ({
     async (filePath: string) => {
       if (!sessionKey || !rootPath || !filePath) return;
       try {
-        const result = await window.tabtin.fileSystem.pathExists(filePath);
+        const result = await window.muse.fileSystem.pathExists(filePath);
         if (result?.success !== true) return;
         if (!result.exists || result.isDirectory === true) {
           pruneWorkspaceSessionPaths(sessionKey, [filePath]);

@@ -1,5 +1,5 @@
-import type { SaveState } from '@tabtin/tabdoc-ui/use-doc-editor'
-import { countDocumentWords } from '@tabtin/tabdoc-ui/editor'
+import type { SaveState } from '@muse/tabdoc-ui/use-doc-editor'
+import { countDocumentWords } from '@muse/tabdoc-ui/editor'
 import {
   countActivePaneRuntimeHosts,
   countVisibleRuntimeHosts,
@@ -10,7 +10,7 @@ import {
   selectMostRecentRuntimeMetricsHost,
   type HostBoundRuntimeReporterHostState,
   type RuntimeReporterOwnerStrategy,
-} from '@tabtin/runtime-reporter'
+} from '@muse/runtime-reporter'
 
 export type TabDocRuntimeOwnerStrategy = RuntimeReporterOwnerStrategy
 

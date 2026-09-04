@@ -1,9 +1,9 @@
 import React from 'react';
-import { ConfirmDialog, toast } from '@tabtin/smartsheet-ui';
+import { ConfirmDialog, toast } from '@muse/smartsheet-ui';
 import {
   TableApiService,
   type TableSearchIndexStatus,
-} from '@tabtin/table-core';
+} from '@muse/table-core';
 import { tableStore, useTableStore } from '@stores/useTableStore';
 import { useRecordStore } from '@stores/useRecordStore';
 import {
@@ -13,15 +13,15 @@ import {
   type TableFontSize,
 } from '@stores/useTableAppearanceStore';
 import { useViewStore } from '@stores/useViewStore';
-import { useOrganizationStore } from '@tabtin/app-shell';
+import { useOrganizationStore } from '@muse/app-shell';
 import { useIsContextTabActive } from '@/hooks/useIsContextTabActive';
 import { useTranslation } from 'react-i18next';
-import { ShareDialog } from '@tabtin/smartsheet-ui';
+import { ShareDialog } from '@muse/smartsheet-ui';
 import { useDataGridContext } from './DataGridContext';
 import { useTableReadonly } from './TableReadonlyContext';
 import { useTableCollab } from './TableCollabContext';
 import { useGridToolbarController } from './controller/useGridToolbarController';
-import { useGridToolbarUiState } from '@tabtin/table-ui';
+import { useGridToolbarUiState } from '@muse/table-ui';
 import { useGridToolbarInteractions } from './controller/useGridToolbarInteractions';
 import { useServerSearch } from './controller/useServerSearch';
 import { useFieldSettingStore } from '@stores/useFieldSettingStore';
@@ -30,7 +30,7 @@ import { GridToolbarDialogs } from './toolbar/GridToolbarDialogs';
 import { SendToIMDialog } from '@/components/tabchat/SendToIMDialog';
 import type { SendToIMResource } from '@/components/tabchat/sendToIM/types';
 import { requestResourceEditAccess } from '@/services/tabchatApi';
-import { COMMON_TABLE_EMOJIS } from '@tabtin/table-ui';
+import { COMMON_TABLE_EMOJIS } from '@muse/table-ui';
 import { useUndoRedoContext } from '@components/view/UndoRedoContext';
 import { buildPublicShareUrlPrefix } from '@/config/api';
 import { useTableOverlayDrawerContainer } from './utils/TableOverlayDrawerHost';

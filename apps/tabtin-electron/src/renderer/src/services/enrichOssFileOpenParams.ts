@@ -6,7 +6,7 @@
  * 这里在打开前查 OSS FileRecord，命中则改写成 artifact_kind=oss_file + access_url。
  */
 
-import type { OpenResourceTabFn } from '@tabtin/resource-router'
+import type { OpenResourceTabFn } from '@muse/resource-router'
 import { localFilePreviewRegistry } from '@components/shared/file-preview/localFilePreviewRegistry'
 import {
   isFileRecordId,

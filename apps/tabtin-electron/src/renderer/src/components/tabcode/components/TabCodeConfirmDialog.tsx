@@ -8,7 +8,7 @@ import {
   DialogHeader,
   DialogTitle,
   Button,
-} from '@tabtin/smartsheet-ui'
+} from '@muse/smartsheet-ui'
 
 interface TabCodeConfirmDialogProps {
   open: boolean

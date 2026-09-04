@@ -1,7 +1,7 @@
 import React from 'react'
 import { afterEach, beforeEach, describe, it, expect, vi } from 'vitest'
 import { render, screen, fireEvent } from '@testing-library/react'
-import type { RichContentBlock } from '@tabtin/chat-client'
+import type { RichContentBlock } from '@muse/chat-client'
 import { RichResourceRef, _clearRichResourceAutoOpenKeys } from '../RichResourceRef'
 
 vi.mock('react-i18next', () => ({

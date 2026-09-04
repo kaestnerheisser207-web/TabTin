@@ -3,7 +3,7 @@
  *
  * 两条上传路径（按优先级）：
  * 1. 宿主注入的 uploadToOSS 函数（Electron 环境）
- * 2. @tabtin/oss-client 直接上传（Daemon 环境）
+ * 2. @muse/oss-client 直接上传（Daemon 环境）
  *
  * 消费方：show_widget 烤图链路等需要把本地产物上传 OSS 的工具。
  *
@@ -177,7 +177,7 @@ export async function uploadFileToOSS(
       };
     }
 
-    const { createOSSClient } = await import('@tabtin/oss-client');
+    const { createOSSClient } = await import('@muse/oss-client');
     const client = createOSSClient({
       apiBaseUrl: apiBase,
       getToken: async () => {

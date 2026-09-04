@@ -39,7 +39,7 @@ from apps.tabtinspace.services.project_task_results import (
 User = get_user_model()
 
 
-@override_settings(TABTIN_ENABLE_PROJECTS=True)
+@override_settings(MUSE_ENABLE_PROJECTS=True)
 class ProjectTaskServiceTests(TestCase):
     def setUp(self):
         self.owner = User.objects.create_user(
@@ -592,7 +592,7 @@ class ProjectTaskServiceTests(TestCase):
             'type': 'text',
             'text': (
                 '已创建 [Markdown linked doc]'
-                '(tabtin://resource/document/02eda024-5f11-4d4a-85c2-9a1b3c5d7e90?hint=tabdoc)'
+                '(muse://resource/document/02eda024-5f11-4d4a-85c2-9a1b3c5d7e90?hint=tabdoc)'
             ),
         }])
 

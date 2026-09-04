@@ -1,6 +1,6 @@
 import React from 'react'
 import { act, fireEvent, render, screen, within } from '@testing-library/react'
-import type { ChatSession } from '@tabtin/chat-client'
+import type { ChatSession } from '@muse/chat-client'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { ChatSidebarTrackersSection } from '../ChatSidebarTrackersSection'
 import { SIDEBAR_MENU_TEXT, SIDEBAR_ROW_ACTIVE } from '@components/layout/sidebarUi'

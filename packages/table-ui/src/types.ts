@@ -13,9 +13,9 @@ export type {
   ViewUpdateRequest,
   TableRecord,
   ViewRecordsResponse,
-} from '@tabtin/table-core'
+} from '@muse/table-core'
 
-import type { Field } from '@tabtin/table-core'
+import type { Field } from '@muse/table-core'
 
 /** @deprecated 使用 Field 代替 */
 export type TableField = Field
@@ -34,7 +34,7 @@ export type RecordFormData = Record<string, unknown>
 
 /**
  * Minimal field interface for toolbar components.
- * Compatible with both `TableField` and `@tabtin/table-core` Field.
+ * Compatible with both `TableField` and `@muse/table-core` Field.
  */
 export interface ToolbarField {
   id: string

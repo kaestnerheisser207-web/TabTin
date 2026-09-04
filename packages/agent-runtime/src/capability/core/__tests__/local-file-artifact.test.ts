@@ -20,9 +20,9 @@ afterEach(() => {
   fs.rmSync(tmpDir, { recursive: true, force: true });
 });
 
-// 宿主注入：复现产品当前 tabtin:// artifact URL 模板。
+// 宿主注入：复现产品当前 muse:// artifact URL 模板。
 const buildArtifactUrl = (relativePath: string): string =>
-  `tabtin://resource/file/${encodeURIComponent(relativePath)}?hint=tabfiles`;
+  `muse://resource/file/${encodeURIComponent(relativePath)}?hint=tabfiles`;
 
 function writeWorkspaceFile(relativePath: string, contents = 'data'): void {
   const abs = path.join(tmpDir, relativePath);
@@ -54,7 +54,7 @@ describe('buildLocalFileArtifactBlock', () => {
       file_type: 'xlsx',
       relative_path: 'artifacts/report.xlsx',
       filename: 'report.xlsx',
-      url: 'tabtin://resource/file/artifacts%2Freport.xlsx?hint=tabfiles',
+      url: 'muse://resource/file/artifacts%2Freport.xlsx?hint=tabfiles',
       mime_type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
       file_size: 12345,
       auto_open: true,

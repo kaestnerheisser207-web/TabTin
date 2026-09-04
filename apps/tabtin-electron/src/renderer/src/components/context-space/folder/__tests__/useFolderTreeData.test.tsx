@@ -5,7 +5,7 @@ import { useFolderTreeData } from '../useFolderTreeData'
 const toastMock = vi.hoisted(() => vi.fn())
 const toastErrorMock = vi.hoisted(() => vi.fn())
 
-vi.mock('@tabtin/smartsheet-ui', () => ({
+vi.mock('@muse/smartsheet-ui', () => ({
   toast: Object.assign(toastMock, {
     error: toastErrorMock,
   }),
@@ -22,7 +22,7 @@ interface FsMockOpts {
 }
 
 /**
- * 装载 window.tabtin.fileSystem mock，并把 onWatchEvent 注册的 callback
+ * 装载 window.muse.fileSystem mock，并把 onWatchEvent 注册的 callback
  * 暴露成 `emit` 用于测试主动推事件。参考 useFolderWatch.test.ts 的同名模式。
  */
 const setupFs = (opts: FsMockOpts = {}) => {

@@ -1,6 +1,6 @@
 import { useCallback, useState } from 'react'
 import { toast } from '@components/ui'
-import type { ChatSession } from '@tabtin/chat-client'
+import type { ChatSession } from '@muse/chat-client'
 import { listSessionSharesBySession } from '@/services/tabchatApi'
 import { useChatStore } from '@/stores/chat/useChatStore'
 import {

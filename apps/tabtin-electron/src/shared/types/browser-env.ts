@@ -3,7 +3,7 @@
  *
  * 主进程 / preload / 渲染进程三处共享：
  *   - 主进程的 ``BrowserEnvironmentService`` 从这里 import 实体类型
- *   - preload 在 ``window.tabtin.browserEnv.xxx`` 的 IPC 封装里导入
+ *   - preload 在 ``window.muse.browserEnv.xxx`` 的 IPC 封装里导入
  *   - 渲染进程消费时直接拿这里的类型，避免重复定义
  *
  * 本地化退役 Wave 1/2 之后：BrowserEnvironment 完全本地化（``BrowserEnvLocalStore``

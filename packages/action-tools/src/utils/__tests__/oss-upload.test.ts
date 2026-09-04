@@ -28,11 +28,11 @@ import * as fs from 'node:fs'
 import * as path from 'node:path'
 import * as os from 'node:os'
 
-// 成功路径会动态 import('@tabtin/oss-client') 并调 client.upload()。
+// 成功路径会动态 import('@muse/oss-client') 并调 client.upload()。
 // 用 vi.hoisted + vi.mock 拦截，断言 uploadFileToOSS 把 oss-client 返回的
 // fileId/fileKey/cdnUrl 透传出来（供 doc import file 等回引文件的下游消费）。
 const { mockUpload } = vi.hoisted(() => ({ mockUpload: vi.fn() }))
-vi.mock('@tabtin/oss-client', () => ({
+vi.mock('@muse/oss-client', () => ({
   createOSSClient: () => ({ upload: mockUpload }),
 }))
 

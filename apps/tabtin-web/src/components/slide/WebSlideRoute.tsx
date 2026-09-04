@@ -7,7 +7,7 @@ import {
   convertBackendToPresentation,
   SlideRenderer,
   type SlidePresentation,
-} from '@tabtin/tabslide/viewer'
+} from '@muse/tabslide/viewer'
 import { getApiClient } from '@/services/api-client'
 import { useSlideLaunchContext } from '@/features/slide/useSlideLaunchContext'
 import { useWebPresentation } from '@/components/layout/WebPresentationContext'

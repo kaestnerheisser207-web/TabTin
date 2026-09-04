@@ -2,8 +2,8 @@
  * W8-F2: Creative Engines headless integration tests
  *
  * Verifies that daemon.ts properly initializes:
- *   - TabDoc (@tabtin/doc-editor) — local markdown↔pmJson conversion
- *   - Video export (@tabtin/media-capabilities) — FFmpeg availability check
+ *   - TabDoc (@muse/doc-editor) — local markdown↔pmJson conversion
+ *   - Video export (@muse/media-capabilities) — FFmpeg availability check
  *
  * Also verifies that action-tools headless adapter registers the
  * expected tools for each engine.
@@ -17,11 +17,11 @@ const daemonSrc = readFileSync(join(ROOT, 'src', 'bootstrap', 'daemon.ts'), 'utf
 const detectorSrc = readFileSync(join(ROOT, 'src', 'platform', 'system', 'capability', 'detector.ts'), 'utf-8');
 const pkgJson = JSON.parse(readFileSync(join(ROOT, 'package.json'), 'utf-8'));
 
-// ── TabDoc (@tabtin/doc-editor) ─────────────────────────────────────────
+// ── TabDoc (@muse/doc-editor) ─────────────────────────────────────────
 
 describe('W8-F2: TabDoc headless integration', () => {
-  it('package.json declares @tabtin/doc-editor dependency', () => {
-    expect(pkgJson.dependencies['@tabtin/doc-editor']).toBeDefined();
+  it('package.json declares @muse/doc-editor dependency', () => {
+    expect(pkgJson.dependencies['@muse/doc-editor']).toBeDefined();
   });
 
   it('daemon.ts has initDocEditor method', () => {
@@ -32,7 +32,7 @@ describe('W8-F2: TabDoc headless integration', () => {
     expect(daemonSrc).toContain('this.initDocEditor().catch(');
   });
 
-  it('initDocEditor dynamically imports @tabtin/doc-editor', () => {
+  it('initDocEditor dynamically imports @muse/doc-editor', () => {
     expect(daemonSrc).toMatch(/await\s+import\(['"]@tabtin\/doc-editor['"]\)/);
   });
 
@@ -61,15 +61,15 @@ describe('W8-F2: TabDoc headless integration', () => {
   });
 });
 
-// ── Video export (@tabtin/media-capabilities) ───────────────────────────
+// ── Video export (@muse/media-capabilities) ───────────────────────────
 
 describe('W8-F2: video export headless integration', () => {
-  it('package.json declares @tabtin/media-capabilities dependency', () => {
-    expect(pkgJson.dependencies['@tabtin/media-capabilities']).toBeDefined();
+  it('package.json declares @muse/media-capabilities dependency', () => {
+    expect(pkgJson.dependencies['@muse/media-capabilities']).toBeDefined();
   });
 
-  it('package.json does not declare retired @tabtin/tabvideo-engine', () => {
-    expect(pkgJson.dependencies['@tabtin/tabvideo-engine']).toBeUndefined();
+  it('package.json does not declare retired @muse/tabvideo-engine', () => {
+    expect(pkgJson.dependencies['@muse/tabvideo-engine']).toBeUndefined();
   });
 
   it('daemon.ts has initVideoEngine method', () => {
@@ -113,7 +113,7 @@ describe('W8-F2: video export headless integration', () => {
 
 describe('W8-F2: Headless adapter registers creative engine tools', () => {
   it('headless adapter no longer includes removed tabvideo_build_and_export', async () => {
-    const { createHeadlessAdapter } = await import('@tabtin/action-tools/headless');
+    const { createHeadlessAdapter } = await import('@muse/action-tools/headless');
     const adapter = createHeadlessAdapter();
     const tools = adapter.getRegisteredTools();
 
@@ -121,7 +121,7 @@ describe('W8-F2: Headless adapter registers creative engine tools', () => {
   });
 
   it('headless adapter no longer registers retired tabslide_* AgentTools (W6 2026-05-04)', async () => {
-    const { createHeadlessAdapter } = await import('@tabtin/action-tools/headless');
+    const { createHeadlessAdapter } = await import('@muse/action-tools/headless');
     const adapter = createHeadlessAdapter();
     const tools = adapter.getRegisteredTools();
 
@@ -161,7 +161,7 @@ describe('W8-F2: buildHostRuntimeSnapshot includes creative engine states', () =
 describe('W8-F2: CapabilityDetector video capability detection', () => {
   it('uses media-capabilities FFmpeg lookup before reporting video capabilities', () => {
     expect(detectorSrc).toContain('findFFmpegAsync');
-    expect(detectorSrc).toContain("import('@tabtin/media-capabilities')");
+    expect(detectorSrc).toContain("import('@muse/media-capabilities')");
   });
 
   it('does not gate video capabilities directly on commandExists(ffmpeg)', () => {

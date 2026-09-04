@@ -6,7 +6,7 @@
  * - 本轮助手已有实质输出（可见正文 / 工具）→ 当作别答了：保留时间线，不回填
  */
 
-import type { ChatMessage } from '@tabtin/chat-client'
+import type { ChatMessage } from '@muse/chat-client'
 import { streamingContent } from '../../execution/streamingContent'
 import type { ToolEvent } from '../../shared/types'
 import type { SubmittedMessageSnapshot } from '../../../useChatRuntimeStore'

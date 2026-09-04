@@ -2,7 +2,7 @@
 //
 // ToolErrorCode / ToolError / StandardToolOutput 死镜像已删除（2026-07）。
 // 现阶段 SSoT：`packages/browser-core/src/types/errors.ts`
-// （action-tools 经 `@tabtin/browser-core` re-export 消费）。
+// （action-tools 经 `@muse/browser-core` re-export 消费）。
 // P2 将改为生成式单源；本模块不再承载错误码镜像。
 
 export interface AgentTool<TInput = unknown, TOutput = unknown> {

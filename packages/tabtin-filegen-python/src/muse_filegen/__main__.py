@@ -1,4 +1,4 @@
-"""tabtin-filegen CLI — generate office/pdf files from JSON specs.
+"""muse-filegen CLI — generate office/pdf files from JSON specs.
 
 Commands:
   create       generate a file from a spec
@@ -19,9 +19,9 @@ import tempfile
 from typing import Any, Dict
 
 # Importing the generators package registers every supported file type.
-import tabtin_filegen.generators  # noqa: F401
-from tabtin_filegen.errors import FileGenError, SpecError
-from tabtin_filegen.registry import (
+import muse_filegen.generators  # noqa: F401
+from muse_filegen.errors import FileGenError, SpecError
+from muse_filegen.registry import (
     get_by_extension,
     get_generator,
     get_reader,
@@ -46,7 +46,7 @@ def main(argv: list[str] | None = None) -> int:
 
 
 def _build_parser() -> argparse.ArgumentParser:
-    parser = argparse.ArgumentParser(prog="tabtin-filegen", description=__doc__)
+    parser = argparse.ArgumentParser(prog="muse-filegen", description=__doc__)
     sub = parser.add_subparsers(dest="command")
 
     create = sub.add_parser("create", help="generate a file from a JSON spec")
@@ -85,7 +85,7 @@ def _cmd_create(args: argparse.Namespace) -> int:
     os.makedirs(parent, exist_ok=True)
 
     # Atomic write: generate to a temp file in the same directory, then replace.
-    fd, tmp_path = tempfile.mkstemp(prefix=".tabtin-filegen-", dir=parent)
+    fd, tmp_path = tempfile.mkstemp(prefix=".muse-filegen-", dir=parent)
     os.close(fd)
     try:
         generator.generate(spec, tmp_path)

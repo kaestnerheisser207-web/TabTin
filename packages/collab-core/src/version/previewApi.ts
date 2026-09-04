@@ -1,4 +1,4 @@
-import { joinApiPath } from '@tabtin/config'
+import { joinApiPath } from '@muse/config'
 
 import type { ConversationSegmentResponse, SubConversationRef } from './types'
 
@@ -12,7 +12,7 @@ export interface VersionPreviewData {
   content_type?: string
   // slide —— pages 为后端 rebuild_data 输出的完整页面（含 elements），
   // 由 tabslide 的 convertBackendToPresentation 消费渲染真实缩略图。
-  // 这里刻意用宽松结构，避免 collab-core 反向依赖 @tabtin/tabslide。
+  // 这里刻意用宽松结构，避免 collab-core 反向依赖 @muse/tabslide。
   page_count?: number
   pages?: Array<Record<string, unknown>>
   theme?: Record<string, unknown> | null

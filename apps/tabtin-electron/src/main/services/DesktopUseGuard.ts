@@ -221,7 +221,7 @@ async function requestDesktopApproval(sessionId: string): Promise<boolean> {
 // 审批持久化 — 跨 Electron 重启记住"允许桌面操控"
 // ---------------------------------------------------------------------------
 
-import { getHomeTabtinPath } from '@tabtin/shared/storage-paths'
+import { getHomeTabtinPath } from '@muse/shared/storage-paths'
 
 const APPROVAL_FILE = getHomeTabtinPath('desktop-approval.json')
 const DEFAULT_APPROVAL_TTL_MS = 86_400_000 // 24 hours

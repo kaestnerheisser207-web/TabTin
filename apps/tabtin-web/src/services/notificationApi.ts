@@ -8,7 +8,7 @@
  *  - 无 Dock badge(浏览器没有 setBadgeCount API,Bell 红点已足够)
  *  - 类型 NotificationNavigateTarget 内联,避免引入 Electron main 进程类型
  */
-import { API_ENDPOINTS } from '@tabtin/config'
+import { API_ENDPOINTS } from '@muse/config'
 import { getApiClient } from './api-client'
 
 /**

@@ -25,7 +25,7 @@ import {
 import type {
   DesktopExecutor,
   DesktopSessionContext,
-} from '@tabtin/desktop-contracts'
+} from '@muse/desktop-contracts'
 
 // ---------------------------------------------------------------------------
 // Mock executor —— 不依赖 nut-js / electron / sharp 的极简实现

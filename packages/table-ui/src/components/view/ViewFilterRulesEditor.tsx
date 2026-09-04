@@ -37,8 +37,8 @@ import {
   FALLBACK_TAG_TEXT_COLORS,
   normalizeHexColor,
   isLightHexColor,
-} from '@tabtin/smartsheet-ui'
-import type { DateFilterPickerValue, UserOption } from '@tabtin/smartsheet-ui'
+} from '@muse/smartsheet-ui'
+import type { DateFilterPickerValue, UserOption } from '@muse/smartsheet-ui'
 import { Check, ChevronDown, GripVertical, Plus, Trash2 } from 'lucide-react'
 import { LEGACY_DATE_FILTER_OPERATORS } from '../../utils/filterHelpers'
 
@@ -171,7 +171,7 @@ const DEFAULT_TEXTS: Required<ViewFilterRulesEditorTexts> = {
 const EMPTY_CHOICES: ChoiceOption[] = []
 
 // CHOICE_COLOR_HEX_MAP, stableHash, normalizeHexColor, isLightHexColor,
-// resolveChoiceTagColors, FALLBACK_TAG_* → imported from @tabtin/smartsheet-ui
+// resolveChoiceTagColors, FALLBACK_TAG_* → imported from @muse/smartsheet-ui
 
 const resolveTagColors = resolveChoiceTagColors
 

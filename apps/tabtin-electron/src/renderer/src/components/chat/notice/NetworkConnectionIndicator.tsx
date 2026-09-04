@@ -1,6 +1,6 @@
 import React from 'react'
 import { useTranslation } from 'react-i18next'
-import { cn, Popover, PopoverContent, PopoverTrigger } from '@tabtin/smartsheet-ui'
+import { cn, Popover, PopoverContent, PopoverTrigger } from '@muse/smartsheet-ui'
 import { Wifi, WifiOff } from 'lucide-react'
 import {
   TOPBAR_CHROME_ACTION,

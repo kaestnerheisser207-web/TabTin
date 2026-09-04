@@ -1,5 +1,5 @@
 import { app, BrowserWindow } from 'electron';
-import { okResponse } from '@tabtin/agent-wire';
+import { okResponse } from '@muse/agent-wire';
 
 import {
   MEETING_CAPTURE_DEVICES_CHANGED_CHANNEL,

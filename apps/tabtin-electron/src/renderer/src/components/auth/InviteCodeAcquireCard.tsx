@@ -5,7 +5,7 @@ import {
   DialogDescription,
   DialogHeader,
   DialogTitle,
-} from '@tabtin/smartsheet-ui'
+} from '@muse/smartsheet-ui'
 import { ChevronRight } from 'lucide-react'
 import { cn } from '@utils/cn'
 import inviteCodeQrUrl from './assets/invite-code-qr.png?url'

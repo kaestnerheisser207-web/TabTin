@@ -31,7 +31,7 @@ def _request(user, *, get: dict[str, str] | None = None):
     )
 
 
-@override_settings(TABTIN_ENABLE_PROJECTS=True)
+@override_settings(MUSE_ENABLE_PROJECTS=True)
 class AgentProjectTasksApiTests(TestCase):
     def setUp(self):
         self.owner = User.objects.create_user(

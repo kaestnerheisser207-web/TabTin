@@ -49,12 +49,12 @@ vi.mock('../runtime.js', () => ({
   }),
 }))
 
-vi.mock('@tabtin/shared', () => ({
+vi.mock('@muse/shared', () => ({
   withPersistSafety: (options: unknown) => options,
   createErrorExtractor: () => (_err: unknown, fallbackKey: string) => fallbackKey,
 }))
 
-vi.mock('@tabtin/config', () => ({
+vi.mock('@muse/config', () => ({
   API_ENDPOINTS: {
     ORGANIZATION: {
       LIST: '/organizations',

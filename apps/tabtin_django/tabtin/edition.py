@@ -24,13 +24,13 @@ class EditionConfiguration:
 def resolve_edition_configuration(
     environ: Mapping[str, str],
 ) -> EditionConfiguration:
-    raw_edition = environ.get("TABTIN_EDITION", "").strip().lower()
+    raw_edition = environ.get("MUSE_EDITION", "").strip().lower()
     normalized = raw_edition or TabTinEdition.SAAS.value
     try:
         edition = TabTinEdition(normalized)
     except ValueError as exc:
         supported = ", ".join(item.value for item in TabTinEdition)
         raise ValueError(
-            f"Unsupported TABTIN_EDITION={raw_edition!r}; expected one of: {supported}"
+            f"Unsupported MUSE_EDITION={raw_edition!r}; expected one of: {supported}"
         ) from exc
     return EditionConfiguration(edition=edition)

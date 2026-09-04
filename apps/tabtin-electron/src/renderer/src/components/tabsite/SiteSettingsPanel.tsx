@@ -2,7 +2,7 @@ import React, { useState, useCallback } from 'react'
 import {
   Button, Input, Label, Switch, Separator, toast,
   Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter,
-} from '@tabtin/smartsheet-ui'
+} from '@muse/smartsheet-ui'
 import { Archive, ArchiveRestore, Copy, Check, Pencil, Loader2, Lock, LockOpen } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 

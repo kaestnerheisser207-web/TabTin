@@ -11,11 +11,11 @@ import {
   ChevronDown,
   ArrowRight,
 } from 'lucide-react'
-import { Button } from '@tabtin/smartsheet-ui'
+import { Button } from '@muse/smartsheet-ui'
 import { useTranslation } from 'react-i18next'
 import { cn } from '@utils/cn'
 import { SETTINGS_CONTROL_SM, SETTINGS_SECTION_TITLE } from '@components/settings/settingsUi'
-import type { Space } from '@tabtin/app-shell'
+import type { Space } from '@muse/app-shell'
 import {
   listConnections,
   listExtensions,
@@ -74,7 +74,7 @@ export const ExecutionReadinessSummary: React.FC<ExecutionReadinessSummaryProps>
 
     try {
       const results = await Promise.allSettled([
-        window.tabtin.capabilityDiscovery.getSummary(space.id),
+        window.muse.capabilityDiscovery.getSummary(space.id),
         SubAgentTemplateApi.list(space.id),
         listExtensions(space.organization_id),
         listConnections(space.organization_id),

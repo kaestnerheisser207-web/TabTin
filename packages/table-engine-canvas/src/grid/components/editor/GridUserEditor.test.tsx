@@ -1,6 +1,6 @@
 import { act } from 'react';
 import { createRoot, type Root } from 'react-dom/client';
-import type { UserOption } from '@tabtin/smartsheet-ui';
+import type { UserOption } from '@muse/smartsheet-ui';
 import type { IGridTheme } from '../../configs';
 import { CellType } from '../../renderers/cell-renderer/interface';
 import { GridUserEditor } from './GridUserEditor';

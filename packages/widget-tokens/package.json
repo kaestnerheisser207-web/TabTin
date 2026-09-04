@@ -1,5 +1,5 @@
 {
-  "name": "@tabtin/widget-tokens",
+  "name": "@muse/widget-tokens",
   "version": "0.1.0",
   "description": "Muse widget design tokens + sandbox iframe wrapper template — single source of truth shared between Electron renderer (chat preview), Electron main (offscreen render), and Daemon (offscreen render).",
   "type": "module",

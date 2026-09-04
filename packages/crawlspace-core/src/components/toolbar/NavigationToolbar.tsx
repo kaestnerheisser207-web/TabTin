@@ -1,6 +1,6 @@
 import React from 'react'
 import { ArrowLeft, ArrowRight, RotateCw, X } from 'lucide-react'
-import { Button } from '@tabtin/smartsheet-ui'
+import { Button } from '@muse/smartsheet-ui'
 import { t } from '../../i18n'
 
 export interface NavigationToolbarProps {

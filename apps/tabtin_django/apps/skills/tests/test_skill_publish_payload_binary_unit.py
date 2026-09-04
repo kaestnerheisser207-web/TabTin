@@ -156,7 +156,7 @@ def _patch_create_user_skill(
 
 
 def test_import_from_files_writes_binary_bytes_exactly(tmp_path, monkeypatch):
-    monkeypatch.setenv("TABTIN_SANDBOX_ROOT", str(tmp_path))
+    monkeypatch.setenv("MUSE_SANDBOX_ROOT", str(tmp_path))
     owner_user_id = "22222222-2222-2222-2222-222222222222"
     _patch_create_user_skill(monkeypatch, owner_user_id=owner_user_id)
 
@@ -181,7 +181,7 @@ def test_import_from_files_writes_binary_bytes_exactly(tmp_path, monkeypatch):
 
 
 def test_import_from_files_budget_raises(tmp_path, monkeypatch):
-    monkeypatch.setenv("TABTIN_SANDBOX_ROOT", str(tmp_path))
+    monkeypatch.setenv("MUSE_SANDBOX_ROOT", str(tmp_path))
     monkeypatch.setattr(SkillService, "_MAX_EXTRACTED_TOTAL", 8)
     _patch_create_user_skill(monkeypatch)
 

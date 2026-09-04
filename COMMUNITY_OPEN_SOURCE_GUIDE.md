@@ -14,7 +14,7 @@ Muse Community 面向希望在自己电脑上运行 Muse Server、连接桌面�
 6. 打开 **Settings → Model Configuration → BYOK**，添加 OpenAI-compatible Provider 与模型。
 7. 返回 Agent 对话并 **Start Chat**。
 
-首次启动会在根目录缺少 `.env` 时自动从 `.env.example` 创建它。服务端 Edition 统一由该文件中的 `TABTIN_EDITION` 控制，启动脚本和容器不再另外写死；默认模板为 `TABTIN_EDITION=community`。手机号注册/登录固定提示码由 `AUTH_FIXED_VERIFICATION_CODE` 单独控制，留空即关闭，不再由 Edition 隐式启用。
+首次启动会在根目录缺少 `.env` 时自动从 `.env.example` 创建它。服务端 Edition 统一由该文件中的 `MUSE_EDITION` 控制，启动脚本和容器不再另外写死；默认模板为 `MUSE_EDITION=community`。手机号注册/登录固定提示码由 `AUTH_FIXED_VERIFICATION_CODE` 单独控制，留空即关闭，不再由 Edition 隐式启用。
 
 ## 日常使用
 

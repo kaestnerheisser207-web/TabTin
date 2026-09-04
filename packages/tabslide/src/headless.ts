@@ -1,5 +1,5 @@
 /**
- * @tabtin/tabslide/headless — Node.js-safe entry point
+ * @muse/tabslide/headless — Node.js-safe entry point
  *
  * Zero React/DOM/html2canvas/DOMPurify dependencies.
  * Designed for Daemon, backend workers, and CLI tooling.

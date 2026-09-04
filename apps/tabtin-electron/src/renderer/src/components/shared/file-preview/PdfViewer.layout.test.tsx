@@ -127,7 +127,7 @@ describe('PdfViewer narrow viewport layout', () => {
   it('keeps an oversized page aligned from the scrollable left edge ', async () => {
     render(
       <div style={{ width: 240, height: 400 }}>
-        <PdfViewer fileUrl="tabtin-file://local/C:/fixture.pdf" />
+        <PdfViewer fileUrl="muse-file://local/C:/fixture.pdf" />
       </div>,
     )
 
@@ -143,7 +143,7 @@ describe('PdfViewer narrow viewport layout', () => {
   })
 
   it('zooms the PDF when the user holds Ctrl and scrolls ', async () => {
-    render(<PdfViewer fileUrl="tabtin-file://local/C:/fixture.pdf" />)
+    render(<PdfViewer fileUrl="muse-file://local/C:/fixture.pdf" />)
 
     const page = await screen.findByTestId('pdf-page')
     await waitFor(() => expect(screen.getByText('100%')).toBeTruthy())
@@ -158,7 +158,7 @@ describe('PdfViewer narrow viewport layout', () => {
   })
 
   it('leaves ordinary wheel events available for document scrolling', async () => {
-    render(<PdfViewer fileUrl="tabtin-file://local/C:/fixture.pdf" />)
+    render(<PdfViewer fileUrl="muse-file://local/C:/fixture.pdf" />)
 
     const page = await screen.findByTestId('pdf-page')
     await waitFor(() => expect(screen.getByText('100%')).toBeTruthy())
@@ -176,10 +176,10 @@ describe('PdfViewer narrow viewport layout', () => {
   })
 
   it('ignores stale page metadata after switching PDF files', async () => {
-    const { rerender } = render(<PdfViewer fileUrl="tabtin-file://local/C:/slow.pdf" />)
+    const { rerender } = render(<PdfViewer fileUrl="muse-file://local/C:/slow.pdf" />)
     await waitFor(() => expect(pdfMockState.slowPageRequests).toHaveLength(1))
 
-    rerender(<PdfViewer fileUrl="tabtin-file://local/C:/next.pdf" />)
+    rerender(<PdfViewer fileUrl="muse-file://local/C:/next.pdf" />)
     await waitFor(() => expect(screen.getByText('1 / 1')).toBeTruthy())
 
     await act(async () => {
@@ -225,12 +225,12 @@ describe('PdfViewer narrow viewport layout', () => {
   })
 
   it('ignores the first request when switching from A to B and back to A', async () => {
-    const { rerender } = render(<PdfViewer fileUrl="tabtin-file://local/C:/slow.pdf" />)
+    const { rerender } = render(<PdfViewer fileUrl="muse-file://local/C:/slow.pdf" />)
     await waitFor(() => expect(pdfMockState.slowPageRequests).toHaveLength(1))
 
-    rerender(<PdfViewer fileUrl="tabtin-file://local/C:/next.pdf" />)
+    rerender(<PdfViewer fileUrl="muse-file://local/C:/next.pdf" />)
     await waitFor(() => expect(screen.getByText('1 / 1')).toBeTruthy())
-    rerender(<PdfViewer fileUrl="tabtin-file://local/C:/slow.pdf" />)
+    rerender(<PdfViewer fileUrl="muse-file://local/C:/slow.pdf" />)
     await waitFor(() => expect(pdfMockState.slowPageRequests).toHaveLength(2))
 
     await act(async () => {

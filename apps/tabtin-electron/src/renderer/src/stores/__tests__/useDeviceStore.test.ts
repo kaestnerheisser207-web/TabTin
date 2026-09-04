@@ -48,7 +48,7 @@ const {
   }
 })
 
-vi.mock('@tabtin/ws-gateway-client', () => ({
+vi.mock('@muse/ws-gateway-client', () => ({
   DomainEvents: {
     DEVICE_STATUS: 'device.status',
     DEVICE_UNBOUND: 'device.unbound',
@@ -148,7 +148,7 @@ vi.mock('../useOrganizationStore', () => ({
   },
 }))
 
-vi.mock('@tabtin/smartsheet-ui', () => ({
+vi.mock('@muse/smartsheet-ui', () => ({
   FALLBACK_TAG_BACKGROUND_COLOR: '#000000',
   FALLBACK_TAG_TEXT_COLOR: '#ffffff',
   resolveChoiceTagColors: vi.fn(() => ({
@@ -158,7 +158,7 @@ vi.mock('@tabtin/smartsheet-ui', () => ({
   toast: mockToast,
 }))
 
-vi.mock('@tabtin/smartsheet-ui/toast', () => ({
+vi.mock('@muse/smartsheet-ui/toast', () => ({
   toast: mockToast,
 }))
 
@@ -249,7 +249,7 @@ beforeEach(async () => {
   Object.defineProperty(window, 'tabtin', {
     configurable: true,
     value: {
-      ...(window.tabtin ?? {}),
+      ...(window.muse ?? {}),
       ensureDeviceRegistered: mockRegisterDevice,
     },
   })

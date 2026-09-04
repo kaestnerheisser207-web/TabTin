@@ -33,5 +33,5 @@ muse slide lint --project-id <project-id> --skip-visual --min-severity warning
 
 ## Resource Rules
 
-- Memo: `tabtin://resource/document/<id>?hint=tabdoc`.
-- Source table: `tabtin://resource/table/<id>?hint=tabdata`.
+- Memo: `muse://resource/document/<id>?hint=tabdoc`.
+- Source table: `muse://resource/table/<id>?hint=tabdata`.

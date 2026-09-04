@@ -17,7 +17,7 @@ import type {
   ToolContext,
 } from '../src/engine/contracts/tools.js';
 import type { SkillRecord } from '../src/tools/skills-tools.js';
-import { resolveSpaceSkillDir } from '@tabtin/terminal-core';
+import { resolveSpaceSkillDir } from '@muse/terminal-core';
 
 function makeContext(overrides?: Partial<ToolContext>): ToolContext {
   return {

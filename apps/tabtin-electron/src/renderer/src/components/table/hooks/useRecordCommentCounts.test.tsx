@@ -1,6 +1,6 @@
 import { act, renderHook, waitFor } from '@testing-library/react'
 import { describe, expect, it, vi } from 'vitest'
-import type { RecordCommentCountsResponse } from '@tabtin/table-core'
+import type { RecordCommentCountsResponse } from '@muse/table-core'
 import {
   useRecordCommentCounts,
   type RecordCommentCountsGateway,

@@ -13,10 +13,10 @@
  * 与 ElectronBrowserContext 共用同一全局单例，attach 幂等、不会重复 attach。
  */
 
-import { getRouteRules } from '@tabtin/action-tools/tools'
-import { getCDPConnectionManager } from '@tabtin/action-tools/cdp'
-import type { RouteRule } from '@tabtin/action-tools/types'
-import { attachRuntimeLogCapture, getSharedNetworkLog, getSharedConsoleLog } from '@tabtin/browser-core'
+import { getRouteRules } from '@muse/action-tools/tools'
+import { getCDPConnectionManager } from '@muse/action-tools/cdp'
+import type { RouteRule } from '@muse/action-tools/types'
+import { attachRuntimeLogCapture, getSharedNetworkLog, getSharedConsoleLog } from '@muse/browser-core'
 import { ElectronBrowserContext } from '../context/ElectronBrowserContext'
 import { createLogger } from '../logger'
 

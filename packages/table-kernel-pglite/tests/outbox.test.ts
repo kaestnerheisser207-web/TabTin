@@ -4,7 +4,7 @@ import {
   PGliteOutboxStore,
   PGliteUnitOfWork,
 } from '../src/index.js'
-import type { OutboxChangeEnvelope } from '@tabtin/table-kernel'
+import type { OutboxChangeEnvelope } from '@muse/table-kernel'
 import type { PGliteInstance } from '../src/dialect.js'
 
 function makeEnvelope(overrides: Partial<OutboxChangeEnvelope> = {}): OutboxChangeEnvelope {

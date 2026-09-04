@@ -2,9 +2,9 @@ import { AsyncLocalStorage } from 'node:async_hooks'
 import {
   collectBrowserActionIdsForPolicy,
   evaluateBrowserRoutePolicy,
-} from '@tabtin/browser-core'
-import { PERMISSION_TIMEOUTS } from '@tabtin/agent-wire'
-import { runWithHumanInteractionContext } from '@tabtin/agent-runtime'
+} from '@muse/browser-core'
+import { PERMISSION_TIMEOUTS } from '@muse/agent-wire'
+import { runWithHumanInteractionContext } from '@muse/agent-runtime'
 import { requestApproval } from '../services/ApprovalManager'
 import { isScheduledRuntimeThread } from '../agent/policy/interaction-mode-context'
 import { shouldBypassConfirmApproval } from '../agent/policy/approval-mode-context'

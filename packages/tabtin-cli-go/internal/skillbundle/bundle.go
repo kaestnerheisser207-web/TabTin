@@ -1,6 +1,6 @@
 // Package skillbundle 提供第三方 Agent Skill 包的读/装/同步/诊断/卸载。
 //
-// 包内 skills/（随 @tabtin/cli tarball）是权威内容；~/.agents/skills/tabtin-*
+// 包内 skills/（随 @muse/cli tarball）是权威内容；~/.agents/skills/tabtin-*
 // 只是供 Cursor/Claude/Codex 原生扫描的物化副本。
 package skillbundle
 
@@ -21,9 +21,9 @@ import (
 
 const (
 	// EnvBundleDir 覆盖包内 Skill 根（npm 启动器会设置）。
-	EnvBundleDir = "TABTIN_SKILLS_BUNDLE_DIR"
+	EnvBundleDir = "MUSE_SKILLS_BUNDLE_DIR"
 	// EnvAgentsSkillsDir 覆盖第三方 Agent Skills 目录（与 agent-runtime 对齐）。
-	EnvAgentsSkillsDir = "TABTIN_AGENTS_SKILLS_DIR"
+	EnvAgentsSkillsDir = "MUSE_AGENTS_SKILLS_DIR"
 
 	OwnershipFileName = ".tabtin-skill.json"
 	ManifestFileName  = "manifest.json"

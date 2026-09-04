@@ -8,7 +8,7 @@
  * 同语义（修 01 图谱 §断层 5 "Daemon 三家都不消费 snapshot"）。
  *
  * 设计要点：
- *   1. **薄包装**——直接复用 `@tabtin/security-policy` 的
+ *   1. **薄包装**——直接复用 `@muse/security-policy` 的
  *      `isPathInAllowedRoots` / `checkHardlinePath` / `checkSensitivePath`
  *      （Daemon 三家入口少 + headless 环境无 platform IPC 路径），不重复造
  *      Electron 那边的工厂 + singleton。
@@ -31,7 +31,7 @@ import {
   checkSensitivePath,
   isPathInAllowedRoots,
   type WorkspaceSnapshot,
-} from '@tabtin/security-policy'
+} from '@muse/security-policy'
 
 /**
  * 当前活跃 Space 的 workspaceSnapshot 解析器。

@@ -109,7 +109,7 @@ describe('production host sync boundary', () => {
 
   it('both hosts share SubagentManager / BudgetTracker carry-forward via resolveSubagentCarryForward', () => {
     // W4a S3③（PR2 review P1 修复）SSoT：两端 host 都必须走
-    // `resolveSubagentCarryForward`（`@tabtin/agent-host/runtime`）决定
+    // `resolveSubagentCarryForward`（`@muse/agent-host/runtime`）决定
     // Manager 复用 + budgetTracker 条件式复用，避免任一端漏改让"后台子跑 +
     // runtime 硬重建 → 并发击穿 maxActive"或"复用旧 Manager 但没 rebind live
     // deps"这类根因型 bug 复活。
@@ -160,7 +160,7 @@ describe('production host sync boundary', () => {
 
   it('both hosts装配 CostCap 走 buildCostCapConfig（W2.3-fix F8）', () => {
     // v2 execution_limits 归一 + CostCapInit 组合的 SSoT。两端 host 必须走
-    // `buildCostCapConfig`（`@tabtin/agent-host/runtime`），不允许再自己 inline
+    // `buildCostCapConfig`（`@muse/agent-host/runtime`），不允许再自己 inline
     // `new CostCap({ config: { execution_limits: {...} } })` —— 那种写法在
     // Django stringify max_credits 场景下会静默失效（F8 根因）。
     for (const source of Object.values(runtimeParitySources)) {
@@ -170,7 +170,7 @@ describe('production host sync boundary', () => {
 
   it('both assemblies route W6a storage + permission shell through agent-host helpers', () => {
     // createRuntime 装配下沉：SessionStorage 束 + ApprovalMemo/permission 外壳
-    // 必须走 `@tabtin/agent-host/runtime` 的共享 helper，禁止双端再各自
+    // 必须走 `@muse/agent-host/runtime` 的共享 helper，禁止双端再各自
     // `new SessionStorage` / `createApprovalMemoStore` 内联一份。
     for (const source of Object.values(runtimeParitySources)) {
       expect(source).toMatch(/\bcreateSessionStorageBundle\s*\(/)

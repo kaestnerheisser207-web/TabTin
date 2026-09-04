@@ -13,7 +13,7 @@
 import React from 'react'
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { fireEvent, render } from '@testing-library/react'
-import type { RichContentBlock } from '@tabtin/chat-client'
+import type { RichContentBlock } from '@muse/chat-client'
 
 const routerOpen = vi.fn(async (
   _spaceId: string,
@@ -31,7 +31,7 @@ const mockVirtualModule = vi.mock as unknown as (
   factory: () => unknown,
   options: { virtual: boolean },
 ) => void
-mockVirtualModule('@tabtin/resource-router', () => ({
+mockVirtualModule('@muse/resource-router', () => ({
   parseResourcePointer: (href: string) => ({
     scheme: 'tabtin',
     type: 'file',

@@ -10,7 +10,7 @@
  *   不可用"的承诺在 CLI 侧失效。
  *
  *   Wave 2.1 扫尾：渲染侧订阅 `selectedAgent?.agent_config?.device_permissions`
- *   变化，通过 `window.tabtin.desktop.setDevicePermissions(perms)` 把字典推到
+ *   变化，通过 `window.muse.desktop.setDevicePermissions(perms)` 把字典推到
  *   主进程缓存；路由层在任何策略评估 / session 获锁前读 `desktop_observe`，
  *   block 即拒绝。
  *

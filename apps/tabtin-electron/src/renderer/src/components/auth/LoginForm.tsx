@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { motion } from 'framer-motion'
 import { Eye, EyeOff, Lock, Mail, Smartphone } from 'lucide-react'
-import { Button, Input, Form, FormField, FormLabel, FormMessage, LoadingSpinner } from '@tabtin/smartsheet-ui'
+import { Button, Input, Form, FormField, FormLabel, FormMessage, LoadingSpinner } from '@muse/smartsheet-ui'
 import { useShallow } from 'zustand/react/shallow'
 import { useAuthStore } from '@stores/useAuthStore'
 import apiService from '@/services/api'
@@ -11,8 +11,8 @@ import {
   useLoginForm,
   CN_MOBILE_PHONE_MAX_LENGTH,
   SMS_CODE_MAX_LENGTH,
-} from '@tabtin/shared/auth-forms'
-import { useCapsLockWarning } from '@tabtin/shared/use-caps-lock-warning'
+} from '@muse/shared/auth-forms'
+import { useCapsLockWarning } from '@muse/shared/use-caps-lock-warning'
 import { AUTH_EMAIL_LOGIN_ENABLED } from '@/utils/featureFlags'
 import { CapsLockHint } from './CapsLockHint'
 import {

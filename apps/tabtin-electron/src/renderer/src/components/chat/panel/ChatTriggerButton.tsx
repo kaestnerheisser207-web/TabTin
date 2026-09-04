@@ -5,7 +5,7 @@
 import React from 'react'
 import { MessageSquare } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Button } from '@tabtin/smartsheet-ui'
+import { Button } from '@muse/smartsheet-ui'
 import { useChatStore } from '../../../stores/chat/useChatStore'
 import { cn } from '@utils/cn'
 import { OVERLAY_SURFACE_CLASS } from '@components/ui'

@@ -13,15 +13,15 @@ import { readFileSync, unlinkSync } from 'fs'
 import { join } from 'path'
 import { app } from 'electron'
 import { createLogger } from '../logger'
-import { getHomeTabtinPath } from '@tabtin/shared/storage-paths'
+import { getHomeTabtinPath } from '@muse/shared/storage-paths'
 
 const log = createLogger('DesktopUseLock')
 
-const TABTIN_DIR = getHomeTabtinPath()
+const MUSE_DIR = getHomeTabtinPath()
 const LOCK_FILENAME = 'desktop-use.lock'
 
 function getLockPath(): string {
-  return join(TABTIN_DIR, LOCK_FILENAME)
+  return join(MUSE_DIR, LOCK_FILENAME)
 }
 
 // ---------------------------------------------------------------------------
@@ -193,7 +193,7 @@ export async function tryAcquire(sessionId: string): Promise<AcquireResult> {
     acquiredAt: Date.now(),
   }
 
-  await mkdir(TABTIN_DIR, { recursive: true })
+  await mkdir(MUSE_DIR, { recursive: true })
 
   // 尝试原子创建
   if (await tryCreateExclusive(payload)) {

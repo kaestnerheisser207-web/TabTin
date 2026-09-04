@@ -10,7 +10,7 @@
 import {
   normalizeAgentToolIntentInput,
   type AgentToolIntent,
-} from '@tabtin/agent-runtime/subagent-intent'
+} from '@muse/agent-runtime/subagent-intent'
 
 export const SUBAGENT_TOOL_NAMES: ReadonlySet<string> = new Set(['agent', 'task', 'Task'])
 

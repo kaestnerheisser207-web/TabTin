@@ -5,7 +5,7 @@
  */
 
 import type { ViewProfile, ProfilePreset, ViewFactoryConfig } from './types';
-import type { AntiDetectConfig } from '@tabtin/anti-detect';
+import type { AntiDetectConfig } from '@muse/anti-detect';
 
 /**
  * Profile 预设映射

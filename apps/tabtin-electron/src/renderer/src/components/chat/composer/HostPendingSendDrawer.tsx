@@ -8,7 +8,7 @@
  */
 
 import React, { useEffect, useState } from 'react'
-import { ScrollArea } from '@tabtin/smartsheet-ui'
+import { ScrollArea } from '@muse/smartsheet-ui'
 import { AnimatePresence, motion } from 'framer-motion'
 import { ChevronDown, ChevronUp, Pencil, Play, X } from 'lucide-react'
 import { cn } from '@utils/cn'

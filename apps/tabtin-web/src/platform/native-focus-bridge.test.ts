@@ -115,9 +115,9 @@ test('有效 viewId 会 trim 后再上报', () => {
 })
 
 test('无 host 时 hasNativeFocusHost 为 false 且 report 为 no-op', () => {
-  const g = globalThis as { window?: { __TABTIN_NATIVE_FOCUS__?: unknown } }
+  const g = globalThis as { window?: { __MUSE_NATIVE_FOCUS__?: unknown } }
   const prev = g.window
-  g.window = { __TABTIN_NATIVE_FOCUS__: undefined }
+  g.window = { __MUSE_NATIVE_FOCUS__: undefined }
 
   try {
     assert.equal(hasNativeFocusHost(), false)
@@ -132,11 +132,11 @@ test('无 host 时 hasNativeFocusHost 为 false 且 report 为 no-op', () => {
 })
 
 test('有 host 时 report 转发 payload', () => {
-  const g = globalThis as { window?: { __TABTIN_NATIVE_FOCUS__?: unknown } }
+  const g = globalThis as { window?: { __MUSE_NATIVE_FOCUS__?: unknown } }
   const prev = g.window
   const calls: NativeFocusPayload[] = []
   g.window = {
-    __TABTIN_NATIVE_FOCUS__: {
+    __MUSE_NATIVE_FOCUS__: {
       report(payload: NativeFocusPayload) {
         calls.push(payload)
       },

@@ -4,9 +4,9 @@
  * 创建 / 变更 working_dir 时，后端按 Team + control_device + normalized path
  * 拒绝重复绑定。前端收到 WORKING_DIR_CONFLICT 后查找已有 Space 并引导打开。
  */
-import { toast } from '@tabtin/smartsheet-ui'
+import { toast } from '@muse/smartsheet-ui'
 import type { TFunction } from 'i18next'
-import type { Space } from '@tabtin/app-shell'
+import type { Space } from '@muse/app-shell'
 import { useSpaceStore } from '@stores/useSpaceStore'
 import { useDeviceStore } from '@stores/useDeviceStore'
 import { ensureSpaceSelectedWithFeedback } from '@/services/spaceNavigation'

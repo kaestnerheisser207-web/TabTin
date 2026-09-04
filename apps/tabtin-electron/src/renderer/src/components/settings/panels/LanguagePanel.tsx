@@ -32,17 +32,17 @@ interface DesktopBehaviorSettings {
  * 后台常驻 Windows/macOS 展示；开机自启 Windows/macOS 展示。
  */
 const useDesktopBehaviorSettings = () => {
-  const platform = window.tabtin?.getPlatform?.() ?? ''
+  const platform = window.muse?.getPlatform?.() ?? ''
   const supportsTray = platform === 'win32' || platform === 'darwin'
   const supportsAutoStart = platform === 'win32' || platform === 'darwin'
-  const available = Boolean(window.tabtin?.appSettings) && (supportsTray || supportsAutoStart)
+  const available = Boolean(window.muse?.appSettings) && (supportsTray || supportsAutoStart)
 
   const [settings, setSettings] = useState<DesktopBehaviorSettings | null>(null)
 
   useEffect(() => {
     if (!available) return
     let cancelled = false
-    window.tabtin.appSettings.get()
+    window.muse.appSettings.get()
       .then((value) => { if (!cancelled) setSettings(value) })
       .catch(() => { /* 主进程不可用时不展示该区块 */ })
     return () => { cancelled = true }
@@ -51,8 +51,8 @@ const useDesktopBehaviorSettings = () => {
   const updateSetting = (partial: Partial<DesktopBehaviorSettings>) => {
     // 乐观更新：开关即时反馈；主进程 set 内同步生效（托盘/登录项）
     setSettings(prev => (prev ? { ...prev, ...partial } : prev))
-    void window.tabtin.appSettings.set(partial).catch(() => {
-      void window.tabtin.appSettings.get().then(setSettings).catch(() => {})
+    void window.muse.appSettings.set(partial).catch(() => {
+      void window.muse.appSettings.get().then(setSettings).catch(() => {})
     })
   }
 

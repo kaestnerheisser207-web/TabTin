@@ -7,9 +7,9 @@
  *
  * WebDocRoute 等编辑器路由自带的内层 Provider 会覆盖外层 — 编辑器专属 client 不受影响。
  */
-import { createDirectAppClient } from '@tabtin/app-host-sdk/host'
-import type { AppHostClient } from '@tabtin/app-host-sdk'
-import type { AppHttpRequest, AppHttpResponse, AppHttpTransport } from '@tabtin/contracts/app'
+import { createDirectAppClient } from '@muse/app-host-sdk/host'
+import type { AppHostClient } from '@muse/app-host-sdk'
+import type { AppHttpRequest, AppHttpResponse, AppHttpTransport } from '@muse/contracts/app'
 import { getApiClient } from '@/services/api-client'
 import { API_BASE_URL } from '@/config/api'
 import { STORAGE_KEYS } from '@/platform'

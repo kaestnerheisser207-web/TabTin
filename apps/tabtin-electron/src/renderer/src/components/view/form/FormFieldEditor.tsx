@@ -11,8 +11,8 @@ import {
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from '@tabtin/smartsheet-ui'
-import type { FormFieldMeta } from '@tabtin/table-ui'
+} from '@muse/smartsheet-ui'
+import type { FormFieldMeta } from '@muse/table-ui'
 import { FieldTypeIcon } from '@/components/field/FieldTypeIcon'
 
 export interface FormFieldEditorProps {

@@ -37,7 +37,7 @@ export const ExternalArchiveHub: React.FC = () => {
     setLoading(true)
     void (async () => {
       try {
-        const api = window.tabtin?.import
+        const api = window.muse?.import
         if (!api?.listArchives) {
           if (!cancelled) setError('当前客户端未暴露本机档案列表接口')
           return

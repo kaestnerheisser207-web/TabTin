@@ -1,5 +1,5 @@
 /**
- * 测试用 ToolGate——包装 @tabtin/agent-modes（与宿主适配器同形）。
+ * 测试用 ToolGate——包装 @muse/agent-modes（与宿主适配器同形）。
  * 不可放进 src（会进 baseline）；亦不可引用宿主包（AH-003）。
  */
 
@@ -8,7 +8,7 @@ import {
   evaluateAgentModeToolAccess,
   PLAN_TARGET_GUARDED_TOOLS,
   type AgentModeName,
-} from '@tabtin/agent-modes'
+} from '@muse/agent-modes'
 import type { ToolGate } from '../../src/engine/contracts/kernel.js'
 
 export function createTestAgentModesToolGate(deps: {

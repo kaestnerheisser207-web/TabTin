@@ -7,8 +7,8 @@
 
 import type { BrowserWindow } from 'electron'
 import { basename } from 'path'
-import { setResourceDetectionAPI } from '@tabtin/action-tools/runtime'
-import type { ParseStreamOutput } from '@tabtin/action-tools/types'
+import { setResourceDetectionAPI } from '@muse/action-tools/runtime'
+import type { ParseStreamOutput } from '@muse/action-tools/types'
 import { getViewFactory } from '../view-factory'
 import { isAliveWebContents } from '../crawl-view/utils'
 import { getResourceDetectionService } from './ResourceDetectionService'

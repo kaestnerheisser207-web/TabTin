@@ -11,7 +11,7 @@
 
 function isWindowsPlatform(): boolean {
   try {
-    return window.tabtin?.getPlatform?.() === 'win32'
+    return window.muse?.getPlatform?.() === 'win32'
   } catch {
     return false
   }
@@ -37,7 +37,7 @@ export async function resolveRealPath(path: string | null | undefined): Promise<
   const trimmed = (path ?? '').trim()
   if (!trimmed) return ''
   try {
-    const result = await window.tabtin?.fileSystem?.realpath?.(trimmed)
+    const result = await window.muse?.fileSystem?.realpath?.(trimmed)
     if (result?.success && result.path) {
       return result.path
     }
@@ -55,7 +55,7 @@ export async function canonicalizePath(path: string | null | undefined): Promise
   const trimmed = (path ?? '').trim()
   if (!trimmed) return ''
   try {
-    const result = await window.tabtin?.fileSystem?.realpath?.(trimmed)
+    const result = await window.muse?.fileSystem?.realpath?.(trimmed)
     if (result?.success && result.path) {
       return normalizeComparableKey(result.path)
     }

@@ -6,7 +6,7 @@ import {
   X,
   Trash2,
 } from 'lucide-react'
-import { ContextMenu, ContextMenuItem, ContextMenuDivider, toast } from '@tabtin/smartsheet-ui'
+import { ContextMenu, ContextMenuItem, ContextMenuDivider, toast } from '@muse/smartsheet-ui'
 import { useTranslation } from 'react-i18next'
 import type { StreamDownloadItem } from '@stores/useDownloadStore'
 import { storeActions } from './DownloadRowShared'
@@ -27,11 +27,11 @@ export const StreamContextMenu: React.FC<StreamContextMenuProps> = ({ x, y, item
   const handleDeleteFile = async () => {
     if (!savePath) return
     const fallbackError = t('downloads.deleteFileFailed', '删除文件失败')
-    // contract W2-β: 走 window.tabtin.fileSystem.deleteFile（preload 已包装为
+    // contract W2-β: 走 window.muse.fileSystem.deleteFile（preload 已包装为
     // invokeIpc，享受 envelope ok:false 短路 + ring buffer 记录）；旧裸 IPC
     // invoke 路径已废弃。channel `fs:deleteFile` 在 LEGACY_HANDLERS
     // 内仍透传 raw `{success, error?}`，所以用 ensureLegacyOk 转 throw。
-    const fsApi = window.tabtin?.fileSystem
+    const fsApi = window.muse?.fileSystem
     if (!fsApi?.deleteFile) {
       toast({ title: fallbackError, variant: 'destructive' })
       return

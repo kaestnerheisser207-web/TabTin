@@ -72,8 +72,8 @@ import {
   checkHardlinePath,
   checkSensitivePath,
   isPathInAllowedRoots,
-} from '@tabtin/security-policy'
-import { matchSensitivePath } from '@tabtin/terminal-core'
+} from '@muse/security-policy'
+import { matchSensitivePath } from '@muse/terminal-core'
 
 // packaged Electron 主进程是纯 ESM bundle（electron-vite 输出 format='es'，
 // 顶部无 esbuild `__require` polyfill / 全局 `require` 守卫）。下面 lazy
@@ -398,7 +398,7 @@ let _defaultChecker: PathAccessChecker | null = null
  * 渲染层 IPC 共享的 checker 实例（singleton）。
  *
  * lazy 初始化——第一次 IPC 调用时才构造。避免 module 顶层 import 期
- * eager 拉 `electron` / `@tabtin/terminal-core`（测试场景可能跑在
+ * eager 拉 `electron` / `@muse/terminal-core`（测试场景可能跑在
  * non-electron 进程）。
  */
 export function getDefaultPathAccessChecker(): PathAccessChecker {
@@ -412,7 +412,7 @@ export function getDefaultPathAccessChecker(): PathAccessChecker {
   const { app } = require('electron') as typeof import('electron')
   const {
     resolveDataRoot,
-  } = require('@tabtin/terminal-core') as typeof import('@tabtin/terminal-core')
+  } = require('@muse/terminal-core') as typeof import('@muse/terminal-core')
 
   let homeDir: string
   try {
@@ -460,7 +460,7 @@ export function resetDefaultPathAccessCheckerForTest(): void {
  * `validateProjectPath` 时透传用。
  *
  * 与 `getDefaultPathAccessChecker().check()` 不同的是：本函数仅返回数组，
- * 不做判定——`validateProjectPath`（@tabtin/action-tools/headless）有自己
+ * 不做判定——`validateProjectPath`（@muse/action-tools/headless）有自己
  * 的语义（platformDataRoot 兜底 / read 的 logical-vs-physical 双层放行
  * 等），不能直接被 path-access-checker.check() 替代。
  *

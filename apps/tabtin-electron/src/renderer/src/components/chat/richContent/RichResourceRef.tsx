@@ -11,7 +11,7 @@
 
 import React, { useCallback, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
-import type { RichContentBlock } from '@tabtin/chat-client'
+import type { RichContentBlock } from '@muse/chat-client'
 import { cn } from '@utils/cn'
 import { ANIMATION, CARD_PADDING, CARD_RADIUS, RESULT_BAR, TEXT, TEXT_COLOR } from '../registry/chatDesignTokens'
 import { RESOURCE_TYPE_ICONS } from './kindIcons'

@@ -13,7 +13,7 @@
  *     SKILLS_USAGE / PLANNING）
  *   - 5 个特殊 config combo
  *
- * 更新 snapshot：`pnpm --filter @tabtin/agent-prompt test -- -u`
+ * 更新 snapshot：`pnpm --filter @muse/agent-prompt test -- -u`
  *
  */
 

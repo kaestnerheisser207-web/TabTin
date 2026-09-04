@@ -156,7 +156,7 @@ def test_windows_dev_prepare_repairs_and_verifies_before_seeding() -> None:
     positions = [script.index(step) for step in ordered_steps]
 
     assert positions == sorted(positions)
-    assert "set \"TABTIN_COMMUNITY_DEV_MODE=1\"" in script
+    assert "set \"MUSE_COMMUNITY_DEV_MODE=1\"" in script
     assert "set \"PG_DB_USER=tabtin_migrator\"" in script
 
 
@@ -164,7 +164,7 @@ def test_loopback_installation_keeps_local_storage_client_reachable() -> None:
     """The localhost-only developer profile must pass upstream local OSS checks."""
 
     environment = _compose()["services"]["django"]["environment"]
-    assert environment["TABTIN_PUBLIC_BASE_URL"] == "http://127.0.0.1:6060"
+    assert environment["MUSE_PUBLIC_BASE_URL"] == "http://127.0.0.1:6060"
     assert environment["SERVICES_OSS_PROVIDER"] == "local"
     # Upstream deliberately rejects loopback object URLs in production mode.
     # This official profile is bound to 127.0.0.1 and is therefore a local

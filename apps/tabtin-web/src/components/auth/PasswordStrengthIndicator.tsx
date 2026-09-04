@@ -1,7 +1,7 @@
 import { Check, X } from 'lucide-react'
-import { LoadingSpinner } from '@tabtin/smartsheet-ui'
+import { LoadingSpinner } from '@muse/smartsheet-ui'
 import { useTranslation } from 'react-i18next'
-import { resolveStrengthKey, resolveSuggestionKey } from '@tabtin/shared'
+import { resolveStrengthKey, resolveSuggestionKey } from '@muse/shared'
 import type { PasswordStrength } from '@/types/auth'
 
 interface PasswordStrengthIndicatorProps {

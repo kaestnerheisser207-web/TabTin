@@ -1,5 +1,5 @@
 /**
- * @tabtin/agent-runtime/permissions — Runtime 工具调用权限层（清退后）
+ * @muse/agent-runtime/permissions — Runtime 工具调用权限层（清退后）
  *
  * 模块清单：
  *   - `types`：HITL 通道 + 审批记忆接口（ApprovalMemo* / UserInteractiveChannel /

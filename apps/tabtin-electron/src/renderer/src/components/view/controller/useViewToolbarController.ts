@@ -2,4 +2,4 @@ export {
   useViewToolbarController,
   type UseViewToolbarControllerInput,
   type ViewToolbarControllerState,
-} from '@tabtin/table-ui'
+} from '@muse/table-ui'

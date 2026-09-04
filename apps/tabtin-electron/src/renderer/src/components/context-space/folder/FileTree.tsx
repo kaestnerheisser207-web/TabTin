@@ -181,7 +181,7 @@ export const FileTree: React.FC<FileTreeProps> = ({
       setLoading((prev) => new Set(prev).add(normalizedDirPath))
 
       try {
-        const result = await window.tabtin.fileSystem.readDir(normalizedDirPath)
+        const result = await window.muse.fileSystem.readDir(normalizedDirPath)
         ensureLegacyOk(result, 'readDir')
         if (result?.entries) {
           const normalizedEntries = filterVisibleFileEntries(
@@ -374,7 +374,7 @@ export const FileTree: React.FC<FileTreeProps> = ({
 
   const handleRevealInFinder = useCallback(async (path: string) => {
     try {
-      await window.tabtin.showItemInFolder(path)
+      await window.muse.showItemInFolder(path)
     } catch (err) {
       console.error('[FileTree] revealInFinder error:', err)
       toast.error(formatIpcErrorForUser(err, t('errorToast.revealFailed')))
@@ -383,7 +383,7 @@ export const FileTree: React.FC<FileTreeProps> = ({
 
   const handleOpenWithDefault = useCallback(async (path: string) => {
     try {
-      await window.tabtin.openPath(path)
+      await window.muse.openPath(path)
     } catch (err) {
       console.error('[FileTree] openWithDefault error:', err)
       toast.error(formatIpcErrorForUser(err, t('errorToast.openFileFailed')))

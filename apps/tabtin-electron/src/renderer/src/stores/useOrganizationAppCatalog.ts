@@ -11,12 +11,12 @@
  * - installScope=device：后端落记录 + 客户端本地下载/移除二进制
  */
 
-import { joinApiPath } from '@tabtin/config'
+import { joinApiPath } from '@muse/config'
 import { create } from 'zustand'
 import { API_CONFIG, API_ENDPOINTS } from '@/config/api'
 import { useAuthStore } from '@/stores/useAuthStore'
 import { registerResetAction } from './sessionResetRegistry'
-import { toast } from '@tabtin/smartsheet-ui/toast'
+import { toast } from '@muse/smartsheet-ui/toast'
 import i18n from '@/i18n'
 import { electronFetch } from '@/services/electronFetch'
 import { createLogger } from '@/utils/logger'
@@ -280,7 +280,7 @@ export const useOrganizationAppCatalog = create<OrganizationAppCatalogStore>(
             API_ENDPOINTS.ORGANIZATION.APP_CATALOG(organizationId) + `/${appId}/manifest`,
           )
           if (manifest.data) {
-            await window.tabtin!.marketplace.installApp(appId, manifest.data)
+            await window.muse!.marketplace.installApp(appId, manifest.data)
           }
         }
 
@@ -324,7 +324,7 @@ export const useOrganizationAppCatalog = create<OrganizationAppCatalogStore>(
         // device 级应用还需要清掉本机二进制；后端 Organization 安装记录同样必须删除，
         // 否则刷新目录后仍会显示已安装。
         if (isDeviceScope) {
-          await window.tabtin!.marketplace.uninstallApp(appId)
+          await window.muse!.marketplace.uninstallApp(appId)
         }
 
         set({ uninstallingAppId: null })

@@ -81,14 +81,14 @@ export function applyDeployPackageTransforms(pkg, options = {}) {
         if (entry && entry.from === '../../packages/tabtin-cli-go/dist') {
           return { ...entry, from: './tabtin-cli-go-dist-src' }
         }
-        if (entry && entry.from === '../../packages/tabtin-filegen-python/dist') {
-          return { ...entry, from: './tabtin-filegen-python-dist-src' }
+        if (entry && entry.from === '../../packages/muse-filegen-python/dist') {
+          return { ...entry, from: './muse-filegen-python-dist-src' }
         }
         if (entry && entry.from === '../../packages/office-preview-runtime/runtime') {
           return { ...entry, from: './office-preview-runtime-src' }
         }
         if (entry && entry.from === '../../packages/python-runtime/runtime') {
-          return { ...entry, from: './tabtin-python-runtime-src' }
+          return { ...entry, from: './muse-python-runtime-src' }
         }
         if (entry && entry.from === 'resources/models') {
           return { ...entry, from: './embedding-models-src' }

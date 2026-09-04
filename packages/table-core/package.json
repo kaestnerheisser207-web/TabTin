@@ -1,5 +1,5 @@
 {
-  "name": "@tabtin/table-core",
+  "name": "@muse/table-core",
   "version": "0.1.0",
   "description": "Host-agnostic table runtime contracts and core utilities",
   "type": "module",
@@ -33,8 +33,8 @@
   "author": "Muse Team",
   "license": "MIT",
   "dependencies": {
-    "@tabtin/app-host-sdk": "workspace:*",
-    "@tabtin/table-kernel": "workspace:*",
+    "@muse/app-host-sdk": "workspace:*",
+    "@muse/table-kernel": "workspace:*",
     "xlsx": "0.18.5",
     "zustand": "^5.0.3"
   },

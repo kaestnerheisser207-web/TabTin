@@ -11,7 +11,7 @@ import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { resolve } from 'node:path'
 
 import { DaemonActionBridge } from '../src/application/execution/action-bridge.js'
-import { validateProjectPath } from '@tabtin/action-tools/headless'
+import { validateProjectPath } from '@muse/action-tools/headless'
 import { HeartbeatService } from '../src/transport/gateway/heartbeat.js'
 import { createActionExecutionTestPorts } from './helpers/action-execution-ports.js'
 

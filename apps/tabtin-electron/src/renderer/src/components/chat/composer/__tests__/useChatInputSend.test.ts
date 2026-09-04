@@ -8,7 +8,7 @@ const mocks = vi.hoisted(() => ({
   warning: vi.fn(),
 }))
 
-vi.mock('@tabtin/smartsheet-ui', () => ({
+vi.mock('@muse/smartsheet-ui', () => ({
   toast: {
     error: vi.fn(),
     info: vi.fn(),

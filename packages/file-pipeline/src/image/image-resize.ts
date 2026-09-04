@@ -2,11 +2,11 @@
  * image-resize — 大图自动缩放 + magic bytes 验证
  *
  * **W4（2026-05-13）位置变更**：从 `packages/agent-runtime/src/tools/image-resize.ts`
- * 搬到 `@tabtin/file-pipeline`，让通道（channel）与 parser（image）层物理分离。
+ * 搬到 `@muse/file-pipeline`，让通道（channel）与 parser（image）层物理分离。
  * agent-runtime adapter 不再直接 import 本模块；ImageParser 内部用它做缩放。
  *
  * **W4（2026-05-13）L44 收敛**：硬上限 / 软上限常量退役本地定义，全部从
- * `@tabtin/file-pipeline-errors` 包 SSoT 拿，避免三处独立字面值漂移。
+ * `@muse/file-pipeline-errors` 包 SSoT 拿，避免三处独立字面值漂移。
  *
  * **设计取舍**（沿用 W2 实施纪要）：
  *   1. 软上限 `IMAGE_RESIZE_TRIGGER_BYTES = 5MB`：>5MB 走 sharp 长边 2048px JPEG 90%
@@ -24,7 +24,7 @@ import path from 'node:path';
 import {
   IMAGE_RESIZE_TRIGGER_BYTES,
   MAX_IMAGE_FILE_BYTES_HARD,
-} from '@tabtin/file-pipeline-errors';
+} from '@muse/file-pipeline-errors';
 
 // 让 channel + tests 沿用同一份字面值（不破坏原有 import 链）。
 export { IMAGE_RESIZE_TRIGGER_BYTES, MAX_IMAGE_FILE_BYTES_HARD };

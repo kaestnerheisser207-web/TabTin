@@ -10,7 +10,7 @@ from apps.users.auth.session_manager import SessionManager
 from apps.users.auth.utils import generate_jwt_token
 
 
-@override_settings(TABTIN_REQUIRE_INVITE_CODE=False)
+@override_settings(MUSE_REQUIRE_INVITE_CODE=False)
 class OrganizationMemberBatchProfileTests(TestCase):
     databases = {"default", "postgresql"}
 

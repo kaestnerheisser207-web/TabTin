@@ -1,5 +1,5 @@
 import { useEffect, useRef } from 'react'
-import { toast } from '@tabtin/smartsheet-ui'
+import { toast } from '@muse/smartsheet-ui'
 import { useAuthStore, selectIsAuthenticated } from '@stores/useAuthStore'
 import { useIMStore } from '@stores/useIMStore'
 import { useOrganizationStore } from '@stores/useOrganizationStore'

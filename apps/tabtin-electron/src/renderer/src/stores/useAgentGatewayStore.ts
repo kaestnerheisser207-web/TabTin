@@ -20,7 +20,7 @@ let unsubBridge: (() => void) | null = null
 
 function refreshStatusFromBridge(): void {
   if (typeof window === 'undefined') return
-  const gw = (window as any).tabtin?.agentGateway
+  const gw = (window as any).muse?.agentGateway
   gw?.getStatus?.()
     .then((s: string) => {
       if (isAgentGatewayStatus(s)) {
@@ -48,7 +48,7 @@ export function ensureAgentGatewayBridge(): void {
   if (bridgeStarted) return
   if (typeof window === 'undefined') return
 
-  const gw = (window as any).tabtin?.agentGateway
+  const gw = (window as any).muse?.agentGateway
   if (!gw) return
 
   bridgeStarted = true

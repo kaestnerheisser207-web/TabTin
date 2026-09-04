@@ -13,7 +13,7 @@ const mocks = vi.hoisted(() => ({
   sessionsBySpaceId: {} as Record<string, Array<{ id: string }>>,
 }))
 
-vi.mock('@tabtin/app-shell', () => ({
+vi.mock('@muse/app-shell', () => ({
   resolveSessionScopeId: vi.fn((session: { space_id?: string | null; workspace_id?: string | null }) => (
     session.space_id ?? session.workspace_id ?? null
   )),

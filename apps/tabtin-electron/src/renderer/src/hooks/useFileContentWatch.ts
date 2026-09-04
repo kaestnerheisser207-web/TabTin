@@ -48,7 +48,7 @@ export function useFileContentWatch(filePath: string | null): number {
     setVersion(0)
     const targetPath = comparableWatchPath(filePath)
 
-    const unsub = window.tabtin.fileSystem.onWatchEvent((payload) => {
+    const unsub = window.muse.fileSystem.onWatchEvent((payload) => {
       if (!payload.fullPath) return
       if (comparableWatchPath(payload.fullPath) !== targetPath) return
       if (timerRef.current) clearTimeout(timerRef.current)
@@ -62,7 +62,7 @@ export function useFileContentWatch(filePath: string | null): number {
         // 让 caller 走正常的 readFile 链路再面对真实错误）。
         if (payload.eventType === 'rename') {
           try {
-            const result = await window.tabtin.fileSystem.pathExists(filePath)
+            const result = await window.muse.fileSystem.pathExists(filePath)
             if (result?.success === true && !result.exists) {
               if (versionPathRef.current !== filePath) return
               setVersion(FILE_DELETED_VERSION)
@@ -120,7 +120,7 @@ export function useWatchedFileContent(
     }
     let cancelled = false
     setIsLoading(true)
-    window.tabtin.fileSystem
+    window.muse.fileSystem
       .readFilePreview(filePath, { maxBytes: options?.maxBytes ?? 512 * 1024 })
       .then((result: any) => {
         if (cancelled) return

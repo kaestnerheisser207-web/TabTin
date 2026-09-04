@@ -1,5 +1,5 @@
 /**
- * ：本机图片预览走 path / tabtin-file://，远程才 base64 内联并截断。
+ * ：本机图片预览走 path / muse-file://，远程才 base64 内联并截断。
  */
 import os from 'node:os'
 import path from 'node:path'
@@ -26,7 +26,7 @@ vi.mock('node:util', () => ({
   default: { promisify: () => vi.fn() },
 }))
 
-vi.mock('@tabtin/terminal-core', () => ({
+vi.mock('@muse/terminal-core', () => ({
   resolveSpacesRoot: vi.fn(() => '/tmp/sandbox'),
   resolveDataRoot: vi.fn(() => '/tmp/data'),
   resolvePlatformDataRoot: vi.fn(() => '/tmp/platform'),
@@ -34,12 +34,12 @@ vi.mock('@tabtin/terminal-core', () => ({
   matchSensitivePath: vi.fn(() => null),
 }))
 
-vi.mock('@tabtin/agent-runtime', () => ({
+vi.mock('@muse/agent-runtime', () => ({
   resolveSpaceWorkspaceRoot: vi.fn(),
   resolveOrganizationSkillsDir: vi.fn(),
 }))
 
-vi.mock('@tabtin/security-policy', () => ({
+vi.mock('@muse/security-policy', () => ({
   checkHardlinePath: vi.fn(() => ({ allowed: true })),
 }))
 

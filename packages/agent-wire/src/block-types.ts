@@ -71,7 +71,7 @@ export const STANDARD_BLOCK_TYPES = [
  * PG `content_blocks_json` strip 操作（`block.type.startsWith('tabtin_')`
  * 一行全部剥离）。
  */
-export const TABTIN_BLOCK_TYPES = [
+export const MUSE_BLOCK_TYPES = [
   'tabtin_rich_content',
   'tabtin_composer_preset',
   'tabtin_ask_user_fields',
@@ -101,7 +101,7 @@ export const TABTIN_BLOCK_TYPES = [
  */
 export const ALL_BLOCK_TYPES = [
   ...STANDARD_BLOCK_TYPES,
-  ...TABTIN_BLOCK_TYPES,
+  ...MUSE_BLOCK_TYPES,
 ] as const
 
 /**
@@ -119,7 +119,7 @@ export type ContentBlockType = typeof ALL_BLOCK_TYPES[number]
  *
  * 用法：
  * ```ts
- * import { ALL_BLOCK_TYPE_SET } from '@tabtin/agent-wire'
+ * import { ALL_BLOCK_TYPE_SET } from '@muse/agent-wire'
  * if (ALL_BLOCK_TYPE_SET.has(block.type)) { ... } else { /* fallback *​/ }
  * ```
  */

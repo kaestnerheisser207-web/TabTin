@@ -1,5 +1,5 @@
-import type { ChatMessage } from '@tabtin/chat-client'
-import { ChatAPIError } from '@tabtin/chat-client'
+import type { ChatMessage } from '@muse/chat-client'
+import { ChatAPIError } from '@muse/chat-client'
 import type { ChatAttachment } from '../../../../components/chat/types'
 import type { SendTimingTrace } from '../../execution/sendTimingTrace'
 import { trackSendTimingTelemetry } from '../../execution/sendTimingTrace'

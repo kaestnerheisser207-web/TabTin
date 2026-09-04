@@ -3,7 +3,7 @@ import { normalize, join, sep } from 'path'
 import { fileURLToPath } from 'url'
 import { guardedHandle } from './utils/guarded-handle'
 import { API_BASE_URL } from './config/api.js'
-import { joinApiPath } from '@tabtin/config'
+import { joinApiPath } from '@muse/config'
 import { createLogger } from './logger'
 import { credentialStore } from './safe-credential-store'
 
@@ -623,11 +623,11 @@ export class TokenManager {
  * 拒绝来自第三方 WebContents（如 BrowserView 加载的外部页面、Tin 沙箱）的调用。
  *
  * 受信任来源：
- *   1. `tabtin-file://app/...` —— packaged 模式主 renderer / 分离 chat 窗口的入口协议。
+ *   1. `muse-file://app/...` —— packaged 模式主 renderer / 分离 chat 窗口的入口协议。
  *      协议本身由 main 进程的 `registerStreamProtocol` 独占注册，且 `app` host 被
  *      `resolveAppResourcePath` 限定到 `out/renderer/` 目录，无法被外部页面伪造来源。
  *   2. `file://<appDir>/...` —— 历史 packaged 模式（直接 loadFile）兼容路径。如果
- *      未来彻底切到 `tabtin-file://app/`，可以删除该分支；保留可平滑迁移。
+ *      未来彻底切到 `muse-file://app/`，可以删除该分支；保留可平滑迁移。
  *      CR-001/SD-034: 仅信任 app 安装目录内的资源，不信任 userData 下的 Tin 沙箱文件。
  *   3. `process.env.ELECTRON_RENDERER_URL` —— dev 模式 vite dev server。
  *      SD-049: 仅匹配该值，不再允许任意 http://localhost。
@@ -637,12 +637,12 @@ export function isTrustedSender(event: IpcSenderEvent): boolean {
     const frameUrl = event.senderFrame?.url
     if (!frameUrl) return false
 
-    if (frameUrl.startsWith('tabtin-file://')) {
-      // 严格校验：protocol + hostname 必须完全匹配 `tabtin-file://app`，
-      // 防 `tabtin-file://app.evil.com` 之类 hostname 混淆。
+    if (frameUrl.startsWith('muse-file://')) {
+      // 严格校验：protocol + hostname 必须完全匹配 `muse-file://app`，
+      // 防 `muse-file://app.evil.com` 之类 hostname 混淆。
       try {
         const parsed = new URL(frameUrl)
-        return parsed.protocol === 'tabtin-file:' && parsed.hostname === 'app'
+        return parsed.protocol === 'muse-file:' && parsed.hostname === 'app'
       } catch {
         return false
       }

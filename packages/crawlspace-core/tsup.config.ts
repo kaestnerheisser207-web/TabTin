@@ -13,7 +13,7 @@ export default defineConfig({
   splitting: false,
   sourcemap: true,
   clean: true,
-  external: ['react', 'react-dom', 'react-resizable-panels', 'lucide-react', '@tabtin/smartsheet-ui', 'framer-motion', 'clsx', 'tailwind-merge'],
+  external: ['react', 'react-dom', 'react-resizable-panels', 'lucide-react', '@muse/smartsheet-ui', 'framer-motion', 'clsx', 'tailwind-merge'],
   // 跳过node_modules检查
   skipNodeModulesBundle: true
 })

@@ -164,7 +164,7 @@ echo -e "input1\ninput2" | some_command  # 多行输入
 
 ## 工作目录
 
-- 默认 cwd = 工作目录根；绝对路径只通过环境变量 `$TABTIN_WORKSPACE`（Windows：`$env:TABTIN_WORKSPACE` / `%TABTIN_WORKSPACE%`）访问
+- 默认 cwd = 工作目录根；绝对路径只通过环境变量 `$MUSE_WORKSPACE`（Windows：`$env:MUSE_WORKSPACE` / `%MUSE_WORKSPACE%`）访问
 - 相对路径相对工作目录根本身——**不要**再套一层 `workspace/` 前缀
 - 切其他目录：在命令内部 `cd /path && <cmd>` 或用绝对路径
 - 长路径含空格用引号：`cd "/path with spaces" && <cmd>`

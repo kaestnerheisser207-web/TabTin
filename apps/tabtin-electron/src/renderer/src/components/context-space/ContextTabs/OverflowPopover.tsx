@@ -17,7 +17,7 @@ import {
   PopoverContent,
   PopoverTrigger,
   ScrollArea,
-} from '@tabtin/smartsheet-ui'
+} from '@muse/smartsheet-ui'
 import { cn } from '@utils/cn'
 import { CANVAS_TAB_TEXT } from '@components/layout/canvasUi'
 import type { ContextItem } from '@components/context-space/registry'

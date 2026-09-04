@@ -7,7 +7,7 @@
  *   - S5-01 原规约「Daemon action-bridge.ts 持有 `fileLockManager =
  *     new FileLockManager()` + 包 `FILE_POLICY_ACTIONS` 外层锁」已废弃。
  *     新规约：Daemon action-bridge 不再持锁；锁的责任收口到
- *     `@tabtin/action-tools/adapters/ActionExecutorAdapter` 一侧的
+ *     `@muse/action-tools/adapters/ActionExecutorAdapter` 一侧的
  *     `withFileLock`，所有 4 个写入口（agent-runtime adapter /
  *     ActionExecutorAdapter / FAB / action-bridge / Daemon MCP）共享同一
  *     个 module-level lockMap（详见 PRD §四.5 §1.5.B/C/D）。

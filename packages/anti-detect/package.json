@@ -1,5 +1,5 @@
 {
-  "name": "@tabtin/anti-detect",
+  "name": "@muse/anti-detect",
   "version": "0.1.0",
   "description": "Muse anti-detect module (UA pool, proxy health, fingerprints, client hints)",
   "type": "module",
@@ -24,7 +24,7 @@
   },
   "dependencies": {
     "axios": "^1.6.0",
-    "@tabtin/crawl-integration": "workspace:*"
+    "@muse/crawl-integration": "workspace:*"
   },
   "devDependencies": {
     "@types/node": "^20.0.0",

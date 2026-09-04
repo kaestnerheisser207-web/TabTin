@@ -1,7 +1,7 @@
 /**
  * Agent 对话视口 Phase 0：dev-only 帧级探针。
  *
- * - 仅 DEV bootstrap 后暴露 window.__TABTIN_CHAT_VIEWPORT_PROBE__
+ * - 仅 DEV bootstrap 后暴露 window.__MUSE_CHAT_VIEWPORT_PROBE__
  * - rAF 连续采样几何；programmatic 写通过 recordConversationViewportWrite 记账
  * - turn-ended 等语义 reason sticky 到下一帧采样，不被同帧 resize/write 覆盖
  * - 不记录消息正文 / 用户输入 / token / DOM 文本
@@ -258,7 +258,7 @@ export function bootstrapConversationViewportProbe(
   }
   state.bootstrapped = true
   if (typeof window !== 'undefined') {
-    window.__TABTIN_CHAT_VIEWPORT_PROBE__ = api
+    window.__MUSE_CHAT_VIEWPORT_PROBE__ = api
   }
 }
 
@@ -298,6 +298,6 @@ export function __resetConversationViewportProbeForTests(): void {
   clearCaptureEvidence()
   state.bootstrapped = false
   if (typeof window !== 'undefined') {
-    delete window.__TABTIN_CHAT_VIEWPORT_PROBE__
+    delete window.__MUSE_CHAT_VIEWPORT_PROBE__
   }
 }

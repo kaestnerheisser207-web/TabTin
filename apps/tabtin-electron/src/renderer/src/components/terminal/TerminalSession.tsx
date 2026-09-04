@@ -8,7 +8,7 @@ import React, { useState, useCallback, useEffect } from 'react'
 import { cn } from '@utils/cn'
 import { XTerminal } from './XTerminal'
 import { RotateCcw } from 'lucide-react'
-import { Button } from '@tabtin/smartsheet-ui'
+import { Button } from '@muse/smartsheet-ui'
 import { useTranslation } from 'react-i18next'
 import { killPtySession, useTerminalSessionStore } from '@components/context-space/sources/terminal'
 import { useTerminalSplitStore } from '@stores/useTerminalSplitStore'
@@ -63,7 +63,7 @@ export const TerminalSession: React.FC<TerminalSessionProps> = ({
 
   // Phase 4：cwd 与 executionSpaceId 都取自会话本身（跨桶按 sessionId 定位）。
   // executionSpaceId = 真实执行 Space（对话/执行终端）或 undefined（桌面沙箱终端）——
-  // 传给 XTerminal → spawn 时作为 spaceId 注入 TABTIN_SPACE_ID，桌面终端不注入。
+  // 传给 XTerminal → spawn 时作为 spaceId 注入 MUSE_SPACE_ID，桌面终端不注入。
   const { cwd: sessionCwd, executionSpaceId } = useTerminalSessionStore(
     useShallow(state => {
       for (const sessions of Object.values(state.sessionsBySpace)) {

@@ -7,8 +7,8 @@
  * - 本层用 shell tokenizer 得到 argv，再按声明式 command path 精确匹配。
  */
 
-import type { ToolPresentation } from '@tabtin/agent-runtime/engine';
-import { tokenizeShellCommand } from '@tabtin/agent-runtime/capability';
+import type { ToolPresentation } from '@muse/agent-runtime/engine';
+import { tokenizeShellCommand } from '@muse/agent-runtime/capability';
 
 type CliPresentationDefinition = {
   commandPath: readonly string[];

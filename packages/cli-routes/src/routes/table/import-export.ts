@@ -1,6 +1,6 @@
 import { readFileSync } from 'node:fs'
 import type { ServerResponse } from 'node:http'
-import { errorResponse, okResponse, type SendJSON } from '@tabtin/cli-server-core'
+import { errorResponse, okResponse, type SendJSON } from '@muse/cli-server-core'
 import { djangoRequest } from '../../host-bindings.js'
 import { guardLocalFile } from '../local-file-guard.js'
 import { performLocalFileUpload } from '../oss.js'

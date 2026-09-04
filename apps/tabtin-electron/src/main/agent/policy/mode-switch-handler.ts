@@ -20,12 +20,12 @@
  */
 
 import { createLogger } from '../../logger.js'
-import { isAgentModeName, type AgentModeName } from '@tabtin/agent-modes'
+import { isAgentModeName, type AgentModeName } from '@muse/agent-modes'
 import {
   cancelAllPendingHitlRequests,
   type PendingHitlMap,
-} from '@tabtin/agent-runtime'
-import type { SwitchModeProposalRegistry } from '@tabtin/agent-runtime/tools'
+} from '@muse/agent-runtime'
+import type { SwitchModeProposalRegistry } from '@muse/agent-runtime/tools'
 
 const log = createLogger('ModeSwitch')
 

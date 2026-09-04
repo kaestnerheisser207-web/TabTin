@@ -19,8 +19,8 @@
 
 import { useCallback } from 'react'
 import type { TFunction } from 'i18next'
-import { toast } from '@tabtin/smartsheet-ui'
-import type { RichContentBlock } from '@tabtin/chat-client'
+import { toast } from '@muse/smartsheet-ui'
+import type { RichContentBlock } from '@muse/chat-client'
 import {
   downloadPreviewResource,
   downloadWidgetPreview,
@@ -84,7 +84,7 @@ export function useWidgetContextActions(input: UseWidgetContextActionsInput): Wi
 
   const handleSavePng = useCallback(async () => {
     // ：与 Lightbox 统一——远程 URL 走主进程 downloadResource，禁止裸 fetch
-    // + `<a download>`（打包态 tabtin-file://app 下 CSP/CORS 会失败或伪成功）。
+    // + `<a download>`（打包态 muse-file://app 下 CSP/CORS 会失败或伪成功）。
     const base = (block.summary || block.title || 'widget')
       .replace(/[\s\\/:*?"<>|]+/g, '-')
       .slice(0, 40)

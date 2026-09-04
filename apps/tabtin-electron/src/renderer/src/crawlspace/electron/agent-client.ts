@@ -1,10 +1,10 @@
 import i18n from '@/i18n'
-import { toast } from '@tabtin/smartsheet-ui'
+import { toast } from '@muse/smartsheet-ui'
 import { withTimeout, DEFAULT_IPC_TIMEOUT, LONG_IPC_TIMEOUT } from '../utils/withTimeout'
 
 function getApi(): any | null {
   if (typeof window === 'undefined') return null
-  const tabtin = window.tabtin
+  const tabtin = window.muse
   return tabtin?.agent || null
 }
 

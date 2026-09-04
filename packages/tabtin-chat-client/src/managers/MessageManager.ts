@@ -13,7 +13,7 @@ import type {
  * M5.Y 后仅保留消息历史查询。消息发送、编排请求（invoke/review/answer）
  * 与 sync 已全部迁移：
  * - 发送：Electron/Daemon 本地 Runtime 直接驱动 (IPC / prompt.forward)
- * - Review / AskUser 回执：`window.tabtin.agentEngine.submitAskUserResponse`
+ * - Review / AskUser 回执：`window.muse.agentEngine.submitAskUserResponse`
  * - 持久化：由 relay ACK 事件驱动（不再走 HTTP sync）
  */
 export class MessageManager {

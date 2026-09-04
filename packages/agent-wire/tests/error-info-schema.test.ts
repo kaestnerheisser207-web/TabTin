@@ -31,7 +31,7 @@ import {
   PartialReasonSchema,
   ErrorInfoSchema,
   MessageStopSchema,
-} from '@tabtin/agent-wire';
+} from '@muse/agent-wire';
 
 describe('PartialReasonSchema — 三档字面量严格 enum', () => {
   it.each(['aborted', 'stream_interrupted', 'message_stop_fallback'] as const)(

@@ -4,7 +4,7 @@
  * 方案 A：仅真实用户消息分轮；其余一律轮内。挂载点落在轮内最后一个
  * 可承载产物的 assistant 段（llm / tool_artifact / error_envelope）。
  */
-import type { ChatMessage } from '@tabtin/chat-client'
+import type { ChatMessage } from '@muse/chat-client'
 import type { TurnArtifact } from './turnArtifactTypes'
 import {
   canHostTurnArtifacts,

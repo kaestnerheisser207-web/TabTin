@@ -1,7 +1,7 @@
 import React from 'react'
 import { describe, expect, it, vi } from 'vitest'
 import { render, screen } from '@testing-library/react'
-import type { ChatMessage } from '@tabtin/chat-client'
+import type { ChatMessage } from '@muse/chat-client'
 
 const chatStoreState = vi.hoisted(() => ({
   currentSessionId: 'sess-1' as string | null,
@@ -70,7 +70,7 @@ vi.mock('../messages/common/', () => ({
   CollapsibleMessage: ({ children }: { children: () => React.ReactNode }) => <>{children()}</>,
 }))
 
-vi.mock('@tabtin/smartsheet-ui', () => ({
+vi.mock('@muse/smartsheet-ui', () => ({
   ConfirmDialog: () => null,
   Popover: ({ children }: { children: React.ReactNode }) => <>{children}</>,
   PopoverTrigger: ({ children }: { children: React.ReactNode }) => <>{children}</>,

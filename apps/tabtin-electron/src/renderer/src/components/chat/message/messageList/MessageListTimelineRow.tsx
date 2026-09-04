@@ -1,5 +1,5 @@
 import React from 'react'
-import type { ChatMessage } from '@tabtin/chat-client'
+import type { ChatMessage } from '@muse/chat-client'
 import type { ContextBlock } from '../../context/ContextRefCard'
 import type { SessionAccessCapabilities } from '../../sessionAccessCapabilities'
 import type { TurnArtifact } from '../../turn/turnArtifacts'

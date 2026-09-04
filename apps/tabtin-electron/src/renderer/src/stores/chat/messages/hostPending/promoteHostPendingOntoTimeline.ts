@@ -3,7 +3,7 @@
  * USER echo 仍会经 upsertObservedUserMessage 补齐 arrival_seq，不二次插入。
  */
 
-import type { ChatMessage } from '@tabtin/chat-client'
+import type { ChatMessage } from '@muse/chat-client'
 import { applyBlocksArrival } from '@/stores/chat/domain/messageTimelineOrder'
 import { beginStartedTurnUi } from '../runtime/applyLocalRuntimeSendAck'
 import type { HostPendingSendItem } from './hostPendingSendSlice'

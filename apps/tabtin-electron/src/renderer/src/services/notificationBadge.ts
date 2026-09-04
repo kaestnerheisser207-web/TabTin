@@ -21,7 +21,7 @@ export function syncNotificationBadge(
 ): void {
   const count = resolveNotificationBadgeCount(unreadNotificationCount, pendingInvitationCount)
   try {
-    const request = window.tabtin?.notification?.setBadgeCount(count)
+    const request = window.muse?.notification?.setBadgeCount(count)
     void request?.catch(() => {
       // 主进程退出或 preload IPC 已销毁时，角标失败不应产生未处理 Promise。
     })

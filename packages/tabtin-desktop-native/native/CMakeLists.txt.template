@@ -1,4 +1,4 @@
-# TabDesktop @tabtin/desktop-native · CMake 工程模板（模块零 v2.1 占位）
+# TabDesktop @muse/desktop-native · CMake 工程模板（模块零 v2.1 占位）
 #
 # 用途：模块二 / 模块四执行 Agent 启用 native 编译时复制本文件 →
 # native/CMakeLists.txt，按需取消注释下方各能力段。

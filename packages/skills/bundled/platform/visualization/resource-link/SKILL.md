@@ -2,7 +2,7 @@
 name: resource-link
 description: >
   插入资源链接——在 chat 文字流里给资源链接，markdown
-  link 形态 [显示文本](tabtin://resource/<type>/<id>?hint=<carrierApp>)，
+  link 形态 [显示文本](muse://resource/<type>/<id>?hint=<carrierApp>)，
   用户点击直接在 Space 内打开。行业格式（http/https/
   file/mailto）也兼容；不要写 file:// 让用户自己复制粘贴。
 metadata:
@@ -37,7 +37,7 @@ metadata:
 **自有格式（首选）**：
 
 ```
-[查看《项目方案》](tabtin://resource/<type>/<id>?hint=<carrierAppId>)
+[查看《项目方案》](muse://resource/<type>/<id>?hint=<carrierAppId>)
 ```
 
 - `<type>` —— 资源类型小写字符串，与 chat 上下文 ContextRefType 同集合（`document` / `table` / `slide` / `code_file` / `webpage` / `email_thread` / `memo` / `whiteboard` / `site` / `video` / `file` / `folder` / `tracker` / `agenda_event` / ...）。完整列表由 manifest 聚合，不固定写死；写错了用户点击会落到系统打开兜底，不是产品事故，但体验不优雅
@@ -61,9 +61,9 @@ metadata:
 ## 例子
 
 ```
-我已经把分析放进 [《Q3 销售解读》](tabtin://resource/document/doc_xyz?hint=tabdoc) 里。
-原始数据在 [销售明细表](tabtin://resource/table/tbl_abc?hint=tabdata)。
-脚本：[gen_report.py](tabtin://resource/code_file/%2Ftmp%2Fgen_report.py?hint=tabcode)
+我已经把分析放进 [《Q3 销售解读》](muse://resource/document/doc_xyz?hint=tabdoc) 里。
+原始数据在 [销售明细表](muse://resource/table/tbl_abc?hint=tabdata)。
+脚本：[gen_report.py](muse://resource/code_file/%2Ftmp%2Fgen_report.py?hint=tabcode)
 本地导出：[/tmp/q3.html](file:///tmp/q3.html)
 邮件回复 [客户](mailto:cust@example.com?subject=Q3%20review)
 ```
@@ -72,9 +72,9 @@ metadata:
 
 - **写 `file:///path` 让用户复制粘贴**：W3 之后裸路径 + `file://` 都已能 chat 里点开，**不要再绕一圈**输出"请打开终端 cd /Users/... && cat ..."这种引导
 - **同一份资源同时输出 markdown link + open_in_space 工具调用**：用户会被同一动作触发两次（你点了，我又自动展开）。要么写 link 让用户控制时机，要么调工具立即展开，二选一
-- **tab id 替代 resource id**：`tabtin://resource/document/tab_<random>` 是错的——`<id>` 是资源本身的业务 id（doc_xxx / tbl_xxx），不是 carrier 内部的 tab 实例 id
+- **tab id 替代 resource id**：`muse://resource/document/tab_<random>` 是错的——`<id>` 是资源本身的业务 id（doc_xxx / tbl_xxx），不是 carrier 内部的 tab 实例 id
 - **硬编码 hint 到非业务 type**：比如 `?hint=tabweb` 但 pointer 是 `mailto:` —— 语义荒谬；当 hint 与 type/scheme 不可达时系统会按 D2 manifest_default 兜底，不会按你的 hint 走
-- **遗忘 encodeURIComponent**：`tabtin://resource/code_file//Users/x/r.md?hint=tabcode` 错（`/` 没编码会让 path 解析失败）；正确：`tabtin://resource/code_file/%2FUsers%2Fx%2Fr.md?hint=tabcode`
+- **遗忘 encodeURIComponent**：`muse://resource/code_file//Users/x/r.md?hint=tabcode` 错（`/` 没编码会让 path 解析失败）；正确：`muse://resource/code_file/%2FUsers%2Fx%2Fr.md?hint=tabcode`
 
 ## 与其他形态的边界
 

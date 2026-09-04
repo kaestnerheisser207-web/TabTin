@@ -1,12 +1,12 @@
 import {
   DEFAULT_MAX_CREDITS_PER_RUN,
   DEFAULT_MAX_TURNS,
-} from '@tabtin/agent-runtime/runtime-defaults'
+} from '@muse/agent-runtime/runtime-defaults'
 import {
   hasNumericExecutionLimits,
   isExecutionLimitsEnabled,
   type ExecutionLimitsShape,
-} from '@tabtin/app-shell/agent-config-v2'
+} from '@muse/app-shell/agent-config-v2'
 
 export type ExecLimitsShape = ExecutionLimitsShape
 

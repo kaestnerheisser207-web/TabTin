@@ -1,12 +1,12 @@
 /**
- * @tabtin/agent-modes — Agent Mode SSoT（独立包）
+ * @muse/agent-modes — Agent Mode SSoT（独立包）
  *
  * 统一管理 ask / agent / plan / study / group 五种交互模式的：
  *   1. 工具白名单与访问策略（isToolAllowedByPolicy / evaluateAgentModeToolAccess）
  *   2. 注入 system prompt 的额外段落（getAgentModePromptSection）
  *   3. JSON contract 序列化（serializeAgentModeContract）— 跨语言对齐 Django
  *
- * 本包不依赖 @tabtin/agent-runtime，可被 agent-runtime、tabtin-electron、Daemon
+ * 本包不依赖 @muse/agent-runtime，可被 agent-runtime、tabtin-electron、Daemon
  * 等多端直接 import。
  */
 

@@ -2,7 +2,7 @@
  * I-4 (P1): Electron ↔ Daemon dev-server.json path conflict fix.
  *
  * Daemon now writes daemon-server.json; CLI discovery prefers it
- * over Electron's dev-server.json, with TABTIN_SOCK as highest priority.
+ * over Electron's dev-server.json, with MUSE_SOCK as highest priority.
  */
 import { describe, it, expect, afterEach } from 'vitest'
 import fs from 'node:fs'
@@ -10,16 +10,16 @@ import { join } from 'node:path'
 import { homedir } from 'node:os'
 import { startCLIServer, stopCLIServer } from '../src/transport/cli/cli-server.js'
 
-const TABTIN_DIR = join(homedir(), '.tabtin')
-const DAEMON_SERVER_PATH = join(TABTIN_DIR, 'daemon-server.json')
-const DEV_SERVER_PATH = join(TABTIN_DIR, 'dev-server.json')
+const MUSE_DIR = join(homedir(), '.tabtin')
+const DAEMON_SERVER_PATH = join(MUSE_DIR, 'daemon-server.json')
+const DEV_SERVER_PATH = join(MUSE_DIR, 'dev-server.json')
 const CLI_SERVER_SOURCE = fs.readFileSync(
   new URL('../src/transport/cli/cli-server.ts', import.meta.url),
   'utf-8',
 )
 
 function startTestServer() {
-  const socketPath = join(TABTIN_DIR, `daemon-cli-test-${process.pid}-${Date.now()}.sock`)
+  const socketPath = join(MUSE_DIR, `daemon-cli-test-${process.pid}-${Date.now()}.sock`)
   return startCLIServer({ version: '0.0.1-test', socketPath })
 }
 
@@ -59,7 +59,7 @@ describe('I-4: Server JSON path conflict', () => {
         pid: 99999,
         startedAt: new Date().toISOString(),
       }
-      fs.mkdirSync(TABTIN_DIR, { recursive: true })
+      fs.mkdirSync(MUSE_DIR, { recursive: true })
       fs.writeFileSync(DEV_SERVER_PATH, JSON.stringify(electronData), 'utf-8')
 
       startTestServer()

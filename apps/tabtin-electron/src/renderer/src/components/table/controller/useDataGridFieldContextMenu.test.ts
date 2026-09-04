@@ -13,7 +13,7 @@ vi.mock('@components/view/UndoRedoContext', () => ({
   useUndoRedoContext: () => null,
 }))
 
-vi.mock('@tabtin/table-core', () => ({
+vi.mock('@muse/table-core', () => ({
   FieldApiService: {
     deleteField: tableCoreMocks.deleteField,
     updateField: tableCoreMocks.updateField,

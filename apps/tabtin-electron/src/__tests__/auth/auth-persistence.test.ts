@@ -10,7 +10,7 @@ describe('persistAuthTokens', () => {
 
   beforeEach(() => {
     mockSave = vi.fn().mockResolvedValue({ success: true })
-    ;(window as any).tabtin = {
+    ;(window as any).muse = {
       auth: {
         save: mockSave,
       },
@@ -18,7 +18,7 @@ describe('persistAuthTokens', () => {
   })
 
   afterEach(() => {
-    delete (window as any).tabtin
+    delete (window as any).muse
   })
 
   it('应正确传递所有参数到 auth.save', async () => {

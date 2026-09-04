@@ -1,7 +1,7 @@
 /**
  * Runtime-owned stream event type constants（ Stage 5b）。
  *
- * 字面量与 `@tabtin/agent-wire` `StreamEvents` / `ContentBlockEvents` 字节对齐；
+ * 字面量与 `@muse/agent-wire` `StreamEvents` / `ContentBlockEvents` 字节对齐；
  * runtime 生产路径不再 value-import agent-wire 常量表。wire 包仍保留同名常量
  * 供 Django / Renderer / mobile 消费；变更字面量须双端同步。
  */

@@ -4,7 +4,7 @@ User Portrait 常量定义。
 """
 
 # 数据库路由的 alias（跟 db_router.py 一致）
-USER_PORTRAIT_DB = ('default' if getattr(settings, 'TABTIN_SINGLE_DATABASE_MODE', False) else 'postgresql')
+USER_PORTRAIT_DB = ('default' if getattr(settings, 'MUSE_SINGLE_DATABASE_MODE', False) else 'postgresql')
 # Hint 软提示的字符上限（微决策 2: B 软提示）
 HINT_SOFT_LIMIT_CHARS = 200
 

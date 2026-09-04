@@ -16,7 +16,7 @@ import {
 import { getBackgroundCssValue } from '../utils/background'
 import { keymapManager, KeyboardPriority } from '../utils/keymap-manager'
 import { useT } from '../i18n'
-import { ZIndex } from '@tabtin/app-shell'
+import { ZIndex } from '@muse/app-shell'
 import {
   STAGE_BG,
   TRANSITION_DURATION,

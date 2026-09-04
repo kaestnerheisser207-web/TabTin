@@ -15,7 +15,7 @@
  * 防御点，三家 caller 不再读取也不再透传此字段。
  */
 import { describe, expect, it } from 'vitest';
-import type { WorkspaceSnapshot } from '@tabtin/security-policy';
+import type { WorkspaceSnapshot } from '@muse/security-policy';
 import {
   checkDaemonPathAccess,
   type WorkspaceSnapshotResolver,

@@ -86,7 +86,7 @@ class CloudWorkspaceLifecycleService:
         if response.get("state") not in {"stopped", "missing"}:
             raise ServiceError("CLOUD_DISABLE_FAILED", "Cloud Runtime 未停止", 502)
         retention_days = int(
-            getattr(settings, "TABTIN_CLOUD_DISABLED_RETENTION_DAYS", 30)
+            getattr(settings, "MUSE_CLOUD_DISABLED_RETENTION_DAYS", 30)
         )
         with transaction.atomic(using=postgres_app_db_alias()):
             allocation = CloudRuntimeAllocation.objects.select_for_update().get(

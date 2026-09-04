@@ -3,7 +3,7 @@
  *
  * 🎯 使用方式：
  * ```typescript
- * import { getClientHintsService, generateClientHintsHeaders } from '@tabtin/anti-detect/client-hints';
+ * import { getClientHintsService, generateClientHintsHeaders } from '@muse/anti-detect/client-hints';
  *
  * // 方式 1：使用服务类
  * const service = getClientHintsService();

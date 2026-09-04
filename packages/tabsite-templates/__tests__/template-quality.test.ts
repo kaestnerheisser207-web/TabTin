@@ -19,7 +19,7 @@ function readText(relPath: string) {
   return readFileSync(resolve(TEMPLATES_ROOT, relPath), 'utf-8')
 }
 
-describe('DU-012: dashboard @tabtin/sdk 不使用 workspace:* 协议', () => {
+describe('DU-012: dashboard @muse/sdk 不使用 workspace:* 协议', () => {
   it('依赖版本不包含 workspace: 前缀', () => {
     const pkg = readJSON('dashboard/package.json')
     const allDeps = { ...pkg.dependencies, ...pkg.devDependencies }
@@ -63,17 +63,17 @@ describe('DU-026: 依赖版本使用 ~ 而非 ^', () => {
 })
 
 describe('DU-027: blank .env.example 不含 dashboard 专属变量', () => {
-  it('不包含 VITE_TABTIN_TOKEN', () => {
+  it('不包含 VITE_MUSE_TOKEN', () => {
     const content = readText('blank/.env.example')
-    expect(content).not.toContain('VITE_TABTIN_TOKEN')
+    expect(content).not.toContain('VITE_MUSE_TOKEN')
   })
-  it('不包含 VITE_TABTIN_TABLE_ID', () => {
+  it('不包含 VITE_MUSE_TABLE_ID', () => {
     const content = readText('blank/.env.example')
-    expect(content).not.toContain('VITE_TABTIN_TABLE_ID')
+    expect(content).not.toContain('VITE_MUSE_TABLE_ID')
   })
-  it('不包含 VITE_TABTIN_SPACE_ID', () => {
+  it('不包含 VITE_MUSE_SPACE_ID', () => {
     const content = readText('blank/.env.example')
-    expect(content).not.toContain('VITE_TABTIN_SPACE_ID')
+    expect(content).not.toContain('VITE_MUSE_SPACE_ID')
   })
 })
 
@@ -82,13 +82,13 @@ describe('DU-028: README 环境变量引用正确', () => {
     const content = readText('README.md')
     expect(content).not.toContain('VITE_TABLE_NAME')
   })
-  it('包含正确的 VITE_TABTIN_TABLE_ID', () => {
+  it('包含正确的 VITE_MUSE_TABLE_ID', () => {
     const content = readText('README.md')
-    expect(content).toContain('VITE_TABTIN_TABLE_ID')
+    expect(content).toContain('VITE_MUSE_TABLE_ID')
   })
-  it('包含正确的 VITE_TABTIN_SPACE_ID', () => {
+  it('包含正确的 VITE_MUSE_SPACE_ID', () => {
     const content = readText('README.md')
-    expect(content).toContain('VITE_TABTIN_SPACE_ID')
+    expect(content).toContain('VITE_MUSE_SPACE_ID')
   })
 })
 

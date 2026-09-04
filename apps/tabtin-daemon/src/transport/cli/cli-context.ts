@@ -1,4 +1,4 @@
-import type { ActionExecutorAdapter } from '@tabtin/action-tools/headless';
+import type { ActionExecutorAdapter } from '@muse/action-tools/headless';
 import type { BrowserApplicationPort } from '../../base/browser/browser-application-port.js';
 
 export interface EnvironmentPort {
@@ -31,7 +31,7 @@ export interface CliRequestContextOptions {
   browserApplication?: BrowserApplicationPort | null;
   actionAdapter?: ActionExecutorAdapter | null;
   wsConnectionInfo?: WsConnectionInfo | null;
-  workspaceSnapshotResolver?: (() => import('@tabtin/security-policy').WorkspaceSnapshot | null) | null;
+  workspaceSnapshotResolver?: (() => import('@muse/security-policy').WorkspaceSnapshot | null) | null;
   subagentCancelResolver?: ((childId: string) => boolean) | null;
   skillsMaterializer?: CLISkillsMaterializer | null;
   skillsInteropAdder?: CLISkillsInteropAdder | null;
@@ -43,7 +43,7 @@ export class CliRequestContext {
   private browserApplication: BrowserApplicationPort | null;
   private actionAdapter: ActionExecutorAdapter | null;
   private wsConnectionInfo: WsConnectionInfo | null;
-  private workspaceSnapshotResolver: (() => import('@tabtin/security-policy').WorkspaceSnapshot | null) | null;
+  private workspaceSnapshotResolver: (() => import('@muse/security-policy').WorkspaceSnapshot | null) | null;
   private subagentCancelResolver: ((childId: string) => boolean) | null;
   private skillsMaterializer: CLISkillsMaterializer | null;
   private skillsInteropAdder: CLISkillsInteropAdder | null;
@@ -61,18 +61,18 @@ export class CliRequestContext {
 
   setSpaceId(value: string | null): void {
     this.spaceId = value;
-    this.environment.set('TABTIN_SPACE_ID', value ?? undefined);
+    this.environment.set('MUSE_SPACE_ID', value ?? undefined);
   }
-  getSpaceId(): string | null { return this.spaceId || this.environment.get('TABTIN_SPACE_ID') || null; }
+  getSpaceId(): string | null { return this.spaceId || this.environment.get('MUSE_SPACE_ID') || null; }
   peekSpaceId(): string | null { return this.spaceId; }
-  getOrganizationId(): string | null { return this.wsConnectionInfo?.organizationId || this.environment.get('TABTIN_ORGANIZATION_ID') || null; }
-  getUserId(): string | null { return this.wsConnectionInfo?.userId || this.environment.get('TABTIN_USER_ID') || null; }
+  getOrganizationId(): string | null { return this.wsConnectionInfo?.organizationId || this.environment.get('MUSE_ORGANIZATION_ID') || null; }
+  getUserId(): string | null { return this.wsConnectionInfo?.userId || this.environment.get('MUSE_USER_ID') || null; }
   requireUserId(): string {
     const value = this.getUserId();
     if (!value) throw new Error('未登录：无法解析 userId，拒绝写入本地 skills 目录（请重新运行 `tabtin-daemon init --token <token> --force`）');
     return value;
   }
-  getOrganizationRoot(): string | null { return this.environment.get('TABTIN_ORGANIZATION_ROOT') || null; }
+  getOrganizationRoot(): string | null { return this.environment.get('MUSE_ORGANIZATION_ROOT') || null; }
   setBrowserApplication(value: BrowserApplicationPort | null): void { this.browserApplication = value; }
   getBrowserApplication(): BrowserApplicationPort | null { return this.browserApplication; }
   setActionAdapter(value: ActionExecutorAdapter | null): void { this.actionAdapter = value; }
@@ -80,8 +80,8 @@ export class CliRequestContext {
   setWsConnectionInfo(value: WsConnectionInfo | null): void { this.wsConnectionInfo = value; }
   getWsConnectionInfo(): WsConnectionInfo | null { return this.wsConnectionInfo; }
   updateWsCredential(value: string): void { if (this.wsConnectionInfo) this.wsConnectionInfo.credential = value; }
-  setWorkspaceSnapshotResolver(value: (() => import('@tabtin/security-policy').WorkspaceSnapshot | null) | null): void { this.workspaceSnapshotResolver = value; }
-  resolveWorkspaceSnapshot(): import('@tabtin/security-policy').WorkspaceSnapshot | null { return this.workspaceSnapshotResolver?.() ?? null; }
+  setWorkspaceSnapshotResolver(value: (() => import('@muse/security-policy').WorkspaceSnapshot | null) | null): void { this.workspaceSnapshotResolver = value; }
+  resolveWorkspaceSnapshot(): import('@muse/security-policy').WorkspaceSnapshot | null { return this.workspaceSnapshotResolver?.() ?? null; }
   setSubagentCancelResolver(value: ((childId: string) => boolean) | null): void { this.subagentCancelResolver = value; }
   getSubagentCancelResolver(): ((childId: string) => boolean) | null { return this.subagentCancelResolver; }
   setSkillsMaterializer(value: CLISkillsMaterializer | null): void { this.skillsMaterializer = value; }

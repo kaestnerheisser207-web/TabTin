@@ -16,7 +16,7 @@ fetch + attach 实现。
 
 - 列表场景必须显式调（否则 property 触发 fallback warning，N+1 隐式发生）
 - 单点接口可不调——单条 fallback fetch 是可接受成本
-- ``TABTIN_SOFTREF_STRICT=1`` env 让 fallback 直接 raise，CI 模式逼出未走预加载
+- ``MUSE_SOFTREF_STRICT=1`` env 让 fallback 直接 raise，CI 模式逼出未走预加载
 """
 
 from __future__ import annotations

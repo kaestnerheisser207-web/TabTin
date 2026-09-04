@@ -22,7 +22,7 @@ vi.mock('@components/chat/preview/chatMediaHttpCache', () => ({
     getCachedMediaUrlSpy(...args),
 }))
 
-vi.mock('@tabtin/table-core', () => ({
+vi.mock('@muse/table-core', () => ({
   AttachmentApiService: {
     resolveAccessUrl: (...args: unknown[]) => resolveAccessUrlSpy(...args),
   },

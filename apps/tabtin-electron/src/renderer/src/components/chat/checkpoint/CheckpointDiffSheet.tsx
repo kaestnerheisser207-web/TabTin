@@ -184,7 +184,7 @@ const CheckpointDiffSheet: React.FC<CheckpointDiffSheetProps> = ({
   // 重新加载（300ms 白屏 + scroll 重置 = 用户感知很差）。
   // dialog 内的破坏性确认 CTA：软色面（destructive/10）是刻意比满饱和红更克制的
   // 确认态，属设计契约允许的「dialog 内小面积告警色面」例外。
-  // eslint-disable-next-line tabtin/no-chat-design-violations -- dialog 破坏性确认 CTA 的克制软色面，非横幅/卡片大色块
+  // eslint-disable-next-line muse/no-chat-design-violations -- dialog 破坏性确认 CTA 的克制软色面，非横幅/卡片大色块
   const confirmRollbackClass = 'h-7 px-3 rounded-interactive text-body font-medium bg-destructive/10 text-destructive hover:bg-destructive/20 disabled:opacity-40 transition-colors'
 
   return createPortal(

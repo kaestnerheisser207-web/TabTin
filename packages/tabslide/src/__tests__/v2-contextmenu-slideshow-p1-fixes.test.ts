@@ -87,7 +87,7 @@ describe('C6-03: submenu zIndex uses design system token', () => {
     expect(subMenuSection).toContain('ZIndex.dropdown')
   })
 
-  it('ZIndex is imported from @tabtin/app-shell', () => {
+  it('ZIndex is imported from @muse/app-shell', () => {
     expect(contextMenuSrc).toMatch(/import\s*\{[^}]*ZIndex[^}]*\}\s*from\s*['"]@tabtin\/app-shell['"]/)
   })
 })

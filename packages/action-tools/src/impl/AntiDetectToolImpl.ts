@@ -1,4 +1,4 @@
-import { UAPool, DESKTOP_UA_POOL, MOBILE_UA_POOL, TABLET_UA_POOL, ProxyHealthChecker, type ProxyHealthResult } from '@tabtin/anti-detect'
+import { UAPool, DESKTOP_UA_POOL, MOBILE_UA_POOL, TABLET_UA_POOL, ProxyHealthChecker, type ProxyHealthResult } from '@muse/anti-detect'
 import { ToolErrorCode, ToolErrorFactory, type ToolError } from '../types/errors'
 import { t } from '../i18n'
 

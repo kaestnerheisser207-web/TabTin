@@ -1,1 +1,1 @@
-export { extractErrorMessage, dedupAsync } from '@tabtin/app-shell'
+export { extractErrorMessage, dedupAsync } from '@muse/app-shell'

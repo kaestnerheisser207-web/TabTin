@@ -3,7 +3,7 @@ import { describe, expect, it } from 'vitest'
 import { ProcessCommandRunner } from '../src/command-runner.js'
 import { DockerWorkspaceManager } from '../src/docker-workspace-manager.js'
 
-const IMAGE = process.env.TABTIN_CLOUD_WORKER_DOCKER_TEST_IMAGE
+const IMAGE = process.env.MUSE_CLOUD_WORKER_DOCKER_TEST_IMAGE
 
 describe.skipIf(!IMAGE)('DockerWorkspaceManager integration', () => {
   it('provisions, stops, restarts, and permanently removes one labelled allocation', async () => {

@@ -26,7 +26,7 @@ import type {
   Tool,
   ToolContext,
   ToolResult,
-} from '@tabtin/agent-runtime';
+} from '@muse/agent-runtime';
 import {
   joinApiPath,
   jsonError,
@@ -42,8 +42,8 @@ import {
   RESOURCE_NOT_FOUND,
   RUNTIME_MISCONFIG,
   UPSTREAM_ERROR,
-} from '@tabtin/agent-runtime/tools'
-import type { ToolErrorKind } from '@tabtin/agent-runtime/tools'
+} from '@muse/agent-runtime/tools'
+import type { ToolErrorKind } from '@muse/agent-runtime/tools'
 
 // ─── Shared types & helpers ──────────────────────────────────────────
 

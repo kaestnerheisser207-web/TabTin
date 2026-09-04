@@ -1,4 +1,4 @@
-import type { TabDocOpenWebUrlInput } from '@tabtin/app-host-sdk'
+import type { TabDocOpenWebUrlInput } from '@muse/app-host-sdk'
 
 function closestAnchor(target: EventTarget | null): HTMLAnchorElement | null {
   const closest = (target as { closest?: unknown } | null)?.closest

@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import type { ChatSessionRunState } from '@tabtin/chat-client'
+import type { ChatSessionRunState } from '@muse/chat-client'
 import { parseChatSessionRunStateEvent } from './chatSessionRunStateEvent'
 
 const RUN_STATE: ChatSessionRunState = {

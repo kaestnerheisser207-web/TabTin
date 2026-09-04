@@ -8,7 +8,7 @@ import { sanitizeSchema, rehypeSanitizeCss } from '../rehypeSanitizeSchema'
 import {
   ScrollArea,
   ConfirmDialog,
-} from '@tabtin/smartsheet-ui'
+} from '@muse/smartsheet-ui'
 import type { TabdocRevision } from '../api-client'
 import type { SaveState } from '../useDocEditor'
 

@@ -19,14 +19,14 @@
  * 调用点在 `buildInitialMessages` 之后（host pipeline，非 runtime hook）。
  */
 
-import type { ContentBlock, Message, MessageBlockRecord } from '@tabtin/agent-runtime'
+import type { ContentBlock, Message, MessageBlockRecord } from '@muse/agent-runtime'
 import {
   EXCLUDED_FROM_LLM_HISTORY_MESSAGE_KINDS,
-} from '@tabtin/agent-runtime/history'
+} from '@muse/agent-runtime/history'
 import {
   INTERNAL_MESSAGE_MARKERS,
   setInternalMarker,
-} from '@tabtin/agent-runtime/engine'
+} from '@muse/agent-runtime/engine'
 import { resolveMessageAgentAttribution } from './message-agent-attribution-store.js'
 
 /** 本 host 注入文案的稳定短语（仅 host 拥有）。 */

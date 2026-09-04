@@ -24,7 +24,7 @@ import {
   cleanupSocketFile,
   cleanupDiscoveryFile,
   scanMarketplaceManifests,
-} from '@tabtin/cli-server-core'
+} from '@muse/cli-server-core'
 import {
   configureCLIRoutes,
   handleTableRoute,
@@ -36,10 +36,10 @@ import {
   handleOSSRoute,
   handleCapabilitiesRoute,
   handleSearchRoute,
-} from '@tabtin/cli-routes'
+} from '@muse/cli-routes'
 import { handleBrowserRoute } from './routes/browser'
 import { handleSlideRoute } from './routes/slide'
-import { wirePythonRuntimeHost } from '@tabtin/python-runtime-host'
+import { wirePythonRuntimeHost } from '@muse/python-runtime-host'
 import { logger as appLogger } from '../utils/logger'
 import { createLogger } from '../logger'
 import { resolveDevInstanceId } from '../app-identity'
@@ -68,14 +68,14 @@ import {
   sendBrowserTabUserInControlError,
 } from './routes/shared/error-handler'
 import { ensureCliProfileBootstrap } from './cli-profile-bootstrap'
-import { okResponse, errResponse } from '@tabtin/agent-wire'
-import { runWithHumanInteractionContext } from '@tabtin/agent-runtime'
+import { okResponse, errResponse } from '@muse/agent-wire'
+import { runWithHumanInteractionContext } from '@muse/agent-runtime'
 import {
   getSurfaceByHttpPath,
   createSurfaceHttpHandler,
   configureSurfaceRuntime,
   createSurfacesEndpoint,
-} from '@tabtin/cli-server-core'
+} from '@muse/cli-server-core'
 import {
   getCLIActionExecutor,
   getCLISpaceId,
@@ -635,7 +635,7 @@ export function startCLIServer(config?: CLIServerConfig): CLIServerInfo {
     return serverInfo!
   }
 
-  // Wave 4b：把宿主特有能力注入 @tabtin/cli-routes 共享路由模块。
+  // Wave 4b：把宿主特有能力注入 @muse/cli-routes 共享路由模块。
   // djangoRequest 走 Electron TokenManager（JWT 自动刷新），actionExecutor
   // 走 FrontendActionBridge（IPC 到渲染进程），getSpaceId / workspaceRoot 走
   // ./cli-context（state owner，避免和 routes 形成循环）。
@@ -773,15 +773,15 @@ export function startCLIServer(config?: CLIServerConfig): CLIServerInfo {
     // （= process.resourcesPath），to: "tabtin-cli-go/dist"。dev 形态下该目录不存在，
     // 由下面的 existsSync 过滤掉。
     ...(process.resourcesPath ? [join(process.resourcesPath, 'tabtin-cli-go', 'dist')] : []),
-  ].filter((d) => existsSync(join(d, process.platform === 'win32' ? 'tabtin.exe' : 'tabtin')))
+  ].filter((d) => existsSync(join(d, process.platform === 'win32' ? 'muse.exe' : 'muse')))
 
-  // tabtin-filegen：随包分发的文件生成二进制（PyInstaller 自包含，客户端免装 Python）。
+  // muse-filegen：随包分发的文件生成二进制（PyInstaller 自包含，客户端免装 Python）。
   // `muse file create` 代理与 Agent 通过 PATH 命中它。打包/路径形态与 Go CLI 一致。
-  const fileGenName = process.platform === 'win32' ? 'tabtin-filegen.exe' : 'tabtin-filegen'
+  const fileGenName = process.platform === 'win32' ? 'muse-filegen.exe' : 'muse-filegen'
   const fileGenCliDirs = [
-    join(app.getAppPath(), '..', '..', 'packages', 'tabtin-filegen-python', 'dist'),
-    join(app.getAppPath(), 'packages', 'tabtin-filegen-python', 'dist'),
-    ...(process.resourcesPath ? [join(process.resourcesPath, 'tabtin-filegen-python', 'dist')] : []),
+    join(app.getAppPath(), '..', '..', 'packages', 'muse-filegen-python', 'dist'),
+    join(app.getAppPath(), 'packages', 'muse-filegen-python', 'dist'),
+    ...(process.resourcesPath ? [join(process.resourcesPath, 'muse-filegen-python', 'dist')] : []),
   ].filter((d) => existsSync(join(d, fileGenName)))
 
   const nodeCliDirs = [
@@ -799,7 +799,7 @@ export function startCLIServer(config?: CLIServerConfig): CLIServerInfo {
   }
 
   // 自管 Python 运行时：解析/provision 后把解释器 bin 接入 PATH（真实实现由
-  // @tabtin/python-runtime-host 经 agent-runtime re-export 提供）。
+  // @muse/python-runtime-host 经 agent-runtime re-export 提供）。
   // fire-and-forget（同 ensureCliProfileBootstrap 模式）：agent PTY 在用户操作时才 spawn，
   // 届时读 process.env 已就绪；dev 无种子无 OSS 时静默跳过，回落系统 python3。
   // 传 app logger → [python-runtime] 日志落 electron-log 文件（生产可查，不再依赖 stdout）。

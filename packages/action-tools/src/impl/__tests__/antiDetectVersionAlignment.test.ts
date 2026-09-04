@@ -5,7 +5,7 @@ import {
   WeightedDesktopUAPool,
   generateDesktopChromeVersionPool,
   generateDesktopUAPool,
-} from '@tabtin/anti-detect'
+} from '@muse/anti-detect'
 
 describe('anti-detect version alignment', () => {
   it('桌面 UA 池会跟随传入的 Chromium 版本生成', () => {

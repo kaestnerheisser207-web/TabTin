@@ -1,6 +1,6 @@
 import React from 'react'
 import { useTranslation } from 'react-i18next'
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogScrollBody, DialogTitle, ScrollArea, StatusNotice } from '@tabtin/smartsheet-ui'
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogScrollBody, DialogTitle, ScrollArea, StatusNotice } from '@muse/smartsheet-ui'
 import type { SubscriptionPlan } from '@/types/membership'
 import { SettingsBadge } from '../SettingsBadge'
 import { SubscriptionActionButton } from './SubscriptionActionButton'
@@ -12,7 +12,7 @@ import {
   resolveTierDisplayName,
 } from './subscriptionFormat'
 
-const TABTIN_WEBSITE_URL = 'https://www.example.com/'
+const MUSE_WEBSITE_URL = 'https://www.example.com/'
 
 export const SubscriptionPlanDialog: React.FC<{
   open: boolean
@@ -35,10 +35,10 @@ export const SubscriptionPlanDialog: React.FC<{
           <DialogDescription>
             {t('membership.planDialog.descriptionPrefix')}
             <a
-              href={TABTIN_WEBSITE_URL}
+              href={MUSE_WEBSITE_URL}
               onClick={(event) => {
                 event.preventDefault()
-                void window.tabtin.openExternal(TABTIN_WEBSITE_URL)
+                void window.muse.openExternal(MUSE_WEBSITE_URL)
               }}
               className="text-primary underline-offset-4 hover:underline"
             >

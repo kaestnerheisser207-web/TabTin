@@ -4,9 +4,9 @@ import {
   FieldValueEditor,
   type FieldValueEditorField,
   type FieldValueEditorProps,
-} from '@tabtin/smartsheet-ui'
-import { isAttachmentFieldType, type FormFieldMeta } from '@tabtin/table-ui'
-import type { Field } from '@tabtin/table-core'
+} from '@muse/smartsheet-ui'
+import { isAttachmentFieldType, type FormFieldMeta } from '@muse/table-ui'
+import type { Field } from '@muse/table-core'
 import { FieldTypeIcon } from '@/components/field/FieldTypeIcon'
 import { useUpload } from '@/hooks/useUpload'
 

@@ -2,7 +2,7 @@
  * bridge-core.ts — 核心 API 注入桥接
  *
  * 将 Electron 主进程各服务（RunSession、ViewFactory、CrawlView、
- * ContextSpace、HttpCrawl、PtyManager 等）桥接到 @tabtin/action-tools
+ * ContextSpace、HttpCrawl、PtyManager 等）桥接到 @muse/action-tools
  * 的 set*API 接口，使工具层无需直接依赖 app 层路径。
  */
 
@@ -15,7 +15,7 @@ import {
   generateSkeletonHtml,
   filterHtmlByContentTypes,
   parseContentTypeWhitelist,
-} from '@tabtin/action-tools/impl'
+} from '@muse/action-tools/impl'
 import {
   setRunSessionAPI,
   setViewFactoryAPI,
@@ -30,12 +30,12 @@ import {
   setOffscreenRenderAPI,
   setUIThemeAPI,
   type UITheme,
-} from '@tabtin/action-tools/runtime'
+} from '@muse/action-tools/runtime'
 import { WidgetRenderService } from './WidgetRenderService'
 import { initWidgetAuditLogger } from './widgetAuditLogger'
 import { initResourceOpenTelemetryService } from './resourceOpenTelemetryService'
 import { getBrowserEnvironmentService } from '../browser-env/BrowserEnvironmentService'
-import { setBrowserCoreBridge } from '@tabtin/browser-core'
+import { setBrowserCoreBridge } from '@muse/browser-core'
 import { ElectronBrowserContext } from '../context/ElectronBrowserContext'
 
 import { executeScript, getNavigationState, goBack, goForward, reload, stop, loadUrl, waitForTabReady, waitForSelector } from '../embedded-crawl-view'

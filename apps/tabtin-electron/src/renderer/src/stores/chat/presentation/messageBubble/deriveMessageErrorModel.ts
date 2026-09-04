@@ -1,4 +1,4 @@
-import type { ChatMessage } from '@tabtin/chat-client'
+import type { ChatMessage } from '@muse/chat-client'
 import { BILLING_ERROR_CATEGORIES } from '@utils/chat/billingErrorCategories'
 import { getErrorClassInfo, type ErrorClassInfo } from '@utils/chat/messageErrorClassMap'
 import type { Translate } from './messageBubbleModelTypes'

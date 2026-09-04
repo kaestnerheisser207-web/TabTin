@@ -4,7 +4,7 @@ export interface DocRendererModuleInfo {
 }
 
 export const DOC_RENDERER_MODULE_INFO: DocRendererModuleInfo = {
-  name: '@tabtin/doc-renderer',
+  name: '@muse/doc-renderer',
   version: '0.1.0',
 }
 

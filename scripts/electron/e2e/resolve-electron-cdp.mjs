@@ -36,8 +36,8 @@ export function getDevToolsActivePortPath() {
 }
 
 function parseEnvPort() {
-  const raw = process.env.TABTIN_CDP_ACTIVE_PORT
-    ?? process.env.TABTIN_CDP_PORT
+  const raw = process.env.MUSE_CDP_ACTIVE_PORT
+    ?? process.env.MUSE_CDP_PORT
     ?? process.env.CDP_PORT
   if (!raw?.trim()) return undefined
   const port = Number(raw)
@@ -97,7 +97,7 @@ export async function resolveCdpEndpoint(overridePort) {
   const port = overridePort ?? active?.port
   if (!port) {
     throw new Error(
-      `无法解析 Electron CDP 端口：请确认 Electron dev 在跑，或设置 TABTIN_CDP_PORT；` +
+      `无法解析 Electron CDP 端口：请确认 Electron dev 在跑，或设置 MUSE_CDP_PORT；` +
         `期望文件 ${getDevToolsActivePortPath()}`,
     )
   }
@@ -201,7 +201,7 @@ async function withBrowserSession(fn, { port, commandTimeoutMs } = {}) {
 
 function isTabtinPackagedPage(target) {
   const url = String(target.url || '')
-  return url.startsWith('tabtin-file://app/')
+  return url.startsWith('muse-file://app/')
 }
 
 function isTabtinDevPage(target, vitePort = DEFAULT_VITE_PORT) {
@@ -237,9 +237,9 @@ function isMainDevPage(target, vitePort = DEFAULT_VITE_PORT) {
   if (!isTabtinDevPage(target, vitePort)) return false
   const url = String(target.url || '')
   if (url.includes('overlay.html')) return false
-  // packaged / preview:packaged 主页面是 tabtin-file://app/index.html
+  // packaged / preview:packaged 主页面是 muse-file://app/index.html
   if (isTabtinPackagedPage(target)) {
-    return url.includes('/index.html') || url === 'tabtin-file://app/' || url.endsWith('://app')
+    return url.includes('/index.html') || url === 'muse-file://app/' || url.endsWith('://app')
   }
   return true
 }
@@ -300,7 +300,7 @@ async function pickPageTarget(client, { page = 'main', vitePort = DEFAULT_VITE_P
   }
 
   throw new Error(
-    `未找到 Muse 主 renderer page（期望 localhost:${vitePort} 或 tabtin-file://app/index.html，非 overlay.html）。` +
+    `未找到 Muse 主 renderer page（期望 localhost:${vitePort} 或 muse-file://app/index.html，非 overlay.html）。` +
       `当前 pages: ${pages.map((p) => p.url).join(', ') || '(none)'}`,
   )
 }

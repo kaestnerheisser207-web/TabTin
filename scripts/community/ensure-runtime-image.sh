@@ -4,7 +4,7 @@ set -euo pipefail
 repo_root="${1:?repository root is required}"
 compose_file="${repo_root}/compose.yaml"
 env_file="${repo_root}/.env"
-image="tabtin/community-django:local"
+image="muse/community-django:local"
 label="com.tabtin.community.dev-dependency-fingerprint"
 
 hash_file_list() {
@@ -30,10 +30,10 @@ if [ "${current}" = "${fingerprint}" ]; then
 fi
 
 printf '%s\n' 'Building Community Docker image (dependency fingerprint changed).'
-unset TABTIN_EDITION AUTH_FIXED_VERIFICATION_CODE
+unset MUSE_EDITION AUTH_FIXED_VERIFICATION_CODE
 retry_count=0
 max_retries=3
-until TABTIN_DOCKER_DEPENDENCY_FINGERPRINT="${fingerprint}" docker compose \
+until MUSE_DOCKER_DEPENDENCY_FINGERPRINT="${fingerprint}" docker compose \
     --project-directory "${repo_root}" \
     --env-file "${env_file}" \
     -f "${compose_file}" \

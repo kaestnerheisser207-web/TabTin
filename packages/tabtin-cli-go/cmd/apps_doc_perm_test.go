@@ -53,8 +53,8 @@ func TestDocPermSetIsFullReplaceRiskWrite(t *testing.T) {
 	if !strings.Contains(def.Long, "全量") && !strings.Contains(def.Long, "replace") {
 		t.Fatalf("perm set Long 应强调全量 replace，got: %s", def.Long)
 	}
-	if !strings.Contains(def.Long, "TABTIN_USER_ID") || !strings.Contains(def.Long, "user_id") {
-		t.Fatalf("perm set Long 应说明从 JWT/TABTIN_USER_ID 识别自身 admin，got: %s", def.Long)
+	if !strings.Contains(def.Long, "MUSE_USER_ID") || !strings.Contains(def.Long, "user_id") {
+		t.Fatalf("perm set Long 应说明从 JWT/MUSE_USER_ID 识别自身 admin，got: %s", def.Long)
 	}
 	if def.DryRun == nil {
 		t.Fatal("perm set 缺 DryRun")
@@ -78,9 +78,9 @@ func TestParseDocPermEntrySpec(t *testing.T) {
 }
 
 func TestValidateDocPermSetRequiresSelfAdmin(t *testing.T) {
-	t.Setenv("TABTIN_USER_ID", "usr_me")
-	t.Setenv("TABTIN_JWT", "")
-	t.Setenv("TABTIN_TOKEN", "")
+	t.Setenv("MUSE_USER_ID", "usr_me")
+	t.Setenv("MUSE_JWT", "")
+	t.Setenv("MUSE_TOKEN", "")
 
 	ctx := &cmdutil.RunContext{FlagValues: map[string]any{}}
 	if err := validateDocPermSetFlags(ctx); err == nil {
@@ -110,9 +110,9 @@ func TestValidateDocPermSetRequiresSelfAdmin(t *testing.T) {
 }
 
 func TestValidateDocPermSetFailClosedWithoutCallerID(t *testing.T) {
-	t.Setenv("TABTIN_USER_ID", "")
-	t.Setenv("TABTIN_JWT", "")
-	t.Setenv("TABTIN_TOKEN", "")
+	t.Setenv("MUSE_USER_ID", "")
+	t.Setenv("MUSE_JWT", "")
+	t.Setenv("MUSE_TOKEN", "")
 
 	ctx := &cmdutil.RunContext{
 		Factory:    cmdutil.NewFactory(),
@@ -122,16 +122,16 @@ func TestValidateDocPermSetFailClosedWithoutCallerID(t *testing.T) {
 	if err == nil {
 		t.Fatal("无 caller id 时应 fail-closed")
 	}
-	if !strings.Contains(err.Error(), "user:<your-id>:admin") && !strings.Contains(err.Error(), "TABTIN_USER_ID") {
-		t.Fatalf("应提示显式 --entry / TABTIN_USER_ID，got: %v", err)
+	if !strings.Contains(err.Error(), "user:<your-id>:admin") && !strings.Contains(err.Error(), "MUSE_USER_ID") {
+		t.Fatalf("应提示显式 --entry / MUSE_USER_ID，got: %v", err)
 	}
 }
 
 func TestValidateDocPermSetReadsJWTUserID(t *testing.T) {
-	t.Setenv("TABTIN_USER_ID", "")
+	t.Setenv("MUSE_USER_ID", "")
 	token := testAccessTokenWithUserID(t, "usr_from_jwt")
-	t.Setenv("TABTIN_JWT", token)
-	t.Setenv("TABTIN_TOKEN", "")
+	t.Setenv("MUSE_JWT", token)
+	t.Setenv("MUSE_TOKEN", "")
 
 	ctx := &cmdutil.RunContext{
 		Factory:    cmdutil.NewFactory(),

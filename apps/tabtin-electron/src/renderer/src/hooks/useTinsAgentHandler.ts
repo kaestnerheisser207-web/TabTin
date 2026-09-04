@@ -11,8 +11,8 @@
  */
 
 import { useEffect, useRef } from 'react'
-import { RecordApiService } from '@tabtin/table-core'
-import { toast } from '@tabtin/smartsheet-ui'
+import { RecordApiService } from '@muse/table-core'
+import { toast } from '@muse/smartsheet-ui'
 import { useSpaceStore } from '@stores/useSpaceStore'
 import { useOrganizationStore } from '@stores/useOrganizationStore'
 import { useTinsStore } from '@stores/useTinsStore'
@@ -38,7 +38,7 @@ function makeOneShotSessionId(): string {
 }
 
 function isLocalRuntimeReady(agentConfig?: { use_local_runtime?: boolean }): boolean {
-  if (typeof window === 'undefined' || !window.tabtin?.agentEngine) return false
+  if (typeof window === 'undefined' || !window.muse?.agentEngine) return false
   if (agentConfig?.use_local_runtime === false) return false
   return true
 }
@@ -156,7 +156,7 @@ export function useTinsAgentHandler(): void {
   spaceIdRef.current = spaceId
 
   useEffect(() => {
-    const unsub = window.tabtin?.tins?.onAgentRequest(
+    const unsub = window.muse?.tins?.onAgentRequest(
       async (data: {
         requestId: string
         instruction: string
@@ -168,11 +168,11 @@ export function useTinsAgentHandler(): void {
             instruction: data.instruction,
             organizationId: data.organizationId,
           })
-          window.tabtin?.tins?.respondAgent(data.requestId, result)
+          window.muse?.tins?.respondAgent(data.requestId, result)
         } catch (e) {
           const errMsg = e instanceof Error ? e.message : String(e)
           log.error('runAgent unexpected failure:', e)
-          window.tabtin?.tins?.respondAgent(data.requestId, { error: errMsg })
+          window.muse?.tins?.respondAgent(data.requestId, { error: errMsg })
         }
       },
     )
@@ -182,7 +182,7 @@ export function useTinsAgentHandler(): void {
   }, [])
 
   useEffect(() => {
-    const unsubToast = window.tabtin?.tins?.onToast(
+    const unsubToast = window.muse?.tins?.onToast(
       (data: { message: string; type: string }) => {
         toast({
           title: data.message || '',
@@ -200,7 +200,7 @@ export function useTinsAgentHandler(): void {
     // 与 Electron host 通信。它是 Tin sandbox 独立的 API wire format（不属于 Tracker
     // 模块），改名会破坏所有已发布的 Tin 应用；本期保留 sandbox API 字段名，
     // 接收后立即在内部把语义视为 trackerId（log / 调用都用 trackerId 语义）。
-    const unsubTrigger = window.tabtin?.tins?.onTriggerGoal(
+    const unsubTrigger = window.muse?.tins?.onTriggerGoal(
       async (data: { instanceId: string; goalId: string; params?: Record<string, unknown> }) => {
         const trackerId = data.goalId
         log.info(`triggerTracker – trackerId=${trackerId} instanceId=${data.instanceId}`)
@@ -214,7 +214,7 @@ export function useTinsAgentHandler(): void {
       },
     )
 
-    const unsubTable = window.tabtin?.tins?.onWriteTable(
+    const unsubTable = window.muse?.tins?.onWriteTable(
       async (data: { instanceId: string; tableId: string; records: Record<string, unknown>[]; organizationId: string }) => {
         log.info(`writeToTable – tableId=${data.tableId} records=${data.records?.length ?? 0} organizationId=${data.organizationId}`)
         if (!Array.isArray(data.records) || data.records.length === 0) return

@@ -5,7 +5,7 @@
  * 可被 Hook、Store、组件直接调用，不依赖 React hook。
  */
 
-import { toast } from '@tabtin/smartsheet-ui/toast'
+import { toast } from '@muse/smartsheet-ui/toast'
 import i18n from '@/i18n'
 import { useChatStore } from '@stores/chat/useChatStore'
 import { useSpaceStore } from '@stores/useSpaceStore'
@@ -29,7 +29,7 @@ import { useIMStore } from '@stores/useIMStore'
 import { useUIStore } from '@stores/useUIStore'
 import { useSpaceViewPrefsStore } from '@stores/useSpaceViewPrefsStore'
 import { getConversation } from '@/services/tabchatApi'
-import { getConversationNavigationKind, resolveSessionScopeId } from '@tabtin/app-shell'
+import { getConversationNavigationKind, resolveSessionScopeId } from '@muse/app-shell'
 import { useOrganizationStore } from '@stores/useOrganizationStore'
 import { runWithAgentContextSwitchGuard } from '@/services/agentContextSwitchGuard'
 import {

@@ -43,7 +43,7 @@ import {
   type IpcStreamEnvelope,
   type IpcStreamSender,
 } from '../../../../shared/ipc-stream'
-import { DeliveryBatchBuffer, type DeliveryTransport } from '@tabtin/agent-host/delivery'
+import { DeliveryBatchBuffer, type DeliveryTransport } from '@muse/agent-host/delivery'
 
 interface StreamEvt {
   type: string

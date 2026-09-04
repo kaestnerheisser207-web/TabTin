@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
-import type { Field, TableRecord } from '@tabtin/table-core'
-import type { CollabSyncMode } from '@tabtin/collab-core'
+import type { Field, TableRecord } from '@muse/table-core'
+import type { CollabSyncMode } from '@muse/collab-core'
 import type { IncrementalSyncSnapshot, WsGatewayLike, TableStreamEvent } from './types'
 import { useIncrementalSync } from './useIncrementalSync'
 import { useTableEventStream } from './useTableEventStream'

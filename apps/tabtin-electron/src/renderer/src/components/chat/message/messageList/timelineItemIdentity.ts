@@ -1,4 +1,4 @@
-import type { ChatMessage } from '@tabtin/chat-client'
+import type { ChatMessage } from '@muse/chat-client'
 import { isLlmAssistantSegment, isRegularUserMessage } from '@stores/chat/presentation/messageTimeline/turnTransparency'
 
 /** 稳定虚拟行身份：用户消息 ACK 前后及物化分段都保持同一语义 key。 */

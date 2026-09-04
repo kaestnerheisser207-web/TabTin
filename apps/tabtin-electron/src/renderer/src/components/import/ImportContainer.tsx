@@ -16,8 +16,8 @@ import {
   DataImportConfig,
   DataImportResult,
   DataImportField,
-} from '@tabtin/smartsheet-ui';
-import { ImportExportApiService, isImportResultError } from '@tabtin/table-core';
+} from '@muse/smartsheet-ui';
+import { ImportExportApiService, isImportResultError } from '@muse/table-core';
 import { useTableStore } from '@/stores/useTableStore';
 import { useRecordStore } from '@/stores/useRecordStore';
 import { useViewStore } from '@/stores/useViewStore';

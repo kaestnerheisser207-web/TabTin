@@ -9,7 +9,7 @@
  */
 
 import i18n from '@/i18n'
-import type { ChatMessage } from '@tabtin/chat-client'
+import type { ChatMessage } from '@muse/chat-client'
 import { isAgentModeName, type AgentModeName, type AgentStep, type AgentStepStatus, type AgentStepType, type ToolEvent, type ToolPhase } from '../../shared/types'
 import { humanizeToolName, summarizeToolInput, summarizeToolOutput, unwrapToolOutputFence } from '../../shared/helpers'
 

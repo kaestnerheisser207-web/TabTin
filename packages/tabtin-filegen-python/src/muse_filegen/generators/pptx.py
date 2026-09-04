@@ -7,8 +7,8 @@ from typing import Any, Dict
 from pptx import Presentation
 from pptx.util import Inches
 
-from tabtin_filegen.errors import SpecError
-from tabtin_filegen.validate import as_text, optional_text, require_list, require_mapping
+from muse_filegen.errors import SpecError
+from muse_filegen.validate import as_text, optional_text, require_list, require_mapping
 
 _SPEC_HELP = """pptx spec:
 {

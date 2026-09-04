@@ -14,7 +14,7 @@ import {
   rememberAttributionFromPersistEvent,
   hydrateMessageSenderAttributions,
   resolveMessageSenderAttribution,
-} from '@tabtin/agent-host/conversation'
+} from '@muse/agent-host/conversation'
 import fs from 'node:fs'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
@@ -25,7 +25,7 @@ import {
   isOSAccessError,
   toToolError,
   type OSToolError,
-} from '@tabtin/safe-fs'
+} from '@muse/safe-fs'
 import {
   AgentHost,
   ApprovalGate,
@@ -33,16 +33,16 @@ import {
   HostTrackerScheduler,
   MessageDeliveryOutbox,
   createApprovalGate,
-} from '@tabtin/agent-host'
+} from '@muse/agent-host'
 import type {
   AgentOwnerAdapter,
   HostQuery,
   HostTriggerSource,
-} from '@tabtin/agent-host'
+} from '@muse/agent-host'
 import type {
   RuntimeResourceFactory,
   RuntimeDisabledAppsExtraKey,
-} from '@tabtin/agent-host/runtime'
+} from '@muse/agent-host/runtime'
 import {
   buildRelayRequestPayload,
   FileLlmSnapshotLedgerDirectory,
@@ -52,22 +52,22 @@ import {
   type DeliveryDurableLayer,
   type LocalStreamPort,
   type RelayDeliveryMetadata,
-} from '@tabtin/agent-host/delivery'
+} from '@muse/agent-host/delivery'
 import type {
   ForwardConversationRequest,
   QueryTurnDataPort,
   QueryTurnSessionView,
-} from '@tabtin/agent-host/conversation'
+} from '@muse/agent-host/conversation'
 
 import type {
   Message,
   ModelCatalogEntry,
   StreamEvent,
-} from '@tabtin/agent-runtime/engine'
+} from '@muse/agent-runtime/engine'
 //  批次 13：engine barrel 收敛为 engine-only。非 engine 目录的符号
 // （runtime 组装根 / session / subagent / providers / telemetry / agent-modes /
 // permissions / host / terminal / capability injectors）改从包入口
-// `@tabtin/agent-runtime` import。
+// `@muse/agent-runtime` import。
 import {
   SessionStorage,
   reconstructMessagesFromTranscriptEntries,
@@ -101,7 +101,7 @@ import {
   resolveUserRoot,
   setHumanInteractionHooks,
   reapOrphanedSubagentRuns,
-} from '@tabtin/agent-runtime'
+} from '@muse/agent-runtime'
 import {
   correlateSourceClientEvent,
   formatProactiveReportMessage,
@@ -118,38 +118,38 @@ import {
   type NotificationDrainContext,
   type PendingSubtaskInfo,
   type RelaySessionStorageView,
-} from '@tabtin/agent-host/delivery'
+} from '@muse/agent-host/delivery'
 import {
   executionOwnerScopeId,
   resolveRuntimeModeAgainstSticky,
-} from '@tabtin/agent-host/runtime'
+} from '@muse/agent-host/runtime'
 import {
   applyAuthoritativeSecurityMutate,
   type QueryPipelineSession,
-} from '@tabtin/agent-host/conversation'
-import type { AgentStreamEnvelope } from '@tabtin/agent-host/realtime'
-import type { HostTurnStateSnapshot } from '@tabtin/agent-host/policy'
-import type { AgentModeName } from '@tabtin/agent-modes'
-import type { ReconstructedTranscriptMessage } from '@tabtin/agent-runtime'
+} from '@muse/agent-host/conversation'
+import type { AgentStreamEnvelope } from '@muse/agent-host/realtime'
+import type { HostTurnStateSnapshot } from '@muse/agent-host/policy'
+import type { AgentModeName } from '@muse/agent-modes'
+import type { ReconstructedTranscriptMessage } from '@muse/agent-runtime'
 import {
   executeTool,
   classifyError,
   isReportableRunError,
   isToolLifecycleNotice,
-} from '@tabtin/agent-runtime/engine'
-import type { PersistedEntryOwner } from '@tabtin/agent-runtime'
-import { electronHostRuntimeOptions } from '@tabtin/agent-host/configuration'
+} from '@muse/agent-runtime/engine'
+import type { PersistedEntryOwner } from '@muse/agent-runtime'
+import { electronHostRuntimeOptions } from '@muse/agent-host/configuration'
 const { resolveSyncPersistence } = electronHostRuntimeOptions
-import type { TelemetryEventName } from '@tabtin/agent-runtime'
-import type { AppContext } from '@tabtin/agent-host/hooks'
+import type { TelemetryEventName } from '@muse/agent-runtime'
+import type { AppContext } from '@muse/agent-host/hooks'
 import type {
   CodeWorktreeAgentContext,
   CodeWorktreeController,
-} from '@tabtin/cli-routes'
+} from '@muse/cli-routes'
 import { TokenManager } from '../auth.js'
 import { API_BASE_URL } from '../config/api.js'
-import { joinApiPath } from '@tabtin/config'
-import { deriveApprovalMode } from '@tabtin/security-policy'
+import { joinApiPath } from '@muse/config'
+import { deriveApprovalMode } from '@muse/security-policy'
 import {
   getCLIOrganizationRoot,
   getCLISpaceId,
@@ -204,25 +204,25 @@ import {
   SkillsStore,
   type ApprovalGrantName,
   type StateRoot,
-} from '@tabtin/agent-host'
-import { bindAttributionStore, modelCatalogScopeKey } from '@tabtin/agent-host/state'
+} from '@muse/agent-host'
+import { bindAttributionStore, modelCatalogScopeKey } from '@muse/agent-host/state'
 import {
   bindCatalogStore,
   warmCliCommandsMaterialized,
 } from './capabilities/cli-commands-materializer.js'
 // W4 (2026-05-13)：持久通道改造——不再直接 import parseLocalAttachment，改走
-// `@tabtin/file-pipeline` 的 `FileResolver`。channel 只决定策略 + 装配 prompt。
+// `@muse/file-pipeline` 的 `FileResolver`。channel 只决定策略 + 装配 prompt。
 import {
   createDefaultFileResolver,
   type FileResolver,
-} from '@tabtin/file-pipeline'
+} from '@muse/file-pipeline'
 import { runDocParserTask } from '../workers/doc-parser-runner.js'
 // errorClassToFallback 是 local-docparse 内部 helper —— W4 沿用（PDF/DOCX/XLSX
 // 各 errorClass 的"是否值得切云端" 业务规则在 worker 层定义，channel 复用即可）。
 import {
   errorClassToFallback,
   assessCloudSummaryQuality,
-} from '@tabtin/local-docparse'
+} from '@muse/local-docparse'
 
 // W4 lazy singleton：Electron 主进程共享一个 FileResolver 实例（无状态）。
 let _electronFileResolver: FileResolver | null = null
@@ -255,13 +255,13 @@ import {
   registerWorktreeRemoveRuntimeProbe,
   unregisterWorktreeRemoveRuntimeProbe,
 } from '../git/worktree-remove-runtime-probe.js'
-import { createAgentSecuritySurfaces } from '@tabtin/cli-server-core/surfaces/agent-security'
-import { createSkillListSurface } from '@tabtin/cli-server-core/surfaces/skill-list'
-import { createSkillMaterializeAppSurface } from '@tabtin/cli-server-core/surfaces/skill-materialize-app'
-import { createSkillReadContentSurface } from '@tabtin/cli-server-core/surfaces/skill-read-content'
-import { createSkillWriteContentSurface } from '@tabtin/cli-server-core/surfaces/skill-write-content'
-import { createSkillResolvePathSurface } from '@tabtin/cli-server-core/surfaces/skill-resolve-path'
-import { isValidSkillKey } from '@tabtin/agent-host/skills'
+import { createAgentSecuritySurfaces } from '@muse/cli-server-core/surfaces/agent-security'
+import { createSkillListSurface } from '@muse/cli-server-core/surfaces/skill-list'
+import { createSkillMaterializeAppSurface } from '@muse/cli-server-core/surfaces/skill-materialize-app'
+import { createSkillReadContentSurface } from '@muse/cli-server-core/surfaces/skill-read-content'
+import { createSkillWriteContentSurface } from '@muse/cli-server-core/surfaces/skill-write-content'
+import { createSkillResolvePathSurface } from '@muse/cli-server-core/surfaces/skill-resolve-path'
+import { isValidSkillKey } from '@muse/agent-host/skills'
 import { installNpmSkill } from '../cli/routes/skill-import-npm.js'
 import { getCLISkillsInteropAdder } from '../cli/cli-context.js'
 import {
@@ -269,7 +269,7 @@ import {
   type AgentEngineCompactSessionInput,
   type AgentEngineCompactSessionOutput,
   type AgentEngineGetStateOutput,
-} from '@tabtin/cli-server-core/surfaces/agent-engine'
+} from '@muse/cli-server-core/surfaces/agent-engine'
 import { electronWsGateway } from '../ws/ElectronWsGateway.js'
 import { electronAgentTransport } from './platform/electron-agent-transport.js'
 import { HostStateSync } from './host-state-sync.js'
@@ -292,8 +292,8 @@ import { resolveLocalStreamSessionId } from './resolve-local-stream-session-id.j
 // YOLO PRD v3 review M2：main 进程现拉 Django 权威 agent_config。
 // 详见 ElectronAgentHost.agentConfigClient 字段注释 + agent-config-client.ts。
 import { createAgentConfigClient } from './policy/agent-config-client.js'
-import { clearAllActivePlansForSession } from '@tabtin/agent-runtime'
-import type { SubagentModelPolicy } from '@tabtin/agent-runtime'
+import { clearAllActivePlansForSession } from '@muse/agent-runtime'
+import type { SubagentModelPolicy } from '@muse/agent-runtime'
 
 import {
   getOrResumeFileHistory,
@@ -323,8 +323,8 @@ import {
   liftLegacyResult,
   type LegacyEnvelopeResult,
 } from './conversation/envelope-error.js'
-import { AgentActionEvents, LocalRuntimeEvents } from '@tabtin/ws-gateway-client'
-import type { GatewayEnvelope } from '@tabtin/ws-gateway-client'
+import { AgentActionEvents, LocalRuntimeEvents } from '@muse/ws-gateway-client'
+import type { GatewayEnvelope } from '@muse/ws-gateway-client'
 import {
   clearRuntimeInteractionMode,
   getRuntimeInteractionMode,
@@ -338,26 +338,26 @@ import {
   deriveCacheType,
   deriveReasoningHistoryPolicy,
   FALLBACK_MODEL_CAPABILITIES,
-} from '@tabtin/agent-runtime/engine'
+} from '@muse/agent-runtime/engine'
 import {
   resolveSpaceWorkspaceRoot,
   isValidModelRef,
   isInTurnPushNotificationUser,
-} from '@tabtin/agent-runtime'
+} from '@muse/agent-runtime'
 // ShellCap 接 PtyManagerBridge — 装配点拿 bridge。
 // bootstrap 顺序（agent-bridge.ts L544-548）：
 //   PtyManager 就绪 → bridge-core.ts setupCoreAPIs 调 setPtyManagerBridge
 //   → 此处 resolvePtyManagerBridge 拿到真实 bridge → 装配 ShellCap
-import { resolvePtyManagerBridge } from '@tabtin/action-tools/runtime'
+import { resolvePtyManagerBridge } from '@muse/action-tools/runtime'
 import {
   isChatAudioAttachment,
   formatChatAudioTranscriptBody,
   transcribeChatAudioAttachment,
-} from '@tabtin/media-capabilities/audio'
+} from '@muse/media-capabilities/audio'
 import {
   isChatVideoAttachment,
   formatChatVideoUploadedBody,
-} from '@tabtin/media-capabilities/video'
+} from '@muse/media-capabilities/video'
 import {
   resolvePlatformDataRoot,
   resolveDataRoot,
@@ -377,36 +377,36 @@ import {
   type ManagedTaskReconcileRecord,
   type ManagedTaskReconcileDeps,
   type ReconcileTerminalState,
-} from '@tabtin/terminal-core'
+} from '@muse/terminal-core'
 // W3：HITL UserInteractiveChannel 桥接 + ApprovalMemoStore（W6 v3 judge 接管后）。
-// 生产链路 100% 走 `@tabtin/security-policy` `judge()` 主路径——历史 6 层
+// 生产链路 100% 走 `@muse/security-policy` `judge()` 主路径——历史 6 层
 // PermissionPipeline（driver / layers / 配套接口）已整体清退。
 import {
   applyCancelledByRollbackToHitl,
   buildBackgroundTaskTerminalResult,
   type InMemoryApprovalMemoStore,
-} from '@tabtin/agent-runtime'
+} from '@muse/agent-runtime'
 import { ModeSwitchHandler } from './policy/mode-switch-handler.js'
 import { installElectronTelemetrySink } from './platform/telemetry-sink.js'
 import { registerTelemetryIpcHandlers } from './platform/telemetry-ipc.js'
 import { getLocalMcpService } from '../services/LocalMcpService.js'
 // ：宿主启动期一次性把旧 platform-data 布局迁到新 dataRoot 布局。
-import { migrateLegacyPlatformDataToDataRoot } from '@tabtin/shared'
+import { migrateLegacyPlatformDataToDataRoot } from '@muse/shared'
 // ：临时隐藏 skill 名单（tabvideo）由宿主注入。
-import { TEMPORARILY_HIDDEN_SKILLS } from '@tabtin/agent-host/capabilities'
+import { TEMPORARILY_HIDDEN_SKILLS } from '@muse/agent-host/capabilities'
 import {
   disposeSkillsModule,
   initSkillsModule,
   resolveDefaultInteropRoots,
   type SkillPreinstallSource,
   type SkillsModuleHandle,
-} from '@tabtin/agent-host/skills'
+} from '@muse/agent-host/skills'
 import {
   loadEnabledPersonalPluginSkillSnapshot,
-} from '@tabtin/agent-runtime/skills'
+} from '@muse/agent-runtime/skills'
 import { SkillsModuleLifecycle } from './skills-module-lifecycle.js'
 import { fetchSkillEnablementMap } from './capabilities/fetch-skill-enablement-map.js'
-import { RecallIndex } from '@tabtin/search'
+import { RecallIndex } from '@muse/search'
 import { getSemanticScorer } from './capabilities/semantic-scorer.js'
 import {
   initProactivePoller,
@@ -417,7 +417,7 @@ import {
   markSubtaskRunsNotified,
 } from './subagents/proactive-poller.js'
 // ：per-session 串行执行器 + FIFO 队列（host 侧 busy/queue 唯一真相源）。
-import { PromptEvents, StreamEvents, okResponse } from '@tabtin/agent-wire'
+import { PromptEvents, StreamEvents, okResponse } from '@muse/agent-wire'
 import {
   clearUserDeviceModelPreferences,
   readOrganizationDeviceModelPreferences,
@@ -468,7 +468,7 @@ type RollbackSessionTimelineResult = {
 }
 
 function resolveDevWorkspacePath(...segments: string[]): string | undefined {
-  const workspaceRoot = process.env.TABTIN_WORKSPACE_ROOT
+  const workspaceRoot = process.env.MUSE_WORKSPACE_ROOT
   if (workspaceRoot) {
     const candidate = path.join(workspaceRoot, ...segments)
     return fs.existsSync(candidate) ? candidate : undefined
@@ -1090,7 +1090,7 @@ export class ElectronAgentHost {
    * 后不再切，让"已编辑过的项目"先打通端到端。后续 PR 可以加 workspace root
    * 切换时 reinit 逻辑。
    *
-   * 关闭：`TABTIN_DISABLE_LSP=1` 环境变量。
+   * 关闭：`MUSE_DISABLE_LSP=1` 环境变量。
    */
   /**
    * v0.4 W1.5（PRD §7.5.7）：HITL pending resolver map，名义统一。
@@ -1454,7 +1454,7 @@ export class ElectronAgentHost {
   /**
    * Agent 级 SkillEnablement 缓存。fetchSkills 前 refresh；tools 同步读。
    * 封闭携带集：仅 `enabledMap[key] === true` 才注入（含 workspace；缺键/无快照=关）。
-   * 见 `@tabtin/agent-runtime/skills` skill-enablement。
+   * 见 `@muse/agent-runtime/skills` skill-enablement。
    */
   private get skillEnablementCache() {
     const skills = this.stateRoot.skills
@@ -3470,7 +3470,7 @@ export class ElectronAgentHost {
           return null
         }
 
-        const workspaceRoot = process.env.TABTIN_WORKSPACE_ROOT
+        const workspaceRoot = process.env.MUSE_WORKSPACE_ROOT
         const allowedRoots = [
           workspaceRoot ? path.join(workspaceRoot, 'packages', 'skills', 'bundled') : undefined,
           workspaceRoot ? path.join(workspaceRoot, 'packages', 'apps') : undefined,
@@ -3630,23 +3630,23 @@ export class ElectronAgentHost {
     //
     // 保留的 ``get-workspace-snapshot`` / ``build-approval-key`` / ``build-scope-description``
     // 都是只读查询：snapshot 是 main 进程持有的内存状态，build-* 是纯函数（共享
-    // ``@tabtin/security-policy``），不发 HTTP，无 URL bug 隐患。
+    // ``@muse/security-policy``），不发 HTTP，无 URL bug 隐患。
     // W6 批次 1：agent-security 3 个 handler 迁到 PlatformSurface。
     // findWorkspaceSnapshot 闭包捕获 this.sessions（AgentHost 内存状态遍历）；
     // buildApprovalKey / buildScopeDescription 通过 dynamic import 延迟加载
-    // @tabtin/security-policy（避免 cli-server-core 对 security-policy 的直接依赖）。
+    // @muse/security-policy（避免 cli-server-core 对 security-policy 的直接依赖）。
     const agentSecuritySurfaces = createAgentSecuritySurfaces({
       findWorkspaceSnapshot: (spaceId: string) =>
         this.workspaceBoundary.getSnapshot(this.sessions.values(), spaceId),
       buildApprovalKey: async (toolName, subcmd, input, inWorkspace, opts) => {
-        const mod = await import('@tabtin/security-policy')
+        const mod = await import('@muse/security-policy')
         return mod.buildApprovalKey(toolName, subcmd, input, inWorkspace, {
           scope: opts.scope,
-          kind: opts.kind as import('@tabtin/security-policy').PolicyActionKind | undefined,
+          kind: opts.kind as import('@muse/security-policy').PolicyActionKind | undefined,
         })
       },
       buildScopeDescription: async (toolName, subcmd, scope) => {
-        const mod = await import('@tabtin/security-policy')
+        const mod = await import('@muse/security-policy')
         return mod.buildScopeDescription(toolName, subcmd, scope)
       },
     })
@@ -3679,7 +3679,7 @@ export class ElectronAgentHost {
     //
     // 多窗口 split view（多 Space 同时活跃）超出 dogfood 范围，进遗留池由后续
     // wave 用"renderer fs/git/checkpoint IPC payload 加 spaceId"严格方案修。
-    const findWorkspaceSnapshotByActiveSpaceId = (): import('@tabtin/security-policy').WorkspaceSnapshot | null => {
+    const findWorkspaceSnapshotByActiveSpaceId = (): import('@muse/security-policy').WorkspaceSnapshot | null => {
       const activeSpaceId = getCLISpaceId()
       if (!activeSpaceId) return null
       return this.workspaceBoundary.getSnapshot(this.sessions.values(), activeSpaceId)
@@ -4490,7 +4490,7 @@ export class ElectronAgentHost {
         collectPlatformSources,
         collectAppSources,
         collectPackageSkillSources,
-      } = await import('@tabtin/agent-host/skills')
+      } = await import('@muse/agent-host/skills')
       const preinstallSources = [
         ...(bundledRoot ? await collectPlatformSources(bundledRoot) : []),
         ...(appsRoot ? await collectAppSources(appsRoot) : []),
@@ -4783,7 +4783,7 @@ export class ElectronAgentHost {
       },
       reconcileAllowedPaths: (dst) => {
         this.workspaceBoundary.reconcileSnapshot(
-          dst as unknown as import('@tabtin/security-policy').WorkspaceSnapshot,
+          dst as unknown as import('@muse/security-policy').WorkspaceSnapshot,
           { type: 'refresh' },
         )
       },
@@ -5823,10 +5823,10 @@ export class ElectronAgentHost {
    * 由 `NotificationIdleDrain` 打结构化日志后短路。
    */
   private resolveNotificationQueue():
-    | import('@tabtin/terminal-core').NotificationQueue
+    | import('@muse/terminal-core').NotificationQueue
     | undefined {
     const bridge = resolvePtyManagerBridge() as
-      | { getNotificationQueue?: () => import('@tabtin/terminal-core').NotificationQueue }
+      | { getNotificationQueue?: () => import('@muse/terminal-core').NotificationQueue }
       | null
     return bridge?.getNotificationQueue?.()
   }
@@ -6205,8 +6205,8 @@ export class ElectronAgentHost {
    * FR-18 主路径：本地优先解析附件（W4 经 FileResolver 抽象层）。
    *
    * **W4 (2026-05-13) 改造**：
-   *   - 旧实现：直接 import + 调 `parseLocalAttachment(@tabtin/local-docparse)`
-   *   - 新实现：通过 `@tabtin/file-pipeline` 的 `FileResolver` 调 `PdfParser /
+   *   - 旧实现：直接 import + 调 `parseLocalAttachment(@muse/local-docparse)`
+   *   - 新实现：通过 `@muse/file-pipeline` 的 `FileResolver` 调 `PdfParser /
    *     DocxParser / XlsxParser`；channel 只决定策略（local_first / cloud_only）+
    *     转 `ResolveResult` 为 prompt 注入文本。
    *
@@ -6379,7 +6379,7 @@ export class ElectronAgentHost {
   // `logLocalParseResult(LocalDocParseResult)`）。事件名 / 字段 / 桶分布
   // 与 W3 完全对齐——dashboard / jq 消费方不变。
   private logFileResolverResult(
-    result: import('@tabtin/file-pipeline').ResolveResult,
+    result: import('@muse/file-pipeline').ResolveResult,
     ctx: { mime: string; fileId: string; filename: string },
   ): void {
     if (result.kind === 'text') {

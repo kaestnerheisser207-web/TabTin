@@ -1,7 +1,7 @@
 import React from 'react'
 import { act, cleanup, render, renderHook, screen, waitFor } from '@testing-library/react'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
-import { Toaster } from '@tabtin/smartsheet-ui/toast'
+import { Toaster } from '@muse/smartsheet-ui/toast'
 import { useFileTreeActions } from '../useFileTreeActions'
 
 vi.mock('react-i18next', () => ({

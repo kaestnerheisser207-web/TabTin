@@ -6,7 +6,7 @@
  *   2. 宿主侧（如 retry-tool 错误归因）可直接复用
  *
  * **W1（2026-05-13）**：返回值改为 `FilePipelineErrorCode` 全局 enum 字面值
- * （与 `@tabtin/file-pipeline-errors` SSoT 对齐）。
+ * （与 `@muse/file-pipeline-errors` SSoT 对齐）。
  */
 
 import { FilePipelineErrorCode, type LocalDocParseErrorClass } from './types.js'
@@ -74,7 +74,7 @@ export class OversizeDownloadError extends Error {
  *   3. pdfjs 升级时若更换类名，先 name 不匹配 → 走 message 兜底；若 message 也变则回落
  *      UNKNOWN_ERROR（fallbackToCloud: true），比硬编码误匹配更安全
  *
- * **W1**：返回值字面值已与 `@tabtin/file-pipeline-errors` SSoT 对齐——下游
+ * **W1**：返回值字面值已与 `@muse/file-pipeline-errors` SSoT 对齐——下游
  * `tabcode-adapter` 不再需要 lossy 压扁映射（旧 adapter 层那个把 6 类压成
  * `UNSUPPORTED_OPERATION=4` 的函数已删除，envelope 通过 `formatFilePipelineError`
  * 派发）。

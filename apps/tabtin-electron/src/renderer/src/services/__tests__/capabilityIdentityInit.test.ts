@@ -15,7 +15,7 @@ vi.mock('@/stores/chat/execution/activeRunBinding', () => ({
 vi.mock('@/stores/chat/stream/handlers/supersededRuns', () => ({
   clearAllSupersededRuns: (...args: unknown[]) => clearAllSupersededRuns(...args),
 }))
-vi.mock('@tabtin/app-shell', () => ({
+vi.mock('@muse/app-shell', () => ({
   onOrganizationSelected: (...args: unknown[]) =>
     (onOrganizationSelected as (...a: unknown[]) => unknown)(...args),
   resetHostTurnPush: (...args: unknown[]) => resetHostTurnPush(...args),
@@ -45,7 +45,7 @@ describe('capabilityIdentityInit ', () => {
     expect(clearAllActiveRunBindings).toHaveBeenCalled()
     expect(clearAllSupersededRuns).toHaveBeenCalled()
     expect(resetHostTurnPush).toHaveBeenCalled()
-    expect(window.tabtin?.agentEngine?.initCapabilityIdentity).toHaveBeenCalledWith({
+    expect(window.muse?.agentEngine?.initCapabilityIdentity).toHaveBeenCalledWith({
       reason: 'organization-switch',
       organizationId: 'org-b',
     })
@@ -67,8 +67,8 @@ describe('capabilityIdentityInit ', () => {
     expect(orgCb).toBeTypeOf('function')
     await orgCb?.('org-a')
     await orgCb?.('org-a')
-    expect(window.tabtin?.agentEngine?.initCapabilityIdentity).toHaveBeenCalledTimes(1)
-    expect(window.tabtin?.agentEngine?.initCapabilityIdentity).toHaveBeenCalledWith({
+    expect(window.muse?.agentEngine?.initCapabilityIdentity).toHaveBeenCalledTimes(1)
+    expect(window.muse?.agentEngine?.initCapabilityIdentity).toHaveBeenCalledWith({
       reason: 'organization-switch',
       organizationId: 'org-a',
     })

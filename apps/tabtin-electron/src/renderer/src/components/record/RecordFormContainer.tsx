@@ -17,15 +17,15 @@ import {
   type RecordFormData,
   type AttachmentFieldRenderProps,
   type HistoryOperation,
-} from '@tabtin/smartsheet-ui';
+} from '@muse/smartsheet-ui';
 import { MessageSquare } from 'lucide-react';
-import { toFieldDefinitions, toOrganizationMembers } from '@tabtin/table-ui';
-import { UndoRedoApiService, computeChangedRecordData, isOutOfBandManagedField } from '@tabtin/table-core';
+import { toFieldDefinitions, toOrganizationMembers } from '@muse/table-ui';
+import { UndoRedoApiService, computeChangedRecordData, isOutOfBandManagedField } from '@muse/table-core';
 import { useTableStore } from '@stores/useTableStore';
 import { useRecordStore } from '@stores/useRecordStore';
 import { useViewStore } from '@stores/useViewStore';
 import { useUIStore } from '@stores/useUIStore';
-import type { AttachmentReference, Field, TableRecord } from '@tabtin/table-core';
+import type { AttachmentReference, Field, TableRecord } from '@muse/table-core';
 import { AttachmentField } from '@/components/attachments/AttachmentField';
 import { LinkCellEditor } from '@/components/field/LinkCellEditor';
 import { LinkedRecordFormHost } from '@/components/record/LinkedRecordFormHost';

@@ -22,7 +22,7 @@ export interface ModeSwitchExecuteResult {
 export async function executeModeSwitch(
   request: ModeSwitchExecuteRequest,
 ): Promise<ModeSwitchExecuteResult> {
-  const ipc = window.tabtin?.agentEngine
+  const ipc = window.muse?.agentEngine
   if (!ipc?.executeModeSwitch) {
     throw new Error('IPC bridge missing executeModeSwitch')
   }
@@ -63,7 +63,7 @@ export interface NotifyModeSwitchedResult {
 export async function notifyModeSwitched(
   payload: NotifyModeSwitchedPayload,
 ): Promise<NotifyModeSwitchedResult> {
-  const ipc = window.tabtin?.agentEngine
+  const ipc = window.muse?.agentEngine
   if (!ipc?.notifyModeSwitched) {
     return { success: false }
   }

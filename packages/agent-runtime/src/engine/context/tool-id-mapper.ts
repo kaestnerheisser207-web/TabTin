@@ -14,14 +14,14 @@
 
 import { v4 as uuidv4 } from 'uuid';
 
-const TABTIN_TOOL_ID_PREFIX = 'tu_';
+const MUSE_TOOL_ID_PREFIX = 'tu_';
 
 export function isTabtinToolUseId(id: string): boolean {
-  return typeof id === 'string' && id.startsWith(TABTIN_TOOL_ID_PREFIX);
+  return typeof id === 'string' && id.startsWith(MUSE_TOOL_ID_PREFIX);
 }
 
 export function allocateTabtinToolUseId(): string {
-  return `${TABTIN_TOOL_ID_PREFIX}${uuidv4()}`;
+  return `${MUSE_TOOL_ID_PREFIX}${uuidv4()}`;
 }
 
 /**

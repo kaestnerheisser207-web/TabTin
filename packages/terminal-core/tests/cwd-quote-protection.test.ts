@@ -32,13 +32,13 @@ describe('detectUnquotedWorkspacePath：含空格路径未引号被命中', () =
     expect(hits[0].hint).toContain(SPACED);
   });
 
-  it('hint 给出动作化建议（含 single-quote / TABTIN_WORKSPACE 双引号示例）', () => {
+  it('hint 给出动作化建议（含 single-quote / MUSE_WORKSPACE 双引号示例）', () => {
     const cmd = `cp ${SPACED}/a.txt /tmp/b.txt`;
     const hits = detectUnquotedWorkspacePath(cmd, [SPACED]);
     expect(hits).toHaveLength(1);
     // hint 必须给出可执行的下一步姿势，不能是空话
     expect(hits[0].hint).toMatch(/single quotes/i);
-    expect(hits[0].hint).toMatch(/TABTIN_WORKSPACE/);
+    expect(hits[0].hint).toMatch(/MUSE_WORKSPACE/);
   });
 
   it('多个不同含空格路径 → 多条命中（每路径报一次）', () => {
@@ -72,7 +72,7 @@ describe('detectUnquotedWorkspacePath：引号内不命中', () => {
   });
 
   it('双引号包裹整个路径 + 后跟 / 文件名 → 不命中', () => {
-    // bash 把 `"$TABTIN_WORKSPACE"/a.txt` 看作完整 token（路径含空格但被引）
+    // bash 把 `"$MUSE_WORKSPACE"/a.txt` 看作完整 token（路径含空格但被引）
     const cmd = `cat "${SPACED}/notes/today.md"`;
     const hits = detectUnquotedWorkspacePath(cmd, [SPACED]);
     expect(hits).toHaveLength(0);

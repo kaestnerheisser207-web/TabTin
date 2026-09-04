@@ -4,7 +4,7 @@ set -euo pipefail
 # TabTin Agent Daemon Installer
 # Usage: curl -fsSL https://install.example.com | bash -s -- --token "eyJ..."
 
-TABTIN_DAEMON_PKG="@tabtin/daemon"
+MUSE_DAEMON_PKG="@muse/daemon"
 MIN_NODE_VERSION=18
 INSTALL_DIR="$HOME/.tabtin-daemon"
 
@@ -23,7 +23,7 @@ cleanup_on_error() {
   err "Installation failed. Please check the error above."
   err "If the issue persists, try manual installation:"
   err "  1. Install Node.js >= ${MIN_NODE_VERSION}: https://nodejs.org"
-  err "  2. npm install -g ${TABTIN_DAEMON_PKG}"
+  err "  2. npm install -g ${MUSE_DAEMON_PKG}"
   err "  3. tabtin-daemon init --token <your-token>"
   exit 1
 }
@@ -123,12 +123,12 @@ if ! check_node; then
 fi
 
 # --- Install Daemon ---
-DAEMON_VERSION="${TABTIN_DAEMON_VERSION:-latest}"
+DAEMON_VERSION="${MUSE_DAEMON_VERSION:-latest}"
 TARBALL_URL="https://releases.example.com/daemon/tabtin-daemon-${DAEMON_VERSION}.tgz"
 
 install_from_npm() {
   log "Installing from npm registry..."
-  npm install -g "${TABTIN_DAEMON_PKG}@${DAEMON_VERSION}" 2>&1
+  npm install -g "${MUSE_DAEMON_PKG}@${DAEMON_VERSION}" 2>&1
 }
 
 install_from_tarball() {

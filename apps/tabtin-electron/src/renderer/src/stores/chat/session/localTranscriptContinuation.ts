@@ -2,7 +2,7 @@
  * 续接任务的本机 transcript 往往只有新一轮，不含服务端物化的 share_snapshot。
  * 这类短记录不能当完整对话权威，否则会把原任务时间线盖掉。
  */
-import type { ChatClient, ChatMessage, ChatSession } from '@tabtin/chat-client'
+import type { ChatClient, ChatMessage, ChatSession } from '@muse/chat-client'
 import { mergeMessagesFromServer } from '@/stores/chat/domain/messageSyncAction'
 import { sortMessagesForTimeline } from '@/stores/chat/domain/messageTimelineOrder'
 

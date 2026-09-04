@@ -1,4 +1,4 @@
-import type { GroupRuntimeConfig } from '@tabtin/chat-client'
+import type { GroupRuntimeConfig } from '@muse/chat-client'
 import { useOrganizationStore } from '@stores/useOrganizationStore'
 import { useSpaceStore } from '@stores/useSpaceStore'
 import { resolveProjectExecutionWorkspace } from '@utils/projectExecutionTarget'

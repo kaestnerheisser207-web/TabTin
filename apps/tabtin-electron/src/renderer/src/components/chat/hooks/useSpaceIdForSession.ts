@@ -11,7 +11,7 @@
  * - 返回 null 时上层应禁用按钮（拼不出请求）
  */
 
-import { resolveSessionScopeId } from '@tabtin/app-shell'
+import { resolveSessionScopeId } from '@muse/app-shell'
 import { useChatStore } from '@/stores/chat/useChatStore'
 
 export function useSpaceIdForSession(sessionId: string | null | undefined): string | null {

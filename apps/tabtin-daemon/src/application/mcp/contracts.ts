@@ -1,4 +1,4 @@
-import type { ActionExecutorAdapter } from '@tabtin/action-tools/headless'
+import type { ActionExecutorAdapter } from '@muse/action-tools/headless'
 import type { McpContentApiPort, McpTablePort } from './ports.js'
 
 export interface McpServerConfig {
@@ -6,7 +6,7 @@ export interface McpServerConfig {
   table?: McpTablePort
   adapter?: ActionExecutorAdapter
   workspaceRoot?: string
-  getWorkspaceSnapshot?: () => import('@tabtin/security-policy').WorkspaceSnapshot | null
+  getWorkspaceSnapshot?: () => import('@muse/security-policy').WorkspaceSnapshot | null
 }
 
 export interface McpToolDefinition {

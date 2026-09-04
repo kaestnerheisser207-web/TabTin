@@ -5,10 +5,10 @@
  * 上报、done usage → live usage 转换、Vite env 读取，以及远程网关响应类型。都是
  * 围绕「把一次发送派发出去」所需的输入/输出小件。
  */
-import type { ChatMessage, ChatSession } from '@tabtin/chat-client'
+import type { ChatMessage, ChatSession } from '@muse/chat-client'
 import type { ChatAttachment } from '../../../../components/chat/types'
 import type { SerializableAttachment } from '../../../useChatRuntimeStore'
-import type { EnvKillSwitchReader } from '@tabtin/agent-runtime/history'
+import type { EnvKillSwitchReader } from '@muse/agent-runtime/history'
 import {
   findAssistantAfterPendingUser,
   isCheckpointAnchorAssistant,

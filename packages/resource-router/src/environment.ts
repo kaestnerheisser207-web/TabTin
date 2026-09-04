@@ -24,7 +24,7 @@ export function resolveTabTinResourceScheme(
   try {
     const hostname = new URL(environment.apiBaseUrl).hostname.toLowerCase()
     if (hostname === 'api.example.com') return 'muse'
-    if (hostname === 'api-test.example.com') return 'tabtin-preprod'
+    if (hostname === 'api-test.example.com') return 'muse-preprod'
     if (
       hostname === 'localhost' ||
       hostname === '::1' ||
@@ -32,18 +32,18 @@ export function resolveTabTinResourceScheme(
       hostname === 'host.docker.internal' ||
       isPrivateIPv4(hostname)
     ) {
-      return 'tabtin-dev'
+      return 'muse-dev'
     }
   } catch {
     // Invalid or relative custom API values fall back to the build identity below.
   }
 
-  if (environment.buildProfile === 'preprod') return 'tabtin-preprod'
+  if (environment.buildProfile === 'preprod') return 'muse-preprod'
   if (
     environment.buildProfile === 'development' ||
     environment.buildProfile === 'local'
   ) {
-    return 'tabtin-dev'
+    return 'muse-dev'
   }
   return 'muse'
 }

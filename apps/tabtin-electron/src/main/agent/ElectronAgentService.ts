@@ -3,11 +3,11 @@
  *
  * 职责：
  *   1. 维持到 Backend WS 的连接（带 token 刷新与重试）
- * Agent topic、命令路由、观察流去重由 `@tabtin/agent-host` 统一拥有。
+ * Agent topic、命令路由、观察流去重由 `@muse/agent-host` 统一拥有。
  */
 
-import type { GatewayAuthContext } from '@tabtin/ws-gateway-client'
-import { deviceTopicForDevice } from '@tabtin/agent-host/realtime'
+import type { GatewayAuthContext } from '@muse/ws-gateway-client'
+import { deviceTopicForDevice } from '@muse/agent-host/realtime'
 import { app } from 'electron'
 import { electronWsGateway } from '../ws/ElectronWsGateway.js'
 import { TokenManager } from '../auth.js'

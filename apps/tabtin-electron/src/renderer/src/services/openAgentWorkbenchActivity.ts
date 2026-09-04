@@ -2,8 +2,8 @@
  * 从 AI 分身工作台打开 Chat / Project Task 活动条目。
  */
 
-import type { ChatSession, ChatSessionWithAgent } from '@tabtin/chat-client'
-import { compareSpacesByStableOrder } from '@tabtin/app-shell'
+import type { ChatSession, ChatSessionWithAgent } from '@muse/chat-client'
+import { compareSpacesByStableOrder } from '@muse/app-shell'
 import { enterTeamSpaceProject } from '@components/layout/project/teamSpaceProjectNavigation'
 import { focusProjectTask } from '@/services/focusProjectTask'
 import { openProjectTaskChatSession } from '@/services/openProjectTaskChatSession'

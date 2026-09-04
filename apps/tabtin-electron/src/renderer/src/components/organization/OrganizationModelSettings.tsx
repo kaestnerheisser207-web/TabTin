@@ -366,7 +366,7 @@ export const OrganizationModelSettings: React.FC<OrganizationModelSettingsProps>
   )
 
   const refreshOpenAICodexStatus = useCallback(async (): Promise<OpenAICodexStatus> => {
-    const status = await window.tabtin.openaiCodex.getStatus()
+    const status = await window.muse.openaiCodex.getStatus()
     setOpenAICodexStatus(status)
     return status
   }, [])
@@ -459,7 +459,7 @@ export const OrganizationModelSettings: React.FC<OrganizationModelSettingsProps>
   useEffect(() => { void loadAll() }, [loadAll])
 
   useEffect(() => {
-    const unsubscribe = window.tabtin.openaiCodex.onStatusChanged(() => {
+    const unsubscribe = window.muse.openaiCodex.onStatusChanged(() => {
       void refreshOpenAICodexStatus()
         .then(() => {
           // 登录与断开都刷新：断开时要立即移除本机模型，并重读主进程已清理的
@@ -477,7 +477,7 @@ export const OrganizationModelSettings: React.FC<OrganizationModelSettingsProps>
   const handleDisconnectOpenAICodex = async () => {
     setNotice(null)
     try {
-      await window.tabtin.openaiCodex.logout()
+      await window.muse.openaiCodex.logout()
       if (deviceMainModelId || deviceSubagentModelId) {
         await saveOrganizationDeviceModelPreferences(organizationId, {})
         setDeviceMainModelId('')

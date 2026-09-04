@@ -1,4 +1,4 @@
-import type { Model, ModelRuntimeControl } from '@tabtin/chat-client'
+import type { Model, ModelRuntimeControl } from '@muse/chat-client'
 import { resolveOpenAICodexModelCapabilities } from '../../../shared/openai-codex-models'
 
 type OpenAICodexStatus = {

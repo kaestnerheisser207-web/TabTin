@@ -6,7 +6,7 @@
 #
 # POSIX 入口。Windows 走独立的 PowerShell 实现，互不调用。
 # 启动脚本走 _ensure-desktop-runtimes.sh；打包走 build-packaged-app.sh。
-# 跳过：TABTIN_SKIP_DESKTOP_RUNTIME_FETCH=1
+# 跳过：MUSE_SKIP_DESKTOP_RUNTIME_FETCH=1
 # 默认失败只告警、不阻断调用方；需要失败退出时加 --strict。
 #
 # 用法：
@@ -20,13 +20,13 @@ set -euo pipefail
 
 REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../../.." && pwd)"
 SOURCES_JSON="$REPO_ROOT/scripts/electron/runtime/desktop-runtime-official-sources.json"
-OFFICE_CONFIG_JSON="${TABTIN_OFFICE_RUNTIME_CONFIG:-$REPO_ROOT/packages/office-preview-runtime/runtime.config.json}"
+OFFICE_CONFIG_JSON="${MUSE_OFFICE_RUNTIME_CONFIG:-$REPO_ROOT/packages/office-preview-runtime/runtime.config.json}"
 REGION_RESOLVER="$REPO_ROOT/scripts/electron/runtime/resolve-office-runtime-region.mjs"
 ONLY="all"
 FORCE=0
 STRICT=0
 PLATFORM_OVERRIDE=""
-REGION="${TABTIN_RUNTIME_REGION:-auto}"
+REGION="${MUSE_RUNTIME_REGION:-auto}"
 
 while [ $# -gt 0 ]; do
   case "$1" in
@@ -66,8 +66,8 @@ if [ "$ONLY" != "all" ] && [ "$ONLY" != "python" ] && [ "$ONLY" != "office" ]; t
   exit 2
 fi
 
-if [ "${TABTIN_SKIP_DESKTOP_RUNTIME_FETCH:-0}" = "1" ]; then
-  echo "⏭  TABTIN_SKIP_DESKTOP_RUNTIME_FETCH=1：跳过官方运行时拉取"
+if [ "${MUSE_SKIP_DESKTOP_RUNTIME_FETCH:-0}" = "1" ]; then
+  echo "⏭  MUSE_SKIP_DESKTOP_RUNTIME_FETCH=1：跳过官方运行时拉取"
   exit 0
 fi
 
@@ -112,8 +112,8 @@ echo "  · 目标平台/架构: $PLATFORM"
 REGION="$(node "$REGION_RESOLVER" --region "$REGION")" || exit 2
 echo "  · Office 下载区域: $REGION"
 
-CACHE_DIR="${TABTIN_DESKTOP_RUNTIME_CACHE_DIR:-${HOME}/.cache/tabtin-desktop-runtimes}"
-OFFICE_ROOT="${TABTIN_OFFICE_RUNTIME_ROOT:-$REPO_ROOT/packages/office-preview-runtime/runtime}"
+CACHE_DIR="${MUSE_DESKTOP_RUNTIME_CACHE_DIR:-${HOME}/.cache/tabtin-desktop-runtimes}"
+OFFICE_ROOT="${MUSE_OFFICE_RUNTIME_ROOT:-$REPO_ROOT/packages/office-preview-runtime/runtime}"
 mkdir -p "$CACHE_DIR"
 
 source_field() {
@@ -276,7 +276,7 @@ install_mac_poppler() {
   formula="$(source_field popplerMac formula)"
   if ! command -v brew >/dev/null 2>&1; then
     echo "⚠ macOS 需要 Homebrew 才能从官方 formula 安装 Poppler（$formula）。" >&2
-    echo "   安装 Homebrew 后重试，或自行提供 TABTIN_OFFICE_PREVIEW_RUNTIME_SOURCE。" >&2
+    echo "   安装 Homebrew 后重试，或自行提供 MUSE_OFFICE_PREVIEW_RUNTIME_SOURCE。" >&2
     return 1
   fi
   if ! brew list --versions "$formula" >/dev/null 2>&1; then

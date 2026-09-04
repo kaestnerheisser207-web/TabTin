@@ -23,7 +23,7 @@ type RichBlockArg = NonNullable<ToolContext['emitRichContentBlock']> extends (ar
 const SUPPORTED_RESOURCE_TYPES = new Set(['table', 'doc', 'slide', 'video', 'site', 'tracker'])
 const autoOpenPolicy = (resourceType: string): boolean => resourceType !== 'slide'
 const buildLocalFileArtifactUrl = (relativePath: string): string =>
-  `tabtin://resource/file/${encodeURIComponent(relativePath)}?hint=tabfiles`
+  `muse://resource/file/${encodeURIComponent(relativePath)}?hint=tabfiles`
 
 function getPresentToUserTool(overrides: Partial<PresentationToolsDeps> = {}): Tool {
   const tool = createPresentationTools({
@@ -434,7 +434,7 @@ describe('present_to_user local_file contract', () => {
         auto_open: true,
       },
     })
-    expect(String(richBlocks[0].payload?.url)).toBe('tabtin://resource/file/artifacts%2Freport.xlsx?hint=tabfiles')
+    expect(String(richBlocks[0].payload?.url)).toBe('muse://resource/file/artifacts%2Freport.xlsx?hint=tabfiles')
     expect(JSON.stringify(richBlocks[0])).not.toContain(tmpDir)
   })
 

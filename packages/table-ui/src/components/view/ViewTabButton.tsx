@@ -1,5 +1,5 @@
 import React from 'react'
-import { cn } from '@tabtin/smartsheet-ui'
+import { cn } from '@muse/smartsheet-ui'
 import { Lock, Pin } from 'lucide-react'
 import { VIEW_TYPE_ICONS } from './viewTypeIcons'
 

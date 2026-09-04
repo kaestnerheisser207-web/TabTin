@@ -1,8 +1,8 @@
 /**
- * @deprecated 已废弃 — 请使用 `@tabtin/collab-core` 的 `useVersionHistory`。
+ * @deprecated 已废弃 — 请使用 `@muse/collab-core` 的 `useVersionHistory`。
  *
  * 此文件保留仅为向后兼容。所有新代码应直接引用
- * `import { useVersionHistory } from '@tabtin/collab-core'`。
+ * `import { useVersionHistory } from '@muse/collab-core'`。
  *
  * 迁移指南:
  *   旧: useCollabVersionHistory({ resourceType, resourceId, enabled })
@@ -15,9 +15,9 @@
  *   restoreFromHistory → restoreVersion
  *   deleteNamedVersion → unnameVersion
  */
-import { joinApiPath } from '@tabtin/config'
+import { joinApiPath } from '@muse/config'
 import { useCallback } from 'react'
-import { useVersionHistory, type OperationResult, type VersionHistoryItem } from '@tabtin/collab-core'
+import { useVersionHistory, type OperationResult, type VersionHistoryItem } from '@muse/collab-core'
 import { useAuthStore } from '@/stores/useAuthStore'
 import { API_BASE_URL } from '@/config/api'
 
@@ -43,7 +43,7 @@ interface UseCollabVersionHistoryOptions {
 }
 
 /**
- * @deprecated 请迁移至 `useVersionHistory` from `@tabtin/collab-core`。
+ * @deprecated 请迁移至 `useVersionHistory` from `@muse/collab-core`。
  */
 export function useCollabVersionHistory({
   resourceType,

@@ -437,7 +437,7 @@ def _rewrite_turn_local_file_payloads(
             payload["artifact_kind"] = _LOCAL_FILE_KIND
             payload["relative_path"] = target_path
             payload["url"] = (
-                "tabtin://resource/file/"
+                "muse://resource/file/"
                 f"{quote(target_path, safe='')}?hint=tabfiles"
             )
             payload["handoff_file_id"] = file_id

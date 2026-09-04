@@ -71,7 +71,7 @@ log "esbuild 打包 → ${BUNDLE_OUT}"
 log "启动 Electron…"
 cd "${APP_DIR}"
 # autofill-service 模块加载需要 API_BASE_URL；E2E 不打后端，dummy 值即可
-export TABTIN_API_BASE_URL="${TABTIN_API_BASE_URL:-http://e2e.invalid/api}"
+export MUSE_API_BASE_URL="${MUSE_API_BASE_URL:-http://e2e.invalid/api}"
 "${ELECTRON_BIN}" \
   --no-sandbox \
   --disable-gpu \

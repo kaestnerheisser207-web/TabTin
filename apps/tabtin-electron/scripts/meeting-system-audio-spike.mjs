@@ -11,7 +11,7 @@ import { spawn } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
 import { app, BrowserWindow, desktopCapturer, session } from 'electron';
-import { STEALTH_ARGS } from '@tabtin/anti-detect';
+import { STEALTH_ARGS } from '@muse/anti-detect';
 
 const SAMPLE_DURATION_MS = 6_000;
 const SYSTEM_SOUND_PATH = '/System/Library/Sounds/Glass.aiff';

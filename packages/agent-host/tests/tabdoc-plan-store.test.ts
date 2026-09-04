@@ -11,7 +11,7 @@
 
 import { describe, it, expect, vi } from 'vitest';
 import { TabDocPlanStore } from '../src/tools/tabdoc-plan-store.js';
-import type { ToolContext } from '@tabtin/agent-runtime/engine';
+import type { ToolContext } from '@muse/agent-runtime/engine';
 
 const baseContext = {
   threadId: 't-test',

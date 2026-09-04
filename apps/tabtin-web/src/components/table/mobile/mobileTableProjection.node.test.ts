@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict'
 import test from 'node:test'
-import type { Field, TableRecord, ViewMeta } from '@tabtin/table-core'
-import type { TableGridRow } from '@tabtin/table-engine'
+import type { Field, TableRecord, ViewMeta } from '@muse/table-core'
+import type { TableGridRow } from '@muse/table-engine'
 import {
   projectMobileTableItems,
   readMobileCardFieldValue,

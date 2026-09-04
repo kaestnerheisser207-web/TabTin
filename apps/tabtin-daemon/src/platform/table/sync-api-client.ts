@@ -10,9 +10,9 @@
  *   - POST /tables/{tableId}/records/batch-delete
  */
 
-import type { SyncDelta, SyncRecordChange, SyncChange, TableSchema } from '@tabtin/table-kernel'
-import type { SyncApiClient } from '@tabtin/table-kernel-pglite'
-import { joinApiPath } from '@tabtin/config'
+import type { SyncDelta, SyncRecordChange, SyncChange, TableSchema } from '@muse/table-kernel'
+import type { SyncApiClient } from '@muse/table-kernel-pglite'
+import { joinApiPath } from '@muse/config'
 
 export interface SyncApiClientConfig {
   baseUrl: string
@@ -375,7 +375,7 @@ function isRecord(value: unknown): value is Record<string, unknown> {
 
 // ── RemoteApiClient factory for table-kernel DDD flows ──
 
-import type { RemoteApiClient } from '@tabtin/table-kernel'
+import type { RemoteApiClient } from '@muse/table-kernel'
 
 export function createRemoteApiClient(config: SyncApiClientConfig): RemoteApiClient {
   const apiRoot = `${config.baseUrl.replace(/\/+$/, '')}/api`

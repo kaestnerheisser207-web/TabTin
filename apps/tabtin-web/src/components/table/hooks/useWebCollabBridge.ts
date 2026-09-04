@@ -1,7 +1,7 @@
 /**
  * useWebCollabBridge — Web 端协作桥接薄封装
  *
- * 核心逻辑在 @tabtin/table-engine/collab，此文件仅注入 Web 特有的运行时依赖：
+ * 核心逻辑在 @muse/table-engine/collab，此文件仅注入 Web 特有的运行时依赖：
  *   - getAuthToken（localStorage）
  *   - COLLAB_WS_URLS.table
  *   - 当前用户信息
@@ -9,16 +9,16 @@
 
 import { useCallback, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
-import { toast } from '@tabtin/smartsheet-ui'
-import { getUserColor } from '@tabtin/collab-core'
+import { toast } from '@muse/smartsheet-ui'
+import { getUserColor } from '@muse/collab-core'
 import { useAuthStore } from '@/stores/auth-store'
 import { COLLAB_WS_URLS, TABLE_COLLAB_DISABLED } from '@/config/api'
 import { STORAGE_KEYS } from '@/platform/web-auth-adapter'
-import type { Field, CreateRecordRequest, UpdateRecordRequest, TableRecord } from '@tabtin/table-core'
+import type { Field, CreateRecordRequest, UpdateRecordRequest, TableRecord } from '@muse/table-core'
 import {
   useDataGridCollabBridge as useDataGridCollabBridgeCore,
   type UseDataGridCollabBridgeResult,
-} from '@tabtin/table-engine/collab'
+} from '@muse/table-engine/collab'
 
 async function getAuthToken(): Promise<string> {
   const token = localStorage.getItem(STORAGE_KEYS.ACCESS_TOKEN)

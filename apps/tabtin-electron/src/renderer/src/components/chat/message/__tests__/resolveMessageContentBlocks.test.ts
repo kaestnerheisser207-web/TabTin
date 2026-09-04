@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import type { ChatMessage } from '@tabtin/chat-client'
+import type { ChatMessage } from '@muse/chat-client'
 import type { ContentBlockEntry } from '../../blocks/types'
 import { ensureMessageRuntimeBlocks } from '@/stores/chat/messages/ensureMessageRuntimeBlocks'
 import { deriveAssistantBubbleModel } from '@stores/chat/presentation/messageBubble/deriveAssistantBubbleModel'

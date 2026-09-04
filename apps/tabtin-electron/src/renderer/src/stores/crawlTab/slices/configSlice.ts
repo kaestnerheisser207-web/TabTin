@@ -56,7 +56,7 @@ export function createConfigActions(get: GetFn, set: SetFn) {
         if (pluginId) {
           const pluginDefaults = getWorkspaceDefaults(pluginId)
           if (pluginDefaults) return pluginDefaults
-          if (globalThis.__TABTIN_DEBUG_TAB_SWITCH__) {
+          if (globalThis.__MUSE_DEBUG_TAB_SWITCH__) {
             console.warn('[CrawlTabStore] Plugin default config not found, using Agent defaults:', { crawlspaceId, pluginId })
           }
         }

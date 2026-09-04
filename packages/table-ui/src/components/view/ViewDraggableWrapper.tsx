@@ -1,6 +1,6 @@
 import type { ReactElement } from 'react'
 import { useCallback } from 'react'
-import type { ViewMeta } from '@tabtin/table-core'
+import type { ViewMeta } from '@muse/table-core'
 import {
   DndKitContext,
   Draggable,

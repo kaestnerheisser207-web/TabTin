@@ -13,7 +13,7 @@ def _policy_module():
 def test_community_core_keeps_builtin_product_paths_enabled() -> None:
     policy_module = _policy_module()
     policy = policy_module.resolve_startup_policy(
-        {"TABTIN_EDITION": "community"}
+        {"MUSE_EDITION": "community"}
     )
 
     core = {
@@ -38,7 +38,7 @@ def test_community_core_keeps_builtin_product_paths_enabled() -> None:
 def test_community_optional_services_do_not_block_startup_when_unconfigured() -> None:
     policy_module = _policy_module()
     policy = policy_module.resolve_startup_policy(
-        {"TABTIN_EDITION": "community"}
+        {"MUSE_EDITION": "community"}
     )
 
     optional = {
@@ -55,7 +55,7 @@ def test_community_optional_services_do_not_block_startup_when_unconfigured() ->
 def test_community_external_startup_integrations_are_opt_in_not_permanently_disabled() -> None:
     policy_module = _policy_module()
     policy = policy_module.resolve_startup_policy(
-        {"TABTIN_EDITION": "community"}
+        {"MUSE_EDITION": "community"}
     )
 
     configurable = {
@@ -74,7 +74,7 @@ def test_community_external_startup_integrations_are_opt_in_not_permanently_disa
 def test_community_commercial_dependencies_stay_disabled_even_if_requested() -> None:
     policy_module = _policy_module()
     policy = policy_module.resolve_startup_policy(
-        {"TABTIN_EDITION": "community"}
+        {"MUSE_EDITION": "community"}
     )
 
     disabled = {
@@ -119,7 +119,7 @@ def test_community_company_fallback_is_not_resolved() -> None:
     policy_module = _policy_module()
 
     endpoint = policy_module.resolve_endpoint_setting(
-        {"TABTIN_EDITION": "community"},
+        {"MUSE_EDITION": "community"},
         "DAEMON_SERVER_URL",
         saas_default="https://api.example.com",
     )
@@ -132,7 +132,7 @@ def test_community_accepts_an_explicit_third_party_endpoint() -> None:
 
     endpoint = policy_module.resolve_endpoint_setting(
         {
-            "TABTIN_EDITION": "community",
+            "MUSE_EDITION": "community",
             "OPENAI_BASE_URL": "https://llm.community.example/v1",
         },
         "OPENAI_BASE_URL",
@@ -158,7 +158,7 @@ def test_community_rejects_explicit_company_endpoints(endpoint: str) -> None:
     with pytest.raises(ValueError, match="company endpoint"):
         policy_module.resolve_endpoint_setting(
             {
-                "TABTIN_EDITION": "community",
+                "MUSE_EDITION": "community",
                 "CUSTOM_ENDPOINT": endpoint,
             },
             "CUSTOM_ENDPOINT",

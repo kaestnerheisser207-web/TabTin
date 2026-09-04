@@ -4,13 +4,13 @@ import {
   type TableRecord,
   type ViewMeta,
   type ViewRecordsQuery,
-} from '@tabtin/table-core'
+} from '@muse/table-core'
 import {
   useDataGridSyncRuntime,
   type FieldChangeInfo,
-} from '@tabtin/table-engine/sync'
-import type { WsGatewayLike } from '@tabtin/table-engine/sync'
-import type { CollabSyncMode } from '@tabtin/collab-core'
+} from '@muse/table-engine/sync'
+import type { WsGatewayLike } from '@muse/table-engine/sync'
+import type { CollabSyncMode } from '@muse/collab-core'
 
 interface UseDataGridViewRuntimeInput {
   getGateway: () => WsGatewayLike

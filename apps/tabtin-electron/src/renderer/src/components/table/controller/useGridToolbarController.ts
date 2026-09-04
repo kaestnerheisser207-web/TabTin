@@ -3,8 +3,8 @@ import {
   type GridToolbarControllerResult,
   type GridToolbarRowLike,
   type UseGridToolbarControllerInput as UseGridToolbarControllerInputBase,
-} from '@tabtin/table-ui'
-import type { Field, Table } from '@tabtin/table-core'
+} from '@muse/table-ui'
+import type { Field, Table } from '@muse/table-core'
 
 export interface UseGridToolbarControllerInput<Row extends GridToolbarRowLike = GridToolbarRowLike>
   extends Omit<UseGridToolbarControllerInputBase<Row>, 'selectedTable' | 'fieldsCount'> {

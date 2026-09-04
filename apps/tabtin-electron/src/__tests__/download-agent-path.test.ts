@@ -29,7 +29,7 @@ vi.mock('electron', () => ({
   BrowserWindow: vi.fn(),
 }))
 
-vi.mock('@tabtin/terminal-core', () => ({
+vi.mock('@muse/terminal-core', () => ({
   CommandValidator: class CommandValidator {
     validate() {
       return { ok: true }
@@ -41,7 +41,7 @@ vi.mock('@tabtin/terminal-core', () => ({
 }))
 
 // ：downloads 目录挪到 workspace 元数据下；userId / orgId / workspaceId 均必填。
-vi.mock('@tabtin/agent-runtime', () => ({
+vi.mock('@muse/agent-runtime', () => ({
   resolveWorkspaceDownloadsDir: (
     dataRoot: string,
     userId: string,

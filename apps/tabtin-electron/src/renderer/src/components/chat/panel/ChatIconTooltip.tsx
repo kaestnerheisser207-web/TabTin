@@ -6,7 +6,7 @@ import {
   TooltipTrigger,
   cn,
   type TooltipContentProps,
-} from '@tabtin/smartsheet-ui'
+} from '@muse/smartsheet-ui'
 
 interface ChatIconTooltipProps {
   content: ReactNode

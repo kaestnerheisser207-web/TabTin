@@ -1,6 +1,6 @@
 import { PageSizeSelect } from '@/components/ui/pagination'
 import { formatDateTime } from '@/lib/utils'
-import { ApiError } from '@tabtin/api-client'
+import { ApiError } from '@muse/api-client'
 import { useCallback, useEffect, useState } from 'react'
 import { multimodalApi } from '../../api/multimodal'
 import type {

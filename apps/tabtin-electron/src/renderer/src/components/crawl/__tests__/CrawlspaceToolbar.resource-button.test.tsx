@@ -2,7 +2,7 @@ import React from 'react'
 import { fireEvent, render, screen } from '@testing-library/react'
 import { describe, expect, it, vi } from 'vitest'
 
-import { CrawlspaceToolbar } from '@tabtin/crawlspace-core'
+import { CrawlspaceToolbar } from '@muse/crawlspace-core'
 
 describe('CrawlspaceToolbar resource button', () => {
   it('在完整工具栏下显示资源按钮并触发切换', () => {

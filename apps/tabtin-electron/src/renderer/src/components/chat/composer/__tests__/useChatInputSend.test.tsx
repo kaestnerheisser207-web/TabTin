@@ -11,7 +11,7 @@ const {
   mockToastInfo: vi.fn(),
 }))
 
-vi.mock('@tabtin/smartsheet-ui', () => ({
+vi.mock('@muse/smartsheet-ui', () => ({
   toast: {
     error: vi.fn(),
     info: mockToastInfo,

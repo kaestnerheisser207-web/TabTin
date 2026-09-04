@@ -1,5 +1,5 @@
 import React from 'react'
-import { EmptyState } from '@tabtin/smartsheet-ui'
+import { EmptyState } from '@muse/smartsheet-ui'
 import { Inbox } from 'lucide-react'
 
 interface SettingsEmptyStateProps {

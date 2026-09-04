@@ -14,7 +14,7 @@
  */
 
 import type { ServerResponse } from 'node:http';
-import { errorResponse, type SendJSON } from '@tabtin/cli-server-core';
+import { errorResponse, type SendJSON } from '@muse/cli-server-core';
 import { djangoRequest } from '../host-bindings.js';
 
 const LOG_TAG = '[CLI Search]';
@@ -94,7 +94,7 @@ export async function handleSearchRoute(
 
   // organization_id 兜底：fts API 从 SearchParams.organization_id 读取（query 参数）
   if (!sanitized.get('organization_id')) {
-    const fallback = process.env.TABTIN_ORGANIZATION_ID;
+    const fallback = process.env.MUSE_ORGANIZATION_ID;
     if (fallback && fallback.trim()) {
       sanitized.set('organization_id', fallback.trim());
     }

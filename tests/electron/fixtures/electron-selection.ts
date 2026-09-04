@@ -46,7 +46,7 @@ function resolveWorkspaceSpaceId(
 export function readElectronSelection(context: RunContext): ElectronSelection {
   const expression = `
 (async () => {
-  const auth = await window.tabtin.auth.get();
+  const auth = await window.muse.auth.get();
   const spaceList = JSON.parse(localStorage.getItem('tabtin-space-list') || '{}').state || {};
   const organizationStore = JSON.parse(localStorage.getItem('tabtin-organization-store') || '{}').state || {};
   const organization = organizationStore.selectedOrganization || {};

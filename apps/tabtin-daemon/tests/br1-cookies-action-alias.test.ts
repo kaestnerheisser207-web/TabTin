@@ -8,14 +8,14 @@
  * 当 'add' 的别名收下（保留 'add' 兼容旧调用）。
  *
  * 为何复刻而非 import 真 handler：daemon 的 handleBrowserRoute 顶层 import 链会拖入
- * 一串未构建 dist 的 workspace 包（@tabtin/shared/storage-paths、@tabtin/browser-core
+ * 一串未构建 dist 的 workspace 包（@muse/shared/storage-paths、@muse/browser-core
  * 等），vitest 在 install 后默认跑不动（仓库既有 BR-05 测试同样用「复刻被测逻辑」绕开）。
  * 这里 1:1 镜像 apps/tabtin-daemon/src/transport/cli/routes/browser/index.ts 的 `/cookies` 分支，
  * 改 handler 时务必同步本测试。
  */
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 
-// 复刻 @tabtin/agent-wire 的响应信封形状（与真实端一致）。
+// 复刻 @muse/agent-wire 的响应信封形状（与真实端一致）。
 const okResponse = (data: unknown) => ({ ok: true as const, data });
 const errorResponse = (code: string, message: string, extra?: Record<string, unknown>) => ({
   ok: false as const,

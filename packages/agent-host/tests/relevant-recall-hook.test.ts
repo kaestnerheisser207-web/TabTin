@@ -15,7 +15,7 @@ import {
   setInternalMarker,
   type Message,
   type EngineState,
-} from '@tabtin/agent-runtime/engine';
+} from '@muse/agent-runtime/engine';
 import { makeIterationCtx } from './fixtures/iteration-ctx.js';
 import { buildRelevantRecallHook } from '../src/hooks/index.js';
 

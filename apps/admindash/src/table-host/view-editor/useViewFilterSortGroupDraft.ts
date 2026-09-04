@@ -8,7 +8,7 @@ import {
   toGroupEditorItems,
   toSortEditorItems,
 } from '@/table-host/view-config-editor'
-import type { ViewMeta } from '@tabtin/table-ui'
+import type { ViewMeta } from '@muse/table-ui'
 import { useCallback, useState } from 'react'
 
 interface UseViewFilterSortGroupDraftInput {

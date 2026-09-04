@@ -46,7 +46,7 @@ func isDjangoWarningSilent(path string) bool {
 //   - 提示仅在真实业务调用时出现；`--help` 路径触发的"启动期 catalog 查询"被 silent path
 //     清单豁免，避免污染纯查帮助场景
 //   - 同一 transport 多次调用只打一次（sync.Once 保证幂等）
-//   - `--quiet`（TABTIN_QUIET=1）时静默
+//   - `--quiet`（MUSE_QUIET=1）时静默
 //   - 非 Django transport 直接返回 inner，零开销
 func WithDjangoFallbackWarning(inner Transport) Transport {
 	if inner == nil || inner.Type() != TypeDjango {
@@ -97,8 +97,8 @@ func (t *djangoWarningTransport) emitOnce(path string) {
 		return
 	}
 	t.once.Do(func() {
-		// quiet 模式 / TABTIN_QUIET=1 时抑制（Sprint 1.C：transport 提示属于"进度提示类"）
-		if os.Getenv("TABTIN_QUIET") == "1" {
+		// quiet 模式 / MUSE_QUIET=1 时抑制（Sprint 1.C：transport 提示属于"进度提示类"）
+		if os.Getenv("MUSE_QUIET") == "1" {
 			return
 		}
 		fmt.Fprintln(os.Stderr, "⚠ Daemon 未运行，已回退到 API 直连模式。部分本地功能（doc/browser/desktop/table 等）不可用。")

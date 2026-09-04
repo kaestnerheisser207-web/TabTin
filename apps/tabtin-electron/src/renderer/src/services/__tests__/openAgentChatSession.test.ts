@@ -2,7 +2,7 @@
  * ：AI 分身工作台打开个人 Workspace 会话须先 pin，再改指针。
  */
 import { beforeEach, describe, expect, it, vi } from 'vitest'
-import type { ChatSessionWithAgent } from '@tabtin/chat-client'
+import type { ChatSessionWithAgent } from '@muse/chat-client'
 
 const mocks = vi.hoisted(() => ({
   openProjectTaskChatSession: vi.fn(),

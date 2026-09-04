@@ -7,7 +7,7 @@ final class MobileSyncFixesTests: XCTestCase {
         let suite = "InviteDeepLinkCoordinatorTests.\(UUID().uuidString)"
         let defaults = try XCTUnwrap(UserDefaults(suiteName: suite))
         defer { defaults.removePersistentDomain(forName: suite) }
-        let url = try XCTUnwrap(URL(string: "tabtin://invite/team%2Ftoken"))
+        let url = try XCTUnwrap(URL(string: "muse://invite/team%2Ftoken"))
 
         let coordinator = InviteDeepLinkCoordinator(
             defaults: defaults,
@@ -44,11 +44,11 @@ final class MobileSyncFixesTests: XCTestCase {
     }
 
     func testPreprodInviteSchemeIsRegisteredAndParsed() throws {
-        let url = try XCTUnwrap(URL(string: "tabtin-preprod://invite/team%2Ftoken"))
+        let url = try XCTUnwrap(URL(string: "muse-preprod://invite/team%2Ftoken"))
         let infoPlist = try sourceText("Tabtin/Resources/Info.plist")
 
         XCTAssertEqual(InviteDeepLinkParser.parse(url)?.token, "team/token")
-        XCTAssertTrue(infoPlist.contains("<string>tabtin-preprod</string>"))
+        XCTAssertTrue(infoPlist.contains("<string>muse-preprod</string>"))
     }
 
     func testInvitationLinkUsesCurrentWebEnvironment() {
@@ -117,7 +117,7 @@ final class MobileSyncFixesTests: XCTestCase {
 
     func testResourceDeepLinkParsesCompleteContextAndAliases() throws {
         let url = try XCTUnwrap(URL(string:
-            "tabtin://resource/document_selection/folder%2Fdoc-1"
+            "muse://resource/document_selection/folder%2Fdoc-1"
                 + "?hint=tabdoc&title=Plan&organizationId=org-1&spaceId=space-1"
         ))
 
@@ -135,7 +135,7 @@ final class MobileSyncFixesTests: XCTestCase {
     }
 
     func testResourceDeepLinkReportsMissingContextInsteadOfDroppingTarget() throws {
-        let url = try XCTUnwrap(URL(string: "tabtin://resource/tabdata/table-1"))
+        let url = try XCTUnwrap(URL(string: "muse://resource/tabdata/table-1"))
         XCTAssertEqual(ResourceDeepLinkParser.parse(url), .missingContext)
     }
 

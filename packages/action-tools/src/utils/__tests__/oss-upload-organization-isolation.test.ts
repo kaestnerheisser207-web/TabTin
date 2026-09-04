@@ -50,7 +50,7 @@ import * as os from 'node:os'
 // 之前定义，闭包捕获后 mock factory 能拿到。每个 test 用 mockUpload.mock.calls
 // 检查 client.upload 收到的 organizationId 值（这是 C9 防御的核心断言点）。
 const { mockUpload } = vi.hoisted(() => ({ mockUpload: vi.fn() }))
-vi.mock('@tabtin/oss-client', () => ({
+vi.mock('@muse/oss-client', () => ({
   createOSSClient: () => ({ upload: mockUpload }),
 }))
 

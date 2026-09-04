@@ -39,11 +39,11 @@ func IsTerminal() bool {
 //   - transport / Daemon 提示等 "进度提示"类 stderr：由调用方判断 IsQuiet() 决定是否打
 var quietMode bool
 
-// SetQuietMode 由 cmd/root.go PersistentPreRun 在 --quiet/-Q/TABTIN_QUIET=1 时设 true。
+// SetQuietMode 由 cmd/root.go PersistentPreRun 在 --quiet/-Q/MUSE_QUIET=1 时设 true。
 func SetQuietMode(v bool) { quietMode = v }
 
 // IsQuietMode 返回当前是否 quiet——stderr 提示类的调用方用它决定要不要打。
-func IsQuietMode() bool { return quietMode || os.Getenv("TABTIN_QUIET") == "1" }
+func IsQuietMode() bool { return quietMode || os.Getenv("MUSE_QUIET") == "1" }
 
 // globalOutputPath 是 root PersistentFlag `--output` 的值（仅 root persistent 自己被
 // Changed 时设）。

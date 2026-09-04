@@ -3,7 +3,7 @@ import {
   buildSyncAccountDir,
   type PersistedEntryOwner,
   type PersistentQueue,
-} from '@tabtin/agent-runtime'
+} from '@muse/agent-runtime'
 import {
   RelayRetryQueue,
   type RelayBatch,

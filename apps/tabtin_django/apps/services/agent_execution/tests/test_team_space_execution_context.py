@@ -68,7 +68,7 @@ class TeamSpaceExecutionWorkspaceSelectionTests(SimpleTestCase):
         self.assertEqual(availability.reason, "member_workspace_unset")
 
 
-@override_settings(TABTIN_ENABLE_PROJECTS=True)
+@override_settings(MUSE_ENABLE_PROJECTS=True)
 class TeamSpaceExecutionContextTests(TestCase):
     databases = {"default", "postgresql"}
 

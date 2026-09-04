@@ -8,8 +8,8 @@ import {
   ScrollArea,
 } from '@components/ui'
 import { useTranslation } from 'react-i18next'
-import { useAppHostClient } from '@tabtin/app-host-sdk'
-import { useTabDocHostActions } from '@tabtin/tabdoc-ui'
+import { useAppHostClient } from '@muse/app-host-sdk'
+import { useTabDocHostActions } from '@muse/tabdoc-ui'
 import { DetailedRowListSkeleton } from '@components/common/ListSkeletons'
 import { ContextDialogHeader } from '@components/context-space/ContextDialogHeader'
 

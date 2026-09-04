@@ -7,9 +7,9 @@
 import { useCallback, useMemo, useRef, useState } from 'react'
 import { toast } from '@components/ui'
 import { createLogger } from '@/utils/logger'
-import type { AppHttpRequest } from '@tabtin/contracts/app'
-import { createDirectAppClient } from '@tabtin/app-host-sdk/host'
-import { requireTableApiPort, type CreateTableRequest, type Table } from '@tabtin/table-core'
+import type { AppHttpRequest } from '@muse/contracts/app'
+import { createDirectAppClient } from '@muse/app-host-sdk/host'
+import { requireTableApiPort, type CreateTableRequest, type Table } from '@muse/table-core'
 import { useTranslation } from 'react-i18next'
 import { useOrganizationStore } from '@/stores/useOrganizationStore'
 import { API_CONFIG } from '@/config/api'
@@ -19,7 +19,7 @@ import {
   prefillNewTableRows,
 } from '@/components/table/utils/prefillNewTableRows'
 import { useCreateSiteDialog } from '@/stores/useCreateSiteDialog'
-import { createDocument } from '@tabtin/tabdoc-ui/api-client'
+import { createDocument } from '@muse/tabdoc-ui/api-client'
 // Wave 1（PRD V3.3 §11.5）：syncAgentSkills 已删除（草稿不上云），本地扫描由
 // 主进程 LocalSkillRegistry 完成。
 import { openTinsPanel } from '../../tins/openTinsPanel'
@@ -375,7 +375,7 @@ export function useCreateHandlers({
         // `{success, template?, token_provisioned?, error?}`。模板初始化是后台任务，
         // 失败 toast 但不阻断主创建流程；warn 路径（token_provisioned=false）也单独 toast。
         // 双分支语义保留，重命名变量避开字面 result.success。
-        window.tabtin?.tabsite?.initTemplate(id, spaceId).then((initRes) => {
+        window.muse?.tabsite?.initTemplate(id, spaceId).then((initRes) => {
           if (initRes && !initRes.success) {
             toast({
               title: t('apps.initTemplateFailed', { defaultValue: '模板初始化失败' }),

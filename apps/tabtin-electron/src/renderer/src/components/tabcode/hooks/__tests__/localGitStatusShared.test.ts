@@ -6,7 +6,7 @@ import {
   subscribeLocalGitStatus,
 } from '../localGitStatusShared'
 
-type FullStatusResult = Awaited<ReturnType<typeof window.tabtin.git.fullStatus>>
+type FullStatusResult = Awaited<ReturnType<typeof window.muse.git.fullStatus>>
 
 function deferred<T>() {
   let resolve!: (value: T) => void

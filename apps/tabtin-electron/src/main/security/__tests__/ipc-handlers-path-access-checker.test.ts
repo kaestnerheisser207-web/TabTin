@@ -87,7 +87,7 @@ vi.mock('fs', async () => {
   }
 })
 
-vi.mock('@tabtin/terminal-core', () => ({
+vi.mock('@muse/terminal-core', () => ({
   resolveSpacesRoot: mocks.resolveSpacesRoot,
   resolvePlatformDataRoot: mocks.resolvePlatformDataRoot,
   computeSkillContentHash: mocks.computeSkillContentHash,
@@ -95,7 +95,7 @@ vi.mock('@tabtin/terminal-core', () => ({
 }))
 
 //  批次 13：space 路径 helper 出口从 engine barrel 收敛到包入口。
-vi.mock('@tabtin/agent-runtime', () => ({
+vi.mock('@muse/agent-runtime', () => ({
   resolveSpaceWorkspaceRoot: vi.fn(() => '/tmp/sandbox/wt/spaces/space-1'),
   resolveSpaceSkillsDir: vi.fn(() => '/tmp/platform/wt/spaces/space-1/skills'),
 }))
@@ -145,16 +145,16 @@ vi.mock('../../checkpoint/CheckpointService', () => ({
   destroyCheckpointService: vi.fn().mockResolvedValue(undefined),
 }))
 
-vi.mock('@tabtin/shared', () => ({
+vi.mock('@muse/shared', () => ({
   getCheckpointsRoot: () => '/tmp/checkpoints',
 }))
 
-vi.mock('@tabtin/storage-manager', () => ({
+vi.mock('@muse/storage-manager', () => ({
   getBucket: () => null,
   registerStorageBucket: vi.fn(),
 }))
 
-vi.mock('@tabtin/checkpoint-core', () => ({
+vi.mock('@muse/checkpoint-core', () => ({
   parseShadowCoreWorktreeFromConfig: vi.fn(() => null),
 }))
 

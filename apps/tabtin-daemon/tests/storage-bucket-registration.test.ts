@@ -17,7 +17,7 @@ import {
   __resetForTesting,
   getBucket,
   listBuckets,
-} from '@tabtin/storage-manager';
+} from '@muse/storage-manager';
 import {
   DAEMON_BUCKET_IDS,
   registerDaemonStorageBuckets,

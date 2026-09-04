@@ -7,7 +7,7 @@ import { createPortal } from 'react-dom'
 import { useTranslation } from 'react-i18next'
 import ReactMarkdown, { defaultUrlTransform } from 'react-markdown'
 import remarkGfm from 'remark-gfm'
-import remarkAutolinkResource from '@tabtin/markdown-resource-autolink'
+import remarkAutolinkResource from '@muse/markdown-resource-autolink'
 import rehypeSanitize from 'rehype-sanitize'
 import { sanitizeSchema, rehypeSanitizeCss } from '@/lib/rehypeSanitizeSchema'
 import {
@@ -69,7 +69,7 @@ import {
   addReaction,
   removeReaction,
 } from '@/services/tabchatApi'
-import type { ChatSession } from '@tabtin/chat-client'
+import type { ChatSession } from '@muse/chat-client'
 import { useAuthStore } from '@stores/useAuthStore'
 import { useIMStore } from '@stores/useIMStore'
 import { useSpaceStore } from '@stores/useSpaceStore'
@@ -175,8 +175,8 @@ function getFileTypeStyle(fileName: string): FileTypeStyle {
 }
 
 const MARKDOWN_HINT = /[*_`#\-\[\]!|>~\\]/
-const TABTIN_RESOURCE_LINK_HINT = /tabtin(?:-preprod|-dev)?:\/\/resource\//
-const TABTIN_RESOURCE_URL = /^tabtin(?:-preprod|-dev)?:\/\/resource\//i
+const MUSE_RESOURCE_LINK_HINT = /tabtin(?:-preprod|-dev)?:\/\/resource\//
+const MUSE_RESOURCE_URL = /^tabtin(?:-preprod|-dev)?:\/\/resource\//i
 const CODE_BLOCK_HINT = /```|~~~|(^|\n)( {4}|\t)\S/
 // 纯文本路径里识别裸 URL（http(s):// 或 www.）做 autolink。markdown 路径由 GFM 处理。
 const URL_RE = /((?:https?:\/\/|www\.)[^\s<]+)/gi
@@ -189,7 +189,7 @@ const IM_MESSAGE_ACTION_RAIL_WIDTH = 208
 const IM_MESSAGE_ROW_MIN_WIDTH = 220
 
 function imMarkdownUrlTransform(value: string): string {
-  if (isMentionHref(value) || TABTIN_RESOURCE_URL.test(value)) return value
+  if (isMentionHref(value) || MUSE_RESOURCE_URL.test(value)) return value
   return defaultUrlTransform(value)
 }
 
@@ -725,7 +725,7 @@ export const IMMessageBubble: React.FC<Props> = React.memo(({ message, prevMessa
   }
 
   const hasMarkdown = useMemo(
-    () => MARKDOWN_HINT.test(message.content) || TABTIN_RESOURCE_LINK_HINT.test(message.content),
+    () => MARKDOWN_HINT.test(message.content) || MUSE_RESOURCE_LINK_HINT.test(message.content),
     [message.content],
   )
   const enableHighlight = useMemo(() => CODE_BLOCK_HINT.test(message.content), [message.content])
@@ -1124,7 +1124,7 @@ export const IMMessageBubble: React.FC<Props> = React.memo(({ message, prevMessa
   const handleOpenLocalFile = async () => {
     const localPath = fileAttachment?.localPath
     if (!localPath) return
-    const openPath = window.tabtin?.openPath
+    const openPath = window.muse?.openPath
     if (!openPath) {
       toast({
         title: t('fileOpenFailed', { defaultValue: '打开文件失败' }),
@@ -1148,7 +1148,7 @@ export const IMMessageBubble: React.FC<Props> = React.memo(({ message, prevMessa
   }
 
   const handleCopyLocalFile = async (localPath: string) => {
-    const writeFile = window.tabtin?.clipboard?.writeFile
+    const writeFile = window.muse?.clipboard?.writeFile
     if (!writeFile) {
       toast({
         title: t('copyFileFailed', { defaultValue: '复制文件失败' }),
@@ -1176,8 +1176,8 @@ export const IMMessageBubble: React.FC<Props> = React.memo(({ message, prevMessa
     event.stopPropagation()
     const localPath = fileAttachment?.localPath
     if (!localPath) return
-    const showItemInFolder = window.tabtin?.showItemInFolder
-    const openPath = window.tabtin?.openPath
+    const showItemInFolder = window.muse?.showItemInFolder
+    const openPath = window.muse?.openPath
     try {
       const result = showItemInFolder
         ? await showItemInFolder(localPath)

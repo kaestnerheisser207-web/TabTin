@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query'
-import { MemberApiService, type MemberSearchParams } from '@tabtin/app-shell'
+import { MemberApiService, type MemberSearchParams } from '@muse/app-shell'
 
 export const memberKeys = {
   all: ['members'] as const,

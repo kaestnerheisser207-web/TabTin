@@ -26,7 +26,7 @@
  */
 
 import path from 'node:path';
-import { FilePipelineErrorCode } from '@tabtin/file-pipeline-errors';
+import { FilePipelineErrorCode } from '@muse/file-pipeline-errors';
 import type {
   FileParser,
   FileSource,

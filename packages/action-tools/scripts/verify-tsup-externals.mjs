@@ -190,8 +190,8 @@ async function main() {
 
   const offenders = []
   for (const [pkgName, info] of inlined) {
-    // 跳过 monorepo 内部包（@tabtin/*、@tabtinapp/* 等本仓 workspace）和 node 内置
-    if (pkgName.startsWith('@tabtin/') || pkgName.startsWith('@tabtinapp/')) continue
+    // 跳过 monorepo 内部包（@muse/*、@tabtinapp/* 等本仓 workspace）和 node 内置
+    if (pkgName.startsWith('@muse/') || pkgName.startsWith('@tabtinapp/')) continue
 
     const result = hasNativeBinaryFeatures(pkgName)
     if (result?.reasons?.length > 0) {

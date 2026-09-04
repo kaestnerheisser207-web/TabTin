@@ -15,7 +15,7 @@ const CANONICALIZE_CASES: Array<[string, string | null]> = [
   ['/etc/passwd', null],
   ['~/secret.txt', null],
   ['C:\\Users\\a.txt', null],
-  ['tabtin://resource/file/a.txt', null],
+  ['muse://resource/file/a.txt', null],
   ['../escape.txt', null],
   ['', null],
 ]

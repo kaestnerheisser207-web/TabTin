@@ -5,7 +5,7 @@
 import { readFileSync } from 'node:fs'
 import { resolve } from 'node:path'
 import { describe, it, expect } from 'vitest'
-import { buildSystemPrompt } from '@tabtin/agent-prompt'
+import { buildSystemPrompt } from '@muse/agent-prompt'
 import {
   resolveReadonlySubagentSystemPrompt,
   resolveSubagentSystemPrompt,

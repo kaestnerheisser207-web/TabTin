@@ -3,7 +3,7 @@
  *
  * 三路动态段（`<relevant_skills>` / `<relevant_mcp>` / `<relevant_cli>`）共用的
  * 打分入口。在既有 BM25 词法路之上叠加一条语义路（宿主注入的
- * `SemanticScorer`，本地 ONNX 模型实现在 `@tabtin/local-embedding`），两路结果
+ * `SemanticScorer`，本地 ONNX 模型实现在 `@muse/local-embedding`），两路结果
  * 用倒数排名融合（RRF）合并——语义路能召回「词面零重合但语义相关」的候选，
  * 这是本模块存在的意义。
  *
@@ -25,7 +25,7 @@ import {
 } from './decoys.js';
 
 /**
- * 宿主注入的语义打分能力（结构类型，与 `@tabtin/local-embedding` 的
+ * 宿主注入的语义打分能力（结构类型，与 `@muse/local-embedding` 的
  * `createSemanticScorer` 返回值对齐，故意不产生包依赖）。
  *
  * 返回 null 表示本轮语义路整体不可用（模型未就绪 / 查询推理失败）；

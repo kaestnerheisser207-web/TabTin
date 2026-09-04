@@ -71,7 +71,7 @@ vi.mock('node:util', () => ({
   default: { promisify: () => vi.fn() },
 }))
 
-vi.mock('@tabtin/terminal-core', () => ({
+vi.mock('@muse/terminal-core', () => ({
   resolveSpacesRoot: vi.fn(() => '/tmp/sandbox'),
   resolvePlatformDataRoot: vi.fn(() => '/tmp/platform'),
   computeSkillContentHash: vi.fn(),

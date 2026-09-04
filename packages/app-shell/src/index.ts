@@ -1,5 +1,5 @@
 /**
- * @tabtin/app-shell — 共享应用外壳
+ * @muse/app-shell — 共享应用外壳
  *
  * 统一导出给 Electron、Web 等各端使用。
  */

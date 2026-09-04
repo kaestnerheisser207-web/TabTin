@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from 'vitest';
-import { LocalRuntimeEvents } from '@tabtin/ws-gateway-client';
+import { LocalRuntimeEvents } from '@muse/ws-gateway-client';
 
 import {
   PromptForwardController,

@@ -13,7 +13,7 @@ default_cache_dir() {
   printf '%s\n' "${XDG_CACHE_HOME:-${HOME}/.cache}/tabtin/python-build-standalone"
 }
 
-CACHE_DIR="${TABTIN_PBS_CACHE_DIR:-$(default_cache_dir)}"
+CACHE_DIR="${MUSE_PBS_CACHE_DIR:-$(default_cache_dir)}"
 CACHE_PATH="$CACHE_DIR/$PBS_ASSET"
 PARTIAL_PATH="${CACHE_PATH}.part"
 mkdir -p "$CACHE_DIR"

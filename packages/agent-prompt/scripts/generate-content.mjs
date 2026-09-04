@@ -3,7 +3,7 @@
  * 从 prompts/*.md 生成 src/generated-content.ts。
  *
  * SSoT 是 .md 文件——修改 prompt 只需编辑 .md，然后 build 自动重新生成 TS 常量。
- * 与 @tabtin/agent-modes 的 gen-prompt-sections.mjs 同一模式。
+ * 与 @muse/agent-modes 的 gen-prompt-sections.mjs 同一模式。
  */
 
 import { readFileSync, writeFileSync } from 'node:fs';

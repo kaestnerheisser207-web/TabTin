@@ -1,4 +1,4 @@
-import type { ChatClient, ChatMessage, ChatSession } from '@tabtin/chat-client'
+import type { ChatClient, ChatMessage, ChatSession } from '@muse/chat-client'
 import type { ChatAttachment } from '../../../../components/chat/types'
 import type {
   AgentModeName,
@@ -102,7 +102,7 @@ export interface SendMessageDeps {
    * 绑定根，否则回落全局 active Space 根）；缺省时行为与改动前一致。
    */
   resolveSpacePath: (sessionId?: string | null) => Promise<string | null>
-  buildReviewMessage: (data: import('@tabtin/chat-client').ReviewRequiredEventData) => string
+  buildReviewMessage: (data: import('@muse/chat-client').ReviewRequiredEventData) => string
 }
 
 export type SendMessageSource =

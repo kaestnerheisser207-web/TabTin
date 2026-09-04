@@ -5,7 +5,7 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from '@tabtin/smartsheet-ui'
+} from '@muse/smartsheet-ui'
 import { COLOR_SCHEMES, getColorSchemeById } from '@/constants/color-schemes'
 import { useUIStore } from '@stores/useUIStore'
 import { cn } from '@utils/cn'

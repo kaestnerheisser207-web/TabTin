@@ -55,7 +55,7 @@ vi.mock('../../cli-space-desktop-cache', () => ({
   getCurrentSpaceDevicePermissions: () => mockGetCurrentSpaceDevicePermissions(),
 }))
 
-vi.mock('@tabtin/agent-wire', () => ({
+vi.mock('@muse/agent-wire', () => ({
   okResponse: (data: unknown) => ({ ok: true, data }),
 }))
 
@@ -67,7 +67,7 @@ vi.mock('../shared/error-handler', () => ({
   }),
 }))
 
-// PD-11（W6 M3）：删除 `@tabtin/security-policy` mock —— routes/desktop.ts
+// PD-11（W6 M3）：删除 `@muse/security-policy` mock —— routes/desktop.ts
 // 已不再 import `PolicyEvaluator` / `getPresetPolicy`（device 动作只看
 // device_permissions + DesktopUseLock guard）。
 

@@ -1,8 +1,8 @@
-import { toast } from '@tabtin/smartsheet-ui/toast'
+import { toast } from '@muse/smartsheet-ui/toast'
 import i18n from '@/i18n'
 import { ServiceDisabledError } from '@/services/apiBase'
 import { canManageOrganization } from '@/hooks/useCanManageOrganization'
-import { useOrganizationStore } from '@tabtin/app-shell'
+import { useOrganizationStore } from '@muse/app-shell'
 
 function isServiceDisabled(error: unknown): boolean {
   if (error instanceof ServiceDisabledError) return true

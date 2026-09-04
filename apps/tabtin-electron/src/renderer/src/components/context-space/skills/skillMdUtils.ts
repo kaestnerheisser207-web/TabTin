@@ -377,7 +377,7 @@ export async function writeSkillContent(params: {
   skillKey: string
   content: string
 }): Promise<{ mdPath: string; skillDir: string }> {
-  const api = window.tabtin?.skill?.writeContent
+  const api = window.muse?.skill?.writeContent
   if (!api) {
     throw new Error('IPC skill:write-content unavailable')
   }
@@ -395,7 +395,7 @@ export async function resolveSkillLocalPath(params: {
   /** 当前 space 没有 SKILL.md 时跨 space 回退查找源目录（发布/分享场景传 true）。 */
   searchAcrossSpaces?: boolean
 }): Promise<{ skillDir: string; mdPath: string; exists: boolean; mdExists: boolean; resolvedAcrossSpaces?: boolean } | null> {
-  const api = window.tabtin?.skill?.resolvePath
+  const api = window.muse?.skill?.resolvePath
   if (!api) return null
   return api(params)
 }

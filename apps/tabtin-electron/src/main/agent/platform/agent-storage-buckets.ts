@@ -4,7 +4,7 @@
  * 设计：
  *   - 纯函数 + 内部 helper，不依赖 ElectronAgentHost 实例字段；
  *   - 不 import 任何 Electron / WS / 沉重副作用模块——只用 `fs` + `path`
- *     + `@tabtin/storage-manager` + `@tabtin/terminal-core` 路径常量。
+ *     + `@muse/storage-manager` + `@muse/terminal-core` 路径常量。
  *     这样测试可以直接 import 它而不触发 ipcMain / powerMonitor / WS
  *     gateway 等启动期副作用；
  *   - 7 个 bucket（agent:conversations:* + agent:tool-* + agent:sync-*）
@@ -34,7 +34,7 @@ import {
   type BucketItem,
   getBucket,
   registerStorageBucket,
-} from '@tabtin/storage-manager'
+} from '@muse/storage-manager'
 
 // ─── 内部 helper ─────────────────────────────────────────────────────
 

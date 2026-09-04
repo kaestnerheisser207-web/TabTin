@@ -18,7 +18,7 @@ const mocks = vi.hoisted(() => ({
 const markReadMutation = { mutate: mocks.markRead }
 const markAllReadMutation = { mutate: mocks.markAllRead }
 
-vi.mock('@tabtin/smartsheet-ui/toast', () => ({ toast: vi.fn() }))
+vi.mock('@muse/smartsheet-ui/toast', () => ({ toast: vi.fn() }))
 
 vi.mock('@stores/useNotificationStore', () => ({
   useNotificationStore: (selector: (state: {

@@ -14,19 +14,19 @@ import React, {
   useCallback,
   useRef,
 } from 'react';
-import { DataExportDialog } from '@tabtin/smartsheet-ui';
+import { DataExportDialog } from '@muse/smartsheet-ui';
 import type {
   DataExportConfig as UIExportConfig,
   DataExportStats as UIExportStats,
   DataExportField,
   DataExportRange,
-} from '@tabtin/smartsheet-ui';
+} from '@muse/smartsheet-ui';
 import {
   ImportExportApiService,
   resolveExportViewQuery,
   type ExportConfig,
-} from '@tabtin/table-core';
-import { getViewVisibilitySnapshot } from '@tabtin/table-ui';
+} from '@muse/table-core';
+import { getViewVisibilitySnapshot } from '@muse/table-ui';
 import { useTableStore } from '@/stores/useTableStore';
 import { useRecordStore } from '@/stores/useRecordStore';
 import { useViewStore } from '@/stores/useViewStore';
@@ -307,7 +307,7 @@ export const ExportContainer: React.FC<ExportContainerProps> = ({
       }
 
       if (result.status === 'saved') {
-        const tabtin = window.tabtin;
+        const tabtin = window.muse;
         toast({
           title: t('success.exported', {
             filename,

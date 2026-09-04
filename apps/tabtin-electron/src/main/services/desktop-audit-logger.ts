@@ -55,7 +55,7 @@ import {
 import { pipeline } from 'node:stream/promises'
 import { join, basename } from 'node:path'
 import electronLog from 'electron-log'
-import { getHomeTabtinPath } from '@tabtin/shared/storage-paths'
+import { getHomeTabtinPath } from '@muse/shared/storage-paths'
 import { createLogger } from '../logger'
 import { DesktopErrorCode } from './desktop-error-codes'
 

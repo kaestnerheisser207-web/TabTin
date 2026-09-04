@@ -6,7 +6,7 @@
  * 不能按 id merge。
  */
 
-import type { ChatMessage } from '@tabtin/chat-client'
+import type { ChatMessage } from '@muse/chat-client'
 import { iterableMessageBlocks } from '../../../stores/chat/messages/utils/contentBlockSemantics'
 
 const DETAIL_STEP_TYPES = new Set([

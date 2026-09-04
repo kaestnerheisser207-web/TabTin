@@ -16,7 +16,7 @@ import {
   MessageBlockStorage,
   type MessageBlockRecord,
   type SessionConfig,
-} from '@tabtin/agent-runtime'
+} from '@muse/agent-runtime'
 
 /** 与 Electron `DELIVERABLE_ARTIFACT_KINDS` / host delivery 对齐。 */
 export const CHILD_DELIVERABLE_ARTIFACT_KINDS = [
@@ -184,7 +184,7 @@ function widgetHasDeliverableContent(block: Record<string, unknown>): boolean {
 function ossFileUrl(block: Record<string, unknown>): string | null {
   if (block.artifact_kind !== 'oss_file') return null;
   const fileId = typeof block.file_id === 'string' ? block.file_id.trim() : '';
-  if (typeof block.url === 'string' && block.url.startsWith('tabtin://resource/file/')) {
+  if (typeof block.url === 'string' && block.url.startsWith('muse://resource/file/')) {
     return block.url;
   }
   if (!fileId) return null;
@@ -192,15 +192,15 @@ function ossFileUrl(block: Record<string, unknown>): string | null {
   const title = (typeof block.filename === 'string' && stripShellPathQuotes(block.filename))
     || (typeof block.summary === 'string' ? block.summary : null);
   if (title) params.set('title', title);
-  return `tabtin://resource/file/${encodeURIComponent(fileId)}?${params.toString()}`;
+  return `muse://resource/file/${encodeURIComponent(fileId)}?${params.toString()}`;
 }
 
 function platformResourceUrl(block: Record<string, unknown>): string | null {
-  if (typeof block.url === 'string' && block.url.startsWith('tabtin://')) return block.url;
+  if (typeof block.url === 'string' && block.url.startsWith('muse://')) return block.url;
   const resourceType = typeof block.resource_type === 'string' ? block.resource_type : '';
   const resourceId = typeof block.resource_id === 'string' ? block.resource_id : '';
   if (!resourceType || !resourceId) return null;
-  const base = `tabtin://resource/${resourceType}/${encodeURIComponent(resourceId)}`;
+  const base = `muse://resource/${resourceType}/${encodeURIComponent(resourceId)}`;
   const hint = typeof block.hint_carrier_app_id === 'string' ? block.hint_carrier_app_id : null;
   return hint ? `${base}?hint=${encodeURIComponent(hint)}` : base;
 }

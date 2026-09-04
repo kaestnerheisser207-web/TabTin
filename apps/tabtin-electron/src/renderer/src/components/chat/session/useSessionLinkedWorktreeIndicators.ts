@@ -7,7 +7,7 @@
  */
 
 import { useEffect, useMemo, useRef, useState } from 'react'
-import type { ChatSession } from '@tabtin/chat-client'
+import type { ChatSession } from '@muse/chat-client'
 import { useSessionBoundCodeRootStore } from '@stores/useSessionBoundCodeRootStore'
 import { hydrateSessionCodeRoots } from '@/services/sessionCodeRootBinding'
 import {
@@ -46,7 +46,7 @@ export function useSessionLinkedWorktreeIndicators(
       // 成功后再标记；IPC 未就绪时不钉死，允许会话列表稍后重试
       const count = await hydrateSessionCodeRoots(pending)
       if (cancelled) return
-      const available = typeof window.tabtin?.agent?.listSessionCodeRoots === 'function'
+      const available = typeof window.muse?.agent?.listSessionCodeRoots === 'function'
       if (available || count > 0) {
         for (const id of pending) hydratedIdsRef.current.add(id)
       }

@@ -815,7 +815,7 @@ private fun nativeFocusInjectionScript(expectedOrigin: String): String {
     return """
         (() => {
           if (window.location.origin !== $origin) return;
-          window.__TABTIN_NATIVE_FOCUS__ = {
+          window.__MUSE_NATIVE_FOCUS__ = {
             report: (p) => TabTinNativeFocus.report(typeof p === 'string' ? p : JSON.stringify(p))
           };
         })();

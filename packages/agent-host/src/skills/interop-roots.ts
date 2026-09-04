@@ -2,7 +2,7 @@
  * 规范互操作 Skill 目录解析。
  *
  * 本机全局（device / interop）：
- * - `TABTIN_AGENTS_SKILLS_DIR` 或 `~/.agents/skills`
+ * - `MUSE_AGENTS_SKILLS_DIR` 或 `~/.agents/skills`
  * - `~/.cursor/skills` / `~/.claude/skills` / `~/.codex/skills`
  *
  * 工作区目录自带 Skill（Trust 注入）走 `workspace-skill-scanner` 按内容特征
@@ -13,7 +13,7 @@
 import * as os from 'node:os';
 import * as path from 'node:path';
 
-export const AGENTS_SKILLS_ENV = 'TABTIN_AGENTS_SKILLS_DIR';
+export const AGENTS_SKILLS_ENV = 'MUSE_AGENTS_SKILLS_DIR';
 
 /** 跨客户端约定的 skills 子路径（相对 home 或 working_dir）。 */
 export const CLIENT_SKILL_DIR_SEGMENTS: ReadonlyArray<readonly string[]> = [
@@ -35,7 +35,7 @@ export function resolveDefaultAgentsSkillsDir(
 
 /**
  * 本机全局多客户端互操作根（去重、保序）。
- * `TABTIN_AGENTS_SKILLS_DIR` 若设置，替换默认的 `~/.agents/skills` 槽位，其余客户端路径仍保留。
+ * `MUSE_AGENTS_SKILLS_DIR` 若设置，替换默认的 `~/.agents/skills` 槽位，其余客户端路径仍保留。
  */
 export function resolveGlobalInteropSkillDirs(options?: {
   env?: NodeJS.ProcessEnv;

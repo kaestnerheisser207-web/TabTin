@@ -13,7 +13,7 @@ import type {
   Tool,
   ToolContext,
 } from '../src/engine/contracts/tools.js';
-import type { OSError } from '@tabtin/os-errors';
+import type { OSError } from '@muse/os-errors';
 
 // §17.6 D4：SessionConfig.sessionId → threadId（业务对话 thread）。
 const SESSION_CONFIG = { sessionDir: '/tmp/test', threadId: 'os-error-subagent-parent' };

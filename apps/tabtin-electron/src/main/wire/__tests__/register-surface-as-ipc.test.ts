@@ -49,7 +49,7 @@ vi.mock('../../utils/trace-context', () => ({
   stampTraceIntoEnvelope: <T>(v: T) => v,
 }))
 
-vi.mock('@tabtin/cli-server-core', async () => {
+vi.mock('@muse/cli-server-core', async () => {
   const actual = await import('../../../../../../packages/cli-server-core/src/surface/types.js')
   const runtime = await import('../../../../../../packages/cli-server-core/src/surface/configure-surface-runtime.js')
   return {

@@ -35,8 +35,8 @@ from reportlab.platypus import (
     TableStyle,
 )
 
-from tabtin_filegen.errors import SpecError
-from tabtin_filegen.validate import as_text, optional_text, require_list, require_mapping
+from muse_filegen.errors import SpecError
+from muse_filegen.validate import as_text, optional_text, require_list, require_mapping
 
 _SPEC_HELP = """pdf spec (shared block model with docx):
 {
@@ -80,7 +80,7 @@ _MAX_HEADING_LEVEL = 4
 
 def _cjk_font_path_candidates() -> List[str]:
     candidates: List[str] = []
-    configured = os.environ.get("TABTIN_CJK_FONT_PATH", "").strip()
+    configured = os.environ.get("MUSE_CJK_FONT_PATH", "").strip()
     if configured:
         candidates.append(os.path.expanduser(configured))
     candidates.extend(_SYSTEM_CJK_FONT_PATHS)

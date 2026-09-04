@@ -160,7 +160,7 @@ _APP_CONTEXT_WHITELIST = frozenset({
     # wire payload `prompt.forward.workspace_snapshot`，Daemon / Electron
     # 接 forward 时 decode + 注入 EffectivePolicy。
     #
-    # 形态参考 `@tabtin/security-policy` 的 `WorkspaceSnapshot`；handler 这里
+    # 形态参考 `@muse/security-policy` 的 `WorkspaceSnapshot`；handler 这里
     # 不强校验形态（避免反向依赖 wire schema），下游 AgentDispatcher 只做
     # is-dict 判断，wire 用 z.unknown() / Optional[Any]，Daemon / Electron
     # 端有 type guard 兜底。

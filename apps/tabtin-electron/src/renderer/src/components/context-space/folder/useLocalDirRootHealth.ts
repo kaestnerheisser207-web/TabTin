@@ -21,7 +21,7 @@ export interface LocalDirRootHealth {
 }
 
 async function probeRoot(rootPath: string): Promise<'ok' | 'missing'> {
-  const fs = window.tabtin?.fileSystem
+  const fs = window.muse?.fileSystem
   if (!fs?.pathExists) {
     // preload 异常时不阻塞用户（与 TabCodePaneHost 同款乐观兜底）
     return 'ok'

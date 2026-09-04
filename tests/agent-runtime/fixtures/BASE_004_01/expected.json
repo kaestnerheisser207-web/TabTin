@@ -6,7 +6,7 @@
     "toolInputsSchemaValid": true
   },
   "normalizedSnapshot": {
-    "finalAssistantText": "已在当前 Space 成功创建文档。\n\n| 项目 | 内容 |\n|------|------|\n| 标题 | 【测试-意图识别-001】 |\n| 文档 ID | `<uuid>` |\n| 状态 | 正常（active） |\n| 创建时间 | <datetime> |\n\n正文已写入一段关于北京交通的说明（约 100 字）。你可以点击 [【测试-意图识别-001】](tabtin://resource/doc/<uuid>?hint=tabdoc) 直接打开这篇文档。",
+    "finalAssistantText": "已在当前 Space 成功创建文档。\n\n| 项目 | 内容 |\n|------|------|\n| 标题 | 【测试-意图识别-001】 |\n| 文档 ID | `<uuid>` |\n| 状态 | 正常（active） |\n| 创建时间 | <datetime> |\n\n正文已写入一段关于北京交通的说明（约 100 字）。你可以点击 [【测试-意图识别-001】](muse://resource/doc/<uuid>?hint=tabdoc) 直接打开这篇文档。",
     "messagesShape": [
       "user:user_input",
       "user:user_input",

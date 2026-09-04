@@ -330,7 +330,7 @@ describe('模型运行参数同步', () => {
       v: 2,
       thinking_mode: 'standard',
     }, 'old-model')
-    Object.assign(window.tabtin!, {
+    Object.assign(window.muse!, {
       openaiCodex: {
         getStatus: vi.fn().mockResolvedValue({ connected: true }),
       },
@@ -359,7 +359,7 @@ describe('模型运行参数同步', () => {
       },
       'gpt-5.6-sol',
     )
-    Object.assign(window.tabtin!, {
+    Object.assign(window.muse!, {
       openaiCodex: {
         getStatus: vi.fn().mockResolvedValue({ connected: true }),
       },
@@ -381,7 +381,7 @@ describe('模型运行参数同步', () => {
 
   it('本机 Codex 写 service_tier 时同步 map，且不打 Django updateModelParams', async () => {
     setSessionModelParams('sess-params', { v: 2, thinking_mode: 'standard' }, 'gpt-5.6-sol')
-    Object.assign(window.tabtin!, {
+    Object.assign(window.muse!, {
       openaiCodex: {
         getStatus: vi.fn().mockResolvedValue({ connected: true }),
       },
@@ -409,7 +409,7 @@ describe('模型运行参数同步', () => {
 
   it('本机 Codex 写 reasoning_effort 时保留 effort 供右栏高亮，不升级成 thinking_mode', async () => {
     setSessionModelParams('sess-params', { v: 2, thinking_mode: 'standard' }, 'gpt-5.6-sol')
-    Object.assign(window.tabtin!, {
+    Object.assign(window.muse!, {
       openaiCodex: {
         getStatus: vi.fn().mockResolvedValue({ connected: true }),
       },

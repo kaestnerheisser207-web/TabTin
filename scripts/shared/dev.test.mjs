@@ -103,9 +103,9 @@ test('full dev builds Electron before starting its dev process', () => {
 
 test('full preview Electron build uses the same local env as Electron dev', () => {
   const env = resolveFullPreviewBuildEnv({ PATH: '/tmp/bin' });
-  assert.equal(env.TABTIN_BUILD_PROFILE, 'local');
+  assert.equal(env.MUSE_BUILD_PROFILE, 'local');
   assert.equal(
-    env.TABTIN_ELECTRON_DEV_ENV_FILE,
+    env.MUSE_ELECTRON_DEV_ENV_FILE,
     path.join(rootDir, '.env.local'),
   );
   assert.equal(env.PATH, '/tmp/bin');

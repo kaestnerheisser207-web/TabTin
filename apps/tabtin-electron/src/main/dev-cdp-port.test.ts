@@ -22,27 +22,27 @@ import {
 } from './dev-cdp-port'
 
 describe('dev-cdp-port', () => {
-  const originalTabtin = process.env.TABTIN_CDP_PORT
+  const originalTabtin = process.env.MUSE_CDP_PORT
   const originalCdp = process.env.CDP_PORT
 
   beforeEach(() => {
     vi.clearAllMocks()
-    delete process.env.TABTIN_CDP_PORT
+    delete process.env.MUSE_CDP_PORT
     delete process.env.CDP_PORT
     Object.defineProperty(process, 'platform', { value: 'darwin' })
   })
 
   afterEach(() => {
-    if (originalTabtin === undefined) delete process.env.TABTIN_CDP_PORT
-    else process.env.TABTIN_CDP_PORT = originalTabtin
+    if (originalTabtin === undefined) delete process.env.MUSE_CDP_PORT
+    else process.env.MUSE_CDP_PORT = originalTabtin
     if (originalCdp === undefined) delete process.env.CDP_PORT
     else process.env.CDP_PORT = originalCdp
   })
 
-  it('parseEnvCdpPort 读取 TABTIN_CDP_PORT / CDP_PORT', () => {
-    process.env.TABTIN_CDP_PORT = '9333'
+  it('parseEnvCdpPort 读取 MUSE_CDP_PORT / CDP_PORT', () => {
+    process.env.MUSE_CDP_PORT = '9333'
     expect(parseEnvCdpPort()).toBe(9333)
-    delete process.env.TABTIN_CDP_PORT
+    delete process.env.MUSE_CDP_PORT
     process.env.CDP_PORT = '9224'
     expect(parseEnvCdpPort()).toBe(9224)
   })
@@ -72,11 +72,11 @@ describe('dev-cdp-port', () => {
     })
   })
 
-  it('显式 TABTIN_CDP_PORT 优先于默认 9222', () => {
+  it('显式 MUSE_CDP_PORT 优先于默认 9222', () => {
     execSyncMock.mockImplementation(() => {
       throw new Error('free')
     })
-    process.env.TABTIN_CDP_PORT = '9227'
+    process.env.MUSE_CDP_PORT = '9227'
     expect(resolveDevCdpPortWithMeta()).toEqual({
       port: 9227,
       requestedPort: 9227,

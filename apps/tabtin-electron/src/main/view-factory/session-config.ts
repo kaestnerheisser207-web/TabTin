@@ -17,7 +17,7 @@ import {
   type FullConfig,
 } from './anti-detect-config'
 import { setupResourceInterception, type ResourceInterceptionContext } from './resource-interception'
-import { getCDPConnectionManager } from '@tabtin/action-tools/cdp'
+import { getCDPConnectionManager } from '@muse/action-tools/cdp'
 
 // ---------------------------------------------------------------------------
 // Types

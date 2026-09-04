@@ -2,7 +2,7 @@
  * ：用户停止（abort signal）时 throw 必须映射为 kind:'aborted'，不得收成 failed。
  */
 import { describe, expect, it, vi } from 'vitest'
-import type { QueryParams, StreamEvent } from '@tabtin/agent-runtime'
+import type { QueryParams, StreamEvent } from '@muse/agent-runtime'
 import { DefaultQueryTurnPipeline, type QueryTurnDataPort } from '../src/conversation/query-turn-pipeline.js'
 import { ConversationSupervisor } from '../src/conversation/conversation-supervisor.js'
 import type { HostQuery, HostQueryResult } from '../src/conversation/host-query.js'

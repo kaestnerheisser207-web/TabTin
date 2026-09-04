@@ -4,7 +4,7 @@
  * 设计语言守门豁免：本测试用字符串字面量断言"禁止 text-xs/sm" 这类违规——
  * 字符串本身就是违规模式，所以测试文件被规则误报。
  */
-/* eslint-disable tabtin/no-chat-design-violations -- 测试文件用字面违规字符串做反向断言 */
+/* eslint-disable muse/no-chat-design-violations -- 测试文件用字面违规字符串做反向断言 */
 import { describe, it, expect } from 'vitest'
 
 describe('AgentModeBadge design system compliance', () => {
@@ -39,9 +39,9 @@ describe('AgentModeBadge design system compliance', () => {
     expect(content).toContain('text-foreground/60')
     expect(content).toContain('text-caption')
     expect(content).not.toContain('opacity-60')
-    // eslint-disable-next-line tabtin/no-design-system-violations -- 断言源码不含禁用字号，字面量本身不是样式
+    // eslint-disable-next-line muse/no-design-system-violations -- 断言源码不含禁用字号，字面量本身不是样式
     expect(content).not.toContain('text-xs')
-    // eslint-disable-next-line tabtin/no-design-system-violations -- 断言源码不含禁用字号，字面量本身不是样式
+    // eslint-disable-next-line muse/no-design-system-violations -- 断言源码不含禁用字号，字面量本身不是样式
     expect(content).not.toContain('text-sm')
   })
 

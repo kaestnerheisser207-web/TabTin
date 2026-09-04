@@ -16,8 +16,8 @@
 
 import { create } from 'zustand'
 import { createJSONStorage, persist } from 'zustand/middleware'
-import { createMigratingStorage, withPersistSafety } from '@tabtin/shared'
-import { getBucket, registerStorageBucket } from '@tabtin/storage-manager'
+import { createMigratingStorage, withPersistSafety } from '@muse/shared'
+import { getBucket, registerStorageBucket } from '@muse/storage-manager'
 import { PERSIST_KEYS } from './persist-key-registry'
 import {
   getLocalUpdatedAt,

@@ -40,7 +40,7 @@ class MockUtilityProcess extends EventEmitter {
 }
 
 describe('SubprocessPtyHostClient', () => {
-  const originalHostMode = process.env.TABTIN_PTY_HOST_MODE
+  const originalHostMode = process.env.MUSE_PTY_HOST_MODE
 
   beforeEach(() => {
     forkMock.mockReset()
@@ -48,9 +48,9 @@ describe('SubprocessPtyHostClient', () => {
 
   afterEach(() => {
     if (originalHostMode == null) {
-      delete process.env.TABTIN_PTY_HOST_MODE
+      delete process.env.MUSE_PTY_HOST_MODE
     } else {
-      process.env.TABTIN_PTY_HOST_MODE = originalHostMode
+      process.env.MUSE_PTY_HOST_MODE = originalHostMode
     }
   })
 
@@ -310,23 +310,23 @@ describe('SubprocessPtyHostClient', () => {
   })
 
   it('默认 host 模式为 subprocess（：避免主进程 forkpty 崩溃）', () => {
-    delete process.env.TABTIN_PTY_HOST_MODE
+    delete process.env.MUSE_PTY_HOST_MODE
 
     const hostClient = createDefaultPtyHostClient()
 
     expect(hostClient).toBeInstanceOf(SubprocessPtyHostClient)
   })
 
-  it('TABTIN_PTY_HOST_MODE=in-process 时回退到 in-process host（排障用）', () => {
-    process.env.TABTIN_PTY_HOST_MODE = 'in-process'
+  it('MUSE_PTY_HOST_MODE=in-process 时回退到 in-process host（排障用）', () => {
+    process.env.MUSE_PTY_HOST_MODE = 'in-process'
 
     const hostClient = createDefaultPtyHostClient()
 
     expect(hostClient).toBeInstanceOf(InProcessPtyHostClient)
   })
 
-  it('TABTIN_PTY_HOST_MODE=subprocess 显式指定仍为 subprocess host', () => {
-    process.env.TABTIN_PTY_HOST_MODE = 'subprocess'
+  it('MUSE_PTY_HOST_MODE=subprocess 显式指定仍为 subprocess host', () => {
+    process.env.MUSE_PTY_HOST_MODE = 'subprocess'
 
     const hostClient = createDefaultPtyHostClient()
 

@@ -1,5 +1,5 @@
 {
-  "name": "@tabtin/pty-core",
+  "name": "@muse/pty-core",
   "version": "0.1.0",
   "description": "Shared PTY core modules for Muse (Electron & Daemon)",
   "type": "module",
@@ -20,7 +20,7 @@
     "test:watch": "vitest"
   },
   "dependencies": {
-    "@tabtin/env-sanitize": "workspace:*"
+    "@muse/env-sanitize": "workspace:*"
   },
   "peerDependencies": {
     "node-pty": ">=1.0.0"

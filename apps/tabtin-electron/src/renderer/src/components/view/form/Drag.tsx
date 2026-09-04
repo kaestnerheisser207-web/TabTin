@@ -2,9 +2,9 @@ import type { UniqueIdentifier } from '@dnd-kit/core'
 import { useDraggable } from '@dnd-kit/core'
 import { useSortable } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
-import { cn } from '@tabtin/smartsheet-ui'
+import { cn } from '@muse/smartsheet-ui'
 import React from 'react'
-import type { FormFieldMeta } from '@tabtin/table-ui'
+import type { FormFieldMeta } from '@muse/table-ui'
 
 export interface DraggableItemProps {
   id: string

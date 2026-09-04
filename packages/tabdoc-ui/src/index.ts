@@ -51,7 +51,7 @@ export {
   getProbeSessionId,
   resetDataflowProbe,
   markdownToPlaintext,
-} from '@tabtin/doc-editor'
+} from '@muse/doc-editor'
 export type {
   ProbeOrigin,
   ProbeComponent,
@@ -60,4 +60,4 @@ export type {
   ProbeIntentDescriptor,
   ProbeSink,
   ProbeDumpFilter,
-} from '@tabtin/doc-editor'
+} from '@muse/doc-editor'

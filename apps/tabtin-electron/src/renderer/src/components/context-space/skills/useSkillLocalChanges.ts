@@ -31,7 +31,7 @@ function isLocalChangeCandidate(skill: SkillIndexEntry): boolean {
 export async function computeSkillLocalChangeState(
   skill: SkillIndexEntry,
 ): Promise<SkillLocalChangeState> {
-  const hashFn = window.tabtin?.fileSystem?.computeSkillContentHash
+  const hashFn = window.muse?.fileSystem?.computeSkillContentHash
   if (!hashFn || !isLocalChangeCandidate(skill)) return 'unknown'
   try {
     const result = await hashFn(skill.path!)

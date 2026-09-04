@@ -1,4 +1,4 @@
-import type { Agent, Space, OrganizationRole } from '@tabtin/app-shell'
+import type { Agent, Space, OrganizationRole } from '@muse/app-shell'
 
 import { canManageOrganization } from './useCanManageOrganization'
 

@@ -14,13 +14,13 @@ LOG_FILE="${LOG_DIR}/electron-dev.log"
 ELECTRON_DEV_PORT="${VITE_DEV_SERVER_PORT:-5173}"
 ELECTRON_START_TIMEOUT="${ELECTRON_START_TIMEOUT:-240}"
 # 允许个人 .env.local 开启 IM 联调；shell 显式传值优先，便于临时关闭。
-IM_MODE="${TABTIN_DEV_IM_MODE:-}"
+IM_MODE="${MUSE_DEV_IM_MODE:-}"
 if [[ -z "${IM_MODE}" && -f "${ROOT_DIR}/.env.local" ]]; then
-  IM_MODE="$(grep -E '^TABTIN_DEV_IM_MODE=' "${ROOT_DIR}/.env.local" | tail -1 | cut -d= -f2- | tr -d ' \"' || true)"
+  IM_MODE="$(grep -E '^MUSE_DEV_IM_MODE=' "${ROOT_DIR}/.env.local" | tail -1 | cut -d= -f2- | tr -d ' \"' || true)"
 fi
 IM_MODE="${IM_MODE:-0}"
 if [[ "${IM_MODE}" == "1" ]]; then
-  export TABTIN_DEV_IM_MODE=1
+  export MUSE_DEV_IM_MODE=1
 fi
 
 if [[ -f "${ROOT_DIR}/.env" ]]; then

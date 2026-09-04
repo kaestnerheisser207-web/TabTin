@@ -2,7 +2,7 @@
  * toolErrorClassification — 工具错误分类
  *
  * Wave 2h：SOFT_ERROR_CODES 三处重复定义抽到此处。
- * Wave 2（tool-errors）：catalog 默认项由 `@tabtin/tool-errors` 生成；
+ * Wave 2（tool-errors）：catalog 默认项由 `@muse/tool-errors` 生成；
  * 本文件只保留 UX 特例 override + 查询 helper，保证现有分类值不变。
  *
  * - `soft`：是否走温和化 UX（黄 Clock 代替红 XCircle）——语义是"系统/用户主动
@@ -16,7 +16,7 @@
 import {
   TOOL_ERROR_CATALOG_DEFAULTS,
   type ToolErrorCatalogEntry,
-} from '@tabtin/tool-errors'
+} from '@muse/tool-errors'
 
 export type ToolErrorEntry = ToolErrorCatalogEntry
 

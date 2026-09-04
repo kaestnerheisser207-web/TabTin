@@ -146,7 +146,7 @@ function main(): void {
 
       if (typeNames.length > 0) {
         importLines.push(
-          `import type { ${typeNames.join(', ')} } from '@tabtin/cli-server-core/surfaces/${s.fileName}'`,
+          `import type { ${typeNames.join(', ')} } from '@muse/cli-server-core/surfaces/${s.fileName}'`,
         )
       }
 

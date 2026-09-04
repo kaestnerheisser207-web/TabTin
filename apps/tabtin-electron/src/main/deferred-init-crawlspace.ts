@@ -1,7 +1,7 @@
 import type { BrowserWindow } from 'electron'
 import { startupPerf, createLogger } from './logger'
 import { withStepTimeout, STEP_TIMEOUT_MS } from './deferred-utils'
-import type { ResourceDetectionSummary } from '@tabtin/action-tools/types'
+import type { ResourceDetectionSummary } from '@muse/action-tools/types'
 
 const mainLog = createLogger('Main')
 

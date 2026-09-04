@@ -7,7 +7,7 @@
  * in-flight 去重防止轮询/重复挂载打爆请求。
  */
 import { describe, it, expect, vi, beforeEach } from 'vitest'
-import type { ChatSession } from '@tabtin/chat-client'
+import type { ChatSession } from '@muse/chat-client'
 import { createSessionCrudActions, type SessionCrudStore } from '../sessionCrudSlice'
 import { __resetSpaceSessionListWriteGateForTest } from '../../spaceSessionListWriteGate'
 import { registerDraftSession, releaseDraftSession, resetDraftSessions } from '../../draftSession'
@@ -85,7 +85,7 @@ vi.mock('../../../../useSessionReadStore', () => ({
   },
 }))
 vi.mock('@/services/sessionFreshness', () => ({ markSessionFresh: vi.fn(), markSessionStale: vi.fn() }))
-vi.mock('@tabtin/smartsheet-ui/toast', () => ({ toast: vi.fn() }))
+vi.mock('@muse/smartsheet-ui/toast', () => ({ toast: vi.fn() }))
 vi.mock('@/i18n', () => ({ default: { t: (k: string) => k } }))
 
 function makeSession(id: string, spaceId: string): ChatSession {

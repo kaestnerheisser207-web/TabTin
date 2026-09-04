@@ -118,7 +118,7 @@ vi.mock('@/components/context-space/registry', () => ({
   },
 }))
 
-vi.mock('@tabtin/resource-router', () => ({
+vi.mock('@muse/resource-router', () => ({
   parseResourcePointer: vi.fn(),
 }))
 

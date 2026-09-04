@@ -1,5 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
-import { STEALTH_ARGS } from '@tabtin/anti-detect'
+import { STEALTH_ARGS } from '@muse/anti-detect'
 
 const mocks = vi.hoisted(() => ({
   getPath: vi.fn(() => '/tmp/tabtin-user-data'),

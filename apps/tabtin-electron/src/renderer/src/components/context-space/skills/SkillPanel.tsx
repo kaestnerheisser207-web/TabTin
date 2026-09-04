@@ -773,7 +773,7 @@ export const SkillPanel: React.FC<SkillPanelProps> = ({
   const handleUpgrade = useCallback(async (skill: SkillIndexEntry) => {
     try {
       let autoResolution: UpgradeResolution | undefined
-      const hashFn = window.tabtin?.fileSystem?.computeSkillContentHash
+      const hashFn = window.muse?.fileSystem?.computeSkillContentHash
       if (hashFn && skill.path && skill.install_content_hash) {
         try {
           const hr = await hashFn(skill.path)
@@ -857,7 +857,7 @@ export const SkillPanel: React.FC<SkillPanelProps> = ({
       // 后端 fork 只写 Django sandbox；Electron Agent 读的是本地 platform-data——必须物化，否则副本空壳。
       if (nextKey && organizationId) {
         try {
-          const fs = window.tabtin?.fileSystem
+          const fs = window.muse?.fileSystem
           let skillDir = ''
           const sourceKey = skill.skill_key || ''
           if (sourceKey) {
@@ -911,7 +911,7 @@ export const SkillPanel: React.FC<SkillPanelProps> = ({
     const spaceIds = targetSpaceIds.length > 0 ? targetSpaceIds : [currentSpaceId]
     setInstallToSpacesLoading(true)
     try {
-      const fs = window.tabtin?.fileSystem
+      const fs = window.muse?.fileSystem
       const skillKey = skill.skill_key || ''
       let skillDir = ''
       if (skillKey && !isDeviceLocal) {
@@ -1053,7 +1053,7 @@ export const SkillPanel: React.FC<SkillPanelProps> = ({
           restorePublishedVersion: restorePublishedSkillForShare,
         }),
         collectFiles: async (skillDir) => {
-          const fs = window.tabtin?.fileSystem
+          const fs = window.muse?.fileSystem
           if (!fs) throw new Error('skill dir unavailable')
           return collectSkillFiles(skillDir, fs)
         },

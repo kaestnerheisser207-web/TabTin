@@ -5,7 +5,7 @@
  * 渲染（webpage / table / file）。这是发送链路里**唯一打 API** 的上下文解析点。
  */
 import { useAuthStore } from '@stores/useAuthStore'
-import { getApiRuntimeConfig, type EnvLike } from '@tabtin/config'
+import { getApiRuntimeConfig, type EnvLike } from '@muse/config'
 import { electronFetch } from '@/services/electronFetch'
 import { isMcpFocusBlock, renderMcpFocusContext } from '@/components/chat/context/mcpFocusContext'
 

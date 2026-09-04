@@ -6,10 +6,10 @@
  * 避免分散实现导致状态分叉。
  */
 
-import { toast } from '@tabtin/smartsheet-ui/toast';
-import { ChatAPIError } from '@tabtin/chat-client';
-import type { ChatSession } from '@tabtin/chat-client';
-import { resolveSessionScopeId } from '@tabtin/app-shell';
+import { toast } from '@muse/smartsheet-ui/toast';
+import { ChatAPIError } from '@muse/chat-client';
+import type { ChatSession } from '@muse/chat-client';
+import { resolveSessionScopeId } from '@muse/app-shell';
 import i18n from '@/i18n';
 import { useChatStore, DEFAULT_CONTEXT_WINDOW_SIZE } from '@stores/chat/useChatStore';
 import { useUIStore } from '@stores/useUIStore';

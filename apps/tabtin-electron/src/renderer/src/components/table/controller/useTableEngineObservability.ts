@@ -21,7 +21,7 @@ const TABLE_ERROR_HINTS = [
   'datagridadapter',
   'canvastableengine',
   'canvasdatagridexperimental',
-  '@tabtin/table-engine',
+  '@muse/table-engine',
 ];
 
 type MetricOperation = 'create' | 'update';
@@ -425,8 +425,8 @@ const updateWindowSnapshot = (
     updatedAt: item.updatedAt ? new Date(item.updatedAt).toISOString() : '-',
   }));
 
-  window.__TABTIN_TABLE_ENGINE_METRICS__ = snapshot;
-  window.__TABTIN_TABLE_ENGINE_METRICS_PRINT__ = () => {
+  window.__MUSE_TABLE_ENGINE_METRICS__ = snapshot;
+  window.__MUSE_TABLE_ENGINE_METRICS_PRINT__ = () => {
     console.table(rows);
     return snapshot;
   };

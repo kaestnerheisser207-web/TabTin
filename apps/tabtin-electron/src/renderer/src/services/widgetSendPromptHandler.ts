@@ -1,5 +1,5 @@
 import i18n from '@/i18n'
-import { toast } from '@tabtin/smartsheet-ui/toast'
+import { toast } from '@muse/smartsheet-ui/toast'
 import { useChatStore } from '@stores/chat/useChatStore'
 import { useChatRuntimeStore } from '@stores/useChatRuntimeStore'
 import { trackChatTelemetry } from '@stores/chat/execution/chatTelemetry'
@@ -225,7 +225,7 @@ function pushDevEvent(event: WidgetSendPromptDevEvent): void {
   devEvents.push(event)
   if (devEvents.length > MAX_DEV_EVENTS) devEvents.splice(0, devEvents.length - MAX_DEV_EVENTS)
   if (typeof window !== 'undefined') {
-    window.__TABTIN_WIDGET_SEND_PROMPT_EVENTS__ = [...devEvents]
+    window.__MUSE_WIDGET_SEND_PROMPT_EVENTS__ = [...devEvents]
   }
 }
 
@@ -493,7 +493,7 @@ export function __resetWidgetSendPromptForTests(): void {
   sessionRateLimitBuckets.clear()
   devEvents.splice(0, devEvents.length)
   if (typeof window !== 'undefined') {
-    window.__TABTIN_WIDGET_SEND_PROMPT_EVENTS__ = []
+    window.__MUSE_WIDGET_SEND_PROMPT_EVENTS__ = []
   }
 }
 

@@ -1,5 +1,5 @@
-import type { HostTurnStore } from '@tabtin/agent-host/policy'
-import type { DeviceIdentityStore } from '@tabtin/agent-host/state'
+import type { HostTurnStore } from '@muse/agent-host/policy'
+import type { DeviceIdentityStore } from '@muse/agent-host/state'
 import type { AgentEngineExecutionTarget } from '../../../shared/types/agent-engine.js'
 import { createLogger } from '../../logger.js'
 

@@ -3,7 +3,7 @@ import { createReadStream } from 'node:fs';
 import fs from 'node:fs/promises';
 import path from 'node:path';
 
-import { getUserDataPath } from '@tabtin/shared';
+import { getUserDataPath } from '@muse/shared';
 
 import {
   MEETING_ARCHIVE_SCHEMA_VERSION,

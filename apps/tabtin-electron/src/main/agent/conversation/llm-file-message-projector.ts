@@ -1,5 +1,5 @@
-import type { ContentBlock, Message } from '@tabtin/agent-runtime'
-import { formatGenericAttachmentResourceText } from '@tabtin/agent-host/delivery'
+import type { ContentBlock, Message } from '@muse/agent-runtime'
+import { formatGenericAttachmentResourceText } from '@muse/agent-host/delivery'
 
 function projectFileBlock(block: ContentBlock): ContentBlock {
   if (block.type === 'file' || block.type === 'image' || block.type === 'video') {

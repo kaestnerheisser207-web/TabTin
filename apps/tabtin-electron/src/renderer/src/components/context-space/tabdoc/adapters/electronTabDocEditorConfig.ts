@@ -8,8 +8,8 @@ import type {
   TabDocImageUploadPort,
   TabDocHtmlUploadPort,
   TabDocAuthPort,
-} from '@tabtin/tabdoc-ui'
-import { isHtmlUploadFile } from '@tabtin/tabdoc-ui/editor'
+} from '@muse/tabdoc-ui'
+import { isHtmlUploadFile } from '@muse/tabdoc-ui/editor'
 import { getAuthToken } from '@/adapters/api-adapter-instance'
 import { useAuthStore } from '@/stores/useAuthStore'
 import { directUpload } from '@/services/oss-direct-uploader'
@@ -138,7 +138,7 @@ export const electronHtmlUploadPort: TabDocHtmlUploadPort = {
  * 将 Electron 特有的 TableEmbedHost 注入到共享包的 TabDataBlockView 中。
  */
 export function configureElectronTabDataBlockEmbed(): void {
-  import('@tabtin/tabdoc-ui/editor').then(({ configureTabDataBlockView }) =>
+  import('@muse/tabdoc-ui/editor').then(({ configureTabDataBlockView }) =>
     import('../components/editor/tabdata-block/TableEmbedHost').then(({ TableEmbedHost }) =>
       import('react').then((React) => {
         configureTabDataBlockView({

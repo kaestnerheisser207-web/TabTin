@@ -1,4 +1,4 @@
-import { okResponse } from '@tabtin/agent-wire'
+import { okResponse } from '@muse/agent-wire'
 import { guardedHandle } from './utils/guarded-handle'
 import {
   importCodexSessionFile,

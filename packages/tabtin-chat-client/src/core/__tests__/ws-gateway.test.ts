@@ -5,7 +5,7 @@ const { coreUnsubscribe, coreOptions } = vi.hoisted(() => ({
   coreOptions: [] as any[],
 }))
 
-vi.mock('@tabtin/ws-gateway-client', () => ({
+vi.mock('@muse/ws-gateway-client', () => ({
   WsGatewayClient: class {
     constructor(options: any) {
       coreOptions.push(options)

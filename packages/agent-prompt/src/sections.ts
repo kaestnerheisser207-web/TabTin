@@ -214,7 +214,7 @@ export function buildEnvironmentSection(identity?: RuntimeIdentity): string {
     '',
     '## 环境变量',
     '',
-    '- `TABTIN_WORKSPACE`：runtime 自动注入的工作目录绝对路径；终端默认 cwd 等于它的值。只在 shell 命令内部拼路径，不要作为结构化 FC 工具参数；相对路径相对工作目录根本身，禁止再套一层 `workspace/` 前缀。',
+    '- `MUSE_WORKSPACE`：runtime 自动注入的工作目录绝对路径；终端默认 cwd 等于它的值。只在 shell 命令内部拼路径，不要作为结构化 FC 工具参数；相对路径相对工作目录根本身，禁止再套一层 `workspace/` 前缀。',
     '',
     ...termLines,
     '</environment>',
@@ -236,21 +236,21 @@ function buildShellIdentityBullet(shellInfo?: PromptShellInfo): string {
   if (!shellInfo) return '';
   if (shellInfo.kind === 'powershell') {
     return `- 当前 shell：PowerShell（\`${shellInfo.shell}\`），不是 bash：
-  - 串联命令用 \`;\`（PS7 也支持 \`&&\`）；切目录 \`Set-Location <path>\` 或 \`cd <path>; <cmd>\`，环境变量 \`$env:TABTIN_WORKSPACE\`
+  - 串联命令用 \`;\`（PS7 也支持 \`&&\`）；切目录 \`Set-Location <path>\` 或 \`cd <path>; <cmd>\`，环境变量 \`$env:MUSE_WORKSPACE\`
   - 含空格的路径用单引号字面字符串（\`'C:\\path with space\\x'\`）
   - 等待用工具参数 \`wait_ms\` / \`pattern\`；bash 专属写法（\`until...do...done\` / \`[[ ! -f ]]\` / \`| cat\`）不适用
 `;
   }
   if (shellInfo.kind === 'cmd') {
     return `- 当前 shell：cmd.exe（\`${shellInfo.shell}\`），不是 bash：
-  - 串联命令用 \`&&\`；切目录 \`cd /d <path> && <cmd>\`，环境变量 \`%TABTIN_WORKSPACE%\`
+  - 串联命令用 \`&&\`；切目录 \`cd /d <path> && <cmd>\`，环境变量 \`%MUSE_WORKSPACE%\`
   - 含空格的路径用双引号（\`"C:\\path with space\\x"\`）；cmd 不识别单引号
   - 等待用工具参数 \`wait_ms\` / \`pattern\`；bash 专属写法（\`until...do...done\` / \`[[ ! -f ]]\` / \`| cat\`）不适用
 `;
   }
   // POSIX 主路径（bash/zsh/sh/other，含 macOS zsh / Linux bash）。
   // 只声明语法纪律，不枚举具体等待命令配方（与 Windows 侧一致，避免命令特判）。
-  return `- 当前 shell：${shellInfo.kind}（\`${shellInfo.shell}\`）——用 POSIX shell 语法：\`&&\` / \`;\` 串联、\`cd /abs && <cmd>\` 切目录、\`$TABTIN_WORKSPACE\` 读环境变量。等待用工具参数 \`wait_ms\` / \`pattern\`；别套用其它 shell（PowerShell / cmd）的专属写法。
+  return `- 当前 shell：${shellInfo.kind}（\`${shellInfo.shell}\`）——用 POSIX shell 语法：\`&&\` / \`;\` 串联、\`cd /abs && <cmd>\` 切目录、\`$MUSE_WORKSPACE\` 读环境变量。等待用工具参数 \`wait_ms\` / \`pattern\`；别套用其它 shell（PowerShell / cmd）的专属写法。
 `;
 }
 
@@ -258,8 +258,8 @@ function buildShellIdentityBullet(shellInfo?: PromptShellInfo): string {
  * `<shell_runtime>` 段中与 cwd / 工作目录变量引用相关的共享条目。
  *
  * ：切目录 / env **形态**只在身份行声明一次；本段只补「默认 cwd 契约」。
- * `TABTIN_WORKSPACE` 的完整描述归 `<environment>` 的 `## 环境变量`。缺 shellInfo 时
- * 用 shell 中性文案，**禁止**回落 `cd /abs &&` / `$TABTIN_WORKSPACE` 等 POSIX 残留
+ * `MUSE_WORKSPACE` 的完整描述归 `<environment>` 的 `## 环境变量`。缺 shellInfo 时
+ * 用 shell 中性文案，**禁止**回落 `cd /abs &&` / `$MUSE_WORKSPACE` 等 POSIX 残留
  * （旧 host 也不应被诱导写 bash）。
  * ：禁止把产品名「工作空间」 说成路径前缀 `workspace/`。
  */
@@ -267,21 +267,21 @@ function buildShellRuntimeSharedBullets(shellInfo?: PromptShellInfo): string {
   const noWorkspacePrefix =
     '相对路径相对工作目录根本身——**禁止**再套一层名为 `workspace/` 的前缀。';
   if (shellInfo?.kind === 'powershell') {
-    return `- 默认 cwd = \`$env:TABTIN_WORKSPACE\` 的值（见 \`<environment>\` 的 \`## 环境变量\`）。终端执行入口不单独接受 cwd；
+    return `- 默认 cwd = \`$env:MUSE_WORKSPACE\` 的值（见 \`<environment>\` 的 \`## 环境变量\`）。终端执行入口不单独接受 cwd；
   要切目录用绝对路径，或按上方身份行的切目录语法内联。
-- PowerShell 中引用 \`TABTIN_WORKSPACE\` 用 \`$env:TABTIN_WORKSPACE\`。${noWorkspacePrefix}
+- PowerShell 中引用 \`MUSE_WORKSPACE\` 用 \`$env:MUSE_WORKSPACE\`。${noWorkspacePrefix}
 `;
   }
   if (shellInfo?.kind === 'cmd') {
-    return `- 默认 cwd = \`%TABTIN_WORKSPACE%\` 的值（见 \`<environment>\` 的 \`## 环境变量\`）。终端执行入口不单独接受 cwd；
+    return `- 默认 cwd = \`%MUSE_WORKSPACE%\` 的值（见 \`<environment>\` 的 \`## 环境变量\`）。终端执行入口不单独接受 cwd；
   要切目录用绝对路径，或按上方身份行的切目录语法内联。
-- cmd 中引用 \`TABTIN_WORKSPACE\` 用 \`%TABTIN_WORKSPACE%\`。${noWorkspacePrefix}
+- cmd 中引用 \`MUSE_WORKSPACE\` 用 \`%MUSE_WORKSPACE%\`。${noWorkspacePrefix}
 `;
   }
   if (shellInfo) {
-    return `- 默认 cwd = \`$TABTIN_WORKSPACE\` 的值（见 \`<environment>\` 的 \`## 环境变量\`）。终端执行入口不单独接受 cwd；
+    return `- 默认 cwd = \`$MUSE_WORKSPACE\` 的值（见 \`<environment>\` 的 \`## 环境变量\`）。终端执行入口不单独接受 cwd；
   要切目录用绝对路径，或按上方身份行的切目录语法内联。
-- POSIX shell 中引用 \`TABTIN_WORKSPACE\` 用 \`$TABTIN_WORKSPACE\`。${noWorkspacePrefix}
+- POSIX shell 中引用 \`MUSE_WORKSPACE\` 用 \`$MUSE_WORKSPACE\`。${noWorkspacePrefix}
 `;
   }
   // 无身份行：勿假设任何具体 shell 语法；也不贴 POSIX/`$…` 变量形态。
@@ -714,7 +714,7 @@ ${content.trim()}
  * 这让 6 类"自动加料"共享一个 wrapper SSoT，history 装填阶段只需要一个
  * parser 就能枚举所有类型。
  *
- * **入参约定**（来自 `@tabtin/agent-runtime` `MemorySummary`，避免循环依赖
+ * **入参约定**（来自 `@muse/agent-runtime` `MemorySummary`，避免循环依赖
  * 这里复述字段集）：
  * ```
  * { id?, content, memo_type?, tags?, importance?, created_at?, source_url? }

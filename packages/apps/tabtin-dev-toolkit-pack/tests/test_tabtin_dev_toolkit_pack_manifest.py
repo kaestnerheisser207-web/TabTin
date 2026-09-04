@@ -22,7 +22,7 @@ def manifest():
 
 
 def test_manifest_identity(manifest):
-    assert manifest["id"] == "tabtin-dev-toolkit-pack"
+    assert manifest["id"] == "muse-dev-toolkit-pack"
     assert manifest["distribution"] == "marketplace"
     assert manifest["runtimeBindings"]["skillsProvider"] == "skills:local"
     assert manifest["runtimeBindings"]["toolProvider"] is None

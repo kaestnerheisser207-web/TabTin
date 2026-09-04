@@ -3,7 +3,7 @@ import { computeInsertPositionAfter } from "../lib/y-utils.js";
 import {
   planTableOrderMutations,
 } from "./table-order-plan.js";
-import { applyTableRecordOrderPlan } from "@tabtin/table-engine/collab/table-record-order";
+import { applyTableRecordOrderPlan } from "@muse/table-engine/collab/table-record-order";
 import { MAX_BINARY_BYTES, type ApplyOpsHandlerResult, type CollabPrimitiveOp, type PrimitiveExecutorInput, isObject } from "./types.js";
 
 function assertPath(path: unknown, op: string): asserts path is string[] {

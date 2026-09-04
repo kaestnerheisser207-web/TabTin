@@ -8,7 +8,7 @@
  *  - 提供单项操作：openSettings / request / recheck
  *  - 对「授权后需重启才刷新」的权限维护 UI 层 pendingRestartConfirmation
  *
- * 与主进程的 IPC 抽象：仅通过 window.tabtin.osPermissions.* 调用，
+ * 与主进程的 IPC 抽象：仅通过 window.muse.osPermissions.* 调用，
  * 不在这里假设 main 实现细节；不修改主进程 PermissionStatus enum。
  *
  * 生命周期：仅挂在「系统权限」面板；离开该 section 会卸载本 hook，
@@ -16,7 +16,7 @@
  */
 
 import { useCallback, useEffect, useRef, useState } from 'react'
-import { toast } from '@tabtin/smartsheet-ui'
+import { toast } from '@muse/smartsheet-ui'
 import { useTranslation } from 'react-i18next'
 import type { PermissionDescriptor, PermissionKind, PermissionStatus } from './permissionConfig'
 
@@ -354,9 +354,9 @@ export function usePermissionsState(): UsePermissionsStateResult {
       }
     }
     // 设置页级全局刷新：从系统设置返回时同步 OS 权限，不绑定 Space 前台语义。
-    // eslint-disable-next-line tabtin/prefer-scoped-activity-effects -- App 设置面板，非 Space 作用域
+    // eslint-disable-next-line muse/prefer-scoped-activity-effects -- App 设置面板，非 Space 作用域
     window.addEventListener('focus', onFocus)
-    // eslint-disable-next-line tabtin/prefer-scoped-activity-effects -- 同上；Electron 有时只触发 visibilitychange
+    // eslint-disable-next-line muse/prefer-scoped-activity-effects -- 同上；Electron 有时只触发 visibilitychange
     document.addEventListener('visibilitychange', onVisibility)
     return () => {
       window.removeEventListener('focus', onFocus)

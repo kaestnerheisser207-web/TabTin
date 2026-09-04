@@ -9,7 +9,7 @@
 import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { MessageCircle, Plus } from 'lucide-react'
-import { Button as UIButton } from '@tabtin/smartsheet-ui'
+import { Button as UIButton } from '@muse/smartsheet-ui'
 import { CreateConversationDialog } from '@components/tabchat/CreateConversationDialog'
 
 export const IMWelcomePanel: React.FC = React.memo(() => {

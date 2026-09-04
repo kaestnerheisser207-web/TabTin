@@ -4,7 +4,7 @@
 import { readFileSync } from 'node:fs'
 import { join } from 'node:path'
 import { describe, expect, it } from 'vitest'
-import { COMMENT_RAIL_BREAKPOINT_PX, resolveCommentRailLayout } from '@tabtin/tabdoc-ui/api-client'
+import { COMMENT_RAIL_BREAKPOINT_PX, resolveCommentRailLayout } from '@muse/tabdoc-ui/api-client'
 import {
   DOC_COMMENT_MESSAGE_EVENT,
   DOC_COMMENT_THREAD_EVENT,

@@ -1,6 +1,6 @@
 """Runtime → Django relay 的用户可见事件注册契约。
 
-这些事件由 ``@tabtin/agent-runtime`` / ``@tabtin/agent-host`` 产生，Electron
+这些事件由 ``@muse/agent-runtime`` / ``@muse/agent-host`` 产生，Electron
 本机 IPC 会直接消费；Django registry 若漏项，远端 mobile/web observer 会在
 ``relay_handler`` 的 ``event_not_allowed`` 分支被静默跳过。
 """

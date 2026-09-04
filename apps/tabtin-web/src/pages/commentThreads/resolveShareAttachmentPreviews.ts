@@ -1,8 +1,8 @@
-import type { AppHostClient } from '@tabtin/app-host-sdk'
+import type { AppHostClient } from '@muse/app-host-sdk'
 import {
   resolveSharedCommentAttachmentPreview,
   type CommentThread,
-} from '@tabtin/tabdoc-ui/api-client'
+} from '@muse/tabdoc-ui/api-client'
 
 /**
  * 将线程附件的鉴权 preview path 解析为短时 OSS URL（分享页 img 可直接显示）。

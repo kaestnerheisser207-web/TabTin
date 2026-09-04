@@ -7,12 +7,12 @@ import apiService from '@/services/api'
 import { useI18nStore } from './useI18nStore'
 import { resetSessionState } from './sessionReset'
 import i18n from '@/i18n'
-import { toast } from '@tabtin/smartsheet-ui'
+import { toast } from '@muse/smartsheet-ui'
 import { createLogger } from '@/utils/logger'
 import { fetchUploadConfig } from '@/constants/upload'
 import { setAuthSyncHandler, setAuthLogoutHandler } from '@/utils/authPersistence'
 import { extractErrorMessage, extractStorableErrorMessage } from '@/utils/extract-api-error'
-import { withPersistSafety, createMigratingStorage } from '@tabtin/shared'
+import { withPersistSafety, createMigratingStorage } from '@muse/shared'
 import { PERSIST_KEYS } from './persist-key-registry'
 import { useSessionReadStore } from './useSessionReadStore'
 import { queryClient } from '@/lib/query-client'
@@ -83,7 +83,7 @@ async function handleLoginSuccess(
   apiService.setAuthToken(access_token)
 
   // 保存到安全存储
-  await window.tabtin.auth.save(access_token, refresh_token, user)
+  await window.muse.auth.save(access_token, refresh_token, user)
 
   // 更新状态
   set({
@@ -132,7 +132,7 @@ async function refreshProfileFromServer(
     set({ user: refreshedUser })
     syncUserProfileCache(refreshedUser)
     if (current.accessToken && current.refreshToken) {
-      await window.tabtin.auth.save(
+      await window.muse.auth.save(
         current.accessToken,
         current.refreshToken,
         refreshedUser,
@@ -255,7 +255,7 @@ export const useAuthStore = create<AuthStore>()(
               error: null,
             })
             if (current.accessToken && current.refreshToken) {
-              await window.tabtin.auth.save(current.accessToken, current.refreshToken, updatedUser)
+              await window.muse.auth.save(current.accessToken, current.refreshToken, updatedUser)
             }
             toast({ title: '邀请码已验证，欢迎使用 Muse' })
           } catch (error: any) {
@@ -300,8 +300,8 @@ export const useAuthStore = create<AuthStore>()(
           let logoutOwner: { userId: string; organizationId: string } | null = null
           try {
             // 动态 import 避免在 store 顶层引入循环依赖（useOrganizationStore
-            // 来自 @tabtin/app-shell，与 useAuthStore 互相 import 会成环）。
-            const { useOrganizationStore } = await import('@tabtin/app-shell')
+            // 来自 @muse/app-shell，与 useAuthStore 互相 import 会成环）。
+            const { useOrganizationStore } = await import('@muse/app-shell')
             const wt = useOrganizationStore.getState().selectedOrganization
             const userId = currentUser?.id != null ? String(currentUser.id) : ''
             const organizationId = wt?.id ? String(wt.id) : ''
@@ -321,7 +321,7 @@ export const useAuthStore = create<AuthStore>()(
 
             apiService.clearAuth()
 
-            await window.tabtin.auth.clear()
+            await window.muse.auth.clear()
 
             // 先标记未认证，阻断 clearDevices → reportOffline → 401 → notifyLogoutRequired 循环
             set({
@@ -345,9 +345,9 @@ export const useAuthStore = create<AuthStore>()(
             // 产品 Review LH2-D2 follow-up：必须区分 IPC 业务失败（result.success=false）
             // 与 IPC 通道异常。前者通常是 fs 权限 / dispose 失败，应明确 warn
             // 让运维知道"本地 sync 目录可能未清空"；后者是 preload/IPC 没就绪。
-            if (logoutOwner && window.tabtin?.agentEngine?.resetAccountSync) {
+            if (logoutOwner && window.muse?.agentEngine?.resetAccountSync) {
               try {
-                const result = await window.tabtin.agentEngine.resetAccountSync(logoutOwner)
+                const result = await window.muse.agentEngine.resetAccountSync(logoutOwner)
                 if (result?.success) {
                   log.info('reset-account-sync done:', {
                     userId: logoutOwner.userId,
@@ -370,7 +370,7 @@ export const useAuthStore = create<AuthStore>()(
             } else {
               log.warn(
                 'reset-account-sync skipped — local sync dir for this account will NOT be cleaned',
-                { hasOwner: !!logoutOwner, hasIpc: !!window.tabtin?.agentEngine?.resetAccountSync },
+                { hasOwner: !!logoutOwner, hasIpc: !!window.muse?.agentEngine?.resetAccountSync },
               )
             }
 
@@ -396,10 +396,10 @@ export const useAuthStore = create<AuthStore>()(
           try {
             // contract W2-β：旧 envelope `{success, accessToken, message}` 改为 invokeIpc 自动 throw。
             // 确定性拒绝（过期/吊销）才 logout；瞬时网络失败对齐 api.handleRefreshFailure / ，保留凭证。
-            await window.tabtin.auth.refreshAccessToken()
+            await window.muse.auth.refreshAccessToken()
 
             // 主进程已将新 token 持久化到 Keychain，读取完整 token bundle 同步到渲染进程
-            const authData = await window.tabtin.auth.load()
+            const authData = await window.muse.auth.load()
             if (!authData?.accessToken) {
               throw new Error('Failed to load refreshed tokens from storage')
             }
@@ -446,7 +446,7 @@ export const useAuthStore = create<AuthStore>()(
             // 同步到安全存储
             const { accessToken, refreshToken } = get()
             if (accessToken && refreshToken) {
-              await window.tabtin.auth.save(accessToken, refreshToken, updatedUser)
+              await window.muse.auth.save(accessToken, refreshToken, updatedUser)
             }
           } catch (error: any) {
             set({
@@ -464,18 +464,18 @@ export const useAuthStore = create<AuthStore>()(
         // 从存储加载认证信息
         loadAuthFromStorage: async () => {
           try {
-            const authData = await window.tabtin.auth.load()
+            const authData = await window.muse.auth.load()
 
             if (authData && authData.accessToken) {
               // 检查 token 是否即将过期，若即将过期则尝试主动刷新
               let activeAccessToken = authData.accessToken
               try {
-                const expiryCheck = await window.tabtin.auth.isTokenExpiringSoon(5)
+                const expiryCheck = await window.muse.auth.isTokenExpiringSoon(5)
                 if (expiryCheck?.success && expiryCheck.isExpiring && authData.refreshToken) {
                   log.info('Token expiring soon, attempting refresh...')
                   const newToken = await apiService.tryRefreshTokens()
                   if (newToken) {
-                    const freshAuth = await window.tabtin.auth.load()
+                    const freshAuth = await window.muse.auth.load()
                     if (freshAuth?.accessToken) {
                       activeAccessToken = freshAuth.accessToken
                       authData.refreshToken = freshAuth.refreshToken
@@ -491,7 +491,7 @@ export const useAuthStore = create<AuthStore>()(
                     //   凭证已被清掉的情况下"演已登录"（Agent 设置可编辑但保存全 401）。
                     // - 瞬时失败（网络/超时/5xx）：主进程保留凭证，bundle 仍有 token，
                     //   维持"保留现有 token"的既有设计（见 api.ts handleRefreshFailure）。
-                    const bundleAfterFailure = await window.tabtin.auth.load().catch(() => null)
+                    const bundleAfterFailure = await window.muse.auth.load().catch(() => null)
                     if (!bundleAfterFailure?.accessToken) {
                       log.warn('Startup token refresh rejected and credentials cleared, entering unauthenticated')
                       set({
@@ -663,8 +663,8 @@ setAuthLogoutHandler((reason) => {
   void useAuthStore.getState().logout(reason as LogoutReason)
 })
 
-if (typeof window !== 'undefined' && !window.__tabtin_auth_logout_event_bound__) {
-  window.__tabtin_auth_logout_event_bound__ = true
+if (typeof window !== 'undefined' && !window.__muse_auth_logout_event_bound__) {
+  window.__muse_auth_logout_event_bound__ = true
 
   // CL-1/CL-2 完成迁移：logout / token 同步事件生产者已迁移至内部通道
   // （authPersistence.ts 闭包）。下面的 invite gate 事件只在 renderer 内
@@ -680,7 +680,7 @@ if (typeof window !== 'undefined' && !window.__tabtin_auth_logout_event_bound__)
     }
     useAuthStore.setState({ user: updatedUser })
     if (state.accessToken && state.refreshToken) {
-      void window.tabtin.auth.save(state.accessToken, state.refreshToken, updatedUser)
+      void window.muse.auth.save(state.accessToken, state.refreshToken, updatedUser)
     }
   })
 
@@ -721,13 +721,13 @@ if (typeof window !== 'undefined' && !window.__tabtin_auth_logout_event_bound__)
     }
   })
 
-  if (window.tabtin?.auth?.onForceLogout) {
+  if (window.muse?.auth?.onForceLogout) {
     // 兄弟窗口 refresh 失败会广播 force-logout；若本窗刚写入新凭证，应 rehydrate 而非 logout。
-    window.tabtin.auth.onForceLogout(() => {
+    window.muse.auth.onForceLogout(() => {
       log.info('Received cross-window force-logout')
       void (async () => {
         try {
-          const bundle = await window.tabtin.auth.load()
+          const bundle = await window.muse.auth.load()
           if (bundle?.accessToken) {
             log.info('Ignoring force-logout: credentials still present, rehydrating store')
             await useAuthStore.getState().loadAuthFromStorage()
@@ -746,10 +746,10 @@ if (typeof window !== 'undefined' && !window.__tabtin_auth_logout_event_bound__)
     })
   }
 
-  if (window.tabtin?.auth?.onTokenRefreshed) {
-    window.tabtin.auth.onTokenRefreshed(async () => {
+  if (window.muse?.auth?.onTokenRefreshed) {
+    window.muse.auth.onTokenRefreshed(async () => {
       try {
-        const bundle = await window.tabtin.auth.load()
+        const bundle = await window.muse.auth.load()
         if (bundle?.accessToken) {
           apiService.setAuthToken(bundle.accessToken)
           useAuthStore.setState({
@@ -764,8 +764,8 @@ if (typeof window !== 'undefined' && !window.__tabtin_auth_logout_event_bound__)
     })
   }
 
-  if (window.tabtin?.agentMonitor?.onEmitInterrupted) {
-    window.tabtin.agentMonitor.onEmitInterrupted(() => {
+  if (window.muse?.agentMonitor?.onEmitInterrupted) {
+    window.muse.agentMonitor.onEmitInterrupted(() => {
       toast({
         title: i18n.t('monitor:emitInterrupted'),
         variant: 'destructive',

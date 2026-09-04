@@ -2,10 +2,10 @@ import { useCallback, useEffect, useMemo, useState, type ReactNode } from 'react
 import { Link, useParams } from 'react-router-dom'
 import { AlertTriangle, Download, ExternalLink, ShieldCheck } from 'lucide-react'
 import {
-  TABTIN_DOWNLOAD_URL,
+  MUSE_DOWNLOAD_URL,
   buildDesktopInviteDeepLink,
   isSupportedInviteToken,
-} from '@tabtin/config'
+} from '@muse/config'
 import { LanguageToggle, ThemeToggle } from '@/components/layout/ToolbarWidgets'
 
 const CLIENT_LAUNCH_FALLBACK_DELAY_MS = 1600
@@ -96,7 +96,7 @@ export function InviteBridgePage() {
                 再次打开客户端
               </button>
               <a
-                href={TABTIN_DOWNLOAD_URL}
+                href={MUSE_DOWNLOAD_URL}
                 target="_blank"
                 rel="noreferrer"
                 className="inline-flex items-center justify-center gap-2 rounded-md border border-input bg-background px-4 py-2 text-body font-medium text-foreground transition-colors hover:bg-accent"

@@ -1,4 +1,4 @@
-import type { TableUserRole } from '@tabtin/table-core'
+import type { TableUserRole } from '@muse/table-core'
 
 const READONLY_TABLE_ROLES: ReadonlySet<string> = new Set(['viewer', 'commenter'])
 

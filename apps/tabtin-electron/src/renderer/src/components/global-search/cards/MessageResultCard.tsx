@@ -10,7 +10,7 @@
  */
 
 import React from 'react'
-import type { FtsSearchResultItem } from '@tabtin/app-shell'
+import type { FtsSearchResultItem } from '@muse/app-shell'
 import { SafeHighlight } from '../components/SafeHighlight'
 import { buildQuerySnippetHighlight } from '../components/querySnippet'
 import { CardShell, CreatorBadge, SpacePath, formatRelativeTime } from './cardCommon'

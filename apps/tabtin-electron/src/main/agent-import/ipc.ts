@@ -5,11 +5,11 @@
  * - createImportSurfaces(runner) → registerSurfaceAsIpc 逐个挂到 ipcMain
  *   （channel: import:detect / scan / run / status / cancel / rollback）
  * - 进度事件 import:progress 仅投递给发起 run 的窗口（有 owner 时），
- *   renderer 通过 window.tabtin.import.onProgress 订阅
+ *   renderer 通过 window.muse.import.onProgress 订阅
  */
 
 import { BrowserWindow } from 'electron'
-import { okResponse, errResponse } from '@tabtin/agent-wire'
+import { okResponse, errResponse } from '@muse/agent-wire'
 import {
   SurfaceError,
   createImportSurfaces,
@@ -17,7 +17,7 @@ import {
   IMPORT_PROGRESS_CHANNEL,
   type ImportProgressEvent,
   type ImportRunInput,
-} from '@tabtin/cli-server-core'
+} from '@muse/cli-server-core'
 import { registerSurfaceAsIpc } from '../wire/register-surface-as-ipc'
 import { guardedHandle } from '../utils/guarded-handle'
 import { createLogger } from '../logger'

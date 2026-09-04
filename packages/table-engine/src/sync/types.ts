@@ -1,5 +1,5 @@
 /**
- * WS Gateway 最小接口 — 供 sync 模块使用，不依赖 @tabtin/chat-client。
+ * WS Gateway 最小接口 — 供 sync 模块使用，不依赖 @muse/chat-client。
  * Electron/Web 各自传入自己的 WsGateway 实例即可满足该接口。
  */
 export interface WsGatewayLike {

@@ -1,11 +1,11 @@
 /**
- * window.tabtinComposerPresets — 开放注册 API
+ * window.museComposerPresets — 开放注册 API
  *
  * 允许外部开发者 / 插件 / MCP 工具在运行时注册自定义 Preset。
  * 底层走标准的 registerComposerPreset + registerComposerRenderer + emitComposerPreset。
  *
- * 注意：window.tabtin 由 contextBridge.exposeInMainWorld 创建，是不可扩展的代理对象，
- * 因此 API 安装在独立的顶级 key window.tabtinComposerPresets。
+ * 注意：window.muse 由 contextBridge.exposeInMainWorld 创建，是不可扩展的代理对象，
+ * 因此 API 安装在独立的顶级 key window.museComposerPresets。
  */
 
 import type {
@@ -65,9 +65,9 @@ export function createComposerPresetsAPI(): ComposerPresetsPublicAPI {
 }
 
 /**
- * 安装到 window.tabtinComposerPresets
+ * 安装到 window.museComposerPresets
  *
- * 注意：window.tabtin 由 contextBridge.exposeInMainWorld 创建，
+ * 注意：window.muse 由 contextBridge.exposeInMainWorld 创建，
  * 是不可扩展的代理对象，不能直接挂载新属性，因此使用独立的顶级 key。
  *
  * 在 Electron renderer 入口处调用一次

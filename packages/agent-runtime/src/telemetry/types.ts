@@ -1,5 +1,5 @@
 /**
- * @tabtin/agent-runtime/telemetry — 结构化埋点契约（类型定义）
+ * @muse/agent-runtime/telemetry — 结构化埋点契约（类型定义）
  *
  * 设计目标：
  *   1. Runtime 核心代码只依赖 `emitTelemetryEvent`，不关心落地渠道。

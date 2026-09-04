@@ -16,7 +16,7 @@
  */
 
 import { useCallback, useMemo, useState } from 'react'
-import { toast } from '@tabtin/smartsheet-ui'
+import { toast } from '@muse/smartsheet-ui'
 import { useQueryClient } from '@tanstack/react-query'
 import { useTranslation } from 'react-i18next'
 import { useDetectBrowsers } from './useDetectBrowsers'

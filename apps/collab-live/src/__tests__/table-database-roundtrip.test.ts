@@ -17,7 +17,7 @@ import { getOrderedIds } from "../lib/y-utils.js";
 import {
   getEffectiveTableRecordOrder,
   insertTableRecordAtomically,
-} from "@tabtin/table-engine/collab/table-record-order";
+} from "@muse/table-engine/collab/table-record-order";
 
 function makeSnapshot(overrides: Record<string, unknown> = {}) {
   return {

@@ -4,7 +4,7 @@
  * - 再次：复用已绑定会话（禁止每次点都新建）
  */
 
-import type { ChatMessage } from '@tabtin/chat-client'
+import type { ChatMessage } from '@muse/chat-client'
 import { toast } from '@components/ui'
 import { useChatStore } from '@stores/chat/useChatStore'
 import { useWorkbenchSceneStore } from '@stores/useWorkbenchSceneStore'
@@ -275,7 +275,7 @@ async function bindOpenedSession(args: {
   sessionId: string
 }): Promise<void> {
   try {
-    await window.tabtin?.import?.bindOpenedSession?.(args)
+    await window.muse?.import?.bindOpenedSession?.(args)
     useExternalArchiveIndexStore.getState().bump()
   } catch {
     /* 绑定失败不阻断已打开的会话 */
@@ -292,7 +292,7 @@ async function seedOpenedArchiveTranscript(args: {
   spaceId: string
 }): Promise<void> {
   try {
-    const result = await window.tabtin?.import?.seedSessionTranscript?.(args)
+    const result = await window.muse?.import?.seedSessionTranscript?.(args)
     if (!result) return
     if (result.seeded || SEED_SKIP_REASONS.has(result.reason ?? '')) return
     toast({

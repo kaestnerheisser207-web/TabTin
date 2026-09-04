@@ -16,11 +16,11 @@ import { describe, it, expect, vi, beforeEach } from 'vitest'
 
 const mockToast = vi.fn()
 
-vi.mock('@tabtin/smartsheet-ui/toast', () => ({
+vi.mock('@muse/smartsheet-ui/toast', () => ({
   toast: mockToast,
 }))
 
-vi.mock('@tabtin/app-shell', () => ({
+vi.mock('@muse/app-shell', () => ({
   useOrganizationStore: {
     getState: () => ({
       organizations: [

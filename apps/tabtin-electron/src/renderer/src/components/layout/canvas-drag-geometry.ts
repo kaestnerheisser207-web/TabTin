@@ -5,7 +5,7 @@ import { EDGE_ENTER_MIN, EDGE_ENTER_MAX, EDGE_EXIT_PADDING } from './canvas-drag
 export const clamp = (value: number, min: number, max: number) => Math.max(min, Math.min(max, value))
 
 export const isDebugBoundsEnabled = () =>
-  typeof window !== 'undefined' && Boolean(window.__TABTIN_DEBUG_DRAG_BOUNDS__)
+  typeof window !== 'undefined' && Boolean(window.__MUSE_DEBUG_DRAG_BOUNDS__)
 
 export const rectToBox = (rect: DOMRect) => ({
   left: rect.left,

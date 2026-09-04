@@ -67,7 +67,7 @@ beforeEach(() => {
     refresh: vi.fn(),
   })
   // 默认 IPC：无 cookie
-  ;(window as any).tabtin = {
+  ;(window as any).muse = {
     credentialVault: {
       getPartitionCookies: (...args: any[]) =>
         hoisted.ipcGetPartitionCookies(...args),

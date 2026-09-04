@@ -8,7 +8,7 @@ vi.mock('electron', () => ({
   app: { getPath: () => '/tmp/test-userdata' },
 }))
 
-vi.mock('@tabtin/terminal-core', () => ({
+vi.mock('@muse/terminal-core', () => ({
   atomicWriteFileSync: mockAtomicWriteFileSync,
 }))
 

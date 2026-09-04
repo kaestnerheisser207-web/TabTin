@@ -2,8 +2,8 @@ import fs from 'node:fs';
 import path from 'node:path';
 import type { DaemonConfig } from '../../../base/types/daemon-config.js';
 import { DEFAULT_CONFIG } from '../../../base/types/daemon-config.js';
-import { atomicWriteFileSync } from '@tabtin/terminal-core';
-import { getDaemonHomePath } from '@tabtin/shared/storage-paths';
+import { atomicWriteFileSync } from '@muse/terminal-core';
+import { getDaemonHomePath } from '@muse/shared/storage-paths';
 
 const CONFIG_FILE_NAME = 'config.json';
 const FINGERPRINT_FILE_NAME = 'fingerprint';

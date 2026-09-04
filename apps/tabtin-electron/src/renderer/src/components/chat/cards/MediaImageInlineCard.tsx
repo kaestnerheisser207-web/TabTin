@@ -7,7 +7,7 @@
 import React, { useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { cn } from '@utils/cn'
-import type { RichContentBlock } from '@tabtin/chat-client'
+import type { RichContentBlock } from '@muse/chat-client'
 import { TEXT, TEXT_COLOR } from '../registry/chatDesignTokens'
 import { ImageGeneratingCard, type ImageGeneratingPhase } from './ImageGeneratingCard'
 import { formatMediaImageFailureDetails } from './formatMediaImageFailureDetails'

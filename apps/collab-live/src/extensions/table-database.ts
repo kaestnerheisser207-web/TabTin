@@ -21,13 +21,13 @@ import { extractEditorInfo } from "../lib/collab-utils.js";
 import { withRetry } from "../lib/retry.js";
 import { fetchCollabSnapshot } from "../services/django-api.js";
 import { getOrderedIds, setOrderedIds } from "../lib/y-utils.js";
-import { YDOC_RECORDS, YDOC_ROW_ORDER, YDOC_META, YDOC_VIEWS, YDOC_VIEW_ORDER_MAP } from "@tabtin/table-engine/collab/ydoc-schema";
+import { YDOC_RECORDS, YDOC_ROW_ORDER, YDOC_META, YDOC_VIEWS, YDOC_VIEW_ORDER_MAP } from "@muse/table-engine/collab/ydoc-schema";
 import {
   applyTableRecordOrderPlan,
   getEffectiveTableRecordOrder,
   LEGACY_RECORD_ORDER_FIELD,
   planTableRecordOrderReconcile,
-} from "@tabtin/table-engine/collab/table-record-order";
+} from "@muse/table-engine/collab/table-record-order";
 
 const YDOC_ROW_ORDER_MAP = "rowOrderMap";
 const POSITION_ID_KEY = "__position_id";

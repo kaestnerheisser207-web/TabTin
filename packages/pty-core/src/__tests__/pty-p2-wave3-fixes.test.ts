@@ -149,7 +149,7 @@ describe('PC-24: MARKER_LINE_RE without global flag', () => {
   })
 
   it('MARKER_LINE_RE.test works consistently across multiple calls', () => {
-    const line = '__TABTIN_CMD_START_abcdef1234567890abcdef1234567890__'
+    const line = '__MUSE_CMD_START_abcdef1234567890abcdef1234567890__'
     // With 'g' flag, second call to test() would fail due to lastIndex.
     // Without 'g', both calls should match.
     expect(MARKER_LINE_RE.test(line)).toBe(true)
@@ -168,15 +168,15 @@ describe('PC-24: MARKER_LINE_RE without global flag', () => {
   it('createMarkerLineRE replaces all marker lines in multi-line text', () => {
     const text = [
       'some output',
-      '__TABTIN_CMD_START_abcdef1234567890abcdef1234567890__',
+      '__MUSE_CMD_START_abcdef1234567890abcdef1234567890__',
       'command output here',
-      '__TABTIN_CMD_END_abcdef1234567890abcdef1234567890_0_/tmp__',
+      '__MUSE_CMD_END_abcdef1234567890abcdef1234567890_0_/tmp__',
       'more output',
     ].join('\n')
 
     const cleaned = text.replace(createMarkerLineRE(), '')
-    expect(cleaned).not.toContain('__TABTIN_CMD_START_')
-    expect(cleaned).not.toContain('__TABTIN_CMD_END_')
+    expect(cleaned).not.toContain('__MUSE_CMD_START_')
+    expect(cleaned).not.toContain('__MUSE_CMD_END_')
     expect(cleaned).toContain('some output')
     expect(cleaned).toContain('command output here')
     expect(cleaned).toContain('more output')
@@ -501,8 +501,8 @@ describe('PC-33: auto-respond timer tracking', () => {
 
     // Extract markers from written command
     const written = writeFn.mock.calls[0][1] as string
-    const endMarkerMatch = written.match(/echo "(__TABTIN_CMD_END_[a-f0-9]+_)\$/)!
-    const startMarkerMatch = written.match(/echo "(__TABTIN_CMD_START_[^"]+)"/)!
+    const endMarkerMatch = written.match(/echo "(__MUSE_CMD_END_[a-f0-9]+_)\$/)!
+    const startMarkerMatch = written.match(/echo "(__MUSE_CMD_START_[^"]+)"/)!
     const endMarkerPrefix = endMarkerMatch[1]
     const startMarker = startMarkerMatch[1]
 
@@ -584,8 +584,8 @@ describe('P2-05: ANSI escape sequences in marker output', () => {
 
     // Extract markers from the written command
     const written = writeFn.mock.calls[0][1] as string
-    const endMarkerMatch = written.match(/echo "(__TABTIN_CMD_END_[a-f0-9]+_)\$/)!
-    const startMarkerMatch = written.match(/echo "(__TABTIN_CMD_START_[^"]+)"/)!
+    const endMarkerMatch = written.match(/echo "(__MUSE_CMD_END_[a-f0-9]+_)\$/)!
+    const startMarkerMatch = written.match(/echo "(__MUSE_CMD_START_[^"]+)"/)!
     const endMarkerPrefix = endMarkerMatch[1]
     const startMarker = startMarkerMatch[1]
 
@@ -614,8 +614,8 @@ describe('P2-05: ANSI escape sequences in marker output', () => {
     })
 
     const written = writeFn.mock.calls[0][1] as string
-    const endMarkerMatch = written.match(/echo "(__TABTIN_CMD_END_[a-f0-9]+_)\$/)!
-    const startMarkerMatch = written.match(/echo "(__TABTIN_CMD_START_[^"]+)"/)!
+    const endMarkerMatch = written.match(/echo "(__MUSE_CMD_END_[a-f0-9]+_)\$/)!
+    const startMarkerMatch = written.match(/echo "(__MUSE_CMD_START_[^"]+)"/)!
     const endMarkerPrefix = endMarkerMatch[1]
     const startMarker = startMarkerMatch[1]
 

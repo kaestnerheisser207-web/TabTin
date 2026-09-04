@@ -1,4 +1,4 @@
-import type { MessageBlock } from '@tabtin/chat-client'
+import type { MessageBlock } from '@muse/chat-client'
 
 /**
  * 构造用户可见消息的 content blocks。

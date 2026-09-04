@@ -14,7 +14,7 @@
  * 也委托到这里，出入站共用同一份门面定义。
  */
 
-import type { ChatMessage } from '@tabtin/chat-client'
+import type { ChatMessage } from '@muse/chat-client'
 import {
   mergeAuthoritativeServerReplace,
   mergeMessagesFromServer,

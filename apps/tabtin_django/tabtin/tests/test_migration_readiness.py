@@ -12,7 +12,7 @@ from tabtin.migration_readiness import (
 
 
 class MigrationReadinessTests(SimpleTestCase):
-    @override_settings(TABTIN_MIGRATION_DATABASE_ALIASES=["default"])
+    @override_settings(MUSE_MIGRATION_DATABASE_ALIASES=["default"])
     @patch("tabtin.migration_readiness.MigrationExecutor")
     def test_returns_pending_forward_migrations(self, executor_cls):
         executor = MagicMock()
@@ -27,7 +27,7 @@ class MigrationReadinessTests(SimpleTestCase):
             {"default": ["meetings.0001_initial"]},
         )
 
-    @override_settings(TABTIN_MIGRATION_DATABASE_ALIASES=["default"])
+    @override_settings(MUSE_MIGRATION_DATABASE_ALIASES=["default"])
     @patch("tabtin.migration_readiness.MigrationExecutor")
     def test_ignores_reverse_plan_entries(self, executor_cls):
         executor = MagicMock()
@@ -39,7 +39,7 @@ class MigrationReadinessTests(SimpleTestCase):
 
         self.assertEqual(list_pending_migrations(), {})
 
-    @override_settings(TABTIN_MIGRATION_DATABASE_ALIASES=["default"])
+    @override_settings(MUSE_MIGRATION_DATABASE_ALIASES=["default"])
     @patch("tabtin.migration_readiness.list_pending_migrations")
     def test_fail_fast_message_points_to_safe_migrate(self, list_pending):
         list_pending.return_value = {"default": ["meetings.0001_initial"]}
@@ -47,7 +47,7 @@ class MigrationReadinessTests(SimpleTestCase):
         with self.assertRaisesRegex(RuntimeError, "safe_migrate"):
             assert_database_schema_ready()
 
-    @override_settings(TABTIN_MIGRATION_DATABASE_ALIASES=["default"])
+    @override_settings(MUSE_MIGRATION_DATABASE_ALIASES=["default"])
     @patch("tabtin.migration_readiness.list_pending_migrations", return_value={})
     def test_ready_schema_does_not_raise(self, _list_pending):
         assert_database_schema_ready()

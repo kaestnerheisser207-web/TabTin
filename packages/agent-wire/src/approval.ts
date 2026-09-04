@@ -269,7 +269,7 @@ const SwitchActionValueSchema = z.enum(['allow', 'confirm', 'block']);
 /**
  * v3 judge 记忆命中的 specificity 等级。
  *
- * SSoT: `@tabtin/security-policy` 的 `MemoSpecificity`（`types-v3.ts`）。本 schema
+ * SSoT: `@muse/security-policy` 的 `MemoSpecificity`（`types-v3.ts`）。本 schema
  * 必须与其枚举值完全一致，否则 judge.ts emit 的 memo_allow / memo_deny reason
  * 在 wire 层 parse 失败。
  */
@@ -286,7 +286,7 @@ export type MemoSpecificity = z.infer<typeof MemoSpecificitySchema>;
  * classifier / user_interactive / unknown_tool / fallback_preset /
  * rule_high_risk_allowlist_miss。
  *
- * 2026-05-03 W6 M4 扩展（L-W6-16 P0 修复）：补齐 `@tabtin/security-policy` 的
+ * 2026-05-03 W6 M4 扩展（L-W6-16 P0 修复）：补齐 `@muse/security-policy` 的
  * W6 v3 `judge()` 函数 emit 的 16 个新 type，让 judge 直接生成的 reason 对象
  * 能被本 schema 原样 parse 通过 —— `tool-orchestration` 无需再把 reason 降级
  * 成 `{ type } as DecisionReason` 强 cast，避免 35 条 sensitive 模式 +
@@ -294,7 +294,7 @@ export type MemoSpecificity = z.infer<typeof MemoSpecificitySchema>;
  *
  * **字段命名**：legacy 19 个 type 全用 snake_case（W1A-轮 2 Review P1-1 约定）；
  * v3 新增 `memo_allow` / `memo_deny` 的 `createdAt` **保持 camelCase**
- * 以对齐 `@tabtin/security-policy/src/judge.ts` 实际 emit 的字段名。
+ * 以对齐 `@muse/security-policy/src/judge.ts` 实际 emit 的字段名。
  * 这不违反"wire JSON snake_case"约定——那条约定针对事件 payload top-level
  * 字段（batch_id / action_requests 等），而 `DecisionReason` 分支字段的命名
  * 以 judge SSoT 为准，避免 runtime 透传时 wire/runtime 再做一层 mapping。

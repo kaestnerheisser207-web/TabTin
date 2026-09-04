@@ -1,5 +1,5 @@
-import type { TableGridRuntimeApi, TableGridRow } from '@tabtin/table-engine'
-import { resolveRecordId } from '@tabtin/table-engine'
+import type { TableGridRuntimeApi, TableGridRow } from '@muse/table-engine'
+import { resolveRecordId } from '@muse/table-engine'
 
 type GridRuntimeApi = Pick<
   TableGridRuntimeApi<TableGridRow>,

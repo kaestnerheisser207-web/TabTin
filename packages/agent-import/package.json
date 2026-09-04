@@ -1,5 +1,5 @@
 {
-  "name": "@tabtin/agent-import",
+  "name": "@muse/agent-import",
   "version": "0.1.0",
   "description": "External agent tool data import — adapters for Cursor / Codex / Claude Code / WorkBuddy local session data, translated to Muse ContentBlock format",
   "type": "module",

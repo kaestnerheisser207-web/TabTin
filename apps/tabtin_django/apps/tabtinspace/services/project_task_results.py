@@ -24,7 +24,7 @@ _RESOURCE_TYPE_ALIASES = {
 }
 
 # 对齐 Electron extractResourceLinkArtifacts：CLI 建文档后常见 markdown / 裸链。
-_BARE_RESOURCE_URI_RE = re.compile(r'tabtin://resource/[^\s)\]"\'`]+')
+_BARE_RESOURCE_URI_RE = re.compile(r'muse://resource/[^\s)\]"\'`]+')
 _FENCED_CODE_RE = re.compile(r'```[\s\S]*?(?:```|$)')
 _INLINE_CODE_RE = re.compile(r'`[^`\n]*`')
 _TRAILING_URI_PUNCT_RE = re.compile(r'[.,;:!?。，、；：！？…]+$', re.UNICODE)
@@ -74,17 +74,17 @@ def _strip_code_segments(text: str) -> str:
 
 
 def iter_resource_pointers_from_text(text: Any) -> Iterable[tuple[str, str]]:
-    """从正文 / 工具输出抽取 tabtin://resource/<type>/<id>（对齐 Electron）。"""
-    if not isinstance(text, str) or 'tabtin://resource/' not in text:
+    """从正文 / 工具输出抽取 muse://resource/<type>/<id>（对齐 Electron）。"""
+    if not isinstance(text, str) or 'muse://resource/' not in text:
         return
     cleaned = _strip_code_segments(text)
-    if 'tabtin://resource/' not in cleaned:
+    if 'muse://resource/' not in cleaned:
         return
     for match in _BARE_RESOURCE_URI_RE.finditer(cleaned):
         href = _TRAILING_URI_PUNCT_RE.sub('', match.group(0))
-        if not href.startswith('tabtin://resource/'):
+        if not href.startswith('muse://resource/'):
             continue
-        rest = href[len('tabtin://resource/'):]
+        rest = href[len('muse://resource/'):]
         path = rest.split('?', 1)[0]
         parts = path.split('/', 1)
         if len(parts) != 2:
@@ -203,7 +203,7 @@ def _text_chunks_from_block(block: dict[str, Any]) -> Iterable[str]:
     # 部分路径把 CLI stdout 塞进 tool_use 的结果镜像字段。
     for key in ('result', 'output', 'stdout'):
         value = block.get(key)
-        if isinstance(value, str) and 'tabtin://resource/' in value:
+        if isinstance(value, str) and 'muse://resource/' in value:
             yield value
 
 

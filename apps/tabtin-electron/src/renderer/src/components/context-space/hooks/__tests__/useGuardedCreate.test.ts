@@ -1,7 +1,7 @@
 import { describe, expect, it, vi } from 'vitest'
 import { executeGuardedCreate } from '../useGuardedCreate'
 
-vi.mock('@tabtin/smartsheet-ui', () => ({
+vi.mock('@muse/smartsheet-ui', () => ({
   toast: vi.fn(),
 }))
 

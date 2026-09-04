@@ -1,5 +1,5 @@
 {
-  "name": "@tabtin/oss-client",
+  "name": "@muse/oss-client",
   "version": "0.1.0",
   "description": "统一 OSS 直传客户端：presign → PUT → confirm，支持取消、重试、并发控制",
   "type": "module",
@@ -21,7 +21,7 @@
     "clean": "rm -rf dist"
   },
   "dependencies": {
-    "@tabtin/config": "workspace:*"
+    "@muse/config": "workspace:*"
   },
   "devDependencies": {
     "@types/node": "^20.0.0",

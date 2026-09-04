@@ -12,8 +12,8 @@
     "moduleResolution": "bundler",
     "sourceMap": true,
     "paths": {
-      "@tabtin/browser-core": ["../browser-core/dist/index.d.ts"],
-      "@tabtin/config": ["../tabtin-config/dist/index.d.ts"]
+      "@muse/browser-core": ["../browser-core/dist/index.d.ts"],
+      "@muse/config": ["../tabtin-config/dist/index.d.ts"]
     }
   },
   "include": [

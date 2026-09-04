@@ -1,4 +1,4 @@
-import type { ChatMessage } from '@tabtin/chat-client'
+import type { ChatMessage } from '@muse/chat-client'
 import type { AgentModeName } from '../../shared/types'
 import { useChatRuntimeStore } from '../../../useChatRuntimeStore'
 import { markSessionSuspended } from '@/services/sessionSuspended'

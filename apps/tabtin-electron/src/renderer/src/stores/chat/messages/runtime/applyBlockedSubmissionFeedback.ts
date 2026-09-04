@@ -1,5 +1,5 @@
 import i18n from '@/i18n'
-import { toast } from '@tabtin/smartsheet-ui/toast'
+import { toast } from '@muse/smartsheet-ui/toast'
 import { trackSendTimingTelemetry } from '../../execution/sendTimingTrace'
 import type { BlockedSubmission } from '../product/types'
 import type { SendTimingTrace } from '../../execution/sendTimingTrace'

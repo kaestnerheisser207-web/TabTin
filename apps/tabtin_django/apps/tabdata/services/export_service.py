@@ -118,7 +118,7 @@ def _get_cjk_font_name() -> str:
             logger.debug('CJK CID 字体 %s 注册失败', font_name, exc_info=True)
             continue
 
-    env_path = os.environ.get('TABTIN_CJK_FONT_PATH')
+    env_path = os.environ.get('MUSE_CJK_FONT_PATH')
     ttf_search_paths = [env_path] if env_path else list(_SYSTEM_CJK_FONT_PATHS)
 
     for font_path in ttf_search_paths:

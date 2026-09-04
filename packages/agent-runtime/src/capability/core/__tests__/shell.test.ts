@@ -23,7 +23,7 @@
  *      banner stdout
  *   8. hardline 硬拒绝 / sleep 拦截 / restrictedShellChecker 受限模式拦截
  *   9. skillContextProvider 凭据注入（同名 skill 优先）+ 未注入 SYSTEM_NOTICE
- *  10. env 装配（user / TABTIN_* / skill credential）+ TABTIN_* 过滤
+ *  10. env 装配（user / MUSE_* / skill credential）+ MUSE_* 过滤
  *  11. timeout default 120_000 + 显式覆盖
  *  12. 工具 description LLM 引导文本删除 persisted_stderr_path 相关引导
  *  13. 大输出落盘（仅 stdout 单源）
@@ -66,7 +66,7 @@ import {
   type AgentSessionEventName,
   type AgentSessionEventHandler,
   type AgentSessionUnsubscribe,
-} from '@tabtin/terminal-core';
+} from '@muse/terminal-core';
 import type {
   StreamEvent,
 } from '../../../engine/contracts/wire-protocol.js';
@@ -228,14 +228,14 @@ function makeFakeContext(
 }
 
 const PROTECTED_ENV_FOR_RESULT_TESTS = {
-  __TABTIN_MID: 'secret-mid-value',
-  TABTIN_ZETA: 'secret-zeta-value',
-  _TABTIN_ALPHA: 'secret-alpha-value',
+  __MUSE_MID: 'secret-mid-value',
+  MUSE_ZETA: 'secret-zeta-value',
+  _MUSE_ALPHA: 'secret-alpha-value',
 };
 const SORTED_IGNORED_KEYS = [
-  'TABTIN_ZETA',
-  '_TABTIN_ALPHA',
-  '__TABTIN_MID',
+  'MUSE_ZETA',
+  '_MUSE_ALPHA',
+  '__MUSE_MID',
 ];
 
 function expectIgnoredKeysWarning(result: { content: unknown }): void {
@@ -533,7 +533,7 @@ describe('ShellCap spaceId 硬契约', () => {
 });
 
 describe('ShellCap 真实 Agent 身份注入', () => {
-  it('分别写入 agentMeta.agentId 与 TABTIN_AGENT_ID，不复用 Workspace ID', async () => {
+  it('分别写入 agentMeta.agentId 与 MUSE_AGENT_ID，不复用 Workspace ID', async () => {
     const { cap, mock } = makeShellCap({
       spaceId: 'workspace-1',
       organizationId: 'organization-1',
@@ -548,9 +548,9 @@ describe('ShellCap 真实 Agent 身份注入', () => {
       agentId: 'agent-1',
     });
     expect(mock.executeCalls[0].env).toMatchObject({
-      TABTIN_SPACE_ID: 'workspace-1',
-      TABTIN_AGENT_ID: 'agent-1',
-      TABTIN_ORGANIZATION_ID: 'organization-1',
+      MUSE_SPACE_ID: 'workspace-1',
+      MUSE_AGENT_ID: 'agent-1',
+      MUSE_ORGANIZATION_ID: 'organization-1',
     });
   });
 
@@ -569,7 +569,7 @@ describe('ShellCap 真实 Agent 身份注入', () => {
     const req = mock.executeCalls[0];
     expect(req.agentMeta.threadId).toBe('parent-thread');
     expect(req.agentMeta.notificationThreadId).toBe('child-run-id');
-    expect(req.env).toMatchObject({ TABTIN_THREAD_ID: 'parent-thread' });
+    expect(req.env).toMatchObject({ MUSE_THREAD_ID: 'parent-thread' });
   });
 
   it('优先使用 ToolContext.notificationThreadId', async () => {
@@ -620,12 +620,12 @@ describe.skip('ShellCap run_terminal_command foreground 路径 (deprecated by 20
     expect(req.command).toBe('ls -la');
     expect(req.cwd).toBe('/tmp/proj');
     expect(req.timeoutMs).toBe(5000);
-    // §17.6 D4.b：env 含用户传的 FOO + TABTIN_WORKSPACE + TABTIN_THREAD_ID（值取
-    // context.threadId）。原 TABTIN_SESSION_ID 已改名为 TABTIN_THREAD_ID。
+    // §17.6 D4.b：env 含用户传的 FOO + MUSE_WORKSPACE + MUSE_THREAD_ID（值取
+    // context.threadId）。原 MUSE_SESSION_ID 已改名为 MUSE_THREAD_ID。
     expect(req.env).toMatchObject({
       FOO: 'bar',
-      TABTIN_WORKSPACE: '/tmp/proj',
-      TABTIN_THREAD_ID: 'test-thread',
+      MUSE_WORKSPACE: '/tmp/proj',
+      MUSE_THREAD_ID: 'test-thread',
     });
   });
 
@@ -1101,50 +1101,50 @@ describe('ShellCap 入参校验', () => {
     expect(mock.executeCalls).toHaveLength(0);
   });
 
-  it('LLM 传 TABTIN_* / _TABTIN_* / __TABTIN_* env 被过滤（平台契约不可污染）', async () => {
+  it('LLM 传 MUSE_* / _MUSE_* / __MUSE_* env 被过滤（平台契约不可污染）', async () => {
     const { cap, mock } = makeShellCap({ spaceId: 'real-space', agentId: 'real-agent' });
     const r = await cap.tools()[0].execute(
       {
         command: 'echo',
         env: {
-          TABTIN_WORKSPACE: '/evil/path',
+          MUSE_WORKSPACE: '/evil/path',
           // §17.6 D4.b：LLM 仍可能传旧字段名（实际生产路径不该出现，但测试
-          // 校验"任何 TABTIN_* 都该被过滤"）。
-          TABTIN_THREAD_ID: 'fake-thread',
-          TABTIN_AGENT_RUN_ID: 'fake-run',
-          TABTIN_AGENT_ID: 'fake-agent',
-          TABTIN_SPACE_ID: 'fake-space',
-          TABTIN_CUSTOM: 'llm-attempt',
-          _TABTIN_TRANSPORT_TOKEN: 'fake-token',
-          __TABTIN_SKILL_CREDENTIAL_PRESERVE_KEYS__: 'OPENAI_API_KEY',
+          // 校验"任何 MUSE_* 都该被过滤"）。
+          MUSE_THREAD_ID: 'fake-thread',
+          MUSE_AGENT_RUN_ID: 'fake-run',
+          MUSE_AGENT_ID: 'fake-agent',
+          MUSE_SPACE_ID: 'fake-space',
+          MUSE_CUSTOM: 'llm-attempt',
+          _MUSE_TRANSPORT_TOKEN: 'fake-token',
+          __MUSE_SKILL_CREDENTIAL_PRESERVE_KEYS__: 'OPENAI_API_KEY',
           LEGITIMATE: 'ok',
         },
       },
       makeFakeContext({ workspaceRoot: '/real/workspace' }),
     );
     const env = mock.executeCalls[0].env ?? {};
-    expect(env.TABTIN_WORKSPACE).toBe('/real/workspace');
-    // §17.6 D4.b：TABTIN_SESSION_ID → TABTIN_THREAD_ID。
-    expect(env.TABTIN_THREAD_ID).toBe('test-thread');
-    expect(env.TABTIN_AGENT_RUN_ID).toBe('test-agent-run');
-    expect(env.TABTIN_AGENT_ID).toBe('real-agent');
-    expect(env.TABTIN_SPACE_ID).toBe('real-space');
-    expect(env.TABTIN_CUSTOM).toBeUndefined();
-    expect(env._TABTIN_TRANSPORT_TOKEN).toBeUndefined();
-    expect(env.__TABTIN_SKILL_CREDENTIAL_PRESERVE_KEYS__).toBeUndefined();
+    expect(env.MUSE_WORKSPACE).toBe('/real/workspace');
+    // §17.6 D4.b：MUSE_SESSION_ID → MUSE_THREAD_ID。
+    expect(env.MUSE_THREAD_ID).toBe('test-thread');
+    expect(env.MUSE_AGENT_RUN_ID).toBe('test-agent-run');
+    expect(env.MUSE_AGENT_ID).toBe('real-agent');
+    expect(env.MUSE_SPACE_ID).toBe('real-space');
+    expect(env.MUSE_CUSTOM).toBeUndefined();
+    expect(env._MUSE_TRANSPORT_TOKEN).toBeUndefined();
+    expect(env.__MUSE_SKILL_CREDENTIAL_PRESERVE_KEYS__).toBeUndefined();
     expect(env.LEGITIMATE).toBe('ok');
     const parsed = JSON.parse(r.content as string) as Record<string, unknown>;
     expect(parsed.ignored_keys).toEqual([
-      'TABTIN_AGENT_RUN_ID',
-      'TABTIN_AGENT_ID',
-      'TABTIN_CUSTOM',
-      'TABTIN_SPACE_ID',
-      'TABTIN_THREAD_ID',
-      'TABTIN_WORKSPACE',
-      '_TABTIN_TRANSPORT_TOKEN',
-      '__TABTIN_SKILL_CREDENTIAL_PRESERVE_KEYS__',
+      'MUSE_AGENT_RUN_ID',
+      'MUSE_AGENT_ID',
+      'MUSE_CUSTOM',
+      'MUSE_SPACE_ID',
+      'MUSE_THREAD_ID',
+      'MUSE_WORKSPACE',
+      '_MUSE_TRANSPORT_TOKEN',
+      '__MUSE_SKILL_CREDENTIAL_PRESERVE_KEYS__',
     ]);
-    expect(String(parsed.ignored_keys_warning)).toContain('TABTIN_WORKSPACE');
+    expect(String(parsed.ignored_keys_warning)).toContain('MUSE_WORKSPACE');
     expect(String(parsed.ignored_keys_warning).match(/Protected env keys were ignored/g)).toHaveLength(1);
     // 不得泄漏受保护键的 value
     expect(JSON.stringify(parsed)).not.toContain('/evil/path');
@@ -1649,9 +1649,9 @@ describe.skip('ShellCap description LLM 引导 (2026-05-18 重构改了 descript
     expect(desc).toContain('read_file');
   });
 
-  it('保留：$TABTIN_WORKSPACE / 256KB / 120000ms / 6 项工具偏好清单', () => {
+  it('保留：$MUSE_WORKSPACE / 256KB / 120000ms / 6 项工具偏好清单', () => {
     const desc = getToolDescription();
-    expect(desc).toContain('$TABTIN_WORKSPACE');
+    expect(desc).toContain('$MUSE_WORKSPACE');
     expect(desc).toContain('256KB');
     expect(desc).toMatch(/120000ms|120 ?秒|2 ?分钟/);
     expect(desc).toContain('glob_search');
@@ -2512,10 +2512,10 @@ describe('ShellCap running 出口标记后台暴露语义', () => {
       command: 'du -sh .',
       cwd: '/workspace',
       env: {
-        TABTIN_WORKSPACE: '/workspace',
-        TABTIN_THREAD_ID: 'test-thread',
-        TABTIN_AGENT_RUN_ID: 'test-agent-run',
-        TABTIN_SPACE_ID: 'mock-space',
+        MUSE_WORKSPACE: '/workspace',
+        MUSE_THREAD_ID: 'test-thread',
+        MUSE_AGENT_RUN_ID: 'test-agent-run',
+        MUSE_SPACE_ID: 'mock-space',
       },
       spaceId: 'mock-space',
       agentId: 'mock-agent',
@@ -2693,10 +2693,10 @@ describe('ShellCap running 快照携带 hard_timeout_ms（终端假运行根治 
   // dedup record（command/cwd/env/threadId 全等 + 窗口内）。dedup 仅按这 4 项匹配，
   // 不看本次入参 hard_timeout_ms —— running 快照应取历史 record 的真死线。
   const DEDUP_ENV = {
-    TABTIN_WORKSPACE: WS,
-    TABTIN_THREAD_ID: 'test-thread',
-    TABTIN_AGENT_RUN_ID: 'test-agent-run',
-    TABTIN_SPACE_ID: 'mock-space',
+    MUSE_WORKSPACE: WS,
+    MUSE_THREAD_ID: 'test-thread',
+    MUSE_AGENT_RUN_ID: 'test-agent-run',
+    MUSE_SPACE_ID: 'mock-space',
   };
 
   it('dedup 命中 → running 快照带历史 record 的 hard_timeout_ms', async () => {

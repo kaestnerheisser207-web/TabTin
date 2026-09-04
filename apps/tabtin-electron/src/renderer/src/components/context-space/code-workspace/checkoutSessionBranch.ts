@@ -116,7 +116,7 @@ export async function checkoutSessionBranch(input: {
   let stashed = false
   try {
     if (dirty && input.confirmedStash) {
-      const stashResult = await window.tabtin.git.stash(input.rootPath, 'save', {
+      const stashResult = await window.muse.git.stash(input.rootPath, 'save', {
         message: input.t('gitFlow.stashMessage', { branch }),
         includeUntracked: true,
       })
@@ -132,7 +132,7 @@ export async function checkoutSessionBranch(input: {
 
     // 已确认暂存，或仅未跟踪直切：跳过 main 二次脏树策略，交给 Git CLI。
     const allowDirty = stashed || (untrackedOnly && !input.confirmedStash)
-    const result = await window.tabtin.git.checkoutBranch(input.rootPath, {
+    const result = await window.muse.git.checkoutBranch(input.rootPath, {
       branch,
       ...(allowDirty ? { allowDirty: true } : {}),
     })

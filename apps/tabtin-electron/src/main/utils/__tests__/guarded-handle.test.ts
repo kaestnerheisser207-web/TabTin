@@ -29,7 +29,7 @@ vi.mock('../../auth', () => ({
 }))
 
 import { guardedHandle, guardedHandleAllowingTinSandbox } from '../guarded-handle'
-import { errResponse } from '@tabtin/agent-wire'
+import { errResponse } from '@muse/agent-wire'
 
 function makeFakeEvent(url: string | undefined): IpcMainInvokeEvent {
   return {

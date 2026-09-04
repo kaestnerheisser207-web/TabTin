@@ -19,7 +19,7 @@ from .base import CollabAdapter
 
 logger = logging.getLogger("collab.adapters.table")
 
-DB = ('default' if getattr(settings, 'TABTIN_SINGLE_DATABASE_MODE', False) else 'postgresql')
+DB = ('default' if getattr(settings, 'MUSE_SINGLE_DATABASE_MODE', False) else 'postgresql')
 def _snapshot_json_default(obj):
     """VH-003/VH-008: 替代 default=str 的类型感知 JSON 序列化。
 

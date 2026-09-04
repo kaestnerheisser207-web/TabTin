@@ -50,7 +50,7 @@ export function useResourceMonitorSnapshot(
   }, [snapshot])
 
   const loadSnapshot = React.useCallback(async (force: boolean) => {
-    if (!window.tabtin?.resourceMonitor?.getSnapshot) {
+    if (!window.muse?.resourceMonitor?.getSnapshot) {
       setError('当前版本暂不支持资源监控')
       setIsLoading(false)
       setIsRefreshing(false)
@@ -67,7 +67,7 @@ export function useResourceMonitorSnapshot(
 
     const startedAt = Date.now()
     try {
-      const nextSnapshot = await window.tabtin.resourceMonitor.getSnapshot({
+      const nextSnapshot = await window.muse.resourceMonitor.getSnapshot({
         mode,
         force,
       })

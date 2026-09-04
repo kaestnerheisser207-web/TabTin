@@ -9,7 +9,7 @@ Cloud Worker Supervisor 直接运行在管理员的 VPS 上，并只连接同一
 - `DOCKER_HOST` 必须指向该账号自己的 `/run/user/<uid>/podman/podman.sock`；控制 API 只绑定宿主 bridge 地址，由 TLS 反向代理向 Django 暴露。
 - Podman volume 根目录必须位于启用 `prjquota`/`pquota` 的 XFS 文件系统；rootless Podman 不能自行设置 XFS project ID，因此 root-owned Socket Helper 只负责创建/检查/删除严格命名的限额目录，Worker 无 sudo、无 root socket、保持 `NoNewPrivileges=true`。Worker 启动时会真实贯通 Helper 与 rootless bind volume，配额链不成立就拒绝启动。
 - Rootless Podman 必须运行在 cgroup v2 + systemd manager/delegation 下；Worker 会读取 runtime info 验证，否则不宣称 CPU/内存/PID 硬限制可用。
-- `/etc/tabtin/cloud-worker.env` 权限设为 `0600 root:root`；Worker token 只配置在 Django 的 `TABTIN_CLOUD_WORKERS_JSON_FILE` 与该文件中。
+- `/etc/tabtin/cloud-worker.env` 权限设为 `0600 root:root`；Worker token 只配置在 Django 的 `MUSE_CLOUD_WORKERS_JSON_FILE` 与该文件中。
 
 ## 安装轮廓
 
@@ -19,7 +19,7 @@ Cloud Worker Supervisor 直接运行在管理员的 VPS 上，并只连接同一
 4. Cloud 发布生成独立 `DAEMON_TOKEN_SECRET` file secret，写入 Runtime digest、Worker registry file、runtime volume 大小与 Worker pool edition 后，仅重建 Django/Celery 加载配置。
 5. 周期 heartbeat 自动物化 `CloudWorkerNode`；只有 HTTPS `/v1/health` 的 protocol/runtime/storage/resource 四重门禁通过后才置为 `ready`，无需手工插数据库。
 
-`TABTIN_CLOUD_WORKERS_JSON` 的 Community 节点示例（生产 endpoint 必须是 HTTPS）：
+`MUSE_CLOUD_WORKERS_JSON` 的 Community 节点示例（生产 endpoint 必须是 HTTPS）：
 
 ```json
 {

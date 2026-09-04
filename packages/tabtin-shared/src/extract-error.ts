@@ -1,4 +1,4 @@
-import { ApiError } from '@tabtin/api-client'
+import { ApiError } from '@muse/api-client'
 
 export const KNOWN_ERROR_CODES = new Set([
   'VALIDATION_ERROR',

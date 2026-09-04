@@ -1,4 +1,4 @@
-import type { EngineHooks } from '@tabtin/agent-runtime/engine'
+import type { EngineHooks } from '@muse/agent-runtime/engine'
 import type { AgentWorktreeTransitionQueue } from './agent-worktree-transition.js'
 
 export interface AgentWorktreeLifecycleHookOptions {

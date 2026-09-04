@@ -19,7 +19,7 @@ const isAccessTokenExpiringSoon = vi.hoisted(() => vi.fn())
 const refreshAccessToken = vi.hoisted(() => vi.fn())
 const daemonControlEnabled = vi.hoisted(() => ({ value: true }))
 
-vi.mock('@tabtin/ws-gateway-client', () => ({
+vi.mock('@muse/ws-gateway-client', () => ({
   WsGatewayClient: class {
     constructor(options: CoreOptions) {
       core.options.push(options)

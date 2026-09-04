@@ -20,17 +20,17 @@
  * 认证：Bearer Token（随机生成，写入 ~/.tabtin/mcp-server.json）。
  */
 
-import { ALL_FIELD_TYPES, type FieldType, type ViewType } from '@tabtin/table-kernel'
+import { ALL_FIELD_TYPES, type FieldType, type ViewType } from '@muse/table-kernel'
 // WP5（2026-05-14，D8）：以下 4 个 import 随 4 件套 MCP 退役一同删除——
 //   - `evaluateLocalTerminalPolicy` / `isAutoApprovedTerminalWrite` /
-//     `containsCommandSubstitution` （from @tabtin/terminal-core）
-//   - `checkHardlineCommand` （from @tabtin/security-policy）
+//     `containsCommandSubstitution` （from @muse/terminal-core）
+//   - `checkHardlineCommand` （from @muse/security-policy）
 // remote frontend_action 路径仍然用它们（daemon `executor/action-bridge.ts`
 // + Electron `services/FrontendActionBridge.ts`），仅 MCP server 侧不再需要
 // 因为 4 件套已不通过 MCP 暴露。`evaluateLocalFilePolicy` /
 // `TerminalExecutionPolicyPayload` 一并清掉——MCP file action 路径已迁到
 // `checkDaemonPathAccess`，这两个 symbol 在 mcp-server.ts 内部已无消费者。
-import { matchDisabledToolDomain } from '@tabtin/agent-wire'
+import { matchDisabledToolDomain } from '@muse/agent-wire'
 import type { McpServerConfig, McpToolDefinition, McpRequestContext } from './contracts.js'
 import { McpSecurityPolicy } from './security.js'
 import { McpAdapterTools } from './adapter-tools.js'
@@ -560,12 +560,12 @@ const SQL_TOOLS: McpToolDefinition[] = [
 const SITE_TOOLS: McpToolDefinition[] = [
   {
     name: 'tabtin_site_list',
-    description: 'List all sites in the current space. Uses TABTIN_SPACE_ID and TABTIN_ORGANIZATION_ID env vars if not provided.',
+    description: 'List all sites in the current space. Uses MUSE_SPACE_ID and MUSE_ORGANIZATION_ID env vars if not provided.',
     inputSchema: {
       type: 'object',
       properties: {
-        space_id: { type: 'string', description: 'Space ID (optional, uses TABTIN_SPACE_ID env var if omitted)' },
-        organization_id: { type: 'string', description: 'Organization ID (optional, uses TABTIN_ORGANIZATION_ID env var if omitted)' },
+        space_id: { type: 'string', description: 'Space ID (optional, uses MUSE_SPACE_ID env var if omitted)' },
+        organization_id: { type: 'string', description: 'Organization ID (optional, uses MUSE_ORGANIZATION_ID env var if omitted)' },
         status: { type: 'string', description: 'Filter by status: draft, published, archived' },
       },
       required: [],

@@ -13,7 +13,7 @@ const nextId = () => `stream-telem-${Date.now()}-${Math.random().toString(36).sl
 
 const persistWindow = () => {
   if (typeof window === 'undefined') return
-  ;(window as any).__TABTIN_STREAM_TELEMETRY__ = {
+  ;(window as any).__MUSE_STREAM_TELEMETRY__ = {
     events: [...streamEvents],
     counters: Object.fromEntries(streamCounters.entries()),
   }

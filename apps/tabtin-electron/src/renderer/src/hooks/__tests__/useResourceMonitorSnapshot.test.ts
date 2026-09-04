@@ -40,7 +40,7 @@ function createSnapshot(collectedAt: number): ResourceMonitorSnapshot {
 }
 
 describe('useResourceMonitorSnapshot — 手动刷新最小可见时长', () => {
-  const originalTabtin = window.tabtin
+  const originalTabtin = window.muse
 
   beforeEach(() => {
     vi.useFakeTimers({ shouldAdvanceTime: true })
@@ -48,12 +48,12 @@ describe('useResourceMonitorSnapshot — 手动刷新最小可见时长', () => 
 
   afterEach(() => {
     vi.useRealTimers()
-    window.tabtin = originalTabtin
+    window.muse = originalTabtin
   })
 
   it('手动刷新即使快照瞬时返回，isRefreshing 仍保持可感知的最短时长', async () => {
     const getSnapshot = vi.fn().mockImplementation(async () => createSnapshot(Date.now()))
-    window.tabtin = { ...originalTabtin, resourceMonitor: { getSnapshot } } as typeof window.tabtin
+    window.muse = { ...originalTabtin, resourceMonitor: { getSnapshot } } as typeof window.muse
 
     const { result } = renderHook(() => useResourceMonitorSnapshot('interactive'))
 
@@ -86,7 +86,7 @@ describe('useResourceMonitorSnapshot — 手动刷新最小可见时长', () => 
 
   it('背景自动轮询（非手动刷新）不受最短可见时长影响，且不置 isRefreshing', async () => {
     const getSnapshot = vi.fn().mockImplementation(async () => createSnapshot(Date.now()))
-    window.tabtin = { ...originalTabtin, resourceMonitor: { getSnapshot } } as typeof window.tabtin
+    window.muse = { ...originalTabtin, resourceMonitor: { getSnapshot } } as typeof window.muse
 
     const { result } = renderHook(() => useResourceMonitorSnapshot('interactive'))
 

@@ -83,7 +83,7 @@ export const PendingTasksNotice: React.FC<PendingTasksNoticeProps> = ({ sessionI
       setBackgroundTaskState({ ownerSessionId: null, tasks: EMPTY_BG_TASKS })
       return
     }
-    const api = window.tabtin?.agentEngine?.listRunningBackgroundTasks
+    const api = window.muse?.agentEngine?.listRunningBackgroundTasks
     if (!api) {
       setBackgroundTaskState({ ownerSessionId: sessionId, tasks: EMPTY_BG_TASKS })
       return
@@ -188,7 +188,7 @@ export const PendingTasksNotice: React.FC<PendingTasksNoticeProps> = ({ sessionI
     }
     if (stoppingShellTaskIds[item.id]) return
     setStoppingShellTaskIds(current => ({ ...current, [item.id]: true }))
-    void window.tabtin?.pty?.agentKill?.(item.id)
+    void window.muse?.pty?.agentKill?.(item.id)
       .then((result) => {
         if (result?.success === true) {
           setStoppedShellTaskIds(current => ({ ...current, [item.id]: true }))

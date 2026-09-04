@@ -2,7 +2,7 @@
  * Bundled LSP server 路径解析。
  *
  * 三层 fallback（优先级从高到低）：
- *   1. `TABTIN_LSP_SERVERS_DIR` env override —— 测试 / 高级用户配置
+ *   1. `MUSE_LSP_SERVERS_DIR` env override —— 测试 / 高级用户配置
  *   2. packaged 模式：`process.resourcesPath/app.asar.unpacked/lsp-servers/`
  *   3. dev 模式：`packages/lsp-runtime/lsp-servers/`
  *
@@ -27,13 +27,13 @@ const __dirname = dirname(__filename);
  * 解析 lsp-servers/ 根目录。
  *
  * 优先级：
- *   1. `TABTIN_LSP_SERVERS_DIR` env
+ *   1. `MUSE_LSP_SERVERS_DIR` env
  *   2. packaged（`process.resourcesPath` 存在且包含 app.asar.unpacked）
  *   3. dev（相对于本模块 `../../lsp-servers`）
  */
 export function getLspServersRoot(): string {
-  if (process.env.TABTIN_LSP_SERVERS_DIR) {
-    return process.env.TABTIN_LSP_SERVERS_DIR;
+  if (process.env.MUSE_LSP_SERVERS_DIR) {
+    return process.env.MUSE_LSP_SERVERS_DIR;
   }
 
   // Packaged Electron：process.resourcesPath 指向 Electron 安装目录的 resources/

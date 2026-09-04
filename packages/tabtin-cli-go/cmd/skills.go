@@ -19,7 +19,7 @@ func newCmdSkills(f *cmdutil.Factory) *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "skills",
 		Short: "第三方 Agent Skill（包内权威副本 ↔ ~/.agents/skills）",
-		Long: `内省与安装随 @tabtin/cli 发布的 Skill 包。
+		Long: `内省与安装随 @muse/cli 发布的 Skill 包。
 
 包内 skills/ 与当前 CLI 版本绑定，是权威内容；物化到 ~/.agents/skills/tabtin-*
 供 Cursor/Claude/Codex 等原生扫描。漂移时用 sync 覆盖回包内版本。
@@ -93,7 +93,7 @@ func newCmdSkills(f *cmdutil.Factory) *cobra.Command {
 			Flags: []cmdutil.FlagDef{
 				{Name: "target", Type: cmdutil.FlagEnum, Enum: []string{"agents"}, Default: "agents", Desc: "安装目标（首版仅 agents）"},
 				{Name: "name", Type: cmdutil.FlagString, Desc: "只安装指定外部名", NoFileInput: true},
-				{Name: "dir", Type: cmdutil.FlagString, Desc: "覆盖目标目录（默认 TABTIN_AGENTS_SKILLS_DIR 或 ~/.agents/skills）", NoFileInput: true},
+				{Name: "dir", Type: cmdutil.FlagString, Desc: "覆盖目标目录（默认 MUSE_AGENTS_SKILLS_DIR 或 ~/.agents/skills）", NoFileInput: true},
 			},
 			DryRun: func(ctx *cmdutil.RunContext) *cmdutil.DryRunPlan {
 				return skillsWriteDryRun(ctx, "install")
@@ -210,7 +210,7 @@ func openSkillsBundle() (*skillbundle.Bundle, error) {
 		return nil, output.PrintErrorAndExit(output.ErrorEnvelope(
 			string(errcode.NotFound),
 			err.Error(),
-			"先运行 node packages/tabtin-cli/scripts/generate-skills-bundle.cjs，或设置 TABTIN_SKILLS_BUNDLE_DIR",
+			"先运行 node packages/tabtin-cli/scripts/generate-skills-bundle.cjs，或设置 MUSE_SKILLS_BUNDLE_DIR",
 			output.ExitNotFound,
 		))
 	}
@@ -365,7 +365,7 @@ func skillsInstallExecute(f *cmdutil.Factory) func(*cmdutil.RunContext) error {
 				return output.PrintErrorAndExit(output.ErrorEnvelopeWith(
 					string(errcode.Conflict),
 					c.Error(),
-					"请手动处理冲突目录，或换 TABTIN_AGENTS_SKILLS_DIR；sync/remove 不会覆盖非 Muse Skill",
+					"请手动处理冲突目录，或换 MUSE_AGENTS_SKILLS_DIR；sync/remove 不会覆盖非 Muse Skill",
 					output.ExitGeneral,
 					output.ErrorEnvelopeOpts{
 						Detail: map[string]any{

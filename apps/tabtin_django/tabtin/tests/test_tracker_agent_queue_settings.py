@@ -10,8 +10,8 @@ class TrackerAgentQueueSettingsTests(SimpleTestCase):
         keys = {
             "TRACKER_AGENT_QUEUE": "",
             "TRACKER_AGENT_ISOLATE_LOCAL_QUEUE": "",
-            "TABTIN_INFRA_MODE": "remote",
-            "TABTIN_QUEUE_SUFFIX": "My Mac",
+            "MUSE_INFRA_MODE": "remote",
+            "MUSE_QUEUE_SUFFIX": "My Mac",
             "KUBERNETES_SERVICE_HOST": "",
         }
         keys.update(overrides)

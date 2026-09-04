@@ -20,7 +20,7 @@ import {
   SheetDescription,
   ScrollArea,
   OverlayContainerProvider,
-} from '@tabtin/smartsheet-ui'
+} from '@muse/smartsheet-ui'
 import { useShallow } from 'zustand/react/shallow'
 import { useTranslation } from 'react-i18next'
 import { useSpaceStore } from '@stores/useSpaceStore'
@@ -37,7 +37,7 @@ import {
   useAgentSettingsSheetStore,
   type AgentSettingsSection,
 } from '@stores/useAgentSettingsSheetStore'
-import type { Space } from '@tabtin/app-shell'
+import type { Space } from '@muse/app-shell'
 import { SettingsSectionContext } from './SettingsSectionContext'
 
 import { AgentSecurityPanel } from './AgentSecurityPanel'

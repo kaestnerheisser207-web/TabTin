@@ -145,7 +145,7 @@ class TestBillingRequired(SimpleTestCase):
             return {"ok": True, "wt": request._billing_organization_id}
 
         req = self._make_request(user_id=user_id)
-        req.META = {"HTTP_X_TABTIN_ORGANIZATION_ID": wt_id}
+        req.META = {"HTTP_X_MUSE_ORGANIZATION_ID": wt_id}
         result = my_view(req)
         self.assertTrue(result["ok"])
         self.assertEqual(result["wt"], wt_id)
@@ -162,7 +162,7 @@ class TestBillingRequired(SimpleTestCase):
             return {"should_not_reach": True}
 
         req = self._make_request(user_id=str(uuid.uuid4()))
-        req.META = {"HTTP_X_TABTIN_ORGANIZATION_ID": wt_id}
+        req.META = {"HTTP_X_MUSE_ORGANIZATION_ID": wt_id}
         with self.assertRaises(HttpError) as ctx:
             my_view(req)
         self.assertEqual(ctx.exception.status_code, 402)
@@ -191,7 +191,7 @@ class TestBillingRequired(SimpleTestCase):
             return {"ok": True}
 
         req = self._make_request(user_id=str(uuid.uuid4()))
-        req.META = {"HTTP_X_TABTIN_ORGANIZATION_ID": wt_id}
+        req.META = {"HTTP_X_MUSE_ORGANIZATION_ID": wt_id}
         result = my_view(req)
         self.assertTrue(result["ok"])
 

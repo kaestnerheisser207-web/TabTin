@@ -91,14 +91,14 @@ async function verifyChatMessagePersisted(
   const runVerify = (sessionId?: string | null) => {
     const env: NodeJS.ProcessEnv = {
       ...process.env,
-      TABTIN_E2E_MARKER: prepared.marker,
-      TABTIN_E2E_SPACE_ID: prepared.spaceId,
+      MUSE_E2E_MARKER: prepared.marker,
+      MUSE_E2E_SPACE_ID: prepared.spaceId,
     };
     if (sessionId) {
-      env.TABTIN_E2E_SESSION_ID = sessionId;
+      env.MUSE_E2E_SESSION_ID = sessionId;
     }
     if (options.messageId) {
-      env.TABTIN_E2E_MESSAGE_ID = options.messageId;
+      env.MUSE_E2E_MESSAGE_ID = options.messageId;
     }
 
     const djangoResult = runCommand(

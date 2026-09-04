@@ -32,7 +32,7 @@ import {
   VAlignTopIcon, VAlignMiddleIcon, VAlignBottomIcon, VerticalTextIcon,
   TextColorIcon, HighlightIcon,
 } from '../../shared/field-icons'
-import { SectionPanel } from '@tabtin/smartsheet-ui'
+import { SectionPanel } from '@muse/smartsheet-ui'
 import { FillEditor } from '../FillEditor'
 import { FontSelect } from '../FontSelect'
 import { LatexEditor } from './LatexEditor'

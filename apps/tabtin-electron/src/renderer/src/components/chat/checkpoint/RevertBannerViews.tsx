@@ -1,5 +1,5 @@
 import React, { Suspense, lazy } from 'react'
-import type { RollbackApplyLayerStatus } from '@tabtin/chat-client'
+import type { RollbackApplyLayerStatus } from '@muse/chat-client'
 import {
   AlertTriangle,
   Loader2,

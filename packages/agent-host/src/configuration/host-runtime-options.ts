@@ -31,14 +31,14 @@ import {
   DEFAULT_NORMALIZATION_LEVEL,
   DEFAULT_TOOL_FAILURE_BUDGET_THRESHOLDS,
   DEFAULT_TOOL_SCHEMA_VALIDATION,
-} from '@tabtin/agent-runtime/engine'
+} from '@muse/agent-runtime/engine'
 import type {
   IterationBudgetConfig,
   NormalizationLevel,
   ToolFailureBudgetThresholds,
   ToolFailureTrackerConfig,
   ToolSchemaValidationLevel,
-} from '@tabtin/agent-runtime/engine'
+} from '@muse/agent-runtime/engine'
 
 export type DoomLoopPolicy = 'soft' | 'strict'
 
@@ -53,7 +53,7 @@ export interface HostRuntimeProfile {
 }
 
 /**
- * `TABTIN_DOOM_LOOP_POLICY` → `EngineConfig.doomLoopPolicy`.
+ * `MUSE_DOOM_LOOP_POLICY` → `EngineConfig.doomLoopPolicy`.
  *
  * Accepts `'soft' | 'strict'` (case-insensitive). Any other value logs
  * a single warning and falls back to `'soft'` — louder than silent
@@ -64,18 +64,18 @@ export function resolveDoomLoopPolicy(
   env: NodeJS.ProcessEnv,
   logger: HostRuntimeOptionsLogger,
 ): DoomLoopPolicy {
-  const raw = env.TABTIN_DOOM_LOOP_POLICY?.trim().toLowerCase()
+  const raw = env.MUSE_DOOM_LOOP_POLICY?.trim().toLowerCase()
   if (raw === undefined || raw.length === 0) return 'soft'
   if (raw === 'soft' || raw === 'strict') return raw
   logger.warn(
-    `[AgentHost] Invalid TABTIN_DOOM_LOOP_POLICY="${raw}"; falling back to 'soft'. ` +
+    `[AgentHost] Invalid MUSE_DOOM_LOOP_POLICY="${raw}"; falling back to 'soft'. ` +
       `Valid values: 'soft' | 'strict'.`,
   )
   return 'soft'
 }
 
 /**
- * `TABTIN_MAX_MESSAGE_CHARS` → `EngineConfig.maxMessageChars`.
+ * `MUSE_MAX_MESSAGE_CHARS` → `EngineConfig.maxMessageChars`.
  *
  * Accepts a positive finite integer. Non-numeric / zero / negative /
  * `NaN` logs a warning and falls back to the Runtime default so a
@@ -85,12 +85,12 @@ export function resolveMaxMessageChars(
   env: NodeJS.ProcessEnv,
   logger: HostRuntimeOptionsLogger,
 ): number {
-  const raw = env.TABTIN_MAX_MESSAGE_CHARS?.trim()
+  const raw = env.MUSE_MAX_MESSAGE_CHARS?.trim()
   if (raw === undefined || raw.length === 0) return DEFAULT_MAX_MESSAGE_CHARS
   const parsed = Number(raw)
   if (!Number.isFinite(parsed) || parsed <= 0) {
     logger.warn(
-      `[AgentHost] Invalid TABTIN_MAX_MESSAGE_CHARS="${raw}"; must be a positive finite number. ` +
+      `[AgentHost] Invalid MUSE_MAX_MESSAGE_CHARS="${raw}"; must be a positive finite number. ` +
         `Falling back to DEFAULT_MAX_MESSAGE_CHARS=${DEFAULT_MAX_MESSAGE_CHARS}.`,
     )
     return DEFAULT_MAX_MESSAGE_CHARS
@@ -99,7 +99,7 @@ export function resolveMaxMessageChars(
 }
 
 /**
- * `TABTIN_NORMALIZATION_LEVEL` → `EngineConfig.normalizationLevel`.
+ * `MUSE_NORMALIZATION_LEVEL` → `EngineConfig.normalizationLevel`.
  *
  * Accepts `'off' | 'conservative' | 'full'` (case-insensitive; trimmed).
  * Any other value logs a single warning and falls back to the Runtime
@@ -114,11 +114,11 @@ export function resolveNormalizationLevel(
   env: NodeJS.ProcessEnv,
   logger: HostRuntimeOptionsLogger,
 ): NormalizationLevel {
-  const raw = env.TABTIN_NORMALIZATION_LEVEL?.trim().toLowerCase()
+  const raw = env.MUSE_NORMALIZATION_LEVEL?.trim().toLowerCase()
   if (raw === undefined || raw.length === 0) return DEFAULT_NORMALIZATION_LEVEL
   if (raw === 'off' || raw === 'conservative' || raw === 'full') return raw
   logger.warn(
-    `[AgentHost] Invalid TABTIN_NORMALIZATION_LEVEL="${raw}"; falling back to ` +
+    `[AgentHost] Invalid MUSE_NORMALIZATION_LEVEL="${raw}"; falling back to ` +
       `'${DEFAULT_NORMALIZATION_LEVEL}'. Valid values: 'off' | 'conservative' | 'full'.`,
   )
   return DEFAULT_NORMALIZATION_LEVEL
@@ -129,7 +129,7 @@ export function resolveNormalizationLevel(
 export type AttachmentStrategy = 'local_first' | 'cloud_only'
 
 /**
- * `TABTIN_ATTACHMENT_STRATEGY` → `ElectronAgentHost.resolveDefaultAttachmentStrategy`
+ * `MUSE_ATTACHMENT_STRATEGY` → `ElectronAgentHost.resolveDefaultAttachmentStrategy`
  * 等价契约。共享 helper 与 Daemon 同名同语义，保持运维同一份文档管两端。
  *
  * **W4 (2026-05-13)** 移除 `cloud_first` 死配置字面值（T8 / 总控 §三 F5）：旧
@@ -143,11 +143,11 @@ export function resolveAttachmentStrategy(
   env: NodeJS.ProcessEnv,
   logger: HostRuntimeOptionsLogger,
 ): AttachmentStrategy {
-  const raw = env.TABTIN_ATTACHMENT_STRATEGY?.trim().toLowerCase()
+  const raw = env.MUSE_ATTACHMENT_STRATEGY?.trim().toLowerCase()
   if (raw === undefined || raw.length === 0) return 'local_first'
   if (raw === 'local_first' || raw === 'cloud_only') return raw
   logger.warn(
-    `[AgentHost] Invalid TABTIN_ATTACHMENT_STRATEGY="${raw}"; falling back to ` +
+    `[AgentHost] Invalid MUSE_ATTACHMENT_STRATEGY="${raw}"; falling back to ` +
       `'local_first'. Valid values: 'local_first' | 'cloud_only' ` +
       `(W4: 'cloud_first' is no longer accepted — use 'cloud_only' instead).`,
   )
@@ -169,7 +169,7 @@ export const ELECTRON_DEFAULT_MAX_LOCAL_FILE_SIZE_MB = 50
 export const DAEMON_DEFAULT_MAX_LOCAL_FILE_SIZE_MB = 20
 
 /**
- * `TABTIN_LOCAL_DOCPARSE_MAX_MB` → Electron 本地解析体积上限的**类型/值集对齐 helper**。
+ * `MUSE_LOCAL_DOCPARSE_MAX_MB` → Electron 本地解析体积上限的**类型/值集对齐 helper**。
  *
  * **⚠️ 当前 Electron 侧未在生产代码路径接线**：`ElectronAgentHost.resolveOneAttachment`
  * 仍直接使用 packages 常量 `DEFAULT_MAX_LOCAL_FILE_SIZE_MB`（50MB）做体积预判与
@@ -194,12 +194,12 @@ export function resolveMaxLocalFileSizeMb(
   logger: HostRuntimeOptionsLogger,
   fallback = ELECTRON_DEFAULT_MAX_LOCAL_FILE_SIZE_MB,
 ): number {
-  const raw = env.TABTIN_LOCAL_DOCPARSE_MAX_MB?.trim()
+  const raw = env.MUSE_LOCAL_DOCPARSE_MAX_MB?.trim()
   if (raw === undefined || raw.length === 0) return fallback
   const parsed = Number(raw)
   if (!Number.isFinite(parsed) || parsed <= 0) {
     logger.warn(
-      `[AgentHost] Invalid TABTIN_LOCAL_DOCPARSE_MAX_MB="${raw}"; must be a positive ` +
+      `[AgentHost] Invalid MUSE_LOCAL_DOCPARSE_MAX_MB="${raw}"; must be a positive ` +
         `finite number. Falling back to ${fallback}MB.`,
     )
     return fallback
@@ -207,7 +207,7 @@ export function resolveMaxLocalFileSizeMb(
   const HARD_CAP_MB = 200
   if (parsed > HARD_CAP_MB) {
     logger.warn(
-      `[AgentHost] TABTIN_LOCAL_DOCPARSE_MAX_MB=${parsed} exceeds hard cap ${HARD_CAP_MB}MB; ` +
+      `[AgentHost] MUSE_LOCAL_DOCPARSE_MAX_MB=${parsed} exceeds hard cap ${HARD_CAP_MB}MB; ` +
         `clamping to ${HARD_CAP_MB}. Reduce the value or split large documents.`,
     )
     return HARD_CAP_MB
@@ -216,7 +216,7 @@ export function resolveMaxLocalFileSizeMb(
 }
 
 /**
- * `TABTIN_TOOL_SCHEMA_VALIDATION` → `EngineConfig.toolSchemaValidation` (FR-07).
+ * `MUSE_TOOL_SCHEMA_VALIDATION` → `EngineConfig.toolSchemaValidation` (FR-07).
  *
  * Accepts `'off' | 'warn' | 'strict'` (case-insensitive; trimmed).
  * Any other value logs a single warning and falls back to the Runtime
@@ -231,18 +231,18 @@ export function resolveToolSchemaValidation(
   env: NodeJS.ProcessEnv,
   logger: HostRuntimeOptionsLogger,
 ): ToolSchemaValidationLevel {
-  const raw = env.TABTIN_TOOL_SCHEMA_VALIDATION?.trim().toLowerCase()
+  const raw = env.MUSE_TOOL_SCHEMA_VALIDATION?.trim().toLowerCase()
   if (raw === undefined || raw.length === 0) return DEFAULT_TOOL_SCHEMA_VALIDATION
   if (raw === 'off' || raw === 'warn' || raw === 'strict') return raw
   logger.warn(
-    `[AgentHost] Invalid TABTIN_TOOL_SCHEMA_VALIDATION="${raw}"; falling back to ` +
+    `[AgentHost] Invalid MUSE_TOOL_SCHEMA_VALIDATION="${raw}"; falling back to ` +
       `'${DEFAULT_TOOL_SCHEMA_VALIDATION}'. Valid values: 'off' | 'warn' | 'strict'.`,
   )
   return DEFAULT_TOOL_SCHEMA_VALIDATION
 }
 
 /**
- * `TABTIN_TOOL_OUTPUT_SCAN` → `EngineConfig.toolOutputScan` (FR-09).
+ * `MUSE_TOOL_OUTPUT_SCAN` → `EngineConfig.toolOutputScan` (FR-09).
  *
  * Accepts boolean-shaped strings: `'on' | 'off' | 'true' | 'false' | '1' | '0'`
  * (case-insensitive; trimmed). Defaults to `true` (scanner ON).
@@ -256,12 +256,12 @@ export function resolveToolOutputScan(
   env: NodeJS.ProcessEnv,
   logger: HostRuntimeOptionsLogger,
 ): boolean {
-  const raw = env.TABTIN_TOOL_OUTPUT_SCAN?.trim().toLowerCase()
+  const raw = env.MUSE_TOOL_OUTPUT_SCAN?.trim().toLowerCase()
   if (raw === undefined || raw.length === 0) return true
   if (['on', 'true', '1', 'enabled'].includes(raw)) return true
   if (['off', 'false', '0', 'disabled'].includes(raw)) return false
   logger.warn(
-    `[AgentHost] Invalid TABTIN_TOOL_OUTPUT_SCAN="${raw}"; falling back to ` +
+    `[AgentHost] Invalid MUSE_TOOL_OUTPUT_SCAN="${raw}"; falling back to ` +
       `'on'. Valid values: 'on' | 'off' | 'true' | 'false' | '1' | '0'.`,
   )
   return true
@@ -302,7 +302,7 @@ function resolveBudgetThreshold(
 }
 
 /**
- * `TABTIN_ITERATION_BUDGET_*` → `EngineConfig.iterationBudget`.
+ * `MUSE_ITERATION_BUDGET_*` → `EngineConfig.iterationBudget`.
  *
  * 解析两通路四个阈值（terminate 固定 1.0）。返回结构与
  * `EngineConfig.iterationBudget` 一致，宿主直接 spread 进 EngineConfig
@@ -323,13 +323,13 @@ export function resolveIterationBudget(
     iteration: {
       warn: resolveBudgetThreshold(
         env,
-        'TABTIN_ITERATION_BUDGET_WARN_ITER',
+        'MUSE_ITERATION_BUDGET_WARN_ITER',
         DEFAULT_ITERATION_BUDGET.iteration.warn,
         logger,
       ),
       grace: resolveBudgetThreshold(
         env,
-        'TABTIN_ITERATION_BUDGET_GRACE_ITER',
+        'MUSE_ITERATION_BUDGET_GRACE_ITER',
         DEFAULT_ITERATION_BUDGET.iteration.grace,
         logger,
       ),
@@ -338,13 +338,13 @@ export function resolveIterationBudget(
     token: {
       warn: resolveBudgetThreshold(
         env,
-        'TABTIN_ITERATION_BUDGET_WARN_TOKEN',
+        'MUSE_ITERATION_BUDGET_WARN_TOKEN',
         DEFAULT_ITERATION_BUDGET.token.warn,
         logger,
       ),
       grace: resolveBudgetThreshold(
         env,
-        'TABTIN_ITERATION_BUDGET_GRACE_TOKEN',
+        'MUSE_ITERATION_BUDGET_GRACE_TOKEN',
         DEFAULT_ITERATION_BUDGET.token.grace,
         logger,
       ),
@@ -381,25 +381,25 @@ function parseToolFailureEnabled(
   env: NodeJS.ProcessEnv,
   logger: HostRuntimeOptionsLogger,
 ): boolean {
-  const raw = env.TABTIN_TOOL_FAILURE_TRACKER_ENABLED?.trim().toLowerCase()
+  const raw = env.MUSE_TOOL_FAILURE_TRACKER_ENABLED?.trim().toLowerCase()
   if (raw === undefined || raw.length === 0) return true
   if (['on', 'true', '1', 'enabled', 'yes'].includes(raw)) return true
   if (['off', 'false', '0', 'disabled', 'no'].includes(raw)) return false
   logger.warn(
-    `[ElectronAgentHost] Invalid TABTIN_TOOL_FAILURE_TRACKER_ENABLED="${raw}"; falling back to ` +
+    `[ElectronAgentHost] Invalid MUSE_TOOL_FAILURE_TRACKER_ENABLED="${raw}"; falling back to ` +
       `'true'. Valid values: 'on' | 'off' | 'true' | 'false' | '1' | '0' | 'enabled' | 'disabled' | 'yes' | 'no'.`,
   )
   return true
 }
 
 /**
- * `TABTIN_TOOL_FAILURE_*` → `EngineConfig.toolFailureTracker` (W3).
+ * `MUSE_TOOL_FAILURE_*` → `EngineConfig.toolFailureTracker` (W3).
  *
  * 解析四个 env：
- *   - `TABTIN_TOOL_FAILURE_NOTICE_STREAK` → thresholds.notice（默认 3）
- *   - `TABTIN_TOOL_FAILURE_NUDGE_STREAK` → thresholds.nudge（默认 5）
- *   - `TABTIN_TOOL_FAILURE_TERMINATE_STREAK` → thresholds.terminate（默认 8， 硬熔断档）
- *   - `TABTIN_TOOL_FAILURE_TRACKER_ENABLED` → enabled（默认 true）
+ *   - `MUSE_TOOL_FAILURE_NOTICE_STREAK` → thresholds.notice（默认 3）
+ *   - `MUSE_TOOL_FAILURE_NUDGE_STREAK` → thresholds.nudge（默认 5）
+ *   - `MUSE_TOOL_FAILURE_TERMINATE_STREAK` → thresholds.terminate（默认 8， 硬熔断档）
+ *   - `MUSE_TOOL_FAILURE_TRACKER_ENABLED` → enabled（默认 true）
  *
  * 不变量校验（notice < nudge < terminate）由 `tool-failure-tracker.ts::
  * mergeTrackerConfig` 兜底——非法时整 thresholds 回落默认 / terminate 抬到
@@ -414,19 +414,19 @@ export function resolveToolFailureTracker(
   const enabled = parseToolFailureEnabled(env, logger)
   const notice = parseToolFailureStreak(
     env,
-    'TABTIN_TOOL_FAILURE_NOTICE_STREAK',
+    'MUSE_TOOL_FAILURE_NOTICE_STREAK',
     DEFAULT_TOOL_FAILURE_BUDGET_THRESHOLDS.notice,
     logger,
   )
   const nudge = parseToolFailureStreak(
     env,
-    'TABTIN_TOOL_FAILURE_NUDGE_STREAK',
+    'MUSE_TOOL_FAILURE_NUDGE_STREAK',
     DEFAULT_TOOL_FAILURE_BUDGET_THRESHOLDS.nudge,
     logger,
   )
   const terminate = parseToolFailureStreak(
     env,
-    'TABTIN_TOOL_FAILURE_TERMINATE_STREAK',
+    'MUSE_TOOL_FAILURE_TERMINATE_STREAK',
     DEFAULT_TOOL_FAILURE_BUDGET_THRESHOLDS.terminate,
     logger,
   )
@@ -448,7 +448,7 @@ export function resolveToolFailureTracker(
 export const DEFAULT_MAX_CONCURRENT_CHILDREN = 5;
 
 /**
- * `TABTIN_MAX_CONCURRENT_CHILDREN` → `EngineConfig.maxConcurrentChildren` (FR-17.1).
+ * `MUSE_MAX_CONCURRENT_CHILDREN` → `EngineConfig.maxConcurrentChildren` (FR-17.1).
  *
  * 接受正整数（≥ 1）。`Infinity` / `unlimited` / `0` 三种 token 显式禁用限制
  * （`BudgetTracker` 内部把 ≤ 0 视为 Infinity，但 0 在 env 里语义模糊，所以
@@ -464,13 +464,13 @@ export function resolveMaxConcurrentChildren(
   env: NodeJS.ProcessEnv,
   logger: HostRuntimeOptionsLogger,
 ): number {
-  const raw = env.TABTIN_MAX_CONCURRENT_CHILDREN?.trim().toLowerCase()
+  const raw = env.MUSE_MAX_CONCURRENT_CHILDREN?.trim().toLowerCase()
   if (raw === undefined || raw.length === 0) return DEFAULT_MAX_CONCURRENT_CHILDREN
   if (raw === 'unlimited' || raw === 'infinity' || raw === '0') return Number.POSITIVE_INFINITY
   const parsed = Number(raw)
   if (!Number.isFinite(parsed) || parsed < 1) {
     logger.warn(
-      `[AgentHost] Invalid TABTIN_MAX_CONCURRENT_CHILDREN="${raw}"; must be a positive integer ` +
+      `[AgentHost] Invalid MUSE_MAX_CONCURRENT_CHILDREN="${raw}"; must be a positive integer ` +
         `or 'unlimited' / 'infinity' / '0'. Falling back to ${DEFAULT_MAX_CONCURRENT_CHILDREN}.`,
     )
     return DEFAULT_MAX_CONCURRENT_CHILDREN
@@ -490,7 +490,7 @@ export function resolveMaxConcurrentChildren(
 export const DEFAULT_MAX_SUBAGENT_QUEUE = 95;
 
 /**
- * `TABTIN_MAX_SUBAGENT_QUEUE` → `EngineConfig.maxSubagentQueue` (W4 D1).
+ * `MUSE_MAX_SUBAGENT_QUEUE` → `EngineConfig.maxSubagentQueue` (W4 D1).
  *
  * 接受非负整数（0 = 禁用排队，满即 error；与 maxConcurrentChildren=Infinity 互斥）。
  * 非数字 / 负数 → warn + fallback `DEFAULT_MAX_SUBAGENT_QUEUE` (= 95)。
@@ -502,12 +502,12 @@ export function resolveMaxSubagentQueue(
   env: NodeJS.ProcessEnv,
   logger: HostRuntimeOptionsLogger,
 ): number {
-  const raw = env.TABTIN_MAX_SUBAGENT_QUEUE?.trim().toLowerCase()
+  const raw = env.MUSE_MAX_SUBAGENT_QUEUE?.trim().toLowerCase()
   if (raw === undefined || raw.length === 0) return DEFAULT_MAX_SUBAGENT_QUEUE
   const parsed = Number(raw)
   if (!Number.isFinite(parsed) || parsed < 0) {
     logger.warn(
-      `[AgentHost] Invalid TABTIN_MAX_SUBAGENT_QUEUE="${raw}"; must be a non-negative integer. ` +
+      `[AgentHost] Invalid MUSE_MAX_SUBAGENT_QUEUE="${raw}"; must be a non-negative integer. ` +
         `Falling back to ${DEFAULT_MAX_SUBAGENT_QUEUE}.`,
     )
     return DEFAULT_MAX_SUBAGENT_QUEUE
@@ -516,7 +516,7 @@ export function resolveMaxSubagentQueue(
 }
 
 /**
- * `TABTIN_SUBAGENT_RESULT_COMPACT` → `EngineConfig.subagentResultCompact` (FR-17.2).
+ * `MUSE_SUBAGENT_RESULT_COMPACT` → `EngineConfig.subagentResultCompact` (FR-17.2).
  *
  * 接受 boolean-shaped strings：`'on' | 'off' | 'true' | 'false' | '1' | '0'`
  * （case-insensitive；trim）。默认 `true`（PRD §5.2 FR-17 决策"默认开启"）。
@@ -529,19 +529,19 @@ export function resolveSubagentResultCompact(
   env: NodeJS.ProcessEnv,
   logger: HostRuntimeOptionsLogger,
 ): boolean {
-  const raw = env.TABTIN_SUBAGENT_RESULT_COMPACT?.trim().toLowerCase()
+  const raw = env.MUSE_SUBAGENT_RESULT_COMPACT?.trim().toLowerCase()
   if (raw === undefined || raw.length === 0) return true
   if (['on', 'true', '1', 'enabled'].includes(raw)) return true
   if (['off', 'false', '0', 'disabled'].includes(raw)) return false
   logger.warn(
-    `[AgentHost] Invalid TABTIN_SUBAGENT_RESULT_COMPACT="${raw}"; falling back to ` +
+    `[AgentHost] Invalid MUSE_SUBAGENT_RESULT_COMPACT="${raw}"; falling back to ` +
       `'on'. Valid values: 'on' | 'off' | 'true' | 'false' | '1' | '0'.`,
   )
   return true
 }
 
 /**
- * FR-16 H3-B：`TABTIN_SUMMARY_REUSE_JUDGE_SAMPLE_RATE` →
+ * FR-16 H3-B：`MUSE_SUMMARY_REUSE_JUDGE_SAMPLE_RATE` →
  * `EngineConfig.summaryReuseJudgeSampleRate`.
  *
  * 接受 [0, 1] 浮点数。`0` 关 judge 但保留 reuse；`1` 每次都跑 judge（开发者
@@ -557,12 +557,12 @@ export function resolveSummaryReuseJudgeSampleRate(
   env: NodeJS.ProcessEnv,
   logger: HostRuntimeOptionsLogger,
 ): number | undefined {
-  const raw = env.TABTIN_SUMMARY_REUSE_JUDGE_SAMPLE_RATE?.trim()
+  const raw = env.MUSE_SUMMARY_REUSE_JUDGE_SAMPLE_RATE?.trim()
   if (raw === undefined || raw.length === 0) return undefined
   const parsed = Number(raw)
   if (!Number.isFinite(parsed) || parsed < 0 || parsed > 1) {
     logger.warn(
-      `[AgentHost] Invalid TABTIN_SUMMARY_REUSE_JUDGE_SAMPLE_RATE="${raw}"; must be a finite number in [0, 1]. ` +
+      `[AgentHost] Invalid MUSE_SUMMARY_REUSE_JUDGE_SAMPLE_RATE="${raw}"; must be a finite number in [0, 1]. ` +
         `Falling back to runtime default.`,
     )
     return undefined
@@ -571,19 +571,19 @@ export function resolveSummaryReuseJudgeSampleRate(
 }
 
 /**
- * FR-16 H3-B：`TABTIN_SUMMARY_REUSE_JUDGE_WINDOW_SIZE` →
+ * FR-16 H3-B：`MUSE_SUMMARY_REUSE_JUDGE_WINDOW_SIZE` →
  * `EngineConfig.summaryReuseJudgeWindowSize`. 接受 ≥ 10 的正整数。
  */
 export function resolveSummaryReuseJudgeWindowSize(
   env: NodeJS.ProcessEnv,
   logger: HostRuntimeOptionsLogger,
 ): number | undefined {
-  const raw = env.TABTIN_SUMMARY_REUSE_JUDGE_WINDOW_SIZE?.trim()
+  const raw = env.MUSE_SUMMARY_REUSE_JUDGE_WINDOW_SIZE?.trim()
   if (raw === undefined || raw.length === 0) return undefined
   const parsed = Number(raw)
   if (!Number.isFinite(parsed) || parsed < 10 || !Number.isInteger(parsed)) {
     logger.warn(
-      `[AgentHost] Invalid TABTIN_SUMMARY_REUSE_JUDGE_WINDOW_SIZE="${raw}"; must be an integer ≥ 10. ` +
+      `[AgentHost] Invalid MUSE_SUMMARY_REUSE_JUDGE_WINDOW_SIZE="${raw}"; must be an integer ≥ 10. ` +
         `Falling back to runtime default.`,
     )
     return undefined
@@ -592,19 +592,19 @@ export function resolveSummaryReuseJudgeWindowSize(
 }
 
 /**
- * FR-16 H3-B：`TABTIN_SUMMARY_REUSE_JUDGE_THRESHOLD` →
+ * FR-16 H3-B：`MUSE_SUMMARY_REUSE_JUDGE_THRESHOLD` →
  * `EngineConfig.summaryReuseJudgeThreshold`. 接受 [0, 1] 浮点数。
  */
 export function resolveSummaryReuseJudgeThreshold(
   env: NodeJS.ProcessEnv,
   logger: HostRuntimeOptionsLogger,
 ): number | undefined {
-  const raw = env.TABTIN_SUMMARY_REUSE_JUDGE_THRESHOLD?.trim()
+  const raw = env.MUSE_SUMMARY_REUSE_JUDGE_THRESHOLD?.trim()
   if (raw === undefined || raw.length === 0) return undefined
   const parsed = Number(raw)
   if (!Number.isFinite(parsed) || parsed < 0 || parsed > 1) {
     logger.warn(
-      `[AgentHost] Invalid TABTIN_SUMMARY_REUSE_JUDGE_THRESHOLD="${raw}"; must be a finite number in [0, 1]. ` +
+      `[AgentHost] Invalid MUSE_SUMMARY_REUSE_JUDGE_THRESHOLD="${raw}"; must be a finite number in [0, 1]. ` +
         `Falling back to runtime default.`,
     )
     return undefined
@@ -613,7 +613,7 @@ export function resolveSummaryReuseJudgeThreshold(
 }
 
 /**
- * FR-16 H3-B：`TABTIN_SUMMARY_REUSE_MAX_AGE_MS` → `EngineConfig.summaryReuseMaxAgeMs`.
+ * FR-16 H3-B：`MUSE_SUMMARY_REUSE_MAX_AGE_MS` → `EngineConfig.summaryReuseMaxAgeMs`.
  *
  * 接受非负整数（ms）；`0` 等价 `undefined`（不限）。
  * 适用场景：长 idle 后用户回来，希望强制一次 summary "全量 refresh" 避免老 summary 误导新一轮。
@@ -622,12 +622,12 @@ export function resolveSummaryReuseMaxAgeMs(
   env: NodeJS.ProcessEnv,
   logger: HostRuntimeOptionsLogger,
 ): number | undefined {
-  const raw = env.TABTIN_SUMMARY_REUSE_MAX_AGE_MS?.trim()
+  const raw = env.MUSE_SUMMARY_REUSE_MAX_AGE_MS?.trim()
   if (raw === undefined || raw.length === 0) return undefined
   const parsed = Number(raw)
   if (!Number.isFinite(parsed) || parsed < 0 || !Number.isInteger(parsed)) {
     logger.warn(
-      `[AgentHost] Invalid TABTIN_SUMMARY_REUSE_MAX_AGE_MS="${raw}"; must be a non-negative integer (ms). ` +
+      `[AgentHost] Invalid MUSE_SUMMARY_REUSE_MAX_AGE_MS="${raw}"; must be a non-negative integer (ms). ` +
         `Falling back to runtime default (no age limit).`,
     )
     return undefined
@@ -636,19 +636,19 @@ export function resolveSummaryReuseMaxAgeMs(
 }
 
 /**
- * FR-16 H3-B：`TABTIN_SUMMARY_REUSE_MIN_ADDED_MESSAGES` →
+ * FR-16 H3-B：`MUSE_SUMMARY_REUSE_MIN_ADDED_MESSAGES` →
  * `EngineConfig.summaryReuseMinAddedMessages`. 接受 ≥ 1 的整数。
  */
 export function resolveSummaryReuseMinAddedMessages(
   env: NodeJS.ProcessEnv,
   logger: HostRuntimeOptionsLogger,
 ): number | undefined {
-  const raw = env.TABTIN_SUMMARY_REUSE_MIN_ADDED_MESSAGES?.trim()
+  const raw = env.MUSE_SUMMARY_REUSE_MIN_ADDED_MESSAGES?.trim()
   if (raw === undefined || raw.length === 0) return undefined
   const parsed = Number(raw)
   if (!Number.isFinite(parsed) || parsed < 1 || !Number.isInteger(parsed)) {
     logger.warn(
-      `[AgentHost] Invalid TABTIN_SUMMARY_REUSE_MIN_ADDED_MESSAGES="${raw}"; must be an integer ≥ 1. ` +
+      `[AgentHost] Invalid MUSE_SUMMARY_REUSE_MIN_ADDED_MESSAGES="${raw}"; must be an integer ≥ 1. ` +
         `Falling back to runtime default (3).`,
     )
     return undefined
@@ -657,7 +657,7 @@ export function resolveSummaryReuseMinAddedMessages(
 }
 
 /**
- * FR-16 H3-B：`TABTIN_SUMMARY_REUSE` → `EngineConfig.enableSummaryReuse`.
+ * FR-16 H3-B：`MUSE_SUMMARY_REUSE` → `EngineConfig.enableSummaryReuse`.
  *
  * 接受 `'on'/'off'/'true'/'false'/'1'/'0'/'enabled'/'disabled'`（case-insensitive；
  * trim）。其他值警告一次后默认 `true`（对齐 PRD §5.2 + Q4 决策"默认开启"）。
@@ -674,19 +674,19 @@ export function resolveSummaryReuse(
   env: NodeJS.ProcessEnv,
   logger: HostRuntimeOptionsLogger,
 ): boolean {
-  const raw = env.TABTIN_SUMMARY_REUSE?.trim().toLowerCase()
+  const raw = env.MUSE_SUMMARY_REUSE?.trim().toLowerCase()
   if (raw === undefined || raw.length === 0) return true
   if (['on', 'true', '1', 'enabled'].includes(raw)) return true
   if (['off', 'false', '0', 'disabled'].includes(raw)) return false
   logger.warn(
-    `[AgentHost] Invalid TABTIN_SUMMARY_REUSE="${raw}"; falling back to true. ` +
+    `[AgentHost] Invalid MUSE_SUMMARY_REUSE="${raw}"; falling back to true. ` +
       `Valid values: 'on' | 'off' | 'true' | 'false' | '1' | '0' | 'enabled' | 'disabled'.`,
   )
   return true
 }
 
 /**
- * 连续对话成熟化 · 事 3：`TABTIN_TIME_BASED_MICROCOMPACT` →
+ * 连续对话成熟化 · 事 3：`MUSE_TIME_BASED_MICROCOMPACT` →
  * `EngineConfig.timeBasedMicroCompact`.
  *
  * 默认 **开启**（`enabled: true`，`gapThresholdMinutes: 30`，`keepRecent: 4`）——
@@ -709,21 +709,21 @@ export function resolveTimeBasedMicroCompact(
     keepRecent: 4,
   } as const
 
-  const raw = env.TABTIN_TIME_BASED_MICROCOMPACT?.trim().toLowerCase()
+  const raw = env.MUSE_TIME_BASED_MICROCOMPACT?.trim().toLowerCase()
   if (raw === undefined || raw.length === 0) return { ...defaultConfig }
   if (['on', 'true', '1', 'enabled'].includes(raw)) return { ...defaultConfig, enabled: true }
   if (['off', 'false', '0', 'disabled'].includes(raw)) {
     return { ...defaultConfig, enabled: false }
   }
   logger.warn(
-    `[AgentHost] Invalid TABTIN_TIME_BASED_MICROCOMPACT="${raw}"; falling back to enabled=true. ` +
+    `[AgentHost] Invalid MUSE_TIME_BASED_MICROCOMPACT="${raw}"; falling back to enabled=true. ` +
       `Valid values: 'on' | 'off' | 'true' | 'false' | '1' | '0' | 'enabled' | 'disabled'.`,
   )
   return { ...defaultConfig }
 }
 
 /**
- *  第一波：`TABTIN_PRESSURE_THRESHOLDS` → `EngineConfig.pressureThresholds`.
+ *  第一波：`MUSE_PRESSURE_THRESHOLDS` → `EngineConfig.pressureThresholds`.
  *
  * 格式：三个位于 (0, 1] 区间的数字，逗号分隔，依次为
  * `microCompactStart,llmSummaryStart,emergencyStart`（例如 `"0.75,0.85,0.95"`），
@@ -745,7 +745,7 @@ export function resolvePressureThresholds(
   env: NodeJS.ProcessEnv,
   logger: HostRuntimeOptionsLogger,
 ): { microCompactStart: number; llmSummaryStart: number; emergencyStart: number } | undefined {
-  const raw = env.TABTIN_PRESSURE_THRESHOLDS?.trim()
+  const raw = env.MUSE_PRESSURE_THRESHOLDS?.trim()
   if (raw === undefined || raw.length === 0) return undefined
 
   const parts = raw.split(',').map((part) => Number(part.trim()))
@@ -761,7 +761,7 @@ export function resolvePressureThresholds(
 
   if (!valid) {
     logger.warn(
-      `[AgentHost] Invalid TABTIN_PRESSURE_THRESHOLDS="${raw}"; falling back to runtime defaults. ` +
+      `[AgentHost] Invalid MUSE_PRESSURE_THRESHOLDS="${raw}"; falling back to runtime defaults. ` +
         `Expected three numbers in (0, 1] with micro <= summary < emergency, e.g. "0.75,0.85,0.95".`,
     )
     return undefined
@@ -812,7 +812,7 @@ export function decodeCloudPressureThresholds(
 }
 
 /**
- * FR-14：`TABTIN_SYNC_PERSISTENCE` → `EngineConfig.syncPersistence`.
+ * FR-14：`MUSE_SYNC_PERSISTENCE` → `EngineConfig.syncPersistence`.
  *
  * 接受 `'1' | '0' | 'true' | 'false' | 'on' | 'off'`（case-insensitive；
  * trim）。其他值警告一次后默认 `false`（保持 v1 兼容，不强制启用）。
@@ -829,12 +829,12 @@ export function resolveSyncPersistence(
   env: NodeJS.ProcessEnv,
   logger: HostRuntimeOptionsLogger,
 ): boolean {
-  const raw = env.TABTIN_SYNC_PERSISTENCE?.trim().toLowerCase()
+  const raw = env.MUSE_SYNC_PERSISTENCE?.trim().toLowerCase()
   if (raw === undefined || raw.length === 0) return true
   if (raw === '1' || raw === 'true' || raw === 'on') return true
   if (raw === '0' || raw === 'false' || raw === 'off') return false
   logger.warn(
-    `[AgentHost] Invalid TABTIN_SYNC_PERSISTENCE="${raw}"; falling back to false. ` +
+    `[AgentHost] Invalid MUSE_SYNC_PERSISTENCE="${raw}"; falling back to false. ` +
       `Valid values: '1' | '0' | 'true' | 'false' | 'on' | 'off'.`,
   )
   return false

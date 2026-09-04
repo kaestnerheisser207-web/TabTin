@@ -1,7 +1,7 @@
 import os from 'node:os'
 import { app } from 'electron'
-import type { Device, DeviceRegisterRequest } from '@tabtin/app-shell'
-import { API_ENDPOINTS } from '@tabtin/config'
+import type { Device, DeviceRegisterRequest } from '@muse/app-shell'
+import { API_ENDPOINTS } from '@muse/config'
 
 import { djangoRequest } from '../../cli/routes/shared/error-handler.js'
 import type {

@@ -625,8 +625,8 @@ def _httpish_url(value: object) -> Optional[str]:
     return None
 
 
-_MD_RESOURCE_LINK_RE = re.compile(r"\[([^\]]+)\]\((tabtin://resource/[^)\s\"'`]+)\)")
-_BARE_RESOURCE_URI_RE = re.compile(r"tabtin://resource/[^\s)\]\"'`]+")
+_MD_RESOURCE_LINK_RE = re.compile(r"\[([^\]]+)\]\((muse://resource/[^)\s\"'`]+)\)")
+_BARE_RESOURCE_URI_RE = re.compile(r"muse://resource/[^\s)\]\"'`]+")
 _TRAILING_URI_PUNCT_RE = re.compile(r"[.,;:!?。，、；：！？…]+$", re.UNICODE)
 _FENCED_CODE_RE = re.compile(r"```[\s\S]*?(?:```|$)")
 _INLINE_CODE_RE = re.compile(r"`[^`\n]*`")
@@ -641,10 +641,10 @@ def _sanitize_resource_href(href: str) -> str:
 
 
 def _parse_tabtin_resource(href: str) -> Optional[tuple[str, str]]:
-    """解析 tabtin://resource/{type}/{id}，截断 id 视为无效。"""
-    if not isinstance(href, str) or not href.startswith("tabtin://resource/"):
+    """解析 muse://resource/{type}/{id}，截断 id 视为无效。"""
+    if not isinstance(href, str) or not href.startswith("muse://resource/"):
         return None
-    rest = href[len("tabtin://resource/") :].split("?", 1)[0]
+    rest = href[len("muse://resource/") :].split("?", 1)[0]
     parts = rest.split("/", 1)
     if len(parts) != 2 or not parts[0] or not parts[1]:
         return None
@@ -690,7 +690,7 @@ def _extract_message_attachments(blocks, content: Optional[str] = None) -> list[
     来源：
     1. 用户 image/file/video/document 块
     2. Agent tabtin_rich_content file / resource_ref（可交付）
-    3. 正文 markdown / 裸 tabtin://resource 链接（与 Electron 本轮产物对齐）
+    3. 正文 markdown / 裸 muse://resource 链接（与 Electron 本轮产物对齐）
     """
     if not isinstance(blocks, list):
         blocks = []
@@ -755,7 +755,7 @@ def _extract_message_attachments(blocks, content: Optional[str] = None) -> list[
         if not resource_type or not resource_id:
             return
         kind = _attachment_kind_for_resource(resource_type)
-        canonical = href or f"tabtin://resource/{resource_type}/{resource_id}"
+        canonical = href or f"muse://resource/{resource_type}/{resource_id}"
         _push(
             kind=kind,
             filename=title or resource_id,
@@ -823,9 +823,9 @@ def _extract_message_attachments(blocks, content: Optional[str] = None) -> list[
                 for candidate in (
                     payload.get("url"),
                     block.get("url"),
-                    f"tabtin://resource/file/{file_id}" if file_id else None,
+                    f"muse://resource/file/{file_id}" if file_id else None,
                 ):
-                    if isinstance(candidate, str) and candidate.startswith("tabtin://resource/"):
+                    if isinstance(candidate, str) and candidate.startswith("muse://resource/"):
                         resource_url = candidate
                         break
                 filename = (
@@ -865,7 +865,7 @@ def _extract_message_attachments(blocks, content: Optional[str] = None) -> list[
             if kind == "resource_ref" or artifact_kind == "platform_resource":
                 href = None
                 for candidate in (block.get("url"), payload.get("url")):
-                    if isinstance(candidate, str) and candidate.startswith("tabtin://"):
+                    if isinstance(candidate, str) and candidate.startswith("muse://"):
                         href = candidate
                         break
                 resource_type = (
@@ -896,7 +896,7 @@ def _extract_message_attachments(blocks, content: Optional[str] = None) -> list[
 
     # 正文资源链接（本会话常文档创建成功后只写 markdown，无独立 rich 块）
     text = _collect_text_for_attachments(blocks, content)
-    if "tabtin://resource/" in text:
+    if "muse://resource/" in text:
         cleaned = _strip_code_segments(text)
         label_by_url: dict[str, str] = {}
         for match in _MD_RESOURCE_LINK_RE.finditer(cleaned):

@@ -1,5 +1,5 @@
 {
-  "name": "@tabtin/resource-router",
+  "name": "@muse/resource-router",
   "version": "0.1.0",
   "description": "Muse Agent 产物指针的双轨解析 + ResourceRouter 薄包装层 + manifest opens 注册表 + 埋点事件契约。所有「在 Space 内打开」最终落点的 SSOT。",
   "type": "module",

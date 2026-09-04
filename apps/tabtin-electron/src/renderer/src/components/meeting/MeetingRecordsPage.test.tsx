@@ -110,8 +110,8 @@ function createMeetingArchive(
     audioUrls: audioDeleted
       ? {}
       : {
-          local: 'tabtin-file:///local.webm',
-          remote: 'tabtin-file:///remote.webm',
+          local: 'muse-file:///local.webm',
+          remote: 'muse-file:///remote.webm',
         },
     transcript: [
       {
@@ -156,7 +156,7 @@ describe('MeetingRecordsPage', () => {
   });
 
   it('redirects setup to an existing recording before showing the form', async () => {
-    const previousTabtin = window.tabtin;
+    const previousTabtin = window.muse;
     const activeSessionId = '11111111-1111-4111-8111-111111111111';
     const recordingStatus = {
       active: true,
@@ -405,7 +405,7 @@ describe('MeetingRecordsPage', () => {
   });
 
   it('wires both deletion paths to the real archive scope and returns after full deletion', async () => {
-    const previousTabtin = window.tabtin;
+    const previousTabtin = window.muse;
     const previousUser = useAuthStore.getState().user;
     const previousOrganization =
       useOrganizationStore.getState().selectedOrganization;
@@ -579,8 +579,8 @@ describe('MeetingRecordsPage', () => {
         },
       } as MeetingLocalArchive['manifest'],
       audioUrls: {
-        local: 'tabtin-file:///local.webm',
-        remote: 'tabtin-file:///remote.webm',
+        local: 'muse-file:///local.webm',
+        remote: 'muse-file:///remote.webm',
       },
       transcript: [
         {

@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useShallow } from 'zustand/react/shallow'
-import type { ChatMessage } from '@tabtin/chat-client'
+import type { ChatMessage } from '@muse/chat-client'
 import type { ContentBlockEntry } from '@stores/useChatRuntimeStore'
 import { shouldHidePushNotificationAtTopLevel } from './timelineMessageVisibility'
 import {
@@ -136,7 +136,7 @@ export function useMessageBubbleOrchestration(
   const hasHeartbeat = !!heartbeatInfo
   useEffect(() => {
     if (!isStreaming || !hasHeartbeat) return
-    // eslint-disable-next-line tabtin/prefer-scoped-activity-effects -- 气泡级停滞提示只在当前消息组件挂载且流式有心跳时滴答，卸载/状态变化会清理。
+    // eslint-disable-next-line muse/prefer-scoped-activity-effects -- 气泡级停滞提示只在当前消息组件挂载且流式有心跳时滴答，卸载/状态变化会清理。
     const timer = setInterval(() => setStalledTick((n) => n + 1), 5_000)
     return () => clearInterval(timer)
   }, [isStreaming, hasHeartbeat])

@@ -74,7 +74,7 @@ export const MeetingRecordsSidebar: React.FC = () => {
   );
 
   React.useEffect(() => {
-    const bridge = window.tabtin?.meetingRecording;
+    const bridge = window.muse?.meetingRecording;
     if (!bridge || !organizationId || !userId) return;
     let cancelled = false;
     void bridge

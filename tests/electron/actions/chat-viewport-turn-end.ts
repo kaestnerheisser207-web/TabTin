@@ -309,8 +309,8 @@ async function runAuthDjango(
       timeoutMs: 60_000,
       env: {
         ...process.env,
-        TABTIN_E2E_MODE: "auth",
-        TABTIN_E2E_RUN_ID: prepared.runId,
+        MUSE_E2E_MODE: "auth",
+        MUSE_E2E_RUN_ID: prepared.runId,
       },
     },
   );
@@ -631,11 +631,11 @@ function requireProbeAndStartExpression(prepared: ChatViewportTurnEndPreparation
   return `
 (() => {
   const prepared = ${JSON.stringify({ sessionId: prepared.sessionId })};
-  const probe = window.__TABTIN_CHAT_VIEWPORT_PROBE__;
+  const probe = window.__MUSE_CHAT_VIEWPORT_PROBE__;
   if (!probe || typeof probe !== 'object') {
     return JSON.stringify({
       ok: false,
-      reason: 'window.__TABTIN_CHAT_VIEWPORT_PROBE__ is missing (Phase 0 probe not bootstrapped yet)',
+      reason: 'window.__MUSE_CHAT_VIEWPORT_PROBE__ is missing (Phase 0 probe not bootstrapped yet)',
     });
   }
   const required = ['start', 'stop', 'reset', 'sampleNow', 'snapshot'];
@@ -661,11 +661,11 @@ function requireProbeAndStartExpression(prepared: ChatViewportTurnEndPreparation
 function stopProbeExpression(): string {
   return `
 (() => {
-  const probe = window.__TABTIN_CHAT_VIEWPORT_PROBE__;
+  const probe = window.__MUSE_CHAT_VIEWPORT_PROBE__;
   if (!probe || typeof probe.stop !== 'function' || typeof probe.snapshot !== 'function') {
     return JSON.stringify({
       ok: false,
-      reason: 'window.__TABTIN_CHAT_VIEWPORT_PROBE__ unavailable at stop()',
+      reason: 'window.__MUSE_CHAT_VIEWPORT_PROBE__ unavailable at stop()',
       frames: [],
       sampleErrorCount: 0,
     });
@@ -1060,7 +1060,7 @@ export async function runChatViewportTurnEndStability(
     );
     if (!probeStart.ok) {
       throw new Error(
-        `chat.viewport-turn-end-stability requires window.__TABTIN_CHAT_VIEWPORT_PROBE__: ${JSON.stringify(probeStart)}`,
+        `chat.viewport-turn-end-stability requires window.__MUSE_CHAT_VIEWPORT_PROBE__: ${JSON.stringify(probeStart)}`,
       );
     }
     probeStarted = true;

@@ -5,9 +5,9 @@
  */
 
 import type { WebContents, WebContentsView, Rectangle } from 'electron';
-import type { CDPConnectionStrategy } from '@tabtin/action-tools/types';
-import type { AntiDetectConfig } from '@tabtin/anti-detect';
-import type { SessionMode } from '@tabtin/crawl-contracts';
+import type { CDPConnectionStrategy } from '@muse/action-tools/types';
+import type { AntiDetectConfig } from '@muse/anti-detect';
+import type { SessionMode } from '@muse/crawl-contracts';
 
 /**
  * View 使用场景（预设配置）
@@ -29,7 +29,7 @@ export type ViewDisplayMode =
 
 /**
  * CDP 连接策略
- * 🔥 从 @tabtin/action-tools 导入，避免重复定义
+ * 🔥 从 @muse/action-tools 导入，避免重复定义
  * - ephemeral: 短暂模式（每次操作后立即断开）
  * - keep-alive: 保活模式（60秒无活动自动断开）⭐ 默认
  * - task-bound: 任务绑定（任务结束自动断开）⭐⭐⭐ 后台任务专用
@@ -128,7 +128,7 @@ export interface ViewFactoryConfig {
   /**
    * 反检测配置（UA/代理/指纹/会话）
    * 🔥 优先级最高：会覆盖 userAgent、proxy 等单独配置
-   * 🎯 使用 @tabtin/anti-detect 的 AntiDetectManager 统一管理
+   * 🎯 使用 @muse/anti-detect 的 AntiDetectManager 统一管理
    *
    * @example
    * ```typescript

@@ -20,7 +20,7 @@ func adaptStorageBatchDelete(ctx *cmdutil.RunContext, method, path string, body 
 		orgID = ctx.OrganizationID
 	}
 	if orgID == "" {
-		return "", "", nil, fmt.Errorf("缺少 organization_id。请先 muse org use <id> 或设置 TABTIN_ORGANIZATION_ID")
+		return "", "", nil, fmt.Errorf("缺少 organization_id。请先 muse org use <id> 或设置 MUSE_ORGANIZATION_ID")
 	}
 	remoteBody := map[string]any{}
 	if v, ok := body["file_ids"]; ok {

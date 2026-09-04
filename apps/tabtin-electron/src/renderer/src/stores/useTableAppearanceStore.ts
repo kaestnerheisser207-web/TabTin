@@ -2,7 +2,7 @@
 
 import { create } from 'zustand'
 import { createJSONStorage, persist } from 'zustand/middleware'
-import { withPersistSafety } from '@tabtin/shared'
+import { withPersistSafety } from '@muse/shared'
 import { PERSIST_KEYS, LEGACY_KEY_MAP } from './persist-key-registry'
 import { registerResetAction } from './sessionResetRegistry'
 

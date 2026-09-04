@@ -1,7 +1,7 @@
 /**
  * User-Context Wrapper —— 自动加料统一壳协议（引擎消息形态 SSoT）。
  *
- *  Stage 2c：自 `@tabtin/agent-prompt` 迁入；产品文案仍由宿主拼 body，
+ *  Stage 2c：自 `@muse/agent-prompt` 迁入；产品文案仍由宿主拼 body，
  * 本模块只负责 `<context type>` 框的渲染 / 解析。
  *
  * **背景（阶段 6.4 + 6.5 议题 2）**：

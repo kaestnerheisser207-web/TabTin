@@ -21,7 +21,7 @@ vi.mock('electron', () => ({
 vi.mock('../auth', () => ({ TokenManager: { getAccessToken: vi.fn() } }))
 vi.mock('../utils/guarded-handle', () => ({ guardedHandle: vi.fn() }))
 vi.mock('../config/api', () => ({ API_BASE_URL: 'http://e2e.invalid/api' }))
-vi.mock('@tabtin/config', () => ({ joinApiPath: (a: string, b: string) => a + b }))
+vi.mock('@muse/config', () => ({ joinApiPath: (a: string, b: string) => a + b }))
 vi.mock('../window-manager', () => ({ getMainWindow: () => null }))
 vi.mock('./autofill-detector', () => ({
   detectLoginForm: vi.fn().mockResolvedValue(null),

@@ -14,7 +14,7 @@ import { describe, expect, it } from 'vitest';
 import * as fs from 'fs';
 import * as path from 'path';
 import { checkDaemonPathAccess } from '../src/application/security/path-access.js';
-import type { WorkspaceSnapshot } from '@tabtin/security-policy';
+import type { WorkspaceSnapshot } from '@muse/security-policy';
 
 const MCP_SRC = fs.readFileSync(
   path.resolve(__dirname, '../src/application/mcp/mcp-tool-application.ts'),

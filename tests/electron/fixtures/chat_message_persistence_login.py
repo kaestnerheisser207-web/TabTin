@@ -105,7 +105,7 @@ def ensure_run_space(user, organization, run_id: str) -> tuple[Space, bool, int]
 
 def main() -> None:
     User = get_user_model()
-    run_id = optional_env("TABTIN_E2E_RUN_ID", "manual")
+    run_id = optional_env("MUSE_E2E_RUN_ID", "manual")
     email = "electron-chat-e2e@example.com"
     password = "E2eChat!12345"
     user, created = User.objects.get_or_create(

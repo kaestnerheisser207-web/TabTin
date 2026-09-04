@@ -43,7 +43,7 @@ import {
   buildInitialMessages,
   buildUserMessageWithAttachments,
   type HistorySourceMessage,
-} from '@tabtin/agent-runtime';
+} from '@muse/agent-runtime';
 import { buildContextHook } from '../src/hooks/index.js';
 import { createAppMetaFormatter } from '../src/delivery/app-meta-formatter.js';
 import {
@@ -52,7 +52,7 @@ import {
   hasInternalMarker,
   type Message,
   type EngineState,
-} from '@tabtin/agent-runtime/engine';
+} from '@muse/agent-runtime/engine';
 
 // ── Helpers ─────────────────────────────────────────────────────────
 

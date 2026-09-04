@@ -13,7 +13,7 @@ import rehypeSanitize from 'rehype-sanitize'
 import { sanitizeSchema, rehypeSanitizeCss } from '@/lib/rehypeSanitizeSchema'
 import { handleResourceLinkClick } from '@/services/openResourceLink'
 import { cn } from '@utils/cn'
-import { ScrollArea } from '@tabtin/smartsheet-ui'
+import { ScrollArea } from '@muse/smartsheet-ui'
 import type { Components } from 'react-markdown'
 
 interface MarkdownViewerProps {
@@ -211,7 +211,7 @@ const resolveImageSrc = (src: string | undefined, dirPath: string | undefined): 
     .split('/')
     .map(seg => (seg ? encodeURIComponent(seg) : ''))
     .join('/')
-  return `tabtin-file://${encoded}`
+  return `muse-file://${encoded}`
 }
 
 /* ---------- MarkdownViewer 主组件 ---------- */

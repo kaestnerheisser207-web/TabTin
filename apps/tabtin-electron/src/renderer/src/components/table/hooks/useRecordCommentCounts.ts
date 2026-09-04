@@ -3,7 +3,7 @@ import {
   RecordCommentApiService,
   type RecordCommentCountsResponse,
   type RecordCommentStatusFilter,
-} from '@tabtin/table-core'
+} from '@muse/table-core'
 
 const COMMENT_COUNTS_BATCH_SIZE = 100
 

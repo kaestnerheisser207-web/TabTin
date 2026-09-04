@@ -15,7 +15,7 @@ import { createRunTempPptxParse } from '../src/platform/content/document/tempPpt
 import {
   FILE_PIPELINE_ERROR_KINDS,
   FilePipelineErrorCode,
-} from '@tabtin/local-docparse';
+} from '@muse/local-docparse';
 
 const PPTX_MIME =
   'application/vnd.openxmlformats-officedocument.presentationml.presentation';

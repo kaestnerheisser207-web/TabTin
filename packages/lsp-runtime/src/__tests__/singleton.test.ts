@@ -59,13 +59,13 @@ function makeFailingLoader(): LspServerConfigLoader {
 describe('singleton manager', () => {
   beforeEach(() => {
     _resetLspManagerForTesting();
-    delete process.env.TABTIN_DISABLE_LSP;
+    delete process.env.MUSE_DISABLE_LSP;
   });
 
   afterEach(async () => {
     await shutdownLspServerManager();
     _resetLspManagerForTesting();
-    delete process.env.TABTIN_DISABLE_LSP;
+    delete process.env.MUSE_DISABLE_LSP;
   });
 
   it('初始状态：not-started + getLspServerManager 返回 undefined', () => {
@@ -111,8 +111,8 @@ describe('singleton manager', () => {
     expect(m1).toBe(m2);
   });
 
-  it('disabled via env (TABTIN_DISABLE_LSP=1) → 跳过初始化', () => {
-    process.env.TABTIN_DISABLE_LSP = '1';
+  it('disabled via env (MUSE_DISABLE_LSP=1) → 跳过初始化', () => {
+    process.env.MUSE_DISABLE_LSP = '1';
     initializeLspServerManager(makeLoader());
     expect(getInitializationStatus().status).toBe('not-started');
     expect(getLspServerManager()).toBeUndefined();

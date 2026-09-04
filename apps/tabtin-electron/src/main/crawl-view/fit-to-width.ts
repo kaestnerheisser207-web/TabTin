@@ -40,7 +40,7 @@ const manualZoomOverride = new Set<string>()
 const debounceTimers = new Map<string, ReturnType<typeof setTimeout>>()
 const rememberedContentWidths = new Map<string, { url: string; width: number }>()
 
-const shouldLogFit = process.env.TABTIN_DEBUG_CRAWL_BOUNDS === '1' || process.env.TABTIN_DEBUG_CRAWLVIEW_VERBOSE === '1'
+const shouldLogFit = process.env.MUSE_DEBUG_CRAWL_BOUNDS === '1' || process.env.MUSE_DEBUG_CRAWLVIEW_VERBOSE === '1'
 
 export { computeFitZoomFactor } from './fit-to-width-calc'
 

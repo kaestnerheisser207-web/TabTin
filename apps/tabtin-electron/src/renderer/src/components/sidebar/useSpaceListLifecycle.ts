@@ -5,7 +5,7 @@ import { useIMStore } from '@stores/useIMStore';
 import { useSpaceListStore } from '@stores/useSpaceListStore';
 import { useSpaceStore } from '@stores/useSpaceStore';
 import { useOrganizationStore } from '@stores/useOrganizationStore';
-import { AgentApiService, getRuntime } from '@tabtin/app-shell';
+import { AgentApiService, getRuntime } from '@muse/app-shell';
 import { getChatClient } from '@/services/chatApi';
 import { recoverFromInvalidOrganizationAccess } from '@/services/membershipEventHandler';
 import {

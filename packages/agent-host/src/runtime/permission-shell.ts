@@ -15,7 +15,7 @@
 import type {
   EnginePermissionHandler,
   StreamEvent,
-} from '@tabtin/agent-runtime/engine'
+} from '@muse/agent-runtime/engine'
 import {
   createApprovalMemoStore,
   createApprovalMemoCommitClient,
@@ -24,7 +24,7 @@ import {
   type InMemoryApprovalMemoStore,
   type LocalPermissionHandlerOptions,
   type UserInteractiveChannel,
-} from '@tabtin/agent-runtime'
+} from '@muse/agent-runtime'
 import { buildMemoPatternKey } from '../policy/build-memo-pattern-key.js'
 
 export interface PermissionShellLogger {

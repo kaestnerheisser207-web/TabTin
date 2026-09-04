@@ -19,7 +19,7 @@ import { ChatSessionHistoryMenu } from './ChatSessionHistoryMenu'
 import { CheckpointBrowseTrigger } from '@components/checkpoint/CheckpointBrowseTrigger'
 import { useShellTopBarInset } from '@components/layout/shellTopBarInset'
 import { CHAT_PAGE_GUTTER } from '../registry/chatDesignTokens'
-import type { ChatSession } from '@tabtin/chat-client'
+import type { ChatSession } from '@muse/chat-client'
 import type { ExternalArchiveDeleteTarget } from './ExternalArchiveDeleteDialog'
 
 interface ChatSessionBarProps {

@@ -38,10 +38,10 @@ describe('storage-paths (2026-05-04 platform-data layout)', () => {
 
   afterEach(() => {
     setDaemonHomeOverride(undefined)
-    delete process.env.TABTIN_PLATFORM_BASE_ROOT
-    delete process.env.TABTIN_COMMAND_SANDBOX_ROOT
-    delete process.env.TABTIN_DATA_ROOT
-    delete process.env.TABTIN_RUNTIME_ROOT
+    delete process.env.MUSE_PLATFORM_BASE_ROOT
+    delete process.env.MUSE_COMMAND_SANDBOX_ROOT
+    delete process.env.MUSE_DATA_ROOT
+    delete process.env.MUSE_RUNTIME_ROOT
   })
 
   // ── getHomeTabtinPath ────────────────────────────────────────
@@ -58,9 +58,9 @@ describe('storage-paths (2026-05-04 platform-data layout)', () => {
     })
 
     it('respects the profile-scoped runtime root', () => {
-      process.env.TABTIN_RUNTIME_ROOT = '/tmp/tabtin-preprod-runtime'
+      process.env.MUSE_RUNTIME_ROOT = '/tmp/muse-preprod-runtime'
       expect(getHomeTabtinPath('server.json')).toBe(
-        path.join(path.resolve('/tmp/tabtin-preprod-runtime'), 'server.json'),
+        path.join(path.resolve('/tmp/muse-preprod-runtime'), 'server.json'),
       )
     })
   })
@@ -93,8 +93,8 @@ describe('storage-paths (2026-05-04 platform-data layout)', () => {
       }
     })
 
-    it('respects TABTIN_PLATFORM_BASE_ROOT env', () => {
-      process.env.TABTIN_PLATFORM_BASE_ROOT = '/tmp/test-base'
+    it('respects MUSE_PLATFORM_BASE_ROOT env', () => {
+      process.env.MUSE_PLATFORM_BASE_ROOT = '/tmp/test-base'
       expect(getPlatformBaseRoot()).toBe(path.resolve('/tmp/test-base'))
     })
   })
@@ -103,14 +103,14 @@ describe('storage-paths (2026-05-04 platform-data layout)', () => {
 
   describe('getSpacesRoot', () => {
     it('returns {platformBase}/organizations', () => {
-      process.env.TABTIN_PLATFORM_BASE_ROOT = '/tmp/test-base'
+      process.env.MUSE_PLATFORM_BASE_ROOT = '/tmp/test-base'
       expect(getSpacesRoot()).toBe(path.join(path.resolve('/tmp/test-base'), 'organizations'))
     })
   })
 
   describe('getPlatformDataRoot', () => {
     it('returns {platformBase}/platform-data/organizations', () => {
-      process.env.TABTIN_PLATFORM_BASE_ROOT = '/tmp/test-base'
+      process.env.MUSE_PLATFORM_BASE_ROOT = '/tmp/test-base'
       expect(getPlatformDataRoot()).toBe(
         path.join(path.resolve('/tmp/test-base'), 'platform-data', 'organizations'),
       )
@@ -144,8 +144,8 @@ describe('storage-paths (2026-05-04 platform-data layout)', () => {
       )
     })
 
-    it('respects TABTIN_COMMAND_SANDBOX_ROOT env', () => {
-      process.env.TABTIN_COMMAND_SANDBOX_ROOT = '/tmp/cmd-sandbox'
+    it('respects MUSE_COMMAND_SANDBOX_ROOT env', () => {
+      process.env.MUSE_COMMAND_SANDBOX_ROOT = '/tmp/cmd-sandbox'
       expect(getCommandSandboxRoot()).toBe(path.resolve('/tmp/cmd-sandbox'))
     })
   })
@@ -212,8 +212,8 @@ describe('storage-paths (2026-05-04 platform-data layout)', () => {
       expect(getDataRoot()).toBe(getPlatformBaseRoot())
     })
 
-    it('respects TABTIN_DATA_ROOT env', () => {
-      process.env.TABTIN_DATA_ROOT = '/tmp/data-root'
+    it('respects MUSE_DATA_ROOT env', () => {
+      process.env.MUSE_DATA_ROOT = '/tmp/data-root'
       expect(getDataRoot()).toBe(path.resolve('/tmp/data-root'))
     })
   })

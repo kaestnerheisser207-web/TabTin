@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { PromptCancelPayloadSchema } from '@tabtin/agent-wire'
+import { PromptCancelPayloadSchema } from '@muse/agent-wire'
 
 describe('PromptCancelPayloadSchema', () => {
   it('accepts a session-only stop', () => {

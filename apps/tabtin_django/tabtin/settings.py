@@ -20,7 +20,7 @@ PROJECT_ROOT = BASE_DIR.parent.parent
 # 开发环境变量：仓库根 .env 为单文件 SSoT（Electron / AdminDash / Django 共用）。
 # 个人本地覆盖用根 .env.local（gitignore，不进 git）；不再使用 apps/tabtin_django/.env。
 _PROCESS_COMMUNITY_EDITION = (
-    os.environ.get('TABTIN_EDITION', '').strip().lower() == 'community'
+    os.environ.get('MUSE_EDITION', '').strip().lower() == 'community'
 )
 if not _PROCESS_COMMUNITY_EDITION:
     load_dotenv(PROJECT_ROOT / '.env')
@@ -28,9 +28,9 @@ if not _PROCESS_COMMUNITY_EDITION:
     if _root_env_local.is_file():
         load_dotenv(_root_env_local, override=True)
 
-# 命名 env 叠加（opt-in）：``TABTIN_ENV=<name>`` 时再叠加 ``.env.<name>``（最高优先级）。
+# 命名 env 叠加（opt-in）：``MUSE_ENV=<name>`` 时再叠加 ``.env.<name>``（最高优先级）。
 # 优先根目录，遗留文件可在 apps/tabtin_django/ 下（如 .env.dual）。
-_env_name = os.environ.get('TABTIN_ENV', '').strip()
+_env_name = os.environ.get('MUSE_ENV', '').strip()
 if _env_name and not _PROCESS_COMMUNITY_EDITION:
     for _named_env in (PROJECT_ROOT / f'.env.{_env_name}', BASE_DIR / f'.env.{_env_name}'):
         if _named_env.is_file():
@@ -38,12 +38,12 @@ if _env_name and not _PROCESS_COMMUNITY_EDITION:
             break
 
 try:
-    TABTIN_EDITION_CONFIGURATION = resolve_edition_configuration(os.environ)
+    MUSE_EDITION_CONFIGURATION = resolve_edition_configuration(os.environ)
 except ValueError as exc:
     raise ImproperlyConfigured(str(exc)) from exc
-TABTIN_EDITION = TABTIN_EDITION_CONFIGURATION.edition.value
-TABTIN_STARTUP_POLICY = resolve_startup_policy(os.environ)
-IS_COMMUNITY_EDITION = TABTIN_EDITION_CONFIGURATION.edition is TabTinEdition.COMMUNITY
+MUSE_EDITION = MUSE_EDITION_CONFIGURATION.edition.value
+MUSE_STARTUP_POLICY = resolve_startup_policy(os.environ)
+IS_COMMUNITY_EDITION = MUSE_EDITION_CONFIGURATION.edition is TabTinEdition.COMMUNITY
 
 
 def _bounded_text_env_or_file(key: str, default: str, *, max_bytes: int) -> str:
@@ -76,35 +76,35 @@ def _bounded_text_env_or_file(key: str, default: str, *, max_bytes: int) -> str:
 # Cloud Agent v1. Runtime images must be immutable digests in deployed
 # environments; an empty value disables provisioning instead of floating to
 # an unpinned image.
-TABTIN_CLOUD_RUNTIME_IMAGE = os.getenv('TABTIN_CLOUD_RUNTIME_IMAGE', '').strip()
-TABTIN_CLOUD_WORKER_PROTOCOL_VERSION = os.getenv(
-    'TABTIN_CLOUD_WORKER_PROTOCOL_VERSION',
+MUSE_CLOUD_RUNTIME_IMAGE = os.getenv('MUSE_CLOUD_RUNTIME_IMAGE', '').strip()
+MUSE_CLOUD_WORKER_PROTOCOL_VERSION = os.getenv(
+    'MUSE_CLOUD_WORKER_PROTOCOL_VERSION',
     '1',
 ).strip()
-TABTIN_CLOUD_MAX_ACTIVE_WORKSPACES_PER_USER = int(
-    os.getenv('TABTIN_CLOUD_MAX_ACTIVE_WORKSPACES_PER_USER', '1')
+MUSE_CLOUD_MAX_ACTIVE_WORKSPACES_PER_USER = int(
+    os.getenv('MUSE_CLOUD_MAX_ACTIVE_WORKSPACES_PER_USER', '1')
 )
-TABTIN_CLOUD_DISABLED_RETENTION_DAYS = int(
-    os.getenv('TABTIN_CLOUD_DISABLED_RETENTION_DAYS', '30')
+MUSE_CLOUD_DISABLED_RETENTION_DAYS = int(
+    os.getenv('MUSE_CLOUD_DISABLED_RETENTION_DAYS', '30')
 )
-TABTIN_CLOUD_RUNTIME_STORAGE_GB = int(
-    os.getenv('TABTIN_CLOUD_RUNTIME_STORAGE_GB', '2')
+MUSE_CLOUD_RUNTIME_STORAGE_GB = int(
+    os.getenv('MUSE_CLOUD_RUNTIME_STORAGE_GB', '2')
 )
-if TABTIN_CLOUD_RUNTIME_STORAGE_GB < 1:
-    raise ImproperlyConfigured('TABTIN_CLOUD_RUNTIME_STORAGE_GB 必须大于 0')
-TABTIN_CLOUD_WORKER_EDITION = os.getenv(
-    'TABTIN_CLOUD_WORKER_EDITION',
-    TABTIN_EDITION,
+if MUSE_CLOUD_RUNTIME_STORAGE_GB < 1:
+    raise ImproperlyConfigured('MUSE_CLOUD_RUNTIME_STORAGE_GB 必须大于 0')
+MUSE_CLOUD_WORKER_EDITION = os.getenv(
+    'MUSE_CLOUD_WORKER_EDITION',
+    MUSE_EDITION,
 ).strip().lower()
-if TABTIN_CLOUD_WORKER_EDITION not in {'saas', 'community'}:
+if MUSE_CLOUD_WORKER_EDITION not in {'saas', 'community'}:
     raise ImproperlyConfigured(
-        'TABTIN_CLOUD_WORKER_EDITION 必须是 saas 或 community'
+        'MUSE_CLOUD_WORKER_EDITION 必须是 saas 或 community'
     )
 # Secret JSON map: {"node-key":{"endpoint":"https://...","token":"..."}}.
 # Endpoint and token are bound in one server-owned config so a database-only
 # endpoint mutation can never redirect Worker credentials.
-TABTIN_CLOUD_WORKERS_JSON = _bounded_text_env_or_file(
-    'TABTIN_CLOUD_WORKERS_JSON',
+MUSE_CLOUD_WORKERS_JSON = _bounded_text_env_or_file(
+    'MUSE_CLOUD_WORKERS_JSON',
     '{}',
     max_bytes=64 * 1024,
 )
@@ -161,16 +161,16 @@ def _env_bool(key: str, default: bool = False) -> bool:
 DEBUG = os.getenv('DEBUG', 'False').lower() == 'true'
 
 # Registration invite gate. Default off for SaaS/Web/AdminDash self-service signup;
-# private/internal deployments can opt in with TABTIN_REQUIRE_INVITE_CODE=1.
-TABTIN_REQUIRE_INVITE_CODE = _env_bool('TABTIN_REQUIRE_INVITE_CODE', False)
-REQUIRE_INVITE_CODE = TABTIN_REQUIRE_INVITE_CODE
+# private/internal deployments can opt in with MUSE_REQUIRE_INVITE_CODE=1.
+MUSE_REQUIRE_INVITE_CODE = _env_bool('MUSE_REQUIRE_INVITE_CODE', False)
+REQUIRE_INVITE_CODE = MUSE_REQUIRE_INVITE_CODE
 
 # CLI OAuth Device Authorization Flow：用户确认授权的前端页面地址。
 # 默认指向本地 Electron/Web dev 端口，生产环境按部署域名覆盖。
-TABTIN_DEVICE_VERIFY_URL = os.getenv('TABTIN_DEVICE_VERIFY_URL', 'http://localhost:5175/device')
-TABTIN_RELEASE_VERSION = os.getenv('TABTIN_RELEASE_VERSION', os.getenv('TABTIN_IMAGE_TAG', '')).strip()
-TABTIN_SERVER_VERSION = os.getenv('TABTIN_SERVER_VERSION', '').strip()
-TABTIN_GIT_SHA = os.getenv('TABTIN_SOURCE_SHA', os.getenv('TABTIN_GIT_SHA', '')).strip()
+MUSE_DEVICE_VERIFY_URL = os.getenv('MUSE_DEVICE_VERIFY_URL', 'http://localhost:5175/device')
+MUSE_RELEASE_VERSION = os.getenv('MUSE_RELEASE_VERSION', os.getenv('MUSE_IMAGE_TAG', '')).strip()
+MUSE_SERVER_VERSION = os.getenv('MUSE_SERVER_VERSION', '').strip()
+MUSE_GIT_SHA = os.getenv('MUSE_SOURCE_SHA', os.getenv('MUSE_GIT_SHA', '')).strip()
 
 
 def _env_bool(key: str, default: bool = False) -> bool:
@@ -529,20 +529,20 @@ def _legacy_mysql_database_config() -> dict:
 # Database
 # 单库目标态：`default` 是唯一业务关系库（PostgreSQL）。`postgresql` alias
 # 镜像 `default` 仅用于过渡期兼容历史 `.using("postgresql")` 调用。
-TABTIN_DATABASE_MODE = os.getenv('TABTIN_DATABASE_MODE', 'single_pg').lower()
+MUSE_DATABASE_MODE = os.getenv('MUSE_DATABASE_MODE', 'single_pg').lower()
 _SINGLE_PG_DATABASE_MODES = {
     'single_pg', 'single-postgres', 'single_postgres', 'postgres', 'postgresql',
 }
 _DUAL_DATABASE_MODES = {'dual', 'dual_db', 'mysql_pg', 'mysql-postgres'}
-if TABTIN_DATABASE_MODE not in _SINGLE_PG_DATABASE_MODES | _DUAL_DATABASE_MODES:
+if MUSE_DATABASE_MODE not in _SINGLE_PG_DATABASE_MODES | _DUAL_DATABASE_MODES:
     raise ImproperlyConfigured(
-        "TABTIN_DATABASE_MODE must be one of "
+        "MUSE_DATABASE_MODE must be one of "
         f"{sorted(_SINGLE_PG_DATABASE_MODES | _DUAL_DATABASE_MODES)}, "
-        f"got {TABTIN_DATABASE_MODE!r}"
+        f"got {MUSE_DATABASE_MODE!r}"
     )
-TABTIN_SINGLE_DATABASE_MODE = TABTIN_DATABASE_MODE in _SINGLE_PG_DATABASE_MODES
+MUSE_SINGLE_DATABASE_MODE = MUSE_DATABASE_MODE in _SINGLE_PG_DATABASE_MODES
 
-if TABTIN_SINGLE_DATABASE_MODE:
+if MUSE_SINGLE_DATABASE_MODE:
     _PG_DATABASE = _postgres_database_config()
     DATABASES = {
         'default': _PG_DATABASE,
@@ -551,8 +551,8 @@ if TABTIN_SINGLE_DATABASE_MODE:
             'TEST': {'MIRROR': 'default'},
         },
     }
-    TABTIN_MIGRATION_DATABASE_ALIASES = ['default']
-    if os.getenv('TABTIN_ENABLE_LEGACY_MYSQL', 'False').lower() == 'true':
+    MUSE_MIGRATION_DATABASE_ALIASES = ['default']
+    if os.getenv('MUSE_ENABLE_LEGACY_MYSQL', 'False').lower() == 'true':
         DATABASES['legacy_mysql'] = _legacy_mysql_database_config()
 else:
     DATABASES = {
@@ -560,7 +560,7 @@ else:
         'default': _legacy_mysql_database_config(),
         'postgresql': _postgres_database_config(),
     }
-    TABTIN_MIGRATION_DATABASE_ALIASES = ['default', 'postgresql']
+    MUSE_MIGRATION_DATABASE_ALIASES = ['default', 'postgresql']
 
 # Django tests default to the local PostgreSQL test database. SQLite is now an
 # explicit opt-in compatibility path because production and dev both run on
@@ -570,14 +570,14 @@ if RUNNING_TESTS and os.getenv('USE_SQLITE_FOR_TESTS', '0') == '1':
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'test_default.sqlite3',
     }
-    if TABTIN_SINGLE_DATABASE_MODE:
+    if MUSE_SINGLE_DATABASE_MODE:
         DATABASES['postgresql'] = {
             'ENGINE': 'django.db.backends.sqlite3',
             'NAME': BASE_DIR / 'test_default.sqlite3',
             'TEST': {'MIRROR': 'default'},
         }
         DATABASES.pop('legacy_mysql', None)
-        TABTIN_MIGRATION_DATABASE_ALIASES = ['default']
+        MUSE_MIGRATION_DATABASE_ALIASES = ['default']
     else:
         DATABASES['postgresql'] = {
             'ENGINE': 'django.db.backends.sqlite3',
@@ -1184,13 +1184,13 @@ def _default_tracker_agent_queue() -> str:
         # macOS / 本地 Docker worker 同样会抢消费。Kubernetes 内 producer/worker
         # 继续共用 canonical queue，避免按 Pod 主机名分叉。
         should_isolate = (
-            os.getenv('TABTIN_INFRA_MODE', '').strip().lower() == 'remote'
+            os.getenv('MUSE_INFRA_MODE', '').strip().lower() == 'remote'
             and not os.getenv('KUBERNETES_SERVICE_HOST', '').strip()
         )
 
     if should_isolate:
         raw_suffix = (
-            os.getenv('TABTIN_QUEUE_SUFFIX')
+            os.getenv('MUSE_QUEUE_SUFFIX')
             or os.getenv('COMPUTERNAME')
             or os.getenv('HOSTNAME')
             or os.getenv('USERNAME')
@@ -1554,16 +1554,16 @@ LOCAL_OSS_ROOT = str(
 )
 # 面向 Electron / 移动端的统一公开入口。生产 local provider 必须配置成客户端
 # 实际可达的 LAN HTTP 地址或云端 HTTPS 域名，不能使用容器 DNS/内部端口。
-TABTIN_PUBLIC_BASE_URL = _edition_endpoint(
-    'TABTIN_PUBLIC_BASE_URL',
+MUSE_PUBLIC_BASE_URL = _edition_endpoint(
+    'MUSE_PUBLIC_BASE_URL',
     saas_default=os.getenv('SOURCEMAP_API_URL', 'http://127.0.0.1:6060'),
     community_default='http://127.0.0.1:6060',
 ).rstrip('/')
 LOCAL_OSS_PUBLIC_BASE_URL = (
-    f"{TABTIN_PUBLIC_BASE_URL}/api/services/oss/local-object"
+    f"{MUSE_PUBLIC_BASE_URL}/api/services/oss/local-object"
 )
 LOCAL_OSS_UPLOAD_BASE_URL = (
-    f"{TABTIN_PUBLIC_BASE_URL}/api/services/oss/local-upload"
+    f"{MUSE_PUBLIC_BASE_URL}/api/services/oss/local-upload"
 )
 
 ALIYUN_OSS_REGION = '' if IS_COMMUNITY_EDITION else os.getenv('ALIYUN_OSS_REGION', 'oss-cn-wuhan-lr')
@@ -2318,11 +2318,11 @@ if RUNNING_TESTS:
 # 发布期能力开关：Project / team_space
 # -------------------------------------------------------------------
 # release/0.1.0 先不对客开放多人协作 Project。本地 DEBUG / 单测默认打开；
-# 托管环境需显式 TABTIN_ENABLE_PROJECTS=true；
+# 托管环境需显式 MUSE_ENABLE_PROJECTS=true；
 # 正式环境保持关闭，除非单独灰度。
 # ===================================================================
-TABTIN_ENABLE_PROJECTS = os.environ.get(
-    'TABTIN_ENABLE_PROJECTS',
+MUSE_ENABLE_PROJECTS = os.environ.get(
+    'MUSE_ENABLE_PROJECTS',
     'true' if DEBUG or RUNNING_TESTS else 'false',
 ).strip().lower() in ('1', 'true', 'yes', 'on')
 

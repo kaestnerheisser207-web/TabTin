@@ -63,7 +63,7 @@ vi.mock('react-i18next', () => ({
   }),
 }))
 
-vi.mock('@tabtin/app-shell', () => ({
+vi.mock('@muse/app-shell', () => ({
   ZIndex: { global: 1 },
   cn: (...inputs: Array<string | false | null | undefined>) => inputs.filter(Boolean).join(' '),
   registerResetAction: () => () => {},
@@ -91,7 +91,7 @@ vi.mock('@/stores/useCrawlTabStore', () => ({
   ),
 }))
 
-vi.mock('@tabtin/smartsheet-ui', () => ({
+vi.mock('@muse/smartsheet-ui', () => ({
   EmptyState: ({ title, className }: { title?: string; className?: string }) => (
     <div className={className}>{title}</div>
   ),

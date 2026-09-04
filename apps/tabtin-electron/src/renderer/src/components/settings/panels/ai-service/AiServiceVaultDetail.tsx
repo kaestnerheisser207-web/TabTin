@@ -4,7 +4,7 @@
 
 import React, { useState } from 'react'
 import { CheckCircle2, CircleSlash, Eye, KeyRound, Loader2, Pencil, Trash2 } from 'lucide-react'
-import { Button, ConfirmDialog, toast } from '@tabtin/smartsheet-ui'
+import { Button, ConfirmDialog, toast } from '@muse/smartsheet-ui'
 import { useTranslation } from 'react-i18next'
 import { useQueryClient } from '@tanstack/react-query'
 import { apiClient } from '@/services/apiClient'

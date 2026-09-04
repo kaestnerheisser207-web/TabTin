@@ -39,7 +39,7 @@
 
 import { useCallback, useEffect, useMemo, useRef } from 'react'
 import { useQueryClient, type QueryClient } from '@tanstack/react-query'
-import { UserEvents } from '@tabtin/agent-wire'
+import { UserEvents } from '@muse/agent-wire'
 import { getChatClient } from '@/services/chatApi'
 import { useNotificationStore } from '@stores/useNotificationStore'
 import { getChatStoreCallbacks } from '@stores/chat/shared/storeAccessRegistry'
@@ -238,7 +238,7 @@ export function useNotificationEventStream({
       }
 
       // ：列表在 overlay 独立 QueryClient；主窗缓存更新后推 refresh，已开面板立刻重拉。
-      void window.tabtin?.overlay?.push?.({
+      void window.muse?.overlay?.push?.({
         type: 'notification-refresh',
         organizationId: isPersonalGlobal ? currentOrganizationId : itemOrganizationId,
       })
@@ -441,7 +441,7 @@ export function useNotificationEventStream({
       optimisticMarkAgentSessionTerminalRead(queryClient, organizationId, sessionId)
       invalidateNotificationUnreadCounts(queryClient, organizationId)
     }
-    // eslint-disable-next-line tabtin/prefer-scoped-activity-effects -- 用户级通知读态跨 Space 生效，跟随 App 全局通知 stream 生命周期。
+    // eslint-disable-next-line muse/prefer-scoped-activity-effects -- 用户级通知读态跨 Space 生效，跟随 App 全局通知 stream 生命周期。
     window.addEventListener(
       ACKNOWLEDGE_AGENT_SESSION_COMPLETED_EVENT,
       onAcknowledgeCompleted,
@@ -460,12 +460,12 @@ export function useNotificationEventStream({
       const organizationId = normalizeNotificationOrganizationId(detail?.organizationId)
       invalidateNotifications(queryClient)
       invalidateNotificationUnreadCounts(queryClient, organizationId)
-      void window.tabtin?.overlay?.push?.({
+      void window.muse?.overlay?.push?.({
         type: 'notification-refresh',
         organizationId,
       })
     }
-    // eslint-disable-next-line tabtin/prefer-scoped-activity-effects -- 充值消警后的未读刷新跨 Space，挂在通知 stream 生命周期。
+    // eslint-disable-next-line muse/prefer-scoped-activity-effects -- 充值消警后的未读刷新跨 Space，挂在通知 stream 生命周期。
     window.addEventListener(NOTIFICATION_REFRESH_EVENT, onNotificationRefresh)
     return () => window.removeEventListener(NOTIFICATION_REFRESH_EVENT, onNotificationRefresh)
   }, [isEffectivelyEnabled, queryClient])

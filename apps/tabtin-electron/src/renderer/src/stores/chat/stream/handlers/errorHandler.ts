@@ -8,7 +8,7 @@
  */
 
 import i18n from '@/i18n'
-import { AgentStreamEvents } from '@tabtin/ws-gateway-client'
+import { AgentStreamEvents } from '@muse/ws-gateway-client'
 import { createLogger } from '@/utils/logger'
 import type { AgentStreamMessage, HandlerContext } from './streamHandlerTypes'
 

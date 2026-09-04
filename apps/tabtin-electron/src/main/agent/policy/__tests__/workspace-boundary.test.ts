@@ -20,8 +20,8 @@ import {
   type WorkspacePathsChangedPayload,
   type AppendSessionApprovedPathPayload,
 } from '../workspace-boundary'
-import type { WorkspaceSnapshot, WorkspaceSources } from '@tabtin/security-policy'
-import { tabtinAgentTasksDir } from '@tabtin/terminal-core'
+import type { WorkspaceSnapshot, WorkspaceSources } from '@muse/security-policy'
+import { tabtinAgentTasksDir } from '@muse/terminal-core'
 
 // dogfood 314d7f23 修复：deriveAllowedPaths 自动追加 internal
 // agent-tasks 目录（让 `run_terminal_command` 写的 output_file 子 Agent 也能

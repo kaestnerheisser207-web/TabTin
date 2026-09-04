@@ -10,7 +10,7 @@
  * 5 类 url × 3 触发场景。
  *
  * 5 类 url：
- *   1. 自有格式 `tabtin://resource/<type>/<id>?hint=<app>`
+ *   1. 自有格式 `muse://resource/<type>/<id>?hint=<app>`
  *   2. https://...
  *   3. file:///...
  *   4. mailto:...
@@ -28,18 +28,18 @@ import {
   parseResourcePointer,
   ResourceRouter,
   ResourceRouterRegistry,
-} from '@tabtin/resource-router'
+} from '@muse/resource-router'
 
 // ─── 测试 fixtures ─────────────────────────────────────────────────
 
 const URLS = {
-  selfFormat: 'tabtin://resource/document/doc_xyz?hint=tabdoc&title=项目方案',
+  selfFormat: 'muse://resource/document/doc_xyz?hint=tabdoc&title=项目方案',
   https: 'https://example.com/x',
   file: 'file:///tmp/log.json',
   mailto: 'mailto:foo@bar.com?subject=hi',
-  // 裸路径在 markdown-resource-autolink 阶段升级为 tabtin://resource/file/<encoded>
+  // 裸路径在 markdown-resource-autolink 阶段升级为 muse://resource/file/<encoded>
   // 这里直接给升级后的形态，模拟 chat MarkdownRenderer 拿到 href 时的形态
-  bareFile: 'tabtin://resource/file/' + encodeURIComponent('/Users/developer/report.md'),
+  bareFile: 'muse://resource/file/' + encodeURIComponent('/Users/developer/report.md'),
 }
 
 const TRIGGERS = {

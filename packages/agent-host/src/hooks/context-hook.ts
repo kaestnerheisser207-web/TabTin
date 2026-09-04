@@ -2,9 +2,9 @@
  * Context Hook —— 每轮把 Tab/App context 注入 messages（贴当前 user turn 尾部）。
  *
  * **归属（ Phase 1）**：本 hook 原名 `buildContextInjectorHook`，住在
- * `@tabtin/agent-runtime` 的 `capability/injectors/context-injector.ts`。因它依赖
- * `@tabtin/agent-prompt`（产品内容包），随「引擎零业务依赖」重构迁到宿主
- * `@tabtin/agent-host/hooks`。行为与原实现逐字节一致——只换了归属与工厂名
+ * `@muse/agent-runtime` 的 `capability/injectors/context-injector.ts`。因它依赖
+ * `@muse/agent-prompt`（产品内容包），随「引擎零业务依赖」重构迁到宿主
+ * `@muse/agent-host/hooks`。行为与原实现逐字节一致——只换了归属与工厂名
  * （`buildContextInjectorHook` → `buildContextHook`）。
  *
  * **行为**：每轮 LLM 前从宿主拉取当前焦点 App 元数据（appType / appMeta /
@@ -19,14 +19,14 @@
  * relevant-recall hook）。
  */
 
-import { buildUserContextWrapper, formatAgentDatetime, findFirstUserContextWrapper } from '@tabtin/agent-prompt'
-import type { Message, EngineHooks } from '@tabtin/agent-runtime/engine'
+import { buildUserContextWrapper, formatAgentDatetime, findFirstUserContextWrapper } from '@muse/agent-prompt'
+import type { Message, EngineHooks } from '@muse/agent-runtime/engine'
 import {
   INTERNAL_MESSAGE_MARKERS,
   hasInternalMarker,
   findLastRealUserIndex,
   firstMessageText,
-} from '@tabtin/agent-runtime/engine'
+} from '@muse/agent-runtime/engine'
 import { upsertTaggedBlock } from './message-inject.js'
 
 // ─── Public Types ────────────────────────────────────────────────────
@@ -68,7 +68,7 @@ export interface AppContextTab {
  * 宿主焦点上下文。
  *
  * **Focus 核心字段**（`appType` / `appMeta` / `openTabs` / `spaceId` /
- * `userTimeZone` / `workspaceMode`）对齐 `@tabtin/contracts` 的
+ * `userTimeZone` / `workspaceMode`）对齐 `@muse/contracts` 的
  * `FocusSnapshot`——wire `app_context` 与 Django normalizer 共用该合同。
  * 下列 host-only 字段（scope / 当前模型等）不进 FocusSnapshot，由宿主自行附加。
  */
@@ -87,7 +87,7 @@ export interface AppContext {
    *
    * 用于把 `current_datetime` 按**用户设备时区**渲染，而不是 host（Daemon/Cloud
    * 可能在另一个时区）的本地时区或裸 UTC。缺省 → UTC（显式标注，安全降级）。
-   * 详见 `@tabtin/agent-prompt` 的 `formatAgentDatetime`。
+   * 详见 `@muse/agent-prompt` 的 `formatAgentDatetime`。
    */
   userTimeZone?: string | null
   /** 当前工作台模式，给 LLM 理解用户所在界面；不用于决定工具写入桶。 */

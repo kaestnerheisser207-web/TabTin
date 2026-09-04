@@ -9,7 +9,7 @@
 import type {
   TabDocAuthPort,
   TabDocImageUploadPort,
-} from '@tabtin/tabdoc-ui'
+} from '@muse/tabdoc-ui'
 import { authAdapter, STORAGE_KEYS } from '@/platform'
 import { getApiClient } from '@/services/api-client'
 import { refreshAccessToken } from '@/services/token-refresh'

@@ -1,5 +1,5 @@
 import { createContext, useContext } from 'react'
-import type { TabDocHostActions } from '@tabtin/app-host-sdk'
+import type { TabDocHostActions } from '@muse/app-host-sdk'
 
 const TabDocHostActionsContext = createContext<TabDocHostActions | null>(null)
 

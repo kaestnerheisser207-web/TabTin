@@ -1,5 +1,5 @@
 {
-  "name": "@tabtin/table-engine-canvas",
+  "name": "@muse/table-engine-canvas",
   "version": "0.1.0",
   "description": "Canvas renderer engine for Muse table",
   "type": "module",
@@ -55,9 +55,9 @@
   "license": "MIT",
   "dependencies": {
     "@floating-ui/react": "0.27.16",
-    "@tabtin/app-shell": "workspace:*",
-    "@tabtin/smartsheet-ui": "workspace:*",
-    "@tabtin/table-engine": "workspace:*",
+    "@muse/app-shell": "workspace:*",
+    "@muse/smartsheet-ui": "workspace:*",
+    "@muse/table-engine": "workspace:*",
     "@teable/core": "1.10.0",
     "@teable/ui-lib": "1.10.0",
     "date-fns": "4.1.0",

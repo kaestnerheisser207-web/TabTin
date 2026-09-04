@@ -32,17 +32,17 @@ vi.mock('node:fs/promises', () => ({
   },
 }));
 
-vi.mock('@tabtin/agent-host/skills', () => ({
+vi.mock('@muse/agent-host/skills', () => ({
   installSkillFromBundle: mocks.installSkillFromBundle,
   uninstallSkillLocal: mocks.uninstallSkillLocal,
   isValidSkillKey: (skillKey: string) => /^[\w][\w.\-@]*$/.test(skillKey) && !skillKey.includes('..'),
 }));
 
-vi.mock('@tabtin/agent-runtime/skills', () => ({
+vi.mock('@muse/agent-runtime/skills', () => ({
   parseAppSkillCanonicalKey: mocks.parseAppSkillCanonicalKey,
 }));
 
-vi.mock('@tabtin/terminal-core', () => ({
+vi.mock('@muse/terminal-core', () => ({
   resolveDataRoot: mocks.resolveDataRoot,
   resolveOrganizationSkillDir: mocks.resolveOrganizationSkillDir,
   resolveUserSkillDir: mocks.resolveUserSkillDir,

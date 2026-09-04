@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { resolveRecordId, type TableGridRow } from '@tabtin/table-engine';
-import type { TableRecord, ViewRecordsResponse } from '@tabtin/table-core';
+import { resolveRecordId, type TableGridRow } from '@muse/table-engine';
+import type { TableRecord, ViewRecordsResponse } from '@muse/table-core';
 import type { RecordFormFocusTarget } from '@/components/record/recordFormFocusTarget';
 
 interface UseDataGridRecordEditorInput {

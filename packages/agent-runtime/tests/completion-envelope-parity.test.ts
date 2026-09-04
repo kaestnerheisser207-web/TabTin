@@ -7,7 +7,7 @@ import { describe, expect, it } from 'vitest';
 import {
   createSubagentCompletionPayload,
   SubagentCompletionEnvelopeSchema,
-} from '@tabtin/agent-wire';
+} from '@muse/agent-wire';
 import { buildChildCompletionEnvelope } from '../src/subagent/completion-envelope.js';
 
 const FIXTURES = [

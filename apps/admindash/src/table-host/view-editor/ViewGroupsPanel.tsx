@@ -1,5 +1,5 @@
 import type { ViewGroupsPanelProps } from '@/table-host/view-editor/types'
-import { ViewGroupRulesEditor } from '@tabtin/table-ui'
+import { ViewGroupRulesEditor } from '@muse/table-ui'
 
 export function ViewGroupsPanel({
   availableFieldOptions,

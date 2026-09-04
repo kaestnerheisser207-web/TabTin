@@ -21,7 +21,7 @@ const (
 
 // AuthSource 描述认证凭据由谁负责提供。
 //
-// profile 表示 CLI 必须从当前 profile 或 TABTIN_JWT/TABTIN_TOKEN 读取真实
+// profile 表示 CLI 必须从当前 profile 或 MUSE_JWT/MUSE_TOKEN 读取真实
 // 用户凭据；host 表示宿主（Electron/Daemon）会在 transport 请求链路中负责
 // 用户认证，CLI 不应在请求前用 profile token 做 fail-fast。
 type AuthSource string

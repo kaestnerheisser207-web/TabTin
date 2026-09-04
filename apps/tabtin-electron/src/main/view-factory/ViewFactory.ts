@@ -34,8 +34,8 @@ import { getResourceDetectionService } from '../services/ResourceDetectionServic
 import { ensureCrawlspaceWindowOpenHandler } from '../crawlspace/window-open-handler';
 import { registerContextMenu } from '../context-menu';
 import { getDarwinVersion, getSystemArch } from '../utils/system-ua';
-import { sharedAntiDetectManager } from '@tabtin/anti-detect';
-import { getClientHintsService } from '@tabtin/anti-detect/client-hints';
+import { sharedAntiDetectManager } from '@muse/anti-detect';
+import { getClientHintsService } from '@muse/anti-detect/client-hints';
 import { ViewRegistrationCoordinator } from './registrations/ViewRegistrationCoordinator';
 import {
   type ResourceInterceptionContext
@@ -86,7 +86,7 @@ import type {
 } from './types';
 
 // 🆕 导入新的 ViewManager
-import { ViewManager } from '@tabtin/browser-capabilities';
+import { ViewManager } from '@muse/browser-capabilities';
 
 type ResourceManagerLike = {
   register?: (resource: any) => void;

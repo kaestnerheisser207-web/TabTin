@@ -5,7 +5,7 @@
  */
 
 import { describe, it, expect, beforeEach, vi } from 'vitest'
-import type { ChatMessage } from '@tabtin/chat-client'
+import type { ChatMessage } from '@muse/chat-client'
 
 const { mockState } = vi.hoisted(() => {
   const mockState: { messagesBySessionId: Record<string, ChatMessage[]> } = {
@@ -31,7 +31,7 @@ vi.mock('@stores/chat/useChatStore', () => ({
 
 import { getCommittedBlocks, __resetMessageBlocks } from '../messageBlocks'
 import { useChatRuntimeStore, flushRuntimeBatch } from '@stores/useChatRuntimeStore'
-import type { ContentBlock } from '@tabtin/agent-wire'
+import type { ContentBlock } from '@muse/agent-wire'
 
 const SID = 'sess-commit'
 const TEXT_BLOCK: ContentBlock = { type: 'text', text: '' }

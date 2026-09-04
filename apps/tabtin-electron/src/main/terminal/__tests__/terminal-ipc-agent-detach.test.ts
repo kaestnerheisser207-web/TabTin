@@ -29,7 +29,7 @@ vi.mock('../../auth', () => ({
 
 const mockRequestDetachAgentSession = vi.fn(() => true)
 
-vi.mock('@tabtin/action-tools/runtime', () => ({
+vi.mock('@muse/action-tools/runtime', () => ({
   resolvePtyManagerBridge: vi.fn(() => ({
     requestDetachAgentSession: mockRequestDetachAgentSession,
   })),
@@ -82,7 +82,7 @@ vi.mock('../snapshot', () => ({
   listAutoCheckpoints: vi.fn(async () => []),
 }))
 
-vi.mock('@tabtin/pty-core', () => ({
+vi.mock('@muse/pty-core', () => ({
   normalizeSize: vi.fn((cols?: number, rows?: number) => ({
     cols: cols ?? 80,
     rows: rows ?? 24,
@@ -98,7 +98,7 @@ describe('pty:agent-detach IPC', () => {
     handlers.clear()
     mockRequestDetachAgentSession.mockClear()
     mockRequestDetachAgentSession.mockReturnValue(true)
-    const { resolvePtyManagerBridge } = await import('@tabtin/action-tools/runtime')
+    const { resolvePtyManagerBridge } = await import('@muse/action-tools/runtime')
     vi.mocked(resolvePtyManagerBridge).mockReturnValue({
       requestDetachAgentSession: mockRequestDetachAgentSession,
     } as never)
@@ -130,7 +130,7 @@ describe('pty:agent-detach IPC', () => {
   })
 
   it('bridge 不可用 → 返回 success:false', async () => {
-    const { resolvePtyManagerBridge } = await import('@tabtin/action-tools/runtime')
+    const { resolvePtyManagerBridge } = await import('@muse/action-tools/runtime')
     vi.mocked(resolvePtyManagerBridge).mockReturnValue(null)
 
     const handler = handlers.get('pty:agent-detach')

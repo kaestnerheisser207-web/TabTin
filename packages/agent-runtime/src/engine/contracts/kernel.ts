@@ -918,7 +918,7 @@ export interface EngineConfig {
   subagentRunId?: string;
   /**
    * 父业务对话 thread id。**仅子 Agent runtime 有**——ToolContext.threadId /
-   * TABTIN_THREAD_ID 优先读此字段；storage 仍用 sessionConfig.threadId（agent-*）。
+   * MUSE_THREAD_ID 优先读此字段；storage 仍用 sessionConfig.threadId（agent-*）。
    */
   businessThreadId?: string;
   /** Context window size in tokens (for pressure calculation) */
@@ -1272,7 +1272,7 @@ export interface EngineConfig {
    *   assistant 过滤和末尾 trailing-thinking 剥离。对 A/B 或灰度
    *   开放。
    *
-   * 宿主通过 `TABTIN_NORMALIZATION_LEVEL` 环境变量覆盖（见两宿主
+   * 宿主通过 `MUSE_NORMALIZATION_LEVEL` 环境变量覆盖（见两宿主
    * `host-knobs.ts`），与 `doomLoopPolicy` / `maxMessageChars` 同一
    * ops 模式，clean install 默认行为 = `'conservative'`。
    *
@@ -1295,7 +1295,7 @@ export interface EngineConfig {
    *
    * 默认 `'warn'` 是兼容性选择：现有工具大多对部分非法 input 有自己
    * 的兜底，模型也常能自我纠正；切到 `'strict'` 会改变现有调用者的
-   * 行为，需要灰度验证。两宿主通过 `TABTIN_TOOL_SCHEMA_VALIDATION`
+   * 行为，需要灰度验证。两宿主通过 `MUSE_TOOL_SCHEMA_VALIDATION`
    * env 覆盖（与 `doomLoopPolicy` / `normalizationLevel` 同一 ops 模式）。
    *
    * 类型定义在 `engine/tool-schema-validator.ts`；此处 import 保证
@@ -1311,7 +1311,7 @@ export interface EngineConfig {
    *
    * 开关存在的目的是给运维一个紧急回滚通道：如果某个 pattern 误报
    * 影响线上某类合法工具输出（极小概率，但 PRD §6.1 强调向后兼容），
-   * 操作员可以 `TABTIN_TOOL_OUTPUT_SCAN=off` 重启宿主立刻关掉，
+   * 操作员可以 `MUSE_TOOL_OUTPUT_SCAN=off` 重启宿主立刻关掉，
    * 不必发版。**生产环境正常应保持 true**——关掉后 browser-surface 内容 /
    * run_terminal_command 的间接注入面就裸露给模型了。
    */
@@ -1342,7 +1342,7 @@ export interface EngineConfig {
    * 实现。**Runtime 内部不读此字段**——`SyncQueue` 通过
    * `SyncQueueOptions.persistentQueue` 注入决策具体实现。
    *
-   * 宿主额外的 env override：`TABTIN_SYNC_PERSISTENCE`（`'1' / '0'` /
+   * 宿主额外的 env override：`MUSE_SYNC_PERSISTENCE`（`'1' / '0'` /
    * `'true' / 'false'`），见两宿主 `host-knobs.ts`。
    */
   syncPersistence?: boolean;
@@ -1354,7 +1354,7 @@ export interface EngineConfig {
    * - `false`：永远走全量 summary 路径，保留首次落地前的旧行为。开发者用于 A/B
    *   或紧急回滚——**用户界面不感知此开关**（Q4 决策）。
    *
-   * 宿主额外提供 env override `TABTIN_SUMMARY_REUSE`（`'on'|'off'|'1'|'0'|'true'|'false'`），
+   * 宿主额外提供 env override `MUSE_SUMMARY_REUSE`（`'on'|'off'|'1'|'0'|'true'|'false'`），
    * 见两宿主 `host-knobs.ts:resolveSummaryReuse`，与 `doomLoopPolicy` /
    * `normalizationLevel` 同一 ops 模式。
    *
@@ -1436,7 +1436,7 @@ export interface EngineConfig {
    *
    * 类型定义在 `engine/iteration-budget.ts`；此处 import 保持 `types.ts`
    * 是 `EngineConfig` 所有字段类型的单一真相源。两宿主通过
-   * `TABTIN_ITERATION_BUDGET_WARN_ITER` / `_GRACE_ITER` /
+   * `MUSE_ITERATION_BUDGET_WARN_ITER` / `_GRACE_ITER` /
    * `_WARN_TOKEN` / `_GRACE_TOKEN` env 覆盖（与 `doomLoopPolicy`
    * 同一 ops 模式，see `host-knobs.ts`）。
    */
@@ -1446,7 +1446,7 @@ export interface EngineConfig {
    *
    * 默认 `DEFAULT_TOOL_FAILURE_TRACKER_CONFIG`（notice=3 / nudge=5 /
    * bufferSize=10 / 排除 10 个 kinds）。Host 通过
-   * `TABTIN_TOOL_FAILURE_NOTICE_STREAK` / `_NUDGE_STREAK` /
+   * `MUSE_TOOL_FAILURE_NOTICE_STREAK` / `_NUDGE_STREAK` /
    * `_TRACKER_ENABLED` env 覆盖；解析在两宿主 `host-knobs.ts` 完成
    * （非法值 logger.warn + 回落默认），与 `iterationBudget` 同 ops 模式。
    *
@@ -1465,7 +1465,7 @@ export interface EngineConfig {
    *
    * 默认 `DEFAULT_TOOL_REPETITION_TRACKER_CONFIG`（notice=2 / nudge=3 /
    * windowMs=30_000 / maxBufferSize=256）。Host 通过
-   * `TABTIN_TOOL_REPETITION_NOTICE_COUNT` / `_NUDGE_COUNT` /
+   * `MUSE_TOOL_REPETITION_NOTICE_COUNT` / `_NUDGE_COUNT` /
    * `_WINDOW_MS` / `_TRACKER_ENABLED` env 覆盖；解析在两宿主 `host-knobs.ts`
    * 完成（非法值 logger.warn + 回落默认），与 `toolFailureTracker` 同 ops 模式。
    *

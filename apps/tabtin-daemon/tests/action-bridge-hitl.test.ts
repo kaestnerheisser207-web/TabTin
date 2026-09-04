@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from 'vitest'
-import { PERMISSION_TIMEOUTS } from '@tabtin/agent-wire'
+import { PERMISSION_TIMEOUTS } from '@muse/agent-wire'
 
 import { DaemonActionBridge } from '../src/application/execution/action-bridge.js'
 import { createActionExecutionTestPorts } from './helpers/action-execution-ports.js'

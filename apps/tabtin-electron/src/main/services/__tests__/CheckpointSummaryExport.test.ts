@@ -33,12 +33,12 @@ vi.mock('../../logger', () => ({
 
 describe('CheckpointSummaryExport · checkpoint:summary-export', () => {
   beforeEach(async () => {
-    const sm = await import('@tabtin/storage-manager')
+    const sm = await import('@muse/storage-manager')
     sm.__resetForTesting()
   })
 
   it('注册的 bucket 字段符合 D-5 §4 规范', async () => {
-    const sm = await import('@tabtin/storage-manager')
+    const sm = await import('@muse/storage-manager')
     const { registerCheckpointSummaryExportBucket } = await import(
       '../CheckpointSummaryExport'
     )
@@ -57,7 +57,7 @@ describe('CheckpointSummaryExport · checkpoint:summary-export', () => {
   })
 
   it('checkpointsRoot 不存在时 exportFn 产出 totalProjects=0 + 合法 JSON', async () => {
-    const sm = await import('@tabtin/storage-manager')
+    const sm = await import('@muse/storage-manager')
     const { registerCheckpointSummaryExportBucket } = await import(
       '../CheckpointSummaryExport'
     )

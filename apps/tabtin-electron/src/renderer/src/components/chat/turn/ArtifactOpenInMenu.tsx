@@ -16,7 +16,7 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from '@tabtin/smartsheet-ui'
+} from '@muse/smartsheet-ui'
 import { cn } from '@utils/cn'
 import type { ArtifactOpenActions } from './useArtifactOpenActions'
 import { resolveRevealInOsLabel } from './revealInOsLabel'

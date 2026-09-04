@@ -1,5 +1,5 @@
 import React from 'react'
-import { ScrollArea, Skeleton } from '@tabtin/smartsheet-ui'
+import { ScrollArea, Skeleton } from '@muse/smartsheet-ui'
 import { cn } from '@utils/cn'
 import {
   SKELETON_CHAT_HISTORY_ROW,

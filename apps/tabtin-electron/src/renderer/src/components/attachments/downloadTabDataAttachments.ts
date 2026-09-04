@@ -8,11 +8,11 @@
  */
 
 import { createElement } from 'react'
-import { toast, ToastAction } from '@tabtin/smartsheet-ui'
+import { toast, ToastAction } from '@muse/smartsheet-ui'
 import type { TFunction } from 'i18next'
-import type { TableGridAttachmentDownloadItem } from '@tabtin/table-engine'
-import type { TableGridAttachmentAccessContext } from '@tabtin/table-engine'
-import { AttachmentApiService } from '@tabtin/table-core'
+import type { TableGridAttachmentDownloadItem } from '@muse/table-engine'
+import type { TableGridAttachmentAccessContext } from '@muse/table-engine'
+import { AttachmentApiService } from '@muse/table-core'
 import { createLogger } from '@/utils/logger'
 import { downloadPreviewResource } from '@components/chat/preview/downloadPreviewResource'
 
@@ -42,7 +42,7 @@ async function downloadViaMainProcess(
   url: string,
   fileName: string,
 ): Promise<string | null> {
-  const downloadResource = window.tabtin?.resourceDetection?.downloadResource
+  const downloadResource = window.muse?.resourceDetection?.downloadResource
   if (!downloadResource) return null
   const result = await downloadResource({ url, filename: fileName })
   if (!result?.success || !result.data?.filePath) {
@@ -152,7 +152,7 @@ export async function downloadTabDataAttachmentsBatch(
       ok: succeeded.length,
       total: targets.length,
     })
-    const showInFolder = window.tabtin?.showItemInFolder
+    const showInFolder = window.muse?.showItemInFolder
     if (firstPath && showInFolder) {
       const label = t('preview.showInFolder', { defaultValue: '打开文件位置' })
       toast.success(message, {

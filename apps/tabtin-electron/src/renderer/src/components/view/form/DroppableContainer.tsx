@@ -1,6 +1,6 @@
 import React from 'react'
 import { useDroppable } from '@dnd-kit/core'
-import { cn } from '@tabtin/smartsheet-ui'
+import { cn } from '@muse/smartsheet-ui'
 
 export interface DroppableContainerProps {
   id: string

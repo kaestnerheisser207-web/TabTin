@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState, type MutableRefObject } from 'react'
-import { AgentApiService, type Agent } from '@tabtin/app-shell'
-import type { ChatSession } from '@tabtin/chat-client'
+import { AgentApiService, type Agent } from '@muse/app-shell'
+import type { ChatSession } from '@muse/chat-client'
 import { toast } from '@components/ui'
 import { getChatClient } from '@/services/chatApi'
 import { useOrganizationStore } from '@/stores/useOrganizationStore'

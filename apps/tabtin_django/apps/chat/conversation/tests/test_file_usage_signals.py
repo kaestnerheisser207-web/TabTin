@@ -15,7 +15,7 @@ class ConversationFileUsageExtractionTest(SimpleTestCase):
                 "artifact_kind": "oss_file",
                 "file_id": "file-image-1",
                 "access_url": "https://oss.example/image.png",
-                "url": "tabtin://resource/file/file-image-1?hint=tabfiles",
+                "url": "muse://resource/file/file-image-1?hint=tabfiles",
             },
         }]
 

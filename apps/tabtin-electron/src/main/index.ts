@@ -44,7 +44,7 @@ const fixMainProcessPath = () => {
 }
 
 const installMainLogFilter = () => {
-  const raw = process.env.TABTIN_LOG_FILTER || ''
+  const raw = process.env.MUSE_LOG_FILTER || ''
   const tokens = raw.split('|').map(item => item.trim()).filter(Boolean)
   if (tokens.length === 0) {
     return
@@ -93,9 +93,9 @@ const loadRootEnvironment = () => {
   const rootLocalEnvPath = resolve(projectRoot, '.env.local')
   const rootPackagePath = resolve(projectRoot, 'package.json')
 
-  if (!process.env.TABTIN_WORKSPACE_ROOT && existsSync(rootPackagePath)) {
-    process.env.TABTIN_WORKSPACE_ROOT = projectRoot
-    log.info('已设置 TABTIN_WORKSPACE_ROOT:', projectRoot)
+  if (!process.env.MUSE_WORKSPACE_ROOT && existsSync(rootPackagePath)) {
+    process.env.MUSE_WORKSPACE_ROOT = projectRoot
+    log.info('已设置 MUSE_WORKSPACE_ROOT:', projectRoot)
   }
 
   const envPaths = [rootEnvPath, rootLocalEnvPath].filter(path => existsSync(path))
@@ -130,7 +130,7 @@ loadRootEnvironment()
 
 // Sentry 错误上报：DSN 未配置时 no-op。必须**同步**初始化——
 // SDK 要求在 app 'ready' 前完成，且要抢在 main-app（deep-link.ts 注册
-// tabtin-file scheme）之前注册 sentry-ipc scheme，动态 import 无法保证这
+// muse-file scheme）之前注册 sentry-ipc scheme，动态 import 无法保证这
 // 两个先后关系（详见 ./sentry 模块头注释）。内部自 try/catch，不会阻塞启动。
 initSentryMain()
 

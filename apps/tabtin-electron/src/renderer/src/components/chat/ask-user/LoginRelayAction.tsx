@@ -12,7 +12,7 @@ import {
 } from '@/services/loginRelayWorkbench'
 import { TEXT } from '../registry/chatDesignTokens'
 import type { LoginRelayImportResult } from '@shared/types/login-relay'
-import type { AskUserAnswer, AskUserQuestion } from '@tabtin/chat-client'
+import type { AskUserAnswer, AskUserQuestion } from '@muse/chat-client'
 
 type LoginRelayStatus =
   | 'idle'
@@ -41,7 +41,7 @@ function scheduleRelayCleanup(
 async function attemptRelayCleanup(relayId: string): Promise<void> {
   if (!relayIdsAwaitingCleanup.has(relayId)) return
   try {
-    const result = await window.tabtin.loginRelay.cancel({ relayId })
+    const result = await window.muse.loginRelay.cancel({ relayId })
     if (result.success) {
       relayIdsAwaitingCleanup.delete(relayId)
       return
@@ -82,13 +82,13 @@ async function cancelRelayAndWorkbench(
   workbenchHandle: LoginRelayWorkbenchHandle | null,
   cancelFailedMessage: string,
 ): Promise<void> {
-  const result = await window.tabtin.loginRelay.cancel({ relayId })
+  const result = await window.muse.loginRelay.cancel({ relayId })
   if (!result.success) throw new Error(result.error || cancelFailedMessage)
   if (workbenchHandle) await closeLoginRelayWorkbenchTab(workbenchHandle)
 }
 
 async function prepareRelay(input: PrepareRelayInput): Promise<PreparedRelay> {
-  const result = await window.tabtin.loginRelay.start({
+  const result = await window.muse.loginRelay.start({
     spaceId: input.spaceId,
     organizationId: input.organizationId,
     domain: input.domain,
@@ -259,7 +259,7 @@ export const LoginRelayAction: React.FC<LoginRelayActionProps> = ({
     setStatus('submitting')
     setError(null)
     try {
-      const result = await window.tabtin.loginRelay.complete({ relayId, threadId, ...(tabId ? { tabId } : {}) })
+      const result = await window.muse.loginRelay.complete({ relayId, threadId, ...(tabId ? { tabId } : {}) })
       if (
         !result.success
         || result.importResult?.success !== true

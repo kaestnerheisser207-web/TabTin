@@ -2,12 +2,12 @@ import {
   FilePersistentQueue,
   buildSyncAccountDir,
   type PersistedEntryOwner,
-} from '@tabtin/agent-runtime';
+} from '@muse/agent-runtime';
 import type {
   ManagedTaskOwner,
   ManagedTaskPersistence,
   PersistedManagedTask,
-} from '@tabtin/terminal-core';
+} from '@muse/terminal-core';
 
 interface PersistenceSupervisorPorts {
   isEnabled(): boolean;

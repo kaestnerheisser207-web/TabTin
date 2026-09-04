@@ -15,7 +15,7 @@ import type { RendererCrawlspaceViewMetaUpdates } from '@shared/types/crawlspace
 import type { OpenIntentHints } from '../../shared/open-intent'
 import { guardDirectLoadURL } from '../blocked-preview-load'
 import { getMainWindow } from '../window-manager'
-import { buildAntiDetectConfig, AccessLevel } from '@tabtin/browser-core'
+import { buildAntiDetectConfig, AccessLevel } from '@muse/browser-core'
 import { resolveBrowserContainerMode } from '../../shared/browser-container-mode'
 import { createLogger } from '../logger'
 import { fileUrlToLocalPath, isAllowedLocalFileUrl } from '../crawl-view/utils'

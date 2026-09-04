@@ -5,7 +5,7 @@
  * 设计语言：扁平简约，优雅紫品牌色，无阴影。
  *
  * @deprecated 模块级双轨 token，正逐步并入全局设计系统：语义字号/z-index/颜色用
- *   `@tabtin/tailwind-preset`，色板/玻璃 CSS 变量见 Electron `styles/globals.css`，
+ *   `@muse/tailwind-preset`，色板/玻璃 CSS 变量见 Electron `styles/globals.css`，
  *   规范真源见 `apps/tabtin-electron/docs/design-system.md`。新代码请直接用语义
  *   Tailwind 类（text-body/rounded-interactive/z-modal 等），不要再引用此文件的常量；
  *   存量消费方迁移完成后本文件将移除。

@@ -44,16 +44,16 @@ User = get_user_model()
 
 @contextmanager
 def _strict_softref_env():
-    """临时设置 ``TABTIN_SOFTREF_STRICT=1`` 并在 yield 后恢复。"""
-    previous = os.environ.get("TABTIN_SOFTREF_STRICT")
-    os.environ["TABTIN_SOFTREF_STRICT"] = "1"
+    """临时设置 ``MUSE_SOFTREF_STRICT=1`` 并在 yield 后恢复。"""
+    previous = os.environ.get("MUSE_SOFTREF_STRICT")
+    os.environ["MUSE_SOFTREF_STRICT"] = "1"
     try:
         yield
     finally:
         if previous is None:
-            os.environ.pop("TABTIN_SOFTREF_STRICT", None)
+            os.environ.pop("MUSE_SOFTREF_STRICT", None)
         else:
-            os.environ["TABTIN_SOFTREF_STRICT"] = previous
+            os.environ["MUSE_SOFTREF_STRICT"] = previous
 
 
 # M3b（单库治理）：本文件借 ``ChatSession.current_model`` / ``ChatMessage.model`` 这两个
@@ -160,7 +160,7 @@ class SoftRefPropertyTest(CrossDbSoftRefBaseTest):
             session.current_model = self.model
 
     def test_strict_mode_raises_on_fallback(self):
-        """``TABTIN_SOFTREF_STRICT=1`` 时单点 fallback 不再 warning，直接 raise。"""
+        """``MUSE_SOFTREF_STRICT=1`` 时单点 fallback 不再 warning，直接 raise。"""
         session = ChatSession.objects.create(
             user=self.user, organization_id="t",
             current_model_id=self.model.id,

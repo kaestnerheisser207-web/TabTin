@@ -73,7 +73,7 @@ describe('TurnAgentBadge · ', () => {
     expect(avatar.className).toMatch(/!h-8|h-8/)
     expect(avatar.className).toMatch(/!w-8|w-8/)
     const nameEl = badge.querySelector('span.truncate')
-    // eslint-disable-next-line tabtin/no-chat-design-violations, tabtin/no-design-system-violations -- 断言兼容既有 15px 回归点，字面量不是新增样式。
+    // eslint-disable-next-line muse/no-chat-design-violations, muse/no-design-system-violations -- 断言兼容既有 15px 回归点，字面量不是新增样式。
     expect(nameEl?.className).toContain('text-[15px]')
   })
 })

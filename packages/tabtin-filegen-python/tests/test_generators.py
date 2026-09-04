@@ -7,8 +7,8 @@ from pathlib import Path
 
 import pytest
 
-from tabtin_filegen.errors import SpecError
-from tabtin_filegen.registry import get_generator, get_reader
+from muse_filegen.errors import SpecError
+from muse_filegen.registry import get_generator, get_reader
 
 
 def test_xlsx_round_trip(tmp_path):
@@ -93,9 +93,9 @@ def test_pptx_round_trip(tmp_path):
 
 
 def test_pdf_uses_cid_fallback_without_embeddable_font(tmp_path, monkeypatch):
-    from tabtin_filegen.generators import pdf as pdf_module
+    from muse_filegen.generators import pdf as pdf_module
 
-    monkeypatch.delenv("TABTIN_CJK_FONT_PATH", raising=False)
+    monkeypatch.delenv("MUSE_CJK_FONT_PATH", raising=False)
     monkeypatch.delenv("WINDIR", raising=False)
     monkeypatch.setattr(pdf_module, "_SYSTEM_CJK_FONT_PATHS", ())
     pdf_module._ensure_cjk_font.cache_clear()
@@ -122,10 +122,10 @@ def test_pdf_uses_cid_fallback_without_embeddable_font(tmp_path, monkeypatch):
 
 def test_pdf_rejects_configured_font_without_cjk_glyphs(tmp_path, monkeypatch):
     import reportlab
-    from tabtin_filegen.generators import pdf as pdf_module
+    from muse_filegen.generators import pdf as pdf_module
 
     font_path = Path(reportlab.__file__).parent / "fonts" / "Vera.ttf"
-    monkeypatch.setenv("TABTIN_CJK_FONT_PATH", str(font_path))
+    monkeypatch.setenv("MUSE_CJK_FONT_PATH", str(font_path))
     monkeypatch.setattr(pdf_module, "_SYSTEM_CJK_FONT_PATHS", ())
     pdf_module._ensure_cjk_font.cache_clear()
     try:
@@ -145,7 +145,7 @@ def test_pdf_embedded_cjk_text_round_trip_when_system_font_is_available(
     tmp_path, monkeypatch
 ):
     from pypdf import PdfReader
-    from tabtin_filegen.generators import pdf as pdf_module
+    from muse_filegen.generators import pdf as pdf_module
 
     font_path = next(
         (
@@ -158,7 +158,7 @@ def test_pdf_embedded_cjk_text_round_trip_when_system_font_is_available(
     if font_path is None:
         pytest.skip("No embeddable system CJK font is available on this host")
 
-    monkeypatch.setenv("TABTIN_CJK_FONT_PATH", str(font_path))
+    monkeypatch.setenv("MUSE_CJK_FONT_PATH", str(font_path))
     pdf_module._ensure_cjk_font.cache_clear()
     try:
         out = tmp_path / "embedded-cjk.pdf"

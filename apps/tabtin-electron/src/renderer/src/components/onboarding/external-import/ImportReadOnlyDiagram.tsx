@@ -11,7 +11,7 @@ import {
   ShieldCheck,
   type LucideIcon,
 } from 'lucide-react'
-import type { ImportSourceId } from '@tabtin/cli-server-core'
+import type { ImportSourceId } from '@muse/cli-server-core'
 import { cn } from '@utils/cn'
 import { IMPORT_SOURCE_ICON_URLS } from './importSourceIcons'
 

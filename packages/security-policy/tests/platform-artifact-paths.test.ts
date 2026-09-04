@@ -6,7 +6,7 @@ import { describe, it, expect, beforeEach } from 'vitest';
 import * as fs from 'node:fs';
 import * as os from 'node:os';
 import * as path from 'node:path';
-import { tabtinAgentTasksDir } from '@tabtin/terminal-core';
+import { tabtinAgentTasksDir } from '@muse/terminal-core';
 
 import { judge } from '../src/judge.js';
 import { __clearNormalizeCache } from '../src/path-normalize.js';

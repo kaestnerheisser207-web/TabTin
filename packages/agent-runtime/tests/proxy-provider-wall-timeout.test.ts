@@ -7,7 +7,7 @@
  * 最终只能等 Django forward 1800s 外层超时（实测 run d743b9c5 持续 delta 11+ 分钟）。
  *
  * 本测试验证：当一条 LLM 调用（含全部重试）总耗时超过
- * `TABTIN_MAX_STREAM_WALL_MS` 上限时，createStream 按 **non-retryable** 终止
+ * `MUSE_MAX_STREAM_WALL_MS` 上限时，createStream 按 **non-retryable** 终止
  * （details.wallTimeout=true），不再无限重试。
  */
 
@@ -45,9 +45,9 @@ describe('TabTinProxyProvider · 总墙钟上限（stall runaway 防护）', () 
   let prevEnv: string | undefined;
 
   beforeEach(() => {
-    prevEnv = process.env.TABTIN_MAX_STREAM_WALL_MS;
+    prevEnv = process.env.MUSE_MAX_STREAM_WALL_MS;
     // 1ms 上限：第一次 retryable（503）错误后，elapsed（数 ms）即超限 → 立即墙钟终止。
-    process.env.TABTIN_MAX_STREAM_WALL_MS = '1';
+    process.env.MUSE_MAX_STREAM_WALL_MS = '1';
     // 每个 attempt 都返回 503（retryable）——模拟「会被重试」的失败流。
     fetchSpy = vi.fn(async () => new Response('upstream unavailable', { status: 503 }));
     vi.stubGlobal('fetch', fetchSpy);
@@ -55,8 +55,8 @@ describe('TabTinProxyProvider · 总墙钟上限（stall runaway 防护）', () 
 
   afterEach(() => {
     vi.unstubAllGlobals();
-    if (prevEnv === undefined) delete process.env.TABTIN_MAX_STREAM_WALL_MS;
-    else process.env.TABTIN_MAX_STREAM_WALL_MS = prevEnv;
+    if (prevEnv === undefined) delete process.env.MUSE_MAX_STREAM_WALL_MS;
+    else process.env.MUSE_MAX_STREAM_WALL_MS = prevEnv;
   });
 
   it('总耗时超 cap 时按 non-retryable 终止，不无限重试', async () => {

@@ -1,10 +1,10 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react'
-import { VIEW_SWITCH_TIMEOUT_MS } from '@tabtin/tabdoc-ui/editor'
+import { VIEW_SWITCH_TIMEOUT_MS } from '@muse/tabdoc-ui/editor'
 import { useViewStore } from '@stores/useViewStore'
-import { Button, cn, Tooltip, TooltipContent, TooltipProvider, TooltipTrigger, toast } from '@tabtin/smartsheet-ui'
+import { Button, cn, Tooltip, TooltipContent, TooltipProvider, TooltipTrigger, toast } from '@muse/smartsheet-ui'
 import { Grid2x2, Columns3, CalendarDays, LayoutGrid, Layers, ClipboardList } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
-import type { ViewType } from '@tabtin/table-core'
+import type { ViewType } from '@muse/table-core'
 
 const VIEW_TYPE_ICON: Partial<Record<ViewType, React.ElementType>> = {
   grid: Grid2x2,

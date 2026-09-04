@@ -31,7 +31,7 @@ import {
   findElementInSnapshot,
   collectCandidateNames,
 } from '../desktop-accessibility'
-import type { AccessibilitySnapshot, AccessibilityNode } from '@tabtin/desktop-contracts'
+import type { AccessibilitySnapshot, AccessibilityNode } from '@muse/desktop-contracts'
 import { DesktopErrorCode } from '../desktop-error-codes'
 
 // ---------------------------------------------------------------------------

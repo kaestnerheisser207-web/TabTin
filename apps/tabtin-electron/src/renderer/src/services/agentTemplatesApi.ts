@@ -8,7 +8,7 @@
 
 import { apiClient } from './apiClient'
 import { API_ENDPOINTS } from '@/config/api'
-import type { Agent } from '@tabtin/app-shell'
+import type { Agent } from '@muse/app-shell'
 
 export interface AgentTemplate {
   /** 模板 slug（实例化时作为 template_id 传给创建接口） */

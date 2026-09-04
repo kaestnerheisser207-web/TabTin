@@ -1,4 +1,4 @@
-import type { TableRecord, ViewMeta, ViewRecordsResponse } from '@tabtin/table-core'
+import type { TableRecord, ViewMeta, ViewRecordsResponse } from '@muse/table-core'
 
 export type LocalCreateOverlayScopeInput = {
   useViewData: boolean

@@ -40,7 +40,7 @@ type apiEnvelope struct {
 }
 
 func defaultAPIURL() string {
-	if v := os.Getenv("TABTIN_API_URL"); v != "" {
+	if v := os.Getenv("MUSE_API_URL"); v != "" {
 		return strings.TrimRight(v, "/")
 	}
 	return "https://api.example.com"

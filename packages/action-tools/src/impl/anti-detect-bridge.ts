@@ -20,7 +20,7 @@ export async function resolveAntiDetectHeaders(
   if (!config) return {};
 
   try {
-    const mod = await import('@tabtin/anti-detect');
+    const mod = await import('@muse/anti-detect');
     const manager = mod.sharedAntiDetectManager;
 
     const profile = await manager.getOrCreateProfile({

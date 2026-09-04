@@ -7,7 +7,7 @@
  * subagentTemplateApi.ts 等模块引用，待后续迁移到独立 API 后移除。
  */
 
-import { joinApiPath } from '@tabtin/config'
+import { joinApiPath } from '@muse/config'
 import { API_CONFIG } from '../config/api'
 import { useAuthStore, authReadyPromise } from '../stores/useAuthStore'
 import { electronFetch } from './electronFetch'

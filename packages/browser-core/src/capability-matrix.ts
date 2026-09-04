@@ -6,8 +6,8 @@
  * 它只声明数据 + 纯投影函数，可被 Electron / Daemon / CLI 漂移检测三方安全引用。
  *
  * 「拆包缝」怎么留的：本文件自成一体（类型 + 数据 + 投影函数都在这里），
- * 仅从 `@tabtin/browser-core` 的 index 干净 re-export。将来要把这层独立成
- * `@tabtin/browser-contract` 时，直接 `git mv` 本文件到新包、把 index 的
+ * 仅从 `@muse/browser-core` 的 index 干净 re-export。将来要把这层独立成
+ * `@muse/browser-contract` 时，直接 `git mv` 本文件到新包、把 index 的
  * re-export 改成转发即可，调用方（两端 route / 未来 CLI 校验）无需改动。
  *
  * 支持级别词表 —— 正典 `support/app/specs/runtime-capability-model.md` 的

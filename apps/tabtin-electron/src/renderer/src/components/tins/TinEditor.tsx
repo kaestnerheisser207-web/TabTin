@@ -10,7 +10,7 @@
 
 import React, { useEffect, useState, useCallback, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
-import { toast, ConfirmDialog } from '@tabtin/smartsheet-ui'
+import { toast, ConfirmDialog } from '@muse/smartsheet-ui'
 import { useTinsStore } from '../../stores/useTinsStore'
 import { useOrganizationStore } from '../../stores/useOrganizationStore'
 import { useSpaceStore } from '../../stores/useSpaceStore'

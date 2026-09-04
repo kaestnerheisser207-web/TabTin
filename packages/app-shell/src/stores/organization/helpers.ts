@@ -1,4 +1,4 @@
-import { createErrorExtractor } from '@tabtin/shared'
+import { createErrorExtractor } from '@muse/shared'
 
 export const extractErrorMessage = createErrorExtractor(
   (key, _opts) => key,

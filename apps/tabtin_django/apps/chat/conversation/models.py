@@ -1270,7 +1270,7 @@ class SessionWorkspaceFileReference(models.Model):
         ("local_file", "local_file 产物卡"),
         ("tool_mutation", "write/edit 工具产物"),
         ("shell_history", "终端 file_history"),
-        ("resource_link", "tabtin://resource/file/ 链接"),
+        ("resource_link", "muse://resource/file/ 链接"),
     )
 
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)

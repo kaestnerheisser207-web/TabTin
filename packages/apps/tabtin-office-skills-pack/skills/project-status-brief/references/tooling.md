@@ -28,6 +28,6 @@ If TabSlide reports Playwright/Chromium missing, treat it as a TabSlide runtime 
 
 ## Resource Rules
 
-- Brief document: `tabtin://resource/document/<id>?hint=tabdoc`.
-- Task/project table: `tabtin://resource/table/<id>?hint=tabdata`.
-- Slide project: `tabtin://resource/slide/<id>?hint=tabslide` when available.
+- Brief document: `muse://resource/document/<id>?hint=tabdoc`.
+- Task/project table: `muse://resource/table/<id>?hint=tabdata`.
+- Slide project: `muse://resource/slide/<id>?hint=tabslide` when available.

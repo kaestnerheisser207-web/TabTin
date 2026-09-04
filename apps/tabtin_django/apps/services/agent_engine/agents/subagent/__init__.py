@@ -2,13 +2,13 @@
 
 W10 cleanup: ``factory`` (SubagentFactory / SubagentReactAgent) and
 ``compressor`` were removed together with the builtin ReAct engine.
-Subagent execution now happens on client devices via ``@tabtin/agent-runtime``.
+Subagent execution now happens on client devices via ``@muse/agent-runtime``.
 
 W5 cleanup (2026-05-26, 子 Agent 模块完善总控): the in-Django announce
 pipeline submodules were removed — W10 had left them orphaned (the only
 consumer ``flush_orphaned_announcements`` had been retired and ``announce()``
 never had a production entry point). Result delivery is now performed by
-``@tabtin/agent-runtime`` emitting ``SUBAGENT_COMPLETED`` events directly
+``@muse/agent-runtime`` emitting ``SUBAGENT_COMPLETED`` events directly
 to the parent process.
 
 Surviving public symbols (loaded lazily):

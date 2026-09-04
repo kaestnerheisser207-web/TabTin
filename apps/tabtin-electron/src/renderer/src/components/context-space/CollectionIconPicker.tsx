@@ -5,7 +5,7 @@
  * 点击 emoji 切换图标，点击颜色圆点切换颜色。
  */
 import React, { useCallback, useState } from 'react'
-import { Popover, PopoverTrigger, PopoverContent } from '@tabtin/smartsheet-ui'
+import { Popover, PopoverTrigger, PopoverContent } from '@muse/smartsheet-ui'
 import { cn } from '@utils/cn'
 
 const COLLECTION_EMOJIS = [

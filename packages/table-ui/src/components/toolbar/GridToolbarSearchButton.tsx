@@ -17,7 +17,7 @@ import {
   TooltipTrigger,
   cn,
   useOverlayContainer,
-} from '@tabtin/smartsheet-ui'
+} from '@muse/smartsheet-ui'
 import type { ToolbarField } from '../../types'
 import type { DataGridSearchScope } from '../grid/DataGridContext'
 import {

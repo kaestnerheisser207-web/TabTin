@@ -2086,7 +2086,7 @@ private fun rollbackBannerKey(state: SessionRollbackState): String =
     ).joinToString("|")
 
 /**
- * Wave 4 I8：通过 tabtin:// scheme + ACTION_VIEW 派发到 Plan 文档（tabdoc 资源）。
+ * Wave 4 I8：通过 muse:// scheme + ACTION_VIEW 派发到 Plan 文档（tabdoc 资源）。
  * 与 RichContentSection.navigateToResource 同语义，集中在 conversation 模块复用。
  *
  * 失败时给出"无法打开"Toast，不崩溃——manifest 注册被禁 / 系统找不到 handler 都走这里。
@@ -2099,7 +2099,7 @@ private fun openPlanDocument(
 ) {
     if (planDocumentId.isBlank()) return
     val encoded = Uri.encode(planDocumentId)
-    val uri = Uri.parse("tabtin://resource/tabdoc/$encoded").buildUpon().apply {
+    val uri = Uri.parse("muse://resource/tabdoc/$encoded").buildUpon().apply {
         organizationId?.takeIf { it.isNotBlank() }
             ?.let { appendQueryParameter("organization_id", it) }
         spaceId?.takeIf { it.isNotBlank() }

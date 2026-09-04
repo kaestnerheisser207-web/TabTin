@@ -10,7 +10,7 @@ import {
   useState,
   type RefObject,
 } from 'react'
-import { useAppHostClient } from '@tabtin/app-host-sdk'
+import { useAppHostClient } from '@muse/app-host-sdk'
 import {
   addSharedCommentMessage,
   createSharedCommentThread,
@@ -21,7 +21,7 @@ import {
   resolveSharedCommentAttachmentPreview,
   updateSharedCommentThreadStatus,
   type CommentThread,
-} from '@tabtin/tabdoc-ui/api-client'
+} from '@muse/tabdoc-ui/api-client'
 import {
   CommentRail,
   DocumentCommentThreadsSection,
@@ -33,7 +33,7 @@ import {
   type CommentYjsCodec,
   type DocumentCommentMentionCandidate,
   type EditorInstance,
-} from '@tabtin/tabdoc-ui/editor'
+} from '@muse/tabdoc-ui/editor'
 import { useAuthStore } from '@/stores/auth-store'
 import { uploadShareCommentAttachmentImage } from './commentAttachmentUpload'
 import { resolveThreadAttachmentPreviews } from './resolveShareAttachmentPreviews'

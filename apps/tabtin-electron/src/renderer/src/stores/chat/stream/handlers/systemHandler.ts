@@ -10,8 +10,8 @@
  */
 
 import i18n from '@/i18n'
-import { AgentStreamEvents } from '@tabtin/ws-gateway-client'
-import { toast } from '@tabtin/smartsheet-ui/toast'
+import { AgentStreamEvents } from '@muse/ws-gateway-client'
+import { toast } from '@muse/smartsheet-ui/toast'
 import type { AgentStepType, AgentStepStatus } from '../../shared/types'
 import { payloadStrOpt as strOpt } from '../../shared/helpers'
 import type { AgentStreamMessage, HandlerContext } from './streamHandlerTypes'

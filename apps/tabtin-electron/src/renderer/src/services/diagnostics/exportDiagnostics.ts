@@ -11,7 +11,7 @@
  */
 
 import JSZip from 'jszip'
-import { toast } from '@tabtin/smartsheet-ui'
+import { toast } from '@muse/smartsheet-ui'
 import { getLogEntries, formatLogEntries } from '@/services/logCollector'
 import { getBreadcrumbsSnapshot, getRecentErrorsSnapshot } from '@/services/errorReporter'
 import { collectDiagnosticsMeta, type DiagnosticsMeta } from './collectContext'
@@ -79,7 +79,7 @@ function collectRendererDiagnostics(reason: string, host: DiagnosticsHostEnv | n
 }
 
 async function buildDiagnosticsBundle(reason: string): Promise<DiagnosticsBundlePayload> {
-  const host = await window.tabtin?.diagnostics?.getHostEnv?.().catch(() => null) ?? null
+  const host = await window.muse?.diagnostics?.getHostEnv?.().catch(() => null) ?? null
   const { meta, rendererLog, breadcrumbs, errors } = collectRendererDiagnostics(reason, host)
   const zip = new JSZip()
   zip.file('README.txt', buildReadme(meta))
@@ -103,7 +103,7 @@ export async function exportDiagnostics(options?: { reason?: string }): Promise<
   toast({ title: '正在生成诊断包…' })
 
   try {
-    const result = await window.tabtin?.diagnostics?.saveBundle?.(await buildDiagnosticsBundle(reason))
+    const result = await window.muse?.diagnostics?.saveBundle?.(await buildDiagnosticsBundle(reason))
     if (!result?.absolutePath) {
       throw new Error('诊断落盘未返回路径（API 不可用？）')
     }
@@ -131,7 +131,7 @@ export async function uploadDiagnosticsToSupport(): Promise<void> {
   diagnosticsActionInFlight = true
   toast({ title: '正在准备上传诊断包…' })
   try {
-    const result = await window.tabtin?.diagnostics?.queueSupportUpload?.(
+    const result = await window.muse?.diagnostics?.queueSupportUpload?.(
       await buildDiagnosticsBundle('support_upload'),
     )
     if (!result?.queued) throw new Error('诊断包未进入上传队列')
@@ -157,9 +157,9 @@ export async function copyDiagnosticsToClipboard(options?: { reason?: string }):
   toast({ title: '正在复制诊断日志…' })
 
   try {
-    const host = await window.tabtin?.diagnostics?.getHostEnv?.().catch(() => null) ?? null
+    const host = await window.muse?.diagnostics?.getHostEnv?.().catch(() => null) ?? null
     const meta = collectDiagnosticsMeta(reason, host)
-    const mainSnap = await window.tabtin?.diagnostics?.readLogs?.()
+    const mainSnap = await window.muse?.diagnostics?.readLogs?.()
     // 剪贴板只取最近 N 分钟现场，避免几天积累的 main.log/telemetry 撑爆 AI 上下文。
     // zip 导出仍走 collectRendererDiagnostics 全量路径。
     const prepared = prepareClipboardDiagnostics({
@@ -200,7 +200,7 @@ export async function copyDiagnosticsToClipboard(options?: { reason?: string }):
  */
 export async function openDiagnosticsLogDir(): Promise<void> {
   try {
-    await window.tabtin?.diagnostics?.openLogDir?.()
+    await window.muse?.diagnostics?.openLogDir?.()
   } catch (err) {
     toast({
       title: '无法打开日志文件夹',

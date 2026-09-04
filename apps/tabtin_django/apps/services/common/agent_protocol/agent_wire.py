@@ -1,5 +1,5 @@
 """
-agent_wire — Python-side schema mirror of ``@tabtin/agent-wire``.
+agent_wire — Python-side schema mirror of ``@muse/agent-wire``.
 
 Provides Pydantic models that match the TypeScript Zod schemas defined in
 ``packages/agent-wire/src/``. Any change to the TS schemas **must** be
@@ -81,7 +81,7 @@ class PerModelUsage(BaseModel):
 class UsageReport(BaseModel):
     """UsageReport — 一次 LLM 调用 / 一次 query 的累计用量。
 
-    与 TS `@tabtin/contracts/agent` 的 `UsageReportSchema` 完全对齐。
+    与 TS `@muse/contracts/agent` 的 `UsageReportSchema` 完全对齐。
     包含基础 token 计数、cost、cache 命中、reasoning、compact 分项、计费状态、
     per-model 分桶、context-ring 字段。runtime / Proxy billing 尾帧 / Wallet
     计费记账三条路径会消费这些字段。
@@ -240,7 +240,7 @@ class EnabledAppDto(BaseModel):
 
     W7c · Stage 4 双路径对齐：Django 端 ``prompt_forward_service`` 从 manifest +
     ``AppSettings.resolve_enabled_app_ids`` 派生后透传到 Daemon，让本地 ``buildAppsSection``
-    在 Daemon 路径上生效。形态对齐 ``@tabtin/agent-prompt`` 的 ``EnabledAppInfo``。
+    在 Daemon 路径上生效。形态对齐 ``@muse/agent-prompt`` 的 ``EnabledAppInfo``。
     """
 
     key: str
@@ -275,7 +275,7 @@ class PromptForwardPayload(BaseModel):
     yolo_mode: Optional[bool] = None
     # Hilt v3 / W6 M2：客户端工作区快照（Space sandbox + TabCode/TabFolder + 附件）。
     # 主要给 Daemon 用 —— Daemon 没有自己的 TabCode UI，只能由主控端 Electron
-    # 通过 prompt.forward 透传。形态参考 ``@tabtin/security-policy`` 的
+    # 通过 prompt.forward 透传。形态参考 ``@muse/security-policy`` 的
     # ``WorkspaceSnapshot``；wire 这里用 ``Any`` 不强校验，Daemon 侧 type guard
     # + ``buildPolicyFromAgentConfigV2`` 兜底形态错误。
     workspace_snapshot: Optional[Any] = None
@@ -519,7 +519,7 @@ class InterruptState(BaseModel):
 # 每个分支独立定义，Union 汇总。TS 端是 Zod discriminatedUnion，语义等价。
 #
 # 历史 19 种（W1A 轮 2，PRD 05 6 层 pipeline 时期）+ W6 M4 新增 16 种
-# （2026-05-03 L-W6-16 扩展，mirror `@tabtin/security-policy` v3 judge emit）。
+# （2026-05-03 L-W6-16 扩展，mirror `@muse/security-policy` v3 judge emit）。
 # 总计 35 种；字段命名与 TS 侧 `packages/agent-wire/src/approval.ts` 一字不差。
 #
 # 注意 memo_allow / memo_deny 的 `createdAt` **保持 camelCase**（非

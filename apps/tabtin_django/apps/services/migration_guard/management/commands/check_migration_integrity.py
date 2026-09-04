@@ -85,7 +85,7 @@ class Command(BaseCommand):
     ) -> None:
         per_db_rows: dict[str, list[tuple[int | None, str, str]]] = {}
         db_aliases = list(
-            getattr(settings, "TABTIN_MIGRATION_DATABASE_ALIASES", None)
+            getattr(settings, "MUSE_MIGRATION_DATABASE_ALIASES", None)
             or connections.databases.keys()
         )
         for db_alias in db_aliases:

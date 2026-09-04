@@ -21,7 +21,7 @@ import { mkdtempSync, mkdirSync, rmSync, writeFileSync, readFileSync } from 'nod
 import { tmpdir } from 'node:os';
 import path from 'node:path';
 import { afterEach, describe, expect, it } from 'vitest';
-import { computeSkillContentHash } from '@tabtin/terminal-core';
+import { computeSkillContentHash } from '@muse/terminal-core';
 
 import { preinstallDefaultSkills } from '../../src/skills/skill-preinstaller.js';
 

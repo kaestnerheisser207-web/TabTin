@@ -3,7 +3,7 @@
  */
 import { act, renderHook } from '@testing-library/react'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
-import type { ChatSession } from '@tabtin/chat-client'
+import type { ChatSession } from '@muse/chat-client'
 
 const loadModels = vi.fn(async () => {})
 const switchModel = vi.fn(async () => {})

@@ -20,7 +20,7 @@ import { useSpaceContextTabsStore } from '@stores/useSpaceContextTabsStore'
 import { openResourceTabGuarded } from '../restore/openResourceMembershipGuard'
 import { installTabdocDirtyProvider } from '../tabdoc/tabdocDirtyProvider'
 import { registerDesktopTabHandler } from '../desktopTabHandler'
-import type { ManifestOpens } from '@tabtin/resource-router'
+import type { ManifestOpens } from '@muse/resource-router'
 import { logger } from '@/utils/logger'
 import {
   adaptIndustryParams,
@@ -160,7 +160,7 @@ wireResourceRouter({
     openResourceTabGuarded(tabScopeKey, withOss, spaceId)
   },
   shellOpenExternal: async (url) => {
-    const result = await window.tabtin?.openExternal?.(url)
+    const result = await window.muse?.openExternal?.(url)
     if (result && result.success === false) {
       throw new Error(result.error || 'shell.openExternal returned success=false')
     }
@@ -189,7 +189,7 @@ wireResourceRouter({
       pointer,
       workingDir: space?.working_dir || agent?.working_dir || null,
       pathExists: async (absolutePath) => {
-        const pathExists = window.tabtin?.fileSystem?.pathExists
+        const pathExists = window.muse?.fileSystem?.pathExists
         if (!pathExists) {
           throw new Error('当前环境不支持本地文件检查')
         }
@@ -261,13 +261,13 @@ logger.debug('[resourceRouter] manifest opens 注册完成', {
 // 在 fallback 路径只能靠 disposition 还原（见 ./windowOpenFallback.ts 抽出的纯函数）。
 import { isModifierExternalDisposition } from './windowOpenFallback'
 
-if (typeof window !== 'undefined' && typeof window.tabtin?.resourceRouter?.onOpenFallback === 'function') {
+if (typeof window !== 'undefined' && typeof window.muse?.resourceRouter?.onOpenFallback === 'function') {
   // 异步 import 避免循环依赖（resourceRouter.ts → 注入 contextRegistry → registry/index.ts）
   void import('@/services/resourceRouter').then(async ({ resourceRouter }) => {
-    const { parseResourcePointer } = await import('@tabtin/resource-router')
+    const { parseResourcePointer } = await import('@muse/resource-router')
     const { useSpaceStore } = await import('@/stores/useSpaceStore')
     const { tryOpenPreviewableDirectUrl } = await import('@/components/chat/preview/assetPreviewResolver')
-    window.tabtin!.resourceRouter!.onOpenFallback(({ url, source, disposition, filename, mimeType, assetId }) => {
+    window.muse!.resourceRouter!.onOpenFallback(({ url, source, disposition, filename, mimeType, assetId }) => {
       const modifierExternal = isModifierExternalDisposition(disposition)
       // ⌘/Ctrl 仍走系统应用；普通 window.open 的 xlsx/pdf/image 进 Preview Modal。
       if (!modifierExternal && tryOpenPreviewableDirectUrl(url, {

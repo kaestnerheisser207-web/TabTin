@@ -41,11 +41,11 @@ android {
         )
     }
     val observabilityEnvironment = if (releaseUsesProduction) "production" else "test"
-    val gitSha = (providers.gradleProperty("TABTIN_GIT_SHA").orNull
-        ?: System.getenv("TABTIN_GIT_SHA")
+    val gitSha = (providers.gradleProperty("MUSE_GIT_SHA").orNull
+        ?: System.getenv("MUSE_GIT_SHA")
         ?: "").trim().lowercase()
     if (gitSha.isNotEmpty() && !gitSha.matches(Regex("[0-9a-f]{7,40}"))) {
-        throw GradleException("TABTIN_GIT_SHA 必须是 7～40 位小写十六进制 Git SHA")
+        throw GradleException("MUSE_GIT_SHA 必须是 7～40 位小写十六进制 Git SHA")
     }
     val releaseApiBaseUrl = if (releaseUsesProduction) {
         "https://api.example.com/api"
@@ -106,7 +106,7 @@ android {
         // prod 域名常量，供按 apiBaseUrl 推导 Centrifugo 环境。
         buildConfigField("String", "CENTRIFUGO_WS_URL_PROD", "\"wss://centrifugo.example.com/connection/websocket\"")
         buildConfigField("String", "OBSERVABILITY_ENVIRONMENT", "\"test\"")
-        buildConfigField("String", "TABTIN_GIT_SHA", "\"$gitSha\"")
+        buildConfigField("String", "MUSE_GIT_SHA", "\"$gitSha\"")
 
         externalNativeBuild {
             cmake {

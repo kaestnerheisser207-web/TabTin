@@ -12,7 +12,7 @@ const { mockPoolNext, mockCheckerCheck, MockUAPool, MockProxyHealthChecker } = v
   return { mockPoolNext, mockCheckerCheck, MockUAPool, MockProxyHealthChecker }
 })
 
-vi.mock('@tabtin/anti-detect', () => ({
+vi.mock('@muse/anti-detect', () => ({
   UAPool: MockUAPool,
   DESKTOP_UA_POOL: ['desktop-ua-1', 'desktop-ua-2'],
   MOBILE_UA_POOL: ['mobile-ua-1'],

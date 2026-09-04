@@ -5,7 +5,7 @@
  * the IPC-based apiService) because they need the chat-specific base URL.
  */
 
-import { joinApiPath } from '@tabtin/config'
+import { joinApiPath } from '@muse/config'
 import { API_CONFIG } from '../config/api'
 import { useAuthStore } from '../stores/useAuthStore'
 import { electronFetch } from './electronFetch'
@@ -21,7 +21,7 @@ import type {
   RevertHistoryEntryView,
   SessionRollbackState,
   GroupRuntimeConfig,
-} from '@tabtin/chat-client'
+} from '@muse/chat-client'
 
 function getToken(): string {
   const token = useAuthStore.getState().accessToken

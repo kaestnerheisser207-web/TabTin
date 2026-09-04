@@ -4,7 +4,7 @@ agent_execution — 服务端 Agent 执行入口。
 ChatService（send_message_sync）及其子服务的统一归属包。
 从 orchestration 物理搬迁而来。W10 之后 ChatService 是纯薄壳：
 prepare → ingest → contextualize → route，所有 ReAct / 工具执行都在
-客户端 ``@tabtin/agent-runtime`` 中完成。
+客户端 ``@muse/agent-runtime`` 中完成。
 
 Public API:
     ChatService          — 唯一的外部入口（send_message_sync）

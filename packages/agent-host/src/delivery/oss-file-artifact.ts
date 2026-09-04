@@ -319,7 +319,7 @@ export function buildOssFileArtifactBlock(args: {
       file_id: args.fileId,
       file_type: args.fileType,
       filename,
-      url: `tabtin://resource/file/${encodeURIComponent(args.fileId)}?${params.toString()}`,
+      url: `muse://resource/file/${encodeURIComponent(args.fileId)}?${params.toString()}`,
       mime_type: args.mimeType,
       ...(typeof args.fileSize === 'number' ? { file_size: args.fileSize } : {}),
       access_url: args.accessUrl,

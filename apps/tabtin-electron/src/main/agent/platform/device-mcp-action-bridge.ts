@@ -10,7 +10,7 @@
  * 链路：远端客户端 → Django devices/query → device topic envelope →
  * 本模块读 LocalMcpService → `agent.action.result` 回传。
  */
-import { AgentActionEvents } from '@tabtin/ws-gateway-client'
+import { AgentActionEvents } from '@muse/ws-gateway-client'
 import { electronWsGateway } from '../../ws/ElectronWsGateway.js'
 import { getLocalMcpService } from '../../services/LocalMcpService.js'
 import { createLogger } from '../../logger'

@@ -12,8 +12,8 @@ import {
 } from 'react'
 import { createPortal } from 'react-dom'
 import { useTranslation } from 'react-i18next'
-import type { OrganizationMember } from '@tabtin/app-shell'
-import { useAppHostClient } from '@tabtin/app-host-sdk'
+import type { OrganizationMember } from '@muse/app-shell'
+import { useAppHostClient } from '@muse/app-host-sdk'
 import { Button, toast } from '@components/ui'
 import {
   addDocumentCommentMessage,
@@ -30,7 +30,7 @@ import {
   type CommentMessage,
   type CommentAnchorV1,
   type CommentThread,
-} from '@tabtin/tabdoc-ui/api-client'
+} from '@muse/tabdoc-ui/api-client'
 import {
   CommentRail,
   DocumentCommentThreadsSection,
@@ -45,7 +45,7 @@ import {
   type CommentYjsCodec,
   type DocumentCommentMentionCandidate,
   type EditorInstance,
-} from '@tabtin/tabdoc-ui/editor'
+} from '@muse/tabdoc-ui/editor'
 import { MemberApiService } from '@/services/memberApi'
 import { useAuthStore } from '@stores/useAuthStore'
 import { electronTabDocEventStreamPort } from '../adapters/electronTabDocEventStreamPort'

@@ -48,7 +48,7 @@ Agent 不得覆盖已有本地配置、修改全局 npm registry、绕过健康�
 
 使用同一个 `<LAN_IP>` 配置桌面端、Android 和 iOS：
 
-- **桌面端**：在根目录 `.env.local` 中将 `TABTIN_API_BASE_URL` / `VITE_API_BASE_URL` 设为 `http://<LAN_IP>:6060/api`，将 `VITE_COLLAB_WS_BASE`、`VITE_CENTRIFUGO_WS_URL` 和 `VITE_PUBLIC_WEB_BASE_URL` 分别设为 `ws://<LAN_IP>:4100`、`ws://<LAN_IP>:8100/connection/websocket` 和 `http://<LAN_IP>:5176`，然后再执行全量预览或桌面 Debug 构建。
+- **桌面端**：在根目录 `.env.local` 中将 `MUSE_API_BASE_URL` / `VITE_API_BASE_URL` 设为 `http://<LAN_IP>:6060/api`，将 `VITE_COLLAB_WS_BASE`、`VITE_CENTRIFUGO_WS_URL` 和 `VITE_PUBLIC_WEB_BASE_URL` 分别设为 `ws://<LAN_IP>:4100`、`ws://<LAN_IP>:8100/connection/websocket` 和 `http://<LAN_IP>:5176`，然后再执行全量预览或桌面 Debug 构建。
 - **Android**：构建 Debug APK 时传入 `-PDEV_HOST=<LAN_IP> -PDEV_PORT=6060 -PDEV_WEB_BASE_URL=http://<LAN_IP>:5176`。真机必须与服务端电脑在同一局域网；只有 Android Emulator 未使用局域网地址时，才使用其宿主机映射地址 `10.0.2.2`。
 - **iOS**：使用桌面端生成的环境二维码导入上述局域网地址后，再构建或安装 Debug 包；不要填写 `localhost`。
 
@@ -140,10 +140,10 @@ node scripts/dev.mjs electron
 Community 包需要四个公开服务地址，不能包含账号、密码或其他凭据：
 
 ```bash
-export TABTIN_COMMUNITY_API_BASE_URL=https://api.example.org/api
-export TABTIN_COMMUNITY_COLLAB_WS_BASE=wss://api.example.org/collab
-export TABTIN_COMMUNITY_CENTRIFUGO_WS_URL=wss://api.example.org/connection/websocket
-export TABTIN_COMMUNITY_PUBLIC_WEB_BASE_URL=https://web.example.org
+export MUSE_COMMUNITY_API_BASE_URL=https://api.example.org/api
+export MUSE_COMMUNITY_COLLAB_WS_BASE=wss://api.example.org/collab
+export MUSE_COMMUNITY_CENTRIFUGO_WS_URL=wss://api.example.org/connection/websocket
+export MUSE_COMMUNITY_PUBLIC_WEB_BASE_URL=https://web.example.org
 ```
 
 macOS/Linux 执行 `pnpm --dir apps/tabtin-electron build:mac:community` 或 `build:linux:community`；Windows PowerShell 设置同名 `$env:` 变量后执行 `build:win:community`。安装包应出现在 `apps/tabtin-electron/dist-app/`。这是 Community 分发流程，不是下方 Debug 构建的验收证据。

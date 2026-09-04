@@ -19,7 +19,7 @@ import { useLocalDirRootHealth } from './useLocalDirRootHealth'
 import { isCodeFile, isTextFile, isOfficeFile, getBaseName } from './utils'
 import { useFileContentWatch, FILE_DELETED_VERSION } from '@hooks/useFileContentWatch'
 import { useTranslation } from 'react-i18next'
-import { toast } from '@tabtin/smartsheet-ui'
+import { toast } from '@muse/smartsheet-ui'
 import { WorkdirPaneShell } from '@components/layout/WorkdirPaneShell'
 import { formatIpcErrorForUser } from '@/services/ipc-error'
 import { isOfficeOwnerLockFile } from './fileEntryVisibility'
@@ -170,7 +170,7 @@ export const FileExplorerPane: React.FC<FileExplorerPaneProps> = ({
       // contract W2-β：旧 envelope `{success, data, error}` 改为 invokeIpc 直接返
       // `{ data }` 或 throw —— catch 块统一文案；FileExplorerPane 是次要预览路径，
       // 失败显示带 trace 末 6 位的提示，方便用户截图给开发者。
-      const result = await window.tabtin.fileSystem.readFilePreview(entry.path, {
+      const result = await window.muse.fileSystem.readFilePreview(entry.path, {
         maxBytes: shouldLoadMore ? MAX_EDIT_BYTES : undefined
       })
       if (result?.data) {
@@ -207,7 +207,7 @@ export const FileExplorerPane: React.FC<FileExplorerPaneProps> = ({
     let cancelled = false
     setPreviewLoading(true)
     const shouldLoadMore = isTextFile(selectedFile.name) || isCodeFile(selectedFile.name) || isOfficeFile(selectedFile.name)
-    window.tabtin.fileSystem.readFilePreview(filePath, {
+    window.muse.fileSystem.readFilePreview(filePath, {
       maxBytes: shouldLoadMore ? MAX_EDIT_BYTES : undefined,
     })
       .then((result) => {
@@ -319,8 +319,8 @@ export const FileExplorerPane: React.FC<FileExplorerPaneProps> = ({
   // 在 Finder 中打开
   const handleOpenInFinder = useCallback(async () => {
     try {
-      // contract W2-β: 走 window.tabtin 抽象，channel 仍在 LEGACY_HANDLERS 透传。
-      await window.tabtin.openPath(normalizedRootPath)
+      // contract W2-β: 走 window.muse 抽象，channel 仍在 LEGACY_HANDLERS 透传。
+      await window.muse.openPath(normalizedRootPath)
     } catch (err) {
       console.error('[FileExplorerPane] openInFinder error:', err)
       toast.error(t('errorToast.revealFailed'))

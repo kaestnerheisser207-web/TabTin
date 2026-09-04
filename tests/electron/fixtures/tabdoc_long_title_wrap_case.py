@@ -184,7 +184,7 @@ def ensure_context(run_id: str) -> dict:
 
 
 def prepare_case() -> None:
-    context = ensure_context(require_env("TABTIN_E2E_RUN_ID"))
+    context = ensure_context(require_env("MUSE_E2E_RUN_ID"))
     document = context["document"]
     context_item = context["contextItem"]
     emit({
@@ -220,7 +220,7 @@ def prepare_case() -> None:
 
 
 def auth_case() -> None:
-    context = ensure_context(require_env("TABTIN_E2E_RUN_ID"))
+    context = ensure_context(require_env("MUSE_E2E_RUN_ID"))
     emit(build_electron_auth_payload(
         user=context["user"],
         organization=context["organization"],
@@ -232,10 +232,10 @@ def auth_case() -> None:
 
 
 def verify_case() -> None:
-    document_id = require_env("TABTIN_E2E_DOCUMENT_ID")
-    expected_title = require_env("TABTIN_E2E_EXPECTED_TITLE")
-    expected_space_id = require_env("TABTIN_E2E_SPACE_ID")
-    expected_organization_id = require_env("TABTIN_E2E_ORGANIZATION_ID")
+    document_id = require_env("MUSE_E2E_DOCUMENT_ID")
+    expected_title = require_env("MUSE_E2E_EXPECTED_TITLE")
+    expected_space_id = require_env("MUSE_E2E_SPACE_ID")
+    expected_organization_id = require_env("MUSE_E2E_ORGANIZATION_ID")
     document = Document.objects.get(id=document_id)
     context_item = (
         ContextItem.objects
@@ -244,7 +244,7 @@ def verify_case() -> None:
         .first()
     )
     emit({
-        "runId": require_env("TABTIN_E2E_RUN_ID"),
+        "runId": require_env("MUSE_E2E_RUN_ID"),
         "documentId": str(document.id),
         "title": document.title,
         "titleMatches": document.title == expected_title,
@@ -264,7 +264,7 @@ def verify_case() -> None:
 
 
 def main() -> None:
-    mode = require_env("TABTIN_E2E_MODE")
+    mode = require_env("MUSE_E2E_MODE")
     if mode == "prepare":
         prepare_case()
         return
@@ -274,7 +274,7 @@ def main() -> None:
     if mode == "verify":
         verify_case()
         return
-    raise RuntimeError(f"Unknown TABTIN_E2E_MODE: {mode}")
+    raise RuntimeError(f"Unknown MUSE_E2E_MODE: {mode}")
 
 
 main()

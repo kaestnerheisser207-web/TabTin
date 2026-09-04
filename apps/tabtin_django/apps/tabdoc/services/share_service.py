@@ -29,7 +29,7 @@ from apps.tabdoc.services.comment_service import DocumentCommentService
 
 logger = logging.getLogger("tabdoc.share")
 
-TABDOC_DB = ('default' if getattr(settings, 'TABTIN_SINGLE_DATABASE_MODE', False) else 'postgresql')
+TABDOC_DB = ('default' if getattr(settings, 'MUSE_SINGLE_DATABASE_MODE', False) else 'postgresql')
 MAX_BATCH_INVITE = 50
 DEDUPE_WINDOW_MINUTES = 5
 VALID_PERMISSIONS = {"viewer", "editor", "admin"}

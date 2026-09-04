@@ -1,8 +1,8 @@
 /**
  * Host 侧拉取 AgentSkillLink → enabled map（Daemon 与 Electron 同契约）。
  */
-import { joinApiPath } from '@tabtin/config';
-import { parseAgentSkillEnablementResponse } from '@tabtin/agent-runtime/skills';
+import { joinApiPath } from '@muse/config';
+import { parseAgentSkillEnablementResponse } from '@muse/agent-runtime/skills';
 
 export async function fetchSkillEnablementMap(params: {
   apiBaseUrl: string;

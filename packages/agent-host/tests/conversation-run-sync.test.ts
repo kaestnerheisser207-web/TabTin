@@ -4,7 +4,7 @@
 
 import { describe, it, expect } from 'vitest'
 import { ConversationRunCoordinator } from '../src/conversation/conversation-run-coordinator.js'
-import type { AgentRunSyncPayload } from '@tabtin/agent-wire'
+import type { AgentRunSyncPayload } from '@muse/agent-wire'
 
 function deferred<T = void>() {
   let resolve!: (v: T) => void

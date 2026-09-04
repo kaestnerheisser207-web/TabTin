@@ -86,7 +86,7 @@ export function createMainWindowRegistry(
       setMainWindowNotificationHostReady(false)
       broadcastNotificationHostState()
       if (isMainFrame && errorCode !== -3) {
-        const isPackagedResource = validatedURL.startsWith('tabtin-file://')
+        const isPackagedResource = validatedURL.startsWith('muse-file://')
         captureClientError(new Error(`Main renderer failed to load: ${errorDescription}`), {
           handled_by: 'main_window_load_failure',
           error_category: isPackagedResource ? 'STARTUP_FATAL' : 'NETWORK_FATAL',

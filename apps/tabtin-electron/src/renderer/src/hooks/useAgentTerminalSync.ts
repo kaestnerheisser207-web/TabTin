@@ -22,7 +22,7 @@
  *     main 端 emit / preload 暴露 / 本 hook 订阅都不再消费。
  *
  * IPC 边界（agent-bridge.ts JSDoc L421-432）：
- *   - renderer 经 `window.tabtin?.pty.onAgentSessionCreated` 收到事件的
+ *   - renderer 经 `window.muse?.pty.onAgentSessionCreated` 收到事件的
  *     时序受 IPC 延迟影响，可能晚于 ShellCap 命令本身 return 几 ms 到
  *     几十 ms。这是 Electron IPC 物理边界、不是 bug；本 hook 不尝试同步。
  *
@@ -145,7 +145,7 @@ export function useAgentTerminalSync(): void {
     // 会自动把全局订阅者合并到任何 scope 的事件 forward 列表，所以全局订阅
     // 本来就能收到所有 spaceId 的事件。事件 payload 自带 info.spaceId，
     // 路由由 handle*Ref 内的 knownSpaceIdsRef 校验完成。
-    const pty = window.tabtin?.pty
+    const pty = window.muse?.pty
     const unsubCreated = pty?.onAgentSessionCreated?.(stableHandleCreated)
     const unsubClosed = pty?.onAgentSessionClosed?.(stableHandleClosed)
 

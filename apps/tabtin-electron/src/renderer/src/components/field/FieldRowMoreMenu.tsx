@@ -11,10 +11,10 @@ import {
   PopoverTrigger,
   Switch,
   cn,
-} from '@tabtin/smartsheet-ui';
+} from '@muse/smartsheet-ui';
 import { MoreHorizontal } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
-import { isPrimaryFieldAllowedType, type Field } from '@tabtin/table-core';
+import { isPrimaryFieldAllowedType, type Field } from '@muse/table-core';
 
 const CLOSE_DELAY_MS = 150;
 

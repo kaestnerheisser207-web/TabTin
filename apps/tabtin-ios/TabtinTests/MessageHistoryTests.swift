@@ -171,7 +171,7 @@ final class MessageHistoryTests: XCTestCase {
                 "file_size":8090,
                 "access_url":"https://oss.example.com/mountain.png",
                 "source_tool_use_id":"tool-use-ios-history",
-                "url":"tabtin://resource/file/file-ios-001?hint=tabfiles"
+                "url":"muse://resource/file/file-ios-001?hint=tabfiles"
               }
             }
           ]}

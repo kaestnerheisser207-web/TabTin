@@ -18,7 +18,7 @@ import {
   getSharedSoMService,
   DOMOperationHelper,
   getSharedCDPOperationHelper,
-} from '@tabtin/browser-core'
+} from '@muse/browser-core'
 
 // ── helpers ──────────────────────────────────────────────────────────
 

@@ -1,4 +1,4 @@
-import type { Model, ContextTier } from '@tabtin/chat-client'
+import type { Model, ContextTier } from '@muse/chat-client'
 import { useSendCooldownStore } from '@/stores/chat/execution/sendCooldown'
 import { computeComposerAcceptTypes } from './modelAttachmentCapabilities'
 

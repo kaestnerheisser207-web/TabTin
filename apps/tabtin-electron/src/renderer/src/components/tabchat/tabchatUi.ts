@@ -7,7 +7,7 @@
 
 import { COMPOSER_TEXT_BODY } from '../chat/registry/chatDesignTokens'
 
-// eslint-disable-next-line tabtin/no-design-system-violations -- IM body readable density @ zoom 0.9
+// eslint-disable-next-line muse/no-design-system-violations -- IM body readable density @ zoom 0.9
 const IM_TEXT_15_BASE = 'text-[15px] font-normal antialiased'
 
 /** 消息气泡正文（含 Markdown 渲染） */

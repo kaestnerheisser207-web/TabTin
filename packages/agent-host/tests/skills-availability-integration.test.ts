@@ -1,6 +1,6 @@
 import { describe, expect, it, vi } from 'vitest'
-import type { EngineState, ToolContext } from '@tabtin/agent-runtime/engine'
-import { renderSkillNames, type LocalSkill } from '@tabtin/agent-runtime/skills'
+import type { EngineState, ToolContext } from '@muse/agent-runtime/engine'
+import { renderSkillNames, type LocalSkill } from '@muse/agent-runtime/skills'
 import { SkillsCap } from '../src/capabilities/skills.js'
 import { SkillsStore } from '../src/state/skills/skills-store.js'
 import {
@@ -8,7 +8,7 @@ import {
   makeRunCtx,
   sectionContent,
 } from './fixtures/fake-capabilities.js'
-import { SYSTEM_SECTION_NAMES } from '@tabtin/agent-runtime/engine'
+import { SYSTEM_SECTION_NAMES } from '@muse/agent-runtime/engine'
 
 const SKILL: LocalSkill = {
   canonicalKey: 'platform:visualization/tabtin-widget',

@@ -135,6 +135,6 @@ describe('codegen surface preload 验证', () => {
     expect(content).toContain('ChatExportMdOutput')
 
     // import type 使用正确的包路径
-    expect(content).toContain("from '@tabtin/cli-server-core/surfaces/chat-export-md'")
+    expect(content).toContain("from '@muse/cli-server-core/surfaces/chat-export-md'")
   })
 })

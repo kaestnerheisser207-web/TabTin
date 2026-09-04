@@ -16,21 +16,21 @@ import { promisify } from 'util'
 // 白名单，invokeIpc shim 进 Tier 0 → 抛 LEGACY_SHAPE。
 // 修法：handler 改返 envelope `{ok:true, data}`，invokeIpc 自动 unwrap，
 // renderer caller (`useSpaceApps.ts`) 拿到的形态完全一致（仍是 record 对象）。
-import { okResponse } from '@tabtin/agent-wire'
+import { okResponse } from '@muse/agent-wire'
 // dogfood 4d2108a2 第 7 轮：删除 dead imports —— 实际抽取走 shell `tar -xzf`
 // 命令（行 196 `execFileAsync('tar', ['-xzf', ...])`），不需要 stream/promises
 // pipeline / zlib createGunzip / 'tar' npm 包的 Extract API。这些 import 一直
 // 是死代码，但 esbuild 不报错让它进 dist；缩小 main typecheck 范围后 tsc 抓
 // 出 'tar' 包 types 缺失（实际是包都没声明依赖），整理时一并删除。
 import { net } from 'electron'
-import { registerStorageBucket } from '@tabtin/storage-manager'
+import { registerStorageBucket } from '@muse/storage-manager'
 import {
   createBundledOfficialPluginCatalog,
   installOfficialPluginRelease,
   type InstalledOfficialPluginRecord,
   type OfficialPluginCapabilityManifest,
   type UpstreamPluginIdentity,
-} from '@tabtin/agent-runtime/official-plugins'
+} from '@muse/agent-runtime/official-plugins'
 
 import {
   resolveMarketplaceChecksumKey,
@@ -128,7 +128,7 @@ class MarketplaceAppInstaller {
    * Wave D（2026-04-17）SHA256 强校验：
    * - 默认必须能在 manifest `cli.checksums` 中找到当前 platform/arch 对应的哈希；
    *   缺失或当前 platform 无映射时**拒装**（PRD §6.5 / §10.3 Expand-Contract）。
-   * - dev/CI 通过 `TABTIN_ALLOW_UNCHECKED_INSTALL=1` 显式豁免；生产构建强校验。
+   * - dev/CI 通过 `MUSE_ALLOW_UNCHECKED_INSTALL=1` 显式豁免；生产构建强校验。
    * - 无论是否豁免，只要 manifest 提供了对应 checksum，都会校验失败时拒装（不允许悄悄绕过）。
    */
   async installApp(appId: string, manifest: AppManifest): Promise<void> {
@@ -155,13 +155,13 @@ class MarketplaceAppInstaller {
       process.arch,
     )
     const expectedChecksum = checksumKey ? cli.checksums?.[checksumKey] : undefined
-    const allowUnchecked = process.env.TABTIN_ALLOW_UNCHECKED_INSTALL === '1'
+    const allowUnchecked = process.env.MUSE_ALLOW_UNCHECKED_INSTALL === '1'
 
     if (!expectedChecksum && !allowUnchecked) {
       throw new Error(
         `[E_INSTALL_CHECKSUM_MISSING] Refusing to install '${appId}': ` +
           `manifest.cli.checksums is missing entry for '${checksumKey ?? 'current platform'}'. ` +
-          `Set TABTIN_ALLOW_UNCHECKED_INSTALL=1 only for dev/CI.`,
+          `Set MUSE_ALLOW_UNCHECKED_INSTALL=1 only for dev/CI.`,
       )
     }
 
@@ -172,7 +172,7 @@ class MarketplaceAppInstaller {
     } else if (allowUnchecked) {
       log.warn(
         `'${appId}': SHA256 verification skipped ` +
-          `because TABTIN_ALLOW_UNCHECKED_INSTALL=1 (dev/CI escape hatch). ` +
+          `because MUSE_ALLOW_UNCHECKED_INSTALL=1 (dev/CI escape hatch). ` +
           `Production builds must populate manifest.cli.checksums.`,
       )
     }

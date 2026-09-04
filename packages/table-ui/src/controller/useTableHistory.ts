@@ -3,8 +3,8 @@
  */
 
 import { useState, useCallback } from 'react'
-import { UndoRedoApiService } from '@tabtin/table-core'
-import type { HistoryOperationOut } from '@tabtin/table-core'
+import { UndoRedoApiService } from '@muse/table-core'
+import type { HistoryOperationOut } from '@muse/table-core'
 
 const TABLE_HISTORY_PAGE_SIZE = 20
 

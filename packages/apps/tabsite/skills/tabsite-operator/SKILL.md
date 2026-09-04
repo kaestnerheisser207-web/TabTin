@@ -68,17 +68,17 @@ run_terminal_command(command="muse site build <site-id>")
 # 想中途取消用 run_terminal_command 跑 `kill <pid>`。
 ```
 
-dashboard 模板创建后，`VITE_TABTIN_TOKEN` 和 `VITE_TABTIN_API_URL` 已自动写入 `.env.local`，前端代码通过 `import.meta.env` 读取即可。
+dashboard 模板创建后，`VITE_MUSE_TOKEN` 和 `VITE_MUSE_API_URL` 已自动写入 `.env.local`，前端代码通过 `import.meta.env` 读取即可。
 
 ### 数据联动
 
 站点前端直接调用 TabData Open API：
 
 ```typescript
-const API_URL = import.meta.env.VITE_TABTIN_API_URL
-const TOKEN = import.meta.env.VITE_TABTIN_TOKEN
-const SPACE_ID = import.meta.env.VITE_TABTIN_SPACE_ID
-const TABLE_ID = import.meta.env.VITE_TABTIN_TABLE_ID
+const API_URL = import.meta.env.VITE_MUSE_API_URL
+const TOKEN = import.meta.env.VITE_MUSE_TOKEN
+const SPACE_ID = import.meta.env.VITE_MUSE_SPACE_ID
+const TABLE_ID = import.meta.env.VITE_MUSE_TABLE_ID
 
 const res = await fetch(
   `${API_URL}/api/open/v1/spaces/${SPACE_ID}/data/tables/${TABLE_ID}/records?page_size=50`,
@@ -95,7 +95,7 @@ blank 模板不自动创建 Token，需手动：
 
 ```python
 tabsite_provision_token(site_id="<id>")
-# 返回 VITE_TABTIN_TOKEN → 用 `muse code write` 写入 .env.local
+# 返回 VITE_MUSE_TOKEN → 用 `muse code write` 写入 .env.local
 ```
 
 ### 绑定数据表

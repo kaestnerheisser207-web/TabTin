@@ -1,13 +1,13 @@
 /**
  * /oss/upload — 上传本地文件到 OSS，返回访问 URL。
  *
- * 委托 @tabtin/action-tools/utils/oss-upload；不依赖宿主 GUI，可在
- * Daemon / Electron 两端通用。Daemon 走 @tabtin/oss-client 直传，
+ * 委托 @muse/action-tools/utils/oss-upload；不依赖宿主 GUI，可在
+ * Daemon / Electron 两端通用。Daemon 走 @muse/oss-client 直传，
  * Electron 走宿主注入的 uploadToOSS 函数（详见 oss-upload.ts 头注释）。
  */
 
 import type { ServerResponse } from 'node:http';
-import { errorResponse, okResponse, type SendJSON } from '@tabtin/cli-server-core';
+import { errorResponse, okResponse, type SendJSON } from '@muse/cli-server-core';
 import { djangoRequest } from '../host-bindings.js';
 import {
   guardLocalFile,
@@ -128,7 +128,7 @@ export async function performLocalFileUpload(
   const contextId = opts.contextId?.trim() || `cli-upload-${Date.now()}`;
 
   try {
-    const mod: any = await import('@tabtin/action-tools/utils/oss-upload' as any);
+    const mod: any = await import('@muse/action-tools/utils/oss-upload' as any);
     const uploadFileToOSS = mod.uploadFileToOSS as (
       path: string,
       o: any,
@@ -226,14 +226,14 @@ export async function handleOSSRoute(
   if (url === '/oss/storage/files/batch-delete' && method === 'POST') {
     const organizationId = (typeof body?.organization_id === 'string' && body.organization_id.trim())
       ? body.organization_id.trim()
-      : (typeof process.env.TABTIN_ORGANIZATION_ID === 'string' && process.env.TABTIN_ORGANIZATION_ID.trim()
-        ? process.env.TABTIN_ORGANIZATION_ID.trim()
+      : (typeof process.env.MUSE_ORGANIZATION_ID === 'string' && process.env.MUSE_ORGANIZATION_ID.trim()
+        ? process.env.MUSE_ORGANIZATION_ID.trim()
         : '');
     if (!organizationId) {
       sendJSON(
         res,
         400,
-        errorResponse('VALIDATION_ERROR', '缺少 organization_id。请设置 TABTIN_ORGANIZATION_ID 或传入 organization_id'),
+        errorResponse('VALIDATION_ERROR', '缺少 organization_id。请设置 MUSE_ORGANIZATION_ID 或传入 organization_id'),
       );
       return;
     }
@@ -258,14 +258,14 @@ export async function handleOSSRoute(
   if (url === '/oss/storage/files/batch-delete' && method === 'POST') {
     const organizationId = (typeof body?.organization_id === 'string' && body.organization_id.trim())
       ? body.organization_id.trim()
-      : (typeof process.env.TABTIN_ORGANIZATION_ID === 'string' && process.env.TABTIN_ORGANIZATION_ID.trim()
-        ? process.env.TABTIN_ORGANIZATION_ID.trim()
+      : (typeof process.env.MUSE_ORGANIZATION_ID === 'string' && process.env.MUSE_ORGANIZATION_ID.trim()
+        ? process.env.MUSE_ORGANIZATION_ID.trim()
         : '');
     if (!organizationId) {
       sendJSON(
         res,
         400,
-        errorResponse('VALIDATION_ERROR', '缺少 organization_id。请设置 TABTIN_ORGANIZATION_ID 或传入 organization_id'),
+        errorResponse('VALIDATION_ERROR', '缺少 organization_id。请设置 MUSE_ORGANIZATION_ID 或传入 organization_id'),
       );
       return;
     }

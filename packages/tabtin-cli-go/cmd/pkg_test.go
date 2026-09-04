@@ -389,7 +389,7 @@ func TestContentType_FallbackOnError(t *testing.T) {
 // 后端 SSoT 而不是内置 fallback。
 //
 // 测试策略:模拟 cli-server 启动时的注入流程 —— 用 NewFactory() + 设环境变量
-// TABTIN_API_URL 让 ResolveBaseURL 命中 httptest 桩,验证桩里返回的自定义 mime
+// MUSE_API_URL 让 ResolveBaseURL 命中 httptest 桩,验证桩里返回的自定义 mime
 // 真实生效。同时校验 override 已被注册(非 nil)。
 func TestContentType_ProductionPathUsesOverride(t *testing.T) {
 	var hits int32
@@ -412,7 +412,7 @@ func TestContentType_ProductionPathUsesOverride(t *testing.T) {
 	}))
 	defer srv.Close()
 
-	t.Setenv("TABTIN_API_URL", srv.URL)
+	t.Setenv("MUSE_API_URL", srv.URL)
 
 	pkgResetContentTypeCache()
 	t.Cleanup(func() {

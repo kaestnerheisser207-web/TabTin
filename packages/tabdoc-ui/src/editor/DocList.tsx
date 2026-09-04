@@ -8,10 +8,10 @@ import {
   ContextMenu,
   ContextMenuItem,
   ContextMenuDivider,
-} from '@tabtin/smartsheet-ui'
+} from '@muse/smartsheet-ui'
 import type { TabdocDocument, TabdocSearchItem } from '../api-client'
 import { trashDocument, restoreDocumentFromTrash, createDocument, importDocumentFileDraft, importMarkdown, updateDocument } from '../api-client'
-import { useAppHostClient } from '@tabtin/app-host-sdk'
+import { useAppHostClient } from '@muse/app-host-sdk'
 import { useTabDocHostActions } from '../TabDocHostActionsContext'
 import { useTabDocEditorConfigOptional } from '../TabDocEditorConfigContext'
 import {

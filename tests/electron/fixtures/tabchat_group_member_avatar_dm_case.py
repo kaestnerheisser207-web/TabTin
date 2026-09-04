@@ -146,8 +146,8 @@ def ensure_context(run_id: str) -> dict:
 
 
 def main() -> None:
-    mode = require_env("TABTIN_E2E_MODE")
-    context = ensure_context(require_env("TABTIN_E2E_RUN_ID"))
+    mode = require_env("MUSE_E2E_MODE")
+    context = ensure_context(require_env("MUSE_E2E_RUN_ID"))
     if mode == "prepare":
         emit({
             "runId": context["runId"],
@@ -175,7 +175,7 @@ def main() -> None:
             invite_redeemed=ensure_e2e_invite_redemption(context["owner"]),
         ))
         return
-    raise RuntimeError(f"Unknown TABTIN_E2E_MODE: {mode}")
+    raise RuntimeError(f"Unknown MUSE_E2E_MODE: {mode}")
 
 
 main()

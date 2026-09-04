@@ -18,7 +18,7 @@ W10 cleanup：``apps/services/agent_engine/prompts/`` 目录已在 M1
 
 Locale 选择（按优先级首个命中即停）：
 
-- ``TABTIN_PROMPT_LOCALE`` 环境变量（显式覆盖）
+- ``MUSE_PROMPT_LOCALE`` 环境变量（显式覆盖）
 - ``django.conf.settings.LANGUAGE_CODE`` 的两位前缀
 - 内置 fallback ``["zh", "en"]``
 
@@ -58,7 +58,7 @@ _PROMPTS_APPS_PKG = "apps.services.agent_engine.prompts.apps"
 
 def _resolve_prompt_locales() -> list[str]:
     """返回 prompt locale 优先级列表。"""
-    explicit = os.environ.get("TABTIN_PROMPT_LOCALE", "").strip().lower()
+    explicit = os.environ.get("MUSE_PROMPT_LOCALE", "").strip().lower()
     candidates: list[str] = []
     if explicit:
         candidates.append(explicit)

@@ -63,7 +63,7 @@ describe('guardLoadURL', () => {
 
   it('allows unknown schemes (file / tabtin)', () => {
     expect(guardLoadURL({ url: 'file:///tmp/a.xlsx' })).toEqual({ action: 'allow' })
-    expect(guardLoadURL({ url: 'tabtin://resource/file/a.xlsx' })).toEqual({
+    expect(guardLoadURL({ url: 'muse://resource/file/a.xlsx' })).toEqual({
       action: 'allow',
     })
   })

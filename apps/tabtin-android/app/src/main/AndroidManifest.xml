@@ -86,12 +86,12 @@
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
-                <data android:scheme="tabtin" android:host="invite" />
-                <data android:scheme="tabtin-preprod" android:host="invite" />
+                <data android:scheme="muse" android:host="invite" />
+                <data android:scheme="muse-preprod" android:host="invite" />
             </intent-filter>
             <!--
                 Wave 3 (X3): rich_content resource_ref 点击 → 跳转资源详情。
-                URL 格式：tabtin://resource/<resource_type>/<resource_id>，与 iOS 同 scheme。
+                URL 格式：muse://resource/<resource_type>/<resource_id>，与 iOS 同 scheme。
                 同一 scheme 复用之前 invite 的 BROWSABLE 权限，外部链接（聊天里粘贴 URL）
                 也能被本应用拦截。当前 Wave 没有真正的资源详情页，DeepLinkHandler 暂走
                 "即将支持"提示——见 ConversationViewModel 失败反思 Y1。
@@ -100,7 +100,7 @@
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
-                <data android:scheme="tabtin" android:host="resource" />
+                <data android:scheme="muse" android:host="resource" />
             </intent-filter>
         </activity>
         <provider

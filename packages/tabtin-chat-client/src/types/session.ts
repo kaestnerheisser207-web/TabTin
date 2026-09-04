@@ -149,7 +149,7 @@ export interface DecisionSummary {
  * 聊天面板消费的完整版决策上下文。
  *
  * 字段严格对齐后端 `apps.chat.conversation.schemas.CheckpointContextView`。
- * 版本面板使用的精简版见 `@tabtin/collab-core.VersionCheckpointContext`。
+ * 版本面板使用的精简版见 `@muse/collab-core.VersionCheckpointContext`。
  */
 export interface CheckpointContext {
   user_prompt?: string | null

@@ -34,7 +34,7 @@ import {
   ApprovalScopeSchema,
   RuntimeModeSchema,
   ApprovalOutcomeSchema,
-} from '@tabtin/agent-wire';
+} from '@muse/agent-wire';
 
 void ApprovalActionRequestSchema; // 间接通过 payload 校验，导出供消费方使用
 void ApprovalDecisionSchema;

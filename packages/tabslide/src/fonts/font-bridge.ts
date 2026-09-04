@@ -14,7 +14,7 @@ import type { FontDef } from './font-list'
 
 // Re-export font scan adapter for PPTElement → SceneObjects conversion
 export { scanSlideFonts, adaptElementsToSceneObjects } from './font-scan-adapter'
-export type { ScanResult } from '@tabtin/media-core/fonts'
+export type { ScanResult } from '@muse/media-core/fonts'
 
 export interface SharedFontEntry {
   family: string
@@ -33,7 +33,7 @@ let _cachedEntries: SharedFontEntry[] | undefined
 export async function getSharedFontCatalog(): Promise<SharedFontEntry[]> {
   if (_cachedEntries) return _cachedEntries
 
-  const registry = await import('@tabtin/media-core/fonts')
+  const registry = await import('@muse/media-core/fonts')
   const entries = registry.getAvailableFonts()
   _cachedEntries = entries.map((entry: { family: string; category: string; weights: number[]; urlPattern: string; cjk?: boolean }) => ({
     family: entry.family,
@@ -69,7 +69,7 @@ export async function getSharedFontsAsFontDefs(): Promise<FontDef[]> {
  * Returns null if the font is not in the shared catalog.
  */
 export async function resolveFontUrl(family: string): Promise<string | null> {
-  const registry = await import('@tabtin/media-core/fonts')
+  const registry = await import('@muse/media-core/fonts')
   const resolved = registry.findFont(family)
   return resolved?.urlPattern ?? null
 }
@@ -78,7 +78,7 @@ export async function resolveFontUrl(family: string): Promise<string | null> {
  * Check if text contains CJK characters (shared with media-core).
  */
 export async function containsCjk(text: string): Promise<boolean> {
-  const registry = await import('@tabtin/media-core/fonts')
+  const registry = await import('@muse/media-core/fonts')
   return registry.containsCjk(text)
 }
 

@@ -25,7 +25,7 @@ if errorlevel 1 (
 echo Created %REPO_ROOT%\.env from .env.example.
 
 :ensure_switches
-call :ensure_key TABTIN_EDITION || exit /b 1
+call :ensure_key MUSE_EDITION || exit /b 1
 call :ensure_empty_key AUTH_FIXED_VERIFICATION_CODE || exit /b 1
 call :render_runtime_env || exit /b 1
 exit /b 0
@@ -56,13 +56,13 @@ set "EDITION="
 set "FIXED_CODE="
 for /f "usebackq tokens=1,* delims==" %%A in ("%ENV_FILE%") do (
   set "KEY=%%A"
-  if /I "!KEY!"=="TABTIN_EDITION" set "EDITION=%%B"
+  if /I "!KEY!"=="MUSE_EDITION" set "EDITION=%%B"
   if /I "!KEY!"=="AUTH_FIXED_VERIFICATION_CODE" set "FIXED_CODE=%%B"
 )
 if /I "!EDITION!"=="community" set "EDITION=community"
 if /I "!EDITION!"=="saas" set "EDITION=saas"
 if not "!EDITION!"=="community" if not "!EDITION!"=="saas" (
-  echo ERROR: TABTIN_EDITION in %ENV_FILE% must be community or saas.
+  echo ERROR: MUSE_EDITION in %ENV_FILE% must be community or saas.
   endlocal & exit /b 1
 )
 if defined FIXED_CODE (
@@ -79,7 +79,7 @@ if not defined RUNTIME_GUID (
   endlocal & exit /b 1
 )
 set "RUNTIME_TEMP=!RUNTIME_ENV!.tmp.!RUNTIME_GUID!"
->"!RUNTIME_TEMP!" echo TABTIN_EDITION=!EDITION!
+>"!RUNTIME_TEMP!" echo MUSE_EDITION=!EDITION!
 >>"!RUNTIME_TEMP!" echo AUTH_FIXED_VERIFICATION_CODE=!FIXED_CODE!
 move /Y "!RUNTIME_TEMP!" "!RUNTIME_ENV!" >nul
 if errorlevel 1 (

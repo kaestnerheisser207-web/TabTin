@@ -2,9 +2,9 @@
  * Mode Reminder Hook —— 每轮 query iteration 0 注入 sparse mode reminder。
  *
  * **归属（ Phase 1）**：本 hook 原名 `buildModeReminderInjectorHook`，
- * 住在 `@tabtin/agent-runtime` 的 `capability/injectors/mode-reminder-injector.ts`。
- * 因它依赖 `@tabtin/agent-modes` + `@tabtin/agent-prompt`，随「引擎零业务依赖」重构
- * 迁到宿主 `@tabtin/agent-host/hooks`。行为逐字节一致，仅换归属与工厂名
+ * 住在 `@muse/agent-runtime` 的 `capability/injectors/mode-reminder-injector.ts`。
+ * 因它依赖 `@muse/agent-modes` + `@muse/agent-prompt`，随「引擎零业务依赖」重构
+ * 迁到宿主 `@muse/agent-host/hooks`。行为逐字节一致，仅换归属与工厂名
  * （`buildModeReminderInjectorHook` → `buildModeReminderHook`）。
  *
  * 每轮向 messages 注入 mode 约束的 `<system-reminder>`（总控 D5）；默认每轮注入，
@@ -15,17 +15,17 @@
  * 与单块注入模型不匹配，故不走 message-inject 原语、保持独立实现（对齐原设计）。
  */
 
-import { getAgentModeSparseReminder, getModeTransitionReminder } from '@tabtin/agent-modes'
-import type { AgentModeName } from '@tabtin/agent-modes'
-import { buildUserContextWrapper, type UserContextWrapperType } from '@tabtin/agent-prompt'
-import type { Message, EngineHooks, IterationHookContext } from '@tabtin/agent-runtime/engine'
+import { getAgentModeSparseReminder, getModeTransitionReminder } from '@muse/agent-modes'
+import type { AgentModeName } from '@muse/agent-modes'
+import { buildUserContextWrapper, type UserContextWrapperType } from '@muse/agent-prompt'
+import type { Message, EngineHooks, IterationHookContext } from '@muse/agent-runtime/engine'
 import {
   INTERNAL_MESSAGE_MARKERS,
   hasInternalMarker,
   setInternalMarker,
   findLastRealUserIndex,
   isRealUserMessage,
-} from '@tabtin/agent-runtime/engine'
+} from '@muse/agent-runtime/engine'
 
 // ─── Public Types ────────────────────────────────────────────────────
 

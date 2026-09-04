@@ -1,6 +1,6 @@
 import os from 'node:os';
-import type { HostRuntimeSnapshot } from '@tabtin/shared';
-import { API_ENDPOINTS, deriveApiBaseUrl, joinApiPath } from '@tabtin/config';
+import type { HostRuntimeSnapshot } from '@muse/shared';
+import { API_ENDPOINTS, deriveApiBaseUrl, joinApiPath } from '@muse/config';
 import type { DaemonConfig, FatalExitHandler } from '../../base/types/daemon-config.js';
 import type { DaemonGatewayClient } from './gateway-client.js';
 import type { CapabilityDetector } from '../../platform/system/capability/detector.js';
@@ -89,7 +89,7 @@ export class HeartbeatService {
 
   private async detectSandboxStatus(): Promise<void> {
     try {
-      const { createPlatformSandbox, getBwrapUnavailableReason } = await import('@tabtin/terminal-core');
+      const { createPlatformSandbox, getBwrapUnavailableReason } = await import('@muse/terminal-core');
       const sandbox = createPlatformSandbox();
       const available = await sandbox.isAvailable();
       const reason = !available ? getBwrapUnavailableReason() : undefined;

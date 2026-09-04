@@ -1,7 +1,7 @@
 {
-  "_doc": "TaskCapsule 跨端状态投影契约 fixture —— Electron / iOS / Android 必须对同一组投影输入给出 byte-identical 的 canonical status key，并对视觉决策（full/mini/hidden）保持一致。优先级：人工介入 → paused/连接恢复 → 忙碌 → 终态 → 待命。后端不下发颜色/尺寸；视觉态由客户端纯函数 resolveTaskCapsuleVisual 给出（仅 ready → mini；其余含 paused、未读 complete → full）。SSOT：@tabtin/contracts resolveTaskCapsuleStatus / resolveTaskCapsuleVisual；Electron 正典 resolveCapsuleStatus 应委托或等价于该函数。",
+  "_doc": "TaskCapsule 跨端状态投影契约 fixture —— Electron / iOS / Android 必须对同一组投影输入给出 byte-identical 的 canonical status key，并对视觉决策（full/mini/hidden）保持一致。优先级：人工介入 → paused/连接恢复 → 忙碌 → 终态 → 待命。后端不下发颜色/尺寸；视觉态由客户端纯函数 resolveTaskCapsuleVisual 给出（仅 ready → mini；其余含 paused、未读 complete → full）。SSOT：@muse/contracts resolveTaskCapsuleStatus / resolveTaskCapsuleVisual；Electron 正典 resolveCapsuleStatus 应委托或等价于该函数。",
   "spec_version": "v1",
-  "ssot_anchor": "@tabtin/agent-wire cross-lang-fixtures/task-capsule-status-v1.json",
+  "ssot_anchor": "@muse/agent-wire cross-lang-fixtures/task-capsule-status-v1.json",
   "validation_rule": "resolveTaskCapsuleStatus(input) === expected_status; resolveTaskCapsuleVisual(expected_status) === expected_visual",
   "priority_order": [
     "pendingApproval → needsApproval",

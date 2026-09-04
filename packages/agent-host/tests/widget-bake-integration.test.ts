@@ -16,14 +16,14 @@
  */
 
 import { describe, it, expect, vi, beforeEach, afterAll } from 'vitest'
-import { createShowWidgetTool } from '@tabtin/agent-runtime/tools'
+import { createShowWidgetTool } from '@muse/agent-runtime/tools'
 import { bakeAndUploadWidget } from '../src/capabilities/widget-bake'
 import {
   setOffscreenRenderAPI,
   setUIThemeAPI,
-} from '@tabtin/action-tools/headless'
-import type { OffscreenRenderResult } from '@tabtin/action-tools/headless'
-import type { StreamEvent, ToolContext } from '@tabtin/agent-runtime'
+} from '@muse/action-tools/headless'
+import type { OffscreenRenderResult } from '@muse/action-tools/headless'
+import type { StreamEvent, ToolContext } from '@muse/agent-runtime'
 
 function setupTabtinGlobal(): void {
   ;(globalThis as unknown as { muse?: unknown }).tabtin = {

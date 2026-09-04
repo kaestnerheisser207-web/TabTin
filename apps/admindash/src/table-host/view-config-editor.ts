@@ -1,4 +1,4 @@
-import type { ViewFilter, ViewGroup, ViewSort } from '@tabtin/table-core'
+import type { ViewFilter, ViewGroup, ViewSort } from '@muse/table-core'
 
 export interface FilterEditorItem {
   id: string

@@ -5,7 +5,7 @@ import {
   PopoverContent,
   toast,
   cn,
-} from '@tabtin/smartsheet-ui'
+} from '@muse/smartsheet-ui'
 import {
   ArrowUpDown,
   Calendar,
@@ -16,7 +16,7 @@ import {
   Palette,
   Settings2,
 } from 'lucide-react'
-import type { Field, ViewCreateRequest, ViewFilter, ViewGroup, ViewMeta, ViewSort, ViewUpdateRequest } from '@tabtin/table-core'
+import type { Field, ViewCreateRequest, ViewFilter, ViewGroup, ViewMeta, ViewSort, ViewUpdateRequest } from '@muse/table-core'
 import {
   ViewSortRulesEditor,
   ViewFilterPanel,
@@ -41,7 +41,7 @@ import {
   type ViewPopoverControls,
   type ViewSortRuleDraftItem,
   type ViewToolbarAction,
-} from '@tabtin/table-ui'
+} from '@muse/table-ui'
 import { useViewStore } from '@/stores/table/useViewStore'
 import { useTranslation } from 'react-i18next'
 import { createLooseTranslate } from '@/types/table-adapters'

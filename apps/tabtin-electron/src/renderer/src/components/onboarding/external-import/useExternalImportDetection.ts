@@ -1,7 +1,7 @@
 /**
  * 检测提示的触发聚合 hook（Layer D，impl-spec §4 / PRD §4.1）。
  *
- * 登录成功进入主界面后调 `window.tabtin.import.detect()`——只读各工具本地索引做
+ * 登录成功进入主界面后调 `window.muse.import.detect()`——只读各工具本地索引做
  * 计数（亚秒级、不读正文、不上传），任一源 installed 且有会话即可能亮指示灯。
  *
  * 侧栏指示灯语义：
@@ -13,7 +13,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useAuthStore } from '@stores/useAuthStore'
 import { useOrganizationStore } from '@stores/useOrganizationStore'
-import type { ImportDetectResult } from '@tabtin/cli-server-core'
+import type { ImportDetectResult } from '@muse/cli-server-core'
 import {
   isForceImportOnboardingForTest,
   isImportSidebarIndicatorAllowed,
@@ -66,7 +66,7 @@ export function useExternalImportDetection(
   )
   const [navClicked, setNavClicked] = useState(() => isImportSidebarNavClickedThisSession())
 
-  const importApi = typeof window !== 'undefined' ? window.tabtin?.import : undefined
+  const importApi = typeof window !== 'undefined' ? window.muse?.import : undefined
   const gated = enabled && isAuthenticated && !!importApi
 
   const detectPromiseRef = useRef<Promise<ImportDetectResult[]> | null>(null)

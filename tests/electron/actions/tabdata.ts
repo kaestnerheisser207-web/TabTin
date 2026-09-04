@@ -171,11 +171,11 @@ async function runDjango<T>(
         env: {
           ...process.env,
           ...extraEnv,
-          TABTIN_E2E_MODE: mode,
-          TABTIN_E2E_RUN_ID: prepared.runId,
-          TABTIN_E2E_USER_ID: prepared.userId,
-          TABTIN_E2E_ORGANIZATION_ID: prepared.organizationId,
-          TABTIN_E2E_SPACE_ID: prepared.spaceId,
+          MUSE_E2E_MODE: mode,
+          MUSE_E2E_RUN_ID: prepared.runId,
+          MUSE_E2E_USER_ID: prepared.userId,
+          MUSE_E2E_ORGANIZATION_ID: prepared.organizationId,
+          MUSE_E2E_SPACE_ID: prepared.spaceId,
         },
       },
     );
@@ -596,9 +596,9 @@ async function verifyNewTableCreatedByUi(
     "verify_new_table",
     logName,
     {
-      TABTIN_E2E_BEFORE_TABLE_IDS: JSON.stringify(beforeTableIds),
-      TABTIN_E2E_CREATED_AFTER: options.createdAfter,
-      TABTIN_E2E_UI_TABLE_NAME_PREFIX: `[${prepared.runId}]`,
+      MUSE_E2E_BEFORE_TABLE_IDS: JSON.stringify(beforeTableIds),
+      MUSE_E2E_CREATED_AFTER: options.createdAfter,
+      MUSE_E2E_UI_TABLE_NAME_PREFIX: `[${prepared.runId}]`,
     },
   );
   return {
@@ -754,11 +754,11 @@ async function runMemberMentionDjango<T>(
         env: {
           ...process.env,
           ...extraEnv,
-          TABTIN_E2E_MODE: mode,
-          TABTIN_E2E_RUN_ID: prepared.runId,
-          TABTIN_E2E_USER_ID: prepared.userId,
-          TABTIN_E2E_ORGANIZATION_ID: prepared.organizationId,
-          TABTIN_E2E_SPACE_ID: prepared.spaceId,
+          MUSE_E2E_MODE: mode,
+          MUSE_E2E_RUN_ID: prepared.runId,
+          MUSE_E2E_USER_ID: prepared.userId,
+          MUSE_E2E_ORGANIZATION_ID: prepared.organizationId,
+          MUSE_E2E_SPACE_ID: prepared.spaceId,
         },
       },
     );
@@ -1117,9 +1117,9 @@ export async function runTabDataMemberMentionCase(context: RunContext): Promise<
     "verify",
     "tabdata-member-mention-verify",
     {
-      TABTIN_E2E_RECORD_ID: prepared.record.id,
-      TABTIN_E2E_FIELD_ID: prepared.fields.assignee.id,
-      TABTIN_E2E_EXPECTED_USER_ID: prepared.candidateMember.userId,
+      MUSE_E2E_RECORD_ID: prepared.record.id,
+      MUSE_E2E_FIELD_ID: prepared.fields.assignee.id,
+      MUSE_E2E_EXPECTED_USER_ID: prepared.candidateMember.userId,
     },
   );
   artifacts.push(...verify.artifacts);
@@ -1260,12 +1260,12 @@ async function runSelectOptionManagement(
     "SELECT-OPTION-MANAGEMENT-VERIFY-RENAME",
     "select-option-management-verify-rename",
     {
-      TABTIN_E2E_TABLE_ID: payload.table.id,
-      TABTIN_E2E_FIELD_ID: payload.field.id,
-      TABTIN_E2E_USED_RECORD_IDS: JSON.stringify(payload.records.usedRecordIds),
-      TABTIN_E2E_CONTROL_RECORD_ID: payload.records.controlRecordId,
-      TABTIN_E2E_EXPECTED_LABEL: "处理中",
-      TABTIN_E2E_EXPECTED_CONTROL_LABEL: "待处理",
+      MUSE_E2E_TABLE_ID: payload.table.id,
+      MUSE_E2E_FIELD_ID: payload.field.id,
+      MUSE_E2E_USED_RECORD_IDS: JSON.stringify(payload.records.usedRecordIds),
+      MUSE_E2E_CONTROL_RECORD_ID: payload.records.controlRecordId,
+      MUSE_E2E_EXPECTED_LABEL: "处理中",
+      MUSE_E2E_EXPECTED_CONTROL_LABEL: "待处理",
     },
   );
   artifacts.push(...verify.artifacts);

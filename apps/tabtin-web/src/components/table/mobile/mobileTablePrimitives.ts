@@ -1,4 +1,4 @@
-import type { Field, ViewFilter, ViewMeta } from '@tabtin/table-core'
+import type { Field, ViewFilter, ViewMeta } from '@muse/table-core'
 
 type ColumnMeta = Record<string, {
   order?: number

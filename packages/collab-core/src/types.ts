@@ -1,5 +1,5 @@
 /**
- * @tabtin/collab-core 类型定义
+ * @muse/collab-core 类型定义
  */
 
 import type * as Y from "yjs";

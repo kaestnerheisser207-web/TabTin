@@ -16,7 +16,7 @@
  *   反复拉取（如重连/重试）能干净覆盖而不污染其他来源（Space 安装列表等）。
  */
 
-import { joinApiPath } from '@tabtin/config'
+import { joinApiPath } from '@muse/config'
 import { apiRequest } from '@/adapters/api-adapter-instance'
 import { API_CONFIG, API_ENDPOINTS } from '@/config/api'
 import { createLogger } from '@/utils/logger'

@@ -10,7 +10,7 @@ import { PlusCircle, RefreshCw, Trash2 } from 'lucide-react'
 import { cn } from '@utils/cn'
 import { useTranslation } from 'react-i18next'
 import type { CardRendererProps } from '../registry/types'
-import type { RecordOpData } from '@tabtin/chat-client'
+import type { RecordOpData } from '@muse/chat-client'
 import { KeyValuePairs, type KeyValueItem } from './primitives'
 import {
   CARD_RADIUS,

@@ -7,7 +7,7 @@
  * 复跑见 docs/agent/8878-sidebar-decouple-messages-acceptance-harness.md
  */
 import { describe, expect, it } from 'vitest'
-import type { ChatSession } from '@tabtin/chat-client'
+import type { ChatSession } from '@muse/chat-client'
 import { sortSessionsByActivity } from '@/utils/chat-session-sort'
 import { buildSessionListVirtualItems } from '../buildSessionListVirtualItems'
 import { filterSidebarSessions } from '../filterSidebarSessions'

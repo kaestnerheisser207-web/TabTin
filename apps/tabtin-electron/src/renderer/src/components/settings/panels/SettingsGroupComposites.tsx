@@ -10,7 +10,7 @@
 import React, { lazy, Suspense, useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
 import { BarChart3, Building2, HardDrive, Sparkles, Users } from 'lucide-react'
-import type { Organization, OrganizationRole } from '@tabtin/app-shell'
+import type { Organization, OrganizationRole } from '@muse/app-shell'
 import { SettingsSkeleton } from '../SettingsSkeleton'
 import { SettingsCompositeContainer, type SettingsCompositeTab } from '../SettingsCompositeContainer'
 import { SettingsPanelHeader } from '../SettingsPanelHeader'

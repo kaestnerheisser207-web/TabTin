@@ -35,7 +35,7 @@
  * - 空输入 / 非对象输入 → 返回空对象（调用方据 `Object.keys(metadata).length` 判断是否写 metadata）。
  */
 
-import type { UsageReport } from '@tabtin/agent-wire';
+import type { UsageReport } from '@muse/agent-wire';
 
 /**
  * 从 usage 对象提取成本 / token 分项，扁平化为 ChatMessage.metadata 结构。

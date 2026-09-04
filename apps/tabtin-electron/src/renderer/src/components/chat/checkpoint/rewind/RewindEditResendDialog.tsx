@@ -1,6 +1,6 @@
 import React from 'react'
 import { useTranslation } from 'react-i18next'
-import type { SessionRollbackState } from '@tabtin/chat-client'
+import type { SessionRollbackState } from '@muse/chat-client'
 import type { RollbackPreviewResult } from '../../../../services/chatExtraApi'
 import {
   Dialog,

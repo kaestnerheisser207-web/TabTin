@@ -26,7 +26,7 @@
 			<key>CFBundleURLSchemes</key>
 			<array>
 				<string>tabtin</string>
-				<string>tabtin-preprod</string>
+				<string>muse-preprod</string>
 			</array>
 		</dict>
 	</array>
@@ -84,6 +84,6 @@
 	<key>UIUserInterfaceStyle</key>
 	<string>Automatic</string>
 	<key>TABTINGitSHA</key>
-	<string>$(TABTIN_GIT_SHA)</string>
+	<string>$(MUSE_GIT_SHA)</string>
 </dict>
 </plist>

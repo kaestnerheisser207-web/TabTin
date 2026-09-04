@@ -7,7 +7,7 @@ vi.setConfig({ testTimeout: 20_000, hookTimeout: 20_000 })
  * 必须以 setAppearance 回包的 shouldUseDarkColors 校正 DOM。
  */
 describe('useUIStore theme follow system', () => {
-  const originalTabtin = window.tabtin
+  const originalTabtin = window.muse
   const originalMatchMedia = window.matchMedia
 
   beforeEach(() => {

@@ -390,7 +390,7 @@ def _load_app_payloads() -> List[Dict[str, Any]]:
     if _app_payloads_cache["data"] is not None and (now - _app_payloads_cache["ts"]) < _APP_PAYLOADS_TTL:
         return _app_payloads_cache["data"]
 
-    # : 必须用 services.repo_root（认 TABTIN_REPO_ROOT / packages+apps），
+    # : 必须用 services.repo_root（认 MUSE_REPO_ROOT / packages+apps），
     # 勿再走曾漏认容器布局的 path_utils 旧启发式。
     from apps.services.repo_root import get_repo_root
 

@@ -8,7 +8,7 @@
 import { describe, it, expect, beforeAll, afterAll } from 'vitest'
 import { PGlite } from '@electric-sql/pglite'
 import { initializeSchema, fieldTypeToSqlType, whereNodeToSql } from '../src/index.js'
-import type { TableSchema, TableFieldSchema } from '@tabtin/table-kernel'
+import type { TableSchema, TableFieldSchema } from '@muse/table-kernel'
 import type { PGliteInstance } from '../src/dialect.js'
 
 function makeField(

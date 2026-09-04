@@ -32,7 +32,7 @@ import { ConfirmDialog } from '../confirm-dialog';
 import { cn } from '../../utils/cn';
 import { ScrollArea } from '../scroll-area';
 import { t } from '../../i18n';
-import { isImportResultError } from '@tabtin/table-core';
+import { isImportResultError } from '@muse/table-core';
 
 /**
  * 导入预览响应

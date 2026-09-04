@@ -8,7 +8,7 @@
  */
 
 import React from 'react';
-import { toast } from '@tabtin/smartsheet-ui';
+import { toast } from '@muse/smartsheet-ui';
 import { extractBillingErrorCode, showBillingErrorToast } from '@/lib/billingErrorHandler';
 
 export interface UseDataGridPermissionParams {

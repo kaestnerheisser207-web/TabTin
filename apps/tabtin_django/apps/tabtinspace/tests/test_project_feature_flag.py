@@ -83,7 +83,7 @@ class ProjectFeatureFlagTests(TransactionTestCase):
         self.assertEqual(ctx.exception.code, "TEAM_SPACE_RETIRED")
         self.assertEqual(ctx.exception.status, 410)
 
-    @override_settings(TABTIN_ENABLE_PROJECTS=False)
+    @override_settings(MUSE_ENABLE_PROJECTS=False)
     def test_project_list_route_returns_empty_when_feature_disabled(self):
         self._make_project_room()
 
@@ -94,7 +94,7 @@ class ProjectFeatureFlagTests(TransactionTestCase):
         self.assertTrue(response["success"])
         self.assertEqual(response["data"], {"projects": [], "total": 0})
 
-    @override_settings(TABTIN_ENABLE_PROJECTS=False)
+    @override_settings(MUSE_ENABLE_PROJECTS=False)
     def test_project_create_route_returns_feature_disabled(self):
         response = create_project_with_workspace(
             _request(self.user),

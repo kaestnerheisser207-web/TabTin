@@ -38,7 +38,7 @@ DEFAULT_AGENTS_SKILLS_DIR = Path.home() / ".agents" / "skills"
 
 
 def _agents_skills_dir() -> Path:
-    override = os.environ.get("TABTIN_AGENTS_SKILLS_DIR")
+    override = os.environ.get("MUSE_AGENTS_SKILLS_DIR")
     if override:
         return Path(override)
     return DEFAULT_AGENTS_SKILLS_DIR

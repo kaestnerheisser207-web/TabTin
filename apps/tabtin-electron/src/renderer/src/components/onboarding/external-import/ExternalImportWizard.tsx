@@ -46,7 +46,7 @@ import type {
   ImportRunInput,
   ImportSessionRef,
   ImportSourceId,
-} from '@tabtin/cli-server-core'
+} from '@muse/cli-server-core'
 import { cn } from '@utils/cn'
 import { useImportIdentity, type ExistingWorkspaceMatch } from './useImportIdentity'
 import { useImportJobStore, type ImportJobUiState } from './useImportJobStore'
@@ -365,7 +365,7 @@ export const ExternalImportFlow: React.FC = () => {
 
   const loadPreview = useCallback(
     async (rangeKey: RangeKey) => {
-      const api = window.tabtin?.import
+      const api = window.muse?.import
       if (!api) {
         setScanError('导入服务尚未就绪，请稍后重试')
         return

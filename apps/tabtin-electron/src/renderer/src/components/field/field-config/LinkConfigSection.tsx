@@ -11,8 +11,8 @@ import {
   type LinkTableOption,
   type LinkForeignMeta,
   type LinkableFieldItem,
-} from '@tabtin/smartsheet-ui'
-import { FieldApiService, TableApiService, ViewApiService } from '@tabtin/table-core'
+} from '@muse/smartsheet-ui'
+import { FieldApiService, TableApiService, ViewApiService } from '@muse/table-core'
 import { useSpaceStore } from '@/stores/useSpaceStore'
 
 type ElectronLinkProps = Omit<SharedProps, 'tables' | 'onLoadTables' | 'onLoadForeignMeta'>

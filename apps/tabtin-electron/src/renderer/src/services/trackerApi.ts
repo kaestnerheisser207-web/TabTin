@@ -7,10 +7,10 @@
  * 不再区分日程事件 / agent_task 子类型。
  */
 
-import { joinApiPath } from '@tabtin/config'
+import { joinApiPath } from '@muse/config'
 import { API_CONFIG } from '@/config/api'
 import { apiRequest, getAuthToken } from '@/adapters/api-adapter-instance'
-import type { TableHttpMethod } from '@tabtin/table-core'
+import type { TableHttpMethod } from '@muse/table-core'
 import i18n from '@/i18n'
 
 // ── Types ────────────────────────────────────────────────────────────

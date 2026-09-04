@@ -1,4 +1,4 @@
-import type { AgentRunSyncPayload } from '@tabtin/agent-wire'
+import type { AgentRunSyncPayload } from '@muse/agent-wire'
 import { ConversationRunQueue } from './conversation-run-queue.js'
 
 export interface ConversationRunSubmission<Result> {

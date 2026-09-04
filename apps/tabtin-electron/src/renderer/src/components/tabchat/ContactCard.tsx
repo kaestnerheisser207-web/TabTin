@@ -8,7 +8,7 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { MessageSquare } from 'lucide-react'
-import { toast } from '@tabtin/smartsheet-ui'
+import { toast } from '@muse/smartsheet-ui'
 import { useAuthStore } from '@stores/useAuthStore'
 import { useIMStore } from '@stores/useIMStore'
 import { useUserProfileCache, useDisplayName, useAvatar } from '@stores/useUserProfileCache'

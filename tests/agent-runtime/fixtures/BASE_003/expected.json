@@ -6,7 +6,7 @@
     "toolInputsSchemaValid": true
   },
   "normalizedSnapshot": {
-    "finalAssistantText": "文档已创建成功！\n\n**【测试-意图识别-001】** 已在当前 Space 下新建完成，正文已写入关于北京交通的说明。\n\n你可以在 **文档** App 中打开它继续编辑：[【测试-意图识别-001】](tabtin://resource/doc/<uuid>?hint=tabdoc)",
+    "finalAssistantText": "文档已创建成功！\n\n**【测试-意图识别-001】** 已在当前 Space 下新建完成，正文已写入关于北京交通的说明。\n\n你可以在 **文档** App 中打开它继续编辑：[【测试-意图识别-001】](muse://resource/doc/<uuid>?hint=tabdoc)",
     "messagesShape": [
       "user:user_input",
       "user:user_input",

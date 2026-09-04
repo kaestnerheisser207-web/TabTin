@@ -21,8 +21,8 @@ vi.mock('../../auth', () => ({
   TokenManager: { getAccessToken: vi.fn(async () => 'tabtin-access-token') },
 }))
 vi.mock('../../config/api', () => ({ API_BASE_URL: 'https://workspace.test/api' }))
-vi.mock('@tabtin/terminal-core', () => ({ atomicWriteFileSync: vi.fn() }))
-vi.mock('@tabtin/storage-manager', () => ({ registerStorageBucket: vi.fn() }))
+vi.mock('@muse/terminal-core', () => ({ atomicWriteFileSync: vi.fn() }))
+vi.mock('@muse/storage-manager', () => ({ registerStorageBucket: vi.fn() }))
 vi.mock('../../security/agent-access-guard', () => ({
   assertCurrentUserCanAccessAgent: vi.fn(),
   AgentAccessDeniedError: class AgentAccessDeniedError extends Error {},

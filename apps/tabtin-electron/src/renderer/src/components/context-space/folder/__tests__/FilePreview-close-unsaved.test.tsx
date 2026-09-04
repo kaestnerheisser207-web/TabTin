@@ -68,7 +68,7 @@ vi.mock('@components/shared/file-preview/TextFileEditor', () => ({
   },
 }))
 
-vi.mock('@tabtin/smartsheet-ui', () => ({
+vi.mock('@muse/smartsheet-ui', () => ({
   cn: (...args: unknown[]) => args.filter(Boolean).join(' '),
   OVERLAY_SURFACE_CLASS: '',
   Button: ({ children, ...props }: React.ButtonHTMLAttributes<HTMLButtonElement>) => (

@@ -55,7 +55,7 @@ def _launcher_fixture() -> tuple[tempfile.TemporaryDirectory[str], Path, Path, P
         fake_bin / "docker",
         """#!/bin/sh
 printf 'docker %s\\n' "$*" >> "$TRACE_FILE"
-printf 'docker-env edition=%s fixed=%s\\n' "${TABTIN_EDITION-unset}" "${AUTH_FIXED_VERIFICATION_CODE-unset}" >> "$TRACE_FILE"
+printf 'docker-env edition=%s fixed=%s\\n' "${MUSE_EDITION-unset}" "${AUTH_FIXED_VERIFICATION_CODE-unset}" >> "$TRACE_FILE"
 case "$*" in
   "info") [ "${FAKE_DOCKER_ENGINE:-up}" = "up" ] ;;
   *" build django")
@@ -136,7 +136,7 @@ def test_start_works_from_non_repo_cwd_when_source_path_contains_spaces() -> Non
             trace=trace,
             extra_env={
                 "FAKE_SERVER_READY": "1",
-                "TABTIN_EDITION": "community-from-shell",
+                "MUSE_EDITION": "community-from-shell",
                 "AUTH_FIXED_VERIFICATION_CODE": "123456",
             },
         )
@@ -150,7 +150,7 @@ def test_start_works_from_non_repo_cwd_when_source_path_contains_spaces() -> Non
         assert (root / ".env.community-runtime").read_text(
             encoding="utf-8"
         ) == (
-            "TABTIN_EDITION=community\n"
+            "MUSE_EDITION=community\n"
             "AUTH_FIXED_VERIFICATION_CODE=888888\n"
         )
         assert (
@@ -207,7 +207,7 @@ def test_start_adds_new_public_switches_without_overwriting_existing_env() -> No
     temporary, root, fake_bin, trace = _launcher_fixture()
     with temporary:
         (root / ".env").write_text(
-            "TABTIN_EDITION=saas\nLOCAL_VALUE=keep-me\n", encoding="utf-8"
+            "MUSE_EDITION=saas\nLOCAL_VALUE=keep-me\n", encoding="utf-8"
         )
 
         result = _run(
@@ -220,12 +220,12 @@ def test_start_adds_new_public_switches_without_overwriting_existing_env() -> No
 
         assert result.returncode == 0, result.stdout + result.stderr
         generated = (root / ".env").read_text(encoding="utf-8")
-        assert "TABTIN_EDITION=saas\n" in generated
+        assert "MUSE_EDITION=saas\n" in generated
         assert "LOCAL_VALUE=keep-me\n" in generated
         assert "AUTH_FIXED_VERIFICATION_CODE=\n" in generated
         assert (root / ".env.community-runtime").read_text(
             encoding="utf-8"
-        ) == "TABTIN_EDITION=saas\nAUTH_FIXED_VERIFICATION_CODE=\n"
+        ) == "MUSE_EDITION=saas\nAUTH_FIXED_VERIFICATION_CODE=\n"
         assert (root / ".env.community-runtime").stat().st_mode & 0o777 == 0o600
 
 

@@ -136,8 +136,8 @@ async function clearPreviousOwnerSync(
 ): Promise<void> {
   if (!owner || (owner.userId === userId && owner.organizationId === organizationId)) return;
   try {
-    const { getDaemonHomePath } = await import('@tabtin/shared/storage-paths');
-    const { clearSyncAccountDir } = await import('@tabtin/agent-runtime');
+    const { getDaemonHomePath } = await import('@muse/shared/storage-paths');
+    const { clearSyncAccountDir } = await import('@muse/agent-runtime');
     if (await clearSyncAccountDir(getDaemonHomePath('agent-sync'), owner)) {
       console.log(`  Cleared old account sync dir: ${owner.userId}/${owner.organizationId}`);
     }
@@ -420,7 +420,7 @@ program
     }
     console.log(`Installing plugin: ${plugin}...`);
     try {
-      execSync(`npm install -g @tabtin/daemon-plugin-${plugin}`, { stdio: 'inherit' });
+      execSync(`npm install -g @muse/daemon-plugin-${plugin}`, { stdio: 'inherit' });
       const config = configManager.load();
       if (!config.plugins.includes(plugin)) {
         config.plugins.push(plugin);
@@ -511,7 +511,7 @@ program
   .action(handleUpdate);
 
 async function handleUpdate(opts: { check?: boolean; format?: string }): Promise<void> {
-    const PACKAGE_NAME = '@tabtin/daemon';
+    const PACKAGE_NAME = '@muse/daemon';
     const jsonOutput = opts.format === 'json';
     const currentVersion = getDaemonCurrentVersion();
 
@@ -700,7 +700,7 @@ let _cliBucketUnregisterHandles: Array<() => void> | null = null;
 function loadStorageRuntime(configDir?: string) {
   const configManager = new ConfigManager(configDir);
   return import('../platform/storage/storage-bucket-registration.js').then(async (mod) => {
-    const sm = await import('@tabtin/storage-manager');
+    const sm = await import('@muse/storage-manager');
     // 幂等：先 unregister 历史 handles（在多次 import 同一模块的特殊场景下生效）
     if (_cliBucketUnregisterHandles) {
       for (const off of _cliBucketUnregisterHandles) {
@@ -1014,7 +1014,7 @@ program
   .option('--severity <level>', 'Severity tag (p0/p1/p2)')
   .action(async (opts) => {
     const { emitMttrStart, generateIncidentId, setTelemetrySink } = await import(
-      '@tabtin/agent-runtime'
+      '@muse/agent-runtime'
     );
     const incidentId = (opts.incident as string | undefined)?.trim() || generateIncidentId();
     // 若 daemon 未运行，用 stdout 兜底，让运维仍可把输出 tee 到日志
@@ -1041,7 +1041,7 @@ program
   .option('--session <id>', 'Associated Runtime session id')
   .option('--error-class <class>', 'Associated AgentErrorCode')
   .action(async (opts) => {
-    const { emitMttrResolved, setTelemetrySink } = await import('@tabtin/agent-runtime');
+    const { emitMttrResolved, setTelemetrySink } = await import('@muse/agent-runtime');
     const duration = Number(opts.durationMs);
     setTelemetrySink((record) => {
       process.stdout.write(`[telemetry] ${JSON.stringify(record)}\n`);

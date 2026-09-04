@@ -4,7 +4,7 @@
 
 import React, { useState, useCallback, useRef, useEffect, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
-import { toast } from '@tabtin/smartsheet-ui'
+import { toast } from '@muse/smartsheet-ui'
 import { useIMStore } from '@stores/useIMStore'
 import { useAuthStore } from '@stores/useAuthStore'
 import { useOrganizationStore } from '@stores/useOrganizationStore'

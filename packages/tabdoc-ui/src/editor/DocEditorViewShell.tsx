@@ -19,7 +19,7 @@ import {
   ScrollArea,
   Separator,
   cn,
-} from '@tabtin/smartsheet-ui'
+} from '@muse/smartsheet-ui'
 import type { TabdocDocument } from '../api-client'
 import type { UseDocEditorViewStateReturn } from './useDocEditorViewState'
 import type { DocEditorToolbarProps } from './DocEditorToolbar'

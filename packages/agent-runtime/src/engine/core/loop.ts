@@ -1,5 +1,5 @@
 /**
- * @tabtin/agent-runtime — Agent 执行微内核主循环（原 query.ts， 批次 6 收官）。
+ * @muse/agent-runtime — Agent 执行微内核主循环（原 query.ts， 批次 6 收官）。
  *
  * 本文件只拥有一件事：**run 生命周期状态机**——
  *

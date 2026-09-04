@@ -17,13 +17,13 @@ import {
   type OrbRgb,
   type OrbSettleShape,
   type OrbTexture,
-} from '@tabtin/agent-orb'
+} from '@muse/agent-orb'
 import { useUIStore } from '@stores/useUIStore'
 import { useScopedEffect, useScopedEventListener } from '@hooks/spaceActivity'
 import { registerOrbDriver } from './orbScheduler'
 
 /**
- * Agent 状态点云球体。唯一把 `@tabtin/agent-orb` 的绘制指令落到 Canvas2D 的地方。
+ * Agent 状态点云球体。唯一把 `@muse/agent-orb` 的绘制指令落到 Canvas2D 的地方。
  *
  * 它只表达「Agent 在用哪类能力」这一条信息，**不承载颜色语义**——要不要用户出手由色点管。
  * 所以终态与等待人工介入的状态不要渲染 orb，交给调用方按 `resolveOrbVisual` 分流。

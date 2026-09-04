@@ -39,7 +39,7 @@ import {
   hasCloseWorkspaceHandler,
   requestCloseWorkspace,
   setCloseWorkspaceHandler,
-} from '@tabtin/crawlspace-core'
+} from '@muse/crawlspace-core'
 import { useCrawlTabStore } from '../useCrawlTabStore'
 
 describe('useCrawlTabStore close handler 注入集成（Wave 3.3）', () => {

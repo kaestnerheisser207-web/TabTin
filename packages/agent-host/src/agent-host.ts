@@ -6,18 +6,18 @@ import {
   PromptCancelPayloadSchema,
   StreamEvents,
   SubagentCancelPayloadSchema,
-} from '@tabtin/agent-wire'
+} from '@muse/agent-wire'
 import {
   type HumanInteractionContext,
   type PlatformApprovalRequest,
   type PlatformApprovalResult,
   createInterruptAdapter,
-} from '@tabtin/agent-runtime/permissions'
+} from '@muse/agent-runtime/permissions'
 import {
   presentAccessBarrier as presentAccessBarrierCore,
   type AccessBarrier,
   type AccessBarrierResolution,
-} from '@tabtin/agent-runtime'
+} from '@muse/agent-runtime'
 import type { ConversationLifecycleIdentity } from './conversation/conversation-identity.js'
 import type {
   AgentPlatformAdapter,
@@ -94,7 +94,7 @@ interface HostQueryPipelineHandle {
 /**
  * Access Barrier HITL registry 安全网超时（设计 §8.3）：`HumanInteractionRegistry.
  * waitForInput` 自带的 fallback timer，只用来防止 registry 条目无限挂着——真正
- * 的用户超时由 `presentAccessBarrier`（`@tabtin/agent-runtime`）自己的
+ * 的用户超时由 `presentAccessBarrier`（`@muse/agent-runtime`）自己的
  * `interrupt()` race 控制（默认 10 分钟），所以这里给一个远大于它的安全网。
  */
 const ACCESS_BARRIER_REGISTRY_SAFETY_TIMEOUT_MS = 24 * 60 * 60 * 1000
@@ -569,7 +569,7 @@ export class AgentHost<Request, Result, SessionState = unknown> {
 
   /**
    * Access Barrier HITL：浏览器编排出口拿到 `AccessBarrier` 后经此落到真实
-   * 会话通道——委托 `presentAccessBarrier`（`@tabtin/agent-runtime`）做「emit
+   * 会话通道——委托 `presentAccessBarrier`（`@muse/agent-runtime`）做「emit
    * 专用卡片 + interrupt 挂起 + 超时」，本方法只负责把 threadId 解析成
    * session 并组出 `InterruptPort`（`realtime.publish` + `interactions.waitForInput`）。
    *

@@ -3,7 +3,7 @@ import { render, screen } from '@testing-library/react'
 import { describe, expect, it, vi } from 'vitest'
 import { SettingsSkeleton } from '../SettingsSkeleton'
 
-vi.mock('@tabtin/smartsheet-ui', () => ({
+vi.mock('@muse/smartsheet-ui', () => ({
   Skeleton: ({ className, width, height }: { className?: string; width?: number | string; height?: number | string }) => (
     <div
       data-testid="skeleton-block"

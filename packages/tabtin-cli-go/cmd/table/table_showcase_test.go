@@ -1,7 +1,7 @@
 // table_showcase_test.go — TabData 能力总览注册期 invariant + manifest 导出测试。
 //
 // 镜像 cmd/apps_doc_test.go 的 showcase 套件：把「漏登记命令 / registry 不一致 /
-// manifest 结构漂移」从「跑 ./dist/tabtin 才暴露」提前到 `go test`。
+// manifest 结构漂移」从「跑 ./dist/muse 才暴露」提前到 `go test`。
 package table
 
 import (

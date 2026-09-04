@@ -1,8 +1,8 @@
 /**
  * 交叉一致性测试：确保 pty-core 和 terminal-core 两份 sanitizeEnv
- * 导出的安全变量列表来自同一个包 (@tabtin/env-sanitize)。
+ * 导出的安全变量列表来自同一个包 (@muse/env-sanitize)。
  *
- * 由于两边都已改为从 @tabtin/env-sanitize re-export，
+ * 由于两边都已改为从 @muse/env-sanitize re-export，
  * 这里验证两边导出的是同一个引用对象。
  */
 import { describe, it, expect } from 'vitest';

@@ -6,7 +6,7 @@
  */
 
 import React from "react";
-import { identityAvatarColor, identityAvatarInitial } from "@tabtin/shared";
+import { identityAvatarColor, identityAvatarInitial } from "@muse/shared";
 import type { CollabPeerState } from "../types.js";
 import { resolveAvatarSrc } from "../utils/resolveAvatarSrc.js";
 

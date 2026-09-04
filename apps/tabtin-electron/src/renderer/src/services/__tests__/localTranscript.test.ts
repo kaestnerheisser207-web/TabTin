@@ -16,7 +16,7 @@ import {
   enrichWithServerMetadata,
   type ReconstructedTranscriptMessage,
 } from '../localTranscript'
-import type { ChatMessage } from '@tabtin/chat-client'
+import type { ChatMessage } from '@muse/chat-client'
 
 const SID = 'sess-4897'
 

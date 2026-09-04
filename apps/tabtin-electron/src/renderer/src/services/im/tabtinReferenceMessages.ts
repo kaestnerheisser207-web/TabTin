@@ -1,7 +1,7 @@
 import type { IMMessage, IMMessageMetadata } from './contracts'
 
-export const TABTIN_REFERENCE_SCHEMA = 'tabtin.im.ref.v1'
-export const TABTIN_REFERENCE_KIND = 'tabtin_ref'
+export const MUSE_REFERENCE_SCHEMA = 'tabtin.im.ref.v1'
+export const MUSE_REFERENCE_KIND = 'tabtin_ref'
 
 const REFERENCE_KEYS = new Set([
   'schema',
@@ -49,7 +49,7 @@ export function decodeTabTinMessageReference(
   } catch {
     return { status: 'not_reference' }
   }
-  if (!isRecord(value) || value.schema !== TABTIN_REFERENCE_SCHEMA) {
+  if (!isRecord(value) || value.schema !== MUSE_REFERENCE_SCHEMA) {
     return { status: 'not_reference' }
   }
   if (
@@ -87,7 +87,7 @@ export function encodeTabTinMessageReference(
     throw new Error('TabTin message reference is invalid')
   }
   return JSON.stringify({
-    schema: TABTIN_REFERENCE_SCHEMA,
+    schema: MUSE_REFERENCE_SCHEMA,
     message_ref: reference.messageRef,
     tabtin_message_id: reference.tabtinMessageId,
     ...(reference.businessProjectionRevision
@@ -100,7 +100,7 @@ export function getTabTinMessageReference(
   metadata: IMMessageMetadata,
 ): TabTinMessageReference | null {
   if (
-    metadata.kind !== TABTIN_REFERENCE_KIND
+    metadata.kind !== MUSE_REFERENCE_KIND
     || typeof metadata.message_ref !== 'string'
     || !metadata.message_ref.trim()
     || !isTabTinMessageId(metadata.tabtin_message_id)
@@ -154,7 +154,7 @@ export function mergeHydratedTabTinMessage(
     metadata: {
       ...hydrated.metadata,
       ...pointer.metadata,
-      kind: TABTIN_REFERENCE_KIND,
+      kind: MUSE_REFERENCE_KIND,
       message_ref: reference.messageRef,
       tabtin_message_id: reference.tabtinMessageId,
       ...(reference.businessProjectionRevision

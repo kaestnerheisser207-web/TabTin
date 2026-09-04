@@ -44,7 +44,7 @@ const reportAllWindowsOffline = (): void => {
     for (const win of windows) {
       if (!win.isDestroyed() && win.webContents) {
         win.webContents.executeJavaScript(
-          `try { window.__tabtin_report_offline?.() } catch(e) {}`
+          `try { window.__muse_report_offline?.() } catch(e) {}`
         ).catch(() => {})
       }
     }
@@ -70,7 +70,7 @@ export function createMainAppLifecycleHandlers(
 
       initializeStartupServices({
         isDev: options.isDev,
-        appUserModelId: process.env.TABTIN_APP_ID || 'com.tabtin.app',
+        appUserModelId: process.env.MUSE_APP_ID || 'com.tabtin.app',
         rendererUrl: options.rendererUrl,
         displayMediaTrustedOrigins: options.displayMediaTrustedOrigins,
         log: options.log,

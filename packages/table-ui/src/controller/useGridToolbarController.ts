@@ -1,5 +1,5 @@
 import { useCallback, useMemo } from 'react'
-import { isDraftGridRow, resolveRecordId } from '@tabtin/table-engine'
+import { isDraftGridRow, resolveRecordId } from '@muse/table-engine'
 
 export type TableFontStyle = 'system' | 'serif' | 'mono' | 'rounded'
 export type TableFontWeight = 'thin' | 'regular' | 'medium' | 'semibold'

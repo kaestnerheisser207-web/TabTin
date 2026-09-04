@@ -70,11 +70,11 @@ export async function collectDistFiles(
 // ── CDN base URL resolution ──────────────────────────────
 
 export function resolveCdnBaseUrl(folder: string): string {
-  const cdnDomain = process.env.TABTIN_CDN_DOMAIN || process.env.ALIYUN_OSS_CDN_DOMAIN || '';
+  const cdnDomain = process.env.MUSE_CDN_DOMAIN || process.env.ALIYUN_OSS_CDN_DOMAIN || '';
   if (cdnDomain) {
     return `https://${cdnDomain}/${folder}`;
   }
-  const ossDomain = process.env.ALIYUN_OSS_ENDPOINT || process.env.TABTIN_OSS_DOMAIN || '';
+  const ossDomain = process.env.ALIYUN_OSS_ENDPOINT || process.env.MUSE_OSS_DOMAIN || '';
   const bucket = process.env.ALIYUN_OSS_BUCKET || '';
   if (ossDomain && bucket) {
     return `https://${bucket}.${ossDomain}/${folder}`;
@@ -238,7 +238,7 @@ export async function uploadDist(options: UploadDistOptions): Promise<UploadDist
     return {
       success: false,
       error_code: 'BACKEND_ERROR',
-      error: '上传成功但无法推导 dist_url，请检查 CDN/OSS 域名环境变量（TABTIN_CDN_DOMAIN 或 ALIYUN_OSS_CDN_DOMAIN）',
+      error: '上传成功但无法推导 dist_url，请检查 CDN/OSS 域名环境变量（MUSE_CDN_DOMAIN 或 ALIYUN_OSS_CDN_DOMAIN）',
       detail: { uploaded_keys: uploadedKeys, uploaded_count: uploadedCount },
     };
   }

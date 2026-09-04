@@ -12,7 +12,7 @@ vi.mock('react-i18next', () => ({
   }),
 }))
 
-vi.mock('@tabtin/smartsheet-ui', () => ({
+vi.mock('@muse/smartsheet-ui', () => ({
   toast: (...args: unknown[]) => toast(...args),
   resolveChoiceTagColors: vi.fn(() => ({ background: '#ffffff', text: '#000000' })),
 }))

@@ -59,7 +59,7 @@ vi.mock('fs', async () => {
   }
 })
 
-vi.mock('@tabtin/terminal-core', () => ({
+vi.mock('@muse/terminal-core', () => ({
   resolveSpacesRoot: gitMocks.resolveSpacesRoot,
   matchSensitivePath: vi.fn(() => null),
 }))

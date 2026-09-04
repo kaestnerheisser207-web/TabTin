@@ -1,7 +1,7 @@
 import type {
   ChatSession,
   ChatSessionRunState,
-} from '@tabtin/chat-client'
+} from '@muse/chat-client'
 import { isChatSessionRunState } from '@/stores/chat/execution/sessionRunProjectionReducer'
 
 export interface ParsedChatSessionRunStateEvent {

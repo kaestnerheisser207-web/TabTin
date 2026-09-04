@@ -8,11 +8,11 @@
  * 新增 locale 文件只需放入 locales/{lang}/ 目录即可，无需修改本文件。
  */
 import type { BackendModule, ReadCallback } from 'i18next'
-import { tableSharedLocales } from '@tabtin/table-ui'
+import { tableSharedLocales } from '@muse/table-ui'
 import {
   recordSharedLocales,
   deepMergeLocaleObjects,
-} from '@tabtin/table-core'
+} from '@muse/table-core'
 import { SUPPORTED_LANGUAGES } from './language'
 
 type NamespaceLoader = () => Promise<{ default: Record<string, unknown> }>

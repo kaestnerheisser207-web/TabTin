@@ -23,21 +23,21 @@
 import { promises as fsPromises, createReadStream } from 'node:fs'
 import { Readable } from 'node:stream'
 
-// 用 `@tabtin/local-docparse` re-exported SSoT（与 ElectronAgentHost
+// 用 `@muse/local-docparse` re-exported SSoT（与 ElectronAgentHost
 // `fetchCloudSummary` 同源）—— Electron package.json 已声明 local-docparse
-// dependency，不需要新增 `@tabtin/file-pipeline-errors` 直接依赖。
+// dependency，不需要新增 `@muse/file-pipeline-errors` 直接依赖。
 import {
   FilePipelineErrorCode,
   isFilePipelineErrorCode,
-} from '@tabtin/local-docparse'
+} from '@muse/local-docparse'
 import type {
   RunTempPptxParse,
   TempPptxParseChunk,
   TempPptxParseResult,
-} from '@tabtin/agent-host/tools'
+} from '@muse/agent-host/tools'
 
 import { API_BASE_URL } from '../config/api.js'
-import { joinApiPath } from '@tabtin/config'
+import { joinApiPath } from '@muse/config'
 import { TokenManager } from '../auth.js'
 import { createLogger } from '../logger.js'
 

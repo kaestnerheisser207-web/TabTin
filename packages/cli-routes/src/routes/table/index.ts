@@ -14,7 +14,7 @@
  */
 
 import type { ServerResponse } from 'node:http'
-import { errorResponse, type SendJSON } from '@tabtin/cli-server-core'
+import { errorResponse, type SendJSON } from '@muse/cli-server-core'
 import { handleTableQueryRoute } from './query.js'
 import { handleTableCrudRoute } from './crud.js'
 import { handleTableSchemaRoute } from './schema.js'

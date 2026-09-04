@@ -12,8 +12,8 @@ import {
   AgentHost,
   type SkillRunSnapshotOptions,
   type SkillAvailabilitySnapshot,
-} from '@tabtin/agent-host'
-import { modelCatalogScopeKey } from '@tabtin/agent-host/state'
+} from '@muse/agent-host'
+import { modelCatalogScopeKey } from '@muse/agent-host/state'
 
 import type {
   AgentRuntime,
@@ -23,11 +23,11 @@ import type {
   ModelCatalogEntry,
   ReadFileState,
   StreamEvent,
-} from '@tabtin/agent-runtime/engine'
+} from '@muse/agent-runtime/engine'
 //  批次 13：engine barrel 收敛为 engine-only。非 engine 目录的符号
 // （runtime 组装根 / session / subagent / providers / telemetry / agent-modes /
 // permissions / host / terminal / capability injectors）改从包入口
-// `@tabtin/agent-runtime` import。
+// `@muse/agent-runtime` import。
 import {
   createRuntime,
   TabTinProxyProvider,
@@ -48,7 +48,7 @@ import {
   type TodoSessionAnchor,
   type SubagentModelPolicy,
   LocalCodexResponsesProvider,
-} from '@tabtin/agent-runtime'
+} from '@muse/agent-runtime'
 import { sharedOpenAICodexCredentialStore } from '../../llm/openai-codex-credential-store.js'
 import { openAICodexFetch } from '../../llm/openai-codex-http.js'
 import {
@@ -65,7 +65,7 @@ import {
   LLM_IMAGE_DATA_URL_MAX_BYTES,
   nodeBufferToAgentDataUrl,
 } from '../../../shared/llm-image-url.js'
-import { createSubagentStreamRouter, SessionPauseController } from '@tabtin/agent-host/delivery'
+import { createSubagentStreamRouter, SessionPauseController } from '@muse/agent-host/delivery'
 import {
   canSoftReconfigureByShellTier,
   resolveRuntimeModeAgainstSticky,
@@ -80,19 +80,19 @@ import {
   type RuntimeDisabledAppsExtraKey,
   type RuntimeSessionFactoryAdapter,
   type RuntimeBuildContext,
-} from '@tabtin/agent-host/runtime'
-import type { AgentModeName } from '@tabtin/agent-modes'
-import { getRestrictedShellAllowlist } from '@tabtin/agent-modes'
+} from '@muse/agent-host/runtime'
+import type { AgentModeName } from '@muse/agent-modes'
+import { getRestrictedShellAllowlist } from '@muse/agent-modes'
 import {
   BudgetTracker,
   composeHooks,
   normalizeWorkspaceRoot,
-} from '@tabtin/agent-runtime/engine'
-import { createSkillActivation } from '@tabtin/agent-runtime/tools'
-import type { PersistedEntryOwner } from '@tabtin/agent-runtime'
+} from '@muse/agent-runtime/engine'
+import { createSkillActivation } from '@muse/agent-runtime/tools'
+import type { PersistedEntryOwner } from '@muse/agent-runtime'
 // W4a S3-S5（PR2）：live 依赖重绑 + 完成回调契约类型。
-import type { SubagentLiveDeps, EnqueueSubagentCompletion } from '@tabtin/agent-runtime'
-import { electronHostRuntimeOptions } from '@tabtin/agent-host/configuration'
+import type { SubagentLiveDeps, EnqueueSubagentCompletion } from '@muse/agent-runtime'
+import { electronHostRuntimeOptions } from '@muse/agent-host/configuration'
 const {
   resolveDoomLoopPolicy,
   resolveIterationBudget,
@@ -115,11 +115,11 @@ const {
 } = electronHostRuntimeOptions
 import { TokenManager } from '../../auth.js'
 import { API_BASE_URL } from '../../config/api.js'
-import { joinApiPath } from '@tabtin/config'
+import { joinApiPath } from '@muse/config'
 import {
   buildPolicyFromAgentConfigV2,
   checkHardlineCommand,
-} from '@tabtin/security-policy'
+} from '@muse/security-policy'
 import { getCLISpaceId, getCLIOrganizationId } from '../../cli/cli-server.js'
 import { acquireSubagentCLIWorkspaceScopeLease } from '../../cli/cli-context.js'
 import { createLogger } from '../../logger.js'
@@ -138,32 +138,32 @@ import {
   isLibTvSkill,
   shouldInjectMediaSkill,
 } from '../capabilities/media-image-skill-routing.js'
-import type { SkillCredentialResolverHandle } from '@tabtin/agent-host/credentials'
+import type { SkillCredentialResolverHandle } from '@muse/agent-host/credentials'
 import { createRunObservationInjector } from '../conversation/run-observation-injector.js'
 // YOLO PRD v3 review M2：main 进程现拉 Django 权威 agent_config。
 // 详见 ElectronAgentHost.agentConfigClient 字段注释 + agent-config-client.ts。
 import { createAgentConfigClient } from '../policy/agent-config-client.js'
-import { clearAllActivePlansForSession, getActivePlanFilePath } from '@tabtin/agent-runtime'
+import { clearAllActivePlansForSession, getActivePlanFilePath } from '@muse/agent-runtime'
 
 import { getOrCreateFileHistory } from '../../file-history/file-history-registry.js'
 import { getRuntimeInteractionMode } from '../policy/interaction-mode-context.js'
 import { setThreadEffectiveApprovalMode } from '../policy/approval-mode-context.js'
-import { deriveCacheType, deriveReasoningHistoryPolicy, FALLBACK_MODEL_CAPABILITIES, buildModelFallbackChain } from '@tabtin/agent-runtime/engine'
-import { findCatalogEntry } from '@tabtin/agent-runtime'
+import { deriveCacheType, deriveReasoningHistoryPolicy, FALLBACK_MODEL_CAPABILITIES, buildModelFallbackChain } from '@muse/agent-runtime/engine'
+import { findCatalogEntry } from '@muse/agent-runtime'
 // 路径权限治理 W7 / L1：派生 EffectivePolicy.planModeGuardActive
-import { isPlanModeGuardActive } from '@tabtin/agent-modes'
+import { isPlanModeGuardActive } from '@muse/agent-modes'
 // W1.2 /  Stage 6d：装配 NativeBackendSession + ExecutionBackendRegistry。
 // bootstrap 在 agent-host（依赖 terminal-core）；session 实现仍在 agent-runtime。
 import {
   bootstrapNativeBackend,
   isNativeBackendSessionEnabled,
   type NativeBackendBootstrapResult,
-} from '@tabtin/agent-host/native'
+} from '@muse/agent-host/native'
 // ShellCap 接 PtyManagerBridge — 装配点拿 bridge。
 // bootstrap 顺序（agent-bridge.ts L544-548）：
 //   PtyManager 就绪 → bridge-core.ts setupCoreAPIs 调 setPtyManagerBridge
 //   → 此处 resolvePtyManagerBridge 拿到真实 bridge → 装配 ShellCap
-import { resolvePtyManagerBridge } from '@tabtin/action-tools/runtime'
+import { resolvePtyManagerBridge } from '@muse/action-tools/runtime'
 // W2.3：7 Capability + capability 装配 helper + 引擎 hooks 子模块
 import {
   FileSystemCap,
@@ -179,7 +179,7 @@ import {
   type CliCommandSchema,
   type RestrictedShellAllowlistChecker,
   type SkillContextProvider,
-} from '@tabtin/agent-runtime/capability'
+} from '@muse/agent-runtime/capability'
 // ：平台目录类 Cap（SkillsCap / McpCap / CliCap）已迁至共享宿主包。
 // ：受限 shell 动词表 / Plan 浏览器导航豁免 / untrusted 判定 / 本地产物
 // URI / 隐藏 skill 名单——TabTin 业务知识由宿主注入。
@@ -191,16 +191,16 @@ import {
   RESTRICTED_BROWSER_NAV_ALLOWLIST,
   isUntrustedShellCommand,
   resolveCliToolPresentation,
-} from '@tabtin/agent-host/capabilities'
+} from '@muse/agent-host/capabilities'
 import { shouldInjectBrowserNavigationAllowlist } from './restricted-shell-mode-policy.js'
-import { createAppMetaFormatter } from '@tabtin/agent-host/delivery'
+import { createAppMetaFormatter } from '@muse/agent-host/delivery'
 // W2.3-fix（F8）：v2 cost.execution_limits 归一 helper —— 让 Renderer 透传过来
 // 的 v2 形态（含 Django 校验后字符串化的 max_credits）正确归一到 CostCap 期望
 // 的 number 类型。Daemon 端用同一个 helper 保证两宿主装配语义一致。
 // 走子路径而非顶层 barrel，避免顶层 index.ts re-export 的 zustand store
 // 在 ESM 静态解析阶段牵连 main 进程加载 zustand（packaged main 没装 zustand，
-// 启动会 ERR_MODULE_NOT_FOUND）。同样的修法已用于 @tabtin/shared/use-countdown。
-import { normalizeExecutionLimitsForCostCap } from '@tabtin/app-shell/agent-config-v2'
+// 启动会 ERR_MODULE_NOT_FOUND）。同样的修法已用于 @muse/shared/use-countdown。
+import { normalizeExecutionLimitsForCostCap } from '@muse/app-shell/agent-config-v2'
 import {
   buildContextHook,
   buildProjectTaskContextHook,
@@ -213,12 +213,12 @@ import {
   buildRelevantRecallHook,
   buildRulesHook,
   buildWorktreeRoutingHook,
-} from '@tabtin/agent-host/hooks'
+} from '@muse/agent-host/hooks'
 // Memory v2 阶段 3：memory-injector hook 复用 memory_search 工具同款 helper
 // 调 TabMemo HTTP API（DataToolsDeps 闭包）拉相关 memo——一份 fetch 逻辑两处用。
 // 项目规则自动加载（AGENTS.md MVP）：rules-injector hook 复用 readProjectRules
 // 读盘 helper（mtime 缓存 + 截断），两端宿主 import 同一份。
-import { readProjectRules } from '@tabtin/agent-runtime/tools'
+import { readProjectRules } from '@muse/agent-runtime/tools'
 import { shouldInjectProjectTaskSkill } from './project-task-skill-gate'
 import {
   buildUserPortraitCacheKey,
@@ -226,7 +226,7 @@ import {
   resolveUserPortraitFetchScope,
 } from './user-portrait-fetch-contract'
 // ：memory_search helper 随 data-tools 迁宿主业务工具包。
-import { callMemorySearchAPI } from '@tabtin/agent-host/tools'
+import { callMemorySearchAPI } from '@muse/agent-host/tools'
 // C14: lsp-runtime singleton 初始化 + passive feedback handler 注册
 import {
   initializeLspServerManager,
@@ -234,14 +234,14 @@ import {
   registerLSPNotificationHandlers,
   createBuiltinServersLoader,
   getInitializationStatus as getLspInitializationStatus,
-} from '@tabtin/lsp-runtime'
-import type { ToolProvider as RuntimeToolProvider } from '@tabtin/agent-runtime/engine'
-import type { WorkingDirType, SubagentCatalogEntry, SystemPromptConfig } from '@tabtin/agent-prompt'
+} from '@muse/lsp-runtime'
+import type { ToolProvider as RuntimeToolProvider } from '@muse/agent-runtime/engine'
+import type { WorkingDirType, SubagentCatalogEntry, SystemPromptConfig } from '@muse/agent-prompt'
 //  / ：Space 模板快照解析在 host；runtime 只吃展开后的通用入参。
 import {
   mapRawTemplateToSnapshot,
   type SubAgentTemplateSnapshot,
-} from '@tabtin/agent-host/configuration'
+} from '@muse/agent-host/configuration'
 // ：系统提示词装配的权威真相源在 agent-runtime。Electron 不再直接调
 // buildSystemPrompt 手抄入参（原主 prompt / subagent / mode 热切换 / 软切换 4 处），
 // 统一走 assembleSystemPrompt（烘焙输入 + 变体）。
@@ -249,23 +249,23 @@ import {
   assembleSystemPrompt,
   createSystemPromptProvider,
   createTodoCompletionNudgeProvider,
-} from '@tabtin/agent-host/prompt'
+} from '@muse/agent-host/prompt'
 import {
   createToolRiskPolicyPort,
   createJudgeMemoStoreAdapter,
   createAgentModesToolGate,
   annotateReadonlyChildTools,
-} from '@tabtin/agent-host/policy'
-import type { BakedSystemPromptInputs } from '@tabtin/agent-host/prompt'
+} from '@muse/agent-host/policy'
+import type { BakedSystemPromptInputs } from '@muse/agent-host/prompt'
 // ：run_terminal_command 交付物卡（Browser→Table / OSS）迁到 host
-// afterToolResult hook（业务落在 @tabtin/agent-host/delivery）；两端宿主对称注册。
+// afterToolResult hook（业务落在 @muse/agent-host/delivery）；两端宿主对称注册。
 import {
   wrapEnqueueSubagentCompletionWithDeliverables,
   createTerminalArtifactCardHook,
   createFileEditPatchPersistHook,
-} from '@tabtin/agent-host/delivery'
+} from '@muse/agent-host/delivery'
 import { recordFileEditPatch } from '../../file-edit-patches/file-edit-patch-store'
-import type { HostAgentToolDeps } from '@tabtin/agent-host/configuration'
+import type { HostAgentToolDeps } from '@muse/agent-host/configuration'
 import {
   ExecutionBackendRegistry,
   ExecutionRootUnreachableError,
@@ -273,16 +273,16 @@ import {
   resolveSpacesRoot,
   buildSubagentCompletionEnvelope,
   resolveAgentShellInfo,
-} from '@tabtin/terminal-core'
-import { resolveSpaceWorkspaceRoot } from '@tabtin/agent-runtime'
+} from '@muse/terminal-core'
+import { resolveSpaceWorkspaceRoot } from '@muse/agent-runtime'
 import { resolveAuthoritativeSessionCodeRoot } from '../session-code-root-binding.js'
 type OperationSwitchesType = Record<string, 'allow' | 'confirm' | 'block'>
 // W3：HITL UserInteractiveChannel 桥接 + ApprovalMemoStore（W6 v3 judge 接管后）。
-// 生产链路 100% 走 `@tabtin/security-policy` `judge()` 主路径——历史 6 层
+// 生产链路 100% 走 `@muse/security-policy` `judge()` 主路径——历史 6 层
 // PermissionPipeline（driver / layers / 配套接口）已整体清退。
 import {
   cancelAllPendingHitlRequests,
-} from '@tabtin/agent-runtime'
+} from '@muse/agent-runtime'
 import { ModeSwitchHandler } from '../policy/mode-switch-handler.js'
 import {
   loadEnabledPersonalPluginSkillSnapshot,
@@ -290,8 +290,8 @@ import {
   searchRuntimeSkills,
   type PersonalPluginSkillSnapshot,
   type VisibleSkillEntry,
-} from '@tabtin/agent-runtime/skills'
-import type { SkillsModuleHandle } from '@tabtin/agent-host/skills'
+} from '@muse/agent-runtime/skills'
+import type { SkillsModuleHandle } from '@muse/agent-host/skills'
 import {
   collectWorkspaceSkillsForSession,
 } from '../workspace-skills-context.js'
@@ -299,7 +299,7 @@ import type {
   SkillsToolsDeps,
   SkillInvokeDeps,
   SkillCreateDeps,
-} from '@tabtin/agent-runtime/tools'
+} from '@muse/agent-runtime/tools'
 import { createMcpListingFetcher } from '../capabilities/mcp-listing-fetcher.js'
 import { createGatedCliListingFetcher } from '../capabilities/cli-listing-gate.js'
 import { getSemanticScorer } from '../capabilities/semantic-scorer.js'
@@ -339,7 +339,7 @@ function resolveStrictRuntimeWorkspaceRoot(rawWorkspaceRoot: string | undefined)
 }
 
 /**
- * ：`$TABTIN_WORKSPACE` / runtime 执行根只能来自会话 Space 的 `working_dir`。
+ * ：`$MUSE_WORKSPACE` / runtime 执行根只能来自会话 Space 的 `working_dir`。
  * 无 working_dir 时走平台沙箱；禁止读全局 CLI organizationRoot。
  *
  *  / ：会话代码根绑定（TabCode worktree session root）优先于 `working_dir`。
@@ -373,7 +373,7 @@ import type {
   StreamEventSink,
   QueryRequest,
 } from '../electron-agent-types.js'
-import type { RuntimeSessionRequest } from '@tabtin/agent-host/runtime'
+import type { RuntimeSessionRequest } from '@muse/agent-host/runtime'
 
 export interface ElectronRuntimeAssemblyPorts {
   readonly sessions: AgentHost<ElectronSharedQuery, QueryResult, HostState>['sessions']
@@ -457,7 +457,7 @@ function electronRuntimeExtraKeysMatch(
 export class ElectronRuntimeAssembly {
   constructor(private readonly ports: ElectronRuntimeAssemblyPorts) {}
 
-  private _runtimeFactory: import('@tabtin/agent-host/runtime').RuntimeSessionFactory<
+  private _runtimeFactory: import('@muse/agent-host/runtime').RuntimeSessionFactory<
     RuntimeBuildInput,
     HostState,
     AgentModeName,
@@ -1255,7 +1255,7 @@ export class ElectronRuntimeAssembly {
    *   - 异步：initializeLspServerManager 内部异步，本方法是 sync wrapper
    *   - onLspInitialized 回调注册：init 成功后自动调
    *     `registerLSPNotificationHandlers` wire publishDiagnostics handler
-   *   - TABTIN_DISABLE_LSP=1 由 lsp-runtime 内部处理（initializeLspServerManager
+   *   - MUSE_DISABLE_LSP=1 由 lsp-runtime 内部处理（initializeLspServerManager
    *     opts.disabled 等价）
    *
    * 当前简化：第一次 session 决定的 workspace root 作 projectRoot，后续 session
@@ -1565,7 +1565,7 @@ export class ElectronRuntimeAssembly {
     personalRules?: string,
     /**
      *  第三波：云端 AdminDash 压缩分档阈值（camelCase，已校验）。
-     * 非空时优先于 env 旋钮 `TABTIN_PRESSURE_THRESHOLDS`。
+     * 非空时优先于 env 旋钮 `MUSE_PRESSURE_THRESHOLDS`。
      */
     cloudPressureThresholds?: { microCompactStart: number; llmSummaryStart: number; emergencyStart: number },
     /**
@@ -1617,7 +1617,7 @@ export class ElectronRuntimeAssembly {
      * 运行时撞 `workspaceSnapshotV3 is not defined` ReferenceError。修复方案是
      * 把 workspaceSnapshotV3 从函数局部变量提升为返回值字段。
      */
-    workspaceSnapshotV3: import('@tabtin/security-policy').WorkspaceSnapshot
+    workspaceSnapshotV3: import('@muse/security-policy').WorkspaceSnapshot
     /**
      * Hilt v3 / W6 M1：本 session 的 AgentConfigV3 可变实例。
      *
@@ -1626,7 +1626,7 @@ export class ElectronRuntimeAssembly {
      * 设置切换在下一轮 runTools 入口立即生效，无需重建 runtime。
      * v3 PRD §5.1.1：字段改名 yolo_mode → allow_yolo_mode（Agent 级 gate）。
      */
-    agentConfigV3: import('@tabtin/security-policy').AgentConfigV3
+    agentConfigV3: import('@muse/security-policy').AgentConfigV3
     /**
      * YOLO 两步授权 PRD v3 §5.5.2：buildJudgePolicy 闭包派生 effectiveMode
      * 所需的两个入参容器。透出给 getOrCreateRuntime 写到 HostState，
@@ -1921,7 +1921,7 @@ export class ElectronRuntimeAssembly {
     }
 
     // FR-17.1：从 env 读取 per-parent 子 Agent 并发上限，注入 BudgetTracker。
-    // 默认 5；env `TABTIN_MAX_CONCURRENT_CHILDREN=unlimited` 可显式禁用。
+    // 默认 5；env `MUSE_MAX_CONCURRENT_CHILDREN=unlimited` 可显式禁用。
     // BudgetTracker 用一份对应一次 query —— 每个 sessionId 在 createRuntime
     // 时新建，所以 quota 天然按"一次用户对话"独立。
     const maxConcurrentChildren = resolveMaxConcurrentChildren(process.env, log)
@@ -1938,7 +1938,7 @@ export class ElectronRuntimeAssembly {
     // —— 让后台子与新子计入同一并发账本，不击穿。无后台子时照常 new（软切换另有
     // 路径，不到这里）。
     // W4a S3③（PR2 review P1 修复）—— resolveSubagentCarryForward 是双端共享
-    // SSoT（`@tabtin/agent-host/runtime`），把 existing / hasBackgroundRuns()
+    // SSoT（`@muse/agent-host/runtime`），把 existing / hasBackgroundRuns()
     // / dispose 判定 + budgetTracker 条件复用统一收拢，避免两端漂移。详见
     // `packages/agent-host/src/runtime/subagent-carry-forward.ts` 头注释。
     // W4a S5（2026-05-30）：完成回调投递句柄——子终态经 Manager.notifyCompleted
@@ -1957,7 +1957,7 @@ export class ElectronRuntimeAssembly {
       // readonly 字段，carry-forward 复用时不随 runtime 重建更新；Space 切换硬重建且
       // 仍有后台子时，HostState 已是新 spaceId，Manager 快照仍是旧值，用 live 优先
       // 避免完成通知带错 spaceId。快照为空但 live 已有值时不再 return false。
-      // spaceId 派生走 resolveSubagentCompletionSpaceId（`@tabtin/agent-host/runtime`
+      // spaceId 派生走 resolveSubagentCompletionSpaceId（`@muse/agent-host/runtime`
       // SSoT），Electron 额外把 getCLISpaceId() 作为 cliSpaceIdFallback 参与派生。
       const liveEntry = host.sessions.get(sessionId)
       const effectiveSpaceId = resolveSubagentCompletionSpaceId({
@@ -1976,9 +1976,9 @@ export class ElectronRuntimeAssembly {
       // ：null-safe bridge 解析——resolvePtyManagerBridge 返回 PtyManagerBridge | null，
       // 旧写法 `bridge.getNotificationQueue` 在 null 时抛 TypeError 被 catch 静默吞掉；
       // 缺 queue 时打结构化日志（含 threadId/kind）便于排查。
-      let queue: import('@tabtin/terminal-core').NotificationQueue | undefined
+      let queue: import('@muse/terminal-core').NotificationQueue | undefined
       try {
-        const bridge = resolvePtyManagerBridge() as { getNotificationQueue?: () => import('@tabtin/terminal-core').NotificationQueue } | null
+        const bridge = resolvePtyManagerBridge() as { getNotificationQueue?: () => import('@muse/terminal-core').NotificationQueue } | null
         queue = bridge?.getNotificationQueue?.()
       } catch (err) {
         log.error(
@@ -2019,10 +2019,10 @@ export class ElectronRuntimeAssembly {
     // 到的是上一个 runtime 的 Manager；复用它（保留后台子登记），下方 rebindLiveDeps
     // 把新 runtime 的 live 依赖灌进去。仅当旧 Manager 已 dispose（不该发生）才新建。
     // （budgetTracker 的 carry-forward 是**条件式**——仅有后台子时复用，见上方。）
-    // 决策统一走 `resolveSubagentCarryForward`（`@tabtin/agent-host/runtime` SSoT）。
+    // 决策统一走 `resolveSubagentCarryForward`（`@muse/agent-host/runtime` SSoT）。
     const carryForwardResolved = resolveSubagentCarryForward({
-      carryForwardSubagentManager: carryForwardSubagentManager as unknown as import('@tabtin/agent-host/runtime').SubagentManagerLike | undefined,
-      liveSessionManager: host.sessions.get(sessionId)?.subagentManager as unknown as import('@tabtin/agent-host/runtime').SubagentManagerLike | undefined,
+      carryForwardSubagentManager: carryForwardSubagentManager as unknown as import('@muse/agent-host/runtime').SubagentManagerLike | undefined,
+      liveSessionManager: host.sessions.get(sessionId)?.subagentManager as unknown as import('@muse/agent-host/runtime').SubagentManagerLike | undefined,
       maxConcurrentChildren,
       maxQueueSize: maxSubagentQueue,
       createBudgetTracker: ({ maxConcurrentChildren: mcc, maxQueueSize: mqs }) =>
@@ -2409,7 +2409,7 @@ export class ElectronRuntimeAssembly {
     const summaryReuseMinAddedMessages = resolveSummaryReuseMinAddedMessages(process.env, log)
     const timeBasedMicroCompact = resolveTimeBasedMicroCompact(process.env, log)
     //  压缩分档阈值：云端 AdminDash（prompt.forward 下发，已校验）>
-    // env 旋钮 TABTIN_PRESSURE_THRESHOLDS > runtime 默认（0.75 / 0.85 / 0.95）。
+    // env 旋钮 MUSE_PRESSURE_THRESHOLDS > runtime 默认（0.75 / 0.85 / 0.95）。
     // 与 timeBasedMicroCompact 同 SSoT 模式——agentToolDeps 与 EngineConfig
     // 复用同一份解析结果，父子触发线一致。
     const pressureThresholds = cloudPressureThresholds ?? resolvePressureThresholds(process.env, log)
@@ -2425,8 +2425,8 @@ export class ElectronRuntimeAssembly {
     // **W2（2026-05-13）image / localDoc dedup 状态**（与 readFileState 物理
     // 隔离，跨 Wave 不变量 #6）。同款"提前 new + 引用共享给 EngineConfig +
     // agentToolDeps"模式，让父→子 fork 时能 shallow clone。
-    const imageReadFileState: import('@tabtin/agent-runtime').ImageReadFileState = new Map()
-    const localDocReadFileState: import('@tabtin/agent-runtime').LocalDocReadFileState = new Map()
+    const imageReadFileState: import('@muse/agent-runtime').ImageReadFileState = new Map()
+    const localDocReadFileState: import('@muse/agent-runtime').LocalDocReadFileState = new Map()
 
     // per-file 回退引擎（替代 shadow git）：按 threadId(=sessionId) 取/建 **per-thread**
     // 实例（与 per-query 新建的 readFileState 不同——同一 thread 多轮 query 必须复用
@@ -2444,7 +2444,7 @@ export class ElectronRuntimeAssembly {
       },
     )
 
-    const workspaceSnapshotV3: import('@tabtin/security-policy').WorkspaceSnapshot = {
+    const workspaceSnapshotV3: import('@muse/security-policy').WorkspaceSnapshot = {
       sources: {
         sandbox: workspaceRoot ?? sessionDir,
         // 单根契约：workingDir 在 WorkspaceBoundary hydrate 后会被填上，
@@ -2516,7 +2516,7 @@ export class ElectronRuntimeAssembly {
     //
     // v3 PRD §5.1.1：字段名 ``allow_yolo_mode``（Agent 级 gate）。
     // v3 review M2：reviewer-C HIGH-1 / reviewer-A A1 — 修复 IPC 篡改提权。
-    const agentConfigV3: import('@tabtin/security-policy').AgentConfigV3 = {
+    const agentConfigV3: import('@muse/security-policy').AgentConfigV3 = {
       schema_version: 3,
       runtime_plane: 'local',
       security: { allow_yolo_mode: yoloMode === true },
@@ -2638,7 +2638,7 @@ export class ElectronRuntimeAssembly {
         // W1-A: 子 agent 继承父 mode，保持工具过滤 + 受限模式软拒行为一致
         agentMode,
         //  Stage 2b：子 Agent system prompt 重烘焙经宿主端口，
-        // runtime 不再直接 import @tabtin/agent-prompt。
+        // runtime 不再直接 import @muse/agent-prompt。
         systemPromptProvider,
         // FR-17.2：子 Agent 完成时是否对 summary 做 microCompact（默认 true）。
         subagentResultCompact,
@@ -2822,7 +2822,7 @@ export class ElectronRuntimeAssembly {
       ptyManagerBridge: ptyBridge,
       //  Stage 3c：硬红线由宿主注入，内核不再 import security-policy。
       checkHardlineCommand,
-      //  RB2：per-runtime 业务身份烘进 ShellCap（凭据派生 / TABTIN_SPACE_ID
+      //  RB2：per-runtime 业务身份烘进 ShellCap（凭据派生 / MUSE_SPACE_ID
       // env / agentMeta.spaceId / agentId 读这里），不再从运行时 ToolContext 取。
       spaceId,
       agentId,
@@ -3011,7 +3011,7 @@ export class ElectronRuntimeAssembly {
     // 关闭：bundle.session.shutdown() 由 host runtime rebuild 路径调用；
     // registry 在 host shutdown 时通过 backendRegistry.dispose() 清理。
     // C14 (2026-05-13)：第一次拿到 workspace root 时 init lsp-runtime singleton。
-    // 后续 session 共享同一个 singleton；TABTIN_DISABLE_LSP=1 时 noop。
+    // 后续 session 共享同一个 singleton；MUSE_DISABLE_LSP=1 时 noop。
     // 失败不阻塞 runtime 创建（lsp-runtime 是可选增强，singleton 未 init 时
     // notifyLspAfterEdit / buildLspDiagnosticHook 都会静默 noop）。
     this.ensureLspInitialized(workspaceRoot)
@@ -3058,10 +3058,10 @@ export class ElectronRuntimeAssembly {
       )
     } else if (!isNativeBackendSessionEnabled()) {
       // W4.1：feature flag opt-out 路径——也别静默。运维 / 自动化测试如果显式
-      // 关掉 TABTIN_NATIVE_BACKEND_SESSION 然后又奇怪 Capability 不工作，看到
+      // 关掉 MUSE_NATIVE_BACKEND_SESSION 然后又奇怪 Capability 不工作，看到
       // 这行 warn 立刻知道是自己关掉的开关。
       log.warn(
-        '[NativeBackendSession] skipped: TABTIN_NATIVE_BACKEND_SESSION env disables it (feature flag opt-out). ' +
+        '[NativeBackendSession] skipped: MUSE_NATIVE_BACKEND_SESSION env disables it (feature flag opt-out). ' +
           '7 Capability will not bind. Set env to enabled / 1 / on to restore.',
       )
     }
@@ -3116,7 +3116,7 @@ export class ElectronRuntimeAssembly {
     // tabtin 已注册的 RiskNone 子命令）。Agent / Group 模式不传 → 不限制。
     //
     // checker 的 fetchCommandRisk 实现：调本地 tabtin 拉 schema 列表
-    //   → 用 `@tabtin/agent-runtime/capability/buildRiskMapFromSchemas`
+    //   → 用 `@muse/agent-runtime/capability/buildRiskMapFromSchemas`
     //     压成 Map<fullName, riskString>
     //   → checker 内部按子命令 path 查 Map
     //
@@ -3130,7 +3130,7 @@ export class ElectronRuntimeAssembly {
       ptyManagerBridge: ptyBridge,
       //  Stage 3c：硬红线由宿主注入，内核不再 import security-policy。
       checkHardlineCommand,
-      //  RB2：per-runtime 业务身份烘进 ShellCap（凭据派生 / TABTIN_SPACE_ID
+      //  RB2：per-runtime 业务身份烘进 ShellCap（凭据派生 / MUSE_SPACE_ID
       // env / agentMeta.spaceId / agentId 读这里），不再从运行时 ToolContext 取。
       spaceId,
       agentId,
@@ -3171,7 +3171,7 @@ export class ElectronRuntimeAssembly {
       writer: createRelayAuditWriter(emitStreamEvent),
       level: 'standard',
     })
-    // 双端 SSoT：`buildCostCapConfig`（`@tabtin/agent-host/runtime`）统一
+    // 双端 SSoT：`buildCostCapConfig`（`@muse/agent-host/runtime`）统一
     // v2 execution_limits 归一 + CostCapInit shape 组合。上方 `normalizedCostLimits`
     // 仍保留作 `agentConfigV3.capabilities.overrides.cost.execution_limits` 的
     // baked 字段（policy-context 读），本处装配 CostCap 用 helper 走同一份归一

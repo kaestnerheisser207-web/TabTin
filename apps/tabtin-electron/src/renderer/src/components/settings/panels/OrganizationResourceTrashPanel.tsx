@@ -1,12 +1,12 @@
-import { joinApiPath } from '@tabtin/config'
+import { joinApiPath } from '@muse/config'
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import {
   Trash2, RotateCcw, RefreshCw, AlertTriangle,
   FileText, Table2, Presentation, Code2,
 } from 'lucide-react'
 import { Button, ConfirmDialog, toast } from '@components/ui'
-import type { Organization } from '@tabtin/app-shell'
-import { SpaceApiService, type TrashedItem } from '@tabtin/app-shell'
+import type { Organization } from '@muse/app-shell'
+import { SpaceApiService, type TrashedItem } from '@muse/app-shell'
 import { useTranslation } from 'react-i18next'
 import { cn } from '@utils/cn'
 import { apiRequest as adapterApiRequest, getAuthToken } from '@/adapters/api-adapter-instance'

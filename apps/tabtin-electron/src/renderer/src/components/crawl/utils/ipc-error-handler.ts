@@ -5,7 +5,7 @@
  * 区分可忽略（仅日志）和需用户感知（toast）两类。
  */
 
-import { toast } from '@tabtin/smartsheet-ui'
+import { toast } from '@muse/smartsheet-ui'
 import i18n from '@/i18n'
 
 type ErrorSeverity = 'silent' | 'toast'

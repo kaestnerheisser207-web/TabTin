@@ -17,7 +17,7 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest'
 import { handleSubagentStreamEvent } from '../subagentStreamHandler'
 import { useSubagentLiveStore, flushSubagentLiveBatch } from '../../../../subagentLive'
-import { StreamEvents } from '@tabtin/agent-wire'
+import { StreamEvents } from '@muse/agent-wire'
 import type { HandlerContext } from '../../../stream/handlers/streamHandlerTypes'
 import type { SubagentRun } from '../../../shared/types'
 

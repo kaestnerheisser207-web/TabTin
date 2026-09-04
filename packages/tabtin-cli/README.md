@@ -1,4 +1,4 @@
-# @tabtin/cli
+# @muse/cli
 
 Muse 统一 CLI（`muse`）的**本地安装包**。把 `packages/tabtin-cli-go` 编译出的
 Go 二进制打进一个 npm 包，靠标准 `npm i -g` 完成全局安装 + PATH 挂载，免去手工
@@ -14,7 +14,7 @@ Go 二进制打进一个 npm 包，靠标准 `npm i -g` 完成全局安装 + PAT
 
 ```bash
 # 1. 编译 Win/mac 二进制 + 生成 skills/（不依赖 make）
-pnpm --filter @tabtin/cli build   # 或: npm run build
+pnpm --filter @muse/cli build   # 或: npm run build
 
 # 2. 打包（prepack 校验 binaries/ + skills/）
 cd packages/tabtin-cli
@@ -28,7 +28,7 @@ muse --help
 ls ~/.agents/skills   # 应有一批 tabtin-*
 ```
 
-跳过自动物化：`TABTIN_SKIP_SKILLS_INSTALL=1 npm i -g ./tabtin-cli-*.tgz`。
+跳过自动物化：`MUSE_SKIP_SKILLS_INSTALL=1 npm i -g ./tabtin-cli-*.tgz`。
 
 ## 支持的平台（首版）
 
@@ -51,7 +51,7 @@ ls ~/.agents/skills   # 应有一批 tabtin-*
 二进制，`spawnSync` 转发 `argv` / `stdio` / exit code（含信号透传）。找不到匹配平台
 或对应二进制文件缺失时，会打印清晰报错后退出。
 
-未设置时注入 `TABTIN_SKILLS_BUNDLE_DIR` 指向包内 `skills/`。
+未设置时注入 `MUSE_SKILLS_BUNDLE_DIR` 指向包内 `skills/`。
 
 ## `postinstall` 做了什么
 
@@ -61,7 +61,7 @@ ls ~/.agents/skills   # 应有一批 tabtin-*
 
 ## 卸载 vs 清配置 —— 这是两件事，别混
 
-- **`npm uninstall -g @tabtin/cli`**：只删程序本体（launcher + binaries + 包内 skills），
+- **`npm uninstall -g @muse/cli`**：只删程序本体（launcher + binaries + 包内 skills），
   **保留** `~/.tabtin` 登录态，也**不会**自动删除已物化到 `~/.agents/skills` 的副本。
   清物化 Skill：`muse skills remove --yes`（须在卸载 CLI 前执行，或重装后再清）。
 - **显式清空本地配置 / 凭证 / 缓存**：
@@ -76,7 +76,7 @@ ls ~/.agents/skills   # 应有一批 tabtin-*
 
 ```
 packages/tabtin-cli/
-├── package.json              # name=@tabtin/cli, bin, private, postinstall
+├── package.json              # name=@muse/cli, bin, private, postinstall
 ├── bin/muse.js             # Node 启动器
 ├── scripts/
 │   ├── build-binaries.js     # go 交叉编译 → binaries/（无 make）

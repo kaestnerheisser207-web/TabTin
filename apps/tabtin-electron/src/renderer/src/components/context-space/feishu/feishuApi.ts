@@ -251,7 +251,7 @@ export function removeFeishuOAuthProvider(organizationId: string): Promise<{ del
 /** 获取飞书官方授权页 URL（accounts.feishu.cn），由客户端直接 openExternal */
 export function startFeishuOAuth(
   organizationId: string,
-  returnDeepLink = 'tabtin://integrations/feishu/connected',
+  returnDeepLink = 'muse://integrations/feishu/connected',
 ): Promise<string> {
   return request<{ authorize_url?: string }>({
     path: '/oauth/start',

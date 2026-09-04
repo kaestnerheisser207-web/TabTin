@@ -46,10 +46,10 @@
  *   miscHandler             — TODO / SSH_OUTPUT / COMPACTION / DONE
  */
 
-import type { ChatClient, ChatMessage, ChatSession } from '@tabtin/chat-client'
-import { AgentStreamEvents } from '@tabtin/ws-gateway-client'
+import type { ChatClient, ChatMessage, ChatSession } from '@muse/chat-client'
+import { AgentStreamEvents } from '@muse/ws-gateway-client'
 import { isSystemAuthoredMessage } from '../../domain/messageRolePolicy'
-import { isContentBlockEvent, ContentBlockEvents, StreamEvents } from '@tabtin/agent-wire'
+import { isContentBlockEvent, ContentBlockEvents, StreamEvents } from '@muse/agent-wire'
 import { createLogger } from '@/utils/logger'
 import { handleLifecycleEvent } from './lifecycleHandler'
 import { handleSubagentEvent } from '../../subagent/handlers/subagentHandler'
@@ -74,7 +74,7 @@ import {
   readSessionMessages,
 } from '@/services/agentService/messageWriteGate'
 import { applyRuntimeRunSync } from '../../execution/sessionRunProjection'
-import { AgentRunSyncPayloadSchema } from '@tabtin/agent-wire'
+import { AgentRunSyncPayloadSchema } from '@muse/agent-wire'
 import { useChatStore } from '../../useChatStore'
 import { requestTitleGenerationOnSend } from '../../messages/actions/titleGenerationDedupe'
 import { resolveSessionForSend } from '../../messages/actions/sendDispatchInputs'

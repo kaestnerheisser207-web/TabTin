@@ -38,7 +38,7 @@ export async function loadOrganizationDeviceModelPreferences(
 ): Promise<OrganizationDeviceModelPreferences> {
   const id = organizationId.trim()
   if (!id) return {}
-  const bridge = window.tabtin?.agentEngine?.getDeviceModelPreferences
+  const bridge = window.muse?.agentEngine?.getDeviceModelPreferences
   if (typeof bridge !== 'function') return readCachedOrganizationDeviceModelPreferences(id)
   const result = await bridge(id)
   const preferences = normalize(result.preferences)
@@ -52,7 +52,7 @@ export async function saveOrganizationDeviceModelPreferences(
 ): Promise<OrganizationDeviceModelPreferences> {
   const id = organizationId.trim()
   if (!id) throw new Error('organizationId is required')
-  const bridge = window.tabtin?.agentEngine?.setDeviceModelPreferences
+  const bridge = window.muse?.agentEngine?.setDeviceModelPreferences
   if (typeof bridge !== 'function') throw new Error('Device model preferences are unavailable')
   const result = await bridge(id, normalize(preferences))
   const saved = normalize(result.preferences)

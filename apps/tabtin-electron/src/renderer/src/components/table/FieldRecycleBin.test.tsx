@@ -23,7 +23,7 @@ vi.mock('react-i18next', () => ({
   }),
 }))
 
-vi.mock('@tabtin/smartsheet-ui', async () => {
+vi.mock('@muse/smartsheet-ui', async () => {
   const React = await import('react')
   return {
     Dialog: ({ open, children }: { open: boolean; children: React.ReactNode }) =>

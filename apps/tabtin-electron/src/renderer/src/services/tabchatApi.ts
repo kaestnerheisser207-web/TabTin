@@ -4,12 +4,12 @@
  * 封装 Django IM 数据面与会话控制面。
  */
 
-import { joinApiPath } from '@tabtin/config'
+import { joinApiPath } from '@muse/config'
 import { API_CONFIG } from '@/config/api'
 import { apiRequest, getAuthToken } from '@/adapters/api-adapter-instance'
 import { ApiError } from '@/services/api'
 import { createLogger } from '@/utils/logger'
-import type { TableHttpMethod } from '@tabtin/table-core'
+import type { TableHttpMethod } from '@muse/table-core'
 import {
   createDefaultIMProviderRegistry,
   createClientRequestId,

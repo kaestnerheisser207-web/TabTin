@@ -22,8 +22,8 @@
  * 在协议层升级后仍正确。
  */
 import { describe, expect, it } from 'vitest';
-import type { WorkspaceSnapshot } from '@tabtin/security-policy';
-import { decodeForwardWorkspaceSnapshot } from '@tabtin/agent-host/conversation';
+import type { WorkspaceSnapshot } from '@muse/security-policy';
+import { decodeForwardWorkspaceSnapshot } from '@muse/agent-host/conversation';
 
 interface DecodeHarness {
   decodeWorkspaceSnapshot: (raw: unknown) => WorkspaceSnapshot | undefined;

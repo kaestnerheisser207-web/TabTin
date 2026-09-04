@@ -3,7 +3,7 @@ package com.tabtin.mobile.data.websocket
 /**
  * Billing WebSocket 事件类型常量。
  *
- * 与 TypeScript `@tabtin/ws-gateway-client` 的 BillingEvents 对齐，
+ * 与 TypeScript `@muse/ws-gateway-client` 的 BillingEvents 对齐，
  * 以及后端 `ws_events.py` 中 VALID_EVENT_TYPES 保持一致。
  */
 public object BillingEvents {

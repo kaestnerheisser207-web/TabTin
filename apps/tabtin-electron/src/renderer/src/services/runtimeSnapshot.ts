@@ -1,4 +1,4 @@
-import type { Device } from '@tabtin/app-shell'
+import type { Device } from '@muse/app-shell'
 import {
   CAPABILITY_DISCOVERY_SNAPSHOT_VERSION,
   capabilityIdBuilders,
@@ -6,7 +6,7 @@ import {
   normalizeHostRuntimeSnapshot,
   type CapabilityId,
   type HostRuntimeSnapshot,
-} from '@tabtin/shared'
+} from '@muse/shared'
 
 export interface CoreCliNamespaceSummary {
   capability_id: CapabilityId
@@ -16,7 +16,7 @@ export interface CoreCliNamespaceSummary {
 }
 
 export async function fetchCoreCliNamespaces(): Promise<CoreCliNamespaceSummary[]> {
-  const catalog = await window.tabtin.cli.getCoreCommandCatalog() as Array<{
+  const catalog = await window.muse.cli.getCoreCommandCatalog() as Array<{
     name?: string
     description?: string
     examples?: string[]
@@ -35,7 +35,7 @@ export async function fetchCoreCliNamespaces(): Promise<CoreCliNamespaceSummary[
 }
 
 export async function collectCurrentHostRuntimeSnapshot(): Promise<HostRuntimeSnapshot> {
-  const runtimeTools = await window.tabtin.agent.getRegisteredTools()
+  const runtimeTools = await window.muse.agent.getRegisteredTools()
   const reportedAt = new Date().toISOString()
 
   return {

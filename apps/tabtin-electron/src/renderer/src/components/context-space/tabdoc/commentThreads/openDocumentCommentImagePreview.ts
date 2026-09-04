@@ -4,8 +4,8 @@
  * 公共 tabdoc-ui 只上报预览意图；宿主在这里刷新同消息图片的短期签名 URL，
  * 再复用聊天已验证的缩放、键盘、遮罩关闭和显式下载体验。
  */
-import type { CommentAttachment } from '@tabtin/tabdoc-ui/api-client'
-import type { CommentAttachmentPreviewRequest } from '@tabtin/tabdoc-ui/editor'
+import type { CommentAttachment } from '@muse/tabdoc-ui/api-client'
+import type { CommentAttachmentPreviewRequest } from '@muse/tabdoc-ui/editor'
 import type { PreviewResource } from '@components/chat/preview/types'
 import { useResourcePreviewStore } from '@components/chat/preview/useResourcePreviewStore'
 

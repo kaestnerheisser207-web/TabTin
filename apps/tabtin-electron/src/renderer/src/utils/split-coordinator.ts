@@ -24,7 +24,7 @@ export const DRAG_TYPE_CHAT_SESSION = 'application/x-chat-session'
 /** Chat 上下文引用拖拽 */
 export const DRAG_TYPE_CHAT_CONTEXT = 'application/x-tabtin-chat-context'
 /** 跨应用文件引用拖拽（对话图片 → 文档 / 多维表格附件） */
-export const DRAG_TYPE_FILE_REF = 'application/x-tabtin-file-ref'
+export const DRAG_TYPE_FILE_REF = 'application/x-muse-file-ref'
 
 // ────────────────────────────────────────────────────────────
 // 分屏事件总线

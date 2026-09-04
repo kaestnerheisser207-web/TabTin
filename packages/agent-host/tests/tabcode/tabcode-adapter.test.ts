@@ -23,7 +23,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import type {
   ReadFileState,
   ToolContext,
-} from '@tabtin/agent-runtime';
+} from '@muse/agent-runtime';
 import { wrapInToolOutputFence } from '../../engine/tooling/tool-output-sanitizer.js';
 import {
   FILE_MATERIALIZATION_MAX_BYTES,
@@ -1049,7 +1049,7 @@ describe('Review 修复回归（路径 canonical / errorCode 区分 / OLD_NEW_ID
     const parsed = parseContent(res.content as string);
     expect(parsed.error_kind).toBe('file_not_found');
     // **W1（2026-05-13）**：error_kind 从 generic `resource_not_found` 改为
-    // file pipeline 专属 `file_not_found`（与 `@tabtin/file-pipeline-errors`
+    // file pipeline 专属 `file_not_found`（与 `@muse/file-pipeline-errors`
     // SSoT 对齐）。客户端 i18n 据此给"文件不存在 · 检查路径"精确文案，区
     // 别于其它资源（如 widget code / skill key）的 not-found。
     expect(parsed.error_kind).toBe('file_not_found');
@@ -1815,7 +1815,7 @@ describe('read_lints adapter（C13 退役）', () => {
     // runSpawnLinterFallback → actionReadDiagnosticsTool.execute(...) 兜底。
     // 验证 action-tools 这层没被误删。
     const { readDiagnosticsTool } = await import(
-      '@tabtin/action-tools/tools'
+      '@muse/action-tools/tools'
     );
     expect(typeof readDiagnosticsTool.execute).toBe('function');
     expect(readDiagnosticsTool.name).toBe('read_lints');

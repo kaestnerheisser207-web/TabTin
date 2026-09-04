@@ -4,10 +4,10 @@
  * 封装 /api/extensions/* 后端接口。
  */
 
-import { joinApiPath } from '@tabtin/config'
+import { joinApiPath } from '@muse/config'
 import { API_CONFIG } from '@/config/api'
 import { apiRequest, getAuthToken } from '@/adapters/api-adapter-instance'
-import type { TableHttpMethod } from '@tabtin/table-core'
+import type { TableHttpMethod } from '@muse/table-core'
 
 // ── Types ────────────────────────────────────────────────────────────
 

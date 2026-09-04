@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import { projectRelayMessageEvent } from '../src/delivery/relay-message-projection.js'
-import type { StreamEvent } from '@tabtin/agent-runtime'
+import type { StreamEvent } from '@muse/agent-runtime'
 
 function userEvent(payload: Record<string, unknown>): StreamEvent {
   return {

@@ -418,11 +418,11 @@ describe('ToolRepetitionTracker — buffer overflow protection', () => {
 });
 
 describe('ToolRepetitionTracker — env override', () => {
-  it('overrides notice threshold from TABTIN_TOOL_REPETITION_NOTICE_COUNT (合法 1)', () => {
+  it('overrides notice threshold from MUSE_TOOL_REPETITION_NOTICE_COUNT (合法 1)', () => {
     // 单设 notice=1 配默认 nudge=3 → notice<nudge 合法 → 生效
     let now = 1_000_000;
     const tracker = new ToolRepetitionTracker({
-      env: { TABTIN_TOOL_REPETITION_NOTICE_COUNT: '1' },
+      env: { MUSE_TOOL_REPETITION_NOTICE_COUNT: '1' },
       now: () => now,
     });
     expect(tracker.getConfig().thresholds.notice).toBe(1);
@@ -436,7 +436,7 @@ describe('ToolRepetitionTracker — env override', () => {
     // env 单设 notice=3 与默认 nudge=3 触发 invariant 失败 → 整 thresholds 回落
     // 这是有意设计（不局部修复以免反直觉），与 tool-failure-tracker 同惯例
     const tracker = new ToolRepetitionTracker({
-      env: { TABTIN_TOOL_REPETITION_NOTICE_COUNT: '3' },
+      env: { MUSE_TOOL_REPETITION_NOTICE_COUNT: '3' },
     });
     expect(tracker.getConfig().thresholds).toEqual(
       DEFAULT_TOOL_REPETITION_THRESHOLDS,
@@ -446,8 +446,8 @@ describe('ToolRepetitionTracker — env override', () => {
   it('overrides both thresholds simultaneously (合法组合)', () => {
     const tracker = new ToolRepetitionTracker({
       env: {
-        TABTIN_TOOL_REPETITION_NOTICE_COUNT: '3',
-        TABTIN_TOOL_REPETITION_NUDGE_COUNT: '5',
+        MUSE_TOOL_REPETITION_NOTICE_COUNT: '3',
+        MUSE_TOOL_REPETITION_NUDGE_COUNT: '5',
       },
     });
     // ：thresholds 现含 terminate 第三档（跟随合并，由专项测试覆盖），
@@ -455,17 +455,17 @@ describe('ToolRepetitionTracker — env override', () => {
     expect(tracker.getConfig().thresholds).toMatchObject({ notice: 3, nudge: 5 });
   });
 
-  it('overrides windowMs from TABTIN_TOOL_REPETITION_WINDOW_MS', () => {
+  it('overrides windowMs from MUSE_TOOL_REPETITION_WINDOW_MS', () => {
     const tracker = new ToolRepetitionTracker({
-      env: { TABTIN_TOOL_REPETITION_WINDOW_MS: '60000' },
+      env: { MUSE_TOOL_REPETITION_WINDOW_MS: '60000' },
     });
     expect(tracker.getConfig().windowMs).toBe(60_000);
   });
 
-  it('disables tracker when TABTIN_TOOL_REPETITION_TRACKER_ENABLED=false', () => {
+  it('disables tracker when MUSE_TOOL_REPETITION_TRACKER_ENABLED=false', () => {
     let now = 1_000_000;
     const tracker = new ToolRepetitionTracker({
-      env: { TABTIN_TOOL_REPETITION_TRACKER_ENABLED: 'false' },
+      env: { MUSE_TOOL_REPETITION_TRACKER_ENABLED: 'false' },
       now: () => now,
     });
     expect(tracker.getConfig().enabled).toBe(false);
@@ -479,8 +479,8 @@ describe('ToolRepetitionTracker — env override', () => {
   it('falls back to defaults when env values are non-numeric', () => {
     const tracker = new ToolRepetitionTracker({
       env: {
-        TABTIN_TOOL_REPETITION_NOTICE_COUNT: 'abc',
-        TABTIN_TOOL_REPETITION_NUDGE_COUNT: 'NaN',
+        MUSE_TOOL_REPETITION_NOTICE_COUNT: 'abc',
+        MUSE_TOOL_REPETITION_NUDGE_COUNT: 'NaN',
       },
     });
     expect(tracker.getConfig().thresholds).toEqual(
@@ -491,7 +491,7 @@ describe('ToolRepetitionTracker — env override', () => {
   it('falls back when env value is negative / zero / out of range', () => {
     for (const bad of ['0', '-1', '999', '1.5e3']) {
       const t = new ToolRepetitionTracker({
-        env: { TABTIN_TOOL_REPETITION_NOTICE_COUNT: bad },
+        env: { MUSE_TOOL_REPETITION_NOTICE_COUNT: bad },
       });
       expect(t.getConfig().thresholds.notice).toBe(
         DEFAULT_TOOL_REPETITION_THRESHOLDS.notice,
@@ -502,8 +502,8 @@ describe('ToolRepetitionTracker — env override', () => {
   it('falls back when notice >= nudge invariant violated (env)', () => {
     const t = new ToolRepetitionTracker({
       env: {
-        TABTIN_TOOL_REPETITION_NOTICE_COUNT: '5',
-        TABTIN_TOOL_REPETITION_NUDGE_COUNT: '3',
+        MUSE_TOOL_REPETITION_NOTICE_COUNT: '5',
+        MUSE_TOOL_REPETITION_NUDGE_COUNT: '3',
       },
     });
     expect(t.getConfig().thresholds).toEqual(
@@ -514,19 +514,19 @@ describe('ToolRepetitionTracker — env override', () => {
   it('falls back when windowMs out of range', () => {
     // < 1s
     const tLow = new ToolRepetitionTracker({
-      env: { TABTIN_TOOL_REPETITION_WINDOW_MS: '500' },
+      env: { MUSE_TOOL_REPETITION_WINDOW_MS: '500' },
     });
     expect(tLow.getConfig().windowMs).toBe(DEFAULT_TOOL_REPETITION_WINDOW_MS);
     // > 1h
     const tHigh = new ToolRepetitionTracker({
-      env: { TABTIN_TOOL_REPETITION_WINDOW_MS: '7200000' },
+      env: { MUSE_TOOL_REPETITION_WINDOW_MS: '7200000' },
     });
     expect(tHigh.getConfig().windowMs).toBe(DEFAULT_TOOL_REPETITION_WINDOW_MS);
   });
 
   it('explicit options.config overrides env', () => {
     const t = new ToolRepetitionTracker({
-      env: { TABTIN_TOOL_REPETITION_NOTICE_COUNT: '3' },
+      env: { MUSE_TOOL_REPETITION_NOTICE_COUNT: '3' },
       config: { thresholds: { notice: 4, nudge: 6 } },
     });
     expect(t.getConfig().thresholds).toMatchObject({ notice: 4, nudge: 6 });
@@ -535,13 +535,13 @@ describe('ToolRepetitionTracker — env override', () => {
   it('accepts boolean alias values for enabled flag', () => {
     for (const onValue of ['on', '1', 'enabled', 'yes', 'true']) {
       const t = new ToolRepetitionTracker({
-        env: { TABTIN_TOOL_REPETITION_TRACKER_ENABLED: onValue },
+        env: { MUSE_TOOL_REPETITION_TRACKER_ENABLED: onValue },
       });
       expect(t.getConfig().enabled).toBe(true);
     }
     for (const offValue of ['off', '0', 'disabled', 'no', 'false']) {
       const t = new ToolRepetitionTracker({
-        env: { TABTIN_TOOL_REPETITION_TRACKER_ENABLED: offValue },
+        env: { MUSE_TOOL_REPETITION_TRACKER_ENABLED: offValue },
       });
       expect(t.getConfig().enabled).toBe(false);
     }
@@ -557,7 +557,7 @@ describe('ToolRepetitionTracker — defensive input', () => {
 
   it('ignores recordSuccess when disabled', () => {
     const tracker = new ToolRepetitionTracker({
-      env: { TABTIN_TOOL_REPETITION_TRACKER_ENABLED: 'false' },
+      env: { MUSE_TOOL_REPETITION_TRACKER_ENABLED: 'false' },
       now: () => 1000,
     });
     tracker.recordSuccess({ tool: 'a', input: { x: 1 } });
@@ -818,10 +818,10 @@ describe('ToolRepetitionTracker — terminate hard-stop ()', () => {
     expect(isToolRepetitionStageUpgrade('terminate', 'terminate')).toBe(false);
   });
 
-  it('env TABTIN_TOOL_REPETITION_TERMINATE_COUNT overrides threshold', () => {
+  it('env MUSE_TOOL_REPETITION_TERMINATE_COUNT overrides threshold', () => {
     let now = 1_000_000;
     const tracker = new ToolRepetitionTracker({
-      env: { TABTIN_TOOL_REPETITION_TERMINATE_COUNT: '4' },
+      env: { MUSE_TOOL_REPETITION_TERMINATE_COUNT: '4' },
       now: () => now,
     });
     expect(tracker.getConfig().thresholds.terminate).toBe(4);

@@ -12,9 +12,9 @@
 import React, { useCallback, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { HelpCircle, Loader2 } from 'lucide-react'
-import { Button, toast } from '@tabtin/smartsheet-ui'
+import { Button, toast } from '@muse/smartsheet-ui'
 import { cn } from '@utils/cn'
-import type { PresetFieldDef, AddonParamDef } from '@tabtin/chat-client'
+import type { PresetFieldDef, AddonParamDef } from '@muse/chat-client'
 import { useAskUserFormState } from '../composer-presets/useAskUserFormState'
 import { SchemaFormRenderer } from '../composer-presets/SchemaFormRenderer'
 import {

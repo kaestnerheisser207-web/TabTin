@@ -13,7 +13,7 @@
 import React, { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Check, Minus, Terminal } from 'lucide-react'
-import type { RichContentBlock } from '@tabtin/chat-client'
+import type { RichContentBlock } from '@muse/chat-client'
 import { RichFallback } from './RichFallback'
 import { formatRichRelativeTime } from './relativeTime'
 
@@ -112,7 +112,7 @@ export const RichCliOutputTable: React.FC<{ block: RichContentBlock }> = React.m
           </div>
         ) : (
           // 与 W7 RichSearchResults / RichMemoryCard / RichDocumentExcerpt 视觉对齐：
-          // 用原生 overflow-auto 替代 @tabtin/smartsheet-ui ScrollArea，
+          // 用原生 overflow-auto 替代 @muse/smartsheet-ui ScrollArea，
           // 避免 monorepo 测试 build dist 依赖 + 跨组件 scrollbar 风格不一致。
           <div className="max-h-[360px] overflow-auto">
             <table className="w-full text-caption">

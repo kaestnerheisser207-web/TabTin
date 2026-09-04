@@ -8,7 +8,7 @@ agent_engine 作为独立 Django app，承担 Agent 执行引擎的：
 
 W10 cleanup: TinAgent registration was removed — the builtin ReAct engine
 (NativeReactLoop / TinAgent / ReactAgent) is gone, all agent execution
-happens on client devices via ``@tabtin/agent-runtime``. Likewise the
+happens on client devices via ``@muse/agent-runtime``. Likewise the
 startup ``recover_stale_subagents`` recovery hook was removed because no
 new ``SubtaskRun`` records are created on the server side.
 

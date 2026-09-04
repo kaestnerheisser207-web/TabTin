@@ -72,7 +72,7 @@ muse skill install npm:@scope/foo --import-to-space   # 可选：再导入成「
 ```
 
 **契约**：`POST /skills/install-npm` → 本机执行 `npx skills add <pkg> -y -g`，写入
-`~/.agents/skills/`（可用 `TABTIN_AGENTS_SKILLS_DIR` 覆盖），并刷新 LocalSkillRegistry。
+`~/.agents/skills/`（可用 `MUSE_AGENTS_SKILLS_DIR` 覆盖），并刷新 LocalSkillRegistry。
 默认只出现在面板「本机」分组（只读发现，见 ）；加 `--import-to-space` 再走 import API。
 
 ### `muse skill import <source>` —— 本地 / HTTPS 导入

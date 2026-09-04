@@ -99,7 +99,7 @@ class TestProvisionTabdataToken:
         with patch.object(type(svc), '_get_site', return_value=site):
             result = svc.provision_tabdata_token(str(site.id), force=False)
 
-        assert "VITE_TABTIN_TOKEN" not in result
+        assert "VITE_MUSE_TOKEN" not in result
         assert result["is_newly_created"] is False
 
     @patch("apps.tabsite.services.site_service.SiteService._deactivate_old_token")
@@ -127,7 +127,7 @@ class TestProvisionTabdataToken:
             result = svc.provision_tabdata_token(str(site.id), force=True)
 
         mock_deactivate.assert_called_once_with(old_token_id)
-        assert result["VITE_TABTIN_TOKEN"] == plain
+        assert result["VITE_MUSE_TOKEN"] == plain
         assert result["is_newly_created"] is True
 
     def test_tdi005_create_token_called_with_expired_at(self):

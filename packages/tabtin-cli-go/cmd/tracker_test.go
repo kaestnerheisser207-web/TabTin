@@ -661,23 +661,23 @@ func TestBuildTrackerNewBody_OmitsEmptyWorkspaceID(t *testing.T) {
 }
 
 func TestResolveTrackerExecutionWorkspaceID_PrefersEnv(t *testing.T) {
-	t.Setenv("TABTIN_CONFIG_DIR", t.TempDir())
-	t.Setenv("TABTIN_WORKSPACE_ID", "ws-from-env")
-	t.Setenv("TABTIN_SPACE_ID", "space-fallback")
+	t.Setenv("MUSE_CONFIG_DIR", t.TempDir())
+	t.Setenv("MUSE_WORKSPACE_ID", "ws-from-env")
+	t.Setenv("MUSE_SPACE_ID", "space-fallback")
 
 	got, err := resolveTrackerExecutionWorkspaceID(&cmdutil.Factory{}, "space-fallback")
 	if err != nil {
 		t.Fatalf("不应报错：%v", err)
 	}
 	if got != "ws-from-env" {
-		t.Fatalf("应优先 TABTIN_WORKSPACE_ID，实际：%q", got)
+		t.Fatalf("应优先 MUSE_WORKSPACE_ID，实际：%q", got)
 	}
 }
 
 func TestResolveTrackerExecutionWorkspaceID_FallsBackToScopeSpace(t *testing.T) {
-	t.Setenv("TABTIN_CONFIG_DIR", t.TempDir())
-	t.Setenv("TABTIN_WORKSPACE_ID", "")
-	t.Setenv("TABTIN_SPACE_ID", "")
+	t.Setenv("MUSE_CONFIG_DIR", t.TempDir())
+	t.Setenv("MUSE_WORKSPACE_ID", "")
+	t.Setenv("MUSE_SPACE_ID", "")
 
 	got, err := resolveTrackerExecutionWorkspaceID(&cmdutil.Factory{}, "ws-from-scope")
 	if err != nil {
@@ -692,13 +692,13 @@ func TestResolveTrackerExecutionWorkspaceID_FallsBackToScopeSpace(t *testing.T) 
 //
 // 早期CLI 在缺 --agent 时前置拦死，逼调用方先解析 agent id——正是这条
 // 要求诱发了 （Agent 为填 --agent 去 `agent current` 猜身份，拿到 space id）。
-// 现改为可选：不传时用 TABTIN_AGENT_ID / profile.DefaultAgent；仍空则省略
+// 现改为可选：不传时用 MUSE_AGENT_ID / profile.DefaultAgent；仍空则省略
 // agent_id（后端会再校验必填）。断言：缺 --agent **不再**触发 CLI 前置的
 // "必须指定执行 Agent"闸门，命令会继续走到后续校验 / transport。
 func TestTrackerNewFunc_MissingAgentIsOptional(t *testing.T) {
 	// 隔离配置目录，避免读到开发机真实 ~/.tabtin（f.Config 现在会被调用）。
-	t.Setenv("TABTIN_CONFIG_DIR", t.TempDir())
-	t.Setenv("TABTIN_AGENT_ID", "")
+	t.Setenv("MUSE_CONFIG_DIR", t.TempDir())
+	t.Setenv("MUSE_AGENT_ID", "")
 
 	oldStderr := os.Stderr
 	r, w, _ := os.Pipe()

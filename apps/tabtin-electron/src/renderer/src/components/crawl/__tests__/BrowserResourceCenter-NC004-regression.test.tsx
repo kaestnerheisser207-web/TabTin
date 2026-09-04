@@ -60,7 +60,7 @@ type TestWindow = Window & typeof globalThis & {
   }
 }
 
-vi.mock('@tabtin/smartsheet-ui', () => ({
+vi.mock('@muse/smartsheet-ui', () => ({
   Skeleton: ({ width, height }: { width?: number | string; height?: number | string }) => (
     <div data-testid="skeleton" style={{ width, height }} />
   ),

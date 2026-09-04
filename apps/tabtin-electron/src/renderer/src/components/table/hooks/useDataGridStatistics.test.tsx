@@ -10,7 +10,7 @@ const { getViewColumnStatistics } = vi.hoisted(() => ({
   getViewColumnStatistics: vi.fn(),
 }))
 
-vi.mock('@tabtin/table-engine-canvas/statistics', () => ({
+vi.mock('@muse/table-engine-canvas/statistics', () => ({
   StatFunc: {
     None: 'none',
     Count: 'count',
@@ -19,17 +19,17 @@ vi.mock('@tabtin/table-engine-canvas/statistics', () => ({
   getValidStatFuncs: () => ['count', 'sum'],
 }))
 
-vi.mock('@tabtin/table-engine-canvas/engine', () => ({
+vi.mock('@muse/table-engine-canvas/engine', () => ({
   CANVAS_TABLE_ENGINE: { id: 'canvas' },
 }))
 
-vi.mock('@tabtin/smartsheet-ui', () => ({ toast: vi.fn() }))
+vi.mock('@muse/smartsheet-ui', () => ({ toast: vi.fn() }))
 
-vi.mock('@tabtin/table-engine', () => ({
+vi.mock('@muse/table-engine', () => ({
   resolveRecordId: (row: { id?: string }) => row.id,
 }))
 
-vi.mock('@tabtin/table-core', () => ({
+vi.mock('@muse/table-core', () => ({
   ViewApiService: { getViewColumnStatistics },
 }))
 

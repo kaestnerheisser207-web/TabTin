@@ -19,13 +19,13 @@
  * - 总控 §六 Wave 4a F 节
  */
 
-import type { ChatMessage } from '@tabtin/chat-client'
+import type { ChatMessage } from '@muse/chat-client'
 import {
   ContentBlockEvents,
   type ContentBlockEventType,
   AnyContentBlockStreamEventSchema,
   type AnyContentBlockStreamEvent,
-} from '@tabtin/agent-wire'
+} from '@muse/agent-wire'
 
 import type { AgentStreamMessage, HandlerContext } from './streamHandlerTypes'
 import { useSubagentLiveStore } from '../../../subagentLive'

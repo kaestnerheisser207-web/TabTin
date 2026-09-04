@@ -4,7 +4,7 @@ import OSLog
 /// 跨端 FocusSnapshot 的 iOS Codable mirror。
 ///
 /// 自动上下文只描述「在哪」：App 类型、打开的 tab、时区等；不含正文 / 选区 / 附件。
-/// 字段命名与 `@tabtin/contracts` FocusSnapshot 对齐（内层 camelCase；tab 子字段保留 snake）。
+/// 字段命名与 `@muse/contracts` FocusSnapshot 对齐（内层 camelCase；tab 子字段保留 snake）。
 struct FocusSnapshot: Codable, Equatable, Sendable {
     var appType: String?
     var appMeta: [String: String]?

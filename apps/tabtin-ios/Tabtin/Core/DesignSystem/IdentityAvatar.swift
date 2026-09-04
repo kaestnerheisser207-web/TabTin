@@ -1,6 +1,6 @@
 import SwiftUI
 
-/// 对齐 `@tabtin/shared` `identity-avatar.ts`：默认头像色只由稳定身份 ID 决定。
+/// 对齐 `@muse/shared` `identity-avatar.ts`：默认头像色只由稳定身份 ID 决定。
 /// AI Agent 也可复用同一套哈希色（产品口径）。
 enum IdentityAvatar {
     /// `identityAvatarHue`

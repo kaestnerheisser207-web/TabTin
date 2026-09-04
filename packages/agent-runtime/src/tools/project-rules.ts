@@ -2,7 +2,7 @@
  * Project Rules 读盘 helper —— 读取工作目录根部 `AGENTS.md`（项目规约 MVP）。
  *
  * **落点（PRD §4.5 / §5#7 拍板）**：放 agent-runtime 的 node-only `tools/`
- * 子目录，经 `@tabtin/agent-runtime/tools` 暴露给两端宿主（Electron / Daemon）
+ * 子目录，经 `@muse/agent-runtime/tools` 暴露给两端宿主（Electron / Daemon）
  * import 同一份——完全复刻 `callMemorySearchAPI` 范式（实现在 `tools/`、经
  * subpath 共享）。
  *

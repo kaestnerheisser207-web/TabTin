@@ -22,13 +22,13 @@ vi.mock('../../../browser-tab-lock/browserTabInputLock', async (importOriginal) 
   }
 })
 
-vi.mock('@tabtin/agent-wire', () => ({
+vi.mock('@muse/agent-wire', () => ({
   okResponse: (data: Record<string, unknown>) => ({ ok: true, data }),
 }))
 
-vi.mock('@tabtin/action-tools/impl', async () => {
-  const actual = await vi.importActual<typeof import('@tabtin/action-tools/impl')>(
-    '@tabtin/action-tools/impl',
+vi.mock('@muse/action-tools/impl', async () => {
+  const actual = await vi.importActual<typeof import('@muse/action-tools/impl')>(
+    '@muse/action-tools/impl',
   )
   return {
     ...actual,

@@ -9,7 +9,7 @@ import { act, renderHook } from '@testing-library/react'
 import {
   ChatSessionPresenceEvents,
   ChatSessionPresenceTiming,
-} from '@tabtin/ws-gateway-client'
+} from '@muse/ws-gateway-client'
 
 const mockRequest = vi.fn()
 const mockIsConnected = vi.fn(() => true)

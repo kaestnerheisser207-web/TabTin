@@ -1,12 +1,12 @@
 #!/usr/bin/env bash
-# Build the self-contained `tabtin-filegen` binary with PyInstaller.
+# Build the self-contained `muse-filegen` binary with PyInstaller.
 #
-# Produces dist/tabtin-filegen (dist/tabtin-filegen.exe on Windows): a single
+# Produces dist/muse-filegen (dist/muse-filegen.exe on Windows): a single
 # executable bundling the Python interpreter + all libs + reportlab CID font
 # data, so the client needs NO Python installed.
 #
 # PyInstaller does not cross-compile — run this once on each target OS+arch.
-# Also stamps dist/tabtin-filegen-<os>-<arch> so dual-arch packaging cannot
+# Also stamps dist/muse-filegen-<os>-<arch> so dual-arch packaging cannot
 # reuse the wrong Mach-O .
 set -euo pipefail
 
@@ -48,12 +48,12 @@ python -m pip install -e ".[build]" >/dev/null
 # --collect-all pulls each lib's bundled data (office default templates,
 # reportlab CMaps / CID font metrics) into the frozen binary.
 python -m PyInstaller --onefile --noconfirm --clean \
-  --name tabtin-filegen \
+  --name muse-filegen \
   --collect-all reportlab \
   --collect-all docx \
   --collect-all pptx \
   --collect-all openpyxl \
-  src/tabtin_filegen/__main__.py
+  src/muse_filegen/__main__.py
 
 HOST_OS="$(filegen_detect_host_os)"
 HOST_ARCH="$(filegen_detect_host_arch)"
@@ -67,7 +67,7 @@ if [ ! -f "$GENERIC_BIN" ]; then
   exit 1
 fi
 if ! filegen_matches_target "$GENERIC_BIN" "$HOST_OS" "$HOST_ARCH"; then
-  echo "tabtin-filegen 架构与本机不符：期望 ${HOST_OS}/${HOST_ARCH}，文件 $(file -b "$GENERIC_BIN" 2>/dev/null || echo unknown)" >&2
+  echo "muse-filegen 架构与本机不符：期望 ${HOST_OS}/${HOST_ARCH}，文件 $(file -b "$GENERIC_BIN" 2>/dev/null || echo unknown)" >&2
   exit 1
 fi
 cp -f "$GENERIC_BIN" "$ARCH_BIN"

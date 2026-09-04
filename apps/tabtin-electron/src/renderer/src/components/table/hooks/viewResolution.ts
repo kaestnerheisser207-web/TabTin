@@ -1,5 +1,5 @@
-import type { ViewMeta } from '@tabtin/table-core';
-import { syncKanbanGroupConfig } from '@tabtin/table-core';
+import type { ViewMeta } from '@muse/table-core';
+import { syncKanbanGroupConfig } from '@muse/table-core';
 
 export type PersonalViewDraftLike = {
   filters?: ViewMeta['filters'];

@@ -1,4 +1,4 @@
-import type { Space } from '@tabtin/app-shell'
+import type { Space } from '@muse/app-shell'
 import i18n from '@/i18n'
 import type {
   TabDocRuntimeMonitorSnapshot,

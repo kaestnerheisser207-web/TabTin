@@ -40,7 +40,7 @@ import {
   serializeAccessibilityText,
 } from '../win32-bridge/desktop-accessibility-win'
 import { DesktopErrorCode, DesktopError } from '../desktop-error-codes'
-import type { AccessibilityNode } from '@tabtin/desktop-contracts'
+import type { AccessibilityNode } from '@muse/desktop-contracts'
 
 // ---------------------------------------------------------------------------
 // Tests

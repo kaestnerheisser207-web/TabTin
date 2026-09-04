@@ -1,6 +1,6 @@
 import React, { useMemo, useState } from 'react'
 import { Receipt, RefreshCw, ArrowUpRight, ArrowDownLeft, CreditCard, Wallet } from 'lucide-react'
-import { StatusNotice } from '@tabtin/smartsheet-ui'
+import { StatusNotice } from '@muse/smartsheet-ui'
 import { useTranslation } from 'react-i18next'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import type {

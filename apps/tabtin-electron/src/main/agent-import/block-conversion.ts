@@ -1,5 +1,5 @@
 /**
- * UnifiedBlock（@tabtin/agent-import）→ Django ContentBlock 转换（spec §2.3 / §1.3.1）。
+ * UnifiedBlock（@muse/agent-import）→ Django ContentBlock 转换（spec §2.3 / §1.3.1）。
  *
  * # 边界不变量（收敛"外部脏数据击穿存储"这一类问题）
  *
@@ -14,14 +14,14 @@
  *
  * 可靠导入「对话」：user/assistant 正文、thinking、标题、元信息。工具响应是 hazard
  * 老巢——**降级为轻量痕迹**。图片：宿主把源文件拷进本机档案后，转为可渲染的
- * `image` 块（`tabtin-file://`）；拷贝失败则仍落文本占位。
+ * `image` 块（`muse-file://`）；拷贝失败则仍落文本占位。
  *
  * 产出对象同时用于 Django append-messages 与本地 transcript（同一份，Anthropic 形态）。
  */
 
 import { basename } from 'node:path'
 import { existsSync } from 'node:fs'
-import type { UnifiedBlock } from '@tabtin/agent-import'
+import type { UnifiedBlock } from '@muse/agent-import'
 
 /** Django / 本机档案 `content_blocks_json` 单块（Anthropic 形态子集 + 扁平 image）。 */
 export type DjangoContentBlock =
@@ -135,7 +135,7 @@ export function imageRefPlaceholderText(path: string): string {
 }
 
 /**
- * 绝对路径 → `tabtin-file://`（与渲染进程 `buildTabtinFileUrl` 同构）。
+ * 绝对路径 → `muse-file://`（与渲染进程 `buildTabtinFileUrl` 同构）。
  * 档案图片落在 userData 下，协议白名单已含 userData。
  */
 export function toTabtinFileUrl(filePath: string): string {
@@ -145,14 +145,14 @@ export function toTabtinFileUrl(filePath: string): string {
       .split('/')
       .map((seg) => (seg ? encodeURIComponent(seg) : ''))
       .join('/')
-    return `tabtin-file://local/${encodedPath}`
+    return `muse-file://local/${encodedPath}`
   }
   const withLeadingSlash = normalized.startsWith('/') ? normalized : `/${normalized}`
   const encoded = withLeadingSlash
     .split('/')
     .map((seg) => (seg ? encodeURIComponent(seg) : ''))
     .join('/')
-  return `tabtin-file://${encoded}`
+  return `muse-file://${encoded}`
 }
 
 /** 单块转换：DB-safe + 工具降级；image_ref 在路径可读时转为 image 块。 */

@@ -15,7 +15,7 @@ let depth = 0
 
 function hasPassthroughApi(): boolean {
   return Boolean(
-    typeof window !== 'undefined' && window.tabtin?.crawlView?.setIgnoreMouseEventsForAttached,
+    typeof window !== 'undefined' && window.muse?.crawlView?.setIgnoreMouseEventsForAttached,
   )
 }
 

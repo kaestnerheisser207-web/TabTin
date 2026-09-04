@@ -69,7 +69,7 @@ export const WorktreeCreateFields: React.FC<WorktreeCreateFieldsProps> = ({
   }
 
   const handlePickParent = async () => {
-    const picker = window.tabtin?.showOpenDialog
+    const picker = window.muse?.showOpenDialog
     if (!picker) {
       toast({
         title: tx('worktreePickFolderUnavailable', '文件夹选择器不可用，请稍后重试'),

@@ -12,7 +12,7 @@
  * 住 Daemon 端不能再倒回去（multi-Space 越权防御）。
  */
 import { describe, expect, it } from 'vitest';
-import type { WorkspaceSnapshot } from '@tabtin/security-policy';
+import type { WorkspaceSnapshot } from '@muse/security-policy';
 import { DaemonAgentHost } from '../src/application/agent/daemon-agent-host.js';
 
 interface HostStateLike {

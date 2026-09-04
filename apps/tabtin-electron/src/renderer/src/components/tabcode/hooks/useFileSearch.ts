@@ -136,7 +136,7 @@ async function buildSharedIndex(rootPath: string): Promise<void> {
       // 透传 raw `{success, entries?, error?}`）。这里是后台索引构建——单条目录
       // 读取失败不阻断整体（fail-soft），不走 ensureLegacyOk 转 throw 保留原
       // silent skip 语义。用 isLegacyOk 把 `success` 字面统一收口到 helper。
-      const dirRes = await window.tabtin.fileSystem.readDir(dir)
+      const dirRes = await window.muse.fileSystem.readDir(dir)
       if (!isLegacyOk(dirRes) || !dirRes.entries || cancelled) continue
       for (const entry of dirRes.entries) {
         // 跳过依赖/缓存/系统垃圾——这是性能保护（10000 条配额留给源代码），

@@ -2,7 +2,7 @@
  * TabSite route handler for Daemon CLI Server.
  *
  * Full-featured version that supports init-template and upload-dist
- * via @tabtin/tabsite-core shared utilities.
+ * via @muse/tabsite-core shared utilities.
  *
  * Routes:
  *   POST  /site/create             → POST   /api/tabsite/sites/
@@ -21,8 +21,8 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import type { CliRequestContext } from '../../cli-context.js';
 import { djangoRequest, errorResponse, okResponse, sendDjangoResult, type SendJSON } from '../shared/error-handler.js';
-import { initTemplate, uploadDist } from '@tabtin/tabsite-core';
-import { resolveDataRoot, resolveSpacesRoot } from '@tabtin/terminal-core';
+import { initTemplate, uploadDist } from '@muse/tabsite-core';
+import { resolveDataRoot, resolveSpacesRoot } from '@muse/terminal-core';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 

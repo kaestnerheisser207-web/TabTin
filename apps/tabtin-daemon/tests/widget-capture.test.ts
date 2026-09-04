@@ -21,7 +21,7 @@
 
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { DaemonBrowserService } from '../src/platform/browser/DaemonBrowserService.js'
-import { WIDGET_CSP } from '@tabtin/widget-tokens'
+import { WIDGET_CSP } from '@muse/widget-tokens'
 import type { Logger } from '../src/platform/observability/logging/logger.js'
 
 function makeLogger(): Logger {

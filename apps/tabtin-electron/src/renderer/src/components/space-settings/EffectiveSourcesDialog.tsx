@@ -19,7 +19,7 @@ import { useSkillsListQuery } from '@/hooks/queries/skills'
 import {
   computeWorkspaceShadowing,
   type SkillSlugRef,
-} from '@tabtin/agent-runtime/skills/workspace-skill-merge'
+} from '@muse/agent-runtime/skills/workspace-skill-merge'
 import { classifySkillGroup } from '@components/context-space/skills/skillSourceGroups'
 import { getSkillKey } from '@components/context-space/skills/skillPanelFilters'
 import { resolveSkillDisplayName } from '@components/context-space/skills/skillSlug'
@@ -93,7 +93,7 @@ export const EffectiveSourcesDialog: React.FC<EffectiveSourcesDialogProps> = ({
       return
     }
     const api = (
-      window.tabtin?.skill as (typeof window.tabtin.skill & WorkspaceSkillScanApi) | undefined
+      window.muse?.skill as (typeof window.muse.skill & WorkspaceSkillScanApi) | undefined
     )?.workspaceScan
     if (!api) return
     void api({ workspaceRoot: workingDir })

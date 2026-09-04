@@ -153,7 +153,7 @@ export const EmojiQuickPicker: React.FC<EmojiQuickPickerProps> = ({
       if (anchorRef.current?.contains(target)) return
       onClose()
     }
-    // eslint-disable-next-line tabtin/prefer-scoped-activity-effects -- 短生命周期浮层；避免再拉 spaceActivity 进气泡静态 import 链
+    // eslint-disable-next-line muse/prefer-scoped-activity-effects -- 短生命周期浮层；避免再拉 spaceActivity 进气泡静态 import 链
     document.addEventListener('mousedown', handleClickOutside)
     return () => document.removeEventListener('mousedown', handleClickOutside)
   }, [anchorRef, onClose])

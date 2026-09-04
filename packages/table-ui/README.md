@@ -1,4 +1,4 @@
-# @tabtin/table-ui
+# @muse/table-ui
 
 Reusable UI layer for table features.
 

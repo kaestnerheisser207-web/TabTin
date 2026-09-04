@@ -910,7 +910,7 @@ describe('UpdateManager', () => {
   it('打包产物里的 channel 元数据会覆盖环境变量，避免 beta 包回落到 stable', async () => {
     const tempDir = mkdtempSync(join(tmpdir(), 'tabtin-update-channel-'))
     const originalEnv = {
-      TABTIN_UPDATE_CHANNEL: process.env.TABTIN_UPDATE_CHANNEL,
+      MUSE_UPDATE_CHANNEL: process.env.MUSE_UPDATE_CHANNEL,
       UPDATE_CHANNEL: process.env.UPDATE_CHANNEL,
     }
 
@@ -921,7 +921,7 @@ describe('UpdateManager', () => {
         },
       }))
       vi.mocked(app.getAppPath).mockReturnValue(tempDir)
-      process.env.TABTIN_UPDATE_CHANNEL = 'stable'
+      process.env.MUSE_UPDATE_CHANNEL = 'stable'
       process.env.UPDATE_CHANNEL = 'stable'
 
       const fetchMock = vi.mocked(fetch)
@@ -951,10 +951,10 @@ describe('UpdateManager', () => {
         channel: 'beta',
       })
     } finally {
-      if (originalEnv.TABTIN_UPDATE_CHANNEL === undefined) {
-        delete process.env.TABTIN_UPDATE_CHANNEL
+      if (originalEnv.MUSE_UPDATE_CHANNEL === undefined) {
+        delete process.env.MUSE_UPDATE_CHANNEL
       } else {
-        process.env.TABTIN_UPDATE_CHANNEL = originalEnv.TABTIN_UPDATE_CHANNEL
+        process.env.MUSE_UPDATE_CHANNEL = originalEnv.MUSE_UPDATE_CHANNEL
       }
       if (originalEnv.UPDATE_CHANNEL === undefined) {
         delete process.env.UPDATE_CHANNEL

@@ -17,14 +17,14 @@
  * 从 ALS trace context（getCurrentTraceId）读取。
  */
 
-import { okResponse, errResponse } from '@tabtin/agent-wire'
+import { okResponse, errResponse } from '@muse/agent-wire'
 import {
   SurfaceError,
   getSurfaceContext,
   writeSurfaceAuditLog,
   _computeInputHash,
   type RegisteredSurface,
-} from '@tabtin/cli-server-core'
+} from '@muse/cli-server-core'
 import { guardedHandle } from '../utils/guarded-handle'
 import { getCurrentTraceId } from '../utils/trace-context'
 import { createLogger } from '../logger'

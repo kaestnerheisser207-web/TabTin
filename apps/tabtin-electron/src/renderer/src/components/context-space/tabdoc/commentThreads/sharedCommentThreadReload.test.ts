@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from 'vitest'
-import type { CommentThread } from '@tabtin/tabdoc-ui/api-client'
+import type { CommentThread } from '@muse/tabdoc-ui/api-client'
 import { acquireSharedCommentThreadReload } from './sharedCommentThreadReload'
 
 async function flushMicrotasks() {

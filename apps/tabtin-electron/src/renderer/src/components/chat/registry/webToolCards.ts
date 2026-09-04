@@ -2,7 +2,7 @@
  * 网络操作（搜索、浏览器截图）+ 外部 Agent 网络类工具。
  */
 
-import type { ToolCardDescriptor, ToolOutputData } from '@tabtin/chat-client'
+import type { ToolCardDescriptor, ToolOutputData } from '@muse/chat-client'
 import { getNestedArgs, truncate, unwrapData, unwrapStringOrData } from './toolCardUtils'
 
 function extractWebSearchQuery(input: unknown): string | null {

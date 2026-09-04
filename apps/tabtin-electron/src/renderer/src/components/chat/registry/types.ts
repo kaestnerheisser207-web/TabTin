@@ -1,12 +1,12 @@
 /**
  * Electron-specific registry types.
  *
- * Extends the platform-agnostic CardDescriptor from @tabtin/chat-client
+ * Extends the platform-agnostic CardDescriptor from @muse/chat-client
  * with React component references.
  */
 
 import type React from 'react'
-import type { ToolCardDescriptor, ToolOutputData } from '@tabtin/chat-client'
+import type { ToolCardDescriptor, ToolOutputData } from '@muse/chat-client'
 
 /** Props every card renderer receives */
 export interface CardRendererProps {

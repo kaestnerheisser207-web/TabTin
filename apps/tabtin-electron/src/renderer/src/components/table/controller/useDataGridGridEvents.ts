@@ -1,10 +1,10 @@
 import { useCallback, useEffect, useRef } from 'react'
 import type { MutableRefObject } from 'react'
-import { toast } from '@tabtin/smartsheet-ui'
-import type { TableGridRow, TableGridRuntimeApi } from '@tabtin/table-engine'
-import type { RecordQueryParams, ViewMeta, ViewUpdateRequest } from '@tabtin/table-core'
-import { getViewColumnMeta } from '@tabtin/table-core'
-import { isViewLocked } from '@tabtin/table-ui'
+import { toast } from '@muse/smartsheet-ui'
+import type { TableGridRow, TableGridRuntimeApi } from '@muse/table-engine'
+import type { RecordQueryParams, ViewMeta, ViewUpdateRequest } from '@muse/table-core'
+import { getViewColumnMeta } from '@muse/table-core'
+import { isViewLocked } from '@muse/table-ui'
 import { useTableViewUiStore } from '@stores/useTableViewUiStore'
 
 const FLOATING_OVERLAY_SELECTOR = [

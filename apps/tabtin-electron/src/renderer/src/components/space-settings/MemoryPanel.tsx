@@ -8,14 +8,14 @@
  */
 import React, { useCallback, useEffect, useMemo, useReducer } from 'react'
 import { MessageCircle } from 'lucide-react'
-import { Button, ScrollArea, Switch } from '@tabtin/smartsheet-ui'
+import { Button, ScrollArea, Switch } from '@muse/smartsheet-ui'
 import { useShallow } from 'zustand/react/shallow'
 import { useSpaceStore } from '@stores/useSpaceStore'
 import { useSpaceExecutionAgent } from './hooks/useSpaceExecutionAgent'
 import type {
   Space, Agent, MemoryConfig, SessionSummarizationStrategy,
-} from '@tabtin/app-shell'
-import { MEMORY_DEFAULTS_V2 } from '@tabtin/app-shell'
+} from '@muse/app-shell'
+import { MEMORY_DEFAULTS_V2 } from '@muse/app-shell'
 import { useTranslation } from 'react-i18next'
 import { SETTINGS_CONTROL } from '@components/settings/settingsUi'
 import { SpaceSettingsSectionHeader } from '@components/space-settings/SpaceSettingsSectionHeader'

@@ -1,5 +1,5 @@
 import http from 'node:http'
-import { okResponse } from '@tabtin/agent-wire'
+import { okResponse } from '@muse/agent-wire'
 // BR-8 P3c 收尾：record / replay 编排收编进 browser-core Orchestrator；本文件退成薄分发。
 // 活跃录制的跨请求登记表也下沉为 browser-core 共享 runtime（RecordingRegistry），route 不再持 Map。
 import {
@@ -13,7 +13,7 @@ import {
   type BrowserOrchestratorHostHooks,
   type BrowserSessionData,
   type BrowserSessionHooks,
-} from '@tabtin/browser-core'
+} from '@muse/browser-core'
 import type { SendJSON, ActionExecutor } from './_helpers'
 import { buildBrowserRequestScope, resolveTabId, errorResponse, getCLIViewGetter, electronPolicyHooks } from './_helpers'
 import { runWithBrowserApprovalContext } from '../../browser-policy-middleware'

@@ -4,13 +4,13 @@ import {
   evaluateTerminalPolicyDegradation,
   evaluateLocalTerminalPolicy,
   executeDegraded,
-} from '@tabtin/terminal-core';
+} from '@muse/terminal-core';
 import type {
   TerminalAutoRespondRule,
   TerminalExecutionContext,
   TerminalExecutionPolicy,
   DegradationDecision,
-} from '@tabtin/terminal-core';
+} from '@muse/terminal-core';
 import {
   PtyOutputBuffer,
   PtyWriteChannel,
@@ -27,13 +27,13 @@ import {
   DEFAULT_COLS,
   DEFAULT_ROWS,
   MAX_OUTPUT_BUFFER_BYTES,
-} from '@tabtin/pty-core';
+} from '@muse/pty-core';
 import type {
   ExecuteCommandResult,
   PtySession,
   PtyHostClient,
   PtyHostDisposable,
-} from '@tabtin/pty-core';
+} from '@muse/pty-core';
 import { collectProcessUsageTable } from './process-usage.js';
 
 // WP2 P1-M：MAX_SESSIONS 从 10 提到 20 对齐 Electron PtyManager（apps/tabtin-electron/
@@ -47,7 +47,7 @@ const AGENT_IDLE_TIMEOUT_MS = 60 * 60 * 1000;
 /** Stopped (shell exited) sessions 保留时长，让 Agents / 4 件套人控在命令完成后仍能读输出。 */
 const IDLE_TIMEOUT_STOPPED_MS = 30 * 60 * 1000;
 
-export type { ExecuteCommandResult } from '@tabtin/pty-core';
+export type { ExecuteCommandResult } from '@muse/pty-core';
 
 export interface SessionStatusInfo {
   id: string;
@@ -168,10 +168,10 @@ export class DaemonPtyManager {
   // ── Session Management ──
 
   private spawnEnvironment(sessionId: string, options: SpawnOptions): Record<string, string> {
-    const spaceId = options.spaceId || process.env.TABTIN_SPACE_ID || process.env.TABTIN_AGENT_SPACE_ID;
+    const spaceId = options.spaceId || process.env.MUSE_SPACE_ID || process.env.MUSE_AGENT_SPACE_ID;
     const cliEnv: Record<string, string> = { ...sanitizeEnv(process.env), ...(this.envProvider?.() ?? {}), ...(options.env ? sanitizeEnv(options.env as NodeJS.ProcessEnv) : {}), TERM: 'xterm-256color', COLORTERM: 'truecolor' };
-    if (spaceId) { cliEnv.TABTIN_SPACE_ID = spaceId; cliEnv.TABTIN_AGENT_SPACE_ID = spaceId; }
-    if (sessionId.startsWith('agent-')) cliEnv.TABTIN_AGENT = '1';
+    if (spaceId) { cliEnv.MUSE_SPACE_ID = spaceId; cliEnv.MUSE_AGENT_SPACE_ID = spaceId; }
+    if (sessionId.startsWith('agent-')) cliEnv.MUSE_AGENT = '1';
     return cliEnv;
   }
 
@@ -201,7 +201,7 @@ export class DaemonPtyManager {
     let ptySession: ReturnType<PtyHostClient['spawn']> | SyntheticPtyHostSession | null = null;
     const cliEnv = this.spawnEnvironment(sessionId, options);
     try {
-      // SD-039 Phase 1: 不再向 PTY 子进程注入 TABTIN_SOCK 和 TABTIN_TOKEN。
+      // SD-039 Phase 1: 不再向 PTY 子进程注入 MUSE_SOCK 和 MUSE_TOKEN。
       // CLI 工具通过 ~/.tabtin/server.json 文件发现机制定位 socket（CB-02）。
       // 详见 support/strategy/2026-03-24-sd039-sock-assessment.md
       ptySession = options.synthetic
@@ -427,7 +427,7 @@ export class DaemonPtyManager {
     this.store.deleteBackgroundedWatchers(sessionId);
 
     const shell = resolveShell();
-    // SD-039 Phase 1: 不再向 PTY 子进程注入 TABTIN_SOCK 和 TABTIN_TOKEN。
+    // SD-039 Phase 1: 不再向 PTY 子进程注入 MUSE_SOCK 和 MUSE_TOKEN。
     // CLI 工具通过 ~/.tabtin/server.json 文件发现机制定位 socket（CB-02）。
     // 详见 support/strategy/2026-03-24-sd039-sock-assessment.md
 
@@ -538,7 +538,7 @@ export class DaemonPtyManager {
   /**
    * 降级执行路径：当 PTY 不支持请求的安全策略时（如 route=sandbox、networkMode=blocked），
    * 降级到 CommandExecutor spawn + OS sandbox 执行。
-   * 核心逻辑已提取到 @tabtin/terminal-core 的 executeDegraded。
+   * 核心逻辑已提取到 @muse/terminal-core 的 executeDegraded。
    */
   private async executeDegradedImpl(
     session: PtySession,

@@ -66,7 +66,7 @@ class RepoRootSSoT8726Test(SimpleTestCase):
         self.assertEqual(path_utils.get_repo_root(), repo_root.get_repo_root())
 
     def test_container_layout_without_package_json_finds_app_skills(self):
-        """TABTIN_REPO_ROOT 已设、无根 package.json 时仍能扫到 app skill。"""
+        """MUSE_REPO_ROOT 已设、无根 package.json 时仍能扫到 app skill。"""
         from apps.services.repo_root import get_repo_root
         from apps.skills.services.app_package_skills import (
             AppPackageSkillsService,
@@ -77,7 +77,7 @@ class RepoRootSSoT8726Test(SimpleTestCase):
             root = _write_container_layout(Path(tmp))
             get_repo_root.cache_clear()
             clear_app_payloads_cache()
-            with mock.patch.dict(os.environ, {"TABTIN_REPO_ROOT": str(root)}):
+            with mock.patch.dict(os.environ, {"MUSE_REPO_ROOT": str(root)}):
                 get_repo_root.cache_clear()
                 self.assertEqual(get_repo_root(), root.resolve())
                 skills = AppPackageSkillsService.list_skills()

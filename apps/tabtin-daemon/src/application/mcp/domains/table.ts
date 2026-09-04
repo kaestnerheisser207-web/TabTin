@@ -1,5 +1,5 @@
-import { API_ENDPOINTS } from '@tabtin/config'
-import type { FieldType, ViewType } from '@tabtin/table-kernel'
+import { API_ENDPOINTS } from '@muse/config'
+import type { FieldType, ViewType } from '@muse/table-kernel'
 import { McpDomainSupport } from './domain-support.js'
 interface DjangoTableEntry { id: string; name: string; description?: string; fields?: unknown[]; record_count?: number }
 interface DjangoTableListPayload { tables?: DjangoTableEntry[]; items?: DjangoTableEntry[] }

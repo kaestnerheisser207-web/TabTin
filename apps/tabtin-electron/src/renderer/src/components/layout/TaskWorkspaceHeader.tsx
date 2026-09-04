@@ -8,8 +8,8 @@ import {
   TrackerRunBreadcrumb,
   resolveTrackerRunSessionTitle,
 } from '@components/chat/tracker/TrackerRunBreadcrumb'
-import type { TrackerRunMeta } from '@tabtin/chat-client'
-import type { Agent } from '@tabtin/app-shell'
+import type { TrackerRunMeta } from '@muse/chat-client'
+import type { Agent } from '@muse/app-shell'
 import {
   resolveCurrentAgentDisplay,
   type AgentDisplaySource,

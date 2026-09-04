@@ -1,4 +1,4 @@
-import { ROLE_LEVELS, type OrganizationRole } from '@tabtin/app-shell'
+import { ROLE_LEVELS, type OrganizationRole } from '@muse/app-shell'
 
 /**
  * 判断当前用户是否有权编辑 Agent 的安全/配置类面板（即调用后端 `update_agent` 的能力）。

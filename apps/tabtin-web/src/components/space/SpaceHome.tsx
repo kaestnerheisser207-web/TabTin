@@ -15,7 +15,7 @@ import {
   useSpaceStore,
   useOrganizationStore,
   useSpaceListStore,
-} from '@tabtin/app-shell'
+} from '@muse/app-shell'
 import { useSpaceResources } from '@/features/space/useSpaceResources'
 import { docPath, tablePath } from '@/features/space/spaceRoutes'
 import { cn } from '@/utils/cn'

@@ -8,7 +8,7 @@
 
 import { useEffect, useMemo, useState, useCallback, useRef } from 'react'
 import * as Y from 'yjs'
-import type { RecordOrderContext } from '@tabtin/table-core'
+import type { RecordOrderContext } from '@muse/table-core'
 import {
   useCollabProvider,
   useOfflineReplay,
@@ -18,7 +18,7 @@ import {
   type CollabPeerState,
   type CollabSyncMode,
   type CollabSyncModeReason,
-} from '@tabtin/collab-core'
+} from '@muse/collab-core'
 import { acquireTableUndoRuntime } from './tableUndoRuntime'
 import { YDOC_RECORDS, YDOC_ROW_ORDER, YDOC_ROW_ORDER_MAP, YDOC_META, YDOC_VIEWS, YDOC_VIEW_ORDER_MAP } from './ydoc-schema'
 import { getOrderedIds } from './y-utils'

@@ -14,7 +14,7 @@ vi.mock('../../logger.js', () => ({
   }),
 }))
 
-vi.mock('@tabtin/config', () => ({
+vi.mock('@muse/config', () => ({
   joinApiPath: (base: string, path: string) => `${base}${path}`,
   API_ENDPOINTS: {
     AGENT: { DETAIL: (id: string) => `/agents/${id}` },
@@ -22,7 +22,7 @@ vi.mock('@tabtin/config', () => ({
   },
 }))
 
-vi.mock('@tabtin/app-shell/agent-config-v2', () => ({
+vi.mock('@muse/app-shell/agent-config-v2', () => ({
   isExecutionLimitsEnabled: (limits: { enabled?: boolean | null } | null | undefined) => {
     if (!limits) return false
     if (typeof limits.enabled === 'boolean') return limits.enabled
@@ -30,7 +30,7 @@ vi.mock('@tabtin/app-shell/agent-config-v2', () => ({
   },
 }))
 
-import { HostTurnStore } from '@tabtin/agent-host/policy'
+import { HostTurnStore } from '@muse/agent-host/policy'
 import {
   bindHostStateReconciler,
   bindHostTurnStore,

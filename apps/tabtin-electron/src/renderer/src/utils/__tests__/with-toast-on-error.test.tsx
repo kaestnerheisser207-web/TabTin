@@ -15,10 +15,10 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // ---------------------------------------------------------------------------
-// Mock：`@tabtin/smartsheet-ui/toast` —— 把 toast 函数本体 + shorthand 都拦截
+// Mock：`@muse/smartsheet-ui/toast` —— 把 toast 函数本体 + shorthand 都拦截
 // ---------------------------------------------------------------------------
 
-vi.mock('@tabtin/smartsheet-ui/toast', () => {
+vi.mock('@muse/smartsheet-ui/toast', () => {
   const success = vi.fn()
   const error = vi.fn()
   const warning = vi.fn()
@@ -44,7 +44,7 @@ vi.mock('@/i18n', () => ({
   },
 }))
 
-import { toast, ToastAction } from '@tabtin/smartsheet-ui/toast'
+import { toast, ToastAction } from '@muse/smartsheet-ui/toast'
 import {
   __resetToastDedupeForTesting,
   isPlatformIpcError,

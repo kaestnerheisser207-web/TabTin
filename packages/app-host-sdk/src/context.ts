@@ -2,7 +2,7 @@
  * AppHostContext — 宿主注入给 App 的能力接口
  *
  * builtin (in-process): 宿主直接构造并传递 context 对象
- * marketplace (WebContentsView): 通过 preload bridge (window.tabtin.appHost) 透传
+ * marketplace (WebContentsView): 通过 preload bridge (window.muse.appHost) 透传
  */
 
 import type { AppHttpTransport } from './http'

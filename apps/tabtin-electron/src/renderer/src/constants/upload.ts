@@ -7,7 +7,7 @@
  * 不再各自维护 MIME 白名单。
  */
 
-import { joinApiPath } from '@tabtin/config'
+import { joinApiPath } from '@muse/config'
 import { API_CONFIG } from '@/config/api'
 import { useAuthStore } from '@stores/useAuthStore'
 import { registerResetAction } from '@/stores/sessionResetRegistry'

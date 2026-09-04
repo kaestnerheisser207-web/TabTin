@@ -1,7 +1,7 @@
 import type {
   Model,
   PromotionCredit,
-} from '@tabtin/chat-client'
+} from '@muse/chat-client'
 
 export function shouldConfirmPromotionCreditModelSwitch(
   currentModel: Model | null | undefined,

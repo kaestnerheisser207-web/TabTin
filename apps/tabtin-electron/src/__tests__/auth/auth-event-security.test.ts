@@ -18,11 +18,11 @@ describe('CL-1: persistAuthTokens 不再广播 token 到 DOM', () => {
 
   beforeEach(() => {
     mockSave = vi.fn().mockResolvedValue({ success: true })
-    ;(window as any).tabtin = { auth: { save: mockSave } }
+    ;(window as any).muse = { auth: { save: mockSave } }
   })
 
   afterEach(() => {
-    delete (window as any).tabtin
+    delete (window as any).muse
   })
 
   it('persistAuthTokens 不再 dispatch auth:tokensUpdated 事件', async () => {

@@ -8,7 +8,7 @@
  * - 恢复后延迟刷新（消除竞态 CC-023）
  */
 import { useCallback, useEffect, useRef, useState } from "react"
-import { joinApiPath } from "@tabtin/config"
+import { joinApiPath } from "@muse/config"
 import type { VersionHistoryItem } from "./types"
 
 export interface OperationResult {

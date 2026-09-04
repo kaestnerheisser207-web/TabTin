@@ -17,7 +17,7 @@ const saveCapturedContent = vi.fn()
 const resolveResource = vi.fn()
 const markDownloaded = vi.fn()
 
-vi.mock('@tabtin/action-tools/runtime', () => ({
+vi.mock('@muse/action-tools/runtime', () => ({
   setResourceDetectionAPI: vi.fn(),
 }))
 

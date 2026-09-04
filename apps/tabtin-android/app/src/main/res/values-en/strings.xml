@@ -888,7 +888,7 @@
     <!-- Wave 3: rich_content -->
     <string name="rich_content_resource">Resource</string>
     <string name="rich_content_open">Open</string>
-    <!-- Local file card without http(s) (tabtin:// only): file lives on the desktop device. -->
+    <!-- Local file card without http(s) (muse:// only): file lives on the desktop device. -->
     <string name="rich_content_file_open_on_desktop">Open on desktop</string>
     <string name="rich_content_download">Download</string>
     <string name="rich_content_table_empty">No data</string>

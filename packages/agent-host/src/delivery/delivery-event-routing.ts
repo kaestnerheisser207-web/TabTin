@@ -1,5 +1,5 @@
-import { StreamEvents } from '@tabtin/agent-wire'
-import type { StreamEvent } from '@tabtin/agent-runtime'
+import { StreamEvents } from '@muse/agent-wire'
+import type { StreamEvent } from '@muse/agent-runtime'
 
 export type DeliveryEventSource = 'runtime' | 'subagent_trace'
   | 'subagent_stream'

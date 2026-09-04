@@ -8,4 +8,4 @@ export {
   SENSITIVE_SANDBOX_PATTERNS,
   isSensitiveSandboxKey,
   sanitizeSandboxEnv,
-} from '@tabtin/env-sanitize'
+} from '@muse/env-sanitize'

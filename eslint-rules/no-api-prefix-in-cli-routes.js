@@ -1,5 +1,5 @@
 /**
- * tabtin/no-api-prefix-in-cli-routes
+ * muse/no-api-prefix-in-cli-routes
  *
  * 禁止 `packages/cli-routes/src/routes/**` 下传给 `djangoRequest`（以及通过中间
  * 变量传入）的 path 字面量自带 `/api/` 前缀。
@@ -33,7 +33,7 @@ const rule = {
     docs: {
       description:
         '禁止 cli-routes 路由文件里传给 djangoRequest 的 path 自带 /api 前缀；baseUrl 已带 /api，再前缀会被自动剥并触发 dev warn。',
-      url: 'https://github.com/TabTin/TabTinAgent/blob/main/eslint-rules/README.md#tabtinno-api-prefix-in-cli-routes',
+      url: 'https://github.com/TabTin/TabTinAgent/blob/main/eslint-rules/README.md#museno-api-prefix-in-cli-routes',
     },
     schema: [],
     messages: {

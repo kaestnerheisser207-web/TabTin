@@ -1,5 +1,5 @@
 import { rememberLocallySubmittedSession } from '@/stores/chat/session/locallySubmittedSessionRegistry'
-import type { ChatSession } from '@tabtin/chat-client'
+import type { ChatSession } from '@muse/chat-client'
 
 /** 发送上屏时乐观 bump 会话列表预览 / message_count，并清 revert 横幅。 */
 export function bumpSessionSidebarOnSend(params: {

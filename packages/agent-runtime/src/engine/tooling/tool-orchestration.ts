@@ -115,7 +115,7 @@ export interface RunToolsOptions {
   schemaValidation?: ToolSchemaValidationLevel;
   /**
    * FR-09: master switch for output sanitization. Defaults to `true`.
-   * Hosts can override via `TABTIN_TOOL_OUTPUT_SCAN=off` for emergency
+   * Hosts can override via `MUSE_TOOL_OUTPUT_SCAN=off` for emergency
    * rollback if a pattern false-positives en masse.
    */
   outputScan?: boolean;

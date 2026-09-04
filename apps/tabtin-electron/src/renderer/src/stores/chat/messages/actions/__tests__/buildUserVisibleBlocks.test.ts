@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import type { MessageBlock } from '@tabtin/chat-client'
+import type { MessageBlock } from '@muse/chat-client'
 import { buildUserVisibleBlocks } from '../buildUserVisibleBlocks'
 
 describe('buildUserVisibleBlocks ', () => {

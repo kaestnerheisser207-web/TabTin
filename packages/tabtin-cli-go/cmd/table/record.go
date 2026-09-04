@@ -74,7 +74,7 @@ func registerRecordCommands(parent *cobra.Command, f *cmdutil.Factory) {
 页面的记录链接可直接作为位置参数，CLI 会复用当前 Profile 授权并解析 record-id。
 常见陷阱：--field-key-type 决定返回 JSON 的 key 是字段名还是字段 UUID，与
 record update 的 --data key 约定要保持一致，否则回写会对不上字段。`,
-			Example: "  muse table record detail \"tabtin://resource/table/<table_id>?hint=tabdata&recordIds=<record_id>\"\n" +
+			Example: "  muse table record detail \"muse://resource/table/<table_id>?hint=tabdata&recordIds=<record_id>\"\n" +
 				"  muse table record detail \"http://127.0.0.1:5175/table/<table_id>/record/<record_id>\"\n" +
 				"  muse table record detail --record-id <record_id>\n" +
 				"  muse table record detail --record-id <record_id> --field-key-type name\n" +
@@ -88,7 +88,7 @@ record update 的 --data key 约定要保持一致，否则回写会对不上字
 			},
 			ArgsMapping: []string{"record_url"},
 			// Auth-only：adaptRecordDetail 不注入 agent_id；Cursor/Codex 粘贴
-			// tabtin:// 记录链接时应直接复用 Electron managed profile，不能先要求
+			// muse:// 记录链接时应直接复用 Electron managed profile，不能先要求
 			// `muse agent use`（否则外部 Agent 会退回 Django/DB）。
 			HasFormat: true, RequiresAgent: false, RequiresAuth: true,
 			Validate: normalizeRecordDetailRef,
@@ -132,7 +132,7 @@ record update 的 --data key 约定要保持一致，否则回写会对不上字
 				"Windows：复杂 JSON 请先写 UTF-8 **无 BOM** 文件，再用带引号的 @file（如 --data '@patch.json' / --records '@records.json'）。" +
 				"PowerShell 5.x 的 Set-Content -Encoding utf8 会写 BOM，优先用 write_file / python json.dump / Out-File -Encoding utf8NoBOM。\n\n" +
 				recordDataFormatLong,
-			Example: "  muse table record update --url \"tabtin://resource/table/<table_id>?hint=tabdata&recordIds=<record_id>\" --set \"状态=完成\"\n" +
+			Example: "  muse table record update --url \"muse://resource/table/<table_id>?hint=tabdata&recordIds=<record_id>\" --set \"状态=完成\"\n" +
 				"  muse table record update --url \"http://127.0.0.1:5175/table/xxx/record/yyy\" --set \"状态=完成\"\n" +
 				"  muse table record update --table-id xxx --record-id yyy --set \"标题=123\"\n" +
 				"  muse table record update --table-id xxx --record-id yyy --set status=done --set score=3\n" +
@@ -146,7 +146,7 @@ record update 的 --data key 约定要保持一致，否则回写会对不上字
 			Runtime: cmdutil.RuntimeHybrid, AdaptRequest: adaptRecordUpdate,
 			Layer: "L2", Risk: cmdutil.RiskWrite, RiskDeclared: true,
 			Flags: []cmdutil.FlagDef{
-				{Name: "url", Type: cmdutil.FlagString, NoFileInput: true, Desc: "TabData 页面 URL 或 tabtin:// 记录资源链接（自动解析表格 ID 和记录 ID）"},
+				{Name: "url", Type: cmdutil.FlagString, NoFileInput: true, Desc: "TabData 页面 URL 或 muse:// 记录资源链接（自动解析表格 ID 和记录 ID）"},
 				{Name: "table-id", Type: cmdutil.FlagString, Desc: "表格 ID（使用 --url 时可省略）"},
 				{Name: "record-id", Type: cmdutil.FlagString, Desc: "记录 ID（单条更新）"},
 				{Name: "data", Type: cmdutil.FlagString,

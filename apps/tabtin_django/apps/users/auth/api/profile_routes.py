@@ -97,7 +97,7 @@ def redeem_invite_code(request: HttpRequest, data: RedeemInviteCodeSchema):
             code="RATE_LIMITED",
             retry_after_seconds=INVITE_REDEEM_RATE_LIMIT_SECONDS,
         )
-        if request.META.get("HTTP_X_TABTIN_ERROR_STATUS") == INVITE_REDEEM_HTTP_ERROR_CAPABILITY:
+        if request.META.get("HTTP_X_MUSE_ERROR_STATUS") == INVITE_REDEEM_HTTP_ERROR_CAPABILITY:
             http_response = JsonResponse(response.model_dump(), status=429)
             http_response["Retry-After"] = str(response.retry_after_seconds)
             return http_response

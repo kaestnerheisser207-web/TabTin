@@ -1,5 +1,5 @@
 /**
- * `@tabtin/agent-runtime/capability/core` —— Core 三件套 Capability barrel。
+ * `@muse/agent-runtime/capability/core` —— Core 三件套 Capability barrel。
  *
  * **Core 范畴**（capability.ts 的 CapabilityCategory 注释）：
  * - 通用 / 元能力基础设施（FileSystem / Shell / Skills / Cost 等）

@@ -5,12 +5,12 @@
  */
 import { useCallback, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
-import { toast } from '@tabtin/smartsheet-ui'
-import type { Field, CreateRecordRequest, UpdateRecordRequest, TableRecord } from '@tabtin/table-core'
+import { toast } from '@muse/smartsheet-ui'
+import type { Field, CreateRecordRequest, UpdateRecordRequest, TableRecord } from '@muse/table-core'
 import {
   useDataGridCollabBridge as useDataGridCollabBridgeCore,
   type UseDataGridCollabBridgeResult,
-} from '@tabtin/table-engine/collab'
+} from '@muse/table-engine/collab'
 import { COLLAB_WS_URLS } from '@/config/api'
 import { buildShareCollabUser } from '@/pages/hooks/useShareCollab'
 import { useAuthStore } from '@/stores/auth-store'

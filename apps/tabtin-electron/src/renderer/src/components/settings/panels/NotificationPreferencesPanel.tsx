@@ -68,8 +68,8 @@ export const NotificationPreferencesPanel: React.FC<NotificationPreferencesPanel
   const normalizedRef = useRef(false)
 
   useEffect(() => {
-    if (!window.tabtin?.notification) return
-    window.tabtin.notification.getPrefs().then((p) => {
+    if (!window.muse?.notification) return
+    window.muse.notification.getPrefs().then((p) => {
       if (!p) return
       setCategoryOverrides((p.categoryOverrides ?? {}) as Record<string, CategoryOverride>)
       if (!normalizedRef.current) {
@@ -80,7 +80,7 @@ export const NotificationPreferencesPanel: React.FC<NotificationPreferencesPanel
           p.soundEnabled === false ||
           p.dndEnabled === true
         if (needsNormalize) {
-          void window.tabtin?.notification
+          void window.muse?.notification
             ?.setPrefs({ enabled: true, desktopEnabled: true, soundEnabled: true, dndEnabled: false })
             .catch(() => {})
         }
@@ -89,7 +89,7 @@ export const NotificationPreferencesPanel: React.FC<NotificationPreferencesPanel
 
     // IA Phase 2：主进程在"其它设备 WS 回灌 / 多窗口本地改动"后广播最新偏好，
     // 这里只刷新本地分类状态（不回调 setPrefs，天然不成回声环）。
-    const unsubscribePrefs = window.tabtin.notification.onPrefsChanged?.((p) => {
+    const unsubscribePrefs = window.muse.notification.onPrefsChanged?.((p) => {
       if (p) setCategoryOverrides((p.categoryOverrides ?? {}) as Record<string, CategoryOverride>)
     })
 
@@ -102,7 +102,7 @@ export const NotificationPreferencesPanel: React.FC<NotificationPreferencesPanel
     // 单个「要不要通知」开关同时控制桌面与声音——关闭即该类彻底安静。
     const nextOverride: CategoryOverride = { desktopEnabled: enabled, soundEnabled: enabled }
     setCategoryOverrides((prev) => ({ ...prev, [category]: nextOverride }))
-    void window.tabtin?.notification
+    void window.muse?.notification
       ?.setPrefs({ categoryOverrides: { [category]: nextOverride } })
       .catch(() => {})
   }, [])
@@ -114,7 +114,7 @@ export const NotificationPreferencesPanel: React.FC<NotificationPreferencesPanel
       soundEnabled: delivery !== 'never',
     }
     setCategoryOverrides((prev) => ({ ...prev, [AGENT_RESULT_KEY]: nextOverride }))
-    void window.tabtin?.notification
+    void window.muse?.notification
       ?.setPrefs({ categoryOverrides: { [AGENT_RESULT_KEY]: nextOverride } })
       .catch(() => {})
   }, [])

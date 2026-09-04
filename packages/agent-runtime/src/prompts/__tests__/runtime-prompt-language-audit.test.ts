@@ -1,7 +1,7 @@
 /**
  * P3 · runtime prompt 段语言纪律审计（阶段 5 全中文化回归保护）
  *
- * **填补的缺口**：`@tabtin/agent-prompt` 的 `audit.test.ts` P3 只覆盖 base prompt
+ * **填补的缺口**：`@muse/agent-prompt` 的 `audit.test.ts` P3 只覆盖 base prompt
  * 段（18 个 RENDERERS），`tool-description-audit.test.ts` P3 只覆盖工具 description
  * （32 个）。compact 链路 / convergence / 兜底等 **runtime 渲染的 prompt 段**
  * 此前没有任何 detectLanguage 渲染校验（agent-prompt audit:118-120 自承"由
@@ -25,8 +25,8 @@
  */
 
 import { describe, it, expect } from 'vitest';
-import { REGISTRY_ENTRIES, checkLanguageDiscipline } from '@tabtin/prompt-contract';
-import type { SectionDescriptor } from '@tabtin/prompt-contract';
+import { REGISTRY_ENTRIES, checkLanguageDiscipline } from '@muse/prompt-contract';
+import type { SectionDescriptor } from '@muse/prompt-contract';
 
 import { COMPACT_SYSTEM_PROMPT } from '../compact/system.js';
 import { COMPACT_USER_PROMPT } from '../compact/user.js';

@@ -7,7 +7,7 @@ import React, {
 import type {
   TableGridAttachmentUploadHandler,
   TableGridRow,
-} from '@tabtin/table-engine';
+} from '@muse/table-engine';
 import { act } from 'react';
 import { createRoot, type Root } from 'react-dom/client';
 import { afterEach, describe, expect, it, vi } from 'vitest';

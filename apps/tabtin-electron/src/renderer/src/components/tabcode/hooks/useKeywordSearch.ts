@@ -165,7 +165,7 @@ export function useKeywordSearch(rootPath: string | null) {
 
   const cancelRequest = useCallback(async (requestId: string) => {
     try {
-      await window.tabtin.fileSystem.ripgrepSearchCancel(requestId)
+      await window.muse.fileSystem.ripgrepSearchCancel(requestId)
     } catch (err) {
       log.warn('取消搜索请求失败', {
         requestId: requestId.slice(-12),
@@ -235,7 +235,7 @@ export function useKeywordSearch(rootPath: string | null) {
       const perFileMaxCount = hasReplacement ? null : RIPGREP_DEFAULT_PER_FILE_MAX_COUNT
 
       try {
-        const rgRes = await window.tabtin.fileSystem.ripgrepSearch({
+        const rgRes = await window.muse.fileSystem.ripgrepSearch({
           cwd: rootPath,
           pattern: pattern.trim(),
           ...options,
@@ -329,7 +329,7 @@ export function useKeywordSearch(rootPath: string | null) {
       })
 
       try {
-        const rgRes = await window.tabtin.fileSystem.ripgrepSearch({
+        const rgRes = await window.muse.fileSystem.ripgrepSearch({
           cwd: rootPath,
           pattern: lastSearch.pattern,
           ...lastSearch.options,

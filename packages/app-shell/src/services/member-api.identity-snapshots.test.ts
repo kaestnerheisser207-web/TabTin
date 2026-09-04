@@ -4,7 +4,7 @@ import { configureAppShell } from '../runtime.js'
 import { MemberApiService } from './member-api.js'
 
 
-vi.mock('@tabtin/config', () => ({
+vi.mock('@muse/config', () => ({
   API_ENDPOINTS: {
     ORGANIZATION_MEMBER: {
       LIST: (organizationId: string) => `/context/organizations/${organizationId}/members`,

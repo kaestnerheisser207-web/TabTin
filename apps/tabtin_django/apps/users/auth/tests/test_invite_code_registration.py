@@ -19,7 +19,7 @@ from apps.users.auth.services.invite_code_service import (
 )
 
 
-@override_settings(TABTIN_REQUIRE_INVITE_CODE=True)
+@override_settings(MUSE_REQUIRE_INVITE_CODE=True)
 class RegistrationInviteCodeTests(TestCase):
     def setUp(self):
         self.factory = RequestFactory()
@@ -172,7 +172,7 @@ class RegistrationInviteCodeTests(TestCase):
     def test_post_auth_gate_uses_http_429_for_capable_clients(self, _mock_limit):
         user = User.objects.create_user(phone="13900000016", username="invite_http_429")
         request = self._request("/api/auth/invite-code/redeem")
-        request.META["HTTP_X_TABTIN_ERROR_STATUS"] = "standard"
+        request.META["HTTP_X_MUSE_ERROR_STATUS"] = "standard"
         request.auth = user
 
         response = redeem_invite_code(

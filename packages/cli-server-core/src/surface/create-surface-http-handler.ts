@@ -11,14 +11,14 @@
  *   → SurfaceError: sendJSON(400, errResponse(code, message, {detail})) + 审计 error
  *   → 未知错误: sendJSON(500, errResponse('INTERNAL_ERROR', message)) + 审计 error
  *
- * envelope 直接复用 @tabtin/agent-wire 的 okResponse / errResponse，
+ * envelope 直接复用 @muse/agent-wire 的 okResponse / errResponse，
  * 与整个仓库的 envelope SSoT 保持一致。
  *
  * W5 审计：在 handler 前后自动计时 + 写 audit-log JSONL，trace_id
  * 从 HTTP 请求头 X-Request-Id 读取。
  */
 
-import { okResponse, errResponse } from '@tabtin/agent-wire'
+import { okResponse, errResponse } from '@muse/agent-wire'
 import { parseBody, sendJSON } from '../http-utils.js'
 import type { RouteHandler } from '../server.js'
 import { SurfaceError } from './types.js'

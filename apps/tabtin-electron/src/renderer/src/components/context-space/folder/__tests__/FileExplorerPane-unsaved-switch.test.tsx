@@ -97,7 +97,7 @@ vi.mock('@components/shared/file-ops', () => ({
   depthForNewItem: () => 0,
 }))
 
-vi.mock('@tabtin/smartsheet-ui', () => ({
+vi.mock('@muse/smartsheet-ui', () => ({
   toast: { error: vi.fn() },
 }))
 

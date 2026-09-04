@@ -25,7 +25,7 @@ vi.mock('fs', () => {
   return { ...mocks, default: mocks }
 })
 
-vi.mock('@tabtin/terminal-core', () => ({
+vi.mock('@muse/terminal-core', () => ({
   resolveSpacesRoot: vi.fn(() => '/mock/sandbox'),
 }))
 

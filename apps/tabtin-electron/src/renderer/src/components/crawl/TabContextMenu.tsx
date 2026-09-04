@@ -1,10 +1,10 @@
 import React, { useState, useCallback, useRef, useEffect } from 'react'
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, Input, Button, Label } from '@tabtin/smartsheet-ui'
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, Input, Button, Label } from '@muse/smartsheet-ui'
 import type { CrawlTab } from '@stores/useCrawlTabStore'
 import { useShallow } from 'zustand/react/shallow'
 import { useCrawlTabStore } from '@stores/useCrawlTabStore'
 import { openNativeContextMenu, menuSeparator, type NativeMenuItem } from '@/utils/nativeMenu'
-import { requestCloseWorkspace } from '@tabtin/crawlspace-core'
+import { requestCloseWorkspace } from '@muse/crawlspace-core'
 import { electronCrawlspaceHost } from '../../crawlspace/host/electron-crawlspace-host'
 import { useTranslation } from 'react-i18next'
 

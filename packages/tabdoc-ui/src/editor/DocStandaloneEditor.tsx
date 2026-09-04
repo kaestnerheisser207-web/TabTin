@@ -14,10 +14,10 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { useTranslation } from 'react-i18next'
-import { markdownToPmJson, normalizeMathPmJson } from '@tabtin/doc-editor'
+import { markdownToPmJson, normalizeMathPmJson } from '@muse/doc-editor'
 import {
   Separator,
-} from '@tabtin/smartsheet-ui'
+} from '@muse/smartsheet-ui'
 import {
   EditorCommand,
   EditorCommandEmpty,

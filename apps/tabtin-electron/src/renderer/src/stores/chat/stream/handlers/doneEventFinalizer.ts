@@ -1,6 +1,6 @@
-import type { ChatMessage } from '@tabtin/chat-client'
-import type { UsageReport } from '@tabtin/agent-wire'
-import { projectUsageMetadata } from '@tabtin/agent-host/delivery/usage-metadata-projection'
+import type { ChatMessage } from '@muse/chat-client'
+import type { UsageReport } from '@muse/agent-wire'
+import { projectUsageMetadata } from '@muse/agent-host/delivery/usage-metadata-projection'
 import { useChatStore } from '@/stores/chat/useChatStore'
 import { classifyRunTermination } from '../../messages/actions/runTermination'
 import {

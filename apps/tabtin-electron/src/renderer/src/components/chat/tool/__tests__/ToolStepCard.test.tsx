@@ -10,8 +10,8 @@ vi.mock('react-i18next', () => ({
   }),
 }))
 
-vi.mock('@tabtin/smartsheet-ui', async importOriginal => ({
-  ...(await importOriginal<typeof import('@tabtin/smartsheet-ui')>()),
+vi.mock('@muse/smartsheet-ui', async importOriginal => ({
+  ...(await importOriginal<typeof import('@muse/smartsheet-ui')>()),
   ScrollArea: ({ children, className }: { children: React.ReactNode; className?: string }) => (
     <div className={className} data-testid="scroll-area">
       {children}

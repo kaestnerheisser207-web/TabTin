@@ -2,7 +2,7 @@ import { describe, it, expect, beforeEach, afterEach } from 'vitest'
 import { PGlite } from '@electric-sql/pglite'
 import { PGliteQueryService, translateWhereNodeFields } from '../src/index.js'
 import type { PGliteInstance } from '../src/index.js'
-import type { WhereNode, FieldColumnMap } from '@tabtin/table-kernel'
+import type { WhereNode, FieldColumnMap } from '@muse/table-kernel'
 
 describe('PGliteQueryService', () => {
   let pg: PGliteInstance

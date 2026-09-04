@@ -11,7 +11,7 @@ import {
   DialogContent,
   DialogTitle,
   Textarea,
-} from '@tabtin/smartsheet-ui'
+} from '@muse/smartsheet-ui'
 import { renderMathPreview } from './math-preview'
 import 'katex/dist/katex.min.css'
 

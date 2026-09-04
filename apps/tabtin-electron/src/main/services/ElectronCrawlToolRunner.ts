@@ -11,9 +11,9 @@
  * - 超时后主动销毁 View 并返回明确的超时错误
  */
 
-import type { CrawlToolRunner, CrawlCleanHtmlInput, CrawlCleanHtmlOutput } from '@tabtin/action-tools/types'
-import { cleanHtml, generateSkeletonHtml } from '@tabtin/action-tools/impl'
-import { buildDeepOuterHTMLExpression } from '@tabtin/browser-core'
+import type { CrawlToolRunner, CrawlCleanHtmlInput, CrawlCleanHtmlOutput } from '@muse/action-tools/types'
+import { cleanHtml, generateSkeletonHtml } from '@muse/action-tools/impl'
+import { buildDeepOuterHTMLExpression } from '@muse/browser-core'
 import { getViewFactory } from '../view-factory'
 import { loadUrl } from '../embedded-crawl-view'
 import { createLogger } from '../logger'

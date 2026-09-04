@@ -6,7 +6,7 @@
  * workspace 物理隔离。
  *
  *  Stage 6a：路径计算改为本地 `../paths`（原 re-export
- * `@tabtin/terminal-core`）。
+ * `@muse/terminal-core`）。
  */
 
 export {

@@ -11,7 +11,7 @@
  *      **No** `$ref` / `allOf` / `oneOf` / `anyOf` / arbitrary `pattern`
  *      RegExp execution / `dependencies`. Auditing builtin schemas
  *      confirmed this — see `tool-schema-validator.test.ts`.
- *   2. **Zero new dependencies**: `@tabtin/agent-runtime` ships to
+ *   2. **Zero new dependencies**: `@muse/agent-runtime` ships to
  *      Electron / Daemon / future mobile. ajv ≈ 60 KB minified + JIT-compiles
  *      schemas via `Function(...)` which collides with strict CSP and
  *      bundler tree-shaking expectations.

@@ -21,7 +21,7 @@ import {
   isAttachmentFieldType,
   useDataGridDataset,
   useViewContainerState,
-} from '@tabtin/table-ui'
+} from '@muse/table-ui'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 
 const DEFAULT_PAGE_SIZE = 100

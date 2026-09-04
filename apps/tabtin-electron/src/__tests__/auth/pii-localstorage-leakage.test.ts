@@ -14,7 +14,7 @@ describe('FP-026: useAuthStore partialize 过滤 PII 字段', () => {
     localStorage.clear()
     vi.resetModules()
 
-    ;(window as any).tabtin = {
+    ;(window as any).muse = {
       auth: {
         save: vi.fn().mockResolvedValue({ success: true }),
         load: vi.fn().mockResolvedValue(null),
@@ -28,7 +28,7 @@ describe('FP-026: useAuthStore partialize 过滤 PII 字段', () => {
 
   afterEach(() => {
     localStorage.clear()
-    delete (window as any).tabtin
+    delete (window as any).muse
   })
 
   it('partialize 不应将 email 和 phone 写入 localStorage', async () => {

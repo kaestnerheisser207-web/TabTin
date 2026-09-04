@@ -23,7 +23,7 @@
  */
 
 import type React from 'react'
-import { ALL_BLOCK_TYPES, type ContentBlockType } from '@tabtin/agent-wire'
+import { ALL_BLOCK_TYPES, type ContentBlockType } from '@muse/agent-wire'
 import { TextBlockView } from './TextBlockView'
 import { ThinkingBlockView } from './ThinkingBlockView'
 import { ToolUseBlockView } from './ToolUseBlockView'
@@ -36,7 +36,7 @@ import { FallbackBlockView } from './FallbackBlockView'
 import type { BlockRendererProps } from './types'
 
 /**
- * W4c · W4b-P1-1 子项 d：BLOCK_DISPATCH 派生使用 `@tabtin/agent-wire/ALL_BLOCK_TYPES`
+ * W4c · W4b-P1-1 子项 d：BLOCK_DISPATCH 派生使用 `@muse/agent-wire/ALL_BLOCK_TYPES`
  * 单源，避免三处（renderer / daemon lite-collector / Django reassembler）独立
  * 维护字面量列表导致漏写。
  *

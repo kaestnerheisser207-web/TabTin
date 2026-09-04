@@ -11,7 +11,7 @@ RetrieveToolResultTool 已随 agent-runtime W3（2026-05-10）退役——TS 端
 
 历史 ask_question 工具（manifest metadata 壳，run() 不会被实际调用）已随
 Wave 11 云端 langgraph 下线 + Wave 5 ask 三件套（ask_choice / ask_form /
-request_approval）拆分一并清除——三件套在 TS @tabtin/agent-runtime 端实现，
+request_approval）拆分一并清除——三件套在 TS @muse/agent-runtime 端实现，
 Python 端不再镜像注册。
 """
 

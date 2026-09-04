@@ -228,7 +228,7 @@ internal data class WorkbenchWebAuthSnapshot(
               else localStorage.removeItem('tabtin_expires_at');
               if (auth.user) localStorage.setItem('tabtin_user', JSON.stringify(auth.user));
               else localStorage.removeItem('tabtin_user');
-              window.__TABTIN_NATIVE_AUTH__ = {
+              window.__MUSE_NATIVE_AUTH__ = {
                 platform: 'android',
                 refresh: async () => {
                   const result = JSON.parse(window.TabTinNativeAuth.refresh());
@@ -412,7 +412,7 @@ public class WorkbenchViewModel @Inject constructor(
      * 任务 App 首页的「资料库 / 共享」入口必须看组织级 cloud-drive shared-feed。
      *
      * 只靠当前 workspace 的 [resources] 会漏掉别人分享给我的资源；这时消息里解析出的
-     * tabtin://resource 也匹配不到 SpaceResource，工作台卡片就会退成「当前内容不可用」。
+     * muse://resource 也匹配不到 SpaceResource，工作台卡片就会退成「当前内容不可用」。
      * 新版优先 shared-feed；滚动发布环境 404 时才回退旧 doc/table shared-with-me。
      */
     public fun loadSharedAppHomeResources(

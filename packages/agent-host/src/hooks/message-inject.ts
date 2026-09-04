@@ -14,13 +14,13 @@
  * 行为与原 `single-block-injector.ts` 的 filter + 插位 + splice 逐字节一致。
  */
 
-import type { Message } from '@tabtin/agent-runtime/engine'
+import type { Message } from '@muse/agent-runtime/engine'
 import {
   hasInternalMarker,
   setInternalMarker,
   findLastRealUserIndex,
   type InternalMessageMarker,
-} from '@tabtin/agent-runtime/engine'
+} from '@muse/agent-runtime/engine'
 
 /**
  * 注入位置：

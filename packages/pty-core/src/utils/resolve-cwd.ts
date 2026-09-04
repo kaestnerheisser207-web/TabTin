@@ -12,12 +12,12 @@ function isValidDirectory(value?: string): value is string {
 
 /**
  * Resolves the working directory for a PTY session.
- * Falls back through: preferred → workspaceRoot → TABTIN_WORKSPACE_ROOT → cwd → homedir.
+ * Falls back through: preferred → workspaceRoot → MUSE_WORKSPACE_ROOT → cwd → homedir.
  */
 export function resolveCwd(preferred?: string, workspaceRoot?: string): string {
   if (isValidDirectory(preferred)) return preferred
   if (isValidDirectory(workspaceRoot)) return workspaceRoot
-  const fromEnv = process.env.TABTIN_WORKSPACE_ROOT
+  const fromEnv = process.env.MUSE_WORKSPACE_ROOT
   if (isValidDirectory(fromEnv)) return fromEnv
   const current = process.cwd()
   if (isValidDirectory(current)) return current

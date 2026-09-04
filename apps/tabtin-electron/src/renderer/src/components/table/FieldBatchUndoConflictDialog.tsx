@@ -25,7 +25,7 @@ import {
   ScrollArea,
   Separator,
   cn,
-} from '@tabtin/smartsheet-ui'
+} from '@muse/smartsheet-ui'
 import { Undo2, History, AlertTriangle } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 

@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, it } from 'vitest'
-import { getSharedNetworkLog, resetSharedRuntimeLogs } from '@tabtin/browser-core'
+import { getSharedNetworkLog, resetSharedRuntimeLogs } from '@muse/browser-core'
 import { networkLogTool, routeTool, unrouteTool } from '../network'
 
 /**

@@ -1,4 +1,4 @@
-import type { ChatMessage } from '@tabtin/chat-client'
+import type { ChatMessage } from '@muse/chat-client'
 
 /**
  * 与 `packages/agent-runtime/src/prompts/compact/wrapper.ts` 的

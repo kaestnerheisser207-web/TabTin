@@ -111,8 +111,8 @@ def list_tables(space_id: UUID) -> None:
 
 
 def verify_new_table(space_id: UUID, table_service: TableService) -> None:
-    before_ids = set(json.loads(os.environ.get("TABTIN_E2E_BEFORE_TABLE_IDS", "[]")))
-    created_after = parse_datetime(os.environ.get("TABTIN_E2E_CREATED_AFTER", ""))
+    before_ids = set(json.loads(os.environ.get("MUSE_E2E_BEFORE_TABLE_IDS", "[]")))
+    created_after = parse_datetime(os.environ.get("MUSE_E2E_CREATED_AFTER", ""))
     candidates_query = Table.objects.filter(space_id=space_id, is_archived=False).order_by("-created_at")
     if created_after is not None:
         candidates_query = candidates_query.filter(created_at__gte=created_after)
@@ -121,7 +121,7 @@ def verify_new_table(space_id: UUID, table_service: TableService) -> None:
         raise RuntimeError("No new TabData table was created after clicking the Electron new-table button.")
     table = candidates[0]
     original_name = table.name
-    name_prefix = os.environ.get("TABTIN_E2E_UI_TABLE_NAME_PREFIX", "").strip()
+    name_prefix = os.environ.get("MUSE_E2E_UI_TABLE_NAME_PREFIX", "").strip()
     if name_prefix and not table.name.startswith(name_prefix):
         updated = table_service.update_table(table.id, name=f"{name_prefix} {table.name}")
         if updated is not None:
@@ -420,15 +420,15 @@ def verify_select_option_rename_case(
     table_service: TableService,
     record_service: RecordService,
 ) -> None:
-    table_id = UUID(require_env("TABTIN_E2E_TABLE_ID"))
-    field_id = UUID(require_env("TABTIN_E2E_FIELD_ID"))
+    table_id = UUID(require_env("MUSE_E2E_TABLE_ID"))
+    field_id = UUID(require_env("MUSE_E2E_FIELD_ID"))
     used_record_ids = [
         UUID(item)
-        for item in json.loads(require_env("TABTIN_E2E_USED_RECORD_IDS"))
+        for item in json.loads(require_env("MUSE_E2E_USED_RECORD_IDS"))
     ]
-    control_record_id = UUID(require_env("TABTIN_E2E_CONTROL_RECORD_ID"))
-    expected_label = require_env("TABTIN_E2E_EXPECTED_LABEL")
-    expected_control_label = require_env("TABTIN_E2E_EXPECTED_CONTROL_LABEL")
+    control_record_id = UUID(require_env("MUSE_E2E_CONTROL_RECORD_ID"))
+    expected_label = require_env("MUSE_E2E_EXPECTED_LABEL")
+    expected_control_label = require_env("MUSE_E2E_EXPECTED_CONTROL_LABEL")
 
     table = table_service.get_table(table_id)
     if table is None:
@@ -692,10 +692,10 @@ def create_project_task_model(
 
 
 def main() -> None:
-    mode = require_env("TABTIN_E2E_MODE")
-    run_id = require_env("TABTIN_E2E_RUN_ID")
-    user_id = UUID(require_env("TABTIN_E2E_USER_ID"))
-    space_id = UUID(require_env("TABTIN_E2E_SPACE_ID"))
+    mode = require_env("MUSE_E2E_MODE")
+    run_id = require_env("MUSE_E2E_RUN_ID")
+    user_id = UUID(require_env("MUSE_E2E_USER_ID"))
+    space_id = UUID(require_env("MUSE_E2E_SPACE_ID"))
     marker = f"[{run_id}]"
 
     User = get_user_model()
@@ -731,7 +731,7 @@ def main() -> None:
         verify_select_option_rename_case(table_service, record_service)
         return
 
-    raise RuntimeError(f"Unknown TABTIN_E2E_MODE: {mode}")
+    raise RuntimeError(f"Unknown MUSE_E2E_MODE: {mode}")
 
 
 main()

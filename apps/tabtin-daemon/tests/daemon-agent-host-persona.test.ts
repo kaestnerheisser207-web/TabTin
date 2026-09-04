@@ -1,6 +1,6 @@
 /**
  * W3 / W7a 历史回归 —— SSoT 迁移后该测试文件直接测试
- * `@tabtin/agent-prompt::buildSystemPrompt` 的 customRules 行为，与 Daemon
+ * `@muse/agent-prompt::buildSystemPrompt` 的 customRules 行为，与 Daemon
  * 宿主行为保持一一对应。
  *
  * 「角色设定」persona 已下线——identity 段固定用系统默认身份，用户的身份/行为
@@ -8,7 +8,7 @@
  * wrapper 漂移"。
  */
 import { describe, it, expect } from 'vitest';
-import { buildSystemPrompt } from '@tabtin/agent-prompt';
+import { buildSystemPrompt } from '@muse/agent-prompt';
 
 describe('Daemon SSoT buildSystemPrompt – custom_rules (W3 / W7a)', () => {
   it('always renders the built-in default identity', () => {

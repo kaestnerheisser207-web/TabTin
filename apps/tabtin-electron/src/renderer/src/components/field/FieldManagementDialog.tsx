@@ -16,7 +16,7 @@ import {
   toast,
   EmptyState,
   cn,
-} from '@tabtin/smartsheet-ui';
+} from '@muse/smartsheet-ui';
 import { useShallow } from 'zustand/react/shallow';
 import { useTableStore } from '@stores/useTableStore';
 import { useViewStore } from '@stores/useViewStore';
@@ -24,7 +24,7 @@ import {
   buildColumnMetaUpdatePayload,
   FieldApiService,
   isPrimaryFieldAllowedType,
-} from '@tabtin/table-core';
+} from '@muse/table-core';
 import {
   Eye,
   EyeOff,
@@ -32,7 +32,7 @@ import {
   GripVertical,
 } from 'lucide-react';
 import { arrayMove } from '@dnd-kit/sortable';
-import type { Field } from '@tabtin/table-core';
+import type { Field } from '@muse/table-core';
 import { useFieldSettingStore } from '@/stores/useFieldSettingStore';
 import { useTableCollabOptional } from '../table/TableCollabContext';
 import { useUndoRedoContext } from '@components/view/UndoRedoContext';
@@ -46,7 +46,7 @@ import {
   getViewVisibilitySnapshot,
   isPrimaryVisibilityLocked,
   mergeReorderedSubsetIntoFieldOrder,
-} from '@tabtin/table-ui';
+} from '@muse/table-ui';
 import {
   DndKitContext,
   Draggable,

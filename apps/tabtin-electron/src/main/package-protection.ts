@@ -22,8 +22,8 @@ export function resolveProtectedRuntimeProfile(
   env: NodeJS.ProcessEnv = process.env,
 ): ProtectedRuntimeProfile {
   return (
-    normalizeProtectedRuntimeProfile(env.TABTIN_RUNTIME_PROFILE) ??
-    normalizeProtectedRuntimeProfile(env.TABTIN_BUILD_PROFILE) ??
+    normalizeProtectedRuntimeProfile(env.MUSE_RUNTIME_PROFILE) ??
+    normalizeProtectedRuntimeProfile(env.MUSE_BUILD_PROFILE) ??
     normalizeProtectedRuntimeProfile(env.VITE_BUILD_PROFILE) ??
     (env.NODE_ENV === 'development' ? 'development' : 'production')
   )
@@ -34,8 +34,8 @@ export function shouldAllowMainDevTools(options: {
   env?: NodeJS.ProcessEnv
 }): boolean {
   const env = options.env ?? process.env
-  if (env.TABTIN_ALLOW_MAIN_DEVTOOLS != null) {
-    return parseBoolean(env.TABTIN_ALLOW_MAIN_DEVTOOLS, false)
+  if (env.MUSE_ALLOW_MAIN_DEVTOOLS != null) {
+    return parseBoolean(env.MUSE_ALLOW_MAIN_DEVTOOLS, false)
   }
 
   const profile = resolveProtectedRuntimeProfile(env)
@@ -49,8 +49,8 @@ export function shouldAllowBrowserDevTools(options: {
   env?: NodeJS.ProcessEnv
 } = {}): boolean {
   const env = options.env ?? process.env
-  if (env.TABTIN_ALLOW_BROWSER_DEVTOOLS != null) {
-    return parseBoolean(env.TABTIN_ALLOW_BROWSER_DEVTOOLS, false)
+  if (env.MUSE_ALLOW_BROWSER_DEVTOOLS != null) {
+    return parseBoolean(env.MUSE_ALLOW_BROWSER_DEVTOOLS, false)
   }
 
   const profile = resolveProtectedRuntimeProfile(env)

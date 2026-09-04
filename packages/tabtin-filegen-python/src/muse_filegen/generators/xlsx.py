@@ -8,8 +8,8 @@ from openpyxl import Workbook, load_workbook
 from openpyxl.styles import Font
 from openpyxl.utils import get_column_letter
 
-from tabtin_filegen.errors import SpecError
-from tabtin_filegen.validate import as_text, require_list, require_mapping
+from muse_filegen.errors import SpecError
+from muse_filegen.validate import as_text, require_list, require_mapping
 
 _READ_HELP = """xlsx read 输出：
 {

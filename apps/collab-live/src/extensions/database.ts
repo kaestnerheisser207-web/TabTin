@@ -10,7 +10,7 @@
 import * as Y from "yjs";
 import type { Hocuspocus } from "@hocuspocus/server";
 import { Database as HocuspocusDatabase } from "@hocuspocus/extension-database";
-import { DOC_SCHEMA_VERSION } from "@tabtin/doc-editor";
+import { DOC_SCHEMA_VERSION } from "@muse/doc-editor";
 import {
   fetchDocumentBinary,
   storeDocumentUpdate,

@@ -10,9 +10,9 @@
  * longer need to coordinate peek/consume/derive ordering themselves.
  */
 
-import type { WorkspaceSnapshot, WorkspaceSources } from '@tabtin/security-policy'
-import { isDangerouslyBroadPath } from '@tabtin/security-policy'
-import { tabtinAgentTasksDir } from '@tabtin/terminal-core'
+import type { WorkspaceSnapshot, WorkspaceSources } from '@muse/security-policy'
+import { isDangerouslyBroadPath } from '@muse/security-policy'
+import { tabtinAgentTasksDir } from '@muse/terminal-core'
 
 export interface WorkspaceBoundarySession {
   readonly sessionId?: string

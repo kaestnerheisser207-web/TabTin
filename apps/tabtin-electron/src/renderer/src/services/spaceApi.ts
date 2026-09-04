@@ -1,8 +1,8 @@
 /**
- * Space API 服务 — 从 @tabtin/app-shell 重导出
+ * Space API 服务 — 从 @muse/app-shell 重导出
  */
 
-export { SpaceApiService, ProjectApiService, WorkspaceApiService } from '@tabtin/app-shell'
+export { SpaceApiService, ProjectApiService, WorkspaceApiService } from '@muse/app-shell'
 export type {
   TrashedItem,
   TrashedItemsResponse,
@@ -13,7 +13,7 @@ export type {
   ContextSearchResponse,
   ContextItemListResponse,
   SpaceContextSearchParams,
-} from '@tabtin/app-shell'
+} from '@muse/app-shell'
 export type {
   SpaceContextItem,
   SpaceContextItemListResponse,
@@ -25,4 +25,4 @@ export type {
   KnowledgeTreeNodeType,
   KnowledgeTreeResponse,
   KnowledgeTreeParams,
-} from '@tabtin/app-shell'
+} from '@muse/app-shell'

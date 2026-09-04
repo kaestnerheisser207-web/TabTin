@@ -1,4 +1,4 @@
-import type { ViewCreateRequest, ViewMeta, ViewStore } from '@tabtin/table-core'
+import type { ViewCreateRequest, ViewMeta, ViewStore } from '@muse/table-core'
 
 type RuntimeViewCreatePayload = Omit<ViewCreateRequest, 'table_id'> & { table_id?: string }
 

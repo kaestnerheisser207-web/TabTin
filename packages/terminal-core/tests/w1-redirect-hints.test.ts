@@ -161,67 +161,67 @@ describe('redirect-write P0 修复：1>file 被正确拦截（stdout 显式 fd=1
 // ─── 3. buildTabtinVarPreamble / buildPSTabtinVarPreamble 单元测试 ────────
 
 describe('buildTabtinVarPreamble（POSIX shell，W1 #4）', () => {
-  it('值含空格的 TABTIN_* 变量生成 export 语句', () => {
+  it('值含空格的 MUSE_* 变量生成 export 语句', () => {
     const preamble = buildTabtinVarPreamble({
-      TABTIN_WORKSPACE: '/Users/foo/Application Support/TabTin/spaces',
+      MUSE_WORKSPACE: '/Users/foo/Application Support/TabTin/spaces',
       PATH: '/usr/bin:/bin',
     });
-    expect(preamble).toBe("export TABTIN_WORKSPACE='/Users/foo/Application Support/TabTin/spaces'");
+    expect(preamble).toBe("export MUSE_WORKSPACE='/Users/foo/Application Support/TabTin/spaces'");
   });
 
   it('值不含空格的变量不出现在 preamble 中', () => {
     const preamble = buildTabtinVarPreamble({
-      TABTIN_WORKSPACE: '/Users/foo/.tabtin/spaces',
-      TABTIN_LOG_DIR: '/var/log/tabtin',
+      MUSE_WORKSPACE: '/Users/foo/.tabtin/spaces',
+      MUSE_LOG_DIR: '/var/log/tabtin',
     });
     expect(preamble).toBe('');
   });
 
-  it('非 TABTIN_* 前缀变量不出现在 preamble 中', () => {
+  it('非 MUSE_* 前缀变量不出现在 preamble 中', () => {
     const preamble = buildTabtinVarPreamble({
       MY_PATH: '/some/path with spaces',
-      TABTIN_CLEAN: '/clean/no-space',
+      MUSE_CLEAN: '/clean/no-space',
     });
     expect(preamble).toBe('');
   });
 
   it('值含单引号时正确转义（POSIX \'\\\'\'）', () => {
     const preamble = buildTabtinVarPreamble({
-      TABTIN_WORKSPACE: "/Users/foo/it's here/spaces",
+      MUSE_WORKSPACE: "/Users/foo/it's here/spaces",
     });
-    expect(preamble).toBe("export TABTIN_WORKSPACE='/Users/foo/it'\\''s here/spaces'");
+    expect(preamble).toBe("export MUSE_WORKSPACE='/Users/foo/it'\\''s here/spaces'");
   });
 
   it('多个含空格变量用 "; " 连接', () => {
     const preamble = buildTabtinVarPreamble({
-      TABTIN_WORKSPACE: '/a b',
-      TABTIN_HOME: '/c d',
+      MUSE_WORKSPACE: '/a b',
+      MUSE_HOME: '/c d',
     });
-    expect(preamble).toContain("export TABTIN_WORKSPACE='/a b'");
-    expect(preamble).toContain("export TABTIN_HOME='/c d'");
+    expect(preamble).toContain("export MUSE_WORKSPACE='/a b'");
+    expect(preamble).toContain("export MUSE_HOME='/c d'");
     expect(preamble).toContain('; ');
   });
 });
 
 describe('buildPSTabtinVarPreamble（PowerShell Win32，W1 #4）', () => {
-  it('值含空格的 TABTIN_* 变量生成 $env: 赋值语句', () => {
+  it('值含空格的 MUSE_* 变量生成 $env: 赋值语句', () => {
     const preamble = buildPSTabtinVarPreamble({
-      TABTIN_WORKSPACE: 'C:\\Users\\foo\\Application Support\\Muse',
+      MUSE_WORKSPACE: 'C:\\Users\\foo\\Application Support\\Muse',
       PATH: 'C:\\Windows\\System32',
     });
-    expect(preamble).toBe("$env:TABTIN_WORKSPACE = 'C:\\Users\\foo\\Application Support\\Muse'");
+    expect(preamble).toBe("$env:MUSE_WORKSPACE = 'C:\\Users\\foo\\Application Support\\Muse'");
   });
 
   it('值含单引号时用 PowerShell 双单引号转义', () => {
     const preamble = buildPSTabtinVarPreamble({
-      TABTIN_WORKSPACE: "C:\\it's here with space",
+      MUSE_WORKSPACE: "C:\\it's here with space",
     });
-    expect(preamble).toBe("$env:TABTIN_WORKSPACE = 'C:\\it''s here with space'");
+    expect(preamble).toBe("$env:MUSE_WORKSPACE = 'C:\\it''s here with space'");
   });
 
   it('值不含空格的变量不出现在 preamble 中', () => {
     const preamble = buildPSTabtinVarPreamble({
-      TABTIN_WORKSPACE: 'C:\\nospace',
+      MUSE_WORKSPACE: 'C:\\nospace',
     });
     expect(preamble).toBe('');
   });

@@ -1,7 +1,7 @@
 /**
  * Wave 1.5 PROD-3 · 共享 SkillCredentialResolver 单测
  *
- * 验证 `@tabtin/agent-host/credentials` 的行为
+ * 验证 `@muse/agent-host/credentials` 的行为
  * （Electron + Daemon 共用同一份实现），覆盖 HTTP / 缓存 / 失效 / 降级 /
  * warnings 透传等语义。
  *

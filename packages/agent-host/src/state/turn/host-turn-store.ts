@@ -9,7 +9,7 @@ import {
   FALLBACK_DENY_AGENT_CONFIG,
   normalizeAuthoritativeAgentConfig,
 } from '../../policy/agent-config-client.js'
-import type { AgentConfigV3 } from '@tabtin/security-policy'
+import type { AgentConfigV3 } from '@muse/security-policy'
 
 export type HostTurnExecutionLimits = {
   max_iterations_per_run?: number | null

@@ -99,7 +99,7 @@ class SessionPrimarySurfaceSchemaContractTests(SimpleTestCase):
         )
 
 
-@override_settings(TABTIN_REQUIRE_INVITE_CODE=False)
+@override_settings(MUSE_REQUIRE_INVITE_CODE=False)
 class SessionPrimarySurfaceWriteAndListTests(TestCase):
     """弱写入守卫 + list_all_sessions 透出。"""
 

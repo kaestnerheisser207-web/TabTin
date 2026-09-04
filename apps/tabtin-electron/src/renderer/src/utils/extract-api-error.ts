@@ -1,5 +1,5 @@
-import { ApiError } from '@tabtin/api-client'
-import { createErrorExtractor } from '@tabtin/shared'
+import { ApiError } from '@muse/api-client'
+import { createErrorExtractor } from '@muse/shared'
 import i18n from '@/i18n'
 
 const I18N_ERROR_PREFIX = '__tabtin_i18n_error__:'

@@ -5,7 +5,7 @@ import { describe, it, expect } from 'vitest'
 import { render, screen } from '@testing-library/react'
 import { getAgentIdentityAvatar, AgentAvatar } from '../messages/common/AgentAvatar'
 import { AGENT_IDENTITY_PALETTE, AGENT_AVATAR_20 } from '../../registry/chatDesignTokens'
-import { TABTIN_APP_ICON_URL } from '@/constants/appIcon'
+import { MUSE_APP_ICON_URL } from '@/constants/appIcon'
 
 describe('getAgentIdentityAvatar', () => {
   it('同 id 多次调用颜色稳定（哈希确定性，与 name 无关）', () => {
@@ -74,7 +74,7 @@ describe('AgentAvatar 组件', () => {
     render(<AgentAvatar agentId="agent-1" name="查令" />)
     const avatar = screen.getByTestId('agent-avatar')
     expect(avatar.tagName).toBe('IMG')
-    expect(avatar.getAttribute('src')).toBe(TABTIN_APP_ICON_URL)
+    expect(avatar.getAttribute('src')).toBe(MUSE_APP_ICON_URL)
     expect(avatar.getAttribute('aria-label')).toBe('查令')
     expect(avatar.getAttribute('role')).toBe('img')
     expect(avatar.className).toContain('h-5')

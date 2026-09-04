@@ -1,4 +1,4 @@
-import { RecordApiService } from '@tabtin/table-core'
+import { RecordApiService } from '@muse/table-core'
 
 /**
  * 新建表格默认预填的可见空白行数量。

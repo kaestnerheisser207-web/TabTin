@@ -23,7 +23,7 @@ export interface NotifyApprovalModeChangedResult {
 export async function notifyApprovalModeChanged(
   payload: NotifyApprovalModeChangedPayload,
 ): Promise<NotifyApprovalModeChangedResult> {
-  const ipc = window.tabtin?.agentEngine
+  const ipc = window.muse?.agentEngine
   if (!ipc?.notifyApprovalModeChanged) {
     return { success: false }
   }

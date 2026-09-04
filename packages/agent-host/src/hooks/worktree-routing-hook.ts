@@ -1,9 +1,9 @@
 import {
   buildWorktreeRoutingSection,
   type WorkingDirType,
-} from '@tabtin/agent-prompt'
-import type { EngineHooks } from '@tabtin/agent-runtime/engine'
-import { SYSTEM_SECTION_NAMES } from '@tabtin/agent-runtime/engine'
+} from '@muse/agent-prompt'
+import type { EngineHooks } from '@muse/agent-runtime/engine'
+import { SYSTEM_SECTION_NAMES } from '@muse/agent-runtime/engine'
 
 export interface WorktreeRoutingHookOptions {
   workingDirType?: WorkingDirType

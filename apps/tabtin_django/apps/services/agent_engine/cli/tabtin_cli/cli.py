@@ -140,12 +140,12 @@ def _build_parser() -> argparse.ArgumentParser:
             "安装 marketplace App。按 manifest ``install.type`` 字段分流：\n\n"
             "  - ``npm-global`` （v3.1 主路径）：检查 ``shutil.which``，"
             "未装则默认引导 ``npm install -g <package>``；设 ``--auto-install`` "
-            "或 ``TABTIN_AUTO_NPM_INSTALL=1`` 才代跑。装好后写本地 registry + "
+            "或 ``MUSE_AUTO_NPM_INSTALL=1`` 才代跑。装好后写本地 registry + "
             "触发 Wave H Skill 同步注册。\n"
             "  - ``tarball`` （兼容路径）：下载 manifest 中声明的 ``cli.binary``、"
             "按 platform/arch 查 ``cli.checksums`` 校验 SHA256、解压并写本地 registry。"
             "缺失对应 platform 的 checksum 时拒装；dev/CI 通过 "
-            "``TABTIN_ALLOW_UNCHECKED_INSTALL=1`` 显式豁免。"
+            "``MUSE_ALLOW_UNCHECKED_INSTALL=1`` 显式豁免。"
         ),
         formatter_class=argparse.RawDescriptionHelpFormatter,
     )
@@ -174,7 +174,7 @@ def _build_parser() -> argparse.ArgumentParser:
         action="store_true",
         help=(
             "npm-global 类型 App 未装时代跑 ``npm install -g <package>`` "
-            "（等价环境变量 TABTIN_AUTO_NPM_INSTALL=1）。默认关闭 —— "
+            "（等价环境变量 MUSE_AUTO_NPM_INSTALL=1）。默认关闭 —— "
             "tabtin 不替用户决定是否动 npm 全局目录"
         ),
     )
@@ -205,12 +205,12 @@ def _apply_cli_logging(verbose: bool) -> None:
     调用仍然生效（不被 dictConfig override），因为它的检查在 logger 内部
     ``isEnabledFor()`` 流程里发生。
 
-    ``verbose=True`` 或 ``TABTIN_VERBOSE=1`` 时不禁用，便于 debug。
+    ``verbose=True`` 或 ``MUSE_VERBOSE=1`` 时不禁用，便于 debug。
     后者是 Go CLI root PersistentPreRun 自动设置的 —— 用户敲
     ``tabtin --verbose ...`` 时 Go 吞掉 flag 但会导出此环境变量，
     Python shim 读它来保持一致行为。
     """
-    if verbose or os.getenv("TABTIN_VERBOSE") == "1":
+    if verbose or os.getenv("MUSE_VERBOSE") == "1":
         return
     logging.disable(logging.INFO)
 

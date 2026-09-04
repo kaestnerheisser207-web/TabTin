@@ -9,7 +9,7 @@
  * 本脚本前台拉起 electron-vite dev，透传 stdio、信号与退出码。
  *
  * 用法：node scripts/dev.mjs electron
- *   --no-hmr           设 TABTIN_DISABLE_RENDERER_HMR=1（关渲染进程 HMR）
+ *   --no-hmr           设 MUSE_DISABLE_RENDERER_HMR=1（关渲染进程 HMR）
  *   --im               开启 IM 联调：启动时进入「消息」模块（配合 electron-im-start.sh 拉起双端）
  *   --profile preprod  显式加载 apps/tabtin-electron/.env.preprod 连接预发环境
  *   --env-file <path>  显式加载指定 dev env 文件（相对当前 package cwd）
@@ -26,7 +26,7 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const isWin = process.platform === 'win32';
 const args = process.argv.slice(2);
 const noHmr = args.includes('--no-hmr');
-const imMode = args.includes('--im') || process.env.TABTIN_DEV_IM_MODE === '1';
+const imMode = args.includes('--im') || process.env.MUSE_DEV_IM_MODE === '1';
 const profileArgIndex = args.indexOf('--profile');
 const explicitProfile = profileArgIndex >= 0 ? args[profileArgIndex + 1]?.trim() : '';
 const envFileArgIndex = args.indexOf('--env-file');
@@ -63,38 +63,38 @@ if (resolvedEnvFile) {
 // pnpm 跑 script 时已把 node_modules/.bin 注入 PATH，子进程继承得到 electron-vite。
 // win32 下用 shell:true 让 cmd 按 PATHEXT 解析 electron-vite.cmd（裸 spawn .cmd 会 EINVAL）。
 const env = { ...process.env };
-if (noHmr) env.TABTIN_DISABLE_RENDERER_HMR = '1';
+if (noHmr) env.MUSE_DISABLE_RENDERER_HMR = '1';
 // IM 联调模式把每次 Electron 冷启动 / 主进程重启都带回「消息」模块，
 // 避免开发者反复手点侧栏分段控件。只影响 dev，生产构建不会注入该变量。
 if (imMode) {
-  env.TABTIN_DEV_IM_MODE = '1';
+  env.MUSE_DEV_IM_MODE = '1';
   env.VITE_DEV_INITIAL_MODULE = 'im';
 }
-// `TABTIN_BUILD_PROFILE` / `TABTIN_VITE_MODE` are build-only selectors.
-// `TABTIN_RUNTIME_PROFILE` is for packaged/debug overrides; plain dev must
+// `MUSE_BUILD_PROFILE` / `MUSE_VITE_MODE` are build-only selectors.
+// `MUSE_RUNTIME_PROFILE` is for packaged/debug overrides; plain dev must
 // always use the dedicated Muse Dev identity unless a dev profile is explicit.
-// If a shell keeps `TABTIN_BUILD_PROFILE=preprod` after packaging, plain
+// If a shell keeps `MUSE_BUILD_PROFILE=preprod` after packaging, plain
 // `pnpm dev` would load apps/tabtin-electron/.env.preprod and make the
 // in-app Agent/chat rail talk to the preprod backend instead of root .env.
 for (const key of Object.keys(env)) {
   const normalized = key.toUpperCase();
   if (
     normalized === 'ELECTRON_RUN_AS_NODE' ||
-    normalized === 'TABTIN_BUILD_PROFILE' ||
-    normalized === 'TABTIN_VITE_MODE' ||
-    normalized === 'TABTIN_RUNTIME_PROFILE' ||
-    normalized === 'TABTIN_ELECTRON_DEV_ENV_FILE'
+    normalized === 'MUSE_BUILD_PROFILE' ||
+    normalized === 'MUSE_VITE_MODE' ||
+    normalized === 'MUSE_RUNTIME_PROFILE' ||
+    normalized === 'MUSE_ELECTRON_DEV_ENV_FILE'
   ) {
     delete env[key];
   }
 }
 if (explicitProfile) {
-  env.TABTIN_BUILD_PROFILE = explicitProfile;
-  env.TABTIN_VITE_MODE = explicitProfile;
-  env.TABTIN_RUNTIME_PROFILE = explicitProfile;
+  env.MUSE_BUILD_PROFILE = explicitProfile;
+  env.MUSE_VITE_MODE = explicitProfile;
+  env.MUSE_RUNTIME_PROFILE = explicitProfile;
 }
 if (resolvedEnvFile) {
-  env.TABTIN_ELECTRON_DEV_ENV_FILE = resolvedEnvFile;
+  env.MUSE_ELECTRON_DEV_ENV_FILE = resolvedEnvFile;
 }
 
 try {
@@ -119,7 +119,7 @@ injectGitBuildInfoEnv({
 });
 
 const communityBootstrap =
-  process.env.TABTIN_COMMUNITY_DEV_BOOTSTRAP === '1' &&
+  process.env.MUSE_COMMUNITY_DEV_BOOTSTRAP === '1' &&
   typeof process.send === 'function';
 const child = spawn('electron-vite', ['dev'], {
   stdio: communityBootstrap ? ['inherit', 'pipe', 'pipe'] : 'inherit',

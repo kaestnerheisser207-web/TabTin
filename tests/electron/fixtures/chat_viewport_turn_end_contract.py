@@ -33,7 +33,7 @@ def assert_turn_end_fixture_ast_contract(source: str | None = None) -> None:
     names = _collect_names(tree)
 
     required = {
-        "TABTIN_E2E_LIVE_SPACE_ID",
+        "MUSE_E2E_LIVE_SPACE_ID",
         "live_space_candidates",
         "select_execution_context",
         "select_active_user",
@@ -97,7 +97,7 @@ def assert_turn_end_fixture_ast_contract(source: str | None = None) -> None:
     if selector is None:
         raise AssertionError("missing select_execution_context")
     selector_text = ast.get_source_segment(text, selector) or ""
-    env_pos = selector_text.find("TABTIN_E2E_LIVE_SPACE_ID")
+    env_pos = selector_text.find("MUSE_E2E_LIVE_SPACE_ID")
     fallback_pos = selector_text.find("for space in live_space_candidates()")
     no_candidate_pos = selector_text.find('"query:no-ready-existing-space"')
     if min(env_pos, fallback_pos, no_candidate_pos) < 0:

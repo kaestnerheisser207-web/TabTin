@@ -8,7 +8,7 @@ import {
   type HSV, type RGB,
 } from './color-utils'
 import { usePresentationColors } from './usePresentationColors'
-import { ZIndex } from '@tabtin/app-shell'
+import { ZIndex } from '@muse/app-shell'
 
 /* ── ColorPickerPopover ── */
 

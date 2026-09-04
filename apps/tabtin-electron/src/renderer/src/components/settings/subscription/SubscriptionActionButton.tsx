@@ -1,6 +1,6 @@
 import React from 'react'
 import { useTranslation } from 'react-i18next'
-import { Button } from '@tabtin/smartsheet-ui'
+import { Button } from '@muse/smartsheet-ui'
 import type { MembershipChangeAction } from '@/types/membership'
 
 export const SubscriptionActionButton: React.FC<{

@@ -12,7 +12,7 @@ const { pasteConfirmState } = vi.hoisted(() => ({
   },
 }))
 
-vi.mock('@tabtin/smartsheet-ui', () => ({
+vi.mock('@muse/smartsheet-ui', () => ({
   ConfirmDialog: ({ open, title, description }: Record<string, unknown>) =>
     open
       ? React.createElement(
@@ -70,20 +70,20 @@ vi.mock('react-i18next', () => ({
   }),
 }))
 
-vi.mock('@tabtin/table-engine', () => ({
+vi.mock('@muse/table-engine', () => ({
   resolveTableGridEngine: () => ({
     id: 'canvas',
     component: () => React.createElement('div', { 'data-testid': 'grid-engine' }),
   }),
 }))
 
-vi.mock('@tabtin/table-engine-canvas', () => ({
+vi.mock('@muse/table-engine-canvas', () => ({
   CANVAS_TABLE_ENGINE: { id: 'canvas' },
   useGridOverlayStore: (selector: (state: any) => unknown) =>
     selector({ openHeaderMenu: vi.fn() }),
 }))
 
-vi.mock('@tabtin/table-ui', () => ({
+vi.mock('@muse/table-ui', () => ({
   DataGridFullWidthRowRenderer: () => null,
   isDataGridFullWidthRow: () => false,
   postSortRowsKeepSpecialRowsAtBottom: (rows: unknown[]) => rows,
@@ -377,7 +377,7 @@ vi.mock('./controller/useDataGridRecordEditor', () => ({
     recordEditor: null,
   }),
 }))
-vi.mock('@tabtin/table-engine/sync', () => ({
+vi.mock('@muse/table-engine/sync', () => ({
   useIncrementalViewMerge: () => ({
     merge: vi.fn(),
     remove: vi.fn(),
@@ -574,7 +574,7 @@ describe('DataGridAdapter', () => {
   })
 
   it('表头协作状态徽标可见性应只隐藏初始和正常首次连接态', async () => {
-    const { CollabConnectionStatus, CollabStatus } = await import('@tabtin/collab-core')
+    const { CollabConnectionStatus, CollabStatus } = await import('@muse/collab-core')
     const { shouldShowTableCollabStatusBadge } = await import('./tableCollabStatusBadgeVisibility')
 
     expect(shouldShowTableCollabStatusBadge(CollabStatus.INITIAL, null)).toBe(false)

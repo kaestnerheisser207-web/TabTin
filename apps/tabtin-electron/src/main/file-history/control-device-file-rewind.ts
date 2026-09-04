@@ -10,7 +10,7 @@ import type {
   RewindPathGuard,
   RewindPreview,
   RewindResult,
-} from '@tabtin/file-history-core'
+} from '@muse/file-history-core'
 import {
   buildLocalFilePreviewRevision,
 } from '@shared/file-preview-revision'

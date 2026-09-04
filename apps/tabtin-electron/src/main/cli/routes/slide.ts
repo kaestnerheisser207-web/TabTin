@@ -32,7 +32,7 @@ function getSpaceId(body?: any): string | null {
 }
 
 function getOrganizationId(body?: any): string | null {
-  return body?.organization_id || process.env.TABTIN_ORGANIZATION_ID || null
+  return body?.organization_id || process.env.MUSE_ORGANIZATION_ID || null
 }
 
 function extractDjangoData(data: unknown): Record<string, unknown> | null {

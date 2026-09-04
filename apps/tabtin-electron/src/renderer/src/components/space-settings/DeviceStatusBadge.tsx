@@ -2,7 +2,7 @@ import React from 'react'
 import { Wifi, WifiOff, Loader2, Shield, ShieldAlert } from 'lucide-react'
 import { cn } from '@utils/cn'
 import { useTranslation } from 'react-i18next'
-import type { DeviceStatus } from '@tabtin/app-shell'
+import type { DeviceStatus } from '@muse/app-shell'
 
 interface DeviceStatusBadgeProps {
   status: DeviceStatus

@@ -6,7 +6,7 @@
  * 优先于 isReadOnly 启发式。
  *
  *  批次 13：原 `action-tools-adapter` 已删除（生产链路零消费——action-tools
- * 集成实际走 ShellCap / tabcode-adapter 直连 `@tabtin/action-tools`）。本测试改用
+ * 集成实际走 ShellCap / tabcode-adapter 直连 `@muse/action-tools`）。本测试改用
  * 内联 Tool fixture，风险等级覆盖不变。
  */
 

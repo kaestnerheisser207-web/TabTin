@@ -13,8 +13,8 @@ import {
   Columns3, Search, ChevronRight, Loader2,
   FolderOpen, Globe, Layers,
 } from 'lucide-react'
-import { EmptyState, ScrollArea, useOverlayContainer } from '@tabtin/smartsheet-ui'
-import { ZIndex } from '@tabtin/app-shell'
+import { EmptyState, ScrollArea, useOverlayContainer } from '@muse/smartsheet-ui'
+import { ZIndex } from '@muse/app-shell'
 import { cn } from '@utils/cn'
 import { COMPOSER_TEXT_META, COMPOSER_TEXT_META_BASE } from '../registry/chatDesignTokens'
 import { OVERLAY_SURFACE_CLASS } from '@components/ui'
@@ -72,7 +72,7 @@ type TopLevelEntry =
   | { kind: 'category'; category: Category }
 
 /** 从 registry 动态构建分类 + 特殊分类（打开的标签 / 字段） */
-// eslint-disable-next-line tabtin/no-chat-design-violations -- @提及分类身份色（field 类别签名色，与 ContextChip 类型色板对齐），非单点 UI 警示
+// eslint-disable-next-line muse/no-chat-design-violations -- @提及分类身份色（field 类别签名色，与 ContextChip 类型色板对齐），非单点 UI 警示
 const FIELD_CATEGORY: Category = { key: 'field', label: 'field', icon: Columns3, type: 'field', color: 'text-warning bg-warning/10' }
 const OPEN_TABS_CATEGORY: Category = {
   key: OPEN_TABS_CATEGORY_KEY,

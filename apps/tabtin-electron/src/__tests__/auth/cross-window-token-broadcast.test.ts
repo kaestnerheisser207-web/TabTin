@@ -468,7 +468,7 @@ describe('源码结构回归验证', () => {
     )
     expect(refreshTokenMethod).toBeTruthy()
     expect(refreshTokenMethod![0]).toContain('refreshAccessTokenWithLock')
-    expect(refreshTokenMethod![0]).not.toContain('window.tabtin.auth.refreshAccessToken()')
+    expect(refreshTokenMethod![0]).not.toContain('window.muse.auth.refreshAccessToken()')
   })
 
   it('useAuthStore loadAuthFromStorage 应使用 apiService.tryRefreshTokens', async () => {
@@ -483,7 +483,7 @@ describe('源码结构回归验证', () => {
       source.indexOf('loadAuthFromStorage'),
       source.indexOf('clearAuth:'),
     )
-    expect(loadAuthSection).not.toContain('window.tabtin.auth.refreshAccessToken()')
+    expect(loadAuthSection).not.toContain('window.muse.auth.refreshAccessToken()')
   })
 
   it('useAuthStore 应注册 onTokenRefreshed 监听器', async () => {

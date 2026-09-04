@@ -1,5 +1,5 @@
 /**
- * `@tabtin/desktop-contracts` —— 接口契约 + 命名空间常量的"包能 import"
+ * `@muse/desktop-contracts` —— 接口契约 + 命名空间常量的"包能 import"
  * 级别守约。规范 § 9.1 完成标准 1 + 4 的支撑：
  *
  * - 类型契约存在（编译期）→ 通过 import 触发
@@ -9,9 +9,9 @@
 
 import { describe, it, expect } from 'vitest'
 import {
-  TABTIN_DESKTOP_TOOL_NAMES,
-  TABTIN_DESKTOP_TOOL_NAMESPACE_PREFIX,
-  TABTIN_DESKTOP_RESOURCE_URI_PREFIX,
+  MUSE_DESKTOP_TOOL_NAMES,
+  MUSE_DESKTOP_TOOL_NAMESPACE_PREFIX,
+  MUSE_DESKTOP_RESOURCE_URI_PREFIX,
   DEFAULT_DESKTOP_AUTHORIZATION_PROFILE,
   DEFAULT_DESKTOP_SUB_GATES,
   DEFAULT_DESKTOP_COORDINATE_MODE,
@@ -22,16 +22,16 @@ import {
   type DesktopSessionContext,
 } from '../index.js'
 
-describe('@tabtin/desktop-contracts · MCP 命名空间常量', () => {
-  it('TABTIN_DESKTOP_TOOL_NAMESPACE_PREFIX 必须是 tabtin:desktop:', () => {
-    expect(TABTIN_DESKTOP_TOOL_NAMESPACE_PREFIX).toBe('tabtin:desktop:')
+describe('@muse/desktop-contracts · MCP 命名空间常量', () => {
+  it('MUSE_DESKTOP_TOOL_NAMESPACE_PREFIX 必须是 tabtin:desktop:', () => {
+    expect(MUSE_DESKTOP_TOOL_NAMESPACE_PREFIX).toBe('tabtin:desktop:')
   })
 
   it('每条工具名都必须以 tabtin:desktop: 开头（grep 验收锚点）', () => {
-    const names = Object.values(TABTIN_DESKTOP_TOOL_NAMES)
+    const names = Object.values(MUSE_DESKTOP_TOOL_NAMES)
     expect(names.length).toBeGreaterThan(0)
     for (const n of names) {
-      expect(n.startsWith(TABTIN_DESKTOP_TOOL_NAMESPACE_PREFIX)).toBe(true)
+      expect(n.startsWith(MUSE_DESKTOP_TOOL_NAMESPACE_PREFIX)).toBe(true)
     }
   })
 
@@ -39,22 +39,22 @@ describe('@tabtin/desktop-contracts · MCP 命名空间常量', () => {
     // 与 cli/routes/desktop.ts KNOWN_ROUTES 一致：screenshot/click/scroll/drag/move/
     // type/key/hotkey/windows/activate/open/batch/session/start/session/end/
     // session/extend-allowlist/accessibility/revoke-approval = 17 条
-    const names = Object.values(TABTIN_DESKTOP_TOOL_NAMES)
+    const names = Object.values(MUSE_DESKTOP_TOOL_NAMES)
     expect(names.length).toBeGreaterThanOrEqual(17)
   })
 
-  it('TABTIN_DESKTOP_RESOURCE_URI_PREFIX 必须是 tabtin-desktop:// 形态', () => {
-    expect(TABTIN_DESKTOP_RESOURCE_URI_PREFIX).toBe('tabtin-desktop://')
+  it('MUSE_DESKTOP_RESOURCE_URI_PREFIX 必须是 tabtin-desktop:// 形态', () => {
+    expect(MUSE_DESKTOP_RESOURCE_URI_PREFIX).toBe('tabtin-desktop://')
   })
 
   it('工具名互不重复', () => {
-    const names = Object.values(TABTIN_DESKTOP_TOOL_NAMES)
+    const names = Object.values(MUSE_DESKTOP_TOOL_NAMES)
     const set = new Set(names)
     expect(set.size).toBe(names.length)
   })
 })
 
-describe('@tabtin/desktop-contracts · 默认对象（v1 等价行为）', () => {
+describe('@muse/desktop-contracts · 默认对象（v1 等价行为）', () => {
   it('DEFAULT_DESKTOP_AUTHORIZATION_PROFILE 默认 tier=full（与 v1.8 之前的"无 tier"等价）', () => {
     expect(DEFAULT_DESKTOP_AUTHORIZATION_PROFILE.tier).toBe('full')
     // 模块零阶段：deniedApps / sentinelApps / clipboardGuard 都是 undefined
@@ -82,7 +82,7 @@ describe('@tabtin/desktop-contracts · 默认对象（v1 等价行为）', () =>
   })
 })
 
-describe('@tabtin/desktop-contracts · 类型契约可用性（编译期）', () => {
+describe('@muse/desktop-contracts · 类型契约可用性（编译期）', () => {
   it('DesktopAuthorizationProfile 字段集合完整', () => {
     const profile: DesktopAuthorizationProfile = {
       tier: 'full',

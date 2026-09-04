@@ -18,7 +18,7 @@ const log = createLogger('OrphanReconcile')
 /**
  * 🚀 启动优化：延迟执行 reconcile
  *
- * reconcileOrphans 通过 window.tabtin.crawlView.reconcileOrphans IPC 调用
+ * reconcileOrphans 通过 window.muse.crawlView.reconcileOrphans IPC 调用
  * embeddedCrawlView handlers，这些 handlers 在主进程爬虫模块延迟初始化中注册。
  *
  * 延迟 8 秒确保：

@@ -19,7 +19,7 @@
  * 对应规范: docs/agent-chat/component-spec.md §2 Category B + docs/app-market/PRD-v3.md §5.4 B2。
  */
 
-import type { RiskLevel, ToolCardDescriptor } from '@tabtin/chat-client'
+import type { RiskLevel, ToolCardDescriptor } from '@muse/chat-client'
 import { FILE_TOOL_CARDS } from './fileToolCards'
 import { HISTORICAL_TERMINAL_TOOL_CARDS, TERMINAL_TOOL_CARDS } from './terminalToolCards'
 import { HISTORICAL_WEB_TOOL_CARDS, WEB_TOOL_CARDS } from './webToolCards'
@@ -129,7 +129,7 @@ export function getCompactSummary(toolName: string, input: unknown, _output?: un
 }
 
 /** 提取工具输出的结构化数据 */
-export function extractToolOutput(toolName: string, output: unknown): import('@tabtin/chat-client').ToolOutputData | null {
+export function extractToolOutput(toolName: string, output: unknown): import('@muse/chat-client').ToolOutputData | null {
   const desc = getDisplayToolDescriptor(toolName)
   if (!desc?.extractOutput) return null
   return desc.extractOutput(output)

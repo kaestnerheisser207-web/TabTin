@@ -11,7 +11,7 @@
 
 import path from 'node:path'
 import fs from 'node:fs/promises'
-import { getCheckpointsRoot } from '@tabtin/shared/storage-paths'
+import { getCheckpointsRoot } from '@muse/shared/storage-paths'
 import crypto from 'node:crypto'
 import simpleGit, { type SimpleGit } from 'simple-git'
 import { buildExcludeContent } from './exclusions.js'

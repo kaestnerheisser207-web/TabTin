@@ -18,12 +18,12 @@ import type {
   RollbackPartialSuccessDetails,
   RollbackApplyResultView,
   SessionRollbackState,
-} from '@tabtin/chat-client'
-// W1-A: AgentModeName 从 @tabtin/agent-runtime 单一来源 import，避免 renderer 与
+} from '@muse/chat-client'
+// W1-A: AgentModeName 从 @muse/agent-runtime 单一来源 import，避免 renderer 与
 // preload / main 进程的字面量重复定义出现漂移（先前曾在 7 处独立维护）。
 //
 // LH2-X3 修复（2026-04-17）：
-//   原本走 `@tabtin/agent-runtime/engine` god-barrel；该 barrel 会副作用 re-export
+//   原本走 `@muse/agent-runtime/engine` god-barrel；该 barrel 会副作用 re-export
 //   `local-permission-handler.js` (node:crypto) / `session/storage.js` (node:fs) /
 //   `compact/micro-compact.js` (node:fs) 等 Node-only 模块，被 Vite renderer 跟着
 //   解析后会出现 `randomUUID/join/existsSync` 等命名导入找不到的 build 失败。
@@ -41,9 +41,9 @@ import {
   isApprovalModeName as isApprovalModeNameRuntime,
   resolveApprovalModeName as resolveApprovalModeNameRuntime,
   type ApprovalModeName as RuntimeApprovalModeName,
-} from '@tabtin/agent-modes'
+} from '@muse/agent-modes'
 
-// PR1 SSoT 已合并：`@tabtin/agent-modes` 的 AGENT_MODE_NAMES 字面量元组就是单源真理
+// PR1 SSoT 已合并：`@muse/agent-modes` 的 AGENT_MODE_NAMES 字面量元组就是单源真理
 // （`AgentModeName` 由 `typeof AGENT_MODE_NAMES[number]` 派生），含 'yolo'。
 // renderer 不再做 union/array 本地拼装，直接复用 runtime 导出即可。
 export type AgentModeName = RuntimeAgentModeName
@@ -53,7 +53,7 @@ export const SELECTABLE_AGENT_MODES: readonly AgentModeName[] = RUNTIME_SELECTAB
 
 //  三档审批策略 SSoT（与 AgentMode 正交的第二维度）：
 // 'always_ask' 请求批准（默认）｜'auto' 替我审批（= 旧 yolo）｜'full_access' 完全访问。
-// 字面量单源在 `@tabtin/agent-modes`，renderer / preload / main / wire 共用。
+// 字面量单源在 `@muse/agent-modes`，renderer / preload / main / wire 共用。
 export type ApprovalModeName = RuntimeApprovalModeName
 export const APPROVAL_MODE_NAMES: readonly ApprovalModeName[] = RUNTIME_APPROVAL_MODE_NAMES
 export const isApprovalModeName = isApprovalModeNameRuntime
@@ -319,7 +319,7 @@ export interface SubagentRun {
   }
   /**
    * ：终态完成信封快照（与 notifyCompleted / NotificationQueue /
-   * `@tabtin/agent-wire` SubagentCompletionEnvelope 同构）。
+   * `@muse/agent-wire` SubagentCompletionEnvelope 同构）。
    * COMPLETED/FAILED 时写入；运行中缺省。
    * 字段漂移由 agent-runtime `completion-envelope-parity` 锁 runtime↔wire；
    * UI 侧保持字面量同构（linked worktree 的 electron node_modules 常指向 main
@@ -658,7 +658,7 @@ export interface CheckpointDiffItem {
 }
 
 // ── LLM Call Snapshot (Phase 3 · Debug Observability) ──
-// 前端简化版——结构与 @tabtin/agent-runtime/engine LLMCallSnapshot 对齐，
+// 前端简化版——结构与 @muse/agent-runtime/engine LLMCallSnapshot 对齐，
 // 但不走 god-barrel import 以避免 Node-only 副作用。
 
 export interface LLMCallMessageSummary {
@@ -730,7 +730,7 @@ export interface LLMCallSnapshot {
   response?: LLMCallResponse
 }
 
-// ── 本地扩展类型（不修改共享包 @tabtin/chat-client） ──
+// ── 本地扩展类型（不修改共享包 @muse/chat-client） ──
 
 export type MessageSendStatus = 'sending' | 'sent' | 'failed'
 

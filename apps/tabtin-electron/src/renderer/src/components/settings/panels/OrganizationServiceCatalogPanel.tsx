@@ -12,7 +12,7 @@ import { SETTINGS_CONTROL, SETTINGS_HINT } from '../settingsUi'
 import { useSettingsSpaceStore } from '@stores/useSettingsSpaceStore'
 import { useAuthStore } from '@/stores/useAuthStore'
 import { OrganizationBillingApiService } from '@/services/billingApi'
-import type { Organization } from '@tabtin/app-shell'
+import type { Organization } from '@muse/app-shell'
 import type { LowBalanceConfig, ServiceCatalogData, ServiceCatalogItem } from '@/types/billing'
 import { cn } from '@utils/cn'
 import {

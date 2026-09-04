@@ -12,8 +12,8 @@ import os
 
 from .settings import *  # noqa: F401,F403
 
-TABTIN_DATABASE_MODE = "single_pg"
-TABTIN_SINGLE_DATABASE_MODE = True
+MUSE_DATABASE_MODE = "single_pg"
+MUSE_SINGLE_DATABASE_MODE = True
 
 
 def _meeting_test_pg_config(name: str) -> dict:

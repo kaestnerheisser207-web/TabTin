@@ -4,7 +4,7 @@ import {
   resolveViewGroups,
   type ViewMeta,
   type ViewSort,
-} from '@tabtin/table-core'
+} from '@muse/table-core'
 import {
   applyViewUpdatePayload,
   buildCollabViewRecords,

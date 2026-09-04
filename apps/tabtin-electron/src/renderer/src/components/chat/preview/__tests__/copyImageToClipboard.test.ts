@@ -13,7 +13,7 @@ vi.mock('../resolveOssFileAccessUrl', () => ({
 }))
 
 describe('copyImageToClipboard', () => {
-  const originalTabtin = window.tabtin
+  const originalTabtin = window.muse
 
   beforeEach(() => {
     getAttachmentBufferMock.mockReset()

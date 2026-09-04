@@ -17,8 +17,8 @@ import { useEffect, useRef, useCallback, useMemo } from 'react'
 import { getChatClient } from '@/services/chatApi'
 
 /**
- * 与 @tabtin/agent-wire 中的 UserEvents.NOTIFICATION_NEW 字符串值同步。
- * Web 包尚未引入 @tabtin/agent-wire workspace 依赖,这里内联常量;
+ * 与 @muse/agent-wire 中的 UserEvents.NOTIFICATION_NEW 字符串值同步。
+ * Web 包尚未引入 @muse/agent-wire workspace 依赖,这里内联常量;
  * 后端 agent_wire publish_to_user 写死该字符串,不会漂。
  */
 const USER_EVENT_NOTIFICATION_NEW = 'agent.user.notification.new'

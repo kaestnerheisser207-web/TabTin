@@ -18,9 +18,9 @@ for /l %%I in (1,1,60) do (
 echo [ERROR] PostgreSQL did not become ready within 60 seconds.
 exit /b 1
 :ready
-set "TABTIN_EDITION=community"
-set "TABTIN_COMMUNITY_DEV_MODE=1"
-set "TABTIN_COMMUNITY_DATABASE_SQL_ROOT=%ROOT_DIR%\community-assets\postgres"
+set "MUSE_EDITION=community"
+set "MUSE_COMMUNITY_DEV_MODE=1"
+set "MUSE_COMMUNITY_DATABASE_SQL_ROOT=%ROOT_DIR%\community-assets\postgres"
 set "PG_DB_HOST=127.0.0.1"
 set "PG_DB_PORT=5432"
 set "PG_DB_USER=tabtin"

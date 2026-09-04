@@ -17,7 +17,7 @@ import type {
   Model,
   ModelParamOverrides,
   RuntimeProfileThinkingMode,
-} from '@tabtin/chat-client'
+} from '@muse/chat-client'
 import {
   getCatalogThinkingCapability,
   resolveActiveThinkingMode,

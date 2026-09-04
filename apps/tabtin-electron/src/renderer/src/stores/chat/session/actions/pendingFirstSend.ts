@@ -10,7 +10,7 @@
  * -  ownership：先 allocate + bind，成功后再 commit；禁止先写 UI 再判 ownership
  */
 
-import type { ChatMessage, MessageBlock } from '@tabtin/chat-client'
+import type { ChatMessage, MessageBlock } from '@muse/chat-client'
 import type { ChatAttachment } from '../../../../components/chat/types'
 import type { LocalChatMessage } from '../../shared/types'
 import { applyBlocksArrival } from '@/stores/chat/domain/messageTimelineOrder'

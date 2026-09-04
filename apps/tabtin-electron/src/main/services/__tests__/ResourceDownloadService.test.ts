@@ -2,7 +2,7 @@ import os from 'node:os'
 import path from 'node:path'
 import { mkdtemp, readFile, readdir, rm } from 'node:fs/promises'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
-import type { ResourceContentRef } from '@tabtin/action-tools/types'
+import type { ResourceContentRef } from '@muse/action-tools/types'
 
 vi.mock('electron', () => ({
   app: { getPath: vi.fn(() => os.tmpdir()) },

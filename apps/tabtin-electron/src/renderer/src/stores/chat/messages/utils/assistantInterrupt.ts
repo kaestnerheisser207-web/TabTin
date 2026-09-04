@@ -4,7 +4,7 @@
  * W3：新消息走 `stop_reason` / `error_info_json`；`intent==='interrupted'`
  * 与 metadata 兼容内存 abort 与老历史。
  */
-import type { ChatMessage } from '@tabtin/chat-client'
+import type { ChatMessage } from '@muse/chat-client'
 
 export function isAssistantInterruptedMessage(
   message: ChatMessage,

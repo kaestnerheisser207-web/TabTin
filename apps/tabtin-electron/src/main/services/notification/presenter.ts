@@ -29,7 +29,7 @@ type DeliveryCallbacks = { onFailed?: () => void }
 const FOCUS_SUPPRESS_EXEMPT_CATEGORIES = new Set(['im', 'download', 'extension', 'tracker.run'])
 
 function resolveWindowsAumid(): string {
-  return process.env.TABTIN_APP_ID?.trim() || 'com.muse.app'
+  return process.env.MUSE_APP_ID?.trim() || 'com.muse.app'
 }
 
 /**
@@ -110,7 +110,7 @@ export class OsNotificationPresenter {
         silent,
         iconFileUrl: resolveToastIconFileUrl(),
         bannerSeconds: WIN_TOAST_BANNER_SECONDS_DEFAULT,
-        // 点击走 tabtin:// 协议激活（PowerShell 发完即退，无 Electron click 回调）
+        // 点击走 muse:// 协议激活（PowerShell 发完即退，无 Electron click 回调）
         launchUrl: buildToastLaunchUrl(payload.navigateTo),
       }).then((result) => {
         if (!result.ok) {

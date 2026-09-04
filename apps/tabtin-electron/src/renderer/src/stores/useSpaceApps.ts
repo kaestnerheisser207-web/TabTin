@@ -7,11 +7,11 @@
  * 管理 Workspace 级 APP 启用状态与配置（；原 /spaces/.../apps 已 410）。
  *
  */
-import { joinApiPath } from '@tabtin/config'
+import { joinApiPath } from '@muse/config'
 import { create } from 'zustand'
 import { API_CONFIG, API_ENDPOINTS } from '@/config/api'
 import { apiRequest, getAuthToken } from '@/adapters/api-adapter-instance'
-import { useSpaceStore } from '@tabtin/app-shell'
+import { useSpaceStore } from '@muse/app-shell'
 import { registerGenericEmbeddedWebHandlers } from '@/components/context-space/registry'
 import type { AppSurface } from './appSurface'
 import { createLogger } from '@/utils/logger'
@@ -141,7 +141,7 @@ export const useSpaceApps = create<SpaceAppsState>((set, get) => {
 
       // 对 device 级 app 补充本地二进制就绪状态
       try {
-        const localInstalled = (await window.tabtin?.marketplace.listInstalled()) as Record<string, unknown> | null
+        const localInstalled = (await window.muse?.marketplace.listInstalled()) as Record<string, unknown> | null
         if (localInstalled) {
           for (const app of apps) {
             if (app.install_scope === 'device') {
@@ -171,7 +171,7 @@ export const useSpaceApps = create<SpaceAppsState>((set, get) => {
       // 即便空数组也要推送：本 sourceId=spaceId 在主进程 patternsBySource 中可能
       // 残留上一次进入该 Space 时的旧 patterns（或与 marketplace-api source 合并），
       // 不推送会让"切换到无 marketplace App 的 Space"时旧条目永久挂在内存。
-      window.tabtin?.appDiscovery.updatePatterns(discoveryPatterns, spaceId)
+      window.muse?.appDiscovery.updatePatterns(discoveryPatterns, spaceId)
     } catch (error) {
       log.error('loadSpaceApps failed:', { spaceId, error })
       set((prev) => {

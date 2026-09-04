@@ -254,7 +254,7 @@ scripts/verification/**/*.png
 /packages/tabtin-cli-go/tabtin-cli
 /packages/tabtin-cli-go/tabtin-cli-*
 
-# @tabtin/cli npm 包：本地生成的二进制与 pack 产物不入库（issue #5888 工作包二）
+# @muse/cli npm 包：本地生成的二进制与 pack 产物不入库（issue #5888 工作包二）
 /packages/tabtin-cli/binaries/*
 !/packages/tabtin-cli/binaries/.gitkeep
 /packages/tabtin-cli/*.tgz

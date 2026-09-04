@@ -37,7 +37,7 @@ import type {
   LocalDocDedupEntry,
   ImageReadFileState,
   LocalDocReadFileState,
-} from '@tabtin/agent-runtime';
+} from '@muse/agent-runtime';
 import { canonicalizePath } from './read-file-state.js';
 
 // ─── 独立 byte budget（与 25MB 文本 budget 物理隔离） ─────────────────
@@ -67,14 +67,14 @@ const DEDUP_ENTRY_OVERHEAD_BYTES = 256;
 const IMAGE_DEDUP_MAX_ENTRIES = 200;
 const LOCAL_DOC_DEDUP_MAX_ENTRIES = 200;
 
-// ─── Entry / Map 类型（契约在 @tabtin/agent-runtime，此处 re-export） ──
+// ─── Entry / Map 类型（契约在 @muse/agent-runtime，此处 re-export） ──
 
 export type {
   ImageDedupEntry,
   LocalDocDedupEntry,
   ImageReadFileState,
   LocalDocReadFileState,
-} from '@tabtin/agent-runtime';
+} from '@muse/agent-runtime';
 
 
 // ─── Sidecar 字节统计（与 read-file-state.ts 同款 WeakMap 模式） ──────

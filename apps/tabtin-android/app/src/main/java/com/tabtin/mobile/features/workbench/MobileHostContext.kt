@@ -33,7 +33,7 @@ internal fun mobileHostInjectionScript(
         (() => {
           if (window.location.origin !== $origin) return;
           const context = $context;
-          window.__TABTIN_MOBILE_HOST__ = context;
+          window.__MUSE_MOBILE_HOST__ = context;
           window.dispatchEvent(new CustomEvent($eventName, { detail: context }));
         })();
     """.trimIndent()

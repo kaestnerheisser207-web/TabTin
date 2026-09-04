@@ -10,7 +10,7 @@ const { toastMock, tableErrorRef } = vi.hoisted(() => ({
   tableErrorRef: { current: '更新表格失败' as string | null },
 }))
 
-vi.mock('@tabtin/smartsheet-ui', () => ({
+vi.mock('@muse/smartsheet-ui', () => ({
   toast: toastMock,
 }))
 

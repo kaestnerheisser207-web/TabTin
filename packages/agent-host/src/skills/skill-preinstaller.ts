@@ -14,12 +14,12 @@
  *
  * 治本：preinstaller 不再只靠 version，而是**检测源目录内容有没有变**：
  * - 每次 install / upgrade 落盘时，算**源目录** content hash（Merkle，递归、
- *   规范化行尾、带 ignore 列表，复用 `@tabtin/terminal-core`
+ *   规范化行尾、带 ignore 列表，复用 `@muse/terminal-core`
  *   `computeSkillContentHash`），写进 sandbox 的 `.skill-meta.json`
  *   `sourceContentHash` 字段——这是「上次装入时的源内容指纹」。
  * - 判定时算**当前源目录** hash，跟 meta 里记录的指纹比：
  *   - sandbox SKILL.md 不存在 → install（首次安装）
- *   - `TABTIN_DEV_REFRESH_SKILLS` → upgrade（DEV 强制刷新）
+ *   - `MUSE_DEV_REFRESH_SKILLS` → upgrade（DEV 强制刷新）
  *   - meta 缺 `sourceContentHash`（老 sandbox 没记录）→ **upgrade**：强制同步
  *     一次，既建立 hash 基线、又让存量 sandbox 立刻拿到最新（这是解决上面那个
  *     bug 的关键一步）
@@ -60,14 +60,14 @@
  * 包含用户对**内置副本**的本地改动。这是可接受的——内置 skill 本就只读
  * （UI 已是只读查看器）。user skill 不走 preinstaller，不受影响。
  *
- * DEV mode：环境变量 `TABTIN_DEV_REFRESH_SKILLS=1` 绕过 hash 比对、强制全量
+ * DEV mode：环境变量 `MUSE_DEV_REFRESH_SKILLS=1` 绕过 hash 比对、强制全量
  * 覆盖（开发体验：改源 SKILL 不必手动清 sandbox）。
  */
 
 import * as fsp from 'node:fs/promises';
 import * as path from 'node:path';
-import { computeSkillContentHash } from '@tabtin/agent-runtime/paths';
-import { isFirstPartyStarterPackAppId, parseSkillDoc } from '@tabtin/agent-runtime/skills';
+import { computeSkillContentHash } from '@muse/agent-runtime/paths';
+import { isFirstPartyStarterPackAppId, parseSkillDoc } from '@muse/agent-runtime/skills';
 
 export interface SkillPreinstallSource {
   /** Absolute path of the source directory containing SKILL.md + assets */
@@ -570,7 +570,7 @@ async function installSingleSource(
  * Space skills 目录，让 `LocalSkillRegistry` 扫得到、Agent 的 `<skills>` 段可见。
  *
  * 与 {@link preinstallDefaultSkills} 的关键区别：**不做孤儿清理**（只认自己这一个
- * skill，不会误删同目录其它内置 skill）。`TABTIN_DEV_REFRESH_SKILLS` 仍生效（强制覆盖）。
+ * skill，不会误删同目录其它内置 skill）。`MUSE_DEV_REFRESH_SKILLS` 仍生效（强制覆盖）。
  */
 export async function installSkillSource(
   targetDir: string,
@@ -580,8 +580,8 @@ export async function installSkillSource(
   const log = onLog ?? (() => {});
   const result: PreinstallResult = { installed: 0, skipped: 0, removed: 0, errors: [] };
   const forceRefresh =
-    process.env.TABTIN_DEV_REFRESH_SKILLS === '1'
-    || process.env.TABTIN_DEV_REFRESH_SKILLS === 'true';
+    process.env.MUSE_DEV_REFRESH_SKILLS === '1'
+    || process.env.MUSE_DEV_REFRESH_SKILLS === 'true';
 
   await fsp.mkdir(targetDir, { recursive: true });
   await installSingleSource(targetDir, src, forceRefresh, result);
@@ -662,8 +662,8 @@ export async function preinstallDefaultSkills(
   // DEV_MODE：强制覆盖 sandbox 副本到源版本，跳过 version 比对。
   // 主要用途：开发者改 bundled SKILL 后不必手动清 sandbox。
   const forceRefresh =
-    process.env.TABTIN_DEV_REFRESH_SKILLS === '1'
-    || process.env.TABTIN_DEV_REFRESH_SKILLS === 'true';
+    process.env.MUSE_DEV_REFRESH_SKILLS === '1'
+    || process.env.MUSE_DEV_REFRESH_SKILLS === 'true';
 
   await fsp.mkdir(targetDir, { recursive: true });
 

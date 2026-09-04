@@ -1,5 +1,5 @@
 {
-  "name": "@tabtin/wire-codegen",
+  "name": "@muse/wire-codegen",
   "version": "0.1.0",
   "description": "Muse wire-protocol codegen toolchain (Anthropic Messages API alignment, Wave 1)",
   "type": "module",
@@ -36,7 +36,7 @@
     "roundtrip:kotlin": "./scripts/roundtrip-kotlin.sh"
   },
   "dependencies": {
-    "@tabtin/agent-wire": "workspace:*",
+    "@muse/agent-wire": "workspace:*",
     "zod": "^3.25.76",
     "zod-to-json-schema": "^3.24.0"
   },

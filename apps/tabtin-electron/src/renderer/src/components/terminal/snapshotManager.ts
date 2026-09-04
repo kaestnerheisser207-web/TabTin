@@ -55,7 +55,7 @@ function collectSnapshots(dirtyOnly = false): Array<{
 }
 
 async function saveSnapshots(): Promise<void> {
-  const tabtin = window.tabtin
+  const tabtin = window.muse
   if (!tabtin?.pty?.snapshotSave) return
 
   const snapshots = collectSnapshots(true)
@@ -86,7 +86,7 @@ export function initSnapshotManager(): void {
   }, PERIODIC_SNAPSHOT_INTERVAL_MS)
 
   beforeUnloadHandler = () => {
-    const tabtin = window.tabtin
+    const tabtin = window.muse
     if (!tabtin?.pty?.snapshotSaveSync) return
     const snapshots = collectSnapshots(true)
     if (snapshots.length === 0) return

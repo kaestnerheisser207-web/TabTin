@@ -19,13 +19,13 @@ describe('useVoiceSettingsStore · storage-manager 接入', () => {
   beforeEach(async () => {
     localStorage.clear()
     vi.resetModules()
-    const sm = await import('@tabtin/storage-manager')
+    const sm = await import('@muse/storage-manager')
     sm.__resetForTesting()
   })
 
   it('store 模块加载后 system:voice-settings 已注册，字段符合 D-5 §1', async () => {
     await import('../useVoiceSettingsStore')
-    const sm = await import('@tabtin/storage-manager')
+    const sm = await import('@muse/storage-manager')
 
     const bucket = sm.getBucket('system:voice-settings')
     expect(bucket).toBeDefined()
@@ -41,7 +41,7 @@ describe('useVoiceSettingsStore · storage-manager 接入', () => {
 
   it('exportFn 产出含 schemaVersion + ISO exportedAt + 6 字段配置的 JSON', async () => {
     const { useVoiceSettingsStore } = await import('../useVoiceSettingsStore')
-    const sm = await import('@tabtin/storage-manager')
+    const sm = await import('@muse/storage-manager')
 
     useVoiceSettingsStore.getState().addHotword('TabTin')
     useVoiceSettingsStore.getState().addHotword('Codex')
@@ -78,7 +78,7 @@ describe('useVoiceSettingsStore · storage-manager 接入', () => {
 
   it('clearFn 把 6 个字段全部还原默认值（dryRun 不改状态）', async () => {
     const { useVoiceSettingsStore, DEFAULT_VOICE_SHORTCUT } = await import('../useVoiceSettingsStore')
-    const sm = await import('@tabtin/storage-manager')
+    const sm = await import('@muse/storage-manager')
 
     useVoiceSettingsStore.getState().addHotword('keep-me')
     useVoiceSettingsStore.getState().addReplacementRule('a', 'b')

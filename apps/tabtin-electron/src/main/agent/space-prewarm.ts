@@ -10,7 +10,7 @@ import {
   PrewarmScheduler,
   type AgentEnablementPrewarmHandler,
   type SpacePrewarmHandler,
-} from '@tabtin/agent-host/state'
+} from '@muse/agent-host/state'
 
 const log = createLogger('space-prewarm')
 

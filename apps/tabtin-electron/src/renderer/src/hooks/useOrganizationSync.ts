@@ -22,7 +22,7 @@ export function useOrganizationSync(): void {
   const isFirstRunRef = useRef(true)
 
   useEffect(() => {
-    const off = window.tabtin?.im?.onOrganizationSynced?.((payload) => {
+    const off = window.muse?.im?.onOrganizationSynced?.((payload) => {
       const organizationId = payload?.organizationId
       if (!organizationId) return
       const store = useOrganizationStore.getState()
@@ -47,6 +47,6 @@ export function useOrganizationSync(): void {
       appliedFromRemoteRef.current = null
       return
     }
-    window.tabtin?.im?.syncOrganization?.({ organizationId: selectedOrganizationId })
+    window.muse?.im?.syncOrganization?.({ organizationId: selectedOrganizationId })
   }, [selectedOrganizationId])
 }

@@ -1,5 +1,5 @@
 /**
- * @tabtin/tool-errors
+ * @muse/tool-errors
  *
  * Generative SSoT for tool error_kind literals, Electron catalog defaults,
  * i18n key inventory, and browser/action → runtime string bridges.

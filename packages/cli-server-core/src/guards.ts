@@ -6,7 +6,7 @@
  */
 
 import type http from 'node:http'
-import { errResponse } from '@tabtin/agent-wire'
+import { errResponse } from '@muse/agent-wire'
 import { sendJSON } from './http-utils.js'
 
 const ALLOWED_HOSTS = ['tabtin-engine.sock', 'localhost', '127.0.0.1', '[::1]']

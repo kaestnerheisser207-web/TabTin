@@ -11,7 +11,7 @@
 import React from 'react'
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { fireEvent, render, screen, waitFor } from '@testing-library/react'
-import type { TrackerRunMeta } from '@tabtin/chat-client'
+import type { TrackerRunMeta } from '@muse/chat-client'
 
 const triggerTask = vi.fn()
 const toastSuccess = vi.fn()
@@ -33,7 +33,7 @@ vi.mock('react-i18next', () => ({
   }),
 }))
 
-vi.mock('@tabtin/smartsheet-ui', () => ({
+vi.mock('@muse/smartsheet-ui', () => ({
   toast: {
     success: (...args: unknown[]) => toastSuccess(...args),
     error: (...args: unknown[]) => toastError(...args),
@@ -186,7 +186,7 @@ describe('TrackerRunStatusIndicator — 复制产物链接(Wave 6 主实施回�
 // charter §4.4 "1 步可达":
 //   buildArtifactLink 必须真消费 trackerRun.artifact_ref(snake_case),把
 //   memo_id / doc_id / slide_id / code_path / record_ids / artifact_id 塞进
-//   产物 deep link query（W3 形态：tabtin://resource/<type>/<id>?hint=<app>&...）。
+//   产物 deep link query（W3 形态：muse://resource/<type>/<id>?hint=<app>&...）。
 //   本测试守护字段不死、形态契约稳定。
 // =============================================================================
 describe('TrackerRunStatusIndicator — 复制产物链接含 artifact_ref (NEW-P0-3 §4.4)', () => {
@@ -215,8 +215,8 @@ describe('TrackerRunStatusIndicator — 复制产物链接含 artifact_ref (NEW-
     fireEvent.click(screen.getByTestId('tracker-run-copy-artifact-link'))
     await waitFor(() => expect(getLinkFromButton()).not.toBeNull())
     const link = getLinkFromButton()!
-    // W3 改造（RFC §10.3）：path 形态 tabtin://resource/<type>/<id>?hint=<app>&...
-    expect(link.startsWith('tabtin://resource/memo/')).toBe(true)
+    // W3 改造（RFC §10.3）：path 形态 muse://resource/<type>/<id>?hint=<app>&...
+    expect(link.startsWith('muse://resource/memo/')).toBe(true)
     expect(link).toContain('hint=tabmemo')
     expect(link).toContain('memoId=mem_xyz')
     expect(link).toContain('run=run-1')

@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import type { Space } from '@tabtin/app-shell'
+import type { Space } from '@muse/app-shell'
 import {
   defaultSelectedSpaceIds,
   formatEnabledSpacesToast,

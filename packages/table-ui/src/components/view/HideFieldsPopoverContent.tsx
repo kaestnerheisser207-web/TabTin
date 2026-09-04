@@ -5,7 +5,7 @@ import {
   ScrollArea,
   Switch,
   cn,
-} from '@tabtin/smartsheet-ui'
+} from '@muse/smartsheet-ui'
 import { Lock } from 'lucide-react'
 import { PopoverSearchInput } from '../common/PopoverSearchInput'
 import type { Field } from '../../types'

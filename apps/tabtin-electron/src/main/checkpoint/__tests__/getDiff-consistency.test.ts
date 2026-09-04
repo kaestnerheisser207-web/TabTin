@@ -40,7 +40,7 @@ vi.mock('simple-git', () => ({
 
 vi.mock('node:fs/promises', () => ({ default: mockFs }))
 
-import { CheckpointService, type CheckpointLogger } from '@tabtin/checkpoint-core'
+import { CheckpointService, type CheckpointLogger } from '@muse/checkpoint-core'
 
 const testLogger: CheckpointLogger = {
   info: vi.fn(), warn: vi.fn(), error: vi.fn(), debug: vi.fn(),

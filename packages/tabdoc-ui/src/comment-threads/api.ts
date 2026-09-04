@@ -2,7 +2,7 @@
  * comment_threads_v1 API client。
  * 旧 `/comments` 接口仍在 api-client.ts，签名不变。
  */
-import type { AppHostClient } from '@tabtin/app-host-sdk'
+import type { AppHostClient } from '@muse/app-host-sdk'
 import type {
   AddCommentMessageInput,
   CommentAttachmentConfirmResult,

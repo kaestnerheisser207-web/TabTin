@@ -2,7 +2,7 @@
  * Regression tests for CP-05 and C5-03 fixes.
  *
  * CP-05: exclusions.ts 两端必须完全一致
- *   RF06 改造后，Electron 和 Daemon 均从 @tabtin/checkpoint-core 导入，
+ *   RF06 改造后，Electron 和 Daemon 均从 @muse/checkpoint-core 导入，
  *   一致性由共享包保证。此处验证运行时导出值相同。
  * C5-03: git_status / git_diff 在 _workspace_root 未配置时必须返回明确错误
  */
@@ -14,10 +14,10 @@ import {
 import {
   CHECKPOINT_EXCLUDE_PATTERNS as CorePatterns,
   buildExcludeContent as coreBuild,
-} from '@tabtin/checkpoint-core'
+} from '@muse/checkpoint-core'
 
 describe('CP-05: exclusions.ts 两端一致性（共享包保证）', () => {
-  it('Daemon re-export 与 @tabtin/checkpoint-core 导出值严格相等', () => {
+  it('Daemon re-export 与 @muse/checkpoint-core 导出值严格相等', () => {
     expect(DaemonPatterns).toBe(CorePatterns)
     expect(daemonBuild).toBe(coreBuild)
   })
@@ -32,7 +32,7 @@ describe('CP-05: exclusions.ts 两端一致性（共享包保证）', () => {
 
 describe('C5-03: git tools 已从 action-tools 退役', () => {
   it('不再暴露已删除的 git_status / git_diff 工具', async () => {
-    const mod = await import('@tabtin/action-tools/headless')
+    const mod = await import('@muse/action-tools/headless')
     expect((mod as any).gitTools).toBeUndefined()
   })
 })

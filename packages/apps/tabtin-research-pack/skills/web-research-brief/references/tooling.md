@@ -8,9 +8,9 @@
 
 ## Resource Rules
 
-- Document links: `tabtin://resource/document/<id>?hint=tabdoc`
-- Table links: `tabtin://resource/table/<id>?hint=tabdata`
-- Memo links: `tabtin://resource/memo/<id>?hint=tabmemo` when available
+- Document links: `muse://resource/document/<id>?hint=tabdoc`
+- Table links: `muse://resource/table/<id>?hint=tabdata`
+- Memo links: `muse://resource/memo/<id>?hint=tabmemo` when available
 
 ## Do Not Guess
 

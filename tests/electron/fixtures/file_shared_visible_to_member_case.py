@@ -321,7 +321,7 @@ def user_summary(user, key: str, role: str, created: bool) -> dict:
 
 
 def prepare_case() -> None:
-    run_id = require_env("TABTIN_E2E_RUN_ID")
+    run_id = require_env("MUSE_E2E_RUN_ID")
     context = ensure_context(run_id)
     marker = context["marker"]
     owner = context["owner"]
@@ -364,10 +364,10 @@ def prepare_case() -> None:
 
 
 def auth_case() -> None:
-    user_id = require_env("TABTIN_E2E_AUTH_USER_ID")
-    organization_id = require_env("TABTIN_E2E_ORGANIZATION_ID")
-    space_id = require_env("TABTIN_E2E_SPACE_ID")
-    role = os.environ.get("TABTIN_E2E_ROLE", "editor")
+    user_id = require_env("MUSE_E2E_AUTH_USER_ID")
+    organization_id = require_env("MUSE_E2E_ORGANIZATION_ID")
+    space_id = require_env("MUSE_E2E_SPACE_ID")
+    role = os.environ.get("MUSE_E2E_ROLE", "editor")
     User = get_user_model()
     user = User.objects.get(id=user_id)
     organization = Organization.objects.get(id=organization_id)
@@ -386,12 +386,12 @@ def auth_case() -> None:
 
 
 def share_created_document_case() -> None:
-    run_id = require_env("TABTIN_E2E_RUN_ID")
+    run_id = require_env("MUSE_E2E_RUN_ID")
     marker = f"[{run_id}]"
-    owner_id = require_env("TABTIN_E2E_OWNER_ID")
-    owner_space_id = require_env("TABTIN_E2E_OWNER_SPACE_ID")
-    member_user_ids = json.loads(require_env("TABTIN_E2E_MEMBER_USER_IDS"))
-    expected_title = require_env("TABTIN_E2E_EXPECTED_TITLE")
+    owner_id = require_env("MUSE_E2E_OWNER_ID")
+    owner_space_id = require_env("MUSE_E2E_OWNER_SPACE_ID")
+    member_user_ids = json.loads(require_env("MUSE_E2E_MEMBER_USER_IDS"))
+    expected_title = require_env("MUSE_E2E_EXPECTED_TITLE")
     owner = get_user_model().objects.get(id=owner_id)
     document = (
         Document.objects
@@ -447,11 +447,11 @@ def share_created_document_case() -> None:
 
 
 def verify_case() -> None:
-    run_id = require_env("TABTIN_E2E_RUN_ID")
-    document_id = require_env("TABTIN_E2E_DOCUMENT_ID")
-    organization_id = require_env("TABTIN_E2E_ORGANIZATION_ID")
-    expected_member_ids = json.loads(require_env("TABTIN_E2E_EXPECTED_MEMBER_IDS"))
-    viewer_member_id = require_env("TABTIN_E2E_VIEWER_MEMBER_ID")
+    run_id = require_env("MUSE_E2E_RUN_ID")
+    document_id = require_env("MUSE_E2E_DOCUMENT_ID")
+    organization_id = require_env("MUSE_E2E_ORGANIZATION_ID")
+    expected_member_ids = json.loads(require_env("MUSE_E2E_EXPECTED_MEMBER_IDS"))
+    viewer_member_id = require_env("MUSE_E2E_VIEWER_MEMBER_ID")
     User = get_user_model()
     viewer = User.objects.get(id=viewer_member_id)
     shared_docs = list_documents_shared_with_me(viewer, organization_id=organization_id)
@@ -482,7 +482,7 @@ def verify_case() -> None:
 
 
 def main() -> None:
-    mode = require_env("TABTIN_E2E_MODE")
+    mode = require_env("MUSE_E2E_MODE")
     if mode == "prepare":
         prepare_case()
         return
@@ -495,7 +495,7 @@ def main() -> None:
     if mode == "verify":
         verify_case()
         return
-    raise RuntimeError(f"Unknown TABTIN_E2E_MODE: {mode}")
+    raise RuntimeError(f"Unknown MUSE_E2E_MODE: {mode}")
 
 
 main()

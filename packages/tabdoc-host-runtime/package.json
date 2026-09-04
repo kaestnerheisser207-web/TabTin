@@ -1,5 +1,5 @@
 {
-  "name": "@tabtin/tabdoc-host-runtime",
+  "name": "@muse/tabdoc-host-runtime",
   "version": "0.1.0",
   "description": "Shared runtime bootstrap for Muse document hosts",
   "type": "module",
@@ -23,9 +23,9 @@
     "clean": "rm -rf dist"
   },
   "dependencies": {
-    "@tabtin/app-host-sdk": "workspace:*",
-    "@tabtin/contracts": "workspace:*",
-    "@tabtin/tabdoc-ui": "workspace:*"
+    "@muse/app-host-sdk": "workspace:*",
+    "@muse/contracts": "workspace:*",
+    "@muse/tabdoc-ui": "workspace:*"
   },
   "peerDependencies": {
     "react": "^19.0.0"

@@ -10,7 +10,7 @@
  * 直接让 daemon Zod ``safeParse`` 失败，整条 prompt.forward 静默 drop。
  */
 import { describe, it, expect } from 'vitest';
-import { PromptForwardPayloadSchema } from '@tabtin/agent-wire';
+import { PromptForwardPayloadSchema } from '@muse/agent-wire';
 
 const BASE = {
   task_id: 'task-1',

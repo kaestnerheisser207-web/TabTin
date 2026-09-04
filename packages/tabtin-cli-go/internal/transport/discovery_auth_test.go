@@ -10,13 +10,13 @@ import (
 func clearDiscoveryAuthEnv(t *testing.T) string {
 	t.Helper()
 	dir := t.TempDir()
-	t.Setenv("TABTIN_CONFIG_DIR", dir)
-	t.Setenv("TABTIN_SOCK", "")
-	t.Setenv("TABTIN_PORT", "")
-	t.Setenv("_TABTIN_TRANSPORT_TOKEN", "")
-	t.Setenv("TABTIN_API_URL", "")
-	t.Setenv("TABTIN_JWT", "")
-	t.Setenv("TABTIN_TOKEN", "")
+	t.Setenv("MUSE_CONFIG_DIR", dir)
+	t.Setenv("MUSE_SOCK", "")
+	t.Setenv("MUSE_PORT", "")
+	t.Setenv("_MUSE_TRANSPORT_TOKEN", "")
+	t.Setenv("MUSE_API_URL", "")
+	t.Setenv("MUSE_JWT", "")
+	t.Setenv("MUSE_TOKEN", "")
 	t.Cleanup(func() {
 		SetTransportState("", "")
 	})
@@ -52,16 +52,16 @@ func TestDiscoverEnvHostRequiresTransportToken(t *testing.T) {
 		{
 			name: "socket pair",
 			set: func() {
-				t.Setenv("TABTIN_SOCK", "/tmp/explicit.sock")
-				t.Setenv("_TABTIN_TRANSPORT_TOKEN", "transport-token")
+				t.Setenv("MUSE_SOCK", "/tmp/explicit.sock")
+				t.Setenv("_MUSE_TRANSPORT_TOKEN", "transport-token")
 			},
 			want: TypeSocket + "+recovery",
 		},
 		{
 			name: "port pair",
 			set: func() {
-				t.Setenv("TABTIN_PORT", "4177")
-				t.Setenv("_TABTIN_TRANSPORT_TOKEN", "transport-token")
+				t.Setenv("MUSE_PORT", "4177")
+				t.Setenv("_MUSE_TRANSPORT_TOKEN", "transport-token")
 			},
 			want: TypeHTTP + "+recovery",
 		},
@@ -88,7 +88,7 @@ func TestDiscoverEnvHostRequiresTransportToken(t *testing.T) {
 
 func TestDiscoverSkipsHalfEnvPairAndContinuesDiscovery(t *testing.T) {
 	dir := clearDiscoveryAuthEnv(t)
-	t.Setenv("TABTIN_SOCK", "/tmp/incomplete.sock")
+	t.Setenv("MUSE_SOCK", "/tmp/incomplete.sock")
 	writeDiscoveryFile(t, dir, "server.json", "/tmp/discovered.sock", os.Getpid())
 
 	tr := Discover()
@@ -123,7 +123,7 @@ func TestDiscoverWithoutEnvUsesDiscoveryFileAsHostTransport(t *testing.T) {
 
 func TestDiscoverSkipsHalfEnvPairAndFallsBackToProfileDjango(t *testing.T) {
 	dir := clearDiscoveryAuthEnv(t)
-	t.Setenv("TABTIN_PORT", "4177")
+	t.Setenv("MUSE_PORT", "4177")
 	writeProfileConfig(t, dir)
 
 	tr := Discover()

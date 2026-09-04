@@ -39,7 +39,7 @@ export const TabDataPreview: React.FC<{
         {cols.map((n, i) => (
           <div
             key={i}
-            // eslint-disable-next-line tabtin/no-design-system-violations -- 卡片封面缩略图微型预览字号（非可读正文），语义字号会撑破 96px 封面
+            // eslint-disable-next-line muse/no-design-system-violations -- 卡片封面缩略图微型预览字号（非可读正文），语义字号会撑破 96px 封面
             className="flex-1 truncate rounded-sm bg-foreground/[0.07] px-1 py-[2px] text-[7.5px] font-medium leading-tight text-foreground/40"
           >
             {n}
@@ -60,7 +60,7 @@ export const TabDataPreview: React.FC<{
       ))}
       {rowCount > 0 && (
         <div
-          // eslint-disable-next-line tabtin/no-design-system-violations -- 卡片封面缩略图微型预览字号（非可读正文），语义字号会撑破 96px 封面
+          // eslint-disable-next-line muse/no-design-system-violations -- 卡片封面缩略图微型预览字号（非可读正文），语义字号会撑破 96px 封面
           className="mt-auto text-[7px] text-foreground/20 tabular-nums"
         >
           {t('preview.coverRows', { count: rowCount })}
@@ -120,7 +120,7 @@ export const TabCodePreview: React.FC<{ projectName?: string }> = ({ projectName
     <div className="h-[3px] w-3 rounded-full bg-purple-500/15" />
     {projectName && (
       <div
-        // eslint-disable-next-line tabtin/no-design-system-violations -- 卡片封面缩略图微型预览字号（非可读正文），语义字号会撑破 96px 封面
+        // eslint-disable-next-line muse/no-design-system-violations -- 卡片封面缩略图微型预览字号（非可读正文），语义字号会撑破 96px 封面
         className="mt-auto truncate text-[7px] text-foreground/20"
       >
         {projectName}
@@ -145,7 +145,7 @@ export const TabSitePreview: React.FC<{
       <div className="flex h-[10px] flex-1 items-center rounded-sm bg-foreground/[0.04] px-1">
         {url && (
           <span
-            // eslint-disable-next-line tabtin/no-design-system-violations -- 卡片封面缩略图微型预览字号（非可读正文），语义字号会撑破 96px 封面
+            // eslint-disable-next-line muse/no-design-system-violations -- 卡片封面缩略图微型预览字号（非可读正文），语义字号会撑破 96px 封面
             className="truncate text-[6px] text-foreground/20"
           >
             {url}
@@ -163,7 +163,7 @@ export const TabSitePreview: React.FC<{
     </div>
     {framework && (
       <div
-        // eslint-disable-next-line tabtin/no-design-system-violations -- 卡片封面缩略图微型预览字号（非可读正文），语义字号会撑破 96px 封面
+        // eslint-disable-next-line muse/no-design-system-violations -- 卡片封面缩略图微型预览字号（非可读正文），语义字号会撑破 96px 封面
         className="mt-0.5 text-[7px] text-foreground/20"
       >
         {framework}
@@ -191,7 +191,7 @@ export const TabDocPreview: React.FC<{
         </div>
         {hasText ? (
           <p
-            // eslint-disable-next-line tabtin/no-design-system-violations -- 卡片封面缩略图微型预览字号（非可读正文），语义字号会撑破 96px 封面
+            // eslint-disable-next-line muse/no-design-system-violations -- 卡片封面缩略图微型预览字号（非可读正文），语义字号会撑破 96px 封面
             className="line-clamp-3 text-[7px] leading-[1.45] text-foreground/35"
           >
             {text!.slice(0, COVER_TEXT_MAX_CHARS)}
@@ -209,7 +209,7 @@ export const TabDocPreview: React.FC<{
       {/* 版本角标 */}
       {!hasText && version != null && version > 0 && (
         <div
-          // eslint-disable-next-line tabtin/no-design-system-violations -- 卡片封面缩略图微型预览字号（非可读正文），语义字号会撑破 96px 封面
+          // eslint-disable-next-line muse/no-design-system-violations -- 卡片封面缩略图微型预览字号（非可读正文），语义字号会撑破 96px 封面
           className="mt-0.5 text-right text-[7px] text-foreground/20"
         >
           v{version}
@@ -233,7 +233,7 @@ export const TabFolderPreview: React.FC<{
     </svg>
     {folderName && (
       <span
-        // eslint-disable-next-line tabtin/no-design-system-violations -- 卡片封面缩略图微型预览字号（非可读正文），语义字号会撑破 96px 封面
+        // eslint-disable-next-line muse/no-design-system-violations -- 卡片封面缩略图微型预览字号（非可读正文），语义字号会撑破 96px 封面
         className="max-w-full truncate text-[7px] text-foreground/20"
       >
         {folderName}
@@ -283,14 +283,14 @@ export const TabTrackerPreview: React.FC<{
         <div className="flex items-center gap-1">
           <div className={cn('h-[5px] w-[5px] rounded-full', dotColor)} />
           <span
-            // eslint-disable-next-line tabtin/no-design-system-violations -- 卡片封面缩略图微型预览字号（非可读正文），语义字号会撑破 96px 封面
+            // eslint-disable-next-line muse/no-design-system-violations -- 卡片封面缩略图微型预览字号（非可读正文），语义字号会撑破 96px 封面
             className="text-[7px] text-foreground/30 font-medium"
           >
             {status ? t(`status.${status}`, { defaultValue: status }) : ''}
           </span>
         </div>
         <span
-          // eslint-disable-next-line tabtin/no-design-system-violations -- emoji 触发图标显示尺寸，非文字字号
+          // eslint-disable-next-line muse/no-design-system-violations -- emoji 触发图标显示尺寸，非文字字号
           className="text-[8px] leading-none"
         >
           {triggerIcon}
@@ -314,7 +314,7 @@ export const TabTrackerPreview: React.FC<{
           <>
             <div className="h-[1px] w-1 bg-foreground/[0.06]" />
             <span
-              // eslint-disable-next-line tabtin/no-design-system-violations -- 卡片封面缩略图微型预览字号（非可读正文），语义字号会撑破 96px 封面
+              // eslint-disable-next-line muse/no-design-system-violations -- 卡片封面缩略图微型预览字号（非可读正文），语义字号会撑破 96px 封面
               className="text-[6px] text-foreground/20"
             >
               +{steps - 5}
@@ -327,14 +327,14 @@ export const TabTrackerPreview: React.FC<{
       <div className="flex items-center justify-between mt-1.5">
         {totalRuns > 0 ? (
           <span
-            // eslint-disable-next-line tabtin/no-design-system-violations -- 卡片封面缩略图微型预览字号（非可读正文），语义字号会撑破 96px 封面
+            // eslint-disable-next-line muse/no-design-system-violations -- 卡片封面缩略图微型预览字号（非可读正文），语义字号会撑破 96px 封面
             className="text-[7px] text-foreground/20"
           >
             {successRuns}/{totalRuns}
           </span>
         ) : (
           <span
-            // eslint-disable-next-line tabtin/no-design-system-violations -- 卡片封面缩略图微型预览字号（非可读正文），语义字号会撑破 96px 封面
+            // eslint-disable-next-line muse/no-design-system-violations -- 卡片封面缩略图微型预览字号（非可读正文），语义字号会撑破 96px 封面
             className="text-[7px] text-foreground/15"
           >
             —
@@ -342,7 +342,7 @@ export const TabTrackerPreview: React.FC<{
         )}
         {triggerLabel && (
           <span
-            // eslint-disable-next-line tabtin/no-design-system-violations -- 卡片封面缩略图微型预览字号（非可读正文），语义字号会撑破 96px 封面
+            // eslint-disable-next-line muse/no-design-system-violations -- 卡片封面缩略图微型预览字号（非可读正文），语义字号会撑破 96px 封面
             className="rounded bg-foreground/[0.05] px-1 py-px text-[6px] text-foreground/25"
           >
             {triggerLabel}
@@ -371,7 +371,7 @@ export const TinsPreview: React.FC<{
       )}
       {isEnabled === false && (
         <span
-          // eslint-disable-next-line tabtin/no-design-system-violations -- 卡片封面缩略图微型预览字号（非可读正文），语义字号会撑破 96px 封面
+          // eslint-disable-next-line muse/no-design-system-violations -- 卡片封面缩略图微型预览字号（非可读正文），语义字号会撑破 96px 封面
           className="text-[7px] text-foreground/20"
         >
           {t('preview.tinsDisabled')}

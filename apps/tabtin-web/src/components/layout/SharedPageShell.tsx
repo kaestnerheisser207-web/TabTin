@@ -1,12 +1,12 @@
 import { Suspense, lazy, useEffect, useMemo, useState, type ReactNode } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { FileText, Home, PanelLeft, Table2, X } from 'lucide-react'
-import { Sheet, SheetContent, SheetTitle } from '@tabtin/smartsheet-ui'
+import { Sheet, SheetContent, SheetTitle } from '@muse/smartsheet-ui'
 import { useAuthStore } from '@/stores/auth-store'
 import {
   useOrganizationStore,
   useSpaceStore,
-} from '@tabtin/app-shell'
+} from '@muse/app-shell'
 import { spaceHomePath } from '@/features/space/spaceRoutes'
 import { cn } from '@/utils/cn'
 import {

@@ -4,7 +4,7 @@ import {
   translate,
 } from '../http'
 import { getTableDataClientConfig } from '../config'
-import { normalizeFieldType } from '@tabtin/table-kernel'
+import { normalizeFieldType } from '@muse/table-kernel'
 import type {
   Field,
   FieldListResponse,

@@ -4,7 +4,7 @@
  * 产品口径：Skill 仍按 Space 启用；创建 / 导入 / 本机安装时让用户看见并选择
  * 「装到哪些 Space」，默认勾选当前 Space。候选范围 = 当前组织下未归档的 Space。
  */
-import type { Space } from '@tabtin/app-shell'
+import type { Space } from '@muse/app-shell'
 
 export interface SkillEnableTargetSpace {
   id: string

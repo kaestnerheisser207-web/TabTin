@@ -1,7 +1,7 @@
 """
 User-Context Wrapper — Python 复刻 ``packages/agent-prompt/src/user-context-wrapper.ts``。
 
-**SSoT 关系**：本模块是 ``@tabtin/agent-prompt`` 中
+**SSoT 关系**：本模块是 ``@muse/agent-prompt`` 中
 ``buildUserContextWrapper`` / ``findFirstUserContextWrapper`` 的 Python 等价
 实现。Django 端无法 import TypeScript 包，但 ``context_assembler.py``
 等路径需要在 Daemon 路径下也产出 byte-identical 的 wrapper 字符串，否则

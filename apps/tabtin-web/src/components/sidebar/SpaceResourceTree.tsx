@@ -23,7 +23,7 @@ import {
   useSpaceStore,
   useOrganizationStore,
   useSpaceListStore,
-} from '@tabtin/app-shell'
+} from '@muse/app-shell'
 import { useSpaceResources } from '@/features/space/useSpaceResources'
 import { docPath, spaceHomePath, tablePath } from '@/features/space/spaceRoutes'
 import { useShareNavigation } from '@/components/layout/ShareNavigationContext'

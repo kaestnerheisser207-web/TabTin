@@ -11,7 +11,7 @@ import {
   type KeyboardEvent,
 } from 'react'
 import { ImagePlus, Loader2, Send, X } from 'lucide-react'
-import { Button, UserAvatar } from '@tabtin/smartsheet-ui'
+import { Button, UserAvatar } from '@muse/smartsheet-ui'
 import type { DocumentCommentMentionCandidate } from '../DocumentCommentsSection'
 import {
   MAX_COMMENT_IMAGES,

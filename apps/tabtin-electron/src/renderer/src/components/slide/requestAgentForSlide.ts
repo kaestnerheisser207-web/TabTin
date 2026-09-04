@@ -19,7 +19,7 @@
  * - 把 store / UI 操作集中在一个 helper 里，避免业务组件各自 import 多个 store
  */
 
-import { toast } from '@tabtin/smartsheet-ui'
+import { toast } from '@muse/smartsheet-ui'
 import i18n from '@/i18n'
 import { useChatStore } from '@/stores/chat/useChatStore'
 import { useUIStore } from '@/stores/useUIStore'

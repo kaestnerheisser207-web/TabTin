@@ -41,7 +41,7 @@ export function ByokCodexLoginPanel({
   }, [])
 
   const refreshStatus = useCallback(async () => {
-    const nextStatus = await window.tabtin.openaiCodex.getStatus()
+    const nextStatus = await window.muse.openaiCodex.getStatus()
     setStatus(nextStatus)
     if (nextStatus.connected && loginPendingRef.current) {
       stopPolling()
@@ -66,7 +66,7 @@ export function ByokCodexLoginPanel({
     void refreshStatus().catch(() => {
       setError(t('llm.codex.statusLoadFailed'))
     })
-    const unsubscribe = window.tabtin.openaiCodex.onStatusChanged(() => {
+    const unsubscribe = window.muse.openaiCodex.onStatusChanged(() => {
       void refreshStatus().catch(() => {
         // 状态推送失败时保留现有 UI，避免清空已连接态。
       })
@@ -83,11 +83,11 @@ export function ByokCodexLoginPanel({
     setPending('browser')
     try {
       if (status?.connected) {
-        await window.tabtin.openaiCodex.logout()
+        await window.muse.openaiCodex.logout()
         setStatus({ connected: false, models: [] })
       }
       loginPendingRef.current = true
-      await window.tabtin.openaiCodex.loginBrowser()
+      await window.muse.openaiCodex.loginBrowser()
       // 浏览器授权在回调里落凭据；此处开始轮询 get-status。
       startPolling()
       // 立即再拉一次，避免只等 interval 造成「已登录但 UI 未变」。
@@ -104,7 +104,7 @@ export function ByokCodexLoginPanel({
     setPending('device')
     try {
       loginPendingRef.current = true
-      const result = await window.tabtin.openaiCodex.loginDeviceCode()
+      const result = await window.muse.openaiCodex.loginDeviceCode()
       setDeviceCode(result)
       startPolling()
     } catch {
@@ -121,7 +121,7 @@ export function ByokCodexLoginPanel({
     setPending(null)
     setDeviceCode(null)
     try {
-      await window.tabtin.openaiCodex.logout()
+      await window.muse.openaiCodex.logout()
       await refreshStatus()
     } catch {
       setError(t('llm.codex.logoutFailed'))
@@ -133,7 +133,7 @@ export function ByokCodexLoginPanel({
     loginPendingRef.current = false
     setPending(null)
     setDeviceCode(null)
-    await window.tabtin.openaiCodex.cancelLogin()
+    await window.muse.openaiCodex.cancelLogin()
   }
 
   const isPending = pending !== null

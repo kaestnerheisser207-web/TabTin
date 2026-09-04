@@ -14,8 +14,8 @@
  */
 
 import { describe, expect, it } from 'vitest'
-import type { ChatMessage, MessageBlock } from '@tabtin/chat-client'
-import { selectRecentHistoryForRuntime } from '@tabtin/agent-runtime/history'
+import type { ChatMessage, MessageBlock } from '@muse/chat-client'
+import { selectRecentHistoryForRuntime } from '@muse/agent-runtime/history'
 
 /**
  * W4c：本测试是 daemon API selectRecentHistoryForRuntime 的契约测试，daemon 端

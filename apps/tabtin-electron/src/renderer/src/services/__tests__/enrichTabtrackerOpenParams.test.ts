@@ -1,7 +1,7 @@
 /**
  * enrichTabtrackerOpenParams — Tracker 预览链接打开时补 meta.taskId
  *
- * 回归：Agent 对话里 tabtin://resource/tracker/<id> 经 ResourceRouter 落地后，
+ * 回归：Agent 对话里 muse://resource/tracker/<id> 经 ResourceRouter 落地后，
  * 若不写 meta.taskId，tabtrackerHandler.renderPane 会落到列表面板而非详情。
  */
 

@@ -23,7 +23,7 @@ import { fileURLToPath, pathToFileURL } from 'node:url';
 // 阶段 2 收尾（2026-05-20 review）：SECTION_BUDGETS 从 REGISTRY_ENTRIES 派生，
 // 避免与注册表 / 0_active_renderers.yaml 漂移（之前 tools_reference 手写表 3600
 // vs 注册表 5500）。注册表是单一 SSoT，本脚本仅消费。
-import { REGISTRY_ENTRIES } from '@tabtin/prompt-contract';
+import { REGISTRY_ENTRIES } from '@muse/prompt-contract';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const DIST_INDEX = resolve(__dirname, '../dist/index.js');
@@ -84,7 +84,7 @@ const FIXED_APPS = [
 ];
 
 /**
- * 各段 charBudget 表 —— 从 @tabtin/prompt-contract `REGISTRY_ENTRIES` 按
+ * 各段 charBudget 表 —— 从 @muse/prompt-contract `REGISTRY_ENTRIES` 按
  * `xmlTag` 派生，**单一 SSoT 来自注册表**。
  *
  * 阶段 2 收尾（2026-05-20）：之前是手写表，与 0_active_renderers.yaml /
@@ -114,7 +114,7 @@ const HELP_TEXT = `dump-prompt — agent-prompt build 后离线 dump 工具
 
 用法：
   node scripts/dump-prompt.mjs [options]
-  pnpm --filter @tabtin/agent-prompt dump -- [options]
+  pnpm --filter @muse/agent-prompt dump -- [options]
 
 Options:
   --mode=agent|plan|ask|study|group   agentMode（默认 agent）
@@ -151,7 +151,7 @@ Options:
   0  成功
   1  参数错误
   2  build 失败（dist/index.js 缺失或 import 失败）—— 先跑
-     pnpm --filter @tabtin/agent-prompt build
+     pnpm --filter @muse/agent-prompt build
 
 示例：
   node scripts/dump-prompt.mjs --mode=plan --format=sections
@@ -414,7 +414,7 @@ function buildToolsBreakdown(tools) {
     totalBudget,
     // 标注数据语义，避免消费者误用
     dataSource: 'fixture (registry summary)',
-    truthSourceForTotal: '@tabtin/agent-runtime tool-description-audit.test.ts P2',
+    truthSourceForTotal: '@muse/agent-runtime tool-description-audit.test.ts P2',
   };
 }
 
@@ -430,7 +430,7 @@ function formatToolsBreakdown(config) {
     '    **不是** runtime 工厂吐出的真实 Tool.description（譬如 read_file 真实',
     '    description ~1392 chars，而 registry 简介只 76 chars）。',
     '    真实 tools[] description 合计由 agent-runtime 的 audit P2 校验：',
-    '    `pnpm --filter @tabtin/agent-runtime exec vitest run \\',
+    '    `pnpm --filter @muse/agent-runtime exec vitest run \\',
     '       src/tools/__tests__/tool-description-audit.test.ts`',
     '    本报表只反映"如果工具描述写成简介长度会消耗多少"——跨工具相对比较用途。',
     '',
@@ -509,7 +509,7 @@ async function main() {
   if (!existsSync(DIST_INDEX)) {
     process.stderr.write(
       `build 失败：找不到 dist/index.js（路径：${DIST_INDEX}）\n` +
-        `请先跑：pnpm --filter @tabtin/agent-prompt build\n`,
+        `请先跑：pnpm --filter @muse/agent-prompt build\n`,
     );
     process.exit(2);
   }
@@ -527,7 +527,7 @@ async function main() {
         `  最新的 src/scripts 文件：${staleCheck.newestSrcRel}（mtime ${new Date(staleCheck.newestSrcMs).toISOString()}）\n` +
         `  对照的 dist 文件：${staleCheck.distRel}（mtime ${new Date(staleCheck.distMs).toISOString()}）\n` +
         `  落后：${Math.round((staleCheck.newestSrcMs - staleCheck.distMs) / 1000)}s\n` +
-        `\n请先跑：pnpm --filter @tabtin/agent-prompt build\n`,
+        `\n请先跑：pnpm --filter @muse/agent-prompt build\n`,
     );
     process.exit(2);
   }

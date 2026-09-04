@@ -10,7 +10,7 @@ import { useSpaceContextNavigation } from '../../context-space/hooks/useSpaceCon
 import { resolveChatContextDisplay } from '../context/resolveChatContextDisplay'
 import type { ContextItemType, ContextTabKey } from '../../context-space/registry/types'
 import type { SpaceContext } from '../../context-space/SpaceContextContainer'
-import type { Table, ViewStore } from '@tabtin/table-core'
+import type { Table, ViewStore } from '@muse/table-core'
 import {
   buildFocusedSurfaceContextKey,
   useFocusedSurfaceStore,

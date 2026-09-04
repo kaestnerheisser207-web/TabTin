@@ -17,7 +17,7 @@ export async function openExternalArchiveAsConversation(input: {
   if (openingKey === key) return
   openingKey = key
   try {
-    const api = window.tabtin?.import
+    const api = window.muse?.import
     if (!api?.getArchive) {
       toast({
         title: '无法打开',

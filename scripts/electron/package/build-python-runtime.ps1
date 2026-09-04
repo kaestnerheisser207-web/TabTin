@@ -82,7 +82,7 @@ function Test-GzipTarArchive([string]$path) {
 }
 
 function Get-PbsCacheDir {
-    $override = [Environment]::GetEnvironmentVariable('TABTIN_PBS_CACHE_DIR')
+    $override = [Environment]::GetEnvironmentVariable('MUSE_PBS_CACHE_DIR')
     if (-not [string]::IsNullOrWhiteSpace($override)) { return $override }
     # Align with scripts/electron/package/cache-python-build-standalone.sh on Windows Git Bash.
     return (Join-Path $env:USERPROFILE '.cache\tabtin\python-build-standalone')
@@ -169,7 +169,7 @@ if ([string]::IsNullOrWhiteSpace($ArchiveName) -and (Test-Path $ConfigJson)) {
     } catch { }
 }
 if ([string]::IsNullOrWhiteSpace($ArchiveName)) {
-    $ArchiveName = "tabtin-python-runtime-${ManifestPlatform}.tar.gz"
+    $ArchiveName = "muse-python-runtime-${ManifestPlatform}.tar.gz"
 }
 
 $PbsAsset = "cpython-${PyVersion}+${PbsRelease}-${Triple}-${PbsVariant}.tar.gz"

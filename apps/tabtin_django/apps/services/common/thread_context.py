@@ -62,7 +62,7 @@ _owner_user_id_for_provider_var: ContextVar[Optional[str]] = ContextVar("owner_u
 #   校验，thread_id mismatch → 视为残留 → 返回 None（与 `_authorization_rules_ctx`
 #   的 thread_id 校验同模式，CA-007 同款治理）。
 #
-# 形态对应 TS 端 `@tabtin/security-policy` 的 `WorkspaceSnapshot`；至少含
+# 形态对应 TS 端 `@muse/security-policy` 的 `WorkspaceSnapshot`；至少含
 # `allowedPaths: list[str]`，sandbox_policy.py 内部用 _normalize_path 比较。
 _workspace_snapshot_var: ContextVar[Optional[tuple]] = ContextVar(
     "workspace_snapshot", default=None

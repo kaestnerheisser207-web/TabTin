@@ -116,7 +116,7 @@ describe('buildSystemPrompt', () => {
     expect(result).not.toContain('<custom_rules>');
   });
 
-  it('renders space id and TABTIN_WORKSPACE contract in <environment> without leaking path ', () => {
+  it('renders space id and MUSE_WORKSPACE contract in <environment> without leaking path ', () => {
     // 2026-05-14 拆段后：spaceId 在 <environment>；#7810 起工作目录绝对路径
     // 不再贴在 prompt，只通过环境变量名和 shell 语法约定暴露。
     const result = buildSystemPrompt({
@@ -135,10 +135,10 @@ describe('buildSystemPrompt', () => {
     expect(result).toContain('<environment>');
     expect(result).toContain('工作空间：  space-abc');
     expect(environmentSlice).toContain('## 环境变量');
-    expect(environmentSlice).toContain('- `TABTIN_WORKSPACE`');
+    expect(environmentSlice).toContain('- `MUSE_WORKSPACE`');
     expect(result).not.toContain('工作目录：   /home/user/project');
     expect(result).not.toContain('/home/user/project');
-    expect(result).toContain('$TABTIN_WORKSPACE');
+    expect(result).toContain('$MUSE_WORKSPACE');
     expect(result).toContain('禁止');
     expect(result).toContain('workspace/');
     // principle 段不再泄露这些路径 / space id
@@ -710,13 +710,13 @@ describe('buildSystemPrompt', () => {
     expect(result).toContain('工作空间：  space-abc');
     expect(result).toContain('会话：       sess-xyz');
     expect(result).toContain('## 环境变量');
-    expect(result).toContain('- `TABTIN_WORKSPACE`');
+    expect(result).toContain('- `MUSE_WORKSPACE`');
     expect(result).not.toContain('工作目录：   /sandbox/agent-spaces/wt-789/space-abc');
     expect(result).not.toContain('/sandbox/agent-spaces/wt-789/space-abc');
     // <shell_runtime>：无 shellInfo 时为 shell 中性 cwd 约定（ 不回落 POSIX）
     expect(result).toContain('<shell_runtime>');
     expect(result).toContain('勿假设 bash/POSIX');
-    expect(result).not.toContain('$TABTIN_WORKSPACE');
+    expect(result).not.toContain('$MUSE_WORKSPACE');
     expect(result).toContain('工作目录变量');
     expect(result).toContain('workspace/');
     // <platform_data>：平台数据读取工具说明，不暴露 archive / tool-logs 路径

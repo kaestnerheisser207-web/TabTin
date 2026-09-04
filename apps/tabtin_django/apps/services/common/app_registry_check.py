@@ -140,7 +140,7 @@ def validate_app_registry() -> list[str]:
 
     # 1. has_prompt_section 与 prompt 模块的一致性（仅 marketplace；builtin 已下放至客户端 runtime）
     #
-    # W10 cleanup：M1 已把 builtin App 的 prompt section SSoT 迁到 ``@tabtin/agent-prompt``
+    # W10 cleanup：M1 已把 builtin App 的 prompt section SSoT 迁到 ``@muse/agent-prompt``
     # （客户端 ``packages/agent-runtime`` 内嵌），主仓 ``prompts/apps/`` 已删除。
     # 所以 ``CORE_APPS`` 的 ``has_prompt_section`` 与 Django 侧 ``APP_SECTIONS`` 不再
     # 强制一一对应——builtin App 的 manifest 仍标记 ``hasPromptSection=true`` 是

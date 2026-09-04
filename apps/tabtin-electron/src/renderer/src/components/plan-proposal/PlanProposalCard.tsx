@@ -15,9 +15,9 @@
 
 import React, { useCallback, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Button, toast } from '@tabtin/smartsheet-ui'
+import { Button, toast } from '@muse/smartsheet-ui'
 import { ChevronDown, ChevronUp, ExternalLink, Loader2, ListChecks } from 'lucide-react'
-import { resolvePlanRef, planRefToLegacyId, planRefKey, type PlanRef } from '@tabtin/agent-wire'
+import { resolvePlanRef, planRefToLegacyId, planRefKey, type PlanRef } from '@muse/agent-wire'
 import { cn } from '@/utils/cn'
 import { MarkdownRenderer } from '@components/chat/markdown/MarkdownRenderer'
 import { useChatStore } from '@/stores/chat/useChatStore'

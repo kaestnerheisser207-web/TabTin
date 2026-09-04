@@ -1,10 +1,10 @@
-import type { DateFilterValue, FilterGroup, TableRecord, ViewMeta, ViewRecordsResponse, ViewSort } from '@tabtin/table-core'
+import type { DateFilterValue, FilterGroup, TableRecord, ViewMeta, ViewRecordsResponse, ViewSort } from '@muse/table-core'
 import {
   cellTextMatchesSearchQuery,
   isFilterSet,
   legacyFiltersToFilterSet,
   syncKanbanGroupConfig,
-} from '@tabtin/table-core'
+} from '@muse/table-core'
 import {
   compareCanonicalGroupValues,
   isEmptyGroupValue,

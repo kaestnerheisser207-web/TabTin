@@ -547,11 +547,11 @@ func TestBuildRequestBodyAllowEmptyStringPassThrough(t *testing.T) {
 // 测试里——本测试是它们的单元层补充，让 pipeline_test.go 也钉一道，
 // 重构 pipeline 时立刻知道这条契约不能丢。
 func TestDryRunBypassesRequiresAuthGate(t *testing.T) {
-	// 通过环境变量清空 TABTIN_JWT / TABTIN_TOKEN 模拟"未认证"——
+	// 通过环境变量清空 MUSE_JWT / MUSE_TOKEN 模拟"未认证"——
 	// config.ResolveToken 优先级是 env > profile.Token，env 空 + 找不到
 	// profile.Token 才会返回空字符串触发 UNAUTHORIZED。
-	t.Setenv("TABTIN_JWT", "")
-	t.Setenv("TABTIN_TOKEN", "")
+	t.Setenv("MUSE_JWT", "")
+	t.Setenv("MUSE_TOKEN", "")
 	// 把 HOME 指向空目录，让 config.Load 找不到 ~/.tabtin/config.json
 	// （等价于 CI runner / 新装机器场景）。
 	t.Setenv("HOME", t.TempDir())

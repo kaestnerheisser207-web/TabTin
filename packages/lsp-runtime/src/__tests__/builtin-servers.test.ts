@@ -32,7 +32,7 @@ describe('bundled-paths', () => {
     const root = getLspServersRoot();
     expect(root).toBeTruthy();
     // 注：如果 pre-build 跑过了，这个目录应该存在
-    if (!process.env.TABTIN_SKIP_LSP_DOWNLOAD) {
+    if (!process.env.MUSE_SKIP_LSP_DOWNLOAD) {
       expect(existsSync(root)).toBe(true);
     }
   });
@@ -40,7 +40,7 @@ describe('bundled-paths', () => {
   it('resolveTypescriptLanguageServer 找到 binary（bundled 或系统 PATH）', () => {
     const result = resolveTypescriptLanguageServer();
     // 如果 pre-build 跑过 → 必然能找到 bundled
-    if (!process.env.TABTIN_SKIP_LSP_DOWNLOAD) {
+    if (!process.env.MUSE_SKIP_LSP_DOWNLOAD) {
       expect(result).toBeDefined();
       expect(result!.command).toBeTruthy();
       expect(result!.args).toContain('--stdio');
@@ -53,7 +53,7 @@ describe('bundled-paths', () => {
     mkdirSync(tmp, { recursive: true });
     try {
       const result = resolveTsserver(tmp);
-      if (!process.env.TABTIN_SKIP_LSP_DOWNLOAD) {
+      if (!process.env.MUSE_SKIP_LSP_DOWNLOAD) {
         // 应该回退到 bundled
         expect(result).toBeTruthy();
         expect(result).toContain('lsp-servers/typescript');
@@ -146,7 +146,7 @@ describe('createBuiltinServersLoader', () => {
   });
 
   it('load 返回 typescript + pyright 配置（bundled 都在）', async () => {
-    if (process.env.TABTIN_SKIP_LSP_DOWNLOAD) return;
+    if (process.env.MUSE_SKIP_LSP_DOWNLOAD) return;
 
     const loader = createBuiltinServersLoader({ projectRoot });
     const { servers } = await loader.load();
@@ -189,8 +189,8 @@ describe('createBuiltinServersLoader', () => {
 describe('bundled LSP server 端到端 spawn（这是 C7 北极星）', () => {
   // 这个 describe 块跑实际 spawn + initialize；如果 bundled binary 缺失则
   // skip——避免 CI 缺包时挂掉
-  if (process.env.TABTIN_SKIP_LSP_DOWNLOAD) {
-    it.skip('bundled typescript-language-server: skipped (TABTIN_SKIP_LSP_DOWNLOAD)', () => {});
+  if (process.env.MUSE_SKIP_LSP_DOWNLOAD) {
+    it.skip('bundled typescript-language-server: skipped (MUSE_SKIP_LSP_DOWNLOAD)', () => {});
     return;
   }
 

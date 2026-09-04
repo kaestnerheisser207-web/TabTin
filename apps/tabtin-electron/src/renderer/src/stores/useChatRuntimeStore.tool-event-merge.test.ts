@@ -307,7 +307,7 @@ describe('useChatRuntimeStore — progress 字段清理契约（dogfood Review P
       progress: { stdout: 'old partial', outputBytes: 11, truncated: false, capturedAt: 500 },
     }))
 
-    // mock window.tabtin —— retryTool 走 IPC 路径需要这个
+    // mock window.muse —— retryTool 走 IPC 路径需要这个
     const originalTabtin = (globalThis as unknown as { window?: unknown }).window
     Object.defineProperty(globalThis, 'window', {
       configurable: true,

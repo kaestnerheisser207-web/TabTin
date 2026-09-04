@@ -1,5 +1,5 @@
 /**
- * WinRT toast → tabtin://notify 协议激活：确保主窗 + 等加载再发 notification:navigate
+ * WinRT toast → muse://notify 协议激活：确保主窗 + 等加载再发 notification:navigate
  */
 
 import { beforeEach, describe, expect, it, vi } from 'vitest'
@@ -147,14 +147,14 @@ describe('deep-link toast navigate ', () => {
     expect(mainWindow.mocks.show).toHaveBeenCalled()
   })
 
-  it('tabtin://focus 只聚焦，不发 notification:navigate', async () => {
+  it('muse://focus 只聚焦，不发 notification:navigate', async () => {
     const mainWindow = createMockWindow({ loading: false, visible: true })
     const controller = createDeepLinkController({
       log: { debug: vi.fn(), error: vi.fn() },
       getMainWindow: () => mainWindow as never,
     })
 
-    controller.handleSecondInstance(['TabTin.exe', 'tabtin://focus'])
+    controller.handleSecondInstance(['TabTin.exe', 'muse://focus'])
     await Promise.resolve()
     await Promise.resolve()
 

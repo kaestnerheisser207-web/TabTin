@@ -12,13 +12,13 @@ const electronVitePackageJson = require.resolve('electron-vite/package.json')
 const electronViteCli = join(dirname(electronVitePackageJson), 'bin', 'electron-vite.js')
 
 const DEFAULT_MAX_OLD_SPACE_SIZE_MB = 8192
-const requestedLimit = process.env.TABTIN_ELECTRON_BUILD_MAX_OLD_SPACE_SIZE?.trim()
+const requestedLimit = process.env.MUSE_ELECTRON_BUILD_MAX_OLD_SPACE_SIZE?.trim()
 const parsedLimit = requestedLimit ? Number.parseInt(requestedLimit, 10) : Number.NaN
 const maxOldSpaceSize = Number.isFinite(parsedLimit) && parsedLimit > 0
   ? parsedLimit
   : DEFAULT_MAX_OLD_SPACE_SIZE_MB
 
-// 根据 TABTIN_BUILD_PROFILE 自动注入 vite --mode 参数 ——
+// 根据 MUSE_BUILD_PROFILE 自动注入 vite --mode 参数 ——
 //
 // 历史 bug：vite build 默认 mode='production'，会自动加载 .env.production，
 // 优先级压过 .env.<profile> 里的 VITE_API_BASE_URL / VITE_APP_VERSION 等关键变量。
@@ -34,7 +34,7 @@ const maxOldSpaceSize = Number.isFinite(parsedLimit) && parsedLimit > 0
 const PROFILE_TO_VITE_MODE = {
   local: 'localdev',
 }
-const profile = process.env.TABTIN_BUILD_PROFILE?.trim()
+const profile = process.env.MUSE_BUILD_PROFILE?.trim()
 if (profile === 'local' && !process.env.VITE_BUILD_PROFILE) {
   process.env.VITE_BUILD_PROFILE = profile
 }
@@ -43,7 +43,7 @@ const hasModeArg = passthroughArgs.some(arg => arg === '--mode' || arg.startsWit
 const viteMode = profile ? (PROFILE_TO_VITE_MODE[profile] ?? profile) : null
 const modeArgs = viteMode && !hasModeArg ? ['--mode', viteMode] : []
 if (viteMode) {
-  process.env.TABTIN_VITE_MODE = viteMode
+  process.env.MUSE_VITE_MODE = viteMode
 }
 
 // 从 Electron package.json 读取默认版本号写入 process.env.VITE_APP_VERSION ——

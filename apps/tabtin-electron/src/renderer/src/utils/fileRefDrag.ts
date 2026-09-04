@@ -1,7 +1,7 @@
 /**
  * 跨应用文件引用 DnD 协议（对话 → 文档 / 多维表格 / 对话 Composer）。
  *
- * MIME: application/x-tabtin-file-ref（见 DRAG_TYPE_FILE_REF）
+ * MIME: application/x-muse-file-ref（见 DRAG_TYPE_FILE_REF）
  * 落点：TabDoc handleDrop、GridAttachmentEditor / AttachmentField、
  * ChatInput / ChatContent（ chatFileRefDrop）。
  */

@@ -16,8 +16,8 @@
  */
 
 import { useCallback, useMemo, useRef } from 'react'
-import { AgentSessionEvents } from '@tabtin/ws-gateway-client'
-import type { DecisionSummary } from '@tabtin/chat-client'
+import { AgentSessionEvents } from '@muse/ws-gateway-client'
+import type { DecisionSummary } from '@muse/chat-client'
 import { useGatewayTopic, type GatewayTopicStatus } from './useGatewayTopic'
 
 export interface DecisionSummaryEventPayload {

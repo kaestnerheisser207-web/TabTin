@@ -7,7 +7,7 @@ describe('buildRichResourcePointer', () => {
     expect(pointer.scheme).toBe('tabtin')
     expect(pointer.type).toBe('document')
     expect(pointer.id).toBe('doc_xyz')
-    expect(pointer.raw).toContain('tabtin://resource/doc/doc_xyz')
+    expect(pointer.raw).toContain('muse://resource/doc/doc_xyz')
   })
 
   it('keeps canonical document type unchanged', () => {

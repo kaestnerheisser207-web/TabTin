@@ -10,7 +10,7 @@ import { OverlayApp } from './OverlayApp'
 
 import '@/i18n'
 import '@styles/globals.css'
-import '@tabtin/smartsheet-ui/styles'
+import '@muse/smartsheet-ui/styles'
 
 /**
  * overlay renderer 必须保持透明：globals.css 有 `body { background: hsl(--canvas) !important }`，
@@ -34,13 +34,13 @@ function setupThemeSync(): void {
     accent: null,
     ring: null,
   })
-  window.tabtin?.overlay?.onSyncTheme?.((raw) => {
+  window.muse?.overlay?.onSyncTheme?.((raw) => {
     applyThemeSnapshot(raw as OverlayThemeSnapshot)
   })
 }
 
 function setupLocaleSync(): void {
-  window.tabtin?.overlay?.onSyncLocale?.((raw) => {
+  window.muse?.overlay?.onSyncLocale?.((raw) => {
     applyOverlayLocale(raw)
   })
 }

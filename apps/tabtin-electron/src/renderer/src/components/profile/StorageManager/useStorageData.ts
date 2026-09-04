@@ -31,7 +31,7 @@ import {
   createDaemonBridge,
   createMainProcessBridge,
   type IpcRendererInvoker,
-} from '@tabtin/storage-manager'
+} from '@muse/storage-manager'
 import type {
   BucketClearReport,
   BucketDescriptor,

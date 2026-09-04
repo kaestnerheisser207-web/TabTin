@@ -14,7 +14,7 @@
  */
 
 import type { WebContents } from 'electron'
-import type { MediaElementInfo, ResourceCategory } from '@tabtin/action-tools/types'
+import type { MediaElementInfo, ResourceCategory } from '@muse/action-tools/types'
 import { createLogger } from '../logger'
 
 const log = createLogger('MediaProbe')

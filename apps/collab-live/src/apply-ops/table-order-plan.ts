@@ -4,11 +4,11 @@ import {
   applyTableRecordOrderPlan,
   LEGACY_RECORD_ORDER_FIELD,
   planTableRecordInsert,
-} from "@tabtin/table-engine/collab/table-record-order";
+} from "@muse/table-engine/collab/table-record-order";
 import {
   RECORD_POSITION_FIELD,
   type RecordPositionPlan,
-} from "@tabtin/table-engine/collab/record-position";
+} from "@muse/table-engine/collab/record-position";
 
 import { isObject, type CollabPrimitiveOp } from "./types.js";
 

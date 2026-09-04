@@ -1,4 +1,4 @@
-export { PtySessionStore } from '@tabtin/pty-core'
+export { PtySessionStore } from '@muse/pty-core'
 export type {
   ExecuteCommandResult,
   PtySession,
@@ -7,4 +7,4 @@ export type {
   ActiveAutoRespond,
   PendingCommand,
   BackgroundedWatcher,
-} from '@tabtin/pty-core'
+} from '@muse/pty-core'

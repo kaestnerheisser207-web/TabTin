@@ -16,8 +16,8 @@
 
 import { create } from 'zustand'
 import { createJSONStorage, persist } from 'zustand/middleware'
-import { withPersistSafety, createMigratingStorage } from '@tabtin/shared'
-import { getBucket, registerStorageBucket } from '@tabtin/storage-manager'
+import { withPersistSafety, createMigratingStorage } from '@muse/shared'
+import { getBucket, registerStorageBucket } from '@muse/storage-manager'
 import { PERSIST_KEYS } from './persist-key-registry'
 import { registerResetAction } from './sessionResetRegistry'
 
@@ -97,7 +97,7 @@ export const useBrowsingHistoryStore = create<BrowsingHistoryState>()(
       initialize: () => {
         if (get().initialized) return
 
-        const api = window.tabtin?.crawlView
+        const api = window.muse?.crawlView
         if (!api?.onEvent) {
           // crawlView 尚未注入时保持未初始化，便于 EmbeddedCrawlView 挂载后重试
           return

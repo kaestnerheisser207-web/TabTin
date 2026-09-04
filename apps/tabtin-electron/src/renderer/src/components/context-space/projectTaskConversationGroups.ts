@@ -1,5 +1,5 @@
 import type { TFunction } from 'i18next'
-import type { ChatSession } from '@tabtin/chat-client'
+import type { ChatSession } from '@muse/chat-client'
 import type { ProjectTask, ProjectTaskConversation } from '@/types/project'
 import type { DeviceControlView } from '@/services/deviceControlMatch'
 import {

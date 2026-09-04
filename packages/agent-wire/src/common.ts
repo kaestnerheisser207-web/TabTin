@@ -29,7 +29,7 @@ export type TurnEndStatus = z.infer<typeof TurnEndStatusSchema>;
 //
 // P2（2026-04-22）：此前本文件曾有一份重复 UsageReportSchema（含 11 字段）但
 // 从未被 ./index.ts 导出（孤儿）；wire 层实际导出的 UsageReport 来自
-// `@tabtin/contracts/agent`。当前已将 contracts 那份扩围到 11 字段，删除本
+// `@muse/contracts/agent`。当前已将 contracts 那份扩围到 11 字段，删除本
 // 处孤儿，确保 schema 单一来源。详见
 
 // ─── Plan Entry ──────────────────────────────────────────────────────

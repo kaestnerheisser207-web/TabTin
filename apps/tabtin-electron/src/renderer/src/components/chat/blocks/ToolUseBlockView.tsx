@@ -36,7 +36,7 @@
 
 import React, { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
-import type { ToolUseBlock } from '@tabtin/agent-wire'
+import type { ToolUseBlock } from '@muse/agent-wire'
 import { cn } from '@utils/cn'
 import { ShinyText } from '../markdown/ShinyText'
 import { SubagentAggregateView } from '../subagent/SubagentAggregateView'

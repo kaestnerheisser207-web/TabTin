@@ -41,7 +41,7 @@ export interface CrawlspaceHost {
   /**
    * TaskAPI 执行能力（可选）
    * - 用于创建/查询/控制任务执行
-   * - 由宿主实现（Electron 中对应 window.tabtin.taskAPI）
+   * - 由宿主实现（Electron 中对应 window.muse.taskAPI）
    */
   taskApi?: {
     create?: (config: any) => Promise<{ success: boolean; task?: any; error?: string }>
@@ -80,7 +80,7 @@ export interface CrawlspaceHost {
   /**
    * Run 会话能力（可选）
    * - 用于创建/结束 run（主进程 RunSessionManager）
-   * - crawlspace-core 不直接依赖 window.tabtin
+   * - crawlspace-core 不直接依赖 window.muse
    */
   runSession?: {
     create?: (runId: string, sessionId?: string) => Promise<{ success: boolean; error?: string }>

@@ -51,13 +51,13 @@ describe('sanitizeSpaceDirName', () => {
 describe('ensureDefaultAgentDirImpl', () => {
   beforeEach(() => {
     homeRoot = fs.mkdtempSync(path.join(os.tmpdir(), 'tabtin-home-'))
-    originalRuntimeProfile = process.env.TABTIN_RUNTIME_PROFILE
-    process.env.TABTIN_RUNTIME_PROFILE = 'production'
+    originalRuntimeProfile = process.env.MUSE_RUNTIME_PROFILE
+    process.env.MUSE_RUNTIME_PROFILE = 'production'
   })
   afterEach(() => {
     try { fs.rmSync(homeRoot, { recursive: true, force: true }) } catch { /* ignore */ }
-    if (originalRuntimeProfile === undefined) delete process.env.TABTIN_RUNTIME_PROFILE
-    else process.env.TABTIN_RUNTIME_PROFILE = originalRuntimeProfile
+    if (originalRuntimeProfile === undefined) delete process.env.MUSE_RUNTIME_PROFILE
+    else process.env.MUSE_RUNTIME_PROFILE = originalRuntimeProfile
   })
 
   it('在 ~/TabTin/<团队>/<名字> 下真实创建目录', async () => {
@@ -98,7 +98,7 @@ describe('ensureDefaultAgentDirImpl', () => {
   })
 
   it('Preprod 使用独立的用户可见 Workspace 根目录', async () => {
-    process.env.TABTIN_RUNTIME_PROFILE = 'preprod'
+    process.env.MUSE_RUNTIME_PROFILE = 'preprod'
     const res = await ensureDefaultAgentDirImpl({
       organizationName: 'Team A',
       spaceName: 'Demo',

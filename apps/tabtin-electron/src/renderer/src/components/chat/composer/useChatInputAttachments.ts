@@ -1,5 +1,5 @@
 import { useCallback } from 'react'
-import { toast } from '@tabtin/smartsheet-ui'
+import { toast } from '@muse/smartsheet-ui'
 import { useTranslation } from 'react-i18next'
 import {
   createAttachment,

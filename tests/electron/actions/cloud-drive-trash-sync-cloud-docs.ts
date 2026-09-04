@@ -333,8 +333,8 @@ async function runAuthDjango(
       timeoutMs: 60_000,
       env: {
         ...process.env,
-        TABTIN_E2E_MODE: "auth",
-        TABTIN_E2E_RUN_ID: prepared.runId,
+        MUSE_E2E_MODE: "auth",
+        MUSE_E2E_RUN_ID: prepared.runId,
       },
     },
   );
@@ -364,13 +364,13 @@ async function runVerifyDjango(
       timeoutMs: 60_000,
       env: {
         ...process.env,
-        TABTIN_E2E_MODE: "verify",
-        TABTIN_E2E_RUN_ID: prepared.runId,
-        TABTIN_E2E_USER_ID: prepared.authUser.userId,
-        TABTIN_E2E_DOCUMENT_ID: prepared.document.id,
-        TABTIN_E2E_TABLE_ID: prepared.table.id,
-        TABTIN_E2E_DOC_CONTEXT_ITEM_ID: prepared.document.contextItemId,
-        TABTIN_E2E_TABLE_CONTEXT_ITEM_ID: prepared.table.contextItemId,
+        MUSE_E2E_MODE: "verify",
+        MUSE_E2E_RUN_ID: prepared.runId,
+        MUSE_E2E_USER_ID: prepared.authUser.userId,
+        MUSE_E2E_DOCUMENT_ID: prepared.document.id,
+        MUSE_E2E_TABLE_ID: prepared.table.id,
+        MUSE_E2E_DOC_CONTEXT_ITEM_ID: prepared.document.contextItemId,
+        MUSE_E2E_TABLE_CONTEXT_ITEM_ID: prepared.table.contextItemId,
       },
     },
   );

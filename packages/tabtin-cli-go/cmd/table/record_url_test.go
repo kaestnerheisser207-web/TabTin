@@ -7,7 +7,7 @@ import (
 )
 
 const testRecordURL = "http://127.0.0.1:5175/table/529c0808-44c2-489f-baf2-71732bb7d76b/record/1652aeb3-5bc9-4ccb-a9ec-00fff389f0fa"
-const testRecordDeepLink = "tabtin://resource/table/529c0808-44c2-489f-baf2-71732bb7d76b?hint=tabdata&recordIds=1652aeb3-5bc9-4ccb-a9ec-00fff389f0fa"
+const testRecordDeepLink = "muse://resource/table/529c0808-44c2-489f-baf2-71732bb7d76b?hint=tabdata&recordIds=1652aeb3-5bc9-4ccb-a9ec-00fff389f0fa"
 
 func TestRecordDetailAndUpdateAreAuthOnly(t *testing.T) {
 	cmd := NewCmdTable(cmdutil.NewFactory())
@@ -79,7 +79,7 @@ func TestRecordDetailAcceptsTabTinResourceDeepLink(t *testing.T) {
 }
 
 func TestRecordDetailAcceptsEnvironmentSpecificResourceDeepLinks(t *testing.T) {
-	for _, scheme := range []string{"tabtin-preprod", "tabtin-dev"} {
+	for _, scheme := range []string{"muse-preprod", "muse-dev"} {
 		t.Run(scheme, func(t *testing.T) {
 			raw := scheme + "://resource/table/529c0808-44c2-489f-baf2-71732bb7d76b?hint=tabdata&recordIds=1652aeb3-5bc9-4ccb-a9ec-00fff389f0fa"
 			ref, err := parseTabDataRecordURL(raw)
@@ -204,7 +204,7 @@ func TestRecordURLRejectsNonRecordPaths(t *testing.T) {
 }
 
 func TestTabTinDeepLinkRequiresExactlyOneRecord(t *testing.T) {
-	base := "tabtin://resource/table/529c0808-44c2-489f-baf2-71732bb7d76b"
+	base := "muse://resource/table/529c0808-44c2-489f-baf2-71732bb7d76b"
 	for _, raw := range []string{
 		base + "?hint=tabdata",
 		base + "?recordIds=1652aeb3-5bc9-4ccb-a9ec-00fff389f0fa&recordIds=aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa",

@@ -22,7 +22,7 @@ vi.mock('react-markdown', () => ({
   default: ({ children }: { children: React.ReactNode }) => <>{children}</>,
 }))
 
-vi.mock('@tabtin/smartsheet-ui', () => ({
+vi.mock('@muse/smartsheet-ui', () => ({
   toast: Object.assign(vi.fn(), { success: vi.fn(), error: vi.fn() }),
   resolveChoiceTagColors: vi.fn(() => ({ bg: '#eee', text: '#111' })),
 }))

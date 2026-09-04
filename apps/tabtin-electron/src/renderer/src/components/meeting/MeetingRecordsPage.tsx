@@ -14,14 +14,14 @@ export const MeetingRecordsPage: React.FC = () => {
   const openSetupView = useMeetingViewNavigation((state) => state.openSetup);
   const openSession = useMeetingViewNavigation((state) => state.openSession);
   const [runtimeChecked, setRuntimeChecked] = React.useState(
-    () => !window.tabtin?.meetingRecording,
+    () => !window.muse?.meetingRecording,
   );
   const [activeSessionId, setActiveSessionId] = React.useState<string | null>(
     null,
   );
 
   React.useEffect(() => {
-    const bridge = window.tabtin?.meetingRecording;
+    const bridge = window.muse?.meetingRecording;
     if (!bridge) {
       setRuntimeChecked(true);
       return;

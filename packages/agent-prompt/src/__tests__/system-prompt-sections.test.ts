@@ -2,7 +2,7 @@
  * 回归测试：system prompt 的 principle / environment / custom_rules 段。
  *
  * 具体 persona 由 agent-profile 提供；principle 只定义默认原则。
- * section builders 的 SSoT 在 `@tabtin/agent-prompt` 包。
+ * section builders 的 SSoT 在 `@muse/agent-prompt` 包。
  */
 import { describe, it, expect } from 'vitest'
 import {
@@ -60,7 +60,7 @@ describe('system-prompt-sections – buildEnvironmentSection', () => {
     expect(out).toContain('工作空间：')
     expect(out).toContain('会话：')
     expect(out).toContain('## 环境变量')
-    expect(out).toContain('- `TABTIN_WORKSPACE`')
+    expect(out).toContain('- `MUSE_WORKSPACE`')
     expect(out).not.toContain('/tmp/workspace-test')
     expect(out).toContain('## 术语')
     expect(out).toContain('Organization')

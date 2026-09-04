@@ -4,7 +4,7 @@ import {
   DEFAULT_MODEL_ID,
   MODEL_FILE_RELATIVE_PATH,
   TOKENIZER_FILENAME,
-} from '@tabtin/local-embedding';
+} from '@muse/local-embedding';
 
 export function hasLocalSemanticModel(modelsDir: string): boolean {
   const modelDir = path.join(modelsDir, DEFAULT_MODEL_ID);

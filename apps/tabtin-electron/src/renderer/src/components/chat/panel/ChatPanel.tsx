@@ -29,8 +29,8 @@ import { ResourceOpenExecutionSpaceContext } from './ResourceOpenExecutionSpaceC
 import { ChatSessionBar } from '../session/ChatSessionBar'
 import type { SpaceContext } from '@components/context-space/SpaceContextContainer'
 import { useSpaceActivity } from '@components/layout/SpaceActivityContext'
-import { resolveSessionScopeId } from '@tabtin/app-shell'
-import type { ChatSession } from '@tabtin/chat-client'
+import { resolveSessionScopeId } from '@muse/app-shell'
+import type { ChatSession } from '@muse/chat-client'
 import {
   buildConversationDraftScopeKey,
   resolveWorkspaceContextState,

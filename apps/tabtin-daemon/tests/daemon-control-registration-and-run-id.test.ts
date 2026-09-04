@@ -9,8 +9,8 @@ import {
 import { TabTinDaemon } from '../src/bootstrap/daemon.js';
 import { registerDaemonControlDevice } from '../src/transport/gateway/daemon-control-registration.js';
 
-vi.mock('@tabtin/agent-wire', async () => {
-  const actual = await vi.importActual<typeof import('@tabtin/agent-wire')>('@tabtin/agent-wire');
+vi.mock('@muse/agent-wire', async () => {
+  const actual = await vi.importActual<typeof import('@muse/agent-wire')>('@muse/agent-wire');
   return {
     ...actual,
     PromptEvents: { ...actual.PromptEvents, ADMITTED: 'agent.prompt.admitted' },
@@ -77,7 +77,7 @@ function makeRegistrationHarness() {
 describe('Daemon Control device registration', () => {
   it('registers the stable installation with the daemon JWT', async () => {
     vi.stubEnv('DAEMON_CONTROL_ENABLED', 'true');
-    vi.stubEnv('TABTIN_DAEMON_CONTROL_API_BASE_URL', 'http://127.0.0.1:6080/api');
+    vi.stubEnv('MUSE_DAEMON_CONTROL_API_BASE_URL', 'http://127.0.0.1:6080/api');
     const fetchMock = vi.fn()
       .mockResolvedValueOnce(deviceResponse(7))
       .mockResolvedValueOnce(deviceResponse(8));
@@ -144,7 +144,7 @@ describe('Daemon Control device registration', () => {
 
   it('does not send daemon credentials to a non-local HTTP origin', async () => {
     vi.stubEnv('DAEMON_CONTROL_ENABLED', 'true');
-    vi.stubEnv('TABTIN_DAEMON_CONTROL_API_BASE_URL', 'http://control.example.com/api');
+    vi.stubEnv('MUSE_DAEMON_CONTROL_API_BASE_URL', 'http://control.example.com/api');
     const fetchMock = vi.fn();
     vi.stubGlobal('fetch', fetchMock);
 

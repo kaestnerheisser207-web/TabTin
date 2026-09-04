@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest'
 import { generateCreateTableSql } from '../src/schema.js'
-import type { TableSchema, TableFieldSchema } from '@tabtin/table-kernel'
+import type { TableSchema, TableFieldSchema } from '@muse/table-kernel'
 
 function makeField(id: string, fieldType: string, extra: Partial<TableFieldSchema> = {}): TableFieldSchema {
   return {

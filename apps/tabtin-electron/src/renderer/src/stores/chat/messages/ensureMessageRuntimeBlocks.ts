@@ -1,4 +1,4 @@
-import type { ChatMessage } from '@tabtin/chat-client'
+import type { ChatMessage } from '@muse/chat-client'
 import { deserializeContentBlocks } from '@/components/chat/blocks/deserializeContentBlocks'
 import { appendMissingUserAttachmentMediaBlocks } from '@/stores/chat/domain/userMediaMerge'
 import { reconcileServerMessageBlocks } from '@/stores/chat/domain/blockMergePolicy'

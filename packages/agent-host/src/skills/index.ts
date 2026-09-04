@@ -1,9 +1,9 @@
 /**
  * Host-side local skill module — disk IO, registry, watcher, install/preinstall.
  *
- * Electron / Daemon import orchestration from `@tabtin/agent-host/skills`.
+ * Electron / Daemon import orchestration from `@muse/agent-host/skills`.
  * Pure contracts (enablement / renderer / types / listing) stay on
- * `@tabtin/agent-runtime/skills`.
+ * `@muse/agent-runtime/skills`.
  */
 
 import * as fsp from 'node:fs/promises';
@@ -11,12 +11,12 @@ import { join, resolve as resolvePath } from 'node:path';
 import {
   resolveOrganizationSkillsDir,
   resolveUserSkillsDir,
-} from '@tabtin/agent-runtime/paths';
+} from '@muse/agent-runtime/paths';
 import type {
   HiddenSkillSets,
   ScanRoot,
   SkillRecallPort,
-} from '@tabtin/agent-runtime/skills';
+} from '@muse/agent-runtime/skills';
 import { LocalSkillRegistry, type RegistryLogger } from './local-skill-registry.js';
 import { SkillDirWatcher } from './skill-dir-watcher.js';
 import type { PreinstallResult, SkillPreinstallSource } from './skill-preinstaller.js';
@@ -127,7 +127,7 @@ export function _skillsDisposableCountForTest(): number {
 
 export interface InitSkillsModuleOptions {
   /**
-   * 新数据根：`{platformBase}` 或 env `TABTIN_DATA_ROOT`。
+   * 新数据根：`{platformBase}` 或 env `MUSE_DATA_ROOT`。
    * 提供时 scanner 走 `.../users/{userId}/…` 双层布局。
    */
   dataRoot?: string;

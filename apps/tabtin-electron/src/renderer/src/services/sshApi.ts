@@ -4,8 +4,8 @@
  * 负责 SSH 远程服务器的 CRUD 和连通性测试。
  */
 
-import { joinApiPath } from '@tabtin/config'
-import type { RemoteServer, RemoteServerCreate, RemoteServerUpdate } from '@tabtin/app-shell'
+import { joinApiPath } from '@muse/config'
+import type { RemoteServer, RemoteServerCreate, RemoteServerUpdate } from '@muse/app-shell'
 import { API_CONFIG, API_ENDPOINTS } from '@/config/api'
 import { apiRequest as adapterApiRequest, getAuthToken } from '@/adapters/api-adapter-instance'
 import i18n from '@/i18n'

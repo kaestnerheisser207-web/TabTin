@@ -15,7 +15,7 @@
  * 对应回归测试随实现位于该宿主包。
  */
 import { describe, it, expect, vi } from 'vitest';
-import { ManagedTaskStore } from '@tabtin/terminal-core';
+import { ManagedTaskStore } from '@muse/terminal-core';
 import {
   killProcessGroupSafe,
   parseRelayFailure,

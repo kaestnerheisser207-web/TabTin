@@ -1,6 +1,6 @@
 import React from 'react'
 import { Users } from 'lucide-react'
-import { identityAvatarColor, identityAvatarInitial } from '@tabtin/shared'
+import { identityAvatarColor, identityAvatarInitial } from '@muse/shared'
 import { cn } from '@utils/cn'
 import { createLogger } from '@/utils/logger'
 

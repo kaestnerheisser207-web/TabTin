@@ -12,7 +12,7 @@ import { useSortable, SortableContext, type SortableContextProps } from '@dnd-ki
 import { CSS } from '@dnd-kit/utilities'
 import React, { useMemo } from 'react'
 import { createPortal } from 'react-dom'
-import { useOverlayContainer } from '@tabtin/smartsheet-ui'
+import { useOverlayContainer } from '@muse/smartsheet-ui'
 
 type IProvidedProps = ReturnType<typeof useSortable> & {
   style: React.CSSProperties

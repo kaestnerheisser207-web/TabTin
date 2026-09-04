@@ -32,7 +32,7 @@ TEST_CREDENTIAL_KEY = Fernet.generate_key().decode("ascii")
 
 
 @override_settings(
-    TABTIN_EDITION="community",
+    MUSE_EDITION="community",
     CREDENTIAL_ENCRYPTION_KEY=TEST_CREDENTIAL_KEY,
 )
 class CommunityExistingByokCompatibilityTests(TestCase):
@@ -247,7 +247,7 @@ class CommunityExistingByokCompatibilityTests(TestCase):
         self.assertEqual(PaymentOrder.objects.count(), 0)
         self.assertEqual(ProviderCreditGrant.objects.count(), 0)
 
-    @override_settings(TABTIN_EDITION="saas")
+    @override_settings(MUSE_EDITION="saas")
     def test_saas_model_creation_does_not_apply_community_profile_defaults(self):
         organization_id = "saas-org"
         request = SimpleNamespace(auth=SimpleNamespace(id="saas-user"))

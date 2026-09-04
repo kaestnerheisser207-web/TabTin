@@ -6,7 +6,7 @@ package cmd
 // Python 侧退出码协议（A5）：
 //   0    成功
 //   2    argparse 参数错误
-//   78   E_INSTALL_CHECKSUM_MISSING（SHA256 缺失，除非 TABTIN_ALLOW_UNCHECKED_INSTALL=1）
+//   78   E_INSTALL_CHECKSUM_MISSING（SHA256 缺失，除非 MUSE_ALLOW_UNCHECKED_INSTALL=1）
 //   126  评估层 deny / fail-close
 //   其他 透传（如 download HTTP error）
 

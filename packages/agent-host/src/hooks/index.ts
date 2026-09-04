@@ -1,7 +1,7 @@
 /**
- * `@tabtin/agent-host/hooks` —— 宿主侧「上下文贡献」EngineHooks 工厂集合。
+ * `@muse/agent-host/hooks` —— 宿主侧「上下文贡献」EngineHooks 工厂集合。
  *
- * **背景（ Phase 1）**：把 agent-runtime 做成对 @tabtin/* 零依赖的通用
+ * **背景（ Phase 1）**：把 agent-runtime 做成对 @muse/* 零依赖的通用
  * ReAct 引擎。引擎只保留 `EngineHooks`（context 变换钩子）作为唯一注入原语；
  * 原来住在 runtime `capability/injectors/` 的 6 段上下文贡献（context / memory /
  * mode-reminder / todo-state / rules / lsp-diagnostic）+ relevant-recall，

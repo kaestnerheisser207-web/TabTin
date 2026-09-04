@@ -9,7 +9,7 @@ import {
   initAppShellStores,
   setExternalStoreAdapters,
   setAppShellLogSink,
-} from '@tabtin/app-shell';
+} from '@muse/app-shell';
 import { createLogger } from '@/utils/logger';
 import { recordLog } from '@/services/logCollector';
 import { apiRequest, getAuthToken } from './api-adapter-instance';
@@ -82,7 +82,7 @@ export function initAppShellForElectron(): void {
       setActiveSpace: (spaceId, crawlspaceId, organizationId, organizationRoot) => {
         // Pass organizationRoot through unchanged; main process applies the
         // sandbox fallback when this is null (see file header comment).
-        const setActive = window.tabtin?.space?.setActive;
+        const setActive = window.muse?.space?.setActive;
         const setActivePromise = setActive?.(spaceId, crawlspaceId, organizationId, organizationRoot ?? null);
         // 路径权限治理 Wave 3 修 L13 / 02 §3.2 断点 1（重启降级）+ §3.3 断点 2
         // （切 Space 不同步）+ §3.4 断点 3（切 Agent 不同步）：
@@ -184,7 +184,7 @@ export function initAppShellForElectron(): void {
         workspaceId,
         workingDir,
       }) => {
-        const api = window.tabtin?.import?.deleteArchivesForWorkspace
+        const api = window.muse?.import?.deleteArchivesForWorkspace
         if (!api) return
         try {
           const res = await api({

@@ -4,7 +4,7 @@ export interface DocEditorModuleInfo {
 }
 
 export const DOC_EDITOR_MODULE_INFO: DocEditorModuleInfo = {
-  name: '@tabtin/doc-editor',
+  name: '@muse/doc-editor',
   version: '0.1.0',
 }
 

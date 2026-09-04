@@ -1,5 +1,5 @@
 import React from 'react'
-import type { TableGridPagination } from '@tabtin/table-engine'
+import type { TableGridPagination } from '@muse/table-engine'
 import {
   Button,
   Select,
@@ -8,7 +8,7 @@ import {
   SelectTrigger,
   SelectValue,
   cn,
-} from '@tabtin/smartsheet-ui'
+} from '@muse/smartsheet-ui'
 
 export interface DataGridPaginationBarProps {
   currentPage: number

@@ -92,7 +92,7 @@ export const MeetingSessionView: React.FC<{
 
   React.useEffect(() => {
     if (!runtimeSession) return;
-    const bridge = window.tabtin?.meetingRecording;
+    const bridge = window.muse?.meetingRecording;
     if (!bridge) {
       setLoading(false);
       return;
@@ -129,7 +129,7 @@ export const MeetingSessionView: React.FC<{
   }, [archiveScope, runtimeSession, sessionId]);
 
   const deleteArchiveAudio = React.useCallback(async () => {
-    const bridge = window.tabtin?.meetingRecording;
+    const bridge = window.muse?.meetingRecording;
     if (!bridge || !archiveScope) {
       throw new Error(t('detail.deleteUnavailable'));
     }
@@ -138,7 +138,7 @@ export const MeetingSessionView: React.FC<{
   }, [archiveScope, t]);
 
   const deleteArchive = React.useCallback(async () => {
-    const bridge = window.tabtin?.meetingRecording;
+    const bridge = window.muse?.meetingRecording;
     if (!bridge || !archiveScope) {
       throw new Error(t('detail.deleteUnavailable'));
     }

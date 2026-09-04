@@ -48,7 +48,7 @@ function notifyBrowserZoomLevel(viewId: string, level: number): void {
  */
 export function adjustBrowserZoom(viewId: string, direction: BrowserZoomDirection): void {
   if (!viewId) return
-  const tabtin = typeof window !== 'undefined' ? window.tabtin : undefined
+  const tabtin = typeof window !== 'undefined' ? window.muse : undefined
   if (!tabtin?.crawlView?.setZoomLevel) return
 
   const current = zoomLevelByViewId[viewId] ?? 0

@@ -1,6 +1,6 @@
 import React from 'react'
 import { useTranslation } from 'react-i18next'
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, Button, StatusNotice } from '@tabtin/smartsheet-ui'
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, Button, StatusNotice } from '@muse/smartsheet-ui'
 import type { MembershipUpgradeOrder, MembershipUpgradeQuotePreview } from '@/types/membership'
 import { formatDateLabel, formatPriceDisplay, resolveTierDisplayName } from './subscriptionFormat'
 

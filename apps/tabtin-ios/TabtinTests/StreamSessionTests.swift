@@ -84,7 +84,7 @@ final class StreamSessionTests: XCTestCase {
                         "file_size": 4096,
                         "access_url": "https://oss.example.com/live.png",
                         "source_tool_use_id": "tool-use-ios-live",
-                        "url": "tabtin://resource/file/file-ios-live?hint=tabfiles",
+                        "url": "muse://resource/file/file-ios-live?hint=tabfiles",
                     ],
                 ],
             ]),

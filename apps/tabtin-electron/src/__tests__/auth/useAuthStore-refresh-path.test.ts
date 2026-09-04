@@ -2,7 +2,7 @@
  * useAuthStore token 刷新路径回归测试
  *
  * 验证 TA-006/TA-007：refreshAuthToken 和 loadAuthFromStorage 必须走
- * 主进程 IPC（window.tabtin.auth.refreshAccessToken）而非已废弃的
+ * 主进程 IPC（window.muse.auth.refreshAccessToken）而非已废弃的
  * apiService.refreshToken()（该方法依赖已移除的 auth:getRefreshToken IPC）。
  *
  * 以及 ：loadAuthFromStorage 启动刷新失败时必须区分确定性拒绝与瞬时

@@ -3,7 +3,7 @@
  */
 
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
-import type { ChatMessage } from '@tabtin/chat-client'
+import type { ChatMessage } from '@muse/chat-client'
 import {
   _resetTitleGenerationDedupeForTests,
   defaultShouldGenerateTitle,
@@ -63,7 +63,7 @@ function buildDeps(opts: {
   )
   const getChatClient = vi.fn(() => ({
     sessions: { generateTitle },
-  })) as unknown as () => import('@tabtin/chat-client').ChatClient
+  })) as unknown as () => import('@muse/chat-client').ChatClient
 
   return {
     sessionId,
@@ -217,7 +217,7 @@ describe('requestTitleGenerationOnSend', () => {
       userMessage: '你好',
       getMessages: () => makeMsgs(['user']),
       getChatClient: () =>
-        ({ sessions: { generateTitle } }) as unknown as import('@tabtin/chat-client').ChatClient,
+        ({ sessions: { generateTitle } }) as unknown as import('@muse/chat-client').ChatClient,
     })
     expect(fired).toBe(true)
     expect(generateTitle).toHaveBeenCalledWith('sess-aaa', {
@@ -233,7 +233,7 @@ describe('requestTitleGenerationOnSend', () => {
       userMessage: '第二句',
       getMessages: () => makeMsgs(['user', 'assistant', 'user']),
       getChatClient: () =>
-        ({ sessions: { generateTitle } }) as unknown as import('@tabtin/chat-client').ChatClient,
+        ({ sessions: { generateTitle } }) as unknown as import('@muse/chat-client').ChatClient,
     })
     expect(fired).toBe(false)
     expect(generateTitle).not.toHaveBeenCalled()

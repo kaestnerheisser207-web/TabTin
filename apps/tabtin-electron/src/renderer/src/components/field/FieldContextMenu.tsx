@@ -19,7 +19,7 @@ import {
   SELECT_CHOICE_PRESET_COLORS,
   type SelectChoiceOption,
   toast,
-} from '@tabtin/smartsheet-ui'
+} from '@muse/smartsheet-ui'
 import {
   ChevronLeft,
   ChevronRight,
@@ -34,8 +34,8 @@ import {
   ArrowDownAZ,
   Star,
 } from 'lucide-react'
-import type { Field, FieldType } from '@tabtin/table-core'
-import { FieldApiService, isPrimaryFieldAllowedType } from '@tabtin/table-core'
+import type { Field, FieldType } from '@muse/table-core'
+import { FieldApiService, isPrimaryFieldAllowedType } from '@muse/table-core'
 import { FieldTypeIcon } from './FieldTypeIcon'
 import { useTranslation } from 'react-i18next'
 import { createLogger } from '@/utils/logger'

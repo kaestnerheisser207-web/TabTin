@@ -63,7 +63,7 @@ vi.mock('../../config/api.js', () => ({
   API_BASE_URL: 'http://test.local/api',
 }))
 
-vi.mock('@tabtin/config', () => ({
+vi.mock('@muse/config', () => ({
   joinApiPath: (base: string, path: string) => `${base}${path}`,
 }))
 
@@ -98,7 +98,7 @@ function makeEvent(overrides: Partial<ResourceOpenEventPayload> = {}): ResourceO
   return {
     event_name: 'resource_open.resolved',
     trigger_source: 'chat_markdown',
-    pointer_scheme: 'tabtin',
+    pointer_scheme: 'muse',
     pointer_type: 'table',
     pointer_id_hash: '0123456789abcdef',
     hint_app_id: null,

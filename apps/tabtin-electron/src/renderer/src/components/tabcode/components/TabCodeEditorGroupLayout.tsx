@@ -165,7 +165,7 @@ export function TabCodeEditorGroupLayout({
     for (const filePath of inactiveOpenFiles) {
       if (previewCacheRef.current.has(filePath) || previewPreloadRef.current.has(filePath)) continue
       previewPreloadRef.current.add(filePath)
-      window.tabtin.fileSystem.readFilePreview(filePath, { maxBytes: 512 * 1024 })
+      window.muse.fileSystem.readFilePreview(filePath, { maxBytes: 512 * 1024 })
         .then((result: { data?: FilePreviewData } | null) => {
           const data = result?.data
           previewCacheRef.current.set(filePath, {

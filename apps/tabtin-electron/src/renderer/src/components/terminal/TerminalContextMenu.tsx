@@ -10,7 +10,7 @@ import {
   ContextMenu,
   ContextMenuItem,
   ContextMenuDivider,
-} from '@tabtin/smartsheet-ui'
+} from '@muse/smartsheet-ui'
 import {
   Copy,
   ClipboardPaste,
@@ -135,7 +135,7 @@ export const TerminalContextMenu: React.FC<TerminalContextMenuProps> = ({
       if (!targetPaneId) return
       // 统一走 createSplitPane：sessionId 不内嵌桶 key（防 scope 桶冒号污染快照名），
       // 且继承父 pane 的 cwd + executionSpaceId（保证分屏 PTY 与 root 同 working_dir /
-      // 同 TABTIN_SPACE_ID）。spaceId 此处为 TerminalSplitContainer 跨桶解析出的桶 key。
+      // 同 MUSE_SPACE_ID）。spaceId 此处为 TerminalSplitContainer 跨桶解析出的桶 key。
       createSplitPane({
         rootSessionId,
         targetPaneId,

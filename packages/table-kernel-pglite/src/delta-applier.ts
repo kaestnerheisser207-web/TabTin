@@ -1,5 +1,5 @@
-import type { SyncRecordChange, FieldColumnMap } from '@tabtin/table-kernel'
-import { translateFieldId } from '@tabtin/table-kernel'
+import type { SyncRecordChange, FieldColumnMap } from '@muse/table-kernel'
+import { translateFieldId } from '@muse/table-kernel'
 import type { PGliteInstance } from './dialect.js'
 
 const GHOST_DELETE_BATCH_SIZE = 500

@@ -11,8 +11,8 @@
  *   7. 静态段预算：一级命令超限时截断并附 `muse commands` 查询方法
  *   8. 动态段最多 8 条
  *
- * ：CliCap 已从 agent-runtime 迁到 @tabtin/agent-host，本单测随源迁来；
- * 对源的 import 指向 host 的 `src/capabilities/cli.js`，契约类型走 @tabtin/agent-runtime 公共面。
+ * ：CliCap 已从 agent-runtime 迁到 @muse/agent-host，本单测随源迁来；
+ * 对源的 import 指向 host 的 `src/capabilities/cli.js`，契约类型走 @muse/agent-runtime 公共面。
  */
 
 import { describe, expect, it } from 'vitest';
@@ -23,8 +23,8 @@ import {
   makeRunCtx,
   sectionContent,
 } from './fixtures/fake-capabilities.js';
-import type { Message, EngineState } from '@tabtin/agent-runtime/engine';
-import { SYSTEM_SECTION_NAMES } from '@tabtin/agent-runtime/engine';
+import type { Message, EngineState } from '@muse/agent-runtime/engine';
+import { SYSTEM_SECTION_NAMES } from '@muse/agent-runtime/engine';
 
 function makeState(query?: string): EngineState {
   return { messages: query ? [{ role: 'user', content: query }] : [] } as EngineState;

@@ -31,7 +31,7 @@ const {
   },
 }));
 
-vi.mock('@tabtin/smartsheet-ui/message', () => ({
+vi.mock('@muse/smartsheet-ui/message', () => ({
   message: { error: mockMessageError },
   MESSAGE_ERROR_DURATION: 2_000,
 }));

@@ -1,4 +1,4 @@
-import type { RollbackApplyLayerStatus } from '@tabtin/chat-client'
+import type { RollbackApplyLayerStatus } from '@muse/chat-client'
 
 export type RevertBannerLayerChip = {
   key: string

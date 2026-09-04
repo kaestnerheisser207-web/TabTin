@@ -26,13 +26,13 @@ import {
   OwnerMismatchError,
   type TranscriptEntry,
   type PersistedEntryOwner,
-} from '@tabtin/agent-runtime';
+} from '@muse/agent-runtime';
 import {
   resetTelemetrySink,
   setTelemetrySink,
   TelemetryEvents,
   type TelemetryRecord,
-} from '@tabtin/agent-runtime';
+} from '@muse/agent-runtime';
 
 const TEST_OWNER: PersistedEntryOwner = {
   userId: 'user-daemon-A',

@@ -24,7 +24,7 @@ vi.mock('@/constants/upload', () => ({
 }))
 
 // html 识别断言在 tabdoc-ui 的 html-upload.test.ts 覆盖；此处 mock 成放行，专注验证 electron 直传插桩。
-vi.mock('@tabtin/tabdoc-ui/editor', () => ({
+vi.mock('@muse/tabdoc-ui/editor', () => ({
   isHtmlUploadFile: (file: { name: string; type: string }) =>
     file.type === 'text/html' || /\.html?$/i.test(file.name),
 }))

@@ -5,8 +5,8 @@ import {
   AttachmentApiService,
   type AttachmentDirectUploader,
   type AttachmentReference,
-} from '@tabtin/table-core'
-import { computeFileHash } from '@tabtin/oss-client'
+} from '@muse/table-core'
+import { computeFileHash } from '@muse/oss-client'
 import i18n from '@/i18n'
 import { createLogger } from '@/utils/logger'
 import { registerResetAction } from './sessionResetRegistry'

@@ -49,7 +49,7 @@ export const BG_TERMINAL_STDOUT_TAIL_BYTES = 30 * 1024;
 
 /**
  * 后台完成通知里 host 构造终态 content 所需的字段子集
- * （= `@tabtin/terminal-core` 的 `BackgroundTaskCompletedPayload`，此处只声明用到的
+ * （= `@muse/terminal-core` 的 `BackgroundTaskCompletedPayload`，此处只声明用到的
  * 字段，避免 agent-runtime 反向耦合 terminal-core 类型）。
  */
 export interface BackgroundTaskTerminalInput {

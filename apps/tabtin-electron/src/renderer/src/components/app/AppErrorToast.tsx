@@ -4,7 +4,7 @@
  */
 import { useEffect, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
-import { message } from '@tabtin/smartsheet-ui/message'
+import { message } from '@muse/smartsheet-ui/message'
 import { useUIStore } from '@stores/useUIStore'
 
 export function AppErrorToast() {

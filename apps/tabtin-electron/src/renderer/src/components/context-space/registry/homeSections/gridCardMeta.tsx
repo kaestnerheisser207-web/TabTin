@@ -6,7 +6,7 @@ import { cn } from '@utils/cn'
  * 优先级：时间（必保完整）> 类型（可截断）> 尾部 badge（图标化）。
  */
 import React from 'react'
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@tabtin/smartsheet-ui'
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@muse/smartsheet-ui'
 
 export interface GridCardMetaRowProps {
   typeLabel?: string | null

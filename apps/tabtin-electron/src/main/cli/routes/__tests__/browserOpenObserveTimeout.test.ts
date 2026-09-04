@@ -2,7 +2,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 const handleBrowserAction = vi.hoisted(() => vi.fn())
 
-vi.mock('@tabtin/browser-core', () => ({
+vi.mock('@muse/browser-core', () => ({
   BrowserActionError: class BrowserActionError extends Error {},
   handleBrowserAction,
 }))

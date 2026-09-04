@@ -11,8 +11,8 @@ import type {
   EngineConfig,
 } from '../src/engine/contracts/kernel.js';
 import type { ToolRiskPolicyPort } from '../src/engine/contracts/tool-risk-policy.js';
-import type { EffectivePolicy, MemoStore } from '@tabtin/security-policy';
-import { evaluateAgentModeToolAccess } from '@tabtin/agent-modes';
+import type { EffectivePolicy, MemoStore } from '@muse/security-policy';
+import { evaluateAgentModeToolAccess } from '@muse/agent-modes';
 import {
   resolveSubagentSystemPromptStringFallback,
   wrapToolProviderForAskMode,

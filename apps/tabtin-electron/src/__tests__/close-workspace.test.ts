@@ -16,7 +16,7 @@ import {
   setCloseWorkspaceHandler,
   requestCloseWorkspace,
   hasCloseWorkspaceHandler,
-} from '@tabtin/crawlspace-core'
+} from '@muse/crawlspace-core'
 
 describe('close-workspace event bus (Wave 3.3)', () => {
   beforeEach(() => {
@@ -214,13 +214,13 @@ describe('close-workspace event bus (Wave 3.3)', () => {
 
   describe('回归：API 变更（Wave 3.3 北极星）', () => {
     it('subscribeCloseWorkspace 已删除（不再支持多 listener Set）', async () => {
-      const module = await import('@tabtin/crawlspace-core')
+      const module = await import('@muse/crawlspace-core')
       // @ts-expect-error: subscribeCloseWorkspace 已被 setCloseWorkspaceHandler 取代
       expect(module.subscribeCloseWorkspace).toBeUndefined()
     })
 
     it('暴露的 API 与文档一致', async () => {
-      const module = await import('@tabtin/crawlspace-core')
+      const module = await import('@muse/crawlspace-core')
       expect(typeof module.requestCloseWorkspace).toBe('function')
       expect(typeof module.setCloseWorkspaceHandler).toBe('function')
       expect(typeof module.hasCloseWorkspaceHandler).toBe('function')

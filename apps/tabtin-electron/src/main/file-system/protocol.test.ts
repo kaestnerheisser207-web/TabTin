@@ -16,7 +16,7 @@ vi.mock('electron', () => ({
 import { registerTabtinFileProtocol } from './protocol'
 
 describe('registerTabtinFileProtocol', () => {
-  it('registers tabtin-file independently for each Electron session', () => {
+  it('registers muse-file independently for each Electron session', () => {
     const firstRegister = vi.fn()
     const secondRegister = vi.fn()
     const firstSession = {
@@ -33,7 +33,7 @@ describe('registerTabtinFileProtocol', () => {
     expect(firstRegister).toHaveBeenCalledOnce()
     expect(secondRegister).toHaveBeenCalledOnce()
     expect(firstRegister).toHaveBeenCalledWith(
-      'tabtin-file',
+      'muse-file',
       expect.any(Function),
     )
   })

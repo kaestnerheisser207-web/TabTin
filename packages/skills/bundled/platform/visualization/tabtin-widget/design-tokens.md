@@ -39,7 +39,7 @@ CSS 变量值是 HSL 三元组，必须包一层 `hsl(var(--token))`：
 
 ## light/dark 真实值
 
-这些值来自 `@tabtin/widget-tokens` 的 `theme-bundle.ts`，运行时由 wrapper 注入：
+这些值来自 `@muse/widget-tokens` 的 `theme-bundle.ts`，运行时由 wrapper 注入：
 
 | token | light | dark |
 |---|---|---|

@@ -12,7 +12,7 @@ import * as theme from '../theme'
 import { useT } from '../i18n'
 import { ZoomControls } from './ZoomControls'
 import { useImageDrop } from '../hooks/useImageDrop'
-import { ZIndex } from '@tabtin/app-shell'
+import { ZIndex } from '@muse/app-shell'
 import { SlidePresenceOverlay, type SlideRemotePeer } from './SlidePresenceOverlay'
 
 interface CanvasProps {

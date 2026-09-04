@@ -91,7 +91,7 @@ func setQueryIntIfPresent(q url.Values, body map[string]any, key string) {
 
 // AdaptTableList: POST /table/list → GET /api/tabdata/organizations/{org}/tables（ org-only）
 func AdaptTableList(ctx *cmdutil.RunContext, method, path string, body map[string]any) (string, string, map[string]any, error) {
-	orgID, err := requireBodyString(body, "organization_id", "缺少 organization_id。请先设置组织或 TABTIN_ORGANIZATION_ID")
+	orgID, err := requireBodyString(body, "organization_id", "缺少 organization_id。请先设置组织或 MUSE_ORGANIZATION_ID")
 	if err != nil {
 		return "", "", nil, err
 	}
@@ -108,7 +108,7 @@ func AdaptTableList(ctx *cmdutil.RunContext, method, path string, body map[strin
 
 // adaptTableCreate: POST /table/create → POST /api/tabdata/organizations/{org}/tables（ org-only）
 func adaptTableCreate(ctx *cmdutil.RunContext, method, path string, body map[string]any) (string, string, map[string]any, error) {
-	orgID, err := requireBodyString(body, "organization_id", "缺少 organization_id。请先设置组织或 TABTIN_ORGANIZATION_ID")
+	orgID, err := requireBodyString(body, "organization_id", "缺少 organization_id。请先设置组织或 MUSE_ORGANIZATION_ID")
 	if err != nil {
 		return "", "", nil, err
 	}

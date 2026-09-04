@@ -10,8 +10,8 @@ import { useTranslation } from 'react-i18next'
 import { FilePenLine, Copy, Check, ChevronDown, ChevronUp, Loader2, PanelsTopLeft } from 'lucide-react'
 import { cn } from '@utils/cn'
 import type { CardRendererProps } from '../registry/types'
-import type { DiffOutputData } from '@tabtin/chat-client'
-import { ScrollArea } from '@tabtin/smartsheet-ui'
+import type { DiffOutputData } from '@muse/chat-client'
+import { ScrollArea } from '@muse/smartsheet-ui'
 import {
   CARD_RADIUS,
   TEXT,

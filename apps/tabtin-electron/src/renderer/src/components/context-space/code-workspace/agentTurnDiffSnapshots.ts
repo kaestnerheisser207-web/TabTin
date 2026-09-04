@@ -6,7 +6,7 @@
  * 时冻结当时的代码根 / 分支 / checkpoint_hash，避免旧根记录混入新根。
  */
 
-import type { ChatMessage } from '@tabtin/chat-client'
+import type { ChatMessage } from '@muse/chat-client'
 import { normalizePathForCompare } from '@components/tabcode/utils/worktreePaths'
 import { create } from 'zustand'
 

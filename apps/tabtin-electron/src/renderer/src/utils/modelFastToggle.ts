@@ -7,7 +7,7 @@
  * - 各模型开关存在 `fast_by_model`（JSON map）；切模型时按目标 id 重算生效参数
  */
 
-import type { Model, ModelRuntimeControl } from '@tabtin/chat-client'
+import type { Model, ModelRuntimeControl } from '@muse/chat-client'
 import { isOpenAICodexModel } from '../../../shared/openai-codex-models'
 
 export const FAST_BY_MODEL_KEY = 'fast_by_model'
