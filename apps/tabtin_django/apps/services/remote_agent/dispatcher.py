@@ -61,7 +61,7 @@ _CLIENT_TYPE_TO_CONTEXT_LABEL = {
 
 def _context_label(client_type: Optional[str]) -> str:
     if not client_type:
-        return "TabTin 系统"
+        return "Muse 系统"
     return _CLIENT_TYPE_TO_CONTEXT_LABEL.get(client_type, f"{client_type} 调用")
 
 

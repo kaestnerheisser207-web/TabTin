@@ -368,7 +368,7 @@ enum AudioRecordingError: LocalizedError {
         case .converterUnavailable: return "音频转换器初始化失败"
         case .notRecording: return "当前没有正在进行的录音"
         case .noFileURL: return "录音文件不存在"
-        case .permissionDenied: return "请在系统设置中允许 TabTin 使用麦克风"
+        case .permissionDenied: return "请在系统设置中允许 Muse 使用麦克风"
         }
     }
 }

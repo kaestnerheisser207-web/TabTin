@@ -4,7 +4,7 @@
  * 获取当前页面检测到的媒体/静态资源列表（视频、M3U8、音频、图片、字体、文档等）。
  * 这是 Browser Runtime 的 Level 0 标准 API —— 任何 App 声明 browser 依赖即可消费。
  *
- * @author TabTin Team
+ * @author Muse Team
  */
 
 import type { AgentTool } from '../types'
@@ -221,7 +221,7 @@ export const inspectResourceTool: AgentTool<InspectResourceInput, InspectResourc
     if (!api?.inspectResource) {
       return standardizeLegacyResult({
         success: false,
-        error: 'inspect_resource API not available in current runtime — use CLI: tabtin browser resource inspect',
+        error: 'inspect_resource API not available in current runtime — use CLI: muse browser resource inspect',
         error_code: ToolErrorCode.IPC_NOT_AVAILABLE
       }) as unknown as InspectResourceOutput
     }
@@ -261,7 +261,7 @@ export const captureResourceTool: AgentTool<CaptureResourceInput, CaptureResourc
     if (!api?.captureResource) {
       return standardizeLegacyResult({
         success: false,
-        error: 'capture_resource API not available in current runtime — use CLI: tabtin browser resource capture',
+        error: 'capture_resource API not available in current runtime — use CLI: muse browser resource capture',
         error_code: ToolErrorCode.IPC_NOT_AVAILABLE
       }) as unknown as CaptureResourceOutput
     }

@@ -90,7 +90,7 @@ export async function registerCurrentElectronDevice(
         },
         body: JSON.stringify({
           installation_id: installationId,
-          name: hostname().trim().slice(0, 120) || 'TabTin Device',
+          name: hostname().trim().slice(0, 120) || 'Muse Device',
           kind: 1, // DEVICE_KIND_ELECTRON
           ...runtimeProfile,
         }),

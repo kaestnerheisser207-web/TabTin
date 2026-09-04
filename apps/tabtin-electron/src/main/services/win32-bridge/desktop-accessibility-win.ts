@@ -57,7 +57,7 @@ export async function captureAccessibilityTreeWin(
       DesktopErrorCode.AX_UNAVAILABLE,
       `Windows AX 查询失败：${msg.slice(0, 200)}。` +
       `本次 AX 查询未执行。` +
-      `请检查 bridge.py 状态，或使用 tabtin desktop screenshot + 坐标点击作为替代。`,
+      `请检查 bridge.py 状态，或使用 muse desktop screenshot + 坐标点击作为替代。`,
     )
   }
 

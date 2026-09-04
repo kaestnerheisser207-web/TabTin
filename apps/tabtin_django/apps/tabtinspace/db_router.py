@@ -1,7 +1,7 @@
 """
-Tabtin Space 数据库路由器
+Muse Space 数据库路由器
 
-将 Tabtin Space 模型路由到 PostgreSQL。
+将 Muse Space 模型路由到 PostgreSQL。
 """
 
 

@@ -141,7 +141,7 @@ def test_start_works_from_non_repo_cwd_when_source_path_contains_spaces() -> Non
             },
         )
         assert result.returncode == 0, result.stdout + result.stderr
-        assert "TabTin Community is READY" in result.stdout
+        assert "Muse Community is READY" in result.stdout
         calls = trace.read_text(encoding="utf-8")
         physical_root = root.resolve()
         assert (root / ".env").read_text(encoding="utf-8") == (
@@ -302,7 +302,7 @@ def test_status_is_read_only_and_distinguishes_starting_from_not_ready() -> None
         )
         assert starting.returncode == 0, starting.stdout + starting.stderr
         assert "Docker: RUNNING" in starting.stdout
-        assert "TabTin Server: STARTING" in starting.stdout
+        assert "Muse Server: STARTING" in starting.stdout
         assert "Realtime: NOT READY" in starting.stdout
         calls = trace.read_text(encoding="utf-8")
         assert " compose " in calls
@@ -318,7 +318,7 @@ def test_status_is_read_only_and_distinguishes_starting_from_not_ready() -> None
             extra_env={"FAKE_SERVER_READY": "1", "FAKE_REALTIME_READY": "1"},
         )
         assert ready.returncode == 0, ready.stdout + ready.stderr
-        assert "TabTin Server: READY" in ready.stdout
+        assert "Muse Server: READY" in ready.stdout
         assert "Realtime: READY" in ready.stdout
 
 

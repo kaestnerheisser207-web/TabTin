@@ -1,7 +1,7 @@
 /**
  * @tabtin/agent-wire
  *
- * Shared wire protocol definitions for TabTin external Agent communication.
+ * Shared wire protocol definitions for Muse external Agent communication.
  * Single source of truth for event types, payload schemas, and adaptation logic
  * across Daemon, Backend, and Frontend.
  */

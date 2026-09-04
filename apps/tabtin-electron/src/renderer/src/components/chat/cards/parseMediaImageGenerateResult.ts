@@ -1,5 +1,5 @@
 /**
- * 从 `tabtin media image generate` 的 tool_result / stdout 信封中抽取成品图 URL。
+ * 从 `muse media image generate` 的 tool_result / stdout 信封中抽取成品图 URL。
  *
  * 常见形态（多层 unwrap）：
  * - shell envelope: `{ stdout: "<json string>", exit_code: 0 }`

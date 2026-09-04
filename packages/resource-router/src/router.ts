@@ -159,7 +159,7 @@ export class ResourceRouter {
     // 自有格式优先按 type 查；行业格式按 scheme 查。两者不混淆。
     const manifestCandidates: ResolveCandidate[] = []
 
-    if (pointer.scheme === 'tabtin' && pointer.type) {
+    if (pointer.scheme === 'muse' && pointer.type) {
       const list = this.registry.lookupByType(pointer.type)
       for (const c of list) {
         manifestCandidates.push({
@@ -168,7 +168,7 @@ export class ResourceRouter {
           source: 'manifest_default',
         })
       }
-    } else if (pointer.scheme !== 'tabtin' && pointer.scheme !== 'unknown') {
+    } else if (pointer.scheme !== 'muse' && pointer.scheme !== 'unknown') {
       const list = this.registry.lookupByScheme(`${pointer.scheme}:`)
       for (const c of list) {
         manifestCandidates.push({
@@ -482,10 +482,10 @@ export class ResourceRouter {
  *   - 解析失败 / scheme === 'unknown' → null（无法形成稳定 key，跳过偏好层）
  */
 export function preferenceKeyOf(pointer: ResourcePointer): string | null {
-  if (pointer.scheme === 'tabtin' && pointer.type) {
+  if (pointer.scheme === 'muse' && pointer.type) {
     return `type:${pointer.type}`
   }
-  if (pointer.scheme && pointer.scheme !== 'unknown' && pointer.scheme !== 'tabtin') {
+  if (pointer.scheme && pointer.scheme !== 'unknown' && pointer.scheme !== 'muse') {
     return `scheme:${pointer.scheme}:`
   }
   return null
@@ -499,11 +499,11 @@ export function preferenceKeyOf(pointer: ResourcePointer): string | null {
  * 一致；handler 自决怎么用）。
  */
 export function isLocalFileResourcePointer(pointer: ResourcePointer): boolean {
-  return pointer.scheme === 'tabtin' && pointer.type === 'file'
+  return pointer.scheme === 'muse' && pointer.type === 'file'
 }
 
 export function derivePointerOpenParams(pointer: ResourcePointer): OpenResourceTabParams {
-  if (pointer.scheme === 'tabtin' && pointer.type) {
+  if (pointer.scheme === 'muse' && pointer.type) {
     return {
       type: pointer.type,
       id: pointer.id,

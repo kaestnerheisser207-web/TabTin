@@ -25,7 +25,7 @@
  *   `prompts.ts:231` "Don't retry the identical action blindly" + Anthropic
  *   模型对自家 prompt 的高遵从度兜底。`denialTracking.ts` 只追踪 permission
  *   **拒绝** streak（不是工具成功复读）。
- * - **TabTin tool-failure-tracker**：本 tracker 的 SSoT 来源。状态机、stage
+ * - **Muse tool-failure-tracker**：本 tracker 的 SSoT 来源。状态机、stage
  *   升级判定、英文 system injection 风格、env override 命名、per-query 实例、
  *   non-throwing 惯例、三层合并默认/env/explicit + 不变量回落默认——全部沿用。
  *
@@ -656,7 +656,7 @@ export function isToolRepetitionStageUpgrade(
  * notice 阶段——给用户看的中文 SYSTEM_NOTICE.content（runtime fallback）。
  *
  * **设计取舍**：与 tool-failure-tracker 的 fallback 同模式，主语用工具
- * 名而非 Agent，避免"问责"姿态；产品主语用 TabTin。
+ * 名而非 Agent，避免"问责"姿态；产品主语用 Muse。
  *
  * 真实渲染走前端 i18n（`chat:systemNotice.toolRepetitionNotice`）；本函数
  * 返回值只在 i18n key 缺失（旧客户端 / dev 启动期）时作为 fallback。raw
@@ -671,7 +671,7 @@ export function buildToolRepetitionNoticeContent(
   const seconds = Math.round(trigger.windowMs / 1000);
   return (
     `工具「${trigger.tool}」在 ${seconds} 秒内被相同输入调用了 ${trigger.count} 次。` +
-    'TabTin 正在关注，再重复几次会主动提示 Agent 别再重发。' +
+    'Muse 正在关注，再重复几次会主动提示 Agent 别再重发。' +
     '（如果是你刚才让 Agent 重做的，可以忽略这条提示）'
   );
 }
@@ -690,7 +690,7 @@ export function buildToolRepetitionNudgeContent(
   const seconds = Math.round(trigger.windowMs / 1000);
   return (
     `工具「${trigger.tool}」在 ${seconds} 秒内被相同输入调用了 ${trigger.count} 次。` +
-    'TabTin 已主动提示 Agent 别再用相同输入重发，请稍候——' +
+    'Muse 已主动提示 Agent 别再用相同输入重发，请稍候——' +
     '如果几轮后还在重复，你可以直接给一句新指令（比如「用我刚才的回答继续」或「换个方式问」）。'
   );
 }

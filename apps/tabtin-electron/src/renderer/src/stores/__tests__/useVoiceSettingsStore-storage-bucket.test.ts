@@ -67,7 +67,7 @@ describe('useVoiceSettingsStore · storage-manager 接入', () => {
       enableAppContext: false,
       enableDialogContext: true,
     })
-    expect(parsed.customHotwords).toEqual(['TabTin', 'Codex'])
+    expect(parsed.customHotwords).toEqual(['Muse', 'Codex'])
     expect(parsed.replacementRules).toHaveLength(1)
     expect(parsed.replacementRules[0]).toMatchObject({ from: 'orig', to: 'replaced', isEnabled: true })
 

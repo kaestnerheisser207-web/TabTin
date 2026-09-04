@@ -20,7 +20,7 @@ SkillVisibility = Literal["private", "organization", "public"]
 
 
 # ---------------------------------------------------------------------------
-# Rich metadata schemas (TabTin Skill 格式规范)
+# Rich metadata schemas (Muse Skill 格式规范)
 # ---------------------------------------------------------------------------
 
 
@@ -48,9 +48,9 @@ class SkillInstallSpec(Schema):
 
 
 class SkillTabtinMetadata(Schema):
-    """``metadata.tabtin.*`` 命名空间——TabTin 扩展字段（新标准格式）。
+    """``metadata.tabtin.*`` 命名空间——Muse 扩展字段（新标准格式）。
 
-    所有 TabTin 私有扩展字段都收敛到这里；解析层（skill_doc_parser）仍对旧的
+    所有 Muse 私有扩展字段都收敛到这里；解析层（skill_doc_parser）仍对旧的
     顶层扁平写法做归一化回退。
     """
 

@@ -10,8 +10,8 @@ import (
 	"github.com/spf13/cobra"
 	"github.com/spf13/pflag"
 
-	"github.com/TabTin/tabtin-cli/internal/errcode"
-	"github.com/TabTin/tabtin-cli/internal/output"
+	"github.com/Muse/muse-cli/internal/errcode"
+	"github.com/Muse/muse-cli/internal/output"
 )
 
 const usageErrorWrappedAnnotation = "tabtin_usage_error_wrapped"
@@ -165,8 +165,8 @@ func contextualFlagHint(cmd *cobra.Command, badFlag string) string {
 			return fmt.Sprintf("`--id` 不是本命令的 flag；ID 应作为位置参数传入（用法: %s）", cmd.Use)
 		}
 	case "content", "markdown":
-		if cmd.CommandPath() == "tabtin doc update" {
-			return "`tabtin doc update` 只改标题/状态/标签等元数据；改正文请用 `tabtin doc save-content <id> --markdown @/path/file.md --format json`（文件路径前需要 @，`--format` 是输出格式）"
+		if cmd.CommandPath() == "muse doc update" {
+			return "`muse doc update` 只改标题/状态/标签等元数据；改正文请用 `muse doc save-content <id> --markdown @/path/file.md --format json`（文件路径前需要 @，`--format` 是输出格式）"
 		}
 	case "tab-key":
 		return "选 Tab 请用 `--tab-id`（`tab list` 输出里的 tabId/activeTabId 字段）"
@@ -176,20 +176,20 @@ func contextualFlagHint(cmd *cobra.Command, badFlag string) string {
 		}
 	// browser 域高频误猜映射（：Agent 连续 VALIDATION_ERROR 烧迭代）
 	case "url":
-		if cmd.CommandPath() == "tabtin browser nav" {
-			return "打开 URL 请用 `tabtin browser open --url <url>`；`nav` 只做 back/forward/reload/stop（`--direction`）"
+		if cmd.CommandPath() == "muse browser nav" {
+			return "打开 URL 请用 `muse browser open --url <url>`；`nav` 只做 back/forward/reload/stop（`--direction`）"
 		}
 	case "script", "code":
-		if cmd.CommandPath() == "tabtin browser eval" {
-			return "执行 JavaScript 请用 `--expression`，如 `tabtin browser eval --expression \"document.title\"`"
+		if cmd.CommandPath() == "muse browser eval" {
+			return "执行 JavaScript 请用 `--expression`，如 `muse browser eval --expression \"document.title\"`"
 		}
 	case "until":
-		if cmd.CommandPath() == "tabtin browser wait" {
+		if cmd.CommandPath() == "muse browser wait" {
 			return "等待条件请用 `--selector <css>` + `--timeout <ms>`；没有 `--until` flag"
 		}
 	case "selector":
-		if cmd.CommandPath() == "tabtin browser print" {
-			return "`print` 不支持 selector（整页导出）；按元素定位请用 `tabtin browser glance --selector <css>` 或 `wait --selector`"
+		if cmd.CommandPath() == "muse browser print" {
+			return "`print` 不支持 selector（整页导出）；按元素定位请用 `muse browser glance --selector <css>` 或 `wait --selector`"
 		}
 	}
 	return ""

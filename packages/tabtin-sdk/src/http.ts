@@ -129,7 +129,7 @@ export class HttpClient {
     return qs ? `${url}?${qs}` : url
   }
 
-  /** Unwrap TabTin {success, data, ...} envelope */
+  /** Unwrap Muse {success, data, ...} envelope */
   private unwrap<T>(json: unknown): T {
     if (
       json &&

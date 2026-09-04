@@ -77,7 +77,7 @@ describe('save_attachment', () => {
       filename: 'report.html',
       file_size: 42,
       mime_type: 'text/html',
-      next_command: 'tabtin browser open --url attachments/report.html',
+      next_command: 'muse browser open --url attachments/report.html',
     })
     expect(tool!.description).toContain('browser open')
     expect(tool!.description).toContain('present_to_user')

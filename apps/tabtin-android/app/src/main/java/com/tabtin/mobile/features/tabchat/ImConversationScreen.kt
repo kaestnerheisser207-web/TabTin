@@ -126,7 +126,7 @@ import androidx.compose.ui.zIndex
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LocalLifecycleOwner
-import com.tabtin.mobile.R
+import com.muse.mobile.R
 import com.tabtin.mobile.data.im.IM_REACTION_KIND_LIMIT
 import com.tabtin.mobile.ui.components.TabSearchField
 import com.tabtin.mobile.ui.components.IdentityColorAvatar

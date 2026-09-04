@@ -27,7 +27,7 @@ const (
 
 	OwnershipFileName = ".tabtin-skill.json"
 	ManifestFileName  = "manifest.json"
-	ManagedByTabTin   = "tabtin"
+	ManagedByTabTin   = "muse"
 	ExternalPrefix    = "tabtin-"
 )
 
@@ -94,7 +94,7 @@ type ConflictError struct {
 }
 
 func (e *ConflictError) Error() string {
-	return fmt.Sprintf("skill %q exists at %s but is not managed by tabtin", e.Name, e.Path)
+	return fmt.Sprintf("skill %q exists at %s but is not managed by muse", e.Name, e.Path)
 }
 
 // Bundle 封装包内权威 Skill 树。

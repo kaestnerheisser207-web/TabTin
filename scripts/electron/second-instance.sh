@@ -60,7 +60,7 @@ fi
 : > "${LOG_FILE}"
 (
   cd "${ELECTRON_DIR}"
-  # userData 会由 TABTIN_DEV_INSTANCE 派生为 TabTin Dev-im-2，登录态、缓存、
+  # userData 会由 TABTIN_DEV_INSTANCE 派生为 Muse Dev-im-2，登录态、缓存、
   # IndexedDB、Electron 单实例锁和大部分本地文件均不会与主端共用。
   unset ELECTRON_RUN_AS_NODE
   if [[ "${WATCH_FOR_UPDATES}" -eq 1 ]]; then
@@ -82,7 +82,7 @@ fi
 )
 
 echo "✅ 已启动第二个 Electron（实例 ${INSTANCE_ID}，PID $(cat "${PID_FILE}")）"
-echo "   与主端共用后端和 Vite；本地资料隔离在 userData: TabTin Dev-${INSTANCE_ID}"
+echo "   与主端共用后端和 Vite；本地资料隔离在 userData: Muse Dev-${INSTANCE_ID}"
 if [[ "${WATCH_FOR_UPDATES}" -eq 1 ]]; then
   echo "   已监听 main/preload 更新，更新后会自动重启第二端"
 fi

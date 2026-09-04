@@ -1,6 +1,6 @@
 # @tabtin/table-engine-canvas
 
-Canvas-based renderer engine for TabTin table.
+Canvas-based renderer engine for Muse table.
 
 ## Scope
 - Provide a migration-safe experimental canvas grid

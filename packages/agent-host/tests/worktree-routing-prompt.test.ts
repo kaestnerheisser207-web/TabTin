@@ -58,8 +58,8 @@ describe('对话 worktree CLI 路由 hook', () => {
 
     expect(system).toContain('section:cli_commands source:worktree-routing')
     expect(system).toContain('<worktree_routing>')
-    expect(system).toContain('`tabtin code worktree create`')
-    expect(system).toContain('`tabtin code worktree switch`')
+    expect(system).toContain('`muse code worktree create`')
+    expect(system).toContain('`muse code worktree switch`')
     expect(system).toContain('必须在前台等待命令完成')
     expect(system).toContain('用户未指定路径时不要添加 `--path`')
   })

@@ -1,7 +1,7 @@
 {
   "name": "@tabtin/api-client",
   "version": "0.1.0",
-  "description": "Type-safe API client generated from OpenAPI spec for TabTin",
+  "description": "Type-safe API client generated from OpenAPI spec for Muse",
   "type": "module",
   "main": "dist/index.js",
   "module": "dist/index.js",

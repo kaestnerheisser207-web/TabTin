@@ -65,10 +65,10 @@ export type ErrorCode =
 export type { SendJSON, DjangoProxyResult }
 
 const ELECTRON_SUGGESTIONS: Partial<Record<string, string[]>> = {
-  UNAUTHORIZED: ['请先登录 TabTin 应用', '确保在 TabTin 内置终端中运行命令'],
-  AUTH_EXPIRED: ['登录已过期，请重新打开 TabTin 应用', '应用会自动刷新登录状态'],
+  UNAUTHORIZED: ['请先登录 Muse 应用', '确保在 Muse 内置终端中运行命令'],
+  AUTH_EXPIRED: ['登录已过期，请重新打开 Muse 应用', '应用会自动刷新登录状态'],
   PERMISSION_DENIED: ['当前账号没有访问该资源的权限', '请确认你拥有对应组织或 Space 的访问权限'],
-  QUOTA_EXCEEDED: ['配额已用尽，请在 TabTin 设置中查看详情'],
+  QUOTA_EXCEEDED: ['配额已用尽，请在 Muse 设置中查看详情'],
   RATE_LIMIT_EXCEEDED: ['请求过于频繁，请稍等片刻后重试'],
 }
 
@@ -159,7 +159,7 @@ export async function djangoRequest(
   if (!accessToken) {
     return {
       status: 401,
-      data: errorResponse('UNAUTHORIZED', '未登录，请先登录 TabTin'),
+      data: errorResponse('UNAUTHORIZED', '未登录，请先登录 Muse'),
     }
   }
   const userInfo = await TokenManager.getUserInfo()

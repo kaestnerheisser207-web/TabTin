@@ -18,7 +18,7 @@ interface WorkspaceAutoMemorySectionProps {
 const INVALID_EXPLICIT_MODEL = 'invalid_explicit_model'
 
 const GROUPS: Array<{ scope: WorkspaceMemoryProviderScope; label: string }> = [
-  { scope: 'global', label: 'TabTin 官方' },
+  { scope: 'global', label: 'Muse 官方' },
   { scope: 'user', label: '我的模型' },
   { scope: 'organization', label: '组织模型' },
 ]
@@ -150,7 +150,7 @@ export const WorkspaceAutoMemorySection: React.FC<WorkspaceAutoMemorySectionProp
           <h3 className="text-body font-medium text-foreground">自动记忆增强</h3>
           <SettingsInfoTooltip
             label="自动记忆增强说明"
-            content="开启后，系统会自动整理工作记忆，并生成日记与画像。使用 TabTin 官方模型时将额外消耗点券；使用自有模型时不消耗 TabTin 点券，相关费用由模型服务商收取。"
+            content="开启后，系统会自动整理工作记忆，并生成日记与画像。使用 Muse 官方模型时将额外消耗点券；使用自有模型时不消耗 Muse 点券，相关费用由模型服务商收取。"
           />
         </div>
         <Switch

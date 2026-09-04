@@ -50,7 +50,7 @@
     "uiEngine": "motor de interfaz de usuario",
     "uiEngineDetail": "{{cpu}} · Memoria compartida para el motor de renderizado de páginas",
     "appHost": "anfitrión de la aplicación",
-    "appHostDetail": "{{cpu}} · Memoria base para la propia aplicación TabTin",
+    "appHostDetail": "{{cpu}} · Memoria base para la propia aplicación Muse",
     "unassigned": "No asignado",
     "unassignedDetail": "{{cpu}} · Recursos aún no atribuidos a un Espacio",
     "background": "Antecedentes",

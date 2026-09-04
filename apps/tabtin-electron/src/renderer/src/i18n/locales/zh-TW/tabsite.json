@@ -26,7 +26,7 @@
   "error.siteNotFound": "站點未找到",
   "error.publishFailed": "發布失敗",
   "error.noDistUrl": "請先建置並上傳產物",
-  "error.noDistUrlHint": "在 TabCode 中執行 build，或使用 CLI: tabtin site build",
+  "error.noDistUrlHint": "在 TabCode 中執行 build，或使用 CLI: muse site build",
   "actions.publishSuccess": "發布成功",
   "publish.dialogTitle": "發佈站點",
   "publish.messageLabel": "版本說明",

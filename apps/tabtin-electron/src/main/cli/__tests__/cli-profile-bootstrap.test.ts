@@ -81,7 +81,7 @@ describe('ensureCliProfileBootstrap · 契约', () => {
     expect(content.currentProfile).toBe('default')
     expect(content.profiles.default.baseURL).toBe('http://127.0.0.1:6060/api')
     expect(content.profiles.default.token).toBe('managed-by-electron')
-    expect(content.profiles.default.label).toBe('TabTin App')
+    expect(content.profiles.default.label).toBe('Muse App')
   })
 
   it('placeholder token 是字面占位符，不是真 JWT（SD-039 §4.5：不让真 token 落盘）', async () => {

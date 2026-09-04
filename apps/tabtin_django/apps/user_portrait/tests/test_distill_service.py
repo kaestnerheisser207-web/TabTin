@@ -51,7 +51,7 @@ def _fake_tabtinspace_loaded() -> bool:
 VALID_PORTRAIT_MD = """\
 ## 工作背景
 
-Uncle 是 TabTin 的独立创始人。
+Uncle 是 Muse 的独立创始人。
 
 ## 个人背景
 
@@ -167,7 +167,7 @@ class DistillInputTests(TestCase):
         """v0.2: input_summary 含 organization_name 而非 organizations 列表。"""
         di = DistillInput(
             user_display_name="X",
-            organization_name="TabTin Team",
+            organization_name="Muse Team",
             previous_portrait_md="",
             memos_for_prompt=[],
             hints=[{"text": "h1"}, {"text": "h2"}],
@@ -178,7 +178,7 @@ class DistillInputTests(TestCase):
         self.assertEqual(summary["memo_count"], 10)
         self.assertEqual(summary["memo_truncated"], 2)
         self.assertEqual(summary["hint_count"], 2)
-        self.assertEqual(summary["organization_name"], "TabTin Team")
+        self.assertEqual(summary["organization_name"], "Muse Team")
 
 
 # ── PortraitDistillService.run（完整流程） ──────────
@@ -232,11 +232,11 @@ class PortraitDistillServiceTests(TestCase):
         if has_inputs:
             di = DistillInput(
                 user_display_name="Uncle",
-                organization_name="TabTin",
+                organization_name="Muse",
                 previous_portrait_md="",
                 memos_for_prompt=[
                     {
-                        "organization_name": "TabTin",
+                        "organization_name": "Muse",
                         "created_at": "2026-04-15",
                         "content": "测试 memo 内容",
                     }
@@ -547,7 +547,7 @@ class LLMSceneIntegrationTests(TestCase):
     def _make_distill_input(self) -> DistillInput:
         return DistillInput(
             user_display_name="Test",
-            organization_name="TabTin",
+            organization_name="Muse",
             previous_portrait_md="",
             memos_for_prompt=[],
             hints=[{"text": "x"}],

@@ -63,7 +63,7 @@ def _device_only_error_payload(
                 "success": False,
                 "error": (
                     f"{label}需要在可解析的 TabVideo/Agent Space 会话中发起。"
-                    "请打开对应 Space 或 TabVideo 项目会话，并确保 Agent 已绑定 TabTin Daemon 后重试。"
+                    "请打开对应 Space 或 TabVideo 项目会话，并确保 Agent 已绑定 Muse Daemon 后重试。"
                 ),
                 "error_code": "VIDEO_EXECUTION_CONTEXT_MISSING",
                 "required_capability": required_capability,
@@ -73,7 +73,7 @@ def _device_only_error_payload(
                 "success": False,
                 "error": (
                     f"{label}需要后台设备上报 {required_capability} 能力。"
-                    "请在执行设备安装 FFmpeg，启动或重启 TabTin Daemon，然后刷新设备能力后重试。"
+                    "请在执行设备安装 FFmpeg，启动或重启 Muse Daemon，然后刷新设备能力后重试。"
                 ),
                 "error_code": "VIDEO_CAPABILITY_MISSING",
                 "required_capability": required_capability,
@@ -83,7 +83,7 @@ def _device_only_error_payload(
                 "success": False,
                 "error": (
                     f"{label}需要具备 {required_capability} 能力的后台设备在线。"
-                    "请启动 TabTin Daemon 并确认设备已连接后重试。"
+                    "请启动 Muse Daemon 并确认设备已连接后重试。"
                 ),
                 "error_code": "VIDEO_DEVICE_OFFLINE",
                 "required_capability": required_capability,
@@ -93,7 +93,7 @@ def _device_only_error_payload(
                 "success": False,
                 "error": (
                     f"{label}需要绑定具备 {required_capability} 能力的后台导出设备。"
-                    "请为当前 Agent 绑定 TabTin Daemon 设备；如设备缺少 FFmpeg，请先安装后刷新能力。"
+                    "请为当前 Agent 绑定 Muse Daemon 设备；如设备缺少 FFmpeg，请先安装后刷新能力。"
                 ),
                 "error_code": "VIDEO_NO_CONTROL_DEVICE",
                 "required_capability": required_capability,
@@ -101,7 +101,7 @@ def _device_only_error_payload(
         if reason == "delivery_failed":
             return {
                 "success": False,
-                "error": f"{label}任务下发到后台设备失败，请确认 TabTin Daemon 仍在线后重试。",
+                "error": f"{label}任务下发到后台设备失败，请确认 Muse Daemon 仍在线后重试。",
                 "error_code": "VIDEO_DEVICE_DELIVERY_FAILED",
                 "required_capability": required_capability,
             }

@@ -1,4 +1,4 @@
-"""Tabtin Project 路由（团队协作场景， 终态）。
+"""Muse Project 路由（团队协作场景， 终态）。
 
 Project 是 :class:`tabtinspace.Project` 真表；本路由以 Project 产品语言读取协作房间。
 创建 Project 时会同时给创建者供给一个 Workspace；后续成员接受邀请或首次进入 Project
@@ -16,7 +16,7 @@ from apps.tabtinspace.services.project_service import ProjectService
 from apps.tabtinspace.services.project_invitation_service import ProjectInvitationService
 from apps.tabtinspace.services.project_task_service import ProjectTaskService
 
-router = Router(tags=["Tabtin Space"])
+router = Router(tags=["Muse Space"])
 
 
 def _projects_enabled() -> bool:

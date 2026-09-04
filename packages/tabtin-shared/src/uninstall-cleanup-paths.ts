@@ -29,6 +29,11 @@ export const TABTIN_USER_DATA_DIR_NAMES = [
   'TabTin Local',
   'TabTin Preprod',
   'tabtin-electron',
+  'Muse',
+  'Muse Dev',
+  'Muse Local',
+  'Muse Community',
+  'Muse Preprod',
 ] as const
 
 export type TabTinUserDataDirName = (typeof TABTIN_USER_DATA_DIR_NAMES)[number]
@@ -99,6 +104,15 @@ export const TABTIN_UPDATER_CACHE_DIR_NAMES = [
   'TabTin Dev-updater',
   'TabTin Local-updater',
   'TabTin Preprod-updater',
+  'com.muse.app-updater',
+  'com.muse.app.dev-updater',
+  'com.muse.app.local-updater',
+  'com.muse.app.preprod-updater',
+  'Muse-updater',
+  'Muse Dev-updater',
+  'Muse Local-updater',
+  'Muse Community-updater',
+  'Muse Preprod-updater',
 ] as const
 
 /** macOS /Applications 下可能存在的 .app 名（卸载助手移入废纸篓用） */
@@ -106,6 +120,11 @@ export const TABTIN_MAC_APP_BUNDLE_NAMES = [
   'TabTin.app',
   'TabTin Local.app',
   'TabTin Dev.app',
+  'Muse.app',
+  'Muse Local.app',
+  'Muse Dev.app',
+  'Muse Community.app',
+  'Muse Preprod.app',
 ] as const
 
 export interface UninstallPathResolveOptions {

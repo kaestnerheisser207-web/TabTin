@@ -684,7 +684,7 @@ function buildStatusCopy({
   }
   return {
     title: t('update.alreadyLatest', { defaultValue: '当前已是最新版本' }),
-    description: t('update.alreadyLatestDescription', { defaultValue: 'TabTin 会在启动时自动检查可用更新' }),
+    description: t('update.alreadyLatestDescription', { defaultValue: 'Muse 会在启动时自动检查可用更新' }),
   }
 }
 

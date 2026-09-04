@@ -107,7 +107,7 @@ export default function App() {
       <footer className="border-t border-border">
         <div className="mx-auto max-w-3xl px-6 py-6">
           <p className="text-center text-caption text-muted-foreground">
-            Powered by TabTin · React + Vite + Tailwind CSS
+            Powered by Muse · React + Vite + Tailwind CSS
           </p>
         </div>
       </footer>

@@ -2,7 +2,7 @@
 
 [English](CHANGELOG.en.md)
 
-记录 TabTin 从首次公开版本开始的重要变化。格式参考 [Keep a Changelog](https://keepachangelog.com/zh-CN/1.1.0/)，版本号遵循 [Semantic Versioning](https://semver.org/lang/zh-CN/)。不回填私有研发历史。
+记录 Muse 从首次公开版本开始的重要变化。格式参考 [Keep a Changelog](https://keepachangelog.com/zh-CN/1.1.0/)，版本号遵循 [Semantic Versioning](https://semver.org/lang/zh-CN/)。不回填私有研发历史。
 
 ## [Unreleased]
 

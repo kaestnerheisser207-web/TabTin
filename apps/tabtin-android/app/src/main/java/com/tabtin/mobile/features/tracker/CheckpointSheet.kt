@@ -35,7 +35,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.tabtin.mobile.R
+import com.muse.mobile.R
 import com.tabtin.mobile.data.model.tracker.StepRunInfo
 import com.tabtin.mobile.ui.components.TTBottomSheet
 import com.tabtin.mobile.ui.components.TTSheetColumn

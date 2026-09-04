@@ -4,7 +4,7 @@ import android.content.Context
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.tabtin.mobile.BuildConfig
+import com.muse.mobile.BuildConfig
 import com.tabtin.mobile.data.api.VersionApi
 import com.tabtin.mobile.data.model.VersionGateDecision
 import dagger.hilt.android.lifecycle.HiltViewModel

@@ -8,9 +8,9 @@
  *
  * Spawn 顺序（builtin-servers.ts 用）：
  *   1. `which(<bin>)` 系统 PATH —— 高级用户装了更新版
- *   2. bundled path —— TabTin 预置版本
+ *   2. bundled path —— Muse 预置版本
  *
- *   TabTin 不走 plugin 系统，用 bundled + 静态注册。本设计是 TabTin 自有，
+ *   Muse 不走 plugin 系统，用 bundled + 静态注册。本设计是 Muse 自有，
  *   解析逻辑见 `Module.resolve("typescript/lib/tsserver.js", ctx.directory)`
  *   + `Npm.which("typescript-language-server")` 的"先项目自带，再 bundled"思路。
  */

@@ -373,7 +373,7 @@ function delay(milliseconds: number, signal: AbortSignal): Promise<void> {
 
 function loginResultPage(success: boolean): string {
   const message = success
-    ? 'ChatGPT Codex 登录已完成，您可以返回 TabTin。'
-    : '登录校验失败，请返回 TabTin 后重试。';
+    ? 'ChatGPT Codex 登录已完成，您可以返回 Muse。'
+    : '登录校验失败，请返回 Muse 后重试。';
   return `<!doctype html><html><body><p>${message}</p></body></html>`;
 }

@@ -357,14 +357,14 @@ export interface ContextTypeHandler {
     /** 用户口语别名，可选。譬如 ['记事本', '便签', 'notes']。 */
     aliases?: readonly string[]
     /**
-     * 真实顶层 CLI 命令名（`tabtin <cliKey> ...`），仅当它与 `backendAliases[0]`
+     * 真实顶层 CLI 命令名（`muse <cliKey> ...`），仅当它与 `backendAliases[0]`
      * 不一致时才需显式声明。
      *
      * 背景：`<apps>` 段的 cliKey 默认取 `backendAliases[0]`，但 backendAliases 同时
      * 承担「后端 item_type 别名」职责——对 tabdoc(`document`) / tabslide(`ppt`) /
      * tabfiles(`tabfiles`) 等 App，item_type 别名与真实 CLI 命令（`doc`/`slide`/`file`）
      * 不同（见 ）。声明本字段让 `toEnabledAppInfo` 优先用真实命令名，既让
-     * `(CLI: x)` 提示正确，也让 host 能按它从 `tabtin commands` 分组出真实子命令。
+     * `(CLI: x)` 提示正确，也让 host 能按它从 `muse commands` 分组出真实子命令。
      * 缺省时回落 `backendAliases[0]`（对 table/memo/video/browser/code 等一致的 App 无需声明）。
      */
     cliKey?: string

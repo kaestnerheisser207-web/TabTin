@@ -1,11 +1,11 @@
 {
-  "welcomeTitle": "欢迎使用 TabTin",
+  "welcomeTitle": "欢迎使用 Muse",
   "welcomeSubtitle": "AI 驱动的工作平台。创建一个新工作空间，或从左侧选择现有工作空间。",
   "welcomeSubtitleGuest": "登录后即可创建工作空间并开始协作。",
   "welcome": {
-    "title": "TabTin",
+    "title": "Muse",
     "tagline": "你的 AI 工作平台",
-    "conceptIntro": "在 TabTin 中，工作空间是持续存在的工作现场，绑定执行设备和工作目录，承载对话、App、资源和执行上下文；你可以组合表格、文档、代码、浏览器、设备控制、自动化、邮件和第三方集成等工作面，让 Agent 在这个边界里帮你完成任务。",
+    "conceptIntro": "在 Muse 中，工作空间是持续存在的工作现场，绑定执行设备和工作目录，承载对话、App、资源和执行上下文；你可以组合表格、文档、代码、浏览器、设备控制、自动化、邮件和第三方集成等工作面，让 Agent 在这个边界里帮你完成任务。",
     "loginCta": "登录 / 注册",
     "learnMore": "了解更多 →",
     "readyTitle": "准备好了！",
@@ -158,7 +158,7 @@
       "selectHelp": "默认模型会用于新会话和未指定模型的任务。"
     },
     "presetSection": {
-      "title": "TabTin 预置模型",
+      "title": "Muse 预置模型",
       "subtitle": "平台内置模型，开箱即用，可直接设为默认，无需配置渠道。",
       "collapse": "收起预置模型",
       "expandHint": "还有 {{count}} 个平台模型，展开查看全部。"

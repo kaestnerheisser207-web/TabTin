@@ -305,7 +305,7 @@ def test_cloud_nginx_route_insertion_is_indentation_safe_and_idempotent(tmp_path
         )
 
     rendered = nginx.read_text(encoding="utf-8")
-    assert rendered.count("# TabTin Cloud Worker control plane") == 1
+    assert rendered.count("# Muse Cloud Worker control plane") == 1
     assert "proxy_pass http://172.18.0.1:8090/;" in rendered
     assert "proxy_pass http://172.17.0.1:8090/;" not in rendered
     assert rendered.index("Cloud Worker control plane") < rendered.index("location / {")

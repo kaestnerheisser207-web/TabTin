@@ -147,7 +147,7 @@ describe('handleToolLifecycleNotice · 主路径 (tool_started/_completed/_faile
       input: { path: '/etc/hosts' },
       presentation: {
         kind: 'media_image_generation',
-        data: { command: 'tabtin media image generate --prompt apple', prompt: 'apple' },
+        data: { command: 'muse media image generate --prompt apple', prompt: 'apple' },
       },
       tool_call_metadata: { intent: '读取 hosts 配置' },
     }, ctx)
@@ -162,7 +162,7 @@ describe('handleToolLifecycleNotice · 主路径 (tool_started/_completed/_faile
     expect(ev.input).toEqual({ path: '/etc/hosts' })
     expect(ev.presentation).toEqual({
       kind: 'media_image_generation',
-      data: { command: 'tabtin media image generate --prompt apple', prompt: 'apple' },
+      data: { command: 'muse media image generate --prompt apple', prompt: 'apple' },
     })
     expect(ev.intent).toBe('读取 hosts 配置')
 
@@ -193,7 +193,7 @@ describe('handleToolLifecycleNotice · 主路径 (tool_started/_completed/_faile
       tool_name: 'run_terminal_command',
       tool_call_id: 'tu_img',
       phase: 'start',
-      input: { command: 'tabtin media image generate --prompt x' },
+      input: { command: 'muse media image generate --prompt x' },
     }, ctx)
 
     const [, ev] = store.upsertToolEventForSession.mock.calls[0]
@@ -215,7 +215,7 @@ describe('handleToolLifecycleNotice · 主路径 (tool_started/_completed/_faile
       notice_type: 'tool_started',
       tool_name: 'run_terminal_command',
       tool_call_id: 'tu_img_replay',
-      input: { command: 'tabtin media image generate --prompt cat' },
+      input: { command: 'muse media image generate --prompt cat' },
       presentation: {
         kind: 'media_image_generation',
         data: { prompt: 'cat' },

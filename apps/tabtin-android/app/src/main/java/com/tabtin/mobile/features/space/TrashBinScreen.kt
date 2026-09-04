@@ -48,7 +48,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.tabtin.mobile.R
+import com.muse.mobile.R
 import com.tabtin.mobile.data.api.ContextApi
 import com.tabtin.mobile.data.model.ApiEnvelope
 import com.tabtin.mobile.ui.theme.TTColors

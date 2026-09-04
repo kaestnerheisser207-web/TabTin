@@ -4,7 +4,7 @@ import fs from 'node:fs'
 import path from 'node:path'
 
 let appDataRoot = ''
-let currentUserDataDirName = 'TabTin Dev'
+let currentUserDataDirName = 'Muse Dev'
 let runtimeProfile: 'development' | 'local' | 'preprod' | 'production' = 'development'
 
 vi.mock('electron', () => ({
@@ -52,7 +52,7 @@ function readIdentity(dirName: string): Record<string, unknown> {
 describe('getDeviceIdentity（安装身份与重装恢复）', () => {
   beforeEach(() => {
     appDataRoot = fs.mkdtempSync(path.join(os.tmpdir(), 'tabtin-appdata-'))
-    currentUserDataDirName = 'TabTin Dev'
+    currentUserDataDirName = 'Muse Dev'
     runtimeProfile = 'development'
     machineIdState.raw = 'MACHINE-UUID-TEST'
     _resetDeviceFingerprintCacheForTests()
@@ -69,22 +69,22 @@ describe('getDeviceIdentity（安装身份与重装恢复）', () => {
 
     _resetDeviceFingerprintCacheForTests()
     expect(getDeviceIdentity().fingerprint).toBe(first.fingerprint)
-    expect(readIdentity('TabTin Dev').fingerprint).toBe(first.fingerprint)
+    expect(readIdentity('Muse Dev').fingerprint).toBe(first.fingerprint)
   })
 
   it('已有历史随机 fingerprint 不会被硬件哈希覆盖', () => {
-    writeIdentity('TabTin Dev', { fingerprint: 'electron-legacy-install-id' })
+    writeIdentity('Muse Dev', { fingerprint: 'electron-legacy-install-id' })
 
     const identity = getDeviceIdentity()
 
     expect(identity.fingerprint).toBe('electron-legacy-install-id')
     expect(identity.machineKey).toHaveLength(32)
-    expect(readIdentity('TabTin Dev').fingerprint).toBe('electron-legacy-install-id')
+    expect(readIdentity('Muse Dev').fingerprint).toBe('electron-legacy-install-id')
   })
 
   it('删除 userData 后是新安装身份，但同 profile machineKey 保持不变供服务端恢复', () => {
     const first = getDeviceIdentity()
-    fs.rmSync(path.join(appDataRoot, 'TabTin Dev'), { recursive: true, force: true })
+    fs.rmSync(path.join(appDataRoot, 'Muse Dev'), { recursive: true, force: true })
     _resetDeviceFingerprintCacheForTests()
 
     const reinstalled = getDeviceIdentity()
@@ -97,7 +97,7 @@ describe('getDeviceIdentity（安装身份与重装恢复）', () => {
     const dev = getDeviceIdentity()
     _resetDeviceFingerprintCacheForTests()
     runtimeProfile = 'production'
-    currentUserDataDirName = 'TabTin'
+    currentUserDataDirName = 'Muse'
 
     const prod = getDeviceIdentity()
 
@@ -106,14 +106,14 @@ describe('getDeviceIdentity（安装身份与重装恢复）', () => {
   })
 
   it('不从其它 profile 收集历史候选', () => {
-    writeIdentity('TabTin Preprod', { fingerprint: 'electron-current-preprod' })
-    writeIdentity('TabTin', {
+    writeIdentity('Muse Preprod', { fingerprint: 'electron-current-preprod' })
+    writeIdentity('Muse', {
       fingerprint: 'electron-current-production',
       previous_fingerprint: 'electron-production-legacy',
     })
     writeIdentity('tabtin-electron', { fingerprint: 'electron-legacy-default' })
     runtimeProfile = 'preprod'
-    currentUserDataDirName = 'TabTin Preprod'
+    currentUserDataDirName = 'Muse Preprod'
 
     const identity = getDeviceIdentity()
 
@@ -124,7 +124,7 @@ describe('getDeviceIdentity（安装身份与重装恢复）', () => {
   it('production 可将旧共享目录身份作为当前档历史身份', () => {
     writeIdentity('tabtin-electron', { fingerprint: 'electron-legacy-default' })
     runtimeProfile = 'production'
-    currentUserDataDirName = 'TabTin'
+    currentUserDataDirName = 'Muse'
 
     const identity = getDeviceIdentity()
 
@@ -147,6 +147,6 @@ describe('getDeviceIdentity（安装身份与重装恢复）', () => {
     expect(nextDeviceRuntimeProfileRevision(3)).toBe(7)
 
     persistDeviceRuntimeProfileRevision(4)
-    expect(readIdentity('TabTin Dev').runtime_profile_revision).toBe(6)
+    expect(readIdentity('Muse Dev').runtime_profile_revision).toBe(6)
   })
 })

@@ -40,11 +40,11 @@ vi.mock('@tabtin/oss-client', () => ({
 let tmpFile: string
 
 function setTabtin(value: unknown): void {
-  ;(globalThis as unknown as { tabtin?: unknown }).tabtin = value
+  ;(globalThis as unknown as { muse?: unknown }).tabtin = value
 }
 
 function delTabtin(): void {
-  delete (globalThis as unknown as { tabtin?: unknown }).tabtin
+  delete (globalThis as unknown as { muse?: unknown }).tabtin
 }
 
 beforeEach(() => {
@@ -237,7 +237,7 @@ describe('uploadFileToOSS — dogfood baking_error 复盘契约', () => {
   })
 
   it('apiBaseUrl 未注入 → errorCode=no-api-base + 提示 host bridge 未初始化', async () => {
-    setTabtin({}) // 空 tabtin 对象
+    setTabtin({}) // 空 muse 对象
     const { uploadFileToOSS } = await import('../oss-upload')
 
     const result = await uploadFileToOSS(tmpFile, {

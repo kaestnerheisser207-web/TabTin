@@ -19,7 +19,7 @@ _default_mode = "success"
 
 
 class Handler(BaseHTTPRequestHandler):
-    server_version = "TabTinLocalMock/1"
+    server_version = "MuseLocalMock/1"
 
     def log_message(self, *_args) -> None:
         return

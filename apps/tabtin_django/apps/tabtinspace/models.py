@@ -1,5 +1,5 @@
 """
-Tabtin Space 数据模型
+Muse Space 数据模型
 
 核心模型：
 1. Organization - 组织
@@ -332,7 +332,7 @@ class OrganizationMemberIdentitySnapshot(models.Model):
 
 
 class Device(models.Model):
-    """设备 — 任何注册到 TabTin 后端的运行环境
+    """设备 — 任何注册到 Muse 后端的运行环境
 
     执行设备（control）：Electron 桌面端、Agent Daemon、云实例，可绑定为 Agent 的执行主机。
     能力设备（data）：移动端、IoT 等，提供特定 capability 供 Agent 调用，作用域为 Organization。

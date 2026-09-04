@@ -17,7 +17,7 @@ type ProfileConfig struct {
 	// RefreshToken 由 Device Flow / JWT 登录写入；UserApiKey（ttn_）模式可为空。
 	RefreshToken string `json:"refreshToken,omitempty"`
 	// DefaultSpace 存 Workspace ID（ Space 终态退役）。JSON key 保留
-	// `defaultSpace` 兼容存量 profile；`tabtin workspace use` 与新 `--workspace-id`
+	// `defaultSpace` 兼容存量 profile；`muse workspace use` 与新 `--workspace-id`
 	// 全局 flag 写这个字段。字段名待下游读取点收敛后再统一改成 DefaultWorkspace。
 	DefaultSpace string `json:"defaultSpace,omitempty"`
 	// DefaultAgent 与 DefaultSpace 是两个独立身份：Workspace（历史字段名 Space）是
@@ -225,7 +225,7 @@ func ResolveSpaceID(profile *ProfileConfig) string {
 }
 
 // ResolveAgentID 解析当前执行 Agent 身份：环境变量 TABTIN_AGENT_ID 优先，
-// 其次 profile.DefaultAgent（由 `tabtin agent use` 写入）。**不回落 Space ID**——
+// 其次 profile.DefaultAgent（由 `muse agent use` 写入）。**不回落 Space ID**——
 // Agent 与 Space 是不同实体，把 Space ID 当 Agent ID 是  的根因。
 func ResolveAgentID(profile *ProfileConfig) string {
 	if v := os.Getenv("TABTIN_AGENT_ID"); v != "" {

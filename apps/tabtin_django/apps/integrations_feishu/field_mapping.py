@@ -314,7 +314,7 @@ def serialize_feishu_cell_value(value: Any, feishu_type: Optional[int] = None) -
         FEISHU_TYPE_MODIFIED_USER,
     ):
         # TabData user 单元格支持带 id/name 的对象或对象列表。保留结构后，
-        # 即使飞书 open_id 不是 TabTin 用户 UUID，也能稳定展示原始姓名，
+        # 即使飞书 open_id 不是 Muse 用户 UUID，也能稳定展示原始姓名，
         # 而不是先压成逗号文本、丢失身份信息。
         return value
 

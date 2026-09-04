@@ -74,7 +74,7 @@ describe('LocalCodexResponsesProvider', () => {
           'OpenAI-Beta': 'responses=experimental',
           accept: 'text/event-stream',
           'content-type': 'application/json',
-          originator: 'tabtin',
+          originator: 'muse',
           'session-id': expect.any(String),
           'x-client-request-id': expect.any(String),
         }),

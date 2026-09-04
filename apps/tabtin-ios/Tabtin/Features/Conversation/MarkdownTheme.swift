@@ -201,7 +201,7 @@ private struct ChatCodeBlock: View {
     }
 
     static func prewarm() {
-        let sample = "let message = \"TabTin\""
+        let sample = "let message = \"Muse\""
         _ = cachedHighlight(code: sample, language: "swift", colorScheme: .light)
         _ = cachedHighlight(code: sample, language: "swift", colorScheme: .dark)
     }

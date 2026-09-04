@@ -331,7 +331,7 @@
     "insufficientCredits": "Insufficient credits — please top up to continue",
     "organizationInsufficientCredits": "Organization wallet balance insufficient — please ask your admin to top up",
     "insufficientCreditsTitle": "Insufficient available balance",
-    "insufficientCreditsDesc": "This action was not completed. Top up to continue using TabTin.",
+    "insufficientCreditsDesc": "This action was not completed. Top up to continue using Muse.",
     "organizationInsufficientCreditsTitle": "Organization wallet balance is insufficient",
     "organizationInsufficientCreditsDesc": "This action was not completed. Ask an organization admin to top up, then try again.",
     "goTeamRecharge": "Organization top up",

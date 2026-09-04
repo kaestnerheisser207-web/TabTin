@@ -6,15 +6,15 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/TabTin/tabtin-cli/internal/cmdutil"
-	"github.com/TabTin/tabtin-cli/internal/errcode"
-	"github.com/TabTin/tabtin-cli/internal/output"
-	"github.com/TabTin/tabtin-cli/internal/skillbundle"
-	"github.com/TabTin/tabtin-cli/internal/version"
+	"github.com/Muse/muse-cli/internal/cmdutil"
+	"github.com/Muse/muse-cli/internal/errcode"
+	"github.com/Muse/muse-cli/internal/output"
+	"github.com/Muse/muse-cli/internal/skillbundle"
+	"github.com/Muse/muse-cli/internal/version"
 )
 
 // newCmdSkills 复数 skills：面向第三方 Agent 的包内 Skill 内省与 ~/.agents/skills 生命周期。
-// 与单数 `tabtin skill`（Space/市场）语义分开。
+// 与单数 `muse skill`（Space/市场）语义分开。
 func newCmdSkills(f *cmdutil.Factory) *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "skills",
@@ -24,7 +24,7 @@ func newCmdSkills(f *cmdutil.Factory) *cobra.Command {
 包内 skills/ 与当前 CLI 版本绑定，是权威内容；物化到 ~/.agents/skills/tabtin-*
 供 Cursor/Claude/Codex 等原生扫描。漂移时用 sync 覆盖回包内版本。
 
-与单数命令 tabtin skill（Space / 市场管理）职责不同，请勿混用。`,
+与单数命令 muse skill（Space / 市场管理）职责不同，请勿混用。`,
 	}
 
 	defs := []cmdutil.CommandDef{
@@ -35,10 +35,10 @@ func newCmdSkills(f *cmdutil.Factory) *cobra.Command {
 
 权威内容来自包内 skills/，不依赖 Desktop/Daemon。可选 path 用于浏览 references 等子目录。
 
-常见陷阱：外部名一律带 tabtin- 前缀；Space 市场技能请用单数 tabtin skill。`,
-			Example: `  tabtin skills list --format json
-  tabtin skills list tabtin-tabdoc-operator
-  tabtin skills list --dir /tmp/agents-skills`,
+常见陷阱：外部名一律带 tabtin- 前缀；Space 市场技能请用单数 muse skill。`,
+			Example: `  muse skills list --format json
+  muse skills list tabtin-tabdoc-operator
+  muse skills list --dir /tmp/agents-skills`,
 			Route:        cmdutil.RouteDirect,
 			Runtime:      cmdutil.RuntimeLocal,
 			Layer:        "L2",
@@ -60,9 +60,9 @@ func newCmdSkills(f *cmdutil.Factory) *cobra.Command {
 相对路径禁止 .. 穿越。跨 Skill 引用请直接 read 目标 Skill 名，不要用 ../。
 
 常见陷阱：读到的是包内版本；磁盘 ~/.agents/skills 副本可能漂移，以本命令为准。`,
-			Example: `  tabtin skills read tabtin-tabdoc-operator
-  tabtin skills read tabtin-tabdoc-operator references/foo.md
-  tabtin skills read tabtin-tabdoc-operator/SKILL.md`,
+			Example: `  muse skills read tabtin-tabdoc-operator
+  muse skills read tabtin-tabdoc-operator references/foo.md
+  muse skills read tabtin-tabdoc-operator/SKILL.md`,
 			Route:        cmdutil.RouteDirect,
 			Runtime:      cmdutil.RuntimeLocal,
 			Layer:        "L2",
@@ -78,12 +78,12 @@ func newCmdSkills(f *cmdutil.Factory) *cobra.Command {
 			Short: "将包内 Skill 物化到第三方 Agent 目录（默认 ~/.agents/skills）",
 			Long: `把包内 Skill 复制到第三方 Agent 可扫描目录（默认 ~/.agents/skills）。
 
-每个目录写入 .tabtin-skill.json 所有权标记。同名但非 TabTin 管理的目录会报冲突，不覆盖。
+每个目录写入 .tabtin-skill.json 所有权标记。同名但非 Muse 管理的目录会报冲突，不覆盖。
 
 常见陷阱：安装不等于设备/登录态可用；runtime 元数据仍需 Agent 自行诊断。`,
-			Example: `  tabtin skills install --target agents
-  tabtin skills install --target agents --name tabtin-tabdoc-operator
-  tabtin skills install --dir /tmp/agents-skills --dry-run`,
+			Example: `  muse skills install --target agents
+  muse skills install --target agents --name tabtin-tabdoc-operator
+  muse skills install --dir /tmp/agents-skills --dry-run`,
 			Route:        cmdutil.RouteDirect,
 			Runtime:      cmdutil.RuntimeLocal,
 			Layer:        "L2",
@@ -102,15 +102,15 @@ func newCmdSkills(f *cmdutil.Factory) *cobra.Command {
 		},
 		{
 			Use:   "sync",
-			Short: "用包内权威版本覆盖本包已安装的 Skill（不碰非 TabTin 目录）",
+			Short: "用包内权威版本覆盖本包已安装的 Skill（不碰非 Muse 目录）",
 			Long: `将 ~/.agents/skills 下本包管理的 tabtin-* 目录强制同步回当前包内版本。
 
-只改带 .tabtin-skill.json 且 managed_by=tabtin 的目录；冲突目录跳过并列入 conflicts。
+只改带 .tabtin-skill.json 且 managed_by=muse 的目录；冲突目录跳过并列入 conflicts。
 
 常见陷阱：sync 会丢掉你对物化副本的本地改动——要以包内为准请先确认。`,
-			Example: `  tabtin skills sync
-  tabtin skills sync --dir /tmp/agents-skills
-  tabtin skills sync --dry-run`,
+			Example: `  muse skills sync
+  muse skills sync --dir /tmp/agents-skills
+  muse skills sync --dry-run`,
 			Route:        cmdutil.RouteDirect,
 			Runtime:      cmdutil.RuntimeLocal,
 			Layer:        "L2",
@@ -133,9 +133,9 @@ func newCmdSkills(f *cmdutil.Factory) *cobra.Command {
 ok=false 时进程退出码为 1，便于脚本门禁。不修改任何文件。
 
 常见陷阱：未 install 时全部记为 missing，属预期；先 install 再 doctor。`,
-			Example: `  tabtin skills doctor --format json
-  tabtin skills doctor --dir /tmp/agents-skills
-  tabtin skills doctor`,
+			Example: `  muse skills doctor --format json
+  muse skills doctor --dir /tmp/agents-skills
+  muse skills doctor`,
 			Route:        cmdutil.RouteDirect,
 			Runtime:      cmdutil.RuntimeLocal,
 			Layer:        "L2",
@@ -153,12 +153,12 @@ ok=false 时进程退出码为 1，便于脚本门禁。不修改任何文件。
 			Short: "移除本包安装的 Skill（仅 .tabtin-skill.json 标记的目录）",
 			Long: `删除第三方 Agent 目录中由本包安装的 Skill。
 
-只删除 managed_by=tabtin 的目录；用户自建或冲突目录一律跳过。需要 --yes。
+只删除 managed_by=muse 的目录；用户自建或冲突目录一律跳过。需要 --yes。
 
 常见陷阱：缺 --yes 返回 confirmation_required，Agent 不得自动追加 --yes。`,
-			Example: `  tabtin skills remove --yes
-  tabtin skills remove --name tabtin-tabdoc-operator --yes
-  tabtin skills remove --dry-run`,
+			Example: `  muse skills remove --yes
+  muse skills remove --name tabtin-tabdoc-operator --yes
+  muse skills remove --dry-run`,
 			Route:        cmdutil.RouteDirect,
 			Runtime:      cmdutil.RuntimeLocal,
 			Layer:        "L2",
@@ -191,10 +191,10 @@ func skillsWriteDryRun(ctx *cmdutil.RunContext, action string) *cmdutil.DryRunPl
 		"names":  names,
 	}
 	if action == "remove" {
-		body["note"] = "only directories with .tabtin-skill.json managed_by=tabtin"
+		body["note"] = "only directories with .tabtin-skill.json managed_by=muse"
 	}
 	return &cmdutil.DryRunPlan{
-		Description: action + " tabtin skills in agents directory",
+		Description: action + " muse skills in agents directory",
 		Plan: []cmdutil.DryRunStep{{
 			Step:   1,
 			Method: "FS",
@@ -266,7 +266,7 @@ func skillsListExecute(f *cmdutil.Factory) func(*cmdutil.RunContext) error {
 				"bundle_root":    b.Root,
 				"agents_dir":     agentsDir,
 			}
-			// 与 tabtin commands 一样：协议输出必须完整内联，避免 64KB 落盘破坏 Agent 发现。
+			// 与 muse commands 一样：协议输出必须完整内联，避免 64KB 落盘破坏 Agent 发现。
 			output.PrintResultWithSchemaInline(output.SuccessEnvelope(result), f.Format, nil)
 			return nil
 		}
@@ -277,7 +277,7 @@ func skillsListExecute(f *cmdutil.Factory) func(*cmdutil.RunContext) error {
 			return output.PrintErrorAndExit(output.ErrorEnvelope(
 				string(errcode.NotFound),
 				err.Error(),
-				"用法: tabtin skills list [name[/path]]",
+				"用法: muse skills list [name[/path]]",
 				output.ExitNotFound,
 			))
 		}
@@ -304,7 +304,7 @@ func skillsReadExecute(f *cmdutil.Factory) func(*cmdutil.RunContext) error {
 			return output.PrintErrorAndExit(output.ErrorEnvelope(
 				string(errcode.ValidationError),
 				"缺少 skill 名称",
-				"用法: tabtin skills read <name> [relative-path]",
+				"用法: muse skills read <name> [relative-path]",
 				output.ExitValidation,
 			))
 		}
@@ -327,7 +327,7 @@ func skillsReadExecute(f *cmdutil.Factory) func(*cmdutil.RunContext) error {
 			return output.PrintErrorAndExit(output.ErrorEnvelope(
 				string(code),
 				err.Error(),
-				fmt.Sprintf("用法: tabtin skills read %s [relative-path]", name),
+				fmt.Sprintf("用法: muse skills read %s [relative-path]", name),
 				exit,
 			))
 		}
@@ -365,7 +365,7 @@ func skillsInstallExecute(f *cmdutil.Factory) func(*cmdutil.RunContext) error {
 				return output.PrintErrorAndExit(output.ErrorEnvelopeWith(
 					string(errcode.Conflict),
 					c.Error(),
-					"请手动处理冲突目录，或换 TABTIN_AGENTS_SKILLS_DIR；sync/remove 不会覆盖非 TabTin Skill",
+					"请手动处理冲突目录，或换 TABTIN_AGENTS_SKILLS_DIR；sync/remove 不会覆盖非 Muse Skill",
 					output.ExitGeneral,
 					output.ErrorEnvelopeOpts{
 						Detail: map[string]any{

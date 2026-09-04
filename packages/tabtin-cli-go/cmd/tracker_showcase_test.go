@@ -9,7 +9,7 @@ import (
 	"os"
 	"testing"
 
-	"github.com/TabTin/tabtin-cli/internal/cmdutil"
+	"github.com/Muse/muse-cli/internal/cmdutil"
 )
 
 // TestTrackerShowcaseRegistryComplete 断言每个 tracker 叶子命令要么进 showcase registry、

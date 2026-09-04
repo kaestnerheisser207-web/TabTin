@@ -412,6 +412,6 @@ class UserActionLogAdmin(admin.ModelAdmin):
 
 
 # 自定义管理后台标题
-admin.site.site_header = 'Tabtin 用户管理'
-admin.site.site_title = 'Tabtin 用户管理'
+admin.site.site_header = 'Muse 用户管理'
+admin.site.site_title = 'Muse 用户管理'
 admin.site.index_title = '用户认证模块管理'

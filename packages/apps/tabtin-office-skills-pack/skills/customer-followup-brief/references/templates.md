@@ -45,7 +45,7 @@
 ```markdown
 客户简报已整理：
 
-- 文档：<tabtin resource link or 草稿>
+- 文档：<muse resource link or 草稿>
 - 下一步：<action + owner + date>
 - 风险：<1-3 items>
 - 待确认：<gaps>

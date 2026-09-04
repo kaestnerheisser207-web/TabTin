@@ -168,7 +168,7 @@
     {
       "name": "table record detail",
       "short": "记录详情",
-      "long": "取单条记录的完整字段值（含 link 关联字段的当前值）。\n设计理由：record list 为分页浏览做了瘦身，link 等重字段不一定\n全带；需要完整值时用 detail 按 record-id 精确取一条。TabTin 稳定资源链接或复制自\n页面的记录链接可直接作为位置参数，CLI 会复用当前 Profile 授权并解析 record-id。\n常见陷阱：--field-key-type 决定返回 JSON 的 key 是字段名还是字段 UUID，与\nrecord update 的 --data key 约定要保持一致，否则回写会对不上字段。",
+      "long": "取单条记录的完整字段值（含 link 关联字段的当前值）。\n设计理由：record list 为分页浏览做了瘦身，link 等重字段不一定\n全带；需要完整值时用 detail 按 record-id 精确取一条。Muse 稳定资源链接或复制自\n页面的记录链接可直接作为位置参数，CLI 会复用当前 Profile 授权并解析 record-id。\n常见陷阱：--field-key-type 决定返回 JSON 的 key 是字段名还是字段 UUID，与\nrecord update 的 --data key 约定要保持一致，否则回写会对不上字段。",
       "group": "records",
       "group_label": "记录"
     },
@@ -344,7 +344,7 @@
     {
       "name": "table query",
       "short": "只读 SQL 查询",
-      "long": "对 Space 内 TabData 表执行只读 SQL（SELECT），TabTin 特色能力。\n设计理由：跨表只读分析、复杂筛选比多次 record list 更高效；与 execute 严格分工。\n常见陷阱：query 拒绝写语句——UPDATE/DELETE 走 execute 并带确认 flag。",
+      "long": "对 Space 内 TabData 表执行只读 SQL（SELECT），Muse 特色能力。\n设计理由：跨表只读分析、复杂筛选比多次 record list 更高效；与 execute 严格分工。\n常见陷阱：query 拒绝写语句——UPDATE/DELETE 走 execute 并带确认 flag。",
       "group": "sql",
       "group_label": "数据查询"
     },

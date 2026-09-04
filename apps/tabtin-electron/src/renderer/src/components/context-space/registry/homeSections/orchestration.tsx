@@ -69,7 +69,7 @@ const OrchestrationSection: React.FC<HomeSectionProps> = ({
   const controlDeviceName = controlDevice?.name ?? null
   const isResolving = !currentDeviceId
   const isControl = isCurrentDeviceControl(controlDeviceId, currentDevice, devices ?? [])
-  //  开箱即用：进入未初始化的 Agent 时静默绑本机设备 + 补默认 ~/TabTin/<团队>/<名字> 目录。
+  //  开箱即用：进入未初始化的 Agent 时静默绑本机设备 + 补默认 ~/Muse/<团队>/<名字> 目录。
   // ：绑定丢失但目录已配置 → readyStatus='needs-reclaim'，不静默接管，由下方卡片显式征询。
   const { status: readyStatus, reclaim } = useEnsureAgentReady(spaceId, agent)
 

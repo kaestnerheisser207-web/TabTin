@@ -302,10 +302,10 @@
   "insertEmoji": "Emoji",
   "emojiMostUsed": "Kürzlich verwendet",
   "emojiDefault": "Standard-Emoji",
-  "emojiTabtin": "TabTin",
+  "emojiTabtin": "Muse",
   "openStickerPreview": "Aufklebervorschau öffnen",
   "stickers": {
-    "neutral": "TabTin-Bot",
+    "neutral": "Muse-Bot",
     "happy": "Glücklich",
     "sad": "Traurig",
     "surprise": "Überraschung",
@@ -477,7 +477,13 @@
   "sendToIMErrorNoteFailed": "Nachricht konnte nicht gesendet werden",
   "sendToIMErrorSendFailed": "Senden fehlgeschlagen",
   "sendToIMSuccessToast": "Wird an {{count}}-Ziele gesendet",
-  "replyThread": { "title": "Antwortdetails", "close": "Antwortdetails schließen", "empty": "Keine Antworten geladen", "messageUnavailable": "Nachricht nicht verfügbar", "openImage": "Bildvorschau öffnen" },
+  "replyThread": {
+    "title": "Antwortdetails",
+    "close": "Antwortdetails schließen",
+    "empty": "Keine Antworten geladen",
+    "messageUnavailable": "Nachricht nicht verfügbar",
+    "openImage": "Bildvorschau öffnen"
+  },
   "externalContacts": {
     "tabs": {
       "internal": "Mitglieder",

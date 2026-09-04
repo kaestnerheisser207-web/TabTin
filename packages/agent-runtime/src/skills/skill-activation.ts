@@ -338,7 +338,7 @@ function buildPersonalPluginRuntimeInstruction(skill: SkillRecord, key: string):
   if (!skill.personalPluginId || !skill.personalPluginRuntime) return null;
 
   const displayTitle = skill.personalPluginRuntime.title ?? skill.personalPluginDisplayName ?? skill.name;
-  const args = ['tabtin', 'plugin', 'launch', skill.personalPluginId];
+  const args = ['muse', 'plugin', 'launch', skill.personalPluginId];
   if (skill.personalPluginRuntime.serviceId) {
     args.push('--service-id', skill.personalPluginRuntime.serviceId);
   }
@@ -353,14 +353,14 @@ function buildPersonalPluginRuntimeInstruction(skill: SkillRecord, key: string):
   return [
     `请启动 Personal Plugin skill \`${key}\` 对应的本地 runtime。`,
     '',
-    '必须直接调用 `run_terminal_command` 执行下面的 TabTin CLI 命令：',
+    '必须直接调用 `run_terminal_command` 执行下面的 Muse CLI 命令：',
     '',
     '```bash',
     command,
     '```',
     '',
     '不要搜索文件系统，不要从当前 workspace 或用户 home 目录查找插件脚本。',
-    '插件安装目录、local service cwd、项目目录、MCP attach 和浏览器打开都由 TabTin CLI 转交宿主授权流程，并根据 Personal Plugin registry 自动处理。',
+    '插件安装目录、local service cwd、项目目录、MCP attach 和浏览器打开都由 Muse CLI 转交宿主授权流程，并根据 Personal Plugin registry 自动处理。',
     `CLI 返回 running 后，用简短中文告诉用户 ${displayTitle} 已打开；如果 CLI 报错，再复述错误和下一步。`,
   ].join('\n');
 }
@@ -585,7 +585,7 @@ function buildSkillInvokeContextModifier(
       contextModifier.modelOverride = meta.model;
     } else {
       // 中文文案：让 LLM（以及把 tool_result content 展示给用户的 UI）
-      // 能直接理解回退原因 + 怎么修。TabTin 面向中文用户，英文系统
+      // 能直接理解回退原因 + 怎么修。Muse 面向中文用户，英文系统
       // 提示容易让 LLM 切换到英文回复。
       modelOverrideRejectedNotice =
         `Skill 指定的模型 "${meta.model}" 不在当前可用模型列表中，` +

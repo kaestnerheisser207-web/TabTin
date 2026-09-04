@@ -105,7 +105,7 @@ export const CreateOrganizationDialog: React.FC<CreateOrganizationDialogProps> =
         setError(t('create.errors.deviceRequired', { defaultValue: '正在识别本机执行设备，请稍后再试' }))
         return
       }
-      // 默认目录名固定中文，不跟 UI 语言走英文（避免 ~/TabTin/.../Default Space）。
+      // 默认目录名固定中文，不跟 UI 语言走英文（避免 ~/Muse/.../Default Space）。
       const defaultDir = await window.tabtin?.fileSystem?.ensureDefaultAgentDir({
         organizationName: data.name,
         spaceName: '默认工作空间',

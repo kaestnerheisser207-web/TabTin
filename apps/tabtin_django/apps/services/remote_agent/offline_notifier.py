@@ -66,13 +66,13 @@ def notify_owner_device_offline(
         body = (
             f"{context_label}尝试调用 {agent_name} 执行 {tracker_label}，"
             f"但其执行设备 \"{device_name}\" 当前不在线。"
-            "请在该设备上启动 TabTin 客户端后重试。"
+            "请在该设备上启动 Muse 客户端后重试。"
         )
     else:
         title = f"设备 \"{device_name}\" 不在线"
         body = (
             f"{context_label}尝试调用 {agent_name}，但其执行设备 \"{device_name}\" 当前不在线。"
-            "请在该设备上启动 TabTin 客户端后重试。"
+            "请在该设备上启动 Muse 客户端后重试。"
         )
 
     metadata = {

@@ -297,7 +297,7 @@ describe('PtyManager pty-core alignment (PTY-008/009, D-01/02/03)', () => {
       expect(manager.spawn('s-cli-env', { cwd: '/tmp' })).toBe(true)
       const host = hostClient.getLastSession()
 
-      const resultP = manager.executeCommand('s-cli-env', 'tabtin doctor', {
+      const resultP = manager.executeCommand('s-cli-env', 'muse doctor', {
         blockUntilMs: 5_000,
       })
       await vi.waitFor(() => expect(host.write).toHaveBeenCalled())
@@ -370,7 +370,7 @@ describe('PtyManager pty-core alignment (PTY-008/009, D-01/02/03)', () => {
       expect(manager.spawn('s-cli-env-pwsh', { cwd: 'C:\\work' })).toBe(true)
       const host = hostClient.getLastSession()
 
-      const resultP = manager.executeCommand('s-cli-env-pwsh', 'tabtin doctor', {
+      const resultP = manager.executeCommand('s-cli-env-pwsh', 'muse doctor', {
         blockUntilMs: 5_000,
       })
       await vi.waitFor(() => expect(host.write).toHaveBeenCalled())
@@ -395,7 +395,7 @@ describe('PtyManager pty-core alignment (PTY-008/009, D-01/02/03)', () => {
       resolveShellMock.mockReturnValue('/bin/bash')
       const host = hostClient.getLastSession()
 
-      const resultP = manager.executeCommand('s-session-shell', 'tabtin doctor', {
+      const resultP = manager.executeCommand('s-session-shell', 'muse doctor', {
         blockUntilMs: 5_000,
       })
       await vi.waitFor(() => expect(host.write).toHaveBeenCalled())
@@ -419,7 +419,7 @@ describe('PtyManager pty-core alignment (PTY-008/009, D-01/02/03)', () => {
       expect(manager.spawn('s-cli-env-explicit', { cwd: '/tmp' })).toBe(true)
       const host = hostClient.getLastSession()
 
-      const resultP = manager.executeCommand('s-cli-env-explicit', 'tabtin doctor', {
+      const resultP = manager.executeCommand('s-cli-env-explicit', 'muse doctor', {
         blockUntilMs: 5_000,
         context: {
           env: {
@@ -451,7 +451,7 @@ describe('PtyManager pty-core alignment (PTY-008/009, D-01/02/03)', () => {
       expect(manager.spawn('s-cli-env-partial-explicit', { cwd: '/tmp' })).toBe(true)
       const host = hostClient.getLastSession()
 
-      const resultP = manager.executeCommand('s-cli-env-partial-explicit', 'tabtin doctor', {
+      const resultP = manager.executeCommand('s-cli-env-partial-explicit', 'muse doctor', {
         blockUntilMs: 5_000,
         context: {
           env: {
@@ -478,7 +478,7 @@ describe('PtyManager pty-core alignment (PTY-008/009, D-01/02/03)', () => {
       expect(manager.spawn('s-cli-env-missing-server', { cwd: '/tmp' })).toBe(true)
       const host = hostClient.getLastSession()
 
-      const resultP = manager.executeCommand('s-cli-env-missing-server', 'tabtin doctor', {
+      const resultP = manager.executeCommand('s-cli-env-missing-server', 'muse doctor', {
         blockUntilMs: 5_000,
       })
       await vi.waitFor(() => expect(host.write).toHaveBeenCalled())

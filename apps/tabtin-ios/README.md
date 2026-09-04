@@ -1,4 +1,4 @@
-# TabTin iOS
+# Muse iOS
 
 ## 从源码运行
 
@@ -14,8 +14,8 @@
 可以把下面的 prompt 直接交给 Codex、Cursor 或其他代码助手：
 
 ```text
-请在当前仓库运行 TabTin 的 iOS 项目：生成 Xcode 工程，启动 iOS Simulator，
-编译并运行 TabTin Debug；如果发现构建错误，请先修复或说明具体阻塞原因。
+请在当前仓库运行 Muse 的 iOS 项目：生成 Xcode 工程，启动 iOS Simulator，
+编译并运行 Muse Debug；如果发现构建错误，请先修复或说明具体阻塞原因。
 ```
 
 也可以在 Xcode 中打开 `apps/tabtin-ios/Tabtin.xcodeproj`，选择 `Tabtin` scheme
@@ -24,11 +24,11 @@
 ### 3. 选择 API 环境
 
 启动后从右上角的 Debug 入口打开环境设置，选择或填写 API 地址。要连接本机开发
-环境时，先在 PC 端启动 TabTin，再使用 PC 端生成的二维码；iOS 扫码后会自动填充
+环境时，先在 PC 端启动 Muse，再使用 PC 端生成的二维码；iOS 扫码后会自动填充
 API、WebSocket 和实时通道地址。真机必须能访问运行服务的电脑（例如处于同一局域网），
 不要填写 `localhost`。
 
-TabTin iOS 工程由 `project.yml` 通过 XcodeGen 生成。日常修改工程配置后运行：
+Muse iOS 工程由 `project.yml` 通过 XcodeGen 生成。日常修改工程配置后运行：
 
 ```bash
 cd apps/tabtin-ios

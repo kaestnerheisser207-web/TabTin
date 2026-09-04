@@ -50,10 +50,10 @@ describe('createAppMetaFormatter — tabdoc 详情块', () => {
       current_doc_title: '文献引用真实性检查报告',
     });
     expect(text).toContain('current_document: "文献引用真实性检查报告" (id: doc_637)');
-    expect(text).toContain('read_current_document: tabtin doc read doc_637 --format json');
-    expect(text).toContain('read_large_document: tabtin doc list-blocks doc_637 --format json; tabtin doc chunks doc_637 --format json');
-    expect(text).toContain('create_cloud_document: write_file path=.agent-drafts/<slug>.md → tabtin doc create --title "<title>" --markdown @.agent-drafts/<slug>.md --format json');
-    expect(text).toContain('update_document_metadata: tabtin doc update <document-id> --icon <emoji> --cover-image <url> --parent-id <parent-id> --tags <tag>');
+    expect(text).toContain('read_current_document: muse doc read doc_637 --format json');
+    expect(text).toContain('read_large_document: muse doc list-blocks doc_637 --format json; muse doc chunks doc_637 --format json');
+    expect(text).toContain('create_cloud_document: write_file path=.agent-drafts/<slug>.md → muse doc create --title "<title>" --markdown @.agent-drafts/<slug>.md --format json');
+    expect(text).toContain('update_document_metadata: muse doc update <document-id> --icon <emoji> --cover-image <url> --parent-id <parent-id> --tags <tag>');
     expect(text).toContain('long_doc_rule: Agent 新建长文临时草稿必须写 .agent-drafts/<slug>.md');
     expect(text).not.toContain('正文');
     expect(text).not.toContain('markdown:');

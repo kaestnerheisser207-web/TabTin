@@ -17,14 +17,14 @@
 // ─── Pointer ─────────────────────────────────────────────────────
 
 /**
- * 来源 scheme：'tabtin' = 自有格式；其余 = 行业格式。
+ * 来源 scheme：'muse' = 自有格式；其余 = 行业格式。
  *
- * 字面量 union 中只列 RFC v1.0 §1.3 显式枚举的 5 种行业 scheme + 'tabtin'
+ * 字面量 union 中只列 RFC v1.0 §1.3 显式枚举的 5 种行业 scheme + 'muse'
  * 自有格式；其他如 `tabtin-file:` / `weixin:` / `ssh:` 等都走 `(string & {})`
  * 兜底——避免在协议层预埋"未来要支持"的字面量过度设计。
  */
 export type ResourcePointerScheme =
-  | 'tabtin'
+  | 'muse'
   | 'http'
   | 'https'
   | 'file'
@@ -32,7 +32,7 @@ export type ResourcePointerScheme =
   | 'tel'
   | (string & {})
 
-export type TabTinResourceScheme = 'tabtin' | 'tabtin-preprod' | 'tabtin-dev'
+export type TabTinResourceScheme = 'muse' | 'tabtin-preprod' | 'tabtin-dev'
 
 /**
  * 自有格式 type 轴。
@@ -57,7 +57,7 @@ export type ResourcePointerType = string
  *      不直接处理裸路径——baseDir 解析依赖渲染层上下文）
  */
 export interface ResourcePointer {
-  /** 'tabtin' = 自有格式，其他都是行业格式（含未知 scheme） */
+  /** 'muse' = 自有格式，其他都是行业格式（含未知 scheme） */
   scheme: ResourcePointerScheme
 
   /** 自有格式：ContextRefType 字符串；行业格式：null */

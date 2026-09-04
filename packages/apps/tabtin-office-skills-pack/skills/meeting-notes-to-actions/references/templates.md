@@ -38,7 +38,7 @@
 ```markdown
 我已整理出：
 
-- 会议纪要：<tabtin resource link or 草稿>
+- 会议纪要：<muse resource link or 草稿>
 - 行动项：<N> 条
 - 已写入：<Doc/Table/Tracker 状态>
 - 待确认：<缺失字段>

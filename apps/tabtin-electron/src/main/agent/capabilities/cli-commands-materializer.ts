@@ -74,7 +74,7 @@ export async function warmCliCommandsMaterialized(
   )
   if (materialized) {
     log.info(
-      `tabtin commands materialized reason=${reason} commands=${materialized.listing.commands.length} elapsed=${Date.now() - startedAt}ms`,
+      `muse commands materialized reason=${reason} commands=${materialized.listing.commands.length} elapsed=${Date.now() - startedAt}ms`,
     )
   }
   return materialized

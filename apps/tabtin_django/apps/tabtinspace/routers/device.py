@@ -1,8 +1,8 @@
-"""Tabtin Space device 路由。"""
+"""Muse Space device 路由。"""
 
 from .shared import *  # noqa: F401,F403
 
-router = Router(tags=["Tabtin Space"])
+router = Router(tags=["Muse Space"])
 
 @router.post("/devices/register", auth=jwt_auth, response={200: dict, **RESP_ERR_400})
 def register_device(request: HttpRequest, payload: DeviceRegister):

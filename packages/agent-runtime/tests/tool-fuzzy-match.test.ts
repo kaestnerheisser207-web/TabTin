@@ -341,7 +341,7 @@ describe('runTools — unknown tool name with did_you_mean', () => {
     const { results } = await drain(gen as AsyncGenerator<StreamEvent, unknown[]>);
     const content = (results[0] as { result: { content: string } }).result.content;
     expect(content).not.toContain('Did you mean');
-    expect(content).toContain('tabtin commands');
+    expect(content).toContain('muse commands');
   });
 
   it('still flags isError=true so query.ts treats it as a tool failure', async () => {

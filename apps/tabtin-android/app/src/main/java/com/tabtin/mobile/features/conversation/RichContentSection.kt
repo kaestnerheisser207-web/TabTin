@@ -69,7 +69,7 @@ import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import coil.compose.AsyncImagePainter
 import coil.compose.SubcomposeAsyncImage
-import com.tabtin.mobile.R
+import com.muse.mobile.R
 import com.tabtin.mobile.data.api.OSSUploadService
 import com.tabtin.mobile.data.model.BlockItem
 import com.tabtin.mobile.data.model.SpaceResource

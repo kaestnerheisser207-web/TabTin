@@ -84,7 +84,7 @@ const AskUserQuestionSchema = z.object({
   id: z.string().min(1),
   /**
    * 完整问题文本（清晰、具体，以问号结束）。
-   * AskUserQuestion 协议的 `question` 字段——TabTin wire
+   * AskUserQuestion 协议的 `question` 字段——Muse wire
    * 历史用 `prompt`，保留 snake_case 风格。
    */
   prompt: z.string().min(1),
@@ -477,7 +477,7 @@ export const DecisionReasonSchema = z.discriminatedUnion('type', [
     type: z.literal('platform_artifact_allow'),
     path: z.string(),
   }),
-  // ：平台受管 tabtin CLI 让位给 host ApprovalGate
+  // ：平台受管 muse CLI 让位给 host ApprovalGate
   z.object({
     type: z.literal('platform_gate_deferred'),
     surface: z.string(),

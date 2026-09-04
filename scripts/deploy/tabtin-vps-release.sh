@@ -46,7 +46,7 @@ fi
 
 mkdir -p "$application_root"
 exec 9>"$lock_file"
-flock -n 9 || die "another TabTin deployment is already running"
+flock -n 9 || die "another Muse deployment is already running"
 [[ -f "$compose_file" ]] || die "missing compose file: $compose_file"
 
 registry_token=""

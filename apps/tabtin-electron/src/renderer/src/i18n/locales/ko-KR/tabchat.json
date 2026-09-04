@@ -302,10 +302,10 @@
   "insertEmoji": "이모티콘",
   "emojiMostUsed": "최근에 사용됨",
   "emojiDefault": "기본 이모티콘",
-  "emojiTabtin": "TabTin",
+  "emojiTabtin": "Muse",
   "openStickerPreview": "스티커 미리보기 열기",
   "stickers": {
-    "neutral": "TabTin 봇",
+    "neutral": "Muse 봇",
     "happy": "행복하다",
     "sad": "슬픈",
     "surprise": "놀라움",
@@ -477,7 +477,13 @@
   "sendToIMErrorNoteFailed": "메모를 보내지 못했습니다.",
   "sendToIMErrorSendFailed": "보내기 실패",
   "sendToIMSuccessToast": "{{count}} 대상에게 전송됨",
-  "replyThread": { "title": "답글 세부정보", "close": "답글 세부정보 닫기", "empty": "불러온 답글이 없습니다", "messageUnavailable": "메시지를 사용할 수 없습니다", "openImage": "이미지 미리보기 열기" },
+  "replyThread": {
+    "title": "답글 세부정보",
+    "close": "답글 세부정보 닫기",
+    "empty": "불러온 답글이 없습니다",
+    "messageUnavailable": "메시지를 사용할 수 없습니다",
+    "openImage": "이미지 미리보기 열기"
+  },
   "externalContacts": {
     "tabs": {
       "internal": "회원",

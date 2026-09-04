@@ -1,5 +1,5 @@
 """
-TabTin Speech Services — 语音识别 (ASR) & 语音合成 (TTS) 统一抽象层
+Muse Speech Services — 语音识别 (ASR) & 语音合成 (TTS) 统一抽象层
 
 ASR Provider 模式：
   BaseASRService  ← 抽象接口

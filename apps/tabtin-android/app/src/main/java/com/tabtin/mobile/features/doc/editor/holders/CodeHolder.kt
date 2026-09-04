@@ -1,5 +1,7 @@
 package com.tabtin.mobile.features.doc.editor.holders
 
+import com.muse.mobile.R
+
 import android.text.Editable
 import com.tabtin.mobile.databinding.DocBlockCodeBinding
 import com.tabtin.mobile.features.doc.editor.core.CodeSyntaxHighlighter
@@ -95,7 +97,7 @@ public class CodeHolder(
 
     private fun resolveLanguageLabel(raw: String): String {
         if (raw.isBlank()) {
-            return binding.root.context.getString(com.tabtin.mobile.R.string.doc_code_language_plain)
+            return binding.root.context.getString(com.muse.mobile.R.string.doc_code_language_plain)
         }
         val normalized = normalizeLanguageKey(raw)
         val match = CODE_LANGUAGES.find { it.key == normalized }

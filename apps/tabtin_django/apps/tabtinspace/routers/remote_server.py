@@ -1,8 +1,8 @@
-"""Tabtin Space remote_server 路由。"""
+"""Muse Space remote_server 路由。"""
 
 from .shared import *  # noqa: F401,F403
 
-router = Router(tags=["Tabtin Space"])
+router = Router(tags=["Muse Space"])
 
 @router.post("/devices/{device_id}/ssh-servers", auth=jwt_auth, response={200: dict, **RESP_ERR_400})
 def create_ssh_server(request: HttpRequest, device_id: UUID, payload: RemoteServerCreate):

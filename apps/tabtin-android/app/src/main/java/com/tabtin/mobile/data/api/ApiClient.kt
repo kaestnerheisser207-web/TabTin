@@ -4,7 +4,7 @@ import android.content.Context
 import android.util.Log
 import com.chuckerteam.chucker.api.ChuckerInterceptor
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
-import com.tabtin.mobile.BuildConfig
+import com.muse.mobile.BuildConfig
 import com.tabtin.mobile.data.model.RefreshTokenRequest
 import com.tabtin.mobile.diagnostics.DiagnosticHttpInterceptor
 import com.tabtin.mobile.diagnostics.DiagnosticRecorder

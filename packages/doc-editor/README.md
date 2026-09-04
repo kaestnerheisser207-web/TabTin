@@ -1,6 +1,6 @@
 # @tabtin/doc-editor
 
-Host-agnostic document editor core for TabTin Tabdoc.
+Host-agnostic document editor core for Muse Tabdoc.
 
 ## Scope
 - host runtime adapters (`upload`, `notify`, `telemetry`, `auth token`)

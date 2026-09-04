@@ -411,7 +411,7 @@ describe('decodeForwardRequest', () => {
         enabled_apps: [
           { key: 'tabdata', display_name: 'TabData', capability: 'sql', cli_key: 'data', aliases: ['excel'] },
         ],
-        cli_reference: '# tabtin capabilities tools ...',
+        cli_reference: '# muse capabilities tools ...',
       }),
       logger,
     )
@@ -432,7 +432,7 @@ describe('decodeForwardRequest', () => {
       spaceName: 'Space One',
       organizationName: 'Org One',
       attachmentStrategy: 'cloud_only',
-      cliReference: '# tabtin capabilities tools ...',
+      cliReference: '# muse capabilities tools ...',
     })
     expect(request?.enabledApps).toEqual([
       {

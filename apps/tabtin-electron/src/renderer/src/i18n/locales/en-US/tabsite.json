@@ -26,7 +26,7 @@
   "error.siteNotFound": "Site not found",
   "error.publishFailed": "Publish failed",
   "error.noDistUrl": "Please build and upload artifacts first",
-  "error.noDistUrlHint": "Run build in TabCode or use CLI: tabtin site build",
+  "error.noDistUrlHint": "Run build in TabCode or use CLI: muse site build",
   "actions.publishSuccess": "Published successfully",
   "publish.dialogTitle": "Publish Site",
   "publish.messageLabel": "Version Note",

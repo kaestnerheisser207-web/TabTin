@@ -1122,7 +1122,7 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         _LOAD_ERRORS.clear()
         self.stdout.write(self.style.HTTP_INFO(
-            f"\n{'='*80}\n  TabTin 工具审计报告\n{'='*80}\n"
+            f"\n{'='*80}\n  Muse 工具审计报告\n{'='*80}\n"
         ))
 
         self.stdout.write("  收集数据...")

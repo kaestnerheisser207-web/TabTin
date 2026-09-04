@@ -6,7 +6,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/TabTin/tabtin-cli/internal/transport"
+	"github.com/Muse/muse-cli/internal/transport"
 )
 
 func TestParentPatchBody(t *testing.T) {

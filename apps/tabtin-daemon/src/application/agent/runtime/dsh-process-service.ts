@@ -7,7 +7,7 @@ const DSH_PATCH = `
     - id: mcp-tabtin
       name: '@deepseek-ai/dsh-mcp-client'
       config:
-        serverName: tabtin
+        serverName: muse
         transport: streamable-http
         url: !!js process.env.TABTIN_MCP_URL
         headers:

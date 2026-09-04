@@ -990,7 +990,7 @@ export function spawnAgentShellProcess(options: AgentShellProcessOptions): Agent
       // 把多字节字符切坏，并正确处理中文等非 UTF-8 控制台输出。
       let output = decodeChildOutput(Buffer.concat(outputChunks));
       if (truncated) {
-        output += '\n...[output truncated by TabTin process runner]';
+        output += '\n...[output truncated by Muse process runner]';
       }
       resolveAfterOutputFileFlush({
         output,

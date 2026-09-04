@@ -471,7 +471,7 @@ function buildUserDownloadsBucket(): StorageBucket {
     group: 'media',
     displayName: '下载列表（仅记录）',
     description:
-      'TabTin 触发下载的历史记录（系统下载 + 流媒体下载聚合）。清理只删这份记录，磁盘上的下载文件不会被删。',
+      'Muse 触发下载的历史记录（系统下载 + 流媒体下载聚合）。清理只删这份记录，磁盘上的下载文件不会被删。',
     warnings: [
       '清理后下载列表清空；~/Downloads 与 ~/Downloads/TabTin/ 里的文件**不会被删**，需要时请在系统文件管理器里手动删除',
       '清理不会停止正在进行的下载',

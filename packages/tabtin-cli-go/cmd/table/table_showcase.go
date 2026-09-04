@@ -7,7 +7,7 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/TabTin/tabtin-cli/internal/cmdutil"
+	"github.com/Muse/muse-cli/internal/cmdutil"
 )
 
 // TabData 能力总览分组 id 闭集——前端 / CI / 生成脚本共用同一份顺序与中文 label。
@@ -53,7 +53,7 @@ var tableShowcaseGroupLabels = map[string]string{
 	tableShowcaseGroupDataShare:      "数据分享",
 }
 
-// tableShowcaseRegistry 以 `table <子路径>` 为 key（不含 `tabtin` 前缀），声明用户向展示分组。
+// tableShowcaseRegistry 以 `table <子路径>` 为 key（不含 `muse` 前缀），声明用户向展示分组。
 // 未出现在 registry 也未出现在 hidden 的叶子命令 → CI 报漏登记。
 // 精选取向（与用户拍板的「curated」一致）：运维向（webhook/token/policy）、纯前端交互
 // （reorder/undo-stack）、Agent 内部辅助查询（link helper、sub-record 父字段管理）、
@@ -302,7 +302,7 @@ type TableShowcaseManifest struct {
 
 func tableRelativePath(leaf *cobra.Command) string {
 	path := leaf.CommandPath()
-	path = strings.TrimPrefix(path, "tabtin table ")
+	path = strings.TrimPrefix(path, "muse table ")
 	path = strings.TrimPrefix(path, "table ")
 	return strings.TrimSpace(path)
 }

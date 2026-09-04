@@ -11,7 +11,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/TabTin/tabtin-cli/internal/cmdutil"
+	"github.com/Muse/muse-cli/internal/cmdutil"
 )
 
 // TestTableAllLeavesRiskDeclared 断言 table 命令树全部叶子命令都设了

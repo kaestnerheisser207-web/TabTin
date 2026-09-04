@@ -30,7 +30,7 @@
  *
  * **执行位置**：
  *   - 在 `restricted-shell-allowlist.ts` 的 `createTabtinReadonlyChecker` 内调用，
- *     当 tabtin parser 失败（命令非 tabtin）时尝试 system command 通道；命中即放行，
+ *     当 muse parser 失败（命令非 muse）时尝试 system command 通道；命中即放行，
  *     否则回到原 `not_tabtin` reject 路径。
  *   - shell.ts execute 主路径**不动**——checker 决策链统一收敛在 RestrictedShellAllowlistChecker。
  */

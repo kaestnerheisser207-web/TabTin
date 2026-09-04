@@ -11,7 +11,7 @@ import { TabTinClient } from './client.js'
 import type { TabTinClientOptions } from './types.js'
 
 /**
- * Create a TabTin SDK client.
+ * Create a Muse SDK client.
  *
  * ```ts
  * import { createClient } from '@tabtin/sdk'

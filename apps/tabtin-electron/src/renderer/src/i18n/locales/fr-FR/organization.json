@@ -12,13 +12,13 @@
     "accessDeniedTitle": "Impossible d'accéder à \"{{name}}\"",
     "accessDeniedAutoSwitch": "Passer à \"{{name}}\""
   },
-  "welcomeTitle": "Bienvenue sur TabTin",
+  "welcomeTitle": "Bienvenue sur Muse",
   "welcomeSubtitle": "Plateforme de travail IA unifiée. Créez un nouvel espace de travail ou choisissez-en un à gauche.",
   "welcomeSubtitleGuest": "Connectez-vous pour créer des espaces de travail et commencer à collaborer.",
   "welcome": {
-    "title": "TabTin",
+    "title": "Muse",
     "tagline": "Votre plateforme de travail IA",
-    "conceptIntro": "Dans TabTin, un espace de travail est un site de travail persistant lié à un périphérique d'exécution et à un répertoire de travail. Il regroupe les conversations, les applications, les ressources et le contexte d'exécution afin que les agents puissent aider dans ces limites.",
+    "conceptIntro": "Dans Muse, un espace de travail est un site de travail persistant lié à un périphérique d'exécution et à un répertoire de travail. Il regroupe les conversations, les applications, les ressources et le contexte d'exécution afin que les agents puissent aider dans ces limites.",
     "loginCta": "Se connecter / S'inscrire",
     "learnMore": "En savoir plus →",
     "loadingTitle": "Chargement des espaces de travail...",
@@ -58,12 +58,12 @@
     "guest": {
       "hookLine1": "L'IA n'est plus",
       "hookLine2": "juste une boîte de discussion",
-      "subtitleLead": "Dans TabTin, les agents effectuent un véritable travail : effectuez des recherches en ligne, extrayez des données, créez des tableaux, rédigez des rapports et créez des diapositives.",
+      "subtitleLead": "Dans Muse, les agents effectuent un véritable travail : effectuez des recherches en ligne, extrayez des données, créez des tableaux, rédigez des rapports et créez des diapositives.",
       "subtitleEmphasis": "Chaque étape reste visible.",
       "footnote": "Accès unifié aux principaux LLM · Plus de 38 scénarios de travail d'IA",
       "demo": {
         "tabs": {
-          "browser": "Navigateur TabTin",
+          "browser": "Navigateur Muse",
           "data": "Données de financement.tabdata",
           "report": "Fiche d'investissement.tabdoc",
           "slides": "Deck de financement hebdomadaire.tabslide"
@@ -73,7 +73,7 @@
         "steps": {
           "browse": {
             "label": "Rechercher des startups récemment financées",
-            "detail": "Navigateur TabTin · Crunchbase · TechCrunch"
+            "detail": "Navigateur Muse · Crunchbase · TechCrunch"
           },
           "collect": {
             "label": "Tour de capture, montant, investisseurs",
@@ -220,7 +220,7 @@
       "platformPaidLabel": "Autres scènes de plateforme",
       "platformPaidText": "Mail AI, mémoire, intégration, parole et autres utilisent toujours la clé de plate-forme et sont facturés à partir du portefeuille de l'organisation.",
       "noFallbackLabel": "Pas de repli automatique",
-      "noFallbackText": "Si ce canal échoue, TabTin ne passe pas automatiquement à un modèle de plateforme."
+      "noFallbackText": "Si ce canal échoue, Muse ne passe pas automatiquement à un modèle de plateforme."
     },
     "byokScopeWarning": {
       "organization": "Organisation BYOK : les membres peuvent sélectionner et utiliser des modèles de ce canal dans le chat ; les scènes gérées par la plateforme utilisent toujours la clé de plateforme.",
@@ -230,7 +230,7 @@
       "label": "BYOK",
       "tooltipOrganization": "Canal BYOK de l'organisation — utilisé lorsque les membres sélectionnent ses modèles dans le chat ; les scènes gérées par la plateforme utilisent toujours la clé de plateforme.",
       "tooltipUser": "Canal BYOK personnel — utilisé uniquement lorsque vous sélectionnez ses modèles dans n'importe quelle organisation ; les scènes gérées par la plateforme utilisent toujours la clé de plateforme.",
-      "tooltipGlobal": "Canal de plate-forme : exploité par TabTin pour les scènes gérées par la plate-forme et le chat lorsqu'aucun modèle BYOK n'est sélectionné."
+      "tooltipGlobal": "Canal de plate-forme : exploité par Muse pour les scènes gérées par la plate-forme et le chat lorsqu'aucun modèle BYOK n'est sélectionné."
     }
   },
   "llm": {
@@ -265,14 +265,14 @@
       "pickSubagentModel": "Sélectionnez un modèle de sous-agent"
     },
     "presetSection": {
-      "title": "Modèles prédéfinis TabTin",
+      "title": "Modèles prédéfinis Muse",
       "subtitle": "Modèles de plateforme intégrés. Prêt à être utilisé par défaut personnel ou en équipe.",
       "collapse": "Réduire les modèles prédéfinis",
       "expandHint": "{{count}} plus de modèles de plateforme. Développez pour tout voir."
     },
     "byokSection": {
       "title": "Apportez vos propres modèles (BYOK)",
-      "subtitle": "Connectez un plan de codage ou un abonnement à une autre plateforme d'IA, ou ajoutez une clé API et utilisez votre propre quota de modèle lorsque vous travaillez avec des agents dans TabTin.",
+      "subtitle": "Connectez un plan de codage ou un abonnement à une autre plateforme d'IA, ou ajoutez une clé API et utilisez votre propre quota de modèle lorsque vous travaillez avec des agents dans Muse.",
       "introUsageText": "Choisissez vos modèles lorsque vous discutez avec des agents, écrivez du code et exécutez des tâches. Le chat principal utilise votre quota, pas le portefeuille de l'organisation."
     },
     "connectEntries": {
@@ -284,7 +284,7 @@
       "pickerTitle": "Connectez votre modèle",
       "pickerDesc": "Choisissez un plan d'abonnement que vous avez acheté ou une plate-forme API avec paiement à l'utilisation.",
       "formTitle": "Connectez votre modèle",
-      "formDesc": "Choisissez un canal et entrez votre clé API. TabTin prédéfinit le point final et les modèles communs.",
+      "formDesc": "Choisissez un canal et entrez votre clé API. Muse prédéfinit le point final et les modèles communs.",
       "planFormTitle": "Plan d'abonnement Connect",
       "planFormDesc": "Choisissez un plan de codage et entrez votre clé. Les modèles de point final et communs sont prédéfinis.",
       "apiFormTitle": "Connectez l'API de paiement à l'utilisation",
@@ -368,7 +368,7 @@
         "vendorLabel": "Kimi",
         "subtitle": "Utilisez votre abonnement Kimi Code ou votre plan de codage. La facturation suit les règles de la plateforme Kimi.",
         "apiKeyPlaceholder": "Clé API de la console Kimi Code",
-        "connectDesc": "Entrez votre clé API Kimi Code. TabTin pré-remplit le point final et les modèles communs.",
+        "connectDesc": "Entrez votre clé API Kimi Code. Muse pré-remplit le point final et les modèles communs.",
         "docsLink": "Guide de configuration Kimi",
         "apiKeyHint": "Créez la clé dans la console Kimi Code. Votre niveau d’adhésion contrôle les modèles disponibles."
       },
@@ -377,7 +377,7 @@
         "vendorLabel": "MiniMax",
         "subtitle": "Connectez votre abonnement MiniMax Token Plan. Utilise la clé d'abonnement (et non les clés API de paiement à l'utilisation).",
         "apiKeyPlaceholder": "sk-cp-… (clé d'abonnement au plan de jetons)",
-        "connectDesc": "Entrez votre clé d’abonnement au Token Plan. TabTin pré-remplit le point final et les modèles M3/M2.7. M3 a un contexte 1M natif ; Les modèles M2.7 utilisent 256K.",
+        "connectDesc": "Entrez votre clé d’abonnement au Token Plan. Muse pré-remplit le point final et les modèles M3/M2.7. M3 a un contexte 1M natif ; Les modèles M2.7 utilisent 256K.",
         "docsLink": "Guide de configuration du plan de jetons MiniMax",
         "apiKeyHint": "Obtenez la clé d'abonnement sous Compte → Plan de jetons. Vous avez besoin d’un plan actif ou d’un siège attribué par l’équipe."
       },
@@ -386,25 +386,25 @@
         "vendorLabel": "Bailien",
         "subtitle": "Connectez le plan de codage Alibaba Cloud Bailian et utilisez le quota de votre plan avec la clé dédiée.",
         "apiKeyPlaceholder": "sk-sp-… (clé du plan de codage)",
-        "connectDesc": "Entrez votre clé de plan de codage. TabTin pré-remplit le point de terminaison compatible OpenAI et les modèles de plan recommandés. Les identifiants de modèle doivent correspondre exactement à la liste blanche officielle.",
+        "connectDesc": "Entrez votre clé de plan de codage. Muse pré-remplit le point de terminaison compatible OpenAI et les modèles de plan recommandés. Les identifiants de modèle doivent correspondre exactement à la liste blanche officielle.",
         "docsLink": "Guide de configuration du plan de codage Bailian",
         "apiKeyHint": "Obtenez la clé sur la page Plan de codage (préfixe sk-sp-). Il ne fonctionne pas avec les clés de paiement à l'utilisation ou les points de terminaison dashscope.aliyuncs.com."
       },
       "volcengineCodingPlan": {
         "title": "Plan de codage de l'arche du moteur volcanique",
         "vendorLabel": "Moteur volcanique",
-        "subtitle": "Connectez le plan de codage Volcengine Ark et utilisez des modèles de codage groupés dans TabTin.",
+        "subtitle": "Connectez le plan de codage Volcengine Ark et utilisez des modèles de codage groupés dans Muse.",
         "apiKeyPlaceholder": "Clé API de la console Ark",
-        "connectDesc": "Entrez votre clé API Ark. TabTin pré-remplit le point de terminaison compatible avec Coding Plan OpenAI et les modèles de code courants. N'utilisez pas l'URL de base générique de l'API Ark.",
+        "connectDesc": "Entrez votre clé API Ark. Muse pré-remplit le point de terminaison compatible avec Coding Plan OpenAI et les modèles de code courants. N'utilisez pas l'URL de base générique de l'API Ark.",
         "docsLink": "Guide de configuration du plan de codage Volcengine",
         "apiKeyHint": "Obtenez la clé dans la console Ark → Gestion des clés API. Vous devez utiliser le point de terminaison coding/v3, sinon le quota du plan ne s'appliquera pas."
       },
       "zhipuCodingPlan": {
         "title": "Plan de codage GLM",
         "vendorLabel": "Zhipu",
-        "subtitle": "Connectez le plan de codage Zhipu GLM et utilisez votre quota d'abonnement dans TabTin.",
+        "subtitle": "Connectez le plan de codage Zhipu GLM et utilisez votre quota d'abonnement dans Muse.",
         "apiKeyPlaceholder": "Clé API du plan de codage",
-        "connectDesc": "Saisissez la clé API de votre plan de codage GLM. TabTin pré-remplit le point de terminaison compatible OpenAI et GLM-5.2 / Turbo / 4.7. GLM-5.2 prend en charge le contexte 1M.",
+        "connectDesc": "Saisissez la clé API de votre plan de codage GLM. Muse pré-remplit le point de terminaison compatible OpenAI et GLM-5.2 / Turbo / 4.7. GLM-5.2 prend en charge le contexte 1M.",
         "docsLink": "Guide de configuration du plan de codage GLM",
         "apiKeyHint": "Créez la clé sous Plan de codage personnel/équipe sur la plateforme Zhipu. Elle n'est pas interchangeable avec les clés à paiement à l'utilisation."
       }
@@ -484,7 +484,7 @@
       "toggleFailed": "L'action a échoué. Veuillez réessayer.",
       "create": "Ajouter une chaîne",
       "creating": "Création...",
-      "createModelHint": "Après avoir enregistré le compte et la clé de la plateforme, ajoutez les modèles spécifiques que vous souhaitez utiliser dans TabTin.",
+      "createModelHint": "Après avoir enregistré le compte et la clé de la plateforme, ajoutez les modèles spécifiques que vous souhaitez utiliser dans Muse.",
       "empty": "Choisissez une option ci-dessus pour vous connecter. Les forfaits n'ont besoin que d'une clé API ; L'API personnalisée nécessite la configuration du canal.",
       "codexLocalHint": "Connexion ChatGPT locale, disponible uniquement sur cet appareil",
       "modelCount": "Modèles {{count}}",
@@ -609,7 +609,7 @@
     },
     "fallback": {
       "title": "Politique de repli",
-      "rule": "Lorsque le modèle par défaut n'est pas disponible, TabTin essaie les canaux et modèles sains dans l'ordre. Un canal BYOK défaillant ne revient pas automatiquement à un modèle de plateforme.",
+      "rule": "Lorsque le modèle par défaut n'est pas disponible, Muse essaie les canaux et modèles sains dans l'ordre. Un canal BYOK défaillant ne revient pas automatiquement à un modèle de plateforme.",
       "healthyProviders": "{{count}} chaînes saines",
       "noCandidate": "Aucun modèle de secours"
     },

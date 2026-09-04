@@ -160,9 +160,9 @@ describe('checkHardlinePath · 绝对路径红线', () => {
     expect(checkHardlinePath('$env:SystemRoot\\System32', 'shell').hit).toBe(true);
     expect(checkHardlinePath('${env:WINDIR}\\System32', 'shell').hit).toBe(true);
     expect(checkHardlinePath('$env:SystemDrive\\Windows\\System32', 'shell').hit).toBe(true);
-    expect(checkHardlinePath('$env:ProgramFiles\\TabTin', 'shell').hit).toBe(true);
-    expect(checkHardlinePath('$env:ProgramW6432\\TabTin', 'shell').hit).toBe(true);
-    expect(checkHardlinePath('${env:ProgramFiles(x86)}\\TabTin', 'shell').hit).toBe(true);
+    expect(checkHardlinePath('$env:ProgramFiles\\Muse', 'shell').hit).toBe(true);
+    expect(checkHardlinePath('$env:ProgramW6432\\Muse', 'shell').hit).toBe(true);
+    expect(checkHardlinePath('${env:ProgramFiles(x86)}\\Muse', 'shell').hit).toBe(true);
     expect(checkHardlinePath('\\Windows\\System32', 'shell').hit).toBe(true);
     expect(checkHardlinePath('C:\\Win*\\System32', 'shell').hit).toBe(true);
     expect(checkHardlinePath('FileSystem::C:\\Windows\\System32', 'shell').hit).toBe(true);
@@ -268,9 +268,9 @@ describe('extractPathsFromCommand · 跨平台 shell 路径', () => {
 
   it('提取 Windows 盘符路径与含空格引号路径', () => {
     expect(extractPathsFromCommand(
-      'Remove-Item -LiteralPath "C:\\Program Files\\TabTin\\app.exe" D:/outside/file.txt',
+      'Remove-Item -LiteralPath "C:\\Program Files\\Muse\\app.exe" D:/outside/file.txt',
     )).toEqual([
-      'C:\\Program Files\\TabTin\\app.exe',
+      'C:\\Program Files\\Muse\\app.exe',
       'D:/outside/file.txt',
     ]);
   });

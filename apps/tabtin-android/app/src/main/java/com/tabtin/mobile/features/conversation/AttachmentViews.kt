@@ -52,7 +52,7 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
-import com.tabtin.mobile.R
+import com.muse.mobile.R
 import com.tabtin.mobile.data.model.AttachmentStatus
 import com.tabtin.mobile.data.model.AttachmentType
 import com.tabtin.mobile.data.model.BlockItem

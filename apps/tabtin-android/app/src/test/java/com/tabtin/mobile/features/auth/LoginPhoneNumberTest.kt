@@ -1,6 +1,6 @@
 package com.tabtin.mobile.features.auth
 
-import com.tabtin.mobile.R
+import com.muse.mobile.R
 import com.tabtin.mobile.data.model.ActionLabel
 import com.tabtin.mobile.data.model.AppError
 import org.junit.Assert.assertEquals

@@ -46,7 +46,7 @@ function isHttpUrl(value: unknown): value is string {
 }
 
 /**
- * 识别 `tabtin fetch` 写出的截断结果信封。
+ * 识别 `muse fetch` 写出的截断结果信封。
  *
  * 这类文件只包含前一段正文和本机完整内容路径；把它改名成 HTML/JSON 后导入
  * 只能得到截断摘要。导入侧应明确拒绝，避免用户误以为 TabDoc 丢了后半段。

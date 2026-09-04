@@ -1,7 +1,7 @@
 {
   "name": "@tabtin/env-sanitize",
   "version": "0.1.0",
-  "description": "Environment variable sanitization for TabTin — strips dangerous injection vars and sensitive credentials",
+  "description": "Environment variable sanitization for Muse — strips dangerous injection vars and sensitive credentials",
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",

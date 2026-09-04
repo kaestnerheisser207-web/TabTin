@@ -547,7 +547,7 @@ function buildHttpCacheAggregateBucket(): StorageBucket {
     group: 'cache',
     displayName: '浏览器嵌入站点缓存',
     description:
-      '飞书 / Notion / ChatGPT 等嵌入站点的图片 / 脚本 / 字体缓存。清掉这些站点下次首屏会慢几秒，几秒后自动重建。不影响 TabTin 主窗口。',
+      '飞书 / Notion / ChatGPT 等嵌入站点的图片 / 脚本 / 字体缓存。清掉这些站点下次首屏会慢几秒，几秒后自动重建。不影响 Muse 主窗口。',
     requiresConfirmation: 'none',
     sizeFn: async (): Promise<BucketSize> => {
       const { bytes, partitions } = await aggregateCacheSize()

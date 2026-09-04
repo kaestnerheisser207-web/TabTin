@@ -240,7 +240,7 @@ async function handleDoctor(
   const platform = str(body, 'platform')
   if (!platform) {
     sendJSON(res, 400, errorResponse('VALIDATION_ERROR', '缺少 platform 参数', {
-      suggestions: ['示例: tabtin reach doctor --platform xiaohongshu'],
+      suggestions: ['示例: muse reach doctor --platform xiaohongshu'],
     }))
     return
   }
@@ -292,7 +292,7 @@ async function handleRun(
   const platform = str(body, 'platform')
   if (!platform) {
     sendJSON(res, 400, errorResponse('VALIDATION_ERROR', '缺少 platform 参数', {
-      suggestions: [`示例: tabtin reach ${verbSeg} --platform xiaohongshu --query "..."`],
+      suggestions: [`示例: muse reach ${verbSeg} --platform xiaohongshu --query "..."`],
     }))
     return
   }
@@ -352,7 +352,7 @@ async function handleRun(
 
   const executor = getCLIActionExecutor()
   if (!executor) {
-    sendJSON(res, 503, errorResponse('INTERNAL_ERROR', 'TabTin 界面尚未就绪（浏览器执行器未初始化）', {
+    sendJSON(res, 503, errorResponse('INTERNAL_ERROR', 'Muse 界面尚未就绪（浏览器执行器未初始化）', {
       retryable: true,
     }))
     return
@@ -428,8 +428,8 @@ export async function handleReachRoute(
   }
   sendJSON(res, 404, errorResponse('UNKNOWN_ROUTE', `未知的 reach 命令: ${url}`, {
     suggestions: [
-      'tabtin reach doctor --platform xiaohongshu',
-      'tabtin reach search --platform xiaohongshu --query "..."',
+      'muse reach doctor --platform xiaohongshu',
+      'muse reach search --platform xiaohongshu --query "..."',
     ],
   }))
 }

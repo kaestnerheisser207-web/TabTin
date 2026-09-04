@@ -19,7 +19,7 @@ class FtsConfig(AppConfig):
     default_auto_field = "django.db.models.BigAutoField"
     name = "apps.fts"
     label = "fts"
-    verbose_name = "TabTin Full-Text Search"
+    verbose_name = "Muse Full-Text Search"
 
     def ready(self) -> None:
         # Wave 1：挂载 6 类业务模型的 post_save / post_delete / pre_save

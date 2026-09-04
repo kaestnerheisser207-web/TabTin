@@ -1,8 +1,8 @@
-"""Tabtin Space share 路由。"""
+"""Muse Space share 路由。"""
 
 from .shared import *  # noqa: F401,F403
 
-router = Router(tags=["Tabtin Space"])
+router = Router(tags=["Muse Space"])
 
 @router.get("/resources/{resource_type}/{resource_id}/permissions", auth=jwt_auth, response={200: dict, 401: ErrorResponse})
 def list_resource_permissions(request: HttpRequest, resource_type: str, resource_id: str):

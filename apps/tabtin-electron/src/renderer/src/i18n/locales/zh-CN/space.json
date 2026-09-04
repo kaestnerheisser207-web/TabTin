@@ -108,7 +108,7 @@
     "availableTitle": "AI 执行将通过「{{device}}」进行",
     "availableDesc": "团队协作留在这个Project；AI 会在 {{space}} 中运行。",
     "unavailableTitle": "Owner 执行设备「{{device}}」当前不可用（{{status}}）",
-    "unavailableDesc": "对话和资产仍可正常使用，AI 任务暂时无法发起。等 Owner 在该设备上重新打开 TabTin、{{space}} 恢复在线后即可继续。"
+    "unavailableDesc": "对话和资产仍可正常使用，AI 任务暂时无法发起。等 Owner 在该设备上重新打开 Muse、{{space}} 恢复在线后即可继续。"
   },
   "agentReady": {
     "bindingDevice": "正在本机就绪…",
@@ -447,8 +447,8 @@
       "subtitle": "先明确这个 Agent 现在由谁驱动、又绑定在哪台设备上，再判断哪些信息属于当前空间配置，哪些只是当前 Electron 控制端的本机能力清单。",
       "builtinActive": "内置运行时已激活",
       "externalActive": "外部 backend 驱动中",
-      "builtinDesc": "当前 Agent 由 TabTin 内置引擎驱动；但本页仍然需要区分当前空间配置与这台 Electron 本机提供的宿主能力。只有当执行设备就是当前 Electron 时，本机 runtime 才等于当前 Agent 的直接能力。",
-      "externalDesc": "当前 Agent 由外部引擎驱动。它主要依赖自己的工具体系和终端能力；本页中的 TabTin runtime、MCP、Core CLI 更多是在说明当前 Electron 控制端能提供什么宿主能力，而不是外部 Agent 一定能直接发起这些调用。",
+      "builtinDesc": "当前 Agent 由 Muse 内置引擎驱动；但本页仍然需要区分当前空间配置与这台 Electron 本机提供的宿主能力。只有当执行设备就是当前 Electron 时，本机 runtime 才等于当前 Agent 的直接能力。",
+      "externalDesc": "当前 Agent 由外部引擎驱动。它主要依赖自己的工具体系和终端能力；本页中的 Muse runtime、MCP、Core CLI 更多是在说明当前 Electron 控制端能提供什么宿主能力，而不是外部 Agent 一定能直接发起这些调用。",
       "boundLocal": "当前执行设备就是这台 Electron",
       "boundOther": "当前 Agent 绑定的是其他设备",
       "unbound": "当前 Agent 尚未绑定执行设备",
@@ -483,7 +483,7 @@
     },
     "coreCli": {
       "title": "本机 Core CLI",
-      "subtitle": "这些命令以 `tabtin <namespace>` 的形式通过当前 Electron 控制端所在机器的本地终端调用，适合人工排查，也适合作为外部 Agent 的后备入口。",
+      "subtitle": "这些命令以 `muse <namespace>` 的形式通过当前 Electron 控制端所在机器的本地终端调用，适合人工排查，也适合作为外部 Agent 的后备入口。",
       "recommendedTitle": "推荐起手路径",
       "recommendedSubtitle": "对外接入与人工排查都建议先按工作空间发现，再进入具体表或 SQL。",
       "recommendedSteps": {
@@ -748,7 +748,7 @@
     "workspaceHint": "根据你在 TabCode / 目录里打开的内容自动识别，无需手动配置",
     "workspaceEmpty": "暂无可访问路径，在 TabCode 打开项目或在目录里打开本机目录即可让 Agent 访问",
     "workspaceSourceSandbox": "Agent 沙盒",
-    "workspaceSandboxHint": "TabTin 为每个工作空间自动创建的基础工作空间，不在此处撤销",
+    "workspaceSandboxHint": "Muse 为每个工作空间自动创建的基础工作空间，不在此处撤销",
     "workspaceSourceTabcode": "TabCode 项目",
     "workspaceTabcodeHint": "你拖入这里的目录会被 Agent 完全访问，包括其下的 .env、SSH 密钥等敏感文件。如有顾虑，请精确选择子目录而非家目录。",
     "workspaceSourceTabfolder": "目录浏览记录",
@@ -1017,11 +1017,11 @@
     "panelDescription": "决定 Agent 在哪台机器上跑命令、读写文件。绑定后固定，本工作空间不会迁移执行设备。",
     "chooseDevice": "选择执行设备",
     "refresh": "刷新设备列表",
-    "noRegisteredDevicesHint": "请在本机打开 TabTin 桌面客户端后再试。",
+    "noRegisteredDevicesHint": "请在本机打开 Muse 桌面客户端后再试。",
     "availableDevices": "可用设备",
     "addRemoteDevice": "添加远程设备",
     "addRemoteDeviceTitle": "添加远程设备",
-    "addRemoteDeviceDesc": "生成安装命令，在远程服务器上安装 TabTin Daemon 以执行 AI 任务。",
+    "addRemoteDeviceDesc": "生成安装命令，在远程服务器上安装 Muse Daemon 以执行 AI 任务。",
     "deviceNameLabel": "设备名称",
     "deviceNamePlaceholder": "例如：生产服务器、GPU 工作站",
     "cancel": "取消",
@@ -1349,7 +1349,7 @@
     "skillsSelf": "仅对你在当前 Project 内生效，不会修改其他成员的 Skill 配置。",
     "extensionsGroup": "这里管理当前 Project 可用的 Extension 连接，未单独连接时会继承组织连接。",
     "channelsOrganization": "渠道账号属于组织级资源，这里配置的是当前 Project 如何使用这些渠道。",
-    "mcpRuntime": "这里同时展示当前工作空间挂载的本机 MCP 连接，以及当前 Electron / Daemon 暴露的 TabTin MCP 端点状态；它们都不是 Project 私有配置。",
+    "mcpRuntime": "这里同时展示当前工作空间挂载的本机 MCP 连接，以及当前 Electron / Daemon 暴露的 Muse MCP 端点状态；它们都不是 Project 私有配置。",
     "apiGroup": "这里暴露的是当前 Project 的数据入口，可用于只读查询和外部接入。"
   },
   "ssh": {
@@ -1407,7 +1407,7 @@
     "connectFailed": "连接失败",
     "testFailed": "测试失败",
     "helpTitle": "SSH 远程服务器说明",
-    "helpTip1": "SSH 连接从 TabTin 后端发起（而非本机），手机端也能使用远程服务器",
+    "helpTip1": "SSH 连接从 Muse 后端发起（而非本机），手机端也能使用远程服务器",
     "helpTip2": "凭据（密码或私钥）经加密存储，不会以明文形式保留",
     "helpTip3": "Agent 可在远程服务器上执行命令，输出实时推送到聊天界面",
     "helpTip4": "首次连接时会记录服务器指纹，后续连接自动验证"
@@ -1492,7 +1492,7 @@
     "deleteConfirm": "确定要删除 MCP 连接 “{{name}}” 吗？",
     "deleteSuccess": "连接已删除",
     "localOnly": "这些连接只保存在当前 Electron 用户数据目录，并绑定当前 Electron 主机；不会自动同步到其他成员、其他设备或其他 Electron 实例。",
-    "externalBackendWarning": "当前 Agent 使用的是第三方引擎。你仍可在此管理外部工具连接，但这些工具不会自动提供给第三方引擎，仅 TabTin 内置引擎可直接使用。",
+    "externalBackendWarning": "当前 Agent 使用的是第三方引擎。你仍可在此管理外部工具连接，但这些工具不会自动提供给第三方引擎，仅 Muse 内置引擎可直接使用。",
     "readOnlyNotice": "当前空间为只读模式。MCP 连接由设备管理员在 Bot 空间中配置。",
     "deleteConfirmTitle": "删除 MCP 连接",
     "cancelButton": "取消",
@@ -1595,7 +1595,7 @@
       "oauthDialog": {
         "promptTitle": "完成 {{name}} 网页授权",
         "promptDescription": "在授权窗口完成 {{name}} 登录后回到这里。",
-        "browserHint": "将在系统默认浏览器中打开授权页。若尚未登录 {{name}}，会先出现登录页；登录后才会看到「允许 TabTin 访问」确认。",
+        "browserHint": "将在系统默认浏览器中打开授权页。若尚未登录 {{name}}，会先出现登录页；登录后才会看到「允许 Muse 访问」确认。",
         "scopeConnectTitle": "连接账户",
         "scopeConnectBody": "用于读取项目、部署状态与基础团队信息。",
         "scopeControlTitle": "仍由你掌控操作",

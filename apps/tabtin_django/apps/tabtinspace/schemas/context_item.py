@@ -1,4 +1,4 @@
-"""Tabtin Space context_item schemas。"""
+"""Muse Space context_item schemas。"""
 
 from .common import *  # noqa: F401,F403
 

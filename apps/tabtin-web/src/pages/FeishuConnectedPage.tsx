@@ -42,7 +42,7 @@ export function FeishuConnectedPage() {
             <div className="space-y-1">
               <h1 className="text-title font-semibold text-foreground">飞书授权完成</h1>
               <p className="text-body text-muted-foreground">
-                正在回到 TabTin 客户端。若已自动打开，可直接关闭本页。
+                正在回到 Muse 客户端。若已自动打开，可直接关闭本页。
               </p>
             </div>
 
@@ -62,14 +62,14 @@ export function FeishuConnectedPage() {
                 className="inline-flex items-center justify-center gap-2 rounded-md border border-input bg-background px-4 py-2 text-body font-medium text-foreground transition-colors hover:bg-accent"
               >
                 <Download className="h-4 w-4" aria-hidden="true" />
-                下载 TabTin
+                下载 Muse
               </a>
             </div>
 
             <p className="text-caption text-muted-foreground" aria-live="polite">
               {showDownloadHint
                 ? '如果没有看到系统确认弹窗，可能是尚未安装客户端，或浏览器拦截了协议唤起。'
-                : '如果系统询问是否打开 TabTin，请选择允许。'}
+                : '如果系统询问是否打开 Muse，请选择允许。'}
             </p>
           </div>
         </div>

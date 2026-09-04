@@ -1,4 +1,4 @@
-"""Tabtin Space remote_server schemas。"""
+"""Muse Space remote_server schemas。"""
 
 from .common import *  # noqa: F401,F403
 

@@ -9,7 +9,7 @@ export default scenario({
     "验证用户通过 Electron 字段设置面板重命名已被使用的 TabData 单选项后，所有使用该选项的记录同步显示并持久化为新名称。",
   caseFile: "tests/electron/scenarios/tabdata-select-option-management.case.md",
   userFlow: [
-    "打开 TabTin Electron 并进入目标 Space。",
+    "打开 Muse Electron 并进入目标 Space。",
     "点击左侧“多维表”入口。",
     "在多维表资源列表中打开测试表“选项管理验收表”。",
     "确认进入表格编辑页，可以看到“客户名称”和“状态”字段。",

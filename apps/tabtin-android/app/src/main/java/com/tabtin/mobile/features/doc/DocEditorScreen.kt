@@ -39,7 +39,7 @@ import androidx.lifecycle.compose.LifecycleResumeEffect
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.tabtin.mobile.R
+import com.muse.mobile.R
 import com.tabtin.mobile.data.im.ImResourceCardType
 import com.tabtin.mobile.data.model.CloudShareResourceType
 import com.tabtin.mobile.features.clouddocs.CloudDocsShareSheet

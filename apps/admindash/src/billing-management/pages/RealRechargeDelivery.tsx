@@ -163,7 +163,7 @@ export function RealRechargeDelivery({ period }: RealRechargeDeliveryProps) {
               <Badge variant="outline">Webhook</Badge>
             </DialogTitle>
             <DialogDescription>
-              配置接收消息的 Webhook 地址和发送方式。接收端可以是外部群聊，也可以是后续接入的 TabTin
+              配置接收消息的 Webhook 地址和发送方式。接收端可以是外部群聊，也可以是后续接入的 Muse
               IM。
             </DialogDescription>
           </DialogHeader>

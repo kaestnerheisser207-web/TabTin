@@ -84,7 +84,7 @@ class Command(BaseCommand):
             result = bucket.get_bucket_lifecycle()
             self.stdout.write(self.style.SUCCESS("当前 bucket lifecycle 规则:"))
             for rule in result.rules:
-                marker = "  ← TabTin 临时通道兜底" if rule.id == LIFECYCLE_RULE_ID else ""
+                marker = "  ← Muse 临时通道兜底" if rule.id == LIFECYCLE_RULE_ID else ""
                 expiration = (
                     f"days={rule.expiration.days}" if rule.expiration and rule.expiration.days
                     else "无 expiration"
@@ -103,7 +103,7 @@ class Command(BaseCommand):
         import oss2  # type: ignore
         from oss2.models import BucketLifecycle, LifecycleRule, LifecycleExpiration
 
-        # 先 read 现有规则，把 TabTin 那条替换 / 新增
+        # 先 read 现有规则，把 Muse 那条替换 / 新增
         existing_rules = []
         try:
             existing_rules = bucket.get_bucket_lifecycle().rules
@@ -111,7 +111,7 @@ class Command(BaseCommand):
             if "NoSuchLifecycle" not in type(exc).__name__ and "NoSuchLifecycle" not in str(exc):
                 raise CommandError(f"读取现有 lifecycle 失败: {exc}")
 
-        # 移除旧的 TabTin 规则（同 id 替换）
+        # 移除旧的 Muse 规则（同 id 替换）
         new_rules = [r for r in existing_rules if r.id != LIFECYCLE_RULE_ID]
 
         new_rules.append(

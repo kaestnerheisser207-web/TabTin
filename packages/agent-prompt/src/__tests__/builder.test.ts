@@ -38,7 +38,7 @@ describe('buildSystemPrompt', () => {
       spaceId: 'space-123',
       agentMode: 'agent' as const,
       tools: MOCK_TOOLS,
-      cliReference: '- `tabtin space list`: List spaces',
+      cliReference: '- `muse space list`: List spaces',
     };
 
     const result1 = buildSystemPrompt(config);
@@ -79,11 +79,11 @@ describe('buildSystemPrompt', () => {
     expect(result).toContain('<agent_mode>');
   });
 
-  it('principle section has no hardcoded TabTin AI Agent persona line', () => {
+  it('principle section has no hardcoded Muse AI Agent persona line', () => {
     // ：具体 Agent 身份走 agent-profile；principle 只保留默认原则。
     const result = buildSystemPrompt({ tools: [] });
     expect(result).toContain('<principle>');
-    expect(result).not.toContain('你是 TabTin AI Agent');
+    expect(result).not.toContain('你是 Muse AI Agent');
     expect(result).not.toContain('## 平台岗位');
     expect(result).not.toMatch(/<principle>[\s\S]*## 术语[\s\S]*<\/principle>/);
     expect(result).toMatch(/<environment>[\s\S]*## 术语[\s\S]*<\/environment>/);
@@ -150,10 +150,10 @@ describe('buildSystemPrompt', () => {
   it('includes cli_capabilities when provided', () => {
     const result = buildSystemPrompt({
       tools: [],
-      cliReference: '- `tabtin table info`: Show table info',
+      cliReference: '- `muse table info`: Show table info',
     });
     expect(result).toContain('<cli_capabilities>');
-    expect(result).toContain('tabtin table info');
+    expect(result).toContain('muse table info');
   });
 
   it('keeps concrete tool names out of system sections other than cli_capabilities ', () => {
@@ -179,7 +179,7 @@ describe('buildSystemPrompt', () => {
       const result = buildSystemPrompt({
         tools: MOCK_TOOLS,
         agentMode,
-        cliReference: '- `tabtin table info`: Show table info',
+        cliReference: '- `muse table info`: Show table info',
         runtimeIdentity: {
           organizationId: 'org-1',
           spaceId: 'space-1',
@@ -326,7 +326,7 @@ describe('buildSystemPrompt', () => {
     expect(principle).toContain('验证强度与失败成本相称');
     expect(principle).toContain('任务才算完成');
     expect(principle).not.toContain('<operating_loop>');
-    expect(principle).not.toMatch(/\b(?:App|MCP|CLI)\b|tabtin|浏览器|本地文件/);
+    expect(principle).not.toMatch(/\b(?:App|MCP|CLI)\b|muse|浏览器|本地文件/);
     expect(SECTION_EXECUTION).not.toContain('## 每轮操作循环');
   });
 
@@ -340,10 +340,10 @@ describe('buildSystemPrompt', () => {
   it('execution section stays capability-neutral instead of restoring a tool encyclopedia', () => {
     // ：具体路由留给动态 apps / tools，不复制具体命令、参数和 description。
     expect(SECTION_EXECUTION).not.toContain('## 工具路由决策');
-    expect(SECTION_EXECUTION).not.toContain('TabTin 业务能力 vs FC 边界');
-    expect(SECTION_EXECUTION).not.toContain('tabtin mcp list-servers');
-    expect(SECTION_EXECUTION).not.toContain('tabtin file create');
-    expect(SECTION_EXECUTION).not.toContain('tabtin fetch <url>');
+    expect(SECTION_EXECUTION).not.toContain('Muse 业务能力 vs FC 边界');
+    expect(SECTION_EXECUTION).not.toContain('muse mcp list-servers');
+    expect(SECTION_EXECUTION).not.toContain('muse file create');
+    expect(SECTION_EXECUTION).not.toContain('muse fetch <url>');
     expect(SECTION_EXECUTION).not.toContain('web_search');
     expect(buildSystemPrompt({ tools: [], agentMode: 'agent' })).not.toContain('## 工具路由决策');
   });
@@ -379,16 +379,16 @@ describe('buildSystemPrompt', () => {
     });
 
     expect(prompt).toContain('<apps>');
-    expect(prompt).toContain('tabtin <cliKey> --help');
-    expect(prompt).toContain('tabtin commands');
+    expect(prompt).toContain('muse <cliKey> --help');
+    expect(prompt).toContain('muse commands');
     expect(prompt).not.toContain('## 用 CLI 操作 App');
     expect(prompt).not.toContain('## App 没装怎么办');
     expect(prompt).not.toContain('## 关于 "App 首页"');
     expect(prompt).not.toContain('### 子命令与参数怎么填');
     expect(prompt).not.toContain('示例：');
-    expect(prompt).not.toContain('tabtin browser open --url https://example.com');
-    expect(prompt).not.toContain('tabtin browser open <url>');
-    expect(prompt).not.toContain('tabtin ppt');
+    expect(prompt).not.toContain('muse browser open --url https://example.com');
+    expect(prompt).not.toContain('muse browser open <url>');
+    expect(prompt).not.toContain('muse ppt');
   });
 
   it('CLI parameter guidance lives in cli_capabilities, not apps ', () => {
@@ -536,11 +536,11 @@ describe('buildSystemPrompt', () => {
   it('renders the host-owned worktree routing section', () => {
     const result = buildWorktreeRoutingSection();
 
-    expect(result).toContain('`tabtin code worktree create`');
-    expect(result).toContain('`tabtin code worktree switch`');
+    expect(result).toContain('`muse code worktree create`');
+    expect(result).toContain('`muse code worktree switch`');
     expect(result).toContain('不得直接执行 `git worktree` 或仓库脚本');
     expect(result).toContain('Skill');
-    expect(result).toContain('转换为上述 TabTin CLI');
+    expect(result).toContain('转换为上述 Muse CLI');
     expect(result).toContain('用户未指定路径时不要添加 `--path`');
     expect(result).toContain('必须在前台等待命令完成');
   });
@@ -599,7 +599,7 @@ describe('buildSystemPrompt', () => {
 
   // ── M1.4: user_portrait section ─────────────────────────────────────
 
-  const SAMPLE_PORTRAIT_MD = `## 工作背景\nUncle 是 Tabtin 创始人。\n\n## 个人背景\nUncle 即将 30 岁。\n\n## 最近在想\nUncle 在思考记忆系统。\n\n## 近期历史\nUncle 最近完成 PRD。\n\n## 长期背景\nUncle 对 AI Agent 架构有长期兴趣。`;
+  const SAMPLE_PORTRAIT_MD = `## 工作背景\nUncle 是 Muse 创始人。\n\n## 个人背景\nUncle 即将 30 岁。\n\n## 最近在想\nUncle 在思考记忆系统。\n\n## 近期历史\nUncle 最近完成 PRD。\n\n## 长期背景\nUncle 对 AI Agent 架构有长期兴趣。`;
 
   it('omits user_portrait by default', () => {
     const result = buildSystemPrompt({ tools: [] });
@@ -623,7 +623,7 @@ describe('buildSystemPrompt', () => {
     });
     expect(result).toContain('<user_portrait>');
     expect(result).toContain('</user_portrait>');
-    expect(result).toContain('Uncle 是 Tabtin 创始人');
+    expect(result).toContain('Uncle 是 Muse 创始人');
     expect(result).toContain('Uncle 在思考记忆系统');
   });
 

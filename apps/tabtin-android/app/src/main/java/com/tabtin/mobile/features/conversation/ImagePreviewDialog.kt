@@ -53,7 +53,7 @@ import coil.compose.AsyncImage
 import coil.imageLoader
 import coil.request.ImageRequest
 import coil.request.SuccessResult
-import com.tabtin.mobile.R
+import com.muse.mobile.R
 import com.tabtin.mobile.ui.theme.TTColors
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -225,12 +225,12 @@ private fun saveBitmapToMediaStore(context: Context, bitmap: Bitmap, filename: S
         else -> Triple(Bitmap.CompressFormat.JPEG, "image/jpeg", 95)
     }
 
-    val name = filename ?: "TabTin_${System.currentTimeMillis()}.jpg"
+    val name = filename ?: "Muse_${System.currentTimeMillis()}.jpg"
     val values = ContentValues().apply {
         put(MediaStore.Images.Media.DISPLAY_NAME, name)
         put(MediaStore.Images.Media.MIME_TYPE, mime)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            put(MediaStore.Images.Media.RELATIVE_PATH, Environment.DIRECTORY_PICTURES + "/TabTin")
+            put(MediaStore.Images.Media.RELATIVE_PATH, Environment.DIRECTORY_PICTURES + "/Muse")
             put(MediaStore.Images.Media.IS_PENDING, 1)
         }
     }

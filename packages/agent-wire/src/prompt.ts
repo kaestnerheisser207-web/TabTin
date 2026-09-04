@@ -433,12 +433,12 @@ export const PromptForwardPayloadSchema = z.object({
    */
   enabled_apps: z.array(EnabledAppDtoSchema).nullable().optional(),
   /**
-   * W7c · Stage 4 Daemon 路径对齐 ── CLI 工具命令清单（``tabtin capabilities tools``）。
+   * W7c · Stage 4 Daemon 路径对齐 ── CLI 工具命令清单（``muse capabilities tools``）。
    *
    * Electron 路径 ``loadCLIReferenceAsync()`` 在主进程异步 spawn 取；Daemon 路径
    * 之前完全没有 `<cli_capabilities>` 段（07 §F.1）。本字段由 Django 端在 forward 前
    * 注入（可选——Daemon 拿到为空时也会本地 fallback 通过 ``loadCLIReferenceAsync``
-   * 自己 spawn ``tabtin capabilities tools``）。
+   * 自己 spawn ``muse capabilities tools``）。
    *
    * 当 Django 端能更高频缓存或精修结果时，优先用 wire 字段；否则 Daemon 端 spawn
    * 兜底，与 Electron 路径同款。

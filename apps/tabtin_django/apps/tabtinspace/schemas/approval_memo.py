@@ -1,4 +1,4 @@
-"""Tabtin Space approval_memo schemas（PRD 05 v0.4 §7.3）。"""
+"""Muse Space approval_memo schemas（PRD 05 v0.4 §7.3）。"""
 
 from .common import *  # noqa: F401,F403
 

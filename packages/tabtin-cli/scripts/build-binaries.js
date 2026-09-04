@@ -19,15 +19,15 @@ const BINARIES_DIR = path.join(PKG_DIR, 'binaries');
 const DIST_DIR = path.join(GO_CLI_DIR, 'dist');
 
 const FIRST_PARTY = [
-  { goos: 'windows', goarch: 'amd64', out: 'tabtin-windows-amd64.exe' },
-  { goos: 'windows', goarch: 'arm64', out: 'tabtin-windows-arm64.exe' },
-  { goos: 'darwin', goarch: 'amd64', out: 'tabtin-darwin-amd64' },
-  { goos: 'darwin', goarch: 'arm64', out: 'tabtin-darwin-arm64' },
+  { goos: 'windows', goarch: 'amd64', out: 'muse-windows-amd64.exe' },
+  { goos: 'windows', goarch: 'arm64', out: 'muse-windows-arm64.exe' },
+  { goos: 'darwin', goarch: 'amd64', out: 'muse-darwin-amd64' },
+  { goos: 'darwin', goarch: 'arm64', out: 'muse-darwin-arm64' },
 ];
 
 const EXTRA_DIST = [
-  { goos: 'linux', goarch: 'amd64', out: 'tabtin-linux-amd64' },
-  { goos: 'linux', goarch: 'arm64', out: 'tabtin-linux-arm64' },
+  { goos: 'linux', goarch: 'amd64', out: 'muse-linux-amd64' },
+  { goos: 'linux', goarch: 'arm64', out: 'muse-linux-arm64' },
 ];
 
 function die(msg) {
@@ -71,9 +71,9 @@ function buildOne({ goos, goarch, out }) {
   const ldflags = [
     '-s',
     '-w',
-    `-X github.com/TabTin/tabtin-cli/internal/version.Version=${version}`,
-    `-X github.com/TabTin/tabtin-cli/internal/version.GitCommit=${commit}`,
-    `-X github.com/TabTin/tabtin-cli/internal/version.BuildDate=${buildDate}`,
+    `-X github.com/Muse/muse-cli/internal/version.Version=${version}`,
+    `-X github.com/Muse/muse-cli/internal/version.GitCommit=${commit}`,
+    `-X github.com/Muse/muse-cli/internal/version.BuildDate=${buildDate}`,
   ].join(' ');
 
   process.stdout.write(`[build-binaries] GOOS=${goos} GOARCH=${goarch} → ${out}\n`);
@@ -102,7 +102,7 @@ function main() {
   }
 
   for (const f of fs.readdirSync(BINARIES_DIR)) {
-    if (f.startsWith('tabtin-')) {
+    if (f.startsWith('muse-')) {
       fs.unlinkSync(path.join(BINARIES_DIR, f));
     }
   }

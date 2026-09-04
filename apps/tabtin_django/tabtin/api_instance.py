@@ -11,11 +11,11 @@ from ninja.errors import ConfigError
 from apps.users.auth.permissions import JWTAuth
 
 api = NinjaAPI(
-    title="Tabtin API",
+    title="Muse API",
     description="""
-    ## TabTin 核心 API 服务
+    ## Muse 核心 API 服务
 
-    TabTin 是人与 AI Agent 团队协作的统一工作平台，提供 Table、Docs、Design、Browser 等多种 App 的后端支撑。
+    Muse 是人与 AI Agent 团队协作的统一工作平台，提供 Table、Docs、Design、Browser 等多种 App 的后端支撑。
 
     ### 🔐 用户认证服务
     - 用户注册/登录（支持邮箱、手机号、验证码登录）

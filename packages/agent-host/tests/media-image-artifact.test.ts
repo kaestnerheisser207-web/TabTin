@@ -16,7 +16,7 @@ describe('isMediaImageGenerateCommand', () => {
       "PROMPT='",
       '一只在雪山上的金毛',
       "'",
-      'tabtin media image generate --prompt "$PROMPT" --format json',
+      'muse media image generate --prompt "$PROMPT" --format json',
     ].join('\n')
 
     expect(isMediaImageGenerateCommand(command)).toBe(true)
@@ -27,7 +27,7 @@ describe('isMediaImageGenerateCommand', () => {
       'sudo exec tabtin-preprod media image generate --prompt x',
     )).toBe(true)
     expect(isMediaImageGenerateCommand(
-      "echo 'tabtin media image generate --prompt x'",
+      "echo 'muse media image generate --prompt x'",
     )).toBe(false)
   })
 })
@@ -35,7 +35,7 @@ describe('isMediaImageGenerateCommand', () => {
 describe('buildMediaImageArtifactBlocks', () => {
   it('projects permanently stored images with stable FileRecord identity', () => {
     const blocks = buildMediaImageArtifactBlocks(
-      'tabtin media image generate --prompt "月照金山" --format json',
+      'muse media image generate --prompt "月照金山" --format json',
       output({
         storage_status: 'succeeded',
         stored_files: [{
@@ -93,7 +93,7 @@ describe('buildMediaImageArtifactBlocks', () => {
     ].join('\n')
 
     const blocks = buildMediaImageArtifactBlocks(
-      'tabtin media image generate --prompt "草地上的金毛" --format json',
+      'muse media image generate --prompt "草地上的金毛" --format json',
       cliOutput,
       'run_terminal_command:0',
     )
@@ -110,7 +110,7 @@ describe('buildMediaImageArtifactBlocks', () => {
 
   it('emits only durable successes for a partial delivery', () => {
     const blocks = buildMediaImageArtifactBlocks(
-      'tabtin media image generate --prompt x --format json',
+      'muse media image generate --prompt x --format json',
       output({
         storage_status: 'partial',
         result_urls: ['https://provider.example/temporary-0.png', 'https://provider.example/temporary-1.png'],
@@ -132,7 +132,7 @@ describe('buildMediaImageArtifactBlocks', () => {
 
   it('does not promote temporary previews or entries without file_id', () => {
     expect(buildMediaImageArtifactBlocks(
-      'tabtin media image generate --prompt x --format json',
+      'muse media image generate --prompt x --format json',
       output({
         delivery_status: 'temporary_preview',
         result_urls: ['https://provider.example/temporary.png'],
@@ -142,7 +142,7 @@ describe('buildMediaImageArtifactBlocks', () => {
     )).toEqual([])
 
     expect(buildMediaImageArtifactBlocks(
-      'tabtin media image generate --prompt x --format json',
+      'muse media image generate --prompt x --format json',
       output({
         storage_status: 'succeeded',
         stored_files: [{
@@ -159,7 +159,7 @@ describe('buildMediaImageArtifactBlocks', () => {
 
   it('ignores unrelated terminal commands', () => {
     expect(buildMediaImageArtifactBlocks(
-      'tabtin oss upload /tmp/a.png',
+      'muse oss upload /tmp/a.png',
       output({ stored_files: [] }),
       'tool-use-5',
     )).toEqual([])
@@ -188,7 +188,7 @@ describe('buildMediaImageArtifactBlocks', () => {
     ].join('\n')
     const events = buildMediaImageArtifactEvents({
       threadId: '3f8a2c7e-9b1d-4e5f-a6c7-8d9e0f1a2b3c',
-      command: 'tabtin media image generate --prompt x --format json',
+      command: 'muse media image generate --prompt x --format json',
       output: JSON.stringify({ _terminal_update: true, stdout: cliOutput }),
       sourceToolUseId: 'run_terminal_command:0',
       initialSeq: 4,

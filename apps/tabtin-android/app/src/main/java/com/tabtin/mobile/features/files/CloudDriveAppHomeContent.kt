@@ -26,7 +26,7 @@ import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import com.tabtin.mobile.R
+import com.muse.mobile.R
 import com.tabtin.mobile.data.model.files.CloudDriveBrowseScope
 import com.tabtin.mobile.data.model.files.CloudDriveCollection
 import com.tabtin.mobile.data.model.files.CloudDriveContracts

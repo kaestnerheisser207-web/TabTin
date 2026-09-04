@@ -11,7 +11,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/TabTin/tabtin-cli/internal/config"
+	"github.com/Muse/muse-cli/internal/config"
 )
 
 // deviceCodeResponse 对齐 Django POST /api/auth/device/code 的 data 字段。
@@ -195,7 +195,7 @@ func runDeviceLogin(baseURL, profileName, label string, cfg *config.CLIConfig) e
 		}
 		return nil
 	}
-	return fmt.Errorf("授权超时（%ds），请重试 tabtin auth login", expiresIn)
+	return fmt.Errorf("授权超时（%ds），请重试 muse auth login", expiresIn)
 }
 
 func hostnameOr(fallback string) string {

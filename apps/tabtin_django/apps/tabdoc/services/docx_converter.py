@@ -187,7 +187,7 @@ def _resolve_and_validate_ip(hostname: str) -> str | None:
 
 
 def _platform_asset_object_key(src: str) -> str | None:
-    """Resolve TabTin-owned asset refs without treating arbitrary URLs as OSS keys."""
+    """Resolve Muse-owned asset refs without treating arbitrary URLs as OSS keys."""
     try:
         from apps.services.oss.services.public_assets import public_asset_object_key_from_ref
         return public_asset_object_key_from_ref(src)

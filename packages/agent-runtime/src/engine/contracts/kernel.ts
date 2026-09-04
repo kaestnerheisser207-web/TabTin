@@ -1201,7 +1201,7 @@ export interface EngineConfig {
    * 宿主注入的「shell 命令是否返回外部不可信字节」谓词（FR-09 / 中性化）。
    *
    * runtime 内核不内置任何 shell 命令业务知识。当 `run_terminal_command`
-   * 的命令返回外网字节（如宿主的 `tabtin fetch` / `tabtin browser …` CLI
+   * 的命令返回外网字节（如宿主的 `muse fetch` / `muse browser …` CLI
    * 路径）时，宿主注入该谓词把这类结果重新纳入 `<tool_output>` fence +
    * 注入扫描。缺省（未注入）时 `run_terminal_command` 一律不因 shell 命令被
    * 判为 untrusted——与其它本机工具一致，走中性无 fence 路径。

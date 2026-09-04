@@ -234,7 +234,7 @@ export const DecisionReasonSchema = z.discriminatedUnion('type', [
     type: z.literal('platform_artifact_allow'),
     path: z.string(),
   }),
-  // ：平台受管 tabtin CLI 让位给 host ApprovalGate
+  // ：平台受管 muse CLI 让位给 host ApprovalGate
   z.object({
     type: z.literal('platform_gate_deferred'),
     surface: z.string(),

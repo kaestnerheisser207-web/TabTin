@@ -1,11 +1,11 @@
 {
-  "welcomeTitle": "Willkommen bei TabTin",
+  "welcomeTitle": "Willkommen bei Muse",
   "welcomeSubtitle": "Einheitliche KI-Arbeitsplattform. Erstellen Sie einen neuen Arbeitsbereich oder wählen Sie links einen aus.",
   "welcomeSubtitleGuest": "Melden Sie sich an, um Arbeitsbereiche zu erstellen und mit der Zusammenarbeit zu beginnen.",
   "welcome": {
-    "title": "TabTin",
+    "title": "Muse",
     "tagline": "Ihre KI-Arbeitsplattform",
-    "conceptIntro": "In TabTin ist ein Arbeitsbereich eine dauerhafte Arbeitssite, die an ein Ausführungsgerät und ein Arbeitsverzeichnis gebunden ist. Es hält Konversationen, Apps, Ressourcen und Ausführungskontext zusammen, sodass Agenten innerhalb dieser Grenzen helfen können.",
+    "conceptIntro": "In Muse ist ein Arbeitsbereich eine dauerhafte Arbeitssite, die an ein Ausführungsgerät und ein Arbeitsverzeichnis gebunden ist. Es hält Konversationen, Apps, Ressourcen und Ausführungskontext zusammen, sodass Agenten innerhalb dieser Grenzen helfen können.",
     "loginCta": "Anmelden / Registrieren",
     "learnMore": "Erfahren Sie mehr →",
     "readyTitle": "Alles klar!",
@@ -158,7 +158,7 @@
       "selectHelp": "Das Standardmodell wird für neue Sitzungen und Aufgaben ohne angegebenes Modell verwendet."
     },
     "presetSection": {
-      "title": "Voreingestellte TabTin-Modelle",
+      "title": "Voreingestellte Muse-Modelle",
       "subtitle": "Eingebaute Plattformmodelle. Standardmäßig einsatzbereit – keine Kanaleinrichtung erforderlich.",
       "collapse": "Voreingestellte Modelle einklappen",
       "expandHint": "{{count}} weitere Plattformmodelle. Erweitern Sie, um alles zu sehen."

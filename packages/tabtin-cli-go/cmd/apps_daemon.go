@@ -12,10 +12,10 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/TabTin/tabtin-cli/internal/cmdutil"
-	"github.com/TabTin/tabtin-cli/internal/config"
-	"github.com/TabTin/tabtin-cli/internal/errcode"
-	"github.com/TabTin/tabtin-cli/internal/output"
+	"github.com/Muse/muse-cli/internal/cmdutil"
+	"github.com/Muse/muse-cli/internal/config"
+	"github.com/Muse/muse-cli/internal/errcode"
+	"github.com/Muse/muse-cli/internal/output"
 )
 
 // ─── Daemon ──────────────────────────────────────────────────────
@@ -24,12 +24,12 @@ func newCmdDaemon(f *cmdutil.Factory) *cobra.Command {
 	cmd := &cobra.Command{Use: "daemon", Short: "Daemon 管理"}
 
 	cmdutil.RegisterCommand(cmd, f, cmdutil.CommandDef{
-		Use: "status", Short: "Daemon 状态", Example: "  tabtin daemon status", Route: cmdutil.RouteDirect, HasFormat: true,
+		Use: "status", Short: "Daemon 状态", Example: "  muse daemon status", Route: cmdutil.RouteDirect, HasFormat: true,
 		RunFunc: daemonStatusFunc(f),
 	})
 	cmdutil.RegisterCommand(cmd, f, cmdutil.CommandDef{
 		// 合并：保留远端 Example（CLI 宪法 Wave 1）+ 我方 Risk（W5.5）
-		Use: "stop", Short: "停止 Daemon", Example: "  tabtin daemon stop", Route: cmdutil.RouteDirect,
+		Use: "stop", Short: "停止 Daemon", Example: "  muse daemon stop", Route: cmdutil.RouteDirect,
 		Risk:    cmdutil.RiskWrite,
 		RunFunc: daemonStopFunc(),
 	})
@@ -39,13 +39,13 @@ func newCmdDaemon(f *cmdutil.Factory) *cobra.Command {
 	//   2. 找不到 → 在 monorepo 里查 apps/tabtin-daemon/dist/index.js，用 node 跑
 	//   3. 都不行 → 打印明确的安装/启动指引（不再叫 Agent 跑一个不存在的命令）
 	// 历史 hint 的"请使用 npx tabtin-daemon"既不准确（包名是 @tabtin/daemon）
-	// 也跟主命令自相矛盾——`tabtin daemon start` 喊你去跑另一条命令。
+	// 也跟主命令自相矛盾——`muse daemon start` 喊你去跑另一条命令。
 	// 单独注册（不进 stubs[]）——它是真启动逻辑而非 stub，与 status/stop 同级。
 	cmdutil.RegisterCommand(cmd, f, cmdutil.CommandDef{
 		Use: "start", Short: "启动 Daemon", Route: cmdutil.RouteDirect,
-		Example: "  tabtin daemon start\n" +
-			"  tabtin daemon start --dry-run    # 只解析 launcher（bin/args/source），不真正 exec\n" +
-			"  TABTIN_DEBUG=1 tabtin daemon start    # exec 前把解析结果打到 stderr",
+		Example: "  muse daemon start\n" +
+			"  muse daemon start --dry-run    # 只解析 launcher（bin/args/source），不真正 exec\n" +
+			"  TABTIN_DEBUG=1 muse daemon start    # exec 前把解析结果打到 stderr",
 		Risk:    cmdutil.RiskWrite,
 		RunFunc: daemonStartFunc(),
 		// start 不发 HTTP，是 exec 本地 daemon binary；dry-run 只跑 resolveDaemonLauncher
@@ -64,10 +64,10 @@ func newCmdDaemon(f *cmdutil.Factory) *cobra.Command {
 	})
 
 	stubs := []cmdutil.CommandDef{
-		{Use: "config", Short: "Daemon 配置", Example: "  tabtin daemon config", Route: cmdutil.RouteDirect, HasFormat: true, RunFunc: daemonStubFunc("config", "请使用 tabtin config 管理配置")},
-		{Use: "logs", Short: "查看日志", Example: "  tabtin daemon logs", Route: cmdutil.RouteDirect, RunFunc: daemonLogsFunc()},
-		{Use: "doctor", Short: "环境诊断", Example: "  tabtin daemon doctor", Route: cmdutil.RouteDirect, HasFormat: true, RunFunc: daemonStubFunc("doctor", "请使用 tabtin doctor 进行环境诊断")},
-		{Use: "update", Short: "更新 Daemon", Example: "  tabtin daemon update", Route: cmdutil.RouteDirect, Risk: cmdutil.RiskWrite, RunFunc: daemonStubFunc("update", "请使用包管理器更新: npm update -g @tabtin/daemon")},
+		{Use: "config", Short: "Daemon 配置", Example: "  muse daemon config", Route: cmdutil.RouteDirect, HasFormat: true, RunFunc: daemonStubFunc("config", "请使用 muse config 管理配置")},
+		{Use: "logs", Short: "查看日志", Example: "  muse daemon logs", Route: cmdutil.RouteDirect, RunFunc: daemonLogsFunc()},
+		{Use: "doctor", Short: "环境诊断", Example: "  muse daemon doctor", Route: cmdutil.RouteDirect, HasFormat: true, RunFunc: daemonStubFunc("doctor", "请使用 muse doctor 进行环境诊断")},
+		{Use: "update", Short: "更新 Daemon", Example: "  muse daemon update", Route: cmdutil.RouteDirect, Risk: cmdutil.RiskWrite, RunFunc: daemonStubFunc("update", "请使用包管理器更新: npm update -g @tabtin/daemon")},
 	}
 	for _, def := range stubs {
 		cmdutil.RegisterCommand(cmd, f, def)
@@ -122,7 +122,7 @@ func daemonStopFunc() func(ctx *cmdutil.RunContext) error {
 		data, err := os.ReadFile(discoveryPath)
 		if err != nil {
 			return output.PrintErrorAndExit(output.ErrorEnvelope(
-				string(errcode.Unavailable), "Daemon 未运行", "tabtin daemon start", output.ExitServiceUnavail,
+				string(errcode.Unavailable), "Daemon 未运行", "muse daemon start", output.ExitServiceUnavail,
 			))
 		}
 		var info map[string]any
@@ -167,7 +167,7 @@ func daemonLogsFunc() func(ctx *cmdutil.RunContext) error {
 		}
 		if len(foundPaths) == 0 {
 			return output.PrintErrorAndExit(output.ErrorEnvelope(
-				string(errcode.NotFound), "未找到 Daemon 日志文件", "tabtin daemon start", output.ExitNotFound,
+				string(errcode.NotFound), "未找到 Daemon 日志文件", "muse daemon start", output.ExitNotFound,
 			))
 		}
 		output.PrintResult(output.SuccessEnvelope(map[string]any{
@@ -181,17 +181,17 @@ func daemonLogsFunc() func(ctx *cmdutil.RunContext) error {
 func daemonStubFunc(name, hint string) func(ctx *cmdutil.RunContext) error {
 	return func(ctx *cmdutil.RunContext) error {
 		output.PrintResult(output.SuccessEnvelope(map[string]any{
-			"command": fmt.Sprintf("tabtin daemon %s", name),
+			"command": fmt.Sprintf("muse daemon %s", name),
 			"hint":    hint,
 		}), ctx.Factory.Format)
 		return nil
 	}
 }
 
-// daemonStartFunc 把 `tabtin daemon start` 桥接到真实的 tabtin-daemon binary。
+// daemonStartFunc 把 `muse daemon start` 桥接到真实的 tabtin-daemon binary。
 //
 // 历史问题：本命令之前是个 stub，只会输出 "请使用 npx tabtin-daemon 启动 Daemon"；
-// 同时所有 RouteCliServer 命令在 daemon 没跑时返回的 hint 是 "tabtin daemon start"。
+// 同时所有 RouteCliServer 命令在 daemon 没跑时返回的 hint 是 "muse daemon start"。
 // 两条 hint 互相指——Agent / 用户照着跑一圈回到原地。
 //
 // 现在的行为（按优先级）：
@@ -212,7 +212,7 @@ func daemonStartFunc() func(ctx *cmdutil.RunContext) error {
 		}
 
 		if os.Getenv("TABTIN_DEBUG") == "1" {
-			fmt.Fprintf(os.Stderr, "[debug] tabtin daemon start → %s (source=%s) %s\n",
+			fmt.Fprintf(os.Stderr, "[debug] muse daemon start → %s (source=%s) %s\n",
 				bin, source, strings.Join(args, " "))
 		}
 
@@ -245,7 +245,7 @@ func daemonStartFunc() func(ctx *cmdutil.RunContext) error {
 // resolveDaemonLauncher 找出该用什么 binary + 参数来启动 daemon。
 //
 // 返回：bin, args, source（用于 debug 提示）, error。
-// extraArgs 是用户在 `tabtin daemon start` 后面附加的位置参数，会原样接到 daemon 调用的尾巴。
+// extraArgs 是用户在 `muse daemon start` 后面附加的位置参数，会原样接到 daemon 调用的尾巴。
 func resolveDaemonLauncher(extraArgs []string) (string, []string, string, error) {
 	if path, err := exec.LookPath("tabtin-daemon"); err == nil {
 		args := append([]string{"start"}, extraArgs...)
@@ -268,7 +268,7 @@ func resolveDaemonLauncher(extraArgs []string) (string, []string, string, error)
 			"  2. monorepo 内构建：pnpm --filter @tabtin/daemon build （会生成 apps/tabtin-daemon/dist/index.js）\n" +
 			"  3. monorepo dev 模式：cd apps/tabtin-daemon && pnpm dev start\n" +
 			"安装好后请先 tabtin-daemon init --token <token>，再 tabtin-daemon start。\n" +
-			"（如果你只是想用桌面端，启动 TabTin Electron App 即可，无需 daemon）",
+			"（如果你只是想用桌面端，启动 Muse Electron App 即可，无需 daemon）",
 	)
 }
 

@@ -140,7 +140,7 @@ export async function captureScreenshot(options: ScreenshotOptions = {}): Promis
         if (status !== 'granted') {
           return {
             success: false,
-            error: `屏幕录制权限未授予（当前状态: ${status}）。请在系统偏好设置 > 隐私与安全 > 屏幕录制中允许 TabTin。`,
+            error: `屏幕录制权限未授予（当前状态: ${status}）。请在系统偏好设置 > 隐私与安全 > 屏幕录制中允许 Muse。`,
           }
         }
       }

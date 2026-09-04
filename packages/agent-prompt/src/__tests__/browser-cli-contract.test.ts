@@ -76,14 +76,14 @@ describe('Browser CLI ↔ agent-prompt contract（Wave 1 / Task E）', () => {
   it('生产 <apps> 段不内嵌 Browser 子命令、参数和示例', () => {
     const apps = buildAppsSection([TABWEB_APP]);
     for (const flag of contract.open.requiredFlags) {
-      expect(apps).not.toContain(`tabtin browser ${contract.open.use} --${flag}`);
+      expect(apps).not.toContain(`muse browser ${contract.open.use} --${flag}`);
     }
     for (const flag of contract.print.requiredFlags) {
-      expect(apps).not.toContain(`tabtin browser print --${flag}`);
+      expect(apps).not.toContain(`muse browser print --${flag}`);
     }
-    expect(apps).not.toContain('tabtin browser capabilities');
-    expect(apps).not.toContain('tabtin browser open https://');
-    expect(apps).not.toContain('tabtin browser open <url>');
+    expect(apps).not.toContain('muse browser capabilities');
+    expect(apps).not.toContain('muse browser open https://');
+    expect(apps).not.toContain('muse browser open <url>');
     expect(apps).not.toContain('示例：');
   });
 
@@ -95,13 +95,13 @@ describe('Browser CLI ↔ agent-prompt contract（Wave 1 / Task E）', () => {
     });
     expect(prompt).toContain('<apps>');
     for (const flag of contract.open.requiredFlags) {
-      expect(prompt).not.toContain(`tabtin browser ${contract.open.use} --${flag}`);
+      expect(prompt).not.toContain(`muse browser ${contract.open.use} --${flag}`);
     }
     for (const flag of contract.print.requiredFlags) {
-      expect(prompt).not.toContain(`tabtin browser print --${flag}`);
+      expect(prompt).not.toContain(`muse browser print --${flag}`);
     }
-    expect(prompt).not.toContain('tabtin browser capabilities');
-    expect(prompt).not.toContain('tabtin browser open https://');
-    expect(prompt).not.toContain('tabtin browser open <url>');
+    expect(prompt).not.toContain('muse browser capabilities');
+    expect(prompt).not.toContain('muse browser open https://');
+    expect(prompt).not.toContain('muse browser open <url>');
   });
 });

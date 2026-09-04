@@ -58,7 +58,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
-import com.tabtin.mobile.R
+import com.muse.mobile.R
 import com.tabtin.mobile.features.conversation.ChatFilePreviewDialog
 import com.tabtin.mobile.features.files.CloudDriveAppHomeViewModel
 import com.tabtin.mobile.features.files.CloudDriveFileCategory

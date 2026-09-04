@@ -89,7 +89,7 @@ describe('client observability context schema', () => {
       clientPlatform,
       runtime,
       environment: 'preprod',
-      release: 'tabtin@1.0.0+1',
+      release: 'muse@1.0.0+1',
       errorCategory: 'CLIENT_CRASH',
       errorCode: 'UNCAUGHT_EXCEPTION',
       severity: 'crash',

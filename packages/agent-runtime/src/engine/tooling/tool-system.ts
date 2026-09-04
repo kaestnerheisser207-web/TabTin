@@ -189,8 +189,8 @@ const TOOL_NAME_ALIASES: Record<string, string> = {
 
   // web_fetch family — Wave 4a (2026-05-01) 已删除：FC `web_fetch` 按 D4
   // 全删后，fetch / curl / browse / scrape 等模型可能想到的别名应**不再
-  // 重定向到 FC**——Agent 抓静态正文走 `tabtin fetch <url>` /
-  // 已打开 tab / JS 动态页走 `tabtin browser print --save <path>` 等 CLI；保留这些 alias
+  // 重定向到 FC**——Agent 抓静态正文走 `muse fetch <url>` /
+  // 已打开 tab / JS 动态页走 `muse browser print --save <path>` 等 CLI；保留这些 alias
   // 反而会让 fuzzy match 把 LLM 调用拉回不存在的 web_fetch FC，触发 "tool
   // not found" 死循环。
 

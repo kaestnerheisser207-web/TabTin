@@ -2,7 +2,7 @@
 
 [中文](CHANGELOG.md)
 
-Records notable TabTin changes beginning with the first public release. The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and versions follow [Semantic Versioning](https://semver.org/). Private development history is not reconstructed.
+Records notable Muse changes beginning with the first public release. The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and versions follow [Semantic Versioning](https://semver.org/). Private development history is not reconstructed.
 
 ## [Unreleased]
 

@@ -25,7 +25,7 @@ import type { ScopedLspServerConfig } from './types.js';
 /**
  * Server config loader interface —— manager 不绑死配置来源。
  *
- *   声明 LSP servers）；TabTin 不走 plugin 系统，C7 阶段用 `builtin-servers.ts`
+ *   声明 LSP servers）；Muse 不走 plugin 系统，C7 阶段用 `builtin-servers.ts`
  *   提供静态配置。这里抽象成接口，让 manager 不绑死配置来源。
  */
 export interface LspServerConfigLoader {

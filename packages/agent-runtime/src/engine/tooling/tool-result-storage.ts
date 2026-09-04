@@ -8,7 +8,7 @@
  *   - Different API surface (intentional):
  * *       `{filepath, originalSize, isJson, preview, hasMore}` in one shot;
  *       caller composes the `<persisted-output>` wrapper itself.
- *     * TabTin: `save(id, toolName, content)` (sync, fire-and-forget) +
+ *     * Muse: `save(id, toolName, content)` (sync, fire-and-forget) +
  *       `getFilePath(id)` (sync, deterministic). The truncation banner is
  *       composed by `tool-orchestration.ts::buildPersistMeta` based on the
  *       returned path; no preview is bundled into the storage layer.
@@ -31,7 +31,7 @@
  *
  * **File extension**: `.txt` (not `.json`). Bodies are raw content, no
  * envelope. Uses `.json` only when the original ToolResultBlock
- * was a content-array (multimodal); TabTin's `enforceToolOutputBudget`
+ * was a content-array (multimodal); Muse's `enforceToolOutputBudget`
  * runs on string content only, so we always write text. If a future tool
  * returns multimodal pre-truncation we'd need to revisit, but today every
  * tool that can blow the budget (`web_search`, `read_file`, `grep_search`,

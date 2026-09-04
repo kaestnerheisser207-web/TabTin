@@ -76,7 +76,7 @@ actor DiagnosticRecorder {
         let support = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask)[0]
         directory = support.appending(path: "Diagnostics", directoryHint: .isDirectory)
         exportDirectory = FileManager.default.temporaryDirectory
-            .appending(path: "TabTinDiagnosticExports", directoryHint: .isDirectory)
+            .appending(path: "MuseDiagnosticExports", directoryHint: .isDirectory)
         encoder = JSONEncoder()
         encoder.outputFormatting = [.sortedKeys, .withoutEscapingSlashes]
         try? FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
@@ -293,7 +293,7 @@ actor DiagnosticRecorder {
     }
 
     private static let readme = """
-    TabTin iOS diagnostic bundle
+    Muse iOS diagnostic bundle
 
     This bundle contains bounded, structured application, HTTP and WebSocket metadata.
     It intentionally excludes request/response bodies, header values, URL queries, tokens,

@@ -105,7 +105,7 @@ export class LocalCodexResponsesProvider implements LLMProvider {
 
   constructor(private readonly options: LocalCodexResponsesProviderOptions) {
     this.baseUrl = (options.baseUrl ?? 'https://chatgpt.com/backend-api').replace(/\/+$/, '');
-    this.originator = options.originator ?? 'tabtin';
+    this.originator = options.originator ?? 'muse';
     this.fetchImpl = options.fetchImpl ?? fetch;
   }
 

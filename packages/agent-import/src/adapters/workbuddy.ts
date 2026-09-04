@@ -15,7 +15,7 @@
  * - 主转录 function_call name="Agent" → 结果末尾 [Agent ID: agent-xxxx] 关联
  *   <sessionId>/subagents/agent-xxxx.jsonl（同格式）→ UnifiedSubagent。
  * - status:"incomplete" 的消息 → stopReason='aborted'。
- * - tool_result 合并进持有该 tool_use 的 assistant 消息（TabTin 协议）。
+ * - tool_result 合并进持有该 tool_use 的 assistant 消息（Muse 协议）。
  */
 
 import * as path from 'node:path'

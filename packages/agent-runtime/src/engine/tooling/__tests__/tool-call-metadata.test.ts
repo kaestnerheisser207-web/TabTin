@@ -25,8 +25,8 @@ describe('tool-call metadata', () => {
   });
 
   it('ignores empty metadata and preserves business input', () => {
-    expect(stripToolCallMetadata({ intent: ' ', query: 'tabtin' })).toEqual({
-      toolInput: { query: 'tabtin' },
+    expect(stripToolCallMetadata({ intent: ' ', query: 'muse' })).toEqual({
+      toolInput: { query: 'muse' },
     });
   });
 

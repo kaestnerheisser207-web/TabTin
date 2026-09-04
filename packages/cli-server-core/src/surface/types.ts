@@ -106,7 +106,7 @@ export interface PlatformSurfaceDef<
    *   - `'write'`：会修改用户数据（如 skill-install）
    *   - `'high-risk-write'`：不可逆 / 高破坏（删除、清空）
    *
-   * 用途：受限模式 shell allowlist 把 surface 也纳入决策——`tabtin invoke <module>
+   * 用途：受限模式 shell allowlist 把 surface 也纳入决策——`muse invoke <module>
    * <verb>` 也走同样的 risk gate，避免 LLM 用 surface 路径绕过 CLI 的 risk 检查。
    * 不声明默认按 RiskNone 处理——但鼓励显式声明，让审计可读。
    */

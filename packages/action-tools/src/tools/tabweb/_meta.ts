@@ -14,7 +14,7 @@ import { resourceDownloadTools } from '../resource-download'
  *
  * **W5（2026-05-04，工具系统宪法 §不变量 2 + W5 收尾白名单反转）**：业务能力走 CLI
  * 不走 FC。tabweb 整域不 opt-in `manifestExposed`（默认 false）—— LLM 不再看到
- * context-space FC，改用 `tabtin browser *` 系列 CLI 命令访问；但 tool execute()
+ * context-space FC，改用 `muse browser *` 系列 CLI 命令访问；但 tool execute()
  * 仍由 ActionExecutor adapter 注册，CLI server `/browser/*` 路由继续派发
  * （如 contextSpace 的派发路径）。
  *

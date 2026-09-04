@@ -88,9 +88,9 @@
     <string name="settings_chucker_network_inspector_subtitle">View and search captured HTTP requests and responses</string>
     <string name="settings_debug_tools">Debug Tools</string>
     <string name="settings_debug_scan_qr">Scan QR code</string>
-    <string name="settings_debug_scan_qr_prompt">Align the environment QR code shown in TabTin Desktop</string>
+    <string name="settings_debug_scan_qr_prompt">Align the environment QR code shown in Muse Desktop</string>
     <string name="settings_debug_scan_qr_succeeded">URLs filled in. Review them, then tap Apply.</string>
-    <string name="settings_debug_scan_qr_invalid">This is not a valid TabTin mobile environment QR code.</string>
+    <string name="settings_debug_scan_qr_invalid">This is not a valid Muse mobile environment QR code.</string>
     <string name="settings_debug_sentry_section">Error reporting</string>
     <string name="settings_debug_sentry_dsn">Sentry DSN</string>
     <string name="settings_debug_sentry_dsn_hint">Leave empty to disable. Apply to take effect immediately.</string>
@@ -100,7 +100,7 @@
     <string name="settings_diagnostics_privacy">Request/response bodies, tokens, full URL queries, chat messages, and document content are excluded.</string>
     <string name="settings_diagnostics_export">Create and Share Bundle</string>
     <string name="settings_diagnostics_exporting">Creating…</string>
-    <string name="settings_diagnostics_share">Share TabTin Diagnostics</string>
+    <string name="settings_diagnostics_share">Share Muse Diagnostics</string>
     <string name="settings_diagnostics_failed">Could not create the diagnostic bundle. Try again.</string>
     <string name="settings_about_subtitle">Version, help, privacy, and terms</string>
     <string name="settings_ai_data_sharing">AI Data Sharing Consent</string>
@@ -114,7 +114,7 @@
     <string name="settings_revoke_ai_consent_subtitle">Stop allowing AI to process voice and related data</string>
     <string name="settings_revoke_ai_consent_title">Revoke AI data sharing?</string>
     <string name="settings_revoke_ai_consent_message">After revoking, features such as voice transcription will request your consent again before use.</string>
-    <string name="settings_privacy_policy_subtitle">Open the TabTin privacy policy in your browser</string>
+    <string name="settings_privacy_policy_subtitle">Open the Muse privacy policy in your browser</string>
     <string name="settings_enabled">Enabled</string>
     <string name="settings_disabled">Disabled</string>
     <string name="settings_not_set">Not set</string>
@@ -147,7 +147,7 @@
     <string name="change_password_error_failed">Could not update the password. Try again.</string>
 
     <string name="notif_settings_title">Notification Settings</string>
-    <string name="notif_settings_desc">Turn TabTin notifications on or off in system settings</string>
+    <string name="notif_settings_desc">Turn Muse notifications on or off in system settings</string>
     <string name="notif_system_permission">System Notification Permission</string>
     <string name="notif_open_system_settings">System Settings</string>
     <string name="notif_types">Notification Types</string>
@@ -180,5 +180,5 @@
     <string name="about_website">Website</string>
     <string name="about_help">Help Center</string>
     <string name="about_open_source">Open Source Licenses</string>
-    <string name="about_copyright">© %d TabTin</string>
+    <string name="about_copyright">© %d Muse</string>
 </resources>

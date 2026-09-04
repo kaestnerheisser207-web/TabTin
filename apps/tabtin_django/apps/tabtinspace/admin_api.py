@@ -82,7 +82,7 @@ from apps.services.oss.services.public_assets import build_public_asset_url
 User = get_user_model()
 logger = logging.getLogger(__name__)
 
-router = Router(tags=["TabtinSpace Admin"], auth=StaffAuth())
+router = Router(tags=["Muse Space Admin"], auth=StaffAuth())
 
 class AdminOrganizationDeleteRequest(Schema):
     dry_run: bool = False
@@ -1416,7 +1416,7 @@ def admin_add_organization_member(
         if target is None:
             return error_response(
                 "USER_NOT_FOUND_BY_PHONE",
-                "该手机号未注册 TabTin，无法直接添加",
+                "该手机号未注册 Muse，无法直接添加",
                 status_code=404,
             )
         user_id = str(target.id)

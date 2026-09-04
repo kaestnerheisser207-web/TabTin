@@ -270,7 +270,7 @@ describe('SubprocessPtyHostClient', () => {
 
     expect(utilityFork).toHaveBeenCalledWith('/tmp/pty-host-process.mjs', [], {
       stdio: ['ignore', 'pipe', 'pipe'],
-      serviceName: 'TabTin PTY Host',
+      serviceName: 'Muse PTY Host',
       env: process.env,
     })
     expect(child.pid).toBe(654)
@@ -303,7 +303,7 @@ describe('SubprocessPtyHostClient', () => {
     expect(child?.pid).toBe(654)
     expect(utilityFork).toHaveBeenCalledWith('/tmp/pty-host-process.mjs', [], {
       stdio: ['ignore', 'pipe', 'pipe'],
-      serviceName: 'TabTin PTY Host',
+      serviceName: 'Muse PTY Host',
       env: process.env,
     })
     expect(createPtyHostChildFromElectron('/tmp/pty-host-process.mjs', {})).toBeNull()

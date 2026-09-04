@@ -95,7 +95,7 @@ describe('sanitizeEnv — 注入变量过滤', () => {
 })
 
 describe('sanitizeEnv — 敏感凭据过滤', () => {
-  it('过滤 TabTin 内部变量', () => {
+  it('过滤 Muse 内部变量', () => {
     const result = sanitizeEnv({ TABTIN_TOKEN: 'tok', TABTIN_JWT: 'jwt', TABTIN_SOCK: '/sock', PATH: '/usr/bin' })
     expect(result).not.toHaveProperty('TABTIN_TOKEN')
     expect(result).not.toHaveProperty('TABTIN_JWT')

@@ -50,7 +50,7 @@
     "uiEngine": "Moteur d'interface utilisateur",
     "uiEngineDetail": "{{cpu}} · Mémoire partagée pour le moteur de rendu de page",
     "appHost": "Hôte de l'application",
-    "appHostDetail": "{{cpu}} · Mémoire de base pour l'application TabTin elle-même",
+    "appHostDetail": "{{cpu}} · Mémoire de base pour l'application Muse elle-même",
     "unassigned": "Non attribué",
     "unassignedDetail": "{{cpu}} · Ressources non encore attribuées à un Espace",
     "background": "Contexte",

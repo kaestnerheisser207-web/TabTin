@@ -9,10 +9,10 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/TabTin/tabtin-cli/cmd/agent"
-	"github.com/TabTin/tabtin-cli/internal/cmdutil"
-	"github.com/TabTin/tabtin-cli/internal/output"
-	"github.com/TabTin/tabtin-cli/internal/transport"
+	"github.com/Muse/muse-cli/cmd/agent"
+	"github.com/Muse/muse-cli/internal/cmdutil"
+	"github.com/Muse/muse-cli/internal/output"
+	"github.com/Muse/muse-cli/internal/transport"
 )
 
 // ── scope 校验：agent-id 必填、org 必填、不猜 ──────────────────
@@ -111,7 +111,7 @@ func TestAgentMemoryItemPath(t *testing.T) {
 func TestAgentMemoryForgetRequiresYes(t *testing.T) {
 	f := cmdutil.NewFactory()
 	buildRoot := func() *cobra.Command {
-		root := &cobra.Command{Use: "tabtin"}
+		root := &cobra.Command{Use: "muse"}
 		registerRootPersistentFlagsForTest(root)
 		agentCmd := agent.NewCmdAgent(f)
 		agentCmd.AddCommand(newCmdAgentMemory(f))

@@ -144,17 +144,17 @@ export interface SystemPromptConfig {
 /**
  * 单个 App 的 Agent-facing 描述。
  *
- * 同一个 App 在 TabTin 内部其实有多套名字共存（历史包袱）：
+ * 同一个 App 在 Muse 内部其实有多套名字共存（历史包袱）：
  *   - `key`：handler 注册时的 type，譬如 `tabdata` / `tabmemo`。tab payload 里
  *     的 type 字段、`agent-engine:update-context` 里的 appType 都是这个。
  *   - `cliKey`：CLI 工具的前缀，来自 `backendAliases[0]`，譬如 tabdata 的 cliKey
- *     是 `table`（`tabtin table info` 而不是 `tabtin tabdata info`）。
+ *     是 `table`（`muse table info` 而不是 `muse tabdata info`）。
  *   - `displayName`：跟用户对话用的中文权威名，譬如 "多维表"。
  *
  * 模板会用 displayName 跟用户说话、cliKey 提示 CLI 命令、key 完全藏起来。
  *
  * - `capability`：≤80 字能力描述。Agent 在 `<apps>` 段直接读出来。
- *   不写具体 `tabtin …` 子命令——CLI 前缀由模板的 `(CLI: key)` 提示。
+ *   不写具体 `muse …` 子命令——CLI 前缀由模板的 `(CLI: key)` 提示。
  * - `aliases`：用户口语别名（"记事本"、"便签"），帮 Agent 理解用户消息。
  *
  * 由 host 从 `ContextRegistry.getAgentExposedHandlers()` 派生 + 用 `useSpaceApps`
@@ -163,7 +163,7 @@ export interface SystemPromptConfig {
 export interface EnabledAppInfo {
   key: string;
   /**
-   * Agent 调用 `tabtin <cliKey> ...` CLI 时的前缀。来自 handler 的
+   * Agent 调用 `muse <cliKey> ...` CLI 时的前缀。来自 handler 的
    * `backendAliases[0]`，譬如 tabdata 的 cliKey 是 `table`。缺省（与 key 相同
    * 或无 backendAliases）时模板省略 `(CLI: x)` 提示，避免噪音。
    */

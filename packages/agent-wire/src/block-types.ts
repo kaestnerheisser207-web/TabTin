@@ -65,7 +65,7 @@ export const STANDARD_BLOCK_TYPES = [
 ] as const
 
 /**
- * TabTin 受控扩展 ContentBlock 6 case（v2 §2.2.3）。
+ * Muse 受控扩展 ContentBlock 6 case（v2 §2.2.3）。
  *
  * `tabtin_*` 前缀策略：让人类阅读 jsonl / DB 时一眼识别自家方言，也方便
  * PG `content_blocks_json` strip 操作（`block.type.startsWith('tabtin_')`

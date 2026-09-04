@@ -121,7 +121,7 @@ describe('Denylist 覆盖测试', () => {
 
   describe('Allowlist 安全命令放行', () => {
     const safeCommands = [
-      ['tabtin', 'tabtin space list'],
+      ['muse', 'muse space list'],
       ['echo', 'echo hello'],
       ['cat', 'cat file.txt'],
       ['head', 'head -n 10 file.txt'],

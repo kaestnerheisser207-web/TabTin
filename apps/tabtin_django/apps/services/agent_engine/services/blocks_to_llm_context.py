@@ -7,7 +7,7 @@ W3 起 ChatMessage.content_blocks_json 与 ConversationState.messages_json 都�
 Anthropic ContentBlock[] 形态。但两者职责不同：
 
 - `chat_message.content_blocks_json` —— **用户可见消息**真相源（UI 渲染 + 历史
-  回看）。包含所有 ContentBlock 类型，含 TabTin 扩展（tabtin_rich_content /
+  回看）。包含所有 ContentBlock 类型，含 Muse 扩展（tabtin_rich_content /
   tabtin_skill_invocation / tabtin_source_ref / tabtin_approval_request 等）。
 
 - `conversation_state.messages_json` —— **LLM context 快照**（下次 LLM 调用入参）。
@@ -71,7 +71,7 @@ ANTHROPIC_STANDARD_BLOCK_TYPES: frozenset[str] = frozenset({
     'mcp_tool_result', 'container_upload', 'search_result',
 })
 
-# TabTin 附着在标准块上的 UI 元数据：可随 ChatMessage 持久化供历史回放，
+# Muse 附着在标准块上的 UI 元数据：可随 ChatMessage 持久化供历史回放，
 # 但不能进入 ConversationState / 上游模型请求。
 _UI_ONLY_STANDARD_BLOCK_FIELDS: frozenset[str] = frozenset({
     'presentation',
@@ -364,7 +364,7 @@ def strip_tabtin_blocks_for_llm(content_blocks: list[dict[str, Any]]) -> list[di
             transformer = _TABTIN_TRANSFORMERS[block_type]
             result.append(transformer(block))
         elif block_type in ANTHROPIC_STANDARD_BLOCK_TYPES:
-            # 标准块保留协议字段，但剥离仅供 TabTin UI 使用的展示元数据。
+            # 标准块保留协议字段，但剥离仅供 Muse UI 使用的展示元数据。
             # deep copy 避免下游修改污染上游持久化真相源。
             import copy as _copy
             copied = _copy.deepcopy(block)

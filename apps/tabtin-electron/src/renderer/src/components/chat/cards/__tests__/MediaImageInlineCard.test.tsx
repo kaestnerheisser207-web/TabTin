@@ -35,7 +35,7 @@ describe('MediaImageInlineCard', () => {
     render(
       <MediaImageInlineCard
         phase="running"
-        command='tabtin media image generate --prompt "apple"'
+        command='muse media image generate --prompt "apple"'
         sessionId="s1"
       />,
     )
@@ -49,7 +49,7 @@ describe('MediaImageInlineCard', () => {
     render(
       <MediaImageInlineCard
         phase="end"
-        command='tabtin media image generate --prompt "apple"'
+        command='muse media image generate --prompt "apple"'
         output={{ stdout: JSON.stringify({ ok: true, data: { result_urls: [url] } }), exit_code: 0 }}
         sessionId="s1"
         messageId="m1"
@@ -63,7 +63,7 @@ describe('MediaImageInlineCard', () => {
     render(
       <MediaImageInlineCard
         phase="end"
-        command='tabtin media image generate --prompt "apple"'
+        command='muse media image generate --prompt "apple"'
         output={{
           stdout: JSON.stringify({
             ok: true,
@@ -120,7 +120,7 @@ describe('MediaImageInlineCard', () => {
     render(
       <MediaImageInlineCard
         phase="end"
-        command='tabtin media image generate --prompt "apple"'
+        command='muse media image generate --prompt "apple"'
         output={{ stdout: 'nope', exit_code: 0 }}
         sessionId="s1"
       />,
@@ -133,7 +133,7 @@ describe('MediaImageInlineCard', () => {
     render(
       <MediaImageInlineCard
         phase="end"
-        command='tabtin media image generate --prompt "闹钟"'
+        command='muse media image generate --prompt "闹钟"'
         output={{
           status: 'running',
           session_id: 'agent-sess-1',
@@ -153,7 +153,7 @@ describe('MediaImageInlineCard', () => {
     render(
       <MediaImageInlineCard
         phase="end"
-        command='tabtin media image generate --prompt "apple"'
+        command='muse media image generate --prompt "apple"'
         output={{
           stdout: JSON.stringify({
             ok: true,
@@ -172,13 +172,13 @@ describe('MediaImageInlineCard', () => {
     render(
       <MediaImageInlineCard
         phase="error"
-        command='tabtin media image generate --prompt "apple"'
+        command='muse media image generate --prompt "apple"'
         sessionId="s1"
       />,
     )
     fireEvent.click(screen.getByTestId('media-image-inline-toggle-details'))
     const details = screen.getByTestId('media-image-inline-details')
-    expect(details.textContent).toContain('tabtin media image generate')
+    expect(details.textContent).toContain('muse media image generate')
     expect(details.textContent).toContain('未能解析图片 URL')
   })
 
@@ -187,7 +187,7 @@ describe('MediaImageInlineCard', () => {
     render(
       <MediaImageInlineCard
         phase="error"
-        command='tabtin media image generate --prompt "apple"'
+        command='muse media image generate --prompt "apple"'
         output={{ stderr: 'Seedream timed out', exit_code: 1 }}
         sessionId="s1"
       />,

@@ -192,7 +192,7 @@ describe('NativeBackendSession.agentHome 路径计算', () => {
 
   it('TABTIN_RUNTIME_ROOT 存在时 Agent Home 跟随当前安装档', () => {
     const previous = process.env.TABTIN_RUNTIME_ROOT;
-    process.env.TABTIN_RUNTIME_ROOT = path.join(tmpDir, 'TabTin Preprod', 'runtime');
+    process.env.TABTIN_RUNTIME_ROOT = path.join(tmpDir, 'Muse Preprod', 'runtime');
     try {
       const agentId = 'profile-isolated-agent';
       const session = new NativeBackendSession({
@@ -202,7 +202,7 @@ describe('NativeBackendSession.agentHome 路径计算', () => {
         execImpl: async () => ({ stdout: '', stderr: '', exitCode: 0, durationMs: 0 }),
       });
       expect(session.agentHome.scratchpad).toBe(
-        path.join(tmpDir, 'TabTin Preprod', 'runtime', 'agents', agentId, 'scratchpad'),
+        path.join(tmpDir, 'Muse Preprod', 'runtime', 'agents', agentId, 'scratchpad'),
       );
     } finally {
       if (previous === undefined) delete process.env.TABTIN_RUNTIME_ROOT;

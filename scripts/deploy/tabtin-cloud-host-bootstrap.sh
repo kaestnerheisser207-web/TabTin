@@ -44,7 +44,7 @@ for source_file in \
   [[ -f "$source_file" ]] ||
     die "pass Worker/unit, volume helper/unit, gateway, Cloud release, and sudoers sources"
 done
-[[ -f "$nginx_config" ]] || die "missing TabTin nginx config"
+[[ -f "$nginx_config" ]] || die "missing Muse nginx config"
 for value in \
   "$runtime_size_gb" \
   "$host_free_reserve_gb" \
@@ -266,7 +266,7 @@ import sys
 path = Path(sys.argv[1])
 worker_bind_address = sys.argv[2]
 text = path.read_text(encoding="utf-8")
-marker = "# TabTin Cloud Worker control plane"
+marker = "# Muse Cloud Worker control plane"
 fallback = re.compile(
     r"(?m)^(?P<indent>[ \t]+)location / \{\r?\n"
     r"(?P<inner>[ \t]+)proxy_pass http://tabtin_web_upstream;"
@@ -274,12 +274,12 @@ fallback = re.compile(
 if marker not in text:
     matches = list(fallback.finditer(text))
     if len(matches) != 1:
-        raise SystemExit("cannot locate the unique TabTin web fallback location")
+        raise SystemExit("cannot locate the unique Muse web fallback location")
     match = matches[0]
     indent = match.group("indent")
     inner = match.group("inner")
     lines = [
-        f"{indent}# TabTin Cloud Worker control plane",
+        f"{indent}# Muse Cloud Worker control plane",
         f"{indent}location ^~ /_internal/cloud-worker/ {{",
         f"{inner}proxy_pass http://{worker_bind_address}:8090/;",
         f"{inner}proxy_http_version 1.1;",
@@ -300,7 +300,7 @@ if text.count(marker) != 1:
     raise SystemExit("Cloud Worker nginx marker is not unique")
 fallback_matches = list(fallback.finditer(text))
 if len(fallback_matches) != 1:
-    raise SystemExit("cannot locate the unique TabTin web fallback location")
+    raise SystemExit("cannot locate the unique Muse web fallback location")
 marker_start = text.index(marker)
 fallback_start = fallback_matches[0].start()
 if marker_start >= fallback_start:

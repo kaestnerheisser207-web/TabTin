@@ -97,7 +97,7 @@ def ensure_invite_redemption(user) -> bool:
             "identifier_hash": hash_string(user.email),
             "entrypoint": "electron-e2e",
             "ip_address": "127.0.0.1",
-            "user_agent": "TabTin-Electron-E2E/1.0",
+            "user_agent": "Muse-Electron-E2E/1.0",
         },
     )
     if invite_redeemed:
@@ -257,7 +257,7 @@ def build_auth_payload(
 ) -> dict:
     request = RequestFactory().post("/api/auth/login")
     request.META["REMOTE_ADDR"] = "127.0.0.1"
-    request.META["HTTP_USER_AGENT"] = "TabTin-Electron-E2E/1.0"
+    request.META["HTTP_USER_AGENT"] = "Muse-Electron-E2E/1.0"
     access_token, refresh_token, access_expire_hours = _create_auth_session(
         user,
         request,

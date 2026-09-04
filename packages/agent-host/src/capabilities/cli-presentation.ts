@@ -1,5 +1,5 @@
 /**
- * TabTin CLI → 工具展示语义。
+ * Muse CLI → 工具展示语义。
  *
  * 这里是 CLI-first 能力与客户端专属呈现之间的宿主适配层：
  * - shell core 只负责执行，不认识媒体/文档等业务；
@@ -85,7 +85,7 @@ function parseTabtinInvocation(command: string): ParsedCliInvocation | undefined
   while (index < tokens.length && isEnvAssignment(tokens[index])) index++;
 
   const executable = executableName(tokens[index] ?? '');
-  if (executable !== 'tabtin' && executable !== 'tabtin.exe') return undefined;
+  if (executable !== 'muse' && executable !== 'muse.exe') return undefined;
   index++;
 
   const path: string[] = [];

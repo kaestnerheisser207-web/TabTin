@@ -206,10 +206,10 @@ describe('buildTabtinVarPreamble（POSIX shell，W1 #4）', () => {
 describe('buildPSTabtinVarPreamble（PowerShell Win32，W1 #4）', () => {
   it('值含空格的 TABTIN_* 变量生成 $env: 赋值语句', () => {
     const preamble = buildPSTabtinVarPreamble({
-      TABTIN_WORKSPACE: 'C:\\Users\\foo\\Application Support\\TabTin',
+      TABTIN_WORKSPACE: 'C:\\Users\\foo\\Application Support\\Muse',
       PATH: 'C:\\Windows\\System32',
     });
-    expect(preamble).toBe("$env:TABTIN_WORKSPACE = 'C:\\Users\\foo\\Application Support\\TabTin'");
+    expect(preamble).toBe("$env:TABTIN_WORKSPACE = 'C:\\Users\\foo\\Application Support\\Muse'");
   });
 
   it('值含单引号时用 PowerShell 双单引号转义', () => {

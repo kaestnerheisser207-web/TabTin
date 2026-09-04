@@ -551,7 +551,7 @@ interface SSEParseContext {
   toolAccumulators: Map<number, ToolCallAccumulator>;
   anthropicToolBlocks: Map<number, { id: string; name: string }>;
   envelopeState: BlockEnvelopeState;
-  /** 单次 LLM SSE 流内的 model tool id → TabTin `tu_*` 映射 */
+  /** 单次 LLM SSE 流内的 model tool id → Muse `tu_*` 映射 */
   toolIdMapper: ToolIdMapper;
 }
 
@@ -1076,7 +1076,7 @@ export class TabTinProxyProvider implements LLMProvider {
       // content_block_start 时记录、content_block_delta 时复用、content_block_stop 时清理。
       anthropicToolBlocks: new Map<number, { id: string; name: string }>(),
       envelopeState,
-      // ：上游 `{name}_{n}` 会在长会话回绕撞号；本流内映射为 TabTin 权威 id。
+      // ：上游 `{name}_{n}` 会在长会话回绕撞号；本流内映射为 Muse 权威 id。
       toolIdMapper: new ToolIdMapper(),
     };
     const reader = body.getReader();

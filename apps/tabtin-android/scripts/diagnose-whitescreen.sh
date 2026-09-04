@@ -15,7 +15,7 @@
 set -uo pipefail
 
 ADB="${ADB:-$HOME/Library/Android/sdk/platform-tools/adb}"
-PKG="${PKG:-com.tabtin.mobile}"
+PKG="${PKG:-com.muse.mobile}"
 OUT="${OUT:-/tmp/tabtin-whitescreen-$(date +%H%M%S)}"
 mkdir -p "$OUT"
 

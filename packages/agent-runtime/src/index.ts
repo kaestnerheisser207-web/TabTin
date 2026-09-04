@@ -1,5 +1,5 @@
 /**
- * @tabtin/agent-runtime — TabTin local agent execution runtime.
+ * @tabtin/agent-runtime — Muse local agent execution runtime.
  *
  * Hosts the local ReAct loop, tool orchestration, context compaction,
  * and session persistence. All LLM calls go through the Django LLM proxy.

@@ -48,7 +48,7 @@ import androidx.compose.ui.semantics.customActions
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
-import com.tabtin.mobile.R
+import com.muse.mobile.R
 import kotlin.math.roundToInt
 import kotlinx.coroutines.launch
 

@@ -1,7 +1,7 @@
 /**
  * Specification 模式基础设施
  *
- * 适配 TabTin 的字段体系。
+ * 适配 Muse 的字段体系。
  * 核心思路：一个 Spec 可以同时用于：
  * 1. 内存判定（isSatisfiedBy）
  * 2. 接受 Visitor 转为 SQL / Django Q

@@ -302,10 +302,10 @@
   "insertEmoji": "emojis",
   "emojiMostUsed": "Usado recientemente",
   "emojiDefault": "Emoji predeterminado",
-  "emojiTabtin": "TabTin",
+  "emojiTabtin": "Muse",
   "openStickerPreview": "Abrir vista previa de la pegatina",
   "stickers": {
-    "neutral": "Bot TabTin",
+    "neutral": "Bot Muse",
     "happy": "feliz",
     "sad": "triste",
     "surprise": "sorpresa",
@@ -477,7 +477,13 @@
   "sendToIMErrorNoteFailed": "No se pudo enviar la nota",
   "sendToIMErrorSendFailed": "Envío fallido",
   "sendToIMSuccessToast": "Enviado a objetivos {{count}}",
-  "replyThread": { "title": "Detalles de las respuestas", "close": "Cerrar detalles de las respuestas", "empty": "No hay respuestas cargadas", "messageUnavailable": "Mensaje no disponible", "openImage": "Abrir vista previa de la imagen" },
+  "replyThread": {
+    "title": "Detalles de las respuestas",
+    "close": "Cerrar detalles de las respuestas",
+    "empty": "No hay respuestas cargadas",
+    "messageUnavailable": "Mensaje no disponible",
+    "openImage": "Abrir vista previa de la imagen"
+  },
   "externalContacts": {
     "tabs": {
       "internal": "Miembros",

@@ -86,7 +86,7 @@ export function DirtyExitConfirmHost(): React.ReactElement {
     if (reason === 'app-relaunch') {
       // 突出"重启完成后会自动重新打开"——缓解用户对"是不是要 quit 我"的担心。
       return t('dirtyExitConfirm.message.appRelaunch', {
-        defaultValue: '重启 TabTin 前发现 {{count}} 个文档尚未保存。重启完成后 TabTin 会自动重新打开。',
+        defaultValue: '重启 Muse 前发现 {{count}} 个文档尚未保存。重启完成后 Muse 会自动重新打开。',
         count,
       })
     }

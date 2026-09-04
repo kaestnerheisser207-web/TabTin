@@ -47,7 +47,7 @@ def test_market_search_slash_query_does_not_strip_slash_for_description():
     unrelated = {
         "skill_id": "visualization/tabtin-widget",
         "skill_key": "platform:visualization/tabtin-widget",
-        "name": "Tabtin Widget",
+        "name": "Muse Widget",
         "description": "长期可编辑产物可使用 TabDoc。",
     }
 

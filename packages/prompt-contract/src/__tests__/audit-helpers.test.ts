@@ -143,7 +143,7 @@ describe('checkPresenceInvariants', () => {
 
 describe('detectLanguage', () => {
   it('纯中文段 → zh', () => {
-    expect(detectLanguage('你是 TabTin AI Agent，运行环境是用户本地。')).toBe('zh');
+    expect(detectLanguage('你是 Muse AI Agent，运行环境是用户本地。')).toBe('zh');
   });
 
   it('纯英文段 → en', () => {
@@ -156,13 +156,13 @@ describe('detectLanguage', () => {
 
   it('中文段含 XML tag 和工具名 → 不被误判为 mixed', () => {
     const text =
-      '## 行为规则\n\n你必须按 `<ask_user_tools_usage>` 段使用 ask_user 工具，调用 `tabtin commands --format json` 发现命令。';
+      '## 行为规则\n\n你必须按 `<ask_user_tools_usage>` 段使用 ask_user 工具，调用 `muse commands --format json` 发现命令。';
     expect(detectLanguage(text)).toBe('zh');
   });
 
   it('中文段含路径 / errno / 缩写 → 不被误判', () => {
     const text =
-      'archive 在 /Users/foo/Library/Application Support/TabTin 下，遇到 EACCES 错误时调用 JSON API 返回 UTF-8 数据。';
+      'archive 在 /Users/foo/Library/Application Support/Muse 下，遇到 EACCES 错误时调用 JSON API 返回 UTF-8 数据。';
     expect(detectLanguage(text)).toBe('zh');
   });
 

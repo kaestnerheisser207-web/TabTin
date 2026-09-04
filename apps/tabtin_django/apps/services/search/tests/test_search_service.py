@@ -317,10 +317,10 @@ class SearchServiceTests(TestCase):
                     "totalEstimatedMatches": 3,
                     "value": [
                         {
-                            "name": "TabTin Blog",
+                            "name": "Muse Blog",
                             "url": "https://www.example.com/blog",
                             "displayUrl": "https://www.example.com/blog",
-                            "snippet": "Latest updates from TabTin.",
+                            "snippet": "Latest updates from Muse.",
                             "siteName": "example.com",
                             "datePublished": "2026-03-01T00:00:00+08:00",
                         }
@@ -332,11 +332,11 @@ class SearchServiceTests(TestCase):
         }
         mock_post.return_value = response
 
-        result = SearchService.search("TabTin 最新动态", charge_billing=False)
+        result = SearchService.search("Muse 最新动态", charge_billing=False)
         formatted = SearchService.format_for_llm(result)
 
         self.assertIn("搜索结果", formatted)
-        self.assertIn("TabTin Blog", formatted)
+        self.assertIn("Muse Blog", formatted)
         self.assertIn("example.com", formatted)
 
     @patch("apps.services.search.services.providers.bocha.requests.post")

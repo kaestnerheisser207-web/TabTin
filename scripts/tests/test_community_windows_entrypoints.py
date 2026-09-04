@@ -23,7 +23,7 @@ def test_windows_start_checks_docker_waits_for_ready_and_prints_next_steps() -> 
         "--env-file \"%~dp0.env\"",
         "docker compose --env-file \"%~dp0.env\" up -d --build",
         "http://127.0.0.1:6060/health/ready",
-        "tabtin community is ready",
+        "muse community is ready",
         "settings",
         "model configuration",
         "byok",
@@ -68,8 +68,8 @@ def test_windows_status_is_read_only_and_reports_public_health() -> None:
         "http://127.0.0.1:8100/health",
         "docker: running",
         "docker: not running",
-        "tabtin server: ready",
-        "tabtin server: not ready",
+        "muse server: ready",
+        "muse server: not ready",
         "centrifugo: ready",
         "centrifugo: not ready",
     ):
@@ -85,9 +85,9 @@ def test_public_docs_have_the_same_windows_quick_start() -> None:
     guide = _text("COMMUNITY_OPEN_SOURCE_GUIDE.md").lower()
     for contract in (
         "https://www.docker.com/products/docker-desktop/",
-        "download tabtin source",
+        "download muse source",
         "start.bat",
-        "tabtin desktop client",
+        "muse desktop client",
         "register / login",
         "settings",
         "model configuration",
@@ -97,5 +97,5 @@ def test_public_docs_have_the_same_windows_quick_start() -> None:
         assert contract in guide, f"Community guide: missing {contract}"
 
     quickstart = _text("docs/development/community-quickstart.md").lower()
-    for contract in ("docker desktop", "start.bat", "tabtin desktop client", "byok"):
+    for contract in ("docker desktop", "start.bat", "muse desktop client", "byok"):
         assert contract in quickstart, f"Quickstart: missing {contract}"

@@ -3,7 +3,7 @@
  * communication.
  *
  * The Electron main process (IPC), Daemon CLI Server (Unix socket) and the
- * `tabtin` CLI binary (HTTP-style stdout) all produce `{ ok, data }` /
+ * `muse` CLI binary (HTTP-style stdout) all produce `{ ok, data }` /
  * `{ ok, error }` envelopes via these helpers. Centralizing the shape keeps
  * all three transports observable (preload shim can detect failure without
  * knowing the channel) and traceable (`trace_id` flows from main → renderer
@@ -125,7 +125,7 @@ export interface CliErrorDetail {
   retryable?: boolean;
   /**
    * Human-readable suggestions surfaced in toasts / CLI hints (e.g.
-   * "run `tabtin login` to refresh your session").
+   * "run `muse login` to refresh your session").
    */
   suggestions?: string[];
   /**

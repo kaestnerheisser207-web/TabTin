@@ -8,11 +8,11 @@
 打开页面后（`open` 即使超时也保留 `tabId`），按序看三处：
 
 **1. network 抓包**——`browser network` 没有 `--wait-ms` / `--wait`；想等异步请求发完，先单独跑
-`tabtin browser wait --timeout 2000`（或等列表 selector），**再**查 network：
+`muse browser wait --timeout 2000`（或等列表 selector），**再**查 network：
 
 ```bash
-tabtin browser wait --timeout 2000
-tabtin browser network --filter "api|list|search|graphql|json" --include-request-body --include-response-body --tab-id <tabId> --format json --output /tmp/network.json
+muse browser wait --timeout 2000
+muse browser network --filter "api|list|search|graphql|json" --include-request-body --include-response-body --tab-id <tabId> --format json --output /tmp/network.json
 jq -r '.data[] | select(.method != "OPTIONS") | select(.responseBody != null and .responseBody != "") | {url, method, requestBody}' /tmp/network.json
 ```
 
@@ -22,7 +22,7 @@ jq -r '.data[] | select(.method != "OPTIONS") | select(.responseBody != null and
 **2. hydration 数据**——network 没有业务 API 时查页面内嵌状态：
 
 ```bash
-tabtin browser eval --tab-id <tabId> --expression "return JSON.stringify(Object.keys(window.__NEXT_DATA__ ?? window.__NUXT__ ?? {}))"
+muse browser eval --tab-id <tabId> --expression "return JSON.stringify(Object.keys(window.__NEXT_DATA__ ?? window.__NUXT__ ?? {}))"
 ```
 
 依次试 `window.__NEXT_DATA__`、`__NUXT__`、Apollo cache、Redux store、`performance.getEntriesByType('resource')`（找漏抓的 XHR URL）。

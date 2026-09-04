@@ -49,7 +49,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import com.tabtin.mobile.R
+import com.muse.mobile.R
 import kotlinx.coroutines.launch
 import com.tabtin.mobile.data.model.OrganizationInvitation
 import com.tabtin.mobile.data.model.OrganizationRole

@@ -3,7 +3,7 @@ package com.tabtin.mobile.features.doc.editor.holders
 import android.view.View
 import coil.load
 import coil.size.Scale
-import com.tabtin.mobile.R
+import com.muse.mobile.R
 import com.tabtin.mobile.databinding.DocBlockImageBinding
 import com.tabtin.mobile.features.doc.editor.core.TabDocBlockView
 

@@ -19,7 +19,7 @@ metadata:
 # Table Modeling
 
 这份 SKILL 只回答两个问题：**该建一张表还是两张表？字段怎么挑？**
-所有执行统一走 `tabtin table` CLI。
+所有执行统一走 `muse table` CLI。
 
 ## 一、先确认交付范围
 
@@ -38,7 +38,7 @@ metadata:
 | **单表** | 一条记录的内容主要是标量；相关清单只需当文本展示 | 子项要独立查询、去重、复用或反向查 |
 | **双表 + link** | 子项是独立实体，需要跨主记录复用、单独查询或反向查 | 用户只要临时扫一眼的简单清单 |
 
-同表内的任务/子任务、部门层级等树形关系走 `tabtin table sub-record *`，不要拆成跨表关联。
+同表内的任务/子任务、部门层级等树形关系走 `muse table sub-record *`，不要拆成跨表关联。
 
 ### 人话解释
 
@@ -58,7 +58,7 @@ metadata:
 
 1. 先建被关联的表。
 2. 再建主表。
-3. 用 `tabtin table link create` 创建关联字段。
+3. 用 `muse table link create` 创建关联字段。
 4. 子表按业务键 `record upsert` 去重。
 5. 重拉子表，建立「业务键 → record_id」映射。
 6. 主表写 link 值：`[{"id":"<目标 record UUID>"}]`。

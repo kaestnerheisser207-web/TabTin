@@ -103,7 +103,7 @@
     "node": ">=18.0.0"
   },
   "keywords": [
-    "tabtin",
+    "muse",
     "daemon",
     "agent",
     "remote-execution",

@@ -98,7 +98,7 @@ export interface DesktopSessionContext {
   selectedDisplayId?: number
 
   /**
-   * TabTin 主窗口是否在本 session 期间被最小化（截图时为避免自截需要隐藏，
+   * Muse 主窗口是否在本 session 期间被最小化（截图时为避免自截需要隐藏，
    * endSession 时恢复）。
    */
   mainWindowHidden?: boolean
@@ -147,7 +147,7 @@ export interface DesktopSessionContext {
    * 把事件路由到目标 HWND 的窗口消息队列；截屏走 PrintWindow 而非 desktopCapturer。
    *
    * 与 `hostBundleId` 的概念边界：
-   * - `hostBundleId` = 触发 TabDesktop 操控的 host 进程标识（TabTin 自身的 bundleId）
+   * - `hostBundleId` = 触发 TabDesktop 操控的 host 进程标识（Muse 自身的 bundleId）
    * - `boundWindow` = Agent 想操控的目标窗口（Notepad / Excel 的 HWND）
    *
    * **v1 / v2.1 阶段**：所有平台为 undefined（"global 模式" = v1.8 之前的全屏 +

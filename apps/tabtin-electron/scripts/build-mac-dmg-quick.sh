@@ -52,7 +52,7 @@ fi
 
 pack_time_begin "Quick DMG (profile=${PROFILE}, arch=${ARCH})"
 
-echo "=== TabTin Quick DMG Build (profile=${PROFILE}, arch=${ARCH}) ==="
+echo "=== Muse Quick DMG Build (profile=${PROFILE}, arch=${ARCH}) ==="
 echo "  · 跳过 typecheck / sourcemap upload / zip / notarize"
 echo "  · 复用 deploy 目录: $DEPLOY_DIR"
 
@@ -72,8 +72,8 @@ echo "  · app 版本号: $PROFILE_VERSION"
 
 PROFILE_PRODUCT_NAME=""
 PROFILE_APP_ID=""
-PROFILE_PRODUCT_NAME="TabTin Local"
-PROFILE_APP_ID="com.tabtin.app.local"
+PROFILE_PRODUCT_NAME="Muse Local"
+PROFILE_APP_ID="com.muse.app.local"
 echo "  · app identity: productName=${PROFILE_PRODUCT_NAME}, appId=${PROFILE_APP_ID}"
 
 ARTIFACT_UPDATE_CHANNEL="stable"

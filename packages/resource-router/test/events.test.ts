@@ -132,7 +132,7 @@ describe('events emit · 5 outcome 分支', () => {
     expect(ev.outcome).toBe('in_space_opened')
     expect(ev.resolve_source).toBe('manifest_default')
     expect(ev.resolved_carrier_app_id).toBe('tabdata')
-    expect(ev.pointer_scheme).toBe('tabtin')
+    expect(ev.pointer_scheme).toBe('muse')
     expect(ev.pointer_type).toBe('table')
   })
 
@@ -415,7 +415,7 @@ describe('events emit · D8 红线（不影响关键路径性能 + emit 失败�
     expect(() => consoleEventEmitter({
       event_name: 'resource_open.resolved',
       trigger_source: 'chat_markdown',
-      pointer_scheme: 'tabtin',
+      pointer_scheme: 'muse',
       pointer_type: 'table',
       pointer_id_hash: 'a'.repeat(16),
       hint_app_id: null,
@@ -440,7 +440,7 @@ describe('events emit · D8 红线（不影响关键路径性能 + emit 失败�
     collector.emit({
       event_name: 'resource_open.resolved',
       trigger_source: 'chat_markdown',
-      pointer_scheme: 'tabtin',
+      pointer_scheme: 'muse',
       pointer_type: 'table',
       pointer_id_hash: 'a'.repeat(16),
       hint_app_id: null,

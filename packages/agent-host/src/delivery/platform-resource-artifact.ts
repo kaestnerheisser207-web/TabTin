@@ -1,5 +1,5 @@
 /**
- * 平台云端资源交付物 —— 从 `tabtin table create` / `tabtin doc create` 成功
+ * 平台云端资源交付物 —— 从 `muse table create` / `muse doc create` 成功
  * stdout 解析并发布 `resource_ref` 卡片（artifact_kind: platform_resource）。
  *
  * 定位：与 `oss-file-artifact` 同级，挂在 host
@@ -32,13 +32,13 @@ function normalizeOptionalText(value: unknown): string | undefined {
   return trimmed.length > 0 ? trimmed : undefined
 }
 
-/** 是否为 `tabtin table create` / `tabtin doc create`（允许 `cd ... &&` / env 前缀）。 */
+/** 是否为 `muse table create` / `muse doc create`（允许 `cd ... &&` / env 前缀）。 */
 export function isPlatformResourceCreateCommand(
   command: string,
   kind: PlatformResourceType,
 ): boolean {
   if (typeof command !== 'string' || !command.trim()) return false
-  const want = kind === 'table' ? ['tabtin', 'table', 'create'] : ['tabtin', 'doc', 'create']
+  const want = kind === 'table' ? ['muse', 'table', 'create'] : ['muse', 'doc', 'create']
   const segments = splitShellCommandSegments(command)
   for (const seg of segments) {
     const tokens = seg.split(/\s+/).filter((t) => t.length > 0)

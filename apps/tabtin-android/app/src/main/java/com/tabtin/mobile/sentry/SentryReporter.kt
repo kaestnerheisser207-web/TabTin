@@ -1,7 +1,7 @@
 package com.tabtin.mobile.sentry
 
 import android.content.Context
-import com.tabtin.mobile.BuildConfig
+import com.muse.mobile.BuildConfig
 import com.tabtin.mobile.diagnostics.DiagnosticRecorder
 import io.sentry.Sentry
 import io.sentry.SentryOptions

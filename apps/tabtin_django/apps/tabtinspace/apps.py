@@ -9,7 +9,7 @@ class TabtinspaceConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
     name = 'apps.tabtinspace'
     label = 'tabtinspace'
-    verbose_name = 'Tabtin Space'
+    verbose_name = 'Muse Space'
 
     def ready(self):
         from . import signals  # noqa: F401

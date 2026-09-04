@@ -5,11 +5,11 @@
 ## 多标签页工作流
 
 ```bash
-tabtin browser open --url "https://source-a.com"
-tabtin browser open --url "https://source-b.com"
-tabtin browser tab list
-tabtin browser tab switch --tab-id <id>
-tabtin browser tab close --tab-id <id>
+muse browser open --url "https://source-a.com"
+muse browser open --url "https://source-b.com"
+muse browser tab list
+muse browser tab switch --tab-id <id>
+muse browser tab close --tab-id <id>
 ```
 
 ## 管道组合
@@ -17,16 +17,16 @@ tabtin browser tab close --tab-id <id>
 CLI 核心优势 — 一条命令完成多步流水线：
 
 ```bash
-tabtin browser open --url "https://docs.example.com/guide" && \
-  tabtin browser wait --selector ".content" && \
-  tabtin browser print --as pdf --save ~/.tabtin/exports/guide.pdf && \
-  tabtin browser print --save ~/.tabtin/exports/guide.md
+muse browser open --url "https://docs.example.com/guide" && \
+  muse browser wait --selector ".content" && \
+  muse browser print --as pdf --save ~/.tabtin/exports/guide.pdf && \
+  muse browser print --save ~/.tabtin/exports/guide.md
 
 for url in "https://a.com" "https://b.com"; do
   # Linux 用 md5sum；macOS 上同名 hash 工具调用方式不同，跨平台脚本请自行适配
-  tabtin browser print --url "$url" --save "$(echo $url | md5sum | cut -d' ' -f1).md"
+  muse browser print --url "$url" --save "$(echo $url | md5sum | cut -d' ' -f1).md"
 done
 
-tabtin browser glance --format json | jq -r '.observed_elements[0].ref' | \
-  xargs -I{} tabtin browser act --actions "[{\"type\":\"click\",\"ref\":\"{}\"}]"
+muse browser glance --format json | jq -r '.observed_elements[0].ref' | \
+  xargs -I{} muse browser act --actions "[{\"type\":\"click\",\"ref\":\"{}\"}]"
 ```

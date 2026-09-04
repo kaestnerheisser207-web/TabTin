@@ -190,7 +190,7 @@ describe('cli-commands-materializer（ C1）', () => {
       },
       readonlyVerbs: new Set(['export']),
     })
-    const decision = await checker.isAllowed('tabtin hidden-domain export')
+    const decision = await checker.isAllowed('muse hidden-domain export')
     expect(decision.allowed).toBe(false)
     expect(decision.code).toBe('lookup_failed')
   })

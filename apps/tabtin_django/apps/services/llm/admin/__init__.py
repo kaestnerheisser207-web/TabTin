@@ -61,5 +61,5 @@ class LLMAdminAuditLogAdmin(ReadOnlyAdminMixin, admin.ModelAdmin):
     ]
 
 
-admin.site.site_header = '⚠️ TabTin LLM 应急通道（只读，配置请走 AdminDash）'
+admin.site.site_header = '⚠️ Muse LLM 应急通道（只读，配置请走 AdminDash）'
 admin.site.index_title = '此入口仅用于事故应急排查与审计查询'

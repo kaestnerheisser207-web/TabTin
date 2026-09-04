@@ -20,8 +20,8 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/TabTin/tabtin-cli/internal/cmdutil"
-	"github.com/TabTin/tabtin-cli/internal/config"
+	"github.com/Muse/muse-cli/internal/cmdutil"
+	"github.com/Muse/muse-cli/internal/config"
 )
 
 func registerDocPermCommands(parent *cobra.Command, f *cmdutil.Factory) {
@@ -32,8 +32,8 @@ func registerDocPermCommands(parent *cobra.Command, f *cmdutil.Factory) {
 是不同模型：collaborator 是增量 invite/update/rm；perm set 是**全量 replace**。
 
 子命令：
-  tabtin doc perm get <document-id>     列出当前权限条目（需 admin）
-  tabtin doc perm set <document-id>     全量替换权限条目（危险，见 set --help）
+  muse doc perm get <document-id>     列出当前权限条目（需 admin）
+  muse doc perm set <document-id>     全量替换权限条目（危险，见 set --help）
 
 角色枚举：viewer / editor / admin / owner / participant（与 ROLE_LEVELS 对齐）。
 subject_type：user（按用户）或 role（按组织/空间角色名）。`,
@@ -45,9 +45,9 @@ subject_type：user（按用户）或 role（按组织/空间角色名）。`,
 返回 {entries:[...]}，每条含 subject_type / subject_id / permission / is_active。
 需文档 admin；与 collaborator list（含 owner 的邀请名单）信息面不同——本命令看的是
 权限覆盖表本体。`,
-		Example: "  tabtin doc perm get doc_xxx\n" +
-			"  tabtin doc perm get doc_xxx --format json\n" +
-			"  tabtin doc perm get doc_xxx --jq '.entries[] | {subject_type, subject_id, permission}'",
+		Example: "  muse doc perm get doc_xxx\n" +
+			"  muse doc perm get doc_xxx --format json\n" +
+			"  muse doc perm get doc_xxx --jq '.entries[] | {subject_type, subject_id, permission}'",
 		Layer: "L2", Risk: cmdutil.RiskRead, RiskDeclared: true,
 		Route:        cmdutil.RouteCliServer,
 		Method:       "GET",
@@ -83,11 +83,11 @@ DocumentPermission 再写入你提交的 entries**。不是增量、不是 patch
 
 角色：viewer / editor / admin / owner / participant。
 与 collaborator 的差异：collaborator 是邀请链路；本命令直接覆盖权限表。`,
-		Example: "  tabtin doc perm get doc_xxx --format json > perms.json\n" +
+		Example: "  muse doc perm get doc_xxx --format json > perms.json\n" +
 			"  # 编辑 perms.json 后全量写回（务必保留自己 admin）\n" +
-			"  tabtin doc perm set doc_xxx --entries @perms.json\n" +
-			"  tabtin doc perm set doc_xxx --entry user:usr_me:admin --entry user:usr_bob:editor\n" +
-			"  tabtin doc perm set doc_xxx --entries @perms.json --dry-run --format json",
+			"  muse doc perm set doc_xxx --entries @perms.json\n" +
+			"  muse doc perm set doc_xxx --entry user:usr_me:admin --entry user:usr_bob:editor\n" +
+			"  muse doc perm set doc_xxx --entries @perms.json --dry-run --format json",
 		Layer: "L2", Risk: cmdutil.RiskWrite, RiskDeclared: true,
 		Route:        cmdutil.RouteCliServer,
 		Method:       "POST",
@@ -130,9 +130,9 @@ func registerDocSharedWithMeCommand(parent *cobra.Command, f *cmdutil.Factory) {
 Agent 私有化后协作者无法进入他人 bot Space，本命令是独立访问发现入口——
 与 table share shared-with-me / drive shared-with-me 对称。
 组织过滤用**全局 --organization-id**（命令级不声明，避免撞 persistent flag）。`,
-		Example: "  tabtin doc shared-with-me\n" +
-			"  tabtin doc shared-with-me --organization-id wt_yyy\n" +
-			"  tabtin doc shared-with-me --format json --jq '.documents[].id'",
+		Example: "  muse doc shared-with-me\n" +
+			"  muse doc shared-with-me --organization-id wt_yyy\n" +
+			"  muse doc shared-with-me --format json --jq '.documents[].id'",
 		Layer: "L2", Risk: cmdutil.RiskRead, RiskDeclared: true,
 		Route:        cmdutil.RouteCliServer,
 		Method:       "GET",

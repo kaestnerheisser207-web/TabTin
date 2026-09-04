@@ -1,7 +1,7 @@
 package com.tabtin.mobile.features.conversation
 
 import androidx.annotation.StringRes
-import com.tabtin.mobile.R
+import com.muse.mobile.R
 
 /**
  * 远程执行现场的环境态（由设备/绑定轮询驱动，不是单次发送 ACK）。

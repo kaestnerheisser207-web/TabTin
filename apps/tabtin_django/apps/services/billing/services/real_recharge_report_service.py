@@ -278,7 +278,7 @@ def _require_ready_account() -> tuple[ChannelAccount, str, WebhookDeliveryProvid
 
 
 def format_recharge_report(summary: dict, *, test: bool = False) -> str:
-    heading = "【测试】TabTin 真实充值报表" if test else "TabTin 真实充值报表"
+    heading = "【测试】Muse 真实充值报表" if test else "Muse 真实充值报表"
     return "\n".join(
         [
             heading,
@@ -385,7 +385,7 @@ def format_single_recharge_notification(order: PaymentOrder) -> str:
     paid_at = order.paid_at or order.updated_at
     return "\n".join(
         [
-            "TabTin 新增真实充值",
+            "Muse 新增真实充值",
             f"实付金额：¥{order.paid_amount:.2f}",
             f"订单号：{order.order_no}",
             f"组织：{organization_name or order.organization_id or '—'}",

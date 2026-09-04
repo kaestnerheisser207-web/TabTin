@@ -82,7 +82,7 @@ export const TabTrackerCapabilitiesDialog: React.FC<TabTrackerCapabilitiesDialog
           title="自动化能力总览"
           description={(
             <>
-            与 <code className={CANVAS_TEXT_META}>tabtin tracker</code> CLI 一一对应，共 {trackerCapabilitiesManifest.commands.length} 条能力。点「交给 Tin」即逐条回归。
+            与 <code className={CANVAS_TEXT_META}>muse tracker</code> CLI 一一对应，共 {trackerCapabilitiesManifest.commands.length} 条能力。点「交给 Tin」即逐条回归。
             </>
           )}
         >

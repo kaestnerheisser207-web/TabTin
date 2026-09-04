@@ -26,7 +26,7 @@
   "error.siteNotFound": "Sitio no encontrado",
   "error.publishFailed": "Error de publicación",
   "error.noDistUrl": "Primero cree y cargue artefactos.",
-  "error.noDistUrlHint": "Ejecute la compilación en TabCode o use CLI: compilación del sitio tabtin",
+  "error.noDistUrlHint": "Ejecute la compilación en TabCode o use CLI: compilación del sitio muse",
   "actions.publishSuccess": "Publicado exitosamente",
   "publish.dialogTitle": "Publicar sitio",
   "publish.messageLabel": "Nota de versión",

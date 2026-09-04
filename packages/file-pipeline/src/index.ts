@@ -1,7 +1,7 @@
 /**
  * @tabtin/file-pipeline — File pipeline 抽象层入口
  *
- * **W4（2026-05-13）业务目标**：未来 TabTin 加新文件格式（.epub / .markdown /
+ * **W4（2026-05-13）业务目标**：未来 Muse 加新文件格式（.epub / .markdown /
  * .numbers）时，工程师只动 parser 层，不动 4 个胶水点（临时通道 read_file /
  * 持久通道 Host / 图装配 / cloud_first 死配置）。
  *

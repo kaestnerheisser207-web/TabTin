@@ -9,7 +9,7 @@ import android.util.Log
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
-import com.tabtin.mobile.R
+import com.muse.mobile.R
 import com.tabtin.mobile.data.adb.AdbConnectionState
 import com.tabtin.mobile.data.adb.AdbConnectionManager
 import com.tabtin.mobile.data.adb.OemDetector
@@ -200,43 +200,43 @@ public class CapabilitiesViewModel @Inject constructor(
         return listOf(
             PermissionItem(
                 key = "contacts",
-                labelRes = com.tabtin.mobile.R.string.capabilities_contacts,
+                labelRes = com.muse.mobile.R.string.capabilities_contacts,
                 permission = Manifest.permission.READ_CONTACTS,
                 granted = hasPermission(ctx, Manifest.permission.READ_CONTACTS),
             ),
             PermissionItem(
                 key = "sms_read",
-                labelRes = com.tabtin.mobile.R.string.capabilities_sms,
+                labelRes = com.muse.mobile.R.string.capabilities_sms,
                 permission = Manifest.permission.READ_SMS,
                 granted = hasPermission(ctx, Manifest.permission.READ_SMS),
             ),
             PermissionItem(
                 key = "sms_send",
-                labelRes = com.tabtin.mobile.R.string.capabilities_sms_send,
+                labelRes = com.muse.mobile.R.string.capabilities_sms_send,
                 permission = Manifest.permission.SEND_SMS,
                 granted = hasPermission(ctx, Manifest.permission.SEND_SMS),
             ),
             PermissionItem(
                 key = "call_log",
-                labelRes = com.tabtin.mobile.R.string.capabilities_call_log,
+                labelRes = com.muse.mobile.R.string.capabilities_call_log,
                 permission = Manifest.permission.READ_CALL_LOG,
                 granted = hasPermission(ctx, Manifest.permission.READ_CALL_LOG),
             ),
             PermissionItem(
                 key = "phone_call",
-                labelRes = com.tabtin.mobile.R.string.capabilities_phone,
+                labelRes = com.muse.mobile.R.string.capabilities_phone,
                 permission = Manifest.permission.CALL_PHONE,
                 granted = hasPermission(ctx, Manifest.permission.CALL_PHONE),
             ),
             PermissionItem(
                 key = "calendar",
-                labelRes = com.tabtin.mobile.R.string.capabilities_calendar,
+                labelRes = com.muse.mobile.R.string.capabilities_calendar,
                 permission = Manifest.permission.READ_CALENDAR,
                 granted = hasPermission(ctx, Manifest.permission.READ_CALENDAR),
             ),
             PermissionItem(
                 key = "location",
-                labelRes = com.tabtin.mobile.R.string.capabilities_location,
+                labelRes = com.muse.mobile.R.string.capabilities_location,
                 permission = Manifest.permission.ACCESS_FINE_LOCATION,
                 granted = hasPermission(ctx, Manifest.permission.ACCESS_FINE_LOCATION) ||
                     hasPermission(ctx, Manifest.permission.ACCESS_COARSE_LOCATION),
@@ -269,7 +269,7 @@ public class CapabilitiesViewModel @Inject constructor(
         } + listOf(
             PermissionItem(
                 key = "notification_listener",
-                labelRes = com.tabtin.mobile.R.string.capabilities_notification_listener,
+                labelRes = com.muse.mobile.R.string.capabilities_notification_listener,
                 permission = null,
                 isSpecial = true,
                 granted = isNotificationListenerEnabled(),

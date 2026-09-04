@@ -546,7 +546,7 @@ export class UpdateManager {
         token,
         ...(organizationId ? { organizationId: String(organizationId) } : {}),
         device: {
-          name: 'TabTin Desktop',
+          name: 'Muse Desktop',
           platform: this.runtimePlatform,
           os: process.platform,
           app_version: app.getVersion(),

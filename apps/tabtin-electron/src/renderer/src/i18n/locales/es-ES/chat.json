@@ -979,7 +979,7 @@
     "invalid_param_format": "Formato de parámetro no válido: verifique la entrada y vuelva a intentarlo",
     "param_too_large": "La entrada excede el límite: divida o simplifique y vuelva a intentarlo",
     "mutually_exclusive_params": "Parámetros en conflicto: mantenga solo uno",
-    "no_ui_session": "Requiere la interfaz de usuario de escritorio TabTin; no está disponible en este modo",
+    "no_ui_session": "Requiere la interfaz de usuario de escritorio Muse; no está disponible en este modo",
     "runtime_misconfig": "La configuración del tiempo de ejecución está incompleta; comuníquese con el desarrollador",
     "host_unsupported": "Esta operación no es compatible con el modo actual",
     "network_failed": "Error en la solicitud de red: verifique la conectividad y vuelva a intentarlo; Para archivos en la nube, es posible que la URL haya caducado, así que solicite al usuario que la vuelva a cargar.",
@@ -1389,7 +1389,7 @@
     "chargeFailed": "Facturación pendiente",
     "chargeFailedDetail": "La facturación de este mensaje no se ha completado; se volverá a intentar automáticamente. No se le cobrará dos veces: el acuerdo final es determinante.",
     "byok": "Clave API propia: sin cargo",
-    "byokDetail": "Estás utilizando tu propia clave API (BYOK). Este mensaje no consume créditos TabTin."
+    "byokDetail": "Estás utilizando tu propia clave API (BYOK). Este mensaje no consume créditos Muse."
   },
   "checkpoint": {
     "edit": "Editar mensaje",
@@ -2518,9 +2518,9 @@
     "plan_create": "Crear plan",
     "plan_update_todos": "Actualizar todos",
     "switch_mode": "Solicitar cambio de modo",
-    "relaunch_app": "Reiniciar TabTin",
+    "relaunch_app": "Reiniciar Muse",
     "clear_os_error_blacklist": "Limpiar el camino bloqueado",
-    "tabtin_search": "Búsqueda TabTin",
+    "tabtin_search": "Búsqueda Muse",
     "show_widget": "widget visual",
     "show_flow_view": "Vista de flujo",
     "web_scraper_scrape_url": "URL raspada",
@@ -2888,9 +2888,9 @@
     "toolFailureNotice_one": "\"{{tool}}\" ha fallado {{streak}} veces seguidas. El sistema le recordará al agente que pruebe un enfoque diferente si falla una vez más.",
     "toolFailureNotice_other": "\"{{tool}}\" ha fallado {{streak}} veces seguidas. El sistema le recordará al agente que pruebe un enfoque diferente después de {{remaining}} más fallas.",
     "toolFailureNudge": "\"{{tool}}\" ha fallado {{streak}} veces seguidas. El sistema le ha recordado al agente que pruebe un enfoque diferente.",
-    "toolRepetitionNotice_one": "\"{{tool}}\" ha sido llamado con la misma entrada {{repeatCount}} veces en los últimos ~{{seconds}}s. TabTin intervendrá para empujar al agente si se repite una vez más.",
-    "toolRepetitionNotice_other": "\"{{tool}}\" ha sido llamado con la misma entrada {{repeatCount}} veces en los últimos ~{{seconds}}s. TabTin intervendrá para empujar al agente después de {{remaining}} más repeticiones.",
-    "toolRepetitionNudge": "\"{{tool}}\" ha sido llamado con la misma entrada {{repeatCount}} veces en los últimos ~{{seconds}}s. TabTin intervino para presionar al agente para que dejara de volver a emitir la misma entrada. Espere un momento; si aún no gira, envíele un nuevo mensaje como \"use mi respuesta anterior para continuar\" o \"reformule la pregunta\".",
+    "toolRepetitionNotice_one": "\"{{tool}}\" ha sido llamado con la misma entrada {{repeatCount}} veces en los últimos ~{{seconds}}s. Muse intervendrá para empujar al agente si se repite una vez más.",
+    "toolRepetitionNotice_other": "\"{{tool}}\" ha sido llamado con la misma entrada {{repeatCount}} veces en los últimos ~{{seconds}}s. Muse intervendrá para empujar al agente después de {{remaining}} más repeticiones.",
+    "toolRepetitionNudge": "\"{{tool}}\" ha sido llamado con la misma entrada {{repeatCount}} veces en los últimos ~{{seconds}}s. Muse intervino para presionar al agente para que dejara de volver a emitir la misma entrada. Espere un momento; si aún no gira, envíele un nuevo mensaje como \"use mi respuesta anterior para continuar\" o \"reformule la pregunta\".",
     "tool_started": "Corriendo: {{toolName}}",
     "tool_completed": "{{toolName}} completado",
     "tool_failed": "{{toolName}} falló: {{reason}}",
@@ -3035,11 +3035,19 @@
     "confirmFailed": "Operación fallida"
   },
   "tokenUsage": {
-    "title": "Uso de tokens", "current": "Uso actual", "windowLimit": "Límite de contexto",
-    "inputTotal": "Entrada total", "outputTotal": "Salida total", "cacheHit": "Aciertos de caché",
-    "reasoning": "Razonamiento", "autoCompacted": "Compactado automáticamente", "billing": "Facturación",
-    "byok": "Clave propia · Sin cargo de credits", "historicalCost": "Coste histórico",
-    "consumed": "Consumido", "estimatedCost": "Coste estimado"
+    "title": "Uso de tokens",
+    "current": "Uso actual",
+    "windowLimit": "Límite de contexto",
+    "inputTotal": "Entrada total",
+    "outputTotal": "Salida total",
+    "cacheHit": "Aciertos de caché",
+    "reasoning": "Razonamiento",
+    "autoCompacted": "Compactado automáticamente",
+    "billing": "Facturación",
+    "byok": "Clave propia · Sin cargo de credits",
+    "historicalCost": "Coste histórico",
+    "consumed": "Consumido",
+    "estimatedCost": "Coste estimado"
   },
   "sessionCollab": {
     "manageTitle": "Administrar el uso compartido",

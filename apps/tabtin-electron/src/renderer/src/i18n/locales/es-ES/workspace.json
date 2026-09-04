@@ -1,11 +1,11 @@
 {
-  "welcomeTitle": "Bienvenido a TabTin",
+  "welcomeTitle": "Bienvenido a Muse",
   "welcomeSubtitle": "Plataforma de trabajo unificada de IA. Crea un nuevo espacio de trabajo o elige uno de la izquierda.",
   "welcomeSubtitleGuest": "Inicia sesión para crear espacios de trabajo y comenzar a colaborar.",
   "welcome": {
-    "title": "TabTin",
+    "title": "Muse",
     "tagline": "Tu plataforma de trabajo de IA",
-    "conceptIntro": "En TabTin, un espacio de trabajo es un sitio de trabajo persistente vinculado a un dispositivo de ejecución y un directorio de trabajo. Mantiene juntas las conversaciones, las aplicaciones, los recursos y el contexto de ejecución para que los agentes puedan ayudar dentro de esos límites.",
+    "conceptIntro": "En Muse, un espacio de trabajo es un sitio de trabajo persistente vinculado a un dispositivo de ejecución y un directorio de trabajo. Mantiene juntas las conversaciones, las aplicaciones, los recursos y el contexto de ejecución para que los agentes puedan ayudar dentro de esos límites.",
     "loginCta": "Iniciar sesión / Registrarse",
     "learnMore": "Más información →",
     "readyTitle": "¡Todo listo!",
@@ -158,7 +158,7 @@
       "selectHelp": "El modelo predeterminado se utiliza para nuevas sesiones y tareas sin un modelo específico."
     },
     "presetSection": {
-      "title": "Modelos preestablecidos de TabTin",
+      "title": "Modelos preestablecidos de Muse",
       "subtitle": "Modelos de plataforma incorporada. Listo para usar como predeterminado: no se requiere configuración de canal.",
       "collapse": "Contraer modelos preestablecidos",
       "expandHint": "{{count}} más modelos de plataforma. Ampliar para ver todo."

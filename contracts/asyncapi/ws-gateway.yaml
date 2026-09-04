@@ -1,10 +1,10 @@
 asyncapi: "2.6.0"
 
 info:
-  title: TabTin WebSocket Gateway
+  title: Muse WebSocket Gateway
   version: 1.0.0
   description: |
-    TabTin WebSocket 网关协议规范。
+    Muse WebSocket 网关协议规范。
     所有消息均使用 GatewayEnvelope 统一信封格式。
   license:
     name: Proprietary

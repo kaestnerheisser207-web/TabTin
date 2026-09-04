@@ -24,7 +24,7 @@ const SNAPSHOT_CALLS = [
     name: 'msg10 wait_agent_ids:[]',
     input: {
       prompt:
-        '在当前 TabTin 仓库中做只读架构勘察。重点：根目录结构、apps/、packages/。',
+        '在当前 Muse 仓库中做只读架构勘察。重点：根目录结构、apps/、packages/。',
       description: '勘察整体架构',
       role: '系统架构分析员',
       template_id: '',
@@ -47,7 +47,7 @@ const SNAPSHOT_CALLS = [
   {
     name: 'msg13 wait_agent_ids:[""]',
     input: {
-      prompt: '在当前 TabTin 仓库中做只读架构勘察。',
+      prompt: '在当前 Muse 仓库中做只读架构勘察。',
       description: '勘察整体架构',
       role: '系统架构分析员',
       template_id: '',
@@ -65,7 +65,7 @@ const SNAPSHOT_CALLS = [
   {
     name: 'msg15 wait_agent_ids:[] again',
     input: {
-      prompt: '在当前 TabTin 仓库中做只读架构勘察。',
+      prompt: '在当前 Muse 仓库中做只读架构勘察。',
       description: '勘察整体架构',
       readonly: true,
       background: false,

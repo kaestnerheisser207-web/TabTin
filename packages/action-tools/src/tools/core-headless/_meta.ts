@@ -7,7 +7,7 @@ import { terminalTools } from '../terminal'
  * Core execution-plane tools for headless and Electron adapters.
  *
  * Wave 4a (2026-05-01): tabdataTools 7 + 5 个 FC 全部删除（D4 全删 FC）。
- * Agent 操作多维表格走 `tabtin table *` CLI（execute_in_terminal 调用）。
+ * Agent 操作多维表格走 `muse table *` CLI（execute_in_terminal 调用）。
  *
  * W5 收尾（2026-05-04，白名单反转）：core 域 `manifestExposed` 默认 false，
  * 由各 group 显式 opt-in 暴露：
@@ -15,7 +15,7 @@ import { terminalTools } from '../terminal'
  *     read_terminal_output / list_terminal_sessions / write_to_terminal）
  *
  * W6 (2026-05-04): the `tabslideTools` adapter-only group was deleted.
- * Slide operations now flow through `tabtin slide *` CLI → Django REST
+ * Slide operations now flow through `muse slide *` CLI → Django REST
  * directly, with no Action Executor mapping in between.
  *
  * W7 (2026-05-05): skillsTools (skills_read) 从 action-tools 下架。

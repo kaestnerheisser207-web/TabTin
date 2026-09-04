@@ -4,7 +4,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/TabTin/tabtin-cli/internal/cmdutil"
+	"github.com/Muse/muse-cli/internal/cmdutil"
 )
 
 // TestRecordDeleteIsDestructive 钉死永久删除语义和风险等级。

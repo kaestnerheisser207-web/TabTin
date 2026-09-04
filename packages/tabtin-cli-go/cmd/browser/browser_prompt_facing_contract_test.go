@@ -26,7 +26,7 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/TabTin/tabtin-cli/internal/cmdutil"
+	"github.com/Muse/muse-cli/internal/cmdutil"
 )
 
 const browserPromptFacingContractFixtureRelPath = "packages/agent-prompt/src/__tests__/fixtures/browser-cli-prompt-contract.json"

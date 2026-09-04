@@ -74,7 +74,7 @@ def _activity_body(**overrides) -> dict:
         },
         "recipient": {
             "id": "bot-001",
-            "name": "TabTin Bot",
+            "name": "Muse Bot",
         },
         "text": "Hello Teams Bot",
         "channelData": {},
@@ -172,7 +172,7 @@ class TestMSTeamsAdapterParseWebhook(SimpleTestCase):
         self.assertEqual(result.peer_kind, "group")
 
     def test_mention_tags_cleaned(self, _mock_jwt):
-        body = _activity_body(text="<at>TabTin Bot</at> Hello there")
+        body = _activity_body(text="<at>Muse Bot</at> Hello there")
         account = _make_account()
         result = self.adapter.parse_webhook(_make_request(body), account)
         self.assertIsNotNone(result)

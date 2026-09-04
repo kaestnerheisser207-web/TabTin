@@ -367,7 +367,7 @@ export async function handleTabsRoute(
     const rawTargetUrl = body?.url
     if (!rawTargetUrl) {
       sendJSON(res, 400, errorResponse('VALIDATION_ERROR', '缺少 url 参数', {
-        suggestions: ['示例: tabtin browser open --url https://example.com'],
+        suggestions: ['示例: muse browser open --url https://example.com'],
       }))
       return true
     }
@@ -385,8 +385,8 @@ export async function handleTabsRoute(
         sendJSON(res, 400, errorResponse('VALIDATION_ERROR', localHtml.message, {
           suggestions: [
             '先确认当前已进入工作空间，且文件落在工作目录内',
-            '本地预览仅支持 .html / .htm：相对路径 tabtin browser open --url attachments/a.html',
-            '或 shell 内绝对路径：tabtin browser open --url "file://$TABTIN_WORKSPACE/attachments/a.html"',
+            '本地预览仅支持 .html / .htm：相对路径 muse browser open --url attachments/a.html',
+            '或 shell 内绝对路径：muse browser open --url "file://$TABTIN_WORKSPACE/attachments/a.html"',
             '若要打开 HTML 源码文件（非渲染预览），用 present_to_user 的 local_file item',
           ],
         }))
@@ -402,7 +402,7 @@ export async function handleTabsRoute(
         {
           suggestions: [
             '使用 https:// 或 http:// 开头的 URL',
-            '本地 HTML 预览：tabtin browser open --url path/a.html（相对工作目录根；须在工作目录内）',
+            '本地 HTML 预览：muse browser open --url path/a.html（相对工作目录根；须在工作目录内）',
             '打开 HTML 源码文件请用 present_to_user 的 local_file item，不要用 browser open',
           ],
         },
@@ -415,7 +415,7 @@ export async function handleTabsRoute(
     // 凭空猜的 URL（不在 DOM）仍拦。本地 HTML 预览不走二级页反幻觉守卫。
     //
     // `skipNavigationEvidenceCheck`：仅可信内部调用方（如 /reach 适配器按平台契约拼
-    // `/video/<id>`）可开。Agent 面的 `tabtin browser open` 不得传此字段——反幻觉守卫仍生效。
+    // `/video/<id>`）可开。Agent 面的 `muse browser open` 不得传此字段——反幻觉守卫仍生效。
     const skipNavigationEvidenceCheck =
       body?.skipNavigationEvidenceCheck === true ||
       body?.skip_navigation_evidence_check === true
@@ -435,8 +435,8 @@ export async function handleTabsRoute(
           detail: unverifiedNavigation,
           suggestions: [
             '不要猜测 /invest、/venture、/project 等路径，也不要改写/拼接页面链接的 query 参数（会丢失站点签名参数）',
-            '用 tabtin browser glance --tab-id <tabId> 重新观测当前页，照抄 observed_elements[].href 里的完整链接去 open',
-            `如果目标是页面上的无 href 导航文字（见 detail.labelsWithoutHref），它本身就可点击：先 tabtin browser glance 拿到该条目的 ref，再 tabtin browser act --actions '[{"type":"click","ref":"<eN>"}]'；仍找不到入口再用 web_search 查官方 URL`,
+            '用 muse browser glance --tab-id <tabId> 重新观测当前页，照抄 observed_elements[].href 里的完整链接去 open',
+            `如果目标是页面上的无 href 导航文字（见 detail.labelsWithoutHref），它本身就可点击：先 muse browser glance 拿到该条目的 ref，再 muse browser act --actions '[{"type":"click","ref":"<eN>"}]'；仍找不到入口再用 web_search 查官方 URL`,
           ],
         }))
         return true
@@ -475,7 +475,7 @@ export async function handleTabsRoute(
               retryable: true,
               suggestions: [
                 '稍等 1-2 秒重试本命令（后台挂载可能正在进行）',
-                `仍失败则先 tabtin browser tab close --tab-id ${requestedTabId} 再重新 open --url <url>`,
+                `仍失败则先 muse browser tab close --tab-id ${requestedTabId} 再重新 open --url <url>`,
               ],
             }
           ))
@@ -488,8 +488,8 @@ export async function handleTabsRoute(
             : `找不到目标 tab: ${requestedTabId}`,
           {
             suggestions: requestedTabId === 'auto'
-              ? ['使用 tabtin browser open <url> 新开一个页面', '或使用 --tab-id <viewId> 指定已有标签']
-              : ['使用 tabtin browser tab list 查看可用标签', '确认传入的 --tab-id <viewId> 仍然存在'],
+              ? ['使用 muse browser open <url> 新开一个页面', '或使用 --tab-id <viewId> 指定已有标签']
+              : ['使用 muse browser tab list 查看可用标签', '确认传入的 --tab-id <viewId> 仍然存在'],
           }
         ))
         return true
@@ -580,12 +580,12 @@ export async function handleTabsRoute(
               },
               suggestions: cleanedUp
                 ? [
-                    '直接重试 tabtin browser open --url <url>（失败标签已回收，不会堆积）',
-                    '连续失败说明浏览器容器异常：用 tabtin browser tab list 查看整体状态，必要时重启应用',
+                    '直接重试 muse browser open --url <url>（失败标签已回收，不会堆积）',
+                    '连续失败说明浏览器容器异常：用 muse browser tab list 查看整体状态，必要时重启应用',
                   ]
                 : [
-                    '直接重试 tabtin browser open --url <url>',
-                    `残留标签自动回收失败，用 tabtin browser tab list 确认后手动 tab close --tab-id ${viewId}`,
+                    '直接重试 muse browser open --url <url>',
+                    `残留标签自动回收失败，用 muse browser tab list 确认后手动 tab close --tab-id ${viewId}`,
                   ],
             },
           ))
@@ -629,7 +629,7 @@ export async function handleTabsRoute(
           sendJSON(res, 409, errorResponse('QUOTA_EXCEEDED', message, quotaOpts))
         } else {
           sendJSON(res, 500, errorResponse('INTERNAL_ERROR', message, {
-            suggestions: ['检查 TabTin 是否正常运行', '尝试重启应用后重试'],
+            suggestions: ['检查 Muse 是否正常运行', '尝试重启应用后重试'],
           }))
         }
       }
@@ -721,7 +721,7 @@ export async function handleTabsRoute(
     const rawTabId = typeof body?.tabId === 'string' ? body.tabId.trim() : ''
     if (!rawTabId) {
       sendJSON(res, 400, errorResponse('VALIDATION_ERROR', '缺少 tabId 参数', {
-        suggestions: ['使用 tabtin browser tab list 查看可用标签', '或使用 --tab-id auto 自动选择活跃标签'],
+        suggestions: ['使用 muse browser tab list 查看可用标签', '或使用 --tab-id auto 自动选择活跃标签'],
       }))
       return true
     }
@@ -737,8 +737,8 @@ export async function handleTabsRoute(
           : `找不到目标 tab: ${rawTabId}`,
         {
           suggestions: rawTabId === 'auto'
-            ? ['使用 tabtin browser tab list 查看当前活跃标签', '或显式传入 --tab-id <viewId>']
-            : ['使用 tabtin browser tab list 查看可用标签', '确认传入的 --tab-id <viewId> 仍然存在'],
+            ? ['使用 muse browser tab list 查看当前活跃标签', '或显式传入 --tab-id <viewId>']
+            : ['使用 muse browser tab list 查看可用标签', '确认传入的 --tab-id <viewId> 仍然存在'],
         }
       ))
       return true
@@ -766,7 +766,7 @@ export async function handleTabsRoute(
     const rawTabId = typeof body?.tabId === 'string' ? body.tabId.trim() : ''
     if (!rawTabId) {
       sendJSON(res, 400, errorResponse('VALIDATION_ERROR', '缺少 tabId 参数', {
-        suggestions: ['使用 tabtin browser tab list 查看可用标签', '或使用 --tab-id auto 自动选择活跃标签'],
+        suggestions: ['使用 muse browser tab list 查看可用标签', '或使用 --tab-id auto 自动选择活跃标签'],
       }))
       return true
     }
@@ -785,8 +785,8 @@ export async function handleTabsRoute(
           : `找不到目标 tab: ${rawTabId}`,
         {
           suggestions: rawTabId === 'auto'
-            ? ['使用 tabtin browser tab list 查看当前活跃标签', '或显式传入 --tab-id <viewId>']
-            : ['使用 tabtin browser tab list 查看可用标签', '确认传入的 --tab-id <viewId> 仍然存在'],
+            ? ['使用 muse browser tab list 查看当前活跃标签', '或显式传入 --tab-id <viewId>']
+            : ['使用 muse browser tab list 查看可用标签', '确认传入的 --tab-id <viewId> 仍然存在'],
         }
       ))
       return true
@@ -815,7 +815,7 @@ export async function handleTabsRoute(
     const direction = body?.direction
     if (!direction || !['back', 'forward', 'reload', 'stop'].includes(direction)) {
       sendJSON(res, 400, errorResponse('VALIDATION_ERROR', '缺少或无效的 direction 参数', {
-        suggestions: ['可选值: back, forward, reload, stop', '示例: tabtin browser nav back --tab-id auto'],
+        suggestions: ['可选值: back, forward, reload, stop', '示例: muse browser nav back --tab-id auto'],
       }))
       return true
     }
@@ -824,7 +824,7 @@ export async function handleTabsRoute(
     // BT-007: tabId 解析失败时提前报错，避免传 undefined 给 executor
     if (!tabId) {
       sendJSON(res, 400, errorResponse('TAB_REQUIRED', '无活跃 tab，请先打开一个页面或显式指定 --tab-id', {
-        suggestions: ['使用 tabtin browser open <url> 打开页面', '使用 --tab-id <viewId> 指定标签'],
+        suggestions: ['使用 muse browser open <url> 打开页面', '使用 --tab-id <viewId> 指定标签'],
       }))
       return true
     }
@@ -846,7 +846,7 @@ export async function handleTabsRoute(
     const tabId = await resolveTabId(body?.tabId, requestScope)
     if (!tabId) {
       sendJSON(res, 400, errorResponse('NOT_FOUND', '无活跃标签页，请先打开一个页面', {
-        suggestions: ['使用 tabtin browser open <url> 打开页面', '使用 tabtin browser tab list 查看已打开标签'],
+        suggestions: ['使用 muse browser open <url> 打开页面', '使用 muse browser tab list 查看已打开标签'],
       }))
       return true
     }
@@ -868,7 +868,7 @@ export async function handleTabsRoute(
     // BT-007: tabId 解析失败时提前报错，避免传 undefined 给 executor
     if (!tabId) {
       sendJSON(res, 400, errorResponse('TAB_REQUIRED', '无活跃 tab，请先打开一个页面或显式指定 --tab-id', {
-        suggestions: ['使用 tabtin browser open <url> 打开页面', '使用 --tab-id <viewId> 指定标签'],
+        suggestions: ['使用 muse browser open <url> 打开页面', '使用 --tab-id <viewId> 指定标签'],
       }))
       return true
     }

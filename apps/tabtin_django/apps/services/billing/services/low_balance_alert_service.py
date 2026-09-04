@@ -506,7 +506,7 @@ class LowBalanceAlertService:
             )
 
             subject = (
-                f"[TabTin] {'紧急' if level == 'critical' else ''}低余额预警 - {organization_name}"
+                f"[Muse] {'紧急' if level == 'critical' else ''}低余额预警 - {organization_name}"
             )
             body_lines = [
                 f"您好 {getattr(user, 'display_name', '') or user.email}，",
@@ -523,7 +523,7 @@ class LowBalanceAlertService:
                 body_lines.append(
                     "建议及时充值，避免余额耗尽导致服务中断。"
                 )
-            body_lines.extend(["", "—— TabTin 计费系统"])
+            body_lines.extend(["", "—— Muse 计费系统"])
             body = "\n".join(body_lines)
 
             from django.core.mail import send_mail

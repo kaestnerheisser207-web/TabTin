@@ -26,7 +26,7 @@
   "error.siteNotFound": "サイトが見つかりません",
   "error.publishFailed": "公開に失敗しました",
   "error.noDistUrl": "まずアーティファクトを構築してアップロードしてください",
-  "error.noDistUrlHint": "TabCode でビルドを実行するか、CLI を使用します: tabtin site build",
+  "error.noDistUrlHint": "TabCode でビルドを実行するか、CLI を使用します: muse site build",
   "actions.publishSuccess": "正常に公開されました",
   "publish.dialogTitle": "サイトを公開する",
   "publish.messageLabel": "バージョンメモ",

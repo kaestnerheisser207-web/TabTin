@@ -8,7 +8,7 @@
 /**
  * 来源大类（PRD V3.3 D19 · 4 档）：
  *
- * - `platform`：客户端内置（随 TabTin 分发）；从 `packages/skills/bundled/platform/`
+ * - `platform`：客户端内置（随 Muse 分发）；从 `packages/skills/bundled/platform/`
  *   扫描。
  * - `app`：App manifest 声明的 skill（`packages/apps/<appId>/skills/`）；本期与 platform
  *   在物理目录上共享，来源判定靠 `app_id` 是否存在。
@@ -141,9 +141,9 @@ export interface SkillFrontmatter {
   homepage?: string;
   /** Skill 附带的 agent 定义摘要 */
   agents?: SkillAgentDefinition[];
-  /** TabTin 扩展：绑定 App；本期解析存库不过滤 listing（PRD §六 R8） */
+  /** Muse 扩展：绑定 App；本期解析存库不过滤 listing（PRD §六 R8） */
   'x-tabtin-apps'?: string[];
-  /** TabTin 扩展：绑定 Agent；本期解析存库不过滤 listing */
+  /** Muse 扩展：绑定 Agent；本期解析存库不过滤 listing */
   'x-tabtin-agents'?: string[];
   /**
    * Wave 1.5 P0-1（质疑 4 补丁）：SKILL.md frontmatter 里声明的主要环境

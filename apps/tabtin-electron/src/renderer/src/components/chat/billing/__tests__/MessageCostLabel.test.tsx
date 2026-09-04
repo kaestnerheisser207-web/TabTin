@@ -53,7 +53,7 @@ describe('MessageCostLabel', () => {
       vi.advanceTimersByTime(300)
     })
 
-    expect(screen.getByText('你使用的是自带 API 密钥（BYOK），本条消息不从 TabTin 钱包扣 credits。')).toBeTruthy()
+    expect(screen.getByText('你使用的是自带 API 密钥（BYOK），本条消息不从 Muse 钱包扣 credits。')).toBeTruthy()
     expect(screen.getByText('本次输入：20.5K tokens')).toBeTruthy()
     expect(screen.getByText('缓存命中：1.0K tokens')).toBeTruthy()
     expect(screen.getByText('缓存写入：512 tokens')).toBeTruthy()

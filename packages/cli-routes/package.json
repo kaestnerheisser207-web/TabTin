@@ -22,7 +22,7 @@
     "dev": "tsc --watch",
     "clean": "rm -rf dist"
   },
-  "author": "TabTin Team",
+  "author": "Muse Team",
   "license": "MIT",
   "dependencies": {
     "@tabtin/action-tools": "workspace:*",

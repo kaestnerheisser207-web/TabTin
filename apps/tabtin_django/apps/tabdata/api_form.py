@@ -85,7 +85,7 @@ def _get_visible_field_ids(view: TableView) -> Set[str]:
     """从视图的 column_meta / visible_fields 推导可见字段 ID 集合。
 
     兼容两种可见性协议：
-    - TabTin 后端写入 ``hidden`` (bool, True=隐藏)
+    - Muse 后端写入 ``hidden`` (bool, True=隐藏)
     - 前端 table-ui 对 form 视图写入 ``visible`` (bool, True=可见)
     优先级：hidden > visible；都缺省时默认可见。
     """

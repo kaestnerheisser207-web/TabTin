@@ -49,7 +49,7 @@
     "logoutConfirmTitle": "Vous déconnecter de votre compte ?",
     "logoutConfirmDesc": "Tout travail non enregistré sur cet appareil sera perdu",
     "openStorageManager": "Gestionnaire de stockage",
-    "openStorageManagerHint": "Voyez ce que TabTin a stocké sur votre machine, puis nettoyez ou exportez",
+    "openStorageManagerHint": "Voyez ce que Muse a stocké sur votre machine, puis nettoyez ou exportez",
     "changePassword": "Changer le mot de passe",
     "bindEmail": "Lier un e-mail"
   },

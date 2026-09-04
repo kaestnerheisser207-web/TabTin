@@ -114,7 +114,7 @@ describe('McpCap 静态段 <mcp_servers>', () => {
     const state = makeState('无关');
     const idx = (await mcpStaticIndex(cap, state))!;
     expect(idx).toContain('- big:'); // server 出现
-    expect(idx).toMatch(/\+\d+ 个，用 tabtin mcp list-tools --server-name big 看全/);
+    expect(idx).toMatch(/\+\d+ 个，用 muse mcp list-tools --server-name big 看全/);
   });
 });
 

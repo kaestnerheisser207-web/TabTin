@@ -3,7 +3,7 @@ package table
 import (
 	"github.com/spf13/cobra"
 
-	"github.com/TabTin/tabtin-cli/internal/cmdutil"
+	"github.com/Muse/muse-cli/internal/cmdutil"
 )
 
 func registerCollaboratorCommands(parent *cobra.Command, f *cmdutil.Factory) {
@@ -15,9 +15,9 @@ func registerCollaboratorCommands(parent *cobra.Command, f *cmdutil.Factory) {
 或误删还需要权限的人。
 常见陷阱：owner 通常不能被 remove/降级，具体约束以后端返回错误为准；
 list 不区分协作者来自哪个 Organization，只反映表级权限关系。`,
-			Example: "  tabtin table collaborator list --table-id <table_id>\n" +
-				"  tabtin table collaborator list --table-id <table_id> --format json\n" +
-				"  tabtin table collaborator list --table-id <table_id> --jq '.[].permission'",
+			Example: "  muse table collaborator list --table-id <table_id>\n" +
+				"  muse table collaborator list --table-id <table_id> --format json\n" +
+				"  muse table collaborator list --table-id <table_id> --jq '.[].permission'",
 			Route: cmdutil.RouteCliServer, Method: "POST", Path: "/table/collaborator-list",
 			Layer: "L2", Risk: cmdutil.RiskRead, RiskDeclared: true,
 			Flags:     []cmdutil.FlagDef{{Name: "table-id", Type: cmdutil.FlagString, Required: true, Desc: "表格 ID"}},
@@ -30,9 +30,9 @@ list 不区分协作者来自哪个 Organization，只反映表级权限关系�
 所有被邀请者拿到相同 permission，需要不同权限请分批调用或事后用 update 调整。
 常见陷阱：user-ids 必须是平台已有用户 ID，不接受邮箱/手机号；已是协作者的
 用户再次邀请行为以后端实现为准（可能报错或幂等更新）。`,
-			Example: "  tabtin table collaborator invite --table-id <table_id> --user-ids '[\"u_1\",\"u_2\"]' --permission viewer\n" +
-				"  tabtin table collaborator invite --table-id <table_id> --user-ids '[\"u_3\"]' --permission editor\n" +
-				"  tabtin table collaborator invite --table-id <table_id> --user-ids '[\"u_1\"]' --permission viewer --dry-run",
+			Example: "  muse table collaborator invite --table-id <table_id> --user-ids '[\"u_1\",\"u_2\"]' --permission viewer\n" +
+				"  muse table collaborator invite --table-id <table_id> --user-ids '[\"u_3\"]' --permission editor\n" +
+				"  muse table collaborator invite --table-id <table_id> --user-ids '[\"u_1\"]' --permission viewer --dry-run",
 			Route: cmdutil.RouteCliServer, Method: "POST", Path: "/table/collaborator-invite",
 			Layer: "L2", Risk: cmdutil.RiskWrite, RiskDeclared: true,
 			Flags: []cmdutil.FlagDef{
@@ -58,9 +58,9 @@ list 不区分协作者来自哪个 Organization，只反映表级权限关系�
 一次只改一人，避免批量误改。
 常见陷阱：user-id 必须已是该表协作者，非协作者调用会报错；owner 的权限
 一般不能通过本命令降级，需走转移 owner 的专门流程（如有）。`,
-			Example: "  tabtin table collaborator update --table-id <table_id> --user-id u_1 --permission editor\n" +
-				"  tabtin table collaborator update --table-id <table_id> --user-id u_2 --permission viewer\n" +
-				"  tabtin table collaborator update --table-id <table_id> --user-id u_1 --permission editor --dry-run",
+			Example: "  muse table collaborator update --table-id <table_id> --user-id u_1 --permission editor\n" +
+				"  muse table collaborator update --table-id <table_id> --user-id u_2 --permission viewer\n" +
+				"  muse table collaborator update --table-id <table_id> --user-id u_1 --permission editor --dry-run",
 			Route: cmdutil.RouteCliServer, Method: "POST", Path: "/table/collaborator-update",
 			Layer: "L2", Risk: cmdutil.RiskWrite, RiskDeclared: true,
 			Flags: []cmdutil.FlagDef{
@@ -86,9 +86,9 @@ list 不区分协作者来自哪个 Organization，只反映表级权限关系�
 若要恢复需要重新 invite，不是简单的"撤销"。
 常见陷阱：owner 一般不能被移除；移除后该用户此前创建的记录/评论等历史
 数据不受影响，只是失去当前访问权限。`,
-			Example: "  tabtin table collaborator remove --table-id <table_id> --user-id u_1 --yes\n" +
-				"  tabtin table collaborator remove --table-id <table_id> --user-id u_1 --dry-run\n" +
-				"  tabtin table collaborator list --table-id <table_id>  # 移除前先确认协作者列表",
+			Example: "  muse table collaborator remove --table-id <table_id> --user-id u_1 --yes\n" +
+				"  muse table collaborator remove --table-id <table_id> --user-id u_1 --dry-run\n" +
+				"  muse table collaborator list --table-id <table_id>  # 移除前先确认协作者列表",
 			Route: cmdutil.RouteCliServer, Method: "POST", Path: "/table/collaborator-remove",
 			Layer: "L2", Risk: cmdutil.RiskDestructive, RiskDeclared: true,
 			Flags: []cmdutil.FlagDef{

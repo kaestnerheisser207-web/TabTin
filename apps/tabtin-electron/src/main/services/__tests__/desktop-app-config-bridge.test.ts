@@ -57,15 +57,15 @@ describe('resolveTabDesktopAppManifestRoot · v2.2 模块零扫尾（独立验�
   it('打包态（isPackaged=true + resourcesPath 有效）→ 返回 <resourcesPath>/app.asar.unpacked/packages/apps', () => {
     const r = resolveTabDesktopAppManifestRoot({
       isPackaged: true,
-      resourcesPath: '/Applications/TabTin.app/Contents/Resources',
+      resourcesPath: '/Applications/Muse.app/Contents/Resources',
     })
-    expect(r).toBe('/Applications/TabTin.app/Contents/Resources/app.asar.unpacked/packages/apps')
+    expect(r).toBe('/Applications/Muse.app/Contents/Resources/app.asar.unpacked/packages/apps')
   })
 
   it('打包态 + Windows 路径 → 同样拼成 packages/apps', () => {
     const r = resolveTabDesktopAppManifestRoot({
       isPackaged: true,
-      resourcesPath: 'C:\\Program Files\\TabTin\\resources',
+      resourcesPath: 'C:\\Program Files\\Muse\\resources',
     })
     // path.join 在 POSIX 用 / 在 Windows 用 \；本测试在 Linux CI 跑，断言以 POSIX 为准
     expect(r).toContain('app.asar.unpacked')

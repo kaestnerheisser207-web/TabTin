@@ -27,7 +27,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.tabtin.mobile.R
+import com.muse.mobile.R
 import com.tabtin.mobile.features.workspace.OrganizationSettingsViewModel
 import com.tabtin.mobile.features.workspace.roleDisplayString
 import com.tabtin.mobile.ui.theme.TTSpacing

@@ -343,7 +343,7 @@
       "feishuReviewConfirm": "確認導入",
       "feishuReviewEmpty": "請至少保留一張表或一篇文檔",
       "feishuIncludeAttachments": "同步附件（較慢）",
-      "feishuIncludeAttachmentsHint": "預設為關閉；開啟後下載飛書檔案並寫入 TabTin 附件",
+      "feishuIncludeAttachmentsHint": "預設為關閉；開啟後下載飛書檔案並寫入 Muse 附件",
       "feishuImporting": "正在導入…",
       "feishuImportProgressRunning": "正在匯入 {{done}}/{{total}}",
       "feishuImportProgressQueued": "正在匯入 {{done}}/{{total}}（排隊 {{queued}}）",
@@ -958,7 +958,7 @@
     },
     "quickUse": {
       "sectionTitle": "快速使用",
-      "autoDescription": "無需填寫參數，TabTin 會先生成一條可發送的任務草稿。",
+      "autoDescription": "無需填寫參數，Muse 會先生成一條可發送的任務草稿。",
       "cardHint": "自動產生一條提示詞草稿，放到 Chat 輸入區確認發送。",
       "insertAction": "產生",
       "toastTitle": "已產生到輸入框",
@@ -971,7 +971,11 @@
       "toggleOff": "關閉"
     },
     "quickUseBuilder": {
-      "button": "快速使用模板", "variables": "變數", "variablesHint": "可只使用固定提示詞，也可新增變數讓使用者填寫。", "preview": "預覽", "cancel": "取消"
+      "button": "快速使用模板",
+      "variables": "變數",
+      "variablesHint": "可只使用固定提示詞，也可新增變數讓使用者填寫。",
+      "preview": "預覽",
+      "cancel": "取消"
     },
     "versionPublish": {
       "title": "發布新版本",
@@ -1254,7 +1258,7 @@
       "xlsxTruncated": "僅顯示前 {{shown}} 行，共 {{total}} 行",
       "xlsxSheetsLimited": "僅顯示前 {{max}} 個工作表",
       "xlsxFormulasCached": "顯示檔案中已儲存的 {{count}} 個公式結果。",
-      "xlsxFormulasCalculated": "TabTin 已在本地計算 {{count}} 個無快取公式；結果未寫回檔案。",
+      "xlsxFormulasCalculated": "Muse 已在本地計算 {{count}} 個無快取公式；結果未寫回檔案。",
       "xlsxFormulasUnavailable": "{{count}} 個公式沒有已儲存的結果，且暫無法在預覽中計算；請用表格套用開啟檔案。",
       "loadingDocxViewer": "正在載入文檔預覽...",
       "loadingPptxViewer": "正在載入簡報預覽...",
@@ -1562,7 +1566,7 @@
   },
   "browserRestore": {
     "restoringTitle": "正在恢復網頁",
-    "restoringDescription": "TabTin 正在重新開啟上次儲存的網頁。",
+    "restoringDescription": "Muse 正在重新開啟上次儲存的網頁。",
     "failedTitle": "網頁復原失敗",
     "failedDescription": "原網址仍然保留。你可以重試，或關閉這個標籤。",
     "retry": "重試",

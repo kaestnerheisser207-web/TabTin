@@ -50,7 +50,7 @@ describe('BR-2: /browser/route-list 诚实报未实现（不再空数组假成�
     await handleBrowserRoute('/browser/route-list', 'POST', {}, res, sendJSON, context);
     const r = lastResponse();
     const sugg = JSON.stringify(r.body.error.suggestions ?? []);
-    expect(sugg).toContain('tabtin browser route');
-    expect(sugg).toContain('tabtin browser unroute');
+    expect(sugg).toContain('muse browser route');
+    expect(sugg).toContain('muse browser unroute');
   });
 });

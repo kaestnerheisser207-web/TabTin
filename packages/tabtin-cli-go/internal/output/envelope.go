@@ -5,7 +5,7 @@ import "encoding/json"
 // FieldSchema 描述 CLI 命令 stdout JSON 中单个字段的 key/label/type/enum。
 //
 // **JSON tag 严格保留为 `key/label/type/enum`** —— 下游 packages/agent-runtime/src/capability/core/cli-output-render.ts
-// 按这些名字解析 `tabtin commands --format json` 的 output_schema 字段；改 tag 会破前端渲染。
+// 按这些名字解析 `muse commands --format json` 的 output_schema 字段；改 tag 会破前端渲染。
 //
 // 历史：原定义在 internal/cmdutil，Sprint 1.C 下沉到 internal/output 让 format.go 直接消费
 // （format 不能反向 import cmdutil）；cmdutil 保留 type alias 兼容现有引用。

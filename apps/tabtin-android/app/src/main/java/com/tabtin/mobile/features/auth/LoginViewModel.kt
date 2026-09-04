@@ -1,5 +1,7 @@
 package com.tabtin.mobile.features.auth
 
+import com.muse.mobile.R
+
 import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -42,13 +44,13 @@ public enum class LoginErrorContext {
 /** 登录页只展示简短、可行动的文案；服务端详情保留在错误对象中，不进入 UI。 */
 public object LoginErrorPresentation {
     public fun messageRes(error: Throwable, context: LoginErrorContext): Int = when {
-        error is AppError.NetworkUnavailable -> com.tabtin.mobile.R.string.auth_error_network
-        context == LoginErrorContext.SEND_CODE -> com.tabtin.mobile.R.string.auth_error_send_code
+        error is AppError.NetworkUnavailable -> com.muse.mobile.R.string.auth_error_network
+        context == LoginErrorContext.SEND_CODE -> com.muse.mobile.R.string.auth_error_send_code
         isCredentialFailure(error) && context == LoginErrorContext.PASSWORD ->
-            com.tabtin.mobile.R.string.auth_error_invalid_password
+            com.muse.mobile.R.string.auth_error_invalid_password
         isCredentialFailure(error) && context == LoginErrorContext.VERIFICATION_CODE ->
-            com.tabtin.mobile.R.string.auth_error_invalid_code
-        else -> com.tabtin.mobile.R.string.auth_error_login
+            com.muse.mobile.R.string.auth_error_invalid_code
+        else -> com.muse.mobile.R.string.auth_error_login
     }
 
     private fun isCredentialFailure(error: Throwable): Boolean {
@@ -273,7 +275,7 @@ public class LoginViewModel @Inject constructor(
                 if (challengeKey == null) {
                     _uiState.value = state.copy(
                         isLoggingIn = false,
-                        error = context.getString(com.tabtin.mobile.R.string.auth_error_send_code),
+                        error = context.getString(com.muse.mobile.R.string.auth_error_send_code),
                     )
                     return@launch
                 }
@@ -314,7 +316,7 @@ public class LoginViewModel @Inject constructor(
         val normalizedCode = inviteCode.trim()
         if (normalizedCode.isEmpty()) {
             _uiState.value = _uiState.value.copy(
-                inviteCodeError = context.getString(com.tabtin.mobile.R.string.auth_invite_code_required),
+                inviteCodeError = context.getString(com.muse.mobile.R.string.auth_invite_code_required),
             )
             return
         }
@@ -335,7 +337,7 @@ public class LoginViewModel @Inject constructor(
                         inviteCodeError = if (error is AppError) {
                             error.toUserMessage(context)
                         } else {
-                            context.getString(com.tabtin.mobile.R.string.error_request_failed)
+                            context.getString(com.muse.mobile.R.string.error_request_failed)
                         },
                     )
                 }

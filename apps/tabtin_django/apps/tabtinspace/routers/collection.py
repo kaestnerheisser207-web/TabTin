@@ -1,4 +1,4 @@
-"""Tabtin Space collection（文件夹）路由。
+"""Muse Space collection（文件夹）路由。
 
 #7140：新增 ``/organizations/{organization_id}/collections`` 系列路径，支持
 Organization 级（org-only）文件夹树，与 workspace/project 路径并列、互不影响。
@@ -6,7 +6,7 @@ Organization 级（org-only）文件夹树，与 workspace/project 路径并列�
 
 from .shared import *  # noqa: F401,F403
 
-router = Router(tags=["Tabtin Space"])
+router = Router(tags=["Muse Space"])
 
 @router.get(
     "/organizations/{organization_id}/shared-resource-placements",

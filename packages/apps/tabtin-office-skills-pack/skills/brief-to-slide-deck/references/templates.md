@@ -41,8 +41,8 @@ Always refine this skeleton according to `app:tabslide/html-spec`; do not treat 
 ```markdown
 已生成演示材料：
 
-- 讲稿：<tabtin doc link or 未创建>
-- 幻灯片：<tabtin slide link/project id or 未生成>
+- 讲稿：<muse doc link or 未创建>
+- 幻灯片：<muse slide link/project id or 未生成>
 - 页数：<N>
 - 检查：<lint/preview 状态>
 - 待确认：<visual style / audience / duration / missing source>

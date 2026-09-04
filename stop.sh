@@ -19,7 +19,7 @@ docker compose version >/dev/null 2>&1 || fail \
 docker info >/dev/null 2>&1 || fail \
   "Docker Engine is not running. Start Docker Desktop and try again."
 [[ -f "${env_file}" ]] || fail \
-  "Missing ${env_file}. Run ./start.sh once before stopping TabTin Community."
+  "Missing ${env_file}. Run ./start.sh once before stopping Muse Community."
 bash "${repo_root}/scripts/community/ensure-env-file.sh" "${repo_root}"
 
 docker compose \
@@ -28,4 +28,4 @@ docker compose \
   -f "${compose_file}" \
   down
 
-printf 'TabTin Community stopped. Your data and Docker volumes were preserved.\n'
+printf 'Muse Community stopped. Your data and Docker volumes were preserved.\n'

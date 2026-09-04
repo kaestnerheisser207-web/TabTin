@@ -85,7 +85,7 @@ const SWITCH_MODE_TOOL = 'switch_mode' as const;
 const WRITE_TOOLS_DENYLIST = [
   // **L16 修复（2026-05-04 W5.5）**：`run_terminal_command` 不再整体拒绝。
   // 受限模式（plan/ask/study）通过 `restrictedShellAllowlist: 'tabtin-readonly'`
-  // 在工具内做 input 级过滤——tabtin 只读子命令放行，写命令拒绝。
+  // 在工具内做 input 级过滤——muse 只读子命令放行，写命令拒绝。
   // 这是宪法不变量 2（业务能力走 CLI）与受限模式权衡后的产品决策（方案 A）。
   'mcp_call_tool',
   // D12.1（2026-05-28）：`agent` 保留在 denylist（plan/study 默认拒）；

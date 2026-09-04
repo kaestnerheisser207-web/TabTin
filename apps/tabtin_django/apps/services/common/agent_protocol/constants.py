@@ -169,9 +169,9 @@ class AgentStreamEvent:
     APPROVAL_RESOLVED = "approval_resolved"
     # W4 R3（2026-05-11）：ask 三件套并存。
     #   - ASK_USER_REQUIRED → ask_user 工具（AskUserQuestion 协议；替代 W4 之前的 ask_choice_required）
-    #   - ASK_FORM_REQUIRED → ask_form 工具（多字段填表，TabTin HITL 扩展）
+    #   - ASK_FORM_REQUIRED → ask_form 工具（多字段填表，Muse HITL 扩展）
     #   - REQUEST_APPROVAL_REQUIRED → request_approval 工具（已决方案审批，
-    #     TabTin HITL 扩展，必带 risk_level）
+    #     Muse HITL 扩展，必带 risk_level）
     # schema 源：packages/agent-wire/src/approval.ts
     #   AskUserRequestSchema / AskFormRequestSchema / RequestApprovalRequestSchema
     ASK_USER_REQUIRED = "ask_user_required"
@@ -488,7 +488,7 @@ class InternalStreamEvent:
 #
 # W4 R3（2026-05-11）：ask 三件套并存
 # （``ask_user_required`` 替代旧 ``ask_choice_required``，AskUserQuestion 协议；
-# ``ask_form_required`` 与 ``request_approval_required`` 是 TabTin HITL 扩展）。
+# ``ask_form_required`` 与 ``request_approval_required`` 是 Muse HITL 扩展）。
 # schema 见 ``packages/agent-wire/src/approval.ts``。
 
 

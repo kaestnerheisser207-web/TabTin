@@ -12,12 +12,12 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/TabTin/tabtin-cli/internal/cmdutil"
-	"github.com/TabTin/tabtin-cli/internal/config"
-	"github.com/TabTin/tabtin-cli/internal/conversation"
-	"github.com/TabTin/tabtin-cli/internal/errcode"
-	"github.com/TabTin/tabtin-cli/internal/output"
-	"github.com/TabTin/tabtin-cli/internal/transport"
+	"github.com/Muse/muse-cli/internal/cmdutil"
+	"github.com/Muse/muse-cli/internal/config"
+	"github.com/Muse/muse-cli/internal/conversation"
+	"github.com/Muse/muse-cli/internal/errcode"
+	"github.com/Muse/muse-cli/internal/output"
+	"github.com/Muse/muse-cli/internal/transport"
 )
 
 func NewCmdAgent(f *cmdutil.Factory) *cobra.Command {
@@ -27,11 +27,11 @@ func NewCmdAgent(f *cmdutil.Factory) *cobra.Command {
 		Long: `管理 Agent、切换上下文、发起对话。
 
 典型工作流：
-  tabtin agent list                       # 列出 Agent
-  tabtin agent use <id>                   # 选择 Agent
-  tabtin agent run "帮我分析数据"          # 对话
-  tabtin agent run                        # 交互模式
-  tabtin agent history                    # 查看历史`,
+  muse agent list                       # 列出 Agent
+  muse agent use <id>                   # 选择 Agent
+  muse agent run "帮我分析数据"          # 对话
+  muse agent run                        # 交互模式
+  muse agent history                    # 查看历史`,
 	}
 
 	cmd.AddCommand(newCmdRun(f))
@@ -63,7 +63,7 @@ func resolveCurrentAgentID(f *cmdutil.Factory, args []string) (string, error) {
 	if id := config.ResolveAgentID(cfg.CurrentProfileConfig()); id != "" {
 		return id, nil
 	}
-	return "", fmt.Errorf("需要指定 Agent ID。使用 'tabtin agent use <id>'、传入参数，或 'tabtin agent list' 查看可用 Agent")
+	return "", fmt.Errorf("需要指定 Agent ID。使用 'muse agent use <id>'、传入参数，或 'muse agent list' 查看可用 Agent")
 }
 
 func subscribeAndSend(ctx context.Context, st transport.StreamTransport, client *conversation.SessionClient, spaceID, message, sessionID, modelID string, handler conversation.EventHandler) (string, error) {
@@ -145,11 +145,11 @@ func newCmdRun(f *cmdutil.Factory) *cobra.Command {
 		Long: `发送消息给当前 Agent。省略消息则进入交互模式。
 
 模式：
-  tabtin agent run "msg"              单次对话
-  tabtin agent run -p "msg"           管道模式（纯输出，无交互）
-  echo "msg" | tabtin agent run       管道输入
-  tabtin agent run -c                 继续上次对话
-  tabtin agent run                    交互模式
+  muse agent run "msg"              单次对话
+  muse agent run -p "msg"           管道模式（纯输出，无交互）
+  echo "msg" | muse agent run       管道输入
+  muse agent run -c                 继续上次对话
+  muse agent run                    交互模式
 
 输出格式（v10.12 起推荐用全局 --format）：
   --format pretty              终端渲染（默认 TTY；text 通道）
@@ -157,15 +157,15 @@ func newCmdRun(f *cmdutil.Factory) *cobra.Command {
   --output-format stream-json  每个事件一行 NDJSON（agent run 独有，全局 --format 无对应）
   --output-format json         已 deprecated；改用 --format json
   --output-format text         agent run 默认形式，无需显式传`,
-		Example: `  tabtin agent run "帮我分析这个数据"
-  tabtin agent run -p "查询所有表格"
-  tabtin agent run --format json "生成报告" > report.json
-  tabtin agent run --format json --jq '.response' "生成报告"        # jq 提取字段
-  tabtin agent run --output-format stream-json -p "msg" | jq .       # NDJSON 流处理
-  echo "分析这段代码" | tabtin agent run -p
-  tabtin agent run -c "继续上次的话题"
-  tabtin agent run --system-prompt "你是数据分析师" "分析销售数据"
-  tabtin agent run                                                   # 交互模式`,
+		Example: `  muse agent run "帮我分析这个数据"
+  muse agent run -p "查询所有表格"
+  muse agent run --format json "生成报告" > report.json
+  muse agent run --format json --jq '.response' "生成报告"        # jq 提取字段
+  muse agent run --output-format stream-json -p "msg" | jq .       # NDJSON 流处理
+  echo "分析这段代码" | muse agent run -p
+  muse agent run -c "继续上次的话题"
+  muse agent run --system-prompt "你是数据分析师" "分析销售数据"
+  muse agent run                                                   # 交互模式`,
 		RunE: func(cmd *cobra.Command, args []string) error {
 			// v10.7 P1 / v10.8 P1 / v10.11 P1：flag 协议校验在 RunE 入口
 			// （早于 transport/profile），避免用户拼错 flag 看到 UNAVAILABLE (exit 8)
@@ -194,21 +194,21 @@ func newCmdRun(f *cmdutil.Factory) *cobra.Command {
 
 			tr, err := f.Transport()
 			if err != nil {
-				return output.PrintErrorAndExit(output.ErrorEnvelope(string(errcode.Unavailable), err.Error(), "tabtin daemon start", output.ExitServiceUnavail))
+				return output.PrintErrorAndExit(output.ErrorEnvelope(string(errcode.Unavailable), err.Error(), "muse daemon start", output.ExitServiceUnavail))
 			}
 
 			if tr.Type() == transport.TypeDjango {
 				return output.PrintErrorAndExit(output.ErrorEnvelope(
 					string(errcode.Unavailable),
-					"'agent run' 需要 TabTin 桌面端或 Daemon 运行。当前为 API 直连模式。",
-					"tabtin daemon start",
+					"'agent run' 需要 Muse 桌面端或 Daemon 运行。当前为 API 直连模式。",
+					"muse daemon start",
 					output.ExitServiceUnavail,
 				))
 			}
 
 			st, err := f.StreamTransport()
 			if err != nil {
-				return output.PrintErrorAndExit(output.ErrorEnvelope(string(errcode.Unavailable), err.Error(), "tabtin daemon start", output.ExitServiceUnavail))
+				return output.PrintErrorAndExit(output.ErrorEnvelope(string(errcode.Unavailable), err.Error(), "muse daemon start", output.ExitServiceUnavail))
 			}
 
 			pst, _ := tr.(transport.PostStreamTransport)
@@ -222,7 +222,7 @@ func newCmdRun(f *cmdutil.Factory) *cobra.Command {
 			profile := cfg.CurrentProfileConfig()
 			spaceID := config.ResolveSpaceID(profile)
 			if spaceID == "" {
-				return output.PrintErrorAndExit(output.ErrorEnvelope(string(errcode.ValidationError), "需要指定 Agent。请先运行 'tabtin agent use <id>'。", "tabtin agent list", output.ExitValidation))
+				return output.PrintErrorAndExit(output.ErrorEnvelope(string(errcode.ValidationError), "需要指定 Agent。请先运行 'muse agent use <id>'。", "muse agent list", output.ExitValidation))
 			}
 
 			client := conversation.NewSessionClient(tr)
@@ -276,7 +276,7 @@ func newCmdRun(f *cmdutil.Factory) *cobra.Command {
 			}
 
 			if !isInteractive() || flagPipe {
-				return output.PrintErrorAndExit(output.ErrorEnvelope(string(errcode.ValidationError), "管道模式需要消息输入", "tabtin agent run -p \"消息\" 或 echo \"消息\" | tabtin agent run", output.ExitValidation))
+				return output.PrintErrorAndExit(output.ErrorEnvelope(string(errcode.ValidationError), "管道模式需要消息输入", "muse agent run -p \"消息\" 或 echo \"消息\" | muse agent run", output.ExitValidation))
 			}
 
 			return runInteractive(reqCtx, st, pst, client, spaceID, flagSessionID, flagModel, outFmt, verbose, flagMaxTurns)
@@ -370,7 +370,7 @@ func runInteractive(parentCtx context.Context, st transport.StreamTransport, pst
 	// v10.8 P1：交互模式也服从 quiet（虽然交互场景下加 quiet 罕见，但协议一致）
 	renderer := conversation.NewRendererWithQuiet(verbose, output.IsQuietMode())
 
-	fmt.Fprintf(os.Stderr, "TabTin Agent 交互模式\n")
+	fmt.Fprintf(os.Stderr, "Muse Agent 交互模式\n")
 	fmt.Fprintf(os.Stderr, "  输入消息开始对话，/exit 退出，/help 查看帮助\n\n")
 
 	signal.Reset(os.Interrupt)
@@ -535,9 +535,9 @@ func newCmdList(f *cmdutil.Factory) *cobra.Command {
 		Use:     "list",
 		Short:   "列出我的 Agent",
 		Aliases: []string{"ls"},
-		Example: `  tabtin agent list
-  tabtin agent list --organization-id <id>
-  tabtin agent list --format table`,
+		Example: `  muse agent list
+  muse agent list --organization-id <id>
+  muse agent list --format table`,
 		RunE: func(cmd *cobra.Command, args []string) error {
 			tr, err := f.Transport()
 			if err != nil {
@@ -551,7 +551,7 @@ func newCmdList(f *cmdutil.Factory) *cobra.Command {
 			organizationID := config.ResolveOrganizationID(profile)
 
 			if organizationID == "" {
-				return output.PrintErrorAndExit(output.ErrorEnvelope(string(errcode.ValidationError), "需要 organization_id", "tabtin config set defaultOrganization <id>", output.ExitValidation))
+				return output.PrintErrorAndExit(output.ErrorEnvelope(string(errcode.ValidationError), "需要 organization_id", "muse config set defaultOrganization <id>", output.ExitValidation))
 			}
 
 			if err := cmdutil.ValidatePathParam(organizationID, "organization ID"); err != nil {
@@ -587,8 +587,8 @@ func newCmdCreate(f *cmdutil.Factory) *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "create",
 		Short: "创建新 Agent",
-		Example: `  tabtin agent create --name "数据分析助手"
-  tabtin agent create --name "代码助手" --rules "你是一个代码专家，回复用中文" --goal "帮助用户编写高质量代码"`,
+		Example: `  muse agent create --name "数据分析助手"
+  muse agent create --name "代码助手" --rules "你是一个代码专家，回复用中文" --goal "帮助用户编写高质量代码"`,
 		RunE: func(cmd *cobra.Command, args []string) error {
 			tr, err := f.Transport()
 			if err != nil {
@@ -602,7 +602,7 @@ func newCmdCreate(f *cmdutil.Factory) *cobra.Command {
 			organizationID := config.ResolveOrganizationID(profile)
 
 			if organizationID == "" {
-				return output.PrintErrorAndExit(output.ErrorEnvelope(string(errcode.ValidationError), "需要 organization_id", "tabtin config set defaultOrganization <id>", output.ExitValidation))
+				return output.PrintErrorAndExit(output.ErrorEnvelope(string(errcode.ValidationError), "需要 organization_id", "muse config set defaultOrganization <id>", output.ExitValidation))
 			}
 
 			body := map[string]any{
@@ -645,11 +645,11 @@ func newCmdInfo(f *cmdutil.Factory) *cobra.Command {
 	return &cobra.Command{
 		Use:     "info [agent-id]",
 		Short:   "Agent 详情",
-		Example: "  tabtin agent info\n  tabtin agent info <agent-id>",
+		Example: "  muse agent info\n  muse agent info <agent-id>",
 		RunE: func(cmd *cobra.Command, args []string) error {
 			agentID, err := resolveCurrentAgentID(f, args)
 			if err != nil {
-				return output.PrintErrorAndExit(output.ErrorEnvelope(string(errcode.ValidationError), err.Error(), "tabtin agent use <id>", output.ExitValidation))
+				return output.PrintErrorAndExit(output.ErrorEnvelope(string(errcode.ValidationError), err.Error(), "muse agent use <id>", output.ExitValidation))
 			}
 
 			if err := cmdutil.ValidatePathParam(agentID, "agent ID"); err != nil {
@@ -694,15 +694,15 @@ func newCmdUpdate(f *cmdutil.Factory) *cobra.Command {
 基础字段：--name, --rules, --goal
 能力配置：--preset, --terminal-mode, --sql-mode, --backend
 
-更复杂的配置修改请使用 tabtin agent config set <key> <value>`,
-		Example: `  tabtin agent update --name "新名字"
-  tabtin agent update --preset collaborative
-  tabtin agent update --terminal-mode sandboxed --sql-mode read_write
-  tabtin agent update --backend codex`,
+更复杂的配置修改请使用 muse agent config set <key> <value>`,
+		Example: `  muse agent update --name "新名字"
+  muse agent update --preset collaborative
+  muse agent update --terminal-mode sandboxed --sql-mode read_write
+  muse agent update --backend codex`,
 		RunE: func(cmd *cobra.Command, args []string) error {
 			agentID, err := resolveCurrentAgentID(f, args)
 			if err != nil {
-				return output.PrintErrorAndExit(output.ErrorEnvelope(string(errcode.ValidationError), err.Error(), "tabtin agent use <id>", output.ExitValidation))
+				return output.PrintErrorAndExit(output.ErrorEnvelope(string(errcode.ValidationError), err.Error(), "muse agent use <id>", output.ExitValidation))
 			}
 
 			if err := cmdutil.ValidatePathParam(agentID, "agent ID"); err != nil {
@@ -789,7 +789,7 @@ func newCmdDelete(f *cmdutil.Factory) *cobra.Command {
 	return &cobra.Command{
 		Use:     "delete <agent-id>",
 		Short:   "删除 Agent",
-		Example: "  tabtin agent delete <agent-id> --yes",
+		Example: "  muse agent delete <agent-id> --yes",
 		Args:    cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			if err := cmdutil.ValidatePathParam(args[0], "agent ID"); err != nil {
@@ -827,7 +827,7 @@ func newCmdUse(f *cmdutil.Factory) *cobra.Command {
 		Use:     "use <agent-id>",
 		Short:   "切换当前 Agent",
 		Args:    cobra.ExactArgs(1),
-		Example: "  tabtin agent use <agent-id>",
+		Example: "  muse agent use <agent-id>",
 		RunE: func(cmd *cobra.Command, args []string) error {
 			if err := cmdutil.ValidatePathParam(args[0], "agent ID"); err != nil {
 				return output.PrintErrorAndExit(output.ErrorEnvelope(string(errcode.ValidationError), err.Error(), "", output.ExitValidation))
@@ -842,7 +842,7 @@ func newCmdUse(f *cmdutil.Factory) *cobra.Command {
 			p := cfg.CurrentProfileConfig()
 			// 只设置 Agent 身份，不再污染 DefaultSpace / TABTIN_SPACE_ID——
 			// Agent 与 Space 是独立实体（ 根因：曾把 agent id 写进 space 槽）。
-			// 切换工作 Space 用 'tabtin space use <space-id>'。
+			// 切换工作 Space 用 'muse space use <space-id>'。
 			p.DefaultAgent = agentID
 
 			if err := config.Save(cfg); err != nil {
@@ -861,7 +861,7 @@ func newCmdCurrent(f *cmdutil.Factory) *cobra.Command {
 	return &cobra.Command{
 		Use:     "current",
 		Short:   "显示当前 Agent",
-		Example: "  tabtin agent current",
+		Example: "  muse agent current",
 		RunE: func(cmd *cobra.Command, args []string) error {
 			cfg, err := f.Config()
 			if err != nil {
@@ -881,7 +881,7 @@ func newCmdCurrent(f *cmdutil.Factory) *cobra.Command {
 				return output.PrintErrorAndExit(output.ErrorEnvelope(
 					string(errcode.ValidationError),
 					"未确定当前 Agent：既无 Agent 身份也无 Space 上下文",
-					"用 'tabtin agent list' 选择一个 agent id，或 'tabtin agent use <id>'",
+					"用 'muse agent list' 选择一个 agent id，或 'muse agent use <id>'",
 					output.ExitValidation,
 				))
 			}
@@ -901,7 +901,7 @@ func newCmdCurrent(f *cmdutil.Factory) *cobra.Command {
 				return output.PrintErrorAndExit(output.ErrorEnvelope(
 					cmdutil.HTTPStatusToErrorCode(resp.Status),
 					fmt.Sprintf("解析当前 Space 执行 Agent 失败 (status %d)", resp.Status),
-					"用 'tabtin agent list' 选择一个 agent id",
+					"用 'muse agent list' 选择一个 agent id",
 					output.ExitGeneral,
 				))
 			}
@@ -914,7 +914,7 @@ func newCmdCurrent(f *cmdutil.Factory) *cobra.Command {
 				return output.PrintErrorAndExit(output.ErrorEnvelope(
 					string(errcode.NotFound),
 					"当前 Space 未绑定执行 Agent",
-					"用 'tabtin agent list' 选择一个 agent id 后加 --agent <agent-id>",
+					"用 'muse agent list' 选择一个 agent id 后加 --agent <agent-id>",
 					output.ExitGeneral,
 				))
 			}
@@ -955,7 +955,7 @@ func newCmdHistory(f *cmdutil.Factory) *cobra.Command {
 	cmd := &cobra.Command{
 		Use:     "history",
 		Short:   "对话历史",
-		Example: "  tabtin agent history\n  tabtin agent history --limit 5",
+		Example: "  muse agent history\n  muse agent history --limit 5",
 		RunE: func(cmd *cobra.Command, args []string) error {
 			tr, err := f.Transport()
 			if err != nil {
@@ -965,8 +965,8 @@ func newCmdHistory(f *cmdutil.Factory) *cobra.Command {
 			if tr.Type() == transport.TypeDjango {
 				return output.PrintErrorAndExit(output.ErrorEnvelope(
 					string(errcode.Unavailable),
-					"'agent history' 需要 TabTin 桌面端或 Daemon 运行。当前为 API 直连模式。",
-					"tabtin daemon start",
+					"'agent history' 需要 Muse 桌面端或 Daemon 运行。当前为 API 直连模式。",
+					"muse daemon start",
 					output.ExitServiceUnavail,
 				))
 			}
@@ -975,7 +975,7 @@ func newCmdHistory(f *cmdutil.Factory) *cobra.Command {
 			profile := cfg.CurrentProfileConfig()
 			spaceID := config.ResolveSpaceID(profile)
 			if spaceID == "" {
-				return output.PrintErrorAndExit(output.ErrorEnvelope(string(errcode.ValidationError), "需要指定 Agent", "tabtin agent use <id>", output.ExitValidation))
+				return output.PrintErrorAndExit(output.ErrorEnvelope(string(errcode.ValidationError), "需要指定 Agent", "muse agent use <id>", output.ExitValidation))
 			}
 
 			client := conversation.NewSessionClient(tr)
@@ -997,7 +997,7 @@ func newCmdModels(f *cmdutil.Factory) *cobra.Command {
 	return &cobra.Command{
 		Use:     "models",
 		Short:   "可用模型列表",
-		Example: "  tabtin agent models",
+		Example: "  muse agent models",
 		RunE: func(cmd *cobra.Command, args []string) error {
 			tr, err := f.Transport()
 			if err != nil {
@@ -1007,8 +1007,8 @@ func newCmdModels(f *cmdutil.Factory) *cobra.Command {
 			if tr.Type() == transport.TypeDjango {
 				return output.PrintErrorAndExit(output.ErrorEnvelope(
 					string(errcode.Unavailable),
-					"'agent models' 需要 TabTin 桌面端或 Daemon 运行。当前为 API 直连模式。",
-					"tabtin daemon start",
+					"'agent models' 需要 Muse 桌面端或 Daemon 运行。当前为 API 直连模式。",
+					"muse daemon start",
 					output.ExitServiceUnavail,
 				))
 			}
@@ -1036,22 +1036,22 @@ func newCmdDB(f *cmdutil.Factory) *cobra.Command {
 	}
 
 	cmdutil.RegisterCommand(dbCmd, f, cmdutil.CommandDef{
-		Use: "info", Short: "数据库连接信息", Example: "  tabtin agent db info",
+		Use: "info", Short: "数据库连接信息", Example: "  muse agent db info",
 		Route: cmdutil.RouteCliServer, Method: "POST", Path: "/space/db-info",
 		HasFormat: true, RequiresAgent: true,
 	})
 	cmdutil.RegisterCommand(dbCmd, f, cmdutil.CommandDef{
-		Use: "connection", Short: "列出连接", Example: "  tabtin agent db connection",
+		Use: "connection", Short: "列出连接", Example: "  muse agent db connection",
 		Route: cmdutil.RouteCliServer, Method: "POST", Path: "/space/db-connection",
 		HasFormat: true, RequiresAgent: true,
 	})
 	cmdutil.RegisterCommand(dbCmd, f, cmdutil.CommandDef{
-		Use: "create", Short: "创建连接", Example: "  tabtin agent db create",
+		Use: "create", Short: "创建连接", Example: "  muse agent db create",
 		Route: cmdutil.RouteCliServer, Method: "POST", Path: "/space/create-db-connection",
 		HasFormat: true, RequiresAgent: true, Risk: cmdutil.RiskWrite,
 	})
 	cmdutil.RegisterCommand(dbCmd, f, cmdutil.CommandDef{
-		Use: "delete <id>", Short: "删除连接", Example: "  tabtin agent db delete --id conn_xxx --yes",
+		Use: "delete <id>", Short: "删除连接", Example: "  muse agent db delete --id conn_xxx --yes",
 		Route: cmdutil.RouteCliServer, Method: "POST", Path: "/space/delete-db-connection",
 		Flags:     []cmdutil.FlagDef{{Name: "id", Type: cmdutil.FlagString, Required: true, Desc: "连接 ID"}},
 		HasFormat: true, RequiresAgent: true, Risk: cmdutil.RiskHigh,
@@ -1074,7 +1074,7 @@ func AgentCommandSchemas() map[string]cmdutil.CommandDef {
 	return map[string]cmdutil.CommandDef{
 		"run": {
 			Use: "run [message]", Short: "与 Agent 对话",
-			Example: "  tabtin agent run \"帮我分析这个数据\"\n  tabtin agent run -p \"查询所有表格\"\n  tabtin agent run --format json \"生成报告\" > report.json",
+			Example: "  muse agent run \"帮我分析这个数据\"\n  muse agent run -p \"查询所有表格\"\n  muse agent run --format json \"生成报告\" > report.json",
 			Route:   cmdutil.RouteDirect,
 			// ：启动 Agent 会话可间接触发任意写/操控，标 write 以在受限模式拒绝、Agent 模式审批。
 			Risk:          cmdutil.RiskWrite,
@@ -1092,7 +1092,7 @@ func AgentCommandSchemas() map[string]cmdutil.CommandDef {
 		},
 		"list": {
 			Use: "list", Short: "列出我的 Agent",
-			Example:      "  tabtin agent list\n  tabtin agent list --format table",
+			Example:      "  muse agent list\n  muse agent list --format table",
 			Route:        cmdutil.RouteDirect,
 			HasFormat:    true,
 			RequiresAuth: true,
@@ -1100,21 +1100,21 @@ func AgentCommandSchemas() map[string]cmdutil.CommandDef {
 		},
 		"use": {
 			Use: "use <agent-id>", Short: "切换当前 Agent",
-			Example:     "  tabtin agent use <agent-id>",
+			Example:     "  muse agent use <agent-id>",
 			Route:       cmdutil.RouteDirect,
 			ArgsMapping: []string{"agent_id"},
 			Risk:        cmdutil.RiskWrite,
 		},
 		"current": {
 			Use: "current", Short: "显示当前 Agent",
-			Example:    "  tabtin agent current",
+			Example:    "  muse agent current",
 			Route:      cmdutil.RouteDirect,
 			HasFormat:  true,
 			Idempotent: true,
 		},
 		"create": {
 			Use: "create", Short: "创建新 Agent",
-			Example:      "  tabtin agent create --name \"数据分析助手\"\n  tabtin agent create --name \"代码助手\" --rules \"你是一个代码专家，回复用中文\"",
+			Example:      "  muse agent create --name \"数据分析助手\"\n  muse agent create --name \"代码助手\" --rules \"你是一个代码专家，回复用中文\"",
 			Route:        cmdutil.RouteDirect,
 			RequiresAuth: true,
 			Risk:         cmdutil.RiskWrite,
@@ -1126,7 +1126,7 @@ func AgentCommandSchemas() map[string]cmdutil.CommandDef {
 		},
 		"info": {
 			Use: "info [agent-id]", Short: "Agent 详情",
-			Example:     "  tabtin agent info\n  tabtin agent info <agent-id>",
+			Example:     "  muse agent info\n  muse agent info <agent-id>",
 			Route:       cmdutil.RouteDirect,
 			HasFormat:   true,
 			Idempotent:  true,
@@ -1134,7 +1134,7 @@ func AgentCommandSchemas() map[string]cmdutil.CommandDef {
 		},
 		"update": {
 			Use: "update [agent-id]", Short: "更新 Agent 配置",
-			Example:      "  tabtin agent update --name \"新名字\"\n  tabtin agent update --preset collaborative",
+			Example:      "  muse agent update --name \"新名字\"\n  muse agent update --preset collaborative",
 			Route:        cmdutil.RouteDirect,
 			RequiresAuth: true,
 			Risk:         cmdutil.RiskWrite,
@@ -1151,7 +1151,7 @@ func AgentCommandSchemas() map[string]cmdutil.CommandDef {
 		},
 		"delete": {
 			Use: "delete <agent-id>", Short: "删除 Agent",
-			Example:     "  tabtin agent delete <agent-id> --yes",
+			Example:     "  muse agent delete <agent-id> --yes",
 			Route:       cmdutil.RouteDirect,
 			ArgsMapping: []string{"agent_id"},
 			Risk:        cmdutil.RiskHigh,
@@ -1161,7 +1161,7 @@ func AgentCommandSchemas() map[string]cmdutil.CommandDef {
 		},
 		"history": {
 			Use: "history", Short: "对话历史",
-			Example:    "  tabtin agent history\n  tabtin agent history --limit 5",
+			Example:    "  muse agent history\n  muse agent history --limit 5",
 			Route:      cmdutil.RouteDirect,
 			HasFormat:  true,
 			Idempotent: true,
@@ -1171,7 +1171,7 @@ func AgentCommandSchemas() map[string]cmdutil.CommandDef {
 		},
 		"models": {
 			Use: "models", Short: "可用模型列表",
-			Example:    "  tabtin agent models",
+			Example:    "  muse agent models",
 			Route:      cmdutil.RouteDirect,
 			HasFormat:  true,
 			Idempotent: true,
@@ -1183,7 +1183,7 @@ func AgentConfigCommandSchemas() map[string]cmdutil.CommandDef {
 	return map[string]cmdutil.CommandDef{
 		"show": {
 			Use: "show [agent-id]", Short: "查看 Agent 配置",
-			Example:    "  tabtin agent config show\n  tabtin agent config show --key authorization_preset",
+			Example:    "  muse agent config show\n  muse agent config show --key authorization_preset",
 			Route:      cmdutil.RouteDirect,
 			HasFormat:  true,
 			Idempotent: true,
@@ -1193,14 +1193,14 @@ func AgentConfigCommandSchemas() map[string]cmdutil.CommandDef {
 		},
 		"set": {
 			Use: "set <key> <value>", Short: "修改 Agent 配置项",
-			Example:     "  tabtin agent config set authorization_preset collaborative\n  tabtin agent config set terminal_mode sandboxed",
+			Example:     "  muse agent config set authorization_preset collaborative\n  muse agent config set terminal_mode sandboxed",
 			Route:       cmdutil.RouteDirect,
 			ArgsMapping: []string{"key", "value"},
 			Risk:        cmdutil.RiskWrite,
 		},
 		"preset": {
 			Use: "preset <preset>", Short: "快速切换安全预设",
-			Example:     "  tabtin agent config preset collaborative\n  tabtin agent config preset cautious",
+			Example:     "  muse agent config preset collaborative\n  muse agent config preset cautious",
 			Route:       cmdutil.RouteDirect,
 			ArgsMapping: []string{"preset"},
 			Risk:        cmdutil.RiskWrite,

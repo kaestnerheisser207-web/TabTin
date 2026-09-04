@@ -14,10 +14,10 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/TabTin/tabtin-cli/internal/config"
-	"github.com/TabTin/tabtin-cli/internal/errcode"
-	"github.com/TabTin/tabtin-cli/internal/output"
-	"github.com/TabTin/tabtin-cli/internal/transport"
+	"github.com/Muse/muse-cli/internal/config"
+	"github.com/Muse/muse-cli/internal/errcode"
+	"github.com/Muse/muse-cli/internal/output"
+	"github.com/Muse/muse-cli/internal/transport"
 )
 
 type registeredCommand struct {
@@ -31,7 +31,7 @@ func GetRegisteredCommands() []CommandSchema {
 	schemas := make([]CommandSchema, 0, len(registeredCommands))
 	for _, entry := range registeredCommands {
 		// Hidden 命令仍输出 schema（供受限模式 risk map 经 --include-hidden 读取），
-		// 默认发现面由 FilterVisibleCommandSchemas / `tabtin commands` 剔除
+		// 默认发现面由 FilterVisibleCommandSchemas / `muse commands` 剔除
 		//（ memo /  slide create 等）。
 		hidden := entry.Def.Hidden || (entry.Cmd != nil && entry.Cmd.Hidden)
 		flags := make([]FlagSchema, 0, len(entry.Def.Flags))
@@ -72,7 +72,7 @@ func GetRegisteredCommands() []CommandSchema {
 	return schemas
 }
 
-// FilterVisibleCommandSchemas 去掉 Hidden 命令，供默认 `tabtin commands` 发现面使用。
+// FilterVisibleCommandSchemas 去掉 Hidden 命令，供默认 `muse commands` 发现面使用。
 func FilterVisibleCommandSchemas(schemas []CommandSchema) []CommandSchema {
 	if len(schemas) == 0 {
 		return schemas
@@ -92,7 +92,7 @@ func commandSchemaName(cmd *cobra.Command) string {
 		return ""
 	}
 	name := cmd.CommandPath()
-	return strings.TrimPrefix(name, "tabtin ")
+	return strings.TrimPrefix(name, "muse ")
 }
 
 // groupDescription 合成 group 条目的召回友好描述：Short + Long 首行。
@@ -121,10 +121,10 @@ func groupDescription(c *cobra.Command) string {
 
 // CollectGroupSchemas 遍历 cobra 命令树，为 pure group 命令（无 CommandDef 注册、
 // 只路由子命令的父命令，如 `doc` / `mcp` / `browser tab`）合成 CommandSchema——
-// 让 `tabtin commands --format json` 也收录入口命令。
+// 让 `muse commands --format json` 也收录入口命令。
 //
 // 之前只输出 registeredCommands（leaf + 手写 RegisterCommandSchema），relevant-cli
-// 召回池对 `tabtin doc` 这类入口命令零召回，Agent 只能靠静态索引兜底。
+// 召回池对 `muse doc` 这类入口命令零召回，Agent 只能靠静态索引兜底。
 //
 // 合成条目带 IsGroup=true + Subcommands 子命令名列表；Risk 留空（裸跑仅显示
 // help，只读），但消费侧受限模式 allowlist 必须按 IsGroup 跳过（防前缀误放行）。
@@ -170,14 +170,14 @@ func CollectGroupSchemas(root *cobra.Command) []CommandSchema {
 	return out
 }
 
-// RegisterCommandSchema 仅注册命令的元数据 schema 到 `tabtin commands` 输出，
+// RegisterCommandSchema 仅注册命令的元数据 schema 到 `muse commands` 输出，
 // 不接管 cobra 命令的 RunE 执行。
 //
-// 用途：当命令的输入/输出格式特殊（如 `tabtin search` 需要自定义 stderr 警告 +
+// 用途：当命令的输入/输出格式特殊（如 `muse search` 需要自定义 stderr 警告 +
 // 双模 stdout 输出），无法走通用 `executePipeline` 流程时，CLI 仍要让 Agent 通过
-// `tabtin commands | jq` 自动发现该命令存在与参数定义。
+// `muse commands | jq` 自动发现该命令存在与参数定义。
 //
-// cmd 可以在挂到最终 root 之前注册；`tabtin commands` 输出时会延迟解析 CommandPath。
+// cmd 可以在挂到最终 root 之前注册；`muse commands` 输出时会延迟解析 CommandPath。
 func RegisterCommandSchema(cmd *cobra.Command, def CommandDef) {
 	registeredCommands = append(registeredCommands, registeredCommand{Cmd: cmd, Def: def})
 }
@@ -301,12 +301,12 @@ func assertSpecCompliant(def CommandDef, parentPath string) {
 	// Example ≥ 3 个独立用例（按非空行近似计数）
 	exampleLines := 0
 	for _, line := range strings.Split(def.Example, "\n") {
-		// 计 example 命令行：以 tabtin / echo 等可执行开头
+		// 计 example 命令行：以 muse / echo 等可执行开头
 		trimmed := strings.TrimSpace(line)
 		if trimmed == "" {
 			continue
 		}
-		if strings.HasPrefix(trimmed, "tabtin ") || strings.HasPrefix(trimmed, "echo ") || strings.HasPrefix(trimmed, "$ ") || strings.HasPrefix(trimmed, "# ") {
+		if strings.HasPrefix(trimmed, "muse ") || strings.HasPrefix(trimmed, "echo ") || strings.HasPrefix(trimmed, "$ ") || strings.HasPrefix(trimmed, "# ") {
 			exampleLines++
 		} else if !strings.HasPrefix(trimmed, "//") && !strings.HasPrefix(trimmed, "#") {
 			// 兜底：把非注释行也算
@@ -346,7 +346,7 @@ func RegisterCommand(parent *cobra.Command, f *Factory, def CommandDef) *cobra.C
 		Long:    def.Long,
 		Example: def.Example,
 		Aliases: def.Aliases,
-		// Hidden 命令仍可运行；`--help` 由 cobra 隐去，默认 `tabtin commands`
+		// Hidden 命令仍可运行；`--help` 由 cobra 隐去，默认 `muse commands`
 		// 经 FilterVisibleCommandSchemas 剔除，risk map 用 --include-hidden 保留。
 		Hidden: def.Hidden,
 		RunE: SafeRunE(func(cmd *cobra.Command, args []string) error {
@@ -560,8 +560,8 @@ func executePipeline(cmd *cobra.Command, args []string, f *Factory, def CommandD
 			if token == "" && !hostManaged {
 				return output.PrintErrorAndExit(output.ErrorEnvelope(
 					string(errcode.Unauthorized),
-					"需要认证。请先运行 'tabtin auth login'。",
-					"tabtin auth login --url <url> --token <token>",
+					"需要认证。请先运行 'muse auth login'。",
+					"muse auth login --url <url> --token <token>",
 					output.ExitAuth,
 				))
 			}
@@ -574,8 +574,8 @@ func executePipeline(cmd *cobra.Command, args []string, f *Factory, def CommandD
 		if def.RequiresAgent && ctx.AgentID == "" && ctx.SpaceID == "" {
 			return output.PrintErrorAndExit(output.ErrorEnvelope(
 				string(errcode.ValidationError),
-				"需要指定 Agent。请先运行 'tabtin agent use <id>'。",
-				"tabtin agent list",
+				"需要指定 Agent。请先运行 'muse agent use <id>'。",
+				"muse agent list",
 				output.ExitValidation,
 			))
 		}
@@ -789,7 +789,7 @@ func executeTransportCommand(ctx *RunContext, f *Factory, def CommandDef) error 
 		return output.PrintErrorAndExit(output.ErrorEnvelope(
 			string(errcode.Unavailable),
 			err.Error(),
-			"tabtin daemon start",
+			"muse daemon start",
 			output.ExitServiceUnavail,
 		))
 	}
@@ -797,8 +797,8 @@ func executeTransportCommand(ctx *RunContext, f *Factory, def CommandDef) error 
 	if tr.Type() == "django" && !def.AllowsDjango() {
 		return output.PrintErrorAndExit(output.ErrorEnvelope(
 			string(errcode.Unavailable),
-			fmt.Sprintf("'%s' 需要 TabTin 桌面端或 Daemon 运行（local-only）。当前为 API 直连模式。", def.Use),
-			"tabtin daemon start",
+			fmt.Sprintf("'%s' 需要 Muse 桌面端或 Daemon 运行（local-only）。当前为 API 直连模式。", def.Use),
+			"muse daemon start",
 			output.ExitServiceUnavail,
 		))
 	}
@@ -841,7 +841,7 @@ func executeTransportCommand(ctx *RunContext, f *Factory, def CommandDef) error 
 			return output.PrintErrorAndExit(output.ErrorEnvelope(
 				string(errcode.ValidationError),
 				"当前无 Agent 上下文",
-				"请先在 TabTin 中选择 Agent，或设置 TABTIN_AGENT_ID / --agent-id",
+				"请先在 Muse 中选择 Agent，或设置 TABTIN_AGENT_ID / --agent-id",
 				output.ExitValidation,
 			))
 		}
@@ -865,7 +865,7 @@ func executeTransportCommand(ctx *RunContext, f *Factory, def CommandDef) error 
 					return output.PrintErrorAndExit(output.ErrorEnvelope(
 						string(errcode.ValidationError),
 						fmt.Sprintf("缺少必填参数 <%s>", strings.ReplaceAll(argName, "_", "-")),
-						fmt.Sprintf("用法: tabtin %s", def.Use),
+						fmt.Sprintf("用法: muse %s", def.Use),
 						output.ExitValidation,
 					))
 				}
@@ -903,7 +903,7 @@ func executeTransportCommand(ctx *RunContext, f *Factory, def CommandDef) error 
 						return output.PrintErrorAndExit(output.ErrorEnvelope(
 							string(errcode.ValidationError),
 							fmt.Sprintf("缺少必填参数 <%s>", strings.ReplaceAll(argName, "_", "-")),
-							fmt.Sprintf("用法: tabtin %s", def.Use),
+							fmt.Sprintf("用法: muse %s", def.Use),
 							output.ExitValidation,
 						))
 					}
@@ -1463,7 +1463,7 @@ func executeBatchCommand(ctx *RunContext, f *Factory, def CommandDef, batchPath 
 
 	tr, err := f.Transport()
 	if err != nil {
-		return output.PrintErrorAndExit(output.ErrorEnvelope(string(errcode.Unavailable), err.Error(), "tabtin daemon start", output.ExitServiceUnavail))
+		return output.PrintErrorAndExit(output.ErrorEnvelope(string(errcode.Unavailable), err.Error(), "muse daemon start", output.ExitServiceUnavail))
 	}
 
 	reqCtx := ctx.ReqContext

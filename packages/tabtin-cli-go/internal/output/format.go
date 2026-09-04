@@ -252,7 +252,7 @@ func PrintResult(data any, format Format) {
 // （用户可能 dry-run 后想保留 plan 做 review）。
 // 顺序与 PrintResultWithSchema 一致：jq → --output → stdout（quiet 不阻断显式写盘也不抑 force 的 stdout）。
 //
-// v10.3 P0 修复：dry-run + jq 也必须工作——`tabtin doc list --dry-run --jq '.plan'`
+// v10.3 P0 修复：dry-run + jq 也必须工作——`muse doc list --dry-run --jq '.plan'`
 // 之前完全绕过 jq 输出 envelope；现在 jq 先应用，让 agent 能拿到关心的字段。
 //
 // ：Force 路径同样经体量闸门（printOrSpill）——超大 dry-run plan 也会落盘换
@@ -287,7 +287,7 @@ func PrintResultWithSchema(data any, format Format, schema []FieldSchema) {
 // PrintResultWithSchemaInline 同 PrintResultWithSchema，但**跳过大输出落盘兜底**。
 //
 // 用于「命令目录 / 能力自描述」这类协议输出——消费方是程序（如 agent-runtime 子进程解析
-// `tabtin commands`），不是 LLM 上下文。这类输出即便超过 64KB 也必须完整内联，否则落盘换成
+// `muse commands`），不是 LLM 上下文。这类输出即便超过 64KB 也必须完整内联，否则落盘换成
 // file_ref 摘要会直接破坏能力发现 / schema 解析。
 func PrintResultWithSchemaInline(data any, format Format, schema []FieldSchema) {
 	printResultWithSchema(data, format, schema, true)
@@ -990,7 +990,7 @@ func printAgentMarkdownTableWithSchema(w io.Writer, items []map[string]any, sche
 
 // printAgentSingleRowWithSchema 单行数据按 schema 渲染——"Label: Value" 列表形式。
 //
-// 单行场景常tabtin agent get / tabtin memo get / tabtin doc info 等查询单一资源。
+// 单行场景常muse agent get / muse memo get / muse doc info 等查询单一资源。
 // 保留 schema 的 Label（中文友好）+ 顺序 + Type 格式化（datetime/id/bool 渲染）。
 func printAgentSingleRowWithSchema(w io.Writer, item map[string]any, schema []FieldSchema) {
 	for _, f := range schema {

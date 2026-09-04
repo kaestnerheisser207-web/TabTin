@@ -108,7 +108,7 @@
     "availableTitle": "Die KI-Ausführung wird über „{{device}}“ geleitet.",
     "availableDesc": "Die Teamzusammenarbeit bleibt in diesem Teamarbeitsbereich; AI läuft in {{space}}.",
     "unavailableTitle": "Besitzer-Ausführungsgerät „{{device}}“ ist nicht verfügbar ({{status}})",
-    "unavailableDesc": "Chat und Assets bleiben verfügbar, aber KI-Aufgaben können vorerst nicht gestartet werden. Sobald der Eigentümer TabTin auf diesem Gerät erneut öffnet und {{space}} wieder online ist, wird die Ausführung fortgesetzt."
+    "unavailableDesc": "Chat und Assets bleiben verfügbar, aber KI-Aufgaben können vorerst nicht gestartet werden. Sobald der Eigentümer Muse auf diesem Gerät erneut öffnet und {{space}} wieder online ist, wird die Ausführung fortgesetzt."
   },
   "validation": {
     "nameRequired": "Der Name des Arbeitsbereichs ist erforderlich",
@@ -441,8 +441,8 @@
       "subtitle": "Identifizieren Sie zunächst, was diesen Agenten antreibt und an welches Gerät er gebunden ist. Trennen Sie dann die aktuelle Raumkonfiguration von den Funktionen, die nur zum aktuellen Electron-Steuergerät gehören.",
       "builtinActive": "Integrierte Laufzeit aktiv",
       "externalActive": "Externes Backend aktiv",
-      "builtinDesc": "Dieser Agent wird von der integrierten TabTin-Engine gesteuert, aber diese Seite muss dennoch zwischen der Konfiguration des aktuellen Speicherplatzes und den von dieser Electron-Instanz bereitgestellten Hostfunktionen unterscheiden. Die lokale Laufzeit entspricht nur dann der direkten Laufzeit des Agenten, wenn dieses Electron-Gerät das Ausführungsgerät ist.",
-      "externalDesc": "Dieser Agent wird von einer externen Engine angetrieben. Es ist hauptsächlich auf sein eigenes Toolsystem und seinen Terminalzugriff angewiesen, daher beschreiben die hier gezeigte TabTin-Laufzeit, MCP und Core-CLI, was der aktuelle Electron-Host bereitstellen kann, und nicht, was der externe Agent immer direkt aufrufen kann.",
+      "builtinDesc": "Dieser Agent wird von der integrierten Muse-Engine gesteuert, aber diese Seite muss dennoch zwischen der Konfiguration des aktuellen Speicherplatzes und den von dieser Electron-Instanz bereitgestellten Hostfunktionen unterscheiden. Die lokale Laufzeit entspricht nur dann der direkten Laufzeit des Agenten, wenn dieses Electron-Gerät das Ausführungsgerät ist.",
+      "externalDesc": "Dieser Agent wird von einer externen Engine angetrieben. Es ist hauptsächlich auf sein eigenes Toolsystem und seinen Terminalzugriff angewiesen, daher beschreiben die hier gezeigte Muse-Laufzeit, MCP und Core-CLI, was der aktuelle Electron-Host bereitstellen kann, und nicht, was der externe Agent immer direkt aufrufen kann.",
       "boundLocal": "Dieses Elektronengerät ist das Ausführungsgerät",
       "boundOther": "Dieser Agent ist an ein anderes Gerät gebunden",
       "unbound": "Dieser Agent ist noch nicht an ein Ausführungsgerät gebunden",
@@ -742,7 +742,7 @@
     "workspaceHint": "Wird automatisch aus in TabCode/Verzeichnissen geöffneten Inhalten erkannt – keine manuelle Konfiguration erforderlich",
     "workspaceEmpty": "Keine Wege zugelassen. Öffnen Sie ein Projekt in TabCode oder ein lokales Verzeichnis in den Verzeichnissen, um Agentenzugriff zu gewähren.",
     "workspaceSourceSandbox": "Agenten-Sandbox",
-    "workspaceSandboxHint": "Basisarbeitsbereich, der von TabTin für jeden Arbeitsbereich automatisch erstellt wird; hier nicht widerrufbar.",
+    "workspaceSandboxHint": "Basisarbeitsbereich, der von Muse für jeden Arbeitsbereich automatisch erstellt wird; hier nicht widerrufbar.",
     "workspaceSourceTabcode": "TabCode-Projekte",
     "workspaceTabcodeHint": "Auf die Ordner, die Sie hier ablegen, hat der Agent uneingeschränkten Zugriff, einschließlich .env, SSH-Schlüsseln und anderen darin enthaltenen vertraulichen Dateien. Wählen Sie einen bestimmten Unterordner anstelle Ihres Home-Verzeichnisses, wenn Sie die Ansicht des Agenten einschränken möchten.",
     "workspaceSourceTabfolder": "Browserverlauf der Verzeichnisse",
@@ -1009,11 +1009,11 @@
     "panelDescription": "Entscheidet, welcher Computer Terminalbefehle und Dateizugriff für diesen Agenten ausführt. Nach der Bindung verbleibt dieser Arbeitsbereich auf dem Gerät.",
     "chooseDevice": "Wählen Sie das Ausführungsgerät",
     "refresh": "Geräteliste aktualisieren",
-    "noRegisteredDevicesHint": "Öffnen Sie die TabTin-Desktop-App auf diesem Computer und versuchen Sie es erneut.",
+    "noRegisteredDevicesHint": "Öffnen Sie die Muse-Desktop-App auf diesem Computer und versuchen Sie es erneut.",
     "availableDevices": "Verfügbare Geräte",
     "addRemoteDevice": "Remote-Gerät hinzufügen",
     "addRemoteDeviceTitle": "Remote-Gerät hinzufügen",
-    "addRemoteDeviceDesc": "Generieren Sie einen Installationsbefehl, um den TabTin-Daemon auf einem Remote-Server für die Ausführung von KI-Aufgaben einzurichten.",
+    "addRemoteDeviceDesc": "Generieren Sie einen Installationsbefehl, um den Muse-Daemon auf einem Remote-Server für die Ausführung von KI-Aufgaben einzurichten.",
     "deviceNameLabel": "Gerätename",
     "deviceNamePlaceholder": "z.B. Produktionsserver, GPU-Workstation",
     "cancel": "Abbrechen",
@@ -1367,7 +1367,7 @@
     "connectFailed": "Verbindung fehlgeschlagen",
     "testFailed": "Test fehlgeschlagen",
     "helpTitle": "Über SSH-Remoteserver",
-    "helpTip1": "SSH-Verbindungen werden vom TabTin-Backend (nicht von Ihrem lokalen Computer) initiiert, sodass mobile Geräte auch Remote-Server verwenden können",
+    "helpTip1": "SSH-Verbindungen werden vom Muse-Backend (nicht von Ihrem lokalen Computer) initiiert, sodass mobile Geräte auch Remote-Server verwenden können",
     "helpTip2": "Anmeldeinformationen (Passwörter oder Schlüssel) werden im Ruhezustand verschlüsselt und niemals im Klartext gespeichert",
     "helpTip3": "Der Agent kann Befehle auf Remote-Servern ausführen und die Ausgabe in Echtzeit an den Chat streamen",
     "helpTip4": "Server-Fingerabdrücke werden bei der ersten Verbindung aufgezeichnet und anschließend automatisch überprüft"
@@ -1410,7 +1410,7 @@
     "skillsSelf": "Diese Fertigkeiten werden nur für Sie im aktuellen Gruppenbereich wirksam und ändern nicht die Fertigkeitskonfiguration anderer Mitglieder.",
     "extensionsGroup": "In diesem Abschnitt werden die Integrationsverbindungen verwaltet, die für den aktuellen Gruppenbereich verfügbar sind. Wenn keine gruppenspezifische Verbindung konfiguriert ist, werden Organisationsverbindungen geerbt.",
     "channelsOrganization": "Kanalkonten sind Ressourcen auf Organisationsebene. Diese Seite steuert, wie der aktuelle Gruppenbereich diese Kanäle verwendet.",
-    "mcpRuntime": "Diese Ansicht kombiniert lokale MCP-Verbindungen, die im aktuellen Bereich bereitgestellt werden, und den TabTin MCP-Endpunkt, der vom aktuellen Electron/Daemon-Host bereitgestellt wird. Es handelt sich auch nicht um eine private serverseitige Konfiguration des Gruppenraums.",
+    "mcpRuntime": "Diese Ansicht kombiniert lokale MCP-Verbindungen, die im aktuellen Bereich bereitgestellt werden, und den Muse MCP-Endpunkt, der vom aktuellen Electron/Daemon-Host bereitgestellt wird. Es handelt sich auch nicht um eine private serverseitige Konfiguration des Gruppenraums.",
     "apiGroup": "In diesem Abschnitt werden die Dateneingabepunkte des aktuellen Gruppenbereichs für schreibgeschützte Abfragen und externe Integrationen verfügbar gemacht."
   },
   "gitStatus": {
@@ -1470,7 +1470,7 @@
   },
   "mcpConnections": {
     "title": "Externe Tools und Integrationen (MCP)",
-    "subtitle": "Model Context Protocol (MCP) ist ein standardisiertes Protokoll. Sie können externe Datenquellen (wie lokale Datenbanken oder GitHub) für den aktuellen Agenten verbinden oder die Funktionen von TabTin anderen KI-Assistenten zugänglich machen.",
+    "subtitle": "Model Context Protocol (MCP) ist ein standardisiertes Protokoll. Sie können externe Datenquellen (wie lokale Datenbanken oder GitHub) für den aktuellen Agenten verbinden oder die Funktionen von Muse anderen KI-Assistenten zugänglich machen.",
     "subtitleDevice": "Verwalten Sie die lokalen MCP-Verbindungen dieses Geräts und wählen Sie aus, für welche Agenten jede Verbindung aktiviert ist.",
     "readOnlyNoticeDevice": "Nur-Lese-Modus. Lokale MCP-Verbindungen werden vom Geräteadministrator verwaltet.",
     "agentScopeMigrationNotice": "Die Legacy-Aktivierung kann Agenten nicht sicher zugeordnet werden. Wählen Sie die Agenten aus, die diese Verbindung erneut verwenden dürfen.",
@@ -1493,7 +1493,7 @@
     "deleteConfirm": "MCP-Verbindung „{{name}}“ löschen?",
     "deleteSuccess": "Verbindung gelöscht",
     "localOnly": "Diese Verbindungen werden nur im aktuellen Electron-Benutzerdatenverzeichnis gespeichert und sind an diesen Electron-Host gebunden. Sie werden nicht automatisch mit anderen Mitgliedern, Geräten oder Electron-Instanzen geteilt.",
-    "externalBackendWarning": "Dieser Agent wird von einer Drittanbieter-Engine unterstützt. Sie können hier weiterhin externe Tool-Verbindungen verwalten, diese Tools stehen jedoch nur der integrierten TabTin-Engine zur Verfügung, nicht der Engine eines Drittanbieters.",
+    "externalBackendWarning": "Dieser Agent wird von einer Drittanbieter-Engine unterstützt. Sie können hier weiterhin externe Tool-Verbindungen verwalten, diese Tools stehen jedoch nur der integrierten Muse-Engine zur Verfügung, nicht der Engine eines Drittanbieters.",
     "readOnlyNotice": "Dieser Bereich befindet sich im schreibgeschützten Modus. MCP-Verbindungen werden vom Geräteadministrator im Bot-Bereich verwaltet.",
     "deleteConfirmTitle": "MCP-Verbindung löschen",
     "cancelButton": "Abbrechen",
@@ -1523,7 +1523,7 @@
     "marketplace": {
       "searchLabel": "Konnektoren suchen",
       "searchPlaceholder": "Suchen Sie nach Name, Quelle oder Konfiguration",
-      "intro": "Nutzen Sie externe Apps und Dienste in TabTin.",
+      "intro": "Nutzen Sie externe Apps und Dienste in Muse.",
       "actionsLabel": "Weitere Aktionen",
       "connectedTitle": "Verbundene Anschlüsse",
       "discoveredTitle": "Auf diesem Gerät entdeckt",
@@ -1562,7 +1562,7 @@
         "reuseHint": "Nach der Genehmigung wird derselbe „Web-Autorisierung → Prüftools“-Ablauf wie Stripe/Notion wiederverwendet.",
         "gotIt": "Verstanden",
         "generic": "Dieser Connector erfordert vor der Autorisierung ein Onboarding des Anbieters. Bitte versuchen Sie es später noch einmal.",
-        "vercel": "Vercel MCP ist auf zugelassene KI-Clients beschränkt. Die Autorisierung wird geöffnet, nachdem TabTin genehmigt wurde.",
+        "vercel": "Vercel MCP ist auf zugelassene KI-Clients beschränkt. Die Autorisierung wird geöffnet, nachdem Muse genehmigt wurde.",
         "canva": "Canva benötigt den Rückruf-URI auf seiner MCP-Zulassungsliste. Die Autorisierung wird nach Überprüfung geöffnet."
       },
       "credentialDialog": {
@@ -1596,7 +1596,7 @@
       "oauthDialog": {
         "promptTitle": "Schließen Sie die {{name}}-Webautorisierung ab",
         "promptDescription": "Beenden Sie die {{name}}-Anmeldung im Autorisierungsfenster und kehren Sie dann hierher zurück.",
-        "browserHint": "TabTin öffnet die Autorisierungsseite in Ihrem Standardbrowser. Wenn Sie nicht bei {{name}} angemeldet sind, sehen Sie zuerst deren Anmeldung. Bestätigen Sie anschließend „Zugriff auf TabTin zulassen“.",
+        "browserHint": "Muse öffnet die Autorisierungsseite in Ihrem Standardbrowser. Wenn Sie nicht bei {{name}} angemeldet sind, sehen Sie zuerst deren Anmeldung. Bestätigen Sie anschließend „Zugriff auf Muse zulassen“.",
         "scopeConnectTitle": "Konto verbinden",
         "scopeConnectBody": "Wird zum Lesen von Projekten, Bereitstellungsstatus und grundlegenden Teaminformationen verwendet.",
         "scopeControlTitle": "Sie behalten die Kontrolle",
@@ -1608,7 +1608,7 @@
         "failedTitle": "Autorisierung unvollständig",
         "failedBody": "{{name}} hat die Autorisierung nicht abgeschlossen. Ihre bisherige Konfiguration bleibt unverändert. Versuchen Sie es erneut oder gehen Sie zurück.",
         "timeoutTitle": "Zeitüberschreitung bei der Verbindungsbestätigung",
-        "timeoutBody": "TabTin wartete mehr als {{seconds}} Sekunden auf die {{name}}-Autorisierung und konnte nicht bestätigen, ob der Vorgang abgeschlossen war. Ihre bisherige Konfiguration bleibt unverändert. Versuchen Sie es erneut oder gehen Sie zurück.",
+        "timeoutBody": "Muse wartete mehr als {{seconds}} Sekunden auf die {{name}}-Autorisierung und konnte nicht bestätigen, ob der Vorgang abgeschlossen war. Ihre bisherige Konfiguration bleibt unverändert. Versuchen Sie es erneut oder gehen Sie zurück.",
         "successTitle": "{{name}} verbunden",
         "successBody": "Autorisierung und Verbindungsprüfung wurden beide abgeschlossen",
         "successAssigned": "{{name}} ist für {{count}}-Agenten konfiguriert.",
@@ -1620,7 +1620,7 @@
         "backToConfig": "Zurück zur Konfiguration"
       },
       "recommendedCatalog": {
-        "vercel": "Offizielles Remote-MCP über mcp-remote (stdio). OAuth wird unterstützt, nachdem TabTin ein zugelassener Vercel MCP-Client ist.",
+        "vercel": "Offizielles Remote-MCP über mcp-remote (stdio). OAuth wird unterstützt, nachdem Muse ein zugelassener Vercel MCP-Client ist.",
         "github": "Offizieller GitHub-Remote-MCP mit separatem persönlichem Zugriffstoken nur für Agent-Tools.",
         "stripe": "Offizielles Stripe-Remote-MCP über mcp-remote (stdio). Schließen Sie nach der Verbindung den Standard-MCP-OAuth im Browser ab.",
         "notion": "Offizielles Notion-Remote-MCP über mcp-remote (stdio). Interaktive Clients bevorzugen OAuth (PAT ebenfalls verfügbar).",

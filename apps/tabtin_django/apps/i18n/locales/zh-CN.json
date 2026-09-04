@@ -211,7 +211,7 @@
     "tool_not_found": "未找到工具「{tool_name}」，请检查工具名称。",
     "resume_error": "恢复执行时出现异常，请重试。",
     "resume_already_in_progress": "该对话正在恢复中，请稍候。",
-    "device_offline": "无法转发消息到执行设备，请在电脑打开 TabTin 后再试。",
+    "device_offline": "无法转发消息到执行设备，请在电脑打开 Muse 后再试。",
     "device_busy": "执行设备当前正在处理其他外部 Agent 任务，请稍后重试。",
     "delegation_forwarding": "设备离线，消息已委托给 Agent 处理。",
     "safety_terminated": "对话已被安全系统终止。",
@@ -1399,7 +1399,7 @@
   },
   "channel": {
     "bot": {
-      "start": "你好！我是 TabTin AI 助手。发送任何消息即可开始对话。\n\n输入 /help 查看可用命令。",
+      "start": "你好！我是 Muse AI 助手。发送任何消息即可开始对话。\n\n输入 /help 查看可用命令。",
       "help": "可用命令：\n/start - 开始对话\n/help  - 查看帮助\n\n直接发送任何消息即可与 AI 助手对话。\n\n我可以帮你处理数据分析、文档编写、网页采集等任务。"
     }
   },

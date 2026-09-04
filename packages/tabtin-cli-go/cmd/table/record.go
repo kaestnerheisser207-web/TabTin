@@ -6,7 +6,7 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/TabTin/tabtin-cli/internal/cmdutil"
+	"github.com/Muse/muse-cli/internal/cmdutil"
 )
 
 // recordDataFormatLong 给 `record insert / update / bulk-insert / upsert` 的 --data
@@ -48,9 +48,9 @@ func registerRecordCommands(parent *cobra.Command, f *cmdutil.Factory) {
 大表请配合 --page-size 分批拉，避免一次性拉全表拖慢响应。
 常见陷阱：--fields 只影响返回列，不改变筛选范围；要过滤记录用 view records 的
 --filters，或先 table search 再按 id 批量 detail。`,
-			Example: "  tabtin table record list --table-id xxx\n" +
-				"  tabtin table record list --table-id xxx --page-size 20 --sort-by name\n" +
-				"  tabtin table record list --table-id xxx --search 关键词 --fields 名称,状态",
+			Example: "  muse table record list --table-id xxx\n" +
+				"  muse table record list --table-id xxx --page-size 20 --sort-by name\n" +
+				"  muse table record list --table-id xxx --search 关键词 --fields 名称,状态",
 			Route: cmdutil.RouteCliServer, Method: "POST", Path: "/table/records",
 			Runtime: cmdutil.RuntimeHybrid, AdaptRequest: adaptRecordList,
 			Layer: "L2", Risk: cmdutil.RiskRead, RiskDeclared: true,
@@ -70,15 +70,15 @@ func registerRecordCommands(parent *cobra.Command, f *cmdutil.Factory) {
 			Use: "detail [record-url]", Short: "记录详情",
 			Long: `取单条记录的完整字段值（含 link 关联字段的当前值）。
 设计理由：record list 为分页浏览做了瘦身，link 等重字段不一定
-全带；需要完整值时用 detail 按 record-id 精确取一条。TabTin 稳定资源链接或复制自
+全带；需要完整值时用 detail 按 record-id 精确取一条。Muse 稳定资源链接或复制自
 页面的记录链接可直接作为位置参数，CLI 会复用当前 Profile 授权并解析 record-id。
 常见陷阱：--field-key-type 决定返回 JSON 的 key 是字段名还是字段 UUID，与
 record update 的 --data key 约定要保持一致，否则回写会对不上字段。`,
-			Example: "  tabtin table record detail \"tabtin://resource/table/<table_id>?hint=tabdata&recordIds=<record_id>\"\n" +
-				"  tabtin table record detail \"http://127.0.0.1:5175/table/<table_id>/record/<record_id>\"\n" +
-				"  tabtin table record detail --record-id <record_id>\n" +
-				"  tabtin table record detail --record-id <record_id> --field-key-type name\n" +
-				"  tabtin table record detail --record-id <record_id> --field-key-type id",
+			Example: "  muse table record detail \"tabtin://resource/table/<table_id>?hint=tabdata&recordIds=<record_id>\"\n" +
+				"  muse table record detail \"http://127.0.0.1:5175/table/<table_id>/record/<record_id>\"\n" +
+				"  muse table record detail --record-id <record_id>\n" +
+				"  muse table record detail --record-id <record_id> --field-key-type name\n" +
+				"  muse table record detail --record-id <record_id> --field-key-type id",
 			Route: cmdutil.RouteCliServer, Method: "POST", Path: "/table/record-detail",
 			Runtime: cmdutil.RuntimeHybrid, AdaptRequest: adaptRecordDetail,
 			Layer: "L2", Risk: cmdutil.RiskRead, RiskDeclared: true,
@@ -89,19 +89,19 @@ record update 的 --data key 约定要保持一致，否则回写会对不上字
 			ArgsMapping: []string{"record_url"},
 			// Auth-only：adaptRecordDetail 不注入 agent_id；Cursor/Codex 粘贴
 			// tabtin:// 记录链接时应直接复用 Electron managed profile，不能先要求
-			// `tabtin agent use`（否则外部 Agent 会退回 Django/DB）。
+			// `muse agent use`（否则外部 Agent 会退回 Django/DB）。
 			HasFormat: true, RequiresAgent: false, RequiresAuth: true,
 			Validate: normalizeRecordDetailRef,
 		},
 		{
 			Use: "insert", Short: "插入记录",
 			Long: "向表格插入一条记录。字段值格式随类型变化——详见下方说明。\n\n" + recordDataFormatLong,
-			Example: "  tabtin table record insert --table-id xxx --data '{\"name\":\"test\",\"age\":25}'\n" +
+			Example: "  muse table record insert --table-id xxx --data '{\"name\":\"test\",\"age\":25}'\n" +
 				"  # link 字段（关联演员）:\n" +
-				"  tabtin table record insert --table-id xxx \\\n" +
+				"  muse table record insert --table-id xxx \\\n" +
 				"    --data '{\"电影名\":\"无间道\",\"演员\":[{\"id\":\"<actor_uuid_1>\"},{\"id\":\"<actor_uuid_2>\"}]}'\n" +
 				"  # attachment 字段:\n" +
-				"  tabtin table record insert --table-id xxx \\\n" +
+				"  muse table record insert --table-id xxx \\\n" +
 				"    --data '{\"封面\":[{\"file_id\":\"...\",\"name\":\"cover.jpg\",\"url\":\"...\"}]}'",
 			Route: cmdutil.RouteCliServer, Method: "POST", Path: "/table/insert",
 			Runtime: cmdutil.RuntimeHybrid, AdaptRequest: adaptRecordInsert,
@@ -132,16 +132,16 @@ record update 的 --data key 约定要保持一致，否则回写会对不上字
 				"Windows：复杂 JSON 请先写 UTF-8 **无 BOM** 文件，再用带引号的 @file（如 --data '@patch.json' / --records '@records.json'）。" +
 				"PowerShell 5.x 的 Set-Content -Encoding utf8 会写 BOM，优先用 write_file / python json.dump / Out-File -Encoding utf8NoBOM。\n\n" +
 				recordDataFormatLong,
-			Example: "  tabtin table record update --url \"tabtin://resource/table/<table_id>?hint=tabdata&recordIds=<record_id>\" --set \"状态=完成\"\n" +
-				"  tabtin table record update --url \"http://127.0.0.1:5175/table/xxx/record/yyy\" --set \"状态=完成\"\n" +
-				"  tabtin table record update --table-id xxx --record-id yyy --set \"标题=123\"\n" +
-				"  tabtin table record update --table-id xxx --record-id yyy --set status=done --set score=3\n" +
+			Example: "  muse table record update --url \"tabtin://resource/table/<table_id>?hint=tabdata&recordIds=<record_id>\" --set \"状态=完成\"\n" +
+				"  muse table record update --url \"http://127.0.0.1:5175/table/xxx/record/yyy\" --set \"状态=完成\"\n" +
+				"  muse table record update --table-id xxx --record-id yyy --set \"标题=123\"\n" +
+				"  muse table record update --table-id xxx --record-id yyy --set status=done --set score=3\n" +
 				"  # Windows 安全 JSON（无 BOM）：\n" +
 				"  #   python -c \"import json; json.dump({'演员':[{'id':'<uuid>'}]}, open('patch.json','w',encoding='utf-8'))\"\n" +
-				"  #   tabtin table record update --table-id xxx --record-id yyy --data '@patch.json'\n" +
+				"  #   muse table record update --table-id xxx --record-id yyy --data '@patch.json'\n" +
 				"  # 批量：\n" +
 				"  #   python -c \"import json; json.dump([{'record_id':'r1','data':{'状态':'已完成'}}], open('records.json','w',encoding='utf-8'))\"\n" +
-				"  #   tabtin table record update --table-id xxx --records '@records.json'",
+				"  #   muse table record update --table-id xxx --records '@records.json'",
 			Route: cmdutil.RouteCliServer, Method: "POST", Path: "/table/update",
 			Runtime: cmdutil.RuntimeHybrid, AdaptRequest: adaptRecordUpdate,
 			Layer: "L2", Risk: cmdutil.RiskWrite, RiskDeclared: true,
@@ -195,9 +195,9 @@ record update 的 --data key 约定要保持一致，否则回写会对不上字
 本操作没有记录回收站，也不能通过撤销或版本历史恢复。
 常见陷阱：批量删除请用 --record-ids（JSON 数组），不要循环调用单条 delete——
 量大时后端有事务与限流成本，且失败时不易定位哪条没删成功。`,
-			Example: "  tabtin table record delete --table-id <table_id> --record-id <record_id> --yes\n" +
-				"  tabtin table record delete --table-id <table_id> --record-ids '[\"rec_1\",\"rec_2\"]' --yes\n" +
-				"  tabtin table record delete --table-id <table_id> --record-id <record_id> --dry-run",
+			Example: "  muse table record delete --table-id <table_id> --record-id <record_id> --yes\n" +
+				"  muse table record delete --table-id <table_id> --record-ids '[\"rec_1\",\"rec_2\"]' --yes\n" +
+				"  muse table record delete --table-id <table_id> --record-id <record_id> --dry-run",
 			Route: cmdutil.RouteCliServer, Method: "POST", Path: "/table/delete",
 			Runtime: cmdutil.RuntimeHybrid, AdaptRequest: adaptRecordDelete,
 			Layer: "L2", Risk: cmdutil.RiskDestructive, RiskDeclared: true,
@@ -238,7 +238,7 @@ record update 的 --data key 约定要保持一致，否则回写会对不上字
 				"⚠ 重要：当前返回值仅含 created_count / updated_count / errors，**不返回 record_id 映射**。" +
 				"如果下游（比如 link 字段写入）需要 record_id，upsert 之后请再用 `record list` 分页重拉（MAX_PAGE_SIZE=1000）。\n\n" +
 				recordDataFormatLong,
-			Example: "  tabtin table record upsert --table-id xxx \\\n" +
+			Example: "  muse table record upsert --table-id xxx \\\n" +
 				"    --records '[{\"豆瓣ID\":\"1292052\",\"姓名\":\"梁朝伟\"}]' \\\n" +
 				"    --upsert-on '[\"豆瓣ID\"]'",
 			Route: cmdutil.RouteCliServer, Method: "POST", Path: "/table/upsert",
@@ -268,7 +268,7 @@ record update 的 --data key 约定要保持一致，否则回写会对不上字
 			Use: "bulk-insert", Short: "批量插入",
 			Long: "单次最多 1000 条记录（MAX_BULK_RECORDS）。字段值格式随类型变化，详见下方说明。\n\n" +
 				recordDataFormatLong,
-			Example: "  tabtin table record bulk-insert --table-id xxx \\\n" +
+			Example: "  muse table record bulk-insert --table-id xxx \\\n" +
 				"    --records '[\n" +
 				"      {\"电影名\":\"无间道\",\"评分\":9.3,\"演员\":[{\"id\":\"<actor_uuid>\"}]},\n" +
 				"      {\"电影名\":\"卧虎藏龙\",\"评分\":8.8}\n" +
@@ -298,9 +298,9 @@ record update 的 --data key 约定要保持一致，否则回写会对不上字
 调整的是表格级默认顺序。
 常见陷阱：--record-ids 必须是完整的目标顺序（或结合 --anchor-record-id +
 --position 做相对定位），传入的记录若不属于该表会被后端拒绝。`,
-			Example: "  tabtin table record reorder --table-id <table_id> --record-ids '[\"rec_1\",\"rec_2\"]'\n" +
-				"  tabtin table record reorder --table-id <table_id> --record-ids '[\"rec_1\"]' --anchor-record-id <record_id> --position after\n" +
-				"  tabtin table record reorder --table-id <table_id> --record-ids '[\"rec_1\",\"rec_2\"]' --view-id <view_id>",
+			Example: "  muse table record reorder --table-id <table_id> --record-ids '[\"rec_1\",\"rec_2\"]'\n" +
+				"  muse table record reorder --table-id <table_id> --record-ids '[\"rec_1\"]' --anchor-record-id <record_id> --position after\n" +
+				"  muse table record reorder --table-id <table_id> --record-ids '[\"rec_1\",\"rec_2\"]' --view-id <view_id>",
 			Route: cmdutil.RouteCliServer, Method: "POST", Path: "/table/records-reorder",
 			Layer: "L2", Risk: cmdutil.RiskWrite, RiskDeclared: true,
 			Flags: []cmdutil.FlagDef{
@@ -330,9 +330,9 @@ record update 的 --data key 约定要保持一致，否则回写会对不上字
 是 record undo / redo 依赖的数据源。
 常见陷阱：--include-undone 默认不含已撤销的操作；排障时想看完整轨迹（包括
 被 undo 撤销掉的）要显式加上这个 flag。`,
-			Example: "  tabtin table record history --record-id <record_id>\n" +
-				"  tabtin table record history --record-id <record_id> --limit 20\n" +
-				"  tabtin table record history --record-id <record_id> --include-undone",
+			Example: "  muse table record history --record-id <record_id>\n" +
+				"  muse table record history --record-id <record_id> --limit 20\n" +
+				"  muse table record history --record-id <record_id> --include-undone",
 			Route: cmdutil.RouteCliServer, Method: "POST", Path: "/table/record-history",
 			Layer: "L2", Risk: cmdutil.RiskRead, RiskDeclared: true,
 			Flags: []cmdutil.FlagDef{
@@ -353,9 +353,9 @@ record update 的 --data key 约定要保持一致，否则回写会对不上字
 排障优先靠 record history 定位再决定要不要 undo。
 常见陷阱：--only-my-operations 只撤销当前 Agent/用户自己产生的操作，多方协作
 下误用会跳过别人刚做的修改，看起来像"没生效"。`,
-			Example: "  tabtin table record undo --record-id <record_id>\n" +
-				"  tabtin table record undo --record-id <record_id> --only-my-operations\n" +
-				"  tabtin table record undo --record-id <record_id> --dry-run",
+			Example: "  muse table record undo --record-id <record_id>\n" +
+				"  muse table record undo --record-id <record_id> --only-my-operations\n" +
+				"  muse table record undo --record-id <record_id> --dry-run",
 			Route: cmdutil.RouteCliServer, Method: "POST", Path: "/table/record-undo",
 			Layer: "L2", Risk: cmdutil.RiskWrite, RiskDeclared: true,
 			Flags: []cmdutil.FlagDef{
@@ -379,9 +379,9 @@ record update 的 --data key 约定要保持一致，否则回写会对不上字
 栈为空或最近动作不是 undo 时后端会拒绝。
 常见陷阱：--only-my-operations 语义与 undo 对称，混用两个不同的过滤范围
 （一次 undo 全部、一次 redo 仅自己）容易导致状态和预期不一致。`,
-			Example: "  tabtin table record redo --record-id <record_id>\n" +
-				"  tabtin table record redo --record-id <record_id> --only-my-operations\n" +
-				"  tabtin table record redo --record-id <record_id> --dry-run",
+			Example: "  muse table record redo --record-id <record_id>\n" +
+				"  muse table record redo --record-id <record_id> --only-my-operations\n" +
+				"  muse table record redo --record-id <record_id> --dry-run",
 			Route: cmdutil.RouteCliServer, Method: "POST", Path: "/table/record-redo",
 			Layer: "L2", Risk: cmdutil.RiskWrite, RiskDeclared: true,
 			Flags: []cmdutil.FlagDef{

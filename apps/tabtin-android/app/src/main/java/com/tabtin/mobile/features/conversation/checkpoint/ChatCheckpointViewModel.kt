@@ -3,7 +3,7 @@ package com.tabtin.mobile.features.conversation.checkpoint
 import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.tabtin.mobile.R
+import com.muse.mobile.R
 import com.tabtin.mobile.data.model.AppError
 import com.tabtin.mobile.data.model.ResourceRestoreItem
 import com.tabtin.mobile.data.model.RevertHistoryEntry

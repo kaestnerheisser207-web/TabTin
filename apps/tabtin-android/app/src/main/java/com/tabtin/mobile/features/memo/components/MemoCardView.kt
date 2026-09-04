@@ -51,7 +51,7 @@ import coil.compose.AsyncImage
 import com.tabtin.mobile.features.conversation.ConversationTypography
 import com.tabtin.mobile.ui.theme.TTFonts
 import com.tabtin.mobile.ui.theme.ttColor
-import com.tabtin.mobile.R
+import com.muse.mobile.R
 import com.tabtin.mobile.data.model.memo.MemoColor
 import com.tabtin.mobile.data.model.memo.MemoSummary
 import com.tabtin.mobile.data.model.memo.isVoice

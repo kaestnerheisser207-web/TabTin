@@ -12,7 +12,7 @@ rename_app_labels — 部署前运行的 app_label 迁移命令
 
 == 双库一致性（波次 3b 2026-05-25 增强）==
 
-TabTin 采用双库（MySQL default + PostgreSQL）跨库 migration 一致性策略
+Muse 采用双库（MySQL default + PostgreSQL）跨库 migration 一致性策略
 （详见 .cursor/rules/backend-django.mdc 双库架构段）。每条 migration 必须在两个库
 的 django_migrations 表都有 applied 记录，否则 migrate-check --strict 失败。
 

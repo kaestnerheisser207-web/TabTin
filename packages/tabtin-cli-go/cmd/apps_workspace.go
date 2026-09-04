@@ -5,16 +5,16 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/TabTin/tabtin-cli/cmd/table"
-	"github.com/TabTin/tabtin-cli/internal/cmdutil"
-	"github.com/TabTin/tabtin-cli/internal/config"
-	"github.com/TabTin/tabtin-cli/internal/output"
+	"github.com/Muse/muse-cli/cmd/table"
+	"github.com/Muse/muse-cli/internal/cmdutil"
+	"github.com/Muse/muse-cli/internal/config"
+	"github.com/Muse/muse-cli/internal/output"
 )
 
-// newCmdWorkspace 提供 `tabtin workspace list/tables/use/current` 命令族。
+// newCmdWorkspace 提供 `muse workspace list/tables/use/current` 命令族。
 //
-//  Space 终态退役：这是 `tabtin space` 的终态替代——面向个人域 Workspace。
-// 老命令 `tabtin space` 作为过渡期别名保留，但会打 stderr 弃用提示。
+//  Space 终态退役：这是 `muse space` 的终态替代——面向个人域 Workspace。
+// 老命令 `muse space` 作为过渡期别名保留，但会打 stderr 弃用提示。
 func newCmdWorkspace(f *cmdutil.Factory) *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "workspace",
@@ -22,13 +22,13 @@ func newCmdWorkspace(f *cmdutil.Factory) *cobra.Command {
 	}
 	defs := []cmdutil.CommandDef{
 		{
-			Use: "list", Short: "列出 Workspace", Example: "  tabtin workspace list",
+			Use: "list", Short: "列出 Workspace", Example: "  muse workspace list",
 			Route: cmdutil.RouteCliServer, Method: "POST", Path: "/workspace/list",
 			Runtime: cmdutil.RuntimeHybrid, RemoteMethod: "GET", RemotePath: "/api/context/workspaces",
 			HasFormat: true, RequiresAuth: true,
 		},
 		{
-			Use: "tables", Short: "列出当前 Workspace 的表格", Example: "  tabtin workspace tables",
+			Use: "tables", Short: "列出当前 Workspace 的表格", Example: "  muse workspace tables",
 			Route: cmdutil.RouteCliServer, Method: "POST", Path: "/table/list",
 			Runtime: cmdutil.RuntimeHybrid, AdaptRequest: table.AdaptTableList,
 			HasFormat: true, RequiresAgent: true, RequiresAuth: true,
@@ -41,7 +41,7 @@ func newCmdWorkspace(f *cmdutil.Factory) *cobra.Command {
 	useCmd := &cobra.Command{
 		Use:     "use <id>",
 		Short:   "切换当前 Workspace",
-		Example: "  tabtin workspace use <workspace-id>",
+		Example: "  muse workspace use <workspace-id>",
 		RunE: cmdutil.SafeRunE(func(cmd *cobra.Command, args []string) error {
 			if len(args) == 0 {
 				return fmt.Errorf("请指定 Workspace ID")
@@ -69,7 +69,7 @@ func newCmdWorkspace(f *cmdutil.Factory) *cobra.Command {
 	currentCmd := &cobra.Command{
 		Use:     "current",
 		Short:   "显示当前 Workspace",
-		Example: "  tabtin workspace current",
+		Example: "  muse workspace current",
 		RunE: cmdutil.SafeRunE(func(cmd *cobra.Command, args []string) error {
 			cfg, err := f.Config()
 			if err != nil {
@@ -94,7 +94,7 @@ func newCmdWorkspace(f *cmdutil.Factory) *cobra.Command {
 func workspaceUseCommandSchema() cmdutil.CommandDef {
 	return cmdutil.CommandDef{
 		Use: "use <id>", Short: "切换当前 Workspace",
-		Example:     "  tabtin workspace use <workspace-id>",
+		Example:     "  muse workspace use <workspace-id>",
 		Route:       cmdutil.RouteDirect,
 		ArgsMapping: []string{"workspace_id"},
 		Risk:        cmdutil.RiskWrite,
@@ -104,7 +104,7 @@ func workspaceUseCommandSchema() cmdutil.CommandDef {
 func workspaceCurrentCommandSchema() cmdutil.CommandDef {
 	return cmdutil.CommandDef{
 		Use: "current", Short: "显示当前 Workspace",
-		Example:    "  tabtin workspace current",
+		Example:    "  muse workspace current",
 		Route:      cmdutil.RouteDirect,
 		HasFormat:  true,
 		Idempotent: true,

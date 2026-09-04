@@ -52,7 +52,7 @@ describe('createSystemTools', () => {
       expect(parsed.runtime).toBe('daemon');
       // user_message 是给用户听的人话——不含 launchd / systemd 等术语
       const userMsg = parsed.user_message as string;
-      expect(userMsg).toContain('TabTin');
+      expect(userMsg).toContain('Muse');
       expect(userMsg).toContain('手动重启');
       expect(userMsg).not.toContain('launchd');
       expect(userMsg).not.toContain('systemd');
@@ -124,7 +124,7 @@ describe('createSystemTools', () => {
       expect(techNote).not.toContain('fd=42');
     });
 
-    // Wave 1 第二轮 用户视角 Review 必修：原英文 message "TabTin is restarting..."
+    // Wave 1 第二轮 用户视角 Review 必修：原英文 message "Muse is restarting..."
     // 改为中文 user_message + 英文 technical_note 分层。
     it('relaunchApp 成功路径含中文 user_message 让 LLM 直接念', async () => {
       const relaunchApp = vi.fn().mockResolvedValue(undefined);
@@ -133,7 +133,7 @@ describe('createSystemTools', () => {
       const parsed = parseResult(r);
       expect(parsed.status).toBe('restarting');
       const userMsg = parsed.user_message as string;
-      expect(userMsg).toContain('TabTin');
+      expect(userMsg).toContain('Muse');
       expect(userMsg).toContain('重启');
       // 不含工程术语 / 工具名（不该被念给用户）
       expect(userMsg).not.toContain('app.relaunch');

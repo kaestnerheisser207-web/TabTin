@@ -1,8 +1,8 @@
 openapi: 3.0.3
 info:
-  title: Tabtin Chat Agent API (WS-first)
+  title: Muse Chat Agent API (WS-first)
   description: |
-    # Tabtin Chat Agent API 文档（WS-first）
+    # Muse Chat Agent API 文档（WS-first）
 
     > **版本**: v2.1
     > **职责**: 会话管理 + WS 流式输出 + 前端动作

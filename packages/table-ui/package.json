@@ -1,7 +1,7 @@
 {
   "name": "@tabtin/table-ui",
   "version": "0.1.0",
-  "description": "Reusable UI layer for TabTin table experiences",
+  "description": "Reusable UI layer for Muse table experiences",
   "type": "module",
   "main": "dist/index.js",
   "module": "dist/index.js",
@@ -31,11 +31,11 @@
     "test:watch": "vitest"
   },
   "keywords": [
-    "tabtin",
+    "muse",
     "table",
     "ui"
   ],
-  "author": "TabTin Team",
+  "author": "Muse Team",
   "license": "MIT",
   "peerDependencies": {
     "react": "^19.0.0",

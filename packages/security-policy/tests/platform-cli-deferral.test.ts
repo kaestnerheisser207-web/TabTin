@@ -57,25 +57,25 @@ const shellTool: JudgeTool = {
 
 describe('detectPlatformManagedTabtinCli', () => {
   it('recognizes browser / desktop surfaces', () => {
-    expect(detectPlatformManagedTabtinCli('tabtin browser eval "1+1"'))
+    expect(detectPlatformManagedTabtinCli('muse browser eval "1+1"'))
       .toEqual({ surface: 'browser' })
-    expect(detectPlatformManagedTabtinCli('FOO=1 tabtin desktop click'))
+    expect(detectPlatformManagedTabtinCli('FOO=1 muse desktop click'))
       .toEqual({ surface: 'desktop' })
   })
 
   it('rejects non-platform or unsafe shell composition', () => {
-    expect(detectPlatformManagedTabtinCli('tabtin table list')).toBeNull()
+    expect(detectPlatformManagedTabtinCli('muse table list')).toBeNull()
     expect(detectPlatformManagedTabtinCli('ls -la')).toBeNull()
-    expect(detectPlatformManagedTabtinCli('tabtin browser eval | rm -rf /')).toBeNull()
+    expect(detectPlatformManagedTabtinCli('muse browser eval | rm -rf /')).toBeNull()
   })
 })
 
 describe('judge platform gate deferral ', () => {
-  it('defers workspace_out ask for tabtin browser shell to platform gate', () => {
+  it('defers workspace_out ask for muse browser shell to platform gate', () => {
     const decision = judge({
       tool: shellTool,
       input: {
-        command: 'tabtin browser eval "document.title"',
+        command: 'muse browser eval "document.title"',
         cwd: '/tmp/outside',
       },
       effectivePolicy: makePolicy(),
@@ -107,7 +107,7 @@ describe('judge platform gate deferral ', () => {
     const decision = judge({
       tool: shellTool,
       input: {
-        command: 'tabtin browser eval /Users/demo/ws/.env',
+        command: 'muse browser eval /Users/demo/ws/.env',
         cwd: '/Users/demo/ws',
       },
       effectivePolicy: makePolicy(),
@@ -122,7 +122,7 @@ describe('judge platform gate deferral ', () => {
     const decision = judge({
       tool: shellTool,
       input: {
-        command: 'tabtin browser eval /Users/demo/.ssh/id_rsa',
+        command: 'muse browser eval /Users/demo/.ssh/id_rsa',
         cwd: '/Users/demo/ws',
       },
       effectivePolicy: makePolicy(),

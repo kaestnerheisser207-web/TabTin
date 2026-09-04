@@ -460,7 +460,7 @@ const MESSAGES: Record<ActionToolsLocale, Record<string, string>> = {
     'tools.download.batch.params.headers': '共享请求头（可选）',
     'tools.download.batch.params.concurrency': '并发下载数（默认 3）',
 
-    'tools.screenshot.capture.description': '捕获 TabTin 应用窗口、指定浏览器视图或整块屏幕的截屏，返回文件路径和尺寸信息',
+    'tools.screenshot.capture.description': '捕获 Muse 应用窗口、指定浏览器视图或整块屏幕的截屏，返回文件路径和尺寸信息',
     'tools.screenshot.capture.params.target': '截屏目标：window=整个应用窗口（默认），view=指定网页视图，screen=整块屏幕',
     'tools.screenshot.capture.params.viewId': '视图 ID（target=view 时必填）',
     'tools.screenshot.capture.params.format': '图片格式（默认 png）',
@@ -972,7 +972,7 @@ const MESSAGES: Record<ActionToolsLocale, Record<string, string>> = {
     'tools.download.batch.params.headers': 'Shared request headers (optional)',
     'tools.download.batch.params.concurrency': 'Download concurrency (default 3)',
 
-    'tools.screenshot.capture.description': 'Capture a screenshot of the TabTin app window, a specific browser view, or the full screen',
+    'tools.screenshot.capture.description': 'Capture a screenshot of the Muse app window, a specific browser view, or the full screen',
     'tools.screenshot.capture.params.target': 'Target: window=entire app (default), view=specific web view, screen=full screen',
     'tools.screenshot.capture.params.viewId': 'View ID (required when target=view)',
     'tools.screenshot.capture.params.format': 'Image format (default png)',

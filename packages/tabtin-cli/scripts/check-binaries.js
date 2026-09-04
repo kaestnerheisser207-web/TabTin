@@ -6,17 +6,17 @@
  *
  * npm 不会把空目录打进 tarball，如果 binaries/ 缺文件，`npm pack` 会“成功”但
  * 产出一个没有二进制的包——这个坑要在这里提前拦住，而不是等用户装完发现
- * `tabtin` 打不开才排查。
+ * `muse` 打不开才排查。
  */
 
 const fs = require('node:fs');
 const path = require('node:path');
 
 const EXPECTED_BINARIES = [
-  'tabtin-windows-amd64.exe',
-  'tabtin-windows-arm64.exe',
-  'tabtin-darwin-amd64',
-  'tabtin-darwin-arm64',
+  'muse-windows-amd64.exe',
+  'muse-windows-arm64.exe',
+  'muse-darwin-amd64',
+  'muse-darwin-arm64',
 ];
 
 const binariesDir = path.join(__dirname, '..', 'binaries');

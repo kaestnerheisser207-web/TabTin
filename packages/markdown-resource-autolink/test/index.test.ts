@@ -14,7 +14,7 @@ function transform(src: string): string {
 }
 
 describe('remarkAutolinkResource', () => {
-  it('裸 TabTin 资源深链升级为可点击链接并保留完整 query', () => {
+  it('裸 Muse 资源深链升级为可点击链接并保留完整 query', () => {
     const uri = 'tabtin://resource/table/46ff7041-cfdd-41f4-9f7e-2f9c93236e3d?hint=tabdata&recordIds=f7372b28-0636-432c-82d2-477d6af58af5'
     const out = transform(`查看 ${uri}`)
 

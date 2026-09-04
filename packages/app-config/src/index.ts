@@ -5,7 +5,7 @@
  * → v2.1 模块零落地）。同时偿还 § 10 Q11 登记的 "TabDesktop app.json 开关
  * 声明了不生效"债（v1.8 SKILL false promise 修正）。
  *
- * **解决什么问题**：v1.8 之前 TabTin 全仓没有"App configSchema → runtime
+ * **解决什么问题**：v1.8 之前 Muse 全仓没有"App configSchema → runtime
  * config"读取路径——`packages/apps/<id>/app.json` 的 configSchema 字段都是
  * "声明了不生效"。模块零建立通用基础设施，TabDesktop 是首批接入；模块一
  * tier / 模块二 subGates / 模块四 coordinateMode 落地时复用同一 API。
@@ -21,7 +21,7 @@
  *   的 configSchema → 提取 default 字段 → deep merge 到调用方传入的 defaults
  *   上 → 再叠加 opts.override → 返回最终 runtime config；
  * - 容错：app.json 不存在 / 解析失败 / configSchema 缺失 / 默认值缺失，全部
- *   降级到调用方 defaults，不抛错（不让 TabTin 启动被一个配置文件错误卡死）。
+ *   降级到调用方 defaults，不抛错（不让 Muse 启动被一个配置文件错误卡死）。
  */
 
 import { existsSync, readFileSync } from 'node:fs'
@@ -75,7 +75,7 @@ export interface AppConfigSource {
  * 2. process.cwd() 上溯到包含 `packages/apps/` 的目录
  * 3. 当前文件所在 dist 目录上溯——同样找 `packages/apps/`
  *
- * 三条路径都要存在性兜底——TabTin 客户端、Daemon、CI、单测可能从不同
+ * 三条路径都要存在性兜底——Muse 客户端、Daemon、CI、单测可能从不同
  * cwd 启动。
  */
 /**
@@ -333,7 +333,7 @@ export interface LoadAppConfigOptions {
  *
  * 合并优先级（从低到高）：调用方 `defaults` < 来源链各 source.read() < `opts.override`。
  *
- * 错误兜底：所有来源失败都不抛错，最终返回 `defaults` ——避免 TabTin 启动
+ * 错误兜底：所有来源失败都不抛错，最终返回 `defaults` ——避免 Muse 启动
  * 被一个 App 的配置文件错误卡死。
  *
  * **打包 / 非常规 cwd 注意（v2.1 技术 Review §5 修）**：默认 `staticManifestSource`

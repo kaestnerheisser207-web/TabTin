@@ -47,7 +47,7 @@ export const CitationSchema = z.object({
   document_index: z.number().int(),
   document_title: z.string().nullable().optional(),
   /**
-   * TabTin 引用展示扩展。
+   * Muse 引用展示扩展。
    *
    * iOS 的引用卡片已经消费这些字段；此前它们只被手工补在 Swift vendor
    * 产物中，完整 codegen 会把字段静默删掉。协议扩展必须回到 Wire SSoT，
@@ -114,7 +114,7 @@ export const DocumentSourceSchema = z.discriminatedUnion('type', [
 export type DocumentSource = z.infer<typeof DocumentSourceSchema>;
 
 /**
- * Tool execution metadata（TabTin 扩展，附加到 tool_result.tabtin_metadata）。
+ * Tool execution metadata（Muse 扩展，附加到 tool_result.tabtin_metadata）。
  *
  * 注：是"扩展元数据"而不是 v2 §2.2.4 退役那批 `tabtin_*` 块——这只是
  * tool_result 内嵌的元数据字段，不是独立 ContentBlock。
@@ -358,7 +358,7 @@ const SearchResultBlockSchema = z.object({
   citations: z.object({ enabled: z.boolean() }).optional(),
 });
 
-// ─── TabTin 受控扩展（v2 §2.2.3）─────────────────────────────────────
+// ─── Muse 受控扩展（v2 §2.2.3）─────────────────────────────────────
 //
 // `tabtin_*` 前缀策略（v2 修订理由）：让人类阅读 jsonl / DB 时一眼识别自家
 // 方言。也方便 PG `messages_json` strip 操作（一行 `block.type.startsWith
@@ -448,7 +448,7 @@ const TabTinApprovalRequestBlockSchema = z.object({
 });
 
 /**
- * TabTin source ref snapshot——5 种 ref_kind 嵌套 union（双 discriminator）。
+ * Muse source ref snapshot——5 种 ref_kind 嵌套 union（双 discriminator）。
  *
  * `kind` 是 snapshot 内部的 discriminator（与顶层 `ref_kind` 语义一致）。
  * 双层 discriminator 是 v2 §2.2.3 的设计——确保任何工具/客户端在 `ref_kind`
@@ -534,12 +534,12 @@ const TabTinSourceRefBlockSchema = z.object({
  * | 14 | mcp_tool_result | 标准 | MCP 协议 |
  * | 15 | container_upload | 标准 | 容器上传 |
  * | 16 | search_result | 标准 | input 端 retrieval |
- * | 17 | tabtin_rich_content | TabTin | 富内容（10 种 kind） |
- * | 18 | tabtin_composer_preset | TabTin | composer 模板 |
- * | 19 | tabtin_ask_user_fields | TabTin | ask_user 回填 |
- * | 20 | tabtin_skill_invocation | TabTin | skill 注入 |
- * | 21 | tabtin_source_ref | TabTin | 引用源 |
- * | 22 | tabtin_approval_request | TabTin | 审批占位 |
+ * | 17 | tabtin_rich_content | Muse | 富内容（10 种 kind） |
+ * | 18 | tabtin_composer_preset | Muse | composer 模板 |
+ * | 19 | tabtin_ask_user_fields | Muse | ask_user 回填 |
+ * | 20 | tabtin_skill_invocation | Muse | skill 注入 |
+ * | 21 | tabtin_source_ref | Muse | 引用源 |
+ * | 22 | tabtin_approval_request | Muse | 审批占位 |
  */
 export const ContentBlockSchema = z.discriminatedUnion('type', [
   TextBlockSchema,
@@ -831,7 +831,7 @@ export const MessageUsageSchema = z.object({
 export type MessageUsage = z.infer<typeof MessageUsageSchema>;
 
 /**
- * stop_reason 字面量集合（与 Anthropic API 对齐 + TabTin 扩展）。
+ * stop_reason 字面量集合（与 Anthropic API 对齐 + Muse 扩展）。
  *
  * - end_turn / max_tokens / tool_use / stop_sequence — Anthropic 标准
  * - aborted — 上游 abort / 客户端中断 / lifecycle terminated

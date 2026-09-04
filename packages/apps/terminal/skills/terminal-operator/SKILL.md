@@ -28,21 +28,21 @@ LLM 通过 `run_terminal_command` 工具执行 shell 命令。命令由一次性
 
 ## 用户要「打开终端」→ 应用内可交互终端
 
-用户说「打开终端 / 开个终端 / 给我一个终端」时，**优先**打开 TabTin 应用内可交互终端：
+用户说「打开终端 / 开个终端 / 给我一个终端」时，**优先**打开 Muse 应用内可交互终端：
 
 ```
-run_terminal_command(command="tabtin terminal open")
-# 可选：tabtin terminal open --cwd <path> --title "项目终端"
-# 聚焦已有：tabtin terminal list → tabtin terminal open --session-id <id>
+run_terminal_command(command="muse terminal open")
+# 可选：muse terminal open --cwd <path> --title "项目终端"
+# 聚焦已有：muse terminal list → muse terminal open --session-id <id>
 ```
 
 这会新建（或聚焦）一个 **可手动打字输入** 的 Terminal Tab（xterm + node-pty），用户可以自己敲命令。
 
 | 意图 | 正确做法 | 错误做法 |
 |------|----------|----------|
-| 给用户一个可交互终端 | `tabtin terminal open` | `tabtin desktop open "PowerShell"` / `Start-Process powershell` |
+| 给用户一个可交互终端 | `muse terminal open` | `muse desktop open "PowerShell"` / `Start-Process powershell` |
 | Agent 自己跑一条命令 | `run_terminal_command(command="...")` | 打开外部系统终端再打字 |
-| 用户明确要系统 PowerShell / Windows Terminal | `tabtin desktop open "PowerShell" --external` | 默认 `desktop open`（会被拦截） |
+| 用户明确要系统 PowerShell / Windows Terminal | `muse desktop open "PowerShell" --external` | 默认 `desktop open`（会被拦截） |
 
 **不要**把「打开终端」理解成启动 OS 级 PowerShell / cmd / Windows Terminal 窗口。
 
@@ -53,7 +53,7 @@ run_terminal_command(command="tabtin terminal open")
 - **实时看输出**——命令 stdout / stderr 合流后出现在 tab 里
 - **手动停止 background 任务**——用户关闭 Agent tab 或 LLM 跑 `run_terminal_command("kill <pid>")` 都会让 bridge 终止仍在跑的 child process
 
-这是 TabTin 的产品基本盘：Agent 在做的每一步都看得见、能干预。**不要刻意隐藏命令输出**——LLM 看到的 stdout 与用户在 tab 看到的是同源。
+这是 Muse 的产品基本盘：Agent 在做的每一步都看得见、能干预。**不要刻意隐藏命令输出**——LLM 看到的 stdout 与用户在 tab 看到的是同源。
 
 ## 工作流
 
@@ -109,7 +109,7 @@ kill 是幂等的（对已自然 exit 的 PID 不算错误，shell 返回退出�
 
 普通 `run_terminal_command` 不支持交互输入。命令本身有 prompt 时会卡住，直到 timeout 或用户取消。最常用的做法是用命令本身的非交互参数（见下方非交互优先表）。
 
-如果非交互参数不够用，**先评估**用 `ask_user` 让用户改用真正的手动 Terminal Tab（`tabtin terminal open`）操作，或等待未来的 interactive terminal 工具；不要把交互流程塞进普通 shell tool，也**不要**用 `tabtin desktop open` 打开系统终端来「凑合」。
+如果非交互参数不够用，**先评估**用 `ask_user` 让用户改用真正的手动 Terminal Tab（`muse terminal open`）操作，或等待未来的 interactive terminal 工具；不要把交互流程塞进普通 shell tool，也**不要**用 `muse desktop open` 打开系统终端来「凑合」。
 
 ## 非交互优先原则
 
@@ -127,7 +127,7 @@ kill 是幂等的（对已自然 exit 的 PID 不算错误，shell 返回退出�
 | `git rebase -i` | `git rebase --autosquash` 或 `GIT_SEQUENCE_EDITOR="sed -i ..." git rebase -i` |
 | `crontab -e` | `crontab <<'EOF'\n...\nEOF` |
 | `vim` / `nano` / `vi` | 用 `edit_file` / `write_file` 工具，**不**走 shell |
-| `mysql -p` / `psql` 直连 | 用 `tabtin table query` CLI |
+| `mysql -p` / `psql` 直连 | 用 `muse table query` CLI |
 | `ssh`（密码认证） | `ssh -o StrictHostKeyChecking=no` + key 认证 |
 | 裸 `python` / `node`（进 REPL） | `python -c "..."` / `python script.py` / `node -e "..."` / `node script.js` |
 
@@ -143,7 +143,7 @@ echo -e "input1\ninput2" | some_command  # 多行输入
 ## 命令安全分级
 
 **自动放行（regular）**：
-- `tabtin *`（所有 CLI 子命令）
+- `muse *`（所有 CLI 子命令）
 - 只读命令：`ls` / `cat` / `head` / `tail` / `grep` / `wc` / `echo` / `pwd` / `whoami` / `date`
 - 网络查询：`curl`（GET）/ `ping` / `dig` / `nslookup`
 
@@ -156,7 +156,7 @@ echo -e "input1\ninput2" | some_command  # 多行输入
 **禁止执行（prohibited）**：
 - 破坏性命令：`rm -rf /` / `mkfs` / `dd` / `> /dev/sda`
 - 权限提升：`sudo` / `su` / `chmod 777`
-- 数据库直连：`mysql` / `psql`（走 `tabtin table query` / `tabtin table execute` CLI）
+- 数据库直连：`mysql` / `psql`（走 `muse table query` / `muse table execute` CLI）
 - 系统修改：`systemctl` / `launchctl` / `crontab -e`
 - 编辑器：`vim` / `nano` / `vi`（用 `edit_file` / `write_file` 工具）
 - 交互式 REPL：裸 `python` / `node`（不带 -c/-e 或脚本文件参数）
@@ -189,13 +189,13 @@ echo -e "input1\ninput2" | some_command  # 多行输入
 
 ## CLI 命令参考
 
-终端环境可用 `tabtin` CLI 快速调平台能力：
+终端环境可用 `muse` CLI 快速调平台能力：
 
 ```bash
-tabtin table query "SELECT ..."
-tabtin table record insert --table-id <id> --data '{"字段":"值"}'
-tabtin table record update --table-id <id> --record-id <rid> --data '{"字段":"值"}'
-tabtin browser print --url "<url>" --save /tmp/page.md
+muse table query "SELECT ..."
+muse table record insert --table-id <id> --data '{"字段":"值"}'
+muse table record update --table-id <id> --record-id <rid> --data '{"字段":"值"}'
+muse browser print --url "<url>" --save /tmp/page.md
 ```
 
 各 App 的 CLI 全集见对应 Skill：

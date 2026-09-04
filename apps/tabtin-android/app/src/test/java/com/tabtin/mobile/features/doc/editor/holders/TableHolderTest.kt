@@ -8,7 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.widget.TableRow
 import android.widget.TextView
-import com.tabtin.mobile.R
+import com.muse.mobile.R
 import com.tabtin.mobile.databinding.DocBlockTableBinding
 import com.tabtin.mobile.features.doc.editor.core.TabDocBlockView
 import com.tabtin.mobile.features.doc.model.ProseMirrorParser
@@ -39,7 +39,7 @@ class TableHolderTest {
 
     private val context = ContextThemeWrapper(
         RuntimeEnvironment.getApplication(),
-        R.style.Theme_TabTin,
+        R.style.Theme_Muse,
     )
 
     @Test

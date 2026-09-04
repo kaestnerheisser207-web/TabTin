@@ -16,7 +16,7 @@ const path = require('node:path');
 const { spawnSync } = require('node:child_process');
 
 const PKG_ROOT = path.resolve(__dirname, '..');
-const LAUNCHER = path.join(PKG_ROOT, 'bin', 'tabtin.js');
+const LAUNCHER = path.join(PKG_ROOT, 'bin', 'muse.js');
 const MANIFEST = path.join(PKG_ROOT, 'skills', 'manifest.json');
 
 function log(msg) {
@@ -42,12 +42,12 @@ function main() {
     return;
   }
   if (!fs.existsSync(LAUNCHER) || !fs.existsSync(MANIFEST)) {
-    log('包内缺少 bin/tabtin.js 或 skills/manifest.json，跳过 Skill 物化');
+    log('包内缺少 bin/muse.js 或 skills/manifest.json，跳过 Skill 物化');
     return;
   }
 
   // 固定落到约定目录，忽略父 shell 残留的 TABTIN_AGENTS_SKILLS_DIR，避免装错地方。
-  // 自定义目录：装完后手动 tabtin skills install --dir <path>
+  // 自定义目录：装完后手动 muse skills install --dir <path>
   const agentsDir = path.join(os.homedir(), '.agents', 'skills');
   const bundleDir = path.join(PKG_ROOT, 'skills');
   log(`物化全部 Skill → ${agentsDir}`);
@@ -82,12 +82,12 @@ function main() {
 
   if (result.error) {
     log(`启动失败: ${result.error.message}`);
-    log('可稍后手动执行: tabtin skills install --target agents');
+    log('可稍后手动执行: muse skills install --target agents');
     // 不阻断 npm i -g
     return;
   }
   if (result.status !== 0) {
-    log(`Skill 物化失败（exit ${result.status}）。可稍后手动: tabtin skills install --target agents`);
+    log(`Skill 物化失败（exit ${result.status}）。可稍后手动: muse skills install --target agents`);
     return;
   }
   log('Skill 物化完成。重启 Cursor / Claude 后即可在 Slash Skills 中使用 tabtin-*。');

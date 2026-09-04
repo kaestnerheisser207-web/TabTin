@@ -1,4 +1,4 @@
-# TabTin Code of Conduct
+# Muse Code of Conduct
 
 [中文](CODE_OF_CONDUCT.md)
 
@@ -34,7 +34,7 @@ The following behavior violates this Code:
 
 ## Private reporting
 
-Use **Report a vulnerability** on the [TabTin public repository's Security page](https://github.com/tabtin-ai/TabTin/security) and prefix the title with **Code of Conduct**. If that entry is not yet visible, email [issue@larchiveai.com](mailto:issue@larchiveai.com) with `[Code of Conduct]` in the subject. Include the time, location, relevant accounts, verifiable records, impact, and requested protective measures.
+Use **Report a vulnerability** on the [Muse public repository's Security page](https://github.com/tabtin-ai/TabTin/security) and prefix the title with **Code of Conduct**. If that entry is not yet visible, email [issue@larchiveai.com](mailto:issue@larchiveai.com) with `[Code of Conduct]` in the subject. Include the time, location, relevant accounts, verifiable records, impact, and requested protective measures.
 
 Do not publish information through Issues, Discussions, or social media if doing so could cause further harm.
 
@@ -55,7 +55,7 @@ This ladder is a guideline and does not limit reasonable action needed to protec
 
 ## Scope
 
-This Code applies in all TabTin community spaces and when a person officially represents TabTin, including through official email, social accounts, or online and offline events.
+This Code applies in all Muse community spaces and when a person officially represents Muse, including through official email, social accounts, or online and offline events.
 
 ## Attribution and license
 

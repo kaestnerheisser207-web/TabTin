@@ -1469,13 +1469,13 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "TabTin"
+            "value": "Muse"
           }
         },
         "zh-Hans": {
           "stringUnit": {
             "state": "translated",
-            "value": "TabTin"
+            "value": "Muse"
           }
         }
       }
@@ -4206,13 +4206,13 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Allow TabTin to use the camera in system settings, then return and try again."
+            "value": "Allow Muse to use the camera in system settings, then return and try again."
           }
         },
         "zh-Hans": {
           "stringUnit": {
             "state": "translated",
-            "value": "请在系统设置中允许 TabTin 使用相机，然后返回重试。"
+            "value": "请在系统设置中允许 Muse 使用相机，然后返回重试。"
           }
         }
       }

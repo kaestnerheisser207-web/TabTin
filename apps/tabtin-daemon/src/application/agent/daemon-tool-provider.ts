@@ -305,7 +305,7 @@ export class DaemonToolProvider implements ToolProvider {
    * 子 Agent fork 用的「完整工具集」provider（含 host `prepareAgentTools` 合并的
    * Cap 工具，尤其 ShellCap 的 `run_terminal_command`）。与 Electron 同构：本
    * Provider 自身 `getTools()` 不含 Cap 工具，若 `agent` 工具用 `tools: this`，
-   * 子 Agent 会缺 `run_terminal_command`，CLI-first 下无法执行 tabtin 命令。
+   * 子 Agent 会缺 `run_terminal_command`，CLI-first 下无法执行 muse 命令。
    * 由 host 装好 `mergedToolProvider` 后回注；回注前兜底用 `this`。
    */
   private subagentToolProvider?: ToolProvider;

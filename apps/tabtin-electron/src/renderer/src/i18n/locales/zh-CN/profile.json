@@ -49,7 +49,7 @@
     "logoutConfirmTitle": "确定要退出登录吗？",
     "logoutConfirmDesc": "退出后当前设备的未保存工作将丢失",
     "openStorageManager": "存储管理",
-    "openStorageManagerHint": "看见 TabTin 在你电脑上存了什么，按需要清理或导出",
+    "openStorageManagerHint": "看见 Muse 在你电脑上存了什么，按需要清理或导出",
     "changePassword": "修改密码",
     "bindEmail": "绑定邮箱"
   },

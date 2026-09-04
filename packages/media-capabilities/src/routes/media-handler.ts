@@ -119,7 +119,7 @@ export function createMediaHandler(deps: MediaHandlerDeps): RouteHandler {
     if (route === '/generate/image' && method === 'POST') {
       if (!body?.prompt) {
         sendJSON(res, 400, errorResponse('VALIDATION_ERROR', '缺少 prompt 参数', {
-          suggestions: ['tabtin media image generate --prompt "描述你要生成的图片"'],
+          suggestions: ['muse media image generate --prompt "描述你要生成的图片"'],
         }));
         return;
       }
@@ -153,7 +153,7 @@ export function createMediaHandler(deps: MediaHandlerDeps): RouteHandler {
     if (route === '/generate/video' && method === 'POST') {
       if (!body?.prompt) {
         sendJSON(res, 400, errorResponse('VALIDATION_ERROR', '缺少 prompt 参数', {
-          suggestions: ['tabtin media generate-video --prompt "描述你要生成的视频"'],
+          suggestions: ['muse media generate-video --prompt "描述你要生成的视频"'],
         }));
         return;
       }
@@ -229,7 +229,7 @@ export function createMediaHandler(deps: MediaHandlerDeps): RouteHandler {
     }
 
     sendJSON(res, 404, errorResponse('UNKNOWN_ROUTE', `未知的媒体路由: ${url}`, {
-      suggestions: ['请检查命令拼写', '使用 tabtin media --help 查看可用命令'],
+      suggestions: ['请检查命令拼写', '使用 muse media --help 查看可用命令'],
     }));
   };
 }

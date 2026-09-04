@@ -211,7 +211,7 @@
     "tool_not_found": "Tool '{tool_name}' not found. Please check the tool name.",
     "resume_error": "An error occurred while resuming. Please try again.",
     "resume_already_in_progress": "This conversation is already resuming. Please wait.",
-    "device_offline": "Unable to forward the message to the execution device. Open TabTin on your computer and try again.",
+    "device_offline": "Unable to forward the message to the execution device. Open Muse on your computer and try again.",
     "device_busy": "Your execution device is handling another external Agent task. Please try again shortly.",
     "delegation_forwarding": "Device offline. Message delegated to a proxy Agent for processing.",
     "safety_terminated": "Conversation was terminated by the safety system.",
@@ -1399,7 +1399,7 @@
   },
   "channel": {
     "bot": {
-      "start": "Hi! I'm a TabTin AI assistant. Send me a message and I'll do my best to help.\n\nUse /help to see available commands.",
+      "start": "Hi! I'm a Muse AI assistant. Send me a message and I'll do my best to help.\n\nUse /help to see available commands.",
       "help": "Available commands:\n/start - Start a conversation\n/help  - Show this help message\n\nYou can also send any text message and I'll respond.\n\nI can help with data analysis, document editing, web scraping, and more."
     }
   },

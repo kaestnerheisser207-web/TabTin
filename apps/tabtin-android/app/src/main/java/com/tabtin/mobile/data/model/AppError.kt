@@ -2,7 +2,7 @@ package com.tabtin.mobile.data.model
 
 import android.content.Context
 import androidx.annotation.StringRes
-import com.tabtin.mobile.R
+import com.muse.mobile.R
 
 public enum class ActionLabel(@StringRes public val labelRes: Int) {
     LOGIN(R.string.error_label_login),

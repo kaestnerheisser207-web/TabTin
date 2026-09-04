@@ -302,7 +302,7 @@
   "insertEmoji": "表情",
   "emojiMostUsed": "最近使用",
   "emojiDefault": "默认表情",
-  "emojiTabtin": "TabTin",
+  "emojiTabtin": "Muse",
   "openStickerPreview": "打开贴纸预览",
   "stickers": {
     "neutral": "小机器人",
@@ -477,10 +477,27 @@
   "sendToIMErrorNoteFailed": "留言发送失败",
   "sendToIMErrorSendFailed": "发送失败",
   "sendToIMSuccessToast": "已成功发送到 {{count}} 个目标",
-  "replyThread": { "title": "回复详情", "close": "关闭回复详情", "empty": "暂无已加载的回复", "messageUnavailable": "消息内容不可用", "openImage": "打开图片预览" },
+  "replyThread": {
+    "title": "回复详情",
+    "close": "关闭回复详情",
+    "empty": "暂无已加载的回复",
+    "messageUnavailable": "消息内容不可用",
+    "openImage": "打开图片预览"
+  },
   "externalContacts": {
-    "tabs": { "internal": "组织成员", "external": "外部联系人", "incoming": "收到的申请", "outgoing": "发出的申请", "blocked": "已拉黑" },
-    "hints": { "external": "已建立关系的外部联系人，可发起私信或邀请进入群聊。", "incoming": "选择你要代表的组织身份后再同意。", "outgoing": "等待对方处理的联系人申请。", "blocked": "已拉黑的联系人无法与你互发消息。" },
+    "tabs": {
+      "internal": "组织成员",
+      "external": "外部联系人",
+      "incoming": "收到的申请",
+      "outgoing": "发出的申请",
+      "blocked": "已拉黑"
+    },
+    "hints": {
+      "external": "已建立关系的外部联系人，可发起私信或邀请进入群聊。",
+      "incoming": "选择你要代表的组织身份后再同意。",
+      "outgoing": "等待对方处理的联系人申请。",
+      "blocked": "已拉黑的联系人无法与你互发消息。"
+    },
     "phoneLabel": "外部联系人完整手机号",
     "phonePlaceholder": "输入完整手机号精确查找",
     "addFriend": "添加联系人",
@@ -508,6 +525,14 @@
     "externalGroupWarning": "加入外部联系人后，群聊将永久标记为外部群。",
     "noAddedContacts": "暂无已添加的外部联系人",
     "empty": "暂无内容",
-    "errors": { "noEligibleOrganization": "请选择一个不同于申请方的组织身份后再同意。", "loadFailed": "加载外部联系人失败", "notFound": "联系人不存在", "selfContact": "不能添加自己的手机号", "requestFailed": "发送申请失败", "resolveFailed": "处理申请失败", "updateFailed": "更新联系人失败" }
+    "errors": {
+      "noEligibleOrganization": "请选择一个不同于申请方的组织身份后再同意。",
+      "loadFailed": "加载外部联系人失败",
+      "notFound": "联系人不存在",
+      "selfContact": "不能添加自己的手机号",
+      "requestFailed": "发送申请失败",
+      "resolveFailed": "处理申请失败",
+      "updateFailed": "更新联系人失败"
+    }
   }
 }

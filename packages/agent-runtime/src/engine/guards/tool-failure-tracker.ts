@@ -744,7 +744,7 @@ const ASK_TOOLS_GENERIC_LINE =
  *   权限不足——LLM 应让用户重新登录或授权，优先 `ask_user`。
  * - **路径级 OS 拒绝**（`os_access_error`）：macOS TCC / Linux EPERM / Windows
  *   ACL 在路径级拦截，**所有**访问同路径的工具都会被同样拦下——不能"换工具"，
- *   只能让用户走系统授权（macOS"允许 TabTin 访问该文件夹"）后重试原操作；
+ *   只能让用户走系统授权（macOS"允许 Muse 访问该文件夹"）后重试原操作；
  *   或换不同路径（如降级到 ~/Downloads 等已授权目录）；或文字总结收尾。
  * - 资源缺失类（`resource_not_found` / `skill_not_found` / `skill_disabled` / `skill_not_installed` 等）：让用户在选项里
  *   选正确目标——优先 `ask_user`。

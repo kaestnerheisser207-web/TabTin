@@ -979,7 +979,7 @@
     "invalid_param_format": "잘못된 매개변수 형식 - 입력을 확인하고 다시 시도하세요.",
     "param_too_large": "입력이 한도를 초과합니다. 분할하거나 단순화하고 다시 시도하세요.",
     "mutually_exclusive_params": "매개변수 충돌 - 하나만 유지",
-    "no_ui_session": "TabTin 데스크톱 UI가 필요합니다. 이 모드에서는 사용할 수 없습니다.",
+    "no_ui_session": "Muse 데스크톱 UI가 필요합니다. 이 모드에서는 사용할 수 없습니다.",
     "runtime_misconfig": "런타임 구성이 완료되지 않았습니다. 개발자에게 문의하세요.",
     "host_unsupported": "이 작업은 현재 모드에서 지원되지 않습니다",
     "network_failed": "네트워크 요청 실패 — 연결을 확인하고 다시 시도하세요. 클라우드 파일의 경우 URL이 만료되었을 수 있으므로 사용자에게 다시 업로드하도록 요청하세요.",
@@ -1389,7 +1389,7 @@
     "chargeFailed": "결제 보류 중",
     "chargeFailedDetail": "이 메시지에 대한 청구가 완료되지 않았습니다. 자동으로 다시 시도됩니다. 귀하에게 이중 청구가 발생하지 않습니다. 최종 정산은 권위를 갖습니다.",
     "byok": "자체 API 키 — 무료",
-    "byokDetail": "자체 API 키(BYOK)를 사용하고 있습니다. 이 메시지는 TabTin 크레딧을 소비하지 않습니다."
+    "byokDetail": "자체 API 키(BYOK)를 사용하고 있습니다. 이 메시지는 Muse 크레딧을 소비하지 않습니다."
   },
   "checkpoint": {
     "edit": "메시지 편집",
@@ -2518,9 +2518,9 @@
     "plan_create": "계획 만들기",
     "plan_update_todos": "할 일 업데이트",
     "switch_mode": "요청 모드 스위치",
-    "relaunch_app": "TabTin 다시 시작",
+    "relaunch_app": "Muse 다시 시작",
     "clear_os_error_blacklist": "차단된 경로 지우기",
-    "tabtin_search": "TabTin 검색",
+    "tabtin_search": "Muse 검색",
     "show_widget": "시각적 위젯",
     "show_flow_view": "흐름 보기",
     "web_scraper_scrape_url": "스크랩 URL",
@@ -2888,9 +2888,9 @@
     "toolFailureNotice_one": "\"{{tool}}\"이 {{streak}}번 연속 실패했습니다. 시스템은 한 번 더 실패할 경우 에이전트에게 다른 접근 방식을 시도하도록 상기시킵니다.",
     "toolFailureNotice_other": "\"{{tool}}\"이 {{streak}}번 연속 실패했습니다. 시스템은 {{remaining}}가 더 실패하면 에이전트에게 다른 접근 방식을 시도하도록 상기시킵니다.",
     "toolFailureNudge": "\"{{tool}}\"이 {{streak}}번 연속 실패했습니다. 시스템은 상담원에게 다른 접근 방식을 시도해 보라고 상기시켰습니다.",
-    "toolRepetitionNotice_one": "\"{{tool}}\"이 지난 ~{{seconds}}s에서 동일한 입력 {{repeatCount}}번으로 호출되었습니다. TabTin은 에이전트가 한 번 더 반복되면 개입하여 에이전트를 조금씩 움직입니다.",
-    "toolRepetitionNotice_other": "\"{{tool}}\"이 지난 ~{{seconds}}s에서 동일한 입력 {{repeatCount}}번으로 호출되었습니다. TabTin은 {{remaining}}이 더 반복된 후 에이전트를 조금씩 움직이기 위해 개입합니다.",
-    "toolRepetitionNudge": "\"{{tool}}\"이 지난 ~{{seconds}}s에서 동일한 입력 {{repeatCount}}번으로 호출되었습니다. TabTin은 동일한 입력의 재발행을 중지하도록 에이전트에 개입했습니다. 잠시 기다려 주세요. 그래도 피벗되지 않으면 \"계속하려면 이전 답변 사용\" 또는 \"질문 변경\"과 같은 새로운 프롬프트를 표시하세요.",
+    "toolRepetitionNotice_one": "\"{{tool}}\"이 지난 ~{{seconds}}s에서 동일한 입력 {{repeatCount}}번으로 호출되었습니다. Muse은 에이전트가 한 번 더 반복되면 개입하여 에이전트를 조금씩 움직입니다.",
+    "toolRepetitionNotice_other": "\"{{tool}}\"이 지난 ~{{seconds}}s에서 동일한 입력 {{repeatCount}}번으로 호출되었습니다. Muse은 {{remaining}}이 더 반복된 후 에이전트를 조금씩 움직이기 위해 개입합니다.",
+    "toolRepetitionNudge": "\"{{tool}}\"이 지난 ~{{seconds}}s에서 동일한 입력 {{repeatCount}}번으로 호출되었습니다. Muse은 동일한 입력의 재발행을 중지하도록 에이전트에 개입했습니다. 잠시 기다려 주세요. 그래도 피벗되지 않으면 \"계속하려면 이전 답변 사용\" 또는 \"질문 변경\"과 같은 새로운 프롬프트를 표시하세요.",
     "tool_started": "실행 중: {{toolName}}",
     "tool_completed": "{{toolName}} 완료",
     "tool_failed": "{{toolName}} 실패: {{reason}}",
@@ -3035,11 +3035,19 @@
     "confirmFailed": "작업 실패"
   },
   "tokenUsage": {
-    "title": "Token 사용량", "current": "현재 사용량", "windowLimit": "컨텍스트 한도",
-    "inputTotal": "입력 합계", "outputTotal": "출력 합계", "cacheHit": "캐시 히트",
-    "reasoning": "심층 추론", "autoCompacted": "자동 정리됨", "billing": "결제",
-    "byok": "자체 키 · credits 차감 없음", "historicalCost": "이전 사용 비용",
-    "consumed": "사용됨", "estimatedCost": "예상 비용"
+    "title": "Token 사용량",
+    "current": "현재 사용량",
+    "windowLimit": "컨텍스트 한도",
+    "inputTotal": "입력 합계",
+    "outputTotal": "출력 합계",
+    "cacheHit": "캐시 히트",
+    "reasoning": "심층 추론",
+    "autoCompacted": "자동 정리됨",
+    "billing": "결제",
+    "byok": "자체 키 · credits 차감 없음",
+    "historicalCost": "이전 사용 비용",
+    "consumed": "사용됨",
+    "estimatedCost": "예상 비용"
   },
   "sessionCollab": {
     "manageTitle": "공유 관리",

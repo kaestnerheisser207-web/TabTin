@@ -4,7 +4,7 @@ import { describe, it } from 'node:test';
 import { OSS_UPLOAD_CONTEXT_TYPES, performLocalFileUpload, resolveUploadContextType } from './oss.js';
 
 describe('resolveUploadContextType (/oss/upload context_type 白名单)', () => {
-  it('缺省时回退默认 present（保持 `tabtin oss upload` 行为不变）', () => {
+  it('缺省时回退默认 present（保持 `muse oss upload` 行为不变）', () => {
     for (const raw of [undefined, null, '']) {
       const result = resolveUploadContextType(raw);
       assert.equal(result.ok, true);

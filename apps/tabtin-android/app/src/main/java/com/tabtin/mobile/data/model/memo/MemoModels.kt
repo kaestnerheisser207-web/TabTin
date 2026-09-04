@@ -2,7 +2,7 @@ package com.tabtin.mobile.data.model.memo
 
 import androidx.annotation.StringRes
 import androidx.compose.ui.graphics.Color
-import com.tabtin.mobile.R
+import com.muse.mobile.R
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.JsonObject

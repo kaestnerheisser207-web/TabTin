@@ -82,7 +82,7 @@ def full_report():
 
 
 def main():
-    parser = argparse.ArgumentParser(description='Tabtin 健康检查工具')
+    parser = argparse.ArgumentParser(description='Muse 健康检查工具')
     parser.add_argument('--full', action='store_true', help='显示完整报告')
 
     args = parser.parse_args()

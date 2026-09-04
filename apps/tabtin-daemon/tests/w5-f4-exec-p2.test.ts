@@ -60,7 +60,7 @@ describe('EF-14 — globalThis.tabtin uses Object.assign', () => {
       methodStart,
       daemonSource.indexOf('\n  }', methodStart) + 4,
     )
-    expect(methodBody).not.toMatch(/globalThis\.tabtin\s*=\s*tabtin/)
+    expect(methodBody).not.toMatch(/globalThis\.tabtin\s*=\s*muse/)
   })
 })
 

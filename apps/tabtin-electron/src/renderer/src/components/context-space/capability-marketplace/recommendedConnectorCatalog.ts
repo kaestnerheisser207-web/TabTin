@@ -9,7 +9,7 @@
  *
  * 产品授权分类（官网核对后）：
  * - `oauth` + `oauthGate: ready`：标准 MCP OAuth，可直接做引导流（Stripe / Notion / Supabase / Neon / Cloudflare / 天眼查）
- * - `oauth` + `oauthGate: vendor_pending`：支持 OAuth，但 TabTin 须先完成厂商注册/审核（Vercel / Canva）
+ * - `oauth` + `oauthGate: vendor_pending`：支持 OAuth，但 Muse 须先完成厂商注册/审核（Vercel / Canva）
  * - `api_key`：主路径粘贴密钥（GitHub MCP / 同花顺）
  * - `app_credentials`：管理员建企业应用后填 Client ID/Secret（钉钉）
  */
@@ -92,7 +92,7 @@ function remoteStdio(url: string, extraArgs: string[] = []): LocalMcpTransportCo
 /**
  * OAuth 远程 MCP。部分授权服不接受 mcp-remote 默认 OIDC scope，
  * 需用 `--static-oauth-client-metadata` 显式声明（Stripe 为正典样板：`{"scope":"mcp"}`）。
- * `client_name: TabTin` 对齐原型授权页「允许 TabTin 访问…」。
+ * `client_name: Muse` 对齐原型授权页「允许 Muse 访问…」。
  * `--auth-timeout` 与探测预算对齐（秒），避免网页授权中途 long-poll 过早结束。
  */
 function remoteOAuthStdio(
@@ -101,7 +101,7 @@ function remoteOAuthStdio(
   extraArgs: string[] = [],
 ): LocalMcpTransportConfig {
   const metadata = {
-    client_name: 'TabTin',
+    client_name: 'Muse',
     ...(clientMetadata ?? {}),
   }
   return remoteStdio(url, [

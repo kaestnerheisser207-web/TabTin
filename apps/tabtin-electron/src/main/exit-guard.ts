@@ -101,7 +101,7 @@ export function createExitGuardController(options: ExitGuardOptions): ExitGuardC
         },
         'app-relaunch': {
           title: '应用未响应',
-          message: '无法获取当前未保存改动列表。仍要重启 TabTin 可能会丢失未保存的改动。',
+          message: '无法获取当前未保存改动列表。仍要重启 Muse 可能会丢失未保存的改动。',
           confirmLabel: '仍然重启',
         },
       }

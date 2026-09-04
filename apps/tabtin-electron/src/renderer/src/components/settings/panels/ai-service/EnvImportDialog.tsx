@@ -110,7 +110,7 @@ export const EnvImportDialog: React.FC<EnvImportDialogProps> = ({ open, onOpenCh
           </DialogTitle>
           <DialogDescription>
             {t('credentialVault.envImport.description', {
-              defaultValue: '把你的 .env 文件内容粘贴进来，TabTin 会自动识别常见 AI 服务（OpenAI / Anthropic / Serper / SendGrid 等）',
+              defaultValue: '把你的 .env 文件内容粘贴进来，Muse 会自动识别常见 AI 服务（OpenAI / Anthropic / Serper / SendGrid 等）',
             })}
           </DialogDescription>
         </DialogHeader>

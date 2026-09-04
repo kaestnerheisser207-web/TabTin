@@ -1,5 +1,7 @@
 package com.tabtin.mobile.features.tabdata
 
+import com.muse.mobile.R
+
 import androidx.lifecycle.SavedStateHandle
 import com.tabtin.mobile.data.model.AppError
 import com.tabtin.mobile.data.model.Organization
@@ -602,7 +604,7 @@ public class NativeTabDataViewModelTest {
         advanceUntilIdle()
 
         assertEquals(
-            com.tabtin.mobile.R.string.tabdata_save_version_conflict_retry,
+            com.muse.mobile.R.string.tabdata_save_version_conflict_retry,
             vm.uiState.value.mutationMessageRes,
         )
         assertFalse(vm.uiState.value.detailWriteBlocked)
@@ -681,7 +683,7 @@ public class NativeTabDataViewModelTest {
         assertEquals(remote, vm.uiState.value.records.single())
         assertEquals(JsonPrimitive("本地草稿"), vm.uiState.value.detailDraft[title.name])
         assertEquals(
-            com.tabtin.mobile.R.string.tabdata_permission_changed_draft_preserved,
+            com.muse.mobile.R.string.tabdata_permission_changed_draft_preserved,
             vm.uiState.value.conflictMessageRes,
         )
         verify(exactly = 0) { draftStore.remove(any()) }
@@ -749,7 +751,7 @@ public class NativeTabDataViewModelTest {
         advanceUntilIdle()
 
         assertEquals(JsonPrimitive("本地草稿"), vm.uiState.value.detailDraft[title.name])
-        assertEquals(com.tabtin.mobile.R.string.tabdata_save_busy, vm.uiState.value.mutationMessageRes)
+        assertEquals(com.muse.mobile.R.string.tabdata_save_busy, vm.uiState.value.mutationMessageRes)
         assertNull(vm.uiState.value.mutationMessage)
         verify(exactly = 0) { draftStore.remove(any()) }
     }
@@ -1145,7 +1147,7 @@ public class NativeTabDataViewModelTest {
         assertTrue(vm.uiState.value.detailWriteBlocked)
         assertFalse(vm.uiState.value.canEditDetail)
         assertEquals(
-            com.tabtin.mobile.R.string.tabdata_version_conflict_message,
+            com.muse.mobile.R.string.tabdata_version_conflict_message,
             vm.uiState.value.conflictMessageRes,
         )
     }
@@ -1186,7 +1188,7 @@ public class NativeTabDataViewModelTest {
         assertEquals(NativeTabDataEvent.CloseDetail, event.await())
         assertFalse(vm.uiState.value.detailWriteBlocked)
         assertEquals(
-            com.tabtin.mobile.R.string.tabdata_collaborative_field_changed,
+            com.muse.mobile.R.string.tabdata_collaborative_field_changed,
             vm.uiState.value.mutationMessageRes,
         )
         assertEquals(listOf("标题"), vm.uiState.value.mutationMessageFields)
@@ -1354,7 +1356,7 @@ public class NativeTabDataViewModelTest {
         assertEquals("record-1", vm.uiState.value.selectedRecord?.id)
         assertTrue(vm.uiState.value.detailWriteBlocked)
         assertEquals(
-            com.tabtin.mobile.R.string.tabdata_record_deleted_remotely,
+            com.muse.mobile.R.string.tabdata_record_deleted_remotely,
             vm.uiState.value.conflictMessageRes,
         )
     }
@@ -1406,7 +1408,7 @@ public class NativeTabDataViewModelTest {
         assertFalse(vm.uiState.value.detailWriteBlocked)
         // 只加字段、没有丢掉正在编辑的值：保持泛化「表结构已更新」，不弹点名告知。
         assertEquals(
-            com.tabtin.mobile.R.string.tabdata_schema_updated,
+            com.muse.mobile.R.string.tabdata_schema_updated,
             vm.uiState.value.mutationMessageRes,
         )
         assertEquals(emptyList<String>(), vm.uiState.value.mutationMessageFields)
@@ -1439,7 +1441,7 @@ public class NativeTabDataViewModelTest {
         coVerify(exactly = 2) { repository.loadViews("table-1") }
         coVerify(exactly = 2) { repository.loadFields("table-1") }
         assertEquals(
-            com.tabtin.mobile.R.string.tabdata_schema_updated,
+            com.muse.mobile.R.string.tabdata_schema_updated,
             vm.uiState.value.mutationMessageRes,
         )
         assertEquals(emptyList<String>(), vm.uiState.value.mutationMessageFields)
@@ -1522,7 +1524,7 @@ public class NativeTabDataViewModelTest {
         assertTrue(vm.uiState.value.isDetailDirty)
         assertFalse(vm.uiState.value.detailWriteBlocked)
         assertEquals(
-            com.tabtin.mobile.R.string.tabdata_schema_dropped_field,
+            com.muse.mobile.R.string.tabdata_schema_dropped_field,
             vm.uiState.value.mutationMessageRes,
         )
         assertEquals(listOf("状态"), vm.uiState.value.mutationMessageFields)
@@ -1584,7 +1586,7 @@ public class NativeTabDataViewModelTest {
         assertFalse(vm.uiState.value.detailWriteBlocked)
         assertTrue(vm.uiState.value.canEditDetail)
         assertEquals(
-            com.tabtin.mobile.R.string.tabdata_schema_dropped_fields,
+            com.muse.mobile.R.string.tabdata_schema_dropped_fields,
             vm.uiState.value.mutationMessageRes,
         )
         assertEquals(listOf("状态"), vm.uiState.value.mutationMessageFields)
@@ -1638,7 +1640,7 @@ public class NativeTabDataViewModelTest {
         assertEquals(JsonNull, vm.uiState.value.detailDraft["状态"])
         assertFalse(vm.uiState.value.detailWriteBlocked)
         assertEquals(
-            com.tabtin.mobile.R.string.tabdata_schema_dropped_field,
+            com.muse.mobile.R.string.tabdata_schema_dropped_field,
             vm.uiState.value.mutationMessageRes,
         )
         assertEquals(listOf("状态"), vm.uiState.value.mutationMessageFields)

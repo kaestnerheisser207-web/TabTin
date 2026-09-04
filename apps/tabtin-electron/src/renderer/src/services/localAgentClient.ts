@@ -334,7 +334,7 @@ export interface LocalAgentStreamOptions {
    * setActive Promise 失败被 renderer silently catch、切 Space race）都会
    * 让 spaceId 在主进程侧为 null，下游 ShellCap.run_terminal_command 撞
    * `context.spaceId is missing` 硬契约 throw，session 静默落 `_unscoped/`，
-   * 用户看到的现象就是「在 Space 里发消息→Agent 调 `tabtin table create`
+   * 用户看到的现象就是「在 Space 里发消息→Agent 调 `muse table create`
    * 立刻被拒→兜底文案推用户去手动点 + 新建按钮」。
    *
    * 调用方从 `useSpaceStore.selectedSpace.id` /

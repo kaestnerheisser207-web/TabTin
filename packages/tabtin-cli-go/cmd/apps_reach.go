@@ -1,9 +1,9 @@
 package cmd
 
-// tabtin reach —— 平台化内容获取命令域（Platform Reach，P0.5 接线）。
+// muse reach —— 平台化内容获取命令域（Platform Reach，P0.5 接线）。
 //
 // 平台适配 + 运行时路由 + 优雅降级，底层复用
-// TabTin 自有浏览器栈（Electron WebContentsView + CDP），经 CLI-server `/reach/*`
+// Muse 自有浏览器栈（Electron WebContentsView + CDP），经 CLI-server `/reach/*`
 // 路由桥接；能力本体在 packages/platform-reach 纯包 + Electron reach route。
 // 需 Electron 桌面客户端运行；Daemon/headless 登录态桥是 P2，暂不可用。
 //
@@ -15,7 +15,7 @@ package cmd
 import (
 	"github.com/spf13/cobra"
 
-	"github.com/TabTin/tabtin-cli/internal/cmdutil"
+	"github.com/Muse/muse-cli/internal/cmdutil"
 )
 
 func newCmdReach(f *cmdutil.Factory) *cobra.Command {
@@ -29,9 +29,9 @@ comments…）、抽取策略与限频；运行时路由（reach doctor）判断
 tonghuashun / eastmoney。需 Electron 桌面客户端运行。
 
 ⚠️ 小红书 xsec_token 两跳：不能用裸 note_id 直读。正确流程——
-  1. tabtin reach search --platform xiaohongshu --query "关键词"
+  1. muse reach search --platform xiaohongshu --query "关键词"
   2. 从结果里取带 xsec_token 的完整 URL
-  3. tabtin reach read/comments --platform xiaohongshu --url "<完整URL>"
+  3. muse reach read/comments --platform xiaohongshu --url "<完整URL>"
 
 合规默认：匿名优先。登录态批量采集是阻塞性产品决策，暂不开放。
 
@@ -41,11 +41,11 @@ tonghuashun / eastmoney。需 Electron 桌面客户端运行。
 京东已声明 sort（sale→psort=3 / price_* / latest），见 --sort。
 
 示例：
-  tabtin reach doctor --platform taobao
-  tabtin reach search --platform taobao --query "机械键盘" --sort sale --limit 5
-  tabtin reach search --platform jd --query "机械键盘" --sort sale --limit 5
-  tabtin reach search --platform bilibili --query "AI Agent" --limit 10
-  tabtin reach read --platform bilibili --url "https://www.bilibili.com/video/BVxxxx"`,
+  muse reach doctor --platform taobao
+  muse reach search --platform taobao --query "机械键盘" --sort sale --limit 5
+  muse reach search --platform jd --query "机械键盘" --sort sale --limit 5
+  muse reach search --platform bilibili --query "AI Agent" --limit 10
+  muse reach read --platform bilibili --url "https://www.bilibili.com/video/BVxxxx"`,
 	}
 
 	platformFlag := cmdutil.FlagDef{
@@ -56,7 +56,7 @@ tonghuashun / eastmoney。需 Electron 桌面客户端运行。
 	defs := []cmdutil.CommandDef{
 		{
 			Use: "doctor", Short: "探测平台 reach 后端可用性（选路诊断）",
-			Example: "  tabtin reach doctor --platform xiaohongshu\n  tabtin reach doctor --platform xiaohongshu --verb read",
+			Example: "  muse reach doctor --platform xiaohongshu\n  muse reach doctor --platform xiaohongshu --verb read",
 			Route:   cmdutil.RouteCliServer, Method: "POST", Path: "/reach/doctor",
 			Risk: cmdutil.RiskRead, RiskDeclared: true,
 			Flags: []cmdutil.FlagDef{
@@ -67,7 +67,7 @@ tonghuashun / eastmoney。需 Electron 桌面客户端运行。
 		},
 		{
 			Use: "search", Short: "搜索平台内容（返回带签名 URL 的归一化条目）",
-			Example: "  tabtin reach search --platform xiaohongshu --query \"AI Agent\" --limit 10\n  tabtin reach search --platform taobao --query \"机械键盘\" --sort sale --limit 5",
+			Example: "  muse reach search --platform xiaohongshu --query \"AI Agent\" --limit 10\n  muse reach search --platform taobao --query \"机械键盘\" --sort sale --limit 5",
 			Route:   cmdutil.RouteCliServer, Method: "POST", Path: "/reach/search",
 			Risk: cmdutil.RiskRead, RiskDeclared: true,
 			Flags: []cmdutil.FlagDef{
@@ -86,7 +86,7 @@ tonghuashun / eastmoney。需 Electron 桌面客户端运行。
 		},
 		{
 			Use: "read", Short: "读取单条内容（需带 xsec_token 的完整 URL，先 search 拿到）",
-			Example: "  tabtin reach read --platform xiaohongshu --url \"https://www.xiaohongshu.com/search_result/<id>?xsec_token=...\"",
+			Example: "  muse reach read --platform xiaohongshu --url \"https://www.xiaohongshu.com/search_result/<id>?xsec_token=...\"",
 			Route:   cmdutil.RouteCliServer, Method: "POST", Path: "/reach/read",
 			Risk: cmdutil.RiskRead, RiskDeclared: true,
 			Flags: []cmdutil.FlagDef{
@@ -99,7 +99,7 @@ tonghuashun / eastmoney。需 Electron 桌面客户端运行。
 		},
 		{
 			Use: "comments", Short: "读取单条内容的评论（需带 xsec_token 的完整 URL）",
-			Example: "  tabtin reach comments --platform xiaohongshu --url \"https://www.xiaohongshu.com/search_result/<id>?xsec_token=...\"",
+			Example: "  muse reach comments --platform xiaohongshu --url \"https://www.xiaohongshu.com/search_result/<id>?xsec_token=...\"",
 			Route:   cmdutil.RouteCliServer, Method: "POST", Path: "/reach/comments",
 			Risk: cmdutil.RiskRead, RiskDeclared: true,
 			Flags: []cmdutil.FlagDef{

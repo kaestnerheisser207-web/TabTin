@@ -3,7 +3,7 @@ package cmd
 import (
 	"github.com/spf13/cobra"
 
-	"github.com/TabTin/tabtin-cli/internal/cmdutil"
+	"github.com/Muse/muse-cli/internal/cmdutil"
 )
 
 func newCmdFetch(f *cmdutil.Factory) *cobra.Command {
@@ -15,14 +15,14 @@ func newCmdFetch(f *cmdutil.Factory) *cobra.Command {
 请求从本地设备发出，代理/VPN 天然兼容。
 
 示例：
-  tabtin fetch "https://example.com"
-  tabtin fetch "https://docs.python.org/3/" --include-images`,
+  muse fetch "https://example.com"
+  muse fetch "https://docs.python.org/3/" --include-images`,
 	}
 
 	defs := []cmdutil.CommandDef{
 		{
 			Use: "fetch <url>", Short: "获取网页内容并转为 Markdown",
-			Example: "  tabtin fetch \"https://example.com\"\n  tabtin fetch \"https://docs.python.org/3/\" --include-images",
+			Example: "  muse fetch \"https://example.com\"\n  muse fetch \"https://docs.python.org/3/\" --include-images",
 			Route:   cmdutil.RouteCliServer, Method: "POST", Path: "/fetch",
 			Flags: []cmdutil.FlagDef{
 				{Name: "url", Type: cmdutil.FlagString, Desc: "目标 URL（也可作为第一个位置参数）"},

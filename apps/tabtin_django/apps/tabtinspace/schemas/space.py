@@ -1,4 +1,4 @@
-"""Tabtin Space space schemas。"""
+"""Muse Space space schemas。"""
 
 from .common import *  # noqa: F401,F403
 from .agent import WorkingDirType, _normalize_working_dir

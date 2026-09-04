@@ -7,7 +7,7 @@ import {
 } from '../tool-id-mapper.js';
 
 describe('ToolIdMapper ', () => {
-  it('maps the same model id to one tabtin id within a mapper', () => {
+  it('maps the same model id to one muse id within a mapper', () => {
     const mapper = new ToolIdMapper();
     const a = mapper.allocate('run_terminal_command_41');
     const b = mapper.allocate('run_terminal_command_41');
@@ -16,7 +16,7 @@ describe('ToolIdMapper ', () => {
     expect(mapper.size).toBe(1);
   });
 
-  it('gives different tabtin ids across independent mappers for the same model id', () => {
+  it('gives different muse ids across independent mappers for the same model id', () => {
     const first = new ToolIdMapper().allocate('run_terminal_command_41');
     const second = new ToolIdMapper().allocate('run_terminal_command_41');
     expect(first).not.toBe(second);

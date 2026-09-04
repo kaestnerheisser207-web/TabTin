@@ -185,7 +185,7 @@ export function createMainWindow(options: CreateMainWindowOptions): BrowserWindo
     frame: false,
     // macOS 的自绘标题栏不展示原生 title，但它仍会出现在窗口切换器等系统入口；
     // 侧栏也会读同一个 URL marker 展示测试端标识。
-    title: getDevInstanceId() ? `TabTin · IM 测试端 ${getDevInstanceId()}` : 'TabTin · 主端',
+    title: getDevInstanceId() ? `Muse · IM 测试端 ${getDevInstanceId()}` : 'Muse · 主端',
     // Windows/Linux：frameless + renderer 自绘标题栏控件（见 components/platform/
     // window-controls.tsx）。不再用原生 titleBarOverlay——原生覆盖层浮在所有内容
     // 之上，鼠标悬浮右上角时会遮挡 UI（飞书式自绘按钮可控样式 + 预留空间）。
@@ -464,7 +464,7 @@ export function createMainWindow(options: CreateMainWindowOptions): BrowserWindo
       dialog.showMessageBox(mainWindow, {
         type: 'warning',
         title: '应用无响应',
-        message: 'TabTin 暂时无响应，是否重新加载？',
+        message: 'Muse 暂时无响应，是否重新加载？',
         buttons: ['继续等待', '重新加载'],
         defaultId: 1,
       }).then(({ response }) => {

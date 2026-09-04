@@ -1,13 +1,13 @@
 /**
- * CliCap —— tabtin CLI 命令的上下文注入。
+ * CliCap —— muse CLI 命令的上下文注入。
  *
- * **目标**：TabTin 是 CLI-first 平台，能力都暴露成 `tabtin <命令>`（数百条）。让 Agent
- * 开局就知道有哪些命令域、以及跟本轮请求相关的命令细节，不必先跑 `tabtin commands` 探。
+ * **目标**：Muse 是 CLI-first 平台，能力都暴露成 `muse <命令>`（数百条）。让 Agent
+ * 开局就知道有哪些命令域、以及跟本轮请求相关的命令细节，不必先跑 `muse commands` 探。
  * 命令通过 `run_terminal_command` 执行——本 Cap 只注入认知，不新增工具。
  *
  * **与 SkillsCap / McpCap 相同的两区机制**：
  *   - **静态段**（`<cli_commands>`，query 无关、跨轮稳定、可缓存）：只列一级命令
- *     （domain / group 根）。按预算截断（超出附 `tabtin commands --format json`）。
+ *     （domain / group 根）。按预算截断（超出附 `muse commands --format json`）。
  *     写入 `state.__cliStaticIndex`，由 query.ts 注入 system 静态前缀。
  *   - **动态段**（`<relevant_cli>`，每轮随 query 变）：与 query BM25 相关的一级命令
  *     Top-N，前 N 条带完整描述，并引导通过 `--help` 继续发现。写入
@@ -39,7 +39,7 @@ import { MEDIA_IMAGE_CLI_INSTRUCTION } from './media-image.js';
 
 // ─── Fetcher 契约 ────────────────────────────────────────────────────
 
-/** 单条 tabtin CLI 命令的最小信息。 */
+/** 单条 muse CLI 命令的最小信息。 */
 export interface CliCommandInfo {
   /** 完整命令 path，如 `browser open` / `agent db info`。 */
   name: string;
@@ -51,7 +51,7 @@ export interface CliCommandInfo {
   /** 关键 flag 名（不含值），用于聚合子命令召回语义。 */
   flags?: string[];
   /**
-   * pure group 入口命令标记（，对应 `tabtin commands` 的 `is_group`）。
+   * pure group 入口命令标记（，对应 `muse commands` 的 `is_group`）。
    * 保留该元数据供宿主和后续命令树处理识别一级入口。
    */
   isGroup?: boolean;
@@ -73,8 +73,8 @@ export type CliCapFetcher = (context: {
 
 export interface CliCapInit {
   /**
-   * 拉取 tabtin CLI 命令树。由宿主层（Electron）注入，通常包装
-   * `tabtin commands --format json` + `parseTabtinCommandsJson`（含缓存）。
+   * 拉取 muse CLI 命令树。由宿主层（Electron）注入，通常包装
+   * `muse commands --format json` + `parseTabtinCommandsJson`（含缓存）。
    * 缺省则 CliCap 不做任何注入（hooks 返回 null）。
    */
   fetchCli?: CliCapFetcher;
@@ -106,13 +106,13 @@ const CMD_DESC_CAP = 240;
 const MEDIA_CMD_DESC_CAP = 1_800;
 
 const STATIC_HEADER =
-  '可用的 tabtin CLI 一级命令（用 run_terminal_command 执行，如 `tabtin <一级命令> --format json`）。\n'
+  '可用的 muse CLI 一级命令（用 run_terminal_command 执行，如 `muse <一级命令> --format json`）。\n'
   + '使用 `--format json` 获取机器可读结果时，禁止再接 `head` / `tail` 截断输出；需要缩小结果请用 CLI 的 `--jq` 或查询参数，完整大输出由 run_terminal_command 自动落盘。\n'
-  + '这里只列出 `tabtin <一级命令>`；选定后先运行 `tabtin <一级命令> --help` 查看子命令、参数和示例，'
-  + '也可用 `tabtin commands <domain> --format json` 查全，不要猜测下一级用法：';
+  + '这里只列出 `muse <一级命令>`；选定后先运行 `muse <一级命令> --help` 查看子命令、参数和示例，'
+  + '也可用 `muse commands <domain> --format json` 查全，不要猜测下一级用法：';
 const RELEVANT_HEADER =
   '与当前请求最相关的一级 CLI 命令（完整一级命令列表见上方 system prompt）。\n'
-  + '这里只展示 `tabtin <一级命令>`；选定能力后，先运行 `tabtin <一级命令> --help` 查看具体子命令、参数和示例，不要猜测下一级用法：';
+  + '这里只展示 `muse <一级命令>`；选定能力后，先运行 `muse <一级命令> --help` 查看具体子命令、参数和示例，不要猜测下一级用法：';
 const RELEVANT_TABLE_HEADER = '| command | risk | description |\n| --- | --- | --- |';
 
 function budgetCharsFromTokens(contextWindowTokens?: number): number {
@@ -130,7 +130,7 @@ function splitCommand(name: string): { domain: string; sub: string } {
 
 function commandPath(name: string): string {
   const trimmed = name.trim();
-  return trimmed.startsWith('tabtin ') ? trimmed.slice('tabtin '.length) : trimmed;
+  return trimmed.startsWith('muse ') ? trimmed.slice('muse '.length) : trimmed;
 }
 
 /** 折叠空白并截断到上限。 */
@@ -198,7 +198,7 @@ function renderStaticIndex(listing: CliListing, budgetChars: number): string | n
     lines.push(`- ${domain}`);
   }
   if (omitted > 0) {
-    lines.push(`(+${omitted} 个一级命令，用 tabtin commands --format json 看全)`);
+    lines.push(`(+${omitted} 个一级命令，用 muse commands --format json 看全)`);
   }
 
   return lines.join('\n');
@@ -226,7 +226,7 @@ function relevantDescriptionForCommand(cmd: CliCommandInfo): string {
 }
 
 /**
- * 召回结果固定为 `tabtin <一级命令>`，但搜索文本聚合该命令下全部子命令元数据，
+ * 召回结果固定为 `muse <一级命令>`，但搜索文本聚合该命令下全部子命令元数据，
  * 使具体任务词仍能命中正确能力入口。
  */
 function buildTopLevelRecallEntries(commands: CliCommandInfo[]): TopLevelRecallEntry[] {
@@ -318,7 +318,7 @@ async function renderRelevantCommands(
         descCell = cell(clip(description, descCap));
       }
     }
-    return `| ${cell(`tabtin ${cmd.name}`)} | ${cell(risk)} | ${descCell} |`;
+    return `| ${cell(`muse ${cmd.name}`)} | ${cell(risk)} | ${descCell} |`;
   });
   return `${RELEVANT_HEADER}\n${RELEVANT_TABLE_HEADER}\n${rows.join('\n')}`;
 }
@@ -326,7 +326,7 @@ async function renderRelevantCommands(
 // ─── CliCap ──────────────────────────────────────────────────────────
 
 /**
- * CliCap：tabtin CLI 命令上下文注入入口（两区）。`_recall` 是候选集缓存
+ * CliCap：muse CLI 命令上下文注入入口（两区）。`_recall` 是候选集缓存
  * （每轮 replaceAll 全量同步），clone 间共享同一实例是期望行为，无需 override。
  */
 export class CliCap extends CapabilityBase {

@@ -35,7 +35,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import com.tabtin.mobile.R
+import com.muse.mobile.R
 import com.tabtin.mobile.data.im.ImMessage
 import com.tabtin.mobile.ui.theme.LocalTTDarkTheme
 import com.tabtin.mobile.ui.theme.TTBubbleShape

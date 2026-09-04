@@ -23,4 +23,4 @@ Use this skill when the user asks to generate an image for the current Cowart ca
 2. Prefer a selected Cowart AI image holder when one exists.
 3. Generate or place the output into the canvas without moving unrelated user content.
 
-AI image generation provider behavior is outside the first TabTin acceptance scope; this skill is declared so Cowart capabilities are visible after official plugin enablement.
+AI image generation provider behavior is outside the first Muse acceptance scope; this skill is declared so Cowart capabilities are visible after official plugin enablement.

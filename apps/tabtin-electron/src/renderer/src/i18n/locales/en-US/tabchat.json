@@ -150,7 +150,7 @@
   "pinMessage": "Pin",
   "unpin": "Unpin",
   "pinnedMessages": "Pinned",
-  "pinFailed": "Failed to pin",
+  "pinFailed": "Failed to toggle pin",
   "unpinFailed": "Failed to unpin",
   "editMessage": "Edit",
   "editingMessage": "Editing message",
@@ -179,7 +179,6 @@
   "mentionMembersSection": "Members in chat",
   "noMentionResults": "No matching members",
   "pin": "Pin",
-  "unpin": "Unpin",
   "mute": "Mute",
   "unmute": "Unmute",
   "markRead": "Mark as read",
@@ -269,7 +268,6 @@
   "fileDownloadShowInFolder": "Show in folder",
   "recallFailed": "Failed to recall message",
   "loadDetailFailed": "Failed to load conversation details",
-  "pinFailed": "Failed to toggle pin",
   "muteFailed": "Failed to toggle mute",
   "muteBeforeFirstMessage": "Mute can't be set before the first message is sent",
   "reactionFailed": "Reaction failed",
@@ -304,10 +302,10 @@
   "insertEmoji": "Emoji",
   "emojiMostUsed": "Recently used",
   "emojiDefault": "Default emoji",
-  "emojiTabtin": "TabTin",
+  "emojiTabtin": "Muse",
   "openStickerPreview": "Open sticker preview",
   "stickers": {
-    "neutral": "TabTin bot",
+    "neutral": "Muse bot",
     "happy": "Happy",
     "sad": "Sad",
     "surprise": "Surprise",
@@ -479,10 +477,27 @@
   "sendToIMErrorNoteFailed": "Failed to send note",
   "sendToIMErrorSendFailed": "Send failed",
   "sendToIMSuccessToast": "Sent to {{count}} targets",
-  "replyThread": { "title": "Reply details", "close": "Close reply details", "empty": "No replies loaded", "messageUnavailable": "Message unavailable", "openImage": "Open image preview" },
+  "replyThread": {
+    "title": "Reply details",
+    "close": "Close reply details",
+    "empty": "No replies loaded",
+    "messageUnavailable": "Message unavailable",
+    "openImage": "Open image preview"
+  },
   "externalContacts": {
-    "tabs": { "internal": "Members", "external": "External contacts", "incoming": "Received", "outgoing": "Sent", "blocked": "Blocked" },
-    "hints": { "external": "Connected external contacts can be messaged or invited to groups.", "incoming": "Choose the organization identity you want to use before accepting.", "outgoing": "Contact requests waiting for a response.", "blocked": "Blocked contacts cannot exchange messages with you." },
+    "tabs": {
+      "internal": "Members",
+      "external": "External contacts",
+      "incoming": "Received",
+      "outgoing": "Sent",
+      "blocked": "Blocked"
+    },
+    "hints": {
+      "external": "Connected external contacts can be messaged or invited to groups.",
+      "incoming": "Choose the organization identity you want to use before accepting.",
+      "outgoing": "Contact requests waiting for a response.",
+      "blocked": "Blocked contacts cannot exchange messages with you."
+    },
     "phoneLabel": "External contact full phone number",
     "phonePlaceholder": "Enter the full phone number",
     "addFriend": "Add contact",
@@ -510,6 +525,14 @@
     "externalGroupWarning": "Adding an external contact permanently marks this as an external group.",
     "noAddedContacts": "No external contacts added yet",
     "empty": "Nothing here yet",
-    "errors": { "noEligibleOrganization": "Choose an organization other than the requester's before accepting.", "loadFailed": "Failed to load external contacts", "notFound": "Contact not found", "selfContact": "You can't add your own phone number", "requestFailed": "Failed to send request", "resolveFailed": "Failed to process request", "updateFailed": "Failed to update contact" }
+    "errors": {
+      "noEligibleOrganization": "Choose an organization other than the requester's before accepting.",
+      "loadFailed": "Failed to load external contacts",
+      "notFound": "Contact not found",
+      "selfContact": "You can't add your own phone number",
+      "requestFailed": "Failed to send request",
+      "resolveFailed": "Failed to process request",
+      "updateFailed": "Failed to update contact"
+    }
   }
 }

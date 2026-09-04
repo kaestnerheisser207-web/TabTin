@@ -69,9 +69,9 @@ const RETRYABLE_CODES = new Set<string>([
 ])
 
 export const COMMON_SUGGESTIONS: Partial<Record<string, string[]>> = {
-  CONNECTION_REFUSED: ['请确保 Django 后端服务正在运行', '运行 tabtin doctor 进行环境诊断'],
+  CONNECTION_REFUSED: ['请确保 Django 后端服务正在运行', '运行 muse doctor 进行环境诊断'],
   CONNECTION_TIMEOUT: ['后端响应超时，请稍后重试', '如果频繁超时，请检查后端服务状态'],
-  UNAUTHORIZED: ['确保在 TabTin 内置终端中运行命令'],
+  UNAUTHORIZED: ['确保在 Muse 内置终端中运行命令'],
   PERMISSION_DENIED: ['当前账号没有访问该资源的权限'],
   VALIDATION_ERROR: ['请检查参数是否正确', '使用 --help 查看命令用法'],
   NOT_IMPLEMENTED: ['该功能在当前模式下尚未实现'],

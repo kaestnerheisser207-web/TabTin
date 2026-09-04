@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# TabTin Django 容器入口：按角色分发（web / worker / beat）。
+# Muse Django 容器入口：按角色分发（web / worker / beat）。
 # 仅 web 角色跑迁移（避免多容器并发 migrate），worker/beat 经 depends_on 等 web healthy。
 set -euo pipefail
 

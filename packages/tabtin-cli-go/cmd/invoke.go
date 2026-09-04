@@ -6,19 +6,19 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/TabTin/tabtin-cli/internal/cmdutil"
-	"github.com/TabTin/tabtin-cli/internal/errcode"
-	"github.com/TabTin/tabtin-cli/internal/output"
-	"github.com/TabTin/tabtin-cli/internal/transport"
+	"github.com/Muse/muse-cli/internal/cmdutil"
+	"github.com/Muse/muse-cli/internal/errcode"
+	"github.com/Muse/muse-cli/internal/output"
+	"github.com/Muse/muse-cli/internal/transport"
 )
 
 // newCmdInvoke 创建通用 PlatformSurface 调用命令。
 //
-// 用法：tabtin invoke <module> <verb> [--input JSON | --input @file.json]
+// 用法：muse invoke <module> <verb> [--input JSON | --input @file.json]
 //
 // 该命令是 PlatformSurface 框架（W3）的 CLI 侧入口。开发者和 Agent 无需为每个
 // surface 手写 cobra command——只要 surface 在 CLI Server 注册了 HTTP handler，
-// 就能通过 `tabtin invoke <module> <verb>` 直接调用。transport 层自动发现
+// 就能通过 `muse invoke <module> <verb>` 直接调用。transport 层自动发现
 // Electron/Daemon 的 Unix socket 或回退到 Django 直连。
 //
 // 设计决策对齐：
@@ -38,9 +38,9 @@ func newCmdInvoke(f *cmdutil.Factory) *cobra.Command {
 无需为每个 surface 手写 cobra command。
 
 示例：
-  tabtin invoke chat export-md --input '{"sessionId":"abc123"}'
-  tabtin invoke chat export-md --input @request.json
-  tabtin invoke workspace get-snapshot`,
+  muse invoke chat export-md --input '{"sessionId":"abc123"}'
+  muse invoke chat export-md --input @request.json
+  muse invoke workspace get-snapshot`,
 		Args: cobra.ExactArgs(2),
 		RunE: cmdutil.SafeRunE(func(cmd *cobra.Command, args []string) error {
 			module := args[0]
@@ -63,7 +63,7 @@ func newCmdInvoke(f *cmdutil.Factory) *cobra.Command {
 				return output.PrintErrorAndExit(output.ErrorEnvelope(
 					string(errcode.Unavailable),
 					err.Error(),
-					"tabtin daemon start",
+					"muse daemon start",
 					output.ExitServiceUnavail,
 				))
 			}
@@ -73,8 +73,8 @@ func newCmdInvoke(f *cmdutil.Factory) *cobra.Command {
 			if tr.Type() == transport.TypeDjango {
 				return output.PrintErrorAndExit(output.ErrorEnvelope(
 					string(errcode.Unavailable),
-					"invoke 需要 TabTin 桌面端或 Daemon 运行。当前为 API 直连模式。",
-					"tabtin daemon start",
+					"invoke 需要 Muse 桌面端或 Daemon 运行。当前为 API 直连模式。",
+					"muse daemon start",
 					output.ExitServiceUnavail,
 				))
 			}
@@ -221,16 +221,16 @@ func httpStatusToExitCode(status int) int {
 }
 
 // invokeCommandSchema 返回 invoke 命令的 CommandDef，供 RegisterCommandSchema
-// 注册到 `tabtin commands` 输出——让 Agent 能自动发现 invoke 命令及其参数定义。
+// 注册到 `muse commands` 输出——让 Agent 能自动发现 invoke 命令及其参数定义。
 func invokeCommandSchema() cmdutil.CommandDef {
 	return cmdutil.CommandDef{
 		Use:   "invoke <module> <verb>",
 		Short: "调用已注册的 PlatformSurface",
 		Long: `通用 PlatformSurface 调用入口。通过 transport 直接 POST /<module>/<verb>
 到 CLI Server（Electron 或 Daemon），返回 envelope 原样输出。`,
-		Example: `tabtin invoke chat export-md --input '{"sessionId":"abc123"}'
-tabtin invoke chat export-md --input @request.json
-tabtin invoke workspace get-snapshot`,
+		Example: `muse invoke chat export-md --input '{"sessionId":"abc123"}'
+muse invoke chat export-md --input @request.json
+muse invoke workspace get-snapshot`,
 		ArgsMapping: []string{"module", "verb"},
 		Method:      "POST",
 		Route:       cmdutil.RouteCliServer,

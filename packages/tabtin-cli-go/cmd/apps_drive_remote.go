@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"net/url"
 
-	"github.com/TabTin/tabtin-cli/internal/cmdutil"
+	"github.com/Muse/muse-cli/internal/cmdutil"
 )
 
 func driveBodyString(body map[string]any, key string) string {
@@ -28,7 +28,7 @@ func requireDriveOrganizationID(ctx *cmdutil.RunContext, body map[string]any) (s
 		orgID = ctx.OrganizationID
 	}
 	if orgID == "" {
-		return "", fmt.Errorf("缺少 organization_id。请先 tabtin org use <id> 或设置 TABTIN_ORGANIZATION_ID")
+		return "", fmt.Errorf("缺少 organization_id。请先 muse org use <id> 或设置 TABTIN_ORGANIZATION_ID")
 	}
 	return orgID, nil
 }

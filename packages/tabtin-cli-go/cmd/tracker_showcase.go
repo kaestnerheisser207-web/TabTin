@@ -7,7 +7,7 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/TabTin/tabtin-cli/internal/cmdutil"
+	"github.com/Muse/muse-cli/internal/cmdutil"
 )
 
 // Tracker / 自动化 能力总览分组 id 闭集——前端 / CI / 生成脚本共用同一份顺序与中文 label。
@@ -34,7 +34,7 @@ var trackerShowcaseGroupLabels = map[string]string{
 	trackerShowcaseGroupVerify:  "试运行与删除",
 }
 
-// trackerShowcaseRegistry 以 `tracker <子路径>` 为 key（不含 `tabtin` 前缀），声明用户向展示分组。
+// trackerShowcaseRegistry 以 `tracker <子路径>` 为 key（不含 `muse` 前缀），声明用户向展示分组。
 // 未出现在 registry 也未出现在 hidden 的叶子命令 → CI 报漏登记（防 banner 与 CLI 全集脱节）。
 //
 // 取向：自动化的价值是「派活给 Agent + 全程可控」，因此创建 / 查看 / 控制 / 试运行
@@ -84,21 +84,21 @@ var trackerFeaturedScenarios = []TrackerFeaturedScenario{
 		Commands:    []string{"tracker list", "tracker runs"},
 		Title:       "看任务跑得怎么样",
 		Description: "汇总当前自动化任务和它们的执行记录",
-		Prompt:      "帮我看看当前 Space 下都有哪些自动化任务、各自跑得怎么样。先用 `tabtin tracker list` 列出来，挑出最近有执行的，再用 `tabtin tracker runs` 看它们的执行记录，把状态和结果整理成一份简报给我。",
+		Prompt:      "帮我看看当前 Space 下都有哪些自动化任务、各自跑得怎么样。先用 `muse tracker list` 列出来，挑出最近有执行的，再用 `muse tracker runs` 看它们的执行记录，把状态和结果整理成一份简报给我。",
 	},
 	{
 		Key:         "control",
 		Commands:    []string{"tracker pause", "tracker resume"},
 		Title:       "暂停 / 恢复某个任务",
 		Description: "先确认是哪一个，再启停它",
-		Prompt:      "帮我暂停或恢复一个自动化任务。先用 `tabtin tracker list` 列出来让我确认是哪一个，再用 `tabtin tracker pause` 暂停或 `tabtin tracker resume` 恢复，操作完告诉我它现在的状态。",
+		Prompt:      "帮我暂停或恢复一个自动化任务。先用 `muse tracker list` 列出来让我确认是哪一个，再用 `muse tracker pause` 暂停或 `muse tracker resume` 恢复，操作完告诉我它现在的状态。",
 	},
 	{
 		Key:         "verify",
 		Commands:    []string{"tracker dry-run"},
 		Title:       "试运行验证触发",
 		Description: "回放最近事件看触发条件是否命中（不真执行）",
-		Prompt:      "帮我试运行一个事件触发型的自动化任务，确认它的触发条件是否符合预期（不要真的执行 Skill）。先用 `tabtin tracker list` 确认是哪一个，再用 `tabtin tracker dry-run` 回放最近几个事件，把命中情况讲给我听。",
+		Prompt:      "帮我试运行一个事件触发型的自动化任务，确认它的触发条件是否符合预期（不要真的执行 Skill）。先用 `muse tracker list` 确认是哪一个，再用 `muse tracker dry-run` 回放最近几个事件，把命中情况讲给我听。",
 	},
 }
 
@@ -127,7 +127,7 @@ type TrackerShowcaseManifest struct {
 
 func trackerRelativePath(leaf *cobra.Command) string {
 	path := leaf.CommandPath()
-	path = strings.TrimPrefix(path, "tabtin tracker ")
+	path = strings.TrimPrefix(path, "muse tracker ")
 	path = strings.TrimPrefix(path, "tracker ")
 	return strings.TrimSpace(path)
 }

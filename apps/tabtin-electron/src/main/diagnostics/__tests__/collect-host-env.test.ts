@@ -21,10 +21,10 @@ describe('buildRuntimeLabel', () => {
 
 describe('collectHostEnv', () => {
   it('返回必需字段且 processArch 与当前进程一致', () => {
-    const env = collectHostEnv('/Applications/TabTin.app/Contents/MacOS/TabTin')
+    const env = collectHostEnv('/Applications/Muse.app/Contents/MacOS/Muse')
     expect(env.processArch).toBe(process.arch)
     expect(env.platform).toBe(process.platform)
-    expect(env.execBasename).toBe('TabTin')
+    expect(env.execBasename).toBe('Muse')
     expect(env.runtimeLabel).toMatch(/native|rosetta|windows-|linux-/)
   })
 })

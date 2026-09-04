@@ -540,7 +540,7 @@ export const BrowserResourceCenter: React.FC<BrowserResourceCenterProps> = ({
   }, [handleParseStream, open, selectedResource, selectedStreamParseBusy])
 
   const handleCopyCli = useCallback(async (resource: ResourceRecord) => {
-    const cli = `tabtin browser resource inspect ${resource.resourceId} --tab ${viewId}`
+    const cli = `muse browser resource inspect ${resource.resourceId} --tab ${viewId}`
     await copyText(cli, t('resourceCenter.toasts.cliCopiedTitle', 'CLI command copied'))
   }, [copyText, t, viewId])
 

@@ -276,7 +276,7 @@ function ensureGoCli() {
 }
 
 // tabtin-filegen（PyInstaller 自包含二进制，客户端免装 Python）：被 cli-server.ts
-// 注入到 Agent shell PATH，供 `tabtin file create` 代理调用。best-effort——文件生成
+// 注入到 Agent shell PATH，供 `muse file create` 代理调用。best-effort——文件生成
 // 是可选附加能力，缺 python3 / 打包失败只 warn，不中断 dev 启动。
 function darwinFilegenMatchesHost(binary) {
   if (process.platform !== 'darwin') return true;
@@ -325,7 +325,7 @@ function ensureFileGenCli() {
   const py = spawnSync('python3', ['--version'], { encoding: 'utf8' });
   if ((py.status ?? 1) !== 0) {
     console.warn(
-      '  ⚠️  未找到 python3，跳过 tabtin-filegen 构建（`tabtin file create` 暂不可用）',
+      '  ⚠️  未找到 python3，跳过 tabtin-filegen 构建（`muse file create` 暂不可用）',
     );
     return;
   }

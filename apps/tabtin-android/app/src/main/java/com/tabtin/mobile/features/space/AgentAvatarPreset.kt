@@ -2,7 +2,7 @@ package com.tabtin.mobile.features.space
 
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
-import com.tabtin.mobile.R
+import com.muse.mobile.R
 
 /**
  * 与 iOS `AgentAvatarPreset`、Electron `agentAvatarPresets.ts` 共用 `avatar_key` 契约。

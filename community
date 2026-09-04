@@ -16,7 +16,7 @@ case "${1:-}" in
     bash "${repo_root}/scripts/community/ensure-env-file.sh" "${repo_root}"
     bash "${repo_root}/scripts/community/ensure-runtime-image.sh" "${repo_root}"
     docker compose --project-directory "${repo_root}" --env-file "${env_file}" -f "${repo_root}/compose.yaml" up -d --no-build
-    echo "TabTin Community: http://127.0.0.1:6060"
+    echo "Muse Community: http://127.0.0.1:6060"
     echo "Electron: Settings -> Model Configuration -> BYOK"
     ;;
   stop)

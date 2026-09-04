@@ -1,7 +1,7 @@
 /**
  * 增量同步服务 — 基于 since_version + record_version_seq
  *
- * 利用 TabTin 已有的版本机制，在 Daemon/Electron 端维护本地 PGlite 副本。
+ * 利用 Muse 已有的版本机制，在 Daemon/Electron 端维护本地 PGlite 副本。
  */
 
 import type {

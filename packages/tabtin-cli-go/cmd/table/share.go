@@ -5,13 +5,13 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/TabTin/tabtin-cli/internal/cmdutil"
+	"github.com/Muse/muse-cli/internal/cmdutil"
 )
 
 // registerShareCommands 挂载 `table share <子命令>` + `table share shared-with-me`。
 //
 // 后端落在 apps/tabtin_django/apps/tabdata/api_share.py（router 在
-// tabtin/urls_deferred.py:90-91 以 /tabdata 挂载），故完整路径前缀是
+// muse/urls_deferred.py:90-91 以 /tabdata 挂载），故完整路径前缀是
 // /api/tabdata/...：
 //   - set              POST   /tables/{table_id}/share       → create_data_share
 //   - get              GET    /tables/{table_id}/share       → get_data_share
@@ -47,11 +47,11 @@ func registerShareCommands(parent *cobra.Command, f *cmdutil.Factory) {
   organization  组织限定：仅对应 organization 的成员登录后可访问；目标组织由全局 --organization-id 指定
 
 子命令：
-  tabtin table share set <table-id> --share-type organization                        开/改组织限定分享
-  tabtin table share set <table-id> --share-type data --acknowledge-public-exposure   开/改公开分享
-  tabtin table share get <table-id>                                                  查看当前有效分享（只读）
-  tabtin table share off <table-id>                                                  关闭分享（物理删除分享记录，可重开靠 set）
-  tabtin table share shared-with-me                                                  列出分享给我的表格（独立访问发现入口）
+  muse table share set <table-id> --share-type organization                        开/改组织限定分享
+  muse table share set <table-id> --share-type data --acknowledge-public-exposure   开/改公开分享
+  muse table share get <table-id>                                                  查看当前有效分享（只读）
+  muse table share off <table-id>                                                  关闭分享（物理删除分享记录，可重开靠 set）
+  muse table share shared-with-me                                                  列出分享给我的表格（独立访问发现入口）
 
 安全提示：data 分享 = 免登录、任何拿到链接者可访问；首次扩到 data 须加
 --acknowledge-public-exposure，否则后端 409。敏感表优先 organization，或对 data
@@ -88,12 +88,12 @@ func registerShareCommands(parent *cobra.Command, f *cmdutil.Factory) {
 
 关于 organization 目标组织：CLI **不提供** --organization-id 命令级 flag（它是全局 persistent flag，
 命令级会撞名）。要建 organization 分享，用全局 --organization-id 指定目标组织，例如：
-  tabtin table share set tbl_xxx --share-type organization --organization-id wt_yyy`,
-		Example: "  tabtin table share set tbl_xxx --share-type data --acknowledge-public-exposure\n" +
-			"  tabtin table share set tbl_xxx --share-type data --acknowledge-public-exposure --password s3cret --expire-hours 24\n" +
-			"  tabtin table share set tbl_xxx --share-type data --acknowledge-public-exposure --permission view --allow-download=false\n" +
-			"  tabtin table share set tbl_xxx --share-type organization --organization-id wt_yyy --permission edit\n" +
-			"  tabtin table share set tbl_xxx --share-type data --acknowledge-public-exposure --dry-run --format json",
+  muse table share set tbl_xxx --share-type organization --organization-id wt_yyy`,
+		Example: "  muse table share set tbl_xxx --share-type data --acknowledge-public-exposure\n" +
+			"  muse table share set tbl_xxx --share-type data --acknowledge-public-exposure --password s3cret --expire-hours 24\n" +
+			"  muse table share set tbl_xxx --share-type data --acknowledge-public-exposure --permission view --allow-download=false\n" +
+			"  muse table share set tbl_xxx --share-type organization --organization-id wt_yyy --permission edit\n" +
+			"  muse table share set tbl_xxx --share-type data --acknowledge-public-exposure --dry-run --format json",
 		Layer: "L2", Risk: cmdutil.RiskWrite, RiskDeclared: true,
 		Route:        cmdutil.RouteCliServer,
 		Method:       "POST",
@@ -172,10 +172,10 @@ func registerShareCommands(parent *cobra.Command, f *cmdutil.Factory) {
 data|organization。未开启分享时返回 {share: null, enabled: false}；已开启返回
 分享详情（share_id 短链 / 权限 / 是否有密码 / 过期时间 / 下载开关 / 访问次数等）。
 只读操作。`,
-		Example: "  tabtin table share get tbl_xxx\n" +
-			"  tabtin table share get tbl_xxx --share-type organization\n" +
-			"  tabtin table share get tbl_xxx --format json --jq .share.share_id\n" +
-			"  tabtin table share get tbl_xxx --jq .enabled  # 未开启分享时为 false",
+		Example: "  muse table share get tbl_xxx\n" +
+			"  muse table share get tbl_xxx --share-type organization\n" +
+			"  muse table share get tbl_xxx --format json --jq .share.share_id\n" +
+			"  muse table share get tbl_xxx --jq .enabled  # 未开启分享时为 false",
 		Layer: "L2", Risk: cmdutil.RiskRead, RiskDeclared: true,
 		Route:        cmdutil.RouteCliServer,
 		Method:       "GET",
@@ -221,9 +221,9 @@ data|organization。未开启分享时返回 {share: null, enabled: false}；已
 不受影响，故定级 RiskWrite（不强制 --yes），不是 RiskDestructive。
 
 省略 --share-type 时关闭 data 分享（后端默认）；也可显式传 organization。`,
-		Example: "  tabtin table share off tbl_xxx\n" +
-			"  tabtin table share off tbl_xxx --share-type organization\n" +
-			"  tabtin table share off tbl_xxx --dry-run --format json",
+		Example: "  muse table share off tbl_xxx\n" +
+			"  muse table share off tbl_xxx --share-type organization\n" +
+			"  muse table share off tbl_xxx --dry-run --format json",
 		Layer: "L2", Risk: cmdutil.RiskWrite, RiskDeclared: true,
 		Route:        cmdutil.RouteCliServer,
 		Method:       "DELETE",
@@ -265,9 +265,9 @@ data|organization。未开启分享时返回 {share: null, enabled: false}；已
 
 省略 --organization-id 时返回当前用户在全部 Organization 下的分享表；
 传全局 --organization-id 可限定单个 Organization。`,
-		Example: "  tabtin table share shared-with-me\n" +
-			"  tabtin table share shared-with-me --organization-id wt_yyy\n" +
-			"  tabtin table share shared-with-me --format json --jq '.tables[].table_id'",
+		Example: "  muse table share shared-with-me\n" +
+			"  muse table share shared-with-me --organization-id wt_yyy\n" +
+			"  muse table share shared-with-me --format json --jq '.tables[].table_id'",
 		Layer: "L2", Risk: cmdutil.RiskRead, RiskDeclared: true,
 		Route:        cmdutil.RouteCliServer,
 		Method:       "GET",

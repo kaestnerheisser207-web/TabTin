@@ -1,5 +1,5 @@
 // apps_code_capabilities_test.go — 钉死 docs/agent/cli-capabilities/code-terminal-folder-cli-capabilities.md
-// 里的 `tabtin code ...` 示例跟 cobra 命令树不漂移（CLI 域轮转流水线 SOP 第 6 步）。
+// 里的 `muse code ...` 示例跟 cobra 命令树不漂移（CLI 域轮转流水线 SOP 第 6 步）。
 package cmd
 
 import (
@@ -7,14 +7,14 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/TabTin/tabtin-cli/internal/cmdutil"
+	"github.com/Muse/muse-cli/internal/cmdutil"
 )
 
 const codeCapabilitiesRelPath = "../../../docs/agent/cli-capabilities/code-terminal-folder-cli-capabilities.md"
 
 func TestCodeCapabilitiesDocResolves(t *testing.T) {
 	f := cmdutil.NewFactory()
-	root := &cobra.Command{Use: "tabtin"}
+	root := &cobra.Command{Use: "muse"}
 	registerRootPersistentFlagsForTest(root)
 	root.AddCommand(newCmdCode(f))
 	assertCapabilitiesDocResolves(t, root, codeCapabilitiesRelPath, "code")

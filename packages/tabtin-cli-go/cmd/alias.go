@@ -6,7 +6,7 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/TabTin/tabtin-cli/internal/cmdutil"
+	"github.com/Muse/muse-cli/internal/cmdutil"
 )
 
 func registerHiddenAliases(rootCmd *cobra.Command, f *cmdutil.Factory) {
@@ -28,7 +28,7 @@ func registerHiddenAliases(rootCmd *cobra.Command, f *cmdutil.Factory) {
 			Use:    old,
 			Hidden: a.hidden,
 			RunE: cmdutil.SafeRunE(func(cmd *cobra.Command, args []string) error {
-				fmt.Fprintf(os.Stderr, "⚠️  'tabtin %s' 已废弃，请使用 'tabtin %s'\n\n", old, newCmd)
+				fmt.Fprintf(os.Stderr, "⚠️  'muse %s' 已废弃，请使用 'muse %s'\n\n", old, newCmd)
 				target, _, err := rootCmd.Find(splitCommand(newCmd))
 				if err != nil {
 					return fmt.Errorf("找不到命令 '%s': %w", newCmd, err)

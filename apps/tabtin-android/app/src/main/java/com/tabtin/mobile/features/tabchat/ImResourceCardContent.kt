@@ -52,7 +52,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import android.os.SystemClock
-import com.tabtin.mobile.R
+import com.muse.mobile.R
 import com.tabtin.mobile.data.im.ImCardTablePreview
 import com.tabtin.mobile.data.im.ImCardStatusMemoryCache
 import com.tabtin.mobile.data.im.ImPromptCard

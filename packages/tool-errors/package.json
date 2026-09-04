@@ -35,11 +35,11 @@
     "node": ">=18.0.0"
   },
   "keywords": [
-    "tabtin",
+    "muse",
     "tool-errors",
     "error-kind",
     "codegen"
   ],
-  "author": "TabTin Team",
+  "author": "Muse Team",
   "license": "MIT"
 }

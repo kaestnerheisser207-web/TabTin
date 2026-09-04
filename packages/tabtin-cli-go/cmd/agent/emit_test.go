@@ -16,8 +16,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/TabTin/tabtin-cli/internal/conversation"
-	"github.com/TabTin/tabtin-cli/internal/output"
+	"github.com/Muse/muse-cli/internal/conversation"
+	"github.com/Muse/muse-cli/internal/output"
 )
 
 // captureStdoutStderr 同时捕获 fn 的 stdout + stderr。

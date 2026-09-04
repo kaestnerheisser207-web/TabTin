@@ -7,12 +7,12 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/TabTin/tabtin-cli/internal/cmdutil"
+	"github.com/Muse/muse-cli/internal/cmdutil"
 )
 
 func TestFeishuCommandTreeRegistered(t *testing.T) {
 	f := cmdutil.NewFactory()
-	root := &cobra.Command{Use: "tabtin"}
+	root := &cobra.Command{Use: "muse"}
 	registerRootPersistentFlagsForTest(root)
 	root.AddCommand(newCmdFeishu(f))
 
@@ -46,7 +46,7 @@ func TestFeishuCommandTreeRegistered(t *testing.T) {
 
 func TestFeishuFlowHelpScopesRenderingToTabDoc(t *testing.T) {
 	f := cmdutil.NewFactory()
-	root := &cobra.Command{Use: "tabtin"}
+	root := &cobra.Command{Use: "muse"}
 	registerRootPersistentFlagsForTest(root)
 	root.AddCommand(newCmdFeishu(f))
 

@@ -1,13 +1,13 @@
 /**
- * `@tabtin/agent-host` 受限 shell / 不可信输出的 TabTin 业务判定。
+ * `@tabtin/agent-host` 受限 shell / 不可信输出的 Muse 业务判定。
  *
- * 这三样是 TabTin CLI 特有知识，从中性 agent-runtime 内核迁出，由两宿主
+ * 这三样是 Muse CLI 特有知识，从中性 agent-runtime 内核迁出，由两宿主
  * （electron / daemon）装配时注入：
  *   - {@link RESTRICTED_READONLY_VERBS}：受限模式下 schema 未命中时判「只读」的
  *     启发式动词表（注入 `createTabtinReadonlyChecker` 的 `readonlyVerbs`）。
  *   - {@link RESTRICTED_BROWSER_NAV_ALLOWLIST}：受限模式浏览器导航豁免（注入
  *     `browserNavAllowlist`）。
- *   - {@link isUntrustedShellCommand}：`tabtin fetch|browser` 输出算外部不可信字节，
+ *   - {@link isUntrustedShellCommand}：`muse fetch|browser` 输出算外部不可信字节，
  *     需 fence（注入 `EngineConfig.isUntrustedShellCommand`）。
  *
  * `isUntrustedShellCommand` 的分词/判定逻辑与迁移前 agent-runtime
@@ -16,7 +16,7 @@
  */
 
 /**
- * 受限模式 schema 未命中时的只读兜底动词表。集合中的动词都是「tabtin <subcmd>
+ * 受限模式 schema 未命中时的只读兜底动词表。集合中的动词都是「muse <subcmd>
  * 只读子命令」的业务假设，非中性 shell 语义，故不留在中性内核。
  */
 export const RESTRICTED_READONLY_VERBS: ReadonlySet<string> = new Set([
@@ -98,12 +98,12 @@ export const RESTRICTED_BROWSER_NAV_ALLOWLIST: ReadonlySet<string> = new Set([
 export const PLAN_BROWSER_NAV_ALLOWLIST = RESTRICTED_BROWSER_NAV_ALLOWLIST
 
 /**
- * FR-09 /  —— `tabtin fetch` / `tabtin browser …` 抓取的外部字节经
+ * FR-09 /  —— `muse fetch` / `muse browser …` 抓取的外部字节经
  * `run_terminal_command` 传输，需 fence，否则绕过 W3 fence allow-list。
  *
- * 基于 token（引号感知）判定，非子串启发：`tabtin` + `fetch|browser` 作为前两个
+ * 基于 token（引号感知）判定，非子串启发：`muse` + `fetch|browser` 作为前两个
  * 命令 token。pipeline 保守：env / 单个 `cd &&` 归一后任一 `|`-段命中即整段视为
- * 不可信（`tabtin fetch … | jq` 仍 fence）；`echo tabtin fetch` 不命中。
+ * 不可信（`muse fetch … | jq` 仍 fence）；`echo muse fetch` 不命中。
  */
 export function isUntrustedShellCommand(command: string): boolean {
   const trimmed = command.trim()
@@ -351,6 +351,6 @@ function segmentIsTabtinFetchOrBrowser(segment: string): boolean {
 
   const tokens = tokenizeShellCommand(main)
   if (!tokens || tokens.length < 2) return false
-  if (tokens[0] !== 'tabtin') return false
+  if (tokens[0] !== 'muse') return false
   return tokens[1] === 'fetch' || tokens[1] === 'browser'
 }

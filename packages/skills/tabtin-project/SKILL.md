@@ -11,12 +11,12 @@ metadata:
     tags: [project, task, collaboration, deliverable]
 ---
 
-# Project Task（tabtin project）
+# Project Task（muse project）
 
 Project Task 是一张可追溯、由责任人确认完成后才进团队资产的工作单，不是普通聊天。
 Project 是协作场，Workspace 是责任人的私有执行现场。
 
-**入口规范**：Project 能力只通过 `tabtin project` CLI 调用；不要使用 Project
+**入口规范**：Project 能力只通过 `muse project` CLI 调用；不要使用 Project
 Function Calling，也不要自行拼 Project HTTP 请求。
 
 ## 当前首步：读取工作面
@@ -25,7 +25,7 @@ Project Task 会话的系统上下文会提供 `project_id` 和 `task_id`。开�
 或不确定当前交付物时，先运行：
 
 ```bash
-tabtin project task get <project-id> <task-id> --format json
+muse project task get <project-id> <task-id> --format json
 ```
 
 返回的 `workbench.primary_artifact` 是当前默认的中间产物；责任人还能在
@@ -49,5 +49,5 @@ tabtin project task get <project-id> <task-id> --format json
 
 ## 后续命令
 
-`current`（受限运行锚点版）、`feedback`、`deliver` 将在 `tabtin project task` 命名空间逐步提供。
+`current`（受限运行锚点版）、`feedback`、`deliver` 将在 `muse project task` 命名空间逐步提供。
 在这些命令落地前，继续使用当前 CLI 读取工作面，并以现有 `present_to_user → TaskRun 结果回流 → 责任人确认完成` 链路交付；不要制造第二条结果写入链。

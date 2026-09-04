@@ -176,17 +176,17 @@ export class CatalogStore {
       let riskSchemasComplete = true
       try {
         ;({ stdout } = await spawn(
-          'tabtin',
+          'muse',
           ['commands', '--format', 'json', '--include-hidden'],
           options,
         ))
       } catch (error) {
         if (!isIncludeHiddenUnsupported(error)) throw error
         logWarn(
-          'bundled tabtin CLI does not support --include-hidden; falling back to visible command catalog',
+          'bundled muse CLI does not support --include-hidden; falling back to visible command catalog',
         )
         riskSchemasComplete = false
-        ;({ stdout } = await spawn('tabtin', ['commands', '--format', 'json'], options))
+        ;({ stdout } = await spawn('muse', ['commands', '--format', 'json'], options))
       }
       const parsed = parseJson(stdout)
       if (!parsed) {
@@ -209,7 +209,7 @@ export class CatalogStore {
       this.cliNegativeAt = null
       return next
     } catch (e) {
-      logWarn(`tabtin commands spawn failed: ${String(e)}`)
+      logWarn(`muse commands spawn failed: ${String(e)}`)
       this.cliNegativeAt = Date.now()
       return this.cliCache
     }

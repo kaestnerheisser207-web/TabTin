@@ -396,7 +396,7 @@ export async function runCompactionPhase(
 
   // ── Step 2c: (removed) Session Memory Compact ──
   // W1（压缩路径简化）：删除原本在中间档跑的 session memory
-  // 自创模块 —— TabTin 自创"中间档"，把旧 tool_result 替换成
+  // 自创模块 —— Muse 自创"中间档"，把旧 tool_result 替换成
   // "[Tool result: name — first line]"一行摘要、截断 assistant text、
   // 合并 system notice。命名误导（与既有约定 同名文件做的"经验沉淀
   // 到 disk"完全不同），且与同期删除的"按层次裁剪"自创模块语义重叠

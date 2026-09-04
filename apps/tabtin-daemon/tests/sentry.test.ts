@@ -1,7 +1,7 @@
 /**
  * Daemon Sentry 接入单测。
  *
- * 覆盖：无 DSN 时零副作用 no-op、同指纹限频（与 Django tabtin/sentry.py
+ * 覆盖：无 DSN 时零副作用 no-op、同指纹限频（与 Django muse/sentry.py
  * 同口径：每指纹每分钟 5 条）、captureRunError 未启用时静默、以及真 SDK
  * init（无效 host DSN，SDK 惰性发送不会真出网络）下的 release / beforeSend
  * 链 / captureRunError tags 断言。
@@ -210,7 +210,7 @@ describe('真 SDK init（DSN 指向无效 host，惰性发送不出网络）', (
     expect(tabtin.run_id).toBe('run-1');
     expect(tabtin.session_id).toBe('sess-1');
     expect(tabtin.agent_id).toBe('agent-1');
-    expect(tabtin).not.toHaveProperty('space_id');
+    expect(muse).not.toHaveProperty('space_id');
     // init 时设置的进程级静态 tags
     expect(tags.device_id).toBe('device-1');
     expect(tags.organization_id).toBe('wt-1');

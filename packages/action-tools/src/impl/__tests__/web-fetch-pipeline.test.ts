@@ -79,7 +79,7 @@ describe('executeFetchPipeline', () => {
     expect(result.quality.ok).toBe(false);
     expect(result.quality.reason).toBe('captcha');
     expect(result.error).toContain('captcha');
-    expect(result.error).toContain('tabtin browser open');
+    expect(result.error).toContain('muse browser open');
   });
 
   it('returns success:true when browser fallback recovers quality', async () => {

@@ -1,9 +1,9 @@
 {
   "panel": {
     "title": "存储状态",
-    "subtitle": "TabTin 在你的电脑上存了哪些东西。",
-    "totalLine": "TabTin 在这台电脑上占用了 {{size}}",
-    "totalLineLoading": "正在统计 TabTin 占用的空间…",
+    "subtitle": "Muse 在你的电脑上存了哪些东西。",
+    "totalLine": "Muse 在这台电脑上占用了 {{size}}",
+    "totalLineLoading": "正在统计 Muse 占用的空间…",
     "refresh": "重新计算",
     "refreshHint": "重新统计所有数据的占用",
     "loadErrorTitle": "加载失败"
@@ -23,7 +23,7 @@
     },
     "critical": {
       "label": "该清了",
-      "tagline": "TabTin 占用偏大，建议清掉一些不再需要的东西。"
+      "tagline": "Muse 占用偏大，建议清掉一些不再需要的东西。"
     }
   },
   "metrics": {
@@ -132,11 +132,11 @@
     },
     "browser:bookmarks": {
       "title": "浏览器书签",
-      "description": "你在 TabTin 内嵌浏览器里收藏的书签"
+      "description": "你在 Muse 内嵌浏览器里收藏的书签"
     },
     "browser:browsing-history": {
       "title": "浏览历史",
-      "description": "你在 TabTin 内嵌浏览器里访问过的网页"
+      "description": "你在 Muse 内嵌浏览器里访问过的网页"
     },
     "tin:sandboxes": {
       "title": "沙箱应用数据",
@@ -164,7 +164,7 @@
     },
     "download:user-downloads": {
       "title": "下载记录",
-      "description": "TabTin 触发的下载历史（仅记录）"
+      "description": "Muse 触发的下载历史（仅记录）"
     },
     "download:agent-sandbox-downloads": {
       "title": "Agent 工具下载",

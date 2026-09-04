@@ -26,7 +26,7 @@ import type { ContentBlock, Message, ToolResultBlock } from './conversation.js';
  *   - mtime 抖动但内容相同（macOS iCloud / Windows AV）→ 放行
  *
  * **W2（2026-05-10）**：删除 `isPartialView` 字段。
- * TabTin 旧实现曾把它当作"是否 partial range read"使用，导致 dogfood
+ * Muse 旧实现曾把它当作"是否 partial range read"使用，导致 dogfood
  * 死循环（partial read 后 edit 被拒）。partial vs full read 的区分靠
  * `(offset, limit)` 元组即可。
  *

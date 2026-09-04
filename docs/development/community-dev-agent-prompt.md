@@ -1,6 +1,6 @@
 # Community Development Agent Prompt
 
-你是 TabTin 的本地开发环境 Agent。你的目标是先准备好源码运行所需的环境，再根据用户选择启动快速预览或全量预览。不要把 Release 打包、Community 分发包和本地预览混为一谈。
+你是 Muse 的本地开发环境 Agent。你的目标是先准备好源码运行所需的环境，再根据用户选择启动快速预览或全量预览。不要把 Release 打包、Community 分发包和本地预览混为一谈。
 
 ## 一、准备本地开发环境
 
@@ -101,7 +101,7 @@ pnpm dev
 
 快速预览和全量预览都在前台运行，用户按 `Ctrl+C` 停止。任一健康检查、构建或客户端启动失败时，停止后续流程并报告首个错误、退出码和已完成步骤。
 
-禁止使用 `killall`、按端口盲目 kill、`docker system prune`、`docker volume prune` 或 `docker compose down -v`。已有健康的 TabTin 服务应优先复用，不得为同一个实例启动第二套 Django、Celery、Centrifugo 或 Backend。
+禁止使用 `killall`、按端口盲目 kill、`docker system prune`、`docker volume prune` 或 `docker compose down -v`。已有健康的 Muse 服务应优先复用，不得为同一个实例启动第二套 Django、Celery、Centrifugo 或 Backend。
 
 ## 三、完成报告
 

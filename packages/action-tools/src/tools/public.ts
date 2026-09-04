@@ -1,7 +1,7 @@
 // Wave 4a (2026-05-01): web-fetch / web-fetch-batch / web-extract /
 // web-extract-to-table / crawl-http FC 全部删除（D4 全删 FC）。
 // Wave 4b (2026-05-01) L20: crawl_clean_html AgentTool 包装层删除——
-// `tabtin browser print`（原 extract）CLI 路由的 Electron 实现现在直调
+// `muse browser print`（原 extract）CLI 路由的 Electron 实现现在直调
 // `CrawlToolImpl.crawlCleanHtml`（与 Daemon 直调 getPageContent 对齐），
 // 不再走 ActionExecutor 派发的间接路径。
 // page-to-markdown / cleanHtml / fetch pipeline 等 impl 仍保留于 utils/ 与
@@ -75,10 +75,10 @@ export {
 // ── TabData tools ──
 //
 // Wave 4a (2026-05-01): 7 个 tabdata FC + 5 个 admin FC 全部删除（D4 全删 FC）。
-// Agent 走 `tabtin table *` CLI。
+// Agent 走 `muse table *` CLI。
 
 // W6 (2026-05-04): TabSlide AgentTool group retired — slide ops use the
-// Django HTTP API via `tabtin slide *` CLI, no FC / adapter mapping needed.
+// Django HTTP API via `muse slide *` CLI, no FC / adapter mapping needed.
 
 export {
   networkTools, routeTool, routeListTool, unrouteTool, networkLogTool, consoleLogTool,

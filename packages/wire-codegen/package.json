@@ -1,7 +1,7 @@
 {
   "name": "@tabtin/wire-codegen",
   "version": "0.1.0",
-  "description": "TabTin wire-protocol codegen toolchain (Anthropic Messages API alignment, Wave 1)",
+  "description": "Muse wire-protocol codegen toolchain (Anthropic Messages API alignment, Wave 1)",
   "type": "module",
   "private": true,
   "main": "dist/index.js",

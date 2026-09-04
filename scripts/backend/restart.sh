@@ -13,7 +13,7 @@ LOG_DIR="${ROOT_DIR}/apps/tabtin_django/logs"
 LONGPOLL_PID_FILE="${LOG_DIR}/channel-longpoll.pid"
 DJANGO_DIR="${ROOT_DIR}/apps/tabtin_django"
 
-echo "🔄 重启 TabTin 本地后端..."
+echo "🔄 重启 Muse 本地后端..."
 echo ""
 
 # 先确保基础设施可用，避免停掉应用后才发现 Docker/DB 未就绪。

@@ -46,7 +46,7 @@ import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.automirrored.filled.Article
 import androidx.compose.material.icons.filled.TableChart
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.tabtin.mobile.R
+import com.muse.mobile.R
 import com.tabtin.mobile.data.model.KnowledgeTreeFlatRow
 import com.tabtin.mobile.data.model.KnowledgeTreeNode
 import com.tabtin.mobile.data.model.KnowledgeTreeSearchHit

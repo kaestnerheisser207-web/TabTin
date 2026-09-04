@@ -1,7 +1,7 @@
 package com.tabtin.mobile.features.conversation
 
 import androidx.annotation.DrawableRes
-import com.tabtin.mobile.R
+import com.muse.mobile.R
 
 /**
  * Agent 预置头像。与 iOS `AgentAvatarPreset` / Electron `agentAvatarPresets.ts`

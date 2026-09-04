@@ -704,8 +704,8 @@
     "profile.deleteAccountIntroBody" : {
       "extractionState" : "manual",
       "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "You can request deletion of your TabTin account and associated personal data directly in the app." } },
-        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "你可以在应用内直接申请注销 TabTin 账号及关联的个人数据。" } }
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "You can request deletion of your Muse account and associated personal data directly in the app." } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "你可以在应用内直接申请注销 Muse 账号及关联的个人数据。" } }
       }
     },
     "profile.deleteAccountWarningTitle" : {
@@ -872,8 +872,8 @@
     "profile.voice.platform.footer" : {
       "extractionState" : "manual",
       "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Showing examples only. The full list covers all TabTin product and feature terms." } },
-        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "仅展示部分示例，完整词库涵盖所有 TabTin 产品和功能术语。" } }
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Showing examples only. The full list covers all Muse product and feature terms." } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "仅展示部分示例，完整词库涵盖所有 Muse 产品和功能术语。" } }
       }
     },
     "profile.voice.context.header" : {
@@ -1110,15 +1110,15 @@
     "debug.scan.invalid" : {
       "extractionState" : "manual",
       "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "This is not a valid TabTin mobile environment QR code." } },
-        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "这不是有效的 TabTin 移动端环境二维码" } }
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "This is not a valid Muse mobile environment QR code." } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "这不是有效的 Muse 移动端环境二维码" } }
       }
     },
     "debug.scan.prompt" : {
       "extractionState" : "manual",
       "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Align the QR code shown in TabTin Desktop" } },
-        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "对准 TabTin 电脑端展示的二维码" } }
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Align the QR code shown in Muse Desktop" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "对准 Muse 电脑端展示的二维码" } }
       }
     },
     "debug.scan.succeeded" : {
@@ -1145,8 +1145,8 @@
     "debug.scanQRCode.hint" : {
       "extractionState" : "manual",
       "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Use the QR code from TabTin Desktop > Settings > About & Updates." } },
-        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "使用 TabTin 电脑端“设置 > 关于与更新”中的二维码" } }
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Use the QR code from Muse Desktop > Settings > About & Updates." } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "使用 Muse 电脑端“设置 > 关于与更新”中的二维码" } }
       }
     },
     "debug.title" : {

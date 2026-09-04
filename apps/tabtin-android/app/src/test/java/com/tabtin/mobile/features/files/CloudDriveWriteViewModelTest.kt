@@ -2,7 +2,7 @@ package com.tabtin.mobile.features.files
 
 import android.content.Context
 import android.net.Uri
-import com.tabtin.mobile.R
+import com.muse.mobile.R
 import com.tabtin.mobile.data.model.doc.Doc
 import com.tabtin.mobile.data.model.doc.DocDetailResponse
 import com.tabtin.mobile.data.model.files.CloudDriveBrowseScope

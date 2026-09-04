@@ -19,10 +19,10 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/TabTin/tabtin-cli/internal/cmdutil"
-	"github.com/TabTin/tabtin-cli/internal/errcode"
-	"github.com/TabTin/tabtin-cli/internal/output"
-	"github.com/TabTin/tabtin-cli/internal/transport"
+	"github.com/Muse/muse-cli/internal/cmdutil"
+	"github.com/Muse/muse-cli/internal/errcode"
+	"github.com/Muse/muse-cli/internal/output"
+	"github.com/Muse/muse-cli/internal/transport"
 )
 
 const (
@@ -46,10 +46,10 @@ func registerDocCommentThreadCommands(commentCmd *cobra.Command, f *cmdutil.Fact
 默认走旧接口 GET /comments（输出 data.comments），保证既有脚本 / jq（如 '.comments[]|.id'）向前兼容。
 传 --threads 时改走 GET /comment-threads，输出 data.threads 与 data.capabilities（含 comment_threads_v1）。
 与分享权限里的 comment 级别不同——本命令操作的是文档内评论实体。`,
-		Example: "  tabtin doc comment list doc_xxx\n" +
-			"  tabtin doc comment list doc_xxx --threads\n" +
-			"  tabtin doc comment list doc_xxx --threads --jq '.threads[]|.id'\n" +
-			"  tabtin doc comment list doc_xxx --jq '.comments[]|.id'",
+		Example: "  muse doc comment list doc_xxx\n" +
+			"  muse doc comment list doc_xxx --threads\n" +
+			"  muse doc comment list doc_xxx --threads --jq '.threads[]|.id'\n" +
+			"  muse doc comment list doc_xxx --jq '.comments[]|.id'",
 		Layer:        "L2",
 		Risk:         cmdutil.RiskRead,
 		RiskDeclared: true,
@@ -80,12 +80,12 @@ func registerDocCommentThreadCommands(commentCmd *cobra.Command, f *cmdutil.Fact
 
 --body 与 --image 至少其一；--image 可重复，最多 9 张，走私有评论附件（presign → PUT → confirm）。
 常见陷阱：--document 与块锚点互斥；块内 --text 出现 0 次或多于 1 次会 VALIDATION_ERROR。`,
-		Example: "  tabtin doc comment add doc_xxx --document --body '总体看法'\n" +
-			"  tabtin doc comment add doc_xxx --block-id blk_a --body '这块需要重写'\n" +
-			"  tabtin doc comment add doc_xxx --block-id blk_a --text '唯一结论' --body '缺来源'\n" +
-			"  tabtin doc comment add doc_xxx --start-block-id blk_a --end-block-id blk_b --start-offset 0 --end-offset 12 --body '跨段'\n" +
-			"  tabtin doc comment add doc_xxx --document --image ./a.png --image ./b.png --body '见图'\n" +
-			"  tabtin doc comment add doc_xxx --document --image ./shot.png --dry-run",
+		Example: "  muse doc comment add doc_xxx --document --body '总体看法'\n" +
+			"  muse doc comment add doc_xxx --block-id blk_a --body '这块需要重写'\n" +
+			"  muse doc comment add doc_xxx --block-id blk_a --text '唯一结论' --body '缺来源'\n" +
+			"  muse doc comment add doc_xxx --start-block-id blk_a --end-block-id blk_b --start-offset 0 --end-offset 12 --body '跨段'\n" +
+			"  muse doc comment add doc_xxx --document --image ./a.png --image ./b.png --body '见图'\n" +
+			"  muse doc comment add doc_xxx --document --image ./shot.png --dry-run",
 		Layer:        "L2",
 		Risk:         cmdutil.RiskWrite,
 		RiskDeclared: true,
@@ -131,10 +131,10 @@ func registerDocCommentThreadCommands(commentCmd *cobra.Command, f *cmdutil.Fact
 		Long: `向已有线程追加一条回复消息（不改正文）。
 设计理由：审阅对话落在线程内，根消息与回复分模型；附件走私有评论上传。
 常见陷阱：--body 与 --image 至少其一；图片可重复最多 9 张；线程不存在返回 404。`,
-		Example: "  tabtin doc comment reply doc_xxx thr_yyy --body '同意'\n" +
-			"  tabtin doc comment reply doc_xxx thr_yyy --image ./note.png\n" +
-			"  tabtin doc comment reply doc_xxx thr_yyy --body '见图' --image ./a.png\n" +
-			"  tabtin doc comment reply doc_xxx thr_yyy --body '预演' --dry-run",
+		Example: "  muse doc comment reply doc_xxx thr_yyy --body '同意'\n" +
+			"  muse doc comment reply doc_xxx thr_yyy --image ./note.png\n" +
+			"  muse doc comment reply doc_xxx thr_yyy --body '见图' --image ./a.png\n" +
+			"  muse doc comment reply doc_xxx thr_yyy --body '预演' --dry-run",
 		Layer:        "L2",
 		Risk:         cmdutil.RiskWrite,
 		RiskDeclared: true,
@@ -163,9 +163,9 @@ func registerDocCommentThreadCommands(commentCmd *cobra.Command, f *cmdutil.Fact
 		Long: `将评论线程标为已解决（PATCH status=resolved）。
 设计理由：审阅闭环与正文版本解耦；解决后仍可 reopen。
 常见陷阱：需写权限；线程不存在返回 404。`,
-		Example: "  tabtin doc comment resolve doc_xxx thr_yyy\n" +
-			"  tabtin doc comment resolve doc_xxx thr_yyy --format json\n" +
-			"  tabtin doc comment resolve doc_xxx thr_yyy --dry-run",
+		Example: "  muse doc comment resolve doc_xxx thr_yyy\n" +
+			"  muse doc comment resolve doc_xxx thr_yyy --format json\n" +
+			"  muse doc comment resolve doc_xxx thr_yyy --dry-run",
 		Layer:        "L2",
 		Risk:         cmdutil.RiskWrite,
 		RiskDeclared: true,
@@ -195,9 +195,9 @@ func registerDocCommentThreadCommands(commentCmd *cobra.Command, f *cmdutil.Fact
 		Long: `重新打开已解决的评论线程（PATCH status=open）。
 设计理由：误关或后续仍需讨论时可恢复 open。
 常见陷阱：需写权限；已是 open 时后端通常幂等接受。`,
-		Example: "  tabtin doc comment reopen doc_xxx thr_yyy\n" +
-			"  tabtin doc comment reopen doc_xxx thr_yyy --format json\n" +
-			"  tabtin doc comment reopen doc_xxx thr_yyy --dry-run",
+		Example: "  muse doc comment reopen doc_xxx thr_yyy\n" +
+			"  muse doc comment reopen doc_xxx thr_yyy --format json\n" +
+			"  muse doc comment reopen doc_xxx thr_yyy --dry-run",
 		Layer:        "L2",
 		Risk:         cmdutil.RiskWrite,
 		RiskDeclared: true,
@@ -228,9 +228,9 @@ func registerDocCommentThreadCommands(commentCmd *cobra.Command, f *cmdutil.Fact
 
 与 add 相同的锚点规则：--block-id（整块或配合 --text）、或显式起止 block+offset。
 不可用 --document（全文线程无锚点可重关联）。`,
-		Example: "  tabtin doc comment reanchor doc_xxx thr_yyy --block-id blk_new\n" +
-			"  tabtin doc comment reanchor doc_xxx thr_yyy --block-id blk_a --text '新结论'\n" +
-			"  tabtin doc comment reanchor doc_xxx thr_yyy --start-block-id blk_a --end-block-id blk_b --start-offset 0 --end-offset 8 --dry-run",
+		Example: "  muse doc comment reanchor doc_xxx thr_yyy --block-id blk_new\n" +
+			"  muse doc comment reanchor doc_xxx thr_yyy --block-id blk_a --text '新结论'\n" +
+			"  muse doc comment reanchor doc_xxx thr_yyy --start-block-id blk_a --end-block-id blk_b --start-offset 0 --end-offset 8 --dry-run",
 		Layer:        "L2",
 		Risk:         cmdutil.RiskWrite,
 		RiskDeclared: true,
@@ -268,7 +268,7 @@ func registerDocCommentThreadCommands(commentCmd *cobra.Command, f *cmdutil.Fact
 
 func docCommentListExecute(f *cmdutil.Factory) func(ctx *cmdutil.RunContext) error {
 	return func(ctx *cmdutil.RunContext) error {
-		docID, err := docHTMLRequireArg(ctx, 0, "document-id", "tabtin doc comment list <document-id> [--threads]")
+		docID, err := docHTMLRequireArg(ctx, 0, "document-id", "muse doc comment list <document-id> [--threads]")
 		if err != nil {
 			return err
 		}
@@ -312,7 +312,7 @@ func docCommentAddValidate(ctx *cmdutil.RunContext) error {
 	}
 	if _, err := docCommentParseMentionUserIDs(ctx.Str("mention-user-ids")); err != nil {
 		return docHTMLValidationExit(err.Error(),
-			"tabtin doc comment add <document-id> --document --body '...' --mention-user-ids '[\"uid\"]'")
+			"muse doc comment add <document-id> --document --body '...' --mention-user-ids '[\"uid\"]'")
 	}
 	return nil
 }
@@ -323,7 +323,7 @@ func docCommentReplyValidate(ctx *cmdutil.RunContext) error {
 	}
 	if _, err := docCommentParseMentionUserIDs(ctx.Str("mention-user-ids")); err != nil {
 		return docHTMLValidationExit(err.Error(),
-			"tabtin doc comment reply <document-id> <thread-id> --body '...' --mention-user-ids '[\"uid\"]'")
+			"muse doc comment reply <document-id> <thread-id> --body '...' --mention-user-ids '[\"uid\"]'")
 	}
 	return nil
 }
@@ -337,12 +337,12 @@ func docCommentValidateContentFlags(ctx *cmdutil.RunContext, verb string) error 
 	images := ctx.StrSlice("image")
 	if body == "" && len(images) == 0 {
 		return docHTMLValidationExit("必须提供 --body 或至少一张 --image（正文与附件不能同时为空）",
-			fmt.Sprintf("tabtin doc comment %s ... --body '...' 或 --image ./a.png", verb))
+			fmt.Sprintf("muse doc comment %s ... --body '...' 或 --image ./a.png", verb))
 	}
 	if len(images) > docCommentMaxImages {
 		return docHTMLValidationExit(
 			fmt.Sprintf("评论图片不能超过 %d 张（当前 %d）", docCommentMaxImages, len(images)),
-			fmt.Sprintf("tabtin doc comment %s ... --image <path>（可重复，≤%d）", verb, docCommentMaxImages),
+			fmt.Sprintf("muse doc comment %s ... --image <path>（可重复，≤%d）", verb, docCommentMaxImages),
 		)
 	}
 	for _, p := range images {
@@ -370,13 +370,13 @@ func docCommentValidateAnchorFlags(ctx *cmdutil.RunContext, reanchor bool) error
 	case hasDoc:
 		if hasText {
 			return docHTMLValidationExit("--document 全文线程不能配合 --text",
-				"tabtin doc comment add <id> --document --body '...'")
+				"muse doc comment add <id> --document --body '...'")
 		}
 		return nil
 	case blockID != "":
 		if hasText && strings.TrimSpace(text) == "" {
 			return docHTMLValidationExit("--text 不能为空",
-				"tabtin doc comment add <id> --block-id <bid> --text '唯一原文' --body '...'")
+				"muse doc comment add <id> --block-id <bid> --text '唯一原文' --body '...'")
 		}
 		return nil
 	case startBlock != "":
@@ -400,10 +400,10 @@ func docCommentValidateAnchorFlags(ctx *cmdutil.RunContext, reanchor bool) error
 	default:
 		if reanchor {
 			return docHTMLValidationExit("必须提供 --block-id 或 --start-block-id/--end-block-id",
-				"tabtin doc comment reanchor <doc> <thread> --block-id <bid>")
+				"muse doc comment reanchor <doc> <thread> --block-id <bid>")
 		}
 		return docHTMLValidationExit("必须提供 --document、--block-id 或跨块起止 block",
-			"tabtin doc comment add <id> --document|--block-id|--start-block-id ...")
+			"muse doc comment add <id> --document|--block-id|--start-block-id ...")
 	}
 }
 
@@ -412,7 +412,7 @@ func docCommentValidateAnchorFlags(ctx *cmdutil.RunContext, reanchor bool) error
 func docCommentAddExecute(f *cmdutil.Factory) func(ctx *cmdutil.RunContext) error {
 	return func(ctx *cmdutil.RunContext) error {
 		docID, err := docHTMLRequireArg(ctx, 0, "document-id",
-			"tabtin doc comment add <document-id> --document --body '...'")
+			"muse doc comment add <document-id> --document --body '...'")
 		if err != nil {
 			return err
 		}
@@ -468,12 +468,12 @@ func docCommentAddExecute(f *cmdutil.Factory) func(ctx *cmdutil.RunContext) erro
 func docCommentReplyExecute(f *cmdutil.Factory) func(ctx *cmdutil.RunContext) error {
 	return func(ctx *cmdutil.RunContext) error {
 		docID, err := docHTMLRequireArg(ctx, 0, "document-id",
-			"tabtin doc comment reply <document-id> <thread-id> --body '...'")
+			"muse doc comment reply <document-id> <thread-id> --body '...'")
 		if err != nil {
 			return err
 		}
 		threadID, err := docHTMLRequireArg(ctx, 1, "thread-id",
-			"tabtin doc comment reply <document-id> <thread-id> --body '...'")
+			"muse doc comment reply <document-id> <thread-id> --body '...'")
 		if err != nil {
 			return err
 		}
@@ -520,12 +520,12 @@ func docCommentReplyExecute(f *cmdutil.Factory) func(ctx *cmdutil.RunContext) er
 func docCommentReanchorExecute(f *cmdutil.Factory) func(ctx *cmdutil.RunContext) error {
 	return func(ctx *cmdutil.RunContext) error {
 		docID, err := docHTMLRequireArg(ctx, 0, "document-id",
-			"tabtin doc comment reanchor <document-id> <thread-id> --block-id <bid>")
+			"muse doc comment reanchor <document-id> <thread-id> --block-id <bid>")
 		if err != nil {
 			return err
 		}
 		threadID, err := docHTMLRequireArg(ctx, 1, "thread-id",
-			"tabtin doc comment reanchor <document-id> <thread-id> --block-id <bid>")
+			"muse doc comment reanchor <document-id> <thread-id> --block-id <bid>")
 		if err != nil {
 			return err
 		}
@@ -540,7 +540,7 @@ func docCommentReanchorExecute(f *cmdutil.Factory) func(ctx *cmdutil.RunContext)
 		}
 		if scope == "document" {
 			return docHTMLValidationExit("reanchor 不支持全文 scope",
-				"tabtin doc comment reanchor <doc> <thread> --block-id <bid>")
+				"muse doc comment reanchor <doc> <thread> --block-id <bid>")
 		}
 
 		body := map[string]any{
@@ -696,7 +696,7 @@ func docCommentResolveAnchor(
 		start, end, matchErr := docCommentFindUniqueText(haystack, text)
 		if matchErr != nil {
 			return "", nil, "", docHTMLValidationExit(matchErr.Error(),
-				"先 tabtin doc read-block <doc> <block-id> 确认原文唯一，再原样传 --text")
+				"先 muse doc read-block <doc> <block-id> 确认原文唯一，再原样传 --text")
 		}
 		selectedText = text
 		if v := ctx.Str("selected-text"); v != "" {

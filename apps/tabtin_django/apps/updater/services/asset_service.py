@@ -444,25 +444,25 @@ class ReleaseAssetService:
         arch = str(release.arch or "").strip().lower()
 
         if platform == "win":
-            # 例：TabTin-1.0.0-windows.exe
-            return f"TabTin-{version}-windows{extension}"
+            # 例：Muse-1.0.0-windows.exe
+            return f"Muse-{version}-windows{extension}"
 
         if platform == "mac":
             if not arch:
                 return ""
             if asset_type == "website_installer":
-                # 例：TabTin-1.0.0-arm64.dmg / TabTin-1.0.0-x64.dmg
-                return f"TabTin-{version}-{arch}{extension}"
+                # 例：Muse-1.0.0-arm64.dmg / Muse-1.0.0-x64.dmg
+                return f"Muse-{version}-{arch}{extension}"
             # 自动更新 zip：保留 -mac 后缀，便于和官网 dmg 区分
-            # 例：TabTin-1.0.0-arm64-mac.zip
+            # 例：Muse-1.0.0-arm64-mac.zip
             if extension == ".zip":
-                return f"TabTin-{version}-{arch}-mac.zip"
-            return f"TabTin-{version}-{arch}{extension}"
+                return f"Muse-{version}-{arch}-mac.zip"
+            return f"Muse-{version}-{arch}{extension}"
 
         if platform == "linux":
             if not arch:
                 return ""
-            return f"TabTin-{version}-{arch}{extension}"
+            return f"Muse-{version}-{arch}{extension}"
 
         return ""
 

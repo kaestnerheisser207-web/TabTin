@@ -145,8 +145,8 @@ export function resolveRelaxedRules(names: string[]): ResolvedRelaxedRules {
  */
 export const DEFAULT_ALLOWLIST: AllowRule[] = [
   {
-    name: 'tabtin',
-    pattern: /^\s*tabtin\b/,
+    name: 'muse',
+    pattern: /^\s*muse\b/,
   },
   {
     name: 'echo',

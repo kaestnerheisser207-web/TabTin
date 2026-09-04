@@ -1,7 +1,7 @@
 """
 字段类型 → PostgreSQL 列类型映射
 
-将 TabTin 多维表格字段类型映射到对应的 PostgreSQL 原生列类型。
+将 Muse 多维表格字段类型映射到对应的 PostgreSQL 原生列类型。
 
 设计决策：
 - select: TEXT 直存（非 JSONB）

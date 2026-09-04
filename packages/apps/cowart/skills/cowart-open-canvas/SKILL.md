@@ -3,7 +3,7 @@ name: cowart-open-canvas
 display_name: Cowart Open Canvas
 description: >
   Open and use the Cowart local infinite canvas for
-  the active TabTin project.
+  the active Muse project.
 version: 0.1.2
 category: media
 tags:
@@ -23,4 +23,4 @@ Use this skill when the user asks to open, launch, view, or work in a Cowart can
 2. Open the resulting local URL for the user when browser control is available.
 3. If browser control is not available, return the local URL and keep the service running.
 
-The first official TabTin release installs Cowart as a prepared runtime. Do not ask the user to run `npm install` or `pnpm install` for Cowart.
+The first official Muse release installs Cowart as a prepared runtime. Do not ask the user to run `npm install` or `pnpm install` for Cowart.

@@ -979,7 +979,7 @@
     "invalid_param_format": "Ungültiges Parameterformat – überprüfen Sie die Eingabe und versuchen Sie es erneut",
     "param_too_large": "Die Eingabe überschreitet den Grenzwert – teilen oder vereinfachen und erneut versuchen",
     "mutually_exclusive_params": "Widersprüchliche Parameter – behalten Sie nur einen bei",
-    "no_ui_session": "Erfordert die TabTin-Desktop-Benutzeroberfläche – in diesem Modus nicht verfügbar",
+    "no_ui_session": "Erfordert die Muse-Desktop-Benutzeroberfläche – in diesem Modus nicht verfügbar",
     "runtime_misconfig": "Die Laufzeitkonfiguration ist unvollständig – wenden Sie sich bitte an den Entwickler",
     "host_unsupported": "Dieser Vorgang wird im aktuellen Modus nicht unterstützt",
     "network_failed": "Netzwerkanforderung fehlgeschlagen – Konnektivität prüfen und erneut versuchen; Bei Cloud-Dateien ist die URL möglicherweise abgelaufen. Bitten Sie den Benutzer daher, sie erneut hochzuladen",
@@ -1389,7 +1389,7 @@
     "chargeFailed": "Abrechnung steht aus",
     "chargeFailedDetail": "Die Abrechnung für diese Nachricht ist noch nicht abgeschlossen. Der Vorgang wird automatisch wiederholt. Ihnen wird nichts doppelt in Rechnung gestellt – die endgültige Abrechnung ist maßgeblich.",
     "byok": "Eigener API-Schlüssel – kostenlos",
-    "byokDetail": "Sie verwenden Ihren eigenen API-Schlüssel (BYOK). Diese Nachricht verbraucht keine TabTin-Credits."
+    "byokDetail": "Sie verwenden Ihren eigenen API-Schlüssel (BYOK). Diese Nachricht verbraucht keine Muse-Credits."
   },
   "checkpoint": {
     "edit": "Nachricht bearbeiten",
@@ -2518,9 +2518,9 @@
     "plan_create": "Plan erstellen",
     "plan_update_todos": "Todos aktualisieren",
     "switch_mode": "Modusschalter anfordern",
-    "relaunch_app": "Starten Sie TabTin neu",
+    "relaunch_app": "Starten Sie Muse neu",
     "clear_os_error_blacklist": "Blockierten Weg freimachen",
-    "tabtin_search": "TabTin-Suche",
+    "tabtin_search": "Muse-Suche",
     "show_widget": "Visuelles Widget",
     "show_flow_view": "Flow-Ansicht",
     "web_scraper_scrape_url": "Scrape-URL",
@@ -2888,9 +2888,9 @@
     "toolFailureNotice_one": "„{{tool}}“ ist {{streak}} Mal hintereinander gescheitert. Das System erinnert den Agenten daran, einen anderen Ansatz auszuprobieren, wenn dieser erneut fehlschlägt.",
     "toolFailureNotice_other": "„{{tool}}“ ist {{streak}} Mal hintereinander gescheitert. Nach {{remaining}} weiteren Fehlern erinnert das System den Agenten daran, einen anderen Ansatz zu versuchen.",
     "toolFailureNudge": "„{{tool}}“ ist {{streak}} Mal hintereinander gescheitert. Das System hat den Agenten daran erinnert, einen anderen Ansatz auszuprobieren.",
-    "toolRepetitionNotice_one": "„{{tool}}“ wurde mit der gleichen Eingabe {{repeatCount}} Mal in den letzten ~{{seconds}}s aufgerufen. TabTin wird eingreifen, um den Agenten anzustoßen, wenn er noch einmal wiederholt wird.",
-    "toolRepetitionNotice_other": "„{{tool}}“ wurde mit der gleichen Eingabe {{repeatCount}} Mal in den letzten ~{{seconds}}s aufgerufen. Nach {{remaining}} weiteren Wiederholungen greift TabTin ein, um den Agenten anzustoßen.",
-    "toolRepetitionNudge": "„{{tool}}“ wurde mit der gleichen Eingabe {{repeatCount}} Mal in den letzten ~{{seconds}}s aufgerufen. TabTin ist eingeschritten, um den Agenten dazu zu bewegen, die erneute Eingabe derselben Eingabe einzustellen. Warten Sie einen Moment – ​​wenn es sich immer noch nicht dreht, geben Sie ihm eine neue Aufforderung, z. B. „Verwenden Sie meine vorherige Antwort, um fortzufahren“ oder „Formulieren Sie die Frage neu“.",
+    "toolRepetitionNotice_one": "„{{tool}}“ wurde mit der gleichen Eingabe {{repeatCount}} Mal in den letzten ~{{seconds}}s aufgerufen. Muse wird eingreifen, um den Agenten anzustoßen, wenn er noch einmal wiederholt wird.",
+    "toolRepetitionNotice_other": "„{{tool}}“ wurde mit der gleichen Eingabe {{repeatCount}} Mal in den letzten ~{{seconds}}s aufgerufen. Nach {{remaining}} weiteren Wiederholungen greift Muse ein, um den Agenten anzustoßen.",
+    "toolRepetitionNudge": "„{{tool}}“ wurde mit der gleichen Eingabe {{repeatCount}} Mal in den letzten ~{{seconds}}s aufgerufen. Muse ist eingeschritten, um den Agenten dazu zu bewegen, die erneute Eingabe derselben Eingabe einzustellen. Warten Sie einen Moment – ​​wenn es sich immer noch nicht dreht, geben Sie ihm eine neue Aufforderung, z. B. „Verwenden Sie meine vorherige Antwort, um fortzufahren“ oder „Formulieren Sie die Frage neu“.",
     "tool_started": "Laufen: {{toolName}}",
     "tool_completed": "{{toolName}} abgeschlossen",
     "tool_failed": "{{toolName}} fehlgeschlagen: {{reason}}",
@@ -3035,11 +3035,19 @@
     "confirmFailed": "Der Vorgang ist fehlgeschlagen"
   },
   "tokenUsage": {
-    "title": "Token-Nutzung", "current": "Aktuelle Nutzung", "windowLimit": "Kontextlimit",
-    "inputTotal": "Eingabe gesamt", "outputTotal": "Ausgabe gesamt", "cacheHit": "Cache-Treffer",
-    "reasoning": "Schlussfolgerung", "autoCompacted": "Automatisch komprimiert", "billing": "Abrechnung",
-    "byok": "Eigener Schlüssel · Keine credits berechnet", "historicalCost": "Bisherige Kosten",
-    "consumed": "Verbraucht", "estimatedCost": "Geschätzte Kosten"
+    "title": "Token-Nutzung",
+    "current": "Aktuelle Nutzung",
+    "windowLimit": "Kontextlimit",
+    "inputTotal": "Eingabe gesamt",
+    "outputTotal": "Ausgabe gesamt",
+    "cacheHit": "Cache-Treffer",
+    "reasoning": "Schlussfolgerung",
+    "autoCompacted": "Automatisch komprimiert",
+    "billing": "Abrechnung",
+    "byok": "Eigener Schlüssel · Keine credits berechnet",
+    "historicalCost": "Bisherige Kosten",
+    "consumed": "Verbraucht",
+    "estimatedCost": "Geschätzte Kosten"
   },
   "sessionCollab": {
     "manageTitle": "Teilen verwalten",

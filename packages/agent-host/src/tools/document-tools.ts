@@ -363,7 +363,7 @@ function createDocumentReadTool(deps: DocumentToolsDeps): Tool {
       '**输入**：必须是 UUID 形态的 `file_id`（chat 文件 chip），**不是**本地路径。\n' +
       '无 file_id 时：让用户拖进 chat，或按用户给的本地路径走本地文件读取。\n\n' +
       '本工具返回的是用于阅读/检索的结构化文本，不是原文件。' +
-      '用户要保存原件 → `save_attachment`；HTML **浏览器渲染预览** → 保存后 `tabtin browser open --url <相对路径或file://>`；' +
+      '用户要保存原件 → `save_attachment`；HTML **浏览器渲染预览** → 保存后 `muse browser open --url <相对路径或file://>`；' +
       '打开源码/文件卡片 → `present_to_user` 的 `local_file` item。禁止根据本工具输出重建原文件。\n\n' +
       '用户只说“解析/阅读 PDF”且没有指定问题时，使用 `mode=overview`，直接给出覆盖整份文档的概览。' +
       '工具中的 `total_pages` 才是页数，`total_chunks` 绝不能表述为页数。' +

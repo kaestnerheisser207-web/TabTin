@@ -561,7 +561,7 @@ export function judge(ctx: JudgeContext): Decision {
             // 的相对路径不会进来；引号相对路径按 cwd(=workspaceRoot) 视为区内，不误伤。
             // auto/full_access 档在 Step 3 已提前放行，不受影响。
             //
-            // ：若整条命令是平台受管 tabtin CLI（browser/desktop），workspace_out
+            // ：若整条命令是平台受管 muse CLI（browser/desktop），workspace_out
             // ask 让位给 CLI 边界 ApprovalGate（避免工具前+平台双弹）。deny 与
             // sensitive_in_ask 不让位——那些不是浏览器闸能覆盖的语义。
             //

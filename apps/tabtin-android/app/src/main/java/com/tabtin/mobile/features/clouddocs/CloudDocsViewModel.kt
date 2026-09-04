@@ -5,7 +5,7 @@ import android.util.Log
 import androidx.annotation.StringRes
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.tabtin.mobile.R
+import com.muse.mobile.R
 import com.tabtin.mobile.data.model.Iso8601DateParser
 import com.tabtin.mobile.data.model.KnowledgeTreeFlatRow
 import com.tabtin.mobile.data.model.KnowledgeTreeFlattener

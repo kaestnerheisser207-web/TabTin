@@ -10,8 +10,8 @@ function shellQuote(value: string): string {
 
 describe.skipIf(process.platform === 'win32')('spawnAgentShellProcess', () => {
   it('runs a one-shot shell process, merges stderr into stdout, and captures cwd with spaces', async () => {
-    const startDir = fs.mkdtempSync(path.join(os.tmpdir(), 'tabtin agent start '));
-    const nextDir = fs.mkdtempSync(path.join(os.tmpdir(), 'tabtin agent cwd '));
+    const startDir = fs.mkdtempSync(path.join(os.tmpdir(), 'muse agent start '));
+    const nextDir = fs.mkdtempSync(path.join(os.tmpdir(), 'muse agent cwd '));
     const terminalChunks: string[] = [];
 
     const handle = spawnAgentShellProcess({
@@ -40,7 +40,7 @@ describe.skipIf(process.platform === 'win32')('spawnAgentShellProcess', () => {
     const result = await handle.result;
 
     expect(result.truncated).toBe(true);
-    expect(result.output).toContain('...[output truncated by TabTin process runner]');
+    expect(result.output).toContain('...[output truncated by Muse process runner]');
     expect(result.outputFilePath).toBeTruthy();
     expect(fs.readFileSync(result.outputFilePath!, 'utf8')).toBe('0123456789abcdefghijklmnopqrstuvwxyz\n');
     expect(result.outputFileSize).toBe(Buffer.byteLength('0123456789abcdefghijklmnopqrstuvwxyz\n', 'utf8'));

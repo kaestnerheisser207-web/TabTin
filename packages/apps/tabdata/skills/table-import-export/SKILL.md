@@ -24,7 +24,7 @@ metadata:
 从网页、文本或文件中提取结构化数据并写入 TabData 表格。
 
 > **当前网页数据建成多维表**属于通用网页采集：先用当前 Tab / `browser-collect` 得到 JSON、JSONL 或 CSV，再由 `collect-to-table` 编排本 skill 的 `table import json` / `table import csv` 等能力写入。来源站点不改变这条路线。
-> 只有用户**明确要求迁移飞书云盘、飞书知识库或飞书资产**时，才使用 `skills_read("app:tabtin-integrations-lite-pack/feishu-import-to-org")` 与 `tabtin feishu *`；仅凭 URL 或域名不能改走飞书专用通道。
+> 只有用户**明确要求迁移飞书云盘、飞书知识库或飞书资产**时，才使用 `skills_read("app:tabtin-integrations-lite-pack/feishu-import-to-org")` 与 `muse feishu *`；仅凭 URL 或域名不能改走飞书专用通道。
 
 > **先拿最权威的数据源，再让 LLM 做字段映射和清洗。** 静态正文、半结构文本可以直接让 LLM 提取；动态列表 / 搜索页 / API JSON 场景里，源 JSON 是第一数据源，LLM 负责建模、字段命名、类型推断和去重。
 
@@ -53,7 +53,7 @@ metadata:
 ## 第 0 步：先做「形态决策」，再考虑导入
 
 接到「采集 X 列表 + 每个 X 的子项 Y」「关联表格」「主表 + 详情」类需求时，
-**不要直接奔 `tabtin table create`**——先决定建几张表、字段怎么挑：
+**不要直接奔 `muse table create`**——先决定建几张表、字段怎么挑：
 
 | 用户场景 | 落到 |
 |---|---|
@@ -69,15 +69,15 @@ metadata:
 
 | 场景 | 推荐方式 | 说明 |
 |------|---------|------|
-| 新建表格写入数据 | `tabtin table create` → `tabtin table record bulk-insert` | 先建表（含字段），再写入；**key 必须是字段显示名** |
-| 追加到已有表格 | `tabtin table record bulk-insert --table-id <id>` | 直接写入已有表 |
-| 按业务键去重写入 | `tabtin table record upsert --upsert-on '["键字段"]'` | 命中则更新、未命中则建；**不返回 record_id 映射** |
-| 从文件导入 | `tabtin table import json --table-id <id> --file <path>`（csv / excel 同理） | JSON/CSV/Excel 文件导入；支持智能字段映射与补建缺失字段。**`--table-id` 必填**——import 不会自动建表 |
-| 下载导入模板 | `tabtin table import template --table-id <id> --file-format json --output ./tpl.json` | 生成 **JSON 对象数组**：key=字段显示名（表头），至少 **2 行**示例（便于看出如何分行）；UI「下载 JSON 模板」同形。改示例值为真实数据后 `import json`。若文件是两行纯文本（像 CSV），不是合法 JSON，请重新下载 |
-| 导入预览 | `tabtin table import preview --table-id <id> --file-type json --file <path>` | 写入前检查字段映射和样例（file-type: csv\|excel\|json） |
-| 导出文件 | `tabtin table export excel/csv/pdf --table-id <id> --output <path>` | `--output` 为本地路径；**JSON 导出当前关闭**，需要 JSON 时用 `record list --format json` |
+| 新建表格写入数据 | `muse table create` → `muse table record bulk-insert` | 先建表（含字段），再写入；**key 必须是字段显示名** |
+| 追加到已有表格 | `muse table record bulk-insert --table-id <id>` | 直接写入已有表 |
+| 按业务键去重写入 | `muse table record upsert --upsert-on '["键字段"]'` | 命中则更新、未命中则建；**不返回 record_id 映射** |
+| 从文件导入 | `muse table import json --table-id <id> --file <path>`（csv / excel 同理） | JSON/CSV/Excel 文件导入；支持智能字段映射与补建缺失字段。**`--table-id` 必填**——import 不会自动建表 |
+| 下载导入模板 | `muse table import template --table-id <id> --file-format json --output ./tpl.json` | 生成 **JSON 对象数组**：key=字段显示名（表头），至少 **2 行**示例（便于看出如何分行）；UI「下载 JSON 模板」同形。改示例值为真实数据后 `import json`。若文件是两行纯文本（像 CSV），不是合法 JSON，请重新下载 |
+| 导入预览 | `muse table import preview --table-id <id> --file-type json --file <path>` | 写入前检查字段映射和样例（file-type: csv\|excel\|json） |
+| 导出文件 | `muse table export excel/csv/pdf --table-id <id> --output <path>` | `--output` 为本地路径；**JSON 导出当前关闭**，需要 JSON 时用 `record list --format json` |
 | 大表导出 / 大文件导入 | `export ... --async` + `export wait` + `export download`；`import file` | 同步通道超时才用；见下方「场景四」 |
-| 工作区快照 | `tabtin table import snapshot --yes`、`tabtin table export snapshot` | 迁移场景；导入快照高风险，必须 `--yes` |
+| 工作区快照 | `muse table import snapshot --yes`、`muse table export snapshot` | 迁移场景；导入快照高风险，必须 `--yes` |
 | 写关联字段值（form C） | 见下方「写入 link 字段」段 | link 值格式 `[{"id":"<目标 record UUID>"}]` |
 
 ## 工作流
@@ -88,7 +88,7 @@ metadata:
 # 1. 建表（含字段定义）
 # select / multi_select 务必带 options.choices；否则列表与字段设置里没有可选项。
 # 若漏传，bulk-insert 写入的值会自动补进 choices，但建字段时写全更稳妥。
-tabtin table create --name "投资事件" --fields '[
+muse table create --name "投资事件" --fields '[
   {"name":"公司","field_type":"text"},
   {"name":"金额","field_type":"number"},
   {"name":"轮次","field_type":"select","options":{"choices":["种子轮","A轮","B轮","C轮"]}},
@@ -98,7 +98,7 @@ tabtin table create --name "投资事件" --fields '[
 # → 返回 table_id
 
 # 2. 批量写入
-tabtin table record bulk-insert --table-id <table_id> --records '[
+muse table record bulk-insert --table-id <table_id> --records '[
   {"公司":"示例科技","金额":1000,"轮次":"A轮","日期":"2024-03-15","投资方":"某资本"},
   ...
 ]'
@@ -111,7 +111,7 @@ tabtin table record bulk-insert --table-id <table_id> --records '[
 
 ```bash
 # 1) 可选：先拿模板对照字段名
-tabtin table import template --table-id <table_id> --file-format json --output ./tpl.json
+muse table import template --table-id <table_id> --file-format json --output ./tpl.json
 
 # 2) 清洗（英文字段 → 显示名）+ 聚合成 JSON array
 jq -c '{"名称": .name, "ID": (.id | tostring),
@@ -119,10 +119,10 @@ jq -c '{"名称": .name, "ID": (.id | tostring),
   | jq -s '.' > /tmp/records.json
 
 # 3) 写入（PowerShell 下 @file 请加引号：--records '@./records.json'）
-tabtin table record bulk-insert --table-id <table_id> --records @/tmp/records.json
+muse table record bulk-insert --table-id <table_id> --records @/tmp/records.json
 
 # 4) 抽查非空——不能只看 success_count
-tabtin table record list --table-id <table_id> --page-size 3 --format json
+muse table record list --table-id <table_id> --page-size 3 --format json
 ```
 
 CLI 对多行 JSONL 的 `@file` 也可能自动聚合成数组；仍建议显式 `jq -s`，并保证 key 已 remap。
@@ -131,26 +131,26 @@ CLI 对多行 JSONL 的 `@file` 也可能自动聚合成数组；仍建议显式
 
 ```bash
 # 先确认表结构（字段名以此为准）
-tabtin table info --table-id <table_id>
+muse table info --table-id <table_id>
 
 # 追加记录（字段名须与表结构匹配）
-tabtin table record bulk-insert --table-id <table_id> --records '[...]'
+muse table record bulk-insert --table-id <table_id> --records '[...]'
 ```
 
 ### 场景三：从文件导入
 
 ```bash
 # 下载 JSON 模板 → 按字段名填数据 → 导入
-tabtin table import template --table-id <table_id> --file-format json --output ./tpl.json
+muse table import template --table-id <table_id> --file-format json --output ./tpl.json
 # 编辑 tpl.json 为真实数据数组后：
-tabtin table import json --table-id <table_id> --file ./tpl.json
+muse table import json --table-id <table_id> --file ./tpl.json
 
 # CSV / Excel
-tabtin table import csv --table-id <table_id> --file ./data.csv
-tabtin table import excel --table-id <table_id> --file ./data.xlsx --sheet-name Sheet1
+muse table import csv --table-id <table_id> --file ./data.csv
+muse table import excel --table-id <table_id> --file ./data.xlsx --sheet-name Sheet1
 
 # 写入前预览
-tabtin table import preview --table-id <table_id> --file-type json --file ./data.json
+muse table import preview --table-id <table_id> --file-type json --file ./data.json
 ```
 
 ### 场景四：大表异步导出 / 大文件导入
@@ -160,24 +160,24 @@ tabtin table import preview --table-id <table_id> --file-type json --file ./data
 
 ```bash
 # 0) 体量预检：记录数 / 预估大小 / 是否建议异步
-tabtin table export stats --table-id <table_id> --format json
+muse table export stats --table-id <table_id> --format json
 
 # 1) 发起异步导出，立刻返回 task_id（不阻塞）
-tabtin table export excel --table-id <table_id> --async --format json
+muse table export excel --table-id <table_id> --async --format json
 
 # 2) 轮询到终态；失败时退出码非 0，成功时输出含 file_id
-tabtin table export wait --task-id <task_id> --wait-timeout 1800 --interval 3 --format json
+muse table export wait --task-id <task_id> --wait-timeout 1800 --interval 3 --format json
 
 # 3) 按 file_id 下载到本地（超大文件会改为返回签名 download_url）
-tabtin table export download --file-id <file_id> -o ./export.xlsx
+muse table export download --file-id <file_id> -o ./export.xlsx
 ```
 
 大文件导入用 `import file`（文件类型由扩展名推断，也可 `--file-type` 显式指定）：
 
 ```bash
-tabtin table import file --table-id <table_id> --file ./big-data.csv --format json
+muse table import file --table-id <table_id> --file ./big-data.csv --format json
 # 小文件直接同步返回导入摘要；大文件返回 task_id → 复用同一个 wait 命令
-tabtin table export wait --task-id <task_id> --format json
+muse table export wait --task-id <task_id> --format json
 ```
 
 - 上限：**CSV / JSON 10MB、Excel 20MB**。`import file` 只把路径发给客户端服务，
@@ -194,19 +194,19 @@ tabtin table export wait --task-id <task_id> --format json
 - **长数字 ID（订单号、豆瓣 ID、雪花 ID 等）用 `text` 字段写入，不要用 `number`**——超长整数走 number 会丢精度或触发数值校验失败
 - 用户目标明确时直接建表、写入、导出；只有字段含义或去重键会影响结果正确性且无法从数据判断时，才用 `ask_user` 让用户选择
 - 单次 `bulk-insert` 上限 **1000 条**，超过时分批调用
-- 大批量数据（>1000 条）建议使用 `tabtin table import json` 走文件导入
-- **字段名必须与 `tabtin table info` / 导入模板一致**；全部 key 未命中时写入会失败并提示未知 key，不得当成成功
+- 大批量数据（>1000 条）建议使用 `muse table import json` 走文件导入
+- **字段名必须与 `muse table info` / 导入模板一致**；全部 key 未命中时写入会失败并提示未知 key，不得当成成功
 - 写入回执有 `warnings`（部分未知字段已忽略）时必须向用户说明；不能只看 `success_count`——用 `record list` 抽查格子非空
 - 全空对象 `{}` 不要当有效交付；禁止用「导入成功」掩盖空行
-- 用户要求 Excel / xlsx / 表格文件时，写入后必须执行 `tabtin table export excel --table-id <table_id> --output ./result.xlsx`，并把文件路径作为最终交付物。`--output` 用**相对路径**（落 working_dir），**不要**写成 `~/Desktop`、`/Users/.../Desktop` 等 working_dir 之外的绝对路径
+- 用户要求 Excel / xlsx / 表格文件时，写入后必须执行 `muse table export excel --table-id <table_id> --output ./result.xlsx`，并把文件路径作为最终交付物。`--output` 用**相对路径**（落 working_dir），**不要**写成 `~/Desktop`、`/Users/.../Desktop` 等 working_dir 之外的绝对路径
 - 用户要求 CSV / PDF 时用对应导出子命令；需要 JSON 交付时用 `record list --format json`（**不要**用已关闭的 `export json`）
-- `tabtin table export snapshot` / `import snapshot --yes` 面向 Organization 级表快照迁移；其中导入快照会覆盖/恢复组织内表数据，属于高影响操作，必须显式确认。
+- `muse table export snapshot` / `import snapshot --yes` 面向 Organization 级表快照迁移；其中导入快照会覆盖/恢复组织内表数据，属于高影响操作，必须显式确认。
 
 ## 建表 / 写入失败时怎么办（不要绕过平台）
 
 「采集到（多维）表」的交付物是 **Organization 内的 TabData 表**——产物要在产品里可见、可协作。建表 / 写入失败时按这条纪律处理，**不要**为了「先交付」就改道把数据用 shell 写成本地文件：
 
-- `tabtin table create` 返回 **`QUOTA_EXCEEDED`（表格数量已达上限）**：把可执行原因摊给用户——「当前 Organization 表格数已达上限（如 20/20）。我可以删除不再使用的表后重写，或你升级套餐 / 换 Organization，告诉我怎么处理」——然后停下等指示。**不要**退化成 `cat > ~/Desktop/xxx.xlsx`、`pandas.to_excel('/Users/.../Desktop/..')` 之类把数据落到本地文件代替建表：那样产物在组织应用门 / 产品里看不到，等于采集没成功。
+- `muse table create` 返回 **`QUOTA_EXCEEDED`（表格数量已达上限）**：把可执行原因摊给用户——「当前 Organization 表格数已达上限（如 20/20）。我可以删除不再使用的表后重写，或你升级套餐 / 换 Organization，告诉我怎么处理」——然后停下等指示。**不要**退化成 `cat > ~/Desktop/xxx.xlsx`、`pandas.to_excel('/Users/.../Desktop/..')` 之类把数据落到本地文件代替建表：那样产物在组织应用门 / 产品里看不到，等于采集没成功。
 - 返回 **`PERMISSION_DENIED`**：说明当前身份对该 Organization 无写权限，向用户报告并确认目标 Organization，不要改写本地文件绕过。
 - 确需先把已采集的数据落盘做断点续传 / 中间缓存，只能写 `/tmp` 或 working_dir 内（相对路径），且要明确说明这是**中间产物不是交付物**，最终仍要落成 Organization 里的表。
 
@@ -218,17 +218,17 @@ tabtin table export wait --task-id <task_id> --format json
 
 ```bash
 # 1) 先把子表 upsert 进去（按业务键去重）
-tabtin table record upsert --table-id $ACTOR_TABLE_ID \
+muse table record upsert --table-id $ACTOR_TABLE_ID \
   --records '[{"姓名":"梁朝伟","豆瓣ID":"1041006"}]' \
   --upsert-on '["豆瓣ID"]'
 
 # 2) upsert 不返回 record_id 映射，必须再 list 一次建索引（page-size 上限 1000）
-tabtin table record list --table-id $ACTOR_TABLE_ID --page-size 1000 --format json \
+muse table record list --table-id $ACTOR_TABLE_ID --page-size 1000 --format json \
   | jq -c '.data.records[] | {key: .fields["豆瓣ID"], rid: .id}' > /tmp/actor_idx.jsonl
 
 # 3) 写主表时把 record_id 拼进 link 字段
 ACTOR_LIANG=$(grep '"1041006"' /tmp/actor_idx.jsonl | jq -r '.rid')
-tabtin table record bulk-insert --table-id $MOVIE_TABLE_ID --records "[
+muse table record bulk-insert --table-id $MOVIE_TABLE_ID --records "[
   {\"电影名\":\"无间道\",\"豆瓣ID\":\"1307914\",\"评分\":9.3,
    \"演职员\":[{\"id\":\"$ACTOR_LIANG\"}]}
 ]"

@@ -33,7 +33,7 @@ metadata:
 **架构**：TabCode 写前端代码 → TabSite 构建发布 → 前端直接调 TabData API 获取数据。不需要额外的后端服务或云函数。
 
 ```
-TabCode（写代码）→ tabtin site build（构建+上传+发布）→ site.example.com/s/{slug}
+TabCode（写代码）→ muse site build（构建+上传+发布）→ site.example.com/s/{slug}
                                                               ↓
                                                     fetch(TabData API)
 ```
@@ -57,10 +57,10 @@ TabCode（写代码）→ tabtin site build（构建+上传+发布）→ site.ex
 tabsite_create_site(name="客户看板", template="dashboard")
 
 # 2. 在 TabCode 中修改代码
-run_terminal_command(command="tabtin code edit --path 'src/App.tsx' --edits '[{\"old_string\":\"...\",\"new_string\":\"...\"}]'")
+run_terminal_command(command="muse code edit --path 'src/App.tsx' --edits '[{\"old_string\":\"...\",\"new_string\":\"...\"}]'")
 
 # 3. 构建发布（一条命令搞定）
-run_terminal_command(command="tabtin site build <site-id>")
+run_terminal_command(command="muse site build <site-id>")
 # 注：build 含「构建+上传+发布」三步，常 30s-3min。foreground 超 120s
 # 默认会终止进程树，主动加 wait_ms=0 更干净——立即拿到 session_id + pid +
 # output_file；任务完成时 push 通知会激活下一轮 turn。
@@ -95,7 +95,7 @@ blank 模板不自动创建 Token，需手动：
 
 ```python
 tabsite_provision_token(site_id="<id>")
-# 返回 VITE_TABTIN_TOKEN → 用 `tabtin code write` 写入 .env.local
+# 返回 VITE_TABTIN_TOKEN → 用 `muse code write` 写入 .env.local
 ```
 
 ### 绑定数据表
@@ -111,31 +111,31 @@ tabsite_update_site(
 
 | 命令 | 作用 |
 |------|------|
-| `tabtin site create <name>` | 创建站点（--template dashboard 自动配 Token） |
-| `tabtin site list` | 列出站点 |
-| `tabtin site info <id>` | 站点详情 |
-| `tabtin site build <id>` | 构建 + 上传 + 发布（一条命令） |
-| `tabtin site publish <id>` | 单独发布（需提供 --dist-url） |
-| `tabtin site rollback <id> <ver>` | 回滚版本 |
+| `muse site create <name>` | 创建站点（--template dashboard 自动配 Token） |
+| `muse site list` | 列出站点 |
+| `muse site info <id>` | 站点详情 |
+| `muse site build <id>` | 构建 + 上传 + 发布（一条命令） |
+| `muse site publish <id>` | 单独发布（需提供 --dist-url） |
+| `muse site rollback <id> <ver>` | 回滚版本 |
 
 ### 常用示例
 
 ```bash
 # 创建 dashboard 站点（Token 自动配置）
-tabtin site create "销售看板" --template dashboard
+muse site create "销售看板" --template dashboard
 
 # 一键构建发布
-tabtin site build <site-id> -m "v1: 初始版本"
+muse site build <site-id> -m "v1: 初始版本"
 
 # 回滚
-tabtin site rollback <site-id> 1
+muse site rollback <site-id> 1
 ```
 
 ## 约束
 
 - dashboard 模板创建后 Token 已自动注入，通常无需手动操作
 - Token 暴露在前端代码中，确保 scope 最小化（默认 readonly）
-- 发布前确保代码已构建（`tabtin site build` 自动处理）
+- 发布前确保代码已构建（`muse site build` 自动处理）
 - 站点默认公开；如需关闭外部访问，请使用 `tabsite_update_site(is_public=False)`
 - 密码保护功能暂不可用，请勿依赖 `password` 参数做访问控制
 - 每次发布自动生成版本快照，支持随时回滚

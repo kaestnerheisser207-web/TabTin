@@ -1,8 +1,8 @@
-"""Tabtin Space app_catalog 路由。"""
+"""Muse Space app_catalog 路由。"""
 
 from .shared import *  # noqa: F401,F403
 
-router = Router(tags=["Tabtin Space"])
+router = Router(tags=["Muse Space"])
 
 @router.get("/organizations/{organization_id}/app-catalog", auth=jwt_auth, response={200: dict, **RESP_ERR})
 def get_organization_app_catalog(request: HttpRequest, organization_id: UUID):

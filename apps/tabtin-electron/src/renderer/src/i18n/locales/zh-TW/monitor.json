@@ -50,7 +50,7 @@
     "uiEngine": "介面引擎",
     "uiEngineDetail": "{{cpu}} · 頁面渲染引擎的共享記憶體開銷",
     "appHost": "應用本體",
-    "appHostDetail": "{{cpu}} · TabTin 應用自身運作所需的基礎內存",
+    "appHostDetail": "{{cpu}} · Muse 應用自身運作所需的基礎內存",
     "unassigned": "未歸因",
     "unassignedDetail": "{{cpu}} · 暫未歸屬到具體 Space 的資源",
     "background": "後台",

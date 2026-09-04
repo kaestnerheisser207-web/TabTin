@@ -1,4 +1,4 @@
-# TabTin 支持入口
+# Muse 支持入口
 
 [English](SUPPORT.en.md)
 

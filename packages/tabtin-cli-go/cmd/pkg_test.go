@@ -29,7 +29,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/TabTin/tabtin-cli/internal/cmdutil"
+	"github.com/Muse/muse-cli/internal/cmdutil"
 )
 
 func TestParsePkgRef_Valid(t *testing.T) {

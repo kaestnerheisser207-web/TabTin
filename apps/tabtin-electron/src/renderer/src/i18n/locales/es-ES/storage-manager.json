@@ -1,8 +1,8 @@
 {
   "panel": {
     "title": "Almacenamiento",
-    "subtitle": "Lo que TabTin guarda en tu computadora.",
-    "totalLine": "TabTin usa {{size}} en esta Mac",
+    "subtitle": "Lo que Muse guarda en tu computadora.",
+    "totalLine": "Muse usa {{size}} en esta Mac",
     "totalLineLoading": "Almacenamiento de medición…",
     "refresh": "Recalcular",
     "refreshHint": "Vuelva a medir todos los tamaños de datos",
@@ -23,7 +23,7 @@
     },
     "critical": {
       "label": "hora de limpiar",
-      "tagline": "TabTin está ocupando mucho espacio. Es hora de borrar algunos datos no utilizados."
+      "tagline": "Muse está ocupando mucho espacio. Es hora de borrar algunos datos no utilizados."
     }
   },
   "metrics": {
@@ -46,7 +46,7 @@
   },
   "topItems": {
     "loading": "Medición de los datos de su espacio de trabajo...",
-    "empty": "Aún no hay datos. Vuelve después de usar TabTin por un tiempo.",
+    "empty": "Aún no hay datos. Vuelve después de usar Muse por un tiempo.",
     "itemCount": "{{count}} artículos",
     "showAll": "Mostrar otros artículos {{count}}",
     "collapseAll": "Colapso",
@@ -133,11 +133,11 @@
     },
     "browser:bookmarks": {
       "title": "Marcadores del navegador",
-      "description": "Marcadores que ha guardado en el navegador integrado de TabTin"
+      "description": "Marcadores que ha guardado en el navegador integrado de Muse"
     },
     "browser:browsing-history": {
       "title": "Historial de navegación",
-      "description": "Páginas que ha visitado en el navegador integrado de TabTin"
+      "description": "Páginas que ha visitado en el navegador integrado de Muse"
     },
     "tin:sandboxes": {
       "title": "Datos de la aplicación Sandbox",
@@ -165,7 +165,7 @@
     },
     "download:user-downloads": {
       "title": "Historial de descargas",
-      "description": "Historial de descargas activadas por TabTin (solo registros)"
+      "description": "Historial de descargas activadas por Muse (solo registros)"
     },
     "download:agent-sandbox-downloads": {
       "title": "Descargas de herramientas del agente",

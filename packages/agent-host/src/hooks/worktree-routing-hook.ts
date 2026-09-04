@@ -10,7 +10,7 @@ export interface WorktreeRoutingHookOptions {
 }
 
 /**
- * 将 TabTin 对话内的 worktree CLI 路由作为宿主策略注入 system prompt。
+ * 将 Muse 对话内的 worktree CLI 路由作为宿主策略注入 system prompt。
  * runtime 只负责通用 section 组装，不感知 worktree 语义。
  */
 export function buildWorktreeRoutingHook(

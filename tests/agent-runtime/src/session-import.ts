@@ -180,7 +180,7 @@ export function snapshotToolsToDefinitions(snapshot: RawSnapshot): FixtureToolDe
 
 const DEFAULT_PLATFORM_DATA = path.join(
   process.env.HOME ?? '~',
-  'Library/Application Support/TabTin/platform-data',
+  'Library/Application Support/Muse/platform-data',
 );
 
 /** 按 sessionId 在 platform-data 下搜索 session 目录。 */

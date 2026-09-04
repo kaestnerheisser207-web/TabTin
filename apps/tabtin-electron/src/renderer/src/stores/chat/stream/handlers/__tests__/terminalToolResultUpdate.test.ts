@@ -1,7 +1,7 @@
 /**
  *  · 后台命令终态 `_terminal_update` tool_result 原地更新桥测试
  *
- * 场景链：Agent 跑 run_terminal_command（如文生图 `tabtin media image generate`），
+ * 场景链：Agent 跑 run_terminal_command（如文生图 `muse media image generate`），
  * wait_ms 耗尽返回 running 快照转后台；进程终结时 host 合成终态 mini-message
  * （role=user + content_block_start(tool_result, content 含 `_terminal_update:true`
  * + 终态 stdout)），renderer 经 WS 观察源 / 本机 publish 收到后，
@@ -88,7 +88,7 @@ function terminalContentJson(over: Record<string, unknown> = {}): string {
     duration_ms: 116_000,
     stdout: JSON.stringify({ ok: true, data: { result_urls: ['https://example.com/x.jpeg'] } }),
     output_file: '/tmp/out.log',
-    command: 'tabtin media image generate --prompt cat',
+    command: 'muse media image generate --prompt cat',
     cwd: '/tmp',
     _terminal_update: true,
     ...over,
@@ -101,7 +101,7 @@ function runningSnapshotJson(): string {
     status: 'running',
     session_id: 'pty-session-1',
     stdout: '',
-    command: 'tabtin media image generate --prompt cat',
+    command: 'muse media image generate --prompt cat',
   })
 }
 
@@ -297,8 +297,8 @@ describe('terminalToolResultUpdate ·  后台命令终态原地更新', () => {
       id: TOOL_USE_ID,
       toolName: 'run_terminal_command',
       phase: 'end',
-      input: { command: 'tabtin media image generate --prompt cat' },
-      inputSummary: 'tabtin media image generate --prompt cat',
+      input: { command: 'muse media image generate --prompt cat' },
+      inputSummary: 'muse media image generate --prompt cat',
       output: runningSnapshotJson(),
       outputSummary: 'running',
       timestamp: startedAt,
@@ -323,8 +323,8 @@ describe('terminalToolResultUpdate ·  后台命令终态原地更新', () => {
     // durationMs 取终态 content 的 duration_ms；startedAt / input / summary 沿用旧值
     expect(updated!.durationMs).toBe(116_000)
     expect(updated!.startedAt).toBe(startedAt)
-    expect(updated!.input).toEqual({ command: 'tabtin media image generate --prompt cat' })
-    expect(updated!.inputSummary).toBe('tabtin media image generate --prompt cat')
+    expect(updated!.input).toEqual({ command: 'muse media image generate --prompt cat' })
+    expect(updated!.inputSummary).toBe('muse media image generate --prompt cat')
     expect(updated!.phase).toBe('end')
 
     // 不动任何计数 / 步骤 / 消息

@@ -3,7 +3,7 @@ package com.tabtin.mobile.features.tabchat
 import androidx.annotation.StringRes
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.tabtin.mobile.R
+import com.muse.mobile.R
 import com.tabtin.mobile.data.im.ImConversationService
 import com.tabtin.mobile.data.im.ImConversationStore
 import com.tabtin.mobile.data.im.ImMessageStore

@@ -238,7 +238,7 @@ export const useAuthStore = create<AuthState & AuthActions>()(
             expiresAt: snapshot.expiresAt,
           })
           set({ isAuthenticated: isUserFullyAuthenticated(updatedUser), user: updatedUser, isLoading: false, error: null })
-          await showToast('邀请码已验证，欢迎使用 TabTin')
+          await showToast('邀请码已验证，欢迎使用 Muse')
         } catch (err: unknown) {
           const message = extractErrorMessage(err, 'errors.inviteCodeFailed')
           set({ isLoading: false, error: message })

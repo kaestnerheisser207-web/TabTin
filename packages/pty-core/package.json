@@ -1,7 +1,7 @@
 {
   "name": "@tabtin/pty-core",
   "version": "0.1.0",
-  "description": "Shared PTY core modules for TabTin (Electron & Daemon)",
+  "description": "Shared PTY core modules for Muse (Electron & Daemon)",
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",

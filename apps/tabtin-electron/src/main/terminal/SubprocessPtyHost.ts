@@ -88,7 +88,7 @@ export function createUtilityPtyHostChild(
 ): PtyHostChildProcess {
   const child = utilityProcess.fork(scriptPath, [], {
     stdio: ['ignore', 'pipe', 'pipe'],
-    serviceName: 'TabTin PTY Host',
+    serviceName: 'Muse PTY Host',
     env: process.env,
   })
   return new UtilityProcessChildAdapter(child)

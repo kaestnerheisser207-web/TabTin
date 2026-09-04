@@ -3,7 +3,7 @@ name: feishu-import-to-org
 description: >
   飞书资产迁入组织——把用户选定的飞书多维表 / 云文档（Docx）/ 知识库节点链接
   一次性导入当前 Organization 云盘（表→TabData，文档→TabDoc）。用户说导入飞书、
-  迁入多维表、同步飞书文档进 TabTin、贴了 feishu.cn/base、/docx 或 /wiki 链接
+  迁入多维表、同步飞书文档进 Muse、贴了 feishu.cn/base、/docx 或 /wiki 链接
   要进组织时使用。不是出站同步稿（那是 lark-sync-brief），也不是外部 lark-cli。
 metadata:
   version: "0.3.0"
@@ -26,8 +26,8 @@ metadata:
 
 把飞书多维表格 / 新版云文档 / 知识库中的可导入叶子 **一次性迁入** 当前 Organization 云盘。
 
-> **强制走 `tabtin feishu *`**。禁止用外部 `lark-cli`、`lark-doc` / `lark-base`、
-> `tabtin table import`、`tabtin doc import file`、**`tabtin browser` / `tabtin fetch` 打开飞书网页**
+> **强制走 `muse feishu *`**。禁止用外部 `lark-cli`、`lark-doc` / `lark-base`、
+> `muse table import`、`muse doc import file`、**`muse browser` / `muse fetch` 打开飞书网页**
 > 冒充迁入通道。飞书 OAuth ≠ 内置浏览器登录态；撞登录墙说明走错了路。
 > 能力清单：`docs/agent/cli-capabilities/feishu-cli-capabilities.md`。
 
@@ -54,17 +54,17 @@ metadata:
 需要：
 
 - `organization_id`（全局 `--organization-id` 或 config `defaultOrganization`）
-- `space_id`（`--space-id` / config `defaultSpace` / 当前会话 Space）——这是 **TabTin Space**，不是飞书 wiki `space_id`
+- `space_id`（`--space-id` / config `defaultSpace` / 当前会话 Space）——这是 **Muse Space**，不是飞书 wiki `space_id`
 - 可选 `collection_id`（当前云盘文件夹；没有则落到 Space 根）
 
-缺了就问用户或用 `tabtin organization list` / 当前上下文补齐。**不要猜错组织。**
+缺了就问用户或用 `muse organization list` / 当前上下文补齐。**不要猜错组织。**
 
 ### 2. 确认企业应用与个人连接
 
 先检查 Organization 的飞书企业应用 Provider：
 
 ```bash
-tabtin feishu provider get --format json
+muse feishu provider get --format json
 ```
 
 若 `configured != true`：
@@ -72,7 +72,7 @@ tabtin feishu provider get --format json
 - 当前用户是 Owner/Admin：请用户提供企业自建应用 App ID，并让 Secret 通过 stdin 输入；不要要求把 Secret 发到聊天或命令参数里。
 
   ```bash
-  printf '%s' "$FEISHU_APP_SECRET" | tabtin feishu provider set --app-id cli_xxx
+  printf '%s' "$FEISHU_APP_SECRET" | muse feishu provider set --app-id cli_xxx
   ```
 
 - 当前用户不是管理员：说明「需要 Organization Owner/Admin 先配置飞书企业应用」，**停下等待**。
@@ -80,13 +80,13 @@ tabtin feishu provider get --format json
 Provider 就绪后，再检查当前成员的个人连接：
 
 ```bash
-tabtin feishu connection get --format json
+muse feishu connection get --format json
 ```
 
 若 `connected != true`：
 
 ```bash
-tabtin feishu oauth start --format json
+muse feishu oauth start --format json
 ```
 
 把 `authorize_url` 交给用户，**停下等待**。授权完成后再次 `connection get`，确认后再继续。
@@ -97,14 +97,14 @@ tabtin feishu oauth start --format json
 **用户贴了链接（含 `/wiki/`）：**
 
 ```bash
-tabtin feishu resolve --url '<飞书链接>' --format json
+muse feishu resolve --url '<飞书链接>' --format json
 ```
 
 可重复 `--url`。按每条 `kind` / `next_action` / `hint` 分支：
 
 | kind | 下一步 |
 |---|---|
-| `bitable` | 无 `table_id` → `tabtin feishu bitable tables --app-token <token>`，勾选表（≤15） |
+| `bitable` | 无 `table_id` → `muse feishu bitable tables --app-token <token>`，勾选表（≤15） |
 | `docx` | 记入 `documents`：`{"doc_token":"<token>","name":"...","doc_type":"docx"}` |
 | `wiki_node` | **目录/容器**：用返回的 `space_id` + `node_token` 展开（见下）。**禁止** browser/fetch |
 | `unsupported` 且 `next_action=reauth` | 缺 wiki 权限：告知用户 disconnect + oauth start，**停下等待**，禁止 browser |
@@ -113,7 +113,7 @@ tabtin feishu resolve --url '<飞书链接>' --format json
 **展开知识库目录：**
 
 ```bash
-tabtin feishu wiki nodes \
+muse feishu wiki nodes \
   --space-id '<resolve.space_id>' \
   --parent-node-token '<resolve.node_token>' \
   --format json
@@ -122,12 +122,12 @@ tabtin feishu wiki nodes \
 - `selectable=true` 且 `import_kind=docx` → 用 `token`（obj_token）写入 documents
 - `selectable=true` 且 `import_kind=bitable` → 用 `token` 作 app_token，再 `bitable tables`
 - `expandable=true` 且未选中 → 可再对子 `node_token` 递归 `wiki nodes`（先问用户要哪几篇，勿一次扫整库）
-- 不知 space 列表时：`tabtin feishu wiki spaces --format json`
+- 不知 space 列表时：`muse feishu wiki spaces --format json`
 
 **用户只给名字：**
 
 ```bash
-tabtin feishu resources list --q '<关键词>' --kinds bitable,docx --format json
+muse feishu resources list --q '<关键词>' --kinds bitable,docx --format json
 ```
 
 深目录 / 知识库内资源更常见路径是 resolve wiki 或 wiki spaces → nodes，而不是只靠扁平 `resources list`。
@@ -135,7 +135,7 @@ tabtin feishu resources list --q '<关键词>' --kinds bitable,docx --format jso
 ### 4. 有表时先审查关联
 
 ```bash
-tabtin feishu import preview --tables @tables.json --format json
+muse feishu import preview --tables @tables.json --format json
 ```
 
 `tables.json` 形如：
@@ -157,7 +157,7 @@ tabtin feishu import preview --tables @tables.json --format json
 ### 5. 提交并等待
 
 ```bash
-tabtin feishu import start \
+muse feishu import start \
   --space-id <tabtin-space> \
   [--collection-id <folder>] \
   [--tables @tables.json] \
@@ -175,7 +175,7 @@ tabtin feishu import start \
 拿到 `task_id` 后：
 
 ```bash
-tabtin feishu import wait <task_id> --format json
+muse feishu import wait <task_id> --format json
 ```
 
 ### 6. 汇报结果
@@ -196,23 +196,23 @@ tabtin feishu import wait <task_id> --format json
 
 ## 禁止事项（硬）
 
-1. **禁止**在 resolve/wiki 失败后改用 `tabtin browser open` / `tabtin fetch` 打开 `*.feishu.cn` / `accounts.feishu.cn`。
+1. **禁止**在 resolve/wiki 失败后改用 `muse browser open` / `muse fetch` 打开 `*.feishu.cn` / `accounts.feishu.cn`。
 2. **禁止**把「OAuth 已连接」当成「内置浏览器已登录飞书网页」。
 3. **禁止**对 `wiki_node` 直接 `import start`（没有 obj_token）。必须先 nodes 展开到叶子。
 4. **禁止**不经用户确认扫完整棵知识库树并批量导入。
 
 ## 长任务干预（可选）
 
-- 尚未开始的表：`tabtin feishu import cancel-table <task_id> --app-token ... --table-id ...`
-- 正在写入的表：`tabtin feishu import skip-table <task_id> --app-token ... --table-id ...`
+- 尚未开始的表：`muse feishu import cancel-table <task_id> --app-token ... --table-id ...`
+- 正在写入的表：`muse feishu import skip-table <task_id> --app-token ... --table-id ...`
 
 ## 断开换号
 
 仅在用户明确要求换飞书账号，或 wiki 权限缺失需重授 scope 时：
 
 ```bash
-tabtin feishu connection disconnect --yes
-tabtin feishu oauth start
+muse feishu connection disconnect --yes
+muse feishu oauth start
 ```
 
 先口头确认；已导入资产不会被删除。
@@ -221,19 +221,19 @@ tabtin feishu oauth start
 
 | 步骤 | 命令 |
 |---|---|
-| 企业应用状态 | `tabtin feishu provider get` |
-| 配置企业应用 | `... | tabtin feishu provider set --app-id ...` |
-| 连接状态 | `tabtin feishu connection get` |
-| 授权 URL | `tabtin feishu oauth start` |
-| 解析链接（含 wiki） | `tabtin feishu resolve --url ...` |
-| 知识空间 | `tabtin feishu wiki spaces` |
-| 知识库节点 | `tabtin feishu wiki nodes --space-id ... [--parent-node-token ...]` |
-| 搜资源 | `tabtin feishu resources list --q ...` |
-| Base 下表 | `tabtin feishu bitable tables --app-token ...` |
-| 审查 | `tabtin feishu import preview --tables ...` |
-| 提交 | `tabtin feishu import start --space-id ...` |
-| 等待 | `tabtin feishu import wait <task_id>` |
-| 状态 | `tabtin feishu import status <task_id>` |
+| 企业应用状态 | `muse feishu provider get` |
+| 配置企业应用 | `... | muse feishu provider set --app-id ...` |
+| 连接状态 | `muse feishu connection get` |
+| 授权 URL | `muse feishu oauth start` |
+| 解析链接（含 wiki） | `muse feishu resolve --url ...` |
+| 知识空间 | `muse feishu wiki spaces` |
+| 知识库节点 | `muse feishu wiki nodes --space-id ... [--parent-node-token ...]` |
+| 搜资源 | `muse feishu resources list --q ...` |
+| Base 下表 | `muse feishu bitable tables --app-token ...` |
+| 审查 | `muse feishu import preview --tables ...` |
+| 提交 | `muse feishu import start --space-id ...` |
+| 等待 | `muse feishu import wait <task_id>` |
+| 状态 | `muse feishu import status <task_id>` |
 
 ## 历史变更
 

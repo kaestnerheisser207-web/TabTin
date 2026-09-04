@@ -88,9 +88,9 @@
     <string name="settings_chucker_network_inspector_subtitle">查看并搜索本机捕获的 HTTP 请求与响应</string>
     <string name="settings_debug_tools">调试工具</string>
     <string name="settings_debug_scan_qr">扫描二维码</string>
-    <string name="settings_debug_scan_qr_prompt">对准 TabTin 电脑端展示的环境二维码</string>
+    <string name="settings_debug_scan_qr_prompt">对准 Muse 电脑端展示的环境二维码</string>
     <string name="settings_debug_scan_qr_succeeded">地址已填入，请核对后点击应用</string>
-    <string name="settings_debug_scan_qr_invalid">这不是有效的 TabTin 移动端环境二维码</string>
+    <string name="settings_debug_scan_qr_invalid">这不是有效的 Muse 移动端环境二维码</string>
     <string name="settings_debug_sentry_section">错误上报</string>
     <string name="settings_debug_sentry_dsn">Sentry DSN</string>
     <string name="settings_debug_sentry_dsn_hint">留空即关闭。填写后点应用立即生效。</string>
@@ -100,7 +100,7 @@
     <string name="settings_diagnostics_privacy">不会包含请求体、响应体、Token、完整 URL 查询参数、聊天消息或文档正文。</string>
     <string name="settings_diagnostics_export">生成并分享诊断包</string>
     <string name="settings_diagnostics_exporting">正在生成…</string>
-    <string name="settings_diagnostics_share">分享 TabTin 诊断包</string>
+    <string name="settings_diagnostics_share">分享 Muse 诊断包</string>
     <string name="settings_diagnostics_failed">诊断包生成失败，请重试</string>
     <string name="settings_about_subtitle">版本、帮助、隐私与服务条款</string>
     <string name="settings_ai_data_sharing">AI 数据共享同意</string>
@@ -114,7 +114,7 @@
     <string name="settings_revoke_ai_consent_subtitle">停止授权 AI 处理语音等数据</string>
     <string name="settings_revoke_ai_consent_title">撤销 AI 数据共享同意？</string>
     <string name="settings_revoke_ai_consent_message">撤销后，语音转写等需要 AI 数据处理的能力会在下次使用前重新请求你的同意。</string>
-    <string name="settings_privacy_policy_subtitle">在浏览器中打开 TabTin 隐私政策</string>
+    <string name="settings_privacy_policy_subtitle">在浏览器中打开 Muse 隐私政策</string>
     <string name="settings_enabled">已开启</string>
     <string name="settings_disabled">未开启</string>
     <string name="settings_not_set">未设置</string>
@@ -147,7 +147,7 @@
     <string name="change_password_error_failed">密码更新失败，请重试。</string>
 
     <string name="notif_settings_title">通知设置</string>
-    <string name="notif_settings_desc">在系统设置中开启或关闭 TabTin 通知权限</string>
+    <string name="notif_settings_desc">在系统设置中开启或关闭 Muse 通知权限</string>
     <string name="notif_system_permission">系统通知权限</string>
     <string name="notif_open_system_settings">系统设置</string>
     <string name="notif_types">通知类型</string>
@@ -180,5 +180,5 @@
     <string name="about_website">官网</string>
     <string name="about_help">帮助中心</string>
     <string name="about_open_source">开源许可</string>
-    <string name="about_copyright">© %d TabTin</string>
+    <string name="about_copyright">© %d Muse</string>
 </resources>

@@ -4,7 +4,7 @@
 
 Brand marks in the connector marketplace are for **product identification only**
 (recognize GitHub / Notion / …). They must not imply partnership, endorsement,
-or that TabTin is an official client of that brand.
+or that Muse is an official client of that brand.
 
 ## Allowed sources
 

@@ -7,7 +7,7 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/TabTin/tabtin-cli/internal/cmdutil"
+	"github.com/Muse/muse-cli/internal/cmdutil"
 )
 
 func registerViewCommands(parent *cobra.Command, f *cmdutil.Factory) {
@@ -19,9 +19,9 @@ func registerViewCommands(parent *cobra.Command, f *cmdutil.Factory) {
 view-type 再操作 view records / view update，避免误改错视图。
 常见陷阱：不同 view-type 支持的 config 字段不同（如 kanban 需要分组字段），
 --view-type 过滤只是缩小列表范围，不改变已有视图的类型。`,
-			Example: "  tabtin table view list --table-id <table_id>\n" +
-				"  tabtin table view list --table-id <table_id> --view-type kanban\n" +
-				"  tabtin table view list --table-id <table_id> --format json",
+			Example: "  muse table view list --table-id <table_id>\n" +
+				"  muse table view list --table-id <table_id> --view-type kanban\n" +
+				"  muse table view list --table-id <table_id> --format json",
 			Route: cmdutil.RouteCliServer, Method: "POST", Path: "/table/views",
 			Layer: "L2", Risk: cmdutil.RiskRead, RiskDeclared: true,
 			Flags: []cmdutil.FlagDef{
@@ -37,9 +37,9 @@ view-type 再操作 view records / view update，避免误改错视图。
 才能拿全，是 view update 增量修改前的必要读取步骤。
 常见陷阱：filters/sorts 的 JSON 结构随字段类型变化（如 select 字段的
 operator 集合和 text 不同），改前先读一遍现有结构再改，别凭空拼。`,
-			Example: "  tabtin table view detail --view-id <view_id>\n" +
-				"  tabtin table view detail --view-id <view_id> --format json\n" +
-				"  tabtin table view detail --view-id <view_id> --jq '.filters'",
+			Example: "  muse table view detail --view-id <view_id>\n" +
+				"  muse table view detail --view-id <view_id> --format json\n" +
+				"  muse table view detail --view-id <view_id> --jq '.filters'",
 			Route: cmdutil.RouteCliServer, Method: "POST", Path: "/table/view-detail",
 			Layer: "L2", Risk: cmdutil.RiskRead, RiskDeclared: true,
 			Flags:     []cmdutil.FlagDef{{Name: "view-id", Type: cmdutil.FlagString, Required: true, Desc: "视图 ID"}},
@@ -56,11 +56,11 @@ operator 集合和 text 不同），改前先读一遍现有结构再改，别�
 取单选字段 ID，再带 --group-by-field-id 创建，最后用 view detail 确认 group_by_field。
 Windows：结构化 JSON 请先写 UTF-8 无 BOM 文件，再用带引号的 @file（如 --groups '@groups.json'），
 不要依赖 PowerShell 内联 JSON 引号；PowerShell 5.x 勿用 Set-Content -Encoding utf8（会写 BOM）。`,
-			Example: "  tabtin table view create --table-id xxx --name \"跟进看板\" --view-type kanban --group-by-field-id <select_field_id>\n" +
+			Example: "  muse table view create --table-id xxx --name \"跟进看板\" --view-type kanban --group-by-field-id <select_field_id>\n" +
 				"  # 复杂分组（Windows 安全写法，无 BOM）：\n" +
 				"  #   python -c \"import json; json.dump([{'field_id':'<id>','direction':'asc'}], open('groups.json','w',encoding='utf-8'))\"\n" +
-				"  #   tabtin table view create --table-id xxx --name \"跟进看板\" --view-type kanban --groups '@groups.json'\n" +
-				"  tabtin table view create --table-id xxx --name \"本月订单\" --view-type grid --filters '[{\"field\":\"日期\",\"operator\":\"gte\",\"value\":\"2026-07-01\"}]'",
+				"  #   muse table view create --table-id xxx --name \"跟进看板\" --view-type kanban --groups '@groups.json'\n" +
+				"  muse table view create --table-id xxx --name \"本月订单\" --view-type grid --filters '[{\"field\":\"日期\",\"operator\":\"gte\",\"value\":\"2026-07-01\"}]'",
 			Route: cmdutil.RouteCliServer, Method: "POST", Path: "/table/create-view",
 			Layer: "L2", Risk: cmdutil.RiskWrite, RiskDeclared: true,
 			Flags: []cmdutil.FlagDef{
@@ -103,9 +103,9 @@ Windows：结构化 JSON 请先写 UTF-8 无 BOM 文件，再用带引号的 @fi
 在 UI 上不能改视图配置（CLI 调用不受此限制）。
 常见陷阱：--filters/--sorts/--groups 都是整体覆盖而非增量合并——想加一条筛选
 条件，需要先 view detail 取出现有 filters 再拼接新条件一起传。`,
-			Example: "  tabtin table view update --view-id <view_id> --name \"新视图名\"\n" +
-				"  tabtin table view update --view-id <view_id> --groups '[{\"field_id\":\"<select_field_id>\",\"direction\":\"asc\"}]'\n" +
-				"  tabtin table view update --view-id <view_id> --filters '[{\"field\":\"status\",\"operator\":\"equals\",\"value\":\"open\"}]'",
+			Example: "  muse table view update --view-id <view_id> --name \"新视图名\"\n" +
+				"  muse table view update --view-id <view_id> --groups '[{\"field_id\":\"<select_field_id>\",\"direction\":\"asc\"}]'\n" +
+				"  muse table view update --view-id <view_id> --filters '[{\"field\":\"status\",\"operator\":\"equals\",\"value\":\"open\"}]'",
 			Route: cmdutil.RouteCliServer, Method: "POST", Path: "/table/update-view",
 			Layer: "L2", Risk: cmdutil.RiskWrite, RiskDeclared: true,
 			Flags: []cmdutil.FlagDef{
@@ -138,9 +138,9 @@ Windows：结构化 JSON 请先写 UTF-8 无 BOM 文件，再用带引号的 @fi
 分组配置和分享链接（表单视图的 share_id 会一并失效）。
 常见陷阱：删除表单视图（view_type=form）会连带使已发出的分享链接失效——
 删前确认没有依赖该分享链接的下游流程（如自动化表单收集）。`,
-			Example: "  tabtin table view delete --view-id <view_id> --yes\n" +
-				"  tabtin table view delete --view-id <view_id> --dry-run\n" +
-				"  tabtin table view detail --view-id <view_id>  # 删前先确认没有依赖的分享链接",
+			Example: "  muse table view delete --view-id <view_id> --yes\n" +
+				"  muse table view delete --view-id <view_id> --dry-run\n" +
+				"  muse table view detail --view-id <view_id>  # 删前先确认没有依赖的分享链接",
 			Route: cmdutil.RouteCliServer, Method: "POST", Path: "/table/delete-view",
 			Layer: "L2", Risk: cmdutil.RiskDestructive, RiskDeclared: true,
 			Flags:     []cmdutil.FlagDef{{Name: "view-id", Type: cmdutil.FlagString, Required: true, Desc: "视图 ID"}},
@@ -160,9 +160,9 @@ Windows：结构化 JSON 请先写 UTF-8 无 BOM 文件，再用带引号的 @fi
 的筛选/排序逻辑，是 UI「打开某视图看到的数据」的 CLI 等价物。
 常见陷阱：临时传的 --filters/--sorts 只影响本次查询，不会写回视图配置；
 想固化下来要用 view update。`,
-			Example: "  tabtin table view records --view-id <view_id>\n" +
-				"  tabtin table view records --view-id <view_id> --page-size 20 --search \"关键词\"\n" +
-				"  tabtin table view records --view-id <view_id> --filters '[{\"field\":\"status\",\"operator\":\"equals\",\"value\":\"open\"}]'",
+			Example: "  muse table view records --view-id <view_id>\n" +
+				"  muse table view records --view-id <view_id> --page-size 20 --search \"关键词\"\n" +
+				"  muse table view records --view-id <view_id> --filters '[{\"field\":\"status\",\"operator\":\"equals\",\"value\":\"open\"}]'",
 			Route: cmdutil.RouteCliServer, Method: "POST", Path: "/table/view-records",
 			Layer: "L2", Risk: cmdutil.RiskRead, RiskDeclared: true,
 			Flags: []cmdutil.FlagDef{
@@ -183,9 +183,9 @@ Windows：结构化 JSON 请先写 UTF-8 无 BOM 文件，再用带引号的 @fi
 任何视图本身的配置或记录数据，随时可再切换。
 常见陷阱：--view-id 必须属于 --table-id 指定的表，跨表设置会被后端拒绝；
 删除当前默认视图后表格会退回到某个兜底视图（通常是最早创建的）。`,
-			Example: "  tabtin table view set-default --table-id <table_id> --view-id <view_id>\n" +
-				"  tabtin table view set-default --table-id <table_id> --view-id <view_id> --dry-run\n" +
-				"  tabtin table view list --table-id <table_id>  # 先确认 view-id 属于该表",
+			Example: "  muse table view set-default --table-id <table_id> --view-id <view_id>\n" +
+				"  muse table view set-default --table-id <table_id> --view-id <view_id> --dry-run\n" +
+				"  muse table view list --table-id <table_id>  # 先确认 view-id 属于该表",
 			Route: cmdutil.RouteCliServer, Method: "POST", Path: "/table/set-default-view",
 			Layer: "L2", Risk: cmdutil.RiskWrite, RiskDeclared: true,
 			Flags: []cmdutil.FlagDef{
@@ -209,9 +209,9 @@ Windows：结构化 JSON 请先写 UTF-8 无 BOM 文件，再用带引号的 @fi
 风险等级 write（可通过再次 reorder 撤销，不会丢数据）。
 常见陷阱：--view-orders 需要覆盖你想固定顺序的全部视图；漏传的视图顺序
 由后端决定，不保证保持调用前的相对位置。`,
-			Example: "  tabtin table view reorder --table-id <table_id> --view-orders '[{\"view_id\":\"view_1\",\"order\":1}]'\n" +
-				"  tabtin table view reorder --table-id <table_id> --view-orders '[{\"view_id\":\"view_1\",\"order\":1},{\"view_id\":\"view_2\",\"order\":2}]'\n" +
-				"  tabtin table view reorder --table-id <table_id> --view-orders '[{\"view_id\":\"view_1\",\"order\":1}]' --dry-run",
+			Example: "  muse table view reorder --table-id <table_id> --view-orders '[{\"view_id\":\"view_1\",\"order\":1}]'\n" +
+				"  muse table view reorder --table-id <table_id> --view-orders '[{\"view_id\":\"view_1\",\"order\":1},{\"view_id\":\"view_2\",\"order\":2}]'\n" +
+				"  muse table view reorder --table-id <table_id> --view-orders '[{\"view_id\":\"view_1\",\"order\":1}]' --dry-run",
 			Route: cmdutil.RouteCliServer, Method: "POST", Path: "/table/reorder-views",
 			Layer: "L2", Risk: cmdutil.RiskWrite, RiskDeclared: true,
 			Flags: []cmdutil.FlagDef{
@@ -235,9 +235,9 @@ Windows：结构化 JSON 请先写 UTF-8 无 BOM 文件，再用带引号的 @fi
 的统计，先 view update 改 filters 再调本命令，或直接看 view records 自行聚合。
 常见陷阱：文本类字段通常只有 count，数值类字段才有 sum/avg/min/max——
 返回结构随列的字段类型变化，不要假设所有列都有相同的统计维度。`,
-			Example: "  tabtin table view statistics --view-id <view_id>\n" +
-				"  tabtin table view statistics --view-id <view_id> --format json\n" +
-				"  tabtin table view statistics --view-id <view_id> --jq '.columns'",
+			Example: "  muse table view statistics --view-id <view_id>\n" +
+				"  muse table view statistics --view-id <view_id> --format json\n" +
+				"  muse table view statistics --view-id <view_id> --jq '.columns'",
 			Route: cmdutil.RouteCliServer, Method: "POST", Path: "/table/view-column-statistics",
 			Layer: "L2", Risk: cmdutil.RiskRead, RiskDeclared: true,
 			Flags:     []cmdutil.FlagDef{{Name: "view-id", Type: cmdutil.FlagString, Required: true, Desc: "视图 ID"}},
@@ -250,9 +250,9 @@ Windows：结构化 JSON 请先写 UTF-8 无 BOM 文件，再用带引号的 @fi
 并行有效的链接，避免旧链接失效但用户不知道。
 常见陷阱：仅对 view_type=form 的视图有效——对其它类型视图调用会被后端拒绝；
 分享开启后任何持有链接的人都能提交数据，敏感表单请配合权限/字段可见性控制。`,
-			Example: "  tabtin table view form-share-enable --view-id <view_id>\n" +
-				"  tabtin table view form-share-enable --view-id <view_id> --dry-run\n" +
-				"  tabtin table view detail --view-id <view_id>  # 确认 view-type 是 form",
+			Example: "  muse table view form-share-enable --view-id <view_id>\n" +
+				"  muse table view form-share-enable --view-id <view_id> --dry-run\n" +
+				"  muse table view detail --view-id <view_id>  # 确认 view-type 是 form",
 			Route: cmdutil.RouteCliServer, Method: "POST", Path: "/table/form-share-enable",
 			Layer: "L2", Risk: cmdutil.RiskWrite, RiskDeclared: true,
 			Flags:     []cmdutil.FlagDef{{Name: "view-id", Type: cmdutil.FlagString, Required: true, Desc: "表单视图 ID"}},
@@ -272,9 +272,9 @@ Windows：结构化 JSON 请先写 UTF-8 无 BOM 文件，再用带引号的 @fi
 再次 enable 会生成新的 share_id，不是恢复旧链接。
 常见陷阱：关闭前确认没有依赖该链接的进行中收集流程——旧链接失效是立即的，
 没有宽限期，正在填写中的用户会提交失败。`,
-			Example: "  tabtin table view form-share-disable --view-id <view_id>\n" +
-				"  tabtin table view form-share-disable --view-id <view_id> --dry-run\n" +
-				"  tabtin table view detail --view-id <view_id>  # 关前确认是否还有依赖方",
+			Example: "  muse table view form-share-disable --view-id <view_id>\n" +
+				"  muse table view form-share-disable --view-id <view_id> --dry-run\n" +
+				"  muse table view detail --view-id <view_id>  # 关前确认是否还有依赖方",
 			Route: cmdutil.RouteCliServer, Method: "POST", Path: "/table/form-share-disable",
 			Layer: "L2", Risk: cmdutil.RiskWrite, RiskDeclared: true,
 			Flags:     []cmdutil.FlagDef{{Name: "view-id", Type: cmdutil.FlagString, Required: true, Desc: "表单视图 ID"}},
@@ -294,9 +294,9 @@ Windows：结构化 JSON 请先写 UTF-8 无 BOM 文件，再用带引号的 @fi
 但 rotate 是单步原子操作，避免中间状态（分享完全关闭）造成的短暂不可用。
 常见陷阱：轮换后所有已分发的旧链接会同时失效——需要同步通知所有正在使用
 该链接的下游方更新到新链接，否则他们会遇到提交失败。`,
-			Example: "  tabtin table view form-share-rotate --view-id <view_id>\n" +
-				"  tabtin table view form-share-rotate --view-id <view_id> --dry-run\n" +
-				"  tabtin table view detail --view-id <view_id>  # 轮换前先确认当前分享状态",
+			Example: "  muse table view form-share-rotate --view-id <view_id>\n" +
+				"  muse table view form-share-rotate --view-id <view_id> --dry-run\n" +
+				"  muse table view detail --view-id <view_id>  # 轮换前先确认当前分享状态",
 			Route: cmdutil.RouteCliServer, Method: "POST", Path: "/table/form-share-rotate",
 			Layer: "L2", Risk: cmdutil.RiskWrite, RiskDeclared: true,
 			Flags:     []cmdutil.FlagDef{{Name: "view-id", Type: cmdutil.FlagString, Required: true, Desc: "表单视图 ID"}},

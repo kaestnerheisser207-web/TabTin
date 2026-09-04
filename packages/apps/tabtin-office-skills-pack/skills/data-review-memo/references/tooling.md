@@ -27,8 +27,8 @@ If the user asks for a deck, finish the memo first. Use TabSlide skills for slid
 Use the same canonical TabSlide flow as the deck skill:
 
 ```bash
-tabtin slide create --name "<deck name>" --html @./slides.html
-tabtin slide lint --project-id <project-id> --skip-visual --min-severity warning
+muse slide create --name "<deck name>" --html @./slides.html
+muse slide lint --project-id <project-id> --skip-visual --min-severity warning
 ```
 
 ## Resource Rules

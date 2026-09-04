@@ -344,7 +344,7 @@ const DOC_WRITE_TOOLS: McpToolDefinition[] = [
         organization_id: { type: 'string', description: 'Organization ID' },
         space_id: { type: 'string', description: 'Space ID' },
         title: { type: 'string', description: 'Document title' },
-        markdown: { type: 'string', description: 'Initial document body in Markdown (optional). CLI equivalent: tabtin doc create --markdown.' },
+        markdown: { type: 'string', description: 'Initial document body in Markdown (optional). CLI equivalent: muse doc create --markdown.' },
         folder_id: { type: 'string', description: 'Parent folder/document ID (optional)' },
       },
       required: ['organization_id', 'space_id', 'title'],

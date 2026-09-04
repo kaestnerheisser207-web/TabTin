@@ -1,5 +1,5 @@
 """
-Tabtin Space 授权规则加载服务（Hilt 重写：stub，旧逻辑已删）
+Muse Space 授权规则加载服务（Hilt 重写：stub，旧逻辑已删）
 
 Hilt W4：授权判决统一由 TS 侧 judge() 完成，Python 侧不再
 resolve_authorization_rules。保留模块避免 import 爆炸。

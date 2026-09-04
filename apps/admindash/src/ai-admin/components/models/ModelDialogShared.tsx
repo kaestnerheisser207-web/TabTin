@@ -75,7 +75,7 @@ const BILLING_TYPES = ['token', 'request', 'time', 'custom'] as const
 type BillingType = (typeof BILLING_TYPES)[number]
 
 const IMAGE_INPUT_VIA_OPTIONS = [
-  { value: 'base64', label: 'Base64', description: 'TabTin 下载图片后内联发送，兼容性最好' },
+  { value: 'base64', label: 'Base64', description: 'Muse 下载图片后内联发送，兼容性最好' },
   { value: 'url', label: '公网 URL', description: '把 OSS 地址直接交给模型拉取' },
   { value: 'file_id', label: '厂商文件 ID', description: '使用 ms:// 等厂商文件引用' },
 ] as const
@@ -1292,7 +1292,7 @@ export function ChatVisionPanel({
           <option value="gemini_generate_content">Gemini Generate Content</option>
         </select>
       </Field>
-      <Field label="流式回复" hint="关闭后上游生成完整答案，再由 TabTin 一次性返回给客户端">
+      <Field label="流式回复" hint="关闭后上游生成完整答案，再由 Muse 一次性返回给客户端">
         <ToggleRow
           checked={cfg.stream_supported}
           onChange={(v) => update({ stream_supported: v })}
@@ -1419,7 +1419,7 @@ export function ChatVisionPanel({
       </Field>
       <Field
         label="上下文缓存"
-        hint="表示 TabTin 可主动使用的缓存方式；选“不支持”不会抹掉厂商响应中真实发生的自动缓存用量"
+        hint="表示 Muse 可主动使用的缓存方式；选“不支持”不会抹掉厂商响应中真实发生的自动缓存用量"
       >
         <select
           className="w-full rounded-md border px-3 py-2 text-body bg-background"

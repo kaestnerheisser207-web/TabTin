@@ -134,7 +134,7 @@ class TencentEmailService(EmailServiceBase):
         """
         try:
             # 使用HTML模板渲染验证码邮件
-            subject = f"【{self.config.get('company_name', 'TabTin')}】邮箱验证码"
+            subject = f"【{self.config.get('company_name', 'Muse')}】邮箱验证码"
 
             # 渲染HTML内容
             html_content = self._render_verification_template(code)
@@ -197,7 +197,7 @@ class TencentEmailService(EmailServiceBase):
         """
         template_context = {
             'code': code,
-            'company': self.config.get('company_name', 'TabTin'),
+            'company': self.config.get('company_name', 'Muse'),
             'website': self.config.get('website', 'https://www.example.com'),
             'support_email': self.config.get('support_email', 'support@laichang.live')
         }
@@ -249,7 +249,7 @@ class TencentEmailService(EmailServiceBase):
 
     def _send_welcome_email(self, to_email: str, params: Dict[str, Any]) -> Dict[str, Any]:
         """发送欢迎邮件"""
-        subject = f"欢迎加入{self.config.get('company_name', 'TabTin')}！"
+        subject = f"欢迎加入{self.config.get('company_name', 'Muse')}！"
 
         html_content = f"""
         <html>
@@ -260,7 +260,7 @@ class TencentEmailService(EmailServiceBase):
             <p>如有任何问题，请随时联系我们。</p>
             <br>
             <p>祝好！</p>
-            <p>{self.config.get('company_name', 'TabTin')}团队</p>
+            <p>{self.config.get('company_name', 'Muse')}团队</p>
         </body>
         </html>
         """
@@ -279,7 +279,7 @@ class TencentEmailService(EmailServiceBase):
             <p>{content}</p>
             <br>
             <p>此邮件由系统自动发送，请勿回复。</p>
-            <p>{self.config.get('company_name', 'TabTin')}团队</p>
+            <p>{self.config.get('company_name', 'Muse')}团队</p>
         </body>
         </html>
         """

@@ -113,7 +113,7 @@ export function createLSPServerInstance(
   // Private state encapsulated via closures.
   //
   // 这里用 lazy require LSPClient 避免 vscode-jsonrpc ~129KB
-  // 静态 import；TabTin lsp-runtime 包本身就是为 LSP 设计的，static import
+  // 静态 import；Muse lsp-runtime 包本身就是为 LSP 设计的，static import
   // 完全合理（见文件头偏差说明 #2）。
   let state: LspServerState = 'stopped';
   let startTime: Date | undefined;

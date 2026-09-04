@@ -117,7 +117,7 @@ function buildTmallItemUrl(id: string): string {
 
 const TMALL_LOGIN_HINT =
   '天猫搜索走淘宝 PC 综合搜的「天猫」tab（list.tmall.com 现网会 302 登录跳）。' +
-  '请在 TabTin 浏览器淘宝/天猫标签扫码登录后重试；与淘宝同属阿里系会话。'
+  '请在 Muse 浏览器淘宝/天猫标签扫码登录后重试；与淘宝同属阿里系会话。'
 
 /**
  * 只做一轮短 capture。live 取证：串行 3×12s+3×4s=48s 全 miss 后 DOM 18ms 出货；
@@ -147,7 +147,7 @@ async function isTaobaoLoginWall(ctx: RunContext, tabId: string): Promise<boolea
 }
 
 const TAOBAO_LOGIN_HINT =
-  '淘宝 PC 搜索匿名不出货（不发 wsearch）。请在 TabTin 浏览器当前淘宝标签扫码登录后重试；批量低频，易滑块/风控。'
+  '淘宝 PC 搜索匿名不出货（不发 wsearch）。请在 Muse 浏览器当前淘宝标签扫码登录后重试；批量低频，易滑块/风控。'
 
 export const taobaoAdapter: PlatformAdapter = {
   id: 'taobao',
@@ -466,7 +466,7 @@ function buildJdItemUrl(id: string): string {
 }
 
 const JD_LOGIN_HINT =
-  '请在 TabTin 浏览器京东标签登录后重试；撞 risk_handler / 验证码时先在页内完成再 search。'
+  '请在 Muse 浏览器京东标签登录后重试；撞 risk_handler / 验证码时先在页内完成再 search。'
 
 /** live：主搜 color API；过宽的 `search` 会先命中 hotwords 等无 wareList 的响应。 */
 const JD_SEARCH_API_PATTERN = 'pc_search_searchWare'

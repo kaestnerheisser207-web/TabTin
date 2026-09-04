@@ -26,7 +26,7 @@
   "error.siteNotFound": "사이트를 찾을 수 없습니다",
   "error.publishFailed": "게시 실패",
   "error.noDistUrl": "먼저 아티팩트를 빌드하고 업로드하세요.",
-  "error.noDistUrlHint": "TabCode에서 빌드를 실행하거나 CLI를 사용하세요: tabtin site build",
+  "error.noDistUrlHint": "TabCode에서 빌드를 실행하거나 CLI를 사용하세요: muse site build",
   "actions.publishSuccess": "성공적으로 게시되었습니다",
   "publish.dialogTitle": "사이트 게시",
   "publish.messageLabel": "버전 참고",

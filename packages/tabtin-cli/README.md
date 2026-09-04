@@ -1,6 +1,6 @@
 # @tabtin/cli
 
-TabTin 统一 CLI（`tabtin`）的**本地安装包**。把 `packages/tabtin-cli-go` 编译出的
+Muse 统一 CLI（`muse`）的**本地安装包**。把 `packages/tabtin-cli-go` 编译出的
 Go 二进制打进一个 npm 包，靠标准 `npm i -g` 完成全局安装 + PATH 挂载，免去手工
 `symlink` 到 `~/.local/bin`。
 
@@ -11,10 +11,6 @@ Go 二进制打进一个 npm 包，靠标准 `npm i -g` 完成全局安装 + PAT
 > 包里不含任何 token / profile / 凭证。
 
 ## 本地安装
-
-完整「打包 → 发给同事 → 登录 → 第三方 Agent 使用」
-
-[`docs/agent/tabtin-cli-pack-install-guide.md`](../../docs/agent/tabtin-cli-pack-install-guide.md)
 
 ```bash
 # 1. 编译 Win/mac 二进制 + 生成 skills/（不依赖 make）
@@ -28,7 +24,7 @@ npm pack
 npm i -g ./tabtin-cli-*.tgz
 
 # 4. 验证
-tabtin --help
+muse --help
 ls ~/.agents/skills   # 应有一批 tabtin-*
 ```
 
@@ -38,10 +34,10 @@ ls ~/.agents/skills   # 应有一批 tabtin-*
 
 | `process.platform` | `process.arch` | 二进制文件名 |
 |---|---|---|
-| `win32` | `x64` | `tabtin-windows-amd64.exe` |
-| `win32` | `arm64` | `tabtin-windows-arm64.exe` |
-| `darwin` | `x64` | `tabtin-darwin-amd64` |
-| `darwin` | `arm64` | `tabtin-darwin-arm64` |
+| `win32` | `x64` | `muse-windows-amd64.exe` |
+| `win32` | `arm64` | `muse-windows-arm64.exe` |
+| `darwin` | `x64` | `muse-darwin-amd64` |
+| `darwin` | `arm64` | `muse-darwin-arm64` |
 
 首版只打包 Windows / macOS。Linux 仍会由 `build-binaries.js` 编到
 `packages/tabtin-cli-go/dist/`，但不打进本包；后续需要时再补。
@@ -49,7 +45,7 @@ ls ~/.agents/skills   # 应有一批 tabtin-*
 `package.json` 的 `os` / `cpu` 字段已限定到上表四种组合——在不支持的平台上
 `npm install` 会直接失败并报出原因，而不是装完之后才在运行时才发现打不开。
 
-## `bin/tabtin.js` 做了什么
+## `bin/muse.js` 做了什么
 
 一个薄 Node 启动器：按 `process.platform` + `process.arch` 从 `binaries/` 选出对应
 二进制，`spawnSync` 转发 `argv` / `stdio` / exit code（含信号透传）。找不到匹配平台
@@ -59,7 +55,7 @@ ls ~/.agents/skills   # 应有一批 tabtin-*
 
 ## `postinstall` 做了什么
 
-仅 **`npm i -g`** 时运行：调用 `tabtin skills install --target agents`，把包内全部
+仅 **`npm i -g`** 时运行：调用 `muse skills install --target agents`，把包内全部
 `tabtin-*` Skill 写到 `~/.agents/skills`，供 Cursor / Claude / Codex 扫描。
 仓库内 `pnpm install`（非全局）不会触发。
 
@@ -67,11 +63,11 @@ ls ~/.agents/skills   # 应有一批 tabtin-*
 
 - **`npm uninstall -g @tabtin/cli`**：只删程序本体（launcher + binaries + 包内 skills），
   **保留** `~/.tabtin` 登录态，也**不会**自动删除已物化到 `~/.agents/skills` 的副本。
-  清物化 Skill：`tabtin skills remove --yes`（须在卸载 CLI 前执行，或重装后再清）。
+  清物化 Skill：`muse skills remove --yes`（须在卸载 CLI 前执行，或重装后再清）。
 - **显式清空本地配置 / 凭证 / 缓存**：
 
   ```bash
-  tabtin config purge --yes
+  muse config purge --yes
   ```
 
   删除 `~/.tabtin` 下状态；**不会**触碰 Space 工作目录。
@@ -81,7 +77,7 @@ ls ~/.agents/skills   # 应有一批 tabtin-*
 ```
 packages/tabtin-cli/
 ├── package.json              # name=@tabtin/cli, bin, private, postinstall
-├── bin/tabtin.js             # Node 启动器
+├── bin/muse.js             # Node 启动器
 ├── scripts/
 │   ├── build-binaries.js     # go 交叉编译 → binaries/（无 make）
 │   ├── build-binaries.sh     # 转发到 .js

@@ -23,5 +23,5 @@
     <string name="perm_bluetooth_scan">Bluetooth Scanning</string>
     <string name="perm_nearby_wifi">Nearby Wi-Fi Devices</string>
 
-    <string name="perm_required_template">The \"%s\" permission is required. Please grant it in the TabTin app settings.</string>
+    <string name="perm_required_template">The \"%s\" permission is required. Please grant it in the Muse app settings.</string>
 </resources>

@@ -57,7 +57,7 @@ import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import com.tabtin.mobile.R
+import com.muse.mobile.R
 import com.tabtin.mobile.data.model.Project
 import com.tabtin.mobile.data.model.ProjectActivityEvent
 import com.tabtin.mobile.data.model.ProjectDiscussion

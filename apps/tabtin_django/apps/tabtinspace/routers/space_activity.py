@@ -1,4 +1,4 @@
-"""Tabtin Space 动态流路由。"""
+"""Muse Space 动态流路由。"""
 
 from .shared import *  # noqa: F401,F403
 
@@ -7,7 +7,7 @@ from apps.tabtinspace.services.space_activity_service import (
     SpaceActivityService,
 )
 
-router = Router(tags=["Tabtin Space"])
+router = Router(tags=["Muse Space"])
 
 
 # ：Workspace / Project 正式路径；/spaces/... 过渡别名保留至 Space 壳 DROP。

@@ -2,7 +2,7 @@
  * Daemon CLI Server
  *
  * HTTP server over Unix Socket (macOS/Linux) or Named Pipe (Windows).
- * Mirrors Electron's CLI Server so that the `tabtin` CLI tool can discover
+ * Mirrors Electron's CLI Server so that the `muse` CLI tool can discover
  * and communicate with the running Daemon via `~/.tabtin/daemon-server.json`.
  *
  * All routes have concrete handler implementations.
@@ -250,7 +250,7 @@ function evaluatePathPolicy(body: any, owner: DaemonCliServer): CLIPolicyResult 
   if (typeof filePath !== 'string' || !filePath) return null;
     // 路径权限治理 Wave 4：CLI server 走 v3 SSoT —— 红线 + 敏感路径 +
     // workspace boundary 三段式（修 01 图谱 §断层 5）。
-    // CLI 客户端（Go CLI、`tabtin` 命令等）不带 spaceId，按 dogfood 单
+    // CLI 客户端（Go CLI、`muse` 命令等）不带 spaceId，按 dogfood 单
     // session 模式取"任一活跃 session 的 snapshot"；snapshot 缺失时
     // 退化到 process.cwd() 单条目录兜底（与 cli-server `workspaceRootForCode`
     // 同模式）。
@@ -507,7 +507,7 @@ async function handleRequestCore(
     if (await dispatchCLIRoute(owner, req, res, url, method, body)) return;
 
     sendJSON(res, 404, errorResponse('UNKNOWN_ROUTE', `未知路由: ${url}`, {
-      suggestions: ['使用 tabtin --help 查看可用命令'],
+      suggestions: ['使用 muse --help 查看可用命令'],
     }));
   } catch (err: any) {
     sendRequestError(owner, res, err);
@@ -662,7 +662,7 @@ function startCLIServerInstance(owner: DaemonCliServer, config?: DaemonCLIServer
   owner.context = context;
   owner.ownsDiscovery = config?.publishDiscovery !== false;
 
-  // Attempt to put tabtin CLI on PATH via node_modules/.bin
+  // Attempt to put muse CLI on PATH via node_modules/.bin
   addLocalCLIToPath();
 
   return info;

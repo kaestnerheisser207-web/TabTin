@@ -45,8 +45,8 @@ describe('CMD-005: CommandValidator 拦截换行注入', () => {
     expect(result.ruleName).toBe('rm -rf root or home');
   });
 
-  it('tabtin foo\\nsudo su 被拒绝', () => {
-    const result = validator.validate('tabtin foo\nsudo su');
+  it('muse foo\\nsudo su 被拒绝', () => {
+    const result = validator.validate('muse foo\nsudo su');
     expect(result.allowed).toBe(false);
     expect(result.decision).toBe('deny');
   });

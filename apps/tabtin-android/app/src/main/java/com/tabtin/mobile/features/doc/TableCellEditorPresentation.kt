@@ -3,7 +3,7 @@ package com.tabtin.mobile.features.doc
 import android.graphics.Color
 import android.widget.TextView
 import androidx.core.content.ContextCompat
-import com.tabtin.mobile.R
+import com.muse.mobile.R
 
 /**
  * 格子检查面板里的输入框是代码创建的，不会吃到 [R.style.DocBlockTextContent]。

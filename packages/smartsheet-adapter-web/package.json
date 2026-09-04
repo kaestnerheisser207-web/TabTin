@@ -1,7 +1,7 @@
 {
   "name": "@tabtin/smartsheet-adapter-web",
   "version": "0.1.0",
-  "description": "Web platform adapter for TabTin applications",
+  "description": "Web platform adapter for Muse applications",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
@@ -10,12 +10,12 @@
     "clean": "rm -rf dist"
   },
   "keywords": [
-    "tabtin",
+    "muse",
     "adapter",
     "web",
     "platform"
   ],
-  "author": "TabTin Team",
+  "author": "Muse Team",
   "license": "MIT",
   "peerDependencies": {
     "@tabtin/smartsheet": "workspace:*"

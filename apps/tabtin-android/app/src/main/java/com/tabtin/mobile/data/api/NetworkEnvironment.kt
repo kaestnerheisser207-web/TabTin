@@ -1,6 +1,6 @@
 package com.tabtin.mobile.data.api
 
-import com.tabtin.mobile.BuildConfig
+import com.muse.mobile.BuildConfig
 import com.tabtin.mobile.util.TokenManager
 import java.net.URI
 

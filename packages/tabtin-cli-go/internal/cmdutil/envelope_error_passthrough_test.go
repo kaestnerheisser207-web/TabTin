@@ -11,7 +11,7 @@ import (
 	"os"
 	"testing"
 
-	"github.com/TabTin/tabtin-cli/internal/output"
+	"github.com/Muse/muse-cli/internal/output"
 )
 
 func captureStderrJSON(t *testing.T, fn func() error) (map[string]any, int) {

@@ -1,4 +1,4 @@
-"""Tabtin Space Schema 共享依赖与辅助函数。"""
+"""Muse Space Schema 共享依赖与辅助函数。"""
 
 from typing import Optional, List, Dict, Any, Generic, TypeVar, Literal
 

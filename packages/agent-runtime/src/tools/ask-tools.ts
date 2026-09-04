@@ -51,7 +51,7 @@ const HITL_KIND_BY_EVENT: Record<string, HitlKind> = {
  *   - W5/W7 上线时拆 `ask_choice` / `ask_form` / `request_approval` 三件套
  *   - W4（2026-05-11 上午）合并三件套为单 `ask_user`（questions[] + Other + header chip）
  *   - W4 R3（2026-05-11 dogfood 审计后）拆回多工具并存——纯 CLI 选型工具不需要
- *     表单 / 显式授权 UI；TabTin 是平台型产品，`ask_form`（11 种字段类型）与
+ *     表单 / 显式授权 UI；Muse 是平台型产品，`ask_form`（11 种字段类型）与
  *     `request_approval`（risk_level + destructive 不可逆确认）各有独立产品语义，
  *     不可合并。
  *   - （2026-07-08）下架 `request_approval`——它的批准结果只是文本回流对话、
@@ -65,7 +65,7 @@ const HITL_KIND_BY_EVENT: Record<string, HitlKind> = {
  *     守护 + header chip + option.preview。**继承 W4 全部改进**，并兼容
  *     ask_choice 场景。
  *   - `ask_form`：fields[]，复杂结构化表单（input/textarea/upload/toggle/color 等
- *     11 种字段类型），TabTin 平台型产品特有。
+ *     11 种字段类型），Muse 平台型产品特有。
  *
  * 两个工具共享：
  *   - W4 R2 dedup 守护（按 toolName + content hash 区分，5 分钟窗口）
@@ -695,7 +695,7 @@ function asRecord(value: unknown): Record<string, unknown> {
  *   `User has answered your questions: "Q1"="A1", "Q2"="A2". You can now
  *    continue with the user's answers in mind.`
  *
- * **W4 R2 P2-5**：删除 TabTin 自创的 `Metadata: status=...; tool=ask_user;
+ * **W4 R2 P2-5**：删除 Muse 自创的 `Metadata: status=...; tool=ask_user;
  * request_id=<uuid>.` 末尾行 —— 采用纯正向单句。
  * - LLM 可能误把 `request_id=<uuid>` 当工具 ID 触发 dogfood 死循环（W3 同模式）
  * - telemetry 走 stream events / trace（保留 request_id 在事件 payload）

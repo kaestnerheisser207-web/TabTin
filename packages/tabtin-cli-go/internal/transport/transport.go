@@ -57,7 +57,7 @@ type RequestOptions struct {
 	Timeout time.Duration
 }
 
-// Transport 为 CLI 与 TabTin Server / Django API 之间的传输抽象。
+// Transport 为 CLI 与 Muse Server / Django API 之间的传输抽象。
 // Request 的第一个参数为 context，用于取消与超时组合；Close 在进程退出或 Factory 重置时可释放资源（默认可为 nil 操作）。
 type Transport interface {
 	Request(ctx context.Context, method, path string, body map[string]any, opts *RequestOptions) (*Response, error)

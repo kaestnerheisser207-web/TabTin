@@ -81,7 +81,7 @@ export function AppLayout() {
             >
               <Menu className="size-5" />
             </button>
-            <span className="ml-1 text-body font-medium text-foreground">TabTin</span>
+            <span className="ml-1 text-body font-medium text-foreground">Muse</span>
           </div>
         ) : null}
         <main className="min-h-0 min-w-0 flex-1 overflow-hidden">

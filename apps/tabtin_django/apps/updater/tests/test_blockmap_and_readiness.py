@@ -75,31 +75,31 @@ class BlockmapAssetServiceTests(TestCase):
         win_intent = service.create_upload_intent(
             win,
             asset_type="package",
-            file_name="TabTin-beta-0.7.127-x64-plain-upload-quick-260805-setup.exe",
+            file_name="Muse-beta-0.7.127-x64-plain-upload-quick-260805-setup.exe",
             file_size=1024,
         )
-        self.assertEqual(win_intent.expected_file_name, "TabTin-0.7.127-windows.exe")
+        self.assertEqual(win_intent.expected_file_name, "Muse-0.7.127-windows.exe")
         self.assertEqual(
             win_intent.object_key,
-            "desktop-updates/beta/win/x64/0.7.127/TabTin-0.7.127-windows.exe",
+            "desktop-updates/beta/win/x64/0.7.127/Muse-0.7.127-windows.exe",
         )
 
         mac = _make_release(version="1.0.0", platform="mac", arch="arm64", channel="stable")
         zip_intent = service.create_upload_intent(
             mac,
             asset_type="package",
-            file_name="TabTin-stable-1.0.0-arm64-plain-upload-release-260727-mac.zip",
+            file_name="Muse-stable-1.0.0-arm64-plain-upload-release-260727-mac.zip",
             file_size=2048,
         )
-        self.assertEqual(zip_intent.expected_file_name, "TabTin-1.0.0-arm64-mac.zip")
+        self.assertEqual(zip_intent.expected_file_name, "Muse-1.0.0-arm64-mac.zip")
 
         dmg_intent = service.create_upload_intent(
             mac,
             asset_type="website_installer",
-            file_name="TabTin-stable-1.0.0-arm64-plain-upload-release-260727.dmg",
+            file_name="Muse-stable-1.0.0-arm64-plain-upload-release-260727.dmg",
             file_size=4096,
         )
-        self.assertEqual(dmg_intent.expected_file_name, "TabTin-1.0.0-arm64.dmg")
+        self.assertEqual(dmg_intent.expected_file_name, "Muse-1.0.0-arm64.dmg")
 
     def test_blockmap_intent_requires_uploaded_package(self):
         release = _make_release()
@@ -108,7 +108,7 @@ class BlockmapAssetServiceTests(TestCase):
             service.create_upload_intent(
                 release,
                 asset_type="blockmap",
-                file_name="TabTin-1.2.0-arm64-mac.zip.blockmap",
+                file_name="Muse-1.2.0-arm64-mac.zip.blockmap",
                 file_size=128,
             )
 
@@ -116,7 +116,7 @@ class BlockmapAssetServiceTests(TestCase):
         release = _make_release(
             file_url=(
                 "https://cdn.example.com/desktop-updates/stable/mac/arm64/1.2.0/"
-                "TabTin-1.2.0-arm64-mac.zip"
+                "Muse-1.2.0-arm64-mac.zip"
             ),
         )
         service = ReleaseAssetService()
@@ -127,20 +127,20 @@ class BlockmapAssetServiceTests(TestCase):
             file_name="whatever.blockmap",
             file_size=128,
         )
-        self.assertEqual(intent.expected_file_name, "TabTin-1.2.0-arm64-mac.zip.blockmap")
+        self.assertEqual(intent.expected_file_name, "Muse-1.2.0-arm64-mac.zip.blockmap")
         self.assertEqual(
             intent.object_key,
-            "desktop-updates/stable/mac/arm64/1.2.0/TabTin-1.2.0-arm64-mac.zip.blockmap",
+            "desktop-updates/stable/mac/arm64/1.2.0/Muse-1.2.0-arm64-mac.zip.blockmap",
         )
 
     def test_blockmap_complete_does_not_touch_release_fields(self):
         file_url = (
             "https://cdn.example.com/desktop-updates/stable/mac/arm64/1.2.0/"
-            "TabTin-1.2.0-arm64-mac.zip"
+            "Muse-1.2.0-arm64-mac.zip"
         )
         release = _make_release(file_url=file_url, file_size=1024, checksum_sha256="a" * 64)
         object_key = (
-            "desktop-updates/stable/mac/arm64/1.2.0/TabTin-1.2.0-arm64-mac.zip.blockmap"
+            "desktop-updates/stable/mac/arm64/1.2.0/Muse-1.2.0-arm64-mac.zip.blockmap"
         )
         self.fake_oss.existing_keys.add(object_key)
 
@@ -149,7 +149,7 @@ class BlockmapAssetServiceTests(TestCase):
             release,
             asset_type="blockmap",
             object_key=object_key,
-            file_name="TabTin-1.2.0-arm64-mac.zip.blockmap",
+            file_name="Muse-1.2.0-arm64-mac.zip.blockmap",
             file_size=128,
             content_type="application/octet-stream",
         )
@@ -181,17 +181,17 @@ class WebsiteInstallerAssetServiceTests(TestCase):
             service.create_upload_intent(
                 release,
                 asset_type="website_installer",
-                file_name="TabTin-1.2.0-arm64-mac.zip",
+                file_name="Muse-1.2.0-arm64-mac.zip",
                 file_size=1024,
             )
 
     def test_website_installer_complete_sets_website_file_url_only(self):
         file_url = (
             "https://cdn.example.com/desktop-updates/stable/mac/arm64/1.2.0/"
-            "TabTin-1.2.0-arm64-mac.zip"
+            "Muse-1.2.0-arm64-mac.zip"
         )
         release = _make_release(file_url=file_url, file_size=2048, checksum_sha256="b" * 64)
-        object_key = "desktop-updates/stable/mac/arm64/1.2.0/TabTin-1.2.0-arm64.dmg"
+        object_key = "desktop-updates/stable/mac/arm64/1.2.0/Muse-1.2.0-arm64.dmg"
         self.fake_oss.existing_keys.add(object_key)
 
         service = ReleaseAssetService()
@@ -199,7 +199,7 @@ class WebsiteInstallerAssetServiceTests(TestCase):
             release,
             asset_type="website_installer",
             object_key=object_key,
-            file_name="TabTin-1.2.0-arm64.dmg",
+            file_name="Muse-1.2.0-arm64.dmg",
             file_size=4096,
             content_type="application/x-apple-diskimage",
         )

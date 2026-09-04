@@ -8,10 +8,10 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/TabTin/tabtin-cli/internal/cmdutil"
-	"github.com/TabTin/tabtin-cli/internal/errcode"
-	"github.com/TabTin/tabtin-cli/internal/output"
-	"github.com/TabTin/tabtin-cli/internal/transport"
+	"github.com/Muse/muse-cli/internal/cmdutil"
+	"github.com/Muse/muse-cli/internal/errcode"
+	"github.com/Muse/muse-cli/internal/output"
+	"github.com/Muse/muse-cli/internal/transport"
 )
 
 func newCmdAPI(f *cmdutil.Factory) *cobra.Command {
@@ -27,9 +27,9 @@ func newCmdAPI(f *cmdutil.Factory) *cobra.Command {
 		Long: `原始 API 调用——L2 命令缺失时的逃生口（cli-philosophy: "L1 是逃生门，Agent 不应日常用"）。
 
 适用场景：①Agent 在 L2 命令缺失时兜底调用某 endpoint；②人类调试 raw envelope；
-③一次性脚本（如清理测试残留）。日常工作应优先用 tabtin <app> <verb> 形式（L2）——
-频繁使用 tabtin api 说明 L2 该有的命令缺了，应反馈给该 App owner 补 L2，
-而不是教 Agent 长期用 tabtin api。
+③一次性脚本（如清理测试残留）。日常工作应优先用 muse <app> <verb> 形式（L2）——
+频繁使用 muse api 说明 L2 该有的命令缺了，应反馈给该 App owner 补 L2，
+而不是教 Agent 长期用 muse api。
 
 --data 支持四种输入：
   字面 JSON：     --data '{"key":"value"}'
@@ -38,11 +38,11 @@ func newCmdAPI(f *cmdutil.Factory) *cobra.Command {
   首字符 @ 转义： --data '@@literal' （等价字面 "@literal"）
 
 示例：
-  tabtin api GET /health
-  tabtin api POST /table/list --data '{"space_id":"xxx"}'
-  tabtin api GET "/agent/models?space_id=xxx"
-  tabtin api POST /api/tabdoc/documents --data '{"organization_id":"xxx","space_id":"xxx","title":"test"}'
-  tabtin api POST /api/tabslide/parse-pptx --data @/tmp/payload.json`,
+  muse api GET /health
+  muse api POST /table/list --data '{"space_id":"xxx"}'
+  muse api GET "/agent/models?space_id=xxx"
+  muse api POST /api/tabdoc/documents --data '{"organization_id":"xxx","space_id":"xxx","title":"test"}'
+  muse api POST /api/tabslide/parse-pptx --data @/tmp/payload.json`,
 		Args: cobra.ExactArgs(2),
 		RunE: cmdutil.SafeRunE(func(cmd *cobra.Command, args []string) error {
 			// v10.6 P1：手写命令也必须遵守全局协议——命令级 -o/--output 与全局 --jq 互斥。

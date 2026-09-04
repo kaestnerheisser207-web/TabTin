@@ -21,9 +21,9 @@ docker compose version >/dev/null 2>&1 || fail \
 docker info >/dev/null 2>&1 || fail \
   "Docker Engine is not running. Start Docker Desktop and try again."
 command -v curl >/dev/null 2>&1 || fail \
-  "curl is required to check TabTin Server readiness."
+  "curl is required to check Muse Server readiness."
 
-printf 'Starting TabTin Community...\n'
+printf 'Starting Muse Community...\n'
 bash "${repo_root}/scripts/community/ensure-env-file.sh" "${repo_root}"
 bash "${repo_root}/scripts/community/ensure-runtime-image.sh" "${repo_root}"
 docker compose \
@@ -41,7 +41,7 @@ if ! [[ "${poll_seconds}" =~ ^[1-9][0-9]*$ ]]; then
   fail "TABTIN_COMMUNITY_START_POLL_SECONDS must be a positive integer."
 fi
 
-printf 'Waiting for TabTin Server readiness'
+printf 'Waiting for Muse Server readiness'
 deadline=$((SECONDS + timeout_seconds))
 until curl -fsS --max-time 3 \
   http://127.0.0.1:6060/health/ready >/dev/null 2>&1; do
@@ -52,7 +52,7 @@ until curl -fsS --max-time 3 \
       --env-file "${env_file}" \
       -f "${compose_file}" \
       ps
-    fail "TabTin Server did not become ready within ${timeout_seconds} seconds. Run ./status.sh or ./community logs for details."
+    fail "Muse Server did not become ready within ${timeout_seconds} seconds. Run ./status.sh or ./community logs for details."
   fi
   printf '.'
   sleep "${poll_seconds}"
@@ -63,10 +63,10 @@ bash "${repo_root}/scripts/electron/runtime/_ensure-desktop-runtimes.sh" || true
 
 cat <<'EOF'
 ========================================
-TabTin Community is READY
+Muse Community is READY
 ========================================
 
-1. Start TabTin Desktop Client
+1. Start Muse Desktop Client
 
 2. Register / Login
 

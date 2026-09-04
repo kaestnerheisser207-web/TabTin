@@ -1,5 +1,5 @@
 /**
- * `cli_output_record` kind 渲染（W4 / D1）—— 把 `tabtin doc read --format json`
+ * `cli_output_record` kind 渲染（W4 / D1）—— 把 `muse doc read --format json`
  * 等单对象 stdout 自动展示成 key-value 详情卡片。
  *
  * 视觉风格与 `RichCliOutputTable` 对齐（顶部 command header + 边框）；

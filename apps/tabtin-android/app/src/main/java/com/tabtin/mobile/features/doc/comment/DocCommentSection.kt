@@ -30,7 +30,7 @@ import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import com.tabtin.mobile.R
+import com.muse.mobile.R
 import com.tabtin.mobile.ui.components.TTAvatar
 import com.tabtin.mobile.ui.components.TTBottomSheet
 import com.tabtin.mobile.ui.components.TTTextField

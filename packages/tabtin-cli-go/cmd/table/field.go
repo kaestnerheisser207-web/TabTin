@@ -3,7 +3,7 @@ package table
 import (
 	"github.com/spf13/cobra"
 
-	"github.com/TabTin/tabtin-cli/internal/cmdutil"
+	"github.com/Muse/muse-cli/internal/cmdutil"
 )
 
 // fieldTypeGroupsLong 是 CLI 可创建字段的产品契约，必须与 Electron
@@ -56,9 +56,9 @@ func registerFieldCommands(parent *cobra.Command, f *cmdutil.Factory) {
 的 --data key 或值格式对不上（如把 select 的字符串值传成了数组）。
 常见陷阱：字段名可能重复被改名——长期跑的脚本建议缓存 field-id 而不是硬编码
 字段名，或每次先 list 再按名称查 id。`,
-			Example: "  tabtin table field list --table-id <table_id>\n" +
-				"  tabtin table field list --table-id <table_id> --format json\n" +
-				"  tabtin table field list --table-id <table_id> --jq '.fields[].name'",
+			Example: "  muse table field list --table-id <table_id>\n" +
+				"  muse table field list --table-id <table_id> --format json\n" +
+				"  muse table field list --table-id <table_id> --jq '.fields[].name'",
 			Route: cmdutil.RouteCliServer, Method: "POST", Path: "/table/fields",
 			Runtime: cmdutil.RuntimeHybrid, AdaptRequest: adaptFieldList,
 			Layer: "L2", Risk: cmdutil.RiskRead, RiskDeclared: true,
@@ -71,9 +71,9 @@ func registerFieldCommands(parent *cobra.Command, f *cmdutil.Factory) {
 设计理由：field list 为列表浏览做了瘦身，完整 options 需要用 detail 单独取。
 常见陷阱：link 字段的 options 存的是目标表和关联关系，不是关联记录的当前值；
 取实际值请用 record detail。`,
-			Example: "  tabtin table field detail --field-id <field_id>\n" +
-				"  tabtin table field detail --field-id <field_id> --format json\n" +
-				"  tabtin table field detail --field-id <field_id> --jq '.options'",
+			Example: "  muse table field detail --field-id <field_id>\n" +
+				"  muse table field detail --field-id <field_id> --format json\n" +
+				"  muse table field detail --field-id <field_id> --jq '.options'",
 			Route: cmdutil.RouteCliServer, Method: "POST", Path: "/table/field-detail",
 			Layer: "L2", Risk: cmdutil.RiskRead, RiskDeclared: true,
 			Flags:     []cmdutil.FlagDef{{Name: "field-id", Type: cmdutil.FlagString, Required: true, Desc: "字段 ID"}},
@@ -82,9 +82,9 @@ func registerFieldCommands(parent *cobra.Command, f *cmdutil.Factory) {
 		{
 			Use: "add", Short: "添加字段",
 			Long: "添加一个字段到表格。\n\n" + fieldTypeGroupsLong,
-			Example: "  tabtin table field add --table-id xxx --name \"邮箱\" --field-type email\n" +
-				"  tabtin table field add --table-id xxx --name \"评分\" --field-type rating --options '{\"max\":5}'\n" +
-				"  tabtin table field add --table-id xxx --name \"演职员\" --field-type link \\\n" +
+			Example: "  muse table field add --table-id xxx --name \"邮箱\" --field-type email\n" +
+				"  muse table field add --table-id xxx --name \"评分\" --field-type rating --options '{\"max\":5}'\n" +
+				"  muse table field add --table-id xxx --name \"演职员\" --field-type link \\\n" +
 				"    --options '{\"foreignTableId\":\"<目标表 UUID>\",\"relationship\":\"ManyMany\",\"isOneWay\":false}'",
 			Route: cmdutil.RouteCliServer, Method: "POST", Path: "/table/add-field",
 			Runtime: cmdutil.RuntimeHybrid, AdaptRequest: adaptFieldAdd,
@@ -117,9 +117,9 @@ func registerFieldCommands(parent *cobra.Command, f *cmdutil.Factory) {
 			Use: "update", Short: "更新字段",
 			Long: "更新字段名称、描述、必填、options 等属性（不含字段类型变更）。\n" +
 				"改类型请用 `field check` / `field preview` / `field convert`。\n\n" + fieldTypeGroupsLong,
-			Example: "  tabtin table field update --field-id <field_id> --name \"新字段名\"\n" +
-				"  tabtin table field update --field-id <field_id> --description \"客户来源\"\n" +
-				"  tabtin table field update --field-id <field_id> --options '{\"choices\":[\"A\",\"B\"]}'",
+			Example: "  muse table field update --field-id <field_id> --name \"新字段名\"\n" +
+				"  muse table field update --field-id <field_id> --description \"客户来源\"\n" +
+				"  muse table field update --field-id <field_id> --options '{\"choices\":[\"A\",\"B\"]}'",
 			Route: cmdutil.RouteCliServer, Method: "POST", Path: "/table/update-field",
 			Layer: "L2", Risk: cmdutil.RiskWrite, RiskDeclared: true,
 			Flags: []cmdutil.FlagDef{
@@ -145,9 +145,9 @@ func registerFieldCommands(parent *cobra.Command, f *cmdutil.Factory) {
 			Long: `硬删除字段及其在全部记录里存储的值——没有回收站层。
 设计理由：字段级删除后端不提供撤销端点；link 字段还会同时清理关联关系。
 常见陷阱：删除后字段定义和历史记录值都不可恢复；建议先 field detail 确认目标。`,
-			Example: "  tabtin table field delete --field-id <field_id> --yes\n" +
-				"  tabtin table field delete --field-id <field_id> --dry-run\n" +
-				"  tabtin table field detail --field-id <field_id>  # 删前确认目标字段",
+			Example: "  muse table field delete --field-id <field_id> --yes\n" +
+				"  muse table field delete --field-id <field_id> --dry-run\n" +
+				"  muse table field detail --field-id <field_id>  # 删前确认目标字段",
 			Route: cmdutil.RouteCliServer, Method: "POST", Path: "/table/delete-field",
 			Runtime: cmdutil.RuntimeHybrid, AdaptRequest: adaptFieldDelete,
 			Layer: "L2", Risk: cmdutil.RiskDestructive, RiskDeclared: true,
@@ -168,9 +168,9 @@ func registerFieldCommands(parent *cobra.Command, f *cmdutil.Factory) {
 是全量覆盖，不是相对移动。
 常见陷阱：--field-orders 必须覆盖你想固定顺序的全部字段——漏传的字段顺序
 行为由后端决定（通常追加到末尾），不保证和调用前一致。`,
-			Example: "  tabtin table field reorder --table-id <table_id> --field-orders '[{\"field_id\":\"fld_1\",\"sort_order\":1}]'\n" +
-				"  tabtin table field reorder --table-id <table_id> --field-orders '[{\"field_id\":\"fld_1\",\"sort_order\":1},{\"field_id\":\"fld_2\",\"sort_order\":2}]'\n" +
-				"  tabtin table field reorder --table-id <table_id> --field-orders '[{\"field_id\":\"fld_1\",\"sort_order\":1}]' --dry-run",
+			Example: "  muse table field reorder --table-id <table_id> --field-orders '[{\"field_id\":\"fld_1\",\"sort_order\":1}]'\n" +
+				"  muse table field reorder --table-id <table_id> --field-orders '[{\"field_id\":\"fld_1\",\"sort_order\":1},{\"field_id\":\"fld_2\",\"sort_order\":2}]'\n" +
+				"  muse table field reorder --table-id <table_id> --field-orders '[{\"field_id\":\"fld_1\",\"sort_order\":1}]' --dry-run",
 			Route: cmdutil.RouteCliServer, Method: "POST", Path: "/table/fields-reorder",
 			Layer: "L2", Risk: cmdutil.RiskWrite, RiskDeclared: true,
 			Flags: []cmdutil.FlagDef{
@@ -194,9 +194,9 @@ func registerFieldCommands(parent *cobra.Command, f *cmdutil.Factory) {
 field preview 抽样看转换后的样子，最后才 convert。
 常见陷阱：check 通过不代表转换后数据「正确」，只代表转换本身不会报错；
 精度/格式类损失（如 datetime → date 丢时间部分）建议进一步 preview 确认。`,
-			Example: "  tabtin table field check --field-id <field_id> --target-type number\n" +
-				"  tabtin table field check --field-id <field_id> --target-type select\n" +
-				"  tabtin table field check --field-id <field_id> --target-type date",
+			Example: "  muse table field check --field-id <field_id> --target-type number\n" +
+				"  muse table field check --field-id <field_id> --target-type select\n" +
+				"  muse table field check --field-id <field_id> --target-type date",
 			Route: cmdutil.RouteCliServer, Method: "POST", Path: "/table/field-check-conversion",
 			Layer: "L2", Risk: cmdutil.RiskRead, RiskDeclared: true,
 			Flags: []cmdutil.FlagDef{
@@ -214,9 +214,9 @@ field preview 抽样看转换后的样子，最后才 convert。
 损失时（如 currency→number 丢符号），肉眼看样本比看风险等级更直观。
 常见陷阱：--sample-size 越大越准，但样本再多也不是全量校验；真正落地后仍需
 field convert 后再抽查几条真实记录。`,
-			Example: "  tabtin table field preview --field-id <field_id> --target-type select --target-options '{\"choices\":[\"A\",\"B\"]}'\n" +
-				"  tabtin table field preview --field-id <field_id> --target-type number --sample-size 20\n" +
-				"  tabtin table field preview --field-id <field_id> --target-type date",
+			Example: "  muse table field preview --field-id <field_id> --target-type select --target-options '{\"choices\":[\"A\",\"B\"]}'\n" +
+				"  muse table field preview --field-id <field_id> --target-type number --sample-size 20\n" +
+				"  muse table field preview --field-id <field_id> --target-type date",
 			Route: cmdutil.RouteCliServer, Method: "POST", Path: "/table/field-preview-conversion",
 			Layer: "L2", Risk: cmdutil.RiskRead, RiskDeclared: true,
 			Flags: []cmdutil.FlagDef{
@@ -233,9 +233,9 @@ field convert 后再抽查几条真实记录。`,
 			Use: "convert", Short: "类型转换",
 			Long: "将字段原地转换为另一种类型。低风险转换直接生效，高风险（如丢精度、结构变更）" +
 				"需 --force 或 --async。\n\n" + fieldTypeGroupsLong,
-			Example: "  tabtin table field convert --field-id <field_id> --target-type number --force\n" +
-				"  tabtin table field convert --field-id <field_id> --target-type select --target-options '{\"choices\":[\"A\",\"B\"]}'\n" +
-				"  tabtin table field convert --field-id <field_id> --target-type long_text --async",
+			Example: "  muse table field convert --field-id <field_id> --target-type number --force\n" +
+				"  muse table field convert --field-id <field_id> --target-type select --target-options '{\"choices\":[\"A\",\"B\"]}'\n" +
+				"  muse table field convert --field-id <field_id> --target-type long_text --async",
 			Route: cmdutil.RouteCliServer, Method: "POST", Path: "/table/field-convert",
 			Layer: "L2", Risk: cmdutil.RiskWrite, RiskDeclared: true,
 			Flags: []cmdutil.FlagDef{
@@ -263,7 +263,7 @@ field convert 后再抽查几条真实记录。`,
 			Use: "bulk-add", Short: "批量添加字段",
 			Long: "单次最多 50 个字段（MAX_BULK_FIELDS）。字段类型与 TabData UI 保持一致。\n\n" +
 				fieldTypeGroupsLong,
-			Example: "  tabtin table field bulk-add --table-id xxx --fields '[\n" +
+			Example: "  muse table field bulk-add --table-id xxx --fields '[\n" +
 				"    {\"name\":\"姓名\",\"field_type\":\"text\"},\n" +
 				"    {\"name\":\"评分\",\"field_type\":\"number\"},\n" +
 				"    {\"name\":\"演员\",\"field_type\":\"link\",\"options\":{\"foreignTableId\":\"<UUID>\",\"relationship\":\"ManyMany\"}}\n" +
@@ -295,9 +295,9 @@ field convert 后再抽查几条真实记录。`,
 字段前对话框与 Agent 决策；--action 默认 delete，也可 convert_to=<type>。
 常见陷阱：explain 通过不代表转换后数据语义正确，高精度损失仍要 field preview；
 warning_level 只是摘要，细节看 impact.dependent_fields。`,
-			Example: "  tabtin table field explain fld_xxx\n" +
-				"  tabtin table field explain fld_xxx --action delete\n" +
-				"  tabtin table field explain fld_xxx --jq '.undo_capability'",
+			Example: "  muse table field explain fld_xxx\n" +
+				"  muse table field explain fld_xxx --action delete\n" +
+				"  muse table field explain fld_xxx --jq '.undo_capability'",
 			Route: cmdutil.RouteCliServer, Method: "GET",
 			Path: "/api/tabdata/fields/{field_id}/explain", ArgsMapping: []string{"field_id"},
 			Layer: "L2", Risk: cmdutil.RiskRead, RiskDeclared: true,
@@ -314,9 +314,9 @@ warning_level 只是摘要，细节看 impact.dependent_fields。`,
 对称 link 与视图引用，避免静默打坏下游。
 常见陷阱：本命令只读、不锁字段；分析后到真正 delete 之间别人可能又加依赖，
 关键字段删前再跑一次。`,
-			Example: "  tabtin table field delete-references fld_xxx\n" +
-				"  tabtin table field delete-references fld_xxx --format json\n" +
-				"  tabtin table field delete-references fld_xxx --jq '.dependent_fields'",
+			Example: "  muse table field delete-references fld_xxx\n" +
+				"  muse table field delete-references fld_xxx --format json\n" +
+				"  muse table field delete-references fld_xxx --jq '.dependent_fields'",
 			Route: cmdutil.RouteCliServer, Method: "GET",
 			Path: "/api/tabdata/fields/{field_id}/delete-references", ArgsMapping: []string{"field_id"},
 			Layer: "L2", Risk: cmdutil.RiskRead, RiskDeclared: true,
@@ -328,9 +328,9 @@ warning_level 只是摘要，细节看 impact.dependent_fields。`,
 设计理由：与 field check / preview / convert 组成完整四步链——本命令给影响面，
 check 给风险等级，preview 给样本值，convert 才落地。
 常见陷阱：warnings 可能为空但仍有精度损失；转 link/公式类务必先 check+preview。`,
-			Example: "  tabtin table field conversion-references fld_xxx\n" +
-				"  tabtin table field conversion-references fld_xxx --format json\n" +
-				"  tabtin table field conversion-references fld_xxx --jq '.warnings'",
+			Example: "  muse table field conversion-references fld_xxx\n" +
+				"  muse table field conversion-references fld_xxx --format json\n" +
+				"  muse table field conversion-references fld_xxx --jq '.warnings'",
 			Route: cmdutil.RouteCliServer, Method: "GET",
 			Path: "/api/tabdata/fields/{field_id}/conversion-references", ArgsMapping: []string{"field_id"},
 			Layer: "L2", Risk: cmdutil.RiskRead, RiskDeclared: true,

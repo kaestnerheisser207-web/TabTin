@@ -4,7 +4,7 @@ import android.util.Log
 import android.view.ViewGroup
 import android.webkit.RenderProcessGoneDetail
 import android.webkit.WebView
-import com.tabtin.mobile.R
+import com.muse.mobile.R
 import io.sentry.Sentry
 import com.tabtin.mobile.sentry.DiagnosticRuntime
 

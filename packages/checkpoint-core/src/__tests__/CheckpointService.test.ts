@@ -392,7 +392,7 @@ describe('CheckpointService', () => {
   describe('normalizeWorktreePathForComparison', () => {
     it('treats Windows slash variants as the same path', () => {
       expect(normalizeWorktreePathForComparison('C:/workspace/TabTin/')).toBe(
-        normalizeWorktreePathForComparison('c:\\workspace\\TabTin'),
+        normalizeWorktreePathForComparison('c:\\workspace\\Muse'),
       )
     })
 

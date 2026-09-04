@@ -13,7 +13,7 @@ describe('buildConversationReferenceSection', () => {
       title: '磁盘盘点',
       preview: '## 盘点完成',
       organizationId: 'wt-789',
-      organizationName: 'TabTin',
+      organizationName: 'Muse',
       spaceId: 'space-abc',
       spaceName: '工作空间',
       workspaceRoot: '/sandbox/wt-789/space-abc',
@@ -26,7 +26,7 @@ describe('buildConversationReferenceSection', () => {
     expect(result).toContain('<conversation_reference>');
     expect(result).toContain('标题：       磁盘盘点');
     expect(result).toContain('消息数：     42');
-    expect(result).toContain('组织：       "TabTin"   (id: wt-789)');
+    expect(result).toContain('组织：       "Muse"   (id: wt-789)');
     expect(result).toContain('工作空间：  "工作空间"   (id: space-abc)');
     expect(result).toContain('会话：       sess-xyz');
     expect(result).toContain('messages.jsonl');

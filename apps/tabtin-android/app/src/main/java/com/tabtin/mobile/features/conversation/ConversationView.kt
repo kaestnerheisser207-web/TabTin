@@ -80,7 +80,7 @@ import androidx.compose.ui.unit.dp
 import androidx.core.content.FileProvider
 import androidx.core.content.ContextCompat
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.tabtin.mobile.R
+import com.muse.mobile.R
 import com.tabtin.mobile.data.model.AgentPhase
 import com.tabtin.mobile.data.model.AttachmentStatus
 import com.tabtin.mobile.data.model.ConversationDraftScope

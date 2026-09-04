@@ -6,22 +6,22 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/TabTin/tabtin-cli/internal/cmdutil"
+	"github.com/Muse/muse-cli/internal/cmdutil"
 )
 
 func TestMemoCommandHiddenFromHelpAndCommands(t *testing.T) {
 	f := cmdutil.NewFactory()
-	root := &cobra.Command{Use: "tabtin"}
+	root := &cobra.Command{Use: "muse"}
 	registerRootPersistentFlagsForTest(root)
 	memo := newCmdMemo(f)
 	root.AddCommand(memo)
 
 	if !memo.Hidden {
-		t.Fatal("memo 组命令应为 Hidden，避免出现在 tabtin --help")
+		t.Fatal("memo 组命令应为 Hidden，避免出现在 muse --help")
 	}
 	for _, child := range memo.Commands() {
 		if !child.Hidden {
-			t.Fatalf("memo %s 应为 Hidden，避免出现在 tabtin commands", child.Name())
+			t.Fatalf("memo %s 应为 Hidden，避免出现在 muse commands", child.Name())
 		}
 	}
 

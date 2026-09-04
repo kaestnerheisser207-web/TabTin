@@ -17,7 +17,7 @@ export const toolManifests: ToolManifestRow[] = allDomains
     groups.flatMap(group => {
       // 工具系统宪法 §不变量 2（W5 实施 2026-05-04，W5 收尾反转默认值）：
       // **白名单模式** —— 默认不暴露给 LLM，必须显式 opt-in `manifestExposed: true`。
-      // 业务能力一律走 `tabtin <command>` CLI；ActionExecutor adapter 仍注册其
+      // 业务能力一律走 `muse <command>` CLI；ActionExecutor adapter 仍注册其
       // tool execute()，CLI server 路由可继续派发（如 /browser/act → execute_act）。
       // group.manifestExposed 为同位 override，可反向覆盖 domain（如 core 域整体
       // 不暴露但 terminal/skills 组要 opt-in）。

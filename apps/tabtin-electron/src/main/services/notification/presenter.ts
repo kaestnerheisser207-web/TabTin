@@ -29,7 +29,7 @@ type DeliveryCallbacks = { onFailed?: () => void }
 const FOCUS_SUPPRESS_EXEMPT_CATEGORIES = new Set(['im', 'download', 'extension', 'tracker.run'])
 
 function resolveWindowsAumid(): string {
-  return process.env.TABTIN_APP_ID?.trim() || 'com.tabtin.app'
+  return process.env.TABTIN_APP_ID?.trim() || 'com.muse.app'
 }
 
 /**

@@ -1,7 +1,7 @@
 {
   "name": "@tabtin/anti-detect",
   "version": "0.1.0",
-  "description": "TabTin anti-detect module (UA pool, proxy health, fingerprints, client hints)",
+  "description": "Muse anti-detect module (UA pool, proxy health, fingerprints, client hints)",
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",

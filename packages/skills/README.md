@@ -1,6 +1,6 @@
-# TabTin Skills
+# Muse Skills
 
-Skill 是 TabTin 中"派给 Agent 完成某类工作的说明书"——Markdown 指令 + 元数据 + 可选脚本/资源/子文件。
+Skill 是 Muse 中"派给 Agent 完成某类工作的说明书"——Markdown 指令 + 元数据 + 可选脚本/资源/子文件。
 **Skill 本身不执行任何操作**,由 Agent 读取后参考其指引调用 Tool 完成实际工作。
 
 > Charter v1.8 §3.1 / §6.4 / §6.8 — Tracker 可选预绑定一个 Skill；不绑定时

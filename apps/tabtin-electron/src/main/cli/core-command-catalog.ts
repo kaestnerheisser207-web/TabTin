@@ -111,7 +111,7 @@ export const CORE_COMMAND_CATALOG: CoreCliCommandCatalogEntry[] = [
   },
   {
     name: 'terminal',
-    description: '打开 / 管理 TabTin 应用内可交互终端',
+    description: '打开 / 管理 Muse 应用内可交互终端',
     examples: ['open', 'open --cwd ~/projects/foo --title "项目终端"', 'list', 'open --session-id <id>'],
   },
   {

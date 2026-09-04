@@ -124,7 +124,7 @@ export function FeishuConnectPage() {
             <div className="space-y-1">
               <h1 className="text-title font-semibold text-foreground">正在跳转飞书授权</h1>
               <p className="text-body text-muted-foreground">
-                请稍候，授权完成后会回到 TabTin 客户端。
+                请稍候，授权完成后会回到 Muse 客户端。
               </p>
             </div>
           </div>
@@ -135,7 +135,7 @@ export function FeishuConnectPage() {
         <BridgeCard>
           <ErrorBlock
             title="缺少组织参数"
-            description="链接中没有 organization_id。请从 TabTin 客户端「云盘 → 新建 → 飞书」重新打开。"
+            description="链接中没有 organization_id。请从 Muse 客户端「云盘 → 新建 → 飞书」重新打开。"
           />
         </BridgeCard>
       ) : null}
@@ -144,7 +144,7 @@ export function FeishuConnectPage() {
         <BridgeCard>
           <ErrorBlock
             title="需要登录"
-            description="未能识别登录态。请回到 TabTin 客户端重新点击「去授权」。"
+            description="未能识别登录态。请回到 Muse 客户端重新点击「去授权」。"
           />
         </BridgeCard>
       ) : null}

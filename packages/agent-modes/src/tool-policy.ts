@@ -66,7 +66,7 @@ export function isToolAllowedBySerializedPolicy(
  * L16 W5.5：获取指定模式的 input 级 shell 白名单设置。
  *
  * 返回 `'tabtin-readonly'` 表示需在 `run_terminal_command.execute` 入口检查命令字符串是否
- * 是 tabtin 只读子命令；返回 `undefined` 表示不限制（agent / group / 未配置）。
+ * 是 muse 只读子命令；返回 `undefined` 表示不限制（agent / group / 未配置）。
  *
  * 消费者：`packages/agent-runtime/src/capability/core/shell.ts`（在 ShellCap 装配时
  * 由宿主把 mode 对应的 allowlist 设置 + checker 一并注入）。

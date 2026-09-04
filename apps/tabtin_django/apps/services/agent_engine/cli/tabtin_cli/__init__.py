@@ -12,7 +12,7 @@
   内部 fork 本 Python module
 
 > **v3.1（2026-04-19）**：``tabtin connect`` 命令族整体删除（方向锚 H8）。
-> TabTin 对 Device 级第三方 App 不代管凭据；用户在本机自己跑该 App 的
+> Muse 对 Device 级第三方 App 不代管凭据；用户在本机自己跑该 App 的
 > ``config init`` / ``auth login`` 等命令，Agent 可引导但不代跑。
 > 详见 ``docs/app-market/PRD-v3.1-方向锚.md``。
 

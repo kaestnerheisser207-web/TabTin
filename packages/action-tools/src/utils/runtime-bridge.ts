@@ -267,7 +267,7 @@ export function setContextSpaceAPI(api: ContextSpaceAPI | null): void {
 export function resolveRunSessionAPI(): RunSessionAPI | null {
   if (injectedRunSession) return injectedRunSession;
   const tabtin = (global as any).tabtin || (typeof window !== 'undefined' ? (window as any).tabtin : null);
-  const runSession = tabtin?.runSession || tabtin?.api?.runSession;
+  const runSession = muse?.runSession || muse?.api?.runSession;
   return runSession || null;
 }
 
@@ -286,7 +286,7 @@ export function resolveViewStateRegistryAPI(): ViewStateRegistryAPI | null {
 export function resolveCrawlViewAPI(): CrawlViewAPI | null {
   if (injectedCrawlView) return injectedCrawlView;
   const tabtin = (global as any).tabtin || (typeof window !== 'undefined' ? (window as any).tabtin : null);
-  const crawlView = tabtin?.crawlView || tabtin?.api?.crawlView;
+  const crawlView = muse?.crawlView || muse?.api?.crawlView;
   return crawlView || null;
 }
 
@@ -755,7 +755,7 @@ export function resolvePtyManagerBridge(): PtyManagerBridge | null {
 // W6 (2026-05-04): the TabSlide runtime bridge (setTabSlideAPI /
 // resolveTabSlideAPI / TabSlideAPI type) was removed together with the
 // `tabslide` AgentTool group. Slide operations now flow through Django
-// REST endpoints via the `tabtin slide *` CLI directly.
+// REST endpoints via the `muse slide *` CLI directly.
 
 // ==================== HTTP Crawl Bridge ====================
 

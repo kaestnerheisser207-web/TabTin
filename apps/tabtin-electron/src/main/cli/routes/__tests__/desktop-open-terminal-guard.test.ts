@@ -1,5 +1,5 @@
 /**
- * desktop /open · 终端类应用软拦截：默认提示改用 tabtin terminal open，
+ * desktop /open · 终端类应用软拦截：默认提示改用 muse terminal open，
  * 显式 --external 才放行系统 PowerShell / cmd / Windows Terminal。
  */
 
@@ -92,15 +92,15 @@ describe('handleDesktopRoute · /open 终端类应用软拦截', () => {
     Object.defineProperty(process, 'platform', { value: originalPlatform })
   })
 
-  it('拦截 PowerShell，提示改用 tabtin terminal open', async () => {
+  it('拦截 PowerShell，提示改用 muse terminal open', async () => {
     const { sendJSON, captured } = collectSendJSON()
     await handleDesktopRoute('/desktop/open', 'POST', { name: 'PowerShell' }, createMockResponse(), sendJSON)
 
     expect(mockExecutor.openApp).not.toHaveBeenCalled()
     expect(captured[0]?.status).toBe(400)
-    expect(String(captured[0]?.payload?.message ?? '')).toContain('tabtin terminal open')
+    expect(String(captured[0]?.payload?.message ?? '')).toContain('muse terminal open')
     expect(captured[0]?.payload?.suggestions).toEqual(
-      expect.arrayContaining(['tabtin terminal open']),
+      expect.arrayContaining(['muse terminal open']),
     )
   })
 

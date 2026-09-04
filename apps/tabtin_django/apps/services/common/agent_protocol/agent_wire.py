@@ -1004,8 +1004,8 @@ class LocalRtUserResponsePayload(BaseModel):
 #   RequestApprovalRequest）。W4 一度合一为单 ``ask_user`` 工具；R3 复盘后
 #   恢复三件套并存：
 #     - ask_user（替代 ask_choice，AskUserQuestion 协议）
-#     - ask_form（多字段填表，TabTin HITL 扩展）
-#     - request_approval（已决方案审批，TabTin HITL 扩展，必带 risk_level）
+#     - ask_form（多字段填表，Muse HITL 扩展）
+#     - request_approval（已决方案审批，Muse HITL 扩展，必带 risk_level）
 #
 # 与 TS Zod schema 严格对齐：
 #   `packages/agent-wire/src/approval.ts`
@@ -1087,7 +1087,7 @@ class AskUserRequest(BaseModel):
     request_id: str = Field(..., min_length=1)
     tool_name: Literal["ask_user"]
     # W4：title 顶层可选——每个 question 自带 header；顶层 title 为可选汇总。
-    # TabTin 历史用 title 作整组问题的卡片标题，保留作可选兜底。
+    # Muse 历史用 title 作整组问题的卡片标题，保留作可选兜底。
     title: Optional[str] = None
     questions: List[AskUserQuestionModel] = Field(..., min_length=1, max_length=4)
     schema_version: Optional[Literal[1]] = None

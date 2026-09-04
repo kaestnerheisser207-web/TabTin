@@ -1,5 +1,7 @@
 package com.tabtin.mobile.features.conversation
 
+import com.muse.mobile.R
+
 import android.os.Build
 import android.view.HapticFeedbackConstants
 import androidx.compose.animation.core.Animatable
@@ -726,7 +728,7 @@ private fun CapsuleOnboardingHint(
                 )
             }
             TextButton(onClick = onSkip) {
-                Text(stringResource(com.tabtin.mobile.R.string.agent_capsule_onboarding_skip))
+                Text(stringResource(com.muse.mobile.R.string.agent_capsule_onboarding_skip))
             }
         }
     }
@@ -734,16 +736,16 @@ private fun CapsuleOnboardingHint(
 
 private val CapsuleOnboardingAction.titleRes: Int
     get() = when (this) {
-        CapsuleOnboardingAction.TAP -> com.tabtin.mobile.R.string.agent_capsule_onboarding_tap_title
-        CapsuleOnboardingAction.DRAG -> com.tabtin.mobile.R.string.agent_capsule_onboarding_drag_title
-        CapsuleOnboardingAction.HOLD -> com.tabtin.mobile.R.string.agent_capsule_onboarding_hold_title
+        CapsuleOnboardingAction.TAP -> com.muse.mobile.R.string.agent_capsule_onboarding_tap_title
+        CapsuleOnboardingAction.DRAG -> com.muse.mobile.R.string.agent_capsule_onboarding_drag_title
+        CapsuleOnboardingAction.HOLD -> com.muse.mobile.R.string.agent_capsule_onboarding_hold_title
     }
 
 private val CapsuleOnboardingAction.detailRes: Int
     get() = when (this) {
-        CapsuleOnboardingAction.TAP -> com.tabtin.mobile.R.string.agent_capsule_onboarding_tap_detail
-        CapsuleOnboardingAction.DRAG -> com.tabtin.mobile.R.string.agent_capsule_onboarding_drag_detail
-        CapsuleOnboardingAction.HOLD -> com.tabtin.mobile.R.string.agent_capsule_onboarding_hold_detail
+        CapsuleOnboardingAction.TAP -> com.muse.mobile.R.string.agent_capsule_onboarding_tap_detail
+        CapsuleOnboardingAction.DRAG -> com.muse.mobile.R.string.agent_capsule_onboarding_drag_detail
+        CapsuleOnboardingAction.HOLD -> com.muse.mobile.R.string.agent_capsule_onboarding_hold_detail
     }
 
 private fun fingerInHost(localPos: Offset, capsuleOrigin: Offset): Offset =

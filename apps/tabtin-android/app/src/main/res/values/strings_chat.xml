@@ -31,7 +31,7 @@
     <string name="chat_composer_full_access_message">完全访问会在组织安全上限内尽量减少操作前的打断。请仅在你信任当前 Agent、执行位置和任务内容时开启。</string>
     <string name="chat_composer_full_access_confirm">继续开启</string>
     <string name="chat_composer_device_unbound">尚未关联执行设备。请先在设置里绑定电脑，再发送任务。</string>
-    <string name="chat_composer_device_offline">该设备离线（请在电脑打开 TabTin 恢复连接）</string>
+    <string name="chat_composer_device_offline">该设备离线（请在电脑打开 Muse 恢复连接）</string>
     <string name="chat_approval_mode_always_ask_short">请求权限</string>
     <string name="chat_approval_mode_auto_short">自动通过</string>
     <string name="chat_approval_mode_full_access_short">全部允许</string>
@@ -80,7 +80,7 @@
     <string name="chat_share_image">分享图片</string>
     <string name="chat_attachment_error">附件错误</string>
     <string name="chat_camera_permission_title">需要相机权限</string>
-    <string name="chat_camera_permission_message">请在系统设置中允许 TabTin 使用相机，然后返回重试。</string>
+    <string name="chat_camera_permission_message">请在系统设置中允许 Muse 使用相机，然后返回重试。</string>
     <string name="chat_camera_open_settings">前往设置</string>
     <string name="chat_camera_unavailable_title">无法使用相机</string>
     <string name="chat_camera_unavailable_message">这台设备上没有可用的相机应用。</string>

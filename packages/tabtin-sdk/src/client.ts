@@ -9,7 +9,7 @@ import type {
 } from './types.js'
 
 /**
- * TabTin SDK client.
+ * Muse SDK client.
  *
  * ```ts
  * import { createClient } from '@tabtin/sdk'

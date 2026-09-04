@@ -30,7 +30,7 @@ import { removeTaggedBlock, upsertTaggedBlock } from './message-inject.js'
 export interface LspDiagnosticHookOptions {
   /**
    * 守门员：返回当前 LLM 调用工具白名单中"能用来跑命令验证诊断"的工具是否存在。
-   * TabTin 侧检查 `run_terminal_command`（agent / group / study mode 有；
+   * Muse 侧检查 `run_terminal_command`（agent / group / study mode 有；
    * ask / plan mode 没有）。返回 false 时不注入。
    */
   hasShellTool: () => boolean

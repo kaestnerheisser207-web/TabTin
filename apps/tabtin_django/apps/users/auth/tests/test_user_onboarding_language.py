@@ -41,7 +41,7 @@ class UserOnboardingLanguageTests(TestCase):
             user_data={
                 'username': f'reg_en_{uuid.uuid4().hex[:8]}',
                 'email': f'reg_en_{uuid.uuid4().hex[:8]}@tabtin.test',
-                'password': 'TabtinTest#2026',
+                'password': 'MuseTest#2026',
             },
         )
         wt = Organization.objects.get(owner_id=user.id, type='personal')
@@ -56,7 +56,7 @@ class UserOnboardingLanguageTests(TestCase):
             user_data={
                 'username': f'reg_zh_{uuid.uuid4().hex[:8]}',
                 'email': f'reg_zh_{uuid.uuid4().hex[:8]}@tabtin.test',
-                'password': 'TabtinTest#2026',
+                'password': 'MuseTest#2026',
             },
             profile_language='zh-CN',
         )

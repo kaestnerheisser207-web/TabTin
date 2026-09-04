@@ -23,7 +23,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import com.tabtin.mobile.R
+import com.muse.mobile.R
 import com.tabtin.mobile.data.model.BlockItem
 import com.tabtin.mobile.features.workbench.WorkbenchResourceOpenRequest
 import com.tabtin.mobile.ui.theme.TTColors

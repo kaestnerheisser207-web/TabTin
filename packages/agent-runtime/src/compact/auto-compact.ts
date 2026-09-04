@@ -7,7 +7,7 @@
  *   p ≥ 0.95         → emergency hard trim + LLM summary fallback
  *
  * W1（压缩路径简化）：删除原本的 layered prune 优先级链。
- * 那是 TabTin 自创的"按层次裁剪老 tool_result content"算法，
+ * 那是 Muse 自创的"按层次裁剪老 tool_result content"算法，
  * 该档位由 cached microcompact + cache_edits（W7 接入），
  * 不做"事后改写历史 tool_result"。删完后 0.85 ≤ p < 0.95 的中间档统一走
  * LLM summary compaction，避免与既有约定 的语义偏离。

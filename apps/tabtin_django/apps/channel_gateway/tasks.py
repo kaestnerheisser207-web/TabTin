@@ -382,7 +382,7 @@ def _sanitize_reply_for_channel(reply: str) -> str:
     if _HITL_PATTERN.search(reply):
         return (
             "This operation requires review and cannot be completed "
-            "through this channel. Please use the TabTin app directly."
+            "through this channel. Please use the Muse app directly."
         )
     return reply
 
@@ -549,7 +549,7 @@ def _user_friendly_dispatcher_error_reply(*, error_category: str) -> str:
     """把 Dispatcher 错误码映射成对外用户能看懂的话术。
 
     原则：避免任何"客户端 / 设备 / 重试"等技术词汇——这些是发给飞书/微信
-    外部用户的回复，他们对 TabTin 的内部架构没有任何概念。
+    外部用户的回复，他们对 Muse 的内部架构没有任何概念。
     """
     if error_category in ("device_offline", "device_unreachable", "device_dropped"):
         return "AI 助手暂时不可用，请稍后再试。"

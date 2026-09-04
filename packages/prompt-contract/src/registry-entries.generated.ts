@@ -349,7 +349,7 @@ export const REGISTRY_ENTRIES: SectionDescriptor[] = [
     "injectionTiming": "runtime-create",
     "role": "system",
     "position": "tail",
-    "description": "可用 tabtin CLI 命令清单 wrap（body 加载自 cli-commands.txt）",
+    "description": "可用 muse CLI 命令清单 wrap（body 加载自 cli-commands.txt）",
     "writerLocations": [
       "packages/agent-prompt/src/sections.ts:268-271 (buildCliCapabilitiesSection)",
       "packages/agent-prompt/src/builder.ts:117-118 (push, 仅 cliReference 非 null)"
@@ -1347,7 +1347,7 @@ export const REGISTRY_ENTRIES: SectionDescriptor[] = [
     "injectionTiming": "on-demand",
     "role": "user",
     "position": "head",
-    "description": "用户 @ 引用 TabTin 资源（表 / 文档 / memo 等）时，走 `buildUserContextWrapper('referenced', ...)` SSoT 套 `<context type=\"referenced\" stale_after_turn=\"<localUserMsgId>\">...</context>` 外壳并拼进 user message 持久化。跨轮重放阶段 select-recent-history 检测 stale 替换 body 为指针。",
+    "description": "用户 @ 引用 Muse 资源（表 / 文档 / memo 等）时，走 `buildUserContextWrapper('referenced', ...)` SSoT 套 `<context type=\"referenced\" stale_after_turn=\"<localUserMsgId>\">...</context>` 外壳并拼进 user message 持久化。跨轮重放阶段 select-recent-history 检测 stale 替换 body 为指针。",
     "writerLocations": [
       "apps/tabtin-electron/src/renderer/src/stores/chat/actions/sendMessageAction.ts:1150-1180",
       "apps/tabtin_django/apps/services/agent_execution/context_assembler.py:402 (Python 复刻 SSoT)",
@@ -2401,7 +2401,7 @@ export const REGISTRY_ENTRIES: SectionDescriptor[] = [
     "role": "tools-array",
     "position": "mid",
     "tier": "high-risk",
-    "description": "MCP server 工具调用（先 tabtin mcp list-tools 发现可用工具；这是唯一的 MCP 相关 FC；其余发现 / 检查走 tabtin mcp <subcommand> CLI）",
+    "description": "MCP server 工具调用（先 muse mcp list-tools 发现可用工具；这是唯一的 MCP 相关 FC；其余发现 / 检查走 muse mcp <subcommand> CLI）",
     "writerLocations": [
       "apps/tabtin-electron/src/main/services/local-mcp-agent-tools.ts:54-58"
     ],

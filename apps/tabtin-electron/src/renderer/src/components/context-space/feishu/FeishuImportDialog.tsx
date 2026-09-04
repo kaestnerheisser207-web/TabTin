@@ -1643,7 +1643,7 @@ export const FeishuImportDialog: React.FC<FeishuImportDialogProps> = ({
                     </p>
                     <p className="text-caption text-muted-foreground/60">
                       {t('home.assetBrowser.feishuIncludeAttachmentsHint', {
-                        defaultValue: '默认关闭；开启后下载飞书文件并写入 TabTin 附件',
+                        defaultValue: '默认关闭；开启后下载飞书文件并写入 Muse 附件',
                       })}
                     </p>
                   </div>

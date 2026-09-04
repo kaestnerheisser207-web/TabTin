@@ -108,7 +108,7 @@ export function buildSystemPrompt(config: SystemPromptConfig & { executionBounda
 
   // Tracker 意图识别 prompt 段（旧 SECTION_TRACKER_INTENT）已于 2026-05-10
   // Lane L 物理下线：W6 退役 Python BaseTool 后 create_tracked_task 不在
-  // LLM 工具列表中，引导段无对应工具。Tracker 接通 CLI（tabtin tracker
+  // LLM 工具列表中，引导段无对应工具。Tracker 接通 CLI（muse tracker
   // create）时同步恢复 prompts/tracker_intent.md + 注入点。
   // ：原 SECTION_SKILLS_USER_VOICE 已删；skill 用户措辞 / description 边界 /
   // relevant_skills 说明并入静态 `<skills>` index header。

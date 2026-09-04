@@ -1,4 +1,4 @@
-# TabTin Support
+# Muse Support
 
 [中文](SUPPORT.md)
 

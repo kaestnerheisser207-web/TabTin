@@ -8,7 +8,7 @@ package browser
 import (
 	"testing"
 
-	"github.com/TabTin/tabtin-cli/internal/cmdutil"
+	"github.com/Muse/muse-cli/internal/cmdutil"
 )
 
 func TestCookiesCommandsCarryFixedAction(t *testing.T) {

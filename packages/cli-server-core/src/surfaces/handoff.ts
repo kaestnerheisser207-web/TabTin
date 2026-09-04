@@ -6,7 +6,7 @@
  *   - handoff:get    — 交接包详情（含材料逐条鉴权结果）
  *   - handoff:list   — 会话内交接包列表
  *
- * CLI 形态：`tabtin invoke handoff create --json '{...}'` 等。
+ * CLI 形态：`muse invoke handoff create --json '{...}'` 等。
  * Agent 通过 create（send=false）代拟草稿，人确认后 send。
  * 后端权威实现见 apps/tabtin_django/apps/tabchat/handoff/。
  */

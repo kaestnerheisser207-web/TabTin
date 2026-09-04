@@ -1,4 +1,4 @@
-// apps_code_mkdir_mv_test.go — W2a`tabtin code mkdir|mv|rename` 结构化
+// apps_code_mkdir_mv_test.go — W2a`muse code mkdir|mv|rename` 结构化
 // regression：确认三条新命令注册到 cobra 树、flag 齐全、Risk 标 RiskWrite。
 package cmd
 
@@ -7,13 +7,13 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/TabTin/tabtin-cli/internal/cmdutil"
+	"github.com/Muse/muse-cli/internal/cmdutil"
 )
 
 func newTestCodeRoot(t *testing.T) *cobra.Command {
 	t.Helper()
 	f := cmdutil.NewFactory()
-	root := &cobra.Command{Use: "tabtin"}
+	root := &cobra.Command{Use: "muse"}
 	registerRootPersistentFlagsForTest(root)
 	root.AddCommand(newCmdCode(f))
 	return root

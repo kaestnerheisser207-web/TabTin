@@ -18,7 +18,7 @@ async function findMainPageWs() {
       && !p.url.includes('overlay.html'),
   )
   if (!page?.webSocketDebuggerUrl) {
-    throw new Error('未找到 TabTin 主页面（需 pnpm dev + remote-debugging-port=9222）')
+    throw new Error('未找到 Muse 主页面（需 pnpm dev + remote-debugging-port=9222）')
   }
   return page.webSocketDebuggerUrl
 }

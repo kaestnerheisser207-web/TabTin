@@ -20,7 +20,7 @@ const DIAGRAM_SOURCES: ImportSourceId[] = ['claude_code', 'codex', 'cursor', 'wo
 const IMPORT_BENEFITS: Array<{ icon: LucideIcon; label: string }> = [
   { icon: Bot, label: '任意模型 · Agent 接着聊' },
   { icon: Cloud, label: '手机电脑多端同步' },
-  { icon: Layers, label: '表格、自动化等 TabTin 能力' },
+  { icon: Layers, label: '表格、自动化等 Muse 能力' },
 ]
 
 export const ImportReadOnlyDiagram: React.FC<{ className?: string }> = ({ className }) => (
@@ -30,7 +30,7 @@ export const ImportReadOnlyDiagram: React.FC<{ className?: string }> = ({ classN
       className,
     )}
     data-testid="import-readonly-diagram"
-    aria-label="导入说明与 TabTin 优势"
+    aria-label="导入说明与 Muse 优势"
   >
     <div className="grid gap-0 lg:grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] lg:items-stretch">
       {/* 只读复制示意 */}
@@ -67,7 +67,7 @@ export const ImportReadOnlyDiagram: React.FC<{ className?: string }> = ({ classN
             >
               <DownloadCloud className="h-4 w-4 text-accent sm:h-[18px] sm:w-[18px]" strokeWidth={1.75} />
             </div>
-            <span className="text-[11px] font-medium text-foreground/90">TabTin</span>
+            <span className="text-[11px] font-medium text-foreground/90">Muse</span>
           </div>
         </div>
 

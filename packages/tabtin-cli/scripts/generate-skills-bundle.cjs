@@ -316,14 +316,14 @@ function rewriteSkillMd(text, extName, runtime, cliDomain) {
   // 注入/覆盖导出字段：在 metadata: 下追加 requires / cliHelp / runtime
   // 若无 metadata，追加整块
   const exportBlock = [
-    '  # --- tabtin export (generated; do not edit source) ---',
+    '  # --- muse export (generated; do not edit source) ---',
     `  runtime: ${runtime}`,
     '  requires:',
     '    bins:',
-    '      - tabtin',
+    '      - muse',
     cliDomain
-      ? `  cliHelp: "tabtin commands ${cliDomain} --format json"`
-      : '  cliHelp: "tabtin commands --format json"',
+      ? `  cliHelp: "muse commands ${cliDomain} --format json"`
+      : '  cliHelp: "muse commands --format json"',
     `  canonicalName: ${canonical}`,
   ].join('\n');
 
@@ -442,10 +442,10 @@ function main() {
       source: relSource,
       content_sha256: contentSha,
       runtime,
-      requires: { bins: ['tabtin'] },
+      requires: { bins: ['muse'] },
       cli_help: cliDomain
-        ? `tabtin commands ${cliDomain} --format json`
-        : 'tabtin commands --format json',
+        ? `muse commands ${cliDomain} --format json`
+        : 'muse commands --format json',
       cli_domain: cliDomain || null,
       category: category || null,
       auto_activate_for: Array.isArray(autoActivateFor) ? autoActivateFor : [],

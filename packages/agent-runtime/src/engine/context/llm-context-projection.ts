@@ -160,7 +160,7 @@ function projectShellToolResultContent(content: string): string | undefined {
  * 执行期只做 hygiene（Unicode strip + injection scan），canonical 结果不再
  * 带 fence——UI / 落库 / transcript 拿到的是干净内容。这里在每次构造
  * `llmRequest` 前，对「外部不可信字节」工具（web_search / parse_document /
- * mcp_* / `tabtin fetch|browser` 的 run_terminal_command）的 tool_result
+ * mcp_* / `muse fetch|browser` 的 run_terminal_command）的 tool_result
  * 统一包 fence：
  *
  *   - live 与历史恢复（transcript / renderer 回退 / crash resume）走同一道闸，

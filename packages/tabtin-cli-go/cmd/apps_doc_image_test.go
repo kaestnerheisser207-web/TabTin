@@ -4,7 +4,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/TabTin/tabtin-cli/internal/cmdutil"
+	"github.com/Muse/muse-cli/internal/cmdutil"
 )
 
 // TestBuildImageMarkdown 锁 ![alt](url) 契约的 Go 侧构造：alt 走

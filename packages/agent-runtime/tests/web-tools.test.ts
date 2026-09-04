@@ -131,7 +131,7 @@ describe('web_search W7 工具结果', () => {
     const richBlocks: RichBlockArg[] = [];
     const ctx = ctxWithRichEmit(richBlocks);
     const tool = findTool(createWebTools(deps), 'web_search');
-    const result = await tool.execute({ search_term: 'tabtin docs' }, ctx);
+    const result = await tool.execute({ search_term: 'muse docs' }, ctx);
 
     expect(richBlocks).toHaveLength(0);
 
@@ -229,7 +229,7 @@ describe('web_search W7 工具结果', () => {
       total_count: 5,
     }));
     const tool = findTool(createWebTools(deps), 'web_search');
-    const result = await tool.execute({ search_term: 'tabtin docs', offset: 3 }, noopContext);
+    const result = await tool.execute({ search_term: 'muse docs', offset: 3 }, noopContext);
     const parsed = JSON.parse(result.content as string) as Record<string, unknown>;
     expect(parsed.summary_offset).toBe(3);
     expect(parsed.summary_range).toBe('4-5');

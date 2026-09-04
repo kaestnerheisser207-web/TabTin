@@ -6,21 +6,21 @@
     <string name="oem_guide_xiaomi_step2">Settings → Additional Settings (HyperOS: My Device) → Developer Options → Enable "USB Debugging" and "Wireless Debugging"</string>
     <string name="oem_guide_xiaomi_step3">Tap "Pair device with pairing code" on the Wireless Debugging page</string>
     <string name="oem_guide_xiaomi_warning1">On newer Xiaomi devices, you must wait 7 days after enabling Developer Options before Wireless Debugging becomes available</string>
-    <string name="oem_guide_xiaomi_warning2">Go to Settings → Battery → Set TabTin to unrestricted background usage</string>
+    <string name="oem_guide_xiaomi_warning2">Go to Settings → Battery → Set Muse to unrestricted background usage</string>
 
     <!-- OPPO -->
     <string name="oem_guide_title_oppo">OPPO Setup Guide</string>
     <string name="oem_guide_oppo_step1">Settings → About Phone → Tap Build Number 7 times</string>
     <string name="oem_guide_oppo_step2">Settings → System Settings → Developer Options → Enable "USB Debugging" and "Wireless Debugging"</string>
     <string name="oem_guide_oppo_step3">Tap "Pair device with pairing code" on the Wireless Debugging page</string>
-    <string name="oem_guide_oppo_warning1">Go to Settings → Battery → App Power Consumption → Set TabTin to unrestricted</string>
+    <string name="oem_guide_oppo_warning1">Go to Settings → Battery → App Power Consumption → Set Muse to unrestricted</string>
 
     <!-- vivo/iQOO -->
     <string name="oem_guide_title_vivo">vivo/iQOO Setup Guide</string>
     <string name="oem_guide_vivo_step1">Settings → About Phone → Tap Software Version 7 times</string>
     <string name="oem_guide_vivo_step2">Settings → System Management → Developer Options → Enable "USB Debugging" and "Wireless Debugging"</string>
     <string name="oem_guide_vivo_step3">Tap "Pair device with pairing code" on the Wireless Debugging page</string>
-    <string name="oem_guide_vivo_warning1">Go to i Manager → App Management → Disable battery optimization for TabTin</string>
+    <string name="oem_guide_vivo_warning1">Go to i Manager → App Management → Disable battery optimization for Muse</string>
 
     <!-- Huawei -->
     <string name="oem_guide_title_huawei">Huawei Setup Guide</string>
@@ -28,21 +28,21 @@
     <string name="oem_guide_huawei_step2">Settings → System &amp; Updates → Developer Options → Enable "USB Debugging" and "Wireless Debugging"</string>
     <string name="oem_guide_huawei_step3">Tap "Pair device with pairing code" on the Wireless Debugging page</string>
     <string name="oem_guide_huawei_warning1">HarmonyOS NEXT devices do not support Wireless Debugging</string>
-    <string name="oem_guide_huawei_warning2">Go to Settings → Battery → App Launch Management → Set TabTin to manual</string>
+    <string name="oem_guide_huawei_warning2">Go to Settings → Battery → App Launch Management → Set Muse to manual</string>
 
     <!-- Honor -->
     <string name="oem_guide_title_honor">Honor Setup Guide</string>
     <string name="oem_guide_honor_step1">Settings → About Phone → Tap Build Number 7 times</string>
     <string name="oem_guide_honor_step2">Settings → System &amp; Updates → Developer Options → Enable "USB Debugging" and "Wireless Debugging"</string>
     <string name="oem_guide_honor_step3">Tap "Pair device with pairing code" on the Wireless Debugging page</string>
-    <string name="oem_guide_honor_warning1">Go to Settings → Battery → App Launch Management → Set TabTin to manual</string>
+    <string name="oem_guide_honor_warning1">Go to Settings → Battery → App Launch Management → Set Muse to manual</string>
 
     <!-- Samsung -->
     <string name="oem_guide_title_samsung">Samsung Setup Guide</string>
     <string name="oem_guide_samsung_step1">Settings → About Phone → Software Information → Tap Build Number 7 times</string>
     <string name="oem_guide_samsung_step2">Settings → Developer Options → Enable "USB Debugging" and "Wireless Debugging"</string>
     <string name="oem_guide_samsung_step3">Tap "Pair device with pairing code" on the Wireless Debugging page</string>
-    <string name="oem_guide_samsung_warning1">Samsung Device Care auto-optimizes background apps. Add TabTin to the "Unmonitored apps" list</string>
+    <string name="oem_guide_samsung_warning1">Samsung Device Care auto-optimizes background apps. Add Muse to the "Unmonitored apps" list</string>
     <string name="oem_guide_samsung_warning2">If Knox security policies are enabled, ensure they do not restrict Developer Options</string>
 
     <!-- OnePlus -->
@@ -50,14 +50,14 @@
     <string name="oem_guide_oneplus_step1">Settings → About Phone → Tap Build Number 7 times</string>
     <string name="oem_guide_oneplus_step2">Settings → System Settings → Developer Options → Enable "USB Debugging" and "Wireless Debugging"</string>
     <string name="oem_guide_oneplus_step3">Tap "Pair device with pairing code" on the Wireless Debugging page</string>
-    <string name="oem_guide_oneplus_warning1">Go to Settings → Battery → Battery Optimization → Set TabTin to "Don\'t optimize"</string>
+    <string name="oem_guide_oneplus_warning1">Go to Settings → Battery → Battery Optimization → Set Muse to "Don\'t optimize"</string>
 
     <!-- Realme -->
     <string name="oem_guide_title_realme">realme Setup Guide</string>
     <string name="oem_guide_realme_step1">Settings → About Phone → Tap Build Number 7 times</string>
     <string name="oem_guide_realme_step2">Settings → System Settings → Developer Options → Enable "USB Debugging" and "Wireless Debugging"</string>
     <string name="oem_guide_realme_step3">Tap "Pair device with pairing code" on the Wireless Debugging page</string>
-    <string name="oem_guide_realme_warning1">Go to Settings → Battery → Battery Optimization → Set TabTin to "Don\'t optimize", and disable auto-cleanup in Phone Manager</string>
+    <string name="oem_guide_realme_warning1">Go to Settings → Battery → Battery Optimization → Set Muse to "Don\'t optimize", and disable auto-cleanup in Phone Manager</string>
 
     <!-- Motorola -->
     <string name="oem_guide_title_motorola">Motorola Setup Guide</string>

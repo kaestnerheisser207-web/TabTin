@@ -40,7 +40,7 @@ async function buildRegistryWithResources(): Promise<LocalSkillRegistry> {
   );
   writeFileSync(
     path.join(skillDir, 'references', 'cli-reference.md'),
-    '# tabtin browser 全子命令参考\n\nbody',
+    '# muse browser 全子命令参考\n\nbody',
   );
   writeFileSync(
     path.join(skillDir, 'references', 'operations.md'),
@@ -76,7 +76,7 @@ describe('LocalSkillRegistry Tier-3 resources', () => {
     expect(paths).not.toContain('references/.secret');
 
     const cli = resources.find((r) => r.path === 'references/cli-reference.md');
-    expect(cli?.summary).toBe('tabtin browser 全子命令参考');
+    expect(cli?.summary).toBe('muse browser 全子命令参考');
     const ops = resources.find((r) => r.path === 'references/operations.md');
     expect(ops?.summary).toBe('端到端命令序列目录');
   });
@@ -95,7 +95,7 @@ describe('LocalSkillRegistry Tier-3 resources', () => {
     expect(res.ok).toBe(true);
     if (res.ok) {
       expect(res.path).toBe('references/cli-reference.md');
-      expect(res.content).toContain('tabtin browser 全子命令参考');
+      expect(res.content).toContain('muse browser 全子命令参考');
     }
   });
 

@@ -3070,7 +3070,7 @@ export class ElectronRuntimeAssembly {
     //
     // 历史上 7 Capability：TabDataCap (Wave 4a 2026-05-01 退役) +
     // TabDocCap (Wave 12 2026-05-04 退役)；产品方向：内置 App 的 Agent 操作
-    // 主要靠 CLI（`tabtin table *` / `tabtin doc *`），不依赖 FC。剩 5 件：
+    // 主要靠 CLI（`muse table *` / `muse doc *`），不依赖 FC。剩 5 件：
     //
     //   - FileSystemCap：目录工具 list_directory / mkdir；文件读写删由
     //     TabCode adapter/action-tools 的 read_file / write_file /
@@ -3254,7 +3254,7 @@ export class ElectronRuntimeAssembly {
       businessThreadId,
       model: modelId,
       systemPrompt,
-      // ：tabtin fetch/browser 输出算外部不可信字节的判定由宿主注入，
+      // ：muse fetch/browser 输出算外部不可信字节的判定由宿主注入，
       // core 默认不因 shell 命令判 untrusted。漏注入 = 注入防护被绕过（P0）。
       isUntrustedShellCommand,
       emitStreamEvent,
@@ -3721,7 +3721,7 @@ export class ElectronRuntimeAssembly {
   }
 
   /**
-   * L16 W5.5 /  C1：异步加载 `tabtin commands` schema 列表，编译成
+   * L16 W5.5 /  C1：异步加载 `muse commands` schema 列表，编译成
    * `Map<fullName, riskString>`。给受限模式 shell allowlist checker 用（另供 `<apps>`
    * 子命令富化）。
    *

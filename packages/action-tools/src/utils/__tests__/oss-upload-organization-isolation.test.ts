@@ -57,11 +57,11 @@ vi.mock('@tabtin/oss-client', () => ({
 let tmpFile: string
 
 function setTabtin(value: unknown): void {
-  ;(globalThis as unknown as { tabtin?: unknown }).tabtin = value
+  ;(globalThis as unknown as { muse?: unknown }).tabtin = value
 }
 
 function delTabtin(): void {
-  delete (globalThis as unknown as { tabtin?: unknown }).tabtin
+  delete (globalThis as unknown as { muse?: unknown }).tabtin
 }
 
 beforeEach(() => {

@@ -2,7 +2,7 @@
  * /surfaces endpoint — 暴露 PlatformSurface 注册表供外部消费。
  *
  * 消费方：
- *   - Go CLI `tabtin commands --json` 合并 surface 信息，
+ *   - Go CLI `muse commands --json` 合并 surface 信息，
  *     Agent 自动发现新能力
  *   - 调试 / 运维工具查看当前宿主注册了哪些 surface
  *

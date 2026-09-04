@@ -15,7 +15,7 @@ class OrganizationContextItemsWireContractTest {
             """
             {
               "id": "org-1",
-              "name": "TabTin",
+              "name": "Muse",
               "icon": "🏢",
               "settings": {"logo_url": "https://cdn.example.com/org.png"}
             }

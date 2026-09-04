@@ -1,5 +1,7 @@
 package com.tabtin.mobile.features.tabchat
 
+import com.muse.mobile.R
+
 import com.tabtin.mobile.data.model.Space
 import com.tabtin.mobile.data.im.ImConversationAgentBinding
 import com.tabtin.mobile.data.im.ImConversationDetail

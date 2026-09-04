@@ -40,8 +40,8 @@ metadata:
 
 - 生成前确认受众、目标、页数/时长、视觉风格和素材来源。
 - 先读取 `app:tabslide/html-spec`；必要时读取 `app:tabslide/design-guide` 和 `app:tabslide/tabslide-operator`。
-- 使用 `tabtin slide create --name "<deck name>" --html @./slides.html` 创建并写入新演示文稿；已有演示文稿插页用 `cat slide.html | tabtin slide add-page --project-id <id> --html -`。
-- 高频检查优先用 `tabtin slide lint --skip-visual --min-severity warning`。
+- 使用 `muse slide create --name "<deck name>" --html @./slides.html` 创建并写入新演示文稿；已有演示文稿插页用 `cat slide.html | muse slide add-page --project-id <id> --html -`。
+- 高频检查优先用 `muse slide lint --skip-visual --min-severity warning`。
 - 如果 `preview`、`lint` 或 `generate` 透出 Playwright/Chromium 缺失，不要给用户浏览器安装命令；说明这是 TabSlide runtime 环境缺失/未就绪，并保留原始错误给产品或管理员诊断。
 
 ## 主流程

@@ -94,10 +94,10 @@ describe('buildASRPayload', () => {
   })
 
   it('should include hotwords in context', () => {
-    const payload = buildASRPayload({ hotwords: ['TabTin', 'Agent'] })
+    const payload = buildASRPayload({ hotwords: ['Muse', 'Agent'] })
     expect(payload.context).toBeDefined()
     const parsed = JSON.parse(payload.context)
-    expect(parsed.hotwords).toEqual([{ word: 'TabTin' }, { word: 'Agent' }])
+    expect(parsed.hotwords).toEqual([{ word: 'Muse' }, { word: 'Agent' }])
   })
 
   it('should include context string', () => {
@@ -160,13 +160,13 @@ describe('ASRStreamClient.start', () => {
     })
     const client = new ASRStreamClient(gateway as unknown as WsGateway, 'wt_1')
 
-    await expect(client.start({ hotwords: ['TabTin'] })).resolves.toBe('asr_test')
+    await expect(client.start({ hotwords: ['Muse'] })).resolves.toBe('asr_test')
 
     expect(gateway.request).toHaveBeenCalledWith(
       'asr.stream.start',
       expect.objectContaining({
         provider: 'bytedance',
-        context: expect.stringContaining('TabTin'),
+        context: expect.stringContaining('Muse'),
       }),
       { organizationId: 'wt_1', timeoutMs: 10_000 },
     )

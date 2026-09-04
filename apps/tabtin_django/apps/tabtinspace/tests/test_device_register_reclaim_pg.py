@@ -38,7 +38,7 @@ class DeviceRegisterReclaimPgTests(TestCase):
         self.owner = User.objects.create_user(
             username=f"reclaim_{suffix}",
             email=f"reclaim-{suffix}@tabtin.test",
-            password="TabtinTest#2026",
+            password="MuseTest#2026",
         )
         self.org_a = create_test_organization(owner=self.owner, prefix=f"reclaim_a_{suffix}")
         self.org_b = create_test_organization(owner=self.owner, prefix=f"reclaim_b_{suffix}")

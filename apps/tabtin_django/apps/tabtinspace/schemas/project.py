@@ -1,4 +1,4 @@
-"""Tabtin Project schemas。
+"""Muse Project schemas。
 
 Project 的物理容器是 ``Space(type=team_space)``；本 schema 以 Project 产品语言
 序列化该协作房间（不含本地执行字段——执行落到成员各自的 Workspace）。

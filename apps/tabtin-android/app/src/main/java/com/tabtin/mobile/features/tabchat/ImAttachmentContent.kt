@@ -47,7 +47,7 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import coil.compose.SubcomposeAsyncImage
-import com.tabtin.mobile.R
+import com.muse.mobile.R
 import com.tabtin.mobile.data.im.ImAttachmentUrl
 import com.tabtin.mobile.data.im.ImMessage
 import com.tabtin.mobile.features.conversation.ChatFilePreviewDialog

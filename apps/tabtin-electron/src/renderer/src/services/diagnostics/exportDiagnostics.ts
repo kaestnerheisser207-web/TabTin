@@ -40,7 +40,7 @@ function buildFilename(meta: DiagnosticsMeta): string {
 
 function buildReadme(meta: DiagnosticsMeta): string {
   return [
-    'TabTin 客户端诊断包',
+    'Muse 客户端诊断包',
     '='.repeat(40),
     '',
     `导出时间：${meta.generatedAt}`,

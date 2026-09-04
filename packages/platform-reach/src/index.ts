@@ -2,7 +2,7 @@
  * @tabtin/platform-reach
  *
  * 平台化内容获取：平台适配 + 运行时路由 + 优雅降级：
- * 用 TabTin 自有浏览器栈实现——适配器通过 `BrowserPrimitives` 端口驱动，宿主把端口
+ * 用 Muse 自有浏览器栈实现——适配器通过 `BrowserPrimitives` 端口驱动，宿主把端口
  * 接到 `browser-core`。本包 electron-free、可单测。
  *
  * 设计与决策：docs/agent/tabweb-platform-reach-design.md

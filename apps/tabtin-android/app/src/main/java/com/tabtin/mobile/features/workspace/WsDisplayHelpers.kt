@@ -2,7 +2,7 @@ package com.tabtin.mobile.features.workspace
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
-import com.tabtin.mobile.R
+import com.muse.mobile.R
 import com.tabtin.mobile.data.model.OrganizationRole
 
 @Composable

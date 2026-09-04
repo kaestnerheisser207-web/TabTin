@@ -21,7 +21,7 @@ import type { Manifest } from './manifest.js';
 /**
  * Backend 类别 —— 产品语义的两选枚举。
  *
- * **D2（2026-04-27）**：TabTin 产品语义只有"local（用户绑定设备，含
+ * **D2（2026-04-27）**：Muse 产品语义只有"local（用户绑定设备，含
  * 现 Native + 阶段 3 LocalVM）"和"cloud（云端 ACS sandbox）"两选。
  * 不预留独立 'localvm' 顶层值 —— LocalVM 是 'local' 的内部子配置。
  *

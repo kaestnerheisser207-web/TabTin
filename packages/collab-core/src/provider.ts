@@ -53,7 +53,7 @@ function isDocumentRestoredCode(code: number): boolean {
 
 /**
  * 上游 Hocuspocus Unauthorized（idle timeout / 认证竞态）。
- * 与 TabTin 业务 force-close `CloseCode.AUTH_FAILED=4001` 不同；
+ * 与 Muse 业务 force-close `CloseCode.AUTH_FAILED=4001` 不同；
  * 2.x 收到后会 `shouldConnect=false` 并打「token is required… Won't try again.」。
  */
 const HOCUSPOCUS_UNAUTHORIZED_CODE = 4401;
@@ -418,7 +418,7 @@ export class CollabProvider {
             return;
           }
           // 协议级失败：可恢复（重建 Provider + 刷新 token）。
-          // TabTin 业务 4001 仍走 force-close 终态。
+          // Muse 业务 4001 仍走 force-close 终态。
           this.beginAuthRecovery("auth_failed");
         },
       });

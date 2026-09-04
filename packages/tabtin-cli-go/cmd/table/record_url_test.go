@@ -3,7 +3,7 @@ package table
 import (
 	"testing"
 
-	"github.com/TabTin/tabtin-cli/internal/cmdutil"
+	"github.com/Muse/muse-cli/internal/cmdutil"
 )
 
 const testRecordURL = "http://127.0.0.1:5175/table/529c0808-44c2-489f-baf2-71732bb7d76b/record/1652aeb3-5bc9-4ccb-a9ec-00fff389f0fa"
@@ -71,7 +71,7 @@ func TestRecordDetailAcceptsTabTinResourceDeepLink(t *testing.T) {
 		FlagValues: map[string]any{},
 	}
 	if err := def.Validate(ctx); err != nil {
-		t.Fatalf("TabTin resource deep link should be accepted: %v", err)
+		t.Fatalf("Muse resource deep link should be accepted: %v", err)
 	}
 	if got := ctx.Str("record-id"); got != "1652aeb3-5bc9-4ccb-a9ec-00fff389f0fa" {
 		t.Fatalf("record-id = %q", got)
@@ -145,7 +145,7 @@ func TestRecordUpdateAcceptsTabTinDeepLinkWithSet(t *testing.T) {
 		"set": []string{"状态=完成"},
 	}}
 	if err := def.Validate(ctx); err != nil {
-		t.Fatalf("TabTin deep link with --set should be accepted: %v", err)
+		t.Fatalf("Muse deep link with --set should be accepted: %v", err)
 	}
 	if got := ctx.Str("table-id"); got != "529c0808-44c2-489f-baf2-71732bb7d76b" {
 		t.Fatalf("table-id = %q", got)

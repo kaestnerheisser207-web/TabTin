@@ -1,6 +1,6 @@
 /**
  * Unified ErrorCode taxonomy — Single Source of Truth for IPC / CLI / HTTP
- * failure responses across the entire TabTin platform.
+ * failure responses across the entire Muse platform.
  *
  * This file is the **TypeScript canonical source**. The Python and Go mirrors
  * (kept byte-equivalent in their respective code list) live at:
@@ -84,7 +84,7 @@ export const ERROR_CODES = [
   /**
    * The request reached an authenticated boundary without proof of identity
    * — e.g. guardedHandle rejecting an untrusted senderFrame, missing JWT on
-   * an HTTP route requiring auth, CLI invoked without `tabtin login`.
+   * an HTTP route requiring auth, CLI invoked without `muse login`.
    */
   'UNAUTHORIZED',
   /**
@@ -136,7 +136,7 @@ export const ERROR_CODES = [
    * RATE_LIMIT_EXCEEDED, this is NOT cleared by waiting — the caller must
    * either upgrade, free up resources, or wait for the next billing cycle.
    * `retryable` SHOULD usually be false; the message SHOULD point at the
-   * remediation (`tabtin login` / "upgrade plan" / etc).
+   * remediation (`muse login` / "upgrade plan" / etc).
    */
   'QUOTA_EXCEEDED',
   /**
@@ -237,7 +237,7 @@ export const ERROR_CODES = [
 ] as const;
 
 /**
- * The complete set of generic ErrorCode values used by TabTin's
+ * The complete set of generic ErrorCode values used by Muse's
  * request-response envelope. See file header for tier rules.
  */
 export type ErrorCode = (typeof ERROR_CODES)[number];

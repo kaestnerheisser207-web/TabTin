@@ -8,7 +8,7 @@
  *      → 自动把本机绑为 control_device（修好"刚建却显示在别处工作"的突兀感，
  *        也顺带自愈本功能上线前创建的历史 Space）。
  *   2. 工作目录：Space 没设 working_dir 且本机就是 control_device
- *      → 自动在本机创建 ~/TabTin/<团队名>/<Space名> 作为默认目录（用户可见）。
+ *      → 自动在本机创建 ~/Muse/<团队名>/<Space名> 作为默认目录（用户可见）。
  *
  * 护栏：
  *   - 只在本机就是（或刚绑成）control_device 时才动 working_dir，绝不替远端 Space 落本机路径。

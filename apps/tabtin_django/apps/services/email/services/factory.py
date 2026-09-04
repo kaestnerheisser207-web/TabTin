@@ -65,7 +65,7 @@ def _get_tencent_config() -> Dict[str, Any]:
         'use_tls': getattr(settings, 'EMAIL_USE_TLS', False),
         'timeout': getattr(settings, 'EMAIL_TIMEOUT', 30),
         'from_email': getattr(settings, 'DEFAULT_FROM_EMAIL', getattr(settings, 'EMAIL_HOST_USER', None)),
-        'company_name': getattr(settings, 'COMPANY_NAME', 'TabTin'),
+        'company_name': getattr(settings, 'COMPANY_NAME', 'Muse'),
         'website': getattr(settings, 'COMPANY_WEBSITE', 'https://www.example.com'),
         'support_email': getattr(settings, 'SUPPORT_EMAIL', 'support@laichang.live'),
     }

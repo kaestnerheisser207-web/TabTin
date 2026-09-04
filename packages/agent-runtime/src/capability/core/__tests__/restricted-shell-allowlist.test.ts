@@ -2,17 +2,17 @@
  * 受限模式 shell 命令 input 级白名单 checker 单测（L16 / W5.5）。
  *
  * 覆盖：
- *   - tabtin 只读子命令通过（含位置参数命令：`doc read <id>` / `search "query"` 等）
- *   - tabtin 写子命令拒绝（risk='write' / 'high-risk-write'）
+ *   - muse 只读子命令通过（含位置参数命令：`doc read <id>` / `search "query"` 等）
+ *   - muse 写子命令拒绝（risk='write' / 'high-risk-write'）
  *   - browser eval 必须按写命令拒绝（W5.5-R3 P0-2 安全洞）
- *   - 非 tabtin 命令拒绝
+ *   - 非 muse 命令拒绝
  *   - 命令注入字符（| ; > ` $(...) ）拒绝
- *   - 复合命令（cd ... && tabtin ...）通过
+ *   - 复合命令（cd ... && muse ...）通过
  *   - 多 && 拒绝
  *   - 未知命令 + 终末动词不在 READONLY_VERBS → 拒绝（启发式兜底）
  *   - 未知命令 + 终末动词在 READONLY_VERBS → 放行（启发式兜底）
  *   - lookup 全失败 → 拒绝（fail-close）
- *   - 裸 tabtin / tabtin --help 通过
+ *   - 裸 muse / muse --help 通过
  *   - 守护断言：risk='write' 命令的终末动词不能出现在 READONLY_VERBS 中
  */
 
@@ -42,40 +42,40 @@ const RESTRICTED_BROWSER_NAV_FIXTURE: ReadonlySet<string> = new Set(['open', 'na
 // 写命令必须 risk='write'（W5.5-R3 P1-1 修复后所有写命令均显式标注），
 // 只读命令 risk=''。新增 schema 行时同步 WRITE_COMMANDS_FOR_GUARD。
 const FAKE_SCHEMAS = [
-  { name: 'tabtin commands', risk: '' },
-  { name: 'tabtin doc list', risk: '' },
-  { name: 'tabtin doc read', risk: '' },
-  { name: 'tabtin doc list-blocks', risk: '' },
+  { name: 'muse commands', risk: '' },
+  { name: 'muse doc list', risk: '' },
+  { name: 'muse doc read', risk: '' },
+  { name: 'muse doc list-blocks', risk: '' },
   { name: 'doc search-blocks', risk: '' },
-  { name: 'tabtin doc export', risk: '' },
-  { name: 'tabtin doc search', risk: '' },
-  { name: 'tabtin doc create', risk: 'write' },
-  { name: 'tabtin doc update', risk: 'write' },
-  { name: 'tabtin doc delete', risk: 'write' },
-  { name: 'tabtin doc save-content', risk: 'write' },
-  { name: 'tabtin search', risk: '' },
-  { name: 'tabtin code grep', risk: '' },
-  { name: 'tabtin code glob', risk: '' },
-  { name: 'tabtin memo read', risk: '' },
-  { name: 'tabtin tracker show', risk: '' },
-  { name: 'tabtin tracker dry-run', risk: '' },
-  { name: 'tabtin browser tab list', risk: '' },
-  { name: 'tabtin browser tab state', risk: '' },
-  { name: 'tabtin browser act', risk: 'write' },
+  { name: 'muse doc export', risk: '' },
+  { name: 'muse doc search', risk: '' },
+  { name: 'muse doc create', risk: 'write' },
+  { name: 'muse doc update', risk: 'write' },
+  { name: 'muse doc delete', risk: 'write' },
+  { name: 'muse doc save-content', risk: 'write' },
+  { name: 'muse search', risk: '' },
+  { name: 'muse code grep', risk: '' },
+  { name: 'muse code glob', risk: '' },
+  { name: 'muse memo read', risk: '' },
+  { name: 'muse tracker show', risk: '' },
+  { name: 'muse tracker dry-run', risk: '' },
+  { name: 'muse browser tab list', risk: '' },
+  { name: 'muse browser tab state', risk: '' },
+  { name: 'muse browser act', risk: 'write' },
   // ：open 改变浏览器上下文，CLI 为 write；受限模式由导航白名单显式放行。
-  { name: 'tabtin browser open', risk: 'write' },
-  { name: 'tabtin browser nav', risk: 'write' },
-  { name: 'tabtin browser batch', risk: 'write' },
-  { name: 'tabtin browser eval', risk: 'write' },
-  { name: 'tabtin browser tab switch', risk: 'write' },
-  { name: 'tabtin browser tab close', risk: 'write' },
-  { name: 'tabtin browser cookies set', risk: 'write' },
-  { name: 'tabtin browser session create', risk: 'write' },
-  { name: 'tabtin daemon stop', risk: 'write' },
-  { name: 'tabtin daemon update', risk: 'write' },
-  { name: 'tabtin table query', risk: '' },
-  { name: 'tabtin table archive', risk: 'write' },
-  { name: 'tabtin table restore', risk: 'write' },
+  { name: 'muse browser open', risk: 'write' },
+  { name: 'muse browser nav', risk: 'write' },
+  { name: 'muse browser batch', risk: 'write' },
+  { name: 'muse browser eval', risk: 'write' },
+  { name: 'muse browser tab switch', risk: 'write' },
+  { name: 'muse browser tab close', risk: 'write' },
+  { name: 'muse browser cookies set', risk: 'write' },
+  { name: 'muse browser session create', risk: 'write' },
+  { name: 'muse daemon stop', risk: 'write' },
+  { name: 'muse daemon update', risk: 'write' },
+  { name: 'muse table query', risk: '' },
+  { name: 'muse table archive', risk: 'write' },
+  { name: 'muse table restore', risk: 'write' },
 ];
 
 const map = buildRiskMapFromSchemas(FAKE_SCHEMAS);
@@ -88,15 +88,15 @@ const checker = createTabtinReadonlyChecker({
 });
 
 describe('parseTabtinSubcommand', () => {
-  it('extracts subcommand tokens for plain tabtin command', () => {
-    const r = parseTabtinSubcommand('tabtin doc list --format json');
+  it('extracts subcommand tokens for plain muse command', () => {
+    const r = parseTabtinSubcommand('muse doc list --format json');
     expect(r.ok).toBe(true);
     if (r.ok) expect(r.tokens).toEqual(['doc', 'list']);
   });
 
-  it('handles cd ... && tabtin prefix', () => {
+  it('handles cd ... && muse prefix', () => {
     const r = parseTabtinSubcommand(
-      'cd /workspace/project && tabtin doc list --format json',
+      'cd /workspace/project && muse doc list --format json',
       '/workspace/project',
     );
     expect(r.ok).toBe(true);
@@ -104,32 +104,32 @@ describe('parseTabtinSubcommand', () => {
   });
 
   it('rejects pipe', () => {
-    const r = parseTabtinSubcommand('tabtin doc list | jq .');
+    const r = parseTabtinSubcommand('muse doc list | jq .');
     expect(r.ok).toBe(false);
   });
 
   it('rejects redirect', () => {
-    const r = parseTabtinSubcommand('tabtin doc list > out.json');
+    const r = parseTabtinSubcommand('muse doc list > out.json');
     expect(r.ok).toBe(false);
   });
 
   it('rejects command substitution', () => {
-    const r = parseTabtinSubcommand('tabtin doc list $(rm -rf /)');
+    const r = parseTabtinSubcommand('muse doc list $(rm -rf /)');
     expect(r.ok).toBe(false);
   });
 
   it('rejects backtick subshell', () => {
-    const r = parseTabtinSubcommand('tabtin doc list `whoami`');
+    const r = parseTabtinSubcommand('muse doc list `whoami`');
     expect(r.ok).toBe(false);
   });
 
   it('rejects multi-stage && chain', () => {
-    const r = parseTabtinSubcommand('cd /tmp && tabtin doc list && rm -rf .');
+    const r = parseTabtinSubcommand('cd /tmp && muse doc list && rm -rf .');
     expect(r.ok).toBe(false);
   });
 
   it('rejects non-cd prefix in compound command', () => {
-    const r = parseTabtinSubcommand('echo hi && tabtin doc list');
+    const r = parseTabtinSubcommand('echo hi && muse doc list');
     expect(r.ok).toBe(false);
   });
 
@@ -139,182 +139,182 @@ describe('parseTabtinSubcommand', () => {
   });
 
   it('handles env var prefix', () => {
-    const r = parseTabtinSubcommand('FOO=bar tabtin doc list');
+    const r = parseTabtinSubcommand('FOO=bar muse doc list');
     expect(r.ok).toBe(true);
     if (r.ok) expect(r.tokens).toEqual(['doc', 'list']);
   });
 
-  it('returns empty tokens for bare tabtin', () => {
-    const r = parseTabtinSubcommand('tabtin');
+  it('returns empty tokens for bare muse', () => {
+    const r = parseTabtinSubcommand('muse');
     expect(r.ok).toBe(true);
     if (r.ok) expect(r.tokens).toEqual([]);
   });
 
   it('handles 3-token nested subcommand', () => {
-    const r = parseTabtinSubcommand('tabtin browser tab list --format json');
+    const r = parseTabtinSubcommand('muse browser tab list --format json');
     expect(r.ok).toBe(true);
     if (r.ok) expect(r.tokens).toEqual(['browser', 'tab', 'list']);
   });
 });
 
 describe('createTabtinReadonlyChecker — 北极星场景', () => {
-  it('北极星 1：plan 模式 tabtin doc list --format json 通过', async () => {
-    const d = await checker.isAllowed('tabtin doc list --format json');
+  it('北极星 1：plan 模式 muse doc list --format json 通过', async () => {
+    const d = await checker.isAllowed('muse doc list --format json');
     expect(d.allowed).toBe(true);
   });
 
-  it('北极星 2：plan 模式 tabtin doc create 被拒绝（带友好错误）', async () => {
-    const d = await checker.isAllowed('tabtin doc create --title X');
+  it('北极星 2：plan 模式 muse doc create 被拒绝（带友好错误）', async () => {
+    const d = await checker.isAllowed('muse doc create --title X');
     expect(d.allowed).toBe(false);
     expect(d.code).toBe('write_risk');
     expect(d.reason).toMatch(/write/);
   });
 
   it('plan 模式 browser act 被拒绝', async () => {
-    const d = await checker.isAllowed('tabtin browser act --tab 1');
+    const d = await checker.isAllowed('muse browser act --tab 1');
     expect(d.allowed).toBe(false);
     expect(d.code).toBe('write_risk');
   });
 
   it('plan 模式 browser tab list 通过', async () => {
-    const d = await checker.isAllowed('tabtin browser tab list --format json');
+    const d = await checker.isAllowed('muse browser tab list --format json');
     expect(d.allowed).toBe(true);
   });
 
-  it('plan 模式 tabtin commands 通过', async () => {
-    const d = await checker.isAllowed('tabtin commands --format json');
+  it('plan 模式 muse commands 通过', async () => {
+    const d = await checker.isAllowed('muse commands --format json');
     expect(d.allowed).toBe(true);
   });
 
   it('plan 模式允许一级命令的纯 --help 调用', async () => {
-    const d = await checker.isAllowed('tabtin browser --help');
+    const d = await checker.isAllowed('muse browser --help');
     expect(d.allowed).toBe(true);
   });
 
   it('包含其它 flag 的写命令不能借 --help 绕过风险检查', async () => {
-    const d = await checker.isAllowed('tabtin doc create --title --help');
+    const d = await checker.isAllowed('muse doc create --title --help');
     expect(d.allowed).toBe(false);
     expect(d.code).toBe('write_risk');
   });
 
   it('转义空格不能把业务参数伪装成纯 --help 调用', async () => {
-    const d = await checker.isAllowed('tabtin daemon stop ignored\\ --help');
+    const d = await checker.isAllowed('muse daemon stop ignored\\ --help');
     expect(d.allowed).toBe(false);
     expect(d.code).toBe('write_risk');
   });
 
   it.each([
-    'tabtin daemon stop # --help',
-    'tabtin daemon stop & --help',
+    'muse daemon stop # --help',
+    'muse daemon stop & --help',
   ])('shell 控制语义不能伪装纯 help：%s', async (command) => {
     const d = await checker.isAllowed(command);
     expect(d.allowed).toBe(false);
   });
 });
 
-// W5.5-R3 P0-1 回归：`tabtin doc read <uuid>` 这类带位置参数的只读查询命令
+// W5.5-R3 P0-1 回归：`muse doc read <uuid>` 这类带位置参数的只读查询命令
 // 此前被启发式 lastVerb 把 uuid 当末尾动词错杀。修复后必须 PASS。
 describe('createTabtinReadonlyChecker — P0-1 位置参数回归', () => {
-  it('tabtin doc read <uuid> --format json 通过', async () => {
-    const d = await checker.isAllowed('tabtin doc read abc-uuid-1234 --format json');
+  it('muse doc read <uuid> --format json 通过', async () => {
+    const d = await checker.isAllowed('muse doc read abc-uuid-1234 --format json');
     expect(d.allowed).toBe(true);
   });
 
-  it('tabtin doc list-blocks <uuid> 通过', async () => {
-    const d = await checker.isAllowed('tabtin doc list-blocks abc-uuid-1234');
+  it('muse doc list-blocks <uuid> 通过', async () => {
+    const d = await checker.isAllowed('muse doc list-blocks abc-uuid-1234');
     expect(d.allowed).toBe(true);
   });
 
-  it('tabtin doc search-blocks <uuid> --query <kw> 通过', async () => {
-    const d = await checker.isAllowed('tabtin doc search-blocks abc-uuid-1234 --query 西湖');
+  it('muse doc search-blocks <uuid> --query <kw> 通过', async () => {
+    const d = await checker.isAllowed('muse doc search-blocks abc-uuid-1234 --query 西湖');
     expect(d.allowed).toBe(true);
   });
 
-  it('tabtin doc export <uuid> --format json 通过', async () => {
-    const d = await checker.isAllowed('tabtin doc export abc-uuid-1234 --format json');
+  it('muse doc export <uuid> --format json 通过', async () => {
+    const d = await checker.isAllowed('muse doc export abc-uuid-1234 --format json');
     expect(d.allowed).toBe(true);
   });
 
-  it('tabtin memo read <uuid> 通过', async () => {
-    const d = await checker.isAllowed('tabtin memo read mem-1234');
+  it('muse memo read <uuid> 通过', async () => {
+    const d = await checker.isAllowed('muse memo read mem-1234');
     expect(d.allowed).toBe(true);
   });
 
-  it('tabtin tracker show <uuid> 通过', async () => {
-    const d = await checker.isAllowed('tabtin tracker show trk-1234');
+  it('muse tracker show <uuid> 通过', async () => {
+    const d = await checker.isAllowed('muse tracker show trk-1234');
     expect(d.allowed).toBe(true);
   });
 
-  it('tabtin search "query string" 通过', async () => {
-    const d = await checker.isAllowed('tabtin search "query string"');
+  it('muse search "query string" 通过', async () => {
+    const d = await checker.isAllowed('muse search "query string"');
     expect(d.allowed).toBe(true);
   });
 
-  it('tabtin code grep "pattern" 通过', async () => {
-    const d = await checker.isAllowed('tabtin code grep "pattern"');
+  it('muse code grep "pattern" 通过', async () => {
+    const d = await checker.isAllowed('muse code grep "pattern"');
     expect(d.allowed).toBe(true);
   });
 
-  it('tabtin code glob "*.go" 通过', async () => {
-    const d = await checker.isAllowed('tabtin code glob "*.go"');
+  it('muse code glob "*.go" 通过', async () => {
+    const d = await checker.isAllowed('muse code glob "*.go"');
     expect(d.allowed).toBe(true);
   });
 });
 
 // W5.5-R3 P0-2 回归：browser eval 不再被当成只读，必须按写命令拒绝。
 describe('createTabtinReadonlyChecker — P0-2 eval 安全洞回归', () => {
-  it('tabtin browser eval --expression "..." 被拒绝（write_risk）', async () => {
+  it('muse browser eval --expression "..." 被拒绝（write_risk）', async () => {
     const d = await checker.isAllowed(
-      'tabtin browser eval --expression "fetch(\'/api/admin\')"',
+      'muse browser eval --expression "fetch(\'/api/admin\')"',
     );
     expect(d.allowed).toBe(false);
     expect(d.code).toBe('write_risk');
   });
 
-  it('tabtin browser eval 不可凭借动词集启发式绕过（动词不在只读动词表）', () => {
+  it('muse browser eval 不可凭借动词集启发式绕过（动词不在只读动词表）', () => {
     expect(READONLY_VERBS_FIXTURE.has('eval')).toBe(false);
   });
 });
 
 describe('createTabtinReadonlyChecker — L20c 引号路径回归', () => {
-  it('cd "/path with space" && tabtin ... 双引号路径通过', async () => {
-    const d = await checker.isAllowed('cd "/workspace/project/My Documents" && tabtin doc list --format json');
+  it('cd "/path with space" && muse ... 双引号路径通过', async () => {
+    const d = await checker.isAllowed('cd "/workspace/project/My Documents" && muse doc list --format json');
     expect(d.allowed).toBe(true);
   });
 
-  it("cd '/path with space' && tabtin ... 单引号路径通过", async () => {
-    const d = await checker.isAllowed("cd '/workspace/project/My Project' && tabtin doc list --format json");
+  it("cd '/path with space' && muse ... 单引号路径通过", async () => {
+    const d = await checker.isAllowed("cd '/workspace/project/My Project' && muse doc list --format json");
     expect(d.allowed).toBe(true);
   });
 
-  it('cd <unquoted-path> && tabtin ... 仍然通过（不破坏既有契约）', async () => {
-    const d = await checker.isAllowed('cd /workspace/project && tabtin doc list --format json');
+  it('cd <unquoted-path> && muse ... 仍然通过（不破坏既有契约）', async () => {
+    const d = await checker.isAllowed('cd /workspace/project && muse doc list --format json');
     expect(d.allowed).toBe(true);
   });
 });
 
-describe('createTabtinReadonlyChecker — L20d tabtin help 命令', () => {
-  it('tabtin help（无参）通过', async () => {
-    const d = await checker.isAllowed('tabtin help');
+describe('createTabtinReadonlyChecker — L20d muse help 命令', () => {
+  it('muse help（无参）通过', async () => {
+    const d = await checker.isAllowed('muse help');
     expect(d.allowed).toBe(true);
   });
 
-  it('tabtin help doc 通过', async () => {
-    const d = await checker.isAllowed('tabtin help doc');
+  it('muse help doc 通过', async () => {
+    const d = await checker.isAllowed('muse help doc');
     expect(d.allowed).toBe(true);
   });
 
-  it('tabtin help doc create 通过——help 子命令本身只读，不会触发 doc create 的写逻辑', async () => {
-    const d = await checker.isAllowed('tabtin help doc create');
+  it('muse help doc create 通过——help 子命令本身只读，不会触发 doc create 的写逻辑', async () => {
+    const d = await checker.isAllowed('muse help doc create');
     expect(d.allowed).toBe(true);
   });
 });
 
 describe('createTabtinReadonlyChecker — 边界与安全网', () => {
-  it('非 tabtin 命令（不在 6 命令系统 allowlist 内）拒绝', async () => {
+  it('非 muse 命令（不在 6 命令系统 allowlist 内）拒绝', async () => {
     // J3a：'ls' 不在第一批 6 命令 scope，进系统通道也被拒——code 升级为
     // system_command_rejected（让 LLM 区分"完全未识别"vs"识别但 flag 不允许"）。
-    // 历史断言 'not_tabtin' 已在 J3a 之前的"plan 模式仅允许 tabtin"假设下成立；
+    // 历史断言 'not_tabtin' 已在 J3a 之前的"plan 模式仅允许 muse"假设下成立；
     // 升级后的 code 更具体，无回归。
     const d = await checker.isAllowed('ls -la');
     expect(d.allowed).toBe(false);
@@ -328,26 +328,26 @@ describe('createTabtinReadonlyChecker — 边界与安全网', () => {
   });
 
   it('管道段含白名单外命令 → 整条拒绝（ 联合校验 fail-close）', async () => {
-    const d = await checker.isAllowed('tabtin doc list | rm -rf /');
+    const d = await checker.isAllowed('muse doc list | rm -rf /');
     expect(d.allowed).toBe(false);
     // rm 段不在白名单：复合联合校验拒绝，code 来自段级决策。
     expect(d.reason).toContain('rm -rf /');
   });
 
   it('已注册写命令（daemon stop 标 risk=write）拒绝', async () => {
-    const d = await checker.isAllowed('tabtin daemon stop');
+    const d = await checker.isAllowed('muse daemon stop');
     expect(d.allowed).toBe(false);
     expect(d.code).toBe('write_risk');
   });
 
   it('未注册命令 + 终末动词在 READONLY_VERBS → 启发式兜底放行', async () => {
     // CLI schema 漏注册的纯只读命令（这里用一个虚构子命令，其终末动词 "list" 在 READONLY_VERBS 中）
-    const d = await checker.isAllowed('tabtin somebrandnewfeature list');
+    const d = await checker.isAllowed('muse somebrandnewfeature list');
     expect(d.allowed).toBe(true);
   });
 
   it('未注册命令 + 终末动词不在 READONLY_VERBS → unknown_command 拒绝', async () => {
-    const d = await checker.isAllowed('tabtin somebrandnewfeature mutate-everything');
+    const d = await checker.isAllowed('muse somebrandnewfeature mutate-everything');
     expect(d.allowed).toBe(false);
     expect(d.code).toBe('unknown_command');
   });
@@ -358,23 +358,23 @@ describe('createTabtinReadonlyChecker — 边界与安全网', () => {
         throw new Error('CLI registry unreachable');
       },
     });
-    const d = await failingChecker.isAllowed('tabtin doc list');
+    const d = await failingChecker.isAllowed('muse doc list');
     expect(d.allowed).toBe(false);
     expect(d.code).toBe('lookup_failed');
   });
 
-  it('裸 tabtin 视作 help 放行', async () => {
-    const d = await checker.isAllowed('tabtin');
+  it('裸 muse 视作 help 放行', async () => {
+    const d = await checker.isAllowed('muse');
     expect(d.allowed).toBe(true);
   });
 
   it('多层 && 拒绝（防止 doc list && doc create 绕过）', async () => {
-    const d = await checker.isAllowed('tabtin doc list && tabtin doc create --title X');
+    const d = await checker.isAllowed('muse doc list && muse doc create --title X');
     expect(d.allowed).toBe(false);
   });
 
-  it('cd /path && tabtin doc list 通过', async () => {
-    const d = await checker.isAllowed('cd /workspace/project && tabtin doc list --format json');
+  it('cd /path && muse doc list 通过', async () => {
+    const d = await checker.isAllowed('cd /workspace/project && muse doc list --format json');
     expect(d.allowed).toBe(true);
   });
 });
@@ -385,46 +385,46 @@ describe('createTabtinReadonlyChecker — 边界与安全网', () => {
 describe('buildRiskMapFromSchemas', () => {
   it('compiles schema array to name → risk map', () => {
     const m = buildRiskMapFromSchemas([
-      { name: 'tabtin doc list', risk: '' },
-      { name: 'tabtin doc create', risk: 'write' },
+      { name: 'muse doc list', risk: '' },
+      { name: 'muse doc create', risk: 'write' },
     ]);
-    expect(m.get('tabtin doc list')).toBe('');
-    expect(m.get('tabtin doc create')).toBe('write');
-    expect(m.has('tabtin nope')).toBe(false);
+    expect(m.get('muse doc list')).toBe('');
+    expect(m.get('muse doc create')).toBe('write');
+    expect(m.has('muse nope')).toBe(false);
   });
 
   it('handles missing risk field as empty string', () => {
-    const m = buildRiskMapFromSchemas([{ name: 'tabtin x' }]);
-    expect(m.get('tabtin x')).toBe('');
+    const m = buildRiskMapFromSchemas([{ name: 'muse x' }]);
+    expect(m.get('muse x')).toBe('');
   });
 
-  it('normalizes command schema names without tabtin prefix', () => {
+  it('normalizes command schema names without muse prefix', () => {
     const m = buildRiskMapFromSchemas([{ name: 'doc search-blocks', risk: '' }]);
-    expect(m.get('tabtin doc search-blocks')).toBe('');
+    expect(m.get('muse doc search-blocks')).toBe('');
   });
 
-  // ：`tabtin commands` 现在也输出 pure group 入口命令（is_group:true，
-  // risk 空）。group 若进 risk map，未注册的写子命令会借 `tabtin doc` 前缀最长
+  // ：`muse commands` 现在也输出 pure group 入口命令（is_group:true，
+  // risk 空）。group 若进 risk map，未注册的写子命令会借 `muse doc` 前缀最长
   // 匹配被误放行——必须跳过，保持未注册子命令走 unknown_command 启发式兜底。
   it('skips is_group entries so group prefix cannot leak allow for unregistered subcommands', async () => {
     const m = buildRiskMapFromSchemas([
       { name: 'doc', risk: '', is_group: true },
-      { name: 'tabtin doc list', risk: '' },
+      { name: 'muse doc list', risk: '' },
     ]);
-    expect(m.has('tabtin doc')).toBe(false);
-    expect(m.get('tabtin doc list')).toBe('');
+    expect(m.has('muse doc')).toBe(false);
+    expect(m.get('muse doc list')).toBe('');
 
     // 端到端：未注册的写形态子命令不能借 group 前缀放行
     const groupChecker = createTabtinReadonlyChecker({
       fetchCommandRisk: async (p) => (m.has(p) ? (m.get(p) ?? '') : null),
     });
-    const decision = await groupChecker.isAllowed('tabtin doc unregistered-mutate --id x');
+    const decision = await groupChecker.isAllowed('muse doc unregistered-mutate --id x');
     expect(decision.allowed).toBe(false);
     expect(decision.code).toBe('unknown_command');
   });
 });
 
-// ：`tabtin commands --format json` 现在输出 SuccessEnvelope
+// ：`muse commands --format json` 现在输出 SuccessEnvelope
 // `{ok, data:{commands, global_flags}}`。ElectronAgentHost / DaemonAgentHost 的
 // loadCliCommandsAsync 共用 parseTabtinCommandsJson 解包，防止两端 inline 解析漂移
 // （Daemon 曾只认顶层数组 → envelope 恒解析成 null → 受限模式 fail-close 误拒只读命令）。
@@ -467,18 +467,18 @@ describe('parseTabtinCommandsJson', () => {
   });
 });
 
-// L20b：READONLY_VERBS codegen 守护——模拟 `tabtin commands --format json` fixture
-// （hand-crafted JSON，避免依赖真 tabtin 二进制），断言所有 risk='' 命令的终末
+// L20b：READONLY_VERBS codegen 守护——模拟 `muse commands --format json` fixture
+// （hand-crafted JSON，避免依赖真 muse 二进制），断言所有 risk='' 命令的终末
 // verb 都在 READONLY_VERBS 集合里。漏一个 verb 会让 schema 注册不全场景下的
 // 启发式兜底（lastVerb in READONLY_VERBS）拒绝合法只读命令。
 //
-// 维护契约：当 tabtin CLI 加新 risk='' 命令时，要么把终末 verb 加进 READONLY_VERBS，
+// 维护契约：当 muse CLI 加新 risk='' 命令时，要么把终末 verb 加进 READONLY_VERBS，
 // 要么把这条命令名加进 PRODUCTION_SCHEMA_FIXTURE。本测试在 fixture 行漏 verb 时
 // 红，让维护者强制选其一处理。fixture 来源：手工同步自 packages/tabtin-cli-go/cmd/
 // 真实声明（采样而非穷举，覆盖每种 verb 模式即可）。
-// tabtin 通道未命中后追加系统命令 allowlist 通道。
+// muse 通道未命中后追加系统命令 allowlist 通道。
 //
-// 决策链：tabtin parser 命中 → 走原 Risk 决策；parser 失败原因是"非 tabtin 命令"
+// 决策链：muse parser 命中 → 走原 Risk 决策；parser 失败原因是"非 muse 命令"
 // → 尝试系统命令 allowlist；都不命中保持原 reject 路径但 code 升级为
 // system_command_rejected（让 LLM 区分"完全未识别"vs"识别但 flag 不允许"）。
 describe('createTabtinReadonlyChecker — 系统命令决策链集成', () => {
@@ -589,8 +589,8 @@ describe('createTabtinReadonlyChecker — 系统命令决策链集成', () => {
       expect(d.allowed).toBe(true)
     })
 
-    it('tabtin 只读命令与白名单系统命令混合管道放行', async () => {
-      const d = await checker.isAllowed("tabtin doc list | sed -n '1,5p'")
+    it('muse 只读命令与白名单系统命令混合管道放行', async () => {
+      const d = await checker.isAllowed("muse doc list | sed -n '1,5p'")
       expect(d.allowed).toBe(true)
     })
 
@@ -632,14 +632,14 @@ describe('createTabtinReadonlyChecker — 系统命令决策链集成', () => {
       expect(d.allowed).toBe(false)
     })
 
-    it('写风险段混入串联 → 整条拒绝：git status && tabtin daemon stop', async () => {
-      const d = await checker.isAllowed('git status && tabtin daemon stop')
+    it('写风险段混入串联 → 整条拒绝：git status && muse daemon stop', async () => {
+      const d = await checker.isAllowed('git status && muse daemon stop')
       expect(d.allowed).toBe(false)
       expect(d.code).toBe('write_risk')
     })
 
     it('换行分隔的第二条命令拒绝，避免 shell 执行未校验段', async () => {
-      const d = await checker.isAllowed('find . -type f\ntabtin daemon stop')
+      const d = await checker.isAllowed('find . -type f\nmuse daemon stop')
       expect(d.allowed).toBe(false)
     })
 
@@ -704,10 +704,10 @@ describe('createTabtinReadonlyChecker — 系统命令决策链集成', () => {
     expect(d.code).toBe('system_command_rejected')
   })
 
-  it('plan 模式 tabtin doc create 仍走 tabtin 通道（不被系统通道接管）', async () => {
-    // tabtin parser 命中（tokens=['doc','create']），fetchCommandRisk 返回 'write'
+  it('plan 模式 muse doc create 仍走 muse 通道（不被系统通道接管）', async () => {
+    // muse parser 命中（tokens=['doc','create']），fetchCommandRisk 返回 'write'
     // → write_risk 拒绝（不是 system_command_rejected）
-    const d = await checker.isAllowed('tabtin doc create --title X')
+    const d = await checker.isAllowed('muse doc create --title X')
     expect(d.allowed).toBe(false)
     expect(d.code).toBe('write_risk')
   })
@@ -737,8 +737,8 @@ describe('createTabtinReadonlyChecker — 系统命令决策链集成', () => {
  * 用顶部同款 `checker`（host 给 ask/plan/study 注入的就是这一个实例，mode 无关）。
  */
 describe('#775 Ask 模式只读语义回归 — 写/执行类命令必须被拦', () => {
-  it('tabtin 写子命令 `tabtin doc create` 被拒（write_risk）', async () => {
-    const d = await checker.isAllowed('tabtin doc create --title X');
+  it('muse 写子命令 `muse doc create` 被拒（write_risk）', async () => {
+    const d = await checker.isAllowed('muse doc create --title X');
     expect(d.allowed).toBe(false);
     expect(d.code).toBe('write_risk');
   });
@@ -753,8 +753,8 @@ describe('#775 Ask 模式只读语义回归 — 写/执行类命令必须被拦'
     expect(d.allowed).toBe(false);
   });
 
-  it('只读查询命令 `tabtin doc list` 仍放行（不误伤只读能力）', async () => {
-    const d = await checker.isAllowed('tabtin doc list --format json');
+  it('只读查询命令 `muse doc list` 仍放行（不误伤只读能力）', async () => {
+    const d = await checker.isAllowed('muse doc list --format json');
     expect(d.allowed).toBe(true);
   });
 });
@@ -768,24 +768,24 @@ describe('#5448 /  受限模式浏览器导航豁免', () => {
   });
 
   it('受限模式放行 write 风险的 `browser open`', async () => {
-    const d = await restrictedModeChecker.isAllowed('tabtin browser open --url https://x.com');
+    const d = await restrictedModeChecker.isAllowed('muse browser open --url https://x.com');
     expect(d.allowed).toBe(true);
   });
 
   it('受限模式放行 `browser nav` 与 `browser tab switch`', async () => {
-    expect((await restrictedModeChecker.isAllowed('tabtin browser nav --back')).allowed).toBe(true);
-    expect((await restrictedModeChecker.isAllowed('tabtin browser tab switch --tab-id t1')).allowed).toBe(true);
+    expect((await restrictedModeChecker.isAllowed('muse browser nav --back')).allowed).toBe(true);
+    expect((await restrictedModeChecker.isAllowed('muse browser tab switch --tab-id t1')).allowed).toBe(true);
   });
 
   it('受限模式仍拒非导航浏览器写命令（tab close / act 走审批）', async () => {
     // fixture 里 browser session create 是 write，代表非导航写——不在豁免集
-    const d = await restrictedModeChecker.isAllowed('tabtin browser session create');
+    const d = await restrictedModeChecker.isAllowed('muse browser session create');
     expect(d.allowed).toBe(false);
     expect(d.code).toBe('write_risk');
   });
 
   it('未注入 browserNavAllowlist 时拒绝 write 风险的 browser open', async () => {
-    const d = await checker.isAllowed('tabtin browser open --url https://x.com');
+    const d = await checker.isAllowed('muse browser open --url https://x.com');
     expect(d.allowed).toBe(false);
     expect(d.code).toBe('write_risk');
   });

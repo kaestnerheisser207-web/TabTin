@@ -1,7 +1,7 @@
 {
   "name": "@tabtin/python-runtime-host",
   "version": "0.1.0",
-  "description": "TabTin self-managed Python runtime host wiring (L1) — provisions via @tabtin/python-runtime and injects PATH/env into the host process. Ships with agent-runtime.",
+  "description": "Muse self-managed Python runtime host wiring (L1) — provisions via @tabtin/python-runtime and injects PATH/env into the host process. Ships with agent-runtime.",
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",

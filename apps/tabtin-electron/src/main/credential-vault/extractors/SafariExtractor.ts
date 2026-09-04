@@ -185,7 +185,7 @@ export class SafariExtractor implements ICookieExtractor {
         browserName: 'safari',
         profileName: 'Default',
         extractedAt: new Date().toISOString(),
-        error: '需要完全磁盘访问权限。已打开系统偏好设置，请将 TabTin 添加到完全磁盘访问列表后重试。',
+        error: '需要完全磁盘访问权限。已打开系统偏好设置，请将 Muse 添加到完全磁盘访问列表后重试。',
       }
     }
 

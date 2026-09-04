@@ -9,7 +9,7 @@ plugins {
 }
 
 android {
-    namespace = "com.tabtin.mobile"
+    namespace = "com.muse.mobile"
     compileSdk = 36
     val releaseStoreFile = providers.gradleProperty("RELEASE_STORE_FILE").orNull
         ?: System.getenv("ANDROID_RELEASE_STORE_FILE")
@@ -70,7 +70,7 @@ android {
     val releaseImApiBaseUrl = releaseApiBaseUrl
 
     defaultConfig {
-        applicationId = "com.example.tabtin"
+        applicationId = "com.muse.mobile"
         minSdk = 26
         targetSdk = 36
         versionCode = overrideVersionCode ?: 1

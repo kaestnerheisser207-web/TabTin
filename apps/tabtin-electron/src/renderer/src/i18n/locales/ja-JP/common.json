@@ -331,7 +331,7 @@
     "insufficientCredits": "クレジットが不十分です — 続行するには補充してください",
     "organizationInsufficientCredits": "組織のウォレット残高が不足しています - 管理者に補充するよう依頼してください",
     "insufficientCreditsTitle": "利用可能な残高が不足しています",
-    "insufficientCreditsDesc": "このアクションは完了していません。 TabTin を使い続けるには補充してください。",
+    "insufficientCreditsDesc": "このアクションは完了していません。 Muse を使い続けるには補充してください。",
     "organizationInsufficientCreditsTitle": "組織のウォレット残高が不足しています",
     "organizationInsufficientCreditsDesc": "このアクションは完了していません。組織管理者に補充するよう依頼してから、もう一度試してください。",
     "goTeamRecharge": "組織のトップアップ",

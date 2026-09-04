@@ -1,5 +1,5 @@
 /**
- * print 渲染器 — `tabtin browser print` 的共享内容渲染（双端同一份）
+ * print 渲染器 — `muse browser print` 的共享内容渲染（双端同一份）
  *
  * 职责：把「页面 HTML + 元信息」渲染成 print 支持的文本类产物形态：
  *   - text     纯文本正文（readability 清洗后剥标签）

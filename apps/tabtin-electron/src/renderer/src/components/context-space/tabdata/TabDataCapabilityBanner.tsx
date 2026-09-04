@@ -2,7 +2,7 @@
  * TabDataCapabilityBanner — 多维表首页的「让 AI 帮你处理表格」介绍区
  *
  * featured 示例卡来自 CLI 生成的 tabdata-capabilities.json（curated NL prompt）；
- * 「查看全部」在当前列表内展示全部 showcase CLI 能力（与 tabtin table 一一对应）。
+ * 「查看全部」在当前列表内展示全部 showcase CLI 能力（与 muse table 一一对应）。
  */
 
 import React, { useCallback } from 'react'

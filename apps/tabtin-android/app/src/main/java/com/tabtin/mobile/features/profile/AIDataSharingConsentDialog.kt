@@ -6,7 +6,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
-import com.tabtin.mobile.R
+import com.muse.mobile.R
 
 /**
  * 会话级 AI 音频/转写共享同意。拒绝时不得启动 ASR；首次同意后需用户重新按住。

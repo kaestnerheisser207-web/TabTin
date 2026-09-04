@@ -6,7 +6,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/TabTin/tabtin-cli/internal/output"
+	"github.com/Muse/muse-cli/internal/output"
 )
 
 type RouteMode string
@@ -34,7 +34,7 @@ const (
 type FlagType string
 
 const (
-	// 既有四种类型——值与 `tabtin commands --format json` 历史输出保持兼容。
+	// 既有四种类型——值与 `muse commands --format json` 历史输出保持兼容。
 	// 注意 FlagStringArray 字符串值是 "string_array"（snake），与规范 §5.2 文档里
 	// 写的 "stringArray" (camel) 不一致——这是已落地的现状，改字符串值会破坏前端
 	// cli-output-render 等下游消费者。下次规范修订时拉齐。
@@ -102,7 +102,7 @@ type FlagDef struct {
 	// 业务字段（如 --title ""）不会被误传给后端清空。
 	//
 	// opt-in（true）：用于"空串本身是合法的三态语义信号"的少数 flag。例如：
-	//   - `tabtin doc share set --password ""` 想清空密码（三态：未传=保留旧值；
+	//   - `muse doc share set --password ""` 想清空密码（三态：未传=保留旧值；
 	//     空串=清空；非空=设新值）。CreateShareRequest.password 在后端就是这套语义。
 	//
 	// 触发条件：FlagDef 标 AllowEmpty=true **且** 用户显式传过（cobra Changed=true，
@@ -119,7 +119,7 @@ type RiskLevel string
 //
 // ⚠️ 兼容性注意：规范文档里的字符串值是 "read" / "write" / "destructive"，但本实现
 // 保留旧字符串值（""/"write"/"high-risk-write"）以兼容存量 105+ 命令、
-// `tabtin commands --format json` 输出消费者（如 packages/agent-runtime/src/capability/core/__tests__/restricted-shell-allowlist.test.ts
+// `muse commands --format json` 输出消费者（如 packages/agent-runtime/src/capability/core/__tests__/restricted-shell-allowlist.test.ts
 // 硬编码比较 `s.risk === 'high-risk-write'`）。新写命令统一用语义化名字 RiskRead/RiskDestructive。
 // 待 agent-runtime 等下游迁移完，再把字符串值整体切到规范值。
 const (
@@ -181,7 +181,7 @@ type CommandDef struct {
 	// 优先于 RemoteMethod/RemotePath。
 	AdaptRequest AdaptRequestFunc
 
-	// Hidden 把命令从 `--help` 与 `tabtin commands`（Agent 命令发现面）中隐去，
+	// Hidden 把命令从 `--help` 与 `muse commands`（Agent 命令发现面）中隐去，
 	// 但命令仍可被显式调用（cobra Hidden 语义）。用于收敛入口而保留底层能力，
 	// 例如 `slide create`（云项目进阶命令）对 Agent 隐藏、只暴露 `slide render`。
 	Hidden bool
@@ -233,7 +233,7 @@ type CommandDef struct {
 	//
 	// 仅高频列表型 / 单对象型命令需声明（doc list / memo list / browser tab list 等）。
 	// 留空时 runtime 端 cli-output-render 走 inferColumns 启发式兜底。
-	// 通过 `tabtin commands --format json` 透传给 ShellCap.cliCommandSchemas。
+	// 通过 `muse commands --format json` 透传给 ShellCap.cliCommandSchemas。
 	OutputSchema []FieldSchema
 
 	// ===== 规范 v1 新增字段（additive，pipeline 后续接入）=====
@@ -382,7 +382,7 @@ type CommandSchema struct {
 
 	// ── pure group 顶层命令──────────────────────────
 	// IsGroup=true 表示这是 cobra group 命令（无 Run/RunE，仅路由子命令，
-	// 裸跑显示 help）。之前 `tabtin commands` 只输出注册过 CommandDef 的
+	// 裸跑显示 help）。之前 `muse commands` 只输出注册过 CommandDef 的
 	// leaf，`doc`/`mcp`/`browser` 这类入口命令不在输出里，relevant-cli
 	// 召回池缺入口条目。group 条目仅供发现/召回；受限模式 risk 判定必须
 	// 跳过它们（见 agent-runtime buildRiskMapFromSchemas），否则未注册的
@@ -391,7 +391,7 @@ type CommandSchema struct {
 	// Subcommands 是 group 直接子命令名列表（发现提示用，非完整 schema）。
 	Subcommands []string `json:"subcommands,omitempty"`
 
-	// Hidden：命令仍可显式调用，但默认不进 `tabtin commands` 发现面
+	// Hidden：命令仍可显式调用，但默认不进 `muse commands` 发现面
 	// 。受限模式 risk map 经 `--include-hidden` 仍需读到
 	// Risk 字段，因此 schema 输出打标而非整条丢弃。
 	Hidden bool `json:"hidden,omitempty"`

@@ -101,6 +101,6 @@ export async function handleExtensionsRoute(
   sendJSON(res, 404, errorResponse(
     'UNKNOWN_ROUTE',
     `未知的 extensions 路由: ${url}`,
-    { suggestions: ['使用 tabtin extensions --help 查看所有可用命令'] },
+    { suggestions: ['使用 muse extensions --help 查看所有可用命令'] },
   ));
 }

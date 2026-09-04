@@ -1,4 +1,4 @@
-# TabTin 社区行为准则
+# Muse 社区行为准则
 
 [English](CODE_OF_CONDUCT.en.md)
 
@@ -34,7 +34,7 @@
 
 ## 私密举报
 
-通过 [TabTin 公开仓库的 Security 页面](https://github.com/tabtin-ai/TabTin/security)进入 **Report a vulnerability** 私密报告，并在标题前注明 **Code of Conduct**。如果该入口暂未显示，请发送邮件至 [issue@larchiveai.com](mailto:issue@larchiveai.com)，并在主题中注明 `[Code of Conduct]`。请提供时间、位置、相关账号、可验证记录、影响和希望采取的保护措施。
+通过 [Muse 公开仓库的 Security 页面](https://github.com/tabtin-ai/TabTin/security)进入 **Report a vulnerability** 私密报告，并在标题前注明 **Code of Conduct**。如果该入口暂未显示，请发送邮件至 [issue@larchiveai.com](mailto:issue@larchiveai.com)，并在主题中注明 `[Code of Conduct]`。请提供时间、位置、相关账号、可验证记录、影响和希望采取的保护措施。
 
 不要在公开 Issue、Discussion 或社交媒体中发布可能使当事人再次受到伤害的信息。
 
@@ -55,7 +55,7 @@
 
 ## 适用范围
 
-本准则适用于 TabTin 的全部社区空间，也适用于个人以 TabTin 官方代表身份活动时，包括使用官方邮箱、社交账号或参加线上和线下活动。
+本准则适用于 Muse 的全部社区空间，也适用于个人以 Muse 官方代表身份活动时，包括使用官方邮箱、社交账号或参加线上和线下活动。
 
 ## 来源与许可
 

@@ -19,7 +19,7 @@
  * 解决的真实用户问题：
  *   - 单 Agent streaming 时 LLM 一次输出多个 edit_file / write_file 调用
  *     同一文件 → 写盘并发竞态 → 后写的覆盖先写的，前一次改动悄悄丢失
- *   - 多 Agent 在同一进程并发改同一仓库（TabTin 经常多 Agent 同时干活）
+ *   - 多 Agent 在同一进程并发改同一仓库（Muse 经常多 Agent 同时干活）
  *     → 同款覆盖丢数据
  *   - LLM Agent chat（adapter 入口）跟 server push action（ActionExecutorAdapter
  *     入口）/ 外部 MCP client（Daemon MCP 入口）同时改同一文件 → 跨入口

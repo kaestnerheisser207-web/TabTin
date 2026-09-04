@@ -17,8 +17,8 @@ describe('formatMediaImageFailureDetails', () => {
   })
 
   it('空 output 仍返回兜底说明（含 command）', () => {
-    const text = formatMediaImageFailureDetails(undefined, 'tabtin media image generate --prompt x')
-    expect(text).toContain('tabtin media image generate')
+    const text = formatMediaImageFailureDetails(undefined, 'muse media image generate --prompt x')
+    expect(text).toContain('muse media image generate')
     expect(text).toContain('未能解析图片 URL')
   })
 

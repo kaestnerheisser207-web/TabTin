@@ -49,7 +49,7 @@
     "logoutConfirmTitle": "계정에서 로그아웃하시겠습니까?",
     "logoutConfirmDesc": "이 기기에 저장되지 않은 작업 내용은 모두 손실됩니다.",
     "openStorageManager": "스토리지 관리자",
-    "openStorageManagerHint": "TabTin이 컴퓨터에 저장한 내용을 확인한 다음 정리하거나 내보냅니다.",
+    "openStorageManagerHint": "Muse이 컴퓨터에 저장한 내용을 확인한 다음 정리하거나 내보냅니다.",
     "changePassword": "비밀번호 변경",
     "bindEmail": "이메일 바인딩"
   },

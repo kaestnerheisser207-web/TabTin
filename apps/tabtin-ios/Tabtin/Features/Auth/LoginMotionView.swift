@@ -29,7 +29,7 @@ struct LoginMotionView: View {
     var body: some View {
         Group {
             if showsStaticFallback {
-                Text("TabTin")
+                Text("Muse")
                     .font(.system(size: 40, weight: .black))
                     .foregroundStyle(
                         Color(red: 32 / 255, green: 32 / 255, blue: 28 / 255)

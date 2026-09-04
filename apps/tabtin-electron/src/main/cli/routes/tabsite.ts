@@ -374,7 +374,7 @@ export async function handleTabsiteRoute(
       sendJSON(
         res,
         403,
-        errorResponse('PERMISSION_DENIED', 'dist_path 必须位于 TabTin 工作区或沙盒目录内'),
+        errorResponse('PERMISSION_DENIED', 'dist_path 必须位于 Muse 工作区或沙盒目录内'),
       )
       return
     }

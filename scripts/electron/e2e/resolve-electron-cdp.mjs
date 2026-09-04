@@ -1,5 +1,5 @@
 /**
- * TabTin Electron CDP 解析 — 读 DevToolsActivePort，经 browser WebSocket 驱动 renderer。
+ * Muse Electron CDP 解析 — 读 DevToolsActivePort，经 browser WebSocket 驱动 renderer。
  *
  * 不硬编码 9222 / 不走 /json/list（Chrome 占 9222 时 /json/list 会 404）。
  */
@@ -9,10 +9,10 @@ import path from 'node:path'
 
 const DEFAULT_VITE_PORT = Number(process.env.VITE_DEV_SERVER_PORT || 5175)
 const KNOWN_USER_DATA_DIR_NAMES = [
-  'TabTin Dev',
-  'TabTin Local',
-  'TabTin Preprod',
-  'TabTin',
+  'Muse Dev',
+  'Muse Local',
+  'Muse Preprod',
+  'Muse',
   'tabtin-electron',
 ]
 
@@ -300,7 +300,7 @@ async function pickPageTarget(client, { page = 'main', vitePort = DEFAULT_VITE_P
   }
 
   throw new Error(
-    `未找到 TabTin 主 renderer page（期望 localhost:${vitePort} 或 tabtin-file://app/index.html，非 overlay.html）。` +
+    `未找到 Muse 主 renderer page（期望 localhost:${vitePort} 或 tabtin-file://app/index.html，非 overlay.html）。` +
       `当前 pages: ${pages.map((p) => p.url).join(', ') || '(none)'}`,
   )
 }

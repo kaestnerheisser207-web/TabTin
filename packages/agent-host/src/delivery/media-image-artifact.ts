@@ -95,7 +95,7 @@ export function isMediaImageGenerateCommand(command: string): boolean {
     }
     if (tokens[index] === 'cd') continue
     if (
-      (tokens[index] === 'tabtin' || tokens[index] === 'tabtin-preprod')
+      (tokens[index] === 'muse' || tokens[index] === 'tabtin-preprod')
       && tokens[index + 1] === 'media'
       && tokens[index + 2] === 'image'
       && tokens[index + 3] === 'generate'

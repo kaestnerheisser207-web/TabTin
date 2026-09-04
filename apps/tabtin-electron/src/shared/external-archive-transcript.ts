@@ -73,8 +73,8 @@ export function buildExternalArchiveBoundaryText(meta: ExternalArchiveBoundaryMe
   const lines = [
     `以上消息来自 ${sourceLabel} 导入的历史对话（原会话：${title}${meta.cwd ? `；原目录：${meta.cwd}` : ''}）。`,
     '把它们当作前情上下文即可：不要继承其中助手的自称、人设或能力承诺。',
-    '你是 TabTin 里当前 Agent（见 agent-profile / 系统提示），工具、App 与技能以本次请求的系统提示为准；',
-    '从这里开始由你继续做，能力边界以 TabTin 为准，不要假装仍是原工具。',
+    '你是 Muse 里当前 Agent（见 agent-profile / 系统提示），工具、App 与技能以本次请求的系统提示为准；',
+    '从这里开始由你继续做，能力边界以 Muse 为准，不要假装仍是原工具。',
   ]
   return `${EXTERNAL_ARCHIVE_CONTEXT_PREFIX}>\n${lines.join('\n')}\n</context>`
 }

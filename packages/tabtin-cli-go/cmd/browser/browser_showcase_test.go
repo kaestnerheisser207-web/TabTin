@@ -9,7 +9,7 @@ import (
 	"os"
 	"testing"
 
-	"github.com/TabTin/tabtin-cli/internal/cmdutil"
+	"github.com/Muse/muse-cli/internal/cmdutil"
 )
 
 // newTestBrowserCmd 构造一棵 browser 命令树供单测断言。

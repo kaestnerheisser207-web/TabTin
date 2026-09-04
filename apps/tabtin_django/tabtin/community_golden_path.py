@@ -664,7 +664,7 @@ def run_probe() -> None:
     funding_after = _funding_snapshot(str(organization.id))
     if funding_after != funding_before:
         raise AssertionError(
-            "Community BYOK chat changed TabTin funding state: "
+            "Community BYOK chat changed Muse funding state: "
             f"before={funding_before} after={funding_after}"
         )
     fake_hits_after = _fake_llm_hits(httpx)

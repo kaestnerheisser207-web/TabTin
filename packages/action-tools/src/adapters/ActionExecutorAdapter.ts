@@ -25,7 +25,7 @@ import { withFileLock } from '../utils/file-lock';
  * 是 LLM Agent chat 链路，PRD §A.5 + §九 决策延迟 delete 到单独 PRD。本集合
  * 是 ActionExecutorAdapter 一侧的「跨入口防御兜底」，语义略宽是设计取舍。
  *
- * **W2a（2026-07-26，）新增 `mkdir` / `move_file`**：CLI `tabtin code
+ * **W2a（2026-07-26，）新增 `mkdir` / `move_file`**：CLI `muse code
  * mkdir|mv|rename` 经 cli-routes → 本 adapter 派发，同款跨入口防御兜底。
  * `move_file` 的锁键取 `to`（目标路径）——下方 executeAction 对
  * FILE_LOCK_ACTIONS 里没有 `path`/`file_path` 字段的 action 会额外尝试
@@ -336,7 +336,7 @@ export class ActionExecutorAdapter {
 
       // TabData：Wave 4a (2026-05-01) 按 D4 全删 FC 删除 7 + 5 个 tabdata
       // FC + admin computed FC，对应 mapping 一并删除（lookup 自动 fall-
-      // through 到原 actionType，行为不变）。Agent 走 `tabtin table *` CLI。
+      // through 到原 actionType，行为不变）。Agent 走 `muse table *` CLI。
 
       // TabSlide：W6 (2026-05-04) tabslide AgentTool group + identity mapping
       // both retired together with the action-tools tabslide directory. Any
@@ -348,7 +348,7 @@ export class ActionExecutorAdapter {
       'clear_session': 'clear_session',
 
       // Web Fetch / Extract：Wave 4a 按 D4 全删网页抓取 FC，对应
-      // mapping 一并删除（fall-through）。Agent 抓页走 `tabtin browser *`
+      // mapping 一并删除（fall-through）。Agent 抓页走 `muse browser *`
       // CLI。Wave 4b L20 进一步删除 `crawl_clean_html` / `capture_webpage`
       // mapping——cli-server `/browser/extract` 路由现直调 impl，不再走
       // ActionExecutor 派发。

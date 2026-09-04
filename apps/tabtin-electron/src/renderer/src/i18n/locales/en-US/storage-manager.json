@@ -1,8 +1,8 @@
 {
   "panel": {
     "title": "Storage",
-    "subtitle": "What TabTin keeps on your computer.",
-    "totalLine": "TabTin uses {{size}} on this Mac",
+    "subtitle": "What Muse keeps on your computer.",
+    "totalLine": "Muse uses {{size}} on this Mac",
     "totalLineLoading": "Measuring storage…",
     "refresh": "Recalculate",
     "refreshHint": "Re-measure all data sizes",
@@ -23,7 +23,7 @@
     },
     "critical": {
       "label": "Time to clean",
-      "tagline": "TabTin is taking a lot of space. Time to clear out some unused data."
+      "tagline": "Muse is taking a lot of space. Time to clear out some unused data."
     }
   },
   "metrics": {
@@ -46,7 +46,7 @@
   },
   "topItems": {
     "loading": "Measuring your workspace data…",
-    "empty": "No data yet. Come back after using TabTin for a while.",
+    "empty": "No data yet. Come back after using Muse for a while.",
     "itemCount": "{{count}} items",
     "showAll": "Show other {{count}} items",
     "collapseAll": "Collapse",
@@ -133,11 +133,11 @@
     },
     "browser:bookmarks": {
       "title": "Browser bookmarks",
-      "description": "Bookmarks you've saved in TabTin's embedded browser"
+      "description": "Bookmarks you've saved in Muse's embedded browser"
     },
     "browser:browsing-history": {
       "title": "Browsing history",
-      "description": "Pages you've visited in TabTin's embedded browser"
+      "description": "Pages you've visited in Muse's embedded browser"
     },
     "tin:sandboxes": {
       "title": "Sandbox app data",
@@ -165,7 +165,7 @@
     },
     "download:user-downloads": {
       "title": "Download history",
-      "description": "History of downloads triggered by TabTin (records only)"
+      "description": "History of downloads triggered by Muse (records only)"
     },
     "download:agent-sandbox-downloads": {
       "title": "Agent tool downloads",

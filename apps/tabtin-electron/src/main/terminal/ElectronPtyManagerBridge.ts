@@ -813,7 +813,7 @@ export class ElectronPtyManagerBridge implements PtyManagerBridge {
       ? new AgentPromptStallWatchdog({
           onStall: (tail) => {
             const warning =
-              '\r\n[TabTin] Background command appears to be waiting for interactive input. ' +
+              '\r\n[Muse] Background command appears to be waiting for interactive input. ' +
               'Run `kill <pid>` (pid in the running envelope) via `run_terminal_command` to stop it, then rerun with piped input or a non-interactive flag.\r\n' +
               `Last output:\r\n${tail.trimEnd()}\r\n`;
             this.ptyManager.appendAgentTranscriptData(sessionId, warning);

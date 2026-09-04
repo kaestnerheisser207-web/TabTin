@@ -57,7 +57,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import com.tabtin.mobile.R
+import com.muse.mobile.R
 import com.tabtin.mobile.data.model.Agent
 import com.tabtin.mobile.data.model.AgentTemplate
 import com.tabtin.mobile.data.model.DeactivatedAgent

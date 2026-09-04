@@ -52,7 +52,7 @@ export interface ToolResultBlock {
 }
 
 /**
- * 图片引用块：base64 已抽出为本地文件，上传层负责转 TabTin 附件并改写为
+ * 图片引用块：base64 已抽出为本地文件，上传层负责转 Muse 附件并改写为
  * 标准 image block。path 指向 extraction 输出目录内的文件。
  */
 export interface ImageRefBlock {
@@ -175,7 +175,7 @@ export interface ScanResult {
 export interface ScanOptions {
   /** 只要 updatedAt 晚于该时刻的会话；undefined = 全量（PRD §4.2 默认近 30 天由上层传入） */
   since?: Date
-  /** 是否包含源侧已归档会话（默认 true，落 TabTin archived 态） */
+  /** 是否包含源侧已归档会话（默认 true，落 Muse archived 态） */
   includeArchived?: boolean
 }
 

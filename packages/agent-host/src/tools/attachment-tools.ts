@@ -87,7 +87,7 @@ function createSaveAttachmentTool(deps: AttachmentToolsDeps): Tool {
       '要读取或分析图片等内容，保存后调用 `read_file`；' +
       '只有用户明确要求打开或交付原文件时，才用 `present_to_user` 的 `local_file` item。' +
       'HTML/HTM **渲染预览**（在浏览器里看页面）则调用 ' +
-      '`run_terminal_command` + `tabtin browser open --url <relative_path或file://绝对路径>`，' +
+      '`run_terminal_command` + `muse browser open --url <relative_path或file://绝对路径>`，' +
       '不要用 `present_to_user` 打开 HTML 源码卡片冒充渲染预览。',
     inputSchema: saveAttachmentInputSchema,
     isReadOnly: false,
@@ -165,10 +165,10 @@ function createSaveAttachmentTool(deps: AttachmentToolsDeps): Tool {
             mime_type: saved.mimeType,
             ...(isHtml
               ? {
-                  next_command: `tabtin browser open --url ${saved.relativePath}`,
+                  next_command: `muse browser open --url ${saved.relativePath}`,
                   hint:
                     'HTML preview uses the built-in browser. Call run_terminal_command with ' +
-                    `tabtin browser open --url ${saved.relativePath} ` +
+                    `muse browser open --url ${saved.relativePath} ` +
                     '(Workspace-relative path or file:// absolute path under the Workspace). ' +
                     'Do NOT use present_to_user local_file for rendered HTML preview — it opens the source/file card.',
                 }

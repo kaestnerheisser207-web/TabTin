@@ -45,7 +45,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import com.tabtin.mobile.R
+import com.muse.mobile.R
 import com.tabtin.mobile.data.model.AgentTodoItem
 import com.tabtin.mobile.data.model.TodoStatus
 import com.tabtin.mobile.features.conversation.cards.ChatCardTokens

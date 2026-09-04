@@ -287,7 +287,7 @@ def _build_feishu_webhook_payload(tracker, alert_type, latest_run, root_cause):
         "msg_type": "interactive",
         "card": {
             "header": {
-                "title": {"tag": "plain_text", "content": "TabTin Tracker 健康警告"},
+                "title": {"tag": "plain_text", "content": "Muse Tracker 健康警告"},
                 "template": "red",
             },
             "elements": [
@@ -316,7 +316,7 @@ def _build_dingtalk_webhook_payload(tracker, alert_type, latest_run, root_cause)
     return {
         "msgtype": "markdown",
         "markdown": {
-            "title": "TabTin Tracker 健康警告",
+            "title": "Muse Tracker 健康警告",
             "text": "\n".join(lines),
         },
     }

@@ -2,7 +2,7 @@
  * Blank 模板 — 干净的起点
  *
  * 如需接入 TabData 数据，运行：
- *   tabtin site provision-token <site-id>
+ *   muse site provision-token <site-id>
  * 然后在此文件中使用 @tabtin/sdk
  */
 export default function App() {
@@ -32,7 +32,7 @@ export default function App() {
               使用 <code>@tabtin/sdk</code> 查询 TabData
             </Step>
             <Step n={3} title="发布">
-              <code>tabtin site build {'<site-id>'}</code> 一键发布到线上
+              <code>muse site build {'<site-id>'}</code> 一键发布到线上
             </Step>
           </div>
         </div>
@@ -43,13 +43,13 @@ export default function App() {
           <pre className="overflow-x-auto text-caption leading-relaxed text-muted-foreground">
 {`import { createClient } from '@tabtin/sdk'
 
-const tabtin = createClient({
+const muse = createClient({
   baseURL: import.meta.env.VITE_TABTIN_API_URL,
   token: import.meta.env.VITE_TABTIN_TOKEN,
 })
-await tabtin.init(import.meta.env.VITE_TABTIN_SPACE_ID)
+await muse.init(import.meta.env.VITE_TABTIN_SPACE_ID)
 
-const { data } = await tabtin
+const { data } = await muse
   .from('你的数据表')
   .select('*')
   .limit(20)
@@ -58,7 +58,7 @@ const { data } = await tabtin
         </div>
 
         <p className="mt-6 text-caption text-muted-foreground">
-          Powered by TabTin · React + Vite + Tailwind CSS
+          Powered by Muse · React + Vite + Tailwind CSS
         </p>
       </div>
     </div>

@@ -45,13 +45,13 @@ class DeleteDeviceGuardTests(TestCase):
         self.owner = user_manager.create_user(
             username=f"devdel_{suffix}",
             email=f"devdel-{suffix}@tabtin.test",
-            password="TabtinTest#2026",
+            password="MuseTest#2026",
         )
         User.objects.db_manager("postgresql").create_user(
             id=self.owner.id,
             username=f"devdel_{suffix}",
             email=f"devdel-{suffix}@tabtin.test",
-            password="TabtinTest#2026",
+            password="MuseTest#2026",
         )
         self.organization = create_test_organization(owner=self.owner, prefix="devdel")
         OrganizationMember.objects.get_or_create(

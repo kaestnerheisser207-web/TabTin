@@ -392,7 +392,7 @@ describe('P0-3: annotateToolsForMode 单元测试（直接对 SSoT 函数）', (
       const annotated = annotateToolsForMode([fakeShell], mode)
       expect(annotated[0]?.description, `${mode} mode injects shell restriction hint`)
         .toMatch(new RegExp(`\\[${label} mode\\] Shell is restricted`))
-      expect(annotated[0]?.description).toMatch(/tabtin readonly subcommands/)
+      expect(annotated[0]?.description).toMatch(/muse readonly subcommands/)
       expect(annotated[0]?.description).toMatch(/ls→glob_search/)
       expect(annotated[0]?.description).toMatch(/cat→read_file/)
       expect(annotated[0]?.description).toMatch(/Writing commands.*will be rejected/)

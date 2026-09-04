@@ -1,6 +1,6 @@
 package com.tabtin.mobile.features.conversation
 
-import com.tabtin.mobile.R
+import com.muse.mobile.R
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNotEquals

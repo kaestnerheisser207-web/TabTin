@@ -15,35 +15,35 @@ export interface TabTinAppIdentity {
 const PROFILE_IDENTITIES: Record<TabTinRuntimeProfile, TabTinAppIdentity> = {
   development: {
     profile: 'development',
-    appId: 'com.tabtin.app.dev',
-    productName: 'TabTin Dev',
-    userDataDirName: 'TabTin Dev',
+    appId: 'com.muse.app.dev',
+    productName: 'Muse Dev',
+    userDataDirName: 'Muse Dev',
   },
   local: {
     profile: 'local',
-    appId: 'com.tabtin.app.local',
-    productName: 'TabTin Local',
-    userDataDirName: 'TabTin Local',
+    appId: 'com.muse.app.local',
+    productName: 'Muse Local',
+    userDataDirName: 'Muse Local',
   },
   community: {
     profile: 'community',
-    appId: 'com.tabtin.community',
-    productName: 'TabTin Community',
-    userDataDirName: 'TabTin Community',
+    appId: 'com.muse.community',
+    productName: 'Muse Community',
+    userDataDirName: 'Muse Community',
   },
   preprod: {
     profile: 'preprod',
-    appId: 'com.tabtin.app.preprod',
+    appId: 'com.muse.app.preprod',
     // Electron safeStorage derives its macOS Keychain service from app.getName().
     // Keep this distinct from production and aligned with the packaged app name.
-    productName: 'TabTin Preprod',
-    userDataDirName: 'TabTin Preprod',
+    productName: 'Muse Preprod',
+    userDataDirName: 'Muse Preprod',
   },
   production: {
     profile: 'production',
-    appId: 'com.tabtin.app',
-    productName: 'TabTin',
-    userDataDirName: 'TabTin',
+    appId: 'com.muse.app',
+    productName: 'Muse',
+    userDataDirName: 'Muse',
   },
 }
 
@@ -63,8 +63,8 @@ function inferProfileFromText(value: string | undefined): TabTinRuntimeProfile |
   if (!normalized) return undefined
   if (normalized.includes('preprod')) return 'preprod'
   if (normalized.includes('community')) return 'community'
-  if (normalized.includes('com.tabtin.app.local')) return 'local'
-  if (/(^|[^a-z0-9])tabtin[^a-z0-9]+local([^a-z0-9]|$)/.test(normalized)) return 'local'
+  if (normalized.includes('com.muse.app.local')) return 'local'
+  if (/(^|[^a-z0-9])muse[^a-z0-9]+local([^a-z0-9]|$)/.test(normalized)) return 'local'
   return undefined
 }
 
@@ -158,8 +158,8 @@ export function resolveRuntimeAppIdentity(): TabTinAppIdentity {
  * 用户可见的默认 Workspace 顶层目录名。
  *
  * Workspace 的 working_dir 是用户本机的外部执行现场，不能跟着 userData
- * 藏进 Application Support；但不同安装档也不能再共用同一个 `~/TabTin`。
- * 正式版保持历史目录不动，其它档位按产品名分根，方便发现也避免互写。
+ * 藏进 Application Support；不同安装档按产品名分根（如 `~/Muse`、
+ * `~/Muse Local`），方便发现也避免互写。
  */
 export function resolveDefaultWorkspaceDirectoryName(
   profile = resolveRuntimeProfile(),

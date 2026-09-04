@@ -19,7 +19,7 @@ describe('renderForCLI', () => {
     expect(out).toContain('操作步骤');
     expect(out).toContain('快捷跳转');
     expect(out).toContain('open "x-apple.systempreferences:');
-    expect(out).toContain('TabTin 主进程则需要重启');
+    expect(out).toContain('Muse 主进程则需要重启');
   });
 
   it('Windows 杀软拦截 → 不含 macOS 字样、含安全软件提示', () => {

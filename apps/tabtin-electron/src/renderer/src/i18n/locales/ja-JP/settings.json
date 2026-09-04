@@ -1,6 +1,6 @@
 {
   "title": "設定",
-  "subtitle": "TabTinの設定を管理します",
+  "subtitle": "Museの設定を管理します",
   "close": "閉じる",
   "navigation": {
     "back": "組織に戻る",
@@ -42,7 +42,7 @@
     "accountDevices": "私のデバイス",
     "systemNotifications": "通知",
     "systemPermissions": "システム権限",
-    "aboutTabtin": "TabTinについて",
+    "aboutTabtin": "Museについて",
     "appearanceDisplay": "外観",
     "voiceHabits": "声",
     "aiSettings": "AI設定",
@@ -86,7 +86,7 @@
     "storageStatus": "ストレージ",
     "dataImport": "データのインポート",
     "performanceMonitor": "パフォーマンス",
-    "tabtinVersion": "TabTin バージョン",
+    "tabtinVersion": "Muse バージョン",
     "resourceOpenPreferences": "デフォルトのエージェント出力アプリ",
     "personalRules": "個人的な一般ルール",
     "myAgents": "AIアバター",
@@ -127,8 +127,8 @@
   "groupOverview": {
     "accountDesc": "プロファイル、ログインセキュリティ、およびアクセス認証情報",
     "credentialsGroupDesc": "ブラウザーのログイン、AI サービス キー、アプリの統合を管理する",
-    "authorizationGroupDesc": "macOS / Windows 上の TabTin に付与される OS レベルの権限",
-    "developerGroupDesc": "TabTin API キーと CLI アクセス",
+    "authorizationGroupDesc": "macOS / Windows 上の Muse に付与される OS レベルの権限",
+    "developerGroupDesc": "Muse API キーと CLI アクセス",
     "myAIGroupDesc": "個人の一般ルールと、デフォルトでエージェントの出力を開く方法を管理します",
     "myAgentsDesc": "組織内の AI アバターを管理します。ペルソナとスキル セットの作成、名前変更、設定を行います。",
     "skillLibraryDesc": "すべてのスキルを参照してエージェントに割り当てます",
@@ -320,9 +320,9 @@
     "themeSystem": "システム",
     "desktopBehaviorSection": "デスクトップの動作",
     "desktopBehaviorTray": "窓を閉めても走り続ける",
-    "desktopBehaviorTrayHint": "TabTin はウィンドウを閉じた後も生き続けます。再ロードせずに、Dock、タスクバー、またはメニューバーのアイコンから再度開く",
+    "desktopBehaviorTrayHint": "Muse はウィンドウを閉じた後も生き続けます。再ロードせずに、Dock、タスクバー、またはメニューバーのアイコンから再度開く",
     "desktopBehaviorAutoStart": "ログイン時に起動",
-    "desktopBehaviorAutoStartHint": "システムにサインインした後、TabTin を自動的に起動します",
+    "desktopBehaviorAutoStartHint": "システムにサインインした後、Muse を自動的に起動します",
     "themeHint": "明るい、暗いを選択するか、システムの外観に従ってください。"
   },
   "performance": {
@@ -345,16 +345,16 @@
   },
   "authorizationSystem": {
     "title": "認可",
-    "subtitle": "TabTin に付与された macOS / Windows の OS レベルの権限を管理する",
+    "subtitle": "Muse に付与された macOS / Windows の OS レベルの権限を管理する",
     "loading": "システム権限を確認しています…",
     "unavailable": "デスクトップクライアント環境は利用できません。許可ステータスを読み取ることができません。",
     "errorTitle": "システム権限のロードに失敗しました",
-    "errorFallback": "再試行するか、TabTin を再起動してこのページを再度開いてください。",
+    "errorFallback": "再試行するか、Muse を再起動してこのページを再度開いてください。",
     "notApplicableHint": "このプラットフォームに適用されない {{count}} 権限は非表示になります",
     "overview": {
-      "taglineAll": "TabTin には必要なシステム権限がすべてあります。",
-      "taglineSome": "TabTin にはいくつかの権限があります。一部の機能は制限されたままです。",
-      "taglineNone": "TabTin にはまだシステム権限がありません。多くの機能が動作しなくなります。",
+      "taglineAll": "Muse には必要なシステム権限がすべてあります。",
+      "taglineSome": "Muse にはいくつかの権限があります。一部の機能は制限されたままです。",
+      "taglineNone": "Muse にはまだシステム権限がありません。多くの機能が動作しなくなります。",
       "summary": "{{total}} のうち {{granted}} が付与されました",
       "refresh": "再確認",
       "refreshDone": "権限ステータスが更新されました"
@@ -384,37 +384,37 @@
     },
     "hints": {
       "detectionUnsupported": "現在のシステムでは、この権限の安定した読み取り可能なステータスが公開されていません。システム設定の実際のスイッチを信頼できる情報源として使用します。",
-      "accessibilityIdentity": "TabTin は実行中のプロセス「{{processLabel}}」をチェックしています。システム設定に複数の TabTin / Electron エントリが含まれている場合は、現在実行中のエントリが有効になっていることを確認してから、TabTin に戻るか、[再確認] をクリックします。",
-      "restartAfterGrant": "この権限がシステム設定ですでに有効になっているにもかかわらず、TabTin に「再起動して確認する」または「未確認」が表示される場合は、再度確認する前に TabTin を完全に終了して再度開きます。 macOS では、このプロセスに許可が表示される前に、現在のアプリ プロセスを再起動する必要がある場合があります。"
+      "accessibilityIdentity": "Muse は実行中のプロセス「{{processLabel}}」をチェックしています。システム設定に複数の Muse / Electron エントリが含まれている場合は、現在実行中のエントリが有効になっていることを確認してから、Muse に戻るか、[再確認] をクリックします。",
+      "restartAfterGrant": "この権限がシステム設定ですでに有効になっているにもかかわらず、Muse に「再起動して確認する」または「未確認」が表示される場合は、再度確認する前に Muse を完全に終了して再度開きます。 macOS では、このプロセスに許可が表示される前に、現在のアプリ プロセスを再起動する必要がある場合があります。"
     },
     "items": {
       "fullDiskAccess": {
         "title": "フルディスクアクセス",
-        "desc": "TabTin に Mac 上のファイルを読み取らせます。プロジェクト ファイルや構成ファイルなどにアクセスするために必要です。"
+        "desc": "Muse に Mac 上のファイルを読み取らせます。プロジェクト ファイルや構成ファイルなどにアクセスするために必要です。"
       },
       "screenCapture": {
         "title": "画面録画",
-        "desc": "TabTin に画面をキャプチャさせます。デスクトップの制御、画面認識、スクリーンショットのフィードバックに必要です。"
+        "desc": "Muse に画面をキャプチャさせます。デスクトップの制御、画面認識、スクリーンショットのフィードバックに必要です。"
       },
       "accessibility": {
         "title": "アクセシビリティ",
-        "desc": "TabTin にキーボード/マウスをシミュレートさせ、デスクトップ コントロールとグローバル ショートカットに必要なアプリ UI を読み取ります。"
+        "desc": "Muse にキーボード/マウスをシミュレートさせ、デスクトップ コントロールとグローバル ショートカットに必要なアプリ UI を読み取ります。"
       },
       "automation": {
         "title": "自動化",
-        "desc": "TabTin をカレンダー、メモ、リマインダーなどと連携させましょう。"
+        "desc": "Muse をカレンダー、メモ、リマインダーなどと連携させましょう。"
       },
       "microphone": {
         "title": "マイク",
-        "desc": "TabTin が音声入力や音声コマンドのためにマイクにアクセスできるようにします。"
+        "desc": "Muse が音声入力や音声コマンドのためにマイクにアクセスできるようにします。"
       },
       "location": {
         "title": "位置情報サービス",
-        "desc": "TabTin が地理情報に依存するタスクの場所にアクセスできるようにします。"
+        "desc": "Muse が地理情報に依存するタスクの場所にアクセスできるようにします。"
       },
       "notifications": {
         "title": "通知",
-        "desc": "TabTin にタスクの完了やメッセージなどのデスクトップ通知を送信させます。"
+        "desc": "Muse にタスクの完了やメッセージなどのデスクトップ通知を送信させます。"
       }
     }
   },
@@ -682,7 +682,7 @@
     "planDialog": {
       "title": "プランを選択してください",
       "descriptionPrefix": "割引やトライアルについては、次のサイトをご覧ください。",
-      "websiteLabel": "TabTin.com",
+      "websiteLabel": "Muse.com",
       "descriptionSuffix": "そしてアカウントマネージャーに連絡してください。",
       "current": "現在の計画",
       "recommended": "おすすめ",
@@ -991,7 +991,7 @@
     },
     "autoTopup": {
       "title": "クレジットオートチャージ",
-      "subtitle": "クレジットが残高警告の閾値を下回った場合、TabTin は組織のキャッシュ ウォレットからクレジットを購入して、AI 会話を継続できます。",
+      "subtitle": "クレジットが残高警告の閾値を下回った場合、Muse は組織のキャッシュ ウォレットからクレジットを購入して、AI 会話を継続できます。",
       "enabled": "クレジットが警告閾値を下回ったら自動チャージ",
       "enabledHint": "すぐに有効になります。オフの場合、クレジットがなくなると AI の会話が停止します。オンの場合、残高が警告閾値を下回ると、以下の金額に従って現金ウォレットからクレジットを購入します",
       "amount": "チャージごとの支出",
@@ -1316,7 +1316,7 @@
     "hint3": "重要なセキュリティ更新が自動的に適用される場合があります",
     "currentVersionWithValue": "現在のバージョン v{{version}}",
     "lastCheckedWithValue": "最終チェック日: {{time}}",
-    "alreadyLatestDescription": "TabTin は起動時にアップデートを自動的にチェックします",
+    "alreadyLatestDescription": "Muse は起動時にアップデートを自動的にチェックします",
     "channelStable": "安定した",
     "channelBeta": "ベータ版",
     "channelAlpha": "アルファ",
@@ -1374,8 +1374,8 @@
     "title": "アンインストールとローカルデータ",
     "subtitle": {
       "windows": "このコンピュータを他の人に渡す前に、ログイン資格情報をクリアしてください。ワークスペース フォルダーとバインドされたローカル ディレクトリは削除されません。 Windowsの設定→アプリからアプリをアンインストールします。",
-      "mac": "このコンピュータを他の人に渡す前に、ログイン資格情報をクリアしてください。ワークスペース フォルダーとバインドされたローカル ディレクトリは削除されません。 TabTin を Finder → アプリケーションからゴミ箱に移動してアンインストールします。",
-      "linux": "このコンピュータを他の人に渡す前に、ログイン資格情報をクリアしてください。ワークスペース フォルダーとバインドされたローカル ディレクトリは削除されません。 TabTin のインストールに使用したソフトウェア マネージャーを使用して TabTin をアンインストールします。"
+      "mac": "このコンピュータを他の人に渡す前に、ログイン資格情報をクリアしてください。ワークスペース フォルダーとバインドされたローカル ディレクトリは削除されません。 Muse を Finder → アプリケーションからゴミ箱に移動してアンインストールします。",
+      "linux": "このコンピュータを他の人に渡す前に、ログイン資格情報をクリアしてください。ワークスペース フォルダーとバインドされたローカル ディレクトリは削除されません。 Muse のインストールに使用したソフトウェア マネージャーを使用して Muse をアンインストールします。"
     },
     "wipeCredentials": "ログイン認証情報をクリアする",
     "wipeCredentialsDesc": "このデバイスに保存されているログイン情報を削除します。再度サインインする必要があります。構成キャッシュとワークスペース ファイルは保持されます。",
@@ -1389,15 +1389,15 @@
     "needsManualDevRestart": "開発モードは自動再起動できません。クリーンアップがスケジュールされています - ターミナルを停止し、pnpm dev を再度実行します。次回の起動時にクリアされます。",
     "uninstallApp": "アンインストールする前にクリーンアップする",
     "uninstallAppDesc": {
-      "windows": "まずログイン資格情報をクリアし (オプションで設定/キャッシュ)、次に Windows の [設定] → [アプリ] から TabTin をアンインストールします。システム アンインストーラーは常にログイン資格情報も削除します。",
-      "mac": "まずログイン資格情報をクリアし (オプションで設定/キャッシュ)、次に TabTin を終了して、Finder → アプリケーションからゴミ箱に移動します。",
-      "linux": "まずログイン資格情報をクリアし (オプションで設定/キャッシュ)、次に TabTin のインストールに使用したソフトウェア マネージャーを使用して TabTin をアンインストールします。"
+      "windows": "まずログイン資格情報をクリアし (オプションで設定/キャッシュ)、次に Windows の [設定] → [アプリ] から Muse をアンインストールします。システム アンインストーラーは常にログイン資格情報も削除します。",
+      "mac": "まずログイン資格情報をクリアし (オプションで設定/キャッシュ)、次に Muse を終了して、Finder → アプリケーションからゴミ箱に移動します。",
+      "linux": "まずログイン資格情報をクリアし (オプションで設定/キャッシュ)、次に Muse のインストールに使用したソフトウェア マネージャーを使用して Muse をアンインストールします。"
     },
     "uninstallConfirmTitle": "アンインストールする前にクリーンアップしますか?",
     "uninstallConfirmDesc": {
       "windows": "ログイン認証情報は削除されます。クリーンアップ後、Windowsの設定→アプリからアンインストールします。ワークスペースとバインドされたフォルダーは削除されません。",
-      "mac": "ログイン認証情報は削除されます。クリーンアップ後、TabTin を終了し、Finder → アプリケーションからゴミ箱に移動します。ワークスペースとバインドされたフォルダーは削除されません。",
-      "linux": "ログイン資格情報は削除されます。クリーンアップ後、TabTin のインストールに使用したソフトウェア マネージャーを使用して TabTin をアンインストールします。ワークスペースとバインドされたフォルダーは削除されません。"
+      "mac": "ログイン認証情報は削除されます。クリーンアップ後、Muse を終了し、Finder → アプリケーションからゴミ箱に移動します。ワークスペースとバインドされたフォルダーは削除されません。",
+      "linux": "ログイン資格情報は削除されます。クリーンアップ後、Muse のインストールに使用したソフトウェア マネージャーを使用して Muse をアンインストールします。ワークスペースとバインドされたフォルダーは削除されません。"
     },
     "deleteLocalDataCheckbox": "ローカル構成とキャッシュも削除します (ワークスペースやバインドされたフォルダーは除く)",
     "uninstallConfirmAction": "クリーン",
@@ -1411,9 +1411,9 @@
       "unknown": "ローカルデータのクリアに失敗しました。後でもう一度試してください。"
     },
     "uninstallHint": {
-      "windows": "TabTin をアンインストールするには、「Windows 設定」→「アプリ」を開きます。アンインストールでは常にログイン認証情報が削除され、オプションで設定/キャッシュをクリアできます (ワークスペースはクリアしません)。",
-      "mac": "TabTin を終了し、Finder → アプリケーションからゴミ箱に移動します。ワークスペースとバインドされたフォルダーは削除されません。",
-      "linux": "TabTin のインストールに使用したソフトウェア マネージャーを使用して TabTin をアンインストールします。ワークスペースとバインドされたフォルダーは削除されません。"
+      "windows": "Muse をアンインストールするには、「Windows 設定」→「アプリ」を開きます。アンインストールでは常にログイン認証情報が削除され、オプションで設定/キャッシュをクリアできます (ワークスペースはクリアしません)。",
+      "mac": "Muse を終了し、Finder → アプリケーションからゴミ箱に移動します。ワークスペースとバインドされたフォルダーは削除されません。",
+      "linux": "Muse のインストールに使用したソフトウェア マネージャーを使用して Muse をアンインストールします。ワークスペースとバインドされたフォルダーは削除されません。"
     }
   },
   "changelog": {
@@ -1566,7 +1566,7 @@
     "emailPlaceholder": "user@example.com",
     "phoneLabel": "電話番号",
     "phonePlaceholder": "登録した電話番号",
-    "phoneHint": "この電話番号を持つ TabTin アカウントをすでに持っている必要があります",
+    "phoneHint": "この電話番号を持つ Muse アカウントをすでに持っている必要があります",
     "phoneRequired": "電話番号を入力してください",
     "roleFixedHint": "新しいメンバーがこの役割に加わります",
     "cancel": "キャンセル",
@@ -1603,7 +1603,7 @@
     "personalPlugins": "インストール可能な個人用プラグイン",
     "personalPluginsDesc": "公式および信頼できる個人用プラグインがここに表示されます。インストールすると、バンドルがローカルに追加されるだけです。有効化は後でエージェントまたはワークスペースの設定から行われます。",
     "builtinPlugins": "組み込みプラグイン",
-    "builtinPluginsDesc": "これらの機能は TabTin に同梱されており、このページからインストール、削除、または有効化することはできません。",
+    "builtinPluginsDesc": "これらの機能は Muse に同梱されており、このページからインストール、削除、または有効化することはできません。",
     "installedPersonalPlugins": "インストールされている個人用プラグイン",
     "installedPersonalPluginsDesc": "インストールされたバンドルは、後でエージェントまたはワークスペースを有効にするために使用できます。",
     "installedEmptyTitle": "個人用プラグインはまだインストールされていません",
@@ -1637,7 +1637,7 @@
     "updating": "更新中...",
     "updateAvailableNotice": "{{name}} には正式リリースの {{release}} が利用可能です。申請する前に確認してください。",
     "updateUpToDateNotice": "{{name}} は最新です。",
-    "updateNotOfficialNotice": "{{name}} は TabTin の公式リリースではないため、TabTin はここで管理された更新を提供しません。",
+    "updateNotOfficialNotice": "{{name}} は Muse の公式リリースではないため、Muse はここで管理された更新を提供しません。",
     "updateCheckFailedNotice": "{{name}} アップデートのチェックに失敗しました: {{message}}",
     "confirmUpdatePrompt": "{{name}} を {{current}} から {{next}} に更新しますか?",
     "updateSuccessNotice": "{{name}} が {{release}} に更新されました。",
@@ -1743,10 +1743,10 @@
     "userSubtitle": "警告する通知の種類を選択します。すべてのチームに適用されます。",
     "refreshPermission": "通知許可ステータスを更新する",
     "categoryToggle": "{{category}} 通知",
-    "permissionsSubtitle": "TabTin に付与された通知と OS 権限を管理する",
+    "permissionsSubtitle": "Muse に付与された通知と OS 権限を管理する",
     "notificationsSectionDesc": "警告する通知の種類を選択します。障害のあるタイプは沈黙する",
     "otherPermsSection": "その他の権限",
-    "otherPermsDesc": "macOS / Windows によって TabTin に付与されるシステム権限",
+    "otherPermsDesc": "macOS / Windows によって Muse に付与されるシステム権限",
     "rulesSubtitle": "管理者: イベントが組織通知になる方法を構成します",
     "prefsMovedHint": "通知設定 (バナー、サウンド、DND など) が [個人] → [設定] → [通知] に移動しました。このページでは、組織通知ルールのみを構成するようになりました。",
     "rules": "通知ルール",
@@ -1818,7 +1818,7 @@
     "permissionGranted": "システム通知許可が付与されました",
     "permissionDenied": "システム通知が無効になっています。システム環境設定で有効にしてください",
     "permissionProvisional": "システム通知は暫定的に許可されており、静かに配信される可能性があります",
-    "permissionRestricted": "システム通知は制限されているため、現在 TabTin に対して有効にすることはできません",
+    "permissionRestricted": "システム通知は制限されているため、現在 Muse に対して有効にすることはできません",
     "permissionNotDetermined": "システム通知許可はまだ決定していません。通知をトリガーするか、システム設定を確認してください",
     "permissionUnsupported": "このシステムではデスクトップ通知はサポートされていません",
     "permissionUnknown": "システム通知許可を検出できません",
@@ -1996,7 +1996,7 @@
     },
     "envImport": {
       "title": ".env から貼り付け",
-      "description": ".env コンテンツを貼り付けます。 TabTin は一般的な AI サービスを自動検出します。",
+      "description": ".env コンテンツを貼り付けます。 Muse は一般的な AI サービスを自動検出します。",
       "textLabel": ".env コンテンツ",
       "recognized": "{{count}} 変数が検出されました",
       "selectAll": "すべて選択",
@@ -2034,7 +2034,7 @@
       "close": "解雇する",
       "closeTooltip": "このセッションでは非表示 — バナーは次回の起動に戻ります",
       "alsoImportPasswords": "保存されたパスワードもインポートします",
-      "passwordSecurityNotice": "パスワードはアカウント内で暗号化されます。 TabTin チームはそれらを読み取ることができません。",
+      "passwordSecurityNotice": "パスワードはアカウント内で暗号化されます。 Muse チームはそれらを読み取ることができません。",
       "noBrowsersDetected": "インストールされているブラウザが検出されませんでした",
       "openCredentialsSettings": "ブラウザ設定を開く",
       "manualSettingsHint": "[設定] → [デバイス] → [ブラウザ] に移動してログインを管理したり、JSON ファイルをインポートしたりすることもできます。",
@@ -2051,7 +2051,7 @@
     },
     "legacyMigration": {
       "title": "クロスワークスペースのログインデータを整理する",
-      "subtitle": "ログイン状態を古いワークスペースごとのストレージから共有環境に移動します (コピーのみ、オリジナルは保持されます)。 TabTin は、最初の起動時にこれを自動的に実行します。ワークスペース間の共有が機能しない場合にのみ、このボタンを使用して再試行します。",
+      "subtitle": "ログイン状態を古いワークスペースごとのストレージから共有環境に移動します (コピーのみ、オリジナルは保持されます)。 Muse は、最初の起動時にこれを自動的に実行します。ワークスペース間の共有が機能しない場合にのみ、このボタンを使用して再試行します。",
       "loading": "読み込みステータス…",
       "notRunYet": "このデバイスではまだ実行されていません。",
       "lastRun": "最終実行: {{time}}",
@@ -2171,7 +2171,7 @@
       "saveAsNewAction": "新規として保存",
       "neverAction": "このサイトでは決してありません",
       "dismissAction": "解雇する",
-      "securityHint": "パスワードは保存時に暗号化されます。 TabTin チームはそれを読むことができません。",
+      "securityHint": "パスワードは保存時に暗号化されます。 Muse チームはそれを読むことができません。",
       "saveSuccess": "パスワードが保存されました",
       "updateSuccess": "パスワードが更新されました",
       "saveFailed": "保存に失敗しました。もう一度お試しください",
@@ -2186,7 +2186,7 @@
     },
     "saveBlacklist": {
       "title": "保存プロンプトが無効になっているサイト",
-      "subtitle": "TabTin では「パスワードを保存しますか?」は表示されません。これらのサイトのプロンプト。次回サインインするときにプロンプトを再度有効にするには、エントリを削除します。",
+      "subtitle": "Muse では「パスワードを保存しますか?」は表示されません。これらのサイトのプロンプト。次回サインインするときにプロンプトを再度有効にするには、エントリを削除します。",
       "loading": "読み込み中...",
       "loadFailed": "ブロックされたサイトを読み込めませんでした",
       "empty": "まだブロックされたサイトはありません",
@@ -2236,7 +2236,7 @@
       "deleted": "Web サイトの認証情報が削除されました",
       "deleteFailed": "削除に失敗しました",
       "confirmImportTitle": "パスワードインポートの確認",
-      "confirmImportDescription": "パスワードは {{browser}} から読み取られ、TabTin 上で暗号化されます。これには、macOS キーチェーン認証が必要です。",
+      "confirmImportDescription": "パスワードは {{browser}} から読み取られ、Muse 上で暗号化されます。これには、macOS キーチェーン認証が必要です。",
       "extractedCount": "{{count}} に保存された Web サイトのパスワードが見つかりました",
       "selectAll": "すべて選択",
       "deselectAll": "すべての選択を解除します",
@@ -2285,7 +2285,7 @@
       "pickerSearchPlaceholder": "アプリ名またはパッケージで検索…",
       "pickerNoApps": "インストールされているアプリが見つかりません",
       "pickerNoMatch": "マッチングアプリがない",
-      "pickerDeviceOffline": "デバイスが接続されていないか、応答していません。携帯電話が TabTin に接続されており、画面がオンになっていることを確認してください。",
+      "pickerDeviceOffline": "デバイスが接続されていないか、応答していません。携帯電話が Muse に接続されており、画面がオンになっていることを確認してください。",
       "pickerUnknownError": "アプリリストの取得に失敗しました。後でもう一度試してください。",
       "loadFailed": "アプリ認証情報のロードに失敗しました",
       "appName": "アプリ名",
@@ -2459,7 +2459,7 @@
       "ready": "あなたの語彙、文脈、ルールにより、一般的な ASR よりも認識が鋭くなっています"
     },
     "statsVocabLabel": "語彙",
-    "statsVocabHint": "あなたの言葉 + TabTin ビルトイン",
+    "statsVocabHint": "あなたの言葉 + Muse ビルトイン",
     "statsContextLabel": "コンテキスト",
     "statsContextHint": "{{count}} ソース",
     "statsRulesLabel": "ルールを修正する",
@@ -2471,7 +2471,7 @@
     "vocabDuplicate": "「{{word}}」はすでにあなたの語彙に入っています",
     "vocabEmpty": "まだ何もありません。自分の名前または頻繁に使用するプロジェクト コードを追加してみてください",
     "vocabRemove": "「{{word}}」を削除",
-    "vocabPlatformToggle": "{{count}} TabTin 用語も自動的にブーストされます",
+    "vocabPlatformToggle": "{{count}} Muse 用語も自動的にブーストされます",
     "vocabPlatformFooter": "これらは常にオンになっており、メンテナンスする必要はありません",
     "contextSection": "ライブコンテキスト",
     "contextHint": "録音時にこれらがエンジンに送信されるため、何について話しているのかが認識されます。",
@@ -2551,7 +2551,7 @@
     "largeFiles": "大きなファイル",
     "largeFilesDesc": "最も多くのスペースを占めるファイル",
     "noLargeFiles": "1MBを超えるファイルはありません",
-    "emptyState": "まだファイルがありません。 TabTin の使用を開始すると、ストレージの分布がここに表示されます。",
+    "emptyState": "まだファイルがありません。 Muse の使用を開始すると、ストレージの分布がここに表示されます。",
     "errorState": "ロードに失敗しました。後でもう一度試してください。",
     "footnote": "現在の統計には、画像、ビデオ、ドキュメントの添付ファイルなどが含まれます。コラボレーション エンジンのデータ (バージョン履歴など) は、将来のリリースで追跡される予定です。",
     "viewDetails": "詳細を見る",
@@ -2739,8 +2739,8 @@
     "title": "デフォルトのアプリ",
     "description": "エージェント (またはあなた) がチャット内のリンクをクリックしたときに、デフォルトで各リソース タイプまたは URL スキームを処理するアプリを選択します。",
     "behaviorHint": "設定したら、一致するリンクをクリックすると、選択したアプリが開きます。現在のデフォルトにはチェックが付いています。",
-    "fallbackHint": "選択したアプリが現在利用できない場合 (アンインストールされているか、タイプが宣言されていない場合)、TabTin はシステムのデフォルトではなく推奨アプリに戻ります。設定は保存され、アプリが復帰すると復活します。",
-    "typesSection": "リソースタイプ (TabTin 形式)",
+    "fallbackHint": "選択したアプリが現在利用できない場合 (アンインストールされているか、タイプが宣言されていない場合)、Muse はシステムのデフォルトではなく推奨アプリに戻ります。設定は保存され、アプリが復帰すると復活します。",
+    "typesSection": "リソースタイプ (Muse 形式)",
     "schemesSection": "URL スキーム (業界形式)",
     "typesEmpty": "現在、あらゆる種類のリソースを開くことができると宣言しているアプリはありません。",
     "schemesEmpty": "現在、任意の URL スキームを処理できると宣言しているアプリはありません。",
@@ -2800,7 +2800,7 @@
     "detailEmpty": "左側で AI アバターを選択すると、そのプロフィールが表示されます",
     "editAvatarAction": "アバターの編集",
     "editAvatarTitle": "アバターの編集",
-    "avatarPresetHint": "アップロードはまだサポートされていません。 TabTin ブランドのアバターを選択します。",
+    "avatarPresetHint": "アップロードはまだサポートされていません。 Muse ブランドのアバターを選択します。",
     "avatarLabel": "アバター",
     "avatarSaveAction": "保存",
     "avatarSaveSuccess": "アバターが更新されました",

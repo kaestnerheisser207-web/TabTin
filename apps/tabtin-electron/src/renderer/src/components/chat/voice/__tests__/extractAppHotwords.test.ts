@@ -54,16 +54,16 @@ describe('extractAppHotwords', () => {
 
   it('should merge organization and space names, deduplicated', () => {
     vi.mocked(useOrganizationStore.getState).mockReturnValue({
-      selectedOrganization: { name: 'TabTin' },
+      selectedOrganization: { name: 'Muse' },
     } as any)
     vi.mocked(useSpaceStore.getState).mockReturnValue({
-      selectedSpace: { name: 'TabTin Space' },
+      selectedSpace: { name: 'Muse Space' },
     } as any)
     const result = extractAppHotwords()
-    const tabTinCount = result.filter(w => w === 'TabTin').length
+    const tabTinCount = result.filter(w => w === 'Muse').length
     expect(tabTinCount).toBe(1)
     expect(result).toContain('Space')
-    expect(result).toContain('TabTin Space')
+    expect(result).toContain('Muse Space')
   })
 
   it('should filter out single-character words', () => {

@@ -1,7 +1,7 @@
 package com.tabtin.mobile.features.files
 
 import android.content.Context
-import com.tabtin.mobile.R
+import com.muse.mobile.R
 import com.tabtin.mobile.data.model.files.CloudDriveBrowseScope
 import com.tabtin.mobile.data.model.files.CloudDriveCollection
 import com.tabtin.mobile.data.model.files.CloudDriveFolderPage

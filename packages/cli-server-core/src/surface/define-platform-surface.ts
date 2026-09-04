@@ -33,7 +33,7 @@ import { _registerSurface } from './registry.js'
  *
  * 这个约束保证：
  *   - IPC channel `chat:export-md` 与 HTTP path `/chat/export-md` 一一映射
- *   - CLI 命令 `tabtin chat export-md` 与 Go cobra 命名一致
+ *   - CLI 命令 `muse chat export-md` 与 Go cobra 命名一致
  *   - grep 时不需要处理大小写 / 特殊字符
  */
 const _MODULE_VERB_PATTERN = /^[a-z][a-z0-9-]*$/

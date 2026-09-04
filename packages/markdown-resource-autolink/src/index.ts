@@ -16,7 +16,7 @@
  *   - 只识别**绝对路径**（^/ 或 ^[A-Z]:\\）。相对路径在渲染层无 baseDir 上下文，
  *     交给 D5 行业格式 `file://` 显式表达，本插件不猜
  *   - http(s) URL 由 remark-gfm 初步识别；本插件修正裸链接边界，并补 GFM
- *     不识别的 TabTin 自有资源协议
+ *     不识别的 Muse 自有资源协议
  *   - 升级目标用 `tabtin://resource/file/<encoded>` 形态，让下游 Router 走
  *     自有格式 type=file 派发；与 iOS 已自约定的 `tabtin://resource/<type>/<id>`
  *     形态对齐（详见 RFC §10.1）
@@ -74,8 +74,8 @@ const ABS_PATH_GLOBAL = new RegExp(
   'gu',
 )
 
-/** GFM 不识别的 TabTin 自有资源协议；尾随句读不属于链接。 */
-const TABTIN_RESOURCE_GLOBAL = /(?:tabtin|tabtin-preprod|tabtin-dev):\/\/resource\/[^\s<>"'`]+/gu
+/** GFM 不识别的 Muse 自有资源协议；尾随句读不属于链接。 */
+const TABTIN_RESOURCE_GLOBAL = /(?:muse|tabtin-preprod|tabtin-dev):\/\/resource\/[^\s<>"'`]+/gu
 const TABTIN_RESOURCE_TRAILING = /[.,;:!?)\]}'"，。！？、；：）】]+$/u
 
 /**
@@ -169,7 +169,7 @@ interface AutolinkOptions {
  * 默认 URI builder：升级裸路径为 D5 自有格式 `tabtin://resource/file/<id>`。
  *
  * 与 W2 `packages/resource-router` parser 字符级对齐：parse 后还原 pointer.id =
- * 原始路径（urldecode）；scheme='tabtin' / type='file' / hint=null。
+ * 原始路径（urldecode）；scheme='muse' / type='file' / hint=null。
  */
 function defaultBuildUri(rawPath: string): string {
   return `tabtin://resource/file/${encodeURIComponent(rawPath)}`

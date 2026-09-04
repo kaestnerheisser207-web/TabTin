@@ -1954,7 +1954,7 @@ def stream_upstream(
                         yield f"data: {payload}\n\n"
 
                     elif line.startswith(":"):
-                        # 上游 comment 可透传 keepalive，但不能伪造 TabTin 内部 timing comment。
+                        # 上游 comment 可透传 keepalive，但不能伪造 Muse 内部 timing comment。
                         if line.strip().startswith(": tabtin_timing "):
                             continue
                         yield f"{line}\n\n"

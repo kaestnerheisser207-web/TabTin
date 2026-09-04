@@ -56,7 +56,7 @@ describe('buildReplayHistoryFromTranscript', () => {
         role: 'assistant',
         content: [
           { type: 'thinking', thinking: '打开浏览器' },
-          { type: 'tool_use', id: 'run_terminal_command_0', name: 'run_terminal_command', input: { command: 'tabtin browser open https://www.xiaohongshu.com' } },
+          { type: 'tool_use', id: 'run_terminal_command_0', name: 'run_terminal_command', input: { command: 'muse browser open https://www.xiaohongshu.com' } },
         ],
       },
       {

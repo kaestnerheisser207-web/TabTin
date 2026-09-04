@@ -1,4 +1,4 @@
-module github.com/TabTin/tabtin-cli
+module github.com/Muse/muse-cli
 
 go 1.26.1
 

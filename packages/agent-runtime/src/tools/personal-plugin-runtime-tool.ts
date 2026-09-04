@@ -67,7 +67,7 @@ const launchRuntimeInputSchema = {
     },
     openBrowser: {
       type: 'boolean',
-      description: 'Whether TabTin should open the plugin local service URL in the in-app browser. Defaults to true.',
+      description: 'Whether Muse should open the plugin local service URL in the in-app browser. Defaults to true.',
     },
     requireMcp: {
       type: 'boolean',

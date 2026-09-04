@@ -343,7 +343,7 @@
       "feishuReviewConfirm": "Confirmer l'importation",
       "feishuReviewEmpty": "Conservez au moins un tableau ou un document",
       "feishuIncludeAttachments": "Synchroniser les pièces jointes (plus lent)",
-      "feishuIncludeAttachmentsHint": "Désactivé par défaut ; lorsqu'il est activé, les fichiers sont téléchargés dans les pièces jointes TabTin",
+      "feishuIncludeAttachmentsHint": "Désactivé par défaut ; lorsqu'il est activé, les fichiers sont téléchargés dans les pièces jointes Muse",
       "feishuImporting": "Importation…",
       "feishuImportProgressRunning": "Importation de {{done}}/{{total}}",
       "feishuImportProgressQueued": "Importation de {{done}}/{{total}} ({{queued}} en file d'attente)",
@@ -958,20 +958,24 @@
     },
     "quickUse": {
       "sectionTitle": "Utilisation rapide",
-      "autoDescription": "Aucune configuration nécessaire. TabTin générera d'abord un brouillon de tâche prêt à être envoyé.",
+      "autoDescription": "Aucune configuration nécessaire. Muse générera d'abord un brouillon de tâche prêt à être envoyé.",
       "cardHint": "Générez un brouillon d’invite et placez-le dans l’entrée Chat pour examen.",
       "insertAction": "Générer",
       "toastTitle": "Généré dans l'entrée",
       "toastDescription": "Vous pouvez ajuster les champs prédéfinis avant l'envoi.",
       "generatedTitle": "Brouillon de tâche généré",
-      "generatedHint": "TabTin a d'abord rempli le modèle. Ajustez-le si nécessaire, puis envoyez.",
+      "generatedHint": "Muse a d'abord rempli le modèle. Ajustez-le si nécessaire, puis envoyez.",
       "readyBadge": "Prêt",
       "previewLabel": "Sera envoyé à l'agent",
       "toggleOn": "Sur",
       "toggleOff": "Désactivé"
     },
     "quickUseBuilder": {
-      "button": "Modèle à utilisation rapide", "variables": "Variables", "variablesHint": "Utilisez une invite fixe ou ajoutez des variables à remplir par les utilisateurs.", "preview": "Aperçu", "cancel": "Annuler"
+      "button": "Modèle à utilisation rapide",
+      "variables": "Variables",
+      "variablesHint": "Utilisez une invite fixe ou ajoutez des variables à remplir par les utilisateurs.",
+      "preview": "Aperçu",
+      "cancel": "Annuler"
     },
     "versionPublish": {
       "title": "Publier une nouvelle version",
@@ -1254,7 +1258,7 @@
       "xlsxTruncated": "Affichage de {{shown}} des {{total}} lignes",
       "xlsxSheetsLimited": "Afficher uniquement les premières feuilles {{max}}",
       "xlsxFormulasCached": "Affichage des résultats de la formule {{count}} enregistrés dans le fichier.",
-      "xlsxFormulasCalculated": "TabTin a calculé la ou les formules {{count}} localement pour cet aperçu. Les résultats n'ont pas été enregistrés dans le fichier.",
+      "xlsxFormulasCalculated": "Muse a calculé la ou les formules {{count}} localement pour cet aperçu. Les résultats n'ont pas été enregistrés dans le fichier.",
       "xlsxFormulasUnavailable": "Les formules {{count}} n'ont pas de résultat enregistré et ne peuvent pas être calculées en aperçu. Ouvrez le fichier dans une application de feuille de calcul.",
       "loadingDocxViewer": "Chargement de l'aperçu du document...",
       "loadingPptxViewer": "Chargement de la présentation...",
@@ -1562,7 +1566,7 @@
   },
   "browserRestore": {
     "restoringTitle": "Restauration de la page",
-    "restoringDescription": "TabTin rouvre la page précédemment enregistrée.",
+    "restoringDescription": "Muse rouvre la page précédemment enregistrée.",
     "failedTitle": "La restauration de la page a échoué",
     "failedDescription": "L'URL d'origine est toujours enregistrée. Réessayez ou fermez cet onglet.",
     "retry": "Réessayer",

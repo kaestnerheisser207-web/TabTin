@@ -6,8 +6,8 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/TabTin/tabtin-cli/internal/cmdutil"
-	"github.com/TabTin/tabtin-cli/internal/output"
+	"github.com/Muse/muse-cli/internal/cmdutil"
+	"github.com/Muse/muse-cli/internal/output"
 )
 
 func newCmdMcp(f *cmdutil.Factory) *cobra.Command {
@@ -17,13 +17,13 @@ func newCmdMcp(f *cmdutil.Factory) *cobra.Command {
 		Long: `管理当前 Agent 已启用的 MCP Server：发现工具、读取资源、获取 Prompt。
 
 示例：
-  tabtin mcp list-servers
-  tabtin mcp list-tools --server-name github
-  tabtin mcp list-resources
-  tabtin mcp read-resource --uri "file:///readme.md"
-  tabtin mcp list-prompts
-  tabtin mcp get-prompt --prompt-name summarize
-  tabtin mcp call --server-name github --tool-name create_issue --arguments '{"title":"bug"}'`,
+  muse mcp list-servers
+  muse mcp list-tools --server-name github
+  muse mcp list-resources
+  muse mcp read-resource --uri "file:///readme.md"
+  muse mcp list-prompts
+  muse mcp get-prompt --prompt-name summarize
+  muse mcp call --server-name github --tool-name create_issue --arguments '{"title":"bug"}'`,
 	}
 
 	defs := []cmdutil.CommandDef{
@@ -114,7 +114,7 @@ func mcpReadResourceFunc(f *cmdutil.Factory) func(ctx *cmdutil.RunContext) error
 	return func(ctx *cmdutil.RunContext) error {
 		uri, _ := ctx.FlagValues["uri"].(string)
 		if uri == "" {
-			return fmt.Errorf("必须提供 --uri 参数，用法：tabtin mcp read-resource --uri <uri>")
+			return fmt.Errorf("必须提供 --uri 参数，用法：muse mcp read-resource --uri <uri>")
 		}
 
 		body := map[string]any{"uri": uri, "agent_id": ctx.AgentID}
@@ -138,7 +138,7 @@ func mcpGetPromptFunc(f *cmdutil.Factory) func(ctx *cmdutil.RunContext) error {
 	return func(ctx *cmdutil.RunContext) error {
 		promptName, _ := ctx.FlagValues["prompt-name"].(string)
 		if promptName == "" {
-			return fmt.Errorf("必须提供 --prompt-name 参数，用法：tabtin mcp get-prompt --prompt-name <name>")
+			return fmt.Errorf("必须提供 --prompt-name 参数，用法：muse mcp get-prompt --prompt-name <name>")
 		}
 
 		body := map[string]any{"prompt_name": promptName, "agent_id": ctx.AgentID}
@@ -171,10 +171,10 @@ func mcpCallFunc(f *cmdutil.Factory) func(ctx *cmdutil.RunContext) error {
 		connectionID, _ := ctx.FlagValues["connection-id"].(string)
 		toolName, _ := ctx.FlagValues["tool-name"].(string)
 		if toolName == "" {
-			return fmt.Errorf("必须提供 --tool-name，用法：tabtin mcp call --server-name X --tool-name Y")
+			return fmt.Errorf("必须提供 --tool-name，用法：muse mcp call --server-name X --tool-name Y")
 		}
 		if serverName == "" && connectionID == "" {
-			return fmt.Errorf("必须提供 --server-name 或 --connection-id 之一，用法：tabtin mcp call --server-name X --tool-name Y")
+			return fmt.Errorf("必须提供 --server-name 或 --connection-id 之一，用法：muse mcp call --server-name X --tool-name Y")
 		}
 
 		body := map[string]any{

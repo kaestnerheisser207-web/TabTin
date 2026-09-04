@@ -13,14 +13,14 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/TabTin/tabtin-cli/internal/cmdutil"
-	"github.com/TabTin/tabtin-cli/internal/errcode"
-	"github.com/TabTin/tabtin-cli/internal/output"
+	"github.com/Muse/muse-cli/internal/cmdutil"
+	"github.com/Muse/muse-cli/internal/errcode"
+	"github.com/Muse/muse-cli/internal/output"
 )
 
 // ─── File ─────────────────────────────────────────────────────────
 //
-// `tabtin file create` 是「文件生成」能力的薄代理：它本身不生成任何内容，只是把
+// `muse file create` 是「文件生成」能力的薄代理：它本身不生成任何内容，只是把
 // 参数透传给随包分发的独立二进制 `tabtin-filegen`（PyInstaller 自包含，客户端免装
 // Python），由后者用成熟库生成 xlsx/docx/pptx/pdf。
 //
@@ -37,7 +37,7 @@ func fileGenBinaryName() string {
 }
 
 // resolveFileGenBinary 定位 tabtin-filegen：先查 PATH（Electron CLI Server 已把其
-// 目录注入 PTY env），再回退到相对 tabtin 自身可执行文件的若干已知布局（打包 /
+// 目录注入 PTY env），再回退到相对 muse 自身可执行文件的若干已知布局（打包 /
 // dev），都找不到则返回错误。
 func resolveFileGenBinary() (string, error) {
 	name := fileGenBinaryName()
@@ -49,7 +49,7 @@ func resolveFileGenBinary() (string, error) {
 	if err == nil {
 		dir := filepath.Dir(exe)
 		candidates := []string{
-			// 与 tabtin 同目录
+			// 与 muse 同目录
 			filepath.Join(dir, name),
 			// 打包：Resources/tabtin-cli-go/dist/tabtin → Resources/tabtin-filegen-python/dist/tabtin-filegen
 			filepath.Join(dir, "..", "..", "tabtin-filegen-python", "dist", name),
@@ -74,7 +74,7 @@ func newCmdFile(f *cmdutil.Factory) *cobra.Command {
 
 由随包分发的 tabtin-filegen 二进制完成（客户端无需 Python）：create 从 JSON spec
 生成、read 抽取已有文件内容；生成后用 present_to_user 的 local_file item 发布成 chat artifact 卡片。`,
-		Example: "  echo '{...}' | tabtin file create -t pdf -o out.pdf -s -\n  tabtin file read -t xlsx -i data.xlsx\n  tabtin file schema -t xlsx",
+		Example: "  echo '{...}' | muse file create -t pdf -o out.pdf -s -\n  muse file read -t xlsx -i data.xlsx\n  muse file schema -t xlsx",
 	}
 
 	// Layer: L2
@@ -87,7 +87,7 @@ func newCmdFile(f *cmdutil.Factory) *cobra.Command {
 任何生成逻辑——新增文件类型时本命令无需改动（--type 由 tabtin-filegen 校验）。
 常见陷阱：--spec 走 stdin 时记得传 '-'；只传相对/可写的 --save-to 路径；生成后仍需
 调用 present_to_user 才会在聊天里出现卡片。`,
-		Example:      "  tabtin file create -t xlsx --save-to report.xlsx -s @spec.json\n  echo '{\"slides\":[{\"title\":\"Hi\"}]}' | tabtin file create -t pptx -o deck.pptx -s -\n  tabtin file create --save-to report.pdf -s @doc.json  # 按扩展名推断类型\n  tabtin file schema --type pdf  # 查看某类型的 spec 结构",
+		Example:      "  muse file create -t xlsx --save-to report.xlsx -s @spec.json\n  echo '{\"slides\":[{\"title\":\"Hi\"}]}' | muse file create -t pptx -o deck.pptx -s -\n  muse file create --save-to report.pdf -s @doc.json  # 按扩展名推断类型\n  muse file schema --type pdf  # 查看某类型的 spec 结构",
 		Layer:        "L2",
 		Risk:         cmdutil.RiskWrite,
 		RiskDeclared: true,
@@ -99,7 +99,7 @@ func newCmdFile(f *cmdutil.Factory) *cobra.Command {
 			{Name: "spec", Short: "s", Type: cmdutil.FlagString, Required: true,
 				Desc: "JSON spec（'-' 读 stdin / @file 读文件 / 字面量 JSON）"},
 		},
-		AIHelp:    "生成 office/pdf 文件到工作目录，再用 present_to_user 的 local_file item 发布。每类型 spec 不同，先 `tabtin file schema --type <t>` 看结构；类型清单 `tabtin file list-types`。生成后必须调用 present_to_user 才会出现卡片。",
+		AIHelp:    "生成 office/pdf 文件到工作目录，再用 present_to_user 的 local_file item 发布。每类型 spec 不同，先 `muse file schema --type <t>` 看结构；类型清单 `muse file list-types`。生成后必须调用 present_to_user 才会出现卡片。",
 		HasFormat: true,
 		DryRun: func(ctx *cmdutil.RunContext) *cmdutil.DryRunPlan {
 			// 与 runFileCreate 同口径：trim 后为空的 --save-to 真实执行会被拒，dry-run 如实预告
@@ -125,7 +125,7 @@ func newCmdFile(f *cmdutil.Factory) *cobra.Command {
 		},
 	})
 
-	// 发现类命令同样代理到 tabtin-filegen——Agent 只需面对 `tabtin file`，
+	// 发现类命令同样代理到 tabtin-filegen——Agent 只需面对 `muse file`，
 	// 不直接接触底层 tabtin-filegen 二进制。两者只读（RiskRead）、原样透传输出。
 	// Layer: L2
 	cmdutil.MustRegisterCommand(cmd, f, cmdutil.CommandDef{
@@ -134,7 +134,7 @@ func newCmdFile(f *cmdutil.Factory) *cobra.Command {
 		Long: `打印指定文件类型（xlsx/docx/pptx/pdf）的 JSON spec 结构说明。
 调用 file create 前用它了解每类型 spec 的字段与形状。
 透传给随包分发的 tabtin-filegen，Go 侧不内置 schema 定义。`,
-		Example:      "  tabtin file schema --type xlsx\n  tabtin file schema -t pdf\n  tabtin file schema -t docx",
+		Example:      "  muse file schema --type xlsx\n  muse file schema -t pdf\n  muse file schema -t docx",
 		Layer:        "L2",
 		Risk:         cmdutil.RiskRead,
 		RiskDeclared: true,
@@ -155,7 +155,7 @@ func newCmdFile(f *cmdutil.Factory) *cobra.Command {
 		Long: `抽取已有 xlsx / docx / pptx / pdf 文件的内容，输出 JSON。
 用于读懂用户已有的 office/pdf 文件（不要对这些二进制用 read_file，会得到乱码）。
 透传给随包分发的 tabtin-filegen，Go 侧不含解析逻辑。`,
-		Example:      "  tabtin file read --type xlsx --input data.xlsx\n  tabtin file read -i report.pdf\n  tabtin file read -t docx -i contract.docx",
+		Example:      "  muse file read --type xlsx --input data.xlsx\n  muse file read -i report.pdf\n  muse file read -t docx -i contract.docx",
 		Layer:        "L2",
 		Risk:         cmdutil.RiskRead,
 		RiskDeclared: true,
@@ -182,7 +182,7 @@ func newCmdFile(f *cmdutil.Factory) *cobra.Command {
 		Long: `列出 file create 支持的所有文件类型及其扩展名（JSON 数组）。
 用于发现当前可生成哪些文件类型。
 透传给随包分发的 tabtin-filegen；新增类型时本命令无需改动。`,
-		Example:      "  tabtin file list-types\n  tabtin file list-types | jq\n  tabtin file list-types | jq '.[].file_type'",
+		Example:      "  muse file list-types\n  muse file list-types | jq\n  muse file list-types | jq '.[].file_type'",
 		Layer:        "L2",
 		Risk:         cmdutil.RiskRead,
 		RiskDeclared: true,
@@ -265,7 +265,7 @@ func runFileCreate(ctx *cmdutil.RunContext, f *cmdutil.Factory) error {
 		return output.PrintErrorAndExit(output.ErrorEnvelope(
 			code,
 			message,
-			"用 `tabtin file schema --type <t>` 核对 spec 结构",
+			"用 `muse file schema --type <t>` 核对 spec 结构",
 			exit,
 		))
 	}

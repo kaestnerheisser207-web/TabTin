@@ -2,7 +2,7 @@ package com.tabtin.mobile.features.doc.editor
 
 import android.content.Context
 import androidx.annotation.StringRes
-import com.tabtin.mobile.R
+import com.muse.mobile.R
 
 /** Keeps schema type names out of the user-visible unsupported-block surface. */
 internal object UnsupportedContentLocalization {

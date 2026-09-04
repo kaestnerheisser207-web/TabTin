@@ -1,7 +1,7 @@
 {
   "name": "@tabtin/doc-editor",
   "version": "0.1.0",
-  "description": "Host-agnostic document editor core for TabTin",
+  "description": "Host-agnostic document editor core for Muse",
   "type": "module",
   "main": "dist/index.js",
   "module": "dist/index.js",
@@ -68,11 +68,11 @@
     }
   },
   "keywords": [
-    "tabtin",
+    "muse",
     "tabdoc",
     "editor"
   ],
-  "author": "TabTin Team",
+  "author": "Muse Team",
   "license": "MIT",
   "devDependencies": {
     "typescript": "5.7.2",

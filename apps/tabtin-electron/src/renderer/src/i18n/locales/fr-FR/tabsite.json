@@ -26,7 +26,7 @@
   "error.siteNotFound": "Site introuvable",
   "error.publishFailed": "Échec de la publication",
   "error.noDistUrl": "Veuillez d'abord créer et télécharger des artefacts",
-  "error.noDistUrlHint": "Exécutez le build dans TabCode ou utilisez CLI : build du site tabtin",
+  "error.noDistUrlHint": "Exécutez le build dans TabCode ou utilisez CLI : build du site muse",
   "actions.publishSuccess": "Publié avec succès",
   "publish.dialogTitle": "Publier le site",
   "publish.messageLabel": "Remarque sur la version",

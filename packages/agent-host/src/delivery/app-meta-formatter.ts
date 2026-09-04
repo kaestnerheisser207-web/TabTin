@@ -3,7 +3,7 @@
  *
  * **定位**：core 的 context-injector（agent-runtime `capability/injectors/context-injector.ts`）
  * 只保留中性框架（focused / open_tabs 拼接、anchor 注入、字节稳定）；「按 appType 渲染
- * 具体资源详情行」这套业务（TabTin 产品名、各 App 的字段口径、tabtin CLI 配方）从 core
+ * 具体资源详情行」这套业务（Muse 产品名、各 App 的字段口径、muse CLI 配方）从 core
  * 迁到这个宿主实现，经 `buildContextInjectorHook` 的 `formatAppMeta` option 注入
  * （Electron / Daemon 在装配 context-injector 时传入 `createAppMetaFormatter()`）。
  *
@@ -57,11 +57,11 @@ function buildTabDocMetaLines(meta: Record<string, unknown>): string[] {
     lines.push(`details:`)
     lines.push(`  current_document: "${docTitle ?? 'Untitled'}"${docId ? ` (id: ${docId})` : ''}`)
     if (docId) {
-      lines.push(`  read_current_document: tabtin doc read ${docId} --format json`)
-      lines.push(`  read_large_document: tabtin doc list-blocks ${docId} --format json; tabtin doc chunks ${docId} --format json`)
+      lines.push(`  read_current_document: muse doc read ${docId} --format json`)
+      lines.push(`  read_large_document: muse doc list-blocks ${docId} --format json; muse doc chunks ${docId} --format json`)
     }
-    lines.push(`  create_cloud_document: write_file path=.agent-drafts/<slug>.md → tabtin doc create --title "<title>" --markdown @.agent-drafts/<slug>.md --format json`)
-    lines.push(`  update_document_metadata: tabtin doc update <document-id> --icon <emoji> --cover-image <url> --parent-id <parent-id> --tags <tag>`)
+    lines.push(`  create_cloud_document: write_file path=.agent-drafts/<slug>.md → muse doc create --title "<title>" --markdown @.agent-drafts/<slug>.md --format json`)
+    lines.push(`  update_document_metadata: muse doc update <document-id> --icon <emoji> --cover-image <url> --parent-id <parent-id> --tags <tag>`)
     lines.push(`  long_doc_rule: Agent 新建长文临时草稿必须写 .agent-drafts/<slug>.md；参数失败只改短命令并复用同一草稿，禁止把全文内联进 shell`)
   }
   return lines

@@ -1422,7 +1422,7 @@ async function resolveSmartDownloadSelection(
   const candidates = await collectDaemonMediaCandidates(svc, tabId);
   const selection = selectSmartDownloadTarget(candidates, { category });
   if (selection) return selection;
-  return { errorResult: { ok: false, status: 404, error: { code: 'NO_MEDIA_FOUND', message: '页面上未发现可下载的媒体资源', detail: { candidateCount: candidates.length, probed: true }, suggestions: ['确保页面上有视频/音频内容（必要时先播放触发加载）', '或显式指定: tabtin browser resource smart-download --url <media-or-stream-url>'] } } };
+  return { errorResult: { ok: false, status: 404, error: { code: 'NO_MEDIA_FOUND', message: '页面上未发现可下载的媒体资源', detail: { candidateCount: candidates.length, probed: true }, suggestions: ['确保页面上有视频/音频内容（必要时先播放触发加载）', '或显式指定: muse browser resource smart-download --url <media-or-stream-url>'] } } };
 }
 
 function resolveTrackedSmartDownload(svc: DaemonBrowserService, tabId: string | undefined, resourceId: string) {
@@ -1993,7 +1993,7 @@ export class DaemonBrowserApplication implements BrowserApplicationPort {
         try { entriesInput = JSON.parse(entriesInput); }
         catch {
           return failure(400, 'VALIDATION_ERROR', 'input 必须是 JSON 字符串或 network JSON 文件内容', {
-            suggestions: ['示例: tabtin browser network --format json > network.json', '再运行: tabtin browser network to-api --input @network.json'],
+            suggestions: ['示例: muse browser network --format json > network.json', '再运行: muse browser network to-api --input @network.json'],
           });
         }
       }
@@ -2043,7 +2043,7 @@ export class DaemonBrowserApplication implements BrowserApplicationPort {
         await page.goto(targetUrl);
         const download = await pending;
         if (!download) {
-          return success({ success: false, message: '页面未触发下载。如需导出页面内容，请使用 tabtin browser print。', url: targetUrl });
+          return success({ success: false, message: '页面未触发下载。如需导出页面内容，请使用 muse browser print。', url: targetUrl });
         }
         const filename = basename(body.filename || download.suggestedFilename());
         const savePath = body.save_path || body.savePath || `/tmp/tabtin-download-${filename}`;
@@ -2079,7 +2079,7 @@ export class DaemonBrowserApplication implements BrowserApplicationPort {
       switch (actionId) {
         case 'page.open': {
           const url = normalizeOptionalString(body.url);
-          if (!url) return failure(400, 'VALIDATION_ERROR', '缺少 url 参数', { suggestions: ['tabtin browser open https://example.com'] });
+          if (!url) return failure(400, 'VALIDATION_ERROR', '缺少 url 参数', { suggestions: ['muse browser open https://example.com'] });
           try { validateUrl(url); }
           catch (error: any) {
             return failure(400, 'VALIDATION_ERROR', error?.message || '无效的 URL', {
@@ -2173,7 +2173,7 @@ export class DaemonBrowserApplication implements BrowserApplicationPort {
         case 'page.route': {
           const pattern = body.urlPattern ?? body.url_pattern;
           if (!pattern) return failure(400, 'VALIDATION_ERROR', '缺少 urlPattern 参数', {
-            suggestions: ['示例: tabtin browser route --url-pattern "**/*.png" --status 403'],
+            suggestions: ['示例: muse browser route --url-pattern "**/*.png" --status 403'],
           });
           await this.ensureTab();
           const page = browser.getPage(body.tabId ?? body.tab_id);
@@ -2189,7 +2189,7 @@ export class DaemonBrowserApplication implements BrowserApplicationPort {
         case 'page.unroute': {
           const pattern = body.urlPattern ?? body.url_pattern ?? body.ruleId ?? body.rule_id;
           if (!pattern) return failure(400, 'VALIDATION_ERROR', '缺少 urlPattern 或 ruleId 参数', {
-            suggestions: ['Daemon 用注册时的 url-pattern 取消: tabtin browser unroute --url-pattern "**/*.png"'],
+            suggestions: ['Daemon 用注册时的 url-pattern 取消: muse browser unroute --url-pattern "**/*.png"'],
           });
           await this.ensureTab();
           await browser.getPage(body.tabId ?? body.tab_id).unroute(pattern);
@@ -2198,16 +2198,16 @@ export class DaemonBrowserApplication implements BrowserApplicationPort {
         case 'page.route-list':
           return failure(501, 'NOT_IMPLEMENTED', 'Daemon 模式不维护可查询的拦截规则列表（page.route 为 per-page、不跨导航持久）。route / unroute 仍可用。', {
             suggestions: [
-              '设置拦截: tabtin browser route --url-pattern "**/*.png" --status 403',
-              '取消拦截: tabtin browser unroute --url-pattern "**/*.png"',
+              '设置拦截: muse browser route --url-pattern "**/*.png" --status 403',
+              '取消拦截: muse browser unroute --url-pattern "**/*.png"',
               '需要可查询的规则列表请使用 Electron 运行时',
             ],
           });
         case 'collect.table':
           return failure(501, 'NOT_IMPLEMENTED', 'Daemon 模式当前不支持 Browser-to-Table 直接创建 TabData 表；请在 Electron 端执行，或使用 --input fixture 验证 browser-core 采集逻辑。', {
             suggestions: [
-              '在 TabTin 桌面端采集：tabtin browser open 打开页面 → tabtin browser network 取接口数据 → 写入 TabData 表',
-              '复用已打开页面：tabtin browser tab list 找 tabId 后用 tabtin browser network 取接口数据',
+              '在 TabTin 桌面端采集：muse browser open 打开页面 → muse browser network 取接口数据 → 写入 TabData 表',
+              '复用已打开页面：muse browser tab list 找 tabId 后用 muse browser network 取接口数据',
               '需要离线分析时先导出 network JSON，再在 Electron 端导入 TabData',
             ],
           });
@@ -2248,7 +2248,7 @@ export class DaemonBrowserApplication implements BrowserApplicationPort {
     const savePath = body.save ?? body.savePath ?? body.save_path;
     if (!savePath || typeof savePath !== 'string') {
       return failure(400, 'VALIDATION_ERROR', '缺少 --save 参数（print 始终落盘）', {
-        suggestions: ['示例: tabtin browser print --save /tmp/page.md'],
+        suggestions: ['示例: muse browser print --save /tmp/page.md'],
       });
     }
     try {
@@ -2257,7 +2257,7 @@ export class DaemonBrowserApplication implements BrowserApplicationPort {
       if (format === 'pdf') {
         if (body.url) {
           return failure(400, 'VALIDATION_ERROR', '--as pdf 仅支持当前 tab（先 open 再 print）', {
-            suggestions: ['tabtin browser open --url <url>', '然后 tabtin browser print --as pdf --save <path>'],
+            suggestions: ['muse browser open --url <url>', '然后 muse browser print --as pdf --save <path>'],
           });
         }
         await this.ensureTab();

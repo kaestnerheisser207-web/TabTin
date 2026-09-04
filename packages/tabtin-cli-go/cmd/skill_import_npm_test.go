@@ -7,7 +7,7 @@ package cmd
 import (
 	"testing"
 
-	"github.com/TabTin/tabtin-cli/internal/cmdutil"
+	"github.com/Muse/muse-cli/internal/cmdutil"
 )
 
 func TestResolveNpmPackage(t *testing.T) {

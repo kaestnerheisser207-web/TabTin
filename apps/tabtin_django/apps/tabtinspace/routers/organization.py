@@ -1,8 +1,8 @@
-"""Tabtin Space organization 路由。"""
+"""Muse Space organization 路由。"""
 
 from .shared import *  # noqa: F401,F403
 
-router = Router(tags=["Tabtin Space"])
+router = Router(tags=["Muse Space"])
 
 @router.get("/organizations", auth=jwt_auth, response={200: dict, 401: ErrorResponse})
 def list_organizations(request: HttpRequest):

@@ -1,5 +1,5 @@
 {
-  "appTitle": "TabTin - AI 工作平台",
+  "appTitle": "Muse - AI 工作平台",
   "close": "关闭",
   "delete": "删除",
   "up": "上移",
@@ -17,7 +17,7 @@
   "switchLanguage": "English",
   "reload": "重新加载",
   "home": {
-    "title": "欢迎使用 TabTin",
+    "title": "欢迎使用 Muse",
     "subtitle": "{{name}}，Web 版本正在建设中，更多功能即将上线。"
   },
   "notFound": {

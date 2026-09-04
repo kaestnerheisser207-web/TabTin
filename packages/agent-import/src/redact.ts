@@ -2,7 +2,7 @@
  * Secret 打码（PRD §3.3 统一规则 / §6.3）。
  *
  * 模式集移植自 agent-observer core.mjs 的 SECRET_PATTERNS（已在真实数据上
- * 验证过误报率可接受），按 TabTin 场景补充 JWT 与常见私有前缀。
+ * 验证过误报率可接受），按 Muse 场景补充 JWT 与常见私有前缀。
  * 打码保形：保留前 4 后 2 字符便于用户辨认是哪个 key（回看历史时能对上号）。
  */
 

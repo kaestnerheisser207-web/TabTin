@@ -359,7 +359,7 @@ _USER_APPS = [
 
 # ── 平台基础服务 ──────────────────────────────────────
 _INFRA_APPS = [
-    'apps.tabtinspace.apps.TabtinspaceConfig',              # Tabtin Space 核心
+    'apps.tabtinspace.apps.TabtinspaceConfig',              # Muse Space 核心
     'apps.channel_gateway.apps.ChannelGatewayConfig',       # Channel Gateway
     'apps.tracker.apps.TrackerConfig',                      # Tracker 派活引擎（含 table_event 表事件触发）
     'apps.services.llm',                                    # LLM 服务
@@ -591,7 +591,7 @@ DATABASE_ROUTERS = [
     # 同 app 内按 model_name 分发，需抢在 DefaultDatabaseRouter 之前决策
     'apps.fts.db_router.FtsRouter',
     # v3.1（2026-04-19）：AppConnectRouter 已删除（Connect 模型作废，见 PRD-v3.1-方向锚）
-    'apps.tabtinspace.db_router.TabtinspaceRouter',  # Tabtin Space 核心模块
+    'apps.tabtinspace.db_router.TabtinspaceRouter',  # Muse Space 核心模块
     'apps.tabdoc.db_router.TabdocRouter',  # TabDoc 文档模块
     'apps.tracker.db_router.TrackerRouter',  # ✅ Tracker 派活引擎（PostgreSQL）
     'apps.tabdata.db_router.TabdataRouter',  # TabData 多维表格
@@ -1300,7 +1300,7 @@ CELERY_TASK_ROUTES = {
     'tabdata.async_import_data': _HEAVY_QUEUE,
     'tabdata.async_export_data': _HEAVY_QUEUE,
 
-    # ── heavy: TabTinSpace 重型清理 / 对账（各 30min） ──
+    # ── heavy: Muse Space 重型清理 / 对账（各 30min） ──
     'tabtinspace.reconcile_context_items': _HEAVY_QUEUE,
     'tabtinspace.cleanup_expired_trashed_resources': _HEAVY_QUEUE,
 
@@ -1746,7 +1746,7 @@ OSS_IMAGE_QUALITY = int(os.getenv('OSS_IMAGE_QUALITY', '85'))
 OSS_IMAGE_MAX_WIDTH = int(os.getenv('OSS_IMAGE_MAX_WIDTH', '2048'))
 OSS_IMAGE_MAX_HEIGHT = int(os.getenv('OSS_IMAGE_MAX_HEIGHT', '2048'))
 OSS_WATERMARK_ENABLED = os.getenv('OSS_WATERMARK_ENABLED', 'False').lower() == 'true'
-OSS_WATERMARK_TEXT = os.getenv('OSS_WATERMARK_TEXT', 'Tabtin')
+OSS_WATERMARK_TEXT = os.getenv('OSS_WATERMARK_TEXT', 'Muse')
 
 # ByteDance Speech Services (ASR/TTS) Configuration
 # v0.1.x：ASR/TTS 凭证统一走 DB（AdminDash 配置 bytedance Provider 的 capabilities_config）。
@@ -1765,7 +1765,7 @@ BYTEDANCE_TTS_DEFAULT_SPEAKER = os.getenv('BYTEDANCE_TTS_DEFAULT_SPEAKER', 'zh_f
 FREESOUND_API_KEY = os.getenv('FREESOUND_API_KEY', '')
 
 # Email Configuration
-COMPANY_NAME = os.getenv('COMPANY_NAME', 'TabTin')
+COMPANY_NAME = os.getenv('COMPANY_NAME', 'Muse')
 if IS_COMMUNITY_EDITION:
     EMAIL_BACKEND = (
         os.getenv('EMAIL_BACKEND', '').strip()

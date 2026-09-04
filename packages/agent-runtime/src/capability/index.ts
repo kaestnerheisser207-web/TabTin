@@ -177,7 +177,7 @@ export type {
 // ─── App Cap（暂无）──────────────────────────────────────────────
 // 内置 App 的 Agent 侧入口 Capability。历史上有 `TabDataCap`（Wave 4a 退役，
 // 2026-05-01）和 `TabDocCap`（Wave 12 退役，2026-05-04）——产品方向都是
-// "Agent 主要靠 CLI（`tabtin table *` / `tabtin doc *`）操作内置 App，不依
+// "Agent 主要靠 CLI（`muse table *` / `muse doc *`）操作内置 App，不依
 // 赖 FC"。当前 `capability/app/` 暂无可导出的 Cap；如未来需要新的 App Cap
 // （例如 TabMemoCap），新文件挂在 `app/<cap>.ts`，从本 barrel re-export。
 

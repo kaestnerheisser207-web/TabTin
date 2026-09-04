@@ -5,7 +5,7 @@ import android.net.Uri
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.tabtin.mobile.R
+import com.muse.mobile.R
 import com.tabtin.mobile.data.api.TabMemoApi
 import com.tabtin.mobile.data.model.memo.BookmarkPreview
 import com.tabtin.mobile.data.model.memo.BookmarkPreviewRequest

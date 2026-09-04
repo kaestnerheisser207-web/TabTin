@@ -2,7 +2,7 @@
  * 云端 document 载体 PlanStore —— 宿主侧业务实现。
  *
  * agent-runtime 只保留中性的 `PlanStore` 接口 + 本地文件实现（LocalFilePlanStore）；
- * 打远端 `/api/plan/*` 落云文档的实现属于 TabTin 宿主业务，故落在 `@tabtin/agent-host`。
+ * 打远端 `/api/plan/*` 落云文档的实现属于 Muse 宿主业务，故落在 `@tabtin/agent-host`。
  * 本类实现 runtime 的 `PlanStore` 接口（`kind='document'`），由宿主装配 plan 工具时
  * 显式注入 `createPlanTools({ planStore })`（云端运行时使用）。
  *

@@ -67,7 +67,7 @@ function missingOrganizationResponse(action: 'enable' | 'disable') {
   return errorResponse('VALIDATION_ERROR', `缺少有效的 organization_id，无法${verb} skill`, {
     suggestions: [
       '请在请求中传入当前 Organization 的 organization_id',
-      '或先通过 `tabtin auth login` / 环境变量设置活跃组织',
+      '或先通过 `muse auth login` / 环境变量设置活跃组织',
     ],
   });
 }
@@ -140,7 +140,7 @@ export async function handleSkillsRoute(
     res,
     404,
     errorResponse('UNKNOWN_ROUTE', `未知的 Skill 路由: ${url}`, {
-      suggestions: ['请检查命令拼写', '使用 tabtin skill --help 查看可用命令'],
+      suggestions: ['请检查命令拼写', '使用 muse skill --help 查看可用命令'],
     }),
   );
 }

@@ -396,7 +396,7 @@ const OnboardingCardContent: React.FC<OnboardingCardContentProps> = ({
     return (
       <CardShell
         step={step}
-        eyebrow="首次进入 TabTin"
+        eyebrow="首次进入 Muse"
         title="你现在在个人账号"
         body="个人账号适合自己先和 Agent 试用；如果要和别人一起协作，可以创建组织。"
       >

@@ -59,7 +59,7 @@ export const COMPACTABLE_TOOLS_DEFAULT: ReadonlySet<string> = new Set([
   'file_read', 'read_file', 'Read', 'FileRead', 'ReadFile',
   'document_read', 'parse_document', 'read',
   // Shell / terminal. `bash` / `shell` are legacy transcript or external-agent
-  // names; current TabTin command tool is `run_terminal_command`.
+  // names; current Muse command tool is `run_terminal_command`.
   'shell', 'bash', 'terminal', 'Shell', 'execute_command', 'run_terminal_command', 'Bash',
   'execute_in_terminal', 'ssh_execute',
   // Search tools
@@ -160,7 +160,7 @@ export { TIME_BASED_MC_CLEARED_MESSAGE };
 
 /**
  * 触发判定输入。`messages` 是常规消息数组；`lastAssistantTimestamp` 若未传
- * 则由本函数从 message metadata 推断（当前 TabTin `Message` 类型不带时间戳
+ * 则由本函数从 message metadata 推断（当前 Muse `Message` 类型不带时间戳
  * 字段，故需要调用方显式传入——通常从 session / transcript 侧拿到）。
  *
  * 若调用方**既不传 `lastAssistantTimestamp` 也没 `options.now`**，evaluate

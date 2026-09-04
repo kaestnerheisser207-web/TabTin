@@ -37,7 +37,7 @@ const SCANNED_SVG = `
   <text x="60" y="160" font-family="serif" font-size="18" fill="#333">第一条 目标。验证可行性，识别扫描件能力。</text>
   <text x="60" y="200" font-family="serif" font-size="18" fill="#333">第二条 交付。POC 脚本 + 样本 + 报告。</text>
   <text x="60" y="240" font-family="serif" font-size="18" fill="#333">第三条 验收。10 页 &lt; 1s，扫描件 &lt; 50 字符/页。</text>
-  <text x="60" y="300" font-family="serif" font-size="16" fill="#555">Signed: TabTin / 2026-04-17</text>
+  <text x="60" y="300" font-family="serif" font-size="16" fill="#555">Signed: Muse / 2026-04-17</text>
   <line x1="60" y1="1050" x2="740" y2="1050" stroke="#888" stroke-width="1"/>
 </svg>
 `

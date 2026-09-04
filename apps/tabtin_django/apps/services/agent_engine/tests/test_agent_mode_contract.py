@@ -136,7 +136,7 @@ class TestContractSchema:
             "retrieve_tool_result",
             "tool_search",
             # W4 R3（2026-05-11）：`ask_choice` 由 `ask_user` 兼容（多选问答 HITL）；
-            # `ask_form` 是 TabTin HITL 扩展，依然在用。
+            # `ask_form` 是 Muse HITL 扩展，依然在用。
             # `ask_question` 已在上方列出（更早退役名）。
             "ask_choice",
             # （2026-07-08）：`request_approval` 下架——审批意图由 ask_user /
@@ -500,7 +500,7 @@ class TestAlignmentWithDjangoToolSelfDeclaration:
                 "TodoWriteTool",
                 ("agent", "plan", "study", "group"),
             ),
-            # Wave 4.5（2026-05-10）：`ThinkTool` 已物理下线（TabTin 双端契约
+            # Wave 4.5（2026-05-10）：`ThinkTool` 已物理下线（Muse 双端契约
             # 让 LLM 走原生 thinking block），样本随之移除。
             # 后续若新增"4 mode 全可见且 isReadOnly=True"的工具，再补 entry。
         ],

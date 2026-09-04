@@ -2,7 +2,7 @@
  * TabTrackerCapabilityBanner — 自动化首页的「让 AI 帮你处理自动化」介绍区
  *
  * featured 示例卡来自 CLI 生成的 tracker-capabilities.json（curated NL prompt）；
- * 「查看全部」在当前列表内展示全部 showcase CLI 能力（与 tabtin tracker 一一对应，共 12 条）。
+ * 「查看全部」在当前列表内展示全部 showcase CLI 能力（与 muse tracker 一一对应，共 12 条）。
  * 产品意图：给一个「让 Agent 帮你建 / 看 / 控制自动化」的统一入口——点一下就让 Agent 跑对应 CLI。
  */
 

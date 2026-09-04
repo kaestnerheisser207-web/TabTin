@@ -41,7 +41,7 @@ export type CaptchaRequiredWire = {
 export const CAPTCHA_REQUIRED_HINT =
   '检测到人机验证（CAPTCHA）：立即停下并把选择权交给用户，不要反复 glance/act 空转。'
   + '用 ask_user 卡片向用户说明此页需要完成验证，并让其二选一：'
-  + '① 在 TabTin 浏览器当前标签页完成验证码后选择「已完成验证」，你复用同一 --tab-id 继续；'
+  + '① 在 Muse 浏览器当前标签页完成验证码后选择「已完成验证」，你复用同一 --tab-id 继续；'
   + '② 明确同意后改从其他公开来源获取（须诚实标注真实来源、不得标为本站结果）。'
   + '不要尝试自动点击或绕过验证码。';
 

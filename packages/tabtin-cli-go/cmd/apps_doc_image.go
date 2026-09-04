@@ -37,10 +37,10 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/TabTin/tabtin-cli/internal/cmdutil"
-	"github.com/TabTin/tabtin-cli/internal/errcode"
-	"github.com/TabTin/tabtin-cli/internal/output"
-	"github.com/TabTin/tabtin-cli/internal/transport"
+	"github.com/Muse/muse-cli/internal/cmdutil"
+	"github.com/Muse/muse-cli/internal/errcode"
+	"github.com/Muse/muse-cli/internal/output"
+	"github.com/Muse/muse-cli/internal/transport"
 )
 
 const (
@@ -84,11 +84,11 @@ func registerDocImageCommands(parent *cobra.Command, f *cmdutil.Factory) {
 --file 是本地图片路径（须在 $HOME 或 /tmp 下，支持 png/jpg/jpeg/gif/webp/svg，单文件上限 100MB）；--alt 缺省用文件名（去扩展名）；--at-start 插到文档顶部，--after 插到某 block 之后，二者都不传则追加末尾。
 底层先 POST /oss/upload 拿 file_id + 临时 url，再通过 image_file_id 走 insert-block 链路绑定；上传成功但插块失败时，错误里保留 file_id 以便重试（无需重新上传）。
 已有现成的公开图片 URL（不需要上传本地文件）时，直接在 --markdown 里写 ![alt](url) 走 insert-block / append 即可，不必用这条命令。`,
-		Example: "  tabtin doc insert-image doc_xxx --file ./chart.png\n" +
-			"  tabtin doc insert-image doc_xxx --file /tmp/screenshot.png --alt \"架构截图\"\n" +
-			"  tabtin doc insert-image doc_xxx --file ./cover.png --at-start\n" +
-			"  tabtin doc insert-image doc_xxx --file ./diagram.svg --after blk_yyy\n" +
-			"  tabtin doc insert-image doc_xxx --file ./photo.jpg --dry-run --format json",
+		Example: "  muse doc insert-image doc_xxx --file ./chart.png\n" +
+			"  muse doc insert-image doc_xxx --file /tmp/screenshot.png --alt \"架构截图\"\n" +
+			"  muse doc insert-image doc_xxx --file ./cover.png --at-start\n" +
+			"  muse doc insert-image doc_xxx --file ./diagram.svg --after blk_yyy\n" +
+			"  muse doc insert-image doc_xxx --file ./photo.jpg --dry-run --format json",
 		Layer: "L2", Risk: cmdutil.RiskWrite, RiskDeclared: true,
 		Route:        cmdutil.RouteCliServer,
 		RequiresAuth: true,
@@ -113,14 +113,14 @@ func registerDocImageCommands(parent *cobra.Command, f *cmdutil.Factory) {
 func docInsertImageExecute(f *cmdutil.Factory) func(ctx *cmdutil.RunContext) error {
 	return func(ctx *cmdutil.RunContext) error {
 		docID, err := docHTMLRequireArg(ctx, 0, "document-id",
-			"tabtin doc insert-image <document-id> --file <path.png>")
+			"muse doc insert-image <document-id> --file <path.png>")
 		if err != nil {
 			return err
 		}
 		filePath := ctx.Str("file")
 		if filePath == "" {
 			return docHTMLValidationExit("必须提供 --file <path.png>",
-				"tabtin doc insert-image "+docID+" --file ./chart.png")
+				"muse doc insert-image "+docID+" --file ./chart.png")
 		}
 		alt := docImageResolveAlt(ctx, docImageAltFromFile(filePath))
 

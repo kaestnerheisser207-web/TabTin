@@ -27,7 +27,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import com.tabtin.mobile.R
+import com.muse.mobile.R
 import com.tabtin.mobile.data.model.CheckpointImpactFileSummary
 import com.tabtin.mobile.data.model.DiffFileSummaryItem
 import com.tabtin.mobile.ui.components.TTBottomSheet

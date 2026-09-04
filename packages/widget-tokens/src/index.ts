@@ -1,5 +1,5 @@
 /**
- * @tabtin/widget-tokens — single source of truth for TabTin widget design
+ * @tabtin/widget-tokens — single source of truth for Muse widget design
  * tokens + sandbox iframe HTML wrapper.
  *
  * Imported from three places to keep widget visuals in lock-step with chat UI:

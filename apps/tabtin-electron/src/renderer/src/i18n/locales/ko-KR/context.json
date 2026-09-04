@@ -343,7 +343,7 @@
       "feishuReviewConfirm": "가져오기 확인",
       "feishuReviewEmpty": "테이블이나 문서를 하나 이상 유지하세요.",
       "feishuIncludeAttachments": "첨부 파일 동기화(느림)",
-      "feishuIncludeAttachmentsHint": "기본적으로 꺼져 있습니다. 켜져 있으면 파일이 TabTin 첨부 파일로 다운로드됩니다.",
+      "feishuIncludeAttachmentsHint": "기본적으로 꺼져 있습니다. 켜져 있으면 파일이 Muse 첨부 파일로 다운로드됩니다.",
       "feishuImporting": "가져오는 중…",
       "feishuImportProgressRunning": "{{done}}/{{total}} 가져오기",
       "feishuImportProgressQueued": "{{done}}/{{total}} 가져오기({{queued}} 대기 중)",
@@ -958,20 +958,24 @@
     },
     "quickUse": {
       "sectionTitle": "빠른 사용",
-      "autoDescription": "설정이 필요하지 않습니다. TabTin은 먼저 보내기 준비 작업 초안을 생성합니다.",
+      "autoDescription": "설정이 필요하지 않습니다. Muse은 먼저 보내기 준비 작업 초안을 생성합니다.",
       "cardHint": "프롬프트 초안을 생성하고 검토를 위해 Chat 입력에 배치합니다.",
       "insertAction": "생성",
       "toastTitle": "입력에서 생성됨",
       "toastDescription": "전송하기 전에 사전 설정된 필드를 조정할 수 있습니다.",
       "generatedTitle": "작업 초안이 생성되었습니다.",
-      "generatedHint": "TabTin이 먼저 템플릿을 채웠습니다. 필요한 경우 조정한 후 전송하세요.",
+      "generatedHint": "Muse이 먼저 템플릿을 채웠습니다. 필요한 경우 조정한 후 전송하세요.",
       "readyBadge": "준비",
       "previewLabel": "상담원에게 전송됩니다",
       "toggleOn": "켜기",
       "toggleOff": "끄기"
     },
     "quickUseBuilder": {
-      "button": "빠른 사용 템플릿", "variables": "변수", "variablesHint": "고정 프롬프트만 사용하거나 사용자가 입력할 변수를 추가하세요.", "preview": "미리보기", "cancel": "취소"
+      "button": "빠른 사용 템플릿",
+      "variables": "변수",
+      "variablesHint": "고정 프롬프트만 사용하거나 사용자가 입력할 변수를 추가하세요.",
+      "preview": "미리보기",
+      "cancel": "취소"
     },
     "versionPublish": {
       "title": "새 버전 게시",
@@ -1254,7 +1258,7 @@
       "xlsxTruncated": "{{total}} 행 중 {{shown}} 표시 중",
       "xlsxSheetsLimited": "첫 번째 {{max}} 시트만 표시",
       "xlsxFormulasCached": "파일에 저장된 {{count}} 수식 결과를 표시합니다.",
-      "xlsxFormulasCalculated": "TabTin은 이 미리보기를 위해 로컬에서 {{count}} 수식을 계산했습니다. 결과가 파일에 저장되지 않았습니다.",
+      "xlsxFormulasCalculated": "Muse은 이 미리보기를 위해 로컬에서 {{count}} 수식을 계산했습니다. 결과가 파일에 저장되지 않았습니다.",
       "xlsxFormulasUnavailable": "{{count}} 수식에는 저장된 결과가 없으며 미리보기에서 계산할 수 없습니다. 스프레드시트 앱에서 파일을 엽니다.",
       "loadingDocxViewer": "문서 미리보기 로드 중...",
       "loadingPptxViewer": "프레젠테이션 로드 중...",
@@ -1562,7 +1566,7 @@
   },
   "browserRestore": {
     "restoringTitle": "페이지 복원 중",
-    "restoringDescription": "TabTin이 이전에 저장한 페이지를 다시 열고 있습니다.",
+    "restoringDescription": "Muse이 이전에 저장한 페이지를 다시 열고 있습니다.",
     "failedTitle": "페이지 복원 실패",
     "failedDescription": "원래 URL은 계속 저장됩니다. 다시 시도하거나 이 탭을 닫으세요.",
     "retry": "재시도",

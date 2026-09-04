@@ -2360,7 +2360,7 @@ const SkillDetailPane: React.FC<{
               <div className="space-y-1">
                 <h3 className={SETTINGS_GROUP_LABEL}>{t('skills.quickUse.sectionTitle')}</h3>
                 <p className={CANVAS_TEXT_META}>
-                  {t('skills.quickUse.autoDescription', '无需填写参数，TabTin 会先生成一条可发送的任务草稿。')}
+                  {t('skills.quickUse.autoDescription', '无需填写参数，Muse 会先生成一条可发送的任务草稿。')}
                 </p>
               </div>
               <div className="flex flex-col gap-2">

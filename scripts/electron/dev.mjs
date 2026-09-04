@@ -72,7 +72,7 @@ if (imMode) {
 }
 // `TABTIN_BUILD_PROFILE` / `TABTIN_VITE_MODE` are build-only selectors.
 // `TABTIN_RUNTIME_PROFILE` is for packaged/debug overrides; plain dev must
-// always use the dedicated TabTin Dev identity unless a dev profile is explicit.
+// always use the dedicated Muse Dev identity unless a dev profile is explicit.
 // If a shell keeps `TABTIN_BUILD_PROFILE=preprod` after packaging, plain
 // `pnpm dev` would load apps/tabtin-electron/.env.preprod and make the
 // in-app Agent/chat rail talk to the preprod backend instead of root .env.

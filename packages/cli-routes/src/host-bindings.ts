@@ -117,7 +117,7 @@ export function getBindings(): CLIRoutesHostBindings {
  * `/api/tabdata/tables`）。Electron / Daemon 两端 djangoRequest 实现都会
  * 把 baseUrl 归一化成带 `/api` 结尾再用 `joinApiPath` 拼接，path 自带
  * `/api` 会触发 dev 告警（被自动剥前缀；详见 `@tabtin/config:joinApiPath`）。
- * 由 ESLint 规则 `tabtin/no-api-prefix-in-cli-routes` 在 PR 阶段拦截。
+ * 由 ESLint 规则 `muse/no-api-prefix-in-cli-routes` 在 PR 阶段拦截。
  */
 export const djangoRequest: DjangoRequestFn = (method, path, body, opts) =>
   getBindings().djangoRequest(method, path, body, opts);

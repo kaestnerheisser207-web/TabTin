@@ -1,6 +1,6 @@
 package com.tabtin.mobile.features.skills
 
-import com.tabtin.mobile.R
+import com.muse.mobile.R
 import com.tabtin.mobile.data.model.MobileConnectorMarketSource
 import com.tabtin.mobile.data.model.VisibleSkillEntry
 import com.tabtin.mobile.data.repository.MobileSkillLibraryRepository

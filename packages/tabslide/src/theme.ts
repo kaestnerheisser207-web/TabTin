@@ -1,7 +1,7 @@
 /**
  * TabSlide 主题 Token
  *
- * 消费宿主环境（TabTin Electron）的 CSS 自定义属性。
+ * 消费宿主环境（Muse Electron）的 CSS 自定义属性。
  * 所有 token 带 fallback，脱离宿主也能正常渲染。
  *
  * 视觉层级（由外到内）：

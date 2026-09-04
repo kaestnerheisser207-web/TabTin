@@ -16,9 +16,9 @@ import (
 	"syscall"
 	"time"
 
-	"github.com/TabTin/tabtin-cli/internal/cmdutil"
-	"github.com/TabTin/tabtin-cli/internal/config"
-	"github.com/TabTin/tabtin-cli/internal/output"
+	"github.com/Muse/muse-cli/internal/cmdutil"
+	"github.com/Muse/muse-cli/internal/config"
+	"github.com/Muse/muse-cli/internal/output"
 )
 
 const (
@@ -117,7 +117,7 @@ browser capabilities 契约版本、Patchright/Daemon 可用性，以及旧 bund
 默认只观察本机发现文件、进程、socket 与仓库静态契约；不会启动 live stack，也不会打开网页。
 默认即使发现 warn/fail 也退出 0，方便排障查看完整报告；--strict 会在存在 fail 时返回非 0。
 --fix 只清理已经确认安全的 discovery 文件：JSON 损坏、缺 sock/token、或 PID 已死；危险修复仅给提示。`,
-		Example:    "  tabtin browser doctor\n  tabtin browser doctor --format json\n  tabtin browser doctor --strict --format json\n  tabtin browser doctor --fix --format json",
+		Example:    "  muse browser doctor\n  muse browser doctor --format json\n  muse browser doctor --strict --format json\n  muse browser doctor --fix --format json",
 		Route:      cmdutil.RouteDirect,
 		HasFormat:  true,
 		Idempotent: true,

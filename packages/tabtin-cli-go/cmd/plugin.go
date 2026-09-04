@@ -3,7 +3,7 @@ package cmd
 import (
 	"github.com/spf13/cobra"
 
-	"github.com/TabTin/tabtin-cli/internal/cmdutil"
+	"github.com/Muse/muse-cli/internal/cmdutil"
 )
 
 func newCmdPlugin(f *cmdutil.Factory) *cobra.Command {
@@ -16,7 +16,7 @@ func newCmdPlugin(f *cmdutil.Factory) *cobra.Command {
 	cmdutil.RegisterCommand(cmd, f, cmdutil.CommandDef{
 		Use:            "launch <plugin-id>",
 		Short:          "启动 Personal Plugin runtime",
-		Example:        "  tabtin plugin launch cowart --service-id canvas --require-mcp --open-browser",
+		Example:        "  muse plugin launch cowart --service-id canvas --require-mcp --open-browser",
 		Route:          cmdutil.RouteCliServer,
 		Method:         "POST",
 		Path:           "/plugin/launch",

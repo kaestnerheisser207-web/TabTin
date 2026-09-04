@@ -3,7 +3,7 @@ package cmd
 import (
 	"github.com/spf13/cobra"
 
-	"github.com/TabTin/tabtin-cli/internal/cmdutil"
+	"github.com/Muse/muse-cli/internal/cmdutil"
 )
 
 func newCmdEvent(f *cmdutil.Factory) *cobra.Command {
@@ -14,15 +14,15 @@ func newCmdEvent(f *cmdutil.Factory) *cobra.Command {
 event Tracker 通过 --on <event_key> 订阅这些事件。
 
 示例：
-  tabtin event list
-  tabtin event list --app tabdoc
-  tabtin event show tabdoc.document.published`,
+  muse event list
+  muse event list --app tabdoc
+  muse event show tabdoc.document.published`,
 	}
 
 	cmdutil.RegisterCommand(cmd, f, cmdutil.CommandDef{
 		Use:     "list",
 		Short:   "列出所有 App 声明的业务事件",
-		Example: "  tabtin event list\n  tabtin event list --app tabdoc",
+		Example: "  muse event list\n  muse event list --app tabdoc",
 		Route:   cmdutil.RouteCliServer, Method: "GET", Path: "/api/registry/events",
 		HasFormat:    true,
 		Idempotent:   true,
@@ -36,7 +36,7 @@ event Tracker 通过 --on <event_key> 订阅这些事件。
 	cmdutil.RegisterCommand(cmd, f, cmdutil.CommandDef{
 		Use:     "show <event-key>",
 		Short:   "查看业务事件详情（payload schema + filterable fields）",
-		Example: "  tabtin event show tabdoc.document.published",
+		Example: "  muse event show tabdoc.document.published",
 		Route:   cmdutil.RouteCliServer, Method: "GET",
 		Path:         "/api/registry/events/{event_key}",
 		ArgsMapping:  []string{"event_key"},

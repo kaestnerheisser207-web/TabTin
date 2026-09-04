@@ -2079,7 +2079,7 @@ _WALKER_TEXT_EXTRACT_JS = """(slideEl, opts) => {
                 const cd = getComputedStyle(c).display;
                 return cd === 'inline' || cd === 'inline-block';
             });
-            // flex space-between：拆成独立文本框（脚注 "TabTin Team" | "2026"）。
+            // flex space-between：拆成独立文本框（脚注 "Muse Team" | "2026"）。
             // 子节点计数含 P/H（SKIP_TAGS），否则 `<p>+<span>` 混用会误合成单框丢右端。
             // 仅 space-between（脚注主场景）；space-around/evenly 误拆风险大，不在此自动拆。
             const jc = String(cs.justifyContent || '').toLowerCase();

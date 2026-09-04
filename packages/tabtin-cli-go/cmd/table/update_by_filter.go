@@ -7,7 +7,7 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/TabTin/tabtin-cli/internal/cmdutil"
+	"github.com/Muse/muse-cli/internal/cmdutil"
 )
 
 // registerUpdateByFilterCommands 挂载 `table record update-by-filter <preflight|commit>`。
@@ -22,8 +22,8 @@ func registerUpdateByFilterCommands(parent *cobra.Command, f *cmdutil.Factory) {
 		Long: `按 filter_clause 匹配行，再用 patch 批量改字段——两步契约，避免盲写。
 
 子命令：
-  tabtin table record update-by-filter preflight   统计影响面并签发 confirm_token
-  tabtin table record update-by-filter commit      用同一组 filter/patch + token 提交
+  muse table record update-by-filter preflight   统计影响面并签发 confirm_token
+  muse table record update-by-filter commit      用同一组 filter/patch + token 提交
 
 filter_clause / patch 的 key 可用字段名或字段 UUID；算子支持 $eq/$ne/$gt/$gte/$lt/$lte/$in/$contains/$is_null，
 或直接写标量表示相等。空 filter 会被后端拒绝。`,
@@ -35,11 +35,11 @@ filter_clause / patch 的 key 可用字段名或字段 UUID；算子支持 $eq/$
 		Long: `按筛选条件预检批量更新影响面，不写库。
 设计理由：Agent 先看 matched_total / sample_records，再决定是否 commit，避免误伤整表。
 常见陷阱：commit 必须原样回传同一组 filter_clause + patch + confirm_token；改任一字段会验签失败。`,
-		Example: "  tabtin table record update-by-filter preflight --table-id <tid> \\\n" +
+		Example: "  muse table record update-by-filter preflight --table-id <tid> \\\n" +
 			"    --filter-clause '{\"标题\":\"smoke-row\"}' --patch '{\"标题\":\"updated\"}'\n" +
-			"  tabtin table record update-by-filter preflight --table-id <tid> \\\n" +
+			"  muse table record update-by-filter preflight --table-id <tid> \\\n" +
 			"    --filter-clause '{\"评分\":{\"$gte\":3}}' --patch '{\"状态\":\"已审\"}' --format json\n" +
-			"  tabtin table record update-by-filter preflight --table-id <tid> \\\n" +
+			"  muse table record update-by-filter preflight --table-id <tid> \\\n" +
 			"    --filter-clause @filter.json --patch @patch.json --dry-run",
 		Route:        cmdutil.RouteCliServer,
 		Method:       "POST",
@@ -89,11 +89,11 @@ filter_clause / patch 的 key 可用字段名或字段 UUID；算子支持 $eq/$
 		Long: `用 preflight 返回的 confirm_token 提交批量更新。
 设计理由：token 绑定 filter/patch 哈希与 matched_total，防重放、防中途改条件。
 常见陷阱：filter_clause / patch 必须与 preflight 完全一致；token 过期或 nonce 复用会 409/410。`,
-		Example: "  TOKEN=$(tabtin table record update-by-filter preflight --table-id <tid> \\\n" +
+		Example: "  TOKEN=$(muse table record update-by-filter preflight --table-id <tid> \\\n" +
 			"    --filter-clause '{\"标题\":\"a\"}' --patch '{\"标题\":\"b\"}' --format json | jq -r '.data.confirm_token')\n" +
-			"  tabtin table record update-by-filter commit --table-id <tid> \\\n" +
+			"  muse table record update-by-filter commit --table-id <tid> \\\n" +
 			"    --confirm-token \"$TOKEN\" --filter-clause '{\"标题\":\"a\"}' --patch '{\"标题\":\"b\"}'\n" +
-			"  tabtin table record update-by-filter commit --table-id <tid> \\\n" +
+			"  muse table record update-by-filter commit --table-id <tid> \\\n" +
 			"    --confirm-token \"$TOKEN\" --filter-clause @filter.json --patch @patch.json --dry-run",
 		Route:        cmdutil.RouteCliServer,
 		Method:       "POST",

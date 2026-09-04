@@ -931,7 +931,7 @@ function bar() {
 
   // ─── W5 (2026-05-12) Markdown trailing whitespace 保护 ─────────────────
   //
-  // 双 trailing space = Markdown hard line break。TabTin 当前**没有**主动
+  // 双 trailing space = Markdown hard line break。Muse 当前**没有**主动
   // strip 行为——本块测试是"未雨绸缪"的 regression guard：未来如果有人加
   // normalize 链路忘了 .md 边界，这个测试会立刻提示。
   describe('W5 Markdown trailing whitespace 保护（regression guard）', () => {

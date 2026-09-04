@@ -10,7 +10,7 @@
  *
  * **当前状态（2026-05-04 Wave 12 tabdoc CLI 退役）**：本 barrel **暂无可
  * 导出的 App Cap**。历史上的 `TabDataCap` / `TabDocCap` 都已退役，对应能力
- * 走 CLI（`tabtin table *` / `tabtin doc *`）。如未来需要新的 App Cap
+ * 走 CLI（`muse table *` / `muse doc *`）。如未来需要新的 App Cap
  * （例如 `TabMemoCap`），新文件挂在 `app/<cap>.ts`，从本 barrel re-export。
  *
  * **历史记录**：

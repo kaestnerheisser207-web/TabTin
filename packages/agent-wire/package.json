@@ -1,7 +1,7 @@
 {
   "name": "@tabtin/agent-wire",
   "version": "0.1.0",
-  "description": "Shared wire protocol definitions for TabTin external Agent communication",
+  "description": "Shared wire protocol definitions for Muse external Agent communication",
   "type": "module",
   "main": "dist/index.js",
   "module": "dist/index.js",
@@ -23,12 +23,12 @@
     "test": "vitest run"
   },
   "keywords": [
-    "tabtin",
+    "muse",
     "agent",
     "wire",
     "protocol"
   ],
-  "author": "TabTin Team",
+  "author": "Muse Team",
   "license": "MIT",
   "dependencies": {
     "@tabtin/contracts": "workspace:*",

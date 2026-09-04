@@ -160,11 +160,11 @@ describe('compact builders — boundary checks', () => {
   it('buildIncrementalCompactSystemPrompt with original system prompt', () => {
     const out = buildIncrementalCompactSystemPrompt(
       'PRIOR',
-      'You are TabTin Agent.',
+      'You are Muse Agent.',
     );
     expect(out).toContain('PRIOR');
     expect(out).toContain('--- 原始对话 system prompt（仅供参考）---');
-    expect(out).toContain('You are TabTin Agent.');
+    expect(out).toContain('You are Muse Agent.');
     expect(out).toContain('--- 原始 system prompt 结束 ---');
   });
 

@@ -6,7 +6,7 @@ import android.view.LayoutInflater
 import android.view.ContextThemeWrapper
 import android.widget.FrameLayout
 import androidx.test.core.app.ApplicationProvider
-import com.tabtin.mobile.R
+import com.muse.mobile.R
 import com.tabtin.mobile.databinding.DocBlockImageBinding
 import com.tabtin.mobile.features.doc.editor.core.TabDocBlockView
 import org.junit.Assert.assertFalse
@@ -34,7 +34,7 @@ class ImageHolderReadOnlyTest {
     fun `readonly empty image placeholder is disabled and cannot invoke picker`() {
         val context = ContextThemeWrapper(
             ApplicationProvider.getApplicationContext<Context>(),
-            R.style.Theme_TabTin,
+            R.style.Theme_Muse,
         )
         val binding = DocBlockImageBinding.inflate(
             LayoutInflater.from(context),

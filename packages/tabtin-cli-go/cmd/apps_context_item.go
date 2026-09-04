@@ -6,19 +6,19 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/TabTin/tabtin-cli/internal/cmdutil"
-	"github.com/TabTin/tabtin-cli/internal/errcode"
-	"github.com/TabTin/tabtin-cli/internal/knowledgetree"
-	"github.com/TabTin/tabtin-cli/internal/output"
+	"github.com/Muse/muse-cli/internal/cmdutil"
+	"github.com/Muse/muse-cli/internal/errcode"
+	"github.com/Muse/muse-cli/internal/knowledgetree"
+	"github.com/Muse/muse-cli/internal/output"
 )
 
-// newCmdContextItem 知识库树 ContextItem 操作（与运行时 `tabtin context` 不同）。
+// newCmdContextItem 知识库树 ContextItem 操作（与运行时 `muse context` 不同）。
 func newCmdContextItem(f *cmdutil.Factory) *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "context-item",
 		Short: "知识库树资源节点（ContextItem）",
 		Long: `操作知识库侧栏树节点（ContextItem.parent）。
-与 ` + "`tabtin context`" + `（显示当前运行上下文）无关。
+与 ` + "`muse context`" + `（显示当前运行上下文）无关。
 创建时挂树用 doc/table create --parent-item-id；已有资源改挂用本命令或 doc/table move。`,
 	}
 
@@ -30,9 +30,9 @@ func newCmdContextItem(f *cmdutil.Factory) *cobra.Command {
 --parent-item-id 只覆盖新建，移动必须走本命令（或 doc/table move）。
 常见陷阱：--parent-item-id 传的是父 ContextItem ID（不是 Document/Table ID）；
 与 doc update --parent-id（Document 内页树）完全不同。落根用 --root。`,
-		Example: "  tabtin context-item move <context_item_id> --parent-item-id <parent_ctx_id>\n" +
-			"  tabtin context-item move <context_item_id> --root\n" +
-			"  tabtin context-item move <context_item_id> --parent-item-id <parent_ctx_id> --dry-run",
+		Example: "  muse context-item move <context_item_id> --parent-item-id <parent_ctx_id>\n" +
+			"  muse context-item move <context_item_id> --root\n" +
+			"  muse context-item move <context_item_id> --parent-item-id <parent_ctx_id> --dry-run",
 		Layer: "L2", Risk: cmdutil.RiskWrite, RiskDeclared: true,
 		Route: cmdutil.RouteCliServer, Method: "PATCH",
 		Path:         "/api/context/context-items/{item_id}",
@@ -68,7 +68,7 @@ func newCmdContextItem(f *cmdutil.Factory) *cobra.Command {
 func contextItemMoveFunc(f *cmdutil.Factory) func(ctx *cmdutil.RunContext) error {
 	return func(ctx *cmdutil.RunContext) error {
 		if len(ctx.Args) == 0 || ctx.Args[0] == "" {
-			return fmt.Errorf("请提供 ContextItem ID，用法：tabtin context-item move <item-id> --parent-item-id <id>|--root")
+			return fmt.Errorf("请提供 ContextItem ID，用法：muse context-item move <item-id> --parent-item-id <id>|--root")
 		}
 		itemID := ctx.Args[0]
 		if err := cmdutil.ValidatePathParam(itemID, "context-item ID"); err != nil {

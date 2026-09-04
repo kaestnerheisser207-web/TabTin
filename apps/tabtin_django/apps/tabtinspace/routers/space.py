@@ -10,7 +10,7 @@ Space 表本身进入退役窗口，最终随 DROP 迁移消失。
 
 from .shared import *  # noqa: F401,F403
 
-router = Router(tags=["Tabtin Space"])
+router = Router(tags=["Muse Space"])
 
 
 # 保留 space_id UUID 声明避免旧调用的 500；不做业务处理。

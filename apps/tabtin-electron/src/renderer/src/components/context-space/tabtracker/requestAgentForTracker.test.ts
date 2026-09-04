@@ -38,7 +38,7 @@ describe('requestAgentForTracker', () => {
     expect(prompt).toBe(
       '帮我创建一个自动化任务。\n\n我的需求：\n明天十点提醒我复盘',
     )
-    expect(prompt).not.toContain('tabtin tracker new')
+    expect(prompt).not.toContain('muse tracker new')
     expect(prompt).not.toContain('--once-at')
     expect(prompt).not.toContain('Agent')
     expect(prompt).not.toContain('Skill')

@@ -13,11 +13,11 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/TabTin/tabtin-cli/internal/cmdutil"
-	"github.com/TabTin/tabtin-cli/internal/config"
-	"github.com/TabTin/tabtin-cli/internal/errcode"
-	"github.com/TabTin/tabtin-cli/internal/output"
-	"github.com/TabTin/tabtin-cli/internal/transport"
+	"github.com/Muse/muse-cli/internal/cmdutil"
+	"github.com/Muse/muse-cli/internal/config"
+	"github.com/Muse/muse-cli/internal/errcode"
+	"github.com/Muse/muse-cli/internal/output"
+	"github.com/Muse/muse-cli/internal/transport"
 )
 
 var schedulePresets = map[string]string{
@@ -42,11 +42,11 @@ func newCmdTracker(f *cmdutil.Factory) *cobra.Command {
 新创建直接进入活动状态；需要停止调度时使用 ` + "`pause`" + `。
 
 示例：
-  tabtin tracker new "每日数据同步" --schedule daily --at 09:00 --agent <agent-id> --instructions "同步昨天新增数据并汇报异常"
-  tabtin tracker list --status active
-  tabtin tracker runs <tracker-id>
-  tabtin tracker trigger <tracker-id>
-  tabtin tracker pause <tracker-id>`,
+  muse tracker new "每日数据同步" --schedule daily --at 09:00 --agent <agent-id> --instructions "同步昨天新增数据并汇报异常"
+  muse tracker list --status active
+  muse tracker runs <tracker-id>
+  muse tracker trigger <tracker-id>
+  muse tracker pause <tracker-id>`,
 	}
 
 	// ─── new: 有 schedule 翻译等复杂逻辑，走 RegisterCommand + RunFunc ──
@@ -65,12 +65,12 @@ func newCmdTracker(f *cmdutil.Factory) *cobra.Command {
 
 执行现场：服务端要求 body.workspace_id。CLI 会把全局 --workspace-id /
 当前 profile 的 Workspace 写入创建请求体；未配置时在本地直接报错。`,
-		Example: `  tabtin tracker new "每日报告" --schedule daily --at 09:00 --agent <agent-id> --workspace-id <workspace-id> --instructions "汇总昨天的数据变化并发到 Inbox"
-  tabtin tracker new "工作日提醒" --schedule weekdays --at 18:30 --agent <agent-id> --instructions "提醒我检查今日未完成事项"
-  tabtin tracker new "每半小时巡检" --every 30m --agent <agent-id> --instructions "检查关键服务状态并汇报异常"
-  tabtin tracker new "一次性提醒" --once-at "明天上午十点" --agent <agent-id> --instructions "提醒我准备项目复盘材料"
-  tabtin tracker new "文档发布触发" --on tabdoc.document.published --agent <agent-id> --instructions "文档发布后判断是否需要提醒我"
-  tabtin tracker new "表格变更触发" --on-table <table-id> --on-events record_created,record_updated --agent <agent-id> --instructions "根据变化记录生成同步摘要"`,
+		Example: `  muse tracker new "每日报告" --schedule daily --at 09:00 --agent <agent-id> --workspace-id <workspace-id> --instructions "汇总昨天的数据变化并发到 Inbox"
+  muse tracker new "工作日提醒" --schedule weekdays --at 18:30 --agent <agent-id> --instructions "提醒我检查今日未完成事项"
+  muse tracker new "每半小时巡检" --every 30m --agent <agent-id> --instructions "检查关键服务状态并汇报异常"
+  muse tracker new "一次性提醒" --once-at "明天上午十点" --agent <agent-id> --instructions "提醒我准备项目复盘材料"
+  muse tracker new "文档发布触发" --on tabdoc.document.published --agent <agent-id> --instructions "文档发布后判断是否需要提醒我"
+  muse tracker new "表格变更触发" --on-table <table-id> --on-events record_created,record_updated --agent <agent-id> --instructions "根据变化记录生成同步摘要"`,
 		Route:        cmdutil.RouteCliServer,
 		Method:       "POST",
 		Path:         "/api/tracker/events",
@@ -89,7 +89,7 @@ func newCmdTracker(f *cmdutil.Factory) *cobra.Command {
 			{Name: "once-at", Type: cmdutil.FlagString,
 				Desc: "一次性触发：在指定日期时间执行一次（ISO 8601 或“明天上午十点”这类今天/明天/后天相对时间）；跑完自动停用，与其它触发方式互斥"},
 			{Name: "agent", Type: cmdutil.FlagString,
-				Desc: "执行 Agent ID（可选；不传则用 TABTIN_AGENT_ID / profile.DefaultAgent。后端仍要求最终有 agent_id，可用 `tabtin agent list` 显式指定）"},
+				Desc: "执行 Agent ID（可选；不传则用 TABTIN_AGENT_ID / profile.DefaultAgent。后端仍要求最终有 agent_id，可用 `muse agent list` 显式指定）"},
 			{Name: "skill", Type: cmdutil.FlagString,
 				Desc: "可选：预绑定 Skill key；不填则走纯 Agent 模式，由 Agent 运行时自助选择 Skill"},
 			{Name: "instructions", Type: cmdutil.FlagString,
@@ -98,7 +98,7 @@ func newCmdTracker(f *cmdutil.Factory) *cobra.Command {
 				Desc: `Skill 启动参数 JSON（如 '{"target":"dify"}'）`},
 			{Name: "description", Type: cmdutil.FlagString, Desc: "Tracker 描述"},
 			{Name: "on", Type: cmdutil.FlagString,
-				Desc: "Extension 事件触发：传完整 event_key（形如 <app>.<resource>.<action>，如 tabdoc.document.published；用 `tabtin event list` 查可用项）；与其它触发方式互斥"},
+				Desc: "Extension 事件触发：传完整 event_key（形如 <app>.<resource>.<action>，如 tabdoc.document.published；用 `muse event list` 查可用项）；与其它触发方式互斥"},
 			{Name: "filter", Type: cmdutil.FlagString,
 				Desc: "事件过滤表达式（与 --on 配合使用）"},
 			{Name: "on-table", Type: cmdutil.FlagString,
@@ -112,7 +112,7 @@ func newCmdTracker(f *cmdutil.Factory) *cobra.Command {
 	// ─── list: 纯 Pipeline ──
 	cmdutil.RegisterCommand(cmd, f, cmdutil.CommandDef{
 		Use: "list", Short: "列出自动化任务",
-		Example: "  tabtin tracker list\n  tabtin tracker list --status active",
+		Example: "  muse tracker list\n  muse tracker list --status active",
 		Route:   cmdutil.RouteCliServer, Method: "GET", Path: "/api/tracker/events",
 		Flags: []cmdutil.FlagDef{
 			{Name: "status", Type: cmdutil.FlagString, Desc: "状态过滤：draft / active / paused / disabled",
@@ -126,7 +126,7 @@ func newCmdTracker(f *cmdutil.Factory) *cobra.Command {
 	// ─── show / pause / resume / delete / run-now: 纯 Pipeline + 路径插值 ──
 	cmdutil.RegisterCommand(cmd, f, cmdutil.CommandDef{
 		Use: "show <tracker-id>", Short: "查看自动化任务详情",
-		Example: "  tabtin tracker show <tracker-id>",
+		Example: "  muse tracker show <tracker-id>",
 		Route:   cmdutil.RouteCliServer, Method: "GET",
 		Path:         "/api/tracker/events/{tracker_id}",
 		ArgsMapping:  []string{"tracker_id"},
@@ -139,7 +139,7 @@ func newCmdTracker(f *cmdutil.Factory) *cobra.Command {
 		Long: `启用 draft 状态的自动化任务，使其进入调度。无 skill_key 时按纯 Agent 模式执行。
 
 如果任务已是 active/paused，请用 ` + "`resume`" + ` 而非 ` + "`activate`" + `。`,
-		Example: "  tabtin tracker activate <tracker-id>",
+		Example: "  muse tracker activate <tracker-id>",
 		Route:   cmdutil.RouteCliServer, Method: "POST",
 		Path:         "/api/tracker/events/{tracker_id}/activate",
 		ArgsMapping:  []string{"tracker_id"},
@@ -149,7 +149,7 @@ func newCmdTracker(f *cmdutil.Factory) *cobra.Command {
 	})
 	cmdutil.RegisterCommand(cmd, f, cmdutil.CommandDef{
 		Use: "pause <tracker-id>", Short: "暂停自动化任务",
-		Example: "  tabtin tracker pause <tracker-id>",
+		Example: "  muse tracker pause <tracker-id>",
 		Route:   cmdutil.RouteCliServer, Method: "POST",
 		Path:         "/api/tracker/events/{tracker_id}/pause",
 		ArgsMapping:  []string{"tracker_id"},
@@ -159,7 +159,7 @@ func newCmdTracker(f *cmdutil.Factory) *cobra.Command {
 	})
 	cmdutil.RegisterCommand(cmd, f, cmdutil.CommandDef{
 		Use: "resume <tracker-id>", Short: "恢复自动化任务",
-		Example: "  tabtin tracker resume <tracker-id>",
+		Example: "  muse tracker resume <tracker-id>",
 		Route:   cmdutil.RouteCliServer, Method: "POST",
 		Path:         "/api/tracker/events/{tracker_id}/resume",
 		ArgsMapping:  []string{"tracker_id"},
@@ -169,7 +169,7 @@ func newCmdTracker(f *cmdutil.Factory) *cobra.Command {
 	})
 	cmdutil.RegisterCommand(cmd, f, cmdutil.CommandDef{
 		Use: "delete <tracker-id>", Short: "删除自动化任务",
-		Example: "  tabtin tracker delete <tracker-id>",
+		Example: "  muse tracker delete <tracker-id>",
 		Route:   cmdutil.RouteCliServer, Method: "DELETE",
 		Path:         "/api/tracker/events/{tracker_id}",
 		ArgsMapping:  []string{"tracker_id"},
@@ -181,7 +181,7 @@ func newCmdTracker(f *cmdutil.Factory) *cobra.Command {
 		Use:     "trigger <tracker-id>",
 		Aliases: []string{"run-now"},
 		Short:   "立即执行自动化任务（创建一次 Run）",
-		Example: "  tabtin tracker trigger <tracker-id>",
+		Example: "  muse tracker trigger <tracker-id>",
 		Route:   cmdutil.RouteCliServer, Method: "POST",
 		Path:         "/api/tracker/events/{tracker_id}/trigger",
 		ArgsMapping:  []string{"tracker_id"},
@@ -191,7 +191,7 @@ func newCmdTracker(f *cmdutil.Factory) *cobra.Command {
 	})
 	cmdutil.RegisterCommand(cmd, f, cmdutil.CommandDef{
 		Use: "runs <tracker-id>", Short: "查看自动化任务历次执行",
-		Example: "  tabtin tracker runs <tracker-id>",
+		Example: "  muse tracker runs <tracker-id>",
 		Route:   cmdutil.RouteCliServer, Method: "GET",
 		Path:         "/api/tracker/events/{tracker_id}/runs",
 		ArgsMapping:  []string{"tracker_id"},
@@ -203,7 +203,7 @@ func newCmdTracker(f *cmdutil.Factory) *cobra.Command {
 	// 此前 CLI 只有 runs 列表，无法直接看某次执行详情）。
 	cmdutil.RegisterCommand(cmd, f, cmdutil.CommandDef{
 		Use: "run-show <tracker-id> <run-id>", Short: "查看单次执行详情",
-		Example: "  tabtin tracker run-show <tracker-id> <run-id>",
+		Example: "  muse tracker run-show <tracker-id> <run-id>",
 		Route:   cmdutil.RouteCliServer, Method: "GET",
 		Path:         "/api/tracker/events/{tracker_id}/runs/{run_id}",
 		ArgsMapping:  []string{"tracker_id", "run_id"},
@@ -213,7 +213,7 @@ func newCmdTracker(f *cmdutil.Factory) *cobra.Command {
 	})
 	cmdutil.RegisterCommand(cmd, f, cmdutil.CommandDef{
 		Use: "cancel-run <tracker-id> <run-id>", Short: "取消进行中的本次执行",
-		Example: "  tabtin tracker cancel-run <tracker-id> <run-id>",
+		Example: "  muse tracker cancel-run <tracker-id> <run-id>",
 		Route:   cmdutil.RouteCliServer, Method: "POST",
 		Path:         "/api/tracker/events/{tracker_id}/runs/{run_id}/cancel",
 		ArgsMapping:  []string{"tracker_id", "run_id"},
@@ -226,7 +226,7 @@ func newCmdTracker(f *cmdutil.Factory) *cobra.Command {
 	cmdutil.RegisterCommand(cmd, f, cmdutil.CommandDef{
 		Use:          "dry-run <tracker-id>",
 		Short:        "试运行：回放近 N 个事件评估触发条件（不真执行）",
-		Example:      "  tabtin tracker dry-run <tracker-id>\n  tabtin tracker dry-run <tracker-id> --replay-last 10",
+		Example:      "  muse tracker dry-run <tracker-id>\n  muse tracker dry-run <tracker-id> --replay-last 10",
 		Route:        cmdutil.RouteCliServer,
 		Method:       "POST",
 		Path:         "/api/tracker/events/{tracker_id}/dry-run",
@@ -253,7 +253,7 @@ func newCmdTracker(f *cmdutil.Factory) *cobra.Command {
 func trackerNewFunc(f *cmdutil.Factory) func(ctx *cmdutil.RunContext) error {
 	return func(ctx *cmdutil.RunContext) error {
 		if len(ctx.Args) == 0 {
-			return fmt.Errorf("请提供 Tracker 名称，用法：tabtin tracker new <name>")
+			return fmt.Errorf("请提供 Tracker 名称，用法：muse tracker new <name>")
 		}
 		name := strings.TrimSpace(ctx.Args[0])
 		if name == "" {
@@ -353,7 +353,7 @@ func trackerNewFunc(f *cmdutil.Factory) func(ctx *cmdutil.RunContext) error {
 			if resp, reqErr := tr.Request(reqCtxValidate, "GET", evPath, nil, nil); reqErr == nil && resp != nil && resp.Status == 404 {
 				return output.PrintErrorAndExit(output.ErrorEnvelope(
 					string(errcode.ValidationError),
-					fmt.Sprintf("event_key %q 不在平台事件目录中；用 `tabtin event list` 查看所有可用 event_key", onEvent),
+					fmt.Sprintf("event_key %q 不在平台事件目录中；用 `muse event list` 查看所有可用 event_key", onEvent),
 					"", output.ExitGeneral,
 				))
 			}
@@ -411,7 +411,7 @@ func parseTrackerSkillParams(raw string, instructions string) (map[string]any, e
 func trackerDryRunFunc(f *cmdutil.Factory) func(ctx *cmdutil.RunContext) error {
 	return func(ctx *cmdutil.RunContext) error {
 		if len(ctx.Args) == 0 {
-			return fmt.Errorf("请提供 Tracker ID，用法：tabtin tracker dry-run <tracker-id>")
+			return fmt.Errorf("请提供 Tracker ID，用法：muse tracker dry-run <tracker-id>")
 		}
 		id := ctx.Args[0]
 		if err := cmdutil.ValidatePathParam(id, "tracker ID"); err != nil {
@@ -506,7 +506,7 @@ func dryRunSourceBanner(body []byte, format output.Format) string {
 }
 
 // unwrapDryRunPayload 从 transport 原始 JSON 解出 dry-run data 层。
-// 兼容 TabTin API 信封 {"ok":true,"data":{...}}、Django legacy {"success":true,"data":{...}}
+// 兼容 Muse API 信封 {"ok":true,"data":{...}}、Django legacy {"success":true,"data":{...}}
 // 以及裸 dict（单测 / 直连）。
 func unwrapDryRunPayload(raw any) map[string]any {
 	inner := output.UnwrapDjangoEnvelope(raw)
@@ -595,7 +595,7 @@ func formatAvailableSkills(items []skillRegistryItem) string {
 			continue
 		}
 		if shown >= maxList {
-			fmt.Fprintf(&b, "  …（共 %d 个，更多用 `tabtin skill list` 查看）\n", len(items))
+			fmt.Fprintf(&b, "  …（共 %d 个，更多用 `muse skill list` 查看）\n", len(items))
 			break
 		}
 		fmt.Fprintf(&b, "  - %s（%s）\n", name, key)
@@ -966,7 +966,7 @@ func validateEventKey(key string) error {
 	if len(parts) < 3 {
 		return fmt.Errorf(
 			"--on 需要完整 event_key（形如 <app>.<resource>.<action>，如 tabdoc.document.published），"+
-				"而不是裸事件名 %q；用 `tabtin event list` 查看所有可用 event_key",
+				"而不是裸事件名 %q；用 `muse event list` 查看所有可用 event_key",
 			key,
 		)
 	}
@@ -1070,7 +1070,7 @@ func resolveTrackerScope(f *cmdutil.Factory) (organizationID, spaceID string, er
 	if organizationID == "" {
 		return "", "", output.PrintErrorAndExit(output.ErrorEnvelope(
 			string(errcode.ValidationError),
-			"未配置 organization_id（用 --organization-id 或 'tabtin profile use'）",
+			"未配置 organization_id（用 --organization-id 或 'muse profile use'）",
 			"", output.ExitGeneral,
 		))
 	}

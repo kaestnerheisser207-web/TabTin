@@ -13,9 +13,9 @@ import {
 
 describe('system-prompt-sections – buildPrincipleSection', () => {
   // ：不再硬编码具体 persona；principle 只保留行为规则与操作循环。
-  it('renders principle shell without hardcoded TabTin AI Agent persona line', () => {
+  it('renders principle shell without hardcoded Muse AI Agent persona line', () => {
     const out = buildPrincipleSection()
-    expect(out).not.toContain('你是 TabTin AI Agent')
+    expect(out).not.toContain('你是 Muse AI Agent')
     expect(out).not.toContain('## 平台岗位')
     expect(out).not.toContain('本段不另设人格')
     expect(out).not.toContain('## 术语')
@@ -55,7 +55,7 @@ describe('system-prompt-sections – buildEnvironmentSection', () => {
       toolLogsDir: '/tmp/tool-logs-test',
     })
 
-    expect(out).toContain('你运行在 TabTin 工作空间中。')
+    expect(out).toContain('你运行在 Muse 工作空间中。')
     expect(out).toContain('组织：')
     expect(out).toContain('工作空间：')
     expect(out).toContain('会话：')

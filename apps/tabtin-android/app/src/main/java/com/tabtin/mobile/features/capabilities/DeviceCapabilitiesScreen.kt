@@ -60,7 +60,7 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Lifecycle
-import com.tabtin.mobile.R
+import com.muse.mobile.R
 import com.tabtin.mobile.data.adb.AdbConnectionState
 import com.tabtin.mobile.data.privileged.PrivilegedProcessState
 import com.tabtin.mobile.data.websocket.AutoRecoverState

@@ -198,8 +198,8 @@ import type {
   RuntimeCarryForwardContract,
 } from './contracts.js';
 // Capability + capability 装配 helper（5 件套）：
-// - TabDataCap 已随 Wave 4a (2026-05-01) D4 全删 FC 一并删除（Agent 走 `tabtin table *` CLI）
-// - TabDocCap 已随 Wave 12 (2026-05-04) 退役（Agent 走 `tabtin doc *` CLI）
+// - TabDataCap 已随 Wave 4a (2026-05-01) D4 全删 FC 一并删除（Agent 走 `muse table *` CLI）
+// - TabDocCap 已随 Wave 12 (2026-05-04) 退役（Agent 走 `muse doc *` CLI）
 // ：平台目录类 Cap（SkillsCap）已迁至共享宿主包。
 // ：临时隐藏 skill 名单（tabvideo）由宿主注入。
 import { TEMPORARILY_HIDDEN_SKILLS } from '@tabtin/agent-host/capabilities';
@@ -487,12 +487,12 @@ export interface DaemonQueryRequest extends DaemonQueryRequestContract {
   spaceName?: string;
   organizationName?: string;
   /**
-   * W7c · Stage 4 Daemon 路径对齐。CLI 工具命令清单（``tabtin commands``
+   * W7c · Stage 4 Daemon 路径对齐。CLI 工具命令清单（``muse commands``
    * 的输出文本）。
    *
    * 来源优先级：
    *   1. Django ``prompt.forward.cli_reference``（如果上游能更高频缓存）
-   *   2. Daemon 自己 spawn ``tabtin commands --format json`` 兜底
+   *   2. Daemon 自己 spawn ``muse commands --format json`` 兜底
    *
    * 烘焙到 ``<cli_capabilities>`` 段（07 §F.1）。两路径任一有值即注入；都没有就跳过段。
    */

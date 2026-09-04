@@ -28,7 +28,7 @@ const HEADER = `/* eslint-disable */
 // .ts 直接 re-export agent-wire 的类型 (vendor in 后用相对路径 import)
 const tsContent = `${HEADER}
 /**
- * TabTin wire-protocol generated types (Anthropic Messages API alignment).
+ * Muse wire-protocol generated types (Anthropic Messages API alignment).
  *
  * 在 monorepo 内（推荐路径）：
  *   import type { ContentBlock, MessageStart } from '@tabtin/agent-wire';

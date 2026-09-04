@@ -54,7 +54,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.tabtin.mobile.R
+import com.muse.mobile.R
 import com.tabtin.mobile.data.model.MobilePushPreferences
 import com.tabtin.mobile.data.repository.MobilePushPreferencesRepository
 import com.tabtin.mobile.ui.theme.TTSpacing

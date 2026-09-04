@@ -7,7 +7,7 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/TabTin/tabtin-cli/internal/cmdutil"
+	"github.com/Muse/muse-cli/internal/cmdutil"
 )
 
 func NewCmdBrowser(f *cmdutil.Factory) *cobra.Command {
@@ -20,11 +20,11 @@ func NewCmdBrowser(f *cmdutil.Factory) *cobra.Command {
 部分高级功能仅在 Electron 端可用。
 
 示例：
-  tabtin browser open --url https://example.com
-  tabtin browser glance
-  tabtin browser act --actions '[{"type":"click","ref":"e1"}]'
-  tabtin browser eval --expression "document.title"
-  tabtin browser print --save /tmp/page.md`,
+  muse browser open --url https://example.com
+  muse browser glance
+  muse browser act --actions '[{"type":"click","ref":"e1"}]'
+  muse browser eval --expression "document.title"
+  muse browser print --save /tmp/page.md`,
 	}
 
 	registerTopLevel(cmd, f)
@@ -72,7 +72,7 @@ func NewCmdBrowser(f *cmdutil.Factory) *cobra.Command {
 var tabIDFlag = cmdutil.FlagDef{Name: "tab-id", Type: cmdutil.FlagString, Desc: "Tab ID（默认活跃 Tab）"}
 var spaceIDFlag = cmdutil.FlagDef{Name: "space-id", Type: cmdutil.FlagString, Desc: "Space ID"}
 var runIDFlag = cmdutil.FlagDef{Name: "run-id", Type: cmdutil.FlagString, Desc: "Run ID"}
-var browserAsyncFlag = cmdutil.FlagDef{Name: "async", Type: cmdutil.FlagBool, Desc: "异步执行：立即返回 202 + jobId，用 tabtin browser job status/cancel 跟踪或取消"}
+var browserAsyncFlag = cmdutil.FlagDef{Name: "async", Type: cmdutil.FlagBool, Desc: "异步执行：立即返回 202 + jobId，用 muse browser job status/cancel 跟踪或取消"}
 var browserWatchFlag = cmdutil.FlagDef{Name: "watch", Type: cmdutil.FlagBool, CliOnly: true, Desc: "等待异步 job 完成：stderr 显示进度，终态 JSON 输出到 stdout；Ctrl-C 时尽力取消"}
 
 // compactFlag：browser 命令族统一的「轻量 / 全量」开关。默认 true=轻量视图（全条目 +
@@ -118,7 +118,7 @@ const tabKeyPrefix = "tabweb:"
 
 // tabKeyFlag 是 --tab-id 的隐藏兼容别名（BR-11）。
 //
-// 背景：`tabtin browser tab list` 的输出历史上把 tabKey（值形如 tabweb:<viewId>）/
+// 背景：`muse browser tab list` 的输出历史上把 tabKey（值形如 tabweb:<viewId>）/
 // activeTabKey 作为主字段，但选 Tab 的输入 flag 只有 --tab-id；Agent 据输出字段名误推
 // --tab-key、甚至误带 tabweb: 前缀，报错后才查 --help 自纠（多耗 token）。本次已把输出
 // 主字段改成 tabId/activeTabId 引导正名，这个隐藏别名 + coalesceTabRef 是兜底：Agent
@@ -329,7 +329,7 @@ func registerTopLevel(parent *cobra.Command, f *cmdutil.Factory) {
 			// ：open 会创建或切换浏览器上下文，CLI 声明为写操作；
 			// Electron 审批策略通过 contract 的 policyRisk=read 自动放行，避免浏览链路反复确认。
 			Use: "open", Short: "打开 URL（默认返回即含可交互元素清单，可直接 act）",
-			Example: "  tabtin browser open --url https://example.com\n  tabtin browser open --url https://example.com --observe=false   # 只导航，不带元素清单",
+			Example: "  muse browser open --url https://example.com\n  muse browser open --url https://example.com --observe=false   # 只导航，不带元素清单",
 			Route:   cmdutil.RouteCliServer, Method: "POST", Path: "/browser/open",
 			Flags: []cmdutil.FlagDef{
 				{Name: "url", Type: cmdutil.FlagString, Required: true, Desc: "URL（须 http/https）"},
@@ -349,7 +349,7 @@ func registerTopLevel(parent *cobra.Command, f *cmdutil.Factory) {
 			Use:   "home",
 			Short: "打开浏览器入口（自定义主页或 TabWeb 工作区）",
 			Long: "打开用户的浏览器入口：已配置自定义主页时新建网页标签打开该网址；未配置时打开 TabWeb 工作区。\n\n仅用于用户要打开浏览器或浏览器主页、尚未指定具体网站或搜索内容的场景。\n指定 URL/网站、搜索词、浏览历史、书签或下载管理时，请使用对应浏览器命令。",
-			Example: "  tabtin browser home\n  tabtin browser home --space-id <space_id>",
+			Example: "  muse browser home\n  muse browser home --space-id <space_id>",
 			Route:   cmdutil.RouteCliServer, Method: "POST", Path: "/browser/home",
 			Flags: []cmdutil.FlagDef{
 				spaceIDFlag,
@@ -361,7 +361,7 @@ func registerTopLevel(parent *cobra.Command, f *cmdutil.Factory) {
 			// 返回后可直接继续 act --ref eN，不必再单独 glance 一轮。
 			Use: "act", Short: "执行动作序列（默认返回即含可交互元素清单，可直接继续 act）",
 			Long: "执行按顺序组成的页面动作。填写文本框时，value 是 fill 的正式字段；text 只是兼容别名，收到 compatibility_warnings 后应改用 value。选择下拉项也使用 value 传入选项值。",
-			Example: "  tabtin browser act --actions '[{\"type\":\"fill\",\"ref\":\"e1\",\"value\":\"张三\"}]'\n  tabtin browser act --actions '[{\"type\":\"select\",\"ref\":\"e4\",\"value\":\"large\"}]'\n  tabtin browser act --actions '[{\"type\":\"click\",\"ref\":\"e6\"}]'\n  tabtin browser act --actions '[{\"type\":\"click\",\"selector\":\"p > a\"}]'\n  tabtin browser act --actions '[{\"type\":\"click\",\"ref\":\"e1\"}]' --observe=false   # 只返回动作结果，不带元素清单",
+			Example: "  muse browser act --actions '[{\"type\":\"fill\",\"ref\":\"e1\",\"value\":\"张三\"}]'\n  muse browser act --actions '[{\"type\":\"select\",\"ref\":\"e4\",\"value\":\"large\"}]'\n  muse browser act --actions '[{\"type\":\"click\",\"ref\":\"e6\"}]'\n  muse browser act --actions '[{\"type\":\"click\",\"selector\":\"p > a\"}]'\n  muse browser act --actions '[{\"type\":\"click\",\"ref\":\"e1\"}]' --observe=false   # 只返回动作结果，不带元素清单",
 			Route:   cmdutil.RouteCliServer, Method: "POST", Path: "/browser/act",
 			Flags: []cmdutil.FlagDef{
 				// ref 取自 glance 输出的元素 ref 字段（eN，如 e1）；也可直接用 selector。
@@ -382,7 +382,7 @@ func registerTopLevel(parent *cobra.Command, f *cmdutil.Factory) {
 			// CLI 必须挂 compactDefaultValidate，否则 Default:true 不会进请求体，
 			// 服务端会把「没传」误判成全量（含超长 xpath selector → 易撞 64KB 落盘）。
 			Use: "glance", Short: "看交互：观察页面可交互元素（默认轻量 ref/href；--tree 全量 a11y 树；--screenshot 截图）",
-			Example: "  tabtin browser glance\n  tabtin browser glance --selector \"button\"   # 无损收窄范围\n  tabtin browser glance --compact=false         # 全字段（含 selector/tag/visible）\n  tabtin browser glance --tree                # 全量 a11y 树（重）\n  tabtin browser glance --screenshot --save /tmp/page.png\n  # 点击: tabtin browser act --actions '[{\"type\":\"click\",\"ref\":\"e1\"}]'\n  # 打开链接: 复制元素的 href 原样传给 tabtin browser open（勿自己拼 URL，会丢签名参）",
+			Example: "  muse browser glance\n  muse browser glance --selector \"button\"   # 无损收窄范围\n  muse browser glance --compact=false         # 全字段（含 selector/tag/visible）\n  muse browser glance --tree                # 全量 a11y 树（重）\n  muse browser glance --screenshot --save /tmp/page.png\n  # 点击: muse browser act --actions '[{\"type\":\"click\",\"ref\":\"e1\"}]'\n  # 打开链接: 复制元素的 href 原样传给 muse browser open（勿自己拼 URL，会丢签名参）",
 			Route:    cmdutil.RouteCliServer, Method: "POST", Path: "/browser/glance",
 			Validate: compactDefaultValidate,
 			Flags: []cmdutil.FlagDef{
@@ -400,10 +400,10 @@ func registerTopLevel(parent *cobra.Command, f *cmdutil.Factory) {
 		},
 		{
 			// Risk=write: 任意 JS 求值等同写操作（fetch/click/setItem 都能跑）。
-			// 受限模式必须拒绝；只读取 DOM 文本请改用 `tabtin browser glance` /
-			// `tabtin browser print` 等带数据闸门的命令。
+			// 受限模式必须拒绝；只读取 DOM 文本请改用 `muse browser glance` /
+			// `muse browser print` 等带数据闸门的命令。
 			Use: "eval", Short: "执行 JavaScript",
-			Example: "  tabtin browser eval --expression \"document.title\"",
+			Example: "  muse browser eval --expression \"document.title\"",
 			Route:   cmdutil.RouteCliServer, Method: "POST", Path: "/browser/eval",
 			Flags: []cmdutil.FlagDef{
 				{Name: "expression", Type: cmdutil.FlagString, Required: true, Desc: "JS 表达式"},
@@ -413,7 +413,7 @@ func registerTopLevel(parent *cobra.Command, f *cmdutil.Factory) {
 		},
 		{
 			Use: "wait", Short: "等待",
-			Example: "  tabtin browser wait --selector \".loaded\"\n  tabtin browser wait --timeout 3000",
+			Example: "  muse browser wait --selector \".loaded\"\n  muse browser wait --timeout 3000",
 			Route:   cmdutil.RouteCliServer, Method: "POST", Path: "/browser/wait",
 			Flags: []cmdutil.FlagDef{
 				{Name: "selector", Type: cmdutil.FlagString, Desc: "等待元素出现"},
@@ -427,7 +427,7 @@ func registerTopLevel(parent *cobra.Command, f *cmdutil.Factory) {
 			// 「导出页面内容到文件」一个动词：始终落盘（--save 必填），响应只回路径 + 元信息，
 			// 不把大块正文灌进上下文——要读用 grep/read 按需取文件片段。
 			Use: "print", Short: "导出页面内容到文件（默认 markdown；--as text|markdown|html|json|pdf；--save 必填）",
-			Example: "  tabtin browser print --save /tmp/page.md                   # 当前 tab → markdown\n  tabtin browser print --url https://example.com --save /tmp/page.md\n  tabtin browser print --as json --schema '{\"type\":\"object\",\"properties\":{\"title\":{\"type\":\"string\"}}}' --save /tmp/data.json\n  tabtin browser print --as pdf --save /tmp/page.pdf\n  tabtin browser print --include links,images --save /tmp/page.md   # 保留链接与图片",
+			Example: "  muse browser print --save /tmp/page.md                   # 当前 tab → markdown\n  muse browser print --url https://example.com --save /tmp/page.md\n  muse browser print --as json --schema '{\"type\":\"object\",\"properties\":{\"title\":{\"type\":\"string\"}}}' --save /tmp/data.json\n  muse browser print --as pdf --save /tmp/page.pdf\n  muse browser print --include links,images --save /tmp/page.md   # 保留链接与图片",
 			Route:   cmdutil.RouteCliServer, Method: "POST", Path: "/browser/print",
 			Validate: printValidate,
 			Flags: []cmdutil.FlagDef{
@@ -447,7 +447,7 @@ func registerTopLevel(parent *cobra.Command, f *cmdutil.Factory) {
 		},
 		{
 			Use: "nav", Short: "导航 (back/forward/reload/stop)",
-			Example: "  tabtin browser nav --direction back\n  tabtin browser nav --direction reload --ignore-cache",
+			Example: "  muse browser nav --direction back\n  muse browser nav --direction reload --ignore-cache",
 			Route:   cmdutil.RouteCliServer, Method: "POST", Path: "/browser/nav",
 			Flags: []cmdutil.FlagDef{
 				{Name: "direction", Type: cmdutil.FlagString, Required: true, Desc: "方向 (back/forward/reload/stop)"},
@@ -458,7 +458,7 @@ func registerTopLevel(parent *cobra.Command, f *cmdutil.Factory) {
 		},
 		{
 			Use: "network", Short: "网络日志（列出页面加载发出的请求 / XHR / fetch）",
-			Example: "  tabtin browser network\n  tabtin browser network --filter xhr --tab-id <tab_id>",
+			Example: "  muse browser network\n  muse browser network --filter xhr --tab-id <tab_id>",
 			Route:   cmdutil.RouteCliServer, Method: "POST", Path: "/browser/network",
 			Flags: []cmdutil.FlagDef{
 				{Name: "filter", Type: cmdutil.FlagString, Desc: "过滤条件"},
@@ -472,7 +472,7 @@ func registerTopLevel(parent *cobra.Command, f *cmdutil.Factory) {
 		},
 		{
 			Use: "console", Short: "控制台日志",
-			Example: "  tabtin browser console\n  tabtin browser console --level error --tab-id <tab_id>",
+			Example: "  muse browser console\n  muse browser console --level error --tab-id <tab_id>",
 			Route:   cmdutil.RouteCliServer, Method: "POST", Path: "/browser/console",
 			Flags: []cmdutil.FlagDef{
 				{Name: "level", Type: cmdutil.FlagString, Desc: "日志级别过滤"},
@@ -482,7 +482,7 @@ func registerTopLevel(parent *cobra.Command, f *cmdutil.Factory) {
 		},
 		{
 			Use: "batch", Short: "批量操作",
-			Example: "  tabtin browser batch --actions '[{\"type\":\"click\",\"ref\":\"e1\"},{\"type\":\"type\",\"text\":\"hello\"}]'",
+			Example: "  muse browser batch --actions '[{\"type\":\"click\",\"ref\":\"e1\"},{\"type\":\"type\",\"text\":\"hello\"}]'",
 			Route:   cmdutil.RouteCliServer, Method: "POST", Path: "/browser/batch",
 			Flags: []cmdutil.FlagDef{
 				{Name: "actions", Type: cmdutil.FlagString, Required: true, Desc: "操作数组 JSON（每项含 type + 参数）"},
@@ -493,7 +493,7 @@ func registerTopLevel(parent *cobra.Command, f *cmdutil.Factory) {
 		},
 		{
 			Use: "clear-session", Short: "清除会话数据",
-			Example: "  tabtin browser clear-session --tab-id <tab_id>\n  tabtin browser clear-session --clear-cache --clear-cookies",
+			Example: "  muse browser clear-session --tab-id <tab_id>\n  muse browser clear-session --clear-cache --clear-cookies",
 			Route:   cmdutil.RouteCliServer, Method: "POST", Path: "/browser/clear-session",
 			Flags: []cmdutil.FlagDef{
 				{Name: "clear-cookies", Type: cmdutil.FlagBool, Default: true, Desc: "清除 Cookie"},
@@ -505,14 +505,14 @@ func registerTopLevel(parent *cobra.Command, f *cmdutil.Factory) {
 		},
 		{
 			Use: "random-ua", Short: "随机 User-Agent",
-			Example: "  tabtin browser random-ua\n  tabtin browser random-ua --platform mobile",
+			Example: "  muse browser random-ua\n  muse browser random-ua --platform mobile",
 			Route:   cmdutil.RouteCliServer, Method: "POST", Path: "/browser/random-ua",
 			Flags:     []cmdutil.FlagDef{{Name: "platform", Type: cmdutil.FlagString, Default: "desktop", Desc: "平台 (desktop/mobile)"}},
 			HasFormat: true,
 		},
 		// ── 自描述（BR-5 / BR-6）──────────────────────────────────
 		// 纯只读、runtime-aware：让 Agent「开工前查一眼」而非「运行时踩一脚」。
-		// 刻意不并进顶层 `tabtin capabilities`（那是平台静态工具清单）——这两个
+		// 刻意不并进顶层 `muse capabilities`（那是平台静态工具清单）——这两个
 		// 是 runtime 感知的 browser 自描述，语义不同，挂在 browser 子命令下。
 		{
 			Use: "context", Short: "当前浏览器上下文（runtime/活跃 tab/workspace）",
@@ -521,7 +521,7 @@ crawlspace / workspace 根、以及上下文来源 source。
 
 Electron 从 CrawlspaceContextHub 取活跃 tab，Daemon 从 DaemonBrowserService 取。
 纯只读，不改任何状态。`,
-			Example: "  tabtin browser context\n  tabtin browser context --format json",
+			Example: "  muse browser context\n  muse browser context --format json",
 			Route:   cmdutil.RouteCliServer, Method: "POST", Path: "/browser/context",
 			Flags:      []cmdutil.FlagDef{spaceIDFlag},
 			HasFormat:  true,
@@ -543,9 +543,9 @@ full（完整）/ degraded（功能裁剪）/ unsupported（不可用），degra
 数据源是 @tabtin/browser-core 的能力矩阵（双端同源），只投影「我这一端」那一列，
 所以双端永不漂移。把双端差异从「踩坑」变「可查询契约」。
 
-注意：这不同于顶层 tabtin capabilities（平台静态工具清单）——这条是 runtime 感知的
+注意：这不同于顶层 muse capabilities（平台静态工具清单）——这条是 runtime 感知的
 browser action 矩阵。`,
-			Example: "  tabtin browser capabilities\n  tabtin browser capabilities --format json\n  tabtin browser capabilities --format json --jq '.actions[] | select(.level!=\"full\")'",
+			Example: "  muse browser capabilities\n  muse browser capabilities --format json\n  muse browser capabilities --format json --jq '.actions[] | select(.level!=\"full\")'",
 			Route:   cmdutil.RouteCliServer, Method: "POST", Path: "/browser/capabilities",
 			HasFormat:  true,
 			Idempotent: true,
@@ -562,7 +562,7 @@ browser action 矩阵。`,
 			// 入参语义：缺省（不带 status/body/headers）= 直接 abort 命中请求；
 			// 带 status/body/headers = 以伪造响应 fulfill。
 			Use: "route", Short: "拦截 / 改写匹配的网络请求",
-			Example: "  tabtin browser route --url-pattern \"**/*.png\"            # 直接拦截（abort）\n  tabtin browser route --url-pattern \"**/api/**\" --status 403 --body \"blocked\"",
+			Example: "  muse browser route --url-pattern \"**/*.png\"            # 直接拦截（abort）\n  muse browser route --url-pattern \"**/api/**\" --status 403 --body \"blocked\"",
 			Route:   cmdutil.RouteCliServer, Method: "POST", Path: "/browser/route",
 			Flags: []cmdutil.FlagDef{
 				{Name: "url-pattern", Type: cmdutil.FlagString, Required: true, Desc: "URL 匹配模式（glob，如 **/*.png）"},
@@ -577,7 +577,7 @@ browser action 矩阵。`,
 			// BR-2：列出已注册的拦截规则。仅 Electron 维护可查询规则列表；
 			// Daemon 的 page.route 为 per-page、不持久，会诚实返回 501 NOT_IMPLEMENTED（不再假成功）。
 			Use: "route-list", Short: "列出已注册的拦截规则（仅 Electron）",
-			Example: "  tabtin browser route-list",
+			Example: "  muse browser route-list",
 			Route:   cmdutil.RouteCliServer, Method: "POST", Path: "/browser/route-list",
 			Flags:     []cmdutil.FlagDef{tabIDFlag, spaceIDFlag, runIDFlag},
 			HasFormat: true,
@@ -586,7 +586,7 @@ browser action 矩阵。`,
 			// BR-2：取消请求拦截。双端取消依据不同——Electron 用 route-list 返回的 ruleId，
 			// Daemon 用注册时的 url-pattern；两个 flag 都暴露，按运行时择一使用。
 			Use: "unroute", Short: "取消请求拦截",
-			Example: "  tabtin browser unroute --rule-id <rule_id>      # Electron：用 route-list 拿到的 ruleId\n  tabtin browser unroute --url-pattern \"**/*.png\"  # Daemon：用注册时的 url-pattern",
+			Example: "  muse browser unroute --rule-id <rule_id>      # Electron：用 route-list 拿到的 ruleId\n  muse browser unroute --url-pattern \"**/*.png\"  # Daemon：用注册时的 url-pattern",
 			Route:   cmdutil.RouteCliServer, Method: "POST", Path: "/browser/unroute",
 			Flags: []cmdutil.FlagDef{
 				{Name: "rule-id", Type: cmdutil.FlagString, Desc: "规则 ID（Electron，来自 route-list）"},
@@ -602,7 +602,7 @@ browser action 矩阵。`,
 			registerBrowserDefs(child, f, []cmdutil.CommandDef{
 				{
 					Use: "to-api", Short: "从网络日志生成 OpenAPI 3.1 草案",
-					Example: "  tabtin browser network to-api --format json\n  tabtin browser network --include-request-body --include-response-body --format json > network.json\n  tabtin browser network to-api --input @network.json --title \"Observed API\" --format json",
+					Example: "  muse browser network to-api --format json\n  muse browser network --include-request-body --include-response-body --format json > network.json\n  muse browser network to-api --input @network.json --title \"Observed API\" --format json",
 					Route:   cmdutil.RouteCliServer, Method: "POST", Path: "/browser/network/to-api",
 					Flags: []cmdutil.FlagDef{
 						{Name: "input", Type: cmdutil.FlagString, Desc: "离线 network JSON（支持 @file 或 stdin）；不传则读取当前 tab 的 network 缓冲"},
@@ -624,7 +624,7 @@ func registerTabCommands(parent *cobra.Command, f *cmdutil.Factory) {
 	defs := []cmdutil.CommandDef{
 		// 合并：保留远端 Example（CLI 宪法 Wave 1）+ 我方 Risk/OutputSchema（W5.5/L31）
 		{
-			Use: "list", Short: "Tab 列表", Example: "  tabtin browser tab list\n  tabtin browser tab list --space-id <space_id>", Route: cmdutil.RouteCliServer, Method: "POST", Path: "/browser/tabs",
+			Use: "list", Short: "Tab 列表", Example: "  muse browser tab list\n  muse browser tab list --space-id <space_id>", Route: cmdutil.RouteCliServer, Method: "POST", Path: "/browser/tabs",
 			Flags:     []cmdutil.FlagDef{spaceIDFlag},
 			HasFormat: true,
 			// L31：tabs 数组中每条记录字段（与 Electron `BrowserTabSummary` 对齐）。
@@ -637,34 +637,34 @@ func registerTabCommands(parent *cobra.Command, f *cmdutil.Factory) {
 				{Key: "type", Label: "类型", Type: "string"},
 			},
 		},
-		{Use: "switch", Short: "切换 Tab", Example: "  tabtin browser tab switch --tab-id <tab_id>", Route: cmdutil.RouteCliServer, Method: "POST", Path: "/browser/tab-switch", Flags: []cmdutil.FlagDef{{Name: "tab-id", Type: cmdutil.FlagString, Required: true, Desc: "Tab ID"}, spaceIDFlag}, HasFormat: true, Risk: cmdutil.RiskWrite},
-		{Use: "close", Short: "关闭 Tab", Example: "  tabtin browser tab close --tab-id <tab_id>", Route: cmdutil.RouteCliServer, Method: "POST", Path: "/browser/tab-close", Flags: []cmdutil.FlagDef{{Name: "tab-id", Type: cmdutil.FlagString, Required: true, Desc: "Tab ID"}, spaceIDFlag}, HasFormat: true, Risk: cmdutil.RiskWrite},
-		{Use: "state", Short: "Tab 状态", Example: "  tabtin browser tab state --tab-id <tab_id>\n  tabtin browser tab state --tab-id <tab_id> --include-history", Route: cmdutil.RouteCliServer, Method: "POST", Path: "/browser/tab-state", Flags: []cmdutil.FlagDef{tabIDFlag, spaceIDFlag, {Name: "include-history", Type: cmdutil.FlagBool, Desc: "包含浏览历史"}}, HasFormat: true},
+		{Use: "switch", Short: "切换 Tab", Example: "  muse browser tab switch --tab-id <tab_id>", Route: cmdutil.RouteCliServer, Method: "POST", Path: "/browser/tab-switch", Flags: []cmdutil.FlagDef{{Name: "tab-id", Type: cmdutil.FlagString, Required: true, Desc: "Tab ID"}, spaceIDFlag}, HasFormat: true, Risk: cmdutil.RiskWrite},
+		{Use: "close", Short: "关闭 Tab", Example: "  muse browser tab close --tab-id <tab_id>", Route: cmdutil.RouteCliServer, Method: "POST", Path: "/browser/tab-close", Flags: []cmdutil.FlagDef{{Name: "tab-id", Type: cmdutil.FlagString, Required: true, Desc: "Tab ID"}, spaceIDFlag}, HasFormat: true, Risk: cmdutil.RiskWrite},
+		{Use: "state", Short: "Tab 状态", Example: "  muse browser tab state --tab-id <tab_id>\n  muse browser tab state --tab-id <tab_id> --include-history", Route: cmdutil.RouteCliServer, Method: "POST", Path: "/browser/tab-state", Flags: []cmdutil.FlagDef{tabIDFlag, spaceIDFlag, {Name: "include-history", Type: cmdutil.FlagBool, Desc: "包含浏览历史"}}, HasFormat: true},
 	}
 	registerBrowserDefs(parent, f, defs)
 }
 
 func registerResourceCommands(parent *cobra.Command, f *cmdutil.Factory) {
 	defs := []cmdutil.CommandDef{
-		{Use: "list", Short: "资源列表", Example: "  tabtin browser resource list --tab-id <tab_id>\n  tabtin browser resource list --category video", Route: cmdutil.RouteCliServer, Method: "POST", Path: "/browser/resources",
+		{Use: "list", Short: "资源列表", Example: "  muse browser resource list --tab-id <tab_id>\n  muse browser resource list --category video", Route: cmdutil.RouteCliServer, Method: "POST", Path: "/browser/resources",
 			// 无 --limit：默认返回全部资源，不做有损截断。轻量/全量走命令族统一的 --compact：
 			// 默认轻量（url+type+size）；--compact=false 加 status/mimeType/resourceId 等全字段。用 --category 收窄。
 			Validate: compactDefaultValidate,
 			Flags:    []cmdutil.FlagDef{compactFlag, tabIDFlag, spaceIDFlag, {Name: "category", Type: cmdutil.FlagString, Desc: "类别过滤（收窄结果，替代有损的数量截断）"}, {Name: "probe-media", Type: cmdutil.FlagBool, Desc: "探测媒体信息"}, {Name: "hide-segments", Type: cmdutil.FlagBool, Default: true, Desc: "隐藏流媒体分片（如 DASH/HLS 的小分片），默认 true"}}, HasFormat: true},
-		{Use: "inspect", Short: "资源详情", Example: "  tabtin browser resource inspect --resource-id <resource_id>", Route: cmdutil.RouteCliServer, Method: "POST", Path: "/browser/resource/inspect", Flags: []cmdutil.FlagDef{{Name: "resource-id", Type: cmdutil.FlagString, Required: true, Desc: "资源 ID"}, tabIDFlag, spaceIDFlag}, HasFormat: true},
-		{Use: "capture", Short: "捕获资源", Example: "  tabtin browser resource capture --url https://example.com/video.mp4\n  tabtin browser resource capture --resource-id <resource_id> --force", Route: cmdutil.RouteCliServer, Method: "POST", Path: "/browser/resource/capture", Flags: []cmdutil.FlagDef{{Name: "resource-id", Type: cmdutil.FlagString, Desc: "资源 ID"}, {Name: "url", Type: cmdutil.FlagString, Desc: "URL"}, {Name: "force", Type: cmdutil.FlagBool, Desc: "强制重新捕获"}, tabIDFlag, spaceIDFlag}, HasFormat: true},
-		{Use: "download", Short: "下载资源", Example: "  tabtin browser resource download --resource-id <resource_id> --filename media.mp4\n  tabtin browser resource download --url https://example.com/file.mp4", Route: cmdutil.RouteCliServer, Method: "POST", Path: "/browser/resource/download", Flags: []cmdutil.FlagDef{{Name: "resource-id", Type: cmdutil.FlagString, Desc: "资源 ID"}, {Name: "url", Type: cmdutil.FlagString, Desc: "URL"}, {Name: "filename", Type: cmdutil.FlagString, Desc: "文件名"}, tabIDFlag, spaceIDFlag}, HasFormat: true},
-		{Use: "probe", Short: "主动探测页面中的媒体元素（video/audio/blob）", Example: "  tabtin browser resource probe --tab-id <tab_id>", Route: cmdutil.RouteCliServer, Method: "POST", Path: "/browser/resource/probe", Flags: []cmdutil.FlagDef{tabIDFlag, spaceIDFlag}, HasFormat: true},
-		{Use: "smart-download", Short: "智能下载页面上的主要媒体资源", Example: "  tabtin browser resource smart-download --tab-id <tab_id> --quality best\n  tabtin browser resource smart-download --category video\n  tabtin browser resource smart-download --watch", Route: cmdutil.RouteCliServer, Method: "POST", Path: "/browser/resource/smart-download", Flags: []cmdutil.FlagDef{tabIDFlag, spaceIDFlag, {Name: "quality", Type: cmdutil.FlagString, Desc: "画质选择: best/worst/720p/1080p 等"}, {Name: "category", Type: cmdutil.FlagString, Desc: "资源类别过滤: video/audio/image"}, browserAsyncFlag, browserWatchFlag}, HasFormat: true},
+		{Use: "inspect", Short: "资源详情", Example: "  muse browser resource inspect --resource-id <resource_id>", Route: cmdutil.RouteCliServer, Method: "POST", Path: "/browser/resource/inspect", Flags: []cmdutil.FlagDef{{Name: "resource-id", Type: cmdutil.FlagString, Required: true, Desc: "资源 ID"}, tabIDFlag, spaceIDFlag}, HasFormat: true},
+		{Use: "capture", Short: "捕获资源", Example: "  muse browser resource capture --url https://example.com/video.mp4\n  muse browser resource capture --resource-id <resource_id> --force", Route: cmdutil.RouteCliServer, Method: "POST", Path: "/browser/resource/capture", Flags: []cmdutil.FlagDef{{Name: "resource-id", Type: cmdutil.FlagString, Desc: "资源 ID"}, {Name: "url", Type: cmdutil.FlagString, Desc: "URL"}, {Name: "force", Type: cmdutil.FlagBool, Desc: "强制重新捕获"}, tabIDFlag, spaceIDFlag}, HasFormat: true},
+		{Use: "download", Short: "下载资源", Example: "  muse browser resource download --resource-id <resource_id> --filename media.mp4\n  muse browser resource download --url https://example.com/file.mp4", Route: cmdutil.RouteCliServer, Method: "POST", Path: "/browser/resource/download", Flags: []cmdutil.FlagDef{{Name: "resource-id", Type: cmdutil.FlagString, Desc: "资源 ID"}, {Name: "url", Type: cmdutil.FlagString, Desc: "URL"}, {Name: "filename", Type: cmdutil.FlagString, Desc: "文件名"}, tabIDFlag, spaceIDFlag}, HasFormat: true},
+		{Use: "probe", Short: "主动探测页面中的媒体元素（video/audio/blob）", Example: "  muse browser resource probe --tab-id <tab_id>", Route: cmdutil.RouteCliServer, Method: "POST", Path: "/browser/resource/probe", Flags: []cmdutil.FlagDef{tabIDFlag, spaceIDFlag}, HasFormat: true},
+		{Use: "smart-download", Short: "智能下载页面上的主要媒体资源", Example: "  muse browser resource smart-download --tab-id <tab_id> --quality best\n  muse browser resource smart-download --category video\n  muse browser resource smart-download --watch", Route: cmdutil.RouteCliServer, Method: "POST", Path: "/browser/resource/smart-download", Flags: []cmdutil.FlagDef{tabIDFlag, spaceIDFlag, {Name: "quality", Type: cmdutil.FlagString, Desc: "画质选择: best/worst/720p/1080p 等"}, {Name: "category", Type: cmdutil.FlagString, Desc: "资源类别过滤: video/audio/image"}, browserAsyncFlag, browserWatchFlag}, HasFormat: true},
 	}
 	registerBrowserDefs(parent, f, defs)
 }
 
 func registerStreamCommands(parent *cobra.Command, f *cmdutil.Factory) {
 	defs := []cmdutil.CommandDef{
-		{Use: "parse", Short: "解析流媒体", Example: "  tabtin browser stream parse --url https://example.com/index.m3u8\n  tabtin browser stream parse --resource-id <resource_id>", Route: cmdutil.RouteCliServer, Method: "POST", Path: "/browser/stream/parse", Flags: []cmdutil.FlagDef{{Name: "url", Type: cmdutil.FlagString, Desc: "URL"}, {Name: "resource-id", Type: cmdutil.FlagString, Desc: "资源 ID"}, {Name: "headers", Type: cmdutil.FlagString, Desc: "请求头 JSON"}, tabIDFlag}, HasFormat: true},
-		{Use: "download", Short: "下载流媒体", Example: "  tabtin browser stream download --url https://example.com/index.m3u8 --filename video.mp4\n  tabtin browser stream download --resource-id <resource_id> --quality 720p\n  tabtin browser stream download --url https://example.com/index.m3u8 --watch", Route: cmdutil.RouteCliServer, Method: "POST", Path: "/browser/stream/download", Flags: []cmdutil.FlagDef{{Name: "url", Type: cmdutil.FlagString, Desc: "URL"}, {Name: "resource-id", Type: cmdutil.FlagString, Desc: "资源 ID"}, {Name: "quality", Type: cmdutil.FlagString, Desc: "质量"}, {Name: "filename", Type: cmdutil.FlagString, Desc: "文件名"}, {Name: "concurrency", Type: cmdutil.FlagInt, Desc: "并发数"}, {Name: "output", Type: cmdutil.FlagString, Desc: "显式输出路径（Electron 仅允许系统下载目录内路径；日常优先用 --filename）"}, browserAsyncFlag, browserWatchFlag, tabIDFlag}, HasFormat: true},
-		{Use: "info", Short: "查看流媒体详细信息（画质列表、时长、分片数）", Example: "  tabtin browser stream info --url https://example.com/index.m3u8\n  tabtin browser stream info --resource-id <resource_id>", Route: cmdutil.RouteCliServer, Method: "POST", Path: "/browser/stream/info", Flags: []cmdutil.FlagDef{{Name: "url", Type: cmdutil.FlagString, Desc: "流媒体 URL (m3u8/mpd)"}, {Name: "resource-id", Type: cmdutil.FlagString, Desc: "资源 ID"}, tabIDFlag, {Name: "headers", Type: cmdutil.FlagString, Desc: "请求头 JSON"}}, HasFormat: true},
+		{Use: "parse", Short: "解析流媒体", Example: "  muse browser stream parse --url https://example.com/index.m3u8\n  muse browser stream parse --resource-id <resource_id>", Route: cmdutil.RouteCliServer, Method: "POST", Path: "/browser/stream/parse", Flags: []cmdutil.FlagDef{{Name: "url", Type: cmdutil.FlagString, Desc: "URL"}, {Name: "resource-id", Type: cmdutil.FlagString, Desc: "资源 ID"}, {Name: "headers", Type: cmdutil.FlagString, Desc: "请求头 JSON"}, tabIDFlag}, HasFormat: true},
+		{Use: "download", Short: "下载流媒体", Example: "  muse browser stream download --url https://example.com/index.m3u8 --filename video.mp4\n  muse browser stream download --resource-id <resource_id> --quality 720p\n  muse browser stream download --url https://example.com/index.m3u8 --watch", Route: cmdutil.RouteCliServer, Method: "POST", Path: "/browser/stream/download", Flags: []cmdutil.FlagDef{{Name: "url", Type: cmdutil.FlagString, Desc: "URL"}, {Name: "resource-id", Type: cmdutil.FlagString, Desc: "资源 ID"}, {Name: "quality", Type: cmdutil.FlagString, Desc: "质量"}, {Name: "filename", Type: cmdutil.FlagString, Desc: "文件名"}, {Name: "concurrency", Type: cmdutil.FlagInt, Desc: "并发数"}, {Name: "output", Type: cmdutil.FlagString, Desc: "显式输出路径（Electron 仅允许系统下载目录内路径；日常优先用 --filename）"}, browserAsyncFlag, browserWatchFlag, tabIDFlag}, HasFormat: true},
+		{Use: "info", Short: "查看流媒体详细信息（画质列表、时长、分片数）", Example: "  muse browser stream info --url https://example.com/index.m3u8\n  muse browser stream info --resource-id <resource_id>", Route: cmdutil.RouteCliServer, Method: "POST", Path: "/browser/stream/info", Flags: []cmdutil.FlagDef{{Name: "url", Type: cmdutil.FlagString, Desc: "流媒体 URL (m3u8/mpd)"}, {Name: "resource-id", Type: cmdutil.FlagString, Desc: "资源 ID"}, tabIDFlag, {Name: "headers", Type: cmdutil.FlagString, Desc: "请求头 JSON"}}, HasFormat: true},
 	}
 	registerBrowserDefs(parent, f, defs)
 }
@@ -672,13 +672,13 @@ func registerStreamCommands(parent *cobra.Command, f *cmdutil.Factory) {
 func registerSessionCommands(parent *cobra.Command, f *cmdutil.Factory) {
 	defs := []cmdutil.CommandDef{
 		// 合并：保留远端 Example（CLI 宪法 Wave 1）+ 我方 Risk/OutputSchema（W5.5/L31）
-		{Use: "list", Short: "列出会话", Example: "  tabtin browser session list", Route: cmdutil.RouteCliServer, Method: "POST", Path: "/browser/session/list", HasFormat: true},
-		{Use: "create", Short: "创建会话", Example: "  tabtin browser session create --name research --title \"Research Session\"", Route: cmdutil.RouteCliServer, Method: "POST", Path: "/browser/session/create", Flags: []cmdutil.FlagDef{{Name: "name", Type: cmdutil.FlagString, Required: true, Desc: "会话名称"}, {Name: "title", Type: cmdutil.FlagString, Desc: "显示标题"}}, HasFormat: true, Risk: cmdutil.RiskWrite},
-		{Use: "switch", Short: "切换会话", Example: "  tabtin browser session switch --name research", Route: cmdutil.RouteCliServer, Method: "POST", Path: "/browser/session/switch", Flags: []cmdutil.FlagDef{{Name: "name", Type: cmdutil.FlagString, Required: true, Desc: "会话名称"}}, HasFormat: true, Risk: cmdutil.RiskWrite},
-		{Use: "close", Short: "关闭会话", Example: "  tabtin browser session close --name research", Route: cmdutil.RouteCliServer, Method: "POST", Path: "/browser/session/close", Flags: []cmdutil.FlagDef{{Name: "name", Type: cmdutil.FlagString, Required: true, Desc: "会话名称"}}, HasFormat: true, Risk: cmdutil.RiskWrite},
-		{Use: "close-all", Short: "关闭所有会话", Example: "  tabtin browser session close-all", Route: cmdutil.RouteCliServer, Method: "POST", Path: "/browser/session/close-all", HasFormat: true, Risk: cmdutil.RiskWrite},
-		{Use: "save", Short: "保存会话状态", Example: "  tabtin browser session save --name research\n  tabtin browser session save --name research --tab-id <tab_id>", Route: cmdutil.RouteCliServer, Method: "POST", Path: "/browser/session/save", Flags: []cmdutil.FlagDef{{Name: "name", Type: cmdutil.FlagString, Required: true, Desc: "会话名称"}, {Name: "tab-id", Type: cmdutil.FlagString, Desc: "Tab ID（可选；指定普通 tab 或命名 session 中的某个页）"}}, HasFormat: true, Risk: cmdutil.RiskWrite},
-		{Use: "load", Short: "加载会话状态", Example: "  tabtin browser session load --name research --state '{\"cookies\":[],\"origins\":[]}'\n  tabtin browser session load --name research --tab-id <tab_id> --mode replace --state '{\"cookies\":[],\"origins\":[]}'", Route: cmdutil.RouteCliServer, Method: "POST", Path: "/browser/session/load", Flags: []cmdutil.FlagDef{{Name: "name", Type: cmdutil.FlagString, Required: true, Desc: "会话名称（name-only 存取目前仅 Daemon 支持；Electron 端仍需 --tab-id）"}, {Name: "state", Type: cmdutil.FlagString, Required: true, Desc: "storageState JSON"}, {Name: "tab-id", Type: cmdutil.FlagString, Desc: "Tab ID（可选；指定普通 tab 或命名 session 中的某个页）"}, {Name: "mode", Type: cmdutil.FlagString, Desc: "加载模式：merge(默认，保留旧 key) / replace(先清目标 cookies 与目标页 storage)", Enum: []string{"merge", "replace"}}, {Name: "open-missing-origins", Type: cmdutil.FlagBool, Desc: "缺少同 origin 页面时，允许打开 origin 页以恢复 sessionStorage（Daemon-only，默认 false）"}}, HasFormat: true, Risk: cmdutil.RiskWrite},
+		{Use: "list", Short: "列出会话", Example: "  muse browser session list", Route: cmdutil.RouteCliServer, Method: "POST", Path: "/browser/session/list", HasFormat: true},
+		{Use: "create", Short: "创建会话", Example: "  muse browser session create --name research --title \"Research Session\"", Route: cmdutil.RouteCliServer, Method: "POST", Path: "/browser/session/create", Flags: []cmdutil.FlagDef{{Name: "name", Type: cmdutil.FlagString, Required: true, Desc: "会话名称"}, {Name: "title", Type: cmdutil.FlagString, Desc: "显示标题"}}, HasFormat: true, Risk: cmdutil.RiskWrite},
+		{Use: "switch", Short: "切换会话", Example: "  muse browser session switch --name research", Route: cmdutil.RouteCliServer, Method: "POST", Path: "/browser/session/switch", Flags: []cmdutil.FlagDef{{Name: "name", Type: cmdutil.FlagString, Required: true, Desc: "会话名称"}}, HasFormat: true, Risk: cmdutil.RiskWrite},
+		{Use: "close", Short: "关闭会话", Example: "  muse browser session close --name research", Route: cmdutil.RouteCliServer, Method: "POST", Path: "/browser/session/close", Flags: []cmdutil.FlagDef{{Name: "name", Type: cmdutil.FlagString, Required: true, Desc: "会话名称"}}, HasFormat: true, Risk: cmdutil.RiskWrite},
+		{Use: "close-all", Short: "关闭所有会话", Example: "  muse browser session close-all", Route: cmdutil.RouteCliServer, Method: "POST", Path: "/browser/session/close-all", HasFormat: true, Risk: cmdutil.RiskWrite},
+		{Use: "save", Short: "保存会话状态", Example: "  muse browser session save --name research\n  muse browser session save --name research --tab-id <tab_id>", Route: cmdutil.RouteCliServer, Method: "POST", Path: "/browser/session/save", Flags: []cmdutil.FlagDef{{Name: "name", Type: cmdutil.FlagString, Required: true, Desc: "会话名称"}, {Name: "tab-id", Type: cmdutil.FlagString, Desc: "Tab ID（可选；指定普通 tab 或命名 session 中的某个页）"}}, HasFormat: true, Risk: cmdutil.RiskWrite},
+		{Use: "load", Short: "加载会话状态", Example: "  muse browser session load --name research --state '{\"cookies\":[],\"origins\":[]}'\n  muse browser session load --name research --tab-id <tab_id> --mode replace --state '{\"cookies\":[],\"origins\":[]}'", Route: cmdutil.RouteCliServer, Method: "POST", Path: "/browser/session/load", Flags: []cmdutil.FlagDef{{Name: "name", Type: cmdutil.FlagString, Required: true, Desc: "会话名称（name-only 存取目前仅 Daemon 支持；Electron 端仍需 --tab-id）"}, {Name: "state", Type: cmdutil.FlagString, Required: true, Desc: "storageState JSON"}, {Name: "tab-id", Type: cmdutil.FlagString, Desc: "Tab ID（可选；指定普通 tab 或命名 session 中的某个页）"}, {Name: "mode", Type: cmdutil.FlagString, Desc: "加载模式：merge(默认，保留旧 key) / replace(先清目标 cookies 与目标页 storage)", Enum: []string{"merge", "replace"}}, {Name: "open-missing-origins", Type: cmdutil.FlagBool, Desc: "缺少同 origin 页面时，允许打开 origin 页以恢复 sessionStorage（Daemon-only，默认 false）"}}, HasFormat: true, Risk: cmdutil.RiskWrite},
 	}
 	registerBrowserDefs(parent, f, defs)
 }
@@ -688,9 +688,9 @@ func registerCookieCommands(parent *cobra.Command, f *cmdutil.Factory) {
 		// 合并：保留远端 Example（CLI 宪法 Wave 1）+ 我方 Risk/OutputSchema（W5.5/L31）
 		// 三命令共用 POST /browser/cookies，各自通过 FixedFields 钦定 action（双端动词统一为 get/set/clear），
 		// 否则不发 action 会在 Electron 上 400、在 Daemon 上静默退化成 get（BR-1）。
-		{Use: "get", Short: "获取 Cookie", Example: "  tabtin browser cookies get --domain example.com\n  tabtin browser cookies get --tab-id <tab_id>", Route: cmdutil.RouteCliServer, Method: "POST", Path: "/browser/cookies", Flags: []cmdutil.FlagDef{{Name: "domain", Type: cmdutil.FlagString, Desc: "域名"}, tabIDFlag, spaceIDFlag}, FixedFields: map[string]any{"action": "get"}, HasFormat: true},
-		{Use: "set", Short: "设置 Cookie", Example: "  tabtin browser cookies set --cookies '[{\"name\":\"sid\",\"value\":\"abc\",\"domain\":\"example.com\"}]'", Route: cmdutil.RouteCliServer, Method: "POST", Path: "/browser/cookies", Flags: []cmdutil.FlagDef{{Name: "cookies", Type: cmdutil.FlagString, Required: true, Desc: "Cookie JSON"}, tabIDFlag, spaceIDFlag}, FixedFields: map[string]any{"action": "set"}, HasFormat: true, Risk: cmdutil.RiskWrite},
-		{Use: "clear", Short: "清除 Cookie", Example: "  tabtin browser cookies clear --domain example.com\n  tabtin browser cookies clear --tab-id <tab_id>", Route: cmdutil.RouteCliServer, Method: "POST", Path: "/browser/cookies", Flags: []cmdutil.FlagDef{{Name: "domain", Type: cmdutil.FlagString, Desc: "域名"}, tabIDFlag, spaceIDFlag}, FixedFields: map[string]any{"action": "clear"}, HasFormat: true, Risk: cmdutil.RiskWrite},
+		{Use: "get", Short: "获取 Cookie", Example: "  muse browser cookies get --domain example.com\n  muse browser cookies get --tab-id <tab_id>", Route: cmdutil.RouteCliServer, Method: "POST", Path: "/browser/cookies", Flags: []cmdutil.FlagDef{{Name: "domain", Type: cmdutil.FlagString, Desc: "域名"}, tabIDFlag, spaceIDFlag}, FixedFields: map[string]any{"action": "get"}, HasFormat: true},
+		{Use: "set", Short: "设置 Cookie", Example: "  muse browser cookies set --cookies '[{\"name\":\"sid\",\"value\":\"abc\",\"domain\":\"example.com\"}]'", Route: cmdutil.RouteCliServer, Method: "POST", Path: "/browser/cookies", Flags: []cmdutil.FlagDef{{Name: "cookies", Type: cmdutil.FlagString, Required: true, Desc: "Cookie JSON"}, tabIDFlag, spaceIDFlag}, FixedFields: map[string]any{"action": "set"}, HasFormat: true, Risk: cmdutil.RiskWrite},
+		{Use: "clear", Short: "清除 Cookie", Example: "  muse browser cookies clear --domain example.com\n  muse browser cookies clear --tab-id <tab_id>", Route: cmdutil.RouteCliServer, Method: "POST", Path: "/browser/cookies", Flags: []cmdutil.FlagDef{{Name: "domain", Type: cmdutil.FlagString, Desc: "域名"}, tabIDFlag, spaceIDFlag}, FixedFields: map[string]any{"action": "clear"}, HasFormat: true, Risk: cmdutil.RiskWrite},
 	}
 	registerBrowserDefs(parent, f, defs)
 }
@@ -698,14 +698,14 @@ func registerCookieCommands(parent *cobra.Command, f *cmdutil.Factory) {
 func registerRecordCommands(parent *cobra.Command, f *cmdutil.Factory) {
 	defs := []cmdutil.CommandDef{
 		// 合并：保留远端 Example（CLI 宪法 Wave 1）+ 我方 Risk/OutputSchema（W5.5/L31）
-		{Use: "start", Short: "开始录制", Example: "  tabtin browser record start --tab-id <tab_id> --fps 2", Route: cmdutil.RouteCliServer, Method: "POST", Path: "/browser/record/start", Flags: []cmdutil.FlagDef{tabIDFlag, spaceIDFlag, runIDFlag, {Name: "fps", Type: cmdutil.FlagInt, Default: 2, Desc: "帧率"}}, HasFormat: true, Risk: cmdutil.RiskWrite},
+		{Use: "start", Short: "开始录制", Example: "  muse browser record start --tab-id <tab_id> --fps 2", Route: cmdutil.RouteCliServer, Method: "POST", Path: "/browser/record/start", Flags: []cmdutil.FlagDef{tabIDFlag, spaceIDFlag, runIDFlag, {Name: "fps", Type: cmdutil.FlagInt, Default: 2, Desc: "帧率"}}, HasFormat: true, Risk: cmdutil.RiskWrite},
 		// BR-19：补 runIDFlag，与 record start 对齐——同一录制生命周期三命令入参口径统一，消除
 		// `record status --run-id <id>` 报 unknown flag 的误用障碍。--tab-id 保留可用（两者皆可）。
 		// runId 经 BR-13 的 withBrowserFlagCasing 同时下发 runId(camel)+run_id(snake)；Daemon
 		// 端 recordStop/recordStatus 读 body.runId 真用得上（status 凭 runId 查特定录制、stop 按
 		// runId 选录制），Electron 端按活跃 tab 解析、runId 忽略不影响。
-		{Use: "stop", Short: "停止录制", Example: "  tabtin browser record stop --tab-id <tab_id>", Route: cmdutil.RouteCliServer, Method: "POST", Path: "/browser/record/stop", Flags: []cmdutil.FlagDef{tabIDFlag, spaceIDFlag, runIDFlag}, HasFormat: true, Risk: cmdutil.RiskWrite},
-		{Use: "status", Short: "录制状态", Example: "  tabtin browser record status --tab-id <tab_id>", Route: cmdutil.RouteCliServer, Method: "POST", Path: "/browser/record/status", Flags: []cmdutil.FlagDef{tabIDFlag, spaceIDFlag, runIDFlag}, HasFormat: true},
+		{Use: "stop", Short: "停止录制", Example: "  muse browser record stop --tab-id <tab_id>", Route: cmdutil.RouteCliServer, Method: "POST", Path: "/browser/record/stop", Flags: []cmdutil.FlagDef{tabIDFlag, spaceIDFlag, runIDFlag}, HasFormat: true, Risk: cmdutil.RiskWrite},
+		{Use: "status", Short: "录制状态", Example: "  muse browser record status --tab-id <tab_id>", Route: cmdutil.RouteCliServer, Method: "POST", Path: "/browser/record/status", Flags: []cmdutil.FlagDef{tabIDFlag, spaceIDFlag, runIDFlag}, HasFormat: true},
 	}
 	registerBrowserDefs(parent, f, defs)
 }
@@ -713,8 +713,8 @@ func registerRecordCommands(parent *cobra.Command, f *cmdutil.Factory) {
 func registerReplayCommands(parent *cobra.Command, f *cmdutil.Factory) {
 	defs := []cmdutil.CommandDef{
 		// 合并：保留远端 Example（CLI 宪法 Wave 1）+ 我方 Risk/OutputSchema（W5.5/L31）
-		{Use: "run", Short: "运行回放", Example: "  tabtin browser replay run --run-id <run_id> --speed 2 --skip-waits\n  tabtin browser replay run --run-id <run_id> --watch", Route: cmdutil.RouteCliServer, Method: "POST", Path: "/browser/replay/run", Flags: []cmdutil.FlagDef{{Name: "run-id", Type: cmdutil.FlagString, Required: true, Desc: "Run ID"}, {Name: "speed", Type: cmdutil.FlagInt, Desc: "速度倍数"}, {Name: "skip-waits", Type: cmdutil.FlagBool, Desc: "跳过等待"}, {Name: "stop-on-error", Type: cmdutil.FlagBool, Desc: "遇错停止"}, browserAsyncFlag, browserWatchFlag}, HasFormat: true, Risk: cmdutil.RiskWrite},
-		{Use: "list", Short: "录制列表", Example: "  tabtin browser replay list", Route: cmdutil.RouteCliServer, Method: "POST", Path: "/browser/replay/list", HasFormat: true},
+		{Use: "run", Short: "运行回放", Example: "  muse browser replay run --run-id <run_id> --speed 2 --skip-waits\n  muse browser replay run --run-id <run_id> --watch", Route: cmdutil.RouteCliServer, Method: "POST", Path: "/browser/replay/run", Flags: []cmdutil.FlagDef{{Name: "run-id", Type: cmdutil.FlagString, Required: true, Desc: "Run ID"}, {Name: "speed", Type: cmdutil.FlagInt, Desc: "速度倍数"}, {Name: "skip-waits", Type: cmdutil.FlagBool, Desc: "跳过等待"}, {Name: "stop-on-error", Type: cmdutil.FlagBool, Desc: "遇错停止"}, browserAsyncFlag, browserWatchFlag}, HasFormat: true, Risk: cmdutil.RiskWrite},
+		{Use: "list", Short: "录制列表", Example: "  muse browser replay list", Route: cmdutil.RouteCliServer, Method: "POST", Path: "/browser/replay/list", HasFormat: true},
 	}
 	registerBrowserDefs(parent, f, defs)
 }
@@ -725,8 +725,8 @@ func registerReplayCommands(parent *cobra.Command, f *cmdutil.Factory) {
 func registerJobCommands(parent *cobra.Command, f *cmdutil.Factory) {
 	jobIDFlag := cmdutil.FlagDef{Name: "job-id", Type: cmdutil.FlagString, Required: true, Desc: "Job ID（异步任务 202 响应里的 jobId）"}
 	defs := []cmdutil.CommandDef{
-		{Use: "status", Short: "查询异步任务进度 / 结果", Example: "  tabtin browser job status --job-id <job_id>", Route: cmdutil.RouteCliServer, Method: "POST", Path: "/browser/job/status", Flags: []cmdutil.FlagDef{jobIDFlag}, HasFormat: true},
-		{Use: "cancel", Short: "取消异步任务", Example: "  tabtin browser job cancel --job-id <job_id>", Route: cmdutil.RouteCliServer, Method: "POST", Path: "/browser/job/cancel", Flags: []cmdutil.FlagDef{jobIDFlag}, HasFormat: true, Risk: cmdutil.RiskWrite},
+		{Use: "status", Short: "查询异步任务进度 / 结果", Example: "  muse browser job status --job-id <job_id>", Route: cmdutil.RouteCliServer, Method: "POST", Path: "/browser/job/status", Flags: []cmdutil.FlagDef{jobIDFlag}, HasFormat: true},
+		{Use: "cancel", Short: "取消异步任务", Example: "  muse browser job cancel --job-id <job_id>", Route: cmdutil.RouteCliServer, Method: "POST", Path: "/browser/job/cancel", Flags: []cmdutil.FlagDef{jobIDFlag}, HasFormat: true, Risk: cmdutil.RiskWrite},
 	}
 	registerBrowserDefs(parent, f, defs)
 }

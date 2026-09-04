@@ -70,7 +70,7 @@ function failure(
  *
  * **R3 P0 修复（安全）**：daemon_home 必须通过白名单校验——
  * 仅允许：(a) SSoT 默认 daemon home，或 (b) 必须落在 `os.homedir()` 子树下、
- * 且最末段是合理的 daemon-home 命名（包含 `tabtin` 字样）。
+ * 且最末段是合理的 daemon-home 命名（包含 `muse` 字样）。
  *
  * 旧版本接受任意 path.resolve 后的路径 → token 鉴权后调用方传
  * `{ daemon_home: '/Users/me/Documents' }` + `confirm: 'yes-i-am-sure'` →

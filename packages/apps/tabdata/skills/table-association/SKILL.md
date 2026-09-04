@@ -18,8 +18,8 @@ metadata:
   runtime: cloud
   requires:
     bins:
-      - tabtin
-  cliHelp: "tabtin table link --help"
+      - muse
+  cliHelp: "muse table link --help"
   canonicalName: table-association
 ---
 
@@ -30,7 +30,7 @@ metadata:
 > 「该不该拆成两张表」→ `skills_read("app:tabdata/table-modeling")`。
 > 普通字段与行 CRUD → `skills_read("app:tabdata/table-operator")`。
 
-所有命令走 `tabtin table link`（底层仍是 link 字段 + `LinkRecord`；**没有** `is_multi` 这个 options 键）。
+所有命令走 `muse table link`（底层仍是 link 字段 + `LinkRecord`；**没有** `is_multi` 这个 options 键）。
 
 ---
 
@@ -52,13 +52,13 @@ metadata:
 
 | 目标 | 命令 |
 |------|------|
-| 新建关联字段 | `tabtin table link create --table-id <本表> --name "..." --foreign-table-id <目标表> --relationship ManyMany\|ManyOne` |
-| 改基数 / 单向双向 / 主显字段 | `tabtin table link update --field-id <link字段> ...` |
-| 搜可挂的目标行 | `tabtin table link linkable-records --table-id <本表> --field-id <link字段> --search "<关键词>"` |
-| **增量挂上** | `tabtin table link add --table-id <本表> --field-id <link字段> --record-id <行> --target-ids <uuid>` |
-| **整格覆盖**（只留这些） | `tabtin table link set ... --targets '["uuid1","uuid2"]'` |
-| **解绑** / 清空 | `tabtin table link remove ... --target-ids <uuid>` 或 `--all` |
-| 核对当前挂了谁 | `tabtin table link list --table-id <本表> --field-id <link字段> --record-id <行>` |
+| 新建关联字段 | `muse table link create --table-id <本表> --name "..." --foreign-table-id <目标表> --relationship ManyMany\|ManyOne` |
+| 改基数 / 单向双向 / 主显字段 | `muse table link update --field-id <link字段> ...` |
+| 搜可挂的目标行 | `muse table link linkable-records --table-id <本表> --field-id <link字段> --search "<关键词>"` |
+| **增量挂上** | `muse table link add --table-id <本表> --field-id <link字段> --record-id <行> --target-ids <uuid>` |
+| **整格覆盖**（只留这些） | `muse table link set ... --targets '["uuid1","uuid2"]'` |
+| **解绑** / 清空 | `muse table link remove ... --target-ids <uuid>` 或 `--all` |
+| 核对当前挂了谁 | `muse table link list --table-id <本表> --field-id <link字段> --record-id <行>` |
 
 > `populate-choices` 只服务 **select / multi_select**，与 link 边无关——别拿来处理关联。
 
@@ -70,7 +70,7 @@ metadata:
 
 ```bash
 # 1) 建关联列（先有目标表）
-tabtin table link create \
+muse table link create \
   --table-id "$HOST_TABLE" --name "演职员" \
   --foreign-table-id "$TARGET_TABLE" \
   --relationship ManyMany
@@ -78,18 +78,18 @@ tabtin table link create \
 # 记下返回的 field_id → LINK_FIELD
 
 # 2) 搜目标 UUID（禁止把姓名直接当 link 值）
-tabtin table link linkable-records \
+muse table link linkable-records \
   --table-id "$HOST_TABLE" --field-id "$LINK_FIELD" \
   --search "梁朝伟" --format json
 # → TARGET_RID
 
 # 3) 挂上（增量）
-tabtin table link add \
+muse table link add \
   --table-id "$HOST_TABLE" --field-id "$LINK_FIELD" \
   --record-id "$HOST_RID" --target-ids "$TARGET_RID"
 
 # 4) 核对
-tabtin table link list \
+muse table link list \
   --table-id "$HOST_TABLE" --field-id "$LINK_FIELD" \
   --record-id "$HOST_RID" --format json
 ```
@@ -97,13 +97,13 @@ tabtin table link list \
 ### 3.2 单关联（如看板「分类」用关联表而不是 select）
 
 ```bash
-tabtin table link create \
+muse table link create \
   --table-id "$TASK_TABLE" --name "分类" \
   --foreign-table-id "$CATEGORY_TABLE" \
   --relationship ManyOne
 
 # 换分类 = add（单关联语义：覆盖为新目标）或 set
-tabtin table link add \
+muse table link add \
   --table-id "$TASK_TABLE" --field-id "$LINK_FIELD" \
   --record-id "$TASK_RID" --target-ids "$CATEGORY_RID"
 ```
@@ -111,15 +111,15 @@ tabtin table link add \
 ### 3.3 只想替换整列关联、不要合并
 
 ```bash
-tabtin table link set \
+muse table link set \
   --table-id "$HOST_TABLE" --field-id "$LINK_FIELD" \
   --record-id "$HOST_RID" \
   --targets '["uuid-a","uuid-b"]'
 
 # 清空
-tabtin table link set ... --targets '[]'
+muse table link set ... --targets '[]'
 # 或
-tabtin table link remove ... --all
+muse table link remove ... --all
 ```
 
 ### 3.4 插入新行时顺便挂关联
@@ -127,7 +127,7 @@ tabtin table link remove ... --all
 仍可用 `record insert`，值必须是 id：
 
 ```bash
-tabtin table record insert --table-id "$HOST_TABLE" --data '{
+muse table record insert --table-id "$HOST_TABLE" --data '{
   "标题":"无间道",
   "演职员":[{"id":"<演员uuid>"}]
 }'
@@ -145,7 +145,7 @@ tabtin table record insert --table-id "$HOST_TABLE" --data '{
 4. **`link add` / `remove` 走 Desktop/Daemon**（cli-server 读-改-写）。纯 API 直连请用 `link set`（或先 `list` 再 `set`）。远程 `list` 可能返回整条 record，与 Desktop 裁剪结构不同——优先 Desktop。
 5. **单关联 `add` = 覆盖**为传入的最后一个 id，不是追加第二条。
 6. **`link set` 必须显式传 `--targets` / `--target-ids`**；清空用 `--targets '[]'` 或 `remove --all`，禁止漏参误清空。
-7. 同表树形父子（任务子任务）走 `tabtin table sub-record *`，不是本 SKILL 的跨表 link。
+7. 同表树形父子（任务子任务）走 `muse table sub-record *`，不是本 SKILL 的跨表 link。
 8. **并发**：`add`/`remove` 是读-改-写，无行锁；并行挂同一格可能丢边——串行调用。
 
 ---

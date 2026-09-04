@@ -225,7 +225,7 @@ function unionRules(
 }
 
 const PLATFORM_HOTWORDS = [
-  'TabTin', 'TabData', 'TabDoc', 'TabSlide',
+  'Muse', 'TabData', 'TabDoc', 'TabSlide',
   'Agentspace', 'Agent', 'Space',
   'RAG', 'Prompt', 'Skill', 'Memo', 'Composer', 'Crawler',
 ]

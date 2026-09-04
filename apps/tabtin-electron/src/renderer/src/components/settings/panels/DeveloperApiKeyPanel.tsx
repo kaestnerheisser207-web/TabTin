@@ -207,7 +207,7 @@ export const DeveloperApiKeyPanel: React.FC = () => {
               <p className="text-body text-muted-foreground/60">{t('developerApiKey.empty')}</p>
               <p className={cn(SETTINGS_HINT, 'mt-1')}>
                 {t('developerApiKey.emptyHint', { command: '' })}
-                <code className={cn(SETTINGS_TEXT_MICRO, 'bg-muted px-1 py-0.5 rounded')}>tabtin login --token YOUR_KEY</code>
+                <code className={cn(SETTINGS_TEXT_MICRO, 'bg-muted px-1 py-0.5 rounded')}>muse login --token YOUR_KEY</code>
               </p>
             </div>
           ) : (
@@ -266,7 +266,7 @@ export const DeveloperApiKeyPanel: React.FC = () => {
             <p>{t('developerApiKey.cliStep1')}</p>
             <p>{t('developerApiKey.cliStep2')}</p>
             <code className={cn(SETTINGS_TEXT_MICRO, 'block mt-1 bg-muted px-2 py-1.5 rounded font-mono')}>
-              tabtin login --token ttn_xxxxxxxx_xxxxxxxxxxxxxxxx
+              muse login --token ttn_xxxxxxxx_xxxxxxxxxxxxxxxx
             </code>
             <p className="mt-2">{t('developerApiKey.cliStep3')}</p>
             <code className={cn(SETTINGS_TEXT_MICRO, 'block mt-1 bg-muted px-2 py-1.5 rounded font-mono')}>

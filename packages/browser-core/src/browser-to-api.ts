@@ -110,7 +110,7 @@ export function analyzeBrowserNetworkToOpenApi(
   return {
     openapi: '3.1.0',
     info: {
-      title: options.title || 'TabTin Browser Observed API',
+      title: options.title || 'Muse Browser Observed API',
       version: options.version || '0.1.0',
     },
     ...(servers.length > 0 ? { servers: servers.map((url) => ({ url })) } : {}),

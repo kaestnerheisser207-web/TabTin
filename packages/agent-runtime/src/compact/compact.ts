@@ -453,7 +453,7 @@ function formatActiveFilesHint(messages: Message[]): string {
 export const POST_COMPACT_ATTACHMENT_BUDGET = 20_000;
 
 // Includes legacy transcript / external-agent names so old history compacts
-// correctly; current TabTin file tools are read_file/write_file/edit_file/delete_file.
+// correctly; current Muse file tools are read_file/write_file/edit_file/delete_file.
 const FILE_READ_TOOLS = /^(file_read|read_file|read|cat|view_file)$/i;
 const FILE_WRITE_TOOLS = /^(file_write|write_file|write|edit_file|edit|create_file|str_replace_editor|patch|update_file|save_file|replace|delete_file|remove_file)$/i;
 

@@ -1,7 +1,7 @@
 """`apps.fts.services.sync_service` 的 6 个 to_document 字段级测试。
 
 测试策略（与 Wave 0 一致）：
-    - 用 `MagicMock()` 模拟业务 instance 避免触碰 DB（TabTin 历史约定
+    - 用 `MagicMock()` 模拟业务 instance 避免触碰 DB（Muse 历史约定
       `SimpleTestCase + mock`；SQLite 测试库无法 apply 其他 app 的
       PG-only migrations）
     - 对照 PRD 4.4 / 4.5 / 3.8 的 mapping 字段逐一断言

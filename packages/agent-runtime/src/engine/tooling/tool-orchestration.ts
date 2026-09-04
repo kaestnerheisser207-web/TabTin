@@ -563,7 +563,7 @@ function buildUnknownToolDetail(
   }
   return (
     `Tool '${block.name}' is not registered and no close match exists. ` +
-    `Check the tool name and try again. Use \`tabtin commands\` to discover available CLI tools.`
+    `Check the tool name and try again. Use \`muse commands\` to discover available CLI tools.`
   );
 }
 
@@ -2257,7 +2257,7 @@ function appendSchemaWarningToContent(
  * tools that succeeded validation pass through untouched.
  *
  * The warning is appended **inside** the JSON content when the result is
- * already a JSON object (most TabTin tools), or wrapped as a sibling
+ * already a JSON object (most Muse tools), or wrapped as a sibling
  * envelope when the content is plain text. ContentBlock[] gets an extra text
  * block because `llmContextContent` can now replace `content` in the next
  * model call; the retry instruction must travel with whichever copy the model

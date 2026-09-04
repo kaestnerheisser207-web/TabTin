@@ -142,7 +142,7 @@ def main() -> None:
                 "identifier_hash": hash_string(email),
                 "entrypoint": "electron-e2e",
                 "ip_address": "127.0.0.1",
-                "user_agent": "TabTin-Electron-E2E/1.0",
+                "user_agent": "Muse-Electron-E2E/1.0",
             },
         )
         if invite_redeemed:
@@ -155,7 +155,7 @@ def main() -> None:
 
     request = RequestFactory().post("/api/auth/login")
     request.META["REMOTE_ADDR"] = "127.0.0.1"
-    request.META["HTTP_USER_AGENT"] = "TabTin-Electron-E2E/1.0"
+    request.META["HTTP_USER_AGENT"] = "Muse-Electron-E2E/1.0"
     access_token, refresh_token, access_expire_hours = _create_auth_session(
         user,
         request,

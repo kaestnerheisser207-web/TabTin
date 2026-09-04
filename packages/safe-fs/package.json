@@ -1,7 +1,7 @@
 {
   "name": "@tabtin/safe-fs",
   "version": "0.1.0",
-  "description": "TabTin filesystem wrapper — wraps node:fs with @tabtin/os-errors classification (TCC / NTFS ACL / cloud placeholder / AV detection)",
+  "description": "Muse filesystem wrapper — wraps node:fs with @tabtin/os-errors classification (TCC / NTFS ACL / cloud placeholder / AV detection)",
   "type": "module",
   "main": "./dist/index.js",
   "module": "./dist/index.js",

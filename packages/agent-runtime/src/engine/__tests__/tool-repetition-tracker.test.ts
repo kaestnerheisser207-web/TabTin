@@ -615,8 +615,8 @@ describe('文案构造 — 不硬编码具体案例 + 含动作化引导', () =>
     // 主语用"工具"避免问责姿态（与 tool-failure-tracker 同设计）
     expect(text).toMatch(/工具/);
     expect(text).not.toMatch(/Agent\s*在|Agent\s*已经/);
-    // 含 TabTin 产品主语
-    expect(text).toContain('TabTin');
+    // 含 Muse 产品主语
+    expect(text).toContain('Muse');
     expect(text).toMatch(/关注|主动提示|相同输入/);
     // 真实用户视角 review L6-5 修复：用户主动重做的 escape 句
     expect(text).toMatch(/可以忽略|让 Agent 重做/);
@@ -627,7 +627,7 @@ describe('文案构造 — 不硬编码具体案例 + 含动作化引导', () =>
     expect(text).toContain('3');
     expect(text).toContain('ask_user');
     expect(text).toContain('「ask_user」');
-    expect(text).toContain('TabTin');
+    expect(text).toContain('Muse');
     expect(text).toMatch(/工具/);
     expect(text).not.toMatch(/反复失败|Agent\s*反复/);
     // 真实用户视角 review L6-3 修复：用户接管把手（让用户知道 nudge 后能主动给指令）

@@ -12,8 +12,8 @@ import android.os.IBinder
 import android.util.Log
 import androidx.core.app.NotificationCompat
 import androidx.core.app.ServiceCompat
-import com.tabtin.mobile.BuildConfig
-import com.tabtin.mobile.R
+import com.muse.mobile.BuildConfig
+import com.muse.mobile.R
 import com.tabtin.mobile.data.websocket.WebSocketService
 import com.tabtin.mobile.util.TokenManager
 import dagger.hilt.android.AndroidEntryPoint
@@ -365,10 +365,10 @@ public class DaemonService : Service() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val channel = NotificationChannel(
                 CHANNEL_ID,
-                "TabTin 受控端",
+                "Muse 受控端",
                 NotificationManager.IMPORTANCE_LOW,
             ).apply {
-                description = "TabTin 受控端后台运行通知"
+                description = "Muse 受控端后台运行通知"
             }
             val nm = getSystemService(NotificationManager::class.java)
             nm.createNotificationChannel(channel)
@@ -377,7 +377,7 @@ public class DaemonService : Service() {
 
     private fun buildNotification(text: String): Notification {
         return NotificationCompat.Builder(this, CHANNEL_ID)
-            .setContentTitle("TabTin 受控端")
+            .setContentTitle("Muse 受控端")
             .setContentText(text)
             .setSmallIcon(R.mipmap.ic_launcher)
             .setOngoing(true)

@@ -1,5 +1,5 @@
 /**
- * `cli_output_table` kind 渲染（W4 / D1）—— 把 `tabtin <cmd> --format json`
+ * `cli_output_table` kind 渲染（W4 / D1）—— 把 `muse <cmd> --format json`
  * 的 stdout 数组自动展示成结构化 table。
  *
  * 与 `RichTablePreview` 视觉对齐（边框 / 字号 / 截断），但额外：

@@ -3064,9 +3064,9 @@ describe('createSendMessageAction', () => {
                   request_id: 'req-1',
                   tool_call_id: 'run_terminal_command:1',
                   tool_name: 'run_terminal_command',
-                  tool_input: { command: 'tabtin device info' },
+                  tool_input: { command: 'muse device info' },
                   decision_reason: { type: 'fallback_preset', preset: 'legacy_handler' },
-                  ask_hint: { summary: '命令：tabtin device info', suggested_scope: 'once' },
+                  ask_hint: { summary: '命令：muse device info', suggested_scope: 'once' },
                   allowed_scopes: ['once', 'thread', 'always'],
                   allowed_outcomes: ['allow', 'deny'],
                   risk_level: 'medium',
@@ -3315,13 +3315,13 @@ describe('createSendMessageAction', () => {
         // 第 2 次审批：run_terminal_command:4
         callbacks.onMessage({
           type: 'agent.stream.approval_requested',
-          payload: buildBatchPayload('batch-2', 'req-2', 'run_terminal_command', 'run_terminal_command:4', { command: 'tabtin device info' }),
+          payload: buildBatchPayload('batch-2', 'req-2', 'run_terminal_command', 'run_terminal_command:4', { command: 'muse device info' }),
         })
         callbacks.onMessage({ type: 'agent.stream.tool', payload: { phase: 'end', tool_name: 'run_terminal_command', tool_call_id: 'run_terminal_command:4' } })
         // 第 3 次审批：run_terminal_command:5
         callbacks.onMessage({
           type: 'agent.stream.approval_requested',
-          payload: buildBatchPayload('batch-3', 'req-3', 'run_terminal_command', 'run_terminal_command:5', { command: 'tabtin device info --space-id ...' }),
+          payload: buildBatchPayload('batch-3', 'req-3', 'run_terminal_command', 'run_terminal_command:5', { command: 'muse device info --space-id ...' }),
         })
         callbacks.onMessage({ type: 'agent.stream.tool', payload: { phase: 'end', tool_name: 'run_terminal_command', tool_call_id: 'run_terminal_command:5' } })
         callbacks.onMessage({ type: 'agent.stream.assistant', payload: { phase: 'final', content: '抱歉，当前无法获取设备型号。' } })

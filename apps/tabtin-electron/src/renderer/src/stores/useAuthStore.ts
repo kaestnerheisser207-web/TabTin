@@ -224,7 +224,7 @@ export const useAuthStore = create<AuthStore>()(
           try {
             const response = await apiService.register(data)
             await handleLoginSuccess(set, response)
-            toast({ title: i18n.t('registerSuccess', { ns: 'auth', defaultValue: '注册成功，欢迎使用 TabTin！' }) })
+            toast({ title: i18n.t('registerSuccess', { ns: 'auth', defaultValue: '注册成功，欢迎使用 Muse！' }) })
           } catch (error: any) {
             log.error('Register failed:', error)
             set({
@@ -257,7 +257,7 @@ export const useAuthStore = create<AuthStore>()(
             if (current.accessToken && current.refreshToken) {
               await window.tabtin.auth.save(current.accessToken, current.refreshToken, updatedUser)
             }
-            toast({ title: '邀请码已验证，欢迎使用 TabTin' })
+            toast({ title: '邀请码已验证，欢迎使用 Muse' })
           } catch (error: any) {
             set({
               isLoading: false,

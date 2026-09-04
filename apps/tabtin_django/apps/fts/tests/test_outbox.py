@@ -7,7 +7,7 @@
       `apps/fts/tests/integration/verify_outbox_migration.py` 覆盖，
       需要连接真实 MySQL + PG 执行；参见该脚本注释。
 
-原因：TabTin 历史上用 `SimpleTestCase + mock` 跑所有单元测试
+原因：Muse 历史上用 `SimpleTestCase + mock` 跑所有单元测试
 （见 `apps/tabmemo/tests/test_memo_service.py` 注释），
 pytest 下无法创建完整的 SQLite 测试库——
 其他 app 的 PG-specific migrations（GIN / tsvector）在 SQLite 上

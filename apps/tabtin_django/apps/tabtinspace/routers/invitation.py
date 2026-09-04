@@ -1,8 +1,8 @@
-"""Tabtin Space invitation 路由。"""
+"""Muse Space invitation 路由。"""
 
 from .shared import *  # noqa: F401,F403
 
-router = Router(tags=["Tabtin Space"])
+router = Router(tags=["Muse Space"])
 
 def _serialize_invitation(invitation) -> dict:
     """序列化单条邀请；定向邀请附带被邀请人昵称。"""

@@ -10,14 +10,14 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/TabTin/tabtin-cli/internal/output"
+	"github.com/Muse/muse-cli/internal/output"
 )
 
 // OUT6：Cobra -o 冲突回归测试
 // root 加 --output (long-only) 不与子命令 -o 冲突；如果加 -o 短形式 Cobra 会 panic
 func TestRootOutputLongOnlyDoesNotConflictWithChildO(t *testing.T) {
 	// 模拟 root + 一个子命令带 -o 短形式
-	root := &cobra.Command{Use: "tabtin"}
+	root := &cobra.Command{Use: "muse"}
 	root.PersistentFlags().String("output", "", "long-only PersistentFlag")
 
 	child := &cobra.Command{Use: "child"}
@@ -41,7 +41,7 @@ func TestRootOutputLongOnlyDoesNotConflictWithChildO(t *testing.T) {
 
 // OUT7：--output + --jq 拒绝
 func TestOutputAndJqRejectedAsConflict(t *testing.T) {
-	root := &cobra.Command{Use: "tabtin"}
+	root := &cobra.Command{Use: "muse"}
 	root.PersistentFlags().Bool("dry-run", false, "")
 	root.PersistentFlags().Bool("yes", false, "")
 	root.PersistentFlags().String("batch", "", "")

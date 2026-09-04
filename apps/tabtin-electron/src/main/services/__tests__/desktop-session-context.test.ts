@@ -142,7 +142,7 @@ describe('bindSessionContext (v2.1 模块零 · 规范 § 3.5.2 + § 9.1)', () =
         const msg = (err as DesktopError).message
         expect(msg).toContain('桌面操控 session 未启动')
         expect(msg).toContain('未执行')
-        expect(msg).toContain('请先运行 tabtin desktop screenshot')
+        expect(msg).toContain('请先运行 muse desktop screenshot')
       }
       expect(mock.spies.click).not.toHaveBeenCalled()
     })

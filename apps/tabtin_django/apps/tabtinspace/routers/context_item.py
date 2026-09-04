@@ -1,11 +1,11 @@
-"""Tabtin Space context_item 路由。"""
+"""Muse Space context_item 路由。"""
 
 from typing import Optional
 
 from .shared import *  # noqa: F401,F403
 from apps.tabtinspace.schemas.common import normalize_legacy_item_type
 
-router = Router(tags=["Tabtin Space"])
+router = Router(tags=["Muse Space"])
 
 _CLOUD_DRIVE_ITEM_TYPES = frozenset({"tabdoc", "tabdata", "tabfiles"})
 

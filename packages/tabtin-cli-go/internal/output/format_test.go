@@ -8,7 +8,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/TabTin/tabtin-cli/internal/errcode"
+	"github.com/Muse/muse-cli/internal/errcode"
 )
 
 // TestParseFormat 锁定**容错**语义：合法值正确解析、未知/空回退 FormatJSON。
@@ -168,7 +168,7 @@ func TestSuccessEnvelope(t *testing.T) {
 }
 
 func TestErrorEnvelope(t *testing.T) {
-	env := ErrorEnvelope(string(errcode.Unauthorized), "please login", "tabtin auth login", ExitAuth)
+	env := ErrorEnvelope(string(errcode.Unauthorized), "please login", "muse auth login", ExitAuth)
 	if env.OK {
 		t.Error("ErrorEnvelope.OK should be false")
 	}
@@ -247,14 +247,14 @@ func TestPrintAgentSingleItemSlice(t *testing.T) {
 // TestFormatErrorAgentExplicitHelper：FormatErrorAgent 作为显式 helper 仍可用，
 // 但**不再被 PrintError 自动接管**（v10.10 P1 修复——见 PrintError + V110-* 测试）。
 func TestFormatErrorAgentExplicitHelper(t *testing.T) {
-	env := ErrorEnvelope(string(errcode.NotFound), "table not found", "use tabtin table list", ExitNotFound)
+	env := ErrorEnvelope(string(errcode.NotFound), "table not found", "use muse table list", ExitNotFound)
 	var buf bytes.Buffer
 	FormatErrorAgent(&buf, env)
 	out := buf.String()
 	if !bytes.Contains(buf.Bytes(), []byte("Error: table not found")) {
 		t.Errorf("FormatErrorAgent missing message: %s", out)
 	}
-	if !bytes.Contains(buf.Bytes(), []byte("Hint: use tabtin table list")) {
+	if !bytes.Contains(buf.Bytes(), []byte("Hint: use muse table list")) {
 		t.Errorf("FormatErrorAgent missing hint: %s", out)
 	}
 }

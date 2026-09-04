@@ -3,7 +3,7 @@ package main
 import (
 	"os"
 
-	"github.com/TabTin/tabtin-cli/cmd"
+	"github.com/Muse/muse-cli/cmd"
 )
 
 func main() {

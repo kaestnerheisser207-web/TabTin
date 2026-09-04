@@ -57,7 +57,7 @@ export function bootstrapTabDataProbe(): void {
       const tableId = String((args?.tableId ?? args?.id) ?? '').trim()
       const spaceId = String(args?.spaceId ?? '').trim()
       if (!tableId) throw new Error('tabdata.open 需要 tableId（或 id）')
-      if (!spaceId) throw new Error('tabdata.open 需要 spaceId（可由 tabtin table / space 元数据获取）')
+      if (!spaceId) throw new Error('tabdata.open 需要 spaceId（可由 muse table / space 元数据获取）')
       await ensureSpaceSelectedOrThrow(spaceId)
       useSpaceContextTabsStore.getState().openResourceTab(resolveForegroundTabScopeKey(spaceId), {
         type: 'tabdata',

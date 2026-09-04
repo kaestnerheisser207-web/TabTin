@@ -6,7 +6,7 @@
  *   - IPC adapter（registerSurfaceAsIpc）查询后注册 ipcMain.handle
  *   - HTTP adapter（createSurfaceHttpHandler）查询后挂路由
  *   - W4 codegen 遍历生成 cobra 命令 / preload 类型
- *   - W5 `tabtin commands --json` 直接从此读
+ *   - W5 `muse commands --json` 直接从此读
  *
  * 注册表使用 channel（`${module}:${verb}`）作为 key。alias 也注册
  * 到同一个 Map，指向同一个 RegisteredSurface 实例。
@@ -58,7 +58,7 @@ export function getSurface(channel: string): RegisteredSurface | undefined {
  *
  * 去重逻辑：按 `${def.module}:${def.verb}` 作为唯一标识，alias 注册
  * 的条目虽然 channel 不同但 def.module + def.verb 相同，只返回主
- * channel 的那个。W4 `tabtin commands --json` 不应列出别名作为独立命令。
+ * channel 的那个。W4 `muse commands --json` 不应列出别名作为独立命令。
  */
 export function getAllSurfaces(): readonly RegisteredSurface[] {
   const seen = new Set<string>()

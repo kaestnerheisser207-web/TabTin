@@ -49,7 +49,7 @@ export function groupTabDocCommands(
 
 /** 把 CLI 命令名格式化为用户可见的 tabtin 调用示例 */
 export function formatTabDocCliName(name: string): string {
-  return `tabtin ${name}`
+  return `muse ${name}`
 }
 
 /** 从 help short 生成交给 Agent 的 NL 任务句 */

@@ -6,19 +6,19 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/TabTin/tabtin-cli/internal/cmdutil"
-	"github.com/TabTin/tabtin-cli/internal/config"
-	"github.com/TabTin/tabtin-cli/internal/output"
+	"github.com/Muse/muse-cli/internal/cmdutil"
+	"github.com/Muse/muse-cli/internal/config"
+	"github.com/Muse/muse-cli/internal/output"
 )
 
 func ProfileCommandSchemas() map[string]cmdutil.CommandDef {
 	return map[string]cmdutil.CommandDef{
-		"list":    {Use: "list", Short: "列出所有 Profile", Example: "  tabtin profile list", Route: cmdutil.RouteDirect, HasFormat: true, Idempotent: true},
-		"add":     {Use: "add <name>", Short: "添加 Profile", Example: "  tabtin profile add staging", Route: cmdutil.RouteDirect, ArgsMapping: []string{"name"}, Risk: cmdutil.RiskWrite},
-		"use":     {Use: "use <name>", Short: "切换当前 Profile", Example: "  tabtin profile use staging", Route: cmdutil.RouteDirect, ArgsMapping: []string{"name"}, Risk: cmdutil.RiskWrite},
-		"current": {Use: "current", Short: "当前 Profile", Example: "  tabtin profile current", Route: cmdutil.RouteDirect, HasFormat: true, Idempotent: true},
+		"list":    {Use: "list", Short: "列出所有 Profile", Example: "  muse profile list", Route: cmdutil.RouteDirect, HasFormat: true, Idempotent: true},
+		"add":     {Use: "add <name>", Short: "添加 Profile", Example: "  muse profile add staging", Route: cmdutil.RouteDirect, ArgsMapping: []string{"name"}, Risk: cmdutil.RiskWrite},
+		"use":     {Use: "use <name>", Short: "切换当前 Profile", Example: "  muse profile use staging", Route: cmdutil.RouteDirect, ArgsMapping: []string{"name"}, Risk: cmdutil.RiskWrite},
+		"current": {Use: "current", Short: "当前 Profile", Example: "  muse profile current", Route: cmdutil.RouteDirect, HasFormat: true, Idempotent: true},
 		"remove": {
-			Use: "remove <name>", Short: "删除 Profile", Example: "  tabtin profile remove staging",
+			Use: "remove <name>", Short: "删除 Profile", Example: "  muse profile remove staging",
 			Route: cmdutil.RouteDirect, ArgsMapping: []string{"name"}, Risk: cmdutil.RiskHigh,
 			Flags: []cmdutil.FlagDef{{Name: "force", Type: cmdutil.FlagBool, Desc: "强制删除当前 Profile"}},
 		},

@@ -1,7 +1,7 @@
 {
   "name": "@tabtin/sdk",
   "version": "0.1.0",
-  "description": "TabTin Data SDK — fluent query API for TabData",
+  "description": "Muse Data SDK — fluent query API for TabData",
   "type": "module",
   "main": "dist/index.js",
   "module": "dist/index.js",
@@ -21,13 +21,13 @@
     "clean": "rm -rf dist"
   },
   "keywords": [
-    "tabtin",
+    "muse",
     "sdk",
     "database",
     "baas",
     "client"
   ],
-  "author": "TabTin Team",
+  "author": "Muse Team",
   "license": "MIT",
   "devDependencies": {
     "typescript": "5.7.2"

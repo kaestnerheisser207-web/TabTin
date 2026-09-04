@@ -59,8 +59,8 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import android.widget.Toast
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.tabtin.mobile.R
-import com.tabtin.mobile.BuildConfig
+import com.muse.mobile.R
+import com.muse.mobile.BuildConfig
 import com.chuckerteam.chucker.api.Chucker
 import com.tabtin.mobile.ui.theme.TTColors
 import com.tabtin.mobile.ui.theme.TTRadius

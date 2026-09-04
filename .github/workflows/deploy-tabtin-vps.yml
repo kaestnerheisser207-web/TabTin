@@ -1,4 +1,4 @@
-name: Deploy TabTin VPS
+name: Deploy Muse VPS
 run-name: >-
   ${{ github.event_name == 'workflow_dispatch'
     && format('Deploy Cloud Host · {0}', inputs.release_sha)

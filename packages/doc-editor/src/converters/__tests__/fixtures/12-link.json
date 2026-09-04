@@ -10,7 +10,7 @@
           { "type": "text", "text": "Visit " },
           {
             "type": "text",
-            "text": "TabTin",
+            "text": "Muse",
             "marks": [{ "type": "link", "attrs": { "href": "https://www.example.com", "target": "_blank" } }]
           },
           { "type": "text", "text": " for more" }
@@ -18,5 +18,5 @@
       }
     ]
   },
-  "expectedMarkdown": "Visit [TabTin](https://www.example.com) for more"
+  "expectedMarkdown": "Visit [Muse](https://www.example.com) for more"
 }

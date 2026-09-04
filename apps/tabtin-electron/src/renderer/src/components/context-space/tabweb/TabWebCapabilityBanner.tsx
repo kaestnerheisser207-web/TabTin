@@ -2,7 +2,7 @@
  * TabWebCapabilityBanner — 浏览器首页的「让 AI 帮你处理浏览器」介绍区
  *
  * featured 示例卡来自 CLI 生成的 tabweb-capabilities.json（curated NL prompt）；
- * 「查看全部」在当前列表内展示全部 showcase CLI 能力（与 tabtin browser 一一对应，共 46 条）。
+ * 「查看全部」在当前列表内展示全部 showcase CLI 能力（与 muse browser 一一对应，共 46 条）。
  * 产品意图：给一个「逐条回归所有浏览器能力」的统一入口——点一下就让 Agent 跑对应 CLI。
  */
 

@@ -302,7 +302,7 @@ describe('AskFormRequestSchema (W4 R3: 三件套并存)', () => {
       tool_name: 'ask_form',
       ...askFormMeta,
       title: 'Project info',
-      fields: [{ label: 'Project name', type: 'input', placeholder: 'TabTin' }],
+      fields: [{ label: 'Project name', type: 'input', placeholder: 'Muse' }],
     })).toThrow();
   });
 
@@ -355,7 +355,7 @@ describe('AskFormRequestSchema (W4 R3: 三件套并存)', () => {
 describe('AskFormResponseSchema (W4 R3)', () => {
   it('accepts arbitrary field_values record', () => {
     expect(() => AskFormResponseSchema.parse({
-      field_values: { name: 'TabTin', count: 42, enabled: true },
+      field_values: { name: 'Muse', count: 42, enabled: true },
     })).not.toThrow();
   });
 

@@ -1,5 +1,5 @@
 /**
- * @tabtin/lsp-runtime —— TabTin Agent runtime 的 LSP 子系统。
+ * @tabtin/lsp-runtime —— Muse Agent runtime 的 LSP 子系统。
  *
  * 覆盖常见 agent LSP 运行时能力（client / manager / diagnostics / registry）。
  *

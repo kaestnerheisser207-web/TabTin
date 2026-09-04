@@ -50,7 +50,7 @@
     "uiEngine": "UI 엔진",
     "uiEngineDetail": "{{cpu}} · 페이지 렌더링 엔진용 공유 메모리",
     "appHost": "앱 호스트",
-    "appHostDetail": "{{cpu}} · TabTin 앱 자체의 기본 메모리",
+    "appHostDetail": "{{cpu}} · Muse 앱 자체의 기본 메모리",
     "unassigned": "할당되지 않음",
     "unassignedDetail": "{{cpu}} · 아직 공간에 귀속되지 않은 리소스",
     "background": "배경",

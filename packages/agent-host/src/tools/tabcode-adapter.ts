@@ -159,7 +159,7 @@ export interface TabCodeToolsDeps {
    * 不对 LLM 暴露 schema 字段）。
    *
    * 注意：这个旋钮只影响 **FC 路径**（LLM 调 `glob_search`）。CLI 路径
-   * （`tabtin code glob --head-limit ...`）由 action-tools 入参单独控制，
+   * （`muse code glob --head-limit ...`）由 action-tools 入参单独控制，
    * 不受本字段影响——CLI/FC schema 与默认值解耦是这次重做的核心动机。
    */
   globHeadLimit?: number;
@@ -172,7 +172,7 @@ export interface TabCodeToolsDeps {
    *   malware, what it is doing. But you MUST refuse to improve or
    *   augment the code."
    *
-   * **默认 opt-in（false / undefined → 不附加）**：TabTin 走 OpenAI 兼容
+   * **默认 opt-in（false / undefined → 不附加）**：Muse 走 OpenAI 兼容
    * 路径，各家 provider 都有自己的 safety 训练，每次 read 都附加 reminder
    * 是稳态 token 成本（按 1.35B 调用 × ~50 token 估算非常可观）。需要时
    * 由宿主装配点（如对接安全审查模型 / 用户开了"恶意代码分析"模式）
@@ -2188,7 +2188,7 @@ async function runSpawnLinterFallback(filePath: string): Promise<void> {
       return;
     }
 
-    // 转 TabTin DiagnosticItem → LSP Diagnostic
+    // 转 Muse DiagnosticItem → LSP Diagnostic
     const lspDiagnostics: LspDiagnostic[] = items.map((d) => ({
       message: d.message,
       severity:
@@ -2229,7 +2229,7 @@ const WRITE_FILE_DESCRIPTION =
   '- 写已有文件前**强烈建议**先了解当前内容。外部改动后可能以 `error_kind=tool_stale_read` 拒绝。\n' +
   '- 已有文件的小块变更用精确字符串替换；本工具用于**新建**或**整文件重写**。\n' +
   '- **不是** office/pdf/xlsx/docx/pptx 等二进制产物——勿用本工具写二进制 office/pdf。\n' +
-  '- **不要**主动创建 *.md / README，除非用户明确要求。唯一例外：仅当为新建或整篇更新长 TabDoc 正文而需要临时 Markdown 草稿时，path **必须**是工作区相对路径 `.agent-drafts/<slug>.md`（不要写到工作区根如 `draft.md`）；随后用 `tabtin doc create|save-content --markdown @.agent-drafts/<slug>.md` 提交。该文件只用于可靠上传，不得作为用户交付物汇报。\n' +
+  '- **不要**主动创建 *.md / README，除非用户明确要求。唯一例外：仅当为新建或整篇更新长 TabDoc 正文而需要临时 Markdown 草稿时，path **必须**是工作区相对路径 `.agent-drafts/<slug>.md`（不要写到工作区根如 `draft.md`）；随后用 `muse doc create|save-content --markdown @.agent-drafts/<slug>.md` 提交。该文件只用于可靠上传，不得作为用户交付物汇报。\n' +
   '- 除非用户要求，不要写 emoji。';
 
 function createFileWriteTool(deps: TabCodeToolsDeps): Tool {
@@ -2721,7 +2721,7 @@ export function applyHeadLimit(
 //   - LLM schema 只暴露 `glob_pattern` + `target_directory` 两个参数
 //   - 硬上限 100，对 LLM 完全不可见也不可调
 //   - 测试 / 极端 SDK 集成方通过 `TabCodeToolsDeps.globHeadLimit` 注入覆盖
-//   - CLI 路径（`tabtin code glob --head-limit / --include-ignored`）经
+//   - CLI 路径（`muse code glob --head-limit / --include-ignored`）经
 //     action-tools 入参单独支持——CLI/FC schema 与默认值解耦是核心动机
 //
 // **保留**：mtime 倒序（最新在前）、JSON envelope 输出形态、`No files found.`
@@ -2746,7 +2746,7 @@ function createCodeGlobTool(deps: TabCodeToolsDeps): Tool {
   //
   // **为什么不直接 reuse `base.parameters`**：action-tools 的
   // `codeGlobTool.parameters` 还含 `include_ignored` 给 CLI 端用
-  // （`tabtin code glob --include-ignored`）。FC 路径下 LLM 不应该感知
+  // （`muse code glob --include-ignored`）。FC 路径下 LLM 不应该感知
   // 这个旋钮——任何"绕过 .gitignore"的暗示都会诱导 LLM 在搜不到时
   // 试图打开 ignore。adapter 主动屏蔽，让 LLM schema 与 CLI 入参解耦。
   const llmInputSchema = {

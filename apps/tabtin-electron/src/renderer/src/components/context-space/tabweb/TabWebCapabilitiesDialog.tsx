@@ -85,7 +85,7 @@ export const TabWebCapabilitiesDialog: React.FC<TabWebCapabilitiesDialogProps> =
           title="TabWeb 浏览器能力总览"
           description={(
             <>
-            与 <code className="text-caption">tabtin browser</code> CLI 一一对应，共 {tabWebCapabilitiesManifest.commands.length} 条能力。点「交给 Tin」即逐条回归。
+            与 <code className="text-caption">muse browser</code> CLI 一一对应，共 {tabWebCapabilitiesManifest.commands.length} 条能力。点「交给 Tin」即逐条回归。
             </>
           )}
         >

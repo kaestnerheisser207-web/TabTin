@@ -8,7 +8,7 @@ import (
 	"os"
 	"testing"
 
-	"github.com/TabTin/tabtin-cli/internal/cmdutil"
+	"github.com/Muse/muse-cli/internal/cmdutil"
 )
 
 // newTestTableCmd 构造一棵 table 命令树供单测断言。

@@ -6,7 +6,7 @@
  * - SearchResultItem（单条结果）
  * - SearchResponse（响应整体）
  *
- * 后端端点：`GET /api/search`，由 `tabtin/urls.py` 通过
+ * 后端端点：`GET /api/search`，由 `muse/urls.py` 通过
  * `_safe_add_router('/search', fts_router)` 挂载。
  *
  * 与其他 service 的差异：

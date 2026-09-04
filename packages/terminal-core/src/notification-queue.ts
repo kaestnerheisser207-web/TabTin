@@ -1,5 +1,5 @@
 /**
- * NotificationQueue —— TabTin host 内部 "系统主动 push 给 LLM" 的统一调度队列。
+ * NotificationQueue —— Muse host 内部 "系统主动 push 给 LLM" 的统一调度队列。
  *
  * **业务定位**（北极星）：消除"反复 await 死循环"——以前 LLM 必须主动 polling 等
  * 后台命令完成，因为 host 没有 push 能力；现在 producer 把"事件"入队，consumer
@@ -19,7 +19,7 @@
  * - `'now'`：抢占式（本次实施暂无 producer 用 `'now'`，保留给未来可能的"系统强制
  *   中断"场景——预留接口不写死）
  *
- * 部分实现把"用户输入"也走同一队列（`'next'`），TabTin 本次**不动用户
+ * 部分实现把"用户输入"也走同一队列（`'next'`），Muse 本次**不动用户
  * 输入路径**——但 priority 排序已经预留，未来要扩"主动注入 user message"等场景
  * 不需要改接口。详见 PRD §6.3 末尾边界确认。
  *

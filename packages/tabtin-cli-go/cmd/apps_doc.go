@@ -11,11 +11,11 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/TabTin/tabtin-cli/internal/cmdutil"
-	"github.com/TabTin/tabtin-cli/internal/errcode"
-	"github.com/TabTin/tabtin-cli/internal/knowledgetree"
-	"github.com/TabTin/tabtin-cli/internal/output"
-	"github.com/TabTin/tabtin-cli/internal/transport"
+	"github.com/Muse/muse-cli/internal/cmdutil"
+	"github.com/Muse/muse-cli/internal/errcode"
+	"github.com/Muse/muse-cli/internal/knowledgetree"
+	"github.com/Muse/muse-cli/internal/output"
+	"github.com/Muse/muse-cli/internal/transport"
 )
 
 // docMarkdownDirectiveAllowlist 是 tabdoc 后端 markdown→pm_json 转换器认识的
@@ -374,7 +374,7 @@ func rejectBareMarkdownFilePath(markdown string) error {
 	return output.PrintErrorAndExit(output.ErrorEnvelope(
 		string(errcode.ValidationError),
 		fmt.Sprintf("--markdown 的值看起来像文件路径（%q），而不是 Markdown 正文", path),
-		"从文件读入请加 @：`--markdown @/path/to/file.md`；导出到本地请用 `tabtin doc export <id> --export-format markdown --output /path/to/out.md`（不要用 save-content）。字面量逃逸：`@@/path.md`",
+		"从文件读入请加 @：`--markdown @/path/to/file.md`；导出到本地请用 `muse doc export <id> --export-format markdown --output /path/to/out.md`（不要用 save-content）。字面量逃逸：`@@/path.md`",
 		output.ExitValidation,
 	))
 }
@@ -481,7 +481,7 @@ func rejectUnsupportedInlineHighlightMarkup(markdown string) error {
 	return output.PrintErrorAndExit(output.ErrorEnvelope(
 		string(errcode.ValidationError),
 		"Markdown 写入不支持 <mark> 或 ==高亮== 语法",
-		"这不是 TabDoc 的富文本输入契约，可能不渲染或在转码时损坏原有格式。请先 `doc read-block` 定位段落，再用 `tabtin doc format-text <document-id> <block-id> --text \"完整原文\" --background-color yellow`。",
+		"这不是 TabDoc 的富文本输入契约，可能不渲染或在转码时损坏原有格式。请先 `doc read-block` 定位段落，再用 `muse doc format-text <document-id> <block-id> --text \"完整原文\" --background-color yellow`。",
 		output.ExitValidation,
 	))
 }
@@ -548,7 +548,7 @@ func buildDocTabdataEmbedMarkdown(tableID, title, viewID string, maxHeight int) 
 		return "", output.PrintErrorAndExit(output.ErrorEnvelope(
 			string(errcode.ValidationError),
 			"--table-id 不能为空：嵌入多维表需要真实 TabData id",
-			"先 tabtin table create / table list 拿到 table id，再 tabtin doc embed-table <doc-id> --table-id <id>。普通 markdown 管道表不是 tabdataBlock。",
+			"先 muse table create / table list 拿到 table id，再 muse doc embed-table <doc-id> --table-id <id>。普通 markdown 管道表不是 tabdataBlock。",
 			output.ExitValidation,
 		))
 	}
@@ -607,7 +607,7 @@ func validateDocTabdataDirectives(markdown string) error {
 			return output.PrintErrorAndExit(output.ErrorEnvelope(
 				string(errcode.ValidationError),
 				`:::tabdata 缺少必填属性 tableId="..."`,
-				"普通 markdown 管道表只生成 table block，不等于多维表 tabdataBlock。推荐：tabtin doc embed-table <doc-id> --table-id <table-id>",
+				"普通 markdown 管道表只生成 table block，不等于多维表 tabdataBlock。推荐：muse doc embed-table <doc-id> --table-id <table-id>",
 				output.ExitValidation,
 			))
 		}
@@ -623,7 +623,7 @@ func validateDocTabdataDirectives(markdown string) error {
 			return output.PrintErrorAndExit(output.ErrorEnvelope(
 				string(errcode.ValidationError),
 				":::tabdata 的 tableId 不能为空",
-				"请传入真实 TabData id，或使用 tabtin doc embed-table <doc-id> --table-id <table-id>",
+				"请传入真实 TabData id，或使用 muse doc embed-table <doc-id> --table-id <table-id>",
 				output.ExitValidation,
 			))
 		}
@@ -714,13 +714,13 @@ func newCmdDoc(f *cmdutil.Factory) *cobra.Command {
 		Long: `创建、浏览和管理 TabDoc 文档。
 
 示例：
-  tabtin doc list
-  tabtin doc create --title "周报" --markdown @.agent-drafts/weekly.md
-  tabtin doc read <document-id>
-  tabtin doc list-blocks <document-id>
-  tabtin doc update <document-id> --title "新标题"
-  tabtin doc save-content <document-id> --title "周报" --markdown @.agent-drafts/weekly.md --replace
-  tabtin doc search --query "项目进展"`,
+  muse doc list
+  muse doc create --title "周报" --markdown @.agent-drafts/weekly.md
+  muse doc read <document-id>
+  muse doc list-blocks <document-id>
+  muse doc update <document-id> --title "新标题"
+  muse doc save-content <document-id> --title "周报" --markdown @.agent-drafts/weekly.md --replace
+  muse doc search --query "项目进展"`,
 	}
 
 	defs := []cmdutil.CommandDef{
@@ -729,10 +729,10 @@ func newCmdDoc(f *cmdutil.Factory) *cobra.Command {
 			Long: `列出当前 Space 下的文档（按更新时间倒序）。
 默认由后端返回 200 条，用 --page/--page-size 翻页；全局 --space-id/--organization-id 跨空间查询。
 返回每条文档的 id/title/status/parent_id/latest_version，配合 doc read 取正文。`,
-			Example: "  tabtin doc list\n" +
-				"  tabtin doc list --page-size 50\n" +
-				"  tabtin doc list --page 2 --page-size 50\n" +
-				"  tabtin doc list --space-id spc_xxx",
+			Example: "  muse doc list\n" +
+				"  muse doc list --page-size 50\n" +
+				"  muse doc list --page 2 --page-size 50\n" +
+				"  muse doc list --space-id spc_xxx",
 			Layer: "L2", Risk: cmdutil.RiskRead, RiskDeclared: true,
 			Route: cmdutil.RouteCliServer, Method: "GET", Path: "/api/tabdoc/documents",
 			Flags: []cmdutil.FlagDef{
@@ -777,11 +777,11 @@ title 必填。两套「父」参数语义不同，勿混用名：
   --parent-id       → Document.parent（文档内页树，与知识库 UI 无关）
 不传二者时资源落在知识库根级。--icon/--cover-image 设置文档元数据。
 （标签 tags 是 update 端能力，建文档后用 doc update <id> --tags ... 设置。）`,
-			Example: "  tabtin doc create --title \"周报\"\n" +
-				"  tabtin doc create --title \"周报\" --markdown @.agent-drafts/weekly.md\n" +
-				"  tabtin doc create --title \"子文档\" --parent-item-id <context_item_id>\n" +
-				"  tabtin doc create --title \"会议纪要\" --parent-id doc_xxx --icon 📝\n" +
-				"  tabtin doc create --title \"草稿\" --organization-id org_xxx",
+			Example: "  muse doc create --title \"周报\"\n" +
+				"  muse doc create --title \"周报\" --markdown @.agent-drafts/weekly.md\n" +
+				"  muse doc create --title \"子文档\" --parent-item-id <context_item_id>\n" +
+				"  muse doc create --title \"会议纪要\" --parent-id doc_xxx --icon 📝\n" +
+				"  muse doc create --title \"草稿\" --organization-id org_xxx",
 			Layer: "L2", Risk: cmdutil.RiskWrite, RiskDeclared: true,
 			Route: cmdutil.RouteCliServer, Method: "POST", Path: "/api/tabdoc/documents",
 			Flags: []cmdutil.FlagDef{
@@ -859,9 +859,9 @@ title 必填。两套「父」参数语义不同，勿混用名：
 免去 Agent 手查 item id。
 常见陷阱：与 doc update --parent-id（Document 内页树）无关；--parent-item-id
 传的是父 ContextItem ID。落根用 --root。需全局 --organization-id。`,
-			Example: "  tabtin doc move <document-id> --parent-item-id <context_item_id>\n" +
-				"  tabtin doc move <document-id> --root\n" +
-				"  tabtin doc move <document-id> --parent-item-id <context_item_id> --dry-run",
+			Example: "  muse doc move <document-id> --parent-item-id <context_item_id>\n" +
+				"  muse doc move <document-id> --root\n" +
+				"  muse doc move <document-id> --parent-item-id <context_item_id> --dry-run",
 			Layer: "L2", Risk: cmdutil.RiskWrite, RiskDeclared: true,
 			Route:         cmdutil.RouteCliServer,
 			ArgsMapping:   []string{"document_id"},
@@ -890,9 +890,9 @@ title 必填。两套「父」参数语义不同，勿混用名：
 			Long: `按关键词全文搜索当前 Space 下的文档。
 匹配标题与正文，返回命中文档列表（含 id/title/摘要）。
 适合先搜定位、再用 doc read/list-blocks 深入；--limit 控制返回条数。`,
-			Example: "  tabtin doc search --query \"项目进展\"\n" +
-				"  tabtin doc search --query \"周报\" --limit 5\n" +
-				"  tabtin doc search --query \"API\" --space-id spc_xxx",
+			Example: "  muse doc search --query \"项目进展\"\n" +
+				"  muse doc search --query \"周报\" --limit 5\n" +
+				"  muse doc search --query \"API\" --space-id spc_xxx",
 			Layer: "L2", Risk: cmdutil.RiskRead, RiskDeclared: true,
 			Route: cmdutil.RouteCliServer, Method: "GET", Path: "/api/tabdoc/search",
 			Flags: []cmdutil.FlagDef{
@@ -910,9 +910,9 @@ title 必填。两套「父」参数语义不同，勿混用名：
 			Long: `在单篇文档的顶层 block 内按关键词搜索，返回 block_id / index / snippet。
 这个命令把"搜到正文"和"精准读写某一块"接起来，避免先 list-blocks 再靠 80 字 preview 猜段落。
 它只搜索顶层 block；如果要跨文档找候选文档，先用 doc search，再拿目标文档 id 调本命令。`,
-			Example: "  tabtin doc search-blocks doc_xxx --query \"西湖\"\n" +
-				"  tabtin doc search-blocks doc_xxx --query \"TODO\" --limit 5\n" +
-				"  tabtin doc search-blocks doc_xxx --query \"项目进展\" --format json",
+			Example: "  muse doc search-blocks doc_xxx --query \"西湖\"\n" +
+				"  muse doc search-blocks doc_xxx --query \"TODO\" --limit 5\n" +
+				"  muse doc search-blocks doc_xxx --query \"项目进展\" --format json",
 			Layer: "L2", Risk: cmdutil.RiskRead, RiskDeclared: true,
 			Route:       cmdutil.RouteCliServer,
 			Method:      "GET",
@@ -950,9 +950,9 @@ title 必填。两套「父」参数语义不同，勿混用名：
 		Long: `读取单篇文档的完整详情（含正文 Markdown 与元数据）。
 返回 latest_version，写回时作为 doc save-content/update 的 --base-version 做并发保护。
 正文较长时建议先用 doc list-blocks 看大纲省 token，再决定是否全量读。`,
-		Example: "  tabtin doc read doc_xxx\n" +
-			"  tabtin doc read doc_xxx --format json\n" +
-			"  tabtin doc read doc_xxx --jq .latest_version",
+		Example: "  muse doc read doc_xxx\n" +
+			"  muse doc read doc_xxx --format json\n" +
+			"  muse doc read doc_xxx --jq .latest_version",
 		Layer: "L2", Risk: cmdutil.RiskRead, RiskDeclared: true,
 		Route:        cmdutil.RouteCliServer,
 		Method:       "GET",
@@ -969,9 +969,9 @@ title 必填。两套「父」参数语义不同，勿混用名：
 		Long: `按块分页读取一篇大文档的内容（GET /documents/{id}/chunks）。
 超大文档不必一次拉全文——用 --start / --limit 翻块拉取；每块含 chunk_index / chunk_key /
 plaintext_preview / blob_b64 等字段。只读操作，需对文档有 viewer 权限。`,
-		Example: "  tabtin doc chunks doc_xxx\n" +
-			"  tabtin doc chunks doc_xxx --start 0 --limit 10\n" +
-			"  tabtin doc chunks doc_xxx --format json --jq .chunks",
+		Example: "  muse doc chunks doc_xxx\n" +
+			"  muse doc chunks doc_xxx --start 0 --limit 10\n" +
+			"  muse doc chunks doc_xxx --format json --jq .chunks",
 		Layer: "L2", Risk: cmdutil.RiskRead, RiskDeclared: true,
 		Route:        cmdutil.RouteCliServer,
 		Method:       "GET",
@@ -997,11 +997,11 @@ plaintext_preview / blob_b64 等字段。只读操作，需对文档有 viewer �
   docx/pdf 是二进制格式，**必须**带 --output 才能拿到可打开的文件——不加 --output 只会
   在终端打印 base64 信封，直接吞进 UTF-8 解析会把二进制弄坏。
 不要用 save-content 冒充导出——save-content 是整篇替换云端正文。`,
-		Example: "  tabtin doc export doc_xxx\n" +
-			"  tabtin doc export doc_xxx --export-format html\n" +
-			"  tabtin doc export doc_xxx --export-format txt --output ./out.txt\n" +
-			"  tabtin doc export doc_xxx --export-format docx --output ./out.docx\n" +
-			"  tabtin doc export doc_xxx --export-format pdf --output ./out.pdf",
+		Example: "  muse doc export doc_xxx\n" +
+			"  muse doc export doc_xxx --export-format html\n" +
+			"  muse doc export doc_xxx --export-format txt --output ./out.txt\n" +
+			"  muse doc export doc_xxx --export-format docx --output ./out.docx\n" +
+			"  muse doc export doc_xxx --export-format pdf --output ./out.pdf",
 		Layer: "L2", Risk: cmdutil.RiskRead, RiskDeclared: true,
 		Route:        cmdutil.RouteCliServer,
 		Method:       "GET",
@@ -1031,9 +1031,9 @@ plaintext_preview / blob_b64 等字段。只读操作，需对文档有 viewer �
 		Long: `归档文档（软删除，可恢复）——把文档状态置为 archived。
 不是物理删除：归档后仍可通过 doc update --status active 恢复。
 归档会让文档从默认 doc list 结果中消失，但不影响其子文档。`,
-		Example: "  tabtin doc delete doc_xxx\n" +
-			"  tabtin doc delete doc_xxx --yes\n" +
-			"  tabtin doc delete doc_xxx --dry-run",
+		Example: "  muse doc delete doc_xxx\n" +
+			"  muse doc delete doc_xxx --yes\n" +
+			"  muse doc delete doc_xxx --dry-run",
 		Layer: "L2", Risk: cmdutil.RiskWrite, RiskDeclared: true,
 		Route:        cmdutil.RouteCliServer,
 		Method:       "DELETE",
@@ -1056,11 +1056,11 @@ plaintext_preview / blob_b64 等字段。只读操作，需对文档有 viewer �
 	cmdutil.MustRegisterCommand(cmd, f, cmdutil.CommandDef{
 		Use: "list-blocks <document-id>", Short: "列出文档 Block 大纲（省 token）",
 		Long: `列出文档顶层 block 结构（id/type/level/preview/index）。
-比 ` + "`tabtin doc read`" + ` 取完整内容省 token——LLM 看完大纲后再决定读哪个段落。
+比 ` + "`muse doc read`" + ` 取完整内容省 token——LLM 看完大纲后再决定读哪个段落。
 返回的 block id 可作为后续按段落精读/定位的锚点。`,
-		Example: "  tabtin doc list-blocks doc_xxx\n" +
-			"  tabtin doc list-blocks doc_xxx --format json\n" +
-			"  tabtin doc list-blocks doc_xxx --jq '.blocks[].type'",
+		Example: "  muse doc list-blocks doc_xxx\n" +
+			"  muse doc list-blocks doc_xxx --format json\n" +
+			"  muse doc list-blocks doc_xxx --jq '.blocks[].type'",
 		Layer: "L2", Risk: cmdutil.RiskRead, RiskDeclared: true,
 		Route:        cmdutil.RouteCliServer,
 		Method:       "GET",
@@ -1081,11 +1081,11 @@ plaintext_preview / blob_b64 等字段。只读操作，需对文档有 viewer �
 	cmdutil.MustRegisterCommand(cmd, f, cmdutil.CommandDef{
 		Use: "read-block <document-id> <block-id>", Short: "读取单个 block 的 Markdown（精准单块，省 token）",
 		Long: `读取文档中某个顶层 block 的 Markdown 内容——精准单块，不拉全文，省 token。
-<block-id> 取自 ` + "`tabtin doc list-blocks`" + ` 返回的 block id（缺 blockId 的旧块回退 auto_N）。
+<block-id> 取自 ` + "`muse doc list-blocks`" + ` 返回的 block id（缺 blockId 的旧块回退 auto_N）。
 典型用法：list-blocks 看大纲定位 → read-block 看准这一块 → 再 update/insert/delete-block 改它。`,
-		Example: "  tabtin doc read-block doc_xxx blk_yyy\n" +
-			"  tabtin doc read-block doc_xxx auto_2 --format json\n" +
-			"  tabtin doc read-block doc_xxx blk_yyy --jq .markdown",
+		Example: "  muse doc read-block doc_xxx blk_yyy\n" +
+			"  muse doc read-block doc_xxx auto_2 --format json\n" +
+			"  muse doc read-block doc_xxx blk_yyy --jq .markdown",
 		Layer: "L2", Risk: cmdutil.RiskRead, RiskDeclared: true,
 		Route:        cmdutil.RouteCliServer,
 		Method:       "GET",
@@ -1105,12 +1105,12 @@ plaintext_preview / blob_b64 等字段。只读操作，需对文档有 viewer �
 	cmdutil.MustRegisterCommand(cmd, f, cmdutil.CommandDef{
 		Use: "read-section <document-id> <heading-block-id>", Short: "读整章（heading 锚点起到下一个同级/更高级标题前，省 token）",
 		Long: `读取以某个标题 block 为锚点的完整章节——标题本身 + 其后正文，直到遇到下一个**同级或更高级**标题为止，一条命令拿到整章。
-<heading-block-id> 取自 ` + "`tabtin doc list-blocks`" + ` 返回的 heading 行（type=heading；缺 blockId 的旧块回退 auto_N）。
+<heading-block-id> 取自 ` + "`muse doc list-blocks`" + ` 返回的 heading 行（type=heading；缺 blockId 的旧块回退 auto_N）。
 边界规则：H2 不会吞下一个 H2/H1；H1 自然含其下 H2/H3；最后一节收到文末。锚点不是 heading 会报错（要读单块用 read-block）。
 典型用法：list-blocks 看大纲定位某标题 → read-section 读整章确认边界 → 再 insert/update-block 精准改。`,
-		Example: "  tabtin doc read-section doc_xxx blk_heading\n" +
-			"  tabtin doc read-section doc_xxx blk_heading --mode outline\n" +
-			"  tabtin doc read-section doc_xxx blk_heading --max-depth 1 --format json",
+		Example: "  muse doc read-section doc_xxx blk_heading\n" +
+			"  muse doc read-section doc_xxx blk_heading --mode outline\n" +
+			"  muse doc read-section doc_xxx blk_heading --max-depth 1 --format json",
 		Layer: "L2", Risk: cmdutil.RiskRead, RiskDeclared: true,
 		Route:       cmdutil.RouteCliServer,
 		Method:      "GET",
@@ -1141,10 +1141,10 @@ plaintext_preview / blob_b64 等字段。只读操作，需对文档有 viewer �
 		Use: "update-block <document-id> <block-id>", Short: "用 Markdown 替换单个 block（精准单块，不重写全文）",
 		Long: `用一段 Markdown 替换指定 block——**只动这一块**，其余 block 原样不动，是"改一段"的正路。
 --markdown 走默认输入抽象：直接传文本 / ` + "`@路径`" + ` 从文件读 / ` + "`-`" + ` 从 stdin 读；仅支持替换为单个顶层 block。
-推荐传 --base-version（从 ` + "`tabtin doc read`" + ` 的 latest_version 拿）做并发保护——别人同时改了返回 409。`,
-		Example: "  tabtin doc update-block doc_xxx blk_yyy --markdown \"## 新标题\"\n" +
-			"  tabtin doc update-block doc_xxx blk_yyy --markdown @./para.md --base-version 7\n" +
-			"  echo '改这一段' | tabtin doc update-block doc_xxx blk_yyy --markdown -",
+推荐传 --base-version（从 ` + "`muse doc read`" + ` 的 latest_version 拿）做并发保护——别人同时改了返回 409。`,
+		Example: "  muse doc update-block doc_xxx blk_yyy --markdown \"## 新标题\"\n" +
+			"  muse doc update-block doc_xxx blk_yyy --markdown @./para.md --base-version 7\n" +
+			"  echo '改这一段' | muse doc update-block doc_xxx blk_yyy --markdown -",
 		Layer: "L2", Risk: cmdutil.RiskWrite, RiskDeclared: true,
 		Route:        cmdutil.RouteCliServer,
 		Method:       "PATCH",
@@ -1202,10 +1202,10 @@ plaintext_preview / blob_b64 等字段。只读操作，需对文档有 viewer �
 
 先用 read-block 确认完整原文，再原样传给 --text。每个格式 flag 都是局部补丁：未传的格式保持不变；--bold/--italic 等传 set 或 unset；颜色传 default 会清除该颜色；--remove-link 删除链接。
 不要把 <mark>...</mark>、==高亮==、HTML 或 CSS 写进 Markdown 后再 update-block：那不是 TabDoc 富文本输入契约，可能不渲染或在转码时破坏原有格式。目标文本必须在该 block 内唯一匹配。`,
-		Example: "  tabtin doc format-text doc_xxx blk_yyy --text \"我买几个橘子去。\" --background-color yellow\n" +
-			"  tabtin doc format-text doc_xxx blk_yyy --text \"关键结论\" --bold set --text-color red\n" +
-			"  tabtin doc format-text doc_xxx blk_yyy --text \"官网\" --link-url https://example.com\n" +
-			"  tabtin doc format-text doc_xxx blk_yyy --text \"旧链接\" --remove-link --background-color default --dry-run",
+		Example: "  muse doc format-text doc_xxx blk_yyy --text \"我买几个橘子去。\" --background-color yellow\n" +
+			"  muse doc format-text doc_xxx blk_yyy --text \"关键结论\" --bold set --text-color red\n" +
+			"  muse doc format-text doc_xxx blk_yyy --text \"官网\" --link-url https://example.com\n" +
+			"  muse doc format-text doc_xxx blk_yyy --text \"旧链接\" --remove-link --background-color default --dry-run",
 		Layer: "L2", Risk: cmdutil.RiskWrite, RiskDeclared: true,
 		Route:        cmdutil.RouteCliServer,
 		Method:       "POST",
@@ -1277,10 +1277,10 @@ plaintext_preview / blob_b64 等字段。只读操作，需对文档有 viewer �
 
 这是富文本格式操作，不要把 <mark>...</mark>、==高亮== 或 CSS 写进 Markdown 后再 update-block：那些写法不属于 TabDoc 的 Markdown 输入契约，可能不渲染，也可能在转码时破坏原有格式。
 目标文本必须在该 block 内唯一匹配；存在多个相同片段时命令会拒绝写入，避免错误标记到其他位置。`,
-		Example: "  tabtin doc read-block doc_xxx blk_yyy\n" +
-			"  tabtin doc highlight-text doc_xxx blk_yyy --text \"我买几个橘子去。\" --color yellow --base-version 7\n" +
-			"  tabtin doc highlight-text doc_xxx blk_yyy --text \"这是需要强调的结论\" --color blue\n" +
-			"  tabtin doc highlight-text doc_xxx blk_yyy --text \"唯一匹配原文\" --dry-run",
+		Example: "  muse doc read-block doc_xxx blk_yyy\n" +
+			"  muse doc highlight-text doc_xxx blk_yyy --text \"我买几个橘子去。\" --color yellow --base-version 7\n" +
+			"  muse doc highlight-text doc_xxx blk_yyy --text \"这是需要强调的结论\" --color blue\n" +
+			"  muse doc highlight-text doc_xxx blk_yyy --text \"唯一匹配原文\" --dry-run",
 		Layer: "L2", Risk: cmdutil.RiskWrite, RiskDeclared: true,
 		Route:        cmdutil.RouteCliServer,
 		Method:       "POST",
@@ -1327,10 +1327,10 @@ plaintext_preview / blob_b64 等字段。只读操作，需对文档有 viewer �
 		Long: `在文档指定位置插入一段新 Markdown——**只插这一段**，不重写全文。
 --at-start 插到文档顶部；--after 指定锚点 block（取自 doc list-blocks）；二者都不传则追加到文档末尾（等价于 doc append）。
 --markdown 走默认输入抽象（文本 / @文件 / - stdin）；推荐 --base-version 做并发保护（别人同时改返回 409）。`,
-		Example: "  tabtin doc insert-block doc_xxx --markdown \"文档导语\" --at-start\n" +
-			"  tabtin doc insert-block doc_xxx --markdown \"新的一段\" --after blk_yyy\n" +
-			"  tabtin doc insert-block doc_xxx --markdown @./new.md --after blk_yyy --base-version 7\n" +
-			"  tabtin doc insert-block doc_xxx --markdown \"末尾追加\"   # 不带 --after = 追加到末尾",
+		Example: "  muse doc insert-block doc_xxx --markdown \"文档导语\" --at-start\n" +
+			"  muse doc insert-block doc_xxx --markdown \"新的一段\" --after blk_yyy\n" +
+			"  muse doc insert-block doc_xxx --markdown @./new.md --after blk_yyy --base-version 7\n" +
+			"  muse doc insert-block doc_xxx --markdown \"末尾追加\"   # 不带 --after = 追加到末尾",
 		Layer: "L2", Risk: cmdutil.RiskWrite, RiskDeclared: true,
 		Route:        cmdutil.RouteCliServer,
 		Method:       "POST",
@@ -1401,11 +1401,11 @@ plaintext_preview / blob_b64 等字段。只读操作，需对文档有 viewer �
 	cmdutil.MustRegisterCommand(cmd, f, cmdutil.CommandDef{
 		Use: "delete-block <document-id> <block-id>", Short: "删除单个 block（精准单块，不重写全文）",
 		Long: `删除文档中指定的顶层 block——**只删这一块**，相邻 block 顺序保持不变，不重写全文。
-<block-id> 取自 ` + "`tabtin doc list-blocks`" + `；删除经后端 save_content 落库，可在版本历史里回滚。
+<block-id> 取自 ` + "`muse doc list-blocks`" + `；删除经后端 save_content 落库，可在版本历史里回滚。
 是"删掉某一段"的正路：比读全文 → 本地删 → 整篇 save-content 覆盖更省 token、冲突面更小。`,
-		Example: "  tabtin doc delete-block doc_xxx blk_yyy\n" +
-			"  tabtin doc delete-block doc_xxx blk_yyy --dry-run\n" +
-			"  tabtin doc delete-block doc_xxx auto_3 --format json",
+		Example: "  muse doc delete-block doc_xxx blk_yyy\n" +
+			"  muse doc delete-block doc_xxx blk_yyy --dry-run\n" +
+			"  muse doc delete-block doc_xxx auto_3 --format json",
 		Layer: "L2", Risk: cmdutil.RiskWrite, RiskDeclared: true,
 		Route:        cmdutil.RouteCliServer,
 		Method:       "DELETE",
@@ -1437,9 +1437,9 @@ plaintext_preview / blob_b64 等字段。只读操作，需对文档有 viewer �
 多行正文（标题 + 有序/无序列表等）以及含 $a/$x 的公式**必须**用 @文件或 stdin——
 双引号里写 \n 不会变成真实换行；PowerShell/zsh 双引号还会把 $变量展开为空。
 CLI 也不解码字面 \n；那样会把有序列表静默写成带 \n 的单行段落。`,
-		Example: "  tabtin doc append doc_xxx --markdown \"## 新的一节\"\n" +
-			"  tabtin doc append doc_xxx --markdown @./section.md\n" +
-			"  cat note.md | tabtin doc append doc_xxx --markdown -",
+		Example: "  muse doc append doc_xxx --markdown \"## 新的一节\"\n" +
+			"  muse doc append doc_xxx --markdown @./section.md\n" +
+			"  cat note.md | muse doc append doc_xxx --markdown -",
 		Layer: "L2", Risk: cmdutil.RiskWrite, RiskDeclared: true,
 		Route:        cmdutil.RouteCliServer,
 		Method:       "POST",
@@ -1497,9 +1497,9 @@ title 的换行、Tab、控制字符会归一为空格并折叠连续空白，�
 --table-id 为空时硬失败，不会静默落成「未关联表格」。
 等价于 insert-block 写入一段合法 :::tabdata，但免去手写 directive。
 本命令不校验 table 是否存在/同组织可读（服务端资源权限校验另见  未覆盖项）。`,
-		Example: "  tabtin doc embed-table doc_xxx --table-id tbl_yyy\n" +
-			"  tabtin doc embed-table doc_xxx --table-id tbl_yyy --title \"销售数据\" --view-id view_a\n" +
-			"  tabtin doc embed-table doc_xxx --table-id tbl_yyy --after blk_zzz --base-version 3",
+		Example: "  muse doc embed-table doc_xxx --table-id tbl_yyy\n" +
+			"  muse doc embed-table doc_xxx --table-id tbl_yyy --title \"销售数据\" --view-id view_a\n" +
+			"  muse doc embed-table doc_xxx --table-id tbl_yyy --after blk_zzz --base-version 3",
 		Layer: "L2", Risk: cmdutil.RiskWrite, RiskDeclared: true,
 		Route:        cmdutil.RouteCliServer,
 		Method:       "POST",
@@ -1589,16 +1589,16 @@ title 的换行、Tab、控制字符会归一为空格并折叠连续空白，�
 		Long: `更新文档元数据：title / status / parent-id / icon / cover-image /
 cover-position / tags（仅传的字段才会更新）。
 
-注：仅改元数据，不改正文。改 Markdown 内容请用 ` + "`tabtin doc save-content`" + `——
+注：仅改元数据，不改正文。改 Markdown 内容请用 ` + "`muse doc save-content`" + `——
 HTTP 层就是分两个端点（PATCH /documents/{id} vs POST /documents/{id}/content），
 拆成两个命令边界更清晰。
 
 至少传 title/status/parent-id/icon/cover-image/cover-position/tags 之一，否则报错。
 --cover-position 是封面纵向焦点 0~1（服务端会 clamp 到 [0,1]）；--tags 整组替换式覆盖。`,
-		Example: "  tabtin doc update <document-id> --title \"新标题\"\n" +
-			"  tabtin doc update <document-id> --status archived\n" +
-			"  tabtin doc update <document-id> --icon 📌 --tags 重要 --tags 项目\n" +
-			"  tabtin doc update <document-id> --cover-image https://… --cover-position 0.3",
+		Example: "  muse doc update <document-id> --title \"新标题\"\n" +
+			"  muse doc update <document-id> --status archived\n" +
+			"  muse doc update <document-id> --icon 📌 --tags 重要 --tags 项目\n" +
+			"  muse doc update <document-id> --cover-image https://… --cover-position 0.3",
 		Layer:        "L2",
 		Risk:         cmdutil.RiskWrite,
 		RiskDeclared: true,
@@ -1670,15 +1670,15 @@ HTTP 层就是分两个端点（PATCH /documents/{id} vs POST /documents/{id}/co
 TabDoc 的 --title 就是整篇文章标题；Markdown content 不再自带文章级 H1，直接从导语开始、
 章节从 ## 开始。传入 --title 时，CLI 会移除 content 开头的首个 H1，不比较标题文本。
 若正文以 H1 开头却没传 --title，CLI 会拒绝写入，避免在缺少标题上下文时静默制造重复标题。
-推荐传 --base-version（从 ` + "`tabtin doc read`" + ` 返回值的 latest_version
+推荐传 --base-version（从 ` + "`muse doc read`" + ` 返回值的 latest_version
 拿）做并发保护——其他人/进程同时改了文档时返回 409 VERSION_CONFLICT。
 裸路径字符串（如 C:\\...\\a.md / ./a.md）会被拒绝——那是把路径当正文的常见脚枪；
 从文件读请加 @，导出到本地请用 doc export --output。
 多行正文与含 $a/$x 的公式请用 @文件或 stdin：双引号里写 \\n 不会变成真实换行，
 且 PowerShell/zsh 会展开 $变量破坏公式源文。`,
-		Example: "  tabtin doc save-content <document-id> --markdown \"一段短正文\"\n" +
-			"  tabtin doc save-content <document-id> --title \"周报\" --markdown @./draft.md\n" +
-			"  tabtin doc save-content <document-id> --title \"周报\" --markdown @./draft.md --base-version 5",
+		Example: "  muse doc save-content <document-id> --markdown \"一段短正文\"\n" +
+			"  muse doc save-content <document-id> --title \"周报\" --markdown @./draft.md\n" +
+			"  muse doc save-content <document-id> --title \"周报\" --markdown @./draft.md --base-version 5",
 		Layer:        "L2",
 		Risk:         cmdutil.RiskWrite,
 		RiskDeclared: true,
@@ -1754,9 +1754,9 @@ TabDoc 的 --title 就是整篇文章标题；Markdown content 不再自带文�
 		Long: `把文档移入回收站——比归档（doc delete）更进一步的软删除，仍可恢复。
 状态流转：active/archived → trashed；用 doc restore 从回收站恢复，或 doc permanent-delete 永久删。
 回收站文档会从默认 doc list 消失、释放存储计量（FileUsage deactivate），但数据未物理删除。`,
-		Example: "  tabtin doc trash doc_xxx\n" +
-			"  tabtin doc trash doc_xxx --dry-run\n" +
-			"  tabtin doc trash doc_xxx --format json",
+		Example: "  muse doc trash doc_xxx\n" +
+			"  muse doc trash doc_xxx --dry-run\n" +
+			"  muse doc trash doc_xxx --format json",
 		Layer: "L2", Risk: cmdutil.RiskWrite, RiskDeclared: true,
 		Route:        cmdutil.RouteCliServer,
 		Method:       "POST",
@@ -1781,9 +1781,9 @@ TabDoc 的 --title 就是整篇文章标题；Markdown content 不再自带文�
 		Long: `把回收站中的文档恢复回原状态（trashed → 之前的 active/archived）。
 这是 doc trash 的逆操作，命中后端 POST /restore-from-trash 端点。
 注意：与"恢复到某个历史版本"是两回事——版本回滚走的是另一条版本端点，不是本命令。`,
-		Example: "  tabtin doc restore doc_xxx\n" +
-			"  tabtin doc restore doc_xxx --dry-run\n" +
-			"  tabtin doc restore doc_xxx --format json",
+		Example: "  muse doc restore doc_xxx\n" +
+			"  muse doc restore doc_xxx --dry-run\n" +
+			"  muse doc restore doc_xxx --format json",
 		Layer: "L2", Risk: cmdutil.RiskWrite, RiskDeclared: true,
 		Route:        cmdutil.RouteCliServer,
 		Method:       "POST",
@@ -1808,9 +1808,9 @@ TabDoc 的 --title 就是整篇文章标题；Markdown content 不再自带文�
 		Long: `把已归档文档恢复为活跃状态（archived → active）——doc delete（归档）的逆操作。
 仅对 status=archived 的文档有效；非归档文档调用会被后端拒绝（VALIDATION_ERROR）。
 与 doc restore 区分：unarchive 处理"归档"层，restore 处理"回收站"层，是两级不同的软删。`,
-		Example: "  tabtin doc unarchive doc_xxx\n" +
-			"  tabtin doc unarchive doc_xxx --dry-run\n" +
-			"  tabtin doc unarchive doc_xxx --format json",
+		Example: "  muse doc unarchive doc_xxx\n" +
+			"  muse doc unarchive doc_xxx --dry-run\n" +
+			"  muse doc unarchive doc_xxx --format json",
 		Layer: "L2", Risk: cmdutil.RiskWrite, RiskDeclared: true,
 		Route:        cmdutil.RouteCliServer,
 		Method:       "POST",
@@ -1835,9 +1835,9 @@ TabDoc 的 --title 就是整篇文章标题；Markdown content 不再自带文�
 		Long: `永久物理删除文档及其内容与索引——不可恢复，是回收站生命周期的终点。
 前置条件：文档必须已在回收站（先 doc trash）；后端要求 admin 角色，权限不足报 403。
 RiskDestructive：框架强制 --yes 才执行（或 --dry-run 预演）；要可恢复的删除请用 doc trash。`,
-		Example: "  tabtin doc permanent-delete doc_xxx --yes\n" +
-			"  tabtin doc permanent-delete doc_xxx --dry-run\n" +
-			"  tabtin doc permanent-delete doc_xxx --yes --format json",
+		Example: "  muse doc permanent-delete doc_xxx --yes\n" +
+			"  muse doc permanent-delete doc_xxx --dry-run\n" +
+			"  muse doc permanent-delete doc_xxx --yes --format json",
 		Layer: "L2", Risk: cmdutil.RiskDestructive, RiskDeclared: true,
 		Route:        cmdutil.RouteCliServer,
 		Method:       "DELETE",
@@ -1912,12 +1912,12 @@ func registerDocVersionCommands(parent *cobra.Command, f *cmdutil.Factory) {
 		Long: `管理文档的版本历史与命名版本（基于 V3 collab.VersionHistory）。
 
 子命令：
-  tabtin doc version list <document-id>                   列出版本历史
-  tabtin doc version preview <document-id> <history-id>   预览某版本 Markdown
-  tabtin doc version restore <document-id> <history-id>   恢复文档到某版本
-  tabtin doc version save <document-id> --name "里程碑"    把当前内容存为命名版本
-  tabtin doc version rename <document-id> <version-id> <name>  重命名命名版本
-  tabtin doc version rm <document-id> <version-id>        删除命名版本（软删）
+  muse doc version list <document-id>                   列出版本历史
+  muse doc version preview <document-id> <history-id>   预览某版本 Markdown
+  muse doc version restore <document-id> <history-id>   恢复文档到某版本
+  muse doc version save <document-id> --name "里程碑"    把当前内容存为命名版本
+  muse doc version rename <document-id> <version-id> <name>  重命名命名版本
+  muse doc version rm <document-id> <version-id>        删除命名版本（软删）
 
 history-id 与 version-id 是同一 id 空间（均为 list 返回的版本 id）。`,
 	}
@@ -1929,9 +1929,9 @@ history-id 与 version-id 是同一 id 空间（均为 list 返回的版本 id�
 返回每条记录的 id/is_named/name/is_snapshot/editor_type/created_at 等；其中 id
 可直接作为 doc version preview/restore/rename/rm 的 <history-id>/<version-id>（同一 id 空间）。
 默认返回 50 条，用 --limit/--offset 翻页；只读操作，不改文档。`,
-		Example: "  tabtin doc version list doc_xxx\n" +
-			"  tabtin doc version list doc_xxx --limit 100\n" +
-			"  tabtin doc version list doc_xxx --jq '.histories[] | select(.is_named) | .id'",
+		Example: "  muse doc version list doc_xxx\n" +
+			"  muse doc version list doc_xxx --limit 100\n" +
+			"  muse doc version list doc_xxx --jq '.histories[] | select(.is_named) | .id'",
 		Layer: "L2", Risk: cmdutil.RiskRead, RiskDeclared: true,
 		Route:        cmdutil.RouteCliServer,
 		Method:       "GET",
@@ -1964,9 +1964,9 @@ history-id 与 version-id 是同一 id 空间（均为 list 返回的版本 id�
 		Long: `解析指定版本的内容快照，返回该版本的 Markdown 文本供预览（不改当前文档）。
 <history-id> 取自 doc version list 返回的 id；对 Y.js binary 快照后端会即时转 Markdown。
 只读操作：先 preview 看清要不要回滚，再用 doc version restore 真正恢复。`,
-		Example: "  tabtin doc version preview doc_xxx ver_yyy\n" +
-			"  tabtin doc version preview doc_xxx ver_yyy --format json\n" +
-			"  tabtin doc version preview doc_xxx ver_yyy --jq .markdown",
+		Example: "  muse doc version preview doc_xxx ver_yyy\n" +
+			"  muse doc version preview doc_xxx ver_yyy --format json\n" +
+			"  muse doc version preview doc_xxx ver_yyy --jq .markdown",
 		Layer: "L2", Risk: cmdutil.RiskRead, RiskDeclared: true,
 		Route:        cmdutil.RouteCliServer,
 		Method:       "GET",
@@ -1989,9 +1989,9 @@ history-id 与 version-id 是同一 id 空间（均为 list 返回的版本 id�
 恢复是协同完备路径：与 collab 共享恢复锁、清理 pending DocUpdate、best-effort 同步
 collab-live、断开在线协作连接，避免在线用户用旧状态覆盖。<history-id> 取自 doc version list。
 推荐传 --base-version（从 doc read 的 latest_version 拿）做并发保护——别人同时改了会返回 409。`,
-		Example: "  tabtin doc version restore doc_xxx ver_yyy\n" +
-			"  tabtin doc version restore doc_xxx ver_yyy --base-version 12\n" +
-			"  tabtin doc version restore doc_xxx ver_yyy --dry-run",
+		Example: "  muse doc version restore doc_xxx ver_yyy\n" +
+			"  muse doc version restore doc_xxx ver_yyy --base-version 12\n" +
+			"  muse doc version restore doc_xxx ver_yyy --dry-run",
 		Layer: "L2", Risk: cmdutil.RiskWrite, RiskDeclared: true,
 		Route:        cmdutil.RouteCliServer,
 		Method:       "POST",
@@ -2011,7 +2011,7 @@ collab-live、断开在线协作连接，避免在线用户用旧状态覆盖。
 				return output.PrintErrorAndExit(output.ErrorEnvelope(
 					string(errcode.ValidationError),
 					"缺少 history-id 位置参数",
-					"示例：tabtin doc version restore <document-id> <history-id>（history-id 取自 doc version list）",
+					"示例：muse doc version restore <document-id> <history-id>（history-id 取自 doc version list）",
 					output.ExitValidation,
 				))
 			}
@@ -2046,9 +2046,9 @@ collab-live、断开在线协作连接，避免在线用户用旧状态覆盖。
 		Long: `把文档当前内容手动保存为一个命名版本（永久保留，不受 TTL/降采样回收）。
 --name 可选（不传则存为无名快照）；后端每文档命名版本上限 50 个，超出报 VALIDATION_ERROR。
 推荐传 --base-version（从 doc read 的 latest_version 拿）做并发保护——内容被改过会返回 409。`,
-		Example: "  tabtin doc version save doc_xxx --name \"v1 发布\"\n" +
-			"  tabtin doc version save doc_xxx --name \"评审稿\" --base-version 8\n" +
-			"  tabtin doc version save doc_xxx --dry-run",
+		Example: "  muse doc version save doc_xxx --name \"v1 发布\"\n" +
+			"  muse doc version save doc_xxx --name \"评审稿\" --base-version 8\n" +
+			"  muse doc version save doc_xxx --dry-run",
 		Layer: "L2", Risk: cmdutil.RiskWrite, RiskDeclared: true,
 		Route:        cmdutil.RouteCliServer,
 		Method:       "POST",
@@ -2088,9 +2088,9 @@ collab-live、断开在线协作连接，避免在线用户用旧状态覆盖。
 		Long: `修改一个命名版本的名称（仅命名版本可改；非命名快照会被后端拒绝）。
 <version-id> 与 list/preview/restore 的 history-id 是同一 id 空间（均取自 doc version list）。
 后端把 path 上的 version_id 当 history_id 解析；name 走 body，最长 200 字符。`,
-		Example: "  tabtin doc version rename doc_xxx ver_yyy \"正式发布 v2\"\n" +
-			"  tabtin doc version rename doc_xxx ver_yyy \"归档\" --format json\n" +
-			"  tabtin doc version rename doc_xxx ver_yyy \"评审通过\" --dry-run",
+		Example: "  muse doc version rename doc_xxx ver_yyy \"正式发布 v2\"\n" +
+			"  muse doc version rename doc_xxx ver_yyy \"归档\" --format json\n" +
+			"  muse doc version rename doc_xxx ver_yyy \"评审通过\" --dry-run",
 		Layer: "L2", Risk: cmdutil.RiskWrite, RiskDeclared: true,
 		Route:        cmdutil.RouteCliServer,
 		Method:       "PATCH",
@@ -2105,7 +2105,7 @@ collab-live、断开在线协作连接，避免在线用户用旧状态覆盖。
 				return output.PrintErrorAndExit(output.ErrorEnvelope(
 					string(errcode.ValidationError),
 					"缺少 name 位置参数",
-					"示例：tabtin doc version rename <document-id> <version-id> \"新版本名\"",
+					"示例：muse doc version rename <document-id> <version-id> \"新版本名\"",
 					output.ExitValidation,
 				))
 			}
@@ -2138,9 +2138,9 @@ collab-live、断开在线协作连接，避免在线用户用旧状态覆盖。
 		Long: `删除一个命名版本（后端是软删除：置 expired_at + is_named=False，不物理抹除 blob）。
 因为是软删可逆语义而非物理销毁，定级 RiskWrite（不强制 --yes）；<version-id> 取自 doc version list。
 仅命名版本可删；自动快照/历史点不受影响，删除后不再出现在 doc version list 的命名版本中。`,
-		Example: "  tabtin doc version rm doc_xxx ver_yyy\n" +
-			"  tabtin doc version rm doc_xxx ver_yyy --dry-run\n" +
-			"  tabtin doc version rm doc_xxx ver_yyy --format json",
+		Example: "  muse doc version rm doc_xxx ver_yyy\n" +
+			"  muse doc version rm doc_xxx ver_yyy --dry-run\n" +
+			"  muse doc version rm doc_xxx ver_yyy --format json",
 		Layer: "L2", Risk: cmdutil.RiskWrite, RiskDeclared: true,
 		Route:        cmdutil.RouteCliServer,
 		Method:       "DELETE",
@@ -2170,7 +2170,7 @@ collab-live、断开在线协作连接，避免在线用户用旧状态覆盖。
 //
 // 后端落在 apps/tabtin_django/apps/tabdoc/api_share.py（不是 api.py），URL 前缀
 // /api/tabdoc，故四个端点是 /api/tabdoc/documents/{document_id}/collaborators[/{user_id}]
-// （路由层 api_share.py:334/354/367/387；router 在 tabtin/urls_deferred.py:94 以 /tabdoc 挂载）。
+// （路由层 api_share.py:334/354/367/387；router 在 muse/urls_deferred.py:94 以 /tabdoc 挂载）。
 // 服务层 share_service.py 的 invite_collaborators / list_collaborators /
 // update_collaborator_permission / remove_collaborator 均非 stub（真实读写
 // DocumentPermission 表 + 通知去重），已对 5 层核验。
@@ -2198,10 +2198,10 @@ func registerDocCollaboratorCommands(parent *cobra.Command, f *cmdutil.Factory) 
 		Long: `管理文档的协作者（按 user-id 授予 viewer/editor/admin 权限）。
 
 子命令：
-  tabtin doc collaborator list <document-id>                          列出协作者（含 owner）
-  tabtin doc collaborator invite <document-id> --user-ids <uid> --role editor   批量邀请
-  tabtin doc collaborator update <document-id> <user-id> --role admin    改协作者权限
-  tabtin doc collaborator rm <document-id> <user-id>                  移除协作者（软删，可重新邀请）
+  muse doc collaborator list <document-id>                          列出协作者（含 owner）
+  muse doc collaborator invite <document-id> --user-ids <uid> --role editor   批量邀请
+  muse doc collaborator update <document-id> <user-id> --role admin    改协作者权限
+  muse doc collaborator rm <document-id> <user-id>                  移除协作者（软删，可重新邀请）
 
 邀请/改权限/移除需要 owner 或 admin 角色；list 需要 viewer+。被邀请人必须是同 organization 成员，
 否则在 invite 返回的 skipped 里标 not_in_organization。owner 不可被 update/rm。`,
@@ -2214,9 +2214,9 @@ func registerDocCollaboratorCommands(parent *cobra.Command, f *cmdutil.Factory) 
 返回 {owner, collaborators:[...]}——owner 单独一项，collaborators 每条含 user_id/nickname/
 email（后端已脱敏）/permission/created_at；其中 user_id 可直接喂给 collaborator update/rm。
 只读操作，需 viewer 及以上权限（无权限返回 403 PERMISSION_DENIED）。`,
-		Example: "  tabtin doc collaborator list doc_xxx\n" +
-			"  tabtin doc collaborator list doc_xxx --format json\n" +
-			"  tabtin doc collaborator list doc_xxx --jq '.collaborators[] | {user_id, permission}'",
+		Example: "  muse doc collaborator list doc_xxx\n" +
+			"  muse doc collaborator list doc_xxx --format json\n" +
+			"  muse doc collaborator list doc_xxx --jq '.collaborators[] | {user_id, permission}'",
 		Layer: "L2", Risk: cmdutil.RiskRead, RiskDeclared: true,
 		Route:        cmdutil.RouteCliServer,
 		Method:       "GET",
@@ -2244,9 +2244,9 @@ email（后端已脱敏）/permission/created_at；其中 user_id 可直接喂�
 --role 是 viewer/editor/admin 之一，所有被邀请人授同一权限。需 owner 或 admin 角色。
 幂等：已是该权限的沉默跳过；被邀请人须是同 organization 成员，否则在返回 skipped 标 not_in_organization
 （其余原因：self 邀请自己 / is_owner 邀请 owner）。返回 {notified, skipped:[{user_id, reason}]}。`,
-		Example: "  tabtin doc collaborator invite doc_xxx --user-ids usr_aaa --role editor\n" +
-			"  tabtin doc collaborator invite doc_xxx --user-ids usr_aaa --user-ids usr_bbb --role viewer\n" +
-			"  tabtin doc collaborator invite doc_xxx --user-ids usr_aaa --role admin --dry-run",
+		Example: "  muse doc collaborator invite doc_xxx --user-ids usr_aaa --role editor\n" +
+			"  muse doc collaborator invite doc_xxx --user-ids usr_aaa --user-ids usr_bbb --role viewer\n" +
+			"  muse doc collaborator invite doc_xxx --user-ids usr_aaa --role admin --dry-run",
 		Layer: "L2", Risk: cmdutil.RiskWrite, RiskDeclared: true,
 		Route:        cmdutil.RouteCliServer,
 		Method:       "POST",
@@ -2296,9 +2296,9 @@ email（后端已脱敏）/permission/created_at；其中 user_id 可直接喂�
 <user-id> 取自 collaborator list 返回的 user_id；--role 是 viewer/editor/admin 之一。需 owner 或 admin 角色。
 owner 的权限不可改（返回 CANNOT_MODIFY_OWNER）；目标不是现有协作者返回 COLLABORATOR_NOT_FOUND；
 权限与现状相同则沉默不发通知。返回更新后的该协作者记录。`,
-		Example: "  tabtin doc collaborator update doc_xxx usr_aaa --role admin\n" +
-			"  tabtin doc collaborator update doc_xxx usr_aaa --role viewer --format json\n" +
-			"  tabtin doc collaborator update doc_xxx usr_aaa --role editor --dry-run",
+		Example: "  muse doc collaborator update doc_xxx usr_aaa --role admin\n" +
+			"  muse doc collaborator update doc_xxx usr_aaa --role viewer --format json\n" +
+			"  muse doc collaborator update doc_xxx usr_aaa --role editor --dry-run",
 		Layer: "L2", Risk: cmdutil.RiskWrite, RiskDeclared: true,
 		Route:        cmdutil.RouteCliServer,
 		Method:       "PATCH",
@@ -2345,9 +2345,9 @@ owner 的权限不可改（返回 CANNOT_MODIFY_OWNER）；目标不是现有协
 后端是软删（置 DocumentPermission.is_active=False），不物理删除——之后用 collaborator invite
 可重新激活旧记录，故定级 RiskWrite（不强制 --yes），不是 RiskDestructive。
 owner 不可移除（返回 CANNOT_REMOVE_OWNER）；目标不是现有协作者返回 COLLABORATOR_NOT_FOUND。需 owner 或 admin 角色。`,
-		Example: "  tabtin doc collaborator rm doc_xxx usr_aaa\n" +
-			"  tabtin doc collaborator rm doc_xxx usr_aaa --dry-run\n" +
-			"  tabtin doc collaborator rm doc_xxx usr_aaa --format json",
+		Example: "  muse doc collaborator rm doc_xxx usr_aaa\n" +
+			"  muse doc collaborator rm doc_xxx usr_aaa --dry-run\n" +
+			"  muse doc collaborator rm doc_xxx usr_aaa --format json",
 		Layer: "L2", Risk: cmdutil.RiskWrite, RiskDeclared: true,
 		Route:        cmdutil.RouteCliServer,
 		Method:       "DELETE",
@@ -2377,7 +2377,7 @@ owner 不可移除（返回 CANNOT_REMOVE_OWNER）；目标不是现有协作者
 //
 // 后端落在 apps/tabtin_django/apps/tabdoc/api_share.py（与协作者同一 router，URL 前缀
 // /api/tabdoc，故四个端点是 /api/tabdoc/documents/{document_id}/share[/refresh]；router 在
-// tabtin/urls_deferred.py:94 以 /tabdoc 挂载）。四个端点逐个对 5 层核验、均非 stub：
+// muse/urls_deferred.py:94 以 /tabdoc 挂载）。四个端点逐个对 5 层核验、均非 stub：
 //   - set     POST   /share         （api_share.py:143 create_share）→ create_or_update_share
 //     （share_service.py:56，真实 upsert DocumentShare 表）
 //   - get     GET    /share         （api_share.py:182 get_share）→ get_active_share
@@ -2435,11 +2435,11 @@ func registerDocShareCommands(parent *cobra.Command, f *cmdutil.Factory) {
   organization  组织限定：仅对应 organization 的成员登录后可访问；目标组织由全局 --organization-id 指定
 
 子命令：
-  tabtin doc share set <document-id> --share-type organization         开/改分享（create-or-update）
-  tabtin doc share set <document-id> --share-type public --acknowledge-public-exposure
-  tabtin doc share get <document-id>                                   查看当前有效分享
-  tabtin doc share off <document-id>                                   关闭当前有效分享（软删，可重开）
-  tabtin doc share refresh <document-id>                               轮换当前有效分享短链
+  muse doc share set <document-id> --share-type organization         开/改分享（create-or-update）
+  muse doc share set <document-id> --share-type public --acknowledge-public-exposure
+  muse doc share get <document-id>                                   查看当前有效分享
+  muse doc share off <document-id>                                   关闭当前有效分享（软删，可重开）
+  muse doc share refresh <document-id>                               轮换当前有效分享短链
 
 安全提示：public 分享 = 免登录、任何拿到链接者可访问；首次扩到 public 须加
 --acknowledge-public-exposure，否则后端 409。敏感文档优先 organization，或对 public
@@ -2479,13 +2479,13 @@ func registerDocShareCommands(parent *cobra.Command, f *cmdutil.Factory) {
 
 关于 organization 目标组织：CLI **不提供** --organization-id 命令级 flag（它是全局 persistent flag，
 命令级会撞名）。要建 organization 分享，用全局 --organization-id 指定目标组织，例如：
-  tabtin doc share set doc_xxx --share-type organization --organization-id wt_yyy`,
-		Example: "  tabtin doc share set doc_xxx --share-type organization\n" +
-			"  tabtin doc share set doc_xxx --share-type public --acknowledge-public-exposure\n" +
-			"  tabtin doc share set doc_xxx --share-type public --acknowledge-public-exposure --password s3cret --expire-hours 24\n" +
-			"  tabtin doc share set doc_xxx --share-type public --acknowledge-public-exposure --permission view --allow-download=false\n" +
-			"  tabtin doc share set doc_xxx --share-type organization --organization-id wt_yyy --permission edit\n" +
-			"  tabtin doc share set doc_xxx --share-type public --acknowledge-public-exposure --dry-run --format json",
+  muse doc share set doc_xxx --share-type organization --organization-id wt_yyy`,
+		Example: "  muse doc share set doc_xxx --share-type organization\n" +
+			"  muse doc share set doc_xxx --share-type public --acknowledge-public-exposure\n" +
+			"  muse doc share set doc_xxx --share-type public --acknowledge-public-exposure --password s3cret --expire-hours 24\n" +
+			"  muse doc share set doc_xxx --share-type public --acknowledge-public-exposure --permission view --allow-download=false\n" +
+			"  muse doc share set doc_xxx --share-type organization --organization-id wt_yyy --permission edit\n" +
+			"  muse doc share set doc_xxx --share-type public --acknowledge-public-exposure --dry-run --format json",
 		Layer: "L2", Risk: cmdutil.RiskWrite, RiskDeclared: true,
 		Route:        cmdutil.RouteCliServer,
 		Method:       "POST",
@@ -2563,9 +2563,9 @@ func registerDocShareCommands(parent *cobra.Command, f *cmdutil.Factory) {
 也可显式传 --share-type public|organization 查询指定类型。
 未开启分享时返回 {share: null, enabled: false}；已开启返回分享详情（share_id 短链 / 权限 /
 是否有密码 / 过期时间 / 下载·复制开关 / 访问次数等）。只读操作，不改分享状态。`,
-		Example: "  tabtin doc share get doc_xxx\n" +
-			"  tabtin doc share get doc_xxx --share-type organization\n" +
-			"  tabtin doc share get doc_xxx --format json --jq .share.share_id",
+		Example: "  muse doc share get doc_xxx\n" +
+			"  muse doc share get doc_xxx --share-type organization\n" +
+			"  muse doc share get doc_xxx --format json --jq .share.share_id",
 		Layer: "L2", Risk: cmdutil.RiskRead, RiskDeclared: true,
 		Route:        cmdutil.RouteCliServer,
 		Method:       "GET",
@@ -2605,9 +2605,9 @@ func registerDocShareCommands(parent *cobra.Command, f *cmdutil.Factory) {
 可重新开启分享。故定级 RiskWrite（不强制 --yes），不是 RiskDestructive。
 
 省略 --share-type 时关闭当前有效分享；也可显式传 public|organization。`,
-		Example: "  tabtin doc share off doc_xxx\n" +
-			"  tabtin doc share off doc_xxx --share-type organization\n" +
-			"  tabtin doc share off doc_xxx --dry-run --format json",
+		Example: "  muse doc share off doc_xxx\n" +
+			"  muse doc share off doc_xxx --share-type organization\n" +
+			"  muse doc share off doc_xxx --dry-run --format json",
 		Layer: "L2", Risk: cmdutil.RiskWrite, RiskDeclared: true,
 		Route:        cmdutil.RouteCliServer,
 		Method:       "DELETE",
@@ -2649,9 +2649,9 @@ func registerDocShareCommands(parent *cobra.Command, f *cmdutil.Factory) {
 无生效分享时返回 active_share_not_found。
 
 省略 --share-type 时轮换当前有效分享；也可显式传 public|organization。`,
-		Example: "  tabtin doc share refresh doc_xxx\n" +
-			"  tabtin doc share refresh doc_xxx --share-type organization\n" +
-			"  tabtin doc share refresh doc_xxx --format json --jq .share.share_id",
+		Example: "  muse doc share refresh doc_xxx\n" +
+			"  muse doc share refresh doc_xxx --share-type organization\n" +
+			"  muse doc share refresh doc_xxx --format json --jq .share.share_id",
 		Layer: "L2", Risk: cmdutil.RiskWrite, RiskDeclared: true,
 		Route:        cmdutil.RouteCliServer,
 		Method:       "POST",
@@ -2705,7 +2705,7 @@ func registerDocShareCommands(parent *cobra.Command, f *cmdutil.Factory) {
 //
 // 关键：`/import/file` **不是二进制文件直传 / multipart**——后端 schema
 // DocumentImportFileRequest（schemas.py:105）收的是 **file_record_id**（一个已存在的 OSS
-// FileRecord id，会校验归属当前 organization 防 IDOR）。本地文件须**先**用 `tabtin oss upload`
+// FileRecord id，会校验归属当前 organization 防 IDOR）。本地文件须**先**用 `muse oss upload`
 // 上传拿到 file_record_id，再传给本命令。故 file 子命令用 `--file-record-id`（opaque
 // FlagString，-id 后缀自动 opt-out 输入抽象），**不用 FlagFile / 也无需框架 multipart 能力**。
 func registerDocImportCommands(parent *cobra.Command, f *cmdutil.Factory) {
@@ -2717,13 +2717,13 @@ func registerDocImportCommands(parent *cobra.Command, f *cmdutil.Factory) {
 		Long: `把外部内容转成 TabDoc 草稿（ProseMirror pm_json + markdown），供随后落库。
 
 子命令：
-  tabtin doc import markdown --markdown @./draft.md       Markdown 转草稿（同步）
-  tabtin doc import file --file-record-id <fid>           PDF/Word → 异步 Import Job（202）
-  tabtin doc import job status|result|retry|cancel        异步 job 状态链
+  muse doc import markdown --markdown @./draft.md       Markdown 转草稿（同步）
+  muse doc import file --file-record-id <fid>           PDF/Word → 异步 Import Job（202）
+  muse doc import job status|result|retry|cancel        异步 job 状态链
 
 重要：导入只做"转换"，**不直接创建文档**。Markdown 同步返回草稿；file 多为 202 job，
 需 doc import job status/result poll 后再用 doc create / save-content 落库。
-file 子命令收的是 file_record_id（OSS 文件引用），本地文件请先 tabtin oss upload 取得。`,
+file 子命令收的是 file_record_id（OSS 文件引用），本地文件请先 muse oss upload 取得。`,
 	}
 
 	// Layer: L2
@@ -2733,9 +2733,9 @@ file 子命令收的是 file_record_id（OSS 文件引用），本地文件请�
 返回 {pm_json, markdown, plaintext}——markdown→ProseMirror pm_json 的转换结果，**不落库**。
 --markdown 默认支持 @文件 / -(stdin) / 直传字符串（FlagString 输入抽象），正合导入文件内容。
 需当前 Space 的 editor 角色；上限 5MB。拿到 pm_json 后用 doc create / doc save-content 落库。`,
-		Example: "  tabtin doc import markdown --markdown @./draft.md\n" +
-			"  cat notes.md | tabtin doc import markdown --markdown -\n" +
-			"  tabtin doc import markdown --markdown '# 短标题' --jq .markdown",
+		Example: "  muse doc import markdown --markdown @./draft.md\n" +
+			"  cat notes.md | muse doc import markdown --markdown -\n" +
+			"  muse doc import markdown --markdown '# 短标题' --jq .markdown",
 		Layer: "L2", Risk: cmdutil.RiskWrite, RiskDeclared: true,
 		Route:        cmdutil.RouteCliServer,
 		Method:       "POST",
@@ -2780,9 +2780,9 @@ file 子命令收的是 file_record_id（OSS 文件引用），本地文件请�
 后端内部转 create_import_job；响应含 data.job（id/status/...），**不直接返回草稿**。
 用 doc import job status 轮询，就绪后 doc import job result 取 markdown/pm_json，再
 doc create / save-content 落库。--file-record-id 须属当前 organization。`,
-		Example: "  tabtin doc import file --file-record-id frec_xxx\n" +
-			"  tabtin doc import file --file-record-id frec_xxx --jq '.job.id'\n" +
-			"  tabtin doc import file --file-record-id frec_xxx --dry-run --format json",
+		Example: "  muse doc import file --file-record-id frec_xxx\n" +
+			"  muse doc import file --file-record-id frec_xxx --jq '.job.id'\n" +
+			"  muse doc import file --file-record-id frec_xxx --dry-run --format json",
 		Layer: "L2", Risk: cmdutil.RiskWrite, RiskDeclared: true,
 		Route:        cmdutil.RouteCliServer,
 		Method:       "POST",
@@ -2792,7 +2792,7 @@ doc create / save-content 落库。--file-record-id 须属当前 organization。
 		Flags: []cmdutil.FlagDef{
 			// file_record_id 是 OSS 文件引用（opaque id），不是本地路径——故不用 FlagFile。
 			// -id 后缀 → FlagString 自动 opt-out 输入抽象（不解析 @file，help 不加提示）。
-			{Name: "file-record-id", Type: cmdutil.FlagString, Required: true, Desc: "OSS 文件引用 ID（先用 tabtin oss upload 上传取得）"},
+			{Name: "file-record-id", Type: cmdutil.FlagString, Required: true, Desc: "OSS 文件引用 ID（先用 muse oss upload 上传取得）"},
 		},
 		OutputSchema: []cmdutil.FieldSchema{
 			{Key: "job.id", Label: "Job", Type: "id"},
@@ -2862,14 +2862,14 @@ func requireTransport(f *cmdutil.Factory, cmdName string, allowDjango bool) (tra
 	tr, err := f.Transport()
 	if err != nil {
 		return nil, output.PrintErrorAndExit(output.ErrorEnvelope(
-			string(errcode.Unavailable), err.Error(), "tabtin daemon start", output.ExitServiceUnavail,
+			string(errcode.Unavailable), err.Error(), "muse daemon start", output.ExitServiceUnavail,
 		))
 	}
 	if tr.Type() == transport.TypeDjango && !allowDjango {
 		return nil, output.PrintErrorAndExit(output.ErrorEnvelope(
 			string(errcode.Unavailable),
-			fmt.Sprintf("'%s' 需要 TabTin 桌面端或 Daemon 运行（local-only）。当前为 API 直连模式。", cmdName),
-			"tabtin daemon start",
+			fmt.Sprintf("'%s' 需要 Muse 桌面端或 Daemon 运行（local-only）。当前为 API 直连模式。", cmdName),
+			"muse daemon start",
 			output.ExitServiceUnavail,
 		))
 	}

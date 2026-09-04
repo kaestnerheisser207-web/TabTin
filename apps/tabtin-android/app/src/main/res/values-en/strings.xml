@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">TabTin</string>
+    <string name="app_name">Muse</string>
 
     <string name="common_close">Close</string>
     <string name="common_back">Back</string>
@@ -468,7 +468,7 @@
     <string name="security_server_auto">Server Auto</string>
     <string name="security_server_auto_desc">Security policy managed automatically by the server</string>
     <string name="security_terminal_mode">Terminal Mode</string>
-    <string name="security_term_tabtin_only">TabTin Only</string>
+    <string name="security_term_tabtin_only">Muse Only</string>
     <string name="security_term_tabtin_only_desc">Workspace can only use the built-in terminal</string>
     <string name="security_term_sandboxed">Sandboxed</string>
     <string name="security_term_sandboxed_desc">Commands run in an isolated sandbox</string>
@@ -580,7 +580,7 @@
     <!-- Work Type -->
     <string name="work_type_working_dir_label">Working Directory</string>
     <string name="work_type_working_dir_hint">The working directory is set on desktop / device. On mobile you can only change its type.</string>
-    <string name="work_type_no_working_dir">No working directory yet. Set one for this Workspace in the desktop TabTin app (its Workspace settings) first, then you can choose its type here.</string>
+    <string name="work_type_no_working_dir">No working directory yet. Set one for this Workspace in the desktop Muse app (its Workspace settings) first, then you can choose its type here.</string>
     <string name="work_type_section_label">Directory Type</string>
     <string name="work_type_section_hint">Sets how the workspace works by default for this kind of material. It does not change the permission boundaries under Security.</string>
     <string name="work_type_pending">To be set</string>

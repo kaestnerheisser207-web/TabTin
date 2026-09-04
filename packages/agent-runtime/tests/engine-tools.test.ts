@@ -670,7 +670,7 @@ describe('applyLlmStripKeys before enforceToolOutputBudget ', () => {
         makeToolUseBlock(
           'run_terminal_command',
           'tu-shell-fetch',
-          { command: 'tabtin fetch https://example.com' },
+          { command: 'muse fetch https://example.com' },
         ),
       ],
       registry,

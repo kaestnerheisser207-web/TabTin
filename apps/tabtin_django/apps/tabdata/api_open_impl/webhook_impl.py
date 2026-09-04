@@ -335,7 +335,7 @@ def test_webhook_impl(request: HttpRequest, webhook_id: UUID):
         event_type='webhook.test',
         space_id=str(webhook.space_id),
         table_id=str(webhook.table_id) if webhook.table_id else None,
-        data={'message': 'This is a test event from TabTin'},
+        data={'message': 'This is a test event from Muse'},
     )
 
     # 同步发送测试事件（不走 Celery）

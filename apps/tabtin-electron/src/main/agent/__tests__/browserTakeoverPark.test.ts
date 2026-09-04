@@ -84,7 +84,7 @@ vi.mock('../../app-identity', () => ({
   resolveRuntimeProfile: () => 'development',
   resolveIsDevRuntime: () => true,
   resolveDevInstanceId: () => undefined,
-  resolveDefaultWorkspaceDirectoryName: () => 'TabTin Dev',
+  resolveDefaultWorkspaceDirectoryName: () => 'Muse Dev',
 }))
 
 vi.mock('../../window-manager.js', () => ({

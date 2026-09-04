@@ -11,9 +11,9 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/TabTin/tabtin-cli/internal/cmdutil"
-	"github.com/TabTin/tabtin-cli/internal/errcode"
-	"github.com/TabTin/tabtin-cli/internal/output"
+	"github.com/Muse/muse-cli/internal/cmdutil"
+	"github.com/Muse/muse-cli/internal/errcode"
+	"github.com/Muse/muse-cli/internal/output"
 )
 
 func registerAttachmentCommands(parent *cobra.Command, f *cmdutil.Factory) {
@@ -25,9 +25,9 @@ func registerAttachmentCommands(parent *cobra.Command, f *cmdutil.Factory) {
 附件清单，供 Agent 决定要 reuse 到哪、或要删哪个引用。
 常见陷阱：list 的记录级视角只反映"引用"，同一文件可能被多条记录 reuse，
 删除某条记录的引用不影响其它记录仍持有的引用。`,
-			Example: "  tabtin table attachment list --record-id <record_id>\n" +
-				"  tabtin table attachment list --record-id <record_id> --format json\n" +
-				"  tabtin table attachment list --record-id <record_id> --jq '.[].name'",
+			Example: "  muse table attachment list --record-id <record_id>\n" +
+				"  muse table attachment list --record-id <record_id> --format json\n" +
+				"  muse table attachment list --record-id <record_id> --jq '.[].name'",
 			Route: cmdutil.RouteCliServer, Method: "POST", Path: "/table/attachment-list",
 			Layer: "L2", Risk: cmdutil.RiskRead, RiskDeclared: true,
 			Flags:     []cmdutil.FlagDef{{Name: "record-id", Type: cmdutil.FlagString, Required: true, Desc: "记录 ID"}},
@@ -43,9 +43,9 @@ func registerAttachmentCommands(parent *cobra.Command, f *cmdutil.Factory) {
 常见陷阱：--file 路径必须在 $HOME 或 /tmp 下（cli-server 路径白名单，symlink 会被拒），
 单文件上限 100MB，超限暂无 CLI 侧分片封装；field-id 必须是 attachment
 类型字段，其它类型调用会被拒绝。`,
-			Example: "  tabtin table attachment upload --file ./report.pdf --table-id <table_id> --field-id <field_id> --record-id <record_id>\n" +
-				"  tabtin table attachment upload --file /tmp/chart.png --table-id <table_id> --field-id <field_id> --record-id <record_id> --format json\n" +
-				"  tabtin table attachment upload --file ./report.pdf --table-id <table_id> --field-id <field_id> --record-id <record_id> --dry-run",
+			Example: "  muse table attachment upload --file ./report.pdf --table-id <table_id> --field-id <field_id> --record-id <record_id>\n" +
+				"  muse table attachment upload --file /tmp/chart.png --table-id <table_id> --field-id <field_id> --record-id <record_id> --format json\n" +
+				"  muse table attachment upload --file ./report.pdf --table-id <table_id> --field-id <field_id> --record-id <record_id> --dry-run",
 			Route: cmdutil.RouteCliServer, Method: "POST", Path: "/table/attachment-upload",
 			Layer: "L2", Risk: cmdutil.RiskWrite, RiskDeclared: true,
 			Flags: []cmdutil.FlagDef{
@@ -74,9 +74,9 @@ func registerAttachmentCommands(parent *cobra.Command, f *cmdutil.Factory) {
 本命令只新建引用关系，物理文件只存一份。
 常见陷阱：field-id 必须是 attachment 类型字段，其它类型调用会被拒绝；
 reuse 是追加引用，不会清空该字段已有的其它附件引用。`,
-			Example: "  tabtin table attachment reuse --file-id <file_id> --table-id <table_id> --field-id <field_id> --record-id <record_id>\n" +
-				"  tabtin table attachment reuse --file-id <file_id> --table-id <table_id> --field-id <field_id> --record-id <rid2>\n" +
-				"  tabtin table attachment reuse --file-id <file_id> --table-id <table_id> --field-id <field_id> --record-id <rid> --dry-run",
+			Example: "  muse table attachment reuse --file-id <file_id> --table-id <table_id> --field-id <field_id> --record-id <record_id>\n" +
+				"  muse table attachment reuse --file-id <file_id> --table-id <table_id> --field-id <field_id> --record-id <rid2>\n" +
+				"  muse table attachment reuse --file-id <file_id> --table-id <table_id> --field-id <field_id> --record-id <rid> --dry-run",
 			Route: cmdutil.RouteCliServer, Method: "POST", Path: "/table/attachment-reuse",
 			Layer: "L2", Risk: cmdutil.RiskWrite, RiskDeclared: true,
 			Flags: []cmdutil.FlagDef{
@@ -104,9 +104,9 @@ reuse 是追加引用，不会清空该字段已有的其它附件引用。`,
 对同一文件的 reuse；--delete-file 会连底层文件一起删，影响所有引用者。
 常见陷阱：--delete-file 是破坏性操作，若该文件被多条记录 reuse，其它记录
 的附件会跟着失效——删前建议先确认引用范围。`,
-			Example: "  tabtin table attachment delete --reference-id <reference_id> --yes\n" +
-				"  tabtin table attachment delete --reference-id <reference_id> --delete-file --yes\n" +
-				"  tabtin table attachment delete --reference-id <reference_id> --dry-run",
+			Example: "  muse table attachment delete --reference-id <reference_id> --yes\n" +
+				"  muse table attachment delete --reference-id <reference_id> --delete-file --yes\n" +
+				"  muse table attachment delete --reference-id <reference_id> --dry-run",
 			Route: cmdutil.RouteCliServer, Method: "POST", Path: "/table/attachment-delete",
 			Layer: "L2", Risk: cmdutil.RiskDestructive, RiskDeclared: true,
 			Flags: []cmdutil.FlagDef{
@@ -138,9 +138,9 @@ func registerWebhookCommands(parent *cobra.Command, f *cmdutil.Factory) {
 上下文可见的全部 Webhook（跨表）。
 常见陷阱：list 不返回 secret 明文（安全考虑），需要验证签名逻辑请参考
 创建时记录的 secret，而不是从 list 结果里读。`,
-			Example: "  tabtin table webhook list\n" +
-				"  tabtin table webhook list --table-id <table_id>\n" +
-				"  tabtin table webhook list --format json",
+			Example: "  muse table webhook list\n" +
+				"  muse table webhook list --table-id <table_id>\n" +
+				"  muse table webhook list --format json",
 			Route: cmdutil.RouteCliServer, Method: "POST", Path: "/table/webhook-list",
 			Layer: "L2", Risk: cmdutil.RiskRead, RiskDeclared: true,
 			Flags:     []cmdutil.FlagDef{{Name: "table-id", Type: cmdutil.FlagString, Desc: "按表筛选"}},
@@ -153,9 +153,9 @@ func registerWebhookCommands(parent *cobra.Command, f *cmdutil.Factory) {
 表示监听所有表，范围更大需谨慎；secret 用于回调签名校验，建议总是设置。
 常见陷阱：url 必须是外部可达地址，本地/内网地址在生产环境会因网络策略
 回调失败；max-retries 只控制失败重试次数，不代表消息一定送达（最终仍可能丢弃）。`,
-			Example: "  tabtin table webhook create --url https://example.com/webhook --events '[\"record.created\",\"record.updated\"]'\n" +
-				"  tabtin table webhook create --url https://example.com/webhook --events '[\"record.created\"]' --table-id <table_id>\n" +
-				"  tabtin table webhook create --url https://example.com/webhook --events '[\"record.created\"]' --dry-run",
+			Example: "  muse table webhook create --url https://example.com/webhook --events '[\"record.created\",\"record.updated\"]'\n" +
+				"  muse table webhook create --url https://example.com/webhook --events '[\"record.created\"]' --table-id <table_id>\n" +
+				"  muse table webhook create --url https://example.com/webhook --events '[\"record.created\"]' --dry-run",
 			Route: cmdutil.RouteCliServer, Method: "POST", Path: "/table/webhook-create",
 			Layer: "L2", Risk: cmdutil.RiskWrite, RiskDeclared: true,
 			Flags: []cmdutil.FlagDef{
@@ -182,9 +182,9 @@ func registerWebhookCommands(parent *cobra.Command, f *cmdutil.Factory) {
 增量更新，未传字段保持原值。
 常见陷阱：关闭（--active=false）不会删除 Webhook 配置，仍占用列表位置；
 换 secret 后旧签名会立即失效，接收端要同步更新验签逻辑。`,
-			Example: "  tabtin table webhook update --webhook-id <webhook_id> --url https://example.com/new-webhook\n" +
-				"  tabtin table webhook update --webhook-id <webhook_id> --events '[\"record.deleted\"]' --active\n" +
-				"  tabtin table webhook update --webhook-id <webhook_id> --active=false --dry-run",
+			Example: "  muse table webhook update --webhook-id <webhook_id> --url https://example.com/new-webhook\n" +
+				"  muse table webhook update --webhook-id <webhook_id> --events '[\"record.deleted\"]' --active\n" +
+				"  muse table webhook update --webhook-id <webhook_id> --active=false --dry-run",
 			Route: cmdutil.RouteCliServer, Method: "POST", Path: "/table/webhook-update",
 			Layer: "L2", Risk: cmdutil.RiskWrite, RiskDeclared: true,
 			Flags: []cmdutil.FlagDef{
@@ -211,9 +211,9 @@ func registerWebhookCommands(parent *cobra.Command, f *cmdutil.Factory) {
 删除没有回收站。
 常见陷阱：删除不会通知回调地址，接收端需要自行感知回调停止；误删只能
 重新 create，新 Webhook 的 ID/secret 都会不同。`,
-			Example: "  tabtin table webhook delete --webhook-id <webhook_id> --yes\n" +
-				"  tabtin table webhook delete --webhook-id <webhook_id> --dry-run\n" +
-				"  tabtin table webhook list  # 删前先确认 webhook-id",
+			Example: "  muse table webhook delete --webhook-id <webhook_id> --yes\n" +
+				"  muse table webhook delete --webhook-id <webhook_id> --dry-run\n" +
+				"  muse table webhook list  # 删前先确认 webhook-id",
 			Route: cmdutil.RouteCliServer, Method: "POST", Path: "/table/webhook-delete",
 			Layer: "L2", Risk: cmdutil.RiskDestructive, RiskDeclared: true,
 			Flags:     []cmdutil.FlagDef{{Name: "webhook-id", Type: cmdutil.FlagString, Required: true, Desc: "Webhook ID"}},
@@ -233,9 +233,9 @@ func registerWebhookCommands(parent *cobra.Command, f *cmdutil.Factory) {
 主动触发一次验证，不用等真实业务事件发生。
 常见陷阱：test 会真实发起一次 HTTP 请求到外部 url，接收端会看到一条
 "test"类型事件，不代表真实业务事件；频繁调用可能触发对方限流。`,
-			Example: "  tabtin table webhook test --webhook-id <webhook_id>\n" +
-				"  tabtin table webhook test --webhook-id <webhook_id> --format json\n" +
-				"  tabtin table webhook test --webhook-id <webhook_id> --jq '.success'",
+			Example: "  muse table webhook test --webhook-id <webhook_id>\n" +
+				"  muse table webhook test --webhook-id <webhook_id> --format json\n" +
+				"  muse table webhook test --webhook-id <webhook_id> --jq '.success'",
 			Route: cmdutil.RouteCliServer, Method: "POST", Path: "/table/webhook-test",
 			Layer: "L2", Risk: cmdutil.RiskRead, RiskDeclared: true,
 			Flags:     []cmdutil.FlagDef{{Name: "webhook-id", Type: cmdutil.FlagString, Required: true, Desc: "Webhook ID"}},
@@ -256,9 +256,9 @@ func registerVersionCommands(parent *cobra.Command, f *cmdutil.Factory) {
 history 记录更适合做"上线前/大改前"的关键节点标记。
 常见陷阱：命名版本本身不是可恢复的快照实体——它是标记，恢复到某个历史
 点仍要走 history restore，version 组只负责标记的增删改查。`,
-			Example: "  tabtin table version list --table-id <table_id>\n" +
-				"  tabtin table version list --table-id <table_id> --limit 20\n" +
-				"  tabtin table version list --table-id <table_id> --format json",
+			Example: "  muse table version list --table-id <table_id>\n" +
+				"  muse table version list --table-id <table_id> --limit 20\n" +
+				"  muse table version list --table-id <table_id> --format json",
 			Route: cmdutil.RouteCliServer, Method: "POST", Path: "/table/named-versions",
 			Layer: "L2", Risk: cmdutil.RiskRead, RiskDeclared: true,
 			Flags: []cmdutil.FlagDef{
@@ -274,9 +274,9 @@ history 记录更适合做"上线前/大改前"的关键节点标记。
 "我要回到哪一刻"。
 常见陷阱：create 不会冻结/复制数据，它只是给 history 时间线上的当前点起
 了个名字；数据仍在正常变化，恢复时用的是对应时间点的 history 记录。`,
-			Example: "  tabtin table version create --table-id <table_id> --name \"上线前快照\"\n" +
-				"  tabtin table version create --table-id <table_id> --name \"月末结算点\"\n" +
-				"  tabtin table version create --table-id <table_id> --name test --dry-run",
+			Example: "  muse table version create --table-id <table_id> --name \"上线前快照\"\n" +
+				"  muse table version create --table-id <table_id> --name \"月末结算点\"\n" +
+				"  muse table version create --table-id <table_id> --name test --dry-run",
 			Route: cmdutil.RouteCliServer, Method: "POST", Path: "/table/create-named-version",
 			Layer: "L2", Risk: cmdutil.RiskWrite, RiskDeclared: true,
 			Flags: []cmdutil.FlagDef{
@@ -300,9 +300,9 @@ history 记录更适合做"上线前/大改前"的关键节点标记。
 适合"当时起名不准确，后来想改"的场景。
 常见陷阱：version-id 必须是已存在的命名版本 ID，不是随意时间戳；
 重命名不会创建新版本，是原地改名。`,
-			Example: "  tabtin table version rename --table-id <table_id> --version-id <version_id> --name \"新版本名\"\n" +
-				"  tabtin table version rename --table-id <table_id> --version-id <version_id> --name \"v2-final\"\n" +
-				"  tabtin table version rename --table-id <table_id> --version-id <version_id> --name test --dry-run",
+			Example: "  muse table version rename --table-id <table_id> --version-id <version_id> --name \"新版本名\"\n" +
+				"  muse table version rename --table-id <table_id> --version-id <version_id> --name \"v2-final\"\n" +
+				"  muse table version rename --table-id <table_id> --version-id <version_id> --name test --dry-run",
 			Route: cmdutil.RouteCliServer, Method: "POST", Path: "/table/rename-named-version",
 			Layer: "L2", Risk: cmdutil.RiskWrite, RiskDeclared: true,
 			Flags: []cmdutil.FlagDef{
@@ -327,9 +327,9 @@ history 记录更适合做"上线前/大改前"的关键节点标记。
 设计理由：命名版本是轻量标记，用不上时清理标签列表，不牵动实际数据。
 常见陷阱：删除标签后如果还需要回到那个时间点，仍可以从 history list 里
 按时间找到对应记录，只是失去了那个好记的名字。`,
-			Example: "  tabtin table version delete --table-id <table_id> --version-id <version_id> --yes\n" +
-				"  tabtin table version delete --table-id <table_id> --version-id <version_id> --dry-run\n" +
-				"  tabtin table version list --table-id <table_id>  # 删前先确认版本列表",
+			Example: "  muse table version delete --table-id <table_id> --version-id <version_id> --yes\n" +
+				"  muse table version delete --table-id <table_id> --version-id <version_id> --dry-run\n" +
+				"  muse table version list --table-id <table_id>  # 删前先确认版本列表",
 			Route: cmdutil.RouteCliServer, Method: "POST", Path: "/table/delete-named-version",
 			Layer: "L2", Risk: cmdutil.RiskDestructive, RiskDeclared: true,
 			Flags: []cmdutil.FlagDef{
@@ -361,9 +361,9 @@ func registerHistoryCommands(parent *cobra.Command, f *cmdutil.Factory) {
 history-id 或时间点，再决定用 undo（撤销最近操作）还是 restore（跳到指定历史）。
 常见陷阱：include-undone 决定是否显示已被撤销的历史条目，默认可能不显示；
 only-my-operations 只看自己的操作，团队协作排查问题时通常要去掉这个过滤。`,
-			Example: "  tabtin table history list --table-id <table_id>\n" +
-				"  tabtin table history list --table-id <table_id> --limit 20 --include-undone\n" +
-				"  tabtin table history list --table-id <table_id> --start-date 2026-07-01 --end-date 2026-07-05",
+			Example: "  muse table history list --table-id <table_id>\n" +
+				"  muse table history list --table-id <table_id> --limit 20 --include-undone\n" +
+				"  muse table history list --table-id <table_id> --start-date 2026-07-01 --end-date 2026-07-05",
 			Route: cmdutil.RouteCliServer, Method: "POST", Path: "/table/table-history",
 			Layer: "L2", Risk: cmdutil.RiskRead, RiskDeclared: true,
 			Flags: []cmdutil.FlagDef{
@@ -384,9 +384,9 @@ only-my-operations 只看自己的操作，团队协作排查问题时通常要�
 覆盖当前数据。
 常见陷阱：snapshot 只是预览，看完想真正恢复仍需调用 history restore；
 history-id 必须来自 history list 返回的真实条目，不能是任意猜测值。`,
-			Example: "  tabtin table history snapshot --table-id <table_id> --history-id <history_id>\n" +
-				"  tabtin table history snapshot --table-id <table_id> --history-id <history_id> --format json\n" +
-				"  tabtin table history snapshot --table-id <table_id> --history-id <history_id> --jq '.data'",
+			Example: "  muse table history snapshot --table-id <table_id> --history-id <history_id>\n" +
+				"  muse table history snapshot --table-id <table_id> --history-id <history_id> --format json\n" +
+				"  muse table history snapshot --table-id <table_id> --history-id <history_id> --jq '.data'",
 			Route: cmdutil.RouteCliServer, Method: "POST", Path: "/table/table-snapshot",
 			Layer: "L2", Risk: cmdutil.RiskRead, RiskDeclared: true,
 			Flags: []cmdutil.FlagDef{
@@ -402,9 +402,9 @@ history-id 必须来自 history list 返回的真实条目，不能是任意猜�
 适合"发现问题很久之后才被发现"的场景。
 常见陷阱：restore 会覆盖 restore 时间点之后的全部变更，不是增量合并；
 执行前强烈建议先 snapshot 预览，确认这是你要的状态。`,
-			Example: "  tabtin table history restore --table-id <table_id> --history-id <history_id> --yes\n" +
-				"  tabtin table history restore --table-id <table_id> --history-id <history_id> --dry-run\n" +
-				"  tabtin table history snapshot --table-id <table_id> --history-id <history_id>  # 恢复前先预览",
+			Example: "  muse table history restore --table-id <table_id> --history-id <history_id> --yes\n" +
+				"  muse table history restore --table-id <table_id> --history-id <history_id> --dry-run\n" +
+				"  muse table history snapshot --table-id <table_id> --history-id <history_id>  # 恢复前先预览",
 			Route: cmdutil.RouteCliServer, Method: "POST", Path: "/table/table-restore",
 			Layer: "L2", Risk: cmdutil.RiskDestructive, RiskDeclared: true,
 			Flags: []cmdutil.FlagDef{
@@ -428,9 +428,9 @@ history-id 必须来自 history list 返回的真实条目，不能是任意猜�
 适合"刚做错一步"的场景，跨会话/跨用户的撤销范围以 only-my-operations 控制。
 常见陷阱：undo 有栈深度限制（见 undo-stack 查看可撤销条目），不是无限回退；
 撤销后若又有新操作发生，原本的 redo 路径可能失效。`,
-			Example: "  tabtin table history undo --table-id <table_id>\n" +
-				"  tabtin table history undo --table-id <table_id> --only-my-operations\n" +
-				"  tabtin table history undo --table-id <table_id> --dry-run",
+			Example: "  muse table history undo --table-id <table_id>\n" +
+				"  muse table history undo --table-id <table_id> --only-my-operations\n" +
+				"  muse table history undo --table-id <table_id> --dry-run",
 			Route: cmdutil.RouteCliServer, Method: "POST", Path: "/table/table-undo",
 			Layer: "L2", Risk: cmdutil.RiskWrite, RiskDeclared: true,
 			Flags: []cmdutil.FlagDef{
@@ -454,9 +454,9 @@ history-id 必须来自 history list 返回的真实条目，不能是任意猜�
 没有产生新的写操作打断 redo 链。
 常见陷阱：redo-stack 为空时本命令无效果；only-my-operations 需要和当时
 undo 时的过滤范围一致，否则可能找不到对应条目。`,
-			Example: "  tabtin table history redo --table-id <table_id>\n" +
-				"  tabtin table history redo --table-id <table_id> --only-my-operations\n" +
-				"  tabtin table history redo --table-id <table_id> --dry-run",
+			Example: "  muse table history redo --table-id <table_id>\n" +
+				"  muse table history redo --table-id <table_id> --only-my-operations\n" +
+				"  muse table history redo --table-id <table_id> --dry-run",
 			Route: cmdutil.RouteCliServer, Method: "POST", Path: "/table/table-redo",
 			Layer: "L2", Risk: cmdutil.RiskWrite, RiskDeclared: true,
 			Flags: []cmdutil.FlagDef{
@@ -480,9 +480,9 @@ undo 时的过滤范围一致，否则可能找不到对应条目。`,
 本命令能看到实际还能撤几步。
 常见陷阱：栈内容会随新的写操作动态变化，list 出来的结果只反映查询那一刻的状态，
 之后若有新写入，栈可能已经不同。`,
-			Example: "  tabtin table history undo-stack --table-id <table_id>\n" +
-				"  tabtin table history undo-stack --table-id <table_id> --format json\n" +
-				"  tabtin table history undo-stack --table-id <table_id> --jq '. | length'",
+			Example: "  muse table history undo-stack --table-id <table_id>\n" +
+				"  muse table history undo-stack --table-id <table_id> --format json\n" +
+				"  muse table history undo-stack --table-id <table_id> --jq '. | length'",
 			Route: cmdutil.RouteCliServer, Method: "POST", Path: "/table/undo-stack",
 			Layer: "L2", Risk: cmdutil.RiskRead, RiskDeclared: true,
 			Flags:     []cmdutil.FlagDef{{Name: "table-id", Type: cmdutil.FlagString, Required: true, Desc: "表格 ID"}},
@@ -494,9 +494,9 @@ undo 时的过滤范围一致，否则可能找不到对应条目。`,
 设计理由：redo 前先确认栈里还有什么，与 undo-stack 是对称的只读预览命令。
 常见陷阱：一旦在 undo 之后产生了新的写操作，redo 栈通常会被清空或截断，
 本命令能帮助确认这一点，避免以为还能 redo 但实际已经不能。`,
-			Example: "  tabtin table history redo-stack --table-id <table_id>\n" +
-				"  tabtin table history redo-stack --table-id <table_id> --format json\n" +
-				"  tabtin table history redo-stack --table-id <table_id> --jq '. | length'",
+			Example: "  muse table history redo-stack --table-id <table_id>\n" +
+				"  muse table history redo-stack --table-id <table_id> --format json\n" +
+				"  muse table history redo-stack --table-id <table_id> --jq '. | length'",
 			Route: cmdutil.RouteCliServer, Method: "POST", Path: "/table/redo-stack",
 			Layer: "L2", Risk: cmdutil.RiskRead, RiskDeclared: true,
 			Flags:     []cmdutil.FlagDef{{Name: "table-id", Type: cmdutil.FlagString, Required: true, Desc: "表格 ID"}},
@@ -517,9 +517,9 @@ func registerImportCommands(parent *cobra.Command, f *cmdutil.Factory) {
 auto-create-fields 默认开启，省去手动逐个建字段的步骤，适合快速导入探索性数据。
 常见陷阱：primary-key-field + update-existing 组合决定是新增还是按主键更新已有记录，
 不设置时默认全部当新记录插入，可能产生重复行。`,
-			Example: "  tabtin table import csv --table-id <table_id> --file ./data.csv\n" +
-				"  tabtin table import csv --table-id <table_id> --csv-content 'name,age\\nAlice,20'\n" +
-				"  tabtin table import csv --table-id <table_id> --file ./data.csv --update-existing --primary-key-field id",
+			Example: "  muse table import csv --table-id <table_id> --file ./data.csv\n" +
+				"  muse table import csv --table-id <table_id> --csv-content 'name,age\\nAlice,20'\n" +
+				"  muse table import csv --table-id <table_id> --file ./data.csv --update-existing --primary-key-field id",
 			Route: cmdutil.RouteCliServer, Method: "POST", Path: "/table/import-csv",
 			Layer: "L2", Risk: cmdutil.RiskWrite, RiskDeclared: true,
 			StdinField: "csv_content", FileField: "csv_content", Timeout: 5 * time.Minute,
@@ -548,9 +548,9 @@ auto-create-fields 默认开启，省去手动逐个建字段的步骤，适合�
 系统导出的结构化数据直接灌入。
 常见陷阱：primary-key-field + update-existing 决定新增 vs 更新，同 import csv；
 JSON 数组里每个对象的 key 会被当作字段名，命名不规范会自动创建同名字段。`,
-			Example: "  tabtin table import json --table-id <table_id> --file ./data.json\n" +
-				"  tabtin table import json --table-id <table_id> --json-content '[{\"name\":\"Alice\"}]'\n" +
-				"  tabtin table import json --table-id <table_id> --file ./data.json --update-existing --primary-key-field id",
+			Example: "  muse table import json --table-id <table_id> --file ./data.json\n" +
+				"  muse table import json --table-id <table_id> --json-content '[{\"name\":\"Alice\"}]'\n" +
+				"  muse table import json --table-id <table_id> --file ./data.json --update-existing --primary-key-field id",
 			Route: cmdutil.RouteCliServer, Method: "POST", Path: "/table/import-json",
 			Layer: "L2", Risk: cmdutil.RiskWrite, RiskDeclared: true,
 			StdinField: "json_content", FileField: "json_content", Timeout: 5 * time.Minute,
@@ -579,9 +579,9 @@ JSON 数组里每个对象的 key 会被当作字段名，命名不规范会自�
 用户手头的表格文件，不需要先手动转 CSV。
 常见陷阱：文件内容按 Base64 传输（FileBase64），大文件耗时较长（Timeout 5 分钟）；
 未指定 sheet-name 时默认取第一个工作表，多 sheet 文件请显式指定。`,
-			Example: "  tabtin table import excel --table-id <table_id> --file ./data.xlsx\n" +
-				"  tabtin table import excel --table-id <table_id> --file ./data.xlsx --sheet-name Sheet1\n" +
-				"  tabtin table import excel --table-id <table_id> --file ./data.xlsx --dry-run",
+			Example: "  muse table import excel --table-id <table_id> --file ./data.xlsx\n" +
+				"  muse table import excel --table-id <table_id> --file ./data.xlsx --sheet-name Sheet1\n" +
+				"  muse table import excel --table-id <table_id> --file ./data.xlsx --dry-run",
 			Route: cmdutil.RouteCliServer, Method: "POST", Path: "/table/import-excel",
 			Layer: "L2", Risk: cmdutil.RiskWrite, RiskDeclared: true,
 			FileField: "file_content", FileBase64: true, Timeout: 5 * time.Minute,
@@ -613,9 +613,9 @@ CSV/JSON 10MB、Excel 20MB。小文件请继续用 import csv/json/excel，语�
 （.csv/.json/.xlsx/.xls），扩展名不认识必须显式指定；返回 async=true 时要用
 ` + "`table export wait --task-id`" + ` 轮询终态，命令返回不代表数据已经写进表；
 文本文件按 UTF-8（带 BOM）解析，失败回退 GBK。`,
-			Example: "  tabtin table import file --table-id <table_id> --file ./big-data.csv\n" +
-				"  tabtin table import file --table-id <table_id> --file ./big-data.xlsx --sheet-name Sheet1\n" +
-				"  tabtin table import file --table-id <table_id> --file ./data.dat --file-type csv --format json",
+			Example: "  muse table import file --table-id <table_id> --file ./big-data.csv\n" +
+				"  muse table import file --table-id <table_id> --file ./big-data.xlsx --sheet-name Sheet1\n" +
+				"  muse table import file --table-id <table_id> --file ./data.dat --file-type csv --format json",
 			Route: cmdutil.RouteCliServer, Method: "POST", Path: "/table/import-file",
 			Layer: "L2", Risk: cmdutil.RiskWrite, RiskDeclared: true,
 			Timeout: 10 * time.Minute,
@@ -669,9 +669,9 @@ CSV/JSON 10MB、Excel 20MB。小文件请继续用 import csv/json/excel，语�
 避免大批量写入后才发现列错位或类型识别错误。
 常见陷阱：preview 是只读命令，本身不需要 --dry-run；预览结果的字段类型推断
 可能与实际 import 时的行为略有差异，仅供参考不是强保证。`,
-			Example: "  tabtin table import preview --table-id <table_id> --file-type csv --file ./data.csv --format json\n" +
-				"  tabtin table import preview --table-id <table_id> --file-type json --file-content '[{\"name\":\"Alice\"}]' --format json\n" +
-				"  tabtin table import preview --table-id <table_id> --file-type excel --file ./data.xlsx",
+			Example: "  muse table import preview --table-id <table_id> --file-type csv --file ./data.csv --format json\n" +
+				"  muse table import preview --table-id <table_id> --file-type json --file-content '[{\"name\":\"Alice\"}]' --format json\n" +
+				"  muse table import preview --table-id <table_id> --file-type excel --file ./data.xlsx",
 			Route: cmdutil.RouteCliServer, Method: "POST", Path: "/table/import-preview",
 			Layer: "L2", Risk: cmdutil.RiskRead, RiskDeclared: true,
 			FileField: "file_content",
@@ -690,9 +690,9 @@ CSV/JSON 10MB、Excel 20MB。小文件请继续用 import csv/json/excel，语�
 场景把整个工作区搬过去。
 常见陷阱：这是高影响操作（RiskHigh），可能覆盖/新建大量表，必须显式 --yes；
 snapshot 内容量大时建议先用 --dry-run 看 plan 描述，确认目标 Space 正确。`,
-			Example: "  tabtin table import snapshot --snapshot '{\"tables\":[]}' --yes\n" +
-				"  cat space-snapshot.json | tabtin table import snapshot --snapshot - --yes\n" +
-				"  tabtin table import snapshot --snapshot '{\"tables\":[]}' --dry-run",
+			Example: "  muse table import snapshot --snapshot '{\"tables\":[]}' --yes\n" +
+				"  cat space-snapshot.json | muse table import snapshot --snapshot - --yes\n" +
+				"  muse table import snapshot --snapshot '{\"tables\":[]}' --dry-run",
 			Route: cmdutil.RouteCliServer, Method: "POST", Path: "/table/import-agent-space",
 			Layer: "L2", Risk: cmdutil.RiskHigh, RiskDeclared: true,
 			StdinField: "snapshot",
@@ -713,9 +713,9 @@ snapshot 内容量大时建议先用 --dry-run 看 plan 描述，确认目标 Sp
 可直接用于 table import json / 对照后 bulk-insert。
 常见陷阱：--file-format 控制模板文件格式（csv|json，默认 csv）；全局 --format 只影响
 CLI 回显样式。PowerShell 下写文件请用 --output；字段名必须与 table info 一致。`,
-			Example: "  tabtin table import template --table-id <table_id>\n" +
-				"  tabtin table import template --table-id <table_id> --file-format json --output ./tpl.json\n" +
-				"  tabtin table import template --table-id <table_id> --file-format csv --output ./tpl.csv",
+			Example: "  muse table import template --table-id <table_id>\n" +
+				"  muse table import template --table-id <table_id> --file-format json --output ./tpl.json\n" +
+				"  muse table import template --table-id <table_id> --file-format csv --output ./tpl.csv",
 			Route: cmdutil.RouteCliServer, Method: "POST", Path: "/table/import-template",
 			Layer: "L2", Risk: cmdutil.RiskRead, RiskDeclared: true,
 			Flags: []cmdutil.FlagDef{
@@ -742,10 +742,10 @@ func registerExportCommands(parent *cobra.Command, f *cmdutil.Factory) {
 大表请加 --async：后端转 Celery 任务立即回 task_id，再用 export wait / export download
 取产物；同步导出在大表上会顶到请求超时。--async 与 --output 不要一起用——异步分支
 返回的是任务信息 JSON，不是文件内容。`,
-			Example: "  tabtin table export csv --table-id <table_id> --output ./table.csv\n" +
-				"  tabtin table export csv --table-id <table_id> --view-id <view_id>\n" +
-				"  tabtin table export csv --table-id <table_id> --async --format json\n" +
-				"  tabtin table export csv --table-id <table_id> --record-ids '[\"rec_1\",\"rec_2\"]' --output ./partial.csv",
+			Example: "  muse table export csv --table-id <table_id> --output ./table.csv\n" +
+				"  muse table export csv --table-id <table_id> --view-id <view_id>\n" +
+				"  muse table export csv --table-id <table_id> --async --format json\n" +
+				"  muse table export csv --table-id <table_id> --record-ids '[\"rec_1\",\"rec_2\"]' --output ./partial.csv",
 			Route: cmdutil.RouteCliServer, Method: "POST", Path: "/table/export",
 			Layer: "L2", Risk: cmdutil.RiskRead, RiskDeclared: true,
 			FixedFields: map[string]any{"format": "csv"},
@@ -767,9 +767,9 @@ func registerExportCommands(parent *cobra.Command, f *cmdutil.Factory) {
 输出格式不同；format-type=object 适合按主键聚合成 map 结构的场景。
 常见陷阱：format-type 只影响顶层结构（array vs object），不影响字段值本身
 的类型（link/attachment 等复杂字段仍是嵌套 JSON）。`,
-			Example: "  tabtin table export json --table-id <table_id> --output ./table.json\n" +
-				"  tabtin table export json --table-id <table_id> --format-type object\n" +
-				"  tabtin table export json --table-id <table_id> --view-id <view_id> --output ./view.json",
+			Example: "  muse table export json --table-id <table_id> --output ./table.json\n" +
+				"  muse table export json --table-id <table_id> --format-type object\n" +
+				"  muse table export json --table-id <table_id> --view-id <view_id> --output ./view.json",
 			Route: cmdutil.RouteCliServer, Method: "POST", Path: "/table/export",
 			Layer: "L2", Risk: cmdutil.RiskRead, RiskDeclared: true,
 			FixedFields: map[string]any{"format": "json"},
@@ -791,10 +791,10 @@ func registerExportCommands(parent *cobra.Command, f *cmdutil.Factory) {
 常见陷阱：大表导出为 Excel 比 CSV 更耗时（格式化开销），超大数据量建议用 csv/json；
 view-id 应用视图筛选，逻辑与 export csv 一致。
 Excel 格式化开销大，几万行以上优先加 --async 走任务队列（同步分支容易顶到请求超时）。`,
-			Example: "  tabtin table export excel --table-id <table_id> --output ./table.xlsx\n" +
-				"  tabtin table export excel --table-id <table_id> --view-id <view_id>\n" +
-				"  tabtin table export excel --table-id <table_id> --async --format json\n" +
-				"  tabtin table export excel --table-id <table_id> --field-ids '[\"f1\",\"f2\"]' --output ./partial.xlsx",
+			Example: "  muse table export excel --table-id <table_id> --output ./table.xlsx\n" +
+				"  muse table export excel --table-id <table_id> --view-id <view_id>\n" +
+				"  muse table export excel --table-id <table_id> --async --format json\n" +
+				"  muse table export excel --table-id <table_id> --field-ids '[\"f1\",\"f2\"]' --output ./partial.xlsx",
 			Route: cmdutil.RouteCliServer, Method: "POST", Path: "/table/export",
 			Layer: "L2", Risk: cmdutil.RiskRead, RiskDeclared: true,
 			FixedFields: map[string]any{"format": "excel"},
@@ -816,10 +816,10 @@ Excel 格式化开销大，几万行以上优先加 --async 走任务队列（�
 常见陷阱：字段较多或记录较多时 PDF 排版可能换页/换列，可读性不如 Excel；
 建议先用 record-ids 限定小范围数据核对排版效果，再放开全量导出。
 PDF 渲染是三种格式里最慢的，全量导出建议直接加 --async。`,
-			Example: "  tabtin table export pdf --table-id <table_id> --output ./table.pdf\n" +
-				"  tabtin table export pdf --table-id <table_id> --record-ids '[\"rec_1\"]'\n" +
-				"  tabtin table export pdf --table-id <table_id> --async --format json\n" +
-				"  tabtin table export pdf --table-id <table_id> --view-id <view_id> --output ./view.pdf",
+			Example: "  muse table export pdf --table-id <table_id> --output ./table.pdf\n" +
+				"  muse table export pdf --table-id <table_id> --record-ids '[\"rec_1\"]'\n" +
+				"  muse table export pdf --table-id <table_id> --async --format json\n" +
+				"  muse table export pdf --table-id <table_id> --view-id <view_id> --output ./view.pdf",
 			Route: cmdutil.RouteCliServer, Method: "POST", Path: "/table/export",
 			Layer: "L2", Risk: cmdutil.RiskRead, RiskDeclared: true,
 			FixedFields: map[string]any{"format": "pdf"},
@@ -840,9 +840,9 @@ PDF 渲染是三种格式里最慢的，全量导出建议直接加 --async。`,
 import snapshot 期望的输入格式一致，形成闭环。
 常见陷阱：快照包含全部表的完整数据，Space 较大时文件体积和耗时都可观；
 导出是只读操作，不会清空或修改任何现有数据。`,
-			Example: "  tabtin table export snapshot --output ./space-snapshot.json\n" +
-				"  tabtin table export snapshot --format json\n" +
-				"  tabtin table export snapshot -o ./backup-2026-07-05.json",
+			Example: "  muse table export snapshot --output ./space-snapshot.json\n" +
+				"  muse table export snapshot --format json\n" +
+				"  muse table export snapshot -o ./backup-2026-07-05.json",
 			Route: cmdutil.RouteCliServer, Method: "POST", Path: "/table/export-agent-space",
 			Layer: "L2", Risk: cmdutil.RiskRead, RiskDeclared: true,
 			Flags:     []cmdutil.FlagDef{{Name: "output", Short: "o", Type: cmdutil.FlagString, Desc: "输出文件路径", CliOnly: true}},
@@ -855,9 +855,9 @@ import snapshot 期望的输入格式一致，形成闭环。
 CLI 通道；先 stats 看体量再选路径，比失败一次再改命令便宜。
 常见陷阱：预估体积是按字段类型估算的量级参考，不是导出文件的精确字节数；
 record-ids 只取前 100 条做抽样（后端限制），传更多会被截断并在结果里标 sampled。`,
-			Example: "  tabtin table export stats --table-id <table_id>\n" +
-				"  tabtin table export stats --table-id <table_id> --view-id <view_id> --format json\n" +
-				"  tabtin table export stats --table-id <table_id> --jq .record_count",
+			Example: "  muse table export stats --table-id <table_id>\n" +
+				"  muse table export stats --table-id <table_id> --view-id <view_id> --format json\n" +
+				"  muse table export stats --table-id <table_id> --jq .record_count",
 			Route: cmdutil.RouteCliServer, Method: "POST", Path: "/table/export-stats",
 			Layer: "L2", Risk: cmdutil.RiskRead, RiskDeclared: true,
 			Flags: []cmdutil.FlagDef{
@@ -877,9 +877,9 @@ headless 环境收不到长连接推送，只能靠 HTTP 轮询拿终态；本�
 可以用同一个 task_id 再 wait 一次）。
 导出任务成功后结果里带 file_id，接着用 ` + "`table export download --file-id`" + ` 取文件；
 导入任务成功后结果里是新增/更新条数与错误摘要。`,
-			Example: "  tabtin table export wait --task-id <task_id>\n" +
-				"  tabtin table export wait --task-id <task_id> --wait-timeout 1800 --interval 5\n" +
-				"  tabtin table export wait --task-id <task_id> --format json --jq .file_id",
+			Example: "  muse table export wait --task-id <task_id>\n" +
+				"  muse table export wait --task-id <task_id> --wait-timeout 1800 --interval 5\n" +
+				"  muse table export wait --task-id <task_id> --format json --jq .file_id",
 			Layer: "L2", Risk: cmdutil.RiskRead, RiskDeclared: true,
 			Flags: []cmdutil.FlagDef{
 				{Name: "task-id", Type: cmdutil.FlagString, Required: true, Desc: "异步任务 ID（export --async / import file 的返回值）"},
@@ -900,9 +900,9 @@ cli-server 代取字节后按 ` + "`__binary`" + ` 信封回传，CLI 用 -o 写
 常见陷阱：必须配 -o 指定落盘路径，不传只会打印文件元信息（二进制不适合直出 stdout）；
 超过 CLI 通道 7MB 直传上限的文件不回字节，改回 download_url，自己用 curl 取；
 签名地址有效期有限（默认 1 小时），过期重新执行本命令即可。`,
-			Example: "  tabtin table export download --file-id <file_id> -o ./export.xlsx\n" +
-				"  tabtin table export download --file-id <file_id> --url-only --format json\n" +
-				"  tabtin table export download --file-id <file_id> -o ./export.csv --quiet",
+			Example: "  muse table export download --file-id <file_id> -o ./export.xlsx\n" +
+				"  muse table export download --file-id <file_id> --url-only --format json\n" +
+				"  muse table export download --file-id <file_id> -o ./export.csv --quiet",
 			Route: cmdutil.RouteCliServer, Method: "POST", Path: "/table/export-download",
 			Layer: "L2", Risk: cmdutil.RiskRead, RiskDeclared: true,
 			Flags: []cmdutil.FlagDef{
@@ -961,7 +961,7 @@ func tableExportWaitFunc(f *cmdutil.Factory) func(ctx *cmdutil.RunContext) error
 		tr, err := f.Transport()
 		if err != nil {
 			return output.PrintErrorAndExit(output.ErrorEnvelope(
-				string(errcode.Unavailable), err.Error(), "tabtin daemon start", output.ExitServiceUnavail,
+				string(errcode.Unavailable), err.Error(), "muse daemon start", output.ExitServiceUnavail,
 			))
 		}
 		reqCtx := ctx.ReqContext
@@ -1015,7 +1015,7 @@ func tableExportWaitFunc(f *cmdutil.Factory) func(ctx *cmdutil.RunContext) error
 				return output.PrintErrorAndExit(output.ErrorEnvelope(
 					string(errcode.Timeout),
 					fmt.Sprintf("等待任务 %s 超过 %s 仍未完成", taskID, timeout),
-					fmt.Sprintf("任务可能仍在执行，可加大 --wait-timeout 或稍后再 `tabtin table export wait --task-id %s`", taskID),
+					fmt.Sprintf("任务可能仍在执行，可加大 --wait-timeout 或稍后再 `muse table export wait --task-id %s`", taskID),
 					output.ExitTimeout,
 				))
 			}
@@ -1106,9 +1106,9 @@ func registerTokenCommands(parent *cobra.Command, f *cmdutil.Factory) {
 查看 token-id、scopes、启用状态，供后续 update/delete/regenerate 操作。
 常见陷阱：出于安全考虑，list 不返回 Token 明文——需要明文只能在 create/regenerate
 成功返回时那一次拿到，之后无法再查看。`,
-			Example: "  tabtin table token list\n" +
-				"  tabtin table token list --format json\n" +
-				"  tabtin table token list --jq '.[].name'",
+			Example: "  muse table token list\n" +
+				"  muse table token list --format json\n" +
+				"  muse table token list --jq '.[].name'",
 			Route: cmdutil.RouteCliServer, Method: "POST", Path: "/table/token-list",
 			Layer: "L2", Risk: cmdutil.RiskRead, RiskDeclared: true,
 			HasFormat: true, RequiresAgent: true,
@@ -1120,9 +1120,9 @@ func registerTokenCommands(parent *cobra.Command, f *cmdutil.Factory) {
 （如只给 table:read 而不给 write）；expires-in-days 未设时默认永久有效。
 常见陷阱：创建成功返回的 Token 明文只显示这一次，务必立即保存；scopes
 写错范围会导致后续调用报权限不足，需要 update 补充。`,
-			Example: "  tabtin table token create --name readonly --scopes '[\"table:read\"]'\n" +
-				"  tabtin table token create --name writer --scopes '[\"table:read\",\"table:write\"]' --expires-in-days 30\n" +
-				"  tabtin table token create --name test --scopes '[\"table:read\"]' --dry-run",
+			Example: "  muse table token create --name readonly --scopes '[\"table:read\"]'\n" +
+				"  muse table token create --name writer --scopes '[\"table:read\",\"table:write\"]' --expires-in-days 30\n" +
+				"  muse table token create --name test --scopes '[\"table:read\"]' --dry-run",
 			Route: cmdutil.RouteCliServer, Method: "POST", Path: "/table/token-create",
 			Layer: "L2", Risk: cmdutil.RiskWrite, RiskDeclared: true,
 			Flags: []cmdutil.FlagDef{
@@ -1148,9 +1148,9 @@ func registerTokenCommands(parent *cobra.Command, f *cmdutil.Factory) {
 正在使用该 Token 的调用方会立刻感知权限变化。
 常见陷阱：本命令不能改 Token 明文——需要新密钥请用 regenerate；--active=false
 是暂停而非删除，Token 记录仍保留在 list 里。`,
-			Example: "  tabtin table token update --token-id <token_id> --name readonly-v2\n" +
-				"  tabtin table token update --token-id <token_id> --scopes '[\"table:read\"]' --active\n" +
-				"  tabtin table token update --token-id <token_id> --active=false --dry-run",
+			Example: "  muse table token update --token-id <token_id> --name readonly-v2\n" +
+				"  muse table token update --token-id <token_id> --scopes '[\"table:read\"]' --active\n" +
+				"  muse table token update --token-id <token_id> --active=false --dry-run",
 			Route: cmdutil.RouteCliServer, Method: "POST", Path: "/table/token-update",
 			Layer: "L2", Risk: cmdutil.RiskWrite, RiskDeclared: true,
 			Flags: []cmdutil.FlagDef{
@@ -1176,9 +1176,9 @@ func registerTokenCommands(parent *cobra.Command, f *cmdutil.Factory) {
 删除比停用更彻底，无法恢复。
 常见陷阱：删除前确认没有生产环境脚本还在用这个 Token，否则会导致对方服务
 突然认证失败；误删只能 create 一个新的，新 Token 明文和 ID 都不同。`,
-			Example: "  tabtin table token delete --token-id <token_id> --yes\n" +
-				"  tabtin table token delete --token-id <token_id> --dry-run\n" +
-				"  tabtin table token list  # 删前先确认 token-id",
+			Example: "  muse table token delete --token-id <token_id> --yes\n" +
+				"  muse table token delete --token-id <token_id> --dry-run\n" +
+				"  muse table token list  # 删前先确认 token-id",
 			Route: cmdutil.RouteCliServer, Method: "POST", Path: "/table/token-delete",
 			Layer: "L2", Risk: cmdutil.RiskDestructive, RiskDeclared: true,
 			Flags:     []cmdutil.FlagDef{{Name: "token-id", Type: cmdutil.FlagString, Required: true, Desc: "Token ID"}},
@@ -1198,9 +1198,9 @@ func registerTokenCommands(parent *cobra.Command, f *cmdutil.Factory) {
 元数据，只需要换一个新密钥。
 常见陷阱：轮换后旧密钥立即失效，所有仍用旧密钥的调用方会认证失败——
 需要提前通知所有使用方切换到新密钥。`,
-			Example: "  tabtin table token regenerate --token-id <token_id>\n" +
-				"  tabtin table token regenerate --token-id <token_id> --format json\n" +
-				"  tabtin table token regenerate --token-id <token_id> --dry-run",
+			Example: "  muse table token regenerate --token-id <token_id>\n" +
+				"  muse table token regenerate --token-id <token_id> --format json\n" +
+				"  muse table token regenerate --token-id <token_id> --dry-run",
 			Route: cmdutil.RouteCliServer, Method: "POST", Path: "/table/token-regenerate",
 			Layer: "L2", Risk: cmdutil.RiskWrite, RiskDeclared: true,
 			Flags:     []cmdutil.FlagDef{{Name: "token-id", Type: cmdutil.FlagString, Required: true, Desc: "Token ID"}},
@@ -1220,9 +1220,9 @@ func registerTokenCommands(parent *cobra.Command, f *cmdutil.Factory) {
 到底有什么权限"时比翻 list 更直接。
 常见陷阱：与 list 一样不返回明文密钥；token-id 需从 list 结果中获取，
 不是密钥本身。`,
-			Example: "  tabtin table token detail --token-id <token_id>\n" +
-				"  tabtin table token detail --token-id <token_id> --format json\n" +
-				"  tabtin table token detail --token-id <token_id> --jq '.scopes'",
+			Example: "  muse table token detail --token-id <token_id>\n" +
+				"  muse table token detail --token-id <token_id> --format json\n" +
+				"  muse table token detail --token-id <token_id> --jq '.scopes'",
 			Route: cmdutil.RouteCliServer, Method: "POST", Path: "/table/token-detail",
 			Layer: "L2", Risk: cmdutil.RiskRead, RiskDeclared: true,
 			Flags:     []cmdutil.FlagDef{{Name: "token-id", Type: cmdutil.FlagString, Required: true, Desc: "Token ID"}},
@@ -1235,9 +1235,9 @@ func registerTokenCommands(parent *cobra.Command, f *cmdutil.Factory) {
 本命令让 Agent 在拼 scopes JSON 前先查一遍合法值，避免拼错枚举字符串。
 常见陷阱：scopes 字符串大小写/命名必须与本命令返回值完全一致，
 拼写错误的 scope 会被后端拒绝或静默忽略（视实现而定）。`,
-			Example: "  tabtin table token scopes\n" +
-				"  tabtin table token scopes --format json\n" +
-				"  tabtin table token scopes --jq '.[].name'",
+			Example: "  muse table token scopes\n" +
+				"  muse table token scopes --format json\n" +
+				"  muse table token scopes --jq '.[].name'",
 			Route: cmdutil.RouteCliServer, Method: "POST", Path: "/table/token-scopes",
 			Layer: "L2", Risk: cmdutil.RiskRead, RiskDeclared: true,
 			HasFormat: true, RequiresAgent: true,
@@ -1255,9 +1255,9 @@ func registerTrashCommands(parent *cobra.Command, f *cmdutil.Factory) {
 			Long: `分页列出已软删（trashed）的表格，支持关键词搜索。
 设计理由：delete 后的表不在 table list，需本命令拿 table-id 再 trash restore / permanent。
 常见陷阱：archive 与 trash 正交——归档未删表走 list --archived，不在 trash list。`,
-			Example: "  tabtin table trash list\n" +
-				"  tabtin table trash list --search 用户\n" +
-				"  tabtin table trash list --page-size 20 --format json",
+			Example: "  muse table trash list\n" +
+				"  muse table trash list --search 用户\n" +
+				"  muse table trash list --page-size 20 --format json",
 			Route: cmdutil.RouteCliServer, Method: "POST", Path: "/table/trash-list",
 			Layer: "L2", Risk: cmdutil.RiskRead, RiskDeclared: true,
 			Flags: []cmdutil.FlagDef{
@@ -1272,9 +1272,9 @@ func registerTrashCommands(parent *cobra.Command, f *cmdutil.Factory) {
 			Long: `将软删表从回收站恢复（trashed_at 清空），不是解归档 restore。
 设计理由：与 table restore（解 archive）动词碰撞——本命令只处理回收站维度。
 常见陷阱：表仅归档未删时走 table restore；已 trash permanent 的表无法恢复。`,
-			Example: "  tabtin table trash restore --table-id <table_id>\n" +
-				"  tabtin table trash restore --table-id <table_id> --dry-run\n" +
-				"  # 解归档：tabtin table restore --table-id <table_id>",
+			Example: "  muse table trash restore --table-id <table_id>\n" +
+				"  muse table trash restore --table-id <table_id> --dry-run\n" +
+				"  # 解归档：muse table restore --table-id <table_id>",
 			Route: cmdutil.RouteCliServer, Method: "POST", Path: "/table/trash-restore",
 			Layer: "L2", Risk: cmdutil.RiskWrite, RiskDeclared: true,
 			Flags:     []cmdutil.FlagDef{{Name: "table-id", Type: cmdutil.FlagString, Required: true, Desc: "表格 ID"}},
@@ -1292,9 +1292,9 @@ func registerTrashCommands(parent *cobra.Command, f *cmdutil.Factory) {
 			Long: `物理删除回收站中的表及全部数据——不可逆，真实执行需 --yes。
 设计理由：smoke 主链最终清理步骤；Agent 应先 --dry-run 确认 table-id 再 --yes。
 常见陷阱：不在回收站的表不能 permanent；软删用 delete，解回收站用 trash restore。`,
-			Example: "  tabtin table trash permanent --table-id <table_id> --yes\n" +
-				"  tabtin table trash permanent --table-id <table_id> --dry-run\n" +
-				"  tabtin table trash permanent --table-id <table_id> --yes --format json",
+			Example: "  muse table trash permanent --table-id <table_id> --yes\n" +
+				"  muse table trash permanent --table-id <table_id> --dry-run\n" +
+				"  muse table trash permanent --table-id <table_id> --yes --format json",
 			Route: cmdutil.RouteCliServer, Method: "POST", Path: "/table/trash-permanent",
 			Layer: "L2", Risk: cmdutil.RiskHigh, RiskDeclared: true,
 			Flags:     []cmdutil.FlagDef{{Name: "table-id", Type: cmdutil.FlagString, Required: true, Desc: "表格 ID"}},
@@ -1314,7 +1314,7 @@ func registerTrashCommands(parent *cobra.Command, f *cmdutil.Factory) {
 }
 
 // Wave 4a (2026-05-01)：`registerSkillCommands` 整体删除。
-// `tabtin table skill execute / status / executions / rollback` 4 个命令以及对应的
+// `muse table skill execute / status / executions / rollback` 4 个命令以及对应的
 // cli-server 路由 `/table/skill-execute` / `/table/skill-status` / `/table/skill-executions`
 // / `/table/skill-rollback` / `/table/cell-executions` 全部下架——后端
 // `apps/tabtin_django/apps/tabdata/services/field_executor.py` 已 DEPRECATED 卸载，

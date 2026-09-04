@@ -8,29 +8,29 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/TabTin/tabtin-cli/internal/cmdutil"
-	"github.com/TabTin/tabtin-cli/internal/errcode"
-	"github.com/TabTin/tabtin-cli/internal/output"
+	"github.com/Muse/muse-cli/internal/cmdutil"
+	"github.com/Muse/muse-cli/internal/errcode"
+	"github.com/Muse/muse-cli/internal/output"
 )
 
 func newCmdMemo(f *cmdutil.Factory) *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "memo",
 		Short: "备忘录操作",
-		// ：临时不向 `tabtin --help` / `tabtin commands` 暴露；显式 `tabtin memo …` 仍可用。
+		// ：临时不向 `muse --help` / `muse commands` 暴露；显式 `muse memo …` 仍可用。
 		Hidden: true,
 		Long: `创建、浏览和管理 TabMemo 备忘录。
 
 示例：
-  tabtin memo list
-  tabtin memo create --content "明天开会讨论需求"
-  tabtin memo read <memo-id>`,
+  muse memo list
+  muse memo create --content "明天开会讨论需求"
+  muse memo read <memo-id>`,
 	}
 
 	defs := []cmdutil.CommandDef{
 		{
 			Use: "list", Short: "列出备忘录",
-			Example: "  tabtin memo list\n  tabtin memo list --limit 50\n  tabtin memo list --status archived\n  tabtin memo list --source agent --created-after 2026-05-01T00:00:00",
+			Example: "  muse memo list\n  muse memo list --limit 50\n  muse memo list --status archived\n  muse memo list --source agent --created-after 2026-05-01T00:00:00",
 			Route:   cmdutil.RouteCliServer, Method: "GET", Path: "/api/tabmemo/memos/",
 			Flags: []cmdutil.FlagDef{
 				{Name: "organization-id", Type: cmdutil.FlagString, Desc: "Organization ID（默认当前）"},
@@ -83,7 +83,7 @@ func newCmdMemo(f *cmdutil.Factory) *cobra.Command {
 注：CLI flag ` + "`--content`" + ` 映射到 Django schema 字段 ` + "`content_markdown`" + `——这是
 schema-CLI 字段命名分层（CLI 用户友好名 vs HTTP body schema 名）的显式 mapping，
 historic regression（CLI flag 跟 schema 同名漂移导致正文落空）的修复。`,
-		Example:      "  tabtin memo create --content \"明天开会\"\n  tabtin memo create --content \"紧急事项\" --tags \"urgent,work\"",
+		Example:      "  muse memo create --content \"明天开会\"\n  muse memo create --content \"紧急事项\" --tags \"urgent,work\"",
 		Route:        cmdutil.RouteCliServer,
 		HasFormat:    true,
 		RequiresAuth: true,
@@ -99,7 +99,7 @@ historic regression（CLI flag 跟 schema 同名漂移导致正文落空）的�
 
 	cmdutil.RegisterCommand(cmd, f, cmdutil.CommandDef{
 		Use: "read [memo-id]", Short: "读取备忘录详情",
-		Example:      "  tabtin memo read <memo-id>\n  tabtin memo read <memo-id> --include-trashed",
+		Example:      "  muse memo read <memo-id>\n  muse memo read <memo-id> --include-trashed",
 		Route:        cmdutil.RouteCliServer,
 		ArgsMapping:  []string{"memo_id"},
 		HasFormat:    true,
@@ -116,7 +116,7 @@ historic regression（CLI flag 跟 schema 同名漂移导致正文落空）的�
 
 CLI flag ` + "`--content`" + ` 映射到 Django schema 字段 ` + "`content_markdown`" + `（schema-CLI 字段
 命名分层）。--tags 逗号分隔字符串会被拆成 List[str]。`,
-		Example:      "  tabtin memo update <memo-id> --content \"更新内容\"\n  tabtin memo update <memo-id> --tags \"urgent,review\"",
+		Example:      "  muse memo update <memo-id> --content \"更新内容\"\n  muse memo update <memo-id> --tags \"urgent,review\"",
 		Route:        cmdutil.RouteCliServer,
 		ArgsMapping:  []string{"memo_id"},
 		HasFormat:    true,
@@ -131,7 +131,7 @@ CLI flag ` + "`--content`" + ` 映射到 Django schema 字段 ` + "`content_mark
 
 	cmdutil.RegisterCommand(cmd, f, cmdutil.CommandDef{
 		Use: "delete [memo-id]", Short: "归档备忘录",
-		Example:      "  tabtin memo delete <memo-id>",
+		Example:      "  muse memo delete <memo-id>",
 		Route:        cmdutil.RouteCliServer,
 		ArgsMapping:  []string{"memo_id"},
 		HasFormat:    true,
@@ -144,7 +144,7 @@ CLI flag ` + "`--content`" + ` 映射到 Django schema 字段 ` + "`content_mark
 		Use: "pin [memo-id]", Short: "置顶/取消置顶备忘录",
 		Long: `置顶或取消置顶备忘录。Django schema MemoPinRequest 必填 ` + "`pinned: bool`" + ` 字段；
 默认 ` + "`--pinned=true`" + `（置顶），传 ` + "`--pinned=false`" + ` 取消置顶。`,
-		Example:      "  tabtin memo pin <memo-id>                # 置顶（默认）\n  tabtin memo pin <memo-id> --pinned=false # 取消置顶",
+		Example:      "  muse memo pin <memo-id>                # 置顶（默认）\n  muse memo pin <memo-id> --pinned=false # 取消置顶",
 		Route:        cmdutil.RouteCliServer,
 		ArgsMapping:  []string{"memo_id"},
 		HasFormat:    true,
@@ -158,7 +158,7 @@ CLI flag ` + "`--content`" + ` 映射到 Django schema 字段 ` + "`content_mark
 
 	// ── 生命周期命令（能力对齐补齐）──
 	// 后端早有完整两级软删生命周期端点，此前 CLI 只暴露了 delete(=移入回收站)。
-	// 对标 tabtin doc 的 delete/unarchive/restore/permanent-delete 语义补齐，
+	// 对标 muse doc 的 delete/unarchive/restore/permanent-delete 语义补齐，
 	// 让 Agent 能完整判断「能不能回滚」（AI 友好性·可恢复）。
 	//
 	// memo 生命周期两级软删（注意与 doc 的差异：memo delete = 移入回收站）：
@@ -177,9 +177,9 @@ CLI flag ` + "`--content`" + ` 映射到 Django schema 字段 ` + "`content_mark
 memo unarchive 解档恢复为 active。
 常见陷阱：归档不是回收站，两级软删不要混——更彻底、准备清理的删除走 memo delete
 （移入回收站），再 memo restore 或 memo permanent-delete。`,
-		Example: "  tabtin memo archive <memo-id>\n" +
-			"  tabtin memo archive <memo-id> --dry-run\n" +
-			"  tabtin memo archive <memo-id> --format json",
+		Example: "  muse memo archive <memo-id>\n" +
+			"  muse memo archive <memo-id> --dry-run\n" +
+			"  muse memo archive <memo-id> --format json",
 		Layer: "L2", Risk: cmdutil.RiskWrite, RiskDeclared: true,
 		Route:        cmdutil.RouteCliServer,
 		Method:       "POST",
@@ -205,9 +205,9 @@ memo unarchive 解档恢复为 active。
 恢复后重新出现在默认 memo list。
 常见陷阱：与 memo restore 区分——unarchive 处理「归档」层，restore 处理「回收站」层，
 是两级不同的软删；对非 archived 状态调用会被后端拒绝。`,
-		Example: "  tabtin memo unarchive <memo-id>\n" +
-			"  tabtin memo unarchive <memo-id> --dry-run\n" +
-			"  tabtin memo unarchive <memo-id> --format json",
+		Example: "  muse memo unarchive <memo-id>\n" +
+			"  muse memo unarchive <memo-id> --dry-run\n" +
+			"  muse memo unarchive <memo-id> --format json",
 		Layer: "L2", Risk: cmdutil.RiskWrite, RiskDeclared: true,
 		Route:        cmdutil.RouteCliServer,
 		Method:       "POST",
@@ -233,9 +233,9 @@ memo unarchive 解档恢复为 active。
 恢复前不会物理删除数据。
 常见陷阱：与 memo unarchive（解档）是两回事——unarchive 处理归档层，restore 处理回收站层；
 一旦 memo permanent-delete 后就无法再 restore。`,
-		Example: "  tabtin memo restore <memo-id>\n" +
-			"  tabtin memo restore <memo-id> --dry-run\n" +
-			"  tabtin memo restore <memo-id> --format json",
+		Example: "  muse memo restore <memo-id>\n" +
+			"  muse memo restore <memo-id> --dry-run\n" +
+			"  muse memo restore <memo-id> --format json",
 		Layer: "L2", Risk: cmdutil.RiskWrite, RiskDeclared: true,
 		Route:        cmdutil.RouteCliServer,
 		Method:       "POST",
@@ -260,9 +260,9 @@ memo unarchive 解档恢复为 active。
 设计理由：给出一个显式的、不可逆的清理出口；前置建议先 memo delete 把备忘录移入回收站。
 常见陷阱：这是 RiskDestructive，框架强制 --yes 才执行（或 --dry-run 预演）；删了就找不回来，
 要可恢复的删除请用 memo delete（移入回收站）。`,
-		Example: "  tabtin memo permanent-delete <memo-id> --yes\n" +
-			"  tabtin memo permanent-delete <memo-id> --dry-run\n" +
-			"  tabtin memo permanent-delete <memo-id> --yes --format json",
+		Example: "  muse memo permanent-delete <memo-id> --yes\n" +
+			"  muse memo permanent-delete <memo-id> --dry-run\n" +
+			"  muse memo permanent-delete <memo-id> --yes --format json",
 		Layer: "L2", Risk: cmdutil.RiskDestructive, RiskDeclared: true,
 		Route:        cmdutil.RouteCliServer,
 		Method:       "DELETE",
@@ -290,7 +290,7 @@ memo unarchive 解档恢复为 active。
 func memoReadFunc(f *cmdutil.Factory) func(ctx *cmdutil.RunContext) error {
 	return func(ctx *cmdutil.RunContext) error {
 		if len(ctx.Args) == 0 {
-			return fmt.Errorf("请提供备忘录 ID，用法：tabtin memo read <memo-id>")
+			return fmt.Errorf("请提供备忘录 ID，用法：muse memo read <memo-id>")
 		}
 		memoID := ctx.Args[0]
 		if err := cmdutil.ValidatePathParam(memoID, "memo ID"); err != nil {
@@ -377,7 +377,7 @@ func memoCreateFunc(f *cmdutil.Factory) func(ctx *cmdutil.RunContext) error {
 func memoUpdateFunc(f *cmdutil.Factory) func(ctx *cmdutil.RunContext) error {
 	return func(ctx *cmdutil.RunContext) error {
 		if len(ctx.Args) == 0 {
-			return fmt.Errorf("请提供备忘录 ID，用法：tabtin memo update <memo-id> --content \"...\"")
+			return fmt.Errorf("请提供备忘录 ID，用法：muse memo update <memo-id> --content \"...\"")
 		}
 		memoID := ctx.Args[0]
 		if err := cmdutil.ValidatePathParam(memoID, "memo ID"); err != nil {
@@ -419,7 +419,7 @@ func memoUpdateFunc(f *cmdutil.Factory) func(ctx *cmdutil.RunContext) error {
 func memoDeleteFunc(f *cmdutil.Factory) func(ctx *cmdutil.RunContext) error {
 	return func(ctx *cmdutil.RunContext) error {
 		if len(ctx.Args) == 0 {
-			return fmt.Errorf("请提供备忘录 ID，用法：tabtin memo delete <memo-id>")
+			return fmt.Errorf("请提供备忘录 ID，用法：muse memo delete <memo-id>")
 		}
 		memoID := ctx.Args[0]
 		if err := cmdutil.ValidatePathParam(memoID, "memo ID"); err != nil {
@@ -444,7 +444,7 @@ func memoDeleteFunc(f *cmdutil.Factory) func(ctx *cmdutil.RunContext) error {
 func memoPinFunc(f *cmdutil.Factory) func(ctx *cmdutil.RunContext) error {
 	return func(ctx *cmdutil.RunContext) error {
 		if len(ctx.Args) == 0 {
-			return fmt.Errorf("请提供备忘录 ID，用法：tabtin memo pin <memo-id> [--pinned=false]")
+			return fmt.Errorf("请提供备忘录 ID，用法：muse memo pin <memo-id> [--pinned=false]")
 		}
 		memoID := ctx.Args[0]
 		if err := cmdutil.ValidatePathParam(memoID, "memo ID"); err != nil {

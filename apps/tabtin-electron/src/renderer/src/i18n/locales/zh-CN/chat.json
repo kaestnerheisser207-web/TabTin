@@ -979,7 +979,7 @@
     "invalid_param_format": "参数格式不正确 — 检查输入后重试",
     "param_too_large": "输入超出限制 — 拆分或精简后重试",
     "mutually_exclusive_params": "参数冲突 — 只保留其中一个",
-    "no_ui_session": "需要 TabTin 桌面端才能完成 — 当前模式不支持",
+    "no_ui_session": "需要 Muse 桌面端才能完成 — 当前模式不支持",
     "runtime_misconfig": "运行时配置不完整 — 请联系开发者",
     "host_unsupported": "当前模式不支持此操作",
     "network_failed": "网络请求失败 — 检查网络后重试；如涉及云端文件，URL 可能已过期请重新上传",
@@ -1389,7 +1389,7 @@
     "chargeFailed": "费用暂未出账",
     "chargeFailedDetail": "本条计费暂未出账，稍后会自动重试结算；不会重复扣 credits，以最终结算为准。",
     "byok": "自备密钥 · 不扣 credits",
-    "byokDetail": "你使用的是自带 API 密钥（BYOK），本条消息不从 TabTin 钱包扣 credits。"
+    "byokDetail": "你使用的是自带 API 密钥（BYOK），本条消息不从 Muse 钱包扣 credits。"
   },
   "checkpoint": {
     "edit": "编辑消息",
@@ -2529,9 +2529,9 @@
     "plan_create": "创建 Plan",
     "plan_update_todos": "更新 Todos",
     "switch_mode": "请求切换模式",
-    "relaunch_app": "重启 TabTin",
+    "relaunch_app": "重启 Muse",
     "clear_os_error_blacklist": "解封路径",
-    "tabtin_search": "TabTin 搜索",
+    "tabtin_search": "Muse 搜索",
     "show_widget": "可视化卡片",
     "show_flow_view": "流程视图",
     "web_scraper_scrape_url": "网页抓取",
@@ -2898,8 +2898,8 @@
     },
     "toolFailureNotice": "「{{tool}}」已连续失败 {{streak}} 次。再失败 {{remaining}} 次系统会提醒 Agent 换种方式尝试。",
     "toolFailureNudge": "「{{tool}}」已连续失败 {{streak}} 次。系统已提醒 Agent 换种方式尝试。",
-    "toolRepetitionNotice": "工具「{{tool}}」在最近 {{seconds}} 秒内被相同输入调用了 {{repeatCount}} 次。再重复 {{remaining}} 次 TabTin 会主动介入提示 Agent 别再用相同输入重发。",
-    "toolRepetitionNudge": "工具「{{tool}}」在最近 {{seconds}} 秒内被相同输入调用了 {{repeatCount}} 次。TabTin 已介入提示 Agent 别再用相同输入重发。请稍候——如果几轮后仍在重复，你可以直接给一句新指令（比如「用我刚才的回答继续」或「换个方式问」）。",
+    "toolRepetitionNotice": "工具「{{tool}}」在最近 {{seconds}} 秒内被相同输入调用了 {{repeatCount}} 次。再重复 {{remaining}} 次 Muse 会主动介入提示 Agent 别再用相同输入重发。",
+    "toolRepetitionNudge": "工具「{{tool}}」在最近 {{seconds}} 秒内被相同输入调用了 {{repeatCount}} 次。Muse 已介入提示 Agent 别再用相同输入重发。请稍候——如果几轮后仍在重复，你可以直接给一句新指令（比如「用我刚才的回答继续」或「换个方式问」）。",
     "tool_started": "开始执行：{{toolName}}",
     "tool_completed": "{{toolName}} 已完成",
     "tool_failed": "{{toolName}} 失败：{{reason}}",
@@ -3043,11 +3043,19 @@
     "confirmFailed": "操作失败"
   },
   "tokenUsage": {
-    "title": "Token 用量", "current": "当前用量", "windowLimit": "窗口上限",
-    "inputTotal": "输入累计", "outputTotal": "输出累计", "cacheHit": "缓存命中",
-    "reasoning": "深度思考", "autoCompacted": "已自动整理", "billing": "计费",
-    "byok": "自备密钥 · 不扣 credits", "historicalCost": "历史已消费",
-    "consumed": "已消费", "estimatedCost": "预估费用"
+    "title": "Token 用量",
+    "current": "当前用量",
+    "windowLimit": "窗口上限",
+    "inputTotal": "输入累计",
+    "outputTotal": "输出累计",
+    "cacheHit": "缓存命中",
+    "reasoning": "深度思考",
+    "autoCompacted": "已自动整理",
+    "billing": "计费",
+    "byok": "自备密钥 · 不扣 credits",
+    "historicalCost": "历史已消费",
+    "consumed": "已消费",
+    "estimatedCost": "预估费用"
   },
   "sessionCollab": {
     "manageTitle": "管理共享",

@@ -2,7 +2,7 @@
 
 [English](CONTRIBUTING.en.md)
 
-感谢你关注 TabTin。中文和英文贡献都受欢迎。
+感谢你关注 Muse。中文和英文贡献都受欢迎。
 
 > Public Preview 临时口径：维护组织之外的贡献者可以提交 Pull Request 并参与评审，但当前发布分支暂不合并外部提交的代码、文档或素材。建议先通过 Issue、Discussion、问题复现和使用反馈参与，避免在合并规则最终确认前投入无法进入当前版本的大规模改动。
 
@@ -18,7 +18,7 @@
 
 ## 开发流程
 
-1. Fork [TabTin 公开仓库](https://github.com/tabtin-ai/TabTin)。
+1. Fork [Muse 公开仓库](https://github.com/tabtin-ai/TabTin)。
 2. 从最新 `main` 创建一个聚焦单一问题的分支。
 3. 按公开快速开始和开发文档配置环境。
 4. 修改代码，并运行与改动相关的测试和静态检查。
@@ -83,17 +83,17 @@
 
 - 使用清晰、可检索的提交说明，描述“做了什么”，不要只写 `fix` 或 `update`。
 - 不提交密钥、Token、真实业务数据、个人信息、内部地址或本地绝对路径。
-- 产品名称统一写作 `TabTin`，公共概念以[产品概念](docs/architecture/product-concepts.md)为准。
+- 产品名称统一写作 `Muse`，公共概念以[产品概念](docs/architecture/product-concepts.md)为准。
 - 项目自写公共文档使用中文主文件和 `.en.md` 英文对应文件。两种语言出现歧义时以中文为准；许可证与第三方法律文本以官方英文原文为准。
 
 ## 评审与合并
 
 维护者会根据正确性、产品一致性、兼容性、测试、可维护性、安全和文档完整性评审 Pull Request。提交 Pull Request 不保证合并；维护者可能要求缩小范围、补充验证或先讨论产品方向。
 
-TabTin 当前由 Shanghai Mofan Technology Co., Ltd. 主导维护。社区成员可以通过持续、可靠的贡献逐步获得更多维护权限。
+Muse 当前由 Shanghai Mofan Technology Co., Ltd. 主导维护。社区成员可以通过持续、可靠的贡献逐步获得更多维护权限。
 
 ## 外部贡献
 
-TabTin 的公开源码使用 `AGPL-3.0-only`，同时保留单独商业授权能力。
+Muse 的公开源码使用 `AGPL-3.0-only`，同时保留单独商业授权能力。
 
 维护组织之外的贡献者可以提交 Pull Request 并参与评审。当前发布分支不合并外部提交的代码、文档或素材；Issue、Discussion、问题复现和使用反馈正常受理。

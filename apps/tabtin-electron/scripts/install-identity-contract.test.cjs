@@ -11,14 +11,18 @@ const quickMacBuildScript = fs.readFileSync(
 )
 const installer = fs.readFileSync(installerPath, 'utf8')
 
-assert.ok(buildScript.includes('PROFILE_PRODUCT_NAME="TabTin Preprod"'))
-assert.ok(buildScript.includes('PROFILE_APP_ID="com.tabtin.app.preprod"'))
-assert.ok(buildScript.includes('PROFILE_EXECUTABLE_NAME="tabtin-preprod"'))
-assert.ok(buildScript.includes('PROFILE_SHORTCUT_NAME="TabTin Preprod"'))
-assert.ok(buildScript.includes('"--config.win.executableName=$PROFILE_EXECUTABLE_NAME"'))
+assert.ok(buildScript.includes('PROFILE_PRODUCT_NAME="Muse Local"'))
+assert.ok(buildScript.includes('PROFILE_APP_ID="com.muse.app.local"'))
+assert.ok(buildScript.includes('PROFILE_EXECUTABLE_NAME="muse-local"'))
+assert.ok(buildScript.includes('PROFILE_SHORTCUT_NAME="Muse Local"'))
+assert.ok(buildScript.includes('PROFILE_PRODUCT_NAME="Muse Community"'))
+assert.ok(buildScript.includes('PROFILE_APP_ID="com.muse.community"'))
+assert.ok(buildScript.includes('PROFILE_EXECUTABLE_NAME="muse-community"'))
+assert.ok(buildScript.includes('PROFILE_SHORTCUT_NAME="Muse Community"'))
+assert.ok(buildScript.includes('"--config.${TARGET_NAME}.executableName=$PROFILE_EXECUTABLE_NAME"'))
 assert.ok(buildScript.includes('"--config.nsis.shortcutName=$PROFILE_SHORTCUT_NAME"'))
-assert.ok(quickMacBuildScript.includes('PROFILE_PRODUCT_NAME="TabTin Preprod"'))
-assert.ok(quickMacBuildScript.includes('PROFILE_APP_ID="com.tabtin.app.preprod"'))
+assert.ok(quickMacBuildScript.includes('PROFILE_PRODUCT_NAME="Muse Local"'))
+assert.ok(quickMacBuildScript.includes('PROFILE_APP_ID="com.muse.app.local"'))
 
 const appIdentity = fs.readFileSync(
   path.join(__dirname, '..', 'src', 'main', 'app-identity.ts'),

@@ -6,8 +6,8 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/TabTin/tabtin-cli/internal/cmdutil"
-	"github.com/TabTin/tabtin-cli/internal/knowledgetree"
+	"github.com/Muse/muse-cli/internal/cmdutil"
+	"github.com/Muse/muse-cli/internal/knowledgetree"
 )
 
 func NewCmdTable(f *cmdutil.Factory) *cobra.Command {
@@ -16,14 +16,14 @@ func NewCmdTable(f *cmdutil.Factory) *cobra.Command {
 		Short: "数据表操作",
 		Long: `管理表格、记录、字段、视图等 TabData 资源。
 
-所有操作在当前 Agent 上下文中执行（tabtin agent use）。
+所有操作在当前 Agent 上下文中执行（muse agent use）。
 
 示例：
-  tabtin table list
-  tabtin table query "SELECT * FROM users LIMIT 10"
-  tabtin table record insert --table-id xxx --data '{"name":"test"}'
-  tabtin table field list --table-id xxx
-  tabtin table export --table-id xxx --format csv`,
+  muse table list
+  muse table query "SELECT * FROM users LIMIT 10"
+  muse table record insert --table-id xxx --data '{"name":"test"}'
+  muse table field list --table-id xxx
+  muse table export --table-id xxx --format csv`,
 	}
 
 	registerTopLevel(cmd, f)
@@ -100,7 +100,7 @@ func NewCmdTable(f *cmdutil.Factory) *cobra.Command {
 	registerSearchIndexCommands(searchIndexCmd, f)
 	cmd.AddCommand(searchIndexCmd)
 
-	// Wave 4a (2026-05-01)：`tabtin table skill *` 命令组已下架——后端
+	// Wave 4a (2026-05-01)：`muse table skill *` 命令组已下架——后端
 	// `field_executor.py` 已 DEPRECATED 卸载（field_executor / skill_field
 	// 字段执行链整体退役），Go CLI 仍注册会形成 404 死链。
 	// `registerSkillCommands` 函数与 `/table/skill-execute` 等 5 段路由（Go CLI
@@ -120,10 +120,10 @@ func registerTopLevel(parent *cobra.Command, f *cmdutil.Factory) {
 			Long: `分页列出当前 Space 下的表格，支持关键词搜索、归档过滤。
 设计理由：list 是 TabData 入口——先拿 table-id 再调 record/field/view 子命令；
 返回含 default_view_id / field_count，便于 Agent 判断表规模。
-常见陷阱：软删表不在 list 里，需 ` + "`tabtin table trash list`" + `；` + "`restore`" + ` 是解归档、` + "`trash restore`" + ` 是从回收站恢复，动词不同。`,
-			Example: "  tabtin table list\n" +
-				"  tabtin table list --search 用户 --page-size 20\n" +
-				"  tabtin table list --archived --format json",
+常见陷阱：软删表不在 list 里，需 ` + "`muse table trash list`" + `；` + "`restore`" + ` 是解归档、` + "`trash restore`" + ` 是从回收站恢复，动词不同。`,
+			Example: "  muse table list\n" +
+				"  muse table list --search 用户 --page-size 20\n" +
+				"  muse table list --archived --format json",
 			Route: cmdutil.RouteCliServer, Method: "POST", Path: "/table/list",
 			Runtime: cmdutil.RuntimeHybrid, AdaptRequest: AdaptTableList,
 			Layer: "L2", Risk: cmdutil.RiskRead, RiskDeclared: true,
@@ -143,10 +143,10 @@ func registerTopLevel(parent *cobra.Command, f *cmdutil.Factory) {
 常见陷阱：create 只建表结构，不写记录——数据写入走 record insert；软删用 delete，
 物理清除需 trash permanent + --yes。
 要挂到知识库侧栏某父资源下时传 --parent-item-id（ContextItem ID）；不传则落在根级。`,
-			Example: "  tabtin table create --name \"用户表\"\n" +
-				"  tabtin table create --name \"子表\" --parent-item-id <context_item_id>\n" +
-				"  tabtin table create --name \"订单表\" --description \"存储订单数据\" --use-default-fields\n" +
-				"  tabtin table create --name \"融资\" --fields '[{\"name\":\"日期\",\"field_type\":\"date\"},{\"name\":\"公司\",\"field_type\":\"text\"}]' --dry-run",
+			Example: "  muse table create --name \"用户表\"\n" +
+				"  muse table create --name \"子表\" --parent-item-id <context_item_id>\n" +
+				"  muse table create --name \"订单表\" --description \"存储订单数据\" --use-default-fields\n" +
+				"  muse table create --name \"融资\" --fields '[{\"name\":\"日期\",\"field_type\":\"date\"},{\"name\":\"公司\",\"field_type\":\"text\"}]' --dry-run",
 			Route: cmdutil.RouteCliServer, Method: "POST", Path: "/table/create",
 			Runtime: cmdutil.RuntimeHybrid, AdaptRequest: adaptTableCreate,
 			Layer: "L2", Risk: cmdutil.RiskWrite, RiskDeclared: true,
@@ -182,9 +182,9 @@ func registerTopLevel(parent *cobra.Command, f *cmdutil.Factory) {
 本命令用 --table-id 反查 ContextItem，免去 Agent 手查 item id。
 常见陷阱：--parent-item-id 传父 ContextItem ID（不是 table-id）；落根用 --root。
 需全局 --organization-id。`,
-			Example: "  tabtin table move --table-id <table_id> --parent-item-id <context_item_id>\n" +
-				"  tabtin table move --table-id <table_id> --root\n" +
-				"  tabtin table move --table-id <table_id> --parent-item-id <context_item_id> --dry-run",
+			Example: "  muse table move --table-id <table_id> --parent-item-id <context_item_id>\n" +
+				"  muse table move --table-id <table_id> --root\n" +
+				"  muse table move --table-id <table_id> --parent-item-id <context_item_id> --dry-run",
 			Layer: "L2", Risk: cmdutil.RiskWrite, RiskDeclared: true,
 			Route:        cmdutil.RouteCliServer,
 			HasFormat:    true,
@@ -215,9 +215,9 @@ func registerTopLevel(parent *cobra.Command, f *cmdutil.Factory) {
 			Long: `取单张表的元数据（名称、描述、归档/回收状态、默认视图等）。
 设计理由：info 比 list 字段更全，改表属性前或确认 trashed/archived 状态时先读。
 常见陷阱：info 不返回记录行——记录数用 stats 或 record list。`,
-			Example: "  tabtin table info --table-id <table_id>\n" +
-				"  tabtin table info --table-id <table_id> --format json\n" +
-				"  tabtin table info --table-id <table_id> --jq '.name'",
+			Example: "  muse table info --table-id <table_id>\n" +
+				"  muse table info --table-id <table_id> --format json\n" +
+				"  muse table info --table-id <table_id> --jq '.name'",
 			Route: cmdutil.RouteCliServer, Method: "POST", Path: "/table/info",
 			Runtime: cmdutil.RuntimeHybrid, AdaptRequest: adaptTableInfo,
 			Layer: "L2", Risk: cmdutil.RiskRead, RiskDeclared: true,
@@ -229,9 +229,9 @@ func registerTopLevel(parent *cobra.Command, f *cmdutil.Factory) {
 			Long: `修改表级元数据（名称、描述、图标），不改字段 schema 与记录数据。
 设计理由：与 field add/update 分工——本命令只动 Table 对象属性。
 常见陷阱：改字段结构走 field 子命令；rename 表不影响 record-id 与 field-id。`,
-			Example: "  tabtin table update --table-id <table_id> --name \"新表名\"\n" +
-				"  tabtin table update --table-id <table_id> --description \"新的表格说明\"\n" +
-				"  tabtin table update --table-id <table_id> --name \"新表名\" --dry-run",
+			Example: "  muse table update --table-id <table_id> --name \"新表名\"\n" +
+				"  muse table update --table-id <table_id> --description \"新的表格说明\"\n" +
+				"  muse table update --table-id <table_id> --name \"新表名\" --dry-run",
 			Route: cmdutil.RouteCliServer, Method: "POST", Path: "/table/update-table",
 			Layer: "L2", Risk: cmdutil.RiskWrite, RiskDeclared: true,
 			Flags: []cmdutil.FlagDef{
@@ -257,9 +257,9 @@ func registerTopLevel(parent *cobra.Command, f *cmdutil.Factory) {
 			Long: `软删除表格——数据移入回收站，可用 trash restore 恢复。
 设计理由：与 trash permanent（不可逆）形成两级删除；比硬删更安全，Agent 应优先本命令。
 常见陷阱：delete 是进回收站，不是 record delete；解归档用 restore，回收站恢复用 trash restore。`,
-			Example: "  tabtin table delete --table-id <table_id>\n" +
-				"  # 找回：tabtin table trash restore --table-id <table_id>\n" +
-				"  tabtin table delete --table-id <table_id> --dry-run",
+			Example: "  muse table delete --table-id <table_id>\n" +
+				"  # 找回：muse table trash restore --table-id <table_id>\n" +
+				"  muse table delete --table-id <table_id> --dry-run",
 			Route: cmdutil.RouteCliServer, Method: "POST", Path: "/table/delete-table",
 			Layer: "L2", Risk: cmdutil.RiskWrite, RiskDeclared: true,
 			Flags:     []cmdutil.FlagDef{{Name: "table-id", Type: cmdutil.FlagString, Required: true, Desc: "表格 ID"}},
@@ -277,9 +277,9 @@ func registerTopLevel(parent *cobra.Command, f *cmdutil.Factory) {
 			Long: `将表标记为已归档（is_archived），通常从默认 list 隐藏，与回收站正交。
 设计理由：archive 适合「暂不用但保留」场景，不删数据；与 delete→trash 是不同维度。
 常见陷阱：archive 不等于 delete；解归档用 restore（非 trash restore）。`,
-			Example: "  tabtin table archive --table-id <table_id>\n" +
-				"  tabtin table archive --table-id <table_id> --dry-run\n" +
-				"  tabtin table list --archived  # 归档后在此查看",
+			Example: "  muse table archive --table-id <table_id>\n" +
+				"  muse table archive --table-id <table_id> --dry-run\n" +
+				"  muse table list --archived  # 归档后在此查看",
 			Route: cmdutil.RouteCliServer, Method: "POST", Path: "/table/archive",
 			Layer: "L2", Risk: cmdutil.RiskWrite, RiskDeclared: true,
 			Flags:     []cmdutil.FlagDef{{Name: "table-id", Type: cmdutil.FlagString, Required: true, Desc: "表格 ID"}},
@@ -297,9 +297,9 @@ func registerTopLevel(parent *cobra.Command, f *cmdutil.Factory) {
 			Long: `解除表格归档状态（is_archived=false），不是从回收站恢复。
 设计理由：与 trash restore 动词碰撞——本命令只处理 archive 维度；回收站表走 trash 子组。
 常见陷阱：表在回收站时用 trash restore；仅归档时用本命令。`,
-			Example: "  tabtin table restore --table-id <table_id>\n" +
-				"  tabtin table restore --table-id <table_id> --dry-run\n" +
-				"  # 回收站恢复：tabtin table trash restore --table-id <table_id>",
+			Example: "  muse table restore --table-id <table_id>\n" +
+				"  muse table restore --table-id <table_id> --dry-run\n" +
+				"  # 回收站恢复：muse table trash restore --table-id <table_id>",
 			Route: cmdutil.RouteCliServer, Method: "POST", Path: "/table/restore",
 			Layer: "L2", Risk: cmdutil.RiskWrite, RiskDeclared: true,
 			Flags:     []cmdutil.FlagDef{{Name: "table-id", Type: cmdutil.FlagString, Required: true, Desc: "表格 ID"}},
@@ -317,9 +317,9 @@ func registerTopLevel(parent *cobra.Command, f *cmdutil.Factory) {
 			Long: `返回表的记录数、字段数等聚合统计，只读。
 设计理由：大表操作前先 stats 评估规模，避免 record list 一次拉全表。
 常见陷阱：stats 是快照，并发写入时数字可能略滞后。`,
-			Example: "  tabtin table stats --table-id <table_id>\n" +
-				"  tabtin table stats --table-id <table_id> --format json\n" +
-				"  tabtin table stats --table-id <table_id> --jq '.record_count'",
+			Example: "  muse table stats --table-id <table_id>\n" +
+				"  muse table stats --table-id <table_id> --format json\n" +
+				"  muse table stats --table-id <table_id> --jq '.record_count'",
 			Route: cmdutil.RouteCliServer, Method: "POST", Path: "/table/stats",
 			Layer: "L2", Risk: cmdutil.RiskRead, RiskDeclared: true,
 			Flags:     []cmdutil.FlagDef{{Name: "table-id", Type: cmdutil.FlagString, Required: true, Desc: "表格 ID"}},
@@ -327,12 +327,12 @@ func registerTopLevel(parent *cobra.Command, f *cmdutil.Factory) {
 		},
 		{
 			Use: "query [sql]", Short: "只读 SQL 查询",
-			Long: `对 Space 内 TabData 表执行只读 SQL（SELECT），TabTin 特色能力。
+			Long: `对 Space 内 TabData 表执行只读 SQL（SELECT），Muse 特色能力。
 设计理由：跨表只读分析、复杂筛选比多次 record list 更高效；与 execute 严格分工。
 常见陷阱：query 拒绝写语句——UPDATE/DELETE 走 execute 并带确认 flag。`,
-			Example: "  tabtin table query \"SELECT * FROM users LIMIT 10\"\n" +
-				"  tabtin table query --sql \"SELECT count(*) FROM orders\"\n" +
-				"  tabtin table query \"SELECT * FROM t WHERE id=$1\" --params '[\"uuid\"]'",
+			Example: "  muse table query \"SELECT * FROM users LIMIT 10\"\n" +
+				"  muse table query --sql \"SELECT count(*) FROM orders\"\n" +
+				"  muse table query \"SELECT * FROM t WHERE id=$1\" --params '[\"uuid\"]'",
 			Route: cmdutil.RouteCliServer, Method: "POST", Path: "/table/query",
 			Layer: "L2", Risk: cmdutil.RiskRead, RiskDeclared: true,
 			ArgsMapping: []string{"sql"},
@@ -347,9 +347,9 @@ func registerTopLevel(parent *cobra.Command, f *cmdutil.Factory) {
 			Long: `执行 INSERT/UPDATE/DELETE 等写 SQL；DELETE 需 --allow-delete，DDL 需 --allow-ddl。
 设计理由：批量改数/复杂条件更新时比逐条 record update 高效，但风险更高。
 常见陷阱：--allow-ddl 是 CLI 侧门禁，后端仍可能拒绝 DDL；DELETE 不带 flag 会被 Validate 拦截。`,
-			Example: "  tabtin table execute \"UPDATE orders SET status='done' WHERE id='ord_1'\"\n" +
-				"  tabtin table execute \"DELETE FROM orders WHERE id='ord_1'\" --allow-delete\n" +
-				"  tabtin table execute \"UPDATE orders SET status='done' WHERE id='ord_1'\" --dry-run",
+			Example: "  muse table execute \"UPDATE orders SET status='done' WHERE id='ord_1'\"\n" +
+				"  muse table execute \"DELETE FROM orders WHERE id='ord_1'\" --allow-delete\n" +
+				"  muse table execute \"UPDATE orders SET status='done' WHERE id='ord_1'\" --dry-run",
 			Route: cmdutil.RouteCliServer, Method: "POST", Path: "/table/execute",
 			Layer: "L2", Risk: cmdutil.RiskWrite, RiskDeclared: true,
 			ArgsMapping: []string{"sql"},
@@ -402,9 +402,9 @@ func registerTopLevel(parent *cobra.Command, f *cmdutil.Factory) {
 			Long: `在单表全文索引中搜索关键词，可限定字段或视图。
 设计理由：比 SQL LIKE 更适合中文分词/索引场景；与 search-index 子组（索引管理）分工。
 常见陷阱：需表已建搜索索引；无索引时可能空结果或报错，先 search-index status 排查。`,
-			Example: "  tabtin table search --table-id <table_id> --search \"关键词\"\n" +
-				"  tabtin table search --table-id <table_id> --search \"关键词\" --field-id <field_id>\n" +
-				"  tabtin table search --table-id <table_id> --search \"关键词\" --take 20",
+			Example: "  muse table search --table-id <table_id> --search \"关键词\"\n" +
+				"  muse table search --table-id <table_id> --search \"关键词\" --field-id <field_id>\n" +
+				"  muse table search --table-id <table_id> --search \"关键词\" --take 20",
 			Route: cmdutil.RouteCliServer, Method: "POST", Path: "/table/search",
 			Layer: "L2", Risk: cmdutil.RiskRead, RiskDeclared: true,
 			Flags: []cmdutil.FlagDef{

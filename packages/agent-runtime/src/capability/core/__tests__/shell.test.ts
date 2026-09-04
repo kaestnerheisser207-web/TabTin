@@ -1237,7 +1237,7 @@ describe('ShellCap restrictedShellChecker（L16 W5.5）', () => {
       restrictedShellChecker: { async isAllowed() { return { allowed: true }; } },
     });
     const r = await cap.tools()[0].execute(
-      { command: 'tabtin doc list --format json' },
+      { command: 'muse doc list --format json' },
       makeFakeContext(),
     );
     expect(r.isError).toBeFalsy();
@@ -1248,12 +1248,12 @@ describe('ShellCap restrictedShellChecker（L16 W5.5）', () => {
     const { cap, mock } = makeShellCap({
       restrictedShellChecker: {
         async isAllowed() {
-          return { allowed: false, reason: '命令 tabtin doc create 标记为 write', code: 'write_risk' };
+          return { allowed: false, reason: '命令 muse doc create 标记为 write', code: 'write_risk' };
         },
       },
     });
     const r = await cap.tools()[0].execute(
-      { command: 'tabtin doc create --title hi' },
+      { command: 'muse doc create --title hi' },
       makeFakeContext(),
     );
     expect(mock.executeCalls).toHaveLength(0);
@@ -1311,13 +1311,13 @@ describe('ShellCap Skill 凭据注入', () => {
     };
     const { cap, mock } = makeShellCap({ skillContextProvider: provider });
     await cap.tools()[0].execute(
-      { command: 'curl https://api.github.com/user', env: { SHARED: 'from-user', UA: 'tabtin' } },
+      { command: 'curl https://api.github.com/user', env: { SHARED: 'from-user', UA: 'muse' } },
       makeSkillContext(),
     );
     const env = mock.executeCalls[0].env ?? {};
     expect(env.GITHUB_TOKEN).toBe('ghp_secret_xyz');
     expect(env.SHARED).toBe('from-skill');
-    expect(env.UA).toBe('tabtin');
+    expect(env.UA).toBe('muse');
   });
 
   it('provider 返回 null → 不注入 env + emit SYSTEM_NOTICE', async () => {
@@ -1545,7 +1545,7 @@ describe.skip('ShellCap 大输出落盘 (deprecated by 2026-05-18 重构，待 P
         scriptExecute: () => ({
           status: 'ok',
           exitCode: 0,
-          stdout: 'HEADHEAD\n...[output truncated by TabTin process runner]',
+          stdout: 'HEADHEAD\n...[output truncated by Muse process runner]',
           stderr: '',
           durationMs: 1,
           truncated: true,
@@ -2203,8 +2203,8 @@ describe('ShellCap sync 出口 markNotified（push 通知重构 commit 2）', ()
     expect(store.get(FIXED_SESSION_ID)?.sync_notification_claim).toBeUndefined();
   });
 
-  it('#706 tabtin doc 前台命令同样被 claim 覆盖（命令无关）：exit 先于首轮 poll 不重复 push', async () => {
-    //  与  同源——`tabtin doc create/search` 与 `ls` 一样走 ShellCap
+  it('#706 muse doc 前台命令同样被 claim 覆盖（命令无关）：exit 先于首轮 poll 不重复 push', async () => {
+    //  与  同源——`muse doc create/search` 与 `ls` 一样走 ShellCap
     // run_terminal_command（默认 wait_ms=60s>0）。#690 修复的
     // sync_notification_claim 是命令无关的：任何 wait_ms>0 的前台命令在 exit 先于
     // ShellCap 首轮 poll 时都被 claim suppress 掉后台 push，由 ShellCap 同步交付终态。
@@ -2222,7 +2222,7 @@ describe('ShellCap sync 出口 markNotified（push 通知重构 commit 2）', ()
     });
 
     const r = await cap.tools()[0].execute(
-      { command: 'tabtin doc create --title "demo1" --format json', wait_ms: 60000 },
+      { command: 'muse doc create --title "demo1" --format json', wait_ms: 60000 },
       makeFakeContext(),
     );
     const parsed = JSON.parse(r.content as string);
@@ -2944,7 +2944,7 @@ describe('ShellCap 大输出卸载端到端', () => {
         scriptRead: () => ({ output: bigArray, isRunning: false, exitCode: 0, outputBytes: bigArray.length }),
       }).bridge,
     });
-    const r = await cap.tools()[0].execute({ command: 'tabtin table list --format json' }, makeFakeContext());
+    const r = await cap.tools()[0].execute({ command: 'muse table list --format json' }, makeFakeContext());
     const parsed = JSON.parse(r.content as string);
     expect(parsed.stdout_truncated).toBe(true);
     expect(parsed.stdout).not.toContain('__tabtin_output_summary');

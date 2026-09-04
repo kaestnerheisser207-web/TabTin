@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">TabTin</string>
+    <string name="app_name">Muse</string>
 
     <!-- common: 通用操作 -->
     <string name="common_close">关闭</string>
@@ -650,7 +650,7 @@
     <string name="security_server_auto">服务端自动</string>
     <string name="security_server_auto_desc">由服务端自动管理安全策略</string>
     <string name="security_terminal_mode">终端模式</string>
-    <string name="security_term_tabtin_only">仅限 TabTin</string>
+    <string name="security_term_tabtin_only">仅限 Muse</string>
     <string name="security_term_tabtin_only_desc">工作区只能使用内置终端执行命令</string>
     <string name="security_term_sandboxed">沙箱模式</string>
     <string name="security_term_sandboxed_desc">命令在隔离的沙箱环境中执行</string>
@@ -762,7 +762,7 @@
     <!-- Work Type (运行目录类型) -->
     <string name="work_type_working_dir_label">工作目录</string>
     <string name="work_type_working_dir_hint">工作目录在桌面端 / 设备上设置，移动端仅可调整目录类型。</string>
-    <string name="work_type_no_working_dir">尚未设置工作目录。请先在电脑版 TabTin 的该 Workspace 设置里选择工作目录，之后即可在这里选择目录类型。</string>
+    <string name="work_type_no_working_dir">尚未设置工作目录。请先在电脑版 Muse 的该 Workspace 设置里选择工作目录，之后即可在这里选择目录类型。</string>
     <string name="work_type_section_label">目录类型</string>
     <string name="work_type_section_hint">决定工作区默认怎么做事。它不会改变「安全」里的权限边界。</string>
     <string name="work_type_pending">待选择</string>

@@ -3,7 +3,7 @@ package cmd
 import (
 	"github.com/spf13/cobra"
 
-	"github.com/TabTin/tabtin-cli/internal/cmdutil"
+	"github.com/Muse/muse-cli/internal/cmdutil"
 )
 
 // ─── Code ────────────────────────────────────────────────────────
@@ -15,17 +15,17 @@ func newCmdCode(f *cmdutil.Factory) *cobra.Command {
 		Long: `读写文件、搜索代码、执行 Git 操作。
 
 示例：
-  tabtin code read --path src/main.go
-  tabtin code mkdir --path src/newdir
-  tabtin code mv --from old.go --to new.go
-  tabtin code grep --pattern "TODO" --glob "*.go"
-  tabtin code git status`,
+  muse code read --path src/main.go
+  muse code mkdir --path src/newdir
+  muse code mv --from old.go --to new.go
+  muse code grep --pattern "TODO" --glob "*.go"
+  muse code git status`,
 	}
 
 	defs := []cmdutil.CommandDef{
 		{
 			Use: "read", Short: "读文件",
-			Example: "  tabtin code read --path src/main.go\n  tabtin code read --path README.md --offset 10 --limit 50",
+			Example: "  muse code read --path src/main.go\n  muse code read --path README.md --offset 10 --limit 50",
 			Route:   cmdutil.RouteCliServer, Method: "POST", Path: "/code/read",
 			Flags: []cmdutil.FlagDef{
 				{Name: "path", Type: cmdutil.FlagString, Required: true, Desc: "文件路径"},
@@ -36,7 +36,7 @@ func newCmdCode(f *cmdutil.Factory) *cobra.Command {
 		},
 		{
 			Use: "write", Short: "写文件",
-			Example: "  tabtin code write --path test.txt --contents \"hello world\"",
+			Example: "  muse code write --path test.txt --contents \"hello world\"",
 			Route:   cmdutil.RouteCliServer, Method: "POST", Path: "/code/write",
 			Flags: []cmdutil.FlagDef{
 				{Name: "path", Type: cmdutil.FlagString, Required: true, Desc: "文件路径"},
@@ -47,7 +47,7 @@ func newCmdCode(f *cmdutil.Factory) *cobra.Command {
 		},
 		{
 			Use: "edit", Short: "编辑文件（替换）",
-			Example: "  tabtin code edit --path main.go --old-string \"foo\" --new-string \"bar\"",
+			Example: "  muse code edit --path main.go --old-string \"foo\" --new-string \"bar\"",
 			Route:   cmdutil.RouteCliServer, Method: "POST", Path: "/code/edit",
 			Flags: []cmdutil.FlagDef{
 				{Name: "path", Type: cmdutil.FlagString, Required: true, Desc: "文件路径"},
@@ -59,21 +59,21 @@ func newCmdCode(f *cmdutil.Factory) *cobra.Command {
 		},
 		{
 			Use: "delete", Short: "删除文件",
-			Example: "  tabtin code delete --path temp.txt",
+			Example: "  muse code delete --path temp.txt",
 			Route:   cmdutil.RouteCliServer, Method: "POST", Path: "/code/delete",
 			Flags:     []cmdutil.FlagDef{{Name: "path", Type: cmdutil.FlagString, Required: true, Desc: "文件路径"}},
 			HasFormat: true, Risk: cmdutil.RiskHigh,
 		},
 		{
 			Use: "mkdir", Short: "创建目录",
-			Example: "  tabtin code mkdir --path src/newdir",
+			Example: "  muse code mkdir --path src/newdir",
 			Route:   cmdutil.RouteCliServer, Method: "POST", Path: "/code/mkdir",
 			Flags:     []cmdutil.FlagDef{{Name: "path", Type: cmdutil.FlagString, Required: true, Desc: "要创建的目录路径（递归创建，已是目录时幂等成功）"}},
 			HasFormat: true, Risk: cmdutil.RiskWrite,
 		},
 		{
 			Use: "mv", Short: "移动/重命名文件",
-			Example: "  tabtin code mv --from src/old.go --to src/new.go",
+			Example: "  muse code mv --from src/old.go --to src/new.go",
 			Route:   cmdutil.RouteCliServer, Method: "POST", Path: "/code/mv",
 			Flags: []cmdutil.FlagDef{
 				{Name: "from", Type: cmdutil.FlagString, Required: true, Desc: "源路径"},
@@ -85,7 +85,7 @@ func newCmdCode(f *cmdutil.Factory) *cobra.Command {
 			// rename 是 mv 的别名（同一 action-tool move_file）：语义完全相同，
 			// 只是 --from/--to 命名习惯上更强调"同目录改名"。
 			Use: "rename", Short: "重命名文件（mv 的别名）",
-			Example: "  tabtin code rename --from src/old.go --to src/new.go",
+			Example: "  muse code rename --from src/old.go --to src/new.go",
 			Route:   cmdutil.RouteCliServer, Method: "POST", Path: "/code/rename",
 			Flags: []cmdutil.FlagDef{
 				{Name: "from", Type: cmdutil.FlagString, Required: true, Desc: "源路径"},
@@ -95,7 +95,7 @@ func newCmdCode(f *cmdutil.Factory) *cobra.Command {
 		},
 		{
 			Use: "glob [pattern]", Short: "文件搜索",
-			Example: "  tabtin code glob \"*.go\"\n  tabtin code glob \"src/**/*.ts\" --target-directory ./packages\n  tabtin code glob --glob-pattern \"*.go\"",
+			Example: "  muse code glob \"*.go\"\n  muse code glob \"src/**/*.ts\" --target-directory ./packages\n  muse code glob --glob-pattern \"*.go\"",
 			Route:   cmdutil.RouteCliServer, Method: "POST", Path: "/code/glob",
 			Flags: []cmdutil.FlagDef{
 				{Name: "glob-pattern", Type: cmdutil.FlagString, Desc: "Glob 模式（也可作为位置参数）"},
@@ -106,7 +106,7 @@ func newCmdCode(f *cmdutil.Factory) *cobra.Command {
 		},
 		{
 			Use: "grep [pattern]", Short: "内容搜索（ripgrep）",
-			Example: "  tabtin code grep \"TODO\"\n  tabtin code grep \"func.*Error\" --glob \"*.go\" --case-insensitive",
+			Example: "  muse code grep \"TODO\"\n  muse code grep \"func.*Error\" --glob \"*.go\" --case-insensitive",
 			Route:   cmdutil.RouteCliServer, Method: "POST", Path: "/code/grep",
 			ArgsMapping: []string{"pattern"},
 			Flags: []cmdutil.FlagDef{
@@ -124,7 +124,7 @@ func newCmdCode(f *cmdutil.Factory) *cobra.Command {
 		},
 		{
 			Use: "search", Short: "已退役（代码语义搜索）",
-			Example: "  tabtin code search --query \"如何处理用户认证\"  # 返回 FEATURE_RETIRED，请使用 grep 或 glob",
+			Example: "  muse code search --query \"如何处理用户认证\"  # 返回 FEATURE_RETIRED，请使用 grep 或 glob",
 			Route:   cmdutil.RouteCliServer, Method: "POST", Path: "/code/search",
 			Flags: []cmdutil.FlagDef{
 				{Name: "query", Type: cmdutil.FlagString, Required: true, Desc: "搜索问题"},
@@ -135,7 +135,7 @@ func newCmdCode(f *cmdutil.Factory) *cobra.Command {
 		},
 		{
 			Use: "diagnostics [paths...]", Short: "代码诊断（Linter）",
-			Example: "  tabtin code diagnostics\n  tabtin code diagnostics src/main.go\n  tabtin code diagnostics --paths '[\"src/main.go\"]'",
+			Example: "  muse code diagnostics\n  muse code diagnostics src/main.go\n  muse code diagnostics --paths '[\"src/main.go\"]'",
 			Route:   cmdutil.RouteCliServer, Method: "POST", Path: "/code/diagnostics",
 			Flags:       []cmdutil.FlagDef{{Name: "paths", Type: cmdutil.FlagString, Desc: "文件路径 JSON 数组"}},
 			ArgsMapping: []string{"paths"},
@@ -148,12 +148,12 @@ func newCmdCode(f *cmdutil.Factory) *cobra.Command {
 
 	gitCmd := &cobra.Command{Use: "git", Short: "Git 操作"}
 	cmdutil.RegisterCommand(gitCmd, f, cmdutil.CommandDef{
-		Use: "status", Short: "Git 状态", Example: "  tabtin code git status",
+		Use: "status", Short: "Git 状态", Example: "  muse code git status",
 		Route: cmdutil.RouteCliServer, Method: "POST", Path: "/code/git-status", HasFormat: true,
 	})
 	cmdutil.RegisterCommand(gitCmd, f, cmdutil.CommandDef{
 		Use: "diff", Short: "Git Diff",
-		Example: "  tabtin code git diff\n  tabtin code git diff --file-path src/main.go --staged",
+		Example: "  muse code git diff\n  muse code git diff --file-path src/main.go --staged",
 		Route:   cmdutil.RouteCliServer, Method: "POST", Path: "/code/git-diff",
 		Flags: []cmdutil.FlagDef{
 			{Name: "file-path", Type: cmdutil.FlagString, Desc: "指定文件"},
@@ -173,17 +173,17 @@ func newCmdCode(f *cmdutil.Factory) *cobra.Command {
 	}
 	cmdutil.RegisterCommand(worktreeCmd, f, cmdutil.CommandDef{
 		Use: "current", Short: "查看当前对话绑定的 worktree",
-		Example: "  tabtin code worktree current",
+		Example: "  muse code worktree current",
 		Route:   cmdutil.RouteCliServer, Method: "POST", Path: "/code/worktree/current", HasFormat: true,
 	})
 	cmdutil.RegisterCommand(worktreeCmd, f, cmdutil.CommandDef{
 		Use: "list", Short: "列出当前仓库的 worktree",
-		Example: "  tabtin code worktree list",
+		Example: "  muse code worktree list",
 		Route:   cmdutil.RouteCliServer, Method: "POST", Path: "/code/worktree/list", HasFormat: true,
 	})
 	cmdutil.RegisterCommand(worktreeCmd, f, cmdutil.CommandDef{
 		Use: "switch", Short: "切换当前对话到已有 worktree",
-		Example: "  tabtin code worktree switch --path /absolute/path/to/worktree",
+		Example: "  muse code worktree switch --path /absolute/path/to/worktree",
 		Route:   cmdutil.RouteCliServer, Method: "POST", Path: "/code/worktree/switch",
 		Flags: []cmdutil.FlagDef{
 			{Name: "path", Type: cmdutil.FlagString, Required: true, Desc: "目标 worktree 的绝对路径"},
@@ -192,10 +192,10 @@ func newCmdCode(f *cmdutil.Factory) *cobra.Command {
 	})
 	cmdutil.RegisterCommand(worktreeCmd, f, cmdutil.CommandDef{
 		Use: "create", Short: "创建 worktree 并切换当前对话",
-		Example: "  tabtin code worktree create --new-branch feat/123-task --base release/260812\n  tabtin code worktree create --path /absolute/path/to/wt --existing-branch feat/123-task",
+		Example: "  muse code worktree create --new-branch feat/123-task --base release/260812\n  muse code worktree create --path /absolute/path/to/wt --existing-branch feat/123-task",
 		Route:   cmdutil.RouteCliServer, Method: "POST", Path: "/code/worktree/create",
 		Flags: []cmdutil.FlagDef{
-			{Name: "path", Type: cmdutil.FlagString, Desc: "新 worktree 的绝对路径；省略时使用 TabTin 托管目录"},
+			{Name: "path", Type: cmdutil.FlagString, Desc: "新 worktree 的绝对路径；省略时使用 Muse 托管目录"},
 			{Name: "new-branch", Type: cmdutil.FlagString, Desc: "要创建的新分支"},
 			{Name: "existing-branch", Type: cmdutil.FlagString, Desc: "要检出的已有分支"},
 			{Name: "base", Type: cmdutil.FlagString, Desc: "新分支起点（仅与 --new-branch 同用）"},

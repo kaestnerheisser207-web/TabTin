@@ -16,7 +16,7 @@
 
 ## 前置条件
 
-- TabTin Electron 已启动。
+- Muse Electron 已启动。
 - Django、Collab Live、Centrifugo 等 dev stack 已启动。
 - 用户已登录，并进入一个 Space。
 - Space 中已启用“多维表”。
@@ -33,7 +33,7 @@
 
 ## 用户操作步骤
 
-1. 打开 TabTin Electron。
+1. 打开 Muse Electron。
 2. 进入目标 Space。
 3. 点击左侧“多维表”入口。
 4. 在多维表资源列表中打开测试表“选项管理验收表”。

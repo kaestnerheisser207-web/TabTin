@@ -20,10 +20,10 @@ import { domain as coreHeadless } from './core-headless/_meta'
  * live under `core-headless` (appId `core`); tabcode full set is still
  * registered manually beside the read-only tabcode domain. The legacy
  * `tabslide` adapter group was retired in W6 (2026-05-04) — slide ops
- * go through `tabtin slide *` CLI / Django HTTP API directly.
+ * go through `muse slide *` CLI / Django HTTP API directly.
  *
  * Wave 4a (2026-05-01): tabdata 域已从 `core-headless` 删除，相关 7+5 个 FC
- * 全部下架；Agent 走 `tabtin table *` CLI 操作多维表格。
+ * 全部下架；Agent 走 `muse table *` CLI 操作多维表格。
  */
 export const allDomains: ToolDomain<AgentTool | ActionTool>[] = [
   tabweb,

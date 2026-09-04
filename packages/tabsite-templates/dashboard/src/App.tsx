@@ -220,7 +220,7 @@ export default function App() {
           <SkeletonLoader view={view} />
         ) : !activeTableId ? (
           tables.length === 0
-            ? <EmptyState icon="📭" title="当前 Space 还没有数据表" subtitle="请先在 TabTin 中创建一张数据表，然后刷新页面" />
+            ? <EmptyState icon="📭" title="当前 Space 还没有数据表" subtitle="请先在 Muse 中创建一张数据表，然后刷新页面" />
             : <EmptyState icon="📊" title="选择一张数据表" subtitle="从顶部下拉框中选择要展示的数据表" />
         ) : records.length === 0 ? (
           <EmptyState icon="📭" title="暂无数据" subtitle={search ? `搜索"${search}"没有匹配结果` : '数据表中还没有记录'} />

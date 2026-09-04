@@ -4,7 +4,7 @@
 /**
  * @tabtin/cli 启动器。
  *
- * 按 process.platform + process.arch 选出对应的预编译 tabtin Go 二进制
+ * 按 process.platform + process.arch 选出对应的预编译 muse Go 二进制
  * （见 ../binaries/），原样转发 argv / stdio / exit code。
  *
  * 首版（ 工作包二）只打包 Windows 与 macOS 四个平台；其它平台
@@ -16,12 +16,12 @@ const fs = require('node:fs');
 const { spawnSync } = require('node:child_process');
 
 // platform:arch → binaries/ 下的文件名。必须与 packages/tabtin-cli-go/Makefile
-// 的 build-all 产物命名（dist/tabtin-<os>-<arch>[.exe]）保持一致。
+// 的 build-all 产物命名（dist/muse-<os>-<arch>[.exe]）保持一致。
 const BINARY_MAP = {
-  'win32:x64': 'tabtin-windows-amd64.exe',
-  'win32:arm64': 'tabtin-windows-arm64.exe',
-  'darwin:x64': 'tabtin-darwin-amd64',
-  'darwin:arm64': 'tabtin-darwin-arm64',
+  'win32:x64': 'muse-windows-amd64.exe',
+  'win32:arm64': 'muse-windows-arm64.exe',
+  'darwin:x64': 'muse-darwin-amd64',
+  'darwin:arm64': 'muse-darwin-arm64',
 };
 
 function resolveBinaryPath() {
@@ -36,7 +36,7 @@ function resolveBinaryPath() {
       .join('\n');
     throw new LauncherError(
       `[@tabtin/cli] 不支持的平台: ${platform}/${arch}\n` +
-        `当前 @tabtin/cli 仅打包以下平台的 tabtin 二进制：\n${supported}\n` +
+        `当前 @tabtin/cli 仅打包以下平台的 muse 二进制：\n${supported}\n` +
         '其它平台请改用 `packages/tabtin-cli-go` 自行 `make build`，或等待后续版本补齐。'
     );
   }
@@ -44,7 +44,7 @@ function resolveBinaryPath() {
   const binaryPath = path.join(__dirname, '..', 'binaries', binaryName);
   if (!fs.existsSync(binaryPath)) {
     throw new LauncherError(
-      `[@tabtin/cli] 未找到 tabtin 二进制: ${binaryPath}\n` +
+      `[@tabtin/cli] 未找到 muse 二进制: ${binaryPath}\n` +
         `当前平台: ${platform}/${arch}，期望文件名: ${binaryName}\n` +
         '这通常意味着 npm pack 之前没有运行构建脚本。请先执行：\n' +
         '  pnpm --filter @tabtin/cli build   # 或 bash scripts/build-binaries.sh\n' +
@@ -95,7 +95,7 @@ function main() {
 
   if (result.error) {
     process.stderr.write(
-      `[@tabtin/cli] 启动 tabtin 二进制失败: ${result.error.message}\n` +
+      `[@tabtin/cli] 启动 muse 二进制失败: ${result.error.message}\n` +
         `二进制路径: ${binaryPath}\n`
     );
     process.exit(1);

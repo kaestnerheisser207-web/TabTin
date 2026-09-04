@@ -234,7 +234,7 @@ export class Win32BridgeManager {
           DesktopErrorCode.INTERNAL_ERROR,
           `bridge.py 请求超时（${CALL_TIMEOUT_MS / 1000} 秒）：method=${method}。` +
           `目标窗口可能无响应或 UIA 查询耗时过长。` +
-          `请重试或使用 tabtin desktop screenshot + 坐标点击作为替代。`,
+          `请重试或使用 muse desktop screenshot + 坐标点击作为替代。`,
         ))
       }, CALL_TIMEOUT_MS)
 

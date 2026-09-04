@@ -163,7 +163,7 @@ function linuxNotSupported(actionLabel: string): DesktopError {
     DesktopErrorCode.UNSUPPORTED_PLATFORM,
     `不支持此操作：桌面操控仅在 macOS 和 Windows 可用。` +
     `当前系统识别为 ${process.platform}，本次${actionLabel}未执行，操作已被阻止。` +
-    `如需桌面操控，请在 macOS 或 Windows 上运行 TabTin 客户端。`,
+    `如需桌面操控，请在 macOS 或 Windows 上运行 Muse 客户端。`,
   )
 }
 
@@ -344,7 +344,7 @@ export class DesktopExecutorService {
         DesktopErrorCode.PERMISSION_DENIED,
         `桌面操控 session 未启动：当前没有活跃会话。` +
         `本次请求未执行，其他桌面应用不受影响。` +
-        `请先调用 tabtin desktop screenshot（推荐，会触发审批并建立 session），或显式运行 tabtin desktop session start。`,
+        `请先调用 muse desktop screenshot（推荐，会触发审批并建立 session），或显式运行 muse desktop session start。`,
       )
     }
     return this.currentSession
@@ -362,7 +362,7 @@ export class DesktopExecutorService {
         DesktopErrorCode.ABORTED,
         `桌面操控 session 已结束。` +
         `本次操作未执行。` +
-        `请重新运行 tabtin desktop screenshot 启动新会话。`,
+        `请重新运行 muse desktop screenshot 启动新会话。`,
       )
     }
     if (this.abortSignal?.aborted) {
@@ -370,7 +370,7 @@ export class DesktopExecutorService {
         DesktopErrorCode.ABORTED,
         `桌面操控已被用户中止（通过快捷键或撤销授权）。` +
         `本次操作未执行，当前会话已结束。` +
-        `若要继续，请重新运行 tabtin desktop screenshot 启动新会话。`,
+        `若要继续，请重新运行 muse desktop screenshot 启动新会话。`,
       )
     }
   }
@@ -492,7 +492,7 @@ export class DesktopExecutorService {
         DesktopErrorCode.PERMISSION_DENIED,
         `坐标换算失败：尚未截屏，无法将截图坐标映射到屏幕坐标。` +
         `本次操作未执行。` +
-        `请先调用 tabtin desktop screenshot 建立 session 与坐标系，再发起点击 / 拖拽 / 移动等基于坐标的操作。`,
+        `请先调用 muse desktop screenshot 建立 session 与坐标系，再发起点击 / 拖拽 / 移动等基于坐标的操作。`,
       )
     }
     const offset = dims.regionOffset ?? { x: 0, y: 0 }
@@ -620,7 +620,7 @@ export class DesktopExecutorService {
         DesktopErrorCode.VALIDATION_ERROR,
         `找不到指定的显示器 ${opts.displayId}（当前系统识别到的可用 ID：[${available}]）。` +
         `本次截屏未执行。` +
-        `请先运行 tabtin desktop screenshot 不带 --display 查看主屏，或从可用 ID 列表中选择再指定。`,
+        `请先运行 muse desktop screenshot 不带 --display 查看主屏，或从可用 ID 列表中选择再指定。`,
       )
     }
 
@@ -652,7 +652,7 @@ export class DesktopExecutorService {
           // SESSION_EXPIRED = 停太久；DISPLAY_CONFIG_CHANGED = 硬件 / 显示设置变了。
           `显示器配置已变化（新插拔显示器 / 改变分辨率 / 改变缩放；首次截屏 bounds: ${existingFrozen.boundsX},${existingFrozen.boundsY}，当前 bounds: ${display.bounds.x},${display.bounds.y}），原坐标系失效。` +
           `本次截屏未执行，当前 session 已结束。` +
-          `请重新运行 tabtin desktop screenshot 建立新 session 与新坐标系后再继续。`,
+          `请重新运行 muse desktop screenshot 建立新 session 与新坐标系后再继续。`,
           {
             frozen: {
               x: existingFrozen.boundsX,
@@ -715,9 +715,9 @@ export class DesktopExecutorService {
             DesktopErrorCode.TCC_DENIED,
             `桌面操控无法继续：macOS 屏幕录制权限未授予（当前状态：${this.screenRecordingStatusLabel(status)}）。` +
             `本次截屏未执行，当前会话也未建立；后续桌面操控在未授权前都将失败。` +
-            `请前往「系统设置 → 隐私与安全性 → 屏幕录制」允许 TabTin，` +
-            `或运行 tabtin desktop accessibility --prompt 打开系统引导对话框，` +
-            `授权后重启 TabTin 或重新运行 tabtin desktop screenshot。`,
+            `请前往「系统设置 → 隐私与安全性 → 屏幕录制」允许 Muse，` +
+            `或运行 muse desktop accessibility --prompt 打开系统引导对话框，` +
+            `授权后重启 Muse 或重新运行 muse desktop screenshot。`,
           )
         }
       }
@@ -728,7 +728,7 @@ export class DesktopExecutorService {
           ? `显示器可能不可用，或 macOS 屏幕录制权限尚未授予。`
           : `目标显示器可能不可用或已断开。`) +
         `本次截屏未执行。` +
-        `请确认显示器在线；macOS 上还需在「系统设置 → 隐私与安全性 → 屏幕录制」中允许 TabTin。`,
+        `请确认显示器在线；macOS 上还需在「系统设置 → 隐私与安全性 → 屏幕录制」中允许 Muse。`,
       )
     }
 
@@ -743,9 +743,9 @@ export class DesktopExecutorService {
           DesktopErrorCode.TCC_DENIED,
           `桌面操控无法继续：macOS 屏幕录制权限未授予（当前状态：${this.screenRecordingStatusLabel(status)}），截屏图像可能为全黑。` +
           `本次截屏未执行，当前会话也未建立；后续桌面操控在未授权前都将失败。` +
-          `请前往「系统设置 → 隐私与安全性 → 屏幕录制」允许 TabTin，` +
-          `或运行 tabtin desktop accessibility --prompt 打开系统引导对话框，` +
-          `授权后重启 TabTin 或重新运行 tabtin desktop screenshot。`,
+          `请前往「系统设置 → 隐私与安全性 → 屏幕录制」允许 Muse，` +
+          `或运行 muse desktop accessibility --prompt 打开系统引导对话框，` +
+          `授权后重启 Muse 或重新运行 muse desktop screenshot。`,
         )
       }
     }
@@ -1015,7 +1015,7 @@ export class DesktopExecutorService {
         DesktopErrorCode.POLICY_BLOCKED,
         `点击位置的屏幕内容与上次截图不一致（9×9 像素块已变化）。` +
         `本次点击未执行，避免点在 Agent 未看到过的内容上。` +
-        `请先运行 tabtin desktop screenshot 重新截图，再基于新坐标点击。`,
+        `请先运行 muse desktop screenshot 重新截图，再基于新坐标点击。`,
       )
     } catch (err) {
       if (err instanceof DesktopError && err.code === DesktopErrorCode.POLICY_BLOCKED) {
@@ -1248,7 +1248,7 @@ export class DesktopExecutorService {
             DesktopErrorCode.PERMISSION_DENIED,
             `剪贴板粘贴未授权：当前 session 未开启 clipboardWrite。` +
             `本次粘贴未执行，剪贴板与目标输入框保持原状。` +
-            `请通过 tabtin desktop screenshot 触发的审批弹窗允许桌面操控（一次审批将覆盖整个 session 的剪贴板写入）。`,
+            `请通过 muse desktop screenshot 触发的审批弹窗允许桌面操控（一次审批将覆盖整个 session 的剪贴板写入）。`,
           )
         }
 
@@ -1530,7 +1530,7 @@ export class DesktopExecutorService {
         `操作被阻止：无法检测坐标 (${screenX}, ${screenY}) 指向的应用窗口。` +
         `本次操作未执行，当前会话其他操作不受影响。` +
         (process.platform === 'darwin'
-          ? `请在「系统设置 → 隐私与安全性 → 辅助功能」中允许 TabTin；如系统未安装 python3 也会触发此错误，可通过 brew install python 或系统包管理器补装；`
+          ? `请在「系统设置 → 隐私与安全性 → 辅助功能」中允许 Muse；如系统未安装 python3 也会触发此错误，可通过 brew install python 或系统包管理器补装；`
           : `请确认 Windows 辅助功能权限已授予；`) +
         `或在桌面操控设置中关闭应用范围限制。`,
       )
@@ -1558,7 +1558,7 @@ export class DesktopExecutorService {
         DesktopErrorCode.POLICY_BLOCKED,
         `操作被阻止：坐标 (${screenX}, ${screenY}) 指向应用「${app}」，不在允许列表 [${allowed.join(', ')}] 中（精确匹配，大小写不敏感）。` +
         `本次操作未执行，当前会话其他操作不受影响。` +
-        `如需在本会话中操控「${app}」，请调用 tabtin desktop session extend-allowlist "${app}" --session-id ${sessionId}，` +
+        `如需在本会话中操控「${app}」，请调用 muse desktop session extend-allowlist "${app}" --session-id ${sessionId}，` +
         `等用户在审批弹窗中允许后再继续（不要直接结束会话重开，也不要反复重试原操作）。`,
       )
     }
@@ -1570,8 +1570,8 @@ export class DesktopExecutorService {
         DesktopErrorCode.TCC_DENIED,
         `桌面操控无法继续：macOS 辅助功能权限未授予。` +
         `本次操作未执行，当前会话保留；后续鼠标 / 键盘操作都将失败。` +
-        `请前往「系统设置 → 隐私与安全性 → 辅助功能」允许 TabTin，` +
-        `或运行 tabtin desktop accessibility --prompt 打开系统引导对话框，授权后重新尝试本次动作。`,
+        `请前往「系统设置 → 隐私与安全性 → 辅助功能」允许 Muse，` +
+        `或运行 muse desktop accessibility --prompt 打开系统引导对话框，授权后重新尝试本次动作。`,
       )
     }
   }
@@ -1584,7 +1584,7 @@ export class DesktopExecutorService {
    *
    * 规范 § 4.5.2 约束：
    * - **入口硬性校验（Q5）**：`actions[0].action` 不能是 `'screenshot'`——
-   *   冷启动无 session 时先单独调 `tabtin desktop screenshot` 建立 session 再
+   *   冷启动无 session 时先单独调 `muse desktop screenshot` 建立 session 再
    *   发 batch；违反 → `VALIDATION_ERROR + 中文三段式`（路由层与 Executor 层
    *   双重拦截，任意一条失效都能兜住）。
    * - **stop-on-first-error**：第 N 步失败 → 第 N+1 步不执行；不回滚（鼠标
@@ -1617,7 +1617,7 @@ export class DesktopExecutorService {
     if (actions[0].action === 'screenshot') {
       throw new DesktopError(
         DesktopErrorCode.VALIDATION_ERROR,
-        `batch 首项不能是 screenshot，请先单独调 tabtin desktop screenshot 建立 session 后再发起 batch。` +
+        `batch 首项不能是 screenshot，请先单独调 muse desktop screenshot 建立 session 后再发起 batch。` +
         `本次 batch 未执行，其他桌面操控不受影响。` +
         `原因：batch 入口走一次 desktop_input 策略评估，若首项又是 screenshot 会产生"入口已审批但子动作触发新审批"的复杂耦合（规范 § 4.5.2 Q5）。` +
         `非首项 screenshot 是正常子动作（用于中途刷新坐标系），不受此限制。`,
@@ -1803,7 +1803,7 @@ export class DesktopExecutorService {
         DesktopErrorCode.PERMISSION_DENIED,
         `扩权失败：当前无活跃 session 或 sessionId 不匹配。` +
         `本次扩权未执行；其他已有授权不受影响。` +
-        `请先运行 tabtin desktop screenshot 建立 session，再用同一 sessionId 发起扩权请求。`,
+        `请先运行 muse desktop screenshot 建立 session，再用同一 sessionId 发起扩权请求。`,
       )
     }
 
@@ -1818,7 +1818,7 @@ export class DesktopExecutorService {
         DesktopErrorCode.VALIDATION_ERROR,
         `请求参数非法：扩权的 apps 列表为空。` +
         `本次扩权未执行；当前 session 白名单保持不变。` +
-        `请改用 tabtin desktop session extend-allowlist <app_name> [<app_name>...] 重新调用。`,
+        `请改用 muse desktop session extend-allowlist <app_name> [<app_name>...] 重新调用。`,
       )
     }
 
@@ -1830,7 +1830,7 @@ export class DesktopExecutorService {
         DesktopErrorCode.LOCK_CONFLICT,
         `扩权失败：当前未持有桌面操控锁，无法继续。` +
         `本次扩权未执行；其他桌面操控不受影响。` +
-        `请先运行 tabtin desktop screenshot 触发审批 + 建立锁，再发起扩权请求。`,
+        `请先运行 muse desktop screenshot 触发审批 + 建立锁，再发起扩权请求。`,
       )
     }
 
@@ -1871,7 +1871,7 @@ export class DesktopExecutorService {
         DesktopErrorCode.NEEDS_APPROVAL,
         `桌面操控扩权被拒绝：用户在审批弹窗中选择了拒绝或审批超时。` +
         `本次扩权未执行，当前 session 的允许应用仍为 [${currentList.join(', ') || '（空）'}]；原 session 可以继续使用。` +
-        `如需扩权请重新运行 tabtin desktop session extend-allowlist 并在弹窗中选择「允许」。`,
+        `如需扩权请重新运行 muse desktop session extend-allowlist 并在弹窗中选择「允许」。`,
       )
     }
 
@@ -1982,7 +1982,7 @@ export class DesktopExecutorService {
       DesktopErrorCode.AX_UNAVAILABLE,
       `Accessibility Tree 暂不可用：当前平台不支持。` +
       `本次 AX 查询未执行。` +
-      `请使用 tabtin desktop screenshot + 坐标点击作为替代。`,
+      `请使用 muse desktop screenshot + 坐标点击作为替代。`,
     )
   }
 
@@ -2013,7 +2013,7 @@ export class DesktopExecutorService {
         `未找到名为「${opts.name}」${opts.role ? `角色「${opts.role}」` : ''}的元素。` +
         `本次点击未执行。` +
         `当前 AX 快照里${candidates.length > 0 ? `候选元素有：${candidates.join(' / ')}` : '没有找到匹配的交互元素'}；` +
-        `请检查元素名拼写或改用 tabtin desktop screenshot + 坐标点击。`,
+        `请检查元素名拼写或改用 muse desktop screenshot + 坐标点击。`,
         { candidates },
       )
     }
@@ -2032,7 +2032,7 @@ export class DesktopExecutorService {
         DesktopErrorCode.ELEMENT_NOT_FOUND,
         `元素缺少坐标信息：「${node.name ?? opts.name}」(${node.role}) 没有 bounds 属性。` +
         `本次点击未执行。` +
-        `请改用 tabtin desktop screenshot + 坐标点击。`,
+        `请改用 muse desktop screenshot + 坐标点击。`,
       )
     }
 
@@ -2081,7 +2081,7 @@ export class DesktopExecutorService {
         `未找到名为「${opts.name}」${opts.role ? `角色「${opts.role}」` : ''}的元素。` +
         `本次输入未执行。` +
         `当前 AX 快照里${candidates.length > 0 ? `候选元素有：${candidates.join(' / ')}` : '没有找到匹配的交互元素'}；` +
-        `请检查元素名拼写或改用 tabtin desktop screenshot + 坐标点击后 type。`,
+        `请检查元素名拼写或改用 muse desktop screenshot + 坐标点击后 type。`,
         { candidates },
       )
     }
@@ -2100,7 +2100,7 @@ export class DesktopExecutorService {
         DesktopErrorCode.ELEMENT_NOT_FOUND,
         `元素缺少坐标信息：「${node.name ?? opts.name}」(${node.role}) 没有 bounds 属性。` +
         `本次输入未执行。` +
-        `请改用 tabtin desktop screenshot + 坐标点击后 type。`,
+        `请改用 muse desktop screenshot + 坐标点击后 type。`,
       )
     }
 
@@ -2136,7 +2136,7 @@ export class DesktopExecutorService {
         DesktopErrorCode.PERMISSION_DENIED,
         `bound window 模式仅在 Windows 平台可用（当前平台：${process.platform}）。` +
         `macOS 通过 CGEvent 直接操控，不需要窗口绑定。` +
-        `请直接使用 tabtin desktop click / type 等命令。`,
+        `请直接使用 muse desktop click / type 等命令。`,
       )
     }
 

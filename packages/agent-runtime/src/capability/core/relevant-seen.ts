@@ -10,7 +10,7 @@
  *
  * **压缩安全**：检测基于当轮真实发送的消息——被引用的描述必然在同一 payload 里；即便后续
  * compaction 摘掉历史块，条目名字仍在静态段（`<skills>`/`<mcp_servers>`/`<cli_commands>`），
- * 模型可用 skills_read / `tabtin mcp list-tools` / `tabtin commands` 重取，`（见上文）`是
+ * 模型可用 skills_read / `muse mcp list-tools` / `muse commands` 重取，`（见上文）`是
  * 可恢复引导而非死指针。
  *
  * 三者动态段都是同构 Markdown 表 `| 标识 | 次列 | 描述 |`（skills=key、mcp=tool、cli=command），

@@ -1,5 +1,7 @@
 package com.tabtin.mobile.features.profile
 
+import com.muse.mobile.R
+
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -219,7 +221,7 @@ internal fun LogoutSettingsButton(onClick: () -> Unit) {
             .clickable(onClick = onClick),
     ) {
         Text(
-            text = androidx.compose.ui.res.stringResource(com.tabtin.mobile.R.string.profile_logout),
+            text = androidx.compose.ui.res.stringResource(com.muse.mobile.R.string.profile_logout),
             style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.SemiBold),
             color = criticalColor,
             modifier = Modifier.padding(vertical = TTSpacing.lg),

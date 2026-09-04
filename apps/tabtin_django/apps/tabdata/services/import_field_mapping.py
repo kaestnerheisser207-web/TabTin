@@ -27,14 +27,14 @@ def resolve_target_field_id(
 
 def normalize_import_field_type(raw_field_type: Any) -> Tuple[str, Optional[str]]:
     """
-    兼容外部表格导出字段类型别名，统一映射为 TabTin 内部 field_type。
+    兼容外部表格导出字段类型别名，统一映射为 Muse 内部 field_type。
     """
     raw = str(raw_field_type or '').strip()
     if not raw:
         return 'text', None
 
     alias_map = {
-        # TabTin / snake_case
+        # Muse / snake_case
         'text': 'text',
         'long_text': 'long_text',
         'number': 'number',
@@ -85,7 +85,7 @@ def normalize_import_field_type(raw_field_type: Any) -> Tuple[str, Optional[str]
 
 def extract_import_field_config(raw_field: Dict[str, Any]) -> Dict[str, Any]:
     """
-    统一提取字段配置，兼容 TabTin(config) 与外部导出(options/lookupOptions) 结构。
+    统一提取字段配置，兼容 Muse(config) 与外部导出(options/lookupOptions) 结构。
     """
     raw_options = raw_field.get('options')
     raw_config = raw_field.get('config')

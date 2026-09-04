@@ -343,7 +343,7 @@
       "feishuReviewConfirm": "Bestätigen Sie den Import",
       "feishuReviewEmpty": "Bewahren Sie mindestens eine Tabelle oder ein Dokument auf",
       "feishuIncludeAttachments": "Anhänge synchronisieren (langsamer)",
-      "feishuIncludeAttachmentsHint": "Standardmäßig deaktiviert; Wenn diese Option aktiviert ist, werden Dateien in TabTin-Anhänge heruntergeladen",
+      "feishuIncludeAttachmentsHint": "Standardmäßig deaktiviert; Wenn diese Option aktiviert ist, werden Dateien in Muse-Anhänge heruntergeladen",
       "feishuImporting": "Importieren…",
       "feishuImportProgressRunning": "Importieren von {{done}}/{{total}}",
       "feishuImportProgressQueued": "Importieren von {{done}}/{{total}} ({{queued}} in der Warteschlange)",
@@ -958,20 +958,24 @@
     },
     "quickUse": {
       "sectionTitle": "Schnelle Verwendung",
-      "autoDescription": "Keine Einrichtung erforderlich. TabTin generiert zunächst einen versandfertigen Aufgabenentwurf.",
+      "autoDescription": "Keine Einrichtung erforderlich. Muse generiert zunächst einen versandfertigen Aufgabenentwurf.",
       "cardHint": "Erstellen Sie einen Prompt-Entwurf und platzieren Sie ihn zur Überprüfung in der Chat-Eingabe.",
       "insertAction": "Generieren",
       "toastTitle": "Wird in der Eingabe generiert",
       "toastDescription": "Sie können die voreingestellten Felder vor dem Senden anpassen.",
       "generatedTitle": "Aufgabenentwurf erstellt",
-      "generatedHint": "TabTin hat zuerst die Vorlage ausgefüllt. Passen Sie es bei Bedarf an und senden Sie es dann.",
+      "generatedHint": "Muse hat zuerst die Vorlage ausgefüllt. Passen Sie es bei Bedarf an und senden Sie es dann.",
       "readyBadge": "Bereit",
       "previewLabel": "Wird an den Agenten gesendet",
       "toggleOn": "Auf",
       "toggleOff": "Aus"
     },
     "quickUseBuilder": {
-      "button": "Schnell verwendbare Vorlage", "variables": "Variablen", "variablesHint": "Verwenden Sie einen festen Prompt oder fügen Sie Variablen zum Ausfüllen hinzu.", "preview": "Vorschau", "cancel": "Abbrechen"
+      "button": "Schnell verwendbare Vorlage",
+      "variables": "Variablen",
+      "variablesHint": "Verwenden Sie einen festen Prompt oder fügen Sie Variablen zum Ausfüllen hinzu.",
+      "preview": "Vorschau",
+      "cancel": "Abbrechen"
     },
     "versionPublish": {
       "title": "Neue Version veröffentlichen",
@@ -1254,7 +1258,7 @@
       "xlsxTruncated": "Zeigt {{shown}} von {{total}} Zeilen",
       "xlsxSheetsLimited": "Es werden nur die ersten {{max}}-Blätter angezeigt",
       "xlsxFormulasCached": "Zeigt die in der Datei gespeicherten {{count}}-Formelergebnisse an.",
-      "xlsxFormulasCalculated": "TabTin hat die {{count}}-Formel(en) für diese Vorschau lokal berechnet. Die Ergebnisse wurden nicht in der Datei gespeichert.",
+      "xlsxFormulasCalculated": "Muse hat die {{count}}-Formel(en) für diese Vorschau lokal berechnet. Die Ergebnisse wurden nicht in der Datei gespeichert.",
       "xlsxFormulasUnavailable": "{{count}}-Formeln haben kein gespeichertes Ergebnis und können nicht in der Vorschau berechnet werden. Öffnen Sie die Datei in einer Tabellenkalkulations-App.",
       "loadingDocxViewer": "Dokumentvorschau wird geladen...",
       "loadingPptxViewer": "Präsentation wird geladen...",
@@ -1562,7 +1566,7 @@
   },
   "browserRestore": {
     "restoringTitle": "Seite wird wiederhergestellt",
-    "restoringDescription": "TabTin öffnet die zuvor gespeicherte Seite erneut.",
+    "restoringDescription": "Muse öffnet die zuvor gespeicherte Seite erneut.",
     "failedTitle": "Die Wiederherstellung der Seite ist fehlgeschlagen",
     "failedDescription": "Die ursprüngliche URL wird weiterhin gespeichert. Versuchen Sie es erneut oder schließen Sie diese Registerkarte.",
     "retry": "Versuchen Sie es noch einmal",

@@ -36,7 +36,7 @@ def build_runtime_manifest_markdown(validation: RuntimeValidationResult) -> str:
     sections = [
         "# Runtime Task / Worker Registry",
         "## 0. 部署口径",
-        "TabTin Runtime 生产与本地部署统一采用 **8 组 worker + 单 beat**：`worker-critical`、`worker-default`、`worker-realtime`、`worker-search`、`worker-data-ai`、`worker-heavy`、`worker-tracker`、`worker-ai-background`，以及一个 Celery Beat 进程。ACK、deploy compose、systemd、supervisor 和本地脚本都应保持这个口径。",
+        "Muse Runtime 生产与本地部署统一采用 **8 组 worker + 单 beat**：`worker-critical`、`worker-default`、`worker-realtime`、`worker-search`、`worker-data-ai`、`worker-heavy`、`worker-tracker`、`worker-ai-background`，以及一个 Celery Beat 进程。ACK、deploy compose、systemd、supervisor 和本地脚本都应保持这个口径。",
         "## 1. 字段说明",
         "本文件由 `python manage.py export_runtime_manifest --format markdown` 从 `tabtin.runtime.registry` 生成。",
         "队列、Worker、Task、Beat 的字段含义以 `apps/tabtin_django/tabtin/runtime/registry.py` 顶部中文 docstring 为准。",

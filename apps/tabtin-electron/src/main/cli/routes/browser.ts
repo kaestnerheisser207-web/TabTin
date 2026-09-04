@@ -43,9 +43,9 @@ export async function handleBrowserRoute(
 
   const executor = getCLIActionExecutor()
   if (!executor) {
-    sendJSON(res, 503, errorResponse('INTERNAL_ERROR', 'TabTin 正在启动中，请稍后重试（通常需要 5-10 秒）', {
+    sendJSON(res, 503, errorResponse('INTERNAL_ERROR', 'Muse 正在启动中，请稍后重试（通常需要 5-10 秒）', {
       retryable: true,
-      suggestions: ['确保 TabTin 应用已完全启动', '等待几秒后重试', '运行 tabtin doctor 进行环境诊断'],
+      suggestions: ['确保 Muse 应用已完全启动', '等待几秒后重试', '运行 muse doctor 进行环境诊断'],
     }))
     return
   }
@@ -68,7 +68,7 @@ export async function handleBrowserRoute(
 
   sendJSON(res, 404, errorResponse('UNKNOWN_ROUTE', `未知的 browser 命令: ${url}`, {
     suggestions: [
-      '使用 tabtin browser --help 查看所有可用命令',
+      '使用 muse browser --help 查看所有可用命令',
       '常用命令: open, glance, act, print, eval, tab list',
     ],
   }))

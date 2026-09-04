@@ -10,7 +10,7 @@ describe('fetch route envelopes', () => {
         ok: false,
         reason: 'blocked',
         message: 'Access denied (HTTP 403)',
-        suggestion: 'Use `tabtin browser open <url>` to load in a real browser.',
+        suggestion: 'Use `muse browser open <url>` to load in a real browser.',
       },
     });
 
@@ -18,7 +18,7 @@ describe('fetch route envelopes', () => {
     assert.equal(envelope.error.code, 'FETCH_FAILED');
     assert.match(envelope.error.message, /Access denied/);
     assert.deepEqual(envelope.error.suggestions, [
-      'Use `tabtin browser open <url>` to load in a real browser.',
+      'Use `muse browser open <url>` to load in a real browser.',
     ]);
     assert.equal((envelope.error.detail as { url?: string }).url, 'https://blocked.example.com');
   });

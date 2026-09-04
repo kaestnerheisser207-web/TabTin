@@ -1,7 +1,7 @@
 package com.tabtin.mobile.features.conversation
 
 import android.content.Context
-import com.tabtin.mobile.R
+import com.muse.mobile.R
 
 /**
  * 将后端返回的 `[error_code] fallback text` 格式消息映射为本地化文案。

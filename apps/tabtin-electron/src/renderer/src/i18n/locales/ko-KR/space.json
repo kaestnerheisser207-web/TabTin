@@ -108,7 +108,7 @@
     "availableTitle": "AI 실행은 \"{{device}}\"을 통해 라우팅됩니다.",
     "availableDesc": "팀 협업은 이 팀 작업 공간에 유지됩니다. AI는 {{space}}에서 실행됩니다.",
     "unavailableTitle": "소유자 실행 장치 \"{{device}}\"을 사용할 수 없습니다({{status}})",
-    "unavailableDesc": "채팅과 자산은 계속 사용할 수 있지만 지금은 AI 작업을 시작할 수 없습니다. 소유자가 해당 장치에서 TabTin을 다시 열고 {{space}}가 다시 온라인 상태가 되면 실행이 재개됩니다."
+    "unavailableDesc": "채팅과 자산은 계속 사용할 수 있지만 지금은 AI 작업을 시작할 수 없습니다. 소유자가 해당 장치에서 Muse을 다시 열고 {{space}}가 다시 온라인 상태가 되면 실행이 재개됩니다."
   },
   "validation": {
     "nameRequired": "작업공간 이름은 필수 항목입니다.",
@@ -441,8 +441,8 @@
       "subtitle": "먼저 이 에이전트를 구동하는 요소와 바인딩된 장치를 식별한 다음 현재 전자 제어 장치에만 속하는 기능과 현재 공간 구성을 분리합니다.",
       "builtinActive": "내장 런타임 활성",
       "externalActive": "외부 백엔드 활성",
-      "builtinDesc": "이 에이전트는 TabTin 내장 엔진에 의해 구동되지만 이 페이지에서는 여전히 현재 공간 구성과 이 Electron 인스턴스에서 제공하는 호스트 기능을 구별해야 합니다. 로컬 런타임은 이 Electron 장치가 실행 장치인 경우에만 에이전트의 직접 런타임과 동일합니다.",
-      "externalDesc": "이 에이전트는 외부 엔진에 의해 구동됩니다. 주로 자체 도구 시스템 및 터미널 액세스에 의존하므로 여기에 표시된 TabTin 런타임, MCP 및 Core CLI는 외부 에이전트가 항상 직접 호출할 수 있는 것이 아니라 현재 Electron 호스트가 제공할 수 있는 것을 설명합니다.",
+      "builtinDesc": "이 에이전트는 Muse 내장 엔진에 의해 구동되지만 이 페이지에서는 여전히 현재 공간 구성과 이 Electron 인스턴스에서 제공하는 호스트 기능을 구별해야 합니다. 로컬 런타임은 이 Electron 장치가 실행 장치인 경우에만 에이전트의 직접 런타임과 동일합니다.",
+      "externalDesc": "이 에이전트는 외부 엔진에 의해 구동됩니다. 주로 자체 도구 시스템 및 터미널 액세스에 의존하므로 여기에 표시된 Muse 런타임, MCP 및 Core CLI는 외부 에이전트가 항상 직접 호출할 수 있는 것이 아니라 현재 Electron 호스트가 제공할 수 있는 것을 설명합니다.",
       "boundLocal": "이 Electron 장치는 실행 장치입니다.",
       "boundOther": "이 에이전트는 다른 장치에 바인딩되어 있습니다.",
       "unbound": "이 에이전트는 아직 실행 장치에 바인딩되어 있지 않습니다.",
@@ -742,7 +742,7 @@
     "workspaceHint": "TabCode/디렉토리에서 열린 콘텐츠에서 자동으로 감지됩니다. 수동 구성이 필요하지 않습니다.",
     "workspaceEmpty": "승인된 경로가 없습니다. 에이전트 액세스 권한을 부여하려면 TabCode에서 프로젝트를 열거나 디렉터리에서 로컬 디렉터리를 엽니다.",
     "workspaceSourceSandbox": "에이전트 샌드박스",
-    "workspaceSandboxHint": "각 작업 공간에 대해 TabTin이 자동 생성한 기본 작업 공간. 여기서는 취소할 수 없습니다.",
+    "workspaceSandboxHint": "각 작업 공간에 대해 Muse이 자동 생성한 기본 작업 공간. 여기서는 취소할 수 없습니다.",
     "workspaceSourceTabcode": "TabCode 프로젝트",
     "workspaceTabcodeHint": "여기에 드롭한 폴더는 .env, SSH 키 및 내부의 기타 중요한 파일을 포함하여 에이전트가 완전히 액세스할 수 있습니다. 에이전트 보기 범위를 좁히려면 홈 디렉터리가 아닌 특정 하위 폴더를 선택하세요.",
     "workspaceSourceTabfolder": "디렉토리 검색 기록",
@@ -1009,11 +1009,11 @@
     "panelDescription": "이 에이전트에 대한 터미널 명령과 파일 액세스를 실행할 시스템을 결정합니다. 바인딩되면 이 작업 공간은 해당 장치에 유지됩니다.",
     "chooseDevice": "실행 장치 선택",
     "refresh": "장치 목록 새로 고침",
-    "noRegisteredDevicesHint": "이 컴퓨터에서 TabTin 데스크톱 앱을 열고 다시 시도하세요.",
+    "noRegisteredDevicesHint": "이 컴퓨터에서 Muse 데스크톱 앱을 열고 다시 시도하세요.",
     "availableDevices": "사용 가능한 장치",
     "addRemoteDevice": "원격 장치 추가",
     "addRemoteDeviceTitle": "원격 장치 추가",
-    "addRemoteDeviceDesc": "AI 작업 실행을 위해 원격 서버에 TabTin 데몬을 설정하는 설치 명령을 생성합니다.",
+    "addRemoteDeviceDesc": "AI 작업 실행을 위해 원격 서버에 Muse 데몬을 설정하는 설치 명령을 생성합니다.",
     "deviceNameLabel": "장치 이름",
     "deviceNamePlaceholder": "예를 들어 프로덕션 서버, GPU 워크스테이션",
     "cancel": "취소",
@@ -1367,7 +1367,7 @@
     "connectFailed": "연결 실패",
     "testFailed": "테스트 실패",
     "helpTitle": "SSH 원격 서버 정보",
-    "helpTip1": "SSH 연결은 로컬 컴퓨터가 아닌 TabTin 백엔드에서 시작되므로 모바일 장치도 원격 서버를 사용할 수 있습니다.",
+    "helpTip1": "SSH 연결은 로컬 컴퓨터가 아닌 Muse 백엔드에서 시작되므로 모바일 장치도 원격 서버를 사용할 수 있습니다.",
     "helpTip2": "자격 증명(비밀번호 또는 키)은 저장 시 암호화되며 일반 텍스트로 저장되지 않습니다.",
     "helpTip3": "에이전트는 실시간 출력 스트리밍을 통해 원격 서버에서 명령을 실행할 수 있습니다.",
     "helpTip4": "서버 지문은 첫 번째 연결 시 기록되고 이후 자동으로 확인됩니다."
@@ -1410,7 +1410,7 @@
     "skillsSelf": "이러한 스킬은 현재 그룹 공간에서만 적용되며 다른 구성원의 스킬 구성은 변경되지 않습니다.",
     "extensionsGroup": "이 섹션에서는 현재 그룹 공간에서 사용 가능한 통합 연결을 관리합니다. 그룹별 연결이 구성되지 않은 경우 조직 연결이 상속됩니다.",
     "channelsOrganization": "채널 계정은 조직 수준 리소스입니다. 이 페이지는 현재 그룹 공간이 해당 채널을 사용하는 방법을 제어합니다.",
-    "mcpRuntime": "이 뷰는 현재 공간에 마운트된 로컬 MCP 연결과 현재 Electron/Daemon 호스트에 의해 노출된 TabTin MCP 엔드포인트를 결합합니다. 그룹 공간의 개인 서버측 구성도 마찬가지입니다.",
+    "mcpRuntime": "이 뷰는 현재 공간에 마운트된 로컬 MCP 연결과 현재 Electron/Daemon 호스트에 의해 노출된 Muse MCP 엔드포인트를 결합합니다. 그룹 공간의 개인 서버측 구성도 마찬가지입니다.",
     "apiGroup": "이 섹션에서는 읽기 전용 쿼리 및 외부 통합을 위한 현재 그룹 공간의 데이터 진입점을 노출합니다."
   },
   "gitStatus": {
@@ -1470,7 +1470,7 @@
   },
   "mcpConnections": {
     "title": "외부 도구 및 통합(MCP)",
-    "subtitle": "MCP(Model Context Protocol)는 표준화된 프로토콜입니다. 현재 에이전트에 대한 외부 데이터 소스(예: 로컬 데이터베이스 또는 GitHub)를 연결하거나 TabTin의 기능을 다른 AI 보조자에게 노출할 수 있습니다.",
+    "subtitle": "MCP(Model Context Protocol)는 표준화된 프로토콜입니다. 현재 에이전트에 대한 외부 데이터 소스(예: 로컬 데이터베이스 또는 GitHub)를 연결하거나 Muse의 기능을 다른 AI 보조자에게 노출할 수 있습니다.",
     "subtitleDevice": "이 장치의 로컬 MCP 연결을 관리하고 각 연결을 활성화할 에이전트를 선택하세요.",
     "readOnlyNoticeDevice": "읽기 전용 모드. 로컬 MCP 연결은 장치 관리자가 관리합니다.",
     "agentScopeMigrationNotice": "레거시 활성화는 에이전트에 안전하게 매핑될 수 없습니다. 이 연결을 다시 사용할 수 있는 에이전트를 선택하세요.",
@@ -1493,7 +1493,7 @@
     "deleteConfirm": "MCP 연결 '{{name}}'을 삭제하시겠습니까?",
     "deleteSuccess": "연결이 삭제되었습니다.",
     "localOnly": "이러한 연결은 현재 Electron 사용자 데이터 디렉터리에만 저장되며 이 Electron 호스트에 바인딩됩니다. 다른 구성원, 장치 또는 Electron 인스턴스와 자동으로 공유되지 않습니다.",
-    "externalBackendWarning": "이 에이전트는 타사 엔진으로 구동됩니다. 여기에서 외부 도구 연결을 계속 관리할 수 있지만 이러한 도구는 타사 엔진이 아닌 내장 TabTin 엔진에서만 사용할 수 있습니다.",
+    "externalBackendWarning": "이 에이전트는 타사 엔진으로 구동됩니다. 여기에서 외부 도구 연결을 계속 관리할 수 있지만 이러한 도구는 타사 엔진이 아닌 내장 Muse 엔진에서만 사용할 수 있습니다.",
     "readOnlyNotice": "이 공간은 읽기 전용 모드입니다. MCP 연결은 Bot 공간의 장치 관리자가 관리합니다.",
     "deleteConfirmTitle": "MCP 연결 삭제",
     "cancelButton": "취소",
@@ -1523,7 +1523,7 @@
     "marketplace": {
       "searchLabel": "커넥터 검색",
       "searchPlaceholder": "이름, 소스 또는 구성으로 검색",
-      "intro": "TabTin에서 외부 앱과 서비스를 사용해보세요.",
+      "intro": "Muse에서 외부 앱과 서비스를 사용해보세요.",
       "actionsLabel": "추가 작업",
       "connectedTitle": "연결된 커넥터",
       "discoveredTitle": "이 기기에서 발견됨",
@@ -1562,7 +1562,7 @@
         "reuseHint": "승인되면 Stripe / Notion과 동일한 \"웹 승인 → 프로브 도구\" 흐름을 재사용합니다.",
         "gotIt": "알았어요",
         "generic": "이 커넥터는 승인 전에 공급업체 온보딩이 필요합니다. 나중에 다시 시도해 주세요.",
-        "vercel": "Vercel MCP는 승인된 AI 클라이언트로 제한됩니다. TabTin이 승인된 후 승인이 열립니다.",
+        "vercel": "Vercel MCP는 승인된 AI 클라이언트로 제한됩니다. Muse이 승인된 후 승인이 열립니다.",
         "canva": "Canva에서는 MCP 허용 목록에 콜백 URI가 필요합니다. 검토 후 승인이 열립니다."
       },
       "credentialDialog": {
@@ -1596,7 +1596,7 @@
       "oauthDialog": {
         "promptTitle": "{{name}} 웹 승인 완료",
         "promptDescription": "인증 창에서 {{name}} 로그인을 완료한 후 여기로 돌아오세요.",
-        "browserHint": "TabTin은 기본 브라우저에서 인증 페이지를 엽니다. {{name}}에 로그인하지 않은 경우 해당 로그인이 먼저 표시됩니다. 그런 다음 \"TabTin 액세스 허용\"을 확인하십시오.",
+        "browserHint": "Muse은 기본 브라우저에서 인증 페이지를 엽니다. {{name}}에 로그인하지 않은 경우 해당 로그인이 먼저 표시됩니다. 그런 다음 \"Muse 액세스 허용\"을 확인하십시오.",
         "scopeConnectTitle": "계정 연결",
         "scopeConnectBody": "프로젝트, 배포 상태, 기본 팀 정보를 읽는 데 사용됩니다.",
         "scopeControlTitle": "당신은 통제력을 유지합니다",
@@ -1608,7 +1608,7 @@
         "failedTitle": "승인이 완료되지 않았습니다.",
         "failedBody": "{{name}} 승인이 완료되지 않았습니다. 이전 구성은 변경되지 않습니다. 다시 시도하거나 돌아가세요.",
         "timeoutTitle": "연결 확인 시간이 초과되었습니다.",
-        "timeoutBody": "TabTin은 {{name}} 승인을 위해 {{seconds}}초 이상 기다렸으며 완료되었는지 확인할 수 없었습니다. 이전 구성은 변경되지 않습니다. 다시 시도하거나 돌아가세요.",
+        "timeoutBody": "Muse은 {{name}} 승인을 위해 {{seconds}}초 이상 기다렸으며 완료되었는지 확인할 수 없었습니다. 이전 구성은 변경되지 않습니다. 다시 시도하거나 돌아가세요.",
         "successTitle": "{{name}} 연결됨",
         "successBody": "승인 및 연결 프로브가 모두 완료되었습니다.",
         "successAssigned": "{{name}}은 {{count}} 에이전트에 대해 구성됩니다.",
@@ -1620,7 +1620,7 @@
         "backToConfig": "구성으로 돌아가기"
       },
       "recommendedCatalog": {
-        "vercel": "mcp-remote(stdio)를 통한 공식 원격 MCP. TabTin이 승인된 Vercel MCP 클라이언트 이후에 지원되는 OAuth입니다.",
+        "vercel": "mcp-remote(stdio)를 통한 공식 원격 MCP. Muse이 승인된 Vercel MCP 클라이언트 이후에 지원되는 OAuth입니다.",
         "github": "공식 GitHub 원격 MCP로, Agent 도구 전용의 별도 개인 액세스 토큰을 사용합니다.",
         "stripe": "mcp-remote(stdio)를 통한 공식 스트라이프 원격 MCP. 연결 후 브라우저에서 표준 MCP OAuth를 완료합니다.",
         "notion": "mcp-remote(stdio)를 통한 공식 Notion 원격 MCP. 대화형 클라이언트는 OAuth(PAT도 사용 가능)를 선호합니다.",

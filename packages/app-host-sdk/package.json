@@ -29,11 +29,11 @@
     "test": "pnpm run build:test && node -e \"require('node:fs').writeFileSync('.test-dist/package.json', '{\\\"type\\\":\\\"commonjs\\\"}')\" && node --test .test-dist/tests/*.test.js"
   },
   "keywords": [
-    "tabtin",
+    "muse",
     "app-host",
     "sdk"
   ],
-  "author": "TabTin Team",
+  "author": "Muse Team",
   "license": "MIT",
   "peerDependencies": {
     "react": "^19.0.0"

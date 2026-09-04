@@ -1,6 +1,6 @@
-name: Tabtin
+name: Muse
 options:
-  bundleIdPrefix: com.example.tabtin
+  bundleIdPrefix: com.muse
   deploymentTarget:
     iOS: "18.0"
   xcodeVersion: "16.0"
@@ -16,7 +16,7 @@ settings:
     # per-target Swift 版本策略（移植自旧 tabtin-ios，长期治理决策）：
     # base 保 SWIFT_VERSION=5.0，让 SPM 第三方依赖（Highlightr/Kingfisher/MarkdownUI）
     # 按各自 Package.swift swift-tools-version 推断，避免 Highlightr 在 swift6 mode 编译失败阻塞整 build。
-    # Tabtin target 自身切 SWIFT_VERSION=6 + 严格并发，见 targets.Tabtin.settings.base。
+    # Muse target 自身切 SWIFT_VERSION=6 + 严格并发，见 targets.Muse.settings.base。
     SWIFT_VERSION: "5.0"
     DEVELOPMENT_TEAM: ""
     CODE_SIGN_STYLE: Automatic
@@ -25,7 +25,7 @@ settings:
     SWIFT_UPCOMING_FEATURE_INFER_SENDABLE_FROM_CAPTURES: "YES"
 
 targets:
-  Tabtin:
+  Muse:
     type: application
     platform: iOS
     sources:
@@ -40,12 +40,14 @@ targets:
         aps-environment: development
     settings:
       base:
-        # Tabtin target 强制 Swift 6 严格并发（base SWIFT_VERSION=5.0 仅作 SPM 依赖 fallback）。
+        # Muse target 强制 Swift 6 严格并发（base SWIFT_VERSION=5.0 仅作 SPM 依赖 fallback）。
         SWIFT_VERSION: "6"
         SWIFT_STRICT_CONCURRENCY: complete
         INFOPLIST_FILE: Tabtin/Resources/Info.plist
         DEVELOPMENT_TEAM: ""
-        PRODUCT_BUNDLE_IDENTIFIER: com.example.tabtin
+        PRODUCT_BUNDLE_IDENTIFIER: com.muse.mobile
+        # 品牌改名后保留 Swift 模块名 Tabtin：@testable import Tabtin 与既有符号不变。
+        PRODUCT_MODULE_NAME: Tabtin
         MARKETING_VERSION: "1.0.1"
         CURRENT_PROJECT_VERSION: "1"
         TABTIN_GIT_SHA: ""
@@ -95,21 +97,21 @@ targets:
     settings:
       base:
         BUNDLE_LOADER: "$(TEST_HOST)"
-        TEST_HOST: "$(BUILT_PRODUCTS_DIR)/Tabtin.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Tabtin"
+        TEST_HOST: "$(BUILT_PRODUCTS_DIR)/Muse.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Muse"
         IPHONEOS_DEPLOYMENT_TARGET: "18.0"
         GENERATE_INFOPLIST_FILE: true
-        PRODUCT_BUNDLE_IDENTIFIER: com.example.tabtin.tests
+        PRODUCT_BUNDLE_IDENTIFIER: com.muse.mobile.tests
         DEVELOPMENT_TEAM: ""
         CODE_SIGN_STYLE: Automatic
     dependencies:
-      - target: Tabtin
+      - target: Muse
       - package: Sentry
 
 schemes:
-  Tabtin:
+  Muse:
     build:
       targets:
-        Tabtin: all
+        Muse: all
         TabtinTests: [test]
     test:
       targets:

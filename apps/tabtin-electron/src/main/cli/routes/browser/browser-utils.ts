@@ -44,7 +44,7 @@ export async function handleSessionRoute(
     const action = body?.action
     if (!action || !['get', 'set', 'clear'].includes(action)) {
       sendJSON(res, 400, errorResponse('VALIDATION_ERROR', 'action 必须是 get/set/clear', {
-        suggestions: ['示例: tabtin browser cookies get --tab auto', 'tabtin browser cookies clear --tab auto'],
+        suggestions: ['示例: muse browser cookies get --tab auto', 'muse browser cookies clear --tab auto'],
       }))
       return true
     }

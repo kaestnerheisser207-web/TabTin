@@ -17,7 +17,7 @@ func TestRiskAliasCompat(t *testing.T) {
 }
 
 // TestRiskStringValues 锁定 Risk 三档的字符串字面值——任何修改都会破坏
-// `tabtin commands --format json` 输出消费者（特别是 agent-runtime
+// `muse commands --format json` 输出消费者（特别是 agent-runtime
 // restricted-shell-allowlist.test.ts 硬编码比较 'high-risk-write'）。
 // 这里把当前值钉死，下次拉齐前禁止漂移。
 func TestRiskStringValues(t *testing.T) {

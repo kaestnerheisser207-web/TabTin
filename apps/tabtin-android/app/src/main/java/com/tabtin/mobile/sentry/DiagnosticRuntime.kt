@@ -8,7 +8,7 @@ import androidx.work.NetworkType
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
 import androidx.work.WorkerParameters
-import com.tabtin.mobile.BuildConfig
+import com.muse.mobile.BuildConfig
 import com.tabtin.mobile.data.api.resolveEffectiveApiBaseUrl
 import com.tabtin.mobile.util.TokenManager
 import kotlinx.coroutines.Dispatchers

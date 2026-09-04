@@ -225,7 +225,7 @@ describe('DesktopExecutorService.batch (Wave 3 · computer_batch)', () => {
       } catch (err) {
         const msg = (err as Error).message
         expect(msg).toContain('batch 首项不能是 screenshot')
-        expect(msg).toContain('先单独调 tabtin desktop screenshot')
+        expect(msg).toContain('先单独调 muse desktop screenshot')
       }
     })
   })

@@ -215,7 +215,7 @@ describe('base prompt 函数段独立快照', () => {
   it('buildCliCapabilitiesSection - 含参考', () => {
     expect(
       buildCliCapabilitiesSection(
-        '- `tabtin table list`：列出当前工作空间所有表\n- `tabtin doc read --id xxx`：读文档',
+        '- `muse table list`：列出当前工作空间所有表\n- `muse doc read --id xxx`：读文档',
       ),
     ).toMatchSnapshot();
   });
@@ -291,7 +291,7 @@ describe('buildSystemPrompt 特殊 config combo', () => {
         enabledApps: FIXED_APPS,
         userPortrait: '## 工作背景\n后端工程师，专注分布式系统。',
         memoryCapability: true,
-        cliReference: '- `tabtin table query`：执行 SQL',
+        cliReference: '- `muse table query`：执行 SQL',
       }),
     ).toMatchSnapshot();
   });

@@ -7,7 +7,7 @@ import (
 	"os"
 	"testing"
 
-	"github.com/TabTin/tabtin-cli/internal/cmdutil"
+	"github.com/Muse/muse-cli/internal/cmdutil"
 )
 
 func TestBrowserPrintRegistersSchemaFlag(t *testing.T) {
