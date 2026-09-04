@@ -1,6 +1,6 @@
 package com.tabtin.mobile.features.conversation
 
-import com.tabtin.mobile.R
+import com.muse.mobile.R
 import com.tabtin.mobile.features.conversation.cards.ToolCardFamily
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonArray

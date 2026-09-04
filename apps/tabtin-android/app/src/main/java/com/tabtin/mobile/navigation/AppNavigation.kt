@@ -1,7 +1,7 @@
 package com.tabtin.mobile.navigation
 
 import android.util.Log
-import com.tabtin.mobile.R
+import com.muse.mobile.R
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding

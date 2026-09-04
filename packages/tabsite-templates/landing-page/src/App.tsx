@@ -81,7 +81,7 @@ export default function App() {
       <footer className="border-t border-border">
         <div className="mx-auto max-w-6xl px-6 py-8">
           <p className="text-center text-caption text-muted-foreground">
-            © 2026 YourBrand. Powered by TabTin.
+            © 2026 YourBrand. Powered by Muse.
           </p>
         </div>
       </footer>

@@ -42,7 +42,7 @@
     "accountDevices": "Meine Geräte",
     "systemNotifications": "Benachrichtigungen",
     "systemPermissions": "Systemberechtigungen",
-    "aboutTabtin": "Über TabTin",
+    "aboutTabtin": "Über Muse",
     "appearanceDisplay": "Aussehen",
     "voiceHabits": "Stimme",
     "aiSettings": "AI-Einstellungen",
@@ -86,7 +86,7 @@
     "storageStatus": "Lagerung",
     "dataImport": "Daten importieren",
     "performanceMonitor": "Leistung",
-    "tabtinVersion": "TabTin-Version",
+    "tabtinVersion": "Muse-Version",
     "resourceOpenPreferences": "Standard-Agent-Ausgabe-Apps",
     "personalRules": "Persönliche allgemeine Regeln",
     "myAgents": "KI-Avatare",
@@ -127,8 +127,8 @@
   "groupOverview": {
     "accountDesc": "Profil, Anmeldesicherheit und Zugangsdaten",
     "credentialsGroupDesc": "Verwalten Sie Browser-Anmeldungen, KI-Dienstschlüssel und App-Integrationen",
-    "authorizationGroupDesc": "Berechtigungen auf Betriebssystemebene, die TabTin unter macOS/Windows gewährt werden",
-    "developerGroupDesc": "TabTin-API-Schlüssel und CLI-Zugriff",
+    "authorizationGroupDesc": "Berechtigungen auf Betriebssystemebene, die Muse unter macOS/Windows gewährt werden",
+    "developerGroupDesc": "Muse-API-Schlüssel und CLI-Zugriff",
     "myAIGroupDesc": "Verwalten Sie persönliche allgemeine Regeln und wie Agent-Ausgaben standardmäßig geöffnet werden",
     "myAgentsDesc": "Verwalten Sie KI-Avatare in der Organisation: erstellen, umbenennen, Persona und Fähigkeiten festlegen.",
     "skillLibraryDesc": "Durchsuchen Sie alle Fähigkeiten und weisen Sie sie Ihren Agenten zu",
@@ -320,9 +320,9 @@
     "themeSystem": "System",
     "desktopBehaviorSection": "Desktop-Verhalten",
     "desktopBehaviorTray": "Laufen Sie weiter, nachdem Sie das Fenster geschlossen haben",
-    "desktopBehaviorTrayHint": "TabTin bleibt aktiv, nachdem Sie das Fenster schließen. Öffnen Sie es erneut über das Dock, die Taskleiste oder das Menüleistensymbol, ohne es neu zu laden",
+    "desktopBehaviorTrayHint": "Muse bleibt aktiv, nachdem Sie das Fenster schließen. Öffnen Sie es erneut über das Dock, die Taskleiste oder das Menüleistensymbol, ohne es neu zu laden",
     "desktopBehaviorAutoStart": "Bei der Anmeldung starten",
-    "desktopBehaviorAutoStartHint": "Starten Sie TabTin automatisch, nachdem Sie sich beim System angemeldet haben",
+    "desktopBehaviorAutoStartHint": "Starten Sie Muse automatisch, nachdem Sie sich beim System angemeldet haben",
     "themeHint": "Wählen Sie hell, dunkel oder folgen Sie dem Erscheinungsbild Ihres Systems."
   },
   "performance": {
@@ -345,16 +345,16 @@
   },
   "authorizationSystem": {
     "title": "Autorisierung",
-    "subtitle": "Verwalten Sie die Berechtigungen auf Betriebssystemebene, die macOS/Windows TabTin gewährt hat",
+    "subtitle": "Verwalten Sie die Berechtigungen auf Betriebssystemebene, die macOS/Windows Muse gewährt hat",
     "loading": "Systemberechtigungen werden überprüft…",
     "unavailable": "Desktop-Client-Umgebung nicht verfügbar; Berechtigungsstatus kann nicht gelesen werden.",
     "errorTitle": "Systemberechtigungen konnten nicht geladen werden",
-    "errorFallback": "Bitte versuchen Sie es erneut oder starten Sie TabTin neu und öffnen Sie diese Seite erneut.",
+    "errorFallback": "Bitte versuchen Sie es erneut oder starten Sie Muse neu und öffnen Sie diese Seite erneut.",
     "notApplicableHint": "{{count}}-Berechtigungen, die auf dieser Plattform nicht anwendbar sind, werden ausgeblendet",
     "overview": {
-      "taglineAll": "TabTin verfügt über alle erforderlichen Systemberechtigungen.",
-      "taglineSome": "TabTin verfügt über einige Berechtigungen; Bestimmte Funktionen bleiben eingeschränkt.",
-      "taglineNone": "TabTin hat noch keine Systemberechtigungen; Viele Funktionen funktionieren nicht.",
+      "taglineAll": "Muse verfügt über alle erforderlichen Systemberechtigungen.",
+      "taglineSome": "Muse verfügt über einige Berechtigungen; Bestimmte Funktionen bleiben eingeschränkt.",
+      "taglineNone": "Muse hat noch keine Systemberechtigungen; Viele Funktionen funktionieren nicht.",
       "summary": "{{granted}} gewährt aus {{total}}",
       "refresh": "Überprüfen Sie es noch einmal",
       "refreshDone": "Berechtigungsstatus aktualisiert"
@@ -384,37 +384,37 @@
     },
     "hints": {
       "detectionUnsupported": "Das aktuelle System stellt für diese Berechtigung keinen stabilen lesbaren Status bereit. Verwenden Sie den tatsächlichen Schalter in den Systemeinstellungen als Quelle der Wahrheit.",
-      "accessibilityIdentity": "TabTin überprüft den laufenden Prozess „{{processLabel}}“. Wenn die Systemeinstellungen mehrere TabTin-/Electron-Einträge enthalten, stellen Sie sicher, dass der aktuell ausgeführte Eintrag aktiviert ist, und kehren Sie dann zu TabTin zurück oder klicken Sie auf „Erneut prüfen“.",
-      "restartAfterGrant": "Wenn diese Berechtigung bereits in den Systemeinstellungen aktiviert ist, TabTin aber immer noch „Zur Bestätigung neu starten“ oder „Nicht bestätigt“ anzeigt, beenden Sie TabTin vollständig und öffnen Sie es erneut, bevor Sie es erneut überprüfen. macOS erfordert möglicherweise einen Neustart des aktuellen App-Prozesses, bevor die Gewährung für diesen Prozess sichtbar ist."
+      "accessibilityIdentity": "Muse überprüft den laufenden Prozess „{{processLabel}}“. Wenn die Systemeinstellungen mehrere Muse-/Electron-Einträge enthalten, stellen Sie sicher, dass der aktuell ausgeführte Eintrag aktiviert ist, und kehren Sie dann zu Muse zurück oder klicken Sie auf „Erneut prüfen“.",
+      "restartAfterGrant": "Wenn diese Berechtigung bereits in den Systemeinstellungen aktiviert ist, Muse aber immer noch „Zur Bestätigung neu starten“ oder „Nicht bestätigt“ anzeigt, beenden Sie Muse vollständig und öffnen Sie es erneut, bevor Sie es erneut überprüfen. macOS erfordert möglicherweise einen Neustart des aktuellen App-Prozesses, bevor die Gewährung für diesen Prozess sichtbar ist."
     },
     "items": {
       "fullDiskAccess": {
         "title": "Vollständiger Festplattenzugriff",
-        "desc": "Lassen Sie TabTin Dateien auf Ihrem Mac lesen – benötigt für den Zugriff auf Projektdateien, Konfigurationen usw."
+        "desc": "Lassen Sie Muse Dateien auf Ihrem Mac lesen – benötigt für den Zugriff auf Projektdateien, Konfigurationen usw."
       },
       "screenCapture": {
         "title": "Bildschirmaufzeichnung",
-        "desc": "Lassen Sie TabTin den Bildschirm erfassen – erforderlich für Desktop-Steuerung, Bildschirmerkennung und Feedback-Screenshots."
+        "desc": "Lassen Sie Muse den Bildschirm erfassen – erforderlich für Desktop-Steuerung, Bildschirmerkennung und Feedback-Screenshots."
       },
       "accessibility": {
         "title": "Barrierefreiheit",
-        "desc": "Lassen Sie TabTin Tastatur/Maus simulieren und die App-Benutzeroberfläche lesen – erforderlich für die Desktop-Steuerung und globale Verknüpfungen."
+        "desc": "Lassen Sie Muse Tastatur/Maus simulieren und die App-Benutzeroberfläche lesen – erforderlich für die Desktop-Steuerung und globale Verknüpfungen."
       },
       "automation": {
         "title": "Automatisierung",
-        "desc": "Lassen Sie TabTin mit Kalender, Notizen, Erinnerungen usw. koordinieren."
+        "desc": "Lassen Sie Muse mit Kalender, Notizen, Erinnerungen usw. koordinieren."
       },
       "microphone": {
         "title": "Mikrofon",
-        "desc": "Lassen Sie TabTin für Spracheingaben und Sprachbefehle auf das Mikrofon zugreifen."
+        "desc": "Lassen Sie Muse für Spracheingaben und Sprachbefehle auf das Mikrofon zugreifen."
       },
       "location": {
         "title": "Ortungsdienste",
-        "desc": "Ermöglichen Sie TabTin den Zugriff auf den Standort für Aufgaben, die von geografischen Informationen abhängen."
+        "desc": "Ermöglichen Sie Muse den Zugriff auf den Standort für Aufgaben, die von geografischen Informationen abhängen."
       },
       "notifications": {
         "title": "Benachrichtigungen",
-        "desc": "Lassen Sie TabTin Desktop-Benachrichtigungen für den Abschluss von Aufgaben, Nachrichten usw. senden."
+        "desc": "Lassen Sie Muse Desktop-Benachrichtigungen für den Abschluss von Aufgaben, Nachrichten usw. senden."
       }
     }
   },
@@ -991,7 +991,7 @@
     },
     "autoTopup": {
       "title": "Automatische Aufladung des Guthabens",
-      "subtitle": "Wenn das Guthaben unter die Warnschwelle für niedriges Guthaben fällt, kann TabTin Guthaben aus der Geldbörse der Organisation kaufen, um KI-Gespräche am Laufen zu halten.",
+      "subtitle": "Wenn das Guthaben unter die Warnschwelle für niedriges Guthaben fällt, kann Muse Guthaben aus der Geldbörse der Organisation kaufen, um KI-Gespräche am Laufen zu halten.",
       "enabled": "Automatische Aufladung, wenn das Guthaben unter die Warnschwelle fällt",
       "enabledHint": "Wirkt sofort. Wenn diese Option deaktiviert ist, werden KI-Gespräche beendet, sobald das Guthaben aufgebraucht ist. Wenn diese Option aktiviert ist, werden Credits unter der Warnschwelle gemäß den unten aufgeführten Beträgen aus dem Geldbeutel gekauft",
       "amount": "Pro Aufladung ausgeben",
@@ -1316,7 +1316,7 @@
     "hint3": "Kritische Sicherheitsupdates können automatisch angewendet werden",
     "currentVersionWithValue": "Aktuelle Version v{{version}}",
     "lastCheckedWithValue": "Zuletzt überprüft: {{time}}",
-    "alreadyLatestDescription": "TabTin sucht beim Start automatisch nach Updates",
+    "alreadyLatestDescription": "Muse sucht beim Start automatisch nach Updates",
     "channelStable": "Stabil",
     "channelBeta": "Beta",
     "channelAlpha": "Alpha",
@@ -1374,8 +1374,8 @@
     "title": "Deinstallation und lokale Daten",
     "subtitle": {
       "windows": "Löschen Sie Ihre Anmeldedaten, bevor Sie diesen Computer an jemand anderen weitergeben. Arbeitsbereichsordner und gebundene lokale Verzeichnisse werden niemals gelöscht. Deinstallieren Sie die App über Windows-Einstellungen → Apps.",
-      "mac": "Löschen Sie Ihre Anmeldedaten, bevor Sie diesen Computer an jemand anderen weitergeben. Arbeitsbereichsordner und gebundene lokale Verzeichnisse werden niemals gelöscht. Deinstallieren Sie TabTin, indem Sie es von Finder → Anwendungen in den Papierkorb verschieben.",
-      "linux": "Löschen Sie Ihre Anmeldedaten, bevor Sie diesen Computer an jemand anderen weitergeben. Arbeitsbereichsordner und gebundene lokale Verzeichnisse werden niemals gelöscht. Deinstallieren Sie TabTin mit dem Software-Manager, mit dem es installiert wurde."
+      "mac": "Löschen Sie Ihre Anmeldedaten, bevor Sie diesen Computer an jemand anderen weitergeben. Arbeitsbereichsordner und gebundene lokale Verzeichnisse werden niemals gelöscht. Deinstallieren Sie Muse, indem Sie es von Finder → Anwendungen in den Papierkorb verschieben.",
+      "linux": "Löschen Sie Ihre Anmeldedaten, bevor Sie diesen Computer an jemand anderen weitergeben. Arbeitsbereichsordner und gebundene lokale Verzeichnisse werden niemals gelöscht. Deinstallieren Sie Muse mit dem Software-Manager, mit dem es installiert wurde."
     },
     "wipeCredentials": "Anmeldedaten löschen",
     "wipeCredentialsDesc": "Entfernen Sie die gespeicherten Anmeldeinformationen auf diesem Gerät. Sie müssen sich erneut anmelden. Konfigurations-Cache- und Arbeitsbereichsdateien bleiben erhalten.",
@@ -1389,15 +1389,15 @@
     "needsManualDevRestart": "Der Dev-Modus kann nicht automatisch neu gestartet werden. Die Bereinigung ist geplant – stoppen Sie das Terminal und führen Sie pnpm dev erneut aus. Beim nächsten Start wird es gelöscht.",
     "uninstallApp": "Vor der Deinstallation reinigen",
     "uninstallAppDesc": {
-      "windows": "Löschen Sie zuerst die Anmeldeinformationen (optional Konfiguration/Cache) und deinstallieren Sie dann TabTin über Windows-Einstellungen → Apps. Das System-Deinstallationsprogramm entfernt auch immer Anmeldeinformationen.",
-      "mac": "Löschen Sie zuerst die Anmeldeinformationen (optional Konfiguration/Cache), beenden Sie dann TabTin und verschieben Sie es aus dem Finder → Anwendungen in den Papierkorb.",
-      "linux": "Löschen Sie zuerst die Anmeldeinformationen (optional config/cache) und deinstallieren Sie dann TabTin mit dem Software-Manager, mit dem es installiert wurde."
+      "windows": "Löschen Sie zuerst die Anmeldeinformationen (optional Konfiguration/Cache) und deinstallieren Sie dann Muse über Windows-Einstellungen → Apps. Das System-Deinstallationsprogramm entfernt auch immer Anmeldeinformationen.",
+      "mac": "Löschen Sie zuerst die Anmeldeinformationen (optional Konfiguration/Cache), beenden Sie dann Muse und verschieben Sie es aus dem Finder → Anwendungen in den Papierkorb.",
+      "linux": "Löschen Sie zuerst die Anmeldeinformationen (optional config/cache) und deinstallieren Sie dann Muse mit dem Software-Manager, mit dem es installiert wurde."
     },
     "uninstallConfirmTitle": "Vor der Deinstallation reinigen?",
     "uninstallConfirmDesc": {
       "windows": "Anmeldedaten werden entfernt. Nach der Bereinigung über Windows-Einstellungen → Apps deinstallieren. Arbeitsbereich und gebundene Ordner werden nicht gelöscht.",
-      "mac": "Anmeldedaten werden entfernt. Beenden Sie TabTin nach der Bereinigung und verschieben Sie es von Finder → Anwendungen in den Papierkorb. Arbeitsbereich und gebundene Ordner werden nicht gelöscht.",
-      "linux": "Anmeldedaten werden entfernt. Deinstallieren Sie TabTin nach der Bereinigung mit dem Software-Manager, mit dem es installiert wurde. Arbeitsbereich und gebundene Ordner werden nicht gelöscht."
+      "mac": "Anmeldedaten werden entfernt. Beenden Sie Muse nach der Bereinigung und verschieben Sie es von Finder → Anwendungen in den Papierkorb. Arbeitsbereich und gebundene Ordner werden nicht gelöscht.",
+      "linux": "Anmeldedaten werden entfernt. Deinstallieren Sie Muse nach der Bereinigung mit dem Software-Manager, mit dem es installiert wurde. Arbeitsbereich und gebundene Ordner werden nicht gelöscht."
     },
     "deleteLocalDataCheckbox": "Löschen Sie auch die lokale Konfiguration und den Cache (nicht Arbeitsbereiche oder gebundene Ordner).",
     "uninstallConfirmAction": "Sauber",
@@ -1411,9 +1411,9 @@
       "unknown": "Lokale Daten konnten nicht gelöscht werden. Bitte versuchen Sie es später noch einmal."
     },
     "uninstallHint": {
-      "windows": "Öffnen Sie Windows-Einstellungen → Apps, um TabTin zu deinstallieren. Durch die Deinstallation werden immer Anmeldeinformationen entfernt und optional kann die Konfiguration/der Cache gelöscht werden (niemals Arbeitsbereiche).",
-      "mac": "Beenden Sie TabTin und verschieben Sie es dann von Finder → Anwendungen in den Papierkorb. Arbeitsbereich und gebundene Ordner werden nicht gelöscht.",
-      "linux": "Deinstallieren Sie TabTin mit dem Software-Manager, mit dem es installiert wurde. Arbeitsbereich und gebundene Ordner werden nicht gelöscht."
+      "windows": "Öffnen Sie Windows-Einstellungen → Apps, um Muse zu deinstallieren. Durch die Deinstallation werden immer Anmeldeinformationen entfernt und optional kann die Konfiguration/der Cache gelöscht werden (niemals Arbeitsbereiche).",
+      "mac": "Beenden Sie Muse und verschieben Sie es dann von Finder → Anwendungen in den Papierkorb. Arbeitsbereich und gebundene Ordner werden nicht gelöscht.",
+      "linux": "Deinstallieren Sie Muse mit dem Software-Manager, mit dem es installiert wurde. Arbeitsbereich und gebundene Ordner werden nicht gelöscht."
     }
   },
   "changelog": {
@@ -1566,7 +1566,7 @@
     "emailPlaceholder": "user@example.com",
     "phoneLabel": "Telefonnummer",
     "phonePlaceholder": "Die Telefonnummer, mit der sie sich registriert haben",
-    "phoneHint": "Sie müssen bereits über ein TabTin-Konto mit dieser Telefonnummer verfügen",
+    "phoneHint": "Sie müssen bereits über ein Muse-Konto mit dieser Telefonnummer verfügen",
     "phoneRequired": "Bitte geben Sie eine Telefonnummer ein",
     "roleFixedHint": "Neue Mitglieder werden mit dieser Rolle beitreten",
     "cancel": "Abbrechen",
@@ -1603,7 +1603,7 @@
     "personalPlugins": "Installierbare persönliche Plugins",
     "personalPluginsDesc": "Hier erscheinen offizielle und vertrauenswürdige persönliche Plugins. Durch die Installation wird das Bundle nur lokal hinzugefügt; Die Aktivierung erfolgt später über die Agent- oder Workspace-Einstellungen.",
     "builtinPlugins": "Integrierte Plugins",
-    "builtinPluginsDesc": "Diese Funktionen sind im Lieferumfang von TabTin enthalten und können auf dieser Seite nicht installiert, entfernt oder aktiviert werden.",
+    "builtinPluginsDesc": "Diese Funktionen sind im Lieferumfang von Muse enthalten und können auf dieser Seite nicht installiert, entfernt oder aktiviert werden.",
     "installedPersonalPlugins": "Persönliche Plugins installiert",
     "installedPersonalPluginsDesc": "Installierte Bundles stehen für die spätere Agent- oder Workspace-Aktivierung zur Verfügung.",
     "installedEmptyTitle": "Es sind noch keine persönlichen Plugins installiert",
@@ -1637,7 +1637,7 @@
     "updating": "Aktualisierung...",
     "updateAvailableNotice": "Für {{name}} ist die offizielle Version {{release}} verfügbar. Überprüfen und bestätigen Sie, bevor Sie sich bewerben.",
     "updateUpToDateNotice": "{{name}} ist aktuell.",
-    "updateNotOfficialNotice": "{{name}} ist keine offizielle TabTin-Version, daher bietet TabTin hier keine geregelten Updates an.",
+    "updateNotOfficialNotice": "{{name}} ist keine offizielle Muse-Version, daher bietet Muse hier keine geregelten Updates an.",
     "updateCheckFailedNotice": "Fehler beim Überprüfen des {{name}}-Updates: {{message}}",
     "confirmUpdatePrompt": "{{name}} von {{current}} auf {{next}} aktualisieren?",
     "updateSuccessNotice": "{{name}} wurde auf {{release}} aktualisiert.",
@@ -1743,10 +1743,10 @@
     "userSubtitle": "Wählen Sie aus, welche Arten von Benachrichtigungen Sie benachrichtigen sollen. Gilt für alle Ihre Teams.",
     "refreshPermission": "Berechtigungsstatus für Benachrichtigungen aktualisieren",
     "categoryToggle": "{{category}}-Benachrichtigungen",
-    "permissionsSubtitle": "Verwalten Sie Benachrichtigungen und die TabTin gewährten Betriebssystemberechtigungen",
+    "permissionsSubtitle": "Verwalten Sie Benachrichtigungen und die Muse gewährten Betriebssystemberechtigungen",
     "notificationsSectionDesc": "Wählen Sie aus, welche Arten von Benachrichtigungen Sie benachrichtigen sollen. Behinderte bleiben stumm",
     "otherPermsSection": "Andere Berechtigungen",
-    "otherPermsDesc": "Systemberechtigungen, die TabTin von macOS / Windows gewährt werden",
+    "otherPermsDesc": "Systemberechtigungen, die Muse von macOS / Windows gewährt werden",
     "rulesSubtitle": "Admin: Konfigurieren Sie, wie Ereignisse zu Organisationsbenachrichtigungen werden",
     "prefsMovedHint": "Benachrichtigungseinstellungen (Banner, Ton, DND usw.) wurden nach „Persönlich“ → „Einstellungen“ → „Benachrichtigungen“ verschoben. Auf dieser Seite werden jetzt nur Organisationsbenachrichtigungsregeln konfiguriert.",
     "rules": "Benachrichtigungsregeln",
@@ -1818,7 +1818,7 @@
     "permissionGranted": "Berechtigung zur Systembenachrichtigung erteilt",
     "permissionDenied": "Systembenachrichtigungen deaktiviert. Bitte in den Systemeinstellungen aktivieren",
     "permissionProvisional": "Systembenachrichtigungen sind vorläufig autorisiert und können stillschweigend zugestellt werden",
-    "permissionRestricted": "Systembenachrichtigungen sind eingeschränkt und können derzeit nicht für TabTin aktiviert werden",
+    "permissionRestricted": "Systembenachrichtigungen sind eingeschränkt und können derzeit nicht für Muse aktiviert werden",
     "permissionNotDetermined": "Über die Erlaubnis zur Systembenachrichtigung wurde noch nicht entschieden. Lösen Sie eine Benachrichtigung aus oder überprüfen Sie die Systemeinstellungen",
     "permissionUnsupported": "Desktop-Benachrichtigungen werden auf diesem System nicht unterstützt",
     "permissionUnknown": "Die Systembenachrichtigungsberechtigung konnte nicht erkannt werden",
@@ -1996,7 +1996,7 @@
     },
     "envImport": {
       "title": "Aus .env einfügen",
-      "description": "Fügen Sie Ihren .env-Inhalt ein. TabTin erkennt gängige KI-Dienste automatisch.",
+      "description": "Fügen Sie Ihren .env-Inhalt ein. Muse erkennt gängige KI-Dienste automatisch.",
       "textLabel": ".env-Inhalt",
       "recognized": "{{count}}-Variablen erkannt",
       "selectAll": "Alles auswählen",
@@ -2034,7 +2034,7 @@
       "close": "Entlassen",
       "closeTooltip": "Für diese Sitzung ausblenden – Banner wird beim nächsten Start wieder angezeigt",
       "alsoImportPasswords": "Importieren Sie auch gespeicherte Passwörter",
-      "passwordSecurityNotice": "Passwörter werden in Ihrem Konto verschlüsselt; Das TabTin-Team kann sie nicht lesen.",
+      "passwordSecurityNotice": "Passwörter werden in Ihrem Konto verschlüsselt; Das Muse-Team kann sie nicht lesen.",
       "noBrowsersDetected": "Keine installierten Browser erkannt",
       "openCredentialsSettings": "Öffnen Sie die Browsereinstellungen",
       "manualSettingsHint": "Sie können auch zu Einstellungen → Gerät → Browser gehen, um Anmeldungen zu verwalten oder eine JSON-Datei zu importieren.",
@@ -2051,7 +2051,7 @@
     },
     "legacyMigration": {
       "title": "Bereinigen Sie Workspace-übergreifende Anmeldedaten",
-      "subtitle": "Verschieben Sie den Anmeldestatus vom alten pro-Workspace-Speicher in die freigegebene Umgebung (nur Kopien, Originale bleiben erhalten). TabTin führt dies automatisch beim ersten Start aus – verwenden Sie diese Schaltfläche nur, um es erneut zu versuchen, wenn die arbeitsbereichsübergreifende Freigabe nicht funktioniert.",
+      "subtitle": "Verschieben Sie den Anmeldestatus vom alten pro-Workspace-Speicher in die freigegebene Umgebung (nur Kopien, Originale bleiben erhalten). Muse führt dies automatisch beim ersten Start aus – verwenden Sie diese Schaltfläche nur, um es erneut zu versuchen, wenn die arbeitsbereichsübergreifende Freigabe nicht funktioniert.",
       "loading": "Ladestatus…",
       "notRunYet": "Ist auf diesem Gerät noch nicht gelaufen.",
       "lastRun": "Letzter Lauf: {{time}}",
@@ -2171,7 +2171,7 @@
       "saveAsNewAction": "Als neu speichern",
       "neverAction": "Niemals für diese Seite",
       "dismissAction": "Entlassen",
-      "securityHint": "Das Passwort wird im Ruhezustand verschlüsselt. Das TabTin-Team kann es nicht lesen.",
+      "securityHint": "Das Passwort wird im Ruhezustand verschlüsselt. Das Muse-Team kann es nicht lesen.",
       "saveSuccess": "Passwort gespeichert",
       "updateSuccess": "Passwort aktualisiert",
       "saveFailed": "Das Speichern ist fehlgeschlagen. Bitte versuchen Sie es erneut",
@@ -2186,7 +2186,7 @@
     },
     "saveBlacklist": {
       "title": "Websites mit deaktivierten Speicheraufforderungen",
-      "subtitle": "TabTin zeigt nicht „Passwort speichern?“ an. Aufforderungen auf diesen Seiten. Entfernen Sie einen Eintrag, um die Eingabeaufforderung bei der nächsten Anmeldung wieder zu aktivieren.",
+      "subtitle": "Muse zeigt nicht „Passwort speichern?“ an. Aufforderungen auf diesen Seiten. Entfernen Sie einen Eintrag, um die Eingabeaufforderung bei der nächsten Anmeldung wieder zu aktivieren.",
       "loading": "Laden...",
       "loadFailed": "Blockierte Websites konnten nicht geladen werden",
       "empty": "Noch keine blockierten Websites",
@@ -2236,7 +2236,7 @@
       "deleted": "Website-Zugangsdaten gelöscht",
       "deleteFailed": "Das Löschen ist fehlgeschlagen",
       "confirmImportTitle": "Bestätigen Sie den Passwortimport",
-      "confirmImportDescription": "Passwörter werden von {{browser}} gelesen und auf TabTin verschlüsselt. Dies erfordert die Autorisierung des macOS-Schlüsselbunds.",
+      "confirmImportDescription": "Passwörter werden von {{browser}} gelesen und auf Muse verschlüsselt. Dies erfordert die Autorisierung des macOS-Schlüsselbunds.",
       "extractedCount": "In {{count}} gespeicherte Website-Passwörter gefunden",
       "selectAll": "Alles auswählen",
       "deselectAll": "Alle abwählen",
@@ -2285,7 +2285,7 @@
       "pickerSearchPlaceholder": "Nach App-Namen oder Paket suchen…",
       "pickerNoApps": "Keine installierten Apps gefunden",
       "pickerNoMatch": "Keine passenden Apps",
-      "pickerDeviceOffline": "Gerät ist nicht verbunden oder reagiert nicht. Stellen Sie sicher, dass Ihr Telefon mit TabTin verbunden und der Bildschirm eingeschaltet ist.",
+      "pickerDeviceOffline": "Gerät ist nicht verbunden oder reagiert nicht. Stellen Sie sicher, dass Ihr Telefon mit Muse verbunden und der Bildschirm eingeschaltet ist.",
       "pickerUnknownError": "App-Liste konnte nicht abgerufen werden. Bitte versuchen Sie es später noch einmal.",
       "loadFailed": "App-Anmeldeinformationen konnten nicht geladen werden",
       "appName": "App-Name",
@@ -2459,7 +2459,7 @@
       "ready": "Ihr Wortschatz, Ihr Kontext und Ihre Regeln machen die Erkennung schärfer als die generische ASR"
     },
     "statsVocabLabel": "Wortschatz",
-    "statsVocabHint": "Ihre Worte + integrierte TabTin-Funktionen",
+    "statsVocabHint": "Ihre Worte + integrierte Muse-Funktionen",
     "statsContextLabel": "Kontext",
     "statsContextHint": "{{count}} Quellen an",
     "statsRulesLabel": "Regeln festlegen",
@@ -2471,7 +2471,7 @@
     "vocabDuplicate": "„{{word}}“ ist bereits in Ihrem Wortschatz enthalten",
     "vocabEmpty": "Noch nichts. Versuchen Sie, Ihren Namen oder einen häufigen Projektcode hinzuzufügen",
     "vocabRemove": "Entfernen Sie „{{word}}“",
-    "vocabPlatformToggle": "{{count}} TabTin-Begriffe werden ebenfalls automatisch verstärkt",
+    "vocabPlatformToggle": "{{count}} Muse-Begriffe werden ebenfalls automatisch verstärkt",
     "vocabPlatformFooter": "Diese sind immer eingeschaltet und müssen nicht gewartet werden",
     "contextSection": "Live-Kontext",
     "contextHint": "Bei der Aufnahme werden diese an die Engine gesendet, damit diese weiß, wovon Sie sprechen",
@@ -2551,7 +2551,7 @@
     "largeFiles": "Große Dateien",
     "largeFilesDesc": "Dateien nehmen den meisten Platz ein",
     "noLargeFiles": "Keine Dateien größer als 1 MB",
-    "emptyState": "Noch keine Dateien. Die Speicherverteilung wird hier angezeigt, sobald Sie TabTin verwenden.",
+    "emptyState": "Noch keine Dateien. Die Speicherverteilung wird hier angezeigt, sobald Sie Muse verwenden.",
     "errorState": "Laden fehlgeschlagen. Bitte versuchen Sie es später noch einmal.",
     "footnote": "Zu den aktuellen Statistiken gehören Bilder, Videos, Dokumentanhänge usw. Die Daten der Collaboration Engine (Versionsverlauf usw.) werden in einer zukünftigen Version verfolgt.",
     "viewDetails": "Details anzeigen",
@@ -2739,8 +2739,8 @@
     "title": "Standard-Apps",
     "description": "Wählen Sie aus, welche App jeden Ressourcentyp oder jedes URL-Schema standardmäßig verarbeitet, wenn ein Agent (oder Sie) im Chat auf einen Link klickt.",
     "behaviorHint": "Sobald die Einstellung festgelegt ist, wird durch Klicken auf einen passenden Link die ausgewählte App geöffnet. Der aktuelle Standardwert ist mit einem Häkchen gekennzeichnet.",
-    "fallbackHint": "Wenn die von Ihnen ausgewählte App derzeit nicht verfügbar ist (deinstalliert oder der Typ nicht mehr deklariert ist), greift TabTin auf die empfohlene App statt auf den Systemstandard zurück. Ihre Einstellung bleibt erhalten und wird wieder aktiviert, sobald die App wieder verfügbar ist.",
-    "typesSection": "Ressourcentypen (TabTin-Format)",
+    "fallbackHint": "Wenn die von Ihnen ausgewählte App derzeit nicht verfügbar ist (deinstalliert oder der Typ nicht mehr deklariert ist), greift Muse auf die empfohlene App statt auf den Systemstandard zurück. Ihre Einstellung bleibt erhalten und wird wieder aktiviert, sobald die App wieder verfügbar ist.",
+    "typesSection": "Ressourcentypen (Muse-Format)",
     "schemesSection": "URL-Schemata (Branchenformat)",
     "typesEmpty": "Derzeit gibt keine App an, dass sie jeden Ressourcentyp öffnen kann.",
     "schemesEmpty": "Derzeit gibt keine App an, dass sie mit jedem URL-Schema umgehen kann.",
@@ -2800,7 +2800,7 @@
     "detailEmpty": "Wählen Sie links einen KI-Avatar aus, um sein Profil anzuzeigen",
     "editAvatarAction": "Avatar bearbeiten",
     "editAvatarTitle": "Avatar bearbeiten",
-    "avatarPresetHint": "Uploads werden noch nicht unterstützt. Wählen Sie einen TabTin-Marken-Avatar.",
+    "avatarPresetHint": "Uploads werden noch nicht unterstützt. Wählen Sie einen Muse-Marken-Avatar.",
     "avatarLabel": "Avatar",
     "avatarSaveAction": "Speichern",
     "avatarSaveSuccess": "Avatar aktualisiert",

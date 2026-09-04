@@ -22,7 +22,7 @@ import { registerPendingLSPDiagnostic } from './LSPDiagnosticRegistry.js';
 import type { LSPServerManager } from '../manager/LSPServerManager.js';
 
 /**
- * Map LSP severity to TabTin diagnostic severity.
+ * Map LSP severity to Muse diagnostic severity.
  *
  * 接受 LSP DiagnosticSeverity 枚举值（1=Error, 2=Warning, 3=Information, 4=Hint）
  * 或 undefined；invalid/missing 默认 'Error'（**注意是 Error 不是 Hint**——
@@ -47,7 +47,7 @@ function mapLSPSeverity(
 }
 
 /**
- * Convert LSP diagnostics to TabTin's DiagnosticFile format.
+ * Convert LSP diagnostics to Muse's DiagnosticFile format.
  *
  */
 export function formatDiagnosticsForAttachment(
@@ -190,7 +190,7 @@ export function registerLSPNotificationHandlers(
               `Received diagnostics from ${serverName}: ${diagnosticParams.diagnostics.length} diagnostic(s) for ${diagnosticParams.uri}`,
             );
 
-            // Convert LSP diagnostics to TabTin format (can throw on invalid URIs)
+            // Convert LSP diagnostics to Muse format (can throw on invalid URIs)
             const diagnosticFiles =
               formatDiagnosticsForAttachment(diagnosticParams);
 

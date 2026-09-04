@@ -1,7 +1,7 @@
 {
   "name": "@tabtin/crawl-integration",
   "version": "0.1.0",
-  "description": "TabTin Crawl Integration - Browser control layer with Puppeteer Core + CDP",
+  "description": "Muse Crawl Integration - Browser control layer with Puppeteer Core + CDP",
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",

@@ -1,11 +1,11 @@
 {
-  "welcomeTitle": "Welcome to TabTin",
+  "welcomeTitle": "Welcome to Muse",
   "welcomeSubtitle": "Unified AI work platform. Create a new Workspace or pick one from the left.",
   "welcomeSubtitleGuest": "Sign in to create Workspaces and start collaborating.",
   "welcome": {
-    "title": "TabTin",
+    "title": "Muse",
     "tagline": "Your AI work platform",
-    "conceptIntro": "In TabTin, a Workspace is a persistent work site bound to an execution device and working directory. It keeps conversations, apps, resources, and execution context together so Agents can help within that boundary.",
+    "conceptIntro": "In Muse, a Workspace is a persistent work site bound to an execution device and working directory. It keeps conversations, apps, resources, and execution context together so Agents can help within that boundary.",
     "loginCta": "Sign in / Register",
     "learnMore": "Learn more →",
     "readyTitle": "All set!",
@@ -158,7 +158,7 @@
       "selectHelp": "The default model is used for new sessions and tasks without a specified model."
     },
     "presetSection": {
-      "title": "TabTin preset models",
+      "title": "Muse preset models",
       "subtitle": "Built-in platform models. Ready to use as the default—no channel setup required.",
       "collapse": "Collapse preset models",
       "expandHint": "{{count}} more platform models. Expand to see all."

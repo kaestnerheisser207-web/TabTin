@@ -1,14 +1,14 @@
 /**
  * 内置 LSP server 配置 + LspServerConfigLoader 实现。
  *
- * 设计要点（TabTin 自有实现）：
+ * 设计要点（Muse 自有实现）：
  *   - typescript：必须找到 tsserver.js（项目自带 > bundled），找不到则不启用
  *   - pyright：自动检测 venv 传 pythonPath
  *   - 系统 PATH 优先（高级用户自装的版本）
  *   - 所有解析失败时不抛错——返回 partial config（manager 启动该 server 时
  *     会自然失败到 error 状态，由 agent-runtime 的 spawn linter fallback 兜底）
  *
- *   TabTin 走静态注册（builtin-servers）。设计哲学：先把基础 2 个语言（TS/PY）
+ *   Muse 走静态注册（builtin-servers）。设计哲学：先把基础 2 个语言（TS/PY）
  *   做扎实，后续语言按需扩展。
  *   借鉴：Typescript 的 tsserver.js 必需性检查 / Pyright 的 venv 检测
  */

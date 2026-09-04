@@ -154,8 +154,8 @@ describe('resolveSkillQuickUse', () => {
     )
     const prompt = String(extractToTableBlock.params.rendered_prompt)
     expect(prompt).toContain('先根据我的目标、页面标题/域名和采集字段判断一个清晰表名')
-    expect(prompt).toContain('tabtin browser tab list --format json')
-    expect(prompt).toContain('tabtin browser network')
+    expect(prompt).toContain('muse browser tab list --format json')
+    expect(prompt).toContain('muse browser network')
     expect(prompt).toContain('写入 TabData 表')
     // 已下线的高层命令不应再出现在预设提示里。
     expect(prompt).not.toContain('collect table')

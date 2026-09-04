@@ -73,7 +73,7 @@ export function collectHostEnv(execPath: string = process.execPath): Diagnostics
     macTranslated,
     macSupportsArm64,
     osBuild,
-    execBasename: path.basename(execPath) || 'TabTin',
+    execBasename: path.basename(execPath) || 'Muse',
     runtimeLabel: buildRuntimeLabel(platform, processArch, macTranslated),
   }
 }

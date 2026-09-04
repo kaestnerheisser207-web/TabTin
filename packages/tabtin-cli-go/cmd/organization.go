@@ -9,10 +9,10 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/TabTin/tabtin-cli/internal/cmdutil"
-	"github.com/TabTin/tabtin-cli/internal/config"
-	"github.com/TabTin/tabtin-cli/internal/errcode"
-	"github.com/TabTin/tabtin-cli/internal/output"
+	"github.com/Muse/muse-cli/internal/cmdutil"
+	"github.com/Muse/muse-cli/internal/config"
+	"github.com/Muse/muse-cli/internal/errcode"
+	"github.com/Muse/muse-cli/internal/output"
 )
 
 func newCmdOrganization(f *cmdutil.Factory) *cobra.Command {
@@ -85,7 +85,7 @@ func newCmdOrganizationList(f *cmdutil.Factory) *cobra.Command {
 	return &cobra.Command{
 		Use:     "list",
 		Short:   "列出我的组织",
-		Example: "  tabtin organization list",
+		Example: "  muse organization list",
 		RunE: cmdutil.SafeRunE(func(cmd *cobra.Command, args []string) error {
 			result, err := apiGet(cmd.Context(), f, "/api/context/organizations")
 			if err != nil {
@@ -101,7 +101,7 @@ func newCmdOrganizationInfo(f *cmdutil.Factory) *cobra.Command {
 	return &cobra.Command{
 		Use:     "info [organization-id]",
 		Short:   "组织详情",
-		Example: "  tabtin organization info\n  tabtin organization info <id>",
+		Example: "  muse organization info\n  muse organization info <id>",
 		RunE: cmdutil.SafeRunE(func(cmd *cobra.Command, args []string) error {
 			var id string
 			if len(args) > 0 {
@@ -136,7 +136,7 @@ func newCmdOrganizationUpdate(f *cmdutil.Factory) *cobra.Command {
 	cmd := &cobra.Command{
 		Use:     "update [organization-id]",
 		Short:   "更新组织设置",
-		Example: "  tabtin organization update --name \"新组织名\"\n  tabtin organization update --icon 🚀",
+		Example: "  muse organization update --name \"新组织名\"\n  muse organization update --icon 🚀",
 		RunE: cmdutil.SafeRunE(func(cmd *cobra.Command, args []string) error {
 			var id string
 			if len(args) > 0 {
@@ -199,9 +199,9 @@ func newCmdOrganizationMembers(f *cmdutil.Factory) *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "members [organization-id]",
 		Short: "组织成员列表",
-		Example: "  tabtin organization members\n" +
-			"  tabtin organization members <id>\n" +
-			"  tabtin organization members --search zhang@example.com",
+		Example: "  muse organization members\n" +
+			"  muse organization members <id>\n" +
+			"  muse organization members --search zhang@example.com",
 		RunE: cmdutil.SafeRunE(func(cmd *cobra.Command, args []string) error {
 			var id string
 			if len(args) > 0 {
@@ -252,7 +252,7 @@ func newCmdOrganizationMembership(f *cmdutil.Factory) *cobra.Command {
 	return &cobra.Command{
 		Use:     "membership [organization-id]",
 		Short:   "会员/套餐信息",
-		Example: "  tabtin organization membership",
+		Example: "  muse organization membership",
 		RunE: cmdutil.SafeRunE(func(cmd *cobra.Command, args []string) error {
 			var id string
 			if len(args) > 0 {
@@ -281,7 +281,7 @@ func newCmdOrganizationUsage(f *cmdutil.Factory) *cobra.Command {
 	return &cobra.Command{
 		Use:     "usage [organization-id]",
 		Short:   "用量统计",
-		Example: "  tabtin organization usage",
+		Example: "  muse organization usage",
 		RunE: cmdutil.SafeRunE(func(cmd *cobra.Command, args []string) error {
 			var id string
 			if len(args) > 0 {
@@ -310,7 +310,7 @@ func newCmdOrganizationBilling(f *cmdutil.Factory) *cobra.Command {
 	return &cobra.Command{
 		Use:     "billing [organization-id]",
 		Short:   "计费与权益",
-		Example: "  tabtin organization billing",
+		Example: "  muse organization billing",
 		RunE: cmdutil.SafeRunE(func(cmd *cobra.Command, args []string) error {
 			var id string
 			if len(args) > 0 {
@@ -339,7 +339,7 @@ func newCmdOrganizationWallet(f *cmdutil.Factory) *cobra.Command {
 	return &cobra.Command{
 		Use:     "wallet [organization-id]",
 		Short:   "钱包余额与流水",
-		Example: "  tabtin organization wallet",
+		Example: "  muse organization wallet",
 		RunE: cmdutil.SafeRunE(func(cmd *cobra.Command, args []string) error {
 			var id string
 			if len(args) > 0 {
@@ -370,20 +370,20 @@ func organizationCommandSchemas() map[string]cmdutil.CommandDef {
 	return map[string]cmdutil.CommandDef{
 		"list": {
 			Use: "list", Short: "列出我的组织",
-			Example: "  tabtin organization list",
+			Example: "  muse organization list",
 			Method:  "GET", Path: "/api/context/organizations",
 			HasFormat: true, RequiresAuth: true, Idempotent: true,
 		},
 		"info": {
 			Use: "info [organization-id]", Short: "组织详情",
-			Example: "  tabtin organization info\n  tabtin organization info <id>",
+			Example: "  muse organization info\n  muse organization info <id>",
 			Method:  "GET", Path: "/api/context/organizations/{organization_id}",
 			ArgsMapping: []string{"organization_id"},
 			HasFormat:   true, RequiresAuth: true, Idempotent: true,
 		},
 		"update": {
 			Use: "update [organization-id]", Short: "更新组织设置",
-			Example: "  tabtin organization update --name \"新组织名\"",
+			Example: "  muse organization update --name \"新组织名\"",
 			Method:  "PUT", Path: "/api/context/organizations/{organization_id}",
 			ArgsMapping: []string{"organization_id"},
 			HasFormat:   true, RequiresAuth: true, Risk: cmdutil.RiskWrite,
@@ -395,9 +395,9 @@ func organizationCommandSchemas() map[string]cmdutil.CommandDef {
 		},
 		"members": {
 			Use: "members [organization-id]", Short: "组织成员列表",
-			Example: "  tabtin organization members\n" +
-				"  tabtin organization members <id>\n" +
-				"  tabtin organization members --search zhang@example.com",
+			Example: "  muse organization members\n" +
+				"  muse organization members <id>\n" +
+				"  muse organization members --search zhang@example.com",
 			Method:      "GET", Path: "/api/context/organizations/{organization_id}/members",
 			ArgsMapping: []string{"organization_id"},
 			HasFormat:   true, RequiresAuth: true, Idempotent: true,
@@ -407,28 +407,28 @@ func organizationCommandSchemas() map[string]cmdutil.CommandDef {
 		},
 		"membership": {
 			Use: "membership [organization-id]", Short: "会员/套餐信息",
-			Example: "  tabtin organization membership",
+			Example: "  muse organization membership",
 			Method:  "GET", Path: "/api/membership/organizations/{organization_id}/membership",
 			ArgsMapping: []string{"organization_id"},
 			HasFormat:   true, RequiresAuth: true, Idempotent: true,
 		},
 		"usage": {
 			Use: "usage [organization-id]", Short: "用量统计",
-			Example: "  tabtin organization usage",
+			Example: "  muse organization usage",
 			Method:  "GET", Path: "/api/services/billing/organizations/{organization_id}/summary",
 			ArgsMapping: []string{"organization_id"},
 			HasFormat:   true, RequiresAuth: true, Idempotent: true,
 		},
 		"billing": {
 			Use: "billing [organization-id]", Short: "计费与权益",
-			Example: "  tabtin organization billing",
+			Example: "  muse organization billing",
 			Method:  "GET", Path: "/api/services/billing/organizations/{organization_id}/entitlement",
 			ArgsMapping: []string{"organization_id"},
 			HasFormat:   true, RequiresAuth: true, Idempotent: true,
 		},
 		"wallet": {
 			Use: "wallet [organization-id]", Short: "钱包余额与流水",
-			Example: "  tabtin organization wallet",
+			Example: "  muse organization wallet",
 			Method:  "GET", Path: "/api/wallet/organizations/{organization_id}/wallet",
 			ArgsMapping: []string{"organization_id"},
 			HasFormat:   true, RequiresAuth: true, Idempotent: true,

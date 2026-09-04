@@ -62,7 +62,7 @@ i18n.use(initReactI18next).init({
 
 function syncDocumentMeta(lang: string) {
   document.documentElement.lang = lang
-  document.title = i18n.t('appTitle', { ns: 'common', defaultValue: 'TabTin' })
+  document.title = i18n.t('appTitle', { ns: 'common', defaultValue: 'Muse' })
 }
 
 syncDocumentMeta(i18n.language)

@@ -77,7 +77,7 @@ export function createAudioHandler(deps: AudioHandlerDeps): RouteHandler {
 
     if (!ALLOWED_ROUTES.has(route)) {
       sendJSON(res, 404, errorResponse('NOT_FOUND', `未知的语音路由: ${url}`, {
-        suggestions: ['使用 tabtin speech --help 查看可用命令'],
+        suggestions: ['使用 muse speech --help 查看可用命令'],
       }));
       return;
     }
@@ -86,7 +86,7 @@ export function createAudioHandler(deps: AudioHandlerDeps): RouteHandler {
     if (route === '/tts/synthesize' && method === 'POST') {
       if (!body?.text) {
         sendJSON(res, 400, errorResponse('VALIDATION_ERROR', '缺少 text 参数', {
-          suggestions: ['tabtin speech tts "要合成的文本"'],
+          suggestions: ['muse speech tts "要合成的文本"'],
         }));
         return;
       }

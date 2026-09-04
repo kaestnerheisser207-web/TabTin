@@ -11,10 +11,10 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/TabTin/tabtin-cli/internal/cmdutil"
-	"github.com/TabTin/tabtin-cli/internal/errcode"
-	"github.com/TabTin/tabtin-cli/internal/output"
-	"github.com/TabTin/tabtin-cli/internal/transport"
+	"github.com/Muse/muse-cli/internal/cmdutil"
+	"github.com/Muse/muse-cli/internal/errcode"
+	"github.com/Muse/muse-cli/internal/output"
+	"github.com/Muse/muse-cli/internal/transport"
 )
 
 func newCmdDesktop(f *cmdutil.Factory) *cobra.Command {
@@ -28,12 +28,12 @@ func newCmdDesktop(f *cmdutil.Factory) *cobra.Command {
 首次使用需要用户审批和 macOS 辅助功能权限。
 
 示例：
-  tabtin desktop screenshot
-  tabtin desktop click 640 400
-  tabtin desktop type "Hello World"
-  tabtin desktop hotkey cmd c
-  tabtin desktop windows
-  tabtin desktop activate "Google Chrome"`,
+  muse desktop screenshot
+  muse desktop click 640 400
+  muse desktop type "Hello World"
+  muse desktop hotkey cmd c
+  muse desktop windows
+  muse desktop activate "Google Chrome"`,
 	}
 
 	registerDesktopTopLevel(cmd, f)
@@ -49,7 +49,7 @@ func newCmdDesktop(f *cmdutil.Factory) *cobra.Command {
 	sessionCmd := &cobra.Command{Use: "session", Short: "操控会话管理"}
 	cmdutil.RegisterCommand(sessionCmd, f, cmdutil.CommandDef{
 		Use: "start", Short: "启动桌面操控会话",
-		Example: "  tabtin desktop session start\n  tabtin desktop session start --session-id <id>",
+		Example: "  muse desktop session start\n  muse desktop session start --session-id <id>",
 		Route:   cmdutil.RouteCliServer, Method: "POST", Path: "/desktop/session/start",
 		// ：启动桌面操控会话开启对本机键鼠的控制通道，属状态变更。
 		Risk: cmdutil.RiskWrite, RiskDeclared: true,
@@ -64,7 +64,7 @@ func newCmdDesktop(f *cmdutil.Factory) *cobra.Command {
 	})
 	cmdutil.RegisterCommand(sessionCmd, f, cmdutil.CommandDef{
 		Use: "end", Short: "结束桌面操控会话",
-		Example: "  tabtin desktop session end",
+		Example: "  muse desktop session end",
 		Route:   cmdutil.RouteCliServer, Method: "POST", Path: "/desktop/session/end",
 		// ：结束会话改变操控通道状态。
 		Risk: cmdutil.RiskWrite, RiskDeclared: true,
@@ -76,7 +76,7 @@ func newCmdDesktop(f *cmdutil.Factory) *cobra.Command {
 	cmdutil.RegisterCommand(cmd, f, cmdutil.CommandDef{
 		Use: "revoke-approval", Short: "撤销桌面操控授权",
 		Long:    "撤销桌面操控的总是允许授权，下次使用需重新审批。",
-		Example: "  tabtin desktop revoke-approval",
+		Example: "  muse desktop revoke-approval",
 		Route:   cmdutil.RouteCliServer, Method: "POST", Path: "/desktop/revoke-approval",
 		// ：撤销授权改变持久化的审批状态。
 		Risk: cmdutil.RiskWrite, RiskDeclared: true,
@@ -90,7 +90,7 @@ func registerDesktopTopLevel(parent *cobra.Command, f *cmdutil.Factory) {
 	defs := []cmdutil.CommandDef{
 		{
 			Use: "click <x> <y>", Short: "鼠标点击",
-			Example: "  tabtin desktop click 640 400\n  tabtin desktop click 640 400 --button right\n  tabtin desktop click 640 400 --count 2",
+			Example: "  muse desktop click 640 400\n  muse desktop click 640 400 --button right\n  muse desktop click 640 400 --count 2",
 			Route:   cmdutil.RouteCliServer, Method: "POST", Path: "/desktop/click",
 			// ：真实操控本机鼠标，属设备写。
 			Risk: cmdutil.RiskWrite, RiskDeclared: true,
@@ -103,7 +103,7 @@ func registerDesktopTopLevel(parent *cobra.Command, f *cmdutil.Factory) {
 		},
 		{
 			Use: "scroll <x> <y>", Short: "鼠标滚动",
-			Example: "  tabtin desktop scroll 640 400 --dy -3\n  tabtin desktop scroll 640 400 --dy 5",
+			Example: "  muse desktop scroll 640 400 --dy -3\n  muse desktop scroll 640 400 --dy 5",
 			Route:   cmdutil.RouteCliServer, Method: "POST", Path: "/desktop/scroll",
 			Risk: cmdutil.RiskWrite, RiskDeclared: true,
 			ArgsMapping: []string{"x", "y"},
@@ -115,7 +115,7 @@ func registerDesktopTopLevel(parent *cobra.Command, f *cmdutil.Factory) {
 		},
 		{
 			Use: "move <x> <y>", Short: "移动鼠标（不点击）",
-			Example: "  tabtin desktop move 640 400",
+			Example: "  muse desktop move 640 400",
 			Route:   cmdutil.RouteCliServer, Method: "POST", Path: "/desktop/move",
 			Risk: cmdutil.RiskWrite, RiskDeclared: true,
 			ArgsMapping: []string{"x", "y"},
@@ -123,7 +123,7 @@ func registerDesktopTopLevel(parent *cobra.Command, f *cmdutil.Factory) {
 		},
 		{
 			Use: "type <text>", Short: "键盘输入文字",
-			Example: "  tabtin desktop type \"Hello World\"\n  tabtin desktop type \"你好世界\" --clipboard",
+			Example: "  muse desktop type \"Hello World\"\n  muse desktop type \"你好世界\" --clipboard",
 			Route:   cmdutil.RouteCliServer, Method: "POST", Path: "/desktop/type",
 			Risk: cmdutil.RiskWrite, RiskDeclared: true,
 			ArgsMapping: []string{"text"},
@@ -134,7 +134,7 @@ func registerDesktopTopLevel(parent *cobra.Command, f *cmdutil.Factory) {
 		},
 		{
 			Use: "key <key>", Short: "按键",
-			Example: "  tabtin desktop key Enter\n  tabtin desktop key Backspace --repeat 5\n  tabtin desktop key c --modifiers cmd",
+			Example: "  muse desktop key Enter\n  muse desktop key Backspace --repeat 5\n  muse desktop key c --modifiers cmd",
 			Route:   cmdutil.RouteCliServer, Method: "POST", Path: "/desktop/key",
 			Risk: cmdutil.RiskWrite, RiskDeclared: true,
 			ArgsMapping: []string{"key"},
@@ -160,7 +160,7 @@ func registerDesktopTopLevel(parent *cobra.Command, f *cmdutil.Factory) {
 		},
 		{
 			Use: "windows", Short: "列出所有窗口",
-			Example: "  tabtin desktop windows\n  tabtin desktop windows --format table",
+			Example: "  muse desktop windows\n  muse desktop windows --format table",
 			Route:   cmdutil.RouteCliServer, Method: "POST", Path: "/desktop/windows",
 			// ：只读枚举窗口（POST 仅因走 cli-server，无副作用）。
 			Risk: cmdutil.RiskRead, RiskDeclared: true,
@@ -168,7 +168,7 @@ func registerDesktopTopLevel(parent *cobra.Command, f *cmdutil.Factory) {
 		},
 		{
 			Use: "activate <target>", Short: "激活窗口到前台",
-			Example: "  tabtin desktop activate \"Google Chrome\"",
+			Example: "  muse desktop activate \"Google Chrome\"",
 			Route:   cmdutil.RouteCliServer, Method: "POST", Path: "/desktop/activate",
 			// ：把窗口拉到前台，改变桌面焦点状态。
 			Risk: cmdutil.RiskWrite, RiskDeclared: true,
@@ -177,19 +177,19 @@ func registerDesktopTopLevel(parent *cobra.Command, f *cmdutil.Factory) {
 		},
 		{
 			Use: "open <name>", Short: "打开应用",
-			Example: "  tabtin desktop open \"Slack\"\n  tabtin desktop open \"/Applications/Visual Studio Code.app\"\n  tabtin desktop open \"PowerShell\" --external",
+			Example: "  muse desktop open \"Slack\"\n  muse desktop open \"/Applications/Visual Studio Code.app\"\n  muse desktop open \"PowerShell\" --external",
 			Route:   cmdutil.RouteCliServer, Method: "POST", Path: "/desktop/open",
 			// ：启动本机应用，属系统状态变更。
 			Risk: cmdutil.RiskWrite, RiskDeclared: true,
 			ArgsMapping: []string{"name"},
 			Flags: []cmdutil.FlagDef{
-				{Name: "external", Type: cmdutil.FlagBool, Desc: "显式允许打开系统终端（PowerShell/cmd/Windows Terminal 等）；默认拦截并提示改用 tabtin terminal open"},
+				{Name: "external", Type: cmdutil.FlagBool, Desc: "显式允许打开系统终端（PowerShell/cmd/Windows Terminal 等）；默认拦截并提示改用 muse terminal open"},
 			},
 			HasFormat: true,
 		},
 		{
 			Use: "accessibility", Short: "检查辅助功能权限",
-			Example: "  tabtin desktop accessibility\n  tabtin desktop accessibility --prompt",
+			Example: "  muse desktop accessibility\n  muse desktop accessibility --prompt",
 			Route:   cmdutil.RouteCliServer, Method: "POST", Path: "/desktop/accessibility",
 			// ：查询权限状态为只读（--prompt 仅唤起系统对话框，不改我方状态）。
 			Risk: cmdutil.RiskRead, RiskDeclared: true,
@@ -208,17 +208,17 @@ func newDesktopScreenshotCmd(f *cmdutil.Factory) *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "screenshot",
 		Short: "截取屏幕",
-		Example: `  tabtin desktop screenshot
-  tabtin desktop screenshot --display 1
-  tabtin desktop screenshot --max-dim 1920
-  tabtin desktop screenshot --region 100,200,800,600
-  tabtin desktop screenshot --save ~/screenshots/check.jpg`,
+		Example: `  muse desktop screenshot
+  muse desktop screenshot --display 1
+  muse desktop screenshot --max-dim 1920
+  muse desktop screenshot --region 100,200,800,600
+  muse desktop screenshot --save ~/screenshots/check.jpg`,
 		RunE: cmdutil.SafeRunE(func(cmd *cobra.Command, args []string) error {
 			tr, err := f.Transport()
 			if err != nil {
 				return output.PrintErrorAndExit(output.ErrorEnvelope(
 					string(errcode.Unavailable), err.Error(),
-					"tabtin daemon start", output.ExitServiceUnavail,
+					"muse daemon start", output.ExitServiceUnavail,
 				))
 			}
 
@@ -271,16 +271,16 @@ func newDesktopHotkeyCmd(f *cmdutil.Factory) *cobra.Command {
 		Use:   "hotkey <key1> <key2> ...",
 		Short: "组合键",
 		Long:  "按下组合键。参数为空格分隔的键名序列。",
-		Example: `  tabtin desktop hotkey cmd c
-  tabtin desktop hotkey cmd shift s
-  tabtin desktop hotkey alt Tab`,
+		Example: `  muse desktop hotkey cmd c
+  muse desktop hotkey cmd shift s
+  muse desktop hotkey alt Tab`,
 		Args: cobra.MinimumNArgs(1),
 		RunE: cmdutil.SafeRunE(func(cmd *cobra.Command, args []string) error {
 			tr, err := f.Transport()
 			if err != nil {
 				return output.PrintErrorAndExit(output.ErrorEnvelope(
 					string(errcode.Unavailable), err.Error(),
-					"tabtin daemon start", output.ExitServiceUnavail,
+					"muse daemon start", output.ExitServiceUnavail,
 				))
 			}
 			body := map[string]any{"keys": args}
@@ -289,7 +289,7 @@ func newDesktopHotkeyCmd(f *cmdutil.Factory) *cobra.Command {
 	}
 }
 
-// newDesktopExtendAllowlistCmd 实现 `tabtin desktop session extend-allowlist <app>...`
+// newDesktopExtendAllowlistCmd 实现 `muse desktop session extend-allowlist <app>...`
 // （规范 § 6.12）。session 进行中 Agent 发现需要新应用时主动请求扩权，
 // 扩权必过新审批（弹窗），通过则 append 去重合并到 session.allowedApps。
 func newDesktopExtendAllowlistCmd(f *cmdutil.Factory) *cobra.Command {
@@ -308,16 +308,16 @@ session 进行中 Agent 发现需要额外的应用（如打开 Chrome 查规范
 
 与 /session/start 的区别：扩权**不提供"总是允许"**——每次扩都要弹，
 确保第一次审批的边界意义不被架空。`,
-		Example: `  tabtin desktop session extend-allowlist "Google Chrome"
-  tabtin desktop session extend-allowlist "Google Chrome" --reason "需要在浏览器里查规范文档"
-  tabtin desktop session extend-allowlist "Finder" "Preview"`,
+		Example: `  muse desktop session extend-allowlist "Google Chrome"
+  muse desktop session extend-allowlist "Google Chrome" --reason "需要在浏览器里查规范文档"
+  muse desktop session extend-allowlist "Finder" "Preview"`,
 		Args: cobra.MinimumNArgs(1),
 		RunE: cmdutil.SafeRunE(func(cmd *cobra.Command, args []string) error {
 			tr, err := f.Transport()
 			if err != nil {
 				return output.PrintErrorAndExit(output.ErrorEnvelope(
 					string(errcode.Unavailable), err.Error(),
-					"tabtin daemon start", output.ExitServiceUnavail,
+					"muse daemon start", output.ExitServiceUnavail,
 				))
 			}
 
@@ -335,7 +335,7 @@ session 进行中 Agent 发现需要额外的应用（如打开 Chrome 查规范
 			sessionID, _ := cmd.Flags().GetString("session-id")
 			if strings.TrimSpace(sessionID) == "" {
 				return fmt.Errorf(
-					"缺少 --session-id：扩权必须指定当前 active session 的 id（可从 tabtin desktop screenshot 首次返回获取）",
+					"缺少 --session-id：扩权必须指定当前 active session 的 id（可从 muse desktop screenshot 首次返回获取）",
 				)
 			}
 
@@ -355,13 +355,13 @@ session 进行中 Agent 发现需要额外的应用（如打开 Chrome 查规范
 	return cmd
 }
 
-// newDesktopBatchCmd 实现 `tabtin desktop batch` —— Wave 3 · 规范 § 4.5.2。
+// newDesktopBatchCmd 实现 `muse desktop batch` —— Wave 3 · 规范 § 4.5.2。
 //
 // Agent 用 1 次 CLI 调用批量执行"点击 → 输入 → 回车"这类可预测序列，省掉
 // 每步 200-1500ms 的 LLM RTT。actions 数组由 JSON 文件或 stdin 传入。
 //
 // Q5 硬性校验：actions[0].action 不能是 'screenshot'（冷启动先单独调
-// `tabtin desktop screenshot` 建立 session）。CLI 只做"读进来原样转发"，
+// `muse desktop screenshot` 建立 session）。CLI 只做"读进来原样转发"，
 // 校验与执行由 Electron 侧 Executor + 路由层双重防线负责。
 func newDesktopBatchCmd(f *cmdutil.Factory) *cobra.Command {
 	cmd := &cobra.Command{
@@ -380,22 +380,22 @@ func newDesktopBatchCmd(f *cmdutil.Factory) *cobra.Command {
 
 硬性规则（Q5）：
   actions[0].action 不能是 "screenshot"——冷启动无 session 时先单独调
-  tabtin desktop screenshot 建立 session 后再发 batch。非首项的 screenshot
+  muse desktop screenshot 建立 session 后再发 batch。非首项的 screenshot
   是正常子动作（中途刷新坐标系）。
 
 子动作 action 枚举：
   click / scroll / drag / move / type / key / hotkey / screenshot / wait`,
 		Example: `  # 文件输入
-  tabtin desktop batch --file ops.json
+  muse desktop batch --file ops.json
   # 或
-  tabtin desktop batch ops.json
+  muse desktop batch ops.json
 
   # stdin 输入（推荐）
   echo '[{"action":"click","x":640,"y":400},{"action":"type","text":"hi"},{"action":"key","key":"Enter"}]' \
-    | tabtin desktop batch -
+    | muse desktop batch -
 
   # 中文输入必带 useClipboard=true
-  cat <<'EOF' | tabtin desktop batch -
+  cat <<'EOF' | muse desktop batch -
   [
     {"action":"click","x":100,"y":200},
     {"action":"type","text":"你好世界","useClipboard":true},
@@ -407,7 +407,7 @@ func newDesktopBatchCmd(f *cmdutil.Factory) *cobra.Command {
 			if err != nil {
 				return output.PrintErrorAndExit(output.ErrorEnvelope(
 					string(errcode.Unavailable), err.Error(),
-					"tabtin daemon start", output.ExitServiceUnavail,
+					"muse daemon start", output.ExitServiceUnavail,
 				))
 			}
 
@@ -454,7 +454,7 @@ func readBatchActions(cmd *cobra.Command, args []string) ([]byte, error) {
 	if len(args) == 0 {
 		return nil, fmt.Errorf("batch 需要指定 actions 源：--file <path>、" +
 			"位置参数 <path>、或 `-` 表示从 stdin 读。" +
-			`示例：echo '[{"action":"click","x":10,"y":20}]' | tabtin desktop batch -`)
+			`示例：echo '[{"action":"click","x":10,"y":20}]' | muse desktop batch -`)
 	}
 	src := strings.TrimSpace(args[0])
 	if src == "-" {
@@ -468,8 +468,8 @@ func newDesktopDragCmd(f *cmdutil.Factory) *cobra.Command {
 		Use:   "drag <x1,y1> <x2,y2>",
 		Short: "鼠标拖拽",
 		Long:  "从 (x1,y1) 拖拽到 (x2,y2)。坐标用逗号分隔。",
-		Example: `  tabtin desktop drag 100,200 500,200
-  tabtin desktop drag 100,200 500,200 --duration 1000`,
+		Example: `  muse desktop drag 100,200 500,200
+  muse desktop drag 100,200 500,200 --duration 1000`,
 		Args: cobra.ExactArgs(2),
 		RunE: cmdutil.SafeRunE(func(cmd *cobra.Command, args []string) error {
 			from := strings.Split(args[0], ",")
@@ -490,7 +490,7 @@ func newDesktopDragCmd(f *cmdutil.Factory) *cobra.Command {
 			if err != nil {
 				return output.PrintErrorAndExit(output.ErrorEnvelope(
 					string(errcode.Unavailable), err.Error(),
-					"tabtin daemon start", output.ExitServiceUnavail,
+					"muse daemon start", output.ExitServiceUnavail,
 				))
 			}
 
@@ -544,7 +544,7 @@ func doDesktopRequest(ctx context.Context, tr transport.Transport, method, path 
 	return nil
 }
 
-// newDesktopAccessibilityTreeCmd 实现 `tabtin desktop accessibility-tree`
+// newDesktopAccessibilityTreeCmd 实现 `muse desktop accessibility-tree`
 // （模块四 · 规范 § 4.6.3）。获取前台/指定窗口的 AX 快照。
 func newDesktopAccessibilityTreeCmd(f *cmdutil.Factory) *cobra.Command {
 	cmd := &cobra.Command{
@@ -554,16 +554,16 @@ func newDesktopAccessibilityTreeCmd(f *cmdutil.Factory) *cobra.Command {
 
 AX 快照以 JSON 形式返回元素树（name / role / bounds / enabled / visible / children），
 Agent 可用 click-element / type-into-element 按元素名直接操作，不需要猜坐标。`,
-		Example: `  tabtin desktop accessibility-tree
-  tabtin desktop accessibility-tree --window 'Figma'
-  tabtin desktop accessibility-tree --bundle-id com.apple.TextEdit
-  tabtin desktop accessibility-tree --max-depth 6 --no-interactive-only`,
+		Example: `  muse desktop accessibility-tree
+  muse desktop accessibility-tree --window 'Figma'
+  muse desktop accessibility-tree --bundle-id com.apple.TextEdit
+  muse desktop accessibility-tree --max-depth 6 --no-interactive-only`,
 		RunE: cmdutil.SafeRunE(func(cmd *cobra.Command, args []string) error {
 			tr, err := f.Transport()
 			if err != nil {
 				return output.PrintErrorAndExit(output.ErrorEnvelope(
 					string(errcode.Unavailable), err.Error(),
-					"tabtin daemon start", output.ExitServiceUnavail,
+					"muse daemon start", output.ExitServiceUnavail,
 				))
 			}
 
@@ -595,7 +595,7 @@ Agent 可用 click-element / type-into-element 按元素名直接操作，不需
 	return cmd
 }
 
-// newDesktopClickElementCmd 实现 `tabtin desktop click-element`
+// newDesktopClickElementCmd 实现 `muse desktop click-element`
 // （模块四 · 规范 § 4.6.3）。按元素名/角色点击。
 func newDesktopClickElementCmd(f *cmdutil.Factory) *cobra.Command {
 	cmd := &cobra.Command{
@@ -603,16 +603,16 @@ func newDesktopClickElementCmd(f *cmdutil.Factory) *cobra.Command {
 		Short: "按元素名点击（AX 精确定位）",
 		Long: `按名字 + 角色（可选）定位并点击元素。底层先查 AX 拿 bounds，再走
 现有 click 路径（含 pixelCompare 防护）。优先使用此命令代替坐标点击。`,
-		Example: `  tabtin desktop click-element --name 'Share' --role Button
-  tabtin desktop click-element --name 'A1' --role DataItem
-  tabtin desktop click-element --name 'Save' --role Button --nth 1
-  tabtin desktop click-element --name 'Submit' --button right`,
+		Example: `  muse desktop click-element --name 'Share' --role Button
+  muse desktop click-element --name 'A1' --role DataItem
+  muse desktop click-element --name 'Save' --role Button --nth 1
+  muse desktop click-element --name 'Submit' --button right`,
 		RunE: cmdutil.SafeRunE(func(cmd *cobra.Command, args []string) error {
 			tr, err := f.Transport()
 			if err != nil {
 				return output.PrintErrorAndExit(output.ErrorEnvelope(
 					string(errcode.Unavailable), err.Error(),
-					"tabtin daemon start", output.ExitServiceUnavail,
+					"muse daemon start", output.ExitServiceUnavail,
 				))
 			}
 
@@ -649,7 +649,7 @@ func newDesktopClickElementCmd(f *cmdutil.Factory) *cobra.Command {
 	return cmd
 }
 
-// newDesktopTypeIntoElementCmd 实现 `tabtin desktop type-into-element`
+// newDesktopTypeIntoElementCmd 实现 `muse desktop type-into-element`
 // （模块四 · 规范 § 4.6.3）。按元素名定位输入框并输入文本。
 func newDesktopTypeIntoElementCmd(f *cmdutil.Factory) *cobra.Command {
 	cmd := &cobra.Command{
@@ -657,16 +657,16 @@ func newDesktopTypeIntoElementCmd(f *cmdutil.Factory) *cobra.Command {
 		Short: "按元素名定位输入框并输入文本",
 		Long: `按名字 + 角色定位输入框并输入文本。底层先查 AX 拿 bounds，click 激活
 元素后 type 输入文本。中文/emoji 走 --clipboard 模式。`,
-		Example: `  tabtin desktop type-into-element --name 'Email' 'user@example.com'
-  tabtin desktop type-into-element --name 'Password' 'my_pwd_123'
-  tabtin desktop type-into-element --name 'Search' '规范文档' --clipboard`,
+		Example: `  muse desktop type-into-element --name 'Email' 'user@example.com'
+  muse desktop type-into-element --name 'Password' 'my_pwd_123'
+  muse desktop type-into-element --name 'Search' '规范文档' --clipboard`,
 		Args: cobra.ExactArgs(1),
 		RunE: cmdutil.SafeRunE(func(cmd *cobra.Command, args []string) error {
 			tr, err := f.Transport()
 			if err != nil {
 				return output.PrintErrorAndExit(output.ErrorEnvelope(
 					string(errcode.Unavailable), err.Error(),
-					"tabtin daemon start", output.ExitServiceUnavail,
+					"muse daemon start", output.ExitServiceUnavail,
 				))
 			}
 
@@ -710,7 +710,7 @@ func renameFlag(ctx *cmdutil.RunContext, from, to string) {
 func desktopScreenshotCommandSchema() cmdutil.CommandDef {
 	return cmdutil.CommandDef{
 		Use: "screenshot", Short: "截取屏幕",
-		Example: "  tabtin desktop screenshot\n  tabtin desktop screenshot --max-dim 1920\n  tabtin desktop screenshot --region 100,200,800,600",
+		Example: "  muse desktop screenshot\n  muse desktop screenshot --max-dim 1920\n  muse desktop screenshot --region 100,200,800,600",
 		Route:   cmdutil.RouteCliServer, Method: "POST", Path: "/desktop/screenshot",
 		Risk: cmdutil.RiskRead, RiskDeclared: true, // ：截屏只读
 		HasFormat: true,
@@ -727,7 +727,7 @@ func desktopScreenshotCommandSchema() cmdutil.CommandDef {
 func desktopHotkeyCommandSchema() cmdutil.CommandDef {
 	return cmdutil.CommandDef{
 		Use: "hotkey <key1> <key2> ...", Short: "组合键",
-		Example: "  tabtin desktop hotkey cmd c\n  tabtin desktop hotkey cmd shift s",
+		Example: "  muse desktop hotkey cmd c\n  muse desktop hotkey cmd shift s",
 		Route:   cmdutil.RouteCliServer, Method: "POST", Path: "/desktop/hotkey",
 		Risk: cmdutil.RiskWrite, RiskDeclared: true, // ：组合键操控
 		HasFormat: true,
@@ -737,7 +737,7 @@ func desktopHotkeyCommandSchema() cmdutil.CommandDef {
 func desktopDragCommandSchema() cmdutil.CommandDef {
 	return cmdutil.CommandDef{
 		Use: "drag <x1,y1> <x2,y2>", Short: "鼠标拖拽",
-		Example: "  tabtin desktop drag 100,200 500,200",
+		Example: "  muse desktop drag 100,200 500,200",
 		Route:   cmdutil.RouteCliServer, Method: "POST", Path: "/desktop/drag",
 		Risk: cmdutil.RiskWrite, RiskDeclared: true, // ：鼠标拖拽操控
 		HasFormat: true,
@@ -750,7 +750,7 @@ func desktopDragCommandSchema() cmdutil.CommandDef {
 func desktopBatchCommandSchema() cmdutil.CommandDef {
 	return cmdutil.CommandDef{
 		Use: "batch [-|<file>]", Short: "批量执行多个桌面操控子动作",
-		Example: "  echo '[{\"action\":\"click\",\"x\":640,\"y\":400}]' | tabtin desktop batch -\n  tabtin desktop batch --file ops.json",
+		Example: "  echo '[{\"action\":\"click\",\"x\":640,\"y\":400}]' | muse desktop batch -\n  muse desktop batch --file ops.json",
 		Route:   cmdutil.RouteCliServer, Method: "POST", Path: "/desktop/batch",
 		Risk: cmdutil.RiskWrite, RiskDeclared: true, // ：批量操控子动作
 		HasFormat: true,
@@ -764,7 +764,7 @@ func desktopBatchCommandSchema() cmdutil.CommandDef {
 func desktopAccessibilityTreeCommandSchema() cmdutil.CommandDef {
 	return cmdutil.CommandDef{
 		Use: "accessibility-tree", Short: "获取窗口 Accessibility Tree（AX 快照）",
-		Example: "  tabtin desktop accessibility-tree\n  tabtin desktop accessibility-tree --window 'Figma'",
+		Example: "  muse desktop accessibility-tree\n  muse desktop accessibility-tree --window 'Figma'",
 		Route:   cmdutil.RouteCliServer, Method: "POST", Path: "/desktop/accessibility-tree",
 		Risk: cmdutil.RiskRead, RiskDeclared: true, // ：AX 快照只读
 		HasFormat: true, Idempotent: true,
@@ -781,7 +781,7 @@ func desktopAccessibilityTreeCommandSchema() cmdutil.CommandDef {
 func desktopClickElementCommandSchema() cmdutil.CommandDef {
 	return cmdutil.CommandDef{
 		Use: "click-element", Short: "按元素名点击（AX 精确定位）",
-		Example: "  tabtin desktop click-element --name 'Share' --role Button",
+		Example: "  muse desktop click-element --name 'Share' --role Button",
 		Route:   cmdutil.RouteCliServer, Method: "POST", Path: "/desktop/click-element",
 		Risk: cmdutil.RiskWrite, RiskDeclared: true, // ：AX 定位点击操控
 		HasFormat: true,
@@ -799,7 +799,7 @@ func desktopClickElementCommandSchema() cmdutil.CommandDef {
 func desktopTypeIntoElementCommandSchema() cmdutil.CommandDef {
 	return cmdutil.CommandDef{
 		Use: "type-into-element <text>", Short: "按元素名定位输入框并输入文本",
-		Example: "  tabtin desktop type-into-element --name 'Email' 'user@example.com'",
+		Example: "  muse desktop type-into-element --name 'Email' 'user@example.com'",
 		Route:   cmdutil.RouteCliServer, Method: "POST", Path: "/desktop/type-into-element",
 		Risk: cmdutil.RiskWrite, RiskDeclared: true, // ：AX 定位输入操控
 		HasFormat:   true,
@@ -816,7 +816,7 @@ func desktopTypeIntoElementCommandSchema() cmdutil.CommandDef {
 func desktopExtendAllowlistCommandSchema() cmdutil.CommandDef {
 	return cmdutil.CommandDef{
 		Use: "extend-allowlist <app_name> [<app_name>...]", Short: "扩展当前 session 的允许应用列表",
-		Example: "  tabtin desktop session extend-allowlist \"Google Chrome\"",
+		Example: "  muse desktop session extend-allowlist \"Google Chrome\"",
 		Route:   cmdutil.RouteCliServer, Method: "POST", Path: "/desktop/session/extend-allowlist",
 		Risk: cmdutil.RiskWrite, RiskDeclared: true, // ：改会话允许应用列表
 		HasFormat: true,

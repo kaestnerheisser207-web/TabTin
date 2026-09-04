@@ -538,7 +538,7 @@ def admin_update_app_authorization(
 
 # ---------------------------------------------------------------------------
 # 5. Connect 管理辅助 —— v3.1（2026-04-19）整段删除
-#    理由：TabTin 对 Device 级第三方 App 不代管凭据（方向锚 H2）。
+#    理由：Muse 对 Device 级第三方 App 不代管凭据（方向锚 H2）。
 #    AdminDash 第②页 ConnectManagementPage 同步删除；用户授权改由 § 3/4
 #    基于 SpaceAppSettings.optional_tools_allowlist 展示。
 # ---------------------------------------------------------------------------

@@ -12,7 +12,7 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/TabTin/tabtin-cli/internal/output"
+	"github.com/Muse/muse-cli/internal/output"
 )
 
 // ─────────────────────────────────────────────────────────────
@@ -21,7 +21,7 @@ import (
 
 // newSprintBRoot 返回带全局 flag 的 cobra root 命令。
 func newSprintBRoot() *cobra.Command {
-	root := &cobra.Command{Use: "tabtin"}
+	root := &cobra.Command{Use: "muse"}
 	root.PersistentFlags().Bool("dry-run", false, "")
 	root.PersistentFlags().Bool("yes", false, "")
 	root.PersistentFlags().String("batch", "", "")

@@ -1,7 +1,7 @@
 {
   "name": "@tabtin/smartsheet",
   "version": "0.1.0",
-  "description": "TabTin SmartSheet Core Library",
+  "description": "Muse SmartSheet Core Library",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
@@ -12,11 +12,11 @@
   },
   "keywords": [
     "smartsheet",
-    "tabtin",
+    "muse",
     "data-table",
     "spreadsheet"
   ],
-  "author": "TabTin Team",
+  "author": "Muse Team",
   "license": "MIT",
   "dependencies": {
     "uuid": "^9.0.0",

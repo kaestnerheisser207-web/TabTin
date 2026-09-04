@@ -9,9 +9,9 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/TabTin/tabtin-cli/internal/cmdutil"
-	"github.com/TabTin/tabtin-cli/internal/output"
-	"github.com/TabTin/tabtin-cli/internal/transport"
+	"github.com/Muse/muse-cli/internal/cmdutil"
+	"github.com/Muse/muse-cli/internal/output"
+	"github.com/Muse/muse-cli/internal/transport"
 )
 
 const catalogPath = "/extensions/cli-commands"
@@ -105,7 +105,7 @@ func groupByExtension(cmds []ExtensionCommand) map[string][]ExtensionCommand {
 
 // FetchExtensionCatalog 拉取 /extensions/cli-commands 并返回解析后的命令列表。
 // 任何错误静默返回 nil——不影响原生命令输出。
-// 供 tabtin commands --json 合并 extension + marketplace 命令到 schema 输出。
+// 供 muse commands --json 合并 extension + marketplace 命令到 schema 输出。
 func FetchExtensionCatalog(tr transport.Transport) []ExtensionCommand {
 	if tr == nil {
 		return nil

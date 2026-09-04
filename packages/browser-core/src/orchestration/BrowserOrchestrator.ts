@@ -396,7 +396,7 @@ export type BrowserActionResult =
 const ACT_VALIDATION_SUGGESTIONS = [
   '格式: { "actions": [{ "type": "click", "selector": "#btn" }] }',
   '支持的操作: click, fill, scroll, wait, type, keyPress, hover, drag, dblclick, upload, select',
-  '使用 tabtin browser act --help 查看示例',
+  '使用 muse browser act --help 查看示例',
 ]
 
 // ── 响应投影（形状定义一次）────────────────────────────────────────
@@ -478,7 +478,7 @@ export const OBSERVE_RESULT_HINT =
   '浏览器观察结果的可交互元素位于 observed_elements；元素的 ref 可传给 browser act，'
   + 'href 只能使用页面返回的原始链接。'
   + '先用本次清单里的 ref 继续 act；要用的目标不在清单里时再 glance 一次补观察（--tree/--screenshot 也走 glance）。'
-  + '读正文用 tabtin browser print --save <path> 或 tabtin fetch，不要靠 glance 抠正文。'
+  + '读正文用 muse browser print --save <path> 或 muse fetch，不要靠 glance 抠正文。'
 
 /**
  * 清单里存在「带 text 但无 href」的可点条目（hover 导航 / JS 绑定点击的 div/span）时
@@ -486,7 +486,7 @@ export const OBSERVE_RESULT_HINT =
  */
 export const OBSERVE_NO_HREF_HINT =
   '清单中带 text 但无 href 的条目（hover 导航/JS 绑定点击）同样可点：'
-  + `tabtin browser act --actions '[{"type":"click","ref":"<eN>"}]'（eN 取该条目的 ref）。`
+  + `muse browser act --actions '[{"type":"click","ref":"<eN>"}]'（eN 取该条目的 ref）。`
   + '缺 href 不构成拼 URL 或换替代链接的理由。'
 
 /** 是否存在「带 text 但无 href」的可点条目（触发 OBSERVE_NO_HREF_HINT）。 */
@@ -503,7 +503,7 @@ function hasTextOnlyElement(elements: any[]): boolean {
 export const LOGIN_REQUIRED_HINT =
   '检测到登录墙：立即停下并把选择权交给用户，不要静默改用其他来源，更不能拿别处内容冒充本站结果。'
   + '用 ask_user 卡片向用户说明此页需要登录，并让其二选一：'
-  + '① 在 TabTin 浏览器当前标签页手动完成登录（手机号验证码 / 扫码 / OAuth 等），登录后复用同一 --tab-id 继续在本站获取；'
+  + '① 在 Muse 浏览器当前标签页手动完成登录（手机号验证码 / 扫码 / OAuth 等），登录后复用同一 --tab-id 继续在本站获取；'
   + '② 明确同意后改从其他公开来源获取（须诚实标注真实来源、不得标为本站结果）。'
   + '不要代填账号 / 密码 / 验证码，不要改用 print --url（会丢登录态）。'
 
@@ -840,7 +840,7 @@ function evalMissingExpressionError(runtime: BrowserRuntime): BrowserActionResul
       error: {
         code: 'VALIDATION_ERROR',
         message: '缺少 expression 参数',
-        suggestions: ['示例: tabtin browser eval "document.title" --tab auto'],
+        suggestions: ['示例: muse browser eval "document.title" --tab auto'],
       },
     }
   }
@@ -850,7 +850,7 @@ function evalMissingExpressionError(runtime: BrowserRuntime): BrowserActionResul
     error: {
       code: 'VALIDATION_ERROR',
       message: '缺少 expression 或 code 参数',
-      suggestions: ['tabtin browser eval "document.title"'],
+      suggestions: ['muse browser eval "document.title"'],
     },
   }
 }
@@ -950,7 +950,7 @@ const JOB_ID_REQUIRED_ERROR: BrowserActionResult = {
   error: {
     code: 'VALIDATION_ERROR',
     message: '缺少 jobId 参数',
-    suggestions: ['示例: tabtin browser job status --job-id <jobId>'],
+    suggestions: ['示例: muse browser job status --job-id <jobId>'],
   },
 }
 

@@ -141,7 +141,7 @@ export const SystemPermissionRow: React.FC<Props> = ({
             data-testid="permission-accessibility-hint"
           >
             {t('authorizationSystem.hints.accessibilityIdentity', {
-              processLabel: descriptor.processLabel || 'TabTin',
+              processLabel: descriptor.processLabel || 'Muse',
             })}
           </p>
         )}

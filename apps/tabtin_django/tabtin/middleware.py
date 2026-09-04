@@ -1,4 +1,4 @@
-"""Tabtin 项目级中间件。"""
+"""Muse 项目级中间件。"""
 
 import logging
 import time

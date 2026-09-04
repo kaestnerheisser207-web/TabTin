@@ -1,7 +1,7 @@
 """
 Unified Change Attribution System
 
-Every change across all TabTin modules records:
+Every change across all Muse modules records:
   - Who made the change (human user or AI agent)
   - When the change was made
   - What module and resource was affected

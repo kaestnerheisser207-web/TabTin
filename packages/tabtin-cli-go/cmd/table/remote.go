@@ -7,7 +7,7 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/TabTin/tabtin-cli/internal/cmdutil"
+	"github.com/Muse/muse-cli/internal/cmdutil"
 )
 
 func bodyString(body map[string]any, key string) string {
@@ -341,7 +341,7 @@ func adaptLinkCreate(ctx *cmdutil.RunContext, method, path string, body map[stri
 
 // adaptLinkUpdate: Django 直连下需先拉字段再合并 options——多步，暂要求 Desktop/Daemon。
 func adaptLinkUpdate(ctx *cmdutil.RunContext, method, path string, body map[string]any) (string, string, map[string]any, error) {
-	return "", "", nil, fmt.Errorf("link update 需合并现有 options，远程 API 直连暂不支持；请使用 Desktop/Daemon，或 tabtin table field update --options '{...}'")
+	return "", "", nil, fmt.Errorf("link update 需合并现有 options，远程 API 直连暂不支持；请使用 Desktop/Daemon，或 muse table field update --options '{...}'")
 }
 
 // adaptLinkSet: POST /table/link-set → PUT /api/tabdata/records/{id}

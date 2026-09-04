@@ -7,49 +7,49 @@
 import { describe, it, expect } from 'vitest'
 import { RESTRICTED_READONLY_VERBS } from '../src/capabilities/shell-restriction.js'
 
-// 模拟 `tabtin commands --format json` 采样（risk='' 只读 / risk='write' 写）。
+// 模拟 `muse commands --format json` 采样（risk='' 只读 / risk='write' 写）。
 // 维护契约：CLI 新增 risk='' 命令时，要么把终末 verb 加进 RESTRICTED_READONLY_VERBS，
 // 要么把命令加进本 fixture；漏则本测试红。
 const PRODUCTION_SCHEMA_FIXTURE: ReadonlyArray<{ name: string; risk?: string }> = [
-  { name: 'tabtin doc list', risk: '' },
-  { name: 'tabtin doc read', risk: '' },
-  { name: 'tabtin doc list-blocks', risk: '' },
-  { name: 'tabtin doc search-blocks', risk: '' },
-  { name: 'tabtin doc export', risk: '' },
-  { name: 'tabtin doc search', risk: '' },
-  { name: 'tabtin memo list', risk: '' },
-  { name: 'tabtin memo read', risk: '' },
-  { name: 'tabtin memo search', risk: '' },
-  { name: 'tabtin table list', risk: '' },
-  { name: 'tabtin table query', risk: '' },
-  { name: 'tabtin table view records', risk: '' },
-  { name: 'tabtin table view statistics', risk: '' },
-  { name: 'tabtin browser glance', risk: '' },
-  { name: 'tabtin browser print', risk: '' },
-  { name: 'tabtin browser wait', risk: '' },
-  { name: 'tabtin browser console', risk: '' },
-  { name: 'tabtin browser cookies get', risk: '' },
-  { name: 'tabtin browser network', risk: '' },
-  { name: 'tabtin browser tab list', risk: '' },
-  { name: 'tabtin browser tab state', risk: '' },
-  { name: 'tabtin browser resource', risk: '' },
-  { name: 'tabtin browser stream', risk: '' },
-  { name: 'tabtin browser ua', risk: '' },
-  { name: 'tabtin commands', risk: '' },
-  { name: 'tabtin capabilities', risk: '' },
-  { name: 'tabtin mcp list-servers', risk: '' },
-  { name: 'tabtin mcp list-tools', risk: '' },
-  { name: 'tabtin mcp list-resources', risk: '' },
-  { name: 'tabtin mcp list-prompts', risk: '' },
-  { name: 'tabtin mcp read-resource', risk: '' },
-  { name: 'tabtin mcp get-prompt', risk: '' },
-  { name: 'tabtin tracker show', risk: '' },
-  { name: 'tabtin tracker dry-run', risk: '' },
-  { name: 'tabtin code grep', risk: '' },
-  { name: 'tabtin code glob', risk: '' },
-  { name: 'tabtin doc create', risk: 'write' },
-  { name: 'tabtin browser act', risk: 'write' },
-  { name: 'tabtin browser eval', risk: 'write' },
+  { name: 'muse doc list', risk: '' },
+  { name: 'muse doc read', risk: '' },
+  { name: 'muse doc list-blocks', risk: '' },
+  { name: 'muse doc search-blocks', risk: '' },
+  { name: 'muse doc export', risk: '' },
+  { name: 'muse doc search', risk: '' },
+  { name: 'muse memo list', risk: '' },
+  { name: 'muse memo read', risk: '' },
+  { name: 'muse memo search', risk: '' },
+  { name: 'muse table list', risk: '' },
+  { name: 'muse table query', risk: '' },
+  { name: 'muse table view records', risk: '' },
+  { name: 'muse table view statistics', risk: '' },
+  { name: 'muse browser glance', risk: '' },
+  { name: 'muse browser print', risk: '' },
+  { name: 'muse browser wait', risk: '' },
+  { name: 'muse browser console', risk: '' },
+  { name: 'muse browser cookies get', risk: '' },
+  { name: 'muse browser network', risk: '' },
+  { name: 'muse browser tab list', risk: '' },
+  { name: 'muse browser tab state', risk: '' },
+  { name: 'muse browser resource', risk: '' },
+  { name: 'muse browser stream', risk: '' },
+  { name: 'muse browser ua', risk: '' },
+  { name: 'muse commands', risk: '' },
+  { name: 'muse capabilities', risk: '' },
+  { name: 'muse mcp list-servers', risk: '' },
+  { name: 'muse mcp list-tools', risk: '' },
+  { name: 'muse mcp list-resources', risk: '' },
+  { name: 'muse mcp list-prompts', risk: '' },
+  { name: 'muse mcp read-resource', risk: '' },
+  { name: 'muse mcp get-prompt', risk: '' },
+  { name: 'muse tracker show', risk: '' },
+  { name: 'muse tracker dry-run', risk: '' },
+  { name: 'muse code grep', risk: '' },
+  { name: 'muse code glob', risk: '' },
+  { name: 'muse doc create', risk: 'write' },
+  { name: 'muse browser act', risk: 'write' },
+  { name: 'muse browser eval', risk: 'write' },
 ]
 
 describe('RESTRICTED_READONLY_VERBS — L20b codegen 守护', () => {
@@ -58,7 +58,7 @@ describe('RESTRICTED_READONLY_VERBS — L20b codegen 守护', () => {
     for (const cmd of PRODUCTION_SCHEMA_FIXTURE) {
       if (cmd.risk !== '' && cmd.risk !== undefined) continue
       const verb = cmd.name.split(/\s+/).pop()!.toLowerCase()
-      if (verb === 'tabtin') continue
+      if (verb === 'muse') continue
       if (!RESTRICTED_READONLY_VERBS.has(verb)) missing.push({ name: cmd.name, verb })
     }
     expect(

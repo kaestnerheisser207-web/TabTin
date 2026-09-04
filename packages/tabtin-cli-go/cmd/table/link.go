@@ -5,16 +5,16 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/TabTin/tabtin-cli/internal/cmdutil"
+	"github.com/Muse/muse-cli/internal/cmdutil"
 )
 
 // link 命令组：关联字段的结构创建 + 边上的挂/解绑 + 候选查询。
 //
 // Agent 标准编排（日常挂靠，不涉及「建几张表」决策）：
-//  1. tabtin table link create ...                 # 建 link 字段（一等 flag，免手写 JSON）
-//  2. tabtin table link linkable-records --search  # 搜目标 record UUID
-//  3. tabtin table link add/set/remove ...         # 增量或整格写边
-//  4. tabtin table link list ...                   # 核对当前关联
+//  1. muse table link create ...                 # 建 link 字段（一等 flag，免手写 JSON）
+//  2. muse table link linkable-records --search  # 搜目标 record UUID
+//  3. muse table link add/set/remove ...         # 增量或整格写边
+//  4. muse table link list ...                   # 核对当前关联
 //
 // 「该不该建双表 / nested_list」形态决策仍走 skills_read("app:tabdata/table-modeling")；
 // 本命令组只管运行时关联操作。详见 skills_read("app:tabdata/table-association")。
@@ -28,13 +28,13 @@ func registerLinkCommands(parent *cobra.Command, f *cmdutil.Factory) {
 常见陷阱：单/多不是 is_multi——ManyOne/OneOne=单值，ManyMany/OneMany=多值；
 双向（默认）会在目标表自动建对称字段，别再手建反向 link；先建目标表再 create。`,
 			Example: "  # 多对多双向（电影→演员）\n" +
-				"  tabtin table link create --table-id <本表> --name \"演职员\" \\\n" +
+				"  muse table link create --table-id <本表> --name \"演职员\" \\\n" +
 				"    --foreign-table-id <演员表> --relationship ManyMany\n" +
 				"  # 多对一单关联（任务→分类）\n" +
-				"  tabtin table link create --table-id <任务表> --name \"分类\" \\\n" +
+				"  muse table link create --table-id <任务表> --name \"分类\" \\\n" +
 				"    --foreign-table-id <分类表> --relationship ManyOne\n" +
 				"  # 单向，不在目标表建对称字段\n" +
-				"  tabtin table link create --table-id <本表> --name \"标签\" \\\n" +
+				"  muse table link create --table-id <本表> --name \"标签\" \\\n" +
 				"    --foreign-table-id <标签表> --relationship ManyMany --one-way",
 			Route: cmdutil.RouteCliServer, Method: "POST", Path: "/table/link-create",
 			Runtime: cmdutil.RuntimeHybrid, AdaptRequest: adaptLinkCreate,
@@ -79,9 +79,9 @@ func registerLinkCommands(parent *cobra.Command, f *cmdutil.Factory) {
 本命令按 flag 增量合并。
 常见陷阱：改 relationship 可能影响已有单元格的单/多语义；双向改单向不会自动删对称字段（以后端为准）；
 改类型以外的 name/description 也可一并传。`,
-			Example: "  tabtin table link update --field-id <link字段> --relationship ManyMany\n" +
-				"  tabtin table link update --field-id <link字段> --one-way\n" +
-				"  tabtin table link update --field-id <link字段> --two-way --lookup-field-id <目标字段>",
+			Example: "  muse table link update --field-id <link字段> --relationship ManyMany\n" +
+				"  muse table link update --field-id <link字段> --one-way\n" +
+				"  muse table link update --field-id <link字段> --two-way --lookup-field-id <目标字段>",
 			Route: cmdutil.RouteCliServer, Method: "POST", Path: "/table/link-update",
 			Runtime: cmdutil.RuntimeHybrid, AdaptRequest: adaptLinkUpdate,
 			Layer: "L2", Risk: cmdutil.RiskWrite, RiskDeclared: true,
@@ -120,12 +120,12 @@ func registerLinkCommands(parent *cobra.Command, f *cmdutil.Factory) {
 设计理由：后端 set_link_cell 语义就是整格 diff；需要「只留这些」时用 set，避免 add/remove 来回。
 常见陷阱：必须显式传 --targets / --target-ids（漏参会校验失败，不会静默清空）；清空请传 --targets '[]' 或改用 remove --all；
 值必须是目标表 record UUID，禁止写显示名。`,
-			Example: "  tabtin table link set --table-id <本表> --field-id <link字段> --record-id <行> \\\n" +
+			Example: "  muse table link set --table-id <本表> --field-id <link字段> --record-id <行> \\\n" +
 				"    --targets '[\"<目标uuid1>\",\"<目标uuid2>\"]'\n" +
-				"  tabtin table link set --table-id <本表> --field-id <link字段> --record-id <行> \\\n" +
+				"  muse table link set --table-id <本表> --field-id <link字段> --record-id <行> \\\n" +
 				"    --target-ids <uuid1>,<uuid2>\n" +
 				"  # 清空关联（必须显式空数组）\n" +
-				"  tabtin table link set --table-id <本表> --field-id <link字段> --record-id <行> --targets '[]'",
+				"  muse table link set --table-id <本表> --field-id <link字段> --record-id <行> --targets '[]'",
 			Route: cmdutil.RouteCliServer, Method: "POST", Path: "/table/link-set",
 			Runtime: cmdutil.RuntimeHybrid, AdaptRequest: adaptLinkSet,
 			Layer: "L2", Risk: cmdutil.RiskWrite, RiskDeclared: true,
@@ -143,11 +143,11 @@ func registerLinkCommands(parent *cobra.Command, f *cmdutil.Factory) {
 设计理由：Agent 最常见需求是「再挂一个演员 / 再挂一个标签」，不应要求先 list 再手拼整格 JSON。
 常见陷阱：增量合并在 Desktop/Daemon（cli-server）下完整支持；纯 API 直连请改用 link set；
 目标 id 用 linkable-records 查，不要把姓名当 id。`,
-			Example: "  tabtin table link add --table-id <本表> --field-id <link字段> --record-id <行> \\\n" +
+			Example: "  muse table link add --table-id <本表> --field-id <link字段> --record-id <行> \\\n" +
 				"    --target-ids <演员uuid>\n" +
-				"  tabtin table link add --table-id <本表> --field-id <link字段> --record-id <行> \\\n" +
+				"  muse table link add --table-id <本表> --field-id <link字段> --record-id <行> \\\n" +
 				"    --targets '[\"<uuid1>\",\"<uuid2>\"]'\n" +
-				"  tabtin table link add --table-id <本表> --field-id <link字段> --record-id <行> \\\n" +
+				"  muse table link add --table-id <本表> --field-id <link字段> --record-id <行> \\\n" +
 				"    --target-ids <uuid> --format json",
 			Route:   cmdutil.RouteCliServer, Method: "POST", Path: "/table/link-add",
 			Runtime: cmdutil.RuntimeHybrid, AdaptRequest: adaptLinkAddRemoveDjangoHint("add"),
@@ -166,10 +166,10 @@ func registerLinkCommands(parent *cobra.Command, f *cmdutil.Factory) {
 设计理由：与 add 对称，避免 Agent 为了解绑一条去拼完整剩余列表。
 常见陷阱：没传 --target-ids 又没 --all 会校验失败；清空也可用 link set --targets '[]'；
 双向 link 解绑会同步对称边（后端保证）。`,
-			Example: "  tabtin table link remove --table-id <本表> --field-id <link字段> --record-id <行> \\\n" +
+			Example: "  muse table link remove --table-id <本表> --field-id <link字段> --record-id <行> \\\n" +
 				"    --target-ids <uuid>\n" +
-				"  tabtin table link remove --table-id <本表> --field-id <link字段> --record-id <行> --all\n" +
-				"  tabtin table link remove --table-id <本表> --field-id <link字段> --record-id <行> \\\n" +
+				"  muse table link remove --table-id <本表> --field-id <link字段> --record-id <行> --all\n" +
+				"  muse table link remove --table-id <本表> --field-id <link字段> --record-id <行> \\\n" +
 				"    --targets '[\"<uuid1>\"]' --dry-run",
 			Route:   cmdutil.RouteCliServer, Method: "POST", Path: "/table/link-remove",
 			Runtime: cmdutil.RuntimeHybrid, AdaptRequest: adaptLinkAddRemoveDjangoHint("remove"),
@@ -189,9 +189,9 @@ func registerLinkCommands(parent *cobra.Command, f *cmdutil.Factory) {
 			Long: `读取某条记录在指定 link 字段上的当前目标 id（及 title，若后端有缓存）。
 设计理由：比 record detail 再 jq 抠字段更稳，返回结构对 Agent 友好（target_ids / count）。
 常见陷阱：--field-id 是本表 link 字段；空关联返回 count=0 而不是错误。`,
-			Example: "  tabtin table link list --table-id <本表> --field-id <link字段> --record-id <行>\n" +
-				"  tabtin table link list --table-id <本表> --field-id <link字段> --record-id <行> --format json\n" +
-				"  tabtin table link list --table-id <本表> --field-id <link字段> --record-id <行> --jq '.target_ids'",
+			Example: "  muse table link list --table-id <本表> --field-id <link字段> --record-id <行>\n" +
+				"  muse table link list --table-id <本表> --field-id <link字段> --record-id <行> --format json\n" +
+				"  muse table link list --table-id <本表> --field-id <link字段> --record-id <行> --jq '.target_ids'",
 			Route: cmdutil.RouteCliServer, Method: "POST", Path: "/table/link-list",
 			Runtime: cmdutil.RuntimeHybrid, AdaptRequest: adaptLinkList,
 			Layer: "L2", Risk: cmdutil.RiskRead, RiskDeclared: true,
@@ -209,9 +209,9 @@ func registerLinkCommands(parent *cobra.Command, f *cmdutil.Factory) {
 本命令是 link add/set 或 record insert/update 写 link 前的标准前置查询。
 常见陷阱：--field-id 是本表的 link 字段 ID，不是目标表字段；默认传 selected_record_ids
 会排除已选（方便选择器「还没选的」）；要只看已选请加 --only-selected。`,
-			Example: "  tabtin table link linkable-records --table-id <本表> --field-id <link字段> --search 梁朝伟\n" +
-				"  tabtin table link linkable-records --table-id <本表> --field-id <link字段> --search 梁朝伟 --page 1 --page-size 20\n" +
-				"  tabtin table link linkable-records --table-id <本表> --field-id <link字段> --only-selected --selected-record-ids <id1>,<id2>",
+			Example: "  muse table link linkable-records --table-id <本表> --field-id <link字段> --search 梁朝伟\n" +
+				"  muse table link linkable-records --table-id <本表> --field-id <link字段> --search 梁朝伟 --page 1 --page-size 20\n" +
+				"  muse table link linkable-records --table-id <本表> --field-id <link字段> --only-selected --selected-record-ids <id1>,<id2>",
 			Route: cmdutil.RouteCliServer, Method: "POST", Path: "/table/linkable-records",
 			Runtime: cmdutil.RuntimeHybrid, AdaptRequest: adaptLinkableRecords,
 			Layer: "L2", Risk: cmdutil.RiskRead, RiskDeclared: true,
@@ -236,9 +236,9 @@ func registerLinkCommands(parent *cobra.Command, f *cmdutil.Factory) {
 前，需要先知道目标表有哪些字段及其类型——本命令提供这份清单。
 常见陷阱：返回的是目标表字段，不是本表字段；field-id 仍传本表 link 字段 ID
 用于定位关联关系，不要传目标表字段 ID。`,
-			Example: "  tabtin table link linkable-fields --table-id <本表 UUID> --field-id <本表 link 字段 UUID>\n" +
-				"  tabtin table link linkable-fields --table-id <本表 UUID> --field-id <本表 link 字段 UUID> --format json\n" +
-				"  tabtin table link linkable-fields --table-id <本表 UUID> --field-id <本表 link 字段 UUID> --jq '.fields[].name'",
+			Example: "  muse table link linkable-fields --table-id <本表 UUID> --field-id <本表 link 字段 UUID>\n" +
+				"  muse table link linkable-fields --table-id <本表 UUID> --field-id <本表 link 字段 UUID> --format json\n" +
+				"  muse table link linkable-fields --table-id <本表 UUID> --field-id <本表 link 字段 UUID> --jq '.fields[].name'",
 			Route: cmdutil.RouteCliServer, Method: "POST", Path: "/table/linkable-fields",
 			Runtime: cmdutil.RuntimeHybrid, AdaptRequest: adaptLinkableFields,
 			Layer: "L2", Risk: cmdutil.RiskRead, RiskDeclared: true,
@@ -255,9 +255,9 @@ func registerLinkCommands(parent *cobra.Command, f *cmdutil.Factory) {
 本命令扫现有记录值自动补全，或直接传 --values 指定候选集。
 常见陷阱：仅对 select / multi_select 字段有效，其它类型调用会被后端拒绝；
 与 link 边操作无关——别用它处理关联字段；--values 传入时会覆盖式合并。`,
-			Example: "  tabtin table link populate-choices --field-id <select 字段 UUID>\n" +
-				"  tabtin table link populate-choices --field-id <UUID> --values '[\"A\",\"B\",\"C\"]'\n" +
-				"  tabtin table link populate-choices --field-id <UUID> --dry-run",
+			Example: "  muse table link populate-choices --field-id <select 字段 UUID>\n" +
+				"  muse table link populate-choices --field-id <UUID> --values '[\"A\",\"B\",\"C\"]'\n" +
+				"  muse table link populate-choices --field-id <UUID> --dry-run",
 			Route: cmdutil.RouteCliServer, Method: "POST", Path: "/table/populate-choices",
 			Layer: "L2", Risk: cmdutil.RiskWrite, RiskDeclared: true,
 			Flags: []cmdutil.FlagDef{

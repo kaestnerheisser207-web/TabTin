@@ -19,7 +19,7 @@
  *        - display_name 缺失   → 回退到 app_key 或 type
  *
  *   4. App-specific 详情走 `details:` 块。** 去业务化后**：详情段的
- *      按 appType 渲染（字段口径、产品名、tabtin CLI 配方）已迁到宿主注入的
+ *      按 appType 渲染（字段口径、产品名、muse CLI 配方）已迁到宿主注入的
  *      `AppMetaFormatter`——本文件只再验中性框架（不注入 formatter → 无详情段）；
  *      详情块的具体断言迁到宿主侧的 `app-meta-formatter.test.ts`。
  *
@@ -54,7 +54,7 @@ async function runHookAndGetText(ctx: AppContext): Promise<string> {
 }
 
 // 注：tabweb / tabdoc / tabwhiteboard / tabtracker 的 `details:` 段断言（含
-// tabtin CLI 配方、产品名）随 AppMetaFormatter 迁到宿主，见宿主侧的
+// muse CLI 配方、产品名）随 AppMetaFormatter 迁到宿主，见宿主侧的
 // `tests/app-meta-formatter.test.ts`。本文件不注入 formatter，故只覆盖
 // 不含详情段的中性框架行为。
 

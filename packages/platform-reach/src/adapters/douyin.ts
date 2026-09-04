@@ -111,7 +111,7 @@ export const douyinAdapter: PlatformAdapter = {
   session: {
     loginUrl: 'https://www.douyin.com/',
     loginHint:
-      '抖音 web 搜索匿名会弹登录墙（「登录后即可搜索…」）。请在 TabTin 浏览器当前标签扫码/验证码登录后重试；批量低频，易触发验证码。',
+      '抖音 web 搜索匿名会弹登录墙（「登录后即可搜索…」）。请在 Muse 浏览器当前标签扫码/验证码登录后重试；批量低频，易触发验证码。',
     async probeLoggedIn(ctx: RunContext): Promise<boolean> {
       if (!ctx.tabId) return false
       const result = await ctx.browser.eval({
@@ -148,7 +148,7 @@ export const douyinAdapter: PlatformAdapter = {
           if (nil === 'verify_check') {
             throw new Error(
               '[douyin] 搜索被风控 verify_check 置空（已登录也会发生）。' +
-                '请在 TabTin 浏览器当前抖音搜索页完成验证码/安全验证后重试；勿高频连搜。',
+                '请在 Muse 浏览器当前抖音搜索页完成验证码/安全验证后重试；勿高频连搜。',
             )
           }
           if (nil) {

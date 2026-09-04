@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 /**
- * Clean up stale TabTin Electron dev processes.
+ * Clean up stale Muse Electron dev processes.
  *
- * This is intentionally dev-only. Packaged TabTin uses a different app path and
+ * This is intentionally dev-only. Packaged Muse uses a different app path and
  * should never be touched by this helper.
  */
 import { execFileSync } from 'node:child_process';
@@ -73,7 +73,7 @@ export function parseProcessList(output) {
     .filter((proc) => proc.pid > 0 && proc.pid !== process.pid);
 }
 
-function isTabTinDevElectronProcess(proc, context) {
+function isMuseDevElectronProcess(proc, context) {
   const command = proc.command.replace(/\\/g, '/').toLowerCase();
   const rootDir = context.rootDir.replace(/\\/g, '/').toLowerCase();
   const workspaceDir = context.workspaceDir.replace(/\\/g, '/').toLowerCase();
@@ -91,9 +91,9 @@ function isTabTinDevElectronProcess(proc, context) {
   }
 
   const isCurrentRepoElectron = command.includes(`${rootDir}/node_modules/.pnpm/electron@`);
-  const isSiblingTabTinElectron = command.includes(`${workspaceDir}/tabtin`);
+  const isSiblingMuseElectron = command.includes(`${workspaceDir}/tabtin`);
   const usesDevProfile = command.includes('/application support/tabtin dev');
-  return isCurrentRepoElectron || usesDevProfile || isSiblingTabTinElectron;
+  return isCurrentRepoElectron || usesDevProfile || isSiblingMuseElectron;
 }
 
 function isElectronMainProcess(proc) {
@@ -129,7 +129,7 @@ export function selectElectronDevCleanupTargets(processes, options = {}) {
   const excludedPids = options.excludedPids ?? new Set();
   const roots = processes
     .filter((proc) => !excludedPids.has(proc.pid))
-    .filter((proc) => isTabTinDevElectronProcess(proc, context))
+    .filter((proc) => isMuseDevElectronProcess(proc, context))
     .filter((proc) => killAll || isStale(proc));
   const selectedPids = includeDescendants(processes, roots.map((proc) => proc.pid));
   return processes.filter((proc) => selectedPids.has(proc.pid));
@@ -177,7 +177,7 @@ export function runCli(argv = process.argv.slice(2)) {
 
   if (targets.length === 0) {
     if (!quiet) {
-      console.log('[electron-cleanup] no stale TabTin Electron dev processes found');
+      console.log('[electron-cleanup] no stale Muse Electron dev processes found');
     }
     return 0;
   }
@@ -185,7 +185,7 @@ export function runCli(argv = process.argv.slice(2)) {
   if (!quiet) {
     const mode = killAll ? 'all' : 'stale';
     const scope = currentOnly ? 'current repo ' : '';
-    console.log(`[electron-cleanup] cleaning ${targets.length} ${scope}${mode} TabTin Electron dev process(es)`);
+    console.log(`[electron-cleanup] cleaning ${targets.length} ${scope}${mode} Muse Electron dev process(es)`);
     for (const proc of targets) {
       console.log(`  pid=${proc.pid} ppid=${proc.ppid} stat=${proc.stat} ${proc.command}`);
     }

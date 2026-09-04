@@ -70,7 +70,7 @@ export const MUTUALLY_EXCLUSIVE_PARAMS = 'mutually_exclusive_params' as const;
 /**
  * 工具需要前端 UI 连接（emitStreamEvent / waitForUserInput）才能完成，但当前
  * 宿主不支持（典型：Daemon headless 模式调 show_widget / present_to_user）。
- * 文案给用户："此功能需在 TabTin 桌面端使用"
+ * 文案给用户："此功能需在 Muse 桌面端使用"
  */
 export const NO_UI_SESSION = 'no_ui_session' as const;
 
@@ -263,7 +263,7 @@ export const IMAGE_RESIZE_FAILED = 'image_resize_failed' as const;
 /**
  * 命令 / 工具被**当前 Agent 模式**拒绝 —— 命令本身合规（不会触发 hardline 或
  * denylist），但当前会话处于受限模式（plan / ask / study 等只读模式）而被
- * input 级白名单拦截。典型：用户在 plan 模式下让 Agent 执行 `tabtin doc
+ * input 级白名单拦截。典型：用户在 plan 模式下让 Agent 执行 `muse doc
  * create`——命令在 agent 模式下完全合规，但 plan 模式只放行只读命令。
  *
  * **与 `command_blocked_by_policy` / `command_denied_by_validator` 的区别**：

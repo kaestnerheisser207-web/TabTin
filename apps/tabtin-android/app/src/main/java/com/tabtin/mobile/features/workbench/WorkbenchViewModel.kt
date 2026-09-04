@@ -8,7 +8,7 @@ import androidx.lifecycle.viewModelScope
 import com.tabtin.mobile.data.api.ContextApi
 import com.tabtin.mobile.data.api.resolveEffectiveWebBaseUrl
 import com.tabtin.mobile.util.TokenManager
-import com.tabtin.mobile.R
+import com.muse.mobile.R
 import com.tabtin.mobile.data.model.Agent
 import com.tabtin.mobile.data.model.AppError
 import com.tabtin.mobile.data.model.CloudShareResourceType

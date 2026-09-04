@@ -1,5 +1,7 @@
 package com.tabtin.mobile.ui.splash
 
+import com.muse.mobile.R
+
 import android.animation.ValueAnimator
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
@@ -191,7 +193,7 @@ private fun LaunchSplashArtwork(
                 },
         ) {
             Image(
-                painter = painterResource(com.tabtin.mobile.R.drawable.splash_tin_base),
+                painter = painterResource(com.muse.mobile.R.drawable.splash_tin_base),
                 contentDescription = null,
                 colorFilter = ColorFilter.tint(ink),
                 modifier = Modifier.fillMaxSize(),

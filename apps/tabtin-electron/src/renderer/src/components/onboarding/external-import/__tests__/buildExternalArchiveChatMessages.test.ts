@@ -37,7 +37,7 @@ describe('buildExternalArchiveChatMessages', () => {
     expect(built[3]?.message_kind).toBe('external_archive_context')
     expect(built[3]?.content).toContain('type="external-archive"')
     expect(built[3]?.content).toContain('WorkBuddy')
-    expect(built[3]?.content).toContain('以 TabTin 为准')
+    expect(built[3]?.content).toContain('以 Muse 为准')
     expect(built[3]?.content).toContain('不要继承')
   })
 

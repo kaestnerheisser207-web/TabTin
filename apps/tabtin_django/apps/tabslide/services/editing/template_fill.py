@@ -13,7 +13,7 @@ template_fill.py — PPTX 模板占位符批量替换
 
 用法：
   # JSON 格式的替换映射
-  python template_fill.py unpacked/ -d '{"公司名": "TabTin", "日期": "2026-02-10"}'
+  python template_fill.py unpacked/ -d '{"公司名": "Muse", "日期": "2026-02-10"}'
 
   # 从 JSON 文件读取
   python template_fill.py unpacked/ -f replacements.json

@@ -47,7 +47,7 @@ import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import com.tabtin.mobile.R
+import com.muse.mobile.R
 import com.tabtin.mobile.data.model.SubagentRunSnapshot
 import com.tabtin.mobile.data.model.SubagentRunStats
 import com.tabtin.mobile.data.model.SubagentTranscriptItem

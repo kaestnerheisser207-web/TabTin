@@ -7,7 +7,7 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/TabTin/tabtin-cli/internal/cmdutil"
+	"github.com/Muse/muse-cli/internal/cmdutil"
 )
 
 // TabWeb 能力总览分组 id 闭集——前端 / CI / 生成脚本共用同一份顺序与中文 label。
@@ -47,7 +47,7 @@ var browserShowcaseGroupLabels = map[string]string{
 	browserShowcaseGroupRecord:   "录制与回放",
 }
 
-// browserShowcaseRegistry 以 `browser <子路径>` 为 key（不含 `tabtin` 前缀），声明用户向展示分组。
+// browserShowcaseRegistry 以 `browser <子路径>` 为 key（不含 `muse` 前缀），声明用户向展示分组。
 // 未出现在 registry 也未出现在 hidden 的叶子命令 → CI 报漏登记（防 banner 与 CLI 全集脱节）。
 //
 // 取向：浏览器的价值是「回归所有能力」，因此默认全部进总览——所有叶子命令悉数登记，
@@ -135,7 +135,7 @@ var browserFeaturedScenarios = []BrowserFeaturedScenario{
 		Commands:    []string{"browser open"},
 		Title:       "打开一个网页",
 		Description: "给网址或搜索词，让 AI 打开它",
-		Prompt:      "帮我用浏览器打开一个网页。我给你网址或搜索关键词，你用 `tabtin browser open` 打开它，打开后告诉我页面标题和大致内容。",
+		Prompt:      "帮我用浏览器打开一个网页。我给你网址或搜索关键词，你用 `muse browser open` 打开它，打开后告诉我页面标题和大致内容。",
 	},
 	{
 		Key:         "read",
@@ -185,7 +185,7 @@ type BrowserShowcaseManifest struct {
 
 func browserRelativePath(leaf *cobra.Command) string {
 	path := leaf.CommandPath()
-	path = strings.TrimPrefix(path, "tabtin browser ")
+	path = strings.TrimPrefix(path, "muse browser ")
 	path = strings.TrimPrefix(path, "browser ")
 	return strings.TrimSpace(path)
 }

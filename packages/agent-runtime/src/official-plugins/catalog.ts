@@ -34,7 +34,7 @@ export function createBundledOfficialPluginCatalog(
     id: 'tabtin-minimal-codex-plugin@0.1.0+official.1',
     plugin: {
       id: 'tabtin-minimal-codex-plugin',
-      displayName: 'TabTin Minimal Codex Plugin',
+      displayName: 'Muse Minimal Codex Plugin',
       description: 'Minimal bundled official plugin release used to validate the install path.',
     },
     officialVersion: '0.1.0+official.1',

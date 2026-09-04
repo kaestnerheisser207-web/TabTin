@@ -1,4 +1,4 @@
-"""Tabtin Space Schema 聚合导出。"""
+"""Muse Space Schema 聚合导出。"""
 
 from . import agent as _agent
 from . import app_catalog as _app_catalog

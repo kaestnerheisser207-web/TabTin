@@ -3,7 +3,7 @@
  *
  * 首次启动 TabTin 后，Go CLI 在 `~/.tabtin/config.json` 里看不到 profile.token
  * 会触发 fail-fast 闸门（`packages/tabtin-cli-go/internal/cmdutil/pipeline.go`
- * 中 `RequiresAuth: true` 命令的预检），所有 `tabtin doc/table/space/...`
+ * 中 `RequiresAuth: true` 命令的预检），所有 `muse doc/table/space/...`
  * 等命令立刻报 UNAUTHORIZED——即使用户已经在 Electron 应用里登录了。
  *
  * 真正的认证链路其实是工作的：Go CLI 经 SocketTransport 把请求转给
@@ -17,7 +17,7 @@
  * 让 fail-fast 闸门放行。
  *
  * 设计取舍：
- *   - **绝不覆盖已存在的 config.json**：用户可能手动跑过 `tabtin auth login`
+ *   - **绝不覆盖已存在的 config.json**：用户可能手动跑过 `muse auth login`
  *     存了真 token、或在外部 CI 配过其它 profile，这里只做首次初始化
  *   - **token 字段是字面占位符，不是真 JWT**：真 JWT 留在 TokenManager
  *     keychain 里、不下盘。符合 SD-039 §4.5 "不让 token 文件落盘"的安全意图
@@ -64,7 +64,7 @@ function buildPlaceholderConfig(): CLIProfileConfig {
       default: {
         baseURL: API_BASE_URL,
         token: CLI_PLACEHOLDER_TOKEN,
-        label: 'TabTin App',
+        label: 'Muse App',
       },
     },
     defaults: {},

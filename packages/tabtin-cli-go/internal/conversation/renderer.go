@@ -78,14 +78,14 @@ func (r *Renderer) Handle(event AgentEvent) {
 		fmt.Fprintf(os.Stderr, "⚡ Agent 正在执行: %s\n", msg)
 
 	// Wave 5/6/7：ask 三件套——三件套各自渲染不同图标，提示用户在桌面/移动端
-	// TabTin 中怎么对应（D3 不留兼容；老 ask_user_required / review_required
+	// Muse 中怎么对应（D3 不留兼容；老 ask_user_required / review_required
 	// 已下线——本地 runtime / Daemon → relay 全链路只 emit 三件套 + 批量
 	// approval_requested，cli 端也不再消费老命名）。
 	// W4 (2026-05-11): ask 三件套合一为单 ask_user_required，多选问答 HITL。
 	// 注意：ask_user_required 是**交互必须**——quiet 也不能抑（否则用户看不到该回答什么）。
 	case "ask_user_required":
 		r.ensureNewline()
-		fmt.Fprintf(os.Stderr, "❓ Agent 等待你的回答: %s，请在桌面/移动端 TabTin 中回复\n", event.Message)
+		fmt.Fprintf(os.Stderr, "❓ Agent 等待你的回答: %s，请在桌面/移动端 Muse 中回复\n", event.Message)
 
 	case "thinking":
 		if r.quiet {

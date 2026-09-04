@@ -41,20 +41,20 @@ describe('#5353 Daemon CLI prompt filter', () => {
 
   it('filters forwarded CLI reference line by line', () => {
     const reference = [
-      '- `tabtin site`: site management',
-      '- `tabtin phone list`: list devices',
-      '- `tabtin video gen`: create video',
-      '- `tabtin media video generate`: create video',
-      '- `tabtin media image generate`: create image',
-      '- `tabtin slide create`: create slide',
-      '- `tabtin memo list`: list memos',
-      '- `tabtin files list`: list files',
+      '- `muse site`: site management',
+      '- `muse phone list`: list devices',
+      '- `muse video gen`: create video',
+      '- `muse media video generate`: create video',
+      '- `muse media image generate`: create image',
+      '- `muse slide create`: create slide',
+      '- `muse memo list`: list memos',
+      '- `muse files list`: list files',
     ].join('\n');
 
     expect(filterTemporarilyHiddenCliPromptReference(reference)).toBe([
-      '- `tabtin media image generate`: create image',
-      '- `tabtin slide create`: create slide',
-      '- `tabtin files list`: list files',
+      '- `muse media image generate`: create image',
+      '- `muse slide create`: create slide',
+      '- `muse files list`: list files',
     ].join('\n'));
   });
 

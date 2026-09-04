@@ -66,7 +66,7 @@ export class BundledMcpRemoteTransport implements Transport {
         env: this.server.env,
         // utilityProcess 不支持 pipe stdin；MCP 请求已通过 postMessage 传入。
         stdio: ['ignore', 'pipe', 'pipe'],
-        serviceName: 'TabTin MCP Remote',
+        serviceName: 'Muse MCP Remote',
       })
       this.child = child
 

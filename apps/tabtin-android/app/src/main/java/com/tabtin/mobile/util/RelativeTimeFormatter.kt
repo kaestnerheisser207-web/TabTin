@@ -2,7 +2,7 @@ package com.tabtin.mobile.util
 
 import android.content.Context
 import android.text.format.DateFormat
-import com.tabtin.mobile.R
+import com.muse.mobile.R
 import com.tabtin.mobile.data.model.Iso8601DateParser
 import java.text.SimpleDateFormat
 import java.util.Calendar

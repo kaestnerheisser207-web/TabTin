@@ -1,11 +1,11 @@
-"""Tabtin Space mcp_connection 路由。
+"""Muse Space mcp_connection 路由。
 
 local（device）与 remote（organization）均开放；remote 仅 http。
 """
 
 from .shared import *  # noqa: F401,F403
 
-router = Router(tags=["Tabtin Space"])
+router = Router(tags=["Muse Space"])
 
 @router.post("/devices/{device_id}/mcp-connections", auth=jwt_auth, response={200: dict, **RESP_ERR_400})
 def create_mcp_connection(request: HttpRequest, device_id: UUID, payload: MCPConnectionCreate):

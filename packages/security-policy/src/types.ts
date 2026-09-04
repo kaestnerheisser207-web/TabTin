@@ -10,7 +10,7 @@
 // ---------------------------------------------------------------------------
 
 export type TerminalMode =
-  | 'tabtin_only'  // 仅允许 tabtin CLI 命令
+  | 'tabtin_only'  // 仅允许 muse CLI 命令
   | 'sandboxed'    // 白名单 + 黑名单，未知命令拒绝
   | 'regular'      // 宽松模式，仅拦截高危
   | 'blocked';     // 完全禁止终端执行

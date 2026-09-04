@@ -457,7 +457,7 @@ describe('Router robustness', () => {
 // ── Local file artifacts ───────────────────────────────────────────────
 
 describe('Router local file resource resolver', () => {
-  it('resolves tabtin file pointers through injected localFileResolver before opening tab', async () => {
+  it('resolves muse file pointers through injected localFileResolver before opening tab', async () => {
     const localFileResolver = vi.fn<LocalFileResourceResolver>().mockResolvedValue({
       type: 'file',
       id: 'artifacts/report.xlsx',
@@ -803,7 +803,7 @@ describe('telemetry events', () => {
     expect(e.outcome).toBe('in_space_opened')
     expect(e.resolved_carrier_app_id).toBe('tabdata')
     expect(e.resolve_source).toBe('manifest_default')
-    expect(e.pointer_scheme).toBe('tabtin')
+    expect(e.pointer_scheme).toBe('muse')
     expect(e.pointer_type).toBe('table')
     // pointer_id_hash 不是明文
     expect(e.pointer_id_hash).not.toContain('tbl_a')

@@ -1193,7 +1193,7 @@ class Command(BaseCommand):
             return
 
         self.stdout.write(self.style.HTTP_INFO(
-            f"\n{'='*80}\n  TabTin App 全局审计报告（distribution={options.get('distribution', 'builtin')}）\n{'='*80}"
+            f"\n{'='*80}\n  Muse App 全局审计报告（distribution={options.get('distribution', 'builtin')}）\n{'='*80}"
         ))
 
         # 全局检查

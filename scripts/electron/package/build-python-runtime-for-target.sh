@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# build-python-runtime-for-target.sh —— 按目标平台构建 TabTin 自管 Python 运行时重档（L2 入口）。
+# build-python-runtime-for-target.sh —— 按目标平台构建 Muse 自管 Python 运行时重档（L2 入口）。
 #
 # 用法：
 #   bash scripts/electron/package/build-python-runtime-for-target.sh

@@ -1,4 +1,4 @@
-# TabTin 本地开发基础设施（PostgreSQL + Redis）
+# Muse 本地开发基础设施（PostgreSQL + Redis）
 #
 # 用途：给新同学一键拉起本地数据库 + Redis，避免本机装数据库。
 # 应用层（Django / Electron / Celery）仍在宿主机跑，通过 localhost 端口连接。

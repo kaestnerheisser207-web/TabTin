@@ -1,7 +1,7 @@
 /**
  * WebFetchPipeline — HTTP 抓取 → 内容提取 → 质量校验 → 浏览器降级 → format 路由
  *
- * 核心编排层，供 CLI（tabtin fetch）和历史 batch 抓取链路共用。
+ * 核心编排层，供 CLI（muse fetch）和历史 batch 抓取链路共用。
  * 职责：网络 I/O 编排、降级策略、格式路由，不关心调用方的 ToolError 体系。
  */
 

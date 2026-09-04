@@ -36,9 +36,9 @@ Before generating HTML, read:
 Use this flow:
 
 1. Write `slides.html` that follows the HTML spec.
-2. Create the TabSlide project with `tabtin slide create --name "<deck name>" --html @./slides.html`.
-3. For an existing deck, append a page with `cat slide.html | tabtin slide add-page --project-id <id> --html -`.
-4. Run `tabtin slide lint --skip-visual --min-severity warning` for fast checks.
+2. Create the TabSlide project with `muse slide create --name "<deck name>" --html @./slides.html`.
+3. For an existing deck, append a page with `cat slide.html | muse slide add-page --project-id <id> --html -`.
+4. Run `muse slide lint --skip-visual --min-severity warning` for fast checks.
 5. Use preview only when visual inspection is needed and the runtime is ready.
 
 ## 5. Runtime Error Policy

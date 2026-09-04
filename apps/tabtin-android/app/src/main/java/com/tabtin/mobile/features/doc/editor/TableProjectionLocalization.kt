@@ -2,7 +2,7 @@ package com.tabtin.mobile.features.doc.editor
 
 import android.content.Context
 import androidx.annotation.StringRes
-import com.tabtin.mobile.R
+import com.muse.mobile.R
 import com.tabtin.mobile.features.doc.model.TableCell
 import com.tabtin.mobile.features.doc.model.TableContentSummaryKind
 import com.tabtin.mobile.features.doc.model.TableData

@@ -44,7 +44,7 @@ import androidx.compose.ui.semantics.paneTitle
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.stateDescription
 import androidx.compose.ui.unit.dp
-import com.tabtin.mobile.R
+import com.muse.mobile.R
 import com.tabtin.mobile.ui.theme.TTFonts
 import com.tabtin.mobile.ui.theme.TTRadius
 import com.tabtin.mobile.ui.theme.TTSpacing

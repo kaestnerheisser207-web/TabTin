@@ -3,7 +3,7 @@ package table
 import (
 	"github.com/spf13/cobra"
 
-	"github.com/TabTin/tabtin-cli/internal/cmdutil"
+	"github.com/Muse/muse-cli/internal/cmdutil"
 )
 
 // sub-record 命令组：同一张表内的树形结构（父/子记录，自引用 link）。
@@ -14,7 +14,7 @@ import (
 //
 // 形态对比：
 //   - nested_list 字段：子行是主记录的附属 JSON，不能跨主记录复用
-//   - 双表 link：两张不同的表互相关联（见 tabtin table link）
+//   - 双表 link：两张不同的表互相关联（见 muse table link）
 //   - sub-record：同一张表内的自引用，父子都是正式记录、可独立查询
 //
 // HTTP 路由在 cli-server table-crud.ts，6 条命令与 HTTP 一一对应。
@@ -27,9 +27,9 @@ func registerSubRecordCommands(parent *cobra.Command, f *cmdutil.Factory) {
 与 nested_list 字段的附属子行不同；parent-field-id 可省略，用表上默认父字段。
 常见陷阱：调用前表上必须已有父字段，没有先用 ensure-parent-field 建一个；
 data 的字段值格式与 record insert 完全一致。`,
-			Example: "  tabtin table sub-record create --table-id <表 UUID> --parent-record-id <父记录 UUID> --data '{\"名称\":\"子任务1\"}'\n" +
-				"  tabtin table sub-record create --table-id <表 UUID> --parent-record-id <父记录 UUID> --data '{\"名称\":\"子任务2\",\"负责人\":\"张三\"}'\n" +
-				"  tabtin table sub-record create --table-id <表 UUID> --parent-record-id <父记录 UUID> --data '{...}' --dry-run",
+			Example: "  muse table sub-record create --table-id <表 UUID> --parent-record-id <父记录 UUID> --data '{\"名称\":\"子任务1\"}'\n" +
+				"  muse table sub-record create --table-id <表 UUID> --parent-record-id <父记录 UUID> --data '{\"名称\":\"子任务2\",\"负责人\":\"张三\"}'\n" +
+				"  muse table sub-record create --table-id <表 UUID> --parent-record-id <父记录 UUID> --data '{...}' --dry-run",
 			Route: cmdutil.RouteCliServer, Method: "POST", Path: "/table/sub-record-create",
 			Layer: "L2", Risk: cmdutil.RiskWrite, RiskDeclared: true,
 			Flags: []cmdutil.FlagDef{
@@ -58,9 +58,9 @@ data 的字段值格式与 record insert 完全一致。`,
 移动只改父子关系，不改记录本身的其它字段值。
 常见陷阱：移动到的新父不能是该记录自身的子孙节点，否则会形成环，后端会拒绝；
 parent-field-id 省略时用表上默认父字段，多父字段场景需显式指定。`,
-			Example: "  tabtin table sub-record move --table-id <UUID> --record-id <rec-C UUID> --new-parent-id <rec-A UUID>\n" +
-				"  tabtin table sub-record move --table-id <UUID> --record-id <rec-C UUID> --new-parent-id \"\"  # 升根\n" +
-				"  tabtin table sub-record move --table-id <UUID> --record-id <rec-C UUID> --new-parent-id <rec-A UUID> --dry-run",
+			Example: "  muse table sub-record move --table-id <UUID> --record-id <rec-C UUID> --new-parent-id <rec-A UUID>\n" +
+				"  muse table sub-record move --table-id <UUID> --record-id <rec-C UUID> --new-parent-id \"\"  # 升根\n" +
+				"  muse table sub-record move --table-id <UUID> --record-id <rec-C UUID> --new-parent-id <rec-A UUID> --dry-run",
 			Route: cmdutil.RouteCliServer, Method: "POST", Path: "/table/sub-record-move",
 			Layer: "L2", Risk: cmdutil.RiskWrite, RiskDeclared: true,
 			Flags: []cmdutil.FlagDef{
@@ -89,9 +89,9 @@ parent-field-id 省略时用表上默认父字段，多父字段场景需显式�
 若表没有父字段，返回 null，需先调 ensure-parent-field 建一个。
 常见陷阱：一张表理论上可能有多个自引用 link 字段（见 self-link-fields），
 本命令只返回被标记为"父字段"的那一个，不是全部候选。`,
-			Example: "  tabtin table sub-record parent-field --table-id <UUID>\n" +
-				"  tabtin table sub-record parent-field --table-id <UUID> --format json\n" +
-				"  tabtin table sub-record parent-field --table-id <UUID> --jq '.field_id'",
+			Example: "  muse table sub-record parent-field --table-id <UUID>\n" +
+				"  muse table sub-record parent-field --table-id <UUID> --format json\n" +
+				"  muse table sub-record parent-field --table-id <UUID> --jq '.field_id'",
 			Route: cmdutil.RouteCliServer, Method: "POST", Path: "/table/parent-field",
 			Layer: "L2", Risk: cmdutil.RiskRead, RiskDeclared: true,
 			Flags: []cmdutil.FlagDef{
@@ -106,9 +106,9 @@ parent-field-id 省略时用表上默认父字段，多父字段场景需显式�
 本命令再建子记录，不需要先判断字段是否存在。
 常见陷阱：自动创建的字段名和位置由后端决定，不可自定义；已有多个自引用
 link 字段时，本命令不会新建第二个"父字段"，只认第一次创建的那个。`,
-			Example: "  tabtin table sub-record ensure-parent-field --table-id <UUID>\n" +
-				"  tabtin table sub-record ensure-parent-field --table-id <UUID> --format json\n" +
-				"  tabtin table sub-record ensure-parent-field --table-id <UUID> --dry-run",
+			Example: "  muse table sub-record ensure-parent-field --table-id <UUID>\n" +
+				"  muse table sub-record ensure-parent-field --table-id <UUID> --format json\n" +
+				"  muse table sub-record ensure-parent-field --table-id <UUID> --dry-run",
 			Route: cmdutil.RouteCliServer, Method: "POST", Path: "/table/ensure-parent-field",
 			Layer: "L2", Risk: cmdutil.RiskWrite, RiskDeclared: true,
 			Flags: []cmdutil.FlagDef{
@@ -130,9 +130,9 @@ link 字段时，本命令不会新建第二个"父字段"，只认第一次创�
 自引用字段，本命令让 Agent/用户在建父字段前先看清楚候选集。
 常见陷阱：返回列表不代表这些字段已被标记为"父字段"——真正的父字段用
 parent-field 查询，本命令只是列候选。`,
-			Example: "  tabtin table sub-record self-link-fields --table-id <UUID>\n" +
-				"  tabtin table sub-record self-link-fields --table-id <UUID> --format json\n" +
-				"  tabtin table sub-record self-link-fields --table-id <UUID> --jq '.[].name'",
+			Example: "  muse table sub-record self-link-fields --table-id <UUID>\n" +
+				"  muse table sub-record self-link-fields --table-id <UUID> --format json\n" +
+				"  muse table sub-record self-link-fields --table-id <UUID> --jq '.[].name'",
 			Route: cmdutil.RouteCliServer, Method: "POST", Path: "/table/self-link-fields",
 			Layer: "L2", Risk: cmdutil.RiskRead, RiskDeclared: true,
 			Flags: []cmdutil.FlagDef{
@@ -147,9 +147,9 @@ parent-field 查询，本命令只是列候选。`,
 本命令把整批变更包进单个事务，全成功或全回滚。
 常见陷阱：Agent 通常不需要直接调本命令（move 单条移动已够用），批量编排脚本
 才用得上；operations 里每项至少要有 record_id，缺失字段用原值。`,
-			Example: "  tabtin table sub-record reorder-tree --table-id <UUID> --operations '[{\"record_id\":\"r1\",\"new_parent_id\":\"r0\",\"new_order\":1}]'\n" +
-				"  tabtin table sub-record reorder-tree --table-id <UUID> --operations '[{\"record_id\":\"r1\",\"new_order\":2}]'\n" +
-				"  tabtin table sub-record reorder-tree --table-id <UUID> --operations '[...]' --dry-run",
+			Example: "  muse table sub-record reorder-tree --table-id <UUID> --operations '[{\"record_id\":\"r1\",\"new_parent_id\":\"r0\",\"new_order\":1}]'\n" +
+				"  muse table sub-record reorder-tree --table-id <UUID> --operations '[{\"record_id\":\"r1\",\"new_order\":2}]'\n" +
+				"  muse table sub-record reorder-tree --table-id <UUID> --operations '[...]' --dry-run",
 			Route: cmdutil.RouteCliServer, Method: "POST", Path: "/table/reorder-tree",
 			Layer: "L2", Risk: cmdutil.RiskWrite, RiskDeclared: true,
 			Flags: []cmdutil.FlagDef{

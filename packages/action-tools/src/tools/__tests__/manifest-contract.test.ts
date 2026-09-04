@@ -31,15 +31,15 @@ describe('action-tools manifest contract', () => {
     expect(tooShort).toEqual([]);
   });
 
-  // 工具系统宪法 §不变量 2（W5 实施 2026-05-04）：业务能力一律走 `tabtin <command>`
+  // 工具系统宪法 §不变量 2（W5 实施 2026-05-04）：业务能力一律走 `muse <command>`
   // CLI，不走 FC。tabweb / tabslide 域必须通过 manifestExposed=false 从 manifest
   // 中过滤掉（tool execute 仍由 ActionExecutor adapter 注册，CLI server 路由派发）。
-  it('does not expose tabweb business FCs to LLM (use `tabtin browser` CLI instead)', () => {
+  it('does not expose tabweb business FCs to LLM (use `muse browser` CLI instead)', () => {
     const tabwebTools = manifest.tools.filter(t => (t as { appId?: string }).appId === 'tabweb');
     expect(tabwebTools.map(t => t.name)).toEqual([]);
   });
 
-  it('does not expose tabslide_* FCs to LLM (use `tabtin slide` CLI instead)', () => {
+  it('does not expose tabslide_* FCs to LLM (use `muse slide` CLI instead)', () => {
     const slideTools = manifest.tools.filter(t => t.name.startsWith('tabslide_'));
     expect(slideTools.map(t => t.name)).toEqual([]);
   });

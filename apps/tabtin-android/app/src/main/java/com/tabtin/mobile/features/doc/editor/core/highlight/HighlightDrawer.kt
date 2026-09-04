@@ -9,7 +9,7 @@ import android.text.Layout
 import android.text.Spanned
 import android.util.Log
 import androidx.core.graphics.drawable.DrawableCompat
-import com.tabtin.mobile.R
+import com.muse.mobile.R
 import com.tabtin.mobile.features.doc.editor.core.DocSpan
 
 /**

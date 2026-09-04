@@ -88,7 +88,7 @@ final class WorkspaceModelsTests: XCTestCase {
         let catalog = try JSONDecoder().decode(WorkspaceMemoryModelCatalog.self, from: data)
 
         XCTAssertEqual(catalog.items.first?.providerScope, .user)
-        XCTAssertEqual(WorkspaceMemoryProviderScope.global.groupTitle, "TabTin 官方")
+        XCTAssertEqual(WorkspaceMemoryProviderScope.global.groupTitle, "Muse 官方")
         XCTAssertEqual(WorkspaceMemoryProviderScope.user.groupTitle, "我的模型")
         XCTAssertEqual(WorkspaceMemoryProviderScope.organization.groupTitle, "组织模型")
     }
@@ -118,7 +118,7 @@ final class WorkspaceModelsTests: XCTestCase {
             """
             {
               "id": "org-1",
-              "name": "TabTin",
+              "name": "Muse",
               "icon": "🏢",
               "settings": {"logo_url": "https://cdn.example.com/org.png"}
             }

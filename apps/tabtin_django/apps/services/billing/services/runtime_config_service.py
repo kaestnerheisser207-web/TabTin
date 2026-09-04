@@ -33,7 +33,7 @@ _DEFAULTS: Dict[str, Any] = {
     "pricing_cache_ttl": 60,
     "cache_discount_config": {},
     # PRD-04 Wave 5：默认 True，与 BillingRuntimeConfig 字段默认值保持一致。
-    # 用户在消息气泡上默认能看到每条消息费用——TabTin"透明"承诺的底线。
+    # 用户在消息气泡上默认能看到每条消息费用——Muse"透明"承诺的底线。
     "show_per_message_cost": True,
     "sync_charge_threshold_credits": 100,
     "fail_open_24h_block_threshold": 50,

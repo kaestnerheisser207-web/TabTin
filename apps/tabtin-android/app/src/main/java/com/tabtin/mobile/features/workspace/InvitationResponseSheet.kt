@@ -22,7 +22,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import com.tabtin.mobile.R
+import com.muse.mobile.R
 import com.tabtin.mobile.data.model.PendingInvitation
 import com.tabtin.mobile.ui.components.TTBottomSheet
 import com.tabtin.mobile.ui.theme.TTColors

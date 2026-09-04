@@ -55,7 +55,7 @@
     <string name="my_agents_tools_empty">组织里还没有连接器，请在电脑端添加</string>
     <string name="my_agents_tools_not_mounted">尚未为该分身挂载连接器，请在电脑端管理</string>
     <string name="my_agents_tools_manage_on_desktop">请在电脑端管理</string>
-    <string name="my_agents_tools_device_offline">请在电脑打开 TabTin</string>
+    <string name="my_agents_tools_device_offline">请在电脑打开 Muse</string>
     <string name="my_agents_tools_source_org">组织</string>
     <string name="my_agents_tools_source_local">本机</string>
     <string name="my_agents_skill_locked">默认分身必备技能</string>

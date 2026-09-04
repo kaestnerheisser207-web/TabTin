@@ -15,7 +15,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/TabTin/tabtin-cli/internal/cmdutil"
+	"github.com/Muse/muse-cli/internal/cmdutil"
 )
 
 // expectedBrowserActionIDs 与 capability-matrix.ts 的 EXPECTED_ACTION_IDS 一一对应

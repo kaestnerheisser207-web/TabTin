@@ -46,13 +46,13 @@ func writeTestBundle(t *testing.T, root string) *Bundle {
 		Skills: []ManifestSkill{
 			{
 				Name: "tabtin-demo-a", CanonicalName: "demo-a", Description: "A", Version: "1.0.0",
-				ContentSHA256: shaA, Runtime: "cloud", Requires: Requires{Bins: []string{"tabtin"}},
-				CLIHelp: "tabtin commands doc --format json",
+				ContentSHA256: shaA, Runtime: "cloud", Requires: Requires{Bins: []string{"muse"}},
+				CLIHelp: "muse commands doc --format json",
 			},
 			{
 				Name: "tabtin-demo-b", CanonicalName: "demo-b", Description: "B", Version: "1.0.0",
-				ContentSHA256: shaB, Runtime: "local", Requires: Requires{Bins: []string{"tabtin"}},
-				CLIHelp: "tabtin commands browser --format json",
+				ContentSHA256: shaB, Runtime: "local", Requires: Requires{Bins: []string{"muse"}},
+				CLIHelp: "muse commands browser --format json",
 			},
 		},
 	}
@@ -77,7 +77,7 @@ func TestListAndRead(t *testing.T) {
 	if len(list) != 2 {
 		t.Fatalf("list len=%d", len(list))
 	}
-	if list[0].Name != "tabtin-demo-a" || list[0].Requires.Bins[0] != "tabtin" {
+	if list[0].Name != "tabtin-demo-a" || list[0].Requires.Bins[0] != "muse" {
 		t.Fatalf("unexpected list[0]: %+v", list[0])
 	}
 	data, path, err := b.Read("tabtin-demo-a", "")

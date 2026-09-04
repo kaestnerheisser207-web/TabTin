@@ -146,7 +146,7 @@ export interface HeartbeatEventData {
  * `cli_spec` 缺失（fallback 到既有 toolName/args 渲染）。
  */
 export interface CliSpecForUI {
-  /** `tabtin` / 其他白名单 binary */
+  /** `muse` / 其他白名单 binary */
   binary?: string
   /** 业务域，如 `im` / `vc` / `table` */
   domain?: string
@@ -182,7 +182,7 @@ export interface ReviewActionRequest {
   /**
    * CLI 调用 spec（A4 引入，A5+ 实际填充）
    *
-   * 当本动作是 CLI 类（`tabtin <app> <verb> ...`）时，后端把
+   * 当本动作是 CLI 类（`muse <app> <verb> ...`）时，后端把
    * 解析得到的 `CliInvocationSpec` 子集写入本字段，让 HITL UI 渲染人类可读的
    * resource label 而不是裸 id。非 CLI 类动作或后端尚未接入时本字段缺失。
    */

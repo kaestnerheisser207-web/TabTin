@@ -1,8 +1,8 @@
 {
   "panel": {
     "title": "Stockage",
-    "subtitle": "Ce que TabTin conserve sur votre ordinateur.",
-    "totalLine": "TabTin utilise {{size}} sur ce Mac",
+    "subtitle": "Ce que Muse conserve sur votre ordinateur.",
+    "totalLine": "Muse utilise {{size}} sur ce Mac",
     "totalLineLoading": "Mesurer le stockage…",
     "refresh": "Recalculer",
     "refreshHint": "Mesurez à nouveau toutes les tailles de données",
@@ -23,7 +23,7 @@
     },
     "critical": {
       "label": "Il est temps de nettoyer",
-      "tagline": "TabTin prend beaucoup de place. Il est temps d'effacer certaines données inutilisées."
+      "tagline": "Muse prend beaucoup de place. Il est temps d'effacer certaines données inutilisées."
     }
   },
   "metrics": {
@@ -46,7 +46,7 @@
   },
   "topItems": {
     "loading": "Mesurer les données de votre espace de travail…",
-    "empty": "Aucune donnée pour l'instant. Revenez après avoir utilisé TabTin pendant un certain temps.",
+    "empty": "Aucune donnée pour l'instant. Revenez après avoir utilisé Muse pendant un certain temps.",
     "itemCount": "Articles {{count}}",
     "showAll": "Afficher d'autres articles {{count}}",
     "collapseAll": "Réduire",
@@ -133,11 +133,11 @@
     },
     "browser:bookmarks": {
       "title": "Favoris du navigateur",
-      "description": "Signets que vous avez enregistrés dans le navigateur intégré de TabTin"
+      "description": "Signets que vous avez enregistrés dans le navigateur intégré de Muse"
     },
     "browser:browsing-history": {
       "title": "Historique de navigation",
-      "description": "Pages que vous avez visitées dans le navigateur intégré de TabTin"
+      "description": "Pages que vous avez visitées dans le navigateur intégré de Muse"
     },
     "tin:sandboxes": {
       "title": "Données de l'application Sandbox",
@@ -165,7 +165,7 @@
     },
     "download:user-downloads": {
       "title": "Historique de téléchargement",
-      "description": "Historique des téléchargements déclenchés par TabTin (enregistrements uniquement)"
+      "description": "Historique des téléchargements déclenchés par Muse (enregistrements uniquement)"
     },
     "download:agent-sandbox-downloads": {
       "title": "Téléchargements de l'outil Agent",

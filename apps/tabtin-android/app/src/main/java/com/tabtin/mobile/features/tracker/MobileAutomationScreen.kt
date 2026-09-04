@@ -62,7 +62,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.tabtin.mobile.R
+import com.muse.mobile.R
 import com.tabtin.mobile.data.model.Agent
 import com.tabtin.mobile.data.model.Space
 import com.tabtin.mobile.data.model.tracker.Tracker

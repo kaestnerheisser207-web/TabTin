@@ -1,6 +1,6 @@
-// commands_group_test.go — pure group 入口命令进 `tabtin commands` 输出。
+// commands_group_test.go — pure group 入口命令进 `muse commands` 输出。
 //
-// 之前 `tabtin commands --format json` 只输出注册过 CommandDef 的 leaf 命令，
+// 之前 `muse commands --format json` 只输出注册过 CommandDef 的 leaf 命令，
 // `doc` / `mcp` 这类 pure group 顶层（无 Run/RunE，只路由子命令）不在输出里，
 // relevant-cli 召回池缺入口命令。本测试用真实构造器（newCmdDoc / newCmdMcp）
 // 钉住：CollectGroupSchemas 能从 cobra 树合成 group 条目（IsGroup=true +
@@ -12,11 +12,11 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/TabTin/tabtin-cli/internal/cmdutil"
+	"github.com/Muse/muse-cli/internal/cmdutil"
 )
 
 func TestCommandsOutputIncludesPureGroupEntries(t *testing.T) {
-	root := &cobra.Command{Use: "tabtin"}
+	root := &cobra.Command{Use: "muse"}
 	f := cmdutil.NewFactory()
 	root.AddCommand(newCmdDoc(f))
 	root.AddCommand(newCmdMcp(f))

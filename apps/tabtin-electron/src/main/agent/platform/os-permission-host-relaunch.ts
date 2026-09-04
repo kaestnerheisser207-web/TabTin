@@ -64,9 +64,9 @@ export async function promptOsPermissionHostRelaunch(
       win ? dialog.showMessageBox(win, options) : dialog.showMessageBox(options))
     const { response } = await showMessageBox(window, {
       type: 'info',
-      title: '需要重启 TabTin',
+      title: '需要重启 Muse',
       message: '完全磁盘访问授权后必须重启才能生效。',
-      detail: '先在系统设置里勾选 TabTin，回到这里再选「我已授权，重启」。',
+      detail: '先在系统设置里勾选 Muse，回到这里再选「我已授权，重启」。',
       buttons: ['打开系统设置', '我已授权，重启', '稍后'],
       defaultId: 0,
       cancelId: 2,

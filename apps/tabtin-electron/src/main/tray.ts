@@ -42,41 +42,41 @@ interface TrayLabels {
 
 const TRAY_LABELS: Record<StartupUiLocale, TrayLabels> = {
   'zh-CN': {
-      tooltip: 'TabTin',
-      open: '打开 TabTin',
+      tooltip: 'Muse',
+      open: '打开 Muse',
       quit: '退出',
-      hiddenHintTitle: 'TabTin 仍在后台运行',
+      hiddenHintTitle: 'Muse 仍在后台运行',
       hiddenHintBody: '窗口已隐藏。点击托盘 / 菜单栏图标，或点击任务栏 / Dock 图标可重新打开。可在设置中关闭此行为。',
   },
   'zh-TW': {
-    tooltip: 'TabTin', open: '開啟 TabTin', quit: '結束', hiddenHintTitle: 'TabTin 仍在背景執行',
+    tooltip: 'Muse', open: '開啟 Muse', quit: '結束', hiddenHintTitle: 'Muse 仍在背景執行',
     hiddenHintBody: '視窗已隱藏。點擊系統匣 / 選單列圖示，或工作列 / Dock 圖示即可重新開啟。你可以在設定中關閉此行為。',
   },
   'en-US': {
-    tooltip: 'TabTin',
-    open: 'Open TabTin',
+    tooltip: 'Muse',
+    open: 'Open Muse',
     quit: 'Quit',
-    hiddenHintTitle: 'TabTin is still running',
+    hiddenHintTitle: 'Muse is still running',
     hiddenHintBody: 'The window was hidden. Click the tray or menu bar icon to reopen it, or use the taskbar / Dock. You can change this in Settings.',
   },
   'ja-JP': {
-    tooltip: 'TabTin', open: 'TabTin を開く', quit: '終了', hiddenHintTitle: 'TabTin はバックグラウンドで実行中です',
+    tooltip: 'Muse', open: 'Muse を開く', quit: '終了', hiddenHintTitle: 'Muse はバックグラウンドで実行中です',
     hiddenHintBody: 'ウィンドウは非表示になりました。トレイ / メニューバー、タスクバー / Dock のアイコンをクリックすると再度開けます。この動作は設定で変更できます。',
   },
   'ko-KR': {
-    tooltip: 'TabTin', open: 'TabTin 열기', quit: '종료', hiddenHintTitle: 'TabTin이 백그라운드에서 실행 중입니다',
+    tooltip: 'Muse', open: 'Muse 열기', quit: '종료', hiddenHintTitle: 'Muse이 백그라운드에서 실행 중입니다',
     hiddenHintBody: '창이 숨겨졌습니다. 트레이 / 메뉴 막대 또는 작업 표시줄 / Dock 아이콘을 클릭하여 다시 열 수 있습니다. 설정에서 이 동작을 변경할 수 있습니다.',
   },
   'de-DE': {
-    tooltip: 'TabTin', open: 'TabTin öffnen', quit: 'Beenden', hiddenHintTitle: 'TabTin wird im Hintergrund ausgeführt',
+    tooltip: 'Muse', open: 'Muse öffnen', quit: 'Beenden', hiddenHintTitle: 'Muse wird im Hintergrund ausgeführt',
     hiddenHintBody: 'Das Fenster wurde ausgeblendet. Klicken Sie zum Öffnen auf das Taskleisten-/Menüleistensymbol oder auf das Symbol in der Taskleiste/im Dock. Dieses Verhalten können Sie in den Einstellungen ändern.',
   },
   'fr-FR': {
-    tooltip: 'TabTin', open: 'Ouvrir TabTin', quit: 'Quitter', hiddenHintTitle: 'TabTin s’exécute toujours en arrière-plan',
+    tooltip: 'Muse', open: 'Ouvrir Muse', quit: 'Quitter', hiddenHintTitle: 'Muse s’exécute toujours en arrière-plan',
     hiddenHintBody: 'La fenêtre a été masquée. Cliquez sur l’icône de la barre d’état / des menus ou sur celle de la barre des tâches / du Dock pour la rouvrir. Ce comportement peut être modifié dans les paramètres.',
   },
   'es-ES': {
-    tooltip: 'TabTin', open: 'Abrir TabTin', quit: 'Salir', hiddenHintTitle: 'TabTin sigue ejecutándose en segundo plano',
+    tooltip: 'Muse', open: 'Abrir Muse', quit: 'Salir', hiddenHintTitle: 'Muse sigue ejecutándose en segundo plano',
     hiddenHintBody: 'La ventana se ha ocultado. Haz clic en el icono de la bandeja / barra de menús o en el de la barra de tareas / Dock para volver a abrirla. Puedes cambiar este comportamiento en Ajustes.',
   },
 }

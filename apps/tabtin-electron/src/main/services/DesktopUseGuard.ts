@@ -69,7 +69,7 @@ function registerAbortShortcut(controller: AbortController): void {
 
   abortShortcutRegistered = true
   sendNotification(
-    'TabTin 正在操控你的电脑',
+    'Muse 正在操控你的电脑',
     `按 ${ABORT_SHORTCUT_LABEL} 可随时停止 Agent 操控。`,
   )
 }
@@ -172,9 +172,9 @@ async function requestDesktopApproval(sessionId: string): Promise<boolean> {
       const opts: Electron.MessageBoxOptions = {
         type: 'info',
         title: '需要系统权限',
-        message: `TabTin 需要这些权限才能操控桌面：${missing.join('、')}`,
+        message: `Muse 需要这些权限才能操控桌面：${missing.join('、')}`,
         detail:
-          '请在系统设置 → 隐私与安全性 中允许 TabTin 访问以下项：\n' +
+          '请在系统设置 → 隐私与安全性 中允许 Muse 访问以下项：\n' +
           missing.map((name) => `  • ${name}`).join('\n') +
           '\n\n授权后重新发起桌面操控请求即可。',
         buttons: ['知道了'],
@@ -410,7 +410,7 @@ export async function acquire(sessionId: string): Promise<GuardAcquireResult> {
       reason:
         `桌面操控已被另一个 session 占用（session ${lockResult.by}）。` +
         `本次请求未执行，其他桌面应用不受影响。` +
-        `请等待该 session 完成，或在对应对话中运行 tabtin desktop session end；` +
+        `请等待该 session 完成，或在对应对话中运行 muse desktop session end；` +
         `若怀疑是死进程占用，可手动删除 ~/.tabtin/desktop-use.lock 后重试。`,
     }
   }

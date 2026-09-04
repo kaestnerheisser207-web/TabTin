@@ -105,7 +105,7 @@ export async function prepareElectronWorkspace({
   const pathApi = platform === 'win32' ? path.win32 : path.posix;
   // 与 `pnpm --dir apps/tabtin-electron dev` 的 predev 同源：workspace dist、
   // Go CLI、tabtin-filegen、desktop runtimes。只跑 predev-build 会漏掉 filegen，
-  // 首次 `tabtin file create` 只能落到手动 build.sh。
+  // 首次 `muse file create` 只能落到手动 build.sh。
   const args = [
     pathApi.join(
       rootDir,

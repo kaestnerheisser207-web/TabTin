@@ -3,7 +3,7 @@ package com.tabtin.mobile.features.doc
 import android.app.Application
 import android.view.ContextThemeWrapper
 import androidx.core.content.ContextCompat
-import com.tabtin.mobile.R
+import com.muse.mobile.R
 import com.tabtin.mobile.features.doc.editor.core.DocTextInputWidget
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotEquals
@@ -19,7 +19,7 @@ class TableCellEditorPresentationTest {
 
     private val context = ContextThemeWrapper(
         RuntimeEnvironment.getApplication(),
-        R.style.Theme_TabTin,
+        R.style.Theme_Muse,
     )
 
     @Test

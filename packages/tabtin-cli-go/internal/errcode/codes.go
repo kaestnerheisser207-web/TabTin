@@ -1,5 +1,5 @@
 // Package errcode provides the unified ErrorCode taxonomy used by the
-// `tabtin` CLI binary when emitting envelope responses (see internal/output).
+// `muse` CLI binary when emitting envelope responses (see internal/output).
 //
 // **DO NOT EDIT IN ISOLATION** — this file is a strict mirror of:
 //
@@ -56,7 +56,7 @@ const (
 	// UX recommendation is silent refresh + retry rather than re-login.
 	AuthExpired ErrorCode = "AUTH_EXPIRED"
 	// Unauthorized: request reached an authenticated boundary without proof
-	// of identity (no JWT, untrusted senderFrame, no `tabtin login`).
+	// of identity (no JWT, untrusted senderFrame, no `muse login`).
 	Unauthorized ErrorCode = "UNAUTHORIZED"
 	// PermissionDenied: identity is established but lacks permission for
 	// this operation.

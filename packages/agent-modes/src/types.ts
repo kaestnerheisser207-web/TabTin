@@ -122,14 +122,14 @@ export interface AgentModeToolPolicy {
    * 满足白名单形态才会真正执行。设计意图：
    *
    *   - **业务能力走 CLI** 是宪法不变量 2 的硬约束；Plan/Ask/Study 受限模式需要让 LLM
-   *     仍能调 `tabtin doc list --format json` 等只读 CLI 查询业务对象，否则受限模式就
+   *     仍能调 `muse doc list --format json` 等只读 CLI 查询业务对象，否则受限模式就
    *     完全没有业务能力。
-   *   - 但不能放行 `tabtin doc create` 等写命令，否则受限模式语义被架空。
+   *   - 但不能放行 `muse doc create` 等写命令，否则受限模式语义被架空。
    *   - "工具名级"过滤无法表达"同一工具但部分 input 拒绝"——所以用 input 级。
    *
    * 取值：
-   *   - `'tabtin-readonly'`：仅允许 `tabtin <subcmd>`（含 `cd <dir> && tabtin ...` 复合形态），
-   *     且对应 CLI 命令的 `Risk` 字段为 `RiskNone`（空字符串）。Risk 由 `tabtin commands --format json`
+   *   - `'tabtin-readonly'`：仅允许 `muse <subcmd>`（含 `cd <dir> && muse ...` 复合形态），
+   *     且对应 CLI 命令的 `Risk` 字段为 `RiskNone`（空字符串）。Risk 由 `muse commands --format json`
    *     的 schema 自描述提供（详见 `packages/tabtin-cli-go/internal/cmdutil/command_def.go`）。
    *   - `undefined`：不应用 input 级白名单（agent / group 模式默认不限制）。
    *

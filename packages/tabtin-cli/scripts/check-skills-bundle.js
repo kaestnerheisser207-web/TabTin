@@ -42,8 +42,8 @@ for (const s of manifest.skills) {
     die(`缺少 ${s.name}/SKILL.md`);
   }
   const bins = s.requires && s.requires.bins;
-  if (!Array.isArray(bins) || !bins.includes('tabtin')) {
-    die(`skill ${s.name} requires.bins 必须包含 tabtin`);
+  if (!Array.isArray(bins) || !bins.includes('muse')) {
+    die(`skill ${s.name} requires.bins 必须包含 muse`);
   }
 }
 

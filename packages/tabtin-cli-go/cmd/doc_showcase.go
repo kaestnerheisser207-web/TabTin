@@ -7,7 +7,7 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/TabTin/tabtin-cli/internal/cmdutil"
+	"github.com/Muse/muse-cli/internal/cmdutil"
 )
 
 // TabDoc 能力总览分组 id 闭集——前端 / CI / 生成脚本共用同一份顺序与中文 label。
@@ -44,7 +44,7 @@ var docShowcaseGroupLabels = map[string]string{
 	docShowcaseGroupImportExport: "导入与导出",
 }
 
-// docShowcaseRegistry 以 `doc <子路径>` 为 key（不含 `tabtin` 前缀），声明用户向展示分组。
+// docShowcaseRegistry 以 `doc <子路径>` 为 key（不含 `muse` 前缀），声明用户向展示分组。
 // 未出现在 registry 的叶子命令 → CI 报漏登记；Destructive 命令默认不进总览。
 var docShowcaseRegistry = map[string]string{
 	"list":                docShowcaseGroupBrowse,
@@ -178,7 +178,7 @@ type DocShowcaseManifest struct {
 
 func docRelativePath(leaf *cobra.Command) string {
 	path := leaf.CommandPath()
-	path = strings.TrimPrefix(path, "tabtin doc ")
+	path = strings.TrimPrefix(path, "muse doc ")
 	path = strings.TrimPrefix(path, "doc ")
 	return strings.TrimSpace(path)
 }

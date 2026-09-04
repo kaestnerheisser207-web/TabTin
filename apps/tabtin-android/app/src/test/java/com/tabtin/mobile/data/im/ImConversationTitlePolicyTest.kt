@@ -9,7 +9,7 @@ class ImConversationTitlePolicyTest {
         assertEquals(
             "沈庚涛",
             ImConversationTitlePolicy.resolve(
-                conversationName = "TabTin private conversation",
+                conversationName = "Muse private conversation",
                 isDirectMessage = true,
                 peerDisplayName = "沈庚涛",
                 directMessageFallback = "私信",
@@ -23,7 +23,7 @@ class ImConversationTitlePolicyTest {
         assertEquals(
             "私信",
             ImConversationTitlePolicy.resolve(
-                conversationName = "TabTin private conversation",
+                conversationName = "Muse private conversation",
                 isDirectMessage = true,
                 peerDisplayName = null,
                 directMessageFallback = "私信",

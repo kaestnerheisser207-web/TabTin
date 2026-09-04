@@ -441,8 +441,8 @@ class ChatMessageDecodingTest {
               "role": "assistant",
               "content": "[工具调用]",
               "content_blocks_json": [
-                {"type":"server_tool_use","id":"srv-1","name":"web_search","input":{"query":"TabTin"}},
-                {"type":"web_search_tool_result","tool_use_id":"srv-1","content":[{"type":"web_search_result","title":"TabTin","url":"https://tabtin.ai"}]},
+                {"type":"server_tool_use","id":"srv-1","name":"web_search","input":{"query":"Muse"}},
+                {"type":"web_search_tool_result","tool_use_id":"srv-1","content":[{"type":"web_search_result","title":"Muse","url":"https://tabtin.ai"}]},
                 {"type":"tabtin_rich_content","kind":"search_results","summary":"legacy artifact"}
               ]
             }

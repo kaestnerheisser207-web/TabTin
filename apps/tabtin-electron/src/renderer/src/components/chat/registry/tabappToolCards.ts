@@ -3,7 +3,7 @@
  *
  * 2026-04-30 dogfood P0 清理（CLI first 转向）：原 TabVideo 系列 8 个工具卡片
  * （tabvideo_render_html_clip / tabvideo_place_clip 等）已删除——所有视频
- * 编排能力改由 ``tabtin video <subcommand>`` CLI 命令暴露给 Agent，
+ * 编排能力改由 ``muse video <subcommand>`` CLI 命令暴露给 Agent，
  * `run_terminal_command` 工具卡片即可呈现 Agent 的 CLI 调用，无需专属卡片。
  */
 

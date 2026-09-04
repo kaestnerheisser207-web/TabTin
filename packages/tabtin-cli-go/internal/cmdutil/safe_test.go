@@ -6,8 +6,8 @@ import (
 	"os"
 	"testing"
 
-	"github.com/TabTin/tabtin-cli/internal/errcode"
-	"github.com/TabTin/tabtin-cli/internal/output"
+	"github.com/Muse/muse-cli/internal/errcode"
+	"github.com/Muse/muse-cli/internal/output"
 	"github.com/spf13/cobra"
 )
 

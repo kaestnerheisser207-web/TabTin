@@ -69,7 +69,7 @@ export * from './logger.js';
 export type { LogLine, LogLevel, Logger } from './types/logs.js';
 
 // ==================== Utils ====================
-// TabTin 工具集（URL、编码、重试、system-ua 等）
+// Muse 工具集（URL、编码、重试、system-ua 等）
 export * from './utils/index.js';
 
 // ==================== Config ====================

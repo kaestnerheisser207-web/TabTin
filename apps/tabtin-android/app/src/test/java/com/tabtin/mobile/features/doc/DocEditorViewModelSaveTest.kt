@@ -5,7 +5,7 @@ import android.content.SharedPreferences
 import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
-import com.tabtin.mobile.R
+import com.muse.mobile.R
 import com.tabtin.mobile.data.api.OSSUploadService
 import com.tabtin.mobile.data.model.AppError
 import com.tabtin.mobile.data.model.doc.Doc

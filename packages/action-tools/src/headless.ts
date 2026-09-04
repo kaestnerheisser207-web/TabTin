@@ -27,7 +27,7 @@ export type {
 // ========== Manifest (pure data query, GUI-free — safe for headless) ==========
 //
 // 暴露 manifest 查询给 daemon 等 headless 消费者过滤工具时按 `llm_facing` 字段
-// 决策（如 MCP server 不暴露 4 件套作为 D8「TabTin 不做 MCP 输出」的执行）。
+// 决策（如 MCP server 不暴露 4 件套作为 D8「Muse 不做 MCP 输出」的执行）。
 // 这是纯静态数据查询，没有 runtime 副作用，可以放心放进 headless 子入口。
 export {
   getToolManifests,
@@ -99,11 +99,11 @@ export {
 // ========== TabData Tools ==========
 //
 // Wave 4a (2026-05-01): 7 个 tabdata FC + 5 个 admin FC 全部删除（D4 全删 FC）。
-// Agent 操作多维表格必须走 `tabtin table *` CLI（execute_in_terminal 调）。
+// Agent 操作多维表格必须走 `muse table *` CLI（execute_in_terminal 调）。
 
 // ========== TabSlide Tools (W6 retired 2026-05-04) ==========
 // The tabslide AgentTool group has been removed; slide operations now use
-// the Django REST API via the `tabtin slide *` CLI. Daemon no longer needs
+// the Django REST API via the `muse slide *` CLI. Daemon no longer needs
 // to inject a TabSlideAPI runtime bridge.
 
 // ========== HTML Cleaner ==========
@@ -293,7 +293,7 @@ import { tabcodeTools } from './tools/tabcode';
  * The legacy tabslide adapter group was retired in W6 (2026-05-04).
  *
  * Wave 4a (2026-05-01)：tabdata 域工具（7+5）已删除，原 `core-headless`
- * 中的 `tabdataTools` 一并下架——Agent 走 `tabtin table *` CLI。
+ * 中的 `tabdataTools` 一并下架——Agent 走 `muse table *` CLI。
  *
  * Wave 4b (2026-05-01) L20：`crawl_clean_html` AgentTool 包装层删除。
  * Electron `cli/routes/browser/extraction.ts` 现直调 `CrawlToolImpl.crawlCleanHtml`，

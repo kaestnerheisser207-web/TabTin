@@ -1,7 +1,7 @@
 {
   "name": "@tabtin/python-runtime",
   "version": "0.1.0",
-  "description": "TabTin self-managed Python runtime resolver/provisioner (L0 pure infrastructure, zero business coupling)",
+  "description": "Muse self-managed Python runtime resolver/provisioner (L0 pure infrastructure, zero business coupling)",
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",

@@ -20,8 +20,8 @@ Slides are optional. Do not start TabSlide generation until the report narrative
 When the user confirms slide generation, use the same canonical TabSlide flow as the deck skill:
 
 ```bash
-tabtin slide create --name "<deck name>" --html @./slides.html
-tabtin slide lint --project-id <project-id> --skip-visual --min-severity warning
+muse slide create --name "<deck name>" --html @./slides.html
+muse slide lint --project-id <project-id> --skip-visual --min-severity warning
 ```
 
 If TabSlide commands surface Playwright or Chromium errors, do not tell the user to install browsers. Report it as a TabSlide runtime environment issue and include the raw error for diagnosis.

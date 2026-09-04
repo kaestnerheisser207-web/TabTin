@@ -182,7 +182,7 @@ const allContentBlocks: ContentBlock[] = [
     type: 'search_result',
     source: 'kb://product-spec',
     title: 'Product Spec',
-    content: [{ type: 'text', text: 'TabTin 是一个让人和 AI Agent 一起干活的平台。' }],
+    content: [{ type: 'text', text: 'Muse 是一个让人和 AI Agent 一起干活的平台。' }],
     citations: { enabled: true },
   },
   // 17. tabtin_rich_content

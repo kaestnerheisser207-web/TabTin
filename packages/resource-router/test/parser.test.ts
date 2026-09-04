@@ -3,7 +3,7 @@
  *
  * 任何"看着不该出现的输入"都必须有定义良好的退化行为：
  *  - 完全不合法 URI → scheme: 'unknown'
- *  - 自有格式头部对但 path 形态不合法 → scheme: 'tabtin' + type: null + id: raw
+ *  - 自有格式头部对但 path 形态不合法 → scheme: 'muse' + type: null + id: raw
  *  - 多值 query → meta 收敛为数组
  *  - hint 重复出现 → 只取第一个
  */
@@ -17,7 +17,7 @@ describe('parseResourcePointer · self format', () => {
     const p = parseResourcePointer(
       'tabtin://resource/document/doc_xyz?hint=tabdoc&title=%E9%A1%B9%E7%9B%AE',
     )
-    expect(p.scheme).toBe('tabtin')
+    expect(p.scheme).toBe('muse')
     expect(p.type).toBe('document')
     expect(p.hint).toBe('tabdoc')
     expect(p.meta?.title).toBe('项目')
@@ -30,17 +30,17 @@ describe('parseResourcePointer · self format', () => {
 
   it('treats unknown self-format type as pass-through (manifest cross-ref is registry job)', () => {
     const p = parseResourcePointer('tabtin://resource/some_future_type/id_42')
-    expect(p.scheme).toBe('tabtin')
+    expect(p.scheme).toBe('muse')
     expect(p.type).toBe('some_future_type')
     expect(p.id).toBe('id_42')
   })
 
   it.each(['tabtin-preprod', 'tabtin-dev'] as const)(
-    'parses %s resource links as TabTin self format while preserving raw',
+    'parses %s resource links as Muse self format while preserving raw',
     (scheme) => {
       const raw = `${scheme}://resource/table/tbl_x?hint=tabdata&recordIds=rec_1`
       const p = parseResourcePointer(raw)
-      expect(p.scheme).toBe('tabtin')
+      expect(p.scheme).toBe('muse')
       expect(p.type).toBe('table')
       expect(p.id).toBe('tbl_x')
       expect(p.meta?.recordIds).toBe('rec_1')
@@ -80,14 +80,14 @@ describe('parseResourcePointer · self format', () => {
 
   it('returns degraded shape (type=null) for malformed self-format prefix', () => {
     const p = parseResourcePointer('tabtin://resource/')
-    expect(p.scheme).toBe('tabtin')
+    expect(p.scheme).toBe('muse')
     expect(p.type).toBeNull()
     expect(p.id).toBe('tabtin://resource/')
   })
 
   it('returns degraded shape when id segment is missing', () => {
     const p = parseResourcePointer('tabtin://resource/table')
-    expect(p.scheme).toBe('tabtin')
+    expect(p.scheme).toBe('muse')
     expect(p.type).toBeNull()
     expect(p.id).toBe('tabtin://resource/table')
   })
@@ -175,7 +175,7 @@ describe('serializeSelfFormat round-trip', () => {
       'tabtin-preprod',
     )
     expect(out).toBe('tabtin-preprod://resource/table/tbl_abc?hint=tabdata')
-    expect(parseResourcePointer(out).scheme).toBe('tabtin')
+    expect(parseResourcePointer(out).scheme).toBe('muse')
   })
 
   it('serializes pointer with hint and meta', () => {

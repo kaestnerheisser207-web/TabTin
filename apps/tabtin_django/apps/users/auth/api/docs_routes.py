@@ -94,9 +94,9 @@ def get_auth_api_info(request: HttpRequest):
         message="Auth API Documentation",
         data={
             "api_info": {
-                "title": "TabTin REST API",
+                "title": "Muse REST API",
                 "version": "1.0.0",
-                "description": "TabTin 平台 REST API，规范定义于 contracts/openapi/tabtin-api.yaml",
+                "description": "Muse 平台 REST API，规范定义于 contracts/openapi/tabtin-api.yaml",
                 "spec_format": "OpenAPI 3.1"
             },
             "documentation_links": {

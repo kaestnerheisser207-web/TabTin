@@ -8,7 +8,7 @@ import com.tabtin.mobile.data.model.tracker.TrackerRunExecutionPolicy
 import com.tabtin.mobile.data.model.tracker.TrackerRunStatus
 import com.tabtin.mobile.data.repository.TrackerRepository
 import com.tabtin.mobile.data.websocket.WebSocketService
-import com.tabtin.mobile.R
+import com.muse.mobile.R
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk

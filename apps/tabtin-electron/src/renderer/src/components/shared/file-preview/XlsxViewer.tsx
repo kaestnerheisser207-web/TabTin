@@ -358,7 +358,7 @@ export const XlsxViewer: React.FC<XlsxViewerProps> = ({ filePath, data, classNam
             <span className="text-foreground/65">
               {t('folder.status.xlsxFormulasCalculated', {
                 count: formulaCalculation.calculated,
-                defaultValue: 'TabTin calculated {{count}} formula(s) locally for this preview. Results were not saved to the file.',
+                defaultValue: 'Muse calculated {{count}} formula(s) locally for this preview. Results were not saved to the file.',
               })}
             </span>
           )}

@@ -6,7 +6,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/TabTin/tabtin-cli/internal/cmdutil"
+	"github.com/Muse/muse-cli/internal/cmdutil"
 )
 
 // setupPurgeConfigDir 隔离 TABTIN_CONFIG_DIR 到临时 .tabtin 子目录，避免测试

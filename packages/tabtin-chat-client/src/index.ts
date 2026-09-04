@@ -1,7 +1,7 @@
 /**
  * @tabtin/chat-client
  *
- * Chat Agent SDK for TabTin applications
+ * Chat Agent SDK for Muse applications
  *
  * @packageDocumentation
  */

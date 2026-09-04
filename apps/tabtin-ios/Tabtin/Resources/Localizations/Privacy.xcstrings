@@ -18,8 +18,8 @@
     "privacy.aiConsentSubtitle" : {
       "extractionState" : "manual",
       "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "TabTin uses third-party AI services to generate responses. Before sending your data, please review what will be shared and with whom." } },
-        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "TabTin 会调用第三方 AI 服务生成回复。在发送你的数据前，请了解将共享哪些内容、发送给谁。" } }
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Muse uses third-party AI services to generate responses. Before sending your data, please review what will be shared and with whom." } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "Muse 会调用第三方 AI 服务生成回复。在发送你的数据前，请了解将共享哪些内容、发送给谁。" } }
       }
     },
     "privacy.aiDataSharedTitle" : {
@@ -81,22 +81,22 @@
     "privacy.aiRecipientTabTin" : {
       "extractionState" : "manual",
       "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "TabTin platform services (routing, safety, and delivery)" } },
-        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "TabTin 平台服务（路由、安全与投递）" } }
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Muse platform services (routing, safety, and delivery)" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "Muse 平台服务（路由、安全与投递）" } }
       }
     },
     "privacy.aiRecipientProvider" : {
       "extractionState" : "manual",
       "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "This request will be sent through TabTin platform services to %@ (model: %@) to generate an AI response." } },
-        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "本次请求将通过 TabTin 平台服务发送给 %@（模型：%@），用于生成 AI 回复。" } }
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "This request will be sent through Muse platform services to %@ (model: %@) to generate an AI response." } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "本次请求将通过 Muse 平台服务发送给 %@（模型：%@），用于生成 AI 回复。" } }
       }
     },
     "privacy.aiRecipientProviders" : {
       "extractionState" : "manual",
       "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Your request may be sent through TabTin platform services to third-party AI providers to generate a response." } },
-        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "你的请求可能会通过 TabTin 平台服务发送给第三方 AI 服务商，用于生成回复。" } }
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Your request may be sent through Muse platform services to third-party AI providers to generate a response." } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "你的请求可能会通过 Muse 平台服务发送给第三方 AI 服务商，用于生成回复。" } }
       }
     },
     "privacy.aiPurposeNote" : {

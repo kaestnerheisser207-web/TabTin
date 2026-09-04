@@ -19,7 +19,7 @@ metadata:
 # Table Operator
 
 表格是 TabData 的核心对象，每张表由**字段（Field）**和**记录（Record）**组成。
-所有操作统一通过 `tabtin table` CLI 完成（按 D6 北极星：tabdata + tabweb 数据采集链 0 次 FC，
+所有操作统一通过 `muse table` CLI 完成（按 D6 北极星：tabdata + tabweb 数据采集链 0 次 FC，
 GUI bridge 类 FC 不在该边界内，按需正常使用）。
 
 > **做关联表 / 列表+详情 / 双表设计 / 任何"建几张表"决策**之前，**必须先**
@@ -41,28 +41,28 @@ GUI bridge 类 FC 不在该边界内，按需正常使用）。
 
 | 目标 | CLI 命令 |
 |------|---------|
-| 创建表格 | `tabtin table create --name "表名" --fields '[...]'`；挂知识库父资源加 `--parent-item-id <context_item_id>` |
-| 知识库树中移动表格 | `tabtin table move --table-id <id> --parent-item-id <context_item_id>` 或 `--root` |
-| 查看表结构 | `tabtin table info --table-id <table-id>` |
-| 添加普通字段 | `tabtin table field add --table-id <id> --name "字段" --field-type text` |
+| 创建表格 | `muse table create --name "表名" --fields '[...]'`；挂知识库父资源加 `--parent-item-id <context_item_id>` |
+| 知识库树中移动表格 | `muse table move --table-id <id> --parent-item-id <context_item_id>` 或 `--root` |
+| 查看表结构 | `muse table info --table-id <table-id>` |
+| 添加普通字段 | `muse table field add --table-id <id> --name "字段" --field-type text` |
 | 添加 link | **形态决策**先 `skills_read("app:tabdata/table-modeling")`；**挂/解绑关联边**走 `skills_read("app:tabdata/table-association")`（`table link create/add/set/remove/list`） |
-| 批量添加字段 | `tabtin table field bulk-add --table-id <id> --fields '[...]'`（普通字段和 link 可同批） |
-| 插入单条记录 | `tabtin table record insert --table-id <id> --data '{...}'` |
-| 批量插入 | `tabtin table record bulk-insert --table-id <id> --records '[...]'` |
-| 更新记录（简单） | `tabtin table record update --table-id <id> --record-id <rid> --set "字段=值"` |
-| 更新记录（JSON） | `tabtin table record update --table-id <id> --record-id <rid> --data '@patch.json'` |
-| 批量更新记录 | `tabtin table record update --table-id <id> --records '@records.json'` |
-| 删除记录（永久删除） | `tabtin table record delete --table-id <id> --record-id <rid> --yes` |
-| 记录评论 | `tabtin table record comment list\|create\|reply\|rm`；回复必须用 `reply <record-id> <comment-id>` |
-| 字段影响预检 | `tabtin table field explain\|delete-references\|conversion-references` |
-| 列表记录 | `tabtin table record list --table-id <id>` |
-| 按复制链接读取记录 | `tabtin table record detail "<TabTin 记录链接>" --format json` |
-| 按关键词搜记录 | `tabtin table search --table-id <id> --search "<关键词>"`（有搜索词时必须用它，别用 `record list` 冒充 search；支持 `--field-id` 限定字段、`--view-id` 限定视图、`--take` 控制返回数） |
-| SQL 查询 | `tabtin table query "SELECT ..."` |
-| SQL 写入 | `tabtin table execute "UPDATE ..."` |
-| 字段类型转换 | `tabtin table field convert --field-id <fid> --target-type <type>` （先 `field list` 拿 field-id；高风险转换加 `--force` 或 `--async`） |
-| 创建看板视图 | `tabtin table view create --table-id <id> --name "看板" --view-type kanban --group-by-field-id <可分组字段ID>`（**必须**显式指定分组字段；`select` 为推荐类型，非硬要求；排除 attachment；复杂分组才用 `--groups`） |
-| 查询视图记录 | `tabtin table view records --view-id <view-id>` |
+| 批量添加字段 | `muse table field bulk-add --table-id <id> --fields '[...]'`（普通字段和 link 可同批） |
+| 插入单条记录 | `muse table record insert --table-id <id> --data '{...}'` |
+| 批量插入 | `muse table record bulk-insert --table-id <id> --records '[...]'` |
+| 更新记录（简单） | `muse table record update --table-id <id> --record-id <rid> --set "字段=值"` |
+| 更新记录（JSON） | `muse table record update --table-id <id> --record-id <rid> --data '@patch.json'` |
+| 批量更新记录 | `muse table record update --table-id <id> --records '@records.json'` |
+| 删除记录（永久删除） | `muse table record delete --table-id <id> --record-id <rid> --yes` |
+| 记录评论 | `muse table record comment list\|create\|reply\|rm`；回复必须用 `reply <record-id> <comment-id>` |
+| 字段影响预检 | `muse table field explain\|delete-references\|conversion-references` |
+| 列表记录 | `muse table record list --table-id <id>` |
+| 按复制链接读取记录 | `muse table record detail "<Muse 记录链接>" --format json` |
+| 按关键词搜记录 | `muse table search --table-id <id> --search "<关键词>"`（有搜索词时必须用它，别用 `record list` 冒充 search；支持 `--field-id` 限定字段、`--view-id` 限定视图、`--take` 控制返回数） |
+| SQL 查询 | `muse table query "SELECT ..."` |
+| SQL 写入 | `muse table execute "UPDATE ..."` |
+| 字段类型转换 | `muse table field convert --field-id <fid> --target-type <type>` （先 `field list` 拿 field-id；高风险转换加 `--force` 或 `--async`） |
+| 创建看板视图 | `muse table view create --table-id <id> --name "看板" --view-type kanban --group-by-field-id <可分组字段ID>`（**必须**显式指定分组字段；`select` 为推荐类型，非硬要求；排除 attachment；复杂分组才用 `--groups`） |
+| 查询视图记录 | `muse table view records --view-id <view-id>` |
 
 > **SQL 查询/写入** → 使用 `skills_read("app:tabdata/table-query")` 获取 SQL 规则。
 > **数据导入/提取** → 使用 `skills_read("app:tabdata/table-import-export")` 获取导入导出指南。
@@ -72,20 +72,20 @@ GUI bridge 类 FC 不在该边界内，按需正常使用）。
 
 ## 注意事项
 
-- **搜索走 `table search`，不要用 list 冒充**：用户说「找 / 搜 / 查一下 XX 记录」时必须走 `tabtin table search --table-id <id> --search "<关键词>"`——它是专门的全文搜索端点（`POST /table/search`），命中率与相关性都比 `record list --search` 的列表过滤好。`record list` 是列表命令，`--search` 只是辅助过滤，不要用它冒充搜索。需要限定范围时加 `--field-id` / `--view-id`，控制返回数加 `--take`。
-- **先查结构再操作**：写操作前先 `tabtin table info --table-id <table-id>` 确认字段名和类型。
+- **搜索走 `table search`，不要用 list 冒充**：用户说「找 / 搜 / 查一下 XX 记录」时必须走 `muse table search --table-id <id> --search "<关键词>"`——它是专门的全文搜索端点（`POST /table/search`），命中率与相关性都比 `record list --search` 的列表过滤好。`record list` 是列表命令，`--search` 只是辅助过滤，不要用它冒充搜索。需要限定范围时加 `--field-id` / `--view-id`，控制返回数加 `--take`。
+- **先查结构再操作**：写操作前先 `muse table info --table-id <table-id>` 确认字段名和类型。
 - **批量优先**：多条记录用 `record bulk-insert` / 一次 `--records` 批量更新，避免逐条插入/更新。
 - **批量上限（单次）**：`record bulk-insert` ≤ **1000 条**（`MAX_BULK_RECORDS`）、`record list --page-size` ≤ **1000 条/页**（`MAX_PAGE_SIZE`）、`field bulk-add` ≤ **50 字段**（`MAX_BULK_FIELDS`）。超过就分批——1500 行要 2 页拉、写两次 bulk-insert。
 - **高风险命令必须显式确认**：所有 `RiskHigh` / destructive 命令不带 `--yes` 会被 CLI 拦截。常见例子包括 `record delete --yes`、`field delete --yes`、`view delete --yes`、`import snapshot --yes`、`attachment delete --yes`、`webhook delete --yes`、`token delete --yes`、`version delete --yes`、`policy delete --yes`、`collaborator remove --yes`；不确定时先看对应命令的 `--help`。
 - **上下文已有字段信息时不要重复查询**：系统会自动注入当前表的字段列表。
 - **工具报错时先分析原因，不要盲目重试**。
 - **建表 / 写入失败（`QUOTA_EXCEEDED` 表格数量已达上限、`PERMISSION_DENIED` 等）时**：把可执行原因摊给用户（删表 / 升级 / 换 Organization），**不要**绕过平台改写本地文件（尤其 ~/Desktop 等 working_dir 之外路径）当交付——产物只落 Organization 内 TabData 表或 working_dir。详见 `skills_read("app:tabdata/table-import-export")`。
-- **禁止 Browser 降级**：TabData 数据操作（字段/记录/视图/看板）一律走 `tabtin table` CLI。L2 CLI 失败时，最多按下方「Windows 安全输入」重试一次；随后报告真实错误（保留 CLI/后端错误码与请求标识），**不得**改走网页 Browser、SQL 逃生口，或让用户手动在 UI 完成。
+- **禁止 Browser 降级**：TabData 数据操作（字段/记录/视图/看板）一律走 `muse table` CLI。L2 CLI 失败时，最多按下方「Windows 安全输入」重试一次；随后报告真实错误（保留 CLI/后端错误码与请求标识），**不得**改走网页 Browser、SQL 逃生口，或让用户手动在 UI 完成。
 - **没有读回证据禁止宣称成功**：缺 `view detail` / `record list|detail` 读回前，禁止输出「搞定」或成功任务卡。
 
 ## 当前 CLI 能力索引
 
-`tabtin table` 当前覆盖 162 条命令（2026-08-14，复现：`go run . commands --json` 过滤 `table`）。常用 CRUD 在本 SKILL 里；遇到下列目标直接看对应 `--help`：
+`muse table` 当前覆盖 162 条命令（2026-08-14，复现：`go run . commands --json` 过滤 `table`）。常用 CRUD 在本 SKILL 里；遇到下列目标直接看对应 `--help`：
 
 | 目标 | 命令组 |
 |---|---|
@@ -117,7 +117,7 @@ Windows / PowerShell 下**禁止** inline JSON（引号会被剥掉）。复杂�
 一步完成建表 + 加字段：
 
 ```bash
-tabtin table create --name "用户表" --fields '[
+muse table create --name "用户表" --fields '[
   {"name":"姓名","field_type":"text"},
   {"name":"年龄","field_type":"number"},
   {"name":"邮箱","field_type":"email"},
@@ -134,7 +134,7 @@ tabtin table create --name "用户表" --fields '[
 ### 添加字段
 
 ```bash
-tabtin table field add --table-id <id> --name "状态" --field-type select --options '{"choices":["待处理","进行中","已完成"]}'
+muse table field add --table-id <id> --name "状态" --field-type select --options '{"choices":["待处理","进行中","已完成"]}'
 # select / multi_select 必须带 options.choices；只写 field_type 会导致下拉无选项。
 # 漏传时，后续 record 写入会把单元格值自动补进 choices。
 ```
@@ -142,7 +142,7 @@ tabtin table field add --table-id <id> --name "状态" --field-type select --opt
 批量添加：
 
 ```bash
-tabtin table field bulk-add --table-id <id> --fields '[
+muse table field bulk-add --table-id <id> --fields '[
   {"name":"优先级","field_type":"select","options":{"choices":["高","中","低"]}},
   {"name":"截止日期","field_type":"date"}
 ]'
@@ -152,15 +152,15 @@ tabtin table field bulk-add --table-id <id> --fields '[
 
 TabData 右键「复制记录链接」会生成不携带 Space / Workspace 上下文的稳定
 `tabtin://` 资源链接；读取时把链接作为位置参数，更新时用 `--url`。旧版本复制的
-本地页面 URL 也继续兼容，两种链接都会复用当前 TabTin Profile 的授权
-（Electron 已登录时走 managed profile，**不必**先 `tabtin agent use`）：
+本地页面 URL 也继续兼容，两种链接都会复用当前 Muse Profile 的授权
+（Electron 已登录时走 managed profile，**不必**先 `muse agent use`）：
 
 ```bash
-tabtin table record detail "tabtin://resource/table/<table-id>?hint=tabdata&recordIds=<record-id>" --format json
-tabtin table record update --url "tabtin://resource/table/<table-id>?hint=tabdata&recordIds=<record-id>" --set "状态=完成"
+muse table record detail "tabtin://resource/table/<table-id>?hint=tabdata&recordIds=<record-id>" --format json
+muse table record update --url "tabtin://resource/table/<table-id>?hint=tabdata&recordIds=<record-id>" --set "状态=完成"
 
-tabtin table record detail "http://127.0.0.1:5175/table/<table-id>/record/<record-id>" --format json
-tabtin table record update --url "http://127.0.0.1:5175/table/<table-id>/record/<record-id>" --set "状态=完成"
+muse table record detail "http://127.0.0.1:5175/table/<table-id>/record/<record-id>" --format json
+muse table record update --url "http://127.0.0.1:5175/table/<table-id>/record/<record-id>" --set "状态=完成"
 ```
 
 `tabtin://` 链接必须通过 `recordIds` 指定恰好一条记录，不携带 Space / Workspace
@@ -175,13 +175,13 @@ tabtin table record update --url "http://127.0.0.1:5175/table/<table-id>/record/
 插入单条：
 
 ```bash
-tabtin table record insert --table-id <id> --data '{"姓名":"张三","年龄":28,"邮箱":"zhang@example.com"}'
+muse table record insert --table-id <id> --data '{"姓名":"张三","年龄":28,"邮箱":"zhang@example.com"}'
 ```
 
 批量插入（单次 ≤1000 条）：
 
 ```bash
-tabtin table record bulk-insert --table-id <id> --records '[
+muse table record bulk-insert --table-id <id> --records '[
   {"姓名":"张三","年龄":28},
   {"姓名":"李四","年龄":32}
 ]'
@@ -190,9 +190,9 @@ tabtin table record bulk-insert --table-id <id> --records '[
 更新（优先 `--set`，可重复）：
 
 ```bash
-tabtin table record update --table-id <id> --record-id <rid> --set "测试单选=好吧"
-tabtin table record update --table-id <id> --record-id <rid> --set "标题=123"
-tabtin table record update --table-id <id> --record-id <rid> --set status=done --set score=3
+muse table record update --table-id <id> --record-id <rid> --set "测试单选=好吧"
+muse table record update --table-id <id> --record-id <rid> --set "标题=123"
+muse table record update --table-id <id> --record-id <rid> --set status=done --set score=3
 # --set 一律按字符串保留（含 123/true/null）——文本/单选列直接用它。
 # 需要 JSON 数字/布尔/对象/数组时，走 --data '@.agent-drafts/patch.json'。
 # 需要字段 UUID 作 key 时加 --field-key-type id（主要影响响应 key 形态）
@@ -202,7 +202,7 @@ tabtin table record update --table-id <id> --record-id <rid> --set status=done -
 
 ```bash
 # 先 write_file 到 .agent-drafts/records.json（UTF-8 无 BOM），再：
-tabtin table record update --table-id <id> --records '@.agent-drafts/records.json'
+muse table record update --table-id <id> --records '@.agent-drafts/records.json'
 ```
 
 ### 记录评论协作
@@ -212,8 +212,8 @@ tabtin table record update --table-id <id> --records '@.agent-drafts/records.jso
 必须复用原值，避免重复评论：
 
 ```bash
-tabtin table record comment list <record-id> --format json
-tabtin table record comment reply <record-id> <comment-id> \
+muse table record comment list <record-id> --format json
+muse table record comment reply <record-id> <comment-id> \
   --content "已核对，负责人正确" \
   --mention-user-ids '["<user-id>"]' \
   --client-request-id <request-id> \
@@ -230,14 +230,14 @@ Agent 署名由当前受信任的运行/会话上下文自动携带，禁止尝�
 
 ```bash
 # 1) 找可分组字段 ID（非 attachment；select 为推荐，text/date/checkbox 等亦可）
-tabtin table field list --table-id <id> --format json
+muse table field list --table-id <id> --format json
 
 # 2) 新建看板（一等参数，勿拼底层 groups JSON；必须显式指定 group_by_field）
-tabtin table view create --table-id <id> --name "跟进看板" --view-type kanban \
+muse table view create --table-id <id> --name "跟进看板" --view-type kanban \
   --group-by-field-id <groupable_field_id>
 
 # 3) 读回验收：config.group_by_field 与 groups[0].field_id 必须指向该字段
-tabtin table view detail --view-id <view_id> --format json
+muse table view detail --view-id <view_id> --format json
 ```
 
 复杂多级分组才用 `--groups '@.agent-drafts/groups.json'`（与 `--group-by-field-id` 互斥）。
@@ -248,18 +248,18 @@ tabtin table view detail --view-id <view_id> --format json
 
 ```bash
 # 1) 找到源列记录（按关键词或列表）
-tabtin table search --table-id <id> --search "321" --format json
-# 或 tabtin table record list --table-id <id> --format json
+muse table search --table-id <id> --search "321" --format json
+# 或 muse table record list --table-id <id> --format json
 
 # 2) 优先一次批量更新；简单单条用 --set（文本数字如 123 直接 --set "标题=123"）
-tabtin table record update --table-id <id> --records '@.agent-drafts/move.json'
+muse table record update --table-id <id> --records '@.agent-drafts/move.json'
 # 单条：
-tabtin table record update --table-id <id> --record-id <rid> --set "标题=123"
+muse table record update --table-id <id> --record-id <rid> --set "标题=123"
 
 # 3) 读回确认：空源值记录数应为 0；目标列（如 标题=123）数量增加；必要时再 view detail
-tabtin table view detail --view-id <view_id> --format json
-tabtin table record list --table-id <id> --format json
-# / tabtin table record detail --record-id <rid> --format json
+muse table view detail --view-id <view_id> --format json
+muse table record list --table-id <id> --format json
+# / muse table record detail --record-id <rid> --format json
 ```
 
 没有步骤 3 的读回证据，禁止输出「搞定」或成功任务卡。

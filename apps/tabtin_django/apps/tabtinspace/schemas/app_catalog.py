@@ -1,4 +1,4 @@
-"""Tabtin Space app_catalog schemas。"""
+"""Muse Space app_catalog schemas。"""
 
 from .common import *  # noqa: F401,F403
 

@@ -22,7 +22,7 @@ import android.view.inputmethod.InputConnectionWrapper
 import android.util.Log
 import androidx.appcompat.widget.AppCompatEditText
 import androidx.core.graphics.withTranslation
-import com.tabtin.mobile.R
+import com.muse.mobile.R
 import com.tabtin.mobile.features.doc.editor.core.highlight.HighlightAttributeReader
 import com.tabtin.mobile.features.doc.editor.core.highlight.HighlightDrawer
 

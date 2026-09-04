@@ -7,14 +7,14 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/TabTin/tabtin-cli/internal/cmdutil"
+	"github.com/Muse/muse-cli/internal/cmdutil"
 )
 
 func TestSlideHTMLGuidanceUsesCrossPlatformFileInput(t *testing.T) {
 	fileInputPattern := regexp.MustCompile(`--html\s+["']?@`)
 	cmd := newCmdSlide(cmdutil.NewFactory())
 	for _, subcommand := range cmd.Commands() {
-		if strings.Contains(subcommand.Example, "| tabtin slide") {
+		if strings.Contains(subcommand.Example, "| muse slide") {
 			t.Errorf("%s help 不应推荐 shell 管道传 HTML: %q", subcommand.Name(), subcommand.Example)
 		}
 	}
@@ -40,7 +40,7 @@ func TestSlideHTMLGuidanceUsesCrossPlatformFileInput(t *testing.T) {
 			t.Fatalf("读取 %s: %v", relPath, readErr)
 		}
 		text := string(content)
-		if strings.Contains(text, "| tabtin slide") {
+		if strings.Contains(text, "| muse slide") {
 			t.Errorf("%s 不应推荐 shell 管道传 HTML", relPath)
 		}
 		if !fileInputPattern.MatchString(text) {
@@ -151,7 +151,7 @@ func TestSlideAddPageAcceptsHTMLInput(t *testing.T) {
 }
 
 // TestSlideCommandVisibilityForAgent 锁定  的核心收敛：`slide create` 对 Agent
-// 隐藏（cobra Hidden → 从 `--help` 与 `tabtin commands` 命令发现面剔除），`render` /
+// 隐藏（cobra Hidden → 从 `--help` 与 `muse commands` 命令发现面剔除），`render` /
 // `export` 保持可发现。防止有人手滑把 create 改回可见、让 Agent 又去建云项目。
 func TestSlideCommandVisibilityForAgent(t *testing.T) {
 	cmd := newCmdSlide(cmdutil.NewFactory())

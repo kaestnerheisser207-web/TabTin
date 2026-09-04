@@ -58,7 +58,7 @@ else
 fi
 
 pack_time_begin "Win NSIS quick (profile=${PROFILE}, arch=${ARCH})"
-echo "=== TabTin Windows NSIS Quick (profile=${PROFILE}, arch=${ARCH}) ==="
+echo "=== Muse Windows NSIS Quick (profile=${PROFILE}, arch=${ARCH}) ==="
 echo "  · quick：跳过 sourcemap 生成及上传；保留 staging + audit"
 echo "  · deploy strategy: validated warm cache（依赖变化自动全量重建）"
 echo "  · NSIS compression: ${TABTIN_WIN_NSIS_COMPRESSION:-normal}"

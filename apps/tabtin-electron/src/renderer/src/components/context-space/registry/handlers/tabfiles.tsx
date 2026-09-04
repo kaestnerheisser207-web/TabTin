@@ -20,7 +20,7 @@ export const tabfilesHandler: ContextTypeHandler = {
     displayName: '本地文件',
     capability: '打开 Agent 工作目录里的本地文件产物，支持 .xlsx / .docx / .pdf / .pptx 基础预览',
     aliases: ['file', 'files', '本地文件', '文件'],
-    // backendAliases[0]='tabfiles' 是 item_type，真实 CLI 是 `tabtin file`。
+    // backendAliases[0]='tabfiles' 是 item_type，真实 CLI 是 `muse file`。
     cliKey: 'file',
   },
   resolveTabItem: (id, ctx) => {

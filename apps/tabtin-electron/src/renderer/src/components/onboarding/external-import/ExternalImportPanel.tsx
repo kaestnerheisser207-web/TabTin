@@ -10,7 +10,7 @@ export const ExternalImportPanel: React.FC = () => (
   <StandaloneModulePage
     icon={<DownloadCloud className="h-7 w-7 text-accent" strokeWidth={1.75} aria-hidden />}
     title="导入数据"
-    description="把本机 Claude Code、Cursor、Codex、WorkBuddy 的项目目录和历史对话搬过来，在 TabTin 接着聊。"
+    description="把本机 Claude Code、Cursor、Codex、WorkBuddy 的项目目录和历史对话搬过来，在 Muse 接着聊。"
     testId="external-import-panel"
   >
     <ExternalImportFlow />

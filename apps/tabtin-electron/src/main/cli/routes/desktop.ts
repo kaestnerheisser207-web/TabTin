@@ -180,7 +180,7 @@ interface DesktopTypeIntoElementBody extends DesktopRequestCommon {
 }
 
 /**
- * 终端类应用名 / 路径：用户说「打开终端」应走 `tabtin terminal open`，
+ * 终端类应用名 / 路径：用户说「打开终端」应走 `muse terminal open`，
  * 默认拦截 `desktop open`，除非显式 `--external`。
  */
 const EXTERNAL_TERMINAL_APP_RE =
@@ -437,7 +437,7 @@ export async function handleDesktopRoute(
   if (!KNOWN_ROUTES.has(route)) {
     sendJSON(res, 404, desktopErrorPayload(
       DesktopErrorCode.UNKNOWN_ROUTE,
-      `未知的桌面操控路由：${url}。本次请求未执行。请检查 CLI 命令拼写或参考 tabtin desktop --help 列出全部已支持子命令。`,
+      `未知的桌面操控路由：${url}。本次请求未执行。请检查 CLI 命令拼写或参考 muse desktop --help 列出全部已支持子命令。`,
     ))
     return
   }
@@ -455,7 +455,7 @@ export async function handleDesktopRoute(
       DesktopErrorCode.UNSUPPORTED_PLATFORM,
       `不支持此操作：桌面操控仅在 macOS 和 Windows 可用。` +
       `当前系统识别为 ${process.platform}，本次请求未执行；所有桌面操控命令在本机不可用。` +
-      `如需桌面操控，请在 macOS 或 Windows 上运行 TabTin 客户端。`,
+      `如需桌面操控，请在 macOS 或 Windows 上运行 Muse 客户端。`,
     ))
     return
   }
@@ -464,8 +464,8 @@ export async function handleDesktopRoute(
   if (!executor) {
     sendJSON(res, 503, desktopErrorPayload(
       DesktopErrorCode.INTERNAL_ERROR,
-      `桌面操控暂不可用：执行器尚未初始化。本次请求未执行。请确认 TabTin 桌面客户端已完全启动后重试。`,
-      { suggestions: ['等待 TabTin 桌面客户端完全启动后再发起请求'] },
+      `桌面操控暂不可用：执行器尚未初始化。本次请求未执行。请确认 Muse 桌面客户端已完全启动后重试。`,
+      { suggestions: ['等待 Muse 桌面客户端完全启动后再发起请求'] },
     ))
     return
   }
@@ -528,8 +528,8 @@ export async function handleDesktopRoute(
   //
   // Wave 2 · 产品 Review P1-3 修正：`/revoke-approval` 是"元管理"路由（撤销持久化的
   // 「总是允许」记录），本身就是 session 外的操作——Agent / 用户可以在没有活跃
-  // session 的情况下主动撤销。若把它纳入锁检查，CLI `tabtin desktop revoke-approval`
-  // 会先报 "请先运行 tabtin desktop screenshot 建立 session"，逻辑倒置。
+  // session 的情况下主动撤销。若把它纳入锁检查，CLI `muse desktop revoke-approval`
+  // 会先报 "请先运行 muse desktop screenshot 建立 session"，逻辑倒置。
   const sessionRoutes = new Set<string>([
     '/session/start',
     '/session/end',
@@ -547,8 +547,8 @@ export async function handleDesktopRoute(
         code,
         `桌面操控未启动：当前没有活跃的 session 锁。` +
         `本次请求未执行；其他桌面应用不受影响。` +
-        `请先运行 tabtin desktop screenshot 触发审批并建立 session（推荐），` +
-        `或显式调用 tabtin desktop session start 启动会话后再执行操作。`,
+        `请先运行 muse desktop screenshot 触发审批并建立 session（推荐），` +
+        `或显式调用 muse desktop session start 启动会话后再执行操作。`,
       ))
       writeAuditLog({
         action: route.slice(1),
@@ -582,7 +582,7 @@ export async function handleDesktopRoute(
       // 区分，让 Agent 一眼看出根因是"停太久"而不是"设备变化"。
       `桌面操控会话已超时：空闲超过 10 分钟（实际 ${Math.round(idleMs / 1000)} 秒），系统已自动结束会话并释放锁。` +
       `本次请求未执行；其他桌面应用不受影响。` +
-      `请重新运行 tabtin desktop screenshot 建立新会话后再继续操作。`,
+      `请重新运行 muse desktop screenshot 建立新会话后再继续操作。`,
     ))
     writeAuditLog({
       action: route.slice(1),
@@ -631,7 +631,7 @@ export async function handleDesktopRoute(
             return respondValidationError(
               res, sendJSON, executor.getSession()?.sessionId ?? null, 'screenshot', body,
               `请求参数非法：screenshot 的 region.${regionCheck.field} 必须是有限数字。本次截屏未执行。` +
-              `请改用 tabtin desktop screenshot --region <x>,<y>,<w>,<h> 重新调用。`,
+              `请改用 muse desktop screenshot --region <x>,<y>,<w>,<h> 重新调用。`,
             )
           }
           const reg = r as { x: number; y: number; width: number; height: number }
@@ -733,7 +733,7 @@ export async function handleDesktopRoute(
             'click',
             body,
             `请求参数${check.field === 'x' || check.field === 'y' ? '非法' : '缺失'}：click 需要有限数字类型的 x 与 y 坐标（字段「${check.field}」未提供或无法解析为数字）。` +
-            `本次点击未执行。请改用 tabtin desktop click <x> <y> 重新调用，确保 x / y 为数字。`,
+            `本次点击未执行。请改用 muse desktop click <x> <y> 重新调用，确保 x / y 为数字。`,
           )
         }
         const { x, y } = body as DesktopClickBody
@@ -745,7 +745,7 @@ export async function handleDesktopRoute(
             'click',
             body,
             `请求参数非法：click 的 button 只接受 left / right / middle（收到「${String(button)}」）。` +
-            `本次点击未执行。请改用 tabtin desktop click <x> <y> --button left 重新调用。`,
+            `本次点击未执行。请改用 muse desktop click <x> <y> --button left 重新调用。`,
           )
         }
         // v2.1 模块零：走 bound wrapper（ctx 必存在——前面 hasLock 检查已保证）。
@@ -769,7 +769,7 @@ export async function handleDesktopRoute(
             'scroll',
             body,
             `请求参数${check.field === 'x' || check.field === 'y' ? '非法' : '缺失'}：scroll 需要有限数字类型的 x 与 y 坐标（字段「${check.field}」未提供或无法解析为数字）。` +
-            `本次滚动未执行。请改用 tabtin desktop scroll <x> <y> --dy <n> 重新调用。`,
+            `本次滚动未执行。请改用 muse desktop scroll <x> <y> --dy <n> 重新调用。`,
           )
         }
         if (dx != null && !isFiniteNumberLike(dx)) {
@@ -808,7 +808,7 @@ export async function handleDesktopRoute(
             'drag',
             body,
             `请求参数非法：drag 需要有限数字类型的 fromX / fromY / toX / toY 四个坐标（字段「${check.field}」未提供或无法解析为数字）。` +
-            `本次拖拽未执行。请改用 tabtin desktop drag <x1>,<y1> <x2>,<y2> 重新调用。`,
+            `本次拖拽未执行。请改用 muse desktop drag <x1>,<y1> <x2>,<y2> 重新调用。`,
           )
         }
         const { fromX, fromY, toX, toY, duration } = body as DesktopDragBody
@@ -837,7 +837,7 @@ export async function handleDesktopRoute(
             'move',
             body,
             `请求参数非法：move 需要有限数字类型的 x 与 y 坐标（字段「${check.field}」未提供或无法解析为数字）。` +
-            `本次鼠标移动未执行。请改用 tabtin desktop move <x> <y> 重新调用。`,
+            `本次鼠标移动未执行。请改用 muse desktop move <x> <y> 重新调用。`,
           )
         }
         const { x, y } = body as DesktopMoveBody
@@ -855,7 +855,7 @@ export async function handleDesktopRoute(
             executor.getSession()?.sessionId ?? null,
             'type',
             body,
-            `请求参数缺失：type 需要 text 字段。本次输入未执行。请改用 tabtin desktop type "<内容>" 重新调用；中文 / emoji 等非 ASCII 字符请加 --clipboard。`,
+            `请求参数缺失：type 需要 text 字段。本次输入未执行。请改用 muse desktop type "<内容>" 重新调用；中文 / emoji 等非 ASCII 字符请加 --clipboard。`,
           )
         }
         await (bound ?? executor).type(String(text), !!useClipboard)
@@ -872,7 +872,7 @@ export async function handleDesktopRoute(
             executor.getSession()?.sessionId ?? null,
             'key',
             body,
-            `请求参数缺失：key 需要 key 字段（如 Enter / Tab / a 等）。本次按键未执行。请改用 tabtin desktop key <key> [--modifiers cmd,shift] 重新调用。`,
+            `请求参数缺失：key 需要 key 字段（如 Enter / Tab / a 等）。本次按键未执行。请改用 muse desktop key <key> [--modifiers cmd,shift] 重新调用。`,
           )
         }
         await (bound ?? executor).keyPress(
@@ -893,7 +893,7 @@ export async function handleDesktopRoute(
             executor.getSession()?.sessionId ?? null,
             'hotkey',
             body,
-            `请求参数缺失：hotkey 需要非空 keys 数组（如 ["cmd","c"]）。本次组合键未执行。请改用 tabtin desktop hotkey <key1> <key2> ... 重新调用。`,
+            `请求参数缺失：hotkey 需要非空 keys 数组（如 ["cmd","c"]）。本次组合键未执行。请改用 muse desktop hotkey <key1> <key2> ... 重新调用。`,
           )
         }
         await (bound ?? executor).hotkey(keys.map(String))
@@ -916,7 +916,7 @@ export async function handleDesktopRoute(
             executor.getSession()?.sessionId ?? null,
             'activate',
             body,
-            `请求参数缺失：activate 需要 target（应用名或窗口标题）。本次激活窗口未执行。请改用 tabtin desktop activate "<App Name>" 重新调用。`,
+            `请求参数缺失：activate 需要 target（应用名或窗口标题）。本次激活窗口未执行。请改用 muse desktop activate "<App Name>" 重新调用。`,
           )
         }
         await (bound ?? executor).activateWindow(String(target))
@@ -934,7 +934,7 @@ export async function handleDesktopRoute(
             executor.getSession()?.sessionId ?? null,
             'open',
             body,
-            `请求参数缺失：open 需要 name（应用名或可执行 / .app 路径）。本次「打开应用」未执行。请改用 tabtin desktop open "Slack" 或 tabtin desktop open "/Applications/X.app" 重新调用。`,
+            `请求参数缺失：open 需要 name（应用名或可执行 / .app 路径）。本次「打开应用」未执行。请改用 muse desktop open "Slack" 或 muse desktop open "/Applications/X.app" 重新调用。`,
           )
         }
         const appName = String(name)
@@ -945,12 +945,12 @@ export async function handleDesktopRoute(
           const code = DesktopErrorCode.VALIDATION_ERROR
           sendJSON(res, statusFromErrorCode(code), desktopErrorPayload(
             code,
-            `「${appName}」是系统终端。用户说「打开终端」应打开 TabTin 应用内终端，请改用：tabtin terminal open。若用户明确要求外部系统终端，请加 --external：tabtin desktop open "${appName}" --external。`,
+            `「${appName}」是系统终端。用户说「打开终端」应打开 Muse 应用内终端，请改用：muse terminal open。若用户明确要求外部系统终端，请加 --external：muse desktop open "${appName}" --external。`,
             {
               suggestions: [
-                'tabtin terminal open',
-                'tabtin terminal open --cwd <path> --title "终端"',
-                `tabtin desktop open "${appName}" --external`,
+                'muse terminal open',
+                'muse terminal open --cwd <path> --title "终端"',
+                `muse desktop open "${appName}" --external`,
               ],
             },
           ))
@@ -1039,7 +1039,7 @@ export async function handleDesktopRoute(
             'session_extend_allowlist',
             extendBody,
             `请求参数缺失：session/extend-allowlist 需要非空 apps 数组。` +
-            `本次扩权未执行。请改用 tabtin desktop session extend-allowlist <app_name> 重新调用。`,
+            `本次扩权未执行。请改用 muse desktop session extend-allowlist <app_name> 重新调用。`,
           )
         }
         if (!session || session.sessionId !== reqSessionId) {
@@ -1048,7 +1048,7 @@ export async function handleDesktopRoute(
             code,
             `扩权失败：当前无活跃 session 或 sessionId 不匹配。` +
             `本次扩权未执行；其他已有授权不受影响。` +
-            `请先运行 tabtin desktop screenshot 建立 session，再用同一 sessionId 发起扩权请求。`,
+            `请先运行 muse desktop screenshot 建立 session，再用同一 sessionId 发起扩权请求。`,
           ))
           writeAuditLog({
             action: 'session_extend_allowlist',
@@ -1118,7 +1118,7 @@ export async function handleDesktopRoute(
             batchBody,
             `请求参数非法：batch 需要非空 actions 数组。` +
             `本次 batch 未执行。` +
-            `请改用 tabtin desktop batch --file <path> 或 echo '<json>' | tabtin desktop batch - 重新调用，` +
+            `请改用 muse desktop batch --file <path> 或 echo '<json>' | muse desktop batch - 重新调用，` +
             `每个子动作需包含 action 字段（click / scroll / drag / move / type / key / hotkey / screenshot / wait）。`,
           )
         }
@@ -1134,7 +1134,7 @@ export async function handleDesktopRoute(
             executor.getSession()?.sessionId ?? null,
             'batch',
             batchBody,
-            `batch 首项不能是 screenshot，请先单独调 tabtin desktop screenshot 建立 session 后再发起 batch。` +
+            `batch 首项不能是 screenshot，请先单独调 muse desktop screenshot 建立 session 后再发起 batch。` +
             `本次 batch 未执行，其他桌面操控不受影响。` +
             `原因：batch 入口走一次 desktop_input 策略评估，若首项又是 screenshot 会产生"入口已审批但子动作触发新审批"的复杂耦合（规范 § 4.5.2 · Q5）。` +
             `非首项 screenshot 是正常子动作（用于中途刷新坐标系），不受此限制。`,
@@ -1174,7 +1174,7 @@ export async function handleDesktopRoute(
             'click_element',
             body,
             `请求参数缺失：click-element 需要 name 字段（要点击的元素名）。` +
-            `本次点击未执行。请改用 tabtin desktop click-element --name "<名称>" 重新调用。`,
+            `本次点击未执行。请改用 muse desktop click-element --name "<名称>" 重新调用。`,
           )
         }
         if (ceBody.button != null && !['left', 'right', 'middle'].includes(String(ceBody.button))) {
@@ -1210,7 +1210,7 @@ export async function handleDesktopRoute(
             'type_into_element',
             body,
             `请求参数缺失：type-into-element 需要 name 字段（目标元素名）。` +
-            `本次输入未执行。请改用 tabtin desktop type-into-element --name "<名称>" "<文本>" 重新调用。`,
+            `本次输入未执行。请改用 muse desktop type-into-element --name "<名称>" "<文本>" 重新调用。`,
           )
         }
         if (teBody.text == null) {
@@ -1221,7 +1221,7 @@ export async function handleDesktopRoute(
             'type_into_element',
             body,
             `请求参数缺失：type-into-element 需要 text 字段（要输入的文本）。` +
-            `本次输入未执行。请改用 tabtin desktop type-into-element --name "<名称>" "<文本>" 重新调用。`,
+            `本次输入未执行。请改用 muse desktop type-into-element --name "<名称>" "<文本>" 重新调用。`,
           )
         }
         const teResult = await executor.typeIntoElement({
@@ -1239,7 +1239,7 @@ export async function handleDesktopRoute(
         const code = DesktopErrorCode.UNKNOWN_ROUTE
         sendJSON(res, statusFromErrorCode(code), desktopErrorPayload(
           code,
-          `未知的桌面操控路由：${url}。本次请求未执行。请检查 CLI 命令拼写或参考 tabtin desktop --help 列出全部已支持子命令。`,
+          `未知的桌面操控路由：${url}。本次请求未执行。请检查 CLI 命令拼写或参考 muse desktop --help 列出全部已支持子命令。`,
         ))
         return
       }
@@ -1294,7 +1294,7 @@ export async function handleDesktopRoute(
         code,
         message,
         code === DesktopErrorCode.TCC_DENIED
-          ? { suggestions: ['在 macOS 系统设置 → 隐私与安全 → 辅助功能 中启用 TabTin'] }
+          ? { suggestions: ['在 macOS 系统设置 → 隐私与安全 → 辅助功能 中启用 Muse'] }
           : undefined,
       ),
     )

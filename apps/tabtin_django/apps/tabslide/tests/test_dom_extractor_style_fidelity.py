@@ -106,10 +106,10 @@ class TextEnrichFidelityTests(TestCase):
         self.assertEqual(_apply_plain_text_transform("ab", "capitalize"), "Ab")
 
     def test_whitespace_collapsed(self):
-        dirty = "<p>\n    TabTin Team\n  </p>"
+        dirty = "<p>\n    Muse Team\n  </p>"
         clean = _normalize_extracted_html_whitespace(dirty)
         self.assertNotIn("\n", clean)
-        self.assertIn("TabTin Team", clean)
+        self.assertIn("Muse Team", clean)
 
 
 class CanvasSchemeATests(TestCase):
@@ -265,7 +265,7 @@ class SiblingTitleLayoutCollisionTests(TestCase):
                 "y": 680,
                 "width": 200,
                 "height": 20,
-                "content": "<p>TabTin 团队版</p>",
+                "content": "<p>Muse 团队版</p>",
                 "defaultFontSize": 12,
                 "defaultColor": "#FFFFFF",
                 "opacity": 1,
@@ -292,19 +292,19 @@ class SiblingTitleLayoutCollisionTests(TestCase):
         layouts = [
             {
                 "x": 80, "y": 680, "width": 200, "height": 20,
-                "runs": [{"text": "TabTin 团队版"}],
+                "runs": [{"text": "Muse 团队版"}],
             },
             # 故意偏移 x，模拟测量误差；仍应匹配左侧，不得盖右侧年份
             {
                 "x": 82, "y": 680, "width": 200, "height": 20,
-                "runs": [{"text": "TabTin 团队版"}],
+                "runs": [{"text": "Muse 团队版"}],
             },
         ]
         out = _postprocess_slide_elements(els, text_layout_data=layouts)
         by_id = {e["id"]: e for e in out}
         self.assertIn("2025", by_id["right"]["content"])
         self.assertNotIn("团队版", by_id["right"]["content"])
-        self.assertIn("TabTin 团队版", by_id["left"]["content"])
+        self.assertIn("Muse 团队版", by_id["left"]["content"])
 
     def test_enrich_skips_mismatched_layout_text(self):
         el = {

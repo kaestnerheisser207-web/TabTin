@@ -17,7 +17,7 @@ describe('WebSearchCard', () => {
   it('collapses search results by default and expands from the header', () => {
     const { container } = render(
       <WebSearchCard
-        query="tabtin docs"
+        query="muse docs"
         results={[
           {
             title: 'TabTin manual',
@@ -29,7 +29,7 @@ describe('WebSearchCard', () => {
     )
 
     const header = screen.getByRole('button', { expanded: false })
-    expect(screen.getByText('tabtin docs')).toBeTruthy()
+    expect(screen.getByText('muse docs')).toBeTruthy()
     expect(screen.getByText('1 results')).toBeTruthy()
     expect(container.textContent).not.toContain('TabTin manual')
     expect(screen.queryByText('A short result snippet')).toBeNull()

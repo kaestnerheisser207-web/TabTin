@@ -200,7 +200,7 @@ class WeixinPersonalAdapter(ChannelAdapter):
         - 当前行为：直接传递原始 CDN URL 到 ChannelInboundMessage.media
         - 限制：Agent 无法直接访问这些 URL（下载后需用 per-item aes_key 解密）
         - 后续计划：通过异步 Celery task 实现 下载 → AES 解密 → 上传到
-          TabTin OSS，将 media.url 替换为可直接访问的 OSS URL
+          Muse OSS，将 media.url 替换为可直接访问的 OSS URL
         """
         msg_type = raw_msg.get("message_type", 0)
         if msg_type == 2:  # Bot's own message

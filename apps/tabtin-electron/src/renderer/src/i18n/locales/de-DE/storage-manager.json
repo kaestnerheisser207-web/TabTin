@@ -1,8 +1,8 @@
 {
   "panel": {
     "title": "Lagerung",
-    "subtitle": "Was TabTin auf Ihrem Computer speichert.",
-    "totalLine": "TabTin verwendet {{size}} auf diesem Mac",
+    "subtitle": "Was Muse auf Ihrem Computer speichert.",
+    "totalLine": "Muse verwendet {{size}} auf diesem Mac",
     "totalLineLoading": "Speicher messen…",
     "refresh": "Neu berechnen",
     "refreshHint": "Messen Sie alle Datengrößen erneut",
@@ -23,7 +23,7 @@
     },
     "critical": {
       "label": "Zeit zum Putzen",
-      "tagline": "TabTin nimmt viel Platz ein. Zeit, einige ungenutzte Daten zu löschen."
+      "tagline": "Muse nimmt viel Platz ein. Zeit, einige ungenutzte Daten zu löschen."
     }
   },
   "metrics": {
@@ -46,7 +46,7 @@
   },
   "topItems": {
     "loading": "Messung Ihrer Arbeitsplatzdaten…",
-    "empty": "Noch keine Daten. Kommen Sie zurück, nachdem Sie TabTin eine Weile verwendet haben.",
+    "empty": "Noch keine Daten. Kommen Sie zurück, nachdem Sie Muse eine Weile verwendet haben.",
     "itemCount": "{{count}} Artikel",
     "showAll": "Andere {{count}}-Artikel anzeigen",
     "collapseAll": "Zusammenbruch",
@@ -133,11 +133,11 @@
     },
     "browser:bookmarks": {
       "title": "Browser-Lesezeichen",
-      "description": "Lesezeichen, die Sie im eingebetteten Browser von TabTin gespeichert haben"
+      "description": "Lesezeichen, die Sie im eingebetteten Browser von Muse gespeichert haben"
     },
     "browser:browsing-history": {
       "title": "Browserverlauf",
-      "description": "Seiten, die Sie im eingebetteten Browser von TabTin besucht haben"
+      "description": "Seiten, die Sie im eingebetteten Browser von Muse besucht haben"
     },
     "tin:sandboxes": {
       "title": "Sandbox-App-Daten",
@@ -165,7 +165,7 @@
     },
     "download:user-downloads": {
       "title": "Verlauf herunterladen",
-      "description": "Verlauf der durch TabTin ausgelösten Downloads (nur Aufzeichnungen)"
+      "description": "Verlauf der durch Muse ausgelösten Downloads (nur Aufzeichnungen)"
     },
     "download:agent-sandbox-downloads": {
       "title": "Downloads von Agent-Tools",

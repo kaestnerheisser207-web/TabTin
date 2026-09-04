@@ -56,7 +56,7 @@ export function bootstrapTabDocProbe(): void {
       const docId = String((args?.docId ?? args?.documentId) ?? '').trim()
       const spaceId = String(args?.spaceId ?? '').trim()
       if (!docId) throw new Error('tabdoc.open 需要 docId（或 documentId）')
-      if (!spaceId) throw new Error('tabdoc.open 需要 spaceId（可由 tabtin doc / space 元数据获取）')
+      if (!spaceId) throw new Error('tabdoc.open 需要 spaceId（可由 muse doc / space 元数据获取）')
       await ensureSpaceSelectedOrThrow(spaceId)
       openResourceTabGuarded(resolveForegroundTabScopeKey(spaceId), {
         type: 'tabdoc',

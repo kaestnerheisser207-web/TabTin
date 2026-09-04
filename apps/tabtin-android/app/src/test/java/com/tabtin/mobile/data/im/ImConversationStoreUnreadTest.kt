@@ -1,7 +1,7 @@
 package com.tabtin.mobile.data.im
 
 import android.app.Application
-import com.tabtin.mobile.R
+import com.muse.mobile.R
 import com.tabtin.mobile.data.api.TokenRefreshCoordinator
 import com.tabtin.mobile.diagnostics.DiagnosticRecorder
 import com.tabtin.mobile.util.TokenManager

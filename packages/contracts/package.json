@@ -1,7 +1,7 @@
 {
   "name": "@tabtin/contracts",
   "version": "0.1.0",
-  "description": "TabTin SDK 统一类型契约 — 跨 SDK 边界共享的类型和 Schema",
+  "description": "Muse SDK 统一类型契约 — 跨 SDK 边界共享的类型和 Schema",
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -77,11 +77,11 @@
     "typescript": "5.7.2"
   },
   "keywords": [
-    "tabtin",
+    "muse",
     "contracts",
     "sdk",
     "types"
   ],
-  "author": "TabTin Team",
+  "author": "Muse Team",
   "license": "MIT"
 }

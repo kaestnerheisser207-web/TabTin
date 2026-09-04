@@ -1,5 +1,5 @@
 """
-Tabtin Space 基础服务类
+Muse Space 基础服务类
 
 提供通用方法和 Organization/Space 权限检查
 """
@@ -111,7 +111,7 @@ def validate_space_ownership_response(
 
 class BaseService:
     """
-    Tabtin Space 基础服务类
+    Muse Space 基础服务类
     """
 
     def __init__(self, user: Optional[User] = None):

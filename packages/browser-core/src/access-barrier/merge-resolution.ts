@@ -16,7 +16,7 @@ import type { AccessBarrier, AccessBarrierResolution } from './types.js'
 const ACCESS_BARRIER_LOGIN_REQUIRED_HINT =
   '检测到登录墙：立即停下并把选择权交给用户，不要静默改用其他来源，更不能拿别处内容冒充本站结果。'
   + '用 ask_user 卡片向用户说明此页需要登录，并让其二选一：'
-  + '① 在 TabTin 浏览器当前标签页手动完成登录（手机号验证码 / 扫码 / OAuth 等），登录后复用同一 --tab-id 继续在本站获取；'
+  + '① 在 Muse 浏览器当前标签页手动完成登录（手机号验证码 / 扫码 / OAuth 等），登录后复用同一 --tab-id 继续在本站获取；'
   + '② 明确同意后改从其他公开来源获取（须诚实标注真实来源、不得标为本站结果）。'
   + '不要代填账号 / 密码 / 验证码，不要改用 print --url（会丢登录态）。'
 

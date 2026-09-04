@@ -50,7 +50,7 @@ import com.tabtin.mobile.ui.components.TTBottomSheet
 import com.tabtin.mobile.ui.components.TTSheetColumn
 import com.tabtin.mobile.ui.components.rememberTTSheetState
 import androidx.compose.ui.unit.dp
-import com.tabtin.mobile.R
+import com.muse.mobile.R
 import com.tabtin.mobile.data.model.SkillReadiness
 import com.tabtin.mobile.data.model.SpaceSkill
 import com.tabtin.mobile.ui.theme.TTSpacing

@@ -42,7 +42,7 @@
 ```markdown
 已生成 <周期>工作总结：
 
-- 文档：<tabtin resource link or 草稿>
+- 文档：<muse resource link or 草稿>
 - 素材来源：<coverage>
 - 未覆盖：<missing inputs>
 - 待确认：<questions>

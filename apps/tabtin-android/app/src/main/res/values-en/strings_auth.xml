@@ -3,7 +3,7 @@
     <string name="auth_slogan">AI Creative Workspace</string>
     <string name="auth_hero_title">Put agents\nto real work</string>
     <string name="auth_hero_subtitle">Every step stays visible.</string>
-    <string name="auth_login_title">Log in to TabTin</string>
+    <string name="auth_login_title">Log in to Muse</string>
     <string name="auth_mode_code">Verification code</string>
     <string name="auth_mode_password">Password</string>
     <string name="auth_phone_label">Account</string>

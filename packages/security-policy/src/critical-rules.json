@@ -90,7 +90,7 @@
       "category": "file-write",
       "preSplitOnly": false,
       "description": "Shell redirect write to file",
-      "note": "May conflict with legitimate tabtin CLI pipe redirects — consider whitelisting tabtin prefix"
+      "note": "May conflict with legitimate muse CLI pipe redirects — consider whitelisting muse prefix"
     },
     {
       "name": "export-env-injection",

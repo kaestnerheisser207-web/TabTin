@@ -80,7 +80,7 @@ export const TabDocCapabilitiesDialog: React.FC<TabDocCapabilitiesDialogProps> =
           title="TabDoc 文档能力总览"
           description={(
             <>
-            与 <code className="text-caption">tabtin doc</code> CLI 一一对应，共 {tabDocCapabilitiesManifest.commands.length} 条能力。
+            与 <code className="text-caption">muse doc</code> CLI 一一对应，共 {tabDocCapabilitiesManifest.commands.length} 条能力。
             </>
           )}
         >

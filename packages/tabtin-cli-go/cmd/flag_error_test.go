@@ -14,14 +14,14 @@ import (
 )
 
 func TestBuildFlagErrorHintUnknownFlag(t *testing.T) {
-	root := &cobra.Command{Use: "tabtin"}
+	root := &cobra.Command{Use: "muse"}
 	doc := &cobra.Command{Use: "doc"}
 	read := &cobra.Command{Use: "read <document-id>"}
 	root.AddCommand(doc)
 	doc.AddCommand(read)
 
 	hint := buildFlagErrorHint(read, errUnknownFlag("--id"))
-	if !strings.Contains(hint, "tabtin doc read --help") {
+	if !strings.Contains(hint, "muse doc read --help") {
 		t.Fatalf("hint = %q, want help path", hint)
 	}
 	if !strings.Contains(hint, "位置参数") {
@@ -30,7 +30,7 @@ func TestBuildFlagErrorHintUnknownFlag(t *testing.T) {
 }
 
 func TestBuildFlagErrorHintTabKey(t *testing.T) {
-	root := &cobra.Command{Use: "tabtin"}
+	root := &cobra.Command{Use: "muse"}
 	browser := &cobra.Command{Use: "browser"}
 	snapshot := &cobra.Command{Use: "snapshot"}
 	root.AddCommand(browser)
@@ -43,7 +43,7 @@ func TestBuildFlagErrorHintTabKey(t *testing.T) {
 }
 
 func TestBuildFlagErrorHintDocUpdateContent(t *testing.T) {
-	root := &cobra.Command{Use: "tabtin"}
+	root := &cobra.Command{Use: "muse"}
 	doc := &cobra.Command{Use: "doc"}
 	update := &cobra.Command{Use: "update [document-id]"}
 	root.AddCommand(doc)
@@ -53,9 +53,9 @@ func TestBuildFlagErrorHintDocUpdateContent(t *testing.T) {
 		t.Run(badFlag, func(t *testing.T) {
 			hint := buildFlagErrorHint(update, errUnknownFlag(badFlag))
 			for _, want := range []string{
-				"tabtin doc update --help",
+				"muse doc update --help",
 				"只改标题/状态/标签等元数据",
-				"tabtin doc save-content <id> --markdown @/path/file.md --format json",
+				"muse doc save-content <id> --markdown @/path/file.md --format json",
 				"文件路径前需要 @",
 				"`--format` 是输出格式",
 			} {
@@ -69,7 +69,7 @@ func TestBuildFlagErrorHintDocUpdateContent(t *testing.T) {
 
 func TestBuildFlagErrorHintBrowserMisguesses(t *testing.T) {
 	// ：browser 域高频误猜 flag，hint 必须直接给出正确用法
-	root := &cobra.Command{Use: "tabtin"}
+	root := &cobra.Command{Use: "muse"}
 	browser := &cobra.Command{Use: "browser"}
 	root.AddCommand(browser)
 	subcommands := map[string]*cobra.Command{}
@@ -84,7 +84,7 @@ func TestBuildFlagErrorHintBrowserMisguesses(t *testing.T) {
 		badFlag string
 		want    string
 	}{
-		{"nav", "--url", "tabtin browser open --url"},
+		{"nav", "--url", "muse browser open --url"},
 		{"eval", "--script", "--expression"},
 		{"eval", "--code", "--expression"},
 		{"wait", "--until", "--selector"},
@@ -109,14 +109,14 @@ func TestParseUnknownFlagName(t *testing.T) {
 
 func TestFlagErrorHandlerEmitsEnvelope(t *testing.T) {
 	root := &cobra.Command{
-		Use:           "tabtin",
+		Use:           "muse",
 		SilenceErrors: true,
 		SilenceUsage:  true,
 	}
 	cmd := &cobra.Command{
 		Use:     "demo",
 		Short:   "演示命令",
-		Example: "  tabtin demo --name Alice",
+		Example: "  muse demo --name Alice",
 		RunE:    func(cmd *cobra.Command, args []string) error { return nil },
 	}
 	cmd.Flags().String("name", "", "姓名")
@@ -134,17 +134,17 @@ func TestFlagErrorHandlerEmitsEnvelope(t *testing.T) {
 	if !strings.Contains(stderr, "VALIDATION_ERROR") {
 		t.Fatalf("stderr = %q, want VALIDATION_ERROR code", stderr)
 	}
-	if !strings.Contains(stderr, "tabtin demo --help") {
+	if !strings.Contains(stderr, "muse demo --help") {
 		t.Fatalf("stderr = %q, want help hint", stderr)
 	}
 
 	env := parseValidationEnvelope(t, stderr)
 	for _, want := range []string{
 		"Usage:",
-		"tabtin demo [flags]",
+		"muse demo [flags]",
 		"Flags:",
 		"--name string",
-		"tabtin demo --name Alice",
+		"muse demo --name Alice",
 	} {
 		if !strings.Contains(env.Error.Detail.Help, want) {
 			t.Fatalf("help detail = %q, want %q", env.Error.Detail.Help, want)
@@ -154,7 +154,7 @@ func TestFlagErrorHandlerEmitsEnvelope(t *testing.T) {
 
 func TestArgsUsageErrorHandlerEmitsHelpDetail(t *testing.T) {
 	root := &cobra.Command{
-		Use:           "tabtin",
+		Use:           "muse",
 		SilenceErrors: true,
 		SilenceUsage:  true,
 	}
@@ -175,14 +175,14 @@ func TestArgsUsageErrorHandlerEmitsHelpDetail(t *testing.T) {
 	if !strings.Contains(env.Error.Message, "accepts 1 arg") {
 		t.Fatalf("message = %q, want cobra args error", env.Error.Message)
 	}
-	if !strings.Contains(env.Error.Detail.Help, "tabtin read <document-id> [flags]") {
+	if !strings.Contains(env.Error.Detail.Help, "muse read <document-id> [flags]") {
 		t.Fatalf("help detail = %q, want read command help", env.Error.Detail.Help)
 	}
 }
 
 func TestRegisterFlagErrorHandlerCanCoverLateCommands(t *testing.T) {
 	root := &cobra.Command{
-		Use:           "tabtin",
+		Use:           "muse",
 		SilenceErrors: true,
 		SilenceUsage:  true,
 	}
@@ -203,17 +203,17 @@ func TestRegisterFlagErrorHandlerCanCoverLateCommands(t *testing.T) {
 	})
 
 	env := parseValidationEnvelope(t, stderr)
-	if !strings.Contains(env.Error.Hint, "tabtin extension-cmd --help") {
+	if !strings.Contains(env.Error.Hint, "muse extension-cmd --help") {
 		t.Fatalf("hint = %q, want late command help path", env.Error.Hint)
 	}
-	if !strings.Contains(env.Error.Detail.Help, "tabtin extension-cmd [flags]") {
+	if !strings.Contains(env.Error.Detail.Help, "muse extension-cmd [flags]") {
 		t.Fatalf("help detail = %q, want late command help", env.Error.Detail.Help)
 	}
 }
 
 func TestRootFallbackEmitsHelpForRequiredFlagError(t *testing.T) {
 	root := &cobra.Command{
-		Use:           "tabtin",
+		Use:           "muse",
 		SilenceErrors: true,
 		SilenceUsage:  true,
 	}
@@ -241,14 +241,14 @@ func TestRootFallbackEmitsHelpForRequiredFlagError(t *testing.T) {
 	if !strings.Contains(env.Error.Message, "required flag") {
 		t.Fatalf("message = %q, want required flag error", env.Error.Message)
 	}
-	if !strings.Contains(env.Error.Detail.Help, "tabtin publish [flags]") {
+	if !strings.Contains(env.Error.Detail.Help, "muse publish [flags]") {
 		t.Fatalf("help detail = %q, want publish command help", env.Error.Detail.Help)
 	}
 }
 
 func TestRootFallbackDoesNotTreatBusinessErrorAsUsageError(t *testing.T) {
 	root := &cobra.Command{
-		Use:           "tabtin",
+		Use:           "muse",
 		SilenceErrors: true,
 		SilenceUsage:  true,
 	}

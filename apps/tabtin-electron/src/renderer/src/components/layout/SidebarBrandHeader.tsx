@@ -19,7 +19,7 @@ function getDevInstanceIdFromUrl(): string | undefined {
  */
 export const SidebarBrandHeader: React.FC<SidebarBrandHeaderProps> = ({ className, devInstanceId }) => {
   const instanceId = devInstanceId ?? getDevInstanceIdFromUrl()
-  const productName = instanceId ? `TabTin · IM 测试端 ${instanceId}` : 'TabTin · 主端'
+  const productName = instanceId ? `Muse · IM 测试端 ${instanceId}` : 'Muse · 主端'
 
   return (
     <div className={cn('flex min-w-0 items-center gap-2.5', className)}>

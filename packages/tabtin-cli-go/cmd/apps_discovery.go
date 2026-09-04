@@ -7,10 +7,10 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/TabTin/tabtin-cli/internal/cmdutil"
-	"github.com/TabTin/tabtin-cli/internal/errcode"
-	"github.com/TabTin/tabtin-cli/internal/output"
-	"github.com/TabTin/tabtin-cli/internal/transport"
+	"github.com/Muse/muse-cli/internal/cmdutil"
+	"github.com/Muse/muse-cli/internal/errcode"
+	"github.com/Muse/muse-cli/internal/output"
+	"github.com/Muse/muse-cli/internal/transport"
 )
 
 // ─── Skill ───────────────────────────────────────────────────────
@@ -18,19 +18,19 @@ import (
 func newCmdSkill(f *cmdutil.Factory) *cobra.Command {
 	cmd := &cobra.Command{Use: "skill", Short: "Skill 市场与管理"}
 	defs := []cmdutil.CommandDef{
-		{Use: "list", Short: "已安装 Skill（注册表）", Example: "  tabtin skill list\n  tabtin skill list --category data --include-disabled", Route: cmdutil.RouteCliServer, Method: "GET", Path: "/skills/registry",
+		{Use: "list", Short: "已安装 Skill（注册表）", Example: "  muse skill list\n  muse skill list --category data --include-disabled", Route: cmdutil.RouteCliServer, Method: "GET", Path: "/skills/registry",
 			Flags: []cmdutil.FlagDef{
 				{Name: "include-disabled", Type: cmdutil.FlagBool, Desc: "包含已禁用的 Skill"},
 				{Name: "category", Short: "c", Type: cmdutil.FlagString, Desc: "按分类过滤"},
 			}, HasFormat: true},
-		{Use: "market", Short: "Skill 市场", Example: "  tabtin skill market", Route: cmdutil.RouteCliServer, Method: "GET", Path: "/skills/market", HasFormat: true},
+		{Use: "market", Short: "Skill 市场", Example: "  muse skill market", Route: cmdutil.RouteCliServer, Method: "GET", Path: "/skills/market", HasFormat: true},
 		// Wave 1：managed 端点已下线；改指 visible（当前 Space 可见技能，含启用态）。
-		{Use: "managed", Short: "当前 Space 可见 Skill（原托管列表，已对齐 Wave 1 visible）", Example: "  tabtin skill managed", Route: cmdutil.RouteCliServer, Method: "GET", Path: "/skills/visible", HasFormat: true},
-		{Use: "search <query>", Short: "搜索 Skill", Example: "  tabtin skill search data-analysis", Route: cmdutil.RouteCliServer, Method: "GET", Path: "/skills/market",
+		{Use: "managed", Short: "当前 Space 可见 Skill（原托管列表，已对齐 Wave 1 visible）", Example: "  muse skill managed", Route: cmdutil.RouteCliServer, Method: "GET", Path: "/skills/visible", HasFormat: true},
+		{Use: "search <query>", Short: "搜索 Skill", Example: "  muse skill search data-analysis", Route: cmdutil.RouteCliServer, Method: "GET", Path: "/skills/market",
 			ArgsMapping: []string{"q"}, HasFormat: true},
 		// Wave 1：安装 = enable + 设备端物化。install 是 enable 的别名。
 		// ：npm:<pkg> 走 /skills/install-npm（npx skills add → ~/.agents/skills）。
-		{Use: "install [key]", Short: "安装并启用 Skill；npm:<pkg> / --from-npm 则装到本机 ~/.agents/skills", Example: "  tabtin skill install user:web-search\n  tabtin skill install app:tabtin-office-skills-pack/meeting-notes-to-actions\n  tabtin skill install npm:@scope/foo\n  tabtin skill install --from-npm @scope/foo --import-to-space", Route: cmdutil.RouteCliServer, Method: "POST", Path: "/skills/{skill_key}/enable",
+		{Use: "install [key]", Short: "安装并启用 Skill；npm:<pkg> / --from-npm 则装到本机 ~/.agents/skills", Example: "  muse skill install user:web-search\n  muse skill install app:tabtin-office-skills-pack/meeting-notes-to-actions\n  muse skill install npm:@scope/foo\n  muse skill install --from-npm @scope/foo --import-to-space", Route: cmdutil.RouteCliServer, Method: "POST", Path: "/skills/{skill_key}/enable",
 			ArgsMapping: []string{"skill_key"},
 			Flags: []cmdutil.FlagDef{
 				{Name: "import-to-space", Type: cmdutil.FlagBool, Desc: "仅 npm: 安装：装完后导入到当前 Space（变成「我的」）"},
@@ -40,7 +40,7 @@ func newCmdSkill(f *cmdutil.Factory) *cobra.Command {
 			Validate: validateSkillInstall,
 			RunFunc:  skillInstallFunc(f)},
 		// ：本地路径 / zip / HTTPS → POST /skills/import
-		{Use: "import <source>", Short: "从本地目录/SKILL.md/zip 或 HTTPS URL 导入到当前 Space", Example: "  tabtin skill import ./my-skill\n  tabtin skill import ./pack.zip\n  tabtin skill import https://example.com/skill.zip\n  tabtin skill import ./my-skill --no-enable", Route: cmdutil.RouteCliServer, Method: "POST", Path: "/skills/import",
+		{Use: "import <source>", Short: "从本地目录/SKILL.md/zip 或 HTTPS URL 导入到当前 Space", Example: "  muse skill import ./my-skill\n  muse skill import ./pack.zip\n  muse skill import https://example.com/skill.zip\n  muse skill import ./my-skill --no-enable", Route: cmdutil.RouteCliServer, Method: "POST", Path: "/skills/import",
 			ArgsMapping: []string{"source"},
 			Flags: []cmdutil.FlagDef{
 				{Name: "name", Type: cmdutil.FlagString, Desc: "导入后的展示名（默认取目录名）"},
@@ -50,15 +50,15 @@ func newCmdSkill(f *cmdutil.Factory) *cobra.Command {
 			Validate: validateSkillImport,
 			RunFunc:  skillImportFunc(f)},
 		// 卸载 = disable + remove=true（删 enablement 行；设备端清理本地文件）。
-		{Use: "remove <key>", Short: "卸载 Skill（Wave 1：disable + remove）", Example: "  tabtin skill remove user:web-search", Route: cmdutil.RouteCliServer, Method: "POST", Path: "/skills/{skill_key}/disable",
+		{Use: "remove <key>", Short: "卸载 Skill（Wave 1：disable + remove）", Example: "  muse skill remove user:web-search", Route: cmdutil.RouteCliServer, Method: "POST", Path: "/skills/{skill_key}/disable",
 			ArgsMapping: []string{"skill_key"}, FixedFields: map[string]any{"remove": true}, HasFormat: true, RequiresAgent: true, Risk: cmdutil.RiskWrite},
-		{Use: "update <key>", Short: "更新 Skill 到最新已发布版本", Example: "  tabtin skill update user:web-search", Route: cmdutil.RouteCliServer, Method: "POST", Path: "/skills/{skill_key}/enable",
+		{Use: "update <key>", Short: "更新 Skill 到最新已发布版本", Example: "  muse skill update user:web-search", Route: cmdutil.RouteCliServer, Method: "POST", Path: "/skills/{skill_key}/enable",
 			ArgsMapping: []string{"skill_key"}, HasFormat: true, RequiresAgent: true, Risk: cmdutil.RiskWrite},
-		{Use: "info <key>", Short: "Skill 包元数据", Example: "  tabtin skill info user:web-search", Route: cmdutil.RouteCliServer, Method: "GET", Path: "/skills/{skill_key}/package",
+		{Use: "info <key>", Short: "Skill 包元数据", Example: "  muse skill info user:web-search", Route: cmdutil.RouteCliServer, Method: "GET", Path: "/skills/{skill_key}/package",
 			ArgsMapping: []string{"skill_key"}, HasFormat: true},
-		{Use: "enable <key>", Short: "启用 Skill", Example: "  tabtin skill enable user:web-search\n  tabtin skill enable app:tabtin-office-skills-pack/meeting-notes-to-actions", Route: cmdutil.RouteCliServer, Method: "POST", Path: "/skills/{skill_key}/enable",
+		{Use: "enable <key>", Short: "启用 Skill", Example: "  muse skill enable user:web-search\n  muse skill enable app:tabtin-office-skills-pack/meeting-notes-to-actions", Route: cmdutil.RouteCliServer, Method: "POST", Path: "/skills/{skill_key}/enable",
 			ArgsMapping: []string{"skill_key"}, HasFormat: true, RequiresAgent: true, Risk: cmdutil.RiskWrite},
-		{Use: "disable <key>", Short: "禁用 Skill（保留安装记录）", Example: "  tabtin skill disable user:web-search", Route: cmdutil.RouteCliServer, Method: "POST", Path: "/skills/{skill_key}/disable",
+		{Use: "disable <key>", Short: "禁用 Skill（保留安装记录）", Example: "  muse skill disable user:web-search", Route: cmdutil.RouteCliServer, Method: "POST", Path: "/skills/{skill_key}/disable",
 			ArgsMapping: []string{"skill_key"}, HasFormat: true, RequiresAgent: true, Risk: cmdutil.RiskWrite},
 	}
 	for _, def := range defs {
@@ -92,7 +92,7 @@ func validateSkillInstall(ctx *cmdutil.RunContext) error {
 		return output.PrintErrorAndExit(output.ErrorEnvelope(
 			string(errcode.ValidationError),
 			"请提供 Skill canonical key，或 npm:<pkg> / --from-npm <pkg>",
-			"用法: tabtin skill install user:web-search | tabtin skill install npm:@scope/foo",
+			"用法: muse skill install user:web-search | muse skill install npm:@scope/foo",
 			output.ExitValidation,
 		))
 	}
@@ -100,7 +100,7 @@ func validateSkillInstall(ctx *cmdutil.RunContext) error {
 		return output.PrintErrorAndExit(output.ErrorEnvelope(
 			string(errcode.ValidationError),
 			"--import-to-space 需要当前 Space 上下文（--space-id 或 Agent 会话）",
-			"tabtin skill install npm:@scope/foo --import-to-space --space-id <id>",
+			"muse skill install npm:@scope/foo --import-to-space --space-id <id>",
 			output.ExitValidation,
 		))
 	}
@@ -161,7 +161,7 @@ func validateSkillImport(ctx *cmdutil.RunContext) error {
 		return output.PrintErrorAndExit(output.ErrorEnvelope(
 			string(errcode.ValidationError),
 			"请提供本地路径、zip 或 HTTPS URL",
-			"用法: tabtin skill import ./my-skill | tabtin skill import https://example.com/skill.zip",
+			"用法: muse skill import ./my-skill | muse skill import https://example.com/skill.zip",
 			output.ExitValidation,
 		))
 	}
@@ -169,7 +169,7 @@ func validateSkillImport(ctx *cmdutil.RunContext) error {
 		return output.PrintErrorAndExit(output.ErrorEnvelope(
 			string(errcode.ValidationError),
 			"导入需要当前 Space 上下文（--space-id 或 Agent 会话）",
-			"tabtin skill import ./my-skill --space-id <id>",
+			"muse skill import ./my-skill --space-id <id>",
 			output.ExitValidation,
 		))
 	}
@@ -221,11 +221,11 @@ func skillImportFunc(f *cmdutil.Factory) func(ctx *cmdutil.RunContext) error {
 func newCmdCapabilities(f *cmdutil.Factory) *cobra.Command {
 	cmd := &cobra.Command{Use: "capabilities", Short: "能力发现"}
 	defs := []cmdutil.CommandDef{
-		{Use: "list", Short: "所有可用工具", Example: "  tabtin capabilities list", Route: cmdutil.RouteCliServer, Method: "GET", Path: "/capabilities/tools", HasFormat: true},
-		{Use: "show <name>", Short: "工具详情", Example: "  tabtin capabilities show code_read", Route: cmdutil.RouteCliServer, Method: "GET", Path: "/capabilities/tools/{name}", HasFormat: true, ArgsMapping: []string{"name"}},
-		{Use: "categories", Short: "分类", Example: "  tabtin capabilities categories", Route: cmdutil.RouteCliServer, Method: "GET", Path: "/capabilities/categories", HasFormat: true},
-		{Use: "providers", Short: "提供者", Example: "  tabtin capabilities providers", Route: cmdutil.RouteCliServer, Method: "GET", Path: "/capabilities/providers", HasFormat: true},
-		{Use: "discover <query>", Short: "语义发现：按自然语言描述找能做某件事的工具 / 能力", Example: "  tabtin capabilities discover \"how to read files\"", Route: cmdutil.RouteCliServer, Method: "POST", Path: "/capabilities/discover", HasFormat: true, ArgsMapping: []string{"query"}},
+		{Use: "list", Short: "所有可用工具", Example: "  muse capabilities list", Route: cmdutil.RouteCliServer, Method: "GET", Path: "/capabilities/tools", HasFormat: true},
+		{Use: "show <name>", Short: "工具详情", Example: "  muse capabilities show code_read", Route: cmdutil.RouteCliServer, Method: "GET", Path: "/capabilities/tools/{name}", HasFormat: true, ArgsMapping: []string{"name"}},
+		{Use: "categories", Short: "分类", Example: "  muse capabilities categories", Route: cmdutil.RouteCliServer, Method: "GET", Path: "/capabilities/categories", HasFormat: true},
+		{Use: "providers", Short: "提供者", Example: "  muse capabilities providers", Route: cmdutil.RouteCliServer, Method: "GET", Path: "/capabilities/providers", HasFormat: true},
+		{Use: "discover <query>", Short: "语义发现：按自然语言描述找能做某件事的工具 / 能力", Example: "  muse capabilities discover \"how to read files\"", Route: cmdutil.RouteCliServer, Method: "POST", Path: "/capabilities/discover", HasFormat: true, ArgsMapping: []string{"query"}},
 	}
 	for _, def := range defs {
 		cmdutil.RegisterCommand(cmd, f, def)
@@ -238,9 +238,9 @@ func newCmdCapabilities(f *cmdutil.Factory) *cobra.Command {
 func newCmdTask(f *cmdutil.Factory) *cobra.Command {
 	cmd := &cobra.Command{Use: "task", Short: "异步任务管理"}
 	defs := []cmdutil.CommandDef{
-		{Use: "list", Short: "任务列表", Example: "  tabtin task list", Route: cmdutil.RouteCliServer, Method: "GET", Path: "/media/tasks", HasFormat: true},
-		{Use: "status <id>", Short: "任务状态", Example: "  tabtin task status task_xxx", Route: cmdutil.RouteCliServer, Method: "GET", Path: "/media/tasks/{id}", HasFormat: true, ArgsMapping: []string{"id"}},
-		{Use: "cancel <id>", Short: "取消任务", Example: "  tabtin task cancel task_xxx", Route: cmdutil.RouteCliServer, Method: "POST", Path: "/media/tasks/{id}/cancel", Risk: cmdutil.RiskWrite, RiskDeclared: true, HasFormat: true, ArgsMapping: []string{"id"}},
+		{Use: "list", Short: "任务列表", Example: "  muse task list", Route: cmdutil.RouteCliServer, Method: "GET", Path: "/media/tasks", HasFormat: true},
+		{Use: "status <id>", Short: "任务状态", Example: "  muse task status task_xxx", Route: cmdutil.RouteCliServer, Method: "GET", Path: "/media/tasks/{id}", HasFormat: true, ArgsMapping: []string{"id"}},
+		{Use: "cancel <id>", Short: "取消任务", Example: "  muse task cancel task_xxx", Route: cmdutil.RouteCliServer, Method: "POST", Path: "/media/tasks/{id}/cancel", Risk: cmdutil.RiskWrite, RiskDeclared: true, HasFormat: true, ArgsMapping: []string{"id"}},
 	}
 	for _, def := range defs {
 		cmdutil.RegisterCommand(cmd, f, def)
@@ -253,9 +253,9 @@ func newCmdTask(f *cmdutil.Factory) *cobra.Command {
 func newCmdDevice(f *cmdutil.Factory) *cobra.Command {
 	cmd := &cobra.Command{Use: "device", Short: "设备管理"}
 	defs := []cmdutil.CommandDef{
-		{Use: "info", Short: "设备信息（手机 / 电脑的电量、网络等状态）", Example: "  tabtin device info", Route: cmdutil.RouteCliServer, Method: "POST", Path: "/device/info", HasFormat: true},
-		{Use: "battery", Short: "电池状态", Example: "  tabtin device battery", Route: cmdutil.RouteCliServer, Method: "POST", Path: "/device/battery", HasFormat: true},
-		{Use: "network", Short: "网络状态", Example: "  tabtin device network", Route: cmdutil.RouteCliServer, Method: "POST", Path: "/device/network", HasFormat: true},
+		{Use: "info", Short: "设备信息（手机 / 电脑的电量、网络等状态）", Example: "  muse device info", Route: cmdutil.RouteCliServer, Method: "POST", Path: "/device/info", HasFormat: true},
+		{Use: "battery", Short: "电池状态", Example: "  muse device battery", Route: cmdutil.RouteCliServer, Method: "POST", Path: "/device/battery", HasFormat: true},
+		{Use: "network", Short: "网络状态", Example: "  muse device network", Route: cmdutil.RouteCliServer, Method: "POST", Path: "/device/network", HasFormat: true},
 	}
 	for _, def := range defs {
 		cmdutil.RegisterCommand(cmd, f, def)

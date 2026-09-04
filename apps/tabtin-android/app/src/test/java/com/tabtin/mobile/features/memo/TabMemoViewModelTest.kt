@@ -3,7 +3,7 @@ package com.tabtin.mobile.features.memo
 import android.content.Context
 import android.text.format.DateFormat
 import android.util.Log
-import com.tabtin.mobile.R
+import com.muse.mobile.R
 import com.tabtin.mobile.data.api.OSSUploadService
 import com.tabtin.mobile.data.api.TabMemoApi
 import com.tabtin.mobile.data.model.ApiEnvelope

@@ -86,8 +86,7 @@ export const SidebarAuthInline: React.FC = () => {
           />
           <div className="text-center space-y-1">
             <div className="text-subtitle font-semibold text-foreground leading-tight">
-              TabTin
-            </div>
+              Muse            </div>
             <div
               className={cn(
                 'leading-snug',

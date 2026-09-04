@@ -4,7 +4,7 @@
 
 ## Supported versions
 
-TabTin supports only the latest public stable version. Public Preview or experimental components may have additional limitations described in their release notes.
+Muse supports only the latest public stable version. Public Preview or experimental components may have additional limitations described in their release notes.
 
 | Version | Security support |
 | --- | --- |
@@ -16,7 +16,7 @@ If a problem occurs only on an older release, first check whether it can be repr
 
 ## Report a vulnerability privately
 
-Prefer **Report a vulnerability** on the [TabTin public repository's Security page](https://github.com/tabtin-ai/TabTin/security). If that entry is not yet visible, email [issue@larchiveai.com](mailto:issue@larchiveai.com) with `[SECURITY]` in the subject. Do not disclose an unpatched vulnerability through a normal Issue, Discussion, Pull Request, group chat, or social media.
+Prefer **Report a vulnerability** on the [Muse public repository's Security page](https://github.com/tabtin-ai/TabTin/security). If that entry is not yet visible, email [issue@larchiveai.com](mailto:issue@larchiveai.com) with `[SECURITY]` in the subject. Do not disclose an unpatched vulnerability through a normal Issue, Discussion, Pull Request, group chat, or social media.
 
 Include as much of the following as possible:
 
@@ -56,4 +56,4 @@ Limit testing to accounts, organizations, devices, and deployments that you own 
 
 ## Deployment responsibility
 
-The official Community Server listens only on the local machine by default. Anyone who changes that configuration to allow other devices or expose the service to the Internet is responsible for operating-system security, network boundaries, TLS, databases, object storage, secret management, backups, monitoring, and dependency updates. TabTin security updates do not replace infrastructure security management.
+The official Community Server listens only on the local machine by default. Anyone who changes that configuration to allow other devices or expose the service to the Internet is responsible for operating-system security, network boundaries, TLS, databases, object storage, secret management, backups, monitoring, and dependency updates. Muse security updates do not replace infrastructure security management.

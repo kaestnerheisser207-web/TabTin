@@ -366,7 +366,7 @@ export const DevicePanel: React.FC<DevicePanelProps> = ({
                 </div>
                 <div className="text-caption text-muted-foreground/40 mt-1">
                   {t('device.noRegisteredDevicesHint', {
-                    defaultValue: '请在本机打开 TabTin 桌面客户端后再试。',
+                    defaultValue: '请在本机打开 Muse 桌面客户端后再试。',
                   })}
                 </div>
               </div>

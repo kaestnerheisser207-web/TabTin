@@ -1,7 +1,7 @@
 {
   "name": "@tabtin/ws-gateway-client",
   "version": "0.1.0",
-  "description": "WebSocket Gateway client SDK for TabTin",
+  "description": "WebSocket Gateway client SDK for Muse",
   "type": "module",
   "main": "dist/index.js",
   "module": "dist/index.js",
@@ -23,13 +23,13 @@
     "test": "vitest run"
   },
   "keywords": [
-    "tabtin",
+    "muse",
     "gateway",
     "websocket",
     "sdk",
     "client"
   ],
-  "author": "TabTin Team",
+  "author": "Muse Team",
   "license": "MIT",
   "dependencies": {
     "@tabtin/agent-wire": "workspace:*",

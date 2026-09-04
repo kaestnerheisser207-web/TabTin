@@ -18,7 +18,7 @@ metadata:
 
 # 编写新技能
 
-把可复用流程写成 agentskills 兼容的 TabTin skill。
+把可复用流程写成 agentskills 兼容的 Muse skill。
 
 ## 必须遵守
 

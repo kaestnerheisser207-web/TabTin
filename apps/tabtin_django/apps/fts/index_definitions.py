@@ -207,7 +207,7 @@ MESSAGES_MAPPING: dict[str, Any] = {
 #     对 `tabtin-resources` 中 `item_type='tabcode'` 的资源，额外建
 #     `content.keyword` multi-field，支持精确匹配驼峰标识符。
 # 实施说明：
-#     - PRD 原文字段名 `content`，TabTin 实际模型 `ContextItem.preview`
+#     - PRD 原文字段名 `content`，Muse 实际模型 `ContextItem.preview`
 #       承载预览片段（含代码预览）；此处落到 `preview.keyword` 更贴合
 #       实际数据位置。Wave 1 同步管道把 `ContextItem.preview` 写入本字段。
 #     - 非 tabcode 资源也会写 `preview.keyword`，但 Wave 2 搜索层的精

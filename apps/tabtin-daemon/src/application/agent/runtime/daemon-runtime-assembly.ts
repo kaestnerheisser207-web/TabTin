@@ -155,8 +155,8 @@ import {
 // 供 P5 audit 显式登记差异。详见同名文件 doc-string。
 import { createDaemonRunObservationInjector } from '../run-observation-injector.js';
 // Capability + capability 装配 helper（5 件套）：
-// - TabDataCap 已随 Wave 4a (2026-05-01) D4 全删 FC 一并删除（Agent 走 `tabtin table *` CLI）
-// - TabDocCap 已随 Wave 12 (2026-05-04) 退役（Agent 走 `tabtin doc *` CLI）
+// - TabDataCap 已随 Wave 4a (2026-05-01) D4 全删 FC 一并删除（Agent 走 `muse table *` CLI）
+// - TabDocCap 已随 Wave 12 (2026-05-04) 退役（Agent 走 `muse doc *` CLI）
 import {
   FileSystemCap,
   PlatformDataCap,
@@ -861,7 +861,7 @@ export class DaemonRuntimeAssembly {
     /**
      * W7c · Stage 4 Daemon 路径对齐：CLI 工具命令清单文本。
      * Django 端透传非空时直接用；空时 ``createRuntimeForSession`` 内调
-     * ``loadCLIReferenceAsync()`` 兜底（与 Electron 同款 spawn ``tabtin commands --format json``）。
+     * ``loadCLIReferenceAsync()`` 兜底（与 Electron 同款 spawn ``muse commands --format json``）。
      */
     cliReference?: string,
     /**
@@ -1915,7 +1915,7 @@ export class DaemonRuntimeAssembly {
       : undefined;
 
     // W7c · Stage 4 Daemon 路径对齐（治理 07 §F.1）：CLI 工具命令清单。
-    // 优先级：Django 透传 → Daemon 自己 spawn ``tabtin commands --format json`` 兜底。
+    // 优先级：Django 透传 → Daemon 自己 spawn ``muse commands --format json`` 兜底。
     // 与 Electron 同款 ``loadCLIReferenceAsync`` 行为：30 分钟正向缓存 + 失败 5 分钟负缓存，
     // 失败回退到 null（``<cli_capabilities>`` 段跳过，旧行为）。
     const effectiveCliReference = filterTemporarilyHiddenCliPromptReference(
@@ -2029,8 +2029,8 @@ export class DaemonRuntimeAssembly {
 
     // ── 实例化 5 Capability（与 Electron 同构）──
     //
-    // Wave 4a (2026-05-01)：TabDataCap 退役（D4 全删 FC，Agent 走 `tabtin table *`）。
-    // Wave 12 (2026-05-04)：TabDocCap 退役（Agent 走 `tabtin doc *`）。
+    // Wave 4a (2026-05-01)：TabDataCap 退役（D4 全删 FC，Agent 走 `muse table *`）。
+    // Wave 12 (2026-05-04)：TabDocCap 退役（Agent 走 `muse doc *`）。
     // 剩 FileSystem / Shell / Skills / Audit / Cost。装配映射 + 工具贡献规则
     // 详见 ElectronAgentHost.ts 同段注释。
 
@@ -2190,7 +2190,7 @@ export class DaemonRuntimeAssembly {
     // 子 Agent fork 工具集修复（与 Electron 同构）：把含 Cap 工具（尤其
     // ShellCap.run_terminal_command）的 mergedToolProvider 回注给 ToolProvider，
     // 让 `agent` 工具 fork 子 Agent 时继承与主 Agent 一致的完整工具集。否则子
-    // Agent 走裸 provider 缺 run_terminal_command，CLI-first 下无法执行 tabtin 命令。
+    // Agent 走裸 provider 缺 run_terminal_command，CLI-first 下无法执行 muse 命令。
     toolProvider.setSubagentToolProvider(mergedToolProvider);
 
     const capHooks = composeCapabilityHooks(allCaps);
@@ -2211,7 +2211,7 @@ export class DaemonRuntimeAssembly {
       sessionConfig,
       model: modelId,
       systemPrompt,
-      // ：tabtin fetch/browser 输出算外部不可信字节的判定由宿主注入，
+      // ：muse fetch/browser 输出算外部不可信字节的判定由宿主注入，
       // core 默认不因 shell 命令判 untrusted。漏注入 = 注入防护被绕过（P0）。
       isUntrustedShellCommand,
       emitStreamEvent,
@@ -2734,10 +2734,10 @@ export class DaemonRuntimeAssembly {
    * ``ElectronAgentHost.loadCLIReferenceAsync`` 完全同构：
    *
    *   1. 优先读缓存（正向 30 分钟 / 负向 5 分钟，避免热路径重复 spawn）；
-   *   2. ``execFile('tabtin', ['commands', '--format', 'json'])``
+   *   2. ``execFile('muse', ['commands', '--format', 'json'])``
    *      子进程取真实命令清单 + 描述；超时 5s（避免卡 createRuntimeForSession）；
    *   3. 解析失败 / 空数组 / 命令不可用 → 缓存 null，``<cli_capabilities>`` 段跳过。
-   *   4. ：输出收敛为一级命令（``tabtin <domain>``），与 CliCap 静态段一致。
+   *   4. ：输出收敛为一级命令（``muse <domain>``），与 CliCap 静态段一致。
    *
    * 与 Electron 端的差异：Daemon 用 ``import('node:child_process').execFile``，
    * 不依赖 Electron `app.getPath` 主进程上下文，跨平台行为一致。
@@ -2751,7 +2751,7 @@ export class DaemonRuntimeAssembly {
       const { promisify } = await import('node:util');
       const execFileAsync = promisify(execFile);
       const { stdout } = await execFileAsync(
-        'tabtin',
+        'muse',
         ['commands', '--format', 'json'],
         { timeout: 5_000, encoding: 'utf-8' },
       );
@@ -2792,7 +2792,7 @@ export class DaemonRuntimeAssembly {
     for (const tool of tools) {
       if (typeof tool.name !== 'string' || !tool.name.trim()) continue;
       const trimmedName = tool.name.trim();
-      const path = trimmedName.startsWith('tabtin ') ? trimmedName.slice('tabtin '.length) : trimmedName;
+      const path = trimmedName.startsWith('muse ') ? trimmedName.slice('muse '.length) : trimmedName;
       if (isTemporarilyHiddenCliPromptCommand(path)) continue;
       const domain = path.split(/\s+/)[0];
       if (!domain) continue;
@@ -2802,7 +2802,7 @@ export class DaemonRuntimeAssembly {
       else if (isRoot && tool.description) topLevel.set(domain, { name: domain, description: tool.description });
     }
     return [...topLevel.values()]
-      .map((tool) => `- \`tabtin ${tool.name}\`${tool.description ? `: ${tool.description}` : ''}`)
+      .map((tool) => `- \`muse ${tool.name}\`${tool.description ? `: ${tool.description}` : ''}`)
       .join('\n');
   }
 
@@ -2883,10 +2883,10 @@ export class DaemonRuntimeAssembly {
   }
 
   /**
-   * L16 W5.5 / L31：异步加载 `tabtin commands --format json` 原始 schemas 数组。
+   * L16 W5.5 / L31：异步加载 `muse commands --format json` 原始 schemas 数组。
    *
    * 与 ElectronAgentHost.loadCliCommandsAsync 同构。Daemon 端通过 spawn
-   * 子进程调 tabtin（已经在 PATH 里），失败时 cache.value=null 让 checker fail-close。
+   * 子进程调 muse（已经在 PATH 里），失败时 cache.value=null 让 checker fail-close。
    */
   private async loadCliCommandsAsync(): Promise<
     ReadonlyArray<CliCommandSchema> | null
@@ -2907,7 +2907,7 @@ export class DaemonRuntimeAssembly {
       const execFileAsync = promisify(execFile);
       // ：默认 `commands` 剔除 Hidden；受限模式 risk map 需 --include-hidden。
       const { stdout } = await execFileAsync(
-        'tabtin',
+        'muse',
         ['commands', '--format', 'json', '--include-hidden'],
         { timeout: 5_000, encoding: 'utf-8', maxBuffer: 4 * 1024 * 1024 },
       );

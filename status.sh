@@ -10,7 +10,7 @@ unset TABTIN_EDITION AUTH_FIXED_VERIFICATION_CODE
 print_unavailable() {
   printf '%s\n' \
     'Docker: NOT RUNNING' \
-    'TabTin Server: NOT READY' \
+    'Muse Server: NOT READY' \
     'Backend: http://127.0.0.1:6060' \
     'Realtime: NOT READY'
 }
@@ -27,15 +27,15 @@ printf 'Docker: RUNNING\n'
 if command -v curl >/dev/null 2>&1 && \
    curl -fsS --max-time 3 \
      http://127.0.0.1:6060/health/ready >/dev/null 2>&1; then
-  printf 'TabTin Server: READY\n'
+  printf 'Muse Server: READY\n'
 elif [[ -f "${env_file}" ]] && docker compose \
      --project-directory "${repo_root}" \
      --env-file "${env_file}" \
      -f "${compose_file}" \
      ps --status running --services 2>/dev/null | grep -qx 'django'; then
-  printf 'TabTin Server: STARTING\n'
+  printf 'Muse Server: STARTING\n'
 else
-  printf 'TabTin Server: NOT READY\n'
+  printf 'Muse Server: NOT READY\n'
 fi
 
 printf 'Backend: http://127.0.0.1:6060\n'

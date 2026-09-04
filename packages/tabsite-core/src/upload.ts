@@ -104,7 +104,7 @@ export async function uploadDist(options: UploadDistOptions): Promise<UploadDist
     },
   );
   if (!isWithinAllowed) {
-    return { success: false, error_code: 'PERMISSION_DENIED', error: 'dist_path 必须位于 TabTin 工作区或沙盒目录内' };
+    return { success: false, error_code: 'PERMISSION_DENIED', error: 'dist_path 必须位于 Muse 工作区或沙盒目录内' };
   }
 
   // Fetch site info

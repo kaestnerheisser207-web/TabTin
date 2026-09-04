@@ -1,5 +1,5 @@
 /**
- * Unified Search route — TabTin 统一搜索。
+ * Unified Search route — Muse 统一搜索。
  *
  * 路由：GET /search?q=xxx&organization_id=yyy&types=...
  * 行为：直接转发到 Django GET /api/search，1:1 透传 query 参数。
@@ -59,7 +59,7 @@ export async function handleSearchRoute(
       res,
       400,
       errorResponse('VALIDATION_ERROR', '搜索 query 缺失：必须传 q', {
-        suggestions: ['示例：tabtin search "Python 性能优化" --organization=<id>'],
+        suggestions: ['示例：muse search "Python 性能优化" --organization=<id>'],
       }),
     );
     return;
@@ -86,7 +86,7 @@ export async function handleSearchRoute(
       res,
       400,
       errorResponse('VALIDATION_ERROR', '搜索 q 不能为空', {
-        suggestions: ['示例：tabtin search "Python 性能优化" --organization=<id>'],
+        suggestions: ['示例：muse search "Python 性能优化" --organization=<id>'],
       }),
     );
     return;
@@ -106,7 +106,7 @@ export async function handleSearchRoute(
       errorResponse('VALIDATION_ERROR', 'organization_id 缺失：CLI 无法推断当前 Organization', {
         suggestions: [
           '显式传 --organization=<id>',
-          '或先 tabtin auth login 让 CLI 拿到登录态默认 organization',
+          '或先 muse auth login 让 CLI 拿到登录态默认 organization',
         ],
       }),
     );

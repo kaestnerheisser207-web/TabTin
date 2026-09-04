@@ -7,8 +7,8 @@
 **运行时**：桌面端 / Daemon（命令需要本地 cli-server 路由）
 
 ```bash
-tabtin slide render --html "@./deck.html" --save-to ./季度汇报.pptx
-tabtin slide render --html "@./季度汇报.html" -o 汇报.pptx
+muse slide render --html "@./deck.html" --save-to ./季度汇报.pptx
+muse slide render --html "@./季度汇报.html" -o 汇报.pptx
 ```
 
 | 参数 | 类型 | 必填 | 默认值 | 说明 |
@@ -36,7 +36,7 @@ tabtin slide render --html "@./季度汇报.html" -o 汇报.pptx
 **运行时**：桌面端 / Daemon（命令需要本地 cli-server 路由）
 
 ```bash
-tabtin slide create --name '<名称>' [--preset ppt] [--canvas-width 1920] [--canvas-height 1080]
+muse slide create --name '<名称>' [--preset ppt] [--canvas-width 1920] [--canvas-height 1080]
 ```
 
 | 参数 | 类型 | 必填 | 默认值 | 说明 |
@@ -53,7 +53,7 @@ tabtin slide create --name '<名称>' [--preset ppt] [--canvas-width 1920] [--ca
 **运行时**：桌面端 / Daemon（命令需要本地 cli-server 路由）
 
 ```bash
-tabtin slide list
+muse slide list
 ```
 
 列出当前 Agent 可见的所有演示文稿。
@@ -63,7 +63,7 @@ tabtin slide list
 **运行时**：桌面端 / Daemon（命令需要本地 cli-server 路由）
 
 ```bash
-tabtin slide outline --project-id <project_id>
+muse slide outline --project-id <project_id>
 ```
 
 返回所有页面列表及元素摘要，用于了解整体结构。
@@ -73,7 +73,7 @@ tabtin slide outline --project-id <project_id>
 **运行时**：桌面端 / Daemon（命令需要本地 cli-server 路由）
 
 ```bash
-tabtin slide page --project-id <project_id> --page-id <page_id>
+muse slide page --project-id <project_id> --page-id <page_id>
 ```
 
 返回指定页面的完整内容，包括所有元素及其属性。
@@ -83,7 +83,7 @@ tabtin slide page --project-id <project_id> --page-id <page_id>
 **运行时**：桌面端 / Daemon（命令需要本地 cli-server 路由）
 
 ```bash
-tabtin slide grep --project-id <project_id> --query '<子串>' [--page-id <id>] [--element-types <types>] [--max-results 50]
+muse slide grep --project-id <project_id> --query '<子串>' [--page-id <id>] [--element-types <types>] [--max-results 50]
 ```
 
 | 参数 | 类型 | 必填 | 默认值 | 说明 |
@@ -102,13 +102,13 @@ tabtin slide grep --project-id <project_id> --query '<子串>' [--page-id <id>] 
 
 ```bash
 # 找特定文字在哪页/哪个元素
-tabtin slide grep --project-id $PID --query "季度营收"
+muse slide grep --project-id $PID --query "季度营收"
 
 # 限制单页（已知大概在哪页时更快）
-tabtin slide grep --project-id $PID --query "Primary" --page-id page-3
+muse slide grep --project-id $PID --query "Primary" --page-id page-3
 
 # 只搜 text 元素（跳过 shape 的内嵌文字）
-tabtin slide grep --project-id $PID --query "总结" --element-types text
+muse slide grep --project-id $PID --query "总结" --element-types text
 ```
 
 ### generate - 从 HTML 覆盖整份演示文稿
@@ -116,8 +116,8 @@ tabtin slide grep --project-id $PID --query "总结" --element-types text
 **运行时**：桌面端 / Daemon（命令需要本地 cli-server 路由）
 
 ```bash
-tabtin slide generate --project-id <project_id> --replace --html '<html_content>'
-tabtin slide generate --project-id <project_id> --replace --html "@./deck.html"
+muse slide generate --project-id <project_id> --replace --html '<html_content>'
+muse slide generate --project-id <project_id> --replace --html "@./deck.html"
 ```
 
 | 参数 | 类型 | 必填 | 默认值 | 说明 |
@@ -128,7 +128,7 @@ tabtin slide generate --project-id <project_id> --replace --html "@./deck.html"
 | `--mode` | string | 否 | `direct` | 生成模式 |
 | `--replace` | bool | 非空项目必填 | `false` | 明确允许覆盖项目全部页面 |
 
-`generate` 是覆盖语义，不用于给已有演示文稿插页。插入新页请用 `tabtin slide add-page --project-id <id> --html "@./slide.html"`。
+`generate` 是覆盖语义，不用于给已有演示文稿插页。插入新页请用 `muse slide add-page --project-id <id> --html "@./slide.html"`。
 
 HTML 始终先写入工作目录文件，再通过 `--html "@./slide.html"` 读取；文件内容不会占用命令行参数长度，也能避免 shell 管道转换文本编码。
 
@@ -137,7 +137,7 @@ HTML 始终先写入工作目录文件，再通过 `--html "@./slide.html"` 读�
 **运行时**：桌面端 / Daemon（命令需要本地 cli-server 路由）
 
 ```bash
-tabtin slide update --project-id <id> --page-id <id> --element-id <id> --patch '<json>'
+muse slide update --project-id <id> --page-id <id> --element-id <id> --patch '<json>'
 ```
 
 | 参数 | 类型 | 必填 | 说明 |
@@ -175,19 +175,19 @@ tabtin slide update --project-id <id> --page-id <id> --element-id <id> --patch '
 
 ```bash
 # 改文字内容（text 元素的 content 是 HTML 富文本字符串）
-tabtin slide update --project-id $PID --page-id $PG --element-id $EID \
+muse slide update --project-id $PID --page-id $PG --element-id $EID \
   --patch '{"props":{"content":"<p><span style=\"color:#FFF;font-size:48pt\">新标题</span></p>"}}'
 
 # 改位置和尺寸（直接顶层）
-tabtin slide update --project-id $PID --page-id $PG --element-id $EID \
+muse slide update --project-id $PID --page-id $PG --element-id $EID \
   --patch '{"x":100,"y":200,"width":800,"height":450}'
 
 # 改图片源
-tabtin slide update --project-id $PID --page-id $PG --element-id $EID \
+muse slide update --project-id $PID --page-id $PG --element-id $EID \
   --patch '{"props":{"src":"https://example.com/new.png"}}'
 
 # 改形状填充色 + 透明度（混合）
-tabtin slide update --project-id $PID --page-id $PG --element-id $EID \
+muse slide update --project-id $PID --page-id $PG --element-id $EID \
   --patch '{"opacity":0.8,"props":{"fill":"#2563EB"}}'
 ```
 
@@ -213,7 +213,7 @@ tabtin slide update --project-id $PID --page-id $PG --element-id $EID \
 **运行时**：桌面端 / Daemon（命令需要本地 cli-server 路由）
 
 ```bash
-tabtin slide batch-update --project-id <id> --updates '<json_array>'
+muse slide batch-update --project-id <id> --updates '<json_array>'
 ```
 
 | 参数 | 类型 | 必填 | 说明 |
@@ -225,7 +225,7 @@ tabtin slide batch-update --project-id <id> --updates '<json_array>'
 每条 `patch` 用跟 `update` 命令相同的 schema（内容字段必须嵌入 `props`）。任何一条 patch schema 不合法 → 整批拒绝并返回每条错误清单，**不会部分成功**。
 
 ```bash
-tabtin slide batch-update --project-id $PID --updates '[
+muse slide batch-update --project-id $PID --updates '[
   {"page_id":"pg_001","element_id":"el_001","patch":{"props":{"content":"<p>新标题</p>"}}},
   {"page_id":"pg_001","element_id":"el_002","patch":{"x":100,"y":200,"width":800}},
   {"page_id":"pg_001","element_id":"el_003","patch":{"props":{"fill":"#FF0000"}}}
@@ -239,9 +239,9 @@ tabtin slide batch-update --project-id $PID --updates '[
 **运行时**：桌面端 / Daemon（命令需要本地 cli-server 路由）
 
 ```bash
-tabtin slide add-page --project-id <project_id>
-tabtin slide add-page --project-id <project_id> --after-page page-3
-tabtin slide add-page --project-id <project_id> --html "@./slide.html"
+muse slide add-page --project-id <project_id>
+muse slide add-page --project-id <project_id> --after-page page-3
+muse slide add-page --project-id <project_id> --html "@./slide.html"
 ```
 
 | 参数 | 类型 | 必填 | 说明 |
@@ -263,7 +263,7 @@ tabtin slide add-page --project-id <project_id> --html "@./slide.html"
 **运行时**：桌面端 / Daemon（命令需要本地 cli-server 路由）
 
 ```bash
-tabtin slide delete-page --project-id <project_id> --page-id <page_id>
+muse slide delete-page --project-id <project_id> --page-id <page_id>
 ```
 
 高风险操作，不可撤销。
@@ -273,8 +273,8 @@ tabtin slide delete-page --project-id <project_id> --page-id <page_id>
 **运行时**：桌面端 / Daemon（命令需要本地 cli-server 路由）
 
 ```bash
-tabtin slide reorder --project-id <project_id> --page-order '["id1","id2","id3"]'
-tabtin slide reorder --project-id <project_id> id1 id2 id3
+muse slide reorder --project-id <project_id> --page-order '["id1","id2","id3"]'
+muse slide reorder --project-id <project_id> id1 id2 id3
 ```
 
 支持 `--page-order` JSON 数组或位置参数两种传参方式。
@@ -284,7 +284,7 @@ tabtin slide reorder --project-id <project_id> id1 id2 id3
 **运行时**：桌面端 / Daemon（命令需要本地 cli-server 路由）
 
 ```bash
-tabtin slide preview --project-id <project_id> [--page-id <page_id>] [--response-format url]
+muse slide preview --project-id <project_id> [--page-id <page_id>] [--response-format url]
 ```
 
 不指定 `--page-id` 时预览全部页面。默认返回截图 URL。
@@ -294,8 +294,8 @@ tabtin slide preview --project-id <project_id> [--page-id <page_id>] [--response
 **运行时**：桌面端 / Daemon（命令需要本地 cli-server 路由）
 
 ```bash
-tabtin slide lint --project-id <project_id> [--page-id <page_id>] [--problems-only]
-tabtin slide lint --project-id <id> --skip-visual --min-severity warning  # 高频自检模式（毫秒级）
+muse slide lint --project-id <project_id> [--page-id <page_id>] [--problems-only]
+muse slide lint --project-id <id> --skip-visual --min-severity warning  # 高频自检模式（毫秒级）
 ```
 
 | 参数 | 类型 | 说明 |
@@ -315,15 +315,15 @@ tabtin slide lint --project-id <id> --skip-visual --min-severity warning  # 高�
 返回 `summary: {errors, warnings, infos}` 让 Agent 一眼看到优先级；每个 problem 含 `page_id` / `element_id` 方便 update 精准定位。
 
 **典型用法**：
-- 改完元素后立刻自检：`tabtin slide lint --project-id X --skip-visual --min-severity warning` (< 100ms)
-- 导出前完整检查：`tabtin slide lint --project-id X --problems-only`
+- 改完元素后立刻自检：`muse slide lint --project-id X --skip-visual --min-severity warning` (< 100ms)
+- 导出前完整检查：`muse slide lint --project-id X --problems-only`
 
 ### export - 导出
 
 **运行时**：桌面端 / Daemon（命令需要本地 cli-server 路由）
 
 ```bash
-tabtin slide export --project-id <project_id> [--format pptx]
+muse slide export --project-id <project_id> [--format pptx]
 ```
 
 | 格式 | 说明 |

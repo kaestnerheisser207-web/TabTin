@@ -98,7 +98,7 @@ const TAB_REQUIRED_ERROR: BrowserActionResult = {
   error: {
     code: 'TAB_REQUIRED',
     message: '当前没有可用的浏览器标签，请先 open 一个页面或显式传入 --tab',
-    suggestions: ['示例: tabtin browser open https://example.com', '或使用 tabtin browser tab list 查看可用浏览器标签'],
+    suggestions: ['示例: muse browser open https://example.com', '或使用 muse browser tab list 查看可用浏览器标签'],
   },
 }
 
@@ -109,7 +109,7 @@ function viewNotFoundError(requestedTabId: string): BrowserActionResult {
     error: {
       code: 'VIEW_NOT_FOUND',
       message: `找不到目标 tab: ${requestedTabId}`,
-      suggestions: ['使用 tabtin browser tab list 查看可用标签', '确认传入的 --tab <viewId> 仍然存在'],
+      suggestions: ['使用 muse browser tab list 查看可用标签', '确认传入的 --tab <viewId> 仍然存在'],
     },
   }
 }
@@ -254,7 +254,7 @@ export function buildElectronResourceStreamHooks(executor: NonNullable<ActionExe
       throwIfAborted(opts.signal)
       // BT-010: 与 /download-stream 保持一致，前置校验 url/resourceId 必填其一
       if (!body?.url && !body?.resourceId) {
-        return { ok: false, status: 400, error: { code: 'VALIDATION_ERROR', message: '缺少 url 或 resourceId 参数', suggestions: ['示例: tabtin browser stream download --url "https://example.com/stream.m3u8"'] } }
+        return { ok: false, status: 400, error: { code: 'VALIDATION_ERROR', message: '缺少 url 或 resourceId 参数', suggestions: ['示例: muse browser stream download --url "https://example.com/stream.m3u8"'] } }
       }
       const { requestedTabId, tabId } = await resolveRouteTabId(body?.tabId, body)
       if (requestedTabId && !tabId) return viewNotFoundError(requestedTabId)
@@ -538,7 +538,7 @@ export async function handleResourcesRoute(
     const url = body?.url
     if (!url) {
       sendJSON(res, 400, errorResponse('VALIDATION_ERROR', '缺少 url 参数', {
-        suggestions: ['示例: tabtin browser resource download --url "https://example.com/file.zip"'],
+        suggestions: ['示例: muse browser resource download --url "https://example.com/file.zip"'],
       }))
       return true
     }
@@ -561,14 +561,14 @@ export async function handleResourcesRoute(
     const hasResourceIds = Array.isArray(resourceIds) && resourceIds.length > 0
     if (!hasUrls && !hasResourceIds) {
       sendJSON(res, 400, errorResponse('VALIDATION_ERROR', '缺少 urls 数组参数', {
-        suggestions: ['示例: tabtin browser resource download --url "https://example.com/file.zip"（CLI 逐个下载）'],
+        suggestions: ['示例: muse browser resource download --url "https://example.com/file.zip"（CLI 逐个下载）'],
       }))
       return true
     }
     const { requestedTabId, tabId } = await resolveRouteTabId(body?.tabId, body, { allowImplicitActiveTab: !hasResourceIds })
     if (requestedTabId && !tabId) {
       sendJSON(res, 400, errorResponse('VIEW_NOT_FOUND', `找不到目标 tab: ${requestedTabId}`, {
-        suggestions: ['使用 tabtin browser tab list 查看可用标签', '确认传入的 --tab <viewId> 仍然存在'],
+        suggestions: ['使用 muse browser tab list 查看可用标签', '确认传入的 --tab <viewId> 仍然存在'],
       }))
       return true
     }
@@ -588,14 +588,14 @@ export async function handleResourcesRoute(
     const url = body?.url
     if (!url && !body?.resourceId) {
       sendJSON(res, 400, errorResponse('VALIDATION_ERROR', '缺少 url 参数', {
-        suggestions: ['示例: tabtin browser stream parse --url "https://example.com/stream.m3u8"'],
+        suggestions: ['示例: muse browser stream parse --url "https://example.com/stream.m3u8"'],
       }))
       return true
     }
     const { requestedTabId, tabId } = await resolveRouteTabId(body?.tabId, body, { allowImplicitActiveTab: !body?.resourceId })
     if (requestedTabId && !tabId) {
       sendJSON(res, 400, errorResponse('VIEW_NOT_FOUND', `找不到目标 tab: ${requestedTabId}`, {
-        suggestions: ['使用 tabtin browser tab list 查看可用标签', '确认传入的 --tab <viewId> 仍然存在'],
+        suggestions: ['使用 muse browser tab list 查看可用标签', '确认传入的 --tab <viewId> 仍然存在'],
       }))
       return true
     }
@@ -614,14 +614,14 @@ export async function handleResourcesRoute(
     const url = body?.url
     if (!url && !body?.resourceId) {
       sendJSON(res, 400, errorResponse('VALIDATION_ERROR', '缺少 url 参数', {
-        suggestions: ['示例: tabtin browser stream download --url "https://example.com/stream.m3u8"'],
+        suggestions: ['示例: muse browser stream download --url "https://example.com/stream.m3u8"'],
       }))
       return true
     }
     const { requestedTabId, tabId } = await resolveRouteTabId(body?.tabId, body, { allowImplicitActiveTab: !body?.resourceId })
     if (requestedTabId && !tabId) {
       sendJSON(res, 400, errorResponse('VIEW_NOT_FOUND', `找不到目标 tab: ${requestedTabId}`, {
-        suggestions: ['使用 tabtin browser tab list 查看可用标签', '确认传入的 --tab <viewId> 仍然存在'],
+        suggestions: ['使用 muse browser tab list 查看可用标签', '确认传入的 --tab <viewId> 仍然存在'],
       }))
       return true
     }

@@ -139,7 +139,7 @@ final class ConversationRecoveryPresentationTests: XCTestCase {
 
         XCTAssertEqual(
             deviceNotice?.text,
-            "该设备离线（请在电脑打开 TabTin 恢复连接）"
+            "该设备离线（请在电脑打开 Muse 恢复连接）"
         )
         XCTAssertEqual(
             unboundNotice?.text,

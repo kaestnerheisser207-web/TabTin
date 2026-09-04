@@ -49,7 +49,7 @@
     "logoutConfirmTitle": "アカウントからログアウトしますか?",
     "logoutConfirmDesc": "このデバイス上で保存されていない作業はすべて失われます",
     "openStorageManager": "ストレージマネージャー",
-    "openStorageManagerHint": "TabTin がマシンに保存したものを確認し、クリーンアップまたはエクスポートします",
+    "openStorageManagerHint": "Muse がマシンに保存したものを確認し、クリーンアップまたはエクスポートします",
     "changePassword": "パスワードを変更する",
     "bindEmail": "電子メールをバインドする"
   },

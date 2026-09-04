@@ -27,7 +27,7 @@ metadata:
 
 # TabCode Operator
 
-代码项目文件操作与搜索，**直接调用对应工具**——不要绕 `tabtin code` CLI 子命令。
+代码项目文件操作与搜索，**直接调用对应工具**——不要绕 `muse code` CLI 子命令。
 
 ## 操作方式
 
@@ -53,9 +53,9 @@ metadata:
 走 `run_terminal_command` 调 CLI：
 
 ```bash
-run_terminal_command(command="tabtin code mkdir --path src/newdir")
-run_terminal_command(command="tabtin code mv --from src/old.go --to src/new.go")
-run_terminal_command(command="tabtin code rename --from src/old.go --to src/new.go")  # rename 是 mv 的别名
+run_terminal_command(command="muse code mkdir --path src/newdir")
+run_terminal_command(command="muse code mv --from src/old.go --to src/new.go")
+run_terminal_command(command="muse code rename --from src/old.go --to src/new.go")  # rename 是 mv 的别名
 ```
 
 - `mkdir` 对齐 `mkdir -p`：递归创建，目标已是目录时幂等成功，撞到同名文件时报错。
@@ -108,10 +108,10 @@ run_terminal_command(command="git commit -m 'message'")
 ## Web 信息检索
 
 - `web_search` — 搜索网络获取实时信息（FC 工具）
-- `tabtin fetch <url>` — 抓取静态 URL 页面正文转 Markdown（轻量 HTTP + readability，CLI 首选）；
-  已打开 tab / JS 动态页取正文走 `tabtin browser print --save <path>`（缺省当前 tab；公开动态页加 `--url`），
-  落盘后按需读文件；二进制资源下载走 `tabtin browser resource download --url <url>`。
-- 典型工作流：`web_search` 找到链接 → `run_terminal_command("tabtin fetch <url>")` 抓正文
+- `muse fetch <url>` — 抓取静态 URL 页面正文转 Markdown（轻量 HTTP + readability，CLI 首选）；
+  已打开 tab / JS 动态页取正文走 `muse browser print --save <path>`（缺省当前 tab；公开动态页加 `--url`），
+  落盘后按需读文件；二进制资源下载走 `muse browser resource download --url <url>`。
+- 典型工作流：`web_search` 找到链接 → `run_terminal_command("muse fetch <url>")` 抓正文
 
 ## 诊断与验证
 

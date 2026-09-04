@@ -1,4 +1,4 @@
-"""Tabtin Space collection schemas。"""
+"""Muse Space collection schemas。"""
 
 from .common import *  # noqa: F401,F403
 

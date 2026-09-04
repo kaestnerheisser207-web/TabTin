@@ -7,7 +7,7 @@
  *   - microcompact 改的是父 Agent 自身 message 数组里的
  *     tool_result content，本函数处理的是 fork-query 子 Agent 完成时的
  *     单 string 报告。
- *   - 这是 TabTin 自有功能（`fork-query` 是 TabTin 特定产物），与父对话
+ *   - 这是 Muse 自有功能（`fork-query` 是 Muse 特定产物），与父对话
  *     历史的"跨 turn byte-identical"约束不冲突——父 Agent 拿到的是子
  *     Agent 一次性 final summary，本身就是 first-time decision。
  *

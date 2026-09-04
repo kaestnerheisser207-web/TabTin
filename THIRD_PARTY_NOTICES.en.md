@@ -2,7 +2,7 @@
 
 [中文](THIRD_PARTY_NOTICES.md)
 
-TabTin includes third-party software, fonts, and assets. Their own licenses apply; the root AGPL-3.0-only license does not replace them. This file is an index. Complete terms remain in the repository license files.
+Muse includes third-party software, fonts, and assets. Their own licenses apply; the root AGPL-3.0-only license does not replace them. This file is an index. Complete terms remain in the repository license files.
 
 ## Directly distributed assets
 
@@ -16,7 +16,7 @@ TabTin includes third-party software, fonts, and assets. Their own licenses appl
 | MathJax | 3.2.2 | Apache-2.0 | `apps/tabtin_django/apps/tabslide/assets/vendor/mathjax/LICENSE` |
 | Superpowers personal plugin fixtures | Jesse Vincent | MIT | `packages/agent-runtime/fixtures/personal-plugins/superpowers/LICENSE` |
 | Ponytail | DietrichGebert | MIT | `packages/apps/ponytail/LICENSE` |
-| Table Engine Canvas / Teable-derived work | Teable, Inc. and TabTin Contributors | MIT | `packages/table-engine-canvas/LICENSE` |
+| Table Engine Canvas / Teable-derived work | Teable, Inc. and Muse Contributors | MIT | `packages/table-engine-canvas/LICENSE` |
 
 TabSlide asset versions, sources, and SHA-256 values are in `apps/tabtin_django/apps/tabslide/assets/vendor/manifest.json`.
 

@@ -127,12 +127,12 @@ const TOP_SHOWN_COUNT = 8;
 const TOP_DESC_COUNT = 5;
 /**
  * 保底配额：带描述的前 TOP_DESC_COUNT 个里，至少保证这么多来自 app / platform
- * （TabTin 内置能力），避免被 device / user 的第三方 skill 挤到看不见——除非候选
+ * （Muse 内置能力），避免被 device / user 的第三方 skill 挤到看不见——除非候选
  * 池里 app+platform 总数本就不足。
  */
 const MIN_BUILTIN_IN_DESC = 3;
 
-/** app / platform 来源即 TabTin 内置能力（区别于 device / user 的第三方 skill）。 */
+/** app / platform 来源即 Muse 内置能力（区别于 device / user 的第三方 skill）。 */
 function isBuiltinSourceSkill(skill: LocalSkill): boolean {
   const src = skill.metaSource ?? skill.source;
   return src === 'app' || src === 'platform';

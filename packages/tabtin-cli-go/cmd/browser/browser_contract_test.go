@@ -11,7 +11,7 @@
 //
 //	① 每 CLI Path 必有 route（聚焦 Daemon：扁平 route 表可静态枚举；Daemon 是黑洞/漂移高发端）。
 //	② 多动作端点必有互异 FixedFields（共享同一路由的命令必须靠 FixedFields 区分 action）。
-//	③ route 源码里 `tabtin browser <cmd>` 建议必须真实存在（防 note 指向不存在命令）。
+//	③ route 源码里 `muse browser <cmd>` 建议必须真实存在（防 note 指向不存在命令）。
 //	④ CLI 命令全集 ↔ 契约 JSON 一致（Go 侧锚点；TS 矩阵单测另从同一 JSON 锚 daemon 矩阵）。
 //
 // 「先只校验、不动 route 实现」：这些测试只读、不改任何 route。
@@ -28,7 +28,7 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/TabTin/tabtin-cli/internal/cmdutil"
+	"github.com/Muse/muse-cli/internal/cmdutil"
 )
 
 // contractJSONRelPath 是契约机器可读投影的落盘位置（相对仓库根）。
@@ -278,10 +278,10 @@ func TestDaemonKnownNoRoutePathsAreRealCommands(t *testing.T) {
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
-// check ③ route 源码里 `tabtin browser <cmd>` 建议必须真实存在
+// check ③ route 源码里 `muse browser <cmd>` 建议必须真实存在
 // ─────────────────────────────────────────────────────────────────────────────
 
-var suggestionRe = regexp.MustCompile(`tabtin browser ([a-z][a-zA-Z0-9-]*(?:\s+[a-z][a-zA-Z0-9-]*)*)`)
+var suggestionRe = regexp.MustCompile(`muse browser ([a-z][a-zA-Z0-9-]*(?:\s+[a-z][a-zA-Z0-9-]*)*)`)
 
 // validBrowserCommandPaths 收集 browser 命令树里所有可达路径（含中间分组与叶子），
 // 形如 "route" / "tab" / "tab list" / "resource smart-download"。
@@ -304,7 +304,7 @@ func validBrowserCommandPaths(t *testing.T) map[string]bool {
 }
 
 // resolveSuggestion 取建议词串的最长合法命令前缀；找到即认为该建议指向真实命令。
-// （自然语言里 `tabtin browser open the page` 会贪婪匹配出 "open the page"，
+// （自然语言里 `muse browser open the page` 会贪婪匹配出 "open the page"，
 //
 //	这里逐步缩短到 "open" 命中即放行——只在「首词就不是命令」时才判失败。）
 func resolveSuggestion(suggested string, valid map[string]bool) bool {
@@ -342,10 +342,10 @@ func collectRouteSourceFiles(t *testing.T) []string {
 }
 
 // TestBrowserRouteSuggestionsReferenceRealCommands 扫两端 route 源码里所有
-// `tabtin browser <cmd>` 形式的用户向建议，断言每个被建议的命令都真实存在。
+// `muse browser <cmd>` 形式的用户向建议，断言每个被建议的命令都真实存在。
 //
-// 防 BR-2 类活样本：Daemon /route-list 的 note 曾叫用户「使用 tabtin browser route 设置拦截」，
-// 而那时 `tabtin browser route` 命令根本不存在——建议指向不存在的命令，比报错更误导 Agent。
+// 防 BR-2 类活样本：Daemon /route-list 的 note 曾叫用户「使用 muse browser route 设置拦截」，
+// 而那时 `muse browser route` 命令根本不存在——建议指向不存在的命令，比报错更误导 Agent。
 func TestBrowserRouteSuggestionsReferenceRealCommands(t *testing.T) {
 	valid := validBrowserCommandPaths(t)
 	for _, file := range collectRouteSourceFiles(t) {
@@ -355,7 +355,7 @@ func TestBrowserRouteSuggestionsReferenceRealCommands(t *testing.T) {
 			if resolveSuggestion(suggested, valid) {
 				continue
 			}
-			t.Errorf("%s 的文案建议了 `tabtin browser %s`，但该命令不存在 —— "+
+			t.Errorf("%s 的文案建议了 `muse browser %s`，但该命令不存在 —— "+
 				"route 里给出的命令必须真实可达（BR-2 类：note 指向不存在命令会误导 Agent）", file, suggested)
 		}
 	}

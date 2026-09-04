@@ -457,7 +457,7 @@ func TestGlobalOutputPathWritesFileNotStdout(t *testing.T) {
 	}
 }
 
-// OUT8：手写命令 (`tabtin commands`) + 全局 --output 端到端 — 写盘 + stdout 抑制
+// OUT8：手写命令 (`muse commands`) + 全局 --output 端到端 — 写盘 + stdout 抑制
 //
 // 用已编译的 dist/tabtin binary 真跑——这是 v10 P1 的核心证据：
 // 之前手写命令不走全局写盘路径，现在必须生效。
@@ -540,7 +540,7 @@ var (
 	tabtinBinErr  error
 )
 
-// ensureTabtinBinary 保证返回最新版 tabtin binary 路径。
+// ensureTabtinBinary 保证返回最新版 muse binary 路径。
 //
 // 策略：
 //   - 包级单例 → 整个 test 包只 build 一次（首次调用触发）
@@ -557,7 +557,7 @@ func ensureTabtinBinary(t *testing.T) string {
 			tabtinBinErr = fmt.Errorf("mkdtemp 失败: %w", err)
 			return
 		}
-		binPath := filepath.Join(tmpDir, "tabtin")
+		binPath := filepath.Join(tmpDir, "muse")
 		cmd := exec.Command("go", "build", "-o", binPath, ".")
 		cmd.Dir = "../.." // packages/tabtin-cli-go 根
 		out, err := cmd.CombinedOutput()
@@ -952,7 +952,7 @@ func TestFormatErrorAgentStillUsableAsHelper(t *testing.T) {
 	}
 }
 
-// V110-4：E2E — `tabtin agent run -p test --format agent` 失败 stderr 是 JSON envelope
+// V110-4：E2E — `muse agent run -p test --format agent` 失败 stderr 是 JSON envelope
 func TestAgentRunFormatAgentRejectionIsJSONEnvelope(t *testing.T) {
 	binPath := ensureTabtinBinary(t)
 	cmd := exec.Command(binPath, "agent", "run", "-p", "test", "--format", "agent")
@@ -1763,7 +1763,7 @@ func extractOutputFlagLine(help string) string {
 	return "(no --output line found)"
 }
 
-// V101-6：tabtin commands --format json 的 global_flags 应包含 quiet / output
+// V101-6：muse commands --format json 的 global_flags 应包含 quiet / output
 func TestCommandsGlobalFlagsExposesQuietAndOutput(t *testing.T) {
 	binPath := ensureTabtinBinary(t)
 	cmd := exec.Command(binPath, "commands", "--format", "json")

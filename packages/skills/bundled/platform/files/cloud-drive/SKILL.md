@@ -26,12 +26,12 @@ metadata:
 
 # 云盘上传（platform:files/cloud-drive）
 
-Space 云盘裸文件入口是 `tabtin drive`，不是 `present_to_user` 的 `local_file` item。
+Space 云盘裸文件入口是 `muse drive`，不是 `present_to_user` 的 `local_file` item。
 
 ## 决策
 
-1. **保存/归档到云盘** → `tabtin drive upload <path>` 或 `tabtin drive upload-folder <dir>`
-2. **只要 FileRecord**（再给 doc import / table 附件）→ `tabtin oss upload`
+1. **保存/归档到云盘** → `muse drive upload <path>` 或 `muse drive upload-folder <dir>`
+2. **只要 FileRecord**（再给 doc import / table 附件）→ `muse oss upload`
 3. **聊天里发本地卡片** → `present_to_user` 的 `local_file` item（这不是云盘）
 
 把本地 md/csv「归档到云盘」却只调了 `present_to_user` 的 `local_file` item / `file create`，画布打开会空白或「不存在」——因为从未创建 FileRecord + ContextItem。
@@ -40,14 +40,14 @@ Space 云盘裸文件入口是 `tabtin drive`，不是 `present_to_user` 的 `lo
 
 ```bash
 # 单文件
-tabtin drive upload ./notes.md --format json
+muse drive upload ./notes.md --format json
 
 # 一级目录（跳过子目录与不支持类型；看 summary）
-tabtin drive upload-folder ./exports --format json
+muse drive upload-folder ./exports --format json
 
 # 核对
-tabtin drive list --format json
-tabtin drive download-url <item_id> --format json
+muse drive list --format json
+muse drive download-url <item_id> --format json
 ```
 
 详细参数与边界见 TabFiles 场景下的 `tabfiles-operator` skill；本 skill 保证普通对话也能检索到 `oss` / `drive` 正确入口。

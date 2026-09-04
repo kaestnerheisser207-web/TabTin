@@ -19,7 +19,7 @@ final class VoiceSettings {
     /// 平台级热词，所有用户共享。
     /// 后续可改为从服务端动态拉取。
     static let platformHotwords: [String] = [
-        "TabTin", "TabData", "TabDoc", "TabSlide",
+        "Muse", "TabData", "TabDoc", "TabSlide",
         "Agentspace", "Agent", "Space",
         "RAG", "Prompt", "Skill", "Memo", "Composer", "Crawler",
     ]

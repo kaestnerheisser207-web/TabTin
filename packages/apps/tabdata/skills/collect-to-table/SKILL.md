@@ -19,7 +19,7 @@ metadata:
   runtime: cloud
   requires:
     bins:
-      - tabtin
+      - muse
   canonicalName: collect-to-table
 ---
 

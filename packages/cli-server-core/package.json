@@ -87,7 +87,7 @@
     "clean": "rm -rf dist",
     "test": "vitest run"
   },
-  "author": "TabTin Team",
+  "author": "Muse Team",
   "license": "MIT",
   "dependencies": {
     "@tabtin/agent-wire": "workspace:*",

@@ -20,7 +20,7 @@ describe('BrowserViewRecoveryPanel', () => {
 
     expect(getByRole('status').getAttribute('data-browser-recovery-state')).toBe('restoring')
     expect(getByText('正在恢复网页')).toBeTruthy()
-    expect(getByText('TabTin 正在重新打开上次保存的网页。')).toBeTruthy()
+    expect(getByText('Muse 正在重新打开上次保存的网页。')).toBeTruthy()
     expect(queryByRole('button')).toBeNull()
   })
 

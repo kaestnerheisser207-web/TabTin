@@ -52,7 +52,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import com.tabtin.mobile.R
+import com.muse.mobile.R
 import com.tabtin.mobile.features.doc.model.InlineMarkKind
 import com.tabtin.mobile.ui.components.TTFormDialog
 

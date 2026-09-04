@@ -154,7 +154,7 @@ export interface ForwardConversationRequest {
     capability: string
     aliases?: readonly string[]
   }>
-  /** W7c · Stage 4：CLI 工具命令清单（`tabtin capabilities tools`）。 */
+  /** W7c · Stage 4：CLI 工具命令清单（`muse capabilities tools`）。 */
   cliReference?: string
   /** ：Django 端已计算的 disabled apps（禁用工具白名单基线）。 */
   disabledApps?: string[]

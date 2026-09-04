@@ -396,7 +396,7 @@ export class CheckpointService {
 
     await git.addConfig('core.worktree', this.cwd)
     await git.addConfig('commit.gpgSign', 'false')
-    await git.addConfig('user.name', 'TabTin Checkpoint')
+    await git.addConfig('user.name', 'Muse Checkpoint')
     await git.addConfig('user.email', 'checkpoint@example.com')
     await this.ensureCoreConfigs(git)
 

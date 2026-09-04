@@ -14,19 +14,19 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/TabTin/tabtin-cli/cmd/agent"
-	"github.com/TabTin/tabtin-cli/cmd/auth"
-	"github.com/TabTin/tabtin-cli/cmd/browser"
-	configcmd "github.com/TabTin/tabtin-cli/cmd/configcmd"
-	"github.com/TabTin/tabtin-cli/cmd/profile"
-	"github.com/TabTin/tabtin-cli/cmd/table"
-	"github.com/TabTin/tabtin-cli/internal/cmdutil"
-	"github.com/TabTin/tabtin-cli/internal/config"
-	"github.com/TabTin/tabtin-cli/internal/errcode"
-	"github.com/TabTin/tabtin-cli/internal/extension"
-	"github.com/TabTin/tabtin-cli/internal/output"
-	"github.com/TabTin/tabtin-cli/internal/transport"
-	"github.com/TabTin/tabtin-cli/internal/version"
+	"github.com/Muse/muse-cli/cmd/agent"
+	"github.com/Muse/muse-cli/cmd/auth"
+	"github.com/Muse/muse-cli/cmd/browser"
+	configcmd "github.com/Muse/muse-cli/cmd/configcmd"
+	"github.com/Muse/muse-cli/cmd/profile"
+	"github.com/Muse/muse-cli/cmd/table"
+	"github.com/Muse/muse-cli/internal/cmdutil"
+	"github.com/Muse/muse-cli/internal/config"
+	"github.com/Muse/muse-cli/internal/errcode"
+	"github.com/Muse/muse-cli/internal/extension"
+	"github.com/Muse/muse-cli/internal/output"
+	"github.com/Muse/muse-cli/internal/transport"
+	"github.com/Muse/muse-cli/internal/version"
 )
 
 var timeNow = time.Now
@@ -62,13 +62,13 @@ func Execute() int {
 	registerPkgContentTypeFetcher(f)
 
 	rootCmd := &cobra.Command{
-		Use:   "tabtin [message]",
-		Short: "TabTin — Agent-Native CLI",
-		Long: `TabTin CLI — 人与 AI Agent 团队协作的统一平台。
+		Use:   "muse [message]",
+		Short: "Muse — Agent-Native CLI",
+		Long: `Muse CLI — 人与 AI Agent 团队协作的统一平台。
 
 直接输入消息即可与当前 Agent 对话：
-  tabtin "帮我分析这个数据"
-  tabtin -p "查询所有表格"
+  muse "帮我分析这个数据"
+  muse -p "查询所有表格"
 
 使用子命令管理 Agent、数据和应用。`,
 		Version:       version.Full(),
@@ -185,7 +185,7 @@ func Execute() int {
 					return output.PrintErrorAndExit(output.ErrorEnvelope(
 						"VALIDATION_ERROR",
 						"--output 与 --jq 不能同时使用",
-						"先写盘后用 jq 处理文件：tabtin <cmd> --output out.json && jq '...' out.json",
+						"先写盘后用 jq 处理文件：muse <cmd> --output out.json && jq '...' out.json",
 						output.ExitValidation,
 					))
 				}
@@ -211,7 +211,7 @@ func Execute() int {
 			agentCmd.SetArgs(append([]string{"--"}, args...))
 			err := agentCmd.Execute()
 			if err != nil {
-				fmt.Fprintln(os.Stderr, "提示：如需使用更多选项（如 -c/--continue、-m/--model、-p/--pipe），请使用完整命令 `tabtin agent run`")
+				fmt.Fprintln(os.Stderr, "提示：如需使用更多选项（如 -c/--continue、-m/--model、-p/--pipe），请使用完整命令 `muse agent run`")
 			}
 			return err
 		}),
@@ -251,7 +251,7 @@ func Execute() int {
 	rootCmd.PersistentFlags().String("output", "", "把成功响应写到文件（按 --format 渲染：json→envelope JSON / csv→CSV / table→表格；二进制响应自动 base64 解码；与 --jq 互斥）")
 
 	rootCmd.AddCommand(agent.NewCmdAgent(f))
-	// ：Agent 记忆治理挂到 agent 下（tabtin agent memory ...）。
+	// ：Agent 记忆治理挂到 agent 下（muse agent memory ...）。
 	if agentCmd, _, findErr := rootCmd.Find([]string{"agent"}); findErr == nil && agentCmd != nil && agentCmd.Name() == "agent" {
 		agentCmd.AddCommand(newCmdAgentMemory(f))
 	}
@@ -294,7 +294,7 @@ func Execute() int {
 	rootCmd.AddCommand(newCmdInstall(f))
 	rootCmd.AddCommand(newCmdProject(f))
 
-	//  终态命令 `tabtin workspace`；`tabtin space` 是过渡期兼容别名（hidden）。
+	//  终态命令 `muse workspace`；`muse space` 是过渡期兼容别名（hidden）。
 	workspaceCmd := newCmdWorkspace(f)
 	rootCmd.AddCommand(workspaceCmd)
 	spaceCmd := newCmdSpace(f)
@@ -322,7 +322,7 @@ func Execute() int {
 	rootCmd.AddCommand(completionCmd)
 	commandsCmd := newCmdCommands(f)
 	rootCmd.AddCommand(commandsCmd)
-	// L31：commands 自身的 stdout schema 注册——`tabtin commands --format json`
+	// L31：commands 自身的 stdout schema 注册——`muse commands --format json`
 	// 输出顶层 array of CommandSchema，UI cli_output_table 渲染器（W4）+ schema
 	// 命中（L31）后能直接展示成"命令名 + 描述 + 风险"表格。
 	cmdutil.RegisterCommandSchema(commandsCmd, cmdutil.CommandDef{
@@ -361,7 +361,7 @@ func Execute() int {
 		}
 	}
 
-	// space 过渡期别名（会打 stderr 弃用提示；schema 保留以便 `tabtin commands` 探测）
+	// space 过渡期别名（会打 stderr 弃用提示；schema 保留以便 `muse commands` 探测）
 	for _, child := range spaceCmd.Commands() {
 		switch child.Name() {
 		case "use":
@@ -467,7 +467,7 @@ func Execute() int {
 	// api
 	cmdutil.RegisterCommandSchema(apiCmd, cmdutil.CommandDef{
 		Use: "api <method> <path>", Short: "通用 API 调用",
-		Example:     "  tabtin api GET /health\n  tabtin api POST /table/list --data '{\"space_id\":\"xxx\"}'",
+		Example:     "  muse api GET /health\n  muse api POST /table/list --data '{\"space_id\":\"xxx\"}'",
 		ArgsMapping: []string{"method", "path"},
 		HasFormat:   true,
 		Flags: []cmdutil.FlagDef{
@@ -480,31 +480,31 @@ func Execute() int {
 	// completion-install
 	cmdutil.RegisterCommandSchema(completionCmd, cmdutil.CommandDef{
 		Use: "completion-install", Short: "安装 Shell 补全到当前 Shell",
-		Example: "  tabtin completion-install",
+		Example: "  muse completion-install",
 		Route:   cmdutil.RouteDirect,
 		Risk:    cmdutil.RiskWrite, RiskDeclared: true, // ：写补全文件、可能改 shell rc
 	})
 
 	// about / doctor / ping / status / history
 	cmdutil.RegisterCommandSchema(aboutCmd, cmdutil.CommandDef{
-		Use: "about", Short: "显示 CLI 版本与环境信息", Example: "  tabtin about",
+		Use: "about", Short: "显示 CLI 版本与环境信息", Example: "  muse about",
 		Route: cmdutil.RouteDirect, HasFormat: true, Idempotent: true,
 	})
 	cmdutil.RegisterCommandSchema(doctorCmd, cmdutil.CommandDef{
-		Use: "doctor", Short: "CLI 环境诊断", Example: "  tabtin doctor\n  tabtin doctor --strict",
+		Use: "doctor", Short: "CLI 环境诊断", Example: "  muse doctor\n  muse doctor --strict",
 		HasFormat: true, Idempotent: true,
 		Flags: []cmdutil.FlagDef{{Name: "strict", Type: cmdutil.FlagBool, Desc: "把条件性降级项（如直连模式 cli_server 缺失）升为 ❌ 并计入退出码"}},
 	})
 	cmdutil.RegisterCommandSchema(pingCmd, cmdutil.CommandDef{
-		Use: "ping", Short: "连接探测", Example: "  tabtin ping",
+		Use: "ping", Short: "连接探测", Example: "  muse ping",
 		HasFormat: true, Idempotent: true,
 	})
 	cmdutil.RegisterCommandSchema(statusCmd, cmdutil.CommandDef{
-		Use: "status", Short: "总览状态", Example: "  tabtin status",
+		Use: "status", Short: "总览状态", Example: "  muse status",
 		HasFormat: true, Idempotent: true,
 	})
 	cmdutil.RegisterCommandSchema(historyCmd, cmdutil.CommandDef{
-		Use: "history", Short: "CLI 操作历史", Example: "  tabtin history\n  tabtin history --last 10",
+		Use: "history", Short: "CLI 操作历史", Example: "  muse history\n  muse history --last 10",
 		Route: cmdutil.RouteDirect, HasFormat: true, Idempotent: true,
 		Flags: []cmdutil.FlagDef{{Name: "last", Type: cmdutil.FlagInt, Desc: "只显示最近 N 条记录"}},
 	})
@@ -514,7 +514,7 @@ func Execute() int {
 	if installCmdRef != nil && installCmdRef.Name() == "install" {
 		cmdutil.RegisterCommandSchema(installCmdRef, cmdutil.CommandDef{
 			Use: "install <app_id>", Short: "安装 marketplace App",
-			Example:     "  tabtin install my-app\n  tabtin install my-app --auto-install",
+			Example:     "  muse install my-app\n  muse install my-app --auto-install",
 			Route:       cmdutil.RouteDirect,
 			ArgsMapping: []string{"app_id"},
 			Risk:        cmdutil.RiskWrite,
@@ -700,7 +700,7 @@ func newCmdDoctor(f *cmdutil.Factory) *cobra.Command {
 				// 退 0；要跑 doc/table/browser 的 harness 用 --strict 把它升成 ❌ 退 8。
 				rep.ok("transport", "Type: django（API 直连）")
 				rep.degraded("cli_server",
-					"未运行（API 直连模式）。auth/profile 等命令可用；但 doc/table/browser 等 RouteCliServer 命令不可用——要跑它们请先 `tabtin daemon start` 或启动桌面端",
+					"未运行（API 直连模式）。auth/profile 等命令可用；但 doc/table/browser 等 RouteCliServer 命令不可用——要跑它们请先 `muse daemon start` 或启动桌面端",
 					output.ExitServiceUnavail)
 				doctorProbeBackend(reqCtx, tr, rep)
 			default:
@@ -772,7 +772,7 @@ func newCmdPing(f *cmdutil.Factory) *cobra.Command {
 
 			tr, err := f.Transport()
 			if err != nil {
-				return output.PrintErrorAndExit(output.ErrorEnvelope(string(errcode.Unavailable), err.Error(), "tabtin daemon start", output.ExitServiceUnavail))
+				return output.PrintErrorAndExit(output.ErrorEnvelope(string(errcode.Unavailable), err.Error(), "muse daemon start", output.ExitServiceUnavail))
 			}
 			resp, err := tr.Request(reqCtx, "GET", "/health", nil, nil)
 			if err != nil {
@@ -964,9 +964,9 @@ func newCmdCommands(f *cmdutil.Factory) *cobra.Command {
 		Use:   "commands [domain]",
 		Short: "列出所有可用命令及其 Schema",
 		Long:  "输出所有注册命令的 JSON Schema，供 Agent 动态发现可用能力和参数定义。\n\n可选 domain 前缀过滤（如 doc / table / browser），只返回该领域命令，避免吞下全量目录。\n\n当 Daemon / Electron 可达时，自动合并 PlatformSurface 注册表和 extension/marketplace 命令，Agent 无需额外调用即可发现所有平台能力。",
-		Example: `  tabtin commands --format json
-  tabtin commands doc --format json
-  tabtin commands table --format json`,
+		Example: `  muse commands --format json
+  muse commands doc --format json
+  muse commands table --format json`,
 		Args: cobra.MaximumNArgs(1),
 		RunE: cmdutil.SafeRunE(func(cmd *cobra.Command, args []string) error {
 			if asJSON, _ := cmd.Flags().GetBool("json"); asJSON {
@@ -1067,7 +1067,7 @@ func globalFlagSchemas() []cmdutil.FlagSchema {
 		{Name: "debug", Type: "bool", Desc: "Debug mode"},
 		{Name: "agent-id", Type: "string", Desc: "Specify Agent ID"},
 		// v10.1 P2 修复：Sprint 1.C 新增的全局 flag 必须暴露给 agent discovery，
-		// 否则 `tabtin commands | jq '.data.global_flags'` 拿不到新能力，
+		// 否则 `muse commands | jq '.data.global_flags'` 拿不到新能力，
 		// CLI-first 取向下 agent 无法动态发现 --quiet / --output。
 		{Name: "quiet", Type: "bool", Desc: "Suppress success stdout (error envelope still on stderr); also TABTIN_QUIET=1"},
 		{Name: "output", Type: "string", Desc: "Write success response to file (long flag only; takes precedence over stdout; conflicts with --jq)"},
@@ -1131,7 +1131,7 @@ func fetchSurfaceSchemas(f *cmdutil.Factory) []cmdutil.CommandSchema {
 // surfaceToCommandSchema 将单个 SurfaceDescriptor 映射为 CommandSchema。
 //
 // 映射规则（与 harness 派发对齐）：
-//   - Name = "tabtin invoke <module> <verb>"  → 告诉 Agent 怎么调
+//   - Name = "muse invoke <module> <verb>"  → 告诉 Agent 怎么调
 //   - Description = "<module>/<verb> (PlatformSurface)" → 一目了然的分类标签
 //   - Method = "POST"  → surface HTTP binding 统一用 POST
 //   - Path = httpPath  → 如 /chat/export-md
@@ -1141,7 +1141,7 @@ func fetchSurfaceSchemas(f *cmdutil.Factory) []cmdutil.CommandSchema {
 //   - Kind = surface.kind  → "local" / "proxied"
 func surfaceToCommandSchema(s surfaceDescriptor) cmdutil.CommandSchema {
 	return cmdutil.CommandSchema{
-		Name:        fmt.Sprintf("tabtin invoke %s %s", s.Module, s.Verb),
+		Name:        fmt.Sprintf("muse invoke %s %s", s.Module, s.Verb),
 		Description: fmt.Sprintf("%s/%s (PlatformSurface)", s.Module, s.Verb),
 		Method:      "POST",
 		Path:        s.HTTPPath,
@@ -1193,7 +1193,7 @@ func extensionToCommandSchema(c extension.ExtensionCommand) cmdutil.CommandSchem
 		source = "extension:" + c.ExtensionID
 	}
 
-	name := fmt.Sprintf("tabtin %s %s", c.ExtensionID, c.Name)
+	name := fmt.Sprintf("muse %s %s", c.ExtensionID, c.Name)
 	desc := c.Description
 	if desc == "" {
 		desc = fmt.Sprintf("%s/%s", c.ExtensionID, c.Name)

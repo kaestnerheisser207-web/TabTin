@@ -4,7 +4,7 @@
  * 分层模型（principle/workspace-project.md）：Project 不执行，成员各自在伴生 Workspace
  * 里执行。供给动作必须在有 Electron 客户端时进行（要拿本机设备 + 本地目录）：
  *   1. 为该 Project 所属 Organization 注册/获取本机执行设备（拿 device_id）。
- *   2. 生成默认目录 ~/TabTin/<团队>/<Project名>（用户后续可改）。
+ *   2. 生成默认目录 ~/Muse/<团队>/<Project名>（用户后续可改）。
  *   3. 调后端：创建者/存量成员走 ensureMyWorkspace；被邀请者走 acceptInvitation
  *      （同一事务里激活成员关系 + 供给 Workspace）。
  *
@@ -23,7 +23,7 @@ export interface ProvisionProjectWorkspaceOptions {
   projectName: string
   /** accept：被邀请成员接受邀请；ensure：创建者 / 存量成员幂等补齐。 */
   mode: 'accept' | 'ensure'
-  /** 可选：显式指定本地目录；不传则生成默认 ~/TabTin/<团队>/<Project名>。 */
+  /** 可选：显式指定本地目录；不传则生成默认 ~/Muse/<团队>/<Project名>。 */
   workingDir?: string
   workingDirType?: string
 }

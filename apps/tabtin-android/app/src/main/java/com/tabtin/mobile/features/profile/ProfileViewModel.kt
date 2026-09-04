@@ -5,7 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.tabtin.mobile.BuildConfig
+import com.muse.mobile.BuildConfig
 import com.tabtin.mobile.data.api.resolveEffectiveApiBaseUrl
 import com.tabtin.mobile.data.api.resolveEffectiveCentrifugoWsUrl
 import com.tabtin.mobile.data.api.resolveEffectiveWebBaseUrl

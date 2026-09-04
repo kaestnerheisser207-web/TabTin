@@ -1,7 +1,7 @@
 {
   "name": "@tabtin/collab-core",
   "version": "0.1.0",
-  "description": "TabTin 实时协作底座 — Provider 状态机、重连、IndexedDB、Stateless 事件",
+  "description": "Muse 实时协作底座 — Provider 状态机、重连、IndexedDB、Stateless 事件",
   "private": true,
   "type": "module",
   "main": "dist/index.js",

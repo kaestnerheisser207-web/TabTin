@@ -29,7 +29,7 @@ const { electronMock, notificationMock } = vi.hoisted(() => ({
 
 vi.mock('electron', () => ({
   app: {
-    getName: () => 'TabTin Dev',
+    getName: () => 'Muse Dev',
   },
   systemPreferences: {
     getMediaAccessStatus: (kind: string) => electronMock.mediaAccessStatus[kind] ?? 'unknown',
@@ -136,7 +136,7 @@ describe('OsPermissions.mac', () => {
     electronMock.trustedAccessibilityClient = false
     const pending = await api.check('accessibility')
     expect(pending.status).toBe('not-determined')
-    expect(pending.processLabel).toBe('TabTin Dev')
+    expect(pending.processLabel).toBe('Muse Dev')
     expect(pending.detection).toBe('supported')
     expect(pending.requiresAppRestartAfterGrant).toBe(true)
     // ：辅助功能只能去系统设置，不提供「立即请求」

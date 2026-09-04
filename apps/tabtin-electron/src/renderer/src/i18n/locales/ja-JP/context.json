@@ -343,7 +343,7 @@
       "feishuReviewConfirm": "インポートの確認",
       "feishuReviewEmpty": "少なくとも 1 つの表またはドキュメントを保持する",
       "feishuIncludeAttachments": "添付ファイルを同期する (遅い)",
-      "feishuIncludeAttachmentsHint": "デフォルトではオフです。オンの場合、ファイルは TabTin 添付ファイルにダウンロードされます",
+      "feishuIncludeAttachmentsHint": "デフォルトではオフです。オンの場合、ファイルは Muse 添付ファイルにダウンロードされます",
       "feishuImporting": "インポート中…",
       "feishuImportProgressRunning": "{{done}}/{{total}} をインポート中",
       "feishuImportProgressQueued": "{{done}}/{{total}} をインポート中 ({{queued}} キューに登録)",
@@ -958,20 +958,24 @@
     },
     "quickUse": {
       "sectionTitle": "すぐに使える",
-      "autoDescription": "セットアップは必要ありません。 TabTin は、最初に送信可能なタスクのドラフトを生成します。",
+      "autoDescription": "セットアップは必要ありません。 Muse は、最初に送信可能なタスクのドラフトを生成します。",
       "cardHint": "プロンプトの下書きを生成し、レビューのためにチャット入力に配置します。",
       "insertAction": "生成する",
       "toastTitle": "入力で生成される",
       "toastDescription": "送信前にプリセットフィールドを調整できます。",
       "generatedTitle": "タスクのドラフトが生成されました",
-      "generatedHint": "TabTin が最初にテンプレートを入力しました。必要に応じて調整して送信してください。",
+      "generatedHint": "Muse が最初にテンプレートを入力しました。必要に応じて調整して送信してください。",
       "readyBadge": "準備完了",
       "previewLabel": "エージェントに送信されます",
       "toggleOn": "オン",
       "toggleOff": "オフ"
     },
     "quickUseBuilder": {
-      "button": "すぐに使えるテンプレート", "variables": "変数", "variablesHint": "固定プロンプトのみを使用するか、ユーザーが入力する変数を追加します。", "preview": "プレビュー", "cancel": "キャンセル"
+      "button": "すぐに使えるテンプレート",
+      "variables": "変数",
+      "variablesHint": "固定プロンプトのみを使用するか、ユーザーが入力する変数を追加します。",
+      "preview": "プレビュー",
+      "cancel": "キャンセル"
     },
     "versionPublish": {
       "title": "新しいバージョンを公開する",
@@ -1254,7 +1258,7 @@
       "xlsxTruncated": "{{total}} 行中 {{shown}} を表示しています",
       "xlsxSheetsLimited": "最初の {{max}} シートのみを表示",
       "xlsxFormulasCached": "ファイルに保存された{{count}} 式の結果を表示しています。",
-      "xlsxFormulasCalculated": "TabTin は、このプレビュー用に {{count}} 式をローカルに計算しました。結果はファイルに保存されませんでした。",
+      "xlsxFormulasCalculated": "Muse は、このプレビュー用に {{count}} 式をローカルに計算しました。結果はファイルに保存されませんでした。",
       "xlsxFormulasUnavailable": "{{count}} 式には結果が保存されていないため、プレビューで計算できません。スプレッドシート アプリでファイルを開きます。",
       "loadingDocxViewer": "ドキュメント プレビューを読み込んでいます...",
       "loadingPptxViewer": "プレゼンテーションを読み込んでいます...",
@@ -1562,7 +1566,7 @@
   },
   "browserRestore": {
     "restoringTitle": "ページを復元中",
-    "restoringDescription": "TabTin は以前に保存したページを再度開いています。",
+    "restoringDescription": "Muse は以前に保存したページを再度開いています。",
     "failedTitle": "ページの復元に失敗しました",
     "failedDescription": "元の URL はまだ保存されています。再試行するか、このタブを閉じてください。",
     "retry": "再試行",

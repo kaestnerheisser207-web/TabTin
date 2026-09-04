@@ -8,7 +8,7 @@
  *   4. query 零重合 → 静态段仍在，动态段 undefined
  *   5. 无命令 → 两段都 undefined
  *   6. fetchCli 抛错 / null → 两段都 undefined
- *   7. 静态段预算：一级命令超限时截断并附 `tabtin commands` 查询方法
+ *   7. 静态段预算：一级命令超限时截断并附 `muse commands` 查询方法
  *   8. 动态段最多 8 条
  *
  * ：CliCap 已从 agent-runtime 迁到 @tabtin/agent-host，本单测随源迁来；
@@ -81,7 +81,7 @@ describe('CliCap 静态段 <cli_commands>', () => {
     expect(idx).toContain('<cli_commands>');
     expect(idx).toContain('禁止再接 `head` / `tail` 截断输出');
     expect(idx).toContain('完整大输出由 run_terminal_command 自动落盘');
-    expect(idx).toContain('只列出 `tabtin <一级命令>`');
+    expect(idx).toContain('只列出 `muse <一级命令>`');
     expect(idx).toContain('- browser');
     expect(idx).toContain('- table');
     expect(idx).toContain('- doc');
@@ -103,7 +103,7 @@ describe('CliCap 静态段 <cli_commands>', () => {
     const idx = (await cliStaticIndex(cap, makeState('画一只红苹果')))!;
 
     expect(idx).toContain('- media');
-    expect(idx).not.toContain('tabtin media image models --format json');
+    expect(idx).not.toContain('muse media image models --format json');
     expect(idx).not.toContain('present_to_user');
     expect(idx).not.toContain('禁止用 SVG');
     expect(idx).not.toContain('非空 HTTPS');
@@ -133,7 +133,7 @@ describe('CliCap 静态段 <cli_commands>', () => {
     const state = makeState('无关');
     const idx = (await cliStaticIndex(cap, state))!;
     expect(idx).toContain('- verylongtoplevelcommandname0');
-    expect(idx).toMatch(/\+\d+ 个一级命令，用 tabtin commands --format json 看全/);
+    expect(idx).toMatch(/\+\d+ 个一级命令，用 muse commands --format json 看全/);
     expect(idx).not.toContain('verylongtoplevelcommandname199');
   });
 });
@@ -153,9 +153,9 @@ describe('CliCap 动态段 <relevant_cli>', () => {
     await runCliBeforeRun(cap, state);
     const rel = cap.getRelevantBlock()!;
 
-    expect(rel).toContain('| tabtin media |');
-    expect(rel).toContain('tabtin media image models --format json');
-    expect(rel).toContain('tabtin media image generate --prompt');
+    expect(rel).toContain('| muse media |');
+    expect(rel).toContain('muse media image models --format json');
+    expect(rel).toContain('muse media image generate --prompt');
     expect(rel).toContain('present_to_user');
     expect(rel).toContain('禁止用 SVG');
     expect(rel).toContain('非空 HTTPS');
@@ -174,11 +174,11 @@ describe('CliCap 动态段 <relevant_cli>', () => {
     const rel = cap.getRelevantBlock()!;
     expect(rel).toContain('<relevant_cli>');
     expect(rel).toContain('| command | risk | description |');
-    expect(rel).toContain('只展示 `tabtin <一级命令>`');
-    expect(rel).toContain('`tabtin <一级命令> --help`');
-    expect(rel).toContain('| tabtin browser | read |');
+    expect(rel).toContain('只展示 `muse <一级命令>`');
+    expect(rel).toContain('`muse <一级命令> --help`');
+    expect(rel).toContain('| muse browser | read |');
     expect(rel).toContain('Open pages, interact with elements, and collect web data.');
-    expect(rel).not.toContain('| tabtin browser open |');
+    expect(rel).not.toContain('| muse browser open |');
   });
 
   it('一级命令用全部子命令元数据参与召回，但不把子命令写入结果', async () => {
@@ -200,8 +200,8 @@ describe('CliCap 动态段 <relevant_cli>', () => {
     const state = makeState('点击页面表单');
     await runCliBeforeRun(cap, state);
     const rel = cap.getRelevantBlock() ?? '';
-    expect(rel).toContain('| tabtin browser |');
-    expect(rel).not.toContain('| tabtin browser act |');
+    expect(rel).toContain('| muse browser |');
+    expect(rel).not.toContain('| muse browser act |');
   });
 
   it('网页抓取意图召回 browser 一级命令', async () => {
@@ -217,14 +217,14 @@ describe('CliCap 动态段 <relevant_cli>', () => {
     };
     const cap = new CliCap({ fetchCli: async () => listing });
     await runCliBeforeRun(cap, makeState('抓取网页评论'));
-    expect(cap.getRelevantBlock()).toContain('| tabtin browser |');
+    expect(cap.getRelevantBlock()).toContain('| muse browser |');
   });
 
   it('没有根条目的命令域仍合成为一级入口', async () => {
     const listing: CliListing = {
       commands: [
         {
-          name: 'tabtin invoke chat export-md',
+          name: 'muse invoke chat export-md',
           description: '导出聊天记录为 Markdown',
         },
       ],
@@ -232,9 +232,9 @@ describe('CliCap 动态段 <relevant_cli>', () => {
     const cap = new CliCap({ fetchCli: async () => listing });
     await runCliBeforeRun(cap, makeState('导出聊天记录'));
     const relevant = cap.getRelevantBlock() ?? '';
-    expect(relevant).toContain('| tabtin invoke |');
-    expect(relevant).not.toContain('tabtin tabtin');
-    expect(relevant).not.toContain('| tabtin invoke chat export-md |');
+    expect(relevant).toContain('| muse invoke |');
+    expect(relevant).not.toContain('muse muse');
+    expect(relevant).not.toContain('| muse invoke chat export-md |');
   });
 
   it('大型命令域仍保留子命令 flag 的召回语义', async () => {
@@ -254,7 +254,7 @@ describe('CliCap 动态段 <relevant_cli>', () => {
     };
     const cap = new CliCap({ fetchCli: async () => listing });
     await runCliBeforeRun(cap, makeState('按 schema 提取数据'));
-    expect(cap.getRelevantBlock()).toContain('| tabtin browser |');
+    expect(cap.getRelevantBlock()).toContain('| muse browser |');
   });
 
   it('前 5 条带描述，其余仅名字', async () => {
@@ -267,7 +267,7 @@ describe('CliCap 动态段 <relevant_cli>', () => {
     await runCliBeforeRun(cap, state);
     const dataRows = (cap.getRelevantBlock() ?? '')
       .split('\n')
-      .filter((l) => l.startsWith('| tabtin search'));
+      .filter((l) => l.startsWith('| muse search'));
     const withDesc = dataRows.filter((l) => !l.endsWith('| — |'));
     expect(withDesc.length).toBe(5);
     expect(dataRows.length).toBeGreaterThan(5);
@@ -284,8 +284,8 @@ describe('CliCap 动态段 <relevant_cli>', () => {
     const state = makeState('unicorn common');
     await runCliBeforeRun(cap, state);
     const rel = cap.getRelevantBlock() ?? '';
-    expect(rel).toContain('| tabtin strong |');
-    expect(rel).not.toContain('tabtin weak1');
+    expect(rel).toContain('| muse strong |');
+    expect(rel).not.toContain('muse weak1');
   });
 
   it('最多 8 条', async () => {
@@ -298,7 +298,7 @@ describe('CliCap 动态段 <relevant_cli>', () => {
     await runCliBeforeRun(cap, state);
     const dataRows = (cap.getRelevantBlock() ?? '')
       .split('\n')
-      .filter((l) => l.startsWith('| tabtin search'));
+      .filter((l) => l.startsWith('| muse search'));
     expect(dataRows.length).toBe(8);
   });
 });

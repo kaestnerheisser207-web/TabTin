@@ -329,7 +329,7 @@ describe('collectTurnArtifacts', () => {
     expect(collectTurnArtifacts(turn)).toEqual([])
   })
 
-  it('extracts tabtin resource links from assistant text', () => {
+  it('extracts muse resource links from assistant text', () => {
     const turn = [
       msg({
         id: 'a1',
@@ -1119,7 +1119,7 @@ describe('collectTurnArtifacts', () => {
             type: 'tool_use',
             id: 'tu_doc',
             name: 'run_terminal_command',
-            input: { command: 'tabtin doc create --title "功能测试报告"' },
+            input: { command: 'muse doc create --title "功能测试报告"' },
           },
           {
             type: 'tool_result',
@@ -1130,7 +1130,7 @@ describe('collectTurnArtifacts', () => {
             type: 'tool_use',
             id: 'tu_table',
             name: 'run_terminal_command',
-            input: { command: 'tabtin table create --name "客户名单"' },
+            input: { command: 'muse table create --name "客户名单"' },
           },
           {
             type: 'tool_result',
@@ -1761,7 +1761,7 @@ describe('多维表 / 平台交付进本轮产物', () => {
             type: 'tool_use',
             id: 'tu_t',
             name: 'run_terminal_command',
-            input: { command: 'tabtin table create --name 融资' },
+            input: { command: 'muse table create --name 融资' },
           },
           {
             type: 'tool_result',
@@ -1792,7 +1792,7 @@ describe('多维表 / 平台交付进本轮产物', () => {
             type: 'tool_use',
             id: 'tu_t',
             name: 'run_terminal_command',
-            input: { command: 'tabtin table create --name 融资' },
+            input: { command: 'muse table create --name 融资' },
           },
           {
             type: 'tool_result',

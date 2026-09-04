@@ -3,7 +3,7 @@ package cmd
 import (
 	"github.com/spf13/cobra"
 
-	"github.com/TabTin/tabtin-cli/internal/cmdutil"
+	"github.com/Muse/muse-cli/internal/cmdutil"
 )
 
 // registerDocCommentCommands 挂载 `doc comment` 子组（ 旧 create/rm +  线程）。
@@ -27,9 +27,9 @@ func registerDocCommentCommands(parent *cobra.Command, f *cmdutil.Factory) {
 		Long: `在文档下新增一条评论（旧 /comments 接口，不改文档正文）。
 向前兼容保留：脚本与旧 Agent 仍可调用。新审阅流程请用 comment add（线程 + 锚点 + 图片）。
 常见陷阱：--body 必填；组织资源写封锁时会 403。`,
-		Example: "  tabtin doc comment create doc_xxx --body '这段需要补充来源'\n" +
-			"  tabtin doc comment create doc_xxx --body '同意' --selected-text '结论'\n" +
-			"  tabtin doc comment create doc_xxx --body @note.md --dry-run",
+		Example: "  muse doc comment create doc_xxx --body '这段需要补充来源'\n" +
+			"  muse doc comment create doc_xxx --body '同意' --selected-text '结论'\n" +
+			"  muse doc comment create doc_xxx --body @note.md --dry-run",
 		Layer:        "L2",
 		Risk:         cmdutil.RiskWrite,
 		RiskDeclared: true,
@@ -76,9 +76,9 @@ func registerDocCommentCommands(parent *cobra.Command, f *cmdutil.Factory) {
 		Long: `删除一条文档评论（旧 /comments 接口）。
 向前兼容保留。线程消息删除请走后端 messages DELETE（CLI 暂未暴露 rm-message）。
 常见陷阱：需具备写权限；评论不存在返回 404。`,
-		Example: "  tabtin doc comment rm doc_xxx comment_yyy\n" +
-			"  tabtin doc comment rm doc_xxx comment_yyy --dry-run\n" +
-			"  tabtin doc comment rm doc_xxx comment_yyy --format json",
+		Example: "  muse doc comment rm doc_xxx comment_yyy\n" +
+			"  muse doc comment rm doc_xxx comment_yyy --dry-run\n" +
+			"  muse doc comment rm doc_xxx comment_yyy --format json",
 		Layer:        "L2",
 		Risk:         cmdutil.RiskWrite,
 		RiskDeclared: true,
@@ -121,9 +121,9 @@ doc import file 现返回 202 + job；用本子组 poll status，就绪后取 re
 		Long: `查询导入任务进度（status/stage/processed_pages/result_available 等）。
 设计理由：异步 import 的 poll 入口；Agent 应循环 status 直至 completed/failed。
 常见陷阱：job_id 来自 import file / import/jobs 的 data.job.id，不是 file_record_id。`,
-		Example: "  tabtin doc import job status job_xxx\n" +
-			"  tabtin doc import job status job_xxx --format json\n" +
-			"  tabtin doc import job status job_xxx --jq '.job.status'",
+		Example: "  muse doc import job status job_xxx\n" +
+			"  muse doc import job status job_xxx --format json\n" +
+			"  muse doc import job status job_xxx --jq '.job.status'",
 		Layer:        "L2",
 		Risk:         cmdutil.RiskRead,
 		RiskDeclared: true,
@@ -146,9 +146,9 @@ doc import file 现返回 202 + job；用本子组 poll status，就绪后取 re
 		Long: `任务完成后取草稿（markdown/pm_json/plaintext/title 等）。
 设计理由：与同步时代 import file 返回草稿对齐；未就绪时后端 409 IMPORT_JOB_NOT_READY。
 常见陷阱：先 status 看 result_available；取到草稿后仍需 doc create / save-content 落库。`,
-		Example: "  tabtin doc import job result job_xxx\n" +
-			"  tabtin doc import job result job_xxx --jq '.job.result_payload.markdown'\n" +
-			"  tabtin doc import job result job_xxx --format json",
+		Example: "  muse doc import job result job_xxx\n" +
+			"  muse doc import job result job_xxx --jq '.job.result_payload.markdown'\n" +
+			"  muse doc import job result job_xxx --format json",
 		Layer:        "L2",
 		Risk:         cmdutil.RiskRead,
 		RiskDeclared: true,
@@ -166,9 +166,9 @@ doc import file 现返回 202 + job；用本子组 poll status，就绪后取 re
 		Long: `对失败/可重试的导入任务再次投递（202）。
 设计理由：解析偶发失败时不必重新 oss upload；返回新的或同一 job 视图。
 常见陷阱：仅对允许 retry 的状态有效；成功任务调用会被拒绝。`,
-		Example: "  tabtin doc import job retry job_xxx\n" +
-			"  tabtin doc import job retry job_xxx --dry-run\n" +
-			"  tabtin doc import job retry job_xxx --format json",
+		Example: "  muse doc import job retry job_xxx\n" +
+			"  muse doc import job retry job_xxx --dry-run\n" +
+			"  muse doc import job retry job_xxx --format json",
 		Layer:        "L2",
 		Risk:         cmdutil.RiskWrite,
 		RiskDeclared: true,
@@ -195,9 +195,9 @@ doc import file 现返回 202 + job；用本子组 poll status，就绪后取 re
 		Long: `取消尚未完成的导入任务。
 设计理由：Agent 发现传错文件时可止损，避免空转占用 worker。
 常见陷阱：已完成任务无法取消；取消后 result 不可用。`,
-		Example: "  tabtin doc import job cancel job_xxx\n" +
-			"  tabtin doc import job cancel job_xxx --dry-run\n" +
-			"  tabtin doc import job cancel job_xxx --format json",
+		Example: "  muse doc import job cancel job_xxx\n" +
+			"  muse doc import job cancel job_xxx --dry-run\n" +
+			"  muse doc import job cancel job_xxx --format json",
 		Layer:        "L2",
 		Risk:         cmdutil.RiskWrite,
 		RiskDeclared: true,

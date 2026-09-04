@@ -563,7 +563,7 @@ export async function requireTabWithView(
       res,
       400,
       errorResponse('TAB_REQUIRED', '无活跃 tab，请先 open 一个页面', {
-        suggestions: ['tabtin browser open "https://example.com"'],
+        suggestions: ['muse browser open "https://example.com"'],
       }),
     )
     return null
@@ -585,7 +585,7 @@ export async function requireTabWithView(
       res,
       400,
       errorResponse('VIEW_NOT_FOUND', `View ${tabId} 不存在或已销毁`, {
-        suggestions: ['tabtin browser open "url" 重新打开页面'],
+        suggestions: ['muse browser open "url" 重新打开页面'],
       }),
     )
     return null
@@ -616,10 +616,10 @@ export function requireBridgeAndSpace(
       503,
       errorResponse(
         'INTERNAL_ERROR',
-        'TabTin 界面尚未就绪，请确保应用窗口已打开',
+        'Muse 界面尚未就绪，请确保应用窗口已打开',
         {
           retryable: true,
-          suggestions: ['确保 TabTin 主窗口已显示', '等待几秒后重试'],
+          suggestions: ['确保 Muse 主窗口已显示', '等待几秒后重试'],
         },
       ),
     )
@@ -631,9 +631,9 @@ export function requireBridgeAndSpace(
       400,
       errorResponse(
         'VALIDATION_ERROR',
-        '未选择组织，请先在 TabTin 中打开一个 Space',
+        '未选择组织，请先在 Muse 中打开一个 Space',
         {
-          suggestions: ['在 TabTin 中创建或选择一个 Space'],
+          suggestions: ['在 Muse 中创建或选择一个 Space'],
         },
       ),
     )
@@ -658,11 +658,11 @@ export function enhanceErrorResponse(
       400,
       errorResponse(
         'VALIDATION_ERROR',
-        '该功能当前不可用，请确保 TabTin 已更新到最新版本',
+        '该功能当前不可用，请确保 Muse 已更新到最新版本',
         {
           suggestions: [
-            '请更新 TabTin 到最新版本',
-            '运行 tabtin doctor 检查环境',
+            '请更新 Muse 到最新版本',
+            '运行 muse doctor 检查环境',
           ],
           detail: { original: msg },
         },
@@ -677,8 +677,8 @@ export function enhanceErrorResponse(
       404,
       errorResponse('NOT_FOUND', '找不到目标标签页，请先打开一个页面', {
         suggestions: [
-          '使用 tabtin browser open <url> 打开页面',
-          '使用 tabtin browser tab list 查看已打开的标签页',
+          '使用 muse browser open <url> 打开页面',
+          '使用 muse browser tab list 查看已打开的标签页',
           '使用 --tab <viewId> 指定标签页',
         ],
         detail: { original: msg },
@@ -699,7 +699,7 @@ export function enhanceErrorResponse(
         '找不到目标资源，可能已失效或所属标签已关闭',
         {
           suggestions: [
-            '重新执行 tabtin browser resource list 获取最新 resourceId',
+            '重新执行 muse browser resource list 获取最新 resourceId',
             '确认所属页面仍处于打开状态',
             '如资源依赖页面上下文，可显式传入 --tab <viewId>',
           ],
@@ -740,10 +740,10 @@ export function enhanceErrorResponse(
       503,
       errorResponse(
         'INTERNAL_ERROR',
-        'TabTin 正在启动中，请稍后重试（通常需要 5-10 秒）',
+        'Muse 正在启动中，请稍后重试（通常需要 5-10 秒）',
         {
           retryable: true,
-          suggestions: ['等待几秒后重试', '确保 TabTin 应用已完全启动'],
+          suggestions: ['等待几秒后重试', '确保 Muse 应用已完全启动'],
           detail: { original: msg },
         },
       ),
@@ -763,7 +763,7 @@ export function enhanceErrorResponse(
         suggestions: [
           '检查网络连接',
           '增加 --timeout 参数',
-          '确保 TabTin 前端窗口未被冻结',
+          '确保 Muse 前端窗口未被冻结',
         ],
         detail: { original: msg },
       }),
@@ -809,7 +809,7 @@ export function handleRouteError(
       errorResponse('INTERNAL_ERROR', err?.message || String(err), {
         suggestions: [
           '检查命令参数是否正确',
-          '运行 tabtin browser --help 查看用法',
+          '运行 muse browser --help 查看用法',
         ],
       }),
     )

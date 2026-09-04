@@ -27,13 +27,13 @@
     "lint": "eslint src"
   },
   "keywords": [
-    "tabtin",
+    "muse",
     "table",
     "kernel",
     "field-validation",
     "filter"
   ],
-  "author": "TabTin Team",
+  "author": "Muse Team",
   "license": "MIT",
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "8.57.0",

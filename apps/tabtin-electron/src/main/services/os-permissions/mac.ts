@@ -54,7 +54,7 @@ const SETTINGS_URL: Omit<Record<PermissionKind, string>, 'notifications'> = {
 
 function resolveSettingsUrl(kind: PermissionKind): string {
   if (kind === 'notifications') {
-    const appId = process.env.TABTIN_APP_ID?.trim() || 'com.tabtin.app'
+    const appId = process.env.TABTIN_APP_ID?.trim() || 'com.muse.app'
     return `x-apple.systempreferences:com.apple.Notifications-Settings.extension?id=${encodeURIComponent(appId)}`
   }
   return SETTINGS_URL[kind]
@@ -137,9 +137,9 @@ function checkScreenCapture(): PermissionStatus {
 
 function resolveProcessLabel(): string {
   try {
-    return app.getName() || 'TabTin'
+    return app.getName() || 'Muse'
   } catch {
-    return 'TabTin'
+    return 'Muse'
   }
 }
 

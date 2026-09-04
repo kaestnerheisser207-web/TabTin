@@ -113,7 +113,7 @@ class TestPureHelpers:
             error_category="device_offline",
         ) is True
         assert _is_diagnostic_error_message(
-            "无法转发消息到执行设备，请在电脑打开 TabTin 后再试。",
+            "无法转发消息到执行设备，请在电脑打开 Muse 后再试。",
             error_category="device_offline",
         ) is False
         assert _is_diagnostic_error_message(
@@ -134,7 +134,7 @@ class TestPureHelpers:
             "device_offline",
         )
         assert msg != "device_offline"
-        assert "设备" in msg or "device" in msg.lower() or "TabTin" in msg
+        assert "设备" in msg or "device" in msg.lower() or "Muse" in msg
 
     def test_validate_blocks_rejects_non_dict_item(self):
         assert "must be an object" in (_validate_blocks(["nope"]) or "")

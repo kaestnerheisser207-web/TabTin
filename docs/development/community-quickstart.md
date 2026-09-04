@@ -1,8 +1,8 @@
-# TabTin Community 快速开始
+# Muse Community 快速开始
 
-本指南合并自 Windows 与 macOS 社区安装指引，面向第一次接触 TabTin 的普通用户和开发者。
+本指南合并自 Windows 与 macOS 社区安装指引，面向第一次接触 Muse 的普通用户和开发者。
 
-> 目标：安装 Docker → 启动 TabTin Community Server → 启动 Desktop Client → 配置自己的模型 → 开始第一次对话。
+> 目标：安装 Docker → 启动 Muse Community Server → 启动 Desktop Client → 配置自己的模型 → 开始第一次对话。
 >
 > 当前公开仓库地址：`https://github.com/tabtin-ai/TabTin`。文中的示例地址和 API Key 均为公开占位值，请替换为自己的配置。
 
@@ -11,10 +11,10 @@
 ### Windows
 
 1. 安装并启动 Docker Desktop。
-2. 下载并解压 TabTin Community。
+2. 下载并解压 Muse Community。
 3. 双击 `start.bat`。
-4. 等待显示 `TabTin Community READY`。
-5. 启动 TabTin Desktop Client。
+4. 等待显示 `Muse Community READY`。
+5. 启动 Muse Desktop Client。
 6. 注册或登录。
 7. 进入“设置 → 模型配置 → BYOK”。
 8. 添加自己的模型并开始聊天。
@@ -24,10 +24,10 @@
 ### macOS
 
 1. 安装并启动 Docker Desktop。
-2. 下载并解压 TabTin Community。
+2. 下载并解压 Muse Community。
 3. 双击 `start.command`。
-4. 等待显示 `TabTin Community READY`。
-5. 启动 TabTin Desktop Client。
+4. 等待显示 `Muse Community READY`。
+5. 启动 Muse Desktop Client。
 6. 注册或登录。
 7. 进入“设置 → 模型配置 → BYOK”。
 8. 添加自己的模型并开始聊天。
@@ -36,7 +36,7 @@
 
 ## 二、安装 Docker Desktop
 
-TabTin Community Server 运行在 Docker 中。用户不需要单独安装 PostgreSQL、Redis、Python、Celery 或 Centrifugo，这些服务由 TabTin 的 Community 环境启动。
+Muse Community Server 运行在 Docker 中。用户不需要单独安装 PostgreSQL、Redis、Python、Celery 或 Centrifugo，这些服务由 Muse 的 Community 环境启动。
 
 下载：[Docker Desktop](https://www.docker.com/products/docker-desktop/)
 
@@ -81,7 +81,7 @@ cd TabTin
 
 不需要先理解 PostgreSQL、Redis、Migration、Celery 或 Centrifugo 的内部实现。
 
-## 四、启动 TabTin Community Server
+## 四、启动 Muse Community Server
 
 ### Windows
 
@@ -125,14 +125,14 @@ chmod +x start.sh stop.sh status.sh
 
 ```text
 ========================================
-TabTin Community is READY
+Muse Community is READY
 ========================================
 Backend:
 http://127.0.0.1:6060
 Realtime:
 ws://127.0.0.1:8100
 Next:
-1. Start TabTin Desktop Client
+1. Start Muse Desktop Client
 2. Register or Login
 3. Settings → Model Configuration → BYOK
 4. Start chatting
@@ -173,12 +173,12 @@ Centrifugo: ws://127.0.0.1:8100/connection/websocket
 
 普通用户不需要手动配置这些地址。
 
-## 七、启动 TabTin Desktop Client
+## 七、启动 Muse Desktop Client
 
 Server 显示 READY 后，启动桌面客户端：
 
-- Windows：启动 `TabTin Community.exe` 或已安装的 TabTin Community。
-- macOS：启动 `TabTin Community.app`。如果是首次打开从网络下载的应用，右键应用并选择“打开”，按系统提示确认来源。
+- Windows：启动 `Muse Community.exe` 或已安装的 Muse Community。
+- macOS：启动 `Muse Community.app`。如果是首次打开从网络下载的应用，右键应用并选择“打开”，按系统提示确认来源。
 
 Community Desktop 应自动连接本地 API `127.0.0.1:6060` 和实时服务 `127.0.0.1:8100`，用户不需要填写服务器地址。
 
@@ -228,9 +228,9 @@ Model:    <your-model-name>
 进入 Chat / Agent，输入“你好”。正常链路是：
 
 ```text
-TabTin Desktop
+Muse Desktop
     ↓
-TabTin Community Server
+Muse Community Server
     ↓
 你的 BYOK Provider
     ↓
@@ -252,7 +252,7 @@ Assistant Response
 1. 启动 Docker Desktop。
 2. 等待 Docker Engine Running。
 3. Windows 双击 `start.bat`，macOS 双击 `start.command`。
-4. 启动 TabTin Desktop Client。
+4. 启动 Muse Desktop Client。
 
 默认数据会继续保留。
 
@@ -264,7 +264,7 @@ Assistant Response
 
 ## 十一、不要使用这些危险命令
 
-如果只是正常停止 TabTin，不要执行：
+如果只是正常停止 Muse，不要执行：
 
 ```bash
 docker compose down -v
@@ -284,7 +284,7 @@ docker system prune --volumes
 docker info
 ```
 
-如果仍然失败，重新启动 Docker Desktop 后再启动 TabTin。
+如果仍然失败，重新启动 Docker Desktop 后再启动 Muse。
 
 ### 第一次启动很慢
 
@@ -297,7 +297,7 @@ netstat -ano | findstr :6060
 netstat -ano | findstr :8100
 ```
 
-停止占用端口的其他程序后再启动 TabTin。
+停止占用端口的其他程序后再启动 Muse。
 
 ### macOS 端口 6060 或 8100 被占用
 
@@ -306,7 +306,7 @@ lsof -i :6060
 lsof -i :8100
 ```
 
-停止占用端口的其他程序后再启动 TabTin。
+停止占用端口的其他程序后再启动 Muse。
 
 ### Server READY，但不能聊天
 
@@ -325,11 +325,11 @@ lsof -i :8100
     ↓
 Docker Engine Running
     ↓
-下载并解压 TabTin
+下载并解压 Muse
     ↓
 启动 start.bat / start.command
     ↓
-TabTin Community READY
+Muse Community READY
     ↓
 启动 Desktop Client
     ↓
@@ -349,5 +349,5 @@ Assistant 正常返回
 给普通用户的最终记忆方式：
 
 ```text
-Docker Desktop → start.bat / start.command → TabTin Desktop → BYOK → Chat
+Docker Desktop → start.bat / start.command → Muse Desktop → BYOK → Chat
 ```

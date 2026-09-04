@@ -11,7 +11,7 @@ Confirm:
 
 ## 2. Collect Facts
 
-Prefer user-provided material first. Then use available TabTin resources:
+Prefer user-provided material first. Then use available Muse resources:
 
 - Memo or notes for raw activity.
 - TabDoc for project context and decisions.

@@ -5,8 +5,8 @@ import (
 	"sort"
 	"strings"
 
-	"github.com/TabTin/tabtin-cli/internal/errcode"
-	"github.com/TabTin/tabtin-cli/internal/output"
+	"github.com/Muse/muse-cli/internal/errcode"
+	"github.com/Muse/muse-cli/internal/output"
 )
 
 // validationIssue 描述一个 declarative validation 失败，**不直接打印 envelope**——

@@ -3,7 +3,7 @@
     <string name="auth_slogan">AI 工作平台</string>
     <string name="auth_hero_title">让 Agent\n真正做事</string>
     <string name="auth_hero_subtitle">每一步，都看得见。</string>
-    <string name="auth_login_title">登录 TabTin</string>
+    <string name="auth_login_title">登录 Muse</string>
     <string name="auth_mode_code">验证码</string>
     <string name="auth_mode_password">密码</string>
     <string name="auth_phone_label">邮箱/手机</string>

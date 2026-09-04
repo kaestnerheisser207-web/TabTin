@@ -133,7 +133,7 @@ def create_test_user(
     nickname = nickname or f"Test {suffix}"
     return User.objects.db_manager(USERS_DB_ALIAS).create_user(
         email=email,
-        password="TabtinTest#2026",
+        password="MuseTest#2026",
         nickname=nickname,
         is_active=is_active,
         **kwargs,

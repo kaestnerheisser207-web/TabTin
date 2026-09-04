@@ -6,7 +6,7 @@ from apps.services.email.services.tencent_email import TencentEmailService
 
 class EmailBrandingTests(SimpleTestCase):
     def test_company_name_defaults_to_tabtin(self):
-        self.assertEqual(settings.COMPANY_NAME, 'TabTin')
+        self.assertEqual(settings.COMPANY_NAME, 'Muse')
 
     def test_verification_template_uses_tabtin_not_legacy_legal_name(self):
         service = TencentEmailService(
@@ -21,6 +21,6 @@ class EmailBrandingTests(SimpleTestCase):
             }
         )
         html = service._render_verification_template('123456')
-        self.assertIn('TabTin', html)
+        self.assertIn('Muse', html)
         self.assertIn('123456', html)
         self.assertNotIn('Example Company', html)

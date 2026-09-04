@@ -80,7 +80,7 @@ export const TabDataCapabilitiesDialog: React.FC<TabDataCapabilitiesDialogProps>
           title="TabData 表格能力总览"
           description={(
             <>
-            与 <code className="text-caption">tabtin table</code> CLI 一一对应，共 {tabDataCapabilitiesManifest.commands.length} 条能力。
+            与 <code className="text-caption">muse table</code> CLI 一一对应，共 {tabDataCapabilitiesManifest.commands.length} 条能力。
             </>
           )}
         >

@@ -1,7 +1,7 @@
 package com.tabtin.mobile.features.conversation.checkpoint
 
 import android.content.Context
-import com.tabtin.mobile.R
+import com.muse.mobile.R
 import com.tabtin.mobile.data.model.CheckpointCapabilityScope
 import com.tabtin.mobile.data.model.CheckpointRecord
 

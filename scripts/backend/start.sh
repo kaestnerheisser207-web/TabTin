@@ -21,7 +21,7 @@ CENTRIFUGO_PID_FILE="${LOG_DIR}/centrifugo.pid"
 CENTRIFUGO_LOG_FILE="${LOG_DIR}/centrifugo.log"
 COLLAB_LIVE_DIR="${ROOT_DIR}/apps/collab-live"
 
-echo "🚀 启动所有 TabTin 服务..."
+echo "🚀 启动所有 Muse 服务..."
 echo ""
 
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"

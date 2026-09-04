@@ -103,7 +103,7 @@ const HITL_KIND_TO_EVENT_TYPE = HITL_KIND_TO_ASK_EVENT_TYPE;
 
 /**
  * 单 HITL 挂起等待默认超时（与 ask-tools 里 ASK_USER_TIMEOUT_MS 对齐 = 30min）。
- * 集中定义避免"魔法数字散落"（TabTin engineering 规约）。
+ * 集中定义避免"魔法数字散落"（Muse engineering 规约）。
  */
 const SINGLE_HITL_RESUME_DEFAULT_TIMEOUT_MS = 30 * 60 * 1000;
 

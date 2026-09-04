@@ -2,7 +2,7 @@
  * ShellCap —— 本地 LLM 唯一的 shell 工具贡献者。
  *
  * **业务定位**（北极星）：本地 LLM 调 shell 时，命令用一次性子进程跑，
- * 输出同步写进用户的 Terminal Tab transcript 里，用户能实时看。这是 TabTin「Agent 贯穿所有
+ * 输出同步写进用户的 Terminal Tab transcript 里，用户能实时看。这是 Muse「Agent 贯穿所有
  * 工作面、每一步都看得见」的工程基本盘，让 Agent 命令输出进入用户可见的 Terminal Tab。
  *
  * ---
@@ -55,7 +55,7 @@
  *   - **D6**：未上线，**不做兼容性**。shell bridge 未注入 → ShellCap 装配失败
  *   - **D7**：**不留 MVP / 中间态**——`classifyShellStderr` / `persisted_stderr_path` /
  *     `pid` 等旧执行路径字段全部退役
- *   - **D8**：TabTin 不做 MCP 输出——4 件套 MCP 暴露已在 WP5 删除
+ *   - **D8**：Muse 不做 MCP 输出——4 件套 MCP 暴露已在 WP5 删除
  *   - **D9**：暂不做跨设备执行（bridge 只服务本机 Electron / Daemon 两端）
  *   - **D10**：`DEFAULT_AGENT_COMMAND_TIMEOUT_MS = 120_000` 单源（2 分钟默认超时）
  *   - **D11**：~~5-14 加专门 kill 工具~~（2026-05-23 push 通知重构废止，
@@ -177,7 +177,7 @@ import { isShellCommandWriteOp } from './shell-command-side-effect.js';
  *
  * - `terminal_mode`: 'sandboxed' | 'regular' | 'blocked' | 'tabtin_only'
  *   产品语义：Agent 终端的整体模式。`blocked` 完全禁用 shell；`tabtin_only`
- *   仅允许 tabtin CLI 内置命令；`sandboxed` 走 sandbox-exec / bwrap；
+ *   仅允许 muse CLI 内置命令；`sandboxed` 走 sandbox-exec / bwrap；
  *   `regular` 直接 spawn 子进程。
  *
  * - `command_execution`: 同 terminal_mode 的子集（更细粒度）—— 现有
@@ -289,7 +289,7 @@ export interface ShellCapInit {
    *
    * **业务定位**：本地 LLM 调 `run_terminal_command` 时，命令由一次性子进程
    * 执行，输出写进 Terminal Tab transcript，让 Agent 的每一步真正可视化。
-   * 这是 TabTin 北极星「Agent 贯穿所有工作面、每一步都看得见」的工程拐点。
+   * 这是 Muse 北极星「Agent 贯穿所有工作面、每一步都看得见」的工程拐点。
    *
    * **接口契约**：见本地 `shell-bridge-contract.ts`（`PtyManagerBridge`）：
    *   - `executeAgentCommand` —— foreground 路径（默认）
@@ -346,8 +346,8 @@ export interface ShellCapInit {
    *
    * **决策依据**：
    *   - 业界常见 bash 工具缺省约 2min
-   *   - 过短（如 10s）只适合带 stream delta 的场景；TabTin 没 stream，不适用
-   *   - TabTin 之前 30s 是中间值——`pnpm test` / `pnpm build` 几乎必超时撞
+   *   - 过短（如 10s）只适合带 stream delta 的场景；Muse 没 stream，不适用
+   *   - Muse 之前 30s 是中间值——`pnpm test` / `pnpm build` 几乎必超时撞
    *     timeout hint 路径（`Strongly prefer run_in_background ...`）反而强迫
    *     LLM 多走一轮决策。改 2min 让中等长度命令一次跑完
    *
@@ -366,11 +366,11 @@ export interface ShellCapInit {
    *   `checker.isAllowed(command)`，拒绝时直接返回结构化错误，不走 session.exec。
    *
    * 由宿主（ElectronAgentHost / DaemonAgentHost）按当前 `agentMode` 决定是否注入；
-   * checker 内部负责 tabtin Risk 查询（详见 `restricted-shell-allowlist.ts`）。
+   * checker 内部负责 muse Risk 查询（详见 `restricted-shell-allowlist.ts`）。
    */
   restrictedShellChecker?: RestrictedShellAllowlistChecker;
   /**
-   * 宿主注入的 CLI 展示语义 resolver。core shell 不认识 TabTin 业务命令；
+   * 宿主注入的 CLI 展示语义 resolver。core shell 不认识 Muse 业务命令；
    * 宿主解析 argv 后返回稳定 kind，由 lifecycle 协议透传给 Renderer。
    */
   resolvePresentation?: ShellPresentationResolver;

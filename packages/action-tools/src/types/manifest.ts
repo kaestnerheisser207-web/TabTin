@@ -59,7 +59,7 @@ export interface ToolDomainMeta {
    * Whether tools in this domain are published to manifest.json (FC tool list visible to LLM).
    *
    * **Defaults to `false`（白名单模式，W5 收尾反转 2026-05-04）**：新加 domain 默认
-   * 不暴露给 LLM，业务能力一律走 `tabtin <command>` CLI（工具系统宪法 §不变量 2）。
+   * 不暴露给 LLM，业务能力一律走 `muse <command>` CLI（工具系统宪法 §不变量 2）。
    * 只有少数底层 IO / 执行平面工具（read_file / grep_search / run_terminal_command /
    * skills_*）应该显式 opt-in `manifestExposed: true`。
    *

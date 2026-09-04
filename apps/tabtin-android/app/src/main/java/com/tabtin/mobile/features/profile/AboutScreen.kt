@@ -41,8 +41,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import com.tabtin.mobile.BuildConfig
-import com.tabtin.mobile.R
+import com.muse.mobile.BuildConfig
+import com.muse.mobile.R
 import com.tabtin.mobile.ui.theme.TTRadius
 import com.tabtin.mobile.ui.theme.TTSpacing
 import java.util.Calendar
@@ -99,7 +99,7 @@ public fun AboutScreen(onBack: () -> Unit) {
                             verticalArrangement = Arrangement.spacedBy(TTSpacing.xs),
                         ) {
                             Text(
-                                text = "TabTin",
+                                text = "Muse",
                                 style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.SemiBold),
                                 color = MaterialTheme.colorScheme.onSurface,
                             )

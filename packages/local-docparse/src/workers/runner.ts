@@ -1,7 +1,7 @@
 /**
  * WorkerTaskRunner — 通用 Worker 线程池
  *
- * 参考 Superset 的 WorkerTaskRunner，适配 TabTin 的使用场景。
+ * 参考 Superset 的 WorkerTaskRunner，适配 Muse 的使用场景。
  * 支持并发池、任务队列、去重（coalesce）、最新覆盖（latest-wins）、超时、中止。
  *
  * H1-D-MAIN 在 Electron 已经验证过；H2-E 抽到共享包给 Daemon 复用，

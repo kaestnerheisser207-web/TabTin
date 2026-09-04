@@ -1,7 +1,7 @@
 {
   "name": "@tabtin/crawlspace-core",
   "version": "0.1.0",
-  "description": "Core infrastructure for TabTin crawlspace (workspace for crawling)",
+  "description": "Core infrastructure for Muse crawlspace (workspace for crawling)",
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",

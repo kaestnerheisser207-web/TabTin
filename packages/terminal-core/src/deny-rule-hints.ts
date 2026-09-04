@@ -40,7 +40,7 @@ export const DENY_RULE_HINTS: Readonly<Record<string, string>> = {
 
   'curl pipe to shell':
     'Fetching and executing a script in a single pipeline is blocked. ' +
-    'Use `tabtin fetch <url>` to read the page content, save ' +
+    'Use `muse fetch <url>` to read the page content, save ' +
     'the script with `write_file`, then run it as a Python/Node script ' +
     '(`python3 script.py` / `node script.js`). Avoid `bash <file>` — ' +
     '`shell-invocation` is also blocked.',
@@ -83,8 +83,8 @@ export const DENY_RULE_HINTS: Readonly<Record<string, string>> = {
   'pipe-to-shell':
     'Piping output directly to a shell interpreter is blocked. ' +
     'To execute a remote script safely: ' +
-    '(1) fetch the page text via `tabtin fetch <url>` ' +
-    '(the tabtin CLI is allowed); ' +
+    '(1) fetch the page text via `muse fetch <url>` ' +
+    '(the muse CLI is allowed); ' +
     '(2) review the content with the user; ' +
     '(3) save the script with `write_file` and run it via `python3 script.py` ' +
     'or `node script.js` (both allowed). Direct shell scripts (`bash script.sh`) ' +
@@ -97,8 +97,8 @@ export const DENY_RULE_HINTS: Readonly<Record<string, string>> = {
 
   'process-substitution-input':
     'Process substitution with network-fetching tools is blocked. ' +
-    'Use `tabtin fetch <url>` (page text) or ' +
-    '`tabtin browser print --url <url> --save <path>` (page content to file) to retrieve ' +
+    'Use `muse fetch <url>` (page text) or ' +
+    '`muse browser print --url <url> --save <path>` (page content to file) to retrieve ' +
     'content; for query-driven discovery use `web_search`. ' +
     'Then pass the saved file to the consuming command.',
 
@@ -119,8 +119,8 @@ export const DENY_RULE_HINTS: Readonly<Record<string, string>> = {
   'curl-write-file':
     'Writing curl output directly to a file (`-o` / `-O` / `--output`) is blocked. ' +
     'For binary resources (videos / images / archives), use ' +
-    '`tabtin browser download --url <url>`. For page text content, use ' +
-    '`tabtin browser print --url <url> --save <path>` (saves Markdown by default).',
+    '`muse browser download --url <url>`. For page text content, use ' +
+    '`muse browser print --url <url> --save <path>` (saves Markdown by default).',
 
   'curl-upload':
     'Uploading files via curl (`-T` / `--upload-file`) is blocked. ' +
@@ -284,16 +284,16 @@ export const DENY_RULE_HINTS: Readonly<Record<string, string>> = {
 
   'curl-basic':
     'curl is blocked at the default policy level. To read web pages use ' +
-    '`tabtin fetch <url>` (page text) or ' +
-    '`tabtin browser print --url <url> --save <path>` (page content to file). For binary ' +
-    'downloads use `tabtin browser download --url <url>`. For query-driven ' +
+    '`muse fetch <url>` (page text) or ' +
+    '`muse browser print --url <url> --save <path>` (page content to file). For binary ' +
+    'downloads use `muse browser download --url <url>`. For query-driven ' +
     'discovery use `web_search`. None of these require approval.',
 
   'wget-basic':
     'wget is blocked at the default policy level. Use ' +
-    '`tabtin fetch <url>` for page text, ' +
-    '`tabtin browser print --url <url> --save <path>` for page content to file, or ' +
-    '`tabtin browser download --url <url>` for binary downloads. ' +
+    '`muse fetch <url>` for page text, ' +
+    '`muse browser print --url <url> --save <path>` for page content to file, or ' +
+    '`muse browser download --url <url>` for binary downloads. ' +
     'For query-driven discovery use `web_search`. None of these require approval.',
 
   'ftp-sftp':

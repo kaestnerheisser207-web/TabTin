@@ -16,9 +16,9 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/TabTin/tabtin-cli/internal/conversation"
-	"github.com/TabTin/tabtin-cli/internal/errcode"
-	"github.com/TabTin/tabtin-cli/internal/output"
+	"github.com/Muse/muse-cli/internal/conversation"
+	"github.com/Muse/muse-cli/internal/errcode"
+	"github.com/Muse/muse-cli/internal/output"
 )
 
 // resolveOutputFormatCase 描述一组输入和期望——nil envelope 表示通过，

@@ -1,4 +1,4 @@
-"""TabTin 统一搜索引擎（Full-Text Search）。
+"""Muse 统一搜索引擎（Full-Text Search）。
 
 本 App 承载 PRD《2026-04-16-unified-search-engine》的后端实现：
     - 客户端（client.py）连接阿里云 Elasticsearch 8.x 托管服务

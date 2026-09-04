@@ -1,7 +1,7 @@
 /**
  * **W5 (2026-05-12) edit_file 4 级精准 fuzzy 匹配模块**
  *
- * 基于生产环境高频对话沉淀的精准 fuzzy 匹配实现。事故 c39cd8b2 复盘发现 TabTin 旧实现仅 2 级（exact
+ * 基于生产环境高频对话沉淀的精准 fuzzy 匹配实现。事故 c39cd8b2 复盘发现 Muse 旧实现仅 2 级（exact
  * + line_trimmed），缺 curly quote / tab-space 规范化——LLM API round-trip 时
  * curly quote 被替换、read_file 输出 tab 渲染成空格让 Agent 抄空格写回，
  * 这两类失误每天都在发生，每次都触发"重读重写"循环浪费 5-10 秒。
@@ -14,7 +14,7 @@
  *
  * **不做 9 级激进 fuzzy**：BlockAnchor / WhitespaceNormalized /
  * IndentationFlexible / ContextAware 属于「首末锚定中间不校验 / 全
- * 部空白合并」风格，TabTin Wave 1 dogfood 验证过会假阳性命中（calculator
+ * 部空白合并」风格，Muse Wave 1 dogfood 验证过会假阳性命中（calculator
  * regression 即此案）——LLM 凭幻觉写中间内容，首末两行恰好是真代码 → 静默
  * 改写到错误位置 → 文件被破坏。
  *
@@ -64,7 +64,7 @@ export function normalizeQuotes(str: string): string {
 /**
  * 把 tab 展开成 4 个 ASCII 空格。
  *
- * 用于规范化匹配——TabTin read_file 输出走 cat -n 行号 + tab 前缀 + 文件原
+ * 用于规范化匹配——Muse read_file 输出走 cat -n 行号 + tab 前缀 + 文件原
  * 内容；LLM 在 context 看到的是 cat -n 渲染后的纯文本，tab 可能被各种渲染
  * 层（HTML / 富文本编辑器 / Markdown）展开成空格让 LLM 看见的是空格。Agent
  * 抄一段写回 old_string 给空格版本，但磁盘文件里仍是 tab——exact indexOf

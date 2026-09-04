@@ -1,4 +1,4 @@
-"""Tabtin Space router shim.
+"""Muse Space router shim.
 
 新代码请直接从 `apps.tabtinspace.routers` 导入。
 """

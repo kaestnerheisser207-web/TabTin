@@ -75,7 +75,7 @@ describe("CollabProvider auth recovery ", () => {
     expect(cp.getYDoc()).toBe(ydocBefore);
   });
 
-  it("onAuthenticationFailed is recoverable (not TabTin 4001 FORCE_CLOSED)", async () => {
+  it("onAuthenticationFailed is recoverable (not Muse 4001 FORCE_CLOSED)", async () => {
     const cp = new CollabProvider(BASE_OPTIONS);
     cp.connect();
     const ydocBefore = cp.getYDoc();
@@ -127,7 +127,7 @@ describe("CollabProvider auth recovery ", () => {
     expect(hpConstructCount).toBe(1);
   });
 
-  it("TabTin business CloseCode.AUTH_FAILED (4001) remains FORCE_CLOSED", () => {
+  it("Muse business CloseCode.AUTH_FAILED (4001) remains FORCE_CLOSED", () => {
     const cp = new CollabProvider(BASE_OPTIONS);
     cp.connect();
 

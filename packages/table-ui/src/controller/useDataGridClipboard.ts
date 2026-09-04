@@ -975,7 +975,7 @@ export function useDataGridClipboard({
 
       if (parsedRows.length === 0) return
 
-      // TODO: When pasting from TabTin's own copy, extract typed cell values
+      // TODO: When pasting from Muse's own copy, extract typed cell values
       // from the HTML channel's data-tabtin-cells attribute to bypass string
       // conversion and preserve original types (link records, attachments, etc.).
       // Use: const result = parseHtmlTable(html ?? '', true)

@@ -49,6 +49,6 @@
 - 阻塞：<N or 未统计>
 - 需要决策：<N>
 
-简报：<tabtin resource link or 草稿>
+简报：<muse resource link or 草稿>
 待确认：<questions>
 ```

@@ -262,7 +262,7 @@ class DesktopUpdateAdminApiTests(TestCase):
             data=json.dumps(
                 {
                     "asset_type": "package",
-                    "file_name": "TabTin Setup.exe",
+                    "file_name": "Muse Setup.exe",
                     "file_size": 1024,
                     "content_type": "application/octet-stream",
                 }
@@ -352,7 +352,7 @@ files:
 
     def test_staff_can_preview_manifest_template(self):
         release = self._create_release(version="4.1.0", published=False)
-        release.file_url = "https://cdn.example.com/desktop-updates/stable/mac/x64/4.1.0/TabTin-Setup-4.1.0.dmg"
+        release.file_url = "https://cdn.example.com/desktop-updates/stable/mac/x64/4.1.0/Muse-Setup-4.1.0.dmg"
         release.file_size = 20971520
         release.checksum_sha256 = "a" * 64
         release.checksum_sha512 = "b" * 88
@@ -437,7 +437,7 @@ files:
                 data=json.dumps(
                     {
                         "asset_type": "package",
-                        "file_name": "TabTin Setup 5.0.0.exe",
+                        "file_name": "Muse Setup 5.0.0.exe",
                         "file_size": 31457280,
                         "content_type": "application/octet-stream",
                     }
@@ -447,8 +447,8 @@ files:
             )
             self.assertEqual(intent_response.status_code, 200)
             intent_payload = intent_response.json()
-            self.assertTrue(intent_payload["object_key"].endswith("TabTin-5.0.0-windows.exe"))
-            self.assertEqual(intent_payload["expected_file_name"], "TabTin-5.0.0-windows.exe")
+            self.assertTrue(intent_payload["object_key"].endswith("Muse-5.0.0-windows.exe"))
+            self.assertEqual(intent_payload["expected_file_name"], "Muse-5.0.0-windows.exe")
 
             fake_oss.file_sizes[intent_payload["object_key"]] = 31457280
 
@@ -487,7 +487,7 @@ files:
         self.assertIn(manifest_key, fake_oss.uploaded_bytes)
         manifest_text = fake_oss.uploaded_bytes[manifest_key].decode("utf-8")
         self.assertIn("version: 5.0.0", manifest_text)
-        self.assertIn("TabTin-5.0.0-windows.exe", manifest_text)
+        self.assertIn("Muse-5.0.0-windows.exe", manifest_text)
 
         self.assertEqual(FileRecord.objects.filter(file_key=intent_payload["object_key"]).count(), 1)
         self.assertEqual(FileRecord.objects.filter(file_key=manifest_key).count(), 1)
@@ -500,7 +500,7 @@ files:
             data=json.dumps(
                 {
                     "asset_type": "package",
-                    "file_name": "TabTin-Preprod-5.0.2-arm64.dmg",
+                    "file_name": "Muse-Preprod-5.0.2-arm64.dmg",
                     "file_size": 31457280,
                     "content_type": "application/x-apple-diskimage",
                 }
@@ -514,7 +514,7 @@ files:
 
     def test_superuser_can_upload_website_installer_without_touching_file_url(self):
         release = self._create_release(version="5.0.3", platform="mac", arch="arm64", published=False)
-        release.file_url = "https://cdn.example.com/desktop-updates/stable/mac/arm64/5.0.3/TabTin-5.0.3-arm64-mac.zip"
+        release.file_url = "https://cdn.example.com/desktop-updates/stable/mac/arm64/5.0.3/Muse-5.0.3-arm64-mac.zip"
         release.save(update_fields=["file_url", "updated_at"])
         fake_oss = _FakeOSSService()
 
@@ -524,7 +524,7 @@ files:
                 data=json.dumps(
                     {
                         "asset_type": "website_installer",
-                        "file_name": "TabTin-5.0.3-arm64.dmg",
+                        "file_name": "Muse-5.0.3-arm64.dmg",
                         "file_size": 41943040,
                         "content_type": "application/x-apple-diskimage",
                     }
@@ -534,7 +534,7 @@ files:
             )
             self.assertEqual(intent_response.status_code, 200)
             intent_payload = intent_response.json()
-            self.assertTrue(intent_payload["object_key"].endswith("TabTin-5.0.3-arm64.dmg"))
+            self.assertTrue(intent_payload["object_key"].endswith("Muse-5.0.3-arm64.dmg"))
 
             fake_oss.file_sizes[intent_payload["object_key"]] = 41943040
             complete_response = self.client.post(
@@ -559,23 +559,23 @@ files:
         self.assertEqual(release.website_file_url, payload["asset"]["public_url"])
         self.assertEqual(
             release.file_url,
-            "https://cdn.example.com/desktop-updates/stable/mac/arm64/5.0.3/TabTin-5.0.3-arm64-mac.zip",
+            "https://cdn.example.com/desktop-updates/stable/mac/arm64/5.0.3/Muse-5.0.3-arm64-mac.zip",
         )
         self.assertFalse(payload["asset"]["manifest_generated"])
-        self.assertEqual(payload["release"]["website_asset_name"], "TabTin-5.0.3-arm64.dmg")
+        self.assertEqual(payload["release"]["website_asset_name"], "Muse-5.0.3-arm64.dmg")
         self.assertEqual(payload["release"]["download_file_url"], release.website_file_url)
 
     def test_superuser_can_overwrite_same_object_key_without_duplicate_file_records(self):
         release = self._create_release(version="5.1.0", published=False)
         fake_oss = _FakeOSSService()
-        # 托管上传会规范化为短文件名 TabTin-{ver}-{arch}-mac.zip
-        object_key = "desktop-updates/stable/mac/x64/5.1.0/TabTin-5.1.0-x64-mac.zip"
+        # 托管上传会规范化为短文件名 Muse-{ver}-{arch}-mac.zip
+        object_key = "desktop-updates/stable/mac/x64/5.1.0/Muse-5.1.0-x64-mac.zip"
         fake_oss.file_sizes[object_key] = 2048
 
         payload = {
             "asset_type": "package",
             "object_key": object_key,
-            "file_name": "TabTin-5.1.0-x64-mac.zip",
+            "file_name": "Muse-5.1.0-x64-mac.zip",
             "file_size": 2048,
             "content_type": "application/octet-stream",
             "checksum_sha256": "f" * 64,

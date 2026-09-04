@@ -298,7 +298,7 @@ describe('ElectronAgentHost.relayBackgroundTaskTerminalResult —  本机 live �
     const { harness, publish, send } = createHarness()
     const envelope = makeEnvelope()
     ;(envelope.payload as { command: string }).command =
-      'tabtin media image generate --prompt "月照金山" --format json'
+      'muse media image generate --prompt "月照金山" --format json'
 
     harness.relayBackgroundTaskTerminalResult(envelope)
 

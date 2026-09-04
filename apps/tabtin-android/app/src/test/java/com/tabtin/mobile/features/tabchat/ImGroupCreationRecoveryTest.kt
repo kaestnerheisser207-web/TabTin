@@ -1,6 +1,6 @@
 package com.tabtin.mobile.features.tabchat
 
-import com.tabtin.mobile.R
+import com.muse.mobile.R
 import com.tabtin.mobile.util.ErrorClassifier
 import java.net.UnknownHostException
 import kotlinx.coroutines.test.runTest

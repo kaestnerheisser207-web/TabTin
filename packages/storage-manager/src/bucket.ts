@@ -1,5 +1,5 @@
 /**
- * StorageBucket — TabTin 本地存储统一注册中心的核心类型。
+ * StorageBucket — Muse 本地存储统一注册中心的核心类型。
  *
  * 设计意图：
  *   - 各业务模块（TabVideo / Conversation / Checkpoint / Browser / Skills 等）

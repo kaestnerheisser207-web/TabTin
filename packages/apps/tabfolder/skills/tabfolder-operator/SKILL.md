@@ -37,7 +37,7 @@ metadata:
 
 1. **浏览目录** → 上下文已注入当前文件夹路径和文件树概要，不要重复读取
 2. **读取文件** → 用 `file_read`（不是 `cat`），支持 `offset`/`limit` 分段读取大文件
-3. **写入/编辑** → 通过 CLI `tabtin code write` 新建文件，`tabtin code edit` 精确替换已有内容
+3. **写入/编辑** → 通过 CLI `muse code write` 新建文件，`muse code edit` 精确替换已有内容
 4. **搜索文件** → `code_glob` 按文件名模式查找，`code_grep` 按内容搜索
 
 ## 安全约束
@@ -52,7 +52,7 @@ metadata:
 | 场景 | 方式 |
 |------|------|
 | 文件内容 → TabData | 读取文件 → 解析结构 → 通过 SQL 写入 |
-| 文件内容 → TabDoc | 读取文件 → 通过 `tabtin doc create --markdown` 落库，再按段用 `tabtin doc insert-block` / `tabtin doc append` 补写 |
+| 文件内容 → TabDoc | 读取文件 → 通过 `muse doc create --markdown` 落库，再按段用 `muse doc insert-block` / `muse doc append` 补写 |
 | 代码项目 | 优先使用 TabCode 的完整工具链（语义搜索、诊断等） |
 
 ## 效率规则
@@ -76,6 +76,6 @@ metadata:
 
 | 命令 | 用途 |
 |------|------|
-| `tabtin code write --path <file> --content '<text>'` | 创建或覆盖文件 |
-| `tabtin code edit --path <file> --edits '<json>'` | 精确编辑（指定替换内容） |
-| `tabtin code delete --path <file>` | 删除文件（不可逆，需确认用户意图） |
+| `muse code write --path <file> --content '<text>'` | 创建或覆盖文件 |
+| `muse code edit --path <file> --edits '<json>'` | 精确编辑（指定替换内容） |
+| `muse code delete --path <file>` | 删除文件（不可逆，需确认用户意图） |

@@ -1,4 +1,4 @@
-"""Tabtin Space 分域路由聚合入口。"""
+"""Muse Space 分域路由聚合入口。"""
 
 from ninja import Router
 
@@ -40,7 +40,7 @@ from .tabfiles import router as tabfiles_router
 
 from .space_activity import router as space_activity_router
 
-router = Router(tags=["Tabtin Space"])
+router = Router(tags=["Muse Space"])
 
 router.add_router("", organization_router)
 

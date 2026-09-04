@@ -2,12 +2,12 @@
  * McpCap —— 已挂载 MCP 能力的上下文注入。
  *
  * **目标**：让 Agent 开局就知道当前 Space 挂了哪些 MCP server、各有哪些工具，以及跟本轮
- * 请求相关的工具细节，不必先跑 `tabtin mcp list-servers` / `list-tools` 懒发现。真正调用
+ * 请求相关的工具细节，不必先跑 `muse mcp list-servers` / `list-tools` 懒发现。真正调用
  * 仍走 host 侧的 `mcp_call_tool`——本 Cap 只注入认知，不新增工具。
  *
  * **与 SkillsCap 相同的两区机制**：
  *   - **静态段**（`<mcp_servers>`，query 无关、跨轮稳定、可缓存）：已挂载 server + 工具名
- *     索引。server 全列；工具名按预算截断（超出附 `tabtin mcp list-tools` 查询方法）。
+ *     索引。server 全列；工具名按预算截断（超出附 `muse mcp list-tools` 查询方法）。
  *     写入 `state.__mcpStaticIndex`，由 query.ts 注入 system 静态前缀（boundary 之前）。
  *   - **动态段**（`<relevant_mcp>`，每轮随 query 变）：与本轮 query BM25 相关的工具 Top-N
  *     带描述。写入 `state.__mcpRelevant`，由 context-injector 拼进当轮 `<context>`。
@@ -108,7 +108,7 @@ const RELEVANT_DESC_COUNT = 5;
 const TOOL_DESC_CAP = 160;
 
 const STATIC_HEADER =
-  '已挂载的 MCP server 及其工具（用 mcp_call_tool 调用；工具名省略部分用 `tabtin mcp list-tools --server-name <name> --format json` 查全）：';
+  '已挂载的 MCP server 及其工具（用 mcp_call_tool 调用；工具名省略部分用 `muse mcp list-tools --server-name <name> --format json` 查全）：';
 // 动态段格式与 skills `<relevant_skills>` 一致：英文说明句 + Markdown 表（前 N 行带描述，其余 —）。
 const RELEVANT_HEADER =
   'Most relevant MCP tools for the current request (full tool list is in the system prompt above):';
@@ -178,7 +178,7 @@ function renderStaticIndex(listing: McpListing, budgetChars: number): string | n
     const { shown, omitted } = fitToolNames(names, perServer);
     let toolsStr = shown.join(', ');
     if (omitted > 0) {
-      toolsStr += ` (+${omitted} 个，用 tabtin mcp list-tools --server-name ${server.serverName} 看全)`;
+      toolsStr += ` (+${omitted} 个，用 muse mcp list-tools --server-name ${server.serverName} 看全)`;
     }
     lines.push(`- ${server.serverName}${label}: ${toolsStr}`);
   }

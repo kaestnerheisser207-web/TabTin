@@ -79,8 +79,8 @@ describe('WorkspaceAutoMemorySection', () => {
     expect(screen.queryByText('自动整理工作记忆、日记与画像')).toBeNull()
     expect(getSettings).toHaveBeenCalledWith('workspace-a')
     expect(listModels).toHaveBeenCalledWith('workspace-a')
-    expect(screen.queryByRole('option', { name: 'TabTin 官方 · 官方推荐' })).toBeNull()
-    expect(screen.getByRole('group', { name: 'TabTin 官方' })).toBeTruthy()
+    expect(screen.queryByRole('option', { name: 'Muse 官方 · 官方推荐' })).toBeNull()
+    expect(screen.getByRole('group', { name: 'Muse 官方' })).toBeTruthy()
     expect(screen.getByRole('group', { name: '我的模型' })).toBeTruthy()
     expect(screen.getByRole('group', { name: '组织模型' })).toBeTruthy()
   })
@@ -142,7 +142,7 @@ describe('WorkspaceAutoMemorySection', () => {
 
     const toggle = await screen.findByRole('switch', { name: '自动记忆增强' })
     expect((toggle as HTMLInputElement).disabled).toBe(false)
-    expect(screen.queryByRole('option', { name: 'TabTin 官方 · 官方推荐' })).toBeNull()
+    expect(screen.queryByRole('option', { name: 'Muse 官方 · 官方推荐' })).toBeNull()
     fireEvent.click(toggle)
 
     await waitFor(() => {

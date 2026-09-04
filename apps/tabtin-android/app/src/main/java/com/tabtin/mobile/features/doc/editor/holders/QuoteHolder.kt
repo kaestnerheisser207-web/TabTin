@@ -1,7 +1,7 @@
 package com.tabtin.mobile.features.doc.editor.holders
 
 import com.tabtin.mobile.databinding.DocBlockQuoteBinding
-import com.tabtin.mobile.R
+import com.muse.mobile.R
 import com.tabtin.mobile.features.doc.editor.core.SlashTextWatcherState
 import com.tabtin.mobile.features.doc.editor.core.TabDocMarkup
 import com.tabtin.mobile.ui.theme.TTSpacing

@@ -68,7 +68,7 @@ describe('D9 Study 模式工具策略 · 跟随 plan + present_to_user 显式 al
     it('run_terminal_command 放行（contract allow + L16 input 级 allowlist）', () => {
       const result = evaluateAgentModeToolAccess({
         tool: makeTool('run_terminal_command', false),
-        toolInput: { command: 'tabtin doc list' },
+        toolInput: { command: 'muse doc list' },
         agentMode: 'study',
         sessionId: 'sess-1',
       });

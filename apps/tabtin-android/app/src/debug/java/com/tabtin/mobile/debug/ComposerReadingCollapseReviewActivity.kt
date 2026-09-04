@@ -45,7 +45,7 @@ import com.tabtin.mobile.ui.theme.ttColor
  *
  * 启动：
  * ```
- * adb shell am start -n com.tabtin.mobile/com.tabtin.mobile.debug.ComposerReadingCollapseReviewActivity
+ * adb shell am start -n com.muse.mobile/com.tabtin.mobile.debug.ComposerReadingCollapseReviewActivity
  * ```
  * 用于逐轮验证：滑动消息 → 输入区收成悬浮胶囊；回到最新 → 自然展开；点胶囊 → 展开并聚焦。
  */

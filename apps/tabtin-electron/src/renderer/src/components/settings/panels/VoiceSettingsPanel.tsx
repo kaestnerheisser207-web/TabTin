@@ -41,7 +41,7 @@ const MAX_REPLACEMENT_RULES = 50
 
 const PLATFORM_HOTWORDS = [
   // 与 useVoiceSettingsStore.PLATFORM_HOTWORDS 保持一致（13 个）
-  'TabTin', 'TabData', 'TabDoc', 'TabSlide',
+  'Muse', 'TabData', 'TabDoc', 'TabSlide',
   'Agentspace', 'Agent', 'Space',
   'RAG', 'Prompt', 'Skill', 'Memo', 'Composer', 'Crawler',
 ] as const

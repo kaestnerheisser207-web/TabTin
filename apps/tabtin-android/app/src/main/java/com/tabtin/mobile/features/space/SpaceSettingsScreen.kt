@@ -52,7 +52,7 @@ import androidx.compose.ui.unit.dp
 import androidx.annotation.StringRes
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.background
-import com.tabtin.mobile.R
+import com.muse.mobile.R
 import com.tabtin.mobile.ui.components.TTFormDialog
 import com.tabtin.mobile.ui.components.TTFormSheet
 import com.tabtin.mobile.ui.theme.TTSpacing

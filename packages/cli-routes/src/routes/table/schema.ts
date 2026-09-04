@@ -813,7 +813,7 @@ export async function handleTableSchemaRoute(
 
     const filePath = body?.file ?? body?.file_path ?? body?.path
     const outcome = await performLocalFileUpload(typeof filePath === 'string' ? filePath : '', {
-      // 附件字段挂载的文件走通用 'present' 生命周期（与 `tabtin oss upload` 默认一致）；
+      // 附件字段挂载的文件走通用 'present' 生命周期（与 `muse oss upload` 默认一致）；
       // 不是 TabDoc 正文引用，不需要 'document' 语义。
       contextType: 'present',
       organizationId: typeof body?.organization_id === 'string' ? body.organization_id : undefined,

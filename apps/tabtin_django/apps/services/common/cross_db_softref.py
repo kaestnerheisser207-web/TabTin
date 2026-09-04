@@ -2,7 +2,7 @@
 
 == 为什么需要 ==
 
-TabTin 双库（MySQL default + PostgreSQL）下，跨库 ``ForeignKey(to='other_app.X')``
+Muse 双库（MySQL default + PostgreSQL）下，跨库 ``ForeignKey(to='other_app.X')``
 会有三层雷：
 
 1. **DB router 拒绝赋值**：``router.allow_relation(local, foreign)`` 默认拒绝跨库

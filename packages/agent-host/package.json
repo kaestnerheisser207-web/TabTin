@@ -1,7 +1,7 @@
 {
   "name": "@tabtin/agent-host",
   "version": "0.1.0",
-  "description": "Shared TabTin host orchestration for Agent runtimes",
+  "description": "Shared Muse host orchestration for Agent runtimes",
   "type": "module",
   "main": "dist/index.js",
   "module": "dist/index.js",

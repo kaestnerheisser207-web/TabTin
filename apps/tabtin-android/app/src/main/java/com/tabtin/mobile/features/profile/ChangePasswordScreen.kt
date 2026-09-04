@@ -35,7 +35,7 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.tabtin.mobile.R
+import com.muse.mobile.R
 import com.tabtin.mobile.ui.theme.TTSpacing
 
 @OptIn(ExperimentalMaterial3Api::class)

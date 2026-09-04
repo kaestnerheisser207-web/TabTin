@@ -27,8 +27,8 @@ import type {
   TabTinResourceScheme,
 } from './types.js'
 
-const SELF_FORMAT_PREFIX_RE = /^(?:tabtin|tabtin-preprod|tabtin-dev):\/\/resource\//
-const SELF_FORMAT_RE = /^(?:tabtin|tabtin-preprod|tabtin-dev):\/\/resource\/([^/?#]+)\/([^?#]+)(\?[^#]*)?(#.*)?$/
+const SELF_FORMAT_PREFIX_RE = /^(?:muse|tabtin-preprod|tabtin-dev):\/\/resource\//
+const SELF_FORMAT_RE = /^(?:muse|tabtin-preprod|tabtin-dev):\/\/resource\/([^/?#]+)\/([^?#]+)(\?[^#]*)?(#.*)?$/
 
 /**
  * Agent 常见笔误归一化（须与 Python `resource_pointer.py` 保持字符级对齐）。
@@ -86,7 +86,7 @@ export function parseResourcePointer(
     }
     // 头部对了但 path 形态不合法——退化为 unknown，便于上层 outcome=error
     return {
-      scheme: 'tabtin',
+      scheme: 'muse',
       type: null,
       id: raw,
       raw,
@@ -174,7 +174,7 @@ function tryParseSelfFormat(raw: string): ResourcePointer | null {
   ;({ type, hint } = normalizeSelfFormatFields(type, hint))
 
   return {
-    scheme: 'tabtin',
+    scheme: 'muse',
     type,
     id,
     raw,
@@ -194,7 +194,7 @@ function decodeURIComponentSafe(s: string): string {
 /**
  * 把 ResourcePointer 反向序列化成自有格式字符串。
  *
- * 仅对 `scheme === 'tabtin'` 有意义。行业格式直接用 `pointer.raw`。
+ * 仅对 `scheme === 'muse'` 有意义。行业格式直接用 `pointer.raw`。
  * 用途：
  *   - W3 三处生成端（TrackerRunStatusIndicator / TrackerRunBreadcrumb /
  *     AppDeepLink）从 ContextRefType+id 反构 deep link
@@ -202,7 +202,7 @@ function decodeURIComponentSafe(s: string): string {
  */
 export function serializeSelfFormat(
   pointer: Pick<ResourcePointer, 'type' | 'id' | 'hint' | 'meta'>,
-  scheme: TabTinResourceScheme = 'tabtin',
+  scheme: TabTinResourceScheme = 'muse',
 ): string {
   if (!pointer.type) {
     throw new Error('serializeSelfFormat: pointer.type is required for self format')

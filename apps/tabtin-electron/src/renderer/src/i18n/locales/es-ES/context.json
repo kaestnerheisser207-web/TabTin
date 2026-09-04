@@ -343,7 +343,7 @@
       "feishuReviewConfirm": "Confirmar importación",
       "feishuReviewEmpty": "Mantenga al menos una tabla o documento",
       "feishuIncludeAttachments": "Sincronizar archivos adjuntos (más lento)",
-      "feishuIncludeAttachmentsHint": "Desactivado de forma predeterminada; cuando está activado, los archivos se descargan en archivos adjuntos TabTin",
+      "feishuIncludeAttachmentsHint": "Desactivado de forma predeterminada; cuando está activado, los archivos se descargan en archivos adjuntos Muse",
       "feishuImporting": "Importando…",
       "feishuImportProgressRunning": "Importando {{done}}/{{total}}",
       "feishuImportProgressQueued": "Importando {{done}}/{{total}} ({{queued}} en cola)",
@@ -428,7 +428,7 @@
     "dependenciesDisabled": "{{count}} dependencias deshabilitadas",
     "dependenciesDisabledDetail": "Deshabilitado: {{apps}}",
     "dependenciesIncompatible": "{{count}} la versión de dependencia no coincide",
-      "dependenciesIncompatibleDetail": "Incompatible: {{apps}}",
+    "dependenciesIncompatibleDetail": "Incompatible: {{apps}}",
     "dependenciesBlocked": "Dependencias no satisfechas",
     "dependenciesFix": "Arreglar dependencias",
     "dependenciesFixMissingTitle": "Faltan dependencias",
@@ -958,20 +958,24 @@
     },
     "quickUse": {
       "sectionTitle": "Uso rápido",
-      "autoDescription": "No se necesita configuración. TabTin generará primero un borrador de tarea listo para enviar.",
+      "autoDescription": "No se necesita configuración. Muse generará primero un borrador de tarea listo para enviar.",
       "cardHint": "Genere un borrador rápido y colóquelo en la entrada del chat para su revisión.",
       "insertAction": "generar",
       "toastTitle": "Generado en la entrada",
       "toastDescription": "Puede ajustar los campos preestablecidos antes de enviar.",
       "generatedTitle": "Borrador de tarea generado",
-      "generatedHint": "TabTin llenó la plantilla primero. Ajústelo si es necesario y luego envíelo.",
+      "generatedHint": "Muse llenó la plantilla primero. Ajústelo si es necesario y luego envíelo.",
       "readyBadge": "Listo",
       "previewLabel": "Será enviado al Agente",
       "toggleOn": "encendido",
       "toggleOff": "Apagado"
     },
     "quickUseBuilder": {
-      "button": "Plantilla de uso rápido", "variables": "Variables", "variablesHint": "Usa una instrucción fija o añade variables para que las completen los usuarios.", "preview": "Vista previa", "cancel": "Cancelar"
+      "button": "Plantilla de uso rápido",
+      "variables": "Variables",
+      "variablesHint": "Usa una instrucción fija o añade variables para que las completen los usuarios.",
+      "preview": "Vista previa",
+      "cancel": "Cancelar"
     },
     "versionPublish": {
       "title": "Publicar nueva versión",
@@ -1254,7 +1258,7 @@
       "xlsxTruncated": "Mostrando {{shown}} de {{total}} filas",
       "xlsxSheetsLimited": "Solo se muestran las primeras hojas {{max}}",
       "xlsxFormulasCached": "Mostrando los resultados de la fórmula {{count}} guardados en el archivo.",
-      "xlsxFormulasCalculated": "TabTin calculó las fórmulas {{count}} localmente para esta vista previa. Los resultados no se guardaron en el archivo.",
+      "xlsxFormulasCalculated": "Muse calculó las fórmulas {{count}} localmente para esta vista previa. Los resultados no se guardaron en el archivo.",
       "xlsxFormulasUnavailable": "Las fórmulas {{count}} no tienen resultados guardados y no se pueden calcular en la vista previa. Abra el archivo en una aplicación de hoja de cálculo.",
       "loadingDocxViewer": "Cargando vista previa del documento...",
       "loadingPptxViewer": "Cargando presentación...",
@@ -1562,7 +1566,7 @@
   },
   "browserRestore": {
     "restoringTitle": "Restaurando página",
-    "restoringDescription": "TabTin está reabriendo la página guardada anteriormente.",
+    "restoringDescription": "Muse está reabriendo la página guardada anteriormente.",
     "failedTitle": "Error al restaurar la página",
     "failedDescription": "La URL original todavía está guardada. Vuelva a intentarlo o cierre esta pestaña.",
     "retry": "Reintentar",

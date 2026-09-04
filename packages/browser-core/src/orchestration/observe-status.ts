@@ -4,11 +4,11 @@ export type ObserveStatus = 'ok' | 'empty' | 'skipped' | 'error'
 export const ACT_OBSERVE_OK_HINT =
   'observe_status=ok：本响应已含 observed_elements，先用清单里的 ref 继续 act；'
   + '要用的目标不在清单里时再 glance 一次（--tree/--screenshot 也走 glance）。'
-  + '读正文用 tabtin browser print --save <path> 或 tabtin fetch。'
+  + '读正文用 muse browser print --save <path> 或 muse fetch。'
 
 /** act 内嵌观察失败/空：glance 补观察。 */
 export const ACT_OBSERVE_RETRY_HINT =
-  'observe_status 为 empty/error：请 glance 一次补观察后再 act；读正文仍用 print --save / tabtin fetch，不要靠 glance 抠正文。'
+  'observe_status 为 empty/error：请 glance 一次补观察后再 act；读正文仍用 print --save / muse fetch，不要靠 glance 抠正文。'
 
 export function resolveObserveStatus(opts: {
   observeRequested: boolean

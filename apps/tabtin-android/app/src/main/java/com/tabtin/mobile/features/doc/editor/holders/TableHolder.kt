@@ -13,7 +13,7 @@ import android.widget.TableRow
 import android.widget.TextView
 import android.widget.PopupMenu
 import androidx.core.widget.TextViewCompat
-import com.tabtin.mobile.R
+import com.muse.mobile.R
 import com.tabtin.mobile.databinding.DocBlockTableBinding
 import com.tabtin.mobile.features.doc.editor.TableProjectionLocalization
 import com.tabtin.mobile.features.doc.editor.core.BlockViewConverter

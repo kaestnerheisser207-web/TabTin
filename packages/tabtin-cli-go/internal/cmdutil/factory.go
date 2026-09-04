@@ -6,9 +6,9 @@ import (
 	"sync"
 	"time"
 
-	"github.com/TabTin/tabtin-cli/internal/config"
-	"github.com/TabTin/tabtin-cli/internal/output"
-	"github.com/TabTin/tabtin-cli/internal/transport"
+	"github.com/Muse/muse-cli/internal/config"
+	"github.com/Muse/muse-cli/internal/output"
+	"github.com/Muse/muse-cli/internal/transport"
 )
 
 type Factory struct {
@@ -68,7 +68,7 @@ func (f *Factory) Transport() (transport.Transport, error) {
 		f.tr = tr
 	})
 	if f.tr == nil {
-		return nil, fmt.Errorf("无法连接到 TabTin。请确保 Electron 或 Daemon 正在运行，或配置 API 直连")
+		return nil, fmt.Errorf("无法连接到 Muse。请确保 Electron 或 Daemon 正在运行，或配置 API 直连")
 	}
 	return f.tr, nil
 }

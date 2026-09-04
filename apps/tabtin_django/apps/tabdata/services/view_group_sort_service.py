@@ -31,7 +31,7 @@ _USER_FIELD_TYPES = frozenset({'user', 'created_by', 'last_modified_by'})
 _USER_ID_KEYS = ('id', 'user_id', 'open_id', 'union_id')
 _USER_NAME_KEYS = ('name', 'display_name', 'nickname', 'en_name')
 _USER_AVATAR_KEYS = ('avatar_url', 'avatarUrl', 'avatar')
-# TabTin 组织成员 / 系统用户 id 为 UUID；飞书导入常见 ou_ / open_id 走展示名归桶
+# Muse 组织成员 / 系统用户 id 为 UUID；飞书导入常见 ou_ / open_id 走展示名归桶
 _USER_UUID_RE = re.compile(
     r'^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$',
     re.I,
@@ -97,7 +97,7 @@ def _read_first_text(record: Dict[str, Any], keys: Tuple[str, ...]) -> Optional[
 
 
 def _looks_like_member_id(identity: str) -> bool:
-    """TabTin 组织成员 id 为 UUID；飞书 ou_ / open_id 等不算成员匹配。"""
+    """Muse 组织成员 id 为 UUID；飞书 ou_ / open_id 等不算成员匹配。"""
     return bool(_USER_UUID_RE.match(identity))
 
 

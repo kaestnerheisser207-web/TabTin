@@ -97,8 +97,8 @@ bash scripts/ensure-issue-tracker-table.sh --table-id <table_id>
 记录链接优先直接使用，不手工拆 UUID：
 
 ```bash
-tabtin table record detail "<record-url>" --format json
-tabtin table record update --url "<record-url>" --set "状态=处理中"
+muse table record detail "<record-url>" --format json
+muse table record update --url "<record-url>" --set "状态=处理中"
 ```
 
 状态必须名副其实：lint、类型检查和单元测试通过仍只是代码验证，不等于客户端

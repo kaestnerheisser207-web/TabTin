@@ -1054,7 +1054,7 @@ describe('集成 demo: register → list → size → clear → export', () => {
     }))
     const exportFn = vi.fn(async () => ({
       filename: 'voice-hotwords.json',
-      data: JSON.stringify({ hotwords: ['TabTin', 'Agent'] }),
+      data: JSON.stringify({ hotwords: ['Muse', 'Agent'] }),
       mimeType: 'application/json',
     }))
     registerStorageBucket({
@@ -1066,7 +1066,7 @@ describe('集成 demo: register → list → size → clear → export', () => {
       warnings: ['热词清空后语音识别可能误识专有词'],
       sizeFn: async () => ({ bytes: 4096, itemCount: 12 }),
       listFn: async () => [
-        { id: 'h1', label: 'TabTin', bytes: 32 },
+        { id: 'h1', label: 'Muse', bytes: 32 },
         { id: 'h2', label: 'Agent', bytes: 32 },
       ],
       clearFn,
@@ -1098,7 +1098,7 @@ describe('集成 demo: register → list → size → clear → export', () => {
     const exported = await exportBucket('voice:hotwords')
     expect(exported.filename).toBe('voice-hotwords.json')
     const parsed = JSON.parse(exported.data as string)
-    expect(parsed.hotwords).toContain('TabTin')
+    expect(parsed.hotwords).toContain('Muse')
 
     // 7. Descriptor 形态正确
     const desc = bucketToDescriptor(getBucket('voice:hotwords')!)

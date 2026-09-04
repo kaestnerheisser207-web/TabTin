@@ -7,7 +7,7 @@ const path = require('node:path')
 const { pathToFileURL } = require('node:url')
 
 const DEFAULT_ADMIN_API_PATH = '/api/auth/admin/desktop-updates'
-const RELEASE_NOTE_FALLBACK_PREFIX = 'TabTin Desktop release'
+const RELEASE_NOTE_FALLBACK_PREFIX = 'Muse Desktop release'
 
 function parseArgs(argv) {
   const args = {}
@@ -89,19 +89,19 @@ function buildCanonicalUploadFileName({ platform, arch, version, assetType = 'pa
   const normalizedArch = String(arch || '').trim()
   if (!ver || !ext) return path.basename(String(sourceFileName || ''))
   if (platform === 'win') {
-    return `TabTin-${ver}-windows${ext}`
+    return `Muse Local-${ver}-windows${ext}`
   }
   if (platform === 'mac') {
     if (assetType === 'website_installer') {
-      return `TabTin-${ver}-${normalizedArch}${ext}`
+      return `Muse Local-${ver}-${normalizedArch}${ext}`
     }
     if (ext === '.zip') {
-      return `TabTin-${ver}-${normalizedArch}-mac.zip`
+      return `Muse Local-${ver}-${normalizedArch}-mac.zip`
     }
-    return `TabTin-${ver}-${normalizedArch}${ext}`
+    return `Muse Local-${ver}-${normalizedArch}${ext}`
   }
   if (platform === 'linux' && normalizedArch) {
-    return `TabTin-${ver}-${normalizedArch}${ext}`
+    return `Muse Local-${ver}-${normalizedArch}${ext}`
   }
   return path.basename(String(sourceFileName || ''))
 }
@@ -506,9 +506,9 @@ async function upsertRelease({
  * 从 dist 目录里某个 packaged 安装包的文件名反向推算实际版本号。
  *
  * electron-builder 默认 fileName 模板：`${productName}-${version}-${arch}.${ext}`
- *   例：`TabTin-1.0.0-arm64.dmg`
- *       `TabTin Preprod-1.0.0-preprod.1-arm64.dmg`
- *       `TabTin Preprod-1.0.0-preprod.1-arm64-mac.zip`
+ *   例：`Muse Local-1.0.0-arm64.dmg`
+ *       `Muse Preprod-1.0.0-preprod.1-arm64.dmg`
+ *       `Muse Preprod-1.0.0-preprod.1-arm64-mac.zip`
  *
  * 这是**真实产物的权威版本号**——build script 顶部 RESOLVED_APP_VERSION
  * 一路 patch 进 deploy/package.json + electron-builder extraMetadata，

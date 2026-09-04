@@ -93,7 +93,7 @@ export function scanMarketplaceManifests(appsDir: string): MarketplaceCliCommand
     if (!manifest.cliGrammar?.rules?.length) continue
     if (!manifest.cli?.binary) continue
     // ：显式关闭 Agent 提示词的 marketplace 样板（如 tabtin-demo-app）
-    // 也不应进入 `tabtin commands` / CliCap `<cli_commands>` 发现面。
+    // 也不应进入 `muse commands` / CliCap `<cli_commands>` 发现面。
     if (manifest.agentIntegration?.hasPromptSection === false) continue
 
     const appId = manifest.id

@@ -1237,7 +1237,7 @@ describe('TerminalCard · 终端结果显示精简', () => {
 
     render(
       <TerminalCard
-        command="tabtin table list"
+        command="muse table list"
         stdout={compactJson}
         stderr=""
         exitCode={0}

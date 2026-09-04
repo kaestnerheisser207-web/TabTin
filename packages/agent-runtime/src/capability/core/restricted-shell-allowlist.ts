@@ -1,18 +1,18 @@
 /**
  * 受限模式 shell 命令 input 级白名单（L16 / W5.5 + J3a）。
  *
- * **背景**：宪法不变量 2 把业务能力全压到 `tabtin <command>` CLI；W3 又把
+ * **背景**：宪法不变量 2 把业务能力全压到 `muse <command>` CLI；W3 又把
  * `run_terminal_command` 整体加进受限模式 deny list，结果叠加成"Plan/Ask/Study
- * 三个模式完全没有业务能力"——LLM 连 `tabtin doc list` 这种纯只读查询都跑不了。
+ * 三个模式完全没有业务能力"——LLM 连 `muse doc list` 这种纯只读查询都跑不了。
  *
  * **方案 A**（用户 2026-05-04 拍板）：受限模式仍允许 `run_terminal_command` 调用，
- * 但只放行 `tabtin <subcmd>` 形态、且对应 CLI 命令 `Risk` 字段为 `RiskNone`（空字符串）
- * 的命令。Risk 由 `tabtin commands --format json` 自描述提供。
+ * 但只放行 `muse <subcmd>` 形态、且对应 CLI 命令 `Risk` 字段为 `RiskNone`（空字符串）
+ * 的命令。Risk 由 `muse commands --format json` 自描述提供。
  *
- * **J3a（2026-05-10）**：在 tabtin readonly 通道之外**追加**系统命令通道，
+ * **J3a（2026-05-10）**：在 muse readonly 通道之外**追加**系统命令通道，
  * 追加系统命令 readonly + flag allowlist：
  * 第一批覆盖 6 个高频系统命令：`git` / `tree` / `find` / `sed` / `xargs` / `ps`。
- * 决策链：tabtin parser 命中 → 走原 Risk 决策；tabtin parser 失败（非 tabtin
+ * 决策链：muse parser 命中 → 走原 Risk 决策；muse parser 失败（非 muse
  * 命令）→ 尝试系统命令 allowlist；都不命中则保持原 reject 路径。
  * 系统命令 allowlist 实现见 sibling 文件 `system-command-allowlist.ts`。
  *
@@ -22,11 +22,11 @@
  * **安全策略（CLI schema 权威 + 启发式兜底 + 系统命令 allowlist）**：
  *   1. CLI schema 命中：Risk='write'/'high-risk-write' → 拒绝；Risk='' → 直接放行。
  *      命中 schema 表示 CLI 端已对该命令做出 Risk 标注，二次启发式只会引入位置参数
- *      错杀（W5.5-R3 P0-1 的 bug：`tabtin doc read <uuid>` 把 uuid 当末尾动词）。
+ *      错杀（W5.5-R3 P0-1 的 bug：`muse doc read <uuid>` 把 uuid 当末尾动词）。
  *   2. CLI schema 未命中（命令不在 registry）：启发式兜底——终末动词在已知只读列表
  *      则放行（兜底 schema 暂时漏注册的只读子命令），否则按 unknown_command 拒绝。
  *   3. CLI schema lookup 抛错（registry 不可达）：fail-close，code='lookup_failed'。
- *   4. **J3a 新增**：tabtin parser 失败（非 tabtin 命令）时尝试系统命令 allowlist，
+ *   4. **J3a 新增**：muse parser 失败（非 muse 命令）时尝试系统命令 allowlist，
  *      命中即放行；不命中保持原 not_tabtin reject 路径。
  *
  * **不在意之处**：
@@ -78,7 +78,7 @@ export interface RestrictedShellAllowlistChecker {
  *   - `null`                      → 命令不在 schema 里（未知命令）
  *   - 抛错                        → 透传给 checker 视为 lookup_failed
  *
- * 实现见宿主装配（`ElectronAgentHost` 调 `tabtin commands --format json` + 缓存）。
+ * 实现见宿主装配（`ElectronAgentHost` 调 `muse commands --format json` + 缓存）。
  */
 export type FetchCommandRisk = (subcmdPath: string) => Promise<string | null>
 
@@ -104,21 +104,21 @@ interface CreateCheckerDeps {
 }
 
 /**
- * 把命令字符串拆出真正要执行的 `tabtin <subcmd...>` 部分。
+ * 把命令字符串拆出真正要执行的 `muse <subcmd...>` 部分。
  *
  * 处理这几种合法形态：
- *   - `tabtin doc list --format json`            → ['doc','list']
- *   - `cd /tmp && tabtin doc list`               → ['doc','list']
- *   - `cd /tmp && tabtin doc list --format json` → ['doc','list']
- *   - `FOO=bar tabtin doc list`                  → ['doc','list']（env 前缀）
- *   - 任何含 `|`、`;`、`>`、` && ` 后接非 tabtin / 含 `$(...)` / 含反引号 → 拒绝
+ *   - `muse doc list --format json`            → ['doc','list']
+ *   - `cd /tmp && muse doc list`               → ['doc','list']
+ *   - `cd /tmp && muse doc list --format json` → ['doc','list']
+ *   - `FOO=bar muse doc list`                  → ['doc','list']（env 前缀）
+ *   - 任何含 `|`、`;`、`>`、` && ` 后接非 muse / 含 `$(...)` / 含反引号 → 拒绝
  *
  * 设计取舍：复合命令一律拒绝（除唯一允许的 `cd <path> &&` 前缀），避免 LLM 用
- *  `tabtin doc list || rm -rf /` 这类绕过。
+ *  `muse doc list || rm -rf /` 这类绕过。
  */
 /**
  * parser 失败原因分类。供 `createTabtinReadonlyChecker` 内决定是否进系统命令通道：
- *   - `not_tabtin` / `bare_command_not_tabtin`：mainSegment 第一个非 env token 不是 tabtin
+ *   - `not_tabtin` / `bare_command_not_tabtin`：mainSegment 第一个非 env token 不是 muse
  *     → **可进系统命令通道**（mainSegment 已剥 cd 前缀和 env 前缀，可直接给
  *     `validateSystemCommand` 校验）
  *   - 其他（empty / metachar / multi_and / bad_cd）：根本性失败 → 不进系统命令通道
@@ -175,7 +175,7 @@ function rejectUnsupportedShellSyntax(trimmed: string): ParseTabtinFailure | nul
 //   - 引号未闭合：拒。
 // 单引号内任意字符不展开、安全保留（`--format='%h|%s'` 的 `|` 不当拆分符）。
 // 段内容随后仍走既有单段校验（rejectUnsupportedShellSyntax 双保险 +
-// tabtin Risk / 系统命令 allowlist），拆段器只负责"拆得安全"。
+// muse Risk / 系统命令 allowlist），拆段器只负责"拆得安全"。
 
 type TopLevelSplit =
   | { kind: 'segments'; segments: string[] }
@@ -335,20 +335,20 @@ function extractMainSegmentAfterAllowedCd(
   trimmed: string,
   allowedCwdRoot: string | undefined,
 ): ParseTabtinFailure | { mainSegment: string } {
-  // 允许 0 或 1 个 `cd <path> &&` 前缀（与 tabtin doc / browser 等业务命令的真实工作流对齐）
+  // 允许 0 或 1 个 `cd <path> &&` 前缀（与 muse doc / browser 等业务命令的真实工作流对齐）
   // 用 split('&&') 确认整条命令最多两段，且第一段是单一 cd
   const segments = trimmed.split(/\s*&&\s*/)
   if (segments.length > 2) {
     return {
       ok: false,
-      reason: '只允许单层 cd ... && tabtin ... 复合命令',
+      reason: '只允许单层 cd ... && muse ... 复合命令',
       failKind: 'multi_and',
     }
   }
   if (segments.length === 2) {
     const cdSeg = segments[0].trim()
     // 接受 `cd <path>` / `cd "<path with space>"` / `cd '<path>'` 三种形态。
-    // 引号路径在 LLM 跑 `cd "/Users/me/My Documents" && tabtin doc list` 时常见，
+    // 引号路径在 LLM 跑 `cd "/Users/me/My Documents" && muse doc list` 时常见，
     // 旧 `\S+` 正则会把含空格的路径当成多 token 导致复合命令被误判越界。
     if (!/^cd\s+("[^"]+"|'[^']+'|\S+)$/.test(cdSeg)) {
       return {
@@ -401,17 +401,17 @@ function parseTabtinSubcommand(
     safetyGuard++
   }
 
-  if (cmdTokens.length === 0 || cmdTokens[0] !== 'tabtin') {
+  if (cmdTokens.length === 0 || cmdTokens[0] !== 'muse') {
     return {
       ok: false,
-      reason: '只允许 tabtin 命令（受限模式）',
+      reason: '只允许 muse 命令（受限模式）',
       failKind: 'not_tabtin',
       mainSegment: strippedMain,
     }
   }
 
-  // 提取 tabtin 后非 flag 的位置参数（直到首个以 - 开头的 token）作为子命令路径。
-  // tabtin 子命令路径最多支持 3 层（如 `tabtin browser tab list` / `tabtin table record insert`）
+  // 提取 muse 后非 flag 的位置参数（直到首个以 - 开头的 token）作为子命令路径。
+  // muse 子命令路径最多支持 3 层（如 `muse browser tab list` / `muse table record insert`）
   const subTokens: string[] = []
   for (let j = 1; j < cmdTokens.length; j++) {
     const t = cmdTokens[j]
@@ -421,7 +421,7 @@ function parseTabtinSubcommand(
   }
 
   if (subTokens.length === 0) {
-    // 裸 `tabtin` 不属于"具体子命令"——返回但让上层用 'tabtin' 作为名字尝试 lookup（commands meta 等）
+    // 裸 `muse` 不属于"具体子命令"——返回但让上层用 'muse' 作为名字尝试 lookup（commands meta 等）
     return { ok: true, tokens: [], mainSegment: strippedMain }
   }
 
@@ -441,7 +441,7 @@ function failKindToLegacyCode(
 }
 
 function handleParseFailure(parsed: ParseTabtinFailure): ShellAllowlistDecision {
-  // J3a：parser 因为"非 tabtin 命令"失败 + mainSegment 可用时，
+  // J3a：parser 因为"非 muse 命令"失败 + mainSegment 可用时，
   // 给系统命令 allowlist 一次机会。其他原因（empty / metachar / multi_and /
   // bad_cd）属根本性失败，不进系统通道——保持原 reject 行为。
   if (parsed.failKind === 'not_tabtin' && parsed.mainSegment) {
@@ -467,7 +467,7 @@ function handleParseFailure(parsed: ParseTabtinFailure): ShellAllowlistDecision 
 /** Cobra 的纯帮助调用只打印 usage，不执行命令业务逻辑。 */
 function isPureHelpInvocation(mainSegment: string): boolean {
   const tokens = tokenizeShellCommand(mainSegment.trim())
-  if (!tokens || tokens[0] !== 'tabtin') return false
+  if (!tokens || tokens[0] !== 'muse') return false
   const commandPath = tokens.slice(1, -1)
   const helpFlag = tokens[tokens.length - 1]
   return (
@@ -492,7 +492,7 @@ async function lookupRegisteredRisk(
   let matchedPath = ''
   let lookupFailed = false
   for (let len = tokens.length; len >= 1; len--) {
-    const path = `tabtin ${tokens.slice(0, len).join(' ')}`
+    const path = `muse ${tokens.slice(0, len).join(' ')}`
     try {
       const r = await fetchCommandRisk(path)
       if (r !== null) {
@@ -530,7 +530,7 @@ function decideUnknownRisk(
   if (readonlyVerbs.has(lastVerb)) return { allowed: true }
   return {
     allowed: false,
-    reason: `未识别的命令 ${tokens.slice(0, 3).join(' ')}（受限模式仅放行 tabtin 已注册的只读子命令）`,
+    reason: `未识别的命令 ${tokens.slice(0, 3).join(' ')}（受限模式仅放行 muse 已注册的只读子命令）`,
     code: 'unknown_command',
   }
 }
@@ -538,7 +538,7 @@ function decideUnknownRisk(
 function decideRegisteredRisk(risk: string, matchedPath: string): ShellAllowlistDecision {
   // CLI schema 命中：信任 Risk 字段标注，不再二次启发式判断。
   // 历史 bug：之前在此处用 `parsed.tokens[len-1]` 二次启发式，导致
-  // `tabtin doc read <uuid>` 这类位置参数被当成"未知动词"错杀。
+  // `muse doc read <uuid>` 这类位置参数被当成"未知动词"错杀。
   const normalizedRisk = risk.trim().toLowerCase()
   if (normalizedRisk === 'write' || normalizedRisk === 'high-risk-write') {
     return {
@@ -557,11 +557,11 @@ function decideRegisteredRisk(risk: string, matchedPath: string): ShellAllowlist
  * ```ts
  * const checker = createTabtinReadonlyChecker({
  *   fetchCommandRisk: async (subcmd) => {
- *     // 调本地 tabtin commands 缓存或直接 spawn `tabtin commands --format json`
+ *     // 调本地 muse commands 缓存或直接 spawn `muse commands --format json`
  *     return riskMap.get(subcmd) ?? null
  *   },
  * })
- * const decision = await checker.isAllowed('tabtin doc list --format json')
+ * const decision = await checker.isAllowed('muse doc list --format json')
  * ```
  */
 export function createTabtinReadonlyChecker(
@@ -576,7 +576,7 @@ export function createTabtinReadonlyChecker(
       return handleParseFailure(parsed)
     }
 
-    // 处理裸 `tabtin`（无子命令）—— help/version 等无害默认行为，放行
+    // 处理裸 `muse`（无子命令）—— help/version 等无害默认行为，放行
     if (parsed.tokens.length === 0) {
       return { allowed: true }
     }
@@ -593,14 +593,14 @@ export function createTabtinReadonlyChecker(
       }
     }
 
-    // 处理 `tabtin help <subcmd>...` —— Cobra 内置 help 子命令永远只读，
+    // 处理 `muse help <subcmd>...` —— Cobra 内置 help 子命令永远只读，
     // 单纯打印命令 usage，不会触发任何业务逻辑。直接放行避免被 unknown_command
-    // 错杀（help 路径本身不会出现在 `tabtin commands --format json` schema 里）。
+    // 错杀（help 路径本身不会出现在 `muse commands --format json` schema 里）。
     if (parsed.tokens[0] === 'help') {
       return { allowed: true }
     }
 
-    // 动态 CLI 召回只给一级入口，并引导 `tabtin <一级命令> --help` 继续发现。
+    // 动态 CLI 召回只给一级入口，并引导 `muse <一级命令> --help` 继续发现。
     // 仅放行结尾为 help flag、且中间没有其它 flag/参数的纯帮助调用，避免把
     // `--help` 当作业务参数值时绕过写命令风险校验。
     if (isPureHelpInvocation(parsed.mainSegment)) {
@@ -608,7 +608,7 @@ export function createTabtinReadonlyChecker(
     }
 
     // 尝试从最长匹配开始向上查找已注册命令的 Risk。
-    // 例如 `tabtin browser tab list` 优先尝试 4-token / 3-token / 2-token。
+    // 例如 `muse browser tab list` 优先尝试 4-token / 3-token / 2-token。
     const riskLookup = await lookupRegisteredRisk(parsed.tokens, fetchCommandRisk)
     return riskLookup.risk === null
       ? decideUnknownRisk(parsed.tokens, riskLookup.lookupFailed, readonlyVerbs)
@@ -649,14 +649,14 @@ export function createTabtinReadonlyChecker(
 }
 
 /**
- * 给宿主用的"从 `tabtin commands --format json` 完整 schema 列表生成 Risk 查询函数"工具。
+ * 给宿主用的"从 `muse commands --format json` 完整 schema 列表生成 Risk 查询函数"工具。
  *
  * 把整个 schema 数组压成 Map<fullName, risk>，避免每次 fetch 都 spawn 子进程。
  *
- * **跳过 `is_group` 条目**：`tabtin commands` 现在也输出 pure group
+ * **跳过 `is_group` 条目**：`muse commands` 现在也输出 pure group
  * 入口命令（`doc` / `mcp` 等，供 relevant-cli 召回），它们 risk 为空（裸跑只显示
  * help）。但 checker 的 Risk lookup 是最长前缀匹配——若 group 进了 map，未注册的
- * 写子命令（如假想的 `tabtin doc <未注册写动词>`）会借 `tabtin doc` 的空 risk 被
+ * 写子命令（如假想的 `muse doc <未注册写动词>`）会借 `muse doc` 的空 risk 被
  * 误放行。跳过 group 保持修复前语义：未注册子命令仍走 unknown_command 启发式兜底。
  */
 export function buildRiskMapFromSchemas(
@@ -667,14 +667,14 @@ export function buildRiskMapFromSchemas(
     if (s?.is_group === true) continue
     if (typeof s?.name === 'string' && s.name.length > 0) {
       const name = s.name.trim()
-      const normalizedName = name.startsWith('tabtin ') ? name : `tabtin ${name}`
+      const normalizedName = name.startsWith('muse ') ? name : `muse ${name}`
       map.set(normalizedName, typeof s.risk === 'string' ? s.risk : '')
     }
   }
   return map
 }
 
-/** `tabtin commands --format json` 单条命令 schema 的宿主消费视图。 */
+/** `muse commands --format json` 单条命令 schema 的宿主消费视图。 */
 export interface CliCommandSchema {
   name?: string
   risk?: string
@@ -684,7 +684,7 @@ export interface CliCommandSchema {
 }
 
 /**
- * 解析 `tabtin commands --format json` 的 stdout 为命令 schema 数组。
+ * 解析 `muse commands --format json` 的 stdout 为命令 schema 数组。
  *
  * Go CLI 输出 SuccessEnvelope 形状 `{ ok, data: { commands, global_flags } }`，
  * 解包取 `data.commands`；同时兼容早期 / 其它形状（顶层直接是数组，或直接

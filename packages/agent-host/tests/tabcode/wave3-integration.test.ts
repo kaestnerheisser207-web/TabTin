@@ -10,7 +10,7 @@
  *   - I1 同 Agent LLM streaming batch（3 个 edit 同文件不同段）：Wave 1.5 锁
  *     串行 + Wave 1 refreshSnapshot 在锁内 + L-12 mtime 量化统一 → 后续 edit
  *     进锁立刻看到 fresh snapshot，hook 校验不假阳性 throw STALE_READ
- *   - I2 锁串行 TabTin 内部 + 外部进程穿插改文件 → Wave 1.5 锁让 Agent A 改完
+ *   - I2 锁串行 Muse 内部 + 外部进程穿插改文件 → Wave 1.5 锁让 Agent A 改完
  *     后 Agent B 串行进锁，Wave 2 hook 拦下外部已改的 case
  *   - I3 锁等待期间外部进程改文件 → Agent A 持锁中外部改 → A 释放后 Agent B
  *     进锁，Wave 2 hook 拦下 throw STALE_READ

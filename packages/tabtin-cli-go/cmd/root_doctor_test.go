@@ -5,7 +5,7 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/TabTin/tabtin-cli/internal/output"
+	"github.com/Muse/muse-cli/internal/output"
 )
 
 // TestDoctorReport_WorstExit 锁定 doctor 退出码契约：worstExit 取所有 ❌ 中
@@ -189,7 +189,7 @@ func TestBrowserDoctorExecuteDoesNotStartupCleanDiscovery(t *testing.T) {
 	}
 
 	oldArgs := os.Args
-	os.Args = []string{"tabtin", "browser", "doctor", "--format", "json"}
+	os.Args = []string{"muse", "browser", "doctor", "--format", "json"}
 	defer func() { os.Args = oldArgs }()
 
 	if code := Execute(); code != output.ExitOK {

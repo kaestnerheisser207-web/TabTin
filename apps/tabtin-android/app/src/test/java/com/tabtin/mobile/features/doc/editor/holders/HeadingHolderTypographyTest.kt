@@ -7,7 +7,7 @@ import android.view.ContextThemeWrapper
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
-import com.tabtin.mobile.R
+import com.muse.mobile.R
 import com.tabtin.mobile.databinding.DocBlockHeaderFiveBinding
 import com.tabtin.mobile.databinding.DocBlockHeaderFourBinding
 import com.tabtin.mobile.databinding.DocBlockHeaderOneBinding
@@ -44,7 +44,7 @@ class HeadingHolderTypographyTest {
 
     private val context = ContextThemeWrapper(
         RuntimeEnvironment.getApplication(),
-        R.style.Theme_TabTin,
+        R.style.Theme_Muse,
     )
     private val inflater = LayoutInflater.from(context)
 

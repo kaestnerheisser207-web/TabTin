@@ -83,7 +83,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
-import com.tabtin.mobile.R
+import com.muse.mobile.R
 import com.tabtin.mobile.data.websocket.WebSocketService
 import com.tabtin.mobile.features.memo.TabMemoViewModel
 import com.tabtin.mobile.ui.theme.TTColors

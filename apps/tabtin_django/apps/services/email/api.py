@@ -150,7 +150,7 @@ def send_verification_email(request, payload: SendVerificationEmailRequest):
             user=user,
             recipient_email=payload.email,
             sender_email=settings.DEFAULT_FROM_EMAIL,
-            subject=f'【{getattr(settings, "COMPANY_NAME", "TabTin")}】邮箱验证码',
+            subject=f'【{getattr(settings, "COMPANY_NAME", "Muse")}】邮箱验证码',
             template_name='verification',
             template_params={'code': payload.code},
             content_type='html',

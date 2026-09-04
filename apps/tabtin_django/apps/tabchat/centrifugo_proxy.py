@@ -369,7 +369,7 @@ class SubscribeResponse(Schema):
 def centrifugo_connect_proxy(request, payload: ConnectRequest):
     """Connect Proxy：Centrifugo 新连接鉴权。
 
-    从客户端传来的 data.token 中解析 TabTin JWT，
+    从客户端传来的 data.token 中解析 Muse JWT，
     返回用户身份和初始订阅频道。
 
     Wave 4：连接绑用户级，不再校验 ``data.organization_id``。Centrifugo 频道

@@ -24,13 +24,13 @@
     "test:watch": "vitest"
   },
   "keywords": [
-    "tabtin",
+    "muse",
     "table",
     "pglite",
     "kernel",
     "adapter"
   ],
-  "author": "TabTin Team",
+  "author": "Muse Team",
   "license": "MIT",
   "dependencies": {
     "@tabtin/table-kernel": "workspace:*",

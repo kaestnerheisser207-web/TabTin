@@ -111,7 +111,7 @@ from .middleware import (
 )
 
 __version__ = '1.0.0'
-__author__ = 'Tabtin Team'
+__author__ = 'Muse Team'
 
 __all__ = [
     # 异常类

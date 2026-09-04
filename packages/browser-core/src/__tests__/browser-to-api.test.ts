@@ -16,7 +16,7 @@ function entry(
 }
 
 describe('browser-to-api', () => {
-  it('把 tabtin browser network --format json 响应归一为 NetworkLogEntry[]', () => {
+  it('把 muse browser network --format json 响应归一为 NetworkLogEntry[]', () => {
     const entries = normalizeBrowserNetworkEntries({
       success: true,
       data: [

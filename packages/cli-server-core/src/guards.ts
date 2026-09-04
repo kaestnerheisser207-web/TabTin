@@ -46,7 +46,7 @@ export function validateTokenAuth(
   const token = req.headers['x-tabtin-token']
   if (!expectedToken || token !== expectedToken) {
     sendJSON(res, 401, errResponse('UNAUTHORIZED', '未授权：缺少有效的访问令牌', {
-      suggestions: suggestions ?? ['确保在 TabTin 内置终端中运行命令'],
+      suggestions: suggestions ?? ['确保在 Muse 内置终端中运行命令'],
     }))
     return true
   }

@@ -7,7 +7,7 @@ from apps.maintenance.community_bootstrap import apply_community_bootstrap
 
 
 class Command(BaseCommand):
-    help = "Initialize the idempotent TabTin Community system catalog and installation marker."
+    help = "Initialize the idempotent Muse Community system catalog and installation marker."
 
     def add_arguments(self, parser):
         parser.add_argument("--edition", required=True, choices=("community",))

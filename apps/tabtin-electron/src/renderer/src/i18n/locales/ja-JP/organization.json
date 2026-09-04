@@ -12,13 +12,13 @@
     "accessDeniedTitle": "「{{name}}」にアクセスできません",
     "accessDeniedAutoSwitch": "「{{name}}」に切り替える"
   },
-  "welcomeTitle": "TabTinへようこそ",
+  "welcomeTitle": "Museへようこそ",
   "welcomeSubtitle": "AIワークプラットフォーム。新しいワークスペースを作成するか、左側から選択してください。",
   "welcomeSubtitleGuest": "サインインしてワークスペースを作成し、共同作業を開始します。",
   "welcome": {
-    "title": "TabTin",
+    "title": "Muse",
     "tagline": "AI 作業プラットフォーム",
-    "conceptIntro": "TabTin では、ワークスペースは、実行デバイスと作業ディレクトリにバインドされた永続的な作業サイトです。会話、アプリ、リソース、実行コンテキストをまとめて保持するため、エージェントはその境界内で支援できます。",
+    "conceptIntro": "Muse では、ワークスペースは、実行デバイスと作業ディレクトリにバインドされた永続的な作業サイトです。会話、アプリ、リソース、実行コンテキストをまとめて保持するため、エージェントはその境界内で支援できます。",
     "loginCta": "サインイン/登録",
     "learnMore": "さらに詳しく→",
     "loadingTitle": "ワークスペースを読み込んでいます...",
@@ -58,12 +58,12 @@
     "guest": {
       "hookLine1": "AIはもういない",
       "hookLine2": "ただのチャットボックス",
-      "subtitleLead": "TabTin では、エージェントが実際の作業を行います。オンラインで調査し、データを取得し、表を作成し、レポートを作成し、スライドを作成します。",
+      "subtitleLead": "Muse では、エージェントが実際の作業を行います。オンラインで調査し、データを取得し、表を作成し、レポートを作成し、スライドを作成します。",
       "subtitleEmphasis": "すべてのステップが表示されたままになります。",
       "footnote": "主要な LLM への統合アクセス · 38 以上の AI 作業シナリオ",
       "demo": {
         "tabs": {
-          "browser": "TabTinブラウザ",
+          "browser": "Museブラウザ",
           "data": "資金調達データ.tabdata",
           "report": "投資概要.tabdoc",
           "slides": "毎週の資金調達デッキ.tabslide"
@@ -73,7 +73,7 @@
         "steps": {
           "browse": {
             "label": "最近資金提供を受けたスタートアップを調査する",
-            "detail": "TabTin ブラウザ · Crunchbase · TechCrunch"
+            "detail": "Muse ブラウザ · Crunchbase · TechCrunch"
           },
           "collect": {
             "label": "キャプチャラウンド、金額、投資家",
@@ -220,7 +220,7 @@
       "platformPaidLabel": "その他のプラットフォームシーン",
       "platformPaidText": "メール AI、メモリ、埋め込み、音声などは依然としてプラットフォーム キーを使用し、組織のウォレットから請求されます。",
       "noFallbackLabel": "自動フォールバックなし",
-      "noFallbackText": "このチャネルに障害が発生した場合、TabTin はプラットフォーム モデルに自動的に切り替わりません。"
+      "noFallbackText": "このチャネルに障害が発生した場合、Muse はプラットフォーム モデルに自動的に切り替わりません。"
     },
     "byokScopeWarning": {
       "organization": "組織 BYOK: メンバーはチャットでこのチャネルからモデルを選択して使用できます。プラットフォームで管理されているシーンでは、引き続きプラットフォーム キーが使用されます。",
@@ -230,7 +230,7 @@
       "label": "ビヨク",
       "tooltipOrganization": "組織の BYOK チャネル — メンバーがチャットでそのモデルを選択するときに使用されます。プラットフォームで管理されているシーンでは、引き続きプラットフォーム キーが使用されます。",
       "tooltipUser": "個人の BYOK チャネル — 組織内でそのモデルを選択する場合にのみ使用されます。プラットフォームで管理されているシーンでは、引き続きプラットフォーム キーが使用されます。",
-      "tooltipGlobal": "プラットフォーム チャネル — BYOK モデルが選択されていない場合、プラットフォームで管理されるシーンとチャットのために TabTin によって運営されます。"
+      "tooltipGlobal": "プラットフォーム チャネル — BYOK モデルが選択されていない場合、プラットフォームで管理されるシーンとチャットのために Muse によって運営されます。"
     }
   },
   "llm": {
@@ -265,14 +265,14 @@
       "pickSubagentModel": "サブエージェントモデルの選択"
     },
     "presetSection": {
-      "title": "TabTin プリセット モデル",
+      "title": "Muse プリセット モデル",
       "subtitle": "組み込みプラットフォームモデル。個人またはチームのデフォルトとしてすぐに使用できます。",
       "collapse": "プリセットモデルを折りたたむ",
       "expandHint": "{{count}} より多くのプラットフォーム モデル。展開してすべてを表示します。"
     },
     "byokSection": {
       "title": "独自のモデルの持ち込み (BYOK)",
-      "subtitle": "TabTin でエージェントを操作する場合は、別の AI プラットフォームからコーディング プランまたはメンバーシップを接続するか、API キーを追加して独自のモデル クォータを使用します。",
+      "subtitle": "Muse でエージェントを操作する場合は、別の AI プラットフォームからコーディング プランまたはメンバーシップを接続するか、API キーを追加して独自のモデル クォータを使用します。",
       "introUsageText": "エージェントとのチャット、コードの作成、タスクの実行時にモデルを選択してください。メインチャットは、組織のウォレットではなく、あなたのクォータを使用します。"
     },
     "connectEntries": {
@@ -284,7 +284,7 @@
       "pickerTitle": "モデルを接続する",
       "pickerDesc": "購入したサブスクリプション プラン、または従量課金制の API プラットフォームを選択します。",
       "formTitle": "モデルを接続する",
-      "formDesc": "チャネルを選択し、API キーを入力します。 TabTin はエンドポイントと共通モデルをプリセットします。",
+      "formDesc": "チャネルを選択し、API キーを入力します。 Muse はエンドポイントと共通モデルをプリセットします。",
       "planFormTitle": "コネクトサブスクリプションプラン",
       "planFormDesc": "コーディング プランを選択し、キーを入力します。エンドポイントおよび共通モデルは事前に設定されています。",
       "apiFormTitle": "従量課金制 API に接続する",
@@ -368,7 +368,7 @@
         "vendorLabel": "キミ",
         "subtitle": "Kimi Code メンバーシップまたはコーディング プランを使用してください。請求は Kim プラットフォームのルールに従います。",
         "apiKeyPlaceholder": "Kim Code コンソールからの API キー",
-        "connectDesc": "Kimi Code API キーを入力します。 TabTin はエンドポイントと共通モデルを事前に入力します。",
+        "connectDesc": "Kimi Code API キーを入力します。 Muse はエンドポイントと共通モデルを事前に入力します。",
         "docsLink": "キミセットアップガイド",
         "apiKeyHint": "Kim Code コンソールでキーを作成します。メンバーシップ層によって、利用可能なモデルが制御されます。"
       },
@@ -377,7 +377,7 @@
         "vendorLabel": "ミニマックス",
         "subtitle": "MiniMax トークン プランのサブスクリプションを接続します。サブスクリプション キーを使用します (従量課金制 API キーではありません)。",
         "apiKeyPlaceholder": "sk-cp-… (トークン プランのサブスクリプション キー)",
-        "connectDesc": "トークン プランのサブスクリプション キーを入力します。 TabTin はエンドポイントおよび M3 / M2.7 モデルを事前に入力します。 M3 にはネイティブ 1M コンテキストがあります。 M2.7 モデルは 256K を使用します。",
+        "connectDesc": "トークン プランのサブスクリプション キーを入力します。 Muse はエンドポイントおよび M3 / M2.7 モデルを事前に入力します。 M3 にはネイティブ 1M コンテキストがあります。 M2.7 モデルは 256K を使用します。",
         "docsLink": "MiniMax トークン プランのセットアップ ガイド",
         "apiKeyHint": "「アカウント」→「トークンプラン」でサブスクリプションキーを取得します。アクティブなプランまたはチームによって割り当てられたシートが必要です。"
       },
@@ -386,25 +386,25 @@
         "vendorLabel": "白蓮",
         "subtitle": "Alibaba Cloud Bailian コーディング プランに接続し、専用キーを使用してプラン クォータを使用します。",
         "apiKeyPlaceholder": "sk-sp-… (コーディングプランキー)",
-        "connectDesc": "コーディング プラン キーを入力します。 TabTin は、OpenAI 互換エンドポイントと推奨プラン モデルを事前に入力します。モデル ID は公式のホワイトリストと正確に一致する必要があります。",
+        "connectDesc": "コーディング プラン キーを入力します。 Muse は、OpenAI 互換エンドポイントと推奨プラン モデルを事前に入力します。モデル ID は公式のホワイトリストと正確に一致する必要があります。",
         "docsLink": "Bailian コーディング プランのセットアップ ガイド",
         "apiKeyHint": "「コーディング プラン」ページでキーを取得します (sk-sp- プレフィックス)。 Pay-as-you-go キーまたは dashscope.aliyuncs.com エンドポイントでは機能しません。"
       },
       "volcengineCodingPlan": {
         "title": "ヴォルセンジンアークのコーディング計画",
         "vendorLabel": "ボルセンジン",
-        "subtitle": "Volcengine Ark コーディング プランに接続し、TabTin でバンドルされたコーディング モデルを使用します。",
+        "subtitle": "Volcengine Ark コーディング プランに接続し、Muse でバンドルされたコーディング モデルを使用します。",
         "apiKeyPlaceholder": "Ark コンソールからの API キー",
-        "connectDesc": "Ark API キーを入力します。 TabTin は、コーディング プラン OpenAI 互換エンドポイントおよび共通コード モデルを事前に入力します。汎用の Ark API ベース URL は使用しないでください。",
+        "connectDesc": "Ark API キーを入力します。 Muse は、コーディング プラン OpenAI 互換エンドポイントおよび共通コード モデルを事前に入力します。汎用の Ark API ベース URL は使用しないでください。",
         "docsLink": "Volcengine コーディング プラン セットアップ ガイド",
         "apiKeyHint": "Arkコンソール→APIキー管理でキーを取得します。 coding/v3 エンドポイントを使用する必要があります。そうしないと、プラン クォータは適用されません。"
       },
       "zhipuCodingPlan": {
         "title": "GLMコーディングプラン",
         "vendorLabel": "志埔",
-        "subtitle": "Zhipu GLM コーディング プランに接続し、TabTin でサブスクリプション クォータを使用します。",
+        "subtitle": "Zhipu GLM コーディング プランに接続し、Muse でサブスクリプション クォータを使用します。",
         "apiKeyPlaceholder": "コーディングプランAPIキー",
-        "connectDesc": "GLM コーディング プラン API キーを入力します。 TabTin は、OpenAI 互換エンドポイントおよび GLM-5.2 / Turbo / 4.7 を事前に入力します。 GLM-5.2 は 1M コンテキストをサポートします。",
+        "connectDesc": "GLM コーディング プラン API キーを入力します。 Muse は、OpenAI 互換エンドポイントおよび GLM-5.2 / Turbo / 4.7 を事前に入力します。 GLM-5.2 は 1M コンテキストをサポートします。",
         "docsLink": "GLM コーディング プラン セットアップ ガイド",
         "apiKeyHint": "Zhipu プラットフォームの個人/チーム コーディング プランでキーを作成します。従量課金制のキーと互換性はありません。"
       }
@@ -484,7 +484,7 @@
       "toggleFailed": "アクションが失敗しました。もう一度試してください。",
       "create": "チャンネルを追加",
       "creating": "作成中...",
-      "createModelHint": "プラットフォーム アカウントとキーを保存した後、TabTin で使用する特定のモデルを追加します。",
+      "createModelHint": "プラットフォーム アカウントとキーを保存した後、Muse で使用する特定のモデルを追加します。",
       "empty": "接続するには上のオプションを選択してください。プランに必要なのは API キーのみです。カスタム API にはチャネルの設定が必要です。",
       "codexLocalHint": "ローカル ChatGPT サインイン、このデバイスでのみ利用可能",
       "modelCount": "{{count}} モデル",
@@ -609,7 +609,7 @@
     },
     "fallback": {
       "title": "フォールバックポリシー",
-      "rule": "デフォルトのモデルが利用できない場合、TabTin は正常なチャネルとモデルを順番に試します。失敗した BYOK チャネルは、自動的にプラットフォーム モデルにフォールバックしません。",
+      "rule": "デフォルトのモデルが利用できない場合、Muse は正常なチャネルとモデルを順番に試します。失敗した BYOK チャネルは、自動的にプラットフォーム モデルにフォールバックしません。",
       "healthyProviders": "{{count}} 健全なチャンネル",
       "noCandidate": "フォールバックモデルなし"
     },

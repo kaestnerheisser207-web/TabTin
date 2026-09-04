@@ -444,14 +444,14 @@ describe('FR-07 — every in-package builtin tool accepts a valid sample input',
     ask_form: {
       title: 'Project info',
       fields: [
-        { key: 'name', label: 'Project name', type: 'input', placeholder: 'TabTin' },
+        { key: 'name', label: 'Project name', type: 'input', placeholder: 'Muse' },
         { key: 'desc', label: 'Description', type: 'textarea', description: 'Short summary of the project.' },
       ],
     },
     todo: { action: 'open', items: [{ id: 't1', content: 'do x', status: 'pending' }],
     },
     web_fetch: { url: 'https://example.com' },
-    web_search: { search_term: 'tabtin agent runtime' },
+    web_search: { search_term: 'muse agent runtime' },
     parse_document: { file_id: 'abc-123' },
     // W3 (2026-05-10): summarize_context + retrieve_tool_result removed.
     present_to_user: {

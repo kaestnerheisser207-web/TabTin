@@ -225,11 +225,11 @@ final class MessageHistoryTests: XCTestCase {
         let resp = try decode(#"""
         {"messages":[
           {"id":"tool-1","role":"assistant","content":"[工具调用]","content_blocks_json":[
-            {"type":"server_tool_use","id":"srv-9","name":"web_search","input":{"query":"TabTin"}},
-            {"type":"web_search_tool_result","tool_use_id":"srv-9","content":[{"type":"web_search_result","title":"TabTin","url":"https://tabtin.ai"}]}
+            {"type":"server_tool_use","id":"srv-9","name":"web_search","input":{"query":"Muse"}},
+            {"type":"web_search_tool_result","tool_use_id":"srv-9","content":[{"type":"web_search_result","title":"Muse","url":"https://tabtin.ai"}]}
           ]},
           {"id":"artifact-1","role":"assistant","content":"","message_kind":"tool_artifact","content_blocks_json":[
-            {"type":"tabtin_rich_content","kind":"search_results","summary":"web_search: TabTin (12)","payload":{"query":"TabTin"}}
+            {"type":"tabtin_rich_content","kind":"search_results","summary":"web_search: Muse (12)","payload":{"query":"Muse"}}
           ]}
         ]}
         """#)
@@ -319,8 +319,8 @@ final class MessageHistoryTests: XCTestCase {
         let resp = try decode(#"""
         {"messages":[
           {"id":"search-1","role":"assistant","content":"[工具调用]","content_blocks_json":[
-            {"type":"server_tool_use","id":"srv-1","name":"web_search","input":{"query":"TabTin"}},
-            {"type":"web_search_tool_result","tool_use_id":"srv-1","content":[{"type":"web_search_result","title":"TabTin","url":"https://tabtin.ai"}]},
+            {"type":"server_tool_use","id":"srv-1","name":"web_search","input":{"query":"Muse"}},
+            {"type":"web_search_tool_result","tool_use_id":"srv-1","content":[{"type":"web_search_result","title":"Muse","url":"https://tabtin.ai"}]},
             {"type":"tabtin_rich_content","kind":"search_results","summary":"旧搜索 artifact"}
           ]}
         ]}
@@ -329,7 +329,7 @@ final class MessageHistoryTests: XCTestCase {
         let message = MessageHistoryMapper.map(resp.messages)[0]
         XCTAssertEqual(message.toolCalls.count, 1)
         XCTAssertEqual(message.toolCalls[0].name, "web_search")
-        XCTAssertTrue(message.toolCalls[0].inputJson.contains("TabTin"))
+        XCTAssertTrue(message.toolCalls[0].inputJson.contains("Muse"))
         XCTAssertTrue(message.toolCalls[0].resultText?.contains("https://tabtin.ai") == true)
         XCTAssertFalse(message.blocks.contains { if case .richContent = $0 { return true }; return false })
     }

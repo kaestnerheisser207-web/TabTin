@@ -12,14 +12,14 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/TabTin/tabtin-cli/internal/cmdutil"
-	"github.com/TabTin/tabtin-cli/internal/config"
-	"github.com/TabTin/tabtin-cli/internal/errcode"
-	"github.com/TabTin/tabtin-cli/internal/output"
-	"github.com/TabTin/tabtin-cli/internal/transport"
+	"github.com/Muse/muse-cli/internal/cmdutil"
+	"github.com/Muse/muse-cli/internal/config"
+	"github.com/Muse/muse-cli/internal/errcode"
+	"github.com/Muse/muse-cli/internal/output"
+	"github.com/Muse/muse-cli/internal/transport"
 )
 
-// apps_feishu.go — `tabtin feishu`：飞书 OAuth 连接 + 同通道导入（多维表→TabData / Docx→TabDoc）。
+// apps_feishu.go — `muse feishu`：飞书 OAuth 连接 + 同通道导入（多维表→TabData / Docx→TabDoc）。
 // 全部打 /api/integrations/feishu/*，与 Electron 云盘「外部资源 → 飞书」共用 Django runner。
 // 禁止教 Agent 用外部 lark-cli 当迁入通道。
 
@@ -31,17 +31,17 @@ func newCmdFeishu(f *cmdutil.Factory) *cobra.Command {
 		Short: "飞书连接与导入（多维表 / 云文档 → 组织）",
 		Long: `把飞书多维表格与新版云文档（Docx）一次性导入当前 Organization 云盘。
 
-走 TabTin 自有 OAuth + OpenAPI 管线（/api/integrations/feishu），与 Electron
+走 Muse 自有 OAuth + OpenAPI 管线（/api/integrations/feishu），与 Electron
 「新建 → 外部资源 → 飞书」同一套 runner。不要用外部 lark-cli / Cursor lark-doc
 代替迁入。
 
 OAuth 必须由用户在浏览器完成；CLI 只打印 authorize_url。`,
-		Example: `  tabtin feishu connection get
-  tabtin feishu oauth start
-  tabtin feishu resolve --url https://xxx.feishu.cn/wiki/WikiNode
-  tabtin feishu wiki nodes --space-id <space> --parent-node-token <node>
-  tabtin feishu import start --space-id <space> --documents @docs.json
-  tabtin feishu import wait <task_id>`,
+		Example: `  muse feishu connection get
+  muse feishu oauth start
+  muse feishu resolve --url https://xxx.feishu.cn/wiki/WikiNode
+  muse feishu wiki nodes --space-id <space> --parent-node-token <node>
+  muse feishu import start --space-id <space> --documents @docs.json
+  muse feishu import wait <task_id>`,
 	}
 
 	registerFeishuConnection(cmd, f)
@@ -126,7 +126,7 @@ func requireFeishuOrg(f *cmdutil.Factory, ctx *cmdutil.RunContext) (string, erro
 		return "", output.PrintErrorAndExit(output.ErrorEnvelope(
 			string(errcode.ValidationError),
 			"缺少 organization_id",
-			"用全局 --organization-id，或 tabtin config set defaultOrganization <id>",
+			"用全局 --organization-id，或 muse config set defaultOrganization <id>",
 			output.ExitValidation,
 		))
 	}
@@ -147,9 +147,9 @@ func registerFeishuConnection(parent *cobra.Command, f *cmdutil.Factory) {
 		Long: `查看当前 Organization 是否已连接飞书 OAuth（返回 connected / display_name / open_id，不含 token）。
 设计理由：导入前必须确认连接；未连时 Agent 应先 oauth start 并停下等人，不能假装已导入。
 常见陷阱：换组织后连接不共享；权限变更后须 disconnect 再重新授权才会带上新 scope。`,
-		Example: "  tabtin feishu connection get\n" +
-			"  tabtin feishu connection get --organization-id <org>\n" +
-			"  tabtin feishu connection get --format json",
+		Example: "  muse feishu connection get\n" +
+			"  muse feishu connection get --organization-id <org>\n" +
+			"  muse feishu connection get --format json",
 		Layer: "L2", Risk: cmdutil.RiskRead, RiskDeclared: true,
 		Route: cmdutil.RouteCliServer, Method: "GET",
 		Path:         feishuAPIBase + "/connection",
@@ -187,9 +187,9 @@ func registerFeishuConnection(parent *cobra.Command, f *cmdutil.Factory) {
 		Long: `断开当前 Organization 下当前用户的飞书 OAuth 绑定（已导入的表/文档不会删除）。
 设计理由：换号或 scope 变更时必须先清绑定再授权；高风险操作须 --yes。
 常见陷阱：忘加 --yes 会被拒；断开后列表/导入全部 403，须重新 oauth start。`,
-		Example: "  tabtin feishu connection disconnect --yes\n" +
-			"  tabtin feishu connection disconnect --organization-id <org> --yes\n" +
-			"  tabtin feishu connection disconnect --yes --dry-run",
+		Example: "  muse feishu connection disconnect --yes\n" +
+			"  muse feishu connection disconnect --organization-id <org> --yes\n" +
+			"  muse feishu connection disconnect --yes --dry-run",
 		Layer: "L2", Risk: cmdutil.RiskHigh, RiskDeclared: true,
 		Route: cmdutil.RouteCliServer, Method: "DELETE",
 		Path:         feishuAPIBase + "/connection",
@@ -211,7 +211,7 @@ func registerFeishuConnection(parent *cobra.Command, f *cmdutil.Factory) {
 				return output.PrintErrorAndExit(output.ErrorEnvelope(
 					string(errcode.ValidationError),
 					"断开连接需 --yes 确认",
-					"确认后执行：tabtin feishu connection disconnect --yes",
+					"确认后执行：muse feishu connection disconnect --yes",
 					output.ExitValidation,
 				))
 			}
@@ -252,9 +252,9 @@ App Secret 只从标准输入读取，不接受命令行参数，也不会出现
 		Long: `查看当前 Organization 是否已配置飞书企业自建应用，以及当前用户是否可以管理。
 设计理由：企业应用属于组织，个人 OAuth 连接属于成员，两层状态必须分别可观测。
 常见陷阱：普通成员只能看到配置状态，App ID 仅向 Owner/Admin 返回，App Secret 永不返回。`,
-		Example: "  tabtin feishu provider get\n" +
-			"  tabtin feishu provider get --organization-id <org> --format json\n" +
-			"  tabtin feishu provider get --organization-id <org> --quiet",
+		Example: "  muse feishu provider get\n" +
+			"  muse feishu provider get --organization-id <org> --format json\n" +
+			"  muse feishu provider get --organization-id <org> --quiet",
 		Layer: "L2", Risk: cmdutil.RiskRead, RiskDeclared: true,
 		Route: cmdutil.RouteCliServer, Method: "GET", Path: feishuAPIBase + "/oauth/provider",
 		RequiresAuth: true, HasFormat: true, Idempotent: true,
@@ -287,11 +287,11 @@ App Secret 只从标准输入读取，不接受命令行参数，也不会出现
 		Use:   "set",
 		Short: "校验并保存企业应用凭证（Secret 从 stdin 读取）",
 		Long: `校验并保存当前 Organization 的企业自建应用凭证，仅 Owner/Admin 可执行。
-App Secret 必须经标准输入传入，例如 printf '%s' "$FEISHU_APP_SECRET" | tabtin feishu provider set --app-id cli_xxx。
+App Secret 必须经标准输入传入，例如 printf '%s' "$FEISHU_APP_SECRET" | muse feishu provider set --app-id cli_xxx。
 更新 App ID 或 App Secret 都会让组织成员重新授权；重复提交完全相同的凭证不会影响连接。`,
-		Example: "  printf '%s' \"$FEISHU_APP_SECRET\" | tabtin feishu provider set --app-id cli_xxx\n" +
-			"  Get-Content -Raw .\\app-secret.txt | tabtin feishu provider set --app-id cli_xxx\n" +
-			"  tabtin feishu provider set --app-id cli_xxx --dry-run",
+		Example: "  printf '%s' \"$FEISHU_APP_SECRET\" | muse feishu provider set --app-id cli_xxx\n" +
+			"  Get-Content -Raw .\\app-secret.txt | muse feishu provider set --app-id cli_xxx\n" +
+			"  muse feishu provider set --app-id cli_xxx --dry-run",
 		Layer: "L2", Risk: cmdutil.RiskWrite, RiskDeclared: true,
 		Route: cmdutil.RouteCliServer, Method: "PUT", Path: feishuAPIBase + "/oauth/provider",
 		RequiresAuth: true, HasFormat: true,
@@ -347,9 +347,9 @@ App Secret 必须经标准输入传入，例如 printf '%s' "$FEISHU_APP_SECRET"
 		Long: `删除当前 Organization 的飞书企业自建应用配置，仅 Owner/Admin 可执行。
 设计理由：删除 Provider 后既有个人令牌不能再安全刷新，因此组织内连接会一并失效。
 常见陷阱：运行中的导入任务会阻止删除；这是高风险操作，必须由用户明确传入 --yes。`,
-		Example: "  tabtin feishu provider delete --yes\n" +
-			"  tabtin feishu provider delete --organization-id <org> --yes\n" +
-			"  tabtin feishu provider delete --organization-id <org> --dry-run",
+		Example: "  muse feishu provider delete --yes\n" +
+			"  muse feishu provider delete --organization-id <org> --yes\n" +
+			"  muse feishu provider delete --organization-id <org> --dry-run",
 		Layer: "L2", Risk: cmdutil.RiskDestructive, RiskDeclared: true,
 		Route: cmdutil.RouteCliServer, Method: "DELETE", Path: feishuAPIBase + "/oauth/provider",
 		RequiresAuth: true, HasFormat: true,
@@ -399,9 +399,9 @@ func registerFeishuOAuth(parent *cobra.Command, f *cmdutil.Factory) {
 		Long: `生成飞书 OAuth authorize_url，供用户在系统浏览器完成授权。
 设计理由：令牌落在服务端加密存储；CLI/Agent 不能无人代授，只能把 URL 交给人。
 常见陷阱：授权后要用 connection get 确认；新增 scope 后须先 disconnect 再走本命令。`,
-		Example: "  tabtin feishu oauth start\n" +
-			"  tabtin feishu oauth start --organization-id <org>\n" +
-			"  tabtin feishu oauth start --format json",
+		Example: "  muse feishu oauth start\n" +
+			"  muse feishu oauth start --organization-id <org>\n" +
+			"  muse feishu oauth start --format json",
 		Layer: "L2", Risk: cmdutil.RiskRead, RiskDeclared: true,
 		Route: cmdutil.RouteCliServer, Method: "GET",
 		Path:         feishuAPIBase + "/oauth/start",
@@ -454,9 +454,9 @@ func registerFeishuResources(parent *cobra.Command, f *cmdutil.Factory) {
 		Long: `列出当前账号可见的可导入资源（多维表 bitable / 云文档 docx）。
 设计理由：与 Electron 同通道列表一致；深目录资源常需 --q 关键词搜索才能出现。
 常见陷阱：空列表多半是缺 drive/docs 权限或未重授权，不是「没加入 Base」。`,
-		Example: "  tabtin feishu resources list\n" +
-			"  tabtin feishu resources list --q 项目 --kinds bitable\n" +
-			"  tabtin feishu resources list --kinds docx --format json",
+		Example: "  muse feishu resources list\n" +
+			"  muse feishu resources list --q 项目 --kinds bitable\n" +
+			"  muse feishu resources list --kinds docx --format json",
 		Layer: "L2", Risk: cmdutil.RiskRead, RiskDeclared: true,
 		Route: cmdutil.RouteCliServer, RequiresAuth: true, HasFormat: true, Idempotent: true,
 		Flags: []cmdutil.FlagDef{
@@ -506,9 +506,9 @@ func registerFeishuBitable(parent *cobra.Command, f *cmdutil.Factory) {
 		Long: `列出指定飞书 Base（app_token）下的数据表 table_id / name。
 设计理由：resolve / resources 只给到 Base；导入前须展开表再 preview / start。
 常见陷阱：app_token 不是 table_id；无权限时 502/403，先确认 connection 与可见性。`,
-		Example: "  tabtin feishu bitable tables --app-token BaseXxx\n" +
-			"  tabtin feishu bitable tables --app-token BaseXxx --organization-id <org>\n" +
-			"  tabtin feishu bitable tables --app-token BaseXxx --format json",
+		Example: "  muse feishu bitable tables --app-token BaseXxx\n" +
+			"  muse feishu bitable tables --app-token BaseXxx --organization-id <org>\n" +
+			"  muse feishu bitable tables --app-token BaseXxx --format json",
 		Layer: "L2", Risk: cmdutil.RiskRead, RiskDeclared: true,
 		Route: cmdutil.RouteCliServer, RequiresAuth: true, HasFormat: true, Idempotent: true,
 		Flags: []cmdutil.FlagDef{
@@ -563,9 +563,9 @@ func registerFeishuWiki(parent *cobra.Command, f *cmdutil.Factory) {
 		Long: `列出当前账号可见的飞书知识空间；首页含合成入口「我的文档库」(space_id=my_library)。
 设计理由：贴 /wiki/ 链接 resolve 得到 wiki_node 后，需 space_id 才能展开子节点。
 常见陷阱：缺 wiki:space:retrieve 时会 403，须断开后重新 oauth；禁止用 browser 打开飞书网页代替。`,
-		Example: "  tabtin feishu wiki spaces\n" +
-			"  tabtin feishu wiki spaces --format json\n" +
-			"  tabtin feishu wiki spaces --page-token <token>",
+		Example: "  muse feishu wiki spaces\n" +
+			"  muse feishu wiki spaces --format json\n" +
+			"  muse feishu wiki spaces --page-token <token>",
 		Layer: "L2", Risk: cmdutil.RiskRead, RiskDeclared: true,
 		Route: cmdutil.RouteCliServer, RequiresAuth: true, HasFormat: true, Idempotent: true,
 		Flags: []cmdutil.FlagDef{
@@ -606,9 +606,9 @@ func registerFeishuWiki(parent *cobra.Command, f *cmdutil.Factory) {
 设计理由：与 Electron 知识库树同通道；resolve /wiki/ 得到 wiki_node 后的标准展开路径。
 常见陷阱：不要用 browser/fetch 打开飞书网页；缺 wiki:node:retrieve 须重授权；
 父节点为空则列空间根。`,
-		Example: "  tabtin feishu wiki nodes --space-id my_library\n" +
-			"  tabtin feishu wiki nodes --space-id <space> --parent-node-token <node>\n" +
-			"  tabtin feishu wiki nodes --space-id <space> --parent-node-token <node> --format json",
+		Example: "  muse feishu wiki nodes --space-id my_library\n" +
+			"  muse feishu wiki nodes --space-id <space> --parent-node-token <node>\n" +
+			"  muse feishu wiki nodes --space-id <space> --parent-node-token <node> --format json",
 		Layer: "L2", Risk: cmdutil.RiskRead, RiskDeclared: true,
 		Route: cmdutil.RouteCliServer, RequiresAuth: true, HasFormat: true, Idempotent: true,
 		Flags: []cmdutil.FlagDef{
@@ -633,7 +633,7 @@ func registerFeishuWiki(parent *cobra.Command, f *cmdutil.Factory) {
 			if spaceID == "" {
 				return output.PrintErrorAndExit(output.ErrorEnvelope(
 					string(errcode.ValidationError), "缺少 --space-id",
-					"示例：tabtin feishu wiki nodes --space-id my_library",
+					"示例：muse feishu wiki nodes --space-id my_library",
 					output.ExitValidation,
 				))
 			}
@@ -672,10 +672,10 @@ func registerFeishuResolve(parent *cobra.Command, f *cmdutil.Factory) {
 		Long: `把飞书链接解析为 kind（bitable|docx|wiki_node|unsupported）与 token，并用当前连接探测 accessible。
 设计理由：Agent「贴链接导入」依赖服务端权威解析；/wiki/ 会先 get_node，叶子变 docx/bitable，目录返回 wiki_node + space_id 供展开。
 常见陷阱：wiki_node 须再 wiki nodes，禁止 browser；Sheets/旧 Doc 仍 unsupported；须已 oauth 且含 wiki 权限。`,
-		Example: "  tabtin feishu resolve --url https://xxx.feishu.cn/base/BaseToken\n" +
-			"  tabtin feishu resolve --url https://xxx.feishu.cn/wiki/WikiNode --format json\n" +
-			"  tabtin feishu resolve --url https://xxx.feishu.cn/docx/DocToken --url https://xxx.feishu.cn/base/Base2\n" +
-			"  tabtin feishu resolve --urls '[\"https://xxx.feishu.cn/docx/Doc1\"]' --format json",
+		Example: "  muse feishu resolve --url https://xxx.feishu.cn/base/BaseToken\n" +
+			"  muse feishu resolve --url https://xxx.feishu.cn/wiki/WikiNode --format json\n" +
+			"  muse feishu resolve --url https://xxx.feishu.cn/docx/DocToken --url https://xxx.feishu.cn/base/Base2\n" +
+			"  muse feishu resolve --urls '[\"https://xxx.feishu.cn/docx/Doc1\"]' --format json",
 		Layer: "L2", Risk: cmdutil.RiskRead, RiskDeclared: true,
 		Route: cmdutil.RouteCliServer, RequiresAuth: true, HasFormat: true, Idempotent: true,
 		Flags: []cmdutil.FlagDef{
@@ -698,7 +698,7 @@ func registerFeishuResolve(parent *cobra.Command, f *cmdutil.Factory) {
 				return output.PrintErrorAndExit(output.ErrorEnvelope(
 					string(errcode.ValidationError),
 					"请提供 --url 或 --urls",
-					"示例：tabtin feishu resolve --url https://xxx.feishu.cn/docx/DocToken",
+					"示例：muse feishu resolve --url https://xxx.feishu.cn/docx/DocToken",
 					output.ExitValidation,
 				))
 			}
@@ -760,9 +760,9 @@ func registerFeishuFlow(parent *cobra.Command, f *cmdutil.Factory) {
 		Long: `读取飞书 Wiki 或 Docx 中的首个内嵌画板，将节点与有向连线解析为供 TabDoc 导入兼容的层级数据。
 TabDoc 导入链路会把层级渲染为 Markdown 静态文本树；本命令不创建聊天富内容或 TabWhiteboard，也不承诺画布样式和坐标保真。
 常见陷阱：需要 board:whiteboard:node:read；新增权限后，旧连接须 disconnect 并重新 OAuth 授权。`,
-		Example: "  tabtin feishu flow parse --url https://xxx.feishu.cn/wiki/WikiNode --format json\n" +
-			"  tabtin feishu flow parse --url https://xxx.feishu.cn/docx/DocToken --format json\n" +
-			"  tabtin --organization-id <org> feishu flow parse --url https://xxx.feishu.cn/wiki/WikiNode",
+		Example: "  muse feishu flow parse --url https://xxx.feishu.cn/wiki/WikiNode --format json\n" +
+			"  muse feishu flow parse --url https://xxx.feishu.cn/docx/DocToken --format json\n" +
+			"  muse --organization-id <org> feishu flow parse --url https://xxx.feishu.cn/wiki/WikiNode",
 		Layer: "L2", Risk: cmdutil.RiskRead, RiskDeclared: true,
 		Route: cmdutil.RouteCliServer, Method: "POST",
 		Path:         feishuAPIBase + "/flow/parse",
@@ -786,7 +786,7 @@ TabDoc 导入链路会把层级渲染为 Markdown 静态文本树；本命令不
 				return output.PrintErrorAndExit(output.ErrorEnvelope(
 					string(errcode.ValidationError),
 					"请提供 --url",
-					"示例：tabtin feishu flow parse --url https://xxx.feishu.cn/wiki/WikiNode",
+					"示例：muse feishu flow parse --url https://xxx.feishu.cn/wiki/WikiNode",
 					output.ExitValidation,
 				))
 			}
@@ -823,9 +823,9 @@ func registerFeishuImport(parent *cobra.Command, f *cmdutil.Factory) {
 		Long: `分析所选多维表的同 Base Link 闭包，返回 tables / edges / warnings / has_attachments。
 设计理由：关联表会自动纳入；确认闭包与跨 Base 警告后再 start，避免导入半套关联。
 常见陷阱：纯文档导入可跳过本步；关联闭包可能扩大导入范围，确认后再继续。`,
-		Example: "  tabtin feishu import preview --tables '[{\"app_token\":\"Base1\",\"table_id\":\"tbl1\"}]'\n" +
-			"  tabtin feishu import preview --tables @tables.json\n" +
-			"  tabtin feishu import preview --tables @tables.json --format json",
+		Example: "  muse feishu import preview --tables '[{\"app_token\":\"Base1\",\"table_id\":\"tbl1\"}]'\n" +
+			"  muse feishu import preview --tables @tables.json\n" +
+			"  muse feishu import preview --tables @tables.json --format json",
 		Layer: "L2", Risk: cmdutil.RiskRead, RiskDeclared: true,
 		Route: cmdutil.RouteCliServer, RequiresAuth: true, HasFormat: true, Idempotent: true,
 		Flags: []cmdutil.FlagDef{
@@ -862,9 +862,9 @@ func registerFeishuImport(parent *cobra.Command, f *cmdutil.Factory) {
 		Long: `提交飞书导入 Job（表 Phase A–D，再导入 Docx），返回 task_id。
 设计理由：与 Electron 共用 runner；产物落 Organization 下 space_id 云盘，可选 collection_id。
 常见陷阱：tables/documents 至少一项；附件默认关；须先 preview（有表时）并确认 space-id。`,
-		Example: "  tabtin feishu import start --space-id <space> --tables @tables.json\n" +
-			"  tabtin feishu import start --space-id <space> --documents '[{\"doc_token\":\"Doc1\",\"name\":\"周报\"}]'\n" +
-			"  tabtin feishu import start --space-id <space> --tables @t.json --documents @d.json --include-attachments",
+		Example: "  muse feishu import start --space-id <space> --tables @tables.json\n" +
+			"  muse feishu import start --space-id <space> --documents '[{\"doc_token\":\"Doc1\",\"name\":\"周报\"}]'\n" +
+			"  muse feishu import start --space-id <space> --tables @t.json --documents @d.json --include-attachments",
 		Layer: "L2", Risk: cmdutil.RiskWrite, RiskDeclared: true,
 		Route: cmdutil.RouteCliServer, RequiresAuth: true, HasFormat: true,
 		Flags: []cmdutil.FlagDef{
@@ -910,7 +910,7 @@ func registerFeishuImport(parent *cobra.Command, f *cmdutil.Factory) {
 				return output.PrintErrorAndExit(output.ErrorEnvelope(
 					string(errcode.ValidationError),
 					"缺少 --space-id",
-					"用 --space-id，或 tabtin config set defaultSpace <id> / 全局 --space-id",
+					"用 --space-id，或 muse config set defaultSpace <id> / 全局 --space-id",
 					output.ExitValidation,
 				))
 			}
@@ -965,9 +965,9 @@ func registerFeishuImport(parent *cobra.Command, f *cmdutil.Factory) {
 		Long: `查询飞书导入任务状态：pending / running / success / failed，附带 result 与 error。
 设计理由：异步 Job 的单次观测入口；Agent 也可用 import wait 阻塞到终态。
 常见陷阱：task_id 是 Job UUID（import start 返回），不是 celery_task_id。`,
-		Example: "  tabtin feishu import status <task_id>\n" +
-			"  tabtin feishu import status <task_id> --format json\n" +
-			"  tabtin feishu import status <task_id> --jq '.status'",
+		Example: "  muse feishu import status <task_id>\n" +
+			"  muse feishu import status <task_id> --format json\n" +
+			"  muse feishu import status <task_id> --jq '.status'",
 		Layer: "L2", Risk: cmdutil.RiskRead, RiskDeclared: true,
 		Route: cmdutil.RouteCliServer, Method: "GET",
 		Path:         feishuAPIBase + "/import/{task_id}",
@@ -986,9 +986,9 @@ func registerFeishuImport(parent *cobra.Command, f *cmdutil.Factory) {
 		Long: `阻塞轮询导入任务，直到 status 为 success 或 failed，并打印最终结果。
 设计理由：Agent 编排需要同步等到产物；failed 时非 0 退出并带上 error。
 常见陷阱：默认 timeout 30m；大表/附件导入可能更久，按需加大 --timeout。`,
-		Example: "  tabtin feishu import wait <task_id>\n" +
-			"  tabtin feishu import wait <task_id> --interval 3s --timeout 30m\n" +
-			"  tabtin feishu import wait <task_id> --format json",
+		Example: "  muse feishu import wait <task_id>\n" +
+			"  muse feishu import wait <task_id> --interval 3s --timeout 30m\n" +
+			"  muse feishu import wait <task_id> --format json",
 		Layer: "L2", Risk: cmdutil.RiskRead, RiskDeclared: true,
 		Route: cmdutil.RouteCliServer, RequiresAuth: true, HasFormat: true, Idempotent: true,
 		ArgsMapping: []string{"task_id"},
@@ -1090,9 +1090,9 @@ func registerFeishuImport(parent *cobra.Command, f *cmdutil.Factory) {
 		Long: `取消导入任务中尚未开始的一张表（已开始的表请用 skip-table）。
 设计理由：长任务止损，避免关联闭包里不需要的表继续占额度。
 常见陷阱：已在写入中的表 cancel 会失败，应改 skip-table。`,
-		Example: "  tabtin feishu import cancel-table <task_id> --app-token Base1 --table-id tbl1\n" +
-			"  tabtin feishu import cancel-table <task_id> --app-token Base1 --table-id tbl1 --format json\n" +
-			"  tabtin feishu import cancel-table <task_id> --app-token Base1 --table-id tbl1 --dry-run",
+		Example: "  muse feishu import cancel-table <task_id> --app-token Base1 --table-id tbl1\n" +
+			"  muse feishu import cancel-table <task_id> --app-token Base1 --table-id tbl1 --format json\n" +
+			"  muse feishu import cancel-table <task_id> --app-token Base1 --table-id tbl1 --dry-run",
 		Layer: "L2", Risk: cmdutil.RiskWrite, RiskDeclared: true,
 		Route: cmdutil.RouteCliServer, RequiresAuth: true, HasFormat: true,
 		ArgsMapping: []string{"task_id"},
@@ -1124,9 +1124,9 @@ func registerFeishuImport(parent *cobra.Command, f *cmdutil.Factory) {
 		Long: `跳过导入任务中当前正在写入的一张表（停止后续行），任务其余表继续。
 设计理由：单表卡住或超限时止损，不必取消整个 Job。
 常见陷阱：尚未开始的表请用 cancel-table；skip 后关联回填可能不完整。`,
-		Example: "  tabtin feishu import skip-table <task_id> --app-token Base1 --table-id tbl1\n" +
-			"  tabtin feishu import skip-table <task_id> --app-token Base1 --table-id tbl1 --format json\n" +
-			"  tabtin feishu import skip-table <task_id> --app-token Base1 --table-id tbl1 --dry-run",
+		Example: "  muse feishu import skip-table <task_id> --app-token Base1 --table-id tbl1\n" +
+			"  muse feishu import skip-table <task_id> --app-token Base1 --table-id tbl1 --format json\n" +
+			"  muse feishu import skip-table <task_id> --app-token Base1 --table-id tbl1 --dry-run",
 		Layer: "L2", Risk: cmdutil.RiskWrite, RiskDeclared: true,
 		Route: cmdutil.RouteCliServer, RequiresAuth: true, HasFormat: true,
 		ArgsMapping: []string{"task_id"},

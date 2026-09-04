@@ -29,7 +29,7 @@ class ReleaseHistoryApiTests(TestCase):
             platform="win",
             arch="x64",
             channel="beta",
-            file_url=f"https://cdn.example.com/desktop-updates/beta/win/x64/{version}/TabTin.exe",
+            file_url=f"https://cdn.example.com/desktop-updates/beta/win/x64/{version}/Muse.exe",
             file_size=1024,
             checksum_sha256="a" * 64,
             checksum_sha512="b" * 88,

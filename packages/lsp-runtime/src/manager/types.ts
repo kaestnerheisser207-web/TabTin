@@ -1,7 +1,7 @@
 /**
  * LSP server runtime types。
  *
- *   定义；本类型定义是 TabTin 根据 LSPServerInstance.ts 和 LSPServerManager.ts
+ *   定义；本类型定义是 Muse 根据 LSPServerInstance.ts 和 LSPServerManager.ts
  *   的实际使用场景推导出的最小完整类型。
  */
 

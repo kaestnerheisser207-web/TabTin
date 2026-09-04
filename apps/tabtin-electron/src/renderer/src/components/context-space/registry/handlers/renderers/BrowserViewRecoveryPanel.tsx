@@ -47,7 +47,7 @@ export const BrowserViewRecoveryPanel: React.FC<BrowserViewRecoveryPanelProps> =
               defaultValue: '原网址仍然保留。你可以重试，或关闭这个标签。',
             })
           : t('browserRestore.restoringDescription', {
-              defaultValue: 'TabTin 正在重新打开上次保存的网页。',
+              defaultValue: 'Muse 正在重新打开上次保存的网页。',
             })}
       </p>
       {failed && (

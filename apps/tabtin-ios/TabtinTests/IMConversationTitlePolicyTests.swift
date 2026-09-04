@@ -5,7 +5,7 @@ final class IMConversationTitlePolicyTests: XCTestCase {
     func testDirectMessagePrefersPeerNameOverProviderFallback() {
         XCTAssertEqual(
             IMConversationTitlePolicy.resolve(
-                conversationName: "TabTin private conversation",
+                conversationName: "Muse private conversation",
                 isDirectMessage: true,
                 peerDisplayName: "沈庚涛"
             ),
@@ -16,7 +16,7 @@ final class IMConversationTitlePolicyTests: XCTestCase {
     func testDirectMessageDoesNotExposeProviderFallbackWithoutPeer() {
         XCTAssertEqual(
             IMConversationTitlePolicy.resolve(
-                conversationName: "TabTin private conversation",
+                conversationName: "Muse private conversation",
                 isDirectMessage: true,
                 peerDisplayName: nil
             ),

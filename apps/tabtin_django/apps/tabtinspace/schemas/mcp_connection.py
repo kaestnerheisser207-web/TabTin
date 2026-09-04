@@ -1,4 +1,4 @@
-"""Tabtin Space mcp_connection schemas（与 remote_server schemas 同款 Ninja 风格）。"""
+"""Muse Space mcp_connection schemas（与 remote_server schemas 同款 Ninja 风格）。"""
 
 from .common import *  # noqa: F401,F403
 

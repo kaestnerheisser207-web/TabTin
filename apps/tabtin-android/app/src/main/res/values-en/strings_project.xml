@@ -55,7 +55,7 @@
     <string name="my_agents_tools_empty">No organization connectors yet. Add them on desktop.</string>
     <string name="my_agents_tools_not_mounted">No connectors mounted for this avatar yet. Manage them on desktop.</string>
     <string name="my_agents_tools_manage_on_desktop">Manage on desktop</string>
-    <string name="my_agents_tools_device_offline">Open TabTin on your computer</string>
+    <string name="my_agents_tools_device_offline">Open Muse on your computer</string>
     <string name="my_agents_tools_source_org">Organization</string>
     <string name="my_agents_tools_source_local">Local</string>
     <string name="my_agents_skill_locked">Required by the default avatar</string>

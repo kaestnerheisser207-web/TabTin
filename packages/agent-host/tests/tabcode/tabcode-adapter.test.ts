@@ -154,7 +154,7 @@ describe('字段映射 AgentTool → Tool', () => {
     expect(description).toContain('唯一例外：仅当为新建或整篇更新长 TabDoc 正文而需要临时 Markdown 草稿时');
     expect(description).toContain('path **必须**是工作区相对路径 `.agent-drafts/<slug>.md`');
     expect(description).toContain('不要写到工作区根如 `draft.md`');
-    expect(description).toContain('tabtin doc create|save-content --markdown @.agent-drafts/<slug>.md');
+    expect(description).toContain('muse doc create|save-content --markdown @.agent-drafts/<slug>.md');
     expect(description).toContain('不得作为用户交付物汇报');
     expect(description.match(/唯一例外/g)).toHaveLength(1);
     const exception = description.slice(description.indexOf('唯一例外：'));
@@ -1547,7 +1547,7 @@ describe('grep_search adapter', () => {
 
   it('grep_search files_with_matches 截断时 Found 头带 (limit, offset)（B3）', async () => {
     // 截断时输出 `Found N files` 带头，含
-    // pagination = limit: ${limit}, offset: ${offset}]`，TabTin 等价精神：
+    // pagination = limit: ${limit}, offset: ${offset}]`，Muse 等价精神：
     // `Found N files (limit: 250, offset: 0)\n<list>`
     for (let i = 0; i < 5; i++) await writeTempFile(`many-${i}.ts`, 'B3_LIMIT_MARKER\n');
     const ctx = makeCtx(new Map());
@@ -1618,7 +1618,7 @@ describe('grep_search adapter', () => {
 //   - 截断文案改为更直接的 `(Showing first N of M+ files. Use a more specific pattern.)`
 //   - envelope 字段瘦身：去掉 head_limit 回显（LLM 没参与，回显就是噪音）
 //
-// CLI 路径（`tabtin code glob --head-limit ... --include-ignored`）经
+// CLI 路径（`muse code glob --head-limit ... --include-ignored`）经
 // action-tools 层入参单独支持——CLI/FC schema 与默认值解耦是核心动机。
 // action-tools 层的 hidden / .gitignore / VCS 排除等底层行为有自己的测试覆盖，
 // 本测试段只验证 **adapter 暴露给 LLM 的契约**。

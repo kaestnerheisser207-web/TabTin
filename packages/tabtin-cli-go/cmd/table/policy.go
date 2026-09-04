@@ -3,7 +3,7 @@ package table
 import (
 	"github.com/spf13/cobra"
 
-	"github.com/TabTin/tabtin-cli/internal/cmdutil"
+	"github.com/Muse/muse-cli/internal/cmdutil"
 )
 
 func registerPolicyCommands(parent *cobra.Command, f *cmdutil.Factory) {
@@ -14,9 +14,9 @@ func registerPolicyCommands(parent *cobra.Command, f *cmdutil.Factory) {
 设计理由：改策略前先 list 确认现有策略集，避免重复建同类条件；策略按
 PERMISSIVE(OR)/RESTRICTIVE(AND) 组合生效，多条策略共存时顺序不影响结果但语义要清楚。
 常见陷阱：list 不反映 RLS 总开关状态——总开关用 rls-toggle 单独查/改。`,
-			Example: "  tabtin table policy list --table-id <table_id>\n" +
-				"  tabtin table policy list --table-id <table_id> --format json\n" +
-				"  tabtin table policy list --table-id <table_id> --jq '.policies[].name'",
+			Example: "  muse table policy list --table-id <table_id>\n" +
+				"  muse table policy list --table-id <table_id> --format json\n" +
+				"  muse table policy list --table-id <table_id> --jq '.policies[].name'",
 			Route: cmdutil.RouteCliServer, Method: "POST", Path: "/table/policy-list",
 			Layer: "L2", Risk: cmdutil.RiskRead, RiskDeclared: true,
 			Flags:     []cmdutil.FlagDef{{Name: "table-id", Type: cmdutil.FlagString, Required: true, Desc: "表格 ID"}},
@@ -29,9 +29,9 @@ PERMISSIVE(OR)/RESTRICTIVE(AND) 组合生效，多条策略共存时顺序不影
 之类的按用户隔离；apply-to-tokens/apply-to-jwt 分别控制 API Token 和登录用户是否受约束。
 常见陷阱：默认只对 API Token 生效（apply-to-jwt=false）——只想约束脚本调用、
 不想影响界面操作时保持默认；要同时约束界面登录用户需显式 --apply-to-jwt=true。`,
-			Example: "  tabtin table policy create --table-id <table_id> --name only-mine --condition '{\"$current_user_id\": {\"$eq\": \"owner_id\"}}'\n" +
-				"  tabtin table policy create --table-id <table_id> --name read-only --operation SELECT --policy-type PERMISSIVE --condition '{...}'\n" +
-				"  tabtin table policy create --table-id <table_id> --name test --condition '{...}' --dry-run",
+			Example: "  muse table policy create --table-id <table_id> --name only-mine --condition '{\"$current_user_id\": {\"$eq\": \"owner_id\"}}'\n" +
+				"  muse table policy create --table-id <table_id> --name read-only --operation SELECT --policy-type PERMISSIVE --condition '{...}'\n" +
+				"  muse table policy create --table-id <table_id> --name test --condition '{...}' --dry-run",
 			Route: cmdutil.RouteCliServer, Method: "POST", Path: "/table/policy-create",
 			Layer: "L2", Risk: cmdutil.RiskWrite, RiskDeclared: true,
 			Flags: []cmdutil.FlagDef{
@@ -63,9 +63,9 @@ PERMISSIVE(OR)/RESTRICTIVE(AND) 组合生效，多条策略共存时顺序不影
 未传字段保持原值。
 常见陷阱：--policy-id 必须是已存在策略；改 condition 时格式仍是 Filter DSL，
 建议先 policy list 读现有 condition 再增量改，避免破坏运行时变量语法。`,
-			Example: "  tabtin table policy update --table-id <table_id> --policy-id <pid> --is-active false\n" +
-				"  tabtin table policy update --table-id <table_id> --policy-id <pid> --name renamed\n" +
-				"  tabtin table policy update --table-id <table_id> --policy-id <pid> --is-active false --dry-run",
+			Example: "  muse table policy update --table-id <table_id> --policy-id <pid> --is-active false\n" +
+				"  muse table policy update --table-id <table_id> --policy-id <pid> --name renamed\n" +
+				"  muse table policy update --table-id <table_id> --policy-id <pid> --is-active false --dry-run",
 			Route: cmdutil.RouteCliServer, Method: "POST", Path: "/table/policy-update",
 			Layer: "L2", Risk: cmdutil.RiskWrite, RiskDeclared: true,
 			Flags: []cmdutil.FlagDef{
@@ -96,9 +96,9 @@ PERMISSIVE(OR)/RESTRICTIVE(AND) 组合生效，多条策略共存时顺序不影
 没有软删/回收站，需要谨慎。
 常见陷阱：删除后如果该表没有其它策略且 RLS 总开关仍开着，行为等价于无策略
 放行全部（视后端具体实现），删前先确认业务是否依赖该策略兜底。`,
-			Example: "  tabtin table policy delete --table-id <table_id> --policy-id <pid> --yes\n" +
-				"  tabtin table policy delete --table-id <table_id> --policy-id <pid> --dry-run\n" +
-				"  tabtin table policy list --table-id <table_id>  # 删前先确认还有哪些策略",
+			Example: "  muse table policy delete --table-id <table_id> --policy-id <pid> --yes\n" +
+				"  muse table policy delete --table-id <table_id> --policy-id <pid> --dry-run\n" +
+				"  muse table policy list --table-id <table_id>  # 删前先确认还有哪些策略",
 			Route: cmdutil.RouteCliServer, Method: "POST", Path: "/table/policy-delete",
 			Layer: "L2", Risk: cmdutil.RiskDestructive, RiskDeclared: true,
 			Flags: []cmdutil.FlagDef{
@@ -122,9 +122,9 @@ PERMISSIVE(OR)/RESTRICTIVE(AND) 组合生效，多条策略共存时顺序不影
 rls-force 决定是否对登录用户（JWT）也强制生效，默认只管 API Token。
 常见陷阱：关闭总开关不会删除已配置的策略，重新打开后策略立即恢复生效；
 --rls-force=true 影响面更大，会改变界面里登录用户看到的数据范围，务必确认。`,
-			Example: "  tabtin table policy rls-toggle --table-id <table_id> --rls-enabled true\n" +
-				"  tabtin table policy rls-toggle --table-id <table_id> --rls-enabled true --rls-force\n" +
-				"  tabtin table policy rls-toggle --table-id <table_id> --rls-enabled false --dry-run",
+			Example: "  muse table policy rls-toggle --table-id <table_id> --rls-enabled true\n" +
+				"  muse table policy rls-toggle --table-id <table_id> --rls-enabled true --rls-force\n" +
+				"  muse table policy rls-toggle --table-id <table_id> --rls-enabled false --dry-run",
 			Route: cmdutil.RouteCliServer, Method: "POST", Path: "/table/policy-rls-toggle",
 			Layer: "L2", Risk: cmdutil.RiskWrite, RiskDeclared: true,
 			Flags: []cmdutil.FlagDef{

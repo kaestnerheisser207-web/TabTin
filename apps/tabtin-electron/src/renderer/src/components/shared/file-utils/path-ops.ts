@@ -34,8 +34,8 @@ export function getParentPath(filePath: string): string {
 
 /**
  * 文件变更的 parentDir 会影响哪些已展开目录的列表内容。
- * 旧逻辑仅 `expanded.has(parentDir)`，在只展开子目录（如 TabTin/organizations）
- * 时 parent（TabTin）变更不会触发刷新，导致拖拽/外部修改后侧边栏不同步。
+ * 旧逻辑仅 `expanded.has(parentDir)`，在只展开子目录（如 Muse/organizations）
+ * 时 parent（Muse）变更不会触发刷新，导致拖拽/外部修改后侧边栏不同步。
  */
 export function dirsAffectedByFsChange(parentDir: string, expandedDirs: Iterable<string>): string[] {
   const parent = trimTrailingPathSeparators(parentDir)

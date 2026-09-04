@@ -890,7 +890,7 @@ def resolve_message_references(
     conversation_id: str,
     payload: ResolveMessageReferencesRequest,
 ):
-    """批量解析 IM 消息中的 TabTin 正文引用。"""
+    """批量解析 IM 消息中的 Muse 正文引用。"""
     try:
         items = MessageService.resolve_message_references(
             conversation_id=conversation_id,

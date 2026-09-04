@@ -63,7 +63,7 @@ class DesktopGoLiveTests(TestCase):
             platform="win",
             arch="x64",
             channel="beta",
-            file_url=f"https://cdn.example.com/desktop-updates/beta/win/x64/{version}/TabTin-{version}-windows.exe",
+            file_url=f"https://cdn.example.com/desktop-updates/beta/win/x64/{version}/Muse-{version}-windows.exe",
             file_size=100,
             checksum_sha256="a" * 64,
             checksum_sha512="b" * 88,

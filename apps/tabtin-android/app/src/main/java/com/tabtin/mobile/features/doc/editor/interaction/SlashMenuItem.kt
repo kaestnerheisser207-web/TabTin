@@ -11,7 +11,7 @@ import androidx.compose.material.icons.outlined.FormatQuote
 import androidx.compose.material.icons.outlined.HorizontalRule
 import androidx.compose.material.icons.outlined.Title
 import androidx.compose.ui.graphics.vector.ImageVector
-import com.tabtin.mobile.R
+import com.muse.mobile.R
 import com.tabtin.mobile.features.doc.model.BlockKind
 
 /**

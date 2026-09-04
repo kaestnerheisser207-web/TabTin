@@ -399,7 +399,7 @@ const BUILTIN_QUICK_USE: BuiltinQuickUse[] = [
       '目标页面：{{target}}\n' +
       '要采集的数据：{{fields}}\n' +
       '采集方式：{{strategy}}\n' +
-      '输出要求：先根据我的目标、页面标题/域名和采集字段判断一个清晰表名；如果目标页已经打开，先用 `tabtin browser tab list --format json` 找 tabId 复用已有页（保登录态），未打开时再 `tabtin browser open`；然后用 `tabtin browser network` / `eval` 拿接口数据、优先复刻 API，最后写入 TabData 表；命中「列表 + 详情」时拆成两阶段采集。写表前要抽样校验 3 条数据。',
+      '输出要求：先根据我的目标、页面标题/域名和采集字段判断一个清晰表名；如果目标页已经打开，先用 `muse browser tab list --format json` 找 tabId 复用已有页（保登录态），未打开时再 `muse browser open`；然后用 `muse browser network` / `eval` 拿接口数据、优先复刻 API，最后写入 TabData 表；命中「列表 + 详情」时拆成两阶段采集。写表前要抽样校验 3 条数据。',
     variables: [
       textareaVar('target', '目标页面', '例：商品列表页 / 招聘列表 / 新闻搜索结果页', '天气预报网页，例如中国天气网上海页面'),
       textareaVar('fields', '采集字段', '例：标题、价格、链接、日期、作者、摘要', '日期、天气、最高温、最低温、降雨概率、来源链接'),

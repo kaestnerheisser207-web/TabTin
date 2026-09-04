@@ -1,4 +1,4 @@
-"""Tabtin Space 侧遗留 agent schema。
+"""Muse Space 侧遗留 agent schema。
 
 身份 CRUD schema 正典在 ``apps.agent.schemas``；本模块仅保留
 working_dir 校验工具与历史 re-export，供 Space/Workspace 路径使用。

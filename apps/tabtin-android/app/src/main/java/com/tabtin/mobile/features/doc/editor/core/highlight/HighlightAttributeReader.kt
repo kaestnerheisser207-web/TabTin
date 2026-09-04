@@ -4,7 +4,7 @@ import android.content.Context
 import android.graphics.drawable.Drawable
 import android.util.AttributeSet
 import androidx.core.content.res.getDrawableOrThrow
-import com.tabtin.mobile.R
+import com.muse.mobile.R
 
 /**
  * Derived from anytype-kotlin core-ui HighlightAttributeReader.

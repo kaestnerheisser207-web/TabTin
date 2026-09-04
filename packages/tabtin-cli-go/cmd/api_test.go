@@ -1,6 +1,6 @@
 // cmd/api_test.go
 //
-// `tabtin api --data` 的 input 抽象单测——
+// `muse api --data` 的 input 抽象单测——
 // 直接覆盖底层 cmdutil.ParseDataOrFile（api.go 调它），
 // 而不是跑完整 cobra 链路（避免 mock transport 的复杂度）。
 //
@@ -20,7 +20,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/TabTin/tabtin-cli/internal/cmdutil"
+	"github.com/Muse/muse-cli/internal/cmdutil"
 )
 
 // TestApiParseDataInlineJSON 验证字面 JSON 字符串仍能正常解析（向后兼容旧 contract）。

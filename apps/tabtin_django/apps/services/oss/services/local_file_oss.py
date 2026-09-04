@@ -1,4 +1,4 @@
-"""Filesystem-backed OSS provider for a single-server TabTin deployment."""
+"""Filesystem-backed OSS provider for a single-server Muse deployment."""
 
 from __future__ import annotations
 

@@ -1512,7 +1512,7 @@ struct VoiceSettingsScreen: View {
 
 private struct VoicePlatformHotwordsView: View {
     private let categories: [(String, [String])] = [
-        (L10n.Profile.voiceCategoryProduct, ["TabTin", "TabData", "TabDoc", "TabSlide"]),
+        (L10n.Profile.voiceCategoryProduct, ["Muse", "TabData", "TabDoc", "TabSlide"]),
         (L10n.Profile.voiceCategoryAgent, ["Agent", "Agentspace", "Space", "RAG", "Prompt"]),
         (L10n.Profile.voiceCategoryFeature, ["Skill", "Memo", "Composer", "Crawler"]),
     ]
@@ -1659,7 +1659,7 @@ struct AboutScreen: View {
                         .foregroundStyle(.tt.iconAccent)
                         .accessibilityHidden(true)
                     VStack(spacing: TTSpacing.xs) {
-                        Text("TabTin")
+                        Text("Muse")
                             .font(.tt.titleSemibold)
                             .foregroundStyle(.tt.textPrimary)
                         Text(L10n.Profile.aboutVersionFormat(AppConfig.appVersion, AppConfig.buildNumber))
@@ -1683,7 +1683,7 @@ struct AboutScreen: View {
                     url: "https://assets.example.com/tabtin-agreement/TabTin%E6%A1%8C%E9%9D%A2%E7%AB%AF%E7%94%A8%E6%88%B7%E5%8D%8F%E8%AE%AE-V1.0%E4%B8%AD%E8%8B%B1%E5%8F%8C%E8%AF%AD%E7%89%88.pdf"
                 )
             } footer: {
-                Text("© \(Calendar.current.component(.year, from: Date())) TabTin")
+                Text("© \(Calendar.current.component(.year, from: Date())) Muse")
                     .frame(maxWidth: .infinity, alignment: .center)
             }
         }
@@ -2229,7 +2229,7 @@ struct WorkspaceInvitationsScreen: View {
                         Text(OrganizationRole.editor.title)
                             .foregroundStyle(.tt.textAccent)
                     }
-                    Text("手机号邀请仅支持已注册的 TabTin 用户，将以编辑者身份加入组织。")
+                    Text("手机号邀请仅支持已注册的 Muse 用户，将以编辑者身份加入组织。")
                         .font(.tt.meta)
                         .foregroundStyle(.tt.textTertiary)
                 } else {

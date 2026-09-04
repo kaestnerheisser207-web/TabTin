@@ -907,14 +907,14 @@ function buildToolModeAnnotation(mode: AgentModeName, toolName: string): string 
  * P0-3 修复（2026-05-27）：受限模式下 `run_terminal_command` 的 shell 限制提示。
  *
  * 让模型预先知道：
- *   - Shell 仅放行 `tabtin` 只读子命令
+ *   - Shell 仅放行 `muse` 只读子命令
  *   - 常见替代映射（避免 dogfood "ls 撞墙" 历史 bug）
  *   - 写命令（rm / mv / sed -i / git commit 等）会被入口过滤拒掉
  */
 function buildShellRestrictedAnnotation(mode: AgentModeName): string {
   const label = humanModeLabel(mode);
   return (
-    `\n\n[${label} mode] Shell is restricted to tabtin readonly subcommands. ` +
+    `\n\n[${label} mode] Shell is restricted to muse readonly subcommands. ` +
     `Common alternatives: ls→glob_search, cat→read_file, grep/find→grep_search/glob_search. ` +
     `Writing commands (rm, mv, sed -i, git commit, etc.) will be rejected.`
   );

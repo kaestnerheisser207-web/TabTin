@@ -21,7 +21,7 @@ import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import com.tabtin.mobile.R
+import com.muse.mobile.R
 import com.tabtin.mobile.ui.theme.TTColors
 import com.tabtin.mobile.ui.theme.TTSpacing
 import com.tabtin.mobile.ui.theme.ttColor

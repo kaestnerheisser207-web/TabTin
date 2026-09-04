@@ -79,7 +79,7 @@ const runSessionHooks: BrowserSessionHooks = {
       throw new BrowserActionError(400, {
         code: 'VALIDATION_ERROR',
         message: '缺少 runId 参数',
-        suggestions: ['runId 由执行环境在启动 Run 时分配；用带 --run-id 的命令关联，如 tabtin browser open --run-id <id>'],
+        suggestions: ['runId 由执行环境在启动 Run 时分配；用带 --run-id 的命令关联，如 muse browser open --run-id <id>'],
       })
     }
 
@@ -116,7 +116,7 @@ const runSessionHooks: BrowserSessionHooks = {
       throw new BrowserActionError(400, {
         code: 'VALIDATION_ERROR',
         message: '缺少 runId 参数',
-        suggestions: ['runId 由执行环境在启动 Run 时分配；用带 --run-id 的命令关联，如 tabtin browser open --run-id <id>'],
+        suggestions: ['runId 由执行环境在启动 Run 时分配；用带 --run-id 的命令关联，如 muse browser open --run-id <id>'],
       })
     }
 

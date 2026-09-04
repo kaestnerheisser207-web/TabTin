@@ -1,7 +1,7 @@
 """
 Runtime Registry / 运行时任务台账
 
-本文件是 TabTin Runtime / Celery / Beat / Worker / Queue 的统一维护台账。
+本文件是 Muse Runtime / Celery / Beat / Worker / Queue 的统一维护台账。
 
 维护目的：
 1. 说明每个 Queue 是做什么的。

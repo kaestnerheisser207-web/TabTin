@@ -10,7 +10,7 @@
 
 selector 易碎是采集任务常态——**别复制粘贴示例就跑**。扩量前必做：
 
-1. `tabtin browser glance --screenshot --save /tmp/page.png` 看当前页真实结构；示例里的 selector 不在就按实际结构改。
+1. `muse browser glance --screenshot --save /tmp/page.png` 看当前页真实结构；示例里的 selector 不在就按实际结构改。
 2. 对第一页 / 第一条跑一遍抽取 `eval`，确认返回的 JSON 字段非空、前 3 条与页面可见内容一致。
 3. 定翻页模式：URL 翻页（列表页有 `?page=` / `?start=`）还是无限滚动（往下滚才加载）；终止条件用「总页数 / 总条数」或「滚动后无新增条目」。
 
@@ -24,13 +24,13 @@ selector 易碎是采集任务常态——**别复制粘贴示例就跑**。扩�
 ```bash
 TASK=/tmp/collect-$(date +%s); mkdir -p "$TASK"
 # 打开列表页记下 tabId —— 后面所有翻页/详情都复用这个 tab，会话/Cookie 不丢
-TAB=$(tabtin browser open --url "https://movie.douban.com/top250" --format json | jq -r '.data.tabId')
+TAB=$(muse browser open --url "https://movie.douban.com/top250" --format json | jq -r '.data.tabId')
 
 > "$TASK/list.jsonl"
 for offset in 0 25 50 75 100 125 150 175 200 225; do   # 终止条件：③ 定型的总页数
-  tabtin browser open --url "https://movie.douban.com/top250?start=${offset}" --tab-id "$TAB" || { echo "offset $offset: open failed" >&2; break; }
-  tabtin browser wait --selector ".grid_view" --timeout 5000 || { echo "offset $offset: selector missing (风控/改版?)" >&2; break; }
-  ROW=$(tabtin browser eval --tab-id "$TAB" --expression "
+  muse browser open --url "https://movie.douban.com/top250?start=${offset}" --tab-id "$TAB" || { echo "offset $offset: open failed" >&2; break; }
+  muse browser wait --selector ".grid_view" --timeout 5000 || { echo "offset $offset: selector missing (风控/改版?)" >&2; break; }
+  ROW=$(muse browser eval --tab-id "$TAB" --expression "
     JSON.stringify([...document.querySelectorAll('.item')].map(it => ({
       id: (it.querySelector('.hd a').href.match(/subject\\/(\\d+)/)||[])[1],
       name: it.querySelector('.title').textContent.trim(),
@@ -52,9 +52,9 @@ done
 ```bash
 PREV=0
 for round in $(seq 1 10); do          # 轮数上限 = 有界初始批次
-  tabtin browser act --tab-id "$TAB" --actions '[{"type":"scroll"}]' || break
-  tabtin browser wait --timeout 2000  # 等懒加载请求发完
-  COUNT=$(tabtin browser eval --tab-id "$TAB" --expression "document.querySelectorAll('.item').length" --format json | jq -r '.data.result')
+  muse browser act --tab-id "$TAB" --actions '[{"type":"scroll"}]' || break
+  muse browser wait --timeout 2000  # 等懒加载请求发完
+  COUNT=$(muse browser eval --tab-id "$TAB" --expression "document.querySelectorAll('.item').length" --format json | jq -r '.data.result')
   [ "$COUNT" -le "$PREV" ] && break   # 终止条件：无新增条目
   PREV=$COUNT
   sleep 1
@@ -76,12 +76,12 @@ while IFS= read -r row; do
   # 断点续传：文件存在且非空且可解析才算已完成——防超时/eval undefined 写出的坏文件被永久跳过
   [ -s "$TASK/detail/${id}.json" ] && jq -e . "$TASK/detail/${id}.json" > /dev/null 2>&1 && continue
 
-  if ! tabtin browser open --url "$url" --tab-id "$TAB" \
-     || ! tabtin browser wait --selector "#info" --timeout 5000; then
+  if ! muse browser open --url "$url" --tab-id "$TAB" \
+     || ! muse browser wait --selector "#info" --timeout 5000; then
     echo "$id" >> "$TASK/failed_ids.txt"; echo "detail $id: load failed" >&2
     sleep 5; continue                 # 单条失败记清单继续；连续多条失败按反爬阶梯停下
   fi
-  tabtin browser eval --tab-id "$TAB" --expression "
+  muse browser eval --tab-id "$TAB" --expression "
     JSON.stringify({
       year: (document.querySelector('.year')?.textContent||'').replace(/[()]/g,''),
       directors: [...document.querySelectorAll('a[rel=v:directedBy]')].map(a => ({name:a.textContent,url:a.href,role:'导演'})),

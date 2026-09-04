@@ -1,7 +1,7 @@
 package com.tabtin.mobile.features.clouddocs
 
 import android.content.Context
-import com.tabtin.mobile.R
+import com.muse.mobile.R
 import com.tabtin.mobile.data.model.KnowledgeTreeFlatRow
 import com.tabtin.mobile.data.model.SharedResourceOwner
 import com.tabtin.mobile.data.model.SpaceResource

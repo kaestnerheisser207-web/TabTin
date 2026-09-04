@@ -401,7 +401,7 @@ function safeErrorMessage(error: unknown): string {
   if (error instanceof Error) {
     // OAuth 网页授权超过 SDK 默认 60s 时常见；给用户可读提示（技术原文仍保留在后半）
     if (/Request timed out|-32001/i.test(error.message)) {
-      return `浏览器授权或连接确认超时。请重新授权，并在系统浏览器完成登录后尽快回到 TabTin。（${error.message}）`
+      return `浏览器授权或连接确认超时。请重新授权，并在系统浏览器完成登录后尽快回到 Muse。（${error.message}）`
     }
     return error.message
   }
@@ -1681,7 +1681,7 @@ export class LocalMcpService {
       if (looksLikeMcpRemote && resolved.kind === 'stdio') {
         const remoteUrl = extractMcpRemoteServerUrl(resolved.args)
         if (remoteUrl) {
-          ensureMcpRemoteClientName(remoteUrl, 'TabTin')
+          ensureMcpRemoteClientName(remoteUrl, 'Muse')
         }
       }
       // 后台建连禁止弹授权窗 / 系统浏览器；未授权则快速失败，留给用户主动「前往授权」。
@@ -1964,7 +1964,7 @@ export class LocalMcpService {
       const remoteUrl = extractMcpRemoteServerUrl(resolved.args)
       if (remoteUrl) {
         // 旧动态注册常叫「MCP CLI Proxy」；清掉后按货架 client_name=TabTin 重注册
-        ensureMcpRemoteClientName(remoteUrl, 'TabTin')
+        ensureMcpRemoteClientName(remoteUrl, 'Muse')
       }
     }
     const transport = this.createTransport(resolved, {

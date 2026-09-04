@@ -4,7 +4,7 @@ import androidx.annotation.StringRes
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.tabtin.mobile.R
+import com.muse.mobile.R
 import com.tabtin.mobile.data.model.doc.CommentAnchor
 import com.tabtin.mobile.data.model.doc.CommentThread
 import com.tabtin.mobile.data.model.doc.Doc
@@ -74,12 +74,12 @@ import javax.inject.Inject
 /** 文档保存状态 */
 public enum class SaveState(@StringRes public val labelRes: Int) {
     IDLE(0),
-    DIRTY(com.tabtin.mobile.R.string.doc_save_edited),
-    SAVING(com.tabtin.mobile.R.string.doc_save_saving),
-    SAVED(com.tabtin.mobile.R.string.doc_save_saved),
-    FAILED(com.tabtin.mobile.R.string.doc_save_failed),
-    CONFLICT(com.tabtin.mobile.R.string.doc_save_conflict_short),
-    PERMISSION_DENIED(com.tabtin.mobile.R.string.doc_permission_revoked),
+    DIRTY(com.muse.mobile.R.string.doc_save_edited),
+    SAVING(com.muse.mobile.R.string.doc_save_saving),
+    SAVED(com.muse.mobile.R.string.doc_save_saved),
+    FAILED(com.muse.mobile.R.string.doc_save_failed),
+    CONFLICT(com.muse.mobile.R.string.doc_save_conflict_short),
+    PERMISSION_DENIED(com.muse.mobile.R.string.doc_permission_revoked),
 }
 
 internal fun docDraftScope(userId: String?, organizationId: String?, documentId: String): String? {
@@ -481,7 +481,7 @@ public class DocEditorViewModel @Inject constructor(
                 if (!preserveLocalDraft && restoreDraftForOfflinePreview(generation)) return@launch
                 _uiState.update {
                     it.copy(
-                        errorRes = com.tabtin.mobile.R.string.doc_error_load_failed,
+                        errorRes = com.muse.mobile.R.string.doc_error_load_failed,
                         isLoading = false,
                     )
                 }
@@ -1304,7 +1304,7 @@ public class DocEditorViewModel @Inject constructor(
         _uiState.update { current ->
             current.copy(
                 saveState = SaveState.CONFLICT,
-                conflictMessage = appContext.getString(com.tabtin.mobile.R.string.doc_save_conflict),
+                conflictMessage = appContext.getString(com.muse.mobile.R.string.doc_save_conflict),
             )
         }
         return false
@@ -1753,7 +1753,7 @@ public class DocEditorViewModel @Inject constructor(
                     title = documentTitle,
                     saveState = if (serverChangedSinceDraft) SaveState.CONFLICT else SaveState.DIRTY,
                     conflictMessage = if (serverChangedSinceDraft) {
-                        appContext.getString(com.tabtin.mobile.R.string.doc_save_conflict)
+                        appContext.getString(com.muse.mobile.R.string.doc_save_conflict)
                     } else null,
                 )
             }
@@ -2553,7 +2553,7 @@ public class DocEditorViewModel @Inject constructor(
             if (!canMutate()) return@launch
             if (!isEditableImageTarget(blockId)) return@launch
 
-            _events.tryEmit(EditorEvent.ShowToast(com.tabtin.mobile.R.string.doc_image_uploading))
+            _events.tryEmit(EditorEvent.ShowToast(com.muse.mobile.R.string.doc_image_uploading))
 
             try {
                 val resolver = appContext.contentResolver
@@ -2564,10 +2564,10 @@ public class DocEditorViewModel @Inject constructor(
                     val size = resolver.openFileDescriptor(uri, "r")?.use { it.statSize } ?: 0L
                     if (size > maxBytes) {
                         val maxMB = (maxBytes / 1024 / 1024).toInt()
-                        throw Exception(appContext.getString(com.tabtin.mobile.R.string.doc_image_too_large, maxMB))
+                        throw Exception(appContext.getString(com.muse.mobile.R.string.doc_image_too_large, maxMB))
                     }
                     val data = resolver.openInputStream(uri)?.use { it.readBytes() }
-                        ?: throw Exception(appContext.getString(com.tabtin.mobile.R.string.doc_image_cannot_read))
+                        ?: throw Exception(appContext.getString(com.muse.mobile.R.string.doc_image_cannot_read))
                     val mime = resolver.getType(uri) ?: "image/jpeg"
                     data to mime
                 }
@@ -2594,7 +2594,7 @@ public class DocEditorViewModel @Inject constructor(
                 val ossUrl = result.accessUrl
                 if (ossUrl.isBlank()) {
                     deactivateAbandonedImage(result.fileId, uploadScope)
-                    throw Exception(appContext.getString(com.tabtin.mobile.R.string.doc_image_empty_url))
+                    throw Exception(appContext.getString(com.muse.mobile.R.string.doc_image_empty_url))
                 }
 
                 if (!canMutate() || !isEditableImageTarget(blockId)) {
@@ -2614,7 +2614,7 @@ public class DocEditorViewModel @Inject constructor(
                 throw e
             } catch (e: Exception) {
                 Log.e("DocEditor", "Image upload failed", e)
-                _events.tryEmit(EditorEvent.ShowToast(com.tabtin.mobile.R.string.doc_image_upload_failed))
+                _events.tryEmit(EditorEvent.ShowToast(com.muse.mobile.R.string.doc_image_upload_failed))
             }
         }
     }
@@ -2803,7 +2803,7 @@ public class DocEditorViewModel @Inject constructor(
                 isLoading = false,
                 isPermissionRevoked = true,
                 saveState = SaveState.PERMISSION_DENIED,
-                conflictMessage = appContext.getString(com.tabtin.mobile.R.string.doc_permission_revoked),
+                conflictMessage = appContext.getString(com.muse.mobile.R.string.doc_permission_revoked),
                 canUndo = false,
                 canRedo = false,
                 showSlashMenu = false,

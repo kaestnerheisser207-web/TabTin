@@ -32,7 +32,7 @@ import androidx.compose.ui.viewinterop.AndroidView
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.compose.LocalLifecycleOwner
-import com.tabtin.mobile.R
+import com.muse.mobile.R
 import com.tabtin.mobile.ui.theme.AppLanguage
 import com.tabtin.mobile.ui.web.WebViewRenderProcessGuard
 import com.tabtin.mobile.ui.web.releaseSafely

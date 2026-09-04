@@ -1,7 +1,7 @@
 {
   "name": "@tabtin/security-policy",
   "version": "0.1.0",
-  "description": "Unified security policy engine for TabTin — SSOT for authorization across all runtimes",
+  "description": "Unified security policy engine for Muse — SSOT for authorization across all runtimes",
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",

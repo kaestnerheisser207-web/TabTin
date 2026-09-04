@@ -2,7 +2,7 @@
   "annotations": {
     "list": []
   },
-  "description": "TabTin Unified Search (FTS) — 上线 SLO 监控（Wave 5 PRD 6.3 / 6.4）",
+  "description": "Muse Unified Search (FTS) — 上线 SLO 监控（Wave 5 PRD 6.3 / 6.4）",
   "editable": true,
   "graphTooltip": 0,
   "id": null,
@@ -14,7 +14,7 @@
       "keepTime": false,
       "tags": ["tabtin"],
       "targetBlank": true,
-      "title": "TabTin docs",
+      "title": "Muse docs",
       "type": "link",
       "url": "https://github.com/your-org/TabTinAgent/blob/main/support/strategy/2026-04-16-unified-search-engine.md"
     }
@@ -276,7 +276,7 @@
   "time": { "from": "now-3h", "to": "now" },
   "timepicker": {},
   "timezone": "browser",
-  "title": "TabTin FTS — Unified Search SLO",
+  "title": "Muse FTS — Unified Search SLO",
   "uid": "tabtin-fts",
   "version": 1,
   "weekStart": ""

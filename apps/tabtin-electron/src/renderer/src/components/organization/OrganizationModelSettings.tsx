@@ -1216,10 +1216,10 @@ export const OrganizationModelSettings: React.FC<OrganizationModelSettingsProps>
         </p>
       )}
 
-      {/* ── 分区一：TabTin 预置模型（平台内置，开箱即用） ── */}
+      {/* ── 分区一：Muse 预置模型（平台内置，开箱即用） ── */}
       {systemModels.length > 0 && (
           <SettingsSectionCard
-            title={t('llm.presetSection.title', { defaultValue: 'TabTin 预置模型' })}
+            title={t('llm.presetSection.title', { defaultValue: 'Muse 预置模型' })}
           subtitle={t('llm.presetSection.subtitle', { defaultValue: '平台内置模型，开箱即用，可设为个人或团队默认。' })}
           subtitleAsTooltip
         >

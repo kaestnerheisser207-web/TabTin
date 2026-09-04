@@ -193,13 +193,13 @@ function truncateResult(result: Record<string, any>): Record<string, any> {
 }
 
 /**
- * 判断是否为「严格」的单行 `tabtin desktop ...` 调用：无 shell 链式/子 shell 等元字符。
+ * 判断是否为「严格」的单行 `muse desktop ...` 调用：无 shell 链式/子 shell 等元字符。
  * 换行/回车必须拒绝，否则可在「截屏」后插入换行再拼接任意 shell 命令，绕过审批执行。
- * `()` 会误伤 `tabtin desktop open "App (Name)"`，但在 bash 中为子 shell 语法，保留拦截更安全。
+ * `()` 会误伤 `muse desktop open "App (Name)"`，但在 bash 中为子 shell 语法，保留拦截更安全。
  */
 function isStrictInternalDesktopCLI(command: string): boolean {
   const t = command.trim();
-  if (!/^\s*tabtin\s+desktop\b/i.test(t)) return false;
+  if (!/^\s*muse\s+desktop\b/i.test(t)) return false;
   return !/[;|&`$()\n\r]/.test(t);
 }
 
@@ -1277,14 +1277,14 @@ export class DaemonActionBridge {
     }
 
   private validateTerminalInput(command: string, params: Record<string, any>): Record<string, any> | null {
-      if (/^\s*tabtin\s+desktop\b/i.test(command) && !isStrictInternalDesktopCLI(command)) {
+      if (/^\s*muse\s+desktop\b/i.test(command) && !isStrictInternalDesktopCLI(command)) {
         this.logger.warn(
-          `[POLICY] Blocked unsafe tabtin desktop command (shell meta or newline): ${command.slice(0, 120)}`,
+          `[POLICY] Blocked unsafe muse desktop command (shell meta or newline): ${command.slice(0, 120)}`,
         );
         return {
           success: false,
           error:
-            'Unsafe tabtin desktop command: shell metacharacters or newlines are not allowed.',
+            'Unsafe muse desktop command: shell metacharacters or newlines are not allowed.',
           error_code: 'POLICY_BLOCKED',
           data: { policy_decision: 'blocked', ruleName: 'desktop-cli-strict' },
         };

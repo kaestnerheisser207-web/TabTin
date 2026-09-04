@@ -1,5 +1,5 @@
 {
-  "appTitle": "TabTin - Creative Workspace",
+  "appTitle": "Muse - Creative Workspace",
   "close": "Close",
   "delete": "Delete",
   "up": "Move up",
@@ -17,7 +17,7 @@
   "switchLanguage": "中文",
   "reload": "Reload",
   "home": {
-    "title": "Welcome to TabTin",
+    "title": "Welcome to Muse",
     "subtitle": "{{name}}, the web version is under construction. More features coming soon."
   },
   "notFound": {

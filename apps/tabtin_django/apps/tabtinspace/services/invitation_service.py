@@ -507,7 +507,7 @@ class InvitationService(BaseService):
         # 与登录口径一致：+86 / 11 位互认
         target = resolve_user_by_phone(phone, active_only=True)
         if target is None:
-            raise ServiceError('USER_NOT_FOUND_BY_PHONE', '该手机号未注册 TabTin，请先让对方注册', 404)
+            raise ServiceError('USER_NOT_FOUND_BY_PHONE', '该手机号未注册 Muse，请先让对方注册', 404)
 
         return self.create_direct_invitation(
             organization_id=organization_id,

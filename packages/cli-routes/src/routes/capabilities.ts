@@ -68,6 +68,6 @@ export async function handleCapabilitiesRoute(
   sendJSON(res, 404, errorResponse(
     'UNKNOWN_ROUTE',
     `未知的 capabilities 路由: ${url}`,
-    { suggestions: ['使用 tabtin capabilities --help 查看所有可用命令'] },
+    { suggestions: ['使用 muse capabilities --help 查看所有可用命令'] },
   ));
 }

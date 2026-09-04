@@ -1,7 +1,7 @@
 package com.tabtin.mobile.features.tabdata
 
 import androidx.annotation.StringRes
-import com.tabtin.mobile.R
+import com.muse.mobile.R
 
 public enum class TabDataSaveIndicatorState(@StringRes public val labelRes: Int) {
     IDLE(0),

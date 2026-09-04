@@ -1,6 +1,6 @@
 package com.tabtin.mobile.features.notification
 
-import com.tabtin.mobile.R
+import com.muse.mobile.R
 import com.tabtin.mobile.data.model.NotificationItem
 import com.tabtin.mobile.data.model.MobileNotificationTarget
 import com.tabtin.mobile.data.model.MobileNotificationTargetResolver

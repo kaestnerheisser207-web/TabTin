@@ -1,2 +1,2 @@
-"""TabTin runtime registry helpers."""
+"""Muse runtime registry helpers."""
 

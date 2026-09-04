@@ -535,7 +535,7 @@ async function handleSlideExportRoutes(
   }
 
   // ── Delete project ─────────────────────────────────
-  // 供 `tabtin slide render` 用完即删临时渲染项目：Agent「做 PPT」
+  // 供 `muse slide render` 用完即删临时渲染项目：Agent「做 PPT」
   // 走 create→export→delete 的瞬时渲染，不留用户可见的云演示文稿。
   if (route === '/delete-project' && method === 'POST') {
     const projectId = body?.project_id;

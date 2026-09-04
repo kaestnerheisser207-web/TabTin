@@ -328,7 +328,7 @@ describe('skill_invoke', () => {
     expect(result.isError).toBeFalsy();
     const text = injectedText(result);
     expect(text).toContain('run_terminal_command');
-    expect(text).toContain("'tabtin' 'plugin' 'launch' 'cowart'");
+    expect(text).toContain("'muse' 'plugin' 'launch' 'cowart'");
     expect(text).toContain("'--service-id' 'canvas'");
     expect(text).toContain("'--require-mcp'");
     expect(text).toContain("'--open-browser'");

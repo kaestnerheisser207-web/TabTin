@@ -2,7 +2,7 @@ package com.tabtin.mobile.features.conversation
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
-import com.tabtin.mobile.R
+import com.muse.mobile.R
 import com.tabtin.mobile.ui.theme.TTColors
 import com.tabtin.mobile.ui.theme.ttColor
 

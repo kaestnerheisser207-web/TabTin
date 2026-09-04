@@ -1172,7 +1172,7 @@ class RoundThreeFeatureTestCase(TestCase):
         self.assertIn('openapi', spec)
         self.assertIn('info', spec)
         self.assertIn('paths', spec)
-        self.assertEqual(spec['info']['title'], 'TabTin Developer Open API')
+        self.assertEqual(spec['info']['title'], 'Muse Developer Open API')
         self.assertEqual(spec['info']['version'], '1.0.0')
         for path_key in spec['paths']:
             self.assertTrue(

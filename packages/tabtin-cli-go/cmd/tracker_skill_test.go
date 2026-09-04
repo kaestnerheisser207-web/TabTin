@@ -13,7 +13,7 @@ func sampleRegistry() []skillRegistryItem {
 	return []skillRegistryItem{
 		{AppID: "tabmemo-operator", SkillKey: "app:tabmemo/tabmemo-operator", Name: "TabMemo Operator", Source: "app"},
 		{AppID: "task-tracker", SkillKey: "app:tabdata/task-tracker", Name: "任务跟踪", Source: "app"},
-		{AppID: "visualization/tabtin-widget", SkillKey: "platform:visualization/tabtin-widget", Name: "Tabtin Widget", Source: "platform"},
+		{AppID: "visualization/tabtin-widget", SkillKey: "platform:visualization/tabtin-widget", Name: "Muse Widget", Source: "platform"},
 		// user 来源：app_id 是 UUID，权威 key 是 user:<slug>
 		{AppID: "11111111-2222-3333-4444-555555555555", SkillKey: "user:weekly-report", Name: "周报助手", Source: "user"},
 	}

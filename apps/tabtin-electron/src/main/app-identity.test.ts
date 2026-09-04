@@ -99,20 +99,20 @@ describe('app-identity', () => {
 
     expect(identity).toMatchObject({
       profile: 'development',
-      appId: 'com.tabtin.app.dev',
-      productName: 'TabTin Dev',
+      appId: 'com.muse.app.dev',
+      productName: 'Muse Dev',
     })
-    expect(mocks.app.setName).toHaveBeenCalledWith('TabTin Dev')
+    expect(mocks.app.setName).toHaveBeenCalledWith('Muse Dev')
     expect(mocks.app.setPath).toHaveBeenCalledWith(
       'userData',
-      join('/Users/test/Library/Application Support', 'TabTin Dev'),
+      join('/Users/test/Library/Application Support', 'Muse Dev'),
     )
-    expect(process.env.TABTIN_APP_ID).toBe('com.tabtin.app.dev')
+    expect(process.env.TABTIN_APP_ID).toBe('com.muse.app.dev')
     expect(process.env.TABTIN_DATA_ROOT).toBe(
-      join('/Users/test/Library/Application Support', 'TabTin Dev'),
+      join('/Users/test/Library/Application Support', 'Muse Dev'),
     )
     expect(process.env.TABTIN_RUNTIME_ROOT).toBe(
-      join('/Users/test/Library/Application Support', 'TabTin Dev', 'runtime'),
+      join('/Users/test/Library/Application Support', 'Muse Dev', 'runtime'),
     )
     expect(process.env.TABTIN_CONFIG_DIR).toBe(process.env.TABTIN_RUNTIME_ROOT)
   })
@@ -122,27 +122,27 @@ describe('app-identity', () => {
 
     applyRuntimeAppIdentity()
 
-    expect(mocks.app.setName).toHaveBeenCalledWith('TabTin Dev (im-2)')
+    expect(mocks.app.setName).toHaveBeenCalledWith('Muse Dev (im-2)')
     expect(mocks.app.setPath).toHaveBeenCalledWith(
       'userData',
-      join('/Users/test/Library/Application Support', 'TabTin Dev-im-2'),
+      join('/Users/test/Library/Application Support', 'Muse Dev-im-2'),
     )
   })
 
   it('packaged preprod runtime is inferred from the packaged app name', () => {
     mocks.app.isPackaged = true
-    mocks.app.getName.mockReturnValue('TabTin Preprod')
+    mocks.app.getName.mockReturnValue('Muse Preprod')
 
     expect(resolveRuntimeAppIdentity()).toMatchObject({
       profile: 'preprod',
-      appId: 'com.tabtin.app.preprod',
-      productName: 'TabTin Preprod',
+      appId: 'com.muse.app.preprod',
+      productName: 'Muse Preprod',
     })
   })
 
   it('packaged preprod runtime is inferred from packaged metadata when app name is shared', () => {
     mocks.app.isPackaged = true
-    mocks.app.getName.mockReturnValue('TabTin')
+    mocks.app.getName.mockReturnValue('Muse')
     mocks.app.getAppPath.mockReturnValue('/tmp/tabtin-preprod-app')
     mocks.readFileSync.mockReturnValue(JSON.stringify({
       build: {
@@ -156,14 +156,14 @@ describe('app-identity', () => {
 
     expect(resolveRuntimeAppIdentity()).toMatchObject({
       profile: 'preprod',
-      appId: 'com.tabtin.app.preprod',
-      productName: 'TabTin Preprod',
+      appId: 'com.muse.app.preprod',
+      productName: 'Muse Preprod',
     })
   })
 
   it('packaged community runtime keeps an isolated identity and userData path', () => {
     mocks.app.isPackaged = true
-    mocks.app.getName.mockReturnValue('TabTin Community')
+    mocks.app.getName.mockReturnValue('Muse Community')
     mocks.readFileSync.mockReturnValue(JSON.stringify({
       build: {
         extraMetadata: {
@@ -176,54 +176,54 @@ describe('app-identity', () => {
 
     expect(applyRuntimeAppIdentity()).toMatchObject({
       profile: 'community',
-      appId: 'com.tabtin.community',
-      productName: 'TabTin Community',
+      appId: 'com.muse.community',
+      productName: 'Muse Community',
     })
     expect(mocks.app.setPath).toHaveBeenCalledWith(
       'userData',
-      join('/Users/test/Library/Application Support', 'TabTin Community'),
+      join('/Users/test/Library/Application Support', 'Muse Community'),
     )
   })
 
   it('packaged preprod runtime is inferred from the app bundle resources path', () => {
     mocks.app.isPackaged = true
-    mocks.app.getName.mockReturnValue('TabTin')
+    mocks.app.getName.mockReturnValue('Muse')
     Object.defineProperty(process, 'resourcesPath', {
       configurable: true,
-      value: '/Applications/TabTin Preprod.app/Contents/Resources',
+      value: '/Applications/Muse Preprod.app/Contents/Resources',
     })
 
     expect(resolvePackagedRuntimeProfileFromHost()).toBe('preprod')
     expect(resolveRuntimeAppIdentity()).toMatchObject({
       profile: 'preprod',
-      appId: 'com.tabtin.app.preprod',
-      productName: 'TabTin Preprod',
+      appId: 'com.muse.app.preprod',
+      productName: 'Muse Preprod',
     })
   })
 
   it('explicit local profile overrides packaged app name inference', () => {
     mocks.app.isPackaged = true
-    mocks.app.getName.mockReturnValue('TabTin Preprod')
+    mocks.app.getName.mockReturnValue('Muse Preprod')
     process.env.TABTIN_RUNTIME_PROFILE = 'local'
 
     expect(resolveRuntimeAppIdentity()).toMatchObject({
       profile: 'local',
-      appId: 'com.tabtin.app.local',
-      productName: 'TabTin Local',
+      appId: 'com.muse.app.local',
+      productName: 'Muse Local',
     })
   })
 
   it('packaged runtime defaults to production when no profile marker exists', () => {
     mocks.app.isPackaged = true
-    mocks.app.getName.mockReturnValue('TabTin')
+    mocks.app.getName.mockReturnValue('Muse')
     delete process.env.TABTIN_RUNTIME_PROFILE
     delete process.env.VITE_BUILD_PROFILE
     delete process.env.TABTIN_BUILD_PROFILE
 
     expect(resolveRuntimeAppIdentity()).toMatchObject({
       profile: 'production',
-      appId: 'com.tabtin.app',
-      productName: 'TabTin',
+      appId: 'com.muse.app',
+      productName: 'Muse',
     })
   })
 
@@ -259,15 +259,15 @@ describe('app-identity', () => {
 
     process.env.TABTIN_RUNTIME_PROFILE = 'preprod'
     applyRuntimeAppIdentity()
-    expect(mocks.app.setName).toHaveBeenLastCalledWith('TabTin Preprod')
+    expect(mocks.app.setName).toHaveBeenLastCalledWith('Muse Preprod')
   })
 
   it('keeps production default Workspace root compatible while isolating other profiles', () => {
-    expect(resolveDefaultWorkspaceDirectoryName('production')).toBe('TabTin')
-    expect(resolveDefaultWorkspaceDirectoryName('community')).toBe('TabTin Community')
-    expect(resolveDefaultWorkspaceDirectoryName('preprod')).toBe('TabTin Preprod')
-    expect(resolveDefaultWorkspaceDirectoryName('development')).toBe('TabTin Dev')
-    expect(resolveDefaultWorkspaceDirectoryName('local')).toBe('TabTin Local')
+    expect(resolveDefaultWorkspaceDirectoryName('production')).toBe('Muse')
+    expect(resolveDefaultWorkspaceDirectoryName('community')).toBe('Muse Community')
+    expect(resolveDefaultWorkspaceDirectoryName('preprod')).toBe('Muse Preprod')
+    expect(resolveDefaultWorkspaceDirectoryName('development')).toBe('Muse Dev')
+    expect(resolveDefaultWorkspaceDirectoryName('local')).toBe('Muse Local')
   })
 })
 

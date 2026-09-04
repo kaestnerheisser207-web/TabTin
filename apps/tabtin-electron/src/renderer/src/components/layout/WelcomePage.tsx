@@ -64,7 +64,7 @@ const Hook: React.FC<{ t: TFunction<'organization'> }> = ({ t }) => (
     <p className="text-body sm:text-subtitle text-muted-foreground leading-relaxed">
       {t(
         'welcome.guest.subtitleLead',
-        '在 TabTin，Agent 真的在做事——上网调研、抓数据、做表格、写报告、做 PPT。',
+        '在 Muse，Agent 真的在做事——上网调研、抓数据、做表格、写报告、做 PPT。',
       )}
       <span className="text-foreground/80">
         {t('welcome.guest.subtitleEmphasis', '每一步，全程可见。')}
@@ -112,7 +112,7 @@ const AgentLiveDemo: React.FC<{ t: TFunction<'organization'> }> = ({ t }) => {
       label: t('welcome.guest.demo.steps.browse.label', '调研最近融资的企业'),
       detail: t(
         'welcome.guest.demo.steps.browse.detail',
-        'TabTin 浏览器 · 36氪 · IT桔子 · Crunchbase',
+        'Muse 浏览器 · 36氪 · IT桔子 · Crunchbase',
       ),
     },
     {
@@ -168,7 +168,7 @@ const AgentLiveDemo: React.FC<{ t: TFunction<'organization'> }> = ({ t }) => {
       {/* Tab 栏（统一与 ContextTabs 风格相近的 light 设计） */}
       <div className="flex items-center gap-2 px-3 py-2 border-b border-border/60 bg-muted/30">
         <div className="flex items-center gap-1 min-w-0 overflow-x-auto">
-          <DemoTab icon="🌐" label={t('welcome.guest.demo.tabs.browser', 'TabTin 浏览器')} />
+          <DemoTab icon="🌐" label={t('welcome.guest.demo.tabs.browser', 'Muse 浏览器')} />
           <DemoTab icon="📊" label={t('welcome.guest.demo.tabs.data', '融资数据.tabdata')} />
           <DemoTab icon="📝" label={t('welcome.guest.demo.tabs.report', '投融资研报.tabdoc')} active />
           <DemoTab icon="📑" label={t('welcome.guest.demo.tabs.slides', '融资周报.tabslide')} />

@@ -25,9 +25,9 @@ metadata:
 
 通过 SQL 查询/写入 TabData 数据。
 
-> **统一走 CLI**：`tabtin table query "<SQL>"` 读、`tabtin table execute "<SQL>"` 写。
+> **统一走 CLI**：`muse table query "<SQL>"` 读、`muse table execute "<SQL>"` 写。
 > 原 FC 工具（`sql_catalog` / `sql_query` / `sql_execute`）已删除（Wave 4a / D4 全删 FC），
-> CLI 通过 `run_terminal_command` 调用，能管道、能脚本、能与其他 `tabtin` 命令组合。
+> CLI 通过 `run_terminal_command` 调用，能管道、能脚本、能与其他 `muse` 命令组合。
 
 ## SQL 规则
 
@@ -35,14 +35,14 @@ metadata:
 - 标识符必须用双引号：`"字段名"`
 - 主键是 `__id`（不是 `_id`）
 - **UPDATE / DELETE 必须带真实收敛的 WHERE** — 安全层会拒绝恒真条件（如 `WHERE 1=1`、`WHERE TRUE`、`WHERE "__id" IS NOT NULL`）。如果确实要改很多行，先 `SELECT COUNT(*)` 看规模，再用业务条件分批；不要伪造全表 WHERE。
-- **删除记录优先用 `tabtin table record delete`**（按 record_id 精准删，是产品推荐路径）；
-  非要走 SQL `DELETE` 时 `tabtin table execute "DELETE ..." --allow-delete` 才会被允许，
+- **删除记录优先用 `muse table record delete`**（按 record_id 精准删，是产品推荐路径）；
+  非要走 SQL `DELETE` 时 `muse table execute "DELETE ..." --allow-delete` 才会被允许，
   且只删数据行（不删表/不改 schema）
 - 不要用 SQL DELETE 做软删——用 `UPDATE ... SET "状态" = '已取消'` 表达业务语义
 - **优先一条批量 UPDATE** — 不要逐行生成语句
 - 大表加 `LIMIT` — 避免无限制的 `SELECT *`
 - link 字段不能通过 SQL UPDATE 改关联关系；要改关联关系用
-  `tabtin table record update --data` 或 `tabtin table link add/set/remove`
+  `muse table record update --data` 或 `muse table link add/set/remove`
 
 ## SQL 模板
 
@@ -66,33 +66,33 @@ UPDATE "<表名>" SET "<字段>" = '<前缀>' || "<字段>" || '<后缀>' WHERE 
 
 ## CLI 操作
 
-通过 `run_terminal_command` 执行 `tabtin table` 命令：
+通过 `run_terminal_command` 执行 `muse table` 命令：
 
 ```bash
 # SQL 查询（只读）
-tabtin table query "SELECT * FROM \"任务\" WHERE \"状态\" = '进行中' ORDER BY \"优先级\" DESC LIMIT 20"
-tabtin table query "SELECT \"部门\", COUNT(*) as cnt FROM \"员工\" GROUP BY \"部门\""
+muse table query "SELECT * FROM \"任务\" WHERE \"状态\" = '进行中' ORDER BY \"优先级\" DESC LIMIT 20"
+muse table query "SELECT \"部门\", COUNT(*) as cnt FROM \"员工\" GROUP BY \"部门\""
 
 # SQL 写入（INSERT / UPDATE）
-tabtin table execute "UPDATE \"任务\" SET \"状态\" = '已完成' WHERE \"负责人\" = '张三' AND \"截止日期\" < '2024-01-01'"
+muse table execute "UPDATE \"任务\" SET \"状态\" = '已完成' WHERE \"负责人\" = '张三' AND \"截止日期\" < '2024-01-01'"
 
 # 命令组合（CLI 优势）：把查询结果给下一条命令处理
-tabtin table query "SELECT \"__id\" FROM \"任务\" WHERE \"状态\" = '已取消'" --format json \
+muse table query "SELECT \"__id\" FROM \"任务\" WHERE \"状态\" = '已取消'" --format json \
   | jq -r '.data.rows[][0]' \
-  | xargs -I{} tabtin table record delete --table-id <id> --record-id {} --yes
+  | xargs -I{} muse table record delete --table-id <id> --record-id {} --yes
 ```
 
 ## 看表结构
 
 ```bash
-tabtin table list                              # 列出当前 Organization 下所有表
-tabtin table info --table-id <id>              # 看单表（字段名/类型/约束）
-tabtin table field list --table-id <id>        # 看字段详情
+muse table list                              # 列出当前 Organization 下所有表
+muse table info --table-id <id>              # 看单表（字段名/类型/约束）
+muse table field list --table-id <id>        # 看字段详情
 ```
 
 ## link 字段在 SQL 里的写法
 
-- **link 字段** SELECT 出来是关联记录的简略 JSON——形态因 link 配置而异，写 SQL 前先 `tabtin table info` 看具体形态
+- **link 字段** SELECT 出来是关联记录的简略 JSON——形态因 link 配置而异，写 SQL 前先 `muse table info` 看具体形态
 - 跨 link 反向查（"梁朝伟参演了哪些电影"）—— 双向 link 时子表上会自动产生对称字段，**直接 SELECT 那一列**即可，比 JOIN 简单
 
 > 还不熟悉 link 怎么建？先读 `skills_read("app:tabdata/table-modeling")`。

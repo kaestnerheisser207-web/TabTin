@@ -25,7 +25,7 @@ import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
-import com.tabtin.mobile.R
+import com.muse.mobile.R
 import com.tabtin.mobile.ui.components.TTFormDialog
 import com.tabtin.mobile.data.model.files.CloudDriveCollection
 import com.tabtin.mobile.data.model.files.CloudDriveResourceRow

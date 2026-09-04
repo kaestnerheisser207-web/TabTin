@@ -1,12 +1,12 @@
 openapi: 3.1.0
 info:
-  title: TabTin REST API
+  title: Muse REST API
   version: 1.0.0
   description: |
-    TabTin 平台 REST API 规范，覆盖 Auth、Chat、Context 三个核心模块。
+    Muse 平台 REST API 规范，覆盖 Auth、Chat、Context 三个核心模块。
     所有响应均使用统一 ApiEnvelope 包装。
   contact:
-    name: TabTin Team
+    name: Muse Team
     url: https://www.example.com
 
 servers:

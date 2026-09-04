@@ -104,7 +104,7 @@ export class OpenAICodexCredentialStore {
 
   private async requireAccountName(): Promise<string> {
     const accountName = await this.dependencies.resolveAccountName()
-    if (!accountName) throw new Error('TabTin authentication is required for ChatGPT Codex')
+    if (!accountName) throw new Error('Muse authentication is required for ChatGPT Codex')
     return accountName
   }
 

@@ -45,7 +45,7 @@ export async function handleNetworkRoute(
         400,
         errorResponse('VALIDATION_ERROR', '缺少 urlPattern 参数', {
           suggestions: [
-            '示例: tabtin browser route --url-pattern "**/*.png" --status 403',
+            '示例: muse browser route --url-pattern "**/*.png" --status 403',
           ],
         }),
       );
@@ -93,8 +93,8 @@ export async function handleNetworkRoute(
         400,
         errorResponse('VALIDATION_ERROR', '缺少 ruleId 或 urlPattern 参数', {
           suggestions: [
-            '使用 tabtin browser route-list 查看已添加的拦截规则，再用 --rule-id 取消',
-            '或使用注册时的模式取消: tabtin browser unroute --url-pattern "**/*.png"',
+            '使用 muse browser route-list 查看已添加的拦截规则，再用 --rule-id 取消',
+            '或使用注册时的模式取消: muse browser unroute --url-pattern "**/*.png"',
           ],
         }),
       );
@@ -193,8 +193,8 @@ export async function handleNetworkRoute(
             'input 必须是 JSON 字符串或 network JSON 文件内容',
             {
               suggestions: [
-                '示例: tabtin browser network --format json > network.json',
-                '再运行: tabtin browser network to-api --input @network.json',
+                '示例: muse browser network --format json > network.json',
+                '再运行: muse browser network to-api --input @network.json',
               ],
             },
           ),

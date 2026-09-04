@@ -1,7 +1,7 @@
 /**
  * Realtime subscription client for TabData table changes.
  *
- * Connects to the TabTin WebSocket gateway and subscribes
+ * Connects to the Muse WebSocket gateway and subscribes
  * to `table.open.{tableId}` topics for live change events.
  */
 

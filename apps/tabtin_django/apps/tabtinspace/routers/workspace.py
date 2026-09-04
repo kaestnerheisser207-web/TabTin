@@ -44,7 +44,7 @@ from apps.tabtinspace.services.cloud_workspace_lifecycle import (
     CloudWorkspaceLifecycleService,
 )
 
-router = Router(tags=["Tabtin Space"])
+router = Router(tags=["Muse Space"])
 
 jwt_auth = JWTAuth()
 

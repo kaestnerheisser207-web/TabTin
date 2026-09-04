@@ -562,7 +562,7 @@ export const UserProfile: React.FC<UserProfileProps> = ({ isOpen, onClose }) => 
                   {t('actions.openStorageManager', { ns: 'profile', defaultValue: '存储管理' })}
                 </p>
                 <p className="text-caption text-muted-foreground/60 truncate">
-                  {t('actions.openStorageManagerHint', { ns: 'profile', defaultValue: '看见 TabTin 在你电脑上存了什么，按需要清理或导出' })}
+                  {t('actions.openStorageManagerHint', { ns: 'profile', defaultValue: '看见 Muse 在你电脑上存了什么，按需要清理或导出' })}
                 </p>
               </div>
             </div>

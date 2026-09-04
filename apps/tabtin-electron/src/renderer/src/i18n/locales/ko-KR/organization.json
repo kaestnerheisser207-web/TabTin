@@ -12,13 +12,13 @@
     "accessDeniedTitle": "'{{name}}'에 액세스할 수 없습니다.",
     "accessDeniedAutoSwitch": "'{{name}}'로 전환 중"
   },
-  "welcomeTitle": "TabTin에 오신 것을 환영합니다",
+  "welcomeTitle": "Muse에 오신 것을 환영합니다",
   "welcomeSubtitle": "통합 AI 작업 플랫폼. 새 작업공간을 생성하거나 왼쪽에서 하나를 선택하세요.",
   "welcomeSubtitleGuest": "로그인하여 작업공간을 만들고 공동작업을 시작하세요.",
   "welcome": {
-    "title": "TabTin",
+    "title": "Muse",
     "tagline": "AI 작업 플랫폼",
-    "conceptIntro": "TabTin에서 Workspace는 실행 장치 및 작업 디렉터리에 바인딩된 영구 작업 사이트입니다. 에이전트가 해당 경계 내에서 도움을 줄 수 있도록 대화, 앱, 리소스 및 실행 컨텍스트를 함께 유지합니다.",
+    "conceptIntro": "Muse에서 Workspace는 실행 장치 및 작업 디렉터리에 바인딩된 영구 작업 사이트입니다. 에이전트가 해당 경계 내에서 도움을 줄 수 있도록 대화, 앱, 리소스 및 실행 컨텍스트를 함께 유지합니다.",
     "loginCta": "로그인 / 등록",
     "learnMore": "자세히 알아보기 →",
     "loadingTitle": "작업공간 로드 중...",
@@ -58,12 +58,12 @@
     "guest": {
       "hookLine1": "AI는 더 이상 존재하지 않는다",
       "hookLine2": "그냥 채팅창",
-      "subtitleLead": "TabTin에서 상담원은 온라인 조사, 데이터 가져오기, 테이블 작성, 보고서 작성, 슬라이드 만들기 등 실제 작업을 수행합니다.",
+      "subtitleLead": "Muse에서 상담원은 온라인 조사, 데이터 가져오기, 테이블 작성, 보고서 작성, 슬라이드 만들기 등 실제 작업을 수행합니다.",
       "subtitleEmphasis": "모든 단계는 계속 표시됩니다.",
       "footnote": "주요 LLM에 대한 통합 액세스 · 38개 이상의 AI 작업 시나리오",
       "demo": {
         "tabs": {
-          "browser": "TabTin 브라우저",
+          "browser": "Muse 브라우저",
           "data": "자금 데이터.tabdata",
           "report": "투자 개요.tabdoc",
           "slides": "주간 자금 조달 자료.tabslide"
@@ -73,7 +73,7 @@
         "steps": {
           "browse": {
             "label": "최근 자금을 지원받은 스타트업 조사",
-            "detail": "TabTin 브라우저 · Crunchbase · TechCrunch"
+            "detail": "Muse 브라우저 · Crunchbase · TechCrunch"
           },
           "collect": {
             "label": "라운드, 금액, 투자자 확보",
@@ -220,7 +220,7 @@
       "platformPaidLabel": "기타 플랫폼 장면",
       "platformPaidText": "메일 AI, 메모리, 임베딩, 음성 등은 여전히 플랫폼 키를 사용하며 조직 지갑에서 청구됩니다.",
       "noFallbackLabel": "자동 대체 없음",
-      "noFallbackText": "이 채널이 실패하면 TabTin은 자동으로 플랫폼 모델로 전환하지 않습니다."
+      "noFallbackText": "이 채널이 실패하면 Muse은 자동으로 플랫폼 모델로 전환하지 않습니다."
     },
     "byokScopeWarning": {
       "organization": "조직 BYOK: 회원은 채팅에서 이 채널의 모델을 선택하고 사용할 수 있습니다. 플랫폼 관리 장면은 여전히 ​​플랫폼 키를 사용합니다.",
@@ -230,7 +230,7 @@
       "label": "BYOK",
       "tooltipOrganization": "조직 BYOK 채널 — 회원이 채팅에서 모델을 선택할 때 사용됩니다. 플랫폼 관리 장면은 여전히 ​​플랫폼 키를 사용합니다.",
       "tooltipUser": "개인 BYOK 채널 — 조직에서 해당 모델을 선택할 때만 사용됩니다. 플랫폼 관리 장면은 여전히 ​​플랫폼 키를 사용합니다.",
-      "tooltipGlobal": "플랫폼 채널 — BYOK 모델이 선택되지 않은 경우 플랫폼 관리 장면 및 채팅을 위해 TabTin에서 운영됩니다."
+      "tooltipGlobal": "플랫폼 채널 — BYOK 모델이 선택되지 않은 경우 플랫폼 관리 장면 및 채팅을 위해 Muse에서 운영됩니다."
     }
   },
   "llm": {
@@ -265,14 +265,14 @@
       "pickSubagentModel": "하위 에이전트 모델 선택"
     },
     "presetSection": {
-      "title": "TabTin 사전 설정 모델",
+      "title": "Muse 사전 설정 모델",
       "subtitle": "내장된 플랫폼 모델. 개인 또는 팀 기본값으로 사용할 준비가 되었습니다.",
       "collapse": "사전 설정 모델 축소",
       "expandHint": "{{count}} 더 많은 플랫폼 모델. 모두 보려면 펼치세요."
     },
     "byokSection": {
       "title": "자신의 모델 가져오기(BYOK)",
-      "subtitle": "TabTin에서 에이전트 작업 시 다른 AI 플랫폼의 코딩 계획이나 멤버십을 연결하거나 API 키를 추가하고 자체 모델 할당량을 사용하세요.",
+      "subtitle": "Muse에서 에이전트 작업 시 다른 AI 플랫폼의 코딩 계획이나 멤버십을 연결하거나 API 키를 추가하고 자체 모델 할당량을 사용하세요.",
       "introUsageText": "에이전트와 채팅하고, 코드를 작성하고, 작업을 실행할 때 모델을 선택하세요. 메인 채팅은 조직 지갑이 아닌 할당량을 사용합니다."
     },
     "connectEntries": {
@@ -284,7 +284,7 @@
       "pickerTitle": "모델 연결",
       "pickerDesc": "구매한 구독 플랜이나 종량제 API 플랫폼을 선택하세요.",
       "formTitle": "모델 연결",
-      "formDesc": "채널을 선택하고 API 키를 입력하세요. TabTin은 끝점 및 공통 모델을 사전 설정합니다.",
+      "formDesc": "채널을 선택하고 API 키를 입력하세요. Muse은 끝점 및 공통 모델을 사전 설정합니다.",
       "planFormTitle": "연결 구독 계획",
       "planFormDesc": "코딩 계획을 선택하고 키를 입력하세요. 엔드포인트 및 공통 모델이 사전 설정되어 있습니다.",
       "apiFormTitle": "종량제 API 연결",
@@ -368,7 +368,7 @@
         "vendorLabel": "키미",
         "subtitle": "Kimi Code 멤버십 또는 코딩 플랜을 사용하세요. 청구는 Kimi 플랫폼 규칙을 따릅니다.",
         "apiKeyPlaceholder": "Kimi Code 콘솔의 API 키",
-        "connectDesc": "Kimi 코드 API 키를 입력하세요. TabTin은 엔드포인트와 공통 모델을 미리 채웁니다.",
+        "connectDesc": "Kimi 코드 API 키를 입력하세요. Muse은 엔드포인트와 공통 모델을 미리 채웁니다.",
         "docsLink": "키미 설정 가이드",
         "apiKeyHint": "Kimi Code 콘솔에서 키를 생성합니다. 멤버십 등급에 따라 사용 가능한 모델이 제어됩니다."
       },
@@ -377,7 +377,7 @@
         "vendorLabel": "미니맥스",
         "subtitle": "MiniMax 토큰 플랜 구독을 연결하세요. 구독 키를 사용합니다(종량제 API 키 아님).",
         "apiKeyPlaceholder": "sk-cp-… (토큰 플랜 구독 키)",
-        "connectDesc": "토큰 플랜 구독 키를 입력하세요. TabTin은 끝점과 M3/M2.7 모델을 미리 채웁니다. M3에는 기본 1M 컨텍스트가 있습니다. M2.7 모델은 256K를 사용합니다.",
+        "connectDesc": "토큰 플랜 구독 키를 입력하세요. Muse은 끝점과 M3/M2.7 모델을 미리 채웁니다. M3에는 기본 1M 컨텍스트가 있습니다. M2.7 모델은 256K를 사용합니다.",
         "docsLink": "MiniMax 토큰 플랜 설정 가이드",
         "apiKeyHint": "계정 → 토큰 플랜에서 구독 키를 받으세요. 활성 계획 또는 팀 지정 좌석이 필요합니다."
       },
@@ -386,25 +386,25 @@
         "vendorLabel": "바이리안",
         "subtitle": "Alibaba Cloud Bailian Coding Plan을 연결하고 전용 키로 계획 할당량을 사용하세요.",
         "apiKeyPlaceholder": "sk-sp-… (코딩 계획 키)",
-        "connectDesc": "코딩 계획 키를 입력하세요. TabTin은 OpenAI 호환 엔드포인트와 권장 계획 모델을 미리 채웁니다. 모델 ID는 공식 허용 목록과 정확히 일치해야 합니다.",
+        "connectDesc": "코딩 계획 키를 입력하세요. Muse은 OpenAI 호환 엔드포인트와 권장 계획 모델을 미리 채웁니다. 모델 ID는 공식 허용 목록과 정확히 일치해야 합니다.",
         "docsLink": "Bailian 코딩 계획 설정 가이드",
         "apiKeyHint": "코딩 계획 페이지(sk-sp- 접두사)에서 키를 가져옵니다. 종량제 키 또는 dashscope.aliyuncs.com 엔드포인트에서는 작동하지 않습니다."
       },
       "volcengineCodingPlan": {
         "title": "Volcengine Ark 코딩 계획",
         "vendorLabel": "볼크엔진",
-        "subtitle": "Volcengine Ark Coding Plan을 연결하고 TabTin에서 번들 코딩 모델을 사용하세요.",
+        "subtitle": "Volcengine Ark Coding Plan을 연결하고 Muse에서 번들 코딩 모델을 사용하세요.",
         "apiKeyPlaceholder": "Ark 콘솔의 API 키",
-        "connectDesc": "Ark API 키를 입력하세요. TabTin은 코딩 계획 OpenAI 호환 엔드포인트 및 공통 코드 모델을 미리 채웁니다. 일반 Ark API 기본 URL을 사용하지 마세요.",
+        "connectDesc": "Ark API 키를 입력하세요. Muse은 코딩 계획 OpenAI 호환 엔드포인트 및 공통 코드 모델을 미리 채웁니다. 일반 Ark API 기본 URL을 사용하지 마세요.",
         "docsLink": "Volcengine 코딩 계획 설정 가이드",
         "apiKeyHint": "Ark 콘솔 → API Key 관리에서 키를 받으세요. 코딩/v3 엔드포인트를 사용해야 합니다. 그렇지 않으면 계획 할당량이 적용되지 않습니다."
       },
       "zhipuCodingPlan": {
         "title": "GLM 코딩 계획",
         "vendorLabel": "지푸",
-        "subtitle": "Zhipu GLM Coding Plan을 연결하고 TabTin에서 구독 할당량을 사용하세요.",
+        "subtitle": "Zhipu GLM Coding Plan을 연결하고 Muse에서 구독 할당량을 사용하세요.",
         "apiKeyPlaceholder": "코딩 계획 API 키",
-        "connectDesc": "GLM 코딩 계획 API 키를 입력하세요. TabTin은 OpenAI 호환 엔드포인트 및 GLM-5.2/Turbo/4.7을 미리 채웁니다. GLM-5.2는 1M 컨텍스트를 지원합니다.",
+        "connectDesc": "GLM 코딩 계획 API 키를 입력하세요. Muse은 OpenAI 호환 엔드포인트 및 GLM-5.2/Turbo/4.7을 미리 채웁니다. GLM-5.2는 1M 컨텍스트를 지원합니다.",
         "docsLink": "GLM 코딩 계획 설정 가이드",
         "apiKeyHint": "Zhipu 플랫폼의 개인/팀 코딩 계획에서 키를 생성합니다. 종량제 키와 교환할 수 없습니다."
       }
@@ -484,7 +484,7 @@
       "toggleFailed": "작업이 실패했습니다. 다시 시도해 주세요.",
       "create": "채널 추가",
       "creating": "만드는 중...",
-      "createModelHint": "플랫폼 계정과 키를 저장한 후 TabTin에서 사용하려는 특정 모델을 추가하세요.",
+      "createModelHint": "플랫폼 계정과 키를 저장한 후 Muse에서 사용하려는 특정 모델을 추가하세요.",
       "empty": "연결하려면 위에서 옵션을 선택하세요. 계획에는 API 키만 필요합니다. 맞춤 API에는 채널 설정이 필요합니다.",
       "codexLocalHint": "로컬 ChatGPT 로그인, 이 기기에서만 사용 가능",
       "modelCount": "{{count}} 모델",
@@ -609,7 +609,7 @@
     },
     "fallback": {
       "title": "대체 정책",
-      "rule": "기본 모델을 사용할 수 없는 경우 TabTin은 건강한 채널과 모델을 순서대로 시도합니다. 실패한 BYOK 채널은 자동으로 플랫폼 모델로 대체되지 않습니다.",
+      "rule": "기본 모델을 사용할 수 없는 경우 Muse은 건강한 채널과 모델을 순서대로 시도합니다. 실패한 BYOK 채널은 자동으로 플랫폼 모델로 대체되지 않습니다.",
       "healthyProviders": "{{count}} 건강한 채널",
       "noCandidate": "대체 모델 없음"
     },

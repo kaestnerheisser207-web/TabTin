@@ -14,8 +14,8 @@ import (
 //
 // 这些 path 是 CLI 自身的命令树构建 / 元数据查询：
 //   - /extensions/cli-commands：root.go 在 Execute 之前调用，为 `--help` 注册扩展命令；
-//     若此处打 warning，则 `tabtin --help` 也会污染 stderr，违反 cli-protocol.md §8.5
-//   - /surfaces：tabtin commands 拉取 PlatformSurface 清单
+//     若此处打 warning，则 `muse --help` 也会污染 stderr，违反 cli-protocol.md §8.5
+//   - /surfaces：muse commands 拉取 PlatformSurface 清单
 //   - /dev/token、/health、/healthz、/version：与 envelope_validator 同一豁免类目
 //
 // 设计取舍：tranport 层"知道"上层 path 语义并不优雅，但相比其他方案（在 ctx / opts

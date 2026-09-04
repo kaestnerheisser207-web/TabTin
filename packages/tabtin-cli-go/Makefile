@@ -1,11 +1,11 @@
-BINARY_NAME=tabtin
+BINARY_NAME=muse
 VERSION=$(shell git describe --tags --always --dirty 2>/dev/null || echo "dev")
 GIT_COMMIT=$(shell git rev-parse --short HEAD 2>/dev/null || echo "unknown")
 BUILD_DATE=$(shell date -u +"%Y-%m-%dT%H:%M:%SZ")
 LDFLAGS=-ldflags "-s -w \
-	-X github.com/TabTin/tabtin-cli/internal/version.Version=$(VERSION) \
-	-X github.com/TabTin/tabtin-cli/internal/version.GitCommit=$(GIT_COMMIT) \
-	-X github.com/TabTin/tabtin-cli/internal/version.BuildDate=$(BUILD_DATE)"
+	-X github.com/Muse/muse-cli/internal/version.Version=$(VERSION) \
+	-X github.com/Muse/muse-cli/internal/version.GitCommit=$(GIT_COMMIT) \
+	-X github.com/Muse/muse-cli/internal/version.BuildDate=$(BUILD_DATE)"
 
 .PHONY: build clean test install build-all checksums
 

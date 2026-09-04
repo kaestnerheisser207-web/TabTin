@@ -187,7 +187,7 @@ export type SwitchAction = 'allow' | 'confirm' | 'block'
  * - shell → ShellCap
  * - filesystem → FileSystemCap
  * - network → （暂无独立 Cap，预留）
- * - sql → 由后端 `api_agent_sql.py` HTTP API + `tabtin table query/execute`
+ * - sql → 由后端 `api_agent_sql.py` HTTP API + `muse table query/execute`
  *         CLI 提供（Wave 4a：原 TabDataCap 已按 D4 全删 FC 删除）；sql_mode
  *         仍由 sandbox 沿用，仅作 LLM hint
  * - cost → CostCap
@@ -482,7 +482,7 @@ export interface UpdateAgentRequest {
    */
   avatar_url?: string
   /**
-   * TabTin 品牌头像标识；当前 AI 分身编辑只允许从七张内置头像中选择。
+   * Muse 品牌头像标识；当前 AI 分身编辑只允许从七张内置头像中选择。
    * 服务端写入 settings.avatar_key，并清除旧 avatar_url。
    */
   avatar_key?: string

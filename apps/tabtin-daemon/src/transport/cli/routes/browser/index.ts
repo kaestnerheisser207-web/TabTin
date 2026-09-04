@@ -258,8 +258,8 @@ async function handleBrowserRouteListRoute(context: BrowserRouteContext): Promis
     'Daemon 模式不维护可查询的拦截规则列表（page.route 为 per-page、不跨导航持久）。route / unroute 仍可用。',
     {
       suggestions: [
-        '设置拦截: tabtin browser route --url-pattern "**/*.png" --status 403',
-        '取消拦截: tabtin browser unroute --url-pattern "**/*.png"',
+        '设置拦截: muse browser route --url-pattern "**/*.png" --status 403',
+        '取消拦截: muse browser unroute --url-pattern "**/*.png"',
         '需要可查询的规则列表请使用 Electron 运行时',
       ],
     },
@@ -359,7 +359,7 @@ export async function handleBrowserRoute(
   sendJSON(res, 404, errorResponse('UNKNOWN_ROUTE', `未知的 browser 命令: ${url}`, {
     suggestions: [
       'Daemon 支持: open, act, glance, print, eval, wait, nav, tab list, session, cookies, clear-session',
-      '使用 tabtin browser --help 查看所有可用命令',
+      '使用 muse browser --help 查看所有可用命令',
     ],
   }));
 }

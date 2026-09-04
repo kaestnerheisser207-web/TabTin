@@ -1,7 +1,7 @@
 {
   "name": "@tabtin/shared",
   "version": "0.1.0",
-  "description": "Shared utilities for TabTin apps (persist-safety, hooks, error helpers)",
+  "description": "Shared utilities for Muse apps (persist-safety, hooks, error helpers)",
   "type": "module",
   "main": "dist/index.js",
   "module": "dist/index.js",

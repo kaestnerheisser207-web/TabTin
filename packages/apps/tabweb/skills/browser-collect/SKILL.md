@@ -22,7 +22,7 @@ metadata:
 # Browser Collect
 
 > 从网页里把**成批的结构化数据**抓出来的专用流程。浏览器能力一律走
-> `tabtin browser` CLI（`run_terminal_command`）。基础命令约定、会话管理、反爬阶梯、
+> `muse browser` CLI（`run_terminal_command`）。基础命令约定、会话管理、反爬阶梯、
 > 安全规则见 `skills_read("app:tabweb/browser-operator")`。
 
 ---
@@ -36,7 +36,7 @@ metadata:
 若用户目标是**采集并写入多维表**（含关联 / 分表），交付 Bundle 后交给
 **`skills_read("app:tabdata/collect-to-table")`** 编排，不要在本 skill 内直接 `table create`。
 
-- 只读某页正文 / 就这页问答 → 不是批量采集，回 `browser-operator`（`print --save` / `tabtin fetch`）。
+- 只读某页正文 / 就这页问答 → 不是批量采集，回 `browser-operator`（`print --save` / `muse fetch`）。
 - 批量抓列表 / 详情结构化数据 → 本 skill。
 
 ---
@@ -52,14 +52,14 @@ metadata:
 （列表走接口、详情走模拟操作是常见组合）。
 
 > **登录墙 ≠ 失败（任何阶段都适用）**：目标页 / 接口要求登录时，**停下来让用户在
-> TabTin 浏览器的这个 Tab 里手动登录**，确认后复用同一 `tabId` 继续（流程见
+> Muse 浏览器的这个 Tab 里手动登录**，确认后复用同一 `tabId` 继续（流程见
 > `skills_read("app:tabweb/browser-operator")`「需登录页面」）。**不要**把登录墙当成
 > 通道失败去换网络搜索 / 其他站点找替代数据源——用户指定了数据来源，换源等于换了任务。
 
 ### ① 侦察：数据长在哪
 
-1. `tabtin browser tab list`：优先复用同域 Tab，避免丢登录态。撞登录墙 → **先让用户手动登录**再继续（见 `skills_read("app:tabweb/browser-operator")`「需登录页面」）。
-2. `tabtin browser open --url <url> --wait-until domcontentloaded --timeout 15000`：导航超时也保留返回的 `tabId`。
+1. `muse browser tab list`：优先复用同域 Tab，避免丢登录态。撞登录墙 → **先让用户手动登录**再继续（见 `skills_read("app:tabweb/browser-operator")`「需登录页面」）。
+2. `muse browser open --url <url> --wait-until domcontentloaded --timeout 15000`：导航超时也保留返回的 `tabId`。
 3. 依次看三处（命令细节见 `references/collect-structured-data.md`，别凭记忆拼）：
    **network 抓包**（XHR / JSON / GraphQL）→ **hydration**（`__NEXT_DATA__` / `__NUXT__` / Apollo / Redux）→ **渲染后 DOM**。
 4. 产出一个明确结论：数据在「接口响应 / hydration / 仅 DOM」，以及是否依赖鉴权 Cookie / token / 签名。
@@ -135,6 +135,6 @@ metadata:
 | --- | --- | --- |
 | `references/collect-structured-data.md` | ① 侦察命令细节 + 通道 A 接口爬取：network 解析纪律、curl / in-tab fetch 复刻、pageNo / cursor 分页模板、manifest 模板 | 走通道 A、要现成分页脚本时 |
 | `references/list-detail-two-phase.md` | 通道 B 模拟操作 + 两阶段：DOM 抽取、URL 翻页、无限滚动（`act scroll`）、断点续传与失败清单、反爬中断恢复 | 走通道 B、命中「列表 + 每项详情」时 |
-| `app:tabweb/browser-operator` → `references/cli-reference.md` | `tabtin browser` 全子命令参考 | 查某个子命令的完整参数与返回结构时 |
+| `app:tabweb/browser-operator` → `references/cli-reference.md` | `muse browser` 全子命令参考 | 查某个子命令的完整参数与返回结构时 |
 
 **怎么读**：本 skill 的附属文档用 `skills_read` 传 `path` 参数读取，例如 `skills_read(key="app:tabweb/browser-collect", path="references/collect-structured-data.md")`。跨 skill 读别的 skill 传对应 key。**不要**用 `read_file` / `cat`——它们读不到 skill 目录。不要给 `skills_read` / `skill_invoke` 传 `section` 参数。

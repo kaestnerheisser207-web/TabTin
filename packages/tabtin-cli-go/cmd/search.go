@@ -1,8 +1,8 @@
-// Wave 4 of TabTin Unified Search Engine — `tabtin search` CLI command.
+// Wave 4 of Muse Unified Search Engine — `muse search` CLI command.
 //
 // 用法：
 //
-//	tabtin search "<query>" [flags]
+//	muse search "<query>" [flags]
 //
 // 走 cli-server `/search` 路由（由 Electron 主进程接管），后者再透传到
 // Django `/api/search`。鉴权 / ACL / 降级 / RRF 全部由后端完成，CLI 只做
@@ -33,9 +33,9 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/TabTin/tabtin-cli/internal/cmdutil"
-	"github.com/TabTin/tabtin-cli/internal/errcode"
-	"github.com/TabTin/tabtin-cli/internal/output"
+	"github.com/Muse/muse-cli/internal/cmdutil"
+	"github.com/Muse/muse-cli/internal/errcode"
+	"github.com/Muse/muse-cli/internal/output"
 )
 
 // 允许的 query 参数白名单（与 Electron CLI 路由 / Django SearchParams 对齐）
@@ -94,14 +94,14 @@ func newCmdSearch(f *cmdutil.Factory) *cobra.Command {
 		Short: "统一搜索消息 / 资源 / Agent / Space / 备忘录 / IM",
 		Long: `统一搜索：在当前 Organization 范围内一次命中 6 类对象。
 
-结果与用户在 TabTin 桌面端按 Cmd+K 看到的完全一致：相同的权限边界、
+结果与用户在 Muse 桌面端按 Cmd+K 看到的完全一致：相同的权限边界、
 相同的 RRF 排序、相同的降级语义。Agent 通过 CLI 调用同一份能力。
 
 示例：
-  tabtin search "Python 性能优化"
-  tabtin search "缓存方案" --space=<space-id> --types=messages,resources
-  tabtin search "我的备忘" --creator-type=agent --json | jq '.results[].title'
-  tabtin search '"Cannot read property"'    # 短语精确匹配（双引号包裹整个 query）
+  muse search "Python 性能优化"
+  muse search "缓存方案" --space=<space-id> --types=messages,resources
+  muse search "我的备忘" --creator-type=agent --json | jq '.results[].title'
+  muse search '"Cannot read property"'    # 短语精确匹配（双引号包裹整个 query）
 
 提示：
   --agent-id / --creator-type=agent 仅对 messages 和 agents 索引精准生效；
@@ -110,10 +110,10 @@ func newCmdSearch(f *cmdutil.Factory) *cobra.Command {
 
   query 不接受 @ / # / in: 等前缀语法（这些是桌面端 Cmd+K 输入框的快捷选择器）；
   CLI 请用对应 flag：--agent-id / --types / --space。`,
-		Example: `  tabtin search "TypeError" --json
-  tabtin search "性能" --types=messages,resources --limit=20
-  tabtin search "缓存" --space=$CURRENT_SPACE_ID
-  tabtin search "我写过的 RAG" --creator-type=agent --agent-id=$MY_AGENT_ID`,
+		Example: `  muse search "TypeError" --json
+  muse search "性能" --types=messages,resources --limit=20
+  muse search "缓存" --space=$CURRENT_SPACE_ID
+  muse search "我写过的 RAG" --creator-type=agent --agent-id=$MY_AGENT_ID`,
 		Args: cobra.MinimumNArgs(0), // help 时允许 0 args
 		RunE: cmdutil.SafeRunE(func(cmd *cobra.Command, args []string) error {
 			return runSearch(cmd, args, f)
@@ -142,14 +142,14 @@ func runSearch(cmd *cobra.Command, args []string, f *cmdutil.Factory) error {
 		return cmd.Help()
 	}
 	// Wave 4 Review H3 产品修复：多 args 不带引号时拼接（避免静默丢弃）
-	// 例：`tabtin search Python performance test` → 搜 "Python performance test"
+	// 例：`muse search Python performance test` → 搜 "Python performance test"
 	// 与 `git commit -m foo bar` 语义一致
 	q := strings.TrimSpace(strings.Join(args, " "))
 	if q == "" {
 		return output.PrintErrorAndExit(output.ErrorEnvelope(
 			string(errcode.ValidationError),
 			"搜索 query 不能为空",
-			`tabtin search "你的关键词"`,
+			`muse search "你的关键词"`,
 			output.ExitValidation,
 		))
 	}
@@ -232,7 +232,7 @@ func runSearch(cmd *cobra.Command, args []string, f *cmdutil.Factory) error {
 	resp, err := tr.Request(reqCtx, "GET", path, nil, nil)
 	if err != nil {
 		return output.PrintErrorAndExit(output.ErrorEnvelope(
-			string(errcode.Unavailable), err.Error(), "tabtin daemon start", output.ExitNetwork,
+			string(errcode.Unavailable), err.Error(), "muse daemon start", output.ExitNetwork,
 		))
 	}
 
@@ -295,7 +295,7 @@ func printSearchHTTPError(status int, body []byte) error {
 	}
 	// Wave 4 Review H3 用户修复：透传 djangoRequest 准备好的 suggestions
 	// （cli/routes/shared/error-handler.ts 的 ELECTRON_SUGGESTIONS）到 hint
-	// 例：401 → "请先登录 TabTin 应用; 确保在 TabTin 内置终端中运行命令"
+	// 例：401 → "请先登录 Muse 应用; 确保在 Muse 内置终端中运行命令"
 	hint := joinSuggestions(body)
 	var errData map[string]any
 	if json.Unmarshal(body, &errData) == nil {
@@ -529,8 +529,8 @@ func contains(slice []string, val string) bool {
 	return false
 }
 
-// searchCommandSchema 返回 `tabtin search` 的 schema 定义，供 `tabtin commands`
-// 输出（让 Agent 通过 `tabtin commands | jq` 自动发现）。
+// searchCommandSchema 返回 `muse search` 的 schema 定义，供 `muse commands`
+// 输出（让 Agent 通过 `muse commands | jq` 自动发现）。
 //
 // Wave 4 Review H1 产品修复：search 命令因为输出格式特殊（自定义 stderr 警告 +
 // 双模 stdout）走的是手写 RunE 而非通用 RegisterCommand 流程；这里手动用
@@ -542,10 +542,10 @@ func searchCommandSchema() cmdutil.CommandDef {
 		Short: "统一搜索消息 / 资源 / Agent / Space / 备忘录 / IM",
 		Long: "统一搜索：在当前 Organization 范围内一次命中 6 类对象。" +
 			"结果与用户 Cmd+K 完全一致（相同权限、相同排序、相同降级语义）。",
-		Example: `tabtin search "TypeError" --json
-  tabtin search "性能" --types=messages,resources --limit=20
-  tabtin search "缓存" --space=$CURRENT_SPACE_ID
-  tabtin search "我写过的 RAG" --creator-type=agent --agent-id=$MY_AGENT_ID`,
+		Example: `muse search "TypeError" --json
+  muse search "性能" --types=messages,resources --limit=20
+  muse search "缓存" --space=$CURRENT_SPACE_ID
+  muse search "我写过的 RAG" --creator-type=agent --agent-id=$MY_AGENT_ID`,
 		Route:        cmdutil.RouteCliServer,
 		Method:       "GET",
 		Path:         "/search",

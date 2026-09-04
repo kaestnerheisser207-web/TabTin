@@ -9,14 +9,14 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/TabTin/tabtin-cli/internal/output"
+	"github.com/Muse/muse-cli/internal/output"
 )
 
 // TestDestructiveMissingYesReturnsConfirmationRequired 协议测试：
 // RiskDestructive 缺 --yes → exit ExitConfirmation + error.type=confirmation_required
 // + error.risk.level/action；不得静默放行。
 func TestDestructiveMissingYesReturnsConfirmationRequired(t *testing.T) {
-	root := &cobra.Command{Use: "tabtin"}
+	root := &cobra.Command{Use: "muse"}
 	executed := false
 	def := CommandDef{
 		Use:          "purge",
@@ -98,7 +98,7 @@ func TestDestructiveMissingYesReturnsConfirmationRequired(t *testing.T) {
 }
 
 func TestDestructiveWithYesProceeds(t *testing.T) {
-	root := &cobra.Command{Use: "tabtin"}
+	root := &cobra.Command{Use: "muse"}
 	executed := false
 	def := CommandDef{
 		Use:          "purge2",

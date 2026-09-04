@@ -20,7 +20,7 @@ metadata:
 
 # Desktop Operator
 
-通过 `tabtin desktop` CLI 命令操控用户的 macOS / Windows 桌面。所有操作通过 `run_terminal_command(command="tabtin desktop ...")` 执行——**不使用 FC 工具**。仅在 Electron 桌面客户端运行时可用（headless / daemon 模式不支持，Linux 也不支持）。
+通过 `muse desktop` CLI 命令操控用户的 macOS / Windows 桌面。所有操作通过 `run_terminal_command(command="muse desktop ...")` 执行——**不使用 FC 工具**。仅在 Electron 桌面客户端运行时可用（headless / daemon 模式不支持，Linux 也不支持）。
 
 ## 平台支持
 
@@ -36,32 +36,32 @@ metadata:
 
 | 目标 | CLI 命令 |
 |------|---------|
-| 截取屏幕 | `tabtin desktop screenshot` |
-| 获取 AX 快照（元素树） | `tabtin desktop accessibility-tree` |
-| **按元素名点击**（AX 优先） | `tabtin desktop click-element --name "名称" [--role Role]` |
-| **按元素名输入**（AX 优先） | `tabtin desktop type-into-element --name "名称" "文本"` |
-| 鼠标点击（坐标，AX 不可用时回退） | `tabtin desktop click <x> <y>` |
-| 鼠标拖拽 | `tabtin desktop drag <x1>,<y1> <x2>,<y2>` |
-| 鼠标滚动 | `tabtin desktop scroll <x> <y> --dy <n>` |
-| 移动鼠标（不点击） | `tabtin desktop move <x> <y>` |
-| 输入文字 | `tabtin desktop type "text"` |
-| 输入中文/特殊字符 | `tabtin desktop type "中文" --clipboard` |
-| 按键 / 组合键 | `tabtin desktop key` / `tabtin desktop hotkey` |
-| 列出所有窗口 | `tabtin desktop windows` |
-| 激活窗口到前台 | `tabtin desktop activate "App Name"` |
-| 打开应用（按名称或 .app 路径） | `tabtin desktop open "App Name"` / `tabtin desktop open "/Applications/X.app"` |
-| **批处理多步**（Wave 3） | `tabtin desktop batch -` (读 stdin) / `tabtin desktop batch --file ops.json` |
+| 截取屏幕 | `muse desktop screenshot` |
+| 获取 AX 快照（元素树） | `muse desktop accessibility-tree` |
+| **按元素名点击**（AX 优先） | `muse desktop click-element --name "名称" [--role Role]` |
+| **按元素名输入**（AX 优先） | `muse desktop type-into-element --name "名称" "文本"` |
+| 鼠标点击（坐标，AX 不可用时回退） | `muse desktop click <x> <y>` |
+| 鼠标拖拽 | `muse desktop drag <x1>,<y1> <x2>,<y2>` |
+| 鼠标滚动 | `muse desktop scroll <x> <y> --dy <n>` |
+| 移动鼠标（不点击） | `muse desktop move <x> <y>` |
+| 输入文字 | `muse desktop type "text"` |
+| 输入中文/特殊字符 | `muse desktop type "中文" --clipboard` |
+| 按键 / 组合键 | `muse desktop key` / `muse desktop hotkey` |
+| 列出所有窗口 | `muse desktop windows` |
+| 激活窗口到前台 | `muse desktop activate "App Name"` |
+| 打开应用（按名称或 .app 路径） | `muse desktop open "App Name"` / `muse desktop open "/Applications/X.app"` |
+| **批处理多步**（Wave 3） | `muse desktop batch -` (读 stdin) / `muse desktop batch --file ops.json` |
 
-> **禁止误开系统终端**：用户说「打开终端」指的是 **TabTin 应用内终端**，请用 `tabtin terminal open`，**不要**用 `tabtin desktop open "PowerShell"` / `"Windows Terminal"` / `"cmd"`。只有用户明确要求外部系统终端时，才用 `tabtin desktop open "PowerShell" --external`。
+> **禁止误开系统终端**：用户说「打开终端」指的是 **Muse 应用内终端**，请用 `muse terminal open`，**不要**用 `muse desktop open "PowerShell"` / `"Windows Terminal"` / `"cmd"`。只有用户明确要求外部系统终端时，才用 `muse desktop open "PowerShell" --external`。
 
 **会话与授权管理**（元命令，详见下方「会话与授权管理」章节）：
 
 | 目标 | CLI 命令 |
 |------|---------|
-| 诊断系统权限（辅助功能 / 屏幕录制） | `tabtin desktop accessibility [--prompt]` |
-| 手动启动 / 结束会话（高级） | `tabtin desktop session start` / `tabtin desktop session end` |
-| 中途扩展 allowedApps 白名单 | `tabtin desktop session extend-allowlist <app>... --session-id <sid>` |
-| 撤销「总是允许」授权 | `tabtin desktop revoke-approval` |
+| 诊断系统权限（辅助功能 / 屏幕录制） | `muse desktop accessibility [--prompt]` |
+| 手动启动 / 结束会话（高级） | `muse desktop session start` / `muse desktop session end` |
+| 中途扩展 allowedApps 白名单 | `muse desktop session extend-allowlist <app>... --session-id <sid>` |
+| 撤销「总是允许」授权 | `muse desktop revoke-approval` |
 
 ## 核心工作流
 
@@ -70,19 +70,19 @@ metadata:
 每次桌面操控遵循 **截屏 → AX 查询（有能力时）→ 分析 → 操作 → 截屏验证** 循环：
 
 ```
-1. tabtin desktop screenshot                         ← 获取当前屏幕画面（必须第一步）
-2. tabtin desktop accessibility-tree                  ← 获取元素结构（有 AX 时优先）
+1. muse desktop screenshot                         ← 获取当前屏幕画面（必须第一步）
+2. muse desktop accessibility-tree                  ← 获取元素结构（有 AX 时优先）
 3. 分析截图 + AX 快照，确定操作方式                     ← 你来判断
-4. tabtin desktop click-element / type-into-element   ← AX 精确操作（优先）
-   或 tabtin desktop click / type / hotkey            ← 坐标操作（AX 不可用时回退）
-5. tabtin desktop screenshot                         ← 验证操作结果
+4. muse desktop click-element / type-into-element   ← AX 精确操作（优先）
+   或 muse desktop click / type / hotkey            ← 坐标操作（AX 不可用时回退）
+5. muse desktop screenshot                         ← 验证操作结果
 6. 如果未达预期，回到步骤 2 重新分析
 ```
 
 **AX 优先策略**：
 
-- **有 AX 时优先用 AX**：目标应用的前台窗口用 `tabtin desktop accessibility-tree` 能拿到结构化元素时，优先用 `click-element` / `type-into-element` 操作——不需要猜坐标，UI 怎么动都能找对
-- **只有 AX 找不到时才回退坐标**：元素是 canvas 原生绘制（如 Figma 画布内元素、游戏引擎、Web 里的 `<canvas>` / `<svg>` 拖放元素）、或 role 不符合交互白名单、或收到 `ELEMENT_NOT_FOUND` / `AX_UNAVAILABLE` 错误时，再回落到 `tabtin desktop screenshot` + `tabtin desktop click <x> <y>`
+- **有 AX 时优先用 AX**：目标应用的前台窗口用 `muse desktop accessibility-tree` 能拿到结构化元素时，优先用 `click-element` / `type-into-element` 操作——不需要猜坐标，UI 怎么动都能找对
+- **只有 AX 找不到时才回退坐标**：元素是 canvas 原生绘制（如 Figma 画布内元素、游戏引擎、Web 里的 `<canvas>` / `<svg>` 拖放元素）、或 role 不符合交互白名单、或收到 `ELEMENT_NOT_FOUND` / `AX_UNAVAILABLE` 错误时，再回落到 `muse desktop screenshot` + `muse desktop click <x> <y>`
 - **做完必验**：AX 操作和坐标操作一样，每步后 screenshot 验证
 
 **关键约束**：
@@ -97,7 +97,7 @@ metadata:
 中文、日文、emoji 等非 ASCII 字符**必须**使用剪贴板模式：
 
 ```
-tabtin desktop type "你好世界" --clipboard
+muse desktop type "你好世界" --clipboard
 ```
 
 `--clipboard` 模式通过剪贴板粘贴文本，绕过逐字符输入的编码问题。系统会自动保存和恢复原有剪贴板内容。
@@ -107,7 +107,7 @@ tabtin desktop type "你好世界" --clipboard
 - 所有坐标基于**最近一次 `screenshot` 返回的坐标系**
 - CLI 内部自动处理 Retina / HiDPI 缩放——你提供截图上看到的坐标，系统自动换算为实际屏幕坐标
 - `screenshot` 返回的 JSON 包含 `scaleFactor`，你**不需要手动换算**
-- **首次截屏时冻结坐标系**（bounds + scaleFactor）。如果 session 期间显示器配置变化（插拔显示器、调分辨率、改缩放），当前 session 会**立即结束**并返回 `DISPLAY_CONFIG_CHANGED` 错误——不是坐标漂移后静默继续。收到该错误时，应立即重新运行 `tabtin desktop screenshot` 建立新 session 与新坐标系，再继续后续操作（规范 § 5.3 规则 8 · fail-fast 设计）
+- **首次截屏时冻结坐标系**（bounds + scaleFactor）。如果 session 期间显示器配置变化（插拔显示器、调分辨率、改缩放），当前 session 会**立即结束**并返回 `DISPLAY_CONFIG_CHANGED` 错误——不是坐标漂移后静默继续。收到该错误时，应立即重新运行 `muse desktop screenshot` 建立新 session 与新坐标系，再继续后续操作（规范 § 5.3 规则 8 · fail-fast 设计）
 
 ## 安全须知
 
@@ -121,9 +121,9 @@ tabtin desktop type "你好世界" --clipboard
 
 这三件事是用户每天都会撞上的，Agent 必须主动向用户解释：
 
-- **「总是允许」有 24 小时 TTL**：用户首次点「总是允许」后，接下来 **24 小时内**的桌面操控不再弹审批；过了 24 小时，下一次 `tabtin desktop screenshot` 会再次弹窗。用户以为"永久允许"而第二天又看到弹窗是常见误解，要主动说明
-- **随时可撤销授权**：用户可在 TabTin「设置 → 凭据与授权 → 桌面操控授权」面板**随时撤销**当前持久化的「总是允许」记录；CLI 等价命令：`tabtin desktop revoke-approval`（见下方元命令专章）
-- **Space 管理员可关闭桌面操控**：管理员或用户把 `device_permissions.desktop_observe` 设为 `block` 时，本 Space 的所有 `tabtin desktop` 命令（除 `accessibility` 诊断外）都会返回 `POLICY_BLOCKED` 三段式错误。遇到此错误时，应告知用户"当前 Space 关闭了桌面操控权限"并让用户或管理员去 **Space 设置 → 授权策略** 打开，**不要**尝试用 `osascript` / PowerShell / `run_terminal_command` 绕路执行等价操作——那是幻觉，云端 / 客户端两侧都会拦
+- **「总是允许」有 24 小时 TTL**：用户首次点「总是允许」后，接下来 **24 小时内**的桌面操控不再弹审批；过了 24 小时，下一次 `muse desktop screenshot` 会再次弹窗。用户以为"永久允许"而第二天又看到弹窗是常见误解，要主动说明
+- **随时可撤销授权**：用户可在 Muse「设置 → 凭据与授权 → 桌面操控授权」面板**随时撤销**当前持久化的「总是允许」记录；CLI 等价命令：`muse desktop revoke-approval`（见下方元命令专章）
+- **Space 管理员可关闭桌面操控**：管理员或用户把 `device_permissions.desktop_observe` 设为 `block` 时，本 Space 的所有 `muse desktop` 命令（除 `accessibility` 诊断外）都会返回 `POLICY_BLOCKED` 三段式错误。遇到此错误时，应告知用户"当前 Space 关闭了桌面操控权限"并让用户或管理员去 **Space 设置 → 授权策略** 打开，**不要**尝试用 `osascript` / PowerShell / `run_terminal_command` 绕路执行等价操作——那是幻觉，云端 / 客户端两侧都会拦
 
 ### 紧急中止快捷键
 
@@ -152,7 +152,7 @@ session 首次 `screenshot` 时若声明了 `allowedApps`（如 `[Figma, VS Code
 - ❌ `allowedApps: ['Chrome']` + 当前应用 `'Google Chrome'` → **不放行**（Chrome ≠ Google Chrome）
 - ❌ `allowedApps: ['Code']` + 当前应用 `'Xcode'` → **不放行**（Code ≠ Xcode；Wave 2.2 之前的子串匹配会误放行，已改精确匹配）
 
-写 allowedApps 时**给完整应用名**（macOS 可用 `tabtin desktop windows --format table` 查 `app` 字段）；拿捏不准就等撞到 `POLICY_BLOCKED` 后读错误文案里的"当前应用名「X」"再走扩权命令。
+写 allowedApps 时**给完整应用名**（macOS 可用 `muse desktop windows --format table` 查 `app` 字段）；拿捏不准就等撞到 `POLICY_BLOCKED` 后读错误文案里的"当前应用名「X」"再走扩权命令。
 
 **正确应对路径**（规范 § 6.12）：
 
@@ -162,13 +162,13 @@ session 首次 `screenshot` 时若声明了 `allowedApps`（如 `[Figma, VS Code
 
 ```bash
 # 扩单个应用
-run_terminal_command(command="tabtin desktop session extend-allowlist 'Google Chrome' --session-id <sid>")
+run_terminal_command(command="muse desktop session extend-allowlist 'Google Chrome' --session-id <sid>")
 
 # 扩多个（去重合并）
-run_terminal_command(command="tabtin desktop session extend-allowlist 'Finder' 'Preview' --session-id <sid>")
+run_terminal_command(command="muse desktop session extend-allowlist 'Finder' 'Preview' --session-id <sid>")
 
 # 建议带 --reason 帮用户判断
-run_terminal_command(command="tabtin desktop session extend-allowlist 'Google Chrome' --session-id <sid> --reason '需要在浏览器里查规范文档'")
+run_terminal_command(command="muse desktop session extend-allowlist 'Google Chrome' --session-id <sid> --reason '需要在浏览器里查规范文档'")
 ```
 
 返回成功 → 继续操控新应用；返回 `NEEDS_APPROVAL`（用户拒绝或超时）→ 向用户解释当前 allowedApps 不包含目标应用并询问是否改道，**不要**立即重试扩权。
@@ -183,15 +183,15 @@ run_terminal_command(command="tabtin desktop session extend-allowlist 'Google Ch
 
 下列命令不参与"截屏 → 点击 → 验证"主循环，但会在排障 / 授权生命周期里用到。Agent 通常不主动调用，错误文案里引导到这些命令时再用。
 
-**`tabtin desktop accessibility [--prompt]`** — 诊断系统权限
+**`muse desktop accessibility [--prompt]`** — 诊断系统权限
 
 ```bash
 # 读当前 macOS 辅助功能 + 屏幕录制权限状态（只读诊断，不触发审批）
-run_terminal_command(command="tabtin desktop accessibility")
+run_terminal_command(command="muse desktop accessibility")
 # → { trusted: true/false, screenRecording: true/false, screenRecordingStatus: 'granted'|'denied'|'unavailable', platform: 'darwin'|'win32'|'linux' }
 
 # --prompt 让 macOS 系统弹出引导对话框（首次授权时用户可直接点进系统设置）
-run_terminal_command(command="tabtin desktop accessibility --prompt")
+run_terminal_command(command="muse desktop accessibility --prompt")
 ```
 
 - **macOS**：返回真实的辅助功能 / 屏幕录制授权状态；`--prompt` 触发系统级引导
@@ -199,32 +199,32 @@ run_terminal_command(command="tabtin desktop accessibility --prompt")
 - **Linux**：诊断豁免（`trusted: false / screenRecording: false / screenRecordingStatus: 'unavailable'`），不会被"不支持"统吞
 - **用途**：收到 `TCC_DENIED` 错误时用来确认授权状态；一般不在主循环里调用
 
-**`tabtin desktop session start` / `tabtin desktop session end`** — 手动会话管理（高级）
+**`muse desktop session start` / `muse desktop session end`** — 手动会话管理（高级）
 
 ```bash
 # 手动启动会话（一般不用——推荐用 screenshot 隐式启动）
-run_terminal_command(command="tabtin desktop session start")
+run_terminal_command(command="muse desktop session start")
 
 # 主动结束当前会话（释放锁）
-run_terminal_command(command="tabtin desktop session end")
+run_terminal_command(command="muse desktop session end")
 ```
 
 - **推荐路径**：首次 `screenshot` 会自动 `session start`——不用显式调用
 - **何时用 end**：任务完成后想立即释放锁，让其他 Agent session 可以接手；不 end 的话会在空闲 10 分钟后自动超时结束
 
-**`tabtin desktop session extend-allowlist <app>... --session-id <sid> [--reason <text>]`** — 中途扩展白名单
+**`muse desktop session extend-allowlist <app>... --session-id <sid> [--reason <text>]`** — 中途扩展白名单
 
 见上一节「扩展操作范围」，要求给**完整应用名**（精确匹配语义）。
 
-**`tabtin desktop revoke-approval`** — 撤销"总是允许"授权
+**`muse desktop revoke-approval`** — 撤销"总是允许"授权
 
 ```bash
 # 清掉持久化的 desktop-approval.json，下次 screenshot 会重新弹审批
-run_terminal_command(command="tabtin desktop revoke-approval")
+run_terminal_command(command="muse desktop revoke-approval")
 ```
 
-- **等价 UI 路径**：TabTin「设置 → 凭据与授权 → 桌面操控授权 → 撤销」
-- **何时用**：用户说"不想再给 TabTin 桌面权限了"、或怀疑"总是允许"被误点、或排障时想强制重新走一次审批流程
+- **等价 UI 路径**：Muse「设置 → 凭据与授权 → 桌面操控授权 → 撤销」
+- **何时用**：用户说"不想再给 Muse 桌面权限了"、或怀疑"总是允许"被误点、或排障时想强制重新走一次审批流程
 - **作用范围**：只清持久化授权，不会中止当前正在进行的 session（想中止 session 按 Cmd+Shift+Esc / Ctrl+Alt+Esc）
 
 ## 注意事项
@@ -237,7 +237,7 @@ run_terminal_command(command="tabtin desktop revoke-approval")
 
 ## 资源导航（按需读取）
 
-- `references/cli-reference.md`：当你需要查某个 `tabtin desktop` 子命令的完整 flag、JSON 返回字段或边界行为时读取；常规流程直接按本文件主章节执行。
+- `references/cli-reference.md`：当你需要查某个 `muse desktop` 子命令的完整 flag、JSON 返回字段或边界行为时读取；常规流程直接按本文件主章节执行。
 - `examples/scenarios.md`：仅在需要端到端范式（例如跨应用流程、坐标版 vs AX 版对照）时读取；示例用于套用结构，不默认整份塞入上下文。
 
 ## CLI 命令参考

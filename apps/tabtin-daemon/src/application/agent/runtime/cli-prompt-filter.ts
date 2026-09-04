@@ -12,7 +12,7 @@ const TEMPORARILY_HIDDEN_CLI_DOMAINS = new Set([
 ]);
 
 export function isTemporarilyHiddenCliPromptCommand(commandPath: string): boolean {
-  const parts = commandPath.trim().replace(/^tabtin\s+/, '').split(/\s+/);
+  const parts = commandPath.trim().replace(/^muse\s+/, '').split(/\s+/);
   const [domain, subcommand] = parts;
   return TEMPORARILY_HIDDEN_CLI_DOMAINS.has(domain)
     || (domain === 'media' && subcommand === 'video');

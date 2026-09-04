@@ -228,7 +228,7 @@ const TabSitePaneHost: React.FC<TabSitePaneHostProps> = ({
     if (!site.dist_oss_url) {
       toast({
         title: t('error.noDistUrl', { defaultValue: '请先构建并上传产物' }),
-        description: t('error.noDistUrlHint', { defaultValue: '在 TabCode 中执行 build，或使用 CLI: tabtin site build' }),
+        description: t('error.noDistUrlHint', { defaultValue: '在 TabCode 中执行 build，或使用 CLI: muse site build' }),
         variant: 'destructive',
       })
       return

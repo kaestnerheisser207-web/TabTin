@@ -62,7 +62,7 @@ export function resolveSocketPath(socketName: string = 'cli.sock'): string {
 /**
  * Write a discovery JSON file for CLI auto-detection.
  *
- * The file contains socket path, token, and PID so the `tabtin` CLI
+ * The file contains socket path, token, and PID so the `muse` CLI
  * can discover the running server. Permissions are restricted to 0o600.
  */
 export function writeDiscoveryFile(

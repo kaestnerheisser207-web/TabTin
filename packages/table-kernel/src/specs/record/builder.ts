@@ -90,7 +90,7 @@ function combineSpecs(
 }
 
 /**
- * 将 FilterSet（TabTin 的嵌套过滤结构）转换为 Spec 树
+ * 将 FilterSet（Muse 的嵌套过滤结构）转换为 Spec 树
  */
 export function buildRecordSpec(filter: FilterItem | FilterSet): ISpecification<RecordData> {
   if (!isFilterSet(filter)) {

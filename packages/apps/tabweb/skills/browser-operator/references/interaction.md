@@ -7,9 +7,9 @@
 用于动态页面交互（表单、SPA、分页列表）：
 
 ```bash
-tabtin browser open --url "https://example.com/form"
-tabtin browser act --actions '[{"type":"fill","ref":"e2","value":"张三"},{"type":"click","ref":"e5"}]'
-tabtin browser act --actions '[{"type":"click","ref":"e8"}]'   # 用上一步返回的 observed_elements 继续
+muse browser open --url "https://example.com/form"
+muse browser act --actions '[{"type":"fill","ref":"e2","value":"张三"},{"type":"click","ref":"e5"}]'
+muse browser act --actions '[{"type":"click","ref":"e8"}]'   # 用上一步返回的 observed_elements 继续
 ```
 
 主路径 **`open → act → act…`**：`open`/`act` 默认内嵌 compact `observed_elements`，可直接链式 `act --ref eN`。
@@ -36,7 +36,7 @@ tabtin browser act --actions '[{"type":"click","ref":"e8"}]'   # 用上一步返
 填写文本框、选择控件后，先查看 `act` 返回的 `executed_actions`，再决定是否提交。`value` 是 `fill` 的正式字段；若返回了 `compatibility_warnings`，说明使用了旧兼容写法，后续动作改用 `value`。
 
 ```bash
-tabtin browser act --actions '[
+muse browser act --actions '[
   {"type":"fill","ref":"e1","value":"张三"},
   {"type":"click","ref":"e6"}
 ]'
@@ -50,10 +50,10 @@ tabtin browser act --actions '[
 
 ```bash
 # 1. 打开或从上一步 act 的 observed_elements 取分页 ref（记下列表首条 title/href）
-tabtin browser open --url "https://example.com/list" --format json
+muse browser open --url "https://example.com/list" --format json
 
 # 2. 从【最近一次 open/act 返回】里按 text 找页码按钮的 ref（如 text "2" → e203），禁止沿用上一轮记忆的 eN
-tabtin browser act --actions '[{"type":"click","ref":"e203"}]' --format json
+muse browser act --actions '[{"type":"click","ref":"e203"}]' --format json
 
 # 3. 验收（见下方三信号）——优先看 act 内嵌 observed_elements；observe_status=empty/error 时再 glance
 ```
@@ -89,13 +89,13 @@ tabtin browser act --actions '[{"type":"click","ref":"e203"}]' --format json
 
 ```bash
 # 1. 在列表页观测（open 或上一步 act 默认已含 observed_elements）
-tabtin browser open --url "https://example.com/list" --tab-id <listTabId> --format json
+muse browser open --url "https://example.com/list" --tab-id <listTabId> --format json
 
 # 2a. 直接点击（当前 tab 内跳转，最像真人）
-tabtin browser act --tab-id <listTabId> --actions '[{"type":"click","ref":"e12"}]'
+muse browser act --tab-id <listTabId> --actions '[{"type":"click","ref":"e12"}]'
 
 # 2b. 用真实 href 开新 tab（保留列表页、可并行）——href 原样复制，勿改写/拼接
-tabtin browser open --url "<observed_elements 里的真实 href>"
+muse browser open --url "<observed_elements 里的真实 href>"
 ```
 
 - **优先 2b `open <真 href>`** 做详情钻取：新 tab、保留列表页、可并行；`href` 直接抄 `observed_elements`，别自己改 query。

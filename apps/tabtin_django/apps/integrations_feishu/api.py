@@ -557,8 +557,8 @@ def oauth_done(request, deep_link: str = "", connected: str = "", organization_i
 <body>
   <div class="card">
     <h1>飞书授权已完成</h1>
-    <p>正在返回 TabTin 客户端。若未自动打开，请点击下方按钮。</p>
-    <a class="btn" id="open" href="{safe_link}" data-href="{safe_link}">打开 TabTin</a>
+    <p>正在返回 Muse 客户端。若未自动打开，请点击下方按钮。</p>
+    <a class="btn" id="open" href="{safe_link}" data-href="{safe_link}">打开 Muse</a>
   </div>
   <script>
     (function () {{
@@ -694,7 +694,7 @@ def _raise_feishu_list_permission_error(exc: FeishuAPIError, *, context: str) ->
             "请在飞书开放平台开通 drive:drive:readonly、"
             "drive:drive.metadata:readonly、search:docs:read、"
             "docs:document.content:read、"
-            "docx:document:readonly，并在 TabTin 断开飞书后重新授权。",
+            "docx:document:readonly，并在 Muse 断开飞书后重新授权。",
         ) from exc
     if "wiki:" in msg or "wiki/" in msg or "99991672" in msg or "99991679" in msg:
         raise HttpError(
@@ -702,7 +702,7 @@ def _raise_feishu_list_permission_error(exc: FeishuAPIError, *, context: str) ->
             "飞书应用缺少知识库只读权限，或当前授权未包含该权限。"
             "请在飞书开放平台开通 wiki:wiki:readonly（或 wiki:node:read）"
             "以及 wiki:space:retrieve / wiki:node:retrieve，"
-            "并在 TabTin 断开后重新授权。",
+            "并在 Muse 断开后重新授权。",
         ) from exc
     raise HttpError(502, f"调用飞书{context}失败") from exc
 
@@ -968,7 +968,7 @@ def parse_flow(request, body: ParseFlowIn):
             raise HttpError(
                 403,
                 "飞书应用缺少画板节点只读权限，或当前授权尚未包含该权限。"
-                "请开通 board:whiteboard:node:read，并在 TabTin 断开后重新授权。",
+                "请开通 board:whiteboard:node:read，并在 Muse 断开后重新授权。",
             ) from exc
         raise HttpError(502, "调用飞书读取画板流程图失败") from exc
     return success_response(payload)
@@ -992,7 +992,7 @@ def list_bitable_apps(request, organization_id: UUID, q: str = ""):
             raise HttpError(
                 403,
                 "飞书应用缺少「云文档」只读权限，或当前授权未包含该权限。"
-                "请在飞书开放平台开通 drive:drive:readonly，并在 TabTin 断开后重新授权。",
+                "请在飞书开放平台开通 drive:drive:readonly，并在 Muse 断开后重新授权。",
             ) from exc
         raise HttpError(502, "调用飞书列出多维表失败") from exc
     payload = [BitableAppOut(app_token=a["app_token"], name=a["name"]).model_dump() for a in apps]

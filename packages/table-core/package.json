@@ -25,12 +25,12 @@
     "test": "pnpm run build:test && node -e \"require('node:fs').writeFileSync('.test-dist/package.json', '{\\\"type\\\":\\\"commonjs\\\"}')\" && node --test .test-dist/tests/*.test.js"
   },
   "keywords": [
-    "tabtin",
+    "muse",
     "table",
     "core",
     "runtime"
   ],
-  "author": "TabTin Team",
+  "author": "Muse Team",
   "license": "MIT",
   "dependencies": {
     "@tabtin/app-host-sdk": "workspace:*",

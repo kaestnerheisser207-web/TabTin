@@ -249,7 +249,7 @@ describe('projectMessagesForLlm · boundary fence', () => {
     expect(content).not.toContain('suspicious=');
   });
 
-  it('tabtin fetch 的 terminal 结果：先 slim 再 fence（fence 内是瘦身后的 envelope）', () => {
+  it('muse fetch 的 terminal 结果：先 slim 再 fence（fence 内是瘦身后的 envelope）', () => {
     const canonical = JSON.stringify({
       status: 'completed',
       session_id: 'agent-9',
@@ -258,13 +258,13 @@ describe('projectMessagesForLlm · boundary fence', () => {
       stdout: '<html>page</html>',
       file_history: { changed_count: 0 },
     });
-    // ：runtime 不再内置 `tabtin fetch|browser` 业务知识；fence 判定依赖
+    // ：runtime 不再内置 `muse fetch|browser` 业务知识；fence 判定依赖
     // 宿主注入的 isUntrustedShellCommand。此处用最小谓词模拟 host 注入。
     const out = projectMessagesForLlm(
-      turn('run_terminal_command', 'tc_f', { command: 'tabtin fetch https://example.com' }, canonical),
+      turn('run_terminal_command', 'tc_f', { command: 'muse fetch https://example.com' }, canonical),
       {
         isUntrustedShellCommand: (command) =>
-          /^\s*tabtin\s+(fetch|browser)\b/.test(command),
+          /^\s*muse\s+(fetch|browser)\b/.test(command),
       },
     );
     const content = resultContentOf(out[1]!);

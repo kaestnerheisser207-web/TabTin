@@ -64,7 +64,7 @@ import androidx.compose.ui.viewinterop.AndroidView
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.tabtin.mobile.R
+import com.muse.mobile.R
 import com.tabtin.mobile.data.api.TabSlideApi
 import com.tabtin.mobile.data.model.slide.TabSlidePage
 import com.tabtin.mobile.data.model.slide.TabSlideDetailResponse

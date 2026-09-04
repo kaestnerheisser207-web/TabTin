@@ -44,7 +44,7 @@ function tplPermissionDeniedMacOS(input: TemplateInput): TemplateOutput {
   const { path: p, category } = input;
 
   // Wave 1 第二轮 Review 修订：
-  //   - 原文案对所有 category 都说"我帮你重启 TabTin 让权限生效"
+  //   - 原文案对所有 category 都说"我帮你重启 Muse 让权限生效"
   //   - 真实 macOS 行为：Desktop / Documents / Downloads / Removable / Network
   //     这些"普通文件夹"授权后**新发起的 fs syscall 立即生效，不需要重启**
   //   - 仅 Full Disk Access / Screen Recording / Microphone / Camera 等
@@ -79,13 +79,13 @@ function tplPermissionDeniedMacOS(input: TemplateInput): TemplateOutput {
   // 这种把动机转嫁给用户的预设，去掉"权限类目：xx"这种工程师味注释。
   const headBase =
     `我打开 ${p} 时被 Mac 阻止了——这是「${cat}」类的权限，需要你手动开一下。` +
-    `请打开「${settingsPath}」，找到 TabTin，`;
+    `请打开「${settingsPath}」，找到 Muse，`;
 
   if (isFullDisk) {
     // Full Disk Access：授权后必须重启
     const userGuidance =
       headBase +
-      `把它加入并勾选启用。授权后 TabTin 会弹出确认框，让你打开系统设置或重启应用；重启前会先请你保存未存工作。`;
+      `把它加入并勾选启用。授权后 Muse 会弹出确认框，让你打开系统设置或重启应用；重启前会先请你保存未存工作。`;
 
     const agentDirectives = [
       '不要重试这个路径，重试在重启前只会再次拿到同样的权限错误',
@@ -96,7 +96,7 @@ function tplPermissionDeniedMacOS(input: TemplateInput): TemplateOutput {
 
     const recoveryActions: RecoveryAction[] = [
       { type: 'open_system_settings', label: `打开${settingsPath}`, deepLink },
-      { type: 'restart_app', label: '重启 TabTin（完全磁盘访问授权后必须）' },
+      { type: 'restart_app', label: '重启 Muse（完全磁盘访问授权后必须）' },
       { type: 'choose_alternate_path', label: '改用其他位置' },
     ];
 
@@ -107,13 +107,13 @@ function tplPermissionDeniedMacOS(input: TemplateInput): TemplateOutput {
   // 授权后**不需要重启**——直接 clear + 重试即可。
   const userGuidance =
     headBase +
-    `打开「${cat}」开关。授权完后告诉我一声，我直接帮你接着读，通常不需要重启 TabTin。`;
+    `打开「${cat}」开关。授权完后告诉我一声，我直接帮你接着读，通常不需要重启 Muse。`;
 
   const agentDirectives = [
     '不要重试这个路径，重试只会再次拿到同样的权限错误',
     '不要建议用户用 sudo / chmod / xattr 等方式绕过 macOS 权限保护',
     '用户表示授权完成后，立即重试原工具；不要假设存在模型侧解封工具',
-    '只有当重试再次拿到同一权限错误时（极少见），才说"看起来这条权限可能需要重启 TabTin 才生效，要我帮你重启吗？"，用户同意时交给宿主授权流程处理',
+    '只有当重试再次拿到同一权限错误时（极少见），才说"看起来这条权限可能需要重启 Muse 才生效，要我帮你重启吗？"，用户同意时交给宿主授权流程处理',
     '不要主动建议重启 —— 普通文件夹授权后通常立即生效',
   ];
 
@@ -169,18 +169,18 @@ function tplPermissionDeniedLinux(input: TemplateInput): TemplateOutput {
 function tplAVBlocked(input: TemplateInput): TemplateOutput {
   const { path: p } = input;
   const userGuidance =
-    `我访问 ${p} 时操作被拦截或长时间没响应，疑似你电脑上的安全软件（常见为 360 安全卫士 / 火绒 / 腾讯电脑管家 / Windows Defender 受控文件夹访问）阻止了 TabTin。` +
-    `请打开你的安全软件，把 TabTin 加进信任 / 白名单后告诉我，我重新尝试。` +
+    `我访问 ${p} 时操作被拦截或长时间没响应，疑似你电脑上的安全软件（常见为 360 安全卫士 / 火绒 / 腾讯电脑管家 / Windows Defender 受控文件夹访问）阻止了 Muse。` +
+    `请打开你的安全软件，把 Muse 加进信任 / 白名单后告诉我，我重新尝试。` +
     `如果不确定用的是哪个安全软件，看任务栏右下角的盾牌或动物图标。`;
 
   const agentDirectives = [
     `不要重试这个路径直到用户确认已加白名单`,
-    `不要建议重启 TabTin —— 重启不解决杀软拦截`,
+    `不要建议重启 Muse —— 重启不解决杀软拦截`,
     `如果用户使用 Windows Defender 受控文件夹访问，可推荐快捷链接：windowsdefender://Threat/`,
   ];
 
   const recoveryActions: RecoveryAction[] = [
-    { type: 'whitelist_in_av', label: '在安全软件中添加 TabTin 白名单' },
+    { type: 'whitelist_in_av', label: '在安全软件中添加 Muse 白名单' },
     {
       type: 'open_system_settings',
       label: '打开 Windows 安全中心',
@@ -207,7 +207,7 @@ function tplCloudNotDownloaded(input: TemplateInput): TemplateOutput {
 
   const agentDirectives = [
     `不要重试这个路径直到用户确认已下载完成`,
-    `不要尝试重启 TabTin —— 占位文件问题与权限无关`,
+    `不要尝试重启 Muse —— 占位文件问题与权限无关`,
     `如果用户网络/云盘配额异常，建议改用本地副本`,
   ];
 

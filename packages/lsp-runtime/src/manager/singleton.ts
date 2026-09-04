@@ -6,7 +6,7 @@
  *   - bare/disabled 模式跳过（不初始化）
  *   - 异步初始化（不阻塞启动）
  *   - generation counter 防止 stale promise 在 reinit 后污染状态
- *   - reinitialize 支持（plugin 刷新后调用，TabTin 等价：动态配置变更）
+ *   - reinitialize 支持（plugin 刷新后调用，Muse 等价：动态配置变更）
  *   - shutdown 错误不传播（应用退出时记录日志即可）
  */
 
@@ -47,8 +47,8 @@ const onInitializedCallbacks: Array<(manager: LSPServerManager) => void> = [];
  *   1. 环境变量 `TABTIN_DISABLE_LSP=1` —— 运行时禁用（部署/CI 场景）
  *   2. 工厂参数 `disabled: true` —— 编程禁用（测试/特定场景）
  *
- *   TabTin 没有 bare 模式但需要等价的 escape hatch（如 daemon 单次 RPC 不需要 LSP）。
- *   采用环境变量 + 参数双控制是 TabTin 自定义但语义等价的扩展。
+ *   Muse 没有 bare 模式但需要等价的 escape hatch（如 daemon 单次 RPC 不需要 LSP）。
+ *   采用环境变量 + 参数双控制是 Muse 自定义但语义等价的扩展。
  */
 function isLspDisabled(opts?: { disabled?: boolean }): boolean {
   if (opts?.disabled) return true;
@@ -137,7 +137,7 @@ export async function waitForInitialization(): Promise<void> {
 /**
  * 注册一个回调：当 LSP runtime 初始化成功后会被调用（带 manager 实例）。
  *
- * TabTin 扩展点（本仓库扩展）：C5 阶段 `registerLSPNotificationHandlers`
+ * Muse 扩展点（本仓库扩展）：C5 阶段 `registerLSPNotificationHandlers`
  * 会通过这个 API 接入，避免 singleton 直接依赖 diagnostics 模块。
  */
 export function onLspInitialized(
@@ -160,7 +160,7 @@ export function onLspInitialized(
 /**
  * Initialize the LSP server manager singleton.
  *
- * This function is called during TabTin startup. It synchronously creates
+ * This function is called during Muse startup. It synchronously creates
  * the manager instance, then starts async initialization in the background
  * without blocking the startup process.
  *
@@ -172,7 +172,7 @@ export function initializeLspServerManager(
   configLoader: LspServerConfigLoader,
   opts?: { disabled?: boolean },
 ): void {
-  // TabTin disabled 模式（bare mode）：跳过初始化
+  // Muse disabled 模式（bare mode）：跳过初始化
   if (isLspDisabled(opts)) {
     logForDebugging('[LSP MANAGER] LSP disabled (env or opts), skipping init');
     return;

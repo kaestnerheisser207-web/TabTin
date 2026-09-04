@@ -159,7 +159,7 @@ function validateSwitchModeRuntime(
       'Daemon mode cannot approve mode switch; ask user to switch via Electron client or run interactively.',
       {
         error_kind: REQUIRES_CLIENT_APPROVAL,
-        hint: 'Ask the user to approve mode switch in the TabTin desktop client.',
+        hint: 'Ask the user to approve mode switch in the Muse desktop client.',
       },
     );
   }

@@ -26,7 +26,7 @@ internal class NotificationReadHandler @Inject constructor(
         if (!store.isListenerEnabled) {
             return DeviceActionResult(
                 success = false,
-                error = "Notification listener not enabled. Please enable TabTin in Settings → Notifications → Notification access.",
+                error = "Notification listener not enabled. Please enable Muse in Settings → Notifications → Notification access.",
                 errorCode = "NOTIFICATION_LISTENER_NOT_ENABLED",
             )
         }

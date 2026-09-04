@@ -2,16 +2,16 @@
 
 > 本文从主 [`../SKILL.md`](../SKILL.md) 物理拆出（内容逐字保留，未改语义）。
 
-所有命令通过 `run_terminal_command(command="tabtin desktop ...")` 执行。输出默认 JSON 格式，人类阅读可加 `--format table`。
+所有命令通过 `run_terminal_command(command="muse desktop ...")` 执行。输出默认 JSON 格式，人类阅读可加 `--format table`。
 
 ### 截屏
 
 ```bash
-tabtin desktop screenshot                                  # 截取主显示器全屏
-tabtin desktop screenshot --display <id>                   # 截取指定显示器
-tabtin desktop screenshot --region 100,200,800,600         # 截取指定区域（x,y,w,h）
-tabtin desktop screenshot --max-dim 1920                   # 设置截图最大边长（默认 1280）
-tabtin desktop screenshot --save ~/screenshots/check.jpg   # 指定保存路径
+muse desktop screenshot                                  # 截取主显示器全屏
+muse desktop screenshot --display <id>                   # 截取指定显示器
+muse desktop screenshot --region 100,200,800,600         # 截取指定区域（x,y,w,h）
+muse desktop screenshot --max-dim 1920                   # 设置截图最大边长（默认 1280）
+muse desktop screenshot --save ~/screenshots/check.jpg   # 指定保存路径
 ```
 
 返回值（JSON）：
@@ -36,17 +36,17 @@ tabtin desktop screenshot --save ~/screenshots/check.jpg   # 指定保存路径
 ### 鼠标操作
 
 ```bash
-tabtin desktop click 640 400                               # 左键单击
-tabtin desktop click 640 400 --button right                # 右键单击
-tabtin desktop click 640 400 --button middle               # 中键单击
-tabtin desktop click 640 400 --count 2                     # 双击
-tabtin desktop click 640 400 --count 3                     # 三击（常用于选中整行文本）
-tabtin desktop scroll 640 400 --dy -3                      # 向上滚动 3 格
-tabtin desktop scroll 640 400 --dy 5                       # 向下滚动 5 格
-tabtin desktop scroll 640 400 --dx 2                       # 向右水平滚动
-tabtin desktop drag 100,200 500,200                        # 从 (100,200) 拖拽到 (500,200)
-tabtin desktop drag 100,200 500,200 --duration 1000        # 拖拽持续 1 秒
-tabtin desktop move 640 400                                # 移动鼠标到坐标（不点击）
+muse desktop click 640 400                               # 左键单击
+muse desktop click 640 400 --button right                # 右键单击
+muse desktop click 640 400 --button middle               # 中键单击
+muse desktop click 640 400 --count 2                     # 双击
+muse desktop click 640 400 --count 3                     # 三击（常用于选中整行文本）
+muse desktop scroll 640 400 --dy -3                      # 向上滚动 3 格
+muse desktop scroll 640 400 --dy 5                       # 向下滚动 5 格
+muse desktop scroll 640 400 --dx 2                       # 向右水平滚动
+muse desktop drag 100,200 500,200                        # 从 (100,200) 拖拽到 (500,200)
+muse desktop drag 100,200 500,200 --duration 1000        # 拖拽持续 1 秒
+muse desktop move 640 400                                # 移动鼠标到坐标（不点击）
 ```
 
 - 所有坐标基于最近一次 `screenshot` 的坐标系
@@ -56,18 +56,18 @@ tabtin desktop move 640 400                                # 移动鼠标到坐�
 ### 键盘操作
 
 ```bash
-tabtin desktop type "Hello World"                          # 逐字符输入（ASCII）
-tabtin desktop type "你好世界" --clipboard                  # 剪贴板粘贴（中文/特殊字符必用）
-tabtin desktop key Enter                                   # 按回车
-tabtin desktop key Tab                                     # 按 Tab
-tabtin desktop key Escape                                  # 按 Escape（普通按键，不会触发中止）
-tabtin desktop key Backspace --repeat 5                    # 连按 5 次退格
-tabtin desktop key a --modifiers cmd                       # Cmd+A（全选）
-tabtin desktop key c --modifiers cmd                       # Cmd+C（复制）
-tabtin desktop key v --modifiers cmd                       # Cmd+V（粘贴）
-tabtin desktop hotkey cmd c                                # 复制（等价于 key c --modifiers cmd）
-tabtin desktop hotkey cmd shift s                          # Cmd+Shift+S（另存为）
-tabtin desktop hotkey alt Tab                              # Alt+Tab（切换窗口）
+muse desktop type "Hello World"                          # 逐字符输入（ASCII）
+muse desktop type "你好世界" --clipboard                  # 剪贴板粘贴（中文/特殊字符必用）
+muse desktop key Enter                                   # 按回车
+muse desktop key Tab                                     # 按 Tab
+muse desktop key Escape                                  # 按 Escape（普通按键，不会触发中止）
+muse desktop key Backspace --repeat 5                    # 连按 5 次退格
+muse desktop key a --modifiers cmd                       # Cmd+A（全选）
+muse desktop key c --modifiers cmd                       # Cmd+C（复制）
+muse desktop key v --modifiers cmd                       # Cmd+V（粘贴）
+muse desktop hotkey cmd c                                # 复制（等价于 key c --modifiers cmd）
+muse desktop hotkey cmd shift s                          # Cmd+Shift+S（另存为）
+muse desktop hotkey alt Tab                              # Alt+Tab（切换窗口）
 ```
 
 - `type` 默认逐字符输入，仅适合 ASCII 字符
@@ -84,13 +84,13 @@ tabtin desktop hotkey alt Tab                              # Alt+Tab（切换窗
 ```bash
 # 从 stdin 读（推荐，避免临时文件）
 echo '[{"action":"click","x":640,"y":400},{"action":"type","text":"hi"},{"action":"key","key":"Enter"}]' \
-  | tabtin desktop batch -
+  | muse desktop batch -
 
 # 从文件读
-tabtin desktop batch --file ops.json
+muse desktop batch --file ops.json
 
 # 位置参数也支持文件路径（等价于 --file）
-tabtin desktop batch ops.json
+muse desktop batch ops.json
 ```
 
 **子动作 action 枚举（9 种）**：`click` / `scroll` / `drag` / `move` / `type` / `key` / `hotkey` / `screenshot` / `wait`。每种的字段与对应单步 CLI 一致——比如 `click` 需要 `x / y`（还可选 `button / count`）、`type` 需要 `text`（可选 `useClipboard: true`）、`wait` 需要 `ms`。
@@ -109,19 +109,19 @@ tabtin desktop batch ops.json
 | `screenshot [--display N] [--max-dim 1024]` | `{"action":"screenshot","displayId":1,"maxDimension":1024}` | 字段都可选；**batch 首项禁止 screenshot**（见下方"硬规则"） |
 | *（CLI 无）* | `{"action":"wait","ms":500}` | batch 专用：等待指定毫秒数再继续下一步（最大 30000ms）；适合"点击后等动画/加载再操作"的场景 |
 
-**session 归属**：batch 默认复用当前活跃 session（由最近一次 `tabtin desktop screenshot` 建立）。多 session 排障时可显式传 `--session-id <sid>`，普通场景不用关心。
+**session 归属**：batch 默认复用当前活跃 session（由最近一次 `muse desktop screenshot` 建立）。多 session 排障时可显式传 `--session-id <sid>`，普通场景不用关心。
 
 **硬规则：batch 首项不能是 screenshot**（规范 § 4.5.2 · Q5）
 
 ```bash
 # ❌ 错误：batch 第 1 项是 screenshot
-echo '[{"action":"screenshot"},{"action":"click","x":10,"y":20}]' | tabtin desktop batch -
+echo '[{"action":"screenshot"},{"action":"click","x":10,"y":20}]' | muse desktop batch -
 # → 返回 VALIDATION_ERROR：
-# "batch 首项不能是 screenshot，请先单独调 tabtin desktop screenshot 建立 session 后再发起 batch。"
+# "batch 首项不能是 screenshot，请先单独调 muse desktop screenshot 建立 session 后再发起 batch。"
 
 # ✅ 正确：先单独 screenshot 建立 session，再发 batch
-tabtin desktop screenshot
-echo '[{"action":"click","x":10,"y":20},{"action":"screenshot"}]' | tabtin desktop batch -
+muse desktop screenshot
+echo '[{"action":"click","x":10,"y":20},{"action":"screenshot"}]' | muse desktop batch -
 ```
 
 **为什么**：batch 入口走一次 `desktop_input` 策略评估；若首项又是 screenshot，会产生"入口已审批但子动作触发新审批"的复杂耦合。**非首项**的 screenshot 是正常子动作，用于中途刷新坐标系——不受此限制。但**不要无脑每步后都插 screenshot**：batch 内每插一次 `screenshot` 约增加 300–600ms（完整截屏落盘），会把 batch 的 RTT 收益磨平；**只在"某步可能触发 UI 大改、后续步必须看新画面才能点"时才插**，可预测序列（点输入框 → 输入 → 回车）不要插中间 screenshot。
@@ -132,15 +132,15 @@ echo '[{"action":"click","x":10,"y":20},{"action":"screenshot"}]' | tabtin deskt
 
 ```bash
 # 单步版本（Wave 2 写法，5 次 LLM RTT）
-run_terminal_command(command="tabtin desktop screenshot")                    # 1
-run_terminal_command(command="tabtin desktop click 120 180")                 # 2
-run_terminal_command(command="tabtin desktop type '项目进度报告' --clipboard") # 3
-run_terminal_command(command="tabtin desktop key Tab")                       # 4
-run_terminal_command(command="tabtin desktop type '2026-04-22'")             # 5
-run_terminal_command(command="tabtin desktop key Enter")                     # 6
+run_terminal_command(command="muse desktop screenshot")                    # 1
+run_terminal_command(command="muse desktop click 120 180")                 # 2
+run_terminal_command(command="muse desktop type '项目进度报告' --clipboard") # 3
+run_terminal_command(command="muse desktop key Tab")                       # 4
+run_terminal_command(command="muse desktop type '2026-04-22'")             # 5
+run_terminal_command(command="muse desktop key Enter")                     # 6
 
 # batch 版本（Wave 3 写法，2 次 LLM RTT）
-run_terminal_command(command="tabtin desktop screenshot")   # 仍然要先单独 screenshot（Q5）
+run_terminal_command(command="muse desktop screenshot")   # 仍然要先单独 screenshot（Q5）
 
 # 步骤 A：用 Write 工具把 actions 写到 /tmp/desktop-batch.json，内容为：
 # [
@@ -152,10 +152,10 @@ run_terminal_command(command="tabtin desktop screenshot")   # 仍然要先单独
 # ]
 
 # 步骤 B：用 --file 直接读（无需跟 shell 引号搏斗）
-run_terminal_command(command="tabtin desktop batch --file /tmp/desktop-batch.json")
+run_terminal_command(command="muse desktop batch --file /tmp/desktop-batch.json")
 ```
 
-> 简短示例用 `echo '...' | tabtin desktop batch -` 的 stdin 写法是可以的（见本章开头"基本用法"）；但在 `run_terminal_command` 场景下的**多步长 JSON 首选 --file**，避免 heredoc/反引号嵌套导致的转义错误。
+> 简短示例用 `echo '...' | muse desktop batch -` 的 stdin 写法是可以的（见本章开头"基本用法"）；但在 `run_terminal_command` 场景下的**多步长 JSON 首选 --file**，避免 heredoc/反引号嵌套导致的转义错误。
 
 **返回格式**：
 
@@ -167,7 +167,7 @@ run_terminal_command(command="tabtin desktop batch --file /tmp/desktop-batch.jso
 }
 ```
 
-- `lastScreenshot`：若 batch 内**含** `screenshot` 子动作，此字段是**最后一次** screenshot 的返回对象（含 `path` / `width` / `height` / `scaleFactor`），Agent 可直接复用该对象的坐标系继续后续点击，无需再单独调 `tabtin desktop screenshot`；若 batch 内**不含** screenshot 子动作，此字段为 `null`。
+- `lastScreenshot`：若 batch 内**含** `screenshot` 子动作，此字段是**最后一次** screenshot 的返回对象（含 `path` / `width` / `height` / `scaleFactor`），Agent 可直接复用该对象的坐标系继续后续点击，无需再单独调 `muse desktop screenshot`；若 batch 内**不含** screenshot 子动作，此字段为 `null`。
 
 **失败策略：stop-on-first-error**（不自动回滚）
 
@@ -206,7 +206,7 @@ Wave 3 开启了"点击前 9×9 像素陈旧度校验"（规范 § 4.5.3，默�
 
     > 点击位置的屏幕内容与上次截图不一致（9×9 像素块已变化）。
     > 本次点击未执行，避免点在 Agent 未看到过的内容上。
-    > 请先运行 tabtin desktop screenshot 重新截图，再基于新坐标点击。
+    > 请先运行 muse desktop screenshot 重新截图，再基于新坐标点击。
 
 **正确反应**：**重新 screenshot → 根据新画面重新分析坐标 → 再点击**。**不要**简单重试原坐标——屏幕已经变了，原坐标很可能是空点或点错按钮。batch 内遇到这个错误时，`stepFailed` 会指向出事的那一步，Agent 应该从新 screenshot 开始而不是"跳过这步继续后面"。
 
@@ -216,7 +216,7 @@ Wave 3 开启了"点击前 9×9 像素陈旧度校验"（规范 § 4.5.3，默�
 
 pixelCompare 每次 `click` / `drag` 前会多一次 `desktopCapturer` 截屏（~100ms 在主流机器上）+ 2 次 9×9 raw byte 比对（<1ms）。单次点击的额外开销用户察觉不到；**batch 内连续 click** 时，N 次点击会累计 `N × ~100ms`——例如 batch 内 10 次连续 click 会额外增加约 1 秒。如果你的场景是"已经确信屏幕稳定的大量连续点击"（例如 Agent 跑单元测试 UI 脚本、批量填数据 1000 行），可以关掉 pixelCompare 换速度：
 
-- **开关现状（v2.1 模块零起 plumbing 已通）**：pixelCompare **默认启用**。管理员 / 工程师可改 `packages/apps/tabdesktop/app.json` 的 `tabdesktop.pixelCompare.enabled = false` 后**重启 TabTin 客户端**关闭——v2.1 模块零（规范 § 3.5.5）打通了 app.json → runtime plumbing，改配置重启即生效（v1.8 的"声明了不生效"债已偿还）。运行时还可走 `DesktopExecutorService.setPixelCompareEnabled(false)`（Space 切换 / 测试场景），不必重启。**注意**：实时热更新（不重启就生效）由后续 Space 配置热更新 Wave 提供，模块零阶段需要重启一次。
+- **开关现状（v2.1 模块零起 plumbing 已通）**：pixelCompare **默认启用**。管理员 / 工程师可改 `packages/apps/tabdesktop/app.json` 的 `tabdesktop.pixelCompare.enabled = false` 后**重启 Muse 客户端**关闭——v2.1 模块零（规范 § 3.5.5）打通了 app.json → runtime plumbing，改配置重启即生效（v1.8 的"声明了不生效"债已偿还）。运行时还可走 `DesktopExecutorService.setPixelCompareEnabled(false)`（Space 切换 / 测试场景），不必重启。**注意**：实时热更新（不重启就生效）由后续 Space 配置热更新 Wave 提供，模块零阶段需要重启一次。
 - **判断准则**：场景里"屏幕被外部改变"的概率可忽略（关掉风险低），而点击次数 ≥ 10 且对延迟敏感（收益高）——满足这两条再考虑关
 - **默认不要关**：Agent 正常操控场景（动态 UI / 用户可能切屏 / 页面有动画）pixelCompare 的"防盲点击"价值 > 每步 100ms 的延迟
 - **关闭后的 Agent 行为契约**：若工程侧关闭了 pixelCompare，Agent 将不再收到"屏幕内容与上次截图不一致"错误；若场景本身 UI 不稳定（动画 / 异步加载 / 弹窗），建议 Agent 在关键节点手动插入 `screenshot` 校验代偿。
@@ -229,19 +229,19 @@ pixelCompare 每次 `click` / `drag` 前会多一次 `desktopCapturer` 截屏（
 
 ```bash
 # 获取 AX 快照
-tabtin desktop accessibility-tree                               # 前台窗口
-tabtin desktop accessibility-tree --window 'Figma'              # 按标题匹配
-tabtin desktop accessibility-tree --bundle-id com.apple.TextEdit # 按 bundle id
-tabtin desktop accessibility-tree --max-depth 6                  # 更深层级
+muse desktop accessibility-tree                               # 前台窗口
+muse desktop accessibility-tree --window 'Figma'              # 按标题匹配
+muse desktop accessibility-tree --bundle-id com.apple.TextEdit # 按 bundle id
+muse desktop accessibility-tree --max-depth 6                  # 更深层级
 
 # 按元素名点击
-tabtin desktop click-element --name 'Share' --role Button       # 按名称+角色
-tabtin desktop click-element --name 'Save' --nth 1              # 同名元素取第 2 个
-tabtin desktop click-element --name 'A1' --role DataItem        # Excel 单元格
+muse desktop click-element --name 'Share' --role Button       # 按名称+角色
+muse desktop click-element --name 'Save' --nth 1              # 同名元素取第 2 个
+muse desktop click-element --name 'A1' --role DataItem        # Excel 单元格
 
 # 按元素名输入
-tabtin desktop type-into-element --name 'Email' 'user@example.com'
-tabtin desktop type-into-element --name 'Search' '规范文档' --clipboard
+muse desktop type-into-element --name 'Email' 'user@example.com'
+muse desktop type-into-element --name 'Search' '规范文档' --clipboard
 ```
 
 - `click-element` 内部先查 AX 拿 bounds，再走现有 click 路径（含 pixelCompare 防护）
@@ -252,11 +252,11 @@ tabtin desktop type-into-element --name 'Search' '规范文档' --clipboard
 ### 窗口管理
 
 ```bash
-tabtin desktop windows                                     # 列出所有窗口（JSON）
-tabtin desktop windows --format table                      # 人类可读格式
-tabtin desktop activate "Google Chrome"                    # 按应用名或窗口标题激活
-tabtin desktop open "Slack"                                # 打开应用（按应用名）
-tabtin desktop open "/Applications/Visual Studio Code.app" # 打开应用（按 .app 路径）
+muse desktop windows                                     # 列出所有窗口（JSON）
+muse desktop windows --format table                      # 人类可读格式
+muse desktop activate "Google Chrome"                    # 按应用名或窗口标题激活
+muse desktop open "Slack"                                # 打开应用（按应用名）
+muse desktop open "/Applications/Visual Studio Code.app" # 打开应用（按 .app 路径）
 ```
 
 - `open` 接受两种参数形式：**应用名**（macOS 走 `open -a`）或 **可执行路径 / .app 路径**（macOS 走 `open <path>`、Windows 走 `Start-Process -FilePath`）。如果不确定应用是否安装在标准位置，传完整 .app 路径更稳。
@@ -268,7 +268,7 @@ tabtin desktop open "/Applications/Visual Studio Code.app" # 打开应用（按 
   {
     "id": "0",
     "app": "Code",
-    "title": "SKILL.md — TabTin",
+    "title": "SKILL.md — Muse",
     "position": { "x": 0, "y": 25 },
     "size": { "width": 1280, "height": 775 },
     "focused": true

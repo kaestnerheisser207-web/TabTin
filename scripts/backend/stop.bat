@@ -1,6 +1,6 @@
 @echo off
 echo ============================================================
-echo              Stopping TabTin application services
+echo              Stopping Muse application services
 echo ============================================================
 call "%~dp0django-stop.bat"
 call "%~dp0celery-stop.bat"

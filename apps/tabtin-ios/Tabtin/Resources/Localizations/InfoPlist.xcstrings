@@ -31,13 +31,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Take photos to send to the AI assistant or scan a TabTin environment QR code"
+            "value" : "Take photos to send to the AI assistant or scan a Muse environment QR code"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "拍照发送给 AI 助手，或扫描 TabTin 环境配置二维码"
+            "value" : "拍照发送给 AI 助手，或扫描 Muse 环境配置二维码"
           }
         }
       }

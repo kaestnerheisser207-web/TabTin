@@ -6,12 +6,12 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/TabTin/tabtin-cli/internal/cmdutil"
+	"github.com/Muse/muse-cli/internal/cmdutil"
 )
 
 func TestSiteHiddenFromHelpAndCommands(t *testing.T) {
 	f := cmdutil.NewFactory()
-	root := &cobra.Command{Use: "tabtin"}
+	root := &cobra.Command{Use: "muse"}
 	registerRootPersistentFlagsForTest(root)
 
 	site := newCmdSite(f)

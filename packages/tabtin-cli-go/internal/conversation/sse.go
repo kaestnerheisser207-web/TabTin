@@ -10,7 +10,7 @@ import (
 	"os"
 	"strings"
 
-	"github.com/TabTin/tabtin-cli/internal/transport"
+	"github.com/Muse/muse-cli/internal/transport"
 )
 
 type EventHandler func(event AgentEvent)

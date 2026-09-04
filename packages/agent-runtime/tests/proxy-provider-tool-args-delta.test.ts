@@ -8,7 +8,7 @@
  *   2. Anthropic native：content_block_start (tool_use) →
  *      content_block_delta (input_json_delta) →  content_block_stop
  *
- * ：持久层 / chunk 上的 tool id 为 TabTin `tu_*`，同流内 delta 与 final 稳定一致。
+ * ：持久层 / chunk 上的 tool id 为 Muse `tu_*`，同流内 delta 与 final 稳定一致。
  */
 
 import { describe, expect, it } from 'vitest';

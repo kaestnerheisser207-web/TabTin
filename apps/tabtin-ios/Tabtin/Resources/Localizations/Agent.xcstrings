@@ -18,8 +18,8 @@
     "spaceList.creationBoundary" : {
       "extractionState" : "manual",
       "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Create new Workspaces in TabTin for desktop." } },
-        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "新建工作空间请在电脑版 TabTin 中完成。" } }
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Create new Workspaces in Muse for desktop." } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "新建工作空间请在电脑版 Muse 中完成。" } }
       }
     },
     "spaceList.searchPlaceholder" : {
@@ -656,7 +656,7 @@
       "extractionState" : "manual",
       "localizations" : {
         "en" : { "stringUnit" : { "state" : "translated", "value" : "No working directory yet. Set one for this Agent on the desktop app (its Agent settings → Working Directory) first, then you can choose its type here." } },
-        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "尚未设置工作目录。请先在电脑版 TabTin 的该 Agent 设置里选择工作目录，之后即可在这里选择目录类型。" } }
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "尚未设置工作目录。请先在电脑版 Muse 的该 Agent 设置里选择工作目录，之后即可在这里选择目录类型。" } }
       }
     },
     "agent.workType.sectionLabel" : {
@@ -1187,8 +1187,8 @@
     "agent.security.term.tabtinOnly" : {
       "extractionState" : "manual",
       "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "TabTin Only" } },
-        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "仅限 TabTin" } }
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Muse Only" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "仅限 Muse" } }
       }
     },
     "agent.security.term.tabtinOnlyDesc" : {

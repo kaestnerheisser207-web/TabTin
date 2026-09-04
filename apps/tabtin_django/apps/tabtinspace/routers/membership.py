@@ -1,11 +1,11 @@
-"""Tabtin Space membership 路由。"""
+"""Muse Space membership 路由。"""
 
 from .shared import *  # noqa: F401,F403
 from apps.services.common.utils import mask_phone_number
 from apps.services.oss.services.public_assets import build_public_asset_url
 from apps.users.auth.phone import canonicalize_phone
 
-router = Router(tags=["Tabtin Space"])
+router = Router(tags=["Muse Space"])
 
 
 @router.post(

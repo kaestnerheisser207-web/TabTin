@@ -31,7 +31,7 @@ describe('os-permission-host-relaunch', () => {
       recoveryActions: [{ type: 'open_system_settings', deepLink: 'x-apple.systempreferences:com.apple.preference.security' }],
     })).toBe(false)
     expect(osErrorRequiresAppRelaunch({
-      recoveryActions: [{ type: 'restart_app', label: '重启 TabTin' }],
+      recoveryActions: [{ type: 'restart_app', label: '重启 Muse' }],
     })).toBe(true)
   })
 
@@ -41,7 +41,7 @@ describe('os-permission-host-relaunch', () => {
       {
         recoveryActions: [
           { type: 'open_system_settings', deepLink: 'x-apple.systempreferences:com.apple.preference.security?Privacy_AllFiles' },
-          { type: 'restart_app', label: '重启 TabTin' },
+          { type: 'restart_app', label: '重启 Muse' },
         ],
       },
       {

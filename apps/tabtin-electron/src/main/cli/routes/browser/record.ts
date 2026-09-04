@@ -63,7 +63,7 @@ export async function runElectronReplay(
     throw new BrowserActionError(400, {
       code: 'VALIDATION_ERROR',
       message: '缺少 runId 参数',
-      suggestions: ['使用 tabtin browser replay list 查看可回放的 run', '使用 tabtin browser record start 先录制产生一个 run'],
+      suggestions: ['使用 muse browser replay list 查看可回放的 run', '使用 muse browser record start 先录制产生一个 run'],
     })
   }
 
@@ -96,7 +96,7 @@ export async function runElectronReplay(
       code: err?.name === 'AbortError' ? 'ABORTED' : 'INTERNAL_ERROR',
       message: err?.message || String(err),
       retryable: err?.name === 'AbortError' ? false : true,
-      suggestions: ['检查 runId 是否正确', '使用 tabtin browser replay list 查看可回放会话'],
+      suggestions: ['检查 runId 是否正确', '使用 muse browser replay list 查看可回放会话'],
     })
   }
 
@@ -181,7 +181,7 @@ function buildRecordSessionHooks(executor: NonNullable<ActionExecutor>): Browser
         throw new BrowserActionError(404, {
           code: 'NOT_FOUND',
           message: `找不到 tab ${tabId} 的活跃录制`,
-          suggestions: ['使用 tabtin browser record start 启动录制', '使用 tabtin browser record status 查看录制状态'],
+          suggestions: ['使用 muse browser record start 启动录制', '使用 muse browser record status 查看录制状态'],
         })
       }
 

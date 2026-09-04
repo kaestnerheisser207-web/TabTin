@@ -136,7 +136,7 @@ export async function handleCodeRoute(
         suggestions: [
           '可用路由: /code/read, /code/write, /code/edit, /code/delete, /code/mkdir, /code/mv, /code/rename, ' +
             '/code/glob, /code/grep, /code/search, /code/diagnostics, /code/worktree/*',
-          '使用 tabtin code --help 查看所有可用命令',
+          '使用 muse code --help 查看所有可用命令',
         ],
       },
     ));

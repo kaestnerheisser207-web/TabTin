@@ -43,7 +43,7 @@ internal class ScreenForceStopAppHandler @Inject constructor(
             if (packageName == context.packageName) {
                 return DeviceActionResult(
                     success = false,
-                    error = "Cannot force-stop TabTin itself",
+                    error = "Cannot force-stop Muse itself",
                     errorCode = "SELF_STOP_BLOCKED",
                 )
             }
@@ -55,7 +55,7 @@ internal class ScreenForceStopAppHandler @Inject constructor(
                     if (result.packageName == context.packageName) {
                         return DeviceActionResult(
                             success = false,
-                            error = "Cannot force-stop TabTin itself",
+                            error = "Cannot force-stop Muse itself",
                             errorCode = "SELF_STOP_BLOCKED",
                         )
                     }

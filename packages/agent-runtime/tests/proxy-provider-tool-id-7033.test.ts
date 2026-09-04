@@ -1,9 +1,9 @@
 /**
- *  — 入站 SSE tool id 映射为 TabTin 权威 `tu_*`（默认 vitest 套件必跑）。
+ *  — 入站 SSE tool id 映射为 Muse 权威 `tu_*`（默认 vitest 套件必跑）。
  *
  * 钉住：
  * - OpenAI / Anthropic 两条路径的 tool_use id 均为 `tu_*`
- * - 同流内 delta 与最终 tool_use 共用同一 tabtin id（不回落到上游 id）
+ * - 同流内 delta 与最终 tool_use 共用同一 muse id（不回落到上游 id）
  * - 同流内重复出现的上游 id 稳定映射；跨 parseSSEStream 调用不撞号
  */
 

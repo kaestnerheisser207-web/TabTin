@@ -5,7 +5,7 @@ import type {
   StreamEvent,
 } from '@tabtin/agent-runtime'
 
-/** Agent harnesses shipped by TabTin Cloud Agent v1. */
+/** Agent harnesses shipped by Muse Cloud Agent v1. */
 export type RuntimeHarness = 'builtin' | 'dsh'
 
 /**

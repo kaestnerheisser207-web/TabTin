@@ -33,7 +33,7 @@ import androidx.core.content.FileProvider
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.tabtin.mobile.R
+import com.muse.mobile.R
 import com.tabtin.mobile.diagnostics.DiagnosticRecorder
 import com.tabtin.mobile.ui.theme.TTSpacing
 import dagger.hilt.android.lifecycle.HiltViewModel

@@ -59,7 +59,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
-import com.tabtin.mobile.R
+import com.muse.mobile.R
 import com.tabtin.mobile.features.conversation.ConversationTypography
 import com.tabtin.mobile.features.memo.components.MemoColorPicker
 import com.tabtin.mobile.features.memo.components.TagChip

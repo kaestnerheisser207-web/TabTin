@@ -7,7 +7,7 @@ class TabtinspaceMeetingTestConfig(AppConfig):
     default_auto_field = "django.db.models.BigAutoField"
     name = "apps.tabtinspace"
     label = "tabtinspace"
-    verbose_name = "Tabtin Space (meeting tests)"
+    verbose_name = "Muse Space (meeting tests)"
 
 
 class ConversationMeetingTestConfig(AppConfig):

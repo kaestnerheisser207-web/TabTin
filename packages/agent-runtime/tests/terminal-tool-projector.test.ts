@@ -6,7 +6,7 @@ describe('projectTerminalToolResult', () => {
     const projection = projectTerminalToolResult({
       toolCallId: 'toolu-create-table',
       sessionId: 'thread-36kr',
-      command: 'tabtin table create --name 36kr',
+      command: 'muse table create --name 36kr',
       output: JSON.stringify({
         status: 'completed',
         exit_code: 0,

@@ -162,7 +162,7 @@ def evaluate_cors_rules(
 
     return CorsCheckResult(
         ok=False,
-        errors=best_failures or ["没有找到满足 TabTin 直传契约的 CORS 规则"],
+        errors=best_failures or ["没有找到满足 Muse 直传契约的 CORS 规则"],
         warnings=collected_warnings,
         checked_rules=len(rules),
     )
@@ -294,7 +294,7 @@ class Command(BaseCommand):
         parser.add_argument(
             "--print-contract",
             action="store_true",
-            help="输出 TabTin 要求的 OSS CORS 契约，不访问 bucket",
+            help="输出 Muse 要求的 OSS CORS 契约，不访问 bucket",
         )
         parser.add_argument("--json", action="store_true", help="以 JSON 输出结果")
 
@@ -332,7 +332,7 @@ class Command(BaseCommand):
         }
         self._emit(payload, as_json=options["json"])
         if not result.ok:
-            raise CommandError("OSS bucket CORS 未满足 TabTin 桌面端直传契约")
+            raise CommandError("OSS bucket CORS 未满足 Muse 桌面端直传契约")
 
     def _check_bucket_cors(self, *, origin: str, request_headers: Sequence[str]) -> CorsCheckResult:
         from apps.services.oss.services.factory import get_oss_service
@@ -406,7 +406,7 @@ class Command(BaseCommand):
             return
 
         if "allowed_origins" in payload:
-            self.stdout.write("TabTin OSS CORS contract")
+            self.stdout.write("Muse OSS CORS contract")
             for key, value in payload.items():
                 self.stdout.write(f"{key}: {value}")
             return

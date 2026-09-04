@@ -199,14 +199,14 @@ export const MessageCostLabel: React.FC<MessageCostLabelProps> = React.memo(({ m
           {mode === 'byok' && (
             <div className="text-muted-foreground mb-1">
               {t('messageCost.byokDetail', {
-                defaultValue: '你使用的是自带 API 密钥（BYOK），本条消息不从 TabTin 钱包扣 credits。',
+                defaultValue: '你使用的是自带 API 密钥（BYOK），本条消息不从 Muse 钱包扣 credits。',
               })}
             </div>
           )}
           {mode === 'usage' && isByok && (
             <div className="text-muted-foreground mb-1">
               {t('messageCost.byokDetail', {
-                defaultValue: '你使用的是自带 API 密钥（BYOK），本条消息不从 TabTin 钱包扣 credits。',
+                defaultValue: '你使用的是自带 API 密钥（BYOK），本条消息不从 Muse 钱包扣 credits。',
               })}
             </div>
           )}

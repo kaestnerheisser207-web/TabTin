@@ -1,7 +1,7 @@
 {
   "name": "@tabtin/terminal-core",
   "version": "0.1.0",
-  "description": "Core terminal execution utilities for TabTin",
+  "description": "Core terminal execution utilities for Muse",
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",

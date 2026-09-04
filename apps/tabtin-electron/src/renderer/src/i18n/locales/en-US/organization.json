@@ -12,13 +12,13 @@
     "accessDeniedTitle": "Cannot access \"{{name}}\"",
     "accessDeniedAutoSwitch": "Switching to \"{{name}}\""
   },
-  "welcomeTitle": "Welcome to TabTin",
+  "welcomeTitle": "Welcome to Muse",
   "welcomeSubtitle": "Unified AI work platform. Create a new Workspace or pick one from the left.",
   "welcomeSubtitleGuest": "Sign in to create Workspaces and start collaborating.",
   "welcome": {
-    "title": "TabTin",
+    "title": "Muse",
     "tagline": "Your AI work platform",
-    "conceptIntro": "In TabTin, a Workspace is a persistent work site bound to an execution device and working directory. It keeps conversations, apps, resources, and execution context together so Agents can help within that boundary.",
+    "conceptIntro": "In Muse, a Workspace is a persistent work site bound to an execution device and working directory. It keeps conversations, apps, resources, and execution context together so Agents can help within that boundary.",
     "loginCta": "Sign in / Register",
     "learnMore": "Learn more →",
     "loadingTitle": "Loading Workspaces...",
@@ -58,12 +58,12 @@
     "guest": {
       "hookLine1": "AI is no longer",
       "hookLine2": "just a chat box",
-      "subtitleLead": "In TabTin, Agents do real work: research online, pull data, build tables, write reports, and make slides.",
+      "subtitleLead": "In Muse, Agents do real work: research online, pull data, build tables, write reports, and make slides.",
       "subtitleEmphasis": "Every step stays visible.",
       "footnote": "Unified access to leading LLMs · 38+ AI work scenarios",
       "demo": {
         "tabs": {
-          "browser": "TabTin Browser",
+          "browser": "Muse Browser",
           "data": "Funding data.tabdata",
           "report": "Investment brief.tabdoc",
           "slides": "Weekly funding deck.tabslide"
@@ -73,7 +73,7 @@
         "steps": {
           "browse": {
             "label": "Research recently funded startups",
-            "detail": "TabTin Browser · Crunchbase · TechCrunch"
+            "detail": "Muse Browser · Crunchbase · TechCrunch"
           },
           "collect": {
             "label": "Capture round, amount, investors",
@@ -220,7 +220,7 @@
       "platformPaidLabel": "Other platform scenes",
       "platformPaidText": "Mail AI, memory, embedding, speech, and similar still use the platform key and are billed from the organization wallet.",
       "noFallbackLabel": "No auto fallback",
-      "noFallbackText": "If this channel fails, TabTin does not automatically switch to a platform model."
+      "noFallbackText": "If this channel fails, Muse does not automatically switch to a platform model."
     },
     "byokScopeWarning": {
       "organization": "Organization BYOK: members can select and use models from this channel in chat; platform-managed scenes still use the platform key.",
@@ -230,7 +230,7 @@
       "label": "BYOK",
       "tooltipOrganization": "Organization BYOK channel — used when members select its models in chat; platform-managed scenes still use the platform key.",
       "tooltipUser": "Personal BYOK channel — used only when you select its models in any organization; platform-managed scenes still use the platform key.",
-      "tooltipGlobal": "Platform channel — operated by TabTin for platform-managed scenes and chat when no BYOK model is selected."
+      "tooltipGlobal": "Platform channel — operated by Muse for platform-managed scenes and chat when no BYOK model is selected."
     }
   },
   "llm": {
@@ -265,7 +265,7 @@
       "pickSubagentModel": "Select a sub-agent model"
     },
     "presetSection": {
-      "title": "TabTin preset models",
+      "title": "Muse preset models",
       "subtitle": "Built-in platform models. Ready to use as a personal or team default.",
       "collapse": "Collapse",
       "expandHint": "{{count}} more platform models. Expand to see all.",
@@ -316,7 +316,7 @@
       "pickerTitle": "Connect your model",
       "pickerDesc": "Pick a subscription plan you purchased, or a pay-as-you-go API platform.",
       "formTitle": "Connect your model",
-      "formDesc": "Choose a channel and enter your API key. TabTin presets the endpoint and common models.",
+      "formDesc": "Choose a channel and enter your API key. Muse presets the endpoint and common models.",
       "planFormTitle": "Connect subscription plan",
       "planFormDesc": "Pick a Coding plan and enter your key. Endpoint and common models are preset.",
       "apiFormTitle": "Connect pay-as-you-go API",
@@ -413,7 +413,7 @@
         "vendorLabel": "Kimi",
         "subtitle": "Use your Kimi Code membership or Coding plan. Billing follows Kimi platform rules.",
         "apiKeyPlaceholder": "API key from the Kimi Code console",
-        "connectDesc": "Enter your Kimi Code API key. TabTin pre-fills the endpoint and common models.",
+        "connectDesc": "Enter your Kimi Code API key. Muse pre-fills the endpoint and common models.",
         "docsLink": "Kimi setup guide",
         "apiKeyHint": "Create the key in Kimi Code console. Your membership tier controls available models."
       },
@@ -422,7 +422,7 @@
         "vendorLabel": "MiniMax",
         "subtitle": "Connect your MiniMax Token Plan subscription. Uses the subscription key (not pay-as-you-go API keys).",
         "apiKeyPlaceholder": "sk-cp-… (Token Plan subscription key)",
-        "connectDesc": "Enter your Token Plan subscription key. TabTin pre-fills the endpoint and M3 / M2.7 models. M3 has native 1M context; M2.7 models use 256K.",
+        "connectDesc": "Enter your Token Plan subscription key. Muse pre-fills the endpoint and M3 / M2.7 models. M3 has native 1M context; M2.7 models use 256K.",
         "docsLink": "MiniMax Token Plan setup guide",
         "apiKeyHint": "Get the subscription key under Account → Token Plan. You need an active plan or a team-assigned seat."
       },
@@ -431,25 +431,25 @@
         "vendorLabel": "Bailian",
         "subtitle": "Connect Alibaba Cloud Bailian Coding Plan and use your plan quota with the dedicated key.",
         "apiKeyPlaceholder": "sk-sp-… (Coding Plan key)",
-        "connectDesc": "Enter your Coding Plan key. TabTin pre-fills the OpenAI-compatible endpoint and recommended plan models. Model IDs must match the official whitelist exactly.",
+        "connectDesc": "Enter your Coding Plan key. Muse pre-fills the OpenAI-compatible endpoint and recommended plan models. Model IDs must match the official whitelist exactly.",
         "docsLink": "Bailian Coding Plan setup guide",
         "apiKeyHint": "Get the key on the Coding Plan page (sk-sp- prefix). It does not work with pay-as-you-go keys or dashscope.aliyuncs.com endpoints."
       },
       "volcengineCodingPlan": {
         "title": "Volcengine Ark Coding Plan",
         "vendorLabel": "Volcengine",
-        "subtitle": "Connect Volcengine Ark Coding Plan and use bundled coding models in TabTin.",
+        "subtitle": "Connect Volcengine Ark Coding Plan and use bundled coding models in Muse.",
         "apiKeyPlaceholder": "API key from Ark console",
-        "connectDesc": "Enter your Ark API key. TabTin pre-fills the Coding Plan OpenAI-compatible endpoint and common code models. Do not use the generic Ark API base URL.",
+        "connectDesc": "Enter your Ark API key. Muse pre-fills the Coding Plan OpenAI-compatible endpoint and common code models. Do not use the generic Ark API base URL.",
         "docsLink": "Volcengine Coding Plan setup guide",
         "apiKeyHint": "Get the key in Ark console → API Key management. You must use the coding/v3 endpoint or plan quota will not apply."
       },
       "zhipuCodingPlan": {
         "title": "GLM Coding Plan",
         "vendorLabel": "Zhipu",
-        "subtitle": "Connect Zhipu GLM Coding Plan and use your subscription quota in TabTin.",
+        "subtitle": "Connect Zhipu GLM Coding Plan and use your subscription quota in Muse.",
         "apiKeyPlaceholder": "Coding Plan API key",
-        "connectDesc": "Enter your GLM Coding Plan API key. TabTin pre-fills the OpenAI-compatible endpoint and GLM-5.2 / Turbo / 4.7. GLM-5.2 supports 1M context.",
+        "connectDesc": "Enter your GLM Coding Plan API key. Muse pre-fills the OpenAI-compatible endpoint and GLM-5.2 / Turbo / 4.7. GLM-5.2 supports 1M context.",
         "docsLink": "GLM Coding Plan setup guide",
         "apiKeyHint": "Create the key under Personal/Team Coding Plan on the Zhipu platform. It is not interchangeable with pay-as-you-go keys."
       }
@@ -540,10 +540,9 @@
       "toggleFailed": "Action failed. Please try again.",
       "create": "Add channel",
       "creating": "Creating...",
-      "createModelHint": "After saving the platform account and key, add the specific models you want to use in TabTin.",
+      "createModelHint": "After saving the platform account and key, add the specific models you want to use in Muse.",
       "empty": "No model services yet. Use Add in the top right.",
       "codexLocalHint": "Available on this device only",
-      "modelCount": "{{count}} models",
       "createSuccess": "Channel added",
       "createSuccessContinueModel": "Channel added. Continue by adding a model under this channel.",
       "createSuccessWithModelHint": "Channel added. Add a model under it to continue.",
@@ -667,7 +666,7 @@
     },
     "fallback": {
       "title": "Fallback policy",
-      "rule": "When the default model is unavailable, TabTin tries healthy channels and models in order. A failed BYOK channel does not automatically fall back to a platform model.",
+      "rule": "When the default model is unavailable, Muse tries healthy channels and models in order. A failed BYOK channel does not automatically fall back to a platform model.",
       "healthyProviders": "{{count}} healthy channels",
       "noCandidate": "No fallback models"
     },

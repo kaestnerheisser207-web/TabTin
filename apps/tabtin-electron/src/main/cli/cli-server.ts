@@ -394,8 +394,8 @@ async function handleRequest(
   }
 
   if (validateTokenAuth(req, res, serverInfo?.token ?? null, [
-    '确保在 TabTin 内置终端中运行命令',
-    '运行 tabtin doctor 进行环境诊断',
+    '确保在 Muse 内置终端中运行命令',
+    '运行 muse doctor 进行环境诊断',
   ])) return
 
   try {
@@ -776,7 +776,7 @@ export function startCLIServer(config?: CLIServerConfig): CLIServerInfo {
   ].filter((d) => existsSync(join(d, process.platform === 'win32' ? 'tabtin.exe' : 'tabtin')))
 
   // tabtin-filegen：随包分发的文件生成二进制（PyInstaller 自包含，客户端免装 Python）。
-  // `tabtin file create` 代理与 Agent 通过 PATH 命中它。打包/路径形态与 Go CLI 一致。
+  // `muse file create` 代理与 Agent 通过 PATH 命中它。打包/路径形态与 Go CLI 一致。
   const fileGenName = process.platform === 'win32' ? 'tabtin-filegen.exe' : 'tabtin-filegen'
   const fileGenCliDirs = [
     join(app.getAppPath(), '..', '..', 'packages', 'tabtin-filegen-python', 'dist'),

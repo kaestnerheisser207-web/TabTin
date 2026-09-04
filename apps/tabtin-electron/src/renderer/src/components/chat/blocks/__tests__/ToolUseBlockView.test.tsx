@@ -264,7 +264,7 @@ describe('ToolUseBlockView', () => {
       id: 'toolu_001',
       toolName: 'run_terminal_command',
       phase: 'end',
-      input: { command: 'tabtin browser open --url https://36kr.com/' },
+      input: { command: 'muse browser open --url https://36kr.com/' },
       output: '{"success":true,"exitCode":0,"stdout":"{\\"ok\\":true,\\"data\\":{\\"tabId\\":\\"view-1\\"}}","stderr":""}',
       timestamp: Date.now(),
       durationMs: 30017,
@@ -274,7 +274,7 @@ describe('ToolUseBlockView', () => {
       <ToolUseBlockView
         entry={makeTool('run_terminal_command', {}, {
           finalized: false,
-          pendingInputJson: '{"command":"tabtin browser open --url https://36kr.com/"',
+          pendingInputJson: '{"command":"muse browser open --url https://36kr.com/"',
         })}
         sessionId="s1"
         messageId="m1"
@@ -294,7 +294,7 @@ describe('ToolUseBlockView', () => {
       id: 'toolu_001',
       toolName: 'run_terminal_command',
       phase: 'error',
-      input: { command: 'tabtin browser open --url https://36kr.com/ --wait-until networkidle' },
+      input: { command: 'muse browser open --url https://36kr.com/ --wait-until networkidle' },
       output: '{"success":false,"error_kind":"request_timeout","abort_reason":"timeout","error":"network idle timeout"}',
       timestamp: Date.now(),
       durationMs: 30012,
@@ -304,7 +304,7 @@ describe('ToolUseBlockView', () => {
       <ToolUseBlockView
         entry={makeTool('run_terminal_command', {}, {
           finalized: false,
-          pendingInputJson: '{"command":"tabtin browser open --url https://36kr.com/ --wait-until networkidle"',
+          pendingInputJson: '{"command":"muse browser open --url https://36kr.com/ --wait-until networkidle"',
         })}
         sessionId="s1"
         messageId="m1"

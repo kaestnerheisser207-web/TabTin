@@ -1,4 +1,4 @@
-"""Tabtin 云盘文件（TabFiles）路由。
+"""Muse 云盘文件（TabFiles）路由。
 
 #3266：宿主为 Workspace 或 Project。对外保留 ``/spaces/{id}/files/...`` 作为
 过渡别名（id-reuse）；正式路径为 ``/workspaces/...`` 与 ``/projects/...``。
@@ -19,7 +19,7 @@ from django.db.models import Q
 from apps.tabtinspace.services.tabfiles_service import TabFilesService
 from apps.tabtinspace.models import ContextItem
 
-router = Router(tags=["Tabtin Space"])
+router = Router(tags=["Muse Space"])
 
 
 class FileUploadRequest(BaseModel):

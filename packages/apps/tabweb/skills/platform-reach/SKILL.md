@@ -2,7 +2,7 @@
 name: platform-reach
 description: >
   平台化内容获取——对登录墙 / 强风控或垂直站点（小红书、抖音、B站、淘宝、
-  天猫、京东、同花顺、东方财富）用**内置适配器**做搜索、阅读、评论。走 `tabtin reach`
+  天猫、京东、同花顺、东方财富）用**内置适配器**做搜索、阅读、评论。走 `muse reach`
   CLI，底层复用 TabWeb 浏览器栈拿结构化数据，产物是归一化 JSON。已知平台优先用本
   skill；没适配器 / 通用批量抓取 / 排序筛选等约束 reach 不支持 → 回 browser-collect
   或 browser-operator，禁止用默认序 reach 交差。
@@ -33,7 +33,7 @@ metadata:
 
 ## 边界（先判该不该用本 skill）
 
-- 目标平台**已有适配器**（`tabtin reach doctor` 能查到）→ 可考虑本 skill。
+- 目标平台**已有适配器**（`muse reach doctor` 能查到）→ 可考虑本 skill。
 - 平台**没适配器**、或要通用「列表 + 详情」批量抓取 → 回 `skills_read("app:tabweb/browser-collect")`。
 - 只读某页正文 / 页面问答 → `skills_read("app:tabweb/browser-operator")`。
 
@@ -45,8 +45,8 @@ metadata:
 **必须先对表，再决定调不调 reach：**
 
 1. 拆出约束：如「按销量 / 最新 / 价格高低 / 仅天猫」→ 规范键 `sale` / `latest` / `price_asc` / `tmall` …
-2. 跑 `tabtin reach doctor --platform <id> --format json`，看 `data.searchConstraints`、`data.routingGate`，以及 `data.loginProbe`（`status=ok` 时 `loggedIn` 可信；`unknown` 表示探测失败，勿当「未登录」）。
-3. 约束落在声明内 → 才可 `tabtin reach search …`（淘宝销量例：`--sort sale`）。
+2. 跑 `muse reach doctor --platform <id> --format json`，看 `data.searchConstraints`、`data.routingGate`，以及 `data.loginProbe`（`status=ok` 时 `loggedIn` 可信；`unknown` 表示探测失败，勿当「未登录」）。
+3. 约束落在声明内 → 才可 `muse reach search …`（淘宝销量例：`--sort sale`）。
 4. **有缺口 → 禁止再调 `reach search`**：服务端会对已建模的 `sort`/`filter` 直接 400。改用 browser 带参 URL 或 `browser-collect` / `browser-operator`。（价区/页码等未进能力表的种类本轮不拦。）
 5. **禁止**：先跑默认 reach，再用「暂不支持某某排序，请手动切换」把综合结果当交付。
 
@@ -73,8 +73,8 @@ metadata:
 
 ## 前置
 
-- 需 TabTin **Electron 桌面客户端**运行；Daemon 无头模式暂不可用。
-- 命令都走 `run_terminal_command` 调 `tabtin reach ...`。
+- 需 Muse **Electron 桌面客户端**运行；Daemon 无头模式暂不可用。
+- 命令都走 `run_terminal_command` 调 `muse reach ...`。
 
 ---
 
@@ -83,7 +83,7 @@ metadata:
 ### ① 选路诊断（含约束对表）
 
 ```bash
-tabtin reach doctor --platform taobao --format json
+muse reach doctor --platform taobao --format json
 ```
 
 看：
@@ -95,14 +95,14 @@ tabtin reach doctor --platform taobao --format json
 ### ② 搜索（仅约束已覆盖时）
 
 ```bash
-tabtin reach search --platform bilibili --query "AI Agent" --limit 10 --format json
-tabtin reach search --platform xiaohongshu --query "AI Agent" --limit 10 --format json
-tabtin reach search --platform tonghuashun --query "宁德时代" --limit 5 --format json
-tabtin reach search --platform douyin --query "AI Agent" --limit 5 --format json
-tabtin reach search --platform taobao --query "露营椅" --limit 3 --format json
-tabtin reach search --platform taobao --query "机械键盘" --sort sale --limit 5 --format json
-tabtin reach search --platform taobao --query "机械键盘" --sort price_asc --min-price 50 --max-price 200 --filter tmall --limit 5 --format json
-tabtin reach search --platform jd --query "机械键盘" --sort sale --limit 5 --format json
+muse reach search --platform bilibili --query "AI Agent" --limit 10 --format json
+muse reach search --platform xiaohongshu --query "AI Agent" --limit 10 --format json
+muse reach search --platform tonghuashun --query "宁德时代" --limit 5 --format json
+muse reach search --platform douyin --query "AI Agent" --limit 5 --format json
+muse reach search --platform taobao --query "露营椅" --limit 3 --format json
+muse reach search --platform taobao --query "机械键盘" --sort sale --limit 5 --format json
+muse reach search --platform taobao --query "机械键盘" --sort price_asc --min-price 50 --max-price 200 --filter tmall --limit 5 --format json
+muse reach search --platform jd --query "机械键盘" --sort sale --limit 5 --format json
 ```
 
 淘宝须先在 TabWeb **扫码登录**；匿名会报登录墙（不应静默空结果）。
@@ -127,9 +127,9 @@ tabtin reach search --platform jd --query "机械键盘" --sort sale --limit 5 -
 ### ③ 阅读 / 评论
 
 ```bash
-tabtin reach read     --platform bilibili --url "https://www.bilibili.com/video/BVxxxx" --format json
-tabtin reach read     --platform xiaohongshu --url "<search 结果里的完整URL>" --format json
-tabtin reach comments --platform xiaohongshu --url "<完整URL>" --format json
+muse reach read     --platform bilibili --url "https://www.bilibili.com/video/BVxxxx" --format json
+muse reach read     --platform xiaohongshu --url "<search 结果里的完整URL>" --format json
+muse reach comments --platform xiaohongshu --url "<完整URL>" --format json
 ```
 
 淘宝 / 天猫 / 京东 **无 comments 动词**——用户要评论时不要硬 search，改详情页 browser 路径。
@@ -159,7 +159,7 @@ tabtin reach comments --platform xiaohongshu --url "<完整URL>" --format json
 
 ## 产物往哪落地
 
-`tabtin reach` 只负责第一手归一化 JSON。落 TabData 用 `tabtin browser collect table` 或表格 skill。
+`muse reach` 只负责第一手归一化 JSON。落 TabData 用 `muse browser collect table` 或表格 skill。
 
 ---
 

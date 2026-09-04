@@ -23,7 +23,7 @@ export function resolveTabTinResourceScheme(
 ): TabTinResourceScheme {
   try {
     const hostname = new URL(environment.apiBaseUrl).hostname.toLowerCase()
-    if (hostname === 'api.example.com') return 'tabtin'
+    if (hostname === 'api.example.com') return 'muse'
     if (hostname === 'api-test.example.com') return 'tabtin-preprod'
     if (
       hostname === 'localhost' ||
@@ -45,5 +45,5 @@ export function resolveTabTinResourceScheme(
   ) {
     return 'tabtin-dev'
   }
-  return 'tabtin'
+  return 'muse'
 }

@@ -10,7 +10,7 @@
   "distribution": "builtin",
   "surface": "builtin",
   "runtimeBindings": {
-    "toolProvider": "cli:tabtin desktop",
+    "toolProvider": "cli:muse desktop",
     "uiProvider": "electron:context-space.tabdesktop",
     "skillsProvider": "skills:local"
   },

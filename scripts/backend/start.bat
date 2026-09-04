@@ -2,7 +2,7 @@
 setlocal
 call "%~dp0_dev-env.bat"
 echo ============================================================
-echo              Starting TabTin backend stack
+echo              Starting Muse backend stack
 echo ============================================================
 if not exist "%PYTHON_BIN%" (
   echo [SETUP] Django virtual environment is missing. Installing backend dependencies...
@@ -44,7 +44,7 @@ if errorlevel 1 (
 )
 echo.
 echo ============================================================
-echo              TabTin backend stack is ready
+echo              Muse backend stack is ready
 echo ============================================================
 echo Django:      http://127.0.0.1:%DJANGO_BIND_PORT%
 echo Collab Live: ws://127.0.0.1:%COLLAB_LIVE_PORT%

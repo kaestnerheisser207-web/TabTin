@@ -30,7 +30,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.dp
-import com.tabtin.mobile.R
+import com.muse.mobile.R
 import com.tabtin.mobile.data.model.ChatMessage
 import com.tabtin.mobile.data.model.StepStatus
 import com.tabtin.mobile.data.model.StepType

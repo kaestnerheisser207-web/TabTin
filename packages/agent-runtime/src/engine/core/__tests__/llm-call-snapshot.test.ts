@@ -50,7 +50,7 @@ describe('buildLLMCallSnapshot', () => {
 
   it('relevant_cli 在快照中记录为 relevant_recall + system', () => {
     const relevantCli = setInternalMarker(
-      { role: 'user' as const, content: '<relevant_cli>tabtin agent history</relevant_cli>' },
+      { role: 'user' as const, content: '<relevant_cli>muse agent history</relevant_cli>' },
       INTERNAL_MESSAGE_MARKERS.RELEVANT_RECALL_INJECTION,
     )
     const request = {

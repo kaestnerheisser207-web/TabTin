@@ -8,8 +8,8 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/TabTin/tabtin-cli/internal/errcode"
-	"github.com/TabTin/tabtin-cli/internal/output"
+	"github.com/Muse/muse-cli/internal/errcode"
+	"github.com/Muse/muse-cli/internal/output"
 )
 
 // stdinReader 是 input 抽象读 stdin 时用的源。
@@ -48,8 +48,8 @@ var opaqueIdentifierSuffixes = []string{
 //
 // v10.3 P1 修复：这些 flag 的值是**写盘目标路径**，不是"从这个文件读内容"的输入字段。
 // 之前 FlagString 默认启用 @file/stdin 抽象（PR Sprint 1.B），导致：
-//   - `tabtin xxx --output @/etc/passwd` 把 /etc/passwd 内容当成输出路径——荒谬
-//   - `tabtin xxx --output -` 把 stdin 当输出路径——荒谬
+//   - `muse xxx --output @/etc/passwd` 把 /etc/passwd 内容当成输出路径——荒谬
+//   - `muse xxx --output -` 把 stdin 当输出路径——荒谬
 //   - help 上还显示 "(supports @file, - for stdin)" 误导用户
 //
 // 这些 flag 应强制 opt-out input 抽象，原样保留路径字符串。
@@ -342,7 +342,7 @@ func resolveInputAbstraction(def CommandDef, ctx *RunContext) error {
 	return nil
 }
 
-// ParseDataOrFile 解析一个 JSON 输入字符串，支持 TabTin 标准 input 抽象：
+// ParseDataOrFile 解析一个 JSON 输入字符串，支持 Muse 标准 input 抽象：
 //
 //   - "@path/to/file"  → 从文件读取 JSON
 //   - "-"              → 从 stdin 读取 JSON
@@ -354,8 +354,8 @@ func resolveInputAbstraction(def CommandDef, ctx *RunContext) error {
 // 便于排查——比如 "JSON 解析失败 (来源: 文件 /tmp/payload.json): ..."。
 //
 // 使用方：
-//   - `tabtin api --data`     （cmd/api.go）
-//   - `tabtin invoke --input` （cmd/invoke.go）
+//   - `muse api --data`     （cmd/api.go）
+//   - `muse invoke --input` （cmd/invoke.go）
 //
 // 这是 L1 手写命令的 input-abstraction 规范实现。L2 声明式命令应使用 cmdutil.FlagString
 // 默认 input 抽象（resolveInputAbstraction 在 pipeline 内自动处理 @file/-/@@）。

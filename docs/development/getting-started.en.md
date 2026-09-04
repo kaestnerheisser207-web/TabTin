@@ -2,7 +2,7 @@
 
 [中文](getting-started.md)
 
-This guide runs TabTin from source. Unless noted otherwise, run commands from the repository root.
+This guide runs Muse from source. Unless noted otherwise, run commands from the repository root.
 
 ## Two startup routes
 
@@ -44,7 +44,7 @@ Full Preview starts the backend, AdminDash, tabtin-web, and Electron desktop cli
 
 ### Default server address for Full Preview
 
-When the user does not explicitly provide a server IP, the Agent must detect an active LAN IPv4 address on the computer running the TabTin server and use it as the default server address for all three packaged clients. It must not put `localhost` or `127.0.0.1` into a package that other devices need to access. An explicitly provided server IP always takes precedence.
+When the user does not explicitly provide a server IP, the Agent must detect an active LAN IPv4 address on the computer running the Muse server and use it as the default server address for all three packaged clients. It must not put `localhost` or `127.0.0.1` into a package that other devices need to access. An explicitly provided server IP always takes precedence.
 
 Use the same `<LAN_IP>` for desktop, Android, and iOS:
 

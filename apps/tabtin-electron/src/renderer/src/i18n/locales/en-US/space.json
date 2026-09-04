@@ -108,7 +108,7 @@
     "availableTitle": "AI execution will route through \"{{device}}\"",
     "availableDesc": "Team collaboration stays in this team Workspace; AI runs in {{space}}.",
     "unavailableTitle": "Owner execution device \"{{device}}\" is unavailable ({{status}})",
-    "unavailableDesc": "Chat and assets remain available, but AI tasks cannot start for now. Once the Owner reopens TabTin on that device and {{space}} is back online, execution resumes."
+    "unavailableDesc": "Chat and assets remain available, but AI tasks cannot start for now. Once the Owner reopens Muse on that device and {{space}} is back online, execution resumes."
   },
   "validation": {
     "nameRequired": "Workspace name is required",
@@ -441,8 +441,8 @@
       "subtitle": "First identify what is driving this agent and which device it is bound to, then separate current-space configuration from capabilities that only belong to the current Electron control device.",
       "builtinActive": "Built-in runtime active",
       "externalActive": "External backend active",
-      "builtinDesc": "This agent is driven by the TabTin built-in engine, but this page still needs to distinguish between current-space configuration and host capabilities provided by this Electron instance. Local runtime only equals the agent's direct runtime when this Electron device is the execution device.",
-      "externalDesc": "This agent is driven by an external engine. It mainly relies on its own tool system and terminal access, so the TabTin runtime, MCP, and Core CLI shown here describe what the current Electron host can provide, not what the external agent can always call directly.",
+      "builtinDesc": "This agent is driven by the Muse built-in engine, but this page still needs to distinguish between current-space configuration and host capabilities provided by this Electron instance. Local runtime only equals the agent's direct runtime when this Electron device is the execution device.",
+      "externalDesc": "This agent is driven by an external engine. It mainly relies on its own tool system and terminal access, so the Muse runtime, MCP, and Core CLI shown here describe what the current Electron host can provide, not what the external agent can always call directly.",
       "boundLocal": "This Electron device is the execution device",
       "boundOther": "This Agent is bound to another device",
       "unbound": "This Agent is not bound to an execution device yet",
@@ -742,7 +742,7 @@
     "workspaceHint": "Automatically detected from content opened in TabCode / Directories — no manual configuration needed",
     "workspaceEmpty": "No paths authorized. Open a project in TabCode or a local directory in Directories to grant Agent access.",
     "workspaceSourceSandbox": "Agent sandbox",
-    "workspaceSandboxHint": "Base workspace auto-created by TabTin for each Workspace; not revocable here.",
+    "workspaceSandboxHint": "Base workspace auto-created by Muse for each Workspace; not revocable here.",
     "workspaceSourceTabcode": "TabCode projects",
     "workspaceTabcodeHint": "Folders you drop here are fully accessible to the Agent, including .env, SSH keys, and other sensitive files inside. Pick a specific subfolder rather than your home directory if you want to narrow the Agent's view.",
     "workspaceSourceTabfolder": "Directories browsing history",
@@ -1009,11 +1009,11 @@
     "panelDescription": "Decides which machine runs terminal commands and file access for this Agent. Once bound, this Workspace stays on that device.",
     "chooseDevice": "Choose execution device",
     "refresh": "Refresh device list",
-    "noRegisteredDevicesHint": "Open the TabTin desktop app on this machine and try again.",
+    "noRegisteredDevicesHint": "Open the Muse desktop app on this machine and try again.",
     "availableDevices": "Available devices",
     "addRemoteDevice": "Add remote device",
     "addRemoteDeviceTitle": "Add Remote Device",
-    "addRemoteDeviceDesc": "Generate an install command to set up TabTin Daemon on a remote server for AI task execution.",
+    "addRemoteDeviceDesc": "Generate an install command to set up Muse Daemon on a remote server for AI task execution.",
     "deviceNameLabel": "Device name",
     "deviceNamePlaceholder": "e.g. Production Server, GPU Workstation",
     "cancel": "Cancel",
@@ -1358,7 +1358,7 @@
     "connectFailed": "Connection failed",
     "testFailed": "Test failed",
     "helpTitle": "About SSH Remote Servers",
-    "helpTip1": "SSH connections are initiated from the TabTin backend (not your local machine), so mobile devices can also use remote servers",
+    "helpTip1": "SSH connections are initiated from the Muse backend (not your local machine), so mobile devices can also use remote servers",
     "helpTip2": "Credentials (passwords or keys) are encrypted at rest and never stored in plaintext",
     "helpTip3": "The Agent can execute commands on remote servers with real-time output streaming to the chat",
     "helpTip4": "Server fingerprints are recorded on first connection and verified automatically afterward"
@@ -1401,7 +1401,7 @@
     "skillsSelf": "These skills only take effect for you in the current group space and do not change other members' skill configuration.",
     "extensionsGroup": "This section manages integration connections available to the current group space. If no group-specific connection is configured, organization connections are inherited.",
     "channelsOrganization": "Channel accounts are organization-level resources. This page controls how the current group space uses those channels.",
-    "mcpRuntime": "This view combines local MCP connections mounted to the current space and the TabTin MCP endpoint exposed by the current Electron / Daemon host. Neither is a private server-side configuration of the group space.",
+    "mcpRuntime": "This view combines local MCP connections mounted to the current space and the Muse MCP endpoint exposed by the current Electron / Daemon host. Neither is a private server-side configuration of the group space.",
     "apiGroup": "This section exposes the current group space's data entry points for read-only queries and external integrations."
   },
   "gitStatus": {
@@ -1461,7 +1461,7 @@
   },
   "mcpConnections": {
     "title": "External Tools & Integrations (MCP)",
-    "subtitle": "Model Context Protocol (MCP) is a standardized protocol. You can connect external data sources (like local databases or GitHub) for the current Agent, or expose TabTin's capabilities to other AI assistants.",
+    "subtitle": "Model Context Protocol (MCP) is a standardized protocol. You can connect external data sources (like local databases or GitHub) for the current Agent, or expose Muse's capabilities to other AI assistants.",
     "subtitleDevice": "Manage this device's local MCP connections, and choose which Agents each connection is enabled for.",
     "readOnlyNoticeDevice": "Read-only mode. Local MCP connections are managed by the device administrator.",
     "agentScopeMigrationNotice": "Legacy enablement cannot be safely mapped to Agents. Select the Agents that may use this connection again.",
@@ -1484,7 +1484,7 @@
     "deleteConfirm": "Delete MCP connection \"{{name}}\"?",
     "deleteSuccess": "Connection deleted",
     "localOnly": "These connections are stored only in the current Electron user data directory and are bound to this Electron host. They are not automatically shared with other members, devices, or Electron instances.",
-    "externalBackendWarning": "This agent is powered by a third-party engine. You can still manage external tool connections here, but these tools are only available to the built-in TabTin engine, not the third-party engine.",
+    "externalBackendWarning": "This agent is powered by a third-party engine. You can still manage external tool connections here, but these tools are only available to the built-in Muse engine, not the third-party engine.",
     "readOnlyNotice": "This space is in read-only mode. MCP connections are managed by the device administrator in the Bot space.",
     "deleteConfirmTitle": "Delete MCP Connection",
     "cancelButton": "Cancel",
@@ -1553,7 +1553,7 @@
         "reuseHint": "Once approved, it will reuse the same “web authorize → probe tools” flow as Stripe / Notion.",
         "gotIt": "Got it",
         "generic": "This connector needs vendor onboarding before authorization. Please try again later.",
-        "vercel": "Vercel MCP is limited to approved AI clients. Authorization opens after TabTin is approved.",
+        "vercel": "Vercel MCP is limited to approved AI clients. Authorization opens after Muse is approved.",
         "canva": "Canva requires the callback URI on their MCP allowlist. Authorization opens after review."
       },
       "credentialDialog": {
@@ -1587,7 +1587,7 @@
       "oauthDialog": {
         "promptTitle": "Complete {{name}} web authorization",
         "promptDescription": "Finish {{name}} sign-in in the authorization window, then return here.",
-        "browserHint": "TabTin opens the authorization page in your default browser. If you are not signed in to {{name}}, you will see their login first; after that, confirm “Allow TabTin to access”.",
+        "browserHint": "Muse opens the authorization page in your default browser. If you are not signed in to {{name}}, you will see their login first; after that, confirm “Allow Muse to access”.",
         "scopeConnectTitle": "Connect account",
         "scopeConnectBody": "Used to read projects, deployment status, and basic team information.",
         "scopeControlTitle": "You stay in control",
@@ -1599,7 +1599,7 @@
         "failedTitle": "Authorization incomplete",
         "failedBody": "{{name}} did not complete authorization. Your previous configuration is unchanged. Retry or go back.",
         "timeoutTitle": "Connection confirmation timed out",
-        "timeoutBody": "TabTin waited more than {{seconds}} seconds for {{name}} authorization and could not confirm whether it completed. Your previous configuration is unchanged. Retry or go back.",
+        "timeoutBody": "Muse waited more than {{seconds}} seconds for {{name}} authorization and could not confirm whether it completed. Your previous configuration is unchanged. Retry or go back.",
         "successTitle": "{{name}} connected",
         "successBody": "Authorization and connection probe both completed",
         "successAssigned": "{{name}} is configured for {{count}} Agents.",

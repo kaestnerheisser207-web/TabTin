@@ -1,7 +1,7 @@
 {
   "name": "@tabtin/runtime-reporter",
   "version": "0.1.0",
-  "description": "Shared runtime reporter for TabTin host-bound panels",
+  "description": "Shared runtime reporter for Muse host-bound panels",
   "type": "module",
   "main": "dist/index.js",
   "module": "dist/index.js",

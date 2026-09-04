@@ -35,7 +35,7 @@
  * itself is retained: it still gates `query.ts` pre-start (L34 H2-B),
  * we only decoupled fence wrap from it. Classifies API errors for which
  * has no fence at all and trusts the LLM's instruction-tuning to
- * distinguish data from directive — TabTin keeps fence as a defense in
+ * distinguish data from directive — Muse keeps fence as a defense in
  * depth for genuinely external sources only.
  *
  * **W3 also drops the `tool_call_id` attribute from the fence head**:
@@ -278,7 +278,7 @@ const INJECTION_PATTERNS: InjectionPattern[] = [
 
 // ─── Decision: when to scan / fence (W3 — tightened to external bytes) ──
 //
-// **W3 (2026-05-10)**: TabTin pre-W3 fenced "non-readonly tools + disablePreStart
+// **W3 (2026-05-10)**: Muse pre-W3 fenced "non-readonly tools + disablePreStart
 // readonly tools", which dragged in every local file reader / writer plus
 // run_terminal_command. Dogfood (`02_C2_工具契约层.md` / `05_C5_交互工具.md`)
 // proved the fence buys little safety for local sources (some agents wrap
@@ -322,8 +322,8 @@ export function extractShellCommandFromInput(input: unknown): string | undefined
 /**
  * 宿主注入的「shell 命令是否返回外部不可信字节」谓词。
  *
- * runtime 内核不内置任何 shell 命令业务知识（不认识 `tabtin fetch` /
- * `tabtin browser …` 等 CLI 语义）。宿主在装配期注入该谓词以把返回外网字节
+ * runtime 内核不内置任何 shell 命令业务知识（不认识 `muse fetch` /
+ * `muse browser …` 等 CLI 语义）。宿主在装配期注入该谓词以把返回外网字节
  * 的 `run_terminal_command` 重新纳入 fence + 注入扫描；未注入时
  * `run_terminal_command` 一律不 fence（中性默认）。
  */

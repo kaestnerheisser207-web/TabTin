@@ -112,7 +112,7 @@ export function ConnectorOAuthAuthorizeDialog({
                 size="sm"
                 description={t('mcpConnections.marketplace.oauthDialog.browserHint', {
                   name: connectorName,
-                  defaultValue: `将在系统默认浏览器中打开授权页。若尚未登录 ${connectorName}，会先出现登录页；登录后才会看到「允许 TabTin 访问」确认。`,
+                  defaultValue: `将在系统默认浏览器中打开授权页。若尚未登录 ${connectorName}，会先出现登录页；登录后才会看到「允许 Muse 访问」确认。`,
                 })}
               />
               <ul className="space-y-3 text-body text-muted-foreground">

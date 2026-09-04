@@ -40,11 +40,11 @@ describe('routeToolUseView · structured presentation', () => {
       effectiveInput: { command: 'opaque command text' },
       presentation: {
         kind: 'media_image_generation',
-        data: { command: 'tabtin media image generate --prompt apple', prompt: 'apple' },
+        data: { command: 'muse media image generate --prompt apple', prompt: 'apple' },
       },
     })).toEqual({
       kind: 'media_image',
-      command: 'tabtin media image generate --prompt apple',
+      command: 'muse media image generate --prompt apple',
       promptPreview: 'apple',
     })
   })
@@ -52,14 +52,14 @@ describe('routeToolUseView · structured presentation', () => {
   it('只有命令文本、没有结构化语义时保持普通终端卡', () => {
     expect(route({
       effectiveInput: {
-        command: 'tabtin media image generate --prompt apple',
+        command: 'muse media image generate --prompt apple',
       },
     })).toEqual({ kind: 'tool_step_card' })
   })
 
   it('未知 presentation.kind 不触发动画', () => {
     expect(route({
-      effectiveInput: { command: 'tabtin media image generate --prompt apple' },
+      effectiveInput: { command: 'muse media image generate --prompt apple' },
       presentation: { kind: 'unknown_future_presentation' },
     })).toEqual({ kind: 'tool_step_card' })
   })
@@ -89,7 +89,7 @@ describe('routeToolUseView · structured presentation', () => {
         content: '{"ok":true}',
         presentation: {
           kind: 'media_image_generation',
-          data: { command: 'tabtin media image generate --prompt apple', prompt: 'apple' },
+          data: { command: 'muse media image generate --prompt apple', prompt: 'apple' },
         },
       },
       todoSnapshot: undefined,
@@ -97,7 +97,7 @@ describe('routeToolUseView · structured presentation', () => {
 
     expect(state.viewRoute).toEqual({
       kind: 'media_image',
-      command: 'tabtin media image generate --prompt apple',
+      command: 'muse media image generate --prompt apple',
       promptPreview: 'apple',
     })
   })

@@ -1,3 +1,3 @@
 """
-Tabtin Space migrations package.
+Muse Space migrations package.
 """

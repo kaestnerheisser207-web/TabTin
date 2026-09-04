@@ -43,7 +43,7 @@ import { runWithHumanInteractionContext } from './permissions/human-interaction-
  * W1（压缩路径简化）：删除 `microCompact` 注入。
  * 原本 query-deps 会把"自创 micro 改写"包装后注入 deps.microCompact，
  * 让 query.ts 每轮 LLM 调用前跑一次"按 filePath 分组 read_file dedup +
- * 长 tool_result 截断 + 老 thinking trim"——三块都是 TabTin 自创、
+ * 长 tool_result 截断 + 老 thinking trim"——三块都是 Muse 自创、
  * 不再做的"事后改写本地 messages 内容"，破坏跨轮 byte-
  * identical 与 prompt cache 稳定性，是 dogfood calculator.html 死循环
  * 的根因之一（C1 §2.1 / §2.2 / §2.6）。

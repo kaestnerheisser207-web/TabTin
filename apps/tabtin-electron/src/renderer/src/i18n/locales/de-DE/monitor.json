@@ -50,7 +50,7 @@
     "uiEngine": "UI-Engine",
     "uiEngineDetail": "{{cpu}} · Gemeinsamer Speicher für die Seitenrendering-Engine",
     "appHost": "App-Host",
-    "appHostDetail": "{{cpu}} · Basisspeicher für die TabTin-App selbst",
+    "appHostDetail": "{{cpu}} · Basisspeicher für die Muse-App selbst",
     "unassigned": "Nicht zugewiesen",
     "unassignedDetail": "{{cpu}} · Ressourcen, die noch keinem Space zugeordnet sind",
     "background": "Hintergrund",

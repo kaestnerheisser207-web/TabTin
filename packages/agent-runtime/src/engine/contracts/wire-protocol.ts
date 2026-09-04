@@ -67,7 +67,7 @@ export const SYSTEM_SECTION_NAMES = {
   project_task_context: 'project_task_context',
   /** 静态段：已挂载 MCP server + 工具名索引（query 无关、跨轮稳定、可缓存）。 */
   mcp_servers: 'mcp_servers',
-  /** 静态段：tabtin CLI 命令名索引（按 domain 分组，query 无关、跨轮稳定、可缓存）。 */
+  /** 静态段：muse CLI 命令名索引（按 domain 分组，query 无关、跨轮稳定、可缓存）。 */
   cli_commands: 'cli_commands',
   /** 静态段：runtime 原生 tool-call metadata 契约。 */
   tool_call_metadata: 'tool_call_metadata',

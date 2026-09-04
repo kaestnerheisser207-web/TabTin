@@ -54,7 +54,7 @@ import androidx.compose.ui.unit.sp
 import com.mikepenz.markdown.m3.Markdown
 import com.mikepenz.markdown.m3.markdownTypography
 import com.mikepenz.markdown.model.MarkdownTypography
-import com.tabtin.mobile.R
+import com.muse.mobile.R
 import com.tabtin.mobile.data.model.ChatMessage
 import com.tabtin.mobile.ui.theme.TTColors
 import com.tabtin.mobile.ui.theme.TTFonts

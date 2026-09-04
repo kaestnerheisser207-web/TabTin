@@ -7,8 +7,8 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/TabTin/tabtin-cli/internal/output"
-	"github.com/TabTin/tabtin-cli/internal/transport"
+	"github.com/Muse/muse-cli/internal/output"
+	"github.com/Muse/muse-cli/internal/transport"
 )
 
 type pipelineAuthTestTransport struct {
@@ -52,7 +52,7 @@ func TestRequiresAuthAllowsHostManagedTransportWithoutProfileToken(t *testing.T)
 		Path:         "/api/host-managed-auth",
 	}
 
-	root := &cobra.Command{Use: "tabtin"}
+	root := &cobra.Command{Use: "muse"}
 	fake := &pipelineAuthTestTransport{
 		source: transport.AuthSourceHost,
 	}
@@ -91,7 +91,7 @@ func TestRequiresAuthWithoutHostTransportStillReturnsUnauthorized(t *testing.T) 
 		},
 	}
 
-	root := &cobra.Command{Use: "tabtin"}
+	root := &cobra.Command{Use: "muse"}
 	RegisterCommand(root, NewFactory(), def)
 	root.SetArgs([]string{def.Use})
 

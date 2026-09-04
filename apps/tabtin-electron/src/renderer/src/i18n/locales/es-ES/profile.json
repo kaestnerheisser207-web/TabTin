@@ -49,7 +49,7 @@
     "logoutConfirmTitle": "¿Cerrar sesión en su cuenta?",
     "logoutConfirmDesc": "Cualquier trabajo no guardado en este dispositivo se perderá.",
     "openStorageManager": "Administrador de almacenamiento",
-    "openStorageManagerHint": "Vea lo que TabTin ha almacenado en su máquina, luego limpie o exporte",
+    "openStorageManagerHint": "Vea lo que Muse ha almacenado en su máquina, luego limpie o exporte",
     "changePassword": "Cambiar contraseña",
     "bindEmail": "Vincular correo electrónico"
   },

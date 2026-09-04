@@ -1,5 +1,5 @@
 /**
- * Fork 作业：把历史里的上游 / 旧 tool_use id 重写为 TabTin `tu_*`。
+ * Fork 作业：把历史里的上游 / 旧 tool_use id 重写为 Muse `tu_*`。
  *
  * 与入站 `ToolIdMapper`（每轮 LLM 流独立）不同——fork 作业内对**同一旧 id
  * 字符串**稳定映射到同一个新 id，以保持 tool_use ↔ tool_result 配对。

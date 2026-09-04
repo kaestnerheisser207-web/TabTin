@@ -6,7 +6,7 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/TabTin/tabtin-cli/internal/cmdutil"
+	"github.com/Muse/muse-cli/internal/cmdutil"
 )
 
 func adaptStorageBatchDelete(ctx *cmdutil.RunContext, method, path string, body map[string]any) (string, string, map[string]any, error) {
@@ -20,7 +20,7 @@ func adaptStorageBatchDelete(ctx *cmdutil.RunContext, method, path string, body 
 		orgID = ctx.OrganizationID
 	}
 	if orgID == "" {
-		return "", "", nil, fmt.Errorf("缺少 organization_id。请先 tabtin org use <id> 或设置 TABTIN_ORGANIZATION_ID")
+		return "", "", nil, fmt.Errorf("缺少 organization_id。请先 muse org use <id> 或设置 TABTIN_ORGANIZATION_ID")
 	}
 	remoteBody := map[string]any{}
 	if v, ok := body["file_ids"]; ok {
@@ -30,16 +30,16 @@ func adaptStorageBatchDelete(ctx *cmdutil.RunContext, method, path string, body 
 	return "POST", remote, remoteBody, nil
 }
 
-// newCmdStorage —  /  团队存储文件治理（与本地 tabtin file 语义分离）。
+// newCmdStorage —  /  团队存储文件治理（与本地 muse file 语义分离）。
 func newCmdStorage(f *cmdutil.Factory) *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "storage",
 		Short: "团队存储文件治理",
 		Long: `管理 Organization 下的 OSS 存储文件（列表 / 引用 / 批量删除）。
-与 tabtin file（本地生成）和 tabtin drive（云盘挂载）不同：本命令面向存储治理。`,
-		Example: `  tabtin storage files list --format json
-  tabtin storage files usages <file_id>
-  tabtin storage files batch-delete --file-ids <id> --yes`,
+与 muse file（本地生成）和 muse drive（云盘挂载）不同：本命令面向存储治理。`,
+		Example: `  muse storage files list --format json
+  muse storage files usages <file_id>
+  muse storage files batch-delete --file-ids <id> --yes`,
 	}
 
 	filesCmd := &cobra.Command{
@@ -52,10 +52,10 @@ func newCmdStorage(f *cmdutil.Factory) *cobra.Command {
 		Short: "列出团队存储文件",
 		Long: `多维筛选 + 游标分页列出 Organization 存储文件。
 设计理由：与 drive list（云盘挂载面）分离，面向 OSS 存量治理与计量。
-常见陷阱：需全局 --organization-id / tabtin org use；云盘可见列表请用 drive list。`,
-		Example: "  tabtin storage files list\n" +
-			"  tabtin storage files list --module tabfiles --search report --format json\n" +
-			"  tabtin storage files list --cursor <c> --limit 50",
+常见陷阱：需全局 --organization-id / muse org use；云盘可见列表请用 drive list。`,
+		Example: "  muse storage files list\n" +
+			"  muse storage files list --module tabfiles --search report --format json\n" +
+			"  muse storage files list --cursor <c> --limit 50",
 		Layer:        "L2",
 		Risk:         cmdutil.RiskRead,
 		RiskDeclared: true,
@@ -85,9 +85,9 @@ func newCmdStorage(f *cmdutil.Factory) *cobra.Command {
 		Long: `查看某个存储 FileRecord 被哪些业务引用。
 设计理由：batch-delete 前必须确认引用，避免误删仍被 TabDoc/表格附件占用的对象。
 常见陷阱：file-id 是 OSS FileRecord id；需 organization 上下文。`,
-		Example: "  tabtin storage files usages <file_id>\n" +
-			"  tabtin storage files usages <file_id> --format json\n" +
-			"  tabtin storage files usages <file_id> --organization-id <org>",
+		Example: "  muse storage files usages <file_id>\n" +
+			"  muse storage files usages <file_id> --format json\n" +
+			"  muse storage files usages <file_id> --organization-id <org>",
 		Layer:        "L2",
 		Risk:         cmdutil.RiskRead,
 		RiskDeclared: true,
@@ -107,9 +107,9 @@ func newCmdStorage(f *cmdutil.Factory) *cobra.Command {
 		Long: `批量 deactivate 引用并释放计量。viewer 无权删除。
 RiskDestructive，强制 --yes。删除前建议先 usages 确认引用。
 organization_id 走 query（与 Django OSS API 对齐）。`,
-		Example: "  tabtin storage files batch-delete --file-ids <id> --yes\n" +
-			"  tabtin storage files batch-delete --file-ids a --file-ids b --yes\n" +
-			"  tabtin storage files batch-delete --file-ids <id> --dry-run",
+		Example: "  muse storage files batch-delete --file-ids <id> --yes\n" +
+			"  muse storage files batch-delete --file-ids a --file-ids b --yes\n" +
+			"  muse storage files batch-delete --file-ids <id> --dry-run",
 		Layer:        "L2",
 		Risk:         cmdutil.RiskDestructive,
 		RiskDeclared: true,

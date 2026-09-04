@@ -3,7 +3,7 @@ package cmd
 import (
 	"github.com/spf13/cobra"
 
-	"github.com/TabTin/tabtin-cli/internal/cmdutil"
+	"github.com/Muse/muse-cli/internal/cmdutil"
 )
 
 func newCmdOSS(f *cmdutil.Factory) *cobra.Command {
@@ -17,9 +17,9 @@ present_to_user 展示）和 OSS 文件引用 id（data.file_id）。
 PDF/Word 转成文档草稿（PDF/Word 导入链路的第一步）。
 
 示例：
-  tabtin oss upload /tmp/chart.png
-  tabtin oss upload ./report.pdf --folder reports
-  FID=$(tabtin oss upload ./report.pdf --format json | jq -r '.data.file_id')`,
+  muse oss upload /tmp/chart.png
+  muse oss upload ./report.pdf --folder reports
+  FID=$(muse oss upload ./report.pdf --format json | jq -r '.data.file_id')`,
 	}
 
 	// Layer: L2
@@ -31,9 +31,9 @@ PDF/Word 转成文档草稿（PDF/Word 导入链路的第一步）。
 返回的 file_id 可喂给 ` + "`doc import file --file-record-id`" + ` 把已上传的 PDF/Word
 转成文档草稿；data.url 可直接 present_to_user 展示。
 若目标是 Organization 云盘列表（团队可见、画布可打开），优先用 ` + "`drive upload`" + ` 一步挂载，不必再 attach。`,
-		Example: `  tabtin oss upload /tmp/chart.png
-  tabtin oss upload ./report.pdf --folder reports
-  tabtin oss upload /tmp/screenshot.png --mime-type image/png`,
+		Example: `  muse oss upload /tmp/chart.png
+  muse oss upload ./report.pdf --folder reports
+  muse oss upload /tmp/screenshot.png --mime-type image/png`,
 		Layer:        "L2",
 		Risk:         cmdutil.RiskWrite,
 		RiskDeclared: true,

@@ -42,7 +42,7 @@
     "accountDevices": "我的設備",
     "systemNotifications": "系統通知",
     "systemPermissions": "系統權限",
-    "aboutTabtin": "關於 TabTin",
+    "aboutTabtin": "關於 Muse",
     "appearanceDisplay": "外觀顯示",
     "voiceHabits": "語音習慣",
     "aiSettings": "AI 設定",
@@ -86,7 +86,7 @@
     "storageStatus": "儲存狀態",
     "dataImport": "導入數據",
     "performanceMonitor": "效能監控",
-    "tabtinVersion": "TabTin 版本",
+    "tabtinVersion": "Muse 版本",
     "resourceOpenPreferences": "Agent 產物預設開啟方式",
     "personalRules": "個人通用規則",
     "myAgents": "AI 分身",
@@ -127,8 +127,8 @@
   "groupOverview": {
     "accountDesc": "管理個人資料、登入安全性與存取憑證",
     "credentialsGroupDesc": "管理瀏覽器登入態、AI 服務金鑰與應用程式接入",
-    "authorizationGroupDesc": "macOS / Windows 給 TabTin 的系統權限",
-    "developerGroupDesc": "TabTin API Key 與 CLI 接入",
+    "authorizationGroupDesc": "macOS / Windows 給 Muse 的系統權限",
+    "developerGroupDesc": "Muse API Key 與 CLI 接入",
     "myAIGroupDesc": "管理個人通用規則和 Agent 產物預設開啟方式",
     "myAgentsDesc": "管理組織內的 AI 分身：創建、改名、設人設與技能攜帶集。",
     "skillLibraryDesc": "瀏覽全部技能，把本事分配給你的 Agent",
@@ -320,9 +320,9 @@
     "themeSystem": "跟隨系統",
     "desktopBehaviorSection": "桌面行為",
     "desktopBehaviorTray": "關閉視窗後繼續後台運行",
-    "desktopBehaviorTrayHint": "點關閉按鈕後 TabTin 保持運行，再次點擊 Dock、工作列或選單列圖示可直接恢復窗口",
+    "desktopBehaviorTrayHint": "點關閉按鈕後 Muse 保持運行，再次點擊 Dock、工作列或選單列圖示可直接恢復窗口",
     "desktopBehaviorAutoStart": "開機自動啟動",
-    "desktopBehaviorAutoStartHint": "登入系統後自動啟動 TabTin",
+    "desktopBehaviorAutoStartHint": "登入系統後自動啟動 Muse",
     "themeHint": "選擇淺色、深色或跟隨系統外觀。"
   },
   "performance": {
@@ -345,16 +345,16 @@
   },
   "authorizationSystem": {
     "title": "授權",
-    "subtitle": "管理 macOS / Windows 給 TabTin 的系統權限",
+    "subtitle": "管理 macOS / Windows 給 Muse 的系統權限",
     "loading": "正在檢測系統權限…",
     "unavailable": "桌面用戶端環境不可用，無法讀取系統權限狀態。",
     "errorTitle": "系統權限讀取失敗",
-    "errorFallback": "請稍後重試，或重新啟動 TabTin 後再次開啟此頁。",
+    "errorFallback": "請稍後重試，或重新啟動 Muse 後再次開啟此頁。",
     "notApplicableHint": "已隱藏 {{count}} 項目前平台不適用的權限",
     "overview": {
-      "taglineAll": "TabTin 已取得所有必要的系統權限。",
-      "taglineSome": "TabTin 已取得部分系統權限，仍有功能受限。",
-      "taglineNone": "TabTin 還沒有任何系統權限，部分功能將無法使用。",
+      "taglineAll": "Muse 已取得所有必要的系統權限。",
+      "taglineSome": "Muse 已取得部分系統權限，仍有功能受限。",
+      "taglineNone": "Muse 還沒有任何系統權限，部分功能將無法使用。",
       "summary": "已授權 {{granted}} / 共 {{total}} 項",
       "refresh": "重新檢查",
       "refreshDone": "權限狀態已刷新"
@@ -384,37 +384,37 @@
     },
     "hints": {
       "detectionUnsupported": "目前系統不提供穩定的權限狀態讀取，請以系統設定中的狀態為準。",
-      "accessibilityIdentity": "目前檢測對像是“{{processLabel}}”。如果系統設定裡有多個 TabTin / Electron 條目，請確認勾選的是目前執行的這一項，授權後回到 TabTin 或點選「重新檢查」。",
-      "restartAfterGrant": "如果系統設定中已經開啟，但這裡仍顯示「待重新啟動確認」或「尚未確認」，請完全退出並重新開啟 TabTin 後再檢查。 macOS 可能需要重新啟動目前 App 進程，偵測結果才會變成已授權。"
+      "accessibilityIdentity": "目前檢測對像是“{{processLabel}}”。如果系統設定裡有多個 Muse / Electron 條目，請確認勾選的是目前執行的這一項，授權後回到 Muse 或點選「重新檢查」。",
+      "restartAfterGrant": "如果系統設定中已經開啟，但這裡仍顯示「待重新啟動確認」或「尚未確認」，請完全退出並重新開啟 Muse 後再檢查。 macOS 可能需要重新啟動目前 App 進程，偵測結果才會變成已授權。"
     },
     "items": {
       "fullDiskAccess": {
         "title": "完全磁碟訪問",
-        "desc": "允許 TabTin 存取電腦上的文件，用於讀取專案檔、設定檔等"
+        "desc": "允許 Muse 存取電腦上的文件，用於讀取專案檔、設定檔等"
       },
       "screenCapture": {
         "title": "螢幕錄製",
-        "desc": "允許 TabTin 截取螢幕，用於桌面控制、螢幕辨識、回饋截圖等功能"
+        "desc": "允許 Muse 截取螢幕，用於桌面控制、螢幕辨識、回饋截圖等功能"
       },
       "accessibility": {
         "title": "輔助功能",
-        "desc": "允許 TabTin 模擬鍵鼠和讀取應用程式介面，用於桌面控制、全域快捷鍵等"
+        "desc": "允許 Muse 模擬鍵鼠和讀取應用程式介面，用於桌面控制、全域快捷鍵等"
       },
       "automation": {
         "title": "自動化",
-        "desc": "允許 TabTin 與行事曆、備忘錄、提醒事項等系統應用程式協作"
+        "desc": "允許 Muse 與行事曆、備忘錄、提醒事項等系統應用程式協作"
       },
       "microphone": {
         "title": "麥克風",
-        "desc": "允許 TabTin 存取麥克風，用於語音輸入、語音指令"
+        "desc": "允許 Muse 存取麥克風，用於語音輸入、語音指令"
       },
       "location": {
         "title": "位置服務",
-        "desc": "允許 TabTin 獲取位置信息，用於地理位置相關的任務"
+        "desc": "允許 Muse 獲取位置信息，用於地理位置相關的任務"
       },
       "notifications": {
         "title": "系統通知",
-        "desc": "允許 TabTin 發送桌面通知，用於任務完成、訊息提醒等場景"
+        "desc": "允許 Muse 發送桌面通知，用於任務完成、訊息提醒等場景"
       }
     }
   },
@@ -1316,7 +1316,7 @@
     "hint3": "重要安全性更新可能會自動安裝",
     "currentVersionWithValue": "目前版本 v{{version}}",
     "lastCheckedWithValue": "上次檢查：{{time}}",
-    "alreadyLatestDescription": "TabTin 會在啟動時自動檢查可用更新",
+    "alreadyLatestDescription": "Muse 會在啟動時自動檢查可用更新",
     "channelStable": "正式版",
     "channelBeta": "測試版",
     "channelAlpha": "預發版",
@@ -1374,8 +1374,8 @@
     "title": "卸載與本地數據",
     "subtitle": {
       "windows": "電腦轉交他人前請清除登入憑證。工作區目錄與綁定的本機目錄一律不會刪除。卸載程式請使用 Windows「設定 → 應用程式」。",
-      "mac": "電腦轉交他人前請清除登入憑證。工作區目錄與綁定的本機目錄一律不會刪除。卸載程式請在「存取 → 應用程式」中將 TabTin 移到廢紙簍。",
-      "linux": "電腦轉交他人前請清除登入憑證。工作區目錄與綁定的本機目錄一律不會刪除。請使用安裝 TabTin 時所使用的軟體管理器來解除安裝程式。"
+      "mac": "電腦轉交他人前請清除登入憑證。工作區目錄與綁定的本機目錄一律不會刪除。卸載程式請在「存取 → 應用程式」中將 Muse 移到廢紙簍。",
+      "linux": "電腦轉交他人前請清除登入憑證。工作區目錄與綁定的本機目錄一律不會刪除。請使用安裝 Muse 時所使用的軟體管理器來解除安裝程式。"
     },
     "wipeCredentials": "清除登入憑證",
     "wipeCredentialsDesc": "刪除本機儲存的登入訊息，下次啟動需重新登入。不刪除配置緩存，也不觸碰工作區文件。",
@@ -1389,15 +1389,15 @@
     "needsManualDevRestart": "開發模式下無法自動重新啟動。已預約清理，請在終端停止後重新執行 pnpm dev，啟動時會自動清除。",
     "uninstallApp": "卸載前清理",
     "uninstallAppDesc": {
-      "windows": "先清除登入憑證（選用再清除設定快取），然後請到 Windows「設定 → 應用程式」中解除安裝 TabTin。系統卸載程式也會一律清除登入憑證。",
-      "mac": "先清除登入憑證（可選再清除配置快取），然後退出 TabTin，並在「訪問 → 應用程式」中將 TabTin 移到廢紙簍。",
-      "linux": "先清除登入憑證（可選再清除設定快取），然後使用安裝 TabTin 時所使用的軟體管理器卸載程式。"
+      "windows": "先清除登入憑證（選用再清除設定快取），然後請到 Windows「設定 → 應用程式」中解除安裝 Muse。系統卸載程式也會一律清除登入憑證。",
+      "mac": "先清除登入憑證（可選再清除配置快取），然後退出 Muse，並在「訪問 → 應用程式」中將 Muse 移到廢紙簍。",
+      "linux": "先清除登入憑證（可選再清除設定快取），然後使用安裝 Muse 時所使用的軟體管理器卸載程式。"
     },
     "uninstallConfirmTitle": "卸載前清理？",
     "uninstallConfirmDesc": {
       "windows": "將清除登入憑證。清理後請到 Windows「設定 → 應用」卸載程式。工作區與綁定目錄不會刪除。",
-      "mac": "將清除登入憑證。清理後請退出 TabTin，並在「訪達 → 應用程式」中將 TabTin 移到廢紙簍。工作區與綁定目錄不會刪除。",
-      "linux": "將清除登入憑證。清理後請使用安裝 TabTin 時所使用的軟體管理器卸載程式。工作區與綁定目錄不會刪除。"
+      "mac": "將清除登入憑證。清理後請退出 Muse，並在「訪達 → 應用程式」中將 Muse 移到廢紙簍。工作區與綁定目錄不會刪除。",
+      "linux": "將清除登入憑證。清理後請使用安裝 Muse 時所使用的軟體管理器卸載程式。工作區與綁定目錄不會刪除。"
     },
     "deleteLocalDataCheckbox": "同時刪除本機配置與快取（不含工作區與綁定目錄）",
     "uninstallConfirmAction": "清理",
@@ -1411,9 +1411,9 @@
       "unknown": "清除本機資料時出錯，請稍後重試。"
     },
     "uninstallHint": {
-      "windows": "請開啟 Windows「設定 → 應用程式」卸載 TabTin。卸載時會清除登入憑證，並可選擇刪除配置與快取（不會刪除工作區）。",
-      "mac": "請退出 TabTin，然後在「存取 → 應用程式」中將 TabTin 移到廢紙簍。工作區與綁定目錄不會刪除。",
-      "linux": "請使用安裝 TabTin 時所使用的軟體管理器來解除安裝程式。工作區與綁定目錄不會刪除。"
+      "windows": "請開啟 Windows「設定 → 應用程式」卸載 Muse。卸載時會清除登入憑證，並可選擇刪除配置與快取（不會刪除工作區）。",
+      "mac": "請退出 Muse，然後在「存取 → 應用程式」中將 Muse 移到廢紙簍。工作區與綁定目錄不會刪除。",
+      "linux": "請使用安裝 Muse 時所使用的軟體管理器來解除安裝程式。工作區與綁定目錄不會刪除。"
     }
   },
   "changelog": {
@@ -1565,7 +1565,7 @@
     "emailLabel": "郵件地址",
     "emailPlaceholder": "user@example.com",
     "phoneLabel": "手機號",
-    "phonePlaceholder": "對方註冊 TabTin 時使用的手機號",
+    "phonePlaceholder": "對方註冊 Muse 時使用的手機號",
     "phoneHint": "對方需已用該手機號碼註冊，接受邀請後即可加入",
     "phoneRequired": "請輸入手機號",
     "roleFixedHint": "新成員將以此角色加入",
@@ -1603,7 +1603,7 @@
     "personalPlugins": "可安裝個人插件",
     "personalPluginsDesc": "官方和可信來源的個人插件會出現在這裡。安裝只把 bundle 放到本機，啟用仍從 Agent 或工作空間設定進入。",
     "builtinPlugins": "內建能力",
-    "builtinPluginsDesc": "這些能力隨 TabTin 提供，不支援安裝、解除安裝或啟用。",
+    "builtinPluginsDesc": "這些能力隨 Muse 提供，不支援安裝、解除安裝或啟用。",
     "installedPersonalPlugins": "已安裝個人插件",
     "installedPersonalPluginsDesc": "已安裝的 bundle 可在後續 Agent 或工作空間設定中啟用。",
     "installedEmptyTitle": "還沒有安裝個人插件",
@@ -1637,7 +1637,7 @@
     "updating": "更新中...",
     "updateAvailableNotice": "{{name}} 有官方 Release {{release}} 可更新。確認後才會應用。",
     "updateUpToDateNotice": "{{name}} 已是最新。",
-    "updateNotOfficialNotice": "{{name}} 不是 TabTin 官方 Release，目前頁面不提供受治理更新。",
+    "updateNotOfficialNotice": "{{name}} 不是 Muse 官方 Release，目前頁面不提供受治理更新。",
     "updateCheckFailedNotice": "檢查 {{name}} 更新失敗：{{message}}",
     "confirmUpdatePrompt": "將 {{name}} 從 {{current}} 更新到 {{next}}？",
     "updateSuccessNotice": "{{name}} 已更新至 {{release}}。",
@@ -1743,10 +1743,10 @@
     "userSubtitle": "選擇哪些類型的通知要提醒你，應用到你的所有團隊",
     "refreshPermission": "刷新通知權限狀態",
     "categoryToggle": "{{category}} 通知",
-    "permissionsSubtitle": "管理系統通知，以及 macOS / Windows 給 TabTin 的系統權限",
+    "permissionsSubtitle": "管理系統通知，以及 macOS / Windows 給 Muse 的系統權限",
     "notificationsSectionDesc": "選擇哪些類型的通知要提醒你，關閉的類型將保持安靜",
     "otherPermsSection": "其他權限",
-    "otherPermsDesc": "macOS / Windows 給予 TabTin 的系統權限",
+    "otherPermsDesc": "macOS / Windows 給予 Muse 的系統權限",
     "rulesSubtitle": "管理員配置事件如何轉換為組織通知",
     "prefsMovedHint": "通知偏好（桌面橫幅、聲音、免打擾等）已搬到「個人 → 偏好 → 通知」，這裡只配置組織的通知規則。",
     "rules": "通知規則",
@@ -1818,7 +1818,7 @@
     "permissionGranted": "系統通知權限已授權",
     "permissionDenied": "系統通知已停用，請在系統偏好設定中開啟",
     "permissionProvisional": "系統通知目前為臨時授權，可能會以靜默方式投遞",
-    "permissionRestricted": "系統通知受系統限制，目前無法為 TabTin 開啟",
+    "permissionRestricted": "系統通知受系統限制，目前無法為 Muse 開啟",
     "permissionNotDetermined": "系統通知尚未做出授權選擇，請先發送通知或在系統設定中檢查",
     "permissionUnsupported": "目前系統不支援桌面通知",
     "permissionUnknown": "無法偵測系統通知權限",
@@ -1996,7 +1996,7 @@
     },
     "envImport": {
       "title": "從 .env 貼上導入",
-      "description": "把你的 .env 檔案內容貼進來，TabTin 會自動辨識出常見 AI 服務",
+      "description": "把你的 .env 檔案內容貼進來，Muse 會自動辨識出常見 AI 服務",
       "textLabel": ".env 內容",
       "recognized": "辨識到 {{count}} 個變數",
       "selectAll": "全選",
@@ -2034,7 +2034,7 @@
       "close": "關閉",
       "closeTooltip": "本次會話內隱藏，下次啟動還會出現",
       "alsoImportPasswords": "同時導入已儲存的密碼",
-      "passwordSecurityNotice": "密碼加密保存在你的帳號下，TabTin 團隊無法看到。",
+      "passwordSecurityNotice": "密碼加密保存在你的帳號下，Muse 團隊無法看到。",
       "noBrowsersDetected": "未偵測到已安裝的瀏覽器",
       "openCredentialsSettings": "前往「瀏覽器」設定",
       "manualSettingsHint": "你也可以前往「設定 → 裝置 → 瀏覽器」管理登入態或匯入 JSON 文件",
@@ -2051,7 +2051,7 @@
     },
     "legacyMigration": {
       "title": "整理跨工作空間登入數據",
-      "subtitle": "把舊版各工作空間的登入狀態移到新的共享環境（僅複製，不刪除原資料）。 TabTin 會在首次啟動時自動整理；這個按鈕只在跨工作空間共享異常時手動重試。",
+      "subtitle": "把舊版各工作空間的登入狀態移到新的共享環境（僅複製，不刪除原資料）。 Muse 會在首次啟動時自動整理；這個按鈕只在跨工作空間共享異常時手動重試。",
       "loading": "載入狀態中…",
       "notRunYet": "本機尚未運作過整理。",
       "lastRun": "上次運行：{{time}}",
@@ -2171,7 +2171,7 @@
       "saveAsNewAction": "儲存新帳號",
       "neverAction": "不為此網站保存",
       "dismissAction": "關閉",
-      "securityHint": "密碼將加密保存，TabTin 團隊無法查看",
+      "securityHint": "密碼將加密保存，Muse 團隊無法查看",
       "saveSuccess": "密碼已儲存",
       "updateSuccess": "密碼已更新",
       "saveFailed": "儲存失敗，請稍後重試",
@@ -2236,7 +2236,7 @@
       "deleted": "網站憑證已刪除",
       "deleteFailed": "刪除失敗",
       "confirmImportTitle": "確認導入密碼",
-      "confirmImportDescription": "將從 {{browser}} 讀取已儲存的密碼並加密儲存到 TabTin。此操作需要 macOS Keychain 授權。",
+      "confirmImportDescription": "將從 {{browser}} 讀取已儲存的密碼並加密儲存到 Muse。此操作需要 macOS Keychain 授權。",
       "extractedCount": "發現 {{count}} 個已儲存的網站密碼",
       "selectAll": "全選",
       "deselectAll": "取消全選",
@@ -2285,7 +2285,7 @@
       "pickerSearchPlaceholder": "搜尋 App 名稱或套件名稱…",
       "pickerNoApps": "未取得已安裝的 App",
       "pickerNoMatch": "沒有符合的 App",
-      "pickerDeviceOffline": "裝置未連線或未回應，請確保手機已連線 TabTin 並處於亮幕狀態",
+      "pickerDeviceOffline": "裝置未連線或未回應，請確保手機已連線 Muse 並處於亮幕狀態",
       "pickerUnknownError": "取得應用程式清單失敗，請稍後重試",
       "loadFailed": "載入 App 憑證失敗",
       "appName": "應用程式名稱",
@@ -2459,7 +2459,7 @@
       "ready": "你的字庫 / 上下文 / 規則正在讓辨識比通用 ASR 更準"
     },
     "statsVocabLabel": "詞庫",
-    "statsVocabHint": "私人 + TabTin 內置",
+    "statsVocabHint": "私人 + Muse 內置",
     "statsContextLabel": "情境",
     "statsContextHint": "{{count}} 項已啟用",
     "statsRulesLabel": "修正規則",
@@ -2471,7 +2471,7 @@
     "vocabDuplicate": "「{{word}}」已在詞庫中，無需重複添加",
     "vocabEmpty": "還沒加詞。試著加上你的名字或常用項目名",
     "vocabRemove": "移除「{{word}}」",
-    "vocabPlatformToggle": "另有 {{count}} 個 TabTin 內建術語自動增強",
+    "vocabPlatformToggle": "另有 {{count}} 個 Muse 內建術語自動增強",
     "vocabPlatformFooter": "這些字詞無需手動維護，辨識時自動啟用",
     "contextSection": "即時情境",
     "contextHint": "錄音時這些訊息會一起發給辨識引擎，幫助它更懂你當下在說什麼",
@@ -2551,7 +2551,7 @@
     "largeFiles": "大文件",
     "largeFilesDesc": "佔空間最多的文件",
     "noLargeFiles": "暫無大於 1MB 的文件",
-    "emptyState": "還沒有文件，開始使用 TabTin 後這裡會顯示儲存分佈",
+    "emptyState": "還沒有文件，開始使用 Muse 後這裡會顯示儲存分佈",
     "errorState": "載入失敗，請稍後重試",
     "footnote": "目前統計包含圖片、影片、文檔附件等檔案；協作引擎資料（版本歷史等）的計量將在後續版本推出",
     "viewDetails": "看詳情",
@@ -2800,7 +2800,7 @@
     "detailEmpty": "選擇左側的 AI 分身檢視檔案",
     "editAvatarAction": "編輯頭像",
     "editAvatarTitle": "編輯頭像",
-    "avatarPresetHint": "暫不支援上傳，請從 TabTin 品牌頭像中選擇。",
+    "avatarPresetHint": "暫不支援上傳，請從 Muse 品牌頭像中選擇。",
     "avatarLabel": "頭像",
     "avatarSaveAction": "儲存",
     "avatarSaveSuccess": "頭像已更新",

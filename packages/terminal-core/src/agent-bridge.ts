@@ -27,7 +27,7 @@
  *   - D5：不加 Agent 视觉标识（`source: 'agent'` 仅作数据层标识）
  *   - D6：未上线，不做兼容性。shell bridge 未注入 → 启动失败
  *   - D7：不留 MVP / 中间态。本契约自身就是上线即成熟版
- *   - D8：TabTin 不做 MCP 输出——4 件套 MCP 暴露已在 WP5 删除
+ *   - D8：Muse 不做 MCP 输出——4 件套 MCP 暴露已在 WP5 删除
  *   - D9：暂不做跨设备执行。`PtyManagerBridge` 仅作本机两端（Electron /
  *     Daemon）的协议对齐，**不**为未来"远端执行环境"做超前抽象
  *   - D10：`DEFAULT_AGENT_COMMAND_TIMEOUT_MS = 120_000` 单源（常见 agent shell 超时共识），两端实现 + ShellCap 默认值
@@ -439,7 +439,7 @@ export interface AgentSpawnDetachedResult {
    * 路径建议：`{tmpdir}/tabtin-agent-tasks/{sessionId}.log`。
    *
    * **ShellCap 上层映射**：本字段值应填进 envelope 的 `output_file` 字段
-   * （沿用现有 `runInBackground` 路径的 TabTin Shell 契约 + macOS realpath
+   * （沿用现有 `runInBackground` 路径的 Muse Shell 契约 + macOS realpath
    * 兜底语义，与 `read-file-state.ts:327-348` 的 `canonicalizePath` 配对，
    * 保证 LLM 后续 `read_file` 调用时 dedup key 命中同一条目）。
    * **不要塞 `persisted_output_path`**——后者是 foreground 大输出 64KB

@@ -480,7 +480,7 @@ export function normalizeLineEndings(text: string): string {
  * read 成功后写 readFileState。如果 ctx.readFileState 未注入则 no-op
  * （兼容旧测试 / 未启用加固的宿主）。
  *
- * **W2（2026-05-10）**：删除 `isPartialView` 参数。TabTin 没有 nested memory
+ * **W2（2026-05-10）**：删除 `isPartialView` 参数。Muse 没有 nested memory
  * 自动注入路径，该字段无合理用途。partial vs full read 的语义靠
  * `(offset, limit)` 元组区分：read 写入时 `offset` 总有值（默认 1）；
  * edit/write 后的 `refreshSnapshot` 不传 offset/limit（隐式 reset 为
@@ -657,7 +657,7 @@ export async function validateReadBeforeWrite(
  *      partial read（offset !== undefined || limit !== undefined）+ mtime 漂移
  *      → throw（不享受 content 兜底）。异步入口校验只看 content 字面相等就放
  *      行（不要求 isFullRead），是 W2「软放行」语义。
- *      TabTin `read_file` 默认场景 entry 写入 `offset=1` 而非 undefined，导致
+ *      Muse `read_file` 默认场景 entry 写入 `offset=1` 而非 undefined，导致
  *      read 后云盘抖动场景下入口放行、写盘前会拦 —— 是有意的 trade-off
  *      （Wave 2 Round 1 reviewer 1 抓到，登记到「实施记录」+「已知风险」段）。
  *

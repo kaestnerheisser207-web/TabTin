@@ -1,7 +1,7 @@
 {
   "name": "@tabtin/config",
   "version": "0.1.0",
-  "description": "Shared runtime configuration for TabTin apps and packages",
+  "description": "Shared runtime configuration for Muse apps and packages",
   "type": "module",
   "main": "dist/index.js",
   "module": "dist/index.js",
@@ -23,11 +23,11 @@
     "clean": "rm -rf dist"
   },
   "keywords": [
-    "tabtin",
+    "muse",
     "config",
     "runtime"
   ],
-  "author": "TabTin Team",
+  "author": "Muse Team",
   "license": "MIT",
   "devDependencies": {
     "typescript": "5.7.2"

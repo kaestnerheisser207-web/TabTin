@@ -1,7 +1,7 @@
 /**
  * CanvasGridAdapter
  *
- * Adapts TabTin's TableGridRendererProps contract to Teable's Grid component.
+ * Adapts Muse's TableGridRendererProps contract to Teable's Grid component.
  * This is the bridge layer that lets us use Teable's canvas grid as our rendering engine.
  *
  * Data flow:
@@ -1499,7 +1499,7 @@ function clipboardEscapeTsv(value: string): string {
 }
 
 // ---------------------------------------------------------------------------
-// Group extraction: convert TabTin's flat row array (with __rowType markers)
+// Group extraction: convert Muse's flat row array (with __rowType markers)
 // into Teable's { dataRows, groupPoints, collapsedGroupIds } structure
 // ---------------------------------------------------------------------------
 interface GroupFieldMeta {
@@ -3752,7 +3752,7 @@ export const CanvasGridAdapter = forwardRef<IGridRef, CanvasGridAdapterProps>(
         e.preventDefault()
         e.clipboardData?.setData?.('text/plain', tsvText)
 
-        // HTML channel: embed raw cell values so paste within TabTin can
+        // HTML channel: embed raw cell values so paste within Muse can
         // reconstruct typed values. Controlled by config.clipboard.includeHtml
         // (defaults to true).
         let html: string | undefined

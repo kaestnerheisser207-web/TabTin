@@ -1,6 +1,6 @@
 # tabtin-filegen
 
-随 `tabtin` CLI 一起分发的文件生成工具，从 JSON spec 生成 **xlsx / docx / pptx / pdf**。
+随 `muse` CLI 一起分发的文件生成工具，从 JSON spec 生成 **xlsx / docx / pptx / pdf**。
 
 - 承接  / ：agent-runtime 只发布 `local_file` artifact，不生成内容；本工具就是 PRD 里说的「外部生成工具」。
 - 用成熟宽松许可证库：`openpyxl`(MIT) / `python-docx`(MIT) / `python-pptx`(MIT) / `reportlab`(BSD)。
@@ -14,7 +14,7 @@
 
 ## 用法
 
-> Agent 不直接调本二进制——统一走 Go CLI 代理 `tabtin file create / schema / list-types`
+> Agent 不直接调本二进制——统一走 Go CLI 代理 `muse file create / schema / list-types`
 > （内部透传到这里）。下面的 `tabtin-filegen ...` 是底层等价形式，便于本地调试。
 
 ```bash

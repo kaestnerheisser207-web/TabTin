@@ -52,7 +52,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.tabtin.mobile.R
+import com.muse.mobile.R
 import com.tabtin.mobile.data.model.Space
 import com.tabtin.mobile.data.model.SpaceResource
 import com.tabtin.mobile.features.doc.DocumentQuotaExceededDialog

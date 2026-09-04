@@ -8,7 +8,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/TabTin/tabtin-cli/internal/config"
+	"github.com/Muse/muse-cli/internal/config"
 )
 
 const maxDiscoveryFileAge = 7 * 24 * time.Hour
@@ -22,7 +22,7 @@ type discoveryFile struct {
 
 // discoveryFiles 是 ~/.tabtin/ 下 CLI Server 发现文件的优先级（Alive PID + 有效 sock/token 才命中）。
 //
-// Electron 优先于 Daemon（BR-20）：用户在 Electron 里和 Agent 对话时，期望 tabtin browser 等命令
+// Electron 优先于 Daemon（BR-20）：用户在 Electron 里和 Agent 对话时，期望 muse browser 等命令
 // 走内嵌浏览器（server.json / dev-server.json），而不是 Daemon 无头 Playwright（daemon-server.json）。
 // 仅 Electron 未运行时才会落到 Daemon。显式 TABTIN_SOCK 仍覆盖一切。
 var discoveryFiles = []string{
@@ -46,7 +46,7 @@ func discoveryDebugf(format string, args ...any) {
 //
 // **默认关闭** —— 因为 Django 后端 envelope 迁移（cli-migration-plan.md 阶段 2）还没完成，
 // 大量旧 endpoint 仍返回 {success, data} 旧 envelope。如果默认开启，所有调旧 endpoint 的
-// 命令（tabtin table list 等）会返回 LEGACY_SHAPE 错误，把现有 CLI 全部打废。
+// 命令（muse table list 等）会返回 LEGACY_SHAPE 错误，把现有 CLI 全部打废。
 //
 // 开启方式：export TABTIN_STRICT_ENVELOPE=1
 //   - 用于测试新写的命令是否符合规范

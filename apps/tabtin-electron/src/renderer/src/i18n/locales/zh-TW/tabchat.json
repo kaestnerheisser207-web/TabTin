@@ -302,7 +302,7 @@
   "insertEmoji": "表情",
   "emojiMostUsed": "最近使用",
   "emojiDefault": "預設表情",
-  "emojiTabtin": "TabTin",
+  "emojiTabtin": "Muse",
   "openStickerPreview": "打開貼紙預覽",
   "stickers": {
     "neutral": "小機器人",
@@ -477,7 +477,13 @@
   "sendToIMErrorNoteFailed": "留言發送失敗",
   "sendToIMErrorSendFailed": "發送失敗",
   "sendToIMSuccessToast": "已成功傳送至 {{count}} 個目標",
-  "replyThread": { "title": "回覆詳情", "close": "關閉回覆詳情", "empty": "尚無已載入的回覆", "messageUnavailable": "訊息內容不可用", "openImage": "開啟圖片預覽" },
+  "replyThread": {
+    "title": "回覆詳情",
+    "close": "關閉回覆詳情",
+    "empty": "尚無已載入的回覆",
+    "messageUnavailable": "訊息內容不可用",
+    "openImage": "開啟圖片預覽"
+  },
   "externalContacts": {
     "tabs": {
       "internal": "組織成員",

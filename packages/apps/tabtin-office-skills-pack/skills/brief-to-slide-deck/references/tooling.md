@@ -19,14 +19,14 @@ Read these when the source material needs retrieval:
 ## Canonical TabSlide Flow
 
 ```bash
-tabtin slide create --name "<deck name>" --html @./slides.html
-tabtin slide lint --project-id <project-id> --skip-visual --min-severity warning
+muse slide create --name "<deck name>" --html @./slides.html
+muse slide lint --project-id <project-id> --skip-visual --min-severity warning
 ```
 
 Use preview only when needed:
 
 ```bash
-tabtin slide preview --project-id <project-id>
+muse slide preview --project-id <project-id>
 ```
 
 ## Guardrails

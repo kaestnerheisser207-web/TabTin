@@ -1,8 +1,8 @@
-"""Tabtin Space daemon 路由。"""
+"""Muse Space daemon 路由。"""
 
 from .shared import *  # noqa: F401,F403
 
-router = Router(tags=["Tabtin Space"])
+router = Router(tags=["Muse Space"])
 
 @router.post("/devices/install-token", auth=jwt_auth, response={200: dict, 403: ErrorResponse})
 def create_install_token(request: HttpRequest, payload: DaemonInstallTokenCreate):

@@ -2,7 +2,7 @@
  * TabDocCapabilityBanner — 文档首页的「让 AI 帮你处理文档」介绍区
  *
  * featured 示例卡来自 CLI 生成的 tabdoc-capabilities.json（curated NL prompt）；
- * 「查看全部」在当前列表内展示全部 showcase CLI 能力（help 驱动，与 tabtin doc 一一对应）。
+ * 「查看全部」在当前列表内展示全部 showcase CLI 能力（help 驱动，与 muse doc 一一对应）。
  */
 
 import React, { useCallback } from 'react'

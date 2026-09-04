@@ -1,7 +1,7 @@
 {
   "name": "minimal-codex-plugin",
   "version": "0.1.0",
-  "description": "Minimal Codex plugin fixture for TabTin official release installation.",
+  "description": "Minimal Codex plugin fixture for Muse official release installation.",
   "repository": "https://github.com/larchiveai/tabtin-official-plugin-fixtures",
   "skills": "./skills/",
   "mcpServers": {

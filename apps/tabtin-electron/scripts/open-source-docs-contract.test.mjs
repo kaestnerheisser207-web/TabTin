@@ -118,14 +118,14 @@ test('root READMEs front-load the hosted service and business contact', () => {
   for (const entry of [
     {
       file: 'README.md',
-      boundary: '## 为什么做 TabTin',
-      website: '[访问 TabTin 官网](https://tabtin.com/)',
+      boundary: '## 为什么做 Muse',
+      website: '[访问 Muse 官网](https://tabtin.com/)',
       business: '[contact@larchiveai.com](mailto:contact@larchiveai.com)',
     },
     {
       file: 'README.en.md',
-      boundary: '## Why TabTin',
-      website: '[Visit the TabTin website](https://tabtin.com/)',
+      boundary: '## Why Muse',
+      website: '[Visit the Muse website](https://tabtin.com/)',
       business: '[contact@larchiveai.com](mailto:contact@larchiveai.com)',
     },
   ]) {

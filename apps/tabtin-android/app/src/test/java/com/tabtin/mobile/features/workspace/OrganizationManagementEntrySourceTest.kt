@@ -1,5 +1,7 @@
 package com.tabtin.mobile.features.workspace
 
+import com.muse.mobile.R
+
 import java.io.File
 import org.junit.Assert.assertTrue
 import org.junit.Test

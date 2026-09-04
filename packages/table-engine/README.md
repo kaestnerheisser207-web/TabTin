@@ -1,6 +1,6 @@
 # @tabtin/table-engine
 
-Unified grid engine contracts for TabTin table rendering.
+Unified grid engine contracts for Muse table rendering.
 
 ## Scope
 - Shared renderer props and data structures

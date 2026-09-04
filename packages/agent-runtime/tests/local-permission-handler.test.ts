@@ -126,7 +126,7 @@ describe('LocalPermissionHandler.requestPermissionsBatch · APPROVAL_REQUESTED p
       waitForUserInput: harness.waitForUserInput,
     })
 
-    const toolInput = { search_term: 'tabtin', explanation: '了解 tabtin 是什么' }
+    const toolInput = { search_term: 'muse', explanation: '了解 muse 是什么' }
     const { decision } = await runSinglePermission(
       handler,
       buildRequest('web_search', toolInput, true),
@@ -234,7 +234,7 @@ describe('LocalPermissionHandler.requestPermissionsBatch · APPROVAL_REQUESTED p
 
   it('search_term 字段会被 extractOperationSummary 识别成 query（产品 review 反馈修复）', async () => {
     // 修前 description 会落成 JSON.stringify(toolInput)；
-    // 修后 description 应渲染为"查询：tabtin"——用户看得懂的人话。
+    // 修后 description 应渲染为"查询：muse"——用户看得懂的人话。
     const harness = makeHarness()
     const handler = new LocalPermissionHandler({
       emitStreamEvent: harness.emit,
@@ -243,12 +243,12 @@ describe('LocalPermissionHandler.requestPermissionsBatch · APPROVAL_REQUESTED p
 
     await runSinglePermission(
       handler,
-      buildRequest('web_search', { search_term: 'tabtin', explanation: 'foo' }, true),
+      buildRequest('web_search', { search_term: 'muse', explanation: 'foo' }, true),
     )
     const ar = ((harness.events.find(
       e => e.type === StreamEvents.APPROVAL_REQUESTED,
     )!.payload as Record<string, unknown>).action_requests as Array<Record<string, unknown>>)[0]
-    expect(ar.description).toBe('查询：tabtin')
+    expect(ar.description).toBe('查询：muse')
   })
 
   it('skill_invoke 的 {skill, args} 渲染成人话而非裸 JSON', async () => {

@@ -1,4 +1,4 @@
-"""Tabtin Space device schemas。"""
+"""Muse Space device schemas。"""
 
 from .common import *  # noqa: F401,F403
 

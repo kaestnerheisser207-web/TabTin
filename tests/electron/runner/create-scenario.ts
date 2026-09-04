@@ -228,7 +228,7 @@ function suggestDataSetup(domain: string, title: string, startState: string): st
   if (domain === "tabdoc" && /搜索|search|ctrl\+?f|f5/i.test(title)) {
     return [
       `准备登录态和目标 Space：${startState}`,
-      "创建一篇包含“TabTin 搜索测试关键词”的 run-scoped TabDoc 文档。",
+      "创建一篇包含“Muse 搜索测试关键词”的 run-scoped TabDoc 文档。",
     ];
   }
   return [
@@ -242,7 +242,7 @@ function suggestUserActions(domain: string, title: string): string[] {
     return [
       "点击打开目标 TabDoc 文档。",
       "按下 Ctrl+F 打开文档搜索框。",
-      "输入搜索关键词“TabTin 搜索测试关键词”。",
+      "输入搜索关键词“Muse 搜索测试关键词”。",
       "确认界面定位并高亮匹配内容。",
     ];
   }

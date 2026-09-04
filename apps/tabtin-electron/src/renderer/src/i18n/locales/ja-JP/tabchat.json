@@ -302,10 +302,10 @@
   "insertEmoji": "絵文字",
   "emojiMostUsed": "最近使用した",
   "emojiDefault": "デフォルトの絵文字",
-  "emojiTabtin": "TabTin",
+  "emojiTabtin": "Muse",
   "openStickerPreview": "ステッカーのプレビューを開く",
   "stickers": {
-    "neutral": "TabTin ボット",
+    "neutral": "Muse ボット",
     "happy": "ハッピー",
     "sad": "悲しい",
     "surprise": "サプライズ",
@@ -477,7 +477,13 @@
   "sendToIMErrorNoteFailed": "メモの送信に失敗しました",
   "sendToIMErrorSendFailed": "送信に失敗しました",
   "sendToIMSuccessToast": "{{count}} ターゲットに送信",
-  "replyThread": { "title": "返信の詳細", "close": "返信の詳細を閉じる", "empty": "読み込み済みの返信はありません", "messageUnavailable": "メッセージは利用できません", "openImage": "画像プレビューを開く" },
+  "replyThread": {
+    "title": "返信の詳細",
+    "close": "返信の詳細を閉じる",
+    "empty": "読み込み済みの返信はありません",
+    "messageUnavailable": "メッセージは利用できません",
+    "openImage": "画像プレビューを開く"
+  },
   "externalContacts": {
     "tabs": {
       "internal": "メンバー",

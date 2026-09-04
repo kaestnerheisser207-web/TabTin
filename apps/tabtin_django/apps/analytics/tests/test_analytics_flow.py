@@ -66,8 +66,8 @@ class ShortLinkResolveTest(TestCase):
             platform="mac",
             arch="arm64",
             channel="stable",
-            file_url="https://cdn.example.com/TabTin-2.0.0-arm64-mac.zip",
-            website_file_url="https://cdn.example.com/TabTin-2.0.0-arm64.dmg",
+            file_url="https://cdn.example.com/Muse-2.0.0-arm64-mac.zip",
+            website_file_url="https://cdn.example.com/Muse-2.0.0-arm64.dmg",
             is_draft=False,
             published_at=timezone.now(),
         )
@@ -81,7 +81,7 @@ class ShortLinkResolveTest(TestCase):
         )
         self.assertEqual(
             services.resolve_short_link_target(link),
-            "https://cdn.example.com/TabTin-2.0.0-arm64.dmg",
+            "https://cdn.example.com/Muse-2.0.0-arm64.dmg",
         )
 
     def test_record_download_increments_and_logs(self):

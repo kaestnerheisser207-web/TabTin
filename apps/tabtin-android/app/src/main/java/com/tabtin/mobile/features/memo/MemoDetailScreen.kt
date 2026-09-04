@@ -56,7 +56,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
-import com.tabtin.mobile.R
+import com.muse.mobile.R
 import com.tabtin.mobile.data.model.memo.AttachmentOut
 import com.tabtin.mobile.data.model.memo.CollectionBriefOut
 import com.tabtin.mobile.data.model.memo.MemoDetail

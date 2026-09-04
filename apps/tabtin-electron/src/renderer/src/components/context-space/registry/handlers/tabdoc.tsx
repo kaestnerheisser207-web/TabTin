@@ -51,7 +51,7 @@ export const tabdocHandler: ContextTypeHandler = {
     displayName: '文档',
     capability: '叙事性长文档与协作内容（标题 / 段落 / 列表 / 引用 / 代码块 / 评论），适合报告、设计文档、需求 spec、会议纪要。',
     aliases: ['doc', '文章', '长文'],
-    // backendAliases[0]='document' 是后端 item_type 别名，真实 CLI 是 `tabtin doc`。
+    // backendAliases[0]='document' 是后端 item_type 别名，真实 CLI 是 `muse doc`。
     cliKey: 'doc',
   },
   // `doc` 是 present_to_user / agent-runtime 常用别名；与 parseResourcePointer

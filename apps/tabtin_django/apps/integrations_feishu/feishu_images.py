@@ -1,4 +1,4 @@
-"""飞书 Docx 图片：从 blocks / Markdown 引用转存到 TabTin OSS。"""
+"""飞书 Docx 图片：从 blocks / Markdown 引用转存到 Muse OSS。"""
 
 from __future__ import annotations
 

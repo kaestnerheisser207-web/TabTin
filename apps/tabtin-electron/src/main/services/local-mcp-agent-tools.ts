@@ -32,7 +32,7 @@ function selectorOf(input: ServerSelectorInput): { serverName?: string; connecti
  * W3 MCP 单入口收敛：只保留 mcp_call_tool 一个 FC 工具。
  *
  * 其余 6 个查询型操作（list-servers / list-tools / list-resources /
- * list-prompts / read-resource / get-prompt）全部迁到 `tabtin mcp` CLI
+ * list-prompts / read-resource / get-prompt）全部迁到 `muse mcp` CLI
  * 命令族，LLM 通过 run_terminal_command 调用。
  *
  * 收益：LLM prompt schema 从 7 个 MCP 工具缩减到 1 个。

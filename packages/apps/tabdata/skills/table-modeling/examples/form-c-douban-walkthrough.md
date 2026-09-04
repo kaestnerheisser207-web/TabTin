@@ -15,7 +15,7 @@
    `link` 字段的 `options.foreignTableId` 必填，目标表必须已存在。
 2. **写 link 字段值时，演员的 `record_id` 必须先拿到**
    `record upsert` 当前**只返回计数、不返回 record_id 映射**（CLI `record upsert --help` 已写明）。
-   要拿映射就在 upsert 之后用 `tabtin table record list --page-size 1000` 重拉一次，按业务键建索引。
+   要拿映射就在 upsert 之后用 `muse table record list --page-size 1000` 重拉一次，按业务键建索引。
 3. **批量建字段（`field bulk-add` / `table create --fields` 含 link）**
    普通字段可以批量创建；link 单独用 `table link create`，便于核对目标表和双向关系。
 4. **双向 link 自动建对称字段**——别手工在子表上再加一个反向 link，会重复。
@@ -34,7 +34,7 @@ User:  ② 双表
 ### 5.3 阶段 1：建表（先子表后主表，再建 link）
 
 ```bash
-tabtin table create --name "豆瓣演员" --fields '[
+muse table create --name "豆瓣演员" --fields '[
   {"name":"姓名","field_type":"text"},
   {"name":"豆瓣ID","field_type":"text","description":"用于去重的业务键"},
   {"name":"角色类型","field_type":"multi_select","options":{"choices":["导演","主演","编剧"]}},
@@ -42,7 +42,7 @@ tabtin table create --name "豆瓣演员" --fields '[
 ]'
 ACTOR_TABLE_ID=<上一行返回的 table_id>
 
-tabtin table create --name "豆瓣Top250" --fields '[
+muse table create --name "豆瓣Top250" --fields '[
   {"name":"电影名","field_type":"text"},
   {"name":"豆瓣ID","field_type":"text"},
   {"name":"评分","field_type":"number","options":{"precision":1}},
@@ -50,7 +50,7 @@ tabtin table create --name "豆瓣Top250" --fields '[
 ]'
 MOVIE_TABLE_ID=<上一行返回的 table_id>
 
-tabtin table link create --table-id $MOVIE_TABLE_ID \
+muse table link create --table-id $MOVIE_TABLE_ID \
   --name "演职员" --foreign-table-id $ACTOR_TABLE_ID --relationship ManyMany
 LINK_FIELD_ID=<上一行返回的 field_id>
 # 等价旧写法：field add --field-type link --options '{"foreignTableId":"...","relationship":"ManyMany","isOneWay":false}'
@@ -58,7 +58,7 @@ LINK_FIELD_ID=<上一行返回的 field_id>
 
 > 想用 bulk-add 一次建多个普通字段也可以，**但 link 单独走一条命令**最稳：
 > ```bash
-> tabtin table field bulk-add --table-id $MOVIE_TABLE_ID --fields '[
+> muse table field bulk-add --table-id $MOVIE_TABLE_ID --fields '[
 >   {"name":"封面","field_type":"attachment"},
 >   {"name":"片长","field_type":"number"},
 >   {"name":"上映时间","field_type":"date"}
@@ -68,7 +68,7 @@ LINK_FIELD_ID=<上一行返回的 field_id>
 ### 5.4 阶段 2：先把演员去重写入（upsert，业务键= 豆瓣ID）
 
 ```bash
-tabtin table record upsert \
+muse table record upsert \
   --table-id $ACTOR_TABLE_ID \
   --records '[
     {"姓名":"梁朝伟","豆瓣ID":"1041006","角色类型":["主演"],
@@ -87,7 +87,7 @@ tabtin table record upsert \
 > /tmp/actor_index.jsonl
 page=1
 while true; do
-  resp=$(tabtin table record list --table-id $ACTOR_TABLE_ID \
+  resp=$(muse table record list --table-id $ACTOR_TABLE_ID \
     --page $page --page-size 1000 --format json)
   count=$(echo "$resp" | jq '.data.records | length')
   [ "$count" = "0" ] && break
@@ -108,7 +108,7 @@ jq -s 'map({(.key): .rid}) | add' /tmp/actor_index.jsonl > /tmp/actor_index.json
 ACTOR_LIANG=$(jq -r '."1041006"' /tmp/actor_index.json)
 ACTOR_LIU=$(jq   -r '."1041010"' /tmp/actor_index.json)
 
-tabtin table record bulk-insert \
+muse table record bulk-insert \
   --table-id $MOVIE_TABLE_ID \
   --records "[
     {\"电影名\":\"无间道\",\"豆瓣ID\":\"1307914\",\"评分\":9.3,\"年份\":2002,
@@ -119,12 +119,12 @@ tabtin table record bulk-insert \
 ### 5.7 阶段 5：验证 + 复述
 
 ```bash
-tabtin table query 'SELECT COUNT(*) FROM "豆瓣Top250"'
-tabtin table query 'SELECT COUNT(*) FROM "豆瓣演员"'
+muse table query 'SELECT COUNT(*) FROM "豆瓣Top250"'
+muse table query 'SELECT COUNT(*) FROM "豆瓣演员"'
 
 # 抽样：演员反查（对称字段名由 LinkFieldService 自动生成，
-# 实际名字以 tabtin table field list --table-id $ACTOR_TABLE_ID 为准）
-tabtin table query "
+# 实际名字以 muse table field list --table-id $ACTOR_TABLE_ID 为准）
+muse table query "
   SELECT \"姓名\" FROM \"豆瓣演员\" WHERE \"姓名\" = '梁朝伟' LIMIT 1
 "
 ```

@@ -65,7 +65,7 @@ def _device_only_timeout_payload(action_type: str, timeout: int) -> Dict[str, An
     return {
         "success": False,
         "error": (
-            f"{label}等待 TabTin Daemon 返回结果超时（{timeout}s）。"
+            f"{label}等待 Muse Daemon 返回结果超时（{timeout}s）。"
             "请确认后台设备仍在线且已上报对应视频能力；任务可能仍在后台运行，"
             "可稍后查看项目状态，或刷新设备能力后重试。"
         ),
@@ -82,7 +82,7 @@ def _device_only_publish_failure_payload(action_type: str) -> Dict[str, Any] | N
     return {
         "success": False,
         "error": (
-            f"{label}任务未能下发到 TabTin Daemon。"
+            f"{label}任务未能下发到 Muse Daemon。"
             "请确认后台设备在线、已绑定到当前 Agent，并刷新设备能力后重试。"
         ),
         "error_code": "VIDEO_DEVICE_DELIVERY_FAILED",

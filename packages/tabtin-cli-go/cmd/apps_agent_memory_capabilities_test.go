@@ -1,5 +1,5 @@
 // apps_agent_memory_capabilities_test.go — 钉死 docs/agent/cli-capabilities/agent-memory-cli-capabilities.md
-// 里的 `tabtin agent memory ...` 示例跟 cobra 命令树不漂移（ W4b）。
+// 里的 `muse agent memory ...` 示例跟 cobra 命令树不漂移（ W4b）。
 //
 // 与 apps_memo_capabilities_test.go 的差异：Agent 记忆是**两词前缀**（agent memory），
 // 通用 assertCapabilitiesDocResolves 的 parseToolCmd 只支持单词 tool，故这里自带解析。
@@ -12,18 +12,18 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/TabTin/tabtin-cli/cmd/agent"
-	"github.com/TabTin/tabtin-cli/internal/cmdutil"
+	"github.com/Muse/muse-cli/cmd/agent"
+	"github.com/Muse/muse-cli/internal/cmdutil"
 )
 
 const agentMemoryCapabilitiesRelPath = "../../../docs/agent/cli-capabilities/agent-memory-cli-capabilities.md"
 
-// parseAgentMemoryCmd 把一条 `tabtin agent memory <verb> <args> --flag` 拆成 subPath + flags。
+// parseAgentMemoryCmd 把一条 `muse agent memory <verb> <args> --flag` 拆成 subPath + flags。
 // 与 parseToolCmd 同构，但认「agent memory」两词前缀。
 func parseAgentMemoryCmd(line string) (subPath []string, flags []string) {
 	line = placeholderRe.ReplaceAllString(line, "__placeholder__")
 	tokens := strings.Fields(line)
-	if len(tokens) < 3 || tokens[0] != "tabtin" || tokens[1] != "agent" || tokens[2] != "memory" {
+	if len(tokens) < 3 || tokens[0] != "muse" || tokens[1] != "agent" || tokens[2] != "memory" {
 		return nil, nil
 	}
 	subPath = []string{"agent", "memory"}
@@ -49,7 +49,7 @@ func parseAgentMemoryCmd(line string) (subPath []string, flags []string) {
 
 func TestAgentMemoryCapabilitiesDocResolves(t *testing.T) {
 	f := cmdutil.NewFactory()
-	root := &cobra.Command{Use: "tabtin"}
+	root := &cobra.Command{Use: "muse"}
 	registerRootPersistentFlagsForTest(root)
 	agentCmd := agent.NewCmdAgent(f)
 	agentCmd.AddCommand(newCmdAgentMemory(f))
@@ -61,9 +61,9 @@ func TestAgentMemoryCapabilitiesDocResolves(t *testing.T) {
 	}
 	commands := extractToolCommandsFromDoc(string(raw), "agent memory")
 	if len(commands) == 0 {
-		t.Fatalf("能力清单 %s 里没抽到任何 `tabtin agent memory ...` 示例——正则或清单有问题", agentMemoryCapabilitiesRelPath)
+		t.Fatalf("能力清单 %s 里没抽到任何 `muse agent memory ...` 示例——正则或清单有问题", agentMemoryCapabilitiesRelPath)
 	}
-	t.Logf("从 %s 抽到 %d 条 `tabtin agent memory ...` 示例", agentMemoryCapabilitiesRelPath, len(commands))
+	t.Logf("从 %s 抽到 %d 条 `muse agent memory ...` 示例", agentMemoryCapabilitiesRelPath, len(commands))
 
 	for _, cmdLine := range commands {
 		subPath, flags := parseAgentMemoryCmd(cmdLine)
@@ -101,11 +101,11 @@ func TestParseAgentMemoryCmdShapes(t *testing.T) {
 		wantPath []string
 		wantFlag []string
 	}{
-		{"tabtin agent memory list --agent-id <agent-id>", []string{"agent", "memory", "list"}, []string{"agent-id"}},
-		{"tabtin agent memory get <memory-id> --agent-id <agent-id>", []string{"agent", "memory", "get"}, []string{"agent-id"}},
-		{"tabtin agent memory correct <memory-id> --agent-id <agent-id> --content \"x\"", []string{"agent", "memory", "correct"}, []string{"agent-id", "content"}},
-		{"tabtin agent memory feedback <memory-id> --agent-id <agent-id> --useful=false", []string{"agent", "memory", "feedback"}, []string{"agent-id", "useful"}},
-		{"tabtin agent memory export --agent-id <agent-id> --export-format json", []string{"agent", "memory", "export"}, []string{"agent-id", "export-format"}},
+		{"muse agent memory list --agent-id <agent-id>", []string{"agent", "memory", "list"}, []string{"agent-id"}},
+		{"muse agent memory get <memory-id> --agent-id <agent-id>", []string{"agent", "memory", "get"}, []string{"agent-id"}},
+		{"muse agent memory correct <memory-id> --agent-id <agent-id> --content \"x\"", []string{"agent", "memory", "correct"}, []string{"agent-id", "content"}},
+		{"muse agent memory feedback <memory-id> --agent-id <agent-id> --useful=false", []string{"agent", "memory", "feedback"}, []string{"agent-id", "useful"}},
+		{"muse agent memory export --agent-id <agent-id> --export-format json", []string{"agent", "memory", "export"}, []string{"agent-id", "export-format"}},
 	}
 	for _, c := range cases {
 		gotPath, gotFlags := parseAgentMemoryCmd(c.input)

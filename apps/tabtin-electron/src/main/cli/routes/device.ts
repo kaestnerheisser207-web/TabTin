@@ -34,7 +34,7 @@ function buildSuggestions(status: number, backendCode?: string): string[] {
   if (backendCode === 'VALIDATION_ERROR' || status === 400 || status === 422) {
     return [
       '请在 Space 终端中执行该命令，或显式传入 --space-id',
-      '可先运行 tabtin capabilities discover "device battery" 查看相关能力入口',
+      '可先运行 muse capabilities discover "device battery" 查看相关能力入口',
     ]
   }
   if (backendCode === 'NOT_FOUND' || status === 404) {

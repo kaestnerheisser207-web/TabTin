@@ -4,7 +4,7 @@
 
 来源拆分：
 - platform: 平台代码预装（``packages/skills/bundled/platform/**/SKILL.md``）—— 不进 Skill 表
-- app: TabTin 自家 App 代码预装（``packages/apps/*/skills/**/SKILL.md``）—— 不进 Skill 表
+- app: Muse 自家 App 代码预装（``packages/apps/*/skills/**/SKILL.md``）—— 不进 Skill 表
 - device: 本机装的 marketplace App / MCP server 自带 —— 不进 Skill 表，
   通过 LocalSkillRegistry 扫描 ``~/.agents/skills/`` 索引
 - user: 用户写 / 导入 / 另存为我的副本 —— 上 Skill 云端表

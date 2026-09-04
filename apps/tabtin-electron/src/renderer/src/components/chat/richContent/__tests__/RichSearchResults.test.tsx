@@ -38,7 +38,7 @@ describe('RichSearchResults', () => {
     const { container } = render(
       <RichSearchResults block={block({
         kind: 'search_results',
-        query: 'tabtin docs',
+        query: 'muse docs',
         total_count: 1,
         search_results: [
           { title: 'TabTin manual', url: 'https://example.com/manual', snippet: 'snippet A' },
@@ -46,7 +46,7 @@ describe('RichSearchResults', () => {
       })} />,
     )
     // 折叠态：header 上的 query 可见，但结果体（标题 / 摘要）不渲染
-    expect(container.textContent).toContain('tabtin docs')
+    expect(container.textContent).toContain('muse docs')
     expect(screen.queryByText('TabTin manual')).toBeNull()
     expect(screen.queryByText('snippet A')).toBeNull()
 
@@ -59,7 +59,7 @@ describe('RichSearchResults', () => {
     const { container } = render(
       <RichSearchResults block={block({
         kind: 'search_results',
-        query: 'tabtin docs',
+        query: 'muse docs',
         total_count: 2,
         search_results: [
           { title: 'TabTin manual', url: 'https://example.com/manual', snippet: 'snippet A' },

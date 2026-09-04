@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# TabTin Client 开发环境启动脚本
+# Muse Client 开发环境启动脚本
 
 set -e
 
@@ -16,7 +16,7 @@ PROJECT_ROOT="$(cd "$(dirname "$0")/../.." && pwd)"
 CLIENT_DIR="$PROJECT_ROOT/apps/tabtin-electron"
 
 echo -e "${BLUE}╔════════════════════════════════════════╗${NC}"
-echo -e "${BLUE}║   TabTin 开发环境启动脚本             ║${NC}"
+echo -e "${BLUE}║   Muse 开发环境启动脚本               ║${NC}"
 echo -e "${BLUE}╚════════════════════════════════════════╝${NC}"
 echo ""
 

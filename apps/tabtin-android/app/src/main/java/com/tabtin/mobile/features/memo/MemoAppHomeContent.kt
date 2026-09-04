@@ -36,7 +36,7 @@ import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import com.tabtin.mobile.R
+import com.muse.mobile.R
 import com.tabtin.mobile.data.model.memo.MemoAppHomeFeatureFlags
 import com.tabtin.mobile.data.model.memo.MemoHeatmapBucket
 import com.tabtin.mobile.features.memo.voice.MemoVoiceRecorderOverlay

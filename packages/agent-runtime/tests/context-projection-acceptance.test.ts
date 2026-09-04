@@ -16,7 +16,7 @@ import { projectTerminalToolResult } from '../src/projection/terminal-tool-proje
 import { SessionStorage } from '../src/session/storage.js';
 
 const SOURCE_URL = 'https://pitchhub.36kr.com/projects?sort=3';
-const COMMAND = 'tabtin browser collect table --url "https://pitchhub.36kr.com/projects?sort=3" --target tabdata --format json';
+const COMMAND = 'muse browser collect table --url "https://pitchhub.36kr.com/projects?sort=3" --target tabdata --format json';
 const RAW_TRANSCRIPT_SENTINEL = 'LOW_LEVEL_COMMAND_TRANSCRIPT jq curl tempfile network inspector stdout stderr';
 
 /**

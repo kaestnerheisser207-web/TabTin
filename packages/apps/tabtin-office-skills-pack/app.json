@@ -3,7 +3,7 @@
   "name": "Office Skills Pack",
   "kind": "app",
   "version": "0.1.0",
-  "description": "面向职场办公流的 TabTin Marketplace Skills：会议纪要、周报、邮件转任务、客户跟进、项目简报、数据复盘、演示稿生成。",
+  "description": "面向职场办公流的 Muse Marketplace Skills：会议纪要、周报、邮件转任务、客户跟进、项目简报、数据复盘、演示稿生成。",
   "icon": "briefcase-business",
   "distribution": "marketplace",
   "installScope": "organization",

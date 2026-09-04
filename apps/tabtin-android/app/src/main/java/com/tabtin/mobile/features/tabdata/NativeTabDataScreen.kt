@@ -109,7 +109,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
-import com.tabtin.mobile.R
+import com.muse.mobile.R
 import com.tabtin.mobile.data.im.ImResourceCardType
 import com.tabtin.mobile.data.model.tabdata.TabDataChoice
 import com.tabtin.mobile.data.model.tabdata.TabDataField

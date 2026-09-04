@@ -289,7 +289,7 @@ export {
   SYNTHETIC_TOOL_RESULT_PLACEHOLDER,
   ensureToolResultPairing,
 } from './context/message-normalizer.js';
-// ：TabTin 权威 tool_use id（入站映射）
+// ：Muse 权威 tool_use id（入站映射）
 export {
   ToolIdMapper,
   allocateTabtinToolUseId,

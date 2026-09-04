@@ -1,5 +1,5 @@
 # Standard BuildKit syntax; no external frontend image is required.
-# TabTin Django 应用镜像（整机 compose 用，单库 single_pg）
+# Muse Django 应用镜像（整机 compose 用，单库 single_pg）
 # 见 docs/agent/pg-single-db-mainline-plan.md「整机 Compose（单库部署形态）设计」。
 #
 # ⚠️ 根上下文构建（context: .）：后端运行时按 parents[5]/parents[6] 读 monorepo

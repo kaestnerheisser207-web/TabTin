@@ -363,7 +363,7 @@ function officialPersonalPluginReleases(): Record<string, OfficialPersonalPlugin
     [OFFICIAL_SUPERPOWERS_PLUGIN_ID]: {
       pluginId: OFFICIAL_SUPERPOWERS_PLUGIN_ID,
       displayName: 'Superpowers',
-      description: 'Official TabTin Personal Plugin bundle for installing reusable agent skills.',
+      description: 'Official Muse Personal Plugin bundle for installing reusable agent skills.',
       sourceUri: OFFICIAL_SUPERPOWERS_SOURCE_URI,
       sourceDir: resolveBundledSuperpowersSourceDir,
       versionPin: OFFICIAL_SUPERPOWERS_RELEASE_VERSION,

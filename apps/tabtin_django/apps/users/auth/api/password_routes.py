@@ -480,7 +480,7 @@ def reset_password(request: HttpRequest, data: PasswordResetSchema):
                 email_service = get_email_service()
                 email_service.send_email(
                     to_email=data.username,
-                    subject=f"【{getattr(settings, 'COMPANY_NAME', 'TabTin')}】密码重置成功通知",
+                    subject=f"【{getattr(settings, 'COMPANY_NAME', 'Muse')}】密码重置成功通知",
                     content=f"""
                     <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
                         <h2>密码重置成功</h2>

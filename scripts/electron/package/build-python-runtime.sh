@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# build-python-runtime.sh —— L2 构建层：产出 TabTin 自管 Python 运行时归档。
+# build-python-runtime.sh —— L2 构建层：产出 Muse 自管 Python 运行时归档。
 #
 # 流程（A1 + B1）：
 #   1. 从 python-build-standalone(astral) 下载 install_only_stripped 解释器（可重定位）

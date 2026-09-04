@@ -48,7 +48,7 @@
     <string name="ws_invite">Invite</string>
     <string name="ws_invite_email">Email Invitation</string>
     <string name="ws_invite_phone">Phone number</string>
-    <string name="ws_invite_phone_hint">Only registered TabTin users can be invited by phone</string>
+    <string name="ws_invite_phone_hint">Only registered Muse users can be invited by phone</string>
     <string name="ws_invite_phone_role_hint">Phone invitations join the organization as editors</string>
     <string name="ws_invite_phone_send">Send phone invitation</string>
     <string name="ws_invite_link">Link Invitation</string>
@@ -106,7 +106,7 @@
     <!-- Space list: Space / Agent / Device are rendered as independent objects -->
     <string name="space_list_empty">No Workspaces</string>
     <string name="space_list_empty_description">Create and bind a local execution environment on desktop first</string>
-    <string name="space_list_long_press_hint">Long-press a Workspace to edit, archive, or delete. Create new Workspaces in TabTin for desktop.</string>
+    <string name="space_list_long_press_hint">Long-press a Workspace to edit, archive, or delete. Create new Workspaces in Muse for desktop.</string>
     <string name="space_list_primary_agent">Primary Agent: %s</string>
     <string name="space_list_primary_agent_unassigned">Primary Agent: Not set</string>
     <string name="space_list_primary_agent_loading">Primary Agent: Loading…</string>

@@ -1,7 +1,7 @@
 package com.tabtin.mobile.features.clouddocs
 
 import androidx.annotation.DrawableRes
-import com.tabtin.mobile.R
+import com.muse.mobile.R
 import com.tabtin.mobile.data.model.SpaceResource
 
 /**

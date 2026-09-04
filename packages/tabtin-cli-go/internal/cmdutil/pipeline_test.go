@@ -14,8 +14,8 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/TabTin/tabtin-cli/internal/output"
-	"github.com/TabTin/tabtin-cli/internal/transport"
+	"github.com/Muse/muse-cli/internal/output"
+	"github.com/Muse/muse-cli/internal/transport"
 )
 
 type singleResponseTransport struct {
@@ -572,7 +572,7 @@ func TestDryRunBypassesRequiresAuthGate(t *testing.T) {
 	}
 
 	f := NewFactory()
-	root := &cobra.Command{Use: "tabtin"}
+	root := &cobra.Command{Use: "muse"}
 	// 全局 --dry-run flag 必须在 RegisterCommand 之前加——pipeline 内调
 	// cmd.Flags().GetBool("dry-run") 依赖该 flag 已被注册到 cobra 树
 	root.PersistentFlags().Bool("dry-run", false, "")
@@ -667,7 +667,7 @@ func TestGetRegisteredCommandsUsesDelayedCommandPath(t *testing.T) {
 	origLen := len(registeredCommands)
 	defer func() { registeredCommands = registeredCommands[:origLen] }()
 
-	root := &cobra.Command{Use: "tabtin"}
+	root := &cobra.Command{Use: "muse"}
 	parent := &cobra.Command{Use: "table"}
 	child := &cobra.Command{Use: "record"}
 	grandchild := &cobra.Command{Use: "list"}
@@ -679,7 +679,7 @@ func TestGetRegisteredCommandsUsesDelayedCommandPath(t *testing.T) {
 		Short:   "List records",
 		Method:  "POST",
 		Path:    "/table/record/list",
-		Example: "tabtin table record list --table-id tbl_1",
+		Example: "muse table record list --table-id tbl_1",
 	})
 
 	root.AddCommand(parent)
@@ -735,7 +735,7 @@ func TestCollectGroupSchemas(t *testing.T) {
 	origLen := len(registeredCommands)
 	defer func() { registeredCommands = registeredCommands[:origLen] }()
 
-	root := &cobra.Command{Use: "tabtin"}
+	root := &cobra.Command{Use: "muse"}
 
 	// pure group：无 Run、未注册 CommandDef → 应被合成 IsGroup 条目
 	doc := &cobra.Command{Use: "doc", Short: "文档操作", Long: "创建、浏览和管理文档。"}
@@ -866,7 +866,7 @@ func TestPipelineCallsDryRunHook(t *testing.T) {
 		},
 	}
 
-	root := &cobra.Command{Use: "tabtin"}
+	root := &cobra.Command{Use: "muse"}
 	root.PersistentFlags().Bool("dry-run", false, "")
 	root.PersistentFlags().Bool("yes", false, "")
 	root.PersistentFlags().String("batch", "", "")
@@ -904,13 +904,13 @@ func TestMustRegisterCommandRequiresRiskDeclared(t *testing.T) {
 		}
 	}()
 
-	root := &cobra.Command{Use: "tabtin"}
+	root := &cobra.Command{Use: "muse"}
 	f := &Factory{}
 	MustRegisterCommand(root, f, CommandDef{
 		Use:     "fake",
 		Short:   "x",
 		Long:    "a\nb\nc",
-		Example: "  tabtin fake\n  tabtin fake --x\n  tabtin fake --y",
+		Example: "  muse fake\n  muse fake --x\n  muse fake --y",
 		Layer:   "L2",
 		Method:  "GET",
 		Path:    "/x",
@@ -921,7 +921,7 @@ func TestMustRegisterCommandRequiresRiskDeclared(t *testing.T) {
 // TestMustRegisterCommandAcceptsExplicitRiskRead 验证 P1-1：显式声明 RiskDeclared:true
 // + Risk: RiskRead 可以通过断言（不被误判为"忘填"）。
 func TestMustRegisterCommandAcceptsExplicitRiskRead(t *testing.T) {
-	root := &cobra.Command{Use: "tabtin"}
+	root := &cobra.Command{Use: "muse"}
 	f := &Factory{}
 	defer func() {
 		if r := recover(); r != nil {
@@ -932,7 +932,7 @@ func TestMustRegisterCommandAcceptsExplicitRiskRead(t *testing.T) {
 		Use:          "fake-read",
 		Short:        "x",
 		Long:         "做什么\n设计理由\n常见陷阱",
-		Example:      "  tabtin fake-read\n  tabtin fake-read --x\n  tabtin fake-read --y",
+		Example:      "  muse fake-read\n  muse fake-read --x\n  muse fake-read --y",
 		Layer:        "L2",
 		Method:       "GET",
 		Path:         "/x",
@@ -944,7 +944,7 @@ func TestMustRegisterCommandAcceptsExplicitRiskRead(t *testing.T) {
 // TestRegisterCommandAllFlagTypes 验证新 5 种 FlagType（FlagFile/FlagEnum/
 // FlagDuration/FlagFloat/FlagStringSlice）真的被注册到 cobra（TabData v2 P0-A）。
 func TestRegisterCommandAllFlagTypes(t *testing.T) {
-	root := &cobra.Command{Use: "tabtin"}
+	root := &cobra.Command{Use: "muse"}
 	f := &Factory{}
 	RegisterCommand(root, f, CommandDef{
 		Use:    "fake-flags",
@@ -977,7 +977,7 @@ func TestRegisterCommandAllFlagTypes(t *testing.T) {
 // FlagFile 在 Sprint 1.B 加了 SafeInputPath 校验——文件必须真实存在，
 // 所以测试创建临时文件来 satisfy。
 func TestExtractFlagValuesAllTypes(t *testing.T) {
-	root := &cobra.Command{Use: "tabtin"}
+	root := &cobra.Command{Use: "muse"}
 	root.PersistentFlags().Bool("dry-run", false, "")
 	root.PersistentFlags().Bool("yes", false, "")
 	root.PersistentFlags().String("batch", "", "")
@@ -1065,7 +1065,7 @@ func TestExtractFlagValuesAllTypes(t *testing.T) {
 // TestExtractFlagValuesEnumStrictRejectsInvalid 验证 FlagEnum 非法值被强制拦截
 // （不再像旧实现只 stderr warning，必须直接非零退出）（TabData v3 P0 子需求）。
 func TestExtractFlagValuesEnumStrictRejectsInvalid(t *testing.T) {
-	root := &cobra.Command{Use: "tabtin"}
+	root := &cobra.Command{Use: "muse"}
 	root.PersistentFlags().Bool("dry-run", false, "")
 	root.PersistentFlags().Bool("yes", false, "")
 	root.PersistentFlags().String("batch", "", "")
@@ -1162,7 +1162,7 @@ func TestBatchDryRunDoesNotCallTransport(t *testing.T) {
 		},
 	}
 
-	root := &cobra.Command{Use: "tabtin"}
+	root := &cobra.Command{Use: "muse"}
 	root.PersistentFlags().Bool("dry-run", false, "")
 	root.PersistentFlags().Bool("yes", false, "")
 	root.PersistentFlags().String("batch", "", "")
@@ -1208,7 +1208,7 @@ func TestBatchDestructiveRequiresYes(t *testing.T) {
 		},
 	}
 
-	root := &cobra.Command{Use: "tabtin"}
+	root := &cobra.Command{Use: "muse"}
 	root.PersistentFlags().Bool("dry-run", false, "")
 	root.PersistentFlags().Bool("yes", false, "")
 	root.PersistentFlags().String("batch", "", "")
@@ -1253,7 +1253,7 @@ func TestBatchDestructiveDryRunDoesNotRequireYes(t *testing.T) {
 		},
 	}
 
-	root := &cobra.Command{Use: "tabtin"}
+	root := &cobra.Command{Use: "muse"}
 	root.PersistentFlags().Bool("dry-run", false, "")
 	root.PersistentFlags().Bool("yes", false, "")
 	root.PersistentFlags().String("batch", "", "")
@@ -1303,7 +1303,7 @@ func TestBatchValidateMutationReachesBody(t *testing.T) {
 		},
 	}
 
-	root := &cobra.Command{Use: "tabtin"}
+	root := &cobra.Command{Use: "muse"}
 	root.PersistentFlags().Bool("dry-run", false, "")
 	root.PersistentFlags().Bool("yes", false, "")
 	root.PersistentFlags().String("batch", "", "")
@@ -1344,7 +1344,7 @@ func TestBatchDestructiveDryRunRequiresDryRunHook(t *testing.T) {
 		},
 	}
 
-	root := &cobra.Command{Use: "tabtin"}
+	root := &cobra.Command{Use: "muse"}
 	root.PersistentFlags().Bool("dry-run", false, "")
 	root.PersistentFlags().Bool("yes", false, "")
 	root.PersistentFlags().String("batch", "", "")
@@ -1396,7 +1396,7 @@ func TestBatchKeyConvertedToSnakeCase(t *testing.T) {
 		},
 	}
 
-	root := &cobra.Command{Use: "tabtin"}
+	root := &cobra.Command{Use: "muse"}
 	root.PersistentFlags().Bool("dry-run", false, "")
 	root.PersistentFlags().Bool("yes", false, "")
 	root.PersistentFlags().String("batch", "", "")
@@ -1431,7 +1431,7 @@ func TestBatchKeyConvertedToSnakeCase(t *testing.T) {
 //
 // batch 模式下 line-level Validate 仍在 dry-run 跑（见 TestBatchDryRunDoesNotCallTransport）。
 func TestDryRunBypassesCommandLevelValidate(t *testing.T) {
-	root := &cobra.Command{Use: "tabtin"}
+	root := &cobra.Command{Use: "muse"}
 	root.PersistentFlags().Bool("dry-run", false, "")
 	root.PersistentFlags().Bool("yes", false, "")
 	root.PersistentFlags().String("batch", "", "")
@@ -1483,7 +1483,7 @@ func TestPipelineCallsExecuteHook(t *testing.T) {
 		},
 	}
 
-	root := &cobra.Command{Use: "tabtin"}
+	root := &cobra.Command{Use: "muse"}
 	root.PersistentFlags().Bool("dry-run", false, "")
 	root.PersistentFlags().Bool("yes", false, "")
 	root.PersistentFlags().String("batch", "", "")

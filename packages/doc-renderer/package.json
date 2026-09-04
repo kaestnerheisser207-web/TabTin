@@ -1,7 +1,7 @@
 {
   "name": "@tabtin/doc-renderer",
   "version": "0.1.0",
-  "description": "Host-agnostic markdown rendering utilities for TabTin Tabdoc",
+  "description": "Host-agnostic markdown rendering utilities for Muse Tabdoc",
   "type": "module",
   "main": "dist/index.js",
   "module": "dist/index.js",
@@ -22,12 +22,12 @@
     "clean": "rm -rf dist"
   },
   "keywords": [
-    "tabtin",
+    "muse",
     "tabdoc",
     "markdown",
     "renderer"
   ],
-  "author": "TabTin Team",
+  "author": "Muse Team",
   "license": "MIT",
   "devDependencies": {
     "typescript": "5.7.2"

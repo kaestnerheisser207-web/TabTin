@@ -17,7 +17,7 @@
  * - reasoning 只有 summary 非空才落 thinking（encrypted_content 不可解密，丢弃）。
  * - fork/resume 会把祖先链消息重复写进同一文件：response_item 消息按文本 hash
  *   去重、工具按 call_id 去重。
- * - tool_result 合并进持有 tool_use 的 assistant 消息（TabTin 协议，见
+ * - tool_result 合并进持有 tool_use 的 assistant 消息（Muse 协议，见
  *   normalize.ts 注释）。
  */
 

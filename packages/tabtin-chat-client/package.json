@@ -1,7 +1,7 @@
 {
   "name": "@tabtin/chat-client",
   "version": "0.1.0",
-  "description": "Chat Agent SDK for TabTin applications",
+  "description": "Chat Agent SDK for Muse applications",
   "type": "module",
   "main": "dist/index.js",
   "module": "dist/index.js",
@@ -23,13 +23,13 @@
     "test": "vitest run"
   },
   "keywords": [
-    "tabtin",
+    "muse",
     "chat",
     "agent",
     "sdk",
     "client"
   ],
-  "author": "TabTin Team",
+  "author": "Muse Team",
   "license": "MIT",
   "dependencies": {
     "@tabtin/ws-gateway-client": "workspace:*"

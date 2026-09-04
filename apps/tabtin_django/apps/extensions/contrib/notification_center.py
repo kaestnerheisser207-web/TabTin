@@ -1,6 +1,6 @@
 """Notification Center Extension
 
-TabTin 内置通知推送中心，作为 EventBus 全局消费者，
+Muse 内置通知推送中心，作为 EventBus 全局消费者，
 将事件按规则匹配转化为用户通知并通过多渠道投递。
 
 is_builtin = True：默认安装、默认启用、不可卸载。
@@ -45,7 +45,7 @@ class NotificationCenterExtension(BaseExtension):
 
     @property
     def description(self) -> str:
-        return "TabTin 内置通知推送中心，统一汇聚事件并按规则投递到多渠道"
+        return "Muse 内置通知推送中心，统一汇聚事件并按规则投递到多渠道"
 
     @property
     def icon(self) -> str:

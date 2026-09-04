@@ -81,7 +81,7 @@ export interface ShareDialogProps {
   canManage: boolean;
   /**
    * react-i18next 的 t 函数；调用方应保证传入的 t 能解析 `share.dialog.*` keys
-   * （TabTin 当前约定将这些 keys 放在 `common` namespace 下）。
+   * （Muse 当前约定将这些 keys 放在 `common` namespace 下）。
    * 缺省时 ShareDialog 内部 fallback 到 useTranslation('common').t。
    */
   t?: (key: string, opts?: Record<string, unknown>) => string;

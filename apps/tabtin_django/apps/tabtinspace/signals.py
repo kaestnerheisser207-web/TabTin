@@ -1,5 +1,5 @@
 """
-Tabtin Space 信号处理器
+Muse Space 信号处理器
 
 负责默认组织/智能体空间创建、成员与智能体空间统计更新。
 同时定义跨 App 资源变更信号 resource_changed。

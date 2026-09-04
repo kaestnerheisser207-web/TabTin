@@ -8,8 +8,8 @@
  * 子 Agent 经 fork-query compose 父 hooks 一并继承）。
  *
  * **行为**：
- * - OSS：exitCode===0 且命中 `tabtin oss upload` → 发 oss_file 卡。
- * - Table/Doc create：命中 `tabtin table|doc create` 且能解析出 id → 发
+ * - OSS：exitCode===0 且命中 `muse oss upload` → 发 oss_file 卡。
+ * - Table/Doc create：命中 `muse table|doc create` 且能解析出 id → 发
  *   `resource_ref`（artifact_kind=platform_resource）；含 207 partial（exit≠0
  *   但 detail 有 table_id）。 / ；不进 agent-runtime。
  * - Browser→Table / `task_episode` 自动发卡已随  命令下线与  移除。
@@ -71,7 +71,7 @@ function readTerminalHostMetadata(
 }
 
 /**
- * OSS：`tabtin oss upload` 成功 → 发 oss_file 卡。逻辑与原 shell.ts
+ * OSS：`muse oss upload` 成功 → 发 oss_file 卡。逻辑与原 shell.ts
  * `maybeEmitOssFileArtifact` 一致（best-effort，发卡失败不影响结果）。
  */
 function emitOssFileArtifact(
@@ -107,7 +107,7 @@ function emitMediaImageArtifacts(
 }
 
 /**
- * Table/Doc：`tabtin table|doc create` 解析出 id → 发 platform_resource 卡。
+ * Table/Doc：`muse table|doc create` 解析出 id → 发 platform_resource 卡。
  * 不要求 exitCode===0（207 表已建字段失败仍应入「本轮产物」）。
  */
 function emitPlatformResourceArtifact(

@@ -1051,7 +1051,7 @@ const CreateSpaceDialog: React.FC<CreateSpaceDialogProps> = ({
                           {t('create.runtime.cloud', { ns: 'space', defaultValue: '云端托管' })}
                         </span>
                         <span className="block text-caption text-muted-foreground/60">
-                          {t('create.runtime.cloudHint', { ns: 'space', defaultValue: '只安装 TabTin，Agent 在云端持续运行' })}
+                          {t('create.runtime.cloudHint', { ns: 'space', defaultValue: '只安装 Muse，Agent 在云端持续运行' })}
                         </span>
                       </span>
                     </button>
@@ -1248,7 +1248,7 @@ const CreateSpaceDialog: React.FC<CreateSpaceDialogProps> = ({
                               : 'border-border/40 text-muted-foreground',
                           )}
                         >
-                          {value === 'dsh' ? 'DeepSeek DSH（默认）' : 'TabTin Builtin'}
+                          {value === 'dsh' ? 'DeepSeek DSH（默认）' : 'Muse Builtin'}
                         </button>
                       ))}
                     </div>

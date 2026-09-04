@@ -432,7 +432,7 @@ describe('selectRecentHistoryForRuntime (HistorySourceMessage input)', () => {
             type: 'tool_call',
             tool_call_id: 'toolu-projected',
             tool_name: 'run_terminal_command',
-            input: { command: 'tabtin table create --name 36kr' },
+            input: { command: 'muse table create --name 36kr' },
             output: rawStdout,
           },
           {
@@ -474,7 +474,7 @@ describe('selectRecentHistoryForRuntime (HistorySourceMessage input)', () => {
             type: 'tool_call',
             tool_call_id: 'toolu-missing-output',
             tool_name: 'run_terminal_command',
-            input: { command: 'tabtin table create --name 36kr' },
+            input: { command: 'muse table create --name 36kr' },
             output: null,
           },
           {
@@ -540,7 +540,7 @@ describe('selectRecentHistoryForRuntime (HistorySourceMessage input)', () => {
   });
 
   it('legacy task_episode 历史降级为短文本摘要，并替换同 command 终端 transcript', () => {
-    const command = 'tabtin browser collect table --url "https://example.com" --target tabdata --format json';
+    const command = 'muse browser collect table --url "https://example.com" --target tabdata --format json';
     const rawTranscript = ('LOW_LEVEL_COMMAND_TRANSCRIPT ' + 'x'.repeat(200) + '\n').repeat(80);
     const result = selectRecentHistoryForRuntime([
       mkUser('u-ep', '做成表'),
@@ -597,7 +597,7 @@ describe('selectRecentHistoryForRuntime (HistorySourceMessage input)', () => {
   });
 
   it('legacy failed task_episode 不把同 command 终端 transcript 当 episode summary 回灌', () => {
-    const command = 'tabtin browser collect table --url "https://example.com" --target tabdata --format json';
+    const command = 'muse browser collect table --url "https://example.com" --target tabdata --format json';
     const result = selectRecentHistoryForRuntime([
       mkUser('u-fail', '做成表'),
       {

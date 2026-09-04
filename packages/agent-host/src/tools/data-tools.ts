@@ -769,7 +769,7 @@ function createMemorySearchTool(deps: DataToolsDeps): Tool {
       // 修法：query 缺失或空字符串 → fail with MISSING_REQUIRED_PARAM。
       // hint 引导 LLM 用 `query='*'` 强制 wildcard 浏览（后端支持的话）
       // 或 deliberate query。任务范围："如 list_recent_memories 不存在则
-      // 只 fail" —— TabTin 当前没有 list_recent_memories 工具，所以这里
+      // 只 fail" —— Muse 当前没有 list_recent_memories 工具，所以这里
       // 只 fail，不暗示其它工具。
       if (typeof params.query !== 'string' || params.query.trim() === '') {
         return jsonError('query is required for memory_search.', {

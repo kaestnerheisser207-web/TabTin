@@ -49,4 +49,4 @@ describe('capability convergence-hints — CostCap token 压力提示（中文�
 // ：MEDIA_IMAGE_CLI_INSTRUCTION 已随 CliCap 迁到宿主包
 // （capabilities/media-image.ts）。runtime prompts 不再 re-export。
 // 文案契约由宿主包 tests/cli.test.ts（含 `media image generate` 时注入
-// `tabtin media image models --format json`）覆盖，本文件不再重复 snapshot。
+// `muse media image models --format json`）覆盖，本文件不再重复 snapshot。

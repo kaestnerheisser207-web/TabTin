@@ -20,8 +20,8 @@ If the user wants a deck, first finalize the brief. Then create a TabSlide proje
 Use the same canonical TabSlide flow as the deck skill:
 
 ```bash
-tabtin slide create --name "<deck name>" --html @./slides.html
-tabtin slide lint --project-id <project-id> --skip-visual --min-severity warning
+muse slide create --name "<deck name>" --html @./slides.html
+muse slide lint --project-id <project-id> --skip-visual --min-severity warning
 ```
 
 If TabSlide reports Playwright/Chromium missing, treat it as a TabSlide runtime environment issue. Do not tell the user to install Playwright.

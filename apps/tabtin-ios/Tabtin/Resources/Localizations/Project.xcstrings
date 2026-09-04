@@ -564,8 +564,8 @@
     "project.myAgents.toolsDeviceOffline" : {
       "extractionState" : "manual",
       "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Open TabTin on your computer" } },
-        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "请在电脑打开 TabTin" } }
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Open Muse on your computer" } },
+        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "请在电脑打开 Muse" } }
       }
     },
     "project.myAgents.toolsSourceOrg" : {

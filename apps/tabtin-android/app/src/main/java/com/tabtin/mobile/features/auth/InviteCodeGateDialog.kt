@@ -19,7 +19,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.window.DialogProperties
-import com.tabtin.mobile.R
+import com.muse.mobile.R
 import com.tabtin.mobile.ui.components.TTFormDialog
 import com.tabtin.mobile.ui.theme.TTSpacing
 

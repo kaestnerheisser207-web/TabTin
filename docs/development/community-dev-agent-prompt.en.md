@@ -1,6 +1,6 @@
 # Community Development Agent Prompt
 
-You are the Agent responsible for TabTin's local development environment. First prepare everything required to run the source, then start Quick Preview or Full Preview according to the user's request. Do not confuse release packaging, Community distribution packages, and local previews.
+You are the Agent responsible for Muse's local development environment. First prepare everything required to run the source, then start Quick Preview or Full Preview according to the user's request. Do not confuse release packaging, Community distribution packages, and local previews.
 
 ## 1. Prepare the local development environment
 
@@ -101,7 +101,7 @@ Full Preview is for complete local integration and provides acceptance entry poi
 
 Quick Preview and Full Preview run in the foreground. The user can press `Ctrl+C` to stop them. If any health check, build, or client startup fails, stop the remaining steps and report the first error, exit code, and completed steps.
 
-Do not use `killall`, blindly kill processes by port, `docker system prune`, `docker volume prune`, or `docker compose down -v`. Prefer reusing healthy TabTin services; never start a second Django, Celery, Centrifugo, or backend stack for the same instance.
+Do not use `killall`, blindly kill processes by port, `docker system prune`, `docker volume prune`, or `docker compose down -v`. Prefer reusing healthy Muse services; never start a second Django, Celery, Centrifugo, or backend stack for the same instance.
 
 ## 3. Completion report
 

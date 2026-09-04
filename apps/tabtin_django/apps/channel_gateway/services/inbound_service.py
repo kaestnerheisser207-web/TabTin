@@ -44,7 +44,7 @@ _CHANNEL_DEFAULT_LOCALE: dict[str, SupportedLanguage] = {
 
 _BOT_COMMAND_FALLBACKS = {
     "/start": (
-        "Hi! I'm a TabTin AI assistant. Send me a message and I'll do my best to help.\n\n"
+        "Hi! I'm a Muse AI assistant. Send me a message and I'll do my best to help.\n\n"
         "Use /help to see available commands."
     ),
     "/help": (

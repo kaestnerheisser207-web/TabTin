@@ -25,7 +25,7 @@ import {
 import type { OffscreenRenderResult } from '@tabtin/action-tools/headless'
 
 function setupTabtinGlobal(uploadResult: string | null | (() => Promise<string | null>) | (() => never)): void {
-  ;(globalThis as unknown as { tabtin?: unknown }).tabtin = {
+  ;(globalThis as unknown as { muse?: unknown }).tabtin = {
     apiBaseUrl: 'http://localhost:6060/api',
     auth: { getAccessToken: () => 'tok' },
     organizationId: 'wt',
@@ -39,7 +39,7 @@ function setupTabtinGlobal(uploadResult: string | null | (() => Promise<string |
 }
 
 function teardownTabtinGlobal(): void {
-  delete (globalThis as unknown as { tabtin?: unknown }).tabtin
+  delete (globalThis as unknown as { muse?: unknown }).tabtin
 }
 
 const preparedSvg = {

@@ -2,7 +2,7 @@ package com.tabtin.mobile.ui.theme
 
 import androidx.annotation.StringRes
 import androidx.compose.ui.graphics.Color
-import com.tabtin.mobile.R
+import com.muse.mobile.R
 
 /** 与 iOS / Electron 的 `ColorSchemeId` 值域对齐。 */
 public enum class TTColorSchemeId(

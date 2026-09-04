@@ -43,11 +43,11 @@
     "node": ">=18.0.0"
   },
   "keywords": [
-    "tabtin",
+    "muse",
     "file-pipeline",
     "parser",
     "abstraction"
   ],
-  "author": "TabTin Team",
+  "author": "Muse Team",
   "license": "MIT"
 }

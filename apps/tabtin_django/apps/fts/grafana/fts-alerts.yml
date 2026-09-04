@@ -1,4 +1,4 @@
-# TabTin FTS — Prometheus 告警规则（Wave 5 PRD 6.3）
+# Muse FTS — Prometheus 告警规则（Wave 5 PRD 6.3）
 # 部署方式：把本文件挂到 Prometheus 的 rule_files 路径
 # 例：/etc/prometheus/rules.d/fts.yml
 #

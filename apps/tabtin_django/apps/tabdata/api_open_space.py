@@ -182,7 +182,7 @@ def _get_open_api_spec() -> dict:
         full_schema = main_api.get_openapi_schema()
     except Exception:
         logger.exception("Failed to generate OpenAPI schema")
-        return {"openapi": "3.1.0", "info": {"title": "TabTin Open API", "version": "1.0.0"}, "paths": {}}
+        return {"openapi": "3.1.0", "info": {"title": "Muse Open API", "version": "1.0.0"}, "paths": {}}
 
     filtered = copy.deepcopy(full_schema)
     open_prefix = "/api/open/v1/"
@@ -192,7 +192,7 @@ def _get_open_api_spec() -> dict:
             filtered_paths[path] = ops
     filtered["paths"] = filtered_paths
     filtered["info"] = {
-        "title": "TabTin Developer Open API",
+        "title": "Muse Developer Open API",
         "description": "Agent / 外部系统可用的数据接口。认证方式：Bearer Token（API Token 或 JWT）。",
         "version": "1.0.0",
     }

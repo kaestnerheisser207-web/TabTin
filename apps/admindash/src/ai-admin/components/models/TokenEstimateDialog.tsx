@@ -31,7 +31,7 @@ interface TokenEstimateDialogProps {
 
 const DEFAULT_MESSAGES = [
   { role: 'system' as const, content: 'You are a helpful assistant.' },
-  { role: 'user' as const, content: '你好，请简要介绍 TabTin 平台的核心理念。' },
+  { role: 'user' as const, content: '你好，请简要介绍 Muse 平台的核心理念。' },
 ]
 
 export function TokenEstimateDialog({ open, model, onClose }: TokenEstimateDialogProps) {

@@ -3,7 +3,7 @@
 //
 // 为什么需要这一层
 // ----------------
-// SKILL.md (packages/apps/tabdoc/skills/tabdoc-operator/SKILL.md) 是 TabTin
+// SKILL.md (packages/apps/tabdoc/skills/tabdoc-operator/SKILL.md) 是 Muse
 // Agent 与 tabdoc 交互的「宪法」——LLM 拿它当 prompt context，照着里面的命令
 // 示例去 execute_command。但目前没机制保证 SKILL.md 跟 cobra 命令树同步：
 //
@@ -12,13 +12,13 @@
 // - 退役命令（FC tabdoc_create_document → CLI doc create）→ SKILL 没擦干净
 //
 // 任一项 SKILL 漂移 = LLM 拿到错的指南 = agent 跑出 "unknown command" 然后
-// 进入 unrecoverable retry loop。生产环境直接表现为「TabTin 突然不能写文档了」。
+// 进入 unrecoverable retry loop。生产环境直接表现为「Muse 突然不能写文档了」。
 //
 // 钉死什么
 // --------
 // 本测试不真跑 dry-run（要构造完整有效参数集合，成本太高且 brittle），只钉两件事：
 //
-//  1. **命令存在**：SKILL.md 里所有 `tabtin doc xxx [subcmd]` 都能在 cobra 树
+//  1. **命令存在**：SKILL.md 里所有 `muse doc xxx [subcmd]` 都能在 cobra 树
 //     Find() 到（命中真实节点，不是兜底 unknown command）
 //  2. **flag 存在**：每个 `--xxx` 都能在该命令或祖先（含 root persistent flag）
 //     的 flag 集合里找到
@@ -47,7 +47,7 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/TabTin/tabtin-cli/internal/cmdutil"
+	"github.com/Muse/muse-cli/internal/cmdutil"
 )
 
 // SKILL.md 在仓库的位置（相对 packages/tabtin-cli-go/cmd/）。
@@ -83,30 +83,30 @@ func registerRootPersistentFlagsForTest(root *cobra.Command) {
 // cobra 根命令——用于本测试解析 SKILL 里的命令路径。
 //
 // 不挂其它子命令（auth/agent/table/oss 等）——SKILL.md 里偶尔出现的
-// `tabtin oss upload ...` 类示例不在本测试 scope，那是其它 SKILL.md 的职责。
+// `muse oss upload ...` 类示例不在本测试 scope，那是其它 SKILL.md 的职责。
 func newTestRootWithDoc(t *testing.T) *cobra.Command {
 	t.Helper()
-	root := &cobra.Command{Use: "tabtin"}
+	root := &cobra.Command{Use: "muse"}
 	registerRootPersistentFlagsForTest(root)
 	f := cmdutil.NewFactory()
 	root.AddCommand(newCmdDoc(f))
 	return root
 }
 
-// docCmdLineRe 匹配 SKILL.md 里所有 `tabtin doc ...` 命令行。
+// docCmdLineRe 匹配 SKILL.md 里所有 `muse doc ...` 命令行。
 //
 // 设计取舍：
-// - 起点严格 `tabtin doc<space>`，不会误把 `tabtin oss upload` / `tabtin auth`
+// - 起点严格 `muse doc<space>`，不会误把 `muse oss upload` / `muse auth`
 //   等其它子树命令吃进来
 // - 终点宽容：到第一个 pipe（`|`）、重定向（`>`、`<`）、续行符（`\`）、
 //   命令替换收尾（`)`、`)`）、行尾停止——剥掉 shell pipeline 让我们只关心
-//   tabtin 自己的 args
+//   muse 自己的 args
 // - 用非贪婪 `.+?` 配合非捕获 stop set——避免吃过头
 //
 // 注：这是 line-by-line 匹配，不处理跨行命令。SKILL.md 里跨行只会用 `\` 续行，
 // 而我们的提取规则会在 `\` 前停止——意味着续行示例本测试只校验第一行的部分。
 // 这是已知 limitation；当前 SKILL.md 跨行命令极少（< 5 处），可接受。
-var docCmdLineRe = regexp.MustCompile(`(tabtin doc(?:\s+[a-z][a-z0-9\-]*)+(?:\s+[^|<>\\)\n]*?)?)(?:\s*[|<>)\\]|$)`)
+var docCmdLineRe = regexp.MustCompile(`(muse doc(?:\s+[a-z][a-z0-9\-]*)+(?:\s+[^|<>\\)\n]*?)?)(?:\s*[|<>)\\]|$)`)
 
 // flagRe 匹配 `--name` 形式的长 flag，捕获 name（不含 `=value` 部分）。
 // 不匹配 `-x` 短 flag——SKILL.md 里几乎没用，且本测试不关心。
@@ -117,7 +117,7 @@ var flagRe = regexp.MustCompile(`--([a-z][a-z0-9\-]*)`)
 // 提取时直接跳过这些 token。
 var placeholderRe = regexp.MustCompile(`<[a-z0-9\-]+>`)
 
-// extractDocCommandsFromSkill 从 SKILL.md 抽取所有 `tabtin doc ...` 命令行。
+// extractDocCommandsFromSkill 从 SKILL.md 抽取所有 `muse doc ...` 命令行。
 // 返回的每个 string 已剥离 pipe 后续部分，但保留所有 args / flag。
 //
 // 不去重——同一命令在 SKILL 不同 Pattern 出现多次时，每次都被本测试校验。
@@ -133,7 +133,7 @@ func extractDocCommandsFromSkill(content string) []string {
 	return out
 }
 
-// parseDocCmd 把一条 `tabtin doc create --title X --markdown @f.md` 拆成：
+// parseDocCmd 把一条 `muse doc create --title X --markdown @f.md` 拆成：
 //   - subPath: ["doc", "create"]（cobra Find 用）
 //   - flags:   ["title", "markdown"]
 //
@@ -148,10 +148,10 @@ func parseDocCmd(line string) (subPath []string, flags []string) {
 	// 先去掉占位符——它们不参与路径判断
 	line = placeholderRe.ReplaceAllString(line, "__placeholder__")
 	tokens := strings.Fields(line)
-	if len(tokens) < 2 || tokens[0] != "tabtin" {
+	if len(tokens) < 2 || tokens[0] != "muse" {
 		return nil, nil
 	}
-	// 跳过 tokens[0] = "tabtin"，从 tokens[1] = "doc" 开始
+	// 跳过 tokens[0] = "muse"，从 tokens[1] = "doc" 开始
 	subPath = []string{"doc"}
 	state := "path" // path → flags
 	for _, tok := range tokens[2:] {
@@ -228,10 +228,10 @@ func TestSkillExamplesAllResolveToRealCommands(t *testing.T) {
 	}
 	commands := extractDocCommandsFromSkill(string(raw))
 	if len(commands) == 0 {
-		t.Fatal("SKILL.md 里没抽到任何 `tabtin doc ...` 命令——正则可能写错了，" +
+		t.Fatal("SKILL.md 里没抽到任何 `muse doc ...` 命令——正则可能写错了，" +
 			"或者 SKILL.md 被改成完全没示例了（后者更需要人工警觉）")
 	}
-	t.Logf("从 SKILL.md 抽到 %d 条 `tabtin doc ...` 示例", len(commands))
+	t.Logf("从 SKILL.md 抽到 %d 条 `muse doc ...` 示例", len(commands))
 
 	root := newTestRootWithDoc(t)
 
@@ -268,7 +268,7 @@ func TestSkillExamplesAllResolveToRealCommands(t *testing.T) {
 		// 校验每个 --flag 都在 cmd（含祖先 persistent flag）里有定义
 		for _, fName := range flags {
 			if !flagExists(cmd, fName) {
-				t.Errorf("flag 未声明：%q 用了 --%s，但 cobra 树上 `tabtin %s` 没注册这个 flag。"+
+				t.Errorf("flag 未声明：%q 用了 --%s，但 cobra 树上 `muse %s` 没注册这个 flag。"+
 					"很可能 SKILL 里 flag 名漂移 / 笔误，"+
 					"或者 CLI 端 rename 没同步 SKILL。",
 					cmdLine, fName, strings.Join(cmdNamePath(cmd), " "))
@@ -357,16 +357,16 @@ func TestLongDocumentWorkflowUsesRelativeDraftPath(t *testing.T) {
 	for _, want := range []string{
 		"Agent 为新建或整篇更新长 TabDoc 正文而新建临时 Markdown 草稿时",
 		"--markdown @.agent-drafts/<slug>.md",
-		"tabtin doc update <document-id>",
+		"muse doc update <document-id>",
 		"明确返回参数/校验错误",
 		"复用同一份草稿文件",
 		"网络超时、断连等",
 		"不得直接重试 create",
-		"tabtin doc search --query \"<title>\" --format json",
+		"muse doc search --query \"<title>\" --format json",
 		"无法唯一确认，必须请求用户确认",
 		"正文草稿与已创建正文不受影响",
 		"如果 CLI 实际返回 `409`",
-		"tabtin doc read <document-id> --format json",
+		"muse doc read <document-id> --format json",
 		"--base-version <latest-version>",
 		"这不是该创建后元数据流程的并发保证",
 		"用户已有 / 已存在的本地 Markdown",
@@ -384,16 +384,16 @@ func TestLongDocumentWorkflowUsesRelativeDraftPath(t *testing.T) {
 
 	root := newTestRootWithDoc(t)
 	for _, command := range []string{
-		`tabtin doc create --title "周报 2026-W18" --markdown @.agent-drafts/<slug>.md --format json`,
-		`tabtin doc update <document-id> --icon 📊 --cover-image "https://example.com/cover.png" --parent-id <parent-id> --tags 周报 --tags 项目`,
-		`tabtin doc search --query "<title>" --format json`,
+		`muse doc create --title "周报 2026-W18" --markdown @.agent-drafts/<slug>.md --format json`,
+		`muse doc update <document-id> --icon 📊 --cover-image "https://example.com/cover.png" --parent-id <parent-id> --tags 周报 --tags 项目`,
+		`muse doc search --query "<title>" --format json`,
 	} {
 		assertCanonicalDocCommand(t, root, pattern1, command)
 	}
 }
 
 // cmdNamePath 返回 cmd 从 root 到它的命令名链（不含 root 名）。
-// 用于错误消息里显示"tabtin doc collaborator invite"这样的 human-friendly 路径。
+// 用于错误消息里显示"muse doc collaborator invite"这样的 human-friendly 路径。
 func cmdNamePath(cmd *cobra.Command) []string {
 	var names []string
 	for c := cmd; c != nil && c.HasParent(); c = c.Parent() {
@@ -413,23 +413,23 @@ func TestExtractDocCommandsBasicShapes(t *testing.T) {
 		wantCmds []string // 期望抽到的命令前缀（用 startsWith 比对，因为正则会保留行尾 args）
 	}{
 		{
-			input:    `tabtin doc create --title "X" --markdown @file.md`,
-			wantCmds: []string{"tabtin doc create --title"},
+			input:    `muse doc create --title "X" --markdown @file.md`,
+			wantCmds: []string{"muse doc create --title"},
 		},
 		{
-			input:    `tabtin doc list --format json | jq '.data.documents'`,
-			wantCmds: []string{"tabtin doc list --format json"},
+			input:    `muse doc list --format json | jq '.data.documents'`,
+			wantCmds: []string{"muse doc list --format json"},
 		},
 		{
-			input:    "FID=$(tabtin doc create --format json) && echo $FID",
-			wantCmds: []string{"tabtin doc create --format json"},
+			input:    "FID=$(muse doc create --format json) && echo $FID",
+			wantCmds: []string{"muse doc create --format json"},
 		},
 		{
-			input:    `tabtin doc version save <id> --name "v1"`,
-			wantCmds: []string{"tabtin doc version save"},
+			input:    `muse doc version save <id> --name "v1"`,
+			wantCmds: []string{"muse doc version save"},
 		},
 		{
-			input:    `# 这是注释，不带 tabtin doc，不应被抽`,
+			input:    `# 这是注释，不带 muse doc，不应被抽`,
 			wantCmds: nil,
 		},
 	}
@@ -457,22 +457,22 @@ func TestParseDocCmdSplitsPathAndFlags(t *testing.T) {
 		wantFlags []string
 	}{
 		{
-			line:      `tabtin doc create --title "X" --markdown @file.md --format json`,
+			line:      `muse doc create --title "X" --markdown @file.md --format json`,
 			wantPath:  []string{"doc", "create"},
 			wantFlags: []string{"title", "markdown", "format"},
 		},
 		{
-			line:      `tabtin doc version save <id> --name "v1" --base-version 5`,
+			line:      `muse doc version save <id> --name "v1" --base-version 5`,
 			wantPath:  []string{"doc", "version", "save"},
 			wantFlags: []string{"name", "base-version"},
 		},
 		{
-			line:      `tabtin doc collaborator invite <document-id> --user-ids usr_aaa --user-ids usr_bbb --role editor`,
+			line:      `muse doc collaborator invite <document-id> --user-ids usr_aaa --user-ids usr_bbb --role editor`,
 			wantPath:  []string{"doc", "collaborator", "invite"},
 			wantFlags: []string{"user-ids", "user-ids", "role"},
 		},
 		{
-			line:      `tabtin doc share set <id> --share-type public --password=s3cret`,
+			line:      `muse doc share set <id> --share-type public --password=s3cret`,
 			wantPath:  []string{"doc", "share", "set"},
 			wantFlags: []string{"share-type", "password"},
 		},

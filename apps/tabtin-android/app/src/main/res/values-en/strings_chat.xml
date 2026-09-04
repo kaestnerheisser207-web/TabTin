@@ -30,7 +30,7 @@
     <string name="chat_composer_full_access_message">Full access reduces confirmation prompts within your organization\'s safety limits. Only enable it when you trust the Agent, execution location, and task.</string>
     <string name="chat_composer_full_access_confirm">Enable</string>
     <string name="chat_composer_device_unbound">No execution device linked yet. Bind a computer in Settings before sending tasks.</string>
-    <string name="chat_composer_device_offline">This device is offline (open TabTin on your computer to reconnect)</string>
+    <string name="chat_composer_device_offline">This device is offline (open Muse on your computer to reconnect)</string>
     <string name="chat_approval_mode_always_ask_short">Ask first</string>
     <string name="chat_approval_mode_auto_short">Auto-approve</string>
     <string name="chat_approval_mode_full_access_short">Full access</string>
@@ -76,7 +76,7 @@
     <string name="chat_share_image">Share Image</string>
     <string name="chat_attachment_error">Attachment Error</string>
     <string name="chat_camera_permission_title">Camera Permission Required</string>
-    <string name="chat_camera_permission_message">Allow TabTin to use the camera in system settings, then return and try again.</string>
+    <string name="chat_camera_permission_message">Allow Muse to use the camera in system settings, then return and try again.</string>
     <string name="chat_camera_open_settings">Open Settings</string>
     <string name="chat_camera_unavailable_title">Camera Unavailable</string>
     <string name="chat_camera_unavailable_message">No camera app is available on this device.</string>

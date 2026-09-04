@@ -11,10 +11,10 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/TabTin/tabtin-cli/internal/cmdutil"
-	"github.com/TabTin/tabtin-cli/internal/errcode"
-	"github.com/TabTin/tabtin-cli/internal/output"
-	"github.com/TabTin/tabtin-cli/internal/transport"
+	"github.com/Muse/muse-cli/internal/cmdutil"
+	"github.com/Muse/muse-cli/internal/errcode"
+	"github.com/Muse/muse-cli/internal/output"
+	"github.com/Muse/muse-cli/internal/transport"
 )
 
 // ─── Slide ───────────────────────────────────────────────────────
@@ -24,8 +24,8 @@ func newCmdSlide(f *cmdutil.Factory) *cobra.Command {
 	defs := []cmdutil.CommandDef{
 		{
 			Use: "create", Short: "创建可编辑云演示项目（进阶；做 PPT 请用 render 直出本地 .pptx）",
-			Example: "  tabtin slide create --name \"Q4 Review\"\n" +
-				"  tabtin slide create --name \"Landing\" --html \"@./landing.html\"",
+			Example: "  muse slide create --name \"Q4 Review\"\n" +
+				"  muse slide create --name \"Landing\" --html \"@./landing.html\"",
 			AIHelp: "创建**可编辑云演示项目**（当前版本 TabSlide 编辑器界面未开放，一般不需要）。用户要「做 PPT / 幻灯片 / 演示文稿」交付本地文件时，用 `slide render` 一步直出本地 .pptx，不要用本命令建云项目。",
 			// ：当前版本对 Agent 隐藏 create（云项目进阶命令），只暴露 render 直出本地
 			// pptx。命令仍注册可用（render 走的是 /slide/create 路由，不受影响）。
@@ -58,7 +58,7 @@ func newCmdSlide(f *cmdutil.Factory) *cobra.Command {
 		},
 		// 合并：保留远端 Example + 我方 OutputSchema（L31）
 		{
-			Use: "list", Short: "列出演示文稿", Example: "  tabtin slide list",
+			Use: "list", Short: "列出演示文稿", Example: "  muse slide list",
 			Route: cmdutil.RouteCliServer, Method: "POST", Path: "/slide/list",
 			HasFormat: true, RequiresAgent: true,
 			// L31：projects 数组中每条记录字段（与 _serialize_project_summary 对齐）。
@@ -72,10 +72,10 @@ func newCmdSlide(f *cmdutil.Factory) *cobra.Command {
 				{Key: "updated_at", Label: "更新时间", Type: "datetime"},
 			},
 		},
-		{Use: "outline", Short: "大纲", Example: "  tabtin slide outline --project-id xxx", Route: cmdutil.RouteCliServer, Method: "POST", Path: "/slide/outline", Flags: []cmdutil.FlagDef{{Name: "project-id", Type: cmdutil.FlagString, Required: true, Desc: "项目 ID"}}, HasFormat: true, RequiresAgent: true},
+		{Use: "outline", Short: "大纲", Example: "  muse slide outline --project-id xxx", Route: cmdutil.RouteCliServer, Method: "POST", Path: "/slide/outline", Flags: []cmdutil.FlagDef{{Name: "project-id", Type: cmdutil.FlagString, Required: true, Desc: "项目 ID"}}, HasFormat: true, RequiresAgent: true},
 		{
 			Use: "page", Short: "查看单页详情",
-			Example: "  tabtin slide page --project-id xxx --page-id pg_001",
+			Example: "  muse slide page --project-id xxx --page-id pg_001",
 			Route:   cmdutil.RouteCliServer, Method: "POST", Path: "/slide/page",
 			Flags: []cmdutil.FlagDef{
 				{Name: "project-id", Type: cmdutil.FlagString, Required: true, Desc: "项目 ID"},
@@ -86,8 +86,8 @@ func newCmdSlide(f *cmdutil.Factory) *cobra.Command {
 		{
 			Use: "generate", Short: "AI 生成",
 			Example: "  # 覆盖整个项目页面集（危险操作，非追加）：\n" +
-				"  tabtin slide generate --project-id xxx --replace --html \"<h1>Title</h1>\"\n" +
-				"  tabtin slide generate --project-id xxx --replace --html \"@./deck.html\"",
+				"  muse slide generate --project-id xxx --replace --html \"<h1>Title</h1>\"\n" +
+				"  muse slide generate --project-id xxx --replace --html \"@./deck.html\"",
 			Route: cmdutil.RouteCliServer, Method: "POST", Path: "/slide/generate",
 			Flags: []cmdutil.FlagDef{
 				{Name: "project-id", Type: cmdutil.FlagString, Required: true, Desc: "项目 ID"},
@@ -105,10 +105,10 @@ func newCmdSlide(f *cmdutil.Factory) *cobra.Command {
 			// 内容字段（content/src/fill/color/fontSize/...）必须嵌入 props 内。
 			// 顶层写错字段会返回 400 + 迁移提示，不会静默吞掉。
 			Example: "  # 改文字内容（content 嵌 props 内）：\n" +
-				"  tabtin slide update --project-id xxx --page-id pg_001 --element-id el_001 \\\n" +
+				"  muse slide update --project-id xxx --page-id pg_001 --element-id el_001 \\\n" +
 				"    --patch '{\"props\":{\"content\":\"<p><span style=\\\"color:#FFF;font-size:48pt\\\">新标题</span></p>\"}}'\n" +
 				"  # 改位置/尺寸（顶层结构字段，直接写）：\n" +
-				"  tabtin slide update --project-id xxx --page-id pg_001 --element-id el_001 --patch '{\"x\":100,\"y\":200,\"width\":800}'",
+				"  muse slide update --project-id xxx --page-id pg_001 --element-id el_001 --patch '{\"x\":100,\"y\":200,\"width\":800}'",
 			Route: cmdutil.RouteCliServer, Method: "POST", Path: "/slide/update",
 			Flags: []cmdutil.FlagDef{
 				{Name: "project-id", Type: cmdutil.FlagString, Required: true, Desc: "项目 ID"},
@@ -122,9 +122,9 @@ func newCmdSlide(f *cmdutil.Factory) *cobra.Command {
 		},
 		{
 			Use: "add-page", Short: "添加页面",
-			Example: "  tabtin slide add-page --project-id xxx                            # 末尾新增一页\n" +
-				"  tabtin slide add-page --project-id xxx --after-page page-3       # 插到 page-3 之后\n" +
-				"  tabtin slide add-page --project-id xxx --html \"@./slide.html\"   # 从 HTML 追加新页",
+			Example: "  muse slide add-page --project-id xxx                            # 末尾新增一页\n" +
+				"  muse slide add-page --project-id xxx --after-page page-3       # 插到 page-3 之后\n" +
+				"  muse slide add-page --project-id xxx --html \"@./slide.html\"   # 从 HTML 追加新页",
 			Route: cmdutil.RouteCliServer, Method: "POST", Path: "/slide/add-page",
 			Flags: []cmdutil.FlagDef{
 				{Name: "project-id", Type: cmdutil.FlagString, Required: true, Desc: "项目 ID"},
@@ -146,21 +146,21 @@ func newCmdSlide(f *cmdutil.Factory) *cobra.Command {
 			},
 			HasFormat: true, RequiresAgent: true, Risk: cmdutil.RiskWrite,
 		},
-		{Use: "delete-page", Short: "删除页面", Example: "  tabtin slide delete-page --project-id xxx --page-id pg_001 --yes", Route: cmdutil.RouteCliServer, Method: "POST", Path: "/slide/delete-page", Flags: []cmdutil.FlagDef{{Name: "project-id", Type: cmdutil.FlagString, Required: true, Desc: "项目 ID"}, {Name: "page-id", Type: cmdutil.FlagString, Required: true, Desc: "页面 ID"}}, HasFormat: true, RequiresAgent: true, Risk: cmdutil.RiskHigh},
+		{Use: "delete-page", Short: "删除页面", Example: "  muse slide delete-page --project-id xxx --page-id pg_001 --yes", Route: cmdutil.RouteCliServer, Method: "POST", Path: "/slide/delete-page", Flags: []cmdutil.FlagDef{{Name: "project-id", Type: cmdutil.FlagString, Required: true, Desc: "项目 ID"}, {Name: "page-id", Type: cmdutil.FlagString, Required: true, Desc: "页面 ID"}}, HasFormat: true, RequiresAgent: true, Risk: cmdutil.RiskHigh},
 		{Use: "reorder [page-ids...]", Short: "页面排序",
-			Example: "  tabtin slide reorder --project-id xxx --page-order '[\"id1\",\"id2\"]'\n  tabtin slide reorder --project-id xxx id1 id2 id3",
+			Example: "  muse slide reorder --project-id xxx --page-order '[\"id1\",\"id2\"]'\n  muse slide reorder --project-id xxx id1 id2 id3",
 			Route:   cmdutil.RouteCliServer, Method: "POST", Path: "/slide/reorder",
 			Flags: []cmdutil.FlagDef{
 				{Name: "project-id", Type: cmdutil.FlagString, Required: true, Desc: "项目 ID"},
 				{Name: "page-order", Type: cmdutil.FlagString, Desc: "页面顺序 JSON 数组（也可作为位置参数）"},
 			}, ArgsMapping: []string{"page_order"}, HasFormat: true, RequiresAgent: true, Risk: cmdutil.RiskWrite},
-		{Use: "preview", Short: "预览", Example: "  tabtin slide preview --project-id xxx", Route: cmdutil.RouteCliServer, Method: "POST", Path: "/slide/preview", Flags: []cmdutil.FlagDef{{Name: "project-id", Type: cmdutil.FlagString, Required: true, Desc: "项目 ID"}, {Name: "page-id", Type: cmdutil.FlagString, Desc: "页面 ID"}, {Name: "response-format", Type: cmdutil.FlagString, Default: "url", Desc: "响应格式"}}, HasFormat: true, RequiresAgent: true},
-		{Use: "lint", Short: "检查", Example: "  tabtin slide lint --project-id xxx\n  tabtin slide lint --project-id xxx --problems-only\n  tabtin slide lint --project-id xxx --min-severity warning  # 只看 warning 及以上\n  tabtin slide lint --project-id xxx --skip-visual          # 只跑 structural（毫秒级）", Route: cmdutil.RouteCliServer, Method: "POST", Path: "/slide/lint", Flags: []cmdutil.FlagDef{{Name: "project-id", Type: cmdutil.FlagString, Required: true, Desc: "项目 ID"}, {Name: "page-id", Type: cmdutil.FlagString, Desc: "页面 ID"}, {Name: "problems-only", Type: cmdutil.FlagBool, Desc: "仅显示 error/warning 级问题"}, {Name: "min-severity", Type: cmdutil.FlagString, Desc: "最低严重级别：error | warning | info"}, {Name: "skip-visual", Type: cmdutil.FlagBool, Desc: "跳过 Playwright 视觉 lint（只跑 structural，毫秒级）"}}, HasFormat: true, RequiresAgent: true},
+		{Use: "preview", Short: "预览", Example: "  muse slide preview --project-id xxx", Route: cmdutil.RouteCliServer, Method: "POST", Path: "/slide/preview", Flags: []cmdutil.FlagDef{{Name: "project-id", Type: cmdutil.FlagString, Required: true, Desc: "项目 ID"}, {Name: "page-id", Type: cmdutil.FlagString, Desc: "页面 ID"}, {Name: "response-format", Type: cmdutil.FlagString, Default: "url", Desc: "响应格式"}}, HasFormat: true, RequiresAgent: true},
+		{Use: "lint", Short: "检查", Example: "  muse slide lint --project-id xxx\n  muse slide lint --project-id xxx --problems-only\n  muse slide lint --project-id xxx --min-severity warning  # 只看 warning 及以上\n  muse slide lint --project-id xxx --skip-visual          # 只跑 structural（毫秒级）", Route: cmdutil.RouteCliServer, Method: "POST", Path: "/slide/lint", Flags: []cmdutil.FlagDef{{Name: "project-id", Type: cmdutil.FlagString, Required: true, Desc: "项目 ID"}, {Name: "page-id", Type: cmdutil.FlagString, Desc: "页面 ID"}, {Name: "problems-only", Type: cmdutil.FlagBool, Desc: "仅显示 error/warning 级问题"}, {Name: "min-severity", Type: cmdutil.FlagString, Desc: "最低严重级别：error | warning | info"}, {Name: "skip-visual", Type: cmdutil.FlagBool, Desc: "跳过 Playwright 视觉 lint（只跑 structural，毫秒级）"}}, HasFormat: true, RequiresAgent: true},
 		{
 			Use: "grep", Short: "全文本搜索",
-			Example: "  tabtin slide grep --project-id xxx --query \"季度营收\"\n" +
-				"  tabtin slide grep --project-id xxx --query \"Lumio\" --page-id page-3\n" +
-				"  tabtin slide grep --project-id xxx --query \"Primary\" --element-types text",
+			Example: "  muse slide grep --project-id xxx --query \"季度营收\"\n" +
+				"  muse slide grep --project-id xxx --query \"Lumio\" --page-id page-3\n" +
+				"  muse slide grep --project-id xxx --query \"Primary\" --element-types text",
 			Route: cmdutil.RouteCliServer, Method: "POST", Path: "/slide/grep",
 			Flags: []cmdutil.FlagDef{
 				{Name: "project-id", Type: cmdutil.FlagString, Required: true, Desc: "项目 ID"},
@@ -185,7 +185,7 @@ func newCmdSlide(f *cmdutil.Factory) *cobra.Command {
 			Use: "batch-update", Short: "批量修改元素",
 			// 跟 update 同样的 patch schema：内容字段必须嵌入 props。
 			// 任何一条 patch schema 不合法 → 整批拒绝并返回每条错误清单。
-			Example: "  tabtin slide batch-update --project-id xxx --updates '[\n" +
+			Example: "  muse slide batch-update --project-id xxx --updates '[\n" +
 				"    {\"page_id\":\"pg_001\",\"element_id\":\"el_001\",\"patch\":{\"props\":{\"content\":\"<p>新标题</p>\"}}},\n" +
 				"    {\"page_id\":\"pg_001\",\"element_id\":\"el_002\",\"patch\":{\"x\":100,\"y\":200,\"width\":800}},\n" +
 				"    {\"page_id\":\"pg_001\",\"element_id\":\"el_003\",\"patch\":{\"props\":{\"fill\":\"#FF0000\"}}}\n" +
@@ -209,10 +209,10 @@ func newCmdSlide(f *cmdutil.Factory) *cobra.Command {
 
 生成 ≠ 发布：文件落地后仍需调 present_to_user 的 local_file item 才会在聊天里出现卡片。
 HTML 规范先读 app:tabslide/html-spec。`,
-			Example: "  tabtin slide render --html \"@./deck.html\" --save-to ./季度汇报.pptx\n" +
-				"  tabtin slide render --html \"@./季度汇报.html\" -o 汇报.pptx\n" +
+			Example: "  muse slide render --html \"@./deck.html\" --save-to ./季度汇报.pptx\n" +
+				"  muse slide render --html \"@./季度汇报.html\" -o 汇报.pptx\n" +
 				"  # 调试用：允许 HTML 撑破画布仍导出（交付勿用）\n" +
-				"  tabtin slide render --html \"@./deck.html\" -o ./out.pptx --allow-html-overflow",
+				"  muse slide render --html \"@./deck.html\" -o ./out.pptx --allow-html-overflow",
 			Route: cmdutil.RouteCliServer,
 			// canvas 默认 1280×720：与 html-spec 的 .ppt-slide 尺寸、PPTX 页面
 			// （12192000 EMU = 1280×9525）三层完全对齐——HTML→JSON→PPT 全程
@@ -246,8 +246,8 @@ HTML 规范先读 app:tabslide/html-spec。`,
 默认只返回 OSS 下载链接（download_url）；带 --save-to 时由 CLI 把 PPTX 直接下载到
 本地文件路径（推荐 workspace 相对路径），之后可用 present_to_user 的 local_file item 发布成聊天文件卡片。
 后端当前仅支持 pptx 格式（不再暴露 --format，避免 shadow 全局输出 --format）。`,
-			Example: "  tabtin slide export --project-id xxx\n" +
-				"  tabtin slide export --project-id xxx --save-to 季度汇报.pptx",
+			Example: "  muse slide export --project-id xxx\n" +
+				"  muse slide export --project-id xxx --save-to 季度汇报.pptx",
 			Route: cmdutil.RouteCliServer,
 			Flags: []cmdutil.FlagDef{
 				{Name: "project-id", Type: cmdutil.FlagString, Required: true, Desc: "项目 ID"},
@@ -270,7 +270,7 @@ HTML 规范先读 app:tabslide/html-spec。`,
 // （Playwright / OSS），比默认 30s 长。
 const slideRenderTimeout = 120 * time.Second
 
-// runSlideRender 执行 `tabtin slide render`：HTML → 本地 PPTX 一步直达。
+// runSlideRender 执行 `muse slide render`：HTML → 本地 PPTX 一步直达。
 //
 // 编排：POST /slide/create（HTML→PPTElement）→ POST /slide/export（拿 download_url）
 // → 下载写盘 → POST /slide/delete-project（删除临时项目）。
@@ -293,13 +293,13 @@ func runSlideRender(ctx *cmdutil.RunContext, f *cmdutil.Factory) error {
 	tr, err := f.Transport()
 	if err != nil {
 		return output.PrintErrorAndExit(output.ErrorEnvelope(
-			string(errcode.Unavailable), err.Error(), "tabtin daemon start", output.ExitServiceUnavail))
+			string(errcode.Unavailable), err.Error(), "muse daemon start", output.ExitServiceUnavail))
 	}
 	if tr.Type() == transport.TypeDjango {
 		return output.PrintErrorAndExit(output.ErrorEnvelope(
 			string(errcode.Unavailable),
-			"'render' 需要 TabTin 桌面端或 Daemon 运行。当前为 API 直连模式。",
-			"tabtin daemon start", output.ExitServiceUnavail))
+			"'render' 需要 Muse 桌面端或 Daemon 运行。当前为 API 直连模式。",
+			"muse daemon start", output.ExitServiceUnavail))
 	}
 
 	reqCtx := ctx.ReqContext
@@ -474,23 +474,23 @@ func slideRenderLint(reqCtx context.Context, tr transport.Transport, projectID s
 	return problems, summary
 }
 
-// runSlideExport 执行 `tabtin slide export`：
+// runSlideExport 执行 `muse slide export`：
 //   - 无 --save-to：透传后端响应（download_url + filename），行为不变。
 //   - 带 --save-to：拿到 download_url 后由 CLI 直接下载写盘（复用 pkgGetFile），
-//     输出本地路径 + present_to_user local_file 发布提示，与 `tabtin file create` 交付口径一致。
+//     输出本地路径 + present_to_user local_file 发布提示，与 `muse file create` 交付口径一致。
 func runSlideExport(ctx *cmdutil.RunContext, f *cmdutil.Factory) error {
 	saveTo := strings.TrimSpace(ctx.Str("save-to"))
 
 	tr, err := f.Transport()
 	if err != nil {
 		return output.PrintErrorAndExit(output.ErrorEnvelope(
-			string(errcode.Unavailable), err.Error(), "tabtin daemon start", output.ExitServiceUnavail))
+			string(errcode.Unavailable), err.Error(), "muse daemon start", output.ExitServiceUnavail))
 	}
 	if tr.Type() == transport.TypeDjango {
 		return output.PrintErrorAndExit(output.ErrorEnvelope(
 			string(errcode.Unavailable),
-			"'export' 需要 TabTin 桌面端或 Daemon 运行。当前为 API 直连模式。",
-			"tabtin daemon start", output.ExitServiceUnavail))
+			"'export' 需要 Muse 桌面端或 Daemon 运行。当前为 API 直连模式。",
+			"muse daemon start", output.ExitServiceUnavail))
 	}
 
 	reqCtx := ctx.ReqContext

@@ -49,7 +49,7 @@
     "logoutConfirmTitle": "Log out of your account?",
     "logoutConfirmDesc": "Any unsaved work on this device will be lost",
     "openStorageManager": "Storage Manager",
-    "openStorageManagerHint": "See what TabTin has stored on your machine, then clean up or export",
+    "openStorageManagerHint": "See what Muse has stored on your machine, then clean up or export",
     "changePassword": "Change password",
     "bindEmail": "Bind email"
   },

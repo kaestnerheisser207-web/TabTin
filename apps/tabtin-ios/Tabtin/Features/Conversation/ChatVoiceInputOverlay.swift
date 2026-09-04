@@ -330,7 +330,7 @@ struct ChatVoiceInputOverlay: View {
                             .multilineTextAlignment(.center)
                             .lineLimit(3)
                     } else if recorder.isPermissionError {
-                        Text("请在系统设置中允许 TabTin 使用麦克风")
+                        Text("请在系统设置中允许 Muse 使用麦克风")
                             .font(.tt.caption)
                             .foregroundStyle(.tt.textSecondary)
                             .multilineTextAlignment(.center)

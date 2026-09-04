@@ -68,8 +68,8 @@ import androidx.compose.ui.viewinterop.AndroidView
 import androidx.webkit.ScriptHandler
 import androidx.webkit.WebViewCompat
 import androidx.webkit.WebViewFeature
-import com.tabtin.mobile.BuildConfig
-import com.tabtin.mobile.R
+import com.muse.mobile.BuildConfig
+import com.muse.mobile.R
 import com.tabtin.mobile.ui.device.MobileFormFactor
 import com.tabtin.mobile.ui.device.stableMobileFormFactor
 import com.tabtin.mobile.ui.theme.LocalTTDarkTheme

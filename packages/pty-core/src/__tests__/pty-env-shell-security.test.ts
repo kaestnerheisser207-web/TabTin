@@ -22,7 +22,7 @@ import { resolveShell, isValidShell } from '../utils/resolve-shell'
 // ─── sanitizeEnv tests ──────────────────────────────────────────
 
 describe('PC-7: sanitizeEnv filters sensitive environment variables', () => {
-  it('should filter exact-match TabTin internal variables', () => {
+  it('should filter exact-match Muse internal variables', () => {
     const env = {
       PATH: '/usr/bin',
       TABTIN_TOKEN: 'secret-token',

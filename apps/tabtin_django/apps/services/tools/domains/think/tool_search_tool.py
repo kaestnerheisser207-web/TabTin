@@ -37,7 +37,7 @@ class ToolSearchInput(BaseModel):
         description=(
             "Search keyword(s) to find specialized FC tools (e.g. headless browser, "
             "SQL, MCP server tools). Can be a tool name fragment, capability keyword, "
-            "or description term. For TabTin business capabilities (browser / slide / "
+            "or description term. For Muse business capabilities (browser / slide / "
             "doc / memo / table / video) use `tabtin commands` via run_terminal_command."
         ),
     )
@@ -58,7 +58,7 @@ class ToolSearchTool(BaseTool):
         "(e.g. specialized headless / SQL / MCP server tools). "
         "Returns matching tool names and descriptions, "
         "and automatically makes them available for your next action. "
-        "Note: TabTin business capabilities (browser / slide / doc / memo / table / video) "
+        "Note: Muse business capabilities (browser / slide / doc / memo / table / video) "
         "are CLI commands accessed via `tabtin commands` + run_terminal_command, not FC tools."
     )
     args_schema: Type[BaseModel] = ToolSearchInput

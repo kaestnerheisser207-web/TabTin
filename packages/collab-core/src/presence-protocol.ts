@@ -1,5 +1,5 @@
 /**
- * Unified Presence Protocol for TabTin
+ * Unified Presence Protocol for Muse
  *
  * Standardized Awareness data structures across all collaboration modules:
  * - TabDoc, TabData, TabSlide, TabVideo, TabWhiteboard

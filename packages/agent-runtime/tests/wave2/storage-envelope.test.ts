@@ -120,7 +120,7 @@ describe('SessionStorage — record* translates to envelope sequence', () => {
     await storage.recordToolResult('toolu_projection', rawStdout, false);
     await storage.recordTerminalToolProjection(
       'toolu_projection',
-      { command: 'tabtin table import 36kr.json' },
+      { command: 'muse table import 36kr.json' },
       {
         status: 'completed',
         exit_code: 0,
@@ -151,7 +151,7 @@ describe('SessionStorage — record* translates to envelope sequence', () => {
 
   it('recordTerminalToolProjection reuses input remembered from the start notice', async () => {
     storage.rememberToolInputForProjection('toolu_cached_input', {
-      command: 'tabtin table import cached.json',
+      command: 'muse table import cached.json',
     });
     await storage.recordTerminalToolProjection(
       'toolu_cached_input',
@@ -163,7 +163,7 @@ describe('SessionStorage — record* translates to envelope sequence', () => {
 
     const projections = await storage.loadModelProjections();
     expect(projections).toHaveLength(1);
-    expect(projections[0].projection.text).toContain('Command: tabtin table import cached.json');
+    expect(projections[0].projection.text).toContain('Command: muse table import cached.json');
   });
 
   it('recordCompaction writes single COMPACTION envelope', async () => {

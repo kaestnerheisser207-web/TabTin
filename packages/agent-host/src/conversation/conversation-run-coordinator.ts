@@ -50,7 +50,7 @@ export class ConversationRunCancelledError extends Error {
 }
 
 /**
- * The single per-session serialization point shared by every TabTin host.
+ * The single per-session serialization point shared by every Muse host.
  */
 export class ConversationRunCoordinator {
   /**

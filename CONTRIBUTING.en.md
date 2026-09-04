@@ -1,8 +1,8 @@
-# Contributing to TabTin
+# Contributing to Muse
 
 [中文](CONTRIBUTING.md)
 
-Thank you for your interest in TabTin. Contributions in Chinese and English are welcome.
+Thank you for your interest in Muse. Contributions in Chinese and English are welcome.
 
 > Public Preview temporary policy: contributors outside the maintaining organization may open Pull Requests and participate in review, but the current release branch does not yet merge externally submitted code, documentation, or media. Start with Issues, Discussions, reproductions, and product feedback to avoid investing in a large change that cannot enter the current release before the final merge policy is confirmed.
 
@@ -18,7 +18,7 @@ By contributing, you agree to follow the project's [Code of Conduct](CODE_OF_CON
 
 ## Development flow
 
-1. Fork the [TabTin public repository](https://github.com/tabtin-ai/TabTin).
+1. Fork the [Muse public repository](https://github.com/tabtin-ai/TabTin).
 2. Create a branch from the latest `main` and keep it focused on one problem.
 3. Configure the environment using the public Getting Started and development documentation.
 4. Make the change and run relevant tests and static checks.
@@ -83,17 +83,17 @@ Large volumes of raw, unreviewed AI output will not be accepted.
 
 - Use clear, searchable commit messages that say what changed instead of only `fix` or `update`.
 - Never commit secrets, tokens, real business data, personal information, internal addresses, or absolute local paths.
-- Write the product name as `TabTin` and follow the public [product concepts](docs/architecture/product-concepts.en.md).
+- Write the product name as `Muse` and follow the public [product concepts](docs/architecture/product-concepts.en.md).
 - Project-authored public documentation uses a Chinese source file and a corresponding `.en.md` file. If the two versions differ, the Chinese version governs. Official English text governs licenses and third-party legal notices.
 
 ## Review and merge
 
 Maintainers review Pull Requests for correctness, product consistency, compatibility, testing, maintainability, security, and documentation completeness. Opening a Pull Request does not guarantee merge. Maintainers may request a narrower scope, additional verification, or product discussion first.
 
-TabTin is currently maintained under the leadership of Shanghai Mofan Technology Co., Ltd. Community members may earn broader maintenance responsibility through sustained, reliable contributions.
+Muse is currently maintained under the leadership of Shanghai Mofan Technology Co., Ltd. Community members may earn broader maintenance responsibility through sustained, reliable contributions.
 
 ## External contributions
 
-TabTin's public source uses `AGPL-3.0-only` while preserving separate commercial licensing options.
+Muse's public source uses `AGPL-3.0-only` while preserving separate commercial licensing options.
 
 Contributors outside the maintaining organization may submit Pull Requests and participate in review. The current release branch does not merge externally submitted code, documentation, or media. Issues, Discussions, reproductions, and product feedback remain welcome.

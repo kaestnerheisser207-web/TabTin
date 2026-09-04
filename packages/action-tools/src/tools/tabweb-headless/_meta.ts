@@ -23,7 +23,7 @@ import { networkTools } from '../network'
  * Wave 4a (2026-05-01) 清理：
  *   - 删 webFetchTools / webFetchBatchTools / webExtractTools /
  *     webExtractToTableTools / crawlTools — 5 个 tabweb 数据采集 FC
- *     按 D4 全删，Agent 抓取页面 / 提取结构化数据走 `tabtin browser *` CLI。
+ *     按 D4 全删，Agent 抓取页面 / 提取结构化数据走 `muse browser *` CLI。
  *   - 保留底层 impl（packages/action-tools/src/impl/CrawlToolImpl /
  *     web-fetch-pipeline 等）供 cli-server routes 调用。
  *   - 保留 GUI bridge 类工具（按 D6）：browserTools / sessionTools /
@@ -44,8 +44,8 @@ export const domain: ToolDomain<AgentTool> = {
     riskLevel: 'review',
     headless: true,
     // W5（2026-05-04，工具系统宪法 §不变量 2 + W5 收尾白名单反转）：tabweb-headless
-    // 整域不 opt-in `manifestExposed`（默认 false）—— LLM 通过 `tabtin browser *` CLI
-    // 调用所有浏览器能力（`tabtin commands` 自描述）。tool execute() 仍由
+    // 整域不 opt-in `manifestExposed`（默认 false）—— LLM 通过 `muse browser *` CLI
+    // 调用所有浏览器能力（`muse commands` 自描述）。tool execute() 仍由
     // ActionExecutor adapter 注册，daemon CLI server `/browser/act` 等路由通过
     // adapter.executeAction({ action_type: 'execute_act', ... }) 派发，整条数据通路
     // 与 LLM 前不变。

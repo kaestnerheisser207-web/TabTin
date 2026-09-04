@@ -1,13 +1,13 @@
-// Wave 3 / W3 — `tabtin pkg` 子命令族(L7).
+// Wave 3 / W3 — `muse pkg` 子命令族(L7).
 //
 // 6 个子命令对齐 Python CLI(`apps/tabtin_django/apps/services/agent_engine/cli/tabtin_cli/pkg.py`):
 //
-//	tabtin pkg publish <dir>                                # 发布目录为包
-//	tabtin pkg install <ns>/<name>[@version]                # 安装包到本地
-//	tabtin pkg list <ns>/<name>                             # 列出版本
-//	tabtin pkg yank <ns>/<name>@<seq> --reason "..."        # 下架版本
-//	tabtin pkg fork <src-ns>/<name> --to <tgt-ns>/<name>    # fork 包
-//	tabtin pkg revert <ns>/<name> <seq>                     # revert 到 seq
+//	muse pkg publish <dir>                                # 发布目录为包
+//	muse pkg install <ns>/<name>[@version]                # 安装包到本地
+//	muse pkg list <ns>/<name>                             # 列出版本
+//	muse pkg yank <ns>/<name>@<seq> --reason "..."        # 下架版本
+//	muse pkg fork <src-ns>/<name> --to <tgt-ns>/<name>    # fork 包
+//	muse pkg revert <ns>/<name> <seq>                     # revert 到 seq
 //
 // 全部 HTTP 端点统一前缀: `/api/services/package-registry/`。
 //
@@ -41,10 +41,10 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/TabTin/tabtin-cli/internal/cmdutil"
-	"github.com/TabTin/tabtin-cli/internal/errcode"
-	"github.com/TabTin/tabtin-cli/internal/output"
-	"github.com/TabTin/tabtin-cli/internal/transport"
+	"github.com/Muse/muse-cli/internal/cmdutil"
+	"github.com/Muse/muse-cli/internal/errcode"
+	"github.com/Muse/muse-cli/internal/output"
+	"github.com/Muse/muse-cli/internal/transport"
 )
 
 // pkgRouteBase 统一的 PR HTTP 路径前缀 —— urls_deferred.py:212 挂载点 + Ninja /api 前缀。
@@ -121,7 +121,7 @@ func parseForkRef(ref string) (*pkgRef, error) {
 	return r, nil
 }
 
-// newCmdPkg 注册 `tabtin pkg` 命令族。在 root.go 中由 rootCmd.AddCommand(newCmdPkg(f)) 调用。
+// newCmdPkg 注册 `muse pkg` 命令族。在 root.go 中由 rootCmd.AddCommand(newCmdPkg(f)) 调用。
 func newCmdPkg(f *cmdutil.Factory) *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "pkg",
@@ -129,12 +129,12 @@ func newCmdPkg(f *cmdutil.Factory) *cobra.Command {
 		Long: `Package Registry CLI — 管理包的发布、安装、版本和 fork。
 
 示例:
-  tabtin pkg publish ./my-skill --organization-id <wid>
-  tabtin pkg install demo/hello@3
-  tabtin pkg list demo/hello
-  tabtin pkg yank demo/hello@2 --reason "broken"
-  tabtin pkg fork demo/hello --to my-ns/hello --organization-id <wid>
-  tabtin pkg revert demo/hello 3`,
+  muse pkg publish ./my-skill --organization-id <wid>
+  muse pkg install demo/hello@3
+  muse pkg list demo/hello
+  muse pkg yank demo/hello@2 --reason "broken"
+  muse pkg fork demo/hello --to my-ns/hello --organization-id <wid>
+  muse pkg revert demo/hello 3`,
 	}
 
 	cmd.AddCommand(newCmdPkgPublish(f))
@@ -144,7 +144,7 @@ func newCmdPkg(f *cmdutil.Factory) *cobra.Command {
 	cmd.AddCommand(newCmdPkgFork(f))
 	cmd.AddCommand(newCmdPkgRevert(f))
 
-	// 统一注册到 `tabtin commands` schema —— 与 tracker 同模式(参考 root.go:148)。
+	// 统一注册到 `muse commands` schema —— 与 tracker 同模式(参考 root.go:148)。
 	for _, child := range cmd.Commands() {
 		cmdutil.RegisterCommandSchema(child, pkgChildSchema(child.Name()))
 	}
@@ -152,14 +152,14 @@ func newCmdPkg(f *cmdutil.Factory) *cobra.Command {
 	return cmd
 }
 
-// pkgChildSchema 为 6 个子命令各自暴露一份 CommandSchema 给 `tabtin commands`。
+// pkgChildSchema 为 6 个子命令各自暴露一份 CommandSchema 给 `muse commands`。
 func pkgChildSchema(name string) cmdutil.CommandDef {
 	switch name {
 	case "publish":
 		return cmdutil.CommandDef{
 			Use:          "publish <directory>",
 			Short:        "发布目录为包",
-			Example:      "tabtin pkg publish ./my-skill --organization-id <wid>",
+			Example:      "muse pkg publish ./my-skill --organization-id <wid>",
 			Route:        cmdutil.RouteCliServer,
 			Method:       "POST",
 			Path:         pkgRouteBase + "/packages",
@@ -178,7 +178,7 @@ func pkgChildSchema(name string) cmdutil.CommandDef {
 		return cmdutil.CommandDef{
 			Use:     "install <ns>/<name>[@seq]",
 			Short:   "安装包到本地",
-			Example: "tabtin pkg install demo/hello@3",
+			Example: "muse pkg install demo/hello@3",
 			Route:   cmdutil.RouteCliServer,
 			Method:  "GET",
 			Path:    pkgRouteBase + "/packages/{package_id}/versions/{seq}/files",
@@ -198,7 +198,7 @@ func pkgChildSchema(name string) cmdutil.CommandDef {
 		return cmdutil.CommandDef{
 			Use:          "list <ns>/<name>",
 			Short:        "列出包的所有版本",
-			Example:      "tabtin pkg list demo/hello",
+			Example:      "muse pkg list demo/hello",
 			Route:        cmdutil.RouteCliServer,
 			Method:       "GET",
 			Path:         pkgRouteBase + "/packages/{package_id}/versions",
@@ -211,7 +211,7 @@ func pkgChildSchema(name string) cmdutil.CommandDef {
 		return cmdutil.CommandDef{
 			Use:          "yank <ns>/<name>@<seq>",
 			Short:        "下架指定版本",
-			Example:      `tabtin pkg yank demo/hello@2 --reason "broken"`,
+			Example:      `muse pkg yank demo/hello@2 --reason "broken"`,
 			Route:        cmdutil.RouteCliServer,
 			Method:       "POST",
 			Path:         pkgRouteBase + "/packages/{package_id}/versions/{seq}/yank",
@@ -227,7 +227,7 @@ func pkgChildSchema(name string) cmdutil.CommandDef {
 		return cmdutil.CommandDef{
 			Use:          "fork <src-ns>/<name> --to <tgt-ns>/<name>",
 			Short:        "Fork 一个包到新命名空间",
-			Example:      "tabtin pkg fork demo/hello --to my-ns/hello",
+			Example:      "muse pkg fork demo/hello --to my-ns/hello",
 			Route:        cmdutil.RouteCliServer,
 			Method:       "POST",
 			Path:         pkgRouteBase + "/packages/{package_id}/fork",
@@ -246,7 +246,7 @@ func pkgChildSchema(name string) cmdutil.CommandDef {
 		return cmdutil.CommandDef{
 			Use:          "revert <ns>/<name> <seq>",
 			Short:        "回滚到指定旧版本(创建新版本指向旧内容)",
-			Example:      "tabtin pkg revert demo/hello 3",
+			Example:      "muse pkg revert demo/hello 3",
 			Route:        cmdutil.RouteCliServer,
 			Method:       "POST",
 			Path:         pkgRouteBase + "/packages/{package_id}/versions/{seq}/revert",
@@ -424,8 +424,8 @@ POST /packages/{id}/versions/init(获取 presigned URL) →
 PUT 上传缺失文件到 OSS → POST /packages/{id}/versions/{vid}/finalize。
 
 示例:
-  tabtin pkg publish ./my-skill --organization-id <wid>
-  tabtin pkg publish ./skills/data-sync --namespace demo --name data-sync`,
+  muse pkg publish ./my-skill --organization-id <wid>
+  muse pkg publish ./skills/data-sync --namespace demo --name data-sync`,
 		Args: cobra.ExactArgs(1),
 		RunE: cmdutil.SafeRunE(func(cmd *cobra.Command, args []string) error {
 			return runPkgPublish(cmd, f, args[0])
@@ -938,9 +938,9 @@ func newCmdPkgInstall(f *cmdutil.Factory) *cobra.Command {
 未指定 @seq 时安装最新非 yanked 版本。安装目标默认为 ~/.tabtin/packages/<ns>/<name>/。
 
 示例:
-  tabtin pkg install demo/hello
-  tabtin pkg install demo/hello@3
-  tabtin pkg install demo/hello@3 --target-dir ./packages/hello`,
+  muse pkg install demo/hello
+  muse pkg install demo/hello@3
+  muse pkg install demo/hello@3 --target-dir ./packages/hello`,
 		Args: cobra.ExactArgs(1),
 		RunE: cmdutil.SafeRunE(func(cmd *cobra.Command, args []string) error {
 			return runPkgInstall(cmd, f, args[0])
@@ -1004,7 +1004,7 @@ func runPkgInstall(cmd *cobra.Command, f *cmdutil.Factory, ref string) error {
 			if r.Version != nil {
 				return output.PrintErrorAndExit(output.ErrorEnvelope(
 					string(errcode.NotFound),
-					fmt.Sprintf("版本 %s/%s@%d 已被下架。用 `tabtin pkg list %s/%s` 查看可用版本",
+					fmt.Sprintf("版本 %s/%s@%d 已被下架。用 `muse pkg list %s/%s` 查看可用版本",
 						r.Namespace, r.Name, seq, r.Namespace, r.Name),
 					"", output.ExitGeneral,
 				))
@@ -1218,7 +1218,7 @@ func pkgGetFile(ctx context.Context, dlURL, dest string) error {
 			waitSec := 1 << attempt // 1, 2, 4
 			fmt.Fprintf(
 				os.Stderr,
-				"[tabtin pkg] download retry %d/%d for %.80s (%s), wait %ds\n",
+				"[muse pkg] download retry %d/%d for %.80s (%s), wait %ds\n",
 				attempt+1, pkgGetFileMaxRetries, dlURL, err, waitSec,
 			)
 			select {
@@ -1492,8 +1492,8 @@ ManagedSkill.version 字符串指针自动同步。
 也支持 <ns>/<name>@<seq> 单参数形式(与 Python CLI 兼容)。
 
 示例:
-  tabtin pkg revert demo/hello 3
-  tabtin pkg revert demo/hello@3`,
+  muse pkg revert demo/hello 3
+  muse pkg revert demo/hello@3`,
 		Args: cobra.RangeArgs(1, 2),
 		RunE: cmdutil.SafeRunE(func(cmd *cobra.Command, args []string) error {
 			return runPkgRevert(cmd, f, args)
@@ -1573,7 +1573,7 @@ func runPkgRevert(cmd *cobra.Command, f *cmdutil.Factory, args []string) error {
 			return output.PrintErrorAndExit(output.ErrorEnvelope(
 				string(errcode.NotFound),
 				fmt.Sprintf("目标版本 %s/%s@%d 已被下架,不能 revert。"+
-					"用 `tabtin pkg list %s/%s` 查看可用版本",
+					"用 `muse pkg list %s/%s` 查看可用版本",
 					ns, name, seq, ns, name),
 				"", output.ExitGeneral,
 			))

@@ -81,14 +81,14 @@ describe('run_terminal_command · compactSummary（collapsed 卡片摘要）', (
 
   it('无 intent 时保持通用终端摘要，不在 registry 解析业务命令', () => {
     const result = summarize({
-      command: 'tabtin media image generate --prompt "a red apple"',
+      command: 'muse media image generate --prompt "a red apple"',
     })
-    expect(result).toBe('tabtin media image generate --prompt "a red apple"')
+    expect(result).toBe('muse media image generate --prompt "a red apple"')
   })
 
   it('media image generate 有 intent → 仍优先 intent', () => {
     const result = summarize({
-      command: 'tabtin media image generate --prompt "a"',
+      command: 'muse media image generate --prompt "a"',
       intent: '画一张红苹果',
     })
     expect(result).toBe('画一张红苹果')

@@ -1,7 +1,7 @@
 {
   "name": "@tabtin/table-engine",
   "version": "0.1.0",
-  "description": "Engine contracts and resolver for TabTin table grid renderers",
+  "description": "Engine contracts and resolver for Muse table grid renderers",
   "type": "module",
   "main": "dist/index.js",
   "module": "dist/index.js",
@@ -50,12 +50,12 @@
     "clean": "rm -rf dist"
   },
   "keywords": [
-    "tabtin",
+    "muse",
     "table",
     "engine",
     "contracts"
   ],
-  "author": "TabTin Team",
+  "author": "Muse Team",
   "license": "MIT",
   "peerDependencies": {
     "@tabtin/table-core": "workspace:*",

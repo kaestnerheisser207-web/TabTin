@@ -10,28 +10,28 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/TabTin/tabtin-cli/internal/cmdutil"
-	"github.com/TabTin/tabtin-cli/internal/config"
-	"github.com/TabTin/tabtin-cli/internal/output"
+	"github.com/Muse/muse-cli/internal/cmdutil"
+	"github.com/Muse/muse-cli/internal/config"
+	"github.com/Muse/muse-cli/internal/output"
 )
 
 func ConfigCommandSchemas() map[string]cmdutil.CommandDef {
 	return map[string]cmdutil.CommandDef{
-		"show": {Use: "show", Short: "显示当前配置", Example: "  tabtin config show", Route: cmdutil.RouteDirect, HasFormat: true, Idempotent: true},
+		"show": {Use: "show", Short: "显示当前配置", Example: "  muse config show", Route: cmdutil.RouteDirect, HasFormat: true, Idempotent: true},
 		"get": {
-			Use: "get <key>", Short: "读取配置项", Example: "  tabtin config get baseURL",
+			Use: "get <key>", Short: "读取配置项", Example: "  muse config get baseURL",
 			Route: cmdutil.RouteDirect, ArgsMapping: []string{"key"}, HasFormat: true, Idempotent: true,
 			Flags: []cmdutil.FlagDef{{Name: "global", Type: cmdutil.FlagBool, Desc: "操作全局配置"}},
 		},
 		"set": {
-			Use: "set <key> <value>", Short: "写入配置项", Example: "  tabtin config set baseURL https://api.example.com",
+			Use: "set <key> <value>", Short: "写入配置项", Example: "  muse config set baseURL https://api.example.com",
 			Route: cmdutil.RouteDirect, ArgsMapping: []string{"key", "value"}, HasFormat: true, Risk: cmdutil.RiskWrite,
 			Flags: []cmdutil.FlagDef{{Name: "global", Type: cmdutil.FlagBool, Desc: "操作全局配置"}},
 		},
-		"path": {Use: "path", Short: "配置文件路径", Example: "  tabtin config path", Route: cmdutil.RouteDirect, HasFormat: true, Idempotent: true},
+		"path": {Use: "path", Short: "配置文件路径", Example: "  muse config path", Route: cmdutil.RouteDirect, HasFormat: true, Idempotent: true},
 		"purge": {
 			Use: "purge", Short: "清除本地配置、登录凭证与缓存（不影响 Space 工作目录）",
-			Example: "  tabtin config purge --yes",
+			Example: "  muse config purge --yes",
 			Route:   cmdutil.RouteDirect, HasFormat: true,
 			Risk: cmdutil.RiskDestructive, RiskDeclared: true, // ：整目录删除，不可逆
 			Flags: []cmdutil.FlagDef{{Name: "yes", Type: cmdutil.FlagBool, Desc: "跳过交互确认，直接清除"}},
@@ -180,7 +180,7 @@ func newCmdConfigSet(f *cmdutil.Factory) *cobra.Command {
 				case "label":
 					p.Label = value
 				case "token":
-					return fmt.Errorf("token 不可直接设置，请使用 'tabtin auth login'")
+					return fmt.Errorf("token 不可直接设置，请使用 'muse auth login'")
 				default:
 					return fmt.Errorf("未知配置项: %s", key)
 				}
@@ -230,7 +230,7 @@ func newCmdConfigPurge(f *cmdutil.Factory) *cobra.Command {
 			"cli-outputs 缓存、daemon 发现文件、已安装 skill 包等）。\n\n" +
 			"不会删除 Space 工作目录或任何业务文件——它们不在该配置目录之下。\n" +
 			"此操作不可恢复，默认需要交互确认；非交互场景请传 --yes。",
-		Example: "  tabtin config purge --yes",
+		Example: "  muse config purge --yes",
 		RunE: cmdutil.SafeRunE(func(cmd *cobra.Command, args []string) error {
 			dir := config.Dir()
 			if err := validatePurgeDir(dir); err != nil {

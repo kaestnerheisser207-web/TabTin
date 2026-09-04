@@ -343,7 +343,7 @@
       "feishuReviewConfirm": "Confirm import",
       "feishuReviewEmpty": "Keep at least one table or document",
       "feishuIncludeAttachments": "Sync attachments (slower)",
-      "feishuIncludeAttachmentsHint": "Off by default; when on, files are downloaded into TabTin attachments",
+      "feishuIncludeAttachmentsHint": "Off by default; when on, files are downloaded into Muse attachments",
       "feishuImporting": "Importing…",
       "feishuImportProgressRunning": "Importing {{done}}/{{total}}",
       "feishuImportProgressQueued": "Importing {{done}}/{{total}} ({{queued}} queued)",
@@ -958,20 +958,24 @@
     },
     "quickUse": {
       "sectionTitle": "Quick use",
-      "autoDescription": "No setup needed. TabTin will generate a send-ready task draft first.",
+      "autoDescription": "No setup needed. Muse will generate a send-ready task draft first.",
       "cardHint": "Generate a prompt draft and place it in the Chat input for review.",
       "insertAction": "Generate",
       "toastTitle": "Generated in the input",
       "toastDescription": "You can adjust the preset fields before sending.",
       "generatedTitle": "Task draft generated",
-      "generatedHint": "TabTin filled the template first. Adjust it if needed, then send.",
+      "generatedHint": "Muse filled the template first. Adjust it if needed, then send.",
       "readyBadge": "Ready",
       "previewLabel": "Will be sent to Agent",
       "toggleOn": "On",
       "toggleOff": "Off"
     },
     "quickUseBuilder": {
-      "button": "Quick-use template", "variables": "Variables", "variablesHint": "Use a fixed prompt or add variables for users to fill in.", "preview": "Preview", "cancel": "Cancel"
+      "button": "Quick-use template",
+      "variables": "Variables",
+      "variablesHint": "Use a fixed prompt or add variables for users to fill in.",
+      "preview": "Preview",
+      "cancel": "Cancel"
     },
     "versionPublish": {
       "title": "Publish new version",
@@ -1254,7 +1258,7 @@
       "xlsxTruncated": "Showing {{shown}} of {{total}} rows",
       "xlsxSheetsLimited": "Only showing first {{max}} sheets",
       "xlsxFormulasCached": "Showing {{count}} formula result(s) saved in the file.",
-      "xlsxFormulasCalculated": "TabTin calculated {{count}} formula(s) locally for this preview. Results were not saved to the file.",
+      "xlsxFormulasCalculated": "Muse calculated {{count}} formula(s) locally for this preview. Results were not saved to the file.",
       "xlsxFormulasUnavailable": "{{count}} formula(s) have no saved result and cannot be calculated in preview. Open the file in a spreadsheet app.",
       "loadingDocxViewer": "Loading document preview...",
       "loadingPptxViewer": "Loading presentation...",
@@ -1562,7 +1566,7 @@
   },
   "browserRestore": {
     "restoringTitle": "Restoring page",
-    "restoringDescription": "TabTin is reopening the previously saved page.",
+    "restoringDescription": "Muse is reopening the previously saved page.",
     "failedTitle": "Page restore failed",
     "failedDescription": "The original URL is still saved. Retry or close this tab.",
     "retry": "Retry",

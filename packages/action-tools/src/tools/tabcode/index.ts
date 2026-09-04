@@ -715,7 +715,7 @@ function checkFilePathSecurity(
     // ("TabFolder/TabCode" / "Super Permissions" / "Agent Security settings")。
     //
     // 旧实现把 UI 文案塞在工具协议里：LLM 拿到错误后只能照本宣科转述给用户，
-    // 但这些产品名一旦 UI 改名就漂移；且 LLM 不一定理解 TabTin 的 i18n
+    // 但这些产品名一旦 UI 改名就漂移；且 LLM 不一定理解 Muse 的 i18n
     // 上下文（多语种 / 多端 / 移动 vs 桌面 UI 不同）。
     //
     // 新策略：工具协议给 LLM 一个 actionable 的简洁信号——"路径在工作区外"
@@ -1343,7 +1343,7 @@ export interface FileEditOutput {
  *   1. Exact match — character-level indexOf
  *   2. Line-trimmed match — ignore leading/trailing whitespace per line
  *
- * **Why no Tier 3 (block-anchor)**: TabTin originally had a "first-line + last-line anchored,
+ * **Why no Tier 3 (block-anchor)**: Muse originally had a "first-line + last-line anchored,
  * middle content unverified" tier here. Dogfood (2026-05-09) hit a hallucination case where
  * Kimi produced an old_string whose first/last lines matched a real `.button { … }` block
  * but the middle was hallucinated CSS classes that don't exist in the file. block-anchor
@@ -1370,7 +1370,7 @@ export interface FileEditOutput {
  * | `curly_quote`   | **W5**：仅 curly → straight 引号 normalize 后命中             |
  * | `whitespace`    | **W5**：仅 tab → 4 spaces normalize 后命中                    |
  * | `curly_quote_whitespace` | **W5**：curly + tab/space 组合 normalize 后命中     |
- * | `line_trimmed`  | 整行 trim 后命中（TabTin 特有兜底，多一层）    |
+ * | `line_trimmed`  | 整行 trim 后命中（Muse 特有兜底，多一层）    |
  */
 type MatchResult = {
   start: number;
@@ -1404,7 +1404,7 @@ type MatchResult = {
  *
  * **fuzzy 不允许"相似度阈值"判定**：本模块每一级都是"语义无损 normalize 后整体
  * indexOf"，不做 BlockAnchor / WhitespaceNormalized / Indentation
- * Flexible / ContextAware（「首末锚定中间不校验」，TabTin Wave 1
+ * Flexible / ContextAware（「首末锚定中间不校验」，Muse Wave 1
  * dogfood 已验证会假阳性命中）。
  */
 interface FindMatchResult {
@@ -2009,7 +2009,7 @@ export const fileDeleteTool: AgentTool<FileDeleteInput, FileDeleteOutput> = {
 };
 
 // ──────────────────────── mkdir ────────────────────────
-// W2a：`tabtin code mkdir` 落地。语义对齐 `mkdir -p`——递归创建、
+// W2a：`muse code mkdir` 落地。语义对齐 `mkdir -p`——递归创建、
 // 目标已是目录时幂等成功；目标已存在但不是目录（撞文件）时拒绝（默认不覆盖，
 // `--force` 覆盖语义留作 follow-up，见  W2a 范围备注）。
 
@@ -2086,7 +2086,7 @@ export const codeMkdirTool: AgentTool<CodeMkdirInput, CodeMkdirOutput> = {
 };
 
 // ──────────────────────── move_file ────────────────────────
-// W2a：`tabtin code mv|rename` 落地为同一工具 `move_file`
+// W2a：`muse code mv|rename` 落地为同一工具 `move_file`
 // （rename 是 mv 的别名：CLI/route 层都映射到本工具，语义完全相同——
 // 唯一区别是用户心智："rename" 强调同目录改名，"mv" 强调跨目录搬移，
 // 底层都是 fs.rename）。
@@ -2338,7 +2338,7 @@ function globToRegex(pattern: string): RegExp {
 // T2-B1 (2026-05-12)：glob_search 底层从手写 `walkDir + globToRegex` 换成
 // ripgrep `--files`，ripgrep `--files` 遍历底座。
 //
-// 保留 TabTin 既有外部语义：
+// 保留 Muse 既有外部语义：
 // - `*.ts` 自动递归匹配 workspace 下所有 ts 文件
 // - 默认排除 node_modules / VCS 元数据 / 系统文件
 // - 返回相对 base cwd 的路径，按 `/` 分隔
@@ -2346,7 +2346,7 @@ function globToRegex(pattern: string): RegExp {
 // glob 底层语义：
 // - 默认尊重 `.gitignore`，避免 dist/build/open-source 等产物淹没前 100 条；需要时可显式 include_ignored
 // - 默认 `--hidden`，让 `.vscode/.cursor/.github/.env*` 可搜（可 `TABTIN_GLOB_HIDDEN=false` 关闭）
-// - 生产用 `--sortr=modified` 保持 TabTin 既有"最新在前"承诺；测试环境用 `--sort=path` 稳定排序
+// - 生产用 `--sortr=modified` 保持 Muse 既有"最新在前"承诺；测试环境用 `--sort=path` 稳定排序
 async function globSearch(pattern: string, cwd: string, includeIgnored = false): Promise<string[]> {
   let searchDir = cwd;
   let searchPattern = pattern;
@@ -2372,7 +2372,7 @@ async function globSearch(pattern: string, cwd: string, includeIgnored = false):
   const regex = globToRegex(normalizedPattern);
   const args = [
     '--files',
-    // 部分实现用 `--sort=modified`，但 ripgrep 该方向是旧文件在前；TabTin
+    // 部分实现用 `--sort=modified`，但 ripgrep 该方向是旧文件在前；Muse
     // description/旧实现一直承诺"最新的在前"，所以生产用 reverse sort。
     process.env.NODE_ENV === 'test' ? '--sort=path' : '--sortr=modified',
   ];
@@ -2759,7 +2759,7 @@ export const codeGrepTool: AgentTool<CodeGrepInput, CodeGrepOutput> = {
       // T2 follow-up B2 (2026-05-12)：默认开 `--hidden`。
       //
       // **场景**：LLM 跑 grep 找 `.vscode/settings.json` / `.cursor/rules/*` /
-      // `.github/workflows/*` / `.env*` 等隐藏目录的配置——TabTin 之前不传 `--hidden`
+      // `.github/workflows/*` / `.env*` 等隐藏目录的配置——Muse 之前不传 `--hidden`
       // ripgrep 默认跳过隐藏路径 → LLM 看到 0 匹配误判"不存在"，转去 read_file 兜底
       // 多花一轮上下文。VCS 元数据噪音由上面的 `VCS_DIRECTORIES_TO_EXCLUDE` 显式排除
       // 已经处理掉，所以 `--hidden` 默认开不会重新引入 `.git/objects/...` 噪音。

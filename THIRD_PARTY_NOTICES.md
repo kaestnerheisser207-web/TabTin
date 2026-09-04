@@ -2,7 +2,7 @@
 
 [English](THIRD_PARTY_NOTICES.en.md)
 
-TabTin 包含第三方软件、字体和资产。它们适用各自许可证；根目录 AGPL-3.0-only 不替代这些条款。本文件是索引，完整条款以仓内许可证文件为准。
+Muse 包含第三方软件、字体和资产。它们适用各自许可证；根目录 AGPL-3.0-only 不替代这些条款。本文件是索引，完整条款以仓内许可证文件为准。
 
 ## 直接分发资产
 
@@ -16,7 +16,7 @@ TabTin 包含第三方软件、字体和资产。它们适用各自许可证；�
 | MathJax | 3.2.2 | Apache-2.0 | `apps/tabtin_django/apps/tabslide/assets/vendor/mathjax/LICENSE` |
 | Superpowers personal plugin fixtures | Jesse Vincent | MIT | `packages/agent-runtime/fixtures/personal-plugins/superpowers/LICENSE` |
 | Ponytail | DietrichGebert | MIT | `packages/apps/ponytail/LICENSE` |
-| Table Engine Canvas / Teable-derived work | Teable, Inc. 与 TabTin Contributors | MIT | `packages/table-engine-canvas/LICENSE` |
+| Table Engine Canvas / Teable-derived work | Teable, Inc. 与 Muse Contributors | MIT | `packages/table-engine-canvas/LICENSE` |
 
 TabSlide 资产版本、来源和 SHA-256 见 `apps/tabtin_django/apps/tabslide/assets/vendor/manifest.json`。
 

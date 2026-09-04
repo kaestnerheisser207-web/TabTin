@@ -1,8 +1,8 @@
 {
   "panel": {
     "title": "저장",
-    "subtitle": "TabTin이 컴퓨터에 보관하는 것.",
-    "totalLine": "TabTin은 이 Mac에서 {{size}}를 사용합니다.",
+    "subtitle": "Muse이 컴퓨터에 보관하는 것.",
+    "totalLine": "Muse은 이 Mac에서 {{size}}를 사용합니다.",
     "totalLineLoading": "저장용량 측정 중…",
     "refresh": "재계산",
     "refreshHint": "모든 데이터 크기를 다시 측정",
@@ -23,7 +23,7 @@
     },
     "critical": {
       "label": "청소할 시간",
-      "tagline": "TabTin은 많은 공간을 차지하고 있습니다. 사용하지 않는 데이터를 정리할 시간입니다."
+      "tagline": "Muse은 많은 공간을 차지하고 있습니다. 사용하지 않는 데이터를 정리할 시간입니다."
     }
   },
   "metrics": {
@@ -46,7 +46,7 @@
   },
   "topItems": {
     "loading": "작업 공간 데이터 측정 중…",
-    "empty": "아직 데이터가 없습니다. 한동안 TabTin을 사용하다가 다시 돌아오세요.",
+    "empty": "아직 데이터가 없습니다. 한동안 Muse을 사용하다가 다시 돌아오세요.",
     "itemCount": "{{count}} 항목",
     "showAll": "다른 {{count}} 항목 표시",
     "collapseAll": "접기",
@@ -133,11 +133,11 @@
     },
     "browser:bookmarks": {
       "title": "브라우저 북마크",
-      "description": "TabTin 내장 브라우저에 저장한 북마크"
+      "description": "Muse 내장 브라우저에 저장한 북마크"
     },
     "browser:browsing-history": {
       "title": "검색 기록",
-      "description": "TabTin 내장 브라우저에서 방문한 페이지"
+      "description": "Muse 내장 브라우저에서 방문한 페이지"
     },
     "tin:sandboxes": {
       "title": "샌드박스 앱 데이터",
@@ -165,7 +165,7 @@
     },
     "download:user-downloads": {
       "title": "다운로드 기록",
-      "description": "TabTin에 의해 실행된 다운로드 내역(기록만 해당)"
+      "description": "Muse에 의해 실행된 다운로드 내역(기록만 해당)"
     },
     "download:agent-sandbox-downloads": {
       "title": "에이전트 도구 다운로드",

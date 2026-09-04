@@ -6,7 +6,7 @@
  *   - **cli-server-core（本文件）**：只定义 surface 壳 + I/O 契约类型 +
  *     `AgentImportRunner` 注入接口。detect/scan/run/status/cancel/rollback 六个
  *     verb 的 IPC channel（`import:*`）与 HTTP path（`/import/*`）由此派生，
- *     供 renderer 向导 UI 与 `tabtin import` CLI 双 binding 对接。
+ *     供 renderer 向导 UI 与 `muse import` CLI 双 binding 对接。
  *   - **Electron 主进程（apps/tabtin-electron/src/main/agent-import/）**：实现
  *     `AgentImportRunner`——注入 NodeImportIO（白名单在 agent-import paths.ts 已拦、
  *     attachmentDir 落用户数据目录）、parseSession、UnifiedBlock→ContentBlock 转换、
@@ -100,7 +100,7 @@ export interface ImportRunInput {
   /**
    * 分源会话清单。`sessionRefs` 可选：
    * - UI 场景：先 scan 展示、用户勾选，传显式 sessionRefs（精确导入所选）。
-   * - CLI 便捷场景：`tabtin import run --source codex --since 30d` 不逐条列
+   * - CLI 便捷场景：`muse import run --source codex --since 30d` 不逐条列
    *   sessionRefs，缺省时 runner 内部按 (source, options.since) 自动 scan 全部再导。
    */
   sources: Array<{ source: ImportSourceId; sessionRefs?: ImportSessionRef[] }>
@@ -128,7 +128,7 @@ export type ImportJobState = 'running' | 'completed' | 'cancelled' | 'error'
 export interface ImportRunReport {
   /** 可见（未归档且有正文）落库会话数。 */
   visible: number
-  /** 源侧已归档、落 TabTin archived 态的会话数。 */
+  /** 源侧已归档、落 Muse archived 态的会话数。 */
   archived: number
   /** header_only / 无正文、仅落标题 + 一条占位说明消息的会话数。 */
   titleOnly: number

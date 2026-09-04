@@ -10,7 +10,7 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/TabTin/tabtin-cli/internal/cmdutil"
+	"github.com/Muse/muse-cli/internal/cmdutil"
 )
 
 func newCmdCompletionInstall(_ *cmdutil.Factory) *cobra.Command {
@@ -23,7 +23,7 @@ func newCmdCompletionInstall(_ *cmdutil.Factory) *cobra.Command {
 		RunE: cmdutil.SafeRunE(func(cmd *cobra.Command, args []string) error {
 			shell := detectShell()
 			if shell == "" {
-				return fmt.Errorf("无法检测当前 Shell。请手动使用 'tabtin completion bash/zsh/fish'")
+				return fmt.Errorf("无法检测当前 Shell。请手动使用 'muse completion bash/zsh/fish'")
 			}
 
 			switch shell {
@@ -85,7 +85,7 @@ func installZsh(rootCmd *cobra.Command) error {
 	rcContent, _ := os.ReadFile(rcFile)
 	fpathLine := fmt.Sprintf("fpath=(%s $fpath)", dir)
 	if !strings.Contains(string(rcContent), fpathLine) {
-		appendToFile(rcFile, fmt.Sprintf("\n# TabTin CLI completion\n%s\nautoload -Uz compinit && compinit\n", fpathLine))
+		appendToFile(rcFile, fmt.Sprintf("\n# Muse CLI completion\n%s\nautoload -Uz compinit && compinit\n", fpathLine))
 	}
 
 	fmt.Fprintf(os.Stderr, "✓ Zsh 补全已安装到 %s\n", path)
@@ -110,7 +110,7 @@ func installBash(rootCmd *cobra.Command) error {
 		return fmt.Errorf("创建补全目录失败: %w", err)
 	}
 
-	path := filepath.Join(dir, "tabtin")
+	path := filepath.Join(dir, "muse")
 	f, err := os.Create(path)
 	if err != nil {
 		return fmt.Errorf("创建补全文件失败: %w", err)

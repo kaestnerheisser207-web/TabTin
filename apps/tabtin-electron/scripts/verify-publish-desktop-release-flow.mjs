@@ -56,14 +56,14 @@ function assert(condition, name, detail = '') {
 
 function createMacFixtureDir() {
   const dir = mkdtempSync(path.join(tmpdir(), 'tabtin-release-verify-'))
-  const zipName = 'TabTin-1.0.99-arm64-mac.zip'
-  const dmgName = 'TabTin-1.0.99-arm64.dmg'
+  const zipName = 'Muse Local-1.0.99-arm64-mac.zip'
+  const dmgName = 'Muse Local-1.0.99-arm64.dmg'
   writeFileSync(path.join(dir, zipName), Buffer.from('fake-zip-content-for-verify'))
   writeFileSync(path.join(dir, `${zipName}.blockmap`), Buffer.from('fake-blockmap'))
   writeFileSync(path.join(dir, dmgName), Buffer.from('fake-dmg-content-for-verify'))
   writeFileSync(
     path.join(dir, 'latest-mac.yml'),
-    'version: 1.0.99\nfiles:\n  - url: TabTin-1.0.99-arm64-mac.zip\n'
+    'version: 1.0.99\nfiles:\n  - url: Muse Local-1.0.99-arm64-mac.zip\n'
   )
   return dir
 }
@@ -166,16 +166,16 @@ function buildMockFetch(calls) {
           arch: 'arm64',
           channel: 'stable',
           file_url: isPackage
-            ? 'https://cdn.example.com/desktop-updates/stable/mac/arm64/1.0.99/TabTin-1.0.99-arm64-mac.zip'
-            : 'https://cdn.example.com/desktop-updates/stable/mac/arm64/1.0.99/TabTin-1.0.99-arm64-mac.zip',
+            ? 'https://cdn.example.com/desktop-updates/stable/mac/arm64/1.0.99/Muse Local-1.0.99-arm64-mac.zip'
+            : 'https://cdn.example.com/desktop-updates/stable/mac/arm64/1.0.99/Muse Local-1.0.99-arm64-mac.zip',
           website_file_url: isWebsite
-            ? 'https://cdn.example.com/desktop-updates/stable/mac/arm64/1.0.99/TabTin-1.0.99-arm64.dmg'
+            ? 'https://cdn.example.com/desktop-updates/stable/mac/arm64/1.0.99/Muse Local-1.0.99-arm64.dmg'
             : '',
           effective_feed_url: 'https://cdn.example.com/desktop-updates/stable/mac/arm64/1.0.99/',
           manifest_url: 'https://cdn.example.com/desktop-updates/stable/mac/arm64/1.0.99/latest-mac.yml',
           download_file_url: isWebsite
-            ? 'https://cdn.example.com/desktop-updates/stable/mac/arm64/1.0.99/TabTin-1.0.99-arm64.dmg'
-            : 'https://cdn.example.com/desktop-updates/stable/mac/arm64/1.0.99/TabTin-1.0.99-arm64-mac.zip',
+            ? 'https://cdn.example.com/desktop-updates/stable/mac/arm64/1.0.99/Muse Local-1.0.99-arm64.dmg'
+            : 'https://cdn.example.com/desktop-updates/stable/mac/arm64/1.0.99/Muse Local-1.0.99-arm64-mac.zip',
           rollout_percentage: 0,
         },
         asset: {
@@ -202,11 +202,11 @@ function buildMockFetch(calls) {
           arch: 'arm64',
           channel: 'stable',
           file_url:
-            'https://cdn.example.com/desktop-updates/stable/mac/arm64/1.0.99/TabTin-1.0.99-arm64-mac.zip',
+            'https://cdn.example.com/desktop-updates/stable/mac/arm64/1.0.99/Muse Local-1.0.99-arm64-mac.zip',
           website_file_url:
-            'https://cdn.example.com/desktop-updates/stable/mac/arm64/1.0.99/TabTin-1.0.99-arm64.dmg',
+            'https://cdn.example.com/desktop-updates/stable/mac/arm64/1.0.99/Muse Local-1.0.99-arm64.dmg',
           download_file_url:
-            'https://cdn.example.com/desktop-updates/stable/mac/arm64/1.0.99/TabTin-1.0.99-arm64.dmg',
+            'https://cdn.example.com/desktop-updates/stable/mac/arm64/1.0.99/Muse Local-1.0.99-arm64.dmg',
           effective_feed_url: 'https://cdn.example.com/desktop-updates/stable/mac/arm64/1.0.99/',
           manifest_url: 'https://cdn.example.com/desktop-updates/stable/mac/arm64/1.0.99/latest-mac.yml',
           rollout_percentage: 0,
@@ -274,8 +274,8 @@ async function testMissingReleaseNotes() {
 async function testMacStableDryRunRequiresDmg() {
   const dir = mkdtempSync(path.join(tmpdir(), 'tabtin-release-nodmg-'))
   try {
-    writeFileSync(path.join(dir, 'TabTin-1.0.99-arm64-mac.zip'), Buffer.from('zip-only'))
-    writeFileSync(path.join(dir, 'TabTin-1.0.99-arm64-mac.zip.blockmap'), Buffer.from('bm'))
+    writeFileSync(path.join(dir, 'Muse Local-1.0.99-arm64-mac.zip'), Buffer.from('zip-only'))
+    writeFileSync(path.join(dir, 'Muse Local-1.0.99-arm64-mac.zip.blockmap'), Buffer.from('bm'))
     let error = null
     try {
       await main([

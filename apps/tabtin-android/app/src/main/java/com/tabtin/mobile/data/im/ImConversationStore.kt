@@ -2,7 +2,7 @@ package com.tabtin.mobile.data.im
 
 import android.util.Log
 import androidx.annotation.StringRes
-import com.tabtin.mobile.R
+import com.muse.mobile.R
 import com.tabtin.mobile.data.model.AppError
 import com.tabtin.mobile.util.ErrorClassifier
 import kotlinx.coroutines.CancellationException

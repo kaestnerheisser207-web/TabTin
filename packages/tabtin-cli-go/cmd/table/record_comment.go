@@ -5,7 +5,7 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/TabTin/tabtin-cli/internal/cmdutil"
+	"github.com/Muse/muse-cli/internal/cmdutil"
 )
 
 // registerRecordCommentCommands 挂载 `table record comment <list|create|reply|resolve|reopen|rm>`。
@@ -22,9 +22,9 @@ func registerRecordCommentCommands(parent *cobra.Command, f *cmdutil.Factory) {
 		Long: `列出一条 TabData 记录下当前可见的评论。
 设计理由：评论是记录协作上下文，不混入字段值；读取沿用当前 Profile 的资源权限。
 常见陷阱：record-id 是记录 UUID，而不是所属表格 UUID。`,
-		Example: "  tabtin table record comment list rec_xxx\n" +
-			"  tabtin table record comment list rec_xxx --limit 20 --format json\n" +
-			"  tabtin table record comment list rec_xxx --before '<previous-next_cursor>' --jq '.comments[] | .id'",
+		Example: "  muse table record comment list rec_xxx\n" +
+			"  muse table record comment list rec_xxx --limit 20 --format json\n" +
+			"  muse table record comment list rec_xxx --before '<previous-next_cursor>' --jq '.comments[] | .id'",
 		Layer:         "L2",
 		Risk:          cmdutil.RiskRead,
 		RiskDeclared:  true,
@@ -52,9 +52,9 @@ func registerRecordCommentCommands(parent *cobra.Command, f *cmdutil.Factory) {
 		Long: `回复一条 TabData 记录下的已有评论，不修改记录字段值。
 设计理由：显式 reply 命令让 Agent 可直接发现回复能力；底层复用新增评论接口并保留完整父评论上下文。
 常见陷阱：comment-id 必须属于当前记录且未删除；重试写入时请复用 --client-request-id。`,
-		Example: "  tabtin table record comment reply rec_xxx comment_yyy --content '已核对，负责人正确' --client-request-id req_xxx\n" +
-			"  tabtin table record comment reply rec_xxx comment_yyy --content '请确认' --mention-user-ids '[\"user_1\"]' --client-request-id req_xxx\n" +
-			"  tabtin table record comment reply rec_xxx comment_yyy --content @reply.md --client-request-id req_xxx --dry-run",
+		Example: "  muse table record comment reply rec_xxx comment_yyy --content '已核对，负责人正确' --client-request-id req_xxx\n" +
+			"  muse table record comment reply rec_xxx comment_yyy --content '请确认' --mention-user-ids '[\"user_1\"]' --client-request-id req_xxx\n" +
+			"  muse table record comment reply rec_xxx comment_yyy --content @reply.md --client-request-id req_xxx --dry-run",
 		Layer:         "L2",
 		Risk:          cmdutil.RiskWrite,
 		RiskDeclared:  true,
@@ -91,9 +91,9 @@ func registerRecordCommentCommands(parent *cobra.Command, f *cmdutil.Factory) {
 		Long: `在一条 TabData 记录下新增评论，不修改记录字段值。
 设计理由：人和 Agent 使用同一命令与署名链路；Agent 的运行与会话归因由 transport 自动携带。
 常见陷阱：不要传 Agent 身份；重试写入时请复用 --client-request-id，避免产生重复评论。`,
-		Example: "  tabtin table record comment create rec_xxx --content '请核对负责人' --client-request-id req_xxx\n" +
-			"  tabtin table record comment create rec_xxx --content '请确认' --mention-user-ids '[\"user_1\"]' --client-request-id req_xxx\n" +
-			"  tabtin table record comment create rec_xxx --content @comment.md --client-request-id req_xxx --dry-run",
+		Example: "  muse table record comment create rec_xxx --content '请核对负责人' --client-request-id req_xxx\n" +
+			"  muse table record comment create rec_xxx --content '请确认' --mention-user-ids '[\"user_1\"]' --client-request-id req_xxx\n" +
+			"  muse table record comment create rec_xxx --content @comment.md --client-request-id req_xxx --dry-run",
 		Layer:         "L2",
 		Risk:          cmdutil.RiskWrite,
 		RiskDeclared:  true,
@@ -126,9 +126,9 @@ func registerRecordCommentCommands(parent *cobra.Command, f *cmdutil.Factory) {
 		Long: `软删除自己在一条 TabData 记录下发布的评论。
 设计理由：删除权只属于评论作者；服务端按当前 Profile 或受审计的 Agent 会话判定作者身份。
 常见陷阱：这是软删除，定级 RiskWrite，不需要 --yes；不能用它删除其他作者的评论。`,
-		Example: "  tabtin table record comment rm rec_xxx comment_yyy\n" +
-			"  tabtin table record comment rm rec_xxx comment_yyy --dry-run\n" +
-			"  tabtin table record comment rm rec_xxx comment_yyy --format json",
+		Example: "  muse table record comment rm rec_xxx comment_yyy\n" +
+			"  muse table record comment rm rec_xxx comment_yyy --dry-run\n" +
+			"  muse table record comment rm rec_xxx comment_yyy --format json",
 		Layer:         "L2",
 		Risk:          cmdutil.RiskWrite,
 		RiskDeclared:  true,
@@ -170,9 +170,9 @@ func registerRecordCommentStatusCommand(parent *cobra.Command, f *cmdutil.Factor
 		Long: "更新一条 TabData 记录下评论线程的解决状态。\n" +
 			"设计理由：线程状态独立于评论正文，便于按未解决、已解决和全部分类协作。\n" +
 			"常见陷阱：thread-id 应传根评论 ID；重复执行同一状态是幂等操作。",
-		Example: "  tabtin table record comment " + name + " rec_xxx thread_yyy\n" +
-			"  tabtin table record comment " + name + " rec_xxx thread_yyy --format json\n" +
-			"  tabtin table record comment " + name + " rec_xxx thread_yyy --dry-run",
+		Example: "  muse table record comment " + name + " rec_xxx thread_yyy\n" +
+			"  muse table record comment " + name + " rec_xxx thread_yyy --format json\n" +
+			"  muse table record comment " + name + " rec_xxx thread_yyy --dry-run",
 		Layer:        "L2",
 		Risk:         cmdutil.RiskWrite,
 		RiskDeclared: true,

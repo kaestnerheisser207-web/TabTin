@@ -10,7 +10,7 @@ import com.tabtin.mobile.data.model.AgentProjectTask
 import com.tabtin.mobile.data.model.AgentSkillLink
 import com.tabtin.mobile.data.model.AllChatSession
 import com.tabtin.mobile.data.model.VisibleSkillEntry
-import com.tabtin.mobile.R
+import com.muse.mobile.R
 import com.tabtin.mobile.data.repository.AgentDetailRepository
 import com.tabtin.mobile.util.ErrorClassifier
 import com.tabtin.mobile.util.safeLaunch

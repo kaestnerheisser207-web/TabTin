@@ -18,7 +18,7 @@ import {
 /**
  * 调用方可声明的 FileUsage.context_type 白名单。
  *
- * - `present`：通用一次性上传（`tabtin oss upload` 的既有语义），文件不纳入某个业务
+ * - `present`：通用一次性上传（`muse oss upload` 的既有语义），文件不纳入某个业务
  *   实体的生命周期清理——保持默认，避免改变通用命令行为。
  * - `document`：TabDoc 正文引用的文件（与 Electron 直传图片一致）。登记为 document
  *   后，文件随文档归档 / 永久删除被 DocumentService._deactivate_document_file_usages
@@ -178,7 +178,7 @@ export async function handleOSSRoute(
     // 修复"daemon 跑在 organization A、CLI 操作 organization B"导致 FileRecord 错写、
     // 后续 doc import file 报 file_not_in_organization 403 的 bug。
     // contextType 由调用方声明（白名单 present/document，见 resolveUploadContextType）。
-    // 默认 'present' 保持 `tabtin oss upload` 通用命令行为不变；TabDoc HTML 块上传
+    // 默认 'present' 保持 `muse oss upload` 通用命令行为不变；TabDoc HTML 块上传
     // 传 'document' 以纳入文档归档/删除的 FileUsage 清理路径。
     // CLI TabDoc HTML  显式传 is_public=false；缺省保持 action-tools 默认。
     const explicitIsPublic =
@@ -193,7 +193,7 @@ export async function handleOSSRoute(
       mimeType: body?.mime_type as string | undefined,
       contextType: body?.context_type,
       // Django confirm-upload 强制 context_id 非空（CROSS-1 文件归属追踪，
-      // apps/tabtin_django/apps/services/oss/api.py）。`tabtin oss upload` 是通用
+      // apps/tabtin_django/apps/services/oss/api.py）。`muse oss upload` 是通用
       // 一次性上传，无内建业务上下文——调用方可显式传 context_id，否则由
       // performLocalFileUpload 按 oss-upload.ts 头注释的"一次性产物自造 stable id"
       // 约定合成一个，避免上传被服务端直接拒。

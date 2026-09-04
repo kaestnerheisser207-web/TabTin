@@ -17,7 +17,7 @@ metadata:
 
 # 技能创建器
 
-引导用户从场景 → 路由描述 → 正文 → references → 自测触发句。产出符合 TabTin `metadata.tabtin` 规范的草案。
+引导用户从场景 → 路由描述 → 正文 → references → 自测触发句。产出符合 Muse `metadata.tabtin` 规范的草案。
 
 ## 必须遵守
 

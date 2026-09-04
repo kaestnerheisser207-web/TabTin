@@ -10,9 +10,9 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/TabTin/tabtin-cli/internal/cmdutil"
-	"github.com/TabTin/tabtin-cli/internal/errcode"
-	"github.com/TabTin/tabtin-cli/internal/output"
+	"github.com/Muse/muse-cli/internal/cmdutil"
+	"github.com/Muse/muse-cli/internal/errcode"
+	"github.com/Muse/muse-cli/internal/output"
 )
 
 func newCmdConfig(f *cmdutil.Factory) *cobra.Command {
@@ -32,10 +32,10 @@ func newCmdConfig(f *cmdutil.Factory) *cobra.Command {
   - SQL 模式 (sql_mode)
 
 示例：
-  tabtin agent config show
-  tabtin agent config set authorization_preset collaborative
-  tabtin agent config set terminal_mode sandboxed
-  tabtin agent config set agent_backend.type codex`,
+  muse agent config show
+  muse agent config set authorization_preset collaborative
+  muse agent config set terminal_mode sandboxed
+  muse agent config set agent_backend.type codex`,
 	}
 
 	cmd.AddCommand(newCmdConfigShow(f))
@@ -105,11 +105,11 @@ func newCmdConfigShow(f *cmdutil.Factory) *cobra.Command {
 	cmd := &cobra.Command{
 		Use:     "show [agent-id]",
 		Short:   "查看 Agent 配置",
-		Example: "  tabtin agent config show\n  tabtin agent config show --key authorization_preset\n  tabtin agent config show --key sandbox",
+		Example: "  muse agent config show\n  muse agent config show --key authorization_preset\n  muse agent config show --key sandbox",
 		RunE: cmdutil.SafeRunE(func(cmd *cobra.Command, args []string) error {
 			agentID, err := resolveCurrentAgentID(f, args)
 			if err != nil {
-				return output.PrintErrorAndExit(output.ErrorEnvelope(string(errcode.ValidationError), err.Error(), "tabtin agent use <id>", output.ExitValidation))
+				return output.PrintErrorAndExit(output.ErrorEnvelope(string(errcode.ValidationError), err.Error(), "muse agent use <id>", output.ExitValidation))
 			}
 
 			reqCtx := cmd.Context()
@@ -164,13 +164,13 @@ func newCmdConfigSet(f *cmdutil.Factory) *cobra.Command {
   package_install | curl_read | curl_mutate | docker | kubectl | ssh
   值: allow | confirm | block`,
 		Args:    cobra.ExactArgs(2),
-		Example: "  tabtin agent config set authorization_preset collaborative\n  tabtin agent config set terminal_mode sandboxed\n  tabtin agent config set agent_backend.type codex\n  tabtin agent config set memory.enabled true\n  tabtin agent config set operation_switches.git_push confirm",
+		Example: "  muse agent config set authorization_preset collaborative\n  muse agent config set terminal_mode sandboxed\n  muse agent config set agent_backend.type codex\n  muse agent config set memory.enabled true\n  muse agent config set operation_switches.git_push confirm",
 		RunE: cmdutil.SafeRunE(func(cmd *cobra.Command, args []string) error {
 			key, rawValue := args[0], args[1]
 
 			agentID, err := resolveCurrentAgentID(f, nil)
 			if err != nil {
-				return output.PrintErrorAndExit(output.ErrorEnvelope(string(errcode.ValidationError), err.Error(), "tabtin agent use <id>", output.ExitValidation))
+				return output.PrintErrorAndExit(output.ErrorEnvelope(string(errcode.ValidationError), err.Error(), "muse agent use <id>", output.ExitValidation))
 			}
 
 			reqCtx := cmd.Context()
@@ -229,7 +229,7 @@ func newCmdConfigPreset(f *cmdutil.Factory) *cobra.Command {
   collaborative  协作模式 — 常规操作自动执行（默认）
   full_auto      全自动模式 — 所有操作自动执行`,
 		Args:    cobra.ExactArgs(1),
-		Example: "  tabtin agent config preset collaborative\n  tabtin agent config preset cautious",
+		Example: "  muse agent config preset collaborative\n  muse agent config preset cautious",
 		RunE: cmdutil.SafeRunE(func(cmd *cobra.Command, args []string) error {
 			preset := args[0]
 			validPresets := []string{"cautious", "collaborative", "full_auto"}
@@ -243,12 +243,12 @@ func newCmdConfigPreset(f *cmdutil.Factory) *cobra.Command {
 			if !valid {
 				return output.PrintErrorAndExit(output.ErrorEnvelope(string(errcode.ValidationError),
 					fmt.Sprintf("无效的预设 '%s'，可选: %s", preset, strings.Join(validPresets, " | ")),
-					"tabtin agent config preset collaborative", output.ExitValidation))
+					"muse agent config preset collaborative", output.ExitValidation))
 			}
 
 			agentID, err := resolveCurrentAgentID(f, nil)
 			if err != nil {
-				return output.PrintErrorAndExit(output.ErrorEnvelope(string(errcode.ValidationError), err.Error(), "tabtin agent use <id>", output.ExitValidation))
+				return output.PrintErrorAndExit(output.ErrorEnvelope(string(errcode.ValidationError), err.Error(), "muse agent use <id>", output.ExitValidation))
 			}
 
 			reqCtx := cmd.Context()

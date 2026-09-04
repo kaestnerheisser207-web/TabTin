@@ -210,7 +210,7 @@ export function createAskUserActions(
         // Phase 1 Review #6 修复：原文案 "需要本地 Runtime" 对普通用户是黑话。
         // 改成"需要桌面端"+"在哪能解决"，避免用户对着术语发呆。
         content: i18n.t('chat:messages.askUserRequiresDevice', {
-          defaultValue: '这个操作需要在桌面端 TabTin 里完成。请打开桌面客户端、或在 Agent 设置中绑定一台设备后再试。',
+          defaultValue: '这个操作需要在桌面端 Muse 里完成。请打开桌面客户端、或在 Agent 设置中绑定一台设备后再试。',
         }),
         created_at: new Date().toISOString(),
       },

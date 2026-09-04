@@ -2,7 +2,7 @@
  * reach doctor — 选路核心（纯函数）
  *
  * `doctor --json` 诊断：探"哪个后端此刻能服务这个平台"。但我们探的
- * 维度是 TabTin 自己的——运行时（Electron/Daemon）× 登录态 × 适配器可用性 × 代理。
+ * 维度是 Muse 自己的——运行时（Electron/Daemon）× 登录态 × 适配器可用性 × 代理。
  *
  * 这里只做**纯决策**：输入是已探测好的事实（`PlatformProbe`），输出是选路结果。
  * 真正的探测（起没起 Electron、分区里有没有 cookie）由宿主填 probe，宿主那步不纯、

@@ -310,7 +310,7 @@ export interface RichContentBlock extends MessageBlock {
 
   // -- cli_output_table / cli_output_record（W4 D1：CLI stdout 自动渲染）-----------
   /**
-   * 原始 CLI 命令字符串（如 `tabtin doc list --format json`）。
+   * 原始 CLI 命令字符串（如 `muse doc list --format json`）。
    * UI 在卡片头部以等宽字体显示，让用户知道数据来源，方便复制重跑。
    *
    * 注意与 `table_preview` 已有的 `columns` / `rows` 字段语义区分：

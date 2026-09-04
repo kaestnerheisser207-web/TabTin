@@ -61,7 +61,7 @@ class SpaceTrashCascadeTests(SimpleTestCase):
 
     QC Agent 端到端复现的 BLOCKER：用户软删 Space 后用户仍能搜到该
     Space 下的 memo / message。Wave 1 原实现只在 on_space_deleted 硬删
-    时级联，但 TabTin 产品有 30 天回收站 → 用户感知"已删除"=软删。
+    时级联，但 Muse 产品有 30 天回收站 → 用户感知"已删除"=软删。
     """
 
     def _make_space(self, *, trashed_at=None):

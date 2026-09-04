@@ -250,7 +250,7 @@ describe('LocalPermissionHandler · memo write-back by scope', () => {
       waitForUserInput: harness.waitForUserInput,
       memoStore: memo,
     });
-    const req = buildRequest('web_search', { search_term: 'tabtin' }, { isReadOnly: true });
+    const req = buildRequest('web_search', { search_term: 'muse' }, { isReadOnly: true });
     await handler.requestPermissionsBatch({ batchId: 'b5', requests: [req], agentRunId: 'test-run' });
     expect(memo.__debugAlwaysSnapshot()).not.toEqual({});
   });

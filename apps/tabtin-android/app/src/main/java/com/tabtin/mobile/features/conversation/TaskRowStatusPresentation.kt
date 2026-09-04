@@ -1,7 +1,7 @@
 package com.tabtin.mobile.features.conversation
 
 import androidx.annotation.StringRes
-import com.tabtin.mobile.R
+import com.muse.mobile.R
 import com.tabtin.mobile.data.model.AllChatSession
 import com.tabtin.mobile.data.model.SessionRunStatus
 

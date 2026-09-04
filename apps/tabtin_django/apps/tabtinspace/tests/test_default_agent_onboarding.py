@@ -82,7 +82,7 @@ class DefaultSpaceOnboardingTests(TestCase):
         User = get_user_model()
         user = User.objects.db_manager(postgres_app_db_alias()).create_user(
             email=f"default-agent-onboarding-{uuid4().hex[:8]}@tabtin.test",
-            password="TabtinTest#2026",
+            password="MuseTest#2026",
             nickname="New User",
             is_active=True,
         )
@@ -130,7 +130,7 @@ class DefaultSpaceOnboardingTests(TestCase):
         try:
             owner = User.objects.db_manager(postgres_app_db_alias()).create_user(
                 email=f"integrity-default-agent-{uuid4().hex[:8]}@tabtin.test",
-                password="TabtinTest#2026",
+                password="MuseTest#2026",
                 nickname="Owner",
                 is_active=True,
             )
@@ -176,7 +176,7 @@ class DefaultSpaceOnboardingTests(TestCase):
         User = get_user_model()
         owner = User.objects.db_manager(postgres_app_db_alias()).create_user(
             email=f"default-space-execution-{uuid4().hex[:8]}@tabtin.test",
-            password="TabtinTest#2026",
+            password="MuseTest#2026",
             nickname="Owner",
             is_active=True,
         )
@@ -237,7 +237,7 @@ class DefaultSpaceOnboardingTests(TestCase):
         User = get_user_model()
         owner = User.objects.db_manager(postgres_app_db_alias()).create_user(
             email=f"second-org-home-{uuid4().hex[:8]}@tabtin.test",
-            password="TabtinTest#2026",
+            password="MuseTest#2026",
             nickname="Owner",
             is_active=True,
         )
@@ -298,7 +298,7 @@ class DefaultSpaceOnboardingTests(TestCase):
         User = get_user_model()
         owner = User.objects.db_manager(postgres_app_db_alias()).create_user(
             email=f"second-org-same-device-{uuid4().hex[:8]}@tabtin.test",
-            password="TabtinTest#2026",
+            password="MuseTest#2026",
             nickname="Owner",
             is_active=True,
         )
@@ -344,7 +344,7 @@ class DefaultSpaceOnboardingTests(TestCase):
         User = get_user_model()
         owner = User.objects.db_manager(postgres_app_db_alias()).create_user(
             email=f"owner-empty-space-{uuid4().hex[:8]}@tabtin.test",
-            password="TabtinTest#2026",
+            password="MuseTest#2026",
             nickname="Owner",
             is_active=True,
         )
@@ -369,13 +369,13 @@ class DefaultSpaceOnboardingTests(TestCase):
         User = get_user_model()
         owner = User.objects.db_manager(postgres_app_db_alias()).create_user(
             email=f"editor-empty-owner-{uuid4().hex[:8]}@tabtin.test",
-            password="TabtinTest#2026",
+            password="MuseTest#2026",
             nickname="Owner",
             is_active=True,
         )
         member = User.objects.db_manager(postgres_app_db_alias()).create_user(
             email=f"editor-empty-member-{uuid4().hex[:8]}@tabtin.test",
-            password="TabtinTest#2026",
+            password="MuseTest#2026",
             nickname="Member",
             is_active=True,
         )
@@ -402,7 +402,7 @@ class DefaultSpaceOnboardingTests(TestCase):
         User = get_user_model()
         owner = User.objects.db_manager(postgres_app_db_alias()).create_user(
             email=f"owner-empty-idempotent-{uuid4().hex[:8]}@tabtin.test",
-            password="TabtinTest#2026",
+            password="MuseTest#2026",
             nickname="Owner",
             is_active=True,
         )
@@ -451,13 +451,13 @@ class DefaultSpaceOnboardingTests(TestCase):
         User = get_user_model()
         owner = User.objects.db_manager(postgres_app_db_alias()).create_user(
             email=f"viewer-empty-owner-{uuid4().hex[:8]}@tabtin.test",
-            password="TabtinTest#2026",
+            password="MuseTest#2026",
             nickname="Owner",
             is_active=True,
         )
         viewer = User.objects.db_manager(postgres_app_db_alias()).create_user(
             email=f"viewer-empty-member-{uuid4().hex[:8]}@tabtin.test",
-            password="TabtinTest#2026",
+            password="MuseTest#2026",
             nickname="Viewer",
             is_active=True,
         )
@@ -492,13 +492,13 @@ class DefaultSpaceOnboardingTests(TestCase):
         User = get_user_model()
         owner = User.objects.db_manager(postgres_app_db_alias()).create_user(
             email=f"apikey-empty-owner-{uuid4().hex[:8]}@tabtin.test",
-            password="TabtinTest#2026",
+            password="MuseTest#2026",
             nickname="Owner",
             is_active=True,
         )
         member = User.objects.db_manager(postgres_app_db_alias()).create_user(
             email=f"apikey-empty-member-{uuid4().hex[:8]}@tabtin.test",
-            password="TabtinTest#2026",
+            password="MuseTest#2026",
             nickname="Member",
             is_active=True,
         )

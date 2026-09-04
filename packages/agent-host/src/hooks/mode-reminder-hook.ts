@@ -41,7 +41,7 @@ export interface ModeReminderHookOptions {
   /**
    * Plan 模式主 plan 文件路径（可选；无则 plan-sparse 省略路径占位）。
    *
-   * **TD-16 决策**：TabTin Plan 概念是 TabDoc document_id，不是本地文件路径。
+   * **TD-16 决策**：Muse Plan 概念是 TabDoc document_id，不是本地文件路径。
    * 生产 Electron / Daemon 当前均不注入此回调；`{{planFilePath}}` 占位符会替换为
    * 空字符串，文案优雅 fallback。主要服务未来扩展（path-aware 草稿 / 第三方 host）。
    */

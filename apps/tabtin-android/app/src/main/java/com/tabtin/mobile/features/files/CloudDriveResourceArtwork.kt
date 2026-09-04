@@ -25,7 +25,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.res.stringResource
-import com.tabtin.mobile.R
+import com.muse.mobile.R
 import com.tabtin.mobile.features.clouddocs.TabTinAppIcon
 import com.tabtin.mobile.features.clouddocs.TabTinAppIconVariant
 import com.tabtin.mobile.ui.theme.TTRadius

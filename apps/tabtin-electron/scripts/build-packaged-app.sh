@@ -400,7 +400,7 @@ cleanup_packaged_deploy_on_exit() {
 trap cleanup_packaged_deploy_on_exit EXIT
 
 pack_time_begin "${BUILD_TITLE} (profile=${PROFILE})"
-echo "=== TabTin ${BUILD_TITLE} Build (profile=${PROFILE}) ==="
+echo "=== Muse ${BUILD_TITLE} Build (profile=${PROFILE}) ==="
 if [ "$PACK_QUICK" = "1" ]; then
   if [ "$PACK_SKIP_SENTRY_SYMBOLS" = "1" ]; then
     echo "  · mode: QUICK LOCAL (skip sourcemaps; Windows deep prune/cache; keep staging + audit)"
@@ -809,16 +809,16 @@ PROFILE_EXECUTABLE_NAME=""
 PROFILE_SHORTCUT_NAME=""
 case "$PROFILE" in
   local)
-    PROFILE_PRODUCT_NAME="TabTin Local"
-    PROFILE_APP_ID="com.tabtin.app.local"
-    PROFILE_EXECUTABLE_NAME="tabtin-local"
-    PROFILE_SHORTCUT_NAME="TabTin Local"
+    PROFILE_PRODUCT_NAME="Muse Local"
+    PROFILE_APP_ID="com.muse.app.local"
+    PROFILE_EXECUTABLE_NAME="muse-local"
+    PROFILE_SHORTCUT_NAME="Muse Local"
     ;;
   community)
-    PROFILE_PRODUCT_NAME="TabTin Community"
-    PROFILE_APP_ID="com.tabtin.community"
-    PROFILE_EXECUTABLE_NAME="tabtin-community"
-    PROFILE_SHORTCUT_NAME="TabTin Community"
+    PROFILE_PRODUCT_NAME="Muse Community"
+    PROFILE_APP_ID="com.muse.community"
+    PROFILE_EXECUTABLE_NAME="muse-community"
+    PROFILE_SHORTCUT_NAME="Muse Community"
     ;;
 esac
 

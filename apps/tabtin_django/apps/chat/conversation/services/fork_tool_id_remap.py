@@ -1,4 +1,4 @@
-"""Fork 时把历史 tool_use / tool_result id 重写为 TabTin 权威 id。
+"""Fork 时把历史 tool_use / tool_result id 重写为 Muse 权威 id。
 
 契约与前端 ``ToolIdMapper`` / ``remapToolIdsInValue`` 对齐：
 - 持久层只认 ``tu_<uuid>``

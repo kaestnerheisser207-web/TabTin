@@ -1,6 +1,6 @@
 package com.tabtin.mobile.sentry
 
-import com.tabtin.mobile.BuildConfig
+import com.muse.mobile.BuildConfig
 import com.tabtin.mobile.data.repository.OrganizationRepository
 import com.tabtin.mobile.util.TokenManager
 import io.sentry.Sentry

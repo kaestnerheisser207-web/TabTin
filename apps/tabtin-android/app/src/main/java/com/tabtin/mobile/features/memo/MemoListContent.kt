@@ -49,7 +49,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import com.tabtin.mobile.R
+import com.muse.mobile.R
 import com.tabtin.mobile.data.model.memo.MemoCollection
 import com.tabtin.mobile.data.model.memo.MemoSummary
 import com.tabtin.mobile.features.memo.components.MemoCardView

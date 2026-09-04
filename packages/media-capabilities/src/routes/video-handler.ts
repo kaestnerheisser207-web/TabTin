@@ -138,7 +138,7 @@ export function createVideoHandler(deps: VideoHandlerDeps = {}): VideoHandlerIns
       const style = body?.style as string | undefined;
       if (!style || typeof style !== 'string') {
         sendJSON(res, 400, errorResponse('VALIDATION_ERROR', '缺少 style 参数', {
-          suggestions: ['tabtin video bgm --style tech --duration 30'],
+          suggestions: ['muse video bgm --style tech --duration 30'],
         }));
         return;
       }
@@ -165,7 +165,7 @@ export function createVideoHandler(deps: VideoHandlerDeps = {}): VideoHandlerIns
     }
 
     sendJSON(res, 404, errorResponse('UNKNOWN_ROUTE', `未知的视频路由: ${url}`, {
-      suggestions: ['请检查命令拼写', '使用 tabtin video --help 查看可用命令'],
+      suggestions: ['请检查命令拼写', '使用 muse video --help 查看可用命令'],
     }));
   };
 

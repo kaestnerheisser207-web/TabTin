@@ -258,15 +258,15 @@ end tell`
           DesktopErrorCode.AX_UNAVAILABLE,
           `Accessibility Tree 不可用：macOS 辅助功能权限未授予。` +
           `本次 AX 查询未执行。` +
-          `请在「系统设置 → 隐私与安全性 → 辅助功能」中启用 TabTin，然后重试；` +
-          `或使用 tabtin desktop screenshot + 坐标点击作为替代。`,
+          `请在「系统设置 → 隐私与安全性 → 辅助功能」中启用 Muse，然后重试；` +
+          `或使用 muse desktop screenshot + 坐标点击作为替代。`,
         )
       }
       throw new DesktopError(
         DesktopErrorCode.ELEMENT_NOT_FOUND,
         `找不到目标窗口：按 ${opts.window ? `标题「${opts.window}」` : `bundleId「${opts.bundleId}」`} 未能匹配到可见窗口/进程。` +
         `本次 AX 查询未执行。` +
-        `请确认目标应用已启动且窗口可见，或使用 tabtin desktop windows 列出当前所有窗口后重试。`,
+        `请确认目标应用已启动且窗口可见，或使用 muse desktop windows 列出当前所有窗口后重试。`,
       )
     }
   } else {
@@ -289,8 +289,8 @@ end tell`
         DesktopErrorCode.AX_UNAVAILABLE,
         `Accessibility Tree 不可用：macOS 辅助功能权限未授予或 AX 查询被系统拒绝。` +
         `本次 AX 查询未执行。` +
-        `请在「系统设置 → 隐私与安全性 → 辅助功能」中启用 TabTin，` +
-        `或使用 tabtin desktop screenshot + 坐标点击作为替代。`,
+        `请在「系统设置 → 隐私与安全性 → 辅助功能」中启用 Muse，` +
+        `或使用 muse desktop screenshot + 坐标点击作为替代。`,
       )
     }
     if (msg.includes('timed out') || msg.includes('ETIMEDOUT')) {
@@ -298,14 +298,14 @@ end tell`
         DesktopErrorCode.INTERNAL_ERROR,
         `AX 查询超时（超过 ${AX_TIMEOUT_MS / 1000} 秒）：目标应用 UI 层级可能过于复杂。` +
         `本次 AX 查询未完成。` +
-        `建议降低 --max-depth 参数，或使用 tabtin desktop screenshot + 坐标点击作为替代。`,
+        `建议降低 --max-depth 参数，或使用 muse desktop screenshot + 坐标点击作为替代。`,
       )
     }
     throw new DesktopError(
       DesktopErrorCode.AX_UNAVAILABLE,
       `AX 查询失败：${msg.slice(0, 200)}。` +
       `本次 AX 查询未执行。` +
-      `请检查目标应用状态，或使用 tabtin desktop screenshot + 坐标点击作为替代。`,
+      `请检查目标应用状态，或使用 muse desktop screenshot + 坐标点击作为替代。`,
     )
   }
 

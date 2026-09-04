@@ -32,7 +32,7 @@ from apps.services.daemon_control.api import query_device_presence
 def api_root(request):
     """API根路径，返回API信息"""
     return {
-        "message": "Tabtin API Service",
+        "message": "Muse API Service",
         "version": "1.0.0",
         "docs": "/api/docs",
         "endpoints": {
@@ -61,7 +61,7 @@ def api_root(request):
 def auth_docs(request):
     """认证API文档，专门为开发工具提供"""
     return {
-        "title": "Tabtin 认证API文档",
+        "title": "Muse 认证API文档",
         "version": "1.0.0",
         "base_url": "http://localhost:6060/api/auth",
         "authentication": "JWT Bearer Token",
@@ -189,7 +189,7 @@ def auth_openapi(request):
     return {
         "openapi": "3.1.0",
         "info": {
-            "title": "Tabtin 认证API",
+            "title": "Muse 认证API",
             "version": "1.0.0",
             "description": "Tabtin用户认证模块API文档，包含注册、登录、密码管理等功能"
         },
@@ -542,7 +542,7 @@ def auth_openapi(request):
 
 _safe_add_router("/auth", auth_router)
 _safe_add_router("/chat", chat_router)
-_safe_add_router("/context", tabtinspace_router, tags=["Tabtin Space"])
+_safe_add_router("/context", tabtinspace_router, tags=["Muse Space"])
 try:
     from apps.agent.api import router as agent_identity_router
     _safe_add_router("/agents", agent_identity_router, tags=["Agent"])

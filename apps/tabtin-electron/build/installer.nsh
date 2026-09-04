@@ -58,6 +58,11 @@
   Delete "$APPDATA\TabTin Local\credentials.json"
   Delete "$APPDATA\TabTin Preprod\credentials.json"
   Delete "$APPDATA\tabtin-electron\credentials.json"
+  Delete "$APPDATA\Muse\credentials.json"
+  Delete "$APPDATA\Muse Dev\credentials.json"
+  Delete "$APPDATA\Muse Local\credentials.json"
+  Delete "$APPDATA\Muse Community\credentials.json"
+  Delete "$APPDATA\Muse Preprod\credentials.json"
 !macroend
 
 ; Wipe config/cache under one userData profile. Does NOT touch organizations\.
@@ -97,6 +102,11 @@
   !insertmacro wipeTabTinProfileConfig "$APPDATA\TabTin Local"
   !insertmacro wipeTabTinProfileConfig "$APPDATA\TabTin Preprod"
   !insertmacro wipeTabTinProfileConfig "$APPDATA\tabtin-electron"
+  !insertmacro wipeTabTinProfileConfig "$APPDATA\Muse"
+  !insertmacro wipeTabTinProfileConfig "$APPDATA\Muse Dev"
+  !insertmacro wipeTabTinProfileConfig "$APPDATA\Muse Local"
+  !insertmacro wipeTabTinProfileConfig "$APPDATA\Muse Community"
+  !insertmacro wipeTabTinProfileConfig "$APPDATA\Muse Preprod"
   ; ~/.tabtin：只删配置文件，保留 checkpoints / file-history / 用户相关内容
   Delete "$PROFILE\.tabtin\desktop-approval.json"
   Delete "$PROFILE\.tabtin\server.json"
@@ -110,6 +120,15 @@
   RMDir /r "$LOCALAPPDATA\TabTin Dev-updater"
   RMDir /r "$LOCALAPPDATA\TabTin Local-updater"
   RMDir /r "$LOCALAPPDATA\TabTin Preprod-updater"
+  RMDir /r "$LOCALAPPDATA\com.muse.app-updater"
+  RMDir /r "$LOCALAPPDATA\com.muse.app.dev-updater"
+  RMDir /r "$LOCALAPPDATA\com.muse.app.local-updater"
+  RMDir /r "$LOCALAPPDATA\com.muse.app.preprod-updater"
+  RMDir /r "$LOCALAPPDATA\Muse-updater"
+  RMDir /r "$LOCALAPPDATA\Muse Dev-updater"
+  RMDir /r "$LOCALAPPDATA\Muse Local-updater"
+  RMDir /r "$LOCALAPPDATA\Muse Community-updater"
+  RMDir /r "$LOCALAPPDATA\Muse Preprod-updater"
 !macroend
 
 !macro customUnInstall
@@ -127,7 +146,7 @@
     ${Else}
       ${IfNot} ${Silent}
         MessageBox MB_YESNO|MB_ICONQUESTION \
-          "Login credentials have been removed.$\r$\n$\r$\nAlso delete local TabTin config and cache?$\r$\n(Workspace folders and bound local directories are NEVER deleted.)$\r$\n$\r$\n登录凭证已清除。$\r$\n$\r$\n是否同时删除本地配置与缓存？$\r$\n（工作区目录与绑定的本机目录一律保留，不会删除。）" \
+          "Login credentials have been removed.$\r$\n$\r$\nAlso delete local Muse config and cache?$\r$\n(Workspace folders and bound local directories are NEVER deleted.)$\r$\n$\r$\n登录凭证已清除。$\r$\n$\r$\n是否同时删除本地配置与缓存？$\r$\n（工作区目录与绑定的本机目录一律保留，不会删除。）" \
           IDYES tabtinFullWipe IDNO tabtinSkipFullWipe
         tabtinFullWipe:
           StrCpy $0 "1"

@@ -108,7 +108,7 @@
     "availableTitle": "La ejecución de la IA se dirigirá a través de \"{{device}}\"",
     "availableDesc": "La colaboración en equipo permanece en este espacio de trabajo del equipo; La IA se ejecuta en {{space}}.",
     "unavailableTitle": "El dispositivo de ejecución del propietario \"{{device}}\" no está disponible ({{status}})",
-    "unavailableDesc": "El chat y los recursos siguen disponibles, pero las tareas de IA no pueden iniciarse por ahora. Una vez que el propietario vuelve a abrir TabTin en ese dispositivo y {{space}} vuelve a estar en línea, se reanuda la ejecución."
+    "unavailableDesc": "El chat y los recursos siguen disponibles, pero las tareas de IA no pueden iniciarse por ahora. Una vez que el propietario vuelve a abrir Muse en ese dispositivo y {{space}} vuelve a estar en línea, se reanuda la ejecución."
   },
   "validation": {
     "nameRequired": "El nombre del espacio de trabajo es obligatorio.",
@@ -441,8 +441,8 @@
       "subtitle": "Primero identifique qué está impulsando a este agente y a qué dispositivo está vinculado, luego separe la configuración del espacio actual de las capacidades que solo pertenecen al dispositivo de control electrónico actual.",
       "builtinActive": "Tiempo de ejecución incorporado activo",
       "externalActive": "Backend externo activo",
-      "builtinDesc": "Este agente está impulsado por el motor integrado TabTin, pero esta página aún necesita distinguir entre la configuración del espacio actual y las capacidades del host proporcionadas por esta instancia de Electron. El tiempo de ejecución local solo es igual al tiempo de ejecución directo del agente cuando este dispositivo Electron es el dispositivo de ejecución.",
-      "externalDesc": "Este agente es impulsado por un motor externo. Se basa principalmente en su propio sistema de herramientas y acceso a terminal, por lo que el tiempo de ejecución de TabTin, MCP y Core CLI que se muestran aquí describen lo que el host Electron actual puede proporcionar, no lo que el agente externo siempre puede llamar directamente.",
+      "builtinDesc": "Este agente está impulsado por el motor integrado Muse, pero esta página aún necesita distinguir entre la configuración del espacio actual y las capacidades del host proporcionadas por esta instancia de Electron. El tiempo de ejecución local solo es igual al tiempo de ejecución directo del agente cuando este dispositivo Electron es el dispositivo de ejecución.",
+      "externalDesc": "Este agente es impulsado por un motor externo. Se basa principalmente en su propio sistema de herramientas y acceso a terminal, por lo que el tiempo de ejecución de Muse, MCP y Core CLI que se muestran aquí describen lo que el host Electron actual puede proporcionar, no lo que el agente externo siempre puede llamar directamente.",
       "boundLocal": "Este dispositivo Electron es el dispositivo de ejecución.",
       "boundOther": "Este agente está vinculado a otro dispositivo",
       "unbound": "Este Agente aún no está vinculado a un dispositivo de ejecución",
@@ -742,7 +742,7 @@
     "workspaceHint": "Detectado automáticamente a partir del contenido abierto en TabCode/Directorios: no se necesita configuración manual",
     "workspaceEmpty": "No hay caminos autorizados. Abra un proyecto en TabCode o un directorio local en Directorios para otorgar acceso al Agente.",
     "workspaceSourceSandbox": "Zona de pruebas del agente",
-    "workspaceSandboxHint": "Espacio de trabajo base creado automáticamente por TabTin para cada espacio de trabajo; no revocable aquí.",
+    "workspaceSandboxHint": "Espacio de trabajo base creado automáticamente por Muse para cada espacio de trabajo; no revocable aquí.",
     "workspaceSourceTabcode": "Proyectos de TabCode",
     "workspaceTabcodeHint": "Las carpetas que coloca aquí son totalmente accesibles para el Agente, incluidos .env, claves SSH y otros archivos confidenciales que contienen. Elija una subcarpeta específica en lugar de su directorio de inicio si desea limitar la vista del Agente.",
     "workspaceSourceTabfolder": "Historial de navegación de directorios",
@@ -1009,11 +1009,11 @@
     "panelDescription": "Decide qué máquina ejecuta comandos de terminal y acceso a archivos para este Agente. Una vez vinculado, este espacio de trabajo permanece en ese dispositivo.",
     "chooseDevice": "Elija el dispositivo de ejecución",
     "refresh": "Actualizar lista de dispositivos",
-    "noRegisteredDevicesHint": "Abra la aplicación de escritorio TabTin en esta máquina e inténtelo nuevamente.",
+    "noRegisteredDevicesHint": "Abra la aplicación de escritorio Muse en esta máquina e inténtelo nuevamente.",
     "availableDevices": "Dispositivos disponibles",
     "addRemoteDevice": "Agregar dispositivo remoto",
     "addRemoteDeviceTitle": "Agregar dispositivo remoto",
-    "addRemoteDeviceDesc": "Genere un comando de instalación para configurar TabTin Daemon en un servidor remoto para la ejecución de tareas de IA.",
+    "addRemoteDeviceDesc": "Genere un comando de instalación para configurar Muse Daemon en un servidor remoto para la ejecución de tareas de IA.",
     "deviceNameLabel": "Nombre del dispositivo",
     "deviceNamePlaceholder": "por ej. Servidor de producción, estación de trabajo GPU",
     "cancel": "Cancelar",
@@ -1367,7 +1367,7 @@
     "connectFailed": "La conexión falló",
     "testFailed": "Prueba fallida",
     "helpTitle": "Acerca de los servidores remotos SSH",
-    "helpTip1": "Las conexiones SSH se inician desde el backend de TabTin (no desde su máquina local), por lo que los dispositivos móviles también pueden usar servidores remotos.",
+    "helpTip1": "Las conexiones SSH se inician desde el backend de Muse (no desde su máquina local), por lo que los dispositivos móviles también pueden usar servidores remotos.",
     "helpTip2": "Las credenciales (contraseñas o claves) se cifran en reposo y nunca se almacenan en texto sin formato.",
     "helpTip3": "El agente puede ejecutar comandos en servidores remotos con transmisión de salida en tiempo real al chat.",
     "helpTip4": "Las huellas digitales del servidor se registran en la primera conexión y se verifican automáticamente después"
@@ -1410,7 +1410,7 @@
     "skillsSelf": "Estas habilidades solo tienen efecto para usted en el espacio del grupo actual y no cambian la configuración de habilidades de otros miembros.",
     "extensionsGroup": "Esta sección gestiona las conexiones de integración disponibles para el espacio del grupo actual. Si no se configura ninguna conexión específica de grupo, las conexiones de la organización se heredan.",
     "channelsOrganization": "Las cuentas de canal son recursos a nivel de organización. Esta página controla cómo el espacio del grupo actual utiliza esos canales.",
-    "mcpRuntime": "Esta vista combina conexiones MCP locales montadas en el espacio actual y el punto final TabTin MCP expuesto por el host Electron/Daemon actual. Tampoco lo es una configuración privada del lado del servidor del espacio del grupo.",
+    "mcpRuntime": "Esta vista combina conexiones MCP locales montadas en el espacio actual y el punto final Muse MCP expuesto por el host Electron/Daemon actual. Tampoco lo es una configuración privada del lado del servidor del espacio del grupo.",
     "apiGroup": "Esta sección expone los puntos de entrada de datos del espacio de grupo actual para consultas de solo lectura e integraciones externas."
   },
   "gitStatus": {
@@ -1470,7 +1470,7 @@
   },
   "mcpConnections": {
     "title": "Herramientas e integraciones externas (MCP)",
-    "subtitle": "El Protocolo de contexto modelo (MCP) es un protocolo estandarizado. Puede conectar fuentes de datos externas (como bases de datos locales o GitHub) para el Agente actual o exponer las capacidades de TabTin a otros asistentes de IA.",
+    "subtitle": "El Protocolo de contexto modelo (MCP) es un protocolo estandarizado. Puede conectar fuentes de datos externas (como bases de datos locales o GitHub) para el Agente actual o exponer las capacidades de Muse a otros asistentes de IA.",
     "subtitleDevice": "Administre las conexiones MCP locales de este dispositivo y elija para qué agentes está habilitada cada conexión.",
     "readOnlyNoticeDevice": "Modo de solo lectura. Las conexiones MCP locales las administra el administrador del dispositivo.",
     "agentScopeMigrationNotice": "La habilitación heredada no se puede asignar de forma segura a los agentes. Seleccione los Agentes que podrán volver a utilizar esta conexión.",
@@ -1493,7 +1493,7 @@
     "deleteConfirm": "¿Eliminar la conexión MCP \"{{name}}\"?",
     "deleteSuccess": "Conexión eliminada",
     "localOnly": "Estas conexiones se almacenan únicamente en el directorio de datos de usuario actual de Electron y están vinculadas a este host de Electron. No se comparten automáticamente con otros miembros, dispositivos o instancias de Electron.",
-    "externalBackendWarning": "Este agente funciona con un motor de terceros. Aún puede administrar conexiones de herramientas externas aquí, pero estas herramientas solo están disponibles para el motor TabTin integrado, no para el motor de terceros.",
+    "externalBackendWarning": "Este agente funciona con un motor de terceros. Aún puede administrar conexiones de herramientas externas aquí, pero estas herramientas solo están disponibles para el motor Muse integrado, no para el motor de terceros.",
     "readOnlyNotice": "Este espacio está en modo de solo lectura. Las conexiones MCP son administradas por el administrador del dispositivo en el espacio Bot.",
     "deleteConfirmTitle": "Eliminar conexión MCP",
     "cancelButton": "Cancelar",
@@ -1523,7 +1523,7 @@
     "marketplace": {
       "searchLabel": "Conectores de búsqueda",
       "searchPlaceholder": "Buscar por nombre, fuente o configuración",
-      "intro": "Utilice aplicaciones y servicios externos en TabTin.",
+      "intro": "Utilice aplicaciones y servicios externos en Muse.",
       "actionsLabel": "Más acciones",
       "connectedTitle": "Conectores conectados",
       "discoveredTitle": "Descubierto en este dispositivo",
@@ -1562,7 +1562,7 @@
         "reuseHint": "Una vez aprobado, reutilizará el mismo flujo de “autorización web → herramientas de sonda” que Stripe/Notion.",
         "gotIt": "Lo tengo",
         "generic": "Este conector necesita la incorporación del proveedor antes de la autorización. Inténtelo de nuevo más tarde.",
-        "vercel": "Vercel MCP está limitado a clientes de IA aprobados. La autorización se abre después de que se aprueba TabTin.",
+        "vercel": "Vercel MCP está limitado a clientes de IA aprobados. La autorización se abre después de que se aprueba Muse.",
         "canva": "Canva requiere el URI de devolución de llamada en su lista de permitidos de MCP. La autorización se abre después de la revisión."
       },
       "credentialDialog": {
@@ -1596,7 +1596,7 @@
       "oauthDialog": {
         "promptTitle": "Completar autorización web {{name}}",
         "promptDescription": "Termine de iniciar sesión {{name}} en la ventana de autorización y luego regrese aquí.",
-        "browserHint": "TabTin abre la página de autorización en su navegador predeterminado. Si no ha iniciado sesión en {{name}}, verá su inicio de sesión primero; después de eso, confirme \"Permitir el acceso a TabTin\".",
+        "browserHint": "Muse abre la página de autorización en su navegador predeterminado. Si no ha iniciado sesión en {{name}}, verá su inicio de sesión primero; después de eso, confirme \"Permitir el acceso a Muse\".",
         "scopeConnectTitle": "Conectar cuenta",
         "scopeConnectBody": "Se utiliza para leer proyectos, estado de implementación e información básica del equipo.",
         "scopeControlTitle": "Mantienes el control",
@@ -1608,7 +1608,7 @@
         "failedTitle": "Autorización incompleta",
         "failedBody": "{{name}} no completó la autorización. Su configuración anterior no ha cambiado. Vuelva a intentarlo o regrese.",
         "timeoutTitle": "Se agotó el tiempo de espera de confirmación de conexión",
-        "timeoutBody": "TabTin esperó más de {{seconds}} segundos para la autorización {{name}} y no pudo confirmar si se completó. Su configuración anterior no ha cambiado. Vuelva a intentarlo o regrese.",
+        "timeoutBody": "Muse esperó más de {{seconds}} segundos para la autorización {{name}} y no pudo confirmar si se completó. Su configuración anterior no ha cambiado. Vuelva a intentarlo o regrese.",
         "successTitle": "{{name}} conectado",
         "successBody": "Sonda de autorización y conexión completadas",
         "successAssigned": "{{name}} está configurado para los agentes {{count}}.",
@@ -1620,7 +1620,7 @@
         "backToConfig": "Volver a la configuración"
       },
       "recommendedCatalog": {
-        "vercel": "MCP remoto oficial a través de mcp-remote (stdio). OAuth es compatible después de que TabTin sea un cliente Vercel MCP aprobado.",
+        "vercel": "MCP remoto oficial a través de mcp-remote (stdio). OAuth es compatible después de que Muse sea un cliente Vercel MCP aprobado.",
         "github": "MCP remoto oficial de GitHub con un token de acceso personal separado solo para las herramientas del Agent.",
         "stripe": "MCP remoto oficial de Stripe a través de mcp-remote (stdio). Complete MCP OAuth estándar en el navegador después de conectarse.",
         "notion": "MCP remoto oficial de Notion a través de mcp-remote (stdio). Los clientes interactivos prefieren OAuth (PAT también está disponible).",

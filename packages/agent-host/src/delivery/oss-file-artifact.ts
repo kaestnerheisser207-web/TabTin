@@ -1,5 +1,5 @@
 /**
- * OSS 云端文件交付物 —— 从 `tabtin oss upload` 成功 stdout 解析并发布卡片。
+ * OSS 云端文件交付物 —— 从 `muse oss upload` 成功 stdout 解析并发布卡片。
  *
  * ：从 `capability/core/` 整文件迁到宿主共享位置（core 去业务化）。
  * upload 成功 → emit `artifact_kind: oss_file` → 流内 RichFile + 本轮产物。
@@ -69,7 +69,7 @@ function unwrapEnvelope(parsed: unknown, depth = 0): unknown {
   return parsed;
 }
 
-/** 是否为 `tabtin oss upload`(允许 `cd ... &&` / env 前缀)。 */
+/** 是否为 `muse oss upload`(允许 `cd ... &&` / env 前缀)。 */
 export function isOssUploadCommand(command: string): boolean {
   if (typeof command !== 'string' || !command.trim()) return false;
   const segments = splitShellCommandSegments(command);
@@ -83,14 +83,14 @@ export function isOssUploadCommand(command: string): boolean {
       i++;
     }
     if (tokens[i] === 'cd') continue;
-    if (tokens[i] === 'tabtin' && tokens[i + 1] === 'oss' && tokens[i + 2] === 'upload') {
+    if (tokens[i] === 'muse' && tokens[i + 1] === 'oss' && tokens[i + 2] === 'upload') {
       return true;
     }
   }
   return false;
 }
 
-/** 从 `tabtin oss upload <path>` 抽出本地路径 basename。 */
+/** 从 `muse oss upload <path>` 抽出本地路径 basename。 */
 export function extractOssUploadFilename(command: string): string | null {
   if (!isOssUploadCommand(command)) return null;
   const segments = splitShellCommandSegments(command);
@@ -103,7 +103,7 @@ export function extractOssUploadFilename(command: string): string | null {
     ) {
       i++;
     }
-    if (tokens[i] !== 'tabtin' || tokens[i + 1] !== 'oss' || tokens[i + 2] !== 'upload') continue;
+    if (tokens[i] !== 'muse' || tokens[i + 1] !== 'oss' || tokens[i + 2] !== 'upload') continue;
     // 位置参数或 --file-path
     for (let j = i + 3; j < tokens.length; j++) {
       const t = tokens[j];
@@ -250,7 +250,7 @@ function parseAgentTextOssFields(stdout: string): {
   return { fileId, accessUrl };
 }
 
-/** 从 `tabtin oss upload` 的 command + stdout 解析交付物字段。 */
+/** 从 `muse oss upload` 的 command + stdout 解析交付物字段。 */
 export function parseOssUploadResult(
   command: string,
   stdout: string,

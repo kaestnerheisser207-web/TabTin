@@ -35,7 +35,7 @@ const meta = {
     macTranslated: 0,
     macSupportsArm64: 1,
     osBuild: '24F74',
-    execBasename: 'TabTin',
+    execBasename: 'Muse',
     runtimeLabel: 'apple-silicon-native',
   },
   session: { sessionId: 's_ab12cd', deviceId: 'd_ff9021' },
@@ -95,7 +95,7 @@ const recentErrors = [
 ]
 
 const README = [
-  'TabTin 客户端诊断包（样例）',
+  'Muse 客户端诊断包（样例）',
   '='.repeat(40),
   '',
   `导出时间：${meta.generatedAt}`,

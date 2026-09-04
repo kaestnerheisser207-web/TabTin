@@ -1,5 +1,5 @@
 /**
- * 受限 shell / 不可信输出的 TabTin 业务判定测试。
+ * 受限 shell / 不可信输出的 Muse 业务判定测试。
  *
  * 这些断言从 agent-runtime 的 tool-output-sanitizer / restricted-shell-allowlist
  * 测试迁来——判定逻辑随源码迁到宿主，覆盖也随之落在这里。
@@ -12,29 +12,29 @@ import {
 } from '../src/capabilities/shell-restriction.js'
 
 describe('FR-09 /  — isUntrustedShellCommand', () => {
-  it('matches tabtin fetch and tabtin browser subcommands', () => {
-    expect(isUntrustedShellCommand('tabtin fetch https://example.com')).toBe(true)
-    expect(isUntrustedShellCommand('tabtin browser markdown --tab-id t1')).toBe(true)
-    expect(isUntrustedShellCommand('tabtin browser extract --url https://x')).toBe(true)
-    expect(isUntrustedShellCommand('tabtin browser tab list --format json')).toBe(true)
+  it('matches muse fetch and muse browser subcommands', () => {
+    expect(isUntrustedShellCommand('muse fetch https://example.com')).toBe(true)
+    expect(isUntrustedShellCommand('muse browser markdown --tab-id t1')).toBe(true)
+    expect(isUntrustedShellCommand('muse browser extract --url https://x')).toBe(true)
+    expect(isUntrustedShellCommand('muse browser tab list --format json')).toBe(true)
   })
 
   it('matches pipeline / cd / env prefixes conservatively', () => {
-    expect(isUntrustedShellCommand('tabtin fetch https://x.com | jq .')).toBe(true)
-    expect(isUntrustedShellCommand('cd /tmp && tabtin fetch https://x.com')).toBe(true)
-    expect(isUntrustedShellCommand('FOO=bar tabtin fetch https://x.com')).toBe(true)
+    expect(isUntrustedShellCommand('muse fetch https://x.com | jq .')).toBe(true)
+    expect(isUntrustedShellCommand('cd /tmp && muse fetch https://x.com')).toBe(true)
+    expect(isUntrustedShellCommand('FOO=bar muse fetch https://x.com')).toBe(true)
   })
 
   it('does not match unrelated shell commands or bare mentions', () => {
     expect(isUntrustedShellCommand('ls -la')).toBe(false)
     expect(isUntrustedShellCommand('curl -sf https://example.com')).toBe(false)
-    expect(isUntrustedShellCommand('tabtin doc list --format json')).toBe(false)
-    expect(isUntrustedShellCommand('echo tabtin fetch https://example.com')).toBe(false)
+    expect(isUntrustedShellCommand('muse doc list --format json')).toBe(false)
+    expect(isUntrustedShellCommand('echo muse fetch https://example.com')).toBe(false)
   })
 })
 
 describe('restricted readonly verb table (host-injected)', () => {
-  it('contains generic read verbs and TabTin CLI readonly subcommands', () => {
+  it('contains generic read verbs and Muse CLI readonly subcommands', () => {
     for (const verb of ['list', 'get', 'read', 'query', 'records', 'glance', 'print']) {
       expect(RESTRICTED_READONLY_VERBS.has(verb)).toBe(true)
     }

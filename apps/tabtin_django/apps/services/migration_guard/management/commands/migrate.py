@@ -1,7 +1,7 @@
-"""migrate —— Tabtin wrapper，拦截直接 migrate，引导用 safe_migrate。
+"""migrate —— Muse wrapper，拦截直接 migrate，引导用 safe_migrate。
 
 为什么 override 内置 migrate：
-- TabTin 是 MySQL+PG 双库架构，靠 router 决定每个 app 落哪个库。
+- Muse 是 MySQL+PG 双库架构，靠 router 决定每个 app 落哪个库。
 - 跑 default 时，router 会拦掉 PG-only app 的 DDL 执行，**但 MigrationRecorder
   仍在 default 的 django_migrations 表写"applied"影子记录**——这是 Django 设计
   上跨 app 依赖图（``check_consistent_history``）的必需机制，不是 bug。
@@ -44,7 +44,7 @@ SAFE_MIGRATE_ENV = "_TABTIN_SAFE_MIGRATE_INVOKED"
 
 class Command(DjangoMigrateCommand):
     help = (
-        "（Tabtin wrapper）双库架构禁止直接跑 migrate；"
+        "（Muse wrapper）双库架构禁止直接跑 migrate；"
         "请用 `python manage.py safe_migrate`。极少数情况下加 --allow-unsafe 放行。"
     )
 
@@ -80,7 +80,7 @@ class Command(DjangoMigrateCommand):
             return super().handle(*args, **options)
 
         raise CommandError(
-            "TabTin 是 MySQL+PG 双库架构，禁止直接跑 `python manage.py migrate`——\n"
+            "Muse 是 MySQL+PG 双库架构，禁止直接跑 `python manage.py migrate`——\n"
             "否则 default 库会写'假落账' applied 记录但 PG 真实数据/schema 不变，造成漂移。\n\n"
             "请改用：\n"
             "  python manage.py safe_migrate           # 按 default → postgresql 双库跑 + 跑后自检\n"

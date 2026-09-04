@@ -8,7 +8,7 @@ import android.webkit.WebResourceRequest
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import androidx.core.view.isVisible
-import com.tabtin.mobile.R
+import com.muse.mobile.R
 import com.tabtin.mobile.databinding.DocBlockFormulaBinding
 import com.tabtin.mobile.features.doc.editor.core.KatexFormulaHtml
 import com.tabtin.mobile.features.doc.editor.core.TabDocBlockView

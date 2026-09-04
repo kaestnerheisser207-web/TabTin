@@ -4,7 +4,7 @@ import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.os.Build
-import com.tabtin.mobile.BuildConfig
+import com.muse.mobile.BuildConfig
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.EntryPoint
 import dagger.hilt.InstallIn
@@ -156,7 +156,7 @@ public class DiagnosticRecorder @Inject constructor(
         private const val EXPORT_RETENTION_MS = 24 * 60 * 60 * 1000L
         private val FILE_TIMESTAMP_FORMATTER: DateTimeFormatter =
             DateTimeFormatter.ofPattern("yyyyMMdd-HHmmss").withZone(ZoneOffset.UTC)
-        private const val README = """TabTin Android diagnostic bundle
+        private const val README = """Muse Android diagnostic bundle
 
 This bundle contains bounded, structured application, HTTP and WebSocket metadata.
 It intentionally excludes request/response bodies, header values, URL queries, tokens,

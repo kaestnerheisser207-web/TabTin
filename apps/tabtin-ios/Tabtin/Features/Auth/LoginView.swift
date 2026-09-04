@@ -198,7 +198,7 @@ struct LoginView: View {
 
     private var loginHeader: some View {
         HStack(spacing: 0) {
-            Text("TabTin")
+            Text("Muse")
                 .font(.system(size: 14, weight: .heavy))
                 .tracking(-0.55)
                 .foregroundStyle(LoginPalette.ink)

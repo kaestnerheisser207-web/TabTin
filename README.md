@@ -1,8 +1,8 @@
 <div align="center">
 
-<img src="assets/readme/tabtin-logo.png" alt="TabTin" width="96" height="96" />
+<img src="assets/readme/muse-logo.png" alt="Muse" width="96" height="96" />
 
-# TabTin
+# Muse
 
 **让团队和 Agent 协作更优雅**
 
@@ -13,12 +13,12 @@
 </div>
 
 <p align="center">
-  <img src="assets/readme/tabtin-collaboration-hero-zh.png" alt="TabTin 团队与 Agent 协作界面" />
+  <img src="assets/readme/tabtin-collaboration-hero-zh.png" alt="Muse 团队与 Agent 协作界面" />
 </p>
 
-TabTin 是一个开源的人与 Agent 协作平台，面向希望把 Agent 带进真实工作的个人和团队。我们希望降低人和 Agent 共同工作的协作成本，让个人完成的工作能够被团队接续、复用和检查。
+Muse 是一个开源的人与 Agent 协作平台，面向希望把 Agent 带进真实工作的个人和团队。我们希望降低人和 Agent 共同工作的协作成本，让个人完成的工作能够被团队接续、复用和检查。
 
-> **直接体验：** [访问 TabTin 官网](https://tabtin.com/)，使用官方服务，无需自行维护服务端。
+> **直接体验：** [访问 Muse 官网](https://tabtin.com/)，使用官方服务，无需自行维护服务端。
 >
 > **企业合作：** 如需部署评估、迁移协助、商业授权或定制服务，请联系 [contact@larchiveai.com](mailto:contact@larchiveai.com)。
 
@@ -26,17 +26,17 @@ TabTin 是一个开源的人与 Agent 协作平台，面向希望把 Agent 带�
 
 > 我们希望工作因此更轻松，协作更顺畅，任务推进更清晰；每个人的工作被看见、判断被理解、贡献有据可验。
 
-## 为什么做 TabTin
+## 为什么做 Muse
 
 AI 提高了个人产出，却没有自动提高团队效率。
 
 团队使用 Agent 越深入，重复调研、上下文与判断依据丢失、Token 重复消耗、方法难复用和结果责任不清的问题越明显。
 
-TabTin 首先想解决一个问题：**一个人已经完成的工作，能不能直接成为下一位同事的起点？**
+Muse 首先想解决一个问题：**一个人已经完成的工作，能不能直接成为下一位同事的起点？**
 
-深度使用 AI 的团队是 TabTin 最初切入的人群，但不是产品边界。TabTin 面向所有希望把 Agent 带进真实工作的个人和团队。
+深度使用 AI 的团队是 Muse 最初切入的人群，但不是产品边界。Muse 面向所有希望把 Agent 带进真实工作的个人和团队。
 
-## 个人和团队可以用 TabTin 做什么
+## 个人和团队可以用 Muse 做什么
 
 个人可以配置不同的 Agent、模型、Skill 和执行规则，让 Agent 直接参与调研、资料采集、文档、表格、演示文稿和代码等真实工作，并逐步形成自己的 Agent 工作方式。
 
@@ -50,7 +50,7 @@ TabTin 首先想解决一个问题：**一个人已经完成的工作，能不�
 
 ### 人和 Agent 操作同一份结果
 
-TabTin 提供消息、文档、多维表格和演示文稿等协作应用。Agent 可以直接创建和编辑这些内容；浏览器采集到的数据与媒体也可以继续进入工作应用。
+Muse 提供消息、文档、多维表格和演示文稿等协作应用。Agent 可以直接创建和编辑这些内容；浏览器采集到的数据与媒体也可以继续进入工作应用。
 
 人和 Agent 面对的是同一份在线结果，不需要在聊天框、文件下载和办公软件之间反复搬运。
 
@@ -62,13 +62,13 @@ Agent 可以执行工作，但重要判断、责任确认和结果验收仍然�
 
 ### 团队可以拥有自己的 Agent 工作系统
 
-TabTin 不只提供客户端，也包括服务端、Agent Runtime、实时协作、工作应用和管理能力。个人和小团队可以直接使用官方服务；开发者可以在自己的电脑上运行 Community Server，也可以从源码继续修改。
+Muse 不只提供客户端，也包括服务端、Agent Runtime、实时协作、工作应用和管理能力。个人和小团队可以直接使用官方服务；开发者可以在自己的电脑上运行 Community Server，也可以从源码继续修改。
 
 我们会继续让架构更加模块化和可插拔。只有已经在公开代码中存在并经过验证的能力，才会写成当前能力；未来方向进入 [ROADMAP](ROADMAP.md)。
 
 ## 当前状态
 
-TabTin 当前处于 Public Preview（公开预览）阶段，正在进行首次完整公开发布。核心工作链路已经可以体验，但不同组件的成熟度和跨端体验仍有差异。
+Muse 当前处于 Public Preview（公开预览）阶段，正在进行首次完整公开发布。核心工作链路已经可以体验，但不同组件的成熟度和跨端体验仍有差异。
 
 部分模块目前采用默认实现，替换和扩展能力仍待完善；Community Server 主要面向本机运行；移动端需要配合电脑执行环境；Project 是下一版本将重点推进的能力。
 
@@ -76,7 +76,7 @@ TabTin 当前处于 Public Preview（公开预览）阶段，正在进行首次�
 
 ## 开源范围
 
-TabTin 开放的是实际产品代码，而不是为开源单独制作的简化 Demo。
+Muse 开放的是实际产品代码，而不是为开源单独制作的简化 Demo。
 
 开发者可以在自己的环境中运行、扩展并参与建设这套平台。
 
@@ -86,12 +86,12 @@ TabTin 开放的是实际产品代码，而不是为开源单独制作的简化 
 
 你可以根据自己的目标选择两种入口：
 
-1. **官方服务**：适合希望直接体验产品、不自行维护服务端的个人和小团队。访问 [TabTin 官网](https://tabtin.com/)。
-2. **本地运行源码**：适合希望在本机体验、调试或二次开发 TabTin 的用户和开发者。既可以让 Agent 自动准备环境并启动，也可以手动运行。
+1. **官方服务**：适合希望直接体验产品、不自行维护服务端的个人和小团队。访问 [Muse 官网](https://tabtin.com/)。
+2. **本地运行源码**：适合希望在本机体验、调试或二次开发 Muse 的用户和开发者。既可以让 Agent 自动准备环境并启动，也可以手动运行。
 
 ### 本地运行源码
 
-在本机运行 TabTin 源码有两种方式：使用 Agent 自动准备并启动，或手动运行脚本和命令。两种方式使用同一套本地开发环境，都不是 Community 分发包或正式 Release 构建。
+在本机运行 Muse 源码有两种方式：使用 Agent 自动准备并启动，或手动运行脚本和命令。两种方式使用同一套本地开发环境，都不是 Community 分发包或正式 Release 构建。
 
 #### 方式一：使用 Agent 启动
 
@@ -176,7 +176,7 @@ Community 启动入口只从根 `.env` 读取 `TABTIN_EDITION` 和 `AUTH_FIXED_V
 
 ### 移动端构建
 
-> 当前移动端是 TabTin 桌面端的配套入口，不提供独立的 Agent 执行环境。要从移动端发起或控制 Agent 任务，需要先在桌面端完成执行环境配置与设备绑定，并在任务运行时保持该电脑在线。只安装移动端不能独立执行 Agent 任务。
+> 当前移动端是 Muse 桌面端的配套入口，不提供独立的 Agent 执行环境。要从移动端发起或控制 Agent 任务，需要先在桌面端完成执行环境配置与设备绑定，并在任务运行时保持该电脑在线。只安装移动端不能独立执行 Agent 任务。
 
 * [iOS 构建指南](apps/tabtin-ios/README.md)
 * [Android 构建指南](apps/tabtin-android/README.md)
@@ -199,12 +199,12 @@ Bug 和信息相对完整的功能需求请使用 Issue；使用帮助、开放�
 
 ## 数据与隐私
 
-Community Server 默认只监听本机地址，并把账号、配置和业务数据保存在本机 Docker 数据卷中。Community 客户端默认不连接 TabTin 维护方的 Sentry（错误监控）或更新服务；完整诊断包只能在用户明确同意后上传。官方服务的数据处理以公开隐私政策为准。
+Community Server 默认只监听本机地址，并把账号、配置和业务数据保存在本机 Docker 数据卷中。Community 客户端默认不连接 Muse 维护方的 Sentry（错误监控）或更新服务；完整诊断包只能在用户明确同意后上传。官方服务的数据处理以公开隐私政策为准。
 
 ## 许可证与商标
 
-TabTin 的公开源码依据 [AGPL-3.0-only](LICENSE) 提供。对于无法采用 AGPL-3.0-only 的使用或分发场景，可以通过 [contact@larchiveai.com](mailto:contact@larchiveai.com) 向 Shanghai Mofan Technology Co., Ltd. 咨询单独商业授权。
+Muse 的公开源码依据 [AGPL-3.0-only](LICENSE) 提供。对于无法采用 AGPL-3.0-only 的使用或分发场景，可以通过 [contact@larchiveai.com](mailto:contact@larchiveai.com) 向 Shanghai Mofan Technology Co., Ltd. 咨询单独商业授权。
 
-第三方组件继续适用各自的许可证，参阅 [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md)。TabTin 名称和标识属于项目维护方的商标；分支项目可以如实说明“基于 TabTin”，但不得冒充官方版本。
+第三方组件继续适用各自的许可证，参阅 [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md)。Muse 名称和标识属于项目维护方的商标；分支项目可以如实说明“基于 Muse”，但不得冒充官方版本。
 
 Copyright © 2026 Shanghai Mofan Technology Co., Ltd.

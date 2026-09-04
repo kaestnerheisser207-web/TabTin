@@ -17,7 +17,7 @@
     }
   },
   "notes": [
-    "This directory is the TabTin prepared-runtime release identity for Cowart.",
+    "This directory is the Muse prepared-runtime release identity for Cowart.",
     "The first acceptance slice validates installation metadata and skill visibility; AI image generation is intentionally out of scope."
   ]
 }

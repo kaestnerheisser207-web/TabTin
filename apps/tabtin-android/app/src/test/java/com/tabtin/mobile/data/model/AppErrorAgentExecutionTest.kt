@@ -1,7 +1,7 @@
 package com.tabtin.mobile.data.model
 
 import androidx.test.core.app.ApplicationProvider
-import com.tabtin.mobile.R
+import com.muse.mobile.R
 import org.junit.Assert.assertEquals
 import org.junit.Test
 import org.junit.runner.RunWith

@@ -51,7 +51,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.tabtin.mobile.R
+import com.muse.mobile.R
 import com.tabtin.mobile.ui.theme.TTColors
 import com.tabtin.mobile.ui.theme.TTRadius
 import com.tabtin.mobile.ui.theme.TTSpacing
@@ -135,7 +135,7 @@ public fun SettingsAccountScreen(
                             userId = userId,
                             copied = copiedUserId,
                             onClick = {
-                                copySettingsText(context, "TabTin User ID", userId)
+                                copySettingsText(context, "Muse User ID", userId)
                                 copiedUserId = true
                             },
                         )

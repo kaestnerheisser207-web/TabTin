@@ -3,7 +3,7 @@ setlocal
 call "%~dp0_dev-env.bat"
 if not exist "%PYTHON_BIN%" (
   echo [ERROR] Missing Windows virtual environment: %PYTHON_BIN%
-  echo Create apps\tabtin_django\venv-windows before starting TabTin.
+  echo Create apps\tabtin_django\venv-windows before starting Muse.
   exit /b 1
 )
 call "%~dp0docker-ready.bat" || exit /b 1

@@ -69,7 +69,7 @@ export function validateContentQuality(
         ok: false,
         reason: 'blocked',
         message: 'Access denied (HTTP 403)',
-        suggestion: 'The site blocks automated access. Use `tabtin browser open <url>` to load in a real browser.',
+        suggestion: 'The site blocks automated access. Use `muse browser open <url>` to load in a real browser.',
       };
     }
   }
@@ -83,7 +83,7 @@ export function validateContentQuality(
       ok: false,
       reason: 'captcha',
       message: 'Page is behind a CAPTCHA or bot-challenge screen',
-      suggestion: 'Use `tabtin browser open <url>` to load in a real browser that can handle challenges.',
+      suggestion: 'Use `muse browser open <url>` to load in a real browser that can handle challenges.',
     };
   }
 
@@ -93,7 +93,7 @@ export function validateContentQuality(
       ok: false,
       reason: 'empty',
       message: 'No readable content could be extracted',
-      suggestion: 'The page may be empty or require JavaScript rendering. Try `tabtin browser open <url>` then `extract`.',
+      suggestion: 'The page may be empty or require JavaScript rendering. Try `muse browser open <url>` then `extract`.',
     };
   }
 
@@ -103,7 +103,7 @@ export function validateContentQuality(
       ok: false,
       reason: 'insufficient_content',
       message: `Very little readable content (${content.trim().length} chars)`,
-      suggestion: 'The page may block automated access or require JavaScript rendering. Try `tabtin browser open <url>` then `extract`.',
+      suggestion: 'The page may block automated access or require JavaScript rendering. Try `muse browser open <url>` then `extract`.',
     };
   }
 
@@ -114,7 +114,7 @@ export function validateContentQuality(
       ok: false,
       reason: 'spa_skeleton',
       message: 'Page appears to be a client-side rendered SPA with minimal server HTML',
-      suggestion: 'Use `tabtin browser open <url>` to render JavaScript, then use `extract` to get the content.',
+      suggestion: 'Use `muse browser open <url>` to render JavaScript, then use `extract` to get the content.',
     };
   }
 

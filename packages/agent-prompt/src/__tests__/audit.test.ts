@@ -109,7 +109,7 @@ const RENDERERS: Partial<Record<string, () => string>> = {
       '始终用中文回复，提交信息要写明背景和原因。文件命名遵循蛇形小写约定。回答前先查询数据，不要凭印象作答。',
     ),
   cli_capabilities_section: () =>
-    buildCliCapabilitiesSection('- `tabtin table list`：列出当前工作空间所有表'),
+    buildCliCapabilitiesSection('- `muse table list`：列出当前工作空间所有表'),
   execution_section: () => SECTION_EXECUTION,
   safety_section: () => SECTION_SAFETY,
   planning_section: () => SECTION_PLANNING,
@@ -627,7 +627,7 @@ describe('P5 · 双路径对称（Electron vs Daemon）', () => {
       customRules: undefined,
       agentMode: 'agent',
       tools: MINIMAL_TOOLS,
-      cliReference: '- `tabtin table list`：列出当前工作空间所有表',
+      cliReference: '- `muse table list`：列出当前工作空间所有表',
       memoryCapability: true,
       userPortrait: undefined,
       runtimeIdentity: FIXED_RUNTIME_IDENTITY,
@@ -645,7 +645,7 @@ describe('P5 · 双路径对称（Electron vs Daemon）', () => {
     expect(prompt).toContain(FIXED_APPS[0]!.capability);
 
     expect(prompt).toContain('<cli_capabilities>');
-    expect(prompt).toContain('tabtin table list');
+    expect(prompt).toContain('muse table list');
   });
 });
 

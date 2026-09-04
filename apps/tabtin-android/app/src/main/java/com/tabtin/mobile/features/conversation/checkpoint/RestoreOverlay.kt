@@ -17,7 +17,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
-import com.tabtin.mobile.R
+import com.muse.mobile.R
 import com.tabtin.mobile.features.conversation.ConversationTypography
 import com.tabtin.mobile.ui.theme.TTColors
 import com.tabtin.mobile.ui.theme.TTRadius

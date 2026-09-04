@@ -1,7 +1,7 @@
 /**
  * MCP route handler for CLI Server.
  *
- * Delegates MCP discovery and invocation requests from the `tabtin mcp` CLI
+ * Delegates MCP discovery and invocation requests from the `muse mcp` CLI
  * to the LocalMcpService singleton. Requires an explicit Agent context.
  *
  * Go CLI sends GET requests with parameters in query string (not body),

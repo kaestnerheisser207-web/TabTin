@@ -1566,7 +1566,7 @@ const ProgressResult: React.FC<{ step: WizardStep }> = ({ step }) => {
           </div>
         )}
         <p className="text-caption text-muted-foreground/60">
-          导入在后台进行，你可以离开此页继续使用 TabTin，进度会保留在右下角面板。
+          导入在后台进行，你可以离开此页继续使用 Muse，进度会保留在右下角面板。
         </p>
       </div>
     )

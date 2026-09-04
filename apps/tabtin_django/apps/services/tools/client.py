@@ -192,8 +192,8 @@ class AgentClientTool(ClientTool):
                 "degraded": True,
                 "error_kind": "capability_unavailable",
                 "user_message": (
-                    "这个操作需要 TabTin 桌面端的前端能力，当前运行环境暂时用不了，"
-                    "所以我没法完成它。请在 TabTin 桌面端里重试。"
+                    "这个操作需要 Muse 桌面端的前端能力，当前运行环境暂时用不了，"
+                    "所以我没法完成它。请在 Muse 桌面端里重试。"
                 ),
                 "remediation": (
                     "Frontend action dispatcher is not injected (orchestration not "

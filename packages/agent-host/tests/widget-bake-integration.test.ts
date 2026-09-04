@@ -26,7 +26,7 @@ import type { OffscreenRenderResult } from '@tabtin/action-tools/headless'
 import type { StreamEvent, ToolContext } from '@tabtin/agent-runtime'
 
 function setupTabtinGlobal(): void {
-  ;(globalThis as unknown as { tabtin?: unknown }).tabtin = {
+  ;(globalThis as unknown as { muse?: unknown }).tabtin = {
     apiBaseUrl: 'http://localhost:6060/api',
     auth: { getAccessToken: () => 'test-token-' + Date.now() },
     organizationId: 'wt_test',
@@ -37,7 +37,7 @@ function setupTabtinGlobal(): void {
 }
 
 function teardownTabtinGlobal(): void {
-  delete (globalThis as unknown as { tabtin?: unknown }).tabtin
+  delete (globalThis as unknown as { muse?: unknown }).tabtin
 }
 
 function makeContext(emit?: (e: StreamEvent) => void): ToolContext {

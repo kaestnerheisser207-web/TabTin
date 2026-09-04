@@ -56,7 +56,7 @@ export async function handlePrintRoute(
   const rawSave = body?.save ?? body?.savePath ?? body?.save_path
   if (!rawSave || typeof rawSave !== 'string') {
     sendJSON(res, 400, errorResponse('VALIDATION_ERROR', '缺少 --save 参数（print 始终落盘）', {
-      suggestions: ['示例: tabtin browser print --save /tmp/page.md'],
+      suggestions: ['示例: muse browser print --save /tmp/page.md'],
     }))
     return true
   }
@@ -146,7 +146,7 @@ async function handlePdfPrint(
 ): Promise<void> {
   if (body?.url) {
     sendJSON(res, 400, errorResponse('VALIDATION_ERROR', '--as pdf 仅支持当前 tab（先 open 再 print）', {
-      suggestions: ['tabtin browser open --url <url>', '然后 tabtin browser print --as pdf --save <path>'],
+      suggestions: ['muse browser open --url <url>', '然后 muse browser print --as pdf --save <path>'],
     }))
     return
   }
@@ -223,8 +223,8 @@ async function fetchPageViaTab(
   if (!tabId) {
     sendJSON(res, 400, errorResponse('TAB_REQUIRED', '没有可用的 tab（且未提供 --url）', {
       suggestions: [
-        '先打开页面: tabtin browser open --url https://example.com',
-        '或临时抓取: tabtin browser print --url https://example.com --save <path>',
+        '先打开页面: muse browser open --url https://example.com',
+        '或临时抓取: muse browser print --url https://example.com --save <path>',
       ],
     }))
     return null

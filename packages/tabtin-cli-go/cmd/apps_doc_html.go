@@ -46,10 +46,10 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/TabTin/tabtin-cli/internal/cmdutil"
-	"github.com/TabTin/tabtin-cli/internal/errcode"
-	"github.com/TabTin/tabtin-cli/internal/output"
-	"github.com/TabTin/tabtin-cli/internal/transport"
+	"github.com/Muse/muse-cli/internal/cmdutil"
+	"github.com/Muse/muse-cli/internal/errcode"
+	"github.com/Muse/muse-cli/internal/output"
+	"github.com/Muse/muse-cli/internal/transport"
 )
 
 const (
@@ -95,10 +95,10 @@ func registerDocHTMLCommands(parent *cobra.Command, f *cmdutil.Factory) {
 适合 Agent 产出交互式内容（架构图 / 脑暴板 / 原型 / 数据可视化，单文件 HTML）后放进文档：块在文档里以沙箱 iframe 在线渲染，权限跟随所属文档。
 --file 是本地 .html 路径（须在 $HOME 或 /tmp 下，单文件上限 100MB）；--title 缺省用文件名（去扩展名），--height 缺省 480；--after 指定插到某 block 之后，缺省追加到文档末尾。
 底层先 POST /oss/upload（is_public=false）拿 file_id，再拼 :::htmlblock{fileId=... src="" ...} markdown 走 insert-block 链路插块；新块不写永久公开 URL。上传成功但插块失败时，错误里保留 file_id 以便重试（无需重新上传）。`,
-		Example: "  tabtin doc insert-html doc_xxx --file ./architecture.html\n" +
-			"  tabtin doc insert-html doc_xxx --file /tmp/dashboard.html --title \"数据看板\" --height 600\n" +
-			"  tabtin doc insert-html doc_xxx --file ./proto.html --after blk_yyy\n" +
-			"  tabtin doc insert-html doc_xxx --file ./chart.html --dry-run --format json",
+		Example: "  muse doc insert-html doc_xxx --file ./architecture.html\n" +
+			"  muse doc insert-html doc_xxx --file /tmp/dashboard.html --title \"数据看板\" --height 600\n" +
+			"  muse doc insert-html doc_xxx --file ./proto.html --after blk_yyy\n" +
+			"  muse doc insert-html doc_xxx --file ./chart.html --dry-run --format json",
 		Layer: "L2", Risk: cmdutil.RiskWrite, RiskDeclared: true,
 		Route:        cmdutil.RouteCliServer,
 		RequiresAuth: true,
@@ -120,10 +120,10 @@ func registerDocHTMLCommands(parent *cobra.Command, f *cmdutil.Factory) {
 先 GET 现有块拿到 markdown（含 fileId），用授权端点 GET /api/tabdoc/documents/<id>/html-artifacts/<fileId> 下载现有 HTML（ 私有化后禁止匿名 curl src）；目标块不是 HTML 块时直接报错退出。
 --file 是新的本地 .html 路径（同 insert-html 的路径白名单 + 大小限制）；<block-id> 取自 doc list-blocks / read-block。
 底层三步：读现有块 → POST /oss/upload 传新文件 → PATCH 块为新的 :::htmlblock{...}（新 fileId/src + 沿用或覆盖的 title/height）。上传成功但替换失败时，错误里保留新 file_id 以便重试。`,
-		Example: "  tabtin doc update-html doc_xxx blk_yyy --file ./architecture-v2.html\n" +
-			"  tabtin doc update-html doc_xxx blk_yyy --file /tmp/dashboard.html --title \"数据看板 v2\"\n" +
-			"  tabtin doc update-html doc_xxx blk_yyy --file ./proto.html --height 720\n" +
-			"  tabtin doc update-html doc_xxx blk_yyy --file ./chart.html --dry-run --format json",
+		Example: "  muse doc update-html doc_xxx blk_yyy --file ./architecture-v2.html\n" +
+			"  muse doc update-html doc_xxx blk_yyy --file /tmp/dashboard.html --title \"数据看板 v2\"\n" +
+			"  muse doc update-html doc_xxx blk_yyy --file ./proto.html --height 720\n" +
+			"  muse doc update-html doc_xxx blk_yyy --file ./chart.html --dry-run --format json",
 		Layer: "L2", Risk: cmdutil.RiskWrite, RiskDeclared: true,
 		Route:        cmdutil.RouteCliServer,
 		RequiresAuth: true,
@@ -143,14 +143,14 @@ func registerDocHTMLCommands(parent *cobra.Command, f *cmdutil.Factory) {
 func docInsertHTMLExecute(f *cmdutil.Factory) func(ctx *cmdutil.RunContext) error {
 	return func(ctx *cmdutil.RunContext) error {
 		docID, err := docHTMLRequireArg(ctx, 0, "document-id",
-			"tabtin doc insert-html <document-id> --file <path.html>")
+			"muse doc insert-html <document-id> --file <path.html>")
 		if err != nil {
 			return err
 		}
 		filePath := ctx.Str("file")
 		if filePath == "" {
 			return docHTMLValidationExit("必须提供 --file <path.html>",
-				"tabtin doc insert-html "+docID+" --file ./chart.html")
+				"muse doc insert-html "+docID+" --file ./chart.html")
 		}
 		title := docHTMLResolveTitle(ctx, docHTMLTitleFromFile(filePath))
 		height := docHTMLResolveHeight(ctx, docHTMLDefaultHeight)
@@ -198,19 +198,19 @@ func docInsertHTMLExecute(f *cmdutil.Factory) func(ctx *cmdutil.RunContext) erro
 func docUpdateHTMLExecute(f *cmdutil.Factory) func(ctx *cmdutil.RunContext) error {
 	return func(ctx *cmdutil.RunContext) error {
 		docID, err := docHTMLRequireArg(ctx, 0, "document-id",
-			"tabtin doc update-html <document-id> <block-id> --file <path.html>")
+			"muse doc update-html <document-id> <block-id> --file <path.html>")
 		if err != nil {
 			return err
 		}
 		blockID, err := docHTMLRequireArg(ctx, 1, "block-id",
-			"tabtin doc update-html <document-id> <block-id> --file <path.html>")
+			"muse doc update-html <document-id> <block-id> --file <path.html>")
 		if err != nil {
 			return err
 		}
 		filePath := ctx.Str("file")
 		if filePath == "" {
 			return docHTMLValidationExit("必须提供 --file <path.html>",
-				"tabtin doc update-html "+docID+" "+blockID+" --file ./chart.html")
+				"muse doc update-html "+docID+" "+blockID+" --file ./chart.html")
 		}
 
 		tr, err := requireCliServerTransport(f, "doc update-html")
@@ -677,7 +677,7 @@ func docHTMLRecoveryHint(detail map[string]any) string {
 // docHTMLInsertRecoveryCmd / docHTMLUpdateRecoveryCmd 生成可直接重跑的 block 命令，
 // 让 Agent 在写块失败后不必重传文件即可补齐（markdown 已含上传好的 fileId/src）。
 func docHTMLInsertRecoveryCmd(docID, markdown, after string, atStart bool) string {
-	cmd := fmt.Sprintf("tabtin doc insert-block %s --markdown %s", docID, docHTMLShellQuote(markdown))
+	cmd := fmt.Sprintf("muse doc insert-block %s --markdown %s", docID, docHTMLShellQuote(markdown))
 	if after != "" {
 		cmd += " --after " + after
 	} else if atStart {
@@ -687,7 +687,7 @@ func docHTMLInsertRecoveryCmd(docID, markdown, after string, atStart bool) strin
 }
 
 func docHTMLUpdateRecoveryCmd(docID, blockID, markdown string) string {
-	return fmt.Sprintf("tabtin doc update-block %s %s --markdown %s", docID, blockID, docHTMLShellQuote(markdown))
+	return fmt.Sprintf("muse doc update-block %s %s --markdown %s", docID, blockID, docHTMLShellQuote(markdown))
 }
 
 // docHTMLShellQuote 把 markdown 包成单引号 shell 字面量（内部单引号用 '\” 转义），

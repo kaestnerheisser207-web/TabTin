@@ -44,7 +44,7 @@ fi
 [[ "$registry_user" =~ ^[A-Za-z0-9-]{1,39}$ ]] || die "invalid registry user"
 
 exec 9>"$lock_file"
-flock -n 9 || die "another TabTin deployment is already running"
+flock -n 9 || die "another Muse deployment is already running"
 [[ -f "$compose_file" ]] || die "missing compose file: $compose_file"
 [[ -f "$runtime_env_file" ]] || die "missing runtime env file: $runtime_env_file"
 [[ -f "$worker_token_file" ]] || die "Cloud host bootstrap has not installed the Worker token"

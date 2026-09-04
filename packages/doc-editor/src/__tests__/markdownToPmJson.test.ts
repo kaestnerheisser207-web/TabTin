@@ -31,7 +31,7 @@ describe('markdownToPmJson', () => {
   })
 
   it('should parse inline links', () => {
-    const md = '[TabTin](https://www.example.com)'
+    const md = '[Muse](https://www.example.com)'
     const result = markdownToPmJson(md) as any
     const linkNode = result.content[0].content[0]
     expect(linkNode.marks[0].type).toBe('link')
@@ -121,12 +121,12 @@ describe('markdownToPmJson', () => {
   })
 
   it('should parse link href with nested parentheses', () => {
-    const md = '[TabTin](https://www.example.com/docs/image_(linked))'
+    const md = '[Muse](https://www.example.com/docs/image_(linked))'
     const result = markdownToPmJson(md) as any
     const linkNode = result.content[0].content[0]
 
     expect(linkNode.type).toBe('text')
-    expect(linkNode.text).toBe('TabTin')
+    expect(linkNode.text).toBe('Muse')
     expect(linkNode.marks[0].type).toBe('link')
     expect(linkNode.marks[0].attrs.href).toBe('https://www.example.com/docs/image_(linked)')
   })

@@ -2,7 +2,7 @@
  * FR-07 — Lightweight JSON Schema validator for tool inputs.
  *
  * Why hand-rolled instead of `ajv`:
- *   1. **Coverage matches actual usage**: every TabTin built-in tool's
+ *   1. **Coverage matches actual usage**: every Muse built-in tool's
  *      `inputSchema` only uses a subset of JSON Schema Draft-07 —
  *      `type` (object/string/number/integer/boolean/array/null), `properties`,
  *      `required`, `enum`, `format` (sole allowlisted value:

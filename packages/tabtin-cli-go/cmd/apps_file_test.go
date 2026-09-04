@@ -1,4 +1,4 @@
-// apps_file_test.go — `tabtin file` 命令树注册期 invariant（镜像 apps_doc_test.go）。
+// apps_file_test.go — `muse file` 命令树注册期 invariant（镜像 apps_doc_test.go）。
 //
 // 目的：把 cmdutil.MustRegisterCommand 的注册期断言（Layer/Risk/RiskDeclared/
 // Long≥3/Example≥3/写命令 DryRun）提前到 `go test` 触发——否则只有跑实际命令树
@@ -9,7 +9,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/TabTin/tabtin-cli/internal/cmdutil"
+	"github.com/Muse/muse-cli/internal/cmdutil"
 )
 
 func newTestFileCmd(t *testing.T) *cmdutil.Factory {

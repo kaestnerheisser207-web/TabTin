@@ -29,7 +29,7 @@ const (
 )
 
 // globalInline 是 root persistent flag `--inline` 的值——true 时禁用本层落盘，超限也直接
-// 输出 stdout（人用管道 `tabtin ... | jq`、或显式要完整内联的场景）。
+// 输出 stdout（人用管道 `muse ... | jq`、或显式要完整内联的场景）。
 var globalInline bool
 
 // SetGlobalInline 由 cmd/root.go PersistentPreRunE 在 --inline Changed 时调用。

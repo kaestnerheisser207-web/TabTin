@@ -1,7 +1,7 @@
 package com.tabtin.mobile.util
 
 import androidx.annotation.StringRes
-import com.tabtin.mobile.R
+import com.muse.mobile.R
 import retrofit2.HttpException
 import java.net.ConnectException
 import java.net.SocketTimeoutException

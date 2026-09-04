@@ -84,7 +84,7 @@ export interface WorkspaceSources {
    * 用户配置的执行根 = 该 Space 绑定 Agent 的 working_dir。空字符串
    * 表示 Agent 还没设置工作目录（此时 allowedPaths 只有 sandbox 兜底）。
    *
-   * 取代了早期的 `tabcodeProjects` + `tabfolderDirs` 两个数组——TabTin 不再
+   * 取代了早期的 `tabcodeProjects` + `tabfolderDirs` 两个数组——Muse 不再
    * 支持"在一个 Space 里挂载多个项目"。
    */
   workingDir: string;
@@ -218,7 +218,7 @@ export type DecisionReason =
    */
   | { type: 'platform_artifact_allow'; path: string }
   /**
-   * ：shell 为平台受管 tabtin CLI（browser / desktop）且本将
+   * ：shell 为平台受管 muse CLI（browser / desktop）且本将
    * workspace_out ask 时，judge 让位给 host ApprovalGate。deny /
    * sensitive_in_ask 不走此 reason。
    */

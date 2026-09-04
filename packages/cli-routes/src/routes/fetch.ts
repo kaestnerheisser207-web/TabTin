@@ -31,7 +31,7 @@ export interface FetchRouteFailureInput {
 export function buildFetchFailureEnvelope(targetUrl: string, result: FetchRouteFailureInput) {
   const suggestions = result.quality?.suggestion
     ? [result.quality.suggestion]
-    : ['检查 URL 是否可访问', '使用 tabtin browser open <url> 打开后再提取'];
+    : ['检查 URL 是否可访问', '使用 muse browser open <url> 打开后再提取'];
   return errorResponse('FETCH_FAILED', result.error || 'Fetch failed', {
     detail: { url: targetUrl, quality: result.quality },
     suggestions,
@@ -75,7 +75,7 @@ export async function handleFetchRoute(
   const targetUrl = body?.url;
   if (!targetUrl || typeof targetUrl !== 'string') {
     sendJSON(res, 400, errorResponse('VALIDATION_ERROR', '缺少 url 参数', {
-      suggestions: ['tabtin fetch "https://example.com"'],
+      suggestions: ['muse fetch "https://example.com"'],
     }));
     return;
   }
@@ -105,7 +105,7 @@ export async function handleFetchRoute(
     sendJSON(res, 200, buildFetchSuccessEnvelope(result));
   } catch (error: any) {
     sendJSON(res, 500, errorResponse('FETCH_FAILED', error?.message || 'Fetch failed', {
-      suggestions: ['检查 URL 是否可访问', '使用 tabtin browser open <url> 打开后再提取'],
+      suggestions: ['检查 URL 是否可访问', '使用 muse browser open <url> 打开后再提取'],
     }));
   }
 }

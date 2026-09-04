@@ -1,7 +1,7 @@
 /**
- * `present_to_user` 的 TabTin 资源类型与自动打开策略。
+ * `present_to_user` 的 Muse 资源类型与自动打开策略。
  *
- * 「支持哪些资源类型」「哪种资源禁止自动打开」是 TabTin 产品口径，从中性
+ * 「支持哪些资源类型」「哪种资源禁止自动打开」是 Muse 产品口径，从中性
  * agent-runtime `presentation-tools` 迁出，经 `PresentationToolsDeps` 注入。
  */
 

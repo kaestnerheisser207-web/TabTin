@@ -5,7 +5,7 @@ description: >
   / Android / IoT 能力设备的设备信息、电池状态、网络状态。
   用户提到"手机电量""iPhone 型号""Wi-Fi""蜂窝网络""低电量模式""设备是否在线"时激活。
   当前 Space 没有连接能力设备时，直接告诉用户在手机端
-  TabTin App 登录并加入此 Space，不要反复重试。
+  Muse App 登录并加入此 Space，不要反复重试。
 metadata:
   version: 0.2.0
   tabtin:
@@ -51,7 +51,7 @@ metadata:
 ## 不适用场景（避免误用）
 
 - **用户问“我这台电脑 / 桌面 / Mac / Windows 的电量 / 网络 / 型号”**——本 Skill 不读 control 设备。请用 `run_terminal_command` 跑 `system_profiler` / `pmset` / `ipconfig` 之类的本机命令
-- **用户没有连过手机，只在桌面客户端**——本 Skill 用不上，请直接告诉用户“此功能需要先在手机端 TabTin App 登录并加入当前组织”
+- **用户没有连过手机，只在桌面客户端**——本 Skill 用不上，请直接告诉用户“此功能需要先在手机端 Muse App 登录并加入当前组织”
 - **用户问通话记录 / 短信 / 联系人 / 应用列表 / 截屏**——这些是 mobile_l1 / mobile_l2 能力，不在本 Skill 范围（请到 `app:tabphone/phone-operator` 或 Django 设备工具）
 
 ## 调用入口的两条路径
@@ -72,7 +72,7 @@ metadata:
 
 ### 路径 B：CLI 命令——本地 runtime（Electron / Daemon）的唯一调用方式
 
-通过 `run_terminal_command` 执行 `tabtin device …` 命令。CLI 内部走 cli-server（Electron 主进程或 Daemon 进程），最终调 Django `/api/tabtinspace/devices/query` 派发到 Space 的能力设备。**两端是同一条派发链路**——CLI 调用结果跟 FC 工具调用结果等价，只是入口不同。
+通过 `run_terminal_command` 执行 `muse device …` 命令。CLI 内部走 cli-server（Electron 主进程或 Daemon 进程），最终调 Django `/api/tabtinspace/devices/query` 派发到 Space 的能力设备。**两端是同一条派发链路**——CLI 调用结果跟 FC 工具调用结果等价，只是入口不同。
 
 **默认推荐路径 B**——只要你看到的工具列表里没有 `get_device_info`，就直接走 CLI，不要尝试 function call。
 
@@ -89,9 +89,9 @@ metadata:
 通过 `run_terminal_command` 执行：
 
 ```bash
-tabtin device info    [--space-id <id>] [--timeout 30] [--format json]
-tabtin device battery [--space-id <id>] [--timeout 30] [--format json]
-tabtin device network [--space-id <id>] [--timeout 30] [--format json]
+muse device info    [--space-id <id>] [--timeout 30] [--format json]
+muse device battery [--space-id <id>] [--timeout 30] [--format json]
+muse device network [--space-id <id>] [--timeout 30] [--format json]
 ```
 
 参数说明：
@@ -121,7 +121,7 @@ CLI 命令本身**真实存在**，调用时返回非 0 的 exit code 几乎都�
 
 ### stderr 的双层结构
 
-`tabtin device …` 失败时 `run_terminal_command` 看到的 stderr 是 **Go CLI 又包了一层** 的双层 JSON：
+`muse device …` 失败时 `run_terminal_command` 看到的 stderr 是 **Go CLI 又包了一层** 的双层 JSON：
 
 ```json
 {
@@ -147,10 +147,10 @@ CLI 命令本身**真实存在**，调用时返回非 0 的 exit code 几乎都�
 | `VALIDATION_ERROR` | 400 / 422 | 缺少 `--space-id` 等必要参数 | **可重试一次**：补上 `--space-id <当前 Space 的 ID>`（identity 提示里就有当前 Space ID） |
 | `NOT_FOUND` | 404 | **Space 不存在 / 不属于当前组织 / Space ID 输错** | 告诉用户当前 Space ID 在后端找不到（可能 Space 已删除或 ID 错），让用户确认；**不要重试** |
 | `PERMISSION_DENIED` | 403 | 当前账号对该 Space 无访问权限 | 告诉用户切换组织 / 联系管理员；不要重试 |
-| `TASK_FAILED` | 409 | **该 Space 没有绑定且在线的能力设备**（cli-server 把后端 `DEVICE_RUNTIME_UNAVAILABLE` / `DEVICE_RUNTIME_OFFLINE` 都映射成这个码） | **不要再调任何 device 工具**。直接告诉用户：当前工作空间还没有可用的手机；需要在 iOS / Android 端打开 TabTin App，登录并加入当前组织，确保 App 在前台或保持后台运行权限。等用户确认连上后再重试一次 |
+| `TASK_FAILED` | 409 | **该 Space 没有绑定且在线的能力设备**（cli-server 把后端 `DEVICE_RUNTIME_UNAVAILABLE` / `DEVICE_RUNTIME_OFFLINE` 都映射成这个码） | **不要再调任何 device 工具**。直接告诉用户：当前工作空间还没有可用的手机；需要在 iOS / Android 端打开 Muse App，登录并加入当前组织，确保 App 在前台或保持后台运行权限。等用户确认连上后再重试一次 |
 | `TASK_TIMEOUT` | 504 | 设备在线但响应超时（手机退到后台/网络差） | 提示用户把手机端 App 切回前台，可重试一次 |
 | `BACKEND_ERROR` | 500 / 502 | 后端未分类错误 / device_runtime 投递失败 | 把 `error.message` 原样转述给用户，不要臆造原因 |
-| `AUTH_MISSING` | 401 | 未认证 / token 过期 | 告诉用户重新登录 TabTin |
+| `AUTH_MISSING` | 401 | 未认证 / token 过期 | 告诉用户重新登录 Muse |
 
 > 路径 A（Django 云端 FC 工具直调）的 error code 体系不太一样——内层 code 可能直接是 `DEVICE_RUNTIME_UNAVAILABLE` / `DEVICE_RUNTIME_OFFLINE` 等原始码（没经 cli-server 重映射）。语义跟上表 `TASK_FAILED` 行一致——按"没绑/离线"处理。
 

@@ -1,7 +1,7 @@
 {
   "name": "@tabtin/tabdoc-host-runtime",
   "version": "0.1.0",
-  "description": "Shared runtime bootstrap for TabTin document hosts",
+  "description": "Shared runtime bootstrap for Muse document hosts",
   "type": "module",
   "main": "dist/index.js",
   "module": "dist/index.js",

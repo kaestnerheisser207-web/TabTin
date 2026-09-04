@@ -94,7 +94,7 @@ const relaunchInputSchema: Record<string, unknown> = {
       type: 'string',
       description:
         // 阶段 6.6 议题 3 翻译。保留 telemetry / macOS 等术语。
-        '为什么现在需要重启 TabTin（会落 telemetry）。典型：用户授予了 macOS 文件访问权限。',
+        '为什么现在需要重启 Muse（会落 telemetry）。典型：用户授予了 macOS 文件访问权限。',
     },
   },
   required: ['reason'],
@@ -106,7 +106,7 @@ function createRelaunchAppTool(deps: SystemToolsDeps): Tool {
     name: 'relaunch_app',
     policyActionKind: 'device',
     description:
-      '重启 TabTin 宿主进程，让新授权的操作系统权限生效。' +
+      '重启 Muse 宿主进程，让新授权的操作系统权限生效。' +
       '**只在**用户说"我授权了"之后原工具调用仍失败时调本工具——大部分文件夹级授权' +
       '（Desktop / Documents / Downloads / Removable / Network）立即生效，**不需要**重启。' +
       '需要重启才生效的能力授权：Full Disk Access、屏幕录制、麦克风、摄像头、network entitlement、' +
@@ -134,7 +134,7 @@ function createRelaunchAppTool(deps: SystemToolsDeps): Tool {
             status: 'unsupported_in_this_runtime',
             runtime: 'daemon',
             user_message:
-              '我现在跑在 TabTin 后台服务模式下，没法自己重启。请你手动重启一下 TabTin' +
+              '我现在跑在 Muse 后台服务模式下，没法自己重启。请你手动重启一下 Muse' +
               '（怎么启动的就怎么重启，比如命令行起的就 Ctrl+C 后再跑一次），' +
               '重启完了告诉我一声，我帮你接着试。',
             technical_note:
@@ -159,8 +159,8 @@ function createRelaunchAppTool(deps: SystemToolsDeps): Tool {
         const isUserCancelled = errMessage === 'relaunch_aborted_by_user';
         return jsonError(
           isUserCancelled
-            ? '我刚才请你确认是否要重启 TabTin（重启后我才能用上你刚授权的权限），你点了取消，所以这次没重启。如果你后来又想让我重启，告诉我一声。'
-            : '我尝试在重启前先帮你保存未存改动，但这一步没顺利完成，所以我没有重启 TabTin（避免动了你的工作）。你可以稍后再让我试一次，或者自己手动重启 TabTin。',
+            ? '我刚才请你确认是否要重启 Muse（重启后我才能用上你刚授权的权限），你点了取消，所以这次没重启。如果你后来又想让我重启，告诉我一声。'
+            : '我尝试在重启前先帮你保存未存改动，但这一步没顺利完成，所以我没有重启 Muse（避免动了你的工作）。你可以稍后再让我试一次，或者自己手动重启 Muse。',
           {
             // user 主动 cancel 走 catalog 现有 'aborted' 文案池（normalize 表里
             // aborted_by_user → aborted），soft + userInitiated；hook 抛非 cancel
@@ -170,7 +170,7 @@ function createRelaunchAppTool(deps: SystemToolsDeps): Tool {
             user_cancelled: isUserCancelled,
             hint: isUserCancelled
               ? 'Do not retry relaunch_app unless the user explicitly asks to restart again.'
-              : 'Do not restart automatically; ask the user to save work or restart TabTin manually.',
+              : 'Do not restart automatically; ask the user to save work or restart Muse manually.',
             technical_note: isUserCancelled
               ? 'beforeRelaunch hook signalled user cancel via exit-guard dialog.'
               : 'beforeRelaunch hook threw a non-cancel error; details are intentionally not propagated to the LLM-visible content for safety.',
@@ -178,7 +178,7 @@ function createRelaunchAppTool(deps: SystemToolsDeps): Tool {
         );
       }
       // 调相当于 fire-and-forget —— 进程随后会退出，本工具的返回值实际上
-      // 在用户重新打开 TabTin 后已经不会被消费。仍返回成功状态便于 telemetry。
+      // 在用户重新打开 Muse 后已经不会被消费。仍返回成功状态便于 telemetry。
       void deps.relaunchApp().catch(() => {
         /* 进程已退出，再处理 promise 已经无意义 */
       });
@@ -186,10 +186,10 @@ function createRelaunchAppTool(deps: SystemToolsDeps): Tool {
         content: JSON.stringify({
           status: 'restarting',
           reason: reason ?? 'unspecified',
-          // Wave 1 第二轮 用户视角 Review：原英文 "TabTin is restarting..."
+          // Wave 1 第二轮 用户视角 Review：原英文 "Muse is restarting..."
           // LLM 弱模型可能直译成奇怪中文。直接给中文 user_message 让 LLM 念。
           user_message:
-            'TabTin 正在重启，这次对话会暂时断开几秒钟。重启完成后我会自动重新打开，你可以让我接着试刚才那个被卡住的任务（比如再让我读那个文件夹）。',
+            'Muse 正在重启，这次对话会暂时断开几秒钟。重启完成后我会自动重新打开，你可以让我接着试刚才那个被卡住的任务（比如再让我读那个文件夹）。',
           technical_note:
             'Agent session ends here (Electron app.relaunch + app.exit). On next launch, ' +
             'newly granted OS permissions take effect. User can re-issue the original task.',

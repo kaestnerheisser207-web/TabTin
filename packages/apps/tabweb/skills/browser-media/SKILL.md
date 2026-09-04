@@ -22,7 +22,7 @@ metadata:
 # Browser Media
 
 > 网页媒体资源的**发现、下载、流媒体处理**专用流程。浏览器能力一律走
-> `tabtin browser` CLI（`run_terminal_command`）。基础命令约定、会话管理、反爬阶梯、
+> `muse browser` CLI（`run_terminal_command`）。基础命令约定、会话管理、反爬阶梯、
 > 安全规则见 `skills_read("app:tabweb/browser-operator")`。
 
 ---
@@ -47,13 +47,13 @@ metadata:
 ## 资源发现与下载
 
 ```bash
-tabtin browser open --url "https://example.com/gallery"
-tabtin browser wait --timeout 3000
-tabtin browser resource list --category video     # 只读：列出检测到的媒体
-tabtin browser resource probe                      # 只读：主动探测 video/audio/blob
-tabtin browser resource inspect --resource-id <id> # 只读：查看单个资源详情
-tabtin browser resource download --url <url>       # 真落盘：下载单个资源
-tabtin browser resource smart-download             # 真落盘：智能批量下载主媒体
+muse browser open --url "https://example.com/gallery"
+muse browser wait --timeout 3000
+muse browser resource list --category video     # 只读：列出检测到的媒体
+muse browser resource probe                      # 只读：主动探测 video/audio/blob
+muse browser resource inspect --resource-id <id> # 只读：查看单个资源详情
+muse browser resource download --url <url>       # 真落盘：下载单个资源
+muse browser resource smart-download             # 真落盘：智能批量下载主媒体
 ```
 
 - `resource list --category <image|video|audio>` 按类型过滤；`--hide-segments` 隐藏流分片。
@@ -64,9 +64,9 @@ tabtin browser resource smart-download             # 真落盘：智能批量下
 ## HLS/DASH 流媒体
 
 ```bash
-tabtin browser stream parse --url <url>            # 解析清单
-tabtin browser stream info --url <url>             # 只读：画质 / 时长 / 分片
-tabtin browser stream download --url <url> --quality best --filename video.mp4
+muse browser stream parse --url <url>            # 解析清单
+muse browser stream info --url <url>             # 只读：画质 / 时长 / 分片
+muse browser stream download --url <url> --quality best --filename video.mp4
 ```
 
 `stream download --output <path>` 是显式保存路径；Electron 端只允许系统下载目录内路径。
@@ -79,9 +79,9 @@ tabtin browser stream download --url <url> --quality best --filename video.mp4
 大文件 / 流媒体 / 批量下载建议走异步，避免长时间阻塞：
 
 ```bash
-tabtin browser stream download --url <url> --filename video.mp4 --async   # 返回 jobId
-tabtin browser job status --job-id <id>            # 查询进度 / 结果
-tabtin browser job cancel --job-id <id>            # 取消
+muse browser stream download --url <url> --filename video.mp4 --async   # 返回 jobId
+muse browser job status --job-id <id>            # 查询进度 / 结果
+muse browser job cancel --job-id <id>            # 取消
 ```
 
 `resource smart-download` / `stream download` / `replay run` 都支持 `--async`（返回 jobId）和 `--watch`（前台阻塞直到完成）。命中 BR-30 高风险信号时优先 `--async` + 轮询。
@@ -93,7 +93,7 @@ tabtin browser job cancel --job-id <id>            # 取消
 `resource` / `stream` 命令在 Daemon 无头模式下多为 **degraded**（可用但降级，如 `page_bound_blob` 不可用）。不确定时先执行：
 
 ```bash
-tabtin browser capabilities --format json
+muse browser capabilities --format json
 ```
 
 ---

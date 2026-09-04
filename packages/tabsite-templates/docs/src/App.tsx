@@ -42,7 +42,7 @@ const CONTENT: Record<string, { title: string; body: string }> = {
 
 1. 编辑 \`src/App.tsx\` 修改导航结构
 2. 替换示例内容为你的文档
-3. 运行 \`tabtin site build\` 发布上线`,
+3. 运行 \`muse site build\` 发布上线`,
   },
   install: {
     title: '安装',
@@ -77,10 +77,10 @@ pnpm build
 
 ## 发布
 
-使用 TabTin CLI 一键发布：
+使用 Muse CLI 一键发布：
 
 \`\`\`bash
-tabtin site build <site-id>
+muse site build <site-id>
 \`\`\``,
   },
 }

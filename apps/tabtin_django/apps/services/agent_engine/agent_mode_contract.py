@@ -147,7 +147,7 @@ _DEGRADED_WRITE_DENY = [
     "skill_invoke",
 ]
 # W4 R3（2026-05-11）：`ask_user` 替代旧 `ask_choice`（多选问答 HITL）；
-# `ask_form` 是 TabTin HITL 扩展（多字段填表）。#3709（2026-07-08）下架
+# `ask_form` 是 Muse HITL 扩展（多字段填表）。#3709（2026-07-08）下架
 # `request_approval`——审批意图由 ask_user / 纯文本承接，高危动作安全兜底由系统
 # 拦截（judge 管线）承担。degraded fallback 跟随 SSoT。
 _DEGRADED_ASK_TOOLS = ["ask_user", "ask_form"]

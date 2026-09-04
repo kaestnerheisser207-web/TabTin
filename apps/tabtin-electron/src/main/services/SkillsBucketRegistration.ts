@@ -199,7 +199,7 @@ export function registerSkillsPreinstalledBucket(): () => void {
       category: 'semi-cache',
       group: 'business-app',
       displayName: 'Agent 工具脚本',
-      description: 'TabTin 在每个 Agent 工作区里自动准备的工具脚本（让 AI 能调用平台和业务 App 的能力）。你不需要手动管理。',
+      description: 'Muse 在每个 Agent 工作区里自动准备的工具脚本（让 AI 能调用平台和业务 App 的能力）。你不需要手动管理。',
       warnings: [
         '清理后下次进入对应 Agent 工作区会自动重新准备（首次会比平时慢几秒）',
         '若你曾在工具脚本目录里手动改过文件（高级用法），这些修改会被一并清掉',

@@ -15,23 +15,23 @@ import {
 describe('mapAppAsarPathToUnpacked ', () => {
   it('maps macOS/Linux app.asar segment to app.asar.unpacked', () => {
     const asar =
-      '/Applications/TabTin.app/Contents/Resources/app.asar/node_modules/@vscode/ripgrep-darwin-arm64/bin/rg';
+      '/Applications/Muse.app/Contents/Resources/app.asar/node_modules/@vscode/ripgrep-darwin-arm64/bin/rg';
     expect(mapAppAsarPathToUnpacked(asar)).toBe(
-      '/Applications/TabTin.app/Contents/Resources/app.asar.unpacked/node_modules/@vscode/ripgrep-darwin-arm64/bin/rg',
+      '/Applications/Muse.app/Contents/Resources/app.asar.unpacked/node_modules/@vscode/ripgrep-darwin-arm64/bin/rg',
     );
   });
 
   it('maps Windows app.asar\\ segment to app.asar.unpacked', () => {
     const asar =
-      'C:\\Program Files\\TabTin\\resources\\app.asar\\node_modules\\@vscode\\ripgrep\\bin\\rg.exe';
+      'C:\\Program Files\\Muse\\resources\\app.asar\\node_modules\\@vscode\\ripgrep\\bin\\rg.exe';
     expect(mapAppAsarPathToUnpacked(asar)).toBe(
-      'C:\\Program Files\\TabTin\\resources\\app.asar.unpacked\\node_modules\\@vscode\\ripgrep\\bin\\rg.exe',
+      'C:\\Program Files\\Muse\\resources\\app.asar.unpacked\\node_modules\\@vscode\\ripgrep\\bin\\rg.exe',
     );
   });
 
   it('does not double-rewrite app.asar.unpacked', () => {
     const unpacked =
-      '/Applications/TabTin.app/Contents/Resources/app.asar.unpacked/node_modules/@vscode/ripgrep-darwin-arm64/bin/rg';
+      '/Applications/Muse.app/Contents/Resources/app.asar.unpacked/node_modules/@vscode/ripgrep-darwin-arm64/bin/rg';
     expect(mapAppAsarPathToUnpacked(unpacked)).toBe(unpacked);
   });
 

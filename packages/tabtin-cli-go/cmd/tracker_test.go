@@ -13,8 +13,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/TabTin/tabtin-cli/internal/cmdutil"
-	"github.com/TabTin/tabtin-cli/internal/output"
+	"github.com/Muse/muse-cli/internal/cmdutil"
+	"github.com/Muse/muse-cli/internal/output"
 )
 
 // ─── translateSchedule 5 档预设 ──────────────────────────────────────
@@ -393,7 +393,7 @@ func TestValidateEventKey_BareNameRejected(t *testing.T) {
 		t.Fatal("裸事件名 record_created 应该报错")
 	}
 	if !strings.Contains(err.Error(), "event list") {
-		t.Errorf("错误信息应引导用 `tabtin event list`，实际：%v", err)
+		t.Errorf("错误信息应引导用 `muse event list`，实际：%v", err)
 	}
 }
 
@@ -556,7 +556,7 @@ func TestTrackerNewSchema_SkillFlagIsOptional(t *testing.T) {
 // 锁定「合成预览 vs 真实回放」横幅文案，避免用户把 dry-run 结果误当真实回放。
 
 func TestDryRunSourceBanner_OKEnvelopeSynthetic(t *testing.T) {
-	// live API 走 TabTin 信封 {"ok":true,"data":{...}}，横幅必须能解包。
+	// live API 走 Muse 信封 {"ok":true,"data":{...}}，横幅必须能解包。
 	body := []byte(`{"ok":true,"data":{"events_source":"synthetic","disclaimer":"本期试运行使用合成事件演示 trigger filter 行为。"}}`)
 	got := dryRunSourceBanner(body, output.FormatTable)
 	if !strings.Contains(got, "合成预览") {

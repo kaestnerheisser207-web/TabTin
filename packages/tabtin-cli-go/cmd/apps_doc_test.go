@@ -25,7 +25,7 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/TabTin/tabtin-cli/internal/cmdutil"
+	"github.com/Muse/muse-cli/internal/cmdutil"
 )
 
 // newTestDocCmd 构造一棵 doc 命令树供单测断言。
@@ -92,7 +92,7 @@ func TestDocCommandsMounted(t *testing.T) {
 
 func TestDocOverviewPromotesTitleAwareMarkdownWrites(t *testing.T) {
 	cmd := newTestDocCmd(t)
-	if !strings.Contains(cmd.Long, `tabtin doc create --title "周报" --markdown @.agent-drafts/weekly.md`) {
+	if !strings.Contains(cmd.Long, `muse doc create --title "周报" --markdown @.agent-drafts/weekly.md`) {
 		t.Fatalf("doc 顶层说明必须优先展示 title 与正文一步写入，long=%q", cmd.Long)
 	}
 	if strings.Contains(cmd.Long, "save-content <document-id> --markdown @./draft.md") {
@@ -430,7 +430,7 @@ func TestDocShareGetOffRefreshOmitShareTypeDefault(t *testing.T) {
 	}
 }
 
-// TestDocAIHelpExportedInCommandsSchema tabtin commands JSON 应携带 ai_help。
+// TestDocAIHelpExportedInCommandsSchema muse commands JSON 应携带 ai_help。
 func TestDocAIHelpExportedInCommandsSchema(t *testing.T) {
 	newTestDocCmd(t)
 	byName := map[string]cmdutil.CommandSchema{}
@@ -776,7 +776,7 @@ func TestLooksLikeBareMarkdownFilePath(t *testing.T) {
 	}{
 		{name: "正常正文", in: "# 标题\n\n正文一段。", want: false},
 		{name: "短标题带井号", in: "# 周报", want: false},
-		{name: "Windows 绝对路径 md", in: `C:\Users\Lenovo\TabTin\默认 Agent-2\淬炼盛夏荣光.md`, want: true},
+		{name: "Windows 绝对路径 md", in: `C:\Users\Lenovo\Muse\默认 Agent-2\淬炼盛夏荣光.md`, want: true},
 		{name: "POSIX 绝对路径", in: "/Users/me/TabTin/workspace/report.md", want: true},
 		{name: "相对路径带斜杠", in: "./drafts/weekly.md", want: true},
 		{name: "反斜杠相对路径", in: `artifacts\news.md`, want: true},

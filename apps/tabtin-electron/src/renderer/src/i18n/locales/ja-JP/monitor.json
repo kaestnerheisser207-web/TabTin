@@ -50,7 +50,7 @@
     "uiEngine": "UIエンジン",
     "uiEngineDetail": "{{cpu}} · ページ レンダリング エンジン用の共有メモリ",
     "appHost": "アプリホスト",
-    "appHostDetail": "{{cpu}} · TabTin アプリ自体のベースライン メモリ",
+    "appHostDetail": "{{cpu}} · Muse アプリ自体のベースライン メモリ",
     "unassigned": "未割り当て",
     "unassignedDetail": "{{cpu}} · まだスペースに属していないリソース",
     "background": "背景",

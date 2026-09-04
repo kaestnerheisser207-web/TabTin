@@ -8,7 +8,7 @@
  *
  * 字段契约（tags 白名单 / 脱敏红线）：docs/agent/error-context-schema.md。
  * 脱敏与 Electron 同源（@tabtin/shared/sentry-scrub）；同指纹限频与 Django
- * 端 tabtin/sentry.py 同口径（每指纹每分钟最多 5 条），防止 relay/重试类
+ * 端 muse/sentry.py 同口径（每指纹每分钟最多 5 条），防止 relay/重试类
  * 高频错误路径打爆自部署 Sentry。
  *
  * Runtime（@tabtin/agent-runtime）本身不依赖 @sentry/*：run 级致命错误统一
@@ -34,7 +34,7 @@ export function isSentryEnabled(): boolean {
   return sdk !== null;
 }
 
-// ── 同指纹限频（洪水保护，与 Django tabtin/sentry.py 同口径） ──────────
+// ── 同指纹限频（洪水保护，与 Django muse/sentry.py 同口径） ──────────
 
 const RATE_LIMIT_WINDOW_MS = 60_000;
 const RATE_LIMIT_MAX = 5;
@@ -177,7 +177,7 @@ export function captureRunError(error: unknown, context: RunErrorContext): void 
         run_id: context.run_id,
         task_id: context.task_id,
       }).filter(([, value]) => Boolean(value)));
-      scope.setContext('tabtin', tabtinContext);
+      scope.setContext('muse', tabtinContext);
       scope.setFingerprint([
         'agent-run',
         context.error_category,

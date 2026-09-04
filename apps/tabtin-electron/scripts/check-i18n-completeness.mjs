@@ -79,7 +79,7 @@ const hasDeprecatedTraditionalChineseSearchTerm = value => (
 )
 
 const protectedBrandTokens = [
-  'TabTin', '小Tin', 'TabDoc', 'TabData', 'TabChat', 'TabCode', 'TabWeb',
+  'Muse', '小Tin', 'TabDoc', 'TabData', 'TabChat', 'TabCode', 'TabWeb',
   'TabSlide', 'TabVideo', 'TabFiles', 'TabTracker', 'TabInbox',
 ]
 

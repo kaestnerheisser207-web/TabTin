@@ -1,6 +1,6 @@
 // cmd/agent/current_test.go
 //
-//  回归：`tabtin agent current` 不得再把 Space ID 冒充 agent_id。
+//  回归：`muse agent current` 不得再把 Space ID 冒充 agent_id。
 // 修复后 current 改为解析当前 Space 的真实 execution_agent_id。
 // 这里直接覆盖响应解析纯函数 parseSpaceExecutionAgent（避开 transport mock）。
 package agent

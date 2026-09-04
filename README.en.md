@@ -1,4 +1,4 @@
-# TabTin
+# Muse
 
 **A more elegant way for teams and Agents to collaborate**
 
@@ -7,12 +7,12 @@
 [Website](https://tabtin.com/) · [Business inquiries](mailto:contact@larchiveai.com) · [Get started](#get-started) · [Run from source locally](#run-from-source-locally) · [Contributing](CONTRIBUTING.en.md) · [Security](SECURITY.en.md)
 
 <p align="center">
-  <img src="assets/readme/tabtin-collaboration-hero.png" alt="TabTin collaboration between people and Agents" />
+  <img src="assets/readme/tabtin-collaboration-hero.png" alt="Muse collaboration between people and Agents" />
 </p>
 
-TabTin is an open-source collaboration platform for people and Agents, built for individuals and teams that want to bring Agents into real work. We want to reduce the friction of working with Agents, so work completed by one person can be continued, reused, and reviewed by the team.
+Muse is an open-source collaboration platform for people and Agents, built for individuals and teams that want to bring Agents into real work. We want to reduce the friction of working with Agents, so work completed by one person can be continued, reused, and reviewed by the team.
 
-> **Try TabTin:** [Visit the TabTin website](https://tabtin.com/) to use the official hosted service without operating your own server.
+> **Try Muse:** [Visit the Muse website](https://tabtin.com/) to use the official hosted service without operating your own server.
 >
 > **Business inquiries:** For deployment assessments, migration assistance, commercial licensing, or custom services, contact [contact@larchiveai.com](mailto:contact@larchiveai.com).
 
@@ -20,17 +20,17 @@ Public repository: [github.com/tabtin-ai/TabTin](https://github.com/tabtin-ai/Ta
 
 > We want work to feel easier, collaboration smoother, and task execution clearer—while making each person's work visible, their decisions understandable, and their contributions verifiable.
 
-## Why TabTin
+## Why Muse
 
 AI increases individual output, but it does not automatically improve team efficiency.
 
 As teams rely more heavily on Agents, repeated research, lost context and decision rationale, repeated Token spending, methods that are difficult to reuse, and unclear accountability become more visible.
 
-TabTin starts by asking one question: **Can work completed by one person become the next colleague's starting point?**
+Muse starts by asking one question: **Can work completed by one person become the next colleague's starting point?**
 
-Teams already using AI deeply are TabTin's first wedge, not its product boundary. TabTin is for any individual or team that wants to bring Agents into real work.
+Teams already using AI deeply are Muse's first wedge, not its product boundary. Muse is for any individual or team that wants to bring Agents into real work.
 
-## What individuals and teams can do with TabTin
+## What individuals and teams can do with Muse
 
 Individuals can configure different Agents, models, Skills, and execution rules, then involve Agents directly in research, information gathering, documents, tables, presentations, code, and other real work. Over time, they can develop an Agent workflow that fits how they work.
 
@@ -44,7 +44,7 @@ Each person's local files and execution environment remain separate, while compl
 
 ### People and Agents operate on the same result
 
-TabTin provides collaboration applications for messaging, documents, data tables, and presentations. Agents can create and edit this content directly, and data and media collected by the browser can continue into the work applications.
+Muse provides collaboration applications for messaging, documents, data tables, and presentations. Agents can create and edit this content directly, and data and media collected by the browser can continue into the work applications.
 
 People and Agents work on the same online result instead of repeatedly moving content between chat, downloads, and office software.
 
@@ -56,13 +56,13 @@ Agents can execute work, while important decisions, accountability, and acceptan
 
 ### Teams can own their Agent work system
 
-TabTin includes more than a client. It also includes server components, an Agent Runtime, real-time collaboration, work applications, and administration capabilities. Individuals and small teams can use the official service, while developers can run Community Server on their own computer or continue developing and modifying the product from source.
+Muse includes more than a client. It also includes server components, an Agent Runtime, real-time collaboration, work applications, and administration capabilities. Individuals and small teams can use the official service, while developers can run Community Server on their own computer or continue developing and modifying the product from source.
 
 We will continue making the architecture more modular and pluggable. Only capabilities that exist in the public source and have been verified are described as current. Future directions belong in the [roadmap](ROADMAP.en.md).
 
 ## Current status
 
-TabTin is currently in Public Preview and preparing its first complete public source release. Its core workflows are available to try, but components still differ in maturity and cross-platform consistency.
+Muse is currently in Public Preview and preparing its first complete public source release. Its core workflows are available to try, but components still differ in maturity and cross-platform consistency.
 
 Some modules currently rely on default implementations and still need easier replacement and extension paths. Community Server is primarily designed for local use today. Mobile clients require a configured computer execution environment, and Project is a focus for the next version.
 
@@ -70,7 +70,7 @@ Current capabilities are defined by the public source and verified behavior. See
 
 ## Open-source scope
 
-TabTin is open-sourcing the actual product code, not a separate simplified demo.
+Muse is open-sourcing the actual product code, not a separate simplified demo.
 
 Developers can run the platform in their own environments, extend it, and help build it.
 
@@ -80,12 +80,12 @@ The intended public system includes desktop and mobile clients, server component
 
 Choose one of these two entry points:
 
-1. **Official service**: for individuals and small teams that want to experience TabTin without operating server infrastructure. Visit the [TabTin website](https://tabtin.com/).
-2. **Run from source locally**: for users and developers who want to try, debug, or extend TabTin on their own computer. An Agent can prepare and start the environment, or you can run it manually.
+1. **Official service**: for individuals and small teams that want to experience Muse without operating server infrastructure. Visit the [Muse website](https://tabtin.com/).
+2. **Run from source locally**: for users and developers who want to try, debug, or extend Muse on their own computer. An Agent can prepare and start the environment, or you can run it manually.
 
 ### Run from source locally
 
-There are two ways to run the TabTin source locally: ask an Agent to prepare and start it, or run the scripts and commands yourself. Both use the same local development environment; neither is a Community distribution package or a production release build.
+There are two ways to run the Muse source locally: ask an Agent to prepare and start it, or run the scripts and commands yourself. Both use the same local development environment; neither is a Community distribution package or a production release build.
 
 #### Option 1: Start with an Agent
 
@@ -168,7 +168,7 @@ For region selection, backend reuse, and troubleshooting, see the [Electron open
 
 ### Mobile builds
 
-> The mobile clients are companion interfaces to TabTin Desktop and do not provide an independent Agent execution environment. Before starting or controlling Agent tasks from mobile, configure and bind the execution environment in the desktop client and keep that computer online while tasks run. A mobile client alone cannot execute Agent tasks.
+> The mobile clients are companion interfaces to Muse Desktop and do not provide an independent Agent execution environment. Before starting or controlling Agent tasks from mobile, configure and bind the execution environment in the desktop client and keep that computer online while tasks run. A mobile client alone cannot execute Agent tasks.
 
 - [iOS build guide](apps/tabtin-ios/README.md)
 - [Android build guide](apps/tabtin-android/README.md)
@@ -185,7 +185,7 @@ For region selection, backend reuse, and troubleshooting, see the [Electron open
 
 ## Explore with us
 
-We welcome individuals, teams, and developers around the world who are using or exploring Agents to try TabTin, report real problems, share working methods, or contribute code, documentation, Skills, work applications, and adapters.
+We welcome individuals, teams, and developers around the world who are using or exploring Agents to try Muse, report real problems, share working methods, or contribute code, documentation, Skills, work applications, and adapters.
 
 We hope to explore better ways for people and Agents to collaborate in the AI era—together.
 
@@ -195,12 +195,12 @@ Contributions in Chinese and English are welcome. When AI is used, the contribut
 
 ## Data and privacy
 
-Community Server listens only on the local machine by default and stores account, configuration, and business data in local Docker volumes. The Community client does not connect to TabTin-maintainer Sentry or update services by default. Full diagnostic bundles may be uploaded only with explicit user consent. Data processing for the official service follows its published privacy policy.
+Community Server listens only on the local machine by default and stores account, configuration, and business data in local Docker volumes. The Community client does not connect to Muse-maintainer Sentry or update services by default. Full diagnostic bundles may be uploaded only with explicit user consent. Data processing for the official service follows its published privacy policy.
 
 ## License and trademarks
 
-TabTin's public source is provided under [AGPL-3.0-only](LICENSE). Organizations whose use or distribution is incompatible with AGPL-3.0-only may contact Shanghai Mofan Technology Co., Ltd. at [contact@larchiveai.com](mailto:contact@larchiveai.com) about separate commercial licensing.
+Muse's public source is provided under [AGPL-3.0-only](LICENSE). Organizations whose use or distribution is incompatible with AGPL-3.0-only may contact Shanghai Mofan Technology Co., Ltd. at [contact@larchiveai.com](mailto:contact@larchiveai.com) about separate commercial licensing.
 
-Third-party components remain subject to their respective licenses. See [THIRD_PARTY_NOTICES.en.md](THIRD_PARTY_NOTICES.en.md). The TabTin name and marks are trademarks of the project maintainer. Forks may truthfully state that they are “based on TabTin,” but must not impersonate an official release.
+Third-party components remain subject to their respective licenses. See [THIRD_PARTY_NOTICES.en.md](THIRD_PARTY_NOTICES.en.md). The Muse name and marks are trademarks of the project maintainer. Forks may truthfully state that they are “based on Muse,” but must not impersonate an official release.
 
 Copyright © 2026 Shanghai Mofan Technology Co., Ltd.

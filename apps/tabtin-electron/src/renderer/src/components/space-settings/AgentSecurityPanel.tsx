@@ -237,7 +237,7 @@ export const AgentSecurityPanel: React.FC<AgentSecurityPanelProps> = ({ spaceId,
                   <WorkspaceSourceGroup
                     title={t('security.workspaceSourceSandbox', { defaultValue: 'Agent 沙盒' })}
                     hint={t('security.workspaceSandboxHint', {
-                      defaultValue: 'TabTin 为每个工作空间自动创建的基础工作空间，不在此处撤销',
+                      defaultValue: 'Muse 为每个工作空间自动创建的基础工作空间，不在此处撤销',
                     })}
                     paths={[workspaceSources.sandbox]}
                   />

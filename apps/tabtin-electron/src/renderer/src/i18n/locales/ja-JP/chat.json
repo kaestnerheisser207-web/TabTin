@@ -979,7 +979,7 @@
     "invalid_param_format": "無効なパラメータ形式 - 入力を確認して再試行してください",
     "param_too_large": "入力が制限を超えています - 分割または単純化して再試行してください",
     "mutually_exclusive_params": "矛盾するパラメータ — 1 つだけを保持します",
-    "no_ui_session": "TabTin デスクトップ UI が必要です — このモードでは使用できません",
+    "no_ui_session": "Muse デスクトップ UI が必要です — このモードでは使用できません",
     "runtime_misconfig": "ランタイム構成が不完全です - 開発者に連絡してください",
     "host_unsupported": "この操作は現在のモードではサポートされていません",
     "network_failed": "ネットワーク要求が失敗しました - 接続を確認して再試行してください。クラウド ファイルの場合、URL の有効期限が切れている可能性があるため、ユーザーに再アップロードするよう依頼してください。",
@@ -1389,7 +1389,7 @@
     "chargeFailed": "請求保留中",
     "chargeFailedDetail": "このメッセージに対する請求は完了していません。自動的に再試行されます。二重に請求されることはありません。最終的な決済は正式なものです。",
     "byok": "独自の API キー - 料金なし",
-    "byokDetail": "独自の API キー (BYOK) を使用しています。このメッセージは TabTin クレジットを消費しません。"
+    "byokDetail": "独自の API キー (BYOK) を使用しています。このメッセージは Muse クレジットを消費しません。"
   },
   "checkpoint": {
     "edit": "メッセージを編集する",
@@ -2518,9 +2518,9 @@
     "plan_create": "計画の作成",
     "plan_update_todos": "Todoを更新する",
     "switch_mode": "モード切り替えのリクエスト",
-    "relaunch_app": "TabTinを再起動する",
+    "relaunch_app": "Museを再起動する",
     "clear_os_error_blacklist": "ブロックされたパスをクリアする",
-    "tabtin_search": "TabTin検索",
+    "tabtin_search": "Muse検索",
     "show_widget": "ビジュアルウィジェット",
     "show_flow_view": "フロービュー",
     "web_scraper_scrape_url": "URLをスクレイピング",
@@ -2888,9 +2888,9 @@
     "toolFailureNotice_one": "「{{tool}}」は {{streak}} 回連続で失敗しました。もう一度失敗した場合、システムはエージェントに別のアプローチを試すよう通知します。",
     "toolFailureNotice_other": "「{{tool}}」は{{streak}}回連続で失敗しています。あと{{remaining}}回失敗すると、別の方法を試すようシステムがエージェントに通知します。",
     "toolFailureNudge": "「{{tool}}」は {{streak}} 回連続で失敗しました。システムはエージェントに別のアプローチを試すよう通知しました。",
-    "toolRepetitionNotice_one": "\"{{tool}}\" は、最後の ~{{seconds}} で同じ入力 {{repeatCount}} 回で呼び出されています。エージェントがもう一度繰り返される場合、TabTin が介入してエージェントを押します。",
-    "toolRepetitionNotice_other": "\"{{tool}}\" は、最後の ~{{seconds}} で同じ入力 {{repeatCount}} 回で呼び出されています。 {{remaining}} をさらに繰り返すと、TabTin が介入してエージェントを少しずつ押し出します。",
-    "toolRepetitionNudge": "\"{{tool}}\" は、最後の ~{{seconds}} で同じ入力 {{repeatCount}} 回で呼び出されています。 TabTin は、同じ入力の再発行をやめるようにエージェントを促しました。少し待ちます。それでもピボットしない場合は、「前の回答を使用して続行する」または「質問を言い換える」などの新しいプロンプトを表示します。",
+    "toolRepetitionNotice_one": "\"{{tool}}\" は、最後の ~{{seconds}} で同じ入力 {{repeatCount}} 回で呼び出されています。エージェントがもう一度繰り返される場合、Muse が介入してエージェントを押します。",
+    "toolRepetitionNotice_other": "\"{{tool}}\" は、最後の ~{{seconds}} で同じ入力 {{repeatCount}} 回で呼び出されています。 {{remaining}} をさらに繰り返すと、Muse が介入してエージェントを少しずつ押し出します。",
+    "toolRepetitionNudge": "\"{{tool}}\" は、最後の ~{{seconds}} で同じ入力 {{repeatCount}} 回で呼び出されています。 Muse は、同じ入力の再発行をやめるようにエージェントを促しました。少し待ちます。それでもピボットしない場合は、「前の回答を使用して続行する」または「質問を言い換える」などの新しいプロンプトを表示します。",
     "tool_started": "実行中: {{toolName}}",
     "tool_completed": "{{toolName}} 完了しました",
     "tool_failed": "{{toolName}} が失敗しました: {{reason}}",
@@ -3035,11 +3035,19 @@
     "confirmFailed": "操作が失敗しました"
   },
   "tokenUsage": {
-    "title": "Token 使用量", "current": "現在の使用量", "windowLimit": "コンテキスト上限",
-    "inputTotal": "入力合計", "outputTotal": "出力合計", "cacheHit": "キャッシュヒット",
-    "reasoning": "推論", "autoCompacted": "自動整理済み", "billing": "課金",
-    "byok": "独自キー · credits 消費なし", "historicalCost": "過去の消費",
-    "consumed": "消費済み", "estimatedCost": "推定コスト"
+    "title": "Token 使用量",
+    "current": "現在の使用量",
+    "windowLimit": "コンテキスト上限",
+    "inputTotal": "入力合計",
+    "outputTotal": "出力合計",
+    "cacheHit": "キャッシュヒット",
+    "reasoning": "推論",
+    "autoCompacted": "自動整理済み",
+    "billing": "課金",
+    "byok": "独自キー · credits 消費なし",
+    "historicalCost": "過去の消費",
+    "consumed": "消費済み",
+    "estimatedCost": "推定コスト"
   },
   "sessionCollab": {
     "manageTitle": "共有の管理",

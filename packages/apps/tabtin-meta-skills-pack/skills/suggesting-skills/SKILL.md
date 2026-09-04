@@ -17,7 +17,7 @@ metadata:
 
 # 推荐该装的技能
 
-先 `tabtin skill search/market` 或读取已装列表，再推荐 1～3 个最相关 skill，说明为何匹配与如何安装。
+先 `muse skill search/market` 或读取已装列表，再推荐 1～3 个最相关 skill，说明为何匹配与如何安装。
 
 ## 必须遵守
 

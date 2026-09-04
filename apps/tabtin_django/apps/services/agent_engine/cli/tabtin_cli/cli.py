@@ -15,7 +15,7 @@ argparse 风格的命令族实现：
 - ``tabtin pkg ...``                 — Package Registry 包管理
 
 **v3.1（2026-04-19）**：``tabtin connect`` 命令族整体删除（方向锚 H8）。
-TabTin 对 Device 级第三方 App 不代管凭据，由 App 自己管（OS keychain 等）。
+Muse 对 Device 级第三方 App 不代管凭据，由 App 自己管（OS keychain 等）。
 
 **为什么用 argparse 不用 click/typer**：保持零额外依赖（A1-A4 已是纯 stdlib + Django），
 让本模块在 ``python -m`` 形式下立即可用，不需要 ``pip install`` 任何新包。
@@ -103,7 +103,7 @@ GENERAL_HELP_EPILOG = """\
   tabtin pkg install <app_id>/<skill-name>
 
 第三方 CLI 凭据由 App 自己管（OS keychain 等）。
-TabTin 不代管凭据，登录请直接跑 App 原生命令。
+Muse 不代管凭据，登录请直接跑 App 原生命令。
 
 更多帮助：``tabtin <子命令> --help``
 """
@@ -112,7 +112,7 @@ TabTin 不代管凭据，登录请直接跑 App 原生命令。
 def _build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         prog=PROG_NAME,
-        description="TabTin 平台统一 CLI — install / pkg 命令族",
+        description="Muse 平台统一 CLI — install / pkg 命令族",
         epilog=GENERAL_HELP_EPILOG,
         formatter_class=argparse.RawDescriptionHelpFormatter,
     )
@@ -180,9 +180,9 @@ def _build_parser() -> argparse.ArgumentParser:
     )
 
     # v3.1（2026-04-19）：``tabtin connect`` 命令族整体删除（方向锚 H8）。
-    # TabTin 对 Device 级第三方 App 不代管凭据；用户在本机自己跑该 App 自身的
+    # Muse 对 Device 级第三方 App 不代管凭据；用户在本机自己跑该 App 自身的
     # ``config init`` / ``auth login`` 等命令，Agent 可引导但不代跑。
-    # 详见 docs/app-market/PRD-v3.1-方向锚.md §一 "TabTin 不做" 列表。
+    # 详见 docs/app-market/PRD-v3.1-方向锚.md §一 "Muse 不做" 列表。
 
     # pkg <action> ...
     from apps.services.agent_engine.cli.tabtin_cli.pkg import build_pkg_subparser

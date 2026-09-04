@@ -108,7 +108,7 @@ export interface DiagnosticsClipboardInput {
 export function buildDiagnosticsClipboardText(input: DiagnosticsClipboardInput): string {
   const windowMin = Math.round(input.windowMs / 60_000)
   const sections: string[] = [
-    'TabTin Client Diagnostics (clipboard)',
+    'Muse Client Diagnostics (clipboard)',
     '='.repeat(48),
     `window: last ${windowMin} minute(s) (since ${input.windowSinceIso})`,
     '',

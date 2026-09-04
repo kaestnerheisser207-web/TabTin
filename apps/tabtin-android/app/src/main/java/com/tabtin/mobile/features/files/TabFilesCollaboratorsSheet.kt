@@ -24,7 +24,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
-import com.tabtin.mobile.R
+import com.muse.mobile.R
 import com.tabtin.mobile.data.model.SearchUserItem
 import com.tabtin.mobile.data.model.files.TabFilesCollaborator
 import com.tabtin.mobile.data.model.files.TabFilesUserBrief

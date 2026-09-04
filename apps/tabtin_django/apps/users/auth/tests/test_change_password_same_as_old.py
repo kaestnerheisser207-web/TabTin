@@ -94,7 +94,7 @@ class ChangePasswordSameAsOldTests(SimpleTestCase):
     @patch("apps.users.auth.api.password_routes.check_password_reset_rate_limit")
     @patch("apps.users.auth.api.password_routes.validate_password_reset_context")
     @patch("apps.users.auth.api.password_routes.log_security_event")
-    @patch("apps.users.auth.api.password_routes.get_user_agent", return_value="TabTin-Test/1.0")
+    @patch("apps.users.auth.api.password_routes.get_user_agent", return_value="Muse-Test/1.0")
     @patch("apps.users.auth.api.password_routes.get_client_ip", return_value="127.0.0.1")
     def test_forgot_password_rejects_masked_identifier_before_risk_counting(
         self,

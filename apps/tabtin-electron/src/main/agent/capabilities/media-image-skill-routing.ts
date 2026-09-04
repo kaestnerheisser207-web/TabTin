@@ -22,7 +22,7 @@ export function isExplicitLibTvRequest(query: string | null | undefined): boolea
 }
 
 /**
- * 原生 `tabtin media image` 是通用生图主链路。LibTV 作为扩展 Skill，只有用户
+ * 原生 `muse media image` 是通用生图主链路。LibTV 作为扩展 Skill，只有用户
  * 明确点名，或当前 Agent 已有可用密钥时才进入自动召回上下文。
  */
 export function shouldInjectMediaSkill(

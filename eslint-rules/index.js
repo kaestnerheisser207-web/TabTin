@@ -1,5 +1,5 @@
 /**
- * TabTin ESLint 自定义规则 plugin barrel。
+ * Muse ESLint 自定义规则 plugin barrel。
  *
  * 在 `eslint.config.mjs` 里：
  *   import tabtinPlugin from './eslint-rules/index.js'

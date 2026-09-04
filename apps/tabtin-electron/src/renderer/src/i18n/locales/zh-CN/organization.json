@@ -12,13 +12,13 @@
     "accessDeniedTitle": "无法访问「{{name}}」",
     "accessDeniedAutoSwitch": "正在切换到「{{name}}」"
   },
-  "welcomeTitle": "欢迎使用 TabTin",
+  "welcomeTitle": "欢迎使用 Muse",
   "welcomeSubtitle": "AI 驱动的工作平台。创建一个新工作空间，或从左侧选择现有工作空间。",
   "welcomeSubtitleGuest": "登录后即可创建工作空间并开始协作。",
   "welcome": {
-    "title": "TabTin",
+    "title": "Muse",
     "tagline": "你的 AI 工作平台",
-    "conceptIntro": "在 TabTin 中，工作空间是持续存在的工作现场，绑定执行设备和工作目录，承载对话、App、资源和执行上下文；你可以组合表格、文档、代码、浏览器、设备控制、自动化、邮件和第三方集成等工作面，让 Agent 在这个边界里帮你完成任务。",
+    "conceptIntro": "在 Muse 中，工作空间是持续存在的工作现场，绑定执行设备和工作目录，承载对话、App、资源和执行上下文；你可以组合表格、文档、代码、浏览器、设备控制、自动化、邮件和第三方集成等工作面，让 Agent 在这个边界里帮你完成任务。",
     "loginCta": "登录 / 注册",
     "learnMore": "了解更多 →",
     "loadingTitle": "正在加载工作空间...",
@@ -58,12 +58,12 @@
     "guest": {
       "hookLine1": "AI 不再只是",
       "hookLine2": "一个聊天框",
-      "subtitleLead": "在 TabTin，Agent 真的在做事——上网调研、抓数据、做表格、写报告、做 PPT。",
+      "subtitleLead": "在 Muse，Agent 真的在做事——上网调研、抓数据、做表格、写报告、做 PPT。",
       "subtitleEmphasis": "每一步，全程可见。",
       "footnote": "统一接入主流大模型 · 38+ AI 工作场景",
       "demo": {
         "tabs": {
-          "browser": "TabTin 浏览器",
+          "browser": "Muse 浏览器",
           "data": "融资数据.tabdata",
           "report": "投融资研报.tabdoc",
           "slides": "融资周报.tabslide"
@@ -73,7 +73,7 @@
         "steps": {
           "browse": {
             "label": "调研最近融资的企业",
-            "detail": "TabTin 浏览器 · 36氪 · IT桔子 · Crunchbase"
+            "detail": "Muse 浏览器 · 36氪 · IT桔子 · Crunchbase"
           },
           "collect": {
             "label": "抓取轮次、金额、投资方",
@@ -265,7 +265,7 @@
       "pickSubagentModel": "选择子 Agent 模型"
     },
     "presetSection": {
-      "title": "TabTin 预置模型",
+      "title": "Muse 预置模型",
       "subtitle": "平台内置模型，开箱即用，可设为个人或团队默认。",
       "collapse": "收起",
       "expandHint": "还有 {{count}} 个平台模型，展开查看全部。",
@@ -316,7 +316,7 @@
       "pickerTitle": "接入自带模型",
       "pickerDesc": "选择你已购买的订阅套餐，或按量计费的 API 平台。",
       "formTitle": "接入自带模型",
-      "formDesc": "选择渠道并填写 API Key，端点与常用模型由 TabTin 预置。",
+      "formDesc": "选择渠道并填写 API Key，端点与常用模型由 Muse 预置。",
       "planFormTitle": "接入订阅套餐",
       "planFormDesc": "选择 Coding 套餐平台并填写 Key；端点与常用模型已预置。",
       "apiFormTitle": "接入 API 按量",
@@ -413,7 +413,7 @@
         "vendorLabel": "Kimi",
         "subtitle": "接入 Kimi Code 会员 / Coding 套餐，按 Kimi 平台规则消耗额度。",
         "apiKeyPlaceholder": "在 Kimi Code 控制台创建的 API Key",
-        "connectDesc": "填写 Kimi Code API Key 即可；请求地址与常用模型由 TabTin 预置。",
+        "connectDesc": "填写 Kimi Code API Key 即可；请求地址与常用模型由 Muse 预置。",
         "docsLink": "查看 Kimi 接入说明",
         "apiKeyHint": "Key 在 Kimi Code 控制台创建；会员档位决定可用模型，详见官方文档。"
       },
@@ -422,7 +422,7 @@
         "vendorLabel": "MiniMax",
         "subtitle": "接入 MiniMax Token Plan 订阅，使用订阅 Key 消耗套餐额度（与按量 API Key 不互通）。",
         "apiKeyPlaceholder": "sk-cp-…（Token Plan 订阅 Key）",
-        "connectDesc": "填写 Token Plan 订阅 Key 即可；端点与 M3 / M2.7 系列模型由 TabTin 预置。M3 为原生 1M 长上下文，M2.7 为 256K。",
+        "connectDesc": "填写 Token Plan 订阅 Key 即可；端点与 M3 / M2.7 系列模型由 Muse 预置。M3 为原生 1M 长上下文，M2.7 为 256K。",
         "docsLink": "查看 MiniMax Token Plan 接入说明",
         "apiKeyHint": "订阅 Key 在 MiniMax 控制台「账户管理 / Token Plan」获取；须已购买套餐或获得团队分配席位。"
       },
@@ -431,25 +431,25 @@
         "vendorLabel": "百炼",
         "subtitle": "接入阿里云百炼 Coding Plan，使用套餐专属 Key 消耗固定月费额度。",
         "apiKeyPlaceholder": "sk-sp-…（Coding Plan 专属 Key）",
-        "connectDesc": "填写百炼 Coding Plan 专属 Key 即可；OpenAI 兼容端点与套餐推荐模型由 TabTin 预置。模型名须与官方白名单逐字匹配。",
+        "connectDesc": "填写百炼 Coding Plan 专属 Key 即可；OpenAI 兼容端点与套餐推荐模型由 Muse 预置。模型名须与官方白名单逐字匹配。",
         "docsLink": "查看百炼 Coding Plan 接入说明",
         "apiKeyHint": "专属 Key 在百炼 Coding Plan 页面获取（sk-sp- 开头）；与按量 Key（sk-）及 dashscope.aliyuncs.com 端点不互通。"
       },
       "volcengineCodingPlan": {
         "title": "火山方舟 Coding Plan",
         "vendorLabel": "火山方舟",
-        "subtitle": "接入火山引擎方舟 Coding Plan，在 TabTin 中使用套餐内多模型 Coding 额度。",
+        "subtitle": "接入火山引擎方舟 Coding Plan，在 Muse 中使用套餐内多模型 Coding 额度。",
         "apiKeyPlaceholder": "方舟控制台 API Key",
-        "connectDesc": "填写方舟 API Key 即可；Coding Plan 专用 OpenAI 兼容端点与常用 Code 模型由 TabTin 预置。勿使用通用方舟 API 地址。",
+        "connectDesc": "填写方舟 API Key 即可；Coding Plan 专用 OpenAI 兼容端点与常用 Code 模型由 Muse 预置。勿使用通用方舟 API 地址。",
         "docsLink": "查看火山方舟 Coding Plan 接入说明",
         "apiKeyHint": "Key 在火山方舟控制台 API Key 管理获取；须使用 coding/v3 端点，否则无法抵扣套餐且可能产生按量费用。"
       },
       "zhipuCodingPlan": {
         "title": "GLM Coding Plan",
         "vendorLabel": "智谱",
-        "subtitle": "接入智谱 GLM Coding Plan 订阅，在 TabTin 中使用套餐 Coding 额度。",
+        "subtitle": "接入智谱 GLM Coding Plan 订阅，在 Muse 中使用套餐 Coding 额度。",
         "apiKeyPlaceholder": "Coding Plan 专属 API Key",
-        "connectDesc": "填写 GLM Coding Plan API Key 即可；OpenAI 兼容端点与 GLM-5.2 / Turbo / 4.7 由 TabTin 预置。GLM-5.2 为 1M 上下文。",
+        "connectDesc": "填写 GLM Coding Plan API Key 即可；OpenAI 兼容端点与 GLM-5.2 / Turbo / 4.7 由 Muse 预置。GLM-5.2 为 1M 上下文。",
         "docsLink": "查看 GLM Coding Plan 接入说明",
         "apiKeyHint": "Key 在智谱开放平台「个人/团队编程套餐」创建；与按量 API Key 及 open.bigmodel.cn 通用端点不互通。"
       }
@@ -540,10 +540,9 @@
       "toggleFailed": "操作失败，请重试",
       "create": "添加渠道",
       "creating": "添加中...",
-      "createModelHint": "保存平台账号与密钥后，请添加该平台下要在 TabTin 中使用的具体模型。",
+      "createModelHint": "保存平台账号与密钥后，请添加该平台下要在 Muse 中使用的具体模型。",
       "empty": "还没有接入模型服务。点击右上角添加。",
       "codexLocalHint": "仅当前设备可用",
-      "modelCount": "{{count}} 个模型",
       "createSuccess": "渠道已添加",
       "createSuccessContinueModel": "渠道已添加，请继续为该渠道添加模型",
       "createSuccessWithModelHint": "渠道已添加，请在其下添加模型",

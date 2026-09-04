@@ -45,8 +45,8 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.compose.LocalLifecycleOwner
-import com.tabtin.mobile.BuildConfig
-import com.tabtin.mobile.R
+import com.muse.mobile.BuildConfig
+import com.muse.mobile.R
 import com.tabtin.mobile.data.model.OrganizationRole
 import com.tabtin.mobile.features.workspace.roleDisplayString
 import com.tabtin.mobile.ui.theme.TTSpacing

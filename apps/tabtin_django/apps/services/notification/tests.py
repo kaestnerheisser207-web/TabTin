@@ -1035,13 +1035,13 @@ class AccountNotificationAdapterTests(SimpleTestCase):
                 "旧标题",
                 "旧详情",
                 {
-                    "organization_name": "TabTin 产品组",
+                    "organization_name": "Muse 产品组",
                     "inviter_name": "周扬",
                     "role": "editor",
                 },
             ),
             (
-                "你收到来自「TabTin 产品组」的邀请",
+                "你收到来自「Muse 产品组」的邀请",
                 "周扬邀请你以“成员”身份加入该组织。",
             ),
         )

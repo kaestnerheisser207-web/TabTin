@@ -12,20 +12,20 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/TabTin/tabtin-cli/internal/cmdutil"
-	"github.com/TabTin/tabtin-cli/internal/config"
-	"github.com/TabTin/tabtin-cli/internal/errcode"
-	"github.com/TabTin/tabtin-cli/internal/output"
-	"github.com/TabTin/tabtin-cli/internal/transport"
+	"github.com/Muse/muse-cli/internal/cmdutil"
+	"github.com/Muse/muse-cli/internal/config"
+	"github.com/Muse/muse-cli/internal/errcode"
+	"github.com/Muse/muse-cli/internal/output"
+	"github.com/Muse/muse-cli/internal/transport"
 )
 
-// agent_memory.go — `tabtin agent memory` 子命令组（ W4b · CLI 层解耦）。
+// agent_memory.go — `muse agent memory` 子命令组（ W4b · CLI 层解耦）。
 //
 // 打后端独立领域端点 /api/agent-memory/memories/*（W1-W3 已收口，见
 // apps/agent_memory/api.py + urls_deferred.py），把「查看 / 纠正 / 忘记 /
-// 重要度反馈 / 导出」Agent 记忆的 CLI 面从 `tabtin memo`（用户笔记）彻底分家：
-//   - tabtin memo        → /tabmemo/*：只放用户主动写的碎片笔记 / 书签。
-//   - tabtin agent memory → /agent-memory/*：Agent 从交互蒸馏的记忆治理。
+// 重要度反馈 / 导出」Agent 记忆的 CLI 面从 `muse memo`（用户笔记）彻底分家：
+//   - muse memo        → /tabmemo/*：只放用户主动写的碎片笔记 / 书签。
+//   - muse agent memory → /agent-memory/*：Agent 从交互蒸馏的记忆治理。
 //
 // 不变量（与后端一致，见 apps/agent_memory/services.py）：记忆按
 // (agent_id, subject_user, organization) 完全隔离；查询强制三元组前两键
@@ -42,7 +42,7 @@ const agentMemoryBasePath = "/api/agent-memory/memories"
 const agentMemoryRecordDisabledCode = "AGENT_MEMORY_RECORD_DISABLED"
 
 // agentMemoryDisabledHint 是收到 RECORD_DISABLED 时补的人话——不静默、给可执行指引。
-const agentMemoryDisabledHint = "记忆总闸当前关闭：写入 / 更正被拒。请在 TabTin『记忆』App →『记忆偏好』→『让 Agent 记笔记』重新开启后重试（关闭期间读取按空处理，不会返回既有记忆）。"
+const agentMemoryDisabledHint = "记忆总闸当前关闭：写入 / 更正被拒。请在 Muse『记忆』App →『记忆偏好』→『让 Agent 记笔记』重新开启后重试（关闭期间读取按空处理，不会返回既有记忆）。"
 
 // agentMemoryTypes 是 Agent 记忆四类（与后端 AgentMemory.MemoType Literal 对齐）。
 var agentMemoryTypes = []string{"about_you", "insight", "task_summary", "diary"}
@@ -76,12 +76,12 @@ func resolveAgentMemoryScope(organizationID, agentID string) (scope agentMemoryS
 	agentID = strings.TrimSpace(agentID)
 	if agentID == "" {
 		return agentMemoryScope{}, "缺少 --agent-id：Agent 记忆按 (agent, 用户, 组织) 强隔离，必须显式指定 Agent。",
-			"用 --agent-id <id> 指定；先 tabtin agent list 查可用 Agent。", false
+			"用 --agent-id <id> 指定；先 muse agent list 查可用 Agent。", false
 	}
 	organizationID = strings.TrimSpace(organizationID)
 	if organizationID == "" {
 		return agentMemoryScope{}, "缺少 organization_id：无法解析当前组织。",
-			"用 --organization-id <id>，或 tabtin config set defaultOrganization <id>。", false
+			"用 --organization-id <id>，或 muse config set defaultOrganization <id>。", false
 	}
 	return agentMemoryScope{organizationID: organizationID, agentID: agentID}, "", "", true
 }
@@ -455,13 +455,13 @@ func newCmdAgentMemory(f *cmdutil.Factory) *cobra.Command {
 记忆按 (agent, 用户, 组织) 强隔离——每条命令必须用 --agent-id 显式指定 Agent，
 缺失直接报错、不猜（不回退到当前 Space）。organization 从当前上下文解析。
 
-与 tabtin memo 的边界：memo 只管用户主动写的笔记 / 书签；Agent 记忆治理走这里，
+与 muse memo 的边界：memo 只管用户主动写的笔记 / 书签；Agent 记忆治理走这里，
 打后端独立领域端点 /agent-memory/*，不再经 memo 的 --source agent 猜类型分流。`,
-		Example: `  tabtin agent memory list --agent-id <agent-id>
-  tabtin agent memory list --agent-id <agent-id> --type insight --limit 50
-  tabtin agent memory get <memory-id> --agent-id <agent-id>
-  tabtin agent memory forget <memory-id> --agent-id <agent-id>
-  tabtin agent memory export --agent-id <agent-id> --export-format json`,
+		Example: `  muse agent memory list --agent-id <agent-id>
+  muse agent memory list --agent-id <agent-id> --type insight --limit 50
+  muse agent memory get <memory-id> --agent-id <agent-id>
+  muse agent memory forget <memory-id> --agent-id <agent-id>
+  muse agent memory export --agent-id <agent-id> --export-format json`,
 	}
 
 	registerAgentMemoryList(cmd, f)
@@ -483,10 +483,10 @@ func registerAgentMemoryList(parent *cobra.Command, f *cmdutil.Factory) {
 天然隔离他人 / 他 Agent 的记忆；隐私总闸关闭时后端 fail-closed 返回空页（不泄漏条数 / 内容）。
 常见陷阱：不带 --agent-id 直接报错、不猜；--type 只认 about_you/insight/task_summary/diary；
 翻页用上一页返回的 next_cursor 传 --cursor，不要客户端拉全量再过滤。`,
-		Example: "  tabtin agent memory list --agent-id <agent-id>\n" +
-			"  tabtin agent memory list --agent-id <agent-id> --type insight --limit 50\n" +
-			"  tabtin agent memory list --agent-id <agent-id> --state archived --format json\n" +
-			"  tabtin agent memory list --agent-id <agent-id> --search 偏好 --cursor 30",
+		Example: "  muse agent memory list --agent-id <agent-id>\n" +
+			"  muse agent memory list --agent-id <agent-id> --type insight --limit 50\n" +
+			"  muse agent memory list --agent-id <agent-id> --state archived --format json\n" +
+			"  muse agent memory list --agent-id <agent-id> --search 偏好 --cursor 30",
 		Layer: "L2", Risk: cmdutil.RiskRead, RiskDeclared: true,
 		Route: cmdutil.RouteCliServer, RequiresAuth: true, HasFormat: true, Idempotent: true,
 		Flags: []cmdutil.FlagDef{
@@ -537,9 +537,9 @@ func registerAgentMemoryGet(parent *cobra.Command, f *cmdutil.Factory) {
 设计理由：走同一三元组归属校验——只能读当前用户在该 Agent 名下的记忆，越权 / 已忘记 / 总闸关闭
 一律 404（不区分「没有」与「不可见」，不泄漏存在性）。
 常见陷阱：--agent-id 必填；memory-id 从 list 结果取；忘记后的记忆读不到（软删后全排除）。`,
-		Example: "  tabtin agent memory get <memory-id> --agent-id <agent-id>\n" +
-			"  tabtin agent memory get <memory-id> --agent-id <agent-id> --format json\n" +
-			"  tabtin agent memory get <memory-id> --agent-id <agent-id> --organization-id <org-id>",
+		Example: "  muse agent memory get <memory-id> --agent-id <agent-id>\n" +
+			"  muse agent memory get <memory-id> --agent-id <agent-id> --format json\n" +
+			"  muse agent memory get <memory-id> --agent-id <agent-id> --organization-id <org-id>",
 		Layer: "L2", Risk: cmdutil.RiskRead, RiskDeclared: true,
 		Route: cmdutil.RouteCliServer, RequiresAuth: true, HasFormat: true, Idempotent: true,
 		ArgsMapping: []string{"memory_id"},
@@ -583,9 +583,9 @@ func registerAgentMemoryCorrect(parent *cobra.Command, f *cmdutil.Factory) {
 （AGENT_MEMORY_RECORD_DISABLED / 409），CLI 给人话不静默。
 常见陷阱：--content 必填且非空；只能纠正当前用户在该 Agent 名下的活跃记忆，
 已归档 / 已忘记的条目返回 404；可选 --type 改写记忆类型。`,
-		Example: "  tabtin agent memory correct <memory-id> --agent-id <agent-id> --content \"更正后的内容\"\n" +
-			"  tabtin agent memory correct <memory-id> --agent-id <agent-id> --content \"...\" --type insight\n" +
-			"  tabtin agent memory correct <memory-id> --agent-id <agent-id> --content \"...\" --dry-run",
+		Example: "  muse agent memory correct <memory-id> --agent-id <agent-id> --content \"更正后的内容\"\n" +
+			"  muse agent memory correct <memory-id> --agent-id <agent-id> --content \"...\" --type insight\n" +
+			"  muse agent memory correct <memory-id> --agent-id <agent-id> --content \"...\" --dry-run",
 		Layer: "L2", Risk: cmdutil.RiskWrite, RiskDeclared: true,
 		Route: cmdutil.RouteCliServer, RequiresAuth: true, HasFormat: true,
 		ArgsMapping: []string{"memory_id"},
@@ -611,7 +611,7 @@ func registerAgentMemoryCorrect(parent *cobra.Command, f *cmdutil.Factory) {
 			}
 			content := strings.TrimSpace(ctx.Str("content"))
 			if content == "" {
-				return output.PrintErrorAndExit(output.ErrorEnvelope(string(errcode.ValidationError), "缺少 --content：纠正必须提供新内容", "tabtin agent memory correct <memory-id> --agent-id <id> --content \"...\"", output.ExitValidation))
+				return output.PrintErrorAndExit(output.ErrorEnvelope(string(errcode.ValidationError), "缺少 --content：纠正必须提供新内容", "muse agent memory correct <memory-id> --agent-id <id> --content \"...\"", output.ExitValidation))
 			}
 			scope, message, hint, ok := agentMemoryScopeFromFactory(f)
 			if !ok {
@@ -645,9 +645,9 @@ func registerAgentMemoryForget(parent *cobra.Command, f *cmdutil.Factory) {
 风险：CLI 无「取消忘记」入口、动作对用户不可逆，标记为破坏性——真实执行必须显式 --yes
 二次确认（先 --dry-run 预览计划不需要 --yes）。
 常见陷阱：--agent-id 必填；只能忘记当前用户在该 Agent 名下的记忆；忘记后 get / list 默认读不到。`,
-		Example: "  tabtin agent memory forget <memory-id> --agent-id <agent-id> --yes\n" +
-			"  tabtin agent memory forget <memory-id> --agent-id <agent-id> --dry-run\n" +
-			"  tabtin agent memory forget <memory-id> --agent-id <agent-id> --yes --format json",
+		Example: "  muse agent memory forget <memory-id> --agent-id <agent-id> --yes\n" +
+			"  muse agent memory forget <memory-id> --agent-id <agent-id> --dry-run\n" +
+			"  muse agent memory forget <memory-id> --agent-id <agent-id> --yes --format json",
 		Layer: "L2", Risk: cmdutil.RiskDestructive, RiskDeclared: true,
 		Route: cmdutil.RouteCliServer, RequiresAuth: true, HasFormat: true,
 		ArgsMapping: []string{"memory_id"},
@@ -688,9 +688,9 @@ func registerAgentMemoryFeedback(parent *cobra.Command, f *cmdutil.Factory) {
 后端刻意不过隐私总闸——与「correct=写→过闸」「forget=删→放行」的三分一致。
 常见陷阱：--importance 与 --useful 至少给一个；--importance 超出 1-5 会被拒；
 --useful 传 --useful=false 表示「没用」下调一档；只能反馈活跃记忆（已忘记 / 归档返回 404）。`,
-		Example: "  tabtin agent memory feedback <memory-id> --agent-id <agent-id> --useful\n" +
-			"  tabtin agent memory feedback <memory-id> --agent-id <agent-id> --useful=false\n" +
-			"  tabtin agent memory feedback <memory-id> --agent-id <agent-id> --importance 5",
+		Example: "  muse agent memory feedback <memory-id> --agent-id <agent-id> --useful\n" +
+			"  muse agent memory feedback <memory-id> --agent-id <agent-id> --useful=false\n" +
+			"  muse agent memory feedback <memory-id> --agent-id <agent-id> --importance 5",
 		Layer: "L2", Risk: cmdutil.RiskWrite, RiskDeclared: true,
 		Route: cmdutil.RouteCliServer, RequiresAuth: true, HasFormat: true,
 		ArgsMapping: []string{"memory_id"},
@@ -763,9 +763,9 @@ func registerAgentMemoryStats(parent *cobra.Command, f *cmdutil.Factory) {
 设计理由：与 list 同一三元组归属与读侧隐私总闸口径——总闸关闭时后端 fail-closed 恒返回 0（不泄漏条数）；
 Agent 想「知道自己记住了几类各多少」时无需拉全量再客户端聚合。
 常见陷阱：--agent-id 必填；返回是 total/about_you/insight/task_summary/diary 的计数对象，不含条目内容。`,
-		Example: "  tabtin agent memory stats --agent-id <agent-id>\n" +
-			"  tabtin agent memory stats --agent-id <agent-id> --format json\n" +
-			"  tabtin agent memory stats --agent-id <agent-id> --organization-id <org-id>",
+		Example: "  muse agent memory stats --agent-id <agent-id>\n" +
+			"  muse agent memory stats --agent-id <agent-id> --format json\n" +
+			"  muse agent memory stats --agent-id <agent-id> --organization-id <org-id>",
 		Layer: "L2", Risk: cmdutil.RiskRead, RiskDeclared: true,
 		Route: cmdutil.RouteCliServer, RequiresAuth: true, HasFormat: true, Idempotent: true,
 		OutputSchema: []cmdutil.FieldSchema{
@@ -801,9 +801,9 @@ func registerAgentMemoryExport(parent *cobra.Command, f *cmdutil.Factory) {
 markdown 按四类分组带重要度星标，json 输出结构化记录数组供二次处理。
 常见陷阱：--agent-id 必填；导出只含活跃记忆（已忘记 / 归档不含）；用 --output 写盘、
 --export-format json 配 --jq 做二次过滤。`,
-		Example: "  tabtin agent memory export --agent-id <agent-id>\n" +
-			"  tabtin agent memory export --agent-id <agent-id> --export-format json\n" +
-			"  tabtin agent memory export --agent-id <agent-id> --max 200 --output memories.md",
+		Example: "  muse agent memory export --agent-id <agent-id>\n" +
+			"  muse agent memory export --agent-id <agent-id> --export-format json\n" +
+			"  muse agent memory export --agent-id <agent-id> --max 200 --output memories.md",
 		Layer: "L2", Risk: cmdutil.RiskRead, RiskDeclared: true,
 		Route: cmdutil.RouteCliServer, RequiresAuth: true, HasFormat: true, Idempotent: true,
 		Flags: []cmdutil.FlagDef{
@@ -873,7 +873,7 @@ func agentMemoryArgID(ctx *cmdutil.RunContext, verb string) (string, error) {
 		return "", output.PrintErrorAndExit(output.ErrorEnvelope(
 			string(errcode.ValidationError),
 			"请提供记忆 ID",
-			fmt.Sprintf("用法：tabtin agent memory %s <memory-id> --agent-id <id>", verb),
+			fmt.Sprintf("用法：muse agent memory %s <memory-id> --agent-id <id>", verb),
 			output.ExitValidation,
 		))
 	}

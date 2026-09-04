@@ -87,7 +87,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.core.view.WindowCompat
-import com.tabtin.mobile.R
+import com.muse.mobile.R
 import com.tabtin.mobile.features.profile.DebugEnvironmentDialog
 import com.tabtin.mobile.features.profile.ProfileViewModel
 import com.tabtin.mobile.ui.theme.AppLanguage

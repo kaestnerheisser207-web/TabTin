@@ -53,7 +53,7 @@
     <string name="ws_invite">邀请</string>
     <string name="ws_invite_email">邮箱邀请</string>
     <string name="ws_invite_phone">手机号</string>
-    <string name="ws_invite_phone_hint">仅支持已注册的 TabTin 用户</string>
+    <string name="ws_invite_phone_hint">仅支持已注册的 Muse 用户</string>
     <string name="ws_invite_phone_role_hint">手机号邀请将以编辑者身份加入组织</string>
     <string name="ws_invite_phone_send">发送手机号邀请</string>
     <string name="ws_invite_link">链接邀请</string>
@@ -117,7 +117,7 @@
     <!-- Space 列表：Space / Agent / Device 独立对象组合展示 -->
     <string name="space_list_empty">暂无 Workspace</string>
     <string name="space_list_empty_description">请先在电脑端创建并绑定本地执行环境</string>
-    <string name="space_list_long_press_hint">长按 Workspace 可进行编辑、归档或删除操作；新建 Workspace 请在电脑版 TabTin 中完成</string>
+    <string name="space_list_long_press_hint">长按 Workspace 可进行编辑、归档或删除操作；新建 Workspace 请在电脑版 Muse 中完成</string>
     <string name="space_list_primary_agent">主要 Agent：%s</string>
     <string name="space_list_primary_agent_unassigned">主要 Agent：未设置</string>
     <string name="space_list_primary_agent_loading">主要 Agent：加载中…</string>

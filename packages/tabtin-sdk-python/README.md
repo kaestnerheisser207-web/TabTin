@@ -1,6 +1,6 @@
 # tabtin-sdk
 
-TabTin Data SDK for Python — fluent query API for TabData.
+Muse Data SDK for Python — fluent query API for TabData.
 
 ## Quick Start
 

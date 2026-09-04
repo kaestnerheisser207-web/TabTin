@@ -23,5 +23,5 @@
     <string name="perm_bluetooth_scan">蓝牙扫描</string>
     <string name="perm_nearby_wifi">附近 Wi-Fi 设备</string>
 
-    <string name="perm_required_template">需要「%s」权限才能执行此操作，请在 TabTin 应用设置中授权。</string>
+    <string name="perm_required_template">需要「%s」权限才能执行此操作，请在 Muse 应用设置中授权。</string>
 </resources>

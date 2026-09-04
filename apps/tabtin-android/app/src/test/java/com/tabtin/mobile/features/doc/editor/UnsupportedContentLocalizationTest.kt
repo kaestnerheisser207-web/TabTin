@@ -8,7 +8,7 @@ import android.view.ContextThemeWrapper
 import android.view.LayoutInflater
 import android.widget.FrameLayout
 import androidx.test.core.app.ApplicationProvider
-import com.tabtin.mobile.R
+import com.muse.mobile.R
 import com.tabtin.mobile.databinding.DocBlockTableBinding
 import com.tabtin.mobile.databinding.DocBlockUnsupportedBinding
 import com.tabtin.mobile.features.doc.editor.core.BlockViewConverter
@@ -416,7 +416,7 @@ class UnsupportedContentLocalizationTest {
 
     private fun themedContext(locale: Locale): Context = ContextThemeWrapper(
         localizedContext(locale),
-        R.style.Theme_TabTin,
+        R.style.Theme_Muse,
     )
 
     private fun unsupportedBinding(context: Context): DocBlockUnsupportedBinding =

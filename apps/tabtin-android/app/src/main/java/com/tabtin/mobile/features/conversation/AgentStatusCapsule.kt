@@ -49,7 +49,7 @@ import androidx.compose.ui.semantics.customActions
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
-import com.tabtin.mobile.R
+import com.muse.mobile.R
 import com.tabtin.mobile.features.space.AgentIdentityAvatar
 import com.tabtin.mobile.ui.theme.TTSpacing
 import com.tabtin.mobile.ui.theme.rememberReduceMotion

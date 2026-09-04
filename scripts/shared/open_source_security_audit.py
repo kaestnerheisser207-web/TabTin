@@ -86,7 +86,7 @@ SAFE_EXPLICIT_VALUES = {
     "dev-placeholder-centrifugo-api-key",
     "dev-placeholder-centrifugo-proxy-secret",
     "dev-placeholder-centrifugo-token-secret",
-    "com.example.tabtin",
+    "com.example.muse",
 }
 
 

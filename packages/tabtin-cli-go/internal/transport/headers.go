@@ -5,7 +5,7 @@ import (
 	"net/http"
 	"os"
 
-	"github.com/TabTin/tabtin-cli/internal/version"
+	"github.com/Muse/muse-cli/internal/version"
 )
 
 // setCommonHeaders sets headers shared across all transport implementations.

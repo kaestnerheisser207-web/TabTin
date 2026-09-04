@@ -9,7 +9,7 @@ package cmd
 //   - 退出码透传 Python 进程的 exit code，保持 A5 定义的协议
 //     （0 / 2 / 78 / 126 / 127）不变。
 //
-// v3.1（2026-04-19）：`tabtin connect` 子命令整体删除（方向锚 H8）；本 shim 现在
+// v3.1（2026-04-19）：`muse connect` 子命令整体删除（方向锚 H8）；本 shim 现在
 // 只服务 install 一个 Go 子命令。
 //
 // 定位 Python 的策略（优先级递减）：
@@ -21,7 +21,7 @@ package cmd
 //  4. 系统 PATH 中的 python3（最后兜底，依赖用户 PYTHONPATH 已配好）
 //
 // 这种分层 fallback 允许：
-//   - 开发场景：用户 cd 到 repo 或 TabTin Electron bundle 里的 binary 自动定位
+//   - 开发场景：用户 cd 到 repo 或 Muse Electron bundle 里的 binary 自动定位
 //   - CI 场景：显式 TABTIN_PYTHON 指 venv python
 //   - 生产场景（H2）：Electron 打包时可直接设置 TABTIN_PYTHON 指向 bundle python
 //
@@ -36,7 +36,7 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/TabTin/tabtin-cli/internal/output"
+	"github.com/Muse/muse-cli/internal/output"
 )
 
 const (

@@ -76,7 +76,7 @@ export const AGENT_TOOL_CARDS: Record<string, ToolCardDescriptor> = {
 
   /*
    * TabTracker / TabAgenda FC 卡片注册项已删除（Tracker 模块收敛波次 1，2026-05-20）：
-   * 方案 B 决议把 FC 工具实现整体下线，Agent 通过 `tabtin tracker` CLI（即
+   * 方案 B 决议把 FC 工具实现整体下线，Agent 通过 `muse tracker` CLI（即
    * `run_terminal_command`）调用 Tracker 域能力；LLM 不会再产出
    * `create_tracked_task` / `trigger_task` / `list_tracked_tasks` / `query_agenda`
    * 等 tool_call，因此对应卡片注册项删除是清理死代码。

@@ -1,7 +1,7 @@
 /**
  * @tabtin/collab-core
  *
- * TabTin 实时协作底座
+ * Muse 实时协作底座
  * - CollabProvider: 统一连接管理（HocuspocusProvider + IndexedDB + 状态机）
  * - useCollabProvider: React Hook 封装
  * - useStatelessEvents: Stateless 业务事件 Hook

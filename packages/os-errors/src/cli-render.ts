@@ -1,7 +1,7 @@
 /**
  * CLI 错误渲染 —— 把 OSError 格式化到彩色 stderr。
  *
- * 用于 `tabtin` Node CLI、Daemon 排错日志、单元测试 fixture 等场景。
+ * 用于 `muse` Node CLI、Daemon 排错日志、单元测试 fixture 等场景。
  * 不直接 print，由调用方决定输出位置（process.stderr.write / logger.warn 等），
  * 保持纯函数特性方便测试。
  *
@@ -126,7 +126,7 @@ export function renderForCLI(err: OSError, opts: RenderCLIOptions = {}): string 
   if (err.terminal) {
     lines.push('');
     lines.push(
-      `  ${c.yellow}注意：完成上述操作后再次运行此命令；TabTin 主进程则需要重启才能让权限生效。${c.reset}`,
+      `  ${c.yellow}注意：完成上述操作后再次运行此命令；Muse 主进程则需要重启才能让权限生效。${c.reset}`,
     );
   }
 

@@ -15,7 +15,7 @@
     {
       "title": "行动项标题",
       "description": "具体要求",
-      "responsible_user_id": "仅在逐字稿明确给出 TabTin 用户 ID 时填写，否则为空",
+      "responsible_user_id": "仅在逐字稿明确给出 Muse 用户 ID 时填写，否则为空",
       "responsible_name": "逐字稿中明确的责任人名称，否则为空",
       "due_date": "明确日期，否则为空",
       "priority": "low|medium|high|urgent",

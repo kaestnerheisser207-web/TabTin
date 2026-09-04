@@ -1,9 +1,9 @@
-"""Tabtin Space capability 路由。"""
+"""Muse Space capability 路由。"""
 
 from .shared import *  # noqa: F401,F403
 from apps.services.common.agent_governance_resolver import ORG_ALLOW_MEMBER_YOLO_DEFAULT
 
-router = Router(tags=["Tabtin Space"])
+router = Router(tags=["Muse Space"])
 
 @router.get("/security-presets", auth=jwt_auth, response={200: dict, 401: ErrorResponse})
 def get_security_presets(request: HttpRequest):

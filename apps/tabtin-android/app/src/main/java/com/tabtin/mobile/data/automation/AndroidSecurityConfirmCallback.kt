@@ -6,7 +6,7 @@ import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AlertDialog
-import com.tabtin.mobile.R
+import com.muse.mobile.R
 import com.tabtin.mobile.data.websocket.SecurityConfirmCallback
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.suspendCancellableCoroutine

@@ -7,7 +7,7 @@
  *
  * 与 get_detected_resources 配合使用：先检测 → 再下载/解析
  *
- * @author TabTin Team
+ * @author Muse Team
  */
 
 import type { AgentTool } from '../types'
@@ -67,7 +67,7 @@ export const downloadResourceTool: AgentTool<DownloadResourceInput, DownloadReso
     if (!api?.downloadResource) {
       return standardizeLegacyResult({
         success: false,
-        error: 'download_resource API not available in current runtime — use CLI: tabtin browser resource download',
+        error: 'download_resource API not available in current runtime — use CLI: muse browser resource download',
         error_code: ToolErrorCode.IPC_NOT_AVAILABLE
       }) as unknown as DownloadResourceOutput
     }
@@ -133,7 +133,7 @@ export const parseM3U8Tool: AgentTool<ParseM3U8Input, ParseM3U8Output> = {
     if (!api?.parseM3U8) {
       return standardizeLegacyResult({
         success: false,
-        error: 'parse_m3u8 API not available in current runtime — use CLI: tabtin browser stream parse',
+        error: 'parse_m3u8 API not available in current runtime — use CLI: muse browser stream parse',
         error_code: ToolErrorCode.IPC_NOT_AVAILABLE
       }) as unknown as ParseM3U8Output
     }
@@ -183,7 +183,7 @@ export const parseStreamTool: AgentTool<ParseStreamInput, ParseStreamOutput> = {
     if (!api?.parseStream) {
       return standardizeLegacyResult({
         success: false,
-        error: 'parse_stream API not available in current runtime — use CLI: tabtin browser stream parse',
+        error: 'parse_stream API not available in current runtime — use CLI: muse browser stream parse',
         error_code: ToolErrorCode.IPC_NOT_AVAILABLE
       }) as unknown as ParseStreamOutput
     }
@@ -264,7 +264,7 @@ export const downloadStreamTool: AgentTool<DownloadStreamInput, DownloadStreamOu
     if (!api?.downloadStream) {
       return standardizeLegacyResult({
         success: false,
-        error: 'download_stream API not available in current runtime — use CLI: tabtin browser stream download',
+        error: 'download_stream API not available in current runtime — use CLI: muse browser stream download',
         error_code: ToolErrorCode.IPC_NOT_AVAILABLE
       }) as unknown as DownloadStreamOutput
     }
@@ -340,7 +340,7 @@ export const downloadBatchTool: AgentTool<DownloadBatchInput, DownloadBatchOutpu
     if (!api?.downloadBatch) {
       return standardizeLegacyResult({
         success: false,
-        error: 'download_batch API not available in current runtime — use CLI: tabtin browser resource download-batch',
+        error: 'download_batch API not available in current runtime — use CLI: muse browser resource download-batch',
         error_code: ToolErrorCode.IPC_NOT_AVAILABLE
       }) as unknown as DownloadBatchOutput
     }

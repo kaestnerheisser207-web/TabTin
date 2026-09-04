@@ -1,4 +1,4 @@
-"""Django Ninja router defaults for TabTin APIs."""
+"""Django Ninja router defaults for Muse APIs."""
 
 from __future__ import annotations
 

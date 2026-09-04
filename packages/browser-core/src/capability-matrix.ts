@@ -18,8 +18,8 @@
  *   - `unsupported` 该 action 在此运行时不可用（route 缺失 404 / 显式 501 / 无 handler）。
  *                   对应正典的 `unavailable`。
  *
- * action id 命名：与 `tabtin browser …` CLI 命令路径一一对应——顶层命令用命令名
- * （如 `open`），子命令组用 `group.sub`（如 `tab.list` ↔ `tabtin browser tab list`）。
+ * action id 命名：与 `muse browser …` CLI 命令路径一一对应——顶层命令用命令名
+ * （如 `open`），子命令组用 `group.sub`（如 `tab.list` ↔ `muse browser tab list`）。
  * 这样 BR-6 的 `capabilities` 命令、BR-7 的 CI 漂移检测、Skill 都能拿同一份 id 对齐。
  *
  * 「如实标注、不粉饰」：daemon 列严格按当前 main 源码定级（每条 note 带原因 / BR 编号），
@@ -449,7 +449,7 @@ export interface CapabilityProjectionEntry {
   note?: string
 }
 
-/** `tabtin browser capabilities` 返回体形状（只投影「我这一端」那一列）。 */
+/** `muse browser capabilities` 返回体形状（只投影「我这一端」那一列）。 */
 export interface CapabilityProjection {
   runtime: BrowserRuntime
   schemaVersion: number

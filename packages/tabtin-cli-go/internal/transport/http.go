@@ -94,7 +94,7 @@ func (t *HTTPTransport) doStream(ctx context.Context, method, path string, body 
 	if err != nil {
 		msg := err.Error()
 		if strings.Contains(msg, "connection refused") || strings.Contains(msg, "ECONNREFUSED") {
-			return nil, fmt.Errorf("无法连接到 TabTin CLI Server: %w", err)
+			return nil, fmt.Errorf("无法连接到 Muse CLI Server: %w", err)
 		}
 		if strings.Contains(msg, "timeout") || strings.Contains(msg, "deadline exceeded") {
 			return nil, fmt.Errorf("SSE 连接超时: %w", err)
@@ -147,7 +147,7 @@ func (t *HTTPTransport) doRequest(ctx context.Context, method, path string, body
 	if err != nil {
 		msg := err.Error()
 		if strings.Contains(msg, "connection refused") || strings.Contains(msg, "ECONNREFUSED") {
-			return &Response{Status: 502, Data: BuildErrorResponse(errCodeConnRefused, "无法连接到 TabTin CLI Server，请确保 TabTin 应用正在运行", map[string]any{"base_url": t.baseURL})}, nil
+			return &Response{Status: 502, Data: BuildErrorResponse(errCodeConnRefused, "无法连接到 Muse CLI Server，请确保 Muse 应用正在运行", map[string]any{"base_url": t.baseURL})}, nil
 		}
 		if strings.Contains(msg, "timeout") || strings.Contains(msg, "deadline exceeded") {
 			return &Response{Status: 504, Data: BuildErrorResponse(errCodeConnTimeout, fmt.Sprintf("请求超时 (%v): %s %s", timeout, method, path), nil)}, nil

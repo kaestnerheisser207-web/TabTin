@@ -19,7 +19,7 @@ from apps.tabtinspace.schemas.approval_memo import (
 )
 from apps.tabtinspace.services.approval_memo_service import ApprovalMemoService
 
-router = Router(tags=["Tabtin Space"])
+router = Router(tags=["Muse Space"])
 
 
 def _serialize_view(view) -> dict:

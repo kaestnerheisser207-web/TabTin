@@ -71,7 +71,7 @@ function ensureCtxMatchesExecutor(
       `桌面操控 session 未启动：bindSessionContext 收到 ctx.sessionId=${ctx.sessionId}，` +
       `但当前 executor 没有活跃 session。` +
       `本次操作未执行，其他桌面应用不受影响。` +
-      `请先运行 tabtin desktop screenshot 建立 session（推荐），或显式调用 tabtin desktop session start。`,
+      `请先运行 muse desktop screenshot 建立 session（推荐），或显式调用 muse desktop session start。`,
     )
   }
   if (session.sessionId !== ctx.sessionId) {
@@ -197,7 +197,7 @@ export function bindSessionContext(
           DesktopErrorCode.AX_UNAVAILABLE,
           `Accessibility Tree 未实现：当前 TabDesktop 版本尚未启用 AX Tree 能力。` +
           `本次 AX 查询未执行。` +
-          `请使用 tabtin desktop screenshot + 坐标点击作为替代。`,
+          `请使用 muse desktop screenshot + 坐标点击作为替代。`,
         )
       }
       return executor.captureAccessibilityTree(opts)
@@ -209,7 +209,7 @@ export function bindSessionContext(
           DesktopErrorCode.AX_UNAVAILABLE,
           `按元素名点击未实现：当前 TabDesktop 版本尚未启用 AX Tree 能力。` +
           `本次点击未执行。` +
-          `请使用 tabtin desktop screenshot + 坐标点击作为替代。`,
+          `请使用 muse desktop screenshot + 坐标点击作为替代。`,
         )
       }
       return executor.clickElement(opts)
@@ -221,7 +221,7 @@ export function bindSessionContext(
           DesktopErrorCode.AX_UNAVAILABLE,
           `按元素名输入未实现：当前 TabDesktop 版本尚未启用 AX Tree 能力。` +
           `本次输入未执行。` +
-          `请使用 tabtin desktop screenshot + 坐标点击后 type 作为替代。`,
+          `请使用 muse desktop screenshot + 坐标点击后 type 作为替代。`,
         )
       }
       return executor.typeIntoElement(opts)

@@ -49,7 +49,7 @@
     "logoutConfirmTitle": "確定要登出登入嗎？",
     "logoutConfirmDesc": "退出後目前裝置的未儲存工作將會遺失",
     "openStorageManager": "儲存管理",
-    "openStorageManagerHint": "看見 TabTin 在你電腦上存了什麼，依需求清理或匯出",
+    "openStorageManagerHint": "看見 Muse 在你電腦上存了什麼，依需求清理或匯出",
     "changePassword": "修改密碼",
     "bindEmail": "綁定信箱"
   },

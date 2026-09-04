@@ -1022,7 +1022,7 @@ const purgeSession = async (payload: PurgeSessionPayload) => {
 
 /**
  * 打开 / 聚焦 TabTin 应用内可交互终端（node-pty + xterm）。
- * CLI：`tabtin terminal open [--cwd] [--title] [--session-id]`
+ * CLI：`muse terminal open [--cwd] [--title] [--session-id]`
  */
 export const invokeOpenTerminalTab = (payload: OpenTerminalTabPayload) => {
   const spaceId = resolvePayloadSpaceId(payload)
@@ -1097,7 +1097,7 @@ export const invokeOpenTerminalTab = (payload: OpenTerminalTabPayload) => {
 
 /**
  * 列出当前前台 scope 下的用户终端会话。
- * CLI：`tabtin terminal list`
+ * CLI：`muse terminal list`
  */
 export const invokeListTerminalSessions = (payload: ListTerminalSessionsPayload) => {
   const spaceId = resolvePayloadSpaceId(payload)

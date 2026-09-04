@@ -76,7 +76,7 @@ export const TINS_UI_ENABLED: boolean = import.meta.env.VITE_ENABLE_TINS_UI === 
  *
  * 2026-07决策：当前版本 TabSlide App UI 暂不上线。Agent「做 PPT」的
  * 交付物改为工作目录内的本地 `.pptx` 文件（TabSlide 引擎降级为隐形渲染器，用
- * `tabtin slide export --output` 落地本地文件）。App 的 tab / Home 入口 / 快捷创建 /
+ * `muse slide export --output` 落地本地文件）。App 的 tab / Home 入口 / 快捷创建 /
  * composer preset / 更多应用总览一律隐藏；底层引擎、Django API、编辑器组件保留，
  * 上线时把本 flag 置真（或注入 `VITE_ENABLE_TABSLIDE_UI=true`）即可整体恢复。
  *

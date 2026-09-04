@@ -44,7 +44,7 @@ export const slideHandler: ContextTypeHandler = {
     displayName: '演示',
     capability: '把内容排成精美幻灯片，一步生成并交付本地 .pptx 演示文件（不产生需要在应用内打开的云项目），适合产品介绍、汇报、教学、总结 deck。',
     aliases: ['ppt', '幻灯片', 'slides', '演示文稿'],
-    // backendAliases[0]='ppt' 是后端 item_type 别名，真实 CLI 是 `tabtin slide`。
+    // backendAliases[0]='ppt' 是后端 item_type 别名，真实 CLI 是 `muse slide`。
     cliKey: 'slide',
   },
   backendAliases: ['ppt', 'slide'],

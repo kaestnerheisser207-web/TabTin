@@ -84,7 +84,7 @@ export const DANGEROUS_INJECTION_PREFIXES: readonly string[] = [
  * to impersonate the daemon or access protected APIs.
  */
 export const SENSITIVE_ENV_VARS: ReadonlySet<string> = new Set([
-  // TabTin internal
+  // Muse internal
   'TABTIN_TOKEN',
   'TABTIN_JWT',
   'TABTIN_SOCK', // SD-039 Phase 1: socket 路径不应泄漏到子进程

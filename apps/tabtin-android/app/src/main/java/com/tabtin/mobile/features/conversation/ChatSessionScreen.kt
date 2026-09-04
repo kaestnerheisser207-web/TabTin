@@ -66,7 +66,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.tabtin.mobile.R
+import com.muse.mobile.R
 import com.tabtin.mobile.data.model.SpaceResource
 import com.tabtin.mobile.data.websocket.WSConnectionState
 import com.tabtin.mobile.features.profile.AIDataSharingConsentDialog

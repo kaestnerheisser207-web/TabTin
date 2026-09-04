@@ -15,9 +15,9 @@ const DOC_ID = 'd0c0d0c0-aaaa-bbbb-cccc-ddddeeeeffff'
 
 describe('isPlatformResourceCreateCommand', () => {
   it('matches table/doc create with prefixes', () => {
-    expect(isPlatformResourceCreateCommand('tabtin table create --name x', 'table')).toBe(true)
-    expect(isPlatformResourceCreateCommand('cd /tmp && tabtin table create --name x', 'table')).toBe(true)
-    expect(isPlatformResourceCreateCommand('tabtin doc create --title x', 'document')).toBe(true)
+    expect(isPlatformResourceCreateCommand('muse table create --name x', 'table')).toBe(true)
+    expect(isPlatformResourceCreateCommand('cd /tmp && muse table create --name x', 'table')).toBe(true)
+    expect(isPlatformResourceCreateCommand('muse doc create --title x', 'document')).toBe(true)
   })
 
   it('matches table create after a quoted multiline env assignment', () => {
@@ -25,7 +25,7 @@ describe('isPlatformResourceCreateCommand', () => {
       {"name":"评论ID","field_type":"text"},
       {"name":"点赞数","field_type":"number"}
     ]'
-    tabtin table create --name "抖音评论采集" --fields "$FIELDS" --format json`
+    muse table create --name "抖音评论采集" --fields "$FIELDS" --format json`
 
     expect(isPlatformResourceCreateCommand(command, 'table')).toBe(true)
   })
@@ -33,20 +33,20 @@ describe('isPlatformResourceCreateCommand', () => {
   it('matches create commands across shell continuations and pipelines', () => {
     const continuedCommand = [
       'FIELDS="[]" \\',
-      'tabtin table create --name x --fields "$FIELDS" --format json | jq .data.table',
+      'muse table create --name x --fields "$FIELDS" --format json | jq .data.table',
     ].join('\n')
     expect(isPlatformResourceCreateCommand(continuedCommand, 'table')).toBe(true)
     expect(isPlatformResourceCreateCommand(
-      'echo preparing\ntabtin doc create --title x --format json',
+      'echo preparing\nmuse doc create --title x --format json',
       'document',
     )).toBe(true)
   })
 
   it('rejects unrelated commands', () => {
-    expect(isPlatformResourceCreateCommand('tabtin table list', 'table')).toBe(false)
-    expect(isPlatformResourceCreateCommand('echo tabtin table create', 'table')).toBe(false)
-    expect(isPlatformResourceCreateCommand('tabtin table create --name x', 'document')).toBe(false)
-    expect(isPlatformResourceCreateCommand("echo 'tabtin table create --name x'", 'table')).toBe(false)
+    expect(isPlatformResourceCreateCommand('muse table list', 'table')).toBe(false)
+    expect(isPlatformResourceCreateCommand('echo muse table create', 'table')).toBe(false)
+    expect(isPlatformResourceCreateCommand('muse table create --name x', 'document')).toBe(false)
+    expect(isPlatformResourceCreateCommand("echo 'muse table create --name x'", 'table')).toBe(false)
   })
 })
 
@@ -56,7 +56,7 @@ describe('parsePlatformResourceCreateResult', () => {
       ok: true,
       data: { table: { id: TABLE_ID, name: '客户名单', space_id: 's1' } },
     })
-    expect(parsePlatformResourceCreateResult('tabtin table create --name 客户名单', stdout)).toEqual({
+    expect(parsePlatformResourceCreateResult('muse table create --name 客户名单', stdout)).toEqual({
       resourceType: 'table',
       resourceId: TABLE_ID,
       title: '客户名单',
@@ -66,7 +66,7 @@ describe('parsePlatformResourceCreateResult', () => {
 
   it('parses Django flat {data:{id,name}}', () => {
     const stdout = JSON.stringify({ data: { id: TABLE_ID, name: '融资' } })
-    expect(parsePlatformResourceCreateResult('tabtin table create --name 融资', stdout)).toEqual({
+    expect(parsePlatformResourceCreateResult('muse table create --name 融资', stdout)).toEqual({
       resourceType: 'table',
       resourceId: TABLE_ID,
       title: '融资',
@@ -79,7 +79,7 @@ describe('parsePlatformResourceCreateResult', () => {
       'ok: true',
       '',
     ].join('\n')
-    expect(parsePlatformResourceCreateResult('tabtin table create --name 客户名单', stdout)).toEqual({
+    expect(parsePlatformResourceCreateResult('muse table create --name 客户名单', stdout)).toEqual({
       resourceType: 'table',
       resourceId: TABLE_ID,
       title: '客户名单',
@@ -97,7 +97,7 @@ describe('parsePlatformResourceCreateResult', () => {
         },
       },
     })
-    expect(parsePlatformResourceCreateResult('tabtin table create --name 融资 --fields []', stdout)).toEqual({
+    expect(parsePlatformResourceCreateResult('muse table create --name 融资 --fields []', stdout)).toEqual({
       resourceType: 'table',
       resourceId: TABLE_ID,
       title: '融资',
@@ -109,7 +109,7 @@ describe('parsePlatformResourceCreateResult', () => {
       ok: true,
       data: { document: { id: DOC_ID, title: '周报' } },
     })
-    expect(parsePlatformResourceCreateResult('tabtin doc create --title 周报', stdout)).toEqual({
+    expect(parsePlatformResourceCreateResult('muse doc create --title 周报', stdout)).toEqual({
       resourceType: 'document',
       resourceId: DOC_ID,
       title: '周报',
@@ -118,7 +118,7 @@ describe('parsePlatformResourceCreateResult', () => {
 
   it('returns null when create failed without id', () => {
     const stdout = JSON.stringify({ ok: false, error: { message: 'denied' } })
-    expect(parsePlatformResourceCreateResult('tabtin table create --name x', stdout)).toBeNull()
+    expect(parsePlatformResourceCreateResult('muse table create --name x', stdout)).toBeNull()
   })
 })
 
@@ -129,7 +129,7 @@ describe('buildPlatformResourceArtifactBlockFromCreate', () => {
       data: { table: { id: TABLE_ID, name: '客户名单', space_id: 'workspace-1' } },
     })
     const block = buildPlatformResourceArtifactBlockFromCreate(
-      'tabtin table create --name 客户名单',
+      'muse table create --name 客户名单',
       stdout,
     )
     expect(block).toMatchObject({

@@ -7,7 +7,7 @@
       signal 事务边界。
 
 之所以同 app 下两个模型路由到不同库，是因为 PRD 4.3 要求 Outbox 写入
-必须与业务 `post_save` 处于同一事务；TabTin 业务库双栈并存
+必须与业务 `post_save` 处于同一事务；Muse 业务库双栈并存
 （MySQL + PG），因此 Outbox 也必须双栈。
 
 注意：

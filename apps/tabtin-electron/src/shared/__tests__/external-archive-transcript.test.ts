@@ -37,7 +37,7 @@ describe('buildExternalArchiveSeedRecords', () => {
     expect(records[2]?.messageId).toBe('ext-llm-boundary-sess-1')
     expect(records[2]?.content).toContain('type="external-archive"')
     expect(records[2]?.content).toContain('WorkBuddy')
-    expect(records[2]?.content).toContain('以 TabTin 为准')
+    expect(records[2]?.content).toContain('以 Muse 为准')
   })
 
   it('空正文消息跳过；全空则不写边界', () => {

@@ -12,7 +12,7 @@ import {
  * TabCode manifest domain — read-only subset only.
  *
  * Write tools (write_file, edit_file, delete_file) are excluded because:
- * - Main Agent uses CLI (`tabtin code *`) via execute_in_terminal
+ * - Main Agent uses CLI (`muse code *`) via execute_in_terminal
  * - explore/plan subagents are read-only (_READONLY_DENY_TOOLS blocks writes)
  *
  * This domain exists for subagent consumption (action-tools manifest).

@@ -44,7 +44,7 @@ export function InviteCodeGate({ embedded = false }: InviteCodeGateProps) {
           </div>
           <h2 className="text-title font-semibold text-foreground">输入邀请码</h2>
           <p className="text-body text-muted-foreground leading-relaxed">
-            账号已登录。当前内测阶段需要完成邀请码验证后继续使用 TabTin。
+            账号已登录。当前内测阶段需要完成邀请码验证后继续使用 Muse。
           </p>
         </div>
 

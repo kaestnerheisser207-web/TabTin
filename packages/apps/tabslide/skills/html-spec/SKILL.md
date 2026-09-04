@@ -14,7 +14,7 @@ metadata:
 
 # TabSlide HTML 生成规范
 
-TabSlide 的 HTML 转页能力（`tabtin slide create --html` / `tabtin slide add-page --html`；整份覆盖才用 `tabtin slide generate --replace`）会把你写的 HTML 转成可编辑的 PPTElement。这份文档定义两件事：
+TabSlide 的 HTML 转页能力（`muse slide create --html` / `muse slide add-page --html`；整份覆盖才用 `muse slide generate --replace`）会把你写的 HTML 转成可编辑的 PPTElement。这份文档定义两件事：
 
 1. **哪些 HTML 模式我们能完整解析为可编辑 PPTElement**（用户能拖、能改文字、能改色）
 2. **超出白名单的视觉怎么用 `data-tabslide-rasterize` 兜底**（截图为 image，视觉对但整块拖）

@@ -42,13 +42,13 @@
     "node": ">=18.0.0"
   },
   "keywords": [
-    "tabtin",
+    "muse",
     "docparse",
     "pdfjs",
     "mammoth",
     "xlsx",
     "local-first"
   ],
-  "author": "TabTin Team",
+  "author": "Muse Team",
   "license": "MIT"
 }

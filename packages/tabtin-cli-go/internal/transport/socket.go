@@ -153,7 +153,7 @@ func (t *SocketTransport) doRequest(ctx context.Context, method, path string, bo
 	if err != nil {
 		return &Response{
 			Status: 502,
-			Data:   BuildErrorResponse(errCodeConnRefused, "无法连接到 TabTin CLI Server，请确保 TabTin 应用正在运行", map[string]any{"socket_path": socketPath, "system_error": err.Error()}),
+			Data:   BuildErrorResponse(errCodeConnRefused, "无法连接到 Muse CLI Server，请确保 Muse 应用正在运行", map[string]any{"socket_path": socketPath, "system_error": err.Error()}),
 		}, nil
 	}
 	defer conn.Close()

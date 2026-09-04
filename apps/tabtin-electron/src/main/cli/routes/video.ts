@@ -2,7 +2,7 @@
  * 视频管线路由 — Electron 端。
  *
  * 委托给 @tabtin/media-capabilities 共享实现，
- * 使 Electron 也能响应云端 `tabtin media` 视频生成管线。
+ * 使 Electron 也能响应云端 `muse media` 视频生成管线。
  */
 
 import {
