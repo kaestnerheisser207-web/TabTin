@@ -8,7 +8,7 @@
  *   - plan rich-content block / plan_proposal 发射
  *
  * 云端 HTTP 路径（snake_case body / 错误翻译 / 字段映射）见宿主包
- * `packages/@tabtin/host-side/tests/tabdoc-plan-store.test.ts`（路径示意；
+ * `packages/@muse/host-side/tests/tabdoc-plan-store.test.ts`（路径示意；
  * 实际在宿主包 tests/ 下，此处刻意不写触发 AH-003 字面量）。
  */
 

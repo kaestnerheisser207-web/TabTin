@@ -6,7 +6,7 @@ import {
   type BrowserOrchestratorHostHooks,
   type BrowserSessionData,
   type BrowserSessionHooks,
-} from '@tabtin/browser-core'
+} from '@muse/browser-core'
 import type { SendJSON, ActionExecutor } from './_helpers'
 import {
   buildBrowserRequestScope,

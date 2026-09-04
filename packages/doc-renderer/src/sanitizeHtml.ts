@@ -5,7 +5,7 @@
  * the tree keeping only whitelisted tags, attributes, and safe URL protocols.
  * Falls back to a regex-based strip for non-browser environments (Node.js).
  *
- * @architecture **互斥警告**：本模块**不得**直接用于消毒 `@tabtin/doc-editor` 的
+ * @architecture **互斥警告**：本模块**不得**直接用于消毒 `@muse/doc-editor` 的
  * `pmJsonToHtml()` 输出。`pmJsonToHtml` 会产出 `data:image/` base64 src、
  * `<iframe sandbox>`、`data-*` 属性等，均不在本模块的白名单中，串联使用会
  * 静默破坏所有图片和业务数据。若需消毒 pmJsonToHtml 输出，应使用专门配置的策略。

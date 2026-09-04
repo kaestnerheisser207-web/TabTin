@@ -2,7 +2,7 @@ import { join } from 'path'
 
 import { app } from 'electron'
 
-const PACKAGED_OVERLAY_URL = 'tabtin-file://app/overlay.html'
+const PACKAGED_OVERLAY_URL = 'muse-file://app/overlay.html'
 
 export function resolveOverlayRendererUrl(isDev: boolean, rendererUrl?: string): string {
   if (isDev && rendererUrl) {

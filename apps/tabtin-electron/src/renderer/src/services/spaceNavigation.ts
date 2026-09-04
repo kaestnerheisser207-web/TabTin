@@ -1,4 +1,4 @@
-import { toast } from '@tabtin/smartsheet-ui/toast';
+import { toast } from '@muse/smartsheet-ui/toast';
 import { ensureSpaceSelected } from './spaceSelection';
 
 export interface SpaceNavigationFailureToast {

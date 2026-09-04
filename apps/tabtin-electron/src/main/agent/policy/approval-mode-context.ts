@@ -18,7 +18,7 @@
  * 硬红线 block 永远拦，不受任何档影响。
  * 与 `interaction-mode-context` 同款（host 写、各处读、thread 别名归一）。
  */
-import type { ApprovalMode } from '@tabtin/security-policy'
+import type { ApprovalMode } from '@muse/security-policy'
 import { normalizeThreadAliases } from './thread-alias'
 
 const effectiveApprovalModes = new Map<string, ApprovalMode>()

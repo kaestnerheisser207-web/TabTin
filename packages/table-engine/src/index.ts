@@ -74,7 +74,7 @@ export {
   resolveRecordId,
   isDraftGridRow,
 } from './types'
-export { isPrimaryFieldAllowedType } from '@tabtin/table-core'
+export { isPrimaryFieldAllowedType } from '@muse/table-core'
 
 export type {
   ReadTableGridEnginePreferenceInput,

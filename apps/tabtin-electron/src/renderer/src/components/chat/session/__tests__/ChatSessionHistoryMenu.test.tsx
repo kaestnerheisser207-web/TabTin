@@ -1,7 +1,7 @@
 import React from 'react'
 import { act, fireEvent, render, screen, waitFor } from '@testing-library/react'
 import { afterEach, describe, expect, it, vi } from 'vitest'
-import type { ChatSession } from '@tabtin/chat-client'
+import type { ChatSession } from '@muse/chat-client'
 import { ChatSessionHistoryMenu } from '../ChatSessionHistoryMenu'
 
 const mocks = vi.hoisted(() => ({
@@ -70,7 +70,7 @@ vi.mock('react-i18next', () => ({
   }),
 }))
 
-vi.mock('@tabtin/smartsheet-ui', () => ({
+vi.mock('@muse/smartsheet-ui', () => ({
   Tooltip: ({ children }: { children: React.ReactNode }) => <>{children}</>,
   TooltipContent: ({ children }: { children: React.ReactNode }) => (
     <span data-testid="mock-tooltip-content">{children}</span>

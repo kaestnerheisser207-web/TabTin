@@ -10,8 +10,8 @@
  */
 
 import React, { createContext, useCallback, useContext, useMemo, useRef, useState, type ReactNode } from 'react'
-import type { TableGridRow } from '@tabtin/table-engine'
-import type { SearchIndexHit } from '@tabtin/table-core'
+import type { TableGridRow } from '@muse/table-engine'
+import type { SearchIndexHit } from '@muse/table-core'
 
 export type DataGridSearchScope = 'all_fields' | 'current_field'
 

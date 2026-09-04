@@ -2,7 +2,7 @@
  * SharedSession 访问判定小工具。
  */
 
-import { ChatAPIError } from '@tabtin/chat-client'
+import { ChatAPIError } from '@muse/chat-client'
 import { ShareApiError } from '@/services/sessionShareApi'
 
 interface SharedSessionAccessInput {

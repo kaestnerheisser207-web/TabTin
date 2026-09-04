@@ -34,12 +34,12 @@ import {
   NotificationQueue,
   type BackgroundTaskCompletedPayload,
   type NotificationEnvelope,
-} from '@tabtin/terminal-core';
+} from '@muse/terminal-core';
 import {
   type AgentCommandRequest,
   type AgentSpawnDetachedResult,
   type PtyManagerBridge,
-} from '@tabtin/terminal-core';
+} from '@muse/terminal-core';
 import {
   createMockProvider,
   createMockPermissionHandler,

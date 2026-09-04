@@ -30,7 +30,7 @@ import {
   type MessageBlockRecord,
   type QueryParams,
   type StreamEvent,
-} from '@tabtin/agent-runtime'
+} from '@muse/agent-runtime'
 import { injectTurnIdentity } from './inject-turn-identity.js'
 import {
   rememberAgentDisplayName,
@@ -40,11 +40,11 @@ import {
   hydrateMessageAgentAttributions,
   rememberMessageSenderAttribution,
 } from './message-agent-attribution-store.js'
-import { resolveAgentModeName } from '@tabtin/agent-modes'
+import { resolveAgentModeName } from '@muse/agent-modes'
 import {
   buildReplayHistoryFromTranscript,
-} from '@tabtin/agent-runtime/history'
-import type { ApprovalMode } from '@tabtin/security-policy'
+} from '@muse/agent-runtime/history'
+import type { ApprovalMode } from '@muse/security-policy'
 import type { ConversationLifecycleIdentity } from './conversation-identity.js'
 import type { RuntimeSessionLifecycle } from '../runtime/runtime-session-lifecycle.js'
 import type {
@@ -269,7 +269,7 @@ export interface QueryTurnDataPort<Session, RuntimeInput, Mode extends string, E
     /** Electron：叠 Workspace approval_grant；缺省 fail-closed。 */
     workspaceId?: string
   }): Promise<
-    { security: { allow_yolo_mode?: boolean; approval_grant?: import('@tabtin/security-policy').ApprovalMode } } | null
+    { security: { allow_yolo_mode?: boolean; approval_grant?: import('@muse/security-policy').ApprovalMode } } | null
   >
   /** Electron injects tracker reconcile; Daemon derives from sources. */
   reconcileAllowedPaths?: (dst: import('./query-session-mutate.js').QuerySessionWorkspaceSnapshotLike) => void

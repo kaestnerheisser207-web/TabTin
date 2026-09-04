@@ -92,7 +92,7 @@ Expected: FAIL，原因是 `options.mjs` 或导出函数尚不存在。
 ```js
 export function parseCommunityDevArgs(argv) {
   const options = {
-    region: process.env.TABTIN_DEV_REGION || 'auto',
+    region: process.env.MUSE_DEV_REGION || 'auto',
     skipBackend: false,
     doctor: false,
     dryRun: false,

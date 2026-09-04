@@ -1,5 +1,5 @@
 {
-  "name": "@tabtin/cli-routes",
+  "name": "@muse/cli-routes",
   "version": "0.1.0",
   "description": "Shared CLI server route handlers for Electron and Daemon hosts",
   "type": "module",
@@ -25,9 +25,9 @@
   "author": "Muse Team",
   "license": "MIT",
   "dependencies": {
-    "@tabtin/action-tools": "workspace:*",
-    "@tabtin/agent-wire": "workspace:*",
-    "@tabtin/cli-server-core": "workspace:*"
+    "@muse/action-tools": "workspace:*",
+    "@muse/agent-wire": "workspace:*",
+    "@muse/cli-server-core": "workspace:*"
   },
   "devDependencies": {
     "@types/node": "^22.0.0",

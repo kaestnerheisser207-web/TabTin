@@ -23,7 +23,7 @@ import * as path from 'node:path';
 import {
   blockRecordsToTranscriptMessages,
   type MessageBlockRecord,
-} from '@tabtin/agent-runtime';
+} from '@muse/agent-runtime';
 
 export type SubagentSessionKind = 'messages' | 'snapshots' | 'events';
 

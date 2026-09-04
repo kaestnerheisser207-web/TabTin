@@ -16,7 +16,7 @@
  */
 
 import { net } from 'electron'
-import type { StreamVariant, M3U8Segment, StreamInfo } from '@tabtin/action-tools/types'
+import type { StreamVariant, M3U8Segment, StreamInfo } from '@muse/action-tools/types'
 import { buildNetRequestOptions } from './resourceRequestContext'
 
 /**

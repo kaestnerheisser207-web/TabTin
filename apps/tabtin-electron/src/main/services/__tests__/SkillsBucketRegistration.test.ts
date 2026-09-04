@@ -20,11 +20,11 @@ import { describe, it, expect, beforeEach, vi } from 'vitest'
 
 // ── mocks ────────────────────────────────────────────────────────
 
-vi.mock('@tabtin/shared/storage-paths', () => ({
+vi.mock('@muse/shared/storage-paths', () => ({
   getDataRoot: vi.fn(() => '/tmp/__nonexistent_tabtin_dataroot_for_test'),
 }))
 
-vi.mock('@tabtin/terminal-core', () => ({
+vi.mock('@muse/terminal-core', () => ({
   resolveUserSkillsDir: (dataRoot: string, userId: string) =>
     `${dataRoot}/users/${userId}/skills`,
   resolveOrganizationSkillsDir: (dataRoot: string, userId: string, orgId: string) =>
@@ -43,12 +43,12 @@ vi.mock('../../utils/logger', () => ({
 
 describe('SkillsBucketRegistration', () => {
   beforeEach(async () => {
-    const sm = await import('@tabtin/storage-manager')
+    const sm = await import('@muse/storage-manager')
     sm.__resetForTesting()
   })
 
   it('registerSkillsPreinstalledBucket 注册的 bucket 字段符合 RFC §五', async () => {
-    const sm = await import('@tabtin/storage-manager')
+    const sm = await import('@muse/storage-manager')
     const { registerSkillsPreinstalledBucket } = await import(
       '../SkillsBucketRegistration'
     )
@@ -67,7 +67,7 @@ describe('SkillsBucketRegistration', () => {
   })
 
   it('dataRoot/users 目录不存在时 sizeFn / listFn / clearFn dryRun 都返回 0 不抛错', async () => {
-    const sm = await import('@tabtin/storage-manager')
+    const sm = await import('@muse/storage-manager')
     const { registerSkillsPreinstalledBucket } = await import(
       '../SkillsBucketRegistration'
     )

@@ -220,7 +220,7 @@ describe('OsPermissions.mac', () => {
   })
 
   it('通知设置入口携带当前运行包身份', async () => {
-    process.env.TABTIN_APP_ID = 'com.tabtin.app.preprod'
+    process.env.MUSE_APP_ID = 'com.tabtin.app.preprod'
     try {
       const api = buildApi()
 
@@ -230,7 +230,7 @@ describe('OsPermissions.mac', () => {
         'x-apple.systempreferences:com.apple.Notifications-Settings.extension?id=com.tabtin.app.preprod',
       )
     } finally {
-      delete process.env.TABTIN_APP_ID
+      delete process.env.MUSE_APP_ID
     }
   })
 

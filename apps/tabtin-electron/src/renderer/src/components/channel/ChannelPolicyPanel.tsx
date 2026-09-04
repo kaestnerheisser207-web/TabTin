@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react'
-import { Button, Select, SelectContent, SelectItem, SelectTrigger, SelectValue, Switch } from '@tabtin/smartsheet-ui'
+import { Button, Select, SelectContent, SelectItem, SelectTrigger, SelectValue, Switch } from '@muse/smartsheet-ui'
 import { useTranslation } from 'react-i18next'
 import { apiClient } from '@/services/apiClient'
 

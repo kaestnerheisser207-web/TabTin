@@ -82,7 +82,7 @@ log "启动 Electron…"
 cd "${APP_DIR}"
 # E2E 脚本用 FakeBrowserEnvironmentService，不依赖真实后端；但 api 配置模块
 # 会在模块加载时校验 API_BASE_URL 必填，所以注入一个 dummy 以通过校验。
-export TABTIN_API_BASE_URL="${TABTIN_API_BASE_URL:-http://e2e.invalid/api}"
+export MUSE_API_BASE_URL="${MUSE_API_BASE_URL:-http://e2e.invalid/api}"
 "${ELECTRON_BIN}" \
   --no-sandbox \
   --disable-gpu \

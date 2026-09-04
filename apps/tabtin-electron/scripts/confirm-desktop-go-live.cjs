@@ -53,12 +53,12 @@ async function main() {
   const adminBaseUrl = resolveUpdaterAdminBaseUrl(
     args['admin-base-url'] ||
       process.env.UPDATER_ADMIN_API_BASE_URL ||
-      process.env.TABTIN_API_BASE_URL ||
+      process.env.MUSE_API_BASE_URL ||
       process.env.API_BASE_URL
   )
   const adminToken = String(args['admin-token'] || process.env.UPDATER_ADMIN_TOKEN || '').trim()
   const publicApiBase = String(
-    args['public-api-base'] || process.env.PUBLIC_API_BASE_URL || process.env.TABTIN_API_BASE_URL || ''
+    args['public-api-base'] || process.env.PUBLIC_API_BASE_URL || process.env.MUSE_API_BASE_URL || ''
   ).trim()
 
   if (!adminBaseUrl) {

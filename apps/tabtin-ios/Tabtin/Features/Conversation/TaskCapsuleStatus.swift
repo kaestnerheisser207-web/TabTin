@@ -78,7 +78,7 @@ enum TaskCapsuleActivity {
     }
 }
 
-/// 跨端 TaskCapsule 状态投影（对齐 `@tabtin/contracts` resolveTaskCapsuleStatus）。
+/// 跨端 TaskCapsule 状态投影（对齐 `@muse/contracts` resolveTaskCapsuleStatus）。
 ///
 /// 输入 run / HITL / queue / unread / paused，输出 canonical key 与 full/mini/hidden。
 /// 仅 `ready` → mini；未读 `complete`、`paused` 及其余活跃/终态 → full。

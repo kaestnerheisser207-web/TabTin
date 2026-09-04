@@ -13,7 +13,7 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest'
 
 const toastMock = vi.fn()
-vi.mock('@tabtin/smartsheet-ui', () => ({
+vi.mock('@muse/smartsheet-ui', () => ({
   toast: (...args: unknown[]) => toastMock(...args),
 }))
 
@@ -80,7 +80,7 @@ describe('setupExitGuardListener', () => {
     expect(registeredCallback).toBeNull()
   })
 
-  it('window.tabtin.exitGuard 不存在时返回 noop', () => {
+  it('window.muse.exitGuard 不存在时返回 noop', () => {
     const cleanup = setupExitGuardListener({ exitGuardBridge: undefined })
     expect(typeof cleanup).toBe('function')
     cleanup()

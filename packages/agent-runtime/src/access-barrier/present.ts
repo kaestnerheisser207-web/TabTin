@@ -10,7 +10,7 @@
  * 宿主用的呈现辅助，不在 `default-policy-hooks.ts` 里被自动调用（设计 §8.2）。
  *
  * `AccessBarrier` / `AccessBarrierResolution` 结构与
- * `@tabtin/browser-core::access-barrier/types.ts` 同名同形，但本文件
+ * `@muse/browser-core::access-barrier/types.ts` 同名同形，但本文件
  * **不 import browser-core**（避免 agent-runtime 生产路径依赖某个能力包
  * 实现细节——与 `agent-wire/src/access-barrier.ts` 同一策略，两边字段
  * 靠人工对齐同一设计文档）。

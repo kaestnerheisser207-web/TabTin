@@ -15,7 +15,7 @@
  * 消息（与 daemon reassembler / 主对话 BlockTimeline 同 message 配对口径一致）。
  */
 
-import type { ChatMessage, MessageBlock } from '@tabtin/chat-client'
+import type { ChatMessage, MessageBlock } from '@muse/chat-client'
 import {
   buildIdentityIndex,
   findByIdentity,
@@ -56,9 +56,9 @@ interface SessionContext {
   organizationId?: string
 }
 
-function getBridge(): NonNullable<typeof window.tabtin>['agentEngine'] | undefined {
+function getBridge(): NonNullable<typeof window.muse>['agentEngine'] | undefined {
   if (typeof window === 'undefined') return undefined
-  return window.tabtin?.agentEngine
+  return window.muse?.agentEngine
 }
 
 /** 判据探盘：该会话盘上是否有非空 messages.jsonl（本机会话 vs 观察端）。 */

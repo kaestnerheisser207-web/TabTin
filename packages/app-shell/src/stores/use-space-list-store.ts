@@ -9,7 +9,7 @@
 
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import { withPersistSafety } from '@tabtin/shared';
+import { withPersistSafety } from '@muse/shared';
 import type {
   SpaceListItem,
   SpaceNavigationKind,

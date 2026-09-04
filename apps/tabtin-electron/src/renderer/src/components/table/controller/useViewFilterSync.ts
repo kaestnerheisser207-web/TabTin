@@ -1,6 +1,6 @@
 import { useCallback, useMemo, useRef } from 'react'
-import { toast } from '@tabtin/smartsheet-ui'
-import type { ViewFilter } from '@tabtin/table-core'
+import { toast } from '@muse/smartsheet-ui'
+import type { ViewFilter } from '@muse/table-core'
 
 interface GridFilterModelItem {
   field: string

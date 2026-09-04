@@ -14,7 +14,7 @@
  */
 
 import { describe, expect, it } from 'vitest';
-import { MessageStartSchema } from '@tabtin/agent-wire';
+import { MessageStartSchema } from '@muse/agent-wire';
 import {
   ContentBlockEvents,
   PROTOCOL_VERSION_V2,
@@ -202,7 +202,7 @@ describe('EnvelopeEmitter — message lifecycle', () => {
       },
     });
     // 动态 import wire schema 让测试与运行时 import 同源
-    return import('@tabtin/agent-wire').then(({ MessageStopSchema }) => {
+    return import('@muse/agent-wire').then(({ MessageStopSchema }) => {
       const parsed = MessageStopSchema.parse(stop.payload);
       expect(parsed.error_info?.partial_reason).toBe('aborted');
       expect(parsed.error_info?.category).toBe('aborted');
@@ -660,18 +660,18 @@ describe('EnvelopeEmitter — message_kind 协议字段', () => {
     ).toThrow();
   });
 
-  it('TABTIN_DAEMON_EMIT_VALIDATE=false 可禁用 self-validate（测试 / 故障演练 override）', async () => {
+  it('MUSE_DAEMON_EMIT_VALIDATE=false 可禁用 self-validate（测试 / 故障演练 override）', async () => {
     // 显式 disable self-validate 后，emit 出的 payload 经 wire schema parse fail
     // 仍可被外部观察——这条测试模拟"daemon 端不自检 / 消费端兜底"的现状路径，
     // 让未来的回归测试能 isolate 验证下游消费方的容错行为。
-    process.env.TABTIN_DAEMON_EMIT_VALIDATE = 'false';
+    process.env.MUSE_DAEMON_EMIT_VALIDATE = 'false';
     try {
       // 重新 import 模块以重读环境变量（模块级 const 已 cache，所以测试只能验证
       // env 接口被读到——具体 disable 行为留给 unit isolation 测试或 W5 dogfood）
-      const env = process.env.TABTIN_DAEMON_EMIT_VALIDATE;
+      const env = process.env.MUSE_DAEMON_EMIT_VALIDATE;
       expect(env).toBe('false');
     } finally {
-      delete process.env.TABTIN_DAEMON_EMIT_VALIDATE;
+      delete process.env.MUSE_DAEMON_EMIT_VALIDATE;
     }
   });
 

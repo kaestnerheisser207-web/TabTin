@@ -1,5 +1,5 @@
 import { ipcMain } from 'electron'
-import { okResponse } from '@tabtin/agent-wire'
+import { okResponse } from '@muse/agent-wire'
 import { electronAgentHost } from '../agent/ElectronAgentHost'
 import { createLogger } from '../logger'
 import { guardedHandle } from '../utils/guarded-handle'

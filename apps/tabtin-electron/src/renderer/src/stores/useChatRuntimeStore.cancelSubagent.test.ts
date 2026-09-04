@@ -2,7 +2,7 @@
  * useChatRuntimeStore.cancelSubagentRun — W5-a 子 Agent 取消端到端链路（renderer 侧）。
  *
  * 守的不变量：
- *   ① 本地宿主会话：window.tabtin.agentEngine.cancelSubagent（IPC）命中即收工。
+ *   ① 本地宿主会话：window.muse.agentEngine.cancelSubagent（IPC）命中即收工。
  *   ② daemon / 远控会话：renderer 仍只发 IPC，由主进程 agent-host 代发
  *      `subagent.cancel {session_id, child_id}` 并返回是否 accepted。
  *   ③ agent-host 拒绝 / 失败：不落 cancelled，但清 in-flight「取消中」标记让用户可重试。

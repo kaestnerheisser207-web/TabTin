@@ -1,7 +1,7 @@
 import {
   resolveTabTinResourceScheme,
   serializeSelfFormat,
-} from '@tabtin/resource-router';
+} from '@muse/resource-router';
 import { API_BASE_URL } from '@/config/api';
 import { BUILD_PROFILE } from '@/utils/featureFlags';
 

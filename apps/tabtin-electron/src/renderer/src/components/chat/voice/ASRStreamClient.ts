@@ -7,7 +7,7 @@
  *   3. 发送 `asr.stream.stop` → 收到 `asr.stream.done`（最终文本）
  */
 
-import type { WsGateway } from '@tabtin/chat-client'
+import type { WsGateway } from '@muse/chat-client'
 
 export type ASREmotionTag = 'angry' | 'happy' | 'neutral' | 'sad' | 'surprise'
 

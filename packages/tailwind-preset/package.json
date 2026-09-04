@@ -1,5 +1,5 @@
 {
-  "name": "@tabtin/tailwind-preset",
+  "name": "@muse/tailwind-preset",
   "version": "1.0.0",
   "private": true,
   "main": "index.cjs",

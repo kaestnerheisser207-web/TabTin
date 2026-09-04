@@ -25,7 +25,7 @@ func writeDiscoveryFile(t *testing.T, dir, filename, sock string, pid int) {
 
 func TestTryDiscoverFromFilesPrefersElectronOverDaemon(t *testing.T) {
 	dir := t.TempDir()
-	t.Setenv("TABTIN_CONFIG_DIR", dir)
+	t.Setenv("MUSE_CONFIG_DIR", dir)
 
 	writeDiscoveryFile(t, dir, "server.json", "/tmp/tabtin-electron.sock", os.Getpid())
 	writeDiscoveryFile(t, dir, "daemon-server.json", "/tmp/tabtin-daemon.sock", os.Getpid())
@@ -41,7 +41,7 @@ func TestTryDiscoverFromFilesPrefersElectronOverDaemon(t *testing.T) {
 
 func TestTryDiscoverFromFilesFallsBackToDaemonWhenElectronMissing(t *testing.T) {
 	dir := t.TempDir()
-	t.Setenv("TABTIN_CONFIG_DIR", dir)
+	t.Setenv("MUSE_CONFIG_DIR", dir)
 
 	writeDiscoveryFile(t, dir, "daemon-server.json", "/tmp/tabtin-daemon.sock", os.Getpid())
 
@@ -56,7 +56,7 @@ func TestTryDiscoverFromFilesFallsBackToDaemonWhenElectronMissing(t *testing.T) 
 
 func TestTryDiscoverFromFilesPrefersProdElectronOverDevWhenBothAlive(t *testing.T) {
 	dir := t.TempDir()
-	t.Setenv("TABTIN_CONFIG_DIR", dir)
+	t.Setenv("MUSE_CONFIG_DIR", dir)
 
 	writeDiscoveryFile(t, dir, "server.json", "/tmp/tabtin-electron-prod.sock", os.Getpid())
 	writeDiscoveryFile(t, dir, "dev-server.json", "/tmp/tabtin-electron-dev.sock", os.Getpid())
@@ -72,15 +72,15 @@ func TestTryDiscoverFromFilesPrefersProdElectronOverDevWhenBothAlive(t *testing.
 
 func TestDiscoverEnvSockOverridesDiscoveryFiles(t *testing.T) {
 	dir := t.TempDir()
-	t.Setenv("TABTIN_CONFIG_DIR", dir)
-	t.Setenv("TABTIN_SOCK", "/tmp/explicit.sock")
-	t.Setenv("_TABTIN_TRANSPORT_TOKEN", "explicit-token")
+	t.Setenv("MUSE_CONFIG_DIR", dir)
+	t.Setenv("MUSE_SOCK", "/tmp/explicit.sock")
+	t.Setenv("_MUSE_TRANSPORT_TOKEN", "explicit-token")
 
 	writeDiscoveryFile(t, dir, "server.json", "/tmp/tabtin-electron.sock", os.Getpid())
 
 	tr := Discover()
 	if tr == nil {
-		t.Fatal("expected transport from TABTIN_SOCK")
+		t.Fatal("expected transport from MUSE_SOCK")
 	}
 	if tr.Type() != TypeSocket+"+recovery" {
 		t.Fatalf("transport type = %q", tr.Type())

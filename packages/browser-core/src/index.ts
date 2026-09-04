@@ -144,8 +144,8 @@ export {
 } from './utils/response-builder';
 
 // ========== Capability Matrix（双端 action 支持矩阵，零依赖纯数据）==========
-// 留了将来 `git mv` 拆独立 `@tabtin/browser-contract` 的缝：矩阵自成一文件，
-// 这里只做干净 re-export，调用方只依赖 `@tabtin/browser-core` 这层稳定门面。
+// 留了将来 `git mv` 拆独立 `@muse/browser-contract` 的缝：矩阵自成一文件，
+// 这里只做干净 re-export，调用方只依赖 `@muse/browser-core` 这层稳定门面。
 export {
   BROWSER_CAPABILITY_MATRIX,
   CAPABILITY_MATRIX_VERSION,

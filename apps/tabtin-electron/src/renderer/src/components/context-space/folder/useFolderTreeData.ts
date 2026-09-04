@@ -90,7 +90,7 @@ export function useFolderTreeData(roots: RootInput[]) {
       })
 
       try {
-        const result = await window.tabtin.fileSystem.readDir(dirPath)
+        const result = await window.muse.fileSystem.readDir(dirPath)
         ensureLegacyOk(result, 'readDir')
         setStates(prev => {
           const root = prev[rootId] ?? createRootState()

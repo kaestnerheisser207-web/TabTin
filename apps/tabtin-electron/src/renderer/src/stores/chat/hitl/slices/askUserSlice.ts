@@ -6,16 +6,16 @@
  * User can also skip (dismiss) the questions — Agent gets "skipped" result.
  *
  * M5.Y / Wave 11：云端 `/api/orchestration/agent/answer` 已下线，HTTP 兜底
- * 整条移除。本 slice 仅走 `window.tabtin.agentEngine.submitAskUserResponse`
+ * 整条移除。本 slice 仅走 `window.muse.agentEngine.submitAskUserResponse`
  * (IPC → 本地 Runtime)。没有本地 Runtime / 非 Electron 上下文时，直接把错误
  * 文案写回会话；sendMessageAction 已在入口阻止了"无设备"场景发消息，这里
  * 只处理 race / 异常兜底。
  */
 
-import type { ChatMessage, ChatClient, AskUserAnswer } from '@tabtin/chat-client'
+import type { ChatMessage, ChatClient, AskUserAnswer } from '@muse/chat-client'
 import type { AskUserRequestState } from '../../shared/types'
 import i18n from '@/i18n'
-import { toast } from '@tabtin/smartsheet-ui'
+import { toast } from '@muse/smartsheet-ui'
 import { isLocalRuntimeAvailable } from '@services/localAgentClient'
 import { getSessionController } from '@/services/agentService'
 import { isPlatformIpcError, formatIpcErrorForUser } from '@/services/ipc-error'

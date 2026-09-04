@@ -156,7 +156,7 @@ class CloudWorkerClientBoundaryTests(SimpleTestCase):
         )
 
     @override_settings(
-        TABTIN_CLOUD_WORKERS_JSON=(
+        MUSE_CLOUD_WORKERS_JSON=(
             '{"worker-1":{"endpoint":"https://worker.internal",'
             '"token":"secret"}}'
         )
@@ -172,7 +172,7 @@ class CloudWorkerClientBoundaryTests(SimpleTestCase):
         )
 
     @override_settings(
-        TABTIN_CLOUD_WORKERS_JSON=(
+        MUSE_CLOUD_WORKERS_JSON=(
             '{"worker-1":{"endpoint":"https://trusted.internal",'
             '"token":"secret"}}'
         )
@@ -186,7 +186,7 @@ class CloudWorkerClientBoundaryTests(SimpleTestCase):
             CloudWorkerClient._connection_for(worker)
 
     @override_settings(
-        TABTIN_CLOUD_WORKERS_JSON=(
+        MUSE_CLOUD_WORKERS_JSON=(
             '{"worker-1":{"endpoint":"https://worker.internal",'
             '"token":"secret"}}'
         )
@@ -225,7 +225,7 @@ class CloudWorkerClientBoundaryTests(SimpleTestCase):
         self.assertEqual(timeout, 7)
 
     @override_settings(
-        TABTIN_CLOUD_WORKERS_JSON=(
+        MUSE_CLOUD_WORKERS_JSON=(
             '{"worker-1":{"endpoint":"https://worker.internal",'
             '"token":"secret"}}'
         )
@@ -280,7 +280,7 @@ class CloudWorkerRegistryTests(TransactionTestCase):
             },
         }
         with (
-            override_settings(TABTIN_CLOUD_WORKERS_JSON=json.dumps(config)),
+            override_settings(MUSE_CLOUD_WORKERS_JSON=json.dumps(config)),
             patch.object(
                 CloudWorkerClient,
                 "health",
@@ -321,7 +321,7 @@ class CloudWorkerRegistryTests(TransactionTestCase):
         self.assertNotIn("registry-secret-token", str(worker.__dict__))
 
         with (
-            override_settings(TABTIN_CLOUD_WORKERS_JSON=json.dumps(config)),
+            override_settings(MUSE_CLOUD_WORKERS_JSON=json.dumps(config)),
             patch.object(
                 CloudWorkerClient,
                 "health",
@@ -339,7 +339,7 @@ class CloudWorkerRegistryTests(TransactionTestCase):
         self.assertEqual(mismatch["error"], 1)
         self.assertEqual(worker.state, CloudWorkerNode.State.ERROR)
 
-        with override_settings(TABTIN_CLOUD_WORKERS_JSON="{}"):
+        with override_settings(MUSE_CLOUD_WORKERS_JSON="{}"):
             removed = CloudWorkerRegistry().sync_configured()
         worker.refresh_from_db()
         self.assertEqual(removed["offline"], 1)
@@ -450,15 +450,15 @@ class CloudRuntimePersistenceTests(TransactionTestCase):
 
 
 @override_settings(
-    TABTIN_EDITION="saas",
-    TABTIN_CLOUD_RUNTIME_IMAGE=(
+    MUSE_EDITION="saas",
+    MUSE_CLOUD_RUNTIME_IMAGE=(
         "ghcr.io/tabtin/cloud-runtime@sha256:"
         "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
     ),
-    TABTIN_CLOUD_WORKER_PROTOCOL_VERSION="1",
-    TABTIN_CLOUD_MAX_ACTIVE_WORKSPACES_PER_USER=1,
-    TABTIN_CLOUD_RUNTIME_STORAGE_GB=2,
-    TABTIN_CLOUD_WORKER_EDITION="saas",
+    MUSE_CLOUD_WORKER_PROTOCOL_VERSION="1",
+    MUSE_CLOUD_MAX_ACTIVE_WORKSPACES_PER_USER=1,
+    MUSE_CLOUD_RUNTIME_STORAGE_GB=2,
+    MUSE_CLOUD_WORKER_EDITION="saas",
 )
 class CloudWorkspaceServiceTests(TransactionTestCase):
     databases: ClassVar[set[str]] = {"default", "postgresql"}
@@ -490,7 +490,7 @@ class CloudWorkspaceServiceTests(TransactionTestCase):
             capacity_storage_gb=40,
         )
         worker_settings = override_settings(
-            TABTIN_CLOUD_WORKERS_JSON=json.dumps({
+            MUSE_CLOUD_WORKERS_JSON=json.dumps({
                 self.worker.node_key: {
                     "endpoint": self.worker.control_endpoint,
                     "token": "test-worker-token",
@@ -612,8 +612,8 @@ class CloudWorkspaceServiceTests(TransactionTestCase):
         self.assertTrue(self.service._worker_has_capacity(self.worker))
 
     @override_settings(
-        TABTIN_EDITION="community",
-        TABTIN_CLOUD_WORKER_EDITION="saas",
+        MUSE_EDITION="community",
+        MUSE_CLOUD_WORKER_EDITION="saas",
     )
     def test_hosted_cloud_pool_can_run_on_community_control_plane(self):
         with transaction.atomic(using=self.db_alias):

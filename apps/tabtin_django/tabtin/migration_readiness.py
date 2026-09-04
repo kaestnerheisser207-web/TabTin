@@ -15,7 +15,7 @@ def list_pending_migrations(
     """Return forward migrations that still need to be applied per database."""
     aliases = list(
         database_aliases
-        or getattr(settings, "TABTIN_MIGRATION_DATABASE_ALIASES", None)
+        or getattr(settings, "MUSE_MIGRATION_DATABASE_ALIASES", None)
         or connections.databases.keys()
     )
     pending: dict[str, list[str]] = {}

@@ -1,4 +1,4 @@
-import type { ExtractionSchema } from '@tabtin/crawl-contracts';
+import type { ExtractionSchema } from '@muse/crawl-contracts';
 
 type ExtractionField = ExtractionSchema['fields'][number];
 type TransformDef = NonNullable<ExtractionField['transform']>;

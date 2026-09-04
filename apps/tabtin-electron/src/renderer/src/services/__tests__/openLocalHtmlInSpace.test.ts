@@ -99,14 +99,14 @@ beforeEach(() => {
     workingDir: '/Users/me/space',
     absolutePath: HTML_ABS,
   })
-  ;(window as unknown as { tabtin: Partial<Window['tabtin']> }).tabtin = {
+  ;(window as unknown as { tabtin: Partial<Window['muse']> }).tabtin = {
     fileSystem: {
       pathExists: vi.fn().mockResolvedValue({
         success: true,
         exists: true,
         isFile: true,
       }),
-    } as Window['tabtin']['fileSystem'],
+    } as Window['muse']['fileSystem'],
   }
 })
 
@@ -127,7 +127,7 @@ describe('openLocalHtmlInSpace', () => {
     scheme: 'tabtin' as const,
     type: 'file',
     id: 'artifacts/7722-live-preview.html',
-    raw: 'tabtin://resource/file/artifacts%2F7722-live-preview.html?hint=tabfiles',
+    raw: 'muse://resource/file/artifacts%2F7722-live-preview.html?hint=tabfiles',
     hint: 'tabfiles',
     meta: {},
   }

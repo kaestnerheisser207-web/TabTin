@@ -17,7 +17,7 @@
  */
 
 import { session } from 'electron'
-import { okResponse } from '@tabtin/agent-wire'
+import { okResponse } from '@muse/agent-wire'
 import { guardedHandle } from './utils/guarded-handle'
 import { createLogger } from './logger'
 

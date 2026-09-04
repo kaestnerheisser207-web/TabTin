@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react'
 import { Check } from 'lucide-react'
-import type { ChatSession } from '@tabtin/chat-client'
+import type { ChatSession } from '@muse/chat-client'
 import {
   Tooltip,
   TooltipContent,

@@ -97,7 +97,7 @@ function installContextProvider(Sentry: SentryRendererModule, clientInstallId: s
   // space 取值复用诊断包同一回退逻辑（契约 B 表）：设置页/IM 会清空
   // selectedSpace，回退到列表选择与 spaces 缓存，避免这段时间的事件丢 space_id。
   // 动态 import 打破与 collectContext 的循环依赖（它静态引本模块的互认导出）。
-  void Promise.all([import('@tabtin/app-shell'), import('./diagnostics/collectContext')])
+  void Promise.all([import('@muse/app-shell'), import('./diagnostics/collectContext')])
     .then(([shell, { resolveDiagnosticsSpace, resolveDiagnosticsAgent }]) => {
       const { useOrganizationStore, useSpaceStore, useSpaceListStore } = shell
       const applyTabtinContext = () => {

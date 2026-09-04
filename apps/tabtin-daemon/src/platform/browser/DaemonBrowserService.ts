@@ -16,16 +16,16 @@ import { existsSync } from 'node:fs';
 import { writeFile, mkdir } from 'node:fs/promises';
 import { join, dirname, resolve, normalize } from 'node:path';
 import { tmpdir } from 'node:os';
-import { getHomeTabtinPath } from '@tabtin/shared/storage-paths';
+import { getHomeTabtinPath } from '@muse/shared/storage-paths';
 import { EventEmitter } from 'node:events';
 
 import type { Logger } from '../observability/logging/logger.js';
 import { DaemonBrowserContext } from './context/DaemonBrowserContext.js';
-import { applyStealthArgs } from '@tabtin/anti-detect';
+import { applyStealthArgs } from '@muse/anti-detect';
 import { PromiseMutex } from '../../base/async/promise-mutex.js';
-import { isPrivateHost, validateUrl } from '@tabtin/security-policy';
-import { isBlockedScript } from '@tabtin/browser-core/url-policy';
-import { attachRuntimeLogCapture } from '@tabtin/browser-core';
+import { isPrivateHost, validateUrl } from '@muse/security-policy';
+import { isBlockedScript } from '@muse/browser-core/url-policy';
+import { attachRuntimeLogCapture } from '@muse/browser-core';
 import type {
   NetworkLog,
   ConsoleLog,
@@ -33,7 +33,7 @@ import type {
   NetworkLogEntry,
   ConsoleLogQuery,
   ConsoleLogEntry,
-} from '@tabtin/browser-core';
+} from '@muse/browser-core';
 import type { ResourceEntry } from './ResourceTracker.js';
 import type { RecordingManager } from './RecordingSession.js';
 
@@ -134,7 +134,7 @@ function findChromePath(): string | undefined {
 }
 
 // ── URL / Path Validation ────────────────────────────────────────
-// SSRF 防护统一由 @tabtin/security-policy 提供，此处 re-export 保持外部引用兼容
+// SSRF 防护统一由 @muse/security-policy 提供，此处 re-export 保持外部引用兼容
 export { isPrivateHost, validateUrl };
 
 export function validateSavePath(savePath: string, workspaceRoot?: string): void {
@@ -855,7 +855,7 @@ export class DaemonBrowserService extends EventEmitter {
    *   - captureWidget：从源代码起新建 ephemeral page → 烤图 → 销毁
    *
    * **与 Electron WidgetRenderService 共用 widget-tokens**：wrapper HTML 由
-   * `@tabtin/widget-tokens.buildWrapper(code, { theme, reducedMotion: true })`
+   * `@muse/widget-tokens.buildWrapper(code, { theme, reducedMotion: true })`
    * 生成，CSP 字面与 chat 预览一致。
    */
   async captureWidget(input: {
@@ -876,12 +876,12 @@ export class DaemonBrowserService extends EventEmitter {
     if (!normalized.value) return { success: false, error: normalized.error };
     const { code, codeBytes, width, height, deviceScaleFactor, theme } = normalized.value;
 
-    // 动态 import @tabtin/widget-tokens——避免在 patchright launch 失败的边界
+    // 动态 import @muse/widget-tokens——避免在 patchright launch 失败的边界
     // 路径上把 widget-tokens 也 fail，且让没有 widget 的 daemon 启动不付出
     // import 成本。
-    let buildWrapper: typeof import('@tabtin/widget-tokens').buildWrapper;
+    let buildWrapper: typeof import('@muse/widget-tokens').buildWrapper;
     try {
-      ({ buildWrapper } = await import('@tabtin/widget-tokens'));
+      ({ buildWrapper } = await import('@muse/widget-tokens'));
     } catch (err) {
       return {
         success: false,
@@ -1099,7 +1099,7 @@ export class DaemonBrowserService extends EventEmitter {
         const title = await page.title();
         const pageUrl = page.url();
 
-        const { createTurndownInstance } = await import('@tabtin/action-tools/headless');
+        const { createTurndownInstance } = await import('@muse/action-tools/headless');
         const td = await createTurndownInstance({
           removeImages: opts?.includeImages === false,
           removeLinks: opts?.includeLinks === false,
@@ -1476,7 +1476,7 @@ export class DaemonBrowserService extends EventEmitter {
       setHttpCrawlAPI,
       setResourceDetectionAPI,
       setOffscreenRenderAPI,
-    } = await import('@tabtin/action-tools/headless');
+    } = await import('@muse/action-tools/headless');
 
     setCrawlViewAPI({
       executeScript: (script: string, tabId?: string) => this.executeScript(script, tabId),
@@ -2064,7 +2064,7 @@ export class DaemonBrowserService extends EventEmitter {
     const {
       setOnRulesChanged,
       getRouteRules,
-    } = await import('@tabtin/action-tools/tools');
+    } = await import('@muse/action-tools/tools');
 
     setOnRulesChanged(async (tabId: string) => {
       const pageEntry = this.pages.get(tabId);
@@ -2118,9 +2118,9 @@ export class DaemonBrowserService extends EventEmitter {
    */
   async initBrowserCore(): Promise<void> {
     const { getSharedBrowserToolImpl, setBrowserCoreBridge, getSharedNetworkLog, getSharedConsoleLog } =
-      await import('@tabtin/browser-core');
+      await import('@muse/browser-core');
     const { cleanHtml, generateSkeletonHtml, filterHtmlByContentTypes, parseContentTypeWhitelist } =
-      await import('@tabtin/action-tools/impl');
+      await import('@muse/action-tools/impl');
     const impl = getSharedBrowserToolImpl();
 
     // BR-8 WS-B：拿到 browser-core 的共享历史缓冲，供 attachRuntimeLogCapture 喂数据。
@@ -2519,7 +2519,7 @@ export class DaemonBrowserService extends EventEmitter {
     this.activeSessionName = null;
 
     try {
-      const { setOnRulesChanged } = await import('@tabtin/action-tools/tools');
+      const { setOnRulesChanged } = await import('@muse/action-tools/tools');
       setOnRulesChanged(null);
     } catch { /* non-critical */ }
     this._pageRouteHandlers.clear();

@@ -5,7 +5,7 @@
 
 import path from 'node:path'
 import type { mkdir, writeFile } from 'node:fs/promises'
-import { okResponse, errResponse, type CliOkResponse, type CliErrorResponse } from '@tabtin/agent-wire'
+import { okResponse, errResponse, type CliOkResponse, type CliErrorResponse } from '@muse/agent-wire'
 import { sanitizeBundleFilename } from './bundle-filename'
 import type { mergeMainLogsIntoBundleBuffer } from './merge-main-logs-into-bundle'
 import type { readMainProcessLogSnapshot } from './read-main-logs'

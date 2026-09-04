@@ -98,7 +98,7 @@ describe('IA Phase 3·3B-1 Daemon host 分层规则源码合同（I-1）', () =>
 
   it('daemon.ts routeToLocalAgentHost 从共享 ForwardConversationRequest 拿 personalRules（snake→camel 归一由 agent-host 单测锁定）', () => {
     // 架构演进：`daemon.ts` 不再直接 safeParse wire payload，personal_rules 的
-    // snake→camel 归一收口到 `@tabtin/agent-host/conversation`
+    // snake→camel 归一收口到 `@muse/agent-host/conversation`
     // `decodeForwardRequestDetailed`（agent-host 单测锁定 `payload.personal_rules
     // → request.personalRules` 契约）。daemon 侧只需从 request 透穿。
     const src = readSrc('src/bootstrap/daemon.ts');

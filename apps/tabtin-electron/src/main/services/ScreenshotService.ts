@@ -14,7 +14,7 @@ import { join } from 'node:path'
 import { mkdirSync, writeFileSync } from 'node:fs'
 import { getMainWindow } from '../window-manager'
 import { getViewFactory } from '../view-factory'
-import { getHomeTabtinPath } from '@tabtin/shared/storage-paths'
+import { getHomeTabtinPath } from '@muse/shared/storage-paths'
 
 export interface ScreenshotOptions {
   /** 截屏目标: window=主窗口, view=指定视图, screen=整块屏幕 */

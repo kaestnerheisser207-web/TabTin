@@ -1,6 +1,6 @@
 /** TabTin 自定义 IM 卡片的类型与能力单一入口。 */
 
-export const TABTIN_CUSTOM_CARD_TYPES = [
+export const MUSE_CUSTOM_CARD_TYPES = [
   'space',
   'agent_space',
   'table',
@@ -14,7 +14,7 @@ export const TABTIN_CUSTOM_CARD_TYPES = [
   'codex_session',
 ] as const
 
-export type TabTinCustomCardType = typeof TABTIN_CUSTOM_CARD_TYPES[number]
+export type TabTinCustomCardType = typeof MUSE_CUSTOM_CARD_TYPES[number]
 export type TabTinResourceCardType = Extract<TabTinCustomCardType, 'table' | 'document'>
 
 /** IM 消息中的原始卡片负载；未知字段保留，供新旧客户端向前兼容。 */
@@ -141,7 +141,7 @@ export type TabTinCustomCardResolution =
   | { kind: 'invalid'; type: TabTinCustomCardType }
   | { kind: 'unsupported'; type: string }
 
-const KNOWN_TYPES = new Set<string>(TABTIN_CUSTOM_CARD_TYPES)
+const KNOWN_TYPES = new Set<string>(MUSE_CUSTOM_CARD_TYPES)
 const NON_FORWARDABLE_TYPES = new Set<TabTinCustomCardType>([
   'handoff',
   'session_share',

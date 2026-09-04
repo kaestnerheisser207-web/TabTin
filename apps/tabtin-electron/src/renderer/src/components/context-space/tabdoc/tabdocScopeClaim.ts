@@ -6,7 +6,7 @@
  * foreign scope 用普通 `closeTab`（不 bump explicitCloseRevision）。
  */
 
-import { toast } from '@tabtin/smartsheet-ui'
+import { toast } from '@muse/smartsheet-ui'
 import i18n from '@/i18n'
 import { parseTabKey } from '@stores/contextTabs/helpers'
 import { useSpaceContextTabsStore } from '@stores/useSpaceContextTabsStore'

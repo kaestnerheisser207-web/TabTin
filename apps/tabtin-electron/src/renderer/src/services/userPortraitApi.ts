@@ -20,7 +20,7 @@
  *   - 不存在"调整 Organization 范围"功能（决策已删除）
  */
 
-import { joinApiPath } from '@tabtin/config'
+import { joinApiPath } from '@muse/config'
 import { API_CONFIG } from '@/config/api'
 import { apiRequest as adapterApiRequest, getAuthToken } from '@/adapters/api-adapter-instance'
 import { createLogger } from '@/utils/logger'

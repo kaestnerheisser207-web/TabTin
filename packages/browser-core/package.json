@@ -1,5 +1,5 @@
 {
-  "name": "@tabtin/browser-core",
+  "name": "@muse/browser-core",
   "version": "0.1.0",
   "description": "Browser operation core — unified BrowserContext abstraction for Electron and Daemon",
   "type": "module",
@@ -23,8 +23,8 @@
     "test": "vitest run"
   },
   "dependencies": {
-    "@tabtin/crawl-contracts": "workspace:*",
-    "@tabtin/security-policy": "workspace:*"
+    "@muse/crawl-contracts": "workspace:*",
+    "@muse/security-policy": "workspace:*"
   },
   "devDependencies": {
     "@types/node": "^20.0.0",

@@ -1,8 +1,8 @@
 /**
  * Auth 表单共享逻辑（hooks + 纯规则）——跨 electron / web 单一口径。
  *
- * 注意：本模块的 hooks 依赖 React，**只能** 经 `@tabtin/shared/auth-forms` 子路径导入，
- * 绝不从顶层 `@tabtin/shared` index 再导出（否则 main 进程 import 顶层 barrel 时会连带
+ * 注意：本模块的 hooks 依赖 React，**只能** 经 `@muse/shared/auth-forms` 子路径导入，
+ * 绝不从顶层 `@muse/shared` index 再导出（否则 main 进程 import 顶层 barrel 时会连带
  * 加载 react，packaged app 里 main 无 react 依赖会 ERR_MODULE_NOT_FOUND，启动崩溃；
  * 与 use-countdown 同样的约束）。
  */

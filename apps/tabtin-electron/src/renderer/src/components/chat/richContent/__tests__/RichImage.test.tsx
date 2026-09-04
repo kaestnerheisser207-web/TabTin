@@ -1,7 +1,7 @@
 import React from 'react'
 import { fireEvent, render, screen } from '@testing-library/react'
 import { describe, expect, it, vi } from 'vitest'
-import type { RichContentBlock } from '@tabtin/chat-client'
+import type { RichContentBlock } from '@muse/chat-client'
 import { RichImage } from '../RichImage'
 
 const useFileIdImageUrl = vi.fn(() => ({
@@ -105,7 +105,7 @@ describe('RichImage', () => {
           kind: 'image',
           artifact_kind: 'oss_file',
           file_id: 'file-123',
-          url: 'tabtin://resource/file/file-123?hint=tabfiles',
+          url: 'muse://resource/file/file-123?hint=tabfiles',
           access_url: 'https://oss.example.test/expired.png',
           summary: '永久图片',
         } as RichContentBlock}

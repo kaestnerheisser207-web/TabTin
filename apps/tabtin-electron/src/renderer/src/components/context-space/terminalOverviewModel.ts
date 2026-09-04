@@ -17,7 +17,7 @@
  */
 
 import { useMemo } from 'react'
-import { toast } from '@tabtin/smartsheet-ui/toast'
+import { toast } from '@muse/smartsheet-ui/toast'
 import { useSpaceStore } from '@stores/useSpaceStore'
 import { useSpaceContextTabsStore } from '@stores/useSpaceContextTabsStore'
 import { useTerminalPaneStatusStore, type PaneStatus } from '@stores/useTerminalPaneStatusStore'

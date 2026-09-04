@@ -31,7 +31,7 @@ const mockKillAgentSession = vi.fn(async () => undefined)
 const mockRequestKillAgentSession = vi.fn(() => true)
 const mockNotifyAgentSessionUserInterrupted = vi.fn(() => true)
 
-vi.mock('@tabtin/action-tools/runtime', () => ({
+vi.mock('@muse/action-tools/runtime', () => ({
   resolvePtyManagerBridge: vi.fn(() => ({
     killAgentSession: mockKillAgentSession,
     requestKillAgentSession: mockRequestKillAgentSession,
@@ -86,7 +86,7 @@ vi.mock('../snapshot', () => ({
   listAutoCheckpoints: vi.fn(async () => []),
 }))
 
-vi.mock('@tabtin/pty-core', () => ({
+vi.mock('@muse/pty-core', () => ({
   normalizeSize: vi.fn((cols?: number, rows?: number) => ({
     cols: cols ?? 80,
     rows: rows ?? 24,
@@ -103,7 +103,7 @@ describe('pty:agent-kill IPC', () => {
     mockKillAgentSession.mockClear()
     mockRequestKillAgentSession.mockClear()
     mockNotifyAgentSessionUserInterrupted.mockClear()
-    const { resolvePtyManagerBridge } = await import('@tabtin/action-tools/runtime')
+    const { resolvePtyManagerBridge } = await import('@muse/action-tools/runtime')
     vi.mocked(resolvePtyManagerBridge).mockReturnValue({
       killAgentSession: mockKillAgentSession,
       requestKillAgentSession: mockRequestKillAgentSession,
@@ -141,7 +141,7 @@ describe('pty:agent-kill IPC', () => {
   })
 
   it('bridge 不可用 → 返回 success:false', async () => {
-    const { resolvePtyManagerBridge } = await import('@tabtin/action-tools/runtime')
+    const { resolvePtyManagerBridge } = await import('@muse/action-tools/runtime')
     vi.mocked(resolvePtyManagerBridge).mockReturnValue(null)
 
     const handler = handlers.get('pty:agent-kill')

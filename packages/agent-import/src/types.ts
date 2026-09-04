@@ -1,5 +1,5 @@
 /**
- * @tabtin/agent-import 核心契约。
+ * @muse/agent-import 核心契约。
  *
  * 统一中间表示（UnifiedSession / UnifiedMessage）以 Anthropic ContentBlock 为
  * 消息体形态——与 Django `ChatMessage.content_blocks_json` 同族，上传层零翻译。

@@ -1,5 +1,5 @@
-import { createDirectAppClient } from '@tabtin/app-host-sdk/host'
-import type { AppHttpRequest } from '@tabtin/contracts/app'
+import { createDirectAppClient } from '@muse/app-host-sdk/host'
+import type { AppHttpRequest } from '@muse/contracts/app'
 import {
   configureTableDataClient,
   configureTableRuntime,
@@ -13,7 +13,7 @@ import {
   type TableI18nPort,
   type TableTelemetryPort,
   type TableUploadPort,
-} from '@tabtin/table-core'
+} from '@muse/table-core'
 
 export interface TableHostRuntimeOptions {
   appId?: string

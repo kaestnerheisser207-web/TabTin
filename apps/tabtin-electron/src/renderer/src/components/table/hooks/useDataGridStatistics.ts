@@ -13,21 +13,21 @@ import React from 'react';
 import {
   StatFunc,
   getValidStatFuncs,
-} from '@tabtin/table-engine-canvas/statistics';
+} from '@muse/table-engine-canvas/statistics';
 import {
   CANVAS_TABLE_ENGINE,
-} from '@tabtin/table-engine-canvas/engine';
+} from '@muse/table-engine-canvas/engine';
 import {
   toast,
-} from '@tabtin/smartsheet-ui';
+} from '@muse/smartsheet-ui';
 import {
   resolveRecordId,
   type TableGridRendererProps,
   type TableGridColumnStatistic,
   type TableGridColumnStatistics,
   type TableGridHeaderContextMenuInfo,
-} from '@tabtin/table-engine';
-import { ViewApiService, type ViewFilter, type ViewMeta } from '@tabtin/table-core';
+} from '@muse/table-engine';
+import { ViewApiService, type ViewFilter, type ViewMeta } from '@muse/table-core';
 import { formatNumber } from '@/utils/i18n/format';
 
 // ---------------------------------------------------------------------------

@@ -21,7 +21,7 @@ const mockStopWatcher = vi.fn()
 const mockOpenResourceTab = vi.fn()
 const mockSetActiveKey = vi.fn()
 
-vi.mock('@tabtin/smartsheet-ui', () => ({
+vi.mock('@muse/smartsheet-ui', () => ({
   Button: ({ children, ...props }: any) => <button type="button" {...props}>{children}</button>,
   Dialog: ({ children, open }: any) => open ? <div data-testid="dialog">{children}</div> : null,
   DialogContent: ({ children }: any) => <div data-testid="dialog-content">{children}</div>,

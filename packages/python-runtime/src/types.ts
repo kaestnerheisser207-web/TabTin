@@ -70,11 +70,11 @@ export interface ResolvedPythonRuntime {
 export interface PythonRuntimeConfig {
   /** 自管运行时缓存根（L1 用 os cache dir 计算注入），必填 */
   cacheDir: string
-  /** 显式指定的现成运行时目录（如 L1 从 TABTIN_PYTHON_RUNTIME_DIR 读到），最高优先 */
+  /** 显式指定的现成运行时目录（如 L1 从 MUSE_PYTHON_RUNTIME_DIR 读到），最高优先 */
   explicitRoots?: string[]
   /**
    * 候选根：内含 bundled manifest.json 与同目录归档。
-   * Electron 传 resourcesPath/native/tabtin-python-runtime 与 dev 仓库 packages/python-runtime/runtime。
+   * Electron 传 resourcesPath/native/muse-python-runtime 与 dev 仓库 packages/python-runtime/runtime。
    */
   packagedRoots?: string[]
   /** 覆盖 tar 命令（默认按平台推断）；测试可注入 */

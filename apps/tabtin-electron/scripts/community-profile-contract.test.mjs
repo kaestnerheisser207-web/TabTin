@@ -13,7 +13,7 @@ function validateProfile(extraEnv = {}) {
     env: {
       PATH: process.env.PATH,
       HOME: process.env.HOME,
-      TABTIN_COMMUNITY_PROFILE_VALIDATE_ONLY: '1',
+      MUSE_COMMUNITY_PROFILE_VALIDATE_ONLY: '1',
       ...extraEnv,
     },
   })
@@ -40,18 +40,18 @@ test('Community profile rejects company endpoints but accepts explicit third-par
     'https://gptapi.xmov.ai/v1',
     'https://api.example.com/api',
   ]) {
-    const result = validateProfile({ TABTIN_COMMUNITY_API_BASE_URL: url })
+    const result = validateProfile({ MUSE_COMMUNITY_API_BASE_URL: url })
     assert.notEqual(result.status, 0, `${url} must be rejected`)
   }
 
   const thirdParty = validateProfile({
-    TABTIN_COMMUNITY_API_BASE_URL: 'https://selfhost.example.org/api',
-    TABTIN_COMMUNITY_CENTRIFUGO_WS_URL: 'wss://events.example.org/connection/websocket',
+    MUSE_COMMUNITY_API_BASE_URL: 'https://selfhost.example.org/api',
+    MUSE_COMMUNITY_CENTRIFUGO_WS_URL: 'wss://events.example.org/connection/websocket',
   })
   assert.equal(thirdParty.status, 0, thirdParty.stderr)
 
   const companyFeed = validateProfile({
-    TABTIN_COMMUNITY_UPDATE_FEED_URL: 'https://downloads.example.com/community',
+    MUSE_COMMUNITY_UPDATE_FEED_URL: 'https://downloads.example.com/community',
   })
   assert.notEqual(companyFeed.status, 0, 'company update feeds must not be inherited')
 })

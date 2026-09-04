@@ -2,8 +2,8 @@
  * ImportDialog — Web 端数据导入对话框
  *
  * 对齐 Electron 的 ImportContainer：
- * - 使用 @tabtin/smartsheet-ui 的 DataImportDialog UI 组件
- * - 通过 @tabtin/table-core 的 ImportExportApiService 调用 API
+ * - 使用 @muse/smartsheet-ui 的 DataImportDialog UI 组件
+ * - 通过 @muse/table-core 的 ImportExportApiService 调用 API
  * - 所有 store 操作通过 props 回调注入，保持组件可共享性
  */
 
@@ -15,9 +15,9 @@ import {
   type DataImportConfig,
   type DataImportResult,
   type DataImportField,
-} from '@tabtin/smartsheet-ui'
-import { ImportExportApiService, isImportResultError } from '@tabtin/table-core'
-import type { Field } from '@tabtin/table-core'
+} from '@muse/smartsheet-ui'
+import { ImportExportApiService, isImportResultError } from '@muse/table-core'
+import type { Field } from '@muse/table-core'
 
 const getErrorMessage = (error: unknown): string =>
   error instanceof Error ? error.message : String(error)

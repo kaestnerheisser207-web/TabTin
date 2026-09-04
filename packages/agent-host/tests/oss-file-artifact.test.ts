@@ -2,7 +2,7 @@
  * OSS 云端文件交付物解析 / 建卡单测。
  *
  * ：`oss-file-artifact` 从 agent-runtime 的 capability/core 迁到
- * @tabtin/agent-host 的 delivery 目录，本单测随源迁来；对源的 import 指向
+ * @muse/agent-host 的 delivery 目录，本单测随源迁来；对源的 import 指向
  * host 的 `src/delivery/oss-file-artifact.js`。断言的是迁移后（字节级一致）的现有行为。
  */
 

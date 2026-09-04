@@ -18,7 +18,7 @@ beforeEach(() => {
   getZoomLevelMock.mockResolvedValue({ success: true, level: 0 })
   zoomLevelChangedCallback = null
   __resetBrowserZoomForTesting()
-  ;(window as unknown as { tabtin: Partial<Window['tabtin']> }).tabtin = {
+  ;(window as unknown as { tabtin: Partial<Window['muse']> }).tabtin = {
     crawlView: {
       setZoomLevel: setZoomLevelMock,
       getZoomLevel: getZoomLevelMock,
@@ -28,7 +28,7 @@ beforeEach(() => {
           if (zoomLevelChangedCallback === callback) zoomLevelChangedCallback = null
         }
       },
-    } as Partial<Window['tabtin']['crawlView']> as Window['tabtin']['crawlView'],
+    } as Partial<Window['muse']['crawlView']> as Window['muse']['crawlView'],
   }
 })
 

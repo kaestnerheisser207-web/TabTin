@@ -49,7 +49,7 @@ func TestDjangoWarning_NilInner(t *testing.T) {
 }
 
 func TestDjangoWarning_PrintsOnceOnRequest(t *testing.T) {
-	t.Setenv("TABTIN_QUIET", "")
+	t.Setenv("MUSE_QUIET", "")
 	inner := &mockTransport{typ: TypeDjango, response: &Response{Status: 200, Data: json.RawMessage(`{"ok":true}`)}}
 	tr := WithDjangoFallbackWarning(inner)
 
@@ -69,7 +69,7 @@ func TestDjangoWarning_PrintsOnceOnRequest(t *testing.T) {
 }
 
 func TestDjangoWarning_QuietSuppresses(t *testing.T) {
-	t.Setenv("TABTIN_QUIET", "1")
+	t.Setenv("MUSE_QUIET", "1")
 	inner := &mockTransport{typ: TypeDjango, response: &Response{Status: 200, Data: json.RawMessage(`{"ok":true}`)}}
 	tr := WithDjangoFallbackWarning(inner)
 
@@ -78,12 +78,12 @@ func TestDjangoWarning_QuietSuppresses(t *testing.T) {
 		_, _ = tr.Request(context.Background(), "GET", "/api/y", nil, nil)
 	})
 	if stderr != "" {
-		t.Errorf("TABTIN_QUIET=1 should suppress warning, got stderr=%q", stderr)
+		t.Errorf("MUSE_QUIET=1 should suppress warning, got stderr=%q", stderr)
 	}
 }
 
 func TestDjangoWarning_OnceUnderConcurrency(t *testing.T) {
-	t.Setenv("TABTIN_QUIET", "")
+	t.Setenv("MUSE_QUIET", "")
 	inner := &mockTransport{typ: TypeDjango, response: &Response{Status: 200, Data: json.RawMessage(`{"ok":true}`)}}
 	tr := WithDjangoFallbackWarning(inner)
 
@@ -106,7 +106,7 @@ func TestDjangoWarning_OnceUnderConcurrency(t *testing.T) {
 }
 
 func TestDjangoWarning_SilentPathsDoNotConsumeOnce(t *testing.T) {
-	t.Setenv("TABTIN_QUIET", "")
+	t.Setenv("MUSE_QUIET", "")
 	inner := &mockTransport{typ: TypeDjango, response: &Response{Status: 200, Data: json.RawMessage(`{"ok":true}`)}}
 	tr := WithDjangoFallbackWarning(inner)
 
@@ -126,7 +126,7 @@ func TestDjangoWarning_SilentPathsDoNotConsumeOnce(t *testing.T) {
 }
 
 func TestDjangoWarning_OnlySilentPaths(t *testing.T) {
-	t.Setenv("TABTIN_QUIET", "")
+	t.Setenv("MUSE_QUIET", "")
 	inner := &mockTransport{typ: TypeDjango, response: &Response{Status: 200, Data: json.RawMessage(`{"ok":true}`)}}
 	tr := WithDjangoFallbackWarning(inner)
 

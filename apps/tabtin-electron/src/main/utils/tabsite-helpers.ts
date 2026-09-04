@@ -1,6 +1,6 @@
 /**
  * Shared utilities for TabSite module — used by both IPC handlers and CLI route.
- * Delegates to @tabtin/tabsite-core for platform-independent logic,
+ * Delegates to @muse/tabsite-core for platform-independent logic,
  * adds Electron-specific template path resolution.
  */
 
@@ -13,8 +13,8 @@ import {
   provisionTokenAndWriteEnv as coreProvisionTokenAndWriteEnv,
   fixWorkspaceDeps as coreFixWorkspaceDeps,
   resolveTemplatePath as coreResolveTemplatePath,
-} from '@tabtin/tabsite-core'
-import type { ProvisionResult, ProvisionOptions, CopyDirOptions } from '@tabtin/tabsite-core'
+} from '@muse/tabsite-core'
+import type { ProvisionResult, ProvisionOptions, CopyDirOptions } from '@muse/tabsite-core'
 import { djangoRequest } from '../cli/routes/shared/error-handler'
 
 export type { ProvisionResult, ProvisionOptions, CopyDirOptions }

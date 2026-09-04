@@ -1,4 +1,4 @@
-import { getBucket, registerStorageBucket } from '@tabtin/storage-manager'
+import { getBucket, registerStorageBucket } from '@muse/storage-manager'
 import { DRAFT_MAX_CHARS } from './chatInputConstants'
 
 const DRAFT_KEY_PREFIX = 'tabtin:draft:'

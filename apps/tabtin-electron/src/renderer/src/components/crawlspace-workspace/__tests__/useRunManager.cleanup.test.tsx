@@ -12,7 +12,7 @@ import React, { Activity, useEffect } from 'react'
 import { act, render, renderHook } from '@testing-library/react'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
-import { useRunManager } from '@tabtin/crawlspace-core'
+import { useRunManager } from '@muse/crawlspace-core'
 
 interface MockAdapter {
   create: ReturnType<typeof vi.fn>

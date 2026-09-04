@@ -46,7 +46,7 @@ export { IMProviderUnavailableError } from './errors'
 export { createClientRequestId, createMessageRef } from './ids'
 export { mergeAndSortMessages, messagesShareStableIdentity } from './messageMerge'
 export {
-  TABTIN_CUSTOM_CARD_TYPES,
+  MUSE_CUSTOM_CARD_TYPES,
   canForwardTabTinCustomCard,
   isTabTinCustomCardContent,
   isTabTinCustomCardType,

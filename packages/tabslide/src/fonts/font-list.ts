@@ -4,7 +4,7 @@
  * 提供系统字体枚举、降级检测、运行时字体合并，
  * 供 TextBubbleMenu / StyleEditor 等字体选择器复用。
  *
- * 本地字体检测能力已提取到 @tabtin/media-core/fonts（local-fonts），
+ * 本地字体检测能力已提取到 @muse/media-core/fonts（local-fonts），
  * 此文件复用 media-core 的 queryLocalFonts / isFontAvailable 实现。
  */
 
@@ -22,7 +22,7 @@ import {
   queryLocalFonts as queryLocalFontsCore,
   isFontAvailable,
   type LocalFontInfo,
-} from '@tabtin/media-core/fonts'
+} from '@muse/media-core/fonts'
 
 export interface FontDef {
   label: string

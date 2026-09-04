@@ -14,8 +14,8 @@
  */
 
 import type { ConversationLifecycleIdentity } from '../conversation/conversation-identity.js'
-import type { ApprovalMode } from '@tabtin/security-policy'
-import type { AgentModeName } from '@tabtin/agent-modes'
+import type { ApprovalMode } from '@muse/security-policy'
+import type { AgentModeName } from '@muse/agent-modes'
 import type { ConversationSupervisor } from '../conversation/conversation-supervisor.js'
 import {
   ExecutionOwnerLifecycle,

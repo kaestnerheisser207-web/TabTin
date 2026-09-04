@@ -15,7 +15,7 @@ import { parseResourcePointer, serializeSelfFormat } from '../src/parser.js'
 describe('parseResourcePointer · self format', () => {
   it('accepts urlencoded chinese in title meta', () => {
     const p = parseResourcePointer(
-      'tabtin://resource/document/doc_xyz?hint=tabdoc&title=%E9%A1%B9%E7%9B%AE',
+      'muse://resource/document/doc_xyz?hint=tabdoc&title=%E9%A1%B9%E7%9B%AE',
     )
     expect(p.scheme).toBe('muse')
     expect(p.type).toBe('document')
@@ -24,18 +24,18 @@ describe('parseResourcePointer · self format', () => {
   })
 
   it('treats hint="" the same as missing hint', () => {
-    const p = parseResourcePointer('tabtin://resource/table/tbl_x?hint=')
+    const p = parseResourcePointer('muse://resource/table/tbl_x?hint=')
     expect(p.hint).toBeNull()
   })
 
   it('treats unknown self-format type as pass-through (manifest cross-ref is registry job)', () => {
-    const p = parseResourcePointer('tabtin://resource/some_future_type/id_42')
+    const p = parseResourcePointer('muse://resource/some_future_type/id_42')
     expect(p.scheme).toBe('muse')
     expect(p.type).toBe('some_future_type')
     expect(p.id).toBe('id_42')
   })
 
-  it.each(['tabtin-preprod', 'tabtin-dev'] as const)(
+  it.each(['muse-preprod', 'muse-dev'] as const)(
     'parses %s resource links as Muse self format while preserving raw',
     (scheme) => {
       const raw = `${scheme}://resource/table/tbl_x?hint=tabdata&recordIds=rec_1`
@@ -49,47 +49,47 @@ describe('parseResourcePointer · self format', () => {
   )
 
   it('normalises agent typo `type=doc` to canonical `document`', () => {
-    const p = parseResourcePointer('tabtin://resource/doc/doc_xyz?hint=tabdoc')
+    const p = parseResourcePointer('muse://resource/doc/doc_xyz?hint=tabdoc')
     expect(p.type).toBe('document')
     expect(p.hint).toBe('tabdoc')
     expect(p.id).toBe('doc_xyz')
   })
 
   it('normalises agent typo `hint=document` to carrier `tabdoc`', () => {
-    const p = parseResourcePointer('tabtin://resource/document/doc_xyz?hint=document')
+    const p = parseResourcePointer('muse://resource/document/doc_xyz?hint=document')
     expect(p.type).toBe('document')
     expect(p.hint).toBe('tabdoc')
   })
 
   it('normalises both type=doc and hint=document typos in one URI', () => {
-    const p = parseResourcePointer('tabtin://resource/doc/doc_xyz?hint=document')
+    const p = parseResourcePointer('muse://resource/doc/doc_xyz?hint=document')
     expect(p.type).toBe('document')
     expect(p.hint).toBe('tabdoc')
   })
 
   it('normalises hint=doc (app-id shorthand typo) to canonical tabdoc', () => {
-    const p = parseResourcePointer('tabtin://resource/doc/doc_xyz?hint=doc')
+    const p = parseResourcePointer('muse://resource/doc/doc_xyz?hint=doc')
     expect(p.type).toBe('document')
     expect(p.hint).toBe('tabdoc')
   })
 
   it('keeps meta multi-value query as array', () => {
-    const p = parseResourcePointer('tabtin://resource/table/tbl_x?tag=a&tag=b&tag=c')
+    const p = parseResourcePointer('muse://resource/table/tbl_x?tag=a&tag=b&tag=c')
     expect(p.meta?.tag).toEqual(['a', 'b', 'c'])
   })
 
   it('returns degraded shape (type=null) for malformed self-format prefix', () => {
-    const p = parseResourcePointer('tabtin://resource/')
+    const p = parseResourcePointer('muse://resource/')
     expect(p.scheme).toBe('muse')
     expect(p.type).toBeNull()
-    expect(p.id).toBe('tabtin://resource/')
+    expect(p.id).toBe('muse://resource/')
   })
 
   it('returns degraded shape when id segment is missing', () => {
-    const p = parseResourcePointer('tabtin://resource/table')
+    const p = parseResourcePointer('muse://resource/table')
     expect(p.scheme).toBe('muse')
     expect(p.type).toBeNull()
-    expect(p.id).toBe('tabtin://resource/table')
+    expect(p.id).toBe('muse://resource/table')
   })
 })
 
@@ -149,12 +149,12 @@ describe('parseResourcePointer · garbage/unknown', () => {
 
 describe('parseResourcePointer · baseDir passthrough', () => {
   it('baseDir is stored on pointer when provided', () => {
-    const p = parseResourcePointer('tabtin://resource/file/x', '/Users/foo')
+    const p = parseResourcePointer('muse://resource/file/x', '/Users/foo')
     expect(p.baseDir).toBe('/Users/foo')
   })
 
   it('baseDir is undefined when not provided', () => {
-    const p = parseResourcePointer('tabtin://resource/file/x')
+    const p = parseResourcePointer('muse://resource/file/x')
     expect(p.baseDir).toBeUndefined()
   })
 })
@@ -166,15 +166,15 @@ describe('serializeSelfFormat round-trip', () => {
       id: 'tbl_abc',
       hint: null,
     })
-    expect(out).toBe('tabtin://resource/table/tbl_abc')
+    expect(out).toBe('muse://resource/table/tbl_abc')
   })
 
   it('serializes an environment-specific resource scheme', () => {
     const out = serializeSelfFormat(
       { type: 'table', id: 'tbl_abc', hint: 'tabdata' },
-      'tabtin-preprod',
+      'muse-preprod',
     )
-    expect(out).toBe('tabtin-preprod://resource/table/tbl_abc?hint=tabdata')
+    expect(out).toBe('muse-preprod://resource/table/tbl_abc?hint=tabdata')
     expect(parseResourcePointer(out).scheme).toBe('muse')
   })
 

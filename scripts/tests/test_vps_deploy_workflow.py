@@ -35,7 +35,7 @@ def test_action_builds_and_pushes_five_immutable_amd64_images() -> None:
     assert "tags: ${{ env.CLOUD_RUNTIME_IMAGE_NAME }}:sha-${{ env.RELEASE_SHA }}" in workflow
     assert "tags: ${{ env.CLOUD_WORKER_IMAGE_NAME }}:sha-${{ env.RELEASE_SHA }}" in workflow
     assert "org.opencontainers.image.revision=${{ env.RELEASE_SHA }}" in workflow
-    assert "TABTIN_SOURCE_SHA=${{ env.RELEASE_SHA }}" in workflow
+    assert "MUSE_SOURCE_SHA=${{ env.RELEASE_SHA }}" in workflow
     assert (
         "cache-to: type=gha,mode=max,scope=tabtin-community-django,ignore-error=true"
         in workflow
@@ -128,12 +128,12 @@ def test_web_and_collab_images_are_reproducible_from_repo_dockerfiles() -> None:
     assert 'CMD ["node", "apps/collab-live/dist/start.js"]' in collab
 
     collab_package = json.loads(COLLAB_PACKAGE.read_text(encoding="utf-8"))
-    assert collab_package["dependencies"]["@tabtin/table-core"] == "workspace:*"
+    assert collab_package["dependencies"]["@muse/table-core"] == "workspace:*"
     lockfile = LOCKFILE.read_text(encoding="utf-8")
     collab_importer = lockfile.split("  apps/collab-live:\n", 1)[1].split(
         "\n  apps/", 1
     )[0]
-    assert "'@tabtin/table-core':" in collab_importer
+    assert "'@muse/table-core':" in collab_importer
 
 
 def test_cleanup_is_scoped_to_old_tabtin_images_and_runs_after_health() -> None:
@@ -147,7 +147,7 @@ def test_cleanup_is_scoped_to_old_tabtin_images_and_runs_after_health() -> None:
     assert '"$image_id" != "$django_image_id"' in script
     assert '"$image_id" != "$web_image_id"' in script
     assert '"$image_id" != "$collab_image_id"' in script
-    assert 'repository" == "tabtin/community-django"' in script
+    assert 'repository" == "muse/community-django"' in script
     assert 'repository" == "tabtin/web"' in script
     assert 'repository" == "tabtin/collab-live"' in script
     assert 'repository" == "$django_repository"' in script
@@ -180,9 +180,9 @@ def test_cloud_host_release_is_separate_and_requires_runtime_worker_digests() ->
     assert '"$worker_direct_endpoint/v1/metrics"' in script
     assert "tabtin_cloud_worker_up 1" in script
     assert "DAEMON_TOKEN_SECRET_FILE" in script
-    assert "TABTIN_CLOUD_WORKER_EDITION" in script
-    assert "TABTIN_CLOUD_CAPACITY_CPU_MILLICORES" in script
-    assert "TABTIN_CLOUD_WORKER_BIND_ADDRESS" in script
+    assert "MUSE_CLOUD_WORKER_EDITION" in script
+    assert "MUSE_CLOUD_CAPACITY_CPU_MILLICORES" in script
+    assert "MUSE_CLOUD_WORKER_BIND_ADDRESS" in script
     assert "systemctl enable --now tabtin-cloud-volume-helper.socket" in script
     assert "deployment/tabtin-cloud-volume-helper.sh" in worker_dockerfile
     assert '"$worker_container:/app/deployment/tabtin-cloud-volume-helper.sh"' in script
@@ -243,14 +243,14 @@ def test_cloud_host_bootstrap_keeps_worker_rootless_and_quota_gated() -> None:
     assert "--opt type=none" in bootstrap
     assert '--opt "device=$probe_path"' in bootstrap
     assert "--opt o=bind" in bootstrap
-    assert "TABTIN_CLOUD_XFS_SIZE_GB" in bootstrap
-    assert "TABTIN_CLOUD_CAPACITY_STORAGE_GB" in bootstrap
-    assert "TABTIN_CLOUD_WORKER_BIND_ADDRESS" in bootstrap
+    assert "MUSE_CLOUD_XFS_SIZE_GB" in bootstrap
+    assert "MUSE_CLOUD_CAPACITY_STORAGE_GB" in bootstrap
+    assert "MUSE_CLOUD_WORKER_BIND_ADDRESS" in bootstrap
     assert "host.docker.internal" not in bootstrap
     assert "mkfs.xfs -f -L tabtin-cloud" in bootstrap
     assert 'runtime_fstype="$(blkid -s TYPE -o value' in bootstrap
     assert 'host_config_file="/etc/tabtin/cloud-host.env"' in bootstrap
-    assert "TABTIN_NGINX_CONFIG" in bootstrap
+    assert "MUSE_NGINX_CONFIG" in bootstrap
     assert "/Project/infrastructure/nginx/current/nginx.conf" in bootstrap
     assert 'install -o root -g tabtin-deploy -m 0750 "$deploy_gateway_source"' in bootstrap
     assert 'install -o root -g root -m 0700 "$cloud_release_source"' in bootstrap
@@ -346,15 +346,15 @@ def test_restricted_gateway_rejects_unknown_or_extra_arguments_before_sudo() -> 
         "shell",
         (
             f"deploy-cloud {sha} "
-            f"ghcr.io/kaestnerheisser207-web/tabtin-cloud-runtime@sha256:{digest} "
-            f"ghcr.io/kaestnerheisser207-web/tabtin-cloud-worker@sha256:{digest} "
+            f"ghcr.io/kaestnerheisser207-web/muse-cloud-runtime@sha256:{digest} "
+            f"ghcr.io/kaestnerheisser207-web/muse-cloud-worker@sha256:{digest} "
             "actor extra"
         ),
         (
             f"deploy {sha} "
-            f"ghcr.io/kaestnerheisser207-web/tabtin-community-django@sha256:{digest} "
-            f"ghcr.io/kaestnerheisser207-web/tabtin-web@sha256:{digest} "
-            f"ghcr.io/kaestnerheisser207-web/tabtin-collab-live@sha256:{digest} "
+            f"ghcr.io/kaestnerheisser207-web/muse-community-django@sha256:{digest} "
+            f"ghcr.io/kaestnerheisser207-web/muse-web@sha256:{digest} "
+            f"ghcr.io/kaestnerheisser207-web/muse-collab-live@sha256:{digest} "
             "actor extra"
         ),
     ]

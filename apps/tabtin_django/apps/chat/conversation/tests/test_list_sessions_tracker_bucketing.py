@@ -30,7 +30,7 @@ from apps.users.auth.utils import generate_jwt_token
 User = get_user_model()
 
 
-@override_settings(TABTIN_REQUIRE_INVITE_CODE=False)
+@override_settings(MUSE_REQUIRE_INVITE_CODE=False)
 class ListSessionsTrackerBucketingTest(TransactionTestCase):
     """list_sessions / list_all_sessions 的 include_tracker_runs 分桶单测。"""
 

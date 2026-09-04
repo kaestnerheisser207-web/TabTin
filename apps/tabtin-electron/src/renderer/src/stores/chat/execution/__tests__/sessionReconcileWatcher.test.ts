@@ -52,7 +52,7 @@ vi.mock('@services/localAgentClient', () => ({
   isLocalRuntimeAvailable: () => localRuntimeAvailable,
 }))
 
-vi.mock('@tabtin/smartsheet-ui/toast', () => ({ toast: vi.fn() }))
+vi.mock('@muse/smartsheet-ui/toast', () => ({ toast: vi.fn() }))
 vi.mock('@/i18n', () => ({ default: { t: (_k: string, o?: { defaultValue?: string }) => o?.defaultValue ?? _k } }))
 vi.mock('@/utils/logger', () => ({
   createLogger: () => ({ info: vi.fn(), warn: vi.fn(), error: vi.fn(), debug: vi.fn(), log: vi.fn() }),

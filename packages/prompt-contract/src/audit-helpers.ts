@@ -314,7 +314,7 @@ export const HARD_CONTRACT_KEYWORDS: Readonly<Record<string, readonly HardContra
     ],
     run_terminal_command_tool: [
       // workspace / cwd 契约（：env 名与切目录语法在 <shell_runtime>，
-      // 工具描述只保留 workspace 指向 + shell_runtime 指针，不再要求 TABTIN_WORKSPACE）
+      // 工具描述只保留 workspace 指向 + shell_runtime 指针，不再要求 MUSE_WORKSPACE）
       { name: 'workspace / cwd 契约', keywords: ['workspace', 'shell_runtime'] },
       // 长任务背景化（status=running 由 push 通知激活下一轮）
       { name: '长任务 background 化', keywords: ['wait_ms', 'background'] },

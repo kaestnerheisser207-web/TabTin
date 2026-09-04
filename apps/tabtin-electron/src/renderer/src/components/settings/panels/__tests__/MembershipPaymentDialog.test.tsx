@@ -8,7 +8,7 @@ const { toDataURLMock } = vi.hoisted(() => ({
   toDataURLMock: vi.fn(),
 }))
 
-vi.mock('@tabtin/smartsheet-ui', () => ({
+vi.mock('@muse/smartsheet-ui', () => ({
   Dialog: ({ open, children }: { open: boolean; children: React.ReactNode }) => open ? <div>{children}</div> : null,
   DialogContent: ({ children }: { children: React.ReactNode }) => <div>{children}</div>,
   DialogHeader: ({ children }: { children: React.ReactNode }) => <header>{children}</header>,

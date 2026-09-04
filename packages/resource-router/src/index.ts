@@ -1,5 +1,5 @@
 /**
- * @tabtin/resource-router — barrel.
+ * @muse/resource-router — barrel.
  *
  * 三种 Agent 输出形式（增强 markdown / open_in_space 工具 / 富 ResourceCard）
  * 共享同一个 `ResourcePointer` 数据结构 + 同一个 `ResourceRouter.open` 落点。

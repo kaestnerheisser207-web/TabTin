@@ -14,7 +14,7 @@
 import * as nodeOs from 'node:os';
 import * as nodePath from 'node:path';
 
-import { tabtinAgentTasksDir } from '@tabtin/terminal-core';
+import { tabtinAgentTasksDir } from '@muse/terminal-core';
 
 import { isPathInAllowedRoots, normalize } from './path-normalize.js';
 
@@ -22,7 +22,7 @@ import { isPathInAllowedRoots, normalize } from './path-normalize.js';
 export const CLI_OUTPUTS_DIR_NAME = 'cli-outputs';
 
 /** shell 大输出 spill 子目录名（与 agent-runtime shell.ts persistLargeOutput 对齐）。 */
-export const TABTIN_TOOL_RESULTS_DIR_NAME = 'tabtin-tool-results';
+export const MUSE_TOOL_RESULTS_DIR_NAME = 'tabtin-tool-results';
 
 /**
  * 返回平台自产产物根目录（绝对路径、未强制 realpath）。
@@ -35,7 +35,7 @@ export function getPlatformArtifactRoots(homeDir?: string): string[] {
   return [
     nodePath.join(home, '.tabtin', CLI_OUTPUTS_DIR_NAME),
     tabtinAgentTasksDir(),
-    nodePath.join(nodeOs.tmpdir(), TABTIN_TOOL_RESULTS_DIR_NAME),
+    nodePath.join(nodeOs.tmpdir(), MUSE_TOOL_RESULTS_DIR_NAME),
   ];
 }
 

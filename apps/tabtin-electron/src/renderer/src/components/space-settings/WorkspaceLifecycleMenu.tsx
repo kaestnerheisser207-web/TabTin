@@ -18,7 +18,7 @@ import {
   Button,
   ConfirmDialog,
   toast,
-} from '@tabtin/smartsheet-ui'
+} from '@muse/smartsheet-ui'
 import { useShallow } from 'zustand/react/shallow'
 import { useTranslation } from 'react-i18next'
 import { useSpaceStore } from '@stores/useSpaceStore'
@@ -34,9 +34,9 @@ import {
   SETTINGS_SECTION_TITLE,
 } from '@components/settings/settingsUi'
 import { cn } from '@utils/cn'
-import type { Space } from '@tabtin/app-shell'
+import type { Space } from '@muse/app-shell'
 import type { LocalMcpConnectionSummary } from '@shared/types/mcp'
-import { WorkspaceApiService } from '@tabtin/app-shell'
+import { WorkspaceApiService } from '@muse/app-shell'
 import { useSpaceDeleteGuard } from './hooks/useSpaceDeleteGuard'
 import { ConnectorCredentialDialog } from '@components/context-space/capability-marketplace/ConnectorCredentialDialog'
 import { applyCredentialSecretToTransport } from '@components/context-space/capability-marketplace/connectorCredentialTransport'
@@ -201,7 +201,7 @@ export const WorkspaceLifecycleMenu: React.FC<WorkspaceLifecycleMenuProps> = ({
     setCloudBusy(true)
     setDangerError('')
     try {
-      const { credentialRef } = await window.tabtin.localMcp.createCloudGitCredential(
+      const { credentialRef } = await window.muse.localMcp.createCloudGitCredential(
         connection.id,
         space.organization_id,
         undefined,
@@ -219,7 +219,7 @@ export const WorkspaceLifecycleMenu: React.FC<WorkspaceLifecycleMenuProps> = ({
 
   const resolveGithubConnection = useCallback(async () => {
     if (!githubCatalog) return null
-    const connections = await window.tabtin.localMcp.listConnections()
+    const connections = await window.muse.localMcp.listConnections()
     const matched = findConnectionForRecommendedConnector(githubCatalog, connections) ?? null
     const github = matched?.enabled ? matched : null
     setGithubConnection(github)
@@ -240,16 +240,16 @@ export const WorkspaceLifecycleMenu: React.FC<WorkspaceLifecycleMenuProps> = ({
     setGithubCredentialSaving(true)
     setDangerError('')
     try {
-      const saved = await window.tabtin.localMcp.saveManualConnection({
+      const saved = await window.muse.localMcp.saveManualConnection({
         ...(githubConnection ? { connectionId: githubConnection.id } : {}),
         name: githubCatalog.name,
         description: '个人 GitHub 连接',
         enabled: true,
         transport: applyCredentialSecretToTransport(githubCatalog.transport, value.apiKey),
       })
-      const probe = await window.tabtin.localMcp.probeConnection(saved.id, { timeoutMs: 20_000 })
+      const probe = await window.muse.localMcp.probeConnection(saved.id, { timeoutMs: 20_000 })
       if (!probe.ok) throw new Error(probe.error || 'GitHub 连接探测失败')
-      const connections = await window.tabtin.localMcp.listConnections()
+      const connections = await window.muse.localMcp.listConnections()
       const connected = findConnectionForRecommendedConnector(githubCatalog, connections) ?? saved
       setGithubConnection(connected)
       setGithubCredentialDialogOpen(false)

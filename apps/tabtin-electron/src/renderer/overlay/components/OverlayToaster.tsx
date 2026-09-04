@@ -1,5 +1,5 @@
 import React from 'react'
-import { MessageHost, getMessageController } from '@tabtin/smartsheet-ui/toast'
+import { MessageHost, getMessageController } from '@muse/smartsheet-ui/toast'
 
 import { useToastOverlayMousePassthrough } from '../hooks/useToastOverlayMousePassthrough'
 
@@ -23,12 +23,12 @@ export function OverlayToaster() {
 
   // 从错误 hug 态恢复：挂载即清掉主进程 toastStackSize，强制全屏穿透。
   React.useEffect(() => {
-    void window.tabtin?.overlay?.setToastStackSize?.(null)
+    void window.muse?.overlay?.setToastStackSize?.(null)
   }, [])
 
   // Windows：无可见卡片时隐藏 toast 子窗，避免全屏穿透 HWND 打断 OLE HTML5 拖拽。
   React.useEffect(() => {
-    void window.tabtin?.overlay?.setToastContentVisible?.(hasVisible)
+    void window.muse?.overlay?.setToastContentVisible?.(hasVisible)
   }, [hasVisible])
 
   useToastOverlayMousePassthrough(hasVisible)

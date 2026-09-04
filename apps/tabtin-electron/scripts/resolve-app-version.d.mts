@@ -8,7 +8,7 @@ export declare function readSourceVersion(): string
 /**
  * 按 build profile 派生 packaged app 的 version 字符串。
  *
- * @param profile  TABTIN_BUILD_PROFILE 取值：'production' | 'preprod' | 'local' | undefined / null / ''（dev）
+ * @param profile  MUSE_BUILD_PROFILE 取值：'production' | 'preprod' | 'local' | undefined / null / ''（dev）
  * @param sourceVersion  缺省时自动从 apps/tabtin-electron/package.json#version 读
  * @returns 派生版本字符串（与 packaged app.getVersion() 严格相等）
  * @throws  profile 非法（避免 typo 静默退化成 production）

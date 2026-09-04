@@ -4,7 +4,7 @@ import {
   getRollbackResourceDetailsFromState,
   hasWorkspaceFilesFailure,
 } from '../../../../stores/chat/checkpoint/utils/rollbackResult'
-import type { SessionRollbackState } from '@tabtin/chat-client'
+import type { SessionRollbackState } from '@muse/chat-client'
 import { buildCheckpointSemanticFeedback, isSimpleRollback } from '@utils/chat/checkpointFeedback'
 import type { DiffFileEntry } from '../CheckpointDiffSheet'
 import { canContinueWithoutFileRestore } from '../../../../services/fileHistoryIpc'

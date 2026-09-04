@@ -4,7 +4,7 @@ import {
   hasInternalMarker,
   setInternalMarker,
   type Message,
-} from '@tabtin/agent-runtime/engine'
+} from '@muse/agent-runtime/engine'
 import { buildAgentProfileHook } from '../agent-profile-hook.js'
 
 function user(text: string): Message {

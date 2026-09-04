@@ -1,5 +1,5 @@
 /**
- * Re-export from @tabtin/browser-core for backward compatibility.
+ * Re-export from @muse/browser-core for backward compatibility.
  * Actual implementation lives in packages/browser-core/src/utils/response-builder.ts
  */
 export {
@@ -8,4 +8,4 @@ export {
   buildStopOnErrorResult,
   buildTabMissingResult,
   buildTopLevelErrorResult,
-} from '@tabtin/browser-core';
+} from '@muse/browser-core';

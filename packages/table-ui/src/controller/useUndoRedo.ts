@@ -11,7 +11,7 @@ import { useRecordHistory } from './useRecordHistory'
 import { useTableHistory } from './useTableHistory'
 import { shouldHandleTableUndoShortcut } from './tableUndoKeyboard'
 
-import type { HistoryOperationOut } from '@tabtin/table-core'
+import type { HistoryOperationOut } from '@muse/table-core'
 
 export type {
   CollabUndoRedoState,

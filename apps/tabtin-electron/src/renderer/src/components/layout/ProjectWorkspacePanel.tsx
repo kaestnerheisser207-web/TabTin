@@ -42,7 +42,7 @@ import {
   type Space,
   type SpaceContextItem,
   type OrganizationMember,
-} from '@tabtin/app-shell'
+} from '@muse/app-shell'
 import { useCloudDocumentPreviewStore } from '@/components/chat/preview/useCloudDocumentPreviewStore'
 import { MarkdownRenderer } from '@/components/chat/markdown/MarkdownRenderer'
 import { useContextInjectionStore } from '@/stores/useContextInjectionStore'
@@ -855,7 +855,7 @@ const AssetsPane: React.FC<{ project: Space }> = ({ project }) => {
               project.organization_id,
               asset.id,
             )
-        const opened = await window.tabtin?.openExternal?.(result.url)
+        const opened = await window.muse?.openExternal?.(result.url)
         if (!opened?.success) {
           window.open(result.url, '_blank', 'noopener,noreferrer')
         }

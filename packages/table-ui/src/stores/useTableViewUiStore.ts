@@ -1,6 +1,6 @@
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
-import type { ViewFilter, ViewGroup, ViewFilterLogic } from '@tabtin/table-core'
+import type { ViewFilter, ViewGroup, ViewFilterLogic } from '@muse/table-core'
 
 const buildScopeKey = (tableId?: string | null, viewId?: string | null) => {
   if (!tableId || !viewId) {

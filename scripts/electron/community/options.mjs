@@ -1,6 +1,6 @@
 export function parseCommunityDevArgs(argv) {
   const options = {
-    region: process.env.TABTIN_DEV_REGION || 'auto',
+    region: process.env.MUSE_DEV_REGION || 'auto',
     skipBackend: false,
     doctor: false,
     dryRun: false,

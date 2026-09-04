@@ -2,7 +2,7 @@
  * Wave 11 IPC 迁移：验证 approval / askUser slice 默认优先走本地 Runtime IPC。
  *
  * 业务契约：
- *   - 只要 `window.tabtin.agentEngine` 存在且用户没显式 `localStorage.tabtin_local_runtime='false'`，
+ *   - 只要 `window.muse.agentEngine` 存在且用户没显式 `localStorage.tabtin_local_runtime='false'`，
  *     决策提交必须走 `agentEngine.submitHitlBatch` (approval) / `submitAskUserResponse` (askUser)
  *     而不是 `client.messages.*`；
  *   - Django `/api/orchestration/agent/{review,answer}` 在 Wave 11 已下线（urls_deferred.py L47-48）。
@@ -16,19 +16,19 @@
  *   2. IPC 不可用时，不得调用旧 HTTP client，而是回填"需要设备"提示
  */
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
-import type { ChatClient } from '@tabtin/chat-client'
+import type { ChatClient } from '@muse/chat-client'
 
 // 收口后 slice 经 agentService 出站；mock 门面直接透传到
-// window.tabtin.agentEngine，保持本单测隔离（不加载 hub 的 chatApi 重依赖链），
+// window.muse.agentEngine，保持本单测隔离（不加载 hub 的 chatApi 重依赖链），
 // 同时验证「slice → 门面 → IPC bridge」调用链仍成立。
 vi.mock('@/services/agentService', () => ({
   getSessionController: () => ({
     submitApproval: (...args: unknown[]) =>
       (globalThis as { window: { tabtin: { agentEngine: { submitHitlBatch: (...a: unknown[]) => unknown } } } })
-        .window.tabtin.agentEngine.submitHitlBatch(...args),
+        .window.muse.agentEngine.submitHitlBatch(...args),
     answerAskUser: (...args: unknown[]) =>
       (globalThis as { window: { tabtin: { agentEngine: { submitAskUserResponse: (...a: unknown[]) => unknown } } } })
-        .window.tabtin.agentEngine.submitAskUserResponse(...args),
+        .window.muse.agentEngine.submitAskUserResponse(...args),
     // （第二刀）：dismiss / skip 降级路径需要 cancelHitlInteraction。
     // 测试若挂了 stub 就用之，否则返 `{success: true}` 让 fire-and-forget 不抛。
     cancelHitlInteraction: (payload: unknown) => {
@@ -716,7 +716,7 @@ describe('Wave 11 HITL local-IPC routing', () => {
     expect(updateSessionMessages).toHaveBeenCalledTimes(1)
   })
 
-  it('window.tabtin.agentEngine 不存在时回填需要设备的提示（preload 未注入场景）', async () => {
+  it('window.muse.agentEngine 不存在时回填需要设备的提示（preload 未注入场景）', async () => {
     removeAgentEngineStub()
     const reviewAgent = vi.fn().mockResolvedValue({ success: true })
     const updateSessionMessages = vi.fn()

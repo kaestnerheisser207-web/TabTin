@@ -1,5 +1,5 @@
 /**
- * @tabtin/agent-runtime/history — 跨轮记忆共享模块。
+ * @muse/agent-runtime/history — 跨轮记忆共享模块。
  *
  * 宿主无关的消息装填逻辑：从持久化/内存消息源选出最近 N 轮历史，
  * 展开 tool_use/tool_result 对，构建 runtime.query 的 initialMessages。

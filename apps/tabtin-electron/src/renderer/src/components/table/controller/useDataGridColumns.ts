@@ -2,8 +2,8 @@ import {
   useDataGridColumns as useDataGridColumnsBase,
   type DataGridColumnsResult,
   type UseDataGridColumnsInput as UseDataGridColumnsInputBase,
-} from '@tabtin/table-ui'
-import type { Field, ViewMeta } from '@tabtin/table-core'
+} from '@muse/table-ui'
+import type { Field, ViewMeta } from '@muse/table-core'
 
 export interface UseDataGridColumnsInput
   extends Omit<UseDataGridColumnsInputBase, 'orderedFields' | 'currentView'> {

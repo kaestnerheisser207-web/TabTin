@@ -5,7 +5,7 @@
  *   1. will-attach-webview 白名单裁决（策略在 attach-policy.ts 纯函数层）
  *      —— 无条件安装（不受 feature flag 控制），同时覆盖 Tin 沙箱 guest。
  *   2. announce/attach/bind 三段配对（pending-guests.ts）——只在
- *      flag=webview（TABTIN_BROWSER_CONTAINER）时接受 announce。
+ *      flag=webview（MUSE_BROWSER_CONTAINER）时接受 announce。
  *   3. 配对成功后的能力装配：ViewFactory.adoptWebviewGuest（VSR / RunSession /
  *      Workspace / ResourceDetection / 反检测 / 资源拦截 / popup 接管）+
  *      CrawlViewEventManager 事件桥（与 WCV 同一 crawl-view:event 链路，
@@ -390,7 +390,7 @@ export function registerWebviewHostIpcHandlers(): void {
   guardedHandle('webview-host:announce', async (_event, tabId: string, options: WebviewAnnounceOptions) => {
     try {
       if (!isWebviewContainerEnabled()) {
-        return { success: false, error: 'webview container disabled (TABTIN_BROWSER_CONTAINER!=webview)' }
+        return { success: false, error: 'webview container disabled (MUSE_BROWSER_CONTAINER!=webview)' }
       }
       if (!tabId || typeof tabId !== 'string') {
         return { success: false, error: 'tabId is required' }

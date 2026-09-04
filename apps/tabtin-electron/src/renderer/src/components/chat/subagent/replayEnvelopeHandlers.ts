@@ -2,7 +2,7 @@
  * Subagent replay envelope 事件 handler（从 applyEnvelopeEvent 拆分）。
  */
 
-import type { ChatMessage, MessageBlock } from '@tabtin/chat-client'
+import type { ChatMessage, MessageBlock } from '@muse/chat-client'
 
 export interface EnvelopeLine {
   type?: string

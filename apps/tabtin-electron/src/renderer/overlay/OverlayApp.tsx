@@ -1,6 +1,6 @@
 import React, { useCallback, useMemo, useState } from 'react'
 import { useQueryClient } from '@tanstack/react-query'
-import { Button, OVERLAY_SURFACE_CLASS } from '@tabtin/smartsheet-ui'
+import { Button, OVERLAY_SURFACE_CLASS } from '@muse/smartsheet-ui'
 
 import type { OverlayConfirmPayload, OverlayGlobalSearchPayload, OverlayNotificationPayload, OverlayUpdatePromptPayload } from '@shared/overlay/types'
 import { invalidateNotifications } from '@/hooks/queries/notification'
@@ -108,7 +108,7 @@ function OverlayModalLayer() {
   const resolveConfirm = useCallback((confirmed: boolean) => {
     setConfirmState((current) => {
       if (current) {
-        window.tabtin?.overlay?.sendConfirmResult?.({
+        window.muse?.overlay?.sendConfirmResult?.({
           type: 'confirm-result',
           requestId: current.requestId,
           confirmed,
@@ -131,7 +131,7 @@ function OverlayModalLayer() {
           tabScopeKey={globalSearchContext.tabScopeKey}
           onClose={() => {
             setGlobalSearchOpen(false)
-            window.tabtin?.overlay?.syncGlobalSearchClosed?.()
+            window.muse?.overlay?.syncGlobalSearchClosed?.()
           }}
         />
       ) : null}
@@ -148,7 +148,7 @@ function OverlayModalLayer() {
           organizationId={notification.organizationId ?? null}
           onClose={() => {
             setNotification(null)
-            window.tabtin?.overlay?.notificationClosed?.()
+            window.muse?.overlay?.notificationClosed?.()
           }}
         />
       ) : null}

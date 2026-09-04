@@ -11,7 +11,7 @@
  *   - verifyCollabAccess(resourceType, resourceId, token)
  */
 
-import { joinApiPath } from "@tabtin/config";
+import { joinApiPath } from "@muse/config";
 
 import { env } from "../env.js";
 

@@ -108,7 +108,7 @@ describe('ipc-lazy: W2-δ 错误 envelope 路径', () => {
   })
 
   afterEach(() => {
-    delete process.env.TABTIN_EAGER_IPC
+    delete process.env.MUSE_EAGER_IPC
   })
 
   describe('HANDLER_NOT_FOUND envelope', () => {

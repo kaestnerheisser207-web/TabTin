@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
-import { toast } from '@tabtin/smartsheet-ui/toast'
+import { toast } from '@muse/smartsheet-ui/toast'
 import { navigateToVirtualItem } from '../../viewport/virtualizerViewportBridge'
 import type { TurnNavigatorEntry } from '../../turn/turnNavigator'
 import type { ConversationViewportEvent } from '../../viewport/types'

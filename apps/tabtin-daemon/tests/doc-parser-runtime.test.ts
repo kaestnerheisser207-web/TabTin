@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from 'vitest';
-import type { WorkerTaskRunner } from '@tabtin/local-docparse/workers';
+import type { WorkerTaskRunner } from '@muse/local-docparse/workers';
 
 import { DocParserRuntime } from '../src/platform/content/document/doc-parser-runner.js';
 

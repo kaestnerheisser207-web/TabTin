@@ -8,7 +8,7 @@
  *   - path/url 对齐 Django 2048 上限
  */
 import { describe, it, expect } from 'vitest';
-import { FOCUS_SNAPSHOT_LIMITS } from '@tabtin/contracts/agent';
+import { FOCUS_SNAPSHOT_LIMITS } from '@muse/contracts/agent';
 import { PromptForwardPayloadSchema } from '../src/prompt.js';
 
 const BASE = {

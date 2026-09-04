@@ -2,7 +2,7 @@ import React from 'react'
 import { render, screen } from '@testing-library/react'
 import { describe, expect, it, vi } from 'vitest'
 import { ThinkingModeSelector } from '../ThinkingModeSelector'
-import type { Model } from '@tabtin/chat-client'
+import type { Model } from '@muse/chat-client'
 
 vi.mock('@utils/cn', () => ({
   cn: (...parts: Array<string | false | null | undefined>) => parts.filter(Boolean).join(' '),

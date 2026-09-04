@@ -1,6 +1,6 @@
 import { act, renderHook } from '@testing-library/react'
 import { describe, expect, it, vi } from 'vitest'
-import type { ChatSession } from '@tabtin/chat-client'
+import type { ChatSession } from '@muse/chat-client'
 import {
   ARCHIVE_INLINE_CONFIRM_COOLDOWN_MS,
   ARCHIVE_INLINE_CONFIRM_TIMEOUT_MS,

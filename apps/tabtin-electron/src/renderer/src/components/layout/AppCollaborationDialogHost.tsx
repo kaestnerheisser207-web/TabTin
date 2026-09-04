@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react'
-import { AgentApiService, type Agent } from '@tabtin/app-shell'
+import { AgentApiService, type Agent } from '@muse/app-shell'
 import {
   Button,
   Dialog,

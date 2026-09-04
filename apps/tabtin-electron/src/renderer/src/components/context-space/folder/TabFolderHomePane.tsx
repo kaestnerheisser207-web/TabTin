@@ -189,7 +189,7 @@ export const TabFolderHomePane: React.FC<TabFolderHomePaneProps> = ({ spaceId })
   }, [t])
 
   const verifyDirectoryAvailable = useCallback(async (rootPath: string) => {
-    const pathExists = window.tabtin?.fileSystem?.pathExists
+    const pathExists = window.muse?.fileSystem?.pathExists
     if (!pathExists) return true
     try {
       const result = await pathExists(rootPath)
@@ -249,7 +249,7 @@ export const TabFolderHomePane: React.FC<TabFolderHomePaneProps> = ({ spaceId })
 
   const handleAddDirectory = useCallback(async () => {
     if (!folderScopeReady) return
-    const tabtin = window.tabtin
+    const tabtin = window.muse
     if (!tabtin?.showOpenDialog) {
       toast({
         title: t('folder.errors.openFolderTitle', { defaultValue: 'Failed to open folder' }),

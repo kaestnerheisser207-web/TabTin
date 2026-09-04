@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { CollabStatus, ForceCloseOverlay } from '@tabtin/collab-core'
+import { CollabStatus, ForceCloseOverlay } from '@muse/collab-core'
 import { OnlinePresencePopover } from '@components/collab/OnlinePresencePopover'
 import { useTranslation } from 'react-i18next'
 import { FileText } from 'lucide-react'
@@ -12,8 +12,8 @@ import {
   toast,
 } from '@components/ui'
 import { ContextDialogHeader } from '@components/context-space/ContextDialogHeader'
-import '@tabtin/tabdoc-ui/editor/prosemirror.css'
-import type { TabdocComment, TabdocDocument, ExportFormat } from '@tabtin/tabdoc-ui/api-client'
+import '@muse/tabdoc-ui/editor/prosemirror.css'
+import type { TabdocComment, TabdocDocument, ExportFormat } from '@muse/tabdoc-ui/api-client'
 import {
   COMMENT_RAIL_BREAKPOINT_PX,
   COMMENT_RAIL_WIDTH_PX,
@@ -22,15 +22,15 @@ import {
   exportDocument,
   exportDocumentBlob,
   listDocumentComments,
-} from '@tabtin/tabdoc-ui/api-client'
-import type { OrganizationMember } from '@tabtin/app-shell'
+} from '@muse/tabdoc-ui/api-client'
+import type { OrganizationMember } from '@muse/app-shell'
 import type {
   SaveState,
   DocumentSyncState,
   DocumentLoadErrorKind,
-} from '@tabtin/tabdoc-ui/use-doc-editor'
-import { useAppHostClient } from '@tabtin/app-host-sdk'
-import { useTabDocHostActions } from '@tabtin/tabdoc-ui'
+} from '@muse/tabdoc-ui/use-doc-editor'
+import { useAppHostClient } from '@muse/app-host-sdk'
+import { useTabDocHostActions } from '@muse/tabdoc-ui'
 import {
   DocumentCommentsSection as SharedDocumentCommentsSection,
   SendToChatButton,
@@ -49,7 +49,7 @@ import {
   type DocumentCommentMentionCandidate,
   useCommentRailController,
   useDocEditorViewState,
-} from '@tabtin/tabdoc-ui/editor'
+} from '@muse/tabdoc-ui/editor'
 import {
   DocumentCommentThreadsHost,
   type CommentThreadsCapabilityMode,
@@ -74,7 +74,7 @@ import type {
   HocuspocusProvider,
   CollaborativeState,
   TabDocCollaborationUser,
-} from '@tabtin/tabdoc-ui/use-collaborative-doc-editor'
+} from '@muse/tabdoc-ui/use-collaborative-doc-editor'
 import { TableSelector } from './editor/tabdata-block/TableSelector'
 import { DRAG_TYPE_TAB_META } from '@/utils/split-coordinator'
 import { sendSelectionToChat } from '@/services/sendSelectionToChat'
@@ -1102,7 +1102,7 @@ export function DocEditorView({
             <Button
               variant="link"
               className="h-auto p-0 text-accent"
-              onClick={() => void window.tabtin?.showItemInFolder?.(savedPath)}
+              onClick={() => void window.muse?.showItemInFolder?.(savedPath)}
             >
               {tExport('success.showInFolder', { defaultValue: '打开文件位置' })}
             </Button>

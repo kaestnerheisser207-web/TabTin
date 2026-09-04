@@ -1,5 +1,5 @@
 /**
- * tabtin/no-design-system-violations
+ * muse/no-design-system-violations
  *
  * renderer 全域设计系统 token 守门规则（design-system.md §2 / §3 / §4 / §10）。
  * 把 cursor rule `frontend-design-system.mdc` 列的高频踩坑钉成 lint 信号，范围由
@@ -11,8 +11,8 @@
  *   - 浮层实底 `bg-popover` → 浮层必须走 `OVERLAY_SURFACE_CLASS` 不透明中性面（§10.2）
  * 复用三类 token 违规：禁用字号、像素字号、`/50` `/70` 透明度。
  *
- * 关闭：文件级 `/* eslint-disable tabtin/no-design-system-violations -- 理由 *\/`；
- * 行级 `// eslint-disable-next-line tabtin/no-design-system-violations -- 理由`。
+ * 关闭：文件级 `/* eslint-disable muse/no-design-system-violations -- 理由 *\/`；
+ * 行级 `// eslint-disable-next-line muse/no-design-system-violations -- 理由`。
  *
  * 注意：裸 `<button>` / `<input>` / 手写 `fixed inset-0` modal 的收敛**不**由本规则
  * 承担——那是「组件替换」而非「类名违规」，字符串 lint 无法安全判定（误伤面极大），
@@ -82,7 +82,7 @@ const rule = {
     docs: {
       description:
         'renderer 全域设计系统 token 守门：禁用默认字号 / 像素字号 / 违规透明度 /50 /70 / 硬编码 z-index / 浮层实底 bg-popover。',
-      url: 'https://github.com/TabTin/TabTinAgent/blob/main/eslint-rules/README.md#tabtinno-design-system-violations',
+      url: 'https://github.com/TabTin/TabTinAgent/blob/main/eslint-rules/README.md#museno-design-system-violations',
     },
     schema: [],
     messages: MESSAGES,

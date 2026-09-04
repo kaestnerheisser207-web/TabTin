@@ -14,7 +14,7 @@ import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useShallow } from 'zustand/react/shallow'
 import { AlertTriangle, Code2, FileText, Folder, FolderSearch, MonitorOff } from 'lucide-react'
-import { Button, toast } from '@tabtin/smartsheet-ui'
+import { Button, toast } from '@muse/smartsheet-ui'
 import { useSpaceStore } from '@stores/useSpaceStore'
 import { useDeviceStore } from '@stores/useDeviceStore'
 import { SETTINGS_HINT, SETTINGS_LABEL } from '@components/settings/settingsUi'
@@ -142,7 +142,7 @@ export const ProfileWorkingDirForm: React.FC<ProfileWorkingDirFormProps> = ({
       return
     }
     let cancelled = false
-    const fs = window.tabtin?.fileSystem
+    const fs = window.muse?.fileSystem
     if (!fs?.pathExists) {
       return
     }
@@ -166,7 +166,7 @@ export const ProfileWorkingDirForm: React.FC<ProfileWorkingDirFormProps> = ({
     }
     if (!space) return
     let cancelled = false
-    const lookup = window.tabtin?.fileSystem?.lookupSpaceSandbox
+    const lookup = window.muse?.fileSystem?.lookupSpaceSandbox
     if (!lookup) {
       setLegacySandbox(null)
       return
@@ -294,7 +294,7 @@ export const ProfileWorkingDirForm: React.FC<ProfileWorkingDirFormProps> = ({
 
   const handlePickDir = useCallback(
     async (options?: { autoSave?: boolean }) => {
-      const tabtin = window.tabtin
+      const tabtin = window.muse
       if (!tabtin?.showOpenDialog) {
         toast({
           title: t('workingDir.pickUnavailable', {
@@ -370,7 +370,7 @@ export const ProfileWorkingDirForm: React.FC<ProfileWorkingDirFormProps> = ({
   )
 
   const handleOpenInFinder = useCallback(() => {
-    const tabtin = window.tabtin
+    const tabtin = window.muse
     if (!tabtin?.openPath || !workingDir) return
     void tabtin.openPath(workingDir)
   }, [workingDir])
@@ -400,7 +400,7 @@ export const ProfileWorkingDirForm: React.FC<ProfileWorkingDirFormProps> = ({
     try {
       let inferredType: WorkingDirType = 'mixed'
       try {
-        const result = await window.tabtin?.git?.isGitRepo?.(legacySandbox.path)
+        const result = await window.muse?.git?.isGitRepo?.(legacySandbox.path)
         if (result?.success && result?.isRepo) inferredType = 'code'
       } catch {
         // ignore；保持 mixed

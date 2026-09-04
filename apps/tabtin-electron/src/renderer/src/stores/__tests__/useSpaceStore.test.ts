@@ -22,7 +22,7 @@ const { mockLoadSpaces, mockAppShellUseSpaceStore } = vi.hoisted(() => {
   }
 })
 
-vi.mock('@tabtin/app-shell', () => ({
+vi.mock('@muse/app-shell', () => ({
   useSpaceStore: mockAppShellUseSpaceStore,
 }))
 
@@ -42,7 +42,7 @@ beforeEach(async () => {
 })
 
 describe('useSpaceStore', () => {
-  it('renderer 侧继续重导出 @tabtin/app-shell 的 space store', async () => {
+  it('renderer 侧继续重导出 @muse/app-shell 的 space store', async () => {
     expect(useSpaceStore).toBe(mockAppShellUseSpaceStore)
 
     await useSpaceStore.getState().loadSpaces('ws-1')

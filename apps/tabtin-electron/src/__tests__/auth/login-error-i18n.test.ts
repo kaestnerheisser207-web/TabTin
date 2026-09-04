@@ -29,7 +29,7 @@ vi.mock('@/constants/upload', () => ({
   fetchUploadConfig: vi.fn(),
 }))
 
-vi.mock('@tabtin/smartsheet-ui', () => ({
+vi.mock('@muse/smartsheet-ui', () => ({
   toast: vi.fn(),
 }))
 

@@ -17,7 +17,7 @@ import {
   composeNotificationPrompt,
   type NotificationEnvelope,
   type NotificationQueue,
-} from '@tabtin/terminal-core'
+} from '@muse/terminal-core'
 
 export interface NotificationIdleDrainLogger {
   info(message: string): void

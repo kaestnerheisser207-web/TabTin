@@ -6,12 +6,12 @@ import { SelectionRegionType, type IRange } from './grid/interface'
 
 let latestGridProps: Record<string, any> | null = null
 
-vi.mock('@tabtin/smartsheet-ui', () => ({
+vi.mock('@muse/smartsheet-ui', () => ({
   resolveSelectChipColors: () => ({ backgroundColor: '#eee', color: '#111' }),
 }))
 
-vi.mock('@tabtin/table-engine', async (importOriginal) => {
-  const original = await importOriginal<typeof import('@tabtin/table-engine')>()
+vi.mock('@muse/table-engine', async (importOriginal) => {
+  const original = await importOriginal<typeof import('@muse/table-engine')>()
   return {
     ...original,
     resolveRecordId: (row: { id?: string; __recordId?: string }) =>

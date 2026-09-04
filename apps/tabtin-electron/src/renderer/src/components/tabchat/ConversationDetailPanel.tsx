@@ -11,7 +11,7 @@ import {
   X, UserPlus, UserMinus, Crown, Shield, Loader2, Bot, Users,
   Bell, BellOff, Pin, Trash2, LogOut, Pencil, Check, Ban, Replace,
 } from 'lucide-react'
-import { toast } from '@tabtin/smartsheet-ui'
+import { toast } from '@muse/smartsheet-ui'
 import { cn } from '@utils/cn'
 import { ChatIconTooltip } from '@components/chat/panel/ChatIconTooltip'
 import { DetailedRowListSkeleton } from '@components/common/ListSkeletons'

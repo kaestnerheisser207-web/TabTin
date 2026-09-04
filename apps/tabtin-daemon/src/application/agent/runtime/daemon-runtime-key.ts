@@ -2,7 +2,7 @@ import {
   disabledAppsExtraKeysMatch,
   normalizeDisabledAppsExtraKey,
   type RuntimeDisabledAppsExtraKey,
-} from '@tabtin/agent-host/runtime'
+} from '@muse/agent-host/runtime'
 
 export interface DaemonRuntimeExtraKey extends RuntimeDisabledAppsExtraKey {
   workspaceId: string

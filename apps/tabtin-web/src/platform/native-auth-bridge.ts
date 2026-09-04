@@ -1,5 +1,5 @@
-import { RefreshTemporarilyUnavailableError } from '@tabtin/api-client'
-import type { AuthAdapter } from '@tabtin/platform-adapter'
+import { RefreshTemporarilyUnavailableError } from '@muse/api-client'
+import type { AuthAdapter } from '@muse/platform-adapter'
 
 export type NativeAuthRefreshResult =
   | { status: 'succeeded'; accessToken: string; expiresAt: number | null }
@@ -13,13 +13,13 @@ interface NativeAuthHost {
 
 declare global {
   interface Window {
-    __TABTIN_NATIVE_AUTH__?: NativeAuthHost
+    __MUSE_NATIVE_AUTH__?: NativeAuthHost
   }
 }
 
 export function hasNativeAuthHost(): boolean {
   return typeof window !== 'undefined'
-    && typeof window.__TABTIN_NATIVE_AUTH__?.refresh === 'function'
+    && typeof window.__MUSE_NATIVE_AUTH__?.refresh === 'function'
 }
 
 /**
@@ -30,7 +30,7 @@ export function hasNativeAuthHost(): boolean {
 export async function refreshAccessTokenFromNativeHost(
   adapter: AuthAdapter,
 ): Promise<{ access_token: string; refresh_token: string } | null> {
-  const host = window.__TABTIN_NATIVE_AUTH__
+  const host = window.__MUSE_NATIVE_AUTH__
   if (!host) return null
 
   let result: NativeAuthRefreshResult

@@ -1,4 +1,4 @@
-import { getToolManifests, type ActionExecutorAdapter } from '@tabtin/action-tools/headless'
+import { getToolManifests, type ActionExecutorAdapter } from '@muse/action-tools/headless'
 import type { McpToolDefinition } from './contracts.js'
 
 const HIDDEN_TOOLS = new Set(getToolManifests()

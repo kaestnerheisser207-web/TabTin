@@ -1,4 +1,4 @@
-import type { components } from '@tabtin/api-client'
+import type { components } from '@muse/api-client'
 import { getApiClient } from './tabtin-client'
 
 export type ChatMessageItem = components['schemas']['ChatMessage']

@@ -1,8 +1,8 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { Crown, RefreshCw } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
-import { StatusNotice, toast } from '@tabtin/smartsheet-ui'
-import type { Organization } from '@tabtin/app-shell'
+import { StatusNotice, toast } from '@muse/smartsheet-ui'
+import type { Organization } from '@muse/app-shell'
 import type {
   MembershipUpgradeQuotePreview,
   MembershipUpgradeOrder,

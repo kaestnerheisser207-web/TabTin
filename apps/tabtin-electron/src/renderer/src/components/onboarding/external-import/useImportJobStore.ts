@@ -1,7 +1,7 @@
 /**
  * 外部 Agent 导入任务状态 store（Layer D）。
  *
- * 契约：`window.tabtin.import.run` 立即返回 jobId，真正的进度经 IPC event
+ * 契约：`window.muse.import.run` 立即返回 jobId，真正的进度经 IPC event
  * `import:progress`（onProgress 订阅）逐条推来；最终结果报告经 `status({jobId})`
  * 拉取。本 store 把这两路信息聚合成单一可订阅状态，让**向导第三步**与**悬浮进度
  * 面板**共享同一份进度——用户关掉向导 Dialog 后导入仍在后台跑，面板继续显示
@@ -19,8 +19,8 @@ import type {
   ImportRollbackOutput,
   ImportRunInput,
   ImportRunReport,
-} from '@tabtin/cli-server-core'
-import { resolveSessionScopeId } from '@tabtin/app-shell'
+} from '@muse/cli-server-core'
+import { resolveSessionScopeId } from '@muse/app-shell'
 import { useSpaceStore } from '@stores/useSpaceStore'
 import { useChatStore } from '@stores/chat/useChatStore'
 import { markExternalImportCompleted } from './importSidebarIndicator'
@@ -130,7 +130,7 @@ export const useImportJobStore = create<ImportJobStore>((set, get) => ({
   ...IDLE_SNAPSHOT,
 
   startJob: async (input) => {
-    const api = window.tabtin?.import
+    const api = window.muse?.import
     const totalSessions = input.sources.reduce((n, s) => n + (s.sessionRefs?.length ?? 0), 0)
     set({
       ...IDLE_SNAPSHOT,
@@ -207,7 +207,7 @@ export const useImportJobStore = create<ImportJobStore>((set, get) => ({
     const { jobId } = get()
     if (!jobId) return
     try {
-      await window.tabtin?.import?.cancel({ jobId })
+      await window.muse?.import?.cancel({ jobId })
     } catch {
       /* 取消失败也把 UI 置为取消态，避免卡在 running */
     }
@@ -216,12 +216,12 @@ export const useImportJobStore = create<ImportJobStore>((set, get) => ({
 
   rollbackLast: async () => {
     const { jobId, organizationId } = get()
-    if (!jobId || !window.tabtin?.import) return null
-    const listArchives = window.tabtin.import.listArchives
+    if (!jobId || !window.muse?.import) return null
+    const listArchives = window.muse.import.listArchives
     const beforeArchives = organizationId && listArchives
       ? await listArchives(organizationId).catch(() => [] as ExternalArchiveIndexEntry[])
       : []
-    const res = await window.tabtin.import.rollback({ jobId })
+    const res = await window.muse.import.rollback({ jobId })
     if (res) {
       const afterArchives = organizationId && listArchives
         ? await listArchives(organizationId).catch(() => [] as ExternalArchiveIndexEntry[])

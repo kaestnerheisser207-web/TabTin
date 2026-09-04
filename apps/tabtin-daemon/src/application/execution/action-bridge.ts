@@ -1,5 +1,5 @@
-import type { GatewayEnvelope } from '@tabtin/ws-gateway-client';
-import { PERMISSION_TIMEOUTS } from '@tabtin/agent-wire';
+import type { GatewayEnvelope } from '@muse/ws-gateway-client';
+import { PERMISSION_TIMEOUTS } from '@muse/agent-wire';
 import {
   isAutoApprovedTerminalWrite,
   containsCommandSubstitution,
@@ -12,18 +12,18 @@ import {
   resolveDataRoot,
   type TerminalExecutionPolicyPayload,
   type DegradationDecision,
-} from '@tabtin/terminal-core';
+} from '@muse/terminal-core';
 import {
   checkHardlineCommand,
   checkHardlinePath,
   CHECKPOINT_MUTATING_ACTIONS,
-} from '@tabtin/security-policy';
-import { runWithHumanInteractionContext } from '@tabtin/agent-runtime';
+} from '@muse/security-policy';
+import { runWithHumanInteractionContext } from '@muse/agent-runtime';
 import {
   createHeadlessAdapter,
   validateProjectPath,
   type ActionExecutorAdapter,
-} from '@tabtin/action-tools/headless';
+} from '@muse/action-tools/headless';
 import { resolve } from 'node:path';
 import type { DaemonConfig } from '../../base/types/daemon-config.js';
 import type { Logger } from '../../platform/observability/logging/logger.js';
@@ -213,7 +213,7 @@ export class DaemonActionBridge {
   private readonly useAdapter: boolean;
   // Wave 1.5（2026-05-13）：旧 file-lock-manager 实例字段已删除——锁的责任
   // 收口到 ActionExecutorAdapter 一侧（统一 `withFileLock` 跨入口共享 lockMap，
-  // 详见 `@tabtin/action-tools/utils/file-lock`）。外层不再嵌一道 withLock 调用，
+  // 详见 `@muse/action-tools/utils/file-lock`）。外层不再嵌一道 withLock 调用，
   // 避免「上层包了下层又包」同 key 死锁。
   private readonly admission = new ActionAdmissionController();
   // **2026-05-13**：旧版 `turnChangedFilesByProject` per-project Set 已退役。
@@ -250,9 +250,9 @@ export class DaemonActionBridge {
     this.logger = logger;
     this.ports = ports;
     this.adapter = this.createAdapter(config.capabilities ?? ['terminal_execute', 'file']);
-    this.useAdapter = process.env.TABTIN_USE_ACTION_ADAPTER !== '0';
+    this.useAdapter = process.env.MUSE_USE_ACTION_ADAPTER !== '0';
     const adapterTools = this.adapter.getRegisteredTools();
-    this.logger.info(`[ActionBridge] mode=${this.useAdapter ? 'adapter' : 'legacy'} (TABTIN_USE_ACTION_ADAPTER=${process.env.TABTIN_USE_ACTION_ADAPTER ?? 'unset'}), adapter tools (${adapterTools.length}): ${adapterTools.join(', ')}`);
+    this.logger.info(`[ActionBridge] mode=${this.useAdapter ? 'adapter' : 'legacy'} (MUSE_USE_ACTION_ADAPTER=${process.env.MUSE_USE_ACTION_ADAPTER ?? 'unset'}), adapter tools (${adapterTools.length}): ${adapterTools.join(', ')}`);
   }
 
   private createAdapter(capabilities: Iterable<string>): ActionExecutorAdapter {

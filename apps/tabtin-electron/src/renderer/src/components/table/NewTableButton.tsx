@@ -6,7 +6,7 @@
 import React, { useState } from 'react'
 import { Plus } from 'lucide-react'
 import { motion } from 'framer-motion'
-import { CreateTableDialog, toast } from '@tabtin/smartsheet-ui'
+import { CreateTableDialog, toast } from '@muse/smartsheet-ui'
 import { useCreateTable, useTableStore } from '@/stores/useTableStore'
 import { useResolvedOrganizationId } from '@/hooks/useResolvedOrganizationId'
 import { useTranslation } from 'react-i18next'

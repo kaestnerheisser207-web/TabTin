@@ -54,7 +54,7 @@ const SETTINGS_URL: Omit<Record<PermissionKind, string>, 'notifications'> = {
 
 function resolveSettingsUrl(kind: PermissionKind): string {
   if (kind === 'notifications') {
-    const appId = process.env.TABTIN_APP_ID?.trim() || 'com.muse.app'
+    const appId = process.env.MUSE_APP_ID?.trim() || 'com.muse.app'
     return `x-apple.systempreferences:com.apple.Notifications-Settings.extension?id=${encodeURIComponent(appId)}`
   }
   return SETTINGS_URL[kind]

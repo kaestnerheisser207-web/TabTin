@@ -15,17 +15,17 @@ function transform(src: string): string {
 
 describe('remarkAutolinkResource', () => {
   it('裸 Muse 资源深链升级为可点击链接并保留完整 query', () => {
-    const uri = 'tabtin://resource/table/46ff7041-cfdd-41f4-9f7e-2f9c93236e3d?hint=tabdata&recordIds=f7372b28-0636-432c-82d2-477d6af58af5'
+    const uri = 'muse://resource/table/46ff7041-cfdd-41f4-9f7e-2f9c93236e3d?hint=tabdata&recordIds=f7372b28-0636-432c-82d2-477d6af58af5'
     const out = transform(`查看 ${uri}`)
 
     // remark-stringify 会把「label 与 href 相同」的 link 节点压成 autolink literal。
     expect(out).toContain(`<${uri}>`)
   })
 
-  it('POSIX 绝对路径升级为 tabtin://resource/file/<encoded>', () => {
+  it('POSIX 绝对路径升级为 muse://resource/file/<encoded>', () => {
     const out = transform('看这个 /Users/x/log.json 文件')
     expect(out).toContain('[/Users/x/log.json]')
-    expect(out).toContain('tabtin://resource/file/')
+    expect(out).toContain('muse://resource/file/')
     expect(out).toContain(encodeURIComponent('/Users/x/log.json'))
   })
 
@@ -37,7 +37,7 @@ describe('remarkAutolinkResource', () => {
 
   it('裸路径在行首也能识别', () => {
     const out = transform('/tmp/out.json')
-    expect(out).toContain('tabtin://resource/file/')
+    expect(out).toContain('muse://resource/file/')
   })
 
   it('文件路径含 Unicode 字符（中文）支持', () => {
@@ -59,13 +59,13 @@ describe('remarkAutolinkResource', () => {
 
   it('相对路径不识别（缺少 baseDir 上下文）', () => {
     const out = transform('看 ./relative/path.json 这个')
-    expect(out).not.toContain('tabtin://resource/file/')
+    expect(out).not.toContain('muse://resource/file/')
     expect(out).toContain('./relative/path.json')
   })
 
   it('URL 形式的文本不识别（remark-gfm 处理 url）', () => {
     const out = transform('链接 https://example.com/x 这个')
-    expect(out).not.toContain('tabtin://resource/file/')
+    expect(out).not.toContain('muse://resource/file/')
   })
 
   it('一行多个裸路径都能识别', () => {
@@ -95,7 +95,7 @@ describe('remarkAutolinkResource', () => {
     expect(() => transform('')).not.toThrow()
   })
 
-  it.each(['tabtin-preprod', 'tabtin-dev'])(
+  it.each(['muse-preprod', 'muse-dev'])(
     'bare %s resource URI becomes a link',
     (scheme) => {
       const uri = `${scheme}://resource/table/tbl_1?hint=tabdata&recordIds=rec_1`

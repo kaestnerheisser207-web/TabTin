@@ -36,7 +36,7 @@ export const MeetingLibraryView: React.FC<{
   const userId = useAuthStore((state) => state.user?.id ?? null);
 
   React.useEffect(() => {
-    const bridge = window.tabtin?.meetingRecording;
+    const bridge = window.muse?.meetingRecording;
     if (!bridge || !organizationId || !userId) {
       setArchives([]);
       setLoading(false);

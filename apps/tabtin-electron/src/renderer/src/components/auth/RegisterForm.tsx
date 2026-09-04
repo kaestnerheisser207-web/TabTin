@@ -9,7 +9,7 @@ import {
   FormLabel,
   FormMessage,
   LoadingSpinner,
-} from '@tabtin/smartsheet-ui'
+} from '@muse/smartsheet-ui'
 import { useShallow } from 'zustand/react/shallow'
 import { useAuthStore } from '@stores/useAuthStore'
 import { PasswordStrength } from '@/types/auth'
@@ -18,9 +18,9 @@ import { zxcvbn, zxcvbnOptions } from '@zxcvbn-ts/core'
 import * as zxcvbnCommonPackage from '@zxcvbn-ts/language-common'
 import * as zxcvbnEnPackage from '@zxcvbn-ts/language-en'
 import { useTranslation } from 'react-i18next'
-import { passwordHasSpecialChar } from '@tabtin/shared'
-import { useRegisterForm, CN_MOBILE_PHONE_MAX_LENGTH } from '@tabtin/shared/auth-forms'
-import { useCapsLockWarning } from '@tabtin/shared/use-caps-lock-warning'
+import { passwordHasSpecialChar } from '@muse/shared'
+import { useRegisterForm, CN_MOBILE_PHONE_MAX_LENGTH } from '@muse/shared/auth-forms'
+import { useCapsLockWarning } from '@muse/shared/use-caps-lock-warning'
 import { AUTH_EMAIL_LOGIN_ENABLED } from '@/utils/featureFlags'
 import { extractErrorMessage } from '@/utils/extract-api-error'
 import { PasswordStrengthIndicator } from './PasswordStrengthIndicator'
@@ -102,7 +102,7 @@ export const RegisterForm: React.FC<RegisterFormProps> = ({
 
   const openExternalLink = (url: string) => {
     if (!url) return
-    void window.tabtin?.openExternal?.(url)
+    void window.muse?.openExternal?.(url)
   }
 
   const form = useRegisterForm({

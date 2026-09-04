@@ -5,7 +5,7 @@
  * 转换为可在 PGlite 中执行的 SQL WHERE 子句。
  */
 
-import type { WhereNode } from '@tabtin/table-kernel'
+import type { WhereNode } from '@muse/table-kernel'
 
 export interface SqlFragment {
   sql: string

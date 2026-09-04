@@ -15,7 +15,7 @@ import {
 import {
   FieldLabel, PanelSelect, ColorSwatch,
 } from './shared/components'
-import { SectionPanel } from '@tabtin/smartsheet-ui'
+import { SectionPanel } from '@muse/smartsheet-ui'
 import { FillEditor } from './editors/FillEditor'
 import { FontSelect } from './editors/FontSelect'
 import { ScrollArea } from '../../components/ui/ScrollArea'

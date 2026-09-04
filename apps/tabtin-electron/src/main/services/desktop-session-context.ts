@@ -38,7 +38,7 @@ import type {
   DesktopExecutorScreenshotResult,
   DesktopExecutorWindowInfo,
   DesktopSessionContext,
-} from '@tabtin/desktop-contracts'
+} from '@muse/desktop-contracts'
 import { DesktopError, DesktopErrorCode } from './desktop-error-codes'
 
 /**

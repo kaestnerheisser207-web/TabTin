@@ -1,7 +1,7 @@
 /**
  * Skill 动态段召回端口（ Stage 6c）。
  *
- * Runtime 不再依赖 `@tabtin/search`。宿主必须注入实现（典型：`new RecallIndex({ scorer })`）。
+ * Runtime 不再依赖 `@muse/search`。宿主必须注入实现（典型：`new RecallIndex({ scorer })`）。
  * {@link createLexicalSkillRecall} 仅供单测 / 离线 harness，不作生产缺省回落。
  */
 
@@ -21,7 +21,7 @@ export interface SkillRecallPort {
   query(domain: string, queryText: string): Promise<SkillRecallHit[]>;
 }
 
-// ─── 本地词法 fallback（自 @tabtin/search bm25/tokenize/stopwords 精简迁入）────
+// ─── 本地词法 fallback（自 @muse/search bm25/tokenize/stopwords 精简迁入）────
 
 const RELEVANCE_RELATIVE_THRESHOLD = 0.2;
 const DEFAULT_K1 = 1.5;

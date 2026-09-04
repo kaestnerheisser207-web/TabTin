@@ -84,11 +84,11 @@ const {
   }
 })
 
-vi.mock('@tabtin/smartsheet-ui', () => ({
+vi.mock('@muse/smartsheet-ui', () => ({
   toast: toastMock,
 }))
 
-vi.mock('@tabtin/doc-editor', () => ({
+vi.mock('@muse/doc-editor', () => ({
   recordProbeEvent: vi.fn(),
 }))
 
@@ -100,7 +100,7 @@ vi.mock('../TabDocEditorConfigContext', () => ({
   useTabDocEditorConfigOptional: () => configStub,
 }))
 
-vi.mock('@tabtin/collab-core', () => ({
+vi.mock('@muse/collab-core', () => ({
   useCollabProvider: (options: unknown) => {
     collabProviderMock(options)
     return {

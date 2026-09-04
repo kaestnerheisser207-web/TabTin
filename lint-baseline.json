@@ -34,8 +34,8 @@
       "__no_rule__": 99,
       "prefer-const": 2048,
       "react-hooks/exhaustive-deps": 288,
-      "tabtin/no-chat-design-violations": 75,
-      "tabtin/prefer-scoped-activity-effects": 156
+      "muse/no-chat-design-violations": 75,
+      "muse/prefer-scoped-activity-effects": 156
     }
   }
 }

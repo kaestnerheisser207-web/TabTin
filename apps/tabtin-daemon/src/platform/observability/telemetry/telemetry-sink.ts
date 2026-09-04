@@ -9,8 +9,8 @@
  * 调用时机：`DaemonAgentHost.start()` 首行，保证早于任何埋点发出。
  */
 
-import type { TelemetryRecord } from '@tabtin/agent-runtime';
-import { setTelemetrySink } from '@tabtin/agent-runtime';
+import type { TelemetryRecord } from '@muse/agent-runtime';
+import { setTelemetrySink } from '@muse/agent-runtime';
 import { readDaemonVersion } from '../../../platform/system/update/daemon-version.js';
 import type { Logger } from '../logging/logger.js';
 

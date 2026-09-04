@@ -189,7 +189,7 @@ export const MeetingLiveSessionView: React.FC<{
 
   React.useEffect(() => {
     if (isPreview) return;
-    const bridge = window.tabtin?.meetingRecording;
+    const bridge = window.muse?.meetingRecording;
     if (!bridge) return;
     let cancelled = false;
     void bridge.getStatus().then((status) => {
@@ -332,7 +332,7 @@ export const MeetingLiveSessionView: React.FC<{
       organizationId: manifestOrganizationId,
       userId: manifestUserId,
     };
-    const bridge = window.tabtin.meetingRecording;
+    const bridge = window.muse.meetingRecording;
     let cancelled = false;
     setTranscript([]);
     const unsubscribe = bridge.onTranscriptChanged(
@@ -439,7 +439,7 @@ export const MeetingLiveSessionView: React.FC<{
   ]);
 
   React.useEffect(() => {
-    const bridge = window.tabtin?.meetingRecording;
+    const bridge = window.muse?.meetingRecording;
     if (
       !manifestSessionId ||
       !manifestOrganizationId ||
@@ -489,7 +489,7 @@ export const MeetingLiveSessionView: React.FC<{
     )
       return;
     let cancelled = false;
-    const bridge = window.tabtin.meetingRecording;
+    const bridge = window.muse.meetingRecording;
     let refreshGeneration = 0;
     const refreshCaptureDevices = () => {
       const generation = ++refreshGeneration;
@@ -537,7 +537,7 @@ export const MeetingLiveSessionView: React.FC<{
     setStopError(null);
     setControlError(null);
     try {
-      const next = await window.tabtin.meetingRecording.stop(scope);
+      const next = await window.muse.meetingRecording.stop(scope);
       setRuntimeStatus(next);
       toast({ title: t('live.endSuccess') });
       onBack();
@@ -575,7 +575,7 @@ export const MeetingLiveSessionView: React.FC<{
     }
     setControlError(null);
     try {
-      const next = await window.tabtin.meetingRecording.setCopilotEnabled(
+      const next = await window.muse.meetingRecording.setCopilotEnabled(
         scope,
         enabled,
       );
@@ -690,7 +690,7 @@ export const MeetingLiveSessionView: React.FC<{
       };
       try {
         const answer =
-          await window.tabtin.meetingRecording.answerCopilotQuestion(
+          await window.muse.meetingRecording.answerCopilotQuestion(
             scope,
             question.requestSegmentId,
           );
@@ -831,7 +831,7 @@ export const MeetingLiveSessionView: React.FC<{
     setCaptureSourceNotice(null);
     setSwitchingSource(source);
     try {
-      const bridge = window.tabtin.meetingRecording;
+      const bridge = window.muse.meetingRecording;
       const next = await (source === 'local'
         ? bridge.switchMicrophone({ ...scope, deviceId: sourceId })
         : bridge.switchSystemAudio({ ...scope, sourceId }));

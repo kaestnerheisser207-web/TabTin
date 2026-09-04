@@ -5,4 +5,4 @@ export type {
   PtyHostSession,
   PtyHostSpawnedEvent,
   PtyHostSpawnRequest,
-} from '@tabtin/pty-core'
+} from '@muse/pty-core'

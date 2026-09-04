@@ -29,7 +29,7 @@ import { NewAgentDialog } from '@components/sidebar/NewAgentButton'
 import { AgentSkillsPanel } from '@components/space-settings/AgentSkillsPanel'
 import { AgentToolsPanel } from '@components/space-settings/AgentToolsPanel'
 import { AgentMemoryGovernancePanel } from './AgentMemoryGovernancePanel'
-import { TABTIN_APP_ICON_URL } from '@/constants/appIcon'
+import { MUSE_APP_ICON_URL } from '@/constants/appIcon'
 import { extractAgentAvatarUrl, resolveAgentAvatarUrl } from '@/utils/resolveAgentAvatar'
 import { useAgentMemoryFocusStore } from '@/services/agentMemoryNavigation'
 import { useSkillLibraryContextSpaceId } from './SkillLibraryPanel'
@@ -42,7 +42,7 @@ import {
   type OrganizationAgentSummary,
 } from '@/services/organizationAgentsApi'
 import { listAgentTemplates } from '@/services/agentTemplatesApi'
-import { AgentApiService, SpaceApiService, type DeactivatedAgent } from '@tabtin/app-shell'
+import { AgentApiService, SpaceApiService, type DeactivatedAgent } from '@muse/app-shell'
 import { SettingsSectionCard } from '../SettingsSectionCard'
 import { SettingsSectionHeader } from '../SettingsSectionHeader'
 import { SettingsTabs } from '../SettingsTabs'
@@ -111,7 +111,7 @@ export const AgentListIdentityAvatar: React.FC<{
         className,
       )}
       onError={() => {
-        if (src !== TABTIN_APP_ICON_URL) setSrc(TABTIN_APP_ICON_URL)
+        if (src !== MUSE_APP_ICON_URL) setSrc(MUSE_APP_ICON_URL)
       }}
     />
   )

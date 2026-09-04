@@ -52,8 +52,8 @@ function createSession(store: PtySessionStore, id = 'test-session', maxBytes = M
 describe('PC-9: marker nonce strength', () => {
   it('generates nonce with 32 hex characters (128 bits)', () => {
     const markers = generateMarkerPair()
-    // endMarkerPrefix format: __TABTIN_CMD_END_{nonce}_
-    const match = markers.endMarkerPrefix.match(/__TABTIN_CMD_END_([a-f0-9]+)_/)
+    // endMarkerPrefix format: __MUSE_CMD_END_{nonce}_
+    const match = markers.endMarkerPrefix.match(/__MUSE_CMD_END_([a-f0-9]+)_/)
     expect(match).not.toBeNull()
     expect(match![1]).toHaveLength(32)
   })
@@ -77,8 +77,8 @@ describe('PC-9: marker nonce strength', () => {
 describe('PC-20: separate nonces for start and end markers', () => {
   it('start marker nonce differs from end marker nonce', () => {
     const markers = generateMarkerPair()
-    const startMatch = markers.startMarker.match(/__TABTIN_CMD_START_([a-f0-9]+)__/)
-    const endMatch = markers.endMarkerPrefix.match(/__TABTIN_CMD_END_([a-f0-9]+)_/)
+    const startMatch = markers.startMarker.match(/__MUSE_CMD_START_([a-f0-9]+)__/)
+    const endMatch = markers.endMarkerPrefix.match(/__MUSE_CMD_END_([a-f0-9]+)_/)
     expect(startMatch).not.toBeNull()
     expect(endMatch).not.toBeNull()
     expect(startMatch![1]).not.toBe(endMatch![1])
@@ -93,9 +93,9 @@ describe('PC-20: separate nonces for start and end markers', () => {
   it('child process cannot forge end marker from observing start marker echo', () => {
     const markers = generateMarkerPair()
     // Extract the nonce from the start marker (what a child process sees)
-    const startNonce = markers.startMarker.match(/__TABTIN_CMD_START_([a-f0-9]+)__/)![1]
+    const startNonce = markers.startMarker.match(/__MUSE_CMD_START_([a-f0-9]+)__/)![1]
     // Construct a fake end marker using the start nonce
-    const fakeEndMarker = `__TABTIN_CMD_END_${startNonce}_`
+    const fakeEndMarker = `__MUSE_CMD_END_${startNonce}_`
     // This should NOT match the real end marker prefix
     expect(fakeEndMarker).not.toBe(markers.endMarkerPrefix)
   })
@@ -104,18 +104,18 @@ describe('PC-20: separate nonces for start and end markers', () => {
 // ── PC-12: 测试标记前缀与实际代码一致 ──
 
 describe('PC-12: marker prefix consistency', () => {
-  it('generated start marker uses __TABTIN_CMD_START_ prefix', () => {
+  it('generated start marker uses __MUSE_CMD_START_ prefix', () => {
     const markers = generateMarkerPair()
-    expect(markers.startMarker).toMatch(/^__TABTIN_CMD_START_/)
+    expect(markers.startMarker).toMatch(/^__MUSE_CMD_START_/)
   })
 
-  it('generated end marker prefix uses __TABTIN_CMD_END_ prefix', () => {
+  it('generated end marker prefix uses __MUSE_CMD_END_ prefix', () => {
     const markers = generateMarkerPair()
-    expect(markers.endMarkerPrefix).toMatch(/^__TABTIN_CMD_END_/)
+    expect(markers.endMarkerPrefix).toMatch(/^__MUSE_CMD_END_/)
   })
 
-  it('MARKER_PREFIX constant is __TABTIN_CMD_', () => {
-    expect(MARKER_PREFIX).toBe('__TABTIN_CMD_')
+  it('MARKER_PREFIX constant is __MUSE_CMD_', () => {
+    expect(MARKER_PREFIX).toBe('__MUSE_CMD_')
   })
 })
 
@@ -400,8 +400,8 @@ describe('PC-18: timeout-marker race condition', () => {
 
     // Extract markers from the written command
     const written = writeFn.mock.calls[0][1] as string
-    const startMarkerMatch = written.match(/echo "(__TABTIN_CMD_START_[^"]+)"/)!
-    const endMarkerMatch = written.match(/echo "(__TABTIN_CMD_END_[a-f0-9]+_)\$/)!
+    const startMarkerMatch = written.match(/echo "(__MUSE_CMD_START_[^"]+)"/)!
+    const endMarkerMatch = written.match(/echo "(__MUSE_CMD_END_[a-f0-9]+_)\$/)!
     const startMarker = startMarkerMatch[1]
     const endMarkerPrefix = endMarkerMatch[1]
 

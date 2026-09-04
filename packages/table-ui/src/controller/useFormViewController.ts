@@ -1,6 +1,6 @@
 import { useMemo, useCallback } from 'react'
 import type { Field, ViewMeta, ViewRecordsResponse, ViewUpdateRequest } from '../types'
-import type { FieldDefaultValue, FormFieldConfig, FormViewConfig } from '@tabtin/table-core'
+import type { FieldDefaultValue, FormFieldConfig, FormViewConfig } from '@muse/table-core'
 import {
   getViewVisibilitySnapshot,
   getViewFieldOrderSnapshot,

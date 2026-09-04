@@ -23,8 +23,8 @@ import {
   ToolLogWriter,
   resolveWorkspaceSessionArchiveDir,
   resolveWorkspaceToolLogsDir,
-} from '@tabtin/agent-runtime'
-import { FileToolResultStorage } from '@tabtin/agent-runtime/engine'
+} from '@muse/agent-runtime'
+import { FileToolResultStorage } from '@muse/agent-runtime/engine'
 
 export interface SessionStorageBundleLogger {
   warn(message: string, ...args: unknown[]): void

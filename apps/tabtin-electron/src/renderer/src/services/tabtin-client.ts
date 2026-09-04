@@ -1,11 +1,11 @@
 /**
- * Electron renderer 的 @tabtin/api-client 单例。
+ * Electron renderer 的 @muse/api-client 单例。
  *
  * 通过 electronFetch 桥接 IPC 代理，保持 Electron main 进程统一转发 HTTP 请求的架构。
  * 配置了 token 注入、401 自动 refresh 重试、ApiEnvelope 解包。
  */
 
-import { createApiClient, type TabTinApiClient, type DelegatedRefresh } from '@tabtin/api-client'
+import { createApiClient, type TabTinApiClient, type DelegatedRefresh } from '@muse/api-client'
 import { electronFetch } from './electronFetch'
 import { API_CONFIG } from '@/config/api'
 import { notifyTokensSynced, notifyLogoutRequired } from '@/utils/authPersistence'
@@ -13,9 +13,9 @@ import { notifyTokensSynced, notifyLogoutRequired } from '@/utils/authPersistenc
 let _client: TabTinApiClient | null = null
 
 async function getAccessToken(): Promise<string | null> {
-  if (!window.tabtin?.auth?.getAccessToken) return null
+  if (!window.muse?.auth?.getAccessToken) return null
   try {
-    const result = await window.tabtin.auth.getAccessToken()
+    const result = await window.muse.auth.getAccessToken()
     return result?.success ? (result.token ?? null) : null
   } catch {
     return null
@@ -23,7 +23,7 @@ async function getAccessToken(): Promise<string | null> {
 }
 
 async function hasRefreshableSession(): Promise<DelegatedRefresh | null> {
-  if (!window.tabtin?.auth?.refreshAccessToken) return null
+  if (!window.muse?.auth?.refreshAccessToken) return null
   return { delegateToMain: true }
 }
 
@@ -35,10 +35,10 @@ async function refreshViaMainProcess(
   // 这个 helper 是 chat-client 的"refresh 失败兜底"路径——失败时返 null，
   // chat-client 会触发 session_expired 流程，所以 catch 黑洞是合理的。
   try {
-    const result = await window.tabtin.auth.refreshAccessToken()
+    const result = await window.muse.auth.refreshAccessToken()
     if (!result?.accessToken) return null
 
-    const authBundle = await window.tabtin.auth.get().catch(() => null)
+    const authBundle = await window.muse.auth.get().catch(() => null)
     const storedRefreshToken = authBundle?.refreshToken || ''
 
     notifyTokensSynced({

@@ -1,6 +1,6 @@
 import React from 'react'
 import { Search } from 'lucide-react'
-import { Input } from '@tabtin/smartsheet-ui'
+import { Input } from '@muse/smartsheet-ui'
 import { cn } from '@utils/cn'
 import {
   CONTEXT_PAGE_HEADER_GAP,

@@ -106,9 +106,9 @@ vi.mock('@/utils/logger', () => ({
   createLogger: () => ({ debug: vi.fn(), info: vi.fn(), warn: vi.fn(), error: vi.fn() }),
 }))
 vi.mock('@/i18n', () => ({ default: { t: (key: string) => key } }))
-vi.mock('@tabtin/smartsheet-ui', () => ({ toast: vi.fn() }))
+vi.mock('@muse/smartsheet-ui', () => ({ toast: vi.fn() }))
 
-import { toast } from '@tabtin/smartsheet-ui'
+import { toast } from '@muse/smartsheet-ui'
 import {
   disconnectCentrifugo,
   reconnectCentrifugo,

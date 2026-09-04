@@ -62,7 +62,7 @@ export function useOrganizationExternalArchives(spaces: Array<{
     setLoading(true)
     void (async () => {
       try {
-        const api = window.tabtin?.import
+        const api = window.muse?.import
         if (!api?.listArchives) {
           if (!cancelled) {
             setArchives([])

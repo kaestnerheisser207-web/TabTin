@@ -1,4 +1,4 @@
-import { TABTIN_APP_ICON_URL } from '@/constants/appIcon'
+import { MUSE_APP_ICON_URL } from '@/constants/appIcon'
 import { resolveAgentAvatarPresetUrl } from '@/constants/agentAvatarPresets'
 
 export interface AgentAvatarSettings {
@@ -31,5 +31,5 @@ export function extractAgentAvatarUrl(
  */
 export function resolveAgentAvatarUrl(avatarUrl?: string | null): string {
   const trimmed = avatarUrl?.trim()
-  return trimmed || TABTIN_APP_ICON_URL
+  return trimmed || MUSE_APP_ICON_URL
 }

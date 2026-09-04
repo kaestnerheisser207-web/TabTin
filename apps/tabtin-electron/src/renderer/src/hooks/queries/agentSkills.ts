@@ -14,7 +14,7 @@
  * HTTP 通道与 hooks/queries/skills.ts 一致：electronFetch → 主进程 IPC 代理，
  * 禁止 renderer 裸 fetch 拼 URL。
  */
-import { joinApiPath } from '@tabtin/config'
+import { joinApiPath } from '@muse/config'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { API_CONFIG, API_ENDPOINTS } from '@/config/api'
 import { useAuthStore } from '@/stores/useAuthStore'

@@ -144,7 +144,7 @@ export const normalizeTabKeys = (tabKeys: unknown): string[] | null => {
 // ---------------------------------------------------------------------------
 
 export const shouldDebugTabSwitch = () =>
-  typeof globalThis !== 'undefined' && Boolean(globalThis.__TABTIN_DEBUG_TAB_SWITCH__)
+  typeof globalThis !== 'undefined' && Boolean(globalThis.__MUSE_DEBUG_TAB_SWITCH__)
 
 // ---------------------------------------------------------------------------
 // Shallow comparison for syncItemsByType de-duplication

@@ -246,7 +246,7 @@ async function prewarmHostRuntimeForDraftSession(args: {
   } | null | undefined
 }): Promise<void> {
   const { sessionId, spaceId, currentAgent, warmModel } = args
-  const prewarmApi = window.tabtin?.agentEngine?.prewarmRuntime
+  const prewarmApi = window.muse?.agentEngine?.prewarmRuntime
   if (typeof prewarmApi !== 'function') return
   const agentId = currentAgent?.id?.trim()
   const modelId = warmModel?.id?.trim()

@@ -12,7 +12,7 @@ import pytest
 
 from apps.services.agent_engine.services.blocks_to_llm_context import (
     ANTHROPIC_STANDARD_BLOCK_TYPES,
-    TABTIN_BLOCK_TYPES,
+    MUSE_BLOCK_TYPES,
     chat_messages_to_llm_messages,
     strip_tabtin_blocks_for_llm,
 )
@@ -402,7 +402,7 @@ class TestChatMessagesToLLMMessages:
 class TestConstants:
     def test_tabtin_block_types_complete(self):
         # 6 种 tabtin_* 块都注册
-        assert TABTIN_BLOCK_TYPES == frozenset({
+        assert MUSE_BLOCK_TYPES == frozenset({
             'tabtin_source_ref',
             'tabtin_rich_content',
             'tabtin_composer_preset',
@@ -413,5 +413,5 @@ class TestConstants:
 
     def test_anthropic_standard_block_types_no_tabtin(self):
         # 标准块集合不包含任何 tabtin_*
-        for t in TABTIN_BLOCK_TYPES:
+        for t in MUSE_BLOCK_TYPES:
             assert t not in ANTHROPIC_STANDARD_BLOCK_TYPES

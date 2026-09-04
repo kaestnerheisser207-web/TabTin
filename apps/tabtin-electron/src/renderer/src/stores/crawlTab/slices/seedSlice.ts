@@ -53,7 +53,7 @@ export function createSeedActions(get: GetFn, set: SetFn) {
           }
         }
 
-        if (globalThis.__TABTIN_DEBUG_TAB_SWITCH__) {
+        if (globalThis.__MUSE_DEBUG_TAB_SWITCH__) {
           console.log('%c[CrawlTabStore] markColdStartComplete', 'color: #4CAF50; font-weight: bold', {
             crawlspaceId,
             remainingColdStarts: Object.keys(next),

@@ -13,7 +13,7 @@ import { t } from '../i18n'
 // BR-8 P3b：network/console 历史读自 browser-core 的双端共享缓冲（写入由两端的
 // attachRuntimeLogCapture 经 BrowserContext.onCDPEvent 常驻喂入）。本模块不再自持
 // 并行 network/console Map —— route 拦截规则（route/unroute）仍留在本地。
-import { getSharedNetworkLog, getSharedConsoleLog } from '@tabtin/browser-core'
+import { getSharedNetworkLog, getSharedConsoleLog } from '@muse/browser-core'
 
 // ── Types ─────────────────────────────────────────────────
 

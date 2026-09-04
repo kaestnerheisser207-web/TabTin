@@ -107,7 +107,7 @@ class CloudWorkspaceService(BaseService):
             return existing
 
         runtime_image = str(
-            getattr(settings, "TABTIN_CLOUD_RUNTIME_IMAGE", "") or ""
+            getattr(settings, "MUSE_CLOUD_RUNTIME_IMAGE", "") or ""
         ).strip()
         if not _IMMUTABLE_IMAGE.match(runtime_image):
             raise ServiceError(
@@ -241,15 +241,15 @@ class CloudWorkspaceService(BaseService):
     def _select_worker(self, organization: Organization) -> CloudWorkerNode:
         edition = getattr(
             settings,
-            "TABTIN_CLOUD_WORKER_EDITION",
-            getattr(settings, "TABTIN_EDITION", "saas"),
+            "MUSE_CLOUD_WORKER_EDITION",
+            getattr(settings, "MUSE_EDITION", "saas"),
         )
         workers = CloudWorkerNode.objects.select_for_update().filter(
             edition=edition,
             state=CloudWorkerNode.State.READY,
             protocol_version=getattr(
                 settings,
-                "TABTIN_CLOUD_WORKER_PROTOCOL_VERSION",
+                "MUSE_CLOUD_WORKER_PROTOCOL_VERSION",
                 "1",
             ),
         )
@@ -274,12 +274,12 @@ class CloudWorkspaceService(BaseService):
     def _enforce_user_quota(self) -> None:
         if getattr(
             settings,
-            "TABTIN_CLOUD_WORKER_EDITION",
-            getattr(settings, "TABTIN_EDITION", "saas"),
+            "MUSE_CLOUD_WORKER_EDITION",
+            getattr(settings, "MUSE_EDITION", "saas"),
         ) != "saas":
             return
         limit = int(
-            getattr(settings, "TABTIN_CLOUD_MAX_ACTIVE_WORKSPACES_PER_USER", 1)
+            getattr(settings, "MUSE_CLOUD_MAX_ACTIVE_WORKSPACES_PER_USER", 1)
         )
         active_count = CloudRuntimeAllocation.objects.filter(
             workspace__created_by=self.user,
@@ -309,7 +309,7 @@ class CloudWorkspaceService(BaseService):
             allocation_count=Count("id"),
         )
         runtime_storage_gb = int(
-            getattr(settings, "TABTIN_CLOUD_RUNTIME_STORAGE_GB", 2)
+            getattr(settings, "MUSE_CLOUD_RUNTIME_STORAGE_GB", 2)
         )
         return {
             "cpu": int(active_usage["cpu"] or 0),
@@ -323,7 +323,7 @@ class CloudWorkspaceService(BaseService):
     def _worker_has_capacity(cls, worker: CloudWorkerNode) -> bool:
         usage = cls._worker_usage(worker)
         runtime_storage_gb = int(
-            getattr(settings, "TABTIN_CLOUD_RUNTIME_STORAGE_GB", 2)
+            getattr(settings, "MUSE_CLOUD_RUNTIME_STORAGE_GB", 2)
         )
         return (
             usage["cpu"] + _DEFAULT_CPU_MILLICORES

@@ -174,7 +174,7 @@ export const TabCodeGitWorkflowDialog: React.FC<
     const remote = upstream.includes('/') ? upstream.split('/')[0] : 'origin';
     await runGitAction(
       'pull',
-      () => window.tabtin.git.pull(rootPath, { remote }),
+      () => window.muse.git.pull(rootPath, { remote }),
       t('gitFlow.pullSuccess'),
     );
   }, [data.branchMeta.upstream, rootPath, runGitAction, t]);
@@ -182,7 +182,7 @@ export const TabCodeGitWorkflowDialog: React.FC<
   const handleFetch = useCallback(async () => {
     await runGitAction(
       'fetch',
-      () => window.tabtin.git.fetch(rootPath),
+      () => window.muse.git.fetch(rootPath),
       t('gitFlow.fetchSuccess'),
     );
   }, [rootPath, runGitAction, t]);
@@ -335,7 +335,7 @@ export const TabCodeGitWorkflowDialog: React.FC<
                       type="button"
                       className="mt-2 inline-flex items-center gap-1 rounded-md px-2 py-1 text-caption text-muted-foreground transition-colors hover:bg-background/60 hover:text-foreground"
                       onClick={() =>
-                        void window.tabtin.openExternal(latestOutcome.link!)
+                        void window.muse.openExternal(latestOutcome.link!)
                       }
                     >
                       <ExternalLink className="h-3 w-3" />

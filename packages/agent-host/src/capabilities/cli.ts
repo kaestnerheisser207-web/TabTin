@@ -18,23 +18,23 @@
  * beforeRun 首算；#5503 beforeIteration 在 in_progress todo 推进（检索词变化）时重算，
  * 让相关命令随任务推进刷新。fetcher 抛错 / 无命令 → 本轮不注入（下一轮重试）。
  *
- * ：本 Cap 从 `@tabtin/agent-runtime` 的 capability/core 迁到共享宿主包
- * `@tabtin/agent-host`——agent-runtime 的 core 只留通用能力（filesystem / shell）。
+ * ：本 Cap 从 `@muse/agent-runtime` 的 capability/core 迁到共享宿主包
+ * `@muse/agent-host`——agent-runtime 的 core 只留通用能力（filesystem / shell）。
  * 依赖的 `CapabilityBase` / `EngineHooks` / `SYSTEM_SECTION_NAMES` / 召回 helper 等经
- * `@tabtin/agent-runtime` 跨包 import（单向、合法）。
+ * `@muse/agent-runtime` 跨包 import（单向、合法）。
  */
 
-import type { Tool, EngineHooks, RunHookContext } from '@tabtin/agent-runtime/engine';
-import { SYSTEM_SECTION_NAMES } from '@tabtin/agent-runtime/engine';
-import type { CapabilityCategory } from '@tabtin/agent-runtime/capability';
+import type { Tool, EngineHooks, RunHookContext } from '@muse/agent-runtime/engine';
+import { SYSTEM_SECTION_NAMES } from '@muse/agent-runtime/engine';
+import type { CapabilityCategory } from '@muse/agent-runtime/capability';
 import {
   CapabilityBase,
   buildRecallQuery,
   collectDescribedKeys,
   blankSeenDescriptions,
-} from '@tabtin/agent-runtime/capability';
-import type { SemanticScorer } from '@tabtin/search';
-import { RecallIndex } from '@tabtin/search';
+} from '@muse/agent-runtime/capability';
+import type { SemanticScorer } from '@muse/search';
+import { RecallIndex } from '@muse/search';
 import { MEDIA_IMAGE_CLI_INSTRUCTION } from './media-image.js';
 
 // ─── Fetcher 契约 ────────────────────────────────────────────────────
@@ -81,7 +81,7 @@ export interface CliCapInit {
   /** 模型 context window 大小（tokens），用于静态段命令名索引的预算（~1%）。 */
   contextWindowTokens?: number;
   /**
-   * 语义打分器（ 双路召回），由宿主注入（`@tabtin/local-embedding`
+   * 语义打分器（ 双路召回），由宿主注入（`@muse/local-embedding`
    * 的 `createSemanticScorer`）。缺省时动态段为纯词法路，行为与注入前一致。
    */
   semanticScorer?: SemanticScorer;

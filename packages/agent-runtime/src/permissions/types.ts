@@ -5,7 +5,7 @@
  * 拿掉（hasJudge=true 永真，pipeline 0 触发），其 driver / layers / 配套
  * 接口（PermissionPipeline / PermissionLayer / PermissionContext /
  * PermissionDecision / LayerOutcome / LayerId / PipelineRunMode）随之删除。
- * 真实判决主路径走 `@tabtin/security-policy` `judge()`（5 步状态机）。
+ * 真实判决主路径走 `@muse/security-policy` `judge()`（5 步状态机）。
  *
  * 本文件留下的两组类型仍是生产链路：
  *   - `ApprovalMemo*`：跨 thread / always 审批记忆（judge.ts + LocalPermissionHandler

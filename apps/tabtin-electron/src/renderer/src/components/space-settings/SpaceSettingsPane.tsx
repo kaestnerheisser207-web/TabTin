@@ -52,7 +52,7 @@ import { ExecutionLimitsPanel } from '@components/space-settings/ExecutionLimits
 import { SubAgentPanel } from '@components/space-settings/SubAgentPanel'
 import { MemoryPanel } from '@components/space-settings/MemoryPanel'
 import { TeamSpaceMembersSection } from '@components/space-settings/TeamSpaceMembersSection'
-import type { Space } from '@tabtin/app-shell'
+import type { Space } from '@muse/app-shell'
 import { cn } from '@utils/cn'
 import {
   AgentAvatarUploader,
@@ -228,7 +228,7 @@ const GeneralSection: React.FC<{
       return
     }
     let cancelled = false
-    const browserEnv = (window as any).tabtin?.browserEnv
+    const browserEnv = (window as any).muse?.browserEnv
     if (!browserEnv?.getEnvironmentForSpace) return undefined
     void browserEnv
       .getEnvironmentForSpace({ spaceId: space.id })
@@ -325,7 +325,7 @@ const GeneralSection: React.FC<{
       throw new Error(msg)
     }
     if (envToCleanup) {
-      const browserEnv = (window as any).tabtin?.browserEnv
+      const browserEnv = (window as any).muse?.browserEnv
       if (browserEnv?.delete) {
         try {
           const r = await browserEnv.delete({ id: envToCleanup.id })

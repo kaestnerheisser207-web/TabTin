@@ -9,7 +9,7 @@ vi.mock('react-i18next', () => ({
   }),
 }))
 
-vi.mock('@tabtin/smartsheet-ui/toast', () => ({
+vi.mock('@muse/smartsheet-ui/toast', () => ({
   toast: vi.fn(),
 }))
 

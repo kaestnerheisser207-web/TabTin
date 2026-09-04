@@ -1,5 +1,5 @@
 import React from 'react'
-import { Button } from '@tabtin/smartsheet-ui'
+import { Button } from '@muse/smartsheet-ui'
 
 interface PanelToggleButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   title: string

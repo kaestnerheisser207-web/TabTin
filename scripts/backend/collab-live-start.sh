@@ -8,7 +8,7 @@ set -euo pipefail
 #   这是默认轻量模式的增量能力，不是替代方案。
 #
 # 本脚本会启动：
-#   - 先增量构建 Collab 的 workspace 依赖闭包（@tabtin/doc-editor 等 export dist 的包）
+#   - 先增量构建 Collab 的 workspace 依赖闭包（@muse/doc-editor 等 export dist 的包）
 #   - Collab-Live，端口为 COLLAB_LIVE_PORT（默认 4100）
 #
 # 本脚本不会启动：
@@ -76,9 +76,9 @@ fi
 mkdir -p "${LOG_DIR}"
 
 # Collab 走 tsx 源码，但 workspace 包 export dist。启动前按真实依赖图增量补齐，
-# 避免冷启动缺 @tabtin/doc-editor / @tabtin/config 等导致 4100 健康检查失败。
+# 避免冷启动缺 @muse/doc-editor / @muse/config 等导致 4100 健康检查失败。
 echo "🔍 准备 Collab workspace 依赖..."
-if [[ "${TABTIN_SKIP_COLLAB_WORKSPACE_BUILD:-0}" == "1" ]]; then
+if [[ "${MUSE_SKIP_COLLAB_WORKSPACE_BUILD:-0}" == "1" ]]; then
   echo "⏭️  Collab workspace 依赖已由 Community 拓扑构建准备，跳过"
 else
   node "${ROOT_DIR}/scripts/electron/run-predev-build-with-lock.mjs" --seed collab-live

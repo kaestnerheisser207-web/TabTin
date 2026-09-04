@@ -1,1 +1,1 @@
-export { InProcessPtyHostClient } from '@tabtin/pty-core'
+export { InProcessPtyHostClient } from '@muse/pty-core'

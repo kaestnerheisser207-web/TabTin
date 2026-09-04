@@ -21,7 +21,7 @@
  * `SpaceApiService.searchOrganization` / `getChatClient().sessions.listAll`。
  */
 
-import { API_ENDPOINTS, joinApiPath } from '@tabtin/config'
+import { API_ENDPOINTS, joinApiPath } from '@muse/config'
 import { apiBaseUrl, getAuthToken } from './base.js'
 import { createLogger } from '../utils/logger.js'
 

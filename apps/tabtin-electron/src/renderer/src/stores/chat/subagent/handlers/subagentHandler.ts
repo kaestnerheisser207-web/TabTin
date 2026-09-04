@@ -52,8 +52,8 @@
  */
 
 import i18n from '@/i18n'
-import { AgentStreamEvents } from '@tabtin/ws-gateway-client'
-import type { SpeakerIdentity } from '@tabtin/agent-wire'
+import { AgentStreamEvents } from '@muse/ws-gateway-client'
+import type { SpeakerIdentity } from '@muse/agent-wire'
 import type {
   AgentStepType,
   AgentStepStatus,

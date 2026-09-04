@@ -1,6 +1,6 @@
 import { type RefObject } from 'react'
 import type { TFunction } from 'i18next'
-import type { CrawlspaceHost } from '@tabtin/crawlspace-core'
+import type { CrawlspaceHost } from '@muse/crawlspace-core'
 import { getElementViewBounds } from '@/utils/crawl-view-bounds'
 import { reportCrawlViewError } from '../../../crawlspace/utils/reportCrawlViewError'
 import { createIPCErrorHandler } from '../utils/ipc-error-handler'

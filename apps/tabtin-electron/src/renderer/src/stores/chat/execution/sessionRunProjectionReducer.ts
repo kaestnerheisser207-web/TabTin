@@ -1,7 +1,7 @@
 import type {
   ChatSessionRunState,
   ChatSessionRunStatus,
-} from '@tabtin/chat-client'
+} from '@muse/chat-client'
 
 export type SessionRunProjectionSource =
   | 'event'

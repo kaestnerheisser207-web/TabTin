@@ -1,6 +1,6 @@
-// ── 从 @tabtin/table-kernel 导入核心类型和常量 ──
-export type { FieldType, CellValueType, LinkRelationship, LinkCellValue } from '@tabtin/table-kernel'
-export type { LinkFilterItem, LinkFilterConfig, LinkFieldOptions } from '@tabtin/table-kernel'
+// ── 从 @muse/table-kernel 导入核心类型和常量 ──
+export type { FieldType, CellValueType, LinkRelationship, LinkCellValue } from '@muse/table-kernel'
+export type { LinkFilterItem, LinkFilterConfig, LinkFieldOptions } from '@muse/table-kernel'
 export {
   FIELD_CELL_VALUE_TYPE,
   FIELD_IS_MULTIPLE_CELL_VALUE,
@@ -9,9 +9,9 @@ export {
   getCellValueType,
   getIsMultipleCellValue,
   isMultiValueLink,
-} from '@tabtin/table-kernel'
+} from '@muse/table-kernel'
 
-import type { FieldType, CellValueType } from '@tabtin/table-kernel'
+import type { FieldType, CellValueType } from '@muse/table-kernel'
 
 export interface FieldOptions {
   choices?: Array<string | Record<string, unknown>>

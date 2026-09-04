@@ -9,7 +9,7 @@
  * - Uniform error surface for callers
  */
 
-import { validateUrl } from '@tabtin/security-policy';
+import { validateUrl } from '@muse/security-policy';
 
 const DEFAULT_TIMEOUT = 30_000;
 const DEFAULT_SEGMENT_TIMEOUT = 60_000;

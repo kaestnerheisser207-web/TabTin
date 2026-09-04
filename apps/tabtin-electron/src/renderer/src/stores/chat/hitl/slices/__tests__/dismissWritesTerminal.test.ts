@@ -14,19 +14,19 @@
  * 本文件验「dismiss 也走 IPC 写回终态」——第二刀新增的行为。
  */
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
-import type { ChatClient } from '@tabtin/chat-client'
+import type { ChatClient } from '@muse/chat-client'
 
 vi.mock('@/services/agentService', () => ({
   getSessionController: () => ({
     submitApproval: (...args: unknown[]) =>
       (globalThis as { window: { tabtin: { agentEngine: { submitHitlBatch: (...a: unknown[]) => unknown } } } })
-        .window.tabtin.agentEngine.submitHitlBatch(...args),
+        .window.muse.agentEngine.submitHitlBatch(...args),
     answerAskUser: (...args: unknown[]) =>
       (globalThis as { window: { tabtin: { agentEngine: { submitAskUserResponse: (...a: unknown[]) => unknown } } } })
-        .window.tabtin.agentEngine.submitAskUserResponse(...args),
+        .window.muse.agentEngine.submitAskUserResponse(...args),
     cancelHitlInteraction: (payload: unknown) =>
       (globalThis as { window: { tabtin: { agentEngine: { cancelHitlInteraction: (p: unknown) => unknown } } } })
-        .window.tabtin.agentEngine.cancelHitlInteraction(payload),
+        .window.muse.agentEngine.cancelHitlInteraction(payload),
   }),
 }))
 

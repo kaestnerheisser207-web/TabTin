@@ -341,9 +341,9 @@ describe('ToolFailureTracker — exclude kinds', () => {
 });
 
 describe('ToolFailureTracker — env override', () => {
-  it('overrides notice threshold from TABTIN_TOOL_FAILURE_NOTICE_STREAK', () => {
+  it('overrides notice threshold from MUSE_TOOL_FAILURE_NOTICE_STREAK', () => {
     const tracker = new ToolFailureTracker({
-      env: { TABTIN_TOOL_FAILURE_NOTICE_STREAK: '2' },
+      env: { MUSE_TOOL_FAILURE_NOTICE_STREAK: '2' },
     });
     expect(tracker.getConfig().thresholds.notice).toBe(2);
     tracker.recordFailure({ tool: 'a', error_kind: 'x' });
@@ -354,8 +354,8 @@ describe('ToolFailureTracker — env override', () => {
   it('overrides both thresholds simultaneously', () => {
     const tracker = new ToolFailureTracker({
       env: {
-        TABTIN_TOOL_FAILURE_NOTICE_STREAK: '2',
-        TABTIN_TOOL_FAILURE_NUDGE_STREAK: '4',
+        MUSE_TOOL_FAILURE_NOTICE_STREAK: '2',
+        MUSE_TOOL_FAILURE_NUDGE_STREAK: '4',
       },
     });
     // ：thresholds 现含 terminate 第三档（跟随合并，由专项测试覆盖），
@@ -363,9 +363,9 @@ describe('ToolFailureTracker — env override', () => {
     expect(tracker.getConfig().thresholds).toMatchObject({ notice: 2, nudge: 4 });
   });
 
-  it('disables tracker when TABTIN_TOOL_FAILURE_TRACKER_ENABLED=false', () => {
+  it('disables tracker when MUSE_TOOL_FAILURE_TRACKER_ENABLED=false', () => {
     const tracker = new ToolFailureTracker({
-      env: { TABTIN_TOOL_FAILURE_TRACKER_ENABLED: 'false' },
+      env: { MUSE_TOOL_FAILURE_TRACKER_ENABLED: 'false' },
     });
     expect(tracker.getConfig().enabled).toBe(false);
     for (let i = 0; i < 10; i++) {
@@ -377,8 +377,8 @@ describe('ToolFailureTracker — env override', () => {
   it('falls back to defaults when env values are non-numeric', () => {
     const tracker = new ToolFailureTracker({
       env: {
-        TABTIN_TOOL_FAILURE_NOTICE_STREAK: 'abc',
-        TABTIN_TOOL_FAILURE_NUDGE_STREAK: 'NaN',
+        MUSE_TOOL_FAILURE_NOTICE_STREAK: 'abc',
+        MUSE_TOOL_FAILURE_NUDGE_STREAK: 'NaN',
       },
     });
     expect(tracker.getConfig().thresholds).toEqual(
@@ -389,7 +389,7 @@ describe('ToolFailureTracker — env override', () => {
   it('falls back when env value is negative / zero / out of range', () => {
     for (const bad of ['0', '-1', '999', '1.5e3']) {
       const t = new ToolFailureTracker({
-        env: { TABTIN_TOOL_FAILURE_NOTICE_STREAK: bad },
+        env: { MUSE_TOOL_FAILURE_NOTICE_STREAK: bad },
       });
       expect(t.getConfig().thresholds.notice).toBe(
         DEFAULT_TOOL_FAILURE_BUDGET_THRESHOLDS.notice,
@@ -400,8 +400,8 @@ describe('ToolFailureTracker — env override', () => {
   it('falls back when notice >= nudge invariant violated', () => {
     const t = new ToolFailureTracker({
       env: {
-        TABTIN_TOOL_FAILURE_NOTICE_STREAK: '5',
-        TABTIN_TOOL_FAILURE_NUDGE_STREAK: '3',
+        MUSE_TOOL_FAILURE_NOTICE_STREAK: '5',
+        MUSE_TOOL_FAILURE_NUDGE_STREAK: '3',
       },
     });
     // 整 thresholds 回落默认（不局部修复）
@@ -415,8 +415,8 @@ describe('ToolFailureTracker — env override', () => {
     // 浮点 → floor，合法（注：阈值仍受 notice<nudge 约束）
     const tFloat = new ToolFailureTracker({
       env: {
-        TABTIN_TOOL_FAILURE_NOTICE_STREAK: '2.9',
-        TABTIN_TOOL_FAILURE_NUDGE_STREAK: '5.1',
+        MUSE_TOOL_FAILURE_NOTICE_STREAK: '2.9',
+        MUSE_TOOL_FAILURE_NUDGE_STREAK: '5.1',
       },
     });
     expect(tFloat.getConfig().thresholds).toMatchObject({ notice: 2, nudge: 5 });
@@ -424,15 +424,15 @@ describe('ToolFailureTracker — env override', () => {
     // 边界 100 inclusive 允许
     const tHundred = new ToolFailureTracker({
       env: {
-        TABTIN_TOOL_FAILURE_NOTICE_STREAK: '99',
-        TABTIN_TOOL_FAILURE_NUDGE_STREAK: '100',
+        MUSE_TOOL_FAILURE_NOTICE_STREAK: '99',
+        MUSE_TOOL_FAILURE_NUDGE_STREAK: '100',
       },
     });
     expect(tHundred.getConfig().thresholds).toMatchObject({ notice: 99, nudge: 100 });
 
     // 边界 100.1 拒绝（> 100 即非法）
     const tOver = new ToolFailureTracker({
-      env: { TABTIN_TOOL_FAILURE_NUDGE_STREAK: '100.1' },
+      env: { MUSE_TOOL_FAILURE_NUDGE_STREAK: '100.1' },
     });
     expect(tOver.getConfig().thresholds.nudge).toBe(
       DEFAULT_TOOL_FAILURE_BUDGET_THRESHOLDS.nudge,
@@ -441,8 +441,8 @@ describe('ToolFailureTracker — env override', () => {
     // 科学计数法 5e1 = 50 通过 + Math.floor，合法（与 nudge 默认 5 不冲突时单独覆盖）
     const tSci = new ToolFailureTracker({
       env: {
-        TABTIN_TOOL_FAILURE_NOTICE_STREAK: '5e0', // = 5
-        TABTIN_TOOL_FAILURE_NUDGE_STREAK: '5e1',  // = 50
+        MUSE_TOOL_FAILURE_NOTICE_STREAK: '5e0', // = 5
+        MUSE_TOOL_FAILURE_NUDGE_STREAK: '5e1',  // = 50
       },
     });
     expect(tSci.getConfig().thresholds).toMatchObject({ notice: 5, nudge: 50 });
@@ -450,7 +450,7 @@ describe('ToolFailureTracker — env override', () => {
 
   it('explicit options.config overrides env', () => {
     const t = new ToolFailureTracker({
-      env: { TABTIN_TOOL_FAILURE_NOTICE_STREAK: '2' },
+      env: { MUSE_TOOL_FAILURE_NOTICE_STREAK: '2' },
       config: { thresholds: { notice: 4, nudge: 6, terminate: 8 } },
     });
     expect(t.getConfig().thresholds).toMatchObject({ notice: 4, nudge: 6 });
@@ -459,13 +459,13 @@ describe('ToolFailureTracker — env override', () => {
   it('accepts boolean alias values for enabled flag', () => {
     for (const onValue of ['on', '1', 'enabled', 'yes', 'true']) {
       const t = new ToolFailureTracker({
-        env: { TABTIN_TOOL_FAILURE_TRACKER_ENABLED: onValue },
+        env: { MUSE_TOOL_FAILURE_TRACKER_ENABLED: onValue },
       });
       expect(t.getConfig().enabled).toBe(true);
     }
     for (const offValue of ['off', '0', 'disabled', 'no', 'false']) {
       const t = new ToolFailureTracker({
-        env: { TABTIN_TOOL_FAILURE_TRACKER_ENABLED: offValue },
+        env: { MUSE_TOOL_FAILURE_TRACKER_ENABLED: offValue },
       });
       expect(t.getConfig().enabled).toBe(false);
     }
@@ -806,7 +806,7 @@ describe('ToolFailureTracker — composite scenarios', () => {
 // 取消不该 streak）外，所有 12 类 file pipeline kind 应该正常累积 streak +
 // 触发 notice (3) → nudge (5)。
 
-import { FILE_PIPELINE_ERROR_KINDS } from '@tabtin/file-pipeline-errors';
+import { FILE_PIPELINE_ERROR_KINDS } from '@muse/file-pipeline-errors';
 
 const FILE_PIPELINE_NUDGE_ELIGIBLE_KINDS = FILE_PIPELINE_ERROR_KINDS.filter(
   (kind) => !DEFAULT_TOOL_FAILURE_EXCLUDE_KINDS.includes(kind),
@@ -953,9 +953,9 @@ describe('ToolFailureTracker — terminate hard-stop ()', () => {
     expect(tracker.getConfig().thresholds.terminate).toBeGreaterThan(9);
   });
 
-  it('env TABTIN_TOOL_FAILURE_TERMINATE_STREAK overrides threshold', () => {
+  it('env MUSE_TOOL_FAILURE_TERMINATE_STREAK overrides threshold', () => {
     const tracker = new ToolFailureTracker({
-      env: { TABTIN_TOOL_FAILURE_TERMINATE_STREAK: '6' },
+      env: { MUSE_TOOL_FAILURE_TERMINATE_STREAK: '6' },
     });
     expect(tracker.getConfig().thresholds.terminate).toBe(6);
     for (let i = 0; i < 6; i++) {

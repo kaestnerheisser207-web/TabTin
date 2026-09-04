@@ -8,7 +8,7 @@
 import React, { useState, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Search, User, IdCard } from 'lucide-react'
-import { toast } from '@tabtin/smartsheet-ui'
+import { toast } from '@muse/smartsheet-ui'
 import { Dialog, DialogContent, DialogTitle } from '@components/ui'
 import { searchOrganizationMembers, type SearchMemberResult } from '@/services/tabchatApi'
 

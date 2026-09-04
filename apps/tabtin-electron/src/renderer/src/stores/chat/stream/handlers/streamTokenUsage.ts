@@ -31,8 +31,8 @@
  * 保持原单点行为。
  */
 
-import type { MessageUsage } from '@tabtin/agent-wire'
-import type { ChatMessage } from '@tabtin/chat-client'
+import type { MessageUsage } from '@muse/agent-wire'
+import type { ChatMessage } from '@muse/chat-client'
 import { useChatStore } from '@/stores/chat/useChatStore'
 import { extractChatSessionTokenUsage } from '@/utils/chatSessionTokenUsage'
 

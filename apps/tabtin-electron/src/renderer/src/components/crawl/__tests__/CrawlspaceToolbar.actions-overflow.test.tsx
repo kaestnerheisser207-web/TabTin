@@ -6,7 +6,7 @@ import {
   CrawlspaceToolbar,
   TOOLBAR_ACTIONS_OVERFLOW_MAX_WIDTH_PX,
   shouldOverflowToolbarActions,
-} from '@tabtin/crawlspace-core'
+} from '@muse/crawlspace-core'
 
 describe('shouldOverflowToolbarActions', () => {
   it('is true strictly below 560', () => {

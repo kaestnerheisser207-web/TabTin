@@ -58,7 +58,7 @@ export const NotificationBell: React.FC<{ size?: 'default' | 'rail' }> = ({ size
 
   // 子窗口面板关闭（clickaway / 点击后）→ 同步主 renderer open 状态，保证 toggle 逻辑正确。
   React.useEffect(() => {
-    const unsubscribe = window.tabtin?.overlay?.onNotificationClosed?.(() => setOpen(false))
+    const unsubscribe = window.muse?.overlay?.onNotificationClosed?.(() => setOpen(false))
     return () => {
       unsubscribe?.()
     }
@@ -71,7 +71,7 @@ export const NotificationBell: React.FC<{ size?: 'default' | 'rail' }> = ({ size
     if (next) {
       void refreshPending()
     }
-    void window.tabtin?.overlay?.push({
+    void window.muse?.overlay?.push({
       type: 'notification',
       open: next,
       anchor: rect

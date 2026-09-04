@@ -13,8 +13,8 @@
  */
 
 import { describe, it, expect } from 'vitest';
-import { evaluateAgentModeToolAccess } from '@tabtin/agent-modes';
-import type { AgentModeName, ToolLike } from '@tabtin/agent-modes';
+import { evaluateAgentModeToolAccess } from '@muse/agent-modes';
+import type { AgentModeName, ToolLike } from '@muse/agent-modes';
 
 function makeMcpTool(isReadOnly: boolean): ToolLike {
   // 实际生产环境的 mcp_call_tool 只有 isReadOnly=false 一个变体（见

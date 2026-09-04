@@ -50,7 +50,7 @@ let mockSelectedOrganization: { id: string; name: string; owner_id: string; type
 let mockCurrentUserRole: string | null = 'owner'
 let mockUser = { id: 'user-owner' }
 
-vi.mock('@tabtin/smartsheet-ui', () => ({
+vi.mock('@muse/smartsheet-ui', () => ({
   Button: ({ children, ...props }: React.ButtonHTMLAttributes<HTMLButtonElement>) => (
     <button type="button" {...props}>{children}</button>
   ),

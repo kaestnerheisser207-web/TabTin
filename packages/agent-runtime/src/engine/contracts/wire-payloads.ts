@@ -1,7 +1,7 @@
 /**
  * Runtime-owned wire payload shapes（ Stage 5a）。
  *
- * 字段名 / 字面量与 `@tabtin/agent-wire` Zod infer 对齐；runtime 不再
+ * 字段名 / 字面量与 `@muse/agent-wire` Zod infer 对齐；runtime 不再
  * type-import agent-wire。常量表见 stream-events.ts（Stage 5b）；Zod 校验
  * 仍在 wire / host（Stage 5c）。
  */

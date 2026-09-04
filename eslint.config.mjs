@@ -1,7 +1,7 @@
 import tseslint from 'typescript-eslint';
 import reactHooksPlugin from 'eslint-plugin-react-hooks';
 import reactPlugin from 'eslint-plugin-react';
-import tabtinPlugin from './eslint-rules/index.js';
+import musePlugin from './eslint-rules/index.js';
 
 export default tseslint.config(
   {
@@ -12,7 +12,7 @@ export default tseslint.config(
     plugins: {
       'react-hooks': reactHooksPlugin,
       'react': reactPlugin,
-      'tabtin': tabtinPlugin,
+      'muse': musePlugin,
     },
     rules: {
       '@typescript-eslint/no-unused-vars': ['warn', {
@@ -33,7 +33,7 @@ export default tseslint.config(
       // contract Wave 1-B：默认 off；只在 renderer/src 范围内开 error（见下方 override）。
       // 主进程 / preload / 测试代码里有大量历史 `catch {}`，需要专门 wave 配合迁移工具
       // 一起治理；本批次先把 renderer 端两个反模式收敛掉。
-      'tabtin/no-empty-catch': 'off',
+      'muse/no-empty-catch': 'off',
     },
   },
   //  网络请求收口护栏：禁直 fetch 拼业务 API URL → 走 apiService.request /
@@ -50,7 +50,7 @@ export default tseslint.config(
       'packages/table-core/src/**/*.{ts,tsx}',
     ],
     rules: {
-      'tabtin/no-direct-fetch-in-renderer': 'error',
+      'muse/no-direct-fetch-in-renderer': 'error',
     },
   },
   // contract Wave 1-B：renderer 端反模式收敛。
@@ -60,12 +60,12 @@ export default tseslint.config(
   {
     files: ['apps/tabtin-electron/src/renderer/src/**/*.{ts,tsx}'],
     rules: {
-      'tabtin/no-empty-catch': 'error',
+      'muse/no-empty-catch': 'error',
       // 2026-05-05 react-virtual 死循环治理：MessageList 等 8 处 useVirtualizer
       // 因 inline getItemKey/estimateSize/getScrollElement 触发 "Maximum update
       // depth exceeded" 死循环（参考 TanStack/virtual#1092）。这条规则在 PR 阶段
       // 静态拦截 inline 反模式，避免回归。详见 eslint-rules/use-virtualizer-stable-callbacks.js。
-      'tabtin/use-virtualizer-stable-callbacks': 'error',
+      'muse/use-virtualizer-stable-callbacks': 'error',
       // 2026-05-07 Wave 5 DX 保障：在 React effect 内引导走 useScoped* 包装 hook
       // （`apps/tabtin-electron/src/renderer/src/hooks/spaceActivity/`），避免
       // hot-Space 子树未来被无意中引入 zombie effect（Space 隐藏后副作用仍在跑）。
@@ -78,7 +78,7 @@ export default tseslint.config(
       // 未来收紧路径：hot-Space 子树（components/{chat, context-space, crawl,
       // crawlspace-workspace} + layout/SpaceWorkbenchHost* / SpaceChatRailHost*）
       // 升 error；其他范围保持 warn。详见 eslint-rules/prefer-scoped-activity-effects.js。
-      'tabtin/prefer-scoped-activity-effects': 'warn',
+      'muse/prefer-scoped-activity-effects': 'warn',
     },
   },
   // chat store 领域化：禁止 import 已删除的扁平双轨路径
@@ -103,7 +103,7 @@ export default tseslint.config(
   },
   // Electron UI primitive 收敛（2026-06 设计系统收敛）：业务组件优先从
   // `@components/ui` 导入 Button/Input/Dialog/Popover/Toast 等通用 primitive。
-  // `@components/ui` 负责 re-export `@tabtin/smartsheet-ui` 并承载 renderer 专用
+  // `@components/ui` 负责 re-export `@muse/smartsheet-ui` 并承载 renderer 专用
   // primitive（如 OverlayScrim）。这里先用 warn 暴露历史直连，后续按模块迁移后
   // 再收紧为 error。
   {
@@ -113,7 +113,7 @@ export default tseslint.config(
       'no-restricted-imports': ['warn', {
         paths: [
           {
-            name: '@tabtin/smartsheet-ui',
+            name: '@muse/smartsheet-ui',
             message: '业务组件请优先从 @components/ui 导入通用 UI primitive；@components/ui 是 Electron 应用层统一入口。',
           },
         ],
@@ -128,7 +128,7 @@ export default tseslint.config(
   {
     files: ['apps/tabtin-electron/src/renderer/src/components/chat/**/*.{ts,tsx}'],
     rules: {
-      'tabtin/no-chat-design-violations': 'warn',
+      'muse/no-chat-design-violations': 'warn',
     },
   },
   // 设计系统 token 全域守门（2026-06 样式统一收敛 阶段0）：把 design-system.md
@@ -142,7 +142,7 @@ export default tseslint.config(
   {
     files: ['apps/tabtin-electron/src/renderer/src/**/*.{ts,tsx}'],
     rules: {
-      'tabtin/no-design-system-violations': 'warn',
+      'muse/no-design-system-violations': 'warn',
     },
   },
   // cli-routes path 契约（2026-05-20 djangoRequest 两端归一化）：
@@ -154,7 +154,7 @@ export default tseslint.config(
   {
     files: ['packages/cli-routes/src/routes/**/*.ts'],
     rules: {
-      'tabtin/no-api-prefix-in-cli-routes': 'error',
+      'muse/no-api-prefix-in-cli-routes': 'error',
     },
   },
   // tabslide 复杂度治理（2026-06-10）：把圈复杂度（单函数分支数）与嵌套深度
@@ -232,12 +232,12 @@ export default tseslint.config(
     ],
   },
   // LH2-X3 守门规则（2026-04-17）：
-  //   `@tabtin/agent-runtime` 的根入口与 `/engine` 子入口都是 god-barrel，会副作用
+  //   `@muse/agent-runtime` 的根入口与 `/engine` 子入口都是 god-barrel，会副作用
   //   re-export `local-permission-handler.js` (node:crypto) / `session/storage.js`
   //   (node:fs) / `compact/micro-compact.js` (node:fs) 等 Node-only 模块。
   //   renderer / web / preload 等浏览器侧编译路径上**只能**：
-  //     - 走更细粒度的 sub-export：`@tabtin/agent-runtime/agent-modes`、
-  //       `@tabtin/agent-runtime/engine/types`（纯类型/字面量）；
+  //     - 走更细粒度的 sub-export：`@muse/agent-runtime/agent-modes`、
+  //       `@muse/agent-runtime/engine/types`（纯类型/字面量）；
   //     - 或者用 `import type`（esbuild 会 elide，不进 vite 模块图）。
   //   这条 lint 规则把"renderer 值导入 god-barrel"在 PR 阶段就拦截掉，避免回归
   //   到 LH2-X3 那种 `__vite-browser-external` 抹除 `node:*` → 命名导入找不到
@@ -250,28 +250,28 @@ export default tseslint.config(
       'apps/admindash/**/*.{ts,tsx}',
     ],
     rules: {
-      // `allowTypeImports: true` 让 `import type { ... } from '@tabtin/agent-runtime/engine'`
+      // `allowTypeImports: true` 让 `import type { ... } from '@muse/agent-runtime/engine'`
       // 仍然合法（esbuild 会 elide，不进 vite 模块图）；只拦截值导入。
       '@typescript-eslint/no-restricted-imports': ['error', {
         paths: [
           {
-            name: '@tabtin/agent-runtime',
-            message: '禁止在浏览器侧值导入 @tabtin/agent-runtime god-barrel（会拖入 node:crypto/node:fs 等 Node-only 模块）。改走 @tabtin/agent-runtime/agent-modes、@tabtin/agent-runtime/engine/types 等纯子路径，或使用 `import type`。详见 LH2-X3 修复说明。',
+            name: '@muse/agent-runtime',
+            message: '禁止在浏览器侧值导入 @muse/agent-runtime god-barrel（会拖入 node:crypto/node:fs 等 Node-only 模块）。改走 @muse/agent-runtime/agent-modes、@muse/agent-runtime/engine/types 等纯子路径，或使用 `import type`。详见 LH2-X3 修复说明。',
             allowTypeImports: true,
           },
           {
-            name: '@tabtin/agent-runtime/engine',
-            message: '禁止在浏览器侧值导入 @tabtin/agent-runtime/engine god-barrel（会拖入 local-permission-handler 的 node:crypto、session/storage 的 node:fs 等）。改走 @tabtin/agent-runtime/agent-modes、@tabtin/agent-runtime/engine/types 等纯子路径，或使用 `import type`。详见 LH2-X3 修复说明。',
+            name: '@muse/agent-runtime/engine',
+            message: '禁止在浏览器侧值导入 @muse/agent-runtime/engine god-barrel（会拖入 local-permission-handler 的 node:crypto、session/storage 的 node:fs 等）。改走 @muse/agent-runtime/agent-modes、@muse/agent-runtime/engine/types 等纯子路径，或使用 `import type`。详见 LH2-X3 修复说明。',
             allowTypeImports: true,
           },
           {
-            name: '@tabtin/agent-host',
-            message: '禁止在浏览器侧值导入 @tabtin/agent-host 根入口（会拖入 Node-only 宿主实现）。改走明确的 browser-safe 子路径，或使用 `import type`。',
+            name: '@muse/agent-host',
+            message: '禁止在浏览器侧值导入 @muse/agent-host 根入口（会拖入 Node-only 宿主实现）。改走明确的 browser-safe 子路径，或使用 `import type`。',
             allowTypeImports: true,
           },
           {
-            name: '@tabtin/agent-host/delivery',
-            message: '禁止在浏览器侧值导入 @tabtin/agent-host/delivery 聚合入口（会拖入文件 outbox 等 Node-only 实现）。改走 @tabtin/agent-host/delivery/usage-metadata-projection 等 browser-safe 子路径，或使用 `import type`。',
+            name: '@muse/agent-host/delivery',
+            message: '禁止在浏览器侧值导入 @muse/agent-host/delivery 聚合入口（会拖入文件 outbox 等 Node-only 实现）。改走 @muse/agent-host/delivery/usage-metadata-projection 等 browser-safe 子路径，或使用 `import type`。',
             allowTypeImports: true,
           },
         ],

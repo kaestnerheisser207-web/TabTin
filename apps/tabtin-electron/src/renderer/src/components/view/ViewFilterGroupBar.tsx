@@ -16,7 +16,7 @@ import {
   ScrollArea,
   toast,
   cn,
-} from '@tabtin/smartsheet-ui'
+} from '@muse/smartsheet-ui'
 import {
   ArrowUpDown,
   Calendar,
@@ -45,7 +45,7 @@ import {
   type Field,
   type ViewCreateRequest,
   type ViewMeta,
-} from '@tabtin/table-core'
+} from '@muse/table-core'
 import {
   type TableFontStyle,
   type TableFontWeight,
@@ -83,7 +83,7 @@ import {
   VIEW_DRAFT_SAVE_DISABLED_REASON_KEYS,
   type ViewSortRuleDraftItem,
   type ViewToolbarAction,
-} from '@tabtin/table-ui'
+} from '@muse/table-ui'
 import { useTranslation } from 'react-i18next'
 import { useTableReadonly } from '@components/table/TableReadonlyContext'
 import { useViewFilterGroupController } from './controller/useViewFilterGroupController'
@@ -95,7 +95,7 @@ import {
   type OpenViewFilterPopoverEventDetail,
   type OpenViewSortPopoverEventDetail,
 } from './viewToolbarEvents'
-import type { ViewSort, ViewUpdateRequest } from '@tabtin/table-core'
+import type { ViewSort, ViewUpdateRequest } from '@muse/table-core'
 import {
   shouldRefreshViewRecordsViaRest,
   shouldUseCollabViewRuntime,
@@ -876,7 +876,7 @@ export const ViewFilterGroupBar: React.FC<ViewFilterGroupBarProps> = ({
       setFilterOpen(true)
     }
 
-    // eslint-disable-next-line tabtin/prefer-scoped-activity-effects -- 与排序弹窗一致，表头菜单通过同页全局事件打开工具栏 popover。
+    // eslint-disable-next-line muse/prefer-scoped-activity-effects -- 与排序弹窗一致，表头菜单通过同页全局事件打开工具栏 popover。
     window.addEventListener(OPEN_VIEW_FILTER_POPOVER_EVENT, handleFilterOpenRequest as EventListener)
     return () => {
       window.removeEventListener(OPEN_VIEW_FILTER_POPOVER_EVENT, handleFilterOpenRequest as EventListener)

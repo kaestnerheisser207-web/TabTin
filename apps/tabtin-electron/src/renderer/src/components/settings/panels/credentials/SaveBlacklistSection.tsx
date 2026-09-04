@@ -18,7 +18,7 @@
  */
 import React, { useState } from 'react'
 import { Globe, Loader2, ShieldOff, Trash2 } from 'lucide-react'
-import { Button, ConfirmDialog, cn, toast } from '@tabtin/smartsheet-ui'
+import { Button, ConfirmDialog, cn, toast } from '@muse/smartsheet-ui'
 import { useTranslation } from 'react-i18next'
 import { ManagementCardListSkeleton } from '@components/common/ListSkeletons'
 import { SettingsSectionCard } from '../../SettingsSectionCard'

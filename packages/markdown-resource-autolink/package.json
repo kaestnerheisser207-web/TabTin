@@ -1,7 +1,7 @@
 {
-  "name": "@tabtin/markdown-resource-autolink",
+  "name": "@muse/markdown-resource-autolink",
   "version": "0.1.0",
-  "description": "remark plugin: autolink 裸路径 / 裸 url 为 tabtin://resource/file/<encoded> 链接节点。chat MarkdownRenderer W3 接入。",
+  "description": "remark plugin: autolink 裸路径 / 裸 url 为 muse://resource/file/<encoded> 链接节点。chat MarkdownRenderer W3 接入。",
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",

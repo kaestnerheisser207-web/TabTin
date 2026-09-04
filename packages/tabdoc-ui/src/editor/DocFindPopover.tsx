@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react'
 import { ChevronDown, ChevronUp, Search, X } from 'lucide-react'
-import { cn } from '@tabtin/smartsheet-ui'
+import { cn } from '@muse/smartsheet-ui'
 
 export interface DocFindPopoverProps {
   open: boolean

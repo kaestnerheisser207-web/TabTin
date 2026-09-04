@@ -2,11 +2,11 @@
  * **AUTO-GENERATED — DO NOT EDIT BY HAND**
  *
  * Source: packages/tool-errors/codegen/kinds/*.yaml
- * Codegen: pnpm --filter @tabtin/tool-errors codegen
+ * Codegen: pnpm --filter @muse/tool-errors codegen
  *
  * Tool-layer error_kind constants + TOOL_LAYER_ERROR_KINDS.
  * File-pipeline kinds are NOT listed here — agent-runtime re-exports
- * @tabtin/file-pipeline-errors and merges into TOOL_ERROR_KINDS.
+ * @muse/file-pipeline-errors and merges into TOOL_ERROR_KINDS.
  */
 
 export const MISSING_REQUIRED_PARAM = 'missing_required_param' as const;

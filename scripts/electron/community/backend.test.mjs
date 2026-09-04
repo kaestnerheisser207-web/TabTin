@@ -156,7 +156,7 @@ test('formatBackendFailure lists failed services, first error, log path and tail
       assert.equal(filePath, logPath);
       return [
         'boot',
-        "Error: Cannot find module '@tabtin/doc-editor'",
+        "Error: Cannot find module '@muse/doc-editor'",
         'still crashing',
         'last line',
       ].join('\n');
@@ -226,7 +226,7 @@ test('startCommunityDevBackend keeps a non-zero exit code and attaches diagnosti
         }),
         existsSyncImpl: (filePath) => filePath === logPath,
         readFileSyncImpl: () =>
-          "Error: Cannot find module '@tabtin/config'\nexit",
+          "Error: Cannot find module '@muse/config'\nexit",
       }),
     (error) => {
       assert.match(error.message, /退出码 7/);
@@ -247,9 +247,9 @@ test('startCommunityDevBackend keeps a non-zero exit code and attaches diagnosti
 
 test('startCommunityDevBackend leaves root env switches to Docker Compose', async () => {
   let spawnOptions;
-  const previousEdition = process.env.TABTIN_EDITION;
+  const previousEdition = process.env.MUSE_EDITION;
   const previousFixedCode = process.env.AUTH_FIXED_VERIFICATION_CODE;
-  process.env.TABTIN_EDITION = 'saas';
+  process.env.MUSE_EDITION = 'saas';
   process.env.AUTH_FIXED_VERIFICATION_CODE = '123456';
   try {
     await startCommunityDevBackend({
@@ -262,19 +262,19 @@ test('startCommunityDevBackend leaves root env switches to Docker Compose', asyn
       },
     });
   } finally {
-    if (previousEdition === undefined) delete process.env.TABTIN_EDITION;
-    else process.env.TABTIN_EDITION = previousEdition;
+    if (previousEdition === undefined) delete process.env.MUSE_EDITION;
+    else process.env.MUSE_EDITION = previousEdition;
     if (previousFixedCode === undefined)
       delete process.env.AUTH_FIXED_VERIFICATION_CODE;
     else process.env.AUTH_FIXED_VERIFICATION_CODE = previousFixedCode;
   }
 
-  assert.equal(Object.hasOwn(spawnOptions.env, 'TABTIN_EDITION'), false);
+  assert.equal(Object.hasOwn(spawnOptions.env, 'MUSE_EDITION'), false);
   assert.equal(
     Object.hasOwn(spawnOptions.env, 'AUTH_FIXED_VERIFICATION_CODE'),
     false,
   );
-  assert.equal(spawnOptions.env.TABTIN_DEV_REGION, 'cn');
+  assert.equal(spawnOptions.env.MUSE_DEV_REGION, 'cn');
 });
 
 test('startCommunityDevBackend still reports spawn errors without log archaeology', async () => {

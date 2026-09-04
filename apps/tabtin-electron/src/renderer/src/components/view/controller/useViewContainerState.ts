@@ -2,8 +2,8 @@ import {
   useViewContainerState as useViewContainerStateBase,
   type UseViewContainerStateInput as UseViewContainerStateInputBase,
   type ViewContainerState,
-} from '@tabtin/table-ui'
-import type { ViewMeta, ViewRecordsResponse } from '@tabtin/table-core'
+} from '@muse/table-ui'
+import type { ViewMeta, ViewRecordsResponse } from '@muse/table-core'
 
 export interface UseViewContainerStateInput
   extends Omit<UseViewContainerStateInputBase, 'views' | 'currentViewRecords'> {

@@ -1,5 +1,5 @@
 {
-  "name": "@tabtin/platform-adapter",
+  "name": "@muse/platform-adapter",
   "version": "0.1.0",
   "description": "Platform adapter interfaces for Muse apps",
   "type": "module",

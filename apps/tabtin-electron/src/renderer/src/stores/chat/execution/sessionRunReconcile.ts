@@ -49,7 +49,7 @@ import {
   isChatSessionRunState,
   isSessionRunIdentityCurrent,
 } from './sessionRunProjection'
-import type { ChatSessionRunState } from '@tabtin/chat-client'
+import type { ChatSessionRunState } from '@muse/chat-client'
 
 const log = createLogger('SessionRunReconcile')
 
@@ -152,7 +152,7 @@ async function doReconcile(sessionId: string, reason: ReconcileReason): Promise<
         : projectionAtRequest?.authoritativeRunState?.run_id ?? null),
     dispatchToken: projectionAtRequest?.localDispatchToken ?? null,
   }
-  const res = await window.tabtin!.agentEngine.getState({ sessionId })
+  const res = await window.muse!.agentEngine.getState({ sessionId })
   if (!isSessionRunIdentityCurrent(sessionId, reconcileIdentity)) {
     log.debug('reconcile: ignored stale runtime response for an older run', {
       sessionId: sessionId.slice(0, 8),

@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import { toast } from '@tabtin/smartsheet-ui/toast'
+import { toast } from '@muse/smartsheet-ui/toast'
 
 import type { OverlayNotificationActionPayload } from '@shared/overlay/types'
 import { useInvitationInboxStore } from '@stores/useInvitationInboxStore'
@@ -28,7 +28,7 @@ export function AppNotificationActionHost() {
   const markAllReadMutation = useMarkAllReadMutation(organizationId)
 
   useEffect(() => {
-    const unsubscribe = window.tabtin?.overlay?.onNotificationAction?.((raw) => {
+    const unsubscribe = window.muse?.overlay?.onNotificationAction?.((raw) => {
       const action = raw as OverlayNotificationActionPayload | undefined
       if (!action) return
       const notif = action.notif as NotificationItem | undefined
@@ -114,7 +114,7 @@ export function AppNotificationActionHost() {
   ])
 
   useEffect(() => {
-    const unsubscribe = window.tabtin?.notification?.onToastFallback?.((payload) => {
+    const unsubscribe = window.muse?.notification?.onToastFallback?.((payload) => {
       if (payload.type === 'download.failed') {
         toast({ title: payload.title, description: payload.body, variant: 'destructive' })
       } else if (payload.type === 'download.completed') {

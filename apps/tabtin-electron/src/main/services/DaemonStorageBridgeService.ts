@@ -1,6 +1,6 @@
 /**
  * DaemonStorageBridgeService — 主进程把 Daemon CLI Storage 路由
- * 包成 `DaemonStorageFetcher`，注入到 `@tabtin/storage-manager` 的 daemon-bridge。
+ * 包成 `DaemonStorageFetcher`，注入到 `@muse/storage-manager` 的 daemon-bridge。
  *
  * 角色：
  *   - W2.3 在 Daemon 端实现了 `POST /storage/*` 路由（HTTP-over-Unix-socket）
@@ -34,8 +34,8 @@ import {
   type ClearOptions,
   type DaemonStorageFetcher,
   type ExportPayload,
-} from '@tabtin/storage-manager'
-import { getHomeTabtinPath } from '@tabtin/shared/storage-paths'
+} from '@muse/storage-manager'
+import { getHomeTabtinPath } from '@muse/shared/storage-paths'
 import { createLogger } from '../logger'
 
 const log = createLogger('DaemonStorageBridge')
@@ -157,7 +157,7 @@ async function callDaemon(
 /**
  * 解析 daemon 响应为 ok.data，失败抛 DaemonHttpError。
  * Daemon 路由统一返回 `{ ok: true, data: {...} }` 或
- * `{ ok: false, error: { code, message } }`（来自 @tabtin/agent-wire 的 cli-envelope）。
+ * `{ ok: false, error: { code, message } }`（来自 @muse/agent-wire 的 cli-envelope）。
  */
 function parseDaemonResponse<T = unknown>(resp: DaemonHttpResponse): T {
   if (resp.status >= 200 && resp.status < 300) {
@@ -302,7 +302,7 @@ export function initDaemonStorageBridge(): void {
 
 /**
  * 取出主进程持有的 daemon bridge handle。W3.1 渲染进程接入时会用，
- * 但调用方也可以直接 `import { createDaemonBridge } from '@tabtin/storage-manager'`
+ * 但调用方也可以直接 `import { createDaemonBridge } from '@muse/storage-manager'`
  * 自行创建（lazy fetcher 让"先创建后注入"的顺序也安全）。
  */
 export function getDaemonBridgeHandle(): ReturnType<typeof createDaemonBridge> | null {

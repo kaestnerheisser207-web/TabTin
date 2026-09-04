@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest'
 import type {
   ChatSessionRunState,
   ChatSessionRunStatus,
-} from '@tabtin/chat-client'
+} from '@muse/chat-client'
 import {
   getEffectiveSessionRunStatus,
   isChatSessionRunState,

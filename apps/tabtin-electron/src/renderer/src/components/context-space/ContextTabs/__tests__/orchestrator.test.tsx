@@ -39,10 +39,10 @@ beforeAll(() => {
 })
 
 // 桥接 mock smartsheet-ui Popover，使 ScrollArea / Popover 在 jsdom 中能展开 children
-vi.mock('@tabtin/smartsheet-ui', async () => {
+vi.mock('@muse/smartsheet-ui', async () => {
   const React = await import('react')
-  const actual = await vi.importActual<typeof import('@tabtin/smartsheet-ui')>(
-    '@tabtin/smartsheet-ui',
+  const actual = await vi.importActual<typeof import('@muse/smartsheet-ui')>(
+    '@muse/smartsheet-ui',
   )
   return {
     ...actual,

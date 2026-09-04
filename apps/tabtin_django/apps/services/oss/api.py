@@ -887,7 +887,7 @@ def _html_embed_frame_ancestors() -> str:
 
     钉死已知宿主而非用端口通配（``http://127.0.0.1:*``）——通配等于允许本机任意端口的
     页面框住它做点击劫持。端口从根 ``.env`` 读，改了端口不会变成又一个「只有特定环境
-    才白屏」的坑；``tabtin-file:`` 是打包态 renderer 的 scheme（tabtin-file://app/index.html）。
+    才白屏」的坑；``muse-file:`` 是打包态 renderer 的 scheme（muse-file://app/index.html）。
     """
     # 两个已知 dev 入口（Electron Vite 5175 / tabtin-web 5176）无条件兜底：
     # 各 dev profile 对 VITE_PUBLIC_WEB_BASE_URL 的赋值并不一致，只认 env 会漏。
@@ -902,7 +902,7 @@ def _html_embed_frame_ancestors() -> str:
         except ValueError:
             pass
     sources = [f'http://{host}:{port}' for port in sorted(ports) for host in ('localhost', '127.0.0.1')]
-    sources.append('tabtin-file:')
+    sources.append('muse-file:')
     return ' '.join(sources)
 
 

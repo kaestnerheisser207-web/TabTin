@@ -1,4 +1,4 @@
-/* eslint-disable tabtin/no-chat-design-violations -- 上下文类型身份色板（表格=accent / 文档=info / 代码=success / 字段=warning…），每种资源类型一个签名色，等同文件类型识别色，整套保留才能一眼区分引用类型，非单点 UI 警示 */
+/* eslint-disable muse/no-chat-design-violations -- 上下文类型身份色板（表格=accent / 文档=info / 代码=success / 字段=warning…），每种资源类型一个签名色，等同文件类型识别色，整套保留才能一眼区分引用类型，非单点 UI 警示 */
 /**
  * ContextChip — 上下文引用标签
  *

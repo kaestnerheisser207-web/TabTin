@@ -14,7 +14,7 @@ import {
   CapsuleLabel,
   type FloatingPanelContent,
   type FloatingPanelTab,
-} from '@tabtin/smartsheet-ui'
+} from '@muse/smartsheet-ui'
 
 const TAB_IDS = ['insert', 'edit', 'animation'] as const
 type TabId = (typeof TAB_IDS)[number]

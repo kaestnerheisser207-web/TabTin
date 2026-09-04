@@ -26,8 +26,8 @@ from .settings import *  # noqa: F401,F403
 # alias（双库布局仿真）。service 代码统一经 postgres_app_db_alias() 取 alias
 # ，必须声明双库模式让其返回 'postgresql'，与 router 落表位置一致；
 # 否则 single_pg 默认下 alias 解析为 'default'，default 库无表直接报错。
-TABTIN_DATABASE_MODE = "dual"
-TABTIN_SINGLE_DATABASE_MODE = False
+MUSE_DATABASE_MODE = "dual"
+MUSE_SINGLE_DATABASE_MODE = False
 
 DATABASES["default"] = {  # type: ignore[name-defined]
     "ENGINE": "django.db.backends.sqlite3",

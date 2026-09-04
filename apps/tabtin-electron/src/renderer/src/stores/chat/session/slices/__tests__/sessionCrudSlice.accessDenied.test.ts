@@ -2,7 +2,7 @@
  * ：服务端 403/404 时清除已渲染本地/IDB/内存正文，停止继续展示私有 session。
  */
 import { describe, it, expect, vi, beforeEach } from 'vitest'
-import type { ChatSession, ChatMessage } from '@tabtin/chat-client'
+import type { ChatSession, ChatMessage } from '@muse/chat-client'
 import {
   createSessionCrudActions,
   isSessionAccessDeniedError,
@@ -43,7 +43,7 @@ vi.mock('../../../../useSessionReadStore', () => ({
   useSessionReadStore: { getState: () => ({ markViewed: vi.fn() }) },
 }))
 vi.mock('@/services/sessionFreshness', () => ({ markSessionFresh: vi.fn(), markSessionStale: vi.fn() }))
-vi.mock('@tabtin/smartsheet-ui/toast', () => ({ toast: vi.fn() }))
+vi.mock('@muse/smartsheet-ui/toast', () => ({ toast: vi.fn() }))
 vi.mock('@/i18n', () => ({ default: { t: (k: string) => k } }))
 vi.mock('@/services/localAgentClient', () => ({ isLocalRuntimeAvailable: () => true }))
 vi.mock('@/services/localTranscript', async (importActual) => {

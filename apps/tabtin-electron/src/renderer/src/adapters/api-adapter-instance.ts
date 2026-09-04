@@ -1,9 +1,9 @@
 /**
  * API 适配器实例
- * 通过 @tabtin/table-host-runtime 统一初始化所有 runtime ports
+ * 通过 @muse/table-host-runtime 统一初始化所有 runtime ports
  */
 
-import { getApiAdapter } from '@tabtin/smartsheet-adapter-electron/renderer'
+import { getApiAdapter } from '@muse/smartsheet-adapter-electron/renderer'
 import {
   requireTableApiPort,
   setTableFetch,
@@ -11,8 +11,8 @@ import {
   type TableApiPort,
   type TableHttpRequest,
   type TableHttpResponse,
-} from '@tabtin/table-core'
-import { initializeTableHostRuntime } from '@tabtin/table-host-runtime'
+} from '@muse/table-core'
+import { initializeTableHostRuntime } from '@muse/table-host-runtime'
 import apiService, { ApiError, extractRetryAfterFromResponse } from '@/services/api'
 import i18n from '@/i18n'
 import { API_CONFIG, API_ENDPOINTS } from '@/config/api'
@@ -80,7 +80,7 @@ export const initializeElectronApiAdapter = (): void => {
   }
 
   // 把 table-core 内部需要完整 Fetch 语义（FormData 导入导出 / 附件分片中转 /
-  // 公开表单）的请求收口到主进程代理：electronFetch → window.tabtin.apiRequest →
+  // 公开表单）的请求收口到主进程代理：electronFetch → window.muse.apiRequest →
   // 主进程 Node http，绕开生产包 renderer 自定义协议 origin 触发的业务 API CORS。
   setTableFetch(electronFetch)
 

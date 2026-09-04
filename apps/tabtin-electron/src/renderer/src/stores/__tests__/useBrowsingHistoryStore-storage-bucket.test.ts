@@ -18,13 +18,13 @@ describe('useBrowsingHistoryStore · storage-manager 接入', () => {
   beforeEach(async () => {
     localStorage.clear()
     vi.resetModules()
-    const sm = await import('@tabtin/storage-manager')
+    const sm = await import('@muse/storage-manager')
     sm.__resetForTesting()
   })
 
   it('store 模块加载后 browser:browsing-history 已注册', async () => {
     await import('../useBrowsingHistoryStore')
-    const sm = await import('@tabtin/storage-manager')
+    const sm = await import('@muse/storage-manager')
 
     const bucket = sm.getBucket('browser:browsing-history')
     expect(bucket).toBeDefined()
@@ -38,7 +38,7 @@ describe('useBrowsingHistoryStore · storage-manager 接入', () => {
 
   it('clearFn 支持按 itemIds 部分清理', async () => {
     const { useBrowsingHistoryStore } = await import('../useBrowsingHistoryStore')
-    const sm = await import('@tabtin/storage-manager')
+    const sm = await import('@muse/storage-manager')
 
     useBrowsingHistoryStore.setState({
       items: [
@@ -60,7 +60,7 @@ describe('useBrowsingHistoryStore · storage-manager 接入', () => {
 
   it('clearFn 不带 itemIds 时全清', async () => {
     const { useBrowsingHistoryStore } = await import('../useBrowsingHistoryStore')
-    const sm = await import('@tabtin/storage-manager')
+    const sm = await import('@muse/storage-manager')
 
     useBrowsingHistoryStore.setState({
       items: [
@@ -78,7 +78,7 @@ describe('useBrowsingHistoryStore · storage-manager 接入', () => {
 
   it('sizeFn 粗略反映 items 数量', async () => {
     const { useBrowsingHistoryStore } = await import('../useBrowsingHistoryStore')
-    const sm = await import('@tabtin/storage-manager')
+    const sm = await import('@muse/storage-manager')
 
     useBrowsingHistoryStore.setState({
       items: [

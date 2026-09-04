@@ -30,11 +30,11 @@ import { BrowserWindow } from 'electron'
 import * as path from 'node:path'
 import * as fs from 'node:fs'
 import * as os from 'node:os'
-import { buildWrapper, DEFAULT_VIEWPORT } from '@tabtin/widget-tokens'
+import { buildWrapper, DEFAULT_VIEWPORT } from '@muse/widget-tokens'
 import type {
   OffscreenRenderInput,
   OffscreenRenderResult,
-} from '@tabtin/action-tools/headless'
+} from '@muse/action-tools/headless'
 import {
   OffscreenWindowPool,
   OFFSCREEN_POOL_MAX_CONCURRENT,

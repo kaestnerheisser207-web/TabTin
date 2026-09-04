@@ -252,7 +252,7 @@ describe('BRA-001: scanAgentSkills discovers agents/*.md', () => {
       },
     })
 
-    const readFilePreview = (window as any).tabtin.fileSystem.readFilePreview
+    const readFilePreview = (window as any).muse.fileSystem.readFilePreview
     const skills = await scanAgentSkills('/root')
     expect(skills[0].agents).toHaveLength(1)
     expect(skills[0].agents![0].name).toBe('Valid')

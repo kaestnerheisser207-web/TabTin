@@ -881,7 +881,7 @@
       render(frozen);
     };
 
-    window.tabtinMotion = { pause: () => setActive(false), resume: () => setActive(true), seek, setActive };
+    window.museMotion = { pause: () => setActive(false), resume: () => setActive(true), seek, setActive };
     document.addEventListener('visibilitychange', () => { if (document.hidden) pausePlayback(); else resumePlayback(); });
     reducedMotion.addEventListener?.('change', event => {
       if (event.matches) {

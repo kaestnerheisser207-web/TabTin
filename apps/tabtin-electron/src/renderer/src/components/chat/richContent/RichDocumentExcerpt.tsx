@@ -1,4 +1,4 @@
-/* eslint-disable tabtin/no-chat-design-violations -- 解析状态徽章是一套完整状态图例（parsing 蓝 / pending·partial 琥珀 / failed 红 / success 绿），等同 CI 状态色系，整套保留才能让用户辨识解析阶段，非单点 UI 警示 */
+/* eslint-disable muse/no-chat-design-violations -- 解析状态徽章是一套完整状态图例（parsing 蓝 / pending·partial 琥珀 / failed 红 / success 绿），等同 CI 状态色系，整套保留才能让用户辨识解析阶段，非单点 UI 警示 */
 /**
  * `document_excerpt` kind renderer (W7) — used by parse_document.
  *
@@ -16,7 +16,7 @@
 import React, { useCallback, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { FileText, Loader2, Hourglass, ExternalLink } from 'lucide-react'
-import type { RichContentBlock } from '@tabtin/chat-client'
+import type { RichContentBlock } from '@muse/chat-client'
 import { RichFallback } from './RichFallback'
 
 const COLLAPSED_PAGE_LIMIT = 3

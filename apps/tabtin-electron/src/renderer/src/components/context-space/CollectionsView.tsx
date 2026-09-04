@@ -15,7 +15,7 @@ import {
   ChevronRight, FolderPlus, Pencil, Trash2,
   FolderInput, FolderOutput, Plus,
 } from 'lucide-react'
-import { ContextMenu, ContextMenuItem, ConfirmDialog, toast } from '@tabtin/smartsheet-ui'
+import { ContextMenu, ContextMenuItem, ConfirmDialog, toast } from '@muse/smartsheet-ui'
 import { useTranslation } from 'react-i18next'
 import { useCollections, useCollectionsBySpace } from '@/stores/useCollections'
 import { useSpaceUnifiedResources, useUnifiedResources } from '@/stores/useUnifiedResources'
@@ -33,7 +33,7 @@ import { OVERLAY_SURFACE_CLASS, ScrollArea } from '@components/ui'
 import { SIDEBAR_LIST_PANEL, SIDEBAR_LIST_PANEL_HEADER, SIDEBAR_LIST_PANEL_SCROLL } from '@components/layout/sidebarUi'
 import type { SpaceContextItem as SearchResultItem } from '@/services/spaceApi'
 import type { SpaceCollection } from '@/services/spaceApi'
-import type { Table as TableType } from '@tabtin/table-core'
+import type { Table as TableType } from '@muse/table-core'
 import type { HomeViewMode } from './registry/homeSections/HomeGridCard'
 
 function findCollectionById(nodes: SpaceCollection[], id: string): SpaceCollection | null {
@@ -360,7 +360,7 @@ export const CollectionsView: React.FC<CollectionsViewProps> = ({
             </div>
           ) : (
             <span
-              // eslint-disable-next-line tabtin/no-design-system-violations -- emoji 图标显示尺寸，非文字字号
+              // eslint-disable-next-line muse/no-design-system-violations -- emoji 图标显示尺寸，非文字字号
               className="text-[28px] leading-none drop-shadow-sm transition-transform group-hover:scale-110"
             >
               {coll.icon || '📁'}
@@ -394,7 +394,7 @@ export const CollectionsView: React.FC<CollectionsViewProps> = ({
     <div className="flex min-w-0 w-full flex-col overflow-hidden rounded-lg border border-dashed border-border/40 bg-background/60 text-left">
       <div className="relative w-full h-16 overflow-hidden bg-gradient-to-br from-muted/20 to-muted/5 flex items-center justify-center">
         <span
-          // eslint-disable-next-line tabtin/no-design-system-violations -- emoji 图标显示尺寸，非文字字号
+          // eslint-disable-next-line muse/no-design-system-violations -- emoji 图标显示尺寸，非文字字号
           className="text-[28px] leading-none opacity-40"
         >
           📁

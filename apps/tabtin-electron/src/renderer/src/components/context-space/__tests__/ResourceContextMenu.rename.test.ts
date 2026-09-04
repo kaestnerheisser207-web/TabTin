@@ -47,7 +47,7 @@ const {
   },
 }))
 
-vi.mock('@tabtin/tabdoc-ui/api-client', () => ({
+vi.mock('@muse/tabdoc-ui/api-client', () => ({
   updateDocument: mockUpdateDocument,
 }))
 
@@ -77,7 +77,7 @@ vi.mock('react-i18next', () => ({
   }),
 }))
 
-vi.mock('@tabtin/smartsheet-ui', async () => {
+vi.mock('@muse/smartsheet-ui', async () => {
   const React = await vi.importActual<typeof import('react')>('react')
   const toastFn = Object.assign(vi.fn(), { error: mockToastError })
   return {

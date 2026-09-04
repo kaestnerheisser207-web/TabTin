@@ -1,7 +1,7 @@
 /**
  * Native Focus Bridge — Web → iOS/Android 工作台焦点回传。
  *
- * 与 Auth bridge 分离。原生在 WebView 注入 `window.__TABTIN_NATIVE_FOCUS__`；
+ * 与 Auth bridge 分离。原生在 WebView 注入 `window.__MUSE_NATIVE_FOCUS__`；
  * 未注入时 report 为 no-op，不影响浏览器直开。
  */
 
@@ -21,7 +21,7 @@ interface NativeFocusHost {
 
 declare global {
   interface Window {
-    __TABTIN_NATIVE_FOCUS__?: NativeFocusHost
+    __MUSE_NATIVE_FOCUS__?: NativeFocusHost
   }
 }
 
@@ -29,7 +29,7 @@ export const NATIVE_FOCUS_REPORT_DEBOUNCE_MS = 100
 
 export function hasNativeFocusHost(): boolean {
   return typeof window !== 'undefined'
-    && typeof window.__TABTIN_NATIVE_FOCUS__?.report === 'function'
+    && typeof window.__MUSE_NATIVE_FOCUS__?.report === 'function'
 }
 
 export function buildTabDataNativeFocusPayload(
@@ -73,7 +73,7 @@ export function resolveTabDataNativeFocusReport(input: {
 /** 探测宿主并上报；无 host 时 no-op。 */
 export function reportNativeFocus(payload: NativeFocusPayload): void {
   if (typeof window === 'undefined') return
-  const report = window.__TABTIN_NATIVE_FOCUS__?.report
+  const report = window.__MUSE_NATIVE_FOCUS__?.report
   if (typeof report !== 'function') return
   try {
     report(payload)

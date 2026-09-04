@@ -1,7 +1,7 @@
 import { FILTER_OPERATOR_OPTIONS } from '@/table-host/view-config-editor'
 import type { ViewFiltersPanelProps } from '@/table-host/view-editor/types'
-import type { ViewFilterEditorRule } from '@tabtin/table-ui'
-import { ViewFilterRulesEditor } from '@tabtin/table-ui'
+import type { ViewFilterEditorRule } from '@muse/table-ui'
+import { ViewFilterRulesEditor } from '@muse/table-ui'
 
 const stringifyFilterValue = (value: unknown): string => {
   if (value === null || value === undefined) {

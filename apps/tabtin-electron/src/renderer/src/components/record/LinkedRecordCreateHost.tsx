@@ -11,10 +11,10 @@ import {
   useToast,
   type RecordFormData,
   type FieldDefinition,
-} from '@tabtin/smartsheet-ui'
-import { toFieldDefinitions, toOrganizationMembers } from '@tabtin/table-ui'
-import { FieldApiService, RecordApiService, TableApiService } from '@tabtin/table-core'
-import type { Field } from '@tabtin/table-core'
+} from '@muse/smartsheet-ui'
+import { toFieldDefinitions, toOrganizationMembers } from '@muse/table-ui'
+import { FieldApiService, RecordApiService, TableApiService } from '@muse/table-core'
+import type { Field } from '@muse/table-core'
 import { useTranslation } from 'react-i18next'
 import {
   announceTableDrawerOpen,

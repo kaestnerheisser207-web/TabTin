@@ -43,7 +43,7 @@ class InviteCodeCheckResult:
 
 def is_invite_gate_enabled() -> bool:
     """默认关闭；私有部署可通过配置显式开启。"""
-    raw = getattr(settings, "TABTIN_REQUIRE_INVITE_CODE", None)
+    raw = getattr(settings, "MUSE_REQUIRE_INVITE_CODE", None)
     if raw is None:
         raw = getattr(settings, "REQUIRE_INVITE_CODE", None)
     if raw is None:

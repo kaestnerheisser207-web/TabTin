@@ -9,10 +9,10 @@ RUN apt-get update \
     && rm -rf /var/lib/apt/lists/*
 COPY . .
 RUN --mount=type=cache,id=tabtin-cloud-pnpm,target=/root/.local/share/pnpm/store \
-    pnpm --filter @tabtin/daemon... install --frozen-lockfile
-RUN pnpm --filter '@tabtin/daemon^...' build
-RUN pnpm --filter @tabtin/daemon build
-RUN pnpm --filter @tabtin/daemon deploy --prod /opt/tabtin-daemon
+    pnpm --filter @muse/daemon... install --frozen-lockfile
+RUN pnpm --filter '@muse/daemon^...' build
+RUN pnpm --filter @muse/daemon build
+RUN pnpm --filter @muse/daemon deploy --prod /opt/tabtin-daemon
 
 FROM ${NODE_RUNTIME_IMAGE} AS runtime
 
@@ -28,8 +28,8 @@ RUN chmod 0755 /usr/local/bin/tabtin-cloud-entrypoint \
     && ln -s /opt/tabtin-daemon/node_modules/@deepseek-ai/dsh/lib/bin.js /usr/local/bin/dsh
 
 ENV NODE_ENV=production \
-    TABTIN_WORKSPACE_ROOT=/workspace \
-    TABTIN_DAEMON_CONFIG_DIR=/var/lib/tabtin/daemon \
+    MUSE_WORKSPACE_ROOT=/workspace \
+    MUSE_DAEMON_CONFIG_DIR=/var/lib/tabtin/daemon \
     DSH_HOME=/var/lib/tabtin/dsh \
     DSH_TELEMETRY_MODE=DISABLED
 

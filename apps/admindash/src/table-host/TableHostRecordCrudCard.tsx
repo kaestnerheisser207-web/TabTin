@@ -2,12 +2,12 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import type { RecordFormMode } from '@/table-host/record-draft-utils'
-import type { Table } from '@tabtin/table-core'
+import type { Table } from '@muse/table-core'
 import {
   isAttachmentFieldType,
   type TableField,
   type TableRecord,
-} from '@tabtin/table-ui'
+} from '@muse/table-ui'
 import { Pencil, Plus, Save, Trash2 } from 'lucide-react'
 
 export interface TableHostRecordCrudCardProps {

@@ -8,7 +8,7 @@ vi.mock('react-i18next', () => ({
   }),
 }))
 
-vi.mock('@tabtin/smartsheet-ui', () => ({
+vi.mock('@muse/smartsheet-ui', () => ({
   ContextMenu: ({ open, children }: { open: boolean; children: React.ReactNode }) => (
     open ? <div data-testid="context-menu">{children}</div> : null
   ),

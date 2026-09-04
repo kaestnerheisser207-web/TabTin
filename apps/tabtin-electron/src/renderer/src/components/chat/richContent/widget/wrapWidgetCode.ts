@@ -2,7 +2,7 @@
  * 重构来源：apps/tabtin-electron/src/renderer/src/components/chat/RichContentRenderer.tsx（行 1294-1352）
  * 拆分时间：2026-04-30
  * 重构原因：RichContentRenderer.tsx 1352 行单文件过大，按职责拆分
- * 职责：chat 预览 srcdoc wrapper 构造 —— 将 widget 源代码包进 @tabtin/widget-tokens
+ * 职责：chat 预览 srcdoc wrapper 构造 —— 将 widget 源代码包进 @muse/widget-tokens
  *       的标准 wrapper。该 wrapper 的 CSP / design tokens 与 Electron 烤图 +
  *       Daemon 烤图字面共用同一套 widget-tokens 包（wave 4 建立的抽象）。
  *
@@ -13,9 +13,9 @@
  * 业务逻辑版本：与拆分前完全相同，只是 module 边界调整
  */
 
-import { buildWrapper as buildWidgetWrapper } from '@tabtin/widget-tokens'
+import { buildWrapper as buildWidgetWrapper } from '@muse/widget-tokens'
 
-// Wave 4: light/dark token bundle 全部抽到 `@tabtin/widget-tokens` 包，
+// Wave 4: light/dark token bundle 全部抽到 `@muse/widget-tokens` 包，
 // 让 chat 预览（本文件 wrapWidgetCode）+ Electron 烤图（WidgetRenderService）
 // + Daemon 烤图（DaemonBrowserService.captureWidget）三端**字面共用**同一份
 // design tokens。CSP 也共用——避免 chat 预览能跑但烤图被 block 的视觉漂移。

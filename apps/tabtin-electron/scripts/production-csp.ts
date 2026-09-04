@@ -13,7 +13,7 @@
 /** 生产 CSP 各指令的白名单来源。 */
 export interface ProductionCspEnv {
   VITE_API_BASE_URL?: string
-  TABTIN_API_BASE_URL?: string
+  MUSE_API_BASE_URL?: string
   ASSET_PUBLIC_DOMAIN?: string
   ALIYUN_OSS_CDN_DOMAIN?: string
   VITE_ASSET_PUBLIC_DOMAIN?: string
@@ -77,14 +77,14 @@ export function buildProductionCsp(
   env: ProductionCspEnv,
   onWarn: (message: string) => void = () => {},
 ): string {
-  const connectSources = new Set(["'self'", 'blob:', 'tabtin-file:'])
+  const connectSources = new Set(["'self'", 'blob:', 'muse-file:'])
   const frameSources = new Set(["'self'"])
-  const imageSources = new Set(["'self'", 'data:', 'blob:', 'https:', 'tabtin-file:'])
-  const mediaSources = new Set(["'self'", 'blob:', 'https:', 'tabtin-file:'])
+  const imageSources = new Set(["'self'", 'data:', 'blob:', 'https:', 'muse-file:'])
+  const mediaSources = new Set(["'self'", 'blob:', 'https:', 'muse-file:'])
 
   // --- 从构建时环境变量推导合法 origin ---
 
-  const apiBaseUrl = env.VITE_API_BASE_URL || env.TABTIN_API_BASE_URL || ''
+  const apiBaseUrl = env.VITE_API_BASE_URL || env.MUSE_API_BASE_URL || ''
   let resolvedApiOrigin = ''
   if (apiBaseUrl) {
     try {
@@ -133,12 +133,12 @@ export function buildProductionCsp(
   if (!hasApiOrigin) {
     if (env.NODE_ENV === 'production') {
       throw new Error(
-        '[harden-csp] VITE_API_BASE_URL / TABTIN_API_BASE_URL 未设置。' +
+        '[harden-csp] VITE_API_BASE_URL / MUSE_API_BASE_URL 未设置。' +
         '生产构建必须配置 API 域名以生成安全的 CSP。请在 .env.production 中配置。',
       )
     }
     onWarn(
-      '[harden-csp] ⚠️  VITE_API_BASE_URL / TABTIN_API_BASE_URL 未设置，' +
+      '[harden-csp] ⚠️  VITE_API_BASE_URL / MUSE_API_BASE_URL 未设置，' +
       'connect-src 将回退到 https: wss:（宽泛策略）。请在 .env.production 中配置。',
     )
     connectSources.add('https:')

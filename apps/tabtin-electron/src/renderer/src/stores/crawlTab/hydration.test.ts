@@ -151,7 +151,7 @@ describe('hydration.normalizeTabs — workspace partition 回填', () => {
   })
 
   it('老数据无 partition + mirror 未就绪 → 默认 env partition 兜底（不写 legacy crawlspace 前缀）', () => {
-    // mirror 未启动 + window.tabtin.browserEnv 不可用 → getPartitionForSpaceSync
+    // mirror 未启动 + window.muse.browserEnv 不可用 → getPartitionForSpaceSync
     // 应立即返回默认 partition 而不是 pending / legacy 字面量。
     installSnapshotMock({ pending: true })
     // 故意不 await IPC，模拟"hydration 这一帧 mirror 还没拉到任何东西"

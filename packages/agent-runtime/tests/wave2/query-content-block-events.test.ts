@@ -818,7 +818,7 @@ describe('query.ts — Wave message_kind 协议字段', () => {
 
     expect(messageStartEvents.length).toBeGreaterThan(0);
 
-    const { MessageStartSchema } = await import('@tabtin/agent-wire');
+    const { MessageStartSchema } = await import('@muse/agent-wire');
     for (const ev of messageStartEvents) {
       // 协议契约：每条 message_start 都必须经 wire schema parse 通过——
       // 缺 message_kind / role × kind 非法都会让 parse fail，本 e2e 验证
@@ -918,7 +918,7 @@ describe('query.ts — Wave message_kind 协议字段', () => {
     expect(thinkingStopIdx).toBeLessThan(stopIdx);
 
     // 保留原「间接守门」：所有 message_start 过 wire schema
-    const { MessageStartSchema } = await import('@tabtin/agent-wire');
+    const { MessageStartSchema } = await import('@muse/agent-wire');
     for (const ev of messageStarts) {
       const parsed = MessageStartSchema.parse((ev as { payload: unknown }).payload);
       expect(parsed.message_kind).toBe('llm');
@@ -971,7 +971,7 @@ describe('query.ts — Wave message_kind 协议字段', () => {
 
     expect(messageStartEvents.length).toBeGreaterThan(0);
 
-    const { MessageStartSchema } = await import('@tabtin/agent-wire');
+    const { MessageStartSchema } = await import('@muse/agent-wire');
     for (const ev of messageStartEvents) {
       const parsed = MessageStartSchema.parse((ev as { payload: unknown }).payload);
       expect(parsed.message_kind).toBe('llm');
@@ -1060,7 +1060,7 @@ describe('query.ts — Wave message_kind 协议字段', () => {
     // 至少 2 个 message_start（两轮 LLM 调用）
     expect(messageStartEvents.length).toBeGreaterThanOrEqual(2);
 
-    const { MessageStartSchema } = await import('@tabtin/agent-wire');
+    const { MessageStartSchema } = await import('@muse/agent-wire');
     const parsedKinds = messageStartEvents.map(
       (ev) => MessageStartSchema.parse((ev as { payload: unknown }).payload).message_kind,
     );

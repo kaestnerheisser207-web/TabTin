@@ -6,7 +6,7 @@ import {
   FOCUS_SNAPSHOT_LIMITS,
   FocusSnapshotSchema,
   type FocusSnapshot,
-} from '@tabtin/contracts/agent'
+} from '@muse/contracts/agent'
 import type { LocalAgentAppContext } from '@/services/localAgentClient'
 
 export type RemoteAppContextReplyTo = {

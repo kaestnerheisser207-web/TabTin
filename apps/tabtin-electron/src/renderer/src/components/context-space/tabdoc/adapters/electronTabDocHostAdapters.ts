@@ -1,7 +1,7 @@
-import type { AppHostClient, TabDocHostActions } from '@tabtin/app-host-sdk'
-import { getTableSpaceId } from '@tabtin/table-core'
-import { toast } from '@tabtin/smartsheet-ui'
-import { getHtmlBlockBrowserLink } from '@tabtin/tabdoc-ui/api-client'
+import type { AppHostClient, TabDocHostActions } from '@muse/app-host-sdk'
+import { getTableSpaceId } from '@muse/table-core'
+import { toast } from '@muse/smartsheet-ui'
+import { getHtmlBlockBrowserLink } from '@muse/tabdoc-ui/api-client'
 import type { SpaceContextItem } from '@/services/spaceApi'
 import { useUnifiedResources } from '@/stores/useUnifiedResources'
 import { useSpaceContextTabsStore } from '@/stores/useSpaceContextTabsStore'
@@ -24,7 +24,7 @@ import { openTableTabGuarded } from '../../restore/openResourceMembershipGuard'
 import { resolveTabDocHtmlBrowserOpenTarget } from '../resolveTabDocHtmlBrowserOpen'
 import type { WorkbenchMode } from '@components/layout/useShellLayoutState'
 import { createEmbeddedTableStorePool } from '@/components/table/tableStorePool'
-import type { TabDocTableEmbedRuntime } from '@tabtin/tabdoc-ui'
+import type { TabDocTableEmbedRuntime } from '@muse/tabdoc-ui'
 
 type TranslateDocFn = (key: string, options?: Record<string, unknown>) => string
 
@@ -40,7 +40,7 @@ function stripUrlHash(url: string): string {
 
 async function resolveElectronAccessToken(): Promise<string> {
   try {
-    const ipcToken = (await window.tabtin?.auth?.getAccessToken?.()) as
+    const ipcToken = (await window.muse?.auth?.getAccessToken?.()) as
       | string
       | { token?: string | null }
       | null
@@ -268,7 +268,7 @@ export function createElectronTabDocHostActions(input: {
         })
         let result = reused
         if (reused.ok && hasAuthHandoff && reused.viewId) {
-          const nav = await window.tabtin?.webviewHost?.navigate?.(reused.viewId, url)
+          const nav = await window.muse?.webviewHost?.navigate?.(reused.viewId, url)
           if (nav && nav.success === false) {
             // navigate 失败则退回新开，保证 handoff 仍能送达
             result = await openWebTabInSpace(spaceId, url, openOptions)

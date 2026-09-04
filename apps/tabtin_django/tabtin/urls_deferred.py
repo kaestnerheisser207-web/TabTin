@@ -301,7 +301,7 @@ def _register_social_and_misc_routers():
 def _register_admin_routers():
     from django.conf import settings as django_settings
 
-    if not (django_settings.DEBUG or os.getenv('TABTIN_ENABLE_ADMIN_API', '0') == '1'):
+    if not (django_settings.DEBUG or os.getenv('MUSE_ENABLE_ADMIN_API', '0') == '1'):
         return
 
     from apps.users.auth.admin_api import router as auth_admin_router

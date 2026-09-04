@@ -9,7 +9,7 @@
  * store 依赖链。
  */
 
-import type { ChatClient } from '@tabtin/chat-client'
+import type { ChatClient } from '@muse/chat-client'
 import { registerResetAction } from '@/stores/sessionResetRegistry'
 import { useBackgroundEventStore } from '@/stores/useBackgroundEventStore'
 import { clearPersistedLastEventId } from './wsLastEventIdPersistence'

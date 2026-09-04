@@ -21,5 +21,5 @@
 
 ## Resource Rules
 
-- Customer brief: `tabtin://resource/document/<id>?hint=tabdoc`.
-- Customer/follow-up table: `tabtin://resource/table/<id>?hint=tabdata`.
+- Customer brief: `muse://resource/document/<id>?hint=tabdoc`.
+- Customer/follow-up table: `muse://resource/table/<id>?hint=tabdata`.

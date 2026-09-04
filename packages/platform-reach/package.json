@@ -1,5 +1,5 @@
 {
-  "name": "@tabtin/platform-reach",
+  "name": "@muse/platform-reach",
   "version": "0.1.0",
   "description": "Platform Reach — per-platform content adapters over the shared TabWeb browser stack (platform routing + Muse-native runtime)",
   "type": "module",

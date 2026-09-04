@@ -1,5 +1,5 @@
 {
-  "name": "@tabtin/connector-brand-icons",
+  "name": "@muse/connector-brand-icons",
   "version": "0.1.0",
   "description": "Compliant brand icon registry + resolver for Muse connector marketplace",
   "type": "module",

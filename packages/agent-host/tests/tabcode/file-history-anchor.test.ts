@@ -8,7 +8,7 @@
  * 这正是 fork 继承的落点——子 runtime 的 query.ts 把**父轮 anchorId** 填进
  * `ToolContext.fileHistoryAnchorId`，所以子 agent 的 trackEdit 用父轮 anchor，
  * 子改的文件归到父轮、回退父轮一并恢复（语义层不变量见
- * `@tabtin/file-history-core` 的 FileHistoryService.test.ts「§3.9 规则 2」）。
+ * `@muse/file-history-core` 的 FileHistoryService.test.ts「§3.9 规则 2」）。
  *
  * 三条断言：
  *   1. fileHistoryAnchorId 存在（子继承父）→ trackEdit 用它，**不**用 agentRunId。
@@ -25,7 +25,7 @@ import type {
   FileHistorySink,
   Tool,
   ToolContext,
-} from '@tabtin/agent-runtime';
+} from '@muse/agent-runtime';
 import { createTabCodeTools } from '../../src/tools/tabcode-adapter.js';
 
 let tmpDir: string;

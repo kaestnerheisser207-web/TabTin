@@ -1,5 +1,5 @@
 /**
- * 测试用 ToolRiskPolicyPort——包装 @tabtin/security-policy（与宿主适配器同形）。
+ * 测试用 ToolRiskPolicyPort——包装 @muse/security-policy（与宿主适配器同形）。
  * 不可放进 src（会进 baseline）；亦不可引用宿主包（AH-003）。
  */
 
@@ -10,7 +10,7 @@ import {
   type EffectivePolicy,
   type MemoStore,
   type PolicyActionKind,
-} from '@tabtin/security-policy';
+} from '@muse/security-policy';
 import type {
   BuildMemoPatternKeyInput,
   RiskDecision,

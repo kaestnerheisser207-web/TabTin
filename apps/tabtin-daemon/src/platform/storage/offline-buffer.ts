@@ -18,7 +18,7 @@ import {
 import { readFile, writeFile, unlink, readdir, stat } from 'node:fs/promises';
 import { join } from 'node:path';
 import type { Logger } from '../observability/logging/logger.js';
-import { getDaemonHomePath } from '@tabtin/shared/storage-paths';
+import { getDaemonHomePath } from '@muse/shared/storage-paths';
 
 const DEFAULT_BUFFER_DIR = getDaemonHomePath('offline-buffer');
 const MAX_BUFFER_SIZE_BYTES = 10 * 1024 * 1024; // 10 MB per thread

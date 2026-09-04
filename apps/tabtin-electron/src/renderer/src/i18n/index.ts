@@ -2,10 +2,10 @@ import i18n, { type Resource } from 'i18next'
 import { initReactI18next } from 'react-i18next'
 import lazyBackend, { allNamespaces } from './lazy-backend'
 
-import { tabdocLocales } from '@tabtin/tabdoc-ui'
+import { tabdocLocales } from '@muse/tabdoc-ui'
 
-import { setSmartsheetUiLocale } from '@tabtin/smartsheet-ui/i18n'
-import { setCanvasGridLocale } from '@tabtin/table-engine-canvas/i18n'
+import { setSmartsheetUiLocale } from '@muse/smartsheet-ui/i18n'
+import { setCanvasGridLocale } from '@muse/table-engine-canvas/i18n'
 import {
   DEFAULT_LANGUAGE,
   DEFAULT_LANGUAGE_PREFERENCE,
@@ -106,7 +106,7 @@ applyCanvasGridLocale(i18n.language)
 
 const syncLocaleToMainProcess = (language: string) => {
   try {
-    window.tabtin?.contextMenu?.setLocale?.(language)
+    window.muse?.contextMenu?.setLocale?.(language)
   } catch { /* main process may not be ready */ }
 }
 

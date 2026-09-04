@@ -1,5 +1,5 @@
 /**
- * @tabtin/agent-runtime — PersistentQueue<T> 抽象与默认实现。
+ * @muse/agent-runtime — PersistentQueue<T> 抽象与默认实现。
  *
  * FR-14（H2-D）持久化通路的"宿主无关"侧：Runtime 只定义抽象 + 内存实现；
  * 真正落盘 / IndexedDB / 远端 KV 等具体物理介质由宿主在启动时注入。

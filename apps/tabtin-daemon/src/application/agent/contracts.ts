@@ -1,9 +1,9 @@
-import type { AgentModeName } from '@tabtin/agent-modes'
-import type { AppContext } from '@tabtin/agent-host/hooks'
-import type { NativeBackendBootstrapResult } from '@tabtin/agent-host/native'
-import type { HostedRuntime, RuntimeCacheKey } from '@tabtin/agent-host/runtime'
-import type { AttachmentStrategy } from '@tabtin/agent-host/configuration'
-import type { WorkingDirType } from '@tabtin/agent-prompt'
+import type { AgentModeName } from '@muse/agent-modes'
+import type { AppContext } from '@muse/agent-host/hooks'
+import type { NativeBackendBootstrapResult } from '@muse/agent-host/native'
+import type { HostedRuntime, RuntimeCacheKey } from '@muse/agent-host/runtime'
+import type { AttachmentStrategy } from '@muse/agent-host/configuration'
+import type { WorkingDirType } from '@muse/agent-prompt'
 import type {
   ContentBlock,
   EngineConfig,
@@ -15,23 +15,23 @@ import type {
   StreamEvent,
   SubagentManager,
   ToolLogWriter,
-} from '@tabtin/agent-runtime'
+} from '@muse/agent-runtime'
 import type {
   SerializedPendingApproval,
   SerializedPendingSingleHitl,
-} from '@tabtin/agent-runtime/engine'
-import type { ExitFlushStore } from '@tabtin/agent-runtime'
+} from '@muse/agent-runtime/engine'
+import type { ExitFlushStore } from '@muse/agent-runtime'
 import type {
   ManagedTaskStore,
   NotificationQueue,
   PtyManagerBridge,
-} from '@tabtin/terminal-core'
+} from '@muse/terminal-core'
 
 import type { DaemonToolProvider } from './daemon-tool-provider.js'
 
 export interface DaemonQueryRequestContract {
   /** Agent Harness; local/cloud execution plane is resolved from Workspace. */
-  harness?: import('@tabtin/agent-host/runtime').RuntimeHarness
+  harness?: import('@muse/agent-host/runtime').RuntimeHarness
   prompt: string
   runId?: string
   sessionId: string
@@ -48,7 +48,7 @@ export interface DaemonQueryRequestContract {
   yoloMode?: boolean
   approvalMode?: string
   approvalGrant?: string
-  workspaceSnapshot?: import('@tabtin/security-policy').WorkspaceSnapshot
+  workspaceSnapshot?: import('@muse/security-policy').WorkspaceSnapshot
   userId?: string
   customRules?: string
   agentName?: string
@@ -106,7 +106,7 @@ export interface RuntimeBuildInputContract {
   workingDirType: WorkingDirType | undefined
   executionLimits: { max_iterations_per_run?: number; max_credits_per_run?: number } | undefined
   yoloMode: boolean | undefined
-  workspaceSnapshot: import('@tabtin/security-policy').WorkspaceSnapshot | undefined
+  workspaceSnapshot: import('@muse/security-policy').WorkspaceSnapshot | undefined
   isByokMode: boolean | undefined
   enabledApps: DaemonQueryRequestContract['enabledApps']
   isGroupSpace: boolean | undefined
@@ -142,7 +142,7 @@ export interface DaemonHostStateContract extends RuntimeCacheKey {
   disabledToolPrefixes: string[]
   operationSwitches: Record<string, 'allow' | 'confirm' | 'block'> | undefined
   abortController: AbortController
-  pauseController: import('@tabtin/agent-host/delivery').SessionPauseController
+  pauseController: import('@muse/agent-host/delivery').SessionPauseController
   sessionStorage: SessionStorage
   snapshotStorage: SnapshotStorage
   eventStorage: EventStorage
@@ -154,12 +154,12 @@ export interface DaemonHostStateContract extends RuntimeCacheKey {
   agentProfile: { agentName?: string; customRules?: string } | null
   engineConfig: EngineConfig
   backendBootstrap: NativeBackendBootstrapResult | null
-  agentConfigV3: import('@tabtin/security-policy').AgentConfigV3 | null
-  workspaceSnapshot: import('@tabtin/security-policy').WorkspaceSnapshot | null
+  agentConfigV3: import('@muse/security-policy').AgentConfigV3 | null
+  workspaceSnapshot: import('@muse/security-policy').WorkspaceSnapshot | null
   policyContext: {
     currentAgentMode: AgentModeName
     isGroupSpace: boolean
-    requestedApprovalMode?: import('@tabtin/security-policy').ApprovalMode
+    requestedApprovalMode?: import('@muse/security-policy').ApprovalMode
   }
   subagentManager: SubagentManager
   subagentStreamSink: (event: StreamEvent) => void

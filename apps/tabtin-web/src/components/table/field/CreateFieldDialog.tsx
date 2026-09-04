@@ -10,7 +10,7 @@ export {
   type CreateFieldDialogProps,
   type CreateFieldData,
   type FieldOptions,
-} from '@tabtin/smartsheet-ui'
+} from '@muse/smartsheet-ui'
 
 export interface InsertFieldContext {
   referenceFieldId: string

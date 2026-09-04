@@ -21,7 +21,7 @@ import {
   VaultToolbar,
   useVault,
 } from './vault'
-import { Button } from '@tabtin/smartsheet-ui'
+import { Button } from '@muse/smartsheet-ui'
 import { useAiServiceVaultRows, type AiServiceVaultFilter, type AiServiceVaultRow } from './ai-service/useAiServiceVaultRows'
 import { AiServiceSyncPopover } from './ai-service/AiServiceSyncPopover'
 import { AiServiceVaultDetail } from './ai-service/AiServiceVaultDetail'

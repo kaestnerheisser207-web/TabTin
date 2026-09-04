@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
-import { ToastAction } from '@tabtin/smartsheet-ui'
+import { ToastAction } from '@muse/smartsheet-ui'
 import { toast } from '@components/ui'
 import { useChatStore } from '@/stores/chat/useChatStore'
 import { isSessionShareArchiveConflict } from '@/stores/chat/session/isSessionShareArchiveConflict'

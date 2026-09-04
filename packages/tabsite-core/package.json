@@ -1,5 +1,5 @@
 {
-  "name": "@tabtin/tabsite-core",
+  "name": "@muse/tabsite-core",
   "version": "0.1.0",
   "description": "Shared TabSite utilities — template management, dist upload, path helpers",
   "type": "module",
@@ -21,7 +21,7 @@
     "clean": "rm -rf dist"
   },
   "dependencies": {
-    "@tabtin/terminal-core": "workspace:*"
+    "@muse/terminal-core": "workspace:*"
   },
   "devDependencies": {
     "@types/node": "^20.0.0",

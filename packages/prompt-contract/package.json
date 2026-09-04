@@ -1,7 +1,7 @@
 {
-  "name": "@tabtin/prompt-contract",
+  "name": "@muse/prompt-contract",
   "version": "0.1.0",
-  "description": "Prompt section registry + audit helpers. Shared by @tabtin/agent-prompt and @tabtin/agent-runtime. Zero runtime deps.",
+  "description": "Prompt section registry + audit helpers. Shared by @muse/agent-prompt and @muse/agent-runtime. Zero runtime deps.",
   "type": "module",
   "main": "dist/index.js",
   "module": "dist/index.js",

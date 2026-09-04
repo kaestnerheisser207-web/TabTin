@@ -66,7 +66,7 @@ Muse 双库（MySQL default + PostgreSQL）下，跨库 ``ForeignKey(to='other_a
 描述符单点 fallback fetch（"忘了调 attach helper"）会打 ``logger.warning``，但
 **带 5 分钟去重**——同 ``(model, cache_attr)`` 5 分钟内只 log 一次，避免生产刷屏。
 
-``TABTIN_SOFTREF_STRICT=1`` 环境变量可让 fallback 直接 raise，CI 跑测试时打开
+``MUSE_SOFTREF_STRICT=1`` 环境变量可让 fallback 直接 raise，CI 跑测试时打开
 能逼出所有未走预加载的列表场景。
 """
 
@@ -102,9 +102,9 @@ logger = logging.getLogger(__name__)
 SOFTREF_CACHE_MISSING = object()
 
 
-# 开发期严格模式。CI 里 ``TABTIN_SOFTREF_STRICT=1`` 时单点 fallback 直接 raise，
+# 开发期严格模式。CI 里 ``MUSE_SOFTREF_STRICT=1`` 时单点 fallback 直接 raise，
 # 逼出所有"忘了调 attach helper"的列表场景。生产 / 默认 dev 关闭。
-_STRICT_ENV = "TABTIN_SOFTREF_STRICT"
+_STRICT_ENV = "MUSE_SOFTREF_STRICT"
 
 # Fallback warning 去重：同 (model, cache_attr) 5 分钟内只 log 一次。
 # 生产路径如果有遗漏 attach helper 的列表场景会刷屏，去重后既能定位又不淹没日志。

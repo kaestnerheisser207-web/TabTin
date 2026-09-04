@@ -11,7 +11,7 @@
  */
 
 import type { ServerResponse } from 'node:http';
-import { errorResponse, okResponse, type SendJSON } from '@tabtin/cli-server-core';
+import { errorResponse, okResponse, type SendJSON } from '@muse/cli-server-core';
 import { djangoRequest } from '../host-bindings.js';
 import {
   guardLocalFile,
@@ -61,7 +61,7 @@ function organizationIdFrom(body: any): string | undefined {
   if (typeof body?.organizationId === 'string' && body.organizationId.trim()) {
     return body.organizationId.trim();
   }
-  const envOrg = process.env.TABTIN_ORGANIZATION_ID;
+  const envOrg = process.env.MUSE_ORGANIZATION_ID;
   if (typeof envOrg === 'string' && envOrg.trim()) {
     return envOrg.trim();
   }
@@ -80,7 +80,7 @@ function requireOrganizationId(
       400,
       errorResponse(
         'VALIDATION_ERROR',
-        '缺少 organization_id。请设置 TABTIN_ORGANIZATION_ID，或在请求中传入 organization_id',
+        '缺少 organization_id。请设置 MUSE_ORGANIZATION_ID，或在请求中传入 organization_id',
       ),
     );
     return null;
@@ -90,7 +90,7 @@ function requireOrganizationId(
 
 async function loadUploadFileToOSS(): Promise<UploadFileToOSS> {
   if (uploadFileToOSSForTest) return uploadFileToOSSForTest;
-  const mod: any = await import('@tabtin/action-tools/utils/oss-upload' as any);
+  const mod: any = await import('@muse/action-tools/utils/oss-upload' as any);
   return mod.uploadFileToOSS as UploadFileToOSS;
 }
 

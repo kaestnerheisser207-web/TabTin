@@ -56,7 +56,7 @@ _FAST_ALLOW_PATTERNS: List[Tuple[str, _FastAllowPredicate]] = [
     (
         "package_install",
         lambda args: all(
-            p.startswith("@tabtin/") for p in (args.get("packages") or [])
+            p.startswith("@muse/") for p in (args.get("packages") or [])
         )
         and len(args.get("packages") or []) > 0,
     ),

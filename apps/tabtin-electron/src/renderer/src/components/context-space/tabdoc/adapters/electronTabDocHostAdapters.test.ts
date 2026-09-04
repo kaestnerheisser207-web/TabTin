@@ -70,8 +70,8 @@ const {
   }
 })
 
-vi.mock('@tabtin/table-core', async (importOriginal) => {
-  const actual = await importOriginal<typeof import('@tabtin/table-core')>()
+vi.mock('@muse/table-core', async (importOriginal) => {
+  const actual = await importOriginal<typeof import('@muse/table-core')>()
   return {
     ...actual,
     getTableSpaceId: mockGetTableSpaceId,
@@ -196,8 +196,8 @@ describe('createElectronTabDocHostActions', () => {
     unifiedResourcesState.resources = []
     unifiedResourcesState.resourcesBySpaceId = {}
     mockDirectUpload.mockResolvedValue({ fileId: 'file-1' })
-    ;(window as any).tabtin = {
-      ...(window as any).tabtin,
+    ;(window as any).muse = {
+      ...(window as any).muse,
       auth: {
         getAccessToken: vi.fn(async () => ({ success: true, token: null })),
       },
@@ -820,7 +820,7 @@ describe('createElectronTabDocHostActions', () => {
   })
 
   it('openHtmlArtifactInBrowser 注入 tabtin_handoff 并放行 PRIVATE_WEB', async () => {
-    ;(window as any).tabtin.auth.getAccessToken = vi.fn(async () => ({
+    ;(window as any).muse.auth.getAccessToken = vi.fn(async () => ({
       success: true,
       token: 'tok-electron',
     }))
@@ -872,11 +872,11 @@ describe('createElectronTabDocHostActions', () => {
       crawlspaceId: 'cs-1',
     })
     const navigate = vi.fn(async () => ({ success: true }))
-    ;(window as any).tabtin.auth.getAccessToken = vi.fn(async () => ({
+    ;(window as any).muse.auth.getAccessToken = vi.fn(async () => ({
       success: true,
       token: 'tok-retry',
     }))
-    ;(window as any).tabtin.webviewHost = { navigate }
+    ;(window as any).muse.webviewHost = { navigate }
     const mockRequest = vi.fn().mockResolvedValue({
       document_id: 'doc-1',
       block_id: 'block-1',

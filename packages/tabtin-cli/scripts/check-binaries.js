@@ -26,14 +26,14 @@ const missing = EXPECTED_BINARIES.filter(
 
 if (missing.length > 0) {
   process.stderr.write(
-    '[@tabtin/cli] 缺少以下二进制，拒绝打包：\n' +
+    '[@muse/cli] 缺少以下二进制，拒绝打包：\n' +
       missing.map((name) => `  - binaries/${name}`).join('\n') +
       '\n\n请先运行：\n' +
-      '  pnpm --filter @tabtin/cli build   # 或 node scripts/build-binaries.js\n'
+      '  pnpm --filter @muse/cli build   # 或 node scripts/build-binaries.js\n'
   );
   process.exit(1);
 }
 
 process.stdout.write(
-  `[@tabtin/cli] binaries/ 校验通过，${EXPECTED_BINARIES.length} 个平台产物齐备。\n`
+  `[@muse/cli] binaries/ 校验通过，${EXPECTED_BINARIES.length} 个平台产物齐备。\n`
 );

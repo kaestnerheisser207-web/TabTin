@@ -43,7 +43,7 @@ import {
   ContextMenuItem,
   ContextMenuDivider,
   toast,
-} from '@tabtin/smartsheet-ui'
+} from '@muse/smartsheet-ui'
 import { sendCodeContextToChat } from '../sendCodeContextToChat'
 import { FileIcon } from '@components/shared/file-icon/FileIcon'
 import { cn } from '@utils/cn'
@@ -366,7 +366,7 @@ export const TabCodeFileTree: React.FC<TabCodeFileTreeProps> = ({
           // （包括 .cursor / .vscode / .git / node_modules 等）。性能/可读性是
           // 用户自己用 .gitignore 或者折叠节点处理的事，不该在 UI 层硬藏。
           // 搜索索引另有性能黑名单（SEARCH_INDEX_SKIP_NAMES），那是另一码事。
-          const dirRes = await window.tabtin.fileSystem.readDir(dirPath)
+          const dirRes = await window.muse.fileSystem.readDir(dirPath)
           if (!isLegacyOk(dirRes) || !dirRes.entries) return []
           const result: { id: string; data: FileNode }[] = []
           for (const e of dirRes.entries) {
@@ -614,7 +614,7 @@ export const TabCodeFileTree: React.FC<TabCodeFileTreeProps> = ({
 
   const handleSend = useCallback(async (filePath: string) => {
     try {
-      const r = await window.tabtin.fileSystem.readFilePreview(filePath, { maxBytes: 4096 })
+      const r = await window.muse.fileSystem.readFilePreview(filePath, { maxBytes: 4096 })
       sendCodeContextToChat({
         type: 'code_file', resourceId: filePath,
         label: basename(filePath),
@@ -635,7 +635,7 @@ export const TabCodeFileTree: React.FC<TabCodeFileTreeProps> = ({
     navigator.clipboard.writeText(relativePath(rootPath, p))
   }, [rootPath])
   const handleReveal = useCallback((p: string) => {
-    window.tabtin.showItemInFolder(p).catch(() => {})
+    window.muse.showItemInFolder(p).catch(() => {})
   }, [])
 
   const handleTogglePin = useCallback((node: FileNode) => {
@@ -681,7 +681,7 @@ export const TabCodeFileTree: React.FC<TabCodeFileTreeProps> = ({
     await runGitPathAction({
       action: 'stage-file-tree-node',
       relPaths: [rel],
-      run: () => window.tabtin.git.stageFiles(rootPath, [rel]),
+      run: () => window.muse.git.stageFiles(rootPath, [rel]),
       successTitle: t('contextMenu.stageSuccessTitle'),
       successDescription: t('contextMenu.stageSuccessDesc', { name: node.name }),
     })
@@ -692,7 +692,7 @@ export const TabCodeFileTree: React.FC<TabCodeFileTreeProps> = ({
     await runGitPathAction({
       action: 'unstage-file-tree-node',
       relPaths: [rel],
-      run: () => window.tabtin.git.unstageFiles(rootPath, [rel]),
+      run: () => window.muse.git.unstageFiles(rootPath, [rel]),
       successTitle: t('contextMenu.unstageSuccessTitle'),
       successDescription: t('contextMenu.unstageSuccessDesc', { name: node.name }),
     })
@@ -704,7 +704,7 @@ export const TabCodeFileTree: React.FC<TabCodeFileTreeProps> = ({
     await runGitPathAction({
       action: 'stage-git-change-section',
       relPaths,
-      run: () => window.tabtin.git.stageFiles(rootPath, relPaths),
+      run: () => window.muse.git.stageFiles(rootPath, relPaths),
       successTitle: t('contextMenu.stageSuccessTitle'),
       successDescription: t('toolbar.unstagedCount', { count: relPaths.length }),
     })
@@ -716,7 +716,7 @@ export const TabCodeFileTree: React.FC<TabCodeFileTreeProps> = ({
     await runGitPathAction({
       action: 'unstage-git-change-section',
       relPaths,
-      run: () => window.tabtin.git.unstageFiles(rootPath, relPaths),
+      run: () => window.muse.git.unstageFiles(rootPath, relPaths),
       successTitle: t('contextMenu.unstageSuccessTitle'),
       successDescription: t('toolbar.stagedCount', { count: relPaths.length }),
     })
@@ -732,7 +732,7 @@ export const TabCodeFileTree: React.FC<TabCodeFileTreeProps> = ({
     setDiscardTarget(null)
     try {
       const rel = relativePath(rootPath, node.path)
-      const result = await window.tabtin.git.discardFiles(rootPath, [rel])
+      const result = await window.muse.git.discardFiles(rootPath, [rel])
       if (result?.success) {
         toast({ title: t('contextMenu.discardSuccessTitle'), description: t('contextMenu.discardSuccessDesc', { name: node.name }) })
         onGitActionComplete?.()
@@ -809,7 +809,7 @@ export const TabCodeFileTree: React.FC<TabCodeFileTreeProps> = ({
         const ok = await createFile(parentPath, name)
         if (!ok) return
         const filePath = `${parentPath}/${name}`
-        const exists = await window.tabtin.fileSystem.readFilePreview(filePath, { maxBytes: 1 })
+        const exists = await window.muse.fileSystem.readFilePreview(filePath, { maxBytes: 1 })
         if (exists.success) onFileSelect(filePath)
       } else {
         const ok = await createDirectory(parentPath, name)
@@ -878,10 +878,10 @@ export const TabCodeFileTree: React.FC<TabCodeFileTreeProps> = ({
       // 是 fail-soft 行为；用 ensureLegacyOk 转 throw 走 catch 块统一处理（exhaustive
       // 而不是各分支重复）。
       if (pinnedItem.isDirectory) {
-        const dirRes = await window.tabtin.fileSystem.readDir(pinnedItem.path)
+        const dirRes = await window.muse.fileSystem.readDir(pinnedItem.path)
         ensureLegacyOk(dirRes, 'pinned node readDir')
       } else {
-        const previewRes = await window.tabtin.fileSystem.readFilePreview(pinnedItem.path, { maxBytes: 1 })
+        const previewRes = await window.muse.fileSystem.readFilePreview(pinnedItem.path, { maxBytes: 1 })
         ensureLegacyOk(previewRes, 'pinned node readFilePreview')
       }
     } catch {

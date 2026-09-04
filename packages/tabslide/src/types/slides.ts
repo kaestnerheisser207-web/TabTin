@@ -1,5 +1,5 @@
 /**
- * @tabtin/tabslide 核心类型定义
+ * @muse/tabslide 核心类型定义
  *
  * 设计原则：
  * 1. 深度参考 PPTist（src/types/slides.ts）的成熟设计，吸收其 9 种元素类型、

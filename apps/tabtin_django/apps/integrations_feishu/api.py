@@ -513,7 +513,7 @@ def oauth_callback(request, code: str = "", state: str = ""):
     if deep_link:
         qs["deep_link"] = deep_link
     else:
-        qs["deep_link"] = "tabtin://integrations/feishu/connected"
+        qs["deep_link"] = "muse://integrations/feishu/connected"
     qs["connected"] = "1"
     qs["organization_id"] = str(organization_id)
     sep = "&" if "?" in success else "?"
@@ -521,12 +521,12 @@ def oauth_callback(request, code: str = "", state: str = ""):
 
 
 def _safe_feishu_deep_link(raw: str) -> str:
-    """只允许 tabtin:// 自定义协议，且限制字符集，避免反射进 HTML/JS。"""
+    """只允许 muse:// 自定义协议，且限制字符集，避免反射进 HTML/JS。"""
     import re
 
-    default = "tabtin://integrations/feishu/connected"
+    default = "muse://integrations/feishu/connected"
     link = (raw or default).strip()
-    if not re.fullmatch(r"tabtin://[\w\-./?=&%:+]*", link):
+    if not re.fullmatch(r"muse://[\w\-./?=&%:+]*", link):
         return default
     return link
 

@@ -15,14 +15,14 @@ import remarkGfm from 'remark-gfm'
 import rehypeSanitize from 'rehype-sanitize'
 import { Check, Copy, FileCode2 } from 'lucide-react'
 import { cn } from '@utils/cn'
-import { ScrollArea } from '@tabtin/smartsheet-ui'
+import { ScrollArea } from '@muse/smartsheet-ui'
 import type { Components } from 'react-markdown'
 import { MermaidBlock } from './MermaidBlock'
 import { safeCopyToClipboard } from '../utils/clipboard'
 import { sanitizeSchema, rehypeSanitizeCss } from '@/lib/rehypeSanitizeSchema'
 import { splitStreamingMarkdown } from './StreamingMarkdownSplitter'
-import { remarkAutolinkResource } from '@tabtin/markdown-resource-autolink'
-import { parseResourcePointer } from '@tabtin/resource-router'
+import { remarkAutolinkResource } from '@muse/markdown-resource-autolink'
+import { parseResourcePointer } from '@muse/resource-router'
 import { normalizeSchemelessWebHref } from '@shared/normalize-web-href'
 import { resourceRouter } from '@/services/resourceRouter'
 import {
@@ -56,7 +56,7 @@ const MarkdownLinksEnabledContext = React.createContext(true)
 
 /**
  * react-markdown 默认 `urlTransform` 走 `safeProtocol = /^(https?|ircs?|mailto|xmpp)$/i`
- * 协议白名单，把 `tabtin://` / `file://` / `tel:` / 自定义 scheme 的 href 替换
+ * 协议白名单，把 `muse://` / `file://` / `tel:` / 自定义 scheme 的 href 替换
  * 为空字符串——这是 D4 改造前已知的"sanitize 第二层"。
  *
  * W3 改造（RFC §3.3 / §4 D4 默认全开）：自定义 urlTransform 走"全开 + known-bad
@@ -492,7 +492,7 @@ const MarkdownLink: React.FC<{
         .catch((err) => {
           linkLog.warn('chat markdown link open without selected space threw', { href: normalizedHref, err })
           if (shouldFallbackOpenExternal(normalizedHref)) {
-            void window.tabtin?.openExternal?.(normalizedHref)
+            void window.muse?.openExternal?.(normalizedHref)
           }
         })
       return
@@ -522,13 +522,13 @@ const MarkdownLink: React.FC<{
             scheme: pointer.scheme,
             errorMessage: outcome.errorMessage,
           })
-          void window.tabtin?.openExternal?.(normalizedHref)
+          void window.muse?.openExternal?.(normalizedHref)
         }
       })
       .catch((err) => {
         linkLog.warn('chat markdown link open threw', { href: normalizedHref, spaceId, err })
         if (shouldFallbackOpenExternal(normalizedHref)) {
-          void window.tabtin?.openExternal?.(normalizedHref)
+          void window.muse?.openExternal?.(normalizedHref)
         }
       })
   }

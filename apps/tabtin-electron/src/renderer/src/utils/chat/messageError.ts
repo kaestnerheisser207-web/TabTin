@@ -1,4 +1,4 @@
-import type { ChatMessage } from '@tabtin/chat-client'
+import type { ChatMessage } from '@muse/chat-client'
 import { iterableMessageBlocks } from '../../stores/chat/messages/utils/contentBlockSemantics'
 
 type MessageLike = Pick<ChatMessage, 'metadata' | 'content_blocks_json' | 'error_info_json' | 'blocks'>

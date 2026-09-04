@@ -8,7 +8,7 @@ import { DshApiClient } from '../src/application/agent/runtime/dsh-api-client.js
 import { DshModelGateway } from '../src/application/agent/runtime/dsh-model-gateway.js'
 import { DshRuntimeDriver } from '../src/application/agent/runtime/dsh-runtime-driver.js'
 
-const enabled = process.env.TABTIN_DSH_INTEGRATION === '1'
+const enabled = process.env.MUSE_DSH_INTEGRATION === '1'
 const children: ChildProcess[] = []
 const temporaryDirectories: string[] = []
 const servers: Server[] = []

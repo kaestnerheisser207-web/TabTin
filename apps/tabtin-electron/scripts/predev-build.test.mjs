@@ -72,9 +72,9 @@ test('parseNotifySeed validates the optional readiness seed', () => {
 test('collab-live seed builds declared workspace deps, not itself or Go CLI', () => {
   const ctx = predevBuild.buildContext({ seedPkg: 'collab-live' });
   for (const name of [
-    '@tabtin/config',
-    '@tabtin/doc-editor',
-    '@tabtin/table-engine',
+    '@muse/config',
+    '@muse/doc-editor',
+    '@muse/table-engine',
   ]) {
     assert.equal(ctx.closure.has(name), true, name);
   }

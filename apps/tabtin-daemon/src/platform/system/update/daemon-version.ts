@@ -15,7 +15,7 @@ export function readDaemonVersion(): string {
           name?: string
           version?: string
         }
-        if (pkg.name === '@tabtin/daemon') {
+        if (pkg.name === '@muse/daemon') {
           cached = pkg.version ?? 'unknown'
           return cached
         }

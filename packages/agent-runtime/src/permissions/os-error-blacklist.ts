@@ -41,7 +41,7 @@ export interface OSErrorBlacklistEntry {
    * path 维度写入时（`block`）省略此字段，靠 `path` 字段本身就是真实路径。
    */
   originalPath?: string;
-  /** OSErrorCode 字符串 —— 这里不强类型依赖 @tabtin/os-errors 以避免循环 */
+  /** OSErrorCode 字符串 —— 这里不强类型依赖 @muse/os-errors 以避免循环 */
   code: string;
   blockedAt: number;
   expiresAt: number;

@@ -17,7 +17,7 @@ import {
   standaloneExtensions,
   type CommentYjsCodec,
   type EditorInstance,
-} from '@tabtin/tabdoc-ui/editor'
+} from '@muse/tabdoc-ui/editor'
 import { useSharedDocCollab } from './hooks/useShareCollab'
 
 const EMPTY_DOC = { type: 'doc', content: [] } as const

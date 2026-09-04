@@ -116,11 +116,11 @@ describe('SubprocessPtyHostClient smoke', () => {
     })
 
     const largeOutputScript = [
-      'process.stdout.write("__TABTIN_BP_START__\\n")',
+      'process.stdout.write("__MUSE_BP_START__\\n")',
       'for (let index = 0; index < 48; index += 1) {',
       '  process.stdout.write(`chunk-${index}-${"x".repeat(3072)}\\n`)',
       '}',
-      'process.stdout.write("__TABTIN_BP_END__\\n")',
+      'process.stdout.write("__MUSE_BP_END__\\n")',
     ].join('; ')
     const largeOutputCommand = `${JSON.stringify(process.execPath)} -e ${JSON.stringify(largeOutputScript)}\nexit\n`
     let output = ''
@@ -141,12 +141,12 @@ describe('SubprocessPtyHostClient smoke', () => {
       session.write(largeOutputCommand)
 
       await new Promise((resolve) => setTimeout(resolve, 150))
-      expect(output).not.toContain('__TABTIN_BP_END__')
+      expect(output).not.toContain('__MUSE_BP_END__')
 
       session.resumeOutput()
 
       await waitFor(() => {
-        return output.includes('__TABTIN_BP_START__') && output.includes('__TABTIN_BP_END__')
+        return output.includes('__MUSE_BP_START__') && output.includes('__MUSE_BP_END__')
           ? output
           : false
       }, { timeoutMs: 10_000, intervalMs: 50 })

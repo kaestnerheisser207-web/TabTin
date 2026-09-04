@@ -9,8 +9,8 @@
 
 import * as fsp from 'node:fs/promises';
 import * as path from 'node:path';
-import { parseSkillDoc, type LocalSkill } from '@tabtin/agent-runtime/skills';
-import { computeSkillContentHash } from '@tabtin/agent-runtime/paths';
+import { parseSkillDoc, type LocalSkill } from '@muse/agent-runtime/skills';
+import { computeSkillContentHash } from '@muse/agent-runtime/paths';
 
 const SKILL_FILE = 'SKILL.md';
 
@@ -338,7 +338,7 @@ export {
   type SkillSlugRef,
   type WorkspaceShadowingResult,
   type WorkspaceSkillMergeResult,
-} from '@tabtin/agent-runtime/skills';
+} from '@muse/agent-runtime/skills';
 
 /** 根须等于或位于某个 allowedRoot 之下（发现 / 注入共用）。 */
 export function isWorkspaceRootAllowed(

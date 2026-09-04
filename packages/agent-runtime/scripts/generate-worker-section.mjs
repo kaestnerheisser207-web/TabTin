@@ -3,7 +3,7 @@
  * 从 prompts/subagent_worker.md 生成 src/subagent/generated-worker-section.ts。
  *
  * SSoT 是 .md 文件——修改 worker 段只需编辑 .md，然后 build 自动重新生成 TS 常量。
- * 与 @tabtin/agent-prompt 的 generate-content.mjs / @tabtin/agent-modes 的
+ * 与 @muse/agent-prompt 的 generate-content.mjs / @muse/agent-modes 的
  * gen-prompt-sections.mjs 同一模式（generated 产物勿手改，改了会被 prebuild 覆盖）。
  */
 

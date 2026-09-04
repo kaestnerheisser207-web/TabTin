@@ -2,7 +2,7 @@ import { describe, it, expect, vi, beforeEach } from 'vitest'
 
 const { toastMock } = vi.hoisted(() => ({ toastMock: vi.fn() }))
 
-vi.mock('@tabtin/smartsheet-ui', () => ({ toast: toastMock }))
+vi.mock('@muse/smartsheet-ui', () => ({ toast: toastMock }))
 
 vi.mock('@/i18n', () => ({
   default: {

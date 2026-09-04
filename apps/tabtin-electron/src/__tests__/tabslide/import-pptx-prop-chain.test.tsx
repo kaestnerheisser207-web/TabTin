@@ -7,8 +7,8 @@ import type { SlideTopBarProps } from '../../../../../packages/tabslide/src/comp
  * ：导入/导出/放映/版本历史已从 RightSidebar 迁到顶栏 SlideTopBar，
  * 因此 prop 链路改为 SlideEditor → SlideTopBar。
  *
- * 由于测试基础设施中 @tabtin/app-shell 未解析（已有问题），
- * 无法渲染依赖 @tabtin/smartsheet-ui 的组件。
+ * 由于测试基础设施中 @muse/app-shell 未解析（已有问题），
+ * 无法渲染依赖 @muse/smartsheet-ui 的组件。
  * 本测试通过类型契约 + 源码结构两层验证确保 prop 传递链路完整。
  */
 

@@ -99,7 +99,7 @@ vi.mock('react-i18next', () => ({
   useTranslation: () => ({ t: mockT }),
 }))
 
-vi.mock('@tabtin/smartsheet-ui', () => ({ toast: mockToast }))
+vi.mock('@muse/smartsheet-ui', () => ({ toast: mockToast }))
 
 vi.mock('@components/ui', () => ({
   Badge: ({ children, ...props }: React.HTMLAttributes<HTMLDivElement>) =>

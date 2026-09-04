@@ -1,7 +1,7 @@
 import React from 'react'
 import { Archive, Check, ChevronDown, ChevronRight, GitFork, Loader2, Outdent, Pin, PinOff, Trash2 } from 'lucide-react'
 import { cn } from '@utils/cn'
-import type { ChatSession } from '@tabtin/chat-client'
+import type { ChatSession } from '@muse/chat-client'
 import { warmSpacePathCache } from '@/utils/buildSessionReferenceClipboardText'
 import { useChatStore } from '@/stores/chat/useChatStore'
 import { useSessionReadStore } from '@/stores/useSessionReadStore'

@@ -7,7 +7,7 @@
  *   若助手消息没有 agent_run_id（旧数据 / 流式中尚未落地），仅聚合自身
  */
 
-import type { ChatMessage, MessageAttachment, MessageBlock } from '@tabtin/chat-client'
+import type { ChatMessage, MessageAttachment, MessageBlock } from '@muse/chat-client'
 import type { PreviewResource, PreviewResourceKind } from './types'
 import { readMessageBlocks } from '../blocks/messageContentBlocks'
 import { inferPreviewableKind } from './inferPreviewableKind'

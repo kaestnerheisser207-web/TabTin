@@ -1,5 +1,5 @@
 import React from 'react'
-import type { TableGridColumn, TableGridRow } from '@tabtin/table-engine'
+import type { TableGridColumn, TableGridRow } from '@muse/table-engine'
 
 const MIN_EDITOR_SIZE = 24
 const DATE_PATTERN = /^\d{4}-\d{2}-\d{2}$/

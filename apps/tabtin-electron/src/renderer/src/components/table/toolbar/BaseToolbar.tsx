@@ -9,7 +9,7 @@ import {
   TooltipTrigger,
   cn,
   Input,
-} from '@tabtin/smartsheet-ui'
+} from '@muse/smartsheet-ui'
 import { useTranslation } from 'react-i18next'
 import { useUndoRedoContext } from '@components/view/UndoRedoContext'
 

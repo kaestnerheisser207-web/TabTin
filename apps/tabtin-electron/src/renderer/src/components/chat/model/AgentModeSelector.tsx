@@ -10,7 +10,7 @@ import {
   COMPOSER_TOOLBAR_ICON_STROKE,
 } from '../registry/chatDesignTokens'
 import { useTranslation } from 'react-i18next'
-import type { Agent, Space } from '@tabtin/app-shell'
+import type { Agent, Space } from '@muse/app-shell'
 import { SELECTABLE_AGENT_MODES, type AgentModeName } from '@/stores/chat/shared/types'
 import { useChatModelStore } from '@/stores/useChatModelStore'
 import { AGENT_MODE_THEME } from './agentModeTheme'

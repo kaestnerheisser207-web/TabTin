@@ -3,7 +3,7 @@ import type {
   Message,
   QueryParams,
   StreamEvent,
-} from '@tabtin/agent-runtime'
+} from '@muse/agent-runtime'
 
 /** Agent harnesses shipped by Muse Cloud Agent v1. */
 export type RuntimeHarness = 'builtin' | 'dsh'

@@ -1,4 +1,4 @@
-import type { Agent, Space } from '@tabtin/app-shell'
+import type { Agent, Space } from '@muse/app-shell'
 import { useSpaceStore } from '@stores/useSpaceStore'
 
 /**

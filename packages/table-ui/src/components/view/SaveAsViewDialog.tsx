@@ -7,7 +7,7 @@ import {
   DialogTitle,
   DialogFooter,
   Input,
-} from '@tabtin/smartsheet-ui'
+} from '@muse/smartsheet-ui'
 
 export interface SaveAsViewDialogProps {
   open: boolean

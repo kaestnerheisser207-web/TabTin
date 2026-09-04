@@ -8,7 +8,7 @@
  *
  * `canHostTurnArtifacts` 只约束产物挂载点，≠ 分轮。
  */
-import type { ChatMessage } from '@tabtin/chat-client'
+import type { ChatMessage } from '@muse/chat-client'
 import { isRegularUserMessage } from '@/stores/chat/messages/utils/semanticMessageCount'
 
 export { isRegularUserMessage }

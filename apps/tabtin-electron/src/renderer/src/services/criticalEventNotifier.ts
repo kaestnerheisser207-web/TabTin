@@ -19,8 +19,8 @@
  */
 
 import { useBackgroundEventStore, type BackgroundEnvelope } from '@/stores/useBackgroundEventStore'
-import { useOrganizationStore } from '@tabtin/app-shell'
-import { toast } from '@tabtin/smartsheet-ui/toast'
+import { useOrganizationStore } from '@muse/app-shell'
+import { toast } from '@muse/smartsheet-ui/toast'
 import i18n from '@/i18n'
 import { logger } from '@/utils/logger'
 

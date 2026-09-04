@@ -49,7 +49,7 @@ func parseSSEStream(ctx context.Context, reader *bufio.Reader, handler EventHand
 			if len(dataLines) > 0 {
 				dispatchEvent(eventType, dataLines, handler)
 			}
-			if err != io.EOF && ctx.Err() == nil && (os.Getenv("TABTIN_VERBOSE") == "1" || os.Getenv("TABTIN_DEBUG") == "1") {
+			if err != io.EOF && ctx.Err() == nil && (os.Getenv("MUSE_VERBOSE") == "1" || os.Getenv("MUSE_DEBUG") == "1") {
 				fmt.Fprintf(os.Stderr, "[sse] 读流结束: %v\n", err)
 			}
 			return
@@ -98,7 +98,7 @@ func dispatchEvent(eventType string, dataLines []string, handler EventHandler) {
 
 	var event AgentEvent
 	if err := json.Unmarshal([]byte(data), &event); err != nil {
-		if os.Getenv("TABTIN_VERBOSE") == "1" || os.Getenv("TABTIN_DEBUG") == "1" {
+		if os.Getenv("MUSE_VERBOSE") == "1" || os.Getenv("MUSE_DEBUG") == "1" {
 			fmt.Fprintf(os.Stderr, "[sse] 事件解析失败 (type=%s): %v\n", eventType, err)
 		}
 		return

@@ -1,5 +1,5 @@
 {
-  "name": "@tabtin/python-runtime",
+  "name": "@muse/python-runtime",
   "version": "0.1.0",
   "description": "Muse self-managed Python runtime resolver/provisioner (L0 pure infrastructure, zero business coupling)",
   "type": "module",

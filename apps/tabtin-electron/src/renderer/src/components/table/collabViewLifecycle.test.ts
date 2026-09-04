@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from 'vitest'
-import type { ViewMeta } from '@tabtin/table-core'
+import type { ViewMeta } from '@muse/table-core'
 import {
   createRestBackedCollabView,
   deleteRestBackedCollabView,

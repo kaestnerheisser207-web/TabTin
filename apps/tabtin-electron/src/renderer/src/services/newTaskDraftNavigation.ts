@@ -37,7 +37,7 @@ import {
   type EnsureSpaceSelectedWithFeedbackOptions,
 } from '@/services/spaceNavigation'
 import { resolveDefaultExecutionWorkspaceId } from '@/utils/defaultExecutionSpace'
-import { parseSpaceSelectionId } from '@tabtin/app-shell'
+import { parseSpaceSelectionId } from '@muse/app-shell'
 import { ensureLocalWorkspaceForOrganization } from '@components/sidebar/ensureLocalWorkspace'
 
 export type NewTaskConversationTarget = {

@@ -140,7 +140,7 @@ async function fetchRemoteHttpToBuffer(
   signal?: AbortSignal,
 ): Promise<ArrayBuffer> {
   if (signal?.aborted) throw abortError()
-  const fetchBuffer = window.tabtin?.resourceDetection?.fetchBuffer
+  const fetchBuffer = window.muse?.resourceDetection?.fetchBuffer
   if (!fetchBuffer) {
     throw new Error('resourceDetection.fetchBuffer unavailable')
   }

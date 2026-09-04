@@ -2927,7 +2927,7 @@ struct WorkbenchMobileHostContext: Codable, Equatable {
             return;
           }
           const hostContext = \(encodedJSON);
-          window.__TABTIN_MOBILE_HOST__ = hostContext;
+          window.__MUSE_MOBILE_HOST__ = hostContext;
           window.dispatchEvent(
             new CustomEvent('tabtin:host-context', { detail: hostContext })
           );
@@ -2962,7 +2962,7 @@ private enum WorkbenchNativeFocusBridge {
           if (window.location.origin !== \(jsonString(expectedOrigin.javascriptValue))) {
             return;
           }
-          window.__TABTIN_NATIVE_FOCUS__ = {
+          window.__MUSE_NATIVE_FOCUS__ = {
             report: (payload) => {
               window.webkit.messageHandlers[\(jsonString(handlerName))].postMessage(payload);
             }
@@ -3038,7 +3038,7 @@ struct WorkbenchWebAuthSnapshot: Equatable {
           } else {
             localStorage.removeItem('tabtin_user');
           }
-          window.__TABTIN_NATIVE_AUTH__ = {
+          window.__MUSE_NATIVE_AUTH__ = {
             platform: 'ios',
             refresh: async () => {
               const result = await window.webkit.messageHandlers[

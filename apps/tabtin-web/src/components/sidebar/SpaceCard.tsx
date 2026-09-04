@@ -17,7 +17,7 @@ import {
   type SpaceListItem,
   getSpaceNavigationIcon,
   getSpaceNavigationLabel,
-} from '@tabtin/app-shell'
+} from '@muse/app-shell'
 import { spaceHomePath } from '@/features/space/spaceRoutes'
 import { cn } from '@/utils/cn'
 

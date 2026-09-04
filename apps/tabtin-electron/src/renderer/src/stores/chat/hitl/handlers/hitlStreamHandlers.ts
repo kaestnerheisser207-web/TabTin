@@ -7,8 +7,8 @@
  * `pendingApprovalBySessionId`, so ApprovalPanel never rendered.
  */
 
-import type { ReviewRequiredEventData } from '@tabtin/chat-client'
-import { AskInteractionRequestSchema, StreamEvents } from '@tabtin/agent-wire'
+import type { ReviewRequiredEventData } from '@muse/chat-client'
+import { AskInteractionRequestSchema, StreamEvents } from '@muse/agent-wire'
 import i18n from '@/i18n'
 import { createLogger } from '@/utils/logger'
 import { SystemNotification } from '@/services/systemNotification'

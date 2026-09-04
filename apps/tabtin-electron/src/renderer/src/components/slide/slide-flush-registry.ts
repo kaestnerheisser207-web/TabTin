@@ -16,10 +16,10 @@ const FLUSH_TIMEOUT_MS = 3000
 function ensureIpcListener(): void {
   if (ipcCleanup) return
 
-  ipcCleanup = window.tabtin?.slide?.onFlushBeforeClose?.(() => {
+  ipcCleanup = window.muse?.slide?.onFlushBeforeClose?.(() => {
     const handlers = Array.from(registry.values())
     if (handlers.length === 0) {
-      window.tabtin?.slide?.flushComplete?.()
+      window.muse?.slide?.flushComplete?.()
       return
     }
 
@@ -29,7 +29,7 @@ function ensureIpcListener(): void {
     })
 
     void Promise.allSettled(promises).then(() => {
-      window.tabtin?.slide?.flushComplete?.()
+      window.muse?.slide?.flushComplete?.()
     })
   }) ?? null
 }

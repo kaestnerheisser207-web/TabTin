@@ -1,5 +1,5 @@
 {
-  "name": "@tabtin/tabdoc-ui",
+  "name": "@muse/tabdoc-ui",
   "version": "0.1.0",
   "description": "Shared TabDoc editor UI, host contexts, API client, and panel hooks",
   "type": "module",
@@ -76,11 +76,11 @@
   },
   "dependencies": {
     "@floating-ui/react": "0.27.16",
-    "@tabtin/app-host-sdk": "workspace:*",
-    "@tabtin/collab-core": "workspace:*",
-    "@tabtin/doc-editor": "workspace:*",
-    "@tabtin/smartsheet-ui": "workspace:*",
-    "@tabtin/storage-manager": "workspace:*",
+    "@muse/app-host-sdk": "workspace:*",
+    "@muse/collab-core": "workspace:*",
+    "@muse/doc-editor": "workspace:*",
+    "@muse/smartsheet-ui": "workspace:*",
+    "@muse/storage-manager": "workspace:*",
     "@tiptap/core": "^2.27.2",
     "@tiptap/extension-collaboration": "^2.10.0",
     "@tiptap/extension-collaboration-cursor": "^2.10.0",
@@ -109,7 +109,7 @@
   },
   "peerDependencies": {
     "@hocuspocus/provider": "^2.0.0",
-    "@tabtin/table-core": "workspace:*",
+    "@muse/table-core": "workspace:*",
     "react": "^19.0.0",
     "react-dom": "^19.0.0"
   },
@@ -117,7 +117,7 @@
     "@hocuspocus/provider": {
       "optional": true
     },
-    "@tabtin/table-core": {
+    "@muse/table-core": {
       "optional": true
     }
   },

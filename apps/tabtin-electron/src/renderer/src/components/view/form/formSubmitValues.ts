@@ -1,4 +1,4 @@
-import type { FormFieldMeta } from '@tabtin/table-ui'
+import type { FormFieldMeta } from '@muse/table-ui'
 
 export interface FormCreatorContext {
   currentUserId: string | null | undefined

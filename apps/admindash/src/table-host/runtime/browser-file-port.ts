@@ -1,4 +1,4 @@
-import type { TableFilePort } from '@tabtin/table-core'
+import type { TableFilePort } from '@muse/table-core'
 
 export const browserFilePort: TableFilePort = {
   downloadBlob: (blob: Blob, filename: string) => {

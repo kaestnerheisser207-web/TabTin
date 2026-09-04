@@ -1,7 +1,7 @@
 import { Activity, useState } from 'react'
 import { BookText } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
-import { ROLE_LEVELS } from '@tabtin/app-shell'
+import { ROLE_LEVELS } from '@muse/app-shell'
 
 import { cn } from '@utils/cn'
 import { McpPanel } from '@components/space-settings/McpPanel'

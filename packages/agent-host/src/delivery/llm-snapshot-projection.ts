@@ -12,7 +12,7 @@
 import {
   RuntimeLlmSnapshotEvent,
   type StreamEvent,
-} from '@tabtin/agent-runtime'
+} from '@muse/agent-runtime'
 
 /** 目标上限：留出 envelope / 批次开销的余量（整帧 1MB）。 */
 const MAX_RELAY_SNAPSHOT_BYTES = 700_000;

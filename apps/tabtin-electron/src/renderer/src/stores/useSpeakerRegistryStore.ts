@@ -9,7 +9,7 @@
  */
 
 import { create } from 'zustand'
-import type { SpeakerIdentity } from '@tabtin/agent-wire'
+import type { SpeakerIdentity } from '@muse/agent-wire'
 
 export interface SpeakerRegistryState {
   /**

@@ -133,7 +133,7 @@ private extension ToolCall {
     }
 }
 
-/// file pipeline `error_kind` 的中文短文案表，与 `@tabtin/file-pipeline-errors` SSoT 同源。
+/// file pipeline `error_kind` 的中文短文案表，与 `@muse/file-pipeline-errors` SSoT 同源。
 ///
 /// **刻意不渲染**：与 Electron `chat.json#toolError` 保持一致——桌面同样把这份词表翻译好
 /// 存在手边、但不往时间线上贴，失败解释权归 Agent 正文。这里保留它是为了让三端词表不失联。

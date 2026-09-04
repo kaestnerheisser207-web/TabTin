@@ -12,8 +12,8 @@ function memoryEnvironment(initial: Record<string, string> = {}): EnvironmentPor
 
 describe('CliRequestContext instance isolation', () => {
   it('keeps mutable request state and environment fallback isolated per server', () => {
-    const first = new CliRequestContext(memoryEnvironment({ TABTIN_ORGANIZATION_ID: 'org-env-a' }))
-    const second = new CliRequestContext(memoryEnvironment({ TABTIN_ORGANIZATION_ID: 'org-env-b', TABTIN_SPACE_ID: 'space-env-b' }))
+    const first = new CliRequestContext(memoryEnvironment({ MUSE_ORGANIZATION_ID: 'org-env-a' }))
+    const second = new CliRequestContext(memoryEnvironment({ MUSE_ORGANIZATION_ID: 'org-env-b', MUSE_SPACE_ID: 'space-env-b' }))
     const firstCancel = vi.fn(() => true)
 
     first.setSpaceId('space-a')
@@ -33,10 +33,10 @@ describe('CliRequestContext instance isolation', () => {
   })
 
   it('updates only the injected environment instead of process.env', () => {
-    const original = process.env.TABTIN_SPACE_ID
+    const original = process.env.MUSE_SPACE_ID
     const context = new CliRequestContext(memoryEnvironment())
     context.setSpaceId('isolated-space')
     expect(context.getSpaceId()).toBe('isolated-space')
-    expect(process.env.TABTIN_SPACE_ID).toBe(original)
+    expect(process.env.MUSE_SPACE_ID).toBe(original)
   })
 })

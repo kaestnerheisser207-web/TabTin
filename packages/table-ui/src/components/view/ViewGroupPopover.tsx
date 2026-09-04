@@ -7,7 +7,7 @@ import {
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from '@tabtin/smartsheet-ui'
+} from '@muse/smartsheet-ui'
 import type { ViewGroup } from '../../types'
 import { ViewGroupRulesEditor } from './ViewGroupRulesEditor'
 import {

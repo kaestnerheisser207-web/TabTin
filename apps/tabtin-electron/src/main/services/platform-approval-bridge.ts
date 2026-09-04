@@ -20,7 +20,7 @@
 
 import { createLogger } from '../logger'
 import { approvalScopeCache } from './ApprovalScopeCache'
-import type { ApprovalMemoStore } from '@tabtin/agent-runtime/permissions'
+import type { ApprovalMemoStore } from '@muse/agent-runtime/permissions'
 
 const log = createLogger('PlatformApprovalBridge')
 

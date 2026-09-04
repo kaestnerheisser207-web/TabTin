@@ -227,13 +227,13 @@ def resolve_sentry_release() -> str | None:
     configured = os.getenv("SENTRY_RELEASE", "").strip()
     if configured:
         return configured
-    source_sha = os.getenv("TABTIN_SOURCE_SHA", os.getenv("TABTIN_GIT_SHA", "")).strip()
+    source_sha = os.getenv("MUSE_SOURCE_SHA", os.getenv("MUSE_GIT_SHA", "")).strip()
     return f"tabtin-django@{source_sha}" if source_sha else None
 
 
 def resolve_sentry_initial_scope() -> dict[str, dict[str, str]]:
     """为每个 Django 事件保留实际镜像源码 SHA，供告警归因使用。"""
-    source_sha = os.getenv("TABTIN_SOURCE_SHA", os.getenv("TABTIN_GIT_SHA", "")).strip()
+    source_sha = os.getenv("MUSE_SOURCE_SHA", os.getenv("MUSE_GIT_SHA", "")).strip()
     return {"tags": {"source_sha": source_sha}} if source_sha else {}
 
 
@@ -242,13 +242,13 @@ def resolve_sentry_release() -> str | None:
     configured = os.getenv("SENTRY_RELEASE", "").strip()
     if configured:
         return configured
-    source_sha = os.getenv("TABTIN_SOURCE_SHA", os.getenv("TABTIN_GIT_SHA", "")).strip()
+    source_sha = os.getenv("MUSE_SOURCE_SHA", os.getenv("MUSE_GIT_SHA", "")).strip()
     return f"tabtin-django@{source_sha}" if source_sha else None
 
 
 def resolve_sentry_initial_scope() -> dict[str, dict[str, str]]:
     """为每个 Django 事件保留实际镜像源码 SHA，供告警归因使用。"""
-    source_sha = os.getenv("TABTIN_SOURCE_SHA", os.getenv("TABTIN_GIT_SHA", "")).strip()
+    source_sha = os.getenv("MUSE_SOURCE_SHA", os.getenv("MUSE_GIT_SHA", "")).strip()
     return {"tags": {"source_sha": source_sha}} if source_sha else {}
 
 

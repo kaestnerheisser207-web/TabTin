@@ -13,7 +13,7 @@
  * 形态全部迁到 `try/catch + invokeIpc` 模式，但**字面 wire 形态仍是 LEGACY**——这个
  * 矛盾用本 helper 统一收口：
  *
- *   - caller 只写 `try { const data = await window.tabtin.X.foo(...); ensureLegacyOk(data, 'foo'); ... }
+ *   - caller 只写 `try { const data = await window.muse.X.foo(...); ensureLegacyOk(data, 'foo'); ... }
  *     catch (err) { ... }`
  *   - 不再有「30 个文件各自写一遍 if-不-ok 弹错误 toast 再 return」
  *   - main 端迁 envelope 后 helper 退化为 identity（return raw），caller 代码无需再改
@@ -64,7 +64,7 @@ export interface LegacyResultShape {
  * @example
  * ```ts
  * try {
- *   const result = await window.tabtin.fileSystem.readDir(path)
+ *   const result = await window.muse.fileSystem.readDir(path)
  *   ensureLegacyOk(result, 'readDir')
  *   const entries = result.entries  // 此时 TS 知道 result 不会是 {success: false}
  * } catch (err) {

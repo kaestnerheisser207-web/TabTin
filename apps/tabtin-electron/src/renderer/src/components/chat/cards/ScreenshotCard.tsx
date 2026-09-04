@@ -276,7 +276,7 @@ export const ScreenshotCardRenderer: React.FC<CardRendererProps> = React.memo((p
       setIpcLoading(true)
       try {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        const dataUrl = await (window as any).tabtin?.screenshot?.readFileAsDataURL(filePath)
+        const dataUrl = await (window as any).muse?.screenshot?.readFileAsDataURL(filePath)
         if (!cancelled && dataUrl && typeof dataUrl === 'string') {
           setIpcImageUrl(dataUrl)
         }

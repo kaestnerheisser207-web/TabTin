@@ -3,7 +3,7 @@ import {
   type CapabilityAvailabilityState,
   type CapabilityDiscoveryItem,
   type CapabilityDiscoveryReasonCode,
-} from '@tabtin/shared'
+} from '@muse/shared'
 import type { SkillIndexEntry } from '@/skills/types'
 import type { SubAgentTemplate } from '@/services/subagentTemplateApi'
 import type {

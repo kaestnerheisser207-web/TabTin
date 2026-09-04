@@ -20,7 +20,7 @@ vi.mock('../../../utils/tool-output', () => ({
 }));
 
 // Mock atomic write to track calls
-vi.mock('@tabtin/terminal-core', async (importOriginal) => {
+vi.mock('@muse/terminal-core', async (importOriginal) => {
   const actual = await importOriginal() as any;
   return {
     ...actual,
@@ -38,7 +38,7 @@ vi.mock('node:child_process', async (importOriginal) => {
 });
 
 import { execFile } from 'node:child_process';
-import { atomicWriteFile } from '@tabtin/terminal-core';
+import { atomicWriteFile } from '@muse/terminal-core';
 import {
   fileReadTool,
   fileWriteTool,

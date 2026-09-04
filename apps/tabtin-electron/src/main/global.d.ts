@@ -1,7 +1,7 @@
 /**
  * 主进程全局类型声明
  *
- * `global.tabtin` 是供 @tabtin/action-tools 等跨包代码访问主进程能力的
+ * `global.tabtin` 是供 @muse/action-tools 等跨包代码访问主进程能力的
  * 命名空间。所有字段均为可选，在 FrontendActionBridge 初始化后才可用。
  */
 

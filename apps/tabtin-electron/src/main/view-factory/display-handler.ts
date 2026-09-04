@@ -9,7 +9,7 @@
 
 import type { BrowserWindow } from 'electron'
 import type { ViewEntry } from './types'
-import type { ViewManager } from '@tabtin/browser-capabilities'
+import type { ViewManager } from '@muse/browser-capabilities'
 import { applyBrowserViewBorderRadius } from '../browser-view-radius'
 
 export interface DisplayContext {
@@ -106,7 +106,7 @@ export async function notifyRendererCreateTab(
 ): Promise<void> {
   if (!ctx.mainWindow) return
 
-  const allowTempTabUi = process.env.TABTIN_ALLOW_TEMP_TAB_UI === '1'
+  const allowTempTabUi = process.env.MUSE_ALLOW_TEMP_TAB_UI === '1'
   if (!allowTempTabUi && !state.config.persistent) {
     ctx.log('[ViewFactory] ⏭️ 临时标签 UI 入口已禁用，跳过通知渲染进程:', {
       id: state.id,
@@ -150,7 +150,7 @@ export async function notifyRendererCloseTab(
     return
   }
 
-  const allowTempTabUi = process.env.TABTIN_ALLOW_TEMP_TAB_UI === '1'
+  const allowTempTabUi = process.env.MUSE_ALLOW_TEMP_TAB_UI === '1'
   if (!allowTempTabUi && !state.config.persistent) {
     ctx.log('[ViewFactory] ⏭️ 临时标签 UI 入口已禁用，跳过关闭通知:', {
       id: state.id,

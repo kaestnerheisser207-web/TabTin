@@ -6,8 +6,8 @@
  */
 
 import { useCallback, useMemo, useState } from 'react'
-import { PRIMARY_FIELD_ALLOWED_TYPES } from '@tabtin/table-core'
-import type { FieldDefaultValue } from '@tabtin/table-core'
+import { PRIMARY_FIELD_ALLOWED_TYPES } from '@muse/table-core'
+import type { FieldDefaultValue } from '@muse/table-core'
 import { t } from '../i18n'
 import {
   normalizeSelectChoices,

@@ -18,8 +18,8 @@
 
 import { app } from 'electron'
 import electronLog from 'electron-log'
-import type { TelemetryRecord } from '@tabtin/agent-runtime'
-import { setTelemetrySink } from '@tabtin/agent-runtime'
+import type { TelemetryRecord } from '@muse/agent-runtime'
+import { setTelemetrySink } from '@muse/agent-runtime'
 
 let installed = false
 

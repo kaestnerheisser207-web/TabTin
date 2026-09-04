@@ -17,7 +17,7 @@ import type {
   AccessibilityNode,
   AccessibilitySnapshot,
   AccessibilityTreeOpts,
-} from '@tabtin/desktop-contracts'
+} from '@muse/desktop-contracts'
 
 const log = createLogger('DesktopAXWin')
 

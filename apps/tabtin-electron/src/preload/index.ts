@@ -1,6 +1,6 @@
 import { contextBridge, ipcRenderer, webFrame } from 'electron'
 import { electronAPI } from '@electron-toolkit/preload'
-import type { Device } from '@tabtin/app-shell'
+import type { Device } from '@muse/app-shell'
 import { buildDevInspectorBridge } from './dev-inspector-bridge'
 import type { LocalNetworkAddress } from '../shared/types/local-network'
 import { invokeIpc, sendIpc, PlatformIpcError, LEGACY_HANDLERS, subscribeIpcCalls } from './ipc-shim'
@@ -50,7 +50,7 @@ import { parseBrowserContainerModeFromArgv } from '../shared/browser-container-m
 import type { ReplaceInFilesRequest, ReplaceInFilesResponse, RipgrepSearchOptions, RipgrepSearchResponse } from '../shared/ripgrep-search-types'
 import { SESSION_CODE_ROOT_CHANGED_CHANNEL, type SessionCodeRootChangedEvent } from '../shared/session-code-root-events'
 // 外部 Agent 导入 surface 契约类型（type-only，构建期擦除、零运行时字节）。
-import type { ImportDetectOutput, ImportScanInput, ImportScanResult, ImportRunInput, ImportRunOutput, ImportStatusInput, ImportStatusOutput, ImportCancelInput, ImportCancelOutput, ImportRollbackInput, ImportRollbackOutput, ImportProgressEvent } from '@tabtin/cli-server-core'
+import type { ImportDetectOutput, ImportScanInput, ImportScanResult, ImportRunInput, ImportRunOutput, ImportStatusInput, ImportStatusOutput, ImportCancelInput, ImportCancelOutput, ImportRollbackInput, ImportRollbackOutput, ImportProgressEvent } from '@muse/cli-server-core'
 
 installAuthTokenInvalidationListeners()
 
@@ -62,7 +62,7 @@ installAuthTokenInvalidationListeners()
 //   - 各处 ipcRenderer.on / removeListener / once / removeAllListeners — 事件
 //     订阅模式（不属于 invoke/send，本期不归 ipc-shim 管，W2-ζ IpcInspector
 //     的 HTTP 路径接管 main → renderer push 一类）
-// 业务 invoke/send 全部走 invokeIpc / sendIpc。renderer 端通过 window.tabtin.*
+// 业务 invoke/send 全部走 invokeIpc / sendIpc。renderer 端通过 window.muse.*
 // 调用，preload 不需要再 import ipc-shim 之外的东西。
 //
 // PlatformIpcError / LEGACY_HANDLERS / subscribeIpcCalls 三个 symbol 在这里
@@ -79,7 +79,7 @@ export interface OrganizationDeviceModelPreferences {
 
 /**
  * overlay 事件订阅样板：`ipcRenderer.on(channel)` + 返回取消订阅函数。
- * window.tabtin.overlay 的多个 onX（subscribePush / onConfirmResult / ...）共用。
+ * window.muse.overlay 的多个 onX（subscribePush / onConfirmResult / ...）共用。
  */
 function overlayOn<T = unknown>(channel: string) {
   return (callback: (payload: T) => void): (() => void) => {
@@ -170,7 +170,7 @@ function unwrapAuthRefreshResult(result: AuthRefreshLegacyResult): AuthRefreshRe
 }
 
 // ── agentEngine 运行时校验 ──────────────────────────────────────────
-// 不用 zod 是因为 preload bundle 体积敏感，不能 import @tabtin/agent-wire。
+// 不用 zod 是因为 preload bundle 体积敏感，不能 import @muse/agent-wire。
 // 手写的轻量校验在 IPC 边界拦截结构错误（如 agentMode 拼错成 agentmodel），
 // 让错误在 renderer → main 跨进程之前暴露，而非到了主进程才静默 undefined。
 //
@@ -189,7 +189,7 @@ const VALID_APPROVAL_MODES = new Set<string>(APPROVAL_MODE_NAMES)
  * **SYNCED FROM** `packages/agent-wire/src/block-types.ts` `ALL_BLOCK_TYPES`
  * （22 case = 16 标准 Anthropic + 6 tabtin_*）。
  *
- * preload 是 sandbox 环境不能 runtime-import @tabtin/agent-wire 包（bundle
+ * preload 是 sandbox 环境不能 runtime-import @muse/agent-wire 包（bundle
  * 体积敏感 + 子路径解析限制），所以这里做静态白名单——**新增 ContentBlock
  * 变体时必须同步更新本常量与 block-types.ts ALL_BLOCK_TYPES**，否则：
  * - 含新 type 的历史 IPC 装填会被 preload 静默拒收
@@ -200,7 +200,7 @@ const VALID_APPROVAL_MODES = new Set<string>(APPROVAL_MODE_NAMES)
  * / tabtin_approval_request / tabtin_rich_content 等的 history 在 preload
  * 边界被拒。本次扩展到完整 22 类，与 ALL_BLOCK_TYPES 1:1 同步。
  *
- * **W7 收口**：把 ALL_BLOCK_TYPES 从 @tabtin/agent-wire vendored 进 preload
+ * **W7 收口**：把 ALL_BLOCK_TYPES 从 @muse/agent-wire vendored 进 preload
  * sandbox（拷贝构建脚本而非 runtime import），实现编译期联锁。
  *
  * @see packages/agent-wire/src/block-types.ts - 单源契约
@@ -319,7 +319,7 @@ export function validateAgentEngineQuery(req: unknown): void {
   }
   // W7b M3：宽松校验 — memoryCapability 必须是 boolean；operationSwitches 必须是 plain object
   // 其内部 key/value 由后端 mergeOperationSwitches 做合法性过滤（非法值忽略），
-  // preload 不强校验避免与 @tabtin/security-policy 形成耦合。
+  // preload 不强校验避免与 @muse/security-policy 形成耦合。
   if (r.memoryCapability !== undefined && typeof r.memoryCapability !== 'boolean') {
     throw new Error('Invalid agentEngine.query payload: memoryCapability must be a boolean')
   }
@@ -411,7 +411,7 @@ export function validateAgentEngineQuery(req: unknown): void {
             throw new Error(`Invalid agentEngine.query payload: history[${i}].content[${j}] must be an object with string type`)
           }
           // 只接受 runtime `ContentBlock` union 认识的 type。thinking 虽在
-          // whitelist 但 @tabtin/agent-runtime/history 的装填逻辑会显式丢弃——
+          // whitelist 但 @muse/agent-runtime/history 的装填逻辑会显式丢弃——
           // 这里保留 thinking 白名单仅为前向兼容（万一未来启用装填），
           // 不是鼓励当前 renderer 传 thinking。
           const t = block.type
@@ -602,7 +602,7 @@ const _consoleInterceptScript = `(function(){
 
 // Renderer 主世界注入（跨越 contextIsolation 边界）
 webFrame.executeJavaScript(_consoleInterceptScript).catch(() => {})
-import type { RecommendationGeneratorResult, HistoryRecommendationResponse } from '@tabtin/crawl-contracts/recommendation'
+import type { RecommendationGeneratorResult, HistoryRecommendationResponse } from '@muse/crawl-contracts/recommendation'
 import { DownloadIPCChannels, type DownloadItemData, type DownloadIPCResult, type StreamProgressEvent, type StreamCompletedEvent, type StreamFailedEvent } from '@shared/types/download'
 import type { PaneStatus, PaneStatusEvent, TerminalSnapshot, SnapshotManifest } from '@shared/types/terminal'
 import type { DetectedBrowser, DetectBrowsersResult, IPCCookie, ExtractCookiesResult, ExtractPasswordsResult, CookieDomainSummary, PartitionCookieSummary } from '@shared/types/credential'
@@ -611,9 +611,9 @@ import type { NavigateTarget, NotificationPayload, NotificationPermissionStatus 
 import type { LocalMcpConnectionDetail, LocalMcpConnectionSummary, LocalMcpDiscoveryResult, LocalMcpManualConnectionInput, LocalMcpOrganizationMirrorInput, LocalMcpProbeSummary } from '@shared/types/mcp'
 import type { ResourceMonitorSnapshot, ResourceMonitorSnapshotMode } from '@shared/types/resource-monitor'
 import type { AgentEngineCompactSessionRequest, AgentEngineCompactSessionResponse, AgentEngineQueryRequest } from '@shared/types/agent-engine'
-// 只 import 字面量常量；必须从 `@tabtin/agent-modes/types` 子路径导入，
+// 只 import 字面量常量；必须从 `@muse/agent-modes/types` 子路径导入，
 // 不能走 index / agent-runtime barrel（会拉到 permission-path → node:fs）。
-import { AGENT_MODE_NAMES, APPROVAL_MODE_NAMES } from '@tabtin/agent-modes/types'
+import { AGENT_MODE_NAMES, APPROVAL_MODE_NAMES } from '@muse/agent-modes/types'
 import { onNotificationNavigate } from './notification-channel'
 import { createCheckpointApi, type CheckpointApi } from './checkpoint'
 import { createFileHistoryApi, type FileHistoryApi } from './file-history'
@@ -663,7 +663,7 @@ import type { GitBranchMeta, GitBranchItem, GitRemoteInfo as GitRemoteItem, GitW
  * 通过 `tabtin.resourceTelemetry.emit(event)` 把 ResourceOpenEvent 转 IPC
  * 给 main 进程 telemetry queue 批量上报。
  *
- * Schema 字符级镜像 `@tabtin/resource-router/types.ResourceOpenEvent`，
+ * Schema 字符级镜像 `@muse/resource-router/types.ResourceOpenEvent`，
  * 故意不直接 import 那个类型——preload bundle 体积敏感且 contextBridge
  * 序列化只接受 plain object，原始 type union 在跨进程边界上会被 erase。
  */
@@ -1437,7 +1437,7 @@ interface TabTinAPIShape {
 
   /**
    * 浏览器容器 feature flag 只读值。
-   * 主进程读 `TABTIN_BROWSER_CONTAINER` env → additionalArguments 注入 →
+   * 主进程读 `MUSE_BROWSER_CONTAINER` env → additionalArguments 注入 →
    * preload 解析 process.argv。renderer 侧统一经
    * `@/utils/browserContainerMode` 读取，不要散落判断。
    */
@@ -2163,7 +2163,7 @@ interface TabTinAPIShape {
         env?: Record<string, string>
         cols?: number
         rows?: number
-        /** 真实执行 Space；主进程据此设置 shell 的 TABTIN_SPACE_ID（桌面终端不传） */
+        /** 真实执行 Space；主进程据此设置 shell 的 MUSE_SPACE_ID（桌面终端不传） */
         spaceId?: string
       }
     ) => Promise<{ success: boolean }>
@@ -5343,11 +5343,11 @@ const api = {
 
   // contract W2-ζ — dev-only IpcInspector bridge。prod build 此值为 null，
   // renderer 端 IpcInspectorMount 判 null 不挂载浮层（双重 guard：
-  // import.meta.env.DEV + window.tabtin.devInspector !== null）。
+  // import.meta.env.DEV + window.muse.devInspector !== null）。
   devInspector: buildDevInspectorBridge(ipcRenderer),
 } satisfies TabTinAPIShape
 
-// public 类型由实现推导，window.tabtin 类型自动跟随实现，不再需要手工同步接口
+// public 类型由实现推导，window.muse 类型自动跟随实现，不再需要手工同步接口
 export type TabTinAPI = typeof api
 
 if (typeof window !== 'undefined') {
@@ -5371,7 +5371,7 @@ ipcRenderer.setMaxListeners(100)
 if (process.contextIsolated) {
   try {
     contextBridge.exposeInMainWorld('electron', electronAPI)
-    contextBridge.exposeInMainWorld('tabtin', api)
+    contextBridge.exposeInMainWorld('muse', api)
   } catch (error) {
     console.error('Failed to expose APIs:', error)
     ipcRenderer.send('observability:preload-fatal', {
@@ -5382,5 +5382,5 @@ if (process.contextIsolated) {
   // @ts-ignore (define in dts)
   window.electron = electronAPI
   // @ts-ignore (define in dts)
-  window.tabtin = api
+  window.muse = api
 }

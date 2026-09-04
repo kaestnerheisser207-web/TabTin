@@ -16,7 +16,7 @@ export default scenario({
     selfContained: true,
     setup: [
       "复用本地数据库中已有可执行个人 Space：active Agent + preferred model + 在线 Device + 非空 working_dir。",
-      "优先使用 TABTIN_E2E_LIVE_SPACE_ID；未设置时按 Electron runtime 等 readiness 条件查询 fallback。",
+      "优先使用 MUSE_E2E_LIVE_SPACE_ID；未设置时按 Electron runtime 等 readiness 条件查询 fallback。",
       "优先复用活跃 Organization owner，并幂等确保其 owner/active SpaceMembership；否则复用已有活跃成员。",
       "只创建标题含 runId 的空 ChatSession；不创建或修改用户、Organization、Space 执行绑定、Agent、Device、working_dir，不清理其他会话。",
     ],

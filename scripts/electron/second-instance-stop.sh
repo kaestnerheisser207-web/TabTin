@@ -3,7 +3,7 @@ set -euo pipefail
 
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
 LOG_DIR="${ROOT_DIR}/apps/tabtin_django/logs"
-INSTANCE_ID="${TABTIN_SECOND_ELECTRON_INSTANCE:-im-2}"
+INSTANCE_ID="${MUSE_SECOND_ELECTRON_INSTANCE:-im-2}"
 PID_FILE="${LOG_DIR}/electron-dev-${INSTANCE_ID}.pid"
 
 if [[ ! "${INSTANCE_ID}" =~ ^[a-z0-9][a-z0-9-]{0,31}$ ]]; then

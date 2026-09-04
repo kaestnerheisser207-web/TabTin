@@ -62,7 +62,7 @@ log "esbuild 打包 → ${BUNDLE_OUT}"
 
 log "启动 Electron…"
 cd "${APP_DIR}"
-export TABTIN_API_BASE_URL="${TABTIN_API_BASE_URL:-http://e2e.invalid/api}"
+export MUSE_API_BASE_URL="${MUSE_API_BASE_URL:-http://e2e.invalid/api}"
 "${ELECTRON_BIN}" \
   --no-sandbox \
   --disable-gpu \

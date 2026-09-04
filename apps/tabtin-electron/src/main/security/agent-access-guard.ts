@@ -1,4 +1,4 @@
-import { API_ENDPOINTS } from '@tabtin/config'
+import { API_ENDPOINTS } from '@muse/config'
 import { djangoRequest } from '../cli/routes/shared/error-handler'
 import { createLogger } from '../logger'
 

@@ -3,7 +3,7 @@
  * 供图片预览、Office/PDF buffer、以及聊天附件 UUID 被误开成 file tab 时的远端预览共用。
  */
 
-import { joinApiPath } from '@tabtin/config'
+import { joinApiPath } from '@muse/config'
 import { API_CONFIG } from '@/config/api'
 import { apiRequest, unwrapData } from '@/services/apiBase'
 import { registerResetAction } from '@/stores/sessionResetRegistry'

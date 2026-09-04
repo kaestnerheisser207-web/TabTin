@@ -36,7 +36,7 @@ case "${role}" in
     initialize_community_database
     mkdir -p /var/lib/tabtin/objects /ms-playwright
     chown -R 10001:10001 /var/lib/tabtin/objects /ms-playwright
-    unset PG_INIT_PASSWORD_FILE PG_MIGRATOR_PASSWORD_FILE TABTIN_COMMUNITY_DATABASE_SQL_ROOT
+    unset PG_INIT_PASSWORD_FILE PG_MIGRATOR_PASSWORD_FILE MUSE_COMMUNITY_DATABASE_SQL_ROOT
     echo "[entrypoint] starting Community Daphne from bind-mounted source"
     exec gosu tabtin-community python -m daphne \
       --ping-interval 45 \
@@ -58,7 +58,7 @@ case "${role}" in
 
     # The long-running web process receives only the runtime role and cannot
     # read the root/postgres-owned one-shot password files.
-    unset PG_INIT_PASSWORD_FILE PG_MIGRATOR_PASSWORD_FILE TABTIN_COMMUNITY_DATABASE_SQL_ROOT
+    unset PG_INIT_PASSWORD_FILE PG_MIGRATOR_PASSWORD_FILE MUSE_COMMUNITY_DATABASE_SQL_ROOT
     echo "[entrypoint] starting Community daphne on 0.0.0.0:6060"
     exec gosu tabtin-community python -m daphne \
       --ping-interval 45 \

@@ -24,7 +24,7 @@
  *     agent-host 不假设具体宿主形态。
  */
 
-import type { AgentConfigV3, AgentSecurityConfig } from '@tabtin/security-policy'
+import type { AgentConfigV3, AgentSecurityConfig } from '@muse/security-policy'
 
 /**
  * Cache TTL — 5 秒。
@@ -70,7 +70,7 @@ export interface AgentConfigClientOptions {
   getOrganizationId?(): string | null | undefined
   /**
    * 构造 Agent 详情 URL。宿主自己拼 `apiBase + /agents/${agentId}`，
-   * agent-host 不引入 `@tabtin/config` / `API_BASE_URL` 之类的运行时耦合。
+   * agent-host 不引入 `@muse/config` / `API_BASE_URL` 之类的运行时耦合。
    */
   buildAgentDetailUrl(agentId: string): string
   /** 时间源（测试冻结 cache TTL 时用）。 */

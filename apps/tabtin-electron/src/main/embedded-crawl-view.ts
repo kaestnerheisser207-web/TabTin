@@ -397,7 +397,7 @@ async function getOrCreateViewForTab(
             attachedToMainWindow: state?.attachedToMainWindow,
             createdAt: state?.createdAt
           })
-          if (process.env.TABTIN_DEBUG_TAB_SWITCH === '1') {
+          if (process.env.MUSE_DEBUG_TAB_SWITCH === '1') {
             logger.debug('[TabSwitch] main:viewState', {
               t: Date.now(),
               tabId,

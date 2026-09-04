@@ -1,7 +1,7 @@
 import React from 'react';
 import { Camera, Crosshair, Star } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
-import { ToolbarActionTooltip } from '@tabtin/crawlspace-core';
+import { ToolbarActionTooltip } from '@muse/crawlspace-core';
 import { cn } from '@utils/cn';
 import { BrowserZoomControls } from './BrowserZoomControls';
 

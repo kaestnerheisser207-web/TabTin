@@ -5,7 +5,7 @@ from apps.tabtinspace.services.invitation_service import PUBLIC_WEB_BASE_ENV_KEY
 
 
 def test_build_invitation_bridge_url_uses_public_web_base(monkeypatch):
-    monkeypatch.setenv('TABTIN_PUBLIC_WEB_BASE_URL', 'https://tabtin.example.com/')
+    monkeypatch.setenv('MUSE_PUBLIC_WEB_BASE_URL', 'https://tabtin.example.com/')
 
     assert build_invitation_bridge_url('abc_123-xyz-456789') == (
         'https://tabtin.example.com/invite/abc_123-xyz-456789'
@@ -13,7 +13,7 @@ def test_build_invitation_bridge_url_uses_public_web_base(monkeypatch):
 
 
 def test_build_invitation_bridge_url_allows_localhost_http(monkeypatch):
-    monkeypatch.setenv('TABTIN_PUBLIC_WEB_BASE_URL', 'http://127.0.0.1:5176/')
+    monkeypatch.setenv('MUSE_PUBLIC_WEB_BASE_URL', 'http://127.0.0.1:5176/')
 
     assert build_invitation_bridge_url('abc_123-xyz-456789') == (
         'http://127.0.0.1:5176/invite/abc_123-xyz-456789'
@@ -30,7 +30,7 @@ def test_build_invitation_bridge_url_allows_localhost_http(monkeypatch):
     'http://[fe80::8]:5176',
 ])
 def test_build_invitation_bridge_url_allows_private_lan_http(monkeypatch, base_url):
-    monkeypatch.setenv('TABTIN_PUBLIC_WEB_BASE_URL', base_url)
+    monkeypatch.setenv('MUSE_PUBLIC_WEB_BASE_URL', base_url)
 
     assert build_invitation_bridge_url('abc_123-xyz-456789') == (
         f'{base_url}/invite/abc_123-xyz-456789'
@@ -38,7 +38,7 @@ def test_build_invitation_bridge_url_allows_private_lan_http(monkeypatch, base_u
 
 
 def test_build_invitation_bridge_url_rejects_public_http(monkeypatch):
-    monkeypatch.setenv('TABTIN_PUBLIC_WEB_BASE_URL', 'http://web-test.example.com')
+    monkeypatch.setenv('MUSE_PUBLIC_WEB_BASE_URL', 'http://web-test.example.com')
 
     with pytest.raises(ImproperlyConfigured, match='must use HTTPS outside localhost'):
         build_invitation_bridge_url('abc_123-xyz-456789')
@@ -53,7 +53,7 @@ def test_build_invitation_bridge_url_requires_public_web_base(monkeypatch):
 
 
 def test_build_invitation_bridge_url_rejects_non_token_redirect(monkeypatch):
-    monkeypatch.setenv('TABTIN_PUBLIC_WEB_BASE_URL', 'https://tabtin.example.com')
+    monkeypatch.setenv('MUSE_PUBLIC_WEB_BASE_URL', 'https://tabtin.example.com')
 
     with pytest.raises(ValueError, match='Invalid invitation token'):
         build_invitation_bridge_url('https://evil.example.com')

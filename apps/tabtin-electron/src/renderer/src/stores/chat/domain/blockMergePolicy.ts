@@ -25,7 +25,7 @@
  *     助手壳 `content` 仍可走 text_summary（≤200）；气泡全文靠 `blocks` / BlockTimeline。
  */
 
-import type { ChatMessage } from '@tabtin/chat-client'
+import type { ChatMessage } from '@muse/chat-client'
 import { isSystemAuthoredMessage } from './messageRolePolicy'
 import type { ContentBlockEntry } from '@stores/useChatRuntimeStore'
 import { deserializeContentBlocks } from '@/components/chat/blocks/deserializeContentBlocks'

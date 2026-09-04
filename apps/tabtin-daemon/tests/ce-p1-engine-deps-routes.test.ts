@@ -1,9 +1,9 @@
 /**
  * Tests for CE-P1 remaining media-capabilities / tabslide wiring.
  *
- * - CE-P1-02: daemon declares @tabtin/media-capabilities
+ * - CE-P1-02: daemon declares @muse/media-capabilities
  * - CE-P1-06: tabvideo_build_and_export removed from manifest
- * - CE-P1-08: @tabtin/tabslide headless.ts re-exports exportToPPTXBlob
+ * - CE-P1-08: @muse/tabslide headless.ts re-exports exportToPPTXBlob
  */
 import { describe, it, expect } from 'vitest'
 import { readFileSync } from 'node:fs'
@@ -16,16 +16,16 @@ describe('CE-P1-02: daemon declares media-capabilities', () => {
     readFileSync(join(REPO_ROOT, 'apps/tabtin-daemon/package.json'), 'utf-8'),
   )
 
-  it('has @tabtin/media-capabilities in dependencies', () => {
-    expect(pkg.dependencies['@tabtin/media-capabilities']).toBe('workspace:*')
+  it('has @muse/media-capabilities in dependencies', () => {
+    expect(pkg.dependencies['@muse/media-capabilities']).toBe('workspace:*')
   })
 
-  it('does not declare retired @tabtin/tabvideo-engine', () => {
-    expect(pkg.dependencies['@tabtin/tabvideo-engine']).toBeUndefined()
+  it('does not declare retired @muse/tabvideo-engine', () => {
+    expect(pkg.dependencies['@muse/tabvideo-engine']).toBeUndefined()
   })
 
-  it('still has @tabtin/action-tools (transitive host)', () => {
-    expect(pkg.dependencies['@tabtin/action-tools']).toBe('workspace:*')
+  it('still has @muse/action-tools (transitive host)', () => {
+    expect(pkg.dependencies['@muse/action-tools']).toBe('workspace:*')
   })
 })
 

@@ -16,7 +16,7 @@ import { getEventBridge } from './run-session/EventBridge'
 import { UpdateManager } from './services/UpdateManager'
 import { getDeviceFingerprint } from './utils/deviceFingerprint'
 import { WsGatewayClient as MainWsGatewayClient } from './ws/WsGatewayClient'
-import { joinApiPath } from '@tabtin/config'
+import { joinApiPath } from '@muse/config'
 import { reportCommunityDevReady } from './community-dev-readiness'
 
 export interface MainRuntimeServicesLogger {
@@ -40,11 +40,11 @@ export interface MainRuntimeServicesControllerOptions extends DeferredServiceHoo
 
 const PERF_REPORT_SAMPLE_RATE = Math.max(
   0,
-  Math.min(1, parseFloat(process.env.TABTIN_PERF_REPORT_RATE || '0.1')),
+  Math.min(1, parseFloat(process.env.MUSE_PERF_REPORT_RATE || '0.1')),
 ) || 0.1
 
 function reportStartupTiming(data: StartupTimingData): void {
-  if (process.env.TABTIN_PERF_REPORT === '0') return
+  if (process.env.MUSE_PERF_REPORT === '0') return
   if (Math.random() >= PERF_REPORT_SAMPLE_RATE) return
 
   const url = joinApiPath(API_BASE_URL, '/client-errors/report-anonymous')
@@ -98,7 +98,7 @@ export function createMainRuntimeServicesController(
   }
 
   const initializeUpdateManager = (mainWindow: BrowserWindow): void => {
-    const disableDevUpdater = process.env.TABTIN_DISABLE_DEV_UPDATER === 'true'
+    const disableDevUpdater = process.env.MUSE_DISABLE_DEV_UPDATER === 'true'
     if (options.isDev && disableDevUpdater) {
       return
     }

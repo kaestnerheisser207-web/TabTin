@@ -21,8 +21,8 @@ import { bakeAndUploadWidget } from '../src/capabilities/widget-bake'
 import {
   setOffscreenRenderAPI,
   setUIThemeAPI,
-} from '@tabtin/action-tools/headless'
-import type { OffscreenRenderResult } from '@tabtin/action-tools/headless'
+} from '@muse/action-tools/headless'
+import type { OffscreenRenderResult } from '@muse/action-tools/headless'
 
 function setupTabtinGlobal(uploadResult: string | null | (() => Promise<string | null>) | (() => never)): void {
   ;(globalThis as unknown as { muse?: unknown }).tabtin = {

@@ -15,7 +15,7 @@ import { useEffect } from 'react'
 import {
   ChatSessionPresenceEvents,
   ChatSessionPresenceTiming,
-} from '@tabtin/ws-gateway-client'
+} from '@muse/ws-gateway-client'
 import { getChatClient } from '@/services/chatApi'
 import {
   resolvePresenceSessionId,
@@ -230,7 +230,7 @@ export function useChatSessionPresence({ enabled }: UseChatSessionPresenceOption
 
     const startHeartbeat = () => {
       if (heartbeatTimer != null || leaving || disposed) return
-      // eslint-disable-next-line tabtin/prefer-scoped-activity-effects -- App 主窗级 presence 租约必须跨 Space 切换续期，不能被 hot Space 生命周期取消。
+      // eslint-disable-next-line muse/prefer-scoped-activity-effects -- App 主窗级 presence 租约必须跨 Space 切换续期，不能被 hot Space 生命周期取消。
       heartbeatTimer = setInterval(() => {
         syncPresence('heartbeat', { force: true })
       }, REFRESH_MS)
@@ -269,13 +269,13 @@ export function useChatSessionPresence({ enabled }: UseChatSessionPresenceOption
       enqueuePresence(null, 'pagehide', { force: true })
     }
 
-    // eslint-disable-next-line tabtin/prefer-scoped-activity-effects -- App 主窗级 presence 租约必须跨 Space 切换持续感知焦点，不能被 hot Space 生命周期取消。
+    // eslint-disable-next-line muse/prefer-scoped-activity-effects -- App 主窗级 presence 租约必须跨 Space 切换持续感知焦点，不能被 hot Space 生命周期取消。
     window.addEventListener('focus', onFocus)
-    // eslint-disable-next-line tabtin/prefer-scoped-activity-effects -- App 主窗级 presence 租约必须跨 Space 切换持续感知失焦，不能被 hot Space 生命周期取消。
+    // eslint-disable-next-line muse/prefer-scoped-activity-effects -- App 主窗级 presence 租约必须跨 Space 切换持续感知失焦，不能被 hot Space 生命周期取消。
     window.addEventListener('blur', onBlur)
-    // eslint-disable-next-line tabtin/prefer-scoped-activity-effects -- App 主窗级 presence 租约必须跨 Space 切换持续感知可见性，不能被 hot Space 生命周期取消。
+    // eslint-disable-next-line muse/prefer-scoped-activity-effects -- App 主窗级 presence 租约必须跨 Space 切换持续感知可见性，不能被 hot Space 生命周期取消。
     document.addEventListener('visibilitychange', onVisibility)
-    // eslint-disable-next-line tabtin/prefer-scoped-activity-effects -- App 主窗级 presence 租约必须跨 Space 切换处理离开清理，不能被 hot Space 生命周期取消。
+    // eslint-disable-next-line muse/prefer-scoped-activity-effects -- App 主窗级 presence 租约必须跨 Space 切换处理离开清理，不能被 hot Space 生命周期取消。
     window.addEventListener('pagehide', onPageHide)
 
     const unsubscribeSession = useChatStore.subscribe((state, prev) => {

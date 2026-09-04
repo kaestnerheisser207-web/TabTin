@@ -3,7 +3,7 @@
  * 异常硬停 → ErrorClassCard。
  */
 import { describe, expect, it } from 'vitest'
-import type { ChatMessage } from '@tabtin/chat-client'
+import type { ChatMessage } from '@muse/chat-client'
 import { deriveMessageErrorModel } from '@stores/chat/presentation/messageBubble/deriveMessageErrorModel'
 
 const t = (key: string) => key

@@ -11,7 +11,7 @@ import type {
   HumanInteractionContext,
   PlatformApprovalRequest,
   PlatformApprovalResult,
-} from '@tabtin/agent-runtime/permissions'
+} from '@muse/agent-runtime/permissions'
 
 export interface ApprovalActionDescriptor {
   actionType: string

@@ -14,7 +14,7 @@ import { TokenManager } from '../../auth.js'
 import { API_BASE_URL } from '../../config/api.js'
 import { getCLIOrganizationId } from '../../cli/cli-server.js'
 import { createLogger } from '../../logger.js'
-import { joinApiPath } from '@tabtin/config'
+import { joinApiPath } from '@muse/config'
 
 const log = createLogger('proactive-poller')
 

@@ -10,7 +10,7 @@ import {
   Input,
   LoadingSpinner,
   VisuallyHidden,
-} from '@tabtin/smartsheet-ui'
+} from '@muse/smartsheet-ui'
 import { LoginForm } from './LoginForm'
 import { RegisterForm } from './RegisterForm'
 import { ForgotPasswordForm } from './ForgotPasswordForm'

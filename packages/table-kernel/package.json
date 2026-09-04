@@ -1,5 +1,5 @@
 {
-  "name": "@tabtin/table-kernel",
+  "name": "@muse/table-kernel",
   "version": "0.1.0",
   "description": "Pure TypeScript table kernel — field validation, filter matching, dependency graphs",
   "type": "module",

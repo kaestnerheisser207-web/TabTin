@@ -13,7 +13,7 @@
  * `import.meta.env.VITE_XXX === 'true'` 这一行。
  */
 
-import { parseEmailLoginEnabled } from '@tabtin/shared/auth-forms'
+import { parseEmailLoginEnabled } from '@muse/shared/auth-forms'
 
 /** local packaged build keeps app.isPackaged=true but exposes dev-like UI capabilities. */
 export function isDevLikeBuild(isViteDev: boolean, buildProfile: string): boolean {

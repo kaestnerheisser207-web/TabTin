@@ -6,7 +6,7 @@
  */
 import React, { useCallback, useEffect, useMemo, useState } from "react"
 import { createPortal } from "react-dom"
-import { joinApiPath } from "@tabtin/config"
+import { joinApiPath } from "@muse/config"
 import type { VersionAdapter, VersionHistoryItem, VersionPanelLabels, ViewConversationOptions } from "./types"
 import { VersionPanel } from "./VersionPanel"
 import { VersionHistoryOverlayShell } from "./VersionHistoryOverlayShell"

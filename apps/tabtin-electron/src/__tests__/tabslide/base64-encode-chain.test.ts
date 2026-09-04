@@ -1,6 +1,6 @@
 import { describe, expect, it, vi } from 'vitest'
 
-vi.mock('@tabtin/tabslide/exports', () => ({
+vi.mock('@muse/tabslide/exports', () => ({
   setImportAdapter: vi.fn(),
   convertBackendToPresentation: vi.fn(),
 }))

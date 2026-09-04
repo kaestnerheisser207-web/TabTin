@@ -668,7 +668,7 @@ export function ApprovalAttentionDock({
       return
     }
 
-    const secApi = window.tabtin?.agentSecurity
+    const secApi = window.muse?.agentSecurity
     const decisions: PerToolApprovalDecision[] = await Promise.all(
       actions.map(async (action) => {
         const toolName = action.tool_name || action.name || 'unknown'

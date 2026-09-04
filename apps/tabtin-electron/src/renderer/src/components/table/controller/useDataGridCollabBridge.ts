@@ -1,7 +1,7 @@
 /**
  * useDataGridCollabBridge — Electron 薄封装层
  *
- * 核心逻辑已迁移到 @tabtin/table-engine/collab。
+ * 核心逻辑已迁移到 @muse/table-engine/collab。
  * 本文件注入 Electron 特有的运行时依赖并保持与现有调用方的接口兼容。
  */
 
@@ -9,15 +9,15 @@ import { useCallback, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import { getAuthToken } from '@/adapters/api-adapter-instance'
 import { useAuthStore } from '@/stores/useAuthStore'
-import { getUserColor } from '@tabtin/collab-core'
+import { getUserColor } from '@muse/collab-core'
 import { COLLAB_WS_URLS } from '@/config/api'
-import { toast } from '@tabtin/smartsheet-ui'
-import type { Field, CreateRecordRequest, UpdateRecordRequest, TableRecord } from '@tabtin/table-core'
+import { toast } from '@muse/smartsheet-ui'
+import type { Field, CreateRecordRequest, UpdateRecordRequest, TableRecord } from '@muse/table-core'
 import {
   useDataGridCollabBridge as useDataGridCollabBridgeCore,
   type UseDataGridCollabBridgeResult,
   type DiscardedRecordUpdateNotice,
-} from '@tabtin/table-engine/collab'
+} from '@muse/table-engine/collab'
 import { preflightTableCollabAccess } from './preflightTableCollabAccess'
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any

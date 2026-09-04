@@ -13,7 +13,7 @@ import {
   cancelFrame,
   scheduleFrame,
 } from '@/stores/chat/messages/actions/sendMessageFrameScheduler'
-import { StreamEvents } from '@tabtin/agent-wire'
+import { StreamEvents } from '@muse/agent-wire'
 import type { AgentStreamMessage } from '@/stores/chat/stream/handlers/streamMessageHandler'
 
 /** 每帧最多处理的原始入队条数（合批前）。约 60fps × 80 ≈ 4800/s 上限，仍可响应输入。 */

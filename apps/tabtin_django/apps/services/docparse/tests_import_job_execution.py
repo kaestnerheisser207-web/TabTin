@@ -257,11 +257,11 @@ class DocParseExecutionBoundaryTests(TestCase):
 
         self.assertEqual(updated.status, DocumentImportJob.Status.READY)
         self.assertIn("<img", updated.result_payload["markdown"])
-        self.assertIn(f'src="tabtin-file://asset/{first_image_id}"', updated.result_payload["markdown"])
+        self.assertIn(f'src="muse-file://asset/{first_image_id}"', updated.result_payload["markdown"])
         self.assertIn('width="320"', updated.result_payload["markdown"])
         self.assertIn('height="180"', updated.result_payload["markdown"])
         self.assertIn(
-            f"![Second image](tabtin-file://asset/{second_image_id})",
+            f"![Second image](muse-file://asset/{second_image_id})",
             updated.result_payload["markdown"],
         )
         self.assertIn(

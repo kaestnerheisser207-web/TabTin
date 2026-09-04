@@ -14,9 +14,9 @@ import {
   PopoverTrigger,
   ScrollArea,
   toast,
-} from '@tabtin/smartsheet-ui'
+} from '@muse/smartsheet-ui'
 import { Download, List } from 'lucide-react'
-import type { ViewMeta, ViewCreateRequest, ViewUpdateRequest } from '@tabtin/table-core'
+import type { ViewMeta, ViewCreateRequest, ViewUpdateRequest } from '@muse/table-core'
 import { useTableStore } from '@/stores/table/useTableStore'
 import { useViewStore } from '@/stores/table/useViewStore'
 import { WebViewEditorDialog } from './WebViewEditorDialog'
@@ -32,7 +32,7 @@ import {
   ViewDraggableWrapper,
   horizontalListSortingStrategy,
   isViewLocked,
-} from '@tabtin/table-ui'
+} from '@muse/table-ui'
 
 export interface WebViewSwitcherProps {
   /** 表级权限只读；不要把视图锁定塞进来，否则无法打开右键菜单解锁 */

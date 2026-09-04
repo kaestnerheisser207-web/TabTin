@@ -168,21 +168,21 @@ describe('audit-packaged-artifact content checks', () => {
   it('detects missing @tabtin dist relative chunks in asar ', () => {
     const indexText = 'import { matchSensitivePath } from "./chunk-E3XO57H6.js";\n';
     const paths = [
-      'node_modules/@tabtin/terminal-core/dist/index.js',
-      'node_modules/@tabtin/terminal-core/dist/chunk-AHNSL3UH.js',
+      'node_modules/@muse/terminal-core/dist/index.js',
+      'node_modules/@muse/terminal-core/dist/chunk-AHNSL3UH.js',
     ];
     const textByPath = new Map([
-      ['node_modules/@tabtin/terminal-core/dist/index.js', indexText],
+      ['node_modules/@muse/terminal-core/dist/index.js', indexText],
     ]);
     expect(
       findUnresolvedTabtinDistRelativeImports(paths, (p) => textByPath.get(p) || ''),
     ).toEqual([
-      'node_modules/@tabtin/terminal-core/dist/index.js → ./chunk-E3XO57H6.js',
+      'node_modules/@muse/terminal-core/dist/index.js → ./chunk-E3XO57H6.js',
     ]);
 
     const okPaths = [
-      'node_modules/@tabtin/terminal-core/dist/index.js',
-      'node_modules/@tabtin/terminal-core/dist/chunk-E3XO57H6.js',
+      'node_modules/@muse/terminal-core/dist/index.js',
+      'node_modules/@muse/terminal-core/dist/chunk-E3XO57H6.js',
     ];
     expect(
       findUnresolvedTabtinDistRelativeImports(okPaths, (p) => textByPath.get(p) || ''),
@@ -191,10 +191,10 @@ describe('audit-packaged-artifact content checks', () => {
     expect(extractRelativeJsImports(indexText)).toEqual(['./chunk-E3XO57H6.js']);
     expect(
       resolveRelativeSpecifier(
-        'node_modules/@tabtin/terminal-core/dist/index.js',
+        'node_modules/@muse/terminal-core/dist/index.js',
         './chunk-E3XO57H6.js',
       ),
-    ).toBe('node_modules/@tabtin/terminal-core/dist/chunk-E3XO57H6.js');
+    ).toBe('node_modules/@muse/terminal-core/dist/chunk-E3XO57H6.js');
   });
 
   it('fails when a packaged main bundle loads a runtime module absent from the artifact ', () => {
@@ -202,26 +202,26 @@ describe('audit-packaged-artifact content checks', () => {
     const bundleText = [
       `import { createRequire as Z } from 'node:module';`,
       `const require$1 = Z(import.meta.url);`,
-      `require$1('@tabtin/terminal-core');`,
+      `require$1('@muse/terminal-core');`,
       `require$1('electron');`,
       `require$1('node:path');`,
     ].join('\n');
 
     expect(extractLiteralRuntimeSpecifiers(bundleText)).toEqual([
       'node:module',
-      '@tabtin/terminal-core',
+      '@muse/terminal-core',
       'electron',
       'node:path',
     ]);
     expect(
       findUnresolvedPackagedRuntimeImports([{ path: bundlePath, text: bundleText }], [bundlePath]),
     ).toEqual([
-      `${bundlePath} → missing runtime package "@tabtin/terminal-core" (@tabtin/terminal-core)`,
+      `${bundlePath} → missing runtime package "@muse/terminal-core" (@muse/terminal-core)`,
     ]);
     expect(
       findUnresolvedPackagedRuntimeImports(
         [{ path: bundlePath, text: bundleText }],
-        [bundlePath, 'node_modules/@tabtin/terminal-core/package.json'],
+        [bundlePath, 'node_modules/@muse/terminal-core/package.json'],
       ),
     ).toEqual([]);
   });
@@ -275,8 +275,8 @@ describe('audit-packaged-artifact content checks', () => {
   });
 
   it('blocks embedded Office runtime archives in distributable builds by default', () => {
-    const previous = process.env.TABTIN_ENABLE_PACKAGED_OFFICE_PREVIEW_RUNTIME;
-    delete process.env.TABTIN_ENABLE_PACKAGED_OFFICE_PREVIEW_RUNTIME;
+    const previous = process.env.MUSE_ENABLE_PACKAGED_OFFICE_PREVIEW_RUNTIME;
+    delete process.env.MUSE_ENABLE_PACKAGED_OFFICE_PREVIEW_RUNTIME;
 
     try {
       expect(shouldBlockEmbeddedOfficeRuntime('mac', 'preprod')).toBe(true);
@@ -289,13 +289,13 @@ describe('audit-packaged-artifact content checks', () => {
       expect(shouldBlockEmbeddedOfficeRuntime('win', 'local')).toBe(false);
       expect(shouldBlockEmbeddedOfficeRuntime('linux', 'local')).toBe(false);
 
-      process.env.TABTIN_ENABLE_PACKAGED_OFFICE_PREVIEW_RUNTIME = '1';
+      process.env.MUSE_ENABLE_PACKAGED_OFFICE_PREVIEW_RUNTIME = '1';
       expect(shouldBlockEmbeddedOfficeRuntime('mac', 'preprod')).toBe(false);
       expect(shouldBlockEmbeddedOfficeRuntime('win', 'preprod')).toBe(false);
       expect(shouldBlockEmbeddedOfficeRuntime('linux', 'preprod')).toBe(false);
     } finally {
-      if (previous === undefined) delete process.env.TABTIN_ENABLE_PACKAGED_OFFICE_PREVIEW_RUNTIME;
-      else process.env.TABTIN_ENABLE_PACKAGED_OFFICE_PREVIEW_RUNTIME = previous;
+      if (previous === undefined) delete process.env.MUSE_ENABLE_PACKAGED_OFFICE_PREVIEW_RUNTIME;
+      else process.env.MUSE_ENABLE_PACKAGED_OFFICE_PREVIEW_RUNTIME = previous;
     }
   });
 
@@ -309,26 +309,26 @@ describe('audit-packaged-artifact content checks', () => {
     const manifest = JSON.stringify({
       schemaVersion: 2,
       platforms: {
-        'darwin-arm64': { archiveName: 'tabtin-python-runtime.tar.gz' },
+        'darwin-arm64': { archiveName: 'muse-python-runtime.tar.gz' },
       },
     });
     const readText = () => manifest;
 
     expect(
       findMissingPackagedPythonRuntime(
-        ['native/tabtin-python-runtime/manifest.json', 'native/tabtin-python-runtime/tabtin-python-runtime.tar.gz'],
+        ['native/muse-python-runtime/manifest.json', 'native/muse-python-runtime/muse-python-runtime.tar.gz'],
         { target: 'mac', arch: 'arm64', readText },
       ),
     ).toEqual([]);
     expect(
-      findMissingPackagedPythonRuntime(['native/tabtin-python-runtime/manifest.json'], {
+      findMissingPackagedPythonRuntime(['native/muse-python-runtime/manifest.json'], {
         target: 'mac',
         arch: 'arm64',
         readText,
       }),
-    ).toEqual(['native/tabtin-python-runtime/tabtin-python-runtime.tar.gz']);
+    ).toEqual(['native/muse-python-runtime/muse-python-runtime.tar.gz']);
     expect(findMissingPackagedPythonRuntime(['native/office-preview-runtime/manifest.json'])).toEqual([
-      'native/tabtin-python-runtime/manifest.json',
+      'native/muse-python-runtime/manifest.json',
     ]);
   });
 
@@ -422,7 +422,7 @@ describe('machoArchOf', () => {
 });
 
 describe('evaluateMacPackagedFilegen', () => {
-  const relPath = 'tabtin-filegen-python/dist/tabtin-filegen';
+  const relPath = 'muse-filegen-python/dist/muse-filegen';
 
   it('treats a missing binary as critical for preprod/production and warning for local', () => {
     expect(
@@ -436,7 +436,7 @@ describe('evaluateMacPackagedFilegen', () => {
       }),
     ).toEqual({
       level: 'critical',
-      hits: [`缺少内置 tabtin-filegen：${relPath}`],
+      hits: [`缺少内置 muse-filegen：${relPath}`],
     });
     expect(
       evaluateMacPackagedFilegen({
@@ -449,7 +449,7 @@ describe('evaluateMacPackagedFilegen', () => {
       }),
     ).toEqual({
       level: 'warning',
-      hits: [`缺少内置 tabtin-filegen：${relPath}`],
+      hits: [`缺少内置 muse-filegen：${relPath}`],
     });
   });
 
@@ -465,7 +465,7 @@ describe('evaluateMacPackagedFilegen', () => {
       }),
     ).toEqual({
       level: 'critical',
-      hits: [`tabtin-filegen 架构不匹配：${relPath} 期望 x64 实为 arm64`],
+      hits: [`muse-filegen 架构不匹配：${relPath} 期望 x64 实为 arm64`],
     });
   });
 

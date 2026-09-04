@@ -569,7 +569,7 @@ export function resolveRelativeSpecifier(fromPath, specifier) {
 }
 
 /**
- * asar 内 @tabtin/<pkg>/dist entry 引用的相对 .js（含 tsup chunk）必须存在。
+ * asar 内 @muse/<pkg>/dist entry 引用的相对 .js（含 tsup chunk）必须存在。
  * @param {string[]} asarPaths paths inside app.asar (no app.asar/ prefix)
  * @param {(path: string) => string} readText load file contents by asar path
  */
@@ -579,7 +579,7 @@ export function findUnresolvedTabtinDistRelativeImports(asarPaths, readText) {
   )
   const unresolved = []
   for (const entryPath of present) {
-    if (!entryPath.startsWith('node_modules/@tabtin/')) continue
+    if (!entryPath.startsWith('node_modules/@muse/')) continue
     if (!/\/dist\/[^/]+\.js$/.test(entryPath)) continue
     if (/(^|\/)chunk-[^/]+\.js$/.test(entryPath)) continue
     let text = ''
@@ -617,9 +617,9 @@ export function packagedPythonRuntimePlatform(target, arch) {
 
 export function findMissingPackagedPythonRuntime(paths, options = {}) {
   const normalized = (paths || []).map((path) => normalizePath(path))
-  const manifestPath = normalized.find((path) => /(^|\/)native\/tabtin-python-runtime\/manifest\.json$/.test(path))
+  const manifestPath = normalized.find((path) => /(^|\/)native\/muse-python-runtime\/manifest\.json$/.test(path))
   if (!manifestPath) {
-    return ['native/tabtin-python-runtime/manifest.json']
+    return ['native/muse-python-runtime/manifest.json']
   }
 
   const readText = typeof options.readText === 'function' ? options.readText : null
@@ -645,7 +645,7 @@ export function findMissingPackagedPythonRuntime(paths, options = {}) {
     ]
   }
 
-  const archivePath = `native/tabtin-python-runtime/${archiveName}`
+  const archivePath = `native/muse-python-runtime/${archiveName}`
   if (!normalized.some((path) => path === archivePath || path.endsWith(`/${archivePath}`))) {
     return [archivePath]
   }
@@ -657,7 +657,7 @@ export function shouldBlockEmbeddedOfficeRuntime(_target, profile) {
   const isDistributableProfile = normalizedProfile === 'preprod' || normalizedProfile === 'production'
   return (
     isDistributableProfile &&
-    process.env.TABTIN_ENABLE_PACKAGED_OFFICE_PREVIEW_RUNTIME !== '1'
+    process.env.MUSE_ENABLE_PACKAGED_OFFICE_PREVIEW_RUNTIME !== '1'
   )
 }
 
@@ -815,7 +815,7 @@ export function normalizeTargetArch(value) {
 }
 
 /**
- * 打包 audit 用：判断 tabtin-filegen 是否匹配目标 arch。
+ * 打包 audit 用：判断 muse-filegen 是否匹配目标 arch。
  * actualArch 来自 machoArchOf。
  */
 export function evaluateMacPackagedFilegen({
@@ -830,17 +830,17 @@ export function evaluateMacPackagedFilegen({
   if (!exists) {
     return {
       level: required ? 'critical' : 'warning',
-      hits: [`缺少内置 tabtin-filegen：${relPath}`],
+      hits: [`缺少内置 muse-filegen：${relPath}`],
     }
   }
   const hits = []
   if (!executable) {
-    hits.push(`tabtin-filegen 不可执行：${relPath}`)
+    hits.push(`muse-filegen 不可执行：${relPath}`)
   }
   if (actualArch === 'unknown') {
-    hits.push(`无法识别 tabtin-filegen Mach-O 架构：${relPath}`)
+    hits.push(`无法识别 muse-filegen Mach-O 架构：${relPath}`)
   } else if (actualArch !== 'universal' && actualArch !== targetArch) {
-    hits.push(`tabtin-filegen 架构不匹配：${relPath} 期望 ${targetArch} 实为 ${actualArch}`)
+    hits.push(`muse-filegen 架构不匹配：${relPath} 期望 ${targetArch} 实为 ${actualArch}`)
   }
   return { level: 'critical', hits }
 }
@@ -1227,18 +1227,18 @@ function readGoBuildInfoWithRetries(binary) {
 
 export function resolvePackagedGoCliBinaryName({ target, hasBare, hasExe }) {
   const { goos } = normalizeGoTarget(target, '')
-  if (goos === 'windows') return { binaryName: 'tabtin.exe', inferredGoos: 'windows' }
-  if (goos) return { binaryName: 'tabtin', inferredGoos: goos }
-  if (hasExe && !hasBare) return { binaryName: 'tabtin.exe', inferredGoos: 'windows' }
-  if (hasBare && !hasExe) return { binaryName: 'tabtin', inferredGoos: '' }
+  if (goos === 'windows') return { binaryName: 'muse.exe', inferredGoos: 'windows' }
+  if (goos) return { binaryName: 'muse', inferredGoos: goos }
+  if (hasExe && !hasBare) return { binaryName: 'muse.exe', inferredGoos: 'windows' }
+  if (hasBare && !hasExe) return { binaryName: 'muse', inferredGoos: '' }
   return { binaryName: '', inferredGoos: '' }
 }
 
 function scanPackagedGoCliProvenance({ resourcesRoot, target, arch, expectedRevision }) {
   const { goos, goarch } = normalizeGoTarget(target, arch)
   const cliDir = join(resourcesRoot, 'tabtin-cli-go', 'dist')
-  const barePath = join(cliDir, 'tabtin')
-  const exePath = join(cliDir, 'tabtin.exe')
+  const barePath = join(cliDir, 'muse')
+  const exePath = join(cliDir, 'muse.exe')
   const resolved = resolvePackagedGoCliBinaryName({
     target,
     hasBare: existsSync(barePath),
@@ -1249,7 +1249,7 @@ function scanPackagedGoCliProvenance({ resourcesRoot, target, arch, expectedRevi
   const hits = []
 
   if (!resolved.binaryName) {
-    hits.push('无法唯一确定内置 Go CLI：请传 --target，或确保 tabtin / tabtin.exe 仅存在一个')
+    hits.push('无法唯一确定内置 Go CLI：请传 --target，或确保 muse / muse.exe 仅存在一个')
   } else if (!existsSync(cliPath)) {
     hits.push(`缺少内置 Go CLI：${relPath}`)
   } else {
@@ -1277,7 +1277,7 @@ function scanPackagedGoCliProvenance({ resourcesRoot, target, arch, expectedRevi
 }
 
 function scanMacPackagedGoCli(resourcesRoot, targetArch) {
-  const cliPath = join(resourcesRoot, 'tabtin-cli-go', 'dist', 'tabtin')
+  const cliPath = join(resourcesRoot, 'tabtin-cli-go', 'dist', 'muse')
   const relPath = normalizePath(relative(resourcesRoot, cliPath))
   if (!existsSync(cliPath)) {
     return [
@@ -1285,7 +1285,7 @@ function scanMacPackagedGoCli(resourcesRoot, targetArch) {
         `mac Go CLI architecture (${targetArch})`,
         'critical',
         [`缺少内置 Go CLI：${relPath}`],
-        '运行期 Agent shell PATH 依赖 Resources/tabtin-cli-go/dist/tabtin；缺失会让 tabtin 命令不可用。',
+        '运行期 Agent shell PATH 依赖 Resources/tabtin-cli-go/dist/muse；缺失会让 muse 命令不可用。',
       ),
     ]
   }
@@ -1313,7 +1313,7 @@ function scanMacPackagedGoCli(resourcesRoot, targetArch) {
 }
 
 function scanMacPackagedFilegen(resourcesRoot, targetArch, profile) {
-  const filegenPath = join(resourcesRoot, 'tabtin-filegen-python', 'dist', 'tabtin-filegen')
+  const filegenPath = join(resourcesRoot, 'muse-filegen-python', 'dist', 'muse-filegen')
   const relPath = normalizePath(relative(resourcesRoot, filegenPath))
   const exists = existsSync(filegenPath)
   const executable = exists ? (statSync(filegenPath).mode & 0o111) !== 0 : false
@@ -1328,10 +1328,10 @@ function scanMacPackagedFilegen(resourcesRoot, targetArch, profile) {
   })
   return [
     createCheck(
-      `mac tabtin-filegen architecture (${targetArch})`,
+      `mac muse-filegen architecture (${targetArch})`,
       verdict.level,
       verdict.hits,
-      '校验随包 tabtin-filegen 的可执行位与 Mach-O 架构，防止 x64 包复用 arm64 PyInstaller 产物。local 包缺文件为 warning；错架构一律 critical。',
+      '校验随包 muse-filegen 的可执行位与 Mach-O 架构，防止 x64 包复用 arm64 PyInstaller 产物。local 包缺文件为 warning；错架构一律 critical。',
     ),
   ]
 }
@@ -1347,7 +1347,7 @@ function scanMacNativeArch({ appAsarPath, appBundle, target, arch, profile }) {
         'mac native asset architecture',
         'warning',
         [],
-        '无法确定目标架构（未提供 --arch / TABTIN_BUILD_ARCH，且无法从 .app 主可执行文件推断，可能是 universal 包），跳过原生资产架构校验。',
+        '无法确定目标架构（未提供 --arch / MUSE_BUILD_ARCH，且无法从 .app 主可执行文件推断，可能是 universal 包），跳过原生资产架构校验。',
       ),
     ]
   }
@@ -1602,15 +1602,15 @@ function scanContent(options) {
     createCheck('no packaged test/example/benchmark/cache directories', 'critical', forbiddenDirs, '禁止 __tests__/tests/examples/benchmarks/fixtures/.github/.pytest_cache 等目录进入公开包。'),
     createCheck('no TabSite source template directories', 'critical', templateSource, 'TabSite 模板不能以源码模板目录形态进入安装包。'),
     createCheck('no duplicated electron-vite out directory', 'critical', nestedBuildOutput, 'app.asar 里不能出现 out/out；这通常表示 deploy 后重复复制构建产物。'),
-    createCheck('no embedded Office preview runtime archive', 'critical', embeddedOfficeRuntimeArchives, 'preprod/production 分发包默认只携带下载清单，首次预览时下载并校验 Office runtime；离线包可设置 TABTIN_ENABLE_PACKAGED_OFFICE_PREVIEW_RUNTIME=1。'),
-    createCheck('required packaged Python runtime', 'critical', missingPythonRuntime, 'preprod/production 包必须随附 native/tabtin-python-runtime 的 manifest 与当前平台归档；仓库不提交二进制，需先在目标 OS 构建 runtime。'),
+    createCheck('no embedded Office preview runtime archive', 'critical', embeddedOfficeRuntimeArchives, 'preprod/production 分发包默认只携带下载清单，首次预览时下载并校验 Office runtime；离线包可设置 MUSE_ENABLE_PACKAGED_OFFICE_PREVIEW_RUNTIME=1。'),
+    createCheck('required packaged Python runtime', 'critical', missingPythonRuntime, 'preprod/production 包必须随附 native/muse-python-runtime 的 manifest 与当前平台归档；仓库不提交二进制，需先在目标 OS 构建 runtime。'),
     createCheck('no non-darwin native binaries in mac package', 'critical', macNonDarwinNativePayloads, 'macOS 分发包不能携带 Linux ELF / Windows DLL native payload；这些文件会扩大 notary 扫描面并可能拖慢或污染公证结果。'),
     createCheck('no public sourceMappingURL references', 'critical', sourceMapReferences, 'sourcemap 只允许上传内部错误监控，不允许公开包引用。'),
     createCheck('secret-material', 'critical', secretMaterial, '安装包不得包含 env 文件、私钥或上传 token；仅报告相对路径与规则，不回显秘密值。'),
     createCheck('required packaged UI/product signals', 'critical', requiredArtifactSignals.missing, `最终产物必须包含 overlay token、overlay blur utility 与  封面裁剪信号。${requiredArtifactSignals.summary}`),
     createCheck('unpacked worker relative imports resolvable', 'critical', unresolvedUnpackedImports, 'app.asar.unpacked/out/main 下的 .mjs 相对 import 必须能在 unpacked 目录内解析；缺失说明 asarUnpack 漏了共享 chunk，打包版 worker 启动即 ERR_MODULE_NOT_FOUND。'),
     createCheck('bundled Stripe OAuth runtime is self-contained', 'critical', bundledMcpRemoteHostIssues, 'Stripe OAuth 的 mcp-remote 宿主及完整依赖闭包必须随安装包交付；只允许引用 unpacked 相对 chunk 和 Node 内置模块，用户无需安装 Node、npm、npx 或 mcp-remote。'),
-    createCheck('asar @tabtin dist relative imports resolvable', 'critical', unresolvedTabtinDistImports, 'app.asar 内 node_modules/@tabtin/*/dist 的相对 .js import（含 tsup chunk）必须可解析；缺失会导致 path-access-checker 等运行时 ERR_MODULE_NOT_FOUND。'),
+    createCheck('asar @tabtin dist relative imports resolvable', 'critical', unresolvedTabtinDistImports, 'app.asar 内 node_modules/@muse/*/dist 的相对 .js import（含 tsup chunk）必须可解析；缺失会导致 path-access-checker 等运行时 ERR_MODULE_NOT_FOUND。'),
     createCheck('main and preload runtime packages resolvable', 'critical', unresolvedPackagedRuntimeImports, 'main/preload 产物中的非 Node 内置模块必须存在于最终 ASAR；否则安装包会在启动或功能调用时 MODULE_NOT_FOUND。'),
   ]
 }
@@ -1815,8 +1815,8 @@ export async function scanMacLaunchSmokeWithDeps(appBundle, profile, deps) {
       {
         env: {
           ...process.env,
-          TABTIN_DISABLE_APP_RELAUNCH: '1',
-          TABTIN_PACKAGED_AUDIT_SMOKE: '1',
+          MUSE_DISABLE_APP_RELAUNCH: '1',
+          MUSE_PACKAGED_AUDIT_SMOKE: '1',
           ELECTRON_ENABLE_LOGGING: '1',
           ...(deps.env ?? {}),
         },
@@ -1881,11 +1881,11 @@ Options:
     return
   }
   const artifactRoot = resolve(args.artifact || args._[0] || 'dist-app')
-  const profile = String(args.profile || process.env.TABTIN_BUILD_PROFILE || 'production')
-  const target = String(args.target || process.env.TABTIN_BUILD_TARGET || '')
-  const arch = String(args.arch || process.env.TABTIN_BUILD_ARCH || '')
+  const profile = String(args.profile || process.env.MUSE_BUILD_PROFILE || 'production')
+  const target = String(args.target || process.env.MUSE_BUILD_TARGET || '')
+  const arch = String(args.arch || process.env.MUSE_BUILD_ARCH || '')
   const expectedCliRevision = String(
-    args['expected-cli-revision'] || process.env.TABTIN_BUILD_GIT_REVISION || '',
+    args['expected-cli-revision'] || process.env.MUSE_BUILD_GIT_REVISION || '',
   )
 
   if (!existsSync(artifactRoot)) {

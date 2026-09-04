@@ -1,5 +1,5 @@
-declare module '@tabtin/smartsheet-adapter-electron/renderer' {
-  import type { TableHttpRequest, TableHttpResponse } from '@tabtin/table-core'
+declare module '@muse/smartsheet-adapter-electron/renderer' {
+  import type { TableHttpRequest, TableHttpResponse } from '@muse/table-core'
 
   export interface RendererApiAdapter {
     request<T = unknown>(options: TableHttpRequest): Promise<TableHttpResponse<T>>

@@ -32,7 +32,7 @@ from django.utils import timezone
 
 logger = logging.getLogger(__name__)
 
-_USING_DB = ('default' if getattr(settings, 'TABTIN_SINGLE_DATABASE_MODE', False) else 'postgresql')
+_USING_DB = ('default' if getattr(settings, 'MUSE_SINGLE_DATABASE_MODE', False) else 'postgresql')
 _STALE_THRESHOLD_HOURS = 24
 
 CLEANUP_BEAT_SCHEDULE = {

@@ -1,4 +1,4 @@
-# @tabtin/doc-renderer
+# @muse/doc-renderer
 
 Host-agnostic markdown rendering utilities for Muse Tabdoc.
 
@@ -17,7 +17,7 @@ Host-agnostic markdown rendering utilities for Muse Tabdoc.
 import {
   configureMarkdownRenderer,
   renderMarkdown,
-} from '@tabtin/doc-renderer'
+} from '@muse/doc-renderer'
 
 configureMarkdownRenderer({
   renderToHtml(markdown) {

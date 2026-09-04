@@ -1,5 +1,5 @@
 /**
- * @tabtin/agent-runtime/telemetry — 结构化埋点 API 统一出口。
+ * @muse/agent-runtime/telemetry — 结构化埋点 API 统一出口。
  *
  * 使用指南：`packages/agent-runtime/TELEMETRY.md`
  */

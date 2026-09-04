@@ -20,7 +20,7 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from '@tabtin/smartsheet-ui'
+} from '@muse/smartsheet-ui'
 import { useDeviceStore } from '@stores/useDeviceStore'
 import { useOrganizationStore } from '@stores/useOrganizationStore'
 import { useSpaceListStore } from '@stores/useSpaceListStore'

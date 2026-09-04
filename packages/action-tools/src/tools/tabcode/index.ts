@@ -31,16 +31,16 @@ import { createRequire } from 'node:module';
 import { execFile } from 'node:child_process';
 import jschardet from 'jschardet';
 import iconv from 'iconv-lite';
-import { atomicWriteFile } from '@tabtin/terminal-core';
+import { atomicWriteFile } from '@muse/terminal-core';
 // **2026-05-13**：原引用 `getHomeTabtinPath` 用于 trash 备份目录，trash 退役后
 // 本文件无其他消费方，直接删除导入避免 lint dead-import 告警。其他模块用
-// trash 子目录的请直接 import `@tabtin/shared/storage-paths`，本工具不再持有。
-import { matchSensitivePath } from '@tabtin/terminal-core';
+// trash 子目录的请直接 import `@muse/shared/storage-paths`，本工具不再持有。
+import { matchSensitivePath } from '@muse/terminal-core';
 import {
   checkHardlinePath,
   checkSensitivePath,
   isPathInAllowedRoots,
-} from '@tabtin/security-policy';
+} from '@muse/security-policy';
 import { findActualString } from './edit-fuzzy';
 import {
   convertToLineEnding,
@@ -2345,7 +2345,7 @@ function globToRegex(pattern: string): RegExp {
 //
 // glob 底层语义：
 // - 默认尊重 `.gitignore`，避免 dist/build/open-source 等产物淹没前 100 条；需要时可显式 include_ignored
-// - 默认 `--hidden`，让 `.vscode/.cursor/.github/.env*` 可搜（可 `TABTIN_GLOB_HIDDEN=false` 关闭）
+// - 默认 `--hidden`，让 `.vscode/.cursor/.github/.env*` 可搜（可 `MUSE_GLOB_HIDDEN=false` 关闭）
 // - 生产用 `--sortr=modified` 保持 Muse 既有"最新在前"承诺；测试环境用 `--sort=path` 稳定排序
 async function globSearch(pattern: string, cwd: string, includeIgnored = false): Promise<string[]> {
   let searchDir = cwd;
@@ -2377,10 +2377,10 @@ async function globSearch(pattern: string, cwd: string, includeIgnored = false):
     process.env.NODE_ENV === 'test' ? '--sort=path' : '--sortr=modified',
   ];
 
-  if (includeIgnored || isTruthyEnv(process.env.TABTIN_GLOB_INCLUDE_IGNORED)) {
+  if (includeIgnored || isTruthyEnv(process.env.MUSE_GLOB_INCLUDE_IGNORED)) {
     args.push('--no-ignore');
   }
-  if (!isFalsyEnv(process.env.TABTIN_GLOB_HIDDEN)) {
+  if (!isFalsyEnv(process.env.MUSE_GLOB_HIDDEN)) {
     args.push('--hidden');
   }
 
@@ -2765,8 +2765,8 @@ export const codeGrepTool: AgentTool<CodeGrepInput, CodeGrepOutput> = {
       // 已经处理掉，所以 `--hidden` 默认开不会重新引入 `.git/objects/...` 噪音。
       //
       // **env 兜底**：dogfood / CI 场景如果意外撞到隐藏目录扫描慢，可以
-      // `TABTIN_GREP_HIDDEN=false` 关掉。
-      const grepHiddenEnv = (process.env.TABTIN_GREP_HIDDEN ?? '').toLowerCase();
+      // `MUSE_GREP_HIDDEN=false` 关掉。
+      const grepHiddenEnv = (process.env.MUSE_GREP_HIDDEN ?? '').toLowerCase();
       const grepHiddenDisabled =
         grepHiddenEnv === 'false' || grepHiddenEnv === '0' || grepHiddenEnv === 'no';
       if (!grepHiddenDisabled) {

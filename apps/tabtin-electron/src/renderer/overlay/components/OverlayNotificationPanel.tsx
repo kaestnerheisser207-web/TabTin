@@ -54,7 +54,7 @@ function sendAction(payload: {
   notif?: unknown
   invitation?: unknown
 }): void {
-  window.tabtin?.overlay?.sendNotificationAction?.({ type: 'notification-action', ...payload })
+  window.muse?.overlay?.sendNotificationAction?.({ type: 'notification-action', ...payload })
 }
 
 export function OverlayNotificationPanel({

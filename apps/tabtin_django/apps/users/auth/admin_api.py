@@ -210,18 +210,18 @@ def _assert_dirty_user_cleanup_enabled() -> None:
     """Only expose physical phone-based cleanup in dev/test-like environments."""
     env = os.getenv("ENVIRONMENT", "").strip().lower()
     django_env = os.getenv("DJANGO_ENV", "").strip().lower()
-    tabtin_env = os.getenv("TABTIN_ENV", "").strip().lower()
+    tabtin_env = os.getenv("MUSE_ENV", "").strip().lower()
     if env == "production" or django_env == "production":
         raise HttpError(403, "生产环境禁止使用手机号物理清理账号接口")
     if settings.DEBUG:
         return
     if tabtin_env == "ack-test":
         return
-    if os.getenv("TABTIN_ENABLE_DEV_USER_CLEANUP_API") == "1":
+    if os.getenv("MUSE_ENABLE_DEV_USER_CLEANUP_API") == "1":
         return
     raise HttpError(
         403,
-        "临时清理接口未启用：设置 TABTIN_ENABLE_DEV_USER_CLEANUP_API=1 后仅在测试环境使用",
+        "临时清理接口未启用：设置 MUSE_ENABLE_DEV_USER_CLEANUP_API=1 后仅在测试环境使用",
     )
 
 

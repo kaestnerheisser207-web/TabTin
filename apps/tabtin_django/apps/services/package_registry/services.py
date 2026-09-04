@@ -21,7 +21,7 @@ from apps.services.package_registry.models import Package, PackageFile, PackageV
 
 logger = logging.getLogger(__name__)
 
-_USING_DB = ('default' if getattr(settings, 'TABTIN_SINGLE_DATABASE_MODE', False) else 'postgresql')
+_USING_DB = ('default' if getattr(settings, 'MUSE_SINGLE_DATABASE_MODE', False) else 'postgresql')
 _SLUG_RE = re.compile(r"^[a-z0-9][a-z0-9._-]*$")
 
 

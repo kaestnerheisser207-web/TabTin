@@ -3,9 +3,9 @@ import { guardedHandle } from './utils/guarded-handle'
 import { setCapabilityDiscoveryService } from './capability-discovery-accessor'
 import { startupPerf, createLogger } from './logger'
 import { withStepTimeout, STEP_TIMEOUT_MS } from './deferred-utils'
-import type { ActionRequiredEventData, ActionResultRequest } from '@tabtin/chat-client'
+import type { ActionRequiredEventData, ActionResultRequest } from '@muse/chat-client'
 import type { FrontendActionBridge } from './services/FrontendActionBridge'
-import { loadAppConfig } from '@tabtin/app-config'
+import { loadAppConfig } from '@muse/app-config'
 import {
   buildTabDesktopExecutorConstructorOptions,
   resolveTabDesktopAppManifestRoot,
@@ -26,7 +26,7 @@ let electronAgentServiceRef: {
 
 let electronAgentHostRef: {
   stop(): Promise<void>
-  getCodeWorktreeController?(): import('@tabtin/cli-routes').CodeWorktreeController
+  getCodeWorktreeController?(): import('@muse/cli-routes').CodeWorktreeController
   materializeAppSkill?(params: {
     organizationId: string
     /** @deprecated  本地落盘不再按 space */
@@ -96,7 +96,7 @@ export async function initActionBridge(mainWindow: BrowserWindow): Promise<void>
   // DesktopExecutorService: mainWindow getter avoids stale reference after window recreation。
   //
   // v2.1 模块零（规范 § 3.5.5 + § 9.1）· app.json → runtime plumbing 接通：
-  // 通过 @tabtin/app-config loadAppConfig 读 packages/apps/tabdesktop/app.json
+  // 通过 @muse/app-config loadAppConfig 读 packages/apps/tabdesktop/app.json
   // 的 configSchema 默认值（imageResize / pixelCompare），传入 Executor 构造
   // opts。这是 v1.8 § 10 Q11 登记的 "TabDesktop app.json 开关声明了不生效"
   // 债的偿还：改 app.json 重启 → runtime 行为真变。

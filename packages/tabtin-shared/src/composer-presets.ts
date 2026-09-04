@@ -5,7 +5,7 @@
  * 无需关心 Window API 的挂载细节和路径差异。
  *
  * @example
- * import { activatePreset } from '@tabtin/shared/composer-presets'
+ * import { activatePreset } from '@muse/shared/composer-presets'
  *
  * // 素材面板「AI 生成」按钮
  * activatePreset('tabvideo.generateClip')

@@ -548,9 +548,9 @@ const ShortcutRecorder: React.FC<{
 
     const handleBlur = () => setRecording(false)
 
-    // eslint-disable-next-line tabtin/prefer-scoped-activity-effects -- 快捷键录制需在录制期间捕获全局按键，与 Space 活跃态无关。
+    // eslint-disable-next-line muse/prefer-scoped-activity-effects -- 快捷键录制需在录制期间捕获全局按键，与 Space 活跃态无关。
     window.addEventListener('keydown', handleKeyDown, true)
-    // eslint-disable-next-line tabtin/prefer-scoped-activity-effects -- 录制期间窗口失焦即结束，属于录制交互本身。
+    // eslint-disable-next-line muse/prefer-scoped-activity-effects -- 录制期间窗口失焦即结束，属于录制交互本身。
     window.addEventListener('blur', handleBlur)
     return () => {
       window.removeEventListener('keydown', handleKeyDown, true)

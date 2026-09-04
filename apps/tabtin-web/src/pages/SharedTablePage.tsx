@@ -18,13 +18,13 @@ import {
   MessageSquare,
   ShieldAlert,
 } from 'lucide-react'
-import { formatCellValue } from '@tabtin/smartsheet-ui'
+import { formatCellValue } from '@muse/smartsheet-ui'
 import { API_BASE_URL } from '@/config/api'
 import { useAuthStore } from '@/stores/auth-store'
 import { TablePaneView } from '@/components/table/TablePaneView'
 import { configureWebTableRuntime } from '@/features/table/bootstrap'
 import { shareAuthHeaders } from './shareAuth'
-import { buildCollabViewRecords } from '@tabtin/table-engine/collab'
+import { buildCollabViewRecords } from '@muse/table-engine/collab'
 import { useSharedTableCollab } from './hooks/useShareCollab'
 import { shouldPreferCollabShareRecords } from './sharedTableCollabRecords'
 import { resolveSharedTableAccess } from './sharedTableAccess'

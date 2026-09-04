@@ -8,9 +8,9 @@ import {
   type EventStorageEntry,
   type MessageBlockRecord,
   type TranscriptEntry,
-} from '@tabtin/agent-runtime'
-import { isExternalArchiveLocalOnlyMessage } from '@tabtin/agent-runtime/history'
-import { StreamEvents } from '@tabtin/agent-wire'
+} from '@muse/agent-runtime'
+import { isExternalArchiveLocalOnlyMessage } from '@muse/agent-runtime/history'
+import { StreamEvents } from '@muse/agent-wire'
 
 import type { RelayEvent } from './relay-transport.js'
 

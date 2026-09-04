@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react'
-import type { AskUserAnswer, AskUserQuestion } from '@tabtin/chat-client'
+import type { AskUserAnswer, AskUserQuestion } from '@muse/chat-client'
 import { useIsRemoteViewer } from '@components/context-space/hooks/useIsRemoteViewer'
 import { LoginRelayAction } from './LoginRelayAction'
 

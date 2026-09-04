@@ -5,7 +5,7 @@
  *   import tabtinPlugin from './eslint-rules/index.js'
  *   ...
  *   { plugins: { tabtin: tabtinPlugin },
- *     rules: { 'tabtin/no-empty-catch': 'error', ... } }
+ *     rules: { 'muse/no-empty-catch': 'error', ... } }
  */
 
 import noEmptyCatch from './no-empty-catch.js'

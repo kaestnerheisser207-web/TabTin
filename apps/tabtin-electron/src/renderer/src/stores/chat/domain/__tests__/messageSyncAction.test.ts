@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import type { ChatMessage } from '@tabtin/chat-client'
+import type { ChatMessage } from '@muse/chat-client'
 import { mergeAuthoritativeServerReplace, mergeMessagesFromServer } from '@/stores/chat/domain/messageSyncAction'
 
 function msg(overrides: Partial<ChatMessage> & { id: string }): ChatMessage {

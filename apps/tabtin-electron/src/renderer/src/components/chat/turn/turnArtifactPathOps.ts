@@ -28,7 +28,7 @@ export function diffFileHref(filePath: string): string {
   const params = new URLSearchParams({ hint: 'tabfiles' })
   const title = basename(cleaned)
   if (title) params.set('title', title)
-  return `tabtin://resource/file/${encodeURIComponent(cleaned)}?${params.toString()}`
+  return `muse://resource/file/${encodeURIComponent(cleaned)}?${params.toString()}`
 }
 
 /**

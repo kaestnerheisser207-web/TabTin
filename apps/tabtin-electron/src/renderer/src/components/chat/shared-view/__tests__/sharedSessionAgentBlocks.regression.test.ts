@@ -5,7 +5,7 @@
  * Pane 须经 hydrate 入口写入 store，不能只把 blocks 挂在本地 props 上。
  */
 import { beforeEach, describe, expect, it, vi } from 'vitest'
-import type { ChatMessage } from '@tabtin/chat-client'
+import type { ChatMessage } from '@muse/chat-client'
 import { deriveAssistantBubbleModel } from '../../message'
 import { resolveMessageContentBlocks } from '../../message'
 import {

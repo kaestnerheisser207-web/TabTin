@@ -1,5 +1,5 @@
 import type { ServerResponse } from 'node:http';
-import { errorResponse, type SendJSON } from '@tabtin/cli-server-core';
+import { errorResponse, type SendJSON } from '@muse/cli-server-core';
 import { resolveSpaceId } from '../../host-bindings.js';
 
 export const LOG_TAG = '[CLI Table]';
@@ -45,7 +45,7 @@ export function requireSpaceId(body: any, res: ServerResponse, sendJSON: SendJSO
   if (!id) {
     sendJSON(res, 400, errorResponse(
       'VALIDATION_ERROR',
-      '缺少 space_id。请设置 TABTIN_SPACE_ID 环境变量，或在请求中传入 space_id / project_id',
+      '缺少 space_id。请设置 MUSE_SPACE_ID 环境变量，或在请求中传入 space_id / project_id',
     ));
   }
   return id;
@@ -57,7 +57,7 @@ export function requireOrganizationId(body: any, res: ServerResponse, sendJSON: 
   if (!id || typeof id !== 'string') {
     sendJSON(res, 400, errorResponse(
       'VALIDATION_ERROR',
-      '缺少 organization_id。请设置 TABTIN_ORGANIZATION_ID 环境变量，或在请求中传入 organization_id',
+      '缺少 organization_id。请设置 MUSE_ORGANIZATION_ID 环境变量，或在请求中传入 organization_id',
     ));
     return null;
   }

@@ -6,7 +6,7 @@
 import React, { Fragment, useRef } from 'react'
 import { createPortal } from 'react-dom'
 import type { RefObject } from 'react'
-import { isPrimaryFieldAllowedType } from '@tabtin/table-engine'
+import { isPrimaryFieldAllowedType } from '@muse/table-engine'
 import { useClickAway } from 'react-use'
 import {
   ArrowLeft,

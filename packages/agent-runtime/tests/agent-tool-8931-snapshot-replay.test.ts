@@ -10,7 +10,7 @@ import { BudgetTracker } from '../src/engine/guards/budget-tracker.js';
 import {
   NotificationQueue,
   buildSubagentCompletionEnvelope,
-} from '@tabtin/terminal-core';
+} from '@muse/terminal-core';
 import {
   createMockPermissionHandler,
   createMockToolProvider,

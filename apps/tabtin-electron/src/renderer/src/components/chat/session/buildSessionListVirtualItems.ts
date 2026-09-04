@@ -1,4 +1,4 @@
-import type { ChatSession } from '@tabtin/chat-client'
+import type { ChatSession } from '@muse/chat-client'
 import type { WorkspaceListSortMode } from '@/utils/workspace-list-sort'
 import type { GroupKey } from '@/utils/chat-session-sort'
 import {

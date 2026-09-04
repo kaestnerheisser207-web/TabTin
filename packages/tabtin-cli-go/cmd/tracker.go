@@ -89,7 +89,7 @@ func newCmdTracker(f *cmdutil.Factory) *cobra.Command {
 			{Name: "once-at", Type: cmdutil.FlagString,
 				Desc: "一次性触发：在指定日期时间执行一次（ISO 8601 或“明天上午十点”这类今天/明天/后天相对时间）；跑完自动停用，与其它触发方式互斥"},
 			{Name: "agent", Type: cmdutil.FlagString,
-				Desc: "执行 Agent ID（可选；不传则用 TABTIN_AGENT_ID / profile.DefaultAgent。后端仍要求最终有 agent_id，可用 `muse agent list` 显式指定）"},
+				Desc: "执行 Agent ID（可选；不传则用 MUSE_AGENT_ID / profile.DefaultAgent。后端仍要求最终有 agent_id，可用 `muse agent list` 显式指定）"},
 			{Name: "skill", Type: cmdutil.FlagString,
 				Desc: "可选：预绑定 Skill key；不填则走纯 Agent 模式，由 Agent 运行时自助选择 Skill"},
 			{Name: "instructions", Type: cmdutil.FlagString,
@@ -271,13 +271,13 @@ func trackerNewFunc(f *cmdutil.Factory) func(ctx *cmdutil.RunContext) error {
 		agentID, _ := ctx.FlagValues["agent"].(string)
 		agentID = strings.TrimSpace(agentID)
 		//  / ：--agent 改为可选。显式未传时，优先用当前 Agent 身份
-		// （TABTIN_AGENT_ID / profile.DefaultAgent）。后端 create_tracker 仍强制
+		// （MUSE_AGENT_ID / profile.DefaultAgent）。后端 create_tracker 仍强制
 		// 要求 agent_id（不再回落 Space 默认 Agent）；此处只负责把当前身份填进
 		// body，避免 Agent 为填 --agent 去猜身份。
 		if agentID == "" {
 			if cfg, err := f.Config(); err == nil {
 				p := cfg.CurrentProfileConfig()
-				agentID = strings.TrimSpace(firstNonEmpty(getEnv("TABTIN_AGENT_ID"), p.DefaultAgent))
+				agentID = strings.TrimSpace(firstNonEmpty(getEnv("MUSE_AGENT_ID"), p.DefaultAgent))
 			}
 		}
 		skillKey, _ := ctx.FlagValues["skill"].(string)
@@ -1063,9 +1063,9 @@ func resolveTrackerScope(f *cmdutil.Factory) (organizationID, spaceID string, er
 		))
 	}
 	p := cfg.CurrentProfileConfig()
-	organizationID = firstNonEmpty(getEnv("TABTIN_ORGANIZATION_ID"), p.DefaultOrganization)
+	organizationID = firstNonEmpty(getEnv("MUSE_ORGANIZATION_ID"), p.DefaultOrganization)
 	// query space_id 仍是过渡期权限宿主字段；用 ResolveWorkspaceID 读
-	// TABTIN_WORKSPACE_ID / TABTIN_SPACE_ID / profile，避免只设 --workspace-id 时 query 为空。
+	// MUSE_WORKSPACE_ID / MUSE_SPACE_ID / profile，避免只设 --workspace-id 时 query 为空。
 	spaceID = strings.TrimSpace(config.ResolveWorkspaceID(p))
 	if organizationID == "" {
 		return "", "", output.PrintErrorAndExit(output.ErrorEnvelope(
@@ -1120,7 +1120,7 @@ func buildTrackerNewBody(in trackerNewBodyInput) map[string]any {
 
 // resolveTrackerExecutionWorkspaceID 解析 TrackerCreate.workspace_id（执行现场）。
 //
-// 优先 config.ResolveWorkspaceID（TABTIN_WORKSPACE_ID > TABTIN_SPACE_ID > profile）；
+// 优先 config.ResolveWorkspaceID（MUSE_WORKSPACE_ID > MUSE_SPACE_ID > profile）；
 // 若仍为空则回落 resolveTrackerScope 已解析的 spaceID（同值个人域场景）。
 // 二者皆空时本地报错，避免把「body 缺字段」推到后端笼统 VALIDATION_ERROR。
 func resolveTrackerExecutionWorkspaceID(f *cmdutil.Factory, fallbackSpaceID string) (string, error) {

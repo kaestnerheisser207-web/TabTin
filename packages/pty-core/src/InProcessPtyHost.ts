@@ -107,7 +107,7 @@ function requireNodePty(): typeof import('node-pty') {
       nodePtyModule = require('node-pty')
     } catch {
       throw new Error(
-        '@tabtin/pty-core: node-pty is required for InProcessPtyHostClient. ' +
+        '@muse/pty-core: node-pty is required for InProcessPtyHostClient. ' +
           'Install it as a dependency in your app: npm install node-pty',
       )
     }

@@ -1,5 +1,5 @@
 {
-  "name": "@tabtin/chat-client",
+  "name": "@muse/chat-client",
   "version": "0.1.0",
   "description": "Chat Agent SDK for Muse applications",
   "type": "module",
@@ -32,7 +32,7 @@
   "author": "Muse Team",
   "license": "MIT",
   "dependencies": {
-    "@tabtin/ws-gateway-client": "workspace:*"
+    "@muse/ws-gateway-client": "workspace:*"
   },
   "devDependencies": {
     "typescript": "5.7.2",

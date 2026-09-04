@@ -15,8 +15,8 @@ vi.mock('@/hooks/useResolvedOrganizationId', () => ({
   useResolvedOrganizationId: () => 'ws-test',
 }))
 
-vi.mock('@tabtin/table-core', async (importOriginal) => {
-  const actual = await importOriginal<typeof import('@tabtin/table-core')>()
+vi.mock('@muse/table-core', async (importOriginal) => {
+  const actual = await importOriginal<typeof import('@muse/table-core')>()
   return {
     ...actual,
     TableApiService: {},

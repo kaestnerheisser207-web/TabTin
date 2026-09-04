@@ -6,7 +6,7 @@ vi.mock('../../panel/ChatIconTooltip', () => ({
   ChatIconTooltip: ({ children }: { children: ReactNode }) => <>{children}</>,
 }))
 
-vi.mock('@tabtin/smartsheet-ui', () => ({
+vi.mock('@muse/smartsheet-ui', () => ({
   TooltipProvider: ({ children }: { children: ReactNode }) => <>{children}</>,
   Tooltip: ({ children }: { children: ReactNode }) => <>{children}</>,
   TooltipTrigger: ({ children }: { children: ReactNode }) => <>{children}</>,

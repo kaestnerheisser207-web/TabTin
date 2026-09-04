@@ -7,13 +7,13 @@
  */
 
 import { homedir } from 'node:os'
-import type { LocalSkill } from '@tabtin/agent-runtime/skills'
+import type { LocalSkill } from '@muse/agent-runtime/skills'
 import {
   getCachedWorkspaceSkills,
   isWorkspaceRootAllowed,
   scanWorkspaceSkillsGuarded,
   type WorkspaceScanResult,
-} from '@tabtin/agent-host/skills'
+} from '@muse/agent-host/skills'
 
 function allowedScanRoots(): string[] {
   return [homedir()]

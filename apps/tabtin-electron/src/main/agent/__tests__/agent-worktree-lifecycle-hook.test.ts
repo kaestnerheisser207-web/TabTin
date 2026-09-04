@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from 'vitest'
-import type { Tool } from '@tabtin/agent-runtime/engine'
+import type { Tool } from '@muse/agent-runtime/engine'
 import { AgentWorktreeTransitionQueue } from '../agent-worktree-transition'
 import { buildAgentWorktreeLifecycleHook } from '../agent-worktree-lifecycle-hook'
 

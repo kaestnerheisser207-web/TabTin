@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react'
-import { LoadingSpinner } from '@tabtin/smartsheet-ui'
+import { LoadingSpinner } from '@muse/smartsheet-ui'
 import { useTranslation } from 'react-i18next'
 import { useAuthStore } from '@stores/useAuthStore'
 

@@ -5,7 +5,7 @@
  * DB 只补非正文增强字段（usage / checkpoint 等）、绝不覆盖正文。
  */
 import { describe, it, expect, vi, beforeEach } from 'vitest'
-import type { ChatSession, ChatMessage } from '@tabtin/chat-client'
+import type { ChatSession, ChatMessage } from '@muse/chat-client'
 import { createSessionCrudActions, type SessionCrudStore } from '../sessionCrudSlice'
 
 vi.mock('@/utils/logger', () => ({
@@ -39,7 +39,7 @@ vi.mock('../../../../useSessionReadStore', () => ({
   useSessionReadStore: { getState: () => ({ markViewed: vi.fn() }) },
 }))
 vi.mock('@/services/sessionFreshness', () => ({ markSessionFresh: vi.fn(), markSessionStale: vi.fn() }))
-vi.mock('@tabtin/smartsheet-ui/toast', () => ({ toast: vi.fn() }))
+vi.mock('@muse/smartsheet-ui/toast', () => ({ toast: vi.fn() }))
 vi.mock('@/i18n', () => ({ default: { t: (k: string) => k } }))
 
 // ：本机会话判据为 true，transcript 读取按用例注入；enrich 用真实实现。

@@ -4,7 +4,7 @@
  * 与 Electron 版 createElectronTabDocTableEmbedRuntime 对等实现，
  * 使用 Web 端的 tableStorePool 提供 store 池化管理。
  */
-import type { TabDocTableEmbedRuntime } from '@tabtin/tabdoc-ui'
+import type { TabDocTableEmbedRuntime } from '@muse/tabdoc-ui'
 import {
   getOrCreateTableStore,
   getOrCreateViewStore,

@@ -30,7 +30,7 @@
  *     落到 `ChatMessage.content` 的字面值完全一致，不会刷新前后漂移。
  */
 
-import type { ChatMessage } from '@tabtin/chat-client'
+import type { ChatMessage } from '@muse/chat-client'
 import { useChatRuntimeStore } from '@/stores/useChatRuntimeStore'
 import { useChatStore } from '@/stores/chat/useChatStore'
 import { getCommittedBlocks } from '@/stores/chat/messages/messageBlocks'

@@ -1,5 +1,5 @@
 import React, { Activity, useMemo, useRef } from 'react'
-import { OverlayContainerProvider } from '@tabtin/smartsheet-ui'
+import { OverlayContainerProvider } from '@muse/smartsheet-ui'
 import { ChatSidePanel } from '@components/chat/panel/ChatSidePanel'
 import type { SpaceContext } from '@components/context-space/SpaceContextContainer'
 import { useSpaceStore } from '@stores/useSpaceStore'

@@ -5,7 +5,7 @@ import { useHistoryStore } from '../../store/history'
 import { buildShadowStyle } from '../../utils/geometry'
 import * as t from '../../theme'
 import { useT } from '../../i18n'
-import { ZIndex } from '@tabtin/app-shell'
+import { ZIndex } from '@muse/app-shell'
 
 interface ImageElementProps {
   element: PPTImageElement

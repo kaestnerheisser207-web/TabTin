@@ -8,7 +8,7 @@
  * 参考 Design 模块的 RemotePresenceOverlay。
  */
 import React, { useMemo } from 'react'
-import { getUserColor } from '@tabtin/collab-core'
+import { getUserColor } from '@muse/collab-core'
 import type { PPTElement } from '../types/slides'
 
 export interface SlideRemotePeer {

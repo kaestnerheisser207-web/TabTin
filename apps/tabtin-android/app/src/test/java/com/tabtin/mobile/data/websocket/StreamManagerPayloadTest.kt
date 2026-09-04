@@ -143,7 +143,7 @@ class StreamManagerPayloadTest {
                     "mime_type":"image/png",
                     "file_size":4096,
                     "access_url":"https://oss.example.com/live.png",
-                    "url":"tabtin://resource/file/file-live-001?hint=tabfiles"
+                    "url":"muse://resource/file/file-live-001?hint=tabfiles"
                   }
                 }""",
             ).jsonObject,
@@ -166,7 +166,7 @@ class StreamManagerPayloadTest {
                   "payload":{
                     "artifact_kind":"oss_file",
                     "file_id":"file-live-private",
-                    "url":"tabtin://resource/file/file-live-private?hint=tabfiles"
+                    "url":"muse://resource/file/file-live-private?hint=tabfiles"
                   }
                 }""",
             ).jsonObject,

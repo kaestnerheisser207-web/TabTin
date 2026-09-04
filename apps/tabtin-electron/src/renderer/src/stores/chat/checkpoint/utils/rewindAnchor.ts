@@ -6,7 +6,7 @@
  * 这个纯函数做 per-file 本地文件能力判定（Bug 2）。抽到只依赖 `ChatMessage` 类型的纯
  * util，两边都能 import，避免把 checkpointSlice 的重依赖拖进面板（及其单测）。
  */
-import type { ChatMessage } from '@tabtin/chat-client'
+import type { ChatMessage } from '@muse/chat-client'
 
 /**
  * 解析 per-file 回退锚点。

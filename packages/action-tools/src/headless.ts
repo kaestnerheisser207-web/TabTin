@@ -1,5 +1,5 @@
 /**
- * @tabtin/action-tools/headless
+ * @muse/action-tools/headless
  *
  * Headless-friendly subset of action-tools for non-Electron environments
  * (e.g., Agent Daemon on remote servers).

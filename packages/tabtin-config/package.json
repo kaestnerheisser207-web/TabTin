@@ -1,5 +1,5 @@
 {
-  "name": "@tabtin/config",
+  "name": "@muse/config",
   "version": "0.1.0",
   "description": "Shared runtime configuration for Muse apps and packages",
   "type": "module",

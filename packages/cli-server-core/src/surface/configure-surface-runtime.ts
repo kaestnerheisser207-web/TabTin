@@ -1,7 +1,7 @@
 /**
  * Surface 运行时上下文注入。
  *
- * 与 `@tabtin/cli-routes` 的 `configureCLIRoutes` 模式完全对齐：
+ * 与 `@muse/cli-routes` 的 `configureCLIRoutes` 模式完全对齐：
  * 宿主（Electron / Daemon）在启动时调一次 `configureSurfaceRuntime`，
  * 之后所有 surface handler 通过 `getSurfaceContext()` 拿上下文。
  *

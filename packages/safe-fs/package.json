@@ -1,7 +1,7 @@
 {
-  "name": "@tabtin/safe-fs",
+  "name": "@muse/safe-fs",
   "version": "0.1.0",
-  "description": "Muse filesystem wrapper — wraps node:fs with @tabtin/os-errors classification (TCC / NTFS ACL / cloud placeholder / AV detection)",
+  "description": "Muse filesystem wrapper — wraps node:fs with @muse/os-errors classification (TCC / NTFS ACL / cloud placeholder / AV detection)",
   "type": "module",
   "main": "./dist/index.js",
   "module": "./dist/index.js",
@@ -23,7 +23,7 @@
     "test": "vitest run"
   },
   "dependencies": {
-    "@tabtin/os-errors": "workspace:*"
+    "@muse/os-errors": "workspace:*"
   },
   "devDependencies": {
     "@types/node": "^20.0.0",

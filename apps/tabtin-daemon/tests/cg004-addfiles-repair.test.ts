@@ -45,14 +45,14 @@ describe('CG-004: Daemon addFiles includes repairDisabledGitDirs', () => {
     expect(repairIdx).toBeLessThan(disableIdx)
   })
 
-  it('daemon and electron adapters both reuse @tabtin/checkpoint-core', () => {
+  it('daemon and electron adapters both reuse @muse/checkpoint-core', () => {
     if (!fs.existsSync(DAEMON_CHECKPOINT_WRAPPER_PATH) || !fs.existsSync(ELECTRON_CHECKPOINT_WRAPPER_PATH)) {
       return
     }
     const daemonWrapper = fs.readFileSync(DAEMON_CHECKPOINT_WRAPPER_PATH, 'utf-8')
     const electronWrapper = fs.readFileSync(ELECTRON_CHECKPOINT_WRAPPER_PATH, 'utf-8')
 
-    expect(daemonWrapper).toContain("export { CheckpointService } from '@tabtin/checkpoint-core'")
-    expect(electronWrapper).toContain("export { CheckpointService } from '@tabtin/checkpoint-core'")
+    expect(daemonWrapper).toContain("export { CheckpointService } from '@muse/checkpoint-core'")
+    expect(electronWrapper).toContain("export { CheckpointService } from '@muse/checkpoint-core'")
   })
 })

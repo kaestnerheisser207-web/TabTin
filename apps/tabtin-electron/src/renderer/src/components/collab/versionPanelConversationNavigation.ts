@@ -2,13 +2,13 @@
  * 版本面板「查看对话」——从资源 Tab 切到产生该版本的 Space/会话并定位消息。
  * 不能直接用 navigateToMessage：它依赖 currentSpaceId，文档 Tab 下右侧聊天常未选中会话。
  */
-import type { ViewConversationOptions } from '@tabtin/collab-core'
+import type { ViewConversationOptions } from '@muse/collab-core'
 import { getAgentRunConversation } from '@services/chatExtraApi'
 import { enterChatSession } from '@services/chatSessionNavigation'
 import { findSpaceIdForSession } from '@services/notificationNavigation'
 import { useChatStore } from '@stores/chat/useChatStore'
 import { useUIStore } from '@stores/useUIStore'
-import { toast } from '@tabtin/smartsheet-ui/toast'
+import { toast } from '@muse/smartsheet-ui/toast'
 import { createLogger } from '@/utils/logger'
 
 const log = createLogger('versionPanelConvNav')

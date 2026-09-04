@@ -1,5 +1,5 @@
-import type { TableField, ViewMeta } from '@tabtin/table-ui'
-import { getViewVisibilitySnapshot } from '@tabtin/table-ui'
+import type { TableField, ViewMeta } from '@muse/table-ui'
+import { getViewVisibilitySnapshot } from '@muse/table-ui'
 
 const dedupeFieldIds = (fieldIds: string[]): string[] => {
   const unique: string[] = []

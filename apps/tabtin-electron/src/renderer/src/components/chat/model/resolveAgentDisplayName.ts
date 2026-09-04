@@ -1,4 +1,4 @@
-import type { Agent } from '@tabtin/app-shell'
+import type { Agent } from '@muse/app-shell'
 import { extractAgentAvatarUrl } from '@/utils/resolveAgentAvatar'
 
 /**

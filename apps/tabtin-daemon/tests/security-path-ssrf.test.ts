@@ -16,7 +16,7 @@ import {
   validateSavePath,
 } from '../src/platform/browser/DaemonBrowserService.js'
 
-import { validateProjectPath } from '@tabtin/action-tools/headless'
+import { validateProjectPath } from '@muse/action-tools/headless'
 
 const TEST_HOME = '/home/user'
 const TEST_SANDBOX_ROOT = '/tmp/tabtin-sandbox'

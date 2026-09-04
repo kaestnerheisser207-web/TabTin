@@ -39,13 +39,13 @@ import {
   checkForLSPDiagnostics,
   type LspServerConfigLoader,
   type ScopedLspServerConfig,
-} from '@tabtin/lsp-runtime';
+} from '@muse/lsp-runtime';
 
 import { createTabCodeTools } from '../../src/tools/tabcode-adapter.js';
 import type {
   ReadFileState,
   ToolContext,
-} from '@tabtin/agent-runtime';
+} from '@muse/agent-runtime';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const MOCK_SERVER = join(
@@ -252,7 +252,7 @@ describe('lsp-runtime ↔ tabcode-adapter 真实端到端集成', () => {
   it('agent-runtime → lsp-runtime export 链路 OK', async () => {
     // 替代旧的"static import 链路"空测试 —— 显式验证 export 名一致性
     // 防止 lsp-runtime 改 export 名时 agent-runtime 静默失效
-    const lspRuntime = await import('@tabtin/lsp-runtime');
+    const lspRuntime = await import('@muse/lsp-runtime');
     const required = [
       'getLspServerManager',
       'clearDeliveredDiagnosticsForFile',

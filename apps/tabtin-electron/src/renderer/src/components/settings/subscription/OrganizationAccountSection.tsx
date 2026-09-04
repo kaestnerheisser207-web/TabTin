@@ -1,6 +1,6 @@
 import React from 'react'
 import { CreditCard } from 'lucide-react'
-import { Button } from '@tabtin/smartsheet-ui'
+import { Button } from '@muse/smartsheet-ui'
 import { useTranslation } from 'react-i18next'
 import type { OrganizationMembershipStatus, OrganizationWalletInfo, SubscriptionDisplay } from '@/types/membership'
 import { useCashWalletQuery } from '@/hooks/queries/membership'

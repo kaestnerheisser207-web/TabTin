@@ -1,5 +1,5 @@
 /**
- * `@tabtin/agent-runtime/capability/app` —— App 类 Capability barrel。
+ * `@muse/agent-runtime/capability/app` —— App 类 Capability barrel。
  *
  * **App 范畴**（capability.ts 的 CapabilityCategory 注释）：
  *   - 内置 App 的 Agent 侧入口（未来的 TabMemo / TabAgenda 等）

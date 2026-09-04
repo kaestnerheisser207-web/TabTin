@@ -26,7 +26,7 @@ export const RUNTIME_NAMESPACE = 'tabtin-runtimes'
 export const PRIMARY_RUNTIME_NAME = 'tabtin-primary-runtime'
 
 /** 宿主用来把解析出的解释器暴露给 agent 子进程的环境变量名（infra 契约，非业务）。 */
-export const PYTHON_RUNTIME_ENV_VAR = 'TABTIN_PYTHON_RUNTIME'
+export const PYTHON_RUNTIME_ENV_VAR = 'MUSE_PYTHON_RUNTIME'
 
 const MANIFEST_NAME = 'manifest.json'
 const MARKER_NAME = 'current.json'
@@ -159,7 +159,7 @@ async function obtainArchive(
 
 /**
  * L0 唯一公开入口：
- *   1. explicitRoots 已解压目录（dev/测试覆盖，TABTIN_PYTHON_RUNTIME_DIR）
+ *   1. explicitRoots 已解压目录（dev/测试覆盖，MUSE_PYTHON_RUNTIME_DIR）
  *   2. packagedRoots 里读 bundled manifest.json + 同目录归档
  *      - marker 命中（version+sha 一致）→ 直接用缓存
  *      - 否则解压随包归档 → sha 校验 → 写 marker

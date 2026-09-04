@@ -4,17 +4,17 @@ import { describe, expect, it, vi } from 'vitest';
 import type {
   TableGridClipboardPayload,
   TableGridRendererProps,
-} from '@tabtin/table-engine';
+} from '@muse/table-engine';
 
 let latestGridProps: Record<string, any> | null = null;
 
-vi.mock('@tabtin/smartsheet-ui', () => ({
+vi.mock('@muse/smartsheet-ui', () => ({
   resolveSelectChipColors: () => ({ backgroundColor: '#eee', color: '#111' }),
 }));
 
-vi.mock('@tabtin/table-engine', async (importOriginal) => {
+vi.mock('@muse/table-engine', async (importOriginal) => {
   const original =
-    await importOriginal<typeof import('@tabtin/table-engine')>();
+    await importOriginal<typeof import('@muse/table-engine')>();
   return {
     ...original,
     resolveRecordId: (row: { id?: string; __recordId?: string }) =>

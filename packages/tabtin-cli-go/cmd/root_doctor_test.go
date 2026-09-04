@@ -182,7 +182,7 @@ func TestShouldSkipStartupTransportDiscovery(t *testing.T) {
 
 func TestBrowserDoctorExecuteDoesNotStartupCleanDiscovery(t *testing.T) {
 	tmp := t.TempDir()
-	t.Setenv("TABTIN_CONFIG_DIR", tmp)
+	t.Setenv("MUSE_CONFIG_DIR", tmp)
 	stalePath := filepath.Join(tmp, "daemon-server.json")
 	if err := os.WriteFile(stalePath, []byte(`{"sock":"/tmp/missing.sock","token":"tok","pid":999999}`), 0o600); err != nil {
 		t.Fatal(err)

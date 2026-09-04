@@ -12,7 +12,7 @@ import { getViewFactory } from '../view-factory'
 import { waitForViewState, getViewStateRegistry } from '../webcontents/ViewStateRegistry'
 import type { ViewOptions, LoadUrlOptions, LoadReadiness, WaitForOptions } from './types'
 import { isAliveWebContents, sleep, toErrorMessage, ts, validateNavigationUrl } from './utils'
-import { isBlockedScript } from '@tabtin/browser-core/url-policy'
+import { isBlockedScript } from '@muse/browser-core/url-policy'
 import { createLogger } from './logger'
 import { getMainWindow } from '../window-manager'
 import { handleBlockedPreviewLoad } from '../blocked-preview-load'
@@ -901,7 +901,7 @@ export async function getProcessedContent(
 
   log.debug('使用 action-tools 获取页面内容...', { tabId, runId, at: ts() })
 
-  const { requestSnapshotTool } = await import('@tabtin/action-tools/tools')
+  const { requestSnapshotTool } = await import('@muse/action-tools/tools')
 
   const snapshotResult = await requestSnapshotTool.execute({
     runId,

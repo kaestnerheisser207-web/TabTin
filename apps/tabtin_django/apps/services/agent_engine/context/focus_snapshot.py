@@ -70,7 +70,7 @@ _PROJECT_TASK_ANCHOR_KEYS = frozenset({"project_id", "task_id", "task_run_id"})
 # 服务端权威注入键（仅 Django 内部写入；客户端带入会被剥离）
 SERVER_FOCUS_AUTHORITY_KEY = "_server_focus_authority"
 
-# 对齐 @tabtin/contracts WorkspaceModeSchema
+# 对齐 @muse/contracts WorkspaceModeSchema
 _WORKSPACE_MODES = frozenset({"conversation", "desktop", "non-space"})
 
 # openTabs 允许的标量键（对齐 agent-host AppContextTab）

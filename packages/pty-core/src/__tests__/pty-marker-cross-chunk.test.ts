@@ -47,8 +47,8 @@ function createSession(store: PtySessionStore, id = 'test-session'): PtySession 
 
 /** Extract start marker and end marker prefix from the written command string */
 function extractMarkers(written: string) {
-  const startMarkerMatch = written.match(/echo "(__TABTIN_CMD_START_[^"]+)"/)
-  const endMarkerMatch = written.match(/echo "(__TABTIN_CMD_END_[a-f0-9]+_)\$\?/)
+  const startMarkerMatch = written.match(/echo "(__MUSE_CMD_START_[^"]+)"/)
+  const endMarkerMatch = written.match(/echo "(__MUSE_CMD_END_[a-f0-9]+_)\$\?/)
   return {
     startMarker: startMarkerMatch![1],
     endMarkerPrefix: endMarkerMatch![1],
@@ -288,7 +288,7 @@ describe('P1-FUN-3: Marker cross-chunk split detection', () => {
       expect(result.backgrounded).toBe(true)
 
       const written = writeFn.mock.calls[0][1] as string
-      const endMarkerMatch = written.match(/echo "(__TABTIN_CMD_END_[a-f0-9]+_)\$\?/)!
+      const endMarkerMatch = written.match(/echo "(__MUSE_CMD_END_[a-f0-9]+_)\$\?/)!
       const endMarkerPrefix = endMarkerMatch[1]
 
       // Split the marker across two chunks

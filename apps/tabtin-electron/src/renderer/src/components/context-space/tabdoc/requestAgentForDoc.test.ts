@@ -24,7 +24,7 @@ vi.mock('@/services/requestAppCollaboration', () => ({
   requestAppCollaboration: requestAppCollaborationMock,
 }))
 
-vi.mock('@tabtin/smartsheet-ui', () => ({
+vi.mock('@muse/smartsheet-ui', () => ({
   toast: vi.fn(),
 }))
 

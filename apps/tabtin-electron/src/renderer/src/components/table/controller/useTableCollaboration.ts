@@ -1,21 +1,21 @@
 /**
  * useTableCollaboration — Electron 薄封装层
  *
- * 核心逻辑已迁移到 @tabtin/table-engine/collab。
+ * 核心逻辑已迁移到 @muse/table-engine/collab。
  * 本文件注入 Electron 特有的运行时依赖（auth / ws url / env flag）。
  */
 
 import { useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
-import { toast } from '@tabtin/smartsheet-ui'
+import { toast } from '@muse/smartsheet-ui'
 import { getAuthToken } from '@/adapters/api-adapter-instance'
 import { useAuthStore } from '@/stores/useAuthStore'
-import { getUserColor } from '@tabtin/collab-core'
+import { getUserColor } from '@muse/collab-core'
 import { COLLAB_WS_URLS } from '@/config/api'
 import {
   useTableCollaboration as useTableCollaborationCore,
   type UseTableCollaborationResult,
-} from '@tabtin/table-engine/collab'
+} from '@muse/table-engine/collab'
 import { preflightTableCollabAccess } from './preflightTableCollabAccess'
 
 export interface UseTableCollaborationInput {
@@ -68,4 +68,4 @@ export {
   rowOrderHas,
   type CellChange,
   type PendingTableWrite,
-} from '@tabtin/table-engine/collab'
+} from '@muse/table-engine/collab'

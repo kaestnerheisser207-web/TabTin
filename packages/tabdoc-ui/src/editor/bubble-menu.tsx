@@ -10,7 +10,7 @@ import {
   useRef,
 } from 'react'
 import { isNodeSelection } from '@tiptap/core'
-import { OVERLAY_SURFACE_CLASS, cn } from '@tabtin/smartsheet-ui'
+import { OVERLAY_SURFACE_CLASS, cn } from '@muse/smartsheet-ui'
 import { TABDOC_FLOATING_MENU_SURFACE_CLASS } from './floating-menu-surface'
 import { isImageNodeSelection } from './image-selection-menu'
 

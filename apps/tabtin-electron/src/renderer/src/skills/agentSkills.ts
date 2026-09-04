@@ -193,7 +193,7 @@ const scanAgentsDir = async (fs: TabtinFS, skillDirPath: string): Promise<AgentD
 }
 
 export const scanAgentSkills = async (agentRoot: string): Promise<SkillIndexEntry[]> => {
-  const tabtin = window.tabtin
+  const tabtin = window.muse
   if (!tabtin?.fileSystem?.readDir || !tabtin?.fileSystem?.readFilePreview) return []
 
   const skillsRoot = joinPath(agentRoot, SKILLS_DIR)

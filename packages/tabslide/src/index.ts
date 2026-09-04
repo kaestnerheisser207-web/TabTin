@@ -1,11 +1,11 @@
 /**
- * @tabtin/tabslide — 纯 React 幻灯片引擎
+ * @muse/tabslide — 纯 React 幻灯片引擎
  *
  * 提供渲染、编辑、状态管理能力，面向 TabSlide 演示模式。
  *
  * 使用示例：
  * ```tsx
- * import { SlideEditor, createDefaultPresentation } from '@tabtin/tabslide'
+ * import { SlideEditor, createDefaultPresentation } from '@muse/tabslide'
  *
  * function App() {
  *   const [data, setData] = useState(() => createDefaultPresentation())

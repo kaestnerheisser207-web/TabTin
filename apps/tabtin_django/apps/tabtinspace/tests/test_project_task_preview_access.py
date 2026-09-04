@@ -24,7 +24,7 @@ from apps.tabtinspace.services.project_task_preview_access import (
 User = get_user_model()
 
 
-@override_settings(TABTIN_ENABLE_PROJECTS=True)
+@override_settings(MUSE_ENABLE_PROJECTS=True)
 class ProjectTaskPreviewAccessTests(TestCase):
     def setUp(self):
         self.owner = User.objects.create_user(

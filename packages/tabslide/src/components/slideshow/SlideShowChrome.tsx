@@ -1,5 +1,5 @@
 import React from 'react'
-import { ZIndex } from '@tabtin/app-shell'
+import { ZIndex } from '@muse/app-shell'
 import { useT } from '../../i18n'
 import { OVERLAY_TEXT, OVERLAY_BG_HOVER } from './constants'
 

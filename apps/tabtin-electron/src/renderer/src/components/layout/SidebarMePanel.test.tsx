@@ -17,7 +17,7 @@ vi.mock('react-i18next', () => ({
   }),
 }))
 
-vi.mock('@tabtin/smartsheet-ui', () => ({
+vi.mock('@muse/smartsheet-ui', () => ({
   ScrollArea: ({ children }: { children?: React.ReactNode }) => <div>{children}</div>,
 }))
 

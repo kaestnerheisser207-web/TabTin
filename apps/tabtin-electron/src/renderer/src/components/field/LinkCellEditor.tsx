@@ -12,9 +12,9 @@ import {
   sliceDisplayColumns,
   type LinkPickerRecord,
   type LinkPickerListMode,
-} from '@tabtin/smartsheet-ui'
-import { FieldApiService, LinkFieldApiService, TableApiService } from '@tabtin/table-core'
-import type { LinkableRecordItem, LinkableFieldItem } from '@tabtin/table-core'
+} from '@muse/smartsheet-ui'
+import { FieldApiService, LinkFieldApiService, TableApiService } from '@muse/table-core'
+import type { LinkableRecordItem, LinkableFieldItem } from '@muse/table-core'
 import { useTranslation } from 'react-i18next'
 import { LinkedRecordCreateHost } from '@/components/record/LinkedRecordCreateHost'
 import { resolveForegroundTabScopeKey } from '@/components/chat/subagent/openSubagentTab'

@@ -6,7 +6,7 @@ import {
   useAwarenessStates,
   useCollabProvider,
   type CollabProviderOptions,
-} from '@tabtin/collab-core'
+} from '@muse/collab-core'
 import {
   SLIDE_COLLAB_ENABLED,
   SLIDE_COLLAB_WS_URL,

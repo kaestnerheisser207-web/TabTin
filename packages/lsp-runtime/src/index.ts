@@ -1,5 +1,5 @@
 /**
- * @tabtin/lsp-runtime —— Muse Agent runtime 的 LSP 子系统。
+ * @muse/lsp-runtime —— Muse Agent runtime 的 LSP 子系统。
  *
  * 覆盖常见 agent LSP 运行时能力（client / manager / diagnostics / registry）。
  *
@@ -12,7 +12,7 @@
  *   - C6：LSPDiagnosticRegistry ✅（src/diagnostics/LSPDiagnosticRegistry.ts，15 个测试）
  *   - C7：builtin servers + 内置打包 ✅（src/registry/, scripts/, lsp-servers/，10 个测试）
  *
- * @tabtin/lsp-runtime 包内 90/90 测试全过。
+ * @muse/lsp-runtime 包内 90/90 测试全过。
  */
 
 // ─── Client ──────────────────────────────────────

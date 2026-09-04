@@ -1,4 +1,4 @@
-import { CollabConnectionStatus, CollabStatus } from '@tabtin/collab-core'
+import { CollabConnectionStatus, CollabStatus } from '@muse/collab-core'
 
 export function shouldShowTableCollabStatusBadge(
   status: CollabStatus | null | undefined,

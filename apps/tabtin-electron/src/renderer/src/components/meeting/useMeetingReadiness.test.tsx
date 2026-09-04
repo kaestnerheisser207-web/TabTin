@@ -28,7 +28,7 @@ describe('useMeetingReadiness privacy boundary', () => {
     resourceId: 'volc.seedasr.sauc.duration',
     wsEndpoint: 'bigmodel_async',
   });
-  const previousTabtin = window.tabtin;
+  const previousTabtin = window.muse;
 
   beforeEach(() => {
     vi.clearAllMocks();

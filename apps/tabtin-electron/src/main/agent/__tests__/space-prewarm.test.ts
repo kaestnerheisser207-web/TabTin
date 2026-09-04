@@ -13,7 +13,7 @@
 import * as fs from 'node:fs'
 import * as path from 'node:path'
 import { afterEach, describe, it, expect, vi, beforeEach } from 'vitest'
-import { PrewarmScheduler } from '@tabtin/agent-host/state'
+import { PrewarmScheduler } from '@muse/agent-host/state'
 
 vi.mock('../../logger', () => ({
   createLogger: () => ({

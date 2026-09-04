@@ -1,5 +1,5 @@
 {
-  "name": "@tabtin/sdk",
+  "name": "@muse/sdk",
   "version": "0.1.0",
   "description": "Muse Data SDK — fluent query API for TabData",
   "type": "module",

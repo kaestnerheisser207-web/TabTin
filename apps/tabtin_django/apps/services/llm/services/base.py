@@ -163,7 +163,7 @@ class BaseLLMService(ABC):
         """让 Celery 任务内的 SDK 请求预算小于任务硬超时。
 
         普通 API 调用不压缩 provider 自身的 request_timeout；只有在 Celery
-        task 上下文或显式设置 TABTIN_LLM_TASK_HARD_LIMIT_SECONDS 时，才按
+        task 上下文或显式设置 MUSE_LLM_TASK_HARD_LIMIT_SECONDS 时，才按
         任务硬上限拆分预算，避免 worker 被 hard timeout 杀掉。
         """
         hard_limit = self._current_task_hard_limit_seconds()
@@ -187,13 +187,13 @@ class BaseLLMService(ABC):
 
     @staticmethod
     def _current_task_hard_limit_seconds() -> Optional[float]:
-        override = os.environ.get("TABTIN_LLM_TASK_HARD_LIMIT_SECONDS")
+        override = os.environ.get("MUSE_LLM_TASK_HARD_LIMIT_SECONDS")
         if override:
             try:
                 return float(override)
             except (TypeError, ValueError):
                 logger.warning(
-                    "忽略非法 TABTIN_LLM_TASK_HARD_LIMIT_SECONDS=%r",
+                    "忽略非法 MUSE_LLM_TASK_HARD_LIMIT_SECONDS=%r",
                     override,
                 )
 

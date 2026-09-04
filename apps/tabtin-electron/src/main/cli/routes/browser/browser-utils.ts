@@ -1,5 +1,5 @@
 import http from 'node:http'
-import { okResponse } from '@tabtin/agent-wire'
+import { okResponse } from '@muse/agent-wire'
 import type { SendJSON, ActionExecutor } from './_helpers'
 import {
   buildBrowserRequestScope,

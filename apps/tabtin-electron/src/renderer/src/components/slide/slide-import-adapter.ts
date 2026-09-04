@@ -3,7 +3,7 @@ import {
   convertBackendToPresentation,
   type ImportAdapter,
   type ImportResult,
-} from '@tabtin/tabslide/exports'
+} from '@muse/tabslide/exports'
 import { apiService } from '@/services/api'
 import { unwrapEnvelope } from './autosave-utils'
 import {

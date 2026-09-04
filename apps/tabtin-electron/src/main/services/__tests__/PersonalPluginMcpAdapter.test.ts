@@ -38,7 +38,7 @@ describe('Electron Cowart Personal Plugin MCP adapter', () => {
       projectDir,
       env: {
         COWART_PROJECT_DIR: projectDir,
-        TABTIN_PLUGIN_INSTALL_PATH: installPath,
+        MUSE_PLUGIN_INSTALL_PATH: installPath,
       },
       mcp: {
         path: '.mcp.json',

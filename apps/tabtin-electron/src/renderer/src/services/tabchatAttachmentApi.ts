@@ -5,7 +5,7 @@
  * 提供 IM 特定的类型映射、校验和格式化工具。
  */
 
-import { joinApiPath } from '@tabtin/config'
+import { joinApiPath } from '@muse/config'
 import { API_CONFIG } from '@/config/api'
 import { apiRequest, unwrapData } from '@/services/apiBase'
 import { directUpload } from './oss-direct-uploader'

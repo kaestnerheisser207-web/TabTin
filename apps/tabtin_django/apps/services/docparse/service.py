@@ -366,7 +366,7 @@ class DocParseService:
             parsed_doc.status = ParsedDocument.Status.FAILED
             parsed_doc.error_message = str(exc)[:2000]
             # W1：异常分类——根据 message 关键词推断 failure_code，与
-            # @tabtin/file-pipeline-errors SSoT 字面值对齐。无法识别时兜底 UNKNOWN_ERROR。
+            # @muse/file-pipeline-errors SSoT 字面值对齐。无法识别时兜底 UNKNOWN_ERROR。
             parsed_doc.failure_code = _classify_exception_to_failure_code(exc)
             parsed_doc.save(
                 update_fields=["status", "error_message", "failure_code", "updated_at"],
@@ -1203,7 +1203,7 @@ def _build_import_image_markdown(
             context_type="document_import_job",
             context_id=import_job_id,
         )
-        return f"![{alt}](tabtin-file://asset/{file_record.id})", True
+        return f"![{alt}](muse-file://asset/{file_record.id})", True
     except Exception as exc:
         logger.warning("Failed to upload imported image: %s", exc)
         return f"[{alt}]", False
@@ -1763,7 +1763,7 @@ def _classify_exception_to_failure_code(exc: Exception) -> str:
     """
     把后端解析过程中抛出的异常归类到 ParsedDocument.FailureCode 13 类之一。
 
-    W1 / L9：与 @tabtin/file-pipeline-errors SSoT 对齐。匹配启发式与
+    W1 / L9：与 @muse/file-pipeline-errors SSoT 对齐。匹配启发式与
     `packages/local-docparse/src/error-classifier.ts` 同款，便于客户端 / 后端
     两条解析链路给出一致的失败信号。
 

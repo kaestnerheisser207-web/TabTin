@@ -7,7 +7,7 @@
 import React, { useCallback, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { ArrowRightLeft, Loader2 } from 'lucide-react'
-import { Button, toast } from '@tabtin/smartsheet-ui'
+import { Button, toast } from '@muse/smartsheet-ui'
 import { cn } from '@/utils/cn'
 import { useChatStore } from '@/stores/chat/useChatStore'
 import {

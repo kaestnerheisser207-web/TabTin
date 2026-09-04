@@ -1,4 +1,4 @@
-/* eslint-disable tabtin/no-chat-design-violations -- 文件类型识别色（xlsx 绿 / docx 蓝 / pdf 红 / pptx 琥珀）是 Office 文档约定的身份色，等同 IDE 文件图标配色，非 UI 警示色 */
+/* eslint-disable muse/no-chat-design-violations -- 文件类型识别色（xlsx 绿 / docx 蓝 / pdf 红 / pptx 琥珀）是 Office 文档约定的身份色，等同 IDE 文件图标配色，非 UI 警示色 */
 /**
  * 重构来源：apps/tabtin-electron/src/renderer/src/components/chat/RichContentRenderer.tsx（行 355-388）
  * 拆分时间：2026-04-30
@@ -10,7 +10,7 @@
 import React, { useEffect, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { FileCode, FileDown, FileSpreadsheet, FileText, FileType, Film, Image as ImageIcon, Music, Presentation } from 'lucide-react'
-import type { RichContentBlock } from '@tabtin/chat-client'
+import type { RichContentBlock } from '@muse/chat-client'
 import {
   handleResourceLinkClick,
   handleResourceLinkContextMenu,
@@ -454,7 +454,7 @@ function localFileResourceUrl(block: {
   if (title) params.set('title', title)
   if (block.auto_open) params.set('auto_open', '1')
   if (block.auto_open_token) params.set('auto_open_token', block.auto_open_token)
-  return `tabtin://resource/file/${encodeURIComponent(relativePath)}?${params.toString()}`
+  return `muse://resource/file/${encodeURIComponent(relativePath)}?${params.toString()}`
 }
 
 function ossFileResourceUrl(block: {
@@ -469,7 +469,7 @@ function ossFileResourceUrl(block: {
   if (block.artifact_kind !== 'oss_file') return null
   const fileId = typeof block.file_id === 'string' ? block.file_id.trim() : ''
   if (!fileId) {
-    if (typeof block.url === 'string' && block.url.startsWith('tabtin://resource/file/')) {
+    if (typeof block.url === 'string' && block.url.startsWith('muse://resource/file/')) {
       return block.url
     }
     return null
@@ -479,7 +479,7 @@ function ossFileResourceUrl(block: {
   if (title) params.set('title', title)
   if (block.auto_open) params.set('auto_open', '1')
   if (block.auto_open_token) params.set('auto_open_token', block.auto_open_token)
-  return `tabtin://resource/file/${encodeURIComponent(fileId)}?${params.toString()}`
+  return `muse://resource/file/${encodeURIComponent(fileId)}?${params.toString()}`
 }
 
 function basename(path?: string): string | null {

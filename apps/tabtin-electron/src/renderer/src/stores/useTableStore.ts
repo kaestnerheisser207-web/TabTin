@@ -3,7 +3,7 @@
 /**
  * 表格 Store（Electron 宿主包装层）
  *
- * 领域逻辑在 @tabtin/table-core/domain，此文件仅注入宿主服务。
+ * 领域逻辑在 @muse/table-core/domain，此文件仅注入宿主服务。
  */
 
 import { createStore, type StoreApi } from 'zustand'
@@ -19,8 +19,8 @@ import {
   normalizeTable,
   type Table,
   type TableStore,
-} from '@tabtin/table-core'
-import { createStoreHost, createHostAdapters } from '@tabtin/table-ui'
+} from '@muse/table-core'
+import { createStoreHost, createHostAdapters } from '@muse/table-ui'
 import i18n from '@/i18n'
 import { registerResetAction } from './sessionResetRegistry'
 import { useSpaceContextTabsStore } from './useSpaceContextTabsStore'

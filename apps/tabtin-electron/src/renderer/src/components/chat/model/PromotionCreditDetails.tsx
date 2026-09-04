@@ -1,5 +1,5 @@
 import React from 'react'
-import type { PromotionCredit } from '@tabtin/chat-client'
+import type { PromotionCredit } from '@muse/chat-client'
 import { useTranslation } from 'react-i18next'
 import { cn } from '@utils/cn'
 import { COMPOSER_TEXT_META } from '../registry/chatDesignTokens'

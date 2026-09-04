@@ -1,7 +1,7 @@
 /**
  * ToolGate 宿主适配器（ Stage 4）。
  *
- * 包装 `@tabtin/agent-modes` 的受限模式判定与工具软拒；
+ * 包装 `@muse/agent-modes` 的受限模式判定与工具软拒；
  * 供 Electron / Daemon 注入 EngineConfig.toolGate。
  */
 
@@ -10,8 +10,8 @@ import {
   evaluateAgentModeToolAccess,
   PLAN_TARGET_GUARDED_TOOLS,
   type AgentModeName,
-} from '@tabtin/agent-modes'
-import type { ToolGate } from '@tabtin/agent-runtime/engine'
+} from '@muse/agent-modes'
+import type { ToolGate } from '@muse/agent-runtime/engine'
 
 export interface CreateAgentModesToolGateDeps {
   getAgentMode: () => string | undefined

@@ -12,8 +12,8 @@
  *   8. 静态段预算：工具超限时 server 仍全列，工具名截断并附查询方法
  *   9. 动态段最多 8 条
  *
- * ：McpCap 已从 agent-runtime 迁到 @tabtin/agent-host，本单测随源迁来；
- * 对源的 import 指向 host 的 `src/capabilities/mcp.js`，契约类型走 @tabtin/agent-runtime 公共面。
+ * ：McpCap 已从 agent-runtime 迁到 @muse/agent-host，本单测随源迁来；
+ * 对源的 import 指向 host 的 `src/capabilities/mcp.js`，契约类型走 @muse/agent-runtime 公共面。
  */
 
 import { describe, expect, it } from 'vitest';
@@ -23,8 +23,8 @@ import {
   makeRunCtx,
   sectionContent,
 } from './fixtures/fake-capabilities.js';
-import type { EngineState } from '@tabtin/agent-runtime/engine';
-import { SYSTEM_SECTION_NAMES } from '@tabtin/agent-runtime/engine';
+import type { EngineState } from '@muse/agent-runtime/engine';
+import { SYSTEM_SECTION_NAMES } from '@muse/agent-runtime/engine';
 
 function makeState(query?: string): EngineState {
   return {

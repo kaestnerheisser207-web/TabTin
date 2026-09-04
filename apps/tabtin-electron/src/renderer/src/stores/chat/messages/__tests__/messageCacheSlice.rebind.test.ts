@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest'
-import type { ChatMessage } from '@tabtin/chat-client'
+import type { ChatMessage } from '@muse/chat-client'
 
 vi.mock('../messageBlocks', () => ({
   hydrateSessionBlocksFromJson: vi.fn((messages: unknown[]) => ({

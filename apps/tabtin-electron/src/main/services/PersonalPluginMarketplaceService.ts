@@ -21,13 +21,13 @@ import {
   type PersonalPluginOfficialReleaseMetadata,
   type PersonalPluginRuntimeStatus,
   type PersonalPluginUpstreamMetadata,
-} from '@tabtin/agent-runtime/plugins'
+} from '@muse/agent-runtime/plugins'
 import {
   assertSafeStorageSegment,
   resolveDataRoot,
   resolveSpaceWorkspaceRoot,
   resolveSpacesRoot,
-} from '@tabtin/terminal-core'
+} from '@muse/terminal-core'
 import { TokenManager } from '../auth.js'
 import { guardedHandle } from '../utils/guarded-handle'
 import { createLogger } from '../logger'
@@ -272,7 +272,7 @@ export function createElectronPersonalPluginMcpRuntimeAdapter(): PersonalPluginM
           ...server.env,
           ...request.env,
           COWART_PROJECT_DIR: request.projectDir,
-          TABTIN_PLUGIN_INSTALL_PATH: request.installPath,
+          MUSE_PLUGIN_INSTALL_PATH: request.installPath,
         } as Record<string, string>,
         stderr: 'pipe',
       })

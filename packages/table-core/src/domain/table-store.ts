@@ -14,7 +14,7 @@ import {
   normalizeTable,
   normalizeTableListResponse,
 } from '../data'
-import { normalizeFieldType } from '@tabtin/table-kernel'
+import { normalizeFieldType } from '@muse/table-kernel'
 import { mergeFieldsWithPendingOptimistic } from './merge-fields-with-pending'
 
 export interface TableDetailLoadError {

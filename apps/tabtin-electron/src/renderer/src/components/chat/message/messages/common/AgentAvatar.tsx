@@ -13,7 +13,7 @@ import {
   type AgentIdentityPaletteEntry,
 } from '../../../registry/chatDesignTokens'
 import { resolveAgentAvatarUrl } from '@/utils/resolveAgentAvatar'
-import { TABTIN_APP_ICON_URL } from '@/constants/appIcon'
+import { MUSE_APP_ICON_URL } from '@/constants/appIcon'
 
 /** djb2 字符串哈希；只依赖输入内容，跨端 / 跨会话稳定。 */
 function djb2Hash(input: string): number {
@@ -88,7 +88,7 @@ export const AgentAvatar: React.FC<AgentAvatarProps> = ({
       className={cn(AGENT_AVATAR_20, '[-webkit-user-drag:none]', className)}
       data-testid="agent-avatar"
       onError={() => {
-        if (src !== TABTIN_APP_ICON_URL) setSrc(TABTIN_APP_ICON_URL)
+        if (src !== MUSE_APP_ICON_URL) setSrc(MUSE_APP_ICON_URL)
       }}
     />
   )

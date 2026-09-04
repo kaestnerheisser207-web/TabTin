@@ -8,7 +8,7 @@
  */
 
 import React from 'react'
-import type { RichContentBlock } from '@tabtin/chat-client'
+import type { RichContentBlock } from '@muse/chat-client'
 import { Image as ImageIcon } from 'lucide-react'
 import { KIND_ICONS } from './kindIcons'
 

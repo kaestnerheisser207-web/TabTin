@@ -3,14 +3,14 @@
  * prepare-dev-runtime.mjs — assets needed before Electron dev.
  *
  * Renderer/main/preload workspace JS resolves through package `source` export
- * conditions, so plain `pnpm dev` reads each `@tabtin/*` package's `src/*.ts`
+ * conditions, so plain `pnpm dev` reads each `@muse/*` package's `src/*.ts`
  * directly — dev *runtime* is correct without a dist build.
  *
  * But dev also runs the main-process type-checker inline: electron.vite.config.ts
  * mounts `vite-plugin-checker` against `tsconfig.main.json`, which deliberately
  * does NOT enable the `source` condition (it can't — tsc following `source` into
  * e.g. a package's internal `@/*` alias; see the comment in
- * tsconfig.main.json). So the checker resolves every `@tabtin/*` import via the
+ * tsconfig.main.json). So the checker resolves every `@muse/*` import via the
  * `types` condition → `dist/*.d.ts`. Any stale workspace dist therefore makes the
  * dev terminal cry false "no exported member / property does not exist" errors.
  *
@@ -23,7 +23,7 @@
  * (`build:workspace`) so it shares the workspace build lock with tabtin-web.
  *
  * This script additionally keeps non-TS dev runtime artifacts fresh that aren't
- * npm-build outputs (tabtin-filegen PyInstaller binary), plus targeted guards for
+ * npm-build outputs (muse-filegen PyInstaller binary), plus targeted guards for
  * artifacts whose presence the dependency-graph fingerprint can't assert directly
  * (smartsheet-ui CSS bundle, Go `tabtin` CLI binary).
  */
@@ -207,7 +207,7 @@ function ensureSkillBundles() {
 
 // 工作区 dist 新鲜度：交给按真实依赖图驱动的增量构建器，而不是手写包清单。
 // 见文件头注释——main typecheck（vite-plugin-checker / tsconfig.main.json）按 types
-// 条件读各 @tabtin/* 包 dist/*.d.ts，任一被间接 import 的 workspace 包 dist 过期就会
+// 条件读各 @muse/* 包 dist/*.d.ts，任一被间接 import 的 workspace 包 dist 过期就会
 // 在 dev 终端报假错。predev-build.mjs 从 tabtin-electron 的 package.json workspace:*
 // 依赖闭包推导构建集、拓扑排序、按源指纹增量跳过已最新包（warm restart 零重建）；
 // 经 run-predev-build-with-lock.mjs 持锁，与 tabtin-web 共享 workspace 构建锁。
@@ -242,12 +242,12 @@ function ensureSmartsheetStyles() {
   }
 
   console.log('  🎨 构建 smartsheet-ui styles');
-  run(PNPM, ['--filter', '@tabtin/smartsheet-ui', 'build']);
+  run(PNPM, ['--filter', '@muse/smartsheet-ui', 'build']);
 }
 
 function ensureGoCli() {
   const cliDir = path.join(ROOT, 'packages', 'tabtin-cli-go');
-  const binaryName = process.platform === 'win32' ? 'tabtin.exe' : 'tabtin';
+  const binaryName = process.platform === 'win32' ? 'muse.exe' : 'muse';
   const binaryRel = path.join('dist', binaryName);
   const binary = path.join(cliDir, binaryRel);
   if (!fs.existsSync(cliDir)) return;
@@ -275,7 +275,7 @@ function ensureGoCli() {
   console.log(`  ✅ ${binaryRel} rebuilt`);
 }
 
-// tabtin-filegen（PyInstaller 自包含二进制，客户端免装 Python）：被 cli-server.ts
+// muse-filegen（PyInstaller 自包含二进制，客户端免装 Python）：被 cli-server.ts
 // 注入到 Agent shell PATH，供 `muse file create` 代理调用。best-effort——文件生成
 // 是可选附加能力，缺 python3 / 打包失败只 warn，不中断 dev 启动。
 function darwinFilegenMatchesHost(binary) {
@@ -288,9 +288,9 @@ function darwinFilegenMatchesHost(binary) {
 }
 
 function ensureFileGenCli() {
-  const pkgDir = path.join(ROOT, 'packages', 'tabtin-filegen-python');
+  const pkgDir = path.join(ROOT, 'packages', 'muse-filegen-python');
   const binaryName =
-    process.platform === 'win32' ? 'tabtin-filegen.exe' : 'tabtin-filegen';
+    process.platform === 'win32' ? 'muse-filegen.exe' : 'muse-filegen';
   const binaryRel = path.join('dist', binaryName);
   const binary = path.join(pkgDir, binaryRel);
   if (!fs.existsSync(pkgDir)) return;
@@ -318,14 +318,14 @@ function ensureFileGenCli() {
 
   if (process.platform === 'win32') {
     console.warn(
-      '  ⚠️  Windows 下请手动运行 packages/tabtin-filegen-python/build.sh，已跳过 tabtin-filegen 构建',
+      '  ⚠️  Windows 下请手动运行 packages/muse-filegen-python/build.sh，已跳过 muse-filegen 构建',
     );
     return;
   }
   const py = spawnSync('python3', ['--version'], { encoding: 'utf8' });
   if ((py.status ?? 1) !== 0) {
     console.warn(
-      '  ⚠️  未找到 python3，跳过 tabtin-filegen 构建（`muse file create` 暂不可用）',
+      '  ⚠️  未找到 python3，跳过 muse-filegen 构建（`muse file create` 暂不可用）',
     );
     return;
   }
@@ -335,7 +335,7 @@ function ensureFileGenCli() {
     env: process.env,
   });
   if ((r.status ?? 1) !== 0) {
-    console.warn('  ⚠️  tabtin-filegen 构建失败（不阻断 dev）');
+    console.warn('  ⚠️  muse-filegen 构建失败（不阻断 dev）');
     return;
   }
   console.log(`  ✅ ${binaryRel} rebuilt`);

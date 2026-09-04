@@ -1,7 +1,7 @@
 import {
   getRestrictedShellAllowlist,
   type AgentModeName,
-} from '@tabtin/agent-modes'
+} from '@muse/agent-modes'
 
 /**
  * Soft-reconfigure is allowed only when the shell-restriction tier is unchanged.

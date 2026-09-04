@@ -11,8 +11,8 @@ import {
   type BrowserResourceStreamHooks,
   type BrowserOrchestratorHostHooks,
   type BrowserJobHooks,
-} from '@tabtin/browser-core'
-import { okResponse } from '@tabtin/agent-wire'
+} from '@muse/browser-core'
+import { okResponse } from '@muse/agent-wire'
 import type { SendJSON, ActionExecutor } from './_helpers'
 import { buildBrowserRequestScope, resolveTabId, makeTaskId, sendExecutorResult, errorResponse, electronPolicyHooks } from './_helpers'
 import { runWithBrowserApprovalContext } from '../../browser-policy-middleware'

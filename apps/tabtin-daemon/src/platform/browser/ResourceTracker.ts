@@ -8,7 +8,7 @@
 import type { Page, CDPSession } from 'patchright-core';
 import { writeFile, mkdir } from 'node:fs/promises';
 import { dirname, join } from 'node:path';
-import { getHomeTabtinPath } from '@tabtin/shared/storage-paths';
+import { getHomeTabtinPath } from '@muse/shared/storage-paths';
 
 export interface ResourceEntry {
   requestId: string;

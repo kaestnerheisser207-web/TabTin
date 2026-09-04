@@ -7,7 +7,7 @@
 
 import React, { useEffect, useLayoutEffect, useState, useCallback, useMemo } from 'react'
 import { createPortal } from 'react-dom'
-import type { RevertHistoryEntryView, RollbackApplyResult } from '@tabtin/chat-client'
+import type { RevertHistoryEntryView, RollbackApplyResult } from '@muse/chat-client'
 import { X, History, Undo2, Package, RotateCcw, Loader2 } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import * as chatExtraApi from '../../../services/chatExtraApi'

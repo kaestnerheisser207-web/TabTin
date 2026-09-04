@@ -6,7 +6,7 @@
  * 栅格化失败时回退为原始 SVG src（编辑器仍可显示）。
  */
 
-import { toast } from '@tabtin/smartsheet-ui'
+import { toast } from '@muse/smartsheet-ui'
 import { insertUploadedImage } from './image-insert'
 import { isSvgDataUrl, rasterizeSvgDataUrlToPngDataUrl } from './svg-rasterize'
 

@@ -15,11 +15,11 @@
  */
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
-vi.mock('@tabtin/shared', () => ({
+vi.mock('@muse/shared', () => ({
   withPersistSafety: (options: unknown) => options,
 }))
 
-vi.mock('@tabtin/config', () => ({
+vi.mock('@muse/config', () => ({
   API_ENDPOINTS: {},
   joinApiPath: (...parts: string[]) => parts.filter(Boolean).join('/'),
 }))

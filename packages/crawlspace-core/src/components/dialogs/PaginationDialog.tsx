@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { AlertCircle, MousePointerClick, ArrowDown, XCircle, Sparkles, Activity, ChevronRight } from 'lucide-react'
-import { Button } from '@tabtin/smartsheet-ui'
+import { Button } from '@muse/smartsheet-ui'
 import { t } from '../../i18n'
 
 type PaginationMethod = 'click' | 'scroll' | 'both'

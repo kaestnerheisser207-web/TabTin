@@ -17,7 +17,7 @@ import type {
   TerminalRuntimeBridge,
   TerminalSessionSummary,
   PtyManagerBridge,
-} from '@tabtin/terminal-core';
+} from '@muse/terminal-core';
 
 type RunSessionAPI = {
   openTab?: (input: any) => Promise<any> | any;
@@ -266,7 +266,7 @@ export function setContextSpaceAPI(api: ContextSpaceAPI | null): void {
 
 export function resolveRunSessionAPI(): RunSessionAPI | null {
   if (injectedRunSession) return injectedRunSession;
-  const tabtin = (global as any).tabtin || (typeof window !== 'undefined' ? (window as any).tabtin : null);
+  const tabtin = (global as any).muse || (typeof window !== 'undefined' ? (window as any).muse : null);
   const runSession = tabtin?.runSession || tabtin?.api?.runSession;
   return runSession || null;
 }
@@ -285,7 +285,7 @@ export function resolveViewStateRegistryAPI(): ViewStateRegistryAPI | null {
 
 export function resolveCrawlViewAPI(): CrawlViewAPI | null {
   if (injectedCrawlView) return injectedCrawlView;
-  const tabtin = (global as any).tabtin || (typeof window !== 'undefined' ? (window as any).tabtin : null);
+  const tabtin = (global as any).muse || (typeof window !== 'undefined' ? (window as any).muse : null);
   const crawlView = tabtin?.crawlView || tabtin?.api?.crawlView;
   return crawlView || null;
 }

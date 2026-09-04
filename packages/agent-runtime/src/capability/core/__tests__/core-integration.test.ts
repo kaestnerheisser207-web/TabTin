@@ -39,7 +39,7 @@ import {
   type NativeBackendSessionInit,
 } from '../../native/native-backend-session.js';
 import type { ExecResult, ExecOptions } from '../../backend-session.js';
-import type { PtyManagerBridge, AgentCommandRequest, AgentCommandResult, AgentSpawnDetachedResult, AgentReadOptions, AgentReadResult, AgentKillSignal, AgentSessionEventName, AgentSessionEventHandler, AgentSessionUnsubscribe } from '@tabtin/terminal-core';
+import type { PtyManagerBridge, AgentCommandRequest, AgentCommandResult, AgentSpawnDetachedResult, AgentReadOptions, AgentReadResult, AgentKillSignal, AgentSessionEventName, AgentSessionEventHandler, AgentSessionUnsubscribe } from '@muse/terminal-core';
 import { testHardlineChecker, allowAllHardlineChecker } from '../../../../tests/helpers/hardline-checker.js';
 import { createTestSafeFsPort } from '../../../../tests/helpers/safe-fs-port.js';
 

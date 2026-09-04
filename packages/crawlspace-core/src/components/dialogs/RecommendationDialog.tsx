@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { Sparkles, AlertCircle, CheckCircle2 } from 'lucide-react'
-import { Button } from '@tabtin/smartsheet-ui'
+import { Button } from '@muse/smartsheet-ui'
 import type { RecommendationOption, RecommendationStats, RecommendationCaseType } from '../../types'
 import { t } from '../../i18n'
 

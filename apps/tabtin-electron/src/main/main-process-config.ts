@@ -6,7 +6,7 @@ import {
   type MainWindowLogger,
 } from './main-window'
 import { resolveDevCdpPortWithMeta } from './dev-cdp-port'
-import { STEALTH_ARGS } from '@tabtin/anti-detect'
+import { STEALTH_ARGS } from '@muse/anti-detect'
 
 export interface MainProcessConfigLogger extends MainWindowLogger {}
 
@@ -90,7 +90,7 @@ export function configureMainProcess(options: ConfigureMainProcessOptions): void
   app.commandLine.appendSwitch('enable-zero-copy')
   app.commandLine.appendSwitch('ignore-gpu-blocklist')
 
-  // --- Stealth flags（共享 @tabtin/anti-detect 配置） ---
+  // --- Stealth flags（共享 @muse/anti-detect 配置） ---
   const { simple, enableFeatures, disableFeatures } = parseStealthArgs(STEALTH_ARGS)
 
   for (const flag of simple) {
@@ -118,11 +118,11 @@ export function configureMainProcess(options: ConfigureMainProcessOptions): void
     if (cdpFallbackUsed) {
       options.log.warn(
         `CDP 默认端口已被占用，dev 已改用 127.0.0.1:${cdpPort}；` +
-          `探针请读 DevToolsActivePort 或设置 TABTIN_CDP_PORT=${cdpPort}`,
+          `探针请读 DevToolsActivePort 或设置 MUSE_CDP_PORT=${cdpPort}`,
       )
     }
     options.log.info(`CDP 调试端口已启用: 127.0.0.1:${cdpPort}`)
-    process.env.TABTIN_CDP_ACTIVE_PORT = String(cdpPort)
+    process.env.MUSE_CDP_ACTIVE_PORT = String(cdpPort)
   }
 
   if (options.isDev) {

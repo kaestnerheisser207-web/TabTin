@@ -61,7 +61,7 @@ vi.mock('../services/MediaProbeService', () => ({ getMediaProbeService: vi.fn() 
 vi.mock('./renderer-view-meta-updates', () => ({ normalizeRendererViewMetaUpdates: vi.fn() }))
 vi.mock('../blocked-preview-load', () => ({ guardDirectLoadURL: vi.fn() }))
 vi.mock('../window-manager', () => ({ getMainWindow: vi.fn() }))
-vi.mock('@tabtin/browser-core', () => ({
+vi.mock('@muse/browser-core', () => ({
   AccessLevel: { L0: 'L0' },
   buildAntiDetectConfig: vi.fn(() => ({ kind: 'test' })),
 }))

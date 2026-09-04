@@ -1,5 +1,5 @@
 import { AlertTriangle, CheckCircle2, Download, RefreshCw, X } from 'lucide-react'
-import { Button, OVERLAY_SURFACE_CLASS, Progress } from '@tabtin/smartsheet-ui'
+import { Button, OVERLAY_SURFACE_CLASS, Progress } from '@muse/smartsheet-ui'
 
 import type {
   OverlayUpdatePromptActionPayload,
@@ -24,7 +24,7 @@ function resolveFileSize(info: OverlayUpdatePromptInfo | null | undefined): numb
 }
 
 function sendAction(action: OverlayUpdatePromptActionPayload['action']): void {
-  window.tabtin?.overlay?.sendUpdatePromptAction?.({
+  window.muse?.overlay?.sendUpdatePromptAction?.({
     type: 'update-prompt-action',
     action,
   })

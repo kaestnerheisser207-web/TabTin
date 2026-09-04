@@ -1,5 +1,5 @@
 /**
- * @tabtin/agent-import — 外部 Agent 工具数据导入核心包。
+ * @muse/agent-import — 外部 Agent 工具数据导入核心包。
  *
  * PRD：docs/prd/external-agent-import-onboarding-v1.md（§5.2 本包定位）
  * 调研底稿：docs/prd/external-agent-import-research/（字段级事实以底稿为准）

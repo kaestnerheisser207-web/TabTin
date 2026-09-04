@@ -1,7 +1,7 @@
 /**
  * ShellCap ↔ host PTY bridge 本地契约（ Stage 6e）。
  *
- * 生产路径不再 import `@tabtin/terminal-core`；实现仍由 Electron/Daemon
+ * 生产路径不再 import `@muse/terminal-core`；实现仍由 Electron/Daemon
  * 注入的 bridge + ManagedTaskStore 提供。本文件只声明 ShellCap 实际用到的
  * 结构类型 / 常量 / 轻量 helper，须与 terminal-core 对应符号保持对齐。
  */
@@ -21,7 +21,7 @@ export const DEDUP_WINDOW_MS = 1000;
  * 必须与 terminal-core `agent-process-runner` `buildEnv` 字节级一致。
  */
 export const SKILL_CREDENTIAL_PRESERVE_ENV_KEYS_MARKER =
-  '__TABTIN_SKILL_CREDENTIAL_PRESERVE_KEYS__';
+  '__MUSE_SKILL_CREDENTIAL_PRESERVE_KEYS__';
 
 export type AgentShellKind = 'bash' | 'zsh' | 'sh' | 'powershell' | 'cmd' | 'other';
 
@@ -254,7 +254,7 @@ function buildQuotingHint(rawPath: string, shellKind: AgentShellKind | undefined
     `Path \`${rawPath}\` contains spaces and was not wrapped in quotes ` +
     `in the command. Bash will split it into multiple argv tokens, which is ` +
     `usually NOT what you intended. Wrap such paths in single quotes — ` +
-    `e.g. \`'${rawPath}/file.pdf'\` — or use \`"$TABTIN_WORKSPACE/file.pdf"\` ` +
+    `e.g. \`'${rawPath}/file.pdf'\` — or use \`"$MUSE_WORKSPACE/file.pdf"\` ` +
     `(double-quoted variable expansion is also safe).`
   );
 }

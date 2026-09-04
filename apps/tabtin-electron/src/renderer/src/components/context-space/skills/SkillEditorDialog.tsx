@@ -356,7 +356,7 @@ export const SkillEditorDialog: React.FC<SkillEditorDialogProps> = ({
       if (isAbsolutePath(skill.path)) {
         try {
           const md = joinPath(skill.path, 'SKILL.md')
-          const res = await window.tabtin.fileSystem.readFilePreview(md, { maxBytes: MAX_SKILL_FILE_BYTES })
+          const res = await window.muse.fileSystem.readFilePreview(md, { maxBytes: MAX_SKILL_FILE_BYTES })
           if (res?.success && res.data?.kind === 'text') return skill.path
         } catch {
           // skill.path 不可用就走 resolve-path
@@ -376,7 +376,7 @@ export const SkillEditorDialog: React.FC<SkillEditorDialogProps> = ({
     // 只读降级：读 SKILL.md 全文（registry / sourceDocPath fallback），拿不到目录时单文件展示。
     const readSkillMdFallback = async (): Promise<string | null> => {
       try {
-        const existing = await window.tabtin?.skill?.readContent?.({
+        const existing = await window.muse?.skill?.readContent?.({
           skillKey, spaceId, organizationId, sourceDocPath: skill.doc_path ?? undefined,
         })
         const content = existing?.content ?? null
@@ -415,7 +415,7 @@ export const SkillEditorDialog: React.FC<SkillEditorDialogProps> = ({
         if (!resolved.mdExists) {
           let seed = ''
           try {
-            const existing = await window.tabtin?.skill?.readContent?.({
+            const existing = await window.muse?.skill?.readContent?.({
               skillKey, spaceId, organizationId, sourceDocPath: skill.doc_path ?? undefined,
             })
             seed = stripSkillMdFileVersion(existing?.content ?? '')
@@ -469,7 +469,7 @@ export const SkillEditorDialog: React.FC<SkillEditorDialogProps> = ({
     setPendingStatus({ path, status: 'loading' })
     void (async () => {
       try {
-        const res = await window.tabtin.fileSystem.readFilePreview(path, { maxBytes: MAX_SKILL_FILE_BYTES })
+        const res = await window.muse.fileSystem.readFilePreview(path, { maxBytes: MAX_SKILL_FILE_BYTES })
         if (cancelled) return
         if (!res?.success || !res.data) {
           setPendingStatus({ path, status: 'error' })
@@ -578,7 +578,7 @@ export const SkillEditorDialog: React.FC<SkillEditorDialogProps> = ({
     // SKILL.md 尚未进缓冲：先读盘再改，避免丢未加载内容。
     void (async () => {
       try {
-        const res = await window.tabtin.fileSystem.readFilePreview(skillMdPath, {
+        const res = await window.muse.fileSystem.readFilePreview(skillMdPath, {
           maxBytes: MAX_SKILL_FILE_BYTES,
         })
         const disk = res?.success && res.data?.kind === 'text'
@@ -606,7 +606,7 @@ export const SkillEditorDialog: React.FC<SkillEditorDialogProps> = ({
     let skillMdContent = buffersRef.current[skillMdPath]
     if (skillMdContent === undefined) {
       try {
-        const res = await window.tabtin.fileSystem.readFilePreview(skillMdPath, { maxBytes: MAX_SKILL_FILE_BYTES })
+        const res = await window.muse.fileSystem.readFilePreview(skillMdPath, { maxBytes: MAX_SKILL_FILE_BYTES })
         skillMdContent = res?.data?.content ?? ''
       } catch {
         skillMdContent = ''
@@ -685,14 +685,14 @@ export const SkillEditorDialog: React.FC<SkillEditorDialogProps> = ({
         if (p === skillMdPath) {
           await writeSkillContent({ spaceId, organizationId, skillKey, content: buffersToWrite[p] })
         } else {
-          const res = await window.tabtin.fileSystem.writeFile(p, buffersToWrite[p])
+          const res = await window.muse.fileSystem.writeFile(p, buffersToWrite[p])
           if (!res?.success) throw new Error(res?.error || 'writeFile failed')
         }
       }
 
       // 2) 保存即发布一个新的数据库版本。版本号由后端发布记录维护，前端只从
       //    最新发布版本推导下一个版本，不再修改 SKILL.md frontmatter。
-      const collected = await collectSkillFiles(skillDir, window.tabtin.fileSystem, buffersToWrite)
+      const collected = await collectSkillFiles(skillDir, window.muse.fileSystem, buffersToWrite)
       if (!hasSkillMd(collected.files)) {
         throw new Error('collected files missing SKILL.md')
       }

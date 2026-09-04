@@ -21,7 +21,7 @@ import {
   flushProbe,
   registerProbeIntent,
   type ProbeEvent,
-} from '@tabtin/tabdoc-ui'
+} from '@muse/tabdoc-ui'
 import { ensureSpaceSelectedOrThrow } from '@/services/spaceNavigation'
 import { openResourceTabGuarded } from '@components/context-space/restore/openResourceMembershipGuard'
 import { resolveForegroundTabScopeKey } from '@components/chat/subagent/openSubagentTab'

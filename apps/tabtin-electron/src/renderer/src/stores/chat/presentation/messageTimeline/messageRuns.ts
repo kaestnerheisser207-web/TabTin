@@ -8,7 +8,7 @@
  * 用户轮分界只认 `isRegularUserMessage`（见 turnTransparency）；本模块不负责分轮。
  */
 
-import type { ChatMessage } from '@tabtin/chat-client'
+import type { ChatMessage } from '@muse/chat-client'
 import type { ContentBlockEntry } from '@stores/useChatRuntimeStore'
 import { isContextInjectionMessage } from '@/stores/chat/messages/utils/semanticMessageCount'
 import { deriveResolvedAskChoicePresentation } from '../messageBubble/resolvedAskChoicePresentation'

@@ -1,4 +1,4 @@
-import type { AgentRunSyncPayload } from '@tabtin/agent-wire'
+import type { AgentRunSyncPayload } from '@muse/agent-wire'
 import {
   ConversationRunCancelledError,
   ConversationRunCoordinator,

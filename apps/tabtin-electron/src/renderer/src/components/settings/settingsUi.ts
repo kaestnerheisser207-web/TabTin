@@ -38,7 +38,7 @@ export const SETTINGS_HINT = CANVAS_TEXT_SECONDARY
 export const SETTINGS_TEXT_META = CANVAS_TEXT_META
 
 /** 13px 纯尺寸（配语义色时用 cn 组合） */
-// eslint-disable-next-line tabtin/no-design-system-violations -- settings meta base @ zoom 0.9
+// eslint-disable-next-line muse/no-design-system-violations -- settings meta base @ zoom 0.9
 export const SETTINGS_TEXT_META_BASE = 'text-[13px] leading-[18px] antialiased'
 
 /** badge、计数、tabular — 12px caption 档 */

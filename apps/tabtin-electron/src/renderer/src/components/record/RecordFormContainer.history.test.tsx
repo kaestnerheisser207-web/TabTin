@@ -2,14 +2,14 @@ import React from 'react'
 import { act, cleanup, fireEvent, render, screen, waitFor } from '@testing-library/react'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 
-import type { TableRecord } from '@tabtin/table-core'
+import type { TableRecord } from '@muse/table-core'
 import { RecordFormContainer } from './RecordFormContainer'
 
 const mocks = vi.hoisted(() => ({
   getRecordHistory: vi.fn(),
 }))
 
-vi.mock('@tabtin/smartsheet-ui', () => ({
+vi.mock('@muse/smartsheet-ui', () => ({
   Button: ({ children, ...props }: React.ButtonHTMLAttributes<HTMLButtonElement>) => (
     <button {...props}>{children}</button>
   ),
@@ -34,13 +34,13 @@ vi.mock('@tabtin/smartsheet-ui', () => ({
   useToast: () => ({ toast: vi.fn() }),
 }))
 
-vi.mock('@tabtin/table-ui', () => ({
+vi.mock('@muse/table-ui', () => ({
   toFieldDefinitions: () => [],
   toOrganizationMembers: () => [],
 }))
 
-vi.mock('@tabtin/table-core', async (importOriginal) => {
-  const actual = await importOriginal<typeof import('@tabtin/table-core')>()
+vi.mock('@muse/table-core', async (importOriginal) => {
+  const actual = await importOriginal<typeof import('@muse/table-core')>()
   return {
     ...actual,
     UndoRedoApiService: {

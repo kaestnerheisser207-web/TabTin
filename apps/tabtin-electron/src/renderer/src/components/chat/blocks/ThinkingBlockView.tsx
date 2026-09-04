@@ -34,7 +34,7 @@
 import React, { useState, useMemo, useLayoutEffect, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Brain, ChevronDown, ChevronRight, Loader2, Lock } from 'lucide-react'
-import type { ThinkingBlock, RedactedThinkingBlock } from '@tabtin/agent-wire'
+import type { ThinkingBlock, RedactedThinkingBlock } from '@muse/agent-wire'
 import { cn } from '@utils/cn'
 import { MarkdownRenderer } from '../markdown/MarkdownRenderer'
 import { ShinyText } from '../markdown/ShinyText'

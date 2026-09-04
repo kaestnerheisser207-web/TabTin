@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { toast } from '@tabtin/smartsheet-ui'
+import { toast } from '@muse/smartsheet-ui'
 import {
   configureDocEditorHost,
   createAutoSaveController,
@@ -14,7 +14,7 @@ import {
   type DocumentSavePayload,
   type DocumentSaveResult,
   type AutoSaveConflictResolution,
-} from '@tabtin/doc-editor'
+} from '@muse/doc-editor'
 import { saveDraft, loadDraft, deleteDraft, cleanupExpiredDrafts } from './utils/offlineCache'
 import {
   getDocument,
@@ -29,7 +29,7 @@ import {
   assessDocumentContentBudget,
   formatDocumentContentBudgetError,
 } from './documentContentBudget'
-import { useAppHostClient } from '@tabtin/app-host-sdk'
+import { useAppHostClient } from '@muse/app-host-sdk'
 
 /**
  * E2E-9: 检测内容是否为 HTML 格式（而非 Markdown）

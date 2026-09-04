@@ -39,13 +39,13 @@ vi.mock('react-i18next', () => ({
   }),
 }))
 
-vi.mock('@tabtin/app-shell', () => ({
+vi.mock('@muse/app-shell', () => ({
   OrganizationApiService: {
     getOrganizationCreatePolicy,
   },
 }))
 
-vi.mock('@tabtin/smartsheet-ui', () => ({
+vi.mock('@muse/smartsheet-ui', () => ({
   CreateOrganizationDialog: ({ error }: { error?: string | null }) => (
     error ? <div role="alert">{error}</div> : <div data-testid="create-organization-dialog" />
   ),

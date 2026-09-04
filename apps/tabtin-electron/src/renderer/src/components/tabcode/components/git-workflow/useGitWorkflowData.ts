@@ -268,9 +268,9 @@ export function useGitWorkflowData({
   )
 
   const applyBranchContext = useCallback((
-    metaRes: Awaited<ReturnType<NonNullable<typeof window.tabtin.git>['getBranchMeta']>> | null | undefined,
-    branchRes: Awaited<ReturnType<NonNullable<typeof window.tabtin.git>['listBranches']>> | null | undefined,
-    worktreeRes: Awaited<ReturnType<NonNullable<typeof window.tabtin.git>['listWorktrees']>> | null | undefined,
+    metaRes: Awaited<ReturnType<NonNullable<typeof window.muse.git>['getBranchMeta']>> | null | undefined,
+    branchRes: Awaited<ReturnType<NonNullable<typeof window.muse.git>['listBranches']>> | null | undefined,
+    worktreeRes: Awaited<ReturnType<NonNullable<typeof window.muse.git>['listWorktrees']>> | null | undefined,
   ) => {
     if (metaRes?.success && metaRes.meta) {
       setBranchMeta(metaRes.meta)
@@ -300,7 +300,7 @@ export function useGitWorkflowData({
   }, [currentBranch])
 
   const loadBranchContext = useCallback(async () => {
-    const git = window.tabtin?.git
+    const git = window.muse?.git
     if (!git) return
     const [metaRes, branchRes, worktreeRes] = await Promise.all([
       git.getBranchMeta(rootPath),
@@ -312,7 +312,7 @@ export function useGitWorkflowData({
   }, [applyBranchContext, rootPath])
 
   const runLoadData = useCallback(async (options?: { includeBranchContext?: boolean }) => {
-    const git = window.tabtin?.git
+    const git = window.muse?.git
     if (!git) return
 
     const generation = ++loadGenerationRef.current

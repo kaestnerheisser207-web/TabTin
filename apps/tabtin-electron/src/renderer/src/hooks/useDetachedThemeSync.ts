@@ -12,10 +12,10 @@ import { applyThemeSnapshot, type OverlayThemeSnapshot } from '@/utils/overlayTh
  */
 export function useDetachedThemeSync(): void {
   useEffect(() => {
-    const offTheme = window.tabtin?.overlay?.onSyncTheme?.((raw) => {
+    const offTheme = window.muse?.overlay?.onSyncTheme?.((raw) => {
       applyThemeSnapshot(raw as OverlayThemeSnapshot)
     })
-    const offLocale = window.tabtin?.overlay?.onSyncLocale?.((raw) => {
+    const offLocale = window.muse?.overlay?.onSyncLocale?.((raw) => {
       applyOverlayLocale(raw)
     })
     return () => {

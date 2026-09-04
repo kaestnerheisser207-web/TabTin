@@ -11,7 +11,7 @@
 import React, { useState, useMemo, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Search, FileText, Table2, Plus } from 'lucide-react'
-import { toast } from '@tabtin/smartsheet-ui'
+import { toast } from '@muse/smartsheet-ui'
 import { Dialog, DialogContent, DialogTitle } from '@components/ui'
 import type { SpaceContextItem } from '@/services/spaceApi'
 import { contextItemToCardRef, type ImResourceCardRef } from '@/lib/imResourceCard'

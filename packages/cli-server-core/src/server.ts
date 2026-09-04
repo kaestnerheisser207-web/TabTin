@@ -10,7 +10,7 @@ import http from 'node:http'
 import { randomBytes } from 'node:crypto'
 import { chmodSync, existsSync, mkdirSync, readFileSync, unlinkSync, writeFileSync } from 'node:fs'
 import { join } from 'node:path'
-import { getHomeTabtinPath } from '@tabtin/shared/storage-paths'
+import { getHomeTabtinPath } from '@muse/shared/storage-paths'
 
 export interface CLIServerInfo {
   socketPath: string

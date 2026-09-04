@@ -66,7 +66,7 @@ Agent 为新建或整篇更新长 TabDoc 正文而新建草稿时，仍只能用
 muse doc export <document-id> --export-format markdown --output ./报告.md
 
 # ❌ 禁止：把目标路径塞进 --markdown（少写 @ 时会把路径字符串整篇盖进正文）
-# muse doc save-content <id> --markdown "$TABTIN_WORKSPACE/报告.md"
+# muse doc save-content <id> --markdown "$MUSE_WORKSPACE/报告.md"
 ```
 
 ### Pattern 1b — 嵌入 TabData 多维表（tabdataBlock）
@@ -127,11 +127,11 @@ Parser 双端（TS + Python）加了三类容错别名让历史 typo 不至于�
 
 | 输入 | 解析为 | 你仍应输出 |
 |---|---|---|
-| `tabtin://resource/doc/<id>?hint=tabdoc` | `document` + `tabdoc` | `document` + `tabdoc` |
-| `tabtin://resource/document/<id>?hint=document` | `document` + `tabdoc` | `document` + `tabdoc` |
-| `tabtin://resource/document/<id>?hint=doc` | `document` + `tabdoc` | `document` + `tabdoc` |
+| `muse://resource/doc/<id>?hint=tabdoc` | `document` + `tabdoc` | `document` + `tabdoc` |
+| `muse://resource/document/<id>?hint=document` | `document` + `tabdoc` | `document` + `tabdoc` |
+| `muse://resource/document/<id>?hint=doc` | `document` + `tabdoc` | `document` + `tabdoc` |
 
-**别名是兜底，不是写法许可**——你输出时仍走 canonical `tabtin://resource/document/<id>?hint=tabdoc`，别赌别人 parser 都装好了同款别名（外部分享 / 第三方集成 / 老版本客户端都可能没有）。
+**别名是兜底，不是写法许可**——你输出时仍走 canonical `muse://resource/document/<id>?hint=tabdoc`，别赌别人 parser 都装好了同款别名（外部分享 / 第三方集成 / 老版本客户端都可能没有）。
 
 ### Pattern 3 — 长文档省 token 阅读
 
@@ -422,8 +422,8 @@ muse doc read-block <document-id> <block-id> --jq .markdown
 FILE_ID=$(muse doc read-block <document-id> <block-id> --jq .markdown | grep -oE 'fileId="[^"]+"' | head -1 | sed 's/fileId="//;s/"//')
 
 # 2. 授权端点下载（JWT；禁止匿名 curl 永久 OSS URL）
-curl -fsSL -H "Authorization: Bearer $TABTIN_TOKEN" \
-  "$TABTIN_API_BASE/api/tabdoc/documents/<document-id>/html-artifacts/$FILE_ID" \
+curl -fsSL -H "Authorization: Bearer $MUSE_TOKEN" \
+  "$MUSE_API_BASE/api/tabdoc/documents/<document-id>/html-artifacts/$FILE_ID" \
   -o /tmp/edit.html
 
 # 3. 本地改 /tmp/edit.html …

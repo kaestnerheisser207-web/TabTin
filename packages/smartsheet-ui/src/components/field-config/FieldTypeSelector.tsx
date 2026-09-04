@@ -32,7 +32,7 @@ import { cn } from '../../utils/cn'
 import { Check, ChevronDown } from 'lucide-react'
 import { getFieldTypeIcon } from '../common/field-type-icon'
 import { useTranslation } from 'react-i18next'
-import { isPrimaryFieldAllowedType } from '@tabtin/table-core'
+import { isPrimaryFieldAllowedType } from '@muse/table-core'
 import type { FieldType } from '../../hooks/useFieldConfigForm'
 
 interface FieldTypeMeta {

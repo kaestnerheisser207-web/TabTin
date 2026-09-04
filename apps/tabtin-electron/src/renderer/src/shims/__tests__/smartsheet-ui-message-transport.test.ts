@@ -9,7 +9,7 @@ describe('Electron message local-host transport', () => {
   beforeEach(() => {
     push.mockClear()
     vi.resetModules()
-    ;(window as any).tabtin = { overlay: { push } }
+    ;(window as any).muse = { overlay: { push } }
     try {
       window.history.replaceState({}, '', '/index.html')
     } catch {
@@ -18,7 +18,7 @@ describe('Electron message local-host transport', () => {
   })
 
   afterEach(() => {
-    delete (window as any).tabtin
+    delete (window as any).muse
   })
 
   it('纯文案 message.success 写入本窗 Host，不推 overlay', async () => {
@@ -70,7 +70,7 @@ describe('Electron message local-host transport', () => {
 
   it('再导出 message 公开时长常量，避免打包 alias 漏导出', async () => {
     const mod = await import('../smartsheet-ui-toast')
-    const native = await import('@tabtin/smartsheet-ui/message-native')
+    const native = await import('@muse/smartsheet-ui/message-native')
     expect(mod.MESSAGE_LIMIT).toBe(native.MESSAGE_LIMIT)
     expect(mod.MESSAGE_DEFAULT_DURATION).toBe(native.MESSAGE_DEFAULT_DURATION)
     expect(mod.MESSAGE_ERROR_DURATION).toBe(native.MESSAGE_ERROR_DURATION)

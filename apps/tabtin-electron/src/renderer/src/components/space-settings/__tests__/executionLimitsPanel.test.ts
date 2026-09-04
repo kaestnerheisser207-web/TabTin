@@ -1,9 +1,9 @@
 import { describe, expect, it } from 'vitest'
-import { buildCapabilityOverridePatch } from '@tabtin/app-shell/agent-config-v2'
+import { buildCapabilityOverridePatch } from '@muse/app-shell/agent-config-v2'
 import {
   DEFAULT_MAX_CREDITS_PER_RUN,
   DEFAULT_MAX_TURNS,
-} from '@tabtin/agent-runtime/runtime-defaults'
+} from '@muse/agent-runtime/runtime-defaults'
 import {
   hasCustomExecutionLimits,
   isExecutionLimitsEnabled,

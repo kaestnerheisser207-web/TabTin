@@ -3,7 +3,7 @@ import type {
   IUnitOfWork,
   OutboxChangeEnvelope,
   OutboxStats,
-} from '@tabtin/table-kernel'
+} from '@muse/table-kernel'
 import type { PGliteInstance } from './dialect.js'
 
 const OUTBOX_TABLE = '__tabtin_sync_outbox'

@@ -15,7 +15,7 @@ import {
   tryClaimTabDocScopeSync,
 } from '../tabdocScopeClaim'
 
-vi.mock('@tabtin/smartsheet-ui', () => ({
+vi.mock('@muse/smartsheet-ui', () => ({
   toast: vi.fn(),
 }))
 

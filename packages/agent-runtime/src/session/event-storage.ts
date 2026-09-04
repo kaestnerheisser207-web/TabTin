@@ -1,5 +1,5 @@
 /**
- * @tabtin/agent-runtime — JSONL Event Storage
+ * @muse/agent-runtime — JSONL Event Storage
  *
  * Append-only JSONL file: {sessionDir}/{sessionId}/events.jsonl
  * Records the complete event stream for offline replay / audit.

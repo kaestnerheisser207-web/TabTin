@@ -1,8 +1,8 @@
-/* eslint-disable tabtin/no-chat-design-violations -- 代码 Diff 的 +/- 颜色是编辑器领域约定。 */
+/* eslint-disable muse/no-chat-design-violations -- 代码 Diff 的 +/- 颜色是编辑器领域约定。 */
 import React, { useCallback, useEffect, useMemo } from 'react'
 import { ChevronDown, ChevronRight } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
-import type { ChatMessage } from '@tabtin/chat-client'
+import type { ChatMessage } from '@muse/chat-client'
 import { cn } from '@utils/cn'
 import { blockExpandKey, useBlockExpanded } from '@stores/chat/presentation/blockUiPrefs'
 import { useSpaceStore } from '@stores/useSpaceStore'

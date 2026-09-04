@@ -2,7 +2,7 @@
 
 import { create } from 'zustand';
 import { createJSONStorage, persist } from 'zustand/middleware';
-import { createMigratingStorage, withPersistSafety } from '@tabtin/shared';
+import { createMigratingStorage, withPersistSafety } from '@muse/shared';
 import {
   DEFAULT_SETTINGS_ROUTES,
   type SettingsRoute,
@@ -10,7 +10,7 @@ import {
   type SettingsRouteByCategory,
   normalizeSettingsRoute,
 } from '@/settings/settingsRoutes';
-import { getRuntime } from '@tabtin/app-shell';
+import { getRuntime } from '@muse/app-shell';
 import { useOrganizationStore } from './useOrganizationStore';
 import { useMainNavStore } from './useMainNavStore';
 import { emitNavigate } from './viewNavigation';

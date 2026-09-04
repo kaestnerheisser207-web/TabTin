@@ -53,7 +53,7 @@ TabDoc 的 `title` 就是整篇文章标题，`content` 不是一份需要自带
 **任何 chat 回复里出现 doc 标题（list / search / create / read / 提到某文档），都必须写成 markdown link**——否则用户得手动去侧栏找，体验断裂。canonical 形态唯一：
 
 ```markdown
-[<title>](tabtin://resource/document/<id>?hint=tabdoc)
+[<title>](muse://resource/document/<id>?hint=tabdoc)
 ```
 
 | 字段 | 取值 | 不能写成 |
@@ -68,9 +68,9 @@ TabDoc 的 `title` 就是整篇文章标题，`content` 不是一份需要自带
 
 | 标题 | 创建 | 版本 |
 |------|------|------|
-| [厦门旅游](tabtin://resource/document/8a21f144-46d2-4f8c-ae08-519a6fce9605?hint=tabdoc) | 5/28 12:39 | v3 |
-| [杭州旅游](tabtin://resource/document/a926ea31-9902-48c1-970e-d0f6a8fa4ae5?hint=tabdoc) | 5/28 02:58 | v4 |
-| [东北旅游](tabtin://resource/document/5f4d3938-ea46-4bd3-8b8b-22bba7a6a69c?hint=tabdoc) | 5/27 13:24 | v3 |
+| [厦门旅游](muse://resource/document/8a21f144-46d2-4f8c-ae08-519a6fce9605?hint=tabdoc) | 5/28 12:39 | v3 |
+| [杭州旅游](muse://resource/document/a926ea31-9902-48c1-970e-d0f6a8fa4ae5?hint=tabdoc) | 5/28 02:58 | v4 |
+| [东北旅游](muse://resource/document/5f4d3938-ea46-4bd3-8b8b-22bba7a6a69c?hint=tabdoc) | 5/27 13:24 | v3 |
 ```
 
 **search 带 snippet 的样板**：
@@ -78,8 +78,8 @@ TabDoc 的 `title` 就是整篇文章标题，`content` 不是一份需要自带
 ```markdown
 找到 2 条匹配 "项目进展"：
 
-- [Q3 周报](tabtin://resource/document/d7f34d67-2c1a-4b6e-9f30-8e5a1c7d4b21?hint=tabdoc) — *…本周项目进展顺利，三个里程碑按期…*
-- [产品规划](tabtin://resource/document/ad070d7b-58e3-4f92-b1c6-3d9a72e05f48?hint=tabdoc) — *…下半年核心项目进展将聚焦在…*
+- [Q3 周报](muse://resource/document/d7f34d67-2c1a-4b6e-9f30-8e5a1c7d4b21?hint=tabdoc) — *…本周项目进展顺利，三个里程碑按期…*
+- [产品规划](muse://resource/document/ad070d7b-58e3-4f92-b1c6-3d9a72e05f48?hint=tabdoc) — *…下半年核心项目进展将聚焦在…*
 ```
 
 **`<id>` 必须写完整**——从 CLI 输出里原样复制整个 id，一个字符都不能省。snippet 正文可以用 `…` 截断，**链接里的 id 绝对不行**：截断的 id（如 `02eda024-5f11-…`）会原样进用户界面的产物卡片，点击后端直接报「document_id 不是合法 UUID」。
@@ -90,10 +90,10 @@ TabDoc 的 `title` 就是整篇文章标题，`content` 不是一份需要自带
 **厦门旅游**                                                  ❌ 纯加粗，无链接
 | 厦门旅游 |                                                  ❌ 表格里纯字符串
 **厦门旅游** 🟢                                               ❌ 装饰性 emoji 替代不了 link
-[厦门旅游](tabtin://resource/doc/<id>?hint=document)         ❌ type/hint 双 typo
-[厦门旅游](tabtin://resource/document/<id>?hint=document)    ❌ hint 错（应为 tabdoc）
-[厦门旅游](tabtin://resource/document/02eda024-…?hint=tabdoc) ❌ id 被截断（必须完整复制）
-tabtin://resource/document/02eda024-5f11-4d4a-85c2-…         ❌ 裸链接 + 截断 id，双重违约
+[厦门旅游](muse://resource/doc/<id>?hint=document)         ❌ type/hint 双 typo
+[厦门旅游](muse://resource/document/<id>?hint=document)    ❌ hint 错（应为 tabdoc）
+[厦门旅游](muse://resource/document/02eda024-…?hint=tabdoc) ❌ id 被截断（必须完整复制）
+muse://resource/document/02eda024-5f11-4d4a-85c2-…         ❌ 裸链接 + 截断 id，双重违约
 ```
 
 > 字段反例对照表 + Parser 兜底别名说明见 [Pattern 2 文末「回复模板」段](#文档列表--检索结果回复模板chat-输出协议)；本契约一切场景适用，**别名是兜底，不是写法许可**。
@@ -317,8 +317,8 @@ FILE_ID=$(muse doc read-block <document-id> <block-id> --jq .markdown | grep -oE
 
 # 2. 用文档 ACL 授权端点下载（JWT；禁止匿名 GET 永久 OSS URL）
 #    GET /api/tabdoc/documents/<document-id>/html-artifacts/<fileId>
-curl -fsSL -H "Authorization: Bearer $TABTIN_TOKEN" \
-  "$TABTIN_API_BASE/api/tabdoc/documents/<document-id>/html-artifacts/$FILE_ID" \
+curl -fsSL -H "Authorization: Bearer $MUSE_TOKEN" \
+  "$MUSE_API_BASE/api/tabdoc/documents/<document-id>/html-artifacts/$FILE_ID" \
   -o /tmp/edit.html
 
 # 3. 本地改 /tmp/edit.html …
@@ -342,7 +342,7 @@ Muse URL 进 chat：
 
 ```
 https://www.example.com/docs/doc_xxx
-tabtin://resource/document/doc_xxx?hint=tabdoc
+muse://resource/document/doc_xxx?hint=tabdoc
 ```
 
 CLI **不解析 URL**，直接传会 404。提取方法：
@@ -354,8 +354,8 @@ muse doc read "$DOC_ID"
 
 ## Rules
 
-- **回复里凡出现文档标题，必须写成 `[<title>](tabtin://resource/document/<id>?hint=tabdoc)`**——表格 / 列表 / 散文里都一样；纯文字 / 加粗 / `**title**` 都算违约（顶部「输出契约」段有 list / search 可抄样板）
-- **链接里的 `<id>` 必须完整复制**——禁止 `…` / `...` / 手动截断；不带 label 的裸 `tabtin://` 链接也禁止（截断 id 会进产物卡片且点击必失败）
+- **回复里凡出现文档标题，必须写成 `[<title>](muse://resource/document/<id>?hint=tabdoc)`**——表格 / 列表 / 散文里都一样；纯文字 / 加粗 / `**title**` 都算违约（顶部「输出契约」段有 list / search 可抄样板）
+- **链接里的 `<id>` 必须完整复制**——禁止 `…` / `...` / 手动截断；不带 label 的裸 `muse://` 链接也禁止（截断 id 会进产物卡片且点击必失败）
 - 用户说「找/搜/检索 XX 文档」必须走 `muse doc search`，**不要**降级为 `doc list` 客户端字符串过滤；**禁止** `rag_search` 0 条后改 `doc list` 凑数
 - **创建文档前先 `muse doc search`** 看是否已有同名 / 同主题文档，避免重复
 - 标题要简洁有意义，方便后续搜索
@@ -388,12 +388,12 @@ muse doc read "$DOC_ID"
 - **0.11.0 (2026-07-08)**：——补 HTML 嵌入块命令 `doc insert-html` / `doc update-html`。**注**：公开直链契约已由 0.12.0 /  废止。
 - **0.10.4 (2026-07-24)**：——补 `doc move --parent-item-id|--root`（改挂知识库树）；与 create 的 `--parent-item-id` 对称。
 - **0.10.3 (2026-07-24)**：——`doc create` 补 `--parent-item-id`（知识库树 `ContextItem.parent`）；澄清 `--parent-id` 仅写 Document 内页树、侧栏不可见。长文写入规则同步：挂侧栏父资源时 create 当场传 `--parent-item-id`，勿用 `--parent-id`。
-- **0.10.1 (2026-07-06)**： 治理——search 样板里的截断 UUID（`d7f34d67-…`）教坏了模型：实测 Kimi K2.6 照抄样板风格输出 `tabtin://resource/document/02eda024-5f11-4d4a-85c2-…` 截断链接，前端产物卡收进后点击报「document_id 不是合法 UUID」。样板改为完整 UUID，输出契约与 Rules 加「id 必须完整复制、禁止截断/裸链接」硬规则，禁止形态补两条截断反例。前端同步在 `extractResourceLinkArtifacts` 丢弃含 `…` 的 id 兜底。
+- **0.10.1 (2026-07-06)**： 治理——search 样板里的截断 UUID（`d7f34d67-…`）教坏了模型：实测 Kimi K2.6 照抄样板风格输出 `muse://resource/document/02eda024-5f11-4d4a-85c2-…` 截断链接，前端产物卡收进后点击报「document_id 不是合法 UUID」。样板改为完整 UUID，输出契约与 Rules 加「id 必须完整复制、禁止截断/裸链接」硬规则，禁止形态补两条截断反例。前端同步在 `extractResourceLinkArtifacts` 丢弃含 `…` 的 id 兜底。
 - **0.10.0 (2026-05-30)**：§CLI 命令清单改为从 `packages/tabtin-cli-go/cmd/doc_ai_help.go`（CommandDef `AIHelp` + `Invoke`）自动生成；维护命令知识只改 Go registry + `python3 scripts/generate-tabdoc-skill-section.py`，CI `--check` 防 drift。
-- **0.9.7 (2026-05-28)**：ISSUE-F 治理——0.9.6 已写硬规则但人肉验证 P0 #1–#5 仍 0 条 `tabtin://` 输出。归因：① 旧 hard rule 埋在 §441 Rules 章（全文 470+ 行），模型读到时注意力衰减；② 缺可粘贴样板，旧 §「回复模板」只给一行格式 `[<title>](url)`，list/search 跑完模型不知道整个表格怎么列。本期改造：① **顶部新增 §输出契约（Hard Contract · 必读）**，紧跟「范式说明」前移到 §22 之后、CLI 命令清单之前——模型最早能读到的硬契约；② **嵌入两套可粘贴样板**：list 通用表格（标题 / 创建 / 版本三列，第一列必须是 link）+ search 带 snippet 的列表，含真实 UUID 范例可直接抄；③ **禁止形态扩展到 5 条**，加入「`**title**` 加粗」「`| title |` 表格纯字符串」「emoji 装饰替代 link」三种本轮验证实测的违约形态；④ **Rules 第 1 条** 从「创建前先 search」改为「回复必须用 canonical link」（违约频率最高的提到最显眼）；⑤ **Pattern 2 文末「回复模板」段** 精简——核心样板已搬顶部，本段只保留 Parser 三类兜底别名（`type=doc → document` / `hint=document → tabdoc` / `hint=doc → tabdoc`）的对照表，明示「别名是兜底，不是写法许可」。Parser 侧 0.9.6 已实装的别名维持不变。
+- **0.9.7 (2026-05-28)**：ISSUE-F 治理——0.9.6 已写硬规则但人肉验证 P0 #1–#5 仍 0 条 `muse://` 输出。归因：① 旧 hard rule 埋在 §441 Rules 章（全文 470+ 行），模型读到时注意力衰减；② 缺可粘贴样板，旧 §「回复模板」只给一行格式 `[<title>](url)`，list/search 跑完模型不知道整个表格怎么列。本期改造：① **顶部新增 §输出契约（Hard Contract · 必读）**，紧跟「范式说明」前移到 §22 之后、CLI 命令清单之前——模型最早能读到的硬契约；② **嵌入两套可粘贴样板**：list 通用表格（标题 / 创建 / 版本三列，第一列必须是 link）+ search 带 snippet 的列表，含真实 UUID 范例可直接抄；③ **禁止形态扩展到 5 条**，加入「`**title**` 加粗」「`| title |` 表格纯字符串」「emoji 装饰替代 link」三种本轮验证实测的违约形态；④ **Rules 第 1 条** 从「创建前先 search」改为「回复必须用 canonical link」（违约频率最高的提到最显眼）；⑤ **Pattern 2 文末「回复模板」段** 精简——核心样板已搬顶部，本段只保留 Parser 三类兜底别名（`type=doc → document` / `hint=document → tabdoc` / `hint=doc → tabdoc`）的对照表，明示「别名是兜底，不是写法许可」。Parser 侧 0.9.6 已实装的别名维持不变。
 - **0.9.7 (2026-05-28)**：ISSUE-G — Pattern 2 加「doc search vs rag vs list」决策树；Rules 明示禁止 rag 0 条后 list 降级。配合 `agent-prompt` `CROSS_TOOL_DECISIONS` carve-out（TabDoc 关键词 → `doc search` CLI）。
 - **0.10.0 (2026-05-29)**：补 block 级编辑命令组 `doc read-block` / `update-block` / `insert-block` / `delete-block` + `doc append`（对接后端新增 `block_service` + `GET/PATCH/POST/DELETE /documents/{id}/blocks[/{block_id}]`，TD-3）。命令清单 6 行 + Pattern 1「整篇 vs block」纪律改写：**小改（加/改/删一段）一律用 block 命令、只动目标块；`save-content` 退回仅大改/整篇重写**。退役「read 全文 + 本地拼接 + 整篇 save」的旧追加做法（费 token、易误改无关段、协作冲突面大）。
-- **0.9.6 (2026-05-28)**：人肉验证发现 P0 #4/#5 半通过——agent 在 chat 回复里给文档链接用了 `tabtin://resource/doc/<id>?hint=document`（type 段写简写 + hint 段写 resource type 双 typo），ResourceRouter manifest 只注册 `type=document`，点击无反应（ISSUE-F）。本期双管齐下治理：① Pattern 2 文末新增「文档列表 / 检索结果回复模板」段，给出 canonical `[<title>](tabtin://resource/document/<id>?hint=tabdoc)` 模板 + 四条 forbidden 反例 + 字段对照表；② Rules 顶部加 hard rule「chat 回复链接只用 canonical 形态」+「找/搜/检索 必须走 search 不降级 list」；③ Pattern 2 加 list-vs-search 分界说明（list 只看标题、无 snippet、SQLite 中文 FULLTEXT 空时不静默退化）。Parser 侧同步加 `type=doc → document` / `hint=document → tabdoc` / `hint=doc → tabdoc` 三类兜底别名（TS + Python 双端，跨语言 fixture 同步——其中 `hint=doc` 是首次 Electron 重验 P0 #4 实测捕获的新 typo 形态），但 SKILL 仍强制 canonical 输出——别名只兜底字面 typo，不是写法许可。
+- **0.9.6 (2026-05-28)**：人肉验证发现 P0 #4/#5 半通过——agent 在 chat 回复里给文档链接用了 `muse://resource/doc/<id>?hint=document`（type 段写简写 + hint 段写 resource type 双 typo），ResourceRouter manifest 只注册 `type=document`，点击无反应（ISSUE-F）。本期双管齐下治理：① Pattern 2 文末新增「文档列表 / 检索结果回复模板」段，给出 canonical `[<title>](muse://resource/document/<id>?hint=tabdoc)` 模板 + 四条 forbidden 反例 + 字段对照表；② Rules 顶部加 hard rule「chat 回复链接只用 canonical 形态」+「找/搜/检索 必须走 search 不降级 list」；③ Pattern 2 加 list-vs-search 分界说明（list 只看标题、无 snippet、SQLite 中文 FULLTEXT 空时不静默退化）。Parser 侧同步加 `type=doc → document` / `hint=document → tabdoc` / `hint=doc → tabdoc` 三类兜底别名（TS + Python 双端，跨语言 fixture 同步——其中 `hint=doc` 是首次 Electron 重验 P0 #4 实测捕获的新 typo 形态），但 SKILL 仍强制 canonical 输出——别名只兜底字面 typo，不是写法许可。
 - **0.9.5 (2026-05-24)**：A1 后端 P0 修复（`api_share.py:221` view 层 kwarg）通过测试，`doc share set` live 可用——0.9.4 引入的顶部 S1 警示段已删除。基于 C6/C7 调研落地两项 Pattern 重写：① **Pattern 6 按读侧（6.1）/ 写侧（6.2）拆双层结构**——明示 `version list/preview/restore` 是 agent 自然要用的诊断+回滚链路，`version save/rename/rm` 是 user-driven UI 行为（用户明示才动），引入 collab 自动版本节点 + Checkpoint 体系的认知避免 agent 错把命名版本当"完成大任务的自然收尾"（后端 CAP-017 `MAX_NAMED_VERSIONS_PER_DOC=50` 是反诱导配额，不是上限承诺）；② **Pattern 7 加 email→user-id 反查段**——明示走 `organization members` + jq 过滤路径或 `muse api` 逃生口（CLI `organization members` 透传 `--search` 跟踪 followup 中），不再让 agent 自由发挥（推回用户输 user-id 是 UX 灾难）。
 - **0.9.4 (2026-05-24)**：CLI 收口质量补丁——综合修订（一份 PR）：①顶部新增 S1 警示段（修复确认前常驻，0.9.5 已随 A1 PASS 删除）；②新增「输出协议与 jq 路径约定」节解释 envelope 结构 + `| jq` vs `--jq` 路径差异；③修全 9 处 `| jq` 缺 `.data.` 前缀（影响 Pattern 1/2/3/5/6/7/8/9 几乎全部 jq 示例）；④share off/refresh 描述去"仅 public"（实现已支持 organization）；⑤Pattern 1 创建工作流主推一步法、两步法降级为脚注；⑥Pattern 3 补 list-blocks vs chunks 选择标准；⑦Pattern 4 补"查文档状态= `doc read --jq .document.status`"；⑧Pattern 6 加 restore 杀手副作用警告（断协作者连接）；⑨Pattern 8 改清"import markdown vs save-content 适用边界"；⑩Pattern 9 跨组织分享假希望改严（明示 validate_organization_scope 不允许跨）；⑪新增 markdown 雷区段（`\$` 转义/`:::xxx` 白名单/`$$` 闭合 etc.）；⑫新增 URL → doc_id 提取 gotcha。
 - **0.9.3 (2026-05-23)**：分享端到端打通 + 范围收敛为「公开 + organization 内部」。① **跨组织分享下线**——0.9.2 提到的「D2=B 跨租户分享后端已开放」是未端到端打通的半成品，本期明确只做「分享给资源所属组织」：后端 `validate_organization_scope` 改严格（目标组织恒等于资源组织），半成品代码 + 开关已删除。② **organization 分享真正可用**——此前 tabtin-web 查看端（`SharedDocPage`/`SharedTablePage`）匿名取数、登录用户也拿不到身份，organization 分享即便后端修了也看不了；现查看端带 JWT，未登录引导登录 / 非成员提示无权 / 成员正常渲染。③ 表格 records 端点修复（原调用不存在的 `ViewService.get_view_records` 一律 500），分享密码改走 `X-Share-Password` 请求头、不再进 URL。`doc share *` 命令签名不变。

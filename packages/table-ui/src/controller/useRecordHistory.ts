@@ -3,9 +3,9 @@
  */
 
 import { useState, useCallback, useRef } from 'react'
-import { UndoRedoApiService } from '@tabtin/table-core'
-import { useToast } from '@tabtin/smartsheet-ui'
-import type { HistoryOperationOut } from '@tabtin/table-core'
+import { UndoRedoApiService } from '@muse/table-core'
+import { useToast } from '@muse/smartsheet-ui'
+import type { HistoryOperationOut } from '@muse/table-core'
 
 const RECORD_HISTORY_PAGE_SIZE = 20
 

@@ -1,7 +1,7 @@
 /**
  * 「本轮产物」共享类型 —— 供 boundary / rich / 编排层引用，避免循环依赖。
  */
-import type { ChatMessage, MessageBlock } from '@tabtin/chat-client'
+import type { ChatMessage, MessageBlock } from '@muse/chat-client'
 
 /**
  * 取一条消息的内容块——统一读入口：只读 `message.blocks`

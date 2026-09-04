@@ -7,7 +7,7 @@
  * 设计语言豁免：录音红是动作色（与"危险"语义不同），全应用所有"录音中"指示
  * 都用 red-500，跟主题切换无关——这是产品行为约定，不是普通的 UI 警示色。
  */
-/* eslint-disable tabtin/no-chat-design-violations -- 录音红是动作色，全应用约定，不参与主题切换 */
+/* eslint-disable muse/no-chat-design-violations -- 录音红是动作色，全应用约定，不参与主题切换 */
 
 import React, { useEffect, memo } from 'react'
 import { Square, Loader2, X } from 'lucide-react'

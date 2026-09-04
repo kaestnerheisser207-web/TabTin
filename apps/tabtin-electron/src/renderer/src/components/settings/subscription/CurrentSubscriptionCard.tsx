@@ -1,7 +1,7 @@
 import React from 'react'
 import { CalendarClock } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
-import { Button } from '@tabtin/smartsheet-ui'
+import { Button } from '@muse/smartsheet-ui'
 import type { OrganizationMembershipStatus, SubscriptionDisplay } from '@/types/membership'
 import { SettingsSectionCard } from '../SettingsSectionCard'
 import { SettingsBadge } from '../SettingsBadge'

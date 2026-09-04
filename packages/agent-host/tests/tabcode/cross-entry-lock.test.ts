@@ -6,7 +6,7 @@
  * Wave 1 锁加在 agent-runtime adapter 层只覆盖了 LLM Agent chat 链路；
  * Wave 1.5 把锁下沉到 action-tools 后，另外 3 个入口（ActionExecutorAdapter
  * / FrontendActionBridge / Daemon MCP / Daemon action-bridge）通过
- * `@tabtin/action-tools/utils/file-lock` 共享同一份 `lockMap` 单例 ——
+ * `@muse/action-tools/utils/file-lock` 共享同一份 `lockMap` 单例 ——
  * agent-runtime 一侧 `tools/file-lock.ts` 也 re-export 这同一份模块。
  *
  * 本测试从 agent-runtime 一侧（adapter 视角）调 `withFileLock`，从 action-tools
@@ -17,7 +17,7 @@
  *   - refcount 跨入口正确 → lockMap.size === 0 收尾
  *
  * 本测试在 agent-runtime 一侧跑，agent-runtime 的 file-lock.ts 通过
- * `@tabtin/action-tools/headless` re-export —— 跑通即证明 lockMap 是同一份
+ * `@muse/action-tools/headless` re-export —— 跑通即证明 lockMap 是同一份
  * 单例（agent-runtime 一侧的 withFileLock 跟 action-tools 一侧的 withFileLock
  * 操作的是同一份模块状态）。
  */
@@ -32,14 +32,14 @@ import {
   __resetFileLockMapForTest as resetFromAgentRuntime,
   getFileLockMapSize as sizeFromAgentRuntime,
   withFileLock as lockFromAgentRuntime,
-} from '@tabtin/action-tools/headless';
+} from '@muse/action-tools/headless';
 
 // action-tools 一侧的 withFileLock（ActionExecutorAdapter 视角；同一份模块）
 import {
   __resetFileLockMapForTest as resetFromActionTools,
   getFileLockMapSize as sizeFromActionTools,
   withFileLock as lockFromActionTools,
-} from '@tabtin/action-tools/headless';
+} from '@muse/action-tools/headless';
 
 let tmpDir: string;
 

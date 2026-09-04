@@ -1,4 +1,4 @@
-import { joinApiPath, requireSecureCredentialApiBaseUrl } from '@tabtin/config'
+import { joinApiPath, requireSecureCredentialApiBaseUrl } from '@muse/config'
 import { app } from 'electron'
 import { hostname } from 'node:os'
 import { API_BASE_URL, DAEMON_CONTROL_API_BASE_URL, DAEMON_CONTROL_ENABLED } from '../config/api.js'

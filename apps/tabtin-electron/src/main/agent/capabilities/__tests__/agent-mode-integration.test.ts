@@ -52,7 +52,7 @@ vi.mock('../../../services/LocalMcpService', () => ({
 
 const { ElectronToolProvider } = await import('../ElectronToolProvider')
 type AgentModeName = 'ask' | 'agent' | 'plan' | 'study' | 'group'
-const { buildSystemPrompt } = await import('@tabtin/agent-prompt')
+const { buildSystemPrompt } = await import('@muse/agent-prompt')
 
 /**  WP0：默认 agent 模式 ElectronToolProvider 基线工具名（不含 Cap 合并）。 */
 export const ELECTRON_TOOL_PROVIDER_AGENT_MODE_BASELINE = [
@@ -262,7 +262,7 @@ describe('ElectronToolProvider × agentMode (W1-A)', () => {
 
 describe('system prompt assembly × agentMode (W1-A)', () => {
   /**
-   * 使用 @tabtin/agent-prompt 的 buildSystemPrompt（SSoT），
+   * 使用 @muse/agent-prompt 的 buildSystemPrompt（SSoT），
    * 与 ElectronAgentHost 实际使用的是同一函数。
    */
   function buildPrompt(mode: AgentModeName): string {

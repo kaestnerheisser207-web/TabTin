@@ -9,7 +9,7 @@
  */
 
 import type { ServerResponse } from 'node:http';
-import { errorResponse, sendDjangoResult, type SendJSON } from '@tabtin/cli-server-core';
+import { errorResponse, sendDjangoResult, type SendJSON } from '@muse/cli-server-core';
 import { djangoRequest, requireSpaceId, resolveSpaceId } from '../host-bindings.js';
 
 const LOG_TAG = '[CLI Workspace]';

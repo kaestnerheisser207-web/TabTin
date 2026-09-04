@@ -58,7 +58,7 @@ import type {
  *
  * **业务代码禁止识别此字符串** —— 跨端识别"这条 message 是工具产物气泡"走
  * wire 层的 `message_kind === 'tool_artifact'` 字段（见
- * `@tabtin/agent-wire::MessageStartSchema.message_kind`）。本常量仅在 daemon
+ * `@muse/agent-wire::MessageStartSchema.message_kind`）。本常量仅在 daemon
  * 本文件 emit 时填字段使用，不再作为跨端契约出现在 wire 层 export 路径里。
  *
  * 历史背景：W4a 阶段曾把 `'tabtin-tool-runtime'` 作为 wire 层导出的
@@ -80,11 +80,11 @@ const MINI_MESSAGE_MODEL_ID_INTERNAL = 'tabtin-tool-runtime';
  * production 模式跳过——避免重复校验的性能开销（生产期信任 daemon
  * 已通过单测 + dev mode 双重门禁）。
  *
- * 设置 `process.env.TABTIN_DAEMON_EMIT_VALIDATE` 可强制启用 / 禁用，便于
+ * 设置 `process.env.MUSE_DAEMON_EMIT_VALIDATE` 可强制启用 / 禁用，便于
  * 测试场景 override（譬如 `false` 让测试模拟"未来某个 caller 漏标"的反向 case）。
  */
 const SELF_VALIDATE_ENABLED = (() => {
-  const env = typeof process !== 'undefined' ? process.env.TABTIN_DAEMON_EMIT_VALIDATE : undefined;
+  const env = typeof process !== 'undefined' ? process.env.MUSE_DAEMON_EMIT_VALIDATE : undefined;
   if (env === 'true') return true;
   if (env === 'false') return false;
   return typeof process === 'undefined' ? true : process.env.NODE_ENV !== 'production';
@@ -200,7 +200,7 @@ export class EnvelopeEmitter {
      * 还是工具产物 mini-message（`'tool_artifact'`，通常走 {@link emitDetachedMiniMessage}
      * 自动标记，不会经过本入口）。
      *
-     * 详见 `@tabtin/agent-wire::MessageKindSchema` docstring + wire 层
+     * 详见 `@muse/agent-wire::MessageKindSchema` docstring + wire 层
      * `superRefine` 校验 role × message_kind 9 组合里的 3 个非法组合。
      */
     messageKind: MessageKind;

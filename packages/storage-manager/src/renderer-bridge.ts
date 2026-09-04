@@ -298,7 +298,7 @@ export class RendererStorageBridge {
    * 在渲染进程注册一个 bucket（直接转发到 registry singleton）。
    * 业务模块用：
    *   ```ts
-   *   import { registerStorageBucket } from '@tabtin/storage-manager'
+   *   import { registerStorageBucket } from '@muse/storage-manager'
    *   const off = registerStorageBucket({ id, ... })
    *   ```
    * 实际上不需要走 bridge——provided 这里只是为了 API 完备 + 类型路由便利。

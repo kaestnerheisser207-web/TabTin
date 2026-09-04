@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import { ModelPrefsStore } from '../src/state/index.js'
-import type { ModelCatalogEntry } from '@tabtin/agent-runtime/engine'
+import type { ModelCatalogEntry } from '@muse/agent-runtime/engine'
 
 const entry = (id: string): ModelCatalogEntry => ({
   id,

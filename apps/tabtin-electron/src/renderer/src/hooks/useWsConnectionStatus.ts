@@ -1,7 +1,7 @@
 import { useShallow } from 'zustand/react/shallow'
 import { useEffect, useMemo, useRef, useState, useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
-import { toast } from '@tabtin/smartsheet-ui'
+import { toast } from '@muse/smartsheet-ui'
 import { useWsConnectionStore } from '@/stores/useWsConnectionStore'
 import { useIMStore } from '@/stores/useIMStore'
 import { useAuthStore, selectIsAuthenticated } from '@/stores/useAuthStore'

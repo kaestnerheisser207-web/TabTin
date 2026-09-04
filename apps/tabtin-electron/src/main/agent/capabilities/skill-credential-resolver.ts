@@ -3,7 +3,7 @@
  *
  * **历史背景**：Wave 1.5 初次交付时本文件内联了一整份 resolver
  * 实现；Wave 1.5 收尾（PROD-3 拍板 Daemon 补接入）时搬到共享位置
- * `@tabtin/agent-host/credentials`，
+ * `@muse/agent-host/credentials`，
  * Electron 与 Daemon 共用一份实现。
  *
  * 本文件只剩"把 Electron 主进程的 logger / token 注入方式"适配到
@@ -16,8 +16,8 @@
 import type {
   SkillCredentialResolverHandle,
   SkillCredentialResolverLogger,
-} from '@tabtin/agent-host/credentials'
-import { createSkillCredentialResolver as createSharedResolver } from '@tabtin/agent-host/credentials'
+} from '@muse/agent-host/credentials'
+import { createSkillCredentialResolver as createSharedResolver } from '@muse/agent-host/credentials'
 import { createLogger } from '../../logger.js'
 
 const log = createLogger('skill-credential-resolver')

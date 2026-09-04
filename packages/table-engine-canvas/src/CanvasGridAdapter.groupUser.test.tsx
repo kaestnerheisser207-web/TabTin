@@ -2,11 +2,11 @@ import React, { act, forwardRef, useImperativeHandle } from 'react'
 import { createRoot } from 'react-dom/client'
 import { describe, expect, it, vi } from 'vitest'
 
-vi.mock('@tabtin/smartsheet-ui', () => ({
+vi.mock('@muse/smartsheet-ui', () => ({
   resolveSelectChipColors: () => ({ backgroundColor: '#eee', color: '#111' }),
 }))
 
-vi.mock('@tabtin/table-engine', () => ({
+vi.mock('@muse/table-engine', () => ({
   resolveRecordId: (row: { __recordId?: string }) => row.__recordId ?? null,
 }))
 

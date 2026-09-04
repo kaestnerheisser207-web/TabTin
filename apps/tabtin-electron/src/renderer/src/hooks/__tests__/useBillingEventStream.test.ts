@@ -41,7 +41,7 @@ vi.mock('../useGatewayTopic', () => ({
   useGatewayTopic: mockUseGatewayTopic,
 }))
 
-vi.mock('@tabtin/ws-gateway-client', () => ({
+vi.mock('@muse/ws-gateway-client', () => ({
   BillingEvents: {
     AUTO_RENEW_FAILED: 'billing.auto_renew_failed',
     BALANCE_LOW: 'billing.balance_low',
@@ -103,7 +103,7 @@ vi.mock('@/services/systemNotification', () => ({
   },
 }))
 
-vi.mock('@tabtin/smartsheet-ui/toast', () => ({
+vi.mock('@muse/smartsheet-ui/toast', () => ({
   toast: mockToast,
   ToastAction: () => null,
 }))

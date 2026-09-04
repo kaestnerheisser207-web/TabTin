@@ -1,5 +1,5 @@
 import { ipcRenderer } from 'electron'
-import type { FileEditPatch } from '@tabtin/agent-host/tools'
+import type { FileEditPatch } from '@muse/agent-host/tools'
 
 export interface FileEditPatchRecord {
   toolUseId: string

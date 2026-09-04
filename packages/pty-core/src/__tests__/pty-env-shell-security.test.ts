@@ -25,13 +25,13 @@ describe('PC-7: sanitizeEnv filters sensitive environment variables', () => {
   it('should filter exact-match Muse internal variables', () => {
     const env = {
       PATH: '/usr/bin',
-      TABTIN_TOKEN: 'secret-token',
-      TABTIN_JWT: 'secret-jwt',
+      MUSE_TOKEN: 'secret-token',
+      MUSE_JWT: 'secret-jwt',
       HOME: '/home/user',
     }
     const result = sanitizeEnv(env)
-    expect(result).not.toHaveProperty('TABTIN_TOKEN')
-    expect(result).not.toHaveProperty('TABTIN_JWT')
+    expect(result).not.toHaveProperty('MUSE_TOKEN')
+    expect(result).not.toHaveProperty('MUSE_JWT')
     expect(result).toHaveProperty('PATH', '/usr/bin')
     expect(result).toHaveProperty('HOME', '/home/user')
   })

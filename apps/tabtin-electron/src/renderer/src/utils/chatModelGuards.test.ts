@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import type { Model } from '@tabtin/chat-client'
+import type { Model } from '@muse/chat-client'
 import {
   filterSendableChatModels,
   findSendableChatModel,

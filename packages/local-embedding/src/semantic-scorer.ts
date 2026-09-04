@@ -1,12 +1,12 @@
 /**
  * SemanticScorer 适配 —— 语义双路召回。
  *
- * 把 `LocalEmbeddingService` 包装成 `@tabtin/search` 的
+ * 把 `LocalEmbeddingService` 包装成 `@muse/search` 的
  * `WarmableSemanticScorer`——双路召回抽成独立通用包后，接口就是包间契约，
  * 不再需要 duck typing 对齐。
  */
 
-import type { RankItem, RankResult, WarmableSemanticScorer } from '@tabtin/search';
+import type { RankItem, RankResult, WarmableSemanticScorer } from '@muse/search';
 import type { LocalEmbeddingService } from './local-embedding-service.js';
 
 /** 归一化向量的点积 = 余弦相似度。 */

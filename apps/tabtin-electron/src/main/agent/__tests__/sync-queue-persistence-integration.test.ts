@@ -28,7 +28,7 @@ import {
   type TelemetryRecord,
   type TranscriptEntry,
   type PersistedEntryOwner,
-} from '@tabtin/agent-runtime'
+} from '@muse/agent-runtime'
 
 const TEST_OWNER: PersistedEntryOwner = {
   userId: 'user-electron-A',

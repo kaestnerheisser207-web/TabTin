@@ -1,5 +1,5 @@
-import type { ChatSession } from '@tabtin/chat-client'
-import { joinApiPath } from '@tabtin/config'
+import type { ChatSession } from '@muse/chat-client'
+import { joinApiPath } from '@muse/config'
 import { API_CONFIG } from '@/config/api'
 import { apiRequest } from './apiBase'
 import { PERSIST_KEYS } from '@/stores/persist-key-registry'

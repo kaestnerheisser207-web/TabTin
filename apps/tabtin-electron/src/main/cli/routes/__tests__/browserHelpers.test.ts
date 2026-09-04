@@ -48,7 +48,7 @@ vi.mock('electron', () => ({
   },
 }))
 
-vi.mock('@tabtin/shared/storage-paths', () => ({
+vi.mock('@muse/shared/storage-paths', () => ({
   getHomeTabtinPath: mockGetHomeTabtinPath,
 }))
 

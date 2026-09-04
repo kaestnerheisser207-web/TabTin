@@ -9,7 +9,7 @@
  */
 
 import { useCallback, useEffect, useRef, useState } from 'react'
-import { TableApiService, type SearchIndexHit } from '@tabtin/table-core'
+import { TableApiService, type SearchIndexHit } from '@muse/table-core'
 
 const PAGE_SIZE = 100
 const DEBOUNCE_MS = 300

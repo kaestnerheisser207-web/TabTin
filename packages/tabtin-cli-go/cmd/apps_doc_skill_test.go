@@ -330,7 +330,7 @@ func TestLongDocumentWorkflowUsesRelativeDraftPath(t *testing.T) {
 		"长文可靠写入": longWrite,
 		"Pattern 1": pattern1,
 	} {
-		if strings.Contains(section, "$TABTIN_WORKSPACE/.agent-drafts/") {
+		if strings.Contains(section, "$MUSE_WORKSPACE/.agent-drafts/") {
 			t.Errorf("%s 将 shell 变量传给 write_file/--markdown，结构化工具不会展开它", name)
 		}
 		if !strings.Contains(section, "write_file") ||

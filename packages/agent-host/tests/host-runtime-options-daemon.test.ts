@@ -42,14 +42,14 @@ import {
   DEFAULT_MAX_MESSAGE_CHARS,
   DEFAULT_NORMALIZATION_LEVEL,
   DEFAULT_TOOL_SCHEMA_VALIDATION,
-} from '@tabtin/agent-runtime/engine';
+} from '@muse/agent-runtime/engine';
 
 function makeLogger(): HostRuntimeOptionsLogger & { warn: ReturnType<typeof vi.fn> } {
   return { warn: vi.fn() };
 }
 
 describe('Daemon host runtime options — resolveDoomLoopPolicy', () => {
-  it("defaults to 'soft' when TABTIN_DOOM_LOOP_POLICY is unset", () => {
+  it("defaults to 'soft' when MUSE_DOOM_LOOP_POLICY is unset", () => {
     const logger = makeLogger();
     expect(resolveDoomLoopPolicy({}, logger)).toBe('soft');
     expect(logger.warn).not.toHaveBeenCalled();
@@ -58,13 +58,13 @@ describe('Daemon host runtime options — resolveDoomLoopPolicy', () => {
   it("accepts 'soft' / 'strict' (case-insensitive, trimmed)", () => {
     const logger = makeLogger();
     expect(
-      resolveDoomLoopPolicy({ TABTIN_DOOM_LOOP_POLICY: 'strict' }, logger),
+      resolveDoomLoopPolicy({ MUSE_DOOM_LOOP_POLICY: 'strict' }, logger),
     ).toBe('strict');
     expect(
-      resolveDoomLoopPolicy({ TABTIN_DOOM_LOOP_POLICY: 'STRICT' }, logger),
+      resolveDoomLoopPolicy({ MUSE_DOOM_LOOP_POLICY: 'STRICT' }, logger),
     ).toBe('strict');
     expect(
-      resolveDoomLoopPolicy({ TABTIN_DOOM_LOOP_POLICY: '  soft  ' }, logger),
+      resolveDoomLoopPolicy({ MUSE_DOOM_LOOP_POLICY: '  soft  ' }, logger),
     ).toBe('soft');
     expect(logger.warn).not.toHaveBeenCalled();
   });
@@ -72,24 +72,24 @@ describe('Daemon host runtime options — resolveDoomLoopPolicy', () => {
   it("falls back to 'soft' + warns on typo with Daemon tag", () => {
     const logger = makeLogger();
     const out = resolveDoomLoopPolicy(
-      { TABTIN_DOOM_LOOP_POLICY: 'aggressive' },
+      { MUSE_DOOM_LOOP_POLICY: 'aggressive' },
       logger,
     );
     expect(out).toBe('soft');
     expect(logger.warn).toHaveBeenCalledTimes(1);
     const msg = (logger.warn as ReturnType<typeof vi.fn>).mock.calls[0][0];
     expect(msg).toMatch(/DaemonAgentHost/);
-    expect(msg).toMatch(/TABTIN_DOOM_LOOP_POLICY/);
+    expect(msg).toMatch(/MUSE_DOOM_LOOP_POLICY/);
     expect(msg).toMatch(/aggressive/);
   });
 
   it("treats empty / whitespace env as unset (no warn)", () => {
     const logger = makeLogger();
     expect(
-      resolveDoomLoopPolicy({ TABTIN_DOOM_LOOP_POLICY: '' }, logger),
+      resolveDoomLoopPolicy({ MUSE_DOOM_LOOP_POLICY: '' }, logger),
     ).toBe('soft');
     expect(
-      resolveDoomLoopPolicy({ TABTIN_DOOM_LOOP_POLICY: '  \t ' }, logger),
+      resolveDoomLoopPolicy({ MUSE_DOOM_LOOP_POLICY: '  \t ' }, logger),
     ).toBe('soft');
     expect(logger.warn).not.toHaveBeenCalled();
   });
@@ -105,7 +105,7 @@ describe('Daemon host runtime options — resolveMaxMessageChars', () => {
   it('accepts a positive finite integer string', () => {
     const logger = makeLogger();
     expect(
-      resolveMaxMessageChars({ TABTIN_MAX_MESSAGE_CHARS: '750000' }, logger),
+      resolveMaxMessageChars({ MUSE_MAX_MESSAGE_CHARS: '750000' }, logger),
     ).toBe(750_000);
     expect(logger.warn).not.toHaveBeenCalled();
   });
@@ -113,7 +113,7 @@ describe('Daemon host runtime options — resolveMaxMessageChars', () => {
   it('floors a positive float', () => {
     const logger = makeLogger();
     expect(
-      resolveMaxMessageChars({ TABTIN_MAX_MESSAGE_CHARS: '250000.5' }, logger),
+      resolveMaxMessageChars({ MUSE_MAX_MESSAGE_CHARS: '250000.5' }, logger),
     ).toBe(250_000);
   });
 
@@ -121,13 +121,13 @@ describe('Daemon host runtime options — resolveMaxMessageChars', () => {
     const logger = makeLogger();
     for (const bad of ['0', '-1', 'big', 'Infinity', 'NaN']) {
       expect(
-        resolveMaxMessageChars({ TABTIN_MAX_MESSAGE_CHARS: bad }, logger),
+        resolveMaxMessageChars({ MUSE_MAX_MESSAGE_CHARS: bad }, logger),
       ).toBe(DEFAULT_MAX_MESSAGE_CHARS);
     }
     expect(logger.warn).toHaveBeenCalledTimes(5);
     for (const call of (logger.warn as ReturnType<typeof vi.fn>).mock.calls) {
       expect(String(call[0])).toMatch(/DaemonAgentHost/);
-      expect(String(call[0])).toMatch(/TABTIN_MAX_MESSAGE_CHARS/);
+      expect(String(call[0])).toMatch(/MUSE_MAX_MESSAGE_CHARS/);
     }
   });
 
@@ -135,7 +135,7 @@ describe('Daemon host runtime options — resolveMaxMessageChars', () => {
     const logger = makeLogger();
     expect(
       resolveMaxMessageChars(
-        { TABTIN_MAX_MESSAGE_CHARS: '   10000000   ' },
+        { MUSE_MAX_MESSAGE_CHARS: '   10000000   ' },
         logger,
       ),
     ).toBe(10_000_000);
@@ -145,7 +145,7 @@ describe('Daemon host runtime options — resolveMaxMessageChars', () => {
   it('returns default (no warn) on empty string', () => {
     const logger = makeLogger();
     expect(
-      resolveMaxMessageChars({ TABTIN_MAX_MESSAGE_CHARS: '' }, logger),
+      resolveMaxMessageChars({ MUSE_MAX_MESSAGE_CHARS: '' }, logger),
     ).toBe(DEFAULT_MAX_MESSAGE_CHARS);
     expect(logger.warn).not.toHaveBeenCalled();
   });
@@ -164,7 +164,7 @@ describe('Daemon host runtime options — resolveNormalizationLevel', () => {
     const logger = makeLogger();
     for (const raw of ['off', 'CONSERVATIVE', ' Full ']) {
       const out = resolveNormalizationLevel(
-        { TABTIN_NORMALIZATION_LEVEL: raw },
+        { MUSE_NORMALIZATION_LEVEL: raw },
         logger,
       );
       expect(['off', 'conservative', 'full']).toContain(out);
@@ -176,25 +176,25 @@ describe('Daemon host runtime options — resolveNormalizationLevel', () => {
     const logger = makeLogger();
     expect(
       resolveNormalizationLevel(
-        { TABTIN_NORMALIZATION_LEVEL: 'conservativ' },
+        { MUSE_NORMALIZATION_LEVEL: 'conservativ' },
         logger,
       ),
     ).toBe(DEFAULT_NORMALIZATION_LEVEL);
     expect(logger.warn).toHaveBeenCalledTimes(1);
     const msg = (logger.warn as ReturnType<typeof vi.fn>).mock.calls[0][0];
     expect(String(msg)).toMatch(/DaemonAgentHost/);
-    expect(String(msg)).toMatch(/TABTIN_NORMALIZATION_LEVEL/);
+    expect(String(msg)).toMatch(/MUSE_NORMALIZATION_LEVEL/);
     expect(String(msg)).toMatch(/conservativ/);
   });
 
   it('treats empty / whitespace env as unset (no warn)', () => {
     const logger = makeLogger();
     expect(
-      resolveNormalizationLevel({ TABTIN_NORMALIZATION_LEVEL: '' }, logger),
+      resolveNormalizationLevel({ MUSE_NORMALIZATION_LEVEL: '' }, logger),
     ).toBe(DEFAULT_NORMALIZATION_LEVEL);
     expect(
       resolveNormalizationLevel(
-        { TABTIN_NORMALIZATION_LEVEL: '   ' },
+        { MUSE_NORMALIZATION_LEVEL: '   ' },
         logger,
       ),
     ).toBe(DEFAULT_NORMALIZATION_LEVEL);
@@ -208,7 +208,7 @@ describe('Daemon host runtime options — resolvePressureThresholds', () => {
   it('parses three comma-separated thresholds', () => {
     const logger = makeLogger();
     expect(
-      resolvePressureThresholds({ TABTIN_PRESSURE_THRESHOLDS: '0.7,0.8,0.9' }, logger),
+      resolvePressureThresholds({ MUSE_PRESSURE_THRESHOLDS: '0.7,0.8,0.9' }, logger),
     ).toEqual({ microCompactStart: 0.7, llmSummaryStart: 0.8, emergencyStart: 0.9 });
     expect(logger.warn).not.toHaveBeenCalled();
   });
@@ -216,7 +216,7 @@ describe('Daemon host runtime options — resolvePressureThresholds', () => {
   it('accepts micro == summary (parallel tiers, same rule as cloud decode)', () => {
     const logger = makeLogger();
     expect(
-      resolvePressureThresholds({ TABTIN_PRESSURE_THRESHOLDS: '0.85,0.85,0.95' }, logger),
+      resolvePressureThresholds({ MUSE_PRESSURE_THRESHOLDS: '0.85,0.85,0.95' }, logger),
     ).toEqual({ microCompactStart: 0.85, llmSummaryStart: 0.85, emergencyStart: 0.95 });
     expect(logger.warn).not.toHaveBeenCalled();
   });
@@ -224,7 +224,7 @@ describe('Daemon host runtime options — resolvePressureThresholds', () => {
   it('warns and returns undefined on invalid ordering', () => {
     const logger = makeLogger();
     expect(
-      resolvePressureThresholds({ TABTIN_PRESSURE_THRESHOLDS: '0.9,0.8,0.95' }, logger),
+      resolvePressureThresholds({ MUSE_PRESSURE_THRESHOLDS: '0.9,0.8,0.95' }, logger),
     ).toBeUndefined();
     expect(logger.warn).toHaveBeenCalled();
   });
@@ -244,9 +244,9 @@ describe('Daemon host runtime options — resolveSyncPersistence', () => {
 
   it('treats empty / whitespace env as unset (no warn, defaults true)', () => {
     const logger = makeLogger();
-    expect(resolveSyncPersistence({ TABTIN_SYNC_PERSISTENCE: '' }, logger)).toBe(true);
+    expect(resolveSyncPersistence({ MUSE_SYNC_PERSISTENCE: '' }, logger)).toBe(true);
     expect(
-      resolveSyncPersistence({ TABTIN_SYNC_PERSISTENCE: '   ' }, logger),
+      resolveSyncPersistence({ MUSE_SYNC_PERSISTENCE: '   ' }, logger),
     ).toBe(true);
     expect(logger.warn).not.toHaveBeenCalled();
   });
@@ -255,7 +255,7 @@ describe('Daemon host runtime options — resolveSyncPersistence', () => {
     const logger = makeLogger();
     for (const raw of ['1', 'true', 'TRUE', 'on', ' On ']) {
       expect(
-        resolveSyncPersistence({ TABTIN_SYNC_PERSISTENCE: raw }, logger),
+        resolveSyncPersistence({ MUSE_SYNC_PERSISTENCE: raw }, logger),
       ).toBe(true);
     }
     expect(logger.warn).not.toHaveBeenCalled();
@@ -265,7 +265,7 @@ describe('Daemon host runtime options — resolveSyncPersistence', () => {
     const logger = makeLogger();
     for (const raw of ['0', 'false', 'FALSE', 'off']) {
       expect(
-        resolveSyncPersistence({ TABTIN_SYNC_PERSISTENCE: raw }, logger),
+        resolveSyncPersistence({ MUSE_SYNC_PERSISTENCE: raw }, logger),
       ).toBe(false);
     }
     expect(logger.warn).not.toHaveBeenCalled();
@@ -274,12 +274,12 @@ describe('Daemon host runtime options — resolveSyncPersistence', () => {
   it('falls back + warns with Daemon tag on typo', () => {
     const logger = makeLogger();
     expect(
-      resolveSyncPersistence({ TABTIN_SYNC_PERSISTENCE: 'enabled' }, logger),
+      resolveSyncPersistence({ MUSE_SYNC_PERSISTENCE: 'enabled' }, logger),
     ).toBe(false);
     expect(logger.warn).toHaveBeenCalledTimes(1);
     const msg = (logger.warn as ReturnType<typeof vi.fn>).mock.calls[0][0];
     expect(String(msg)).toMatch(/DaemonAgentHost/);
-    expect(String(msg)).toMatch(/TABTIN_SYNC_PERSISTENCE/);
+    expect(String(msg)).toMatch(/MUSE_SYNC_PERSISTENCE/);
     expect(String(msg)).toMatch(/enabled/);
   });
 });
@@ -295,13 +295,13 @@ describe('Daemon host runtime options — resolveToolSchemaValidation', () => {
   it('accepts off / warn / strict (case-insensitive, trimmed)', () => {
     const logger = makeLogger();
     expect(
-      resolveToolSchemaValidation({ TABTIN_TOOL_SCHEMA_VALIDATION: 'off' }, logger),
+      resolveToolSchemaValidation({ MUSE_TOOL_SCHEMA_VALIDATION: 'off' }, logger),
     ).toBe('off');
     expect(
-      resolveToolSchemaValidation({ TABTIN_TOOL_SCHEMA_VALIDATION: 'STRICT' }, logger),
+      resolveToolSchemaValidation({ MUSE_TOOL_SCHEMA_VALIDATION: 'STRICT' }, logger),
     ).toBe('strict');
     expect(
-      resolveToolSchemaValidation({ TABTIN_TOOL_SCHEMA_VALIDATION: '  Warn  ' }, logger),
+      resolveToolSchemaValidation({ MUSE_TOOL_SCHEMA_VALIDATION: '  Warn  ' }, logger),
     ).toBe('warn');
     expect(logger.warn).not.toHaveBeenCalled();
   });
@@ -309,12 +309,12 @@ describe('Daemon host runtime options — resolveToolSchemaValidation', () => {
   it('falls back + warns with DaemonAgentHost tag on typo', () => {
     const logger = makeLogger();
     expect(
-      resolveToolSchemaValidation({ TABTIN_TOOL_SCHEMA_VALIDATION: 'strikt' }, logger),
+      resolveToolSchemaValidation({ MUSE_TOOL_SCHEMA_VALIDATION: 'strikt' }, logger),
     ).toBe('warn');
     expect(logger.warn).toHaveBeenCalledTimes(1);
     const msg = (logger.warn as ReturnType<typeof vi.fn>).mock.calls[0][0];
     expect(String(msg)).toMatch(/DaemonAgentHost/);
-    expect(String(msg)).toMatch(/TABTIN_TOOL_SCHEMA_VALIDATION/);
+    expect(String(msg)).toMatch(/MUSE_TOOL_SCHEMA_VALIDATION/);
   });
 });
 
@@ -327,18 +327,18 @@ describe('Daemon host runtime options — resolveToolOutputScan', () => {
 
   it('parses truthy / falsy aliases', () => {
     const logger = makeLogger();
-    expect(resolveToolOutputScan({ TABTIN_TOOL_OUTPUT_SCAN: 'on' }, logger)).toBe(true);
-    expect(resolveToolOutputScan({ TABTIN_TOOL_OUTPUT_SCAN: '0' }, logger)).toBe(false);
-    expect(resolveToolOutputScan({ TABTIN_TOOL_OUTPUT_SCAN: 'false' }, logger)).toBe(false);
+    expect(resolveToolOutputScan({ MUSE_TOOL_OUTPUT_SCAN: 'on' }, logger)).toBe(true);
+    expect(resolveToolOutputScan({ MUSE_TOOL_OUTPUT_SCAN: '0' }, logger)).toBe(false);
+    expect(resolveToolOutputScan({ MUSE_TOOL_OUTPUT_SCAN: 'false' }, logger)).toBe(false);
     expect(logger.warn).not.toHaveBeenCalled();
   });
 
   it('falls back + warns with DaemonAgentHost tag on typo', () => {
     const logger = makeLogger();
-    expect(resolveToolOutputScan({ TABTIN_TOOL_OUTPUT_SCAN: 'maybe' }, logger)).toBe(true);
+    expect(resolveToolOutputScan({ MUSE_TOOL_OUTPUT_SCAN: 'maybe' }, logger)).toBe(true);
     const msg = (logger.warn as ReturnType<typeof vi.fn>).mock.calls[0][0];
     expect(String(msg)).toMatch(/DaemonAgentHost/);
-    expect(String(msg)).toMatch(/TABTIN_TOOL_OUTPUT_SCAN/);
+    expect(String(msg)).toMatch(/MUSE_TOOL_OUTPUT_SCAN/);
   });
 });
 
@@ -355,36 +355,36 @@ describe('Daemon host runtime options — resolveSummaryReuse', () => {
 
   it('treats empty / whitespace env as unset (no warn)', () => {
     const logger = makeLogger();
-    expect(resolveSummaryReuse({ TABTIN_SUMMARY_REUSE: '' }, logger)).toBe(true);
-    expect(resolveSummaryReuse({ TABTIN_SUMMARY_REUSE: '   ' }, logger)).toBe(true);
+    expect(resolveSummaryReuse({ MUSE_SUMMARY_REUSE: '' }, logger)).toBe(true);
+    expect(resolveSummaryReuse({ MUSE_SUMMARY_REUSE: '   ' }, logger)).toBe(true);
     expect(logger.warn).not.toHaveBeenCalled();
   });
 
   it('accepts on / true / 1 / enabled (case-insensitive, trimmed)', () => {
     const logger = makeLogger();
-    expect(resolveSummaryReuse({ TABTIN_SUMMARY_REUSE: 'on' }, logger)).toBe(true);
-    expect(resolveSummaryReuse({ TABTIN_SUMMARY_REUSE: 'TRUE' }, logger)).toBe(true);
-    expect(resolveSummaryReuse({ TABTIN_SUMMARY_REUSE: '1' }, logger)).toBe(true);
-    expect(resolveSummaryReuse({ TABTIN_SUMMARY_REUSE: '  Enabled  ' }, logger)).toBe(true);
+    expect(resolveSummaryReuse({ MUSE_SUMMARY_REUSE: 'on' }, logger)).toBe(true);
+    expect(resolveSummaryReuse({ MUSE_SUMMARY_REUSE: 'TRUE' }, logger)).toBe(true);
+    expect(resolveSummaryReuse({ MUSE_SUMMARY_REUSE: '1' }, logger)).toBe(true);
+    expect(resolveSummaryReuse({ MUSE_SUMMARY_REUSE: '  Enabled  ' }, logger)).toBe(true);
     expect(logger.warn).not.toHaveBeenCalled();
   });
 
   it('accepts off / false / 0 / disabled', () => {
     const logger = makeLogger();
-    expect(resolveSummaryReuse({ TABTIN_SUMMARY_REUSE: 'off' }, logger)).toBe(false);
-    expect(resolveSummaryReuse({ TABTIN_SUMMARY_REUSE: 'False' }, logger)).toBe(false);
-    expect(resolveSummaryReuse({ TABTIN_SUMMARY_REUSE: '0' }, logger)).toBe(false);
-    expect(resolveSummaryReuse({ TABTIN_SUMMARY_REUSE: 'disabled' }, logger)).toBe(false);
+    expect(resolveSummaryReuse({ MUSE_SUMMARY_REUSE: 'off' }, logger)).toBe(false);
+    expect(resolveSummaryReuse({ MUSE_SUMMARY_REUSE: 'False' }, logger)).toBe(false);
+    expect(resolveSummaryReuse({ MUSE_SUMMARY_REUSE: '0' }, logger)).toBe(false);
+    expect(resolveSummaryReuse({ MUSE_SUMMARY_REUSE: 'disabled' }, logger)).toBe(false);
     expect(logger.warn).not.toHaveBeenCalled();
   });
 
   it('falls back to true on typos and warns once with Daemon tag', () => {
     const logger = makeLogger();
-    expect(resolveSummaryReuse({ TABTIN_SUMMARY_REUSE: 'maybe' }, logger)).toBe(true);
+    expect(resolveSummaryReuse({ MUSE_SUMMARY_REUSE: 'maybe' }, logger)).toBe(true);
     expect(logger.warn).toHaveBeenCalledTimes(1);
     const msg = (logger.warn as ReturnType<typeof vi.fn>).mock.calls[0][0];
     expect(String(msg)).toMatch(/DaemonAgentHost/);
-    expect(String(msg)).toMatch(/TABTIN_SUMMARY_REUSE/);
+    expect(String(msg)).toMatch(/MUSE_SUMMARY_REUSE/);
     expect(String(msg)).toMatch(/falling back to true/);
   });
 });
@@ -396,11 +396,11 @@ describe('Daemon host runtime options — resolveSummaryReuseJudgeSampleRate', (
     expect(resolveSummaryReuseJudgeSampleRate({}, makeLogger())).toBeUndefined();
   });
   it('accepts valid floats in [0, 1]', () => {
-    expect(resolveSummaryReuseJudgeSampleRate({ TABTIN_SUMMARY_REUSE_JUDGE_SAMPLE_RATE: '0.5' }, makeLogger())).toBe(0.5);
+    expect(resolveSummaryReuseJudgeSampleRate({ MUSE_SUMMARY_REUSE_JUDGE_SAMPLE_RATE: '0.5' }, makeLogger())).toBe(0.5);
   });
   it('warns and falls back on out-of-range', () => {
     const logger = makeLogger();
-    expect(resolveSummaryReuseJudgeSampleRate({ TABTIN_SUMMARY_REUSE_JUDGE_SAMPLE_RATE: '1.5' }, logger)).toBeUndefined();
+    expect(resolveSummaryReuseJudgeSampleRate({ MUSE_SUMMARY_REUSE_JUDGE_SAMPLE_RATE: '1.5' }, logger)).toBeUndefined();
     expect(logger.warn).toHaveBeenCalledTimes(1);
     const msg = (logger.warn as ReturnType<typeof vi.fn>).mock.calls[0][0];
     expect(String(msg)).toMatch(/DaemonAgentHost/);
@@ -409,34 +409,34 @@ describe('Daemon host runtime options — resolveSummaryReuseJudgeSampleRate', (
 
 describe('Daemon host runtime options — resolveSummaryReuseJudgeWindowSize', () => {
   it('accepts integer ≥ 10', () => {
-    expect(resolveSummaryReuseJudgeWindowSize({ TABTIN_SUMMARY_REUSE_JUDGE_WINDOW_SIZE: '50' }, makeLogger())).toBe(50);
+    expect(resolveSummaryReuseJudgeWindowSize({ MUSE_SUMMARY_REUSE_JUDGE_WINDOW_SIZE: '50' }, makeLogger())).toBe(50);
   });
   it('falls back on < 10', () => {
-    expect(resolveSummaryReuseJudgeWindowSize({ TABTIN_SUMMARY_REUSE_JUDGE_WINDOW_SIZE: '9' }, makeLogger())).toBeUndefined();
+    expect(resolveSummaryReuseJudgeWindowSize({ MUSE_SUMMARY_REUSE_JUDGE_WINDOW_SIZE: '9' }, makeLogger())).toBeUndefined();
   });
 });
 
 describe('Daemon host runtime options — resolveSummaryReuseJudgeThreshold', () => {
   it('accepts [0, 1] floats', () => {
-    expect(resolveSummaryReuseJudgeThreshold({ TABTIN_SUMMARY_REUSE_JUDGE_THRESHOLD: '0.9' }, makeLogger())).toBe(0.9);
+    expect(resolveSummaryReuseJudgeThreshold({ MUSE_SUMMARY_REUSE_JUDGE_THRESHOLD: '0.9' }, makeLogger())).toBe(0.9);
   });
 });
 
 describe('Daemon host runtime options — resolveSummaryReuseMaxAgeMs', () => {
   it('accepts non-negative integer', () => {
-    expect(resolveSummaryReuseMaxAgeMs({ TABTIN_SUMMARY_REUSE_MAX_AGE_MS: '60000' }, makeLogger())).toBe(60000);
+    expect(resolveSummaryReuseMaxAgeMs({ MUSE_SUMMARY_REUSE_MAX_AGE_MS: '60000' }, makeLogger())).toBe(60000);
   });
   it('treats 0 as unlimited (returns undefined)', () => {
-    expect(resolveSummaryReuseMaxAgeMs({ TABTIN_SUMMARY_REUSE_MAX_AGE_MS: '0' }, makeLogger())).toBeUndefined();
+    expect(resolveSummaryReuseMaxAgeMs({ MUSE_SUMMARY_REUSE_MAX_AGE_MS: '0' }, makeLogger())).toBeUndefined();
   });
 });
 
 describe('Daemon host runtime options — resolveSummaryReuseMinAddedMessages', () => {
   it('accepts integer ≥ 1', () => {
-    expect(resolveSummaryReuseMinAddedMessages({ TABTIN_SUMMARY_REUSE_MIN_ADDED_MESSAGES: '5' }, makeLogger())).toBe(5);
+    expect(resolveSummaryReuseMinAddedMessages({ MUSE_SUMMARY_REUSE_MIN_ADDED_MESSAGES: '5' }, makeLogger())).toBe(5);
   });
   it('falls back on 0', () => {
-    expect(resolveSummaryReuseMinAddedMessages({ TABTIN_SUMMARY_REUSE_MIN_ADDED_MESSAGES: '0' }, makeLogger())).toBeUndefined();
+    expect(resolveSummaryReuseMinAddedMessages({ MUSE_SUMMARY_REUSE_MIN_ADDED_MESSAGES: '0' }, makeLogger())).toBeUndefined();
   });
 });
 
@@ -450,10 +450,10 @@ describe('Daemon host runtime options — resolveAttachmentStrategy (FR-18 Phase
   it('treats empty / whitespace as unset', () => {
     const logger = makeLogger();
     expect(
-      resolveAttachmentStrategy({ TABTIN_ATTACHMENT_STRATEGY: '' }, logger),
+      resolveAttachmentStrategy({ MUSE_ATTACHMENT_STRATEGY: '' }, logger),
     ).toBe('local_first');
     expect(
-      resolveAttachmentStrategy({ TABTIN_ATTACHMENT_STRATEGY: '   ' }, logger),
+      resolveAttachmentStrategy({ MUSE_ATTACHMENT_STRATEGY: '   ' }, logger),
     ).toBe('local_first');
     expect(logger.warn).not.toHaveBeenCalled();
   });
@@ -461,10 +461,10 @@ describe('Daemon host runtime options — resolveAttachmentStrategy (FR-18 Phase
   it('accepts the two valid values (case-insensitive, trimmed)', () => {
     const logger = makeLogger();
     expect(
-      resolveAttachmentStrategy({ TABTIN_ATTACHMENT_STRATEGY: 'local_first' }, logger),
+      resolveAttachmentStrategy({ MUSE_ATTACHMENT_STRATEGY: 'local_first' }, logger),
     ).toBe('local_first');
     expect(
-      resolveAttachmentStrategy({ TABTIN_ATTACHMENT_STRATEGY: '  cloud_only  ' }, logger),
+      resolveAttachmentStrategy({ MUSE_ATTACHMENT_STRATEGY: '  cloud_only  ' }, logger),
     ).toBe('cloud_only');
     expect(logger.warn).not.toHaveBeenCalled();
   });
@@ -474,7 +474,7 @@ describe('Daemon host runtime options — resolveAttachmentStrategy (FR-18 Phase
   it('rejects deprecated cloud_first env value with warn fallback (W4 T8)', () => {
     const logger = makeLogger();
     expect(
-      resolveAttachmentStrategy({ TABTIN_ATTACHMENT_STRATEGY: 'cloud_first' }, logger),
+      resolveAttachmentStrategy({ MUSE_ATTACHMENT_STRATEGY: 'cloud_first' }, logger),
     ).toBe('local_first');
     expect(logger.warn).toHaveBeenCalledTimes(1);
     const msg = String((logger.warn as ReturnType<typeof vi.fn>).mock.calls[0]?.[0] ?? '');
@@ -486,16 +486,16 @@ describe('Daemon host runtime options — resolveAttachmentStrategy (FR-18 Phase
     const logger = makeLogger();
     // 用户经常打成 'local-first' 或 'localfirst' — 不能静默回落
     expect(
-      resolveAttachmentStrategy({ TABTIN_ATTACHMENT_STRATEGY: 'local-first' }, logger),
+      resolveAttachmentStrategy({ MUSE_ATTACHMENT_STRATEGY: 'local-first' }, logger),
     ).toBe('local_first');
     expect(
-      resolveAttachmentStrategy({ TABTIN_ATTACHMENT_STRATEGY: 'localfirst' }, logger),
+      resolveAttachmentStrategy({ MUSE_ATTACHMENT_STRATEGY: 'localfirst' }, logger),
     ).toBe('local_first');
     expect(logger.warn).toHaveBeenCalledTimes(2);
     for (const call of (logger.warn as ReturnType<typeof vi.fn>).mock.calls) {
       const msg = String(call[0]);
       expect(msg).toMatch(/DaemonAgentHost/);
-      expect(msg).toMatch(/TABTIN_ATTACHMENT_STRATEGY/);
+      expect(msg).toMatch(/MUSE_ATTACHMENT_STRATEGY/);
     }
   });
 });
@@ -513,10 +513,10 @@ describe('Daemon host runtime options — resolveMaxLocalFileSizeMb (FR-18 Phase
   it('treats empty / whitespace as unset', () => {
     const logger = makeLogger();
     expect(
-      resolveMaxLocalFileSizeMb({ TABTIN_LOCAL_DOCPARSE_MAX_MB: '' }, logger),
+      resolveMaxLocalFileSizeMb({ MUSE_LOCAL_DOCPARSE_MAX_MB: '' }, logger),
     ).toBe(DAEMON_DEFAULT_MAX_LOCAL_FILE_SIZE_MB);
     expect(
-      resolveMaxLocalFileSizeMb({ TABTIN_LOCAL_DOCPARSE_MAX_MB: '  ' }, logger),
+      resolveMaxLocalFileSizeMb({ MUSE_LOCAL_DOCPARSE_MAX_MB: '  ' }, logger),
     ).toBe(DAEMON_DEFAULT_MAX_LOCAL_FILE_SIZE_MB);
     expect(logger.warn).not.toHaveBeenCalled();
   });
@@ -524,13 +524,13 @@ describe('Daemon host runtime options — resolveMaxLocalFileSizeMb (FR-18 Phase
   it('accepts a positive integer in (0, 200]', () => {
     const logger = makeLogger();
     expect(
-      resolveMaxLocalFileSizeMb({ TABTIN_LOCAL_DOCPARSE_MAX_MB: '50' }, logger),
+      resolveMaxLocalFileSizeMb({ MUSE_LOCAL_DOCPARSE_MAX_MB: '50' }, logger),
     ).toBe(50);
     expect(
-      resolveMaxLocalFileSizeMb({ TABTIN_LOCAL_DOCPARSE_MAX_MB: '200' }, logger),
+      resolveMaxLocalFileSizeMb({ MUSE_LOCAL_DOCPARSE_MAX_MB: '200' }, logger),
     ).toBe(200);
     expect(
-      resolveMaxLocalFileSizeMb({ TABTIN_LOCAL_DOCPARSE_MAX_MB: '  100  ' }, logger),
+      resolveMaxLocalFileSizeMb({ MUSE_LOCAL_DOCPARSE_MAX_MB: '  100  ' }, logger),
     ).toBe(100);
     expect(logger.warn).not.toHaveBeenCalled();
   });
@@ -538,7 +538,7 @@ describe('Daemon host runtime options — resolveMaxLocalFileSizeMb (FR-18 Phase
   it('floors a positive float', () => {
     const logger = makeLogger();
     expect(
-      resolveMaxLocalFileSizeMb({ TABTIN_LOCAL_DOCPARSE_MAX_MB: '37.8' }, logger),
+      resolveMaxLocalFileSizeMb({ MUSE_LOCAL_DOCPARSE_MAX_MB: '37.8' }, logger),
     ).toBe(37);
     expect(logger.warn).not.toHaveBeenCalled();
   });
@@ -547,23 +547,23 @@ describe('Daemon host runtime options — resolveMaxLocalFileSizeMb (FR-18 Phase
     const logger = makeLogger();
     for (const bad of ['0', '-5', 'big', 'NaN', 'Infinity']) {
       expect(
-        resolveMaxLocalFileSizeMb({ TABTIN_LOCAL_DOCPARSE_MAX_MB: bad }, logger),
+        resolveMaxLocalFileSizeMb({ MUSE_LOCAL_DOCPARSE_MAX_MB: bad }, logger),
       ).toBe(DAEMON_DEFAULT_MAX_LOCAL_FILE_SIZE_MB);
     }
     expect(logger.warn).toHaveBeenCalledTimes(5);
     for (const call of (logger.warn as ReturnType<typeof vi.fn>).mock.calls) {
       expect(String(call[0])).toMatch(/DaemonAgentHost/);
-      expect(String(call[0])).toMatch(/TABTIN_LOCAL_DOCPARSE_MAX_MB/);
+      expect(String(call[0])).toMatch(/MUSE_LOCAL_DOCPARSE_MAX_MB/);
     }
   });
 
   it('clamps + warns when exceeding hard cap (200MB)', () => {
     const logger = makeLogger();
     expect(
-      resolveMaxLocalFileSizeMb({ TABTIN_LOCAL_DOCPARSE_MAX_MB: '500' }, logger),
+      resolveMaxLocalFileSizeMb({ MUSE_LOCAL_DOCPARSE_MAX_MB: '500' }, logger),
     ).toBe(200);
     expect(
-      resolveMaxLocalFileSizeMb({ TABTIN_LOCAL_DOCPARSE_MAX_MB: '9999' }, logger),
+      resolveMaxLocalFileSizeMb({ MUSE_LOCAL_DOCPARSE_MAX_MB: '9999' }, logger),
     ).toBe(200);
     expect(logger.warn).toHaveBeenCalledTimes(2);
     for (const call of (logger.warn as ReturnType<typeof vi.fn>).mock.calls) {
@@ -584,10 +584,10 @@ describe('Daemon host runtime options — resolveMaxConcurrentChildren (FR-17.1 
   it("accepts 'unlimited' / '0' as Infinity", () => {
     const logger = makeLogger();
     expect(
-      resolveMaxConcurrentChildren({ TABTIN_MAX_CONCURRENT_CHILDREN: 'unlimited' }, logger),
+      resolveMaxConcurrentChildren({ MUSE_MAX_CONCURRENT_CHILDREN: 'unlimited' }, logger),
     ).toBe(Number.POSITIVE_INFINITY);
     expect(
-      resolveMaxConcurrentChildren({ TABTIN_MAX_CONCURRENT_CHILDREN: '0' }, logger),
+      resolveMaxConcurrentChildren({ MUSE_MAX_CONCURRENT_CHILDREN: '0' }, logger),
     ).toBe(Number.POSITIVE_INFINITY);
     expect(logger.warn).not.toHaveBeenCalled();
   });
@@ -595,20 +595,20 @@ describe('Daemon host runtime options — resolveMaxConcurrentChildren (FR-17.1 
   it('accepts positive integer; floors floats; falls back on bad values', () => {
     const logger = makeLogger();
     expect(
-      resolveMaxConcurrentChildren({ TABTIN_MAX_CONCURRENT_CHILDREN: '12' }, logger),
+      resolveMaxConcurrentChildren({ MUSE_MAX_CONCURRENT_CHILDREN: '12' }, logger),
     ).toBe(12);
     expect(
-      resolveMaxConcurrentChildren({ TABTIN_MAX_CONCURRENT_CHILDREN: '7.6' }, logger),
+      resolveMaxConcurrentChildren({ MUSE_MAX_CONCURRENT_CHILDREN: '7.6' }, logger),
     ).toBe(7);
     for (const bad of ['-3', 'NaN', 'abc']) {
       expect(
-        resolveMaxConcurrentChildren({ TABTIN_MAX_CONCURRENT_CHILDREN: bad }, logger),
+        resolveMaxConcurrentChildren({ MUSE_MAX_CONCURRENT_CHILDREN: bad }, logger),
       ).toBe(DEFAULT_MAX_CONCURRENT_CHILDREN);
     }
     expect(logger.warn).toHaveBeenCalledTimes(3);
     for (const call of (logger.warn as ReturnType<typeof vi.fn>).mock.calls) {
       expect(String(call[0])).toMatch(/DaemonAgentHost/);
-      expect(String(call[0])).toMatch(/TABTIN_MAX_CONCURRENT_CHILDREN/);
+      expect(String(call[0])).toMatch(/MUSE_MAX_CONCURRENT_CHILDREN/);
     }
   });
 });
@@ -622,24 +622,24 @@ describe('Daemon host runtime options — resolveSubagentResultCompact (FR-17.2 
 
   it('accepts truthy / falsy aliases', () => {
     const logger = makeLogger();
-    expect(resolveSubagentResultCompact({ TABTIN_SUBAGENT_RESULT_COMPACT: 'on' }, logger)).toBe(true);
-    expect(resolveSubagentResultCompact({ TABTIN_SUBAGENT_RESULT_COMPACT: 'true' }, logger)).toBe(true);
-    expect(resolveSubagentResultCompact({ TABTIN_SUBAGENT_RESULT_COMPACT: '1' }, logger)).toBe(true);
-    expect(resolveSubagentResultCompact({ TABTIN_SUBAGENT_RESULT_COMPACT: 'off' }, logger)).toBe(false);
-    expect(resolveSubagentResultCompact({ TABTIN_SUBAGENT_RESULT_COMPACT: 'false' }, logger)).toBe(false);
-    expect(resolveSubagentResultCompact({ TABTIN_SUBAGENT_RESULT_COMPACT: '0' }, logger)).toBe(false);
+    expect(resolveSubagentResultCompact({ MUSE_SUBAGENT_RESULT_COMPACT: 'on' }, logger)).toBe(true);
+    expect(resolveSubagentResultCompact({ MUSE_SUBAGENT_RESULT_COMPACT: 'true' }, logger)).toBe(true);
+    expect(resolveSubagentResultCompact({ MUSE_SUBAGENT_RESULT_COMPACT: '1' }, logger)).toBe(true);
+    expect(resolveSubagentResultCompact({ MUSE_SUBAGENT_RESULT_COMPACT: 'off' }, logger)).toBe(false);
+    expect(resolveSubagentResultCompact({ MUSE_SUBAGENT_RESULT_COMPACT: 'false' }, logger)).toBe(false);
+    expect(resolveSubagentResultCompact({ MUSE_SUBAGENT_RESULT_COMPACT: '0' }, logger)).toBe(false);
     expect(logger.warn).not.toHaveBeenCalled();
   });
 
   it('warns + falls back to true on typo', () => {
     const logger = makeLogger();
     expect(
-      resolveSubagentResultCompact({ TABTIN_SUBAGENT_RESULT_COMPACT: 'maybe' }, logger),
+      resolveSubagentResultCompact({ MUSE_SUBAGENT_RESULT_COMPACT: 'maybe' }, logger),
     ).toBe(true);
     expect(logger.warn).toHaveBeenCalledTimes(1);
     expect(
       String((logger.warn as ReturnType<typeof vi.fn>).mock.calls[0][0]),
-    ).toMatch(/TABTIN_SUBAGENT_RESULT_COMPACT/);
+    ).toMatch(/MUSE_SUBAGENT_RESULT_COMPACT/);
   });
 });
 
@@ -714,10 +714,10 @@ describe('Daemon host runtime options — resolveIterationBudget', () => {
     const logger = makeLogger();
     const out = resolveIterationBudget(
       {
-        TABTIN_ITERATION_BUDGET_WARN_ITER: '0.6',
-        TABTIN_ITERATION_BUDGET_GRACE_ITER: '0.85',
-        TABTIN_ITERATION_BUDGET_WARN_TOKEN: '0.8',
-        TABTIN_ITERATION_BUDGET_GRACE_TOKEN: '0.9',
+        MUSE_ITERATION_BUDGET_WARN_ITER: '0.6',
+        MUSE_ITERATION_BUDGET_GRACE_ITER: '0.85',
+        MUSE_ITERATION_BUDGET_WARN_TOKEN: '0.8',
+        MUSE_ITERATION_BUDGET_GRACE_TOKEN: '0.9',
       },
       logger,
     );
@@ -730,7 +730,7 @@ describe('Daemon host runtime options — resolveIterationBudget', () => {
     const logger = makeLogger();
     const out = resolveIterationBudget(
       {
-        TABTIN_ITERATION_BUDGET_WARN_ITER: '0.5',
+        MUSE_ITERATION_BUDGET_WARN_ITER: '0.5',
       },
       logger,
     );
@@ -741,14 +741,14 @@ describe('Daemon host runtime options — resolveIterationBudget', () => {
   it('warns and falls back when value is out of (0, 1] range', () => {
     const logger = makeLogger();
     const out = resolveIterationBudget(
-      { TABTIN_ITERATION_BUDGET_GRACE_TOKEN: '1.5' },
+      { MUSE_ITERATION_BUDGET_GRACE_TOKEN: '1.5' },
       logger,
     );
     expect(out.token.grace).toBe(DEFAULT_ITERATION_BUDGET.token.grace);
     expect(logger.warn).toHaveBeenCalledTimes(1);
     expect(
       String((logger.warn as ReturnType<typeof vi.fn>).mock.calls[0][0]),
-    ).toMatch(/TABTIN_ITERATION_BUDGET_GRACE_TOKEN/);
+    ).toMatch(/MUSE_ITERATION_BUDGET_GRACE_TOKEN/);
     // Daemon 用 [DaemonAgentHost] 前缀（与 Electron 的 [AgentHost] 区分）
     expect(
       String((logger.warn as ReturnType<typeof vi.fn>).mock.calls[0][0]),
@@ -759,9 +759,9 @@ describe('Daemon host runtime options — resolveIterationBudget', () => {
     const logger = makeLogger();
     const out = resolveIterationBudget(
       {
-        TABTIN_ITERATION_BUDGET_WARN_ITER: 'abc',
-        TABTIN_ITERATION_BUDGET_GRACE_ITER: '0',
-        TABTIN_ITERATION_BUDGET_WARN_TOKEN: '-0.1',
+        MUSE_ITERATION_BUDGET_WARN_ITER: 'abc',
+        MUSE_ITERATION_BUDGET_GRACE_ITER: '0',
+        MUSE_ITERATION_BUDGET_WARN_TOKEN: '-0.1',
       },
       logger,
     );
@@ -775,8 +775,8 @@ describe('Daemon host runtime options — resolveIterationBudget', () => {
     const logger = makeLogger();
     const out = resolveIterationBudget(
       {
-        TABTIN_ITERATION_BUDGET_WARN_ITER: '',
-        TABTIN_ITERATION_BUDGET_GRACE_TOKEN: '   \t  ',
+        MUSE_ITERATION_BUDGET_WARN_ITER: '',
+        MUSE_ITERATION_BUDGET_GRACE_TOKEN: '   \t  ',
       },
       logger,
     );

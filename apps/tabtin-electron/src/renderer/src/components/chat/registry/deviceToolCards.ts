@@ -2,7 +2,7 @@
  * 设备操作（TabPhone / 屏幕自动化 / 传感器 / 系统设置）
  */
 
-import type { ToolCardDescriptor } from '@tabtin/chat-client'
+import type { ToolCardDescriptor } from '@muse/chat-client'
 import { truncate, getNestedArgs } from './toolCardUtils'
 
 export const DEVICE_TOOL_CARDS: Record<string, ToolCardDescriptor> = {

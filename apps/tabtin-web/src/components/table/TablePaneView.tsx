@@ -9,7 +9,7 @@
  * 与 Electron 的差异：
  * - 无 tab 系统（Web 靠路由导航）
  * - 简化的 Header（personalView 已支持，Presence 待补）
- * - Grid 渲染复用 @tabtin/table-engine-canvas + @tabtin/table-ui
+ * - Grid 渲染复用 @muse/table-engine-canvas + @muse/table-ui
  */
 
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
@@ -23,16 +23,16 @@ import {
   ConversionPreviewDialog,
   useFieldConversion,
   ShareDialog,
-} from '@tabtin/smartsheet-ui'
+} from '@muse/smartsheet-ui'
 import {
   RemovedFromResourceOverlay,
   useResourceShareDowngrade,
   isPermissionInsufficientForEditing,
   shouldShowRemovedOverlay,
   selectResourceShareNotifications,
-} from '@tabtin/smartsheet-ui'
+} from '@muse/smartsheet-ui'
 import { useLocation, useNavigate } from 'react-router-dom'
-import { useOrganizationStore } from '@tabtin/app-shell'
+import { useOrganizationStore } from '@muse/app-shell'
 import { useNotificationStore } from '@/stores/useNotificationStore'
 import { buildPublicShareUrlPrefix } from '@/config/api'
 import { useStore } from 'zustand'
@@ -47,8 +47,8 @@ import {
   type FieldType,
   type Table,
   type ViewMeta,
-} from '@tabtin/table-core'
-import { CanvasGridAdapter } from '@tabtin/table-engine-canvas/engine'
+} from '@muse/table-core'
+import { CanvasGridAdapter } from '@muse/table-engine-canvas/engine'
 import {
   useDataGridColumns,
   useDataGridDataset,
@@ -71,12 +71,12 @@ import {
   resolveGroupPrefillValuesFromAnchor,
   isViewLocked,
   toOrganizationMembers,
-} from '@tabtin/table-ui'
+} from '@muse/table-ui'
 import {
   useDataGridClipboard,
   resolveCreatedRecordVisibility,
   type ViewAwareCreatePlan,
-} from '@tabtin/table-ui/clipboard'
+} from '@muse/table-ui/clipboard'
 import type {
   TableGridAttachmentUploadHandler,
   TableGridAttachmentUploadProgressItem,
@@ -84,11 +84,11 @@ import type {
   TableGridRow,
   TableGridRuntimeApi,
   TableGridRowMoveContext,
-} from '@tabtin/table-engine'
+} from '@muse/table-engine'
 import {
   applyViewUpdatePayload,
   mergeViewsLifecycleIntoYDoc,
-} from '@tabtin/table-engine/collab'
+} from '@muse/table-engine/collab'
 import {
   TableStoreProvider,
   useTableStore,
@@ -100,7 +100,7 @@ import {
   useViewStoreApi,
 } from '@/stores/table/useViewStore'
 import { RecordStoreProvider, useRecordStore, useRecordStoreApi } from '@/stores/table/useRecordStore'
-import { CollabStatus } from '@tabtin/collab-core'
+import { CollabStatus } from '@muse/collab-core'
 import { useWebCollabBridge } from './hooks/useWebCollabBridge'
 import { useShareWebCollabBridge } from './hooks/useShareWebCollabBridge'
 import {
@@ -130,7 +130,7 @@ import {
   parseRecordCommentRouteIntent,
   type RecordCommentRouteIntent,
 } from './recordCommentRouteIntent'
-import { useDataGridSyncRuntime, useIncrementalViewMerge } from '@tabtin/table-engine/sync'
+import { useDataGridSyncRuntime, useIncrementalViewMerge } from '@muse/table-engine/sync'
 import { getChatClient } from '@/services/chatApi'
 import { CreateFieldDialog, type CreateFieldData, type InsertFieldContext } from './field/CreateFieldDialog'
 import { EditFieldDialog, type EditFieldData } from './field/EditFieldDialog'

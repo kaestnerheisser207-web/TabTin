@@ -8,7 +8,7 @@
 
 import * as Y from "yjs";
 import { prosemirrorJSONToYXmlFragment, yXmlFragmentToProseMirrorRootNode } from "y-prosemirror";
-import { markdownToPmJson, pmJsonToMarkdown, getDocServerSchema } from "@tabtin/doc-editor";
+import { markdownToPmJson, pmJsonToMarkdown, getDocServerSchema } from "@muse/doc-editor";
 import { withDirectConnection } from "../lib/with-direct-connection.js";
 import { safeEditorType } from "../lib/collab-utils.js";
 import { getErrorMessage } from "../lib/error-utils.js";

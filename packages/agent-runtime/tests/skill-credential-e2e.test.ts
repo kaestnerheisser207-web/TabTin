@@ -71,7 +71,7 @@ import type {
   AgentSessionEventName,
   AgentSessionEventHandler,
   AgentSessionUnsubscribe,
-} from '@tabtin/terminal-core';
+} from '@muse/terminal-core';
 import { testHardlineChecker } from './helpers/hardline-checker.js';
 import { createTestToolRiskPolicyPort } from './helpers/tool-risk-policy-port.js';
 

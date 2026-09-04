@@ -192,7 +192,7 @@ class SearchBillingReservationTests(TestCase):
         )
         request = RequestFactory().post(
             "/api/search/web",
-            HTTP_X_TABTIN_ORGANIZATION_ID=self.organization_id,
+            HTTP_X_MUSE_ORGANIZATION_ID=self.organization_id,
         )
         request.auth = user
 

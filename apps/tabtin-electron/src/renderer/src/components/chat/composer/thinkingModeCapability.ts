@@ -9,7 +9,7 @@ import type {
   ModelRuntimeControl,
   ModelRuntimeProfileThinking,
   RuntimeProfileThinkingMode,
-} from '@tabtin/chat-client'
+} from '@muse/chat-client'
 
 export const THINKING_MODE_VALUES: readonly RuntimeProfileThinkingMode[] = [
   'off',

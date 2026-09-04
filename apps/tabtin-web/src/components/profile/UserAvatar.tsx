@@ -5,7 +5,7 @@
 
 import React from 'react'
 import { User } from 'lucide-react'
-import { UserAvatar as IdentityAvatar } from '@tabtin/smartsheet-ui'
+import { UserAvatar as IdentityAvatar } from '@muse/smartsheet-ui'
 import { useAuthStore } from '@/stores/auth-store'
 
 export const UserAvatar: React.FC = () => {

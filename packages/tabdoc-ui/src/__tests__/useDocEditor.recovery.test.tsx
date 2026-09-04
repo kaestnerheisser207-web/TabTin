@@ -34,13 +34,13 @@ vi.mock('react-i18next', () => ({
   useTranslation: () => ({ t: (key: string) => key }),
 }))
 
-vi.mock('@tabtin/app-host-sdk', () => ({
+vi.mock('@muse/app-host-sdk', () => ({
   useAppHostClient: () => ({}),
 }))
 
-vi.mock('@tabtin/smartsheet-ui', () => ({ toast: vi.fn() }))
+vi.mock('@muse/smartsheet-ui', () => ({ toast: vi.fn() }))
 
-vi.mock('@tabtin/doc-editor', () => ({
+vi.mock('@muse/doc-editor', () => ({
   configureDocEditorHost: vi.fn(),
   createAutoSaveController: vi.fn(() => controller),
   markdownToPlaintext: (markdown: string) => markdown,

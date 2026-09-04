@@ -19,7 +19,7 @@
 #   否则 Sentry 堆栈无法符号化。
 #
 # Debug ID 注入（符号化实测 2026-07-07，缺这步整条链路白搭）：
-#   packaged 后 renderer 帧 URL 是 tabtin-file://app/assets/*.js、main 帧是
+#   packaged 后 renderer 帧 URL 是 muse-file://app/assets/*.js、main 帧是
 #   app.asar 内绝对路径，都无法与 artifact 的 ~/renderer/... ~/main/... 路径
 #   匹配（Sentry 报 js_no_source）。`sourcemaps inject` 往 js/map 写入配对的
 #   Debug ID，事件按 ID 找 sourcemap，路径彻底不参与匹配。inject 必须发生在
@@ -35,7 +35,7 @@ APP_DIR="$(dirname "$SCRIPT_DIR")"
 OUT_DIR="$APP_DIR/out"
 
 SENTRY_PROJECT="${SENTRY_PROJECT:-}"
-PROFILE_ARG="${TABTIN_BUILD_PROFILE:-}"
+PROFILE_ARG="${MUSE_BUILD_PROFILE:-}"
 
 read_env_value() {
   local file="$1"

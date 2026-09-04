@@ -540,7 +540,7 @@ Electron 从 CrawlspaceContextHub 取活跃 tab，Daemon 从 DaemonBrowserServic
 			Long: `查询「我能用什么」：当前运行时下每个 browser action 的支持级别——
 full（完整）/ degraded（功能裁剪）/ unsupported（不可用），degraded/unsupported 带原因。
 
-数据源是 @tabtin/browser-core 的能力矩阵（双端同源），只投影「我这一端」那一列，
+数据源是 @muse/browser-core 的能力矩阵（双端同源），只投影「我这一端」那一列，
 所以双端永不漂移。把双端差异从「踩坑」变「可查询契约」。
 
 注意：这不同于顶层 muse capabilities（平台静态工具清单）——这条是 runtime 感知的

@@ -104,11 +104,11 @@ def test_installer_assigns_runtime_and_one_shot_secret_ownership(
     template.write_text(_CENTRIFUGO_TEMPLATE, encoding="utf-8")
     ownership: dict[Path, tuple[int, int]] = {}
 
-    monkeypatch.setenv("TABTIN_COMMUNITY_RUNTIME_UID", "10001")
-    monkeypatch.setenv("TABTIN_COMMUNITY_RUNTIME_GID", "10001")
-    monkeypatch.setenv("TABTIN_COMMUNITY_POSTGRES_UID", "999")
-    monkeypatch.setenv("TABTIN_COMMUNITY_POSTGRES_GID", "999")
-    monkeypatch.setenv("TABTIN_COMMUNITY_CENTRIFUGO_TEMPLATE", str(template))
+    monkeypatch.setenv("MUSE_COMMUNITY_RUNTIME_UID", "10001")
+    monkeypatch.setenv("MUSE_COMMUNITY_RUNTIME_GID", "10001")
+    monkeypatch.setenv("MUSE_COMMUNITY_POSTGRES_UID", "999")
+    monkeypatch.setenv("MUSE_COMMUNITY_POSTGRES_GID", "999")
+    monkeypatch.setenv("MUSE_COMMUNITY_CENTRIFUGO_TEMPLATE", str(template))
     monkeypatch.setattr(
         "tabtin.community_secrets.os.chown",
         lambda path, uid, gid: ownership.__setitem__(Path(path), (uid, gid)),

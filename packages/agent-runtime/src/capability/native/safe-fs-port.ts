@@ -1,7 +1,7 @@
 /**
  * NativeBackendSession 文件系统端口（ Stage 7a）。
  *
- * 实现由宿主注入（典型：`@tabtin/safe-fs` 包装），runtime 生产路径
+ * 实现由宿主注入（典型：`@muse/safe-fs` 包装），runtime 生产路径
  * 不再硬依赖 safe-fs / os-errors。
  */
 

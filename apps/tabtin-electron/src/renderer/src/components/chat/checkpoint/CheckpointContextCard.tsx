@@ -24,11 +24,11 @@ import {
 } from 'lucide-react'
 import { cn } from '@utils/cn'
 import { useTranslation } from 'react-i18next'
-import type { DecisionSummary, OutcomeStructured, SubConversationRef } from '@tabtin/chat-client'
+import type { DecisionSummary, OutcomeStructured, SubConversationRef } from '@muse/chat-client'
 import { fetchCheckpointDecisionContext } from '@/services/chatExtraApi'
 import { applyDecisionSummaryUpdate } from '@/stores/chat/checkpoint/handlers/checkpointHandler'
 import { useChatStore } from '@/stores/chat/useChatStore'
-import { toast } from '@tabtin/smartsheet-ui/toast'
+import { toast } from '@muse/smartsheet-ui/toast'
 
 interface CheckpointContextCardProps {
   decisionSummary: DecisionSummary

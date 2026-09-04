@@ -63,7 +63,7 @@ describe('W7c P0-3: ElectronAgentService dual-path dispatcher', () => {
   })
 
   /**
-   * Agent 入站命令已收口到 `@tabtin/agent-host`：ElectronAgentService 只管
+   * Agent 入站命令已收口到 `@muse/agent-host`：ElectronAgentService 只管
    * gateway 连接生命周期；Host 经 electronAgentTransport + AgentHost.start 接线。
    */
   it('source contract: ElectronAgentService no longer owns Agent command routing', async () => {
@@ -193,7 +193,7 @@ describe('W7c P0-3: ElectronAgentService dual-path dispatcher', () => {
   // Task 2：decodeForwardRequest 白名单加 'yolo'。
   // Task 4：parser 解 payload.is_group_space → request.isGroupSpace（H5 fail-open 修复链路）。
   it('decodeForwardRequest accepts agent_mode=yolo + is_group_space', async () => {
-    const { decodeForwardRequest } = await import('@tabtin/agent-host/conversation')
+    const { decodeForwardRequest } = await import('@muse/agent-host/conversation')
     const request = decodeForwardRequest(
       {
         thread_id: 'chat-session-session-1',
@@ -230,14 +230,14 @@ describe('L-W6-02: decodeForwardWorkspaceSnapshot', () => {
   // 这种"纯函数行为单测"无法干净跑。
 
   it('returns undefined for non-object / array / null', async () => {
-    const { decodeForwardWorkspaceSnapshot } = await import('@tabtin/agent-host/conversation')
+    const { decodeForwardWorkspaceSnapshot } = await import('@muse/agent-host/conversation')
     for (const bad of [null, undefined, 'foo', 42, true, [], [1, 2]]) {
       expect(decodeForwardWorkspaceSnapshot(bad)).toBeUndefined()
     }
   })
 
   it('returns undefined when sources / allowedPaths / spaceSessionId missing', async () => {
-    const { decodeForwardWorkspaceSnapshot } = await import('@tabtin/agent-host/conversation')
+    const { decodeForwardWorkspaceSnapshot } = await import('@muse/agent-host/conversation')
     expect(decodeForwardWorkspaceSnapshot({
       allowedPaths: [], allowedFiles: [], spaceSessionId: 'x',
     })).toBeUndefined()
@@ -252,7 +252,7 @@ describe('L-W6-02: decodeForwardWorkspaceSnapshot', () => {
   })
 
   it('uses [] fallback when allowedFiles missing (Daemon-parity, Review #2 P1)', async () => {
-    const { decodeForwardWorkspaceSnapshot } = await import('@tabtin/agent-host/conversation')
+    const { decodeForwardWorkspaceSnapshot } = await import('@muse/agent-host/conversation')
     const out = decodeForwardWorkspaceSnapshot({
       sources: { sandbox: '/s', tabcodeProjects: ['/p'], tabfolderDirs: [], attachedFiles: [] },
       allowedPaths: ['/s', '/p'],
@@ -270,7 +270,7 @@ describe('L-W6-02: decodeForwardWorkspaceSnapshot', () => {
   })
 
   it('coerces sources sub-fields to safe defaults', async () => {
-    const { decodeForwardWorkspaceSnapshot } = await import('@tabtin/agent-host/conversation')
+    const { decodeForwardWorkspaceSnapshot } = await import('@muse/agent-host/conversation')
     const out = decodeForwardWorkspaceSnapshot({
       sources: {}, // sandbox/projects/dirs/files all missing
       allowedPaths: [],
@@ -284,7 +284,7 @@ describe('L-W6-02: decodeForwardWorkspaceSnapshot', () => {
   })
 
   it('filters non-string entries from arrays', async () => {
-    const { decodeForwardWorkspaceSnapshot } = await import('@tabtin/agent-host/conversation')
+    const { decodeForwardWorkspaceSnapshot } = await import('@muse/agent-host/conversation')
     const out = decodeForwardWorkspaceSnapshot({
       sources: {
         sandbox: '/s',
@@ -302,7 +302,7 @@ describe('L-W6-02: decodeForwardWorkspaceSnapshot', () => {
   })
 
   it('shape-complete empty snapshot still decodes (mutate layer handles "empty as omit")', async () => {
-    const { decodeForwardWorkspaceSnapshot } = await import('@tabtin/agent-host/conversation')
+    const { decodeForwardWorkspaceSnapshot } = await import('@muse/agent-host/conversation')
     const out = decodeForwardWorkspaceSnapshot({
       sources: { sandbox: '', tabcodeProjects: [], tabfolderDirs: [], attachedFiles: [] },
       allowedPaths: [],
@@ -324,7 +324,7 @@ describe('L-W6-02: decodeForwardWorkspaceSnapshot', () => {
   // 路径是同一条 wire 协议，必须做同款过滤；任何宿主行为分歧都是潜在 bug。
 
   it('M3.1: 过滤过宽 path（`/`）但保留合法项目', async () => {
-    const { decodeForwardWorkspaceSnapshot } = await import('@tabtin/agent-host/conversation')
+    const { decodeForwardWorkspaceSnapshot } = await import('@muse/agent-host/conversation')
     const out = decodeForwardWorkspaceSnapshot({
       sources: {
         sandbox: '/Users/me/.tabtin/sandbox',
@@ -344,7 +344,7 @@ describe('L-W6-02: decodeForwardWorkspaceSnapshot', () => {
   })
 
   it('M3.1: 全是过宽 path → 返回 undefined（fail-closed 退化 sandbox）', async () => {
-    const { decodeForwardWorkspaceSnapshot } = await import('@tabtin/agent-host/conversation')
+    const { decodeForwardWorkspaceSnapshot } = await import('@muse/agent-host/conversation')
     const out = decodeForwardWorkspaceSnapshot({
       sources: { sandbox: '/Users/me/.tabtin/sandbox', tabcodeProjects: [], tabfolderDirs: [], attachedFiles: [] },
       allowedPaths: ['/', '/Users', '/home', '/tmp'],
@@ -355,7 +355,7 @@ describe('L-W6-02: decodeForwardWorkspaceSnapshot', () => {
   })
 
   it('M3.1: 过滤 `/Users` `/home` `/tmp` 等顶级目录', async () => {
-    const { decodeForwardWorkspaceSnapshot } = await import('@tabtin/agent-host/conversation')
+    const { decodeForwardWorkspaceSnapshot } = await import('@muse/agent-host/conversation')
     const out = decodeForwardWorkspaceSnapshot({
       sources: {
         sandbox: '/Users/me/.tabtin/sandbox',
@@ -373,7 +373,7 @@ describe('L-W6-02: decodeForwardWorkspaceSnapshot', () => {
   it('M3.1.1 方向 C: 家目录本身 `/Users/me` 保留为合法 workspace（撤 isUserHomeRoot 后）', async () => {
     // M3.1.1 起：单用户家目录 /Users/<name> 视为合法 workspace
     // （用户拍板方向 C：放宽家目录但用 sensitive_path_list 把凭据子目录敲门补回）
-    const { decodeForwardWorkspaceSnapshot } = await import('@tabtin/agent-host/conversation')
+    const { decodeForwardWorkspaceSnapshot } = await import('@muse/agent-host/conversation')
     const out = decodeForwardWorkspaceSnapshot({
       sources: {
         sandbox: '/Users/me/.tabtin/sandbox',
@@ -389,7 +389,7 @@ describe('L-W6-02: decodeForwardWorkspaceSnapshot', () => {
   })
 
   it('M3.1: sandbox = `/Users` 清空字段（让 host 兜底）', async () => {
-    const { decodeForwardWorkspaceSnapshot } = await import('@tabtin/agent-host/conversation')
+    const { decodeForwardWorkspaceSnapshot } = await import('@muse/agent-host/conversation')
     const out = decodeForwardWorkspaceSnapshot({
       sources: {
         sandbox: '/Users',
@@ -405,7 +405,7 @@ describe('L-W6-02: decodeForwardWorkspaceSnapshot', () => {
   })
 
   it('M3.1: tabcodeProjects 含过宽 path → 过滤；保留合法项作为 workingDir', async () => {
-    const { decodeForwardWorkspaceSnapshot } = await import('@tabtin/agent-host/conversation')
+    const { decodeForwardWorkspaceSnapshot } = await import('@muse/agent-host/conversation')
     const out = decodeForwardWorkspaceSnapshot({
       sources: {
         sandbox: '/Users/me/.tabtin/sandbox',
@@ -422,7 +422,7 @@ describe('L-W6-02: decodeForwardWorkspaceSnapshot', () => {
   })
 
   it('M3.1: 相对路径 / `~` / 空串 / Windows 盘符根全部过滤', async () => {
-    const { decodeForwardWorkspaceSnapshot } = await import('@tabtin/agent-host/conversation')
+    const { decodeForwardWorkspaceSnapshot } = await import('@muse/agent-host/conversation')
     const out = decodeForwardWorkspaceSnapshot({
       sources: {
         sandbox: '/Users/me/.tabtin/sandbox',
@@ -438,7 +438,7 @@ describe('L-W6-02: decodeForwardWorkspaceSnapshot', () => {
   })
 
   it('M3.1: allowedFiles 含过宽 path → 过滤', async () => {
-    const { decodeForwardWorkspaceSnapshot } = await import('@tabtin/agent-host/conversation')
+    const { decodeForwardWorkspaceSnapshot } = await import('@muse/agent-host/conversation')
     const out = decodeForwardWorkspaceSnapshot({
       sources: { sandbox: '/Users/me/.tabtin/sandbox', tabcodeProjects: [], tabfolderDirs: [], attachedFiles: ['/Users/me/Downloads/brief.md'] },
       allowedPaths: ['/Users/me/.tabtin/sandbox'],
@@ -449,7 +449,7 @@ describe('L-W6-02: decodeForwardWorkspaceSnapshot', () => {
   })
 
   it('M3.1: 合法 payload 不被误挡（正例不破坏既有路径）', async () => {
-    const { decodeForwardWorkspaceSnapshot } = await import('@tabtin/agent-host/conversation')
+    const { decodeForwardWorkspaceSnapshot } = await import('@muse/agent-host/conversation')
     const out = decodeForwardWorkspaceSnapshot({
       sources: {
         sandbox: '/Users/developer/.tabtin/sandbox',

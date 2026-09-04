@@ -23,7 +23,7 @@ final class IMTextLinksTests: XCTestCase {
     }
 
     func testAttributedTextRoutesOnlyHTTPLinks() {
-        let content = "打开 https://example.com/a 和 http://example.com/b；不要打开 www.example.com、javascript:alert(1)、file:///tmp/a 或 tabtin://resource/1。"
+        let content = "打开 https://example.com/a 和 http://example.com/b；不要打开 www.example.com、javascript:alert(1)、file:///tmp/a 或 muse://resource/1。"
 
         let attributed = attributedIMText(content)
 

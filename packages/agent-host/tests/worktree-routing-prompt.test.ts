@@ -2,17 +2,17 @@ import { describe, expect, it } from 'vitest'
 import {
   createRuntime,
   type StreamEvent,
-} from '@tabtin/agent-runtime'
+} from '@muse/agent-runtime'
 import type {
   EngineConfig,
   LLMProvider,
   LLMRequest,
-} from '@tabtin/agent-runtime/engine'
+} from '@muse/agent-runtime/engine'
 import {
   createMockPermissionHandler,
   createMockToolProvider,
 } from '../../agent-runtime/tests/test-utils.js'
-import type { WorkingDirType } from '@tabtin/agent-prompt'
+import type { WorkingDirType } from '@muse/agent-prompt'
 import { assembleSystemPrompt } from '../src/prompt/system-prompt-assembler.js'
 import { buildWorktreeRoutingHook } from '../src/hooks/worktree-routing-hook.js'
 

@@ -15,7 +15,7 @@ const pngPayload = {
   file_id: FILE_ID,
   file_type: 'png',
   filename: 'chart.png',
-  url: `tabtin://resource/file/${FILE_ID}?hint=tabfiles&title=chart.png`,
+  url: `muse://resource/file/${FILE_ID}?hint=tabfiles&title=chart.png`,
   mime_type: 'image/png',
   file_size: 2048,
   access_url: 'https://cdn.example.com/agent/uploads/chart.png',

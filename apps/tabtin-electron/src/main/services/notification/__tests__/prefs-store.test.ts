@@ -20,7 +20,7 @@ const { mockFetch, getAccessToken, getUserInfo, configStore } = vi.hoisted(() =>
 vi.mock('electron', () => ({ net: { fetch: mockFetch } }))
 vi.mock('../../../auth', () => ({ TokenManager: { getAccessToken, getUserInfo } }))
 vi.mock('../../../config/api', () => ({ API_BASE_URL: 'http://test.local/api' }))
-vi.mock('@tabtin/config', () => ({
+vi.mock('@muse/config', () => ({
   joinApiPath: (base: string, path: string) => `${base}${path}`,
 }))
 vi.mock('../../../logger', () => ({

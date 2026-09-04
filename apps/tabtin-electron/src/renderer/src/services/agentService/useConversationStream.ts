@@ -13,7 +13,7 @@
  */
 
 import { useEffect, useRef } from 'react'
-import type { ChatSession } from '@tabtin/chat-client'
+import type { ChatSession } from '@muse/chat-client'
 import type { ChatSessionTokenUsage } from '@/utils/chatSessionTokenUsage'
 import { attachMainStream, type ConversationStreamDeps } from './streamSources'
 import { reconcileSessionRunState } from '@/stores/chat/execution/sessionRunReconcile'

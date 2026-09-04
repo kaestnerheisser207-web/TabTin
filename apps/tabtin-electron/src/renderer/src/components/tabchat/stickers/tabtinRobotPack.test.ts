@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import {
-  TABTIN_ROBOT_PACK_ID,
-  TABTIN_ROBOT_STICKERS,
+  MUSE_ROBOT_PACK_ID,
+  MUSE_ROBOT_STICKERS,
   getTabtinRobotSticker,
   isTabtinRobotStickerMetadata,
   resolveTabtinRobotStickerMetadata,
@@ -9,8 +9,8 @@ import {
 
 describe('tabtinRobotPack', () => {
   it('exposes five robot stickers with pack id', () => {
-    expect(TABTIN_ROBOT_PACK_ID).toBe('tabtin-robot')
-    expect(TABTIN_ROBOT_STICKERS).toHaveLength(5)
+    expect(MUSE_ROBOT_PACK_ID).toBe('tabtin-robot')
+    expect(MUSE_ROBOT_STICKERS).toHaveLength(5)
     expect(getTabtinRobotSticker('happy')?.id).toBe('happy')
     expect(getTabtinRobotSticker('love')).toBeUndefined()
     expect(getTabtinRobotSticker('laugh')).toBeUndefined()

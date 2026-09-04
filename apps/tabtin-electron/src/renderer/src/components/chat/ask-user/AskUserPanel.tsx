@@ -20,9 +20,9 @@
 import React, { useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { HelpCircle, Check, Circle } from 'lucide-react'
-import { Button } from '@tabtin/smartsheet-ui'
+import { Button } from '@muse/smartsheet-ui'
 import { cn } from '@utils/cn'
-import type { AskUserAnswer, AskUserQuestion } from '@tabtin/chat-client'
+import type { AskUserAnswer, AskUserQuestion } from '@muse/chat-client'
 import type {
   AskUserRequestState,
   AskUserRequestStateChoice,

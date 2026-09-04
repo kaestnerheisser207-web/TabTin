@@ -9,7 +9,7 @@ import {
   Button,
   Input,
   Label,
-} from '@tabtin/smartsheet-ui'
+} from '@muse/smartsheet-ui'
 import { Globe2, LayoutDashboard, Loader2, Rocket, PenLine, Briefcase, BookOpen } from 'lucide-react'
 import { useCreateSiteDialog } from '@/stores/useCreateSiteDialog'
 

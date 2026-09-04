@@ -51,7 +51,7 @@ export async function loadWorktreesForSessionRoot(
 
   const task = (async (): Promise<GitWorktreeInfo[] | null> => {
     try {
-      const result = await window.tabtin?.git?.listWorktrees?.(trimmed)
+      const result = await window.muse?.git?.listWorktrees?.(trimmed)
       if (!result?.success || !result.worktrees?.length) return null
       const worktrees = result.worktrees as GitWorktreeInfo[]
       rememberWorktrees(worktrees)

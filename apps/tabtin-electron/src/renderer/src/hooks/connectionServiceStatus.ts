@@ -1,5 +1,5 @@
 import type { TFunction } from 'i18next'
-import { CollabConnectionStatus, CollabStatus } from '@tabtin/collab-core'
+import { CollabConnectionStatus, CollabStatus } from '@muse/collab-core'
 import type { AgentGatewayStatus } from '@/stores/useAgentGatewayStore'
 
 export type WsConnectionIndicatorTone = 'neutral' | 'success' | 'warning' | 'destructive'

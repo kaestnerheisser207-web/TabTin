@@ -1,5 +1,5 @@
 import { useCallback, useMemo } from 'react'
-import type { ChatSession } from '@tabtin/chat-client'
+import type { ChatSession } from '@muse/chat-client'
 import { useSpaceStore } from '@/stores/useSpaceStore'
 import { useChatStore } from '@/stores/chat/useChatStore'
 import { isExternalOpenedSession } from '@components/onboarding/external-import/externalOpenedSessionRegistry'

@@ -132,8 +132,8 @@ describe('EEL-010: PtyManager executeCommand blocked-route 兜底检查', () => 
       expect(wrappedCommand).toBeDefined()
       expect(wrappedCommand).toContain('echo hello')
 
-      const startMarker = wrappedCommand.match(/__TABTIN_CMD_START_[a-f0-9]+__/)?.[0]
-      const endMarkerPrefix = wrappedCommand.match(/__TABTIN_CMD_END_[a-f0-9]+_/)?.[0]
+      const startMarker = wrappedCommand.match(/__MUSE_CMD_START_[a-f0-9]+__/)?.[0]
+      const endMarkerPrefix = wrappedCommand.match(/__MUSE_CMD_END_[a-f0-9]+_/)?.[0]
 
       if (startMarker && endMarkerPrefix) {
         hostSession.onData.mock.calls[0]?.[0](`${startMarker}\nhello\n${endMarkerPrefix}0_/tmp__\n`)
@@ -161,8 +161,8 @@ describe('EEL-010: PtyManager executeCommand blocked-route 兜底检查', () => 
 
       expect(wrappedCommand).toContain('ls')
 
-      const startMarker = wrappedCommand.match(/__TABTIN_CMD_START_[a-f0-9]+__/)?.[0]
-      const endMarkerPrefix = wrappedCommand.match(/__TABTIN_CMD_END_[a-f0-9]+_/)?.[0]
+      const startMarker = wrappedCommand.match(/__MUSE_CMD_START_[a-f0-9]+__/)?.[0]
+      const endMarkerPrefix = wrappedCommand.match(/__MUSE_CMD_END_[a-f0-9]+_/)?.[0]
 
       if (startMarker && endMarkerPrefix) {
         hostSession.onData.mock.calls[0]?.[0](`${startMarker}\nfile.txt\n${endMarkerPrefix}0_/tmp__\n`)

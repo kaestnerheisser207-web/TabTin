@@ -14,7 +14,7 @@
  *   - 原对象不被 mutate。
  */
 import { describe, expect, it } from 'vitest'
-import type { ChatSession } from '@tabtin/chat-client'
+import type { ChatSession } from '@muse/chat-client'
 import {
   UPDATABLE_MONOTONIC_TOKENS,
   DEPRECATED_TOKEN_FIELDS,

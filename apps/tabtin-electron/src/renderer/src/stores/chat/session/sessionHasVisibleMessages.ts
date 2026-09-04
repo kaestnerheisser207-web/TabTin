@@ -1,4 +1,4 @@
-import type { ChatSession } from '@tabtin/chat-client'
+import type { ChatSession } from '@muse/chat-client'
 
 /**
  * 会话是否应出现在主侧栏（非空草稿）。

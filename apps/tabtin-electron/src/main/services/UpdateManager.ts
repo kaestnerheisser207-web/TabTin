@@ -15,7 +15,7 @@ import { app, BrowserWindow, dialog, type MessageBoxOptions, type MessageBoxRetu
 import log from 'electron-log'
 import { existsSync, mkdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs'
 import { dirname, join } from 'node:path'
-import { joinApiPath } from '@tabtin/config'
+import { joinApiPath } from '@muse/config'
 import type { WsGatewayClient } from '../ws/WsGatewayClient'
 import { TokenManager } from '../auth'
 import { API_BASE_URL } from '../config/api'

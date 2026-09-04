@@ -16,13 +16,13 @@
  *
  * 调用入口：
  *   1. CLI:  `node scripts/resolve-app-version.mjs <profile>`  → stdout = 派生版本号
- *            argv 优先，缺省时回落到 process.env.TABTIN_BUILD_PROFILE
+ *            argv 优先，缺省时回落到 process.env.MUSE_BUILD_PROFILE
  *   2. JS:   `import { resolveAppVersion, readSourceVersion } from './scripts/resolve-app-version.mjs'`
  *
  * 三处消费方（全部走同一份派生规则）：
  *   - scripts/build-packaged-app.sh 顶部 RESOLVED_APP_VERSION（CLI 调用）
  *   - electron.vite.config.ts fallback（直接 import，覆盖 `pnpm build` 不经 build script 的场景）
- *   - scripts/upload-sourcemaps.sh fallback（CLI 调用，让 TABTIN_BUILD_PROFILE 设置时拿到正确派生值）
+ *   - scripts/upload-sourcemaps.sh fallback（CLI 调用，让 MUSE_BUILD_PROFILE 设置时拿到正确派生值）
  *
  * ⚠ 修改派生规则前请确认：admindash 服务端按 app_version 字符串等值精确匹配
  *   sourcemap，任何派生规则漂移都会让历史 sourcemap 反混淆失效。
@@ -66,7 +66,7 @@ export function resolveAppVersion(profile, sourceVersion) {
   }
   if (!VALID_PROFILES.has(trimmedProfile)) {
     throw new Error(
-      `Unknown TABTIN_BUILD_PROFILE="${trimmedProfile}"（合法值：production / preprod / local）`,
+      `Unknown MUSE_BUILD_PROFILE="${trimmedProfile}"（合法值：production / preprod / local）`,
     )
   }
   // VALID_PROFILES 已由上方 throw 拦截非法 profile，到这里 trimmedProfile
@@ -90,7 +90,7 @@ const isCli = (() => {
 
 if (isCli) {
   const argvProfile = process.argv[2]
-  const envProfile = process.env.TABTIN_BUILD_PROFILE
+  const envProfile = process.env.MUSE_BUILD_PROFILE
   const profile = (argvProfile ?? envProfile ?? '').toString().trim()
   try {
     process.stdout.write(resolveAppVersion(profile))

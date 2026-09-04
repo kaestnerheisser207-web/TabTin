@@ -54,9 +54,9 @@ import * as os from 'node:os';
 import * as path from 'node:path';
 //  批次 13：engine barrel 收敛——createRuntime / getFocusedAppKey / AppContext
 // 等非 engine 符号改从包入口 import，engine 契约类型留 engine 子路径。
-import { createRuntime } from '@tabtin/agent-runtime';
-import { getFocusedAppKey, type AppContext } from '@tabtin/agent-host/hooks';
-import type { LocalSkill } from '@tabtin/agent-runtime/skills';
+import { createRuntime } from '@muse/agent-runtime';
+import { getFocusedAppKey, type AppContext } from '@muse/agent-host/hooks';
+import type { LocalSkill } from '@muse/agent-runtime/skills';
 import type {
   EngineConfig,
   EngineHooks,
@@ -67,11 +67,11 @@ import type {
   Tool,
   ToolProvider,
   EnginePermissionHandler,
-} from '@tabtin/agent-runtime/engine';
-import { SkillsCap } from '@tabtin/agent-host/capabilities';
-import { createLexicalSkillRecall } from '@tabtin/agent-runtime/skills';
-import { LocalSkillRegistry, type ScannerEnv } from '@tabtin/agent-host/skills';
-import { resolveOrganizationSkillsDir } from '@tabtin/terminal-core';
+} from '@muse/agent-runtime/engine';
+import { SkillsCap } from '@muse/agent-host/capabilities';
+import { createLexicalSkillRecall } from '@muse/agent-runtime/skills';
+import { LocalSkillRegistry, type ScannerEnv } from '@muse/agent-host/skills';
+import { resolveOrganizationSkillsDir } from '@muse/terminal-core';
 
 // ─── helpers ────────────────────────────────────────────────────────
 

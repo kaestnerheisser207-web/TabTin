@@ -20,7 +20,7 @@ function makeDescriptor(overrides: Partial<SectionDescriptor> = {}): SectionDesc
   return {
     id: 'test_section',
     category: 'base_prompt_section',
-    source: '@tabtin/agent-prompt',
+    source: '@muse/agent-prompt',
     language: 'zh',
     charBudget: 1000,
     cacheBreak: false,

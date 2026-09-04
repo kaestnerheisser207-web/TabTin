@@ -1,4 +1,4 @@
-import { useSpaceListStore, type FtsSearchResultItem } from '@tabtin/app-shell'
+import { useSpaceListStore, type FtsSearchResultItem } from '@muse/app-shell'
 
 import { contextRegistry, type ContextItemType, type ContextTabKey } from '@components/context-space/registry'
 import { resolveForegroundTabScopeKey } from '@components/chat/subagent/openSubagentTab'
@@ -8,7 +8,7 @@ import { useMainNavStore } from '@stores/useMainNavStore'
 import { useSpaceStore } from '@stores/useSpaceStore'
 import { useTabDocRevealStore } from '@stores/useTabDocRevealStore'
 import { useOrganizationStore } from '@stores/useOrganizationStore'
-import { toast } from '@tabtin/smartsheet-ui/toast'
+import { toast } from '@muse/smartsheet-ui/toast'
 import { buildTabDocSearchReveal, firstSearchString, textContainsSearchQuery } from './tabDocSearchReveal'
 
 export type NavigateSearchResultPayload = {

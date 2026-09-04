@@ -26,7 +26,7 @@ TTL 与生命周期（T4）：
     lifecycle policy 兜底（防御性，运维 1 次性配置；命令见
     `apps.services.oss.management.commands.configure_temp_parse_lifecycle`）
 
-错误处理：13 类全局 SSoT（`@tabtin/file-pipeline-errors`）字面值对齐。
+错误处理：13 类全局 SSoT（`@muse/file-pipeline-errors`）字面值对齐。
 """
 from __future__ import annotations
 

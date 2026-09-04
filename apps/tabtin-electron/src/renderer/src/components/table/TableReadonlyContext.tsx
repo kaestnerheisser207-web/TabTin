@@ -12,7 +12,7 @@ import {
   isPermissionInsufficientForEditing,
   selectResourceShareNotifications,
   useResourceShareDowngrade,
-} from '@tabtin/smartsheet-ui'
+} from '@muse/smartsheet-ui'
 import { useTableStore } from '@stores/useTableStore'
 import { useNotificationStore } from '@stores/useNotificationStore'
 import { useTableCollab } from './TableCollabContext'

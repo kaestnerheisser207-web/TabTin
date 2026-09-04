@@ -12,8 +12,8 @@
  */
 
 import { createLogger } from '../logger'
-import type { MonitorStart, MonitorStop } from '@tabtin/agent-wire'
-import { MonitorDeviceEvents } from '@tabtin/agent-wire'
+import type { MonitorStart, MonitorStop } from '@muse/agent-wire'
+import { MonitorDeviceEvents } from '@muse/agent-wire'
 import { getPtyManager } from '../terminal/PtyManager'
 
 const log = createLogger('MonitorExecutor')

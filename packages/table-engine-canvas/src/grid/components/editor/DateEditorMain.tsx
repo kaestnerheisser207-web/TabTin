@@ -11,7 +11,7 @@ import {
   parseDateStoredValue,
   toDateStoredValue,
   hasSecondsInTimeFormat,
-} from '@tabtin/smartsheet-ui';
+} from '@muse/smartsheet-ui';
 
 export interface IDateEditorMainRef {
   focus: () => void;

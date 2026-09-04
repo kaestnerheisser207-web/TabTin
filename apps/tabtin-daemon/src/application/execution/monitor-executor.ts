@@ -15,8 +15,8 @@
 
 import { spawn, type ChildProcess } from 'node:child_process'
 import { createInterface, type Interface as ReadlineInterface } from 'node:readline'
-import { MonitorDeviceEvents } from '@tabtin/agent-wire'
-import type { MonitorStart, MonitorStop } from '@tabtin/agent-wire'
+import { MonitorDeviceEvents } from '@muse/agent-wire'
+import type { MonitorStart, MonitorStop } from '@muse/agent-wire'
 
 const HEARTBEAT_INTERVAL_MS = 30_000
 const REGEX_MATCH_TIMEOUT_MS = 100

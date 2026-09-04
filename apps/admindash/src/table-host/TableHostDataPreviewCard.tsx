@@ -1,7 +1,7 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { cn } from '@/lib/utils'
-import type { Table } from '@tabtin/table-core'
-import type { TableField, ViewMeta } from '@tabtin/table-ui'
+import type { Table } from '@muse/table-core'
+import type { TableField, ViewMeta } from '@muse/table-ui'
 
 type GridRow = Record<string, unknown> & {
   id: string

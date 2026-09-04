@@ -25,7 +25,7 @@ export function useSystemSleepRecovery(): void {
   const heartbeatTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
   useEffect(() => {
-    const api = window.tabtin?.system
+    const api = window.muse?.system
     if (!api) return
 
     const offSuspend = api.onSuspend(() => {

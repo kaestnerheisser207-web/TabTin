@@ -24,7 +24,7 @@ import {
 } from '@/types/auth'
 import type { UISettingsResponse, UISettingsUpdateRequest } from '@/types/uiSettings'
 import { API_CONFIG, API_ENDPOINTS } from '@/config/api'
-import { joinApiPath } from '@tabtin/config'
+import { joinApiPath } from '@muse/config'
 import { notifyTokensSynced, notifyLogoutRequired } from '@/utils/authPersistence'
 import { getCurrentLanguage } from '@/i18n'
 import i18n from '@/i18n'
@@ -192,7 +192,7 @@ class ApiService {
   }
 
   private async ensureAccessToken(): Promise<string | null> {
-    if (!isElectron || !window.tabtin?.auth) {
+    if (!isElectron || !window.muse?.auth) {
       return this.authToken
     }
 
@@ -201,7 +201,7 @@ class ApiService {
         // contract W2-β：旧 envelope `{success, token}` 改为 invokeIpc 直接返
         // `{ token }` 或 throw。catch 块只 log 不弹 toast——这是登录态健康检查路径，
         // 失败时让 caller 走 null 分支自然降级（外部 fetch 不带 Authorization）。
-        const result = await window.tabtin.auth.getAccessToken()
+        const result = await window.muse.auth.getAccessToken()
         this.authToken = result?.token ?? null
       } catch (error) {
         log.error('获取存储的访问令牌失败:', error)
@@ -221,12 +221,12 @@ class ApiService {
   }
 
   private async isAccessTokenExpiringSoon(bufferMinutes = 5): Promise<boolean> {
-    if (!isElectron || !window.tabtin?.auth?.isTokenExpiringSoon) {
+    if (!isElectron || !window.muse?.auth?.isTokenExpiringSoon) {
       return false
     }
 
     try {
-      const result = await window.tabtin.auth.isTokenExpiringSoon(bufferMinutes)
+      const result = await window.muse.auth.isTokenExpiringSoon(bufferMinutes)
       if (typeof result?.isExpiring === 'boolean') {
         return result.isExpiring
       }
@@ -246,7 +246,7 @@ class ApiService {
     this.isRefreshing = true
     this.refreshPromise = (async () => {
       try {
-        if (!isElectron || !window.tabtin?.auth?.refreshAccessToken) {
+        if (!isElectron || !window.muse?.auth?.refreshAccessToken) {
           throw new Error(i18n.t('common:errors.electronUnavailable'))
         }
 
@@ -257,7 +257,7 @@ class ApiService {
         // 决定要不要清登录态（详见 detail.errorCode === 'AUTH_INVALID' 分支）。
         let result: { accessToken: string; errorCode?: string; isTransient?: boolean }
         try {
-          result = await window.tabtin.auth.refreshAccessToken()
+          result = await window.muse.auth.refreshAccessToken()
         } catch (err) {
           if (isPlatformIpcError(err)) {
             const detail = (err.detail ?? {}) as { errorCode?: string; isTransient?: boolean }
@@ -271,7 +271,7 @@ class ApiService {
 
         this.setAuthToken(result.accessToken)
 
-        const authBundle = await window.tabtin.auth.get().catch(() => null)
+        const authBundle = await window.muse.auth.get().catch(() => null)
         const refreshToken = authBundle?.refreshToken || ''
         const userInfo = authBundle?.userInfo || null
 
@@ -347,8 +347,8 @@ class ApiService {
     // 只有服务端明确拒绝（TOKEN_EXPIRED 等）或无法识别的非暂时性错误才登出
     log.error('Token 刷新因认证错误失败（%s），清除凭证并登出', authErrorCode ?? 'unknown')
     try {
-      if (isElectron && window.tabtin?.auth) {
-        await window.tabtin.auth.clear()
+      if (isElectron && window.muse?.auth) {
+        await window.muse.auth.clear()
       }
     } catch (clearError) {
       log.error('刷新失败后清理认证信息出错:', clearError)
@@ -359,12 +359,12 @@ class ApiService {
   }
 
   private async fetchStoredUserInfo(): Promise<UserInfo | null> {
-    if (!isElectron || !window.tabtin?.auth) {
+    if (!isElectron || !window.muse?.auth) {
       return null
     }
 
     try {
-      const result = await window.tabtin.auth.getUserInfo()
+      const result = await window.muse.auth.getUserInfo()
       if (result?.success) {
         return result.userInfo ?? null
       }
@@ -413,7 +413,7 @@ class ApiService {
     retryConfig?: Partial<RetryConfig>,
     _isRetry = false
   ): Promise<T> {
-    if (!isElectron || !window.tabtin) {
+    if (!isElectron || !window.muse) {
       throw new Error(i18n.t('common:errors.electronUnavailable'))
     }
 
@@ -490,7 +490,7 @@ class ApiService {
         body = JSON.stringify(config.data)
       }
 
-      const response = await window.tabtin.apiRequest({
+      const response = await window.muse.apiRequest({
         url,
         method: config.method || 'GET',
         headers,
@@ -620,7 +620,7 @@ class ApiService {
 
   // 刷新Token — 委托主进程执行，复用实例级锁避免与 401 自动刷新并发
   async refreshToken(): Promise<RefreshTokenResponse> {
-    if (!isElectron || !window.tabtin?.auth) {
+    if (!isElectron || !window.muse?.auth) {
       throw new Error(i18n.t('common:errors.electronUnavailable'))
     }
 
@@ -633,7 +633,7 @@ class ApiService {
     // invokeIpc 直接返 `{ refreshToken, userInfo, ... }`（顶层无 success/data 包裹）。
     // auth.get() 失败应该 throw（caller 已经过 refreshAccessTokenWithLock 判过 token），
     // 但 catch 兜底返 null 保证 refresh_token / user 字段安全降级。
-    const authBundle = await window.tabtin.auth.get().catch(() => null)
+    const authBundle = await window.muse.auth.get().catch(() => null)
     const refreshToken = authBundle?.refreshToken || ''
     const userInfo = authBundle?.userInfo || null
 

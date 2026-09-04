@@ -1,5 +1,5 @@
 import { useState, useEffect, useMemo, useCallback } from 'react'
-import type { ChatMessage } from '@tabtin/chat-client'
+import type { ChatMessage } from '@muse/chat-client'
 import { useTranslation } from 'react-i18next'
 import { useChatRuntimeStore } from '@/stores/useChatRuntimeStore'
 import { useLlmSnapshotsForSession } from '../hooks/useLlmSnapshotsForSession'

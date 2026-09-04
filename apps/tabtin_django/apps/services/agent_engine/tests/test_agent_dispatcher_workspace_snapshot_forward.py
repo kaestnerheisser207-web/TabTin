@@ -110,7 +110,7 @@ class AgentDispatcherWorkspaceSnapshotForwardTests(SimpleTestCase):
         self.feature_patch.start()
         self.addCleanup(self.feature_patch.stop)
 
-    @override_settings(TABTIN_EDITION="community", DAEMON_CONTROL_ENABLED=False)
+    @override_settings(MUSE_EDITION="community", DAEMON_CONTROL_ENABLED=False)
     @patch("apps.services.agent_engine.services.prompt_forward_service.PromptForwardService")
     def test_community_freezes_effective_workspace_device_for_prompt_admission(
         self, mock_pfs_cls, _peek, _disabled_prefixes, _disabled_apps,

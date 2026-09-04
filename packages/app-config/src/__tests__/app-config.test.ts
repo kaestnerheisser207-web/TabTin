@@ -1,5 +1,5 @@
 /**
- * @tabtin/app-config —— configSchema 默认值读取 + override + 容错单测。
+ * @muse/app-config —— configSchema 默认值读取 + override + 容错单测。
  *
  * 规范出处：`docs/planning/tabdesktop-spec-v1.md` § 3.5.5 + § 9.1 完成标准 §9.0.4
  * "app.json → runtime plumbing 通畅"。
@@ -30,7 +30,7 @@ const DEFAULT_CONFIG: DesktopLikeConfig = {
   pixelCompare: { enabled: true },
 }
 
-describe('@tabtin/app-config · loadAppConfig（v2.1 模块零）', () => {
+describe('@muse/app-config · loadAppConfig（v2.1 模块零）', () => {
   let tmpRoot: string
 
   beforeEach(() => {

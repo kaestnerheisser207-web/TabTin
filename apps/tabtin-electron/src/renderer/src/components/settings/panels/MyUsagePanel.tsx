@@ -9,7 +9,7 @@ import { SettingsSkeleton } from '../SettingsSkeleton'
 import { SETTINGS_HINT, SETTINGS_LABEL, SETTINGS_TEXT_META, SETTINGS_TEXT_MICRO } from '../settingsUi'
 import { useMyUsage } from '@/hooks/queries/memberBudget'
 import { cn } from '@utils/cn'
-import type { Organization } from '@tabtin/app-shell'
+import type { Organization } from '@muse/app-shell'
 
 interface MyUsagePanelProps {
   organization: Organization

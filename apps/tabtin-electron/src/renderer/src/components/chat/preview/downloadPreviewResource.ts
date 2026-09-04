@@ -2,13 +2,13 @@
  * 预览 Lightbox 下载：跨域 URL 上 `<a download>` 会被 Chromium 忽略，
  * 必须走主进程 / blob 落盘，并给用户明确反馈（成功 + 打开位置）。
  *
- * 打包态（origin=`tabtin-file://app`，webSecurity=true，生产 CSP connect-src
+ * 打包态（origin=`muse-file://app`，webSecurity=true，生产 CSP connect-src
  * 白名单）下，renderer 裸 `fetch(https://…)` 常被 CSP/CORS 拦截。
- * http(s) 只走主进程 `downloadResource`；blob/data/tabtin-file 才允许 renderer fetch。
+ * http(s) 只走主进程 `downloadResource`；blob/data/muse-file 才允许 renderer fetch。
  */
 
 import { createElement } from 'react'
-import { toast, ToastAction } from '@tabtin/smartsheet-ui'
+import { toast, ToastAction } from '@muse/smartsheet-ui'
 import type { TFunction } from 'i18next'
 import { saveExportBlob } from '@/services/tableCoreRuntime'
 import { createLogger } from '@/utils/logger'
@@ -23,7 +23,7 @@ export function isRendererReadableDownloadUrl(url: string): boolean {
   return (
     url.startsWith('blob:') ||
     url.startsWith('data:') ||
-    url.startsWith('tabtin-file:')
+    url.startsWith('muse-file:')
   )
 }
 
@@ -32,7 +32,7 @@ export function isRemoteHttpDownloadUrl(url: string): boolean {
 }
 
 async function downloadViaMainProcess(url: string, fileName: string): Promise<string | null> {
-  const downloadResource = window.tabtin?.resourceDetection?.downloadResource
+  const downloadResource = window.muse?.resourceDetection?.downloadResource
   if (!downloadResource) return null
 
   const result = await downloadResource({ url, filename: fileName })
@@ -117,7 +117,7 @@ function showSavedToast(fileName: string, filePath: string | undefined, t: TFunc
     defaultValue: '已下载 {{name}}',
     name: fileName,
   })
-  const showInFolder = window.tabtin?.showItemInFolder
+  const showInFolder = window.muse?.showItemInFolder
   if (filePath && showInFolder) {
     const label = t('preview.showInFolder', { defaultValue: '打开文件位置' })
     toast.success(message, {
@@ -177,7 +177,7 @@ export async function downloadPreviewResource(params: {
 
   const remoteHttp = isRemoteHttpDownloadUrl(url)
 
-  // 主进程 ClientRequest 只支持 http(s)；blob/data/tabtin-file 直接走 renderer 落盘（ 0KB）
+  // 主进程 ClientRequest 只支持 http(s)；blob/data/muse-file 直接走 renderer 落盘（ 0KB）
   if (remoteHttp) {
     try {
       const mainPath = await downloadRemoteResource(url, safeName, fileId)

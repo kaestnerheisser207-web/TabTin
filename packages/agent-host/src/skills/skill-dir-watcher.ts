@@ -21,7 +21,7 @@ import { watch, type FSWatcher } from 'chokidar';
 import type {
   ScanRoot,
   SkillsChangedListener,
-} from '@tabtin/agent-runtime/skills';
+} from '@muse/agent-runtime/skills';
 import type { LocalSkillRegistry, RegistryLogger } from './local-skill-registry.js';
 
 /** debounce 窗口（ms）—— E1 §7.4。 */

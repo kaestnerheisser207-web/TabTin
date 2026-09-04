@@ -60,7 +60,7 @@ vi.mock('../../../services/LocalMcpService', () => ({
 // 只覆盖 createAgentTool / createHostAgentTool（捕获 config.tools），其余包入口导出走真实实现
 // （annotateToolsForMode / resolveAgentModeName 等构造期依赖必须保留）。
 //  批次 13：createAgentTool 出口从 engine barrel 收敛到包入口。
-vi.mock('@tabtin/agent-host/configuration', async (importOriginal) => {
+vi.mock('@muse/agent-host/configuration', async (importOriginal) => {
   const actual = await importOriginal<Record<string, unknown>>()
   return {
     ...actual,

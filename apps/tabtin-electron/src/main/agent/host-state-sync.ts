@@ -1,4 +1,4 @@
-import type { HostTurnStateSnapshot, HostTurnStore } from '@tabtin/agent-host/policy'
+import type { HostTurnStateSnapshot, HostTurnStore } from '@muse/agent-host/policy'
 
 const DEFAULT_RECONCILE_INTERVAL_MS = 60_000
 const RECONCILE_JITTER_RATIO = 0.2

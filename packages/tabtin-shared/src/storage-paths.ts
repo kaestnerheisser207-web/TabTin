@@ -9,7 +9,7 @@
  * ```
  * {dataRoot}/                              ← getDataRoot()
  * │                                          默认等于 getPlatformBaseRoot()
- * │                                          env `TABTIN_DATA_ROOT` 可覆盖
+ * │                                          env `MUSE_DATA_ROOT` 可覆盖
  * │
  * └── users/{userId}/                     ← per-user 命名空间
  *     │
@@ -56,7 +56,7 @@ import fs from 'node:fs/promises'
  * `resolveWorkspaceMetadataRoot()`。
  */
 export function getHomeTabtinPath(...subSegments: string[]): string {
-  const runtimeRoot = (process.env.TABTIN_RUNTIME_ROOT || '').trim()
+  const runtimeRoot = (process.env.MUSE_RUNTIME_ROOT || '').trim()
   const root = runtimeRoot ? path.resolve(runtimeRoot) : path.join(os.homedir(), '.tabtin')
   return path.join(root, ...subSegments)
 }
@@ -125,10 +125,10 @@ export function getUserDataPath(...subSegments: string[]): string {
  *   - Windows: `%APPDATA%/TabTin/`
  *   - Linux:   `~/.tabtin/`
  *
- * env 覆盖：`TABTIN_PLATFORM_BASE_ROOT`（主要测试用）。
+ * env 覆盖：`MUSE_PLATFORM_BASE_ROOT`（主要测试用）。
  */
 export function getPlatformBaseRoot(): string {
-  const envRoot = (process.env.TABTIN_PLATFORM_BASE_ROOT || '').trim()
+  const envRoot = (process.env.MUSE_PLATFORM_BASE_ROOT || '').trim()
   if (envRoot) {
     return path.resolve(envRoot)
   }
@@ -148,14 +148,14 @@ export function getPlatformBaseRoot(): string {
  * TabTin 本地数据根（ 引入）。**新代码只经此函数取根**。
  *
  * 决议顺序：
- *   1. env `TABTIN_DATA_ROOT`（主要测试 / 多环境隔离用）
+ *   1. env `MUSE_DATA_ROOT`（主要测试 / 多环境隔离用）
  *   2. `getPlatformBaseRoot()`
  *
  * 所有新的 `resolveUserRoot` / `resolveOrganizationRoot` / `resolveWorkspaceMetadataRoot`
  * 等 helper 都以此为父前缀。
  */
 export function getDataRoot(): string {
-  const envRoot = (process.env.TABTIN_DATA_ROOT || '').trim()
+  const envRoot = (process.env.MUSE_DATA_ROOT || '').trim()
   if (envRoot) {
     return path.resolve(envRoot)
   }
@@ -432,11 +432,11 @@ export function getFileHistoryRoot(): string {
  * **与 per-Workspace 元数据不同**：这是 OS 级命令沙箱的临时工作区，
  * 跟 organization / workspace 维度无关，只按 thread 隔离。
  *
- * 默认 `~/.tabtin/command-sandboxes/`；可被 `TABTIN_COMMAND_SANDBOX_ROOT`
+ * 默认 `~/.tabtin/command-sandboxes/`；可被 `MUSE_COMMAND_SANDBOX_ROOT`
  * env 覆盖（主要测试用）。
  */
 export function getCommandSandboxRoot(): string {
-  const envRoot = (process.env.TABTIN_COMMAND_SANDBOX_ROOT || '').trim()
+  const envRoot = (process.env.MUSE_COMMAND_SANDBOX_ROOT || '').trim()
   if (envRoot) {
     return path.resolve(envRoot)
   }

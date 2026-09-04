@@ -196,7 +196,7 @@ export function createTabsActions(get: GetFn, set: SetFn) {
       if (resolvedKind === 'workspace') {
         throw new Error(i18n.t('crawl:tabStore.errors.createTabWorkspaceNotAllowed'))
       }
-      if (!options?.legacy && globalThis.__TABTIN_DEBUG_TAB_SWITCH__) {
+      if (!options?.legacy && globalThis.__MUSE_DEBUG_TAB_SWITCH__) {
         console.warn('[CrawlTabStore]', i18n.t('crawl:tabStore.warnings.legacyCreateTab'), {
           kind: resolvedKind, url
         })
@@ -230,7 +230,7 @@ export function createTabsActions(get: GetFn, set: SetFn) {
           const oldest = persistedTabs.reduce((acc, tab) =>
             tab.createdAt < acc.createdAt ? tab : acc
           )
-          if (globalThis.__TABTIN_DEBUG_TAB_SWITCH__) {
+          if (globalThis.__MUSE_DEBUG_TAB_SWITCH__) {
             console.warn('[CrawlTabStore] Persisted tabs limit exceeded, removing oldest tab:', oldest.id)
           }
           get().deleteTab(oldest.id)

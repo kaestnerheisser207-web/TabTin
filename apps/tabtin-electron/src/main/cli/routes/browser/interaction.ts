@@ -1,5 +1,5 @@
 import http from 'node:http'
-import { okResponse } from '@tabtin/agent-wire'
+import { okResponse } from '@muse/agent-wire'
 // BR-8 P3a：RefCache 收编进 browser-core 共享 runtime（snapshot 填充 + act 回解 ref/toRef）。
 // BR-8 P3c：act/observe/snapshot/eval 编排收编进 browser-core Orchestrator；本文件退成薄分发。
 import {
@@ -16,7 +16,7 @@ import {
   type BrowserOrchestratorHostHooks,
   type BrowserSnapshotRequestParams,
   type CaptchaInfo,
-} from '@tabtin/browser-core'
+} from '@muse/browser-core'
 import type { SendJSON, ActionExecutor } from './_helpers'
 import {
   buildBrowserRequestScope,

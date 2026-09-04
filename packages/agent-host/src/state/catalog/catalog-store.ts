@@ -1,5 +1,5 @@
 import type { CliCommandInfo } from '../../capabilities/cli.js'
-import type { CliCommandSchema } from '@tabtin/agent-runtime/capability'
+import type { CliCommandSchema } from '@muse/agent-runtime/capability'
 import type { McpListing } from '../../capabilities/mcp.js'
 
 /**

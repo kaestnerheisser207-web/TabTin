@@ -4,7 +4,7 @@
  * ensuring the server has subscriptions when processing resume replay.
  */
 import { describe, it, expect, vi } from 'vitest'
-import { WsGatewayClient } from '@tabtin/ws-gateway-client'
+import { WsGatewayClient } from '@muse/ws-gateway-client'
 
 class MockSocket {
   readyState = 1

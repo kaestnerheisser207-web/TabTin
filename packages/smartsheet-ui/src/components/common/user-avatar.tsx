@@ -12,7 +12,7 @@
  */
 
 import * as React from 'react'
-import { identityAvatarColor, identityAvatarInitial } from '@tabtin/shared/identity-avatar'
+import { identityAvatarColor, identityAvatarInitial } from '@muse/shared/identity-avatar'
 import { resolvePublicAvatarUrl } from '../../share-dialog/resolvePublicAvatarUrl'
 import { cn } from '../../utils/cn'
 

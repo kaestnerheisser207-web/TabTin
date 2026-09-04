@@ -38,7 +38,7 @@
  * | 算法 | 末尾连续同 (tool, kind) 长度 | 窗口内同 (tool, digest) 总计数（不要求连续） |
  * | streak 打破 | recordSuccess pop 末尾 / 不同 tool / 不同 kind | 自然过期（窗口外 ts 被 prune） / 末尾换 (tool, digest) |
  * | 跨轮信号（tool-loop-guard 闭包） | failureStage / pendingStallNudge | repetitionStage / pendingRepetitionNudge |
- * | env 命名 | `TABTIN_TOOL_FAILURE_*` | `TABTIN_TOOL_REPETITION_*` |
+ * | env 命名 | `MUSE_TOOL_FAILURE_*` | `MUSE_TOOL_REPETITION_*` |
  *
  * **不动 tool-failure-tracker 内部**——两者并行计量，互不干扰。同一轮工具
  * 失败可以同时让 tool-failure 升 stage、tool-repetition 不升；反之亦然。
@@ -119,11 +119,11 @@
  *
  * ### env override
  *
- * 沿用 `TABTIN_TOOL_FAILURE_*` 命名约定 → `TABTIN_TOOL_REPETITION_*`：
- *   - `TABTIN_TOOL_REPETITION_TRACKER_ENABLED`：true/false 总开关
- *   - `TABTIN_TOOL_REPETITION_NOTICE_COUNT`：notice 阈值（默认 2）
- *   - `TABTIN_TOOL_REPETITION_NUDGE_COUNT`：nudge 阈值（默认 3）
- *   - `TABTIN_TOOL_REPETITION_WINDOW_MS`：窗口毫秒（默认 30000）
+ * 沿用 `MUSE_TOOL_FAILURE_*` 命名约定 → `MUSE_TOOL_REPETITION_*`：
+ *   - `MUSE_TOOL_REPETITION_TRACKER_ENABLED`：true/false 总开关
+ *   - `MUSE_TOOL_REPETITION_NOTICE_COUNT`：notice 阈值（默认 2）
+ *   - `MUSE_TOOL_REPETITION_NUDGE_COUNT`：nudge 阈值（默认 3）
+ *   - `MUSE_TOOL_REPETITION_WINDOW_MS`：窗口毫秒（默认 30000）
  *
  * 解析规则与 tool-failure-tracker 完全对齐：非法值（NaN / 越界 / notice ≥
  * nudge）整 thresholds 回落默认（不局部修复以免反直觉）。
@@ -332,18 +332,18 @@ function readEnvConfig(env: NodeJS.ProcessEnv): Partial<ToolRepetitionTrackerCon
 } {
   const out: EnvConfigOut = {};
 
-  const enabled = parseTrackerEnvBoolean(env.TABTIN_TOOL_REPETITION_TRACKER_ENABLED);
+  const enabled = parseTrackerEnvBoolean(env.MUSE_TOOL_REPETITION_TRACKER_ENABLED);
   if (enabled !== undefined) out.enabled = enabled;
 
-  const notice = parseTrackerEnvNumber(env.TABTIN_TOOL_REPETITION_NOTICE_COUNT, {
+  const notice = parseTrackerEnvNumber(env.MUSE_TOOL_REPETITION_NOTICE_COUNT, {
     min: 1,
     max: TOOL_REPETITION_THRESHOLD_MAX,
   });
-  const nudge = parseTrackerEnvNumber(env.TABTIN_TOOL_REPETITION_NUDGE_COUNT, {
+  const nudge = parseTrackerEnvNumber(env.MUSE_TOOL_REPETITION_NUDGE_COUNT, {
     min: 1,
     max: TOOL_REPETITION_THRESHOLD_MAX,
   });
-  const terminate = parseTrackerEnvNumber(env.TABTIN_TOOL_REPETITION_TERMINATE_COUNT, {
+  const terminate = parseTrackerEnvNumber(env.MUSE_TOOL_REPETITION_TERMINATE_COUNT, {
     min: 1,
     max: TOOL_REPETITION_THRESHOLD_MAX,
   });
@@ -355,7 +355,7 @@ function readEnvConfig(env: NodeJS.ProcessEnv): Partial<ToolRepetitionTrackerCon
     out.thresholds = thresholds;
   }
 
-  const windowMs = parseTrackerEnvNumber(env.TABTIN_TOOL_REPETITION_WINDOW_MS, {
+  const windowMs = parseTrackerEnvNumber(env.MUSE_TOOL_REPETITION_WINDOW_MS, {
     min: TOOL_REPETITION_WINDOW_MIN_MS,
     max: TOOL_REPETITION_WINDOW_MAX_MS,
   });

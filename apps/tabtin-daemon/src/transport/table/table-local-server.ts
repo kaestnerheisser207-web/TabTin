@@ -11,15 +11,15 @@ import { createServer, type Server, type IncomingMessage, type ServerResponse } 
 import { randomBytes, timingSafeEqual } from 'node:crypto'
 import { mkdir, unlink } from 'node:fs/promises'
 import { join } from 'node:path'
-import { getHomeTabtinPath } from '@tabtin/shared/storage-paths'
-import { atomicWriteFile } from '@tabtin/terminal-core'
-import type { FilterSet, SortConfig } from '@tabtin/table-kernel'
+import { getHomeTabtinPath } from '@muse/shared/storage-paths'
+import { atomicWriteFile } from '@muse/terminal-core'
+import type { FilterSet, SortConfig } from '@muse/table-kernel'
 import {
   externalFilterToKernel,
   externalSortsToKernel,
-} from '@tabtin/table-kernel'
-import type { ExternalFilterSet } from '@tabtin/table-kernel'
-import type { ViewType, FieldType, UpdateViewInput } from '@tabtin/table-kernel'
+} from '@muse/table-kernel'
+import type { ExternalFilterSet } from '@muse/table-kernel'
+import type { ViewType, FieldType, UpdateViewInput } from '@muse/table-kernel'
 import type { TableApplicationPort } from '../../application/table/table-application-port.js'
 import { consoleLogger, type KernelLogger } from '../../platform/observability/logging/logger.js'
 

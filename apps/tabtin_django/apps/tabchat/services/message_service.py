@@ -470,8 +470,8 @@ _ATTACHMENT_METADATA_FIELDS = {
     "sticker",
 }
 
-_TABTIN_ROBOT_PACK_ID = "tabtin-robot"
-_TABTIN_ROBOT_STICKER_IDS = frozenset({"neutral", "happy", "sad", "surprise", "cool"})
+_MUSE_ROBOT_PACK_ID = "tabtin-robot"
+_MUSE_ROBOT_STICKER_IDS = frozenset({"neutral", "happy", "sad", "surprise", "cool"})
 
 
 def _sanitize_sticker_metadata(sticker: object) -> dict | None:
@@ -480,7 +480,7 @@ def _sanitize_sticker_metadata(sticker: object) -> dict | None:
         return None
     pack = sticker.get("pack")
     sticker_id = sticker.get("id")
-    if pack == _TABTIN_ROBOT_PACK_ID and sticker_id in _TABTIN_ROBOT_STICKER_IDS:
+    if pack == _MUSE_ROBOT_PACK_ID and sticker_id in _MUSE_ROBOT_STICKER_IDS:
         return {"pack": pack, "id": sticker_id}
     return None
 

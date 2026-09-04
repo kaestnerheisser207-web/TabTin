@@ -21,15 +21,15 @@
 import {
   buildAgentProfileSection,
   buildUserContextWrapper,
-} from '@tabtin/agent-prompt'
-import type { EngineHooks, IterationHookContext, Message } from '@tabtin/agent-runtime/engine'
+} from '@muse/agent-prompt'
+import type { EngineHooks, IterationHookContext, Message } from '@muse/agent-runtime/engine'
 import {
   INTERNAL_MESSAGE_MARKERS,
   hasInternalMarker,
   findLastRealUserIndex,
   firstMessageText,
   findFirstUserContextWrapper,
-} from '@tabtin/agent-runtime/engine'
+} from '@muse/agent-runtime/engine'
 import { upsertTaggedBlock } from './message-inject.js'
 
 export interface AgentProfileSnapshot {

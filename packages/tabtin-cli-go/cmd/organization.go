@@ -38,7 +38,7 @@ func newCmdOrganization(f *cmdutil.Factory) *cobra.Command {
 }
 
 func resolveOrganizationID(f *cmdutil.Factory) (string, error) {
-	if id := os.Getenv("TABTIN_ORGANIZATION_ID"); id != "" {
+	if id := os.Getenv("MUSE_ORGANIZATION_ID"); id != "" {
 		return id, nil
 	}
 	cfg, err := f.Config()

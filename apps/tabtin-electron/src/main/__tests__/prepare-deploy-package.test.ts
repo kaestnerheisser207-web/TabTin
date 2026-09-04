@@ -52,8 +52,8 @@ describe('prepare-deploy-package office preview runtime resources', () => {
         extraResources: [
           {
             from: '../../packages/python-runtime/runtime',
-            to: 'native/tabtin-python-runtime',
-            filter: ['manifest.json', 'tabtin-python-runtime.tar.gz'],
+            to: 'native/muse-python-runtime',
+            filter: ['manifest.json', 'muse-python-runtime.tar.gz'],
           },
         ],
       },
@@ -62,9 +62,9 @@ describe('prepare-deploy-package office preview runtime resources', () => {
     const patched = applyDeployPackageTransforms(pkg)
 
     expect(patched.build.extraResources).toContainEqual({
-      from: './tabtin-python-runtime-src',
-      to: 'native/tabtin-python-runtime',
-      filter: ['manifest.json', 'tabtin-python-runtime.tar.gz'],
+      from: './muse-python-runtime-src',
+      to: 'native/muse-python-runtime',
+      filter: ['manifest.json', 'muse-python-runtime.tar.gz'],
     })
   })
 
@@ -113,8 +113,8 @@ describe('prepare-deploy-package python runtime resources', () => {
         extraResources: [
           {
             from: '../../packages/python-runtime/runtime',
-            to: 'native/tabtin-python-runtime',
-            filter: ['manifest.json', 'tabtin-python-runtime.tar.gz'],
+            to: 'native/muse-python-runtime',
+            filter: ['manifest.json', 'muse-python-runtime.tar.gz'],
           },
         ],
       },
@@ -123,9 +123,9 @@ describe('prepare-deploy-package python runtime resources', () => {
     const patched = applyDeployPackageTransforms(pkg)
 
     expect(patched.build.extraResources).toContainEqual({
-      from: './tabtin-python-runtime-src',
-      to: 'native/tabtin-python-runtime',
-      filter: ['manifest.json', 'tabtin-python-runtime.tar.gz'],
+      from: './muse-python-runtime-src',
+      to: 'native/muse-python-runtime',
+      filter: ['manifest.json', 'muse-python-runtime.tar.gz'],
     })
   })
 })

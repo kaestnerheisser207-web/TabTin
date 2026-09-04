@@ -36,18 +36,18 @@ vi.mock('electron', () => ({
   },
 }))
 
-vi.mock('@tabtin/shared/storage-paths', () => ({
+vi.mock('@muse/shared/storage-paths', () => ({
   getHomeTabtinPath: (...segs: string[]) =>
     path.join(fakeUserData, '__tabtin_home__', ...segs),
   getUserDataPath: (...segs: string[]) => path.join(fakeUserData, ...segs),
 }))
 
-vi.mock('@tabtin/terminal-core', () => ({
+vi.mock('@muse/terminal-core', () => ({
   resolveSpacesRoot: () => fakeSandboxRoot,
 }))
 
 //  批次 13：space 路径 helper 出口从 engine barrel 收敛到包入口。
-vi.mock('@tabtin/agent-runtime', () => ({
+vi.mock('@muse/agent-runtime', () => ({
   resolveSpacesRoot: (root: string) => path.join(root, 'agent-spaces'),
   resolveSpaceDownloadsDir: (root: string, spaceId: string) =>
     path.join(root, 'agent-spaces', spaceId, 'downloads'),
@@ -78,14 +78,14 @@ vi.mock('../../utils/logger', () => ({
 describe('MediaStorageBucketRegistration', () => {
   beforeEach(async () => {
     _mockHistoryStore.clear()
-    const sm = await import('@tabtin/storage-manager')
+    const sm = await import('@muse/storage-manager')
     sm.__resetForTesting()
     const mod = await import('../MediaStorageBucketRegistration')
     mod.unregisterMediaStorageBuckets()
   })
 
   it('一次性注册 7 个 main-process bucket；media 组 ≥ 5, cache 组 ≥ 2', async () => {
-    const sm = await import('@tabtin/storage-manager')
+    const sm = await import('@muse/storage-manager')
     const { registerMediaStorageBuckets } = await import(
       '../MediaStorageBucketRegistration'
     )
@@ -110,7 +110,7 @@ describe('MediaStorageBucketRegistration', () => {
   })
 
   it('各 data 类 bucket（recordings / screenshots / exports-pdf / user-downloads / agent-sandbox-downloads）warnings 非空', async () => {
-    const sm = await import('@tabtin/storage-manager')
+    const sm = await import('@muse/storage-manager')
     const { registerMediaStorageBuckets } = await import(
       '../MediaStorageBucketRegistration'
     )
@@ -131,7 +131,7 @@ describe('MediaStorageBucketRegistration', () => {
   })
 
   it('download:user-downloads 的 clearFn 只删 history 不删磁盘文件', async () => {
-    const sm = await import('@tabtin/storage-manager')
+    const sm = await import('@muse/storage-manager')
     const { registerMediaStorageBuckets } = await import(
       '../MediaStorageBucketRegistration'
     )
@@ -173,7 +173,7 @@ describe('MediaStorageBucketRegistration', () => {
   })
 
   it('download:user-downloads 部分清理（itemIds）只删指定 id，其余保留', async () => {
-    const sm = await import('@tabtin/storage-manager')
+    const sm = await import('@muse/storage-manager')
     const { registerMediaStorageBuckets } = await import(
       '../MediaStorageBucketRegistration'
     )

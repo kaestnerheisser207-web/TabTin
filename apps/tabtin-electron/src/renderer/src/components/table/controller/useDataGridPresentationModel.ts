@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo } from 'react'
-import type { TableGridRow, TableGridConfig } from '@tabtin/table-engine'
+import type { TableGridRow, TableGridConfig } from '@muse/table-engine'
 
 const ADD_ROW_ID = '__add_row__'
 

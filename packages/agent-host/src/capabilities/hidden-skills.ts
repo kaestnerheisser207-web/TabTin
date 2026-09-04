@@ -5,7 +5,7 @@
  * 时经 `initSkillsModule({ hiddenSkills })` 注入 LocalSkillRegistry。
  */
 
-import type { HiddenSkillSets } from '@tabtin/agent-runtime/skills'
+import type { HiddenSkillSets } from '@muse/agent-runtime/skills'
 
 export const TEMPORARILY_HIDDEN_SKILLS: HiddenSkillSets = {
   appIds: new Set([

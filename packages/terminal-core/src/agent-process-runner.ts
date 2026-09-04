@@ -23,22 +23,22 @@ const ACCEPTABLE_WINDOWS_SHELLS = new Set(['cmd', 'cmd.exe', 'powershell', 'powe
  * 「事件到了但 `finish`/flush 卡了约 60s」。
  *
  * **怎么开**（在启动 Electron / Daemon 前 export，对生产链路零影响）：
- *   - `TABTIN_DEBUG_EXIT_TIMING=1`：打开，时间戳行同时写 stderr + 默认文件
+ *   - `MUSE_DEBUG_EXIT_TIMING=1`：打开，时间戳行同时写 stderr + 默认文件
  *     `{os.tmpdir()}/tabtin-exit-timing.log`。**推荐改用绝对路径形式**（见下）让文件好找。
- *   - `TABTIN_DEBUG_EXIT_TIMING=/abs/path.log`（或 `~/x.log`）：开探针，**且**值本身当落盘路径
+ *   - `MUSE_DEBUG_EXIT_TIMING=/abs/path.log`（或 `~/x.log`）：开探针，**且**值本身当落盘路径
  *     （如 `~/tabtin-exit-timing.log` → 落家目录，双击就能开）。
- *   - `TABTIN_DEBUG_EXIT_TIMING_FILE=/abs/path.log`：仅指定落盘文件。**必须配合主 flag**
+ *   - `MUSE_DEBUG_EXIT_TIMING_FILE=/abs/path.log`：仅指定落盘文件。**必须配合主 flag**
  *     （主 flag 缺省时探针整体关闭，本变量被忽略）；同时设两者时本变量决定落盘路径。
  *   - 关（缺省 / `0` / `false` / `off`）：`createExitTimingProbe` 返回 no-op，
  *     不读文件 env、不 attach `close` 监听、不产生任何 IO。
  *
- * **每行格式**：`[TABTIN_EXIT_TIMING] corr=<pid.nonce> pid=<childPid> t+<Δms>ms <ISO> <event> <json?>`
+ * **每行格式**：`[MUSE_EXIT_TIMING] corr=<pid.nonce> pid=<childPid> t+<Δms>ms <ISO> <event> <json?>`
  * `corr` 区分并发命令；`t+Δms` 是相对 spawn 的毫秒差。**怕读不懂时序就直接看 `result.verdict`
  * 那一行**——它已把「真实退出 / exit 事件 / resolve」三个时刻算成 `exitLagMs` / `flushLagMs`
  * 并给出 `verdict`（exit-late / flush-late / prompt），复制这一行回传即可定位。
  */
-const EXIT_TIMING_ENV = 'TABTIN_DEBUG_EXIT_TIMING';
-const EXIT_TIMING_FILE_ENV = 'TABTIN_DEBUG_EXIT_TIMING_FILE';
+const EXIT_TIMING_ENV = 'MUSE_DEBUG_EXIT_TIMING';
+const EXIT_TIMING_FILE_ENV = 'MUSE_DEBUG_EXIT_TIMING_FILE';
 
 interface ExitTimingProbe {
   /** 关闭时为 false——调用方据此跳过「仅诊断用」的额外监听（如 `close`）以保零开销。 */
@@ -104,7 +104,7 @@ export function createExitTimingProbe(
   if (!exitTimingBannerShown) {
     exitTimingBannerShown = true;
     try {
-      console.error(`[TABTIN_EXIT_TIMING] enabled — appending timing lines to ${filePath}`);
+      console.error(`[MUSE_EXIT_TIMING] enabled — appending timing lines to ${filePath}`);
     } catch {
       // ignore
     }
@@ -114,7 +114,7 @@ export function createExitTimingProbe(
     // 整体兜错：探针是 opt-in 诊断，绝不能因序列化 / IO 异常冒泡到命令回调里。
     try {
       const now = Date.now();
-      const head = `[TABTIN_EXIT_TIMING] corr=${corr} pid=${getPid() ?? '-'} t+${now - startedAt}ms ${new Date(now).toISOString()} ${event}`;
+      const head = `[MUSE_EXIT_TIMING] corr=${corr} pid=${getPid() ?? '-'} t+${now - startedAt}ms ${new Date(now).toISOString()} ${event}`;
       write(extra ? `${head} ${JSON.stringify(extra)}` : head);
     } catch {
       // 探针失败静默
@@ -570,7 +570,7 @@ export function getSpawnCommand(
  * 仅 agent-runtime ShellCap 设置；LLM / 用户 env 不得注入此键。
  */
 export const SKILL_CREDENTIAL_PRESERVE_ENV_KEYS_MARKER =
-  '__TABTIN_SKILL_CREDENTIAL_PRESERVE_KEYS__';
+  '__MUSE_SKILL_CREDENTIAL_PRESERVE_KEYS__';
 
 function buildEnv(callerEnv: Record<string, string> | undefined): NodeJS.ProcessEnv {
   let caller = callerEnv;
@@ -591,7 +591,7 @@ function buildEnv(callerEnv: Record<string, string> | undefined): NodeJS.Process
     ),
     TERM: 'xterm-256color',
     COLORTERM: 'truecolor',
-    TABTIN_AGENT: '1',
+    MUSE_AGENT: '1',
   };
 }
 

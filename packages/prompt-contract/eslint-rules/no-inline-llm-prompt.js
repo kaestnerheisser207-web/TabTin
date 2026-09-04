@@ -4,8 +4,8 @@
  * 禁止 `apps/` 下出现长中文字面量直接送 LLM 的反模式。
  *
  * 治理目的：apps 是 host（Electron / Daemon / 移动端壳），不应承载任何 prompt
- * 文案——所有 LLM-facing 自然语言段都必须出自 `@tabtin/agent-prompt` 或
- * `@tabtin/agent-runtime/prompts`，并在 SECTION_REGISTRY 登记。
+ * 文案——所有 LLM-facing 自然语言段都必须出自 `@muse/agent-prompt` 或
+ * `@muse/agent-runtime/prompts`，并在 SECTION_REGISTRY 登记。
  *
  * 否则会出现：
  *   - apps 里散落"小段中文 prompt"，治理脚本扫不到（不在 packages/agent-* 范围）
@@ -204,13 +204,13 @@ const rule = {
     type: 'problem',
     docs: {
       description:
-        '禁止 apps/ 下出现长中文字面量直接送 LLM。所有 prompt 必须出自 @tabtin/agent-prompt 或 @tabtin/agent-runtime/prompts 并在 SECTION_REGISTRY 登记。',
+        '禁止 apps/ 下出现长中文字面量直接送 LLM。所有 prompt 必须出自 @muse/agent-prompt 或 @muse/agent-runtime/prompts 并在 SECTION_REGISTRY 登记。',
       url: 'https://github.com/TabTin/TabTinAgent/blob/main/packages/prompt-contract/eslint-rules/README.md#no-inline-llm-prompt',
     },
     schema: [],
     messages: {
       inlinePrompt:
-        '禁止在 apps/ 下硬编码长中文 prompt（CJK ≥ {{cjk}} 字符；触发位置：{{reason}}）。请改为从 @tabtin/agent-prompt 或 @tabtin/agent-runtime/prompts import 已注册的 section。',
+        '禁止在 apps/ 下硬编码长中文 prompt（CJK ≥ {{cjk}} 字符；触发位置：{{reason}}）。请改为从 @muse/agent-prompt 或 @muse/agent-runtime/prompts import 已注册的 section。',
     },
   },
 

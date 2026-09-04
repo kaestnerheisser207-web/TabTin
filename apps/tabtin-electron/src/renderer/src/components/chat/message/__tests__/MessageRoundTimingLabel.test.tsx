@@ -5,7 +5,7 @@
 import React from 'react'
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
 import { render, screen, act, cleanup } from '@testing-library/react'
-import type { ChatMessage } from '@tabtin/chat-client'
+import type { ChatMessage } from '@muse/chat-client'
 
 let debugEnabled = true
 vi.mock('@/utils/featureFlags', () => ({

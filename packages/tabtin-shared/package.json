@@ -1,5 +1,5 @@
 {
-  "name": "@tabtin/shared",
+  "name": "@muse/shared",
   "version": "0.1.0",
   "description": "Shared utilities for Muse apps (persist-safety, hooks, error helpers)",
   "type": "module",
@@ -93,7 +93,7 @@
   "peerDependencies": {
     "react": ">=18",
     "zustand": ">=4",
-    "@tabtin/api-client": "workspace:*"
+    "@muse/api-client": "workspace:*"
   },
   "peerDependenciesMeta": {
     "react": {
@@ -102,7 +102,7 @@
     "zustand": {
       "optional": true
     },
-    "@tabtin/api-client": {
+    "@muse/api-client": {
       "optional": true
     }
   },
@@ -111,7 +111,7 @@
     "@types/react": "^19.0.1",
     "react": "^19.0.0",
     "zustand": "^5.0.3",
-    "@tabtin/api-client": "workspace:*",
+    "@muse/api-client": "workspace:*",
     "typescript": "5.7.2",
     "vitest": "4.0.18"
   }

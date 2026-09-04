@@ -8,13 +8,13 @@ import {
   StreamEvents,
   type QueryParams,
   type StreamEvent,
-} from '@tabtin/agent-runtime'
+} from '@muse/agent-runtime'
 import type {
   HostedRuntime,
   RuntimeDriver,
   RuntimeDriverContext,
   RuntimeDriverSession,
-} from '@tabtin/agent-host/runtime'
+} from '@muse/agent-host/runtime'
 import { DshEventTranslator } from './dsh-event-translator.js'
 
 export interface DshRuntimeBinding {

@@ -30,7 +30,7 @@ vi.mock('electron', () => ({
 
 vi.mock('../../cli/cli-context', () => cliOrgMock)
 
-vi.mock('@tabtin/agent-import', () => ({
+vi.mock('@muse/agent-import', () => ({
   NodeImportIO: class {
     constructor(_dir?: string) {}
   },

@@ -1,5 +1,5 @@
 /**
- * @tabtin/agent-runtime — JSONL Session Storage（Wave 2 envelope-based 重写）
+ * @muse/agent-runtime — JSONL Session Storage（Wave 2 envelope-based 重写）
  *
  * 落盘形态：`{sessionDir}/{sessionId}/messages.jsonl`，每行一个 JSON 对象，
  * 形态严格遵循 `TranscriptEntry` schema（详见 `engine/types.ts` 同名 interface）：

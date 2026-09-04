@@ -13,7 +13,7 @@ import {
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from '@tabtin/smartsheet-ui'
+} from '@muse/smartsheet-ui'
 import { Lock, X } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { ViewSwitcher } from '@components/view/ViewSwitcher'
@@ -29,11 +29,11 @@ import {
   useCollabReconnectForTable,
   useCollabViewUpdaterForTable,
 } from '@stores/useTableCollabStore'
-import { CollabStatusBadge, CollabStatus, type CollabConnectionStatus } from '@tabtin/collab-core'
+import { CollabStatusBadge, CollabStatus, type CollabConnectionStatus } from '@muse/collab-core'
 import { OnlinePresencePopover } from '@components/collab/OnlinePresencePopover'
-import { buildColumnMetaVisibilityUpdate } from '@tabtin/table-ui'
+import { buildColumnMetaVisibilityUpdate } from '@muse/table-ui'
 import { useTableReadonly } from '@components/table/TableReadonlyContext'
-import type { Table } from '@tabtin/table-core'
+import type { Table } from '@muse/table-core'
 import { DUPLICATE_NAME_ERROR_TITLE, isDuplicateNameErrorMessage } from '@/lib/duplicateNameError'
 import { shouldShowTableCollabStatusBadge } from './tableCollabStatusBadgeVisibility'
 

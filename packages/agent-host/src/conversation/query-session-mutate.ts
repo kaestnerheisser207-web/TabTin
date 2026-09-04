@@ -22,13 +22,13 @@ import type {
   ApprovalMode,
   WorkspaceSnapshot,
   WorkspaceSources,
-} from '@tabtin/security-policy'
-import { isDangerouslyBroadPath } from '@tabtin/security-policy'
+} from '@muse/security-policy'
+import { isDangerouslyBroadPath } from '@muse/security-policy'
 import {
   isApprovalModeName,
   type AgentModeName,
   type ApprovalModeName,
-} from '@tabtin/agent-modes'
+} from '@muse/agent-modes'
 
 /**
  * 与两端 host `HostState.policyContext` 结构类型兼容的最小接口。

@@ -18,7 +18,7 @@ type tabDataRecordURL struct {
 
 func isTabTinRecordScheme(scheme string) bool {
 	switch scheme {
-	case "muse", "tabtin-preprod", "tabtin-dev":
+	case "muse", "muse-preprod", "muse-dev":
 		return true
 	default:
 		return false
@@ -29,13 +29,13 @@ func parseTabDataRecordURL(raw string) (tabDataRecordURL, error) {
 	raw = strings.TrimSpace(raw)
 	parsed, err := url.Parse(raw)
 	if err != nil {
-		return tabDataRecordURL{}, fmt.Errorf("记录链接无效，应为 Muse 记录页面 URL 或 tabtin:// 资源链接")
+		return tabDataRecordURL{}, fmt.Errorf("记录链接无效，应为 Muse 记录页面 URL 或 muse:// 资源链接")
 	}
 	if isTabTinRecordScheme(parsed.Scheme) {
 		return parseTabTinRecordDeepLink(parsed)
 	}
 	if parsed.Host == "" || (parsed.Scheme != "http" && parsed.Scheme != "https") {
-		return tabDataRecordURL{}, fmt.Errorf("记录链接无效，应为 Muse 记录页面 URL 或 tabtin:// 资源链接")
+		return tabDataRecordURL{}, fmt.Errorf("记录链接无效，应为 Muse 记录页面 URL 或 muse:// 资源链接")
 	}
 	return parseHTTPRecordURL(parsed)
 }
@@ -58,7 +58,7 @@ func parseHTTPRecordURL(parsed *url.URL) (tabDataRecordURL, error) {
 func parseTabTinRecordDeepLink(parsed *url.URL) (tabDataRecordURL, error) {
 	segments := strings.Split(strings.Trim(parsed.Path, "/"), "/")
 	if parsed.Host != "resource" || len(segments) != 2 || segments[0] != "table" {
-		return tabDataRecordURL{}, fmt.Errorf("Muse 记录链接应为 tabtin://resource/table/<table-id>?recordIds=<record-id>")
+		return tabDataRecordURL{}, fmt.Errorf("Muse 记录链接应为 muse://resource/table/<table-id>?recordIds=<record-id>")
 	}
 	if !uuidPattern.MatchString(segments[1]) {
 		return tabDataRecordURL{}, fmt.Errorf("记录链接中的 table-id 无效: %q", segments[1])

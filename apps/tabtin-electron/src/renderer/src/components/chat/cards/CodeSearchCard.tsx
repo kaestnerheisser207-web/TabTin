@@ -10,7 +10,7 @@ import { useTranslation } from 'react-i18next'
 import { Search, FileCode2 } from 'lucide-react'
 import { cn } from '@utils/cn'
 import type { CardRendererProps } from '../registry/types'
-import type { CodeSearchData } from '@tabtin/chat-client'
+import type { CodeSearchData } from '@muse/chat-client'
 import { SearchResultList, type SearchResultItem } from './primitives'
 import {
   CARD_RADIUS,

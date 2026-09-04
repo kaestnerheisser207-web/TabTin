@@ -1,14 +1,14 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react'
 import {
   ScrollArea,
-} from '@tabtin/smartsheet-ui'
-import { calcGalleryColumns } from '@tabtin/table-ui'
+} from '@muse/smartsheet-ui'
+import { calcGalleryColumns } from '@muse/table-ui'
 import { LayoutGrid, Image as ImageIcon, Loader2 } from 'lucide-react'
 import { useViewStore, useViewStoreApi } from '@stores/useViewStore'
 import { useTableStore } from '@stores/useTableStore'
-import { CollabStatus } from '@tabtin/collab-core'
+import { CollabStatus } from '@muse/collab-core'
 import { shouldProjectViewRecordsFromCollabYdoc, useTableCollab } from '@components/table/TableCollabContext'
-import { extractViewCoverUrl } from '@tabtin/table-ui'
+import { extractViewCoverUrl } from '@muse/table-ui'
 import { useTranslation } from 'react-i18next'
 import { CellValueRenderer, ViewLoadingOverlay, ViewPaginationBar } from './ViewShared'
 import { useGalleryViewController } from './controller/useGalleryViewController'

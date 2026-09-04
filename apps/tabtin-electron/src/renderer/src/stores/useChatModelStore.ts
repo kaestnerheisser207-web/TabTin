@@ -14,7 +14,7 @@ import { getChatClient } from '../services/chatApi'
 import { useOrganizationStore } from './useOrganizationStore'
 import { useSpaceStore } from './useSpaceStore'
 import { useChatRuntimeStore } from './useChatRuntimeStore'
-import type { Model, ChatSession, ContextTier, ModelParamOverrides, ModelParamValue } from '@tabtin/chat-client'
+import type { Model, ChatSession, ContextTier, ModelParamOverrides, ModelParamValue } from '@muse/chat-client'
 import i18n from '@/i18n'
 import { createLogger } from '@/utils/logger'
 import { updateProviderMetas } from '@/utils/provider-registry'
@@ -142,7 +142,7 @@ const lastSyncedModelParamsBySession = new Map<string, string>()
  * Electron 模式下，把当前 session 的档位同步给 main 进程。
  * main 写到 sessionContextTiers Map，下次 LLM 请求 buildHeaders 时透传。
  *
- * Daemon / web / 测试环境下 window.tabtin 不存在，无操作。
+ * Daemon / web / 测试环境下 window.muse 不存在，无操作。
  */
 async function syncTierToMainProcess(sessionId: string, tierId: string | null): Promise<void> {
   try {
@@ -303,7 +303,7 @@ export const useChatModelStore = create<ChatModelState>()((set, get) => ({
 
         let availableModels = response.models.map(normalizeCatalogModelCapabilities)
         try {
-          const status = await window.tabtin?.openaiCodex?.getStatus()
+          const status = await window.muse?.openaiCodex?.getStatus()
           if (status) {
             availableModels = mergeConnectedOpenAICodexModels(availableModels, status)
           }
@@ -408,7 +408,7 @@ export const useChatModelStore = create<ChatModelState>()((set, get) => ({
         }
         let availableModels = response.models.map(normalizeCatalogModelCapabilities)
         try {
-          const status = await window.tabtin?.openaiCodex?.getStatus()
+          const status = await window.muse?.openaiCodex?.getStatus()
           if (status) {
             availableModels = mergeConnectedOpenAICodexModels(availableModels, status)
           }
@@ -577,7 +577,7 @@ export const useChatModelStore = create<ChatModelState>()((set, get) => ({
       }
 
       if (isOpenAICodexModel(modelId)) {
-        const status = await window.tabtin?.openaiCodex?.getStatus()
+        const status = await window.muse?.openaiCodex?.getStatus()
         if (!status?.connected) {
           throw new Error('请先在「订阅套餐」中登录 ChatGPT，才能使用 Codex 模型。')
         }

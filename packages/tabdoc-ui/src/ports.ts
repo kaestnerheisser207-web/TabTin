@@ -116,6 +116,6 @@ export interface TabDocEditorConfig {
   apiBaseUrl: string
   dragTypeMeta?: string
   chatContextDragType?: string
-  /** 跨应用文件引用拖入文档的 MIME（如 application/x-tabtin-file-ref） */
+  /** 跨应用文件引用拖入文档的 MIME（如 application/x-muse-file-ref） */
   fileRefDragType?: string
 }

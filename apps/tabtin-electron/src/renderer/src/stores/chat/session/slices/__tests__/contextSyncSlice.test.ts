@@ -4,7 +4,7 @@ import { buildContextSyncFingerprint } from '../../../execution/contextSyncFinge
 import { useSessionAccessStore } from '../../sessionAccessStore'
 
 // 收口后 contextSyncSlice 经 agentService 出站；mock 门面直接透传到
-// window.tabtin.agentEngine.updateContext，保持本单测隔离（不加载 hub 的 chatApi
+// window.muse.agentEngine.updateContext，保持本单测隔离（不加载 hub 的 chatApi
 // 重依赖链），同时验证 slice 仍推送 app context。
 vi.mock('@/services/agentService', () => ({
   getSessionController: (sessionId: string) => ({

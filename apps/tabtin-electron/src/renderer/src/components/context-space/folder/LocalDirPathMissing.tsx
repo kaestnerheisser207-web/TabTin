@@ -11,7 +11,7 @@
 import React, { useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { FolderX, RefreshCw, Settings } from 'lucide-react'
-import { Button, EmptyState } from '@tabtin/smartsheet-ui'
+import { Button, EmptyState } from '@muse/smartsheet-ui'
 import { useAgentSettingsSheetStore } from '@stores/useAgentSettingsSheetStore'
 import { useSpaceStore } from '@stores/useSpaceStore'
 import { formatIpcErrorForUser } from '@/services/ipc-error'
@@ -49,7 +49,7 @@ export const LocalDirPathMissing: React.FC<LocalDirPathMissingProps> = ({
 
   const handleUserRelocate = useCallback(async () => {
     if (!onUserRelocate) return
-    const tabtin = window.tabtin
+    const tabtin = window.muse
     if (!tabtin?.showOpenDialog) {
       setRelocateError(
         t('folder.errors.openFolderDescription', {

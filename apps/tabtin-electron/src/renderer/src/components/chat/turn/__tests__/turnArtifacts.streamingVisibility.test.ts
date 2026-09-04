@@ -2,7 +2,7 @@
  * ：本轮产物卡流式可见性 —— 发送下一条时不得误藏已完成轮次。
  */
 import { describe, expect, it } from 'vitest'
-import type { ChatMessage } from '@tabtin/chat-client'
+import type { ChatMessage } from '@muse/chat-client'
 import {
   findLastTurnEndIndex,
   isOpenStreamingTurnEnd,
@@ -17,7 +17,7 @@ function msg(partial: Partial<ChatMessage> & Pick<ChatMessage, 'id' | 'role' | '
   } as ChatMessage
 }
 
-const ARTIFACT_HREF = 'tabtin://resource/tabdoc/d-1'
+const ARTIFACT_HREF = 'muse://resource/tabdoc/d-1'
 
 function turnWithArtifact(ids: { user: string; assistant: string; run: string }): ChatMessage[] {
   return [

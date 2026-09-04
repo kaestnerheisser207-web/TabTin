@@ -1,5 +1,5 @@
 import React from 'react'
-import { StatusNotice, type StatusNoticeTone } from '@tabtin/smartsheet-ui'
+import { StatusNotice, type StatusNoticeTone } from '@muse/smartsheet-ui'
 
 export type SettingsInlineAlertTone = 'info' | 'success' | 'warning' | 'danger'
 

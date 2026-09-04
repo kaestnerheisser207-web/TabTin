@@ -175,7 +175,7 @@ export function GitHistoryPane({
       }
       setLoadError(null)
       try {
-        const result = await window.tabtin?.git?.listCommits?.(rootPath)
+        const result = await window.muse?.git?.listCommits?.(rootPath)
         if (cancelled) return
         if (!result) {
           setCommits([])
@@ -221,7 +221,7 @@ export function GitHistoryPane({
       setDetailLoading(true)
       setDetailError(null)
       try {
-        const next = await window.tabtin?.git?.getCommitDetail?.(rootPath, {
+        const next = await window.muse?.git?.getCommitDetail?.(rootPath, {
           commitHash: selectedHash,
         })
         if (cancelled) return

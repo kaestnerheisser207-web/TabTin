@@ -427,7 +427,7 @@ class AssetActivityHookTests(SpaceActivityTestBase):
         self.assertEqual(events[0].metadata["source_kind"], "ai_final_answer")
 
 
-@override_settings(TABTIN_ENABLE_PROJECTS=True)
+@override_settings(MUSE_ENABLE_PROJECTS=True)
 class SpaceSettingsActivityHookTests(SpaceActivityTestBase):
     """设置变更 + 团队 Space 创建埋点。"""
 

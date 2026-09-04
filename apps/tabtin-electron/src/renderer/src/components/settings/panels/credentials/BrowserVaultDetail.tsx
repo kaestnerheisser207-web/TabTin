@@ -78,7 +78,7 @@ export const BrowserVaultDetailBody: React.FC<{
     if (!partition || raw.kind !== 'cookie') return
     setBusy(true)
     try {
-      const res = await window.tabtin.credentialVault.clearPartitionCookies({
+      const res = await window.muse.credentialVault.clearPartitionCookies({
         partition,
         domain: raw.displayHost,
       })

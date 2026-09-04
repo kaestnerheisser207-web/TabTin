@@ -22,7 +22,7 @@ vi.mock('@/services/spaceNavigation', () => ({
   ensureSpaceSelectedWithFeedback: vi.fn(),
 }))
 
-vi.mock('@tabtin/smartsheet-ui', () => ({
+vi.mock('@muse/smartsheet-ui', () => ({
   toast: vi.fn(),
 }))
 

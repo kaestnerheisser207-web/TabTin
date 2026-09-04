@@ -87,7 +87,7 @@ export const LocalDirAutoPane: React.FC<LocalDirAutoPaneProps> = ({
   const failedIdentityRef = useRef<string | null>(null)
   const isHidden = useGitFlowPreference((s) => s.isGitFlowHidden(rootPath))
   const setGitFlowHidden = useGitFlowPreference((s) => s.setGitFlowHidden)
-  const appendSessionAllowedPath = (window.tabtin?.workspace as {
+  const appendSessionAllowedPath = (window.muse?.workspace as {
     appendSessionAllowedPath?: (payload: { spaceId: string; path: string }) => Promise<unknown>
   } | undefined)?.appendSessionAllowedPath
   const sessionAuthorizationIdentity =
@@ -214,7 +214,7 @@ export const LocalDirAutoPane: React.FC<LocalDirAutoPaneProps> = ({
     setProbeState('checking')
     if (!hasCurrentSessionAuthorization || sessionAccessState !== 'ready') return
     if (rootHealth === 'missing') return
-    const git = window.tabtin?.git
+    const git = window.muse?.git
     if (!git?.isGitRepo || !rootPath) {
       setProbeState('not-repo')
       return

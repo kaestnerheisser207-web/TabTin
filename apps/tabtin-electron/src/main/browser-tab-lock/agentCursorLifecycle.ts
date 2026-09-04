@@ -1,4 +1,4 @@
-import { buildHideCursorScript } from '@tabtin/browser-core'
+import { buildHideCursorScript } from '@muse/browser-core'
 import { setOnViewsUnlocked } from './browserTabInputLock'
 
 export function hideAgentCursorOnViews(

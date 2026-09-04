@@ -14,10 +14,10 @@ describe('interop-roots', () => {
     )
   })
 
-  it('respects TABTIN_AGENTS_SKILLS_DIR override', () => {
+  it('respects MUSE_AGENTS_SKILLS_DIR override', () => {
     expect(
       resolveDefaultAgentsSkillsDir(
-        { TABTIN_AGENTS_SKILLS_DIR: '/custom/skills' },
+        { MUSE_AGENTS_SKILLS_DIR: '/custom/skills' },
         () => '/Users/demo',
       ),
     ).toBe('/custom/skills')
@@ -52,7 +52,7 @@ describe('interop-roots', () => {
   it('env override replaces .agents slot but keeps other clients', () => {
     expect(
       resolveGlobalInteropSkillDirs({
-        env: { TABTIN_AGENTS_SKILLS_DIR: '/custom/skills' },
+        env: { MUSE_AGENTS_SKILLS_DIR: '/custom/skills' },
         homedir: () => '/Users/demo',
       }),
     ).toEqual([

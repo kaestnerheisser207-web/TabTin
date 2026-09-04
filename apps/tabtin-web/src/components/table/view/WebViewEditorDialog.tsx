@@ -11,19 +11,19 @@ import {
   SheetFooter,
   SheetHeader,
   SheetTitle,
-} from '@tabtin/smartsheet-ui'
+} from '@muse/smartsheet-ui'
 import type {
   Field,
   ViewCreateRequest,
   ViewMeta,
   ViewType,
   ViewUpdateRequest,
-} from '@tabtin/table-core'
+} from '@muse/table-core'
 import {
   isKanbanGroupableFieldType,
   isViewCoverFieldType,
   useViewEditorForm,
-} from '@tabtin/table-ui'
+} from '@muse/table-ui'
 
 type FormMode = 'create' | 'edit'
 

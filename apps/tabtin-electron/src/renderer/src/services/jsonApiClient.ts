@@ -7,7 +7,7 @@
  * （保留各自 ``*ApiError`` 类型以便调用点 ``instanceof`` 判定），行为不变。
  */
 
-import { joinApiPath } from '@tabtin/config'
+import { joinApiPath } from '@muse/config'
 import { API_CONFIG } from '@/config/api'
 import { apiRequest as adapterApiRequest, getAuthToken } from '@/adapters/api-adapter-instance'
 import { createLogger } from '@/utils/logger'

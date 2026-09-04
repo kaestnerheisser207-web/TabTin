@@ -1,11 +1,11 @@
 /**
  * useVersionPanel — Electron 薄封装
  *
- * 内部使用共享包 @tabtin/collab-core 的 useVersionPanel，
+ * 内部使用共享包 @muse/collab-core 的 useVersionPanel，
  * 自动注入 Electron 特有的 token、API URL、i18n labels。
  * 保持与原有消费方完全兼容的接口。
  */
-import { joinApiPath } from '@tabtin/config'
+import { joinApiPath } from '@muse/config'
 import React, { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useAuthStore } from '@/stores/useAuthStore'
@@ -15,8 +15,8 @@ import {
   type VersionHistoryItem,
   type VersionPanelLabels,
   type ViewConversationOptions,
-} from '@tabtin/collab-core'
-import { toast } from '@tabtin/smartsheet-ui'
+} from '@muse/collab-core'
+import { toast } from '@muse/smartsheet-ui'
 import { navigateToConversationFromVersionPanel } from './versionPanelConversationNavigation'
 
 function useDefaultLabels(): VersionPanelLabels {

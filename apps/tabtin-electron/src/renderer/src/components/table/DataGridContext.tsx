@@ -1,5 +1,5 @@
 /**
- * Re-export from shared @tabtin/table-ui package.
+ * Re-export from shared @muse/table-ui package.
  *
  * All existing Electron imports (from './DataGridContext', '../DataGridContext')
  * continue to work through this re-export file.
@@ -12,4 +12,4 @@ export {
   type DataGridContextValue,
   useDataGridContext,
   DataGridProvider,
-} from '@tabtin/table-ui'
+} from '@muse/table-ui'

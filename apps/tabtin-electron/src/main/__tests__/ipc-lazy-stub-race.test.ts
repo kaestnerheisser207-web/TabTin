@@ -19,7 +19,7 @@
  * 5. **加载失败可重试**：模块 import 失败后 cache 被清掉，下一次调用
  *    重新尝试 import。
  *
- * 6. **EAGER 模式**：TABTIN_EAGER_IPC=1 时所有模块同步加载完成。
+ * 6. **EAGER 模式**：MUSE_EAGER_IPC=1 时所有模块同步加载完成。
  */
 
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
@@ -195,13 +195,13 @@ describe('ipc-lazy: Stub 永驻 + 模块按需加载', () => {
     mocks.isTrustedSender.mockReturnValue(true)
     // 重置 module，让 ipc-lazy 内部的状态（stubsRegistered、moduleHandlersCache）干净
     vi.resetModules()
-    delete process.env.TABTIN_EAGER_IPC
+    delete process.env.MUSE_EAGER_IPC
     ipcLazy = await import('../ipc-lazy')
     ipcLazy.__resetDeferredIpcForTesting()
   })
 
   afterEach(() => {
-    delete process.env.TABTIN_EAGER_IPC
+    delete process.env.MUSE_EAGER_IPC
   })
 
   describe('registerDeferredIpcStubs', () => {
@@ -362,8 +362,8 @@ describe('ipc-lazy: Stub 永驻 + 模块按需加载', () => {
   })
 
   describe('EAGER 模式', () => {
-    it('TABTIN_EAGER_IPC=1 时同步加载所有模块', async () => {
-      process.env.TABTIN_EAGER_IPC = '1'
+    it('MUSE_EAGER_IPC=1 时同步加载所有模块', async () => {
+      process.env.MUSE_EAGER_IPC = '1'
       vi.resetModules()
       const eagerMod = await import('../ipc-lazy')
       eagerMod.__resetDeferredIpcForTesting()

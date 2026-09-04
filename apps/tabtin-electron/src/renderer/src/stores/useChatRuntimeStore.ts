@@ -37,8 +37,8 @@ import type {
   ContentBlockDeltaPayload,
   MessageStopReason,
   MessageUsage,
-} from '@tabtin/agent-wire'
-import type { GroupRuntimeConfig } from '@tabtin/chat-client'
+} from '@muse/agent-wire'
+import type { GroupRuntimeConfig } from '@muse/chat-client'
 import { INITIAL_RUN_STATE } from './chat/shared/types'
 import { getContentBlocksBridge } from './chat/messages/contentBlocksMirrorRegistry'
 import { deriveSubagentRunsFromMessages } from './chat/subagent/utils/subagentRunsFromMessages'
@@ -142,7 +142,7 @@ async function loadIndexedSubagentSnapshots(
   sessionId: string,
   options?: { organizationId?: string; spaceId?: string },
 ): Promise<SubagentRun[]> {
-  const listRuns = window.tabtin?.agentEngine?.listSubagentRuns
+  const listRuns = window.muse?.agentEngine?.listSubagentRuns
   if (typeof listRuns !== 'function') return []
   try {
     const result = await listRuns({
@@ -2176,8 +2176,8 @@ export const useChatRuntimeStore = create<ChatRuntimeState>()((set, get) => ({
       const sessionId = findSessionId()
       // 子 Agent 取消同样只走 agent-host IPC：本机命中由主进程直接取消；
       // 本机 miss 且有 sessionId 时，由主进程代发远端 `subagent.cancel`。
-      if (window.tabtin?.agentEngine?.cancelSubagent) {
-        const accepted = await window.tabtin.agentEngine.cancelSubagent(
+      if (window.muse?.agentEngine?.cancelSubagent) {
+        const accepted = await window.muse.agentEngine.cancelSubagent(
           sessionId ? { childId: subagentRunId, sessionId } : subagentRunId,
         )
         if (accepted) {
@@ -2574,7 +2574,7 @@ export const useChatRuntimeStore = create<ChatRuntimeState>()((set, get) => ({
       // contract W2-β：旧 envelope `{success, snapshots}` 改为 invokeIpc 直接返
       // `{ snapshots }` 或 throw。snapshots 是 inspector 用的诊断数据，IPC 失败时
       // 静默 swallow——inspector 自然展示空状态，不影响主流程。
-      const result = await window.tabtin?.agentEngine?.readSnapshots?.(sessionId, ctx)
+      const result = await window.muse?.agentEngine?.readSnapshots?.(sessionId, ctx)
       if (Array.isArray(result?.snapshots) && result.snapshots.length > 0) {
         set(state => ({
           snapshotsBySessionId: {

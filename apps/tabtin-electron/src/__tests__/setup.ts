@@ -1,6 +1,6 @@
 /**
  * Vitest 全局 setup
- * 模拟 Electron 环境中的 window.tabtin 对象
+ * 模拟 Electron 环境中的 window.muse 对象
  */
 import { afterEach, beforeEach, vi } from 'vitest'
 import { cleanup } from '@testing-library/react'
@@ -308,7 +308,7 @@ vi.mock('idb', () => ({
   }),
 }))
 
-vi.mock('@tabtin/smartsheet-adapter-electron/renderer', () => ({
+vi.mock('@muse/smartsheet-adapter-electron/renderer', () => ({
   getApiAdapter: () => ({
     request: vi.fn().mockResolvedValue({ status: 200, data: {}, statusText: 'OK' }),
     getAccessToken: vi.fn().mockResolvedValue(null),

@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { getTableSpaceId, TableApiService, type Table } from '@tabtin/table-core'
+import { getTableSpaceId, TableApiService, type Table } from '@muse/table-core'
 import { useCreateTable, useCreateTableInSpace, useTableStore } from '@stores/useTableStore'
 import { useOrganizationStore } from '@stores/useOrganizationStore'
 import { useResolvedOrganizationId } from '@/hooks/useResolvedOrganizationId'

@@ -5,8 +5,8 @@ import { join } from 'node:path';
 
 const mockCrawlCleanHtml = vi.hoisted(() => vi.fn());
 
-vi.mock('@tabtin/action-tools/impl', async () => {
-  const actual = await vi.importActual<typeof import('@tabtin/action-tools/impl')>('@tabtin/action-tools/impl');
+vi.mock('@muse/action-tools/impl', async () => {
+  const actual = await vi.importActual<typeof import('@muse/action-tools/impl')>('@muse/action-tools/impl');
   return {
     ...actual,
     getSharedCrawlToolImpl: () => ({

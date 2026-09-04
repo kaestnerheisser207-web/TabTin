@@ -18,8 +18,8 @@ describe('normalizeSchemelessWebHref', () => {
   it('已有协议、内部资源和相对路径不动', () => {
     expect(normalizeSchemelessWebHref('https://www.baidu.com')).toBe('https://www.baidu.com')
     expect(normalizeSchemelessWebHref('mailto:hi@example.com')).toBe('mailto:hi@example.com')
-    expect(normalizeSchemelessWebHref('tabtin://resource/file/a')).toBe(
-      'tabtin://resource/file/a',
+    expect(normalizeSchemelessWebHref('muse://resource/file/a')).toBe(
+      'muse://resource/file/a',
     )
     expect(normalizeSchemelessWebHref('./notes.md')).toBe('./notes.md')
     expect(normalizeSchemelessWebHref('readme.md')).toBe('readme.md')

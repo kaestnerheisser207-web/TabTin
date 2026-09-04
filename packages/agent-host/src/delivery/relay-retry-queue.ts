@@ -6,7 +6,7 @@ import {
   type PersistedEntry,
   type PersistedEntryOwner,
   type PersistentQueue,
-} from '@tabtin/agent-runtime'
+} from '@muse/agent-runtime'
 
 import { filterRelayPersistableEvents } from './relay-transient-events.js'
 import {

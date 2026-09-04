@@ -1,5 +1,5 @@
 {
-  "name": "@tabtin/browser-capabilities",
+  "name": "@muse/browser-capabilities",
   "version": "0.1.0",
   "description": "Browser capabilities abstraction layer (based on Min Browser design)",
   "type": "module",

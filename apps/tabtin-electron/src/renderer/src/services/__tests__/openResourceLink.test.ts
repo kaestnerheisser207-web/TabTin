@@ -1,14 +1,14 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest'
-import type { OpenOutcome } from '@tabtin/resource-router'
+import type { OpenOutcome } from '@muse/resource-router'
 
 const { resourceRouterOpen, openProjectTaskDocumentPreview } = vi.hoisted(() => ({
   resourceRouterOpen: vi.fn(),
   openProjectTaskDocumentPreview: vi.fn(() => false),
 }))
 
-vi.mock('@tabtin/resource-router', () => ({
+vi.mock('@muse/resource-router', () => ({
   parseResourcePointer: (href: string) => {
-    const match = /^(?:tabtin|tabtin-preprod|tabtin-dev):\/\/resource\/([^/?#]+)\/([^?#]+)(?:\?([^#]*))?/.exec(href)
+    const match = /^(?:muse|muse-preprod|muse-dev):\/\/resource\/([^/?#]+)\/([^?#]+)(?:\?([^#]*))?/.exec(href)
     if (!match) {
       const url = new URL(href)
       return {
@@ -70,7 +70,7 @@ vi.mock('@/stores/useSpaceViewPrefsStore', () => ({
   },
 }))
 
-vi.mock('@tabtin/smartsheet-ui', () => ({
+vi.mock('@muse/smartsheet-ui', () => ({
   toast: (...args: unknown[]) => toast(...args),
 }))
 
@@ -233,7 +233,7 @@ describe('openResourceUrlInSpace', () => {
 
   it('Project Task 双宿主文档预览命中时不走 ResourceRouter / openTeamSpaceTabdoc', async () => {
     openProjectTaskDocumentPreview.mockReturnValue(true)
-    const href = 'tabtin://resource/document/doc_1?hint=tabdoc'
+    const href = 'muse://resource/document/doc_1?hint=tabdoc'
     const outcome = await openResourceUrlInSpace(href, 'conversation:session-1')
 
     expect(openProjectTaskDocumentPreview).toHaveBeenCalledWith({
@@ -251,7 +251,7 @@ describe('openResourceUrlInSpace', () => {
   })
 
   it('成功在 Space 内打开后自动展开画布', async () => {
-    const href = 'tabtin://resource/document/doc_1?hint=tabdoc'
+    const href = 'muse://resource/document/doc_1?hint=tabdoc'
     await openResourceUrlInSpace(href, 'conversation:session-1')
 
     expect(resourceRouterOpen).toHaveBeenCalled()
@@ -259,7 +259,7 @@ describe('openResourceUrlInSpace', () => {
   })
 
   it('ResourceRouter 入口把 OpenIntentHints 写入 pointer meta', async () => {
-    const href = 'tabtin://resource/file/file_1?hint=tabfiles&title=Signed'
+    const href = 'muse://resource/file/file_1?hint=tabfiles&title=Signed'
     const hints = {
       filename: 'report.xlsx',
       mimeType: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
@@ -281,7 +281,7 @@ describe('openResourceUrlInSpace', () => {
   })
 
   it('未传 tabScopeKey 时按前台 scope 展开画布', async () => {
-    const href = 'tabtin://resource/document/doc_1?hint=tabdoc'
+    const href = 'muse://resource/document/doc_1?hint=tabdoc'
     await openResourceUrlInSpace(href)
 
     expect(resourceRouterOpen).toHaveBeenCalledWith(
@@ -294,7 +294,7 @@ describe('openResourceUrlInSpace', () => {
 
   it('无 Space 的 IM 会话仍在内部打开 tabtin 文件资源', async () => {
     selectedSpaceId = null
-    const href = 'tabtin://resource/file/artifacts%2Freport.xlsx?hint=tabfiles'
+    const href = 'muse://resource/file/artifacts%2Freport.xlsx?hint=tabfiles'
 
     await openResourceUrlInSpace(href, 'im:conversation-1')
 
@@ -314,9 +314,9 @@ describe('openResourceUrlInSpace', () => {
     expect(setCanvasCollapsedForScope).toHaveBeenCalledWith('im:conversation-1', false)
   })
 
-  it('无 Space 的 IM 会话仍在内部打开 tabtin-preprod 文件资源', async () => {
+  it('无 Space 的 IM 会话仍在内部打开 muse-preprod 文件资源', async () => {
     selectedSpaceId = null
-    const href = 'tabtin-preprod://resource/file/artifacts%2Freport.xlsx?hint=tabfiles'
+    const href = 'muse-preprod://resource/file/artifacts%2Freport.xlsx?hint=tabfiles'
 
     await openResourceUrlInSpace(href, 'im:conversation-1')
 
@@ -378,7 +378,7 @@ describe('openResourceUrlInSpace', () => {
       errorMessage: 'boom',
       durationMs: 1,
     })
-    await openResourceUrlInSpace('tabtin://resource/document/doc_1?hint=tabdoc')
+    await openResourceUrlInSpace('muse://resource/document/doc_1?hint=tabdoc')
     expect(toast).toHaveBeenCalledWith(expect.objectContaining({
       title: '无法打开链接',
       description: 'boom',
@@ -394,7 +394,7 @@ describe('openResourceUrlInSpace', () => {
       durationMs: 1,
     })
     await openResourceUrlInSpace(
-      'tabtin://resource/document/doc_1?hint=tabdoc',
+      'muse://resource/document/doc_1?hint=tabdoc',
       'conversation:session-1',
       { suppressErrorToast: true },
     )

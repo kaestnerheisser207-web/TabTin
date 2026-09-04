@@ -1066,7 +1066,7 @@
     <!-- rich_content: 富内容展示 -->
     <string name="rich_content_resource">资源</string>
     <string name="rich_content_open">打开</string>
-    <!-- 本地文件卡无 http(s)（仅 tabtin://）：文件在电脑执行设备上，手机只展示提示。 -->
+    <!-- 本地文件卡无 http(s)（仅 muse://）：文件在电脑执行设备上，手机只展示提示。 -->
     <string name="rich_content_file_open_on_desktop">请在电脑端打开</string>
     <string name="rich_content_download">下载</string>
     <!-- Wave 3: 表格 / 资源跳转新增文案 -->

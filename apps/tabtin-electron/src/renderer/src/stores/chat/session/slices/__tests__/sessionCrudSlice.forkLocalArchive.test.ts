@@ -6,7 +6,7 @@
  * fork 点前历史从 UI 消失（DB 仍完好）。
  */
 import { describe, it, expect, vi, beforeEach } from 'vitest'
-import type { ChatSession } from '@tabtin/chat-client'
+import type { ChatSession } from '@muse/chat-client'
 import { createSessionCrudActions, type SessionCrudStore } from '../sessionCrudSlice'
 
 vi.mock('@/utils/logger', () => ({
@@ -34,7 +34,7 @@ vi.mock('../../../../useSessionReadStore', () => ({
   useSessionReadStore: { getState: () => ({ markViewed: vi.fn() }) },
 }))
 vi.mock('@/services/sessionFreshness', () => ({ markSessionFresh: vi.fn(), markSessionStale: vi.fn() }))
-vi.mock('@tabtin/smartsheet-ui/toast', () => ({ toast: vi.fn() }))
+vi.mock('@muse/smartsheet-ui/toast', () => ({ toast: vi.fn() }))
 vi.mock('@/i18n', () => ({ default: { t: (k: string) => k } }))
 vi.mock('@/services/localAgentClient', () => ({ isLocalRuntimeAvailable: () => true }))
 

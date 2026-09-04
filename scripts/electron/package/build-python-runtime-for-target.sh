@@ -8,8 +8,8 @@
 #   bash scripts/electron/package/build-python-runtime-for-target.sh win32-x64
 #
 # 环境变量：
-#   TABTIN_FORCE_PYTHON_RUNTIME_BUILD=1  强制重建（即使产物已存在）
-#   TABTIN_PYTHON_RUNTIME_REQUIRED=1     构建失败时 exit 1
+#   MUSE_FORCE_PYTHON_RUNTIME_BUILD=1  强制重建（即使产物已存在）
+#   MUSE_PYTHON_RUNTIME_REQUIRED=1     构建失败时 exit 1
 set -euo pipefail
 
 REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../../.." && pwd)"
@@ -54,9 +54,9 @@ derive_python_runtime_archive_name() {
   ' "$PY_RUNTIME_PKG_DIR/runtime.config.json" "$TARGET_MANIFEST_PLATFORM" 2>/dev/null
 }
 
-ARCHIVE_NAME="$(derive_python_runtime_archive_name || echo "tabtin-python-runtime-${TARGET_MANIFEST_PLATFORM}.tar.gz")"
+ARCHIVE_NAME="$(derive_python_runtime_archive_name || echo "muse-python-runtime-${TARGET_MANIFEST_PLATFORM}.tar.gz")"
 ARCHIVE_PATH="$PY_RUNTIME_OUT_DIR/$ARCHIVE_NAME"
-REQUIRED="${TABTIN_PYTHON_RUNTIME_REQUIRED:-0}"
+REQUIRED="${MUSE_PYTHON_RUNTIME_REQUIRED:-0}"
 FINGERPRINT_PATH="$PY_RUNTIME_OUT_DIR/.${TARGET_MANIFEST_PLATFORM}.dependency-fingerprint"
 
 sha256_stream() {
@@ -91,7 +91,7 @@ python_runtime_dist_ready() {
   [ -s "$ARCHIVE_PATH" ] \
     && [ -f "$FINGERPRINT_PATH" ] \
     && [ "$(cat "$FINGERPRINT_PATH")" = "$EXPECTED_FINGERPRINT" ] \
-    && [ "${TABTIN_FORCE_PYTHON_RUNTIME_BUILD:-0}" != "1" ]
+    && [ "${MUSE_FORCE_PYTHON_RUNTIME_BUILD:-0}" != "1" ]
 }
 
 if python_runtime_dist_ready; then

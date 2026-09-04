@@ -50,7 +50,7 @@ func TestResolveOutputFormat(t *testing.T) {
 			wantFmt: conversation.OutputText,
 		},
 		{
-			// TABTIN_AGENT=1 等价：root.go:99-100 强制 f.Format=FormatAgent 但 Changed=false。
+			// MUSE_AGENT=1 等价：root.go:99-100 强制 f.Format=FormatAgent 但 Changed=false。
 			// v10.11 P1 实现会误拒此场景；P2 修复后必须 PASS 并保持命令默认 text。
 			name:         "都未显式_envAgent_保持text_不拒（v10.11_P2_regression）",
 			cmdOutFmtRaw: "text", cmdOutFmtExp: false,

@@ -1,7 +1,7 @@
 import {
   cancelAllPendingHitlRequests,
   type PendingHitlMap,
-} from '@tabtin/agent-runtime'
+} from '@muse/agent-runtime'
 
 export interface WaitForHumanInteractionInput {
   requestId: string

@@ -1,4 +1,4 @@
-import { registerStorageBucket } from '@tabtin/storage-manager'
+import { registerStorageBucket } from '@muse/storage-manager'
 import type { Slide, PPTElement } from '../types/slides'
 
 export const PENDING_WRITES_MAX = 300

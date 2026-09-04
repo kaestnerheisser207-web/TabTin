@@ -1,6 +1,6 @@
-import { API_ENDPOINTS } from '@tabtin/config'
-import { RefreshTemporarilyUnavailableError } from '@tabtin/api-client'
-import type { AuthAdapter } from '@tabtin/platform-adapter'
+import { API_ENDPOINTS } from '@muse/config'
+import { RefreshTemporarilyUnavailableError } from '@muse/api-client'
+import type { AuthAdapter } from '@muse/platform-adapter'
 import type { RefreshTokenResponse } from '@/types/auth'
 import { buildApiUrl } from '@/config/api'
 

@@ -7,13 +7,13 @@ export default defineConfig({
     // without requiring a full monorepo build (Wave 3 worktree hydrate).
     conditions: ['source', 'import', 'module', 'default'],
     alias: {
-      '@tabtin/terminal-core': path.resolve(__dirname, '../terminal-core/src/index.ts'),
-      '@tabtin/browser-core': path.resolve(__dirname, '../browser-core/src/index.ts'),
-      '@tabtin/os-errors': path.resolve(__dirname, '../os-errors/src/index.ts'),
-      '@tabtin/safe-fs': path.resolve(__dirname, '../safe-fs/src/index.ts'),
-      '@tabtin/shared/storage-paths': path.resolve(__dirname, '../tabtin-shared/src/storage-paths.ts'),
-      '@tabtin/shared': path.resolve(__dirname, '../tabtin-shared/src/index.ts'),
-      '@tabtin/env-sanitize': path.resolve(__dirname, '../env-sanitize/src/index.ts'),
+      '@muse/terminal-core': path.resolve(__dirname, '../terminal-core/src/index.ts'),
+      '@muse/browser-core': path.resolve(__dirname, '../browser-core/src/index.ts'),
+      '@muse/os-errors': path.resolve(__dirname, '../os-errors/src/index.ts'),
+      '@muse/safe-fs': path.resolve(__dirname, '../safe-fs/src/index.ts'),
+      '@muse/shared/storage-paths': path.resolve(__dirname, '../tabtin-shared/src/storage-paths.ts'),
+      '@muse/shared': path.resolve(__dirname, '../tabtin-shared/src/index.ts'),
+      '@muse/env-sanitize': path.resolve(__dirname, '../env-sanitize/src/index.ts'),
     },
   },
   test: {

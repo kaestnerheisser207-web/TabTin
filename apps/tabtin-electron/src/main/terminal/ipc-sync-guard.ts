@@ -65,7 +65,7 @@
  */
 
 import { ipcMain, type IpcMainEvent } from 'electron'
-import { errResponse, okResponse, type CliResponse } from '@tabtin/agent-wire'
+import { errResponse, okResponse, type CliResponse } from '@muse/agent-wire'
 import { isTrustedSender } from '../auth'
 import { createLogger } from '../logger'
 import {

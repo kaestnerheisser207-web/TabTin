@@ -13,7 +13,7 @@ import { CheckCircle2, XCircle, AlertTriangle, Loader2, ChevronDown, ChevronRigh
 import { cn } from '../../utils/cn'
 import { ScrollArea } from '../scroll-area'
 import { t, getSmartsheetUiLocale } from "../../i18n"
-import type { ImportErrorType, ClassifiedImportError, ImportErrorSummary } from '@tabtin/table-core'
+import type { ImportErrorType, ClassifiedImportError, ImportErrorSummary } from '@muse/table-core'
 
 export type ImportStatus = 'idle' | 'importing' | 'success' | 'error'
 

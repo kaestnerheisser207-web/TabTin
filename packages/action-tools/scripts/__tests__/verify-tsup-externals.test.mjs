@@ -4,7 +4,7 @@
  * 关键不变量：
  *   1. 注释行匹配：能识别 esbuild 标准的 commonJS shim 注释格式
  *   2. native 特征检测：gypfile / binary / postinstall 关键词 / .node 文件 / bin 非 JS
- *   3. monorepo 内部包跳过：@tabtin/* 不应被报错
+ *   3. monorepo 内部包跳过：@muse/* 不应被报错
  *   4. 端到端：当前 action-tools dist（fresh build 后）verify 通过
  *
  * 这个 mjs 测试由 vitest 直接跑（vitest 4 支持 .mjs），加到 packages/action-tools
@@ -107,15 +107,15 @@ var require_lib = __commonJS({
     }
   })
 
-  it('monorepo @tabtin/* 内部包应跳过（即使被 inline 也不算 offender）', async () => {
-    // 用同样的 fixture 套路，但包名是 @tabtin/fake-internal
+  it('monorepo @muse/* 内部包应跳过（即使被 inline 也不算 offender）', async () => {
+    // 用同样的 fixture 套路，但包名是 @muse/fake-internal
     const tmp = await fs.mkdtemp(path.join(packageRoot, '.test-fixture-'))
     try {
       const fakeDist = path.join(tmp, 'dist')
       await fs.mkdir(fakeDist, { recursive: true })
-      const fakeChunk = `// ../../node_modules/.pnpm/@tabtin+fake-internal@1.0.0/node_modules/@tabtin/fake-internal/lib/index.js
+      const fakeChunk = `// ../../node_modules/.pnpm/@tabtin+fake-internal@1.0.0/node_modules/@muse/fake-internal/lib/index.js
 var require_lib = __commonJS({
-  "../../node_modules/.pnpm/@tabtin+fake-internal@1.0.0/node_modules/@tabtin/fake-internal/lib/index.js"(exports, module) {
+  "../../node_modules/.pnpm/@tabtin+fake-internal@1.0.0/node_modules/@muse/fake-internal/lib/index.js"(exports, module) {
     module.exports = {};
   }
 });

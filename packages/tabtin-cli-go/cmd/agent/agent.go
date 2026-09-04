@@ -58,7 +58,7 @@ func resolveCurrentAgentID(f *cmdutil.Factory, args []string) (string, error) {
 	if err != nil {
 		return "", err
 	}
-	// 只认真实 Agent 身份（TABTIN_AGENT_ID / DefaultAgent）；**不回落 Space ID**。
+	// 只认真实 Agent 身份（MUSE_AGENT_ID / DefaultAgent）；**不回落 Space ID**。
 	// 回落 Space ID 会让 `/api/agents/{id}` 收到 space id（ 同源混用）。
 	if id := config.ResolveAgentID(cfg.CurrentProfileConfig()); id != "" {
 		return id, nil
@@ -840,7 +840,7 @@ func newCmdUse(f *cmdutil.Factory) *cobra.Command {
 			}
 
 			p := cfg.CurrentProfileConfig()
-			// 只设置 Agent 身份，不再污染 DefaultSpace / TABTIN_SPACE_ID——
+			// 只设置 Agent 身份，不再污染 DefaultSpace / MUSE_SPACE_ID——
 			// Agent 与 Space 是独立实体（ 根因：曾把 agent id 写进 space 槽）。
 			// 切换工作 Space 用 'muse space use <space-id>'。
 			p.DefaultAgent = agentID
@@ -849,7 +849,7 @@ func newCmdUse(f *cmdutil.Factory) *cobra.Command {
 				return fmt.Errorf("保存失败: %w", err)
 			}
 
-			os.Setenv("TABTIN_AGENT_ID", agentID)
+			os.Setenv("MUSE_AGENT_ID", agentID)
 
 			fmt.Fprintf(os.Stderr, "✓ 已切换到 Agent '%s'\n", agentID)
 			return nil
@@ -869,7 +869,7 @@ func newCmdCurrent(f *cmdutil.Factory) *cobra.Command {
 			}
 			profile := cfg.CurrentProfileConfig()
 
-			// 显式 Agent 身份（--agent-id / TABTIN_AGENT_ID / DefaultAgent）优先，
+			// 显式 Agent 身份（--agent-id / MUSE_AGENT_ID / DefaultAgent）优先，
 			// 直接返回，无需回后端解析。
 			if agentID := config.ResolveAgentID(profile); agentID != "" {
 				output.PrintResult(output.SuccessEnvelope(map[string]any{"agent_id": agentID}), f.Format)

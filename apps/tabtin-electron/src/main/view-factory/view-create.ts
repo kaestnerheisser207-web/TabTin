@@ -14,7 +14,7 @@
 
 import type { WebContents, WebContentsView } from 'electron'
 import type { ViewFactoryConfig } from './types'
-import type { ViewManager } from '@tabtin/browser-capabilities'
+import type { ViewManager } from '@muse/browser-capabilities'
 import type { SessionPreloadRegistry } from './session-preload-registry'
 import type { ResourceInterceptionContext } from './resource-interception'
 import {

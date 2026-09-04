@@ -1,5 +1,5 @@
 /**
- * tabtin/no-chat-design-violations
+ * muse/no-chat-design-violations
  *
  * 把 chat 模块"设计语言治理"成果钉死的守门规则。规则范围由 eslint.config.mjs
  * 的 `files` glob 控制（仅 `apps/tabtin-electron/src/renderer/src/components/chat/**`）；
@@ -29,12 +29,12 @@
  *
  * 文件级豁免（用于 token 定义文件、领域色文件）：
  *   ```ts
- *   /* eslint-disable tabtin/no-chat-design-violations -- 理由 *\/
+ *   /* eslint-disable muse/no-chat-design-violations -- 理由 *\/
  *   ```
  *
  * 行级豁免（极少数动作色场景，如 voice 录音红）：
  *   ```ts
- *   // eslint-disable-next-line tabtin/no-chat-design-violations -- 录音红是动作色
+ *   // eslint-disable-next-line muse/no-chat-design-violations -- 录音红是动作色
  *   ```
  */
 
@@ -87,7 +87,7 @@ const MESSAGES = {
   badOpacity:
     '[chat 设计语言] 透明度违规 `{{match}}`。design-system.md §三 强制 `/60`（次要）或 `/80`（较重要次要），禁用 `/50` 与 `/70`。',
   semanticBgFace:
-    '[chat 设计语言] 警示色面违规 `{{match}}`。横幅 / 卡片样式契约：容器永远 `bg-background`，状态退到 `text-success/80` / `text-destructive/80` / `text-warning/80` 等文字色或图标色上承担（point-only）。如确需小面积色面（譬如 dialog 内的告警 chip），加 `// eslint-disable-next-line tabtin/no-chat-design-violations -- 理由` 例外标注。',
+    '[chat 设计语言] 警示色面违规 `{{match}}`。横幅 / 卡片样式契约：容器永远 `bg-background`，状态退到 `text-success/80` / `text-destructive/80` / `text-warning/80` 等文字色或图标色上承担（point-only）。如确需小面积色面（譬如 dialog 内的告警 chip），加 `// eslint-disable-next-line muse/no-chat-design-violations -- 理由` 例外标注。',
   rawFontSize:
     '[chat 设计语言] 禁用 Tailwind 默认字号 `{{match}}`。改用语义字号：text-caption / text-body / text-subtitle / text-title / text-heading / text-display（见 design-system.md §二）。',
   pixelFontSize:
@@ -114,7 +114,7 @@ const rule = {
     docs: {
       description:
         'chat 模块设计语言守门：禁用硬编码 Tailwind 原色 / 违规透明度 /50 /70 / 默认字号 / 像素字号。',
-      url: 'https://github.com/TabTin/TabTinAgent/blob/main/eslint-rules/README.md#tabtinno-chat-design-violations',
+      url: 'https://github.com/TabTin/TabTinAgent/blob/main/eslint-rules/README.md#museno-chat-design-violations',
     },
     schema: [],
     messages: MESSAGES,

@@ -174,7 +174,7 @@ async function executeRecovery(organizationId: string): Promise<boolean> {
 
 async function isAgentGatewayRecovering(): Promise<boolean> {
   try {
-    const status = await (window as any).tabtin?.agentGateway?.getStatus?.()
+    const status = await (window as any).muse?.agentGateway?.getStatus?.()
     return status === 'recovering'
   } catch {
     return false
@@ -184,7 +184,7 @@ async function isAgentGatewayRecovering(): Promise<boolean> {
 function scheduleReconnectAfterAgentGatewayRecovery(): void {
   if (reconnectAfterAgentRecoveryUnsub) return
 
-  const agentGateway = (window as any).tabtin?.agentGateway
+  const agentGateway = (window as any).muse?.agentGateway
   let finished = false
   const finish = () => {
     if (finished) return

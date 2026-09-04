@@ -1,15 +1,15 @@
 import React from 'react';
 import { createPortal } from 'react-dom';
-import { ConfirmDialog, useOverlayContainer, cn, OVERLAY_SURFACE_CLASS } from '@tabtin/smartsheet-ui';
-import { resolveRecordId, type TableGridRow } from '@tabtin/table-engine';
+import { ConfirmDialog, useOverlayContainer, cn, OVERLAY_SURFACE_CLASS } from '@muse/smartsheet-ui';
+import { resolveRecordId, type TableGridRow } from '@muse/table-engine';
 import { FieldManagementDialog } from '@/components/field';
 import { FieldSettingPanel } from '@/components/field/FieldSettingPanel';
 import { RecordFormContainer } from '@/components/record';
 import { ExportContainer } from '@/components/export';
 import { ImportContainer } from '@/components/import';
-import type { Table } from '@tabtin/table-core';
+import type { Table } from '@muse/table-core';
 import { formatNumber } from '@/utils/i18n/format';
-import type { GridToolbarUiState } from '@tabtin/table-ui';
+import type { GridToolbarUiState } from '@muse/table-ui';
 import { useTableOverlayDrawerContainer } from '@/components/table/utils/TableOverlayDrawerHost';
 
 interface GridToolbarDialogsProps {

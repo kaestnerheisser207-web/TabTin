@@ -4,8 +4,8 @@
  * 所有 API 函数通过 AppHostClient.request() 调用后端，
  * URL 拼接、Token 注入、Envelope 解包由 SDK 统一处理。
  */
-import type { AppHostClient } from '@tabtin/app-host-sdk'
-import { recordProbeEvent } from '@tabtin/doc-editor'
+import type { AppHostClient } from '@muse/app-host-sdk'
+import { recordProbeEvent } from '@muse/doc-editor'
 
 export type FontStyle = 'default' | 'serif' | 'mono'
 

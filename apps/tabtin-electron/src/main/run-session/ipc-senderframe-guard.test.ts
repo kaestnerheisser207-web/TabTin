@@ -52,7 +52,7 @@ vi.mock('./RunSessionManager', () => ({
   getRunSessionManager: () => mocks.managerMock,
 }))
 
-vi.mock('@tabtin/action-tools/tools', () => ({
+vi.mock('@muse/action-tools/tools', () => ({
   requestSnapshotTool: { execute: vi.fn() },
 }))
 

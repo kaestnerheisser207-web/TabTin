@@ -2,7 +2,7 @@
  * ：DONE 收尾对硬停 / ABORT 的 metadata 写入。
  */
 import { beforeEach, describe, expect, it, vi } from 'vitest'
-import type { ChatMessage } from '@tabtin/chat-client'
+import type { ChatMessage } from '@muse/chat-client'
 
 const storeState = {
   messagesBySessionId: {} as Record<string, ChatMessage[]>,
@@ -42,7 +42,7 @@ vi.mock('@/stores/chat/useChatStore', () => ({
   ),
 }))
 
-vi.mock('@tabtin/agent-host/delivery/usage-metadata-projection', () => ({
+vi.mock('@muse/agent-host/delivery/usage-metadata-projection', () => ({
   projectUsageMetadata: () => ({}),
 }))
 

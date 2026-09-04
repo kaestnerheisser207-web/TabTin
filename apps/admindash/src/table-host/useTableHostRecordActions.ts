@@ -5,8 +5,8 @@ import {
   createEmptyDraft,
 } from '@/table-host/record-draft-utils'
 import { toErrorMessage } from '@/table-host/value-utils'
-import { RecordApiService } from '@tabtin/table-core'
-import type { TableField, TableRecord } from '@tabtin/table-ui'
+import { RecordApiService } from '@muse/table-core'
+import type { TableField, TableRecord } from '@muse/table-ui'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 
 interface UseTableHostRecordActionsInput {

@@ -5,12 +5,12 @@
  * 注意：confirm 返回的 preview_url 是鉴权 API path，不能直接给 <img>。
  * 绑定消息前也无法换签，因此这里不返回 previewUrl，保留 composer 的 blob 预览。
  */
-import type { AppHostClient } from '@tabtin/app-host-sdk'
+import type { AppHostClient } from '@muse/app-host-sdk'
 import {
   confirmCommentAttachmentUpload,
   isSignedCommentPreviewUrl,
   presignCommentAttachmentUpload,
-} from '@tabtin/tabdoc-ui/api-client'
+} from '@muse/tabdoc-ui/api-client'
 import { validateUploadFile } from '@/constants/upload'
 import { putPresignedObjectViaMainProcess } from '@/services/mainProcessOssUploader'
 import { createLogger } from '@/utils/logger'

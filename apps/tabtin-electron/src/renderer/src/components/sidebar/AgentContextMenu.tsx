@@ -7,7 +7,7 @@ import {
   ContextMenu,
   ContextMenuItem,
   ContextMenuDivider,
-} from '@tabtin/smartsheet-ui'
+} from '@muse/smartsheet-ui'
 import { Table, Settings2, Share2 } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 

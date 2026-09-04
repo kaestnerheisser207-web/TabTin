@@ -1,7 +1,7 @@
 /**
  * MessageStart payload 本地自检（ Stage 5c）。
  *
- * 替代生产路径对 `@tabtin/agent-wire` `MessageStartSchema.parse` 的依赖；
+ * 替代生产路径对 `@muse/agent-wire` `MessageStartSchema.parse` 的依赖；
  * 规则与 wire `MESSAGE_KIND_ALLOWED_ROLES` + 必填字段对齐。完整 Zod 校验
  * 仍由 wire 包在跨端消费 / 测试侧承担。
  */

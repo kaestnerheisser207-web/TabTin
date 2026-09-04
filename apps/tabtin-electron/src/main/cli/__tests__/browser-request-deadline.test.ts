@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from 'vitest'
-import { PERMISSION_TIMEOUTS } from '@tabtin/agent-wire'
+import { PERMISSION_TIMEOUTS } from '@muse/agent-wire'
 import { BROWSER_CLI_APPROVAL_TIMEOUT_MS } from '../browser-policy-middleware'
 import {
   BROWSER_CLI_REQUEST_TIMEOUT_GRACE_MS,

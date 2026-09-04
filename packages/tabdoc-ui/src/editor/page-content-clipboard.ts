@@ -1,4 +1,4 @@
-import { pmJsonToHtml } from '@tabtin/doc-editor';
+import { pmJsonToHtml } from '@muse/doc-editor';
 
 export interface PageContentClipboard {
   write?: (items: ClipboardItem[]) => Promise<void>;

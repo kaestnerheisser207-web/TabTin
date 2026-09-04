@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import type { ChatMessage } from '@tabtin/chat-client'
+import type { ChatMessage } from '@muse/chat-client'
 import {
   agentToolDeliverableToArtifact,
   parseDeliverablesFromAgentToolContent,
@@ -57,7 +57,7 @@ describe('turnArtifactFromAgentTool', () => {
         resource_type: 'tabdoc',
         resource_id: 'doc_1',
         resource_name: '周报',
-        url: 'tabtin://resource/tabdoc/doc_1',
+        url: 'muse://resource/tabdoc/doc_1',
       },
       'agent_1',
       0,
@@ -66,7 +66,7 @@ describe('turnArtifactFromAgentTool', () => {
     expect(mapped).toMatchObject({
       kind: 'doc',
       title: '周报',
-      href: 'tabtin://resource/tabdoc/doc_1',
+      href: 'muse://resource/tabdoc/doc_1',
       sourceSubagentName: '文件操作助手',
     })
   })

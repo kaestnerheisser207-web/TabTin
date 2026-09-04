@@ -1,7 +1,7 @@
 """TabTin file generation toolkit — JSON spec -> xlsx/docx/pptx/pdf."""
 
-from tabtin_filegen.errors import FileGenError, SpecError
-from tabtin_filegen.registry import (
+from muse_filegen.errors import FileGenError, SpecError
+from muse_filegen.registry import (
     Generator,
     Reader,
     get_generator,

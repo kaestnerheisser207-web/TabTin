@@ -16,47 +16,47 @@
  * TODO: Extract tools to packages/agent-tools for single-source sharing.
  */
 
-import type { SystemPromptConfig } from '@tabtin/agent-prompt';
+import type { SystemPromptConfig } from '@muse/agent-prompt';
 import type {
   ToolProvider,
   Tool,
   StreamEvent,
   ToolResultStorage,
-} from '@tabtin/agent-runtime/engine';
+} from '@muse/agent-runtime/engine';
 //  批次 13：engine barrel 收敛——subagent / tools / agent-modes 符号改从包入口 import。
-import type { AgentToolDeps, TodoSessionAnchor } from '@tabtin/agent-runtime'
-import type { HostAgentToolDeps } from '@tabtin/agent-host/configuration'
+import type { AgentToolDeps, TodoSessionAnchor } from '@muse/agent-runtime'
+import type { HostAgentToolDeps } from '@muse/agent-host/configuration'
 import {
   createHostAgentTool,
   createSubagentToolProvider,
-} from '@tabtin/agent-host/configuration'
-import type { AgentModeName } from '@tabtin/agent-modes'
+} from '@muse/agent-host/configuration'
+import type { AgentModeName } from '@muse/agent-modes'
 import {
   createAgentTool,
   createPlanTools,
   LocalFilePlanStore,
   createSwitchModeTool,
-} from '@tabtin/agent-runtime'
+} from '@muse/agent-runtime'
 import {
   getProposableModeTargets,
   annotateToolsForMode,
   resolveAgentModeName,
-} from '@tabtin/agent-modes'
+} from '@muse/agent-modes'
 import {
   buildPolicyFromAgentConfigV2,
   type UnifiedSecurityPolicy,
   type EffectivePolicy,
   type AgentConfigV3,
   type WorkspaceSnapshot,
-} from '@tabtin/security-policy';
+} from '@muse/security-policy';
 
 type AuthorizationPreset = 'cautious' | 'collaborative' | 'full_auto' | 'server_auto';
 import {
   matchDisabledToolDomain,
   resolveDisabledToolPrefixes,
-} from '@tabtin/agent-wire';
+} from '@muse/agent-wire';
 import type { Logger } from '../../platform/observability/logging/logger.js';
-import type { RunDocParserTask } from '@tabtin/local-docparse';
+import type { RunDocParserTask } from '@muse/local-docparse';
 import { createRunTempPptxParse } from '../../platform/content/document/tempPptxParse.js';
 import {
   createCoreTools,
@@ -69,24 +69,24 @@ import {
   type SkillInvokeDeps,
   type SkillCreateDeps,
   type SkillCredentialResolver,
-} from '@tabtin/agent-runtime/tools';
+} from '@muse/agent-runtime/tools';
 //  / ：data/document/tabcode 业务工具在宿主工具包。
 import {
   createDataTools,
   createDocumentTools,
   createTabCodeTools,
-} from '@tabtin/agent-host/tools';
+} from '@muse/agent-host/tools';
 // ：show_widget 烤图 + present 资源类型/特判由宿主注入。
 import {
   bakeAndUploadWidget,
   buildLocalFileArtifactUrl,
   PRESENT_SUPPORTED_RESOURCE_TYPES,
   presentAutoOpenPolicy,
-} from '@tabtin/agent-host/capabilities';
-import { createSystemPromptProvider } from '@tabtin/agent-host/prompt';
+} from '@muse/agent-host/capabilities';
+import { createSystemPromptProvider } from '@muse/agent-host/prompt';
 // W3 (2026-05-10): `ToolResultStore` (alias of legacy `ToolResultArchive`)
 // removed along with `retrieve_tool_result`.
-import type { OSErrorBlacklist } from '@tabtin/agent-runtime/permissions';
+import type { OSErrorBlacklist } from '@muse/agent-runtime/permissions';
 
 // ─── Options ─────────────────────────────────────────────────────────
 
@@ -353,7 +353,7 @@ export class DaemonToolProvider implements ToolProvider {
       this.agentToolDeps.systemPromptProvider = createSystemPromptProvider();
     }
     this.toolResultStorage = options?.toolResultStorage;
-    this.apiBaseUrl = options?.apiBaseUrl ?? process.env.TABTIN_API_URL ?? 'https://api.example.com';
+    this.apiBaseUrl = options?.apiBaseUrl ?? process.env.MUSE_API_URL ?? 'https://api.example.com';
   }
 
   private initializeIdentityOptions(options?: DaemonToolProviderOptions): void {

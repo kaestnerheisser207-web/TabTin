@@ -16,7 +16,7 @@ File Pipeline W3 — DocParse 临时通道同步解析 endpoint
   - 直接调 parser registry 的 `parser.parse(local_path)` 然后把 chunks 序列化返
     给客户端，瞬时完成
 
-错误处理：13 类全局 SSoT（`@tabtin/file-pipeline-errors`）字面值对齐——
+错误处理：13 类全局 SSoT（`@muse/file-pipeline-errors`）字面值对齐——
 W1 后端启发式 `_classify_exception_to_failure_code` 复用同一份 SSoT，
 不在临时通道里重新发明 catalog。
 """

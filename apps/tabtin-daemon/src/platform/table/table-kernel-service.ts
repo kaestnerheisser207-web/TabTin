@@ -29,7 +29,7 @@ import type {
   CreateViewInput,
   UpdateViewInput,
   RemoteApiClient,
-} from '@tabtin/table-kernel'
+} from '@muse/table-kernel'
 import {
   buildFieldColumnMap,
   LocalRecordRepository,
@@ -44,8 +44,8 @@ import {
   TableWriteFlow,
   ViewWriteFlow,
   NoopUnitOfWork,
-} from '@tabtin/table-kernel'
-import type { PGliteInstance, SyncApiClient, IRegistrableSyncService } from '@tabtin/table-kernel-pglite'
+} from '@muse/table-kernel'
+import type { PGliteInstance, SyncApiClient, IRegistrableSyncService } from '@muse/table-kernel-pglite'
 import {
   initializeSchema,
   PGliteOutboxStore,
@@ -54,7 +54,7 @@ import {
   PGliteUnitOfWork,
   OutboxFlusher,
   PGliteQueryService,
-} from '@tabtin/table-kernel-pglite'
+} from '@muse/table-kernel-pglite'
 import { consoleLogger, type KernelLogger } from '../observability/logging/logger.js'
 
 export type { KernelLogger } from '../observability/logging/logger.js'

@@ -137,7 +137,7 @@ def heartbeat_cloud_worker_nodes():
     active_keys = registry["active_keys"]
     client = CloudWorkerClient(timeout_seconds=5)
     expected_protocol = str(
-        getattr(settings, "TABTIN_CLOUD_WORKER_PROTOCOL_VERSION", "1")
+        getattr(settings, "MUSE_CLOUD_WORKER_PROTOCOL_VERSION", "1")
     )
     result = {"ready": 0, "error": 0}
     for worker in CloudWorkerNode.objects.filter(

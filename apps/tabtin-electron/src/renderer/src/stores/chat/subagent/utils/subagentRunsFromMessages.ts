@@ -15,7 +15,7 @@
  *     冷启动不再依赖 SUBAGENT_* 内存事件。
  */
 
-import type { ChatMessage, MessageBlock } from '@tabtin/chat-client'
+import type { ChatMessage, MessageBlock } from '@muse/chat-client'
 import type { SubagentRun, SubagentStatus } from '../../shared/types'
 import {
   extractSubagentRunIdFromResult,

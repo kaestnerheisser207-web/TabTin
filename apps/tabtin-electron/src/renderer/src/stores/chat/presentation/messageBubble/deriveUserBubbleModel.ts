@@ -1,4 +1,4 @@
-import type { ChatMessage } from '@tabtin/chat-client'
+import type { ChatMessage } from '@muse/chat-client'
 import { parseConversationReferenceMessage } from '@utils/chat/conversationReference'
 import { isUnconfirmedLocalMessage } from '@stores/chat/shared/types'
 import { deriveUserMessageDisplayContent } from '@utils/chat/messageDisplayContent'

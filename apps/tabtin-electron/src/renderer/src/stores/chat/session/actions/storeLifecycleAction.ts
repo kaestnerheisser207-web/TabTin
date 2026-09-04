@@ -9,7 +9,7 @@
  * 从 useChatStore 抽出为独立 use-case action；LRU 经 messageCacheSlice 导出的 helper 操作。
  */
 
-import type { ChatSession } from '@tabtin/chat-client'
+import type { ChatSession } from '@muse/chat-client'
 import type { AgentModeName, ApprovalModeName } from '../../shared/types'
 import { createLogger } from '@/utils/logger'
 import { useChatRuntimeStore } from '../../../useChatRuntimeStore'

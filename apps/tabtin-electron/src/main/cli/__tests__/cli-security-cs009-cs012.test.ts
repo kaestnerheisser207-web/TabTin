@@ -8,11 +8,11 @@
  */
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
 import http from 'node:http'
-import { configureCLIRoutes, handleTableRoute, handleExtensionsRoute } from '@tabtin/cli-routes'
+import { configureCLIRoutes, handleTableRoute, handleExtensionsRoute } from '@muse/cli-routes'
 
 // ─── CS-009：table/create 字段失败返回 207 ──────────────────
 //
-// PlatformSurface 重构后，table 路由已迁移到 @tabtin/cli-routes。原本测试用
+// PlatformSurface 重构后，table 路由已迁移到 @muse/cli-routes。原本测试用
 // `await import('../routes/table-crud')` 直接调内部 sub-module 已不可行
 // （cli-routes 只 export 顶层 handleTableRoute）。改成走 handleTableRoute 入口，
 // 通过 configureCLIRoutes 注入 mock djangoRequest——这是 cli-routes 设计的
@@ -216,7 +216,7 @@ describe('CS-010: refreshAccessToken 超时保护', () => {
     vi.doMock('../../config/api', () => ({
       API_BASE_URL: 'http://localhost:6060/api',
     }))
-    vi.doMock('@tabtin/config', () => ({
+    vi.doMock('@muse/config', () => ({
       joinApiPath: (base: string, p: string) => base + p,
     }))
     vi.doMock('../../logger', () => ({
@@ -399,7 +399,7 @@ describe('CS-012: extensions 路由集成', () => {
     vi.restoreAllMocks()
   })
 
-  // extensions 路由也已迁移到 @tabtin/cli-routes；mock djangoRequest 通过
+  // extensions 路由也已迁移到 @muse/cli-routes；mock djangoRequest 通过
   // configureCLIRoutes 注入，跟 CS-009 同一模式。
   //
   // 注意：新版 extensions.ts 只对 `/extensions/run/*` 子前缀代理到 Django——

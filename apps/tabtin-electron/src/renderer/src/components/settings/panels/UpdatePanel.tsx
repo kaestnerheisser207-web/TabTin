@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback, useMemo } from 'react'
 import { CheckCircle2, ChevronDown, ChevronRight, ClipboardCopy, Download, Info, RefreshCw, Smartphone, Upload } from 'lucide-react'
-import { Button, Progress, StatusNotice, toast } from '@tabtin/smartsheet-ui'
+import { Button, Progress, StatusNotice, toast } from '@muse/smartsheet-ui'
 import { useTranslation } from 'react-i18next'
 import type { TFunction } from 'i18next'
 import { SettingsPanelHeader } from '../SettingsPanelHeader'
@@ -97,11 +97,11 @@ export const UpdatePanel: React.FC = () => {
   }, [])
 
   const loadReleaseHistory = useCallback(async () => {
-    if (!window.tabtin.updater.getReleaseHistory) return
+    if (!window.muse.updater.getReleaseHistory) return
     setHistoryState('loading')
     setHistoryError('')
     try {
-      const items = await window.tabtin.updater.getReleaseHistory({
+      const items = await window.muse.updater.getReleaseHistory({
         platform,
         arch,
         channel,
@@ -117,13 +117,13 @@ export const UpdatePanel: React.FC = () => {
   }, [arch, channel, i18n.language, platform, t])
 
   useEffect(() => {
-    window.tabtin.updater.getAppVersion().then(setCurrentVersion)
-    window.tabtin.updater.getState?.()
+    window.muse.updater.getAppVersion().then(setCurrentVersion)
+    window.muse.updater.getState?.()
       .then(applyRuntimeState)
       .catch(() => {})
       .finally(() => setRuntimeStateLoaded(true))
 
-    const cleanup = window.tabtin.updater.onUpdateEvent((payload) => {
+    const cleanup = window.muse.updater.onUpdateEvent((payload) => {
       const { event, data } = payload
 
       switch (event) {
@@ -186,7 +186,7 @@ export const UpdatePanel: React.FC = () => {
     setUpdateInfo(null)
     setErrorMessage('')
     try {
-      await window.tabtin.updater.checkForUpdates()
+      await window.muse.updater.checkForUpdates()
     } catch {
       // errors handled via event
     }
@@ -194,14 +194,14 @@ export const UpdatePanel: React.FC = () => {
 
   const handleDownload = useCallback(async () => {
     try {
-      await window.tabtin.updater.downloadUpdate()
+      await window.muse.updater.downloadUpdate()
     } catch {
       // errors handled via event
     }
   }, [])
 
   const handleInstall = useCallback(() => {
-    window.tabtin.updater.quitAndInstall()
+    window.muse.updater.quitAndInstall()
   }, [])
 
   // 自动更新失败时的兜底：直接在浏览器里下载安装包手动安装
@@ -210,7 +210,7 @@ export const UpdatePanel: React.FC = () => {
 
   const handleManualDownload = useCallback(() => {
     if (manualDownloadUrl) {
-      void window.tabtin.openExternal(manualDownloadUrl)
+      void window.muse.openExternal(manualDownloadUrl)
     }
   }, [manualDownloadUrl])
 

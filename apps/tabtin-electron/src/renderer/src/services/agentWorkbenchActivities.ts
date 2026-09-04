@@ -5,7 +5,7 @@
  * Chat 走 sessions/all?agent_id=。
  */
 
-import type { ChatSession, ChatSessionWithAgent } from '@tabtin/chat-client'
+import type { ChatSession, ChatSessionWithAgent } from '@muse/chat-client'
 import type { AgentProjectTaskListItem, ProjectTask, ProjectTaskConversation } from '@/types/project'
 import { filterSidebarSessions } from '@components/chat/session/filterSidebarSessions'
 import { getChatClient } from '@/services/chatApi'

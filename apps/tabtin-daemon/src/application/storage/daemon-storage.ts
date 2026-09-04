@@ -15,7 +15,7 @@
  *
  * 设计要点：
  *   - 严格按 RFC 命令名，不自创
- *   - bucket descriptor / size / clear 报告全部走 `@tabtin/storage-manager`
+ *   - bucket descriptor / size / clear 报告全部走 `@muse/storage-manager`
  *     的 ui-protocol DTO，与主进程 daemon-bridge 共享类型，避免漂移（R4 风险）
  *   - admin 类操作（clear --category / vacuum / drain / purge）独立路径，
  *     不走 storage-manager bridge——bridge 仅覆盖单 bucket 主线（W2.1 F-6 边界声明）
@@ -35,8 +35,8 @@ import {
   type BucketGroup,
   type BucketSource,
   type ClearOptions,
-} from '@tabtin/storage-manager';
-import { getDaemonHomePath, getHomeTabtinPath } from '@tabtin/shared/storage-paths';
+} from '@muse/storage-manager';
+import { getDaemonHomePath, getHomeTabtinPath } from '@muse/shared/storage-paths';
 import type { StorageFileSystemPort } from '../../base/storage/storage-file-system.js'
 
 

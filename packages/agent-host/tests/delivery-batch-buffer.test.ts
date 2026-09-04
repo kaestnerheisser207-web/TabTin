@@ -22,7 +22,7 @@
 
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { DeliveryBatchBuffer, type DeliveryTransport } from '../src/delivery/delivery-batch-buffer.js'
-import type { StreamEvent } from '@tabtin/agent-runtime'
+import type { StreamEvent } from '@muse/agent-runtime'
 
 const SID = 'test-session-id'
 

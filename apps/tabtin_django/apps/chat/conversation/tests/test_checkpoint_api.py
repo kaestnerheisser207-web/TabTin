@@ -2093,7 +2093,7 @@ class CheckpointApiTestCase(TestCase):
             }],
         )
 
-    @override_settings(TABTIN_REQUIRE_INVITE_CODE=False)
+    @override_settings(MUSE_REQUIRE_INVITE_CODE=False)
     def test_revert_history_skips_cleanup_entries(self):
         """#2101: cleanup 内部状态条目不得让 revert-history 接口校验崩溃。
 
@@ -2134,7 +2134,7 @@ class CheckpointApiTestCase(TestCase):
         types = [entry['type'] for entry in body['history']]
         self.assertEqual(types, ['rollback', 'unrevert'])
 
-    @override_settings(TABTIN_REQUIRE_INVITE_CODE=False)
+    @override_settings(MUSE_REQUIRE_INVITE_CODE=False)
     def test_revert_history_all_cleanup_returns_empty(self):
         """#2101: 仅含 cleanup 条目的会话返回空列表而非报错。"""
         self.session.revert_history = [

@@ -1,7 +1,7 @@
 /**
  * PptxViewer - PPTX 文件只读预览组件
  *
- * 使用 @tabtin/tabslide 的后端 import adapter 优先解析 PPTX，
+ * 使用 @muse/tabslide 的后端 import adapter 优先解析 PPTX，
  * 将每张幻灯片以缩略图形式渲染（背景 + 文本 + 形状 + 图片）。
  *
  * 后端不可用时降级到客户端 JSZip 解析，复杂元素可能缺失。
@@ -10,7 +10,7 @@
 import React, { useEffect, useState, useMemo, useCallback, useRef } from 'react'
 import { AlertCircle, ChevronLeft, ChevronRight, ExternalLink, Layers } from 'lucide-react'
 import { cn } from '@utils/cn'
-import { ScrollArea } from '@tabtin/smartsheet-ui'
+import { ScrollArea } from '@muse/smartsheet-ui'
 import { useTranslation } from 'react-i18next'
 import { checkFileSize, formatFileSize, MAX_OFFICE_FILE_BYTES } from '@components/shared/file-utils'
 import { formatIpcErrorForUser } from '@/services/ipc-error'
@@ -31,7 +31,7 @@ import type {
   PPTShapeElement,
   SlideBackground,
   Gradient,
-} from '@tabtin/tabslide'
+} from '@muse/tabslide'
 
 let _sanitize: ((html: string) => string) | null = null
 
@@ -400,7 +400,7 @@ export const PptxViewer: React.FC<PptxViewerProps> = ({ filePath, data, filename
           // ：聊天对话框只传内存 data，没有本地 filePath。这里必须先走与
           // filePath 对称的高保真逐页渲染；否则会直接掉进 TabSlide 元素级预览，
           // 中文版式常出现重叠 / 碎裂。
-          const renderOfficePreviewData = window.tabtin?.fileSystem?.renderOfficePreviewData
+          const renderOfficePreviewData = window.muse?.fileSystem?.renderOfficePreviewData
           if (typeof renderOfficePreviewData === 'function') {
             try {
               const rendered = await renderOfficePreviewData({
@@ -435,7 +435,7 @@ export const PptxViewer: React.FC<PptxViewerProps> = ({ filePath, data, filename
             return
           }
 
-          const renderOfficePreview = window.tabtin?.fileSystem?.renderOfficePreview
+          const renderOfficePreview = window.muse?.fileSystem?.renderOfficePreview
           if (typeof renderOfficePreview === 'function') {
             try {
               const rendered = await renderOfficePreview(filePath)
@@ -465,7 +465,7 @@ export const PptxViewer: React.FC<PptxViewerProps> = ({ filePath, data, filename
           // cancelled 检查。
           let result: { data?: ArrayBuffer | Uint8Array } | undefined
           try {
-            result = await window.tabtin.fileSystem.readBinaryFile(filePath)
+            result = await window.muse.fileSystem.readBinaryFile(filePath)
           } catch (err) {
             if (!cancelled) {
               setError(formatIpcErrorForUser(err, t('folder.errors.pptxLoadFailed', 'Failed to read PPTX file')))
@@ -498,7 +498,7 @@ export const PptxViewer: React.FC<PptxViewerProps> = ({ filePath, data, filename
         await ensureSanitizer()
         if (cancelled) return
 
-        const { importPPTXFromBuffer, importPPTXFromFile } = await import('@tabtin/tabslide/exports')
+        const { importPPTXFromBuffer, importPPTXFromFile } = await import('@muse/tabslide/exports')
         if (cancelled) return
 
         let importResult: Awaited<ReturnType<typeof importPPTXFromBuffer>> | null = null
@@ -609,7 +609,7 @@ export const PptxViewer: React.FC<PptxViewerProps> = ({ filePath, data, filename
         {filePath && (
           <button
             type="button"
-            onClick={() => window.tabtin.openPath(filePath!)}
+            onClick={() => window.muse.openPath(filePath!)}
             className="flex items-center gap-1.5 px-3 py-1.5 rounded-md text-caption bg-primary/10 text-primary hover:bg-primary/20 transition-colors"
           >
             <ExternalLink className="h-3.5 w-3.5" />

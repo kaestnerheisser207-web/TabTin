@@ -13,7 +13,7 @@
  * **历史**：曾通过 `instructions()` 把 deny_read/write/custom_write/file_access
  * 等字段拼成软提示给 LLM，阶段 2.3（2026-05-20）删除 —— `Capability.instructions?()`
  * 接口下线后所有 5 个 cap 实现连同字段一并清理。未来若 W3 HITL 需要把策略软提示
- * 给 LLM，走 `@tabtin/agent-prompt` + prompt-contract 注册表，而非恢复本类的
+ * 给 LLM，走 `@muse/agent-prompt` + prompt-contract 注册表，而非恢复本类的
  * `instructions()` 方法。
  */
 
@@ -39,7 +39,7 @@ import { CapabilityBase } from '../base.js';
  *   - `deny_read_paths` / `deny_write_paths`: 黑名单。外层 v3 judge()
  *     在 beforeTool 强制拒绝。
  *
- * **设计考量**：本类型独立维护一份而非 import @tabtin/app-shell —— 后者是
+ * **设计考量**：本类型独立维护一份而非 import @muse/app-shell —— 后者是
  * UI / Renderer 侧的类型，agent-runtime（pure TS 库）依赖它会反向
  * 耦合（Daemon 里没装 app-shell）。两边通过结构兼容（Pyhton agent_config_v2
  * + TS app-shell + 本类型）三处对齐字段名 + 语义。

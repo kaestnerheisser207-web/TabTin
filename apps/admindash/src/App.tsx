@@ -1,4 +1,4 @@
-import { MessageHost } from '@tabtin/smartsheet-ui/message'
+import { MessageHost } from '@muse/smartsheet-ui/message'
 import { type ReactNode, Suspense, lazy } from 'react'
 import { BrowserRouter, Navigate, Route, Routes, useLocation } from 'react-router-dom'
 import { Layout } from './components/layout/layout'

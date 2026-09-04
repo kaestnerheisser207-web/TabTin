@@ -421,9 +421,9 @@ def _build_image_node(
     src: str, alt: str, marks: list[dict[str, Any]] | None = None
 ) -> dict[str, Any]:
     attrs: dict[str, Any] = {"src": src, "alt": alt or None, "title": None}
-    if src.startswith("tabtin-file://asset/"):
+    if src.startswith("muse-file://asset/"):
         try:
-            attrs["fileId"] = str(UUID(src.removeprefix("tabtin-file://asset/")))
+            attrs["fileId"] = str(UUID(src.removeprefix("muse-file://asset/")))
             attrs["src"] = ""
         except ValueError:
             pass
@@ -447,7 +447,7 @@ def _build_standalone_html_image_paragraph(line: str) -> dict[str, Any] | None:
     attrs = _parse_html_attrs(match.group("attrs"))
     src = attrs.get("src", "")
     stable_file_ref = bool(
-        re.fullmatch(r"tabtin-file://asset/[0-9a-fA-F-]{36}", src)
+        re.fullmatch(r"muse-file://asset/[0-9a-fA-F-]{36}", src)
     )
     if not _is_safe_url(src) and not stable_file_ref:
         return None
@@ -1593,7 +1593,7 @@ def _is_safe_markdown_image_src(src: str) -> bool:
     normalized = (src or "").strip()
     if not normalized:
         return False
-    if re.fullmatch(r"tabtin-file://asset/[0-9a-fA-F-]{36}", normalized):
+    if re.fullmatch(r"muse-file://asset/[0-9a-fA-F-]{36}", normalized):
         return True
     if _MD_CONTROL_CHAR_RE.search(normalized) or normalized.startswith("//"):
         return False
@@ -1652,7 +1652,7 @@ def _render_image_markdown(attrs: dict[str, Any], marks: dict[str, dict[str, Any
     file_id = _safe_pm_string(attrs.get("fileId")).strip()
     if not src and file_id:
         try:
-            src = f"tabtin-file://asset/{UUID(file_id)}"
+            src = f"muse-file://asset/{UUID(file_id)}"
         except ValueError:
             src = ""
     if not src or not _is_safe_markdown_image_src(src):

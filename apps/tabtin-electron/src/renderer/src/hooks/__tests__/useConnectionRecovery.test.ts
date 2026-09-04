@@ -257,7 +257,7 @@ beforeEach(() => {
   chatState.sessionsBySpaceId = { 'sp-test': [] }
   busyIds.value = []
   deviceState.registered = true
-  ;(window as any).tabtin = undefined
+  ;(window as any).muse = undefined
   mockRegisterCurrentDevice.mockResolvedValue(null)
   mockLoadOrganizations.mockResolvedValue(undefined)
   mockLoadSpaces.mockResolvedValue(undefined)
@@ -630,7 +630,7 @@ describe('场景 6b: 主进程唤醒恢复中 → renderer 通用重连不抢跑
         connect,
       }),
     })
-    ;(window as any).tabtin = {
+    ;(window as any).muse = {
       agentGateway: {
         getStatus: vi.fn().mockImplementation(() => Promise.resolve(agentGatewayStatus)),
         onStatusChange: vi.fn((cb: (status: string) => void) => {

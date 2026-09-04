@@ -1,5 +1,5 @@
 /**
- * @tabtin/desktop-native · 能力声明（v2.1 模块零占位）。
+ * @muse/desktop-native · 能力声明（v2.1 模块零占位）。
  *
  * 模块零阶段所有能力都是 'unavailable' + source='fallback'——下游消费方
  * （DesktopExecutorService / 路由层）按 capability 决定降级路径。

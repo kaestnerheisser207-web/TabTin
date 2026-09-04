@@ -8,8 +8,8 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
   toast,
-} from '@tabtin/smartsheet-ui'
-import { planRefKey } from '@tabtin/agent-wire'
+} from '@muse/smartsheet-ui'
+import { planRefKey } from '@muse/agent-wire'
 import { cn } from '@utils/cn'
 import type { ContextItem } from '../../types'
 import {
@@ -708,7 +708,7 @@ export const TabFilesPaneRenderer: React.FC<TabFilesPaneRendererProps> = ({
         setAvailability({ status: 'missing', message: missingMessage })
         return
       }
-      const pathExists = window.tabtin?.fileSystem?.pathExists
+      const pathExists = window.muse?.fileSystem?.pathExists
       if (!pathExists) {
         setAvailability({ status: 'missing', message: missingMessage })
         return
@@ -949,13 +949,13 @@ export const TabFilesPaneRenderer: React.FC<TabFilesPaneRendererProps> = ({
                   <span>{tChat('card.openFile.openInWorkspace', { defaultValue: '工作空间' })}</span>
                 </DropdownMenuItem>
               )}
-              <DropdownMenuItem onSelect={() => void window.tabtin?.openPath?.(filePath)} className="gap-2">
+              <DropdownMenuItem onSelect={() => void window.muse?.openPath?.(filePath)} className="gap-2">
                 <HeaderIcon className={cn('h-4 w-4', displayFormat?.iconClassName ?? 'text-muted-foreground')} />
                 <span>{tChat('card.openFile.systemApp', { defaultValue: 'System app' })}</span>
               </DropdownMenuItem>
               <DropdownMenuSeparator />
               <DropdownMenuItem
-                onSelect={() => void (window.tabtin?.showItemInFolder?.(filePath) ?? window.tabtin?.openPath?.(filePath))}
+                onSelect={() => void (window.muse?.showItemInFolder?.(filePath) ?? window.muse?.openPath?.(filePath))}
                 className="gap-2"
               >
                 <FolderOpen className="h-4 w-4" />

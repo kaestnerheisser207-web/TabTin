@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import type { ChatMessage } from '@tabtin/chat-client'
+import type { ChatMessage } from '@muse/chat-client'
 import {
   buildPriorTurnArtifactsByEndIndex,
   buildTurnArtifactsByEndIndex,
@@ -99,7 +99,7 @@ describe('collectTurnArtifacts', () => {
       sourceMessageId: 'a1',
       subtitleKey: 'previewWidget',
     })
-    expect(artifacts[0]?.href).toBe('tabtin://chat/widget/wid-42')
+    expect(artifacts[0]?.href).toBe('muse://chat/widget/wid-42')
   })
 
   it('skips pending widget placeholders in turn artifacts', () => {
@@ -233,7 +233,7 @@ describe('collectTurnArtifacts', () => {
             artifact_kind: 'oss_file',
             file_id: fileId,
             filename: 'chart.png',
-            url: `tabtin://resource/file/${fileId}?hint=tabfiles&title=chart.png`,
+            url: `muse://resource/file/${fileId}?hint=tabfiles&title=chart.png`,
             access_url: 'https://cdn.example.com/chart.png',
             mime_type: 'image/png',
           },
@@ -334,7 +334,7 @@ describe('collectTurnArtifacts', () => {
       msg({
         id: 'a1',
         role: 'assistant',
-        content: '已创建 [季度计划](tabtin://resource/tabdoc/doc-1?hint=tabdoc)',
+        content: '已创建 [季度计划](muse://resource/tabdoc/doc-1?hint=tabdoc)',
         created_at: '2026-01-01T00:00:01Z',
         agent_run_id: 'run-1',
       }),
@@ -343,10 +343,10 @@ describe('collectTurnArtifacts', () => {
     expect(artifacts).toHaveLength(1)
     expect(artifacts[0]?.kind).toBe('doc')
     expect(artifacts[0]?.title).toBe('季度计划')
-    expect(artifacts[0]?.href).toBe('tabtin://resource/tabdoc/doc-1?hint=tabdoc')
+    expect(artifacts[0]?.href).toBe('muse://resource/tabdoc/doc-1?hint=tabdoc')
   })
 
-  it.each(['tabtin-preprod', 'tabtin-dev'])(
+  it.each(['muse-preprod', 'muse-dev'])(
     'extracts %s TabData record links from assistant text',
     (scheme) => {
       const href = `${scheme}://resource/table/tbl_env?hint=tabdata&recordIds=rec_1`
@@ -372,9 +372,9 @@ describe('collectTurnArtifacts', () => {
         id: 'a1',
         role: 'assistant',
         content: [
-          '已创建 [有待发货订单](tabtin://resource/document/02eda024-5f11-4d4a-85c2-9a1b3c5d7e90?hint=tabdoc)',
-          '文档 ID：tabtin://resource/document/02eda024-5f11-4d4a-85c2-…?hint=tabdoc',
-          '另见 [截断](tabtin://resource/document/ad070d7b-...?hint=tabdoc)',
+          '已创建 [有待发货订单](muse://resource/document/02eda024-5f11-4d4a-85c2-9a1b3c5d7e90?hint=tabdoc)',
+          '文档 ID：muse://resource/document/02eda024-5f11-4d4a-85c2-…?hint=tabdoc',
+          '另见 [截断](muse://resource/document/ad070d7b-...?hint=tabdoc)',
         ].join('\n'),
         created_at: '2026-01-01T00:00:01Z',
         agent_run_id: 'run-1',
@@ -383,7 +383,7 @@ describe('collectTurnArtifacts', () => {
     const artifacts = collectTurnArtifacts(turn)
     expect(artifacts).toHaveLength(1)
     expect(artifacts[0]?.title).toBe('有待发货订单')
-    expect(artifacts[0]?.href).toBe('tabtin://resource/document/02eda024-5f11-4d4a-85c2-9a1b3c5d7e90?hint=tabdoc')
+    expect(artifacts[0]?.href).toBe('muse://resource/document/02eda024-5f11-4d4a-85c2-9a1b3c5d7e90?hint=tabdoc')
   })
 
   it('keeps file resource links whose path contains ASCII dots', () => {
@@ -391,7 +391,7 @@ describe('collectTurnArtifacts', () => {
       msg({
         id: 'a1',
         role: 'assistant',
-        content: '[备份](tabtin://resource/file/outputs%2Fdata...bak.txt?hint=tabfiles)',
+        content: '[备份](muse://resource/file/outputs%2Fdata...bak.txt?hint=tabfiles)',
         created_at: '2026-01-01T00:00:01Z',
         agent_run_id: 'run-1',
       }),
@@ -512,7 +512,7 @@ describe('collectTurnArtifacts', () => {
       msg({
         id: 'a1',
         role: 'assistant',
-        content: '[app.ts](tabtin://resource/file/src%2Fapp.ts?hint=tabfiles)',
+        content: '[app.ts](muse://resource/file/src%2Fapp.ts?hint=tabfiles)',
         created_at: '2026-01-01T00:00:01Z',
         agent_run_id: 'run-1',
         diff_summary: {
@@ -528,12 +528,12 @@ describe('collectTurnArtifacts', () => {
     expect(artifacts[0]?.title).toBe('app.ts')
   })
 
-  it('strips trailing quote from bare tabtin:// resource URI in assistant text ', () => {
+  it('strips trailing quote from bare muse:// resource URI in assistant text ', () => {
     const turn = [
       msg({
         id: 'a1',
         role: 'assistant',
-        content: '已生成 tabtin://resource/file/245TES.f30280.m4a"。请查收',
+        content: '已生成 muse://resource/file/245TES.f30280.m4a"。请查收',
         created_at: '2026-01-01T00:00:01Z',
         agent_run_id: 'run-1',
       }),
@@ -594,7 +594,7 @@ describe('collectTurnArtifacts', () => {
               artifact_kind: 'local_file',
               filename: '245TES.f30280.m4a"',
               relative_path: '245TES.f30280.m4a"',
-              url: 'tabtin://resource/file/245TES.f30280.m4a%22?hint=tabfiles',
+              url: 'muse://resource/file/245TES.f30280.m4a%22?hint=tabfiles',
             },
           },
         ],
@@ -1248,7 +1248,7 @@ describe('collectTurnArtifacts', () => {
       msg({
         id: 'a2',
         role: 'assistant',
-        content: '[a.md](tabtin://resource/file/out%2Fa.md?hint=tabfiles)',
+        content: '[a.md](muse://resource/file/out%2Fa.md?hint=tabfiles)',
         created_at: '2026-01-01T00:00:03Z',
         agent_run_id: 'run-2',
         content_blocks_json: [
@@ -1309,7 +1309,7 @@ describe('turn boundary helpers', () => {
 
   it('multi-segment same-run assistants form one turn (single card at real end)', () => {
     // bugbot  high：同 run 多段 assistant 是同一轮，中间段不是轮末尾
-    const link = (n: number) => `[doc${n}](tabtin://resource/tabdoc/doc-${n})`
+    const link = (n: number) => `[doc${n}](muse://resource/tabdoc/doc-${n})`
     const messages = [
       msg({ id: 'u1', role: 'user', content: 'go', created_at: '2026-01-01T00:00:00Z' }),
       msg({ id: 'a1', role: 'assistant', content: link(1), created_at: '2026-01-01T00:00:01Z', agent_run_id: 'run-1' }),
@@ -1330,8 +1330,8 @@ describe('turn boundary helpers', () => {
   it('#7441 方案 A：不同 agent_run_id 无真实 user 时仍属同一用户轮', () => {
     const messages = [
       msg({ id: 'u1', role: 'user', content: 'go', created_at: '2026-01-01T00:00:00Z' }),
-      msg({ id: 'a1', role: 'assistant', content: '[d1](tabtin://resource/tabdoc/d-1)', created_at: '2026-01-01T00:00:01Z', agent_run_id: 'run-1' }),
-      msg({ id: 'a2', role: 'assistant', content: '[d2](tabtin://resource/tabdoc/d-2)', created_at: '2026-01-01T00:00:02Z', agent_run_id: 'run-2' }),
+      msg({ id: 'a1', role: 'assistant', content: '[d1](muse://resource/tabdoc/d-1)', created_at: '2026-01-01T00:00:01Z', agent_run_id: 'run-1' }),
+      msg({ id: 'a2', role: 'assistant', content: '[d2](muse://resource/tabdoc/d-2)', created_at: '2026-01-01T00:00:02Z', agent_run_id: 'run-2' }),
     ]
     expect(getTurnEndIndex(messages, 1)).toBe(2)
     expect(isTurnEndSlot(messages, 1)).toBe(false)
@@ -1340,15 +1340,15 @@ describe('turn boundary helpers', () => {
     // 一张卡汇总整轮产物
     expect(byEnd.size).toBe(1)
     expect(byEnd.get(2)?.map(a => a.href)).toEqual([
-      'tabtin://resource/tabdoc/d-1',
-      'tabtin://resource/tabdoc/d-2',
+      'muse://resource/tabdoc/d-1',
+      'muse://resource/tabdoc/d-2',
     ])
   })
 
   it('#7441 方案 A：error_envelope 同属用户轮，不切开产物窗口', () => {
     const messages = [
       msg({ id: 'u1', role: 'user', content: 'go', created_at: '2026-01-01T00:00:00Z' }),
-      msg({ id: 'a1', role: 'assistant', content: '[d1](tabtin://resource/tabdoc/d-1)', created_at: '2026-01-01T00:00:01Z', agent_run_id: 'run-1' }),
+      msg({ id: 'a1', role: 'assistant', content: '[d1](muse://resource/tabdoc/d-1)', created_at: '2026-01-01T00:00:01Z', agent_run_id: 'run-1' }),
       msg({ id: 'e1', role: 'assistant', content: 'boom', created_at: '2026-01-01T00:00:02Z', message_kind: 'error_envelope', agent_run_id: 'run-1' }),
     ]
     // 挂载点落在轮内最后一个可承载段（error）；窗口含整轮
@@ -1357,14 +1357,14 @@ describe('turn boundary helpers', () => {
     expect(isTurnEndSlot(messages, 2)).toBe(true)
     expect(getTurnMessageWindow(messages, 2).map(m => m.id)).toEqual(['a1', 'e1'])
     const byEnd = buildTurnArtifactsByEndIndex(messages)
-    expect(byEnd.get(2)?.map(a => a.href)).toEqual(['tabtin://resource/tabdoc/d-1'])
+    expect(byEnd.get(2)?.map(a => a.href)).toEqual(['muse://resource/tabdoc/d-1'])
     expect(byEnd.has(1)).toBe(false)
   })
 
   it('user message is never a turn-end slot', () => {
     const messages = [
       msg({ id: 'u1', role: 'user', content: 'go', created_at: '2026-01-01T00:00:00Z' }),
-      msg({ id: 'a1', role: 'assistant', content: '[d](tabtin://resource/tabdoc/d-1)', created_at: '2026-01-01T00:00:01Z', agent_run_id: 'run-1' }),
+      msg({ id: 'a1', role: 'assistant', content: '[d](muse://resource/tabdoc/d-1)', created_at: '2026-01-01T00:00:01Z', agent_run_id: 'run-1' }),
       msg({ id: 'u2', role: 'user', content: 'next', created_at: '2026-01-01T00:00:02Z' }),
     ]
     expect(isTurnEndSlot(messages, 0)).toBe(false)
@@ -1379,7 +1379,7 @@ describe('turn boundary helpers', () => {
       msg({
         id: 'a1',
         role: 'assistant',
-        content: '[d](tabtin://resource/tabdoc/d-1)',
+        content: '[d](muse://resource/tabdoc/d-1)',
         created_at: '2026-01-01T00:00:01Z',
         agent_run_id: 'run-1',
       }),
@@ -1402,7 +1402,7 @@ describe('turn boundary helpers', () => {
       msg({
         id: 'a1',
         role: 'assistant',
-        content: '[d](tabtin://resource/tabdoc/d-1)',
+        content: '[d](muse://resource/tabdoc/d-1)',
         created_at: '2026-01-01T00:00:01Z',
         agent_run_id: 'run-1',
       }),
@@ -1421,20 +1421,20 @@ describe('turn boundary helpers', () => {
     expect(buildTurnArtifactsByEndIndex(withPush).has(1)).toBe(true)
   })
 
-  it('code-fenced tabtin:// examples are not artifacts', () => {
+  it('code-fenced muse:// examples are not artifacts', () => {
     // bugbot  medium：代码块里的示例链接不算产物
     const messages = [
       msg({ id: 'u1', role: 'user', content: 'go', created_at: '2026-01-01T00:00:00Z' }),
       msg({
         id: 'a1',
         role: 'assistant',
-        content: '示例：\n```\ntabtin://resource/tabdoc/fake-1\n```\n行内 `tabtin://resource/tabdoc/fake-2` 也不算。真实产物 [d](tabtin://resource/tabdoc/real-1)',
+        content: '示例：\n```\nmuse://resource/tabdoc/fake-1\n```\n行内 `muse://resource/tabdoc/fake-2` 也不算。真实产物 [d](muse://resource/tabdoc/real-1)',
         created_at: '2026-01-01T00:00:01Z',
         agent_run_id: 'run-1',
       }),
     ]
     const byEnd = buildTurnArtifactsByEndIndex(messages)
-    expect(byEnd.get(1)?.map(a => a.href)).toEqual(['tabtin://resource/tabdoc/real-1'])
+    expect(byEnd.get(1)?.map(a => a.href)).toEqual(['muse://resource/tabdoc/real-1'])
   })
 })
 
@@ -1822,7 +1822,7 @@ describe('多维表 / 平台交付进本轮产物', () => {
             resource_id: 'tbl_platform',
             resource_name: '融资',
             hint_carrier_app_id: 'tabdata',
-            url: 'tabtin://resource/table/tbl_platform?hint=tabdata&title=%E8%9E%8D%E8%B5%84',
+            url: 'muse://resource/table/tbl_platform?hint=tabdata&title=%E8%9E%8D%E8%B5%84',
           },
         }],
       }),
@@ -1854,7 +1854,7 @@ describe('多维表 / 平台交付进本轮产物', () => {
               resource_name: '融资表',
               hint_carrier_app_id: 'tabdata',
               space_id: 'workspace-1',
-              url: 'tabtin://resource/table/tbl_platform?hint=tabdata&title=%E8%9E%8D%E8%B5%84%E8%A1%A8',
+              url: 'muse://resource/table/tbl_platform?hint=tabdata&title=%E8%9E%8D%E8%B5%84%E8%A1%A8',
             },
           },
           {
@@ -1883,7 +1883,7 @@ describe('多维表 / 平台交付进本轮产物', () => {
       msg({
         id: 'a1',
         role: 'assistant',
-        content: '[融资表](tabtin://resource/table/tbl_platform?hint=tabdata)',
+        content: '[融资表](muse://resource/table/tbl_platform?hint=tabdata)',
         created_at: '2026-01-01T00:00:01Z',
         agent_run_id: 'run-1',
         content_blocks_json: [{
@@ -1895,7 +1895,7 @@ describe('多维表 / 平台交付进本轮产物', () => {
             resource_id: 'tbl_platform',
             resource_name: '融资表',
             space_id: 'workspace-1',
-            url: 'tabtin://resource/table/tbl_platform?hint=tabdata',
+            url: 'muse://resource/table/tbl_platform?hint=tabdata',
           },
         }],
       }),

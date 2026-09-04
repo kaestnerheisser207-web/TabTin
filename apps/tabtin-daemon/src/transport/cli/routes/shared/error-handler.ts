@@ -1,7 +1,7 @@
 /**
  * Shared error handling utilities and Django HTTP proxy for Daemon CLI routes.
  *
- * Uses @tabtin/cli-server-core for common error types and response builders.
+ * Uses @muse/cli-server-core for common error types and response builders.
  * The Django proxy uses Daemon's config (server_url + credential) injected
  * via `configureDjangoProxy`.
  */
@@ -9,8 +9,8 @@
 import http from 'node:http';
 import https from 'node:https';
 import { URL } from 'node:url';
-import { okResponse } from '@tabtin/agent-wire';
-import { deriveApiBaseUrl, joinApiPath } from '@tabtin/config';
+import { okResponse } from '@muse/agent-wire';
+import { deriveApiBaseUrl, joinApiPath } from '@muse/config';
 import {
   type ErrorCode,
   type SendJSON,
@@ -18,7 +18,7 @@ import {
   decodeDjangoProxyBody,
   errorResponse,
   sendDjangoResult,
-} from '@tabtin/cli-server-core';
+} from '@muse/cli-server-core';
 
 export { okResponse };
 export { errorResponse, sendDjangoResult };
@@ -119,7 +119,7 @@ async function executeDjangoRequest(
   // 把原始 server_url（约定不带 /api 后缀，譬如 https://api.example.com）归一成
   // canonical apiBaseUrl（带 /api 结尾），与 Electron 端一致。path 契约要求不带
   // /api 前缀；joinApiPath 会兜底处理误带前缀的情况并在 dev 环境告警，详见
-  // @tabtin/config 与 packages/cli-routes/src/bootstrap-bindings.ts 的 djangoRequest export 注释。
+  // @muse/config 与 packages/cli-routes/src/bootstrap-bindings.ts 的 djangoRequest export 注释。
   const apiBaseUrl = deriveApiBaseUrl(serverUrl);
   const fullUrl = joinApiPath(apiBaseUrl, path);
 

@@ -456,7 +456,7 @@ def prepare_message_content(
     新实现用 ``build_user_context_wrapper`` SSoT 套统一 ``<context type="referenced"
     stale_after_turn="<client_message_id>">...</context>`` 外壳，让 history 装填
     阶段（``select-recent-history.ts``）能识别 stale 并替换为指针。Python 端实现
-    与 TS 端 ``@tabtin/agent-prompt`` 的 ``buildUserContextWrapper`` 输出
+    与 TS 端 ``@muse/agent-prompt`` 的 ``buildUserContextWrapper`` 输出
     byte-identical（contract test 锁定）。
 
     ``client_message_id``：本轮 user message 的客户端 UUID。Django 路径上由

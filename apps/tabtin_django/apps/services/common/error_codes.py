@@ -255,7 +255,7 @@ def is_error_code(value: object) -> bool:
 # ─── Wire Envelope Helpers (Wave 0 contract / cli-envelope.ts mirror) ─
 #
 # These helpers produce ``{ok, data}`` / ``{ok, error}`` envelopes that
-# match @tabtin/agent-wire's ``CliResponse`` shape exactly. Use them for
+# match @muse/agent-wire's ``CliResponse`` shape exactly. Use them for
 # any new HTTP route or service-layer return value that crosses the
 # Daemon / Electron boundary.
 #

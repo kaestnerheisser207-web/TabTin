@@ -1,4 +1,4 @@
-import type { ModelCatalogEntry } from '@tabtin/agent-runtime/engine'
+import type { ModelCatalogEntry } from '@muse/agent-runtime/engine'
 import { isOpenAICodexModel } from './openai-codex-models.js'
 
 export type ModelExecutionRoute =

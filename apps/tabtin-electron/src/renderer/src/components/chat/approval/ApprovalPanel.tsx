@@ -2,12 +2,12 @@ import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Check, ChevronDown, FolderPlus } from 'lucide-react'
 import { cn } from '@utils/cn'
-import type { CliSpecForUI, ReviewConfig } from '@tabtin/chat-client'
+import type { CliSpecForUI, ReviewConfig } from '@muse/chat-client'
 import {
   normalizeToRegistrationRiskLevel,
   type DecisionReason,
   type ToolRegistrationRiskLevel,
-} from '@tabtin/agent-wire'
+} from '@muse/agent-wire'
 import { HitlResourceLabel } from '../../permission/HitlResourceLabel'
 import { formatApprovalDetailLines, parseApprovalDetail } from '../../sandbox/approvalDetailFormat'
 import { ApprovalTierUpgradeButton } from './ApprovalTierUpgradeButton'
@@ -16,8 +16,8 @@ import { useSpaceStore } from '@stores/useSpaceStore'
 import { getToolDisplayName } from '../registry/toolDisplayName'
 import { getToolRiskLevel } from '../registry/toolCardRegistry'
 import { scrollToToolCall } from '../tool/scrollToToolCall'
-import { toast } from '@tabtin/smartsheet-ui/toast'
-import { UNKNOWN_WORKSPACE_OUT_PATH } from '@tabtin/security-policy/approval-contract'
+import { toast } from '@muse/smartsheet-ui/toast'
+import { UNKNOWN_WORKSPACE_OUT_PATH } from '@muse/security-policy/approval-contract'
 
 export type ApprovalScope = 'once' | 'thread' | 'always'
 
@@ -495,7 +495,7 @@ const DecisionReasonRow: React.FC<{
  *   - rule_high_risk_allowlist_miss：高风险命令不在允许列表
  *   - destructive_in_workspace_ask：删除类不可逆操作
  *
- * 集合成员类型钉死为 `DecisionReason['type']`（`@tabtin/agent-wire` SSoT）——
+ * 集合成员类型钉死为 `DecisionReason['type']`（`@muse/agent-wire` SSoT）——
  * 后端一旦重命名任一 reason type，这里直接编译报错，而不是让安全红字静默失效。
  */
 const STRICT_HINT_REASON_TYPES: ReadonlySet<DecisionReason['type']> = new Set([
@@ -709,7 +709,7 @@ export const ApprovalPanel: React.FC<ApprovalPanelProps> = ({
 
   const handleAlwaysAllow = useCallback(async (kind: 'exact' | 'pattern') => {
     if (!canResolve) return
-    const secApi = window.tabtin?.agentSecurity
+    const secApi = window.muse?.agentSecurity
     const scope: 'exact' | 'scoped' = kind === 'pattern' ? 'scoped' : 'exact'
 
     const result: PerToolApprovalDecision[] = await Promise.all(
@@ -824,7 +824,7 @@ export const ApprovalPanel: React.FC<ApprovalPanelProps> = ({
   const handleAddWorkspacePathAndApprove = useCallback((action: ApprovalActionItem, path: string) => {
     if (!canResolve) return
     if (!activeSpaceId || !path) return
-    void window.tabtin?.workspace?.appendSessionAllowedPath?.({
+    void window.muse?.workspace?.appendSessionAllowedPath?.({
       spaceId: activeSpaceId,
       path,
     })

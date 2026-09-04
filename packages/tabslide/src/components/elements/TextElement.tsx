@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useLayoutEffect, useRef } from 'react'
 import { Extension, type AnyExtension } from '@tiptap/core'
 import { useEditor, EditorContent } from '@tiptap/react'
-import { createDefaultDocExtensions } from '@tabtin/doc-editor'
+import { createDefaultDocExtensions } from '@muse/doc-editor'
 import TextAlign from '@tiptap/extension-text-align'
 import TextStyleExt from '@tiptap/extension-text-style'
 import Color from '@tiptap/extension-color'
@@ -257,7 +257,7 @@ const ParagraphIndent = Extension.create({
 /**
  * PPT 专用 Tiptap 扩展集
  *
- * 基于 @tabtin/doc-editor 的 createDefaultDocExtensions，
+ * 基于 @muse/doc-editor 的 createDefaultDocExtensions，
  * 关闭 PPT 不需要的块级结构，追加文本样式扩展。
  *
  * 禁用 Tiptap 内置 History：PPT 编辑器使用全局 useHistoryStore 统一管理

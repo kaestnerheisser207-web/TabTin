@@ -1,16 +1,16 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // 收口后 slice 经 agentService 出站；mock 门面直接透传到
-// window.tabtin.agentEngine，保持本单测隔离（不加载 hub 的 chatApi 重依赖链），
+// window.muse.agentEngine，保持本单测隔离（不加载 hub 的 chatApi 重依赖链），
 // 同时验证「slice → 门面 → IPC bridge」调用链仍成立。
 vi.mock('@/services/agentService', () => ({
   getSessionController: () => ({
     submitApproval: (...args: unknown[]) =>
       (globalThis as { window: { tabtin: { agentEngine: { submitHitlBatch: (...a: unknown[]) => unknown } } } })
-        .window.tabtin.agentEngine.submitHitlBatch(...args),
+        .window.muse.agentEngine.submitHitlBatch(...args),
     answerAskUser: (...args: unknown[]) =>
       (globalThis as { window: { tabtin: { agentEngine: { submitAskUserResponse: (...a: unknown[]) => unknown } } } })
-        .window.tabtin.agentEngine.submitAskUserResponse(...args),
+        .window.muse.agentEngine.submitAskUserResponse(...args),
   }),
 }))
 
@@ -35,7 +35,7 @@ function createMutableSet<State extends object>(stateRef: { current: State }) {
  * v0.4 W1.5（PRD §6.7 / §7.4）：approval 通道升级为 batch 形态。
  *
  * 验证：
- *   - approvalSlice 调 `window.tabtin.agentEngine.submitHitlBatch(batchId, decisions[])`
+ *   - approvalSlice 调 `window.muse.agentEngine.submitHitlBatch(batchId, decisions[])`
  *     而不是旧 `submitAskUserResponse`。
  *   - 只清掉 target session 的 pending 状态。
  *   - askUser slice 仍走单 request `submitAskUserResponse(requestId, ...)`（独立语义保留）。
@@ -65,7 +65,7 @@ describe('session-scoped HITL actions', () => {
 
   afterEach(() => {
     if (originalTabtin) {
-      ;(globalThis as any).window.tabtin = originalTabtin
+      ;(globalThis as any).window.muse = originalTabtin
     }
   })
 

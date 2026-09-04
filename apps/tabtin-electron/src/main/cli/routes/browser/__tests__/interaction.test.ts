@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from 'vitest'
-import { BrowserActionError } from '@tabtin/browser-core'
+import { BrowserActionError } from '@muse/browser-core'
 import {
   buildElectronExecHooks,
   CAPTCHA_ACT_WATCH_INITIAL_DELAY_MS,
@@ -15,8 +15,8 @@ const detectFast = vi.fn(async () => ({
   suggested_action: 'auto-wait' as const,
 }))
 
-vi.mock('@tabtin/browser-core', async () => {
-  const actual = await vi.importActual<typeof import('@tabtin/browser-core')>('@tabtin/browser-core')
+vi.mock('@muse/browser-core', async () => {
+  const actual = await vi.importActual<typeof import('@muse/browser-core')>('@muse/browser-core')
   return {
     ...actual,
     getSharedCaptchaGuard: () => ({ detectFast }),

@@ -4,8 +4,8 @@ import {
   resolveRecordId,
   type TableGridRow,
   type TableGridRuntimeApi,
-} from '@tabtin/table-engine';
-import type { Field, ViewFilter } from '@tabtin/table-core';
+} from '@muse/table-engine';
+import type { Field, ViewFilter } from '@muse/table-core';
 import { createLogger } from '@/utils/logger';
 
 const log = createLogger('DataGridFocusHighlight');

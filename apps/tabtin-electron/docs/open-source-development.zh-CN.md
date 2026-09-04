@@ -93,7 +93,7 @@ pnpm bootstrap:electron:cn
 pnpm --dir apps/tabtin-electron runtimes:fetch -- --only office
 ```
 
-Office runtime 默认根据系统时区与 locale 选择下载区域：中国大陆优先使用经过大小和 SHA-256 校验的预构建归档，其他区域优先使用 The Document Foundation 与 Poppler 官方源；首选源不可用时会自动回退。可通过 `TABTIN_RUNTIME_REGION=cn` 或 `TABTIN_RUNTIME_REGION=global` 强制选择。该变量只影响当前命令，无需写入 `.env`。
+Office runtime 默认根据系统时区与 locale 选择下载区域：中国大陆优先使用经过大小和 SHA-256 校验的预构建归档，其他区域优先使用 The Document Foundation 与 Poppler 官方源；首选源不可用时会自动回退。可通过 `MUSE_RUNTIME_REGION=cn` 或 `MUSE_RUNTIME_REGION=global` 强制选择。该变量只影响当前命令，无需写入 `.env`。
 
 ## 启动 Electron（Run Electron）
 
@@ -123,28 +123,28 @@ macOS 的 `local` 构建统一使用 ad-hoc 签名，不读取 Keychain 中的 D
 `community` 是开源发行配置：
 
 - 必须提供 API、Collab WebSocket、Centrifugo WebSocket、公开 Web 四个公开端点。自建 TabChat 使用同一 API Origin 下的 Django `/api/im`，腾讯控制面会被关闭。它们共同构成社区包的完整信任边界，并在构建时写入安装包。
-- 未设置 `TABTIN_COMMUNITY_UPDATE_FEED_URL` 时，自动更新默认关闭。
+- 未设置 `MUSE_COMMUNITY_UPDATE_FEED_URL` 时，自动更新默认关闭。
 - 配置更新源时必须使用 HTTPS，地址会写入打包元数据；运行时环境变量不能替换或扩大信任范围。
 - 社区构建默认跳过 TabTin 官方 sourcemap 上传和公证服务。
 
 Linux/macOS shell 示例（不启用自动更新）：
 
 ```bash
-export TABTIN_COMMUNITY_API_BASE_URL=https://api.example.org/api
-export TABTIN_COMMUNITY_COLLAB_WS_BASE=wss://api.example.org/collab
-export TABTIN_COMMUNITY_CENTRIFUGO_WS_URL=wss://api.example.org/connection/websocket
-export TABTIN_COMMUNITY_PUBLIC_WEB_BASE_URL=https://web.example.org
+export MUSE_COMMUNITY_API_BASE_URL=https://api.example.org/api
+export MUSE_COMMUNITY_COLLAB_WS_BASE=wss://api.example.org/collab
+export MUSE_COMMUNITY_CENTRIFUGO_WS_URL=wss://api.example.org/connection/websocket
+export MUSE_COMMUNITY_PUBLIC_WEB_BASE_URL=https://web.example.org
 pnpm --dir apps/tabtin-electron build:linux:community
 ```
 
 PowerShell 示例（使用社区自行维护的更新源）：
 
 ```powershell
-$env:TABTIN_COMMUNITY_API_BASE_URL = "https://api.example.org/api"
-$env:TABTIN_COMMUNITY_COLLAB_WS_BASE = "wss://api.example.org/collab"
-$env:TABTIN_COMMUNITY_CENTRIFUGO_WS_URL = "wss://api.example.org/connection/websocket"
-$env:TABTIN_COMMUNITY_PUBLIC_WEB_BASE_URL = "https://web.example.org"
-$env:TABTIN_COMMUNITY_UPDATE_FEED_URL = "https://downloads.example.org/desktop"
+$env:MUSE_COMMUNITY_API_BASE_URL = "https://api.example.org/api"
+$env:MUSE_COMMUNITY_COLLAB_WS_BASE = "wss://api.example.org/collab"
+$env:MUSE_COMMUNITY_CENTRIFUGO_WS_URL = "wss://api.example.org/connection/websocket"
+$env:MUSE_COMMUNITY_PUBLIC_WEB_BASE_URL = "https://web.example.org"
+$env:MUSE_COMMUNITY_UPDATE_FEED_URL = "https://downloads.example.org/desktop"
 pnpm --dir apps/tabtin-electron build:win:community
 ```
 

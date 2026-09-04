@@ -1,4 +1,4 @@
-import type { ChatMessage } from '@tabtin/chat-client'
+import type { ChatMessage } from '@muse/chat-client'
 import type { ContentBlockEntry } from '@stores/useChatRuntimeStore'
 import type { parseConversationReferenceMessage } from '@utils/chat/conversationReference'
 import type { ErrorClassInfo } from '@utils/chat/messageErrorClassMap'

@@ -2,7 +2,7 @@
 SubagentRegistry - 子 Agent 运行记录注册表（Postgres + Redis）
 
 W5 cleanup (2026-05-26, 子 Agent 模块完善总控)：W10 之后子 Agent 执行已
-全部下沉到 ``@tabtin/agent-runtime`` 客户端 runtime，云端 spawn 路径不再
+全部下沉到 ``@muse/agent-runtime`` 客户端 runtime，云端 spawn 路径不再
 存在。该文件保留的角色是 **read + cancel + lifecycle cleanup 路径**——
 被 ``apps.users.auth.admin_api._cancel_active_agent_runs`` 调用以在用户
 禁用时取消该用户的活跃 SubtaskRun，以及 collab 级联回滚的 read 路径。

@@ -22,7 +22,7 @@ const toastMock = vi.hoisted(() => {
   return fn
 })
 
-vi.mock('@tabtin/smartsheet-ui', () => ({
+vi.mock('@muse/smartsheet-ui', () => ({
   Dialog: ({ children, open }: any) => (open ? <div data-testid="dialog">{children}</div> : null),
   DialogContent: ({ children }: any) => <div data-testid="dialog-content">{children}</div>,
   DialogHeader: ({ children }: any) => <div>{children}</div>,
@@ -257,18 +257,18 @@ describe('SkillEditorDialog (multi-file editor)', () => {
     toastMock.success.mockClear()
     toastMock.error.mockClear()
     toastMock.warning.mockClear()
-    ;(window as any).tabtin = makeWindowTabtin()
+    ;(window as any).muse = makeWindowTabtin()
   })
 
   afterEach(() => {
-    delete (window as any).tabtin
+    delete (window as any).muse
     vi.restoreAllMocks()
   })
 
   it('resolves the skill dir, roots the file tree there, and auto-selects SKILL.md', async () => {
     await renderDialog()
 
-    await waitFor(() => expect((window as any).tabtin.skill.resolvePath).toHaveBeenCalledWith({
+    await waitFor(() => expect((window as any).muse.skill.resolvePath).toHaveBeenCalledWith({
       spaceId: 'space-1', organizationId: 'wt-1', skillKey: 'user:demo',
     }))
     await waitFor(() => expect(screen.getByTestId('file-tree-root').textContent).toBe(SKILL_DIR))
@@ -281,13 +281,13 @@ describe('SkillEditorDialog (multi-file editor)', () => {
 
   it('normalizes Windows backslash skillDir before passing rootPath to FileTree', async () => {
     const winDir = 'C:\\Users\\demo\\TabTin\\skills\\brainstorming-3'
-    ;(window as any).tabtin.skill.resolvePath.mockResolvedValue({
+    ;(window as any).muse.skill.resolvePath.mockResolvedValue({
       skillDir: winDir,
       mdPath: `${winDir}\\SKILL.md`,
       exists: true,
       mdExists: true,
     })
-    ;(window as any).tabtin.fileSystem.readFilePreview.mockImplementation(async (path: string) => {
+    ;(window as any).muse.fileSystem.readFilePreview.mockImplementation(async (path: string) => {
       if (path.replace(/\\/g, '/').endsWith('/SKILL.md')) {
         return { success: true, data: { kind: 'text', content: SKILL_MD_DISK } }
       }
@@ -308,11 +308,11 @@ describe('SkillEditorDialog (multi-file editor)', () => {
     await waitFor(() => expect(screen.getByTestId('file-tree-root')).toBeTruthy())
 
     fireEvent.click(screen.getByTestId('create-file'))
-    await waitFor(() => expect((window as any).tabtin.fileSystem.writeFile)
+    await waitFor(() => expect((window as any).muse.fileSystem.writeFile)
       .toHaveBeenCalledWith(`${SKILL_DIR}/new.md`, ''))
 
     fireEvent.click(screen.getByTestId('create-dir'))
-    await waitFor(() => expect((window as any).tabtin.fileSystem.createDir)
+    await waitFor(() => expect((window as any).muse.fileSystem.createDir)
       .toHaveBeenCalledWith(`${SKILL_DIR}/newdir`))
   })
 
@@ -321,14 +321,14 @@ describe('SkillEditorDialog (multi-file editor)', () => {
     await waitFor(() => expect(screen.getByTestId('file-tree-root')).toBeTruthy())
 
     fireEvent.click(screen.getByTestId('delete-ref'))
-    await waitFor(() => expect((window as any).tabtin.fileSystem.deleteFile)
+    await waitFor(() => expect((window as any).muse.fileSystem.deleteFile)
       .toHaveBeenCalledWith(`${SKILL_DIR}/references/style.md`))
 
     // SKILL.md 是必备文件：删除被拦截，toast 报错且不调用 deleteFile。
-    ;(window as any).tabtin.fileSystem.deleteFile.mockClear()
+    ;(window as any).muse.fileSystem.deleteFile.mockClear()
     fireEvent.click(screen.getByTestId('delete-skillmd'))
     await waitFor(() => expect(toastMock.error).toHaveBeenCalledWith('skills.editorDialog.skillMdProtected'))
-    expect((window as any).tabtin.fileSystem.deleteFile).not.toHaveBeenCalled()
+    expect((window as any).muse.fileSystem.deleteFile).not.toHaveBeenCalled()
   })
 
   it('hides the SKILL.md preview toggle when another file is selected', async () => {
@@ -358,7 +358,7 @@ describe('SkillEditorDialog (multi-file editor)', () => {
     fireEvent.click(screen.getByText('skills.versionPublish.confirm'))
 
     // SKILL.md 走 skill:write-content（触发 registry rescan）。
-    await waitFor(() => expect((window as any).tabtin.skill.writeContent).toHaveBeenCalledWith({
+    await waitFor(() => expect((window as any).muse.skill.writeContent).toHaveBeenCalledWith({
       spaceId: 'space-1', organizationId: 'wt-1', skillKey: 'user:demo', content: edited,
     }))
 
@@ -395,7 +395,7 @@ describe('SkillEditorDialog (multi-file editor)', () => {
     await waitFor(() => expect(toastMock.error).toHaveBeenCalledWith('skills.editor.nameRequired'))
     expect(screen.queryByText('skills.versionPublish.title')).toBeNull()
     expect(publishMutateAsync).not.toHaveBeenCalled()
-    expect((window as any).tabtin.skill.writeContent).not.toHaveBeenCalled()
+    expect((window as any).muse.skill.writeContent).not.toHaveBeenCalled()
   })
 
   it('uses the latest server version instead of a stale skill snapshot before publishing', async () => {
@@ -497,11 +497,11 @@ describe('SkillEditorDialog (read-only view mode)', () => {
     publishMutateAsync.mockClear()
     toastMock.success.mockClear()
     toastMock.error.mockClear()
-    ;(window as any).tabtin = makeWindowTabtin()
+    ;(window as any).muse = makeWindowTabtin()
   })
 
   afterEach(() => {
-    delete (window as any).tabtin
+    delete (window as any).muse
     vi.restoreAllMocks()
   })
 
@@ -522,9 +522,9 @@ describe('SkillEditorDialog (read-only view mode)', () => {
     expect(screen.queryByText('skills.editor.edit')).toBeNull()
     expect(screen.queryByText('skills.editor.save')).toBeNull()
     // 不写盘 / 不发布；resolve-path 因 skill.path 命中而未触发。
-    expect((window as any).tabtin.skill.writeContent).not.toHaveBeenCalled()
+    expect((window as any).muse.skill.writeContent).not.toHaveBeenCalled()
     expect(publishMutateAsync).not.toHaveBeenCalled()
-    expect((window as any).tabtin.skill.resolvePath).not.toHaveBeenCalled()
+    expect((window as any).muse.skill.resolvePath).not.toHaveBeenCalled()
   })
 
   it('disables file-tree mutation entry points (no create/rename/delete/move) and new-item buttons', async () => {
@@ -545,7 +545,7 @@ describe('SkillEditorDialog (read-only view mode)', () => {
 
   it('falls back to single-file read-only view when no local dir resolves', async () => {
     // 未落盘的 team skill：skill.path 缺失 + resolve-path 命不中 → 单文件降级（读 SKILL.md 内容）。
-    ;(window as any).tabtin.skill.resolvePath = vi.fn().mockResolvedValue({
+    ;(window as any).muse.skill.resolvePath = vi.fn().mockResolvedValue({
       skillDir: '/data/skills/shared', mdPath: '/data/skills/shared/SKILL.md', exists: false, mdExists: false,
     })
     const teamSkill = {
@@ -560,6 +560,6 @@ describe('SkillEditorDialog (read-only view mode)', () => {
     expect(screen.queryByTestId('file-tree')).toBeNull()
     expect(screen.getByTestId('code-editor').getAttribute('data-readonly')).toBe('true')
     expect(screen.queryByText('skills.editor.save')).toBeNull()
-    expect((window as any).tabtin.skill.writeContent).not.toHaveBeenCalled()
+    expect((window as any).muse.skill.writeContent).not.toHaveBeenCalled()
   })
 })

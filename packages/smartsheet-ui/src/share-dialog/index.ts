@@ -1,5 +1,5 @@
 /**
- * @tabtin/smartsheet-ui/share-dialog 入口。
+ * @muse/smartsheet-ui/share-dialog 入口。
  * 由调用方（TabDoc 编辑器工具栏 / TabData 表格视图工具栏）import 使用。
  */
 

@@ -1,4 +1,4 @@
-import { isStreamEvent } from '@tabtin/agent-wire'
+import { isStreamEvent } from '@muse/agent-wire'
 import { isClientBroadcastExcludedStreamType } from '../delivery/client-broadcast-excluded.js'
 
 export const AGENT_REALTIME_EVENT_TYPES = {

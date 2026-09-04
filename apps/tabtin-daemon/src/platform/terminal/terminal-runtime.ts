@@ -2,7 +2,7 @@ import {
   setPtyManagerAPI,
   setPtyManagerBridge,
   type PtyManagerAPI,
-} from '@tabtin/action-tools/headless'
+} from '@muse/action-tools/headless'
 
 import type { DaemonConfig } from '../../base/types/daemon-config.js'
 import type { Logger } from '../observability/logging/logger.js'

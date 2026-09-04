@@ -10,8 +10,8 @@
  *     登记的主题分组覆盖（每个 topic 至少命中 1 个同义词）。
  *
  * **为什么放在 agent-runtime 包**：
- *   - 工具实现都在 `@tabtin/agent-runtime`，P7 必须 import 工厂取 description。
- *   - `@tabtin/agent-prompt::audit.test.ts` 的 P7 留作占位（agent-prompt
+ *   - 工具实现都在 `@muse/agent-runtime`，P7 必须 import 工厂取 description。
+ *   - `@muse/agent-prompt::audit.test.ts` 的 P7 留作占位（agent-prompt
  *     不能 build 工具）。两包 audit 形成"基线段 + 工具段"双护栏。
  *
  * **不覆盖什么**：
@@ -39,9 +39,9 @@ import {
   collectInputSchemaFieldDescriptions,
   checkFieldCharBudget,
   checkFieldLanguageDiscipline,
-} from '@tabtin/prompt-contract';
-import type { SectionDescriptor } from '@tabtin/prompt-contract';
-import { unimplementedPtyManagerBridge } from '@tabtin/terminal-core';
+} from '@muse/prompt-contract';
+import type { SectionDescriptor } from '@muse/prompt-contract';
+import { unimplementedPtyManagerBridge } from '@muse/terminal-core';
 
 import type {
   Tool,

@@ -10,7 +10,7 @@ import type {
   AgentTransportEnvelope,
   AgentTransportPort,
   AgentTransportReadyInfo,
-} from '@tabtin/agent-host/realtime'
+} from '@muse/agent-host/realtime'
 import type { AgentGatewayPort } from './agent-gateway-port.js'
 
 export class DaemonAgentTransport implements AgentTransportPort {

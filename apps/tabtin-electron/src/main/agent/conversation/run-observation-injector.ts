@@ -27,7 +27,7 @@
  * Daemon 端独立实现一份对称版本（`apps/tabtin-daemon/src/agent/run-observation-injector.ts`）。
  */
 
-import type { RunObservationInjection } from '@tabtin/agent-runtime/engine'
+import type { RunObservationInjection } from '@muse/agent-runtime/engine'
 import type { RunObservationEvent } from '@shared/run-session-snapshot'
 import { createLogger } from '../../logger'
 

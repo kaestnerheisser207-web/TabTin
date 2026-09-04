@@ -4,7 +4,7 @@
  * 覆盖 5 类 url × 3 触发方式 = 15 个用例（RFC §12.0 W3 北极星）：
  *
  *   url 维度：
- *     1. 自有格式：`tabtin://resource/document/doc_xyz?hint=tabdoc`
+ *     1. 自有格式：`muse://resource/document/doc_xyz?hint=tabdoc`
  *     2. https://...
  *     3. file:///...
  *     4. mailto:...
@@ -86,7 +86,7 @@ import { sanitizeSchema } from '@/lib/rehypeSanitizeSchema'
 
 // 防御性自检：sanitize schema 的 protocols.href / src 必须为 falsy（null / false /
 // 空数组），代表"完全不限制协议"——RFC §3.3 + D4 默认全开。任何回退到白名单
-// 形态都会让 file:// / tabtin:// 链接被静默删 href，破坏 W3 北极星。
+// 形态都会让 file:// / muse:// 链接被静默删 href，破坏 W3 北极星。
 describe('ResourceLink E2E 守门：sanitize protocols 全开自检', () => {
   it('sanitizeSchema.protocols.href 是 falsy（hast-util-sanitize 语义"全开"）', () => {
     const protocols = (sanitizeSchema as { protocols?: Record<string, unknown> }).protocols
@@ -98,9 +98,9 @@ describe('ResourceLink E2E 守门：sanitize protocols 全开自检', () => {
 
 const URL_CASES: Array<{ name: string; markdown: string; expectedHrefStartsWith: string }> = [
   {
-    name: '自有格式 tabtin://resource/...',
-    markdown: '看[这份产物](tabtin://resource/document/doc_xyz?hint=tabdoc)',
-    expectedHrefStartsWith: 'tabtin://resource/document/doc_xyz',
+    name: '自有格式 muse://resource/...',
+    markdown: '看[这份产物](muse://resource/document/doc_xyz?hint=tabdoc)',
+    expectedHrefStartsWith: 'muse://resource/document/doc_xyz',
   },
   {
     name: 'https',
@@ -120,7 +120,7 @@ const URL_CASES: Array<{ name: string; markdown: string; expectedHrefStartsWith:
   {
     name: '裸绝对路径（autolink 升级）',
     markdown: '产物在 /Users/developer/sandbox/report.md 里',
-    expectedHrefStartsWith: 'tabtin://resource/file/',
+    expectedHrefStartsWith: 'muse://resource/file/',
   },
 ]
 
@@ -178,7 +178,7 @@ describe('ResourceLink E2E (W3 / RFC §12.0 北极星)', () => {
   it('左键点击时透传 tabScopeKey 到 ResourceRouter', async () => {
     const { container } = render(
       <MarkdownRenderer
-        content="[doc](tabtin://resource/document/doc_xyz)"
+        content="[doc](muse://resource/document/doc_xyz)"
         tabScopeKey="conversation:session-1"
       />,
     )
@@ -211,7 +211,7 @@ describe('ResourceLink E2E (W3 / RFC §12.0 北极星)', () => {
   it('非对话宿主可显式指定资源所属 Space，不回退到全局选中工作空间', () => {
     const { container } = render(
       <MarkdownRenderer
-        content="[doc](tabtin://resource/document/doc_xyz)"
+        content="[doc](muse://resource/document/doc_xyz)"
         resourceSpaceId="project-space-1"
       />,
     )
@@ -225,7 +225,7 @@ describe('ResourceLink E2E (W3 / RFC §12.0 北极星)', () => {
   it('外层已可点击的卡片可关闭 Markdown 链接交互', () => {
     const { container } = render(
       <MarkdownRenderer
-        content="查看 **[交付文档](tabtin://resource/document/doc_xyz)**"
+        content="查看 **[交付文档](muse://resource/document/doc_xyz)**"
         linksEnabled={false}
       />,
     )
@@ -263,7 +263,7 @@ describe('ResourceLink E2E (W3 / RFC §12.0 北极星)', () => {
   it('右键菜单时透传 tabScopeKey 到菜单 store', async () => {
     const { container } = render(
       <MarkdownRenderer
-        content="[doc](tabtin://resource/document/doc_xyz)"
+        content="[doc](muse://resource/document/doc_xyz)"
         tabScopeKey="conversation:session-1"
       />,
     )

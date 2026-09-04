@@ -14,15 +14,15 @@
 import {
   decodeWirePendingApprovals,
   decodeWirePendingSingleHitl,
-} from '@tabtin/agent-runtime'
-import type { AgentModeName } from '@tabtin/agent-modes'
+} from '@muse/agent-runtime'
+import type { AgentModeName } from '@muse/agent-modes'
 import type { AppContext } from '../hooks/index.js'
 import type {
   ContentBlock,
   SerializedPendingApproval,
   SerializedPendingSingleHitl,
-} from '@tabtin/agent-runtime/engine'
-import type { WorkspaceSnapshot } from '@tabtin/security-policy'
+} from '@muse/agent-runtime/engine'
+import type { WorkspaceSnapshot } from '@muse/security-policy'
 import {
   PromptForwardPayloadSchema,
   type PromptForwardPayload,
@@ -33,7 +33,7 @@ import {
   type ExecutionLimits,
   type OperationSwitches,
   type SubagentConfigDto,
-} from '@tabtin/agent-wire'
+} from '@muse/agent-wire'
 import {
   decodeCloudPressureThresholds,
   type HostRuntimeOptionsLogger,

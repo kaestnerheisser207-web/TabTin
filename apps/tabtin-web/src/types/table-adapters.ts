@@ -9,7 +9,7 @@ import {
   buildColumnMetaUpdatePayload as buildSharedColumnMetaUpdatePayload,
   type ViewColumnMeta,
   type ViewUpdateRequest,
-} from '@tabtin/table-core'
+} from '@muse/table-core'
 
 export type TranslateFunction = (key: string, options?: Record<string, unknown>) => string
 type LooseI18nLike = {

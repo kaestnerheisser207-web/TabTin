@@ -1,5 +1,5 @@
 /**
- * @tabtin/local-docparse/workers — Worker 协议 + handlers + 通用 Runner
+ * @muse/local-docparse/workers — Worker 协议 + handlers + 通用 Runner
  *
  * 拆出 `./workers` 子路径的原因：宿主侧 worker entry 脚本只需要 handlers +
  * protocol，**不应**误 import 主入口 `parseLocalAttachment.ts`，否则
@@ -12,7 +12,7 @@
  *     handleParsePdf, handleParseDocx, handleParseXlsx,
  *     serializeWorkerError,
  *     type WorkerTaskRequestMessage, type WorkerTaskResponseMessage,
- *   } from '@tabtin/local-docparse/workers'
+ *   } from '@muse/local-docparse/workers'
  *
  *   parentPort!.on('message', async (msg: WorkerTaskRequestMessage) => {
  *     if (msg.kind !== 'task') return

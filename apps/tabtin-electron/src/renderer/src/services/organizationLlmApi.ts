@@ -1,4 +1,4 @@
-import { joinApiPath } from '@tabtin/config'
+import { joinApiPath } from '@muse/config'
 import { API_CONFIG, API_ENDPOINTS } from '@/config/api'
 import { apiRequest, getAuthToken } from '@/adapters/api-adapter-instance'
 import i18n from '@/i18n'

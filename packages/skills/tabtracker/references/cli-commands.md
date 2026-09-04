@@ -9,7 +9,7 @@
 # 5 档预设：manual / hourly / daily / weekdays / weekly
 # --at HH:MM 配合 daily/weekdays/weekly 使用；manual / hourly 忽略
 
-# --agent 必填（或已配置 TABTIN_AGENT_ID / profile.DefaultAgent）
+# --agent 必填（或已配置 MUSE_AGENT_ID / profile.DefaultAgent）
 # 执行 Workspace：全局 --workspace-id / 当前 profile 会写入创建请求体
 muse tracker new "每日报告" --schedule daily --at 09:00 \
     --agent <agent-id> \
@@ -44,8 +44,8 @@ muse tracker new "周报" --schedule weekly --at 10:00 \
 ```
 
 **关键约束**（charter v1.8 §7.1）：
-- `--agent` **必填语义**（charter v1.8 §7.1：后端强制要求执行 Agent，不再回落 Space 默认 Agent）——先用 `muse agent list` 取合法 agent UUID；也可依赖 `TABTIN_AGENT_ID` / profile.DefaultAgent。不要传 `"default"` 这类别名。
-- **执行 Workspace 必填**：服务端校验的是创建请求体里的 `workspace_id`。CLI 会把全局 `--workspace-id`（或当前 profile / `TABTIN_WORKSPACE_ID`）写入 body。只把 ID 当「上下文 flag」而不进 body 时，会稳定报「必须指定执行 Workspace」。个人 Workspace 场景通常与当前会话 Workspace 同 ID；Project 场景须传成员自己的执行 Workspace，不能把 Project / team_space ID 当执行现场（见 ）。
+- `--agent` **必填语义**（charter v1.8 §7.1：后端强制要求执行 Agent，不再回落 Space 默认 Agent）——先用 `muse agent list` 取合法 agent UUID；也可依赖 `MUSE_AGENT_ID` / profile.DefaultAgent。不要传 `"default"` 这类别名。
+- **执行 Workspace 必填**：服务端校验的是创建请求体里的 `workspace_id`。CLI 会把全局 `--workspace-id`（或当前 profile / `MUSE_WORKSPACE_ID`）写入 body。只把 ID 当「上下文 flag」而不进 body 时，会稳定报「必须指定执行 Workspace」。个人 Workspace 场景通常与当前会话 Workspace 同 ID；Project 场景须传成员自己的执行 Workspace，不能把 Project / team_space ID 当执行现场（见 ）。
 - `--skill` 可选——默认纯 Agent 模式，由 Agent 运行时自助搜索 / 读取可用 Skill。只有用户明确指定，或你已确认该 Skill 已安装时，才传 `--skill <skill_key>` 预绑定方法论。
 - **未来只跑一次用 `--once-at`**：支持 ISO 8601（如 `2026-06-10T09:00:00+08:00`）
   和窄中文相对时间（今天/明天/后天 + 上午/下午/晚上 + 点/点半/分钟，如

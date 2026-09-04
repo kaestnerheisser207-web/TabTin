@@ -9,7 +9,7 @@ import (
 	"github.com/Muse/muse-cli/internal/cmdutil"
 )
 
-// setupPurgeConfigDir 隔离 TABTIN_CONFIG_DIR 到临时 .tabtin 子目录，避免测试
+// setupPurgeConfigDir 隔离 MUSE_CONFIG_DIR 到临时 .tabtin 子目录，避免测试
 // 触碰开发机真实 ~/.tabtin，并落一个占位配置文件模拟真实场景。
 func setupPurgeConfigDir(t *testing.T) string {
 	t.Helper()
@@ -21,7 +21,7 @@ func setupPurgeConfigDir(t *testing.T) string {
 	if err := os.WriteFile(filepath.Join(dir, "config.json"), []byte(`{"version":2}`), 0600); err != nil {
 		t.Fatalf("write config.json: %v", err)
 	}
-	t.Setenv("TABTIN_CONFIG_DIR", dir)
+	t.Setenv("MUSE_CONFIG_DIR", dir)
 	return dir
 }
 
@@ -82,7 +82,7 @@ func TestConfigPurgeInteractiveYesConfirms(t *testing.T) {
 func TestConfigPurgeNoopWhenDirMissing(t *testing.T) {
 	tmp := t.TempDir()
 	dir := filepath.Join(tmp, "does-not-exist", ".tabtin")
-	t.Setenv("TABTIN_CONFIG_DIR", dir)
+	t.Setenv("MUSE_CONFIG_DIR", dir)
 
 	f := cmdutil.NewFactory()
 	cmd := newCmdConfigPurge(f)
@@ -95,7 +95,7 @@ func TestConfigPurgeNoopWhenDirMissing(t *testing.T) {
 	}
 }
 
-// ：TABTIN_CONFIG_DIR 误配置成空串/家目录本身/文件系统根时拒绝清除，
+// ：MUSE_CONFIG_DIR 误配置成空串/家目录本身/文件系统根时拒绝清除，
 // 防止 purge 变成误删家目录的破坏性命令。
 func TestValidatePurgeDirRejectsDangerousPaths(t *testing.T) {
 	home, err := os.UserHomeDir()
@@ -120,7 +120,7 @@ func TestValidatePurgeDirRejectsDangerousPaths(t *testing.T) {
 	}
 }
 
-// TABTIN_CONFIG_DIR 允许指向任意自定义目录名（不要求 .tabtin* 前缀）——
+// MUSE_CONFIG_DIR 允许指向任意自定义目录名（不要求 .tabtin* 前缀）——
 // 这是该环境变量本身的既有设计（供用户/测试/CI 隔离），purge 不该更挑剔。
 func TestValidatePurgeDirAllowsCustomNamedDir(t *testing.T) {
 	tmp := t.TempDir()

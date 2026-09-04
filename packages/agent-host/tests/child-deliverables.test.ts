@@ -2,7 +2,7 @@ import { mkdtempSync, writeFileSync, mkdirSync } from 'node:fs'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 import { afterEach, describe, expect, it } from 'vitest'
-import type { MessageBlockRecord } from '@tabtin/agent-runtime'
+import type { MessageBlockRecord } from '@muse/agent-runtime'
 import {
   CHILD_DELIVERABLES_TAG,
   appendDeliverablesToToolResultContent,
@@ -80,7 +80,7 @@ describe('collectDeliverablesFromRecords', () => {
             resource_type: 'tabdata',
             resource_id: 'tbl_1',
             resource_name: '客户表',
-            url: 'tabtin://resource/tabdata/tbl_1',
+            url: 'muse://resource/tabdata/tbl_1',
           },
         },
         {
@@ -100,12 +100,12 @@ describe('collectDeliverablesFromRecords', () => {
       expect.objectContaining({
         artifact_kind: 'platform_resource',
         resource_id: 'tbl_1',
-        url: 'tabtin://resource/tabdata/tbl_1',
+        url: 'muse://resource/tabdata/tbl_1',
       }),
       expect.objectContaining({
         artifact_kind: 'oss_file',
         filename: 'deck.pdf',
-        url: expect.stringContaining('tabtin://resource/file/file-uuid-1'),
+        url: expect.stringContaining('muse://resource/file/file-uuid-1'),
       }),
     ]))
   })

@@ -157,7 +157,7 @@ def candidate_readiness(space: Space) -> dict:
 
 def select_execution_context():
     """Environment id is strict; otherwise query the best existing live Space."""
-    requested_space_id = os.environ.get("TABTIN_E2E_LIVE_SPACE_ID", "").strip()
+    requested_space_id = os.environ.get("MUSE_E2E_LIVE_SPACE_ID", "").strip()
     if requested_space_id:
         try:
             space = live_space_candidates().filter(id=requested_space_id).first()
@@ -173,7 +173,7 @@ def select_execution_context():
         return (
             space,
             (user, membership, membership_provisioned),
-            "env:TABTIN_E2E_LIVE_SPACE_ID",
+            "env:MUSE_E2E_LIVE_SPACE_ID",
             requested_space_id,
         )
 
@@ -272,7 +272,7 @@ def ensure_context(run_id: str, *, clear_session_messages: bool) -> dict:
 
 def prepare_case() -> None:
     context = ensure_context(
-        require_env("TABTIN_E2E_RUN_ID"),
+        require_env("MUSE_E2E_RUN_ID"),
         clear_session_messages=True,
     )
     if not context["usesExistingExecutionSpace"]:
@@ -343,7 +343,7 @@ def prepare_case() -> None:
 
 def auth_case() -> None:
     context = ensure_context(
-        require_env("TABTIN_E2E_RUN_ID"),
+        require_env("MUSE_E2E_RUN_ID"),
         clear_session_messages=False,
     )
     if not context["usesExistingExecutionSpace"]:
@@ -363,14 +363,14 @@ def auth_case() -> None:
 
 
 def main() -> None:
-    mode = require_env("TABTIN_E2E_MODE")
+    mode = require_env("MUSE_E2E_MODE")
     if mode == "prepare":
         prepare_case()
         return
     if mode == "auth":
         auth_case()
         return
-    raise RuntimeError(f"Unknown TABTIN_E2E_MODE: {mode}")
+    raise RuntimeError(f"Unknown MUSE_E2E_MODE: {mode}")
 
 
 main()

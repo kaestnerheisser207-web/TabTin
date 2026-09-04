@@ -8,7 +8,7 @@ import React, { useEffect, useRef, useState } from 'react'
 import { GitBranch, ChevronDown, ChevronUp } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { useGitStatusStore } from '@stores/useGitStatusStore'
-import type { RemoteGitStatus, GitFileEntry } from '@tabtin/app-shell'
+import type { RemoteGitStatus, GitFileEntry } from '@muse/app-shell'
 import { cn } from '@utils/cn'
 
 /**

@@ -21,7 +21,7 @@ import {
   setInternalMarker,
   type Message,
   type EngineState,
-} from '@tabtin/agent-runtime/engine';
+} from '@muse/agent-runtime/engine';
 
 const MEMORY_MARKER = INTERNAL_MESSAGE_MARKERS.MEMORY_INJECTION;
 const CONTEXT_MARKER = INTERNAL_MESSAGE_MARKERS.CONTEXT_INJECTION;

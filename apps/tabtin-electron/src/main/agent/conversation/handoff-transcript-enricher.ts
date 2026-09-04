@@ -7,7 +7,7 @@
  */
 
 import { API_BASE_URL } from '../../config/api.js'
-import { joinApiPath } from '@tabtin/config'
+import { joinApiPath } from '@muse/config'
 import { TokenManager } from '../../auth.js'
 
 const HANDOFF_ID_RE = /交接包[：:]\s*([0-9a-f-]{36})/

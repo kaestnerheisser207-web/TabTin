@@ -6,7 +6,7 @@ import { describe, it, expect } from 'vitest';
 import {
   evaluateAgentModeToolAccess,
   annotateToolsForMode,
-} from '@tabtin/agent-modes';
+} from '@muse/agent-modes';
 
 describe('evaluateAgentModeToolAccess contract', () => {
   it('undefined / agent mode short-circuits to allow', () => {

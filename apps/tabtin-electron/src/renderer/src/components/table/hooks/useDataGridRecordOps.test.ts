@@ -1,5 +1,5 @@
 import { act, renderHook, waitFor } from '@testing-library/react'
-import { RecordApiService, type Field, type ViewMeta } from '@tabtin/table-core'
+import { RecordApiService, type Field, type ViewMeta } from '@muse/table-core'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { useDataGridRecordOps } from './useDataGridRecordOps'
 
@@ -33,8 +33,8 @@ vi.mock('@stores/useRecordStore', () => ({
     }),
 }))
 
-vi.mock('@tabtin/smartsheet-ui', async (importOriginal) => {
-  const actual = await importOriginal<typeof import('@tabtin/smartsheet-ui')>()
+vi.mock('@muse/smartsheet-ui', async (importOriginal) => {
+  const actual = await importOriginal<typeof import('@muse/smartsheet-ui')>()
   return {
     ...actual,
     toast: mockToast,

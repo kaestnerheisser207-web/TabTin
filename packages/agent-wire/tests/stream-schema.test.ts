@@ -40,7 +40,7 @@ import {
   StreamLifecycleSchema,
   CompactionStatsSchema,
   StreamCompactionSchema,
-} from '@tabtin/agent-wire';
+} from '@muse/agent-wire';
 
 describe('FR-06 — StreamDoneSchema 向后兼容', () => {
   it('旧消费者 — 缺所有新字段时仍能 parse 成功 done', () => {

@@ -27,7 +27,7 @@
 import React from 'react'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { act, fireEvent, render, screen, waitFor, within } from '@testing-library/react'
-import { parseResourcePointer } from '@tabtin/resource-router'
+import { parseResourcePointer } from '@muse/resource-router'
 
 // 必须 override setup.ts 的 react-i18next mock，让 defaultValue 生效——
 // menu 文案完全靠 defaultValue 兜底，i18n 文件没补对应 key
@@ -58,7 +58,7 @@ const routerOpen = vi.fn(async () => ({
 
 // router.resolve 在 menu 打开时被调以拿 candidates；返回固定的 2 个 carrier
 const routerResolve = vi.fn(() => ({
-  pointer: parseResourcePointer('tabtin://resource/document/doc_1'),
+  pointer: parseResourcePointer('muse://resource/document/doc_1'),
   candidates: [
     { appId: 'tabdoc', priority: 1_000_000_000, source: 'manifest_default' as const },
     { appId: 'tabcode', priority: 50, source: 'manifest_default' as const },
@@ -93,7 +93,7 @@ vi.mock('@/components/context-space/registry/instance', async (importOriginal) =
 })
 
 // toast — 写偏好后弹 toast，不影响测试，stub 即可
-vi.mock('@tabtin/smartsheet-ui/toast', () => ({
+vi.mock('@muse/smartsheet-ui/toast', () => ({
   toast: {
     success: vi.fn(),
     error: vi.fn(),
@@ -107,7 +107,7 @@ import {
 import { useResourceOpenPreferences } from '@/stores/useResourceOpenPreferences'
 import { PERSIST_KEYS } from '@/stores/persist-key-registry'
 
-const POINTER = parseResourcePointer('tabtin://resource/document/doc_1')
+const POINTER = parseResourcePointer('muse://resource/document/doc_1')
 
 beforeEach(() => {
   useResourceOpenPreferences.setState({ preferences: {}, sessionOverrides: {} })
@@ -124,7 +124,7 @@ function showMenu() {
     showResourceLinkContextMenu({
       x: 100,
       y: 100,
-      href: 'tabtin://resource/document/doc_1',
+      href: 'muse://resource/document/doc_1',
       spaceId: 'space-test',
       pointer: POINTER,
     })
@@ -136,7 +136,7 @@ function showMenuWithScope(tabScopeKey: string) {
     showResourceLinkContextMenu({
       x: 100,
       y: 100,
-      href: 'tabtin://resource/document/doc_1',
+      href: 'muse://resource/document/doc_1',
       spaceId: 'space-test',
       tabScopeKey,
       pointer: POINTER,

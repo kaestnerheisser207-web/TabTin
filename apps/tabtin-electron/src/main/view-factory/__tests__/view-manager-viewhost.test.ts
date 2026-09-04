@@ -29,7 +29,7 @@ vi.mock('electron', () => {
   return { WebContentsView: MockWebContentsView }
 })
 
-import { ViewManager } from '@tabtin/browser-capabilities'
+import { ViewManager } from '@muse/browser-capabilities'
 
 function makeMockMainWindow() {
   const children: unknown[] = []

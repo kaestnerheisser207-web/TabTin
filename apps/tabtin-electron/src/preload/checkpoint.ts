@@ -1,5 +1,5 @@
 import { ipcRenderer } from 'electron'
-import type { CheckpointKind } from '@tabtin/checkpoint-core'
+import type { CheckpointKind } from '@muse/checkpoint-core'
 
 interface CheckpointCommitPolicy {
   kind?: CheckpointKind

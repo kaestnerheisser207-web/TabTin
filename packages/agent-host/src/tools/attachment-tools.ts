@@ -2,7 +2,7 @@ import type {
   Tool,
   ToolContext,
   ToolResult,
-} from '@tabtin/agent-runtime'
+} from '@muse/agent-runtime'
 import {
   joinApiPath,
   jsonError,
@@ -11,7 +11,7 @@ import {
   RUNTIME_MISCONFIG,
   toJsonErrorMetadata,
   translateBackendError,
-} from '@tabtin/agent-runtime/tools'
+} from '@muse/agent-runtime/tools'
 
 const MAX_ATTACHMENT_BYTES = 100 * 1024 * 1024
 const HTML_EXTENSIONS = new Set(['.html', '.htm'])

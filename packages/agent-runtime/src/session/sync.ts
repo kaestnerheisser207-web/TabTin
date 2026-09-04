@@ -1,5 +1,5 @@
 /**
- * @tabtin/agent-runtime — Session Sync Queue（FR-14 H2-D 持久化版）
+ * @muse/agent-runtime — Session Sync Queue（FR-14 H2-D 持久化版）
  *
  * 收集 SessionStorage.onWrite 产生的 TranscriptEntry，攒批后送给宿主注入
  * 的 `uploadFn`。三次连续失败后落 `PersistentQueue<TranscriptEntry[]>`，

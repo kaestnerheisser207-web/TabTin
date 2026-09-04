@@ -7,7 +7,7 @@
 
 import { describe, expect, it } from 'vitest'
 
-import { TOOL_ERROR_CATALOG_DEFAULTS } from '@tabtin/tool-errors'
+import { TOOL_ERROR_CATALOG_DEFAULTS } from '@muse/tool-errors'
 
 import {
   isSoftToolError,
@@ -277,7 +277,7 @@ describe('toolErrorClassification', () => {
       // 动态推算"specific = total - sharedWithTopLevel.size"——SSoT 加 IMAGE_RESIZE_FAILED
       // 后 14 - 5 = 9 类，旧硬编码 8 立即 fail（反思 §八 #14 / #15 教训：SSoT 加新条目时
       // 测试硬编码立刻退化）。改为推算后 SSoT 任意扩缩本测试自动跟随。
-      const { FILE_PIPELINE_ERROR_KINDS, FilePipelineErrorCode } = await import('@tabtin/local-docparse')
+      const { FILE_PIPELINE_ERROR_KINDS, FilePipelineErrorCode } = await import('@muse/local-docparse')
       const sharedWithTopLevel = new Set<string>([
         FilePipelineErrorCode.PERMISSION_DENIED,
         FilePipelineErrorCode.USER_ABORTED,

@@ -85,7 +85,7 @@ export function createDeepLinkController(
 
   protocol.registerSchemesAsPrivileged([
     {
-      scheme: 'tabtin-file',
+      scheme: 'muse-file',
       privileges: {
         standard: true,
         secure: true,
@@ -95,9 +95,9 @@ export function createDeepLinkController(
     },
   ])
 
-  // 第二个开发实例只用于本机双端调试：不能抢占系统 tabtin:// 协议处理器，
+  // 第二个开发实例只用于本机双端调试：不能抢占系统 muse:// 协议处理器，
   // 否则启动/退出它会影响主开发实例的深链接行为。
-  if (!process.env.TABTIN_DEV_INSTANCE) {
+  if (!process.env.MUSE_DEV_INSTANCE) {
     if (process.defaultApp) {
       if (process.argv.length >= 2) {
         app.setAsDefaultProtocolClient(deepLinkScheme, process.execPath, [resolve(process.argv[1])])

@@ -1,13 +1,13 @@
 import { afterEach, beforeEach, describe, expect, it } from 'vitest'
-import type { ContentBlock, Message, MessageBlockRecord } from '@tabtin/agent-runtime'
+import type { ContentBlock, Message, MessageBlockRecord } from '@muse/agent-runtime'
 import {
   INTERNAL_MESSAGE_MARKERS,
   hasInternalMarker,
-} from '@tabtin/agent-runtime/engine'
-import { mergeConsecutiveMessages } from '@tabtin/agent-runtime/engine/message-normalizer'
-import { reconstructMessagesFromBlockRecords } from '@tabtin/agent-runtime'
-import { buildReplayHistoryFromTranscript } from '@tabtin/agent-runtime/history'
-import { buildInitialMessages } from '@tabtin/agent-runtime'
+} from '@muse/agent-runtime/engine'
+import { mergeConsecutiveMessages } from '@muse/agent-runtime/engine/message-normalizer'
+import { reconstructMessagesFromBlockRecords } from '@muse/agent-runtime'
+import { buildReplayHistoryFromTranscript } from '@muse/agent-runtime/history'
+import { buildInitialMessages } from '@muse/agent-runtime'
 import { injectTurnIdentity } from '../src/conversation/inject-turn-identity.js'
 import {
   AttributionStore,

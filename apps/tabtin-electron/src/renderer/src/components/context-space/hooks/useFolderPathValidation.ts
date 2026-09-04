@@ -35,7 +35,7 @@ export function useFolderPathValidation(spaceId: string) {
           // contract W2-β: fs:readDir (LEGACY_HANDLERS) — readDir 失败 = 路径
           // 已删除 / 权限丢失，标记 invalid 是正确语义；W2-α envelope ok:false
           // 短路也会落 catch 同样处理。用 isLegacyOk 收口字面 success。
-          const dirRes = await window.tabtin.fileSystem.readDir(entry.path)
+          const dirRes = await window.muse.fileSystem.readDir(entry.path)
           if (!isLegacyOk(dirRes)) nextInvalid.add(entry.id)
         } catch {
           nextInvalid.add(entry.id)

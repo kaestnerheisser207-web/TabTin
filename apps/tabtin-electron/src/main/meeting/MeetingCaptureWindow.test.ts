@@ -166,19 +166,19 @@ describe('MeetingCaptureWindow', () => {
     });
 
     expect(executeJavaScript.mock.calls.at(-5)?.[0]).toContain(
-      '__TABTIN_MEETING_CAPTURE__.prepareMicrophoneSwitch({"deviceId":"mic-2"})',
+      '__MUSE_MEETING_CAPTURE__.prepareMicrophoneSwitch({"deviceId":"mic-2"})',
     );
     expect(executeJavaScript.mock.calls.at(-4)?.[0]).toContain(
-      '__TABTIN_MEETING_CAPTURE__.commitSourceSwitch({"operationId":"local-op-1","source":"local"})',
+      '__MUSE_MEETING_CAPTURE__.commitSourceSwitch({"operationId":"local-op-1","source":"local"})',
     );
     expect(executeJavaScript.mock.calls.at(-3)?.[0]).toContain(
-      '__TABTIN_MEETING_CAPTURE__.abortSourceSwitch({"operationId":"local-op-1","source":"local"})',
+      '__MUSE_MEETING_CAPTURE__.abortSourceSwitch({"operationId":"local-op-1","source":"local"})',
     );
     expect(executeJavaScript.mock.calls.at(-2)?.[0]).toContain(
-      '__TABTIN_MEETING_CAPTURE__.finalizeSourceSwitch({"operationId":"local-op-1","source":"local"})',
+      '__MUSE_MEETING_CAPTURE__.finalizeSourceSwitch({"operationId":"local-op-1","source":"local"})',
     );
     expect(executeJavaScript.mock.calls.at(-1)?.[0]).toContain(
-      '__TABTIN_MEETING_CAPTURE__.rollbackSourceSwitch({"operationId":"local-op-1","source":"local"})',
+      '__MUSE_MEETING_CAPTURE__.rollbackSourceSwitch({"operationId":"local-op-1","source":"local"})',
     );
   });
 

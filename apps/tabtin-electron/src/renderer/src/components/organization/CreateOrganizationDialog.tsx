@@ -7,14 +7,14 @@ import React, { useEffect, useMemo, useState } from 'react'
 import {
   CreateOrganizationDialog as CreateOrganizationDialogUI,
   CreateOrganizationData
-} from '@tabtin/smartsheet-ui'
+} from '@muse/smartsheet-ui'
 import { useShallow } from 'zustand/react/shallow'
 import { useOrganizationStore } from '@stores/useOrganizationStore'
 import { useDeviceStore } from '@stores/useDeviceStore'
 import { useAuthStore } from '@stores/useAuthStore'
 import { useTranslation } from 'react-i18next'
-import { OrganizationApiService } from '@tabtin/app-shell'
-import type { CreateOrganizationRequest, Organization } from '@tabtin/app-shell'
+import { OrganizationApiService } from '@muse/app-shell'
+import type { CreateOrganizationRequest, Organization } from '@muse/app-shell'
 import { OrganizationAvatarUploader } from '@components/settings/panels/OrganizationAvatarUploader'
 
 /** 合并创建表单 settings 与可选 logo_url（纯函数，便于单测）。 */
@@ -106,7 +106,7 @@ export const CreateOrganizationDialog: React.FC<CreateOrganizationDialogProps> =
         return
       }
       // 默认目录名固定中文，不跟 UI 语言走英文（避免 ~/Muse/.../Default Space）。
-      const defaultDir = await window.tabtin?.fileSystem?.ensureDefaultAgentDir({
+      const defaultDir = await window.muse?.fileSystem?.ensureDefaultAgentDir({
         organizationName: data.name,
         spaceName: '默认工作空间',
       })

@@ -129,7 +129,7 @@ describe('isRateLimited（同指纹限频，窗口 60s / 上限 5 条）', () =>
 });
 
 describe('readDaemonVersion', () => {
-  it('逐级上找包根，返回 @tabtin/daemon 的真实版本（不是 unknown）', () => {
+  it('逐级上找包根，返回 @muse/daemon 的真实版本（不是 unknown）', () => {
     const pkg = JSON.parse(
       readFileSync(join(__dirname, '..', 'package.json'), 'utf-8'),
     ) as { version: string };

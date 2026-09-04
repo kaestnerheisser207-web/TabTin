@@ -1,7 +1,7 @@
 {
-  "name": "@tabtin/table-kernel-pglite",
+  "name": "@muse/table-kernel-pglite",
   "version": "0.1.0",
-  "description": "PGlite adapter for @tabtin/table-kernel — local PostgreSQL via WASM",
+  "description": "PGlite adapter for @muse/table-kernel — local PostgreSQL via WASM",
   "type": "module",
   "main": "dist/index.js",
   "module": "dist/index.js",
@@ -33,7 +33,7 @@
   "author": "Muse Team",
   "license": "MIT",
   "dependencies": {
-    "@tabtin/table-kernel": "workspace:*",
+    "@muse/table-kernel": "workspace:*",
     "@electric-sql/pglite": "^0.2.0",
     "kysely": "^0.27.0"
   },

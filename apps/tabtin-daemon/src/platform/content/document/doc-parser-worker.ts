@@ -3,7 +3,7 @@
  *
  * 职责拆分（与 Electron 完全对称）：
  *   - 本文件：只负责 worker_threads 协议分发（message in → task handler → message out）
- *   - `@tabtin/local-docparse/workers`：承载实际的 PDF/docx/xlsx 解析纯函数
+ *   - `@muse/local-docparse/workers`：承载实际的 PDF/docx/xlsx 解析纯函数
  *
  * 与 Electron `apps/tabtin-electron/src/main/workers/doc-parser-worker.ts` 唯一
  * 差异是构建工具（tsup vs electron-vite）和 worker 脚本的最终输出路径——业务
@@ -21,7 +21,7 @@ import {
   type ParseXlsxPayload,
   type WorkerTaskRequestMessage,
   type WorkerTaskResponseMessage,
-} from '@tabtin/local-docparse/workers'
+} from '@muse/local-docparse/workers'
 
 async function handleTask(request: WorkerTaskRequestMessage): Promise<unknown> {
   switch (request.taskType) {

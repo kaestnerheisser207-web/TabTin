@@ -14,7 +14,7 @@ interface ImportMeta {
 }
 
 interface Window {
-  readonly __TABTIN_RUNTIME_CONFIG__?: {
+  readonly __MUSE_RUNTIME_CONFIG__?: {
     readonly API_BASE_URL?: string
     readonly PUBLIC_WEB_BASE_URL?: string
     readonly COLLAB_WS_BASE?: string

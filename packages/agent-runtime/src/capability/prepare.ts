@@ -156,8 +156,8 @@ export function prepareAgentTools(caps: Capability[]): PreparedTools {
 // W2.3 实施后 Capability 只走 `composeCapabilityHooks` +
 // `prepareAgentTools` 两件套即可装配进 EngineConfig。
 //
-// **后续若要恢复"cap 文案 → system prompt"机制**：走 `@tabtin/agent-prompt` 的
-// `buildSystemPrompt` + `@tabtin/prompt-contract` 的注册表声明，而**不要**恢复
+// **后续若要恢复"cap 文案 → system prompt"机制**：走 `@muse/agent-prompt` 的
+// `buildSystemPrompt` + `@muse/prompt-contract` 的注册表声明，而**不要**恢复
 // 本文件曾经的 prepareAgentInstructions —— 避免又一层与 SECTION_REGISTRY 平行
 // 的隐形 SSoT。同理 sampling_params 若要恢复，应走 EngineConfig 显式 sampling
 // 字段而非 cap-by-cap deep merge 的隐式覆盖语义。

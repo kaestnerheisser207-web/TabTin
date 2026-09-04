@@ -2574,6 +2574,6 @@ export class WsGatewayClient {
 
 export type { GatewayClientOptions, GatewayClientError, WebSocketConstructor }
 
-// ── Permission types re-exported from @tabtin/contracts/agent ──
-export type { PermissionMode } from '@tabtin/contracts/agent'
-export { PERMISSION_TIMEOUTS } from '@tabtin/contracts/agent'
+// ── Permission types re-exported from @muse/contracts/agent ──
+export type { PermissionMode } from '@muse/contracts/agent'
+export { PERMISSION_TIMEOUTS } from '@muse/contracts/agent'

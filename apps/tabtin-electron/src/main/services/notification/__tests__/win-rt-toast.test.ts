@@ -13,11 +13,11 @@ describe('win-rt-toast helpers', () => {
       aumid: 'com.tabtin.app.preprod',
       silent: true,
       iconFileUrl: 'file:///C:/app/static/icon.png',
-      launchUrl: 'tabtin://notify?d=abc&x=1',
+      launchUrl: 'muse://notify?d=abc&x=1',
     })
     expect(xml).toContain('duration="short"')
     expect(xml).toContain('activationType="protocol"')
-    expect(xml).toContain('launch="tabtin://notify?d=abc&amp;x=1"')
+    expect(xml).toContain('launch="muse://notify?d=abc&amp;x=1"')
     expect(xml).toContain('<audio silent="true"/>')
     expect(xml).toContain('placement="appLogoOverride"')
     expect(xml).toContain('hint-crop="circle"')

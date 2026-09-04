@@ -9,7 +9,7 @@ import { registerApiProxyHandlers } from './api-proxy'
 import { initContextMenuI18n } from './context-menu'
 import { resolveStartupUiLocale } from './startup-ui-locale'
 import { setupApplicationMenu } from './application-menu'
-import { setTerminalCoreLocale } from '@tabtin/terminal-core'
+import { setTerminalCoreLocale } from '@muse/terminal-core'
 import { registerCheckpointIpcHandlers } from './checkpoint/checkpoint-ipc'
 import { registerFileHistoryIpcHandlers } from './file-history/file-history-ipc'
 import { registerFileEditPatchIpcHandlers } from './file-edit-patches/file-edit-patch-ipc'
@@ -17,8 +17,8 @@ import { registerTabtinFileProtocol } from './file-system/protocol'
 import { registerGitIpcHandlers } from './git-ipc'
 import { registerDeferredIpcStubs } from './ipc-lazy'
 import { registerSurfaceAsIpc } from './wire/register-surface-as-ipc'
-import { chatExportMd } from '@tabtin/cli-server-core/surfaces/chat-export-md'
-import { createSessionSurfaces } from '@tabtin/cli-server-core/surfaces/session'
+import { chatExportMd } from '@muse/cli-server-core/surfaces/chat-export-md'
+import { createSessionSurfaces } from '@muse/cli-server-core/surfaces/session'
 import { getSessionManager } from './session/SessionManager'
 import {
   registerMainProcessIPCHandlers,
@@ -48,7 +48,7 @@ import { registerMediaStorageBuckets } from './services/MediaStorageBucketRegist
 import { registerCheckpointSummaryExportBucket } from './services/CheckpointSummaryExport'
 import { registerConversationSummaryExportBucket } from './services/ConversationSummaryExport'
 import { registerStorageExportFileWriter } from './services/StorageExportFileWriter'
-import { setUserDataOverride } from '@tabtin/shared/storage-paths'
+import { setUserDataOverride } from '@muse/shared/storage-paths'
 import { shouldAllowMainDevTools } from './package-protection'
 import { createLogger } from './logger'
 
@@ -117,7 +117,7 @@ const registerCoreProcessHandlers = (): void => {
   // services/bridge-core.ts 内 init 期挂载（与 widgetAuditLogger / WidgetRenderService
   // 等 agent runtime bridge 同生命周期），避免本文件的"core handlers"层级混入
   // tab-app 派生服务的依赖链。详见 RFC v1.0 §8.3 + 总控 §2 W7。
-  // tabtin-file:// 协议：不是 IPC handler 而是 session.protocol，必须在
+  // muse-file:// 协议：不是 IPC handler 而是 session.protocol，必须在
   // 任何 BrowserWindow 创建前注册——否则首屏组件加载本地资源（FilePreview /
   // MarkdownViewer / 沙箱内图片）会拿到 net::ERR_UNKNOWN_URL_SCHEME。
   // app.whenReady 已 resolve，session.defaultSession 在此处可用。

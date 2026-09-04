@@ -66,8 +66,8 @@ vi.mock('@/hooks/useResolvedOrganizationId', () => ({
   useResolvedOrganizationId: () => 'org-1',
 }))
 
-vi.mock('@tabtin/app-shell', async (importOriginal) => {
-  const actual = await importOriginal<typeof import('@tabtin/app-shell')>()
+vi.mock('@muse/app-shell', async (importOriginal) => {
+  const actual = await importOriginal<typeof import('@muse/app-shell')>()
   return {
     ...actual,
     AgentApiService: {
@@ -122,7 +122,7 @@ vi.mock('./CreateTrackerDialog', () => ({
   CreateTrackerDialog: () => null,
 }))
 
-vi.mock('@tabtin/smartsheet-ui', () => ({
+vi.mock('@muse/smartsheet-ui', () => ({
   Button: ({ children, ...rest }: React.ComponentProps<'button'>) => (
     <button {...rest}>{children}</button>
   ),
@@ -163,7 +163,7 @@ vi.mock('@tabtin/smartsheet-ui', () => ({
   TooltipContent: ({ children }: { children?: React.ReactNode }) => (
     <div role="tooltip">{children}</div>
   ),
-  // packages/table-ui 编译产物会 import 这些 utils（@tabtin/smartsheet-ui 的真实 export），
+  // packages/table-ui 编译产物会 import 这些 utils（@muse/smartsheet-ui 的真实 export），
   // 测试 mock 必须 stub 出来，否则 import 阶段抛 "No 'resolveChoiceTagColors' export is defined" 让整个 test file 加载失败。
   // 本测试只测 TrackerDetail run-session 跳转逻辑，不渲染任何选择字段标签，stub 成 noop 即可。
   resolveChoiceTagColors: vi.fn(() => ({ background: '#ffffff', text: '#000000' })),

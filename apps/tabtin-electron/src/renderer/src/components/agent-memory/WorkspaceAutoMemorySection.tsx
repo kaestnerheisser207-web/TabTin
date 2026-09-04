@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { Loader2 } from 'lucide-react'
-import { Switch, toast } from '@tabtin/smartsheet-ui'
+import { Switch, toast } from '@muse/smartsheet-ui'
 import { SettingsInfoTooltip } from '@/components/settings/SettingsInfoTooltip'
 import {
   AgentMemoryApi,

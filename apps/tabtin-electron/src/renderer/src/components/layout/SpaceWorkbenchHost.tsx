@@ -1,6 +1,6 @@
 import React, { Activity, useEffect, useMemo, useRef } from 'react'
 import { createPortal } from 'react-dom'
-import { OverlayContainerProvider } from '@tabtin/smartsheet-ui'
+import { OverlayContainerProvider } from '@muse/smartsheet-ui'
 import { PortalHostBridge, useStablePortalHost } from '@/utils/portal-host'
 import { useSidebarContentPortal } from './SidebarContentPortalContext'
 import { useCanvasRailPortal } from './CanvasRailPortalContext'

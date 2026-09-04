@@ -302,9 +302,9 @@ export async function startCommunityDevBackend({
   );
   const childEnv = {
     ...process.env,
-    TABTIN_DEV_REGION: region,
+    MUSE_DEV_REGION: region,
   };
-  delete childEnv.TABTIN_EDITION;
+  delete childEnv.MUSE_EDITION;
   delete childEnv.AUTH_FIXED_VERIFICATION_CODE;
   const result = spawnSyncImpl(command, args, {
     cwd: rootDir,

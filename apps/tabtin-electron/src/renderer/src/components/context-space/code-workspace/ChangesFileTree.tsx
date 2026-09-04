@@ -205,7 +205,7 @@ export const ChangesFileTree: React.FC<ChangesFileTreeProps> = ({
       if (!runGitAction) return
       await runGitAction(
         `stage:${relativePath}`,
-        () => window.tabtin.git.stageFiles(rootPath, [relativePath]),
+        () => window.muse.git.stageFiles(rootPath, [relativePath]),
         t('gitFlow.stageOneSuccess'),
       )
     },
@@ -217,7 +217,7 @@ export const ChangesFileTree: React.FC<ChangesFileTreeProps> = ({
       if (!runGitAction) return
       await runGitAction(
         `unstage:${relativePath}`,
-        () => window.tabtin.git.unstageFiles(rootPath, [relativePath]),
+        () => window.muse.git.unstageFiles(rootPath, [relativePath]),
         t('gitFlow.unstageOneSuccess'),
       )
     },
@@ -230,7 +230,7 @@ export const ChangesFileTree: React.FC<ChangesFileTreeProps> = ({
     setDiscardTarget(null)
     await runGitAction(
       `discard:${target.path}`,
-      () => window.tabtin.git.discardFiles(rootPath, [target.path]),
+      () => window.muse.git.discardFiles(rootPath, [target.path]),
       t('gitFlow.discardSuccess'),
     )
   }, [discardTarget, rootPath, runGitAction, t])

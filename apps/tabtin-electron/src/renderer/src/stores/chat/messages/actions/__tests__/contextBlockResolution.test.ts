@@ -15,7 +15,7 @@ vi.mock('@/services/electronFetch', () => ({
   electronFetch: mocks.electronFetch,
 }))
 
-vi.mock('@tabtin/config', () => ({
+vi.mock('@muse/config', () => ({
   getApiRuntimeConfig: () => ({ chatApiBaseUrl: 'https://api.example.test' }),
 }))
 

@@ -1,7 +1,7 @@
 /**
  * CheckpointService — Electron 平台适配层
  *
- * 核心逻辑由 @tabtin/checkpoint-core 提供，本文件仅负责：
+ * 核心逻辑由 @muse/checkpoint-core 提供，本文件仅负责：
  * - 将 Electron 的 createLogger 适配为 CheckpointLogger 接口
  * - 将撤销快照写入当前用户、当前组织的私有数据目录
  * - 按账号范围提供单例缓存（getCheckpointService / destroyCheckpointService）
@@ -11,17 +11,17 @@ import {
   CheckpointService,
   createServiceCacheManager,
   type CheckpointLogger,
-} from '@tabtin/checkpoint-core'
-import { resolveOrganizationCheckpointsDir, resolveUserRoot } from '@tabtin/shared'
-import { resolveDataRoot } from '@tabtin/terminal-core'
+} from '@muse/checkpoint-core'
+import { resolveOrganizationCheckpointsDir, resolveUserRoot } from '@muse/shared'
+import { resolveDataRoot } from '@muse/terminal-core'
 import fs from 'node:fs'
 import path from 'node:path'
 import { createLogger } from '../logger'
 import { TokenManager } from '../auth'
 import { getCLIOrganizationId } from '../cli/cli-context'
 
-export { CheckpointService } from '@tabtin/checkpoint-core'
-export type { CheckpointDiffEntry } from '@tabtin/checkpoint-core'
+export { CheckpointService } from '@muse/checkpoint-core'
+export type { CheckpointDiffEntry } from '@muse/checkpoint-core'
 
 const rawLog = createLogger('Checkpoint')
 

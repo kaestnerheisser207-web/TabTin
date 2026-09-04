@@ -4,7 +4,7 @@ import type { ChatAttachment } from '../../types'
 
 const { warning } = vi.hoisted(() => ({ warning: vi.fn() }))
 
-vi.mock('@tabtin/smartsheet-ui', () => ({
+vi.mock('@muse/smartsheet-ui', () => ({
   toast: { warning },
 }))
 

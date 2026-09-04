@@ -350,11 +350,11 @@ async function runVerifyDjango(
       timeoutMs: 60_000,
       env: {
         ...process.env,
-        TABTIN_E2E_MODE: "verify",
-        TABTIN_E2E_RUN_ID: prepared.runId,
-        TABTIN_E2E_DOCUMENT_ID: prepared.document.id,
-        TABTIN_E2E_MENTIONED_USER_ID: prepared.mentionedMember.userId,
-        TABTIN_E2E_COMMENT_MARKER: prepared.marker,
+        MUSE_E2E_MODE: "verify",
+        MUSE_E2E_RUN_ID: prepared.runId,
+        MUSE_E2E_DOCUMENT_ID: prepared.document.id,
+        MUSE_E2E_MENTIONED_USER_ID: prepared.mentionedMember.userId,
+        MUSE_E2E_COMMENT_MARKER: prepared.marker,
       },
     },
   );

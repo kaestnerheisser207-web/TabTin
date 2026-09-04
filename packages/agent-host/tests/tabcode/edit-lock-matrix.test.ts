@@ -24,9 +24,9 @@ import type {
   ReadFileState,
   Tool,
   ToolContext,
-} from '@tabtin/agent-runtime';
+} from '@muse/agent-runtime';
 import { createTabCodeTools } from '../../src/tools/tabcode-adapter.js';
-import { __resetFileLockMapForTest, getFileLockMapSize } from '@tabtin/action-tools/headless';
+import { __resetFileLockMapForTest, getFileLockMapSize } from '@muse/action-tools/headless';
 
 let tmpDir: string;
 

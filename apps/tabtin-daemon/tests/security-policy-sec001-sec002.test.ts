@@ -9,7 +9,7 @@ import { describe, it, expect } from 'vitest'
 import {
   getInteractiveTerminalPolicySupportError,
   normalizeTerminalExecutionPolicy,
-} from '@tabtin/terminal-core'
+} from '@muse/terminal-core'
 
 // ---------------------------------------------------------------------------
 // SEC-001: getInteractiveTerminalPolicySupportError blocks unsupported policies

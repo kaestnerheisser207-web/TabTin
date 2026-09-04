@@ -13,7 +13,7 @@ import { Input } from '../input'
 import { cn } from '../../utils/cn'
 import { t, getSmartsheetUiLocale } from '../../i18n'
 
-// ── Types (mirrors @tabtin/table-core DateFilterValue) ──
+// ── Types (mirrors @muse/table-core DateFilterValue) ──
 
 export type DateFilterMode =
   | 'today' | 'yesterday' | 'tomorrow'

@@ -4,7 +4,7 @@ import {
   StreamEvents,
   type QueryParams,
   type StreamEvent,
-} from '@tabtin/agent-runtime'
+} from '@muse/agent-runtime'
 import { DefaultQueryTurnPipeline, type QueryTurnDataPort } from '../src/conversation/query-turn-pipeline.js'
 import { ConversationSupervisor } from '../src/conversation/conversation-supervisor.js'
 import { SessionPauseController } from '../src/delivery/session-pause-controller.js'

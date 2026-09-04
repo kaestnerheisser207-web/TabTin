@@ -153,7 +153,7 @@ export interface SectionDescriptor {
   xmlTag?: string;
 
   /** 段的物理来源包 */
-  source: '@tabtin/agent-prompt' | '@tabtin/agent-runtime' | '@tabtin/agent-modes' | 'host';
+  source: '@muse/agent-prompt' | '@muse/agent-runtime' | '@muse/agent-modes' | 'host';
 
   /** 段写作语言 */
   language: SectionLanguage;

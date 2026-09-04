@@ -35,7 +35,7 @@ export interface WebPresentationSignals {
 
 declare global {
   interface Window {
-    __TABTIN_MOBILE_HOST__?: unknown
+    __MUSE_MOBILE_HOST__?: unknown
   }
 }
 
@@ -168,7 +168,7 @@ function readPointerMedia(query: string): boolean {
 }
 
 function readBrowserEnvironment(): WebPresentationEnvironment {
-  const globalHost = parseMobileHostContext(window.__TABTIN_MOBILE_HOST__)
+  const globalHost = parseMobileHostContext(window.__MUSE_MOBILE_HOST__)
   return resolveWebPresentationEnvironment({
     viewportWidth: readViewportWidth(),
     viewportHeight: readViewportHeight(),

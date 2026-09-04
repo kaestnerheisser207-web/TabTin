@@ -73,7 +73,7 @@ jwt_auth = JWTAuth()
 # 未登录访问返回 ANONYMOUS_USER_MARKER（view 层走 get_authenticated_user 还原成 None）。
 jwt_auth_optional = JWTAuthOptional()
 
-TABDOC_DB = ('default' if getattr(settings, 'TABTIN_SINGLE_DATABASE_MODE', False) else 'postgresql')
+TABDOC_DB = ('default' if getattr(settings, 'MUSE_SINGLE_DATABASE_MODE', False) else 'postgresql')
 
 
 def _interactive_share_auth_required_response(share: DocumentShare, user):

@@ -1,4 +1,4 @@
-import { buildUserContextWrapper } from '@tabtin/agent-runtime/engine/user-context-wrapper'
+import { buildUserContextWrapper } from '@muse/agent-runtime/engine/user-context-wrapper'
 
 export function isMcpFocusBlock(block: Record<string, unknown>): boolean {
   return block.type === 'mcp_server'

@@ -1,11 +1,11 @@
 /**
- * @tabtin/crawl-integration
+ * @muse/crawl-integration
  * 浏览器控制与引擎集成层
  */
 
 // ==================== Browser ====================
 // Browser/V3Context/understudy 已架空（Phase 2 引入 BrowserContext 统一接口后不再使用）。
-// Browser 类不再从入口导出。如需浏览器操作，请使用 @tabtin/browser-core 的 BrowserContext 接口。
+// Browser 类不再从入口导出。如需浏览器操作，请使用 @muse/browser-core 的 BrowserContext 接口。
 // 源文件保留在 src/browser/ 下但不通过入口暴露，后续可安全删除整个目录。
 
 // ==================== Engines ====================

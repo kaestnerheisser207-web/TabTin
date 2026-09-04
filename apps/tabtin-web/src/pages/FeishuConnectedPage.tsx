@@ -2,15 +2,15 @@
  * FeishuConnectedPage — 飞书 OAuth 回调后的桥接页
  *
  * 路由：/integrations/feishu/connected
- * 尝试唤起 tabtin://integrations/feishu/connected，提示可关闭浏览器。
+ * 尝试唤起 muse://integrations/feishu/connected，提示可关闭浏览器。
  */
 import { useCallback, useEffect, useState, type ReactNode } from 'react'
 import { Download, ExternalLink, ShieldCheck } from 'lucide-react'
-import { TABTIN_DOWNLOAD_URL } from '@tabtin/config'
+import { MUSE_DOWNLOAD_URL } from '@muse/config'
 import { LanguageToggle, ThemeToggle } from '@/components/layout/ToolbarWidgets'
 
 const CLIENT_LAUNCH_FALLBACK_DELAY_MS = 1600
-const FEISHU_CONNECTED_DEEP_LINK = 'tabtin://integrations/feishu/connected'
+const FEISHU_CONNECTED_DEEP_LINK = 'muse://integrations/feishu/connected'
 
 export function FeishuConnectedPage() {
   const [showDownloadHint, setShowDownloadHint] = useState(false)
@@ -56,7 +56,7 @@ export function FeishuConnectedPage() {
                 再次打开客户端
               </button>
               <a
-                href={TABTIN_DOWNLOAD_URL}
+                href={MUSE_DOWNLOAD_URL}
                 target="_blank"
                 rel="noreferrer"
                 className="inline-flex items-center justify-center gap-2 rounded-md border border-input bg-background px-4 py-2 text-body font-medium text-foreground transition-colors hover:bg-accent"

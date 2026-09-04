@@ -20,7 +20,7 @@ import type {
 // ---------------------------------------------------------------------------
 // mock media-core 的 resolveFontFamily，避免依赖真实的字体注册表
 // ---------------------------------------------------------------------------
-vi.mock('@tabtin/media-core/fonts/registry', () => ({
+vi.mock('@muse/media-core/fonts/registry', () => ({
   resolveFontFamily: (family: string) => {
     // 返回一个伪造的解析结果，让 scanFonts 能正常工作
     if (family === 'Inter' || family === 'sans-serif') return undefined

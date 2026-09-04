@@ -39,7 +39,7 @@ function createUploadId(): string {
 export async function putPresignedObjectViaMainProcess(
   options: PutPresignedObjectViaMainProcessOptions,
 ): Promise<MainProcessPresignedPutResult> {
-  const mainUploader = window.tabtin?.oss
+  const mainUploader = window.muse?.oss
   if (!mainUploader?.putPresignedObject) {
     throw new MainProcessOssUploadUnavailableError()
   }

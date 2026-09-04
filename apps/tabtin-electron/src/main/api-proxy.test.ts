@@ -733,13 +733,13 @@ describe('isAllowedApiHost / isBlockedApiHost — host 守恒', () => {
 })
 
 describe('allowedDevHosts — 本机多服务放行', () => {
-  const ORIGINAL_DAEMON_CONTROL_BASE = process.env.TABTIN_DAEMON_CONTROL_API_BASE_URL
+  const ORIGINAL_DAEMON_CONTROL_BASE = process.env.MUSE_DAEMON_CONTROL_API_BASE_URL
 
   afterEach(() => {
     if (ORIGINAL_DAEMON_CONTROL_BASE === undefined) {
-      delete process.env.TABTIN_DAEMON_CONTROL_API_BASE_URL
+      delete process.env.MUSE_DAEMON_CONTROL_API_BASE_URL
     } else {
-      process.env.TABTIN_DAEMON_CONTROL_API_BASE_URL = ORIGINAL_DAEMON_CONTROL_BASE
+      process.env.MUSE_DAEMON_CONTROL_API_BASE_URL = ORIGINAL_DAEMON_CONTROL_BASE
     }
     vi.resetModules()
   })
@@ -750,9 +750,9 @@ describe('allowedDevHosts — 本机多服务放行', () => {
   ) {
     vi.resetModules()
     if (daemonControlBaseUrl === undefined) {
-      delete process.env.TABTIN_DAEMON_CONTROL_API_BASE_URL
+      delete process.env.MUSE_DAEMON_CONTROL_API_BASE_URL
     } else {
-      process.env.TABTIN_DAEMON_CONTROL_API_BASE_URL = daemonControlBaseUrl
+      process.env.MUSE_DAEMON_CONTROL_API_BASE_URL = daemonControlBaseUrl
     }
     vi.doMock('./config/api', () => ({
       API_BASE_URL: apiBaseUrl,

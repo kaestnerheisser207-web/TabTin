@@ -37,7 +37,7 @@ test('both guides document the Electron-only scope and security boundaries', () 
       'bootstrap:electron',
       'bootstrap:electron:cn',
       'audit:opensource',
-      'TABTIN_COMMUNITY_API_BASE_URL',
+      'MUSE_COMMUNITY_API_BASE_URL',
       'SOURCEMAP_UPLOAD_KEY',
       'SENTRY_AUTH_TOKEN',
       'Django',

@@ -1,6 +1,6 @@
 import { timingSafeEqual } from 'node:crypto'
 import { createServer, type IncomingMessage, type Server, type ServerResponse } from 'node:http'
-import { deriveApiBaseUrl, joinApiPath } from '@tabtin/config'
+import { deriveApiBaseUrl, joinApiPath } from '@muse/config'
 
 const MAX_REQUEST_BYTES = 4 * 1024 * 1024
 
@@ -26,7 +26,7 @@ export class DshModelGateway {
 
   constructor(private readonly options: DshModelGatewayOptions) {
     this.credential = options.credential
-    if (!options.token) throw new Error('TABTIN_DSH_GATEWAY_TOKEN is required')
+    if (!options.token) throw new Error('MUSE_DSH_GATEWAY_TOKEN is required')
   }
 
   updateCredential(credential: string): void {

@@ -1,6 +1,6 @@
 import React from 'react';
 import { createPortal } from 'react-dom';
-import { useOverlayContainer } from '@tabtin/smartsheet-ui';
+import { useOverlayContainer } from '@muse/smartsheet-ui';
 
 export function useTableOverlayDrawerContainer(open: boolean): {
   host: React.ReactNode;

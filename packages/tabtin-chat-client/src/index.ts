@@ -1,5 +1,5 @@
 /**
- * @tabtin/chat-client
+ * @muse/chat-client
  *
  * Chat Agent SDK for Muse applications
  *

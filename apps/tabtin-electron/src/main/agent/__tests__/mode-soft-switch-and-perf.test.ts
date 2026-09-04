@@ -271,12 +271,12 @@ describe('LEG-2: ElectronAgentHost source contract (async CLI reference)', () =>
   // CLI 能力改由 CliCap 两区注入；原「execFileAsync loadCLIReferenceAsync」「CLI reference cache」
   // 两条源码契约断言随之移除。CliCap 装配契约见下方「assembles CliCap」。
 
-  it('does NOT have buildDefaultSystemPrompt (replaced by @tabtin/agent-prompt)', () => {
+  it('does NOT have buildDefaultSystemPrompt (replaced by @muse/agent-prompt)', () => {
     expect(source).not.toContain('buildDefaultSystemPrompt')
   })
 
-  it('imports system-prompt types from @tabtin/agent-prompt', () => {
-    expect(source).toContain("from '@tabtin/agent-prompt'")
+  it('imports system-prompt types from @muse/agent-prompt', () => {
+    expect(source).toContain("from '@muse/agent-prompt'")
   })
 
   // ：旧 baked cliReference（loadCLIReferenceAsync / invalidateCLIReferenceCache）已下线，
@@ -376,12 +376,12 @@ describe('P0-3: annotateToolsForMode 单元测试（直接对 SSoT 函数）', (
   // ToolProvider 不一定装载 run_terminal_command（由 ShellCap 注入），所以这里
   // 直接对 annotateToolsForMode 单元测试，避免依赖装配链。
   //
-  // 通过包入口 `@tabtin/agent-runtime` re-export 路径访问（ 批次 13 engine
+  // 通过包入口 `@muse/agent-runtime` re-export 路径访问（ 批次 13 engine
   // barrel 收敛后 agent-modes 出口在包入口），与 ElectronToolProvider 实际 import
-  // 路径一致（避免直接走 `@tabtin/agent-modes` 在 vitest alias 链未配置时
+  // 路径一致（避免直接走 `@muse/agent-modes` 在 vitest alias 链未配置时
   // 报"Failed to resolve import"）。
   it('plan/ask/study 模式对 run_terminal_command 注入 shell 受限提示', async () => {
-    const { annotateToolsForMode } = await import('@tabtin/agent-modes')
+    const { annotateToolsForMode } = await import('@muse/agent-modes')
     const fakeShell = {
       name: 'run_terminal_command',
       description: 'Run a shell command.',
@@ -400,7 +400,7 @@ describe('P0-3: annotateToolsForMode 单元测试（直接对 SSoT 函数）', (
   })
 
   it('agent / yolo / group 模式不注入 shell 提示（保持原始 description）', async () => {
-    const { annotateToolsForMode } = await import('@tabtin/agent-modes')
+    const { annotateToolsForMode } = await import('@muse/agent-modes')
     const fakeShell = {
       name: 'run_terminal_command',
       description: 'Run a shell command.',

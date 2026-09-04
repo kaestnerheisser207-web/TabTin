@@ -13,7 +13,7 @@ import type {
   ResourceRecord,
   ResourceSource,
   StreamInfo
-} from '@tabtin/action-tools/types'
+} from '@muse/action-tools/types'
 
 export interface ResourceHubFilter {
   category?: ResourceCategory

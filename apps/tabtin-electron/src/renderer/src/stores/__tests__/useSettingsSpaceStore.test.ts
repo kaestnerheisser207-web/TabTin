@@ -67,7 +67,7 @@ vi.mock('../viewNavigation', () => ({
   },
 }))
 
-vi.mock('@tabtin/app-shell', () => ({
+vi.mock('@muse/app-shell', () => ({
   getRuntime: () => ({
     bridge: {
       closeAuxiliaryPanels: closeAuxiliaryPanelsMock,

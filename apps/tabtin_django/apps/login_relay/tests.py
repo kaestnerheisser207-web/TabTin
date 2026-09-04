@@ -153,7 +153,7 @@ class LoginRelayApiTests(TestCase):
         ):
             request_headers = {}
             if protocol_version is not None:
-                request_headers["HTTP_X_TABTIN_LOGIN_RELAY_PROTOCOL_VERSION"] = protocol_version
+                request_headers["HTTP_X_MUSE_LOGIN_RELAY_PROTOCOL_VERSION"] = protocol_version
             response = self.client.post(
                 "/api/login-relay/packages",
                 data=json.dumps(payload or self._payload()),

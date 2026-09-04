@@ -1,4 +1,4 @@
-import { getHomeTabtinPath } from '@tabtin/shared/storage-paths'
+import { getHomeTabtinPath } from '@muse/shared/storage-paths'
 import { checkDaemonPathAccess } from '../security/path-access.js'
 
 const FILE_ACTIONS = new Set(['write_file', 'edit_file', 'delete_file'])
@@ -7,7 +7,7 @@ const SEARCH_ACTIONS = new Set(['glob_search', 'grep_search'])
 export class McpSecurityPolicy {
   constructor(private readonly options: {
     workspaceRoot?: string
-    getWorkspaceSnapshot?: () => import('@tabtin/security-policy').WorkspaceSnapshot | null
+    getWorkspaceSnapshot?: () => import('@muse/security-policy').WorkspaceSnapshot | null
   }) {}
 
   enforce(toolName: string, args: Record<string, unknown>): Record<string, unknown> | null {

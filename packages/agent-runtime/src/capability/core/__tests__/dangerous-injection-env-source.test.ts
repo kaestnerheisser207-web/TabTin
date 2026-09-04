@@ -3,7 +3,7 @@
  *
  * **业务背景**：早期总控文档 / PRD 用过 `DANGEROUS_INJECTION_ENV_KEYS` 这个
  * 字面，但实际全仓**从未存在**该标识符——真实单源是
- * `@tabtin/env-sanitize.DANGEROUS_INJECTION_VARS`，由 `@tabtin/terminal-core`
+ * `@muse/env-sanitize.DANGEROUS_INJECTION_VARS`，由 `@muse/terminal-core`
  * 经 `sanitizeEnv.ts` re-export 给两端 PtyManager 实现层（bridge 内部 spawn
  * 前调 sanitizeEnv 过滤）。
  *
@@ -13,15 +13,15 @@
  *   2. 历史字面 `DANGEROUS_INJECTION_ENV_KEYS` 被某个 Agent 误当成"应该新建
  *      的常量"加进 policy.ts —— 单源的真实物理位置在 env-sanitize 包，
  *      不在 terminal-core/policy.ts（policy.ts 管 sandbox/route/networkMode）
- *   3. ShellCap / agent-runtime 任何文件出现 `import * from '@tabtin/env-sanitize'`
+ *   3. ShellCap / agent-runtime 任何文件出现 `import * from '@muse/env-sanitize'`
  *      ——sanitize 在 bridge 实现层做，agent-runtime 上层不直接依赖
  *
  * **不变量**（3 条断言）：
- *   1. agent-runtime package.json 不列 `@tabtin/env-sanitize` 为依赖
+ *   1. agent-runtime package.json 不列 `@muse/env-sanitize` 为依赖
  *      （prod 也不在 devDependencies）
  *   2. agent-runtime 任何源码不 inline 定义 LD_PRELOAD/DYLD_INSERT_LIBRARIES
  *      等 injection 风险词的 Set/Array（grep 文件树验证）
- *   3. agent-runtime 任何源码不出现 `from '@tabtin/env-sanitize'` import
+ *   3. agent-runtime 任何源码不出现 `from '@muse/env-sanitize'` import
  *
  * **不在本测试范围**：
  *   - `terminal-core/src/denylist.ts` 的 `export-env-injection` 正则是 shell
@@ -38,14 +38,14 @@ import { readdirSync, readFileSync, statSync } from 'node:fs';
 import { join as joinPath, resolve as resolvePath } from 'node:path';
 
 describe('WP4-C: DANGEROUS_INJECTION_VARS 单源不变量', () => {
-  it('agent-runtime/package.json 不依赖 @tabtin/env-sanitize（sanitize 必须经 bridge 实现层）', () => {
+  it('agent-runtime/package.json 不依赖 @muse/env-sanitize（sanitize 必须经 bridge 实现层）', () => {
     const pkgPath = resolvePath(__dirname, '../../../../package.json');
     const pkg = JSON.parse(readFileSync(pkgPath, 'utf8')) as {
       dependencies?: Record<string, string>;
       devDependencies?: Record<string, string>;
     };
-    expect(pkg.dependencies?.['@tabtin/env-sanitize']).toBeUndefined();
-    expect(pkg.devDependencies?.['@tabtin/env-sanitize']).toBeUndefined();
+    expect(pkg.dependencies?.['@muse/env-sanitize']).toBeUndefined();
+    expect(pkg.devDependencies?.['@muse/env-sanitize']).toBeUndefined();
   });
 
   it('agent-runtime/src 不 inline 定义 LD_PRELOAD/DYLD/NODE_OPTIONS 等 injection 风险词 Set/Array', () => {
@@ -82,7 +82,7 @@ describe('WP4-C: DANGEROUS_INJECTION_VARS 单源不变量', () => {
     ).toEqual([]);
   });
 
-  it('agent-runtime/src 不出现 from "@tabtin/env-sanitize" import', () => {
+  it('agent-runtime/src 不出现 from "@muse/env-sanitize" import', () => {
     const agentRuntimeSrc = resolvePath(__dirname, '../../../');
     const importHits: Array<{ file: string; lineNo: number; line: string }> = [];
 
@@ -101,7 +101,7 @@ describe('WP4-C: DANGEROUS_INJECTION_VARS 单源不变量', () => {
 
     expect(
       importHits,
-      `agent-runtime 直接 import @tabtin/env-sanitize（违反单源不变量）:\n${importHits
+      `agent-runtime 直接 import @muse/env-sanitize（违反单源不变量）:\n${importHits
         .map((h) => `  ${h.file}:${h.lineNo}\n    ${h.line}`)
         .join('\n')}`,
     ).toEqual([]);

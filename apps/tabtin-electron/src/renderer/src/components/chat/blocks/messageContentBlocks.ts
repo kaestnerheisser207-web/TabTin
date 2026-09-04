@@ -7,7 +7,7 @@
  * **读时不再回退读 / 反序列化 `content_blocks_json`**（那只是落库序列化字段）。
  */
 
-import type { ChatMessage } from '@tabtin/chat-client'
+import type { ChatMessage } from '@muse/chat-client'
 import type { ContentBlockEntry } from '@stores/useChatRuntimeStore'
 
 const EMPTY: ContentBlockEntry[] = []

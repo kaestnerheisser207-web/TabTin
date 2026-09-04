@@ -19,7 +19,7 @@ import {
   generateIncidentId,
   emitTelemetryEvent,
   TelemetryEvents,
-} from '@tabtin/agent-runtime'
+} from '@muse/agent-runtime'
 
 interface MttrStartRequest {
   incident_id?: string

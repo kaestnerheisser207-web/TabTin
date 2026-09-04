@@ -23,7 +23,7 @@ from django.utils import timezone
 
 logger = logging.getLogger("tabdata.migrate_named_versions")
 
-DB = ('default' if getattr(settings, 'TABTIN_SINGLE_DATABASE_MODE', False) else 'postgresql')
+DB = ('default' if getattr(settings, 'MUSE_SINGLE_DATABASE_MODE', False) else 'postgresql')
 def _build_table_blob(table_id: str) -> bytes:
     """通过 CollabService 获取当前表格快照并压缩为 blob。"""
     from apps.tabdata.services.collab_service import CollabService

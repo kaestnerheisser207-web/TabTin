@@ -2,7 +2,7 @@
 
 import { create } from 'zustand'
 import { persist, createJSONStorage } from 'zustand/middleware'
-import { withPersistSafety, createMigratingStorage } from '@tabtin/shared'
+import { withPersistSafety, createMigratingStorage } from '@muse/shared'
 import { PERSIST_KEYS } from './persist-key-registry'
 import { logger } from '@/utils/logger'
 import { registerResetAction } from './sessionResetRegistry'
@@ -15,7 +15,7 @@ import { createTabsActions } from './crawlTab/slices/tabsSlice'
 import { createConfigActions } from './crawlTab/slices/configSlice'
 import { configureCrawlspaceContextSubscription } from './crawlTab/crawlspaceContextSubscriptionRegistry'
 import { installCrawlspaceHotSubscriptionSyncer } from './crawlTab/crawlspaceHotSubscriptionSyncer'
-import { setCloseWorkspaceHandler } from '@tabtin/crawlspace-core'
+import { setCloseWorkspaceHandler } from '@muse/crawlspace-core'
 
 // Re-export types for backward compatibility
 export type { CrawlTabKind, CrawlspaceConfig, CrawlspaceViewInfo, CrawlTab, CrawlTabMetadata, CrawlspacePreviewState, CrawlspacePersistedViewSeed, CloseCrawlspaceViewResult } from './crawlTab/types'

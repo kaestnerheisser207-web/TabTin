@@ -4,7 +4,7 @@
 import React from 'react'
 import { render, screen, waitFor } from '@testing-library/react'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
-import type { Organization } from '@tabtin/app-shell'
+import type { Organization } from '@muse/app-shell'
 
 const hoisted = vi.hoisted(() => ({
   listOrganizationTrashedItems: vi.fn(),
@@ -43,8 +43,8 @@ vi.mock('react-i18next', () => ({
   }),
 }))
 
-vi.mock('@tabtin/app-shell', async () => {
-  const actual = await vi.importActual<typeof import('@tabtin/app-shell')>('@tabtin/app-shell')
+vi.mock('@muse/app-shell', async () => {
+  const actual = await vi.importActual<typeof import('@muse/app-shell')>('@muse/app-shell')
   return {
     ...actual,
     SpaceApiService: {

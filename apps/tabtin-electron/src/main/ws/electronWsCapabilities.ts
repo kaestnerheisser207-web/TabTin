@@ -1,4 +1,4 @@
-import { Capabilities, DomainEvents } from '@tabtin/ws-gateway-client'
+import { Capabilities, DomainEvents } from '@muse/ws-gateway-client'
 
 /**
  * Electron 主网关是桌面端唯一 Gateway 连接，承载 renderer 旧 WS 的实时能力

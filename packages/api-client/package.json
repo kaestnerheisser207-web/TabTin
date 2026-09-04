@@ -1,5 +1,5 @@
 {
-  "name": "@tabtin/api-client",
+  "name": "@muse/api-client",
   "version": "0.1.0",
   "description": "Type-safe API client generated from OpenAPI spec for Muse",
   "type": "module",

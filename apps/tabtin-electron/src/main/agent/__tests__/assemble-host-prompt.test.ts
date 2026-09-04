@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 
-vi.mock('@tabtin/agent-runtime/engine/user-context-wrapper', () => ({
+vi.mock('@muse/agent-runtime/engine/user-context-wrapper', () => ({
   buildUserContextWrapper: (type: string, body: string, opts: { stale_after_turn?: string }) =>
     `<context type="${type}" stale_after_turn="${opts.stale_after_turn ?? ''}">${body}</context>`,
 }))
@@ -13,7 +13,7 @@ vi.mock('../../config/api.js', () => ({
   API_BASE_URL: 'https://api.test.local/api',
 }))
 
-vi.mock('@tabtin/config', () => ({
+vi.mock('@muse/config', () => ({
   joinApiPath: (base: string, path: string) => `${base}${path.startsWith('/') ? path : `/${path}`}`,
   API_ENDPOINTS: { AUTH: { PROFILE_PERSONAL_RULES: '/auth/profile/personal-rules' } },
 }))

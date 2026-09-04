@@ -13,7 +13,7 @@
  * 4. 时间线过滤：设备不可达类 error_envelope 不进共享侧栏（底部 banner 已覆盖）。
  */
 
-import type { ChatMessage } from '@tabtin/chat-client'
+import type { ChatMessage } from '@muse/chat-client'
 import { isContextInjectionMessage } from '@stores/chat/messages/utils/semanticMessageCount'
 
 export const SHARED_SESSION_PAGE_SIZE = 50

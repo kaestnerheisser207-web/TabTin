@@ -208,7 +208,7 @@ func LookupOutputSchema(cmd *cobra.Command) []FieldSchema {
 // Visible for testing only —— 给 cmd 包的 *_test.go 做注册期 invariant 断言用
 // （例如 apps_doc_test.go 遍历 doc 命令树，确认所有写命令都声明了 DryRun 钩子 +
 // 所有命令都设了 RiskDeclared:true），把 MustRegisterCommand 的注册期 panic
-// 提前到 `go test`，避免「跑 ./dist/tabtin --help 才能 catch 漏字段」的滞后。
+// 提前到 `go test`，避免「跑 ./dist/muse --help 才能 catch 漏字段」的滞后。
 //
 // 生产代码请通过 pipeline 入口正常获取 def，不要直接调本函数。
 //
@@ -333,10 +333,10 @@ func RegisterCommand(parent *cobra.Command, f *Factory, def CommandDef) *cobra.C
 	if def.Method == "" && def.Path == "" && def.RunFunc == nil && def.Execute == nil {
 		panic(fmt.Sprintf("RegisterCommand: command %q has no Method/Path and no RunFunc/Execute — it would do nothing", def.Use))
 	}
-	if def.Example == "" && os.Getenv("TABTIN_DEBUG") == "1" {
+	if def.Example == "" && os.Getenv("MUSE_DEBUG") == "1" {
 		fmt.Fprintf(os.Stderr, "[warn] RegisterCommand: command %q has no Example — LLM discoverability degraded\n", def.Use)
 	}
-	if def.RunFunc != nil && def.Method != "" && def.Path != "" && os.Getenv("TABTIN_DEBUG") == "1" {
+	if def.RunFunc != nil && def.Method != "" && def.Path != "" && os.Getenv("MUSE_DEBUG") == "1" {
 		fmt.Fprintf(os.Stderr, "[warn] RegisterCommand: command %q has both RunFunc and Method/Path — RunFunc takes precedence, Method/Path will be ignored at runtime\n", def.Use)
 	}
 
@@ -841,7 +841,7 @@ func executeTransportCommand(ctx *RunContext, f *Factory, def CommandDef) error 
 			return output.PrintErrorAndExit(output.ErrorEnvelope(
 				string(errcode.ValidationError),
 				"当前无 Agent 上下文",
-				"请先在 Muse 中选择 Agent，或设置 TABTIN_AGENT_ID / --agent-id",
+				"请先在 Muse 中选择 Agent，或设置 MUSE_AGENT_ID / --agent-id",
 				output.ExitValidation,
 			))
 		}

@@ -5,7 +5,7 @@
  */
 
 import { z } from 'zod';
-import { FocusSnapshotSchema } from '@tabtin/contracts/agent';
+import { FocusSnapshotSchema } from '@muse/contracts/agent';
 import {
   AgentBackendConfigSchema,
   PermissionDecisionSchema,
@@ -15,7 +15,7 @@ import {
 /**
  * prompt.forward 的 `app_context`：FocusSnapshot 核心字段 + host 透传扩展。
  *
- * - 核心字段对齐 `@tabtin/contracts` `FocusSnapshotSchema`（全部 optional，兼容子集）
+ * - 核心字段对齐 `@muse/contracts` `FocusSnapshotSchema`（全部 optional，兼容子集）
  * - `.passthrough()` 保留 Django wire 上的 host-only 键
  *   （`collaborationSpaceId` / `executionSpaceId` / `initiatorUserId` 等）
  * - `.nullable()` 兼容上游序列化为 `null` 的情况
@@ -129,7 +129,7 @@ export type SubagentConfigDto = z.infer<typeof SubagentConfigDtoSchema>;
 // Stage 4 起 Django 端 ``prompt_forward_service`` 从 manifest + ``AppSettings``
 // 派生 ``EnabledAppDto[]`` 透传给 Daemon，让本地 ``buildAppsSection`` 真正生效。
 //
-// 形态对齐 ``@tabtin/agent-prompt`` 的 ``EnabledAppInfo`` —— 4 个字段同名同义：
+// 形态对齐 ``@muse/agent-prompt`` 的 ``EnabledAppInfo`` —— 4 个字段同名同义：
 //   - key          : 与 handler.appId / manifest.id 一致
 //   - cliKey       : 与 handler.backendAliases[0] / manifest.typeAliases[0] 一致
 //   - displayName  : 跟用户对话的中文权威名
@@ -314,7 +314,7 @@ export const PromptForwardPayloadSchema = z.object({
    * 与 Electron 同构走 judge()。
    *
    * 形态用 `z.unknown()` 不强校验（同 `history` 模式）：
-   * `WorkspaceSnapshot` 类型只在 `@tabtin/security-policy` 内定义，wire 包不
+   * `WorkspaceSnapshot` 类型只在 `@muse/security-policy` 内定义，wire 包不
    * 反向依赖；Daemon 侧用 type guard + `buildPolicyFromAgentConfigV2` 兜底
    * 形态错误。缺省 → Daemon 自己用 sandbox 目录兜底（详见 daemon 同 wave 同步改动）。
    */
@@ -484,7 +484,7 @@ export const PromptForwardPayloadSchema = z.object({
   /**
    * W7a：用户聚焦的 App + 打开的标签上下文（FocusSnapshot）。
    *
-   * 核心字段合同见 `@tabtin/contracts` `FocusSnapshotSchema`：
+   * 核心字段合同见 `@muse/contracts` `FocusSnapshotSchema`：
    *   `{ appType?, appMeta?, openTabs?, spaceId?, userTimeZone?, workspaceMode? }`
    *
    * Django `project_focus_for_wire` 可能只输出子集；schema 字段均为 optional。

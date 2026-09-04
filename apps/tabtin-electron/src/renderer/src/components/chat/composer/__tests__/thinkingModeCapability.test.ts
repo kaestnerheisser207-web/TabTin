@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import type { Model, ModelRuntimeControl } from '@tabtin/chat-client'
+import type { Model, ModelRuntimeControl } from '@muse/chat-client'
 import {
   getCatalogThinkingCapability,
   isThinkingRelatedRuntimeControl,

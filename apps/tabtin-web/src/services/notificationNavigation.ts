@@ -6,9 +6,9 @@
  * navigate 函数由 NotificationBell 通过 react-router useNavigate() 注入,
  * 避免本模块直接 import react-router(否则非 Router 上下文调用会抛错)。
  */
-import { toast } from '@tabtin/smartsheet-ui/toast'
+import { toast } from '@muse/smartsheet-ui/toast'
 import i18n from '@/i18n'
-import { useOrganizationStore, useSpaceStore } from '@tabtin/app-shell'
+import { useOrganizationStore, useSpaceStore } from '@muse/app-shell'
 import type { NotificationItem, NotificationNavigateTarget } from './notificationApi'
 import { resolveWebNotificationNavigateTarget } from './notificationTargetResolver'
 import { appendRecordCommentRouteIntent } from '@/components/table/recordCommentRouteIntent'

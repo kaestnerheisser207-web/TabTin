@@ -250,7 +250,7 @@ class TestInsertBlockOrdering(TestCase):
         self.assertEqual(image_nodes[0]["attrs"]["fileId"], str(file_id))
         self.assertEqual(image_nodes[0]["attrs"]["src"], "")
         self.assertIn(
-            f"tabtin-file://asset/{file_id}",
+            f"muse-file://asset/{file_id}",
             service.save_content.call_args.kwargs["content_markdown"],
         )
         mock_load_bound_image.assert_called_once_with(document, file_id)

@@ -11,7 +11,7 @@ import {
   toast,
 } from '@components/ui'
 import { useTranslation } from 'react-i18next'
-import { useCountdown } from '@tabtin/shared/use-countdown'
+import { useCountdown } from '@muse/shared/use-countdown'
 import apiService from '@/services/api'
 import { useAuthStore } from '@/stores/useAuthStore'
 import { extractErrorMessage } from '@/utils/extract-api-error'

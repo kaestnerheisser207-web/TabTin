@@ -1,4 +1,4 @@
-import type { TaskCapsuleStatusKind } from '@tabtin/contracts/agent';
+import type { TaskCapsuleStatusKind } from '@muse/contracts/agent';
 import type {
   OrbMode,
   OrbPaintOptions,

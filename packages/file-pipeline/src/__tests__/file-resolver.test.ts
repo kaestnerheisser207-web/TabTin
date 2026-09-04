@@ -173,7 +173,7 @@ function buildMinimalEpub(chapters: Array<{ name: string; content: string }>): B
 
 describe('EpubParser real parse', () => {
   it('parses a minimal EPUB with 2 xhtml chapters', async () => {
-    const tmpDir = mkdtempSync(path.join(tmpdir(), 'tabtin-file-pipeline-epub-'));
+    const tmpDir = mkdtempSync(path.join(tmpdir(), 'muse-file-pipeline-epub-'));
     const epubPath = path.join(tmpDir, 'sample.epub');
     const epubBytes = buildMinimalEpub([
       { name: 'mimetype', content: 'application/epub+zip' },
@@ -205,7 +205,7 @@ describe('EpubParser real parse', () => {
   });
 
   it('rejects non-zip content via magic bytes', async () => {
-    const tmpDir = mkdtempSync(path.join(tmpdir(), 'tabtin-file-pipeline-epub-fake-'));
+    const tmpDir = mkdtempSync(path.join(tmpdir(), 'muse-file-pipeline-epub-fake-'));
     const fakePath = path.join(tmpDir, 'fake.epub');
     writeFileSync(fakePath, Buffer.from('not an epub at all'));
 
@@ -227,7 +227,7 @@ describe('EpubParser real parse', () => {
   });
 
   it('enforces channelLimitBytes (file too large)', async () => {
-    const tmpDir = mkdtempSync(path.join(tmpdir(), 'tabtin-file-pipeline-epub-big-'));
+    const tmpDir = mkdtempSync(path.join(tmpdir(), 'muse-file-pipeline-epub-big-'));
     const bigPath = path.join(tmpDir, 'big.epub');
     writeFileSync(bigPath, buildMinimalEpub([{ name: 'a', content: 'x'.repeat(10000) }]));
 

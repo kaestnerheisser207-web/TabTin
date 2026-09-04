@@ -39,9 +39,9 @@ import type {
   ReadFileState,
   Tool,
   ToolContext,
-} from '@tabtin/agent-runtime';
+} from '@muse/agent-runtime';
 import { createTabCodeTools } from '../../src/tools/tabcode-adapter.js';
-import { __resetFileLockMapForTest, getFileLockMapSize } from '@tabtin/action-tools/headless';
+import { __resetFileLockMapForTest, getFileLockMapSize } from '@muse/action-tools/headless';
 
 let tmpDir: string;
 
@@ -467,7 +467,7 @@ describe('I5 — Wave 2 TOCTOU throw STALE_READ 时锁正确释放', () => {
     expect(getErrorKind(resA)).toBe('tool_stale_read'); // STALE_READ
 
     // 跨入口下个 edit（用 action-tools 一侧的 withFileLock 验证）
-    const { withFileLock } = await import('@tabtin/action-tools/headless');
+    const { withFileLock } = await import('@muse/action-tools/headless');
     let crossEntryCalled = false;
     const t0 = Date.now();
     await withFileLock(file, async () => {

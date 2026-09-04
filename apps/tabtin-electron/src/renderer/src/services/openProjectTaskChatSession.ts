@@ -1,4 +1,4 @@
-import type { ChatSession } from '@tabtin/chat-client'
+import type { ChatSession } from '@muse/chat-client'
 import { useChatStore } from '@stores/chat/useChatStore'
 import { useProjectWorkspaceSelectionStore } from '@components/layout/projectWorkspaceSelectionStore'
 import { useUIStore } from '@stores/useUIStore'

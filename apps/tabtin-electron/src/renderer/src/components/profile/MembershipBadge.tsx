@@ -1,6 +1,6 @@
 import React from 'react'
 import { Crown } from 'lucide-react'
-import { Button } from '@tabtin/smartsheet-ui'
+import { Button } from '@muse/smartsheet-ui'
 import { useTranslation } from 'react-i18next'
 import { useMembershipStatusQuery } from '@/hooks/queries/membership'
 import { useSettingsSpaceStore } from '@stores/useSettingsSpaceStore'

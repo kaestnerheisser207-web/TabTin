@@ -4,7 +4,7 @@
  * 复刻 iOS AudioLevelVisualization.swift。
  * compact 模式用于工具栏胶囊（8 根小柱子），默认模式 30 根。
  */
-/* eslint-disable tabtin/no-chat-design-violations -- 录音红是动作色 */
+/* eslint-disable muse/no-chat-design-violations -- 录音红是动作色 */
 
 import React, { memo } from 'react'
 

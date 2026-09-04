@@ -30,7 +30,7 @@ import { SourceMetaSchema } from './common.js';
 import {
   RiskLevelSchema,
   UsageReportSchema,
-} from '@tabtin/contracts/agent';
+} from '@muse/contracts/agent';
 
 // ─── Lifecycle ───────────────────────────────────────────────────────
 
@@ -100,7 +100,7 @@ export type StreamLifecycle = z.infer<typeof StreamLifecycleSchema>;
 /**
  * 错误归因 class 字符串 (FR-06 / FR-15)。
  *
- * 取值与 `@tabtin/agent-runtime` 的 `AgentErrorCode` 联合类型对齐（FR-06）：
+ * 取值与 `@muse/agent-runtime` 的 `AgentErrorCode` 联合类型对齐（FR-06）：
  * `LLM_ERROR` / `LLM_BILLING_ERROR` / `LLM_RATE_LIMIT` /
  * `LLM_KEY_EXHAUSTED` / `TOOL_ERROR` / `TOOL_TIMEOUT` /
  * `PERMISSION_DENIED` / `PERMISSION_TIMEOUT` / `CONTEXT_OVERFLOW` /
@@ -337,7 +337,7 @@ export const CompactionStatsSchema = z.object({
  * `agent.stream.compaction` event payload schema (FR-11)。
  *
  * `mode` 用 `string` 而非 enum：
- * - 兼容 `@tabtin/agent-runtime` 的 `CompactionMode` 联合类型 (auto / native /
+ * - 兼容 `@muse/agent-runtime` 的 `CompactionMode` 联合类型 (auto / native /
  *   micro / reactive / emergency_blocking / recovery_413 / hard_trim)；
  * - 允许云端 orchestration 历史路径的 `auto_condense` / `emergency` 字面量
  *   （前端 miscHandler 自行映射）。

@@ -6,7 +6,7 @@ import {
   formatAttachmentValue,
   formatDateCellValue,
   formatDateTimeCellValue,
-} from '@tabtin/table-ui'
+} from '@muse/table-ui'
 
 export type RecordFormMode = 'create' | 'edit'
 

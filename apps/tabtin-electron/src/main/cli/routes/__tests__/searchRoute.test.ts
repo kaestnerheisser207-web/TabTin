@@ -13,9 +13,9 @@
  */
 
 import { beforeEach, describe, expect, it, vi } from 'vitest'
-import { configureCLIRoutes, handleSearchRoute } from '@tabtin/cli-routes'
+import { configureCLIRoutes, handleSearchRoute } from '@muse/cli-routes'
 
-// search.ts 已迁移到 @tabtin/cli-routes（packages/cli-routes/src/routes/search.ts）。
+// search.ts 已迁移到 @muse/cli-routes（packages/cli-routes/src/routes/search.ts）。
 // 通过 cli-routes 的 configureCLIRoutes() 注入 mock djangoRequest，这与运行时
 // 宿主（Electron / Daemon）注入的方式完全一致——比 vi.mock 模块替换更贴近真实路径。
 const mockDjangoRequest = vi.fn()
@@ -43,7 +43,7 @@ describe('handleSearchRoute', () => {
         partial_indices: [],
       },
     })
-    delete process.env.TABTIN_ORGANIZATION_ID
+    delete process.env.MUSE_ORGANIZATION_ID
   })
 
   it('GET /search 透传 q + organization_id 到 Django', async () => {
@@ -132,8 +132,8 @@ describe('handleSearchRoute', () => {
     }))
   })
 
-  it('organization_id 缺失但 env TABTIN_ORGANIZATION_ID 存在 → 自动注入', async () => {
-    process.env.TABTIN_ORGANIZATION_ID = 'wt-from-env'
+  it('organization_id 缺失但 env MUSE_ORGANIZATION_ID 存在 → 自动注入', async () => {
+    process.env.MUSE_ORGANIZATION_ID = 'wt-from-env'
     await handleSearchRoute('/search?q=hello', 'GET', undefined, res, sendJSON)
     expect(mockDjangoRequest).toHaveBeenCalledTimes(1)
     const path = mockDjangoRequest.mock.calls[0][1]

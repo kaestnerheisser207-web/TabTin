@@ -26,7 +26,7 @@ import {
   NativeBackendSession,
   NativeBackendSessionUnsupportedError,
 } from '../native-backend-session.js';
-import { CommandExecutor, SpawnSandboxBackend } from '@tabtin/terminal-core';
+import { CommandExecutor, SpawnSandboxBackend } from '@muse/terminal-core';
 import type { ExecOptions, ExecResult } from '../../backend-session.js';
 import { createTestSafeFsPort } from '../../../../tests/helpers/safe-fs-port.js';
 
@@ -140,7 +140,7 @@ describe('NativeBackendSession.read / write', () => {
   });
 
   it('read 走 safe-fs 不通过 exec 路径（性能 override + 结构化 OS 错误）', async () => {
-    // Wave 1 第二轮：read 不再走 fs.promises，而是走 `@tabtin/safe-fs`，把
+    // Wave 1 第二轮：read 不再走 fs.promises，而是走 `@muse/safe-fs`，把
     // macOS TCC 拒绝 / Windows 杀软拦截 / 云盘占位等 OS 级错误归一抛
     // OSAccessError。本测试关键断言"不触发 exec spawn"，证明性能 override
     // 真生效——避免每次 read 多 5-20ms spawn 开销。
@@ -190,9 +190,9 @@ describe('NativeBackendSession.agentHome 路径计算', () => {
     }
   });
 
-  it('TABTIN_RUNTIME_ROOT 存在时 Agent Home 跟随当前安装档', () => {
-    const previous = process.env.TABTIN_RUNTIME_ROOT;
-    process.env.TABTIN_RUNTIME_ROOT = path.join(tmpDir, 'Muse Preprod', 'runtime');
+  it('MUSE_RUNTIME_ROOT 存在时 Agent Home 跟随当前安装档', () => {
+    const previous = process.env.MUSE_RUNTIME_ROOT;
+    process.env.MUSE_RUNTIME_ROOT = path.join(tmpDir, 'Muse Preprod', 'runtime');
     try {
       const agentId = 'profile-isolated-agent';
       const session = new NativeBackendSession({
@@ -205,8 +205,8 @@ describe('NativeBackendSession.agentHome 路径计算', () => {
         path.join(tmpDir, 'Muse Preprod', 'runtime', 'agents', agentId, 'scratchpad'),
       );
     } finally {
-      if (previous === undefined) delete process.env.TABTIN_RUNTIME_ROOT;
-      else process.env.TABTIN_RUNTIME_ROOT = previous;
+      if (previous === undefined) delete process.env.MUSE_RUNTIME_ROOT;
+      else process.env.MUSE_RUNTIME_ROOT = previous;
     }
   });
 

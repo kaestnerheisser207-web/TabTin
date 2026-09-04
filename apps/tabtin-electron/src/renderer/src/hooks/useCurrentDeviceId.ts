@@ -40,7 +40,7 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useDeviceStore } from '@stores/useDeviceStore'
 import { useOrganizationStore } from '@stores/useOrganizationStore'
-import type { Device } from '@tabtin/app-shell'
+import type { Device } from '@muse/app-shell'
 
 /** 「注册从未触发」纯初始态的永久 loading 兜底超时（毫秒）。 */
 const REGISTER_TIMEOUT_MS = 5000

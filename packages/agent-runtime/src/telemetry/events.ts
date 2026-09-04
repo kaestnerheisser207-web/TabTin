@@ -354,7 +354,7 @@ export const TelemetryEvents = {
    * - `iteration`：当前主循环迭代号。
    *
    * 监控建议：失败率 = `judge_failed / (judge_failed + judge_score)` 持续 > 30%
-   * 触发告警；连续失败大于阈值时考虑暂时关掉 reuse（`TABTIN_SUMMARY_REUSE=off`）。
+   * 触发告警；连续失败大于阈值时考虑暂时关掉 reuse（`MUSE_SUMMARY_REUSE=off`）。
    */
   COMPACT_JUDGE_FAILED: 'compact.judge_failed',
 
@@ -490,7 +490,7 @@ export const TelemetryEvents = {
    *
    * 用途：观察"子 Agent 拒绝率"——如果某 Agent 频繁被拒绝（每天 N 次以上），
    * 说明用户/Agent 行为模式与默认 5 的上限不匹配；运维可调高
-   * `TABTIN_MAX_CONCURRENT_CHILDREN` 或 PRD 决策上调默认值。
+   * `MUSE_MAX_CONCURRENT_CHILDREN` 或 PRD 决策上调默认值。
    *
    * Dashboard：按 `agent_id` / `session_id` 聚合，与 `subagent_started` 总数对比
    * 算"拒绝率 = blocked / (blocked + started)"。

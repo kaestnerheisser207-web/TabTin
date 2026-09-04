@@ -102,7 +102,7 @@ class OrganizationService(BaseService):
 
     @staticmethod
     def provision_community_membership(organization_id: str) -> None:
-        if getattr(settings, "TABTIN_EDITION", "saas") != "community":
+        if getattr(settings, "MUSE_EDITION", "saas") != "community":
             return
         from apps.maintenance.community_bootstrap import (
             ensure_community_organization_membership,

@@ -10,8 +10,8 @@
  * 1. SDK 要求在 app 'ready' 前初始化（configureProtocol 在 ready 后直接 throw）；
  * 2. Electron 的 protocol.registerSchemesAsPrivileged 后调覆盖前调——SDK 注册
  *    sentry-ipc scheme 后会给该函数装 append 代理，保证之后 deep-link.ts 注册
- *    tabtin-file 时两个 scheme 共存；反过来（deep-link 先注册、SDK 后注册）
- *    tabtin-file 的特权会被抹掉。所以 Sentry 必须抢在 main-app 加载之前，
+ *    muse-file 时两个 scheme 共存；反过来（deep-link 先注册、SDK 后注册）
+ *    muse-file 的特权会被抹掉。所以 Sentry 必须抢在 main-app 加载之前，
  *    而 dynamic import 与 'ready' 事件的先后在事件循环上没有保证。
  * SDK 用 createRequire 同步加载（@sentry/electron 被 externalizeDepsPlugin
  * 保留在 node_modules，有 CJS 入口）；DSN 未配置时不加载，保持零开销。

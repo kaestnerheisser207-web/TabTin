@@ -6,7 +6,7 @@ import {
   passwordHasWhitespace,
   passwordMeetsCharClassRule,
   PASSWORD_MIN_LENGTH,
-} from '@tabtin/shared'
+} from '@muse/shared'
 
 zxcvbnOptions.setOptions({
   graphs: zxcvbnCommonPackage.adjacencyGraphs,

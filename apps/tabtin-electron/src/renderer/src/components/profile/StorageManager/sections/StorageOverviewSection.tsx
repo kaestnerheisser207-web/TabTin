@@ -14,7 +14,7 @@
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { Loader2, RotateCcw, Sparkles } from 'lucide-react'
-import { Button } from '@tabtin/smartsheet-ui'
+import { Button } from '@muse/smartsheet-ui'
 import { cn } from '@utils/cn'
 import { SettingsSectionCard } from '../../../settings/SettingsSectionCard'
 import { formatBytes } from '../components/types'

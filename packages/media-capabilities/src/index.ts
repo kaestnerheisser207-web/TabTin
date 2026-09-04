@@ -1,17 +1,17 @@
 /**
- * @tabtin/media-capabilities — Unified media capability layer
+ * @muse/media-capabilities — Unified media capability layer
  *
  * Wraps local FFmpeg / media-core helpers and cloud service capabilities
  * (Django media_generation, speech, music) into a single consumable interface.
  *
  * Usage:
- *   import { generateImage } from '@tabtin/media-capabilities/image';
- *   import { generateVideo } from '@tabtin/media-capabilities/video';
- *   import { synthesizeSpeech } from '@tabtin/media-capabilities/audio';
- *   import { withMiddleware } from '@tabtin/media-capabilities/middleware';
+ *   import { generateImage } from '@muse/media-capabilities/image';
+ *   import { generateVideo } from '@muse/media-capabilities/video';
+ *   import { synthesizeSpeech } from '@muse/media-capabilities/audio';
+ *   import { withMiddleware } from '@muse/media-capabilities/middleware';
  *
  * Or import everything from root:
- *   import { generateImage, generateVideo } from '@tabtin/media-capabilities';
+ *   import { generateImage, generateVideo } from '@muse/media-capabilities';
  */
 
 // Core types

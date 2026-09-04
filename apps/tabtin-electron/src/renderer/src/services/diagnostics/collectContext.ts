@@ -17,9 +17,9 @@ import {
   useSpaceStore,
   useSpaceListStore,
   parseSpaceSelectionId,
-} from '@tabtin/app-shell'
+} from '@muse/app-shell'
 import { useAuthStore } from '@/stores/useAuthStore'
-import type { Space } from '@tabtin/app-shell'
+import type { Space } from '@muse/app-shell'
 
 import type { DiagnosticsHostEnv } from '../../../../shared/diagnostics-types'
 
@@ -122,8 +122,8 @@ export function collectDiagnosticsMeta(
   host: DiagnosticsHostEnv | null = null,
 ): DiagnosticsMeta {
   const client = safe(() => getClientContextSnapshot(), null as ReturnType<typeof getClientContextSnapshot> | null)
-  const platform = safe(() => window.tabtin?.getPlatform?.() ?? '', '')
-  const arch = safe(() => window.tabtin?.getArch?.() ?? '', '')
+  const platform = safe(() => window.muse?.getPlatform?.() ?? '', '')
+  const arch = safe(() => window.muse?.getArch?.() ?? '', '')
 
   // store 结果按 unknown 读取 + readStr 守卫（防御：字段缺失只拿到 null，
   // 不因 store 类型演进而让诊断收集编译失败）

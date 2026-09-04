@@ -1,7 +1,7 @@
 /**
  * CheckpointService — Daemon 平台适配层
  *
- * 核心逻辑由 @tabtin/checkpoint-core 提供，本文件仅负责：
+ * 核心逻辑由 @muse/checkpoint-core 提供，本文件仅负责：
  * - 注入 Daemon 的 Logger 实例作为 CheckpointLogger
  * - 将 ~/.tabtin/checkpoints 作为 checkpointsRoot
  * - 提供单例缓存（getCheckpointService / destroyCheckpointService / destroyAllCheckpointServices）
@@ -11,11 +11,11 @@ import {
   CheckpointService,
   createServiceCacheManager,
   type CheckpointServiceCache,
-} from '@tabtin/checkpoint-core'
+} from '@muse/checkpoint-core'
 import type { Logger } from '../../observability/logging/logger.js'
 
-export { CheckpointService } from '@tabtin/checkpoint-core'
-export type { CheckpointDiffEntry, CheckpointLogger } from '@tabtin/checkpoint-core'
+export { CheckpointService } from '@muse/checkpoint-core'
+export type { CheckpointDiffEntry, CheckpointLogger } from '@muse/checkpoint-core'
 
 const CHECKPOINTS_ROOT = CheckpointService.defaultRoot()
 

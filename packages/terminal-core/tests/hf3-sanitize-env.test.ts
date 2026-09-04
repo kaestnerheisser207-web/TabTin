@@ -145,9 +145,9 @@ describe('sanitizeEnv — 敏感凭据过滤', () => {
     expect(result).not.toHaveProperty('OPENAI_API_KEY');
   });
 
-  it('过滤 TABTIN_TOKEN', () => {
-    const result = sanitizeEnv({ TABTIN_TOKEN: 'tok-xxx', PATH: '/usr/bin' });
-    expect(result).not.toHaveProperty('TABTIN_TOKEN');
+  it('过滤 MUSE_TOKEN', () => {
+    const result = sanitizeEnv({ MUSE_TOKEN: 'tok-xxx', PATH: '/usr/bin' });
+    expect(result).not.toHaveProperty('MUSE_TOKEN');
   });
 
   it('通过模式过滤 CUSTOM_SECRET_KEY', () => {

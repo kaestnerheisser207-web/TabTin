@@ -49,7 +49,7 @@ describe('markdownToPmJson', () => {
 
   it('should restore private image identity from a stable marker', () => {
     const fileId = '802cf8e7-08fc-4619-9145-a37b201fb877'
-    const result = markdownToPmJson(`![private](tabtin-file://asset/${fileId})`) as any
+    const result = markdownToPmJson(`![private](muse-file://asset/${fileId})`) as any
     const imgNode = result.content[0].content.find((node: any) => node.type === 'image')
 
     expect(imgNode.attrs.src).toBe('')

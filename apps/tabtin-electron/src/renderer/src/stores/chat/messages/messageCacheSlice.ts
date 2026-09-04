@@ -15,7 +15,7 @@
  * 路径调用——保证「LRU accessOrder 与缓存快照一致」的不变量只有本模块一处维护。
  */
 
-import type { ChatMessage, ChatSession } from '@tabtin/chat-client'
+import type { ChatMessage, ChatSession } from '@muse/chat-client'
 import { sortMessagesForTimeline } from '@/stores/chat/domain/messageTimelineOrder'
 import {
   getClientMessageId,

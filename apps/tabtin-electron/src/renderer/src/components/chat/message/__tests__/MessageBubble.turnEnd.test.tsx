@@ -5,7 +5,7 @@
 import React from 'react'
 import { act, render, screen } from '@testing-library/react'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
-import type { ChatMessage } from '@tabtin/chat-client'
+import type { ChatMessage } from '@muse/chat-client'
 import { STEP_ROW } from '../../registry/chatDesignTokens'
 import {
   IDLE_TURN_END_LAYOUT,
@@ -118,7 +118,7 @@ vi.mock('../messages/common/', () => ({
   }) => <>{children()}</>,
 }))
 
-vi.mock('@tabtin/smartsheet-ui', () => ({
+vi.mock('@muse/smartsheet-ui', () => ({
   ConfirmDialog: () => null,
   Popover: ({ children }: { children: React.ReactNode }) => <>{children}</>,
   PopoverTrigger: ({ children }: { children: React.ReactNode }) => <>{children}</>,
@@ -405,7 +405,7 @@ describe('MessageBubble turn-end closing window', () => {
         id: 'art-1',
         title: 'doc',
         kind: 'doc',
-        href: 'tabtin://doc/r1',
+        href: 'muse://doc/r1',
         subtitleKey: 'previewDoc',
       },
     ]
@@ -484,7 +484,7 @@ describe('MessageBubble turn-end closing window', () => {
       id: 'artifact-1',
       title: 'file1.txt',
       kind: 'file',
-      href: 'tabtin://resource/file/file1.txt',
+      href: 'muse://resource/file/file1.txt',
       subtitleKey: 'previewFile',
     }]
 

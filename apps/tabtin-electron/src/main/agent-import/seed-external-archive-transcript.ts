@@ -3,8 +3,8 @@
  * 不挂 onWrite，避免导入正文走 Django sync（#7525 本机档案）。
  */
 
-import type { SessionStorage } from '@tabtin/agent-runtime'
-import type { Message } from '@tabtin/agent-runtime/engine'
+import type { SessionStorage } from '@muse/agent-runtime'
+import type { Message } from '@muse/agent-runtime/engine'
 import {
   EXTERNAL_ARCHIVE_MESSAGE_ID_PREFIX,
   EXTERNAL_ARCHIVE_MESSAGE_KIND,

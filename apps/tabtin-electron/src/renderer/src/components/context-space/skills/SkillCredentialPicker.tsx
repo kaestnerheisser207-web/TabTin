@@ -30,7 +30,7 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@tabtin/smartsheet-ui'
+} from '@muse/smartsheet-ui'
 import { useTranslation } from 'react-i18next'
 import { useApiKeyCredentialsQuery } from '@/hooks/queries/credentials'
 import type { CredentialItem } from '@/components/settings/panels/credentials/types'

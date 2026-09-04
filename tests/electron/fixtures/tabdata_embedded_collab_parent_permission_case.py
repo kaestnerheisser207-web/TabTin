@@ -105,7 +105,7 @@ def auth_space_view(workspace: Workspace):
 
 
 def prepare_case() -> None:
-    run_id = require_env("TABTIN_E2E_RUN_ID")
+    run_id = require_env("MUSE_E2E_RUN_ID")
     suffix = run_id[-12:].replace("-", "").replace("_", "")
     marker = f"[{run_id}]"
     owner, _ = ensure_e2e_user(
@@ -234,15 +234,15 @@ def prepare_case() -> None:
 
 
 def auth_case() -> None:
-    user = get_user_model().objects.get(id=require_env("TABTIN_E2E_AUTH_USER_ID"))
-    organization = Organization.objects.get(id=require_env("TABTIN_E2E_ORGANIZATION_ID"))
-    space = Workspace.objects.get(id=require_env("TABTIN_E2E_SPACE_ID"))
+    user = get_user_model().objects.get(id=require_env("MUSE_E2E_AUTH_USER_ID"))
+    organization = Organization.objects.get(id=require_env("MUSE_E2E_ORGANIZATION_ID"))
+    space = Workspace.objects.get(id=require_env("MUSE_E2E_SPACE_ID"))
     emit(
         build_electron_auth_payload(
             user=user,
             organization=organization,
             space=auth_space_view(space),
-            role=require_env("TABTIN_E2E_ROLE"),
+            role=require_env("MUSE_E2E_ROLE"),
         )
     )
 
@@ -256,13 +256,13 @@ def build_consumer(user, organization_id: str) -> GatewayConsumer:
 
 
 def verify_case() -> None:
-    collaborator = get_user_model().objects.get(id=require_env("TABTIN_E2E_COLLABORATOR_USER_ID"))
-    organization_id = require_env("TABTIN_E2E_ORGANIZATION_ID")
-    table_id = require_env("TABTIN_E2E_TABLE_ID")
-    document_id = require_env("TABTIN_E2E_DOCUMENT_ID")
-    unrelated_document_id = require_env("TABTIN_E2E_UNRELATED_DOCUMENT_ID")
-    field_id = require_env("TABTIN_E2E_FIELD_ID")
-    expected_value = require_env("TABTIN_E2E_EXPECTED_VALUE")
+    collaborator = get_user_model().objects.get(id=require_env("MUSE_E2E_COLLABORATOR_USER_ID"))
+    organization_id = require_env("MUSE_E2E_ORGANIZATION_ID")
+    table_id = require_env("MUSE_E2E_TABLE_ID")
+    document_id = require_env("MUSE_E2E_DOCUMENT_ID")
+    unrelated_document_id = require_env("MUSE_E2E_UNRELATED_DOCUMENT_ID")
+    field_id = require_env("MUSE_E2E_FIELD_ID")
+    expected_value = require_env("MUSE_E2E_EXPECTED_VALUE")
     records = list(TableRecord.objects.filter(table_id=table_id, is_deleted=False))
     matching_record = next(
         (
@@ -299,7 +299,7 @@ def verify_case() -> None:
 
 
 def main() -> None:
-    mode = require_env("TABTIN_E2E_MODE")
+    mode = require_env("MUSE_E2E_MODE")
     if mode == "prepare":
         prepare_case()
     elif mode == "auth":
@@ -307,7 +307,7 @@ def main() -> None:
     elif mode == "verify":
         verify_case()
     else:
-        raise RuntimeError(f"Unknown TABTIN_E2E_MODE: {mode}")
+        raise RuntimeError(f"Unknown MUSE_E2E_MODE: {mode}")
 
 
 main()

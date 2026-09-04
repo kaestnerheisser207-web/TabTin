@@ -22,7 +22,7 @@ import {
   getDataRoot,
   resolveOrganizationSkillsDir,
   resolveUserSkillsDir,
-} from '@tabtin/agent-runtime/paths';
+} from '@muse/agent-runtime/paths';
 import {
   parseSkillDoc,
   type ParsedSkillCandidate,
@@ -30,7 +30,7 @@ import {
   type ScanRootKind,
   type SkillSource,
   type UserScope,
-} from '@tabtin/agent-runtime/skills';
+} from '@muse/agent-runtime/skills';
 
 const SKILL_FILE = 'SKILL.md';
 
@@ -50,7 +50,7 @@ const SKILL_READ_CONCURRENCY = 50;
  * scanner 不再读）。
  */
 export interface ScannerEnv {
-  /** 新数据根（`{platformBase}` 或 env `TABTIN_DATA_ROOT`） */
+  /** 新数据根（`{platformBase}` 或 env `MUSE_DATA_ROOT`） */
   dataRoot?: string;
   /**
    * 当前登录用户 id。**给了 `dataRoot` 就必填**—— 硬切：缺失时

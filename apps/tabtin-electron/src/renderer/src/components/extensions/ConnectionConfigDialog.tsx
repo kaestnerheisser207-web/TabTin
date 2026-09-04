@@ -11,7 +11,7 @@ import {
   DialogTitle,
   Input,
   toast,
-} from '@tabtin/smartsheet-ui'
+} from '@muse/smartsheet-ui'
 import { useTranslation } from 'react-i18next'
 import { useExtensionStore } from '@stores/useExtensionStore'
 import type { ExtensionManifest, ExtensionConnection } from '@/services/extensionApi'

@@ -5,7 +5,7 @@
  * payload 增量合并进 `useOrganizationStore`，避免每次全量 loadOrganizations。
  */
 
-import { useOrganizationStore, type Organization } from '@tabtin/app-shell'
+import { useOrganizationStore, type Organization } from '@muse/app-shell'
 import { logger } from '@/utils/logger'
 
 interface OrganizationUpdatedPayload {

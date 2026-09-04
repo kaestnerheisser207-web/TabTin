@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { Capabilities, DomainEvents } from '@tabtin/ws-gateway-client'
+import { Capabilities, DomainEvents } from '@muse/ws-gateway-client'
 
 import { DEFAULT_ELECTRON_WS_CAPABILITIES } from './electronWsCapabilities'
 

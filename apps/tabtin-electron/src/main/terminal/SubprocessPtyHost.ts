@@ -381,8 +381,8 @@ export function createDefaultPtyHostClient(): PtyHostClient {
   //
   // 修复：默认把 PTY host 放进独立 Node 子进程（与 VS Code 的 pty-host 同构），
   // forkpty 发生在干净的单职责进程里，主进程不再 fork。仅排障时可设
-  // TABTIN_PTY_HOST_MODE=in-process 回退到旧行为（有崩溃风险，勿用于生产）。
-  if (process.env.TABTIN_PTY_HOST_MODE === 'in-process') {
+  // MUSE_PTY_HOST_MODE=in-process 回退到旧行为（有崩溃风险，勿用于生产）。
+  if (process.env.MUSE_PTY_HOST_MODE === 'in-process') {
     // pnpm 严格模块隔离下，pty-core（peerDependency）内部的 require('node-pty')
     // 从 packages/pty-core/dist/ 路径开始查找，无法到达 apps/tabtin-electron/node_modules/。
     // 在应用层显式 require 后传入构造函数，绕过路径解析问题。

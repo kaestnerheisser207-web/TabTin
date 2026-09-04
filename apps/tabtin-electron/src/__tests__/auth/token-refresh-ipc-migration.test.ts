@@ -25,12 +25,12 @@ describe('TA-001 / TL-003 回归：废弃 auth:getRefreshToken IPC 不应被调�
     expect(source).not.toContain("auth:getRefreshToken")
   })
 
-  it('api.ts 不应调用 window.tabtin.auth.getRefreshToken()', () => {
+  it('api.ts 不应调用 window.muse.auth.getRefreshToken()', () => {
     const source = readSource(SERVICES_DIR, 'api.ts')
     expect(source).not.toContain('.getRefreshToken()')
   })
 
-  it('tabtin-client.ts 不应调用 window.tabtin.auth.getRefreshToken()', () => {
+  it('tabtin-client.ts 不应调用 window.muse.auth.getRefreshToken()', () => {
     const source = readSource(SERVICES_DIR, 'tabtin-client.ts')
     expect(source).not.toContain('.auth.getRefreshToken')
     expect(source).not.toContain("auth?.getRefreshToken")
@@ -61,7 +61,7 @@ describe('TA-002 / TA-003 / TL-005 回归：渲染进程刷新应委托主进程
 
   it('api.ts 的 refreshToken 方法应调用 refreshAccessToken IPC', () => {
     const source = readSource(SERVICES_DIR, 'api.ts')
-    expect(source).toContain('window.tabtin.auth.refreshAccessToken()')
+    expect(source).toContain('window.muse.auth.refreshAccessToken()')
   })
 
   it('api.ts 不应维护 refreshTokenValue 内存缓存', () => {
@@ -76,7 +76,7 @@ describe('TA-002 / TA-003 / TL-005 回归：渲染进程刷新应委托主进程
 
   it('tabtin-client.ts 的 refresh 回调应委托主进程', () => {
     const source = readSource(SERVICES_DIR, 'tabtin-client.ts')
-    expect(source).toContain('window.tabtin.auth.refreshAccessToken()')
+    expect(source).toContain('window.muse.auth.refreshAccessToken()')
   })
 })
 
@@ -104,8 +104,8 @@ describe('统一刷新架构验证', () => {
     const clientSource = readSource(SERVICES_DIR, 'tabtin-client.ts')
     const preloadSource = readSource(PRELOAD_DIR, 'index.ts')
 
-    const apiUsesIpc = apiSource.includes('window.tabtin.auth.refreshAccessToken()')
-    const clientUsesIpc = clientSource.includes('window.tabtin.auth.refreshAccessToken()')
+    const apiUsesIpc = apiSource.includes('window.muse.auth.refreshAccessToken()')
+    const clientUsesIpc = clientSource.includes('window.muse.auth.refreshAccessToken()')
     // W2-α(contract)：preload 经 ipc-shim 的 invokeIpc 包装调起 auth:refreshAccessToken
     // （取代裸 ipcRenderer.invoke）；正则容忍可选泛型参数。
     const preloadExposesIpc = /invokeIpc(<[^>]+>)?\(\s*['"]auth:refreshAccessToken['"]/.test(preloadSource)
@@ -117,7 +117,7 @@ describe('统一刷新架构验证', () => {
 
   it('api.ts refreshToken 方法应返回 auth.get() 获取的完整 bundle', () => {
     const source = readSource(SERVICES_DIR, 'api.ts')
-    expect(source).toContain('window.tabtin.auth.get()')
+    expect(source).toContain('window.muse.auth.get()')
     expect(source).toContain('authBundle')
   })
 })

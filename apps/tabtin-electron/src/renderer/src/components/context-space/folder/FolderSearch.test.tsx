@@ -26,9 +26,9 @@ const { mockRipgrepSearch } = vi.hoisted(() => ({
   mockRipgrepSearch: vi.fn(),
 }))
 
-// setup.ts 已经把 window.tabtin 初始化成 createMockTabtin()（不带 fileSystem），
+// setup.ts 已经把 window.muse 初始化成 createMockTabtin()（不带 fileSystem），
 // 这里在它上面补 fileSystem.ripgrepSearch。用 defineProperty 是因为 setup.ts
-// 也是用 defineProperty 定义的 window.tabtin，且 configurable: true。
+// 也是用 defineProperty 定义的 window.muse，且 configurable: true。
 beforeEach(() => {
   const baseTabtin = (window as Window & { tabtin?: Record<string, unknown> }).tabtin ?? {}
   Object.defineProperty(window, 'tabtin', {

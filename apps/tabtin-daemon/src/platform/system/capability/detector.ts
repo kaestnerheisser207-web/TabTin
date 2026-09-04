@@ -151,7 +151,7 @@ export class CapabilityDetector {
   }
 
   private async isFFmpegAvailable(): Promise<boolean> {
-    const { findFFmpegAsync } = await import('@tabtin/media-capabilities');
+    const { findFFmpegAsync } = await import('@muse/media-capabilities');
     return Boolean(await findFFmpegAsync());
   }
 

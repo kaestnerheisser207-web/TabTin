@@ -32,7 +32,7 @@
  */
 
 import * as React from 'react'
-import { toast, ToastAction } from '@tabtin/smartsheet-ui/toast'
+import { toast, ToastAction } from '@muse/smartsheet-ui/toast'
 import i18n from '@/i18n'
 import { createLogger } from '@/utils/logger'
 

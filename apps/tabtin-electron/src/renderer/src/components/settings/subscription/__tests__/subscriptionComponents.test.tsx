@@ -13,7 +13,7 @@ import {
   UpgradeQuoteDialog,
 } from '..'
 
-vi.mock('@tabtin/smartsheet-ui', () => ({
+vi.mock('@muse/smartsheet-ui', () => ({
   Button: ({ children, ...props }: any) => <button {...props}>{children}</button>,
   Dialog: ({ open, children }: any) => open ? <div data-testid="dialog">{children}</div> : null,
   DialogContent: ({ children }: any) => <div>{children}</div>,

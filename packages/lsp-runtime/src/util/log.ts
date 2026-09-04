@@ -2,7 +2,7 @@
  * 极简 logger 接口。
  *
  * 设计哲学：lsp-runtime 是底层基础设施包，不绑定具体 logger 实现（避免
- * 引入 pino / winston / @tabtin/shared 等）。宿主通过 `setLogger()` 注入
+ * 引入 pino / winston / @muse/shared 等）。宿主通过 `setLogger()` 注入
  * 真实 logger；未注入时缺省走 console.debug / console.error。
  *
  * `logForDebugging` / `logError` 是对底层 logger 的薄封装。
@@ -19,8 +19,8 @@ export interface LspLogger {
 
 const DEFAULT_LOGGER: LspLogger = {
   debug(message) {
-    if (process.env.TABTIN_LSP_DEBUG) {
-      // 缺省 debug 不打印——除非显式打开 TABTIN_LSP_DEBUG=1
+    if (process.env.MUSE_LSP_DEBUG) {
+      // 缺省 debug 不打印——除非显式打开 MUSE_LSP_DEBUG=1
       // eslint-disable-next-line no-console
       console.debug(`[lsp-runtime] ${message}`);
     }

@@ -5,13 +5,13 @@ import { resolveTabTinResourceScheme } from '../src/environment.js'
 describe('resolveTabTinResourceScheme', () => {
   it.each([
     ['https://api.example.com/api', 'production', 'muse'],
-    ['https://api-test.example.com/api', 'preprod', 'tabtin-preprod'],
-    ['https://api-test.example.com/api', 'development', 'tabtin-preprod'],
-    ['http://127.0.0.1:6060/api', 'development', 'tabtin-dev'],
-    ['http://localhost:6060/api', 'development', 'tabtin-dev'],
-    ['http://[::1]:6060/api', 'development', 'tabtin-dev'],
-    ['http://192.168.1.20:6060/api', 'local', 'tabtin-dev'],
-    ['https://custom.example.com/api', 'preprod', 'tabtin-preprod'],
+    ['https://api-test.example.com/api', 'preprod', 'muse-preprod'],
+    ['https://api-test.example.com/api', 'development', 'muse-preprod'],
+    ['http://127.0.0.1:6060/api', 'development', 'muse-dev'],
+    ['http://localhost:6060/api', 'development', 'muse-dev'],
+    ['http://[::1]:6060/api', 'development', 'muse-dev'],
+    ['http://192.168.1.20:6060/api', 'local', 'muse-dev'],
+    ['https://custom.example.com/api', 'preprod', 'muse-preprod'],
     ['https://custom.example.com/api', 'production', 'muse'],
   ] as const)(
     'maps data source %s with profile %s to %s',

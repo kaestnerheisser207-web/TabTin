@@ -44,7 +44,7 @@ vi.mock('../../cli-space-desktop-cache', () => ({
   getCurrentSpaceDevicePermissions: () => null,
 }))
 
-vi.mock('@tabtin/agent-wire', () => ({
+vi.mock('@muse/agent-wire', () => ({
   okResponse: (data: unknown) => ({ ok: true, data }),
 }))
 
@@ -56,8 +56,8 @@ vi.mock('../shared/error-handler', () => ({
   }),
 }))
 
-vi.mock('@tabtin/security-policy', async () => {
-  const actual = await vi.importActual<typeof import('@tabtin/security-policy')>('@tabtin/security-policy')
+vi.mock('@muse/security-policy', async () => {
+  const actual = await vi.importActual<typeof import('@muse/security-policy')>('@muse/security-policy')
   return { ...actual }
 })
 

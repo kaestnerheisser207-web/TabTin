@@ -42,7 +42,7 @@ const mockGatewayConnect = vi.fn().mockResolvedValue(true)
 const mockGatewayForceReconnect = vi.fn().mockResolvedValue(true)
 const mockInvalidateLocalWorkspaceBootstrap = vi.fn()
 
-vi.mock('@tabtin/app-shell', () => ({
+vi.mock('@muse/app-shell', () => ({
   registerResetAction: vi.fn(),
   useOrganizationStore: Object.assign(
     () => mockState.organization,
@@ -88,7 +88,7 @@ vi.mock('@/utils/authPersistence', () => ({
   notifyLogoutRequired: mockNotifyLogout,
 }))
 
-vi.mock('@tabtin/smartsheet-ui/toast', () => ({
+vi.mock('@muse/smartsheet-ui/toast', () => ({
   toast: mockToast,
 }))
 

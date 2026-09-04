@@ -5,12 +5,12 @@ import {
   type LinkPickerField,
   type LinkPickerListMode,
   type LinkPickerRecord,
-} from '@tabtin/smartsheet-ui'
+} from '@muse/smartsheet-ui'
 import {
   FieldApiService,
   LinkFieldApiService,
   type Field,
-} from '@tabtin/table-core'
+} from '@muse/table-core'
 
 const PAGE_SIZE = 200
 

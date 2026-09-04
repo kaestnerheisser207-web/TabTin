@@ -5,8 +5,8 @@
  * reporting results back to the backend.
  */
 
-import type { ChatClient } from '@tabtin/chat-client'
-import { PERMISSION_TIMEOUTS } from '@tabtin/agent-wire'
+import type { ChatClient } from '@muse/chat-client'
+import { PERMISSION_TIMEOUTS } from '@muse/agent-wire'
 import type { RunState } from '../../shared/types'
 import { agentClient } from '../../../../crawlspace/electron/agent-client'
 import { runSessionClient } from '../../../../crawlspace/electron/run-session-client'

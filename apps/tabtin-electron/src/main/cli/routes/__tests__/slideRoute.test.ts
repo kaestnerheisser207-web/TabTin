@@ -31,7 +31,7 @@ describe('handleSlideRoute', () => {
 
   beforeEach(() => {
     vi.clearAllMocks()
-    process.env.TABTIN_ORGANIZATION_ID = 'wt-1'
+    process.env.MUSE_ORGANIZATION_ID = 'wt-1'
   })
 
   it('拒绝在非空项目上无 --replace 的 generate，避免覆盖旧页面', async () => {

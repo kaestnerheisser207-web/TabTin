@@ -78,13 +78,13 @@ describe('isToolProcessOnlyMessage', () => {
 describe('extractResourceLinkAttachments', () => {
   it('从 markdown 资源链接抽出文档产物', () => {
     const content =
-      '文档创建成功！\n\n**[萌猫档案](tabtin://resource/document/056c501e-a833-4d2f-a86d-fd0ef84e9547?hint=tabdoc)**'
+      '文档创建成功！\n\n**[萌猫档案](muse://resource/document/056c501e-a833-4d2f-a86d-fd0ef84e9547?hint=tabdoc)**'
     expect(extractResourceLinkAttachments(content)).toEqual([
       {
         kind: 'document',
         filename: '萌猫档案',
         source: 'agent',
-        url: 'tabtin://resource/document/056c501e-a833-4d2f-a86d-fd0ef84e9547?hint=tabdoc',
+        url: 'muse://resource/document/056c501e-a833-4d2f-a86d-fd0ef84e9547?hint=tabdoc',
         resource_type: 'document',
         resource_id: '056c501e-a833-4d2f-a86d-fd0ef84e9547',
         file_id: undefined,
@@ -93,7 +93,7 @@ describe('extractResourceLinkAttachments', () => {
   })
 
   it('忽略代码块中的示例链接', () => {
-    const content = '```\n[样例](tabtin://resource/document/02eda024-5f11-…)\n```'
+    const content = '```\n[样例](muse://resource/document/02eda024-5f11-…)\n```'
     expect(extractResourceLinkAttachments(content)).toEqual([])
   })
 })
@@ -103,7 +103,7 @@ describe('collectDisplayAttachments / resolveAttachmentAdminPath', () => {
     const attachments = collectDisplayAttachments(
       msg({
         content:
-          '[周报](tabtin://resource/document/doc-1?hint=tabdoc)\n另见 tabtin://resource/table/tbl-2',
+          '[周报](muse://resource/document/doc-1?hint=tabdoc)\n另见 muse://resource/table/tbl-2',
         attachments: [
           {
             kind: 'image',

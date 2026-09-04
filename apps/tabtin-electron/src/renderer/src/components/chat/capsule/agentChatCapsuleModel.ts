@@ -4,7 +4,7 @@
  * 胶囊只回答「Agent 现在处于哪个阶段」，不复述消息正文。消息仅用于计算
  * 「完成后有几条新回复」，运行阶段继续读取既有 RunState / HITL 单一真相。
  *
- * 状态 key 与优先级的 SSOT 在 `@tabtin/contracts`（resolveTaskCapsuleStatus）；
+ * 状态 key 与优先级的 SSOT 在 `@muse/contracts`（resolveTaskCapsuleStatus）；
  * 本文件保留 Electron 侧别名与未读计数投影。
  */
 
@@ -12,7 +12,7 @@ import {
   resolveTaskCapsuleStatus,
   type TaskCapsuleStatusInput,
   type TaskCapsuleStatusKind,
-} from '@tabtin/contracts/agent'
+} from '@muse/contracts/agent'
 
 export interface CapsuleMessageLike {
   id: string

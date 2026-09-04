@@ -185,7 +185,7 @@ let retryTimer: ReturnType<typeof setTimeout> | null = null
 // 期数据持续异常时控制台被刷屏。
 const warnedOrphanEnvIds = new Set<string>()
 
-/** 仅在测试代码中使用：可注入 mock window.tabtin。 */
+/** 仅在测试代码中使用：可注入 mock window.muse。 */
 type BrowserEnvIpcShape = {
   list?: () => Promise<unknown>
   onChanged?: (

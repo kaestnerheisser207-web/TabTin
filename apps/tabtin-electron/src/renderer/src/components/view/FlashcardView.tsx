@@ -12,7 +12,7 @@ import {
 import { cn } from '@utils/cn'
 import { useViewStore, useViewStoreApi } from '@stores/useViewStore'
 import { useTableStore } from '@stores/useTableStore'
-import { CollabStatus } from '@tabtin/collab-core'
+import { CollabStatus } from '@muse/collab-core'
 import { shouldProjectViewRecordsFromCollabYdoc, useTableCollab } from '@components/table/TableCollabContext'
 import { useTranslation } from 'react-i18next'
 import {

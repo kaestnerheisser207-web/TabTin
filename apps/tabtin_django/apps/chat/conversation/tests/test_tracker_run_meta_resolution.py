@@ -4,14 +4,14 @@ Wave 5 (charter v1.8 §6.7): _resolve_tracker_run_meta 单测
 ⚠️ ⚠️ ⚠️  CI / Reviewer / Agent 必读  ⚠️ ⚠️ ⚠️
 ═══════════════════════════════════════════════════════════════════════
 本文件下方 5 个 TransactionTestCase **真 ORM 路径用例**守
-`TABTIN_REAL_DB_TEST=1` 环境变量。**默认不启用 → 默认全部 skip**。
+`MUSE_REAL_DB_TEST=1` 环境变量。**默认不启用 → 默认全部 skip**。
 
-后果:如果跑测试时未显式 export `TABTIN_REAL_DB_TEST=1`,
+后果:如果跑测试时未显式 export `MUSE_REAL_DB_TEST=1`,
 **反思 9 防线（"代码改对了反而单测红"）形同虚设** —
 真路径根本没跑过,跟没写一样。
 
 正确启用方式(本地 / CI):
-  TABTIN_REAL_DB_TEST=1 python manage.py test \
+  MUSE_REAL_DB_TEST=1 python manage.py test \
     apps.chat.conversation.tests.test_tracker_run_meta_resolution
 
 CI 待办(Wave 5 二次续作 P1(新)-B,Harness 评估):
@@ -19,7 +19,7 @@ CI 待办(Wave 5 二次续作 P1(新)-B,Harness 评估):
   pytest / manage.py test 在 .github/workflows/*.yml 里 grep 0 命中。
   新增 Django test workflow 时**必须**:
     env:
-      TABTIN_REAL_DB_TEST: "1"
+      MUSE_REAL_DB_TEST: "1"
   否则 CI 即使跑也会全部 skip,等于没跑。
 
 文档参考:apps/tabtin_django/README.md §测试
@@ -47,14 +47,14 @@ from django.utils import timezone
 
 # P0-7 续作 (Wave 5 续作 Agent 注): 本地 sqlite test runner 跑 chat 模块全套 migration 时
 # RawSQL CREATE INDEX 语法不兼容(预存在环境问题),会导致 setup_databases 整体失败。
-# TransactionTestCase 真路径需要真实 PG / MySQL test DB,通过环境变量 TABTIN_REAL_DB_TEST=1
+# TransactionTestCase 真路径需要真实 PG / MySQL test DB,通过环境变量 MUSE_REAL_DB_TEST=1
 # 显式启用 — CI / 本地有真库时跑;dev 环境默认 skip 避免阻塞所有测试启动。
 # 守护原则: 测试不应"代码改对了反而单测红"(任务底线第二条)。
 #
 # Wave 5 二次续作 P1(新)-B 警告: 该 env var **CI 默认未启用**(见文件头红框)。
-# 任何执行环境(CI / 本地 / 远程 runner)若未显式 export `TABTIN_REAL_DB_TEST=1`,
+# 任何执行环境(CI / 本地 / 远程 runner)若未显式 export `MUSE_REAL_DB_TEST=1`,
 # 5 个真 ORM 用例**全部 skip**,反思 9 防线形同虚设 —— 等于没测。
-_REQUIRES_REAL_DB = os.getenv('TABTIN_REAL_DB_TEST') == '1'
+_REQUIRES_REAL_DB = os.getenv('MUSE_REAL_DB_TEST') == '1'
 
 
 class TrackerRunMetaResolutionContractTest(SimpleTestCase):
@@ -115,10 +115,10 @@ class TrackerRunMetaResolutionContractTest(SimpleTestCase):
         self.assertEqual(sample.tracker_run['tracker_trigger_type'], 'cron')
 
 
-# P0-7 续作: 真路径 TransactionTestCase 仅在 TABTIN_REAL_DB_TEST=1 下定义。
+# P0-7 续作: 真路径 TransactionTestCase 仅在 MUSE_REAL_DB_TEST=1 下定义。
 # Django test runner 在 setup_databases 阶段会扫描所有 TestCase 子类的 databases 属性,
 # 即便 setUpClass 抛 SkipTest 也已经晚了 — 必须从源头不定义,sqlite 默认环境才不会
-# 触发"创建 PG test DB"链路而失败。设了 TABTIN_REAL_DB_TEST=1 → 走 PG test DB,真路径生效。
+# 触发"创建 PG test DB"链路而失败。设了 MUSE_REAL_DB_TEST=1 → 走 PG test DB,真路径生效。
 if _REQUIRES_REAL_DB:
     class TrackerRunMetaResolutionRealOrmTest(TransactionTestCase):
         """P0-7 修复(总控反思 9 / 14 教训): 真实 ORM 路径走通跨库 conversation + scheduler。

@@ -7,7 +7,7 @@ import {
   beginCrawlViewMousePassthrough,
   endCrawlViewMousePassthrough,
 } from '../../crawlspace/crawl-view-mouse-passthrough-depth'
-import { toast } from '@tabtin/smartsheet-ui'
+import { toast } from '@muse/smartsheet-ui'
 import { useTranslation } from 'react-i18next'
 import {
   CRAWL_VIEW_LAYOUT_CHANGE_EVENT,
@@ -328,34 +328,34 @@ export const CanvasDragLayer: React.FC<CanvasDragLayerProps> = ({
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
-      window.__TABTIN_DRAG_DEBUG_SNAPSHOT__ = () => debugSnapshotRef.current
-      window.__TABTIN_DRAG_DEBUG_PRINT__ = () => {
+      window.__MUSE_DRAG_DEBUG_SNAPSHOT__ = () => debugSnapshotRef.current
+      window.__MUSE_DRAG_DEBUG_PRINT__ = () => {
         const payload = debugSnapshotRef.current
         const text = payload ? JSON.stringify(payload, null, 2) : ''
         console.info('[DragDebug] snapshot:', text)
-        window.__TABTIN_DRAG_DEBUG_TEXT__ = text
+        window.__MUSE_DRAG_DEBUG_TEXT__ = text
         return text
       }
-      window.__TABTIN_DRAG_DEBUG_COPY__ = async () => {
+      window.__MUSE_DRAG_DEBUG_COPY__ = async () => {
         const payload = debugSnapshotRef.current
         const text = payload ? JSON.stringify(payload, null, 2) : ''
-        window.__TABTIN_DRAG_DEBUG_TEXT__ = text
+        window.__MUSE_DRAG_DEBUG_TEXT__ = text
         try {
           await navigator.clipboard.writeText(text)
           console.info('[DragDebug] snapshot copied to clipboard')
         } catch (error) {
           console.warn('[DragDebug] copy failed', error)
-          console.info('[DragDebug] fallback: use __TABTIN_DRAG_DEBUG_TEXT__')
+          console.info('[DragDebug] fallback: use __MUSE_DRAG_DEBUG_TEXT__')
         }
       }
     }
     return () => {
       resetDragSession()
       if (typeof window !== 'undefined') {
-        delete window.__TABTIN_DRAG_DEBUG_SNAPSHOT__
-        delete window.__TABTIN_DRAG_DEBUG_COPY__
-        delete window.__TABTIN_DRAG_DEBUG_PRINT__
-        delete window.__TABTIN_DRAG_DEBUG_TEXT__
+        delete window.__MUSE_DRAG_DEBUG_SNAPSHOT__
+        delete window.__MUSE_DRAG_DEBUG_COPY__
+        delete window.__MUSE_DRAG_DEBUG_PRINT__
+        delete window.__MUSE_DRAG_DEBUG_TEXT__
       }
     }
     // 调试桥只跟随当前前台 Space 的 effect 生命周期；拖拽状态都从 ref 清理。
@@ -511,15 +511,15 @@ export const CanvasDragLayer: React.FC<CanvasDragLayerProps> = ({
         }
         debugSnapshotRef.current = snapshot
         if (typeof window !== 'undefined') {
-          window.__TABTIN_DRAG_DEBUG_LAST__ = snapshot
-          window.__TABTIN_DRAG_DEBUG_TEXT__ = JSON.stringify(snapshot, null, 2)
+          window.__MUSE_DRAG_DEBUG_LAST__ = snapshot
+          window.__MUSE_DRAG_DEBUG_TEXT__ = JSON.stringify(snapshot, null, 2)
         }
       } else if (debugActiveRef.current) {
         setDebugRects([])
         setDebugPoint(null)
         debugActiveRef.current = false
         if (typeof window !== 'undefined') {
-          window.__TABTIN_DRAG_DEBUG_TEXT__ = ''
+          window.__MUSE_DRAG_DEBUG_TEXT__ = ''
         }
       }
 

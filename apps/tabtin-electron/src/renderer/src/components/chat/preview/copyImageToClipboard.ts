@@ -21,7 +21,7 @@ export async function copyImageToClipboard(opts: {
 }): Promise<void> {
   const { url, fileId } = opts
   if (!url) throw new Error('Missing image url')
-  const writeImage = window.tabtin?.clipboard?.writeImage
+  const writeImage = window.muse?.clipboard?.writeImage
   if (!writeImage) {
     throw new Error('Clipboard image write unsupported')
   }

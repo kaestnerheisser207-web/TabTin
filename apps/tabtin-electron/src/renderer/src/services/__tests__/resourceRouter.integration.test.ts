@@ -21,7 +21,7 @@
  */
 
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
-import { parseResourcePointer } from '@tabtin/resource-router'
+import { parseResourcePointer } from '@muse/resource-router'
 
 import {
   resourceRouter,
@@ -103,7 +103,7 @@ describe('resourceRouter integration — sessionOverride wiring（P0 回归）',
       .getState()
       .setSessionOverride('type:document', 'tabweb')
 
-    const pointer = parseResourcePointer('tabtin://resource/document/doc_x')
+    const pointer = parseResourcePointer('muse://resource/document/doc_x')
     const out = await resourceRouter.open('space-1', pointer, {
       triggerSource: 'chat_markdown',
     })
@@ -128,7 +128,7 @@ describe('resourceRouter integration — sessionOverride wiring（P0 回归）',
       .getState()
       .setSessionOverride('type:document', 'tabweb')
 
-    const pointer = parseResourcePointer('tabtin://resource/document/doc_x')
+    const pointer = parseResourcePointer('muse://resource/document/doc_x')
     const out = await resourceRouter.open('space-1', pointer)
 
     expect(out.carrierAppId).toBe('tabcode')
@@ -146,7 +146,7 @@ describe('resourceRouter integration — sessionOverride wiring（P0 回归）',
     })
     useResourceOpenPreferences.getState().setPreference('type:document', 'tabweb')
 
-    const pointer = parseResourcePointer('tabtin://resource/document/doc_x')
+    const pointer = parseResourcePointer('muse://resource/document/doc_x')
     const out = await resourceRouter.open('space-1', pointer)
 
     expect(out.outcome).toBe('in_space_opened')
@@ -174,7 +174,7 @@ describe('resourceRouter integration — sessionOverride wiring（P0 回归）',
     expect(useResourceOpenPreferences.getState().sessionOverrides['type:document']).toBe('tabweb')
 
     // 下次 open 走 sessionOverride（user_pref 已清）
-    const pointer = parseResourcePointer('tabtin://resource/document/doc_x')
+    const pointer = parseResourcePointer('muse://resource/document/doc_x')
     const out = await resourceRouter.open('space-1', pointer)
     expect(out.carrierAppId).toBe('tabweb')
     expect(out.resolveSource).toBe('session_override')
@@ -187,7 +187,7 @@ describe('resourceRouter integration — sessionOverride wiring（P0 回归）',
         { appId: 'tabdoc', types: [{ type: 'document', priority: 100 }] },
       ],
     })
-    const pointer = parseResourcePointer('tabtin://resource/document/doc_x')
+    const pointer = parseResourcePointer('muse://resource/document/doc_x')
 
     // 第 1 次：右键"用 tabweb 打开"（forceCarrierAppId）
     useResourceOpenPreferences
@@ -221,7 +221,7 @@ describe('resourceRouter integration — sessionOverride wiring（P0 回归）',
         { appId: 'tabdoc', types: [{ type: 'document', priority: 100 }] },
       ],
     })
-    const pointer = parseResourcePointer('tabtin://resource/document/doc_x')
+    const pointer = parseResourcePointer('muse://resource/document/doc_x')
     const out = await resourceRouter.open('space-1', pointer)
     expect(out.carrierAppId).toBe('tabdoc')
     expect(out.resolveSource).toBe('manifest_default')
@@ -241,7 +241,7 @@ describe('resourceRouter integration — sessionOverride wiring（P0 回归）',
       .getState()
       .setSessionOverride('type:document', 'tabdoc')
 
-    const pointer = parseResourcePointer('tabtin://resource/document/doc_x')
+    const pointer = parseResourcePointer('muse://resource/document/doc_x')
     const out = await resourceRouter.open('space-1', pointer, {
       modifierExternal: true,
     })
@@ -279,7 +279,7 @@ describe('resourceRouter integration — TabData 记录定位', () => {
     })
 
     const pointer = parseResourcePointer(
-      'tabtin://resource/table/table-1?hint=tabdata&recordIds=record-42',
+      'muse://resource/table/table-1?hint=tabdata&recordIds=record-42',
     )
     await resourceRouter.open('space-1', pointer)
 

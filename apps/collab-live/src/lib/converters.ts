@@ -2,13 +2,13 @@
  * Y.js Binary ↔ 格式转换工具
  *
  * 将 Y.js binary (Uint8Array) 转换为 HTML / JSON / Plaintext / Markdown。
- * Schema 由 @tabtin/doc-editor 的 getDocServerSchema() 统一提供，
+ * Schema 由 @muse/doc-editor 的 getDocServerSchema() 统一提供，
  * 确保与编辑器支持的节点类型完全一致。
  */
 
 import * as Y from "yjs";
 import type { Schema } from "@tiptap/pm/model";
-import { getDocServerSchema } from "@tabtin/doc-editor";
+import { getDocServerSchema } from "@muse/doc-editor";
 import { prosemirrorJSONToYXmlFragment, yXmlFragmentToProseMirrorRootNode } from "y-prosemirror";
 
 const TOP_LEVEL_INLINE_TYPES = new Set(["text", "image", "mathematics", "hardBreak"]);
@@ -17,7 +17,7 @@ const TOP_LEVEL_INLINE_TYPES = new Set(["text", "image", "mathematics", "hardBre
  * Drop marks / attrs the current server schema does not know.
  *
  * Import drafts may emit newer marks (e.g. superscript) before collab-live has
- * been restarted onto a matching @tabtin/doc-editor build. nodeFromJSON would
+ * been restarted onto a matching @muse/doc-editor build. nodeFromJSON would
  * otherwise throw and force a lossy markdown fallback that strips color and
  * highlight for the entire document.
  */
@@ -134,12 +134,12 @@ export async function binaryToAllFormats(
   try {
     const pmNode = yXmlFragmentToProseMirrorRootNode(fragment, getDocServerSchema());
     const rawJson = pmNode.toJSON() as Record<string, unknown>;
-    const { repairLeakedHtmlBlockInPmJson } = await import("@tabtin/doc-editor");
+    const { repairLeakedHtmlBlockInPmJson } = await import("@muse/doc-editor");
     const { pmJson: json } = repairLeakedHtmlBlockInPmJson(rawJson);
 
     let html = "";
     try {
-      const { pmJsonToHtml } = await import("@tabtin/doc-editor");
+      const { pmJsonToHtml } = await import("@muse/doc-editor");
       html = pmJsonToHtml(json);
     } catch {
       html = "";
@@ -149,7 +149,7 @@ export async function binaryToAllFormats(
 
     let markdown = "";
     try {
-      const { pmJsonToMarkdown } = await import("@tabtin/doc-editor");
+      const { pmJsonToMarkdown } = await import("@muse/doc-editor");
       markdown = pmJsonToMarkdown(json);
     } catch {
       markdown = plaintext;
@@ -186,7 +186,7 @@ export async function markdownToUpdateBinary(
   markdown: string,
   fragmentName: string = "default"
 ): Promise<Uint8Array> {
-  const { markdownToPmJson } = await import("@tabtin/doc-editor");
+  const { markdownToPmJson } = await import("@muse/doc-editor");
 
   let pmJson: Record<string, unknown>;
   try {

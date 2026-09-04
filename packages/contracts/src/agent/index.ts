@@ -14,7 +14,7 @@ export type PermissionDecision = z.infer<typeof PermissionDecisionSchema>;
 /**
  * @deprecated  Phase 2：legacy 四档自动批准机制已整体下线——runtime 不再
  * 读写此字段（LocalPermissionHandler 不自动批准任何请求，判决权威是
- * `@tabtin/security-policy` judge() + ApprovalMode 三档）。schema 仅为 wire
+ * `@muse/security-policy` judge() + ApprovalMode 三档）。schema 仅为 wire
  * `permission_mode` optional 字段的向后兼容保留（Django 侧静默丢弃），
  * 禁止新增消费方。
  */

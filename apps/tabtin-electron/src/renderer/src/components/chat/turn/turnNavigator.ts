@@ -7,7 +7,7 @@
  * index 基于 MessageList 物化后的时间线数组（与 virtualizer 行下标一一对应），
  * 点击导航直接 scrollToIndex(entry.index)。
  */
-import type { ChatMessage } from '@tabtin/chat-client'
+import type { ChatMessage } from '@muse/chat-client'
 import { isRegularUserMessage } from '../../../stores/chat/messages/utils/semanticMessageCount'
 import { deriveUserMessageDisplayContent } from '../message'
 

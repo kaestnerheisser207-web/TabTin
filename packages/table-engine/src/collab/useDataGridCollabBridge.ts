@@ -7,7 +7,7 @@
 
 import { useCallback, useEffect, useMemo, useRef } from 'react'
 import * as Y from 'yjs'
-import type { Field, CreateRecordRequest, UpdateRecordRequest, TableRecord } from '@tabtin/table-core'
+import type { Field, CreateRecordRequest, UpdateRecordRequest, TableRecord } from '@muse/table-core'
 import {
   clearCreateLifecycles,
   markCreateDeleting,

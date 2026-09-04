@@ -14,7 +14,7 @@ vi.mock('react-i18next', () => ({
   }),
 }))
 
-vi.mock('@tabtin/smartsheet-ui', () => ({
+vi.mock('@muse/smartsheet-ui', () => ({
   DropdownMenu: ({ children }: { children: React.ReactNode }) => <div>{children}</div>,
   DropdownMenuContent: ({ children }: { children: React.ReactNode }) => <div>{children}</div>,
   DropdownMenuItem: ({

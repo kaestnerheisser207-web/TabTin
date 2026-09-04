@@ -13,8 +13,8 @@ import {
   CommandValidator,
   containsCommandSubstitution,
   CRITICAL_DENYLIST,
-} from '@tabtin/terminal-core'
-import { shellQuote, wrapCommand } from '@tabtin/pty-core'
+} from '@muse/terminal-core'
+import { shellQuote, wrapCommand } from '@muse/pty-core'
 
 // ---------------------------------------------------------------------------
 // P0-2: containsCommandSubstitution utility
@@ -139,8 +139,8 @@ describe('shellQuote', () => {
 
 describe('wrapCommand', () => {
   const markers = {
-    startMarker: '__TABTIN_CMD_START_abc123',
-    endMarkerPrefix: '__TABTIN_CMD_END_abc123_',
+    startMarker: '__MUSE_CMD_START_abc123',
+    endMarkerPrefix: '__MUSE_CMD_END_abc123_',
   }
 
   it('uses single-quoted cd for workingDirectory', () => {

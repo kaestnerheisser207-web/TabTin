@@ -20,8 +20,8 @@ import os
 from .settings import *  # noqa: F401,F403
 
 # 单库语义：cascade_service 经 postgres_app_db_alias() 取 alias。
-TABTIN_DATABASE_MODE = "single_pg"
-TABTIN_SINGLE_DATABASE_MODE = True
+MUSE_DATABASE_MODE = "single_pg"
+MUSE_SINGLE_DATABASE_MODE = True
 os.environ["USE_SQLITE_FOR_TESTS"] = "0"
 
 

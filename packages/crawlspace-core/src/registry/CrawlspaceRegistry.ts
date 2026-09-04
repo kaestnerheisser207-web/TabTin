@@ -152,7 +152,7 @@ export class CrawlspaceRegistry implements ICrawlspaceRegistry {
  *
  * @example
  * ```typescript
- * import { crawlspaceRegistry } from '@tabtin/crawlspace-core'
+ * import { crawlspaceRegistry } from '@muse/crawlspace-core'
  *
  * crawlspaceRegistry.register(myPlugin)
  * ```

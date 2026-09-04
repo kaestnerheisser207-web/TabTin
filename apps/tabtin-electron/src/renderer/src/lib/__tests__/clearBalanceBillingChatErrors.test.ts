@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest'
-import type { ChatMessage } from '@tabtin/chat-client'
+import type { ChatMessage } from '@muse/chat-client'
 import {
   BILLING_ERROR_RESOLVED_META_KEY,
   clearBalanceBillingErrorsInChatStore,

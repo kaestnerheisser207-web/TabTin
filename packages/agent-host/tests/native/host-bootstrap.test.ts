@@ -23,7 +23,7 @@ import * as fs from 'node:fs';
 import * as path from 'node:path';
 import * as os from 'node:os';
 
-import { ExecutionBackendRegistry } from '@tabtin/terminal-core';
+import { ExecutionBackendRegistry } from '@muse/terminal-core';
 import { bootstrapNativeBackend } from '../../src/native/host-bootstrap.js';
 
 let tmpDir: string;

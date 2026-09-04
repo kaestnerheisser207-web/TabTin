@@ -10,8 +10,8 @@ import {
 import {
   analyzeBrowserNetworkToOpenApi,
   normalizeBrowserNetworkEntries,
-} from '@tabtin/browser-core';
-import { okResponse } from '@tabtin/agent-wire';
+} from '@muse/browser-core';
+import { okResponse } from '@muse/agent-wire';
 
 function flag(body: any, camel: string, snake: string): boolean | undefined {
   if (typeof body?.[camel] === 'boolean') return body[camel];

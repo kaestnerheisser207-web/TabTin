@@ -19,7 +19,7 @@ vi.mock('react-i18next', () => ({
   }),
 }))
 
-vi.mock('@tabtin/smartsheet-ui', () => ({ toast: vi.fn() }))
+vi.mock('@muse/smartsheet-ui', () => ({ toast: vi.fn() }))
 
 vi.mock('@stores/useAuthStore', () => ({
   useAuthStore: (selector: (state: { user: { id: string } }) => unknown) =>

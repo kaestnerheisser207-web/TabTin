@@ -9,15 +9,15 @@ import {
   FormLabel,
   FormMessage,
   LoadingSpinner,
-} from '@tabtin/smartsheet-ui'
+} from '@muse/smartsheet-ui'
 import { useAuthStore } from '@/stores/auth-store'
 import { authApi } from '@/services/auth-api'
 import { extractErrorMessage } from '@/utils/extract-api-error'
 import { PasswordStrengthIndicator } from './PasswordStrengthIndicator'
 import type { PasswordStrength } from '@/types/auth'
 import { useTranslation } from 'react-i18next'
-import { useRegisterForm, CN_MOBILE_PHONE_MAX_LENGTH, parseEmailLoginEnabled } from '@tabtin/shared/auth-forms'
-import { useCapsLockWarning } from '@tabtin/shared/use-caps-lock-warning'
+import { useRegisterForm, CN_MOBILE_PHONE_MAX_LENGTH, parseEmailLoginEnabled } from '@muse/shared/auth-forms'
+import { useCapsLockWarning } from '@muse/shared/use-caps-lock-warning'
 import { CapsLockHint } from './CapsLockHint'
 
 const AUTH_EMAIL_LOGIN_ENABLED = parseEmailLoginEnabled(

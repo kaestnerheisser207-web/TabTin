@@ -16,7 +16,7 @@
 
 import React from 'react'
 import { CircleAlert } from 'lucide-react'
-import { toast as nativeToast, ToastAction } from '@tabtin/smartsheet-ui/toast'
+import { toast as nativeToast, ToastAction } from '@muse/smartsheet-ui/toast'
 import i18n from '@/i18n'
 
 // ── 已知计费错误码（大写） ────────────────────────────────────────────────────

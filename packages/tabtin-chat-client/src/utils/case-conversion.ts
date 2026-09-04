@@ -1,5 +1,5 @@
 /**
- * @tabtin/chat-client 类型边界 — snake_case ↔ camelCase 转换工具
+ * @muse/chat-client 类型边界 — snake_case ↔ camelCase 转换工具
  *
  * **背景**(charter v1.8 §4.4 + Wave 6 mini 二次验证 P1):
  *   chat-client schema 沿用后端 Django/REST 习惯(snake_case),main 进程 types

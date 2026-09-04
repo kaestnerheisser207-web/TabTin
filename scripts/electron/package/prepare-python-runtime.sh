@@ -3,7 +3,7 @@
 #
 # 用法：
 #   bash scripts/electron/package/prepare-python-runtime.sh \
-#     --platform darwin-arm64 --profile production --deploy-dir /path/to/tabtin-python-runtime-src
+#     --platform darwin-arm64 --profile production --deploy-dir /path/to/muse-python-runtime-src
 set -euo pipefail
 
 REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../../.." && pwd)"
@@ -58,8 +58,8 @@ python_runtime_manifest_has_platform() {
   )
 }
 
-if [ "${TABTIN_SKIP_PYTHON_RUNTIME_BUILD:-0}" != "1" ]; then
-  TABTIN_PYTHON_RUNTIME_REQUIRED="$REQUIRED" \
+if [ "${MUSE_SKIP_PYTHON_RUNTIME_BUILD:-0}" != "1" ]; then
+  MUSE_PYTHON_RUNTIME_REQUIRED="$REQUIRED" \
     bash "$REPO_ROOT/scripts/electron/package/build-python-runtime-for-target.sh" "$PLATFORM" \
     || {
       if [ "$REQUIRED" -eq 1 ]; then

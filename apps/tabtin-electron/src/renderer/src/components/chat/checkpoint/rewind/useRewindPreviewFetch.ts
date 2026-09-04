@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
-import { toast } from '@tabtin/smartsheet-ui'
+import { toast } from '@muse/smartsheet-ui'
 import type { RollbackPreviewResult } from '../../../../services/chatExtraApi'
 import * as chatExtraApi from '../../../../services/chatExtraApi'
 import { useChatStore } from '../../../../stores/chat/useChatStore'

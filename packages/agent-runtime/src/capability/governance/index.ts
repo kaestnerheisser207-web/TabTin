@@ -11,7 +11,7 @@
  * **下游消费方**：
  *   - `capability/index.ts` —— 顶层 barrel 通过本文件 re-export
  *   - W2.3 宿主装配代码（ElectronAgentHost / DaemonAgentHost）通过
- *     `@tabtin/agent-runtime/capability` import 实例化
+ *     `@muse/agent-runtime/capability` import 实例化
  */
 
 export {

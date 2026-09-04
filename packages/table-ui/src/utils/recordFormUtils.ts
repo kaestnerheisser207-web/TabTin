@@ -1,5 +1,5 @@
-import type { FieldDefinition } from '@tabtin/smartsheet-ui'
-import type { FieldDefaultValue } from '@tabtin/table-core'
+import type { FieldDefinition } from '@muse/smartsheet-ui'
+import type { FieldDefaultValue } from '@muse/table-core'
 
 export const RECORD_FORM_ALLOWED_FIELD_TYPES: ReadonlySet<FieldDefinition['field_type']> = new Set([
   'text',

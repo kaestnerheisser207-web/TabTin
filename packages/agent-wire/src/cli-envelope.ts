@@ -40,7 +40,7 @@
  *     guard until W6 / W7 deletes it altogether.
  *
  *   - WS Gateway protocol — uses `GatewayEnvelope` (canonical schema lives
- *     in `@tabtin/contracts/agent`; this package re-exports it from
+ *     in `@muse/contracts/agent`; this package re-exports it from
  *     `./index.ts`). D-7 in the contract RFC keeps streaming envelopes out
  *     of scope.
  *

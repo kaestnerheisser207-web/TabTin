@@ -1,5 +1,5 @@
 /**
- * @tabtin/local-docparse — 业务类型定义
+ * @muse/local-docparse — 业务类型定义
  *
  * 所有"对外"契约类型集中在这里，主入口 `parseLocalAttachment` 与两侧宿主
  * （Electron / Daemon）共享同一份语义。
@@ -8,7 +8,7 @@
  * 各自决定 snake_case 转换）。
  *
  * **W1（2026-05-13）错误码统一**：旧 `LocalDocParseErrorClass` 自定义 10 类
- * union 整体退役，改为 re-export `@tabtin/file-pipeline-errors` 的全局
+ * union 整体退役，改为 re-export `@muse/file-pipeline-errors` 的全局
  * `FilePipelineErrorCode`。两个原因：
  *
  *   1. **SSoT** —— file pipeline 13 类错误码（含 local-docparse 用的 8 种 +
@@ -31,9 +31,9 @@
 
 import type {
   FilePipelineErrorCode,
-} from '@tabtin/file-pipeline-errors';
+} from '@muse/file-pipeline-errors';
 
-export { FilePipelineErrorCode } from '@tabtin/file-pipeline-errors';
+export { FilePipelineErrorCode } from '@muse/file-pipeline-errors';
 
 /**
  * Local docparse 错误分类 —— 直接复用 file-pipeline-errors 全局 enum 的字符串值。

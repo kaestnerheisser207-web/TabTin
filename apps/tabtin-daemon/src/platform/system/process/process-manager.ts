@@ -3,7 +3,7 @@ import lockfile from 'proper-lockfile';
 import type { ConfigManager } from '../config/config-manager.js';
 import type { Logger } from '../../observability/logging/logger.js';
 import { captureFatal } from '../../observability/logging/sentry.js';
-import { atomicWriteFileSync } from '@tabtin/terminal-core';
+import { atomicWriteFileSync } from '@muse/terminal-core';
 
 const GRACEFUL_TIMEOUT_MS = 15_000;
 const MAX_UNHANDLED_REJECTIONS = 3;

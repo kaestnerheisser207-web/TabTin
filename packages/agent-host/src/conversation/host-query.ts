@@ -16,7 +16,7 @@
  *    to reuse / rebuild.
  */
 
-import type { StreamEvent } from '@tabtin/agent-runtime'
+import type { StreamEvent } from '@muse/agent-runtime'
 import type { ExecutionOwner } from '../runtime/execution-owner-lifecycle.js'
 import type { RuntimeSessionRequest } from '../runtime/runtime-session-factory.js'
 import type { QueryWorkspaceSnapshotIncoming } from './query-session-mutate.js'

@@ -1,6 +1,6 @@
 import { hostname } from 'os'
 import { basename, join, resolve, extname, sep } from 'path'
-import { getHomeTabtinPath } from '@tabtin/shared/storage-paths'
+import { getHomeTabtinPath } from '@muse/shared/storage-paths'
 import * as fsSync from 'node:fs'
 
 import { app, BrowserWindow, dialog, ipcMain, nativeTheme, powerSaveBlocker } from 'electron'
@@ -22,20 +22,20 @@ import { registerAppDiscoveryIpc, initAppDiscoveryPatterns } from './services/Ap
 import { registerOverlayIpc, OVERLAY_IPC_CHANNELS } from './overlay/overlay-ipc'
 import { getMainWindow, getIMWindow } from './window-manager'
 import { setSearchEngineTemplate } from './context-menu/browser-search-engine'
-import { okResponse, errResponse } from '@tabtin/agent-wire'
+import { okResponse, errResponse } from '@muse/agent-wire'
 import { guardedHandle, guardedOn } from './utils/guarded-handle'
 import { registerSurfaceAsIpc } from './wire/register-surface-as-ipc'
 import { registerAgentImportSurfaces, IMPORT_SURFACE_CHANNELS, IMPORT_ARCHIVE_CHANNELS } from './agent-import'
-import { createSpaceSetActiveSurface } from '@tabtin/cli-server-core/surfaces/space-set-active'
-import { createSkillInstallSurface } from '@tabtin/cli-server-core/surfaces/skill-install'
-import { createSkillUninstallSurface } from '@tabtin/cli-server-core/surfaces/skill-uninstall'
+import { createSpaceSetActiveSurface } from '@muse/cli-server-core/surfaces/space-set-active'
+import { createSkillInstallSurface } from '@muse/cli-server-core/surfaces/skill-install'
+import { createSkillUninstallSurface } from '@muse/cli-server-core/surfaces/skill-uninstall'
 import { setCLISpaceContext } from './cli/cli-server'
 import { getCLIOrganizationId } from './cli/cli-context'
 import { requestSpacePrewarm } from './agent/space-prewarm'
 import { setCurrentSpaceDevicePermissions } from './cli/cli-space-desktop-cache'
-import { resolveSpacesRoot, resolveDataRoot } from '@tabtin/terminal-core'
-import { resolveSpaceWorkspaceRoot, resolveOrganizationSkillDir, resolveUserSkillDir } from '@tabtin/agent-runtime'
-import { installSkillFromBundle, uninstallSkillLocal, isValidSkillKey } from '@tabtin/agent-host/skills'
+import { resolveSpacesRoot, resolveDataRoot } from '@muse/terminal-core'
+import { resolveSpaceWorkspaceRoot, resolveOrganizationSkillDir, resolveUserSkillDir } from '@muse/agent-runtime'
+import { installSkillFromBundle, uninstallSkillLocal, isValidSkillKey } from '@muse/agent-host/skills'
 import { TokenManager } from './auth'
 import { stat } from 'node:fs/promises'
 import * as DesktopUseGuard from './services/DesktopUseGuard'
@@ -78,7 +78,7 @@ export function registerMainProcessIPCHandlers(dependencies: MainProcessIpcRegis
 
   guardedOn('browser-prefs:access-policy', async (_event, policy: string) => {
     try {
-      const { getSharedAccessStrategyService } = await import('@tabtin/browser-core')
+      const { getSharedAccessStrategyService } = await import('@muse/browser-core')
       const service = getSharedAccessStrategyService()
       service.setPolicy(policy as 'auto' | 'enhanced' | 'off')
       ipcLog.info(`用户切换访问策略: ${policy}`)

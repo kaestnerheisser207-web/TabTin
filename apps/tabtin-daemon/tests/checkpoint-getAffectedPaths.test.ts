@@ -43,7 +43,7 @@ const mockLogger = {
   info: vi.fn(), warn: vi.fn(), error: vi.fn(), debug: vi.fn(),
 }
 
-import { CheckpointService } from '@tabtin/checkpoint-core'
+import { CheckpointService } from '@muse/checkpoint-core'
 
 describe('CheckpointService.getAffectedPaths', () => {
   let service: CheckpointService

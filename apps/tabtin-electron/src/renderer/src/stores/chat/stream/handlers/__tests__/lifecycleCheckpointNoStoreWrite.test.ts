@@ -3,7 +3,7 @@
  * ：pending 队列 FIFO consume；无 pending 时不 createCheckpoint。
  */
 import { beforeEach, describe, expect, it, vi } from 'vitest'
-import type { ChatMessage } from '@tabtin/chat-client'
+import type { ChatMessage } from '@muse/chat-client'
 import type { CheckpointPendingContext } from '../../../checkpoint/handlers/checkpointAnchor'
 
 const createCheckpoint = vi.fn().mockResolvedValue(undefined)

@@ -19,8 +19,8 @@ import {
 import type {
   Tool,
   ToolContext,
-} from '@tabtin/agent-runtime';
-import { MemoryToolResultStorage } from '@tabtin/agent-runtime/engine';
+} from '@muse/agent-runtime';
+import { MemoryToolResultStorage } from '@muse/agent-runtime/engine';
 
 const noopContext: ToolContext = {
   threadId: 't-test',

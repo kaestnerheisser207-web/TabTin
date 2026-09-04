@@ -52,7 +52,7 @@ import {
 } from '@components/settings/panels/MyAgentsPanel'
 import { personaFirstLinePreview } from '@components/chat/model/AgentModeSelector'
 import type { OrganizationAgentSummary } from '@/services/organizationAgentsApi'
-import type { UpdateAgentRequest } from '@tabtin/app-shell'
+import type { UpdateAgentRequest } from '@muse/app-shell'
 import { AGENT_NAME_OWNER_TOKEN } from '@utils/agentNameInterpolation'
 import { extractAgentCustomAvatarUrl } from '@/utils/resolveAgentAvatar'
 import {

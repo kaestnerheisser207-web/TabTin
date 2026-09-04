@@ -23,8 +23,8 @@
 import React, { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Sparkles, Link2, ChevronDown, ChevronRight, Upload } from 'lucide-react'
-import type { TabTinRichContentBlock, TabTinSkillInvocationBlock, TabTinSourceRefBlock, TabTinApprovalRequestBlock } from '@tabtin/agent-wire'
-import type { RichContentBlock, RichContentKind, MessageBlock } from '@tabtin/chat-client'
+import type { TabTinRichContentBlock, TabTinSkillInvocationBlock, TabTinSourceRefBlock, TabTinApprovalRequestBlock } from '@muse/agent-wire'
+import type { RichContentBlock, RichContentKind, MessageBlock } from '@muse/chat-client'
 import { cn } from '@utils/cn'
 import {
   RichImage,

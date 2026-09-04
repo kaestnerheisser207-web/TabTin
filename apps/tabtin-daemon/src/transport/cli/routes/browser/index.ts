@@ -6,7 +6,7 @@
  */
 
 import http from 'node:http';
-import { type BrowserActionResult } from '@tabtin/browser-core';
+import { type BrowserActionResult } from '@muse/browser-core';
 import type { CliRequestContext } from '../../cli-context.js';
 import type { BrowserApplicationPort } from '../../../../base/browser/browser-application-port.js';
 import { errorResponse, okResponse, type SendJSON } from '../shared/error-handler.js';

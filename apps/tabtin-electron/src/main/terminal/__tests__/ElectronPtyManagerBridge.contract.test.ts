@@ -9,8 +9,8 @@
  */
 
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import { type AgentSessionCloseReason } from '@tabtin/terminal-core';
-import type { PtyHostClient, PtyHostSession, PtySessionCloseReason } from '@tabtin/pty-core';
+import { type AgentSessionCloseReason } from '@muse/terminal-core';
+import type { PtyHostClient, PtyHostSession, PtySessionCloseReason } from '@muse/pty-core';
 import { describeAgentBridgeContract } from '../../../../../../packages/terminal-core/src/agent-bridge-contract';
 import { PtyManager } from '../PtyManager';
 import {

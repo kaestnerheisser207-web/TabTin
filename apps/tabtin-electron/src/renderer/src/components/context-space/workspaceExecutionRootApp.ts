@@ -7,7 +7,7 @@
  * CollapsedCanvasRail、DesktopHomePane 等 UI 共用同一套解析与打开逻辑。
  */
 import type { TFunction } from 'i18next'
-import type { Agent } from '@tabtin/app-shell'
+import type { Agent } from '@muse/app-shell'
 import { contextRegistry } from './registry'
 import { useFolderContextStore } from './folder/useFolderStore'
 import { useSpaceContextTabsStore } from '@stores/useSpaceContextTabsStore'

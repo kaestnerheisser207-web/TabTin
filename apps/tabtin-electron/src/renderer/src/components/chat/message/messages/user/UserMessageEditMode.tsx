@@ -1,7 +1,7 @@
 import React, { useState, useCallback, useRef, useEffect, useMemo } from 'react'
 import { cn } from '@utils/cn'
 import { CHAT_MESSAGE_TEXT_BODY } from '../../../registry/chatDesignTokens'
-import type { ChatMessage } from '@tabtin/chat-client'
+import type { ChatMessage } from '@muse/chat-client'
 import { useTranslation } from 'react-i18next'
 import { AlertTriangle, FileText, Mic, Paperclip, RotateCcw, Send, X } from 'lucide-react'
 import { Button, toast } from '@components/ui'
@@ -288,7 +288,7 @@ export const UserMessageEditMode: React.FC<{
         }
       }
     }
-    // eslint-disable-next-line tabtin/prefer-scoped-activity-effects -- 编辑框打开期间的录音快捷键监听，effect 已由 voiceEnabled 和组件卸载精确收口。
+    // eslint-disable-next-line muse/prefer-scoped-activity-effects -- 编辑框打开期间的录音快捷键监听，effect 已由 voiceEnabled 和组件卸载精确收口。
     window.addEventListener('keydown', handleVoiceShortcut)
     return () => window.removeEventListener('keydown', handleVoiceShortcut)
   }, [isRestoring, wsDisconnected, isVoiceActive, voiceShortcut, voiceStart, voiceEnabled, micBlocked])

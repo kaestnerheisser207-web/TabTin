@@ -23,7 +23,7 @@
 import React, { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { cn } from '@utils/cn'
-import type { CliSpecForUI } from '@tabtin/chat-client'
+import type { CliSpecForUI } from '@muse/chat-client'
 
 interface HitlResourceLabelProps {
   cliSpec?: CliSpecForUI | null

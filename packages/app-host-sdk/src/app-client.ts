@@ -13,7 +13,7 @@ type ContextUpdateHandler = (update: AppHostContextUpdate) => void
  *
  * 两种创建方式:
  * - `fromContext(ctx)`: builtin in-process（宿主直接注入 context）
- * - `fromPreload()`: marketplace WebContentsView（读取 window.tabtin.appHost bridge）
+ * - `fromPreload()`: marketplace WebContentsView（读取 window.muse.appHost bridge）
  */
 export class AppHostClient {
   private _ctx: AppHostContext
@@ -36,13 +36,13 @@ export class AppHostClient {
 
   /**
    * marketplace WebContentsView：从 preload bridge 读取 context
-   * 需要宿主事先在 preload 中暴露 `window.tabtin.appHost`
+   * 需要宿主事先在 preload 中暴露 `window.muse.appHost`
    */
   static fromPreload(): AppHostClient {
     const bridge = (globalThis as any).tabtin?.appHost
     if (!bridge) {
       throw new Error(
-        '[AppHostClient] window.tabtin.appHost bridge not found. ' +
+        '[AppHostClient] window.muse.appHost bridge not found. ' +
         'Ensure App is loaded inside a managed WebContentsView with proper preload.'
       )
     }

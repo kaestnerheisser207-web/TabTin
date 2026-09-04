@@ -13,7 +13,7 @@ from __future__ import annotations
 
 from typing import Any, Dict, Protocol, runtime_checkable
 
-from tabtin_filegen.errors import UnsupportedTypeError
+from muse_filegen.errors import UnsupportedTypeError
 
 
 @runtime_checkable

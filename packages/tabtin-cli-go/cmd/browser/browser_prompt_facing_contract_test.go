@@ -12,7 +12,7 @@
 // fixture 更新（从仓库根执行）：
 //
 //	cd packages/tabtin-cli-go &&
-//	TABTIN_BROWSER_PROMPT_CONTRACT_EXPORT=../../packages/agent-prompt/src/__tests__/fixtures/browser-cli-prompt-contract.json \
+//	MUSE_BROWSER_PROMPT_CONTRACT_EXPORT=../../packages/agent-prompt/src/__tests__/fixtures/browser-cli-prompt-contract.json \
 //	  go test ./cmd/browser -run TestExportBrowserPromptFacingContractFixture -count=1
 package browser
 
@@ -137,15 +137,15 @@ func TestBrowserPromptFacingCLIContract(t *testing.T) {
 		gotJSON, _ := marshalBrowserPromptFacingContract(got)
 		wantJSON, _ := marshalBrowserPromptFacingContract(want)
 		t.Fatalf("%s 与 live browser CommandDef 树不一致\nwant fixture:\n%s\ngot live tree:\n%s\n"+
-			"运行文件头的 TABTIN_BROWSER_PROMPT_CONTRACT_EXPORT 命令更新 fixture",
+			"运行文件头的 MUSE_BROWSER_PROMPT_CONTRACT_EXPORT 命令更新 fixture",
 			browserPromptFacingContractFixtureRelPath, wantJSON, gotJSON)
 	}
 }
 
 func TestExportBrowserPromptFacingContractFixture(t *testing.T) {
-	outPath := os.Getenv("TABTIN_BROWSER_PROMPT_CONTRACT_EXPORT")
+	outPath := os.Getenv("MUSE_BROWSER_PROMPT_CONTRACT_EXPORT")
 	if outPath == "" {
-		t.Skip("TABTIN_BROWSER_PROMPT_CONTRACT_EXPORT 未设置")
+		t.Skip("MUSE_BROWSER_PROMPT_CONTRACT_EXPORT 未设置")
 	}
 	raw, err := marshalBrowserPromptFacingContract(buildBrowserPromptFacingContract(t))
 	if err != nil {

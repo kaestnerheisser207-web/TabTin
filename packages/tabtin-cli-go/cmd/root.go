@@ -36,7 +36,7 @@ var timeNow = time.Now
 // 后端权威字典。fetch 失败时 pkgGuessContentType 内部 fallback 到内置兜底,生产不破。
 func registerPkgContentTypeFetcher(f *cmdutil.Factory) {
 	pkgSetContentTypeFetchOverride(func(fetchCtx context.Context) (map[string]string, string, error) {
-		// 容忍 profile 加载失败：TABTIN_API_URL 环境变量已能驱动 baseURL，
+		// 容忍 profile 加载失败：MUSE_API_URL 环境变量已能驱动 baseURL，
 		// profile 缺失时（首次启动 / 测试场景）应继续走 env-only 路径，
 		// 而不是直接返回错误把整个 fetcher 拉死。
 		profile, _ := f.Profile()
@@ -79,32 +79,32 @@ func Execute() int {
 		PersistentPreRunE: func(cmd *cobra.Command, args []string) error {
 			profileFlag, _ := cmd.Flags().GetString("profile")
 			if profileFlag != "" {
-				os.Setenv("TABTIN_PROFILE", profileFlag)
+				os.Setenv("MUSE_PROFILE", profileFlag)
 				f.ResetTransport()
 			}
 			agentID, _ := cmd.Flags().GetString("agent-id")
 			if agentID != "" {
-				os.Setenv("TABTIN_AGENT_ID", agentID)
+				os.Setenv("MUSE_AGENT_ID", agentID)
 			}
 			//  Space 终态退役：--workspace-id 是终态 flag；--space-id 是过渡期
-			// 别名。两者均把值写入 TABTIN_WORKSPACE_ID + TABTIN_SPACE_ID，让还未
+			// 别名。两者均把值写入 MUSE_WORKSPACE_ID + MUSE_SPACE_ID，让还未
 			// 迁移的代码路径继续读老 env。同时给 --space-id 一条 stderr 提示。
 			workspaceID, _ := cmd.Flags().GetString("workspace-id")
 			if workspaceID != "" {
-				os.Setenv("TABTIN_WORKSPACE_ID", workspaceID)
-				os.Setenv("TABTIN_SPACE_ID", workspaceID)
+				os.Setenv("MUSE_WORKSPACE_ID", workspaceID)
+				os.Setenv("MUSE_SPACE_ID", workspaceID)
 			}
 			spaceID, _ := cmd.Flags().GetString("space-id")
 			if spaceID != "" {
 				fmt.Fprintln(os.Stderr, "warning: --space-id 已改名为 --workspace-id。旧 flag 将在后续版本移除。")
-				os.Setenv("TABTIN_SPACE_ID", spaceID)
+				os.Setenv("MUSE_SPACE_ID", spaceID)
 				if workspaceID == "" {
-					os.Setenv("TABTIN_WORKSPACE_ID", spaceID)
+					os.Setenv("MUSE_WORKSPACE_ID", spaceID)
 				}
 			}
 			organizationID, _ := cmd.Flags().GetString("organization-id")
 			if organizationID != "" {
-				os.Setenv("TABTIN_ORGANIZATION_ID", organizationID)
+				os.Setenv("MUSE_ORGANIZATION_ID", organizationID)
 			}
 			formatFlag, _ := cmd.Flags().GetString("format")
 			if formatFlag != "" {
@@ -122,7 +122,7 @@ func Execute() int {
 					))
 				}
 				f.Format = parsed
-			} else if os.Getenv("TABTIN_AGENT") == "1" {
+			} else if os.Getenv("MUSE_AGENT") == "1" {
 				f.Format = output.FormatAgent
 			} else if cfg, err := f.Config(); err == nil && cfg.Defaults.Format != "" {
 				f.Format = output.ParseFormat(cfg.Defaults.Format)
@@ -131,11 +131,11 @@ func Execute() int {
 			}
 			verbose, _ := cmd.Flags().GetBool("verbose")
 			if verbose {
-				os.Setenv("TABTIN_VERBOSE", "1")
+				os.Setenv("MUSE_VERBOSE", "1")
 			}
 			debug, _ := cmd.Flags().GetBool("debug")
 			if debug {
-				os.Setenv("TABTIN_DEBUG", "1")
+				os.Setenv("MUSE_DEBUG", "1")
 			}
 			noColor, _ := cmd.Flags().GetBool("no-color")
 			if noColor {
@@ -155,9 +155,9 @@ func Execute() int {
 				f.Format = output.FormatJSON
 				output.SetGlobalJQ(jqExpr)
 			}
-			// --quiet / -Q / TABTIN_QUIET=1 (Sprint 1.C)
+			// --quiet / -Q / MUSE_QUIET=1 (Sprint 1.C)
 			quiet, _ := cmd.Flags().GetBool("quiet")
-			if quiet || os.Getenv("TABTIN_QUIET") == "1" {
+			if quiet || os.Getenv("MUSE_QUIET") == "1" {
 				f.Quiet = true
 				output.SetQuietMode(true)
 			}
@@ -1069,7 +1069,7 @@ func globalFlagSchemas() []cmdutil.FlagSchema {
 		// v10.1 P2 修复：Sprint 1.C 新增的全局 flag 必须暴露给 agent discovery，
 		// 否则 `muse commands | jq '.data.global_flags'` 拿不到新能力，
 		// CLI-first 取向下 agent 无法动态发现 --quiet / --output。
-		{Name: "quiet", Type: "bool", Desc: "Suppress success stdout (error envelope still on stderr); also TABTIN_QUIET=1"},
+		{Name: "quiet", Type: "bool", Desc: "Suppress success stdout (error envelope still on stderr); also MUSE_QUIET=1"},
 		{Name: "output", Type: "string", Desc: "Write success response to file (long flag only; takes precedence over stdout; conflicts with --jq)"},
 	}
 }

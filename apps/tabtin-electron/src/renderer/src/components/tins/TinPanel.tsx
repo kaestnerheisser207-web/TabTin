@@ -6,7 +6,7 @@
 
 import React, { useEffect, useMemo, useState, useCallback, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Button, EmptyState, PanelLoadingState, Skeleton, StatusNotice } from '@tabtin/smartsheet-ui'
+import { Button, EmptyState, PanelLoadingState, Skeleton, StatusNotice } from '@muse/smartsheet-ui'
 import { DetailedRowListSkeleton } from '@components/common/ListSkeletons'
 import { useTinsStore } from '../../stores/useTinsStore'
 import { useResolvedOrganizationId } from '../../hooks/useResolvedOrganizationId'
@@ -76,7 +76,7 @@ export const TinPanel: React.FC<TinPanelProps> = ({ spaceId }) => {
 
   // 监听主进程激活状态变化
   useEffect(() => {
-    const unsub = window.tabtin?.tins?.onActivationChanged((data: { states: any[] }) => {
+    const unsub = window.muse?.tins?.onActivationChanged((data: { states: any[] }) => {
       useTinsStore.getState().setActivationStates(data.states)
     })
     return () => { unsub?.() }
@@ -87,7 +87,7 @@ export const TinPanel: React.FC<TinPanelProps> = ({ spaceId }) => {
   organizationIdRef.current = organizationId
 
   useEffect(() => {
-    const unsub = window.tabtin?.tins?.onPersistVariable(
+    const unsub = window.muse?.tins?.onPersistVariable(
       async (data: { instanceId: string; name: string; value: unknown }) => {
         const wsId = organizationIdRef.current
         if (!wsId) return
@@ -99,7 +99,7 @@ export const TinPanel: React.FC<TinPanelProps> = ({ spaceId }) => {
           await updateInstance(wsId, data.instanceId, { user_variables: newVars })
         } catch (e) {
           console.error('[TinPanel] Failed to persist variable:', e)
-          const { toast } = await import('@tabtin/smartsheet-ui')
+          const { toast } = await import('@muse/smartsheet-ui')
           toast({ title: t('toast.persistVarFailed'), variant: 'destructive' })
         }
       }
@@ -153,7 +153,7 @@ export const TinPanel: React.FC<TinPanelProps> = ({ spaceId }) => {
     setSandboxError(null)
     sandboxInstanceIdRef.current = targetId
 
-    window.tabtin?.tins?.prepareSandbox(targetId)
+    window.muse?.tins?.prepareSandbox(targetId)
       .then((result) => {
         if (preparingIdRef.current !== targetId) return
         if (result) setSandboxPaths(result)
@@ -168,7 +168,7 @@ export const TinPanel: React.FC<TinPanelProps> = ({ spaceId }) => {
 
     return () => {
       if (sandboxInstanceIdRef.current) {
-        window.tabtin?.tins?.cleanupSandbox(sandboxInstanceIdRef.current).catch(() => {})
+        window.muse?.tins?.cleanupSandbox(sandboxInstanceIdRef.current).catch(() => {})
       }
     }
   }, [activeTinPanel?.id, sandboxRetryCount])

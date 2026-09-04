@@ -10,7 +10,7 @@ const { writeMock, toastSuccessMock } = vi.hoisted(() => ({
 vi.mock('react-i18next', () => ({
   useTranslation: () => ({ t: (_key: string, options?: { defaultValue?: string }) => options?.defaultValue ?? _key }),
 }))
-vi.mock('@tabtin/smartsheet-ui/toast', () => ({ toast: { success: toastSuccessMock, error: vi.fn() } }))
+vi.mock('@muse/smartsheet-ui/toast', () => ({ toast: { success: toastSuccessMock, error: vi.fn() } }))
 vi.mock('@/utils/logger', async (importOriginal) => ({
   ...(await importOriginal<typeof import('@/utils/logger')>()),
   createLogger: () => ({ debug: vi.fn(), info: vi.fn(), warn: vi.fn(), error: vi.fn() }),

@@ -1,4 +1,4 @@
-import type { CommentThread } from '@tabtin/tabdoc-ui/api-client'
+import type { CommentThread } from '@muse/tabdoc-ui/api-client'
 
 type LocalAnchorStatus = 'attached' | 'detached'
 

@@ -1,12 +1,12 @@
 /**
- * Local Approval Zod ↔ @tabtin/agent-wire 强度对齐。
+ * Local Approval Zod ↔ @muse/agent-wire 强度对齐。
  */
 
 import { describe, expect, it } from 'vitest';
 import {
   ApprovalRequestedPayloadSchema as WireApprovalSchema,
   DecisionReasonSchema as WireDecisionReasonSchema,
-} from '@tabtin/agent-wire';
+} from '@muse/agent-wire';
 
 import { ApprovalRequestedPayloadSchema } from '../approval-requested-schema.js';
 import { DecisionReasonSchema } from '../decision-reason-schema.js';

@@ -187,7 +187,7 @@ class AppPackageSkillsDiscoveryTest(SimpleTestCase):
 
 
 class ContainerRepoRootAppSkillsLoadTest(SimpleTestCase):
-    """#8726：容器布局下 AppPackageSkills 必须认 TABTIN_REPO_ROOT，不能走 path_utils 旧启发式。"""
+    """#8726：容器布局下 AppPackageSkills 必须认 MUSE_REPO_ROOT，不能走 path_utils 旧启发式。"""
 
     def test_load_app_payloads_honors_tabtin_repo_root_without_package_json(self):
         """
@@ -217,8 +217,8 @@ class ContainerRepoRootAppSkillsLoadTest(SimpleTestCase):
             )
             _write_skill(app_dir, "demo-operator", description="demo operator")
 
-            previous = os.environ.get("TABTIN_REPO_ROOT")
-            os.environ["TABTIN_REPO_ROOT"] = str(root)
+            previous = os.environ.get("MUSE_REPO_ROOT")
+            os.environ["MUSE_REPO_ROOT"] = str(root)
             get_repo_root.cache_clear()
             clear_app_payloads_cache()
             try:
@@ -242,9 +242,9 @@ class ContainerRepoRootAppSkillsLoadTest(SimpleTestCase):
                 )
             finally:
                 if previous is None:
-                    os.environ.pop("TABTIN_REPO_ROOT", None)
+                    os.environ.pop("MUSE_REPO_ROOT", None)
                 else:
-                    os.environ["TABTIN_REPO_ROOT"] = previous
+                    os.environ["MUSE_REPO_ROOT"] = previous
                 get_repo_root.cache_clear()
                 clear_app_payloads_cache()
 

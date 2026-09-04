@@ -6,7 +6,7 @@
     "toolInputsSchemaValid": true
   },
   "normalizedSnapshot": {
-    "finalAssistantText": "标题已成功修改。\n\n| 项目 | 内容 |\n|------|------|\n| 新标题 | 【测试-意图识别-001-已改】 |\n| 文档 ID | `<uuid>` |\n| 更新时间 | <datetime> |\n\n可点击 [【测试-意图识别-001-已改】](tabtin://resource/doc/<uuid>?hint=tabdoc) 查看文档。",
+    "finalAssistantText": "标题已成功修改。\n\n| 项目 | 内容 |\n|------|------|\n| 新标题 | 【测试-意图识别-001-已改】 |\n| 文档 ID | `<uuid>` |\n| 更新时间 | <datetime> |\n\n可点击 [【测试-意图识别-001-已改】](muse://resource/doc/<uuid>?hint=tabdoc) 查看文档。",
     "messagesShape": [
       "user:user_input",
       "user:user_input",

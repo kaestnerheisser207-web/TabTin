@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
-import { toast } from '@tabtin/smartsheet-ui'
+import { toast } from '@muse/smartsheet-ui'
 import { AuthPageShell } from '@/components/layout/AuthPageShell'
 import { ForgotPasswordForm } from '@/components/auth'
 

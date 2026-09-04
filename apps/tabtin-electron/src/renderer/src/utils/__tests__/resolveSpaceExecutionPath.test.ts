@@ -157,6 +157,6 @@ describe('resolveSpaceExecutionPath', () => {
     } as never)
 
     await expect(resolveSpaceExecutionPath()).resolves.toBeNull()
-    expect(window.tabtin?.fileSystem?.ensureSpaceSandbox).not.toHaveBeenCalled()
+    expect(window.muse?.fileSystem?.ensureSpaceSandbox).not.toHaveBeenCalled()
   })
 })

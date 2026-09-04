@@ -1,5 +1,5 @@
 # Tool-layer error_kind literals (agent-runtime TOOL_ERROR_KINDS, excluding
-# file-pipeline kinds which remain re-exported from @tabtin/file-pipeline-errors).
+# file-pipeline kinds which remain re-exported from @muse/file-pipeline-errors).
 #
 # Order is stable SSoT — must match historical TOOL_ERROR_KINDS prefix order.
 # include_in_tool_error_kinds defaults to true.

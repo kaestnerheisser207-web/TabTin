@@ -5,7 +5,7 @@
 import React, { useState, useEffect, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Search, Share2, Check } from 'lucide-react'
-import { toast } from '@tabtin/smartsheet-ui'
+import { toast } from '@muse/smartsheet-ui'
 import { Dialog, DialogContent, DialogTitle } from '@components/ui'
 import {
   listExternalContacts,

@@ -4,7 +4,7 @@
 # 流程（A1 + B1）：
 #   1. 从 python-build-standalone(astral) 下载 install_only_stripped 解释器（可重定位）
 #   2. 用该解释器 pip 安装冻结依赖到其自带 site-packages（离线、确定，避 Codex ）
-#   3. 打成 tabtin-python-runtime.tar.gz（内容 = dependencies/python 目录本体）
+#   3. 打成 muse-python-runtime.tar.gz（内容 = dependencies/python 目录本体）
 #   4. 算 sha256 + size 并打印
 #
 # 注意：manifest **不在此生成**——它在 electron 打包阶段由
@@ -16,7 +16,7 @@
 #   PY_VERSION                 默认 3.12.13     —— 解释器版本 pin
 #   PBS_RELEASE                默认 20260610    —— python-build-standalone release tag
 #   PBS_VARIANT                默认 install_only_stripped —— PBS 资产变体（可切 install_only）
-#   TABTIN_PBS_CACHE_DIR       可选            —— PBS 下载缓存目录（默认使用用户缓存目录）
+#   MUSE_PBS_CACHE_DIR       可选            —— PBS 下载缓存目录（默认使用用户缓存目录）
 #   TARGET_MANIFEST_PLATFORM   可选            —— 目标平台键（darwin-arm64 / darwin-x64 / win32-x64 …）
 #   TARGET_TRIPLE              可选            —— 覆盖 PBS 三元组（默认由 TARGET_MANIFEST_PLATFORM 推导）
 #   ARCHIVE_NAME               可选            —— 覆盖产物文件名（默认取 runtime.config.json archives）
@@ -85,7 +85,7 @@ derive_archive_name() {
     return 1
 }
 ARCHIVE_NAME="$(derive_archive_name || true)"
-[ -n "$ARCHIVE_NAME" ] || ARCHIVE_NAME="tabtin-python-runtime-${MANIFEST_PLATFORM}.tar.gz"
+[ -n "$ARCHIVE_NAME" ] || ARCHIVE_NAME="muse-python-runtime-${MANIFEST_PLATFORM}.tar.gz"
 mkdir -p "$RUNTIME_OUT_DIR"
 ARCHIVE_PATH="$RUNTIME_OUT_DIR/$ARCHIVE_NAME"
 

@@ -14,7 +14,7 @@ export function useWindowFullScreen(): boolean {
   const [isFullScreen, setIsFullScreen] = useState(false)
 
   useEffect(() => {
-    const controls = typeof window !== 'undefined' ? window.tabtin?.windowControls : undefined
+    const controls = typeof window !== 'undefined' ? window.muse?.windowControls : undefined
     if (!controls?.isFullScreen) return
     let active = true
     controls

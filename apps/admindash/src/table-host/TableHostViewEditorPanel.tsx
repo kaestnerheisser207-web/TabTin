@@ -6,7 +6,7 @@ import { ViewGroupsPanel } from '@/table-host/view-editor/ViewGroupsPanel'
 import { ViewSortsPanel } from '@/table-host/view-editor/ViewSortsPanel'
 import { ViewVisibilityPanel } from '@/table-host/view-editor/ViewVisibilityPanel'
 import type { FieldOption } from '@/table-host/view-editor/types'
-import type { ViewMeta } from '@tabtin/table-ui'
+import type { ViewMeta } from '@muse/table-ui'
 import { Save } from 'lucide-react'
 
 interface TableHostViewEditorPanelProps {

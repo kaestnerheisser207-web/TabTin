@@ -6,7 +6,7 @@
  *   - 并发 2（POC 建议：避免打爆 CPU）
  *   - app quit 自动 dispose
  *   - 默认 idle=30 分钟缩容（对齐 POC §5 R13 建议；避免半小时没上传 PDF 后又付 400ms 冷启动）
- *   - 环境变量：`TABTIN_DOC_PARSER_WORKERS`（1–4 并发）/ `TABTIN_DOC_PARSER_IDLE_MS`（0=永不缩容）
+ *   - 环境变量：`MUSE_DOC_PARSER_WORKERS`（1–4 并发）/ `MUSE_DOC_PARSER_IDLE_MS`（0=永不缩容）
  *
  * 测试环境（非 Electron）：dispose hook 自动忽略；runner 正常工作，便于单测
  * 直接调 `runDocParserTask` 而不需要 Electron 运行时。
@@ -28,22 +28,22 @@ import type {
 } from './doc-parser-tasks'
 
 // POC §2.Q2：warm pool 下 worker ≈ direct，2 个 worker 足以覆盖并发上传场景。
-// 若需更高并发（批量附件），后续可通过 TABTIN_DOC_PARSER_WORKERS 覆盖。
+// 若需更高并发（批量附件），后续可通过 MUSE_DOC_PARSER_WORKERS 覆盖。
 const WORKER_COUNT = Math.max(
   1,
-  Math.min(4, Number(process.env.TABTIN_DOC_PARSER_WORKERS) || 2),
+  Math.min(4, Number(process.env.MUSE_DOC_PARSER_WORKERS) || 2),
 )
-const WORKER_DEBUG = process.env.TABTIN_WORKER_DEBUG === '1'
+const WORKER_DEBUG = process.env.MUSE_WORKER_DEBUG === '1'
 
 /**
  * Worker 空闲回收时长（毫秒）。POC §5 R13 建议 30min 或 Infinity，避免"半小时
  * 没上传 PDF 后又付 400ms 冷启动"的偶发卡顿；H1-D-MAIN v1.0 默认 30s 偏短，
  * v1.1 改为 30 分钟，平衡冷启动体感 vs 闲置内存占用（~30MB）。
- * 可通过 `TABTIN_DOC_PARSER_IDLE_MS` 覆盖。
+ * 可通过 `MUSE_DOC_PARSER_IDLE_MS` 覆盖。
  */
 const IDLE_TIMEOUT_MS = Math.max(
   0,
-  Number(process.env.TABTIN_DOC_PARSER_IDLE_MS) || 30 * 60 * 1000,
+  Number(process.env.MUSE_DOC_PARSER_IDLE_MS) || 30 * 60 * 1000,
 )
 
 let runner: WorkerTaskRunner | null = null

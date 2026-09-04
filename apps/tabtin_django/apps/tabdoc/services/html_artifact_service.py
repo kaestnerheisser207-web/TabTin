@@ -35,7 +35,7 @@ logger = logging.getLogger("tabdoc.html_artifact")
 
 TABDOC_DB = (
     "default"
-    if getattr(settings, "TABTIN_SINGLE_DATABASE_MODE", False)
+    if getattr(settings, "MUSE_SINGLE_DATABASE_MODE", False)
     else "postgresql"
 )
 _HTML_EMBED_KEY_PREFIX = "tabdoc/html/"

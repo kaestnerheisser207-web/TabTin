@@ -10,8 +10,8 @@
  */
 import { describe, it, expect, vi } from 'vitest'
 import { render, screen } from '@testing-library/react'
-import type { Field, ViewMeta } from '@tabtin/table-core'
-import type { HistoryGroup } from '@tabtin/smartsheet-ui'
+import type { Field, ViewMeta } from '@muse/table-core'
+import type { HistoryGroup } from '@muse/smartsheet-ui'
 
 vi.setConfig({ testTimeout: 40_000, hookTimeout: 40_000 })
 
@@ -61,7 +61,7 @@ describe('CSC-021: GridToolbar 版本历史入口', () => {
 
 describe('CSC-024: NamedVersionItem group lookup', () => {
   it('groupOperations 返回的 group 可通过 id 查找匹配命名版本', async () => {
-    const { groupOperations } = await import('@tabtin/smartsheet-ui')
+    const { groupOperations } = await import('@muse/smartsheet-ui')
 
     const mockOps: Parameters<typeof groupOperations>[0] = [
       {

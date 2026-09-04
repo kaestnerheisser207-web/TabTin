@@ -15,7 +15,7 @@ export async function resolveDisplayAppVersion(): Promise<string> {
   if (buildVersion) return buildVersion
 
   try {
-    const ipcVersion = await window.tabtin?.updater?.getAppVersion?.()
+    const ipcVersion = await window.muse?.updater?.getAppVersion?.()
     return ipcVersion || ''
   } catch {
     return ''

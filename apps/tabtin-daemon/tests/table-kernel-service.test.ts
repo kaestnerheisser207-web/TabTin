@@ -6,7 +6,7 @@
  */
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { TableKernelService } from '../src/platform/table/table-kernel-service.js'
-import type { RemoteApiClient, DomainEventLike } from '@tabtin/table-kernel'
+import type { RemoteApiClient, DomainEventLike } from '@muse/table-kernel'
 
 function makeMockApiClient(opts?: { tableStatus?: string }): RemoteApiClient {
   const successEnvelope = (data: unknown) => ({ success: true, data })

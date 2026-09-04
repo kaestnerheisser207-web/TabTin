@@ -1177,7 +1177,7 @@ def _validate_db_bindings_at_startup() -> None:
         return
 
     from django.conf import settings
-    is_community = getattr(settings, "TABTIN_EDITION", "saas") == "community"
+    is_community = getattr(settings, "MUSE_EDITION", "saas") == "community"
 
     if binding_count == 0 and not is_community:
         # fresh deploy：放过，给运营 actionable hint

@@ -9,7 +9,7 @@
  * selectSession / loadSessions 等「拉已有内容」路径。
  */
 import { describe, it, expect, vi, beforeEach } from 'vitest'
-import type { ChatMessage, ChatSession } from '@tabtin/chat-client'
+import type { ChatMessage, ChatSession } from '@muse/chat-client'
 import {
   applyProvisionedSessionPointer,
   createSessionLifecycleAction,
@@ -67,7 +67,7 @@ vi.mock('@stores/useSpaceStore', () => ({
   },
 }))
 
-vi.mock('@tabtin/app-shell', () => ({
+vi.mock('@muse/app-shell', () => ({
   AgentApiService: {
     listAgents: (...args: unknown[]) => mockListAgents(...args),
   },

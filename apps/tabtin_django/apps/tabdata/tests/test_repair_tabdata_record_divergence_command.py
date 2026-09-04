@@ -107,7 +107,7 @@ class RepairTabDataRecordDivergenceCommandTests(TestCase):
         }
         apply_output = StringIO()
 
-        with patch.dict(os.environ, {"TABTIN_ENV": "ack-test"}, clear=False):
+        with patch.dict(os.environ, {"MUSE_ENV": "ack-test"}, clear=False):
             call_command(
                 "repair_tabdata_record_divergence",
                 "--table",
@@ -194,7 +194,7 @@ class RepairTabDataRecordDivergenceCommandTests(TestCase):
             flags=re.MULTILINE,
         ).group(1)
 
-        with patch.dict(os.environ, {"TABTIN_ENV": "ack-test"}, clear=False):
+        with patch.dict(os.environ, {"MUSE_ENV": "ack-test"}, clear=False):
             with self.assertRaisesMessage(CommandError, "--confirm-flush-pending-collab"):
                 call_command(
                     "repair_tabdata_record_divergence",
@@ -231,7 +231,7 @@ class RepairTabDataRecordDivergenceCommandTests(TestCase):
         self.tombstone.deleted_at = None
         self.tombstone.save(using=TABDATA_DB_ALIAS, update_fields=["is_deleted", "deleted_at"])
 
-        with patch.dict(os.environ, {"TABTIN_ENV": "ack-test"}, clear=False):
+        with patch.dict(os.environ, {"MUSE_ENV": "ack-test"}, clear=False):
             with self.assertRaisesMessage(CommandError, "plan_hash 已变化"):
                 call_command(
                     "repair_tabdata_record_divergence",
@@ -395,7 +395,7 @@ class RepairTabDataRecordDivergenceCommandTests(TestCase):
             flags=re.MULTILINE,
         ).group(1)
 
-        with patch.dict(os.environ, {"TABTIN_ENV": "ack-test"}, clear=False):
+        with patch.dict(os.environ, {"MUSE_ENV": "ack-test"}, clear=False):
             with self.assertRaisesMessage(CommandError, "--expected-space 与目标表归属不一致"):
                 call_command(
                     "repair_tabdata_record_divergence",
@@ -417,8 +417,8 @@ class RepairTabDataRecordDivergenceCommandTests(TestCase):
 
     @patch("apps.tabdata.management.commands.repair_tabdata_record_divergence.CollabService.apply_table_ops")
     def test_apply_is_rejected_outside_ack_test(self, apply_table_ops):
-        with patch.dict(os.environ, {"TABTIN_ENV": "production"}, clear=False):
-            with self.assertRaisesMessage(CommandError, "仅允许 TABTIN_ENV=ack-test"):
+        with patch.dict(os.environ, {"MUSE_ENV": "production"}, clear=False):
+            with self.assertRaisesMessage(CommandError, "仅允许 MUSE_ENV=ack-test"):
                 call_command(
                     "repair_tabdata_record_divergence",
                     "--table",

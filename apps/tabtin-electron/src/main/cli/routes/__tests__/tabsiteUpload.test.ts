@@ -41,7 +41,7 @@ vi.mock('../../cli-context', () => ({
   getCLIOrganizationRoot: mockGetCLIOrganizationRoot,
 }));
 
-vi.mock('@tabtin/terminal-core', () => ({
+vi.mock('@muse/terminal-core', () => ({
   resolveDataRoot: mockResolveSandboxRoot,
   resolveSpacesRoot: mockResolveSandboxRoot,
 }));
@@ -471,7 +471,7 @@ describe('upload-dist route — CDN URL 推导', () => {
       },
     );
 
-    process.env.TABTIN_CDN_DOMAIN = 'cdn.example.com';
+    process.env.MUSE_CDN_DOMAIN = 'cdn.example.com';
     try {
       await handleTabsiteRoute(
         '/site/upload-dist/site-1',
@@ -492,7 +492,7 @@ describe('upload-dist route — CDN URL 推导', () => {
         }),
       );
     } finally {
-      delete process.env.TABTIN_CDN_DOMAIN;
+      delete process.env.MUSE_CDN_DOMAIN;
     }
   });
 
@@ -570,15 +570,15 @@ describe('DVC-005 regression: cdnBaseUrl with instant-upload files', () => {
     mockExistsSync.mockReturnValue(true);
     mockResolveSandboxRoot.mockReturnValue('/sandbox');
     mockGetCLIOrganizationRoot.mockReturnValue('/sandbox');
-    delete process.env.TABTIN_CDN_DOMAIN;
+    delete process.env.MUSE_CDN_DOMAIN;
     delete process.env.ALIYUN_OSS_CDN_DOMAIN;
     delete process.env.ALIYUN_OSS_ENDPOINT;
-    delete process.env.TABTIN_OSS_DOMAIN;
+    delete process.env.MUSE_OSS_DOMAIN;
     delete process.env.ALIYUN_OSS_BUCKET;
   });
 
-  it('DVC-005: all files instant-uploaded, cdnBaseUrl resolved from TABTIN_CDN_DOMAIN', async () => {
-    process.env.TABTIN_CDN_DOMAIN = 'cdn.example.com';
+  it('DVC-005: all files instant-uploaded, cdnBaseUrl resolved from MUSE_CDN_DOMAIN', async () => {
+    process.env.MUSE_CDN_DOMAIN = 'cdn.example.com';
     mockReaddir.mockResolvedValueOnce([
       makeDirent('index.html'),
       makeDirent('app.js'),
@@ -636,7 +636,7 @@ describe('DVC-005 regression: cdnBaseUrl with instant-upload files', () => {
       );
       expect(mockFetch).not.toHaveBeenCalled();
     } finally {
-      delete process.env.TABTIN_CDN_DOMAIN;
+      delete process.env.MUSE_CDN_DOMAIN;
     }
   });
 

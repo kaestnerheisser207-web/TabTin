@@ -1,5 +1,5 @@
-import type { EngineHooks } from '@tabtin/agent-runtime/engine'
-import { SYSTEM_SECTION_NAMES } from '@tabtin/agent-runtime/engine'
+import type { EngineHooks } from '@muse/agent-runtime/engine'
+import { SYSTEM_SECTION_NAMES } from '@muse/agent-runtime/engine'
 import type { AppContext } from './context-hook.js'
 
 export interface ProjectTaskRuntimeContext {

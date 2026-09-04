@@ -31,7 +31,7 @@
  *     `hasCompletionBarriers()` / `getLiveDeps()`）
  */
 
-import type { BudgetTracker } from '@tabtin/agent-runtime'
+import type { BudgetTracker } from '@muse/agent-runtime'
 
 /**
  * Manager 面向 host 侧复用决策所需的最小接口——与 `SubagentManager` 结构类型

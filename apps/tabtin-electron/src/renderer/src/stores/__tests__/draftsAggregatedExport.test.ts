@@ -16,13 +16,13 @@ describe('draftsAggregatedExport · drafts:all-unsaved 聚合 bucket', () => {
     // 顶层副作用 register 只跑一次；通过 resetModules + __resetForTesting
     // 让每个 case 都从干净 registry + 干净模块缓存出发。
     vi.resetModules()
-    const sm = await import('@tabtin/storage-manager')
+    const sm = await import('@muse/storage-manager')
     sm.__resetForTesting()
   })
 
   it('注册 hideFromList=true 的 data 类聚合 bucket', async () => {
     await import('../draftsAggregatedExport')
-    const sm = await import('@tabtin/storage-manager')
+    const sm = await import('@muse/storage-manager')
 
     const bucket = sm.getBucket('drafts:all-unsaved')
     expect(bucket).toBeDefined()
@@ -38,7 +38,7 @@ describe('draftsAggregatedExport · drafts:all-unsaved 聚合 bucket', () => {
 
   it('4 个来源都未注册时 exportFn 产出 totalDraftCount=0 + 全部 unavailable', async () => {
     await import('../draftsAggregatedExport')
-    const sm = await import('@tabtin/storage-manager')
+    const sm = await import('@muse/storage-manager')
 
     const bucket = sm.getBucket('drafts:all-unsaved')!
     const exp = await bucket.exportFn!()
@@ -73,7 +73,7 @@ describe('draftsAggregatedExport · drafts:all-unsaved 聚合 bucket', () => {
   })
 
   it('🔒 隐私守护：来源 listFn label 含正文片段时聚合层覆盖为安全占位', async () => {
-    const sm = await import('@tabtin/storage-manager')
+    const sm = await import('@muse/storage-manager')
 
     // 模拟 tabdoc:offline-drafts 的真实行为：label 含 plaintext 前 60 字
     sm.registerStorageBucket({
@@ -120,7 +120,7 @@ describe('draftsAggregatedExport · drafts:all-unsaved 聚合 bucket', () => {
   })
 
   it('某个来源 bucket 已注册时 exportFn 把它的 listFn 项纳入聚合', async () => {
-    const sm = await import('@tabtin/storage-manager')
+    const sm = await import('@muse/storage-manager')
 
     // 必须先注册来源 bucket，再 import 聚合模块——否则两个模块顺序无所谓，
     // 因为聚合 bucket 的 exportFn 是 lazy 调 getBucket。

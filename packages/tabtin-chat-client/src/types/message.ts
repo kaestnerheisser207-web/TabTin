@@ -113,7 +113,7 @@ export interface LocalFileArtifactPayload {
   file_type: LocalFileArtifactFileType
   relative_path: string
   filename: string
-  url: `tabtin://resource/file/${string}`
+  url: `muse://resource/file/${string}`
   mime_type: string
   file_size: number
   auto_open?: boolean
@@ -129,7 +129,7 @@ export interface OssFileArtifactPayload {
   file_id: string
   file_type: string
   filename: string
-  url: `tabtin://resource/file/${string}`
+  url: `muse://resource/file/${string}`
   mime_type: string
   file_size?: number
   access_url?: string

@@ -4,8 +4,8 @@
  * Phase 1 主闸门：把"按 mode 拒/允"的判定收口到一个函数
  * `evaluateAgentModeToolAccess()`。消费路径（ 收敛后）：
  *
- *   1. `@tabtin/security-policy::judge()` step 0（生产主路径，hasJudge 永真）
- *   2. `@tabtin/agent-runtime` query.ts pre-start 探针（受限模式漏网工具兜底）
+ *   1. `@muse/security-policy::judge()` step 0（生产主路径，hasJudge 永真）
+ *   2. `@muse/agent-runtime` query.ts pre-start 探针（受限模式漏网工具兜底）
  *
  * 两处都只调本 SSoT，不再有 runtime wrapper（旧 `createPlanModeGuard()` 已删）。
  *
@@ -14,7 +14,7 @@
  *   - 单 SSoT：不允许 judge / Provider 之间各自复刻策略表
  *   - 返回结构对模型友好：英文 LLM-facing 文案 + 结构化字段
  *
- * **不依赖 @tabtin/agent-runtime**：agent-modes 是叶子包，被 security-policy /
+ * **不依赖 @muse/agent-runtime**：agent-modes 是叶子包，被 security-policy /
  * agent-runtime / 两个 Provider 共同消费。Active plan tracker 的细颗粒度 target
  * 校验随旧 wrapper 一并退役；judge step 0 用 `planTargetWriteGuarded` 粗粒度
  * marker 对写工具在受限模式统一 deny。

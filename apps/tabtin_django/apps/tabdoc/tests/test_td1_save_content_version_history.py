@@ -222,7 +222,7 @@ class TestH1SyncVersionHistory(unittest.TestCase):
             return_value=True,
         ), patch(
             "apps.tabdoc.services.markdown_exchange.pm_json_to_markdown",
-            return_value="![private](tabtin-file://asset/file-1)",
+            return_value="![private](muse-file://asset/file-1)",
         ) as render_markdown:
             _run_save_content(
                 service,
@@ -234,7 +234,7 @@ class TestH1SyncVersionHistory(unittest.TestCase):
         render_markdown.assert_called_once_with(pm_json)
         self.assertEqual(
             document.description_markdown,
-            "![private](tabtin-file://asset/file-1)",
+            "![private](muse-file://asset/file-1)",
         )
 
     @override_settings(TABDOC_SYNC_VH_ON_SAVE_CONTENT=True)

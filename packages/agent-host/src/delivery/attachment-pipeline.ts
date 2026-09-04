@@ -14,7 +14,7 @@
  * 抽到共享层（抽了要注入 5+ 依赖，反而复杂化）。
  */
 
-import { buildUserContextWrapper } from '@tabtin/agent-prompt'
+import { buildUserContextWrapper } from '@muse/agent-prompt'
 
 export interface AttachmentDescriptor {
   type?: string

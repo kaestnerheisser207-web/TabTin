@@ -1,5 +1,5 @@
-import type { SlidePresentation } from '@tabtin/tabslide'
-import { setRuntimeFontFamilies } from '@tabtin/tabslide'
+import type { SlidePresentation } from '@muse/tabslide'
+import { setRuntimeFontFamilies } from '@muse/tabslide'
 
 // ─── 类型 ──────────────────────────────────────────────
 

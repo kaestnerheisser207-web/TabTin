@@ -5,7 +5,7 @@
 import React from 'react'
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { fireEvent, render, screen } from '@testing-library/react'
-import type { TrackerRunMeta } from '@tabtin/chat-client'
+import type { TrackerRunMeta } from '@muse/chat-client'
 
 const openResourceTab = vi.fn()
 const toastError = vi.fn()
@@ -26,7 +26,7 @@ vi.mock('react-i18next', () => ({
   }),
 }))
 
-vi.mock('@tabtin/smartsheet-ui', async (importOriginal) => {
+vi.mock('@muse/smartsheet-ui', async (importOriginal) => {
   const actual = await importOriginal<Record<string, unknown>>()
   return {
     ...actual,

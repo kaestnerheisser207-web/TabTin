@@ -26,8 +26,8 @@
  *
  * **典型装配**（W2.3 实施会写）：
  * ```ts
- * import { initSkillsModule } from '@tabtin/agent-host/skills';
- * import { SkillsCap } from '@tabtin/agent-host/capabilities';
+ * import { initSkillsModule } from '@muse/agent-host/skills';
+ * import { SkillsCap } from '@muse/agent-host/capabilities';
  *
  * const handle = await initSkillsModule({ sandboxRoot, ... });
  * await handle.ready();
@@ -46,9 +46,9 @@
  * await skillsCap.bind(session);
  * ```
  *
- * ：本 Cap 从 `@tabtin/agent-runtime` 的 capability/core 迁到共享宿主包
- * `@tabtin/agent-host`；依赖的 runtime 契约、skills 子系统与召回 helper 经
- * `@tabtin/agent-runtime` 跨包 import（单向、合法）。
+ * ：本 Cap 从 `@muse/agent-runtime` 的 capability/core 迁到共享宿主包
+ * `@muse/agent-host`；依赖的 runtime 契约、skills 子系统与召回 helper 经
+ * `@muse/agent-runtime` 跨包 import（单向、合法）。
  */
 
 import type {
@@ -56,20 +56,20 @@ import type {
   EngineHooks,
   EngineState,
   RunHookContext,
-} from '@tabtin/agent-runtime/engine';
-import { SYSTEM_SECTION_NAMES } from '@tabtin/agent-runtime/engine';
-import type { CapabilityCategory } from '@tabtin/agent-runtime/capability';
+} from '@muse/agent-runtime/engine';
+import { SYSTEM_SECTION_NAMES } from '@muse/agent-runtime/engine';
+import type { CapabilityCategory } from '@muse/agent-runtime/capability';
 import {
   CapabilityBase,
   buildRecallQuery,
   collectDescribedKeys,
   blankSeenDescriptions,
-} from '@tabtin/agent-runtime/capability';
+} from '@muse/agent-runtime/capability';
 import {
   createSkillsTools,
   type SkillsToolsDeps,
   type SkillsToolsCallbackContext,
-} from '@tabtin/agent-runtime/tools';
+} from '@muse/agent-runtime/tools';
 // W2.2.3 解耦：从 SSoT 单源 import（旧 middleware 路径仍 re-export 透传，
 // 但内部消费者直接拿单源避免循环依赖）。
 import {
@@ -80,7 +80,7 @@ import {
   type SkillsFetchContext,
   type SkillResourceEntry,
   type SkillResourceReadResult,
-} from '@tabtin/agent-runtime/skills';
+} from '@muse/agent-runtime/skills';
 
 /**
  * fetchSkills 回调签名 —— 与 middleware 端 `SkillsFetcher` 同形态，

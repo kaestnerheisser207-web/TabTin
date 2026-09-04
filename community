@@ -4,7 +4,7 @@ set -euo pipefail
 repo_root="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 env_file="${repo_root}/.env"
 export COMPOSE_DISABLE_ENV_FILE=1
-unset TABTIN_EDITION AUTH_FIXED_VERIFICATION_CODE
+unset MUSE_EDITION AUTH_FIXED_VERIFICATION_CODE
 
 usage() {
   echo "Usage: ./community {start|stop|logs}" >&2

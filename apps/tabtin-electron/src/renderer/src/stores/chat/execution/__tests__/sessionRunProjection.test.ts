@@ -13,7 +13,7 @@ import {
   isSessionBusy,
   getSessionRunProjection,
 } from '../sessionRunProjection'
-import type { ChatSession } from '@tabtin/chat-client'
+import type { ChatSession } from '@muse/chat-client'
 
 const SID = 'session-projection-test'
 

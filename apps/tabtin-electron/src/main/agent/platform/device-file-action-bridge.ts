@@ -11,7 +11,7 @@
  * 链路：远端客户端 → Django（`/devices/query` 或 SessionShare 窄预览）→
  * device topic envelope → 本模块执行 → `agent.action.result` 回传。
  */
-import { AgentActionEvents } from '@tabtin/ws-gateway-client'
+import { AgentActionEvents } from '@muse/ws-gateway-client'
 import { electronWsGateway } from '../../ws/ElectronWsGateway.js'
 import { executeRemoteFsAction, isRemoteFsAction } from '../../file-system/remote-fs-actions.js'
 import { createLogger } from '../../logger'

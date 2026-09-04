@@ -2,7 +2,7 @@
  * ToolErrorCode 现阶段 SSoT 契约：
  *   - SSoT = `packages/browser-core/src/types/errors.ts`
  *   - action-tools 必须 re-export / 消费同一份 enum（同一对象引用）
- *   - `@tabtin/contracts/tool` 已删除死镜像，不再导出 ToolErrorCode /
+ *   - `@muse/contracts/tool` 已删除死镜像，不再导出 ToolErrorCode /
  *     ToolError / StandardToolOutput / ToolResult
  *
  * 不得在本测试里再维护第二份 enum 值快照；P2 将改为生成式单源。
@@ -13,8 +13,8 @@ import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { describe, it, expect } from 'vitest';
 import ts from 'typescript';
-import { ToolErrorCode as BrowserCoreToolErrorCode } from '@tabtin/browser-core';
-import { ToolErrorCode as ActionToolsToolErrorCode } from '@tabtin/action-tools/errors';
+import { ToolErrorCode as BrowserCoreToolErrorCode } from '@muse/browser-core';
+import { ToolErrorCode as ActionToolsToolErrorCode } from '@muse/action-tools/errors';
 
 const CONTRACTS_TOOL_SOURCE_PATH = fileURLToPath(
   new URL('../../contracts/src/tool/index.ts', import.meta.url),

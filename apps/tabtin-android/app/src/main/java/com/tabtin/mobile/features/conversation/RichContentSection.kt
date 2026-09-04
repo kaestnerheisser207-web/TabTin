@@ -734,7 +734,7 @@ private fun RichTablePreview(block: BlockItem) {
 }
 
 /**
- * Wave 3 (X1/M3)：rich_content resource_ref 点击 → tabtin:// deep link 跳转。
+ * Wave 3 (X1/M3)：rich_content resource_ref 点击 → muse:// deep link 跳转。
  *
  * 是否可点（canNavigate）：必须 resource_type + resource_id 都非空。这个守卫与右上角
  * 箭头图标的展示条件一致——可点的卡片显示箭头，不可点的卡片视觉上就是静态信息卡，
@@ -855,7 +855,7 @@ private fun RichResourceRef(
 }
 
 /**
- * 构造 tabtin://resource/<type>/<encoded_id> 并通过 Intent.ACTION_VIEW 派发。
+ * 构造 muse://resource/<type>/<encoded_id> 并通过 Intent.ACTION_VIEW 派发。
  *
  * `Uri.encode(String)` 不指定 allow set 时会 encode 除字母数字与 `_-.*` 之外的所有字符，
  * 比 iOS `.urlPathAllowed` 更激进（后者保留 `@` `+` 等路径字符）。对常见场景
@@ -875,7 +875,7 @@ internal fun navigateToResource(
     organizationId: String? = null,
 ) {
     val encoded = Uri.encode(resourceId)
-    val builder = Uri.parse("tabtin://resource/$resourceType/$encoded").buildUpon()
+    val builder = Uri.parse("muse://resource/$resourceType/$encoded").buildUpon()
     title?.takeIf { it.isNotBlank() }?.let { builder.appendQueryParameter("title", it) }
     locationHint?.takeIf { it.isNotBlank() }?.let { builder.appendQueryParameter("location_hint", it) }
     spaceId?.takeIf { it.isNotBlank() }?.let { builder.appendQueryParameter("space_id", it) }
@@ -951,7 +951,7 @@ private fun RichFile(block: BlockItem) {
                     maxLines = 1,
                 )
             }
-            // 本地交付物只有 tabtin:// 指针、无 https：文件在电脑执行设备上，手机不能预览。
+            // 本地交付物只有 muse:// 指针、无 https：文件在电脑执行设备上，手机不能预览。
             if (!canPreview) {
                 Text(
                     text = stringResource(R.string.rich_content_file_open_on_desktop),

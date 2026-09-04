@@ -3,7 +3,7 @@
  */
 
 import { describe, it, expect, vi, beforeEach } from 'vitest'
-import type { ChatMessage } from '@tabtin/chat-client'
+import type { ChatMessage } from '@muse/chat-client'
 import {
   extractProxyErrorMessage,
   isFromProxySSEError,
@@ -12,7 +12,7 @@ import {
 } from '../errorHandler'
 import { registerChatStoreCallbacks } from '../../../shared/storeAccessRegistry'
 
-vi.mock('@tabtin/ws-gateway-client', () => ({
+vi.mock('@muse/ws-gateway-client', () => ({
   AgentStreamEvents: {
     DONE: 'agent.stream.done',
     LIFECYCLE: 'agent.stream.lifecycle',

@@ -7,7 +7,7 @@ import { spawn, type ChildProcess } from 'node:child_process'
 import { WebSocketServer } from 'ws'
 import { afterEach, describe, expect, it } from 'vitest'
 
-const image = process.env.TABTIN_CLOUD_RUNTIME_IMAGE
+const image = process.env.MUSE_CLOUD_RUNTIME_IMAGE
 const children: ChildProcess[] = []
 const servers: Server[] = []
 const temporaryDirectories: string[] = []
@@ -153,9 +153,9 @@ describe.skipIf(!image)('Cloud Runtime image bootstrap integration', () => {
       '--name', containerName,
       '--mount', `type=bind,src=${workspace},dst=/workspace`,
       '--mount', `type=bind,src=${runtime},dst=/var/lib/tabtin`,
-      '--env', 'TABTIN_DSH_GATEWAY_TOKEN=image-e2e-gateway-token',
-      '--env', `TABTIN_DSH_API_URL=http://127.0.0.1:${apiPort}`,
-      '--env', `TABTIN_DSH_GATEWAY_PORT=${gatewayPort}`,
+      '--env', 'MUSE_DSH_GATEWAY_TOKEN=image-e2e-gateway-token',
+      '--env', `MUSE_DSH_API_URL=http://127.0.0.1:${apiPort}`,
+      '--env', `MUSE_DSH_GATEWAY_PORT=${gatewayPort}`,
       '--env', 'DAEMON_CONTROL_ENABLED=false',
       image!,
     ], { stdio: ['ignore', 'pipe', 'pipe'] })

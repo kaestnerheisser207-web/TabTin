@@ -33,7 +33,7 @@
  * 与 `stores/chat/shared/storeAccessRegistry` 同款模式。
  */
 
-import type { ChatMessage } from '@tabtin/chat-client'
+import type { ChatMessage } from '@muse/chat-client'
 import { createLogger } from '@/utils/logger'
 
 const log = createLogger('MessageWriteGate')

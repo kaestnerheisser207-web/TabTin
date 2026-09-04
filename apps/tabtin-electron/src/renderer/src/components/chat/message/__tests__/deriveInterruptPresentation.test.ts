@@ -2,7 +2,7 @@
  * ：历史恢复后消息级「已中断」徽标须认 stop_reason / error_info_json。
  */
 import { describe, expect, it } from 'vitest'
-import type { ChatMessage } from '@tabtin/chat-client'
+import type { ChatMessage } from '@muse/chat-client'
 import {
   deriveInterruptPresentation,
   isAssistantInterruptedMessage,

@@ -1,7 +1,7 @@
 /**
  * 通知 API 服务
  */
-import { joinApiPath } from '@tabtin/config'
+import { joinApiPath } from '@muse/config'
 import { API_CONFIG, API_ENDPOINTS } from '@/config/api'
 import { apiRequest as adapterApiRequest, getAuthToken } from '@/adapters/api-adapter-instance'
 import type { NavigateTarget } from '../../../main/services/notification/types'

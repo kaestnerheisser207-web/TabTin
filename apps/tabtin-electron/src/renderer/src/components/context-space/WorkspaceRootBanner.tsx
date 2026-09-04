@@ -17,7 +17,7 @@
  */
 import React, { useCallback } from 'react'
 import { AlertTriangle, RefreshCw } from 'lucide-react'
-import { Button } from '@tabtin/smartsheet-ui'
+import { Button } from '@muse/smartsheet-ui'
 import { useTranslation } from 'react-i18next'
 import { useAgentSettingsSheetStore } from '@stores/useAgentSettingsSheetStore'
 import { useWorkspaceRootHealth } from './hooks/useWorkspaceRootHealth'

@@ -1,4 +1,4 @@
-import { StreamEvents } from '@tabtin/agent-wire'
+import { StreamEvents } from '@muse/agent-wire'
 
 /**
  * 与 `packages/agent-runtime` 的 `AUDIT_CAP_STREAM_EVENT_TYPE` 同值。

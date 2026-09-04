@@ -20,7 +20,7 @@ import type {
   AskUserRequestStateForm,
   AskUserRequestStateApproval,
 } from '@stores/chat/shared/types'
-import type { AskUserQuestion } from '@tabtin/chat-client'
+import type { AskUserQuestion } from '@muse/chat-client'
 
 vi.mock('react-i18next', () => ({
   useTranslation: () => ({
@@ -33,7 +33,7 @@ vi.mock('react-i18next', () => ({
   }),
 }))
 
-vi.mock('@tabtin/smartsheet-ui', () => ({
+vi.mock('@muse/smartsheet-ui', () => ({
   Button: ({ children, ...props }: React.ButtonHTMLAttributes<HTMLButtonElement>) => (
     <button type="button" {...props}>{children}</button>
   ),

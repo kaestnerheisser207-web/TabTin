@@ -11,7 +11,7 @@ import {
   type TerminalExecutionPolicyPayload,
   type TerminalRuntimeBridge,
   type TerminalExecuteRequest,
-} from '@tabtin/terminal-core';
+} from '@muse/terminal-core';
 
 // ========== Terminal 错误分类 ==========
 //

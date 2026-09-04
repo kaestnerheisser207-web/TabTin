@@ -2,7 +2,7 @@ import type {
   AddonParamDef,
   PresetFieldDef,
   PresetFieldValidationDef,
-} from '@tabtin/chat-client'
+} from '@muse/chat-client'
 import type {
   FieldValidation,
   PresetAddon,

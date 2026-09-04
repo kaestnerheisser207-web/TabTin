@@ -1,7 +1,7 @@
 import React from 'react'
 import { act, cleanup, render } from '@testing-library/react'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
-import * as agentOrb from '@tabtin/agent-orb'
+import * as agentOrb from '@muse/agent-orb'
 import { AgentOrb } from '../AgentOrb'
 import { getOrbDriverCountForTests } from '../orbScheduler'
 

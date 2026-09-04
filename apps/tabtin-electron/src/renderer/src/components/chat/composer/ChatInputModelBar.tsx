@@ -14,7 +14,7 @@ import type {
   ModelParamValue,
   ModelRuntimeControl,
   ModelRuntimeControlOption,
-} from '@tabtin/chat-client'
+} from '@muse/chat-client'
 import { isThinkingRelatedRuntimeControl } from './thinkingModeCapability'
 
 type ModelBarProps = Pick<

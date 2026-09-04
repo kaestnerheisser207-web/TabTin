@@ -2,7 +2,7 @@
  * Schema 初始化 — 从 TableSchema 在 PGlite 中创建表
  */
 
-import type { TableSchema, TableFieldSchema } from '@tabtin/table-kernel'
+import type { TableSchema, TableFieldSchema } from '@muse/table-kernel'
 import type { PGliteInstance } from './dialect.js'
 
 export function fieldTypeToSqlType(fieldType: string): string {

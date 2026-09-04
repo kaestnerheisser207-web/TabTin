@@ -8,7 +8,7 @@
  *   - Header: query string + total count badge + (optional) "showing N of M"
  *   - Each result row: title (bold) → snippet (truncated 2 lines) → footer
  *     line with source / score / content_type chip
- *   - URL results render as anchor; rag_search source_id renders as `tabtin://`
+ *   - URL results render as anchor; rag_search source_id renders as `muse://`
  *     resource hint (callers wire onResourceNavigate elsewhere — search_results
  *     currently does not jump because rag hits don't carry a stable resource_type
  *     mapping yet; a follow-up could promote source_id → resource_ref).
@@ -18,7 +18,7 @@
 import React, { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { ChevronDown, ChevronRight, Globe, Search } from 'lucide-react'
-import type { RichContentBlock } from '@tabtin/chat-client'
+import type { RichContentBlock } from '@muse/chat-client'
 import { RichFallback } from './RichFallback'
 
 const COLLAPSED_LIMIT = 5

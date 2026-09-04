@@ -122,22 +122,22 @@ vi.mock('../../cli/cli-server', () => ({
   },
 }))
 
-vi.mock('@tabtin/cli-server-core/surfaces/agent-security', () => ({
+vi.mock('@muse/cli-server-core/surfaces/agent-security', () => ({
   createAgentSecuritySurfaces: () => [],
 }))
-vi.mock('@tabtin/cli-server-core/surfaces/skill-list', () => ({
+vi.mock('@muse/cli-server-core/surfaces/skill-list', () => ({
   createSkillListSurface: () => ({}),
 }))
-vi.mock('@tabtin/cli-server-core/surfaces/skill-materialize-app', () => ({
+vi.mock('@muse/cli-server-core/surfaces/skill-materialize-app', () => ({
   createSkillMaterializeAppSurface: () => ({}),
 }))
 
-vi.mock('@tabtin/app-shell/agent-config-v2', () => ({
+vi.mock('@muse/app-shell/agent-config-v2', () => ({
   normalizeExecutionLimitsForCostCap: (v: unknown) => v,
 }))
 
 const { ElectronAgentHost } = await import('../ElectronAgentHost')
-const { SHELL_NOTIFICATION_KIND } = await import('@tabtin/terminal-core')
+const { SHELL_NOTIFICATION_KIND } = await import('@muse/terminal-core')
 
 // ─── 测试 harness ────────────────────────────────────────────────────
 
@@ -145,7 +145,7 @@ type PublishMock = ReturnType<typeof vi.fn>
 type SendMock = ReturnType<typeof vi.fn>
 
 interface RelayHarness {
-  relayBackgroundTaskTerminalResult: (env: import('@tabtin/terminal-core').NotificationEnvelope) => void
+  relayBackgroundTaskTerminalResult: (env: import('@muse/terminal-core').NotificationEnvelope) => void
 }
 
 function createHarness(): { harness: RelayHarness; publish: PublishMock; send: SendMock } {
@@ -181,8 +181,8 @@ afterAll(() => {
 })
 
 function makeEnvelope(
-  over: Partial<import('@tabtin/terminal-core').NotificationEnvelope> = {},
-): import('@tabtin/terminal-core').NotificationEnvelope {
+  over: Partial<import('@muse/terminal-core').NotificationEnvelope> = {},
+): import('@muse/terminal-core').NotificationEnvelope {
   return {
     kind: SHELL_NOTIFICATION_KIND,
     target: { spaceId: 'space-1', threadId: RAW_THREAD_ID },

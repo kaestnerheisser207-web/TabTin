@@ -168,7 +168,7 @@ export class ActionExecutorAdapter {
 
       // Wave 1.5（2026-05-13）：FILE_LOCK_ACTIONS 经此 adapter 进入时统一加锁，
       // 跟 agent-runtime tabcode-adapter 共享同一个 `lockMap` 单例（实现下沉到
-      // `@tabtin/action-tools/utils/file-lock`，agent-runtime 一侧 re-export）。
+      // `@muse/action-tools/utils/file-lock`，agent-runtime 一侧 re-export）。
       //
       // 锁键 = `canonicalizePath(params.path / file_path, baseDir=_workspace_root || cwd)`
       // —— 必须跟 agent-runtime adapter 用同一份 canonicalize（macOS symlink /

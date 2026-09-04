@@ -1,5 +1,5 @@
 {
-  "name": "@tabtin/doc-renderer",
+  "name": "@muse/doc-renderer",
   "version": "0.1.0",
   "description": "Host-agnostic markdown rendering utilities for Muse Tabdoc",
   "type": "module",

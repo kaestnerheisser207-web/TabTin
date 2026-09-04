@@ -45,7 +45,7 @@ import {
 import path from 'node:path'
 
 import { app, ipcMain, type IpcMainInvokeEvent } from 'electron'
-import { joinApiPath } from '@tabtin/config'
+import { joinApiPath } from '@muse/config'
 
 import { API_BASE_URL } from '../config/api.js'
 import { TokenManager } from '../auth.js'

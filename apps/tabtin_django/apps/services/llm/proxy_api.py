@@ -45,16 +45,16 @@ class BillingHeaderValues:
 
 def _extract_billing_header_values(meta: Dict[str, Any]) -> BillingHeaderValues:
     legacy_idempotency_key = (
-        meta.get("HTTP_X_TABTIN_BILLING_IDEMPOTENCY_KEY", "") or ""
+        meta.get("HTTP_X_MUSE_BILLING_IDEMPOTENCY_KEY", "") or ""
     ).strip()
     logical_billing_key = (
-        meta.get("HTTP_X_TABTIN_BILLING_LOGICAL_KEY", "") or ""
+        meta.get("HTTP_X_MUSE_BILLING_LOGICAL_KEY", "") or ""
     ).strip()
     attempt_billing_key = (
-        meta.get("HTTP_X_TABTIN_BILLING_ATTEMPT_KEY", "") or ""
+        meta.get("HTTP_X_MUSE_BILLING_ATTEMPT_KEY", "") or ""
     ).strip()
     attempt_index_raw = (
-        meta.get("HTTP_X_TABTIN_BILLING_ATTEMPT_INDEX", "") or ""
+        meta.get("HTTP_X_MUSE_BILLING_ATTEMPT_INDEX", "") or ""
     ).strip()
 
     attempt_index: Optional[int] = None
@@ -346,10 +346,10 @@ def llm_proxy(request: HttpRequest):
 
     user_id = str(user.id)
     organization_id = _extract_organization_id(request)
-    agent_id = request.META.get("HTTP_X_TABTIN_AGENT_ID", "")
-    session_id = request.META.get("HTTP_X_TABTIN_SESSION_ID", "")
-    source = request.META.get("HTTP_X_TABTIN_REQUEST_SOURCE", "llm_proxy")
-    context_tier_id = (request.META.get("HTTP_X_TABTIN_CONTEXT_TIER", "") or "").strip()
+    agent_id = request.META.get("HTTP_X_MUSE_AGENT_ID", "")
+    session_id = request.META.get("HTTP_X_MUSE_SESSION_ID", "")
+    source = request.META.get("HTTP_X_MUSE_REQUEST_SOURCE", "llm_proxy")
+    context_tier_id = (request.META.get("HTTP_X_MUSE_CONTEXT_TIER", "") or "").strip()
     billing_headers = _extract_billing_header_values(request.META)
     billing_idempotency_key = billing_headers.idempotency_key
     logical_billing_key = billing_headers.logical_billing_key
@@ -371,7 +371,7 @@ def llm_proxy(request: HttpRequest):
             status=400,
         )
     attempt_billing_key_header = (
-        request.META.get("HTTP_X_TABTIN_BILLING_ATTEMPT_KEY", "") or ""
+        request.META.get("HTTP_X_MUSE_BILLING_ATTEMPT_KEY", "") or ""
     ).strip()
     attempt_header_present = bool(attempt_billing_key_header)
     if attempt_header_present and not logical_billing_key:

@@ -1,5 +1,5 @@
 /**
- * 组织 API 服务 — 从 @tabtin/app-shell 重导出
+ * 组织 API 服务 — 从 @muse/app-shell 重导出
  */
 
-export { OrganizationApiService } from '@tabtin/app-shell'
+export { OrganizationApiService } from '@muse/app-shell'

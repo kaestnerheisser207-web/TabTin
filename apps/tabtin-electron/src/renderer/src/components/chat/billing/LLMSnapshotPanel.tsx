@@ -7,7 +7,7 @@
 
 import React, { useState, useCallback, useRef, useEffect } from 'react'
 import * as DialogPrimitive from '@radix-ui/react-dialog'
-import { Button, OVERLAY_SURFACE_CLASS, toast, useOverlayContainer } from '@tabtin/smartsheet-ui'
+import { Button, OVERLAY_SURFACE_CLASS, toast, useOverlayContainer } from '@muse/smartsheet-ui'
 import { createLogger } from '@/utils/logger'
 import {
   ChevronDown, ChevronRight, Download, Copy, Check, X,
@@ -15,7 +15,7 @@ import {
 } from 'lucide-react'
 import { cn } from '@utils/cn'
 import { useTranslation } from 'react-i18next'
-import type { ChatMessage } from '@tabtin/chat-client'
+import type { ChatMessage } from '@muse/chat-client'
 import type { LLMCallSnapshot } from '../../../stores/chat/shared/types'
 import {
   TEXT, TEXT_COLOR, ICON_SIZE, BORDER, BG, CARD_RADIUS,
@@ -58,7 +58,7 @@ function fallbackBrowserDownload(jsonText: string, filename: string): void {
  */
 async function saveAndRevealExportJson(jsonText: string, filename: string): Promise<void> {
   const invoke = window.electron?.ipcRenderer?.invoke
-  const showItemInFolder = window.tabtin?.showItemInFolder
+  const showItemInFolder = window.muse?.showItemInFolder
 
   if (!invoke) {
     fallbackBrowserDownload(jsonText, filename)
@@ -248,7 +248,7 @@ const roleBadgeClass: Record<string, string> = {
 }
 const sourceBadgeClass: Record<string, string> = {
   user_input: 'bg-primary/10 text-primary/60',
-  // eslint-disable-next-line tabtin/no-chat-design-violations -- DEBUG-only LLM 快照面板的来源色图例（user/tool/context/history 一套），整套保留才能辨识来源，非单点 UI 警示
+  // eslint-disable-next-line muse/no-chat-design-violations -- DEBUG-only LLM 快照面板的来源色图例（user/tool/context/history 一套），整套保留才能辨识来源，非单点 UI 警示
   tool_result: 'bg-warning/10 text-warning/80',
   context_injection: 'bg-accent/10 text-accent/80',
   memory_recall: 'bg-accent/10 text-accent/60',

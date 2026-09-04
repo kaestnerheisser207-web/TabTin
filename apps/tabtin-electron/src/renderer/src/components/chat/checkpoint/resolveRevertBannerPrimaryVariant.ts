@@ -1,4 +1,4 @@
-import type { SessionRollbackState } from '@tabtin/chat-client'
+import type { SessionRollbackState } from '@muse/chat-client'
 import {
   isSimpleRollback,
   resolveRevertBannerStatus,

@@ -22,7 +22,7 @@ vi.mock('@/stores/useAuthStore', () => ({
   },
 }))
 
-vi.mock('@tabtin/smartsheet-ui/toast', () => ({
+vi.mock('@muse/smartsheet-ui/toast', () => ({
   toast: {
     error: mockToastError,
     success: mockToastSuccess,

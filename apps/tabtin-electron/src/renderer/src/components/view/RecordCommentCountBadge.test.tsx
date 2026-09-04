@@ -3,7 +3,7 @@ import '@testing-library/jest-dom/vitest'
 import { readFileSync } from 'node:fs'
 import { fireEvent, render, screen } from '@testing-library/react'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
-import type { ViewRecordsResponse } from '@tabtin/table-core'
+import type { ViewRecordsResponse } from '@muse/table-core'
 import {
   collectViewRecordIds,
   RecordCommentCountBadge,

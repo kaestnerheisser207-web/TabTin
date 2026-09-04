@@ -2,7 +2,7 @@
 
 import { create } from 'zustand'
 import { createJSONStorage, persist } from 'zustand/middleware'
-import { createMigratingStorage, withPersistSafety } from '@tabtin/shared'
+import { createMigratingStorage, withPersistSafety } from '@muse/shared'
 import { PERSIST_KEYS } from './persist-key-registry'
 
 export type SearchEngineId = 'google' | 'bing' | 'duckduckgo' | 'baidu'
@@ -31,7 +31,7 @@ export function buildSearchUrl(engineId: SearchEngineId, query: string): string 
 
 function syncTemplateToMain(id: SearchEngineId): void {
   const engine = getSearchEngine(id)
-  window.tabtin?.browserPrefs?.syncSearchEngine?.(engine.urlTemplate)
+  window.muse?.browserPrefs?.syncSearchEngine?.(engine.urlTemplate)
 }
 
 export type AccessPolicyId = 'auto' | 'enhanced' | 'off'
@@ -79,7 +79,7 @@ export const useBrowserPrefsStore = create<BrowserPrefsState>()(
       setHomepageUrl: (url) => set({ homepageUrl: url.trim() }),
       setAccessPolicy: (id) => {
         set({ accessPolicy: id })
-        window.tabtin?.browserPrefs?.syncAccessPolicy?.(id)
+        window.muse?.browserPrefs?.syncAccessPolicy?.(id)
       },
       setProxyList: (list) => set({ proxyList: list }),
       addProxy: (entry) => set((state) => ({
@@ -108,7 +108,7 @@ export const useBrowserPrefsStore = create<BrowserPrefsState>()(
           syncTemplateToMain(state.searchEngine)
         }
         if (state?.accessPolicy) {
-          window.tabtin?.browserPrefs?.syncAccessPolicy?.(state.accessPolicy)
+          window.muse?.browserPrefs?.syncAccessPolicy?.(state.accessPolicy)
         }
       },
     }),

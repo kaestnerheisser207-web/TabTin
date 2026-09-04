@@ -3,7 +3,7 @@ import { X, Reply } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { cn } from '@utils/cn'
 import { COMPOSER_TEXT_META_BASE } from '../registry/chatDesignTokens'
-import type { ReplyToPreview } from '@tabtin/chat-client'
+import type { ReplyToPreview } from '@muse/chat-client'
 
 /**
  *  引用回复：引用条。两处复用：

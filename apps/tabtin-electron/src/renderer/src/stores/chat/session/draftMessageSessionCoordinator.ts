@@ -1,5 +1,5 @@
 import { createLogger } from '@/utils/logger'
-import type { ModelParamValue } from '@tabtin/chat-client'
+import type { ModelParamValue } from '@muse/chat-client'
 import type { AgentModeName } from '../shared/types'
 import { isLocalPendingSessionId } from './actions/pendingFirstSend'
 import {

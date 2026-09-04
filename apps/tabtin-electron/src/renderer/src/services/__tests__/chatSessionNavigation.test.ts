@@ -109,11 +109,11 @@ vi.mock('@/utils/logger', () => ({
   createLogger: () => ({ debug: vi.fn(), error: vi.fn(), warn: vi.fn(), info: vi.fn() }),
 }))
 
-vi.mock('@tabtin/smartsheet-ui/toast', () => ({
+vi.mock('@muse/smartsheet-ui/toast', () => ({
   toast: { error: vi.fn(), info: vi.fn() },
 }))
 
-vi.mock('@tabtin/chat-client', () => {
+vi.mock('@muse/chat-client', () => {
   class ChatAPIError extends Error {
     statusCode: number
     constructor(message: string, statusCode: number) {
@@ -126,8 +126,8 @@ vi.mock('@tabtin/chat-client', () => {
 })
 
 import { enterChatSession } from '../chatSessionNavigation'
-import { toast } from '@tabtin/smartsheet-ui/toast'
-import { ChatAPIError } from '@tabtin/chat-client'
+import { toast } from '@muse/smartsheet-ui/toast'
+import { ChatAPIError } from '@muse/chat-client'
 import {
   getOpenChatSessionIntent,
   resetOpenChatSessionIntentForTests,

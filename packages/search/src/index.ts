@@ -1,5 +1,5 @@
 /**
- * @tabtin/search —— 通用搜索库，零运行时依赖。
+ * @muse/search —— 通用搜索库，零运行时依赖。
  *
  * 定位以功能为界：候选集 × 查询 → 相关子集。当前实现为词法 BM25 +
  * 语义向量（宿主注入 `SemanticScorer`）的双路 RRF 融合；`RecallIndex`

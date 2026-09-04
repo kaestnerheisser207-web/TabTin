@@ -24,7 +24,7 @@ import type {
   Tool,
   ToolContext,
 } from '../src/engine/contracts/tools.js';
-import type { OSError } from '@tabtin/os-errors';
+import type { OSError } from '@muse/os-errors';
 
 function makeOSError(overrides: Partial<OSError> = {}): OSError {
   return {

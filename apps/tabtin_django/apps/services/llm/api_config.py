@@ -809,7 +809,7 @@ def create_organization_model(request, organization_id: str, payload: Organizati
     max_output_tokens = payload.max_output_tokens
     if model_domain == 'chat':
         capabilities_config = ensure_custom_chat_json_capability(capabilities_config)
-        if getattr(settings, 'TABTIN_EDITION', 'saas') == 'community':
+        if getattr(settings, 'MUSE_EDITION', 'saas') == 'community':
             capabilities_config = ensure_known_provider_chat_capabilities(
                 provider_name=provider.name,
                 config=capabilities_config,
@@ -969,7 +969,7 @@ def update_organization_model(
         model.capabilities_config = ensure_custom_chat_json_capability(
             model.capabilities_config
         )
-        if getattr(settings, 'TABTIN_EDITION', 'saas') == 'community':
+        if getattr(settings, 'MUSE_EDITION', 'saas') == 'community':
             model.capabilities_config = ensure_known_provider_chat_capabilities(
                 provider_name=provider.name,
                 config=model.capabilities_config,

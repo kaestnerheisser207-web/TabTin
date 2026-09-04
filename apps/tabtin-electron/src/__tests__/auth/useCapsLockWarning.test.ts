@@ -9,7 +9,7 @@ import type { KeyboardEvent } from 'react'
 import {
   useCapsLockWarning,
   __resetCapsLockWarningCacheForTests,
-} from '@tabtin/shared/use-caps-lock-warning'
+} from '@muse/shared/use-caps-lock-warning'
 
 function fakeModifierEvent(capsLockOn: boolean): KeyboardEvent<HTMLInputElement> {
   return {

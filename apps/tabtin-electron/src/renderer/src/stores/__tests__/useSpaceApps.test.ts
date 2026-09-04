@@ -24,8 +24,8 @@ vi.mock('@/adapters/api-adapter-instance', () => ({
   getAuthToken: mockGetAuthToken,
 }))
 
-vi.mock('@tabtin/app-shell', async (importOriginal) => {
-  const actual = await importOriginal<typeof import('@tabtin/app-shell')>()
+vi.mock('@muse/app-shell', async (importOriginal) => {
+  const actual = await importOriginal<typeof import('@muse/app-shell')>()
   return {
     ...actual,
     useSpaceStore: mockUseSpaceStore,
@@ -51,7 +51,7 @@ beforeEach(() => {
   Object.defineProperty(window, 'tabtin', {
     configurable: true,
     value: {
-      ...window.tabtin,
+      ...window.muse,
       appDiscovery: { updatePatterns: vi.fn() },
       marketplace: { listInstalled: vi.fn().mockResolvedValue(null) },
     },

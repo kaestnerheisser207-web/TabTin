@@ -56,7 +56,7 @@ describe('deleteExternalArchive', () => {
     })
 
     expect(result).toEqual({ deleted: 1 })
-    expect(window.tabtin.import.deleteArchive).toHaveBeenCalledWith({
+    expect(window.muse.import.deleteArchive).toHaveBeenCalledWith({
       organizationId: 'org-1',
       source: 'cursor',
       sourceSessionId: 'src-1',
@@ -95,7 +95,7 @@ describe('deleteExternalArchive', () => {
       organizationId: 'org-1',
     })
     expect(dropped).toBe(true)
-    expect(window.tabtin.import.deleteArchive).toHaveBeenCalledWith({
+    expect(window.muse.import.deleteArchive).toHaveBeenCalledWith({
       organizationId: 'org-1',
       source: 'cursor',
       sourceSessionId: 'src-1',

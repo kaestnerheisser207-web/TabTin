@@ -3,7 +3,7 @@
  *
  * Source: packages/tool-errors/codegen/kinds/*.yaml
  *        + file-pipeline-errors specific kinds
- * Codegen: pnpm --filter @tabtin/tool-errors codegen
+ * Codegen: pnpm --filter @muse/tool-errors codegen
  *
  * Inventory of chat.toolError.* keys expected for translatable kinds.
  * Does not generate locale string values.

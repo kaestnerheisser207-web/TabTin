@@ -77,7 +77,7 @@ export const CrawlViewPortalLayer: React.FC = () => {
   const slotSnapshotRef = useRef<Map<string, string>>(new Map())
   // 🧹 移除了 fallback 相关的 ref
   const logTabSwitch = useCallback((stage: string, payload: Record<string, unknown>) => {
-    if (!globalThis.__TABTIN_DEBUG_TAB_SWITCH__) return
+    if (!globalThis.__MUSE_DEBUG_TAB_SWITCH__) return
     const now = typeof performance !== 'undefined' ? performance.now() : Date.now()
     console.info(`[TabSwitch] ${stage}`, { t: now, ...payload })
   }, [])
@@ -87,7 +87,7 @@ export const CrawlViewPortalLayer: React.FC = () => {
       return
     }
     warnedRef.current.add(key)
-    if (globalThis.__TABTIN_DEBUG_TAB_SWITCH__) {
+    if (globalThis.__MUSE_DEBUG_TAB_SWITCH__) {
       console.warn(message, details)
     }
   }, [])
@@ -237,7 +237,7 @@ export const CrawlViewPortalLayer: React.FC = () => {
 
   useEffect(() => {
     const unsubscribe = crawlViewClient.onCrashRecovered((payload) => {
-      if (globalThis.__TABTIN_DEBUG_TAB_SWITCH__) {
+      if (globalThis.__MUSE_DEBUG_TAB_SWITCH__) {
         console.warn(`[CrawlViewPortalLayer] View ${payload.viewId} crashed (${payload.reason}), reloading URL: ${payload.url}`)
       }
     })

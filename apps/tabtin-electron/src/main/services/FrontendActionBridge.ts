@@ -9,7 +9,7 @@
  * 设计原则：
  * - 统一通过工具平台架构
  * - 职责清晰，只做动作路由
- * - 工具实现由 @tabtin/action-tools 负责
+ * - 工具实现由 @muse/action-tools 负责
  *
  * 本文件为 Facade 入口，具体实现拆分至：
  * - tool-registry.ts（工具注册）
@@ -18,11 +18,11 @@
  * - cdp-actions.ts（CDP 截图/PDF/Markdown）
  */
 
-import type { ActionRequiredEventData, ActionResultRequest } from '@tabtin/chat-client'
+import type { ActionRequiredEventData, ActionResultRequest } from '@muse/chat-client'
 import { BrowserWindow } from 'electron'
-import { ActionExecutorAdapter } from '@tabtin/action-tools/adapters'
-import { getSharedBrowserToolImpl } from '@tabtin/action-tools/impl'
-import { validateProjectPath } from '@tabtin/action-tools/headless'
+import { ActionExecutorAdapter } from '@muse/action-tools/adapters'
+import { getSharedBrowserToolImpl } from '@muse/action-tools/impl'
+import { validateProjectPath } from '@muse/action-tools/headless'
 import {
   getInteractiveTerminalPolicySupportError,
   normalizeTerminalExecutionPolicy,
@@ -33,17 +33,17 @@ import {
   containsCommandSubstitution,
   executeDegraded,
   type DegradationDecision,
-} from '@tabtin/terminal-core'
+} from '@muse/terminal-core'
 import {
   checkHardlineCommand,
   checkHardlinePath,
   CHECKPOINT_MUTATING_ACTIONS,
-} from '@tabtin/security-policy'
+} from '@muse/security-policy'
 import {
   getHumanInteractionContext,
   runWithHumanInteractionContext,
   resolveUserRoot,
-} from '@tabtin/agent-runtime'
+} from '@muse/agent-runtime'
 import { requestApproval } from './ApprovalManager.js'
 import {
   shouldBypassConfirmApproval,
@@ -55,7 +55,7 @@ import {
 } from './CDPNetworkBridge'
 
 import { resolve } from 'node:path'
-import { resolveDataRoot } from '@tabtin/terminal-core'
+import { resolveDataRoot } from '@muse/terminal-core'
 import { getPtyManager } from '../terminal/PtyManager'
 import { getCLISpaceId, getCLICrawlspaceId, getCLIOrganizationRoot, getCLIWorkspaceScopeKey } from '../cli/cli-context'
 import { getViewFactory } from '../view-factory'
@@ -292,7 +292,7 @@ export class FrontendActionBridge {
   private _disposeToolRegistry: (() => void) | null = null
   // Wave 1.5（2026-05-13）：旧 file-lock-manager 实例字段已删除——锁的责任
   // 收口到 ActionExecutorAdapter 一侧（统一 `withFileLock` 跨入口共享 lockMap，
-  // 详见 `@tabtin/action-tools/utils/file-lock`）。外层不再嵌一道 withLock 调用，
+  // 详见 `@muse/action-tools/utils/file-lock`）。外层不再嵌一道 withLock 调用，
   // 避免「上层包了下层又包」同 key 死锁；且 LLM Agent chat（agent-runtime
   // adapter）跟 FAB IPC push action 改同文件天然 FIFO 串行（L-11 升级核心
   // H 不变量）。
@@ -406,7 +406,7 @@ export class FrontendActionBridge {
       return this._handleMonitorAction(actionType, params as Record<string, unknown>)
     }
 
-    const allowFallback = process.env.TABTIN_FRONTEND_ACTION_FALLBACK === '1'
+    const allowFallback = process.env.MUSE_FRONTEND_ACTION_FALLBACK === '1'
     try {
       const manager = getRunSessionManager()
       if (explicitTraceId) {
@@ -1060,7 +1060,7 @@ export class FrontendActionBridge {
       if (result?.accessUpgradeNeeded && traceId) {
         const {
           getSharedAccessStrategyService, AccessLevel,
-        } = await import('@tabtin/browser-core')
+        } = await import('@muse/browser-core')
         const strategyService = getSharedAccessStrategyService()
 
         if (strategyService.isUpgradeEnabled()) {
@@ -1214,7 +1214,7 @@ export class FrontendActionBridge {
     }
     const userInfo = await TokenManager.getUserInfo()
     const organizationId =
-      process.env.TABTIN_ORGANIZATION_ID ||
+      process.env.MUSE_ORGANIZATION_ID ||
       resolveOrganizationIdFromUserInfo(userInfo) ||
       ''
     if (!organizationId) {
@@ -1259,7 +1259,7 @@ export class FrontendActionBridge {
           }
           const userInfo = await TokenManager.getUserInfo()
           const organizationId =
-            process.env.TABTIN_ORGANIZATION_ID ||
+            process.env.MUSE_ORGANIZATION_ID ||
             resolveOrganizationIdFromUserInfo(userInfo) ||
             ''
           if (!organizationId) {
@@ -1371,7 +1371,7 @@ export class FrontendActionBridge {
   /**
    * PTY 策略降级执行：当 PTY 不支持 sandbox/network-restricted 策略时，
    * 降级到 CommandExecutor spawn+sandbox 执行，并将输出推送到 PTY 数据通道。
-   * 核心逻辑已提取到 @tabtin/terminal-core 的 executeDegraded。
+   * 核心逻辑已提取到 @muse/terminal-core 的 executeDegraded。
    */
   private async executeDegradedBridge(
     command: string,

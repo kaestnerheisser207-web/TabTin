@@ -84,7 +84,7 @@ import { MeetingRecordsSidebar } from './MeetingRecordsSidebar';
 import { MeetingSetupView } from './MeetingSetupView';
 
 describe('MeetingSetupView microphone dialog', () => {
-  const previousTabtin = window.tabtin;
+  const previousTabtin = window.muse;
   let levelListener:
     | ((event: MeetingMicrophoneTestLevelEvent) => void)
     | undefined;
@@ -217,13 +217,13 @@ describe('MeetingSetupView microphone dialog', () => {
 
     const start = screen.getByRole('button', { name: '开始记录' });
     await waitFor(() => expect(start.hasAttribute('disabled')).toBe(false));
-    expect(window.tabtin.meetingRecording.probeMedia).not.toHaveBeenCalled();
+    expect(window.muse.meetingRecording.probeMedia).not.toHaveBeenCalled();
     expect(testMicrophone).not.toHaveBeenCalled();
   });
 
   it('returns to an active recording instead of preparing a second session', async () => {
     const activeSessionId = '11111111-1111-4111-8111-111111111111';
-    vi.mocked(window.tabtin.meetingRecording.getStatus).mockResolvedValue({
+    vi.mocked(window.muse.meetingRecording.getStatus).mockResolvedValue({
       active: true,
       manifest: {
         sessionId: activeSessionId,
@@ -251,8 +251,8 @@ describe('MeetingSetupView microphone dialog', () => {
     fireEvent.click(screen.getByRole('button', { name: '开始记录' }));
 
     await waitFor(() => expect(onStarted).toHaveBeenCalledWith(activeSessionId));
-    expect(window.tabtin.meetingRecording.prepare).not.toHaveBeenCalled();
-    expect(window.tabtin.meetingRecording.start).not.toHaveBeenCalled();
+    expect(window.muse.meetingRecording.prepare).not.toHaveBeenCalled();
+    expect(window.muse.meetingRecording.start).not.toHaveBeenCalled();
     expect(
       screen.queryByText(/another meeting recording is already active/),
     ).toBeNull();
@@ -260,7 +260,7 @@ describe('MeetingSetupView microphone dialog', () => {
 
   it('shows the active-recording entry only until the recording ends', async () => {
     const activeSessionId = '11111111-1111-4111-8111-111111111111';
-    vi.mocked(window.tabtin.meetingRecording.getStatus).mockResolvedValue({
+    vi.mocked(window.muse.meetingRecording.getStatus).mockResolvedValue({
       active: true,
       manifest: {
         sessionId: activeSessionId,
@@ -288,11 +288,11 @@ describe('MeetingSetupView microphone dialog', () => {
   });
 
   it('translates a prepare race into a plain business message', async () => {
-    vi.mocked(window.tabtin.meetingRecording.getStatus).mockResolvedValue({
+    vi.mocked(window.muse.meetingRecording.getStatus).mockResolvedValue({
       active: false,
       manifest: null,
     });
-    vi.mocked(window.tabtin.meetingRecording.prepare).mockRejectedValueOnce(
+    vi.mocked(window.muse.meetingRecording.prepare).mockRejectedValueOnce(
       new Error(
         "Error invoking remote method 'meeting-recording:prepare': " +
           'Error: another meeting recording is already active',
@@ -318,7 +318,7 @@ describe('MeetingSetupView microphone dialog', () => {
     fireEvent.click(screen.getByRole('button', { name: '开始记录' }));
 
     await waitFor(() =>
-      expect(window.tabtin.meetingRecording.prepare).toHaveBeenCalled(),
+      expect(window.muse.meetingRecording.prepare).toHaveBeenCalled(),
     );
     await waitFor(() =>
       expect(
@@ -369,7 +369,7 @@ describe('MeetingSetupView microphone dialog', () => {
       await Promise.resolve();
     });
 
-    expect(window.tabtin.meetingRecording.prepare).toHaveBeenCalledWith(
+    expect(window.muse.meetingRecording.prepare).toHaveBeenCalledWith(
       expect.objectContaining({
         copilotEnabled: true,
         copilotModelId: 'model-flash',
@@ -387,7 +387,7 @@ describe('MeetingSetupView microphone dialog', () => {
           'system audio capture failed: NotAllowedError: permission denied',
       })
       .mockResolvedValue({ active: true, manifest: {} });
-    Object.assign(window.tabtin.meetingRecording, { start });
+    Object.assign(window.muse.meetingRecording, { start });
     const onStarted = vi.fn();
     render(<MeetingSetupView onBack={vi.fn()} onStarted={onStarted} />);
 
@@ -418,7 +418,7 @@ describe('MeetingSetupView microphone dialog', () => {
       await Promise.resolve();
     });
 
-    const prepare = vi.mocked(window.tabtin.meetingRecording.prepare);
+    const prepare = vi.mocked(window.muse.meetingRecording.prepare);
     expect(prepare).toHaveBeenCalledTimes(2);
     expect(prepare.mock.calls[1]?.[0].sessionId).toBe(
       prepare.mock.calls[0]?.[0].sessionId,

@@ -12,7 +12,7 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { AlertCircle, ZoomIn } from 'lucide-react'
-import type { RichContentBlock } from '@tabtin/chat-client'
+import type { RichContentBlock } from '@muse/chat-client'
 import { cn } from '@utils/cn'
 import { IMAGE_PREVIEW } from '../registry/chatDesignTokens'
 import { useResourcePreviewStore } from '../preview/useResourcePreviewStore'
@@ -44,12 +44,12 @@ export const RichImage: React.FC<{
   const { data: resolvedFile } = useFileIdImageUrl(fileId)
   // present_to_user / 落库可能残留字面量 \u0026，必须先还原才能加载
   // 正式 OSS 产物以 file_id 为稳定身份；签名 URL 只作首屏兜底，resolver 会在
-  // 临期/过期时换取新地址。tabtin:// 仅用于产物导航，不能直接交给 <img>。
+  // 临期/过期时换取新地址。muse:// 仅用于产物导航，不能直接交给 <img>。
   const rawBlockUrl = typeof block.url === 'string' ? block.url : undefined
   const imageUrl = resolvedFile?.url
     ?? normalizeMediaImageUrl(artifact.access_url)
     ?? normalizeMediaImageUrl(rawBlockUrl)
-    ?? (rawBlockUrl && !rawBlockUrl.startsWith('tabtin://') ? rawBlockUrl : undefined)
+    ?? (rawBlockUrl && !rawBlockUrl.startsWith('muse://') ? rawBlockUrl : undefined)
   const imageName = resolvedFile?.name
     ?? artifact.filename
     ?? block.alt_text

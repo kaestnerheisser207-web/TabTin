@@ -13,15 +13,15 @@ import {
   useToast,
   type RecordFormData,
   type FieldDefinition,
-} from '@tabtin/smartsheet-ui'
-import { toFieldDefinitions } from '@tabtin/table-ui'
+} from '@muse/smartsheet-ui'
+import { toFieldDefinitions } from '@muse/table-ui'
 import {
   FieldApiService,
   RecordApiService,
   TableApiService,
   computeChangedRecordData,
-} from '@tabtin/table-core'
-import type { Field, TableRecord } from '@tabtin/table-core'
+} from '@muse/table-core'
+import type { Field, TableRecord } from '@muse/table-core'
 import { LinkCellEditor } from '@/components/field/LinkCellEditor'
 import { useTranslation } from 'react-i18next'
 import {

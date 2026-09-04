@@ -27,7 +27,7 @@ import {
   scanWorkspaceSkills,
   scanWorkspaceSkillsGuarded,
 } from '../workspace-skill-scanner.js';
-import { computeWorkspaceShadowing, type LocalSkill } from '@tabtin/agent-runtime/skills';
+import { computeWorkspaceShadowing, type LocalSkill } from '@muse/agent-runtime/skills';
 
 let root: string;
 

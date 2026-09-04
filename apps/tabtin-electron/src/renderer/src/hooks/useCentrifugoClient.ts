@@ -25,7 +25,7 @@ import { mapDjangoMessage, type DjangoMessageRecord } from '@/services/im/provid
 import { apiService } from '@/services/api'
 import { registerResetAction } from '@/stores/sessionResetRegistry'
 import i18n from '@/i18n'
-import { toast } from '@tabtin/smartsheet-ui'
+import { toast } from '@muse/smartsheet-ui'
 import { createLogger } from '@/utils/logger'
 import { notifyLogoutRequired } from '@/utils/authPersistence'
 

@@ -20,7 +20,7 @@ import {
   UnifiedSearchError,
   type UnifiedSearchParams,
   type UnifiedSearchResponse,
-} from '@tabtin/app-shell'
+} from '@muse/app-shell'
 
 const DEBOUNCE_MS = 200
 

@@ -1,4 +1,4 @@
-import type { ChatSession } from '@tabtin/chat-client'
+import type { ChatSession } from '@muse/chat-client'
 
 /**
  * 任务侧栏是否应隐藏该会话。

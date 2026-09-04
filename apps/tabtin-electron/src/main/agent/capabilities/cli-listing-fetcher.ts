@@ -5,7 +5,7 @@
  * 一次 `--include-hidden` spawn；发送热路径只读可见子集快照。
  */
 
-import type { CliListing } from '@tabtin/agent-host/capabilities'
+import type { CliListing } from '@muse/agent-host/capabilities'
 import {
   getCliCommandsMaterializedSnapshot,
   warmCliCommandsMaterialized,

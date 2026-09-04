@@ -1,2 +1,2 @@
-export { onNavigate, emitNavigate } from '@tabtin/app-shell'
-export type { NavigationTarget, NavigationListener } from '@tabtin/app-shell'
+export { onNavigate, emitNavigate } from '@muse/app-shell'
+export type { NavigationTarget, NavigationListener } from '@muse/app-shell'

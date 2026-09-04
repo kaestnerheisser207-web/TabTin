@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import type { TableGridRuntimeApi } from '@tabtin/table-engine'
-import { shouldActivateGridForSearchMatch, type DataGridSearchScope } from '@tabtin/table-ui'
-import { cellTextMatchesSearchQuery, type Field } from '@tabtin/table-core'
+import type { TableGridRuntimeApi } from '@muse/table-engine'
+import { shouldActivateGridForSearchMatch, type DataGridSearchScope } from '@muse/table-ui'
+import { cellTextMatchesSearchQuery, type Field } from '@muse/table-core'
 
 export type SearchMatch = { rowIndex: number; field: string; rowId: string; fieldId: string }
 

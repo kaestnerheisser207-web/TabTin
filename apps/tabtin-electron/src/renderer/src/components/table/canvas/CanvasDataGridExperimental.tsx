@@ -1,4 +1,4 @@
 export {
   CanvasDataGridExperimental,
   type CanvasDataGridExperimentalProps,
-} from '@tabtin/table-engine-canvas/engine'
+} from '@muse/table-engine-canvas/engine'

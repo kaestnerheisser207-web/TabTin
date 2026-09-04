@@ -1,8 +1,8 @@
 /**
  * OS 访问错误本地契约（ Stage 7a）。
  *
- * 生产路径不再 import `@tabtin/os-errors`。错误对象仍由宿主侧
- * `@tabtin/safe-fs` 抛出（含 `osError` 字段）；runtime 只做 duck-type
+ * 生产路径不再 import `@muse/os-errors`。错误对象仍由宿主侧
+ * `@muse/safe-fs` 抛出（含 `osError` 字段）；runtime 只做 duck-type
  * 识别与 Agent 文案渲染，字段形状须与 os-errors 对齐。
  */
 

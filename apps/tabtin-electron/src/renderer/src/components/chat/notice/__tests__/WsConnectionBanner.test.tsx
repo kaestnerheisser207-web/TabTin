@@ -6,7 +6,7 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
 import { render, screen, fireEvent, act, waitFor } from '@testing-library/react'
 import React from 'react'
-import { toast } from '@tabtin/smartsheet-ui'
+import { toast } from '@muse/smartsheet-ui'
 
 // ── Hoisted mock state ──
 
@@ -213,7 +213,7 @@ vi.mock('zustand/react/shallow', () => ({
   useShallow: (fn: any) => fn,
 }))
 
-vi.mock('@tabtin/smartsheet-ui', () => ({
+vi.mock('@muse/smartsheet-ui', () => ({
   toast: vi.fn(),
   cn: (...args: unknown[]) => args.filter(Boolean).join(' '),
   Popover: ({ children, open }: { children: React.ReactNode; open?: boolean }) => (

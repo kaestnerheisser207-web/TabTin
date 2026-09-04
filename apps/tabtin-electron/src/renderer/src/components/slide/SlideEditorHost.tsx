@@ -1,4 +1,4 @@
-import { joinApiPath } from '@tabtin/config'
+import { joinApiPath } from '@muse/config'
 import React, { useCallback, useState, useEffect, useRef, useMemo } from 'react'
 import {
   SlideEditor,
@@ -11,7 +11,7 @@ import {
   type SlidePreset,
   type SlideShowOptions,
   useSlideStore,
-} from '@tabtin/tabslide'
+} from '@muse/tabslide'
 import {
   convertBackendToPresentation,
   SlideRenderer,
@@ -19,8 +19,8 @@ import {
   type BackendSlidePage,
   type Slide,
   type SlideTheme,
-} from '@tabtin/tabslide/viewer'
-import type { ImportResult, PPTXExportWarning } from '@tabtin/tabslide/exports'
+} from '@muse/tabslide/viewer'
+import type { ImportResult, PPTXExportWarning } from '@muse/tabslide/exports'
 import { apiService } from '@/services/api'
 import { directUpload } from '@/services/oss-direct-uploader'
 import { validateUploadFile, UPLOAD_PRESETS, formatFileSize } from '@/constants/upload'
@@ -28,8 +28,8 @@ import { useSpaceStore } from '@/stores/useSpaceStore'
 import { useAuthStore } from '@/stores/useAuthStore'
 import { useSpaceContextTabsStore } from '@/stores/useSpaceContextTabsStore'
 import { useVersionPanel } from '@/components/collab/useVersionPanel'
-import { fetchVersionPreview, CollabStatus, type CollabPeerState, type VersionHistoryItem, type VersionPreviewData } from '@tabtin/collab-core'
-import { OVERLAY_SURFACE_CLASS, ScrollArea, PanelErrorBoundary, ModuleErrorBoundary } from '@tabtin/smartsheet-ui'
+import { fetchVersionPreview, CollabStatus, type CollabPeerState, type VersionHistoryItem, type VersionPreviewData } from '@muse/collab-core'
+import { OVERLAY_SURFACE_CLASS, ScrollArea, PanelErrorBoundary, ModuleErrorBoundary } from '@muse/smartsheet-ui'
 import { useTranslation } from 'react-i18next'
 import { Presentation, Sparkles } from 'lucide-react'
 import { requestAgentForSlide } from './requestAgentForSlide'
@@ -60,7 +60,7 @@ import {
 } from './slide-save'
 import { downloadFromUrl, requestBackendPptxExport } from './slide-export'
 import { registerFlushHandler } from './slide-flush-registry'
-import { toast } from '@tabtin/smartsheet-ui'
+import { toast } from '@muse/smartsheet-ui'
 import { WifiOff } from 'lucide-react'
 import { useRetryOnRecovery } from '@/hooks/useRetryOnRecovery'
 import { useScopedResizeObserver } from '@hooks/spaceActivity'
@@ -84,8 +84,8 @@ type SaveQueueWaiter = {
   reject: (error: Error) => void
 }
 
-type TabslideExportsRuntime = typeof import('@tabtin/tabslide/exports')
-type TabslideImageReuploadRuntime = typeof import('@tabtin/tabslide/image-reupload')
+type TabslideExportsRuntime = typeof import('@muse/tabslide/exports')
+type TabslideImageReuploadRuntime = typeof import('@muse/tabslide/image-reupload')
 type SlideImportAdapterRuntime = typeof import('./slide-import-adapter')
 
 let tabslideExportsRuntimePromise: Promise<TabslideExportsRuntime> | null = null
@@ -94,14 +94,14 @@ let slideImportAdapterRuntimePromise: Promise<SlideImportAdapterRuntime> | null 
 
 const loadTabslideExportsRuntime = () => {
   if (!tabslideExportsRuntimePromise) {
-    tabslideExportsRuntimePromise = import('@tabtin/tabslide/exports')
+    tabslideExportsRuntimePromise = import('@muse/tabslide/exports')
   }
   return tabslideExportsRuntimePromise
 }
 
 const loadTabslideImageReuploadRuntime = () => {
   if (!tabslideImageReuploadRuntimePromise) {
-    tabslideImageReuploadRuntimePromise = import('@tabtin/tabslide/image-reupload')
+    tabslideImageReuploadRuntimePromise = import('@muse/tabslide/image-reupload')
   }
   return tabslideImageReuploadRuntimePromise
 }
@@ -348,7 +348,7 @@ function SlideVersionPreview({ versionId, version }: { versionId: string; versio
 /**
  * SlideEditorHost — TabSlide 编辑器宿主
  *
- * 使用 @tabtin/tabslide 的 SlideEditor 替代旧的 Penpot iframe。
+ * 使用 @muse/tabslide 的 SlideEditor 替代旧的 Penpot iframe。
  *
  * 工作流程：
  * 1. 新建演示文稿 → createDefaultPresentation() → 本地编辑
@@ -565,10 +565,10 @@ const SlideEditorHostInner: React.FC<SlideEditorHostInnerProps> = ({
   // Electron 真全屏（利用 BrowserWindow.setFullScreen）
   const fullscreenOptions = useMemo<SlideShowOptions>(() => ({
     onEnterFullscreen: () => {
-      window.tabtin?.slideshow?.enterFullscreen()
+      window.muse?.slideshow?.enterFullscreen()
     },
     onExitFullscreen: () => {
-      window.tabtin?.slideshow?.exitFullscreen()
+      window.muse?.slideshow?.exitFullscreen()
     },
   }), [])
 

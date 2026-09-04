@@ -2,7 +2,7 @@
  * subagentPreviewMocks — ChatComponentPreview 专用 mock 数据
  */
 
-import type { SpeakerIdentity } from '@tabtin/agent-wire'
+import type { SpeakerIdentity } from '@muse/agent-wire'
 import type { SubagentRun } from '../../../stores/chat/shared/types'
 
 export const PREVIEW_SESSION_ID = 'preview-session-001'

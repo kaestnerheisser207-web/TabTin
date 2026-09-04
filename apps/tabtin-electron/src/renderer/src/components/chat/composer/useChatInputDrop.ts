@@ -1,5 +1,5 @@
 import { useCallback, useEffect, type DragEvent } from 'react'
-import { toast } from '@tabtin/smartsheet-ui'
+import { toast } from '@muse/smartsheet-ui'
 import { useTranslation } from 'react-i18next'
 import {
   COLLECTION_FOLDER_MIME,
@@ -44,7 +44,7 @@ async function classifyDroppedFile(
 
   let isDirectory = false
   try {
-    const probe = await window.tabtin?.fileSystem?.readFilePreview?.(filePath, { maxBytes: 0 })
+    const probe = await window.muse?.fileSystem?.readFilePreview?.(filePath, { maxBytes: 0 })
     if (probe && probe.success === false && (probe as { code?: string }).code === 'EISDIR') {
       isDirectory = true
     } else if (!probe || probe.success === false) {

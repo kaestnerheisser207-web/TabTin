@@ -195,8 +195,8 @@ describe('EF1: Electron 路径 CommandValidator 集成', () => {
         expect(wrappedCommand).toBeDefined()
         expect(wrappedCommand).toContain('echo hello')
 
-        const startMarker = wrappedCommand.match(/__TABTIN_CMD_START_[a-f0-9]+__/)?.[0]
-        const endMarkerPrefix = wrappedCommand.match(/__TABTIN_CMD_END_[a-f0-9]+_/)?.[0]
+        const startMarker = wrappedCommand.match(/__MUSE_CMD_START_[a-f0-9]+__/)?.[0]
+        const endMarkerPrefix = wrappedCommand.match(/__MUSE_CMD_END_[a-f0-9]+_/)?.[0]
 
         if (startMarker && endMarkerPrefix) {
           hostSession.triggerData(`${startMarker}\nhello\n${endMarkerPrefix}0_/tmp__\n`)
@@ -223,8 +223,8 @@ describe('EF1: Electron 路径 CommandValidator 集成', () => {
         const wrappedCommand = hostSession.write.mock.calls.at(-1)?.[0] as string
         expect(wrappedCommand).toContain('ls -la')
 
-        const startMarker = wrappedCommand.match(/__TABTIN_CMD_START_[a-f0-9]+__/)?.[0]
-        const endMarkerPrefix = wrappedCommand.match(/__TABTIN_CMD_END_[a-f0-9]+_/)?.[0]
+        const startMarker = wrappedCommand.match(/__MUSE_CMD_START_[a-f0-9]+__/)?.[0]
+        const endMarkerPrefix = wrappedCommand.match(/__MUSE_CMD_END_[a-f0-9]+_/)?.[0]
 
         if (startMarker && endMarkerPrefix) {
           hostSession.triggerData(`${startMarker}\ntotal 0\n${endMarkerPrefix}0_/tmp__\n`)

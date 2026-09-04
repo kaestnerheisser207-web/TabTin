@@ -124,7 +124,7 @@ describe('events emit · 5 outcome 分支', () => {
         { appId: 'tabdata', types: [{ type: 'table', priority: 100 }] },
       ],
     })
-    await router.open('space_x', parseResourcePointer('tabtin://resource/table/tbl_a'))
+    await router.open('space_x', parseResourcePointer('muse://resource/table/tbl_a'))
     expect(collector.events).toHaveLength(1)
     const ev = collector.events[0]!
     assertEventShape(ev)
@@ -196,7 +196,7 @@ describe('events emit · 5 outcome 分支', () => {
     })
     const out = await router.open(
       'space_x',
-      parseResourcePointer('tabtin://resource/table/tbl_a'),
+      parseResourcePointer('muse://resource/table/tbl_a'),
     )
     expect(out.outcome).toBe('error')
     expect(collector.events).toHaveLength(1)
@@ -244,7 +244,7 @@ describe('events emit · 5 trigger_source 都被透传', () => {
       })
       await router.open(
         'space_x',
-        parseResourcePointer('tabtin://resource/table/tbl_a'),
+        parseResourcePointer('muse://resource/table/tbl_a'),
         { triggerSource: src },
       )
       expect(collector.events).toHaveLength(1)
@@ -278,7 +278,7 @@ describe('events emit · 6 resolve_source 都被打 tag', () => {
       },
       new ResourceRouterRegistry(),
     )
-    await router.open('s_x', parseResourcePointer('tabtin://resource/table/tbl_a'))
+    await router.open('s_x', parseResourcePointer('muse://resource/table/tbl_a'))
     expect(collector.events[0]!.resolve_source).toBe('user_pref')
   })
 
@@ -302,7 +302,7 @@ describe('events emit · 6 resolve_source 都被打 tag', () => {
       },
       new ResourceRouterRegistry(),
     )
-    await router.open('s_x', parseResourcePointer('tabtin://resource/table/tbl_a'))
+    await router.open('s_x', parseResourcePointer('muse://resource/table/tbl_a'))
     expect(collector.events[0]!.resolve_source).toBe('session_override')
   })
 
@@ -314,7 +314,7 @@ describe('events emit · 6 resolve_source 都被打 tag', () => {
     })
     await router.open(
       's_x',
-      parseResourcePointer('tabtin://resource/table/tbl_a?hint=tabdata'),
+      parseResourcePointer('muse://resource/table/tbl_a?hint=tabdata'),
     )
     expect(collector.events[0]!.resolve_source).toBe('agent_hint')
     expect(collector.events[0]!.hint_app_id).toBe('tabdata')
@@ -327,7 +327,7 @@ describe('events emit · 6 resolve_source 都被打 tag', () => {
         { appId: 'tabdata', types: [{ type: 'table', priority: 100 }] },
       ],
     })
-    await router.open('s_x', parseResourcePointer('tabtin://resource/table/tbl_a'))
+    await router.open('s_x', parseResourcePointer('muse://resource/table/tbl_a'))
     expect(collector.events[0]!.resolve_source).toBe('manifest_default')
   })
 
@@ -371,7 +371,7 @@ describe('events emit · D8 红线（不影响关键路径性能 + emit 失败�
     )
     const out = await router.open(
       's_x',
-      parseResourcePointer('tabtin://resource/table/tbl_a'),
+      parseResourcePointer('muse://resource/table/tbl_a'),
     )
     // emit 抛错 router 仍然返回 in_space_opened（不能影响业务路径）
     expect(out.outcome).toBe('in_space_opened')
@@ -394,7 +394,7 @@ describe('events emit · D8 红线（不影响关键路径性能 + emit 失败�
     )
     const out = await router.open(
       's_x',
-      parseResourcePointer('tabtin://resource/table/tbl_a'),
+      parseResourcePointer('muse://resource/table/tbl_a'),
     )
     expect(out.outcome).toBe('in_space_opened')
   })
@@ -406,8 +406,8 @@ describe('events emit · D8 红线（不影响关键路径性能 + emit 失败�
         { appId: 'tabdata', types: [{ type: 'table', priority: 100 }] },
       ],
     })
-    await router.open('s_x', parseResourcePointer('tabtin://resource/table/tbl_a'))
-    await router.open('s_x', parseResourcePointer('tabtin://resource/table/tbl_b'))
+    await router.open('s_x', parseResourcePointer('muse://resource/table/tbl_a'))
+    await router.open('s_x', parseResourcePointer('muse://resource/table/tbl_b'))
     expect(collector.events).toHaveLength(2)
   })
 

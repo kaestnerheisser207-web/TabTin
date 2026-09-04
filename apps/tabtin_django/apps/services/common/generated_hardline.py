@@ -6,7 +6,7 @@ SSoT:
   - packages/security-policy/src/hardline-rules.json     (v1 兼容)
   - packages/security-policy/src/hardline-v3-rules.json  (v3)
 
-镜像 TS ``@tabtin/security-policy`` 的硬底线规则与检查函数。
+镜像 TS ``@muse/security-policy`` 的硬底线规则与检查函数。
 v1 行为对应 PRD 05 §6.2 Layer 1；v3 行为对应授权策略 v3 §7。
 """
 

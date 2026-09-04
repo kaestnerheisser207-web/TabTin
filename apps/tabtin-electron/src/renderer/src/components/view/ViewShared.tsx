@@ -1,7 +1,7 @@
 import React from 'react'
-import { Button, cn, LoadingSpinner } from '@tabtin/smartsheet-ui'
-import { formatFieldDisplayValue, isAttachmentFieldType } from '@tabtin/table-ui'
-import type { Field } from '@tabtin/table-core'
+import { Button, cn, LoadingSpinner } from '@muse/smartsheet-ui'
+import { formatFieldDisplayValue, isAttachmentFieldType } from '@muse/table-ui'
+import type { Field } from '@muse/table-core'
 import { useTranslation } from 'react-i18next'
 import { formatNumber } from '@/utils/i18n/format'
 import {

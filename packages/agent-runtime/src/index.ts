@@ -1,5 +1,5 @@
 /**
- * @tabtin/agent-runtime — Muse local agent execution runtime.
+ * @muse/agent-runtime — Muse local agent execution runtime.
  *
  * Hosts the local ReAct loop, tool orchestration, context compaction,
  * and session persistence. All LLM calls go through the Django LLM proxy.
@@ -9,10 +9,10 @@ export type { Logger, GatewayPort, RuntimeConfig } from './interfaces.js';
 
 // #5394 Phase 2：permission-policy.ts（shouldAutoApprove / classifyTool /
 // presetToPermissionMode / ToolCategory）已整体删除——判决权威是
-// `@tabtin/security-policy` judge()，handler 不再自动批准任何请求。
+// `@muse/security-policy` judge()，handler 不再自动批准任何请求。
 //
-// issue #6009 Stage 6b：不再从本包 re-export `@tabtin/contracts/agent` 或
-// `@tabtin/python-runtime-host`——宿主直接依赖对应包。
+// issue #6009 Stage 6b：不再从本包 re-export `@muse/contracts/agent` 或
+// `@muse/python-runtime-host`——宿主直接依赖对应包。
 
 // ─── Local Engine ───────────────────────────────────────────────────
 // Local ReAct loop, tool orchestration, compaction, session storage.
@@ -347,7 +347,7 @@ export type {
 //
 // issue #6009 Phase 1：原来这里 re-export 的 7 个 `build*InjectorHook` +
 // 各 Options 类型已整体迁到宿主内容包。引擎不再持有 6 段上下文贡献
-// （它们依赖 @tabtin/agent-prompt / agent-modes / lsp-runtime 这些产品内容包）
+// （它们依赖 @muse/agent-prompt / agent-modes / lsp-runtime 这些产品内容包）
 // ——引擎只保留 EngineHooks 这一唯一注入原语。
 export { composeHooks } from './engine/index.js';
 

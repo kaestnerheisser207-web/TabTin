@@ -18,7 +18,7 @@ import {
 import { getChatClientInstance } from './chatClientSingleton'
 import { getSessionMessagesFacade } from './agentService/sessionMessages'
 import { readSessionMessages, reconcileServerMessages } from './agentService/messageWriteGate'
-import { ChatAPIError } from '@tabtin/chat-client'
+import { ChatAPIError } from '@muse/chat-client'
 import { reconcileHitlPanelsFromMessages } from '@/stores/chat/hitl/handlers/hitlMessageReconcile'
 import { createLogger } from '@/utils/logger'
 
@@ -157,7 +157,7 @@ export async function hydrateAfterLostStream(
         readLocalTranscript,
         enrichWithServerMetadata,
       } = await import('@/services/localTranscript')
-      const { resolveSessionScopeId } = await import('@tabtin/app-shell')
+      const { resolveSessionScopeId } = await import('@muse/app-shell')
       const state = useChatStore.getState()
       const session = state.sessions.find((s) => s.id === sessionId)
         ?? Object.values(state.sessionsBySpaceId ?? {}).flat().find((s) => s.id === sessionId)

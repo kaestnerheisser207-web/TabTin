@@ -108,7 +108,7 @@ enum SkillMarketFilters {
         "tabtin-data-toolkit-pack",
         "tabtin-business-analysis-pack",
         "tabtin-creative-toolkit-pack",
-        "tabtin-dev-toolkit-pack",
+        "muse-dev-toolkit-pack",
     ]
 
     private static let categoryKeys: Set<String> = Set(

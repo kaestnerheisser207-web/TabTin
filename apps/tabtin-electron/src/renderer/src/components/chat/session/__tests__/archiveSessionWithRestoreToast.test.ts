@@ -6,7 +6,7 @@ const mocks = vi.hoisted(() => ({
   restoreSession: vi.fn(),
 }))
 
-vi.mock('@tabtin/smartsheet-ui', () => ({
+vi.mock('@muse/smartsheet-ui', () => ({
   ToastAction: () => null,
 }))
 

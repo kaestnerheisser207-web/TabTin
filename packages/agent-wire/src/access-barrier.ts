@@ -5,7 +5,7 @@
  * 暂停并发起本事件；用户决议写入 `AccessBarrierResolution`，走既有
  * user_response / SingleHitlResolved 管线回灌工具结果。
  *
- * **结构与 `@tabtin/browser-core::access-barrier/types.ts` 的 `AccessBarrier` /
+ * **结构与 `@muse/browser-core::access-barrier/types.ts` 的 `AccessBarrier` /
  * `AccessBarrierResolution` 同名同形**，但本文件**不 import browser-core**——
  * `agent-wire` 是跨 daemon/backend/frontend 的协议层，不应依赖某个能力包的
  * 实现细节；两边字段名/取值域靠人工对齐（本文件与 browser-core 同一设计文档

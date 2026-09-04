@@ -18,8 +18,8 @@
  *   canonical 分支保留 `rawResult.content`（完整 envelope）。
  * - 消费完清空 `hostMetadata`（execution + raw），杜绝完整 stdout 泄漏。
  */
-import type { EngineHooks, ToolResult } from '@tabtin/agent-runtime'
-import type { ContentBlockStart } from '@tabtin/agent-wire'
+import type { EngineHooks, ToolResult } from '@muse/agent-runtime'
+import type { ContentBlockStart } from '@muse/agent-wire'
 import { buildOssFileArtifactBlockFromUpload } from './oss-file-artifact.js'
 import { buildMediaImageArtifactBlocks } from './media-image-artifact.js'
 import { buildPlatformResourceArtifactBlockFromCreate } from './platform-resource-artifact.js'

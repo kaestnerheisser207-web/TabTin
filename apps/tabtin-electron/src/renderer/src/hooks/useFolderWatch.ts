@@ -101,13 +101,13 @@ export function useFolderWatch(
   useEffect(() => {
     if (specs.length === 0) return
 
-    const fileSystem = window.tabtin?.fileSystem
+    const fileSystem = window.muse?.fileSystem
     if (!fileSystem?.watch || !fileSystem?.unwatch || !fileSystem?.onWatchEvent) {
-      log.warn('window.tabtin.fileSystem.watch 不可用，跳过启动')
+      log.warn('window.muse.fileSystem.watch 不可用，跳过启动')
       for (const spec of specs) {
         reportFsWatchSetupFailed({
           rootPath: spec.rootPath,
-          error: 'window.tabtin.fileSystem watch API not available',
+          error: 'window.muse.fileSystem watch API not available',
           source: 'result_failed',
         })
       }

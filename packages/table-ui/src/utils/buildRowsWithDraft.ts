@@ -5,7 +5,7 @@
  * draftRowData 推断分组值匹配 → 首个 group_add 兜底 → 全局 add 行 → 末尾追加。
  */
 
-import type { TableGridRowType } from '@tabtin/table-engine'
+import type { TableGridRowType } from '@muse/table-engine'
 
 export interface GroupRowLike {
   __rowType?: TableGridRowType

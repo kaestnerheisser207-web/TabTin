@@ -24,7 +24,7 @@
 import { promises as fsPromises } from 'node:fs';
 import path from 'node:path';
 import { inflateRaw } from 'node:zlib';
-import { FilePipelineErrorCode } from '@tabtin/file-pipeline-errors';
+import { FilePipelineErrorCode } from '@muse/file-pipeline-errors';
 import type {
   FileParser,
   FileSource,

@@ -25,8 +25,8 @@ class RuntimeBuildTests(SimpleTestCase):
         self.assertEqual(build.source_sha, "abc1234")
 
     @override_settings(
-        TABTIN_SERVER_VERSION="1.0.1-beta.1",
-        TABTIN_GIT_SHA="def5678",
+        MUSE_SERVER_VERSION="1.0.1-beta.1",
+        MUSE_GIT_SHA="def5678",
     )
     def test_reads_server_build_and_compares_supported_versions(self):
         self.assertEqual(get_server_build().release_version, "1.0.1-beta.1")

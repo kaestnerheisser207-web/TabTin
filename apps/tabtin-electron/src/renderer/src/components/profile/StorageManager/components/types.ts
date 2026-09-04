@@ -21,7 +21,7 @@ import type {
   ClearOptions,
   ConfirmationLevel,
   ExportPayload,
-} from '@tabtin/storage-manager'
+} from '@muse/storage-manager'
 
 export type {
   BucketCategory,

@@ -30,7 +30,7 @@ vi.mock('@/components/chat/turn/turnArtifacts', () => ({
   collectSessionArtifacts: (...args: unknown[]) => collectSessionArtifacts(...args),
 }))
 
-vi.mock('@tabtin/resource-router', () => ({
+vi.mock('@muse/resource-router', () => ({
   parseResourcePointer: (href: string) => {
     const match = /^tabtin:\/\/resource\/([^/?#]+)\/([^?#]+)/.exec(href)
     return {
@@ -73,7 +73,7 @@ describe('openProjectTaskDocumentPreview', () => {
   it('补齐缺失的 resourceSpaceId（host=Project / resource=伴生工作空间）', () => {
     collectSessionArtifacts.mockReturnValue([{
       kind: 'doc',
-      href: 'tabtin://resource/document/doc-1?hint=tabdoc',
+      href: 'muse://resource/document/doc-1?hint=tabdoc',
       resourceSpaceId: 'companion-workspace-1',
     }])
 

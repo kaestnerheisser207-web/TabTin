@@ -28,13 +28,13 @@
  */
 
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-// SSoT 通过 @tabtin/local-docparse 二次 re-export（与 daemon localDocParse.ts
+// SSoT 通过 @muse/local-docparse 二次 re-export（与 daemon localDocParse.ts
 // 同款入口；daemon 没有直接 depend file-pipeline-errors）
 import {
   FILE_PIPELINE_ERROR_KINDS,
   FilePipelineErrorCode,
   formatFilePipelineErrorChinesePrompt,
-} from '@tabtin/local-docparse';
+} from '@muse/local-docparse';
 import { DaemonAgentHost } from '../src/application/agent/daemon-agent-host.js';
 
 // ────────────────────────────────────────────────────────────────────

@@ -1,7 +1,7 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { PGliteSyncService } from '../src/sync.js'
 import type { SyncApiClient } from '../src/sync.js'
-import type { SyncDelta } from '@tabtin/table-kernel'
+import type { SyncDelta } from '@muse/table-kernel'
 import type { PGliteInstance } from '../src/dialect.js'
 
 function createMockPg(): PGliteInstance {

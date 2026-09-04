@@ -1,4 +1,4 @@
-import type { Tool, ToolProvider } from '@tabtin/agent-runtime/engine'
+import type { Tool, ToolProvider } from '@muse/agent-runtime/engine'
 
 const SUBAGENT_OMITTED_TOOLS = new Set(['todo'])
 

@@ -1,5 +1,5 @@
 /**
- * @tabtin/file-pipeline — File pipeline 抽象层入口
+ * @muse/file-pipeline — File pipeline 抽象层入口
  *
  * **W4（2026-05-13）业务目标**：未来 Muse 加新文件格式（.epub / .markdown /
  * .numbers）时，工程师只动 parser 层，不动 4 个胶水点（临时通道 read_file /
@@ -8,7 +8,7 @@
  * **典型用法**：
  *
  * ```ts
- * import { createDefaultFileResolver } from '@tabtin/file-pipeline'
+ * import { createDefaultFileResolver } from '@muse/file-pipeline'
  *
  * const fileResolver = createDefaultFileResolver()
  * const result = await fileResolver.resolve(
@@ -83,7 +83,7 @@ export {
   type FilePipelineFileSubject,
   type FilePipelineErrorContext,
   type FilePipelineErrorOutput,
-} from '@tabtin/file-pipeline-errors';
+} from '@muse/file-pipeline-errors';
 
 import { FileResolver } from './file-resolver.js';
 import { ImageParser } from './parsers/image-parser.js';

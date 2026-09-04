@@ -15,8 +15,8 @@ import {
   X
 } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
-import type { ResourceCapability, ResourceCaptureStatus, ResourceCategory, ResourceRecord, ResourceSource } from '@tabtin/action-tools/types'
-import { Skeleton, toast } from '@tabtin/smartsheet-ui'
+import type { ResourceCapability, ResourceCaptureStatus, ResourceCategory, ResourceRecord, ResourceSource } from '@muse/action-tools/types'
+import { Skeleton, toast } from '@muse/smartsheet-ui'
 import { useDownloadStore } from '@stores/useDownloadStore'
 
 type ResourceSummary = {
@@ -242,7 +242,7 @@ export const BrowserResourceCenter: React.FC<BrowserResourceCenterProps> = ({
     setError(null)
 
     try {
-      const api = window.tabtin.resourceDetection
+      const api = window.muse.resourceDetection
       const response = api.listResources
         ? await api.listResources({
             viewId,
@@ -419,7 +419,7 @@ export const BrowserResourceCenter: React.FC<BrowserResourceCenterProps> = ({
 
   const handleDownload = useCallback(async (resource: ResourceRecord) => {
     await withBusyAction(`download:${resource.resourceId}`, async () => {
-      const result = await window.tabtin.resourceDetection.downloadResource({
+      const result = await window.muse.resourceDetection.downloadResource({
         resourceId: resource.resourceId,
         viewId
       })
@@ -438,7 +438,7 @@ export const BrowserResourceCenter: React.FC<BrowserResourceCenterProps> = ({
 
   const handleCapture = useCallback(async (resource: ResourceRecord) => {
     await withBusyAction(`capture:${resource.resourceId}`, async () => {
-      const result = await window.tabtin.resourceDetection.captureResource({
+      const result = await window.muse.resourceDetection.captureResource({
         resourceId: resource.resourceId,
         viewId,
         force: true
@@ -462,7 +462,7 @@ export const BrowserResourceCenter: React.FC<BrowserResourceCenterProps> = ({
     options?: { suppressSuccessToast?: boolean; suppressErrorToast?: boolean }
   ) => {
     await withBusyAction(`parse:${resource.resourceId}`, async () => {
-      const result = await window.tabtin.resourceDetection.parseStream({
+      const result = await window.muse.resourceDetection.parseStream({
         resourceId: resource.resourceId,
         viewId
       })
@@ -486,7 +486,7 @@ export const BrowserResourceCenter: React.FC<BrowserResourceCenterProps> = ({
 
   const handleDownloadStream = useCallback(async (resource: ResourceRecord) => {
     await withBusyAction(`stream-download:${resource.resourceId}`, async () => {
-      const result = await window.tabtin.resourceDetection.downloadStream({
+      const result = await window.muse.resourceDetection.downloadStream({
         resourceId: resource.resourceId,
         viewId,
         quality: selectedQuality !== 'best' ? selectedQuality : undefined

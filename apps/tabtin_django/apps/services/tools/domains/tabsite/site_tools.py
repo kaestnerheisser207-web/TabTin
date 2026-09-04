@@ -677,9 +677,9 @@ class TabsiteProvisionTokenTool(BaseTool):
     name: str = "tabsite_provision_token"
     description: str = (
         "为站点自动创建只读 TabData API Token。"
-        "首次创建时返回 VITE_TABTIN_TOKEN（明文），该值仅在首次创建时可获取。"
+        "首次创建时返回 VITE_MUSE_TOKEN（明文），该值仅在首次创建时可获取。"
         "如果站点通过 init-template 初始化，.env.local 已自动写入，无需手动操作。"
-        "幂等操作：如果站点已有有效 Token，不会重复创建，且不返回 VITE_TABTIN_TOKEN（明文不可恢复）。"
+        "幂等操作：如果站点已有有效 Token，不会重复创建，且不返回 VITE_MUSE_TOKEN（明文不可恢复）。"
         "请勿在幂等返回时尝试将空值写入 .env.local，这会破坏已有配置。"
     )
     args_schema: type = ProvisionTokenInput
@@ -696,7 +696,7 @@ class TabsiteProvisionTokenTool(BaseTool):
             from apps.tabsite.services.site_service import SiteService
             svc = SiteService(user=user)
             env_data = svc.provision_tabdata_token(site_id)
-            newly_created = "VITE_TABTIN_TOKEN" in env_data
+            newly_created = "VITE_MUSE_TOKEN" in env_data
             result = {"success": True, "newly_created": newly_created, **env_data}
             if not newly_created:
                 result["hint"] = (

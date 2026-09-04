@@ -2,8 +2,8 @@ import {
   useDataGridDataset as useDataGridDatasetBase,
   type DataGridDataset as DataGridDatasetBase,
   type UseDataGridDatasetInput as UseDataGridDatasetInputBase,
-} from '@tabtin/table-ui'
-import type { Field, TableRecord, ViewMeta, ViewRecordsResponse } from '@tabtin/table-core'
+} from '@muse/table-ui'
+import type { Field, TableRecord, ViewMeta, ViewRecordsResponse } from '@muse/table-core'
 
 export interface UseDataGridDatasetInput
   extends Omit<

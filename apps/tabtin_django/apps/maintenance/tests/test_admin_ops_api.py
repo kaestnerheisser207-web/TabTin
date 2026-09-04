@@ -36,18 +36,18 @@ def test_reason_is_always_required():
     assert "reason" in str(exc.value)
 
 
-@override_settings(TABTIN_ADMIN_OPS_REQUIRE_TICKET_ID="0")
+@override_settings(MUSE_ADMIN_OPS_REQUIRE_TICKET_ID="0")
 def test_ticket_can_be_disabled_outside_production():
-    with patch.dict(os.environ, {"ENVIRONMENT": "development", "DJANGO_ENV": "", "TABTIN_ENV": ""}, clear=False):
+    with patch.dict(os.environ, {"ENVIRONMENT": "development", "DJANGO_ENV": "", "MUSE_ENV": ""}, clear=False):
         assert ops._require_reason_ticket("investigate user complaint", "") == (
             "investigate user complaint",
             "",
         )
 
 
-@override_settings(TABTIN_ADMIN_OPS_REQUIRE_TICKET_ID="0")
+@override_settings(MUSE_ADMIN_OPS_REQUIRE_TICKET_ID="0")
 def test_ticket_required_in_production_even_if_setting_disabled():
-    with patch.dict(os.environ, {"ENVIRONMENT": "production", "DJANGO_ENV": "", "TABTIN_ENV": ""}, clear=False):
+    with patch.dict(os.environ, {"ENVIRONMENT": "production", "DJANGO_ENV": "", "MUSE_ENV": ""}, clear=False):
         with pytest.raises(HttpError) as exc:
             ops._require_reason_ticket("investigate user complaint", "")
 

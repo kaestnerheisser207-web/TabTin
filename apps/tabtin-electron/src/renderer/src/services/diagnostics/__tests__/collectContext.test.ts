@@ -40,7 +40,7 @@ vi.mock('@/services/sentry', () => ({
   isSentryEnabled: () => true,
   getRecentSentryEventIds: () => ['evt-1', 'evt-2'],
 }))
-vi.mock('@tabtin/app-shell', () => ({
+vi.mock('@muse/app-shell', () => ({
   useOrganizationStore: { getState: () => organizationStoreState },
   useSpaceStore: { getState: () => spaceStoreState },
   useSpaceListStore: { getState: () => listStoreState },

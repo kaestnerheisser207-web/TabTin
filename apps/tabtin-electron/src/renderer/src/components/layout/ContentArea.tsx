@@ -1,5 +1,5 @@
 import React from 'react'
-import { LoadingSpinner } from '@tabtin/smartsheet-ui'
+import { LoadingSpinner } from '@muse/smartsheet-ui'
 import { ErrorBoundary } from '@components/common/ErrorBoundary'
 import { useCrawlspaceRegistry } from '@/crawlspace/registry'
 import { useOrganizationStore } from '@stores/useOrganizationStore'

@@ -18,9 +18,9 @@
 import React, { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { ShieldCheck, AlertTriangle } from 'lucide-react'
-import { Button } from '@tabtin/smartsheet-ui'
+import { Button } from '@muse/smartsheet-ui'
 import { cn } from '@utils/cn'
-import type { AskUserRiskLevel } from '@tabtin/chat-client'
+import type { AskUserRiskLevel } from '@muse/chat-client'
 import {
   CARD_RADIUS,
   BORDER,

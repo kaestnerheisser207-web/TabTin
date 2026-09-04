@@ -11,12 +11,12 @@
 
 import type {
   ChatSession,
-} from '@tabtin/chat-client'
+} from '@muse/chat-client'
 import {
   AgentRunSyncPayloadSchema,
   isAgentRunSyncBusy,
   type AgentRunSyncPayload,
-} from '@tabtin/agent-wire'
+} from '@muse/agent-wire'
 import { useChatRuntimeStore } from '@/stores/useChatRuntimeStore'
 import { createLogger } from '@/utils/logger'
 import {

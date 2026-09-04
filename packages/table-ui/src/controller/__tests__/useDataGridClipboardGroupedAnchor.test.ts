@@ -10,9 +10,9 @@ const { mockToast } = vi.hoisted(() => ({
   }),
 }));
 
-vi.mock('@tabtin/smartsheet-ui', async (importOriginal) => {
+vi.mock('@muse/smartsheet-ui', async (importOriginal) => {
   const original =
-    await importOriginal<typeof import('@tabtin/smartsheet-ui')>();
+    await importOriginal<typeof import('@muse/smartsheet-ui')>();
   return {
     ...original,
     toast: mockToast,

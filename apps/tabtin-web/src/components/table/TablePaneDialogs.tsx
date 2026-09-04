@@ -17,8 +17,8 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from '@tabtin/smartsheet-ui'
-import type { Field, HistoryOperationOut } from '@tabtin/table-core'
+} from '@muse/smartsheet-ui'
+import type { Field, HistoryOperationOut } from '@muse/table-core'
 
 export interface PasteConfirmState {
   open: boolean

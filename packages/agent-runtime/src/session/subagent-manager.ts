@@ -198,7 +198,7 @@ export type ResolveLiveDepsResult =
 /**
  * S5：子 Agent 终态信息——`notifyCompleted` 的入参。
  *
- * ：与 `@tabtin/agent-wire` 的 `SubagentCompletionEnvelope` 同构；
+ * ：与 `@muse/agent-wire` 的 `SubagentCompletionEnvelope` 同构；
  * host 补 `parent_thread_id` 后入 NotificationQueue。deliverables / stats
  * 由 host enrich 或 runtime 终态路径填入，不再靠 `as` 走私字段。
  */

@@ -1,5 +1,5 @@
 import { create } from 'zustand'
-import { toast } from '@tabtin/smartsheet-ui/toast'
+import { toast } from '@muse/smartsheet-ui/toast'
 import i18n from '@/i18n'
 import {
   InvitationApiService,

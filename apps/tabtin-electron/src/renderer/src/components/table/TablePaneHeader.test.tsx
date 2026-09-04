@@ -1,9 +1,9 @@
 import React from 'react'
 import { render, screen } from '@testing-library/react'
 import { describe, expect, it, vi } from 'vitest'
-import type { Table } from '@tabtin/table-core'
+import type { Table } from '@muse/table-core'
 
-vi.mock('@tabtin/smartsheet-ui', () => ({
+vi.mock('@muse/smartsheet-ui', () => ({
   Button: ({ children, ...props }: React.PropsWithChildren<Record<string, unknown>>) => (
     <button {...props}>{children}</button>
   ),
@@ -74,7 +74,7 @@ vi.mock('@stores/useTableCollabStore', () => ({
   useCollabViewUpdaterForTable: () => null,
 }))
 
-vi.mock('@tabtin/collab-core', () => ({
+vi.mock('@muse/collab-core', () => ({
   CollabStatusBadge: () => null,
   CollabStatus: {},
 }))
@@ -83,7 +83,7 @@ vi.mock('@components/table/TableReadonlyContext', () => ({
   useTableReadonly: () => ({ isTableReadonly: false }),
 }))
 
-vi.mock('@tabtin/table-ui', () => ({
+vi.mock('@muse/table-ui', () => ({
   buildColumnMetaVisibilityUpdate: vi.fn(),
 }))
 

@@ -28,7 +28,7 @@ const isVerboseEnabled = (): boolean => {
   try {
     return (
       window.localStorage.getItem('chat:telemetry:verbose') === '1' ||
-      Boolean(window.__TABTIN_CHAT_TELEMETRY_VERBOSE__)
+      Boolean(window.__MUSE_CHAT_TELEMETRY_VERBOSE__)
     )
   } catch {
     return false
@@ -37,7 +37,7 @@ const isVerboseEnabled = (): boolean => {
 
 const persistToWindow = () => {
   if (typeof window === 'undefined') return
-  window.__TABTIN_CHAT_TELEMETRY__ = getChatTelemetrySnapshot()
+  window.__MUSE_CHAT_TELEMETRY__ = getChatTelemetrySnapshot()
 }
 
 const nextId = () => `chat-telem-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`

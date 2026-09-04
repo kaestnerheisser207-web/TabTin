@@ -1,4 +1,4 @@
-import type { ChatSession } from '@tabtin/chat-client'
+import type { ChatSession } from '@muse/chat-client'
 
 export interface SessionReadState {
   last_read_run_sequence: number

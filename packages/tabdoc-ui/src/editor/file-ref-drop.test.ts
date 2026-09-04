@@ -6,7 +6,7 @@ import {
   tryHandleFileRefImageDrop,
 } from './file-ref-drop'
 
-const MIME = 'application/x-tabtin-file-ref'
+const MIME = 'application/x-muse-file-ref'
 
 const schema = new Schema({
   nodes: {

@@ -1,2 +1,2 @@
-export { WebContentsPageAdapter, type Page } from '@tabtin/browser-core';
+export { WebContentsPageAdapter, type Page } from '@muse/browser-core';
 

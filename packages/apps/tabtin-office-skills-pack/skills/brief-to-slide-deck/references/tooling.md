@@ -43,5 +43,5 @@ TabSlide owns its rendering runtime. If the CLI reports Playwright/Chromium/brow
 
 ## Resource Rules
 
-- Script/brief document: `tabtin://resource/document/<id>?hint=tabdoc`.
-- Slide project: `tabtin://resource/slide/<id>?hint=tabslide` when available.
+- Script/brief document: `muse://resource/document/<id>?hint=tabdoc`.
+- Slide project: `muse://resource/slide/<id>?hint=tabslide` when available.

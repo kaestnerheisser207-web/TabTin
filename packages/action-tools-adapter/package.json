@@ -1,5 +1,5 @@
 {
-  "name": "@tabtin/action-tools-adapter",
+  "name": "@muse/action-tools-adapter",
   "version": "0.1.0",
   "description": "Action tools adapter for crawl workflows",
   "type": "module",
@@ -18,7 +18,7 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@tabtin/action-tools": "workspace:*"
+    "@muse/action-tools": "workspace:*"
   },
   "devDependencies": {
     "@types/node": "^20.0.0",

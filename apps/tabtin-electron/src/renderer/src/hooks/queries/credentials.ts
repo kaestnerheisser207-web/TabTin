@@ -128,7 +128,7 @@ export function useSaveBlacklistQuery() {
  *   - IPC handler 内部已做"DELETE django + cache.delete(domain)"原子序列，
  *     与 SavePasswordBar 5s 撤销路径走同一条线。
  *
- * Daemon / Web 部署没有 window.tabtin → fallback 到 HTTP 直接删（保留兼容性，
+ * Daemon / Web 部署没有 window.muse → fallback 到 HTTP 直接删（保留兼容性，
  * 这两个宿主无 autofill-service，本来也不存在 cache 漂移问题）。
  */
 // ---------------------------------------------------------------------------

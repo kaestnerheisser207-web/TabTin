@@ -14,10 +14,10 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         requested_edition = options["edition"]
-        configured_edition = getattr(settings, "TABTIN_EDITION", "saas")
+        configured_edition = getattr(settings, "MUSE_EDITION", "saas")
         if requested_edition != configured_edition:
             raise CommandError(
-                "--edition must match the resolved TABTIN_EDITION setting"
+                "--edition must match the resolved MUSE_EDITION setting"
             )
         try:
             result = apply_community_bootstrap()

@@ -14,7 +14,7 @@
 import { useEffect } from 'react'
 import { useSpaceContextTabsStore } from '@stores/useSpaceContextTabsStore'
 import { contextRegistry } from '../registry'
-import type { Agent } from '@tabtin/app-shell'
+import type { Agent } from '@muse/app-shell'
 
 const AGENT_HOME_APP_ID = 'orchestration'
 const AGENT_HOME_TAB_TYPE = 'apphome'

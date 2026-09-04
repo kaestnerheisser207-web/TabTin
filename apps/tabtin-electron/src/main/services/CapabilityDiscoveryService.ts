@@ -3,14 +3,14 @@ import { TokenManager } from '../auth.js';
 import { createLogger } from '../logger';
 import { getDeviceFingerprint } from '../utils/deviceFingerprint';
 import { getLocalMcpService } from './LocalMcpService';
-import { joinApiPath } from '@tabtin/config';
+import { joinApiPath } from '@muse/config';
 import {
   CAPABILITY_DISCOVERY_SNAPSHOT_VERSION,
   capabilityIdBuilders,
   createRuntimeToolItems,
   type CapabilityId,
   type HostRuntimeSnapshot,
-} from '@tabtin/shared';
+} from '@muse/shared';
 import type { LocalMcpConnectionSummary } from '@shared/types/mcp';
 
 const log = createLogger('CapabilityDiscovery');

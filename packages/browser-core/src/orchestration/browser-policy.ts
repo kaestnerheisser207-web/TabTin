@@ -17,7 +17,7 @@ import {
   checkHardlinePath,
   isPathInAllowedRoots,
   normalize,
-} from '@tabtin/security-policy'
+} from '@muse/security-policy'
 import { isBlockedScript } from '../url-policy/script-policy'
 import { evaluateMediaDownloadGuardrail } from '../resources/media-download-guardrail'
 import contractData from '../generated/browser-cli-contract.json'

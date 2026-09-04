@@ -19,7 +19,7 @@ vi.mock('@/adapters/api-adapter-instance', () => ({
   getAuthToken: vi.fn(async () => 'test-token'),
 }))
 
-vi.mock('@tabtin/config', () => ({
+vi.mock('@muse/config', () => ({
   joinApiPath: (base: string, path: string) => `${base}${path}`,
 }))
 

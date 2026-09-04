@@ -24,7 +24,7 @@ import type {
   ResourceDetectionSummary,
   MediaElementInfo,
   StreamInfo
-} from '@tabtin/action-tools/types'
+} from '@muse/action-tools/types'
 import { getResourceHubService } from './ResourceHubService'
 import { createLogger } from '../logger'
 

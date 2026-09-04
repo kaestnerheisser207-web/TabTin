@@ -2,7 +2,7 @@ import { afterEach, describe, expect, it } from 'vitest'
 import {
   __resetForTesting,
   registerStorageBucket,
-} from '@tabtin/storage-manager'
+} from '@muse/storage-manager'
 
 import { createDaemonStorageApplication } from '../src/application/storage/daemon-storage.js'
 import { NodeStorageFileSystem } from '../src/platform/storage/node-storage-file-system.js'

@@ -7,7 +7,7 @@ set -euo pipefail
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
 ELECTRON_DIR="${ROOT_DIR}/apps/tabtin-electron"
 LOG_DIR="${ROOT_DIR}/apps/tabtin_django/logs"
-INSTANCE_ID="${TABTIN_SECOND_ELECTRON_INSTANCE:-im-2}"
+INSTANCE_ID="${MUSE_SECOND_ELECTRON_INSTANCE:-im-2}"
 PID_FILE="${LOG_DIR}/electron-dev-${INSTANCE_ID}.pid"
 WATCH_FOR_UPDATES=0
 case "${1:-}" in
@@ -60,13 +60,13 @@ fi
 : > "${LOG_FILE}"
 (
   cd "${ELECTRON_DIR}"
-  # userData 会由 TABTIN_DEV_INSTANCE 派生为 Muse Dev-im-2，登录态、缓存、
+  # userData 会由 MUSE_DEV_INSTANCE 派生为 Muse Dev-im-2，登录态、缓存、
   # IndexedDB、Electron 单实例锁和大部分本地文件均不会与主端共用。
   unset ELECTRON_RUN_AS_NODE
   if [[ "${WATCH_FOR_UPDATES}" -eq 1 ]]; then
     # main / preload 更新需要重新拉起 Electron；renderer 更新仍由共享 Vite HMR 处理。
     nohup env \
-      TABTIN_DEV_INSTANCE="${INSTANCE_ID}" \
+      MUSE_DEV_INSTANCE="${INSTANCE_ID}" \
       ELECTRON_RENDERER_URL="http://127.0.0.1:${ELECTRON_DEV_PORT}" \
       node "${ROOT_DIR}/scripts/electron/second-instance-supervisor.mjs" \
         "${ELECTRON_BINARY}" . "${ELECTRON_DIR}/out" >> "${LOG_FILE}" 2>&1 &
@@ -74,7 +74,7 @@ fi
     # 不能直接 nohup Electron：其父进程会变成 launchd，开发态 watchdog 会立即退出。
     # 用常驻 Node 父进程托管它，退出信号也会转发给 Electron。
     nohup env \
-      TABTIN_DEV_INSTANCE="${INSTANCE_ID}" \
+      MUSE_DEV_INSTANCE="${INSTANCE_ID}" \
       ELECTRON_RENDERER_URL="http://127.0.0.1:${ELECTRON_DEV_PORT}" \
       node "${ROOT_DIR}/scripts/electron/instance-launcher.mjs" "${ELECTRON_BINARY}" . >> "${LOG_FILE}" 2>&1 &
   fi

@@ -48,7 +48,7 @@ exports[`base prompt 函数段独立快照 > buildEnvironmentSection - 含 space
 
 ## 环境变量
 
-- \`TABTIN_WORKSPACE\`：runtime 自动注入的工作目录绝对路径；终端默认 cwd 等于它的值。只在 shell 命令内部拼路径，不要作为结构化 FC 工具参数；相对路径相对工作目录根本身，禁止再套一层 \`workspace/\` 前缀。
+- \`MUSE_WORKSPACE\`：runtime 自动注入的工作目录绝对路径；终端默认 cwd 等于它的值。只在 shell 命令内部拼路径，不要作为结构化 FC 工具参数；相对路径相对工作目录根本身，禁止再套一层 \`workspace/\` 前缀。
 
 ## 术语
 
@@ -71,7 +71,7 @@ exports[`base prompt 函数段独立快照 > buildEnvironmentSection - 缺 space
 
 ## 环境变量
 
-- \`TABTIN_WORKSPACE\`：runtime 自动注入的工作目录绝对路径；终端默认 cwd 等于它的值。只在 shell 命令内部拼路径，不要作为结构化 FC 工具参数；相对路径相对工作目录根本身，禁止再套一层 \`workspace/\` 前缀。
+- \`MUSE_WORKSPACE\`：runtime 自动注入的工作目录绝对路径；终端默认 cwd 等于它的值。只在 shell 命令内部拼路径，不要作为结构化 FC 工具参数；相对路径相对工作目录根本身，禁止再套一层 \`workspace/\` 前缀。
 
 ## 术语
 
@@ -153,12 +153,12 @@ exports[`base prompt 函数段独立快照 > buildPrincipleSection - 默认原�
 exports[`base prompt 函数段独立快照 > buildShellRuntimeSection - shellInfo=cmd（Windows 兜底） 1`] = `
 "<shell_runtime>
 - 当前 shell：cmd.exe（\`C:\\Windows\\System32\\cmd.exe\`），不是 bash：
-  - 串联命令用 \`&&\`；切目录 \`cd /d <path> && <cmd>\`，环境变量 \`%TABTIN_WORKSPACE%\`
+  - 串联命令用 \`&&\`；切目录 \`cd /d <path> && <cmd>\`，环境变量 \`%MUSE_WORKSPACE%\`
   - 含空格的路径用双引号（\`"C:\\path with space\\x"\`）；cmd 不识别单引号
   - 等待用工具参数 \`wait_ms\` / \`pattern\`；bash 专属写法（\`until...do...done\` / \`[[ ! -f ]]\` / \`| cat\`）不适用
-- 默认 cwd = \`%TABTIN_WORKSPACE%\` 的值（见 \`<environment>\` 的 \`## 环境变量\`）。终端执行入口不单独接受 cwd；
+- 默认 cwd = \`%MUSE_WORKSPACE%\` 的值（见 \`<environment>\` 的 \`## 环境变量\`）。终端执行入口不单独接受 cwd；
   要切目录用绝对路径，或按上方身份行的切目录语法内联。
-- cmd 中引用 \`TABTIN_WORKSPACE\` 用 \`%TABTIN_WORKSPACE%\`。相对路径相对工作目录根本身——**禁止**再套一层名为 \`workspace/\` 的前缀。
+- cmd 中引用 \`MUSE_WORKSPACE\` 用 \`%MUSE_WORKSPACE%\`。相对路径相对工作目录根本身——**禁止**再套一层名为 \`workspace/\` 的前缀。
 - 工作目录根对应的本地文件区初始可为空；需要落盘时用相对该根的路径（如 \`artifacts/report.pdf\`），
   shell 内需要绝对路径时，用 \`<environment>\` 所列变量按实际 shell 语法拼接——不要额外创建名为 \`workspace\` 的子目录。
 - 命令撞 hardline / 受限模式 / 权限策略时，按返回的错误分类与建议调整，必要时请用户手动执行；不要靠重复尝试探边界。
@@ -168,12 +168,12 @@ exports[`base prompt 函数段独立快照 > buildShellRuntimeSection - shellInf
 exports[`base prompt 函数段独立快照 > buildShellRuntimeSection - shellInfo=powershell（Windows） 1`] = `
 "<shell_runtime>
 - 当前 shell：PowerShell（\`C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe\`），不是 bash：
-  - 串联命令用 \`;\`（PS7 也支持 \`&&\`）；切目录 \`Set-Location <path>\` 或 \`cd <path>; <cmd>\`，环境变量 \`$env:TABTIN_WORKSPACE\`
+  - 串联命令用 \`;\`（PS7 也支持 \`&&\`）；切目录 \`Set-Location <path>\` 或 \`cd <path>; <cmd>\`，环境变量 \`$env:MUSE_WORKSPACE\`
   - 含空格的路径用单引号字面字符串（\`'C:\\path with space\\x'\`）
   - 等待用工具参数 \`wait_ms\` / \`pattern\`；bash 专属写法（\`until...do...done\` / \`[[ ! -f ]]\` / \`| cat\`）不适用
-- 默认 cwd = \`$env:TABTIN_WORKSPACE\` 的值（见 \`<environment>\` 的 \`## 环境变量\`）。终端执行入口不单独接受 cwd；
+- 默认 cwd = \`$env:MUSE_WORKSPACE\` 的值（见 \`<environment>\` 的 \`## 环境变量\`）。终端执行入口不单独接受 cwd；
   要切目录用绝对路径，或按上方身份行的切目录语法内联。
-- PowerShell 中引用 \`TABTIN_WORKSPACE\` 用 \`$env:TABTIN_WORKSPACE\`。相对路径相对工作目录根本身——**禁止**再套一层名为 \`workspace/\` 的前缀。
+- PowerShell 中引用 \`MUSE_WORKSPACE\` 用 \`$env:MUSE_WORKSPACE\`。相对路径相对工作目录根本身——**禁止**再套一层名为 \`workspace/\` 的前缀。
 - 工作目录根对应的本地文件区初始可为空；需要落盘时用相对该根的路径（如 \`artifacts/report.pdf\`），
   shell 内需要绝对路径时，用 \`<environment>\` 所列变量按实际 shell 语法拼接——不要额外创建名为 \`workspace\` 的子目录。
 - 命令撞 hardline / 受限模式 / 权限策略时，按返回的错误分类与建议调整，必要时请用户手动执行；不要靠重复尝试探边界。
@@ -182,10 +182,10 @@ exports[`base prompt 函数段独立快照 > buildShellRuntimeSection - shellInf
 
 exports[`base prompt 函数段独立快照 > buildShellRuntimeSection - shellInfo=zsh（macOS 主路径） 1`] = `
 "<shell_runtime>
-- 当前 shell：zsh（\`/bin/zsh\`）——用 POSIX shell 语法：\`&&\` / \`;\` 串联、\`cd /abs && <cmd>\` 切目录、\`$TABTIN_WORKSPACE\` 读环境变量。等待用工具参数 \`wait_ms\` / \`pattern\`；别套用其它 shell（PowerShell / cmd）的专属写法。
-- 默认 cwd = \`$TABTIN_WORKSPACE\` 的值（见 \`<environment>\` 的 \`## 环境变量\`）。终端执行入口不单独接受 cwd；
+- 当前 shell：zsh（\`/bin/zsh\`）——用 POSIX shell 语法：\`&&\` / \`;\` 串联、\`cd /abs && <cmd>\` 切目录、\`$MUSE_WORKSPACE\` 读环境变量。等待用工具参数 \`wait_ms\` / \`pattern\`；别套用其它 shell（PowerShell / cmd）的专属写法。
+- 默认 cwd = \`$MUSE_WORKSPACE\` 的值（见 \`<environment>\` 的 \`## 环境变量\`）。终端执行入口不单独接受 cwd；
   要切目录用绝对路径，或按上方身份行的切目录语法内联。
-- POSIX shell 中引用 \`TABTIN_WORKSPACE\` 用 \`$TABTIN_WORKSPACE\`。相对路径相对工作目录根本身——**禁止**再套一层名为 \`workspace/\` 的前缀。
+- POSIX shell 中引用 \`MUSE_WORKSPACE\` 用 \`$MUSE_WORKSPACE\`。相对路径相对工作目录根本身——**禁止**再套一层名为 \`workspace/\` 的前缀。
 - 工作目录根对应的本地文件区初始可为空；需要落盘时用相对该根的路径（如 \`artifacts/report.pdf\`），
   shell 内需要绝对路径时，用 \`<environment>\` 所列变量按实际 shell 语法拼接——不要额外创建名为 \`workspace\` 的子目录。
 - 命令撞 hardline / 受限模式 / 权限策略时，按返回的错误分类与建议调整，必要时请用户手动执行；不要靠重复尝试探边界。
@@ -413,7 +413,7 @@ exports[`buildSystemPrompt 完整快照 - 5 个 agent mode > mode=agent：完整
 
 ## 环境变量
 
-- \`TABTIN_WORKSPACE\`：runtime 自动注入的工作目录绝对路径；终端默认 cwd 等于它的值。只在 shell 命令内部拼路径，不要作为结构化 FC 工具参数；相对路径相对工作目录根本身，禁止再套一层 \`workspace/\` 前缀。
+- \`MUSE_WORKSPACE\`：runtime 自动注入的工作目录绝对路径；终端默认 cwd 等于它的值。只在 shell 命令内部拼路径，不要作为结构化 FC 工具参数；相对路径相对工作目录根本身，禁止再套一层 \`workspace/\` 前缀。
 
 ## 术语
 
@@ -548,7 +548,7 @@ exports[`buildSystemPrompt 完整快照 - 5 个 agent mode > mode=ask：完整 p
 
 ## 环境变量
 
-- \`TABTIN_WORKSPACE\`：runtime 自动注入的工作目录绝对路径；终端默认 cwd 等于它的值。只在 shell 命令内部拼路径，不要作为结构化 FC 工具参数；相对路径相对工作目录根本身，禁止再套一层 \`workspace/\` 前缀。
+- \`MUSE_WORKSPACE\`：runtime 自动注入的工作目录绝对路径；终端默认 cwd 等于它的值。只在 shell 命令内部拼路径，不要作为结构化 FC 工具参数；相对路径相对工作目录根本身，禁止再套一层 \`workspace/\` 前缀。
 
 ## 术语
 
@@ -697,7 +697,7 @@ exports[`buildSystemPrompt 完整快照 - 5 个 agent mode > mode=group：完整
 
 ## 环境变量
 
-- \`TABTIN_WORKSPACE\`：runtime 自动注入的工作目录绝对路径；终端默认 cwd 等于它的值。只在 shell 命令内部拼路径，不要作为结构化 FC 工具参数；相对路径相对工作目录根本身，禁止再套一层 \`workspace/\` 前缀。
+- \`MUSE_WORKSPACE\`：runtime 自动注入的工作目录绝对路径；终端默认 cwd 等于它的值。只在 shell 命令内部拼路径，不要作为结构化 FC 工具参数；相对路径相对工作目录根本身，禁止再套一层 \`workspace/\` 前缀。
 
 ## 术语
 
@@ -839,7 +839,7 @@ exports[`buildSystemPrompt 完整快照 - 5 个 agent mode > mode=plan：完整 
 
 ## 环境变量
 
-- \`TABTIN_WORKSPACE\`：runtime 自动注入的工作目录绝对路径；终端默认 cwd 等于它的值。只在 shell 命令内部拼路径，不要作为结构化 FC 工具参数；相对路径相对工作目录根本身，禁止再套一层 \`workspace/\` 前缀。
+- \`MUSE_WORKSPACE\`：runtime 自动注入的工作目录绝对路径；终端默认 cwd 等于它的值。只在 shell 命令内部拼路径，不要作为结构化 FC 工具参数；相对路径相对工作目录根本身，禁止再套一层 \`workspace/\` 前缀。
 
 ## 术语
 
@@ -975,7 +975,7 @@ exports[`buildSystemPrompt 完整快照 - 5 个 agent mode > mode=study：完整
 
 ## 环境变量
 
-- \`TABTIN_WORKSPACE\`：runtime 自动注入的工作目录绝对路径；终端默认 cwd 等于它的值。只在 shell 命令内部拼路径，不要作为结构化 FC 工具参数；相对路径相对工作目录根本身，禁止再套一层 \`workspace/\` 前缀。
+- \`MUSE_WORKSPACE\`：runtime 自动注入的工作目录绝对路径；终端默认 cwd 等于它的值。只在 shell 命令内部拼路径，不要作为结构化 FC 工具参数；相对路径相对工作目录根本身，禁止再套一层 \`workspace/\` 前缀。
 
 ## 术语
 
@@ -1142,7 +1142,7 @@ exports[`buildSystemPrompt 特殊 config combo > Daemon 路径模拟（缺 cliRe
 
 ## 环境变量
 
-- \`TABTIN_WORKSPACE\`：runtime 自动注入的工作目录绝对路径；终端默认 cwd 等于它的值。只在 shell 命令内部拼路径，不要作为结构化 FC 工具参数；相对路径相对工作目录根本身，禁止再套一层 \`workspace/\` 前缀。
+- \`MUSE_WORKSPACE\`：runtime 自动注入的工作目录绝对路径；终端默认 cwd 等于它的值。只在 shell 命令内部拼路径，不要作为结构化 FC 工具参数；相对路径相对工作目录根本身，禁止再套一层 \`workspace/\` 前缀。
 
 ## 术语
 
@@ -1319,7 +1319,7 @@ exports[`buildSystemPrompt 特殊 config combo > agent mode + executionBoundary 
 
 ## 环境变量
 
-- \`TABTIN_WORKSPACE\`：runtime 自动注入的工作目录绝对路径；终端默认 cwd 等于它的值。只在 shell 命令内部拼路径，不要作为结构化 FC 工具参数；相对路径相对工作目录根本身，禁止再套一层 \`workspace/\` 前缀。
+- \`MUSE_WORKSPACE\`：runtime 自动注入的工作目录绝对路径；终端默认 cwd 等于它的值。只在 shell 命令内部拼路径，不要作为结构化 FC 工具参数；相对路径相对工作目录根本身，禁止再套一层 \`workspace/\` 前缀。
 
 ## 术语
 
@@ -1525,7 +1525,7 @@ exports[`buildSystemPrompt 特殊 config combo > agent mode + 全 config（含 u
 
 ## 环境变量
 
-- \`TABTIN_WORKSPACE\`：runtime 自动注入的工作目录绝对路径；终端默认 cwd 等于它的值。只在 shell 命令内部拼路径，不要作为结构化 FC 工具参数；相对路径相对工作目录根本身，禁止再套一层 \`workspace/\` 前缀。
+- \`MUSE_WORKSPACE\`：runtime 自动注入的工作目录绝对路径；终端默认 cwd 等于它的值。只在 shell 命令内部拼路径，不要作为结构化 FC 工具参数；相对路径相对工作目录根本身，禁止再套一层 \`workspace/\` 前缀。
 
 ## 术语
 

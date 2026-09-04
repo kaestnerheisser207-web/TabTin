@@ -9,7 +9,7 @@
  */
 import { describe, it, expect, vi } from 'vitest'
 import { requestWithSessionGuard } from '../request-session-guard'
-import type { TableHttpRequest, TableHttpResponse } from '@tabtin/table-core'
+import type { TableHttpRequest, TableHttpResponse } from '@muse/table-core'
 
 const BASE_OPTIONS: TableHttpRequest = {
   url: '/agents/agent-1',

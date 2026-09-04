@@ -260,7 +260,7 @@ final class SpaceResourceTests: XCTestCase {
         XCTAssertTrue(userScript.isForMainFrameOnly)
         XCTAssertTrue(source.contains("window.location.origin !=="))
         XCTAssertTrue(source.contains("web.example.com"))
-        XCTAssertTrue(source.contains("window.__TABTIN_MOBILE_HOST__ = hostContext"))
+        XCTAssertTrue(source.contains("window.__MUSE_MOBILE_HOST__ = hostContext"))
         XCTAssertTrue(source.contains("new CustomEvent('tabtin:host-context', { detail: hostContext })"))
         XCTAssertTrue(source.contains("\"formFactor\":\"phone\""))
     }
@@ -853,7 +853,7 @@ final class SpaceResourceTests: XCTestCase {
                 .text(TextBlock(
                     messageId: "assistant-md-link",
                     index: 0,
-                    text: "已创建 [问候文档](tabtin://resource/document/\(docId)?hint=tabdoc)"
+                    text: "已创建 [问候文档](muse://resource/document/\(docId)?hint=tabdoc)"
                 )),
             ],
             createdAt: Date(timeIntervalSince1970: 100)
@@ -1275,7 +1275,7 @@ final class SpaceResourceTests: XCTestCase {
                 .text(TextBlock(
                     messageId: "assistant-mixed-artifacts",
                     index: 3,
-                    text: "附件见 [采集表](tabtin://resource/file/file-from-link)"
+                    text: "附件见 [采集表](muse://resource/file/file-from-link)"
                 )),
             ],
             createdAt: Date(timeIntervalSince1970: 100)

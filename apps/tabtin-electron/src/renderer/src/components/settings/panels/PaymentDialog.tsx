@@ -8,7 +8,7 @@ import {
   DialogTitle,
   DialogDescription,
   Button,
-} from '@tabtin/smartsheet-ui'
+} from '@muse/smartsheet-ui'
 import { useTranslation } from 'react-i18next'
 import type {
   PaymentLaunchData,
@@ -215,7 +215,7 @@ export const PaymentDialog: React.FC<PaymentDialogProps> = ({
   // FE-04: weixin:// 类型 QR 码在 Dialog 打开时自动调用 openExternal 唤起微信
   useEffect(() => {
     if (open && paymentData?.qr_code?.startsWith('weixin://')) {
-      void window.tabtin?.openExternal?.(paymentData.qr_code)
+      void window.muse?.openExternal?.(paymentData.qr_code)
     }
   }, [open, paymentData?.qr_code])
 
@@ -227,7 +227,7 @@ export const PaymentDialog: React.FC<PaymentDialogProps> = ({
 
   const handleOpenWeixin = () => {
     if (paymentData?.qr_code?.startsWith('weixin://')) {
-      void window.tabtin?.openExternal?.(paymentData.qr_code)
+      void window.muse?.openExternal?.(paymentData.qr_code)
     }
   }
 

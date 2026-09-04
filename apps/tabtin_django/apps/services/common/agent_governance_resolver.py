@@ -43,7 +43,7 @@ EXECUTION_LIMIT_KEYS = ("max_iterations_per_run", "max_credits_per_run")
 ORG_ALLOW_MEMBER_YOLO_KEY = "allow_member_yolo"
 ORG_ALLOW_MEMBER_YOLO_DEFAULT = True
 
-#:  三档审批策略的合法档位（与 TS `@tabtin/agent-modes` APPROVAL_MODE_NAMES 对齐）。
+#:  三档审批策略的合法档位（与 TS `@muse/agent-modes` APPROVAL_MODE_NAMES 对齐）。
 APPROVAL_GRANT_VALUES = ("always_ask", "auto", "full_access")
 
 

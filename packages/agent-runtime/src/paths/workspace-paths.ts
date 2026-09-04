@@ -1,7 +1,7 @@
 /**
  * Workspace / Organization / User path layout helpers（ 硬切后 SSoT）。
  *
- * 与 `@tabtin/terminal-core/src/spacePaths.ts` 新 helper 段字节对齐；改路径
+ * 与 `@muse/terminal-core/src/spacePaths.ts` 新 helper 段字节对齐；改路径
  * 规则时请同步 terminal-core 同源文件。
  *
  * ## 目标布局（宿主注入 `dataRoot` 后派生）

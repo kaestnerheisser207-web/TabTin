@@ -18,7 +18,7 @@ import { useTranslation } from 'react-i18next'
 import { FilePlus2, Loader2 } from 'lucide-react'
 import { cn } from '@utils/cn'
 import type { CardRendererProps } from '../registry/types'
-import type { FileWriteData } from '@tabtin/chat-client'
+import type { FileWriteData } from '@muse/chat-client'
 import { CodeBlock } from './primitives'
 import { FileCardHeader } from './primitives/FileCardHeader'
 import {

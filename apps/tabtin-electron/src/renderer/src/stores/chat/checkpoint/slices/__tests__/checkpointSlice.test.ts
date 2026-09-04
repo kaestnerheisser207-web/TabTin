@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest'
-import type { ChatMessage, ChatSession } from '@tabtin/chat-client'
+import type { ChatMessage, ChatSession } from '@muse/chat-client'
 import { mergeAuthoritativeServerReplace } from '@/stores/chat/domain/messageSyncAction'
 import type { CheckpointStore } from '../checkpointSlice'
 import type { RecoveryPlanContract } from '../../recoveryPlan'
@@ -76,7 +76,7 @@ vi.mock('@/i18n', () => ({
   },
 }))
 
-vi.mock('@tabtin/smartsheet-ui', () => ({
+vi.mock('@muse/smartsheet-ui', () => ({
   toast: mockToast,
 }))
 
@@ -153,7 +153,7 @@ vi.mock('@stores/useChatRuntimeStore', () => ({
 
 // ：slice 经 hub（SessionController）走 runtime IPC / run 取消**连接通道**。
 // mock 掉 hub 模块本身（其依赖树含 streamMessageHandler → UI 包，测试环境加载会炸），
-// 通道行为转发到本文件既有的 window.tabtin.agentEngine mock，断言口径不变。
+// 通道行为转发到本文件既有的 window.muse.agentEngine mock，断言口径不变。
 vi.mock('@/services/agentService', () => ({
   getSessionController: (sessionId: string) => ({
     rollbackSessionTimeline: (payload: Record<string, unknown>) => {

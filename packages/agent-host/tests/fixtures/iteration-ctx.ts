@@ -6,7 +6,7 @@
  * 只覆盖被迁移测试用到的字段。
  */
 
-import type { EngineState, IterationHookContext } from '@tabtin/agent-runtime/engine'
+import type { EngineState, IterationHookContext } from '@muse/agent-runtime/engine'
 
 /** beforeIteration / afterIteration 用的最小 IterationHookContext。 */
 export function makeIterationCtx(state: EngineState, iteration = 0): IterationHookContext {

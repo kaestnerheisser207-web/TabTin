@@ -1,7 +1,7 @@
 import { useRef, useCallback } from 'react';
-import { toast } from '@tabtin/smartsheet-ui';
-import type { TableGridRow, TableGridRowMoveContext } from '@tabtin/table-engine';
-import { RecordApiService, type ViewGroup, type ViewMeta } from '@tabtin/table-core';
+import { toast } from '@muse/smartsheet-ui';
+import type { TableGridRow, TableGridRowMoveContext } from '@muse/table-engine';
+import { RecordApiService, type ViewGroup, type ViewMeta } from '@muse/table-core';
 import {
   reorderCanvasRowsByDragSnapshot,
   resolveCanvasReorderPersistenceContext,

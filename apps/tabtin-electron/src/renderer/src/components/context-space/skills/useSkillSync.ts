@@ -34,7 +34,7 @@ export function useSkillSync(spaceId: string | null | undefined, options?: UseSk
     if (!spaceId || !enabled) return
     let cancelled = false
 
-    const ensureSpaceSandbox = window.tabtin?.fileSystem?.ensureSpaceSandbox
+    const ensureSpaceSandbox = window.muse?.fileSystem?.ensureSpaceSandbox
     if (!ensureSpaceSandbox) return
 
     ensureSpaceSandbox(spaceId)

@@ -2,7 +2,7 @@ import type {
   RollbackPartialSuccessDetails,
   RollbackWarningView,
   SessionRollbackState,
-} from '@tabtin/chat-client'
+} from '@muse/chat-client'
 import type { ResourceRestoreItem } from '../../../../services/chatExtraApi'
 
 type RetryableResourceCandidate = {

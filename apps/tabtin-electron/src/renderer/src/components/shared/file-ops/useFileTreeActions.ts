@@ -178,7 +178,7 @@ export function useFileTreeActions({
 
   const pathAlreadyExists = useCallback(async (targetPath: string): Promise<boolean> => {
     try {
-      const fs = window.tabtin?.fileSystem
+      const fs = window.muse?.fileSystem
       if (fs?.pathExists) {
         const result = await fs.pathExists(targetPath)
         return !!result?.exists
@@ -220,7 +220,7 @@ export function useFileTreeActions({
         if (!(await ensureParentWritable(parentPath))) return false
         const resolved = await resolveUniqueEntryName(parentPath, name, pathAlreadyExists)
         const filePath = joinPath(parentPath, resolved.name)
-        const result = await window.tabtin.fileSystem.writeFile(filePath, '')
+        const result = await window.muse.fileSystem.writeFile(filePath, '')
         if (result.success) {
           if (resolved.renamed) {
             notifyRenamed(name, resolved.name)
@@ -250,7 +250,7 @@ export function useFileTreeActions({
         if (!(await ensureParentWritable(parentPath))) return false
         const resolved = await resolveUniqueEntryName(parentPath, name, pathAlreadyExists)
         const dirPath = joinPath(parentPath, resolved.name)
-        const result = await window.tabtin.fileSystem.createDir(dirPath)
+        const result = await window.muse.fileSystem.createDir(dirPath)
         if (result.success) {
           if (resolved.renamed) {
             notifyRenamed(name, resolved.name)
@@ -286,7 +286,7 @@ export function useFileTreeActions({
           )
           return false
         }
-        const result = await window.tabtin.fileSystem.rename(absolutePath, newPath)
+        const result = await window.muse.fileSystem.rename(absolutePath, newPath)
         if (result.success) {
           notifySuccess(t('fileOps.renameSuccess', { name: newName }))
           await onRefresh(parentPath)
@@ -323,7 +323,7 @@ export function useFileTreeActions({
 
       setIsRenaming(true)
       try {
-        const result = await window.tabtin.fileSystem.rename(absolutePath, newPath)
+        const result = await window.muse.fileSystem.rename(absolutePath, newPath)
         if (result.success) {
           notifySuccess(t('fileOps.moveSuccess', { name: fileName, defaultValue: `已移动 ${fileName}` }))
           await onRefresh([parentPath, targetDirPath])
@@ -348,8 +348,8 @@ export function useFileTreeActions({
       try {
         const parentPath = getParentPath(absolutePath) || rootPath
         const result = isDirectory
-          ? await window.tabtin.fileSystem.deleteDir(absolutePath)
-          : await window.tabtin.fileSystem.deleteFile(absolutePath)
+          ? await window.muse.fileSystem.deleteDir(absolutePath)
+          : await window.muse.fileSystem.deleteFile(absolutePath)
         if (result.success) {
           notifySuccess(t('fileOps.deleteSuccess'))
           await onRefresh(parentPath)

@@ -5,7 +5,7 @@
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { cn } from '@utils/cn'
-import type { ModelParamOverrides, ModelParamValue } from '@tabtin/chat-client'
+import type { ModelParamOverrides, ModelParamValue } from '@muse/chat-client'
 import {
   PERFORMANCE_PROFILE_VALUES,
   performanceProfileControlChange,

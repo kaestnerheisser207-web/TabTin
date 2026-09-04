@@ -22,13 +22,13 @@ import { AnimatePresence, motion } from 'framer-motion'
 import { Search, X, AlertTriangle, Loader2, History as HistoryIcon } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { OPAQUE_OVERLAY_SURFACE_CLASS, ScrollArea, Skeleton } from '@components/ui'
-import { toast } from '@tabtin/smartsheet-ui/toast'
+import { toast } from '@muse/smartsheet-ui/toast'
 import {
   unifiedSearch as _unifiedSearch,
   type FtsResultType,
   type FtsSearchResultItem,
   type UnifiedSearchParams,
-} from '@tabtin/app-shell'
+} from '@muse/app-shell'
 import { useOrganizationStore } from '@stores/useOrganizationStore'
 import { useSpaceStore } from '@stores/useSpaceStore'
 import { useSpaceContextTabsStore, type ContextItemRecord } from '@stores/useSpaceContextTabsStore'
@@ -390,7 +390,7 @@ export function GlobalSearch({
     })
     // GlobalSearch 跑在透明子窗口（独立 renderer），导航必须代理回主 renderer 执行
     // （store 单例 / enterChatSession / dispatchSelect 都作用于主窗口）。
-    const overlay = window.tabtin?.overlay
+    const overlay = window.muse?.overlay
     if (overlay?.navigateSearchResult) {
       overlay.navigateSearchResult({ item, committedQuery })
       return

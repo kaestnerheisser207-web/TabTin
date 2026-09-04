@@ -50,8 +50,8 @@ function sanitizeResourceHref(href: string): string {
 function parseTabtinResource(
   href: string
 ): { resourceType: string; resourceId: string } | null {
-  if (!href.startsWith('tabtin://resource/')) return null
-  const rest = href.slice('tabtin://resource/'.length).split('?', 1)[0]
+  if (!href.startsWith('muse://resource/')) return null
+  const rest = href.slice('muse://resource/'.length).split('?', 1)[0]
   const slash = rest.indexOf('/')
   if (slash <= 0) return null
   const resourceType = rest.slice(0, slash)
@@ -77,11 +77,11 @@ function attachmentKindForResource(resourceType: string): string {
   return 'resource'
 }
 
-/** 从正文解析 tabtin://resource 链接（旧后端未投影 attachments 时的前端兜底）。 */
+/** 从正文解析 muse://resource 链接（旧后端未投影 attachments 时的前端兜底）。 */
 export function extractResourceLinkAttachments(content: string): ThreadMessageAttachment[] {
-  if (!content || !content.includes('tabtin://resource/')) return []
+  if (!content || !content.includes('muse://resource/')) return []
   const text = stripCodeSegments(content)
-  if (!text.includes('tabtin://resource/')) return []
+  if (!text.includes('muse://resource/')) return []
 
   const labelByUrl = new Map<string, string>()
   for (const match of text.matchAll(MD_RESOURCE_LINK_RE)) {
@@ -135,7 +135,7 @@ export function collectDisplayAttachments(
   return merged
 }
 
-/** AdminDash 内可跳转的资源路径；浏览器打不开的 tabtin:// 会映射到管理页。 */
+/** AdminDash 内可跳转的资源路径；浏览器打不开的 muse:// 会映射到管理页。 */
 export function resolveAttachmentAdminPath(attachment: ThreadMessageAttachment): string | null {
   const resourceType = (attachment.resource_type || '').toLowerCase()
   const resourceId = attachment.resource_id || attachment.file_id

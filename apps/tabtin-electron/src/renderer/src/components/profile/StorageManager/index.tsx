@@ -26,7 +26,7 @@
 import React, { useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { HardDrive } from 'lucide-react'
-import { useSpaceStore } from '@tabtin/app-shell'
+import { useSpaceStore } from '@muse/app-shell'
 import { useOrganizationStore } from '@stores/useOrganizationStore'
 import { SettingsPanelHeader } from '../../settings/SettingsPanelHeader'
 import { SettingsPanelLayout } from '../../settings/SettingsPanelLayout'

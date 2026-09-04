@@ -52,7 +52,7 @@ vi.mock('../logger', () => ({
   }),
 }))
 
-import { AgentActionEvents } from '@tabtin/ws-gateway-client'
+import { AgentActionEvents } from '@muse/ws-gateway-client'
 import { handleLoginRelayImportAction } from './import-handler'
 
 const action = (overrides: Record<string, unknown> = {}) => ({

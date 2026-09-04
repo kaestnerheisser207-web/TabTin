@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { correlateSourceClientEvent } from '@tabtin/agent-host/delivery'
+import { correlateSourceClientEvent } from '@muse/agent-host/delivery'
 
 const SOURCE_ID = '11111111-1111-4111-8111-111111111111'
 

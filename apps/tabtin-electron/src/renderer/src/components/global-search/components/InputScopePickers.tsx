@@ -22,12 +22,12 @@ import {
   Popover,
   PopoverAnchor,
   PopoverContent,
-} from '@tabtin/smartsheet-ui'
+} from '@muse/smartsheet-ui'
 import { useSpaceStore } from '@stores/useSpaceStore'
 import { useOrganizationStore } from '@stores/useOrganizationStore'
 import { contextRegistry } from '@components/context-space/registry'
 import { RESULT_TYPE_EMOJI } from '../i18n'
-import type { FtsResultType } from '@tabtin/app-shell'
+import type { FtsResultType } from '@muse/app-shell'
 
 // ── 解析 ─────────────────────────────────────────────
 

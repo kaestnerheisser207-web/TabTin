@@ -2,7 +2,7 @@
  * **AUTO-GENERATED — DO NOT EDIT BY HAND**
  *
  * Source: packages/file-pipeline-errors/codegen/error-codes.yaml
- * Codegen: pnpm --filter @tabtin/file-pipeline-errors codegen
+ * Codegen: pnpm --filter @muse/file-pipeline-errors codegen
  *
  * 派生 3 个核心常量：
  *   - FilePipelineErrorCode (string enum / error_kind)

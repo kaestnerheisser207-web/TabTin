@@ -4,7 +4,7 @@ import {
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from '@tabtin/smartsheet-ui';
+} from '@muse/smartsheet-ui';
 
 export interface ToolbarActionTooltipProps {
   label: string;

@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import type { ChatSession, ChatSessionRunState } from '@tabtin/chat-client'
+import type { ChatSession, ChatSessionRunState } from '@muse/chat-client'
 import { mergeServerSpaceSessionSnapshot } from '../mergeServerSpaceSessionSnapshot'
 
 function makeSession(id: string, spaceId = 'space-1'): ChatSession {

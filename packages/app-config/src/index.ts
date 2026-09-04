@@ -1,5 +1,5 @@
 /**
- * @tabtin/app-config —— App configSchema 通用 runtime 读取层（v2.1 模块零）。
+ * @muse/app-config —— App configSchema 通用 runtime 读取层（v2.1 模块零）。
  *
  * 规范出处：`docs/planning/tabdesktop-spec-v1.md` § 3.5.5 + § 9.1（v2.0 占位
  * → v2.1 模块零落地）。同时偿还 § 10 Q11 登记的 "TabDesktop app.json 开关
@@ -218,7 +218,7 @@ function defaultExplicitMissingWarn(info: { tried: string; appId: string }): voi
   if (typeof process !== 'undefined' && process.env?.NODE_ENV === 'test') return
   // eslint-disable-next-line no-console
   console.warn(
-    `[@tabtin/app-config] 显式传入的 manifestRoot 不存在: ${info.tried}（appId=${info.appId}）。` +
+    `[@muse/app-config] 显式传入的 manifestRoot 不存在: ${info.tried}（appId=${info.appId}）。` +
     `本次配置读取将 fallback 到调用方 defaults——若该 App 的 configSchema 期望生效，请检查打包态是否正确配置 asarUnpack。`,
   )
 }
@@ -360,7 +360,7 @@ export interface LoadAppConfigOptions {
  *
  * @example
  * ```ts
- * import { loadAppConfig } from '@tabtin/app-config'
+ * import { loadAppConfig } from '@muse/app-config'
  *
  * interface TabDesktopConfig {
  *   imageResize: { enabled: boolean; pxPerToken: number; maxTargetPx: number; maxTargetTokens: number }

@@ -8,11 +8,11 @@
 import React from 'react'
 import { ListChecks } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
-import { toast } from '@tabtin/smartsheet-ui'
+import { toast } from '@muse/smartsheet-ui'
 import { useSpaceContextTabsStore } from '@stores/useSpaceContextTabsStore'
 import { useSpaceStore } from '@stores/useSpaceStore'
 import { cn } from '@utils/cn'
-import type { TrackerRunMeta } from '@tabtin/chat-client'
+import type { TrackerRunMeta } from '@muse/chat-client'
 import { resolveForegroundTabScopeKey } from '../subagent/openSubagentTab'
 
 interface TrackerRunBreadcrumbProps {

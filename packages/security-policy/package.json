@@ -1,5 +1,5 @@
 {
-  "name": "@tabtin/security-policy",
+  "name": "@muse/security-policy",
   "version": "0.1.0",
   "description": "Unified security policy engine for Muse — SSOT for authorization across all runtimes",
   "type": "module",
@@ -30,8 +30,8 @@
     "test": "vitest run"
   },
   "dependencies": {
-    "@tabtin/agent-modes": "workspace:*",
-    "@tabtin/terminal-core": "workspace:*"
+    "@muse/agent-modes": "workspace:*",
+    "@muse/terminal-core": "workspace:*"
   },
   "devDependencies": {
     "@types/node": "^20.0.0",

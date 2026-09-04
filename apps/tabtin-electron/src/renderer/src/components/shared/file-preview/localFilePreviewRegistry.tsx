@@ -68,7 +68,7 @@ const LocalTextFilePreview: React.FC<LocalFilePreviewRenderProps> = ({
 
   useEffect(() => {
     let cancelled = false
-    const readFilePreview = window.tabtin?.fileSystem?.readFilePreview
+    const readFilePreview = window.muse?.fileSystem?.readFilePreview
 
     setState({ status: 'loading' })
 
@@ -207,7 +207,7 @@ const LocalMarkdownPreview: React.FC<LocalFilePreviewRenderProps> = ({
 
   useEffect(() => {
     let cancelled = false
-    const readFilePreview = window.tabtin?.fileSystem?.readFilePreview
+    const readFilePreview = window.muse?.fileSystem?.readFilePreview
     setState({ status: 'loading' })
     if (!readFilePreview) {
       setState({ status: 'error', message: '文件预览服务不可用' })
@@ -268,7 +268,7 @@ const LocalMarkdownPreview: React.FC<LocalFilePreviewRenderProps> = ({
 }
 
 /**
- * ：本地图片预览（含 SVG）。走 tabtin-file:// + `<img>`，
+ * ：本地图片预览（含 SVG）。走 muse-file:// + `<img>`，
  * SVG 不当 HTML 文档执行，避免脚本面。
  */
 const LocalImagePreview: React.FC<LocalFilePreviewRenderProps> = ({
@@ -294,7 +294,7 @@ const LocalImagePreview: React.FC<LocalFilePreviewRenderProps> = ({
   )
 }
 
-/**  / ：本地音视频预览——与 FileKindPreview 同款 tabtin-file:// + 原生控件。 */
+/**  / ：本地音视频预览——与 FileKindPreview 同款 muse-file:// + 原生控件。 */
 const LocalVideoPreview: React.FC<LocalFilePreviewRenderProps> = ({
   filePath,
   className,
@@ -573,7 +573,7 @@ const localFilePreviewFormats: LocalFilePreviewFormat[] = [
     maxBinaryPreviewBytes: LOCAL_TEXT_PREVIEW_BYTES,
   },
   {
-    // ：图片预览（含 SVG）——Agent 常产出示意图；底层 tabtin-file:// 已认 image/svg+xml。
+    // ：图片预览（含 SVG）——Agent 常产出示意图；底层 muse-file:// 已认 image/svg+xml。
     fileType: 'image',
     extensions: ['.png', '.jpg', '.jpeg', '.gif', '.webp', '.svg'],
     label: 'Image',

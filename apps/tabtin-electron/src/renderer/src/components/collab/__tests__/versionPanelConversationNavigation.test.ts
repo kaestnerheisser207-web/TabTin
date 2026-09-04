@@ -25,7 +25,7 @@ vi.mock('@services/chatSessionNavigation', () => ({
   enterChatSession: mockEnterChatSession,
 }))
 
-vi.mock('@tabtin/config', () => ({
+vi.mock('@muse/config', () => ({
   joinApiPath: (...parts: string[]) => parts.join('/').replace(/\/+/g, '/').replace('https:/', 'https://'),
 }))
 
@@ -37,7 +37,7 @@ vi.mock('@services/chatExtraApi', () => ({
   getAgentRunConversation: mockGetAgentRunConversation,
 }))
 
-vi.mock('@tabtin/smartsheet-ui/toast', () => ({
+vi.mock('@muse/smartsheet-ui/toast', () => ({
   toast: mockToast,
 }))
 

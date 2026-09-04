@@ -2,8 +2,8 @@
  * NativeBackendSession 宿主装配辅助 —— W1.2 让两宿主真接入
  * `ExecutionBackendRegistry`。
  *
- *  Stage 6d：自 `@tabtin/agent-runtime/capability/native` 迁入
- * agent-host（装配属宿主职责；runtime 不再依赖 `@tabtin/terminal-core`）。
+ *  Stage 6d：自 `@muse/agent-runtime/capability/native` 迁入
+ * agent-host（装配属宿主职责；runtime 不再依赖 `@muse/terminal-core`）。
  *
  * **设计目标**：两宿主（ElectronAgentHost / DaemonAgentHost）共享同一份
  * 装配代码，避免"Electron 写一遍、Daemon 写一遍"的飘移。
@@ -25,7 +25,7 @@
  *     query.ts 仍然不知道它的存在
  *
  * **feature flag**（破坏性回退）：宿主可在 createSession 之前检查
- * 环境变量 `TABTIN_NATIVE_BACKEND_SESSION`：
+ * 环境变量 `MUSE_NATIVE_BACKEND_SESSION`：
  *   - 默认 / 'enabled' → 装配 NativeBackendSession（W1.2 期望路径）
  *   - 'disabled' → 跳过装配，给 W2 实施期间出现回归提供 escape hatch
  *
@@ -36,13 +36,13 @@
 import type {
   ExecutionBackend,
   ExecutionBackendRegistry as _ExecutionBackendRegistry,
-} from '@tabtin/terminal-core';
+} from '@muse/terminal-core';
 import {
   CommandExecutor,
   ExecutionBackendRegistry,
   SpawnSandboxBackendFactory,
   SPAWN_SANDBOX_BACKEND_CAPABILITIES,
-} from '@tabtin/terminal-core';
+} from '@muse/terminal-core';
 import {
   safeAccess,
   safeMkdir,
@@ -51,10 +51,10 @@ import {
   safeRm,
   safeStat,
   safeWriteFile,
-} from '@tabtin/safe-fs';
+} from '@muse/safe-fs';
 
-import { NativeBackendSession } from '@tabtin/agent-runtime/capability/native';
-import type { ExecOptions, ExecResult } from '@tabtin/agent-runtime/capability';
+import { NativeBackendSession } from '@muse/agent-runtime/capability/native';
+import type { ExecOptions, ExecResult } from '@muse/agent-runtime/capability';
 
 /**
  * Native backend 工厂在 Registry 中的固定 id —— 与 SpawnSandboxBackend.id
@@ -259,7 +259,7 @@ export async function bootstrapNativeBackend(
  * 接受 `no` / `n` + trim 空格之后符合常见环境变量约定。
  */
 export function isNativeBackendSessionEnabled(
-  envVal: string | undefined = process.env.TABTIN_NATIVE_BACKEND_SESSION,
+  envVal: string | undefined = process.env.MUSE_NATIVE_BACKEND_SESSION,
 ): boolean {
   if (envVal === undefined) return true;
   const v = envVal.trim().toLowerCase();

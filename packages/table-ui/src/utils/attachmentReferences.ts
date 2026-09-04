@@ -1,4 +1,4 @@
-import type { AttachmentReference } from '@tabtin/table-core'
+import type { AttachmentReference } from '@muse/table-core'
 
 const IMAGE_EXT_RE = /\.(png|jpe?g|gif|webp|bmp|svg|avif)$/i
 

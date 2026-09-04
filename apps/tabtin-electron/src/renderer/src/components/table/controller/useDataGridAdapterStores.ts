@@ -4,7 +4,7 @@ import { useTableStore } from '@stores/useTableStore'
 import { useRecordStore, useRecordStoreApi } from '@stores/useRecordStore'
 import { useUIStore } from '@stores/useUIStore'
 import { useViewStore, useViewStoreApi } from '@stores/useViewStore'
-import type { ViewDraftState, ViewFilter } from '@tabtin/table-core'
+import type { ViewDraftState, ViewFilter } from '@muse/table-core'
 
 const EMPTY_GROUP_IDS: string[] = []
 const EMPTY_FILTERS: ViewFilter[] = []

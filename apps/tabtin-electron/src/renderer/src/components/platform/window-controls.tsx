@@ -67,7 +67,7 @@ const CLOSE_BUTTON =
   'hover:bg-[#e81123] hover:text-white'
 
 export function WindowControls({ className }: WindowControlsProps) {
-  const controls = typeof window !== 'undefined' ? window.tabtin?.windowControls : undefined
+  const controls = typeof window !== 'undefined' ? window.muse?.windowControls : undefined
   const [isMaximized, setIsMaximized] = useState(false)
 
   useEffect(() => {

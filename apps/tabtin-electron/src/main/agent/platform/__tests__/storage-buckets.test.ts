@@ -98,7 +98,7 @@ describe('W2.2-G2 storage-manager bucket 注册 — registry 集成', () => {
       destroyCheckpointService: vi.fn(),
     }))
 
-    const sm = await import('@tabtin/storage-manager')
+    const sm = await import('@muse/storage-manager')
     sm.__resetForTesting()
 
     const ipc = await import('../../../checkpoint/checkpoint-ipc')

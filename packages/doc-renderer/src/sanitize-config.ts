@@ -5,9 +5,9 @@
  * 的白名单配置，消除两个消毒系统之间的 7 处已知不一致。
  *
  * 使用方：
- * - `@tabtin/doc-renderer` 的 `sanitizeHtml.ts`（DOM 路径，浏览器 DOMParser + Node.js 正则降级）
- * - `@tabtin/tabdoc-ui` 的 `rehypeSanitizeSchema.ts`（HAST 路径，rehype-sanitize 管道）
- * - `@tabtin/doc-renderer` 的 `basicMarkdownToHtml.ts`（轻量渲染器 URL 校验）
+ * - `@muse/doc-renderer` 的 `sanitizeHtml.ts`（DOM 路径，浏览器 DOMParser + Node.js 正则降级）
+ * - `@muse/tabdoc-ui` 的 `rehypeSanitizeSchema.ts`（HAST 路径，rehype-sanitize 管道）
+ * - `@muse/doc-renderer` 的 `basicMarkdownToHtml.ts`（轻量渲染器 URL 校验）
  *
  * 修改本文件前请确认对两个消毒路径的影响。
  */

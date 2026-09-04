@@ -175,7 +175,7 @@ function main() {
  *
  * **DO NOT EDIT BY HAND**. Regenerate with:
  *
- *   pnpm --filter @tabtin/widget-tokens run extract:tokens
+ *   pnpm --filter @muse/widget-tokens run extract:tokens
  *
  * The widget rendering pipeline (Electron WidgetRenderService, Daemon
  * DaemonBrowserService.captureWidget, and chat-iframe RichWidget wrapper)

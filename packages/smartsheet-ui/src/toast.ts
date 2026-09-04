@@ -1,5 +1,5 @@
 /**
- * @deprecated 请改用 `@tabtin/smartsheet-ui/message` 的 `message.*` / `MessageHost`。
+ * @deprecated 请改用 `@muse/smartsheet-ui/message` 的 `message.*` / `MessageHost`。
  * 本入口保留兼容导出，内部已统一到 MessageController。
  */
 export { Toaster, MessageHost } from './components/toast/toaster'

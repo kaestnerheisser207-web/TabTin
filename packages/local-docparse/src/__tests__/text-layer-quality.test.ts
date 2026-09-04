@@ -1,5 +1,5 @@
 /**
- * @tabtin/local-docparse — text-layer-quality 纯函数单测
+ * @muse/local-docparse — text-layer-quality 纯函数单测
  *
  * 与 Electron `apps/tabtin-electron/src/main/services/__tests__/localDocParse.test.ts`
  * 的 `computeTextLayerQuality` 用例集合等价（H1-D-MAIN 时建立的金标准）。

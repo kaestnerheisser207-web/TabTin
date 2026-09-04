@@ -1,6 +1,6 @@
 import i18n from '@/i18n'
 import { getSessionController, hasRuntimeBridge } from '@/services/agentService'
-import type { ChatMessage } from '@tabtin/chat-client'
+import type { ChatMessage } from '@muse/chat-client'
 import type { AskUserRequestState } from '../../shared/types'
 import type { SendMessageSetPartial } from '../actions/sendMessageTypes'
 import {

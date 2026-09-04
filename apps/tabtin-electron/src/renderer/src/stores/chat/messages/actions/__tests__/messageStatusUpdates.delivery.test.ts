@@ -3,7 +3,7 @@
  * 经  markUserMessageDelivered 单一入口落地。
  */
 import { describe, expect, it, vi } from 'vitest'
-import type { ChatMessage } from '@tabtin/chat-client'
+import type { ChatMessage } from '@muse/chat-client'
 import {
   markUserMessageDelivered,
   resolveSourceClientEventId,

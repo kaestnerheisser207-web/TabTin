@@ -1,5 +1,5 @@
 {
-  "name": "@tabtin/cloud-worker",
+  "name": "@muse/cloud-worker",
   "version": "0.1.0",
   "private": true,
   "type": "module",

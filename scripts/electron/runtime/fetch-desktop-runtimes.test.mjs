@@ -130,9 +130,9 @@ test('China region installs a verified prebuilt archive without the official sou
         encoding: 'utf8',
         env: {
           ...process.env,
-          TABTIN_DESKTOP_RUNTIME_CACHE_DIR: cacheDir,
-          TABTIN_OFFICE_RUNTIME_CONFIG: configPath,
-          TABTIN_OFFICE_RUNTIME_ROOT: runtimeRoot,
+          MUSE_DESKTOP_RUNTIME_CACHE_DIR: cacheDir,
+          MUSE_OFFICE_RUNTIME_CONFIG: configPath,
+          MUSE_OFFICE_RUNTIME_ROOT: runtimeRoot,
         },
       },
     );
@@ -171,18 +171,18 @@ function runOfficeFetchWithFailingCurl(extraArgs = []) {
     env: {
       ...process.env,
       PATH: `${binDir}:${process.env.PATH}`,
-      TABTIN_DESKTOP_RUNTIME_CACHE_DIR: cacheDir,
+      MUSE_DESKTOP_RUNTIME_CACHE_DIR: cacheDir,
     },
   });
 }
 
-test('TABTIN_SKIP_DESKTOP_RUNTIME_FETCH skips work', () => {
+test('MUSE_SKIP_DESKTOP_RUNTIME_FETCH skips work', () => {
   const result = spawnSync('bash', [fetchScript, '--only', 'office'], {
     encoding: 'utf8',
-    env: { ...process.env, TABTIN_SKIP_DESKTOP_RUNTIME_FETCH: '1' },
+    env: { ...process.env, MUSE_SKIP_DESKTOP_RUNTIME_FETCH: '1' },
   });
   assert.equal(result.status, 0);
-  assert.match(result.stdout, /TABTIN_SKIP_DESKTOP_RUNTIME_FETCH/);
+  assert.match(result.stdout, /MUSE_SKIP_DESKTOP_RUNTIME_FETCH/);
 });
 
 test('office download failure warns and does not block', () => {
@@ -249,7 +249,7 @@ test('bat and sh fetch entrypoints do not call each other', () => {
   );
   for (const source of [ps1, sh]) {
     assert.match(source, /resolve-office-runtime-region/);
-    assert.match(source, /TABTIN_RUNTIME_REGION/);
+    assert.match(source, /MUSE_RUNTIME_REGION/);
     assert.match(source, /sha256|SHA256/i);
   }
   assert.match(ensureBat, /fetch-desktop-runtimes\.bat/);
@@ -269,7 +269,7 @@ test('startup runtime helpers skip the optional office download by default', () 
   );
 
   for (const source of [ensureBat, ensureSh]) {
-    assert.match(source, /TABTIN_FETCH_OFFICE_RUNTIME_ON_START/);
+    assert.match(source, /MUSE_FETCH_OFFICE_RUNTIME_ON_START/);
     assert.match(source, /--only python/);
   }
 });

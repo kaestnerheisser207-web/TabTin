@@ -2,13 +2,13 @@ import { describe, expect, it, vi } from 'vitest'
 import {
   createRuntime,
   type StreamEvent,
-} from '@tabtin/agent-runtime'
+} from '@muse/agent-runtime'
 import type {
   EngineConfig,
   LLMProvider,
   LLMRequest,
   Tool,
-} from '@tabtin/agent-runtime/engine'
+} from '@muse/agent-runtime/engine'
 import { assembleSystemPrompt } from '../src/prompt/system-prompt-assembler.js'
 import { buildAgentProfileHook } from '../src/hooks/agent-profile-hook.js'
 import {

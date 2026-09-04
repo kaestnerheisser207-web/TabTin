@@ -1,9 +1,9 @@
 /**
- * WinRT toast 点击 → tabtin:// 协议激活（ 后续）。
+ * WinRT toast 点击 → muse:// 协议激活（ 后续）。
  *
  * PowerShell 发出 toast 后进程即退出，无法订阅 Activated。
  * 因此在 toast XML 上挂 activationType=protocol + launch URL，
- * 由系统唤起已注册的 tabtin://，主进程再派发 notification:navigate。
+ * 由系统唤起已注册的 muse://，主进程再派发 notification:navigate。
  */
 
 import type { NavigateTarget } from './types'
@@ -12,13 +12,13 @@ export const TOAST_FOCUS_HOST = 'focus'
 export const TOAST_NOTIFY_HOST = 'notify'
 
 export function resolveTabTinProtocolScheme(): string {
-  switch (process.env.TABTIN_RUNTIME_PROFILE) {
+  switch (process.env.MUSE_RUNTIME_PROFILE) {
     case 'preprod':
-      return 'tabtin-preprod'
+      return 'muse-preprod'
     case 'local':
       return 'tabtin-local'
     case 'development':
-      return 'tabtin-dev'
+      return 'muse-dev'
     default:
       return 'tabtin'
   }

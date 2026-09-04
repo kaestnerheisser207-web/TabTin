@@ -3,7 +3,7 @@
  * 覆盖两条源：活态 metadata（DONE）与正典 error_info_json（message_stop 落库）。
  */
 import { describe, expect, it } from 'vitest'
-import type { ChatMessage } from '@tabtin/chat-client'
+import type { ChatMessage } from '@muse/chat-client'
 import { deriveMessageErrorModel } from '@stores/chat/presentation/messageBubble/deriveMessageErrorModel'
 import { getErrorClassInfo } from '@utils/chat/messageErrorClassMap'
 

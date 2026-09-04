@@ -4,7 +4,7 @@ import {
   mergeSkillListsForRuntime,
   mergeWorkspaceSkillsForRuntime,
   type LocalSkill,
-} from '@tabtin/agent-runtime/skills'
+} from '@muse/agent-runtime/skills'
 
 export type SkillEnablementFetchMap = (
   agentId: string,

@@ -334,7 +334,7 @@ ruleTester.run('prefer-scoped-activity-effects', rule, {
 
 const linter = new Linter()
 
-function lintWithRule(code, ruleName = 'tabtin/prefer-scoped-activity-effects') {
+function lintWithRule(code, ruleName = 'muse/prefer-scoped-activity-effects') {
   return linter.verify(code, {
     plugins: {
       tabtin: { rules: { 'prefer-scoped-activity-effects': rule } },
@@ -354,7 +354,7 @@ const disableCases = [
     name: 'disable 注释 + -- 理由 不触发 disableMissingReason',
     code: `function MyComp() {
       useEffect(() => {
-        // eslint-disable-next-line tabtin/prefer-scoped-activity-effects -- App 级 hotkey 注册器
+        // eslint-disable-next-line muse/prefer-scoped-activity-effects -- App 级 hotkey 注册器
         window.addEventListener('keydown', handler)
       }, [])
     }`,
@@ -364,7 +364,7 @@ const disableCases = [
     name: 'disable 注释带多规则名 + 共享理由',
     code: `function MyComp() {
       useEffect(() => {
-        // eslint-disable-next-line tabtin/prefer-scoped-activity-effects, react-hooks/exhaustive-deps -- 整段例外
+        // eslint-disable-next-line muse/prefer-scoped-activity-effects, react-hooks/exhaustive-deps -- 整段例外
         window.addEventListener('keydown', handler)
       }, [])
     }`,
@@ -376,7 +376,7 @@ const disableCases = [
     name: 'disable-next-line 没带 -- 理由',
     code: `function MyComp() {
       useEffect(() => {
-        // eslint-disable-next-line tabtin/prefer-scoped-activity-effects
+        // eslint-disable-next-line muse/prefer-scoped-activity-effects
         window.addEventListener('keydown', handler)
       }, [])
     }`,
@@ -386,13 +386,13 @@ const disableCases = [
     name: 'disable-next-line 带 -- 但理由是空白',
     code: `function MyComp() {
       useEffect(() => {
-        // eslint-disable-next-line tabtin/prefer-scoped-activity-effects --
+        // eslint-disable-next-line muse/prefer-scoped-activity-effects --
         window.addEventListener('keydown', handler)
       }, [])
     }`,
     expect: 'has-disable-warning',
   },
-  // 注：块级 `/* eslint-disable tabtin/prefer-scoped-activity-effects */` 会
+  // 注：块级 `/* eslint-disable muse/prefer-scoped-activity-effects */` 会
   // 静默整个文件（包括本规则自身的 Program:exit 上报），所以 disableMissingReason
   // 在块级 disable 场景下**无法触发**——这是 ESLint disable 指令的语义所限，
   // 不是 bug。仓库内出现整文件 disable 时由 PR review 兜底（罕见反模式）。

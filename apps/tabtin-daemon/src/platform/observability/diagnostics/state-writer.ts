@@ -1,7 +1,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import type { Logger } from '../logging/logger.js';
-import { atomicWriteFileSync } from '@tabtin/terminal-core';
+import { atomicWriteFileSync } from '@muse/terminal-core';
 
 export interface DaemonState {
   pid: number;

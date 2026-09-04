@@ -1278,7 +1278,7 @@ public object ProseMirrorParser {
 
     private fun DocBlock.imageReference(): String = imageFileId
         .takeIf(String::isNotBlank)
-        ?.let { "tabtin-file://asset/$it" }
+        ?.let { "muse-file://asset/$it" }
         ?: imageURL
 
     // --- JSON helpers ---

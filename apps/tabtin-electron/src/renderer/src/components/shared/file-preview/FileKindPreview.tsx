@@ -2,13 +2,13 @@
  * FileKindPreview — 按 readFilePreview kind 路由到对应 viewer
  *
  * 合并 TabCode / TabFolder 共用的非文本预览逻辑（image/pdf/docx/xlsx/pptx/video/audio）。
- * TabCode / 本机 TabFolder：按 filePath 经 tabtin-file:// 直接加载。
+ * TabCode / 本机 TabFolder：按 filePath 经 muse-file:// 直接加载。
  * 远程 Folder：image 可注入 RPC 返回的 base64（通道体积受限，无法走本机协议）。
  */
 
 import React, { Suspense, lazy } from 'react'
 import { FileArchive } from 'lucide-react'
-import { ScrollArea } from '@tabtin/smartsheet-ui'
+import { ScrollArea } from '@muse/smartsheet-ui'
 import { buildTabtinFileUrl } from '@components/shared/file-utils'
 import { ImagePreview } from '@components/shared/image-preview/ImagePreview'
 import type { FilePreviewKind } from './types'

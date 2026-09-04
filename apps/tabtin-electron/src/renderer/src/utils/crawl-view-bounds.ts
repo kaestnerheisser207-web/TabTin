@@ -6,7 +6,7 @@ export const CRAWL_VIEW_LAYOUT_CHANGE_EVENT = 'canvas-layout-change'
 
 export function getRendererZoomFactor(): number {
   if (typeof window === 'undefined') return 1
-  const raw = window.tabtin?.zoom?.getZoomFactor?.()
+  const raw = window.muse?.zoom?.getZoomFactor?.()
   if (typeof raw !== 'number' || !Number.isFinite(raw) || raw <= 0) {
     return 1
   }

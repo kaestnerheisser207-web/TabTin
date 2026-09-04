@@ -18,7 +18,7 @@
  */
 
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { useAppHostClient } from '@tabtin/app-host-sdk'
+import { useAppHostClient } from '@muse/app-host-sdk'
 import type { SearchedUser } from '../types'
 import { buildMemberSearchRequest, MEMBER_SEARCH_PAGE_SIZE } from './memberSearchRequest'
 

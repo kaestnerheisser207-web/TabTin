@@ -201,7 +201,7 @@ export const SkillsSection: React.FC<SkillsSectionProps> = ({ spaceId, canManage
   }, [spaceId])
 
   const handleOpenLocalSkills = useCallback(async () => {
-    const tabtin = window.tabtin
+    const tabtin = window.muse
     const ensureSpaceSandbox = tabtin?.fileSystem?.ensureSpaceSandbox
     if (!ensureSpaceSandbox) {
       toast({ title: t('skills.localUnsupported'), variant: 'destructive' })
@@ -267,7 +267,7 @@ export const SkillsSection: React.FC<SkillsSectionProps> = ({ spaceId, canManage
           restorePublishedVersion: restorePublishedSkillForShare,
         }),
         collectFiles: async (skillDir) => {
-          const fs = window.tabtin?.fileSystem
+          const fs = window.muse?.fileSystem
           if (!fs) throw new Error('skill dir unavailable')
           return collectSkillFiles(skillDir, fs)
         },

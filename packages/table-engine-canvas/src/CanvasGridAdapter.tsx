@@ -12,8 +12,8 @@
  */
 import React, { useMemo, useCallback, useRef, useEffect, useLayoutEffect, useState, forwardRef, useImperativeHandle } from 'react'
 import { renderToString } from 'react-dom/server'
-import type { DateFieldOptionsLike } from '@tabtin/smartsheet-ui'
-import { resolveSelectChipColors } from '@tabtin/smartsheet-ui'
+import type { DateFieldOptionsLike } from '@muse/smartsheet-ui'
+import { resolveSelectChipColors } from '@muse/smartsheet-ui'
 import {
   A as TextFieldIcon,
   Calendar as CalendarFieldIcon,
@@ -50,7 +50,7 @@ import {
   type TableGridCanvasOverlayConfig,
   type TableGridAttachmentAccessContext,
   type TableGridSortModelItem,
-} from '@tabtin/table-engine'
+} from '@muse/table-engine'
 import { useDebounce } from 'react-use'
 import { resolveUserDisplay, type UserDisplayResolution } from './userDisplayName'
 

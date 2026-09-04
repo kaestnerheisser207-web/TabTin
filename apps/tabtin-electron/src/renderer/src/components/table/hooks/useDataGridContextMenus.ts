@@ -8,14 +8,14 @@
  */
 
 import React from 'react';
-import { toast } from '@tabtin/smartsheet-ui';
-import { StatFunc } from '@tabtin/table-engine-canvas/statistics';
-import { buildCanvasMenuLabels, type CanvasFieldMenuLabels, type CanvasRecordMenuLabels } from '@tabtin/table-ui';
+import { toast } from '@muse/smartsheet-ui';
+import { StatFunc } from '@muse/table-engine-canvas/statistics';
+import { buildCanvasMenuLabels, type CanvasFieldMenuLabels, type CanvasRecordMenuLabels } from '@muse/table-ui';
 import type {
   TableGridHeaderContextMenuInfo,
-} from '@tabtin/table-engine';
-import { resolveRecordId } from '@tabtin/table-engine';
-import type { Field, ViewMeta } from '@tabtin/table-core';
+} from '@muse/table-engine';
+import { resolveRecordId } from '@muse/table-engine';
+import type { Field, ViewMeta } from '@muse/table-core';
 import { useFieldSettingStore } from '@/stores/useFieldSettingStore';
 import { createLogger } from '@/utils/logger';
 import { sendSelectionToChat } from '@/services/sendSelectionToChat';

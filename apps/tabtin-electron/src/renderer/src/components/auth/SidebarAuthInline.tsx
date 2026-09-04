@@ -23,7 +23,7 @@ import {
   Input,
   LoadingSpinner,
   toast,
-} from '@tabtin/smartsheet-ui'
+} from '@muse/smartsheet-ui'
 import { useShallow } from 'zustand/react/shallow'
 import { selectNeedsInviteCode, useAuthStore } from '@stores/useAuthStore'
 import { runWithAgentContextSwitchGuard } from '@/services/agentContextSwitchGuard'
@@ -31,8 +31,8 @@ import { useI18nStore } from '@stores/useI18nStore'
 import { useUIStore } from '@stores/useUIStore'
 import { useTranslation } from 'react-i18next'
 import { LANGUAGE_NATIVE_LABELS, type LanguagePreference } from '@/i18n/language'
-import { sanitizeNewPasswordInput } from '@tabtin/shared'
-import { useCountdown } from '@tabtin/shared/use-countdown'
+import { sanitizeNewPasswordInput } from '@muse/shared'
+import { useCountdown } from '@muse/shared/use-countdown'
 import {
   useLoginForm,
   useRegisterForm,
@@ -40,8 +40,8 @@ import {
   sanitizeAuthIdentifierInput,
   normalizeAuthIdentifier,
   isValidAuthIdentifier,
-} from '@tabtin/shared/auth-forms'
-import { useCapsLockWarning } from '@tabtin/shared/use-caps-lock-warning'
+} from '@muse/shared/auth-forms'
+import { useCapsLockWarning } from '@muse/shared/use-caps-lock-warning'
 import { AUTH_EMAIL_LOGIN_ENABLED } from '@/utils/featureFlags'
 import apiService from '@services/api'
 import { extractErrorMessage, resolveStoredErrorMessage } from '@utils/extract-api-error'
@@ -50,7 +50,7 @@ import { getResetPasswordLocalError } from './passwordValidation'
 import { CN_MOBILE_PHONE_MAX_LENGTH } from './phoneInput'
 import { CapsLockHint } from './CapsLockHint'
 import { PasswordRuleHints } from './PasswordRuleHints'
-import { TABTIN_APP_ICON_URL } from '@/constants/appIcon'
+import { MUSE_APP_ICON_URL } from '@/constants/appIcon'
 import { InviteCodeContactStrip } from './InviteCodeAcquireCard'
 import { resolveInitialAuthEntryMode } from './authEntryMode'
 
@@ -79,7 +79,7 @@ export const SidebarAuthInline: React.FC = () => {
         {/* 品牌 */}
         <div className="flex flex-col items-center gap-2.5 mb-7 shrink-0">
           <img
-            src={TABTIN_APP_ICON_URL}
+            src={MUSE_APP_ICON_URL}
             alt=""
             aria-hidden="true"
             className="h-12 w-12 rounded-xl"
@@ -525,7 +525,7 @@ const RegisterPanel: React.FC<{ onSwitchLogin: () => void }> = ({
 
   const openExternalLink = (url: string) => {
     if (!url) return
-    void window.tabtin?.openExternal?.(url)
+    void window.muse?.openExternal?.(url)
   }
 
   const form = useRegisterForm({

@@ -12,7 +12,7 @@
  * {@link DeliveryTransportPort}.
  */
 
-import type { StreamEvent } from '@tabtin/agent-runtime'
+import type { StreamEvent } from '@muse/agent-runtime'
 import type { ExecutionOwner } from '../runtime/execution-owner-lifecycle.js'
 import type { HostQueryOutcome } from '../conversation/host-query.js'
 import { DeliveryBatchBuffer } from './delivery-batch-buffer.js'

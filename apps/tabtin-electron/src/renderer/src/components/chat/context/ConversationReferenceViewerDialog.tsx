@@ -16,7 +16,7 @@ import {
   Dialog,
   DialogContent,
   DialogTitle,
-} from '@tabtin/smartsheet-ui'
+} from '@muse/smartsheet-ui'
 import { markdownComponents } from '@components/tabchat/IMMessageBubble'
 import { openOssFilePreviewById } from '../preview/openOssFilePreview'
 import type { ConversationReferenceDisplay } from '@utils/chat/conversationReference'

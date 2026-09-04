@@ -49,7 +49,7 @@ export const sanitizeSchema: Schema = deepMerge(defaultSchema, {
     math: ['xmlns'],
   },
   // D4 / RFC §3.3：href/src 协议「默认全开」——`null` 在 hast-util-sanitize 语义为
-  // 不限制协议。Chat ResourceLink（tabtin:// / file://）与 TabDoc 内嵌链接都依赖此项；
+  // 不限制协议。Chat ResourceLink（muse:// / file://）与 TabDoc 内嵌链接都依赖此项；
   // 若收窄为 ['http','https',…] 白名单，rehype-sanitize 会静默剥掉 `href`，链接无
   // underline/小手且点不开（ISSUE-F 根因之一，比 parser alias 更靠前）。
   // XSS 向量由 permissiveUrlTransform（react-markdown）+ 本文件下方 rehypeSanitizeCss 拦。

@@ -23,8 +23,8 @@ import {
   readFileSync, unlinkSync,
 } from 'node:fs'
 import { appendFile } from 'node:fs/promises'
-import { getBucket, registerStorageBucket } from '@tabtin/storage-manager'
-import { resolveDataRoot, resolveOrganizationRoot } from '@tabtin/terminal-core'
+import { getBucket, registerStorageBucket } from '@muse/storage-manager'
+import { resolveDataRoot, resolveOrganizationRoot } from '@muse/terminal-core'
 import { createLogger } from '../logger'
 import { TokenManager } from '../auth'
 import { getCLIOrganizationId } from '../cli/cli-context'

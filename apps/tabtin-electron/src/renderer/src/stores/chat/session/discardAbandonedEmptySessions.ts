@@ -5,7 +5,7 @@
  * 退出 DraftMessage / 预建过期时立刻从列表与服务端 active 集清除。
  */
 
-import type { ChatMessage, ChatSession } from '@tabtin/chat-client'
+import type { ChatMessage, ChatSession } from '@muse/chat-client'
 import { sessionHasVisibleMessages } from './sessionHasVisibleMessages'
 import { isLocalPendingSessionId } from './actions/pendingFirstSend'
 

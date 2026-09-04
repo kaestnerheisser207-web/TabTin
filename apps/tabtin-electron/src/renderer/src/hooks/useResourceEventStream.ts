@@ -12,7 +12,7 @@
  * 使用全局单例的 WsGateway 连接。
  */
 import { useCallback, useMemo } from 'react'
-import { ContextSyncEvents } from '@tabtin/ws-gateway-client'
+import { ContextSyncEvents } from '@muse/ws-gateway-client'
 import { useAuthStore } from '@/stores/useAuthStore'
 import { useOrganizationStore } from '@/stores/useOrganizationStore'
 import { useUnifiedResources, type ResourceWsEvent } from '@/stores/useUnifiedResources'

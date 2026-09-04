@@ -13,7 +13,7 @@
  *     调 Django ensure-session / append-messages、写本地 transcript、推进度事件。
  *   - **Django（apps/tabtin_django/**）**：两段式导入 API（另一 agent 并行实现）。
  *
- * 注入模式参照 `@tabtin/cli-routes` 的 `configureCLIRoutes` / `createSessionSurfaces`：
+ * 注入模式参照 `@muse/cli-routes` 的 `configureCLIRoutes` / `createSessionSurfaces`：
  * 宿主启动时 `createImportSurfaces(runner)` 用闭包捕获运行能力，surface 定义本身
  * 不耦合 Electron 特有类。
  *
@@ -26,7 +26,7 @@ import { randomUUID } from 'node:crypto'
 import { definePlatformSurface } from '../surface/define-platform-surface.js'
 import { SurfaceError, type SurfaceContext } from '../surface/types.js'
 
-// ─── 源枚举与检测 / 扫描结果（与 @tabtin/agent-import 同构，本层不硬依赖该包）──
+// ─── 源枚举与检测 / 扫描结果（与 @muse/agent-import 同构，本层不硬依赖该包）──
 
 export type ImportSourceId = 'claude_code' | 'codex' | 'cursor' | 'workbuddy'
 

@@ -1,6 +1,6 @@
 /**
  * judge-memo-store-adapter.ts — 把 InMemoryApprovalMemoStore（旧接口 ApprovalMemoStore）
- * 适配成 v3 MemoStore（@tabtin/security-policy）。
+ * 适配成 v3 MemoStore（@muse/security-policy）。
  *
  *  Stage 3b：自 agent-runtime 迁入宿主（security-policy 依赖留在 host）。
  */
@@ -9,12 +9,12 @@ import type {
   MemoStore,
   ApprovalMemoEntry as V3Entry,
   ApprovalMemoLookupResult,
-} from '@tabtin/security-policy'
-import { lookupMemo } from '@tabtin/security-policy'
+} from '@muse/security-policy'
+import { lookupMemo } from '@muse/security-policy'
 import type {
   InMemoryApprovalMemoStore,
   ApprovalMemoEntry as OldEntry,
-} from '@tabtin/agent-runtime'
+} from '@muse/agent-runtime'
 
 function _oldToV3(old: OldEntry): V3Entry {
   const createdMs = typeof old.createdAt === 'number' ? old.createdAt : Date.now()

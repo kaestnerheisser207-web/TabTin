@@ -10,7 +10,7 @@ type SmokeLog = {
 export function shouldRunPackagedAuditSmoke(
   env: NodeJS.ProcessEnv = process.env,
 ): boolean {
-  const raw = env.TABTIN_PACKAGED_AUDIT_SMOKE;
+  const raw = env.MUSE_PACKAGED_AUDIT_SMOKE;
   return raw === '1' || raw === 'true';
 }
 

@@ -18,7 +18,7 @@ import {
   PanelLeft,
   PanelLeftClose,
 } from 'lucide-react'
-import { Switch, toast } from '@tabtin/smartsheet-ui'
+import { Switch, toast } from '@muse/smartsheet-ui'
 import { cn } from '@utils/cn'
 import type { FolderContextKind } from './types'
 import { getBaseName } from './utils'

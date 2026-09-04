@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { createClient, type TabTinClient } from '@tabtin/sdk'
-import type { RecordRow } from '@tabtin/sdk'
+import { createClient, type TabTinClient } from '@muse/sdk'
+import type { RecordRow } from '@muse/sdk'
 import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
   PieChart, Pie, Cell, Legend,
@@ -10,16 +10,16 @@ import {
  * Dashboard 模板 — 自动连接 TabData，开箱即用
  *
  * 环境变量由 init-template 自动注入到 .env.local，无需手动配置：
- *   VITE_TABTIN_API_URL   — API 地址
- *   VITE_TABTIN_TOKEN     — TabData Open API Token
- *   VITE_TABTIN_SPACE_ID  — Space ID
- *   VITE_TABTIN_TABLE_ID  — 默认数据表 ID
+ *   VITE_MUSE_API_URL   — API 地址
+ *   VITE_MUSE_TOKEN     — TabData Open API Token
+ *   VITE_MUSE_SPACE_ID  — Space ID
+ *   VITE_MUSE_TABLE_ID  — 默认数据表 ID
  */
 
-const API_URL = import.meta.env.VITE_TABTIN_API_URL || 'https://api.example.com'
-const TOKEN = import.meta.env.VITE_TABTIN_TOKEN || ''
-const SPACE_ID = import.meta.env.VITE_TABTIN_SPACE_ID || ''
-const TABLE_ID = import.meta.env.VITE_TABTIN_TABLE_ID || ''
+const API_URL = import.meta.env.VITE_MUSE_API_URL || 'https://api.example.com'
+const TOKEN = import.meta.env.VITE_MUSE_TOKEN || ''
+const SPACE_ID = import.meta.env.VITE_MUSE_SPACE_ID || ''
+const TABLE_ID = import.meta.env.VITE_MUSE_TABLE_ID || ''
 
 const CHART_COLORS = [
   '#6366f1', '#8b5cf6', '#a78bfa', '#c4b5fd', '#818cf8',
@@ -128,10 +128,10 @@ export default function App() {
 
   // ── Setup hints ──
   if (!TOKEN) {
-    return <SetupHint message="未检测到 API Token" detail="使用 dashboard 模板创建站点时会自动配置 Token。也可以手动在 .env.local 中设置 VITE_TABTIN_TOKEN" />
+    return <SetupHint message="未检测到 API Token" detail="使用 dashboard 模板创建站点时会自动配置 Token。也可以手动在 .env.local 中设置 VITE_MUSE_TOKEN" />
   }
   if (!SPACE_ID) {
-    return <SetupHint message="未配置 Space ID" detail="请在 .env.local 中设置 VITE_TABTIN_SPACE_ID" />
+    return <SetupHint message="未配置 Space ID" detail="请在 .env.local 中设置 VITE_MUSE_SPACE_ID" />
   }
 
   const totalPages = Math.max(1, Math.ceil(total / pageSize))
@@ -463,10 +463,10 @@ function SetupHint({ message, detail }: { message: string; detail: string }) {
         <div className="mt-6 rounded-lg bg-muted p-3 text-left">
           <code className="block text-caption leading-relaxed text-muted-foreground">
             <span className="text-muted-foreground"># .env.local</span>{'\n'}
-            VITE_TABTIN_API_URL=https://api.example.com{'\n'}
-            VITE_TABTIN_TOKEN=ttn_xxx_yyy{'\n'}
-            VITE_TABTIN_SPACE_ID=your-space-id{'\n'}
-            VITE_TABTIN_TABLE_ID=your-table-id
+            VITE_MUSE_API_URL=https://api.example.com{'\n'}
+            VITE_MUSE_TOKEN=ttn_xxx_yyy{'\n'}
+            VITE_MUSE_SPACE_ID=your-space-id{'\n'}
+            VITE_MUSE_TABLE_ID=your-table-id
           </code>
         </div>
       </div>

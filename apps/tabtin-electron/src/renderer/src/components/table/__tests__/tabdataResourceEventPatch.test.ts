@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 
-import type { Table } from '@tabtin/table-core'
+import type { Table } from '@muse/table-core'
 import type { ResourceWsEvent } from '@/stores/useUnifiedResources'
 import {
   applyTableMetaPatchToState,

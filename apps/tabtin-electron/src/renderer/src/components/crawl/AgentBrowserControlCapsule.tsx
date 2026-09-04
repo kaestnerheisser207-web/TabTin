@@ -65,7 +65,7 @@ export function AgentBrowserControlCapsule(props: AgentBrowserControlCapsuleProp
   const handleControlAction = async () => {
     if (!begin(action)) return
     try {
-      const api = window.tabtin?.crawlView
+      const api = window.muse?.crawlView
       if (action === 'take-over') {
         const result = await api?.takeOverBrowser?.(viewId)
         if (!result?.success) {

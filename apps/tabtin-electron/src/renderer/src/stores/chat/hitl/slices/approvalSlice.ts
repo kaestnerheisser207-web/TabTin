@@ -6,8 +6,8 @@
  *
  * 关键变化（与 v0.3a 对比）：
  *   - 监听事件：`agent.stream.review_required` → `agent.stream.approval_requested`
- *   - 提交通道：`window.tabtin.agentEngine.submitAskUserResponse(requestId, ...)`
- *               → `window.tabtin.agentEngine.submitHitlBatch(batchId, decisions[])`
+ *   - 提交通道：`window.muse.agentEngine.submitAskUserResponse(requestId, ...)`
+ *               → `window.muse.agentEngine.submitHitlBatch(batchId, decisions[])`
  *   - 状态字段：`pendingReviewBySessionId` → `pendingApprovalBySessionId`，
  *               `reviewSubmittingBySessionId` → `approvalSubmittingBySessionId`
  *   - state.batchId（替代 interruptId）：runtime 端 LocalPermissionHandler.requestPermissionsBatch
@@ -16,12 +16,12 @@
  * Ask-user 路径（独立语义）保留 `submitAskUserResponse(requestId, ...)`，详见 askUserSlice.ts。
  */
 
-import type { ChatMessage, ChatClient } from '@tabtin/chat-client'
+import type { ChatMessage, ChatClient } from '@muse/chat-client'
 import type {
   ApprovalRequestState,
 } from '../../shared/types'
 import i18n from '@/i18n'
-import { toast } from '@tabtin/smartsheet-ui'
+import { toast } from '@muse/smartsheet-ui'
 import { isLocalRuntimeAvailable } from '@services/localAgentClient'
 import { getSessionController } from '@/services/agentService'
 import { isSessionBusy } from '../../execution/sessionRunProjection'

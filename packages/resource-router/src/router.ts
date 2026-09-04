@@ -1,5 +1,5 @@
 /**
- * @tabtin/resource-router · router
+ * @muse/resource-router · router
  *
  * `ResourceRouter` —— 「在 Space 内打开任意指针」唯一入口。三种 Agent 输出
  * 形式（增强 markdown / open_in_space 工具 / 富 ResourceCard）最终都收口到
@@ -124,7 +124,7 @@ export interface ResourceRouterDeps {
   client?: ResourceOpenEvent['client']
   /**
    * Local file artifact resolver. Used only for self-format file pointers
-   * such as `tabtin://resource/file/artifacts%2Fx.xlsx?hint=tabfiles`.
+   * such as `muse://resource/file/artifacts%2Fx.xlsx?hint=tabfiles`.
    * Runtime-specific wiring resolves the relative path against the current
    * Space-bound Agent working_dir and may throw user-facing errors.
    */

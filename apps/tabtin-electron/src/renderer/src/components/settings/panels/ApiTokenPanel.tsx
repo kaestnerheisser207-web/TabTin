@@ -37,21 +37,21 @@ import {
   LoadingSpinner,
   toast,
   ScrollArea,
-} from '@tabtin/smartsheet-ui'
+} from '@muse/smartsheet-ui'
 import { Input, Textarea } from '@components/ui'
 import { ManagementCardListSkeleton } from '@components/common/ListSkeletons'
 import { SettingsPanelHeader } from '../SettingsPanelHeader'
 import { SettingsPanelLayout } from '../SettingsPanelLayout'
-import { TokenApiService } from '@tabtin/table-core'
+import { TokenApiService } from '@muse/table-core'
 import type {
   ApiToken,
   AvailableScopesResponse,
   CreateTokenRequest,
   TokenScope,
-} from '@tabtin/table-core'
-import { TOKEN_SCOPES, SCOPE_PRESETS } from '@tabtin/table-core'
-import type { ScopePreset } from '@tabtin/table-core'
-import { formatSmartTime } from '@tabtin/smartsheet-ui'
+} from '@muse/table-core'
+import { TOKEN_SCOPES, SCOPE_PRESETS } from '@muse/table-core'
+import type { ScopePreset } from '@muse/table-core'
+import { formatSmartTime } from '@muse/smartsheet-ui'
 import { useTranslation } from 'react-i18next'
 import { SETTINGS_CONTROL, SETTINGS_HINT, SETTINGS_HOVER_ACTION, SETTINGS_LABEL, SETTINGS_SECTION_TITLE, SETTINGS_TEXTAREA, SETTINGS_TEXT_META, SETTINGS_TEXT_META_BASE, SETTINGS_TEXT_MICRO } from '../settingsUi'
 import { cn } from '@utils/cn'

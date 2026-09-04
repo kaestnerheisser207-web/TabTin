@@ -12,7 +12,7 @@ import type {
   ModelParamValue,
   ModelRuntimeControl,
   ModelRuntimeControlOption,
-} from '@tabtin/chat-client'
+} from '@muse/chat-client'
 import {
   getCatalogThinkingCapability,
   isThinkingRelatedRuntimeControl,

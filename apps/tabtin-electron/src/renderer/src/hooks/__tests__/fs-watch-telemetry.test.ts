@@ -70,7 +70,7 @@ describe('fs-watch-telemetry', () => {
     it('preload unavailable 归 preload_unavailable', () => {
       expect(
         classifyFsWatchError(
-          'window.tabtin.fileSystem watch API not available',
+          'window.muse.fileSystem watch API not available',
           'result_failed',
         ),
       ).toBe('preload_unavailable')
@@ -121,7 +121,7 @@ describe('fs-watch-telemetry', () => {
       expect(snap.events[0].errorCode).toBe('thrown_exception')
     })
 
-    it('window.__TABTIN_FS_WATCH_TELEMETRY__ 被持久化', () => {
+    it('window.__MUSE_FS_WATCH_TELEMETRY__ 被持久化', () => {
       reportFsWatchSetupFailed({
         rootPath: '/Users/alice/proj',
         error: 'EACCES',
@@ -129,17 +129,17 @@ describe('fs-watch-telemetry', () => {
         now: 3_000,
       })
       const w = window as unknown as {
-        __TABTIN_FS_WATCH_TELEMETRY__?: {
+        __MUSE_FS_WATCH_TELEMETRY__?: {
           events: Array<{ rootPath: string; errorCode: string }>
           counters: Record<string, number>
         }
       }
-      expect(w.__TABTIN_FS_WATCH_TELEMETRY__).toBeDefined()
-      expect(w.__TABTIN_FS_WATCH_TELEMETRY__!.events).toHaveLength(1)
-      expect(w.__TABTIN_FS_WATCH_TELEMETRY__!.events[0].rootPath).toBe(
+      expect(w.__MUSE_FS_WATCH_TELEMETRY__).toBeDefined()
+      expect(w.__MUSE_FS_WATCH_TELEMETRY__!.events).toHaveLength(1)
+      expect(w.__MUSE_FS_WATCH_TELEMETRY__!.events[0].rootPath).toBe(
         '/Users/<redacted>/proj',
       )
-      expect(w.__TABTIN_FS_WATCH_TELEMETRY__!.counters['fs_watch_setup_failed.access_denied']).toBe(
+      expect(w.__MUSE_FS_WATCH_TELEMETRY__!.counters['fs_watch_setup_failed.access_denied']).toBe(
         1,
       )
     })

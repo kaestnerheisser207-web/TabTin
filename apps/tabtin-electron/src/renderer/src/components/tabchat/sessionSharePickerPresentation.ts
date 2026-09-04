@@ -8,8 +8,8 @@
  * 不用 session.space_id / workspace_id——后者可能漂移，会导致「最近」大于分项之和。
  */
 
-import type { ChatSession } from '@tabtin/chat-client'
-import type { Agent } from '@tabtin/app-shell'
+import type { ChatSession } from '@muse/chat-client'
+import type { Agent } from '@muse/app-shell'
 import { resolveCurrentAgentDisplay } from '@components/chat/model/resolveAgentDisplayName'
 import { getSessionActivityTs } from '@/utils/chat-session-sort'
 

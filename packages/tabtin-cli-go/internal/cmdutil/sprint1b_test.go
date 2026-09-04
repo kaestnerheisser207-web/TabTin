@@ -164,8 +164,8 @@ func TestConflictsBatchLineLevelEnforced(t *testing.T) {
 // stderr **不喷完整 envelope JSON**——只打 [batch:n] 简要文本
 // （TabData v7 P2-2 修复：之前 validateConflicts 内部直接 PrintErrorAndExit 会喷 JSON）。
 func TestBatchLineValidationDoesNotEmitEnvelope(t *testing.T) {
-	// 用真实进程跑——单测里捕 stderr 困难，改成跑 dist/tabtin 二进制
-	// 但 dist/tabtin 不会有"我们临时定义的 fake-conflicts-batch"——所以这里用 Go 内调用，
+	// 用真实进程跑——单测里捕 stderr 困难，改成跑 dist/muse 二进制
+	// 但 dist/muse 不会有"我们临时定义的 fake-conflicts-batch"——所以这里用 Go 内调用，
 	// 把 os.Stderr 临时重定向到 pipe 捕获
 
 	r, w, _ := os.Pipe()

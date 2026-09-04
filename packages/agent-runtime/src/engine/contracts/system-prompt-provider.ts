@@ -2,7 +2,7 @@
  * SystemPromptProvider —— 宿主注入的系统提示词装配端口（ Stage 2b）。
  *
  * 引擎 / 子 Agent 路径只消费「已装配好的字符串」或经本端口请求重烘焙；
- * 不再直接 import `@tabtin/agent-prompt` 的 `buildSystemPrompt`。
+ * 不再直接 import `@muse/agent-prompt` 的 `buildSystemPrompt`。
  */
 
 /** runtime 侧可见的最小工具描述（不依赖 agent-prompt ToolLike）。 */

@@ -44,7 +44,7 @@ import {
   assertRelayAck,
   DeliveryBatchBuffer,
   type DeliveryTransport,
-} from '@tabtin/agent-host/delivery'
+} from '@muse/agent-host/delivery'
 
 interface StreamEvt {
   type: string

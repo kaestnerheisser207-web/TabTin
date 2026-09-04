@@ -17,7 +17,7 @@
  */
 
 import { useRef, useCallback, useMemo } from 'react'
-import { TrackerEvents } from '@tabtin/ws-gateway-client'
+import { TrackerEvents } from '@muse/ws-gateway-client'
 import { useGatewayTopic } from './useGatewayTopic'
 import {
   extractTrackerPayload,

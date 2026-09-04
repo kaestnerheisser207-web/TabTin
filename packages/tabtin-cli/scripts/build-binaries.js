@@ -2,7 +2,7 @@
 'use strict';
 
 /**
- * 跨平台编译 tabtin-cli-go，并把首版要打进 @tabtin/cli 的 Windows/macOS
+ * 跨平台编译 tabtin-cli-go，并把首版要打进 @muse/cli 的 Windows/macOS
  * 四个产物拷到 binaries/。不依赖 make / bash。
  *
  * Linux 仍会编进 tabtin-cli-go/dist/，但不拷进本包。

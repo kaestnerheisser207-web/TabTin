@@ -1,7 +1,7 @@
 /**
  * useSlideCollaboration — TabSlide Y.js 实时协作 Hook
  *
- * 基于 @tabtin/collab-core 的 useCollabProvider:
+ * 基于 @muse/collab-core 的 useCollabProvider:
  * - 连接到 collab-live /slide-collaboration 端点
  * - Y.Doc 数据模型: pages (Y.Map), pageOrder (Y.Array), meta (Y.Map)
  * - 监听 Y.Doc 变更驱动 Zustand Store 更新
@@ -25,7 +25,7 @@ import {
   type CollabPeerState,
   type CollabSyncMode,
   type CollabSyncModeReason,
-} from '@tabtin/collab-core'
+} from '@muse/collab-core'
 import type { Slide, PPTElement } from '../types/slides'
 import { useT } from '../i18n'
 import {

@@ -31,7 +31,7 @@
  *
  * ## 关联 lint 规则
  *
- * `tabtin/prefer-scoped-activity-effects`（warn，仅 renderer）在 `useEffect` 内
+ * `muse/prefer-scoped-activity-effects`（warn，仅 renderer）在 `useEffect` 内
  * 识别裸用 `window.addEventListener` / `setInterval` / `new ResizeObserver` 等
  * 模式时会引导你走这里的包装。详见 `eslint-rules/prefer-scoped-activity-effects.js`。
  */

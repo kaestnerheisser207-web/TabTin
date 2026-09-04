@@ -23,7 +23,7 @@ vi.mock('@/crawlspace/electron/crawl-view-client', () => ({
   },
 }))
 
-vi.mock('@tabtin/smartsheet-ui', () => ({
+vi.mock('@muse/smartsheet-ui', () => ({
   toast: (...args: unknown[]) => mockToast(...args),
 }))
 

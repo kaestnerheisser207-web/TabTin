@@ -5,8 +5,8 @@ import type {
   FlashcardViewConfig,
   Field,
   TableRecord,
-} from '@tabtin/table-core'
-import { RecordApiService } from '@tabtin/table-core'
+} from '@muse/table-core'
+import { RecordApiService } from '@muse/table-core'
 import { useTableCollab } from '@components/table/TableCollabContext'
 
 export interface UseFlashcardViewControllerInput {

@@ -69,7 +69,7 @@ CAPABILITY_ROLE_NAMES = {
     "tabtin_readonly_role_admin",
 }
 
-COMMUNITY_DEV_MODE = "TABTIN_COMMUNITY_DEV_MODE"
+COMMUNITY_DEV_MODE = "MUSE_COMMUNITY_DEV_MODE"
 
 
 def _development_mode_enabled() -> bool:
@@ -428,7 +428,7 @@ def restore_baseline_from_environment() -> str:
 
     baseline_root = Path(
         os.environ.get(
-            "TABTIN_COMMUNITY_DATABASE_BASELINE_ROOT",
+            "MUSE_COMMUNITY_DATABASE_BASELINE_ROOT",
             "/app/community-assets/postgres/baseline",
         )
     )
@@ -490,7 +490,7 @@ def restore_baseline_from_environment() -> str:
 def finalize_from_environment() -> None:
     sql_root = Path(
         os.environ.get(
-            "TABTIN_COMMUNITY_DATABASE_SQL_ROOT",
+            "MUSE_COMMUNITY_DATABASE_SQL_ROOT",
             "/opt/tabtin/postgres-community",
         )
     )

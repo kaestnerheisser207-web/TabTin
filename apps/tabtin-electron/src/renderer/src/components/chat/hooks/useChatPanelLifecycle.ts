@@ -48,7 +48,7 @@ import type {
   ChatSession,
   ModelParamOverrides,
   ModelParamValue,
-} from '@tabtin/chat-client'
+} from '@muse/chat-client'
 import type { SpaceContext } from '@components/context-space/SpaceContextContainer'
 
 function hasNonNegativeToken(value: unknown): value is number {

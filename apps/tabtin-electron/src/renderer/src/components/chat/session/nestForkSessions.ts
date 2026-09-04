@@ -1,4 +1,4 @@
-import type { ChatSession } from '@tabtin/chat-client'
+import type { ChatSession } from '@muse/chat-client'
 import { sortSessionsByActivity } from '@/utils/chat-session-sort'
 
 /**

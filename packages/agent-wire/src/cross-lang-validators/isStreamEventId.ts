@@ -39,11 +39,11 @@
  *
  * **4 端落地状态（W4.5 B3 完成）**
  * ----------------------------------
- * - TS daemon：✅ import `@tabtin/agent-wire` SSOT（本文件）
+ * - TS daemon：✅ import `@muse/agent-wire` SSOT（本文件）
  * - TS Renderer：⚠️ `apps/tabtin-electron/src/renderer/src/services/wsLastEventIdPersistence.ts`
  *   内有等价内联副本（W4c R5-P0-1 引入），TS 测试 `wave45-isStreamEventId-contract.test.ts`
  *   含"副本契约校验"防漂移。W7 清理 Wave 可让 Renderer 直接
- *   `import { isStreamEventId } from '@tabtin/agent-wire'` 收口为单一实现。
+ *   `import { isStreamEventId } from '@muse/agent-wire'` 收口为单一实现。
  * - Python Django：✅ `apps/tabtin_django/apps/services/common/ws/protocol.py::is_stream_event_id`
  *   W4.5 B3 已修紧为 `frozenset("0123456789")` + `all(c in ...)`，原先
  *   `parts[0].isdigit()` 实现已退役。Python 测试

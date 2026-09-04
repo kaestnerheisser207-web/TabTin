@@ -4,7 +4,7 @@
  * adapter 把 `FileEditPatch` 挂在瞬态 `hostMetadata` 上；本 hook 消费后必须清空，
  * 避免正文经其它序列化路径泄漏。失败/拒绝的工具没有补丁，终端改动也不会出现。
  */
-import type { EngineHooks, ToolResult } from '@tabtin/agent-runtime';
+import type { EngineHooks, ToolResult } from '@muse/agent-runtime';
 
 type AfterToolResultContext = Parameters<NonNullable<EngineHooks['afterToolResult']>>[0];
 import {

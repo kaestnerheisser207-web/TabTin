@@ -1,5 +1,5 @@
 /**
- * Runtime StreamEvents ↔ @tabtin/agent-wire 常量 parity（ /  Stage 5b）。
+ * Runtime StreamEvents ↔ @muse/agent-wire 常量 parity（ /  Stage 5b）。
  */
 
 import { describe, expect, it } from 'vitest';
@@ -7,7 +7,7 @@ import {
   ContentBlockEvents as WireContentBlockEvents,
   PROTOCOL_VERSION_V2 as WireProtocolV2,
   StreamEvents as WireStreamEvents,
-} from '@tabtin/agent-wire';
+} from '@muse/agent-wire';
 
 import {
   ContentBlockEvents,

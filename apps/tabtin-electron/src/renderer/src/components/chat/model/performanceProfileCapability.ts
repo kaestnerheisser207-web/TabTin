@@ -6,7 +6,7 @@
  * 才渲染选择器。缺省 / false / undefined → 隐藏（当前全厂商无真实 Fast API）。
  */
 
-import type { Model, ModelParamOverrides, ModelParamValue } from '@tabtin/chat-client'
+import type { Model, ModelParamOverrides, ModelParamValue } from '@muse/chat-client'
 
 export const PERFORMANCE_PROFILE_VALUES = [
   'fast',

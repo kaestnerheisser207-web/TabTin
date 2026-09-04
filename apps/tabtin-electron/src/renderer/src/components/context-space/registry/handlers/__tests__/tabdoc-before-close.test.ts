@@ -22,7 +22,7 @@ const mockRequestConfirm = vi.fn()
 const mockToast = vi.fn()
 const mockOpenResourceTab = vi.fn()
 
-vi.mock('@tabtin/smartsheet-ui', () => ({
+vi.mock('@muse/smartsheet-ui', () => ({
   toast: (...args: unknown[]) => mockToast(...args),
 }))
 

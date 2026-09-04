@@ -55,7 +55,7 @@ class ImTextLinksTest {
 
     @Test
     fun `non-http schemes are not links`() {
-        val content = "javascript:alert(1) file:///tmp/a tabtin://shared/tables/1"
+        val content = "javascript:alert(1) file:///tmp/a muse://shared/tables/1"
 
         assertTrue(findImTextLinks(content).isEmpty())
     }

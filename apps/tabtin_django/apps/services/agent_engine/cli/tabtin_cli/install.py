@@ -5,7 +5,7 @@ v3.1 方向锚（2026-04-19）以来支持两种 install 类型，由 manifest `
 
 1. ``npm-global`` — 多数社区 CLI 的原生分发方式。tabtin 只做"便利入口"：
    ``shutil.which`` 检查已装 → 未装则**默认引导用户** ``npm install -g ...``
-   （设 ``--auto-install`` 或 ``TABTIN_AUTO_NPM_INSTALL=1`` 才代跑 npm）。
+   （设 ``--auto-install`` 或 ``MUSE_AUTO_NPM_INSTALL=1`` 才代跑 npm）。
    **不下载 tarball、不校验 SHA256、不代管凭据**（见方向锚 H1-H9）。
 2. ``tarball`` — 前任 Wave A5/D 设计的 CDN tarball 分发。保留为兼容路径，
    未来真有 tarball 形态 App 时仍可用。逻辑与 Electron 端
@@ -329,7 +329,7 @@ def install_app(
 
     - ``npm-global`` — 检查 ``cli.binary`` 是否在 PATH；未装默认抛
       ``NpmInstallGuidanceError`` 让用户自己跑 ``npm install -g``；
-      ``auto_install=True`` 或 ``TABTIN_AUTO_NPM_INSTALL=1`` 时代跑 npm
+      ``auto_install=True`` 或 ``MUSE_AUTO_NPM_INSTALL=1`` 时代跑 npm
     - ``tarball``（默认） — 与 Electron 端 ``MarketplaceAppInstaller.installApp``
       等价：下载 → SHA256 校验 → 解压 → 写 registry
 
@@ -342,7 +342,7 @@ def install_app(
     - ``manifest_path`` — 可选，覆盖默认 manifest 位置
     - ``registry_dir``  — 可选，覆盖默认 ``~/.tabtin-marketplace-apps/``
     - ``platform_override``/``arch_override`` — tarball 路径测试用
-    - ``allow_unchecked_install`` — tarball 路径：``None`` 取 ``TABTIN_ALLOW_UNCHECKED_INSTALL=1``
+    - ``allow_unchecked_install`` — tarball 路径：``None`` 取 ``MUSE_ALLOW_UNCHECKED_INSTALL=1``
     - ``auto_install`` — npm-global 路径：True 时代跑 ``npm install -g``
     """
     manifest = _load_manifest(app_id, manifest_path)
@@ -405,7 +405,7 @@ def install_app(
     )
     if allow_unchecked_install is None:
         allow_unchecked_install = (
-            os.environ.get("TABTIN_ALLOW_UNCHECKED_INSTALL") == "1"
+            os.environ.get("MUSE_ALLOW_UNCHECKED_INSTALL") == "1"
         )
 
     if not expected_checksum and not allow_unchecked_install:
@@ -441,7 +441,7 @@ def install_app(
         checksum_verified = True
     elif allow_unchecked_install:
         logger.warning(
-            "[tabtin install] %s: SHA256 校验跳过（TABTIN_ALLOW_UNCHECKED_INSTALL=1）。"
+            "[tabtin install] %s: SHA256 校验跳过（MUSE_ALLOW_UNCHECKED_INSTALL=1）。"
             "生产构建必须填充 manifest.cli.checksums",
             app_id,
         )
@@ -507,7 +507,7 @@ def _install_via_npm(
     业务：Muse 不持密 / 不代管版本 / 不强制。只给一个便利入口：
     - binary 在 PATH → 记录已装，走 registry 登记
     - 不在 PATH + 用户未授权 auto → 抛 ``NpmInstallGuidanceError``，run_install
-      翻译为 exit 78（与 TABTIN_ALLOW_UNCHECKED_INSTALL 同语义 —— "需要用户额外
+      翻译为 exit 78（与 MUSE_ALLOW_UNCHECKED_INSTALL 同语义 —— "需要用户额外
       配置后重试"）
     - 不在 PATH + auto 开启 → fork ``npm install -g <package>``，装完再查 PATH
     """
@@ -519,8 +519,8 @@ def _install_via_npm(
 
     binary_name = cli["binary"]
 
-    # TABTIN_AUTO_NPM_INSTALL 支持同一个开关；CLI --auto-install flag 走参数
-    env_auto = os.environ.get("TABTIN_AUTO_NPM_INSTALL") == "1"
+    # MUSE_AUTO_NPM_INSTALL 支持同一个开关；CLI --auto-install flag 走参数
+    env_auto = os.environ.get("MUSE_AUTO_NPM_INSTALL") == "1"
     effective_auto = auto_install or env_auto
 
     found = shutil.which(binary_name)
@@ -638,7 +638,7 @@ class InstallChecksumMissingError(RuntimeError):
         super().__init__(
             f"[E_INSTALL_CHECKSUM_MISSING] 拒绝安装 {app_id!r}：manifest.cli.checksums "
             f"缺少 {checksum_key or '当前 platform'} 的 SHA256。"
-            "如需 dev/CI 跳过：``TABTIN_ALLOW_UNCHECKED_INSTALL=1 tabtin install "
+            "如需 dev/CI 跳过：``MUSE_ALLOW_UNCHECKED_INSTALL=1 tabtin install "
             f"{app_id}``"
         )
 

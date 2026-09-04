@@ -2,11 +2,11 @@
  * end_turn 待办收尾 nudge 文案（ Stage 2c）。
  */
 
-import { buildTodoCompletionNudgeBody } from '@tabtin/agent-prompt'
+import { buildTodoCompletionNudgeBody } from '@muse/agent-prompt'
 import type {
   TodoCompletionNudgeProvider,
   TodoNudgeItem,
-} from '@tabtin/agent-runtime/engine'
+} from '@muse/agent-runtime/engine'
 
 export function createTodoCompletionNudgeProvider(): TodoCompletionNudgeProvider {
   return {

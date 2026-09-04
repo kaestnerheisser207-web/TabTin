@@ -116,7 +116,7 @@ def _is_production() -> bool:
     envs = {
         os.getenv("ENVIRONMENT", ""),
         os.getenv("DJANGO_ENV", ""),
-        os.getenv("TABTIN_ENV", ""),
+        os.getenv("MUSE_ENV", ""),
     }
     return "production" in {item.strip().lower() for item in envs}
 
@@ -124,7 +124,7 @@ def _is_production() -> bool:
 def _ticket_required() -> bool:
     if _is_production():
         return True
-    return str(getattr(settings, "TABTIN_ADMIN_OPS_REQUIRE_TICKET_ID", "0")) == "1"
+    return str(getattr(settings, "MUSE_ADMIN_OPS_REQUIRE_TICKET_ID", "0")) == "1"
 
 
 def _parse_time_range(start: str | None, end: str | None) -> tuple[Any, Any]:

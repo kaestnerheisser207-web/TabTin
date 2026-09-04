@@ -1,4 +1,4 @@
-import type { ChatSessionWithAgent } from '@tabtin/chat-client'
+import type { ChatSessionWithAgent } from '@muse/chat-client'
 
 function getConversationAgentKey(session: ChatSessionWithAgent): string | null {
   const agentId = session.agent_id?.trim()

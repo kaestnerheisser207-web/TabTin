@@ -3,7 +3,7 @@ import { NodeViewWrapper } from '@tiptap/react'
 import type { NodeViewProps } from '@tiptap/react'
 import { Presentation, Trash2, ExternalLink } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
-import { toast } from '@tabtin/smartsheet-ui'
+import { toast } from '@muse/smartsheet-ui'
 import { useTabDocHostActions } from '../../TabDocHostActionsContext'
 
 export const CanvasBlockView: React.FC<NodeViewProps> = ({

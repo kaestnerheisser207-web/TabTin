@@ -7,19 +7,19 @@
  * 融合层自动走词法单路——Daemon 无头模式零额外依赖即可用。
  *
  * 模型目录（ 生产零下载）：默认 `~/.tabtin/models`，部署方用
- * `TABTIN_MODELS_DIR` 指到预置目录；置入方式统一为
+ * `MUSE_MODELS_DIR` 指到预置目录；置入方式统一为
  * `node scripts/electron/runtime/fetch-embedding-model.mjs`（运行时无下载能力，缺模型时
  * 语义路缺席、词法兜底）。
  */
 
-import type { WarmableSemanticScorer } from '@tabtin/search';
-import { LocalEmbeddingService, createSemanticScorer } from '@tabtin/local-embedding';
+import type { WarmableSemanticScorer } from '@muse/search';
+import { LocalEmbeddingService, createSemanticScorer } from '@muse/local-embedding';
 
 let scorer: WarmableSemanticScorer | null = null;
 
 export function getDaemonSemanticScorer(log: (msg: string) => void): WarmableSemanticScorer {
   if (scorer) return scorer;
-  const modelsDir = process.env.TABTIN_MODELS_DIR?.trim();
+  const modelsDir = process.env.MUSE_MODELS_DIR?.trim();
   const service = new LocalEmbeddingService({ ...(modelsDir ? { modelsDir } : {}), log });
   service.warmup().catch((err: unknown) => {
     // 失败已在 service 内记日志；后续对话走词法单路，不影响主链路。

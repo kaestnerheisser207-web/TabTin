@@ -44,7 +44,7 @@ function normalizeStatus(status: string | undefined): MainGatewayStatus {
 
 function getBridge(): any | null {
   if (typeof window === 'undefined') return null
-  return (window as any).tabtin?.agentGateway ?? null
+  return (window as any).muse?.agentGateway ?? null
 }
 
 function ensureBridgeSubscriptions(): void {

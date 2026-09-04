@@ -15,7 +15,7 @@
 
 import { create } from 'zustand'
 import { createJSONStorage, persist } from 'zustand/middleware'
-import { withPersistSafety } from '@tabtin/shared'
+import { withPersistSafety } from '@muse/shared'
 import { PERSIST_KEYS } from './persist-key-registry'
 import { normalizeComparableKey } from '@/utils/canonicalPath'
 

@@ -15,7 +15,7 @@
  */
 
 import React, { useCallback, useEffect, useMemo } from 'react'
-import { ScrollArea, ConfirmDialog } from '@tabtin/smartsheet-ui'
+import { ScrollArea, ConfirmDialog } from '@muse/smartsheet-ui'
 import { X, MessageSquarePlus, Loader2, Square } from 'lucide-react'
 import { cn } from '@utils/cn'
 import { useChatStore } from '@/stores/chat/useChatStore'
@@ -38,7 +38,7 @@ import {
 import { TrackerRunStatusIndicator } from '../tracker/TrackerRunStatusIndicator'
 import { useComposerPresetInjection } from '../composer-presets/useComposerPresetInjection'
 import { useTranslation } from 'react-i18next'
-import type { ChatSession } from '@tabtin/chat-client'
+import type { ChatSession } from '@muse/chat-client'
 import type { ChatAttachment } from '../types'
 import { useContextInjection } from '../context/useContextInjection'
 import { useRemoteExecutionGate } from '../hooks/useRemoteExecutionGate'

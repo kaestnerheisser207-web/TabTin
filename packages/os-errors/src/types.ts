@@ -1,5 +1,5 @@
 /**
- * @tabtin/os-errors — 类型定义
+ * @muse/os-errors — 类型定义
  *
  * OS 级文件 / 网络访问异常的统一抽象。Agent 拿到的不是裸 errno，
  * 而是带「用户引导 + Agent 行为约束 + 可选恢复工具提示」的结构化错误。
@@ -101,7 +101,7 @@ export interface OSToolError {
 }
 
 /**
- * 检测某个错误是否 @tabtin/os-errors 抛出的 OSError。
+ * 检测某个错误是否 @muse/os-errors 抛出的 OSError。
  *
  * **shape 判断**（不要求 instanceof）：跨进程 / mock 测试场景下都能命中。
  *

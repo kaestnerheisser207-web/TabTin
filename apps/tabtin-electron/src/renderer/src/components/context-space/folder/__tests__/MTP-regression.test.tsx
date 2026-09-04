@@ -31,7 +31,7 @@ vi.mock('@utils/cn', () => ({
   cn: (...args: unknown[]) => args.filter(Boolean).join(' '),
 }))
 
-vi.mock('@tabtin/smartsheet-ui', () => ({
+vi.mock('@muse/smartsheet-ui', () => ({
   ScrollArea: ({ children, className }: { children: React.ReactNode; className?: string }) => (
     <div data-testid="scroll-area" className={className}>{children}</div>
   ),
@@ -105,7 +105,7 @@ Object.defineProperty(window, 'tabtin', {
 /* ── Tests ── */
 
 describe('MTP-001: MarkdownViewer relative image path resolution', () => {
-  it('resolves relative src to tabtin-file:// URL when filePath is provided', async () => {
+  it('resolves relative src to muse-file:// URL when filePath is provided', async () => {
     const { MarkdownViewer } = await import('@components/shared/file-preview/MarkdownViewer')
     const { container } = render(
       <MarkdownViewer content="![test](./images/photo.png)" filePath="/home/user/docs/readme.md" />
@@ -113,7 +113,7 @@ describe('MTP-001: MarkdownViewer relative image path resolution', () => {
 
     const img = container.querySelector('img[alt="test"]')
     expect(img).not.toBeNull()
-    expect(img!.getAttribute('src')).toBe('tabtin-file:///home/user/docs/images/photo.png')
+    expect(img!.getAttribute('src')).toBe('muse-file:///home/user/docs/images/photo.png')
   })
 
   it('passes through remote URLs unchanged', async () => {
@@ -196,7 +196,7 @@ describe('MTP-004: buildTabtinFileUrl encodes # character', () => {
     )
 
     const pdfViewer = await findByTestId('pdf-viewer')
-    expect(pdfViewer.getAttribute('data-file-url')).toBe('tabtin-file:///home/user/file%231.pdf')
+    expect(pdfViewer.getAttribute('data-file-url')).toBe('muse-file:///home/user/file%231.pdf')
     expect(pdfViewer.getAttribute('data-base64')).toBe('no')
   })
 })

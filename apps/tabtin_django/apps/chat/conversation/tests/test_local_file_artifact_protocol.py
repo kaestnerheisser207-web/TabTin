@@ -14,7 +14,7 @@ def _local_file_block(file_type: str, relative_path: str, filename: str, mime_ty
             "file_type": file_type,
             "relative_path": relative_path,
             "filename": filename,
-            "url": f"tabtin://resource/file/{relative_path.replace('/', '%2F')}?hint=tabfiles",
+            "url": f"muse://resource/file/{relative_path.replace('/', '%2F')}?hint=tabfiles",
             "mime_type": mime_type,
             "file_size": 12345,
             "self_check": {
@@ -42,7 +42,7 @@ def test_slim_history_response_keeps_local_file_artifact_payload():
 
     assert slimmed == [block]
     assert slimmed[0]["payload"]["relative_path"] == "artifacts/weather.xlsx"
-    assert slimmed[0]["payload"]["url"].startswith("tabtin://resource/file/")
+    assert slimmed[0]["payload"]["url"].startswith("muse://resource/file/")
     assert slimmed[0]["payload"]["self_check"]["status"] == "passed"
 
 
@@ -82,7 +82,7 @@ def test_chat_message_schema_serializes_tool_artifact_local_file_fields():
     assert payload["artifact_kind"] == "local_file"
     assert payload["file_type"] == "xlsx"
     assert payload["relative_path"] == "artifacts/weather.xlsx"
-    assert payload["url"] == "tabtin://resource/file/artifacts%2Fweather.xlsx?hint=tabfiles"
+    assert payload["url"] == "muse://resource/file/artifacts%2Fweather.xlsx?hint=tabfiles"
     assert payload["mime_type"] == "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
     assert payload["file_size"] == 12345
     assert payload["self_check"]["status"] == "passed"
@@ -125,7 +125,7 @@ def test_slim_history_response_keeps_oss_file_artifact_payload():
             "file_id": file_id,
             "file_type": "png",
             "filename": "chart.png",
-            "url": f"tabtin://resource/file/{file_id}?hint=tabfiles&title=chart.png",
+            "url": f"muse://resource/file/{file_id}?hint=tabfiles&title=chart.png",
             "mime_type": "image/png",
             "access_url": "https://cdn.example.com/agent/uploads/chart.png",
             "self_check": {"status": "passed", "summary": "OSS upload succeeded"},

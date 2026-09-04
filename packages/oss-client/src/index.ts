@@ -1,5 +1,5 @@
 /**
- * @tabtin/oss-client — 统一 OSS 直传客户端
+ * @muse/oss-client — 统一 OSS 直传客户端
  *
  * 提供 presign → PUT → confirm 三步直传流程的核心实现，
  * 同时支持浏览器（Electron renderer）和 Node.js（Electron main / action-tools）。
@@ -12,7 +12,7 @@
  * 消费方通过 createOSSClient(config) 创建绑定了认证信息的客户端实例。
  */
 
-import { joinApiPath } from '@tabtin/config'
+import { joinApiPath } from '@muse/config'
 
 // ========== Pending Confirm 类型 ==========
 
@@ -248,7 +248,7 @@ export async function withRetry<T>(
   throw lastError
 }
 
-// 统一 helper 委托 `@tabtin/config/joinApiPath`，避免行为漂移。
+// 统一 helper 委托 `@muse/config/joinApiPath`，避免行为漂移。
 // （历史上 oss-client 自己实现了一份 buildUrl，跟主流派的 dev-warn 防御理念
 // 不一致；2026-04-30 全仓 baseUrl 拼接收敛专题统一委托。）
 function buildUrl(base: string, path: string): string {

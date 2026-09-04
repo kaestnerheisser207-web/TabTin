@@ -1,11 +1,11 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 
-vi.mock('@tabtin/agent-runtime/engine/user-context-wrapper', () => ({
+vi.mock('@muse/agent-runtime/engine/user-context-wrapper', () => ({
   buildUserContextWrapper: (type: string, body: string, opts: { stale_after_turn?: string }) =>
     `<context type="${type}" stale_after_turn="${opts.stale_after_turn ?? ''}">${body}</context>`,
 }))
 
-vi.mock('@tabtin/agent-runtime/tools', () => ({
+vi.mock('@muse/agent-runtime/tools', () => ({
   joinApiPath: (base: string, path: string) => `${base}${path.startsWith('/') ? path : `/${path}`}`,
 }))
 

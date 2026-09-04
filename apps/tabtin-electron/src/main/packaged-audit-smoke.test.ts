@@ -24,7 +24,7 @@ describe('packaged audit smoke mode', () => {
 
     const installed = installPackagedAuditSmokeExit({
       app,
-      env: { TABTIN_PACKAGED_AUDIT_SMOKE: '1' },
+      env: { MUSE_PACKAGED_AUDIT_SMOKE: '1' },
       log,
       delayMs: 25,
     });

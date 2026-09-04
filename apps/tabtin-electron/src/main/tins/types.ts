@@ -165,7 +165,7 @@ export type TinBridgeMessage =
 
 // Note: legacy `TinBridgeResponse` interface (with `id` / `success` / `error` fields)
 // was removed in W2-δ — `tin-bridge:request` now returns a `CliResponse` envelope
-// from `@tabtin/agent-wire` (see `tin-bridge.ts::handleBridgeMessage`).
+// from `@muse/agent-wire` (see `tin-bridge.ts::handleBridgeMessage`).
 // Sandbox callers consume the envelope via `bridgeRequest()` in
 // `generateTinPreloadScript`, which throws on `ok:false` and returns
 // `envelope.data` on `ok:true` — sandbox third-party code thus uses

@@ -11,7 +11,7 @@
  * 自动弹 toast 含末 6 位 trace_id。
  *
  * ═══════════════════════════════════════════════════════════════════════
- *  为什么不能 import @tabtin/agent-wire
+ *  为什么不能 import @muse/agent-wire
  * ═══════════════════════════════════════════════════════════════════════
  *
  * preload 是 contextBridge 注入到 renderer 的 sandbox 脚本，bundle 体积
@@ -22,7 +22,7 @@
  *
  * 因此本文件**自包含**：envelope 形态识别、PlatformIpcError 类型、
  * LEGACY_HANDLERS 白名单、ring buffer 全部 inline 实现。这跟
- * `@tabtin/agent-wire/cli-envelope.ts` 的 `CliResponse<T>` 形状必须保持
+ * `@muse/agent-wire/cli-envelope.ts` 的 `CliResponse<T>` 形状必须保持
  * 同步——Wire 端任何 envelope 字段调整请同步本文件的
  * `IpcEnvelope` 类型与 `isEnvelopeShape` 守卫。
  *
@@ -99,7 +99,7 @@ import { notifyIpcCallForInspector } from './dev-inspector-bridge'
 // ─── Types ────────────────────────────────────────────────────────────
 
 /**
- * Wire envelope 形态（与 `@tabtin/agent-wire/cli-envelope.ts.CliResponse`
+ * Wire envelope 形态（与 `@muse/agent-wire/cli-envelope.ts.CliResponse`
  * 同构，但本文件不能 import）。任何字段变更都要同步那边。
  */
 interface IpcEnvelopeOk<T> {

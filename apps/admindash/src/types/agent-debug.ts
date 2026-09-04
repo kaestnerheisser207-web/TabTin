@@ -126,7 +126,7 @@ export interface ThreadMessageAttachment {
   size?: number
   url?: string
   preview_url?: string
-  /** tabtin://resource/{type}/{id} 的 type */
+  /** muse://resource/{type}/{id} 的 type */
   resource_type?: string
   /** 文档 / 表格 / 文件等资源 ID */
   resource_id?: string

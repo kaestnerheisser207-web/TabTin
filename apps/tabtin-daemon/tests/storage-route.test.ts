@@ -14,7 +14,7 @@ import {
   __resetForTesting,
   registerStorageBucket,
   type ClearResult,
-} from '@tabtin/storage-manager';
+} from '@muse/storage-manager';
 import { handleStorageRoute as handleStorageRouteWithApplication } from '../src/transport/cli/routes/storage/index.js';
 import { createDaemonStorageApplication } from '../src/application/storage/daemon-storage.js';
 import { NodeStorageFileSystem } from '../src/platform/storage/node-storage-file-system.js';

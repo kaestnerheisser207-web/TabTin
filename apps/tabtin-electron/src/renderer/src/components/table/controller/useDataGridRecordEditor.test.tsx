@@ -1,7 +1,7 @@
 import { act, renderHook } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
-import type { TableGridRow } from '@tabtin/table-engine';
-import type { TableRecord } from '@tabtin/table-core';
+import type { TableGridRow } from '@muse/table-engine';
+import type { TableRecord } from '@muse/table-core';
 import { RecordFormFocusTarget } from '@/components/record/recordFormFocusTarget';
 import { useDataGridRecordEditor } from './useDataGridRecordEditor';
 

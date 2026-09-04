@@ -9,7 +9,7 @@ case 4: 已 archived ChatSession → 不重复归档
 case 5: ``chat_session_id`` 为 NULL 的 Run → 跳过
 case 6: ``retention_days=0`` → 抛 ValueError（守卫）
 
-⚠️ 守 ``TABTIN_REAL_DB_TEST=1`` 环境变量（与 ``test_tracker_run_meta_resolution.py``
+⚠️ 守 ``MUSE_REAL_DB_TEST=1`` 环境变量（与 ``test_tracker_run_meta_resolution.py``
 同模式）。
 """
 
@@ -23,7 +23,7 @@ from django.test import SimpleTestCase, TransactionTestCase
 from django.utils import timezone
 
 
-_REQUIRES_REAL_DB = os.getenv("TABTIN_REAL_DB_TEST") == "1"
+_REQUIRES_REAL_DB = os.getenv("MUSE_REAL_DB_TEST") == "1"
 
 
 class ArchiveTaskGuardContractTest(SimpleTestCase):

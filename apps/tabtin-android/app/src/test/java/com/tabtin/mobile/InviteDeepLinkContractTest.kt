@@ -12,14 +12,14 @@ class InviteDeepLinkContractTest {
         val manifest = File("src/main/AndroidManifest.xml").readText()
 
         assertTrue(manifest.contains("android:scheme=\"tabtin\" android:host=\"invite\""))
-        assertTrue(manifest.contains("android:scheme=\"tabtin-preprod\" android:host=\"invite\""))
+        assertTrue(manifest.contains("android:scheme=\"muse-preprod\" android:host=\"invite\""))
     }
 
     @Test
     fun `invite handler accepts only installed mobile invite schemes`() {
         assertTrue(isSupportedInviteDeepLinkScheme("tabtin"))
         assertTrue(isSupportedInviteDeepLinkScheme("TABTIN-PREPROD"))
-        assertFalse(isSupportedInviteDeepLinkScheme("tabtin-dev"))
+        assertFalse(isSupportedInviteDeepLinkScheme("muse-dev"))
         assertFalse(isSupportedInviteDeepLinkScheme("https"))
         assertFalse(isSupportedInviteDeepLinkScheme(null))
     }

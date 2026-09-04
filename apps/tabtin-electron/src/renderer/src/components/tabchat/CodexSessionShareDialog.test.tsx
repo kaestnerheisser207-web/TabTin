@@ -31,13 +31,13 @@ vi.mock('@/services/tabchatAttachmentApi', () => ({
 describe('CodexSessionShareDialog', () => {
   beforeEach(() => {
     vi.clearAllMocks()
-    window.tabtin = {
-      ...window.tabtin,
+    window.muse = {
+      ...window.muse,
       codexSessionShare: {
-        ...window.tabtin?.codexSessionShare,
+        ...window.muse?.codexSessionShare,
         read: mockRead,
       },
-    } as typeof window.tabtin
+    } as typeof window.muse
   })
 
   it('cancels before upload and message send when the session path is missing', async () => {

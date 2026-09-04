@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest'
-import { PERMISSION_TIMEOUTS } from '@tabtin/agent-wire'
-import { getHumanInteractionContext } from '@tabtin/agent-runtime'
+import { PERMISSION_TIMEOUTS } from '@muse/agent-wire'
+import { getHumanInteractionContext } from '@muse/agent-runtime'
 import {
   BROWSER_CLI_APPROVAL_TIMEOUT_MS,
   evaluateElectronBrowserCLIPolicy,

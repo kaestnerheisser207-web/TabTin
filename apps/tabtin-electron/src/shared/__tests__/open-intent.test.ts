@@ -54,7 +54,7 @@ describe('resolveOpenIntent', () => {
 
   it('maps non-direct schemes to unknown', () => {
     expect(resolveOpenIntent({ url: 'file:///tmp/a.xlsx' })).toEqual({ kind: 'unknown' })
-    expect(resolveOpenIntent({ url: 'tabtin://resource/file/a.xlsx' })).toEqual({ kind: 'unknown' })
+    expect(resolveOpenIntent({ url: 'muse://resource/file/a.xlsx' })).toEqual({ kind: 'unknown' })
     expect(resolveOpenIntent({ url: '' })).toEqual({ kind: 'unknown' })
   })
 

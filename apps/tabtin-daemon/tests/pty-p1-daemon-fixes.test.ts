@@ -6,7 +6,7 @@
  *
  * Updated after W8-F1 refactor: marker pipeline, auto-respond, session
  * finalisation, and backgrounded-watcher logic now live in PtyCommandRunner
- * (from @tabtin/pty-core). DaemonPtyManager delegates via `this.commandRunner`.
+ * (from @muse/pty-core). DaemonPtyManager delegates via `this.commandRunner`.
  */
 import { describe, it, expect } from 'vitest';
 import { readFileSync } from 'fs';
@@ -28,21 +28,21 @@ describe('PTY-005 / SD-039: CLI environment variables — no SOCK/TOKEN injectio
     expect(daemonPtySrc).not.toContain("import { getCLIServerInfo }");
   });
 
-  it('does NOT inject TABTIN_SOCK via getCLIServerInfo (SD-039)', () => {
-    expect(daemonPtySrc).not.toContain('cliEnv.TABTIN_SOCK = cliInfo.socketPath');
+  it('does NOT inject MUSE_SOCK via getCLIServerInfo (SD-039)', () => {
+    expect(daemonPtySrc).not.toContain('cliEnv.MUSE_SOCK = cliInfo.socketPath');
   });
 
-  it('does NOT inject TABTIN_TOKEN via getCLIServerInfo (SD-039)', () => {
-    expect(daemonPtySrc).not.toContain('cliEnv.TABTIN_TOKEN = cliInfo.token');
+  it('does NOT inject MUSE_TOKEN via getCLIServerInfo (SD-039)', () => {
+    expect(daemonPtySrc).not.toContain('cliEnv.MUSE_TOKEN = cliInfo.token');
   });
 
-  it('still injects TABTIN_SPACE_ID / TABTIN_AGENT_SPACE_ID', () => {
-    expect(daemonPtySrc).toContain('cliEnv.TABTIN_SPACE_ID');
-    expect(daemonPtySrc).toContain('cliEnv.TABTIN_AGENT_SPACE_ID');
+  it('still injects MUSE_SPACE_ID / MUSE_AGENT_SPACE_ID', () => {
+    expect(daemonPtySrc).toContain('cliEnv.MUSE_SPACE_ID');
+    expect(daemonPtySrc).toContain('cliEnv.MUSE_AGENT_SPACE_ID');
   });
 
-  it('injects TABTIN_AGENT for agent- sessions (P1-1)', () => {
-    expect(daemonPtySrc).toContain('TABTIN_AGENT');
+  it('injects MUSE_AGENT for agent- sessions (P1-1)', () => {
+    expect(daemonPtySrc).toContain('MUSE_AGENT');
     expect(daemonPtySrc).toContain("startsWith('agent-')");
   });
 

@@ -83,9 +83,9 @@ export function IMMessageScrollLockProvider({
     // capture + 非 passive：盖住 portal 菜单上的滚轮穿透（scroll chaining）。
     // 不用 useScopedEventListener：本模块被气泡静态导入，再挂 spaceActivity
     // 会把 vitest 下 IMMessageBubble 动态 import 拖进循环依赖 / 超时。
-    // eslint-disable-next-line tabtin/prefer-scoped-activity-effects -- IM 列表滚动锁需非 passive capture；避免与气泡静态 import 形成测试期环依赖
+    // eslint-disable-next-line muse/prefer-scoped-activity-effects -- IM 列表滚动锁需非 passive capture；避免与气泡静态 import 形成测试期环依赖
     document.addEventListener('wheel', block, { passive: false, capture: true })
-    // eslint-disable-next-line tabtin/prefer-scoped-activity-effects -- 同上
+    // eslint-disable-next-line muse/prefer-scoped-activity-effects -- 同上
     document.addEventListener('touchmove', block, { passive: false, capture: true })
 
     return () => {

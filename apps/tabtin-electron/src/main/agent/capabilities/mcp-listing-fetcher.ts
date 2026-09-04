@@ -7,8 +7,8 @@
 import {
   createMcpListingFetcherFromCatalog,
   type McpListingPorts,
-} from '@tabtin/agent-host/state'
-import type { McpListing } from '@tabtin/agent-host/capabilities'
+} from '@muse/agent-host/state'
+import type { McpListing } from '@muse/agent-host/capabilities'
 import {
   getLocalMcpService,
   type LocalMcpService,

@@ -186,7 +186,7 @@ export const MeetingSetupView: React.FC<{
   }, [organizationId]);
 
   React.useEffect(() => {
-    const bridge = window.tabtin?.meetingRecording;
+    const bridge = window.muse?.meetingRecording;
     if (!bridge?.onMicrophoneTestLevel) return;
     return bridge.onMicrophoneTestLevel((event) => {
       if (!event.active && event.elapsedMs === 0) return;
@@ -218,7 +218,7 @@ export const MeetingSetupView: React.FC<{
 
   const handleStart = async () => {
     if (!canStart || !organizationId || !userId) return;
-    const bridge = window.tabtin?.meetingRecording;
+    const bridge = window.muse?.meetingRecording;
     if (!bridge) return;
     setIsStarting(true);
     setStartError(null);
@@ -281,7 +281,7 @@ export const MeetingSetupView: React.FC<{
   };
 
   const handleMicrophoneTest = async () => {
-    const bridge = window.tabtin?.meetingRecording;
+    const bridge = window.muse?.meetingRecording;
     if (!bridge || microphoneTestState === 'listening') return;
     setMicrophoneTestOpen(true);
     setMicrophoneTestState('listening');

@@ -1,4 +1,4 @@
-# @tabtin/tabdoc-ui
+# @muse/tabdoc-ui
 
 TabDoc 共享 React 宿主上下文包。
 
@@ -13,7 +13,7 @@ TabDoc 共享 React 宿主上下文包。
 - `api-client`
 - `useDocList`
 - `useDocEditor`
-- 版本历史由共享的 `@tabtin/collab-core` `VersionPanel` 提供
+- 版本历史由共享的 `@muse/collab-core` `VersionPanel` 提供
 - `sanitizeSchema`
 
 目标是让 Electron / Web 的 TabDoc panel 组件树围绕同一套 host contract 组织，而不是继续各自维护一份本地 context。
@@ -37,14 +37,14 @@ rm -f vitest.config.js vitest.config.d.ts vitest.config.d.ts.map
 
 ### 跑测试前要有的 `dist/`
 
-`@tabtin/tabdoc-ui` 依赖若干 workspace 包的 **已构建 `dist/`**（例如 `collab-core` → 先要 `@tabtin/config`）。本地若只改了 `tabdoc-ui` 却报 `Cannot find module '@tabtin/config'`，先构建依赖链：
+`@muse/tabdoc-ui` 依赖若干 workspace 包的 **已构建 `dist/`**（例如 `collab-core` → 先要 `@muse/config`）。本地若只改了 `tabdoc-ui` 却报 `Cannot find module '@muse/config'`，先构建依赖链：
 
 ```bash
 # 与 CI（tabdoc-ui-unit.yml）一致：按拓扑构建全部 workspace 依赖
-pnpm --filter "@tabtin/tabdoc-ui^..." build
+pnpm --filter "@muse/tabdoc-ui^..." build
 
-pnpm --filter @tabtin/tabdoc-ui test      # 默认绿集（排除 DEBT）
-pnpm --filter @tabtin/tabdoc-ui test:debt # 单独啃老债用例
+pnpm --filter @muse/tabdoc-ui test      # 默认绿集（排除 DEBT）
+pnpm --filter @muse/tabdoc-ui test:debt # 单独啃老债用例
 ```
 
 ### 测试分层（DEBT）

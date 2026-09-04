@@ -21,7 +21,7 @@ import { afterEach, describe, expect, it } from 'vitest';
 import * as fsp from 'node:fs/promises';
 import * as os from 'node:os';
 import * as path from 'node:path';
-import { resolveOrganizationSkillsDir } from '@tabtin/terminal-core';
+import { resolveOrganizationSkillsDir } from '@muse/terminal-core';
 import {
   initSkillsModule,
   disposeSkillsModule,
@@ -32,7 +32,7 @@ import {
   parseAppSkillCanonicalKey,
   selectAppSkillsToReconcile,
   createLexicalSkillRecall,
-} from '@tabtin/agent-runtime/skills';
+} from '@muse/agent-runtime/skills';
 
 const tempRoots: string[] = [];
 

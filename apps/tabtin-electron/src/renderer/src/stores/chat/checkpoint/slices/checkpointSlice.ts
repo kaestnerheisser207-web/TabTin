@@ -12,10 +12,10 @@ import type {
   MessageListResponse,
   RollbackApplyResultView,
   RollbackPartialSuccessDetails,
-} from '@tabtin/chat-client'
+} from '@muse/chat-client'
 import type { ChatAttachment } from '../../../../components/chat/types'
 import i18n from '@/i18n'
-import { toast } from '@tabtin/smartsheet-ui'
+import { toast } from '@muse/smartsheet-ui'
 import * as chatExtraApi from '../../../../services/chatExtraApi'
 import * as checkpointIpc from '../../../../services/checkpointIpc'
 import * as fileHistoryIpc from '../../../../services/fileHistoryIpc'
@@ -35,7 +35,7 @@ import {
 import { getSessionMessagesFacade } from '@/services/agentService/sessionMessages'
 import { getSessionController } from '@/services/agentService'
 import { rollbackRegistry } from '@/services/agentService/rollbackRegistry'
-import { resolveSessionScopeId } from '@tabtin/app-shell'
+import { resolveSessionScopeId } from '@muse/app-shell'
 import { useSpaceStore } from '@stores/useSpaceStore'
 import { useChatRuntimeStore, type PrefillData } from '@stores/useChatRuntimeStore'
 import {

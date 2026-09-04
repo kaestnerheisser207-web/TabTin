@@ -6,7 +6,7 @@
  * HostTurn YOLO 指针）。切组织不清聊天消息（Wave 3 /  口径不变）。
  */
 
-import { onOrganizationSelected, resetHostTurnPush } from '@tabtin/app-shell'
+import { onOrganizationSelected, resetHostTurnPush } from '@muse/app-shell'
 import { clearAllActiveRunBindings } from '@/stores/chat/execution/activeRunBinding'
 import { clearAllSupersededRuns } from '@/stores/chat/stream/handlers/supersededRuns'
 import { registerResetAction } from '@/stores/sessionResetRegistry'
@@ -35,7 +35,7 @@ export async function initCapabilityIdentity(
   options?: { organizationId?: string | null },
 ): Promise<void> {
   clearRendererCapabilityIdentityState()
-  const ipc = window.tabtin?.agentEngine?.initCapabilityIdentity
+  const ipc = window.muse?.agentEngine?.initCapabilityIdentity
   if (!ipc) return
   try {
     await ipc({

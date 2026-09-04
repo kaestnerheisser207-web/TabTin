@@ -20,7 +20,7 @@
  * - 注册时携带 spaceId，使 collectAllDirty 可以按 space 过滤（Space 删除场景需要）
  * - 暴露 collectAllDirty 列出所有"需要确认"的 dirty 文档，供退出 / Space 删除路径聚合判断
  */
-import type { SaveState } from '@tabtin/tabdoc-ui/use-doc-editor'
+import type { SaveState } from '@muse/tabdoc-ui/use-doc-editor'
 
 export interface TabDocDirtySnapshot {
   /** 编辑器的保存状态，'dirty' / 'saving' / 'error' 视为有未保存内容 */

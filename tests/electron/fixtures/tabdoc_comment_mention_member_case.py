@@ -270,7 +270,7 @@ def ensure_context(run_id: str) -> dict:
 
 
 def prepare_case() -> None:
-    context = ensure_context(require_env("TABTIN_E2E_RUN_ID"))
+    context = ensure_context(require_env("MUSE_E2E_RUN_ID"))
     owner = context["owner"]
     mentioned = context["mentioned"]
     organization = context["organization"]
@@ -316,10 +316,10 @@ def prepare_case() -> None:
 
 
 def verify_case() -> None:
-    run_id = require_env("TABTIN_E2E_RUN_ID")
-    document_id = require_env("TABTIN_E2E_DOCUMENT_ID")
-    mentioned_user_id = require_env("TABTIN_E2E_MENTIONED_USER_ID")
-    comment_marker = require_env("TABTIN_E2E_COMMENT_MARKER")
+    run_id = require_env("MUSE_E2E_RUN_ID")
+    document_id = require_env("MUSE_E2E_DOCUMENT_ID")
+    mentioned_user_id = require_env("MUSE_E2E_MENTIONED_USER_ID")
+    comment_marker = require_env("MUSE_E2E_COMMENT_MARKER")
     comment = (
         DocumentShareComment.objects
         .filter(document_id=document_id, body__contains=comment_marker, is_deleted=False)
@@ -362,14 +362,14 @@ def verify_case() -> None:
 
 
 def main() -> None:
-    mode = require_env("TABTIN_E2E_MODE")
+    mode = require_env("MUSE_E2E_MODE")
     if mode == "prepare":
         prepare_case()
         return
     if mode == "verify":
         verify_case()
         return
-    raise RuntimeError(f"Unknown TABTIN_E2E_MODE: {mode}")
+    raise RuntimeError(f"Unknown MUSE_E2E_MODE: {mode}")
 
 
 main()

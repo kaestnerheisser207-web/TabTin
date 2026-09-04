@@ -53,7 +53,7 @@ export function useCrawlTask() {
   // 当前阶段
   const [currentStage, setCurrentStage] = useState<TaskStage>('config')
 
-  // ✅ TaskAPI 已由 taskApiClient 统一封装（避免散落 window.tabtin/electronAPI）
+  // ✅ TaskAPI 已由 taskApiClient 统一封装（避免散落 window.muse/electronAPI）
   // 为了最小化改动，保留原来的 ref 形态，但默认指向 taskApiClient。
   const taskAPI = useRef<any>(taskApiClient)
 

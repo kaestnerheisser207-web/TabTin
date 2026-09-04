@@ -127,9 +127,9 @@ describe('AgentBrowserControlCapsule', () => {
       configurable: true,
       writable: true,
       value: {
-        ...(window.tabtin ?? {}),
+        ...(window.muse ?? {}),
         crawlView: {
-          ...(window.tabtin?.crawlView ?? {}),
+          ...(window.muse?.crawlView ?? {}),
           takeOverBrowser: mocks.takeOverBrowser,
           handBackBrowser: mocks.handBackBrowser,
         },

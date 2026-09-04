@@ -7,7 +7,7 @@
 
 import { safeFetchText } from './safe-fetch.js';
 
-import { validateUrl } from '@tabtin/security-policy';
+import { validateUrl } from '@muse/security-policy';
 
 export interface M3U8Segment {
   uri: string;

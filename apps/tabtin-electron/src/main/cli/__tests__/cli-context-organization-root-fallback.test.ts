@@ -76,20 +76,20 @@ describe('setCLIOrganizationRootIfMissing · 契约', () => {
     expect(getCLIOrganizationRoot()).toBe('/first/value')
   })
 
-  it('不写 process.env.TABTIN_*——单一职责只补 organizationRoot', () => {
-    const originalSpace = process.env.TABTIN_SPACE_ID
-    const originalWt = process.env.TABTIN_ORGANIZATION_ID
-    delete process.env.TABTIN_SPACE_ID
-    delete process.env.TABTIN_ORGANIZATION_ID
+  it('不写 process.env.MUSE_*——单一职责只补 organizationRoot', () => {
+    const originalSpace = process.env.MUSE_SPACE_ID
+    const originalWt = process.env.MUSE_ORGANIZATION_ID
+    delete process.env.MUSE_SPACE_ID
+    delete process.env.MUSE_ORGANIZATION_ID
 
     try {
       setCLIOrganizationRootIfMissing('/some/root')
-      // 不应有任何 process.env.TABTIN_*_ID 副作用
-      expect(process.env.TABTIN_SPACE_ID).toBeUndefined()
-      expect(process.env.TABTIN_ORGANIZATION_ID).toBeUndefined()
+      // 不应有任何 process.env.MUSE_*_ID 副作用
+      expect(process.env.MUSE_SPACE_ID).toBeUndefined()
+      expect(process.env.MUSE_ORGANIZATION_ID).toBeUndefined()
     } finally {
-      if (originalSpace) process.env.TABTIN_SPACE_ID = originalSpace
-      if (originalWt) process.env.TABTIN_ORGANIZATION_ID = originalWt
+      if (originalSpace) process.env.MUSE_SPACE_ID = originalSpace
+      if (originalWt) process.env.MUSE_ORGANIZATION_ID = originalWt
     }
   })
 })

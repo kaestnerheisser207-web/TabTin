@@ -11,7 +11,7 @@ export const useFileEditPatchJournalStore = create<FileEditPatchJournalState>((s
   load: async (threadId: string) => {
     const id = threadId.trim()
     if (!id) return
-    const api = window.tabtin?.fileEditPatches
+    const api = window.muse?.fileEditPatches
     if (!api) return
     try {
       const result = await api.list(id)

@@ -8,7 +8,7 @@ import React, { useEffect, useRef, useState } from 'react'
 import { renderAsync } from 'docx-preview'
 import { AlertCircle, ExternalLink } from 'lucide-react'
 import { cn } from '@utils/cn'
-import { ScrollArea } from '@tabtin/smartsheet-ui'
+import { ScrollArea } from '@muse/smartsheet-ui'
 import { useTranslation } from 'react-i18next'
 import { checkFileSize, formatFileSize, MAX_OFFICE_FILE_BYTES } from '@components/shared/file-utils'
 import { formatIpcErrorForUser } from '@/services/ipc-error'
@@ -67,7 +67,7 @@ export const DocxViewer: React.FC<DocxViewerProps> = ({ filePath, fileName, data
             return
           }
           if (isLegacyDoc) {
-            const renderOfficePreviewData = window.tabtin?.fileSystem?.renderOfficePreviewData
+            const renderOfficePreviewData = window.muse?.fileSystem?.renderOfficePreviewData
             if (typeof renderOfficePreviewData !== 'function') {
               setError(t('folder.errors.docxRenderFailed'))
               return
@@ -93,7 +93,7 @@ export const DocxViewer: React.FC<DocxViewerProps> = ({ filePath, fileName, data
             return
           }
 
-          const renderOfficePreview = window.tabtin?.fileSystem?.renderOfficePreview
+          const renderOfficePreview = window.muse?.fileSystem?.renderOfficePreview
           if (typeof renderOfficePreview === 'function') {
             try {
               const rendered = await renderOfficePreview(filePath)
@@ -120,7 +120,7 @@ export const DocxViewer: React.FC<DocxViewerProps> = ({ filePath, fileName, data
           // catch 块内也走 isStale() 检查，避免组件卸载后 setError。
           let result: { data?: ArrayBuffer | Uint8Array } | undefined
           try {
-            result = await window.tabtin.fileSystem.readBinaryFile(filePath)
+            result = await window.muse.fileSystem.readBinaryFile(filePath)
           } catch (err) {
             if (!isStale()) {
               setError(formatIpcErrorForUser(err, t('folder.errors.docxLoadFailed')))
@@ -227,7 +227,7 @@ export const DocxViewer: React.FC<DocxViewerProps> = ({ filePath, fileName, data
         {filePath && (
           <button
             type="button"
-            onClick={() => void window.tabtin.openPath(filePath)}
+            onClick={() => void window.muse.openPath(filePath)}
             className="flex items-center gap-1.5 px-3 py-1.5 rounded-md text-caption bg-primary/10 text-primary hover:bg-primary/20 transition-colors"
           >
             <ExternalLink className="h-3.5 w-3.5" />
@@ -270,7 +270,7 @@ export const DocxViewer: React.FC<DocxViewerProps> = ({ filePath, fileName, data
           {filePath && (
             <button
               type="button"
-              onClick={() => void window.tabtin.openPath(filePath)}
+              onClick={() => void window.muse.openPath(filePath)}
               className="flex items-center gap-1.5 px-3 py-1.5 rounded-md text-caption bg-primary/10 text-primary hover:bg-primary/20 transition-colors"
             >
               <ExternalLink className="h-3.5 w-3.5" />

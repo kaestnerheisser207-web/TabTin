@@ -8,7 +8,7 @@ from __future__ import annotations
 
 from typing import Any, List
 
-from tabtin_filegen.errors import SpecError
+from muse_filegen.errors import SpecError
 
 
 def require_mapping(value: Any, field: str) -> dict:

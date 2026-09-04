@@ -1,7 +1,7 @@
 /**
  * shell 命令写副作用判定 —— Tool.isWriteOp / isConcurrencySafe 用。
  *
- * AH-005：agent-runtime 不得 import @tabtin/*；与
+ * AH-005：agent-runtime 不得 import @muse/*；与
  * packages/security-policy/src/shell-command-side-effect.ts 保持同语义拷贝。
  * 改一侧时务必同步另一侧。
  *

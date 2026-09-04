@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import type { ChatMessage, ChatSession } from '@tabtin/chat-client'
+import type { ChatMessage, ChatSession } from '@muse/chat-client'
 import {
   hydrateLocalTranscriptWithContinuationSnapshot,
   isShareSnapshotMessage,

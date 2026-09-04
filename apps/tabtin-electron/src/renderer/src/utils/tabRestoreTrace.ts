@@ -74,7 +74,7 @@ function sanitizeTraceValue(value: unknown, keyHint = '', seen: WeakSet<object> 
 export function shouldTraceTabRestore(): boolean {
   const override = readTraceOverride()
   if (override !== null) return override
-  if (typeof globalThis !== 'undefined' && Boolean((globalThis as Record<string, unknown>).__TABTIN_TRACE_TAB_RESTORE__)) {
+  if (typeof globalThis !== 'undefined' && Boolean((globalThis as Record<string, unknown>).__MUSE_TRACE_TAB_RESTORE__)) {
     return true
   }
   return false

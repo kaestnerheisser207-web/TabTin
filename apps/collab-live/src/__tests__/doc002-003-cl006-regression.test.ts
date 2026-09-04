@@ -10,7 +10,7 @@ import * as Y from "yjs";
 
 const MOCK_SCHEMA_VERSION = 1;
 
-vi.mock("@tabtin/doc-editor", () => ({
+vi.mock("@muse/doc-editor", () => ({
   DOC_SCHEMA_VERSION: MOCK_SCHEMA_VERSION,
 }));
 

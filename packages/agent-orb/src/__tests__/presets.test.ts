@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { TASK_CAPSULE_STATUS_KEYS } from '@tabtin/contracts/agent';
+import { TASK_CAPSULE_STATUS_KEYS } from '@muse/contracts/agent';
 import {
   pickOrbPresetSize,
   resolveOrbPreset,

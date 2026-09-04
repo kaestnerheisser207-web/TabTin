@@ -438,19 +438,19 @@ class SiteService(BaseService):
 
     @staticmethod
     def _build_tabdata_env(site: Site, *, plain_token: Optional[str], is_new: bool = False) -> Dict[str, Any]:
-        api_url = getattr(settings, "TABTIN_API_BASE_URL", "https://api.example.com")
+        api_url = getattr(settings, "MUSE_API_BASE_URL", "https://api.example.com")
         table_ids = site.tabdata_table_ids or []
         result: Dict[str, Any] = {
-            "VITE_TABTIN_API_URL": api_url,
-            "VITE_TABTIN_SPACE_ID": str(site.space_id),
+            "VITE_MUSE_API_URL": api_url,
+            "VITE_MUSE_SPACE_ID": str(site.space_id),
             "tabdata_token_id": site.tabdata_token_id or "",
             "tabdata_table_ids": table_ids,
             "is_newly_created": is_new,
         }
         if plain_token:
-            result["VITE_TABTIN_TOKEN"] = plain_token
+            result["VITE_MUSE_TOKEN"] = plain_token
         if table_ids:
-            result["VITE_TABTIN_TABLE_ID"] = table_ids[0]
+            result["VITE_MUSE_TABLE_ID"] = table_ids[0]
 
         return result
 

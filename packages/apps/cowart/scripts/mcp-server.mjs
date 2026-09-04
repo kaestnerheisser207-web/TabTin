@@ -57,7 +57,7 @@ function canvasStatePath() {
 function defaultState() {
   return {
     version: 1,
-    pluginInstallPath: process.env.TABTIN_PLUGIN_INSTALL_PATH,
+    pluginInstallPath: process.env.MUSE_PLUGIN_INSTALL_PATH,
     elements: [],
   };
 }
@@ -103,7 +103,7 @@ async function callTool(name, args) {
       ok: true,
       state,
       projectDir: projectDir(),
-      pluginInstallPath: process.env.TABTIN_PLUGIN_INSTALL_PATH,
+      pluginInstallPath: process.env.MUSE_PLUGIN_INSTALL_PATH,
     });
   }
 

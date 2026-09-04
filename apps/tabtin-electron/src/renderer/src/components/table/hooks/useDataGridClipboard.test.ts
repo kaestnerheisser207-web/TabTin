@@ -38,7 +38,7 @@ vi.mock('@stores/useRecordStore', () => ({
     }),
 }))
 
-vi.mock('@tabtin/smartsheet-ui', () => ({
+vi.mock('@muse/smartsheet-ui', () => ({
   toast: mockToast,
   validateFieldRules: vi.fn(() => ({ valid: true })),
   ToastAction: ({ children, ...props }: Record<string, unknown>) =>

@@ -74,7 +74,7 @@ async function prepareProjectWorkspacePayload(opts: {
   let workingDir = opts.workingDir?.trim() || ''
   const workingDirType = opts.workingDirType || 'mixed'
   if (!workingDir) {
-    const defaultDir = await window.tabtin?.fileSystem?.ensureDefaultAgentDir({
+    const defaultDir = await window.muse?.fileSystem?.ensureDefaultAgentDir({
       organizationName: opts.organizationName,
       spaceName: opts.projectName,
     })

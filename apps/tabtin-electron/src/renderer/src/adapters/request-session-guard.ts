@@ -15,7 +15,7 @@
  * 依赖全部注入，模块本身零运行时依赖，便于单测。
  */
 
-import type { TableHttpRequest, TableHttpResponse } from '@tabtin/table-core'
+import type { TableHttpRequest, TableHttpResponse } from '@muse/table-core'
 
 export interface SessionGuardDeps<T> {
   /** 实际发请求（通常是 electron adapter 的 request） */

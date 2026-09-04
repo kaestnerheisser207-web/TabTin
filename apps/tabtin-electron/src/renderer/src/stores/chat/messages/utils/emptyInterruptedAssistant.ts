@@ -4,7 +4,7 @@
  * 产品语义：中止事件可以被持久化用于恢复/审计，但如果 assistant 没有正文
  * 或 tool 输出，它不应该在聊天时间线上占一条空消息。
  */
-import type { ChatMessage } from '@tabtin/chat-client'
+import type { ChatMessage } from '@muse/chat-client'
 import { isAssistantInterruptedMessage } from './assistantInterrupt'
 
 function isSubstantialBlockType(type: string | undefined): boolean {

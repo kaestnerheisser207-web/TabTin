@@ -38,7 +38,7 @@ function makeFixture() {
   )
 
   fs.mkdirSync(path.join(sourceDir, 'dist', 'adapters'), { recursive: true })
-  fs.writeFileSync(path.join(sourceDir, 'package.json'), '{"name":"@tabtin/action-tools"}\n')
+  fs.writeFileSync(path.join(sourceDir, 'package.json'), '{"name":"@muse/action-tools"}\n')
   fs.writeFileSync(path.join(sourceDir, 'dist', 'adapters', 'public.js'), 'export {}\n')
   fs.mkdirSync(path.join(sourceDir, 'node_modules', 'ignored'), { recursive: true })
   fs.writeFileSync(path.join(sourceDir, 'node_modules', 'ignored', 'sentinel'), 'do not copy\n')
@@ -54,7 +54,7 @@ function makeFixture() {
   fs.mkdirSync(missingInnerPackage, { recursive: true })
   fs.writeFileSync(
     path.join(missingInnerPackage, 'package.json'),
-    '{"name":"@tabtin/storage-manager"}\n',
+    '{"name":"@muse/storage-manager"}\n',
   )
 
   return {

@@ -34,10 +34,10 @@ vi.mock('../../logger', () => ({
 // ── 共享根目录 mock：把 getHomeTabtinPath 指到临时目录 ─────────
 let tmpRoot: string
 
-vi.mock('@tabtin/shared/storage-paths', async () => {
+vi.mock('@muse/shared/storage-paths', async () => {
   const actual = await vi.importActual<
-    typeof import('@tabtin/shared/storage-paths')
-  >('@tabtin/shared/storage-paths')
+    typeof import('@muse/shared/storage-paths')
+  >('@muse/shared/storage-paths')
   return {
     ...actual,
     getHomeTabtinPath: (...sub: string[]) => path.join(tmpRoot, ...sub),
@@ -49,7 +49,7 @@ async function importBridge() {
   return await import('../DaemonStorageBridgeService')
 }
 async function importStorageManager() {
-  return await import('@tabtin/storage-manager')
+  return await import('@muse/storage-manager')
 }
 
 interface FakeServerHandle {

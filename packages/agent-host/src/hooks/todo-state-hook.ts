@@ -2,9 +2,9 @@
  * Todo State Hook —— 每轮 iteration 注入当前活跃待办快照。
  *
  * **归属（ Phase 1）**：本 hook 原名 `buildTodoStateInjectorHook`，住在
- * `@tabtin/agent-runtime` 的 `capability/injectors/todo-state-injector.ts`。因它依赖
- * `@tabtin/agent-modes` + `@tabtin/agent-prompt`，随「引擎零业务依赖」重构迁到宿主
- * `@tabtin/agent-host/hooks`。行为逐字节一致，仅换归属与工厂名
+ * `@muse/agent-runtime` 的 `capability/injectors/todo-state-injector.ts`。因它依赖
+ * `@muse/agent-modes` + `@muse/agent-prompt`，随「引擎零业务依赖」重构迁到宿主
+ * `@muse/agent-host/hooks`。行为逐字节一致，仅换归属与工厂名
  * （`buildTodoStateInjectorHook` → `buildTodoStateHook`）。
  *
  * 仅 agent mode；有未收尾批时把全量合并态写入 `<context type="active-todos">`。
@@ -19,21 +19,21 @@
  * → 闭包即会话级），每轮以缓存为种子回放 `todo`——抵抗上下文窗口截断丢消息。
  */
 
-import type { AgentModeName } from '@tabtin/agent-modes'
+import type { AgentModeName } from '@muse/agent-modes'
 import {
   buildActiveTodosSection,
   buildUserContextWrapper,
-} from '@tabtin/agent-prompt'
-import type { Message, EngineHooks, IterationHookContext } from '@tabtin/agent-runtime/engine'
+} from '@muse/agent-prompt'
+import type { Message, EngineHooks, IterationHookContext } from '@muse/agent-runtime/engine'
 import {
   INTERNAL_MESSAGE_MARKERS,
   hasInternalMarker,
   findLastRealUserIndex,
-} from '@tabtin/agent-runtime/engine'
+} from '@muse/agent-runtime/engine'
 import {
   deriveActiveTodoBatch,
   type TodoSessionAnchor,
-} from '@tabtin/agent-runtime'
+} from '@muse/agent-runtime'
 import { removeTaggedBlock, upsertTaggedBlock } from './message-inject.js'
 
 export interface TodoStateHookOptions {

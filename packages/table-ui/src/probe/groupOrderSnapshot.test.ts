@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import type { TableGridRow } from '@tabtin/table-engine'
+import type { TableGridRow } from '@muse/table-engine'
 import { buildGroupOrderSnapshot } from './groupOrderSnapshot'
 
 const header = (

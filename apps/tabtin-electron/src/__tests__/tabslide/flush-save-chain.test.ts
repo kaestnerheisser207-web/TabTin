@@ -1,10 +1,10 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 
-vi.mock('@tabtin/tabslide', () => ({
+vi.mock('@muse/tabslide', () => ({
   useSlideStore: { getState: vi.fn(() => ({})) },
 }))
 
-vi.mock('@tabtin/tabslide/exports', () => ({
+vi.mock('@muse/tabslide/exports', () => ({
   convertPagesToBackend: vi.fn(() => [{ id: 'page-1', elements: [] }]),
 }))
 

@@ -11,9 +11,9 @@ Layer A — 核心决策纯函数测试（``decide_storm_guard``）
 
 Layer B — DB 副作用真路径测试（``_trip_circuit_breaker`` + ``_mark_first_triggered``）
 ──────────────────────────────────────────────────────
-守 ``TABTIN_REAL_DB_TEST=1``。**默认 SKIP**（项目客观无 PG/MySQL test DB
+守 ``MUSE_REAL_DB_TEST=1``。**默认 SKIP**（项目客观无 PG/MySQL test DB
 基础设施——同 Wave 5 反思 16）。CI 接入 Django test workflow 后必须
-``env: TABTIN_REAL_DB_TEST: "1"`` 才能让真 ORM 路径生效。
+``env: MUSE_REAL_DB_TEST: "1"`` 才能让真 ORM 路径生效。
 
 设计动机（**反思 9 防线**——MagicMock 让死代码"通过测试"）：
   - Wave 5 教训：把"真 ORM 路径"做成"全 mock 路径"等于没测
@@ -35,7 +35,7 @@ Layer B — DB 副作用真路径测试（``_trip_circuit_breaker`` + ``_mark_fi
     5. **多租户隔离**：不同 tracker_id 的 storm guard cache key 互不干扰
     6. **fail-open**：cache 故障时 allowed=True（不挡正常流量）
 
-  Layer B（TABTIN_REAL_DB_TEST=1 启用）：
+  Layer B（MUSE_REAL_DB_TEST=1 启用）：
     7. **熔断 DB 副作用**：Tracker.status active → paused + intent_snapshot.last_pause_reason
     8. **首次触发 mark**：intent_snapshot.first_triggered_at
 """
@@ -49,9 +49,9 @@ from django.core.cache import cache
 from django.test import SimpleTestCase, TransactionTestCase, override_settings
 
 
-# 让 Layer B 真 ORM 用例只有在 TABTIN_REAL_DB_TEST=1 时才被定义
+# 让 Layer B 真 ORM 用例只有在 MUSE_REAL_DB_TEST=1 时才被定义
 # （未启用时 setup_databases 不会尝试连 PG，避免 dev sqlite 环境阻塞）
-_REQUIRES_REAL_DB = os.getenv("TABTIN_REAL_DB_TEST") == "1"
+_REQUIRES_REAL_DB = os.getenv("MUSE_REAL_DB_TEST") == "1"
 
 
 # ─── Layer A：核心决策纯函数测试（默认启用）─────────────────────────
@@ -349,7 +349,7 @@ class DecideStormGuardCoreTest(SimpleTestCase):
 
         本测试是纯函数 / cache 接口层测试——不真调 TrackerService.resume_tracker
         （需要真 ORM Tracker 对象），而是验证我们清理的是正确的 cache key 集合。
-        Layer B（守 TABTIN_REAL_DB_TEST=1）有 ``test_resume_tracker_clears_storm_cache``
+        Layer B（守 MUSE_REAL_DB_TEST=1）有 ``test_resume_tracker_clears_storm_cache``
         真路径用例，调真 TrackerService.resume_tracker 验证端到端。
 
         本测试钉死：``_storm_guard_keys()`` 是 cache key 命名的单一来源，
@@ -412,7 +412,7 @@ class DecideStormGuardCoreTest(SimpleTestCase):
             )
 
 
-# ─── Layer B：DB 副作用真路径测试（TABTIN_REAL_DB_TEST=1 守护）────
+# ─── Layer B：DB 副作用真路径测试（MUSE_REAL_DB_TEST=1 守护）────
 
 
 # 用 LocMem cache 替代任何 redis backend，避免污染真 redis 也避免

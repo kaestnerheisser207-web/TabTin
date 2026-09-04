@@ -3,14 +3,14 @@ requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [project]
-name = "tabtin-filegen"
+name = "muse-filegen"
 version = "0.1.0"
 description = "TabTin file generation CLI — produce xlsx/docx/pptx/pdf from JSON specs"
 readme = "README.md"
 license = "MIT"
 requires-python = ">=3.9"
 authors = [{ name = "TabTin Team" }]
-keywords = ["tabtin", "cli", "xlsx", "docx", "pptx", "pdf", "filegen"]
+keywords = ["muse", "cli", "xlsx", "docx", "pptx", "pdf", "filegen"]
 classifiers = [
     "Development Status :: 3 - Alpha",
     "Intended Audience :: Developers",
@@ -37,10 +37,10 @@ dev = ["pytest", "ruff"]
 build = ["pyinstaller"]
 
 [project.scripts]
-tabtin-filegen = "tabtin_filegen.__main__:main"
+muse-filegen = "muse_filegen.__main__:main"
 
 [tool.hatch.build.targets.wheel]
-packages = ["src/tabtin_filegen"]
+packages = ["src/muse_filegen"]
 
 [tool.ruff]
 line-length = 100

@@ -1,4 +1,4 @@
-import { CollabStatus } from '@tabtin/collab-core'
+import { CollabStatus } from '@muse/collab-core'
 import type * as Y from 'yjs'
 
 import { isMissingCollabTokenError } from '../externalDocumentSave'

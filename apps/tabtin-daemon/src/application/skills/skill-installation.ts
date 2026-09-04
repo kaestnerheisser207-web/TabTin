@@ -9,12 +9,12 @@ import fsp from 'node:fs/promises'
 import path from 'node:path'
 import { spawn } from 'node:child_process'
 import os from 'node:os'
-import { resolveDefaultAgentsSkillsDir } from '@tabtin/agent-host/skills'
+import { resolveDefaultAgentsSkillsDir } from '@muse/agent-host/skills'
 import {
   resolveDataRoot,
   resolveOrganizationSkillDir,
   resolveUserSkillDir,
-} from '@tabtin/terminal-core'
+} from '@muse/terminal-core'
 const LOG_TAG = '[Skills Installation]'
 
 export interface SkillRegistryPort {

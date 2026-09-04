@@ -8,7 +8,7 @@ import { describe, it, expect, vi, beforeEach } from 'vitest'
 
 // ---- Mock 依赖 ----
 const toastMock = vi.fn()
-vi.mock('@tabtin/smartsheet-ui', () => ({
+vi.mock('@muse/smartsheet-ui', () => ({
   toast: toastMock,
 }))
 
@@ -29,11 +29,11 @@ vi.mock('../api-client', async (importOriginal) => {
   }
 })
 
-vi.mock('@tabtin/app-host-sdk', () => ({
+vi.mock('@muse/app-host-sdk', () => ({
   useAppHostClient: () => ({}),
 }))
 
-vi.mock('@tabtin/doc-editor', () => ({
+vi.mock('@muse/doc-editor', () => ({
   configureDocEditorHost: vi.fn(),
   createAutoSaveController: vi.fn(() => ({
     isDirty: () => false,

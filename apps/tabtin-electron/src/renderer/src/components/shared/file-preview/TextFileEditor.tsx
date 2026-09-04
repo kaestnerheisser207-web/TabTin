@@ -14,7 +14,7 @@ import React, {
   useRef,
   useState,
 } from 'react'
-import { ScrollArea } from '@tabtin/smartsheet-ui'
+import { ScrollArea } from '@muse/smartsheet-ui'
 import { getBaseName, getMonacoLanguage } from '@components/shared/file-utils'
 import { formatIpcErrorForUser } from '@/services/ipc-error'
 import { createLogger } from '@/utils/logger'
@@ -205,7 +205,7 @@ function useEditableBuffer({
     setStatus('saving')
     setSaveError(null)
     try {
-      const result = await window.tabtin.fileSystem.writeFile(savePath, valueRef.current)
+      const result = await window.muse.fileSystem.writeFile(savePath, valueRef.current)
       if (result?.success === false) {
         throw new Error(result.error || saveFailedLabel)
       }

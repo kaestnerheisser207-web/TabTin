@@ -39,7 +39,7 @@ vi.mock('node:fs/promises', async () => {
   return { ...mocked, default: mocked }
 })
 
-import { CheckpointService, type CheckpointLogger } from '@tabtin/checkpoint-core'
+import { CheckpointService, type CheckpointLogger } from '@muse/checkpoint-core'
 
 const LOCK_TIMEOUT_MS = 120_000
 

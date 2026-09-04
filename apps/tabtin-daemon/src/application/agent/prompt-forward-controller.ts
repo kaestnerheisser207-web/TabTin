@@ -1,5 +1,5 @@
-import { AgentActionEvents, LocalRuntimeEvents } from '@tabtin/ws-gateway-client';
-import type { AgentTransportEnvelope } from '@tabtin/agent-host/realtime';
+import { AgentActionEvents, LocalRuntimeEvents } from '@muse/ws-gateway-client';
+import type { AgentTransportEnvelope } from '@muse/agent-host/realtime';
 
 export interface PromptForwardControllerPorts {
   acceptsNewTasks(): boolean;

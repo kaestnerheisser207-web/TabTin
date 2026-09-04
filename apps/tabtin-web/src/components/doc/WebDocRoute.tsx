@@ -8,14 +8,14 @@ import React, { useCallback, useMemo } from 'react'
 import { Link } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { FileText } from 'lucide-react'
-import { initializeTabDocHostRuntime } from '@tabtin/tabdoc-host-runtime'
-import type { AppHostClient, TabDocHostActions, TabDocOpenResourceInput } from '@tabtin/app-host-sdk'
-import { AppHostClientProvider } from '@tabtin/app-host-sdk'
+import { initializeTabDocHostRuntime } from '@muse/tabdoc-host-runtime'
+import type { AppHostClient, TabDocHostActions, TabDocOpenResourceInput } from '@muse/app-host-sdk'
+import { AppHostClientProvider } from '@muse/app-host-sdk'
 import {
   TabDocHostActionsProvider,
   TabDocEditorConfigProvider,
   TabDocTableEmbedRuntimeProvider,
-} from '@tabtin/tabdoc-ui'
+} from '@muse/tabdoc-ui'
 import {
   configureTabDataBlockView,
   createDocumentHtmlArtifactLoader,
@@ -24,14 +24,14 @@ import {
   HtmlArtifactLoaderProvider,
   HtmlBlockAccessProvider,
   ImageAssetLoaderProvider,
-} from '@tabtin/tabdoc-ui/editor'
-import { useCollaborativeDocEditor } from '@tabtin/tabdoc-ui/use-collaborative-doc-editor'
+} from '@muse/tabdoc-ui/editor'
+import { useCollaborativeDocEditor } from '@muse/tabdoc-ui/use-collaborative-doc-editor'
 import {
   getHtmlBlockBrowserLink,
   updateDocument,
-} from '@tabtin/tabdoc-ui/api-client'
-import { useVersionPanel } from '@tabtin/collab-core'
-import { isPermissionInsufficientForEditing, toast } from '@tabtin/smartsheet-ui'
+} from '@muse/tabdoc-ui/api-client'
+import { useVersionPanel } from '@muse/collab-core'
+import { isPermissionInsufficientForEditing, toast } from '@muse/smartsheet-ui'
 
 import { useDocLaunchContext } from '@/features/doc/useDocLaunchContext'
 import { webAuthPort, webImageUploadPort } from '@/features/doc/bootstrap'

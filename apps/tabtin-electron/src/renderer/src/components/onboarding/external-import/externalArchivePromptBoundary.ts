@@ -2,7 +2,7 @@
  * 外部历史 → LLM 的边界说明（纯函数，避免与 chat store 循环依赖）。
  */
 
-import type { ChatMessage } from '@tabtin/chat-client'
+import type { ChatMessage } from '@muse/chat-client'
 import {
   EXTERNAL_ARCHIVE_CONTEXT_PREFIX,
   EXTERNAL_ARCHIVE_MESSAGE_KIND,

@@ -5,12 +5,12 @@ application_root="/Project/applications/tabtin"
 releases_root="$application_root/releases"
 compose_file="$application_root/config/compose.shared.yml"
 public_health_url="https://tabtin.dovelora.com/health/ready"
-local_django_image="tabtin/community-django:local"
+local_django_image="muse/community-django:local"
 local_web_image="tabtin/web:local"
 local_collab_image="tabtin/collab-live:local"
-django_repository="ghcr.io/kaestnerheisser207-web/tabtin-community-django"
-web_repository="ghcr.io/kaestnerheisser207-web/tabtin-web"
-collab_repository="ghcr.io/kaestnerheisser207-web/tabtin-collab-live"
+django_repository="ghcr.io/kaestnerheisser207-web/muse-community-django"
+web_repository="ghcr.io/kaestnerheisser207-web/muse-web"
+collab_repository="ghcr.io/kaestnerheisser207-web/muse-collab-live"
 lock_file="$application_root/.deploy.lock"
 
 log() {
@@ -179,7 +179,7 @@ printf '%s\n' "$requested_sha" > "$application_root/DEPLOYED_COMMIT"
 log "removing previous application images"
 declare -A removed_image_ids=()
 while read -r repository image_id; do
-  [[ "$repository" == "tabtin/community-django" ||
+  [[ "$repository" == "muse/community-django" ||
     "$repository" == "tabtin/web" ||
     "$repository" == "tabtin/collab-live" ||
     "$repository" == "$django_repository" ||

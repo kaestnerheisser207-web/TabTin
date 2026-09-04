@@ -1,5 +1,5 @@
 import { useMemo } from 'react'
-import type { ChatSession } from '@tabtin/chat-client'
+import type { ChatSession } from '@muse/chat-client'
 
 export const resolveSessionTimestamp = (value?: string | number | null): number => {
   if (!value) return 0

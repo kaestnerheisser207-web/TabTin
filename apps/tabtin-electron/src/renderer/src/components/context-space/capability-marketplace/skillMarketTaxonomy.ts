@@ -20,7 +20,7 @@ export const RECOMMENDED_MARKET_PACK_IDS = new Set([
   'tabtin-data-toolkit-pack',
   'tabtin-business-analysis-pack',
   'tabtin-creative-toolkit-pack',
-  'tabtin-dev-toolkit-pack',
+  'muse-dev-toolkit-pack',
 ])
 
 const CATEGORY_KEYS = new Set<string>(SKILL_MARKET_CATEGORY_ORDER)

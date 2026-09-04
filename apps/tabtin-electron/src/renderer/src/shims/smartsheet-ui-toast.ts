@@ -1,7 +1,7 @@
 /**
  * Electron toast / message shim
  *
- * - 导出与 `@tabtin/smartsheet-ui/toast` / `/message` 相同的表面
+ * - 导出与 `@muse/smartsheet-ui/toast` / `/message` 相同的表面
  * - Message / toast **一律本窗 MessageHost**：无全屏透明子窗遮罩，关闭钮可点，到期自动消失
  * - 不再把纯文案桥到 overlay toast 子窗（该路径曾导致全局点不动 / × 点不掉，见 ）
  */
@@ -16,7 +16,7 @@ export {
   ToastClose,
   ToastTitle,
   ToastDescription,
-} from '@tabtin/smartsheet-ui/toast-native'
+} from '@muse/smartsheet-ui/toast-native'
 export type {
   ToastProps,
   ToastActionElement,
@@ -30,7 +30,7 @@ export type {
   MessageType,
   MessageItem,
   MessageActionModel,
-} from '@tabtin/smartsheet-ui/toast-native'
+} from '@muse/smartsheet-ui/toast-native'
 
 // toast-native 对齐 deprecated toast.ts，不含 message 公开时长常量；
 // /message alias 也落到本 shim，须从 message-native 补齐表面（见 ）。
@@ -38,7 +38,7 @@ export {
   MESSAGE_LIMIT,
   MESSAGE_DEFAULT_DURATION,
   MESSAGE_ERROR_DURATION,
-} from '@tabtin/smartsheet-ui/message-native'
+} from '@muse/smartsheet-ui/message-native'
 
 import {
   toast as nativeToast,
@@ -48,7 +48,7 @@ import {
   getMessageController,
   type MessageOpenOptions,
   type ToastFn,
-} from '@tabtin/smartsheet-ui/toast-native'
+} from '@muse/smartsheet-ui/toast-native'
 
 export { useToast, getMessageController }
 

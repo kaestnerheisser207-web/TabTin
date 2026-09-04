@@ -12,10 +12,10 @@ import {
   type HostTurnBundle,
   type HostTurnExecutionLimits,
   type HostTurnProfile,
-} from '@tabtin/agent-host/policy'
-import { isExecutionLimitsEnabled } from '@tabtin/app-shell/agent-config-v2'
-import { API_ENDPOINTS, joinApiPath } from '@tabtin/config'
-import type { AgentConfigV3 } from '@tabtin/security-policy'
+} from '@muse/agent-host/policy'
+import { isExecutionLimitsEnabled } from '@muse/app-shell/agent-config-v2'
+import { API_ENDPOINTS, joinApiPath } from '@muse/config'
+import type { AgentConfigV3 } from '@muse/security-policy'
 import { TokenManager } from '../auth.js'
 import { API_BASE_URL } from '../config/api.js'
 import { createLogger } from '../logger.js'

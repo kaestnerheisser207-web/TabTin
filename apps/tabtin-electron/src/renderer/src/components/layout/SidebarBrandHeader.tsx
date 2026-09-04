@@ -1,6 +1,6 @@
 import React from 'react'
 import { cn } from '@utils/cn'
-import { TABTIN_MARK_ON_DARK_URL, TABTIN_MARK_ON_LIGHT_URL } from '@/constants/brandLogo'
+import { MUSE_MARK_ON_DARK_URL, MUSE_MARK_ON_LIGHT_URL } from '@/constants/brandLogo'
 
 export interface SidebarBrandHeaderProps {
   className?: string
@@ -9,7 +9,7 @@ export interface SidebarBrandHeaderProps {
 }
 
 function getDevInstanceIdFromUrl(): string | undefined {
-  const instanceId = new URLSearchParams(window.location.search).get('tabtin-dev-instance')?.trim()
+  const instanceId = new URLSearchParams(window.location.search).get('muse-dev-instance')?.trim()
   return instanceId || undefined
 }
 
@@ -25,13 +25,13 @@ export const SidebarBrandHeader: React.FC<SidebarBrandHeaderProps> = ({ classNam
     <div className={cn('flex min-w-0 items-center gap-2.5', className)}>
       <span className="relative h-8 w-8 shrink-0" aria-hidden>
         <img
-          src={TABTIN_MARK_ON_LIGHT_URL}
+          src={MUSE_MARK_ON_LIGHT_URL}
           alt=""
           className="h-8 w-8 object-contain dark:hidden"
           draggable={false}
         />
         <img
-          src={TABTIN_MARK_ON_DARK_URL}
+          src={MUSE_MARK_ON_DARK_URL}
           alt=""
           className="hidden h-8 w-8 object-contain dark:block"
           draggable={false}

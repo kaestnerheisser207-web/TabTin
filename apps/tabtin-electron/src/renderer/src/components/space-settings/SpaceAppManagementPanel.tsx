@@ -16,7 +16,7 @@ import {
   StickyNote, Globe2, Zap, Smartphone, LayoutGrid, Package,
   ChevronDown, CheckSquare, XSquare, RefreshCw,
 } from 'lucide-react'
-import { Button, EmptyState, ScrollArea, Switch } from '@tabtin/smartsheet-ui'
+import { Button, EmptyState, ScrollArea, Switch } from '@muse/smartsheet-ui'
 import { useTranslation } from 'react-i18next'
 import { useSpaceApps, EMPTY_APPS, EMPTY_DISABLED_APPS, type AppInfo } from '@stores/useSpaceApps'
 import { useSpaceStore } from '@stores/useSpaceStore'

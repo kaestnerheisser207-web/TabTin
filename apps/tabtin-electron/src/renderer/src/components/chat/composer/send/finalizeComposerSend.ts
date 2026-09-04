@@ -1,4 +1,4 @@
-import { toast } from '@tabtin/smartsheet-ui'
+import { toast } from '@muse/smartsheet-ui'
 import type { TFunction } from 'i18next'
 import { useSendCooldownStore } from '@/stores/chat/execution/sendCooldown'
 import { isSendOnCooldown } from '@/stores/chat/execution/sendCooldown'

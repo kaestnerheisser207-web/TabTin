@@ -4,7 +4,7 @@
  */
 
 import { describe, it, expect } from 'vitest'
-import type { ChatSession, TrackerRunMeta } from '@tabtin/chat-client'
+import type { ChatSession, TrackerRunMeta } from '@muse/chat-client'
 import {
   isTrackerRunSession,
   groupSessionsByTime,

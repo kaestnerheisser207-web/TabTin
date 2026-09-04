@@ -19,14 +19,14 @@ import {
   resetAllLSPDiagnosticState,
   getPendingLSPDiagnosticCount,
   type Diagnostic,
-} from '@tabtin/lsp-runtime';
+} from '@muse/lsp-runtime';
 import { buildLspDiagnosticHook } from '../src/hooks/index.js';
 import {
   INTERNAL_MESSAGE_MARKERS,
   hasInternalMarker,
   type Message,
   type EngineState,
-} from '@tabtin/agent-runtime/engine';
+} from '@muse/agent-runtime/engine';
 
 const LSP_MARKER = INTERNAL_MESSAGE_MARKERS.LSP_DIAGNOSTICS_INJECTION;
 

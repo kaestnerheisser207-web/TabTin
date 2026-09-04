@@ -20,7 +20,7 @@ import {
 import { useCurrentDeviceId } from '@/hooks/useCurrentDeviceId'
 import { useOrganizationStore } from '@stores/useOrganizationStore'
 import { SSHApiService } from '@/services/sshApi'
-import type { RemoteServer, RemoteServerCreate } from '@tabtin/app-shell'
+import type { RemoteServer, RemoteServerCreate } from '@muse/app-shell'
 import { cn } from '@utils/cn'
 import { SETTINGS_CONTROL_SM } from '@components/settings/settingsUi'
 import { SettingsPanelLayout } from '@components/settings/SettingsPanelLayout'

@@ -11,7 +11,7 @@ mock 网络下载 + 真实文件 I/O，验证：
   - manifest 不存在 → ``EXIT_FAILED (1)`` + 友好错误文案
   - download 失败（HTTP 404）→ exit 1
 - edge
-  - ``TABTIN_ALLOW_UNCHECKED_INSTALL=1`` 豁免：缺 checksum 也能装（带 warning）
+  - ``MUSE_ALLOW_UNCHECKED_INSTALL=1`` 豁免：缺 checksum 也能装（带 warning）
   - manifest 含 ``cli`` 但缺 ``binary`` 字段 → ValueError
   - 当前 platform 不在 ``platformMap`` 映射 → ``E_INSTALL_NO_BINARY``
 """
@@ -252,7 +252,7 @@ def test_error_checksum_missing_raises_specific_exception(tmp_path: Path):
 
     # 显式确保 unchecked install 没开
     with patch.dict("os.environ", {}, clear=False):
-        os.environ.pop("TABTIN_ALLOW_UNCHECKED_INSTALL", None)
+        os.environ.pop("MUSE_ALLOW_UNCHECKED_INSTALL", None)
         with pytest.raises(InstallChecksumMissingError) as exc_info:
             install_app(
                 "noc",
@@ -261,7 +261,7 @@ def test_error_checksum_missing_raises_specific_exception(tmp_path: Path):
             )
     msg = str(exc_info.value)
     assert "E_INSTALL_CHECKSUM_MISSING" in msg
-    assert "TABTIN_ALLOW_UNCHECKED_INSTALL=1" in msg
+    assert "MUSE_ALLOW_UNCHECKED_INSTALL=1" in msg
 
 
 def test_error_checksum_missing_run_install_returns_78(tmp_path: Path, capsys):
@@ -272,7 +272,7 @@ def test_error_checksum_missing_run_install_returns_78(tmp_path: Path, capsys):
     manifest_path.write_text(json.dumps(manifest), encoding="utf-8")
 
     with patch.dict("os.environ", {}, clear=False):
-        os.environ.pop("TABTIN_ALLOW_UNCHECKED_INSTALL", None)
+        os.environ.pop("MUSE_ALLOW_UNCHECKED_INSTALL", None)
         rc = run_install(
             app_id="noc",
             manifest_path=str(manifest_path),
@@ -282,7 +282,7 @@ def test_error_checksum_missing_run_install_returns_78(tmp_path: Path, capsys):
     assert rc == 78
     err = capsys.readouterr().err
     assert "E_INSTALL_CHECKSUM_MISSING" in err
-    assert "TABTIN_ALLOW_UNCHECKED_INSTALL=1" in err
+    assert "MUSE_ALLOW_UNCHECKED_INSTALL=1" in err
 
 
 def test_error_checksum_mismatch_raises_runtime_error(tmp_path: Path):
@@ -364,7 +364,7 @@ def test_error_json_output_for_checksum_missing(tmp_path: Path, capsys):
     manifest_path = tmp_path / "m.json"
     manifest_path.write_text(json.dumps(manifest), encoding="utf-8")
     with patch.dict("os.environ", {}, clear=False):
-        os.environ.pop("TABTIN_ALLOW_UNCHECKED_INSTALL", None)
+        os.environ.pop("MUSE_ALLOW_UNCHECKED_INSTALL", None)
         rc = run_install(
             app_id="noc",
             manifest_path=str(manifest_path),
@@ -381,7 +381,7 @@ def test_error_json_output_for_checksum_missing(tmp_path: Path, capsys):
 
 
 def test_edge_unchecked_install_env_var_allows_missing_checksum(tmp_path: Path, monkeypatch):
-    """``TABTIN_ALLOW_UNCHECKED_INSTALL=1`` 豁免：缺 checksum 也能装。"""
+    """``MUSE_ALLOW_UNCHECKED_INSTALL=1`` 豁免：缺 checksum 也能装。"""
     binary_name = "demo-cli"
     payload = b"unchecked"
     manifest = _make_manifest("demo", binary_name)  # 无 checksum
@@ -389,7 +389,7 @@ def test_edge_unchecked_install_env_var_allows_missing_checksum(tmp_path: Path, 
     manifest_path.write_text(json.dumps(manifest), encoding="utf-8")
     tar_gz = _build_tar_gz_with_binary(binary_name, payload)
 
-    monkeypatch.setenv("TABTIN_ALLOW_UNCHECKED_INSTALL", "1")
+    monkeypatch.setenv("MUSE_ALLOW_UNCHECKED_INSTALL", "1")
     with patch.object(install_mod, "_download_file",
                        side_effect=lambda url, dest, **kw: dest.write_bytes(tar_gz)):
         result = install_app(

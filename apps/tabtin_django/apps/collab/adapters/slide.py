@@ -23,7 +23,7 @@ from .base import CollabAdapter
 
 logger = logging.getLogger("collab.adapters.slide")
 
-DB = ('default' if getattr(settings, 'TABTIN_SINGLE_DATABASE_MODE', False) else 'postgresql')
+DB = ('default' if getattr(settings, 'MUSE_SINGLE_DATABASE_MODE', False) else 'postgresql')
 _BASE64_DATA_URL_RE = re.compile(r"^data:image/[^;]+;base64,", re.IGNORECASE)
 
 

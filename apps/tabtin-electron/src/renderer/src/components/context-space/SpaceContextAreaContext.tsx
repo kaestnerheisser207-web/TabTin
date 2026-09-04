@@ -14,8 +14,8 @@ import { createContext, useContext, type ReactNode } from 'react'
 import type { ContextItem } from '@components/context-space/registry'
 import type { CreateResourceHandler } from './hooks/createResourceTypes'
 import type { CanvasLayoutGroup, CanvasPaneContent } from '@stores/useCanvasLayoutStore'
-import type { Table } from '@tabtin/table-core'
-import type { SpaceContextItem } from '@tabtin/app-shell'
+import type { Table } from '@muse/table-core'
+import type { SpaceContextItem } from '@muse/app-shell'
 
 // ─── State ────────────────────────────────────────────────────
 

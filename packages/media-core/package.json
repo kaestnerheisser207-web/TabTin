@@ -1,5 +1,5 @@
 {
-  "name": "@tabtin/media-core",
+  "name": "@muse/media-core",
   "version": "0.1.0",
   "description": "Shared media primitives — fonts, image cache, SVG optimization, pixel effects — used by TabVideo and TabSlide",
   "type": "module",

@@ -10,7 +10,7 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import { Timer } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
-import type { ChatMessage } from '@tabtin/chat-client'
+import type { ChatMessage } from '@muse/chat-client'
 import { useChatRuntimeStore } from '@/stores/useChatRuntimeStore'
 import { DEBUG_PANELS_ENABLED } from '@/utils/featureFlags'
 import { ChatIconTooltip } from '../../../panel/ChatIconTooltip'

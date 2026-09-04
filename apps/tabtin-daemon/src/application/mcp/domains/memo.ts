@@ -1,5 +1,5 @@
 import { McpDomainSupport } from './domain-support.js'
-import { API_ENDPOINTS } from '@tabtin/config'
+import { API_ENDPOINTS } from '@muse/config'
 
 export class MemoMcpDomain extends McpDomainSupport {
   async toolMemoList(args: Record<string, unknown>): Promise<Record<string, unknown>> {

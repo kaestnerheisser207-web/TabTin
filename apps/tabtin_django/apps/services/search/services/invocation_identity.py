@@ -17,7 +17,7 @@ REQUEST_FINGERPRINT_VERSION = "search-request-v1"
 
 _LOGICAL_INVOCATION_NAMESPACE = uuid.uuid5(
     uuid.NAMESPACE_URL,
-    "tabtin://search/logical-invocation/v1",
+    "muse://search/logical-invocation/v1",
 )
 
 logger = logging.getLogger(__name__)

@@ -8,8 +8,8 @@
  */
 
 import { webContents as electronWebContents, type Session, type WebContents } from 'electron'
-import { getGreaseBrand } from '@tabtin/anti-detect/client-hints'
-import { isPrivateHost } from '@tabtin/browser-core/url-policy'
+import { getGreaseBrand } from '@muse/anti-detect/client-hints'
+import { isPrivateHost } from '@muse/browser-core/url-policy'
 import { createLogger } from '../logger'
 
 const log = createLogger('ViewFactory')

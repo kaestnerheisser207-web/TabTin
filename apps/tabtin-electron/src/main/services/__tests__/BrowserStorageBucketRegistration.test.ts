@@ -37,7 +37,7 @@ vi.mock('electron', () => {
   return api
 })
 
-vi.mock('@tabtin/shared/storage-paths', () => ({
+vi.mock('@muse/shared/storage-paths', () => ({
   getUserDataPath: (...segs: string[]) => path.join(fakeUserData, ...segs),
 }))
 
@@ -51,7 +51,7 @@ vi.mock('../../utils/logger', () => ({
 
 describe('BrowserStorageBucketRegistration', () => {
   beforeEach(async () => {
-    const sm = await import('@tabtin/storage-manager')
+    const sm = await import('@muse/storage-manager')
     sm.__resetForTesting()
     const mod = await import('../BrowserStorageBucketRegistration')
     mod.unregisterBrowserStorageBuckets()
@@ -66,7 +66,7 @@ describe('BrowserStorageBucketRegistration', () => {
   })
 
   it('一次性注册 5 个 main-process bucket；字段符合 RFC §五 W2.2 G3', async () => {
-    const sm = await import('@tabtin/storage-manager')
+    const sm = await import('@muse/storage-manager')
     const { registerBrowserStorageBuckets } = await import(
       '../BrowserStorageBucketRegistration'
     )
@@ -107,7 +107,7 @@ describe('BrowserStorageBucketRegistration', () => {
   })
 
   it('Partitions/ 不存在时 sizeFn / listFn 返回 0 / []，不抛错', async () => {
-    const sm = await import('@tabtin/storage-manager')
+    const sm = await import('@muse/storage-manager')
     const { registerBrowserStorageBuckets } = await import(
       '../BrowserStorageBucketRegistration'
     )
@@ -158,7 +158,7 @@ describe('BrowserStorageBucketRegistration', () => {
       fs.writeFileSync(path.join(full, 'dummy.txt'), 'x'.repeat(16))
     }
 
-    const sm = await import('@tabtin/storage-manager')
+    const sm = await import('@muse/storage-manager')
     const { registerBrowserStorageBuckets } = await import(
       '../BrowserStorageBucketRegistration'
     )
@@ -201,7 +201,7 @@ describe('BrowserStorageBucketRegistration', () => {
       clearCache: vi.fn(async () => undefined),
     }))
 
-    const sm = await import('@tabtin/storage-manager')
+    const sm = await import('@muse/storage-manager')
     const { registerBrowserStorageBuckets } = await import(
       '../BrowserStorageBucketRegistration'
     )
@@ -233,7 +233,7 @@ describe('BrowserStorageBucketRegistration', () => {
       fs.writeFileSync(path.join(p, 'dummy.txt'), 'y'.repeat(32))
     }
 
-    const sm = await import('@tabtin/storage-manager')
+    const sm = await import('@muse/storage-manager')
     const { registerBrowserStorageBuckets } = await import(
       '../BrowserStorageBucketRegistration'
     )
@@ -266,7 +266,7 @@ describe('BrowserStorageBucketRegistration', () => {
     fs.mkdirSync(path.join(taskPath, 'Cache'), { recursive: true })
     fs.writeFileSync(path.join(taskPath, 'Cache', 'b.bin'), 'z'.repeat(9999))
 
-    const sm = await import('@tabtin/storage-manager')
+    const sm = await import('@muse/storage-manager')
     const { registerBrowserStorageBuckets } = await import(
       '../BrowserStorageBucketRegistration'
     )
@@ -290,7 +290,7 @@ describe('BrowserStorageBucketRegistration', () => {
     fs.mkdirSync(path.join(envPath, 'Cache'), { recursive: true })
     fs.writeFileSync(path.join(envPath, 'Cache', 'a.bin'), 'y'.repeat(10_000))
 
-    const sm = await import('@tabtin/storage-manager')
+    const sm = await import('@muse/storage-manager')
     const { registerBrowserStorageBuckets } = await import(
       '../BrowserStorageBucketRegistration'
     )

@@ -13,7 +13,7 @@ from .utils import get_client_ip, get_user_agent
 
 
 def _request_id(request) -> str:
-    for key in ("HTTP_X_REQUEST_ID", "HTTP_X_TABTIN_REQUEST_ID"):
+    for key in ("HTTP_X_REQUEST_ID", "HTTP_X_MUSE_REQUEST_ID"):
         value = request.META.get(key)
         if value:
             return str(value)

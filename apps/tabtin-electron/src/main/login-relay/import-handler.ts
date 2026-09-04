@@ -1,6 +1,6 @@
 import { session } from 'electron'
-import { AgentActionEvents } from '@tabtin/ws-gateway-client'
-import { joinApiPath } from '@tabtin/config'
+import { AgentActionEvents } from '@muse/ws-gateway-client'
+import { joinApiPath } from '@muse/config'
 import { TokenManager } from '../auth.js'
 import { getBrowserEnvironmentService } from '../browser-env/BrowserEnvironmentService.js'
 import { getCLIContextSpaceBridge } from '../cli/cli-context.js'

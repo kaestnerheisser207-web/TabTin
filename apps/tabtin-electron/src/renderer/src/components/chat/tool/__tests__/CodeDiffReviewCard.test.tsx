@@ -1,7 +1,7 @@
 import React from 'react'
 import { act, fireEvent, render, screen } from '@testing-library/react'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
-import type { ChatMessage } from '@tabtin/chat-client'
+import type { ChatMessage } from '@muse/chat-client'
 import { blockExpandKey, useChatBlockUiPrefsStore } from '@stores/chat/presentation/blockUiPrefs'
 
 const mocks = vi.hoisted(() => ({

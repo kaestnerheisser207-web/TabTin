@@ -11,7 +11,7 @@ const { toastMock } = vi.hoisted(() => {
   return { toastMock: fn }
 })
 
-vi.mock('@tabtin/smartsheet-ui', () => ({
+vi.mock('@muse/smartsheet-ui', () => ({
   toast: toastMock,
 }))
 
@@ -58,7 +58,7 @@ describe('useDownloadStore.cancelStream consistency', () => {
   })
 
   it('cancelStream 失败时不应误置为已取消', async () => {
-    window.tabtin.downloads.cancelStream.mockResolvedValue({ success: false, error: 'cancel failed' })
+    window.muse.downloads.cancelStream.mockResolvedValue({ success: false, error: 'cancel failed' })
     await useDownloadStore.getState().cancelStream('stream-1')
     const item = useDownloadStore.getState().streamItems[0]
     expect(item.status).toBe('downloading')
@@ -66,7 +66,7 @@ describe('useDownloadStore.cancelStream consistency', () => {
   })
 
   it('aborted=false 时不应误置为已取消', async () => {
-    window.tabtin.downloads.cancelStream.mockResolvedValue({ success: true, aborted: false })
+    window.muse.downloads.cancelStream.mockResolvedValue({ success: true, aborted: false })
     await useDownloadStore.getState().cancelStream('stream-1')
     const item = useDownloadStore.getState().streamItems[0]
     expect(item.status).toBe('downloading')
@@ -74,7 +74,7 @@ describe('useDownloadStore.cancelStream consistency', () => {
   })
 
   it('aborted=true 时应标记为取消哨兵失败态', async () => {
-    window.tabtin.downloads.cancelStream.mockResolvedValue({ success: true, aborted: true })
+    window.muse.downloads.cancelStream.mockResolvedValue({ success: true, aborted: true })
     await useDownloadStore.getState().cancelStream('stream-1')
     const item = useDownloadStore.getState().streamItems[0]
     expect(item.status).toBe('failed')

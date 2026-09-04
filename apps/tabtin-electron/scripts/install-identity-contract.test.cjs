@@ -28,8 +28,8 @@ const appIdentity = fs.readFileSync(
   path.join(__dirname, '..', 'src', 'main', 'app-identity.ts'),
   'utf8',
 )
-assert.ok(appIdentity.includes('process.env.TABTIN_DATA_ROOT = profileRoot'))
-assert.ok(appIdentity.includes("process.env.TABTIN_RUNTIME_ROOT = join(profileRoot, 'runtime')"))
+assert.ok(appIdentity.includes('process.env.MUSE_DATA_ROOT = profileRoot'))
+assert.ok(appIdentity.includes("process.env.MUSE_RUNTIME_ROOT = join(profileRoot, 'runtime')"))
 
 const deepLink = fs.readFileSync(path.join(__dirname, '..', 'src', 'main', 'deep-link.ts'), 'utf8')
 assert.ok(deepLink.includes('resolveTabTinProtocolScheme'))

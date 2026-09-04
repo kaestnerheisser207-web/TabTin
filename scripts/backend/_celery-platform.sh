@@ -115,7 +115,7 @@ _celery_tracker_agent_queue() {
     1 | true | yes | on) should_isolate=1 ;;
     0 | false | no | off) should_isolate=0 ;;
     *)
-      mode="${TABTIN_INFRA_MODE:-$(_celery_env_value_any TABTIN_INFRA_MODE "${root_dir}")}"
+      mode="${MUSE_INFRA_MODE:-$(_celery_env_value_any MUSE_INFRA_MODE "${root_dir}")}"
       # A local worker backed by the shared test Redis must never compete with
       # the ACK tracker worker.  Kubernetes workloads intentionally share the
       # canonical queue; local macOS, Windows, and Docker workers do not.
@@ -128,7 +128,7 @@ _celery_tracker_agent_queue() {
   esac
 
   if [[ "${should_isolate}" == "1" ]]; then
-    suffix="${TABTIN_QUEUE_SUFFIX:-$(_celery_env_value_any TABTIN_QUEUE_SUFFIX "${root_dir}")}"
+    suffix="${MUSE_QUEUE_SUFFIX:-$(_celery_env_value_any MUSE_QUEUE_SUFFIX "${root_dir}")}"
     suffix="${suffix:-${COMPUTERNAME:-${HOSTNAME:-${USERNAME:-local}}}}"
     echo "tracker_agent_$(_celery_safe_queue_suffix "${suffix}")"
     return 0

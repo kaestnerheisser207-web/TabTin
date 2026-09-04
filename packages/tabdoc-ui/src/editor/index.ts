@@ -1,5 +1,5 @@
 /**
- * @tabtin/tabdoc-ui/editor — 共享文档编辑器 UI 组件
+ * @muse/tabdoc-ui/editor — 共享文档编辑器 UI 组件
  *
  * 宿主无关的编辑器视图、工具栏、扩展、选择器等。
  * 各宿主通过 TabDocEditorConfigProvider 注入平台特定能力。

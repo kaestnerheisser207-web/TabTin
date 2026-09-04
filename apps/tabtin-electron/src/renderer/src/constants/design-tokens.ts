@@ -291,10 +291,10 @@ export const ButtonStyles = {
  * 语义化 z-index 常量
  * 用于 inline style，与 Tailwind 类 z-sticky/z-floating/z-banner 对应
  *
- * @deprecated 请直接使用 @tabtin/app-shell 的 ZIndex
- * 保留此导出仅为向后兼容，新代码请使用：import { ZIndex } from '@tabtin/app-shell'
+ * @deprecated 请直接使用 @muse/app-shell 的 ZIndex
+ * 保留此导出仅为向后兼容，新代码请使用：import { ZIndex } from '@muse/app-shell'
  */
-export { ZIndex } from '@tabtin/app-shell'
+export { ZIndex } from '@muse/app-shell'
 
 // ============================================================
 // 导出类型

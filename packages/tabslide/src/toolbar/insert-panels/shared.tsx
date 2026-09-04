@@ -2,10 +2,10 @@ import React, { useEffect, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 import * as t from '../../theme'
 import { ScrollArea } from '../../components/ui/ScrollArea'
-import { ZIndex } from '@tabtin/app-shell'
+import { ZIndex } from '@muse/app-shell'
 
 /**
- * 对齐 TabData（@tabtin/smartsheet-ui）的弹出面板视觉规范：
+ * 对齐 TabData（@muse/smartsheet-ui）的弹出面板视觉规范：
  *
  *   弹出层圆角 : rounded-md  = calc(var(--radius) - 2px) ≈ 7.6px  → t.radiusMd
  *   弹出层边框 : border      = 1px solid hsl(var(--border))        → t.border（全透明度）

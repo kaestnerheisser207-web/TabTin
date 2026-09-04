@@ -12,7 +12,7 @@ import {
   validateUploadFile,
   formatFileSize as _formatFileSize,
 } from '@/constants/upload'
-import type { ReplyToPreview } from '@tabtin/chat-client'
+import type { ReplyToPreview } from '@muse/chat-client'
 
 /** 附件状态 */
 export type AttachmentStatus = 'pending' | 'uploading' | 'ready' | 'error'

@@ -7,7 +7,7 @@
  * `run_terminal_command` 工具卡片即可呈现 Agent 的 CLI 调用，无需专属卡片。
  */
 
-import type { ToolCardDescriptor } from '@tabtin/chat-client'
+import type { ToolCardDescriptor } from '@muse/chat-client'
 import { truncate, getNestedArgs } from './toolCardUtils'
 
 export const TABAPP_TOOL_CARDS: Record<string, ToolCardDescriptor> = {

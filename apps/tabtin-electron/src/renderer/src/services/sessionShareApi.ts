@@ -11,12 +11,12 @@
  * 错误抛 ShareApiError（带 status），供调用方区分 403（共享已停止 / 无权）与其它失败。
  */
 
-import { joinApiPath } from '@tabtin/config'
+import { joinApiPath } from '@muse/config'
 import { API_CONFIG } from '@/config/api'
 import { apiRequest, getAuthToken } from '@/adapters/api-adapter-instance'
 import { createLogger } from '@/utils/logger'
-import type { TableHttpMethod } from '@tabtin/table-core'
-import type { ChatSession } from '@tabtin/chat-client'
+import type { TableHttpMethod } from '@muse/table-core'
+import type { ChatSession } from '@muse/chat-client'
 
 const log = createLogger('SessionShareApi')
 
@@ -171,7 +171,7 @@ export async function sharedCollaborationChat(
   accessEpoch: number,
   text: string,
 ): Promise<SharedChatResult> {
-  const bridge = window.tabtin?.agentEngine
+  const bridge = window.muse?.agentEngine
   if (!bridge?.gatewaySend) throw new Error('gateway-send bridge unavailable')
 
   const response = await bridge.gatewaySend({

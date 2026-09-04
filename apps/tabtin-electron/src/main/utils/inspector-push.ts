@@ -108,7 +108,7 @@ export function pushHttpCallToInspector(record: InspectorHttpRecord): void {
       win.webContents.send(INSPECTOR_HTTP_CHANNEL, record)
     } catch (e) {
       // 单窗口 send 失败不影响其他窗口；不打 warn 以免 dev 终端噪音
-      if (process.env.TABTIN_INSPECTOR_DEBUG === '1') {
+      if (process.env.MUSE_INSPECTOR_DEBUG === '1') {
         log.warn('send to window failed:', e)
       }
     }

@@ -22,7 +22,7 @@ import {
   DialogTitle,
   toast,
 } from '@components/ui'
-import type { ChatSession } from '@tabtin/chat-client'
+import type { ChatSession } from '@muse/chat-client'
 import { useAuthStore } from '@stores/useAuthStore'
 import { useOrganizationStore } from '@stores/useOrganizationStore'
 import { useSpaceStore } from '@stores/useSpaceStore'

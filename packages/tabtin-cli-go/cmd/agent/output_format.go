@@ -26,8 +26,8 @@ import (
 // 关键约束（v10.11 P2 / debug-agent 反馈）：**rootFmt 仅在 rootFmtExplicit==true 时才驱动决策**。
 // f.Format 在 root PersistentPreRunE 会被改写——envelope/config/terminal 默认（root.go:96-105）
 // 和 --jq 强制（root.go:127-131）都会让 f.Format 偏离"用户显式值"。前一轮 v10.11 P1 用
-// Changed 判定双显式互斥，但单边分支仍用 switch rootFmt 导致 TABTIN_AGENT=1 / Defaults.Format
-// 暗中改写出错（`TABTIN_AGENT=1 agent run -p hi` 被假装"传了 --format agent"误拒）。
+// Changed 判定双显式互斥，但单边分支仍用 switch rootFmt 导致 MUSE_AGENT=1 / Defaults.Format
+// 暗中改写出错（`MUSE_AGENT=1 agent run -p hi` 被假装"传了 --format agent"误拒）。
 // 现在所有"读 rootFmt"的决策都 gate 在 rootFmtExplicit 上，让 env/config 默认不再渗透。
 //
 // hasJQ 独立处理：jq 是显式的"我要 envelope 才能过滤"意图（root.go:129 把 f.Format=FormatJSON
@@ -100,7 +100,7 @@ func resolveOutputFormat(
 	// Case 4：都不显式 + hasJQ → jq fallback，切 OutputJSON。
 	//         rootFmt 不参与判定——只看 hasJQ 这一显式意图。
 	// Case 5：都不显式 + !hasJQ → 保持 outFmt=text（命令默认），rootFmt 完全忽略
-	//         （TABTIN_AGENT=1 / config Defaults.Format / IsTerminal 默认在这里全部 noop）。
+	//         （MUSE_AGENT=1 / config Defaults.Format / IsTerminal 默认在这里全部 noop）。
 	if !cmdOutFmtExplicit && !rootFmtExplicit && hasJQ {
 		outFmt = conversation.OutputJSON
 	}

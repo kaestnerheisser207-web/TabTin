@@ -2,7 +2,7 @@
  * ApprovalRequested payload 本地 Zod（ Stage 5c / ）。
  *
  * 覆盖 LocalPermissionHandler emit 前的 fail-fast；字段与
- * `@tabtin/agent-wire` ApprovalRequestedPayloadSchema 对齐（含严格 DecisionReason）。
+ * `@muse/agent-wire` ApprovalRequestedPayloadSchema 对齐（含严格 DecisionReason）。
  * 生产路径不得 import agent-wire；parity 见 `__tests__/approval-schema-parity.test.ts`。
  */
 

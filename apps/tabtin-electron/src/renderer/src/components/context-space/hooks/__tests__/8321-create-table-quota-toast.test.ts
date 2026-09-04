@@ -18,7 +18,7 @@ const {
 }))
 
 vi.mock('@components/ui', () => ({ toast }))
-vi.mock('@tabtin/smartsheet-ui', () => ({
+vi.mock('@muse/smartsheet-ui', () => ({
   toast,
   resolveChoiceTagColors: () => ({ backgroundColor: '#eee', color: '#111' }),
   FALLBACK_TAG_BG: '#eee',
@@ -97,11 +97,11 @@ vi.mock('@/lib/billingErrorHandler', () => ({
 vi.mock('@/stores/useCreateSiteDialog', () => ({
   useCreateSiteDialog: { getState: vi.fn(() => ({ open: vi.fn() })) },
 }))
-vi.mock('@tabtin/tabdoc-ui/api-client', () => ({ createDocument: vi.fn() }))
+vi.mock('@muse/tabdoc-ui/api-client', () => ({ createDocument: vi.fn() }))
 vi.mock('@/skills/agentSkills', () => ({ startAgentSkillsWatcher: vi.fn() }))
 vi.mock('../../../tins/openTinsPanel', () => ({ openTinsPanel: vi.fn() }))
-vi.mock('@tabtin/app-host-sdk/host', () => ({ createDirectAppClient: vi.fn() }))
-vi.mock('@tabtin/table-core', () => ({
+vi.mock('@muse/app-host-sdk/host', () => ({ createDirectAppClient: vi.fn() }))
+vi.mock('@muse/table-core', () => ({
   requireTableApiPort: vi.fn(() => ({ getAccessToken: vi.fn(), request: vi.fn() })),
   TableApiService: {
     createTable: vi.fn(),
@@ -110,7 +110,7 @@ vi.mock('@tabtin/table-core', () => ({
   },
   normalizeTable: (t: unknown) => t,
 }))
-vi.mock('@tabtin/table-ui', () => ({}))
+vi.mock('@muse/table-ui', () => ({}))
 vi.mock('../../ResourceContextMenu', () => ({ ResourceContextMenu: () => null }))
 vi.mock('../../registry/instance', () => ({
   contextRegistry: {

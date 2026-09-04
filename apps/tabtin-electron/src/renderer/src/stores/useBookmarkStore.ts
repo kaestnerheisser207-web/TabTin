@@ -9,8 +9,8 @@
 
 import { create } from 'zustand'
 import { createJSONStorage, persist } from 'zustand/middleware'
-import { withPersistSafety, createMigratingStorage } from '@tabtin/shared'
-import { getBucket, registerStorageBucket } from '@tabtin/storage-manager'
+import { withPersistSafety, createMigratingStorage } from '@muse/shared'
+import { getBucket, registerStorageBucket } from '@muse/storage-manager'
 import { PERSIST_KEYS } from './persist-key-registry'
 import { registerResetAction } from './sessionResetRegistry'
 

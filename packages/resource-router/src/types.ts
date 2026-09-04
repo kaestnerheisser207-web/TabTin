@@ -1,5 +1,5 @@
 /**
- * @tabtin/resource-router · 公共类型契约
+ * @muse/resource-router · 公共类型契约
  *
  * 这是「Agent 产物在 Space 内的打开」专题 W2 协议骨架的 SSOT 之一。
  * 双端字符级对齐：Python 镜像见
@@ -10,7 +10,7 @@
  *    `ContextRefType` 字符串，不另立枚举
  *  - 三种 Agent 输出形式（增强 markdown / `open_in_space` 工具 / 富 ResourceCard）
  *    必须共享同一种 `ResourcePointer` 结构（D3 红线）
- *  - 自有格式（`tabtin://resource/<type>/<id>?hint=…`）+ 行业格式（http /
+ *  - 自有格式（`muse://resource/<type>/<id>?hint=…`）+ 行业格式（http /
  *    https / file / mailto / tel / 其他 scheme）双轨并存（D5 红线）
  */
 
@@ -20,7 +20,7 @@
  * 来源 scheme：'muse' = 自有格式；其余 = 行业格式。
  *
  * 字面量 union 中只列 RFC v1.0 §1.3 显式枚举的 5 种行业 scheme + 'muse'
- * 自有格式；其他如 `tabtin-file:` / `weixin:` / `ssh:` 等都走 `(string & {})`
+ * 自有格式；其他如 `muse-file:` / `weixin:` / `ssh:` 等都走 `(string & {})`
  * 兜底——避免在协议层预埋"未来要支持"的字面量过度设计。
  */
 export type ResourcePointerScheme =
@@ -32,7 +32,7 @@ export type ResourcePointerScheme =
   | 'tel'
   | (string & {})
 
-export type TabTinResourceScheme = 'muse' | 'tabtin-preprod' | 'tabtin-dev'
+export type TabTinResourceScheme = 'muse' | 'muse-preprod' | 'muse-dev'
 
 /**
  * 自有格式 type 轴。
@@ -40,7 +40,7 @@ export type TabTinResourceScheme = 'muse' | 'tabtin-preprod' | 'tabtin-dev'
  * 取值与 `apps/tabtin-electron/src/renderer/src/components/chat/types.ts`
  * 中 `ContextRefType` 字符串完全一致（小写 snake，约 22 种）。
  *
- * 故意保持 `string` 而非闭合 union——`@tabtin/resource-router` 是协议层包，
+ * 故意保持 `string` 而非闭合 union——`@muse/resource-router` 是协议层包，
  * 不应依赖 renderer 层的具体枚举；ContextRefType 增减由 Renderer 那边的
  * SSOT 与 manifest 校验脚本兜底（`scripts/validate-manifest-schema.py` cross-ref）。
  */
@@ -50,10 +50,10 @@ export type ResourcePointerType = string
  * 「Agent 产物指针」。
  *
  * 三种来源：
- *   1. 自有格式 `tabtin://resource/<type>/<id>?hint=<carrierAppId>&...meta`
+ *   1. 自有格式 `muse://resource/<type>/<id>?hint=<carrierAppId>&...meta`
  *   2. 行业格式 `http(s)://...` / `file://...` / `mailto:...` / `tel:...` / 其他
  *   3. 裸路径（本期 Electron 由 W3 `remarkAutolinkResource` 升级到
- *      `tabtin://resource/file/<encoded>` 形态后再进 parser；本包 parser
+ *      `muse://resource/file/<encoded>` 形态后再进 parser；本包 parser
  *      不直接处理裸路径——baseDir 解析依赖渲染层上下文）
  */
 export interface ResourcePointer {
@@ -64,7 +64,7 @@ export interface ResourcePointer {
   type: ResourcePointerType | null
 
   /**
-   * 自有格式：`tabtin://resource/<type>/<id>` 中的 `<id>`，已 urldecode；
+   * 自有格式：`muse://resource/<type>/<id>` 中的 `<id>`，已 urldecode；
    * 行业格式：原始 URI（不 decode 重写，调 `shell.openExternal` 时直接用）。
    */
   id: string

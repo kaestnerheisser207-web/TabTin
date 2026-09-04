@@ -551,7 +551,7 @@ async function renderSkillBodyWithManifest(
  *
  * 宿主典型用法（Wave B · M6 对接点）：
  * ```ts
- * import { createSkillsTools } from '@tabtin/agent-runtime/tools';
+ * import { createSkillsTools } from '@muse/agent-runtime/tools';
  *
  * const registry = new LocalSkillRegistry({
  *   skillRecall: createLexicalSkillRecall(),

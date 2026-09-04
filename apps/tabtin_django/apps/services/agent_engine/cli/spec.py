@@ -176,19 +176,19 @@ def _resolve_manifest_root() -> Path:
     """解析 manifest 扫描根目录。
 
     优先级：
-    1. 环境变量 ``TABTIN_APPS_MANIFEST_ROOT``（测试 / 容器 / 自定义部署用）
-    2. Django settings ``TABTIN_APPS_MANIFEST_ROOT``（如有定义）
+    1. 环境变量 ``MUSE_APPS_MANIFEST_ROOT``（测试 / 容器 / 自定义部署用）
+    2. Django settings ``MUSE_APPS_MANIFEST_ROOT``（如有定义）
     3. 仓库默认 ``<repo>/packages/apps/``
 
     任意路径不可读 / 不存在时返回 ``Path``，调用方按文件存在性兜底（不抛异常）。
     """
-    env_path = os.environ.get("TABTIN_APPS_MANIFEST_ROOT")
+    env_path = os.environ.get("MUSE_APPS_MANIFEST_ROOT")
     if env_path:
         return Path(env_path)
     try:
         from django.conf import settings as _settings  # type: ignore[import-not-found]
 
-        configured = getattr(_settings, "TABTIN_APPS_MANIFEST_ROOT", None)
+        configured = getattr(_settings, "MUSE_APPS_MANIFEST_ROOT", None)
         if configured:
             return Path(configured)
     except Exception:

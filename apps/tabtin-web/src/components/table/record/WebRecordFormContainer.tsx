@@ -1,7 +1,7 @@
 /**
  * WebRecordFormContainer — Web 端记录表单容器
  *
- * 对齐 Electron 的 RecordFormContainer，连接 RecordFormDialog（@tabtin/smartsheet-ui）
+ * 对齐 Electron 的 RecordFormContainer，连接 RecordFormDialog（@muse/smartsheet-ui）
  * 与 Web 端 Store 层。附件字段通过 WebAttachmentField 复用单元格附件 editor。
  */
 
@@ -14,13 +14,13 @@ import {
   toast,
   type AttachmentFieldRenderProps,
   type RecordFormData,
-} from '@tabtin/smartsheet-ui'
+} from '@muse/smartsheet-ui'
 import { MessageSquare } from 'lucide-react'
-import { toFieldDefinitions, toWorkspaceMembers } from '@tabtin/table-ui'
-import { useOrganizationStore } from '@tabtin/app-shell'
+import { toFieldDefinitions, toWorkspaceMembers } from '@muse/table-ui'
+import { useOrganizationStore } from '@muse/app-shell'
 import { useAuthStore } from '@/stores/auth-store'
-import { computeChangedRecordData, isOutOfBandManagedField } from '@tabtin/table-core'
-import type { AttachmentReference, Field, Table } from '@tabtin/table-core'
+import { computeChangedRecordData, isOutOfBandManagedField } from '@muse/table-core'
+import type { AttachmentReference, Field, Table } from '@muse/table-core'
 import {
   useRecordComments,
   type SharedRecordCommentsAccess,

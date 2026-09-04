@@ -319,8 +319,8 @@ internal object ApiModule {
                 addHeader("Content-Type", "application/json")
                 header("X-Client-Type", "android")
                 header("X-Client-Version", BuildConfig.VERSION_NAME)
-                if (BuildConfig.TABTIN_GIT_SHA.isNotEmpty()) {
-                    header("X-Client-Source-Sha", BuildConfig.TABTIN_GIT_SHA)
+                if (BuildConfig.MUSE_GIT_SHA.isNotEmpty()) {
+                    header("X-Client-Source-Sha", BuildConfig.MUSE_GIT_SHA)
                 }
             }
 

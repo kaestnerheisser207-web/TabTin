@@ -16,7 +16,7 @@ export async function saveExportBlob(
   blob: Blob,
   filename: string,
 ): Promise<SaveExportResult> {
-  const tabtin = window.tabtin
+  const tabtin = window.muse
   if (!tabtin?.showSaveDialog || !tabtin?.fileSystem?.writeBinaryFile) {
     fallbackBrowserDownload(blob, filename)
     return { status: 'fallback' }

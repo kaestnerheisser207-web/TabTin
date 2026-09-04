@@ -7,7 +7,7 @@ const openTableTabGuarded = vi.fn()
 const openResourceTabGuarded = vi.fn()
 const expandCanvasForScope = vi.fn()
 
-vi.mock('@tabtin/smartsheet-ui', () => ({
+vi.mock('@muse/smartsheet-ui', () => ({
   toast: (...args: unknown[]) => toast(...args),
 }))
 

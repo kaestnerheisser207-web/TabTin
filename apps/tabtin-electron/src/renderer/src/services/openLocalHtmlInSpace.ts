@@ -41,7 +41,7 @@ import { seedManager } from '@stores/seed-manager'
 import { resolveLocalFilePath } from '@/services/localFileResourceResolver'
 import { focusExistingWebTabInSpaceDetailed } from '@/services/openWebTabInSpace'
 import { createLogger } from '@/utils/logger'
-import type { ResourcePointer } from '@tabtin/resource-router'
+import type { ResourcePointer } from '@muse/resource-router'
 
 const log = createLogger('openLocalHtmlInSpace')
 
@@ -123,7 +123,7 @@ export async function openLocalHtmlInSpace(
       pointer,
       workingDir,
       pathExists: async (p) => {
-        const pathExists = window.tabtin?.fileSystem?.pathExists
+        const pathExists = window.muse?.fileSystem?.pathExists
         if (!pathExists) throw new Error('当前环境不支持本地文件检查')
         return pathExists(p)
       },

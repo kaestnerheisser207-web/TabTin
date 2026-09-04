@@ -272,13 +272,13 @@ type browserDoctorRuntimeDiscovery struct {
 }
 
 func checkBrowserDoctorSelection(report *browserDoctorReport, env browserDoctorEnv, discoveries []browserDoctorRuntimeDiscovery) {
-	if sock := os.Getenv("TABTIN_SOCK"); strings.TrimSpace(sock) != "" {
-		token := os.Getenv("_TABTIN_TRANSPORT_TOKEN")
+	if sock := os.Getenv("MUSE_SOCK"); strings.TrimSpace(sock) != "" {
+		token := os.Getenv("_MUSE_TRANSPORT_TOKEN")
 		status := browserDoctorStatusOK
-		summary := "TABTIN_SOCK 显式覆盖 discovery"
+		summary := "MUSE_SOCK 显式覆盖 discovery"
 		if token == "" {
 			status = browserDoctorStatusWarn
-			summary = "TABTIN_SOCK 已设置但缺 _TABTIN_TRANSPORT_TOKEN"
+			summary = "MUSE_SOCK 已设置但缺 _MUSE_TRANSPORT_TOKEN"
 		}
 		report.addCheck(browserDoctorCheck{
 			ID:         "cli.selection",
@@ -286,7 +286,7 @@ func checkBrowserDoctorSelection(report *browserDoctorReport, env browserDoctorE
 			Status:     status,
 			Summary:    summary,
 			Detail:     map[string]any{"sock": sock, "hasToken": token != ""},
-			Suggestion: "显式指定 socket 时必须同时传 _TABTIN_TRANSPORT_TOKEN，否则 CLI Server 会 401",
+			Suggestion: "显式指定 socket 时必须同时传 _MUSE_TRANSPORT_TOKEN，否则 CLI Server 会 401",
 		})
 		return
 	}

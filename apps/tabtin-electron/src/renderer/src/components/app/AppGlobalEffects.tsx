@@ -46,7 +46,7 @@ import {
   isBillingErrorCode,
   type QuotaResourceType,
 } from '@/lib/billingErrorHandler'
-import { toast, ToastAction } from '@tabtin/smartsheet-ui/toast'
+import { toast, ToastAction } from '@muse/smartsheet-ui/toast'
 import { installComposerPresetsWindowAPI } from '@/components/chat/composer-presets/windowApi'
 import { streamingContent, initStreamingContent } from '@/stores/chat/execution/streamingContent'
 import { getBusySessionIds } from '@/stores/chat/execution/sessionRunProjection'
@@ -88,7 +88,7 @@ export function AppGlobalEffects({ isDetachedChat, hasMainWindowHost }: AppGloba
     enabled: isAuthenticated && !!selectedOrganizationId && (!isDetachedChat || !hasMainWindowHost),
   })
 
-  useEffect(() => window.tabtin?.notification?.onSessionViewed?.(({ sessionId }) => {
+  useEffect(() => window.muse?.notification?.onSessionViewed?.(({ sessionId }) => {
     if (sessionId) useSessionReadStore.getState().markViewed(sessionId)
   }), [])
 
@@ -101,7 +101,7 @@ export function AppGlobalEffects({ isDetachedChat, hasMainWindowHost }: AppGloba
   // refresh token 被上游拒绝时，同时移除旧会话的本机模型恢复记录，避免重启复活。
   useEffect(() => {
     if (isDetachedChat) return
-    return window.tabtin?.openaiCodex?.onStatusChanged?.(({ status }) => {
+    return window.muse?.openaiCodex?.onStatusChanged?.(({ status }) => {
       if (status === 'disconnected') {
         clearAllSessionLocalModelPreferences()
       }
@@ -443,7 +443,7 @@ export function AppGlobalEffects({ isDetachedChat, hasMainWindowHost }: AppGloba
   useEffect(() => {
     if (!isAuthenticated || isDetachedChat) return
 
-    window.tabtin?.sandbox?.syncApprovalPreferences?.().catch(() => {})
+    window.muse?.sandbox?.syncApprovalPreferences?.().catch(() => {})
 
     let listener: ((envelope: any) => void) | null = null
     let gateway: any = null
@@ -459,7 +459,7 @@ export function AppGlobalEffects({ isDetachedChat, hasMainWindowHost }: AppGloba
           // {data:preferences} 喂给 syncFromRemote → 实时同步 no-op。先剥 payload.data。
           const preferences = unwrapApprovalPreferences(envelope)
           if (preferences) {
-            window.tabtin?.sandbox?.notifyRemoteApprovalPreferencesChanged?.(preferences)
+            window.muse?.sandbox?.notifyRemoteApprovalPreferencesChanged?.(preferences)
           }
         }
         gateway.addListener(listener)
@@ -485,7 +485,7 @@ export function AppGlobalEffects({ isDetachedChat, hasMainWindowHost }: AppGloba
     // renderer 5 类（theme/fontSize/colorScheme/voiceHotwords/resourceOpenPrefs）
     void syncUISettingsFromServer()
     // notificationPrefs 在主进程：触发主进程拉取一次合并（范式 B）。
-    void window.tabtin?.notification?.syncPrefsFromServer?.().catch(() => {})
+    void window.muse?.notification?.syncPrefsFromServer?.().catch(() => {})
 
     // cancelled 标志收口异步 setup 竞态：快速 auth 抖动时 cleanup 可能早于 await
     // 完成，此时 listener/gateway 还没赋值、cleanup 取不到无法移除；await 后再 addListener
@@ -504,7 +504,7 @@ export function AppGlobalEffects({ isDetachedChat, hasMainWindowHost }: AppGloba
           // notificationPrefs 由主进程消费：取出该 namespace 信封转发给主进程回灌。
           const np = extractRemoteSettings(envelope).notificationPrefs
           if (np && typeof np.updatedAt === 'number') {
-            window.tabtin?.notification?.notifyRemotePrefsChanged?.({ value: np.value, updatedAt: np.updatedAt })
+            window.muse?.notification?.notifyRemotePrefsChanged?.({ value: np.value, updatedAt: np.updatedAt })
           }
         }
         gateway.addListener(listener)
@@ -549,7 +549,7 @@ export function AppGlobalEffects({ isDetachedChat, hasMainWindowHost }: AppGloba
   }, [isDetachedChat])
 
   // --- dev-only：Agent 对话视口帧级探针（Phase 0）---
-  // 暴露 window.__TABTIN_CHAT_VIEWPORT_PROBE__ 供 Electron E2E / CDP 采样；
+  // 暴露 window.__MUSE_CHAT_VIEWPORT_PROBE__ 供 Electron E2E / CDP 采样；
   // 生产为 no-op（bootstrapConversationViewportProbe 内部有 DEV guard）。
   useEffect(() => {
     if (isDetachedChat) return

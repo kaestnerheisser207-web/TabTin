@@ -1,6 +1,6 @@
 import WebSocketNode from 'ws'
 import { type BrowserWindow } from 'electron'
-import { requireSecureCredentialWsBaseUrl } from '@tabtin/config'
+import { requireSecureCredentialWsBaseUrl } from '@muse/config'
 
 import {
   WsGatewayClient as CoreWsGatewayClient,
@@ -9,7 +9,7 @@ import {
   type GatewayRequestOptions,
   type GatewayEnvelope,
   type GatewayClientStatus as CoreGatewayClientStatus
-} from '@tabtin/ws-gateway-client'
+} from '@muse/ws-gateway-client'
 import { configService } from '../services/ConfigService'
 import { DAEMON_CONTROL_ENABLED, WS_BASE_URL } from '../config/api.js'
 import { getOrCreateDeviceCredential } from '../device-credential.js'

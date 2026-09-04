@@ -140,7 +140,7 @@ export function resolveUpdateChannel(options: ResolveUpdateChannelOptions = {}):
 
   return (
     loadPackagedUpdateChannel(options.packageJsonPath) ??
-    normalizeUpdateChannel(env.TABTIN_UPDATE_CHANNEL) ??
+    normalizeUpdateChannel(env.MUSE_UPDATE_CHANNEL) ??
     normalizeUpdateChannel(env.UPDATE_CHANNEL) ??
     options.fallbackChannel ??
     'stable'
@@ -152,7 +152,7 @@ export function resolveDefaultFeedUrl(options: ResolveDefaultFeedUrlOptions = {}
 
   const explicitFeedUrl =
     normalizeFeedUrl(options.updateServerUrl) ??
-    normalizeFeedUrl(env.TABTIN_UPDATE_FEED_URL) ??
+    normalizeFeedUrl(env.MUSE_UPDATE_FEED_URL) ??
     normalizeFeedUrl(env.UPDATE_SERVER_URL)
 
   if (explicitFeedUrl) {

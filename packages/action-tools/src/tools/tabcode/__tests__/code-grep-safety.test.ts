@@ -439,9 +439,9 @@ describe('grep_search safety fixes', () => {
 
   // T2 follow-up B2 (2026-05-12)：默认 --hidden + env override 防御
   // 默认开 `--hidden`
-  describe('T2 follow-up B2: 默认 --hidden + TABTIN_GREP_HIDDEN env 兜底', () => {
+  describe('T2 follow-up B2: 默认 --hidden + MUSE_GREP_HIDDEN env 兜底', () => {
     afterEach(() => {
-      delete process.env.TABTIN_GREP_HIDDEN;
+      delete process.env.MUSE_GREP_HIDDEN;
     });
 
     it('默认 args 含 --hidden（搜 .vscode/.cursor/.env* 等隐藏配置）', async () => {
@@ -456,8 +456,8 @@ describe('grep_search safety fixes', () => {
       expect(args).toContain('--hidden');
     });
 
-    it('TABTIN_GREP_HIDDEN=false 关闭 --hidden（dogfood / CI 兜底）', async () => {
-      process.env.TABTIN_GREP_HIDDEN = 'false';
+    it('MUSE_GREP_HIDDEN=false 关闭 --hidden（dogfood / CI 兜底）', async () => {
+      process.env.MUSE_GREP_HIDDEN = 'false';
       setupExecFileMock('success', '');
 
       await codeGrepTool.execute({
@@ -469,8 +469,8 @@ describe('grep_search safety fixes', () => {
       expect(args).not.toContain('--hidden');
     });
 
-    it('TABTIN_GREP_HIDDEN=0 / no 也关闭（兼容多种 falsy 写法）', async () => {
-      process.env.TABTIN_GREP_HIDDEN = '0';
+    it('MUSE_GREP_HIDDEN=0 / no 也关闭（兼容多种 falsy 写法）', async () => {
+      process.env.MUSE_GREP_HIDDEN = '0';
       setupExecFileMock('success', '');
       await codeGrepTool.execute({
         pattern: 'foo',
@@ -479,7 +479,7 @@ describe('grep_search safety fixes', () => {
       expect((mockedExecFile.mock.calls[0]?.[1] as string[])).not.toContain('--hidden');
 
       vi.clearAllMocks();
-      process.env.TABTIN_GREP_HIDDEN = 'no';
+      process.env.MUSE_GREP_HIDDEN = 'no';
       setupExecFileMock('success', '');
       await codeGrepTool.execute({
         pattern: 'foo',
@@ -526,8 +526,8 @@ describe('grep_search safety fixes', () => {
   // T2-B1 (2026-05-12)：glob_search 底层换 ripgrep --files，规则见 src/utils/glob.ts
   describe('T2-B1: glob_search 使用 ripgrep --files', () => {
     afterEach(() => {
-      delete process.env.TABTIN_GLOB_HIDDEN;
-      delete process.env.TABTIN_GLOB_INCLUDE_IGNORED;
+      delete process.env.MUSE_GLOB_HIDDEN;
+      delete process.env.MUSE_GLOB_INCLUDE_IGNORED;
     });
 
     it('默认 args 含 --files / --hidden，且不传正向 --glob（避免 whitelist .gitignore 文件）', async () => {
@@ -547,8 +547,8 @@ describe('grep_search safety fixes', () => {
       expect(args).toContain('--sort=path'); // NODE_ENV=test 稳定排序
     });
 
-    it('TABTIN_GLOB_HIDDEN=false 关闭 --hidden', async () => {
-      process.env.TABTIN_GLOB_HIDDEN = 'false';
+    it('MUSE_GLOB_HIDDEN=false 关闭 --hidden', async () => {
+      process.env.MUSE_GLOB_HIDDEN = 'false';
       setupExecFileMock('success', 'src/a.ts\n');
 
       await codeGlobTool.execute({
@@ -573,8 +573,8 @@ describe('grep_search safety fixes', () => {
       expect(args).toContain('--no-ignore');
     });
 
-    it('TABTIN_GLOB_INCLUDE_IGNORED=true 同款开启 --no-ignore（dogfood 兜底）', async () => {
-      process.env.TABTIN_GLOB_INCLUDE_IGNORED = 'true';
+    it('MUSE_GLOB_INCLUDE_IGNORED=true 同款开启 --no-ignore（dogfood 兜底）', async () => {
+      process.env.MUSE_GLOB_INCLUDE_IGNORED = 'true';
       setupExecFileMock('success', 'src/a.ts\n');
 
       await codeGlobTool.execute({

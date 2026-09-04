@@ -28,7 +28,7 @@ func requireDriveOrganizationID(ctx *cmdutil.RunContext, body map[string]any) (s
 		orgID = ctx.OrganizationID
 	}
 	if orgID == "" {
-		return "", fmt.Errorf("缺少 organization_id。请先 muse org use <id> 或设置 TABTIN_ORGANIZATION_ID")
+		return "", fmt.Errorf("缺少 organization_id。请先 muse org use <id> 或设置 MUSE_ORGANIZATION_ID")
 	}
 	return orgID, nil
 }

@@ -25,14 +25,14 @@ function saveAuthExpression(payload: E2eAuthPayload): string {
 (async () => {
   const payload = ${JSON.stringify(payload)};
   const selectedSpaceKind = ${JSON.stringify(selectedSpaceKind)};
-  const saveResult = await window.tabtin.auth.save(
+  const saveResult = await window.muse.auth.save(
     payload.accessToken,
     payload.refreshToken,
     payload.userInfo,
     payload.expiresAt,
   );
   if (saveResult && saveResult.success === false) {
-    throw new Error(saveResult.error || 'window.tabtin.auth.save failed');
+    throw new Error(saveResult.error || 'window.muse.auth.save failed');
   }
   localStorage.setItem('tabtin-organization-store', JSON.stringify({
     state: {
@@ -110,7 +110,7 @@ export async function ensureElectronLocalAuth(context: RunContext): Promise<E2eA
     {
       cwd: context.repoRoot,
       timeoutMs: 60000,
-      env: { ...process.env, TABTIN_E2E_RUN_ID: context.runId },
+      env: { ...process.env, MUSE_E2E_RUN_ID: context.runId },
     },
   );
   await context.writeText("logs/chat-message-local-auth-django.log", redactAuthOutput(djangoResult.stdout));

@@ -1,4 +1,4 @@
-import { buildPublicInviteBridgeUrl, resolveApiRuntimeConfig, joinApiPath } from '@tabtin/config'
+import { buildPublicInviteBridgeUrl, resolveApiRuntimeConfig, joinApiPath } from '@muse/config'
 
 const optionalEnv = (value: unknown): string | undefined => {
   if (typeof value !== 'string') return undefined
@@ -13,7 +13,7 @@ const getBrowserOrigin = (): string | undefined => {
 }
 
 const runtimeConfig =
-  typeof window !== 'undefined' ? window.__TABTIN_RUNTIME_CONFIG__ : undefined
+  typeof window !== 'undefined' ? window.__MUSE_RUNTIME_CONFIG__ : undefined
 const runtimeCollabWsBase = optionalEnv(runtimeConfig?.COLLAB_WS_BASE)
 const browserOrigin = getBrowserOrigin()
 
@@ -33,9 +33,9 @@ let _publicWebBaseUrl: string | undefined = resolvedPublicWebBaseUrl
 try {
   const config = resolveApiRuntimeConfig({
     ...(import.meta.env as Record<string, string | undefined>),
-    TABTIN_API_BASE_URL: resolvedApiBaseUrl,
+    MUSE_API_BASE_URL: resolvedApiBaseUrl,
     VITE_API_BASE_URL: resolvedApiBaseUrl,
-    TABTIN_PUBLIC_WEB_BASE_URL: resolvedPublicWebBaseUrl,
+    MUSE_PUBLIC_WEB_BASE_URL: resolvedPublicWebBaseUrl,
     VITE_PUBLIC_WEB_BASE_URL: resolvedPublicWebBaseUrl,
   })
   _apiBaseUrl = config.apiBaseUrl

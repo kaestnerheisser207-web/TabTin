@@ -4,9 +4,9 @@ import {
   type KanbanViewConfig,
   type KanbanViewControllerState as KanbanViewControllerStateBase,
   type UseKanbanViewControllerInput as UseKanbanViewControllerInputBase,
-} from '@tabtin/table-ui'
-import type { RecordFormData } from '@tabtin/smartsheet-ui'
-import type { ViewMeta, ViewRecordsResponse, TableRecord, Field } from '@tabtin/table-core'
+} from '@muse/table-ui'
+import type { RecordFormData } from '@muse/smartsheet-ui'
+import type { ViewMeta, ViewRecordsResponse, TableRecord, Field } from '@muse/table-core'
 
 export interface UseKanbanViewControllerInput
   extends Omit<

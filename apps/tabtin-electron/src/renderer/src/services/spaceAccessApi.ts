@@ -1,4 +1,4 @@
-import { joinApiPath } from '@tabtin/config'
+import { joinApiPath } from '@muse/config'
 import {
   type AvailableToolsResponse,
   type CreateSpaceMembershipRequest,

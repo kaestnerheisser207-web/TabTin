@@ -71,7 +71,7 @@ export function openNativeContextMenu(
   // contract W2-β: utils 层不再直接 import ipcRenderer——委托到 preload `nativeMenu.open`
   // 抽象，preload 内部用 sendIpc + ipcRenderer.on/removeListener 完整管理生命周期，
   // utils 只把 NativeMenuItem 转成 preload 期望的 template + callbacks 形态。
-  const nativeMenu = window.tabtin?.nativeMenu
+  const nativeMenu = window.muse?.nativeMenu
   if (!nativeMenu?.open) {
     log.warn(i18n.t('common:logs.nativeMenuUnavailable'))
     return () => {}

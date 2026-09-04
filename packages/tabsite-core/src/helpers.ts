@@ -6,7 +6,7 @@
 import fs from 'node:fs';
 import fsPromises from 'node:fs/promises';
 import path from 'node:path';
-import { resolveWorkspaceSiteDir } from '@tabtin/terminal-core';
+import { resolveWorkspaceSiteDir } from '@muse/terminal-core';
 import type { CopyDirOptions, DjangoRequestFn, InitTemplateOptions, ProvisionOptions, ProvisionResult } from './types.js';
 
 // ── Path sanitization ────────────────────────────────────
@@ -103,8 +103,8 @@ export function hasValidTokenInEnvFile(content: string): boolean {
   for (const line of content.split('\n')) {
     const trimmed = line.trim();
     if (trimmed.startsWith('#') || !trimmed) continue;
-    if (trimmed.startsWith('VITE_TABTIN_TOKEN=')) {
-      const value = trimmed.slice('VITE_TABTIN_TOKEN='.length).trim();
+    if (trimmed.startsWith('VITE_MUSE_TOKEN=')) {
+      const value = trimmed.slice('VITE_MUSE_TOKEN='.length).trim();
       return value.length > 0;
     }
   }
@@ -131,10 +131,10 @@ export async function provisionTokenAndWriteEnv(
     }
     const envData = tokenResult.data.data;
     const newVars: Record<string, string> = {};
-    if (envData.VITE_TABTIN_API_URL) newVars.VITE_TABTIN_API_URL = envData.VITE_TABTIN_API_URL;
-    if (envData.VITE_TABTIN_TOKEN) newVars.VITE_TABTIN_TOKEN = envData.VITE_TABTIN_TOKEN;
-    if (envData.VITE_TABTIN_SPACE_ID) newVars.VITE_TABTIN_SPACE_ID = envData.VITE_TABTIN_SPACE_ID;
-    if (envData.VITE_TABTIN_TABLE_ID) newVars.VITE_TABTIN_TABLE_ID = envData.VITE_TABTIN_TABLE_ID;
+    if (envData.VITE_MUSE_API_URL) newVars.VITE_MUSE_API_URL = envData.VITE_MUSE_API_URL;
+    if (envData.VITE_MUSE_TOKEN) newVars.VITE_MUSE_TOKEN = envData.VITE_MUSE_TOKEN;
+    if (envData.VITE_MUSE_SPACE_ID) newVars.VITE_MUSE_SPACE_ID = envData.VITE_MUSE_SPACE_ID;
+    if (envData.VITE_MUSE_TABLE_ID) newVars.VITE_MUSE_TABLE_ID = envData.VITE_MUSE_TABLE_ID;
     if (Object.keys(newVars).length > 0) {
       const envPath = path.join(projectPath, '.env.local');
       const existing: Record<string, string> = {};
@@ -155,7 +155,7 @@ export async function provisionTokenAndWriteEnv(
       const lines = Object.entries(merged).map(([k, v]) => `${k}=${v}`);
       await fsPromises.writeFile(envPath, lines.join('\n') + '\n', 'utf-8');
     }
-    const hasNewToken = !!envData.VITE_TABTIN_TOKEN;
+    const hasNewToken = !!envData.VITE_MUSE_TOKEN;
     if (hasNewToken) {
       return {
         tokenProvisioned: true,

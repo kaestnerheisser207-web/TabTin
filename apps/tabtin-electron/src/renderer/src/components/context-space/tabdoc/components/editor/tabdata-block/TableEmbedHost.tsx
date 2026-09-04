@@ -8,7 +8,7 @@ import { RecordStoreProvider } from '@stores/useRecordStore'
 import { EmbedBlockContent } from './EmbedBlockContent'
 import { AlertTriangle, RefreshCw } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
-import { useTabDocTableEmbedRuntime } from '@tabtin/tabdoc-ui'
+import { useTabDocTableEmbedRuntime } from '@muse/tabdoc-ui'
 import { useTableStore } from '@stores/useTableStore'
 import {
   findVerticalScrollContainer,

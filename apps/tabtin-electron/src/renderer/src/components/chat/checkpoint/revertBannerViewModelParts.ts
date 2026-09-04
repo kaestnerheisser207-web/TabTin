@@ -1,4 +1,4 @@
-import type { RollbackApplyLayerStatus, SessionRollbackState } from '@tabtin/chat-client'
+import type { RollbackApplyLayerStatus, SessionRollbackState } from '@muse/chat-client'
 import {
   getRollbackResourceDetailsFromState,
   hasWorkspaceFilesFailure,

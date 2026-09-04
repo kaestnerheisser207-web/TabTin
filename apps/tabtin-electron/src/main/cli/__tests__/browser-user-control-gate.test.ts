@@ -54,8 +54,8 @@ vi.mock('../routes/browser', () => ({
   handleBrowserRoute: mockHandleBrowserRoute,
 }))
 
-vi.mock('@tabtin/cli-server-core', async (importOriginal) => {
-  const actual = await importOriginal<typeof import('@tabtin/cli-server-core')>()
+vi.mock('@muse/cli-server-core', async (importOriginal) => {
+  const actual = await importOriginal<typeof import('@muse/cli-server-core')>()
   return {
     ...actual,
     createSurfaceHttpHandler: mockCreateSurfaceHttpHandler,
@@ -171,8 +171,8 @@ describe('Browser CLI 用户控制 gate', () => {
       response.end(JSON.stringify({ ok: false, source: 'surface' }))
     })
     const socketPath = `/tmp/test-browser-control-surface-${Date.now()}.sock`
-    const previousDevInstance = process.env.TABTIN_DEV_INSTANCE
-    process.env.TABTIN_DEV_INSTANCE = 'task-3-surface-test'
+    const previousDevInstance = process.env.MUSE_DEV_INSTANCE
+    process.env.MUSE_DEV_INSTANCE = 'task-3-surface-test'
 
     try {
       const info = startCLIServer({ socketPath })
@@ -193,9 +193,9 @@ describe('Browser CLI 用户控制 gate', () => {
     } finally {
       await stopCLIServer()
       if (previousDevInstance === undefined) {
-        delete process.env.TABTIN_DEV_INSTANCE
+        delete process.env.MUSE_DEV_INSTANCE
       } else {
-        process.env.TABTIN_DEV_INSTANCE = previousDevInstance
+        process.env.MUSE_DEV_INSTANCE = previousDevInstance
       }
     }
   })

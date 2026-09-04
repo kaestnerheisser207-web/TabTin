@@ -1,4 +1,4 @@
-# @tabtin/table-engine
+# @muse/table-engine
 
 Unified grid engine contracts for Muse table rendering.
 

@@ -30,9 +30,9 @@
  * - system_notice / subagent_progress 等（runtime 元事件，无对应 ChatMessage）
  */
 
-import type { ChatMessage, MessageBlock } from '@tabtin/chat-client'
+import type { ChatMessage, MessageBlock } from '@muse/chat-client'
 import type { ContentBlockEntry } from '@stores/useChatRuntimeStore'
-import type { ContentBlock } from '@tabtin/agent-wire'
+import type { ContentBlock } from '@muse/agent-wire'
 import { applyReplayEnvelopeEventWithHandlers } from './replayEnvelopeHandlers'
 
 interface EnvelopeLine {

@@ -1,6 +1,6 @@
 import { useChatModelStore } from '@/stores/useChatModelStore'
 import { useChatStore } from '@/stores/chat/useChatStore'
-import type { ChatSession } from '@tabtin/chat-client'
+import type { ChatSession } from '@muse/chat-client'
 
 /** 对话结算完成后，仅为实际使用专项点券的模型静默刷新余额。 */
 export function refreshPromotionCreditAfterDone(sessionId: string): void {

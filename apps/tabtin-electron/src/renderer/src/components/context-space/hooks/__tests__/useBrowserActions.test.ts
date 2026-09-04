@@ -3,7 +3,7 @@ import { afterEach, describe, expect, it, vi } from 'vitest'
 import {
   TABDOC_FIND_REQUEST_EVENT,
   type TabDocFindRequestDetail,
-} from '@tabtin/tabdoc-ui/find-request'
+} from '@muse/tabdoc-ui/find-request'
 import type { ContextItem } from '../../registry/types'
 import { useBrowserActions } from '../useBrowserActions'
 

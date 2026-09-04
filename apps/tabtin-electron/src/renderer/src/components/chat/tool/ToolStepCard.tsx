@@ -23,7 +23,7 @@ import {
 import { getToolDisplayName } from '../registry/toolDisplayName'
 import { getCardRenderer } from '../registry/cardRenderers'
 import { resolveIcon } from '../registry/iconMap'
-import { ScrollArea } from '@tabtin/smartsheet-ui'
+import { ScrollArea } from '@muse/smartsheet-ui'
 import {
   CARD_RADIUS,
   CHAT_STEP_TEXT,

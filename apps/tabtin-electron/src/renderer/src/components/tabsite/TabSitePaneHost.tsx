@@ -21,7 +21,7 @@ import {
 import {
   Button, Separator, Tooltip, TooltipContent, TooltipProvider, TooltipTrigger, toast,
   Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, Input, Label,
-} from '@tabtin/smartsheet-ui'
+} from '@muse/smartsheet-ui'
 import { useTranslation } from 'react-i18next'
 import { PaneLoadingSkeleton } from '@components/common/ListSkeletons'
 import { onResourceEvent } from '@/stores/useUnifiedResources'
@@ -174,7 +174,7 @@ const TabSitePaneHost: React.FC<TabSitePaneHostProps> = ({
   useEffect(() => {
     if (!resourceId || devServerCheckedRef.current) return
     devServerCheckedRef.current = true
-    window.tabtin?.tabsite?.getDevServerStatus(resourceId).then((status) => {
+    window.muse?.tabsite?.getDevServerStatus(resourceId).then((status) => {
       if (status?.running && status.url) {
         setDevServerUrl(status.url)
       }
@@ -185,7 +185,7 @@ const TabSitePaneHost: React.FC<TabSitePaneHostProps> = ({
     if (!resourceId || !site?.code_project_path || devServerStarting) return
     setDevServerStarting(true)
     try {
-      const result = await window.tabtin?.tabsite?.startDevServer(resourceId, site.code_project_path)
+      const result = await window.muse?.tabsite?.startDevServer(resourceId, site.code_project_path)
       if (result?.success && result.url) {
         setDevServerUrl(result.url)
         if (result.already_running) {
@@ -213,7 +213,7 @@ const TabSitePaneHost: React.FC<TabSitePaneHostProps> = ({
 
   const handleStopDevServer = useCallback(async () => {
     if (!resourceId) return
-    await window.tabtin?.tabsite?.stopDevServer(resourceId)
+    await window.muse?.tabsite?.stopDevServer(resourceId)
     setDevServerUrl(null)
     toast({ title: t('preview.devServerStopped', { defaultValue: 'Dev server 已停止' }) })
   }, [resourceId, t])
@@ -268,7 +268,7 @@ const TabSitePaneHost: React.FC<TabSitePaneHostProps> = ({
     if (!resourceId || !spaceId || initializing) return
     setInitializing(true)
     try {
-      const result = await window.tabtin?.tabsite?.initTemplate(resourceId, spaceId)
+      const result = await window.muse?.tabsite?.initTemplate(resourceId, spaceId)
       if (result?.success) {
         toast({ title: t('guide.initSuccess', { defaultValue: '项目初始化成功' }) })
 
@@ -312,12 +312,12 @@ const TabSitePaneHost: React.FC<TabSitePaneHostProps> = ({
   const handleLinkDirectory = useCallback(async () => {
     if (!resourceId) return
     try {
-      const paths = await window.tabtin?.showOpenDialog({
+      const paths = await window.muse?.showOpenDialog({
         properties: ['openDirectory'],
       })
       if (!paths || paths.length === 0) return
       const dirPath = paths[0]
-      const dirResult = await window.tabtin?.fileSystem?.readDir(dirPath)
+      const dirResult = await window.muse?.fileSystem?.readDir(dirPath)
       const hasPackageJson = dirResult?.entries?.some((e: { name: string }) => e.name === 'package.json') || false
       if (!hasPackageJson) {
         toast({

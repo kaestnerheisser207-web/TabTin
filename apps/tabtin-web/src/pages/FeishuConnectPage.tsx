@@ -14,7 +14,7 @@ import { LanguageToggle, ThemeToggle } from '@/components/layout/ToolbarWidgets'
 import { getAccessToken } from './shareAuth'
 import { consumeTabtinWebAuthHandoff } from './feishuAuthHandoff'
 
-const FEISHU_RETURN_DEEP_LINK = 'tabtin://integrations/feishu/connected'
+const FEISHU_RETURN_DEEP_LINK = 'muse://integrations/feishu/connected'
 
 type PageState =
   | { type: 'loading' }

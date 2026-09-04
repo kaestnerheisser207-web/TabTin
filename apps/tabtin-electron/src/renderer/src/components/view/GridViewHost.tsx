@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from 'react'
-import { OverlayContainerProvider, cn } from '@tabtin/smartsheet-ui'
+import { OverlayContainerProvider, cn } from '@muse/smartsheet-ui'
 import { DataGridProvider, useDataGridContext } from '@components/table/DataGridContext'
 import { useTableReadonly } from '@components/table/TableReadonlyContext'
 import { GridToolbar } from '@components/table/GridToolbar'

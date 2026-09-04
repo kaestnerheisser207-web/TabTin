@@ -7,7 +7,7 @@
  * 纯识别逻辑（isHtmlUploadFile / htmlTitleFromFileName）无副作用、可单测，
  * 供拖拽拦截、file input accept、宿主 validate 复用，避免各处各写一份正则而漂移。
  */
-import { toast } from '@tabtin/smartsheet-ui'
+import { toast } from '@muse/smartsheet-ui'
 import type { TabDocHtmlUploadPort } from '../ports'
 
 type TranslateFn = (key: string, opts?: Record<string, unknown>) => string

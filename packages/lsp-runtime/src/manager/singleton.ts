@@ -44,7 +44,7 @@ const onInitializedCallbacks: Array<(manager: LSPServerManager) => void> = [];
  * 检查是否禁用 LSP。
  *
  * 双重控制：
- *   1. 环境变量 `TABTIN_DISABLE_LSP=1` —— 运行时禁用（部署/CI 场景）
+ *   1. 环境变量 `MUSE_DISABLE_LSP=1` —— 运行时禁用（部署/CI 场景）
  *   2. 工厂参数 `disabled: true` —— 编程禁用（测试/特定场景）
  *
  *   Muse 没有 bare 模式但需要等价的 escape hatch（如 daemon 单次 RPC 不需要 LSP）。
@@ -52,7 +52,7 @@ const onInitializedCallbacks: Array<(manager: LSPServerManager) => void> = [];
  */
 function isLspDisabled(opts?: { disabled?: boolean }): boolean {
   if (opts?.disabled) return true;
-  return process.env.TABTIN_DISABLE_LSP === '1';
+  return process.env.MUSE_DISABLE_LSP === '1';
 }
 
 /**

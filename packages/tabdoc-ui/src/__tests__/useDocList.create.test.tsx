@@ -25,7 +25,7 @@ vi.mock('react-i18next', () => ({
   }),
 }))
 
-vi.mock('@tabtin/app-host-sdk', () => ({
+vi.mock('@muse/app-host-sdk', () => ({
   useAppHostClient: () => ({}),
 }))
 

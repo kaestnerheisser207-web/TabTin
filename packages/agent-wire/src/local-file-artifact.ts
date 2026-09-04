@@ -22,7 +22,7 @@ export const LocalFileArtifactPayloadSchema = z.object({
   file_type: z.string().min(1),
   relative_path: z.string().min(1),
   filename: z.string().min(1),
-  url: z.string().startsWith('tabtin://resource/file/'),
+  url: z.string().startsWith('muse://resource/file/'),
   mime_type: z.string().min(1),
   file_size: z.number().int().nonnegative(),
   self_check: LocalFileArtifactSelfCheckSchema,

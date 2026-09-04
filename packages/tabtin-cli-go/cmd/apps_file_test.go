@@ -69,7 +69,7 @@ func TestFileCreateRegistersWithoutPanic(t *testing.T) {
 // TestFileGenBinaryName 锁定平台二进制名（PATH 注入 / 打包 filter 依赖它）。
 func TestFileGenBinaryName(t *testing.T) {
 	name := fileGenBinaryName()
-	if name != "tabtin-filegen" && name != "tabtin-filegen.exe" {
+	if name != "muse-filegen" && name != "muse-filegen.exe" {
 		t.Fatalf("unexpected filegen binary name: %q", name)
 	}
 }

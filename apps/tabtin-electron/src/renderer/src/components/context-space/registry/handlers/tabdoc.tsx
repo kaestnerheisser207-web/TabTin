@@ -1,6 +1,6 @@
 import React, { Suspense } from 'react'
 import { FileText } from 'lucide-react'
-import { toast } from '@tabtin/smartsheet-ui'
+import { toast } from '@muse/smartsheet-ui'
 import i18n from '@/i18n'
 import { TabTypeEmoji } from '@components/layout/sidebarTypeEmoji'
 import type { ContextTypeHandler } from '../types'

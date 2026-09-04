@@ -1,11 +1,11 @@
 import fs from 'node:fs'
 import path from 'node:path'
-import { getHomeTabtinPath } from '@tabtin/shared/storage-paths'
+import { getHomeTabtinPath } from '@muse/shared/storage-paths'
 import type {
   CodeWorktreeAgentContext,
   CodeWorktreeController,
   CodeWorktreeControllerResult,
-} from '@tabtin/cli-routes'
+} from '@muse/cli-routes'
 import {
   belongsToSameGitRepository,
   createGitWorktree,

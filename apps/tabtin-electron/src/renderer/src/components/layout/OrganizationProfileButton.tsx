@@ -23,7 +23,7 @@ import {
   DropdownMenuTrigger,
   UserAvatar,
 } from '@components/ui';
-import type { Organization } from '@tabtin/app-shell';
+import type { Organization } from '@muse/app-shell';
 import { cn } from '@utils/cn';
 import { RailIconTooltip } from './activityRailTooltip';
 import {

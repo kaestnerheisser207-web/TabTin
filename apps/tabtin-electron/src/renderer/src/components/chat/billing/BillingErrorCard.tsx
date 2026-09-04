@@ -1,7 +1,7 @@
 import React from 'react'
 import { AlertCircle, Key, RefreshCw } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
-import type { ChatMessage } from '@tabtin/chat-client'
+import type { ChatMessage } from '@muse/chat-client'
 import { isProjectTaskEditAndResendBlocked } from '@/stores/chat/messages/product/delivery/projectTaskSendGate'
 import { BILLING_ERROR_CATEGORIES } from '@utils/chat/billingErrorCategories'
 import { useSettingsSpaceStore } from '../../../stores/useSettingsSpaceStore'

@@ -5,7 +5,7 @@
  * 用户感知「点了毫无反应」。⌘/Ctrl 点击故意走系统应用时不提示。
  */
 
-import type { OpenOutcome } from '@tabtin/resource-router'
+import type { OpenOutcome } from '@muse/resource-router'
 
 export function shouldToastRichResourceOpenFailure(
   outcome: OpenOutcome | null | undefined,

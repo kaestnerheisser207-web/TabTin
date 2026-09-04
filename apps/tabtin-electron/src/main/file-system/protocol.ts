@@ -3,7 +3,7 @@ import fs from 'node:fs'
 import fsPromises from 'node:fs/promises'
 import path from 'node:path'
 import { Readable } from 'node:stream'
-import { resolveSpacesRoot, resolvePlatformDataRoot } from '@tabtin/terminal-core'
+import { resolveSpacesRoot, resolvePlatformDataRoot } from '@muse/terminal-core'
 
 const MIME_BY_EXT: Record<string, string> = {
   '.pdf': 'application/pdf',
@@ -45,7 +45,7 @@ const MIME_BY_EXT: Record<string, string> = {
 }
 
 /**
- * 允许 tabtin-file 协议访问的根目录列表（用户文件用途）。
+ * 允许 muse-file 协议访问的根目录列表（用户文件用途）。
  * 路径遍历攻击防护：解析后的路径必须落在白名单目录内。
  */
 const getAllowedRoots = (): string[] => {
@@ -78,7 +78,7 @@ const getAppResourceRoot = (): string => {
 }
 
 /**
- * 解析 `tabtin-file://app/<resource>` 形式的 URL，映射到 packaged renderer 输出目录。
+ * 解析 `muse-file://app/<resource>` 形式的 URL，映射到 packaged renderer 输出目录。
  *
  * 安全性：
  *   - hostname 必须等于 'app'（其他 hostname 走用户文件分支）
@@ -93,8 +93,8 @@ const resolveAppResourcePath = (rawUrl: string): string | null => {
   // hostname 已由调用方校验为 'app'；这里再防御一次，避免被误用
   if (url.hostname !== 'app') return null
 
-  // tabtin-file://app/index.html → pathname = '/index.html'
-  // tabtin-file://app/             → pathname = '/'，回退到 index.html
+  // muse-file://app/index.html → pathname = '/index.html'
+  // muse-file://app/             → pathname = '/'，回退到 index.html
   let pathname = decodeURIComponent(url.pathname || '/')
   if (pathname === '' || pathname === '/') {
     pathname = '/index.html'
@@ -191,7 +191,7 @@ const parseRange = (rangeHeader: string, size: number) => {
  *
  * - 支持 HTTP Range 请求（用户视频/音频拖动时间轴）
  * - 始终带 `Access-Control-Allow-Origin: *`，因为 packaged renderer origin
- *   是 `tabtin-file://app`，加载用户文件 `tabtin-file:///path` 是跨 origin
+ *   是 `muse-file://app`，加载用户文件 `muse-file:///path` 是跨 origin
  *
  * 所有错误（含 ENOENT / EACCES）都映射为 404 而非 500，避免泄露文件系统信息。
  */
@@ -256,12 +256,12 @@ const respondWithLocalFile = async (
 const registeredSessions = new WeakSet<Session>()
 
 /**
- * 注册 `tabtin-file://` 协议，承担两种用途：
+ * 注册 `muse-file://` 协议，承担两种用途：
  *
  * 1. **Packaged renderer 入口与静态资源**（hostname == 'app'）
- *    - `tabtin-file://app/index.html` → packaged 出口 `out/renderer/index.html`
- *    - `tabtin-file://app/assets/xxx.js` → `out/renderer/assets/xxx.js`
- *    - 让 renderer origin 稳定为 `tabtin-file://app`，Centrifugo / 其他后端可以
+ *    - `muse-file://app/index.html` → packaged 出口 `out/renderer/index.html`
+ *    - `muse-file://app/assets/xxx.js` → `out/renderer/assets/xxx.js`
+ *    - 让 renderer origin 稳定为 `muse-file://app`，Centrifugo / 其他后端可以
  *      把这个 origin 加进 `allowed_origins` 白名单（参见 scripts/backend/centrifugo-dev.json）
  *    - dev 模式下不会走到这里——dev rendererUrl 是 vite dev server，main-window.ts
  *      根据 `isDev` 分流走 `loadURL(http://localhost:5173)`
@@ -277,7 +277,7 @@ export const registerTabtinFileProtocol = (
   registeredSessions.add(targetSession)
 
   const protocol = targetSession.protocol
-  protocol.registerStreamProtocol('tabtin-file', async (request, callback) => {
+  protocol.registerStreamProtocol('muse-file', async (request, callback) => {
     try {
       const url = new URL(request.url)
 

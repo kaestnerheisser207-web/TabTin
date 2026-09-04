@@ -11,7 +11,7 @@ import {
   listDocuments,
   renameVersion,
   restoreHistory,
-} from '@tabtin/tabdoc-ui/api-client'
+} from '@muse/tabdoc-ui/api-client'
 
 function createMockClient(response: unknown) {
   return {

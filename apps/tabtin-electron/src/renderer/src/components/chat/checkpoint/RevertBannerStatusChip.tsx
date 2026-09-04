@@ -1,4 +1,4 @@
-import type { RollbackApplyLayerStatus } from '@tabtin/chat-client'
+import type { RollbackApplyLayerStatus } from '@muse/chat-client'
 import { AlertTriangle, CheckCircle2, Clock3 } from 'lucide-react'
 import type { RevertBannerLayerChip } from './deriveRevertBannerViewModel'
 

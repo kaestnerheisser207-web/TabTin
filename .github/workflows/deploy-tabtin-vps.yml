@@ -24,11 +24,11 @@ concurrency:
   cancel-in-progress: false
 
 env:
-  DJANGO_IMAGE_NAME: ghcr.io/kaestnerheisser207-web/tabtin-community-django
-  WEB_IMAGE_NAME: ghcr.io/kaestnerheisser207-web/tabtin-web
-  COLLAB_IMAGE_NAME: ghcr.io/kaestnerheisser207-web/tabtin-collab-live
-  CLOUD_RUNTIME_IMAGE_NAME: ghcr.io/kaestnerheisser207-web/tabtin-cloud-runtime
-  CLOUD_WORKER_IMAGE_NAME: ghcr.io/kaestnerheisser207-web/tabtin-cloud-worker
+  DJANGO_IMAGE_NAME: ghcr.io/kaestnerheisser207-web/muse-community-django
+  WEB_IMAGE_NAME: ghcr.io/kaestnerheisser207-web/muse-web
+  COLLAB_IMAGE_NAME: ghcr.io/kaestnerheisser207-web/muse-collab-live
+  CLOUD_RUNTIME_IMAGE_NAME: ghcr.io/kaestnerheisser207-web/muse-cloud-runtime
+  CLOUD_WORKER_IMAGE_NAME: ghcr.io/kaestnerheisser207-web/muse-cloud-worker
   RELEASE_SHA: ${{ github.event_name == 'workflow_dispatch' && inputs.release_sha || github.event.pull_request.merge_commit_sha }}
 
 jobs:
@@ -76,8 +76,8 @@ jobs:
           build-args: |
             BASE_IMAGE=python:3.11-slim
             INSTALL_PLAYWRIGHT=true
-            TABTIN_DEV_DEPENDENCY_FINGERPRINT=${{ steps.dependencies.outputs.fingerprint }}
-            TABTIN_SOURCE_SHA=${{ env.RELEASE_SHA }}
+            MUSE_DEV_DEPENDENCY_FINGERPRINT=${{ steps.dependencies.outputs.fingerprint }}
+            MUSE_SOURCE_SHA=${{ env.RELEASE_SHA }}
           cache-from: type=gha,scope=tabtin-community-django
           cache-to: type=gha,mode=max,scope=tabtin-community-django,ignore-error=true
 

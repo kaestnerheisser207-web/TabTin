@@ -23,8 +23,8 @@ const {
   mockAdapterExecuteAction: vi.fn(),
 }))
 
-vi.mock('@tabtin/ws-gateway-client', () => ({}))
-vi.mock('@tabtin/terminal-core', async (importOriginal) => {
+vi.mock('@muse/ws-gateway-client', () => ({}))
+vi.mock('@muse/terminal-core', async (importOriginal) => {
   const actual = await importOriginal<any>()
   return {
     ...actual,
@@ -39,7 +39,7 @@ vi.mock('@tabtin/terminal-core', async (importOriginal) => {
     resolvePlatformDataRoot: vi.fn(() => "/tmp/tabtin-platform-data"),
   }
 })
-vi.mock('@tabtin/security-policy', async (importOriginal) => {
+vi.mock('@muse/security-policy', async (importOriginal) => {
   const actual = await importOriginal<any>()
   return {
     ...actual,
@@ -47,7 +47,7 @@ vi.mock('@tabtin/security-policy', async (importOriginal) => {
   }
 })
 
-vi.mock('@tabtin/action-tools/headless', async (importOriginal) => {
+vi.mock('@muse/action-tools/headless', async (importOriginal) => {
   const actual = await importOriginal<any>()
   return {
     ...actual,
@@ -73,7 +73,7 @@ vi.mock('../src/platform/workspace/checkpoint/CheckpointService.js', () => ({
 import { DaemonActionBridge } from '../src/application/execution/action-bridge.js'
 import { createActionExecutionTestPorts, type ActionExecutionTestPorts } from './helpers/action-execution-ports.js'
 import type { DaemonConfig } from '../src/base/types/daemon-config.js'
-import { createHeadlessAdapter } from '@tabtin/action-tools/headless'
+import { createHeadlessAdapter } from '@muse/action-tools/headless'
 
 function createLogger() {
   return {

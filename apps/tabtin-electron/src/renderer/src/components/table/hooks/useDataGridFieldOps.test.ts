@@ -3,13 +3,13 @@ import { beforeEach, describe, expect, it, vi } from 'vitest'
 
 import { useDataGridFieldOps } from './useDataGridFieldOps'
 
-vi.mock('@tabtin/table-core', () => ({
+vi.mock('@muse/table-core', () => ({
   FieldApiService: {
     createField: vi.fn(),
   },
 }))
 
-vi.mock('@tabtin/smartsheet-ui', () => ({
+vi.mock('@muse/smartsheet-ui', () => ({
   toast: vi.fn(),
 }))
 

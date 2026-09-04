@@ -20,7 +20,7 @@
  */
 
 import type http from 'node:http'
-import { okResponse } from '@tabtin/agent-wire'
+import { okResponse } from '@muse/agent-wire'
 import { getCLIDesktopExecutor, getCLIDesktopGuard } from '../cli-context'
 import { getCurrentSpaceDevicePermissions } from '../cli-space-desktop-cache'
 import { errorResponse, type ErrorCode } from './shared/error-handler'

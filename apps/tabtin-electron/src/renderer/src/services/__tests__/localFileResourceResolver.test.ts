@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from 'vitest'
-import { parseResourcePointer } from '@tabtin/resource-router'
+import { parseResourcePointer } from '@muse/resource-router'
 
 import {
   isAbsoluteLocalPath,
@@ -19,26 +19,26 @@ describe('localFileResourceResolver', () => {
   })
 
   it('识别 tabfiles hint 的 self-format file pointer', () => {
-    const pointer = parseResourcePointer('tabtin://resource/file/artifacts%2Freport.xlsx?hint=tabfiles')
+    const pointer = parseResourcePointer('muse://resource/file/artifacts%2Freport.xlsx?hint=tabfiles')
     expect(shouldResolveAsLocalFile(pointer)).toBe(true)
   })
 
   it('FileRecord UUID / oss_file 不走本地 working_dir 解析 ', () => {
     const fileId = '550e8400-e29b-41d4-a716-446655440000'
     const uuidPointer = parseResourcePointer(
-      `tabtin://resource/file/${fileId}?hint=tabfiles&title=chart.png`,
+      `muse://resource/file/${fileId}?hint=tabfiles&title=chart.png`,
     )
     expect(shouldResolveAsLocalFile(uuidPointer)).toBe(false)
 
     const ossMetaPointer = parseResourcePointer(
-      `tabtin://resource/file/${fileId}?hint=tabfiles`,
+      `muse://resource/file/${fileId}?hint=tabfiles`,
     )
     ossMetaPointer.meta = { artifact_kind: 'oss_file', access_url: 'https://cdn.example.com/x.png' }
     expect(shouldResolveAsLocalFile(ossMetaPointer)).toBe(false)
   })
 
   it('按扩展名识别 json 本地文件 pointer', () => {
-    const pointer = parseResourcePointer('tabtin://resource/file/artifacts%2Fdata.json')
+    const pointer = parseResourcePointer('muse://resource/file/artifacts%2Fdata.json')
     expect(shouldResolveAsLocalFile(pointer)).toBe(true)
   })
 
@@ -50,7 +50,7 @@ describe('localFileResourceResolver', () => {
       size: 1024,
       mtimeMs: 1710000000000,
     })
-    const pointer = parseResourcePointer('tabtin://resource/file/artifacts%2Freport.xlsx?hint=tabfiles')
+    const pointer = parseResourcePointer('muse://resource/file/artifacts%2Freport.xlsx?hint=tabfiles')
 
     const params = await resolveLocalFileResource({
       pointer,
@@ -87,7 +87,7 @@ describe('localFileResourceResolver', () => {
     })
     // %22 = "
     const pointer = parseResourcePointer(
-      'tabtin://resource/file/245TES.f30280.m4a%22?hint=tabfiles',
+      'muse://resource/file/245TES.f30280.m4a%22?hint=tabfiles',
     )
 
     const resolved = await resolveLocalFilePath({
@@ -106,7 +106,7 @@ describe('localFileResourceResolver', () => {
 
   it('每次解析本地文件都会带刷新时间戳，供已打开预览重读', async () => {
     const dateNow = vi.spyOn(Date, 'now').mockReturnValueOnce(1710000000123).mockReturnValueOnce(1710000000456)
-    const pointer = parseResourcePointer('tabtin://resource/file/artifacts%2Freport.xlsx?hint=tabfiles')
+    const pointer = parseResourcePointer('muse://resource/file/artifacts%2Freport.xlsx?hint=tabfiles')
     const pathExists = vi.fn().mockResolvedValue({
       success: true,
       exists: true,
@@ -132,21 +132,21 @@ describe('localFileResourceResolver', () => {
 
   it('拒绝绝对路径', async () => {
     await expect(resolveLocalFileResource({
-      pointer: parseResourcePointer('tabtin://resource/file/%2Ftmp%2Freport.xlsx?hint=tabfiles'),
+      pointer: parseResourcePointer('muse://resource/file/%2Ftmp%2Freport.xlsx?hint=tabfiles'),
       workingDir: '/Users/me/space',
     })).rejects.toThrow('只支持 Agent 工作目录内的相对路径')
   })
 
   it('拒绝路径穿越', async () => {
     await expect(resolveLocalFileResource({
-      pointer: parseResourcePointer('tabtin://resource/file/..%2Freport.xlsx?hint=tabfiles'),
+      pointer: parseResourcePointer('muse://resource/file/..%2Freport.xlsx?hint=tabfiles'),
       workingDir: '/Users/me/space',
     })).rejects.toThrow('文件路径不可用')
   })
 
   it('拒绝临时目录根', async () => {
     await expect(resolveLocalFileResource({
-      pointer: parseResourcePointer('tabtin://resource/file/tmp%2Freport.xlsx?hint=tabfiles'),
+      pointer: parseResourcePointer('muse://resource/file/tmp%2Freport.xlsx?hint=tabfiles'),
       workingDir: '/Users/me/space',
     })).rejects.toThrow('不支持打开临时目录里的本地产物')
   })
@@ -161,21 +161,21 @@ describe('localFileResourceResolver', () => {
     })
 
     const docx = await resolveLocalFileResource({
-      pointer: parseResourcePointer('tabtin://resource/file/artifacts%2Freport.docx?hint=tabfiles'),
+      pointer: parseResourcePointer('muse://resource/file/artifacts%2Freport.docx?hint=tabfiles'),
       workingDir: '/Users/me/space',
       pathExists,
     })
     expect(docx?.meta?.file_type).toBe('docx')
 
     const pdf = await resolveLocalFileResource({
-      pointer: parseResourcePointer('tabtin://resource/file/artifacts%2Fsummary.pdf?hint=tabfiles'),
+      pointer: parseResourcePointer('muse://resource/file/artifacts%2Fsummary.pdf?hint=tabfiles'),
       workingDir: '/Users/me/space',
       pathExists,
     })
     expect(pdf?.meta?.file_type).toBe('pdf')
 
     const pptx = await resolveLocalFileResource({
-      pointer: parseResourcePointer('tabtin://resource/file/artifacts%2Fdeck.pptx?hint=tabfiles'),
+      pointer: parseResourcePointer('muse://resource/file/artifacts%2Fdeck.pptx?hint=tabfiles'),
       workingDir: '/Users/me/space',
       pathExists,
     })
@@ -192,7 +192,7 @@ describe('localFileResourceResolver', () => {
     })
 
     const params = await resolveLocalFileResource({
-      pointer: parseResourcePointer('tabtin://resource/file/artifacts%2Fdata.json?hint=tabfiles'),
+      pointer: parseResourcePointer('muse://resource/file/artifacts%2Fdata.json?hint=tabfiles'),
       workingDir: '/Users/me/space',
       pathExists,
     })
@@ -212,7 +212,7 @@ describe('localFileResourceResolver', () => {
     })
 
     const params = await resolveLocalFileResource({
-      pointer: parseResourcePointer('tabtin://resource/file/artifacts%2Fnotes.txt?hint=tabfiles'),
+      pointer: parseResourcePointer('muse://resource/file/artifacts%2Fnotes.txt?hint=tabfiles'),
       workingDir: '/Users/me/space',
       pathExists,
     })
@@ -232,7 +232,7 @@ describe('localFileResourceResolver', () => {
     })
 
     const params = await resolveLocalFileResource({
-      pointer: parseResourcePointer('tabtin://resource/file/artifacts%2Freport.csv?hint=tabfiles'),
+      pointer: parseResourcePointer('muse://resource/file/artifacts%2Freport.csv?hint=tabfiles'),
       workingDir: '/Users/me/space',
       pathExists,
     })
@@ -252,7 +252,7 @@ describe('localFileResourceResolver', () => {
     })
 
     const svg = await resolveLocalFileResource({
-      pointer: parseResourcePointer('tabtin://resource/file/artifacts%2Fdiagram.svg?hint=tabfiles'),
+      pointer: parseResourcePointer('muse://resource/file/artifacts%2Fdiagram.svg?hint=tabfiles'),
       workingDir: '/Users/me/space',
       pathExists,
     })
@@ -260,7 +260,7 @@ describe('localFileResourceResolver', () => {
     expect(svg?.meta?.absolute_path).toBe('/Users/me/space/artifacts/diagram.svg')
 
     const png = await resolveLocalFileResource({
-      pointer: parseResourcePointer('tabtin://resource/file/artifacts%2Fscreenshot.png?hint=tabfiles'),
+      pointer: parseResourcePointer('muse://resource/file/artifacts%2Fscreenshot.png?hint=tabfiles'),
       workingDir: '/Users/me/space',
       pathExists,
     })
@@ -277,28 +277,28 @@ describe('localFileResourceResolver', () => {
     })
 
     const m4a = await resolveLocalFileResource({
-      pointer: parseResourcePointer('tabtin://resource/file/artifacts%2Fclip.m4a?hint=tabfiles'),
+      pointer: parseResourcePointer('muse://resource/file/artifacts%2Fclip.m4a?hint=tabfiles'),
       workingDir: '/Users/me/space',
       pathExists,
     })
     expect(m4a?.meta?.file_type).toBe('audio')
 
     const mp4 = await resolveLocalFileResource({
-      pointer: parseResourcePointer('tabtin://resource/file/artifacts%2Fdemo.mp4?hint=tabfiles'),
+      pointer: parseResourcePointer('muse://resource/file/artifacts%2Fdemo.mp4?hint=tabfiles'),
       workingDir: '/Users/me/space',
       pathExists,
     })
     expect(mp4?.meta?.file_type).toBe('video')
 
     const yaml = await resolveLocalFileResource({
-      pointer: parseResourcePointer('tabtin://resource/file/artifacts%2Fconfig.yaml?hint=tabfiles'),
+      pointer: parseResourcePointer('muse://resource/file/artifacts%2Fconfig.yaml?hint=tabfiles'),
       workingDir: '/Users/me/space',
       pathExists,
     })
     expect(yaml?.meta?.file_type).toBe('text')
 
     const tsv = await resolveLocalFileResource({
-      pointer: parseResourcePointer('tabtin://resource/file/artifacts%2Ftable.tsv?hint=tabfiles'),
+      pointer: parseResourcePointer('muse://resource/file/artifacts%2Ftable.tsv?hint=tabfiles'),
       workingDir: '/Users/me/space',
       pathExists,
     })
@@ -306,7 +306,7 @@ describe('localFileResourceResolver', () => {
 
     // 最长后缀：.mts 不应被 .ts 吞掉
     const mts = await resolveLocalFileResource({
-      pointer: parseResourcePointer('tabtin://resource/file/artifacts%2Fmod.mts?hint=tabfiles'),
+      pointer: parseResourcePointer('muse://resource/file/artifacts%2Fmod.mts?hint=tabfiles'),
       workingDir: '/Users/me/space',
       pathExists,
     })
@@ -315,7 +315,7 @@ describe('localFileResourceResolver', () => {
 
   it('拒绝非支持格式的本地产物', async () => {
     await expect(resolveLocalFileResource({
-      pointer: parseResourcePointer('tabtin://resource/file/artifacts%2Freport.bin?hint=tabfiles'),
+      pointer: parseResourcePointer('muse://resource/file/artifacts%2Freport.bin?hint=tabfiles'),
       workingDir: '/Users/me/space',
     })).rejects.toThrow(/当前只支持打开 .* 本地产物/)
   })
@@ -330,7 +330,7 @@ describe('localFileResourceResolver', () => {
     })
 
     const resolved = await resolveLocalFilePath({
-      pointer: parseResourcePointer('tabtin://resource/file/artifacts%2Farchive.zip?hint=tabfiles'),
+      pointer: parseResourcePointer('muse://resource/file/artifacts%2Farchive.zip?hint=tabfiles'),
       workingDir: '/Users/me/space',
       pathExists,
     })
@@ -346,14 +346,14 @@ describe('localFileResourceResolver', () => {
 
   it('没有 working_dir 时给出设置工作目录语义', async () => {
     await expect(resolveLocalFileResource({
-      pointer: parseResourcePointer('tabtin://resource/file/artifacts%2Freport.xlsx?hint=tabfiles'),
+      pointer: parseResourcePointer('muse://resource/file/artifacts%2Freport.xlsx?hint=tabfiles'),
       workingDir: '',
     })).rejects.toThrow('需要先设置或创建 Agent 工作目录')
   })
 
   it('文件不存在时给出已删除或不可用语义', async () => {
     await expect(resolveLocalFileResource({
-      pointer: parseResourcePointer('tabtin://resource/file/artifacts%2Fmissing.xlsx?hint=tabfiles'),
+      pointer: parseResourcePointer('muse://resource/file/artifacts%2Fmissing.xlsx?hint=tabfiles'),
       workingDir: '/Users/me/space',
       pathExists: vi.fn().mockResolvedValue({
         success: true,
@@ -364,7 +364,7 @@ describe('localFileResourceResolver', () => {
 
   it('非本地 artifact file id 返回 null，交回旧路由', async () => {
     await expect(resolveLocalFileResource({
-      pointer: parseResourcePointer('tabtin://resource/file/cloud-file-id'),
+      pointer: parseResourcePointer('muse://resource/file/cloud-file-id'),
       workingDir: '/Users/me/space',
     })).resolves.toBeNull()
   })

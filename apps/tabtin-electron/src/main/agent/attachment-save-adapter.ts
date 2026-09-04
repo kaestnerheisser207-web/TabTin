@@ -3,7 +3,7 @@ import * as path from 'node:path'
 import type {
   SaveAttachmentToWorkspaceInput,
   SaveAttachmentToWorkspaceResult,
-} from '@tabtin/agent-host/tools'
+} from '@muse/agent-host/tools'
 import { createLogger } from '../logger.js'
 import { getResourceDownloadService } from '../services/ResourceDownloadService.js'
 

@@ -1,6 +1,6 @@
 import { describe, expect, it, vi } from 'vitest'
 
-vi.mock('@tabtin/browser-core', () => ({
+vi.mock('@muse/browser-core', () => ({
   getCDPConnectionManager: vi.fn(),
 }))
 

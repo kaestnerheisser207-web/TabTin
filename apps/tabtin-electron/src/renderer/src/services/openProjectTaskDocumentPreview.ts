@@ -1,4 +1,4 @@
-import { parseResourcePointer } from '@tabtin/resource-router'
+import { parseResourcePointer } from '@muse/resource-router'
 import { collectSessionArtifacts } from '@/components/chat/turn/turnArtifacts'
 import { useCloudDocumentPreviewStore } from '@/components/chat/preview/useCloudDocumentPreviewStore'
 import { useProjectWorkspaceSelectionStore } from '@/components/layout/projectWorkspaceSelectionStore'

@@ -9,7 +9,7 @@ import React, { useState } from 'react'
 import { Table2, FileText, Columns3, ChevronDown, ChevronRight, ExternalLink, Presentation, Video, Globe2, FolderOpen, FileCode2, Code2, ListChecks, Boxes } from 'lucide-react'
 import { cn } from '@utils/cn'
 import { useTranslation } from 'react-i18next'
-import { ScrollArea } from '@tabtin/smartsheet-ui'
+import { ScrollArea } from '@muse/smartsheet-ui'
 import { getRefSourceLabel } from './contextRefDisplay'
 import { isFileContextRefBlock } from '@utils/chat/fileContextRefBlock'
 

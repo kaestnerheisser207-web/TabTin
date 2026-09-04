@@ -16,12 +16,12 @@ import { useSettingsSpaceStore } from '@stores/useSettingsSpaceStore';
 import { openSpaceSettingsIntent } from '@components/space-settings/spaceSettingsNavigation';
 import { AgentContextMenu } from './AgentContextMenu';
 import { SpaceContextMenu } from './SpaceContextMenu';
-import type { SpaceListItem } from '@tabtin/app-shell';
+import type { SpaceListItem } from '@muse/app-shell';
 import {
   getSpaceNavigationIcon,
   getSpaceNavigationLabel,
   getSpaceVisibilityLabel,
-} from '@tabtin/app-shell';
+} from '@muse/app-shell';
 import { cn } from '@utils/cn';
 import { useWorkbenchSceneStore } from '@/stores/useWorkbenchSceneStore';
 import { usePendingReportStore } from '@/stores/usePendingReportStore';

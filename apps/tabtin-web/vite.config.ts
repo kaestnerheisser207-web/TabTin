@@ -10,7 +10,7 @@ function createChunkDebugPlugin(enabled: boolean): Plugin | null {
     name: 'tabtin-web-chunk-debug',
     generateBundle(_, bundle) {
       const chunkNames = new Set(
-        (process.env.TABTIN_WEB_CHUNK_DEBUG_CHUNKS || 'vendor-echarts,vendor-editor')
+        (process.env.MUSE_WEB_CHUNK_DEBUG_CHUNKS || 'vendor-echarts,vendor-editor')
           .split(',')
           .map((value) => value.trim())
           .filter(Boolean)
@@ -70,10 +70,10 @@ export default defineConfig(async ({ mode }) => {
   const repoRoot = path.resolve(__dirname, '../..')
   const browserShimDir = path.resolve(__dirname, './src/shims/browser')
   const env = loadEnv(mode, repoRoot, '')
-  const chunkDebugEnabled = env.TABTIN_WEB_CHUNK_DEBUG === '1' || process.env.TABTIN_WEB_CHUNK_DEBUG === '1'
+  const chunkDebugEnabled = env.MUSE_WEB_CHUNK_DEBUG === '1' || process.env.MUSE_WEB_CHUNK_DEBUG === '1'
   Object.assign(process.env, env)
 
-  const { resolveApiRuntimeConfig } = await import('@tabtin/config')
+  const { resolveApiRuntimeConfig } = await import('@muse/config')
   const { apiOrigin } = resolveApiRuntimeConfig(env)
   const apiTarget = apiOrigin
 
@@ -88,8 +88,8 @@ export default defineConfig(async ({ mode }) => {
     resolve: {
       alias: [
         { find: '@', replacement: path.resolve(__dirname, './src') },
-        { find: '@tabtin/app-shell', replacement: path.resolve(__dirname, '../../packages/app-shell/src') },
-        { find: '@tabtin/tabdoc-ui/editor/prosemirror.css', replacement: path.resolve(__dirname, '../../packages/tabdoc-ui/src/editor/prosemirror.css') },
+        { find: '@muse/app-shell', replacement: path.resolve(__dirname, '../../packages/app-shell/src') },
+        { find: '@muse/tabdoc-ui/editor/prosemirror.css', replacement: path.resolve(__dirname, '../../packages/tabdoc-ui/src/editor/prosemirror.css') },
         { find: /^assert$/, replacement: path.resolve(browserShimDir, 'assert.cjs') },
         { find: /^fs$/, replacement: path.resolve(browserShimDir, 'fs.cjs') },
         { find: /^path$/, replacement: path.resolve(browserShimDir, 'path.cjs') },
@@ -129,7 +129,7 @@ export default defineConfig(async ({ mode }) => {
     },
     server: {
       // Electron dev 固定 5175（VITE_DEV_SERVER_PORT）；公开分享页走 tabtin-web，避免同端口抢路由。
-      port: parseInt(env.VITE_TABTIN_WEB_DEV_PORT || '5176', 10),
+      port: parseInt(env.VITE_MUSE_WEB_DEV_PORT || '5176', 10),
       strictPort: true,
       host: '127.0.0.1',
       proxy: {

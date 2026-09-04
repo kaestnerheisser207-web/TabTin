@@ -96,7 +96,7 @@ class TestViewDeclaredPolicyWins:
         """视图声明 csp_override 时其 CSP 原样保留，不被默认的 frame-ancestors 'none' 顶掉。"""
         request = factory.get("/api/services/oss/local-object", {"object_key": "tabdoc/html/demo.html"})
         response = HttpResponse("<html></html>", content_type="text/html; charset=utf-8")
-        view_csp = "sandbox allow-scripts; frame-ancestors tabtin-file:"
+        view_csp = "sandbox allow-scripts; frame-ancestors muse-file:"
         response["Content-Security-Policy"] = view_csp
         response.csp_override = True
         response = middleware.process_response(request, response)

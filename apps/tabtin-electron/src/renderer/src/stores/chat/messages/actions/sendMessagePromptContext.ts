@@ -1,13 +1,13 @@
-import type { ChatMessage } from '@tabtin/chat-client'
-import type { AgentConfig as AgentConfigV2 } from '@tabtin/app-shell'
-// leaf 子路径：禁止经 @tabtin/agent-prompt / runtime 根 barrel（会拖入 node:crypto，）
-import { buildUserContextWrapper } from '@tabtin/agent-runtime/engine/user-context-wrapper'
+import type { ChatMessage } from '@muse/chat-client'
+import type { AgentConfig as AgentConfigV2 } from '@muse/app-shell'
+// leaf 子路径：禁止经 @muse/agent-prompt / runtime 根 barrel（会拖入 node:crypto，）
+import { buildUserContextWrapper } from '@muse/agent-runtime/engine/user-context-wrapper'
 import {
   selectRecentHistoryForRuntime,
   isCrossTurnMemoryEnabled,
   DEFAULT_MAX_HISTORY_MESSAGES,
   type HistorySourceMessage,
-} from '@tabtin/agent-runtime/history'
+} from '@muse/agent-runtime/history'
 import { resolveComposerPresetPrompt } from './composerPresetPrompt'
 import { resolveContextBlocks } from './contextBlockResolution'
 import { createViteEnvReader } from './sendDispatchInputs'

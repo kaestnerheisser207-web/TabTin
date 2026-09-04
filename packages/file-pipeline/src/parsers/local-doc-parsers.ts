@@ -1,5 +1,5 @@
 /**
- * Pdf/Docx/XlsxParser — 共享 `@tabtin/local-docparse` worker pool 调度
+ * Pdf/Docx/XlsxParser — 共享 `@muse/local-docparse` worker pool 调度
  *
  * **设计取舍**：这三种 parser 实现高度同构（都是"FileSource → mime →
  * parseLocalAttachment（worker dispatch）→ ResolveResult"），共用一个 helper
@@ -17,11 +17,11 @@
 
 import {
   FilePipelineErrorCode,
-} from '@tabtin/file-pipeline-errors';
+} from '@muse/file-pipeline-errors';
 import type {
   LocalDocParseResult,
   RunDocParserTask,
-} from '@tabtin/local-docparse';
+} from '@muse/local-docparse';
 import type {
   FileParser,
   FileSource,
@@ -33,14 +33,14 @@ import type {
   ErrorResult,
 } from '../types.js';
 
-// W4 测试可观察性：用 dynamic import 让 vitest `vi.mock('@tabtin/local-docparse')`
+// W4 测试可观察性：用 dynamic import 让 vitest `vi.mock('@muse/local-docparse')`
 // 在 mock-hoist 时刻能跨包拦截到（顶层 static import 在 pnpm workspace symlink
 // 路径下不被 vitest module graph hook 命中，hoist 失效——dynamic import 走
 // require-on-call 路径，每次都过 hook，mock 100% 生效）。
 async function getParseLocalAttachment(): Promise<
-  typeof import('@tabtin/local-docparse').parseLocalAttachment
+  typeof import('@muse/local-docparse').parseLocalAttachment
 > {
-  const mod = await import('@tabtin/local-docparse');
+  const mod = await import('@muse/local-docparse');
   return mod.parseLocalAttachment;
 }
 

@@ -115,7 +115,7 @@ describe('Router D2 priority layers', () => {
         { appId: 'tabdata', types: [{ type: 'table', priority: 100 }] },
       ],
     })
-    const pointer = parseResourcePointer('tabtin://resource/table/tbl_abc')
+    const pointer = parseResourcePointer('muse://resource/table/tbl_abc')
     const out = await router.open('space_x', pointer)
     expect(out.outcome).toBe('in_space_opened')
     expect(out.carrierAppId).toBe('tabdata')
@@ -133,7 +133,7 @@ describe('Router D2 priority layers', () => {
         { appId: 'tabdata', types: [{ type: 'table', priority: 100 }] },
       ],
     })
-    const pointer = parseResourcePointer('tabtin://resource/table/tbl_register')
+    const pointer = parseResourcePointer('muse://resource/table/tbl_register')
     const out = await router.open('space_x', pointer, {
       tabScopeKey: 'conversation:session-1',
       registerOnly: true,
@@ -190,9 +190,9 @@ describe('Router D2 priority layers', () => {
       ],
     })
 
-    // 自有格式轨：tabtin://resource/webpage/<encoded url>?hint=tabweb
+    // 自有格式轨：muse://resource/webpage/<encoded url>?hint=tabweb
     const selfPointer = parseResourcePointer(
-      'tabtin://resource/webpage/https%3A%2F%2Fexample.com?hint=tabweb',
+      'muse://resource/webpage/https%3A%2F%2Fexample.com?hint=tabweb',
     )
     const selfOut = await router.open('space_x', selfPointer)
     expect(selfOut.outcome).toBe('in_space_opened')
@@ -229,7 +229,7 @@ describe('Router D2 priority layers', () => {
 
     const selfOut = await router.open(
       'space_x',
-      parseResourcePointer('tabtin://resource/webpage/https%3A%2F%2Fa.b'),
+      parseResourcePointer('muse://resource/webpage/https%3A%2F%2Fa.b'),
     )
     expect(selfOut.carrierAppId).toBe('tabcode')
     expect(selfOut.resolveSource).toBe('user_pref')
@@ -252,7 +252,7 @@ describe('Router D2 priority layers', () => {
         { appId: 'tabdoc', types: [{ type: 'document', priority: 100 }] },
       ],
     })
-    const pointer = parseResourcePointer('tabtin://resource/document/doc_x?hint=tabdoc')
+    const pointer = parseResourcePointer('muse://resource/document/doc_x?hint=tabdoc')
     const out = await router.open('space_x', pointer)
     expect(out.carrierAppId).toBe('tabdoc')
     expect(out.resolveSource).toBe('agent_hint')
@@ -268,7 +268,7 @@ describe('Router D2 priority layers', () => {
         { appId: 'tabweb', types: [{ type: 'document', priority: 50 }] },
       ],
     })
-    const pointer = parseResourcePointer('tabtin://resource/document/doc_x?hint=tabdoc')
+    const pointer = parseResourcePointer('muse://resource/document/doc_x?hint=tabdoc')
     const out = await router.open('space_x', pointer)
     expect(out.carrierAppId).toBe('tabweb')
     expect(out.resolveSource).toBe('user_pref')
@@ -282,7 +282,7 @@ describe('Router D2 priority layers', () => {
         { appId: 'tabdoc', types: [{ type: 'document', priority: 100 }] },
       ],
     })
-    const pointer = parseResourcePointer('tabtin://resource/document/doc_x?hint=tabdoc')
+    const pointer = parseResourcePointer('muse://resource/document/doc_x?hint=tabdoc')
     const result = router.resolve(pointer, {
       spaceId: 'space_x',
       sessionOverride: {
@@ -347,7 +347,7 @@ describe('Router robustness', () => {
     })
     // hint=tabXX 不存在 → 该候选被剔除；manifest_default tabdoc 接管
     const pointer = parseResourcePointer(
-      'tabtin://resource/document/doc_x?hint=tabXX',
+      'muse://resource/document/doc_x?hint=tabXX',
     )
     const out = await router.open('space_x', pointer)
     expect(out.outcome).toBe('in_space_opened')
@@ -386,7 +386,7 @@ describe('Router robustness', () => {
         { appId: 'tabdoc', types: [{ type: 'document', priority: 100 }] },
       ],
     })
-    const pointer = parseResourcePointer('tabtin://resource/document/doc_x')
+    const pointer = parseResourcePointer('muse://resource/document/doc_x')
     const out = await router.open('space_x', pointer, {
       forceCarrierAppId: 'tabweb', // 用户右键"用 tabweb 打开"
     })
@@ -409,7 +409,7 @@ describe('Router robustness', () => {
       ],
     })
     const pointer = parseResourcePointer(
-      'tabtin://resource/document/doc_x?hint=tabdoc',
+      'muse://resource/document/doc_x?hint=tabdoc',
     )
     const out = await router.open('space_x', pointer, {
       forceCarrierAppId: 'tabweb',
@@ -428,7 +428,7 @@ describe('Router robustness', () => {
         throw new Error('boom')
       },
     })
-    const pointer = parseResourcePointer('tabtin://resource/table/tbl_abc')
+    const pointer = parseResourcePointer('muse://resource/table/tbl_abc')
     const out = await router.open('space_x', pointer)
     expect(out.outcome).toBe('error')
     expect(out.errorMessage).toBe('boom')
@@ -476,7 +476,7 @@ describe('Router local file resource resolver', () => {
       localFileResolver,
     })
 
-    const pointer = parseResourcePointer('tabtin://resource/file/artifacts%2Freport.xlsx?hint=tabfiles')
+    const pointer = parseResourcePointer('muse://resource/file/artifacts%2Freport.xlsx?hint=tabfiles')
     const out = await router.open('space_x', pointer)
 
     expect(out.outcome).toBe('in_space_opened')
@@ -515,7 +515,7 @@ describe('Router local file resource resolver', () => {
       localFileResolver,
     })
 
-    const pointer = parseResourcePointer('tabtin://resource/file/artifacts%2Freport.xlsx?hint=tabfiles')
+    const pointer = parseResourcePointer('muse://resource/file/artifacts%2Freport.xlsx?hint=tabfiles')
     const out = await router.open('space_x', pointer)
 
     expect(out.outcome).toBe('in_space_opened')
@@ -544,7 +544,7 @@ describe('Router local file resource resolver', () => {
       localFileResolver,
     })
 
-    const pointer = parseResourcePointer('tabtin://resource/file/artifacts%2Freport.xlsx?hint=tabfiles')
+    const pointer = parseResourcePointer('muse://resource/file/artifacts%2Freport.xlsx?hint=tabfiles')
     const out = await router.open('space_x', pointer)
 
     expect(out.outcome).toBe('error')
@@ -562,7 +562,7 @@ describe('Router local file resource resolver', () => {
       localFileResolver: () => null,
     })
 
-    const pointer = parseResourcePointer('tabtin://resource/file/cloud-file-id?hint=tabfiles')
+    const pointer = parseResourcePointer('muse://resource/file/cloud-file-id?hint=tabfiles')
     const out = await router.open('space_x', pointer)
 
     expect(out.outcome).toBe('in_space_opened')
@@ -588,7 +588,7 @@ describe('preference key isolation', () => {
         { appId: 'tabdata', types: [{ type: 'table', priority: 100 }] },
       ],
     })
-    const tablePointer = parseResourcePointer('tabtin://resource/table/tbl_a')
+    const tablePointer = parseResourcePointer('muse://resource/table/tbl_a')
     const out = await router.open('space_x', tablePointer)
     expect(out.carrierAppId).toBe('tabdata')
     expect(out.resolveSource).toBe('manifest_default')
@@ -605,7 +605,7 @@ describe('preference key isolation', () => {
   })
 
   it('preferenceKeyOf returns null for self-format with missing type', () => {
-    expect(preferenceKeyOf(parseResourcePointer('tabtin://resource/'))).toBeNull()
+    expect(preferenceKeyOf(parseResourcePointer('muse://resource/'))).toBeNull()
   })
 })
 
@@ -629,7 +629,7 @@ describe('resolve invariants', () => {
       ],
     })
     const result = router.resolve(
-      parseResourcePointer('tabtin://resource/table/tbl_x'),
+      parseResourcePointer('muse://resource/table/tbl_x'),
       { spaceId: 's' },
     )
     expect(result.chosen).toBe(result.candidates[0])
@@ -659,7 +659,7 @@ describe('W4 preferenceStore.getSessionOverride integration', () => {
         { appId: 'tabdoc', types: [{ type: 'document', priority: 100 }] },
       ],
     })
-    const pointer = parseResourcePointer('tabtin://resource/document/doc_x')
+    const pointer = parseResourcePointer('muse://resource/document/doc_x')
     const out = await router.open('space_x', pointer) // 不传 forceCarrierAppId
     expect(out.outcome).toBe('in_space_opened')
     expect(out.carrierAppId).toBe('tabweb')
@@ -678,7 +678,7 @@ describe('W4 preferenceStore.getSessionOverride integration', () => {
         { appId: 'tabdoc', types: [{ type: 'document', priority: 100 }] },
       ],
     })
-    const pointer = parseResourcePointer('tabtin://resource/document/doc_x')
+    const pointer = parseResourcePointer('muse://resource/document/doc_x')
     const out = await router.open('space_x', pointer, {
       forceCarrierAppId: 'tabcode',
     })
@@ -697,7 +697,7 @@ describe('W4 preferenceStore.getSessionOverride integration', () => {
         { appId: 'tabdoc', types: [{ type: 'document', priority: 100 }] },
       ],
     })
-    const pointer = parseResourcePointer('tabtin://resource/document/doc_x')
+    const pointer = parseResourcePointer('muse://resource/document/doc_x')
     const out = await router.open('space_x', pointer)
     expect(out.carrierAppId).toBe('tabcode')
     expect(out.resolveSource).toBe('user_pref')
@@ -715,7 +715,7 @@ describe('W4 preferenceStore.getSessionOverride integration', () => {
         { appId: 'tabweb', types: [{ type: 'document', priority: 50 }] }, // manifest 注册了但 handler 缺
       ],
     })
-    const pointer = parseResourcePointer('tabtin://resource/document/doc_x')
+    const pointer = parseResourcePointer('muse://resource/document/doc_x')
     const out = await router.open('space_x', pointer)
     expect(out.outcome).toBe('in_space_opened')
     expect(out.carrierAppId).toBe('tabdoc') // 降级到 manifest_default
@@ -734,7 +734,7 @@ describe('W4 preferenceStore.getSessionOverride integration', () => {
         { appId: 'tabdoc', types: [{ type: 'document', priority: 100 }] },
       ],
     })
-    const pointer = parseResourcePointer('tabtin://resource/document/doc_x')
+    const pointer = parseResourcePointer('muse://resource/document/doc_x')
     const out = await router.open('space_x', pointer)
     expect(out.carrierAppId).toBe('tabdoc')
     expect(out.resolveSource).toBe('manifest_default')
@@ -763,7 +763,7 @@ describe('W4 preferenceStore.getSessionOverride integration', () => {
       },
       registry,
     )
-    const pointer = parseResourcePointer('tabtin://resource/document/doc_x')
+    const pointer = parseResourcePointer('muse://resource/document/doc_x')
     const out = await router.open('space_x', pointer)
     expect(out.outcome).toBe('in_space_opened')
     expect(out.carrierAppId).toBe('tabdoc')
@@ -796,7 +796,7 @@ describe('telemetry events', () => {
         { appId: 'tabdata', types: [{ type: 'table', priority: 100 }] },
       ],
     })
-    await router.open('space_x', parseResourcePointer('tabtin://resource/table/tbl_a'))
+    await router.open('space_x', parseResourcePointer('muse://resource/table/tbl_a'))
     expect(collector.events).toHaveLength(1)
     const e = collector.events[0]!
     expect(e.event_name).toBe('resource_open.resolved')
@@ -828,7 +828,7 @@ describe('telemetry events', () => {
     ;(router as any).deps.emitEvent = () => {
       throw new Error('telemetry pipe down')
     }
-    const out = await router.open('s', parseResourcePointer('tabtin://resource/table/x'))
+    const out = await router.open('s', parseResourcePointer('muse://resource/table/x'))
     expect(out.outcome).toBe('in_space_opened')
   })
 })

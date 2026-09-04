@@ -1,4 +1,4 @@
-import type { ChatMessage } from '@tabtin/chat-client'
+import type { ChatMessage } from '@muse/chat-client'
 
 export const buildCheckpointMapFromMessages = (messages: ChatMessage[]): Record<string, string> => {
   const result: Record<string, string> = {}

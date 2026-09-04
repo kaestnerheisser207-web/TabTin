@@ -1,13 +1,13 @@
 /**
  * /fetch — 轻量 HTTP fetch + 内容抽取。
  *
- * 委托 @tabtin/action-tools/headless 的 executeFetchPipeline。
+ * 委托 @muse/action-tools/headless 的 executeFetchPipeline。
  * Electron / Daemon 行为完全一致；不依赖宿主特有能力。
  */
 
 import type { ServerResponse } from 'node:http';
-import { errorResponse, okResponse, type SendJSON } from '@tabtin/cli-server-core';
-import { executeFetchPipeline } from '@tabtin/action-tools/headless';
+import { errorResponse, okResponse, type SendJSON } from '@muse/cli-server-core';
+import { executeFetchPipeline } from '@muse/action-tools/headless';
 
 function isSafeUrl(url: string): boolean {
   try {

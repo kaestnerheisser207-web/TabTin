@@ -100,7 +100,7 @@ const _liveAttaches = new Map<string, LiveAttach>()
 
 function callUnwatch(sessionId: string): void {
   try {
-    void Promise.resolve(window.tabtin?.agentEngine?.unwatchSession?.(sessionId)).catch((err) => {
+    void Promise.resolve(window.muse?.agentEngine?.unwatchSession?.(sessionId)).catch((err) => {
       log.warn('unwatchSession failed (non-blocking)', {
         sessionId: sessionId.slice(0, 8),
         err,
@@ -140,7 +140,7 @@ function requestWatch(sessionId: string, live: LiveAttach): void {
   ) {
     return
   }
-  const watchSession = window.tabtin?.agentEngine?.watchSession
+  const watchSession = window.muse?.agentEngine?.watchSession
   if (!watchSession) {
     live.watchAttempts += 1
     log.warn('watchSession bridge unavailable; scheduling retry', {
@@ -218,7 +218,7 @@ function createLiveAttach(
   // 优先使用调用方（同模块 SessionController）已建好的 handle，避免
   // 动态 import 下 index 双实例时 hub 建在错误的 _streamHubs 上。
   const handle = existingHandle ?? getSessionController(sessionId).attachStream(deps)
-  const unsub = window.tabtin?.agentEngine?.onStreamEvent?.(
+  const unsub = window.muse?.agentEngine?.onStreamEvent?.(
     (data) => handle.dispatch(data as unknown as IpcStreamEnvelope<AgentStreamMessage>),
   )
   const live: LiveAttach = {
@@ -243,7 +243,7 @@ function createLiveAttach(
 
 function ensureIpcListener(sessionId: string, live: LiveAttach): void {
   if (live.unsub) return
-  live.unsub = window.tabtin?.agentEngine?.onStreamEvent?.(
+  live.unsub = window.muse?.agentEngine?.onStreamEvent?.(
     (data) => live.handle.dispatch(data as unknown as IpcStreamEnvelope<AgentStreamMessage>),
   )
   if (!live.unsub) {

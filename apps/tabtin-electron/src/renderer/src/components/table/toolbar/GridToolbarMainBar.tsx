@@ -1,13 +1,13 @@
 /**
- * Electron GridToolbarMainBar — thin wrapper around @tabtin/table-ui shared component.
+ * Electron GridToolbarMainBar — thin wrapper around @muse/table-ui shared component.
  * Injects Electron-specific ViewFilterGroupBar as a slot.
  */
 import React from 'react'
 import {
   GridToolbarMainBar as SharedGridToolbarMainBar,
   type GridToolbarMainBarProps as SharedProps,
-} from '@tabtin/table-ui'
-import type { Field } from '@tabtin/table-core'
+} from '@muse/table-ui'
+import type { Field } from '@muse/table-core'
 import type { TableFontStyle, TableFontWeight, TableFontSize } from '@stores/useUIStore'
 import { ViewFilterGroupBar } from '@/components/view/ViewFilterGroupBar'
 import type { DataGridSearchScope } from '../DataGridContext'

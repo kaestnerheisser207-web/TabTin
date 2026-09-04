@@ -20,7 +20,7 @@ from apps.tabdoc.services.share_service import DocumentShareService
 
 TABDOC_DB = (
     "default"
-    if getattr(settings, "TABTIN_SINGLE_DATABASE_MODE", False)
+    if getattr(settings, "MUSE_SINGLE_DATABASE_MODE", False)
     else "postgresql"
 )
 
@@ -114,7 +114,7 @@ def _clone_json_tree(value):
 
 
 def _stable_file_id_from_src(src: str) -> UUID | None:
-    prefix = "tabtin-file://asset/"
+    prefix = "muse-file://asset/"
     normalized = (src or "").strip()
     if not normalized.startswith(prefix):
         return None

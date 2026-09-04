@@ -19,13 +19,13 @@ describe('useBookmarkStore · storage-manager 接入', () => {
   beforeEach(async () => {
     localStorage.clear()
     vi.resetModules()
-    const sm = await import('@tabtin/storage-manager')
+    const sm = await import('@muse/storage-manager')
     sm.__resetForTesting()
   })
 
   it('store 模块加载后 browser:bookmarks 已注册，字段符合 W2.2 G3 规范', async () => {
     await import('../useBookmarkStore')
-    const sm = await import('@tabtin/storage-manager')
+    const sm = await import('@muse/storage-manager')
 
     const bucket = sm.getBucket('browser:bookmarks')
     expect(bucket).toBeDefined()
@@ -39,7 +39,7 @@ describe('useBookmarkStore · storage-manager 接入', () => {
 
   it('exportFn 产出含 metadata + 书签数组的 JSON（W3.3 增强）', async () => {
     const { useBookmarkStore } = await import('../useBookmarkStore')
-    const sm = await import('@tabtin/storage-manager')
+    const sm = await import('@muse/storage-manager')
 
     useBookmarkStore.getState().addBookmark('https://example.com/a', 'A 示例')
     useBookmarkStore.getState().addBookmark('https://example.com/b', 'B 示例')
@@ -74,7 +74,7 @@ describe('useBookmarkStore · storage-manager 接入', () => {
 
   it('clearFn 支持按 itemIds 部分清理', async () => {
     const { useBookmarkStore } = await import('../useBookmarkStore')
-    const sm = await import('@tabtin/storage-manager')
+    const sm = await import('@muse/storage-manager')
 
     useBookmarkStore.getState().addBookmark('https://example.com/a', 'A')
     useBookmarkStore.getState().addBookmark('https://example.com/b', 'B')
@@ -96,7 +96,7 @@ describe('useBookmarkStore · storage-manager 接入', () => {
 
   it('clearFn 不带 itemIds 时全清', async () => {
     const { useBookmarkStore } = await import('../useBookmarkStore')
-    const sm = await import('@tabtin/storage-manager')
+    const sm = await import('@muse/storage-manager')
 
     useBookmarkStore.getState().addBookmark('https://example.com/a', 'A')
     useBookmarkStore.getState().addBookmark('https://example.com/b', 'B')
@@ -109,7 +109,7 @@ describe('useBookmarkStore · storage-manager 接入', () => {
 
   it('clearFn dryRun 不改状态', async () => {
     const { useBookmarkStore } = await import('../useBookmarkStore')
-    const sm = await import('@tabtin/storage-manager')
+    const sm = await import('@muse/storage-manager')
 
     useBookmarkStore.getState().addBookmark('https://example.com/a', 'A')
     useBookmarkStore.getState().addBookmark('https://example.com/b', 'B')

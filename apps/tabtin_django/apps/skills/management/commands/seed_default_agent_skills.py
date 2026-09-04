@@ -60,7 +60,7 @@ class Command(BaseCommand):
         if app_n == 0:
             self.stdout.write(
                 self.style.WARNING(
-                    "list_app_skills() 仍为 0——请先确认 TABTIN_REPO_ROOT / packages/apps 布局"
+                    "list_app_skills() 仍为 0——请先确认 MUSE_REPO_ROOT / packages/apps 布局"
                 )
             )
 

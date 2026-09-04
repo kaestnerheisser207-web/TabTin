@@ -15,8 +15,8 @@ import {
   createRuntime,
   EventEmitter,
   type StreamEvent,
-} from '@tabtin/agent-runtime'
-import type { EngineConfig } from '@tabtin/agent-runtime/engine'
+} from '@muse/agent-runtime'
+import type { EngineConfig } from '@muse/agent-runtime/engine'
 import { DeliveryBatchBuffer, type DeliveryTransport } from '../src/delivery/delivery-batch-buffer.js';
 import {
   createMockProvider,

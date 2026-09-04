@@ -1,5 +1,5 @@
 import { useChatStore } from '@/stores/chat/useChatStore'
-import { toast } from '@tabtin/smartsheet-ui'
+import { toast } from '@muse/smartsheet-ui'
 import { createLogger } from '@/utils/logger'
 import { getBusySessionIds } from '@/stores/chat/execution/sessionRunProjection'
 import {
@@ -22,7 +22,7 @@ function delay(ms: number): Promise<void> {
 }
 
 function listBusySessions(): Promise<BusySession[]> {
-  return window.tabtin.agentEngine.getState().then((state) => {
+  return window.muse.agentEngine.getState().then((state) => {
     if (state.busySessions !== undefined) {
       if (state.busy && state.busySessions.length === 0) {
         throw new Error('Local Agent runtime is busy but did not return session identifiers')
@@ -57,7 +57,7 @@ function describeSessions(sessions: BusySession[]): BusyAgentSessionSummary[] {
 
 async function waitUntilIdle(sessionId: string, deadline: number): Promise<boolean> {
   while (Date.now() < deadline) {
-    const state = await window.tabtin.agentEngine.getState({ sessionId })
+    const state = await window.muse.agentEngine.getState({ sessionId })
     if (!state.busy) return true
     await delay(STOP_POLL_INTERVAL_MS)
   }
@@ -80,10 +80,10 @@ async function stopBusySessions(previouslyBusySessions: BusySession[]): Promise<
   })
   while (pendingSessions.length > 0 && Date.now() < deadline) {
     for (const session of pendingSessions) {
-      const current = await window.tabtin.agentEngine.getState({ sessionId: session.sessionId })
+      const current = await window.muse.agentEngine.getState({ sessionId: session.sessionId })
       if (!current.busy) continue
 
-      const result = await window.tabtin.agentEngine.abortRun(session.sessionId)
+      const result = await window.muse.agentEngine.abortRun(session.sessionId)
       if (!result.localHit && !result.remoteRequested) {
         log.warn('Agent context switch could not request run abort', {
           sessionId: session.sessionId.slice(0, 8),

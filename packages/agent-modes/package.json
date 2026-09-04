@@ -1,5 +1,5 @@
 {
-  "name": "@tabtin/agent-modes",
+  "name": "@muse/agent-modes",
   "version": "0.1.0",
   "description": "Agent Mode SSoT — mode definitions, tool policies, prompt sections, and cross-runtime contract",
   "type": "module",

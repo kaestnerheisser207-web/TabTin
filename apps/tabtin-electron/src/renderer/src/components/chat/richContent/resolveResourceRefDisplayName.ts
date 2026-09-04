@@ -1,5 +1,5 @@
-import type { RichContentBlock } from '@tabtin/chat-client'
-import { parseResourcePointer } from '@tabtin/resource-router'
+import type { RichContentBlock } from '@muse/chat-client'
+import { parseResourcePointer } from '@muse/resource-router'
 import { basename } from '../registry/toolCardUtils'
 
 const PATH_BASED_RESOURCE_TYPES = new Set([

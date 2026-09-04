@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
-import type { Table } from '@tabtin/table-core'
+import type { Table } from '@muse/table-core'
 
 const LOADING_TIMEOUT_MS = 3_000
 

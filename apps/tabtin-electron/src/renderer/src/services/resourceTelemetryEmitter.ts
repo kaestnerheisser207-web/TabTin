@@ -5,7 +5,7 @@
  *   ResourceRouter.emitEvent(event)
  *     → createResourceTelemetryEmitter() 返回的函数
  *     → 从 useAuthStore + useOrganizationStore 注入 user_id / organization_id
- *     → window.tabtin.resourceTelemetry.emit(event)（preload IPC）
+ *     → window.muse.resourceTelemetry.emit(event)（preload IPC）
  *     → main 进程 telemetry queue + 5s flush + HTTP POST + 重试 + 死信
  *
  * 设计取向：
@@ -31,7 +31,7 @@
  *    边角情况，本期不上报；W8 验收 SQL 排查时不会看到孤立 user_id=''。
  */
 
-import type { ResourceOpenEvent } from '@tabtin/resource-router'
+import type { ResourceOpenEvent } from '@muse/resource-router'
 import { useAuthStore } from '@/stores/useAuthStore'
 import { useOrganizationStore } from '@/stores/useOrganizationStore'
 import { logger } from '@/utils/logger'

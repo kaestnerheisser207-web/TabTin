@@ -633,7 +633,7 @@ function normalizeBoundaryComparablePath(p: string): string {
  * 通用判定函数（与 `isInWorkspace` 共享同一份实现）。
  *
  * 给那些已经从 `WorkspaceSnapshot` 取出 `string[]` 的调用方使用，
- * 典型如 `@tabtin/action-tools` 的 `checkFilePathSecurity`：tool-adapter
+ * 典型如 `@muse/action-tools` 的 `checkFilePathSecurity`：tool-adapter
  * 注入到 action-tool payload 的字段是 `_allowed_paths` / `_allowed_files`
  * 数组，没有完整 snapshot——直接调本函数即可与 `isInWorkspace` 共享同一
  * 套过宽路径过滤 + 文件精确匹配 + 目录前缀匹配语义，避免在 action-tools

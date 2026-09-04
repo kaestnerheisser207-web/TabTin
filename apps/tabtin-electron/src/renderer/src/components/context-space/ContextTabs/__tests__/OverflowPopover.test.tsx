@@ -14,7 +14,7 @@ import type { CanvasLayoutGroup } from '@stores/useCanvasLayoutStore'
 import type { ContextItem } from '@components/context-space/registry'
 
 // smartsheet-ui Popover 由 Radix 实现，jsdom 中要让它直接展开 children；用最小桥接 mock
-vi.mock('@tabtin/smartsheet-ui', async () => {
+vi.mock('@muse/smartsheet-ui', async () => {
   const React = await import('react')
   return {
     Popover: ({ children, open: _open, onOpenChange: _onOpenChange }: { children: React.ReactNode; open?: boolean; onOpenChange?: (open: boolean) => void }) => {

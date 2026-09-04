@@ -12,16 +12,16 @@
  */
 
 import React from 'react';
-import { toast, ToastAction } from '@tabtin/smartsheet-ui';
-import { message } from '@tabtin/smartsheet-ui/message';
-import type { TableGridRow } from '@tabtin/table-engine';
-import { resolveRecordId as resolveEngineRecordId } from '@tabtin/table-engine';
-import { RecordApiService, type Field, type TableRecord, type ViewMeta } from '@tabtin/table-core';
+import { toast, ToastAction } from '@muse/smartsheet-ui';
+import { message } from '@muse/smartsheet-ui/message';
+import type { TableGridRow } from '@muse/table-engine';
+import { resolveRecordId as resolveEngineRecordId } from '@muse/table-engine';
+import { RecordApiService, type Field, type TableRecord, type ViewMeta } from '@muse/table-core';
 import { useRecordStore } from '@stores/useRecordStore';
 import {
   resolveCreatedRecordVisibility,
   type ViewAwareCreatePlan,
-} from '@tabtin/table-ui/clipboard';
+} from '@muse/table-ui/clipboard';
 import type { LocalCreateOverlayTreePatch } from '../utils/viewLocalCreateOverlay';
 import { MAX_SUB_RECORD_DEPTH } from '../utils/gridRowUtils';
 import { buildRecordResourceLink } from '../utils/recordResourceLink';
@@ -31,7 +31,7 @@ import {
   normalizeGroupValue,
   isGroupValuesMatch,
   resolveFilterPrefillValues as resolveFilterPrefillValuesShared,
-} from '@tabtin/table-ui';
+} from '@muse/table-ui';
 import { createLogger } from '@/utils/logger';
 
 const log = createLogger('TableRecordOps');
@@ -138,7 +138,7 @@ export interface UseDataGridRecordOpsParams {
   t: (key: string, options?: Record<string, unknown>) => string;
 }
 
-export type { ViewAwareCreatePlan } from '@tabtin/table-ui/clipboard';
+export type { ViewAwareCreatePlan } from '@muse/table-ui/clipboard';
 
 export interface DeleteConfirmState {
   open: boolean;

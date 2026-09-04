@@ -18,9 +18,9 @@
 import React from 'react'
 import { render, screen, fireEvent } from '@testing-library/react'
 import { describe, expect, it, vi } from 'vitest'
-import { UNKNOWN_WORKSPACE_OUT_PATH } from '@tabtin/security-policy/approval-contract'
+import { UNKNOWN_WORKSPACE_OUT_PATH } from '@muse/security-policy/approval-contract'
 
-vi.mock('@tabtin/smartsheet-ui', () => ({
+vi.mock('@muse/smartsheet-ui', () => ({
   Button: ({ children, ...props }: React.ButtonHTMLAttributes<HTMLButtonElement>) => (
     <button type="button" {...props}>{children}</button>
   ),
@@ -60,7 +60,7 @@ vi.mock('@stores/useSpaceStore', () => ({
     selector({ selectedSpace: { id: 'space-1' } }),
 }))
 
-// 单根契约 §2.4：审批通过的路径通过 window.tabtin.workspace.appendSessionAllowedPath
+// 单根契约 §2.4：审批通过的路径通过 window.muse.workspace.appendSessionAllowedPath
 // IPC 推到 main 端 session.workspaceSnapshot.sources.sessionApprovedPaths（不写 store）。
 ;(globalThis as unknown as { window: { tabtin: { workspace: { appendSessionAllowedPath: typeof appendSessionAllowedPathMock } } } }).window = {
   tabtin: {

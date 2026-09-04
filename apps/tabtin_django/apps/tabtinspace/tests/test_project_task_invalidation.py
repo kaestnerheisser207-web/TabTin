@@ -36,7 +36,7 @@ User = get_user_model()
 ALLOWED_PAYLOAD_KEYS = frozenset({'project_id', 'task_id', 'event_type', 'version'})
 
 
-@override_settings(TABTIN_ENABLE_PROJECTS=True)
+@override_settings(MUSE_ENABLE_PROJECTS=True)
 class ProjectTaskInvalidationTests(TestCase):
     def setUp(self):
         self.owner = User.objects.create_user(

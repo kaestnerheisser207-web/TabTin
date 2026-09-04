@@ -19,13 +19,13 @@
  *   - 不触发 `resetChatClient`：Wave 3 目标就是 membership 变更不断 WS。
  */
 
-import { useOrganizationStore, useSpaceStore, getRuntime, type Organization } from '@tabtin/app-shell'
+import { useOrganizationStore, useSpaceStore, getRuntime, type Organization } from '@muse/app-shell'
 import { useIMStore } from '@/stores/useIMStore'
 import { useChatStore } from '@/stores/chat/useChatStore'
 import { useBackgroundEventStore } from '@/stores/useBackgroundEventStore'
 import { useAuthStore } from '@/stores/useAuthStore'
 import { notifyLogoutRequired } from '@/utils/authPersistence'
-import { toast } from '@tabtin/smartsheet-ui/toast'
+import { toast } from '@muse/smartsheet-ui/toast'
 import i18n from '@/i18n'
 import { logger } from '@/utils/logger'
 import { useWsConnectionStore } from '@/stores/useWsConnectionStore'

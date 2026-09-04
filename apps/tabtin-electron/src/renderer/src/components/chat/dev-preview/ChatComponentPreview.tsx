@@ -14,7 +14,7 @@
 
 import React, { useCallback, useEffect, useState } from 'react'
 import { ChevronDown, ChevronRight, Bot, Pencil, Trash2 } from 'lucide-react'
-import { Switch } from '@tabtin/smartsheet-ui'
+import { Switch } from '@muse/smartsheet-ui'
 import { cn } from '@utils/cn'
 import { SubagentProgressCard } from '../subagent/SubagentProgressCard'
 import { SubagentAggregateView } from '../subagent/SubagentAggregateView'

@@ -21,7 +21,7 @@
 
 前置
 ----
-- 本分支默认即单库（``.env`` = ``TABTIN_DATABASE_MODE=single_pg`` + ``PG_DB_NAME=tabtin_single``），
+- 本分支默认即单库（``.env`` = ``MUSE_DATABASE_MODE=single_pg`` + ``PG_DB_NAME=tabtin_single``），
   无需任何 flag；fresh 库需先 ``safe_migrate``（见 harness 文档）。
 - 脚本会在缺会员等级时自动 ``seed_membership_tiers``（TabData 配额校验需要）。
 

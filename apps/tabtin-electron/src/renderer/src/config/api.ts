@@ -7,7 +7,7 @@ import {
   buildPublicInviteBridgeUrl,
   getApiRuntimeConfig,
   type EnvLike,
-} from '@tabtin/config'
+} from '@muse/config'
 import { logger } from '@/utils/logger'
 
 // 环境判断
@@ -20,7 +20,7 @@ const isProduction = import.meta.env.PROD
 const { apiBaseUrl, publicWebBaseUrl } = getApiRuntimeConfig(import.meta.env as unknown as EnvLike)
 
 export const API_BASE_URL = apiBaseUrl
-/** 账号设备控制面；构建配置由 TABTIN_DAEMON_CONTROL_API_BASE_URL 单向映射。 */
+/** 账号设备控制面；构建配置由 MUSE_DAEMON_CONTROL_API_BASE_URL 单向映射。 */
 export const DAEMON_CONTROL_API_BASE_URL =
   import.meta.env.VITE_DAEMON_CONTROL_API_BASE_URL?.trim() || apiBaseUrl
 export const PUBLIC_WEB_BASE_URL =

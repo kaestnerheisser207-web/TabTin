@@ -25,7 +25,7 @@ import { handleBrowserHomeRoute } from './browser/home'
 
 // BR-8 P3a：RefCache 已收编进 browser-core 共享 runtime（getSharedRefCache）。
 // 原先经本文件 re-export 的 getRefCache/clearRefCache/setRefCache 全仓无消费者，
-// 随收编一并移除（消费方直接用 @tabtin/browser-core 的 getSharedRefCache）。
+// 随收编一并移除（消费方直接用 @muse/browser-core 的 getSharedRefCache）。
 
 export async function handleBrowserRoute(
   url: string,

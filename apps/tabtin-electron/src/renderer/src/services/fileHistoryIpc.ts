@@ -1,5 +1,5 @@
 /**
- * File-history IPC facade — wraps `window.tabtin.fileHistory` (per-file rewind).
+ * File-history IPC facade — wraps `window.muse.fileHistory` (per-file rewind).
  *
  * 这是"本地文件回退"在 renderer 侧的新实现，**替代** shadow git 的
  * `checkpointIpc.restore`（见 file-history / checkpoint §3.5 / §3.9）。
@@ -81,7 +81,7 @@ export function canContinueWithoutFileRestore(
 }
 
 function api() {
-  return window.tabtin?.fileHistory
+  return window.muse?.fileHistory
 }
 
 /** 当前宿主是否暴露了 per-file 回退桥（非 Electron 宿主返 false）。 */

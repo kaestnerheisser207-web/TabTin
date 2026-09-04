@@ -5,7 +5,7 @@
  * 执行过，才允许后端把回退投影为完成；文件层若有逐文件失败，则返回可审计的
  * partial 结果，绝不把它伪装成成功。
  */
-import type { RewindResult } from '@tabtin/file-history-core'
+import type { RewindResult } from '@muse/file-history-core'
 import type { ControlDeviceFileRewindOutcome } from '../file-history/control-device-file-rewind.js'
 
 export interface TranscriptRewindOutcome {

@@ -1,4 +1,4 @@
-import { parseResourcePointer } from '@tabtin/resource-router'
+import { parseResourcePointer } from '@muse/resource-router'
 import { resourceRouter } from './resourceRouter'
 import { useSpaceContextTabsStore } from '@stores/useSpaceContextTabsStore'
 import { resolveSpaceIdForResourceLink } from './openResourceLink'
@@ -71,7 +71,7 @@ export async function registerAgentArtifactTab(
     const carrier = input.hintCarrierAppId || CARRIER_BY_RESOURCE_TYPE[resourceType]
     if (carrier) params.set('hint', carrier)
     if (input.title?.trim()) params.set('title', input.title.trim())
-    const href = `tabtin://resource/${resourceType}/${encodeURIComponent(resourceId)}${
+    const href = `muse://resource/${resourceType}/${encodeURIComponent(resourceId)}${
       params.size > 0 ? `?${params.toString()}` : ''
     }`
     const spaceId = resolveSpaceIdForResourceLink(tabScopeKey)

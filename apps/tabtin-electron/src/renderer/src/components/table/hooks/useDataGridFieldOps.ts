@@ -10,9 +10,9 @@
  */
 
 import React from 'react';
-import { toast } from '@tabtin/smartsheet-ui';
-import type { Field, ViewFilter, ViewGroup, ViewMeta } from '@tabtin/table-core';
-import { FieldApiService } from '@tabtin/table-core';
+import { toast } from '@muse/smartsheet-ui';
+import type { Field, ViewFilter, ViewGroup, ViewMeta } from '@muse/table-core';
+import { FieldApiService } from '@muse/table-core';
 
 // ---------------------------------------------------------------------------
 // Filter helpers (pure functions)

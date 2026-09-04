@@ -1,7 +1,7 @@
 /**
  * Wire risk-level helpers（ Stage 5c）。
  *
- * 自 `@tabtin/agent-wire` risk-level 迁入；映射表与字面量保持对齐。
+ * 自 `@muse/agent-wire` risk-level 迁入；映射表与字面量保持对齐。
  */
 
 import type { ApprovalWireRiskLevel } from './wire-payloads.js';

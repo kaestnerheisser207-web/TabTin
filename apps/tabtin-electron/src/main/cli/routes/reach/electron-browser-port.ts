@@ -17,8 +17,8 @@ import type {
   OpenInput,
   OpenResult,
   WaitForInput,
-} from '@tabtin/platform-reach'
-import type { NetworkLogEntry } from '@tabtin/browser-core'
+} from '@muse/platform-reach'
+import type { NetworkLogEntry } from '@muse/browser-core'
 import { createLogger } from '../../../logger'
 import { enableForTab } from '../../../services/CDPNetworkBridge'
 import { getViewFactory } from '../../../view-factory'

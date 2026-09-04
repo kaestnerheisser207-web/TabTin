@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
-import { toast, ToastAction } from '@tabtin/smartsheet-ui/toast'
+import { toast, ToastAction } from '@muse/smartsheet-ui/toast'
 
 import { useAuthStore, selectIsAuthenticated } from '@stores/useAuthStore'
 import { usePendingProjectInvitationStore } from '@stores/usePendingProjectInvitationStore'

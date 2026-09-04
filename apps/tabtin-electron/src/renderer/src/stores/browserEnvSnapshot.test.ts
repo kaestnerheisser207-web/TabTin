@@ -127,7 +127,7 @@ describe('browserEnvSnapshot', () => {
   })
 
   it('镜像未启动 → getPartitionForSpaceSync 返回默认 env partition', () => {
-    // 不安装 window.tabtin —— 镜像懒启动时拿不到 IPC,但仍立即返回默认 partition
+    // 不安装 window.muse —— 镜像懒启动时拿不到 IPC,但仍立即返回默认 partition
     expect(getPartitionForSpaceSync('space-A')).toBe(DEFAULT_ENV_PARTITION)
     expect(getPartitionForSpaceSync(null)).toBe(DEFAULT_ENV_PARTITION)
     expect(getPartitionForSpaceSync(undefined)).toBe(DEFAULT_ENV_PARTITION)
@@ -386,7 +386,7 @@ describe('browserEnvSnapshot', () => {
 
   it('IPC 不可用（preload 未注入）→ 设置 lastError + scheduleRetry', async () => {
     vi.useFakeTimers()
-    // 不设置 window.tabtin.browserEnv
+    // 不设置 window.muse.browserEnv
     ;(globalThis as any).window = { tabtin: {} }
 
     const listener = vi.fn()

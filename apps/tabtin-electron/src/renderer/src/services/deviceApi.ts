@@ -5,8 +5,8 @@
  * 本机注册由 AgentHost DeviceIdentityCoordinator 统一管理。
  */
 
-import { joinApiPath } from '@tabtin/config'
-import type { Device, DeviceUpdateRequest, DeviceListResponse } from '@tabtin/app-shell'
+import { joinApiPath } from '@muse/config'
+import type { Device, DeviceUpdateRequest, DeviceListResponse } from '@muse/app-shell'
 import { API_CONFIG, API_ENDPOINTS } from '@/config/api'
 import { apiRequest as adapterApiRequest, getAuthToken } from '@/adapters/api-adapter-instance'
 import i18n from '@/i18n'
@@ -96,8 +96,8 @@ export class DeviceApiService {
     const authHeaders = await getAuthHeaders()
     const body = JSON.stringify({ fingerprint })
 
-    if (typeof window !== 'undefined' && window.tabtin?.apiRequest) {
-      await window.tabtin.apiRequest({
+    if (typeof window !== 'undefined' && window.muse?.apiRequest) {
+      await window.muse.apiRequest({
         url,
         method: 'POST',
         headers: { 'Content-Type': 'application/json', ...authHeaders },

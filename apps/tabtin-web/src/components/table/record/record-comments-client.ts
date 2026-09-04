@@ -5,7 +5,7 @@ import type {
   RecordCommentListParams,
   RecordCommentListResponse,
   RecordCommentMentionCandidate,
-} from '@tabtin/table-core'
+} from '@muse/table-core'
 import type {
   CreateSharedRecordCommentInput,
   CreateSharedRecordCommentResult,

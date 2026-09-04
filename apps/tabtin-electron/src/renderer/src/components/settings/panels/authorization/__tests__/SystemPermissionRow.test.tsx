@@ -19,7 +19,7 @@ vi.mock('react-i18next', () => ({
   }),
 }))
 
-vi.mock('@tabtin/smartsheet-ui', () => ({
+vi.mock('@muse/smartsheet-ui', () => ({
   Button: ({ children, onClick, disabled, ...rest }: any) => (
     <button onClick={onClick} disabled={disabled} {...rest}>
       {children}

@@ -4,7 +4,7 @@ import {
   getPlatformDataRoot as _getPlatformDataRoot,
   getDataRoot as _getDataRoot,
   getCommandSandboxRoot as _getCommandSandboxRoot,
-} from '@tabtin/shared/storage-paths';
+} from '@muse/shared/storage-paths';
 
 /**
  * Explicit workspace root override（测试 / CLI `--workspace-root` 用）。
@@ -15,18 +15,18 @@ import {
  *
  * 优先级（高 → 低）：
  *   1. `explicitRoot` 入参
- *   2. `TABTIN_WORKSPACE_ROOT` env
+ *   2. `MUSE_WORKSPACE_ROOT` env
  *   3. `process.cwd()`
  */
 export function resolveWorkspaceRoot(explicitRoot?: string): string {
-  const envRoot = (process.env.TABTIN_WORKSPACE_ROOT || '').trim();
+  const envRoot = (process.env.MUSE_WORKSPACE_ROOT || '').trim();
   const base = explicitRoot || envRoot || process.cwd();
   return path.resolve(base);
 }
 
 /**
  * 新单根：所有 per-user / per-organization / per-workspace 元数据
- * 挂在此下。优先 `explicitRoot` → env `TABTIN_DATA_ROOT` → `getPlatformBaseRoot()`。
+ * 挂在此下。优先 `explicitRoot` → env `MUSE_DATA_ROOT` → `getPlatformBaseRoot()`。
  */
 export function resolveDataRoot(explicitRoot?: string): string {
   if (explicitRoot) {

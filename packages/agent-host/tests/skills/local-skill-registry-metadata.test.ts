@@ -1,9 +1,9 @@
-import { createLexicalSkillRecall } from '@tabtin/agent-runtime/skills';
+import { createLexicalSkillRecall } from '@muse/agent-runtime/skills';
 import { mkdtempSync, mkdirSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
 import { afterEach, describe, expect, it } from 'vitest';
-import { resolveOrganizationSkillsDir } from '@tabtin/terminal-core';
+import { resolveOrganizationSkillsDir } from '@muse/terminal-core';
 
 import { LocalSkillRegistry } from '../../src/skills/local-skill-registry.js';
 import {

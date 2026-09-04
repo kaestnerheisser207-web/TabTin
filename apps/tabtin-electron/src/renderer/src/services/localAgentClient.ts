@@ -19,8 +19,8 @@
  */
 
 import type { AgentStreamMessage } from '../stores/chat/stream/handlers/streamHandlerTypes'
-import type { RuntimeHistoryMessage } from '@tabtin/agent-runtime/history'
-import type { AgentModeName, ApprovalModeName } from '@tabtin/agent-modes'
+import type { RuntimeHistoryMessage } from '@muse/agent-runtime/history'
+import type { AgentModeName, ApprovalModeName } from '@muse/agent-modes'
 import {
   openIpcStream,
   IpcStreamRemoteError,
@@ -28,7 +28,7 @@ import {
   IpcStreamAbortedError,
   type IpcStreamEnvelope,
 } from '@shared/ipc-stream'
-import { ContentBlockEvents } from '@tabtin/agent-wire'
+import { ContentBlockEvents } from '@muse/agent-wire'
 import { createLogger } from '@/utils/logger'
 import type { AgentEngineExecutionTarget } from '@shared/types/agent-engine'
 
@@ -154,7 +154,7 @@ export interface LocalAgentStreamOptions {
    * 主进程 `getOrCreateRuntime` 把它纳入 runtime 缓存键，session 内切换 mode
    * 会触发 runtime 重建，保证旧 mode 的工具集 / 旧 prompt 不会继续生效。
    *
-   * 类型走 `@tabtin/agent-modes` 单源（PR1 SSoT），新增 mode
+   * 类型走 `@muse/agent-modes` 单源（PR1 SSoT），新增 mode
    * 自动同步，避免本地字面量与 contract.ts 漂移。
    */
   agentMode?: AgentModeName
@@ -170,14 +170,14 @@ export interface LocalAgentStreamOptions {
   /**
    * Hilt v3 / W6 M3（L-W6-02）：客户端工作区快照。
    *
-   * Renderer 通过 `window.tabtin.agentSecurity.getWorkspaceSnapshot(spaceId)`
+   * Renderer 通过 `window.muse.agentSecurity.getWorkspaceSnapshot(spaceId)`
    * 拿主进程持有的 WorkspaceTracker 内容（Space sandbox + TabCode 项目 +
    * TabFolder 浏览目录 + 拖拽附件），透传到主进程。主进程 ElectronAgentHost
    * 在 `handleQueryInternal` 入口把 snapshot 内容 mutate 到 session 持有的
    * `workspaceSnapshotV3`（同 `workspace:paths-changed` IPC 同款），让
    * PD-13 工厂闭包下一轮 runTools 入口立即拿到最新工作区。
    *
-   * 形态参考 `@tabtin/security-policy` 的 `WorkspaceSnapshot`；renderer
+   * 形态参考 `@muse/security-policy` 的 `WorkspaceSnapshot`；renderer
    * 不依赖 security-policy 包（避免拖入 server-only 类型），所以这里写
    * `unknown`。主进程 type guard + buildPolicyFromAgentConfigV2 兜底形态错误。
    *
@@ -414,7 +414,7 @@ export class LocalAgentClient {
     sessionId: string,
     message: string,
     options?: LocalAgentStreamOptions,
-  ): Parameters<NonNullable<Window['tabtin']>['agentEngine']['query']>[0] {
+  ): Parameters<NonNullable<Window['muse']>['agentEngine']['query']>[0] {
     return {
       prompt: message,
       // §17.6 D4：AgentEngineQueryRequest.sessionId → threadId。业务对话身份与 host
@@ -485,7 +485,7 @@ export class LocalAgentClient {
     log.debug(`invoke agent-engine:query (ack-only) session=${sidShort}`)
     let ack: LocalAgentQueryResult
     try {
-      ack = await window.tabtin.agentEngine.query(this.buildQueryRequest(sessionId, message, options))
+      ack = await window.muse.agentEngine.query(this.buildQueryRequest(sessionId, message, options))
     } catch (err) {
       const error = err instanceof Error ? err : new Error(String(err))
       log.error(`invoke agent-engine:query failed session=${sidShort}:`, error)
@@ -519,7 +519,7 @@ export class LocalAgentClient {
     const sidShort = sessionId.slice(0, 8)
     const stream = openIpcStream<AgentStreamMessage>(sessionId, {
       subscribe: (handler) =>
-        window.tabtin.agentEngine.onStreamEvent(
+        window.muse.agentEngine.onStreamEvent(
           (data) => handler(data as IpcStreamEnvelope<AgentStreamMessage>),
         ),
       isTerminalEvent: isAgentStreamTerminalEvent,
@@ -530,7 +530,7 @@ export class LocalAgentClient {
 
     let invokePromise: Promise<LocalAgentQueryResult>
     try {
-      invokePromise = window.tabtin.agentEngine.query(this.buildQueryRequest(sessionId, message, options))
+      invokePromise = window.muse.agentEngine.query(this.buildQueryRequest(sessionId, message, options))
     } catch (err) {
       const error = err instanceof Error ? err : new Error(String(err))
       stream.close()
@@ -595,12 +595,12 @@ export class LocalAgentClient {
 
   /** Push an app context update to the running session (fire-and-forget). */
   updateContext(sessionId: string, appContext: LocalAgentAppContext): void {
-    window.tabtin.agentEngine.updateContext?.(sessionId, appContext)?.catch(() => {})
+    window.muse.agentEngine.updateContext?.(sessionId, appContext)?.catch(() => {})
   }
 
   /** 中止正在执行的 query（传入 sessionId 时仅中止该会话）。 */
   abort(sessionId?: string): void {
-    window.tabtin.agentEngine.abort(sessionId ? { sessionId } : undefined).catch(() => {})
+    window.muse.agentEngine.abort(sessionId ? { sessionId } : undefined).catch(() => {})
   }
 
   /**
@@ -608,7 +608,7 @@ export class LocalAgentClient {
    * 若 pending_count > 0，Main 侧会自动冷启动 runtime 生成汇报消息。
    */
   async checkPending(threadId: string): Promise<{ pending_count: number; thread_ids: string[] }> {
-    return window.tabtin.agentEngine.checkPending(threadId)
+    return window.muse.agentEngine.checkPending(threadId)
   }
 
   /**
@@ -616,7 +616,7 @@ export class LocalAgentClient {
    * 返回注销监听的函数。
    */
   onProactiveReport(callback: (data: { threadId: string; content: string; runIds: string[] }) => void): () => void {
-    return window.tabtin.agentEngine.onProactiveReport(callback)
+    return window.muse.agentEngine.onProactiveReport(callback)
   }
 
   async compactSession(
@@ -652,7 +652,7 @@ export class LocalAgentClient {
       summary_length: number
     }
   }> {
-    return window.tabtin.agentEngine.compactSession({
+    return window.muse.agentEngine.compactSession({
       threadId: sessionId,
       history: history as Array<{ role: 'user' | 'assistant'; content: string | Record<string, unknown>[] }>,
       summaryFocus,
@@ -692,7 +692,7 @@ export function getLocalAgentClient(): LocalAgentClient {
 /**
  * Wave 11 迁移：本地 Runtime IPC 是否可用。
  *
- * 默认行为：只要 preload 注入了 `window.tabtin.agentEngine` 就走本地 IPC
+ * 默认行为：只要 preload 注入了 `window.muse.agentEngine` 就走本地 IPC
  * —— 云端编排运行时已下线（见 `apps/tabtin_django/tabtin/urls_deferred.py`
  * L47-48，`/api/orchestration/agent/{invoke,review,answer}` 均返回 404）。
  *
@@ -709,7 +709,7 @@ export function getLocalAgentClient(): LocalAgentClient {
  */
 export function isLocalRuntimeAvailable(): boolean {
   if (typeof window === 'undefined') return false
-  if (!window.tabtin?.agentEngine) return false
+  if (!window.muse?.agentEngine) return false
   try {
     if (localStorage.getItem('tabtin_local_runtime') === 'false') return false
   } catch {

@@ -7,7 +7,7 @@ export const BADGE_MODES: ReadonlySet<string> = new Set(['ask', 'plan', 'study']
 
 export const BADGE_VARIANT: Record<string, { iconClass: string; bgClass: string }> = {
   ask: { iconClass: 'text-info/80', bgClass: 'bg-info/10' },
-  // eslint-disable-next-line tabtin/no-chat-design-violations -- 模式身份色图例（与 ask/study 同系），非单点 UI 警示
+  // eslint-disable-next-line muse/no-chat-design-violations -- 模式身份色图例（与 ask/study 同系），非单点 UI 警示
   plan: { iconClass: 'text-warning/80', bgClass: 'bg-warning/10' },
   study: { iconClass: 'text-type-webhook/80', bgClass: 'bg-type-webhook/10' },
 }

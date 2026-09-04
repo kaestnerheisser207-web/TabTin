@@ -19,5 +19,5 @@ Do not assume an additional communication CLI or application exists.
 
 ## Resource Rules
 
-- Task table links: `tabtin://resource/table/<id>?hint=tabdata`.
+- Task table links: `muse://resource/table/<id>?hint=tabdata`.
 - Draft status should mention the message/thread id when available.

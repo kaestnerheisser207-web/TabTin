@@ -24,7 +24,7 @@ import { ErrorBoundary } from '@components/common/ErrorBoundary'
 import { canManageOrganization as canManageOrganizationFn } from '@/hooks/useCanManageOrganization'
 import { useEffectiveFeature } from '@/hooks/useEffectiveFeature'
 import { prefetchOrganizationBillingData } from '@/hooks/queries/membership'
-import type { Organization, OrganizationRole } from '@tabtin/app-shell'
+import type { Organization, OrganizationRole } from '@muse/app-shell'
 import {
   type ProfileSettingsSection,
   type OrganizationSettingsSection,

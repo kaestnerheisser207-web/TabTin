@@ -8,7 +8,7 @@
 import { MessageSquare } from 'lucide-react'
 import { useEditor } from 'novel'
 import { useTranslation } from 'react-i18next'
-import { Button } from '@tabtin/smartsheet-ui'
+import { Button } from '@muse/smartsheet-ui'
 import { collectTopLevelBlockIdsInRange } from '../doc-selection-blocks'
 import { BubbleToolbarTooltip } from './bubble-toolbar-tooltip'
 

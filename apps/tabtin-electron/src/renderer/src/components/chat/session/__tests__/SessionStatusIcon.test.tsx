@@ -6,7 +6,7 @@
 import React from 'react'
 import { act, render } from '@testing-library/react'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
-import type { ChatSession, ChatSessionRunState } from '@tabtin/chat-client'
+import type { ChatSession, ChatSessionRunState } from '@muse/chat-client'
 import { useChatRuntimeStore } from '@/stores/useChatRuntimeStore'
 import {
   applyRuntimeRunSync,

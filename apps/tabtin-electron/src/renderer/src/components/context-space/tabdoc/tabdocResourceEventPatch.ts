@@ -1,4 +1,4 @@
-import type { TabdocDocument } from '@tabtin/tabdoc-ui/api-client'
+import type { TabdocDocument } from '@muse/tabdoc-ui/api-client'
 import type { ResourceWsEvent } from '@/stores/useUnifiedResources'
 
 export const TABDOC_RESOURCE_TYPE = 'tabdoc'

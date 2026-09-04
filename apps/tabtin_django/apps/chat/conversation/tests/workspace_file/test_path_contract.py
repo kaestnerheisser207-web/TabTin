@@ -20,7 +20,7 @@ CANONICALIZE_CASES = [
     ("/etc/passwd", None),
     ("~/secret.txt", None),
     ("C:\\Users\\a.txt", None),
-    ("tabtin://resource/file/a.txt", None),
+    ("muse://resource/file/a.txt", None),
     ("../escape.txt", None),
     ("", None),
 ]

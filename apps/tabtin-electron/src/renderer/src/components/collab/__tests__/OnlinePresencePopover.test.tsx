@@ -11,7 +11,7 @@ vi.mock('react-i18next', () => ({
   }),
 }))
 
-vi.mock('@tabtin/smartsheet-ui', () => ({
+vi.mock('@muse/smartsheet-ui', () => ({
   cn: (...args: unknown[]) => args.filter(Boolean).join(' '),
   Popover: ({ children }: { children: React.ReactNode }) => <div>{children}</div>,
   PopoverTrigger: ({ children }: { children: React.ReactNode }) => <>{children}</>,
@@ -19,7 +19,7 @@ vi.mock('@tabtin/smartsheet-ui', () => ({
   UserAvatar: ({ name }: { name: string }) => <span>{name}</span>,
 }))
 
-vi.mock('@tabtin/shared', () => ({
+vi.mock('@muse/shared', () => ({
   identityAvatarColor: () => '#000',
   identityAvatarInitial: (name: string) => (name || '?').slice(0, 1),
 }))

@@ -10,7 +10,7 @@
  *
  * 2. **SSoT 行为对称：buildSystemPrompt 注入 workspaceRoot 到 <identity>**
  *    W3-fix（cf80e971 + 886bf6f4）后 system prompt 构造统一到
- *    `@tabtin/agent-prompt`；旧 `host.buildSystemPrompt(tools, options)` 私有
+ *    `@muse/agent-prompt`；旧 `host.buildSystemPrompt(tools, options)` 私有
  *    方法不再存在。本节直接测 SSoT 包入口，锁定"Daemon 调 SSoT 时
  *    workspaceRoot 走 identity 段 'Working directory for bash and file tools:'
  *    行"这一契约。`packages/agent-prompt/src/__tests__/builder.test.ts` 也
@@ -18,7 +18,7 @@
  *    立刻被发现）。
  */
 import { describe, it, expect, vi } from 'vitest';
-import { buildSystemPrompt } from '@tabtin/agent-prompt';
+import { buildSystemPrompt } from '@muse/agent-prompt';
 
 import { DaemonAgentHost } from '../src/application/agent/daemon-agent-host.js';
 import type { DaemonAgentHostDeps } from '../src/application/agent/daemon-agent-host.js';

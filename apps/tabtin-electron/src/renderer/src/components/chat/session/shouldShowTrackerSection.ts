@@ -1,4 +1,4 @@
-import type { ChatSession } from '@tabtin/chat-client'
+import type { ChatSession } from '@muse/chat-client'
 import { isTrackerRunSession } from '@/utils/chat-session-sort'
 
 export function shouldShowTrackerSection(params: {

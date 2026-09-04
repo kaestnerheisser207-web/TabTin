@@ -6,7 +6,7 @@
  */
 import React, { useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
-import { toast } from '@tabtin/smartsheet-ui'
+import { toast } from '@muse/smartsheet-ui'
 import { useSpaceStore } from '@stores/useSpaceStore'
 import { AvatarCropUploader } from '@components/shared/AvatarCropUploader'
 

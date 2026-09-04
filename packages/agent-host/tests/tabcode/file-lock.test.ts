@@ -17,7 +17,7 @@ import {
   __resetFileLockMapForTest,
   getFileLockMapSize,
   withFileLock,
-} from '@tabtin/action-tools/headless';
+} from '@muse/action-tools/headless';
 
 let tmpDir: string;
 

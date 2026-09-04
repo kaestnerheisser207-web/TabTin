@@ -4,7 +4,7 @@
 // MustRegisterCommand 的注册期断言（Layer/Risk/RiskDeclared/Long≥3/Example≥3/
 // 写命令必须有 DryRun）。#3129 按子组分批迁移到 MustRegisterCommand，本次收口
 // 覆盖全部 112 条命令。本文件把「后续 PR 悄悄改回 RegisterCommand，或漏填某个
-// 字段」这类回归提前到 `go test`，不依赖跑 ./dist/tabtin --help 才能发现。
+// 字段」这类回归提前到 `go test`，不依赖跑 ./dist/muse --help 才能发现。
 package table
 
 import (

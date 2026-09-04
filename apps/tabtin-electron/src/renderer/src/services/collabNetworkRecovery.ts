@@ -12,7 +12,7 @@
  * 造成 IPC 风暴。
  */
 
-import { COLLAB_STUCK_CONNECTING_EVENT } from '@tabtin/collab-core'
+import { COLLAB_STUCK_CONNECTING_EVENT } from '@muse/collab-core'
 
 /** 达到该连续 watchdog 次数才请求网络栈自愈（≈3 分钟挂起） */
 export const NETWORK_RECOVERY_STUCK_THRESHOLD = 3
@@ -30,7 +30,7 @@ async function requestRecovery(detail: StuckDetail): Promise<void> {
   if (lastRequestAt > 0 && now - lastRequestAt < RENDERER_THROTTLE_MS) return
   lastRequestAt = now
 
-  const recoverStack = window.tabtin?.network?.recoverStack
+  const recoverStack = window.muse?.network?.recoverStack
   if (typeof recoverStack !== 'function') return
 
   try {

@@ -136,7 +136,7 @@ const runtimeContext = createMainRuntimeContext({
   isDev: isDevRuntime,
   rendererUrl: process.env['ELECTRON_RENDERER_URL'],
   rendererVerbose,
-  displayMediaTrustedOrigins: process.env.TABTIN_DISPLAY_MEDIA_TRUSTED_ORIGINS
+  displayMediaTrustedOrigins: process.env.MUSE_DISPLAY_MEDIA_TRUSTED_ORIGINS
     ?.split(',')
     .map(item => item.trim())
     .filter(Boolean),

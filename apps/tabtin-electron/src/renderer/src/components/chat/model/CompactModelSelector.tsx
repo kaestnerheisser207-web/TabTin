@@ -13,7 +13,7 @@ import type {
   ContextTier,
   ModelParamOverrides,
   ModelParamValue,
-} from '@tabtin/chat-client'
+} from '@muse/chat-client'
 import { cn } from '@utils/cn'
 import { OVERLAY_SURFACE_CLASS } from '@components/ui'
 import { COMPOSER_TEXT_META } from '../registry/chatDesignTokens'

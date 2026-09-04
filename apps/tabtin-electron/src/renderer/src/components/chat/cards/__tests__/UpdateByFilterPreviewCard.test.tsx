@@ -43,7 +43,7 @@ vi.mock('@utils/cn', () => ({
   cn: (...args: unknown[]) => args.filter(Boolean).join(' '),
 }))
 
-vi.mock('@tabtin/smartsheet-ui', () => ({
+vi.mock('@muse/smartsheet-ui', () => ({
   toast: Object.assign(vi.fn(), {
     success: vi.fn(),
     error: vi.fn(),
@@ -58,7 +58,7 @@ import {
   BatchErrorList,
   extractUpdateByFilterOutput,
 } from '../UpdateByFilterPreviewCard'
-import type { UpdateByFilterPreviewData } from '@tabtin/chat-client'
+import type { UpdateByFilterPreviewData } from '@muse/chat-client'
 
 /* ═══════════════════════════════════════════════════════════════════
  * 场景 1: 预检渲染 (L35)

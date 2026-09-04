@@ -45,7 +45,7 @@ function resolveSpaceId(): string | undefined {
 }
 
 function send(payload: SystemNotificationPayload): void {
-  if (typeof window === 'undefined' || !window.tabtin?.notification) return
+  if (typeof window === 'undefined' || !window.muse?.notification) return
   // Wave 4：不再 fallback `payload.organizationId` 到当前前台 organization。
   // personal 频道事件可属任意 organization，错位 fallback 会让跨 organization 通知
   // 跳转到错误团队。caller 必须显式传入或保留 undefined。
@@ -61,7 +61,7 @@ function send(payload: SystemNotificationPayload): void {
       ...(targetSpaceId ? { spaceId: targetSpaceId } : {}),
     }
   }
-  window.tabtin.notification.show(payload)
+  window.muse.notification.show(payload)
 }
 
 interface AgentNotificationOpts {

@@ -27,7 +27,7 @@ import {
 import type {
   ReadFileState,
   ToolContext,
-} from '@tabtin/agent-runtime';
+} from '@muse/agent-runtime';
 
 let tmpDir: string;
 let file: string;

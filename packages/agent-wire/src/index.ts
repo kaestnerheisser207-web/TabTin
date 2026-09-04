@@ -1,5 +1,5 @@
 /**
- * @tabtin/agent-wire
+ * @muse/agent-wire
  *
  * Shared wire protocol definitions for Muse external Agent communication.
  * Single source of truth for event types, payload schemas, and adaptation logic
@@ -31,7 +31,7 @@ export {
 // 字符串常量，作为 daemon / Django / Renderer 三端识别 mini-message 的字面量
 // 契约——该 cross-package export 在协议层 `message_kind` 重构后**故意不再保留**
 // 识别工具产出 mini-message 改走 wire 层的 `message_kind === 'tool_artifact'`
-// 字段；占位字符串单源存活在 `@tabtin/agent-runtime::envelope-emitter.ts` 内部，
+// 字段；占位字符串单源存活在 `@muse/agent-runtime::envelope-emitter.ts` 内部，
 // 不再有跨包 import 路径。
 
 export type {
@@ -73,7 +73,7 @@ export type {
 } from './subagent-completion.js';
 
 // ─── Common Types & Schemas ──────────────────────────────────────────
-// Shared cross-SDK types re-exported from @tabtin/contracts/agent
+// Shared cross-SDK types re-exported from @muse/contracts/agent
 export {
   PermissionDecisionSchema,
   PermissionModeSchema,
@@ -85,7 +85,7 @@ export {
   PROTOCOL_VERSION,
   GatewayRoleSchema,
   GatewayEnvelopeSchema,
-} from '@tabtin/contracts/agent';
+} from '@muse/contracts/agent';
 
 export type {
   PermissionDecision,
@@ -96,7 +96,7 @@ export type {
   RiskLevel,
   GatewayRole,
   GatewayEnvelope,
-} from '@tabtin/contracts/agent';
+} from '@muse/contracts/agent';
 
 // Agent-wire internal types & schemas
 export {
@@ -152,7 +152,7 @@ export type {
 // lite-blocks-collector / Django reassembler 三处 import 派生使用。
 export {
   STANDARD_BLOCK_TYPES,
-  TABTIN_BLOCK_TYPES,
+  MUSE_BLOCK_TYPES,
   ALL_BLOCK_TYPES,
   ALL_BLOCK_TYPE_SET,
   isKnownBlockType,

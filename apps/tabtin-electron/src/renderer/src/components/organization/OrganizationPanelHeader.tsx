@@ -1,6 +1,6 @@
 import React from 'react'
 import { X } from 'lucide-react'
-import { Button } from '@tabtin/smartsheet-ui'
+import { Button } from '@muse/smartsheet-ui'
 import { cn } from '@utils/cn'
 
 interface OrganizationPanelHeaderProps {

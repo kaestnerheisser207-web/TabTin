@@ -12,7 +12,7 @@ import React from 'react'
 import { describe, it, expect } from 'vitest'
 import { render, screen } from '@testing-library/react'
 import { HitlResourceLabel } from '../HitlResourceLabel'
-import type { CliSpecForUI } from '@tabtin/chat-client'
+import type { CliSpecForUI } from '@muse/chat-client'
 
 describe('HitlResourceLabel', () => {
   it('renders human-readable label when cli_spec.resource_label is present', () => {

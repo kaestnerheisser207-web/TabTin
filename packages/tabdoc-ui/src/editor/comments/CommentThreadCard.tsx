@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState, type MouseEvent } from 'react'
-import { Button, ConfirmDialog, UserAvatar } from '@tabtin/smartsheet-ui'
+import { Button, ConfirmDialog, UserAvatar } from '@muse/smartsheet-ui'
 import type { CommentAttachment, CommentMessage, CommentThread } from '../../comment-threads/types'
 import { isAnchorDetached, threadSelectedText } from '../../comment-threads/types'
 import type { DocumentCommentMentionCandidate } from '../DocumentCommentsSection'

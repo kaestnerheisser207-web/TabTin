@@ -77,7 +77,7 @@ export function createDetachedIMWindowController(
     if (options.isDev && options.rendererUrl) {
       void win.loadURL(`${options.rendererUrl}?${queryParams}`)
     } else {
-      void win.loadURL(`tabtin-file://app/index.html?${queryParams}`)
+      void win.loadURL(`muse-file://app/index.html?${queryParams}`)
     }
 
     win.on('ready-to-show', () => {

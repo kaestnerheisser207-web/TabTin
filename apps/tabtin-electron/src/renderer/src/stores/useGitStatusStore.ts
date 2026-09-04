@@ -8,7 +8,7 @@
  */
 
 import { create } from 'zustand'
-import type { AgentConfig, RemoteGitStatus, GitStatusEventPayload } from '@tabtin/app-shell'
+import type { AgentConfig, RemoteGitStatus, GitStatusEventPayload } from '@muse/app-shell'
 import { getChatClient } from '@/services/chatApi'
 import { createLogger } from '@/utils/logger'
 

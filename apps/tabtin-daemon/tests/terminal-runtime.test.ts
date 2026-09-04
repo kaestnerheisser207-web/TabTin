@@ -5,7 +5,7 @@ const { setPtyManagerAPI, setPtyManagerBridge } = vi.hoisted(() => ({
   setPtyManagerBridge: vi.fn(),
 }))
 
-vi.mock('@tabtin/action-tools/headless', async (importOriginal) => ({
+vi.mock('@muse/action-tools/headless', async (importOriginal) => ({
   ...await importOriginal<any>(),
   setPtyManagerAPI,
   setPtyManagerBridge,

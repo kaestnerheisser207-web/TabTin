@@ -32,7 +32,7 @@ vi.mock('../src/platform/workspace/checkpoint/CheckpointService.js', () => {
   }
 })
 
-vi.mock('@tabtin/action-tools/headless', () => ({
+vi.mock('@muse/action-tools/headless', () => ({
   // Wave 2 起 API 升级为 workspaceRoots 数组；Wave 4 P0-2 修复 9 处 checkpoint
   // handler 都走 helper 后，mock 也要支持多目录数组（之前 mock 单 workspaceRoot
   // 永远不命中 if 抛错，是 pre-existing baseline 漂移）。
@@ -53,7 +53,7 @@ vi.mock('@tabtin/action-tools/headless', () => ({
     },
   ),
   // Wave 1.5（2026-05-13）：FileLockManager / resolveFileLockPath 已废弃删除——
-  // 锁实现下沉到 @tabtin/action-tools/utils/file-lock 的 withFileLock 函数 API，
+  // 锁实现下沉到 @muse/action-tools/utils/file-lock 的 withFileLock 函数 API，
   // 由 ActionExecutorAdapter 统一加锁。本测试不依赖锁行为，mock 出口字段一并清理。
   createHeadlessAdapter: () => ({
     getRegisteredTools: () => [],
@@ -62,7 +62,7 @@ vi.mock('@tabtin/action-tools/headless', () => ({
   }),
 }))
 
-vi.mock('@tabtin/terminal-core', () => ({
+vi.mock('@muse/terminal-core', () => ({
   evaluateLocalTerminalPolicy: vi.fn(),
   evaluateLocalFilePolicy: vi.fn(),
   isAutoApprovedTerminalWrite: vi.fn(),

@@ -1,7 +1,7 @@
 /**
  * Electron API 适配器
  * 封装所有与 Electron IPC 相关的 API 调用
- * 使应用层不直接依赖 window.tabtin
+ * 使应用层不直接依赖 window.muse
  */
 import { t } from './i18n'
 
@@ -71,7 +71,7 @@ export interface IApiAdapter {
 
 /**
  * Electron API 适配器实现
- * 封装 window.tabtin 的调用
+ * 封装 window.muse 的调用
  */
 export class ElectronApiAdapter implements IApiAdapter {
   private tabtin: any
@@ -80,10 +80,10 @@ export class ElectronApiAdapter implements IApiAdapter {
     // 检查是否在 Electron 环境中
     if (typeof globalThis === 'undefined' ||
         typeof (globalThis as any).window === 'undefined' ||
-        !(globalThis as any).window.tabtin) {
+        !(globalThis as any).window.muse) {
       throw new Error(t('errors.rendererOnly'))
     }
-    this.tabtin = (globalThis as any).window.tabtin
+    this.tabtin = (globalThis as any).window.muse
   }
 
   /**

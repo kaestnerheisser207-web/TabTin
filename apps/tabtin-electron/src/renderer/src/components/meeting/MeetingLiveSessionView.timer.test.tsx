@@ -59,7 +59,7 @@ vi.mock('react-i18next', async () => {
 import { MeetingLiveSessionView } from './MeetingLiveSessionView';
 
 describe('MeetingLiveSessionView timer', () => {
-  const previousTabtin = window.tabtin;
+  const previousTabtin = window.muse;
   const sessionId = '11111111-1111-4111-8111-111111111111';
   let captureLevelListener:
     | ((event: {
@@ -168,7 +168,7 @@ describe('MeetingLiveSessionView timer', () => {
   });
 
   it('distinguishes an active empty transcript from a connecting ASR stream', async () => {
-    const activeStatus = await window.tabtin.meetingRecording.getStatus();
+    const activeStatus = await window.muse.meetingRecording.getStatus();
     const { unmount } = render(
       <MeetingLiveSessionView
         sessionId={sessionId}
@@ -190,7 +190,7 @@ describe('MeetingLiveSessionView timer', () => {
         transcriptionStatus: 'connecting' as const,
       },
     };
-    vi.mocked(window.tabtin.meetingRecording.getStatus).mockResolvedValueOnce(
+    vi.mocked(window.muse.meetingRecording.getStatus).mockResolvedValueOnce(
       connectingStatus,
     );
     render(
@@ -208,7 +208,7 @@ describe('MeetingLiveSessionView timer', () => {
   });
 
   it('applies live transcript increments without reloading the full archive', async () => {
-    const initialStatus = await window.tabtin.meetingRecording.getStatus();
+    const initialStatus = await window.muse.meetingRecording.getStatus();
     let resolveArchive!: (archive: {
       transcript: MeetingTranscriptCheckpoint[];
       copilotRecords: [];
@@ -222,7 +222,7 @@ describe('MeetingLiveSessionView timer', () => {
           resolveArchive = resolve;
         }),
     );
-    Object.assign(window.tabtin.meetingRecording, { getArchive });
+    Object.assign(window.muse.meetingRecording, { getArchive });
 
     render(
       <MeetingLiveSessionView
@@ -317,7 +317,7 @@ describe('MeetingLiveSessionView timer', () => {
   });
 
   it('trusts the bridge switch deadline and hides raw IPC failures', async () => {
-    const initialStatus = await window.tabtin.meetingRecording.getStatus();
+    const initialStatus = await window.muse.meetingRecording.getStatus();
     const rawError =
       "Error invoking remote method 'meeting-recording:switch-microphone': capture timed out";
     let rejectSwitch!: (error: Error) => void;
@@ -327,7 +327,7 @@ describe('MeetingLiveSessionView timer', () => {
           rejectSwitch = reject;
         }),
     );
-    Object.assign(window.tabtin.meetingRecording, {
+    Object.assign(window.muse.meetingRecording, {
       listMicrophones: vi.fn().mockResolvedValue([
         {
           deviceId: 'default',
@@ -383,7 +383,7 @@ describe('MeetingLiveSessionView timer', () => {
   });
 
   it('refreshes device choices and reports scoped fallback outcomes without switching', async () => {
-    const initialStatus = await window.tabtin.meetingRecording.getStatus();
+    const initialStatus = await window.muse.meetingRecording.getStatus();
     const listMicrophones = vi
       .fn()
       .mockRejectedValueOnce(new Error('temporary device enumeration failure'))
@@ -391,7 +391,7 @@ describe('MeetingLiveSessionView timer', () => {
     const listSystemAudioSources = vi.fn().mockResolvedValue([]);
     const switchMicrophone = vi.fn();
     const switchSystemAudio = vi.fn();
-    Object.assign(window.tabtin.meetingRecording, {
+    Object.assign(window.muse.meetingRecording, {
       listMicrophones,
       listSystemAudioSources,
       switchMicrophone,
@@ -473,9 +473,9 @@ describe('MeetingLiveSessionView timer', () => {
   });
 
   it('keeps source switching and stop enabled from the parent-confirmed active status', async () => {
-    const initialStatus = await window.tabtin.meetingRecording.getStatus();
+    const initialStatus = await window.muse.meetingRecording.getStatus();
     const stop = vi.fn().mockResolvedValue(initialStatus);
-    Object.assign(window.tabtin.meetingRecording, { stop });
+    Object.assign(window.muse.meetingRecording, { stop });
     const onBack = vi.fn();
     render(
       <MeetingLiveSessionView
@@ -523,7 +523,7 @@ describe('MeetingLiveSessionView timer', () => {
   });
 
   it('shows archive-saving progress until stopping finishes', async () => {
-    const initialStatus = await window.tabtin.meetingRecording.getStatus();
+    const initialStatus = await window.muse.meetingRecording.getStatus();
     let resolveStop!: (status: typeof initialStatus) => void;
     const stop = vi.fn(
       () =>
@@ -531,7 +531,7 @@ describe('MeetingLiveSessionView timer', () => {
           resolveStop = resolve;
         }),
     );
-    Object.assign(window.tabtin.meetingRecording, { stop });
+    Object.assign(window.muse.meetingRecording, { stop });
     const onBack = vi.fn();
     render(
       <MeetingLiveSessionView
@@ -598,7 +598,7 @@ describe('MeetingLiveSessionView timer', () => {
   });
 
   it('automatically asks AI to interpret a declarative question without regex gating', async () => {
-    const initialStatus = await window.tabtin.meetingRecording.getStatus();
+    const initialStatus = await window.muse.meetingRecording.getStatus();
     initialStatus.manifest!.copilotEnabled = true;
     const getArchive = vi.fn().mockResolvedValue({
       transcript: [
@@ -635,7 +635,7 @@ describe('MeetingLiveSessionView timer', () => {
       provider: 'deepseek',
       latency_ms: 420,
     });
-    Object.assign(window.tabtin.meetingRecording, {
+    Object.assign(window.muse.meetingRecording, {
       getArchive,
       answerCopilotQuestion,
     });
@@ -676,14 +676,14 @@ describe('MeetingLiveSessionView timer', () => {
   });
 
   it('sends a local statement to the model and accepts no_action', async () => {
-    const initialStatus = await window.tabtin.meetingRecording.getStatus();
+    const initialStatus = await window.muse.meetingRecording.getStatus();
     initialStatus.manifest!.copilotEnabled = true;
     const answerCopilotQuestion = vi.fn().mockResolvedValue({
       status: 'no_action',
       message: 'No answer needed.',
       candidate_segment_id: 'local-answer-1',
     });
-    Object.assign(window.tabtin.meetingRecording, {
+    Object.assign(window.muse.meetingRecording, {
       getArchive: vi.fn().mockResolvedValue({
         transcript: [
           {
@@ -745,7 +745,7 @@ describe('MeetingLiveSessionView timer', () => {
   });
 
   it('automatically submits a clear local question', async () => {
-    const initialStatus = await window.tabtin.meetingRecording.getStatus();
+    const initialStatus = await window.muse.meetingRecording.getStatus();
     initialStatus.manifest!.copilotEnabled = true;
     const answerCopilotQuestion = vi.fn().mockResolvedValue({
       status: 'answered',
@@ -760,7 +760,7 @@ describe('MeetingLiveSessionView timer', () => {
       provider: 'test-provider',
       latency_ms: 10,
     });
-    Object.assign(window.tabtin.meetingRecording, {
+    Object.assign(window.muse.meetingRecording, {
       getArchive: vi.fn().mockResolvedValue({
         transcript: [
           {
@@ -806,7 +806,7 @@ describe('MeetingLiveSessionView timer', () => {
   });
 
   it('restores clarification history without requesting the candidate again', async () => {
-    const initialStatus = await window.tabtin.meetingRecording.getStatus();
+    const initialStatus = await window.muse.meetingRecording.getStatus();
     initialStatus.manifest!.copilotEnabled = true;
     const shortTurn = {
       externalId: 'clarify-local-1',
@@ -840,7 +840,7 @@ describe('MeetingLiveSessionView timer', () => {
       transcript: [shortTurn, turn],
       copilotRecords: [],
     });
-    Object.assign(window.tabtin.meetingRecording, {
+    Object.assign(window.muse.meetingRecording, {
       getArchive,
       answerCopilotQuestion,
     });
@@ -905,14 +905,14 @@ describe('MeetingLiveSessionView timer', () => {
   });
 
   it('submits the latest final turn when analyze now is clicked', async () => {
-    const initialStatus = await window.tabtin.meetingRecording.getStatus();
+    const initialStatus = await window.muse.meetingRecording.getStatus();
     initialStatus.manifest!.copilotEnabled = true;
     const answerCopilotQuestion = vi.fn().mockResolvedValue({
       status: 'no_action',
       message: 'No answer needed.',
       candidate_segment_id: 'local-manual-1',
     });
-    Object.assign(window.tabtin.meetingRecording, {
+    Object.assign(window.muse.meetingRecording, {
       getArchive: vi.fn().mockResolvedValue({
         transcript: [
           {
@@ -971,7 +971,7 @@ describe('MeetingLiveSessionView timer', () => {
   });
 
   it('manual analysis prefers the latest unevaluated final before retrying', async () => {
-    const initialStatus = await window.tabtin.meetingRecording.getStatus();
+    const initialStatus = await window.muse.meetingRecording.getStatus();
     initialStatus.manifest!.copilotEnabled = true;
     const answerCopilotQuestion = vi.fn((_, externalId: string) =>
       Promise.resolve({
@@ -980,7 +980,7 @@ describe('MeetingLiveSessionView timer', () => {
         candidate_segment_id: externalId,
       }),
     );
-    Object.assign(window.tabtin.meetingRecording, {
+    Object.assign(window.muse.meetingRecording, {
       getArchive: vi.fn().mockResolvedValue({
         transcript: [
           {
@@ -1048,7 +1048,7 @@ describe('MeetingLiveSessionView timer', () => {
   });
 
   it('does not backfill finals from a disabled Copilot window', async () => {
-    const initialStatus = await window.tabtin.meetingRecording.getStatus();
+    const initialStatus = await window.muse.meetingRecording.getStatus();
     initialStatus.manifest!.copilotEnabled = true;
     const answerCopilotQuestion = vi.fn((_, externalId: string) =>
       Promise.resolve({
@@ -1069,7 +1069,7 @@ describe('MeetingLiveSessionView timer', () => {
       isFinal: true,
       recordedAt,
     });
-    Object.assign(window.tabtin.meetingRecording, {
+    Object.assign(window.muse.meetingRecording, {
       getArchive: vi.fn().mockResolvedValue({
         transcript: [final('queued-a', '2026-08-27T00:00:01.000Z')],
         copilotRecords: [],
@@ -1155,7 +1155,7 @@ describe('MeetingLiveSessionView timer', () => {
   });
 
   it('drops the old final queue when the rendered session changes', async () => {
-    const firstStatus = await window.tabtin.meetingRecording.getStatus();
+    const firstStatus = await window.muse.meetingRecording.getStatus();
     firstStatus.manifest!.copilotEnabled = true;
     const secondSessionId = '22222222-2222-4222-8222-222222222222';
     const secondStatus: MeetingRecordingStatus = {
@@ -1186,7 +1186,7 @@ describe('MeetingLiveSessionView timer', () => {
       isFinal: true,
       recordedAt: '2026-08-27T00:00:02.000Z',
     };
-    const getStatus = vi.mocked(window.tabtin.meetingRecording.getStatus);
+    const getStatus = vi.mocked(window.muse.meetingRecording.getStatus);
     getStatus.mockResolvedValue(firstStatus);
     const getArchive = vi.fn((scope: { sessionId: string }) =>
       Promise.resolve({
@@ -1200,7 +1200,7 @@ describe('MeetingLiveSessionView timer', () => {
       message: 'No answer needed.',
       candidate_segment_id: 'new-session-final',
     });
-    Object.assign(window.tabtin.meetingRecording, {
+    Object.assign(window.muse.meetingRecording, {
       getArchive,
       answerCopilotQuestion,
     });
@@ -1245,7 +1245,7 @@ describe('MeetingLiveSessionView timer', () => {
   });
 
   it('keeps an in-flight remote turn evaluated across transcript status increments', async () => {
-    const initialStatus = await window.tabtin.meetingRecording.getStatus();
+    const initialStatus = await window.muse.meetingRecording.getStatus();
     initialStatus.manifest!.copilotEnabled = true;
     const remoteTurn = {
       externalId: 'remote-pending-1',
@@ -1271,7 +1271,7 @@ describe('MeetingLiveSessionView timer', () => {
           resolveAnswer = resolve;
         }),
     );
-    Object.assign(window.tabtin.meetingRecording, {
+    Object.assign(window.muse.meetingRecording, {
       getArchive,
       answerCopilotQuestion,
     });
@@ -1336,7 +1336,7 @@ describe('MeetingLiveSessionView timer', () => {
   });
 
   it('drops a stale pending result and evaluates the merged revision', async () => {
-    const initialStatus = await window.tabtin.meetingRecording.getStatus();
+    const initialStatus = await window.muse.meetingRecording.getStatus();
     initialStatus.manifest!.copilotEnabled = true;
     const first = {
       externalId: 'dirty-first',
@@ -1381,7 +1381,7 @@ describe('MeetingLiveSessionView timer', () => {
         provider: 'test',
         latency_ms: 1,
       });
-    Object.assign(window.tabtin.meetingRecording, {
+    Object.assign(window.muse.meetingRecording, {
       getArchive: vi.fn().mockResolvedValue({
         transcript: [first],
         copilotRecords: [],
@@ -1451,7 +1451,7 @@ describe('MeetingLiveSessionView timer', () => {
   });
 
   it('re-evaluates a candidate only after wait_for_more gains a revision', async () => {
-    const initialStatus = await window.tabtin.meetingRecording.getStatus();
+    const initialStatus = await window.muse.meetingRecording.getStatus();
     initialStatus.manifest!.copilotEnabled = true;
     const first = {
       externalId: 'wait-first',
@@ -1474,7 +1474,7 @@ describe('MeetingLiveSessionView timer', () => {
         message: 'No direct answer needed.',
         candidate_segment_id: 'wait-second',
       });
-    Object.assign(window.tabtin.meetingRecording, {
+    Object.assign(window.muse.meetingRecording, {
       getArchive: vi.fn().mockResolvedValue({
         transcript: [first],
         copilotRecords: [],
@@ -1525,7 +1525,7 @@ describe('MeetingLiveSessionView timer', () => {
   });
 
   it('evaluates every initial final in recordedAt order', async () => {
-    const initialStatus = await window.tabtin.meetingRecording.getStatus();
+    const initialStatus = await window.muse.meetingRecording.getStatus();
     initialStatus.manifest!.copilotEnabled = true;
     const answerCopilotQuestion = vi.fn((_, externalId: string) =>
       Promise.resolve({
@@ -1534,7 +1534,7 @@ describe('MeetingLiveSessionView timer', () => {
         candidate_segment_id: externalId,
       }),
     );
-    Object.assign(window.tabtin.meetingRecording, {
+    Object.assign(window.muse.meetingRecording, {
       getArchive: vi.fn().mockResolvedValue({
         transcript: [
           {
@@ -1595,7 +1595,7 @@ describe('MeetingLiveSessionView timer', () => {
   });
 
   it('queues a later cross-source final even when its startMs is smaller', async () => {
-    const initialStatus = await window.tabtin.meetingRecording.getStatus();
+    const initialStatus = await window.muse.meetingRecording.getStatus();
     initialStatus.manifest!.copilotEnabled = true;
     const firstTurn = {
       externalId: 'turn-1',
@@ -1634,7 +1634,7 @@ describe('MeetingLiveSessionView timer', () => {
         message: 'Context synchronized.',
         candidate_segment_id: 'turn-2',
       });
-    Object.assign(window.tabtin.meetingRecording, {
+    Object.assign(window.muse.meetingRecording, {
       getArchive,
       answerCopilotQuestion,
     });

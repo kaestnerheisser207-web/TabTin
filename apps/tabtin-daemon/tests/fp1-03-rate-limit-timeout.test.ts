@@ -17,7 +17,7 @@ import { join } from 'node:path';
 // 跑真 grep（~1s/次），25 次顺序请求 >> vitest 默认 5s test timeout，导致
 // 测试在 rate limiter 命中前就被 abort（loop 第一次 await 没回来）。
 // mock 成瞬时 200，让测试可以专注验证 rate limiter 本身。
-vi.mock('@tabtin/action-tools/headless', () => ({
+vi.mock('@muse/action-tools/headless', () => ({
   createHeadlessAdapter: () => ({
     getRegisteredTools: () => [],
     hasToolForAction: () => true,

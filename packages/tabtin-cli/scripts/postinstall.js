@@ -5,7 +5,7 @@
  * npm i -g 后自动把包内 Skill 物化到 ~/.agents/skills（第三方 Agent 扫描目录）。
  *
  * 跳过条件：
- * - TABTIN_SKIP_SKILLS_INSTALL=1
+ * - MUSE_SKIP_SKILLS_INSTALL=1
  * - 非全局安装（避免仓库内 pnpm install 误触发）
  * - 包内 binaries/ 或 skills/manifest.json 缺失（未 build 的开发树）
  */
@@ -20,7 +20,7 @@ const LAUNCHER = path.join(PKG_ROOT, 'bin', 'muse.js');
 const MANIFEST = path.join(PKG_ROOT, 'skills', 'manifest.json');
 
 function log(msg) {
-  process.stderr.write(`[@tabtin/cli postinstall] ${msg}\n`);
+  process.stderr.write(`[@muse/cli postinstall] ${msg}\n`);
 }
 
 function isGlobalInstall() {
@@ -33,8 +33,8 @@ function isGlobalInstall() {
 }
 
 function main() {
-  if (process.env.TABTIN_SKIP_SKILLS_INSTALL === '1') {
-    log('跳过 Skill 物化（TABTIN_SKIP_SKILLS_INSTALL=1）');
+  if (process.env.MUSE_SKIP_SKILLS_INSTALL === '1') {
+    log('跳过 Skill 物化（MUSE_SKIP_SKILLS_INSTALL=1）');
     return;
   }
   if (!isGlobalInstall()) {
@@ -46,14 +46,14 @@ function main() {
     return;
   }
 
-  // 固定落到约定目录，忽略父 shell 残留的 TABTIN_AGENTS_SKILLS_DIR，避免装错地方。
+  // 固定落到约定目录，忽略父 shell 残留的 MUSE_AGENTS_SKILLS_DIR，避免装错地方。
   // 自定义目录：装完后手动 muse skills install --dir <path>
   const agentsDir = path.join(os.homedir(), '.agents', 'skills');
   const bundleDir = path.join(PKG_ROOT, 'skills');
   log(`物化全部 Skill → ${agentsDir}`);
 
-  const childEnv = { ...process.env, TABTIN_SKILLS_BUNDLE_DIR: bundleDir };
-  delete childEnv.TABTIN_AGENTS_SKILLS_DIR;
+  const childEnv = { ...process.env, MUSE_SKILLS_BUNDLE_DIR: bundleDir };
+  delete childEnv.MUSE_AGENTS_SKILLS_DIR;
 
   const result = spawnSync(
     process.execPath,

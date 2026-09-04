@@ -1,4 +1,4 @@
-import { ROLE_LEVELS, type OrganizationRole } from '@tabtin/app-shell'
+import { ROLE_LEVELS, type OrganizationRole } from '@muse/app-shell'
 
 /**
  * 判断当前用户是否有组织管理权限。

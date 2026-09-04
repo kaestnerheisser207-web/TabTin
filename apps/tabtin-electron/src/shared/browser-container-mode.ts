@@ -2,9 +2,9 @@
  * browser-container-mode — 内嵌浏览器容器实现的 feature flag（webview 迁移 Phase 2，）
  *
  * 单一判定入口（ 判定顺序，仍收口在本模块）：
- *   1. 运行时 `TABTIN_BROWSER_CONTAINER=webview|wcv`——dev（根 .env 经 electron-vite
+ *   1. 运行时 `MUSE_BROWSER_CONTAINER=webview|wcv`——dev（根 .env 经 electron-vite
  *      压进 process.env）与排障（终端启动 packaged app 时注入）双用，可覆盖烘焙值
- *   2. 构建期烘焙 `VITE_TABTIN_BROWSER_CONTAINER`（打包 profile 写入，esbuild 字面量
+ *   2. 构建期烘焙 `VITE_MUSE_BROWSER_CONTAINER`（打包 profile 写入，esbuild 字面量
  *      替换进 main bundle）——安装包从 Finder/桌面启动没有 shell env，这是唯一通道
  *   3. 都缺省 → `wcv`
  *
@@ -13,7 +13,7 @@
  *   2. 主 → preload：经 `webPreferences.additionalArguments` 注入
  *      `--tabtin-browser-container=<mode>`（sandboxed preload 读 process.argv 最可靠，
  *      不依赖 env 是否继承进 renderer 进程）
- *   3. preload → renderer：`window.tabtin.browserContainer.mode` 只读值
+ *   3. preload → renderer：`window.muse.browserContainer.mode` 只读值
  *
  * flag 语义：
  *   - `wcv`（默认）：现状 WebContentsView 路径，行为一字不变
@@ -28,7 +28,7 @@
 export type BrowserContainerMode = 'wcv' | 'webview'
 
 /** 环境变量名（主进程读取） */
-export const BROWSER_CONTAINER_ENV_KEY = 'TABTIN_BROWSER_CONTAINER'
+export const BROWSER_CONTAINER_ENV_KEY = 'MUSE_BROWSER_CONTAINER'
 
 /** 主进程 → preload 的命令行参数前缀（additionalArguments） */
 export const BROWSER_CONTAINER_ARGV_PREFIX = '--tabtin-browser-container='
@@ -40,17 +40,17 @@ export function parseBrowserContainerMode(raw: string | undefined | null): Brows
 
 /**
  * 构建期烘焙值。打包 profile（.env.preprod 等）写
- * `VITE_TABTIN_BROWSER_CONTAINER`，esbuild 在 main bundle 编译时把下面的
- * `import.meta.env.VITE_TABTIN_BROWSER_CONTAINER` 替换成字面量——安装包从
+ * `VITE_MUSE_BROWSER_CONTAINER`，esbuild 在 main bundle 编译时把下面的
+ * `import.meta.env.VITE_MUSE_BROWSER_CONTAINER` 替换成字面量——安装包从
  * Finder/桌面启动拿不到 shell env，烘焙是打包形态开 flag 的唯一通道。
  *
- * 必须**精确**写 `import.meta.env.VITE_TABTIN_BROWSER_CONTAINER`（不能加
+ * 必须**精确**写 `import.meta.env.VITE_MUSE_BROWSER_CONTAINER`（不能加
  * `?.` / cast，规矩同 VITE_APP_VERSION，见 src/types/import-meta-env.d.ts）。
  * 本模块也被 preload / renderer 引用：两处 bundle 的该值缺省为 undefined，
  * 而且它们不调 resolveBrowserContainerMode（preload 走 argv，renderer 走
  * preload 只读值），烘焙值只对主进程判定生效。
  */
-const BAKED_BROWSER_CONTAINER: string | undefined = import.meta.env.VITE_TABTIN_BROWSER_CONTAINER
+const BAKED_BROWSER_CONTAINER: string | undefined = import.meta.env.VITE_MUSE_BROWSER_CONTAINER
 
 /**
  * 主进程判定入口：显式传 env 便于测试。

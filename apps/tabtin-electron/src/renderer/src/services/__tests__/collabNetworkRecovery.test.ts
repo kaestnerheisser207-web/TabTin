@@ -2,7 +2,7 @@
  *  渲染进程网络自愈聚合器单测：阈值判定、节流、宿主 API 缺失安全。
  */
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
-import { COLLAB_STUCK_CONNECTING_EVENT } from '@tabtin/collab-core'
+import { COLLAB_STUCK_CONNECTING_EVENT } from '@muse/collab-core'
 import {
   initCollabNetworkRecovery,
   NETWORK_RECOVERY_STUCK_THRESHOLD,
@@ -62,7 +62,7 @@ describe('collabNetworkRecovery — 挂起聚合上报', () => {
     expect(recoverStack).toHaveBeenCalledTimes(1)
   })
 
-  it('window.tabtin 缺失（web/测试环境）时静默安全', async () => {
+  it('window.muse 缺失（web/测试环境）时静默安全', async () => {
     delete (window as unknown as { tabtin?: unknown }).tabtin
     __internal.resetThrottle()
 

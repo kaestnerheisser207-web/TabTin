@@ -1,4 +1,4 @@
-import { joinApiPath } from '@tabtin/config'
+import { joinApiPath } from '@muse/config'
 import { DAEMON_CONTROL_API_BASE_URL } from '@/config/api'
 import { apiRequest, unwrapData } from '@/services/apiBase'
 import { createLogger } from '@/utils/logger'

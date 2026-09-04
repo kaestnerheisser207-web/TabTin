@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest'
-import { CAPABILITY_DISCOVERY_SNAPSHOT_VERSION } from '@tabtin/shared'
+import { CAPABILITY_DISCOVERY_SNAPSHOT_VERSION } from '@muse/shared'
 import { collectCurrentHostRuntimeSnapshot } from '../runtimeSnapshot'
 
 describe('collectCurrentHostRuntimeSnapshot', () => {

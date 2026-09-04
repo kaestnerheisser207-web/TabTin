@@ -2,7 +2,7 @@
  * ：归档确认后立刻下架；PUT / abort 失败再回滚。
  */
 import { describe, it, expect, vi, beforeEach } from 'vitest'
-import type { ChatSession } from '@tabtin/chat-client'
+import type { ChatSession } from '@muse/chat-client'
 import { isSessionShareArchiveConflict } from '../../isSessionShareArchiveConflict'
 import {
   createSessionCrudActions,
@@ -45,7 +45,7 @@ vi.mock('../../../../useSessionReadStore', () => ({
   useSessionReadStore: { getState: () => ({ clearSession: vi.fn() }) },
 }))
 vi.mock('@/services/sessionFreshness', () => ({ markSessionFresh: vi.fn(), markSessionStale: vi.fn() }))
-vi.mock('@tabtin/smartsheet-ui/toast', () => ({ toast: vi.fn() }))
+vi.mock('@muse/smartsheet-ui/toast', () => ({ toast: vi.fn() }))
 vi.mock('@/i18n', () => ({ default: { t: (k: string) => k } }))
 
 function makeSession(id: string, spaceId: string, status = 'active'): ChatSession {

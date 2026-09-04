@@ -47,7 +47,7 @@ export function createSplitPane(opts: {
   const sessionStore = useTerminalSessionStore.getState()
 
   // 继承当前 pane 的 cwd 与执行 Space 绑定（executionSpaceId），保证分屏 pane 的 PTY
-  // 与 root 在同一 working_dir / 同一 TABTIN_SPACE_ID 下起。
+  // 与 root 在同一 working_dir / 同一 MUSE_SPACE_ID 下起。
   const parent = inheritFromSessionId
     ? sessionStore.sessionsBySpace[spaceId]?.find(s => s.id === inheritFromSessionId)
     : undefined

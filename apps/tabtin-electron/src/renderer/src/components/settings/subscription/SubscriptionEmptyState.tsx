@@ -1,6 +1,6 @@
 import React from 'react'
 import { useTranslation } from 'react-i18next'
-import { Button } from '@tabtin/smartsheet-ui'
+import { Button } from '@muse/smartsheet-ui'
 import { cn } from '@utils/cn'
 import { SettingsSectionCard } from '../SettingsSectionCard'
 import { SETTINGS_HINT } from '../settingsUi'

@@ -15,20 +15,20 @@ import { captureClientError } from './sentry'
 /**
  * Packaged 模式下 renderer 的入口 URL。
  *
- * 走 `tabtin-file://` 自定义协议（registerSchemesAsPrivileged 标记为 standard +
+ * 走 `muse-file://` 自定义协议（registerSchemesAsPrivileged 标记为 standard +
  * secure + supportFetchAPI + corsEnabled，详见 deep-link.ts），让 renderer 拿到
- * 稳定的 origin `tabtin-file://app`。这样：
- *   - Centrifugo `allowed_origins` 用 `tabtin-file://` 即可放行（避免 packaged 下
+ * 稳定的 origin `muse-file://app`。这样：
+ *   - Centrifugo `allowed_origins` 用 `muse-file://` 即可放行（避免 packaged 下
  *     renderer 走 file:// 协议握手时 Origin=null 被 403 拒掉）
- *   - 同源资源由 CSP `'self'` 自动覆盖 (`tabtin-file://app`)，不必把 file://
+ *   - 同源资源由 CSP `'self'` 自动覆盖 (`muse-file://app`)，不必把 file://
  *     这种弱 origin 加进 connect-src / script-src
  *
  * URL → 文件映射在 `file-system/protocol.ts` 的 `resolveAppResourcePath`。
  */
-const PACKAGED_RENDERER_URL = 'tabtin-file://app/index.html'
+const PACKAGED_RENDERER_URL = 'muse-file://app/index.html'
 
 function getDevInstanceId(): string | undefined {
-  return process.env.TABTIN_DEV_INSTANCE?.trim() || undefined
+  return process.env.MUSE_DEV_INSTANCE?.trim() || undefined
 }
 
 function withDevInstanceMarker(rendererUrl: string): string {
@@ -36,7 +36,7 @@ function withDevInstanceMarker(rendererUrl: string): string {
   if (!instanceId) return rendererUrl
 
   const url = new URL(rendererUrl)
-  url.searchParams.set('tabtin-dev-instance', instanceId)
+  url.searchParams.set('muse-dev-instance', instanceId)
   return url.toString()
 }
 
@@ -137,9 +137,9 @@ export interface CreateMainWindowOptions {
 
 function isAllowedNavigation(navigationUrl: string, rendererUrl: string): boolean {
   if (navigationUrl.startsWith('file://')) return true
-  // packaged 模式 renderer 走 tabtin-file://app/*；任何 tabtin-file:// 子路径都视为
+  // packaged 模式 renderer 走 muse-file://app/*；任何 muse-file:// 子路径都视为
   // 同源跳转放行（协议本身只能由 main 进程注册的 stream handler 提供数据，无外部入口）
-  if (navigationUrl.startsWith('tabtin-file://')) return true
+  if (navigationUrl.startsWith('muse-file://')) return true
   try {
     const nav = new URL(navigationUrl)
     const renderer = new URL(rendererUrl)
@@ -207,7 +207,7 @@ export function createMainWindow(options: CreateMainWindowOptions): BrowserWindo
       enableWebSQL: false,
       v8CacheOptions: 'code',
       //  (webview 迁移 Phase 2): 开启 <webview> tag 能力。
-      // 无论 TABTIN_BROWSER_CONTAINER 取值都开启——tag 能力是 Tin 沙箱
+      // 无论 MUSE_BROWSER_CONTAINER 取值都开启——tag 能力是 Tin 沙箱
       // () 的前置依赖，这里同时解除该阻塞；安全边界由 webview-host
       // 的 will-attach-webview 白名单无条件兜底，浏览器容器是否实际使用
       // <webview> 由 flag 单独控制（默认 wcv，行为不变）。

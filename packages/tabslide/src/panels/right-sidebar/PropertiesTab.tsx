@@ -10,7 +10,7 @@ import {
   PanelInput,
 } from './shared/components'
 import { RotateIcon, FlipHIcon, FlipVIcon, OpacityIcon } from './shared/field-icons'
-import { SectionPanel } from '@tabtin/smartsheet-ui'
+import { SectionPanel } from '@muse/smartsheet-ui'
 import { StyleEditor } from './editors/style-editor'
 import { ScrollArea } from '../../components/ui/ScrollArea'
 

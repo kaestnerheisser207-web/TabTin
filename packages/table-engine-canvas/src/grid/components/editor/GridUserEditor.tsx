@@ -8,7 +8,7 @@ import {
   useRef,
   useState,
 } from 'react';
-import { UserInitialsAvatar, type UserOption } from '@tabtin/smartsheet-ui';
+import { UserInitialsAvatar, type UserOption } from '@muse/smartsheet-ui';
 import { useGridPopupPosition } from '../../hooks';
 import type { IEditorProps, IEditorRef } from './EditorContainer';
 import { CheckIcon } from './editorIcons';

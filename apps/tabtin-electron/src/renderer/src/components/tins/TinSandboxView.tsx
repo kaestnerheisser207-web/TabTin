@@ -53,7 +53,7 @@ export const TinSandboxView: React.FC<TinSandboxViewProps> = ({
       try {
         const contentsId = webview.getWebContentsId?.()
         if (typeof contentsId === 'number') {
-          window.tabtin?.tins?.registerWebview(currentInstanceId, contentsId)
+          window.muse?.tins?.registerWebview(currentInstanceId, contentsId)
         }
       } catch { /* webview may not support getWebContentsId */ }
       onLoadRef.current?.()
@@ -68,7 +68,7 @@ export const TinSandboxView: React.FC<TinSandboxViewProps> = ({
     cleanupRef.current = () => {
       webview.removeEventListener('did-finish-load', handleDidFinishLoad)
       webview.removeEventListener('did-fail-load', handleDidFailLoad)
-      window.tabtin?.tins?.unregisterWebview(currentInstanceId)
+      window.muse?.tins?.unregisterWebview(currentInstanceId)
     }
   }, [])
 

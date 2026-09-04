@@ -12,7 +12,7 @@
 
 import { create } from 'zustand'
 import { createJSONStorage, persist } from 'zustand/middleware'
-import { createMigratingStorage, withPersistSafety } from '@tabtin/shared'
+import { createMigratingStorage, withPersistSafety } from '@muse/shared'
 import { PERSIST_KEYS } from './persist-key-registry'
 import {
   type LayoutNode,

@@ -10,8 +10,8 @@ import {
   rememberMessageAgentAttribution,
 } from '../src/state/index.js'
 import { injectTurnIdentity } from '../src/conversation/inject-turn-identity.js'
-import type { ContentBlock, MessageBlockRecord } from '@tabtin/agent-runtime'
-import { INTERNAL_MESSAGE_MARKERS, hasInternalMarker } from '@tabtin/agent-runtime/engine'
+import type { ContentBlock, MessageBlockRecord } from '@muse/agent-runtime'
+import { INTERNAL_MESSAGE_MARKERS, hasInternalMarker } from '@muse/agent-runtime/engine'
 
 const testAttribution = new AttributionStore()
 

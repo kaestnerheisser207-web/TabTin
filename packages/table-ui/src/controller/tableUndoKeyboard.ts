@@ -3,7 +3,7 @@
  * 哪些应交给表级 undo（Yjs / REST 时间线）。
  *
  * 与 canvas Grid 的焦点哨兵约定：`data-grid-focus-trap`
- *（见 `@tabtin/table-engine-canvas` EditorContainer）。
+ *（见 `@muse/table-engine-canvas` EditorContainer）。
  */
 export const GRID_FOCUS_TRAP_ATTR = 'data-grid-focus-trap'
 

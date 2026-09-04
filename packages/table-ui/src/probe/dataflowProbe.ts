@@ -4,7 +4,7 @@
  * 目标：让 AI / 自动化能在真实宿主里观测「用户手势 → 真实 handler → 乐观渲染 →
  * http → reconcile/回滚」这条**交互面**链路，而不依赖人工点 Canvas / copy 日志 / 截图。
  *
- * 设计与 TabDoc 的 `@tabtin/doc-editor` 探针同构（见 docs/agent/dataflow-verification.md）：
+ * 设计与 TabDoc 的 `@muse/doc-editor` 探针同构（见 docs/agent/dataflow-verification.md）：
  *   - 探针只采集事件，host-agnostic；由宿主在 DEV 下显式 enableDataflowProbe() 启用
  *     （生产包永不启用 = 全程廉价 no-op）；
  *   - 各层（interaction / editing / clipboard / optimistic / http / reconcile / view）

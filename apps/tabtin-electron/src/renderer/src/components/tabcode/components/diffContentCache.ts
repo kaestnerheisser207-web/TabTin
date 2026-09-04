@@ -122,8 +122,8 @@ async function loadSides(
   baseCommitHash?: string,
 ): Promise<DiffSideContents> {
   const filePathInRepo = relativePath(rootPath, filePath)
-  const git = window.tabtin.git
-  const fs = window.tabtin.fileSystem
+  const git = window.muse.git
+  const fs = window.muse.fileSystem
 
   const getHead = () => {
     trackShowFile()

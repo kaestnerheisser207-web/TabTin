@@ -24,7 +24,7 @@ type ProvisionalSessionBridge = {
 }
 
 function bridge(): ProvisionalSessionBridge | undefined {
-  return typeof window === 'undefined' ? undefined : window.tabtin?.agentEngine
+  return typeof window === 'undefined' ? undefined : window.muse?.agentEngine
 }
 
 export async function registerProvisionalSessionWithHost(sessionId: string): Promise<boolean> {

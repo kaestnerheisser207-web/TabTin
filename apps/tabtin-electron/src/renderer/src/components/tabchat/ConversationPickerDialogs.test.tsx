@@ -18,7 +18,7 @@ vi.mock('react-i18next', () => ({
   useTranslation: () => ({ t: (key: string) => key }),
 }))
 
-vi.mock('@tabtin/smartsheet-ui', () => ({ toast: vi.fn() }))
+vi.mock('@muse/smartsheet-ui', () => ({ toast: vi.fn() }))
 
 vi.mock('@components/ui', () => ({
   Dialog: ({ open, children }: { open: boolean; children: React.ReactNode }) => open ? <>{children}</> : null,

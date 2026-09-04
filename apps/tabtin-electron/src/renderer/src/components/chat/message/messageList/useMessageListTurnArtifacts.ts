@@ -1,5 +1,5 @@
 import { useMemo } from 'react'
-import type { ChatMessage } from '@tabtin/chat-client'
+import type { ChatMessage } from '@muse/chat-client'
 import { useChatRuntimeStore } from '@stores/useChatRuntimeStore'
 import {
   buildPriorTurnArtifactsByEndIndex,

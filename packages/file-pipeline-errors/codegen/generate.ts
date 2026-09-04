@@ -13,8 +13,8 @@
  *   5. apps/tabtin-android/app/src/main/res/values-en/strings_chat.xml 同款
  *
  * 用法：
- *   pnpm --filter @tabtin/file-pipeline-errors codegen          # 派生（覆盖现有文件）
- *   pnpm --filter @tabtin/file-pipeline-errors codegen:verify   # 校验 diff 0（不写文件）
+ *   pnpm --filter @muse/file-pipeline-errors codegen          # 派生（覆盖现有文件）
+ *   pnpm --filter @muse/file-pipeline-errors codegen:verify   # 校验 diff 0（不写文件）
  *
  * **非破坏性 codegen 原则**：
  *   - chat.json 只 mutate `toolError` 段中的 file pipeline kind keys，
@@ -138,7 +138,7 @@ const TS_HEADER = `/**
  * **AUTO-GENERATED — DO NOT EDIT BY HAND**
  *
  * Source: packages/file-pipeline-errors/codegen/error-codes.yaml
- * Codegen: pnpm --filter @tabtin/file-pipeline-errors codegen
+ * Codegen: pnpm --filter @muse/file-pipeline-errors codegen
  *
  * 派生 3 个核心常量：
  *   - FilePipelineErrorCode (string enum / error_kind)
@@ -478,7 +478,7 @@ function main(): void {
   const ok = verifyAll(tasks);
   if (!ok) {
     console.error(
-      `\n[codegen:verify] FAIL — run \`pnpm --filter @tabtin/file-pipeline-errors codegen\` to regenerate.`,
+      `\n[codegen:verify] FAIL — run \`pnpm --filter @muse/file-pipeline-errors codegen\` to regenerate.`,
     );
     process.exit(1);
   }

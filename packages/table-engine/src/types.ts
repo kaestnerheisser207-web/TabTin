@@ -523,7 +523,7 @@ export type TableGridAttachmentUploadHandler<Row extends TableGridRow = TableGri
   context: TableGridAttachmentUploadContext<Row>
 ) => Promise<unknown[] | void> | unknown[] | void
 
-/** 跨应用文件引用（对话 → 附件字段），与 application/x-tabtin-file-ref 对齐 */
+/** 跨应用文件引用（对话 → 附件字段），与 application/x-muse-file-ref 对齐 */
 export interface TableGridAttachmentFileRef {
   name: string
   file_id?: string

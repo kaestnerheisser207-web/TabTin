@@ -56,7 +56,7 @@ vi.mock('@stores/useTerminalPaneStatusStore', () => ({
   },
 }))
 
-vi.mock('@tabtin/smartsheet-ui/toast', () => ({ toast: h.toast }))
+vi.mock('@muse/smartsheet-ui/toast', () => ({ toast: h.toast }))
 
 vi.mock('@/i18n', () => ({
   default: { t: (_k: string, o?: { defaultValue?: string }) => o?.defaultValue ?? _k },

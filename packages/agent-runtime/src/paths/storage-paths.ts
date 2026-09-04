@@ -1,30 +1,30 @@
 /**
  * Platform storage roots（agent-runtime 侧本地副本）。
  *
- * 与 `@tabtin/shared/storage-paths` 的 `getHomeTabtinPath` /
+ * 与 `@muse/shared/storage-paths` 的 `getHomeTabtinPath` /
  * `getPlatformBaseRoot` / `getDataRoot` 字节对齐；runtime 本地持有一份，
- * 避免生产依赖 `@tabtin/shared`。改算法时两边同步。
+ * 避免生产依赖 `@muse/shared`。改算法时两边同步。
  */
 
 import os from 'node:os';
 import path from 'node:path';
 
 /**
- * 运行时根。Electron 会在启动期注入 profile 私有的 TABTIN_RUNTIME_ROOT；
+ * 运行时根。Electron 会在启动期注入 profile 私有的 MUSE_RUNTIME_ROOT；
  * Daemon / 独立 CLI 未注入时保持历史 ~/.tabtin 兼容。
  */
 export function getHomeTabtinPath(...subSegments: string[]): string {
-  const runtimeRoot = (process.env.TABTIN_RUNTIME_ROOT || '').trim();
+  const runtimeRoot = (process.env.MUSE_RUNTIME_ROOT || '').trim();
   const root = runtimeRoot ? path.resolve(runtimeRoot) : path.join(os.homedir(), '.tabtin');
   return path.join(root, ...subSegments);
 }
 
 /**
- * Platform base：env `TABTIN_PLATFORM_BASE_ROOT` 优先，否则按 OS 分档。
+ * Platform base：env `MUSE_PLATFORM_BASE_ROOT` 优先，否则按 OS 分档。
  * darwin → Application Support/TabTin；win32 → APPDATA/TabTin；其它 → ~/.tabtin。
  */
 export function getPlatformBaseRoot(): string {
-  const envRoot = (process.env.TABTIN_PLATFORM_BASE_ROOT || '').trim();
+  const envRoot = (process.env.MUSE_PLATFORM_BASE_ROOT || '').trim();
   if (envRoot) {
     return path.resolve(envRoot);
   }
@@ -39,11 +39,11 @@ export function getPlatformBaseRoot(): string {
 }
 
 /**
- * 新单根。env `TABTIN_DATA_ROOT` 优先，否则回落 `getPlatformBaseRoot()`。
+ * 新单根。env `MUSE_DATA_ROOT` 优先，否则回落 `getPlatformBaseRoot()`。
  * `users/{userId}/…` 等新布局全部挂在此下。
  */
 export function getDataRoot(): string {
-  const envRoot = (process.env.TABTIN_DATA_ROOT || '').trim();
+  const envRoot = (process.env.MUSE_DATA_ROOT || '').trim();
   if (envRoot) {
     return path.resolve(envRoot);
   }
@@ -52,7 +52,7 @@ export function getDataRoot(): string {
 
 /**
  * 解析 data root：显式 override 优先，否则 `getDataRoot()`。
- * 对齐 `@tabtin/terminal-core` `resolveDataRoot`。
+ * 对齐 `@muse/terminal-core` `resolveDataRoot`。
  */
 export function resolveDataRoot(explicitRoot?: string): string {
   if (explicitRoot) {

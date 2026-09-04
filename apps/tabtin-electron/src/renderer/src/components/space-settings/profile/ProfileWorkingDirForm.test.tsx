@@ -12,8 +12,8 @@ vi.mock('react-i18next', () => ({
   }),
 }))
 
-vi.mock('@tabtin/smartsheet-ui', async () => {
-  const actual = await vi.importActual<typeof import('@tabtin/smartsheet-ui')>('@tabtin/smartsheet-ui')
+vi.mock('@muse/smartsheet-ui', async () => {
+  const actual = await vi.importActual<typeof import('@muse/smartsheet-ui')>('@muse/smartsheet-ui')
   return {
     ...actual,
     toast: Object.assign(vi.fn(), { success: vi.fn(), error: vi.fn() }),
@@ -139,11 +139,11 @@ describe('ProfileWorkingDirForm ( Space.working_dir SSOT)', () => {
     pathExistsMock.mockResolvedValue({ exists: false, isDirectory: false })
     showOpenDialogMock.mockResolvedValue(['/Users/me/new-project'])
     sheetState.relocateNonce = 0
-    window.tabtin = {
+    window.muse = {
       showOpenDialog: showOpenDialogMock,
       fileSystem: { pathExists: pathExistsMock },
       git: { isGitRepo: vi.fn().mockResolvedValue({ success: true, isRepo: false }) },
-    } as unknown as typeof window.tabtin
+    } as unknown as typeof window.muse
   })
 
   it('以 Space.working_dir 为 SSOT：Agent 空目录时仍展示失效路径与重选', async () => {

@@ -38,9 +38,9 @@ import {
   Switch,
   toast,
   ScrollArea,
-} from '@tabtin/smartsheet-ui'
+} from '@muse/smartsheet-ui'
 import { Eye, EyeOff, GripVertical, Search } from 'lucide-react'
-import type { Field, ViewColumnMeta, ViewMeta, ViewUpdateRequest } from '@tabtin/table-core'
+import type { Field, ViewColumnMeta, ViewMeta, ViewUpdateRequest } from '@muse/table-core'
 import { buildColumnMetaUpdatePayload } from '@/types/table-adapters'
 import {
   FIELD_MANAGEMENT_CONTENT_CLASS_NAME,

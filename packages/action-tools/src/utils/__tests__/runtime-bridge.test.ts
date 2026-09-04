@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
-import type { TerminalRuntimeBridge } from '@tabtin/terminal-core';
+import type { TerminalRuntimeBridge } from '@muse/terminal-core';
 import {
   resolveTerminalRuntimeBridge,
   setPtyManagerAPI,

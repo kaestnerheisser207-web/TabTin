@@ -2,7 +2,7 @@
 W1.4 收尾：`_classify_exception_to_failure_code` 启发式分类器单测
 
 为什么要补这套测试：
-  - W1 引入 13 类全局 ErrorCode（@tabtin/file-pipeline-errors SSoT），后端
+  - W1 引入 13 类全局 ErrorCode（@muse/file-pipeline-errors SSoT），后端
     `_classify_exception_to_failure_code` 是这条链路的源头——根据后端解析过程
     抛出的异常 message / type name 映射到 13 类之一。
   - 该函数 14 条 if 分支 phrase **顺序敏感**（"etimedout" 含 "timeout" 子串

@@ -18,8 +18,8 @@ import {
   type TerminalExecutionContext,
   type TerminalExecutionPolicy,
   type DegradationDecision,
-} from '@tabtin/terminal-core'
-import { runWithHumanInteractionContext } from '@tabtin/agent-runtime'
+} from '@muse/terminal-core'
+import { runWithHumanInteractionContext } from '@muse/agent-runtime'
 import {
   PtyOutputBuffer,
   PtyWriteChannel,
@@ -44,7 +44,7 @@ import {
   type PtySession,
   type PtySessionCloseReason,
   type ShellType,
-} from '@tabtin/pty-core'
+} from '@muse/pty-core'
 import { collectProcessUsageTable } from '../resource-monitor/process-usage'
 import { createDefaultPtyHostClient } from './SubprocessPtyHost'
 import { saveAutoCheckpoint } from './snapshot'
@@ -89,7 +89,7 @@ export function resolveDefaultLocaleEnv(
 function mergeCurrentCLIServerEnv(
   env?: Record<string, string>,
 ): Record<string, string> | undefined {
-  if (env && ('TABTIN_SOCK' in env || '_TABTIN_TRANSPORT_TOKEN' in env)) {
+  if (env && ('MUSE_SOCK' in env || '_MUSE_TRANSPORT_TOKEN' in env)) {
     return env
   }
 
@@ -99,8 +99,8 @@ function mergeCurrentCLIServerEnv(
   }
 
   return {
-    TABTIN_SOCK: info.socketPath,
-    _TABTIN_TRANSPORT_TOKEN: info.token,
+    MUSE_SOCK: info.socketPath,
+    _MUSE_TRANSPORT_TOKEN: info.token,
     ...(env ?? {}),
   }
 }
@@ -114,7 +114,7 @@ export type {
   ExecuteCommandResult,
   PtySession,
   PtySessionCloseReason,
-} from '@tabtin/pty-core'
+} from '@muse/pty-core'
 
 export type { PaneStatus, PaneStatusEvent } from '@shared/types/terminal'
 import type { PaneStatus, PaneStatusEvent } from '@shared/types/terminal'
@@ -127,7 +127,7 @@ export interface PtySpawnOptions {
   spaceId?: string
   /**
    * Phase 4（PRD §1.5）：桌面/本地沙箱终端「不绑定任何执行 Space」。置 true 时
-   * 不从全局 `process.env.TABTIN_*SPACE_ID` 兜底注入 Space，并在最终 env 中剔除
+   * 不从全局 `process.env.MUSE_*SPACE_ID` 兜底注入 Space，并在最终 env 中剔除
    * 这两个变量——避免桌面终端 shell 内的 tabtin CLI 静默落到当前活跃 Space（执行串台）。
    * 仅 renderer 经 pty:spawn IPC 起的、未显式带 spaceId 的用户终端会置此标志；
    * Agent / 执行型终端显式带 spaceId、不置此标志，行为不变。
@@ -157,7 +157,7 @@ function mergeSpaceIdIntoEnv(
   spaceId: string | undefined,
 ): Record<string, string> | undefined {
   if (!spaceId) return baseEnv
-  return { ...baseEnv, TABTIN_SPACE_ID: spaceId, TABTIN_AGENT_SPACE_ID: spaceId }
+  return { ...baseEnv, MUSE_SPACE_ID: spaceId, MUSE_AGENT_SPACE_ID: spaceId }
 }
 
 function isAgentSessionId(sessionId: string): boolean {
@@ -607,7 +607,7 @@ export class PtyManager extends EventEmitter {
   /**
    * PTY 策略降级执行：当 PTY 不支持 sandbox/network-restricted 策略时，
    * 降级到 CommandExecutor spawn+sandbox 执行，并将输出推送到 PTY 数据通道。
-   * 核心逻辑已提取到 @tabtin/terminal-core 的 executeDegraded。
+   * 核心逻辑已提取到 @muse/terminal-core 的 executeDegraded。
    */
   private async executeDegradedCommand(
     sessionId: string,
@@ -778,16 +778,16 @@ export class PtyManager extends EventEmitter {
     // 多 Electron 实例不能依赖全局 discovery：隔离实例不发布 server.json，
     // 交互式 shell 必须显式绑定当前主进程自己的 CLI Server。
     const cliEnv = mergeCurrentCLIServerEnv(session.cliTransportEnv) ?? {}
-    const resolvedSpaceId = session.spaceId || process.env.TABTIN_SPACE_ID || process.env.TABTIN_AGENT_SPACE_ID
+    const resolvedSpaceId = session.spaceId || process.env.MUSE_SPACE_ID || process.env.MUSE_AGENT_SPACE_ID
     if (resolvedSpaceId) {
-      cliEnv.TABTIN_SPACE_ID = resolvedSpaceId
-      cliEnv.TABTIN_AGENT_SPACE_ID = resolvedSpaceId
+      cliEnv.MUSE_SPACE_ID = resolvedSpaceId
+      cliEnv.MUSE_AGENT_SPACE_ID = resolvedSpaceId
     }
-    const resolvedOrganizationId = process.env.TABTIN_ORGANIZATION_ID
+    const resolvedOrganizationId = process.env.MUSE_ORGANIZATION_ID
     if (resolvedOrganizationId) {
-      cliEnv.TABTIN_ORGANIZATION_ID = resolvedOrganizationId
+      cliEnv.MUSE_ORGANIZATION_ID = resolvedOrganizationId
     }
-    const restartAgentEnv = this.isAgentSession(session) ? { TABTIN_AGENT: '1' } : {}
+    const restartAgentEnv = this.isAgentSession(session) ? { MUSE_AGENT: '1' } : {}
     const env = {
       ...sanitizeEnv(process.env),
       ...cliEnv,
@@ -905,20 +905,20 @@ export class PtyManager extends EventEmitter {
     // Phase 4：桌面终端（noSpaceBinding）不绑 Space —— 不从全局 env 兜底注入 spaceId。
     const resolvedSpaceId = options.noSpaceBinding
       ? undefined
-      : (options.spaceId || process.env.TABTIN_SPACE_ID || process.env.TABTIN_AGENT_SPACE_ID)
+      : (options.spaceId || process.env.MUSE_SPACE_ID || process.env.MUSE_AGENT_SPACE_ID)
     if (resolvedSpaceId) {
-      cliEnv.TABTIN_SPACE_ID = resolvedSpaceId
-      cliEnv.TABTIN_AGENT_SPACE_ID = resolvedSpaceId
+      cliEnv.MUSE_SPACE_ID = resolvedSpaceId
+      cliEnv.MUSE_AGENT_SPACE_ID = resolvedSpaceId
     }
-    const resolvedOrganizationId = process.env.TABTIN_ORGANIZATION_ID
+    const resolvedOrganizationId = process.env.MUSE_ORGANIZATION_ID
     if (resolvedOrganizationId) {
-      cliEnv.TABTIN_ORGANIZATION_ID = resolvedOrganizationId
+      cliEnv.MUSE_ORGANIZATION_ID = resolvedOrganizationId
     }
 
-    const agentEnv = isAgentSessionId(sessionId) ? { TABTIN_AGENT: '1' } : {}
+    const agentEnv = isAgentSessionId(sessionId) ? { MUSE_AGENT: '1' } : {}
     const optionEnv = options.env ?? {}
     const explicitTransportEnv = Object.fromEntries(
-      ['TABTIN_SOCK', '_TABTIN_TRANSPORT_TOKEN']
+      ['MUSE_SOCK', '_MUSE_TRANSPORT_TOKEN']
         .filter((key) => key in optionEnv)
         .map((key) => [key, optionEnv[key]]),
     ) as Record<string, string>
@@ -944,8 +944,8 @@ export class PtyManager extends EventEmitter {
     // 确保 shell 内 tabtin CLI 不会误把命令落到当前活跃 Space。
     if (options.noSpaceBinding) {
       const mutableEnv = env as Record<string, string | undefined>
-      delete mutableEnv.TABTIN_SPACE_ID
-      delete mutableEnv.TABTIN_AGENT_SPACE_ID
+      delete mutableEnv.MUSE_SPACE_ID
+      delete mutableEnv.MUSE_AGENT_SPACE_ID
     }
 
     let ptyProcess: ReturnType<PtyHostClient['spawn']> | SyntheticPtyHostSession | null = null

@@ -1,6 +1,6 @@
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
-import { toast } from '@tabtin/smartsheet-ui'
+import { toast } from '@muse/smartsheet-ui'
 import { authApi } from '@/services/auth-api'
 import {
   authAdapter,
@@ -10,7 +10,7 @@ import {
 import { isNetworkError } from '@/services/network-error'
 import { refreshAccessToken } from '@/services/token-refresh'
 import { resetSessionState } from './session-reset'
-import { withPersistSafety } from '@tabtin/shared'
+import { withPersistSafety } from '@muse/shared'
 import { extractErrorMessage } from '@/utils/extract-api-error'
 import { registerAuthStateUpdater } from './auth-state-bridge'
 import { refreshStoredUserProfile } from './auth-profile-refresh'

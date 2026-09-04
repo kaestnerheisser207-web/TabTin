@@ -1,5 +1,5 @@
 import type { ServerResponse } from 'node:http'
-import { errorResponse, type SendJSON } from '@tabtin/cli-server-core'
+import { errorResponse, type SendJSON } from '@muse/cli-server-core'
 import { djangoRequest } from '../../host-bindings.js'
 import { coerceJSONValue, requireTableId } from './helpers.js'
 

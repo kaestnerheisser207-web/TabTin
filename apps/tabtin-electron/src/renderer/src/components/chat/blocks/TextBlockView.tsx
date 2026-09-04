@@ -14,7 +14,7 @@
 
 import React, { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
-import type { TextBlock } from '@tabtin/agent-wire'
+import type { TextBlock } from '@muse/agent-wire'
 import { cn } from '@utils/cn'
 import { MarkdownRenderer } from '../markdown/MarkdownRenderer'
 import {

@@ -1,5 +1,5 @@
 /**
- * @tabtin/desktop-contracts —— TabDesktop 接口契约 + MCP 命名空间常量。
+ * @muse/desktop-contracts —— TabDesktop 接口契约 + MCP 命名空间常量。
  *
  * 规范出处：`docs/planning/tabdesktop-spec-v1.md` § 3.5（v2.0 占位 → v2.1 落地）。
  *

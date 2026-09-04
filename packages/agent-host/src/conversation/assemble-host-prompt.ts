@@ -5,8 +5,8 @@
  * 不依赖任何宿主 TokenManager / 全局 API_BASE_URL。
  */
 
-import { buildUserContextWrapper } from '@tabtin/agent-runtime/engine/user-context-wrapper'
-import { joinApiPath } from '@tabtin/agent-runtime/tools'
+import { buildUserContextWrapper } from '@muse/agent-runtime/engine/user-context-wrapper'
+import { joinApiPath } from '@muse/agent-runtime/tools'
 import { resolveComposerPresetPrompt } from './composer-preset-prompt.js'
 
 const CONTEXT_REF_TYPES = new Set([

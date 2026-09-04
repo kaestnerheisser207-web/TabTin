@@ -1,6 +1,6 @@
 import React from 'react'
 import { RefreshCw } from 'lucide-react'
-import { Button, LoadingSpinner } from '@tabtin/smartsheet-ui'
+import { Button, LoadingSpinner } from '@muse/smartsheet-ui'
 
 export interface TableLoadingViewProps {
   message?: string

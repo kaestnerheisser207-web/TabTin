@@ -11,15 +11,15 @@ import {
   Button,
   toast,
   cn,
-} from '@tabtin/smartsheet-ui'
-import type { FormFieldMeta, FormViewControllerResult } from '@tabtin/table-ui'
-import { toOrganizationMembers } from '@tabtin/table-ui'
+} from '@muse/smartsheet-ui'
+import type { FormFieldMeta, FormViewControllerResult } from '@muse/table-ui'
+import { toOrganizationMembers } from '@muse/table-ui'
 import {
   buildTableApiUrl,
   ViewApiService,
-} from '@tabtin/table-core'
-import type { FieldDefaultValue } from '@tabtin/table-core'
-import type { WorkspaceMemberInfo } from '@tabtin/table-ui'
+} from '@muse/table-core'
+import type { FieldDefaultValue } from '@muse/table-core'
+import type { WorkspaceMemberInfo } from '@muse/table-ui'
 import { electronFetch } from '@/services/electronFetch'
 import { useOrganizationStore } from '@stores/useOrganizationStore'
 import { useAuthStore, selectIsAuthenticated } from '@stores/useAuthStore'
@@ -188,7 +188,7 @@ async function submitFormDirect(
   }
 }
 
-// InlineFieldEditor removed — FormField now uses shared FieldValueEditor from @tabtin/smartsheet-ui
+// InlineFieldEditor removed — FormField now uses shared FieldValueEditor from @muse/smartsheet-ui
 
 // ---------------------------------------------------------------------------
 // Share collaborators fetcher

@@ -4,7 +4,7 @@ import {
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
-} from '@tabtin/smartsheet-ui'
+} from '@muse/smartsheet-ui'
 import { Copy, Lock, Pin, PinOff, Unlock } from 'lucide-react'
 import {
   isViewLockToggleDisabled,

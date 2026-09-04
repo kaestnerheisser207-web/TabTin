@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
 import { X } from 'lucide-react'
-import { Button } from '@tabtin/smartsheet-ui'
+import { Button } from '@muse/smartsheet-ui'
 import type { CommentThread, CommentThreadStatusFilter } from '../../comment-threads/types'
 import {
   filterAnchoredCommentThreads,

@@ -13,8 +13,8 @@ package cmd
 // 只服务 install 一个 Go 子命令。
 //
 // 定位 Python 的策略（优先级递减）：
-//  1. 环境变量 TABTIN_PYTHON              — 用户显式指定
-//  2. 环境变量 TABTIN_REPO_ROOT           — 从显式 repo root 推导
+//  1. 环境变量 MUSE_PYTHON              — 用户显式指定
+//  2. 环境变量 MUSE_REPO_ROOT           — 从显式 repo root 推导
 //     <root>/apps/tabtin_django/venv/bin/python
 //  3. 从当前 binary 位置或 cwd 向上查找 apps/tabtin_django/manage.py，
 //     推出 repo root + venv python
@@ -22,8 +22,8 @@ package cmd
 //
 // 这种分层 fallback 允许：
 //   - 开发场景：用户 cd 到 repo 或 Muse Electron bundle 里的 binary 自动定位
-//   - CI 场景：显式 TABTIN_PYTHON 指 venv python
-//   - 生产场景（H2）：Electron 打包时可直接设置 TABTIN_PYTHON 指向 bundle python
+//   - CI 场景：显式 MUSE_PYTHON 指 venv python
+//   - 生产场景（H2）：Electron 打包时可直接设置 MUSE_PYTHON 指向 bundle python
 //
 // 本文件 H1 引入，H2 如果把治理层整体 Go 化，本 shim 可整体删除。
 
@@ -57,17 +57,17 @@ type pythonShimConfig struct {
 //
 // 失败时返回的 error 已包含 actionable 说明，调用方直接打印即可。
 func resolvePythonShim() (pythonShimConfig, error) {
-	if pyBin := strings.TrimSpace(os.Getenv("TABTIN_PYTHON")); pyBin != "" {
-		djangoDir := os.Getenv("TABTIN_DJANGO_DIR")
-		repoRoot := os.Getenv("TABTIN_REPO_ROOT")
+	if pyBin := strings.TrimSpace(os.Getenv("MUSE_PYTHON")); pyBin != "" {
+		djangoDir := os.Getenv("MUSE_DJANGO_DIR")
+		repoRoot := os.Getenv("MUSE_REPO_ROOT")
 		if djangoDir == "" || repoRoot == "" {
-			// TABTIN_PYTHON 显式设置但 repo root 没给——尝试自动发现
+			// MUSE_PYTHON 显式设置但 repo root 没给——尝试自动发现
 			if root, ok := findRepoRoot(); ok {
 				repoRoot = root
 				djangoDir = filepath.Join(root, "apps", "tabtin_django")
 			} else {
 				return pythonShimConfig{}, errors.New(
-					"TABTIN_PYTHON 已设置但找不到 repo root。请同时设置 TABTIN_REPO_ROOT 环境变量",
+					"MUSE_PYTHON 已设置但找不到 repo root。请同时设置 MUSE_REPO_ROOT 环境变量",
 				)
 			}
 		}
@@ -75,11 +75,11 @@ func resolvePythonShim() (pythonShimConfig, error) {
 			PythonBin:   pyBin,
 			DjangoDir:   djangoDir,
 			RepoRoot:    repoRoot,
-			DebugOrigin: "TABTIN_PYTHON env",
+			DebugOrigin: "MUSE_PYTHON env",
 		}, nil
 	}
 
-	if explicitRoot := strings.TrimSpace(os.Getenv("TABTIN_REPO_ROOT")); explicitRoot != "" {
+	if explicitRoot := strings.TrimSpace(os.Getenv("MUSE_REPO_ROOT")); explicitRoot != "" {
 		djangoDir := filepath.Join(explicitRoot, "apps", "tabtin_django")
 		venvPy := filepath.Join(djangoDir, "venv", "bin", "python")
 		if _, err := os.Stat(venvPy); err == nil {
@@ -87,7 +87,7 @@ func resolvePythonShim() (pythonShimConfig, error) {
 				PythonBin:   venvPy,
 				DjangoDir:   djangoDir,
 				RepoRoot:    explicitRoot,
-				DebugOrigin: "TABTIN_REPO_ROOT env + venv",
+				DebugOrigin: "MUSE_REPO_ROOT env + venv",
 			}, nil
 		}
 		// venv 不存在时也可尝试系统 python3（依赖 PYTHONPATH）
@@ -95,7 +95,7 @@ func resolvePythonShim() (pythonShimConfig, error) {
 			PythonBin:   "python3",
 			DjangoDir:   djangoDir,
 			RepoRoot:    explicitRoot,
-			DebugOrigin: "TABTIN_REPO_ROOT env + PATH python3",
+			DebugOrigin: "MUSE_REPO_ROOT env + PATH python3",
 		}, nil
 	}
 
@@ -120,8 +120,8 @@ func resolvePythonShim() (pythonShimConfig, error) {
 
 	return pythonShimConfig{}, errors.New(
 		"定位 Python tabtin_cli 失败。请设置以下环境变量之一：\n" +
-			"  TABTIN_PYTHON       — 指向可用的 python 解释器（需已能 import apps.services.agent_engine.cli.tabtin_cli）\n" +
-			"  TABTIN_REPO_ROOT    — 指向 monorepo 根（含 apps/tabtin_django/manage.py）\n" +
+			"  MUSE_PYTHON       — 指向可用的 python 解释器（需已能 import apps.services.agent_engine.cli.tabtin_cli）\n" +
+			"  MUSE_REPO_ROOT    — 指向 monorepo 根（含 apps/tabtin_django/manage.py）\n" +
 			"或从 monorepo 任意子目录运行本命令",
 	)
 }

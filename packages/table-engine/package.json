@@ -1,5 +1,5 @@
 {
-  "name": "@tabtin/table-engine",
+  "name": "@muse/table-engine",
   "version": "0.1.0",
   "description": "Engine contracts and resolver for Muse table grid renderers",
   "type": "module",
@@ -58,7 +58,7 @@
   "author": "Muse Team",
   "license": "MIT",
   "peerDependencies": {
-    "@tabtin/table-core": "workspace:*",
+    "@muse/table-core": "workspace:*",
     "react": "^19.0.0"
   },
   "devDependencies": {
@@ -68,8 +68,8 @@
     "vitest": "4.1.0"
   },
   "dependencies": {
-    "@tabtin/collab-core": "workspace:*",
-    "@tabtin/table-core": "workspace:*",
+    "@muse/collab-core": "workspace:*",
+    "@muse/table-core": "workspace:*",
     "fractional-indexing": "3.2.0",
     "yjs": "^13.6.29"
   }

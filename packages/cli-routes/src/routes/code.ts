@@ -7,7 +7,7 @@
  */
 
 import type { ServerResponse } from 'node:http';
-import { errorResponse, okResponse, type SendJSON } from '@tabtin/cli-server-core';
+import { errorResponse, okResponse, type SendJSON } from '@muse/cli-server-core';
 import { getBindings } from '../host-bindings.js';
 import type { CodeWorktreeAgentContext, CodeWorktreeControllerResult } from '../host-bindings.js';
 

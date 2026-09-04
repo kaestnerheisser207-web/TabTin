@@ -17,7 +17,7 @@
  *   2. 改 `0_active_renderers.md` 对应 entry（注明文件:行 + evidence）
  *   3. 改 `overrides.yaml`（如有 mode / host 特殊约束变化）
  *   4. rerun `python3 extract_renderers.py` 重新生成本文件依赖的 `.generated.ts`
- *   5. `pnpm --filter @tabtin/prompt-contract build` 验证类型
+ *   5. `pnpm --filter @muse/prompt-contract build` 验证类型
  *   6. `pnpm vitest audit.test.ts` 跑 P1-P7 审计
  *
  * 见 `99_治理基线候选.md` 阶段 1.1 / 1.6。

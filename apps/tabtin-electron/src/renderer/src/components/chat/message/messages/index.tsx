@@ -5,7 +5,7 @@
  */
 
 import React from 'react'
-import type { ChatMessage } from '@tabtin/chat-client'
+import type { ChatMessage } from '@muse/chat-client'
 import type { ContentBlockEntry } from '../../blocks/types'
 import type { ContextBlock } from '../../context/ContextRefCard'
 import type { TurnArtifact } from '../../turn/turnArtifacts'

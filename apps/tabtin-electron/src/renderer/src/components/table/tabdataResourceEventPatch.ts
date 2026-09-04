@@ -1,4 +1,4 @@
-import type { Table } from '@tabtin/table-core'
+import type { Table } from '@muse/table-core'
 import type { ResourceWsEvent } from '@/stores/useUnifiedResources'
 
 export const TABDATA_RESOURCE_TYPE = 'tabdata'

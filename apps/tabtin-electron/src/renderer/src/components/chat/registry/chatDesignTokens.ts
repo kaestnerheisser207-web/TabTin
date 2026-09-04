@@ -8,7 +8,7 @@
  * 服务器标签蓝），它们是被设计为"代替散点硬编码"的统一出口，所以本文件不参与
  * 设计语言守门规则。
  */
-/* eslint-disable tabtin/no-chat-design-violations -- 设计 token 集中定义出口；领域色（DIFF/TAG）由此一处管理 */
+/* eslint-disable muse/no-chat-design-violations -- 设计 token 集中定义出口；领域色（DIFF/TAG）由此一处管理 */
 
 /* ─── 布局 ─────────────────────────────────────────────────────────── */
 
@@ -120,7 +120,7 @@ export const TEXT = {
  * 消息正文 typography — 15px CSS @ renderer zoom 0.9。
  * 与 SIDEBAR_TEXT_PRIMARY 同口径；只抬字，不动 padding/gap。
  */
-// eslint-disable-next-line tabtin/no-design-system-violations -- message body readable density @ zoom 0.9
+// eslint-disable-next-line muse/no-design-system-violations -- message body readable density @ zoom 0.9
 export const CHAT_MESSAGE_TEXT_BODY_BASE = 'text-[15px] leading-[1.7] font-normal antialiased'
 
 /** Agent Markdown / 用户气泡 / 折叠预览共用 */
@@ -140,12 +140,12 @@ export const CHAT_MARKDOWN_HEADING_1 =
   'mt-6 mb-2.5 first:mt-0 min-w-0 break-words text-title font-semibold tracking-tight text-foreground-strong antialiased [overflow-wrap:anywhere]'
 
 /** 二级标题：subtitle(16) 与 title(20) 之间 */
-// eslint-disable-next-line tabtin/no-design-system-violations -- chat markdown h2 between subtitle and title
+// eslint-disable-next-line muse/no-design-system-violations -- chat markdown h2 between subtitle and title
 export const CHAT_MARKDOWN_HEADING_2 =
   'mt-5 mb-2 first:mt-0 min-w-0 break-words text-[18px] leading-[26px] font-semibold tracking-tight text-foreground-strong antialiased [overflow-wrap:anywhere]'
 
 /** 与正文同字号，但不带 font-normal，供标题叠 font-semibold */
-// eslint-disable-next-line tabtin/no-design-system-violations -- message body size readable density @ zoom 0.9
+// eslint-disable-next-line muse/no-design-system-violations -- message body size readable density @ zoom 0.9
 export const CHAT_MARKDOWN_HEADING_BODY_SIZE = 'text-[15px] leading-[1.7] antialiased'
 
 /** 三级标题：与正文同字号，靠字重分层 */
@@ -157,12 +157,12 @@ export const CHAT_MARKDOWN_HEADING_MINOR =
   `mt-3 mb-1 first:mt-0 min-w-0 break-words font-semibold text-foreground-strong [overflow-wrap:anywhere] ${CHAT_MARKDOWN_HEADING_BODY_SIZE}`
 
 /** 行内代码略小于正文，避免打断句子 */
-// eslint-disable-next-line tabtin/no-design-system-violations -- chat markdown inline code recedes from 15px prose
+// eslint-disable-next-line muse/no-design-system-violations -- chat markdown inline code recedes from 15px prose
 export const CHAT_MARKDOWN_INLINE_CODE =
   'text-[13px] leading-[1.7] font-mono text-foreground-strong antialiased'
 
 /** 代码块略小于正文 */
-// eslint-disable-next-line tabtin/no-design-system-violations -- chat markdown fence recedes from 15px prose
+// eslint-disable-next-line muse/no-design-system-violations -- chat markdown fence recedes from 15px prose
 export const CHAT_MARKDOWN_CODE_BLOCK =
   'text-[14px] leading-[1.6] font-mono text-foreground-strong antialiased'
 
@@ -170,7 +170,7 @@ export const CHAT_MARKDOWN_CODE_BLOCK =
  * 步骤行 typography — 15px / 22px 行高 @ zoom 0.9。
  * Thinking / 工具折叠条 / turn-end spacer 共用；与侧栏列表 leading 对齐，预览窗 3 行仍 = 66px。
  */
-// eslint-disable-next-line tabtin/no-design-system-violations -- step row readable density @ zoom 0.9
+// eslint-disable-next-line muse/no-design-system-violations -- step row readable density @ zoom 0.9
 export const CHAT_STEP_TEXT_BASE = 'text-[15px] leading-[22px] font-normal antialiased'
 
 /** 步骤行正文（展开摘要、redacted 条等） */
@@ -185,14 +185,14 @@ export const COMPOSER_TEXT_BODY = `${CHAT_STEP_TEXT_BASE} text-foreground`
  * Composer 13px 字号档 — 与 CANVAS_TEXT_META 对齐 @ zoom 0.9。
  * META_BASE 仅尺寸；META 带默认 muted 色。语义色场景用 cn(META_BASE, 'text-warning')。
  */
-// eslint-disable-next-line tabtin/no-design-system-violations -- composer meta readable density @ zoom 0.9
+// eslint-disable-next-line muse/no-design-system-violations -- composer meta readable density @ zoom 0.9
 export const COMPOSER_TEXT_META_BASE = 'text-[13px] leading-[18px] antialiased'
 
 /** Composer 底栏 / @ 上下文 / 模式后缀 — 13px @ zoom 0.9。 */
 export const COMPOSER_TEXT_META = `${COMPOSER_TEXT_META_BASE} text-muted-foreground/70`
 
 /** Composer badge、序号、字数计数 — 12px caption 档 */
-// eslint-disable-next-line tabtin/no-design-system-violations -- composer micro readable density @ zoom 0.9
+// eslint-disable-next-line muse/no-design-system-violations -- composer micro readable density @ zoom 0.9
 export const COMPOSER_TEXT_MICRO = 'text-[12px] leading-[16px] antialiased'
 
 /** Composer 输入区最小高度 — 相对旧档 +8px（ 略抬输入井） */
@@ -340,7 +340,7 @@ export type AgentIdentityPaletteEntry = (typeof AGENT_IDENTITY_PALETTE)[number]
 
 /** 行内身份牌头像：16px 档（历史色块首字；保留导出供兼容引用）。 */
 export const AGENT_AVATAR_16 =
-  // eslint-disable-next-line tabtin/no-design-system-violations -- 头像首字符 9px 是 16px 尺寸档的随档缩放值（设计稿 av-16），非文本字号档
+  // eslint-disable-next-line muse/no-design-system-violations -- 头像首字符 9px 是 16px 尺寸档的随档缩放值（设计稿 av-16），非文本字号档
   'inline-flex h-4 w-4 shrink-0 select-none items-center justify-center rounded-full text-[9px] font-semibold leading-none' as const
 
 /** 行内身份牌头像：20px 档（ 消息流 / 身份牌统一尺寸）。 */

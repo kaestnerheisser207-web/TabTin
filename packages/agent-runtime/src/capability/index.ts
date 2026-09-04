@@ -1,5 +1,5 @@
 /**
- * `@tabtin/agent-runtime/capability` —— Capability 总框架的 barrel export。
+ * `@muse/agent-runtime/capability` —— Capability 总框架的 barrel export。
  *
  * 下游模块应这样 import：
  *
@@ -10,9 +10,9 @@
  *     BaseBackendSession,
  *     prepareAgentTools,
  *     // ...
- *   } from '@tabtin/agent-runtime/capability';
+ *   } from '@muse/agent-runtime/capability';
  *
- * 不要从 `@tabtin/agent-runtime/capability/capability.js` 等子路径直接
+ * 不要从 `@muse/agent-runtime/capability/capability.js` 等子路径直接
  * import —— 子路径不在 package.json exports 白名单中（避免对下游暴露
  * 内部文件结构）。
  *

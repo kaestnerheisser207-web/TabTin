@@ -58,11 +58,11 @@ declare global {
     /**
      * 浏览器容器 flag 的构建期烘焙值（， webview 迁移）。
      * 打包 profile（.env.preprod 等）写 `webview|wcv`，缺省 = 不烘焙（wcv）。
-     * 运行时 `TABTIN_BROWSER_CONTAINER` 可覆盖；判定单点在
+     * 运行时 `MUSE_BROWSER_CONTAINER` 可覆盖；判定单点在
      * src/shared/browser-container-mode.ts，必须精确写
-     * `import.meta.env.VITE_TABTIN_BROWSER_CONTAINER`。
+     * `import.meta.env.VITE_MUSE_BROWSER_CONTAINER`。
      */
-    readonly VITE_TABTIN_BROWSER_CONTAINER?: string
+    readonly VITE_MUSE_BROWSER_CONTAINER?: string
 
     /**
      * ChatGPT Codex 订阅套餐入口（模型配置）。

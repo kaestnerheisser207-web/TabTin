@@ -14,7 +14,7 @@ import {
 } from 'lucide-react'
 import { EditorBubbleItem, useEditor } from 'novel'
 import { useTranslation } from 'react-i18next'
-import { Button, Popover, PopoverContent, PopoverTrigger } from '@tabtin/smartsheet-ui'
+import { Button, Popover, PopoverContent, PopoverTrigger } from '@muse/smartsheet-ui'
 import { BubbleToolbarTooltip } from './bubble-toolbar-tooltip'
 import { TABDOC_FLOATING_MENU_SURFACE_CLASS } from '../floating-menu-surface'
 import { turnSelectionIntoList } from '../list-conversion'

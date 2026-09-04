@@ -13,7 +13,7 @@ from apps.updater.models import AppRelease, UpdateLog
 from apps.updater.services.readiness_service import ReleaseReadinessResult
 
 # Django TestCase 会把 DEBUG 置 False；Admin 路由仅在 DEBUG 或该开关下注册。
-os.environ.setdefault("TABTIN_ENABLE_ADMIN_API", "1")
+os.environ.setdefault("MUSE_ENABLE_ADMIN_API", "1")
 
 User = get_user_model()
 

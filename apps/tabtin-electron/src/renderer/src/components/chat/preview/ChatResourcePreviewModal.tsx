@@ -442,7 +442,7 @@ const MdBody: React.FC<{ resource: PreviewResource }> = ({ resource }) => {
 
 /**
  * PDF 与 Office 对齐：先 getAttachmentBuffer 拉整包，再把二进制交给 PdfViewer。
- * 不要把远程 OSS URL 直喂 pdf.js——打包态 origin 为 tabtin-file://app 时，
+ * 不要把远程 OSS URL 直喂 pdf.js——打包态 origin 为 muse-file://app 时，
  * pdf.js 的 Range 请求会踩 CORS，表现为「PDF 加载失败 / 1 / 0」。
  */
 const PdfBody: React.FC<{ resource: PreviewResource }> = ({ resource }) => (

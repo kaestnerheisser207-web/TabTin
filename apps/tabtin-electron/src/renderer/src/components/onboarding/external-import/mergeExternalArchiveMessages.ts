@@ -3,7 +3,7 @@
  * 的外来行、UI 横幅与 LLM 边界（ / O1）。
  */
 
-import type { ChatMessage } from '@tabtin/chat-client'
+import type { ChatMessage } from '@muse/chat-client'
 import { isExternalArchiveLlmBoundary } from './externalArchivePromptBoundary'
 
 /** ChatMessage / HistorySourceMessage 共用的窄视图（role/kind 允许 string） */

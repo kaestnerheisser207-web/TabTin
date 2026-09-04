@@ -7,7 +7,7 @@
  * 写成 plan，此时不再拦截。
  */
 
-import type { AgentModeName } from '@tabtin/agent-modes'
+import type { AgentModeName } from '@muse/agent-modes'
 
 const SHELL_RESTRICTED_MODES = new Set<AgentModeName>(['plan', 'ask', 'study'])
 

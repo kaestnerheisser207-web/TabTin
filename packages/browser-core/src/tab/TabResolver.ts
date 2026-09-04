@@ -52,7 +52,7 @@ export class TabResolver {
     if (!runId) return null;
 
     try {
-      const tabtin = (global as any).tabtin || (typeof window !== 'undefined' ? (window as any).tabtin : null);
+      const tabtin = (global as any).muse || (typeof window !== 'undefined' ? (window as any).muse : null);
       if (!tabtin?.runSession?.openTab) return null;
 
       if (tabtin.runSession.get) {

@@ -2,13 +2,13 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import {
   RecordHistorySheet,
-} from '@tabtin/smartsheet-ui';
+} from '@muse/smartsheet-ui';
 import { FieldDeleteConfirmDialog } from './FieldDeleteConfirmDialog';
-import type { HistoryOperation } from '@tabtin/smartsheet-ui';
+import type { HistoryOperation } from '@muse/smartsheet-ui';
 import { RecordFormContainer } from '@/components/record';
 import { LinkedRecordFormHost } from '@/components/record/LinkedRecordFormHost';
 import { LinkCellEditor } from '@/components/field/LinkCellEditor';
-import type { Field, TableRecord } from '@tabtin/table-core';
+import type { Field, TableRecord } from '@muse/table-core';
 import {
   announceTableDrawerOpen,
   useCloseOnOtherTableDrawerOpen,

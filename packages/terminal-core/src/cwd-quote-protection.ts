@@ -17,7 +17,7 @@
  *     比补救路径未引号更糟）
  *   - **只识别 + 提示**：返回结构化警告对象，由调用方选择放在
  *     `path_quoting_warnings` 字段里给 LLM 看，让 LLM 学会下次主动加引号
- *   - **粒度可控**：调用方传入要监控的路径列表（workspace / TABTIN_*
+ *   - **粒度可控**：调用方传入要监控的路径列表（workspace / MUSE_*
  *     env 等），detection 不内置硬编码 path 前缀
  *
  * **算法**：
@@ -27,8 +27,8 @@
  *   4. 不在任何引号内 → 命中，返回 hit
  *
  * **与 `buildTabtinVarPreamble` 的关系**：
- *   - `buildTabtinVarPreamble`（commandExecutor 内）解决的是 `$TABTIN_*`
- *     **变量展开**时被 word-splitting 的问题（让用户写 `"$TABTIN_WORKSPACE/foo"`
+ *   - `buildTabtinVarPreamble`（commandExecutor 内）解决的是 `$MUSE_*`
+ *     **变量展开**时被 word-splitting 的问题（让用户写 `"$MUSE_WORKSPACE/foo"`
  *     时变量值含空格也安全）
  *   - 本模块解决的是 LLM 把**字面量路径**直接拼到命令里，没引用变量也
  *     没加引号的问题
@@ -80,7 +80,7 @@ function buildQuotingHint(rawPath: string, shellKind: AgentShellKind | undefined
     `Path \`${rawPath}\` contains spaces and was not wrapped in quotes ` +
     `in the command. Bash will split it into multiple argv tokens, which is ` +
     `usually NOT what you intended. Wrap such paths in single quotes — ` +
-    `e.g. \`'${rawPath}/file.pdf'\` — or use \`"$TABTIN_WORKSPACE/file.pdf"\` ` +
+    `e.g. \`'${rawPath}/file.pdf'\` — or use \`"$MUSE_WORKSPACE/file.pdf"\` ` +
     `(double-quoted variable expansion is also safe).`
   );
 }
@@ -122,7 +122,7 @@ function isInsideQuotes(command: string, targetIndex: number): boolean {
  * 检测命令中未引号包裹的 workspace 路径前缀。
  *
  * @param command       完整命令字符串（与 LLM 写的原文一致，未做 shell 解析）
- * @param protectedPaths 需要保护的路径列表（典型：cwd / TABTIN_WORKSPACE 等）。
+ * @param protectedPaths 需要保护的路径列表（典型：cwd / MUSE_WORKSPACE 等）。
  *                       不含空格的路径会被自动跳过（无 word-split 风险）。
  * @returns 命中数组（按命令中出现顺序）。无命中时返回空数组。
  */

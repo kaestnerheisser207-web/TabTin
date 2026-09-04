@@ -87,7 +87,7 @@ export function WindowDragRegion({
     <div
       aria-hidden="true"
       data-testid="window-drag-region"
-      // eslint-disable-next-line tabtin/no-design-system-violations -- z-0 为窗口拖拽区基线层（置于系统控件之下），属局部堆叠基准，语义 z scale 不适用
+      // eslint-disable-next-line muse/no-design-system-violations -- z-0 为窗口拖拽区基线层（置于系统控件之下），属局部堆叠基准，语义 z scale 不适用
       className={cn('app-region-drag absolute top-0 z-0 select-none bg-transparent', className)}
       style={style}
     />

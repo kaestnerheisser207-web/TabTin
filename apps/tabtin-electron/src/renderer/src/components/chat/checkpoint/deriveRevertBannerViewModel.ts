@@ -1,4 +1,4 @@
-import type { ChatMessage, SessionRollbackState } from '@tabtin/chat-client'
+import type { ChatMessage, SessionRollbackState } from '@muse/chat-client'
 import { getRollbackResourceDetailsFromState, hasWorkspaceFilesFailure } from '../../../stores/chat/checkpoint/utils/rollbackResult'
 import { isRegularUserMessage } from '../../../stores/chat/messages/utils/semanticMessageCount'
 import {

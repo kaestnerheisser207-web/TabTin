@@ -8,7 +8,7 @@
 //
 // set 是危险的全量覆盖：空列表会被后端 CAP-011 拒绝；调用者自身必须保留
 // admin（否则 ValueError permission_must_retain_caller_admin）。CLI 侧再禁空，
-// 并从 JWT / TABTIN_USER_ID 解析当前用户，要求 entries 含 user:<me>:admin。
+// 并从 JWT / MUSE_USER_ID 解析当前用户，要求 entries 含 user:<me>:admin。
 package cmd
 
 import (
@@ -73,7 +73,7 @@ DocumentPermission 再写入你提交的 entries**。不是增量、不是 patch
   1. entries **不能为空**——空列表会被拒绝（防清空锁死）。
   2. 必须保留**当前登录用户**为 user:<your-user-id>:admin——否则后端
      permission_must_retain_caller_admin。CLI 从 JWT payload.user_id（或
-     环境变量 TABTIN_USER_ID）识别「你自己」，要求 entries 含对应条目；
+     环境变量 MUSE_USER_ID）识别「你自己」，要求 entries 含对应条目；
      无法识别 caller id 时 fail-closed，并提示显式 --entry user:<your-id>:admin。
   3. 先 get 看清现状，再拼完整列表 set；漏掉的人会被立刻踢出。
 
@@ -178,7 +178,7 @@ func validateDocPermSetFlags(ctx *cmdutil.RunContext) error {
 		if err != nil {
 			msg = err.Error()
 		}
-		return fmt.Errorf("%s。请用含 user_id 的 JWT 登录，或设置 TABTIN_USER_ID=<your-id>，并显式加入 --entry user:<your-id>:admin", msg)
+		return fmt.Errorf("%s。请用含 user_id 的 JWT 登录，或设置 MUSE_USER_ID=<your-id>，并显式加入 --entry user:<your-id>:admin", msg)
 	}
 
 	hasSelfAdmin := false
@@ -201,9 +201,9 @@ func validateDocPermSetFlags(ctx *cmdutil.RunContext) error {
 }
 
 // resolveCallerUserID 解析当前 CLI 调用者的用户 id。
-// 优先 TABTIN_USER_ID（UserApiKey / 测试）；否则从 access token JWT payload 读 user_id。
+// 优先 MUSE_USER_ID（UserApiKey / 测试）；否则从 access token JWT payload 读 user_id。
 func resolveCallerUserID(ctx *cmdutil.RunContext) (string, error) {
-	if v := strings.TrimSpace(os.Getenv("TABTIN_USER_ID")); v != "" {
+	if v := strings.TrimSpace(os.Getenv("MUSE_USER_ID")); v != "" {
 		return v, nil
 	}
 	if ctx == nil || ctx.Factory == nil {

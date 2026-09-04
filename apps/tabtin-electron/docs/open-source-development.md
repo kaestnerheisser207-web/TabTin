@@ -93,7 +93,7 @@ Development startup prepares only the Python runtime by default, so a cold start
 pnpm --dir apps/tabtin-electron runtimes:fetch -- --only office
 ```
 
-The Office runtime source is selected from the system time zone and locale. China addresses prefer the prebuilt archive verified by size and SHA-256; other regions prefer The Document Foundation and Poppler upstream sources. Either path falls back to the other when unavailable. Set `TABTIN_RUNTIME_REGION=cn` or `TABTIN_RUNTIME_REGION=global` for an explicit one-command override; it does not need to be stored in `.env`.
+The Office runtime source is selected from the system time zone and locale. China addresses prefer the prebuilt archive verified by size and SHA-256; other regions prefer The Document Foundation and Poppler upstream sources. Either path falls back to the other when unavailable. Set `MUSE_RUNTIME_REGION=cn` or `MUSE_RUNTIME_REGION=global` for an explicit one-command override; it does not need to be stored in `.env`.
 
 ## Run Electron
 
@@ -125,28 +125,28 @@ app runnable but are not suitable for public distribution.
 The `community` profile is the open-source distribution profile:
 
 - Four public endpoints are required: API, Collab WebSocket, Centrifugo WebSocket, and the public Web application. Self-hosted TabChat uses Django `/api/im` on the same API origin; the Tencent control plane is disabled. These endpoints form the complete community trust boundary and are written into the package at build time.
-- The updater is disabled when `TABTIN_COMMUNITY_UPDATE_FEED_URL` is absent.
+- The updater is disabled when `MUSE_COMMUNITY_UPDATE_FEED_URL` is absent.
 - When present, the update feed must be HTTPS and is recorded in packaged metadata; a runtime environment variable cannot replace or widen it.
 - Community builds skip TabTin's official sourcemap upload and notarization services.
 
 Linux/macOS shell example without automatic updates:
 
 ```bash
-export TABTIN_COMMUNITY_API_BASE_URL=https://api.example.org/api
-export TABTIN_COMMUNITY_COLLAB_WS_BASE=wss://api.example.org/collab
-export TABTIN_COMMUNITY_CENTRIFUGO_WS_URL=wss://api.example.org/connection/websocket
-export TABTIN_COMMUNITY_PUBLIC_WEB_BASE_URL=https://web.example.org
+export MUSE_COMMUNITY_API_BASE_URL=https://api.example.org/api
+export MUSE_COMMUNITY_COLLAB_WS_BASE=wss://api.example.org/collab
+export MUSE_COMMUNITY_CENTRIFUGO_WS_URL=wss://api.example.org/connection/websocket
+export MUSE_COMMUNITY_PUBLIC_WEB_BASE_URL=https://web.example.org
 pnpm --dir apps/tabtin-electron build:linux:community
 ```
 
 PowerShell example with a community-owned update feed:
 
 ```powershell
-$env:TABTIN_COMMUNITY_API_BASE_URL = "https://api.example.org/api"
-$env:TABTIN_COMMUNITY_COLLAB_WS_BASE = "wss://api.example.org/collab"
-$env:TABTIN_COMMUNITY_CENTRIFUGO_WS_URL = "wss://api.example.org/connection/websocket"
-$env:TABTIN_COMMUNITY_PUBLIC_WEB_BASE_URL = "https://web.example.org"
-$env:TABTIN_COMMUNITY_UPDATE_FEED_URL = "https://downloads.example.org/desktop"
+$env:MUSE_COMMUNITY_API_BASE_URL = "https://api.example.org/api"
+$env:MUSE_COMMUNITY_COLLAB_WS_BASE = "wss://api.example.org/collab"
+$env:MUSE_COMMUNITY_CENTRIFUGO_WS_URL = "wss://api.example.org/connection/websocket"
+$env:MUSE_COMMUNITY_PUBLIC_WEB_BASE_URL = "https://web.example.org"
+$env:MUSE_COMMUNITY_UPDATE_FEED_URL = "https://downloads.example.org/desktop"
 pnpm --dir apps/tabtin-electron build:win:community
 ```
 

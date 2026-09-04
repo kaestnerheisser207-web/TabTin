@@ -17,8 +17,8 @@ import {
   LogIn,
   ShieldAlert,
 } from 'lucide-react'
-import '@tabtin/tabdoc-ui/editor/prosemirror.css'
-import type { TabDocHostActions } from '@tabtin/app-host-sdk'
+import '@muse/tabdoc-ui/editor/prosemirror.css'
+import type { TabDocHostActions } from '@muse/app-host-sdk'
 import {
   DocumentCommentsSection,
   HtmlArtifactLoaderProvider,
@@ -30,8 +30,8 @@ import {
   type BuildCommentAnchorResult,
   type DocumentCommentMentionCandidate,
   type EditorInstance,
-} from '@tabtin/tabdoc-ui/editor'
-import { TabDocHostActionsProvider, markdownToPlaintext } from '@tabtin/tabdoc-ui'
+} from '@muse/tabdoc-ui/editor'
+import { TabDocHostActionsProvider, markdownToPlaintext } from '@muse/tabdoc-ui'
 import { API_BASE_URL, buildHtmlBlockBrowserUrl } from '@/config/api'
 import { useAuthStore } from '@/stores/auth-store'
 import { useShareNavigation } from '@/components/layout/ShareNavigationContext'

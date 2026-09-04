@@ -62,7 +62,7 @@ const {
   mockRefreshConversationMembers: vi.fn(async () => []),
 }))
 
-vi.mock('@tabtin/smartsheet-ui', () => ({ toast: mockToast }))
+vi.mock('@muse/smartsheet-ui', () => ({ toast: mockToast }))
 
 vi.mock('@/i18n', () => ({
   default: {

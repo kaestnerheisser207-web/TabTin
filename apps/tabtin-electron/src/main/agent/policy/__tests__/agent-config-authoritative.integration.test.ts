@@ -53,7 +53,7 @@ vi.mock('electron', () => ({
 }))
 
 const { createAgentConfigClient, CACHE_TTL_MS } = await import('../agent-config-client')
-import type { AgentConfigV3 } from '@tabtin/security-policy'
+import type { AgentConfigV3 } from '@muse/security-policy'
 
 // ─── Fixtures ────────────────────────────────────────────────────────
 

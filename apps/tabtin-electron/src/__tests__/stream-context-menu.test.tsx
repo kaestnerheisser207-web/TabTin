@@ -26,7 +26,7 @@ vi.mock('../renderer/src/components/crawl/DownloadRowShared', () => ({
   storeActions: storeActionsMock,
 }))
 
-vi.mock('@tabtin/smartsheet-ui', () => ({
+vi.mock('@muse/smartsheet-ui', () => ({
   ContextMenu: ({ children }: { children: React.ReactNode }) => <div>{children}</div>,
   ContextMenuDivider: () => <hr />,
   ContextMenuItem: ({

@@ -18,7 +18,7 @@
  */
 
 import { describe, expect, it, vi } from 'vitest'
-import type { QueryParams, StreamEvent } from '@tabtin/agent-runtime'
+import type { QueryParams, StreamEvent } from '@muse/agent-runtime'
 import {
   DefaultQueryTurnPipeline,
   type QueryTurnDataPort,

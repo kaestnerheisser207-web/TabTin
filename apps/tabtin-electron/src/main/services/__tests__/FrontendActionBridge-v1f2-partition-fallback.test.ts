@@ -31,7 +31,7 @@ vi.mock('electron', () => ({
   powerMonitor: { on: vi.fn(), off: vi.fn() },
 }))
 
-vi.mock('@tabtin/action-tools/adapters', () => {
+vi.mock('@muse/action-tools/adapters', () => {
   class MockAdapter {
     getRegisteredTools = vi.fn().mockReturnValue([])
     hasToolForAction = vi.fn().mockReturnValue(false)
@@ -40,20 +40,20 @@ vi.mock('@tabtin/action-tools/adapters', () => {
   return { ActionExecutorAdapter: MockAdapter }
 })
 
-vi.mock('@tabtin/action-tools/impl', () => ({
+vi.mock('@muse/action-tools/impl', () => ({
   getSharedBrowserToolImpl: vi.fn().mockReturnValue({
     destroy: vi.fn().mockResolvedValue(undefined),
   }),
 }))
 
-vi.mock('@tabtin/action-tools/headless', () => ({
+vi.mock('@muse/action-tools/headless', () => ({
   validateProjectPath: vi.fn(),
   // Wave 1.5（2026-05-13）：FileLockManager / resolveFileLockPath 已废弃删除——
   // 锁实现下沉为 withFileLock 函数 API + ActionExecutorAdapter 统一加锁。
 }))
 
-vi.mock('@tabtin/terminal-core', async () => {
-  const actual = await vi.importActual<typeof import('@tabtin/terminal-core')>('@tabtin/terminal-core')
+vi.mock('@muse/terminal-core', async () => {
+  const actual = await vi.importActual<typeof import('@muse/terminal-core')>('@muse/terminal-core')
   return {
     ...actual,
     getInteractiveTerminalPolicySupportError: vi.fn().mockReturnValue(null),
@@ -68,8 +68,8 @@ vi.mock('@tabtin/terminal-core', async () => {
   }
 })
 
-vi.mock('@tabtin/security-policy', async () => {
-  const actual = await vi.importActual<typeof import('@tabtin/security-policy')>('@tabtin/security-policy')
+vi.mock('@muse/security-policy', async () => {
+  const actual = await vi.importActual<typeof import('@muse/security-policy')>('@muse/security-policy')
   return {
     ...actual,
     CHECKPOINT_MUTATING_ACTIONS: new Set(),

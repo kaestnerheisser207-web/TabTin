@@ -2,7 +2,7 @@ import type {
   AccessResult,
   Cookie,
   ProxyConfig,
-} from '@tabtin/crawl-integration';
+} from '@muse/crawl-integration';
 import { randomUUID } from 'crypto';
 import { AntiDetectConfig, SessionProfile, SessionStore, UAConfig, AntiDetectInfo, HttpRequestOptions } from './types.js';
 import { getClientHintsService } from './client-hints/ClientHintsService.js';
@@ -16,7 +16,7 @@ import { IPAD_DEVICES } from './pool/device-profiles.js';
 
 const resolveSystemUserAgent = async (): Promise<string> => {
   try {
-    const module = await import('@tabtin/crawl-integration');
+    const module = await import('@muse/crawl-integration');
     const getter = (module as { getSystemUserAgent?: () => string }).getSystemUserAgent;
     if (typeof getter === 'function') {
       return getter();

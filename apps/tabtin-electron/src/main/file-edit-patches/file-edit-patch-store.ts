@@ -8,9 +8,9 @@
 import { createHash } from 'node:crypto'
 import { promises as fsp } from 'node:fs'
 import path from 'node:path'
-import { getHomeTabtinPath } from '@tabtin/shared/storage-paths'
-import type { FileEditPatch } from '@tabtin/agent-host/tools'
-import { readFileEditPatch } from '@tabtin/agent-host/tools'
+import { getHomeTabtinPath } from '@muse/shared/storage-paths'
+import type { FileEditPatch } from '@muse/agent-host/tools'
+import { readFileEditPatch } from '@muse/agent-host/tools'
 import { createLogger } from '../logger'
 
 const log = createLogger('FileEditPatchStore')

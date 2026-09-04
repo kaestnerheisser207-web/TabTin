@@ -792,7 +792,7 @@ describe('DesktopExecutorService', () => {
         'powershell',
         expect.arrayContaining(['-NoProfile', '-Command']),
         expect.objectContaining({
-          env: expect.objectContaining({ TABTIN_APP: 'notepad' }),
+          env: expect.objectContaining({ MUSE_APP: 'notepad' }),
         }),
       )
     })

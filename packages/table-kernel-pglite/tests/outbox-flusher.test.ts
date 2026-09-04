@@ -5,7 +5,7 @@ import {
   OutboxFlusher,
   PGliteSyncStateStore,
 } from '../src/index.js'
-import type { OutboxChangeEnvelope } from '@tabtin/table-kernel'
+import type { OutboxChangeEnvelope } from '@muse/table-kernel'
 import type { PGliteInstance, SyncApiClient } from '../src/index.js'
 
 function makeEnvelope(overrides: Partial<OutboxChangeEnvelope> = {}): OutboxChangeEnvelope {

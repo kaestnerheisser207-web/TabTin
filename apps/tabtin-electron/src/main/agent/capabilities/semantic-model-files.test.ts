@@ -5,7 +5,7 @@ import {
   DEFAULT_MODEL_ID,
   MODEL_FILE_RELATIVE_PATH,
   TOKENIZER_FILENAME,
-} from '@tabtin/local-embedding';
+} from '@muse/local-embedding';
 import { hasLocalSemanticModel } from './semantic-model-files.js';
 
 const roots: string[] = [];

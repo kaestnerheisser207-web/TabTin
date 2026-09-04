@@ -1,14 +1,14 @@
 /**
  * Agent-Runtime 内部 API URL 拼接 helper —— **本地 zero-dep 版**。
  *
- * **为什么不直接用 `@tabtin/config` 的 `joinApiPath`**：
- * `packages/agent-runtime` 故意不依赖 `@tabtin/config`——这个包要可移植到
+ * **为什么不直接用 `@muse/config` 的 `joinApiPath`**：
+ * `packages/agent-runtime` 故意不依赖 `@muse/config`——这个包要可移植到
  * Electron / Daemon / Cloud / RN 等多种宿主，所有运行时配置走"宿主通过
  * `deps.apiBaseUrl` 注入"的依赖反转模式（见 `host/skill-credential-resolver.ts`
- * 顶部"零依赖原则"注释）。引 `@tabtin/config` 会反向引入 i18n / Vite env 等
+ * 顶部"零依赖原则"注释）。引 `@muse/config` 会反向引入 i18n / Vite env 等
  * 一系列宿主特定依赖，破坏可移植性。
  *
- * **行为契约（与 `@tabtin/config` 的 `joinApiPath` 完全一致）**：
+ * **行为契约（与 `@muse/config` 的 `joinApiPath` 完全一致）**：
  * - `apiBaseUrl` 约定**必须以 `/api` 结尾**（与 `getApiRuntimeConfig()` 的
  *   强制 assert 对齐，见 `packages/tabtin-config/src/index.ts:66-68`）。
  * - 传入的 `path` **不应**以 `/api` 开头，正确写法形如 `/plan/create` 或

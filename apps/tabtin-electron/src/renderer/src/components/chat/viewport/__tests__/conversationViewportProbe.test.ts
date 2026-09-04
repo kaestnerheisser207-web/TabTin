@@ -109,7 +109,7 @@ describe('conversationViewportProbe', () => {
   })
 
   afterEach(() => {
-    window.__TABTIN_CHAT_VIEWPORT_PROBE__?.stop()
+    window.__MUSE_CHAT_VIEWPORT_PROBE__?.stop()
     __resetConversationViewportProbeForTests()
     vi.unstubAllGlobals()
     vi.restoreAllMocks()
@@ -127,15 +127,15 @@ describe('conversationViewportProbe', () => {
     document.body.append(scroller, anchor)
 
     bootstrapConversationViewportProbe()
-    window.__TABTIN_CHAT_VIEWPORT_PROBE__!.start({
+    window.__MUSE_CHAT_VIEWPORT_PROBE__!.start({
       scopeKey: 'session-probe',
       scroller,
       anchor,
       anchorMessageKey: 'message-long-1',
     })
-    window.__TABTIN_CHAT_VIEWPORT_PROBE__!.sampleNow()
+    window.__MUSE_CHAT_VIEWPORT_PROBE__!.sampleNow()
 
-    const snapshot = window.__TABTIN_CHAT_VIEWPORT_PROBE__!.snapshot()
+    const snapshot = window.__MUSE_CHAT_VIEWPORT_PROBE__!.snapshot()
     expect(snapshot.frames).toHaveLength(1)
     expect(snapshot.frames[0]).toMatchObject({
       scopeKey: 'session-probe',
@@ -158,20 +158,20 @@ describe('conversationViewportProbe', () => {
     document.body.append(scroller)
 
     bootstrapConversationViewportProbe()
-    window.__TABTIN_CHAT_VIEWPORT_PROBE__!.start({
+    window.__MUSE_CHAT_VIEWPORT_PROBE__!.start({
       scopeKey: 'session-probe',
       scroller,
     })
     recordConversationViewportWrite('content-resize', 400)
-    window.__TABTIN_CHAT_VIEWPORT_PROBE__!.sampleNow()
-    expect(window.__TABTIN_CHAT_VIEWPORT_PROBE__!.snapshot().frames[0]).toMatchObject({
+    window.__MUSE_CHAT_VIEWPORT_PROBE__!.sampleNow()
+    expect(window.__MUSE_CHAT_VIEWPORT_PROBE__!.snapshot().frames[0]).toMatchObject({
       writesThisFrame: 1,
       reason: 'content-resize',
       source: 'programmatic',
     })
 
-    window.__TABTIN_CHAT_VIEWPORT_PROBE__!.sampleNow()
-    expect(window.__TABTIN_CHAT_VIEWPORT_PROBE__!.snapshot().frames[1]).toMatchObject({
+    window.__MUSE_CHAT_VIEWPORT_PROBE__!.sampleNow()
+    expect(window.__MUSE_CHAT_VIEWPORT_PROBE__!.snapshot().frames[1]).toMatchObject({
       writesThisFrame: 0,
       reason: 'sample',
     })
@@ -182,14 +182,14 @@ describe('conversationViewportProbe', () => {
     document.body.append(scroller)
 
     bootstrapConversationViewportProbe()
-    window.__TABTIN_CHAT_VIEWPORT_PROBE__!.start({
+    window.__MUSE_CHAT_VIEWPORT_PROBE__!.start({
       scopeKey: 'session-probe',
       scroller,
     })
     recordConversationViewportWrite('content-resize')
-    window.__TABTIN_CHAT_VIEWPORT_PROBE__!.sampleNow()
+    window.__MUSE_CHAT_VIEWPORT_PROBE__!.sampleNow()
 
-    expect(window.__TABTIN_CHAT_VIEWPORT_PROBE__!.snapshot().frames[0]).toMatchObject({
+    expect(window.__MUSE_CHAT_VIEWPORT_PROBE__!.snapshot().frames[0]).toMatchObject({
       writesThisFrame: 1,
       reason: 'content-resize',
       source: 'programmatic',
@@ -201,7 +201,7 @@ describe('conversationViewportProbe', () => {
     document.body.append(scroller)
 
     bootstrapConversationViewportProbe()
-    window.__TABTIN_CHAT_VIEWPORT_PROBE__!.start({
+    window.__MUSE_CHAT_VIEWPORT_PROBE__!.start({
       scopeKey: 'session-probe',
       scroller,
     })
@@ -209,9 +209,9 @@ describe('conversationViewportProbe', () => {
     recordConversationViewportReason('turn-ended', 'programmatic')
     recordConversationViewportReason('content-resize', 'programmatic')
     recordConversationViewportWrite('content-resize', 582)
-    window.__TABTIN_CHAT_VIEWPORT_PROBE__!.sampleNow()
+    window.__MUSE_CHAT_VIEWPORT_PROBE__!.sampleNow()
 
-    expect(window.__TABTIN_CHAT_VIEWPORT_PROBE__!.snapshot().frames[0]).toMatchObject({
+    expect(window.__MUSE_CHAT_VIEWPORT_PROBE__!.snapshot().frames[0]).toMatchObject({
       reason: 'turn-ended',
       source: 'programmatic',
       writesThisFrame: 1,
@@ -219,8 +219,8 @@ describe('conversationViewportProbe', () => {
     })
 
     recordConversationViewportReason('content-resize', 'programmatic')
-    window.__TABTIN_CHAT_VIEWPORT_PROBE__!.sampleNow()
-    expect(window.__TABTIN_CHAT_VIEWPORT_PROBE__!.snapshot().frames[1]).toMatchObject({
+    window.__MUSE_CHAT_VIEWPORT_PROBE__!.sampleNow()
+    expect(window.__MUSE_CHAT_VIEWPORT_PROBE__!.snapshot().frames[1]).toMatchObject({
       reason: 'content-resize',
       writesThisFrame: 0,
     })
@@ -231,14 +231,14 @@ describe('conversationViewportProbe', () => {
     document.body.append(scroller)
 
     bootstrapConversationViewportProbe()
-    window.__TABTIN_CHAT_VIEWPORT_PROBE__!.start({
+    window.__MUSE_CHAT_VIEWPORT_PROBE__!.start({
       scopeKey: 'session-probe',
       scroller,
     })
     recordConversationViewportWrite('navigate', undefined, 'virtualizer')
-    window.__TABTIN_CHAT_VIEWPORT_PROBE__!.sampleNow()
+    window.__MUSE_CHAT_VIEWPORT_PROBE__!.sampleNow()
 
-    expect(window.__TABTIN_CHAT_VIEWPORT_PROBE__!.snapshot().frames[0]).toMatchObject({
+    expect(window.__MUSE_CHAT_VIEWPORT_PROBE__!.snapshot().frames[0]).toMatchObject({
       writesThisFrame: 1,
       reason: 'navigate',
       source: 'virtualizer',
@@ -250,15 +250,15 @@ describe('conversationViewportProbe', () => {
     document.body.append(scroller)
 
     bootstrapConversationViewportProbe()
-    window.__TABTIN_CHAT_VIEWPORT_PROBE__!.start({
+    window.__MUSE_CHAT_VIEWPORT_PROBE__!.start({
       scopeKey: 'session-probe',
       scroller,
     })
     recordConversationViewportWrite('message-appended', 400)
     recordConversationViewportWrite('virtualizer-size-adjust', undefined, 'virtualizer')
-    window.__TABTIN_CHAT_VIEWPORT_PROBE__!.sampleNow()
+    window.__MUSE_CHAT_VIEWPORT_PROBE__!.sampleNow()
 
-    expect(window.__TABTIN_CHAT_VIEWPORT_PROBE__!.snapshot().frames[0]).toMatchObject({
+    expect(window.__MUSE_CHAT_VIEWPORT_PROBE__!.snapshot().frames[0]).toMatchObject({
       writesThisFrame: 2,
       reason: 'virtualizer-size-adjust',
       source: 'virtualizer',
@@ -270,7 +270,7 @@ describe('conversationViewportProbe', () => {
     document.body.append(scroller)
 
     bootstrapConversationViewportProbe()
-    const probe = window.__TABTIN_CHAT_VIEWPORT_PROBE__!
+    const probe = window.__MUSE_CHAT_VIEWPORT_PROBE__!
     probe.start({ scopeKey: 'session-probe', scroller })
 
     for (let i = 0; i < 2005; i += 1) {
@@ -289,7 +289,7 @@ describe('conversationViewportProbe', () => {
     document.body.append(scroller)
 
     bootstrapConversationViewportProbe()
-    const probe = window.__TABTIN_CHAT_VIEWPORT_PROBE__!
+    const probe = window.__MUSE_CHAT_VIEWPORT_PROBE__!
     probe.start({ scopeKey: 'session-probe', scroller })
     expect(raf.pendingCount()).toBe(1)
     probe.stop()
@@ -309,7 +309,7 @@ describe('conversationViewportProbe', () => {
     document.body.append(scroller)
 
     bootstrapConversationViewportProbe()
-    const probe = window.__TABTIN_CHAT_VIEWPORT_PROBE__!
+    const probe = window.__MUSE_CHAT_VIEWPORT_PROBE__!
     probe.start({ scopeKey: 'session-probe', scroller })
     recordConversationViewportWrite('content-resize', 10)
     recordConversationViewportReason('layout-changed', 'programmatic')
@@ -345,7 +345,7 @@ describe('conversationViewportProbe', () => {
     document.body.append(scroller)
 
     bootstrapConversationViewportProbe()
-    const probe = window.__TABTIN_CHAT_VIEWPORT_PROBE__!
+    const probe = window.__MUSE_CHAT_VIEWPORT_PROBE__!
     probe.start({ scopeKey: 'session-a', scroller })
     probe.sampleNow()
     expect(probe.snapshot().frames).toHaveLength(1)
@@ -384,7 +384,7 @@ describe('conversationViewportProbe', () => {
     document.body.append(scroller)
 
     bootstrapConversationViewportProbe()
-    const probe = window.__TABTIN_CHAT_VIEWPORT_PROBE__!
+    const probe = window.__MUSE_CHAT_VIEWPORT_PROBE__!
     probe.start({ scopeKey: 'session-probe', scroller })
     raf.runNext()
 
@@ -410,7 +410,7 @@ describe('conversationViewportProbe', () => {
     const scroller = makeScroller({ mode: 'follow-latest' })
 
     bootstrapConversationViewportProbe()
-    const probe = window.__TABTIN_CHAT_VIEWPORT_PROBE__!
+    const probe = window.__MUSE_CHAT_VIEWPORT_PROBE__!
     Object.defineProperty(scroller, 'scrollTop', {
       configurable: true,
       get: () => {
@@ -434,7 +434,7 @@ describe('conversationViewportProbe', () => {
     document.body.append(scroller)
 
     bootstrapConversationViewportProbe()
-    const probe = window.__TABTIN_CHAT_VIEWPORT_PROBE__!
+    const probe = window.__MUSE_CHAT_VIEWPORT_PROBE__!
     probe.start({ scopeKey: 'session-probe', scroller })
     expect(raf.pendingCount()).toBe(1)
 
@@ -453,7 +453,7 @@ describe('conversationViewportProbe', () => {
     document.body.append(scroller)
 
     bootstrapConversationViewportProbe()
-    const probe = window.__TABTIN_CHAT_VIEWPORT_PROBE__!
+    const probe = window.__MUSE_CHAT_VIEWPORT_PROBE__!
     probe.start({ scopeKey: 'session-probe', scroller })
     probe.sampleNow()
 
@@ -468,7 +468,7 @@ describe('conversationViewportProbe', () => {
     document.body.append(scroller)
 
     bootstrapConversationViewportProbe()
-    const probe = window.__TABTIN_CHAT_VIEWPORT_PROBE__!
+    const probe = window.__MUSE_CHAT_VIEWPORT_PROBE__!
     probe.start({ scopeKey: 'session-probe', scroller })
     probe.sampleNow()
 
@@ -483,7 +483,7 @@ describe('conversationViewportProbe', () => {
     document.body.append(scroller)
 
     bootstrapConversationViewportProbe()
-    const probe = window.__TABTIN_CHAT_VIEWPORT_PROBE__!
+    const probe = window.__MUSE_CHAT_VIEWPORT_PROBE__!
     probe.start({ scopeKey: 'session-probe', scroller })
     recordConversationViewportWrite('content-resize', 400)
     probe.sampleNow()
@@ -502,18 +502,18 @@ describe('conversationViewportProbe', () => {
     expect(shouldBootstrapConversationViewportProbe(false)).toBe(false)
 
     bootstrapConversationViewportProbe({ isDev: false })
-    expect(window.__TABTIN_CHAT_VIEWPORT_PROBE__).toBeUndefined()
+    expect(window.__MUSE_CHAT_VIEWPORT_PROBE__).toBeUndefined()
     recordConversationViewportWrite('content-resize', 1)
     recordConversationViewportReason('sample', 'unknown')
 
     bootstrapConversationViewportProbe({ isDev: true })
-    expect(window.__TABTIN_CHAT_VIEWPORT_PROBE__).toBeDefined()
+    expect(window.__MUSE_CHAT_VIEWPORT_PROBE__).toBeDefined()
     bootstrapConversationViewportProbe({ isDev: true })
-    expect(window.__TABTIN_CHAT_VIEWPORT_PROBE__).toBeDefined()
-    expect(typeof window.__TABTIN_CHAT_VIEWPORT_PROBE__!.start).toBe('function')
-    expect(typeof window.__TABTIN_CHAT_VIEWPORT_PROBE__!.stop).toBe('function')
-    expect(typeof window.__TABTIN_CHAT_VIEWPORT_PROBE__!.reset).toBe('function')
-    expect(typeof window.__TABTIN_CHAT_VIEWPORT_PROBE__!.sampleNow).toBe('function')
-    expect(typeof window.__TABTIN_CHAT_VIEWPORT_PROBE__!.snapshot).toBe('function')
+    expect(window.__MUSE_CHAT_VIEWPORT_PROBE__).toBeDefined()
+    expect(typeof window.__MUSE_CHAT_VIEWPORT_PROBE__!.start).toBe('function')
+    expect(typeof window.__MUSE_CHAT_VIEWPORT_PROBE__!.stop).toBe('function')
+    expect(typeof window.__MUSE_CHAT_VIEWPORT_PROBE__!.reset).toBe('function')
+    expect(typeof window.__MUSE_CHAT_VIEWPORT_PROBE__!.sampleNow).toBe('function')
+    expect(typeof window.__MUSE_CHAT_VIEWPORT_PROBE__!.snapshot).toBe('function')
   })
 })

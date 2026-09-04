@@ -1,17 +1,17 @@
 // AUTO-GENERATED — DO NOT EDIT, see scripts/electron/codegen-surface-preload.ts
 
-import type { AgentEngineAbortInput, AgentEngineAbortOutput } from '@tabtin/cli-server-core/surfaces/agent-engine'
-import type { GetWorkspaceSnapshotInput, GetWorkspaceSnapshotOutput } from '@tabtin/cli-server-core/surfaces/agent-security'
-import type { ChatExportMdInput, ChatExportMdOutput } from '@tabtin/cli-server-core/surfaces/chat-export-md'
-import type { SessionCreateInput, SessionCreateOutput } from '@tabtin/cli-server-core/surfaces/session'
-import type { SkillInstallInput, SkillInstallOutput } from '@tabtin/cli-server-core/surfaces/skill-install'
-import type { SkillListInput, SkillListOutput } from '@tabtin/cli-server-core/surfaces/skill-list'
-import type { SkillMaterializeAppInput, SkillMaterializeAppOutput } from '@tabtin/cli-server-core/surfaces/skill-materialize-app'
-import type { SkillReadContentInput, SkillReadContentOutput } from '@tabtin/cli-server-core/surfaces/skill-read-content'
-import type { SkillResolvePathInput, SkillResolvePathOutput } from '@tabtin/cli-server-core/surfaces/skill-resolve-path'
-import type { SkillUninstallInput, SkillUninstallOutput } from '@tabtin/cli-server-core/surfaces/skill-uninstall'
-import type { SkillWriteContentInput, SkillWriteContentOutput } from '@tabtin/cli-server-core/surfaces/skill-write-content'
-import type { SpaceSetActiveInput, SpaceSetActiveOutput } from '@tabtin/cli-server-core/surfaces/space-set-active'
+import type { AgentEngineAbortInput, AgentEngineAbortOutput } from '@muse/cli-server-core/surfaces/agent-engine'
+import type { GetWorkspaceSnapshotInput, GetWorkspaceSnapshotOutput } from '@muse/cli-server-core/surfaces/agent-security'
+import type { ChatExportMdInput, ChatExportMdOutput } from '@muse/cli-server-core/surfaces/chat-export-md'
+import type { SessionCreateInput, SessionCreateOutput } from '@muse/cli-server-core/surfaces/session'
+import type { SkillInstallInput, SkillInstallOutput } from '@muse/cli-server-core/surfaces/skill-install'
+import type { SkillListInput, SkillListOutput } from '@muse/cli-server-core/surfaces/skill-list'
+import type { SkillMaterializeAppInput, SkillMaterializeAppOutput } from '@muse/cli-server-core/surfaces/skill-materialize-app'
+import type { SkillReadContentInput, SkillReadContentOutput } from '@muse/cli-server-core/surfaces/skill-read-content'
+import type { SkillResolvePathInput, SkillResolvePathOutput } from '@muse/cli-server-core/surfaces/skill-resolve-path'
+import type { SkillUninstallInput, SkillUninstallOutput } from '@muse/cli-server-core/surfaces/skill-uninstall'
+import type { SkillWriteContentInput, SkillWriteContentOutput } from '@muse/cli-server-core/surfaces/skill-write-content'
+import type { SpaceSetActiveInput, SpaceSetActiveOutput } from '@muse/cli-server-core/surfaces/space-set-active'
 
 /**
  * PlatformSurface 自动生成的 preload 类型声明。

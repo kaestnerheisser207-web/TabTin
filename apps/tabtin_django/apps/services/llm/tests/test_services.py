@@ -177,7 +177,7 @@ class OpenAIServiceTestCase(TestCase):
             "retry_delay": 1,
         }
 
-        with patch.dict("os.environ", {"TABTIN_LLM_TASK_HARD_LIMIT_SECONDS": "180"}):
+        with patch.dict("os.environ", {"MUSE_LLM_TASK_HARD_LIMIT_SECONDS": "180"}):
             OpenAIService(provider_config)
 
         timeout = mock_openai.call_args.kwargs["timeout"]

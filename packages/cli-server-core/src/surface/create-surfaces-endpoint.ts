@@ -14,7 +14,7 @@
  * 枚举宿主能力清单。
  */
 
-import { okResponse } from '@tabtin/agent-wire'
+import { okResponse } from '@muse/agent-wire'
 import { sendJSON } from '../http-utils.js'
 import type { RouteHandler } from '../server.js'
 import { getAllSurfaces } from './registry.js'

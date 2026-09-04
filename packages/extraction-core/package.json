@@ -1,5 +1,5 @@
 {
-  "name": "@tabtin/extraction-core",
+  "name": "@muse/extraction-core",
   "version": "0.1.0",
   "description": "Schema-driven extraction engine for structured data from HTML",
   "type": "module",
@@ -19,7 +19,7 @@
     "clean": "rm -rf dist"
   },
   "dependencies": {
-    "@tabtin/crawl-contracts": "workspace:*",
+    "@muse/crawl-contracts": "workspace:*",
     "cheerio": "^1.0.0-rc.12"
   },
   "devDependencies": {

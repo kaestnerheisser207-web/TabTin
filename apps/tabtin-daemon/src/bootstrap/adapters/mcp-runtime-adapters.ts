@@ -1,6 +1,6 @@
 import type { TableKernelService } from '../../platform/table/table-kernel-service.js'
 import { createAuthedFetcher } from '../../platform/table/sync-api-client.js'
-import { joinApiPath } from '@tabtin/config'
+import { joinApiPath } from '@muse/config'
 
 import type { McpContentApiPort, McpTablePort } from '../../application/mcp/ports.js'
 

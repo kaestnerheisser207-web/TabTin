@@ -12,8 +12,8 @@
  * 不在渲染进程直打 Django，也不做本地墓碑。
  */
 
-import type { ChatSession } from '@tabtin/chat-client'
-import { resolveSessionScopeId } from '@tabtin/app-shell'
+import type { ChatSession } from '@muse/chat-client'
+import { resolveSessionScopeId } from '@muse/app-shell'
 import type { AbortRunResult } from '@/services/agentService'
 import { getSessionController } from '@/services/agentService'
 import { useSpaceStore } from '@stores/useSpaceStore'
@@ -48,7 +48,7 @@ export interface AbortStreamStore {
 /** 本编排读取的最小 root 形状 + 依赖它调用的 store 侧 action。 */
 interface AbortRootState {
   currentSessionId: string | null
-  messagesBySessionId: Record<string, import('@tabtin/chat-client').ChatMessage[]>
+  messagesBySessionId: Record<string, import('@muse/chat-client').ChatMessage[]>
   sessions: Array<
     Pick<ChatSession, 'id' | 'space_id' | 'organization_id' | 'rollback_state'>
   >

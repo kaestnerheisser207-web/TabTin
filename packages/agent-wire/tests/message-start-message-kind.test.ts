@@ -20,7 +20,7 @@ import {
   MessageKindSchema,
   MessageStartSchema,
   type MessageKind,
-} from '@tabtin/agent-wire';
+} from '@muse/agent-wire';
 
 const baseEnvelope = {
   protocol_version: 'v2' as const,

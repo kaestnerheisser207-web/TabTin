@@ -2,7 +2,7 @@ import { describe, expect, it, vi } from 'vitest'
 import {
   InMemoryPersistentQueue,
   type PersistedEntryOwner,
-} from '@tabtin/agent-runtime'
+} from '@muse/agent-runtime'
 import { MessageDeliveryOutbox } from '../src/delivery/message-delivery-outbox.js'
 import type { RelayBatch } from '../src/delivery/relay-retry-queue.js'
 

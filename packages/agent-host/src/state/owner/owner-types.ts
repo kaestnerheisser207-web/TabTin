@@ -1,4 +1,4 @@
-import type { PersistedEntryOwner } from '@tabtin/agent-runtime'
+import type { PersistedEntryOwner } from '@muse/agent-runtime'
 
 export type ExecutionOwner = Pick<
   PersistedEntryOwner,

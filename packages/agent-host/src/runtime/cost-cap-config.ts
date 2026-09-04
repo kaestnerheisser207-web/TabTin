@@ -17,10 +17,10 @@
  */
 
 /**
- * 内联 v2 execution_limits 归一——语义与 `@tabtin/app-shell/agent-config-v2` 的
+ * 内联 v2 execution_limits 归一——语义与 `@muse/app-shell/agent-config-v2` 的
  * `normalizeExecutionLimitsForCostCap` 逐字对齐（含 Django stringify credits 场景），
  * 内联是因为 app-shell 挂着 react / zustand peer deps，把它拉进
- * `@tabtin/agent-host`（纯运行时包）会污染依赖边界。任一端要改归一规则，两处
+ * `@muse/agent-host`（纯运行时包）会污染依赖边界。任一端要改归一规则，两处
  * 都要同步（`packages/app-shell/tests/agent-config-v2.test.ts` 是权威 fixture）。
  */
 interface NormalizedCostExecutionLimits {

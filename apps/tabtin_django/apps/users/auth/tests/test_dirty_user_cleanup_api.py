@@ -41,7 +41,7 @@ class DirtyUserCleanupByPhoneApiTests(TestCase):
     def test_requires_debug_or_explicit_enable_flag(self):
         payload = AdminDirtyUserCleanupByPhoneRequestSchema(phone="15921194230")
 
-        with patch.dict(os.environ, {"TABTIN_ENV": "", "TABTIN_ENABLE_DEV_USER_CLEANUP_API": ""}, clear=False):
+        with patch.dict(os.environ, {"MUSE_ENV": "", "MUSE_ENABLE_DEV_USER_CLEANUP_API": ""}, clear=False):
             with self.assertRaises(HttpError) as ctx:
                 cleanup_dirty_user_by_phone(self._request(), payload)
 
@@ -51,7 +51,7 @@ class DirtyUserCleanupByPhoneApiTests(TestCase):
     def test_ack_test_env_allows_cleanup_without_explicit_enable_flag(self):
         payload = AdminDirtyUserCleanupByPhoneRequestSchema(phone="15921194230")
 
-        with patch.dict(os.environ, {"TABTIN_ENV": "ack-test"}, clear=False), patch(
+        with patch.dict(os.environ, {"MUSE_ENV": "ack-test"}, clear=False), patch(
             "apps.users.auth.admin_api._cleanup_search_traces_for_user",
             return_value="dry-run",
         ):

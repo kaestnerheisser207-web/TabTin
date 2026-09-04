@@ -5,7 +5,7 @@
  * + 是否遥控器分派：
  *   - document ref → TabDoc 编辑器标签页（全端可开）；
  *   - file ref + 本机 → 打开该 plan 文件**内容**（TabFiles 预览，走 ResourceRouter，
- *     与本地文件 artifact 同款 `tabtin://resource/file/<相对路径>` 通道）；
+ *     与本地文件 artifact 同款 `muse://resource/file/<相对路径>` 通道）；
  *   - file ref + 遥控器 → 走现有 WS action 通道（/devices/query → fs.read_file_preview）
  *     确认最新内容可读（内容以卡片展开快照为主）。
  *
@@ -13,9 +13,9 @@
  * 「打开原文」的进一步动作；执行链路不经过此 provider。
  */
 
-import { toast } from '@tabtin/smartsheet-ui'
-import type { PlanRef } from '@tabtin/agent-wire'
-import { parseResourcePointer } from '@tabtin/resource-router'
+import { toast } from '@muse/smartsheet-ui'
+import type { PlanRef } from '@muse/agent-wire'
+import { parseResourcePointer } from '@muse/resource-router'
 import { openResourceTabGuarded } from '@components/context-space/restore/openResourceMembershipGuard'
 import { resourceRouter } from '@/services/resourceRouter'
 import { remoteReadFilePreview } from '@components/context-space/folder/remote/remoteFsClient'
@@ -96,7 +96,7 @@ export async function openPlanRef({
   }
   const params = new URLSearchParams({ hint: 'tabfiles' })
   params.set('title', planName || fileName(ref.path))
-  const href = `tabtin://resource/file/${encodeURIComponent(ref.path)}?${params.toString()}`
+  const href = `muse://resource/file/${encodeURIComponent(ref.path)}?${params.toString()}`
   let pointer
   try {
     pointer = parseResourcePointer(href)

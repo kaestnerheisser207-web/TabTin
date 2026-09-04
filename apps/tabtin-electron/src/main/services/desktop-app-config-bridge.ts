@@ -32,7 +32,7 @@ import type { ImageResizeParams } from './desktop-image-resize'
 import type {
   AppConfigSource,
   StaticManifestSourceDiagnostics,
-} from '@tabtin/app-config'
+} from '@muse/app-config'
 
 /**
  * v2.2 模块零扫尾：决定 TabDesktop app.json 的 manifestRoot。
@@ -101,7 +101,7 @@ export interface TabDesktopExecutorConfigOptions {
 /**
  * `loadAppConfig` 函数签名抽象——单测注入 mock 函数。
  *
- * 与 `@tabtin/app-config.loadAppConfig` 完全一致，但用本地接口避免单测
+ * 与 `@muse/app-config.loadAppConfig` 完全一致，但用本地接口避免单测
  * 强制 import 真实包（更轻、更可控）。
  */
 export type LoadAppConfigFn = <T extends Record<string, unknown>>(
@@ -119,7 +119,7 @@ export type LoadAppConfigFn = <T extends Record<string, unknown>>(
  * v2.2 模块零扫尾：把 `loadAppConfig` 调用 + 拼 Executor 构造 opts 的接通胶水
  * 抽成纯函数，可被单测显式断言。
  *
- * @param loadConfigFn loadAppConfig 函数引用（生产传 `@tabtin/app-config.loadAppConfig`，单测传 mock）
+ * @param loadConfigFn loadAppConfig 函数引用（生产传 `@muse/app-config.loadAppConfig`，单测传 mock）
  * @param opts plumbing 选项：manifestRoot（生产打包态显式传，开发态 undefined）+ diagnostics 回调
  * @returns Executor 构造 opts 子集（pixelCompareEnabled + imageResize.{enabled, params}）
  *
@@ -128,7 +128,7 @@ export type LoadAppConfigFn = <T extends Record<string, unknown>>(
  *   这是 plumbing 的最终决定值；只能在外面拼 `onSessionTimeout` /
  *   `mainWindowGetter` 等"运行时关切"字段
  * - 任何 loadConfigFn 抛错 / 返回不完整对象的容错都依赖 loadConfigFn 自身
- *   实现（@tabtin/app-config 已保证不抛 + 缺字段走 defaults）
+ *   实现（@muse/app-config 已保证不抛 + 缺字段走 defaults）
  */
 export function buildTabDesktopExecutorConstructorOptions(
   loadConfigFn: LoadAppConfigFn,

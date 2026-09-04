@@ -1,5 +1,5 @@
 /**
- * Checkpoint IPC facade — wraps `window.tabtin.checkpoint` calls.
+ * Checkpoint IPC facade — wraps `window.muse.checkpoint` calls.
  *
  * ## Wave 2-β 改造（contract / 2026-05-03）
  *
@@ -14,7 +14,7 @@
  * 这样 caller 写法统一为 `try { const data = await checkpointIpc.foo(...) ... } catch (err) { ... }`，
  * 跟 `invokeIpc` 全栈契约对齐。
  *
- * **过渡期保护**：W2-α 的 `preload/ipc-shim.ts` 完成前，preload `window.tabtin.checkpoint.*`
+ * **过渡期保护**：W2-α 的 `preload/ipc-shim.ts` 完成前，preload `window.muse.checkpoint.*`
  * 仍返旧 `{ success, ... }` 形态。本 facade 内部主动检测 `success === false` 并 throw——
  * 让 caller 行为不依赖 W2-α 完成时机（Tier 1 LEGACY_HANDLERS 路径同款）。
  * W2-α 完成后 preload 已经自动 throw / 解包，本层主动检测自然变成 no-op，可在 W3 删除。
@@ -25,7 +25,7 @@ import type {
   CheckpointDiffEntry,
   CheckpointRestoreOptions,
   DiffSummaryFileEntry,
-} from '@tabtin/checkpoint-core'
+} from '@muse/checkpoint-core'
 import { createLogger } from '@/utils/logger'
 
 export type { CheckpointDiffEntry, DiffSummaryFileEntry }
@@ -33,7 +33,7 @@ export type { CheckpointDiffEntry, DiffSummaryFileEntry }
 const log = createLogger('CheckpointIPC')
 
 function api() {
-  return window.tabtin?.checkpoint
+  return window.muse?.checkpoint
 }
 
 /**

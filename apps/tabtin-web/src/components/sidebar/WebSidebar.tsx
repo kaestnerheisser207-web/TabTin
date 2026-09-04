@@ -9,10 +9,10 @@
 
 import React from 'react'
 import { Check, RefreshCw, LogOut, ChevronDown } from 'lucide-react'
-import { ContextMenu, ContextMenuDivider, ContextMenuItem } from '@tabtin/smartsheet-ui'
+import { ContextMenu, ContextMenuDivider, ContextMenuItem } from '@muse/smartsheet-ui'
 import { SpaceList } from './SpaceList'
 import { SpaceResourceTree } from './SpaceResourceTree'
-import { useOrganizationStore } from '@tabtin/app-shell'
+import { useOrganizationStore } from '@muse/app-shell'
 import { useAuthStore } from '@/stores/auth-store'
 import { UserAvatar } from '@/components/profile/UserAvatar'
 import { LanguageToggle, ThemeToggle } from '@/components/layout/ToolbarWidgets'

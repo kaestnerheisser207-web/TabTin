@@ -7,10 +7,10 @@
  * setSessionMessages（messageCache 原语）。
  */
 
-import type { ChatMessage } from '@tabtin/chat-client'
+import type { ChatMessage } from '@muse/chat-client'
 import type { ChatReplyTarget } from '../shared/types'
 import { createLogger } from '@/utils/logger'
-import { toast } from '@tabtin/smartsheet-ui/toast'
+import { toast } from '@muse/smartsheet-ui/toast'
 import i18n from '@/i18n'
 
 const logger = createLogger('Chat')

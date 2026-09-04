@@ -27,7 +27,7 @@ import { describe, it, expect, vi } from 'vitest'
 import { randomUUID } from 'node:crypto'
 import { runTools, type ToolExecutionResult } from '../src/engine/tooling/tool-orchestration.js'
 import { LocalPermissionHandler } from '../src/permissions/local-permission-handler.js'
-import { ApprovalRequestedPayloadSchema } from '@tabtin/agent-wire'
+import { ApprovalRequestedPayloadSchema } from '@muse/agent-wire'
 import { StreamEvents } from '../src/engine/contracts/stream-events.js'
 import type {
   StreamEvent,

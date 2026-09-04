@@ -11,4 +11,4 @@ export {
   EditFieldDialog,
   type EditFieldDialogProps,
   type EditFieldData,
-} from '@tabtin/smartsheet-ui'
+} from '@muse/smartsheet-ui'

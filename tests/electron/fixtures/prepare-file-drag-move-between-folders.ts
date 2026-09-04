@@ -59,8 +59,8 @@ export async function prepareFileDragMoveBetweenFolders(
       timeoutMs: 60000,
       env: {
         ...process.env,
-        TABTIN_E2E_MODE: "prepare",
-        TABTIN_E2E_RUN_ID: context.runId,
+        MUSE_E2E_MODE: "prepare",
+        MUSE_E2E_RUN_ID: context.runId,
       },
     },
   );

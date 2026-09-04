@@ -8,12 +8,12 @@
 import { describe, it, expect } from 'vitest'
 import { resolve, join } from 'node:path'
 
-import { validateProjectPath } from '@tabtin/action-tools/headless'
+import { validateProjectPath } from '@muse/action-tools/headless'
 import {
   getInteractiveTerminalPolicySupportError,
   normalizeTerminalExecutionPolicy,
   evaluateLocalTerminalPolicy,
-} from '@tabtin/terminal-core'
+} from '@muse/terminal-core'
 
 const TEST_HOME = '/home/user'
 const TEST_SANDBOX_ROOT = '/tmp/tabtin-sandbox'

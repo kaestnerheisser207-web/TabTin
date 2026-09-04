@@ -1,4 +1,4 @@
-import type { ProxyConfig } from '@tabtin/crawl-integration';
+import type { ProxyConfig } from '@muse/crawl-integration';
 import { Socket } from 'net';
 import http from 'http';
 

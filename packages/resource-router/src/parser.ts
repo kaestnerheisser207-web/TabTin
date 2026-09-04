@@ -1,15 +1,15 @@
 /**
- * @tabtin/resource-router · parser
+ * @muse/resource-router · parser
  *
  * 把任意输入字符串解析成 `ResourcePointer`。双端字符级对齐：
  *   - TypeScript: 本文件
  *   - Python: `apps/tabtin_django/apps/services/common/resource_pointer.py`
  *
  * Cross-lang contract test（W2 北极星之一）：
- *   `pnpm --filter @tabtin/resource-router test parse-cross-lang`
+ *   `pnpm --filter @muse/resource-router test parse-cross-lang`
  *
  * 解析顺序（D5 双轨识别策略）：
- *   1. 先尝试自有格式 `tabtin://resource/<type>/<id>?<query>`
+ *   1. 先尝试自有格式 `muse://resource/<type>/<id>?<query>`
  *   2. 退化到行业格式（http(s) / file / mailto / tel / 其他）
  *
  * 设计取向：
@@ -18,7 +18,7 @@
  *     调用方可凭 `scheme === 'unknown'` 判断兜底
  *   - URL 解析依赖 Web 标准 URL 类（Node ≥ 16 / 现代浏览器都内置）
  *   - 不假设 baseDir——相对路径 / 裸路径在 W3 remark plugin 阶段就被改写成
- *     `tabtin://resource/file/<encoded>` 形态了，到 parser 这里都是 absolute URI
+ *     `muse://resource/file/<encoded>` 形态了，到 parser 这里都是 absolute URI
  */
 
 import type {
@@ -27,8 +27,8 @@ import type {
   TabTinResourceScheme,
 } from './types.js'
 
-const SELF_FORMAT_PREFIX_RE = /^(?:muse|tabtin-preprod|tabtin-dev):\/\/resource\//
-const SELF_FORMAT_RE = /^(?:muse|tabtin-preprod|tabtin-dev):\/\/resource\/([^/?#]+)\/([^?#]+)(\?[^#]*)?(#.*)?$/
+const SELF_FORMAT_PREFIX_RE = /^(?:muse|muse-preprod|muse-dev):\/\/resource\//
+const SELF_FORMAT_RE = /^(?:muse|muse-preprod|muse-dev):\/\/resource\/([^/?#]+)\/([^?#]+)(\?[^#]*)?(#.*)?$/
 
 /**
  * Agent 常见笔误归一化（须与 Python `resource_pointer.py` 保持字符级对齐）。
@@ -65,7 +65,7 @@ function normalizeSelfFormatFields(
 /**
  * 把任意 URI 字符串解析成 `ResourcePointer`。
  *
- * @param uri 输入字符串（自有格式 `tabtin://resource/...` / 行业格式 / 兜底裸字符串）
+ * @param uri 输入字符串（自有格式 `muse://resource/...` / 行业格式 / 兜底裸字符串）
  * @param baseDir 可选；仅作为 ResourcePointer.baseDir 透传，不参与解析逻辑（保留位）
  *
  * @returns 永远返回 ResourcePointer，不抛异常。
@@ -129,7 +129,7 @@ export function parseResourcePointer(
 }
 
 /**
- * 解析自有格式 `tabtin://resource/<type>/<id>?<query>`。
+ * 解析自有格式 `muse://resource/<type>/<id>?<query>`。
  * 返回 null 表示「头部对但 path 形态不合法」，调用方应自决是否退化。
  */
 function tryParseSelfFormat(raw: string): ResourcePointer | null {

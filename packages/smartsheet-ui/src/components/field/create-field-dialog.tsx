@@ -23,7 +23,7 @@ import {
   type FieldType,
   type FieldOptions,
 } from '../../hooks/useFieldConfigForm'
-import type { FieldDefaultValue } from '@tabtin/table-core'
+import type { FieldDefaultValue } from '@muse/table-core'
 import { FieldConfigFormBody } from '../field-config/FieldConfigFormBody'
 import type { LinkTableOption, LinkForeignMeta } from '../field-config/LinkConfigSection'
 

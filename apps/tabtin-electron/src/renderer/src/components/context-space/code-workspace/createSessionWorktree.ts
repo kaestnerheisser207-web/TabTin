@@ -51,7 +51,7 @@ export async function createSessionWorktree(
   const pathValue = input.path.trim()
   const branchValue = resolveCreateWorktreeBranch(input)
   const baseBranch = input.baseBranch?.trim() || undefined
-  const git = window.tabtin?.git
+  const git = window.muse?.git
   if (!git?.createWorktree) {
     log.warn('createWorktree IPC unavailable')
     return { ok: false, phase: 'ipc' }
@@ -59,7 +59,7 @@ export async function createSessionWorktree(
 
   if (input.spaceId) {
     try {
-      await window.tabtin?.workspace?.appendSessionAllowedPath?.({
+      await window.muse?.workspace?.appendSessionAllowedPath?.({
         spaceId: input.spaceId,
         sessionId: input.sessionId,
         path: pathValue,

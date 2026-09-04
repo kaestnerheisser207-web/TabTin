@@ -4,8 +4,8 @@
  * 自 agent-runtime/subagent-readonly 迁出；产品 ask-mode annotate 留在宿主。
  */
 
-import { annotateToolsForMode } from '@tabtin/agent-modes'
-import type { Tool, ToolProvider } from '@tabtin/agent-runtime/engine'
+import { annotateToolsForMode } from '@muse/agent-modes'
+import type { Tool, ToolProvider } from '@muse/agent-runtime/engine'
 
 export function annotateReadonlyChildTools(tools: Tool[]): Tool[] {
   return annotateToolsForMode(tools, 'ask')

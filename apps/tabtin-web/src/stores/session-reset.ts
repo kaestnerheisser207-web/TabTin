@@ -1,11 +1,11 @@
-import { runAllResetActions } from '@tabtin/app-shell'
+import { runAllResetActions } from '@muse/app-shell'
 
 const PRESERVED_KEYS = new Set([
   'tabtin-ui-store',
   'tabtin_language',
 ])
 
-const TABTIN_PREFIXES = ['tabtin_', 'tabtin-']
+const MUSE_PREFIXES = ['tabtin_', 'tabtin-']
 
 type ResetCallback = () => void
 const _resetCallbacks: ResetCallback[] = []
@@ -26,7 +26,7 @@ export function resetSessionState() {
     const key = localStorage.key(i)
     if (!key) continue
     if (PRESERVED_KEYS.has(key)) continue
-    if (TABTIN_PREFIXES.some((prefix) => key.startsWith(prefix))) {
+    if (MUSE_PREFIXES.some((prefix) => key.startsWith(prefix))) {
       keysToRemove.push(key)
     }
   }

@@ -4,7 +4,7 @@
  * 注册所有 Crawlspace 插件
  */
 
-import { crawlspaceRegistry } from '@tabtin/crawlspace-core'
+import { crawlspaceRegistry } from '@muse/crawlspace-core'
 import { createLogger } from '@/utils/logger'
 
 const log = createLogger('PluginRegistry')

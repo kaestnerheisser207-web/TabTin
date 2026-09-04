@@ -2,9 +2,9 @@
 # Windows 高频 local NSIS 快路径（对齐 build-mac-dmg-quick.sh）
 #
 # 与完整 build:win:local 的差异：
-#   - TABTIN_PACK_QUICK=1：跳过 sourcemap
+#   - MUSE_PACK_QUICK=1：跳过 sourcemap
 #   - Windows 复用按依赖契约校验的 deploy；命中后刷新当前 workspace 包产物
-#   - NSIS compression 默认 normal（对齐 Mac 体积量级；TABTIN_WIN_NSIS_COMPRESSION 可改）
+#   - NSIS compression 默认 normal（对齐 Mac 体积量级；MUSE_WIN_NSIS_COMPRESSION 可改）
 #   - 单遍 deep prune 先移除 build.files 已排除的 map/types/tests/docs，减少 builder 扫描
 # 不变（保证产物可用）：
 #   - Office/Python/embedding/filegen/CLI staging
@@ -13,7 +13,7 @@
 #
 # 用法：
 #   bash scripts/build-win-nsis-quick.sh              # local x64
-#   TABTIN_WIN_NSIS_COMPRESSION=normal bash scripts/build-win-nsis-quick.sh
+#   MUSE_WIN_NSIS_COMPRESSION=normal bash scripts/build-win-nsis-quick.sh
 
 set -euo pipefail
 
@@ -21,8 +21,8 @@ SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 APP_DIR="$(dirname "$SCRIPT_DIR")"
 REPO_ROOT="$(cd "$APP_DIR/../.." && pwd)"
 
-PROFILE="${1:-${TABTIN_BUILD_PROFILE:-local}}"
-ARCH="${2:-${TABTIN_BUILD_ARCH:-x64}}"
+PROFILE="${1:-${MUSE_BUILD_PROFILE:-local}}"
+ARCH="${2:-${MUSE_BUILD_ARCH:-x64}}"
 
 if [ "$PROFILE" != "local" ]; then
   echo "Unsupported profile for win quick: $PROFILE (仅允许 local)" >&2
@@ -61,10 +61,10 @@ pack_time_begin "Win NSIS quick (profile=${PROFILE}, arch=${ARCH})"
 echo "=== Muse Windows NSIS Quick (profile=${PROFILE}, arch=${ARCH}) ==="
 echo "  · quick：跳过 sourcemap 生成及上传；保留 staging + audit"
 echo "  · deploy strategy: validated warm cache（依赖变化自动全量重建）"
-echo "  · NSIS compression: ${TABTIN_WIN_NSIS_COMPRESSION:-normal}"
+echo "  · NSIS compression: ${MUSE_WIN_NSIS_COMPRESSION:-normal}"
 
 pack_time_step "quick NSIS 构建" \
-  env TABTIN_PACK_QUICK=1 TABTIN_BUILD_PROFILE="$PROFILE" TABTIN_BUILD_ARCH="$ARCH" \
+  env MUSE_PACK_QUICK=1 MUSE_BUILD_PROFILE="$PROFILE" MUSE_BUILD_ARCH="$ARCH" \
   bash "$SCRIPT_DIR/build-packaged-app.sh" win "$PROFILE" "$ARCH"
 
 echo ""

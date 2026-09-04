@@ -10,7 +10,7 @@ import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from '@tabtin/smartsheet-ui'
+} from '@muse/smartsheet-ui'
 import { ClipboardPaste, RotateCw, Sparkles, Wrench } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { SERVICE_PRESETS } from '../credentials/constants'

@@ -1,6 +1,6 @@
 import * as React from 'react'
 import * as TooltipPrimitive from '@radix-ui/react-tooltip'
-import { ZIndex } from '@tabtin/app-shell'
+import { ZIndex } from '@muse/app-shell'
 import { useOverlayContainer } from './overlay-container-context'
 import { cn } from '../utils/cn'
 import { OVERLAY_SURFACE_CLASS } from './overlay-surface'

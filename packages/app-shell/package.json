@@ -1,5 +1,5 @@
 {
-  "name": "@tabtin/app-shell",
+  "name": "@muse/app-shell",
   "version": "0.1.0",
   "description": "Shared application shell: types, stores, services, and sidebar components for Electron & Web",
   "type": "module",
@@ -39,8 +39,8 @@
     "zustand": ">=4",
     "i18next": ">=23",
     "react-i18next": ">=14",
-    "@tabtin/shared": "workspace:*",
-    "@tabtin/config": "workspace:*"
+    "@muse/shared": "workspace:*",
+    "@muse/config": "workspace:*"
   },
   "peerDependenciesMeta": {
     "react": {
@@ -67,8 +67,8 @@
     "i18next": "^24.2.2",
     "react-i18next": "^15.4.1",
     "jsdom": "28.0.0",
-    "@tabtin/shared": "workspace:*",
-    "@tabtin/config": "workspace:*",
+    "@muse/shared": "workspace:*",
+    "@muse/config": "workspace:*",
     "typescript": "5.7.2",
     "vitest": "4.0.18"
   }

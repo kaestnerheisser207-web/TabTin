@@ -1,4 +1,4 @@
-import { getAgentModePromptSection } from '@tabtin/agent-modes';
+import { getAgentModePromptSection } from '@muse/agent-modes';
 
 import {
   SECTION_EXECUTION,

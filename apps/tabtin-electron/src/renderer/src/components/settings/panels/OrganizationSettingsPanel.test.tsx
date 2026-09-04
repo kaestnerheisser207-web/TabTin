@@ -1,7 +1,7 @@
 import React from 'react'
 import { fireEvent, render, screen, waitFor } from '@testing-library/react'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
-import type { Organization } from '@tabtin/app-shell'
+import type { Organization } from '@muse/app-shell'
 
 const updateOrganization = vi.fn()
 const registerDirtyChecker = vi.fn(() => () => {})

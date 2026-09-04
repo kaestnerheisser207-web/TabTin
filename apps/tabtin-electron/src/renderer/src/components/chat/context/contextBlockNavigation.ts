@@ -1,4 +1,4 @@
-import type { OpenOutcome } from '@tabtin/resource-router'
+import type { OpenOutcome } from '@muse/resource-router'
 import { buildRichResourcePointer } from './buildRichResourcePointer'
 import type { ContextBlock } from './ContextRefCard'
 import { isWebContextRefBlock } from './ContextRefCard'
@@ -108,7 +108,7 @@ async function ensureCodeNavigationSessionAllow(
   const needsAllow = !isInsideWorkingDir(target.absoluteFilePath, workingDir)
     || !isInsideWorkingDir(target.rootPath, workingDir)
   if (!needsAllow) return true
-  const appendSessionAllowedPath = window.tabtin?.workspace?.appendSessionAllowedPath
+  const appendSessionAllowedPath = window.muse?.workspace?.appendSessionAllowedPath
   if (!appendSessionAllowedPath) {
     deps.warn('[ChatPanel] code context session allow bridge unavailable')
     deps.toastOpenFailed()
@@ -212,7 +212,7 @@ async function navigateWebContextBlock(
       tabScopeKey: targetTabScopeKey,
     })).ok
   if (!opened) {
-    void window.tabtin?.openExternal?.(url)
+    void window.muse?.openExternal?.(url)
   } else {
     deps.expandCanvasForScope(targetTabScopeKey)
   }

@@ -1,7 +1,7 @@
 import type {
   ChatSession,
   ChatSessionRunStatus,
-} from '@tabtin/chat-client'
+} from '@muse/chat-client'
 
 /**
  * 侧边栏会话状态只表达用户需要立即辨认的几类结果：

@@ -73,7 +73,7 @@ import {
   buildTrackerCreateViaAgentPrompt,
   requestAgentForTracker,
 } from '../context-space/tabtracker/requestAgentForTracker'
-import { AgentApiService } from '@tabtin/app-shell'
+import { AgentApiService } from '@muse/app-shell'
 
 /**
  * 调度/触发预设。

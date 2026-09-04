@@ -4,7 +4,7 @@ import {
   DialogDescription,
   DialogHeader,
   DialogTitle,
-} from '@tabtin/smartsheet-ui'
+} from '@muse/smartsheet-ui'
 import TabdocPanelApp from '@/components/context-space/tabdoc/TabdocPanelApp'
 import { useCloudDocumentPreviewStore } from './useCloudDocumentPreviewStore'
 

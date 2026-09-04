@@ -11,9 +11,9 @@ import {
   ContextMenuTextarea,
   ContextMenuDivider,
   toast
-} from '@tabtin/smartsheet-ui'
+} from '@muse/smartsheet-ui'
 import { Pencil, Trash2 } from 'lucide-react'
-import type { Table } from '@tabtin/table-core'
+import type { Table } from '@muse/table-core'
 import { useTranslation } from 'react-i18next'
 
 export interface TableContextMenuProps {

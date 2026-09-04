@@ -6,7 +6,7 @@
  */
 
 import http from 'node:http'
-import { okResponse } from '@tabtin/agent-wire'
+import { okResponse } from '@muse/agent-wire'
 import { getCLIContextSpaceBridge, getCLISpaceId } from '../cli-context'
 import { errorResponse } from './shared/error-handler'
 

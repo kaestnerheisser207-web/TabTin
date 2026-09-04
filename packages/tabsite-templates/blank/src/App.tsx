@@ -3,7 +3,7 @@
  *
  * 如需接入 TabData 数据，运行：
  *   muse site provision-token <site-id>
- * 然后在此文件中使用 @tabtin/sdk
+ * 然后在此文件中使用 @muse/sdk
  */
 export default function App() {
   return (
@@ -29,7 +29,7 @@ export default function App() {
               <code>npm run dev</code> 启动本地预览
             </Step>
             <Step n={2} title="接入数据">
-              使用 <code>@tabtin/sdk</code> 查询 TabData
+              使用 <code>@muse/sdk</code> 查询 TabData
             </Step>
             <Step n={3} title="发布">
               <code>muse site build {'<site-id>'}</code> 一键发布到线上
@@ -41,13 +41,13 @@ export default function App() {
         <div className="mt-6 rounded-xl border border-border bg-foreground p-5 text-left shadow-sm">
           <div className="mb-2 text-caption font-medium text-muted-foreground">接入 TabData 示例</div>
           <pre className="overflow-x-auto text-caption leading-relaxed text-muted-foreground">
-{`import { createClient } from '@tabtin/sdk'
+{`import { createClient } from '@muse/sdk'
 
 const muse = createClient({
-  baseURL: import.meta.env.VITE_TABTIN_API_URL,
-  token: import.meta.env.VITE_TABTIN_TOKEN,
+  baseURL: import.meta.env.VITE_MUSE_API_URL,
+  token: import.meta.env.VITE_MUSE_TOKEN,
 })
-await muse.init(import.meta.env.VITE_TABTIN_SPACE_ID)
+await muse.init(import.meta.env.VITE_MUSE_SPACE_ID)
 
 const { data } = await muse
   .from('你的数据表')

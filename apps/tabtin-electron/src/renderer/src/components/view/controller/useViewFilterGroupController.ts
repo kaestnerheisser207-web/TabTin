@@ -2,8 +2,8 @@ import {
   useViewFilterGroupController as useViewFilterGroupControllerBase,
   type UseViewFilterGroupControllerInput as UseViewFilterGroupControllerInputBase,
   type ViewFilterGroupControllerState,
-} from '@tabtin/table-ui'
-import type { ViewMeta } from '@tabtin/table-core'
+} from '@muse/table-ui'
+import type { ViewMeta } from '@muse/table-core'
 
 export interface UseViewFilterGroupControllerInput
   extends Omit<UseViewFilterGroupControllerInputBase, 'views'> {

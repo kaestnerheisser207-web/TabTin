@@ -1,4 +1,4 @@
-import type { AntiDetectConfig } from '@tabtin/crawl-contracts';
+import type { AntiDetectConfig } from '@muse/crawl-contracts';
 
 export enum AccessLevel {
   /** 标准访问：Profile 预设的默认反检测（fingerprint + webdriver 删除 + UA 清洗） */

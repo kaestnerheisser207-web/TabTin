@@ -5,20 +5,20 @@
  * 单例生命周期（reset / beforeunload / session reset）由 chatClientSingleton.ts 管理。
  */
 
-import { ChatClient } from '@tabtin/chat-client'
-import type { ChatSession } from '@tabtin/chat-client'
+import { ChatClient } from '@muse/chat-client'
+import type { ChatSession } from '@muse/chat-client'
 import {
   getChatSessionAccess,
   getChatStoreCallbacks,
 } from '../stores/chat/shared/storeAccessRegistry'
-import { getApiRuntimeConfig, type EnvLike } from '@tabtin/config'
+import { getApiRuntimeConfig, type EnvLike } from '@muse/config'
 import {
   ChatSessionEvents,
   UserEvents,
   OrganizationEvents,
   type ChatSessionEventType,
   type UserEventType,
-} from '@tabtin/agent-wire'
+} from '@muse/agent-wire'
 import { logger, createLogger } from '@/utils/logger'
 import { notifyLogoutRequired } from '@/utils/authPersistence'
 
@@ -27,7 +27,7 @@ const STALE_RESUME_CURSOR_ERROR_CODES = new Set([
   'WS_RESUME_OVERFLOW',
   'WS_1014_REPLAY_GAP',
 ])
-import { Capabilities } from '@tabtin/ws-gateway-client'
+import { Capabilities } from '@muse/ws-gateway-client'
 import {
   loadPersistedLastEventId,
   attachLastEventIdPersistence,
@@ -42,7 +42,7 @@ import {
   registerBackgroundOrganizationIdResolver,
   type BackgroundEnvelope,
 } from '../stores/useBackgroundEventStore'
-import { toast } from '@tabtin/smartsheet-ui/toast'
+import { toast } from '@muse/smartsheet-ui/toast'
 import i18n from '@/i18n'
 import { getOrCreateDeviceId } from '@/utils/deviceId'
 import {

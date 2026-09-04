@@ -1,5 +1,5 @@
 import { act, renderHook, waitFor } from '@testing-library/react'
-import type { Table } from '@tabtin/table-core'
+import type { Table } from '@muse/table-core'
 import { pickFresherTableMetadata, useTableInitFlow } from '../useTableInitFlow'
 
 const table = (

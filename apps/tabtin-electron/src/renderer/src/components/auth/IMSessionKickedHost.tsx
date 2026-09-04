@@ -35,9 +35,9 @@ export function IMSessionKickedHost() {
     }
     const onKicked = () => showBlockingDialog('session_kicked')
     const onRecoveryFailed = () => showBlockingDialog('recovery_failed')
-    // eslint-disable-next-line tabtin/prefer-scoped-activity-effects -- 账号踢出是 App 级安全事件，不受当前 Space 活跃态影响。
+    // eslint-disable-next-line muse/prefer-scoped-activity-effects -- 账号踢出是 App 级安全事件，不受当前 Space 活跃态影响。
     window.addEventListener('im:session-kicked', onKicked)
-    // eslint-disable-next-line tabtin/prefer-scoped-activity-effects -- IM 恢复失败是 App 级阻断事件，不受当前 Space 活跃态影响。
+    // eslint-disable-next-line muse/prefer-scoped-activity-effects -- IM 恢复失败是 App 级阻断事件，不受当前 Space 活跃态影响。
     window.addEventListener('im:connection-recovery-failed', onRecoveryFailed)
     return () => {
       window.removeEventListener('im:session-kicked', onKicked)

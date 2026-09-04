@@ -1,4 +1,4 @@
-# @tabtin/doc-editor
+# @muse/doc-editor
 
 Host-agnostic document editor core for Muse Tabdoc.
 
@@ -20,7 +20,7 @@ Host-agnostic document editor core for Muse Tabdoc.
 import {
   configureDocEditorHost,
   createAutoSaveController,
-} from '@tabtin/doc-editor'
+} from '@muse/doc-editor'
 
 configureDocEditorHost({
   notify: ({ level, message }) => console[level === 'error' ? 'error' : 'log'](message),
@@ -42,7 +42,7 @@ controller.markDirty()
 
 ## Tiptap Extensions
 ```ts
-import { createDefaultDocExtensions } from '@tabtin/doc-editor'
+import { createDefaultDocExtensions } from '@muse/doc-editor'
 
 const extensions = createDefaultDocExtensions({
   profile: {

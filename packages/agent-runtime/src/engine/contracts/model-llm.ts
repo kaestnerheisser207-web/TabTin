@@ -262,7 +262,7 @@ export interface LLMRequestMetadata {
  * Wave 2：proxy-provider 透传给 query.ts 的"半成品 envelope hint"。
  *
  * **kind 字段的字符串值与 `ContentBlockEvents.*` 常量对齐**——proxy-provider 内部
- * `import { ContentBlockEvents } from '@tabtin/agent-runtime/engine'` 后用 `ContentBlockEvents.X`
+ * `import { ContentBlockEvents } from '@muse/agent-runtime/engine'` 后用 `ContentBlockEvents.X`
  * 直接当 kind，让 W2 验收脚本 `rg "ContentBlockEvents\." proxy-provider.ts ≥ 6`
  * 能验证迁移点数；同时让消费端 query.ts 路由时也复用同一组常量，避免硬编码字符串。
  *

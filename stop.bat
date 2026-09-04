@@ -2,7 +2,7 @@
 setlocal EnableExtensions
 cd /d "%~dp0"
 set COMPOSE_DISABLE_ENV_FILE=1
-set "TABTIN_EDITION="
+set "MUSE_EDITION="
 set "AUTH_FIXED_VERIFICATION_CODE="
 
 where docker >nul 2>&1

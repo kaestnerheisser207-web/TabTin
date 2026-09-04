@@ -1,4 +1,4 @@
-import type { BrowserActionResult } from '@tabtin/browser-core'
+import type { BrowserActionResult } from '@muse/browser-core'
 
 /** Explicit application seam consumed by local transports. */
 export interface BrowserApplicationPort {

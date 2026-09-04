@@ -10,7 +10,7 @@ vi.mock('../composerPresetPrompt', () => ({ resolveComposerPresetPrompt: helpers
 vi.mock('../contextBlockResolution', () => ({ resolveContextBlocks: helpers.resolveContextBlocks }))
 vi.mock('../sendDispatchInputs', () => ({ createViteEnvReader: helpers.createViteEnvReader }))
 
-vi.mock('@tabtin/agent-runtime/engine/user-context-wrapper', () => ({
+vi.mock('@muse/agent-runtime/engine/user-context-wrapper', () => ({
   buildUserContextWrapper: (type: string, body: string, opts: { stale_after_turn?: string }) =>
     `<context type="${type}" stale_after_turn="${opts.stale_after_turn ?? ''}">${body}</context>`,
 }))
@@ -25,7 +25,7 @@ const openedSessionMock = vi.hoisted(() => ({
   isExternalOpenedSession: vi.fn(() => false),
 }))
 
-vi.mock('@tabtin/agent-runtime/history', () => historyMock)
+vi.mock('@muse/agent-runtime/history', () => historyMock)
 vi.mock('@components/onboarding/external-import/externalOpenedSessionRegistry', () => openedSessionMock)
 
 import { assemblePromptContext, buildCrossTurnHistory } from '../sendMessagePromptContext'

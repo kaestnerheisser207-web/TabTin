@@ -42,13 +42,13 @@ async function writeExecutable(filePath: string, content: string): Promise<void>
 }
 
 function tarCommand(): string {
-  if (process.env.TABTIN_OFFICE_PREVIEW_TAR_PATH) return process.env.TABTIN_OFFICE_PREVIEW_TAR_PATH
+  if (process.env.MUSE_OFFICE_PREVIEW_TAR_PATH) return process.env.MUSE_OFFICE_PREVIEW_TAR_PATH
   if (process.platform === 'darwin') return '/usr/bin/tar'
   return process.platform === 'win32' ? 'tar.exe' : 'tar'
 }
 
 function findTestTarPath(): string | null {
-  if (process.env.TABTIN_OFFICE_PREVIEW_TAR_PATH) return process.env.TABTIN_OFFICE_PREVIEW_TAR_PATH
+  if (process.env.MUSE_OFFICE_PREVIEW_TAR_PATH) return process.env.MUSE_OFFICE_PREVIEW_TAR_PATH
   if (process.platform !== 'win32') return tarCommand()
   for (const candidate of [
     'C:\\Windows\\System32\\tar.exe',
@@ -212,18 +212,18 @@ describe('office-preview-renderer runtime discovery', () => {
     electronPaths.home = path.join(tempRoot, 'home')
     electronPaths.userData = path.join(tempRoot, 'user-data')
     previousPath = process.env.PATH
-    previousSoffice = process.env.TABTIN_OFFICE_PREVIEW_SOFFICE_PATH
-    previousPdfToPpm = process.env.TABTIN_OFFICE_PREVIEW_PDFTOPPM_PATH
-    previousRuntimeSource = process.env.TABTIN_OFFICE_PREVIEW_RUNTIME_SOURCE
-    previousTarPath = process.env.TABTIN_OFFICE_PREVIEW_TAR_PATH
+    previousSoffice = process.env.MUSE_OFFICE_PREVIEW_SOFFICE_PATH
+    previousPdfToPpm = process.env.MUSE_OFFICE_PREVIEW_PDFTOPPM_PATH
+    previousRuntimeSource = process.env.MUSE_OFFICE_PREVIEW_RUNTIME_SOURCE
+    previousTarPath = process.env.MUSE_OFFICE_PREVIEW_TAR_PATH
     previousHome = process.env.HOME
     previousResourcesPath = (process as NodeJS.Process & { resourcesPath?: string }).resourcesPath
     process.env.PATH = '/usr/bin:/bin'
     process.env.HOME = electronPaths.home
-    delete process.env.TABTIN_OFFICE_PREVIEW_SOFFICE_PATH
-    delete process.env.TABTIN_OFFICE_PREVIEW_PDFTOPPM_PATH
-    delete process.env.TABTIN_OFFICE_PREVIEW_RUNTIME_SOURCE
-    if (testTarPath) process.env.TABTIN_OFFICE_PREVIEW_TAR_PATH = testTarPath
+    delete process.env.MUSE_OFFICE_PREVIEW_SOFFICE_PATH
+    delete process.env.MUSE_OFFICE_PREVIEW_PDFTOPPM_PATH
+    delete process.env.MUSE_OFFICE_PREVIEW_RUNTIME_SOURCE
+    if (testTarPath) process.env.MUSE_OFFICE_PREVIEW_TAR_PATH = testTarPath
 
     const runtimeBin = path.join(
       electronPaths.home,
@@ -266,14 +266,14 @@ printf 'png' > "$prefix-1.png"
   afterEach(async () => {
     if (previousPath === undefined) delete process.env.PATH
     else process.env.PATH = previousPath
-    if (previousSoffice === undefined) delete process.env.TABTIN_OFFICE_PREVIEW_SOFFICE_PATH
-    else process.env.TABTIN_OFFICE_PREVIEW_SOFFICE_PATH = previousSoffice
-    if (previousPdfToPpm === undefined) delete process.env.TABTIN_OFFICE_PREVIEW_PDFTOPPM_PATH
-    else process.env.TABTIN_OFFICE_PREVIEW_PDFTOPPM_PATH = previousPdfToPpm
-    if (previousRuntimeSource === undefined) delete process.env.TABTIN_OFFICE_PREVIEW_RUNTIME_SOURCE
-    else process.env.TABTIN_OFFICE_PREVIEW_RUNTIME_SOURCE = previousRuntimeSource
-    if (previousTarPath === undefined) delete process.env.TABTIN_OFFICE_PREVIEW_TAR_PATH
-    else process.env.TABTIN_OFFICE_PREVIEW_TAR_PATH = previousTarPath
+    if (previousSoffice === undefined) delete process.env.MUSE_OFFICE_PREVIEW_SOFFICE_PATH
+    else process.env.MUSE_OFFICE_PREVIEW_SOFFICE_PATH = previousSoffice
+    if (previousPdfToPpm === undefined) delete process.env.MUSE_OFFICE_PREVIEW_PDFTOPPM_PATH
+    else process.env.MUSE_OFFICE_PREVIEW_PDFTOPPM_PATH = previousPdfToPpm
+    if (previousRuntimeSource === undefined) delete process.env.MUSE_OFFICE_PREVIEW_RUNTIME_SOURCE
+    else process.env.MUSE_OFFICE_PREVIEW_RUNTIME_SOURCE = previousRuntimeSource
+    if (previousTarPath === undefined) delete process.env.MUSE_OFFICE_PREVIEW_TAR_PATH
+    else process.env.MUSE_OFFICE_PREVIEW_TAR_PATH = previousTarPath
     if (previousHome === undefined) delete process.env.HOME
     else process.env.HOME = previousHome
     Object.defineProperty(process, 'resourcesPath', {

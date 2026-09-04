@@ -3,7 +3,7 @@ import type { PPTShapeElement } from '../../types/slides'
 import type { ShapePathFormula } from '../../configs/shapes'
 import { useSlideStore } from '../../store/slide'
 import { useHistoryStore } from '../../store/history'
-import { ZIndex } from '@tabtin/app-shell'
+import { ZIndex } from '@muse/app-shell'
 
 const HANDLE_SIZE = 10
 

@@ -9,7 +9,7 @@ const log = createLogger('AgentCodeRootSyncHost')
 /** 把 main 端已提交的 Agent worktree 切换投影到当前 renderer。 */
 export function AgentCodeRootSyncHost(): null {
   useEffect(() => {
-    const subscribe = window.tabtin?.agentEngine?.onSessionCodeRootChanged
+    const subscribe = window.muse?.agentEngine?.onSessionCodeRootChanged
     if (!subscribe) return
     return subscribe((event: SessionCodeRootChangedEvent) => {
       if (!event.sessionId || !event.rootPath) return

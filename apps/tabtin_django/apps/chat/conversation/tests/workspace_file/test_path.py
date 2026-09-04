@@ -18,7 +18,7 @@ class WorkspaceFilePathTests(SimpleTestCase):
         self.assertIsNone(canonicalize_artifact_relative_path("/etc/passwd"))
         self.assertIsNone(canonicalize_artifact_relative_path("~/secret.txt"))
         self.assertIsNone(canonicalize_artifact_relative_path("C:\\Users\\a.txt"))
-        self.assertIsNone(canonicalize_artifact_relative_path("tabtin://resource/file/a.txt"))
+        self.assertIsNone(canonicalize_artifact_relative_path("muse://resource/file/a.txt"))
         self.assertIsNone(canonicalize_artifact_relative_path("../escape.txt"))
 
     def test_deliverable_filter(self):

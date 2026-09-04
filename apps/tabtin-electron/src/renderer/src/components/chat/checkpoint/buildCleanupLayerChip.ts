@@ -1,4 +1,4 @@
-import type { RollbackApplyLayerStatus } from '@tabtin/chat-client'
+import type { RollbackApplyLayerStatus } from '@muse/chat-client'
 import type { RevertBannerLayerChip } from './revertBannerTypes'
 
 type TranslateFn = (key: string, options?: Record<string, unknown> & { defaultValue?: string }) => string

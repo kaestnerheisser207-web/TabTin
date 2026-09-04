@@ -145,7 +145,7 @@ def _validate_local_config(config: Dict[str, Any]) -> None:
             'localhost', '127.0.0.1', '::1', '0.0.0.0', 'django', 'caddy',
         }:
             raise ConfigurationException(
-                "生产 local OSS 必须配置客户端可达的 TABTIN_PUBLIC_BASE_URL"
+                "生产 local OSS 必须配置客户端可达的 MUSE_PUBLIC_BASE_URL"
             )
 
     if len(origins) != 1:

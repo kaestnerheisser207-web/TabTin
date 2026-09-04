@@ -19,7 +19,7 @@
 import React, { useState } from 'react'
 import { ExternalLink, Loader2 } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
-import { Button } from '@tabtin/smartsheet-ui'
+import { Button } from '@muse/smartsheet-ui'
 import { cn } from '@utils/cn'
 import { PERMISSION_DISPLAY, type PermissionDescriptor, type PermissionKind } from './permissionConfig'
 import { PermissionStatusBadge } from './PermissionStatusBadge'

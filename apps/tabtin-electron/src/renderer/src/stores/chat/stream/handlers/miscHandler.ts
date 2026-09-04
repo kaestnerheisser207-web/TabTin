@@ -4,10 +4,10 @@
  */
 
 import i18n from '@/i18n'
-import { AgentStreamEvents } from '@tabtin/ws-gateway-client'
+import { AgentStreamEvents } from '@muse/ws-gateway-client'
 //  批次 14：`engine/types` 子路径随 types.ts 拆分为 contracts/ 已下线，
 // 改走 `engine` barrel 的 type-only import（esbuild 阶段 elide，不进 vite 模块图）。
-import type { CompactionMode } from '@tabtin/agent-runtime/engine'
+import type { CompactionMode } from '@muse/agent-runtime/engine'
 import type { AgentStepType, AgentStepStatus } from '../../shared/types'
 import type { Payload } from '../../shared/helpers'
 import type { AgentStreamMessage, HandlerContext } from './streamHandlerTypes'
@@ -85,7 +85,7 @@ export function handleMiscEvent(message: AgentStreamMessage, ctx: HandlerContext
 /**
  * FR-05: 前端可能收到的 compaction mode 字符串。
  *
- * - 本地 Runtime 的合法取值完全由 `@tabtin/agent-runtime` 的 `CompactionMode`
+ * - 本地 Runtime 的合法取值完全由 `@muse/agent-runtime` 的 `CompactionMode`
  *   类型单点定义（SSoT）——TypeScript 通过 import 保证两端同步，新增 mode
  *   编译期即会提示要在 `formatCompactionTitle` 扩展分支。
  * - `LegacyCloudCompactionMode` 是历史云端 orchestration 路径仍在发出的字面量，

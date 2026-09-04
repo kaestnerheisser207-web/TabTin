@@ -1,4 +1,4 @@
-# @tabtin/table-engine-canvas
+# @muse/table-engine-canvas
 
 Canvas-based renderer engine for Muse table.
 

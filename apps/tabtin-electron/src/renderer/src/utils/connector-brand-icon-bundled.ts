@@ -1,6 +1,6 @@
 /**
  * Electron 本地镜像的连接器品牌 SVG。
- * 资产与匹配规则的 SSoT 在 `@tabtin/connector-brand-icons`；此处只做 Vite URL 解析。
+ * 资产与匹配规则的 SSoT 在 `@muse/connector-brand-icons`；此处只做 Vite URL 解析。
  */
 
 const bundledConnectorBrandIcons = import.meta.glob<string>(

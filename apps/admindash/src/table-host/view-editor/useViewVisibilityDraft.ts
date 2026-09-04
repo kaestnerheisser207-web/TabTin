@@ -5,7 +5,7 @@ import {
   normalizeFieldOrderDraft,
   normalizeVisibleFieldIdsDraft,
 } from '@/table-host/view-editor/field-visibility-draft'
-import type { ViewMeta } from '@tabtin/table-ui'
+import type { ViewMeta } from '@muse/table-ui'
 import { useCallback, useMemo, useState } from 'react'
 
 interface UseViewVisibilityDraftInput {

@@ -7,7 +7,7 @@ const resolveWorkspaceLocalHtmlOpen = vi.hoisted(() => vi.fn(() => null as any))
 const crawlspaceContextHub = vi.hoisted(() => ({ getSnapshot: vi.fn(), getAllSnapshots: vi.fn() }))
 const runSessionManager = vi.hoisted(() => ({ getQuota: vi.fn() }))
 
-vi.mock('@tabtin/agent-wire', () => ({
+vi.mock('@muse/agent-wire', () => ({
   okResponse: (data: Record<string, unknown>) => ({ ok: true, data }),
 }))
 

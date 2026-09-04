@@ -1,4 +1,4 @@
-import { isContentBlockEvent, StreamEvents } from '@tabtin/agent-wire'
+import { isContentBlockEvent, StreamEvents } from '@muse/agent-wire'
 
 const RELAY_OBSERVER_ONLY_TYPES: ReadonlySet<string> = new Set([
   StreamEvents.SUBAGENT_STREAM_EVENT,

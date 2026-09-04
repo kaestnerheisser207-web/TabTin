@@ -1,7 +1,7 @@
 import React from 'react'
 import { act, cleanup, fireEvent, render, screen, waitFor } from '@testing-library/react'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
-import type { AvailableScopesResponse } from '@tabtin/table-core'
+import type { AvailableScopesResponse } from '@muse/table-core'
 import { ApiTokenPanel } from './ApiTokenPanel'
 
 const {
@@ -91,7 +91,7 @@ vi.mock('react-i18next', () => ({
   }),
 }))
 
-vi.mock('@tabtin/smartsheet-ui', () => ({
+vi.mock('@muse/smartsheet-ui', () => ({
   Button: ({ children, onClick, disabled, type }: Record<string, unknown>) =>
     React.createElement('button', { onClick, disabled, type: (type as string) ?? 'button' }, children),
   Input: (props: Record<string, unknown>) => React.createElement('input', props),
@@ -147,7 +147,7 @@ vi.mock('../SettingsSectionCard', () => ({
   SettingsSectionCard: ({ children }: Record<string, unknown>) => React.createElement('div', null, children),
 }))
 
-vi.mock('@tabtin/table-core', () => {
+vi.mock('@muse/table-core', () => {
   testScopePresets.full.scopes = Object.keys(testTokenScopes)
   return {
     TOKEN_SCOPES: testTokenScopes,

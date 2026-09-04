@@ -605,7 +605,7 @@ def test_show_widget_invoke_path_auto_injects_tool_call_id_from_tool_call_dict()
 #     设备端 DaemonAgentHost / ElectronAgentHost（见 apps/services/agent_engine/
 #     engine/agent_dispatcher.py 头部注释 + `get_agent_backend_type`：
 #     "Always 'local' (or legacy stored value)"）。
-#   - 所有 LLM tool 执行在设备端 TS `@tabtin/agent-runtime` 完成，TS 的
+#   - 所有 LLM tool 执行在设备端 TS `@muse/agent-runtime` 完成，TS 的
 #     `stripKeysFromResult` (engine/tool-system.ts) 已经处理 llmStripKeys。
 #   - Python `ShowWidgetTool` 只在 `tool_registry.py` 实例化用作 manifest
 #     metadata 声明，`run()` 方法在当前架构下**不会**被云端 LLM 调用后

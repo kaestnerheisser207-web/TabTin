@@ -147,7 +147,7 @@ class CloudWorkerClient:
 
     @staticmethod
     def _connection_for(worker: CloudWorkerNode) -> tuple[str, str]:
-        raw = getattr(settings, "TABTIN_CLOUD_WORKERS_JSON", "{}")
+        raw = getattr(settings, "MUSE_CLOUD_WORKERS_JSON", "{}")
         try:
             workers = json.loads(raw)
         except json.JSONDecodeError as exc:

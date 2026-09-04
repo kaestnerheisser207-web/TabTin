@@ -2,7 +2,7 @@ import type { EditorInstance } from 'novel'
 import {
   pmJsonToMarkdown,
   repairLeakedHtmlBlockInPmJson,
-} from '@tabtin/doc-editor'
+} from '@muse/doc-editor'
 import { unescapeLatexInMath } from '../utils/markdown'
 
 export interface EditorContentSnapshot {

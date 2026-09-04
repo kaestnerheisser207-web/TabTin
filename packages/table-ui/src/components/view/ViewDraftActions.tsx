@@ -5,7 +5,7 @@ import {
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from '@tabtin/smartsheet-ui'
+} from '@muse/smartsheet-ui'
 
 export interface ViewDraftActionsProps {
   onClear: () => void

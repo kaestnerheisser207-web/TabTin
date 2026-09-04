@@ -1,5 +1,5 @@
-import { parseResourcePointer } from '@tabtin/resource-router'
-import type { OpenResourceTabParams, ResourcePointer } from '@tabtin/resource-router'
+import { parseResourcePointer } from '@muse/resource-router'
+import type { OpenResourceTabParams, ResourcePointer } from '@muse/resource-router'
 import { localFilePreviewRegistry } from '@components/shared/file-preview/localFilePreviewRegistry'
 import { isFileRecordId } from '@components/chat/preview/resolveOssFileAccessUrl'
 

@@ -10,7 +10,7 @@ import { useDownloadStore } from '@stores/useDownloadStore'
 import { useBrowsingHistoryStore } from '@stores/useBrowsingHistoryStore'
 import { useBrowserPrefsStore } from '@stores/useBrowserPrefsStore'
 import { normalizeBrowserAddressInput } from '@/utils/browserAddressInput'
-import { CrawlspaceToolbar } from '@tabtin/crawlspace-core'
+import { CrawlspaceToolbar } from '@muse/crawlspace-core'
 import { toast } from '@components/ui'
 import { electronCrawlspaceHost } from '../../crawlspace/host/electron-crawlspace-host'
 import { reportCrawlViewError } from '../../crawlspace/utils/reportCrawlViewError'
@@ -90,7 +90,7 @@ const stringifyForBoundsLog = (value: unknown): string => {
 }
 
 const isCrawlBoundsDebugEnabled = (): boolean => {
-  if (typeof globalThis !== 'undefined' && globalThis.__TABTIN_DEBUG_CRAWL_BOUNDS__) return true
+  if (typeof globalThis !== 'undefined' && globalThis.__MUSE_DEBUG_CRAWL_BOUNDS__) return true
   try {
     return window.localStorage?.getItem('debug:crawl-bounds') === '1'
   } catch {
@@ -329,7 +329,7 @@ export const EmbeddedCrawlView: React.FC<EmbeddedCrawlViewProps> = ({
       )
       lastShowBoundsSignatureRef.current = showSignature
     }
-    if (globalThis.__TABTIN_DEBUG_VIEW_RELOAD__) {
+    if (globalThis.__MUSE_DEBUG_VIEW_RELOAD__) {
       console.info('[DebugViewReload] renderer.show', {
         viewId: tab.id, requestedUrl: targetUrl ?? tab.url,
         tabUrl: tab.url, isActive, allowMultiple, managedExternally,
@@ -466,7 +466,7 @@ export const EmbeddedCrawlView: React.FC<EmbeddedCrawlViewProps> = ({
   tabPartitionRef.current = tab.metadata?.partition
   useEffect(() => {
     if (managedExternally || !isActive) return
-    const onReleased = window.tabtin?.crawlView?.onPartitionRebuildReleased
+    const onReleased = window.muse?.crawlView?.onPartitionRebuildReleased
     if (typeof onReleased !== 'function') return
     const unsub = onReleased(({ tabId, actualPartition }) => {
       if (tabId !== tab.id) return
@@ -614,7 +614,7 @@ export const EmbeddedCrawlView: React.FC<EmbeddedCrawlViewProps> = ({
       // Tab 刚被激活，同步当前页面上下文给 TinManager
       const url = navigationState.url || tab.url || ''
       if (url) {
-        window.tabtin?.tins?.syncPageContext?.({
+        window.muse?.tins?.syncPageContext?.({
           url,
           title: navigationState.title ?? '',
         })
@@ -819,7 +819,7 @@ export const EmbeddedCrawlView: React.FC<EmbeddedCrawlViewProps> = ({
   }, [currentUrlForBookmark, navigationState.title])
 
   useEffect(() => {
-    const unsubscribe = window.tabtin?.contextMenu?.onAddToContextRequest?.(({ viewId, selectionText }) => {
+    const unsubscribe = window.muse?.contextMenu?.onAddToContextRequest?.(({ viewId, selectionText }) => {
       if (viewId !== tab.id) return
       const url = navigationState.url || tab.url || ''
       if (!url || url === 'about:blank') return

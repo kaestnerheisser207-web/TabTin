@@ -23,11 +23,11 @@ def extract_text_from_blocks(blocks) -> str:
 
 
 def main() -> None:
-    marker = require_env("TABTIN_E2E_MARKER")
-    space_id = UUID(require_env("TABTIN_E2E_SPACE_ID"))
-    session_id_raw = os.environ.get("TABTIN_E2E_SESSION_ID", "").strip()
+    marker = require_env("MUSE_E2E_MARKER")
+    space_id = UUID(require_env("MUSE_E2E_SPACE_ID"))
+    session_id_raw = os.environ.get("MUSE_E2E_SESSION_ID", "").strip()
     session_id = UUID(session_id_raw) if session_id_raw else None
-    message_id_raw = os.environ.get("TABTIN_E2E_MESSAGE_ID", "").strip()
+    message_id_raw = os.environ.get("MUSE_E2E_MESSAGE_ID", "").strip()
     message_id = UUID(message_id_raw) if message_id_raw else None
 
     session_ids: list[UUID]

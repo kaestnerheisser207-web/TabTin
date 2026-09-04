@@ -1,4 +1,4 @@
-import { buildPublicInviteBridgeUrl } from '@tabtin/config'
+import { buildPublicInviteBridgeUrl } from '@muse/config'
 
 import { API_BASE_URL } from '@/api/client'
 import type { OrganizationInvitationItem } from '@/types/space-admin'

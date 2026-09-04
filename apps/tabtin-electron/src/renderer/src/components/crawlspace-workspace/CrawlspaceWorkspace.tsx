@@ -14,8 +14,8 @@
  */
 
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { CrawlspaceShell } from '@tabtin/crawlspace-core'
-import type { ViewInfo } from '@tabtin/crawlspace-core'
+import { CrawlspaceShell } from '@muse/crawlspace-core'
+import type { ViewInfo } from '@muse/crawlspace-core'
 import { createElectronIpcAdapter, useCrawlspaceContextAdapter } from './hooks/useCrawlSpaceViewManagerAdapter'
 import { createWorkspaceRunGuard } from './workspaceRunGuard'
 import { useAuthStore } from '@stores/useAuthStore'
@@ -26,7 +26,7 @@ import { contextRegistry } from '@components/context-space/registry'
 import { useCanvasLayoutStore, type CanvasLayoutGroup } from '@stores/useCanvasLayoutStore'
 import { CrawlViewPortalHost } from '../crawl/portal/CrawlViewPortalHost'
 import type { CrawlspaceConfig } from '@stores/useCrawlTabStore'
-import { isValidUrl } from '@tabtin/crawlspace-core'
+import { isValidUrl } from '@muse/crawlspace-core'
 import { useBrowserPrefsStore } from '@stores/useBrowserPrefsStore'
 import { useTranslation } from 'react-i18next'
 import { electronCrawlspaceHost } from '../../crawlspace/host/electron-crawlspace-host'
@@ -982,12 +982,12 @@ const CrawlspaceWorkspaceInner: React.FC<CrawlspaceWorkspaceProps> = ({
 
   const handleFind = useCallback((viewId: string, text: string, options: { forward?: boolean; findNext?: boolean }) => {
     findViewIdRef.current = viewId
-    const tabtin = window.tabtin
+    const tabtin = window.muse
     tabtin?.crawlView?.findInPage(viewId, text, options)
   }, [])
 
   const handleStopFind = useCallback((viewId: string) => {
-    const tabtin = window.tabtin
+    const tabtin = window.muse
     tabtin?.crawlView?.stopFindInPage(viewId, 'clearSelection')
     setFindMatchInfo(null)
     findViewIdRef.current = null
@@ -995,7 +995,7 @@ const CrawlspaceWorkspaceInner: React.FC<CrawlspaceWorkspaceProps> = ({
 
   // Listen for found-in-page results from main process
   useEffect(() => {
-    const tabtin = window.tabtin
+    const tabtin = window.muse
     if (!tabtin?.crawlView?.onFoundInPage) return
     const unsubscribe = tabtin.crawlView.onFoundInPage((_event: any, data: { viewId: string; activeMatchOrdinal: number; matches: number }) => {
       if (data.viewId === findViewIdRef.current) {

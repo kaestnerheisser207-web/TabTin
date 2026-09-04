@@ -1,6 +1,6 @@
 import React, { useMemo, useState } from 'react'
 import { FileText } from 'lucide-react'
-import { Button, ScrollArea } from '@tabtin/smartsheet-ui'
+import { Button, ScrollArea } from '@muse/smartsheet-ui'
 import { useTranslation } from 'react-i18next'
 import { useSkillContentQuery } from '@/hooks/queries/skills'
 import type { SkillIndexEntry } from '@/skills/types'

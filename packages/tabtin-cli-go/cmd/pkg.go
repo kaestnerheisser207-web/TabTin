@@ -478,12 +478,12 @@ func runPkgPublish(cmd *cobra.Command, f *cmdutil.Factory, directory string) err
 	}
 
 	if organizationID == "" {
-		organizationID = firstNonEmpty(getEnv("TABTIN_ORGANIZATION_ID"), pkgProfileOrganization(f))
+		organizationID = firstNonEmpty(getEnv("MUSE_ORGANIZATION_ID"), pkgProfileOrganization(f))
 	}
 	if organizationID == "" {
 		return output.PrintErrorAndExit(output.ErrorEnvelope(
 			string(errcode.ValidationError),
-			"需要 --organization-id 或设置 TABTIN_ORGANIZATION_ID / 当前 profile organization",
+			"需要 --organization-id 或设置 MUSE_ORGANIZATION_ID / 当前 profile organization",
 			"", output.ExitGeneral,
 		))
 	}
@@ -1425,12 +1425,12 @@ func runPkgFork(cmd *cobra.Command, f *cmdutil.Factory, srcRef string) error {
 	}
 	organizationID, _ := cmd.Flags().GetString("organization-id")
 	if organizationID == "" {
-		organizationID = firstNonEmpty(getEnv("TABTIN_ORGANIZATION_ID"), pkgProfileOrganization(f))
+		organizationID = firstNonEmpty(getEnv("MUSE_ORGANIZATION_ID"), pkgProfileOrganization(f))
 	}
 	if organizationID == "" {
 		return output.PrintErrorAndExit(output.ErrorEnvelope(
 			string(errcode.ValidationError),
-			"需要 --organization-id 或设置 TABTIN_ORGANIZATION_ID 环境变量",
+			"需要 --organization-id 或设置 MUSE_ORGANIZATION_ID 环境变量",
 			"", output.ExitGeneral,
 		))
 	}

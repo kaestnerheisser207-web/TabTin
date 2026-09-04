@@ -15,7 +15,7 @@ import {
 } from '@stores/useKnowledgeTree'
 import { useSpaceContextNavigation } from '@components/context-space/hooks/useSpaceContextNavigation'
 import { useTableContextSource } from '@components/context-space/sources'
-import type { Table } from '@tabtin/table-core'
+import type { Table } from '@muse/table-core'
 import type { KnowledgeTreeNode, SpaceContextItem } from '@/services/spaceApi'
 import { cn } from '@utils/cn'
 import type { CloudDocsBrowseView } from '../cloudDocsOpenTabs'

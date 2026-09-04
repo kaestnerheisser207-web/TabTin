@@ -38,7 +38,7 @@ type CrawlViewOptions =
     }
 
 function getApi(): any | null {
-  return (typeof window !== 'undefined' ? window.tabtin?.crawlView : null) || null
+  return (typeof window !== 'undefined' ? window.muse?.crawlView : null) || null
 }
 
 export const crawlViewClient = {

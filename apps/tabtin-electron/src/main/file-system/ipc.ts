@@ -6,9 +6,9 @@ import path from 'node:path'
 import { execFile } from 'node:child_process'
 import { promisify } from 'node:util'
 import { getBundledRipgrepPath } from './ripgrep-bundle-path'
-import { resolveSpacesRoot, resolveDataRoot, computeSkillContentHash, matchSensitivePath } from '@tabtin/terminal-core'
-import { resolveSpaceWorkspaceRoot, resolveOrganizationSkillsDir } from '@tabtin/agent-runtime'
-import { checkHardlinePath } from '@tabtin/security-policy'
+import { resolveSpacesRoot, resolveDataRoot, computeSkillContentHash, matchSensitivePath } from '@muse/terminal-core'
+import { resolveSpaceWorkspaceRoot, resolveOrganizationSkillsDir } from '@muse/agent-runtime'
+import { checkHardlinePath } from '@muse/security-policy'
 import { sanitizePathSegment } from '../utils/path-sanitize'
 import { resolveDefaultWorkspaceDirectoryName } from '../app-identity'
 import { guardedHandle } from '../utils/guarded-handle'
@@ -71,7 +71,7 @@ type FileSystemIpcHandler = (event: IpcMainInvokeEvent, ...args: any[]) => any
  * 到具体怎么解（"在 TabFolder 打开" / "调整 Agent Security 设置"）。
  *
  * **初始化失败容错**（2026-05 加）：`getDefaultPathAccessChecker()` 内部
- * lazy require `electron` / `@tabtin/terminal-core`。如果主进程 bundle 走
+ * lazy require `electron` / `@muse/terminal-core`。如果主进程 bundle 走
  * 到了「ESM context 里 require 未定义」（例如 path-access-checker.ts 漏写
  * `createRequire(import.meta.url)`、或者 packaged 后某个间接依赖在 walkSync
  * 之类的代码里裸调 `__require`）这条 ReferenceError 会一路冒泡到 IPC catch
@@ -692,7 +692,7 @@ export interface FilePreviewPayloadOptions {
   /**
    * 仅远程 RPC 传入：启用图片 base64 内联，并以此为字节上限。
    * 超过 → kind='binary' + truncated（远端 UI 显示「过大」）。
-   * 本机 IPC 不传——图片只回 path，由渲染进程走 tabtin-file://。
+   * 本机 IPC 不传——图片只回 path，由渲染进程走 muse-file://。
    */
   imageMaxBytes?: number
 }
@@ -1742,7 +1742,7 @@ export const fileSystemHandlers = {
    * 前端 fail-soft 并 telemetry 上报）。
    *
    * **限流**：单 sender 80 + 全局 200。触线返 envelope error 同时上报
-   * telemetry，前端 useFolderWatch 会写到 `window.__TABTIN_FS_WATCH_TELEMETRY__`
+   * telemetry，前端 useFolderWatch 会写到 `window.__MUSE_FS_WATCH_TELEMETRY__`
    * 便于 dogfood 期定位。
    */
   'fs:watch': async (event: IpcMainInvokeEvent, dirPath: string, options?: { recursive?: boolean }) => {
@@ -2619,7 +2619,7 @@ export const fileSystemHandlers = {
 // 生产路径走 ipc-lazy.ts 的 stub，**不会**调用下面的 register 函数。这里
 // 保留是给两类场景：
 // 1. 单元测试 / 集成测试：在 beforeEach 直接挂 handler，跳过 stub 体系
-// 2. EAGER 模式（TABTIN_EAGER_IPC=1）：现在改成 stub 触发 import 同步等完
+// 2. EAGER 模式（MUSE_EAGER_IPC=1）：现在改成 stub 触发 import 同步等完
 //    所以也不再调用这里。但保留向后兼容。
 
 export function registerFileSystemIpcHandlers(): void {

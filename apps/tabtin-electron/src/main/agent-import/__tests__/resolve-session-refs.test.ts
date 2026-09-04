@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import { resolveAuthoritativeSessionRefs } from '../resolve-session-refs'
-import type { ImportScanResult, ImportSessionRef } from '@tabtin/cli-server-core'
+import type { ImportScanResult, ImportSessionRef } from '@muse/cli-server-core'
 
 function ref(partial: Partial<ImportSessionRef> & { sourceSessionId: string }): ImportSessionRef {
   return {

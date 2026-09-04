@@ -3,33 +3,33 @@
  *
  * 基于共享的 DocEditorViewShell 渲染，无宿主特有扩展。
  */
-import '@tabtin/tabdoc-ui/editor/prosemirror.css'
+import '@muse/tabdoc-ui/editor/prosemirror.css'
 import './web-doc-mobile.css'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Check, Eye, Pencil } from 'lucide-react'
-import { toast } from '@tabtin/smartsheet-ui/toast'
+import { toast } from '@muse/smartsheet-ui/toast'
 import {
   RemovedFromResourceOverlay,
   useResourceShareDowngrade,
   isPermissionInsufficientForEditing,
   shouldShowRemovedOverlay,
   selectResourceShareNotifications,
-} from '@tabtin/smartsheet-ui'
+} from '@muse/smartsheet-ui'
 import { useNavigate } from 'react-router-dom'
-import type { TabdocDocument } from '@tabtin/tabdoc-ui/api-client'
-import type { SaveState } from '@tabtin/tabdoc-ui/use-doc-editor'
+import type { TabdocDocument } from '@muse/tabdoc-ui/api-client'
+import type { SaveState } from '@muse/tabdoc-ui/use-doc-editor'
 import {
   useDocEditorViewState,
   DocEditorViewShell,
-} from '@tabtin/tabdoc-ui/editor'
+} from '@muse/tabdoc-ui/editor'
 import type {
   CollaborativeState,
   YDoc,
   HocuspocusProvider,
   TabDocCollaborationUser,
-} from '@tabtin/tabdoc-ui/use-collaborative-doc-editor'
-import { useAppHostClient } from '@tabtin/app-host-sdk'
+} from '@muse/tabdoc-ui/use-collaborative-doc-editor'
+import { useAppHostClient } from '@muse/app-host-sdk'
 import { useNotificationStore } from '@/stores/useNotificationStore'
 import { buildPublicShareUrlPrefix } from '@/config/api'
 import { useWebPresentation } from '@/components/layout/WebPresentationContext'

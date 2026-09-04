@@ -5,23 +5,23 @@
  */
 
 import { useCallback, useEffect, useMemo, useRef } from 'react'
-import { toast } from '@tabtin/smartsheet-ui'
+import { toast } from '@muse/smartsheet-ui'
 import {
   FieldApiService,
   type Field,
   type ViewColumnMeta,
   type ViewMeta,
   type ViewUpdateRequest,
-} from '@tabtin/table-core'
+} from '@muse/table-core'
 import {
   getViewVisibilitySnapshot,
   buildColumnMetaVisibilityUpdate,
   type ViewPopoverControls,
-} from '@tabtin/table-ui'
+} from '@muse/table-ui'
 import type {
   TableGridHeaderContextMenuInfo,
   TableGridFreezeState,
-} from '@tabtin/table-engine'
+} from '@muse/table-engine'
 import type { InsertFieldContext } from '../field/CreateFieldDialog'
 import { buildColumnMetaUpdatePayload } from '@/types/table-adapters'
 

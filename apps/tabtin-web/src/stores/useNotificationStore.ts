@@ -5,12 +5,12 @@
  * 唯一差异:
  *  - 跳转走 navigateToWebTarget(react-router) 而非 navigateToTarget(Electron)
  *  - 无 Dock badge 同步(浏览器无该 API)
- *  - 无 window.tabtin.notification.onShown 本地推送监听(Electron 主进程才有此事件)
+ *  - 无 window.muse.notification.onShown 本地推送监听(Electron 主进程才有此事件)
  *
  * 同 Electron 的"按 Organization 隔离"语义保留。
  */
 import { create } from 'zustand'
-import { toast } from '@tabtin/smartsheet-ui/toast'
+import { toast } from '@muse/smartsheet-ui/toast'
 import i18n from '@/i18n'
 import {
   NotificationApiService,

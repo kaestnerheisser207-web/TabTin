@@ -8,7 +8,7 @@ import {
 } from './crawl-view-bounds'
 
 describe('crawl-view-bounds', () => {
-  const originalTabtin = window.tabtin
+  const originalTabtin = window.muse
 
   beforeEach(() => {
     Object.defineProperty(window, 'tabtin', {

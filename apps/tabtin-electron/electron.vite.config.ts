@@ -65,27 +65,27 @@ function copyProviderIconAssetsPlugin(): Plugin {
 //   且 vite loadEnv 内部 process.env 优先级最高（覆盖 .env.* 文件读到的值）。
 //   只有把我们想要的 profile 配置先压进 process.env，vite 最终的 import.meta.env
 //   才会用我们的值——否则 local profile build 会偷偷指向生产服务器（重大故障）。
-const buildProfile = process.env.TABTIN_BUILD_PROFILE?.trim() || ''
-const explicitDevEnvFile = process.env.TABTIN_ELECTRON_DEV_ENV_FILE?.trim() || ''
+const buildProfile = process.env.MUSE_BUILD_PROFILE?.trim() || ''
+const explicitDevEnvFile = process.env.MUSE_ELECTRON_DEV_ENV_FILE?.trim() || ''
 // vite mode 名（由 run-electron-vite.mjs 写入），可能与 buildProfile 不同
 // （例：profile='local' → viteMode='localdev'，因 vite 拒绝 'local' 这个保留字）。
 // envFileLoaded 段优先读 .env.<viteMode> 与 vite 自身 loadEnv 对齐。
-const viteMode = process.env.TABTIN_VITE_MODE?.trim() || ''
+const viteMode = process.env.MUSE_VITE_MODE?.trim() || ''
 const initialProcessEnv: Record<string, string | undefined> = {
   ...process.env,
 }
 const ENV_REFERENCE_PATTERN = /\$\{([A-Za-z_][A-Za-z0-9_]*)\}/g
 const expandEnvReferences = (value: string, scope: Record<string, string | undefined>): string => value.replace(ENV_REFERENCE_PATTERN, (match, key: string) => scope[key] ?? match)
 const isDevOnly = process.env.NODE_ENV !== 'production' && !buildProfile && (!viteMode || viteMode === 'development')
-const skipPackagedBuildTypecheck = process.env.TABTIN_PACKAGED_BUILD_SKIP_TYPECHECK === '1'
-const skipPackagedBuildSourcemaps = process.env.TABTIN_PACKAGED_BUILD_SKIP_SOURCEMAPS === '1'
-const devProcessEnvWinsKeys = new Set(['TABTIN_API_BASE_URL', 'TABTIN_DAEMON_CONTROL_API_BASE_URL', 'VITE_API_BASE_URL', 'VITE_COLLAB_WS_BASE', 'VITE_CENTRIFUGO_WS_URL', 'TABTIN_PUBLIC_WEB_BASE_URL', 'VITE_PUBLIC_WEB_BASE_URL', 'VITE_WEBSITE_BASE_URL'])
+const skipPackagedBuildTypecheck = process.env.MUSE_PACKAGED_BUILD_SKIP_TYPECHECK === '1'
+const skipPackagedBuildSourcemaps = process.env.MUSE_PACKAGED_BUILD_SKIP_SOURCEMAPS === '1'
+const devProcessEnvWinsKeys = new Set(['MUSE_API_BASE_URL', 'MUSE_DAEMON_CONTROL_API_BASE_URL', 'VITE_API_BASE_URL', 'VITE_COLLAB_WS_BASE', 'VITE_CENTRIFUGO_WS_URL', 'MUSE_PUBLIC_WEB_BASE_URL', 'VITE_PUBLIC_WEB_BASE_URL', 'VITE_WEBSITE_BASE_URL'])
 const explicitBuildProcessEnvWinsKeys = new Set([
   // Community build 脚本已完成 endpoint 安全校验；其显式输入必须压过
   // .env.community 的本地默认值。其他 profile 仍以各自文件为 SSoT。
-  'TABTIN_API_BASE_URL',
+  'MUSE_API_BASE_URL',
   'VITE_API_BASE_URL',
-  'TABTIN_WS_BASE_URL',
+  'MUSE_WS_BASE_URL',
   'VITE_WS_BASE_URL',
   'VITE_IM_API_BASE_URL',
   'VITE_COLLAB_WS_BASE',
@@ -186,25 +186,25 @@ if (envFileLoaded) {
   console.warn('[Config] ⚠️  未找到任何 .env 文件，候选路径:', envCandidates.join(', '))
 }
 
-/** 开发态：按 .env.local 的 TABTIN_LOCAL_DEV_MODE 套用模式一/模式二预设 URL */
+/** 开发态：按 .env.local 的 MUSE_LOCAL_DEV_MODE 套用模式一/模式二预设 URL */
 function applyDevModePresets(scope: Record<string, string>) {
   if (!isDevOnly) return
-  const mode = scope.TABTIN_LOCAL_DEV_MODE?.trim()
+  const mode = scope.MUSE_LOCAL_DEV_MODE?.trim()
   if (!mode || mode === 'native') return
 
-  const prefix = mode === 'lite' ? 'TABTIN_LITE_' : mode === 'docker' ? 'TABTIN_DOCKER_' : null
+  const prefix = mode === 'lite' ? 'MUSE_LITE_' : mode === 'docker' ? 'MUSE_DOCKER_' : null
   if (!prefix) {
-    console.warn(`[Config] ⚠️  未知 TABTIN_LOCAL_DEV_MODE=${mode}（允许 lite / docker / native）`)
+    console.warn(`[Config] ⚠️  未知 MUSE_LOCAL_DEV_MODE=${mode}（允许 lite / docker / native）`)
     return
   }
 
   const mappings: Array<[string, string]> = [
-    ['API_BASE_URL', 'TABTIN_API_BASE_URL'],
+    ['API_BASE_URL', 'MUSE_API_BASE_URL'],
     ['API_BASE_URL', 'VITE_API_BASE_URL'],
     ['COLLAB_WS_BASE', 'VITE_COLLAB_WS_BASE'],
     ['CENTRIFUGO_WS_URL', 'VITE_CENTRIFUGO_WS_URL'],
     ['PUBLIC_WEB_BASE_URL', 'VITE_PUBLIC_WEB_BASE_URL'],
-    ['PUBLIC_WEB_BASE_URL', 'TABTIN_PUBLIC_WEB_BASE_URL'],
+    ['PUBLIC_WEB_BASE_URL', 'MUSE_PUBLIC_WEB_BASE_URL'],
     ['WEBSITE_BASE_URL', 'VITE_WEBSITE_BASE_URL'],
   ]
 
@@ -263,17 +263,17 @@ function resolveDevEndpointPreset(scope: Record<string, string>, apiBaseUrl: str
   const presets: DevEndpointPreset[] = [
     {
       mode: 'lite',
-      apiBaseUrl: scope.TABTIN_LITE_API_BASE_URL,
-      collabWsBase: scope.TABTIN_LITE_COLLAB_WS_BASE,
-      centrifugoWsUrl: scope.TABTIN_LITE_CENTRIFUGO_WS_URL,
-      publicWebBaseUrl: scope.TABTIN_LITE_PUBLIC_WEB_BASE_URL,
+      apiBaseUrl: scope.MUSE_LITE_API_BASE_URL,
+      collabWsBase: scope.MUSE_LITE_COLLAB_WS_BASE,
+      centrifugoWsUrl: scope.MUSE_LITE_CENTRIFUGO_WS_URL,
+      publicWebBaseUrl: scope.MUSE_LITE_PUBLIC_WEB_BASE_URL,
     },
     {
       mode: 'docker',
-      apiBaseUrl: scope.TABTIN_DOCKER_API_BASE_URL,
-      collabWsBase: scope.TABTIN_DOCKER_COLLAB_WS_BASE,
-      centrifugoWsUrl: scope.TABTIN_DOCKER_CENTRIFUGO_WS_URL,
-      publicWebBaseUrl: scope.TABTIN_DOCKER_PUBLIC_WEB_BASE_URL,
+      apiBaseUrl: scope.MUSE_DOCKER_API_BASE_URL,
+      collabWsBase: scope.MUSE_DOCKER_COLLAB_WS_BASE,
+      centrifugoWsUrl: scope.MUSE_DOCKER_CENTRIFUGO_WS_URL,
+      publicWebBaseUrl: scope.MUSE_DOCKER_PUBLIC_WEB_BASE_URL,
     },
   ]
 
@@ -283,53 +283,53 @@ function resolveDevEndpointPreset(scope: Record<string, string>, apiBaseUrl: str
 function normalizeDevApiBaseAliases(scope: Record<string, string>): void {
   if (!isDevOnly) return
 
-  const tabtinApiBaseUrl = normalizeEnvUrl(scope.TABTIN_API_BASE_URL)
+  const tabtinApiBaseUrl = normalizeEnvUrl(scope.MUSE_API_BASE_URL)
   const viteApiBaseUrl = normalizeEnvUrl(scope.VITE_API_BASE_URL)
   if (!tabtinApiBaseUrl || !viteApiBaseUrl || tabtinApiBaseUrl === viteApiBaseUrl) return
 
-  const tabtinIsDefault = isRootDefaultEnv('TABTIN_API_BASE_URL')
+  const tabtinIsDefault = isRootDefaultEnv('MUSE_API_BASE_URL')
   const viteIsDefault = isRootDefaultEnv('VITE_API_BASE_URL')
   if (!tabtinIsDefault && viteIsDefault) {
     setRuntimeEnv('VITE_API_BASE_URL', tabtinApiBaseUrl, 'auto:api-alias')
-    console.log(`[Config] 🔁 VITE_API_BASE_URL 自动跟随 TABTIN_API_BASE_URL: ${tabtinApiBaseUrl}`)
+    console.log(`[Config] 🔁 VITE_API_BASE_URL 自动跟随 MUSE_API_BASE_URL: ${tabtinApiBaseUrl}`)
     return
   }
   if (tabtinIsDefault && !viteIsDefault) {
-    setRuntimeEnv('TABTIN_API_BASE_URL', viteApiBaseUrl, 'auto:api-alias')
-    console.log(`[Config] 🔁 TABTIN_API_BASE_URL 自动跟随 VITE_API_BASE_URL: ${viteApiBaseUrl}`)
+    setRuntimeEnv('MUSE_API_BASE_URL', viteApiBaseUrl, 'auto:api-alias')
+    console.log(`[Config] 🔁 MUSE_API_BASE_URL 自动跟随 VITE_API_BASE_URL: ${viteApiBaseUrl}`)
     return
   }
 
-  console.warn(`[Config] ⚠️  TABTIN_API_BASE_URL(${tabtinApiBaseUrl}) 与 ` + `VITE_API_BASE_URL(${viteApiBaseUrl}) 不一致；请只覆盖其中一个或保持相同。`)
+  console.warn(`[Config] ⚠️  MUSE_API_BASE_URL(${tabtinApiBaseUrl}) 与 ` + `VITE_API_BASE_URL(${viteApiBaseUrl}) 不一致；请只覆盖其中一个或保持相同。`)
 }
 
 function normalizeDevPublicWebAliases(scope: Record<string, string>): void {
   if (!isDevOnly) return
 
-  const tabtinPublicWebBaseUrl = normalizeEnvUrl(scope.TABTIN_PUBLIC_WEB_BASE_URL)
+  const tabtinPublicWebBaseUrl = normalizeEnvUrl(scope.MUSE_PUBLIC_WEB_BASE_URL)
   const vitePublicWebBaseUrl = normalizeEnvUrl(scope.VITE_PUBLIC_WEB_BASE_URL)
   if (!tabtinPublicWebBaseUrl || !vitePublicWebBaseUrl || tabtinPublicWebBaseUrl === vitePublicWebBaseUrl) return
 
-  const tabtinIsDefault = isRootDefaultEnv('TABTIN_PUBLIC_WEB_BASE_URL')
+  const tabtinIsDefault = isRootDefaultEnv('MUSE_PUBLIC_WEB_BASE_URL')
   const viteIsDefault = isRootDefaultEnv('VITE_PUBLIC_WEB_BASE_URL')
   if (!tabtinIsDefault && viteIsDefault) {
     setRuntimeEnv('VITE_PUBLIC_WEB_BASE_URL', tabtinPublicWebBaseUrl, 'auto:public-web-alias')
-    console.log(`[Config] 🔁 VITE_PUBLIC_WEB_BASE_URL 自动跟随 TABTIN_PUBLIC_WEB_BASE_URL: ${tabtinPublicWebBaseUrl}`)
+    console.log(`[Config] 🔁 VITE_PUBLIC_WEB_BASE_URL 自动跟随 MUSE_PUBLIC_WEB_BASE_URL: ${tabtinPublicWebBaseUrl}`)
     return
   }
   if (tabtinIsDefault && !viteIsDefault) {
-    setRuntimeEnv('TABTIN_PUBLIC_WEB_BASE_URL', vitePublicWebBaseUrl, 'auto:public-web-alias')
-    console.log(`[Config] 🔁 TABTIN_PUBLIC_WEB_BASE_URL 自动跟随 VITE_PUBLIC_WEB_BASE_URL: ${vitePublicWebBaseUrl}`)
+    setRuntimeEnv('MUSE_PUBLIC_WEB_BASE_URL', vitePublicWebBaseUrl, 'auto:public-web-alias')
+    console.log(`[Config] 🔁 MUSE_PUBLIC_WEB_BASE_URL 自动跟随 VITE_PUBLIC_WEB_BASE_URL: ${vitePublicWebBaseUrl}`)
     return
   }
 
-  console.warn(`[Config] ⚠️  TABTIN_PUBLIC_WEB_BASE_URL(${tabtinPublicWebBaseUrl}) 与 ` + `VITE_PUBLIC_WEB_BASE_URL(${vitePublicWebBaseUrl}) 不一致；请只覆盖其中一个或保持相同。`)
+  console.warn(`[Config] ⚠️  MUSE_PUBLIC_WEB_BASE_URL(${tabtinPublicWebBaseUrl}) 与 ` + `VITE_PUBLIC_WEB_BASE_URL(${vitePublicWebBaseUrl}) 不一致；请只覆盖其中一个或保持相同。`)
 }
 
 function normalizeDevRealtimeEndpoints(scope: Record<string, string>): void {
   if (!isDevOnly) return
 
-  const apiBaseUrl = normalizeEnvUrl(scope.VITE_API_BASE_URL || scope.TABTIN_API_BASE_URL)
+  const apiBaseUrl = normalizeEnvUrl(scope.VITE_API_BASE_URL || scope.MUSE_API_BASE_URL)
   const preset = resolveDevEndpointPreset(scope, apiBaseUrl)
   const currentCollabWsBase = normalizeEnvUrl(scope.VITE_COLLAB_WS_BASE)
   const currentCentrifugoWsUrl = normalizeEnvUrl(scope.VITE_CENTRIFUGO_WS_URL)
@@ -353,26 +353,26 @@ function normalizeDevRealtimeEndpoints(scope: Record<string, string>): void {
     if (!scope.VITE_PUBLIC_WEB_BASE_URL || isRootDefaultEnv('VITE_PUBLIC_WEB_BASE_URL')) {
       setRuntimeEnv('VITE_PUBLIC_WEB_BASE_URL', preset.publicWebBaseUrl, `auto:${preset.mode}`)
     }
-    if (!scope.TABTIN_PUBLIC_WEB_BASE_URL || isRootDefaultEnv('TABTIN_PUBLIC_WEB_BASE_URL')) {
-      setRuntimeEnv('TABTIN_PUBLIC_WEB_BASE_URL', preset.publicWebBaseUrl, `auto:${preset.mode}`)
+    if (!scope.MUSE_PUBLIC_WEB_BASE_URL || isRootDefaultEnv('MUSE_PUBLIC_WEB_BASE_URL')) {
+      setRuntimeEnv('MUSE_PUBLIC_WEB_BASE_URL', preset.publicWebBaseUrl, `auto:${preset.mode}`)
     }
   }
 }
 
 /**
- * Daemon Control 只维护 TABTIN_* 单一配置键；Renderer 通过 Vite 映射读取。
+ * Daemon Control 只维护 MUSE_* 单一配置键；Renderer 通过 Vite 映射读取。
  * 打包 profile 未显式覆盖该键时，不能把根 .env 的本机 6080 烘进安装包，
  * 应与该 profile 的 API Gateway 同源。
  */
 function normalizeDaemonControlEndpoint(scope: Record<string, string>): void {
   setRuntimeEnv('VITE_DAEMON_CONTROL_ENABLED', scope.DAEMON_CONTROL_ENABLED?.trim() === 'true' ? 'true' : 'false', 'auto:daemon-control')
-  const apiBaseUrl = normalizeEnvUrl(scope.VITE_API_BASE_URL || scope.TABTIN_API_BASE_URL)
-  const configuredBaseUrl = normalizeEnvUrl(scope.TABTIN_DAEMON_CONTROL_API_BASE_URL)
-  const shouldUseApiGateway = !isDevOnly && isRootDefaultEnv('TABTIN_DAEMON_CONTROL_API_BASE_URL')
+  const apiBaseUrl = normalizeEnvUrl(scope.VITE_API_BASE_URL || scope.MUSE_API_BASE_URL)
+  const configuredBaseUrl = normalizeEnvUrl(scope.MUSE_DAEMON_CONTROL_API_BASE_URL)
+  const shouldUseApiGateway = !isDevOnly && isRootDefaultEnv('MUSE_DAEMON_CONTROL_API_BASE_URL')
   const resolvedBaseUrl = shouldUseApiGateway ? apiBaseUrl : (configuredBaseUrl ?? apiBaseUrl)
   if (!resolvedBaseUrl) return
 
-  setRuntimeEnv('TABTIN_DAEMON_CONTROL_API_BASE_URL', resolvedBaseUrl, shouldUseApiGateway ? 'auto:api-gateway' : 'auto:daemon-control')
+  setRuntimeEnv('MUSE_DAEMON_CONTROL_API_BASE_URL', resolvedBaseUrl, shouldUseApiGateway ? 'auto:api-gateway' : 'auto:daemon-control')
   setRuntimeEnv('VITE_DAEMON_CONTROL_API_BASE_URL', resolvedBaseUrl, shouldUseApiGateway ? 'auto:api-gateway' : 'auto:daemon-control')
 }
 
@@ -382,9 +382,9 @@ normalizeDevRealtimeEndpoints(envVars)
 normalizeDaemonControlEndpoint(envVars)
 
 /** 设为 `1` 时关闭渲染进程 Vite HMR，改代码后需手动刷新窗口（如 ⌘⇧R），避免 Agent 改文件时打断调试 */
-const rendererHmrDisabled = process.env.TABTIN_DISABLE_RENDERER_HMR === '1'
+const rendererHmrDisabled = process.env.MUSE_DISABLE_RENDERER_HMR === '1'
 if (rendererHmrDisabled) {
-  console.log('[Config] TABTIN_DISABLE_RENDERER_HMR=1 → 渲染进程 HMR 已关闭（手动刷新生效）')
+  console.log('[Config] MUSE_DISABLE_RENDERER_HMR=1 → 渲染进程 HMR 已关闭（手动刷新生效）')
 }
 
 // Vite 通用解法应走 package.json `exports` conditions：
@@ -413,7 +413,7 @@ const workspaceDependencyExternalExcludes = Object.entries({
   ...electronPackageManifest.dependencies,
   ...electronPackageManifest.devDependencies,
 })
-  .filter(([name, version]) => name.startsWith('@tabtin/') && version.startsWith('workspace:'))
+  .filter(([name, version]) => name.startsWith('@muse/') && version.startsWith('workspace:'))
   .map(([name]) => name)
 const mainDependencyExternalExcludes = [
   // Dev main resolves workspace packages from their prebuilt dist entrypoints.
@@ -656,7 +656,7 @@ export default defineConfig({
           '@TabTabwebbase/core',
           '@TabTabwebbase/shared',
           '@TabTabwebbase/web',
-          '@tabtin/data-extraction',
+          '@muse/data-extraction',
           // WebSocket 相关
           'ws',
           'bufferutil',
@@ -667,7 +667,7 @@ export default defineConfig({
           // jsdom 依赖 css-tree，css-tree 会运行时读取 ../data/patch.json。
           // 打进 main bundle 后相对数据文件会失散，需保留原 node_modules 目录结构。
           'jsdom',
-          // @tabtin/local-embedding（workspace 包，被打进 main bundle）懒加载
+          // @muse/local-embedding（workspace 包，被打进 main bundle）懒加载
           // onnxruntime-node + @anush008/tokenizers（/#3306 语义双路召回）。
           // 两者都是 .node 原生二进制 + 运行时动态 require，打进 bundle 会在运行时报
           // "Could not dynamically require .../onnxruntime_binding.node"。
@@ -709,13 +709,13 @@ export default defineConfig({
       legalComments: 'eof',
     },
     // preload 编译为 CJS bundle（output.format = 'cjs'）。externalizeDepsPlugin
-    // 默认把所有 dependencies externalize 走运行时 `require()`，但 `@tabtin/agent-
+    // 默认把所有 dependencies externalize 走运行时 `require()`，但 `@muse/agent-
     // runtime` 是 ESM-only 包（"type": "module"，exports 子路径只有 "import" 条件，
     // 没有 "require"），sandbox preloadRequire 解析子路径 `agent-runtime/agent-modes`
     // 时会直接报 `module not found`。
     //
     // preload 仅有一处值导入 `AGENT_MODE_NAMES`（见 preload/index.ts，
-    // 从 `@tabtin/agent-modes/types` 导入）。不能走 index barrel：会解析到
+    // 从 `@muse/agent-modes/types` 导入）。不能走 index barrel：会解析到
     // permission-path.ts（node:fs），sandbox preload 加载即崩。
     plugins: [
       externalizeDepsPlugin({
@@ -727,7 +727,7 @@ export default defineConfig({
       alias: [
         { find: '@shared', replacement: resolve(__dirname, 'src/shared') },
         {
-          find: '@tabtin/agent-modes/types',
+          find: '@muse/agent-modes/types',
           replacement: resolve(__dirname, '../../packages/agent-modes/dist/types.js'),
         },
       ],
@@ -817,25 +817,25 @@ export default defineConfig({
           replacement: resolve(__dirname, 'src/renderer/src/styles'),
         },
         {
-          find: '@tabtin/smartsheet-ui/toast',
+          find: '@muse/smartsheet-ui/toast',
           replacement: resolve(__dirname, 'src/renderer/src/shims/smartsheet-ui-toast.ts'),
         },
         {
-          find: '@tabtin/smartsheet-ui/message',
+          find: '@muse/smartsheet-ui/message',
           replacement: resolve(__dirname, 'src/renderer/src/shims/smartsheet-ui-toast.ts'),
         },
         {
-          find: '@tabtin/smartsheet-ui/toast-native',
+          find: '@muse/smartsheet-ui/toast-native',
           replacement: resolve(__dirname, '../../packages/smartsheet-ui/src/toast.ts'),
         },
         {
-          find: '@tabtin/smartsheet-ui/message-native',
+          find: '@muse/smartsheet-ui/message-native',
           replacement: resolve(__dirname, '../../packages/smartsheet-ui/src/message.ts'),
         },
         // ：包根与 /toast|/message shim 必须同实例。
         // 先匹配 /toast|/message|/toast-native|/styles，再把包根钉到 entry。
         {
-          find: '@tabtin/smartsheet-ui-core',
+          find: '@muse/smartsheet-ui-core',
           replacement: resolve(__dirname, '../../packages/smartsheet-ui/src/index.ts'),
         },
         {
@@ -848,7 +848,7 @@ export default defineConfig({
           replacement: resolve(__dirname, '../../packages/apps'),
         },
         // App 平台 H1 / Wave B-B2：marketplace App 物料 (packages/apps/<id>/) 不是独立 npm 包，
-        // pnpm 下其内部 import '@tabtin/chat-client' 无法通过 node_modules 解析；显式 alias 兜底。
+        // pnpm 下其内部 import '@muse/chat-client' 无法通过 node_modules 解析；显式 alias 兜底。
         {
           find: /^@tabtin\/chat-client$/,
           replacement: resolve(__dirname, '../../packages/tabtin-chat-client/src/index.ts'),
@@ -862,7 +862,7 @@ export default defineConfig({
           replacement: resolve(__dirname, '../../packages/smartsheet-ui/dist/smartsheet-ui.css'),
         },
         {
-          find: '@tabtin/tabdoc-ui/editor/prosemirror.css',
+          find: '@muse/tabdoc-ui/editor/prosemirror.css',
           replacement: resolve(__dirname, '../../packages/tabdoc-ui/src/editor/prosemirror.css'),
         },
         {
@@ -959,7 +959,7 @@ export default defineConfig({
           overlay: resolve(__dirname, 'src/renderer/overlay.html'),
           meetingCapture: resolve(__dirname, 'src/renderer/meeting-capture.html'),
         },
-        external: ['@TabTabwebbase/core', '@TabTabwebbase/shared', '@TabTabwebbase/web', '@tabtin/data-extraction', '@tabtin/security-policy'],
+        external: ['@TabTabwebbase/core', '@TabTabwebbase/shared', '@TabTabwebbase/web', '@muse/data-extraction', '@muse/security-policy'],
         output: {
           manualChunks(id) {
             // 避免 Vite 的 preload helper 被落进 vendor-monaco，

@@ -52,7 +52,7 @@ export class Updater {
   /** Check npm registry for latest version (fallback when backend doesn't supply it). */
   async checkRegistry(): Promise<string | null> {
     try {
-      const { stdout } = await execFileAsync('npm', ['view', '@tabtin/daemon', 'version'], {
+      const { stdout } = await execFileAsync('npm', ['view', '@muse/daemon', 'version'], {
         timeout: 15_000,
       });
       return stdout.trim() || null;
@@ -64,11 +64,11 @@ export class Updater {
   /** Check locally installed version (not registry). */
   private async checkLocalVersion(): Promise<string | null> {
     try {
-      const { stdout } = await execFileAsync('npm', ['list', '-g', '@tabtin/daemon', '--json'], {
+      const { stdout } = await execFileAsync('npm', ['list', '-g', '@muse/daemon', '--json'], {
         timeout: 15_000,
       });
       const json = JSON.parse(stdout);
-      const ver = json?.dependencies?.['@tabtin/daemon']?.version;
+      const ver = json?.dependencies?.['@muse/daemon']?.version;
       return typeof ver === 'string' && semverValid(ver) ? ver : null;
     } catch {
       return null;
@@ -89,7 +89,7 @@ export class Updater {
     this.logger.info(`Updating daemon: ${CURRENT_VERSION} → ${targetVersion}`);
 
     try {
-      await execFileAsync('npm', ['update', '-g', '@tabtin/daemon'], { timeout: 120_000 });
+      await execFileAsync('npm', ['update', '-g', '@muse/daemon'], { timeout: 120_000 });
 
       const installedVersion = await this.checkLocalVersion();
       if (installedVersion && semverGt(installedVersion, CURRENT_VERSION)) {

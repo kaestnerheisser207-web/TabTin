@@ -7,7 +7,7 @@ import {
   type TabdocDocument,
   type TabdocSearchItem,
 } from './api-client'
-import { useAppHostClient } from '@tabtin/app-host-sdk'
+import { useAppHostClient } from '@muse/app-host-sdk'
 
 const SEARCH_PAGE_SIZE = 10
 const SEARCH_DEBOUNCE_MS = 350

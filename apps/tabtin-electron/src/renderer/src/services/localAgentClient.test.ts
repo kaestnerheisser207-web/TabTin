@@ -6,7 +6,7 @@
  *   2. 不传 `options.agentId` 时，IPC payload.agentId 必须为 undefined
  *      （让主进程装配点的 `if (agentId && ...)` 守卫触发并打 warn）
  *
- * 本测试聚焦 LocalAgentClient ↔ window.tabtin.agentEngine IPC 的字段透传协议，
+ * 本测试聚焦 LocalAgentClient ↔ window.muse.agentEngine IPC 的字段透传协议，
  * 不验证主进程装配链 —— 装配链由 ElectronAgentHost 单测 + 三视角 review 覆盖。
  *
  * 历史背景：W2.3 装配 7 Capability 时假设"agentId 必有"（agent home 路径
@@ -19,7 +19,7 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { LocalAgentClient } from './localAgentClient'
 
-// 模拟 window.tabtin.agentEngine —— 单测只关心 IPC payload 字段透传，所以 stub
+// 模拟 window.muse.agentEngine —— 单测只关心 IPC payload 字段透传，所以 stub
 // invoke 的同时还要 stub 主进程发 sentinel 让 stream 退出（否则 IpcStream 会
 // 永远等业务终态 / sentinel）。
 let capturedEnvelopeHandler: ((env: { sessionId: string; terminal?: { reason: string }; event?: unknown }) => void) | null = null
@@ -61,7 +61,7 @@ describe('LocalAgentClient.stream — IPC payload', () => {
       (globalThis as unknown as { window?: unknown }).window as { tabtin: { agentEngine: unknown } }
         ?? ({} as { tabtin: { agentEngine: unknown } })
     ;(globalThis as unknown as { window: { tabtin: { agentEngine: { query: typeof queryMock; abort: typeof abortMock; onStreamEvent: typeof onStreamEventMock } } } })
-      .window.tabtin = {
+      .window.muse = {
         agentEngine: {
           query: queryMock,
           abort: abortMock,

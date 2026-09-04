@@ -12,7 +12,7 @@ function validManifest(overrides: Partial<PythonRuntimeManifest> = {}): PythonRu
     version: '3.12.13',
     platforms: {
       [expectedPlatform()]: {
-        archiveName: 'tabtin-python-runtime.tar.gz',
+        archiveName: 'muse-python-runtime.tar.gz',
         sha256: SHA,
         size: 123,
         entrypoint: 'bin/python3',

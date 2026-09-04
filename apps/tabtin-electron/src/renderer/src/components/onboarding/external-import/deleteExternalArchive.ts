@@ -17,7 +17,7 @@ export async function deleteExternalArchive(payload: {
   sourceSessionId: string
   openedSessionId?: string | null
 }): Promise<{ deleted: number }> {
-  const api = window.tabtin?.import
+  const api = window.muse?.import
   if (!api?.deleteArchive) {
     throw new Error('当前客户端未暴露删除外部档案接口')
   }

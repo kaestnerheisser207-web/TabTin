@@ -2,7 +2,7 @@ import {
   deriveApiBaseUrl,
   joinApiPath,
   requireSecureCredentialApiBaseUrl,
-} from '@tabtin/config';
+} from '@muse/config';
 import type { DaemonConfig } from '../../base/types/daemon-config.js';
 import type { KernelLogger } from '../../platform/observability/logging/logger.js';
 import { readDaemonVersion } from '../../platform/system/update/daemon-version.js';
@@ -38,7 +38,7 @@ export async function registerDaemonControlDevice(
 ): Promise<boolean> {
   if (!isDaemonControlRegistrationEnabled(config)) return false;
   try {
-    const configuredBaseUrl = process.env.TABTIN_DAEMON_CONTROL_API_BASE_URL?.trim()
+    const configuredBaseUrl = process.env.MUSE_DAEMON_CONTROL_API_BASE_URL?.trim()
       || config.daemon_control_api_base_url?.trim();
     const apiBaseUrl = requireSecureCredentialApiBaseUrl(
       deriveApiBaseUrl(configuredBaseUrl || config.server_url),

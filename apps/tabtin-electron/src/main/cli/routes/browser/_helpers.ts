@@ -2,10 +2,10 @@ import http from 'node:http'
 import { basename, extname, isAbsolute, join, resolve, normalize } from 'node:path'
 import { mkdirSync, writeFileSync } from 'node:fs'
 import { pathToFileURL } from 'node:url'
-import { okResponse } from '@tabtin/agent-wire'
-import { getHomeTabtinPath } from '@tabtin/shared/storage-paths'
-import type { BrowserPolicyHostHooks, BrowserOrchestratorHostHooks } from '@tabtin/browser-core'
-import { requestAccessBarrierResolution } from '@tabtin/agent-runtime'
+import { okResponse } from '@muse/agent-wire'
+import { getHomeTabtinPath } from '@muse/shared/storage-paths'
+import type { BrowserPolicyHostHooks, BrowserOrchestratorHostHooks } from '@muse/browser-core'
+import { requestAccessBarrierResolution } from '@muse/agent-runtime'
 import {
   getCLIActionExecutor,
   getCLIViewGetter,

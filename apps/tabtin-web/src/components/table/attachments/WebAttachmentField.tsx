@@ -1,17 +1,17 @@
 import React from 'react'
 import { useTranslation } from 'react-i18next'
-import { StatusNotice, type FieldDefinition } from '@tabtin/smartsheet-ui'
-import { GridAttachmentInlineEditor } from '@tabtin/table-engine-canvas'
+import { StatusNotice, type FieldDefinition } from '@muse/smartsheet-ui'
+import { GridAttachmentInlineEditor } from '@muse/table-engine-canvas'
 import type {
   TableGridAttachmentUploadHandler,
   TableGridAttachmentUploadProgressItem,
   TableGridRow,
-} from '@tabtin/table-engine'
+} from '@muse/table-engine'
 import {
   AttachmentApiService,
   type AttachmentReference,
   type AttachmentUploadFileOut,
-} from '@tabtin/table-core'
+} from '@muse/table-core'
 import {
   buildAttachmentKeyCounts,
   consumeAttachmentKeyCount,
@@ -19,7 +19,7 @@ import {
   filterCurrentFieldAttachments,
   findUniqueAttachmentNameMatch,
   normalizeAttachmentReferences,
-} from '@tabtin/table-ui'
+} from '@muse/table-ui'
 
 interface WebAttachmentFieldProps {
   field: FieldDefinition

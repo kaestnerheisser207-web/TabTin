@@ -7,7 +7,7 @@ import {
   ContextMenu,
   ContextMenuItem,
   ContextMenuDivider,
-} from '@tabtin/smartsheet-ui'
+} from '@muse/smartsheet-ui'
 import {
   Copy,
   ExternalLink,

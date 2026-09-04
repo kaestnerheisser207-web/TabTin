@@ -9,14 +9,14 @@
  */
 
 import React from 'react'
-import { toast, ToastAction, type ToastActionElement } from '@tabtin/smartsheet-ui'
+import { toast, ToastAction, type ToastActionElement } from '@muse/smartsheet-ui'
 import type {
   TableGridRow,
   TableGridClipboardPayload,
   TableGridRuntimeApi,
-} from '@tabtin/table-engine'
-import { resolveRecordId } from '@tabtin/table-engine'
-import type { TableRecord } from '@tabtin/table-core'
+} from '@muse/table-engine'
+import { resolveRecordId } from '@muse/table-engine'
+import type { TableRecord } from '@muse/table-core'
 import {
   resolveCreatedRecordVisibility,
   collectDisplayedRecordIds,

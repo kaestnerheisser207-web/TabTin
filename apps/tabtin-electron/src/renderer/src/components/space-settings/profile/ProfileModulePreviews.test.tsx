@@ -1,7 +1,7 @@
 import React from 'react'
 import { render, screen } from '@testing-library/react'
 import { describe, expect, it, vi, beforeEach } from 'vitest'
-import type { Agent } from '@tabtin/app-shell'
+import type { Agent } from '@muse/app-shell'
 import { WorkingDirPreview } from './ProfileModulePreviews'
 
 vi.mock('react-i18next', () => ({
@@ -99,11 +99,11 @@ describe('WorkingDirPreview', () => {
     remoteViewerState.controlDeviceName = null
     deviceStoreState.devices = []
     deviceStoreState.currentDeviceId = null
-    window.tabtin = {
+    window.muse = {
       fileSystem: {
         pathExists: vi.fn().mockResolvedValue({ exists: false, isDirectory: false }),
       },
-    } as unknown as typeof window.tabtin
+    } as unknown as typeof window.muse
   })
   it('uses the Space working_dir while the Agent cache is still loading', () => {
     render(
@@ -165,11 +165,11 @@ describe('WorkingDirPreview', () => {
       status: 'online',
       os_info: { platform: 'win32', version: '10' },
     }]
-    window.tabtin = {
+    window.muse = {
       fileSystem: {
         pathExists: vi.fn().mockResolvedValue({ exists: true, isDirectory: true }),
       },
-    } as unknown as typeof window.tabtin
+    } as unknown as typeof window.muse
 
     render(
       <WorkingDirPreview

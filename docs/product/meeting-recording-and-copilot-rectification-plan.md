@@ -62,7 +62,7 @@
 
 - 现状：`MeetingRecordingManager.checkpointServerTrack` 只同步音轨元数据；`MeetingTrack.file_record` 已预留但没有写入方；音频只存在本机会议档案。
 - 整改：
-  1. 本地音轨 finalize 成功后，由 Electron Main 复用 `@tabtin/oss-client` 完成 presign → PUT → confirm。
+  1. 本地音轨 finalize 成功后，由 Electron Main 复用 `@muse/oss-client` 完成 presign → PUT → confirm。
   2. 使用 `module='meeting'`、`context_type='meeting_track'` 和稳定的 track ID 创建 FileUsage。
   3. 本地 manifest 每轨持久化 `storageStatus`、`fileRecordId`、失败原因和可重试状态；应用重启后可从 manifest 重建上传或 confirm。
   4. 服务端补会议档案列表、详情、逐字稿、Copilot 历史和授权音频 URL 的读取接口。

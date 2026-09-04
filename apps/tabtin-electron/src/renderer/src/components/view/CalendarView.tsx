@@ -15,14 +15,14 @@ import {
   SelectTrigger,
   SelectValue,
   cn,
-} from '@tabtin/smartsheet-ui'
+} from '@muse/smartsheet-ui'
 import { ChevronLeft, ChevronRight, CalendarDays, RefreshCw } from 'lucide-react'
 import { useViewStore, useViewStoreApi } from '@stores/useViewStore'
 import { useTableStore } from '@stores/useTableStore'
 import { useTranslation } from 'react-i18next'
 import { formatNumber } from '@/utils/i18n/format'
 import { RecordFormContainer } from '@components/record/RecordFormContainer'
-import { CollabStatus } from '@tabtin/collab-core'
+import { CollabStatus } from '@muse/collab-core'
 import { shouldProjectViewRecordsFromCollabYdoc, useTableCollab } from '@components/table/TableCollabContext'
 import { ViewLoadingOverlay, ViewPaginationBar } from './ViewShared'
 import { useCalendarViewController, type CalendarEventItem } from './controller/useCalendarViewController'

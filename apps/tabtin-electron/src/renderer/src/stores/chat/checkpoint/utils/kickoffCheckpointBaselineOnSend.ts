@@ -32,8 +32,8 @@ export function kickoffCheckpointBaselineOnSend(params: {
   if (!bridgeAvailable) {
     params.log.warn('Checkpoint baseline kickoff: bridge unavailable, writing degraded pending', {
       sessionId: sessionPrefix,
-      hasTabtin: typeof window !== 'undefined' && !!window.tabtin,
-      hasCheckpointApi: typeof window !== 'undefined' && !!window.tabtin?.checkpoint,
+      hasTabtin: typeof window !== 'undefined' && !!window.muse,
+      hasCheckpointApi: typeof window !== 'undefined' && !!window.muse?.checkpoint,
     })
   }
 

@@ -31,7 +31,7 @@ class FeatureFlagTests(SimpleTestCase):
         self.assertFalse(self._evaluate({"enabled": False}).enabled)
         self.assertTrue(self._evaluate({"enabled": True}).enabled)
 
-    @override_settings(TABTIN_SERVER_VERSION="1.0.1-beta.1", TABTIN_GIT_SHA="abc1234")
+    @override_settings(MUSE_SERVER_VERSION="1.0.1-beta.1", MUSE_GIT_SHA="abc1234")
     def test_applies_versions_allowlists_and_stable_organization_rollout(self):
         blocked = self._evaluate(
             {"enabled": True, "min_client_versions": {"electron": "2.0.0"}},

@@ -24,7 +24,7 @@ from apps.collab.service import VersionHistoryService
 
 logger = logging.getLogger("collab.backfill_vh_ttl")
 
-DB = ('default' if getattr(settings, 'TABTIN_SINGLE_DATABASE_MODE', False) else 'postgresql')
+DB = ('default' if getattr(settings, 'MUSE_SINGLE_DATABASE_MODE', False) else 'postgresql')
 class Command(BaseCommand):
     help = "补刷 VersionHistory 的 TTL（根据实际会员等级重新计算 expired_at）"
 

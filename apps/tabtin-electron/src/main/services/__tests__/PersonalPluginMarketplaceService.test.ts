@@ -14,15 +14,15 @@ vi.mock('../../auth.js', () => ({
   },
 }))
 
-vi.mock('@tabtin/terminal-core', async (importOriginal) => {
-  const actual = await importOriginal<typeof import('@tabtin/terminal-core')>()
+vi.mock('@muse/terminal-core', async (importOriginal) => {
+  const actual = await importOriginal<typeof import('@muse/terminal-core')>()
   return {
     ...actual,
     resolveDataRoot: () => '/tmp/tabtin-test-data-root',
   }
 })
 
-vi.mock('@tabtin/agent-runtime/plugins', () => ({
+vi.mock('@muse/agent-runtime/plugins', () => ({
   approvePersonalPluginGithubUpdate: vi.fn(),
   checkPersonalPluginGithubUpdate: vi.fn(),
   createDefaultPersonalPluginProcessAdapter: () => ({ start: vi.fn(), stop: vi.fn() }),
@@ -206,7 +206,7 @@ describe('PersonalPluginMarketplaceService runtime IPC seam', () => {
   })
 
   it('checks official release updates without auto-applying and confirms updates explicitly', async () => {
-    const plugins = await import('@tabtin/agent-runtime/plugins')
+    const plugins = await import('@muse/agent-runtime/plugins')
     const installedPlugin = {
       pluginId: 'cowart',
       source: {
@@ -285,7 +285,7 @@ describe('PersonalPluginMarketplaceService runtime IPC seam', () => {
   })
 
   it('does not offer governed updates for arbitrary GitHub imports', async () => {
-    const plugins = await import('@tabtin/agent-runtime/plugins')
+    const plugins = await import('@muse/agent-runtime/plugins')
     vi.mocked(plugins.installPersonalPluginFromCodexDirectory).mockClear()
     vi.mocked(plugins.listInstalledPersonalPlugins).mockResolvedValue([{
       pluginId: 'cowart',
@@ -322,7 +322,7 @@ describe('PersonalPluginMarketplaceService runtime IPC seam', () => {
   })
 
   it('uninstalls marketplace Personal Plugin from the marketplace install scope', async () => {
-    const plugins = await import('@tabtin/agent-runtime/plugins')
+    const plugins = await import('@muse/agent-runtime/plugins')
     vi.mocked(plugins.uninstallPersonalPlugin).mockResolvedValue({ removed: true })
     const stopAllForPlugin = vi.fn(async () => [])
     const { uninstallMarketplacePersonalPlugin } = await import('../PersonalPluginMarketplaceService')

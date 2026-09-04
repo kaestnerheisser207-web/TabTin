@@ -330,18 +330,18 @@ type EnvConfigOut = {
 function readEnvConfig(env: NodeJS.ProcessEnv): ToolFailureTrackerConfigOverride {
   const out: EnvConfigOut = {};
 
-  const enabled = parseTrackerEnvBoolean(env.TABTIN_TOOL_FAILURE_TRACKER_ENABLED);
+  const enabled = parseTrackerEnvBoolean(env.MUSE_TOOL_FAILURE_TRACKER_ENABLED);
   if (enabled !== undefined) out.enabled = enabled;
 
-  const notice = parseTrackerEnvNumber(env.TABTIN_TOOL_FAILURE_NOTICE_STREAK, {
+  const notice = parseTrackerEnvNumber(env.MUSE_TOOL_FAILURE_NOTICE_STREAK, {
     min: 1,
     max: TOOL_FAILURE_THRESHOLD_MAX,
   });
-  const nudge = parseTrackerEnvNumber(env.TABTIN_TOOL_FAILURE_NUDGE_STREAK, {
+  const nudge = parseTrackerEnvNumber(env.MUSE_TOOL_FAILURE_NUDGE_STREAK, {
     min: 1,
     max: TOOL_FAILURE_THRESHOLD_MAX,
   });
-  const terminate = parseTrackerEnvNumber(env.TABTIN_TOOL_FAILURE_TERMINATE_STREAK, {
+  const terminate = parseTrackerEnvNumber(env.MUSE_TOOL_FAILURE_TERMINATE_STREAK, {
     min: 1,
     max: TOOL_FAILURE_THRESHOLD_MAX,
   });

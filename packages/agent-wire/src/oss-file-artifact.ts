@@ -16,8 +16,8 @@ export const OssFileArtifactPayloadSchema = z.object({
   file_id: z.string().uuid(),
   file_type: z.string().min(1),
   filename: z.string().min(1),
-  /** Space 打开契约：`tabtin://resource/file/<file_id>?hint=tabfiles` */
-  url: z.string().startsWith('tabtin://resource/file/'),
+  /** Space 打开契约：`muse://resource/file/<file_id>?hint=tabfiles` */
+  url: z.string().startsWith('muse://resource/file/'),
   mime_type: z.string().min(1),
   file_size: z.number().int().nonnegative().optional(),
   /** HTTPS 访问地址，预览可跳过二次查 FileRecord */

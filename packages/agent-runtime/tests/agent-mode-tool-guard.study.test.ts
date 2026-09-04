@@ -12,8 +12,8 @@ import { describe, it, expect } from 'vitest';
 import {
   evaluateAgentModeToolAccess,
   AGENT_MODE_CONFIGS,
-} from '@tabtin/agent-modes';
-import type { ToolLike } from '@tabtin/agent-modes';
+} from '@muse/agent-modes';
+import type { ToolLike } from '@muse/agent-modes';
 
 function makeTool(name: string, isReadOnly: boolean): ToolLike {
   return { name, isReadOnly };

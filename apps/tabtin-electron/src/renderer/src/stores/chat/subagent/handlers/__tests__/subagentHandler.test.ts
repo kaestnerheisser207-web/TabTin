@@ -22,7 +22,7 @@ vi.mock('@/i18n', () => ({
   },
 }))
 
-vi.mock('@tabtin/ws-gateway-client', () => ({
+vi.mock('@muse/ws-gateway-client', () => ({
   AgentStreamEvents: {
     SUBAGENT_PROGRESS: 'agent.stream.subagent_progress',
     SUBAGENT_STARTED: 'agent.stream.subagent_started',

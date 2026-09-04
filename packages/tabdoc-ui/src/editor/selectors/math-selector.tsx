@@ -1,8 +1,8 @@
 import { SigmaIcon } from 'lucide-react'
 import { useEditor } from 'novel'
 import { useTranslation } from 'react-i18next'
-import { Button } from '@tabtin/smartsheet-ui'
-import { cn } from '@tabtin/smartsheet-ui'
+import { Button } from '@muse/smartsheet-ui'
+import { cn } from '@muse/smartsheet-ui'
 import { BubbleToolbarTooltip } from './bubble-toolbar-tooltip'
 
 /**

@@ -1,7 +1,7 @@
 /**
  * Browser 工具类型定义
  *
- * 统一从 @tabtin/browser-core re-export，避免两套定义不一致。
+ * 统一从 @muse/browser-core re-export，避免两套定义不一致。
  */
 export type {
   BlockSignal,
@@ -16,5 +16,5 @@ export type {
   RequestSnapshotInput,
   RequestSnapshotOutput,
   CaptchaInfo,
-} from '@tabtin/browser-core';
+} from '@muse/browser-core';
 

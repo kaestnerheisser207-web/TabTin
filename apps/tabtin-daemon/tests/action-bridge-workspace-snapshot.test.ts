@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from 'vitest'
-import type { WorkspaceSnapshot } from '@tabtin/security-policy'
+import type { WorkspaceSnapshot } from '@muse/security-policy'
 
 import { DaemonActionBridge } from '../src/application/execution/action-bridge.js'
 import { checkDaemonPathAccess } from '../src/application/security/path-access.js'

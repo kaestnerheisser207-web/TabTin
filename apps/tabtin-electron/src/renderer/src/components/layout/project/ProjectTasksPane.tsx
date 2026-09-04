@@ -48,8 +48,8 @@ import type {
   OrganizationMember,
   Space,
   WorkspaceSummary,
-} from '@tabtin/app-shell';
-import { WorkspaceApiService } from '@tabtin/app-shell';
+} from '@muse/app-shell';
+import { WorkspaceApiService } from '@muse/app-shell';
 import { useAuthStore } from '@stores/useAuthStore';
 import { ProjectApiService } from '@/services/projectApi';
 import { openProjectTaskChatSession } from '@/services/openProjectTaskChatSession';

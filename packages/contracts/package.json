@@ -1,5 +1,5 @@
 {
-  "name": "@tabtin/contracts",
+  "name": "@muse/contracts",
   "version": "0.1.0",
   "description": "Muse SDK 统一类型契约 — 跨 SDK 边界共享的类型和 Schema",
   "type": "module",

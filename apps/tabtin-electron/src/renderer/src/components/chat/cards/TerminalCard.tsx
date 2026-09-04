@@ -10,9 +10,9 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Terminal, Copy, Check, ExternalLink, Loader2, Square, ArrowDownToLine } from 'lucide-react'
 import { cn } from '@utils/cn'
-import { ScrollArea, toast } from '@tabtin/smartsheet-ui'
+import { ScrollArea, toast } from '@muse/smartsheet-ui'
 import type { CardRendererProps } from '../registry/types'
-import type { TerminalOutputData } from '@tabtin/chat-client'
+import type { TerminalOutputData } from '@muse/chat-client'
 import {
   CARD_HEADER_PADDING,
   TEXT,
@@ -132,7 +132,7 @@ async function persistAgentTranscriptSnapshotIfNeeded(params: {
   cwd: string
 }): Promise<void> {
   if (!params.sessionId.startsWith('agent-')) return
-  const pty = window.tabtin?.pty
+  const pty = window.muse?.pty
   if (!pty?.snapshotSave) return
 
   try {
@@ -346,7 +346,7 @@ const TerminalCard: React.FC<TerminalCardProps> = React.memo(
         setStopPending(true)
         let killed = false
         try {
-          const result = await window.tabtin?.pty?.agentKill?.(sessionId)
+          const result = await window.muse?.pty?.agentKill?.(sessionId)
           killed = result?.success === true
           if (!killed) {
             toast({
@@ -377,7 +377,7 @@ const TerminalCard: React.FC<TerminalCardProps> = React.memo(
         setDetachPending(true)
         let detached = false
         try {
-          const result = await window.tabtin?.pty?.agentDetach?.(sessionId)
+          const result = await window.muse?.pty?.agentDetach?.(sessionId)
           detached = result?.success === true
           if (!detached) {
             toast({

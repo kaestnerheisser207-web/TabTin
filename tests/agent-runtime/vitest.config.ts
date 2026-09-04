@@ -5,7 +5,7 @@ import path from 'node:path';
  * Replay harness 的独立 vitest 配置。
  *
  * root 固定为本目录；alias 复制自 packages/agent-runtime/vitest.config.ts
- * （路径改为从本目录出发）——runtime 源码内部的 @tabtin/* import 需要
+ * （路径改为从本目录出发）——runtime 源码内部的 @muse/* import 需要
  * 与其自身测试完全相同的解析规则。
  *
  * 运行方式见 run.sh：vitest 二进制借用 packages/agent-runtime 的安装。
@@ -20,13 +20,13 @@ export default defineConfig({
       // node_modules——显式把 vitest 指到运行用的同一份安装，避免
       // describe/it 注册进另一个 vitest 实例（"No test suite found"）。
       vitest: path.resolve(PKG, 'agent-runtime/node_modules/vitest/dist/index.js'),
-      '@tabtin/config': path.resolve(PKG, 'tabtin-config/dist/index.js'),
-      '@tabtin/file-pipeline': path.resolve(PKG, 'file-pipeline/src/index.ts'),
-      '@tabtin/ws-gateway-client': path.resolve(PKG, 'ws-gateway-client/src/index.ts'),
-      '@tabtin/terminal-core': path.resolve(PKG, 'terminal-core/src/index.ts'),
-      '@tabtin/shared/storage-paths': path.resolve(PKG, 'tabtin-shared/src/storage-paths.ts'),
-      '@tabtin/shared': path.resolve(PKG, 'tabtin-shared/src/index.ts'),
-      '@tabtin/env-sanitize': path.resolve(PKG, 'env-sanitize/src/index.ts'),
+      '@muse/config': path.resolve(PKG, 'tabtin-config/dist/index.js'),
+      '@muse/file-pipeline': path.resolve(PKG, 'file-pipeline/src/index.ts'),
+      '@muse/ws-gateway-client': path.resolve(PKG, 'ws-gateway-client/src/index.ts'),
+      '@muse/terminal-core': path.resolve(PKG, 'terminal-core/src/index.ts'),
+      '@muse/shared/storage-paths': path.resolve(PKG, 'tabtin-shared/src/storage-paths.ts'),
+      '@muse/shared': path.resolve(PKG, 'tabtin-shared/src/index.ts'),
+      '@muse/env-sanitize': path.resolve(PKG, 'env-sanitize/src/index.ts'),
     },
   },
   test: {

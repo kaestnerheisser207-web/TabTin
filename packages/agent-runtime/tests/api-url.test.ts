@@ -2,7 +2,7 @@
  * `utils/api-url.ts` 行为契约单测。
  *
  * 这层 helper 是 agent-runtime 内部 zero-dep 的 URL 拼接工具，行为必须与
- * `@tabtin/config` 的 `joinApiPath` 完全一致——避免两份实现漂移导致历史
+ * `@muse/config` 的 `joinApiPath` 完全一致——避免两份实现漂移导致历史
  * "双 /api" bug 重新冒头。
  */
 

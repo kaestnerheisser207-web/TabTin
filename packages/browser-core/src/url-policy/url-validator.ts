@@ -1,2 +1,2 @@
-export { validateNavigationUrl, validateUrl, isAllowedScheme } from '@tabtin/security-policy';
-export type { ValidationResult } from '@tabtin/security-policy';
+export { validateNavigationUrl, validateUrl, isAllowedScheme } from '@muse/security-policy';
+export type { ValidationResult } from '@muse/security-policy';

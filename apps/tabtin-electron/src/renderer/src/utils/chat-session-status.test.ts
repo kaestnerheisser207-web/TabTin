@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest'
 import type {
   ChatSession,
   ChatSessionRunStatus,
-} from '@tabtin/chat-client'
+} from '@muse/chat-client'
 import { resolveSessionDisplayStatus } from './chat-session-status'
 
 const session = {

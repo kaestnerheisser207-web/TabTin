@@ -5,7 +5,7 @@ import { useIMStore } from '@stores/useIMStore';
 import { useOrganizationStore } from '@stores/useOrganizationStore';
 import { useSpaceListStore } from '@stores/useSpaceListStore';
 import { useMainNavStore } from '@stores/useMainNavStore';
-import { parseSpaceSelectionId, type SpaceNavigationKind } from '@tabtin/app-shell';
+import { parseSpaceSelectionId, type SpaceNavigationKind } from '@muse/app-shell';
 import type { SpaceContext } from '@components/context-space/SpaceContextContainer';
 import {
   resolveActiveShellContext,

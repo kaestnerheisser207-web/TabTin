@@ -1,5 +1,5 @@
 /**
- * @tabtin/agent-runtime — JSONL Snapshot Storage
+ * @muse/agent-runtime — JSONL Snapshot Storage
  *
  * Append-only JSONL file: {sessionDir}/{sessionId}/snapshots.jsonl
  * Each line is a JSON-serialised LLMCallSnapshot.

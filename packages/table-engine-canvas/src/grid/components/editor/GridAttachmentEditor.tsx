@@ -9,8 +9,8 @@ import type {
   TableGridAttachmentUploadProgressItem,
   TableGridCanvasEditorLabels,
   TableGridRow,
-} from '@tabtin/table-engine'
-import { resolveRecordId } from '@tabtin/table-engine'
+} from '@muse/table-engine'
+import { resolveRecordId } from '@muse/table-engine'
 import type {
   ComponentType,
   ForwardRefExoticComponent,
@@ -190,7 +190,7 @@ const DEFAULT_LABELS: AttachmentEditorLabels = {
 }
 
 /** 与 Electron DRAG_TYPE_FILE_REF / 对话拖源对齐 */
-const FILE_REF_DRAG_MIME = 'application/x-tabtin-file-ref'
+const FILE_REF_DRAG_MIME = 'application/x-muse-file-ref'
 const FILE_REF_DRAG_VERSION = 1
 
 function readFileRefFromDataTransfer(

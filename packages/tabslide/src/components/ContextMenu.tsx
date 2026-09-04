@@ -4,7 +4,7 @@ import { useHistoryStore } from '../store/history'
 import { keymapManager, KeyboardPriority } from '../utils/keymap-manager'
 import * as t from '../theme'
 import { useT } from '../i18n'
-import { ZIndex } from '@tabtin/app-shell'
+import { ZIndex } from '@muse/app-shell'
 import { useContextMenuActions } from '../hooks/useContextMenuActions'
 import { buildContextMenuItems } from './buildContextMenuItems'
 

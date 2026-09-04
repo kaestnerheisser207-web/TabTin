@@ -12,7 +12,7 @@ import {
   extractToolPath,
   hasSuspiciousWindowsPathPattern,
   buildModeDisallowedPathError,
-} from '@tabtin/agent-modes';
+} from '@muse/agent-modes';
 
 const writeFile = { name: 'write_file', isReadOnly: false };
 const editFile = { name: 'edit_file', isReadOnly: false };

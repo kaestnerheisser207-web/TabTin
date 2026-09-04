@@ -5,8 +5,8 @@
 import {
   PromptCancelPayloadSchema,
   SubagentCancelPayloadSchema,
-} from '@tabtin/agent-wire'
-import { extractAbortIdentityCandidates } from '@tabtin/agent-host/conversation'
+} from '@muse/agent-wire'
+import { extractAbortIdentityCandidates } from '@muse/agent-host/conversation'
 
 export interface FeedHarnessHost {
   handleAbort?: (id: string) => { success: boolean }

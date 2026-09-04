@@ -1,7 +1,7 @@
 # File Pipeline error_kind SSoT YAML 真相源（W5 L17 / Wave 3）
 #
 # 这是 file pipeline 14 类字符串 error_kind 的**唯一**真相源。下方 codegen
-# `pnpm --filter @tabtin/file-pipeline-errors codegen` 从本文件派生：
+# `pnpm --filter @muse/file-pipeline-errors codegen` 从本文件派生：
 #   1. packages/file-pipeline-errors/src/_generated/error-codes.generated.ts
 #      （FilePipelineErrorCode enum + FILE_PIPELINE_ERROR_KINDS 数组 +
 #      FILE_PIPELINE_ERROR_I18N_KEYS i18n key 表）
@@ -34,12 +34,12 @@
 #   1. 在本 yaml `codes:` 下加一条新 entry（enum/kind/i18n_key/description/i18n
 #      必填）。**禁止新增 numeric 或任何数字码字段**；历史对照只写入
 #      `packages/agent-runtime/docs/wave3-error-kind-migration.md`
-#   2. 跑 `pnpm --filter @tabtin/file-pipeline-errors codegen`
-#   3. 跑 `pnpm --filter @tabtin/file-pipeline-errors codegen:verify` 校验 diff 0
+#   2. 跑 `pnpm --filter @muse/file-pipeline-errors codegen`
+#   3. 跑 `pnpm --filter @muse/file-pipeline-errors codegen:verify` 校验 diff 0
 #   4. 在 format.ts switch 加 case（LLM-facing 英文 message + suggestion）
 #   5. 在 formatFilePipelineErrorChinesePrompt switch 加 case（中文 prompt）
 #   6. 手动改 iOS ChatErrorClassCard.swift::Configs 字典加新 case
-#   7. 跑测试 `pnpm --filter @tabtin/file-pipeline-errors test`
+#   7. 跑测试 `pnpm --filter @muse/file-pipeline-errors test`
 
 codes:
   - enum: FILE_NOT_FOUND

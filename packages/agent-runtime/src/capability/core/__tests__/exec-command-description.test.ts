@@ -21,12 +21,12 @@ describe('buildExecCommandDescription（shell 无关）', () => {
     expect(desc).not.toContain('PowerShell');
     expect(desc).not.toContain('Set-Location');
     expect(desc).not.toContain('cmd.exe');
-    expect(desc).not.toContain('%TABTIN_WORKSPACE%');
+    expect(desc).not.toContain('%MUSE_WORKSPACE%');
     // ：伪通用 bash 示例也禁止再出现在工具描述里。
     expect(desc).not.toContain('until curl');
     expect(desc).not.toContain('[[ ! -f');
     expect(desc).not.toContain('cd /path &&');
-    expect(desc).not.toContain('$TABTIN_WORKSPACE');
+    expect(desc).not.toContain('$MUSE_WORKSPACE');
   });
 
   it('等待场景矩阵仍指向 <shell_runtime> 与 pattern（P7 硬契约）', () => {

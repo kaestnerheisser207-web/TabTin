@@ -29,7 +29,7 @@
  * 消息事实合成同构 interaction 对象，转调既有 handler，避免第二套映射漂移。
  */
 
-import type { ChatMessage } from '@tabtin/chat-client'
+import type { ChatMessage } from '@muse/chat-client'
 import { createLogger } from '@/utils/logger'
 import { getHitlStoreAccess } from '../../shared/storeAccessRegistry'
 import type { AgentStreamMessage } from '../../stream/handlers/streamHandlerTypes'

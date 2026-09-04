@@ -1,7 +1,7 @@
 // browser_showcase_test.go — TabWeb 能力总览注册期 invariant + manifest 导出测试。
 //
 // 镜像 cmd/table/table_showcase_test.go 的 showcase 套件：把「漏登记命令 / registry
-// 不一致 / manifest 结构漂移」从「跑 ./dist/tabtin 才暴露」提前到 `go test`。
+// 不一致 / manifest 结构漂移」从「跑 ./dist/muse 才暴露」提前到 `go test`。
 // 浏览器场景下「回归所有能力」是核心诉求，所以 registry 必须覆盖全部叶子命令。
 package browser
 

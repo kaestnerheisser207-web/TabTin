@@ -1,15 +1,15 @@
 /**
- * 从 assistant 正文提取 tabtin://resource 链接产物（画板 / 轮次产物卡共用）。
+ * 从 assistant 正文提取 muse://resource 链接产物（画板 / 轮次产物卡共用）。
  */
-import { parseResourcePointer } from '@tabtin/resource-router'
+import { parseResourcePointer } from '@muse/resource-router'
 
 /**
  * URI 路径体禁止引号 / 反引号：避免正文 `…m4a"。` 把收尾 `"` 吞进产物路径。
  * 对齐 markdown-resource-autolink 的 PATH_BODY_DENY 对 `"` 的处理。
  */
-const MD_RESOURCE_LINK_RE = /\[([^\]]+)\]\(((?:tabtin|tabtin-preprod|tabtin-dev):\/\/resource\/[^)\s"'`]+)\)/g
-const BARE_RESOURCE_URI_RE = /(?:tabtin|tabtin-preprod|tabtin-dev):\/\/resource\/[^\s)\]"'`]+/g
-const RESOURCE_LINK_MARKER_RE = /(?:tabtin|tabtin-preprod|tabtin-dev):\/\/resource\//
+const MD_RESOURCE_LINK_RE = /\[([^\]]+)\]\(((?:muse|muse-preprod|muse-dev):\/\/resource\/[^)\s"'`]+)\)/g
+const BARE_RESOURCE_URI_RE = /(?:muse|muse-preprod|muse-dev):\/\/resource\/[^\s)\]"'`]+/g
+const RESOURCE_LINK_MARKER_RE = /(?:muse|muse-preprod|muse-dev):\/\/resource\//
 const FENCED_CODE_BLOCK_RE = /```[\s\S]*?(?:```|$)/g
 const INLINE_CODE_RE = /`[^`\n]*`/g
 /** 贪婪匹配后仍可能挂上的收尾西文/中文标点（防御）。 */
@@ -20,7 +20,7 @@ function stripMarkdownInline(s: string): string {
 }
 
 /**
- * 去掉代码块/行内代码后再提链接——模型在 ``` 示例里展示的 tabtin://
+ * 去掉代码块/行内代码后再提链接——模型在 ``` 示例里展示的 muse://
  * 字符串不是真实产物（bugbot ）。
  */
 function stripCodeSegments(text: string): string {
@@ -29,7 +29,7 @@ function stripCodeSegments(text: string): string {
 
 /**
  * 模型截断的 id 不是真实产物：Agent 会照抄 SKILL 样板风格输出
- * `tabtin://resource/document/02eda024-5f11-…` 这类省略号截断链接，收进产物卡
+ * `muse://resource/document/02eda024-5f11-…` 这类省略号截断链接，收进产物卡
  * 后点击必失败（后端报「document_id 不是合法 UUID」）。含 `…` 的 id 一律丢弃；
  * `...` 只对云端资源丢弃——file 类 id 是文件路径，`...` 理论上可以是合法文件名。
  */
@@ -51,7 +51,7 @@ function sanitizeResourceHref(href: string): string {
 }
 
 /**
- * 从 assistant 正文抽出 tabtin://resource 链接。
+ * 从 assistant 正文抽出 muse://resource 链接。
  * 按 `<type>:<id>` 去重（同一轮内调用方再按 href 去重）。
  */
 export function extractResourceLinkArtifacts(rawText: string): ResourceLinkArtifactExtract[] {

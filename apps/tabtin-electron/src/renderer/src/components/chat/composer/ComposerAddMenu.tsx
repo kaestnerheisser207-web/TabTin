@@ -219,7 +219,7 @@ export function ComposerAddMenu({
     let cancelled = false
     setMcpLoading(true)
     setMcpError(false)
-    void window.tabtin.localMcp.listConnections()
+    void window.muse.localMcp.listConnections()
       .then(items => {
         if (!cancelled) setConnections(items)
       })

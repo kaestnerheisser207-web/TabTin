@@ -2,7 +2,7 @@
  * Daemon 端存储 bucket 统一注册。
  *
  * 在 Daemon 启动期（各 service 初始化完成后）调用一次 `registerDaemonStorageBuckets`，
- * 把 14 个 daemon bucket 全部注册到 `@tabtin/storage-manager` 注册中心
+ * 把 14 个 daemon bucket 全部注册到 `@muse/storage-manager` 注册中心
  * （RFC §五 W2.3 表 13 个 + R1 P0 修复补的 `daemon:browser-exports`）。
  * CLI 路由 `cli/routes/storage.ts` 直接通过 `listBuckets` / `getBucketSize`
  * 等公开 API 访问注册结果——CLI 路由不重复维护 bucket 元信息。
@@ -32,8 +32,8 @@ import {
   type ClearOptions,
   type ClearResult,
   type StorageBucket,
-} from '@tabtin/storage-manager';
-import { getHomeTabtinPath } from '@tabtin/shared/storage-paths';
+} from '@muse/storage-manager';
+import { getHomeTabtinPath } from '@muse/shared/storage-paths';
 import type { Logger } from '../observability/logging/logger.js';
 
 /**

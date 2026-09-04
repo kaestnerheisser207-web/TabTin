@@ -1,4 +1,4 @@
-import type { AgentTool } from '@tabtin/action-tools/types'
+import type { AgentTool } from '@muse/action-tools/types'
 import { getLocalMcpService } from './LocalMcpService'
 
 type AgentScopedInput = {

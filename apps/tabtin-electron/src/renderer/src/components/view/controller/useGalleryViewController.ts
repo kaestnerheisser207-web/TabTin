@@ -3,8 +3,8 @@ import {
   useGalleryViewController as useGalleryViewControllerBase,
   type GalleryViewControllerState as GalleryViewControllerStateBase,
   type UseGalleryViewControllerInput as UseGalleryViewControllerInputBase,
-} from '@tabtin/table-ui'
-import type { ViewMeta, ViewRecordsResponse, Field } from '@tabtin/table-core'
+} from '@muse/table-ui'
+import type { ViewMeta, ViewRecordsResponse, Field } from '@muse/table-core'
 
 export interface UseGalleryViewControllerInput
   extends Omit<UseGalleryViewControllerInputBase, 'views' | 'currentViewRecords' | 'fields'> {

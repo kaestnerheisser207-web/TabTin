@@ -18,7 +18,7 @@ export function useToastOverlayMousePassthrough(hasVisibleToasts: boolean): void
     const setIgnoring = (ignore: boolean) => {
       if (ignoringRef.current === ignore) return
       ignoringRef.current = ignore
-      void window.tabtin?.overlay?.setToastIgnoreMouseEvents?.(ignore)
+      void window.muse?.overlay?.setToastIgnoreMouseEvents?.(ignore)
     }
 
     if (!hasVisibleToasts) {
@@ -40,7 +40,7 @@ export function useToastOverlayMousePassthrough(hasVisibleToasts: boolean): void
 
     let cancelled = false
     const syncFromMainCursor = () => {
-      void window.tabtin?.overlay?.getToastCursorClientPoint?.().then((point) => {
+      void window.muse?.overlay?.getToastCursorClientPoint?.().then((point) => {
         if (cancelled || !point) return
         syncFromPointer(point.clientX, point.clientY)
       })

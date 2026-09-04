@@ -9,8 +9,8 @@ import {
   NodeImportIO,
   assertImportSourcePath,
   getAdapter,
-} from '@tabtin/agent-import'
-import type { ImportScanResult, ImportSessionRef } from '@tabtin/cli-server-core'
+} from '@muse/agent-import'
+import type { ImportScanResult, ImportSessionRef } from '@muse/cli-server-core'
 import { resolveImportAttachmentDir } from './agent-import/runner'
 import { indexScanSessions } from './agent-import/resolve-session-refs'
 

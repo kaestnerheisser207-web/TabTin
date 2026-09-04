@@ -12,7 +12,7 @@ import PageList from '../panels/PageList'
 import { RightSidebar } from '../panels/right-sidebar'
 import * as t from '../theme'
 import { calculateFitZoom } from '../utils/geometry'
-import { PanelErrorBoundary } from '@tabtin/smartsheet-ui'
+import { PanelErrorBoundary } from '@muse/smartsheet-ui'
 import { attachSlideEditorStoreLifecycle } from './slide-editor-store-lifecycle'
 
 interface SlideEditorProps {

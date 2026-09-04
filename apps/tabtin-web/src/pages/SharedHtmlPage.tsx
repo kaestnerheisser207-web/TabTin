@@ -14,7 +14,7 @@ import { STORAGE_KEYS } from '@/platform'
 import { useAuthStore } from '@/stores/auth-store'
 import { getAccessToken, shareAuthHeaders } from './shareAuth'
 
-const TABTIN_WEB_AUTH_HANDOFF_PREFIX = 'tabtin_handoff='
+const MUSE_WEB_AUTH_HANDOFF_PREFIX = 'tabtin_handoff='
 
 /**
  * Electron tabweb 与本页 localStorage 不共享；打开时可用 hash 一次性注入 access token。
@@ -25,8 +25,8 @@ function consumeTabtinWebAuthHandoff(): boolean {
   const rawHash = window.location.hash.startsWith('#')
     ? window.location.hash.slice(1)
     : window.location.hash
-  if (!rawHash.startsWith(TABTIN_WEB_AUTH_HANDOFF_PREFIX)) return false
-  const token = decodeURIComponent(rawHash.slice(TABTIN_WEB_AUTH_HANDOFF_PREFIX.length)).trim()
+  if (!rawHash.startsWith(MUSE_WEB_AUTH_HANDOFF_PREFIX)) return false
+  const token = decodeURIComponent(rawHash.slice(MUSE_WEB_AUTH_HANDOFF_PREFIX.length)).trim()
   const cleanUrl = `${window.location.pathname}${window.location.search}`
   window.history.replaceState(null, '', cleanUrl)
   if (!token) return false

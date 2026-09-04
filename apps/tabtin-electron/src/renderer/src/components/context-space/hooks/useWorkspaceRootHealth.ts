@@ -68,7 +68,7 @@ export function useWorkspaceRootHealth(spaceId: string | null): WorkspaceRootHea
     }
     setStatus('checking')
     let cancelled = false
-    const fs = window.tabtin?.fileSystem
+    const fs = window.muse?.fileSystem
     if (!fs?.pathExists) {
       setStatus('idle')
       return

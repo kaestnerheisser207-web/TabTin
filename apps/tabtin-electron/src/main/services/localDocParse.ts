@@ -2,7 +2,7 @@
  * localDocParse — 本地附件解析（FR-18 Phase 1）
  *
  * **H2-E 重构后**：本文件已变薄壳——核心逻辑（pdfjs / mammoth / xlsx 解析、
- * 错误分类、文本质量评估、worker 池）抽到 `@tabtin/local-docparse` 共享包，
+ * 错误分类、文本质量评估、worker 池）抽到 `@muse/local-docparse` 共享包，
  * Electron 与 Daemon 同一份实现。本壳只负责：
  *   1. 注入 Electron 端的 worker pool（`./workers/doc-parser-runner` 用 Vite 产物路径）
  *   2. 注入 Electron 端的 logger（`createLogger('LocalDocParse')`）
@@ -16,7 +16,7 @@ import {
   type LocalDocParseOptions,
   type LocalDocParseResult,
   type ParseLocalAttachmentInput,
-} from '@tabtin/local-docparse'
+} from '@muse/local-docparse'
 import { createLogger } from '../logger.js'
 import { runDocParserTask } from '../workers/doc-parser-runner.js'
 
@@ -52,7 +52,7 @@ export {
   // W1.3 第 3 轮 Review 2 S1：持久通道 main agent 注入中文转述路径
   formatFilePipelineErrorChinesePrompt,
   isFilePipelineErrorCode,
-} from '@tabtin/local-docparse'
+} from '@muse/local-docparse'
 
 export type {
   LocalDocParseErrorClass,
@@ -61,4 +61,4 @@ export type {
   LocalDocParseResult,
   LocalDocParseSuccess,
   ParseLocalAttachmentInput,
-} from '@tabtin/local-docparse'
+} from '@muse/local-docparse'

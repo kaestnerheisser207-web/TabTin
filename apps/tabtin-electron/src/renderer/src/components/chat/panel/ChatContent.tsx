@@ -14,8 +14,8 @@ import { Image as ImageIcon, Share2 } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { logger } from '@/utils/logger'
 import { cn } from '@utils/cn'
-import { ConfirmDialog, toast } from '@tabtin/smartsheet-ui'
-import type { OpenOutcome } from '@tabtin/resource-router'
+import { ConfirmDialog, toast } from '@muse/smartsheet-ui'
+import type { OpenOutcome } from '@muse/resource-router'
 import { buildRichResourcePointer } from '../context/buildRichResourcePointer'
 import { shouldToastRichResourceOpenFailure } from '../context/richResourceOpenFailure'
 import { useChatStore } from '@/stores/chat/useChatStore'
@@ -31,7 +31,7 @@ import { useConversationStream } from '@/services/agentService/useConversationSt
 import { getChatClient } from '@/services/chatApi'
 import { applyDecisionSummaryUpdate } from '@/stores/chat/checkpoint/handlers/checkpointHandler'
 import { fetchCheckpointDecisionContext } from '@/services/chatExtraApi'
-import type { ChatSession, DecisionSummary } from '@tabtin/chat-client'
+import type { ChatSession, DecisionSummary } from '@muse/chat-client'
 import { useChatModelStore } from '@/stores/useChatModelStore'
 import { useSpaceStore } from '@stores/useSpaceStore'
 import { filterSendableChatModels } from '@/utils/chatModelGuards'
@@ -116,10 +116,10 @@ interface ChatContentProps {
   canSend: boolean
   disabledReason: string | null
 
-  currentModel: import('@tabtin/chat-client').Model | null
+  currentModel: import('@muse/chat-client').Model | null
   /** 当前生效的上下文档位（仅多档模型有意义） */
-  currentContextTier?: import('@tabtin/chat-client').ContextTier | null
-  currentModelParamOverrides?: import('@tabtin/chat-client').ModelParamOverrides | null
+  currentContextTier?: import('@muse/chat-client').ContextTier | null
+  currentModelParamOverrides?: import('@muse/chat-client').ModelParamOverrides | null
   tokenUsage: {
     inputTokens: number
     outputTokens: number
@@ -162,7 +162,7 @@ interface ChatContentProps {
     options?: ChatInputSendOptions,
   ) => Promise<void>
   onStop: () => void
-  onModelChange: (modelId: string, tierId?: string, controlChange?: { key: string; value: import('@tabtin/chat-client').ModelParamValue }) => void
+  onModelChange: (modelId: string, tierId?: string, controlChange?: { key: string; value: import('@muse/chat-client').ModelParamValue }) => void
 }
 
 export const ChatContent: React.FC<ChatContentProps> = React.memo(({

@@ -121,7 +121,7 @@ Windows 用户可以从 PowerShell、CMD 或 Git Bash 运行统一 Node 入口�
 区域选择遵循以下优先级：
 
 1. 显式 `--region`。
-2. `TABTIN_DEV_REGION` 进程环境变量。
+2. `MUSE_DEV_REGION` 进程环境变量。
 3. `auto` 探测结果。
 
 `auto` 同时探测 npm registry 与当前 Electron 版本的二进制来源。官方源在合理时限内可用时优先官方源；官方源超时或不可达、国内镜像可用时选择 `cn`。探测结果必须打印，且告诉开发者如何显式覆盖。
@@ -165,8 +165,8 @@ apps/tabtin-electron/.env.opensource.local
 默认本地配置包括：
 
 ```dotenv
-TABTIN_LOCAL_DEV_MODE=native
-TABTIN_API_BASE_URL=http://127.0.0.1:6060/api
+MUSE_LOCAL_DEV_MODE=native
+MUSE_API_BASE_URL=http://127.0.0.1:6060/api
 VITE_API_BASE_URL=http://127.0.0.1:6060/api
 VITE_COLLAB_WS_BASE=ws://127.0.0.1:4100
 VITE_CENTRIFUGO_WS_URL=ws://127.0.0.1:8100/connection/websocket
@@ -184,7 +184,7 @@ Django IM 与主 API 同源，统一使用 `VITE_API_BASE_URL`。
 - URL 格式错误、存在未展开占位符或本应为本地的地址指向未知远端时停止并说明具体键。
 - 日志只输出键名和公开 origin，不打印任何非白名单值。
 
-`TABTIN_COMMUNITY_API_BASE_URL` 是社区安装包构建输入，不是本地开发必填项。
+`MUSE_COMMUNITY_API_BASE_URL` 是社区安装包构建输入，不是本地开发必填项。
 
 ## 后端健康契约
 

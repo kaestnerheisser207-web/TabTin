@@ -1,6 +1,6 @@
 import { randomUUID } from 'node:crypto';
 
-import { joinApiPath } from '@tabtin/config';
+import { joinApiPath } from '@muse/config';
 
 import { TokenManager } from '../auth.js';
 import { API_BASE_URL } from '../config/api.js';

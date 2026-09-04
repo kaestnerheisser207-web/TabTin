@@ -2,7 +2,7 @@
  * Agent 工具（思考、子 Agent、提问、待办、技能、RAG、记忆、日程、终止）
  */
 
-import type { ToolCardDescriptor } from '@tabtin/chat-client'
+import type { ToolCardDescriptor } from '@muse/chat-client'
 import i18n from '@/i18n'
 import { truncate, getNestedArgs } from './toolCardUtils'
 

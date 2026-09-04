@@ -4,8 +4,8 @@
  * 实现挂在 host；runtime 只发纯 summary 的 SUBAGENT_COMPLETED。
  */
 
-import type { EnqueueSubagentCompletion, SubagentCompletionInfo } from '@tabtin/agent-runtime'
-import type { SessionConfig } from '@tabtin/agent-runtime/engine'
+import type { EnqueueSubagentCompletion, SubagentCompletionInfo } from '@muse/agent-runtime'
+import type { SessionConfig } from '@muse/agent-runtime/engine'
 import {
   appendDeliverablesToToolResultContent,
   collectChildDeliverables,

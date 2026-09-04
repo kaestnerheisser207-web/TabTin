@@ -1,5 +1,5 @@
 import { useCallback, useEffect } from 'react'
-import type { ChatMessage } from '@tabtin/chat-client'
+import type { ChatMessage } from '@muse/chat-client'
 import { useChatStore } from '@/stores/chat/useChatStore'
 import { useChatRuntimeStore } from '@/stores/useChatRuntimeStore'
 import type { LLMCallSnapshot } from '@/stores/chat/shared/types'

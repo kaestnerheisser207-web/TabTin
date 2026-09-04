@@ -3,7 +3,7 @@
 /**
  * 记录 Store（Electron 宿主包装层）
  *
- * 领域逻辑在 @tabtin/table-core/domain，此文件仅注入宿主服务与 ViewStore 桥接。
+ * 领域逻辑在 @muse/table-core/domain，此文件仅注入宿主服务与 ViewStore 桥接。
  */
 
 import { createStore } from 'zustand'
@@ -16,8 +16,8 @@ import {
   RecordApiService,
   type RecordStore,
   type RecordStoreViewBridge,
-} from '@tabtin/table-core'
-import { createStoreHost, createHostAdapters } from '@tabtin/table-ui'
+} from '@muse/table-core'
+import { createStoreHost, createHostAdapters } from '@muse/table-ui'
 import i18n from '@/i18n'
 import { viewStore, type ViewStoreApi } from './useViewStore'
 import { bindTableRequestHeaders } from './bindTableRequestHeaders'

@@ -1,4 +1,4 @@
-import { CollabStatus } from '@tabtin/collab-core'
+import { CollabStatus } from '@muse/collab-core'
 
 export function isRecordFocusCollabBootstrapPending(input: {
   hasFocusIntent: boolean

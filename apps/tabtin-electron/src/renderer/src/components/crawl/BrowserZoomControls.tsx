@@ -29,7 +29,7 @@ export const BrowserZoomControls: React.FC<BrowserZoomControlsProps> = ({
 
   useEffect(() => {
     let cancelled = false
-    window.tabtin?.crawlView?.getZoomLevel?.(viewId)
+    window.muse?.crawlView?.getZoomLevel?.(viewId)
       .then((result) => {
         if (cancelled || !result?.success || typeof result.level !== 'number') return
         syncBrowserZoomLevel(viewId, result.level)
@@ -44,7 +44,7 @@ export const BrowserZoomControls: React.FC<BrowserZoomControlsProps> = ({
   }, [viewId])
 
   useEffect(() => {
-    return window.tabtin?.crawlView?.onZoomLevelChanged?.(({ tabId, level }) => {
+    return window.muse?.crawlView?.onZoomLevelChanged?.(({ tabId, level }) => {
       if (tabId !== viewId) return
       syncBrowserZoomLevel(viewId, level)
     }) ?? undefined

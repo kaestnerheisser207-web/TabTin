@@ -2,7 +2,7 @@
  * ToolRiskPolicyPort —— 宿主注入的工具风险判决端口（ Stage 3）。
  *
  * 引擎只消费三态判决与最小工作区边界；EffectivePolicy / MemoStore / judge()
- * 实现留在宿主（`@tabtin/security-policy` 适配器）。
+ * 实现留在宿主（`@muse/security-policy` 适配器）。
  */
 
 /** 引擎 / adapter 需要的最小工作区边界（替代 WorkspaceSnapshot）。 */

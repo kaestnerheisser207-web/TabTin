@@ -11,7 +11,7 @@
  * - TTL 过期自动清理
  */
 
-import { registerStorageBucket } from '@tabtin/storage-manager'
+import { registerStorageBucket } from '@muse/storage-manager'
 
 export interface CachedDraft {
   documentId: string

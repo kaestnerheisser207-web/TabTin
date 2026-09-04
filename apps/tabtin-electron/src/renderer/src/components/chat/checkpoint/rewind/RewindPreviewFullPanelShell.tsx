@@ -1,11 +1,11 @@
 import React from 'react'
-import { OVERLAY_SURFACE_CLASS } from '@tabtin/smartsheet-ui'
+import { OVERLAY_SURFACE_CLASS } from '@muse/smartsheet-ui'
 import { cn } from '@utils/cn'
 import { DetailedRowListSkeleton } from '@components/common/ListSkeletons'
 import { RotateCcw, AlertTriangle, History, X } from 'lucide-react'
 import type { RollbackPreviewResult } from '../../../../services/chatExtraApi'
 import type * as chatExtraApi from '../../../../services/chatExtraApi'
-import type { SessionRollbackState } from '@tabtin/chat-client'
+import type { SessionRollbackState } from '@muse/chat-client'
 import { ChatIconTooltip } from '../../panel/ChatIconTooltip'
 import type { CheckpointSemanticFeedback } from './deriveRewindPreviewUi'
 import { deriveFilteredRestorePlan } from './rewindPreviewFullPanelLogic'
@@ -148,7 +148,7 @@ const RewindPreviewFullPanelHeader: React.FC<{
 )
 
 const ActiveRevertWarning: React.FC<{ t: RewindPreviewFullPanelProps['t'] }> = ({ t }) => (
-  // eslint-disable-next-line tabtin/no-chat-design-violations -- 高风险回退确认弹窗的整体警示块
+  // eslint-disable-next-line muse/no-chat-design-violations -- 高风险回退确认弹窗的整体警示块
   <div className="flex items-start gap-2 rounded-md bg-warning/10 border border-warning/30 px-3 py-2.5">
     <AlertTriangle className="h-4 w-4 mt-0.5 shrink-0 text-warning" />
     <div>

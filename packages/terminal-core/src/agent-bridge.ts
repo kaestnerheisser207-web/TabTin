@@ -92,8 +92,8 @@ export interface AgentCommandRequest {
 
   /**
    * 追加进子进程的环境变量。会与 `sanitizeEnv(process.env)` 合并；
-   * 同名键以本字段为准，但仍受 `DANGEROUS_INJECTION_VARS`（@tabtin/env-sanitize
-   * 单源，被 `@tabtin/terminal-core` re-export）+ `SENSITIVE_ENV_VARS` 等执行层
+   * 同名键以本字段为准，但仍受 `DANGEROUS_INJECTION_VARS`（@muse/env-sanitize
+   * 单源，被 `@muse/terminal-core` re-export）+ `SENSITIVE_ENV_VARS` 等执行层
    * 安全过滤约束（见 `packages/terminal-core/src/sanitizeEnv.ts` re-export 链）。
    * **agent-runtime 永不直接 import env-sanitize**：sanitize 在 bridge 实现层
    * 单点完成，避免 inline 副本漂移。
@@ -586,7 +586,7 @@ export interface AgentReadResult {
  *     但订阅者必须在 return 之前能收到事件
  *   - **renderer 经 IPC 收到事件的时序受 IPC 延迟影响**——bridge 仅保证
  *     **main 侧 emit** 先于命令执行；renderer 侧 `useAgentTerminalSync`
- *     经 `window.tabtin?.pty.onAgentSessionCreated` IPC 通道收到事件，
+ *     经 `window.muse?.pty.onAgentSessionCreated` IPC 通道收到事件，
  *     **可能晚于 ShellCap 命令本身 return**（IPC 跳转有几 ms 到几十 ms 抖动，
  *     特别是命令瞬时完成的情形下，executeAgentCommand 的 Promise 可能比
  *     renderer 的事件先到）。这是 Electron IPC 物理边界，不是 bug。
@@ -821,7 +821,7 @@ export interface PtyManagerBridge {
    *
    * **为什么放在 bridge 接口里**：让两端事件订阅走同一抽象——
    *   - Electron 端：实现层内部接 `EventEmitter`，订阅 → 转 IPC（preload 层
-   *     已有 `window.tabtin.pty.onAgentSessionCreated` 通道，bridge 实现可
+   *     已有 `window.muse.pty.onAgentSessionCreated` 通道，bridge 实现可
    *     直接复用）
    *   - Daemon 端：实现层内部把 emit 转成 `logger.info({ event, ...payload })`，
    *     订阅 → 在内存里挂回调（contract test 用 mock subscriber 即可验证）
@@ -829,7 +829,7 @@ export interface PtyManagerBridge {
    *
    * **谁直接调 subscribe**（WP3 注意）：subscribe 是给 main 侧 contract test
    * + Daemon logger 用的——**renderer 不直接调 bridge.subscribe**，继续走
-   * 现有 IPC 通道 `window.tabtin?.pty.onAgentSessionCreated`。WP3 只改
+   * 现有 IPC 通道 `window.muse?.pty.onAgentSessionCreated`。WP3 只改
    * `useAgentTerminalSync` 的 IPC handler 行为（每次新 tab），不要把 bridge
    * 接口拉到 renderer 进程。
    *

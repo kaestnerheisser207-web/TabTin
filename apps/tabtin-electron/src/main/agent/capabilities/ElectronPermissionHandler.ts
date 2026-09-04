@@ -1,5 +1,5 @@
-import { LocalPermissionHandler } from '@tabtin/agent-runtime'
-import type { LocalPermissionHandlerOptions } from '@tabtin/agent-runtime'
+import { LocalPermissionHandler } from '@muse/agent-runtime'
+import type { LocalPermissionHandlerOptions } from '@muse/agent-runtime'
 import { createLogger } from '../../logger.js'
 
 const log = createLogger('PermissionHandler')

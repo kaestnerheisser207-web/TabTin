@@ -35,7 +35,7 @@ import {
 import type {
   Message,
   EngineState,
-} from '@tabtin/agent-runtime/engine';
+} from '@muse/agent-runtime/engine';
 
 // ── Helpers ──────────────────────────────────────────────────────────
 

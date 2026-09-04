@@ -29,7 +29,7 @@ vi.mock('electron', () => ({
   BrowserWindow: class {},
 }))
 
-import { ViewManager } from '@tabtin/browser-capabilities'
+import { ViewManager } from '@muse/browser-capabilities'
 import { guardLoadURL } from '../../shared/guard-load-url'
 import {
   guardDirectLoadURL,

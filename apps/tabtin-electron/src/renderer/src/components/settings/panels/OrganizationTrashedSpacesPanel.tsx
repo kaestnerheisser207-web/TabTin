@@ -2,13 +2,13 @@ import React, { useCallback, useEffect, useState } from 'react'
 import { Trash2, RotateCcw, Bot } from 'lucide-react'
 import { Button, ConfirmDialog, toast } from '@components/ui'
 import { TrashMemberAwareButton } from './TrashMemberAwareButton'
-import type { Organization } from '@tabtin/app-shell'
+import type { Organization } from '@muse/app-shell'
 import {
   ProjectApiService,
   SpaceApiService,
   type TrashedSpace,
   type DeactivatedAgent,
-} from '@tabtin/app-shell'
+} from '@muse/app-shell'
 import { useTranslation } from 'react-i18next'
 import { useSpaceStore } from '@stores/useSpaceStore'
 import { cn } from '@utils/cn'

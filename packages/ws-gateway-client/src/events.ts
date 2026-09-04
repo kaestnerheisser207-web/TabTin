@@ -5,7 +5,7 @@
  * Electron, Daemon, admindash, and referenced by Android/iOS constants.
  *
  * Agent-related events (stream, external, prompt, permission) are
- * re-exported from @tabtin/agent-wire — the shared protocol package.
+ * re-exported from @muse/agent-wire — the shared protocol package.
  */
 
 import {
@@ -16,14 +16,14 @@ import {
   isStreamEvent,
   isSessionEvent,
   stripStreamPrefix,
-} from '@tabtin/agent-wire'
+} from '@muse/agent-wire'
 import type {
   StreamEventType,
   SessionEventType,
-} from '@tabtin/agent-wire'
+} from '@muse/agent-wire'
 
 // ─── Agent Stream Events ────────────────────────────────────────────
-// Re-exported from @tabtin/agent-wire with legacy name for backward compat.
+// Re-exported from @muse/agent-wire with legacy name for backward compat.
 
 export const AgentStreamEvents = StreamEvents
 
@@ -139,7 +139,7 @@ export type DomainEventType = typeof DomainEvents[keyof typeof DomainEvents]
 // ─── Chat Session Presence (private gateway C2S) ─────────────────────
 //
 // GUI 客户端上报「前台正在看哪个 ChatSession」。私有 gateway 事件，
-// 不进入 @tabtin/agent-wire。身份由服务端 consumer 决定，payload 仅含 session_id。
+// 不进入 @muse/agent-wire。身份由服务端 consumer 决定，payload 仅含 session_id。
 //
 // Payload: `{ session_id: string | null }`
 // - uuid：进入 / 续期该 session
@@ -152,7 +152,7 @@ export const ChatSessionPresenceEvents = {
 } as const
 
 /**
- * Private gateway presence timing contract. Not part of `@tabtin/agent-wire`.
+ * Private gateway presence timing contract. Not part of `@muse/agent-wire`.
  *
  * - On reconnect, immediately re-report the current foreground session.
  * - Refresh the same foreground session at the recommended cadence.
@@ -293,7 +293,7 @@ export type CapabilityType = typeof Capabilities[keyof typeof Capabilities]
 export {
   isStreamEvent as isAgentStreamEvent,
   isSessionEvent as isAgentSessionEvent,
-} from '@tabtin/agent-wire'
+} from '@muse/agent-wire'
 
 export function normalizeStreamEventType(eventType: string): string {
   return stripStreamPrefix(eventType)

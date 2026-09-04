@@ -27,7 +27,7 @@ import {
   type LinkTableOption,
   type LinkForeignMeta,
   type LinkableFieldItem,
-} from '@tabtin/smartsheet-ui'
+} from '@muse/smartsheet-ui'
 import { useTranslation } from 'react-i18next'
 import { Loader2 } from 'lucide-react'
 
@@ -37,14 +37,14 @@ import {
   ViewApiService,
   type Field,
   type FieldOptions as CoreFieldOptions,
-} from '@tabtin/table-core'
+} from '@muse/table-core'
 import { useTableStore } from '@/stores/useTableStore'
 import { useViewStore } from '@/stores/useViewStore'
 import { useSpaceStore } from '@/stores/useSpaceStore'
 import { useOrganizationStore } from '@/stores/useOrganizationStore'
 import { useRecordStore } from '@/stores/useRecordStore'
 import { useShallow } from 'zustand/react/shallow'
-import { toOrganizationMembers } from '@tabtin/table-ui'
+import { toOrganizationMembers } from '@muse/table-ui'
 import { useFieldSettingStore } from '@/stores/useFieldSettingStore'
 import { useFieldSettingForm, type FieldType } from './useFieldSettingForm'
 import { SelectChoicesEditor } from './field-config'
@@ -381,7 +381,7 @@ export const FieldSettingPanel: React.FC<FieldSettingPanelProps> = ({ hostId }) 
     const payload = buildPayload(editingField)
     const result = await execConversion(
       editingField.id,
-      state.fieldType as import('@tabtin/table-core').FieldType,
+      state.fieldType as import('@muse/table-core').FieldType,
       payload.options as Record<string, unknown> | undefined,
       {
         name: payload.name,

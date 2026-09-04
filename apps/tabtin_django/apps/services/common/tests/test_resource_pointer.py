@@ -5,7 +5,7 @@ ResourcePointer Python 镜像 ── 双端字符级对齐测试。
 验证 Python `ResourcePointer.parse()` 输出与 fixture 完全一致。
 
 任一端漂移 = D5 双轨双向覆盖失守 = 后端 open_in_space 工具校验跟前端不一致 =
-Agent 输出 `tabtin://resource/...` 在 Mobile / Daemon 没法跟 Electron 跑出
+Agent 输出 `muse://resource/...` 在 Mobile / Daemon 没法跟 Electron 跑出
 同样的派发结果。
 
 W2 北极星之一：`pytest apps/services/common/tests/test_resource_pointer.py`。
@@ -98,7 +98,7 @@ def test_parse_none_returns_unknown_with_empty_raw() -> None:
 
 
 def test_parse_baseDir_is_passed_through() -> None:
-    p = ResourcePointer.parse("tabtin://resource/file/x", base_dir="/Users/foo")
+    p = ResourcePointer.parse("muse://resource/file/x", base_dir="/Users/foo")
     assert p.base_dir == "/Users/foo"
 
 
@@ -111,13 +111,13 @@ def test_industry_format_never_carries_hint() -> None:
 
 def test_self_format_double_hint_first_wins() -> None:
     p = ResourcePointer.parse(
-        "tabtin://resource/document/doc_xyz?hint=tabdoc&hint=tabweb"
+        "muse://resource/document/doc_xyz?hint=tabdoc&hint=tabweb"
     )
     assert p.hint == "tabdoc"
 
 
 def test_self_format_meta_multivalue_collected_as_list() -> None:
-    p = ResourcePointer.parse("tabtin://resource/table/tbl_x?tag=a&tag=b&tag=c")
+    p = ResourcePointer.parse("muse://resource/table/tbl_x?tag=a&tag=b&tag=c")
     assert p.meta == {"tag": ["a", "b", "c"]}
 
 
@@ -126,7 +126,7 @@ def test_self_format_meta_multivalue_collected_as_list() -> None:
 
 def test_serialize_minimal() -> None:
     out = serialize_self_format(type="table", id="tbl_abc", hint=None)
-    assert out == "tabtin://resource/table/tbl_abc"
+    assert out == "muse://resource/table/tbl_abc"
 
 
 def test_serialize_round_trip() -> None:
@@ -149,9 +149,9 @@ def test_serialize_environment_scheme_round_trip() -> None:
         id="tbl_abc",
         hint="tabdata",
         meta={"recordIds": "rec_abc"},
-        scheme="tabtin-preprod",
+        scheme="muse-preprod",
     )
-    assert out.startswith("tabtin-preprod://resource/table/tbl_abc?")
+    assert out.startswith("muse-preprod://resource/table/tbl_abc?")
     p = ResourcePointer.parse(out)
     assert p.scheme == "tabtin"
     assert p.meta == {"recordIds": "rec_abc"}

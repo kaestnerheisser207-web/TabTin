@@ -35,10 +35,10 @@ import {
 } from '@shared/mcp/org-share-payload'
 import { assertCurrentUserCanAccessAgent, AgentAccessDeniedError } from '../security/agent-access-guard'
 import { createLogger } from '../logger'
-import { atomicWriteFileSync } from '@tabtin/terminal-core'
-import { registerStorageBucket } from '@tabtin/storage-manager'
+import { atomicWriteFileSync } from '@muse/terminal-core'
+import { registerStorageBucket } from '@muse/storage-manager'
 import { stat } from 'node:fs/promises'
-import { API_ENDPOINTS, joinApiPath } from '@tabtin/config'
+import { API_ENDPOINTS, joinApiPath } from '@muse/config'
 import {
   closeConnectorOAuthWindow,
   createOAuthAuthorizeUrlParser,

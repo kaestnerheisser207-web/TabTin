@@ -22,7 +22,7 @@ import type {
   ConversionPreviewItem,
   FieldConversionPreviewResponse,
   FieldConversionResponse,
-} from '@tabtin/table-core'
+} from '@muse/table-core'
 
 export type ConversionPreviewData = Pick<
   FieldConversionPreviewResponse,

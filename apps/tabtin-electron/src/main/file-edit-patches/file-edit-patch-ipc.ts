@@ -6,7 +6,7 @@
  */
 import { guardedHandle } from '../utils/guarded-handle'
 import { createLogger } from '../logger'
-import { readFileEditPatch, type FileEditPatch } from '@tabtin/agent-host/tools'
+import { readFileEditPatch, type FileEditPatch } from '@muse/agent-host/tools'
 import {
   listFileEditPatchRecords,
   recordFileEditPatch,

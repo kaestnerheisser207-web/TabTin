@@ -1,4 +1,4 @@
-import type { StreamEvent } from '@tabtin/agent-runtime'
+import type { StreamEvent } from '@muse/agent-runtime'
 import { parseRelayFailureFromError } from './relay-transport.js'
 import {
   CONTENT_BLOCK_DELTA_TYPE,

@@ -1,4 +1,4 @@
-import { withTableRequestHeaders } from '@tabtin/table-core';
+import { withTableRequestHeaders } from '@muse/table-core';
 
 export function bindTableRequestHeaders<T extends object>(
   service: T,

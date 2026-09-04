@@ -1,5 +1,5 @@
 /**
- * @tabtin/agent-runtime/history — 独立单测。
+ * @muse/agent-runtime/history — 独立单测。
  *
  * 直接用 HistorySourceMessage 最小字段集构造 fixture，
  * 验证共享包不隐式依赖 ChatMessage 上才有的额外字段。

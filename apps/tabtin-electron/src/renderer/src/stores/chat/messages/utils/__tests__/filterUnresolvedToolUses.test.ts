@@ -6,8 +6,8 @@
  */
 
 import { describe, expect, it } from 'vitest'
-import type { RuntimeHistoryMessage } from '@tabtin/agent-runtime/history'
-import { filterUnresolvedToolUses } from '@tabtin/agent-runtime/history'
+import type { RuntimeHistoryMessage } from '@muse/agent-runtime/history'
+import { filterUnresolvedToolUses } from '@muse/agent-runtime/history'
 
 function asstWithToolUses(ids: string[]): RuntimeHistoryMessage {
   return {

@@ -187,7 +187,7 @@ class ChatMessageDecodingTest {
                     "resource_id": "doc-001",
                     "resource_name": "项目周报",
                     "space_id": "space-001",
-                    "url": "tabtin://resource/document/doc-001"
+                    "url": "muse://resource/document/doc-001"
                   }
                 }
               ]
@@ -203,7 +203,7 @@ class ChatMessageDecodingTest {
         assertEquals("doc-001", block.resourceId)
         assertEquals("项目周报", block.resourceName)
         assertEquals("space-001", block.spaceId)
-        assertEquals("tabtin://resource/document/doc-001", block.url)
+        assertEquals("muse://resource/document/doc-001", block.url)
     }
 
     @Test
@@ -257,7 +257,7 @@ class ChatMessageDecodingTest {
                     "file_size": 8090,
                     "access_url": "https://oss.example.com/mountain.png",
                     "source_tool_use_id": "tool-use-android-1",
-                    "url": "tabtin://resource/file/file-001?hint=tabfiles"
+                    "url": "muse://resource/file/file-001?hint=tabfiles"
                   }
                 }
               ]
@@ -286,7 +286,7 @@ class ChatMessageDecodingTest {
                 "payload": {
                   "artifact_kind": "oss_file",
                   "file_id": "file-private-001",
-                  "url": "tabtin://resource/file/file-private-001?hint=tabfiles"
+                  "url": "muse://resource/file/file-private-001?hint=tabfiles"
                 }
               }]
             }

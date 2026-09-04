@@ -2,8 +2,8 @@ import {
   validateFieldRules,
   normalizeValidationPattern,
   coerceRuleNumber,
-} from '@tabtin/smartsheet-ui'
-import { resolveCanonicalGroupValue } from '@tabtin/table-engine'
+} from '@muse/smartsheet-ui'
+import { resolveCanonicalGroupValue } from '@muse/table-engine'
 
 export type DateDisplayFormat = 'YYYY/MM/DD' | 'YYYY-MM-DD' | 'M/D/YYYY' | 'D/M/YYYY'
 export type TimeDisplayFormat = 'HH:mm' | 'HH:mm:ss' | 'hh:mm A' | 'hh:mm:ss A' | 'None'
@@ -607,7 +607,7 @@ export type FieldValidationConfig = {
 // validation_rules 实现收口在 smartsheet-ui，避免格子 / 表单两套语义漂移
 export { validateFieldRules, normalizeValidationPattern, coerceRuleNumber }
 
-// 与 @tabtin/table-kernel 的 EMAIL_RE / 默认 CN 电话规则保持一致（table-ui 未直接依赖
+// 与 @muse/table-kernel 的 EMAIL_RE / 默认 CN 电话规则保持一致（table-ui 未直接依赖
 // table-kernel，此处内联同一正则，避免新增跨包依赖）。
 const EMAIL_RE = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/
 const PHONE_DIGITS_RE = /[^\d]/g

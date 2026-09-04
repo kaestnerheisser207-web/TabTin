@@ -1,4 +1,4 @@
-import { createLexicalSkillRecall } from '@tabtin/agent-runtime/skills';
+import { createLexicalSkillRecall } from '@muse/agent-runtime/skills';
 /**
  * 内置 skill「单份共享 + 全局可见」去重复用测试。
  *
@@ -22,7 +22,7 @@ import {
 import { tmpdir } from 'node:os';
 import path from 'node:path';
 import { afterEach, describe, expect, it } from 'vitest';
-import { resolveOrganizationSkillsDir } from '@tabtin/terminal-core';
+import { resolveOrganizationSkillsDir } from '@muse/terminal-core';
 
 import { removeBuiltinCopiesFromSpace } from '../../src/skills/skill-preinstaller.js';
 import { LocalSkillRegistry } from '../../src/skills/local-skill-registry.js';

@@ -95,7 +95,7 @@ export const FolderSearch: React.FC<FolderSearchProps> = ({
     setHasSearched(true)
     setError(null)
     try {
-      const res = await window.tabtin.fileSystem.ripgrepSearch({
+      const res = await window.muse.fileSystem.ripgrepSearch({
         cwd: rootPath,
         pattern: trimmed,
         maxResults: 100,

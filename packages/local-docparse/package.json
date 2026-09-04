@@ -1,5 +1,5 @@
 {
-  "name": "@tabtin/local-docparse",
+  "name": "@muse/local-docparse",
   "version": "0.1.0",
   "description": "Local document parsing (PDF/Word/Excel) shared across Electron / Daemon hosts — pdfjs-dist + mammoth + xlsx with quality-aware fallback to cloud",
   "type": "module",
@@ -28,7 +28,7 @@
     "test": "vitest run"
   },
   "dependencies": {
-    "@tabtin/file-pipeline-errors": "workspace:*",
+    "@muse/file-pipeline-errors": "workspace:*",
     "mammoth": "1.12.0",
     "pdfjs-dist": "5.4.296",
     "xlsx": "0.18.5"

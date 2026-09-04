@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react'
 import { AlertCircle, ExternalLink, FileSpreadsheet } from 'lucide-react'
-import { ScrollArea } from '@tabtin/smartsheet-ui'
+import { ScrollArea } from '@muse/smartsheet-ui'
 import { cn } from '@utils/cn'
 import { formatIpcErrorForUser } from '@/services/ipc-error'
 import { LOCAL_TEXT_PREVIEW_BYTES } from '@components/shared/file-utils'
@@ -156,7 +156,7 @@ export const CsvViewer: React.FC<CsvViewerProps> = ({
     }
 
     let cancelled = false
-    const readFilePreview = window.tabtin?.fileSystem?.readFilePreview
+    const readFilePreview = window.muse?.fileSystem?.readFilePreview
     setState({ status: 'loading' })
 
     if (!readFilePreview) {
@@ -220,7 +220,7 @@ export const CsvViewer: React.FC<CsvViewerProps> = ({
         {filePath && (
           <button
             type="button"
-            onClick={() => void window.tabtin?.openPath?.(filePath)}
+            onClick={() => void window.muse?.openPath?.(filePath)}
             className="mt-3 flex items-center gap-1.5 rounded-md bg-primary/10 px-3 py-1.5 text-caption text-primary transition-colors hover:bg-primary/20"
           >
             <ExternalLink className="h-3.5 w-3.5" />

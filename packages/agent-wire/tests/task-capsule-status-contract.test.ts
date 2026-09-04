@@ -2,7 +2,7 @@
  * TaskCapsule 跨端状态投影契约测试（TS 端）
  *
  * 消费 `cross-lang-fixtures/task-capsule-status-v1.json`，断言：
- * 1. `@tabtin/contracts` SSOT（resolveTaskCapsuleStatus / Visual）与 fixture 一致
+ * 1. `@muse/contracts` SSOT（resolveTaskCapsuleStatus / Visual）与 fixture 一致
  * 2. FocusSnapshot schema 最小约束（大小 / 深度 / 无正文）成立
  *
  * iOS / Android 后续各自消费同一 fixture；本文件是 TS 锚点。
@@ -22,7 +22,7 @@ import {
   type TaskCapsuleStatusInput,
   type TaskCapsuleStatusKind,
   type TaskCapsuleVisualKind,
-} from '@tabtin/contracts/agent';
+} from '@muse/contracts/agent';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);

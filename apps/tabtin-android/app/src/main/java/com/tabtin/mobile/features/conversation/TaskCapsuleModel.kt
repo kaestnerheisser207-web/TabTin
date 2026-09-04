@@ -8,7 +8,7 @@ import com.tabtin.mobile.data.model.StepStatus
 import com.tabtin.mobile.data.model.StepType
 
 /**
- * TaskCapsule 状态投影 —— 对齐 `@tabtin/contracts` resolveTaskCapsuleStatus / Visual
+ * TaskCapsule 状态投影 —— 对齐 `@muse/contracts` resolveTaskCapsuleStatus / Visual
  * 与 `task-capsule-status-v1.json` fixture。
  *
  * 后端不下发颜色/尺寸；视觉态由本端纯函数给出（仅 ready → mini）。

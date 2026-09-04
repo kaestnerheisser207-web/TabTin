@@ -5,7 +5,7 @@
  * 本地 transcript / LLM 仍可持有完整 base64（runtime 真相源）；仅
  * `DeliveryBatchBuffer` 出站副本做投影。优先保留 `file_id` / 非 data: URL。
  */
-import type { StreamEvent } from '@tabtin/agent-runtime'
+import type { StreamEvent } from '@muse/agent-runtime'
 
 const RELAY_MESSAGE_TYPES = new Set([
   'agent.stream.user',

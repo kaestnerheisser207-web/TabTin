@@ -17,7 +17,7 @@ import {
   useOrganizationStore,
   type SpaceListItem,
   parseSpaceSelectionId,
-} from '@tabtin/app-shell'
+} from '@muse/app-shell'
 import { useAuthStore } from '@/stores/auth-store'
 import { getPendingSpaceRouteSyncTarget } from '@/features/space/spaceRoutes'
 import { useTranslation } from 'react-i18next'

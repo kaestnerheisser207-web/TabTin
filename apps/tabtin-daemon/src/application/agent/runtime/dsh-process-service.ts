@@ -9,9 +9,9 @@ const DSH_PATCH = `
       config:
         serverName: muse
         transport: streamable-http
-        url: !!js process.env.TABTIN_MCP_URL
+        url: !!js process.env.MUSE_MCP_URL
         headers:
-          Authorization: !!js '\`Bearer \${process.env.TABTIN_MCP_TOKEN}\`'
+          Authorization: !!js '\`Bearer \${process.env.MUSE_MCP_TOKEN}\`'
         failOnStartupError: true
         reconnect:
           enabled: true
@@ -68,8 +68,8 @@ export class DshProcessService {
         DSH_PERMISSION_MODE: process.env.DSH_PERMISSION_MODE ?? 'workspace-write',
         DEEPSEEK_API_KEY: this.options.modelGatewayToken,
         DEEPSEEK_BASE_URL: this.options.modelGatewayUrl,
-        TABTIN_MCP_URL: this.options.mcpUrl,
-        TABTIN_MCP_TOKEN: this.options.mcpToken,
+        MUSE_MCP_URL: this.options.mcpUrl,
+        MUSE_MCP_TOKEN: this.options.mcpToken,
       },
       stdio: ['ignore', 'pipe', 'pipe'],
     })

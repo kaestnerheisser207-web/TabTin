@@ -19,7 +19,7 @@ else
   printf 'Created %s from .env.example.\n' "${env_file}"
 fi
 
-for key in TABTIN_EDITION AUTH_FIXED_VERIFICATION_CODE; do
+for key in MUSE_EDITION AUTH_FIXED_VERIFICATION_CODE; do
   if grep -Eq "^[[:space:]]*(export[[:space:]]+)?${key}[[:space:]]*=" "${env_file}"; then
     continue
   fi
@@ -64,12 +64,12 @@ read_root_switch() {
   ' "${env_file}"
 }
 
-edition="$(read_root_switch TABTIN_EDITION | tr '[:upper:]' '[:lower:]')"
+edition="$(read_root_switch MUSE_EDITION | tr '[:upper:]' '[:lower:]')"
 fixed_code="$(read_root_switch AUTH_FIXED_VERIFICATION_CODE)"
 case "${edition}" in
   community|saas) ;;
   *)
-    printf 'ERROR: TABTIN_EDITION in %s must be community or saas.\n' "${env_file}" >&2
+    printf 'ERROR: MUSE_EDITION in %s must be community or saas.\n' "${env_file}" >&2
     exit 1
     ;;
 esac
@@ -82,7 +82,7 @@ runtime_env_file="${repo_root}/.env.community-runtime"
 runtime_env_temporary="${runtime_env_file}.$$"
 trap 'rm -f "${runtime_env_temporary}"' EXIT
 umask 077
-printf 'TABTIN_EDITION=%s\nAUTH_FIXED_VERIFICATION_CODE=%s\n' \
+printf 'MUSE_EDITION=%s\nAUTH_FIXED_VERIFICATION_CODE=%s\n' \
   "${edition}" "${fixed_code}" > "${runtime_env_temporary}"
 chmod 600 "${runtime_env_temporary}"
 mv -f "${runtime_env_temporary}" "${runtime_env_file}"

@@ -2419,7 +2419,7 @@ owner 不可移除（返回 CANNOT_REMOVE_OWNER）；目标不是现有协作者
 //	    ninja 静默丢弃，分享 organization 永远传不进去（更糟）。
 //
 // 故**正确做法是完全不声明 organization flag**：share_type=organization 时，分享目标 organization 由
-// 全局 --organization-id（或 env TABTIN_ORGANIZATION_ID / profile DefaultOrganization）注入到 body.organization_id，
+// 全局 --organization-id（或 env MUSE_ORGANIZATION_ID / profile DefaultOrganization）注入到 body.organization_id，
 // 这正是 create_share 所需。Long 里明确告知用户"organization 分享请用全局 --organization-id 指定组织"。
 // （此语义重叠——全局 organization-id 兼任分享目标——已在交付物点名给 harness。）
 func registerDocShareCommands(parent *cobra.Command, f *cmdutil.Factory) {

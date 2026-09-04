@@ -10,7 +10,7 @@ import type {
   Model,
   ModelParamOverrides,
   RuntimeProfileThinkingMode,
-} from '@tabtin/chat-client'
+} from '@muse/chat-client'
 import type { CapabilityBanner } from '@/stores/useChatRuntimeStore'
 import { getCatalogThinkingCapability } from '../composer/thinkingModeCapability'
 import { shouldShowReasoningEffortSelector } from '../model/ReasoningEffortSelector'

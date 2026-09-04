@@ -12,7 +12,7 @@ import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest'
 import fs from 'fs/promises'
 import path from 'path'
 import os from 'os'
-import { CheckpointService, type CheckpointLogger } from '@tabtin/checkpoint-core'
+import { CheckpointService, type CheckpointLogger } from '@muse/checkpoint-core'
 
 const TEST_DIR_PREFIX = 'tabtin-ckpt-test-'
 

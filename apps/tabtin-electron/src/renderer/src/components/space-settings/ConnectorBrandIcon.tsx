@@ -1,13 +1,13 @@
 /**
  * 连接器市场品牌标：经 registry resolver 解析，无命中则 Plug。
- * 新增品牌只改 `@tabtin/connector-brand-icons`，不要在此写死映射。
+ * 新增品牌只改 `@muse/connector-brand-icons`，不要在此写死映射。
  */
 import React, { useMemo } from 'react'
 import { Plug } from 'lucide-react'
 import {
   resolveConnectorBrandIconFromRegistry,
   type ConnectorBrandIconQuery,
-} from '@tabtin/connector-brand-icons'
+} from '@muse/connector-brand-icons'
 import { cn } from '@utils/cn'
 import { getBundledConnectorBrandIconUrl } from '@/utils/connector-brand-icon-bundled'
 

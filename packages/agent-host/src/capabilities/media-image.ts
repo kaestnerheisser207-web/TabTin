@@ -5,7 +5,7 @@
  * system prompt。只在 Agent 的 CLI 清单里出现一级命令 `media` 时才允许承诺能力；
  * 未出现或模型目录为空时必须如实说明，禁止用 SVG、文件或外部占位图伪造生图结果。
  *
- * ：随 CliCap 从 `@tabtin/agent-runtime` 迁至本宿主包——它是
+ * ：随 CliCap 从 `@muse/agent-runtime` 迁至本宿主包——它是
  * CliCap 独占的渲染指令，与 Cap 本体同居 host 侧。
  */
 export const MEDIA_IMAGE_CLI_INSTRUCTION =

@@ -19,7 +19,7 @@ from apps.tabtinspace.services.space_service import SpaceService
 from apps.tabtinspace.tests.fixtures import create_test_organization, create_test_user
 
 
-@override_settings(TABTIN_ENABLE_PROJECTS=True)
+@override_settings(MUSE_ENABLE_PROJECTS=True)
 class SpaceTrashPermanentDeleteTests(TestCase):
     """#6342：Project 回收站永久删除契约（路由已迁 /context/projects/*）。"""
 

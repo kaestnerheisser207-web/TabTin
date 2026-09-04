@@ -19,8 +19,8 @@ import {
   DialogFooter,
   DialogTitle,
 } from '@components/ui'
-import { toast } from '@tabtin/smartsheet-ui'
-import { AgentApiService, type Agent, type Space } from '@tabtin/app-shell'
+import { toast } from '@muse/smartsheet-ui'
+import { AgentApiService, type Agent, type Space } from '@muse/app-shell'
 import { useOrganizationStore } from '@stores/useOrganizationStore'
 import { useSpaceStore } from '@stores/useSpaceStore'
 import { useSpaceViewPrefsStore } from '@stores/useSpaceViewPrefsStore'

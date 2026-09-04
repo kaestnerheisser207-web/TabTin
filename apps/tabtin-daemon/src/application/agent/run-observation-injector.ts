@@ -20,7 +20,7 @@
  *   真实队列即可；P5 audit 的"NoOp"豁免也应同时摘除。
  */
 
-import type { RunObservationInjection } from '@tabtin/agent-runtime/engine';
+import type { RunObservationInjection } from '@muse/agent-runtime/engine';
 
 export interface DaemonRunObservationInjectorHandle {
   /** ``EngineConfig.getRecentRunObservations`` 实际入参 —— 当前恒返回 ``[]``。 */

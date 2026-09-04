@@ -1,4 +1,4 @@
-import { ApiError, createApiClient, type TabTinApiClient } from '@tabtin/api-client'
+import { ApiError, createApiClient, type TabTinApiClient } from '@muse/api-client'
 import { API_BASE_URL } from '@/config/api'
 import {
   authAdapter,

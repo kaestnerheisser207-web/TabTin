@@ -2,13 +2,13 @@
  * Electron TabDoc 文档事件流 Port
  *
  * 将 Gateway `doc.events.{documentId}` 订阅适配为 TabDocEventStreamPort，
- * 供 @tabtin/tabdoc-ui 在 Agent save-content 等外部写入后 reconcile 编辑器。
+ * 供 @muse/tabdoc-ui 在 Agent save-content 等外部写入后 reconcile 编辑器。
  */
 import type {
   TabDocEventStreamEvent,
   TabDocEventStreamPort,
   TabDocEventStreamSubscription,
-} from '@tabtin/tabdoc-ui'
+} from '@muse/tabdoc-ui'
 import { getChatClient } from '@/services/chatApi'
 import { useOrganizationStore } from '@/stores/useOrganizationStore'
 import {

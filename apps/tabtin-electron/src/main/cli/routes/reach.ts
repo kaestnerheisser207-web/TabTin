@@ -1,7 +1,7 @@
 /**
  * `/reach/*` 路由（Platform Reach P0.5 接线）
  *
- * 把 `@tabtin/platform-reach` 纯包接到 Electron 浏览器执行栈：
+ * 把 `@muse/platform-reach` 纯包接到 Electron 浏览器执行栈：
  *   - POST /reach/doctor        → 选路探测（哪个后端此刻能服务该平台/动词）
  *   - POST /reach/<verb>        → 执行某平台某动词，返回 NormalizedItem[]
  *
@@ -14,7 +14,7 @@
  */
 import http from 'node:http'
 import { session as electronSession } from 'electron'
-import { okResponse } from '@tabtin/agent-wire'
+import { okResponse } from '@muse/agent-wire'
 import {
   AdapterRegistry,
   createDefaultRegistry,
@@ -30,7 +30,7 @@ import {
   type Verb,
   type NormalizedItem,
   type RunContext,
-} from '@tabtin/platform-reach'
+} from '@muse/platform-reach'
 import { getBrowserEnvironmentService } from '../../browser-env/BrowserEnvironmentService'
 import { createLogger } from '../../logger'
 import type { SendJSON } from './browser/_helpers'

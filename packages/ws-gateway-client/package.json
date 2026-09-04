@@ -1,5 +1,5 @@
 {
-  "name": "@tabtin/ws-gateway-client",
+  "name": "@muse/ws-gateway-client",
   "version": "0.1.0",
   "description": "WebSocket Gateway client SDK for Muse",
   "type": "module",
@@ -32,8 +32,8 @@
   "author": "Muse Team",
   "license": "MIT",
   "dependencies": {
-    "@tabtin/agent-wire": "workspace:*",
-    "@tabtin/contracts": "workspace:*"
+    "@muse/agent-wire": "workspace:*",
+    "@muse/contracts": "workspace:*"
   },
   "devDependencies": {
     "typescript": "5.7.2",

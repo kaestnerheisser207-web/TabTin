@@ -6,8 +6,8 @@
  * createSession is in chat/actions/sessionLifecycleAction.ts (extracted in Round 3).
  */
 
-import type { ChatSession, ChatMessage, ChatClient } from '@tabtin/chat-client'
-import { resolveSessionScopeId } from '@tabtin/app-shell'
+import type { ChatSession, ChatMessage, ChatClient } from '@muse/chat-client'
+import { resolveSessionScopeId } from '@muse/app-shell'
 import { trackChatTelemetry } from '../../execution/chatTelemetry'
 import {
   buildCheckpointMapFromMessages,
@@ -50,7 +50,7 @@ import {
   preserveLiveRuntimeOnTranscriptMerge,
 } from '@components/onboarding/external-import/mergeExternalArchiveMessages'
 import { sortSessionsByActivity } from '@/utils/chat-session-sort'
-import { toast } from '@tabtin/smartsheet-ui/toast'
+import { toast } from '@muse/smartsheet-ui/toast'
 import { logger } from '@/utils/logger'
 import i18n from '@/i18n'
 import { requestTitleGenerationOnce } from '../../messages/actions/titleGenerationDedupe'
@@ -354,7 +354,7 @@ const PENDING_ARCHIVED_TOMBSTONE_TTL_MS = 60_000
 const PENDING_OVERLAY_SESSION_TTL_MS = 15_000
 
 async function stopBusyHostRunBeforeArchive(sessionId: string): Promise<void> {
-  const bridge = window.tabtin?.agentEngine
+  const bridge = window.muse?.agentEngine
   if (!bridge?.getState || !bridge?.abortRun) return
 
   let hostState: { busy?: boolean } | null = null

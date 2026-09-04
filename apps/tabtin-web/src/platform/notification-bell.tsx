@@ -22,8 +22,8 @@ import {
   Popover,
   PopoverTrigger,
   PopoverContent,
-} from '@tabtin/smartsheet-ui'
-import { useOrganizationStore } from '@tabtin/app-shell'
+} from '@muse/smartsheet-ui'
+import { useOrganizationStore } from '@muse/app-shell'
 import { useAuthStore } from '@/stores/auth-store'
 import { useNotificationStore } from '@/stores/useNotificationStore'
 import { useWebNotificationEventStream } from '@/services/notificationWebSocket'

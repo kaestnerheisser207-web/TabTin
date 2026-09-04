@@ -12,7 +12,7 @@ import React, { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { NotebookPen, Search, Trash2 } from 'lucide-react'
 import { cn } from '@utils/cn'
-import { ScrollArea } from '@tabtin/smartsheet-ui'
+import { ScrollArea } from '@muse/smartsheet-ui'
 import type { CardRendererProps } from '../registry/types'
 import {
   CARD_HEADER_PADDING,

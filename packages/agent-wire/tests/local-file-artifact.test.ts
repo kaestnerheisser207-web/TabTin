@@ -20,7 +20,7 @@ const xlsxPayload = {
   file_type: 'xlsx',
   relative_path: 'artifacts/weather.xlsx',
   filename: 'weather.xlsx',
-  url: 'tabtin://resource/file/artifacts%2Fweather.xlsx?hint=tabfiles',
+  url: 'muse://resource/file/artifacts%2Fweather.xlsx?hint=tabfiles',
   mime_type: MIME.xlsx,
   file_size: 12345,
   self_check: {
@@ -34,7 +34,7 @@ const docxPayload = {
   file_type: 'docx',
   relative_path: 'artifacts/report.docx',
   filename: 'report.docx',
-  url: 'tabtin://resource/file/artifacts%2Freport.docx?hint=tabfiles',
+  url: 'muse://resource/file/artifacts%2Freport.docx?hint=tabfiles',
   mime_type: MIME.docx,
   file_size: 54321,
   self_check: {
@@ -48,7 +48,7 @@ const pdfPayload = {
   file_type: 'pdf',
   relative_path: 'artifacts/summary.pdf',
   filename: 'summary.pdf',
-  url: 'tabtin://resource/file/artifacts%2Fsummary.pdf?hint=tabfiles',
+  url: 'muse://resource/file/artifacts%2Fsummary.pdf?hint=tabfiles',
   mime_type: MIME.pdf,
   file_size: 98765,
   self_check: {
@@ -62,7 +62,7 @@ const pptxPayload = {
   file_type: 'pptx',
   relative_path: 'artifacts/deck.pptx',
   filename: 'deck.pptx',
-  url: 'tabtin://resource/file/artifacts%2Fdeck.pptx?hint=tabfiles',
+  url: 'muse://resource/file/artifacts%2Fdeck.pptx?hint=tabfiles',
   mime_type: MIME.pptx,
   file_size: 24680,
   self_check: {

@@ -1,6 +1,6 @@
 import React from 'react'
 import { AlertTriangle } from 'lucide-react'
-import { Button, Input } from '@tabtin/smartsheet-ui'
+import { Button, Input } from '@muse/smartsheet-ui'
 
 interface TableSettingsDeleteConfirmPanelProps {
   t: (key: string, options?: Record<string, unknown>) => string

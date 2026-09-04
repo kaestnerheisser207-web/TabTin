@@ -3,7 +3,7 @@
  *
  * 数据源（ 通用交付物协议）：
  *   1. tool_artifact 的可交付 rich：local_file / oss_file / platform_resource / widget
- *   2. assistant 正文 tabtin://resource 链接
+ *   2. assistant 正文 muse://resource 链接
  *   3. write_file / edit_file / delete_file + shell file_history + 可交付 local_file：
  *      统一 canonicalize 后进 path ops，轮末净算后仍存在的文件才入卡
  *   4. ：父 `agent` tool_result 内嵌的子代理交付物（派发轮归属）；
@@ -18,8 +18,8 @@
  *  对账：各通道路径先 canonicalize（去 `./`、POSIX），shell 即使 ok=false
  * 仍消费 deleted_paths，避免已删采集 JSON 残留在产物卡。
  */
-import type { ChatMessage, MessageBlock } from '@tabtin/chat-client'
-import { parseResourcePointer } from '@tabtin/resource-router'
+import type { ChatMessage, MessageBlock } from '@muse/chat-client'
+import { parseResourcePointer } from '@muse/resource-router'
 import {
   collectAssistantText,
   extractResourceLinkArtifacts,

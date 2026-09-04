@@ -1,4 +1,4 @@
-export { okResponse } from '@tabtin/agent-wire'
+export { okResponse } from '@muse/agent-wire'
 export { SlidingWindowRateLimiter } from './rate-limiter.js'
 export { parseBody, sendJSON, MAX_BODY_SIZE, BODY_READ_TIMEOUT_MS } from './http-utils.js'
 export { validateCSRFHeaders, validateTokenAuth } from './guards.js'

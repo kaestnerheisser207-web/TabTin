@@ -1,4 +1,4 @@
-import { toast } from '@tabtin/smartsheet-ui'
+import { toast } from '@muse/smartsheet-ui'
 import i18n from '@/i18n'
 import { crawlViewClient } from '@/crawlspace/electron/crawl-view-client'
 import { emitBrowserAnnotationInject } from '@components/chat/context/browserAnnotationInjection'

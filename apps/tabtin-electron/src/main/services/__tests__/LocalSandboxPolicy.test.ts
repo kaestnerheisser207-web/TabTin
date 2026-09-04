@@ -4,7 +4,7 @@ import {
   evaluateLocalTerminalPolicy,
   getInteractiveTerminalPolicySupportError,
   normalizeTerminalExecutionPolicy,
-} from '@tabtin/terminal-core'
+} from '@muse/terminal-core'
 
 describe('LocalSandboxPolicy', () => {
   it('在 server policy 放宽 relaxed_rules 时允许对应命令通过本地校验', () => {

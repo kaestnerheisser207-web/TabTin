@@ -20,8 +20,8 @@
  *
  * **历史**：曾有 `instructions?()` hook + `prepareAgentInstructions` 装配函数，
  * 阶段 2.3（2026-05-20）整套物理下线 —— 0 production caller。未来要把 cap
- * 文案拼到 system prompt 必须走 `@tabtin/agent-prompt::buildSystemPrompt` +
- * `@tabtin/prompt-contract` 注册表，**不要**恢复 `instructions()` 接口
+ * 文案拼到 system prompt 必须走 `@muse/agent-prompt::buildSystemPrompt` +
+ * `@muse/prompt-contract` 注册表，**不要**恢复 `instructions()` 接口
  * （会再造一层与 SECTION_REGISTRY 平行的隐形 SSoT）。
  */
 

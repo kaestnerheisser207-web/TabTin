@@ -21,7 +21,7 @@ const BUILTIN_OPENS_SUMMARY: Array<{
   priority?: number
 }> = [
   { appId: 'tabweb', types: ['webpage', 'web_selection', 'web_annotation'], schemes: ['http:', 'https:'] },
-  { appId: 'tabfolder', types: ['folder'], schemes: ['file:', 'tabtin-file:'] },
+  { appId: 'tabfolder', types: ['folder'], schemes: ['file:', 'muse-file:'] },
   { appId: 'tabmail', types: ['email_thread'], schemes: ['mailto:'] },
   { appId: 'tabdata', types: ['table', 'table_selection', 'field'] },
   { appId: 'tabdoc', types: ['document', 'doc_selection'] },
@@ -124,7 +124,7 @@ describe('ResourceRouterRegistry · W2 builtin loadout', () => {
   it('knownSchemes covers manifest schemes', () => {
     const r = buildRegistryFromSummary()
     const schemes = new Set(r.knownSchemes())
-    for (const s of ['http:', 'https:', 'file:', 'tabtin-file:', 'mailto:']) {
+    for (const s of ['http:', 'https:', 'file:', 'muse-file:', 'mailto:']) {
       expect(schemes.has(s)).toBe(true)
     }
   })

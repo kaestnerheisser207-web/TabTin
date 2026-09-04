@@ -20,12 +20,12 @@ def optional_env(name: str, fallback: str) -> str:
 
 
 def main() -> None:
-    run_id = require_env("TABTIN_E2E_RUN_ID")
-    user_id = require_env("TABTIN_E2E_USER_ID")
-    organization_id = require_env("TABTIN_E2E_ORGANIZATION_ID")
-    space_id = require_env("TABTIN_E2E_SPACE_ID")
-    organization_name = optional_env("TABTIN_E2E_ORGANIZATION_NAME", "[e2e] mirrored organization")
-    space_name = optional_env("TABTIN_E2E_SPACE_NAME", "[e2e] mirrored Space")
+    run_id = require_env("MUSE_E2E_RUN_ID")
+    user_id = require_env("MUSE_E2E_USER_ID")
+    organization_id = require_env("MUSE_E2E_ORGANIZATION_ID")
+    space_id = require_env("MUSE_E2E_SPACE_ID")
+    organization_name = optional_env("MUSE_E2E_ORGANIZATION_NAME", "[e2e] mirrored organization")
+    space_name = optional_env("MUSE_E2E_SPACE_NAME", "[e2e] mirrored Space")
 
     User = get_user_model()
     user = User.objects.get(id=UUID(user_id))

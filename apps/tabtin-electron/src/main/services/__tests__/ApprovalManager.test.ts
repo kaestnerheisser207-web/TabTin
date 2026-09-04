@@ -23,12 +23,12 @@ vi.mock('../../utils/guarded-handle', () => ({
 describe('ApprovalManager HITL hook facade', () => {
   beforeEach(async () => {
     vi.resetModules()
-    const { setHumanInteractionHooks } = await import('@tabtin/agent-runtime')
+    const { setHumanInteractionHooks } = await import('@muse/agent-runtime')
     setHumanInteractionHooks(undefined)
   })
 
   afterEach(async () => {
-    const { setHumanInteractionHooks } = await import('@tabtin/agent-runtime')
+    const { setHumanInteractionHooks } = await import('@muse/agent-runtime')
     setHumanInteractionHooks(undefined)
   })
 
@@ -44,7 +44,7 @@ describe('ApprovalManager HITL hook facade', () => {
     const {
       runWithHumanInteractionContext,
       setHumanInteractionHooks,
-    } = await import('@tabtin/agent-runtime')
+    } = await import('@muse/agent-runtime')
     const requestPlatformApproval = vi.fn(async () => ({
       approved: true,
       scope: 'thread' as const,

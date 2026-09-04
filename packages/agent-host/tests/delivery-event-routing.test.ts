@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
-import { StreamEvents } from '@tabtin/agent-wire'
-import type { StreamEvent } from '@tabtin/agent-runtime'
+import { StreamEvents } from '@muse/agent-wire'
+import type { StreamEvent } from '@muse/agent-runtime'
 import { routeDeliveryEvent } from '../src/delivery/delivery-event-routing.js'
 
 describe('routeDeliveryEvent', () => {

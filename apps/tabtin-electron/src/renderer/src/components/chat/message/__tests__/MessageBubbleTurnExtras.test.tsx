@@ -21,7 +21,7 @@ describe('MessageBubbleTurnExtras', () => {
           id: 'artifact-1',
           kind: 'file',
           title: 'test.txt',
-          href: 'tabtin://file/test.txt',
+          href: 'muse://file/test.txt',
           subtitleKey: 'previewFile',
         }]}
         canOpenArtifacts={false}
@@ -43,7 +43,7 @@ describe('MessageBubbleTurnExtras', () => {
           id: 'artifact-1',
           kind: 'file',
           title: 'test.txt',
-          href: 'tabtin://file/test.txt',
+          href: 'muse://file/test.txt',
           subtitleKey: 'previewFile',
         }]}
       />,

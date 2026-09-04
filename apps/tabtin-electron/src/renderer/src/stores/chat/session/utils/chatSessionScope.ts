@@ -5,7 +5,7 @@
  * 避免把 Project id 误写进 current_space_id / 列表 space_id。
  */
 
-import type { Space } from '@tabtin/app-shell'
+import type { Space } from '@muse/app-shell'
 import { useSpaceStore } from '@stores/useSpaceStore'
 
 export type ChatSessionListQuery = {

@@ -8,7 +8,7 @@
  * 只补最稳妥的两类，避免把 `readme.md` / 相对路径误加成外链：
  *   - `www.host...`
  *   - `//host...`（协议相对）
- * 已有 scheme（含 `tabtin://` / `mailto:` / `https:`）原样返回。
+ * 已有 scheme（含 `muse://` / `mailto:` / `https:`）原样返回。
  */
 const HAS_SCHEME_RE = /^[a-z][a-z0-9+.-]*:/i
 const WWW_HOST_RE = /^www\./i

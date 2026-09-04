@@ -28,7 +28,7 @@ import React, { useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useQueryClient } from '@tanstack/react-query'
 import { Globe, Loader2, X, AlertCircle, ExternalLink } from 'lucide-react'
-import { Button, toast } from '@tabtin/smartsheet-ui'
+import { Button, toast } from '@muse/smartsheet-ui'
 import { OVERLAY_SURFACE_CLASS } from '@components/ui'
 
 import { useFirstTimeOnboarding } from './useFirstTimeOnboarding'

@@ -30,7 +30,7 @@ vi.mock('@components/app/agentContextSwitchConfirm', () => ({
   requestAgentContextSwitchConfirm: requestConfirm,
 }))
 
-vi.mock('@tabtin/smartsheet-ui', () => ({ toast }))
+vi.mock('@muse/smartsheet-ui', () => ({ toast }))
 
 import { runWithAgentContextSwitchGuard } from './agentContextSwitchGuard'
 

@@ -11,7 +11,7 @@
 import React from 'react'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { fireEvent, render, screen } from '@testing-library/react'
-import type { RichContentBlock } from '@tabtin/chat-client'
+import type { RichContentBlock } from '@muse/chat-client'
 
 import { RichSearchResults } from '../RichSearchResults'
 import { RichMemoryCard } from '../RichMemoryCard'

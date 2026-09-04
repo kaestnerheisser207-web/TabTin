@@ -184,7 +184,7 @@ export const CodeWorkspaceRailCard: React.FC<CodeWorkspaceRailCardProps> = ({
       setWorktreeListError(false)
       return
     }
-    const git = window.tabtin?.git
+    const git = window.muse?.git
     if (!git) {
       setWorktrees([])
       setBranches([])
@@ -452,7 +452,7 @@ export const CodeWorkspaceRailCard: React.FC<CodeWorkspaceRailCardProps> = ({
 
     setBusy(true)
     try {
-      const result = await window.tabtin.git.checkoutBranch(codeRoot, {
+      const result = await window.muse.git.checkoutBranch(codeRoot, {
         branch: nextBranch,
         create: true,
       })

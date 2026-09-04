@@ -19,7 +19,7 @@ _SERVER_MANAGEMENT_COMMANDS = {"runserver"}
 
 def should_skip_startup_background_jobs() -> bool:
     """Return True when ready() should not schedule background startup work."""
-    if os.environ.get("TABTIN_DISABLE_STARTUP_BACKGROUND_JOBS") == "1":
+    if os.environ.get("MUSE_DISABLE_STARTUP_BACKGROUND_JOBS") == "1":
         return True
 
     argv0 = Path(sys.argv[0]).name.lower()

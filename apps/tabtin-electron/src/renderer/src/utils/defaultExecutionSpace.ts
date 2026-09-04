@@ -5,4 +5,4 @@
 export {
   resolveDefaultExecutionWorkspaceId,
   type ExecutionWorkspaceCandidate,
-} from '@tabtin/app-shell'
+} from '@muse/app-shell'

@@ -9,9 +9,9 @@ import {
   Trash2,
 } from 'lucide-react'
 import { Button, EmptyState, Input } from '@components/ui'
-import { toast } from '@tabtin/smartsheet-ui/toast'
+import { toast } from '@muse/smartsheet-ui/toast'
 import { useTranslation } from 'react-i18next'
-import type { Organization } from '@tabtin/app-shell'
+import type { Organization } from '@muse/app-shell'
 import {
   checkPersonalPluginUpdate,
   confirmPersonalPluginUpdate,

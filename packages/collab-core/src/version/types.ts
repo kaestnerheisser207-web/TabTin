@@ -42,7 +42,7 @@ export interface SubConversationRef {
  * 版本面板使用的精简决策上下文（从 `SpaceCheckpoint.metadata.checkpoint_context` 序列化而来）。
  *
  * 注意（Wave 12）：历史上本类型名曾为 `CheckpointContext`，与
- * `@tabtin/chat-client.CheckpointContext`（聊天面板用的完整版）同名但字段不同，
+ * `@muse/chat-client.CheckpointContext`（聊天面板用的完整版）同名但字段不同，
  * 易混淆。现重命名为 `VersionCheckpointContext` 以明确语义边界。
  *
  * 字段对齐 `apps.services.common.version_history.schemas.serialize_history_list`

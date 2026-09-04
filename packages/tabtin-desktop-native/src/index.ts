@@ -1,5 +1,5 @@
 /**
- * @tabtin/desktop-native —— TabDesktop macOS 原生能力承载包入口（v2.1 模块零）。
+ * @muse/desktop-native —— TabDesktop macOS 原生能力承载包入口（v2.1 模块零）。
  *
  * 模块零阶段：包能 import / 占位 Swift hello world / cmake-js 工程模板就绪 /
  * JS fallback 实现。**不真做 ESC PI / SCContentFilter / AX**——这些是模块二

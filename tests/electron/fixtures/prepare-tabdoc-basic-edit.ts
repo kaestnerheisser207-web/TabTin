@@ -36,12 +36,12 @@ export async function prepareTabDocBasicEdit(
       timeoutMs: 60000,
       env: {
         ...process.env,
-        TABTIN_E2E_RUN_ID: context.runId,
-        TABTIN_E2E_USER_ID: selection.userId,
-        TABTIN_E2E_ORGANIZATION_ID: selection.organizationId,
-        TABTIN_E2E_ORGANIZATION_NAME: selection.organizationName,
-        TABTIN_E2E_SPACE_ID: selection.spaceId,
-        TABTIN_E2E_SPACE_NAME: selection.spaceName,
+        MUSE_E2E_RUN_ID: context.runId,
+        MUSE_E2E_USER_ID: selection.userId,
+        MUSE_E2E_ORGANIZATION_ID: selection.organizationId,
+        MUSE_E2E_ORGANIZATION_NAME: selection.organizationName,
+        MUSE_E2E_SPACE_ID: selection.spaceId,
+        MUSE_E2E_SPACE_NAME: selection.spaceName,
       },
     },
   );

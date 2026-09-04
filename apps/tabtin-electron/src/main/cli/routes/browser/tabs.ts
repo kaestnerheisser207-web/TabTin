@@ -1,5 +1,5 @@
 import http from 'node:http'
-import { okResponse } from '@tabtin/agent-wire'
+import { okResponse } from '@muse/agent-wire'
 import type { SendJSON, ActionExecutor } from './_helpers'
 import {
   buildBrowserRequestScope, resolveTabId, resolveContextBrowserTabId, makeTaskId, sendExecutorResult, handleRouteError,
@@ -386,7 +386,7 @@ export async function handleTabsRoute(
           suggestions: [
             '先确认当前已进入工作空间，且文件落在工作目录内',
             '本地预览仅支持 .html / .htm：相对路径 muse browser open --url attachments/a.html',
-            '或 shell 内绝对路径：muse browser open --url "file://$TABTIN_WORKSPACE/attachments/a.html"',
+            '或 shell 内绝对路径：muse browser open --url "file://$MUSE_WORKSPACE/attachments/a.html"',
             '若要打开 HTML 源码文件（非渲染预览），用 present_to_user 的 local_file item',
           ],
         }))

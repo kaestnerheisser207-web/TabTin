@@ -1,5 +1,5 @@
 """
-ResourcePointer Python 镜像 ── @tabtin/resource-router 的协议契约后端复制。
+ResourcePointer Python 镜像 ── @muse/resource-router 的协议契约后端复制。
 
 业务目标：让 `open_in_space` 工具（W2 schema、W5 execute）+ 任何后端代码
 （W6 RichResourceRef render_block）能复用同一份双轨指针解析逻辑，确保 TS
@@ -30,9 +30,9 @@ from urllib.parse import parse_qsl, quote, urlsplit
 
 
 _SELF_FORMAT_PREFIXES = (
-    "tabtin://resource/",
-    "tabtin-preprod://resource/",
-    "tabtin-dev://resource/",
+    "muse://resource/",
+    "muse-preprod://resource/",
+    "muse-dev://resource/",
 )
 
 # Agent 常见笔误归一化（须与 TS `packages/resource-router/src/parser.ts` 字符级对齐）。
@@ -58,7 +58,7 @@ def _normalize_self_format_fields(
 
 @dataclass
 class ResourcePointer:
-    """与 TS 端 @tabtin/resource-router/types.ts:ResourcePointer 契约一致。"""
+    """与 TS 端 @muse/resource-router/types.ts:ResourcePointer 契约一致。"""
 
     scheme: str
     type: Optional[str]
@@ -86,7 +86,7 @@ class ResourcePointer:
                 return self_pointer
             # 头部对了但 path 形态不合法——退化为 scheme=tabtin + type=None
             return cls(
-                scheme="tabtin",
+                scheme="muse",
                 type=None,
                 id=raw,
                 raw=raw,
@@ -193,7 +193,7 @@ def _try_parse_self_format(
     type_decoded, hint = _normalize_self_format_fields(type_decoded, hint)
 
     return ResourcePointer(
-        scheme="tabtin",
+        scheme="muse",
         type=type_decoded,
         id=id_decoded,
         raw=raw,

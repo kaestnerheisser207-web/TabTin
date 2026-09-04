@@ -12,11 +12,11 @@
 
 import { create } from 'zustand'
 import { useShallow } from 'zustand/react/shallow'
-import type { CollabPeerState, CollabStatus } from '@tabtin/collab-core'
-import type { ViewMeta, ViewUpdateRequest, ViewCreateRequest } from '@tabtin/table-core'
+import type { CollabPeerState, CollabStatus } from '@muse/collab-core'
+import type { ViewMeta, ViewUpdateRequest, ViewCreateRequest } from '@muse/table-core'
 import { registerResetAction } from './sessionResetRegistry'
 import { isTableCollabDocumentRuntimeActive } from './tableCollabRuntime'
-import { COLLAB_PENDING_VIEW_TTL_MS } from '@tabtin/table-engine/collab'
+import { COLLAB_PENDING_VIEW_TTL_MS } from '@muse/table-engine/collab'
 
 type CollabViewUpdateOptions = {
   silent?: boolean

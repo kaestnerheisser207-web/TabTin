@@ -1,12 +1,12 @@
 /**
  * 跨轮记忆 · feature flag 单测。
  *
- * 直接测试 @tabtin/agent-runtime/history 的 isCrossTurnMemoryEnabled，
+ * 直接测试 @muse/agent-runtime/history 的 isCrossTurnMemoryEnabled，
  * 通过 envReader 参数注入 mock 环境值。
  */
 
 import { describe, expect, it } from 'vitest'
-import { isCrossTurnMemoryEnabled } from '@tabtin/agent-runtime/history'
+import { isCrossTurnMemoryEnabled } from '@muse/agent-runtime/history'
 
 describe('isCrossTurnMemoryEnabled', () => {
   it('默认（未配置 agent_config、无 envReader）→ true', () => {

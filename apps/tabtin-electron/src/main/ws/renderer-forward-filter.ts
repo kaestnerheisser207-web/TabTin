@@ -1,4 +1,4 @@
-import type { GatewayEnvelope } from '@tabtin/ws-gateway-client'
+import type { GatewayEnvelope } from '@muse/ws-gateway-client'
 
 export function shouldForwardGatewayEnvelopeToRenderer(envelope: Pick<GatewayEnvelope, 'type' | '_topic'>): boolean {
   const topic = typeof envelope._topic === 'string' ? envelope._topic : ''

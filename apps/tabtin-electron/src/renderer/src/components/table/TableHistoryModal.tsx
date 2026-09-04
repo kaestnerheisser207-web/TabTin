@@ -33,13 +33,13 @@ import {
   LoadingSpinner,
   ViewTypeIcon,
   compactCellValue,
-} from '@tabtin/smartsheet-ui'
-import { VersionHistoryOverlayShell } from '@tabtin/collab-core'
-import type { HistoryGroup } from '@tabtin/smartsheet-ui'
-import type { Field, HistoryOperationOut, ViewMeta } from '@tabtin/table-core'
+} from '@muse/smartsheet-ui'
+import { VersionHistoryOverlayShell } from '@muse/collab-core'
+import type { HistoryGroup } from '@muse/smartsheet-ui'
+import type { Field, HistoryOperationOut, ViewMeta } from '@muse/table-core'
 import { Bookmark, Bot, ChevronDown, ChevronRight, MoreHorizontal, Pencil, Plus, Trash2 } from 'lucide-react'
-import { UndoRedoApiService } from '@tabtin/table-core'
-import { getViewVisibilitySnapshot } from '@tabtin/table-ui'
+import { UndoRedoApiService } from '@muse/table-core'
+import { getViewVisibilitySnapshot } from '@muse/table-ui'
 import { HistoryTablePreview, type SnapshotRow } from './HistoryTablePreview'
 import { sanitizeHistoryAttachmentValue } from './historyAttachmentValue'
 import { resolveNamedVersionSnapshotKey } from './namedVersionSnapshotKey'
@@ -282,7 +282,7 @@ function groupTableHistoryByDate(groups: HistoryGroup[], locale?: string) {
   return sections
 }
 
-// VIEW_TYPE_ICONS → ViewTypeIcon from @tabtin/smartsheet-ui
+// VIEW_TYPE_ICONS → ViewTypeIcon from @muse/smartsheet-ui
 
 // ── Action badge colors ──
 const ACTION_COLORS: Record<string, string> = {
@@ -292,7 +292,7 @@ const ACTION_COLORS: Record<string, string> = {
   restore: 'bg-warning',
 }
 
-// compactValue → compactCellValue from @tabtin/smartsheet-ui
+// compactValue → compactCellValue from @muse/smartsheet-ui
 
 const MAX_INLINE_CHANGES = 3
 

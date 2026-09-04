@@ -22,7 +22,7 @@ export const SIDEBAR_SURFACE =
  */
 
 /** 侧栏主交互字号 — 列表行、顶栏入口、可点主文案（padding 不变，只抬字） */
-// eslint-disable-next-line tabtin/no-design-system-violations -- sidebar typography readable density @ zoom 0.9
+// eslint-disable-next-line muse/no-design-system-violations -- sidebar typography readable density @ zoom 0.9
 export const SIDEBAR_TEXT_PRIMARY = 'text-[15px] leading-[22px] font-normal antialiased'
 
 /** 段落/说明（非列表） */
@@ -32,7 +32,7 @@ export const SIDEBAR_TEXT_BODY = 'text-body'
 export const SIDEBAR_TEXT_META = 'text-caption'
 
 /** 分组标题 — WORKSPACE 等（normal case，不用 caption 12px） */
-// eslint-disable-next-line tabtin/no-design-system-violations -- sidebar section readable density @ zoom 0.9
+// eslint-disable-next-line muse/no-design-system-violations -- sidebar section readable density @ zoom 0.9
 export const SIDEBAR_TEXT_SECTION = 'text-[15px] leading-[22px] font-medium text-foreground/75 antialiased'
 
 /** 空状态主文案 — 与列表行同档 13px，不用 META 12px */
@@ -93,7 +93,7 @@ export const SIDEBAR_ROW_BODY_HOVER_MASK =
 
 /** 操作按钮 hover 渐变底（实心底色 + 左侧渐隐，与 SIDEBAR_ROW_BODY_HOVER_MASK 衔接） */
 export const SIDEBAR_ROW_ACTIONS_HOVER_SURFACE =
-  // eslint-disable-next-line tabtin/no-design-system-violations -- z-[1] 为行内局部堆叠（hover 渐变遮罩盖住行内文字），非跨组件层级，语义 z scale 不适用
+  // eslint-disable-next-line muse/no-design-system-violations -- z-[1] 为行内局部堆叠（hover 渐变遮罩盖住行内文字），非跨组件层级，语义 z scale 不适用
   'pl-6 z-[1] [@media(hover:hover)_and_(pointer:fine)]:group-hover:bg-gradient-to-l [@media(hover:hover)_and_(pointer:fine)]:group-hover:from-background [@media(hover:hover)_and_(pointer:fine)]:group-hover:via-background [@media(hover:hover)_and_(pointer:fine)]:group-hover:to-transparent [@media(hover:hover)_and_(pointer:fine)]:group-focus-within:bg-gradient-to-l [@media(hover:hover)_and_(pointer:fine)]:group-focus-within:from-background [@media(hover:hover)_and_(pointer:fine)]:group-focus-within:via-background [@media(hover:hover)_and_(pointer:fine)]:group-focus-within:to-transparent [@media(hover:none)_and_(pointer:coarse)]:bg-gradient-to-l [@media(hover:none)_and_(pointer:coarse)]:from-background [@media(hover:none)_and_(pointer:coarse)]:via-background/90 [@media(hover:none)_and_(pointer:coarse)]:to-transparent'
 
 /**

@@ -2,7 +2,7 @@
  * FR-18 Phase 2 (H2-E)：Daemon 端 doc-parser handlers 真跑集成测试。
  *
  * 与 Electron `apps/tabtin-electron/src/main/workers/__tests__/doc-parser-handlers.test.ts`
- * 对称。直接 import 共享包 `@tabtin/local-docparse/workers` 的 handlers，
+ * 对称。直接 import 共享包 `@muse/local-docparse/workers` 的 handlers，
  * 不经 worker_threads（与 Electron 同一种"绕开 worker 协议测纯函数"的策略）。
  *
  * 关键验证：
@@ -20,7 +20,7 @@ import {
   handleParseDocx,
   handleParsePdf,
   handleParseXlsx,
-} from '@tabtin/local-docparse/workers';
+} from '@muse/local-docparse/workers';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 // fixtures 在 apps/tabtin-electron/fixtures/poc-pdfs/，相对 Daemon 测试目录是 ../../tabtin-electron/...
@@ -34,7 +34,7 @@ const FIXTURES = resolve(
 );
 
 const PERF_TOLERANCE = (() => {
-  const raw = process.env.TABTIN_PERF_TOLERANCE;
+  const raw = process.env.MUSE_PERF_TOLERANCE;
   if (raw) {
     const n = Number(raw);
     if (Number.isFinite(n) && n > 0) return n;

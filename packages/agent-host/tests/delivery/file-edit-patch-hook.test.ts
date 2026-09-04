@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from 'vitest';
-import type { EngineHooks } from '@tabtin/agent-runtime';
+import type { EngineHooks } from '@muse/agent-runtime';
 import { createFileEditPatchPersistHook } from '../../src/delivery/file-edit-patch-hook.js';
 import type { FileEditPatch } from '../../src/tools/file-edit-patch.js';
 

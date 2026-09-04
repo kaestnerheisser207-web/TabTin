@@ -69,12 +69,12 @@ def _briefing_resource_url(resource: dict) -> str | None:
         relative_path = str(resource.get("target_relative_path") or "")
         if not relative_path:
             return None
-        return f"tabtin://resource/file/{quote(relative_path, safe='')}"
+        return f"muse://resource/file/{quote(relative_path, safe='')}"
     client_type = _BRIEFING_RESOURCE_TYPES.get(kind)
     resource_id = str(resource.get("id") or "")
     if not client_type or not resource_id:
         return None
-    return f"tabtin://resource/{client_type}/{resource_id}"
+    return f"muse://resource/{client_type}/{resource_id}"
 
 
 def _materialization_briefing(continuation: SessionContinuation) -> str:

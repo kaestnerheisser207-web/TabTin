@@ -14,14 +14,14 @@ import React from 'react';
 import {
   resolveRecordId,
   type TableGridRendererProps,
-} from '@tabtin/table-engine';
+} from '@muse/table-engine';
 import {
   fieldCellTextMatchesSearchQuery,
   type Field,
   type SearchIndexHit,
   type ViewMeta,
-} from '@tabtin/table-core';
-import { shouldActivateGridForSearchMatch } from '@tabtin/table-ui';
+} from '@muse/table-core';
+import { shouldActivateGridForSearchMatch } from '@muse/table-ui';
 
 // ---------------------------------------------------------------------------
 // Types

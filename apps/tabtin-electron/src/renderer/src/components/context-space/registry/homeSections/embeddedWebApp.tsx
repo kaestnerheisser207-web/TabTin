@@ -6,7 +6,7 @@
  * 主 CTA 走 onCreateResource(appId) → createHandlers[appId] → openEmbeddedWebApp。
  */
 import React, { useCallback } from 'react'
-import { Button } from '@tabtin/smartsheet-ui'
+import { Button } from '@muse/smartsheet-ui'
 import { useTranslation } from 'react-i18next'
 import { contextRegistry } from '../instance'
 import type { HomeSectionHandler, HomeSectionProps, ContextItemType } from '../types'

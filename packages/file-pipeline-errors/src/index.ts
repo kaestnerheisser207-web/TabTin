@@ -1,12 +1,12 @@
 /**
- * @tabtin/file-pipeline-errors
+ * @muse/file-pipeline-errors
  *
  * File pipeline 错误码 SSoT —— 13 类全局错误码 + i18n key + LLM-facing 文案模板。
  *
  * 跨模块共享：
- *   - `@tabtin/local-docparse` —— LocalDocParseErrorClass re-export 全局 enum
- *   - `@tabtin/agent-runtime` —— tabcode-adapter / read-file-state 用此包格式化错误
- *   - `@tabtin/action-tools` —— 25MB 大图等硬上限错误用此包给 LLM hint
+ *   - `@muse/local-docparse` —— LocalDocParseErrorClass re-export 全局 enum
+ *   - `@muse/agent-runtime` —— tabcode-adapter / read-file-state 用此包格式化错误
+ *   - `@muse/action-tools` —— 25MB 大图等硬上限错误用此包给 LLM hint
  *   - 客户端 errorClassMap / messageError 按 error_kind 路由到 i18n key
  *   - Django docparse 后端 ParsedDocument.failure_code 与本 enum 对齐
  */

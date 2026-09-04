@@ -1,1 +1,1 @@
-export { cn } from '@tabtin/app-shell'
+export { cn } from '@muse/app-shell'

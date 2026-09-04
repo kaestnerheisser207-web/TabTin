@@ -27,7 +27,7 @@ vi.mock('react-i18next', () => ({
   }),
 }))
 
-vi.mock('@tabtin/smartsheet-ui', () => ({
+vi.mock('@muse/smartsheet-ui', () => ({
   Button: ({ children, ...props }: React.ButtonHTMLAttributes<HTMLButtonElement>) => (
     <button type="button" {...props}>{children}</button>
   ),
@@ -135,7 +135,7 @@ describe('LoginRelayAction', () => {
         tabKey: 'login_relay:view-login-relay-default',
       },
     })
-    Object.assign(window.tabtin, { loginRelay })
+    Object.assign(window.muse, { loginRelay })
   })
 
   it('shows only the relay action on remote viewer A', async () => {

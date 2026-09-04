@@ -44,7 +44,7 @@ export const CodexSessionCard: React.FC<{ message: IMMessage; isMine: boolean }>
   useEffect(() => {
     if (!projectDialogOpen) return
     setLoadingProjects(true)
-    void window.tabtin.codexSessionShare.projects()
+    void window.muse.codexSessionShare.projects()
       .then((localProjects) => {
         setProjects(localProjects)
         if (localProjects.length === 1) setProjectPath((current) => current || localProjects[0].path)
@@ -81,7 +81,7 @@ export const CodexSessionCard: React.FC<{ message: IMMessage; isMine: boolean }>
       }
       setImportStage('importing')
       setProgress(70)
-      const result = await window.tabtin.codexSessionShare.import({
+      const result = await window.muse.codexSessionShare.import({
         filePath: downloaded.path,
         projectId: project.id,
         projectPath: project.path,
@@ -116,7 +116,7 @@ export const CodexSessionCard: React.FC<{ message: IMMessage; isMine: boolean }>
   const handleOpen = async (project: { id: string; path: string }) => {
     if (!importedSessionId) return
     try {
-      await window.tabtin.codexSessionShare.open(importedSessionId, project.id, project.path)
+      await window.muse.codexSessionShare.open(importedSessionId, project.id, project.path)
     } catch (error) {
       toast({
         title: t('codexSessionShare.openFailed', { defaultValue: '无法在 Codex 中打开会话' }),

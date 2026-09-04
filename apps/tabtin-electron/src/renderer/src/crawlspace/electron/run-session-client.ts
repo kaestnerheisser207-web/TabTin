@@ -2,7 +2,7 @@ import i18n from '@/i18n'
 import { withTimeout, DEFAULT_IPC_TIMEOUT } from '../utils/withTimeout'
 
 function getApi(): any | null {
-  return (typeof window !== 'undefined' ? window.tabtin?.runSession : null) ?? null
+  return (typeof window !== 'undefined' ? window.muse?.runSession : null) ?? null
 }
 
 export const runSessionClient = {

@@ -36,7 +36,7 @@ const MAX_EVENTS = 500
 const events: LayoutTelemetryEvent[] = []
 const counters = new Map<string, number>()
 
-const WINDOW_SNAPSHOT_KEY = '__TABTIN_LAYOUT_TELEMETRY__'
+const WINDOW_SNAPSHOT_KEY = '__MUSE_LAYOUT_TELEMETRY__'
 const VERBOSE_STORAGE_KEY = 'layout:telemetry:verbose'
 
 const nextId = () => `layout-telem-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`
@@ -46,7 +46,7 @@ const isVerboseEnabled = (): boolean => {
   try {
     return (
       window.localStorage.getItem(VERBOSE_STORAGE_KEY) === '1' ||
-      Boolean(window.__TABTIN_LAYOUT_TELEMETRY_VERBOSE__)
+      Boolean(window.__MUSE_LAYOUT_TELEMETRY_VERBOSE__)
     )
   } catch {
     return false
@@ -55,7 +55,7 @@ const isVerboseEnabled = (): boolean => {
 
 const persistToWindow = () => {
   if (typeof window === 'undefined') return
-  window.__TABTIN_LAYOUT_TELEMETRY__ = {
+  window.__MUSE_LAYOUT_TELEMETRY__ = {
     events: [...events],
     counters: Object.fromEntries(counters.entries()),
   }

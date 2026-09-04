@@ -30,33 +30,33 @@ test('root env bootstrap copies the template once and preserves user config', as
   try {
     await fs.writeFile(
       templateFile,
-      'TABTIN_EDITION=community\nAUTH_FIXED_VERIFICATION_CODE=888888\n',
+      'MUSE_EDITION=community\nAUTH_FIXED_VERIFICATION_CODE=888888\n',
     );
 
     const created = await ensureRootEnvFile(envFile, templateFile);
     assert.equal(created.changed, true);
     assert.equal(
       await fs.readFile(envFile, 'utf8'),
-      'TABTIN_EDITION=community\nAUTH_FIXED_VERIFICATION_CODE=888888\n',
+      'MUSE_EDITION=community\nAUTH_FIXED_VERIFICATION_CODE=888888\n',
     );
 
-    await fs.writeFile(envFile, 'TABTIN_EDITION=saas\n');
+    await fs.writeFile(envFile, 'MUSE_EDITION=saas\n');
     const preserved = await ensureRootEnvFile(envFile, templateFile);
     assert.equal(preserved.changed, true);
     assert.equal(
       await fs.readFile(envFile, 'utf8'),
-      'TABTIN_EDITION=saas\nAUTH_FIXED_VERIFICATION_CODE=\n',
+      'MUSE_EDITION=saas\nAUTH_FIXED_VERIFICATION_CODE=\n',
     );
 
     await fs.writeFile(
       envFile,
-      'TABTIN_EDITION=saas\nAUTH_FIXED_VERIFICATION_CODE=\n',
+      'MUSE_EDITION=saas\nAUTH_FIXED_VERIFICATION_CODE=\n',
     );
     const disabled = await ensureRootEnvFile(envFile, templateFile);
     assert.equal(disabled.changed, false);
     assert.equal(
       await fs.readFile(envFile, 'utf8'),
-      'TABTIN_EDITION=saas\nAUTH_FIXED_VERIFICATION_CODE=\n',
+      'MUSE_EDITION=saas\nAUTH_FIXED_VERIFICATION_CODE=\n',
     );
   } finally {
     await fs.rm(rootDir, { recursive: true, force: true });
@@ -70,7 +70,7 @@ test('runtime env contains only the two public root switches', async () => {
   try {
     await fs.writeFile(
       rootEnvFile,
-      'TABTIN_EDITION=community\n' +
+      'MUSE_EDITION=community\n' +
         'AUTH_FIXED_VERIFICATION_CODE=888888\n' +
         'OPENAI_API_KEY=must-not-enter-container\n' +
         'AWS_SECRET_ACCESS_KEY=must-not-enter-container\n',
@@ -80,7 +80,7 @@ test('runtime env contains only the two public root switches', async () => {
 
     assert.equal(
       await fs.readFile(runtimeEnvFile, 'utf8'),
-      'TABTIN_EDITION=community\nAUTH_FIXED_VERIFICATION_CODE=888888\n',
+      'MUSE_EDITION=community\nAUTH_FIXED_VERIFICATION_CODE=888888\n',
     );
     assert.equal((await fs.stat(runtimeEnvFile)).mode & 0o777, 0o600);
   } finally {

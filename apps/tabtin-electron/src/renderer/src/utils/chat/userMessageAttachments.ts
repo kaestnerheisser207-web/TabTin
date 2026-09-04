@@ -1,4 +1,4 @@
-import type { MessageAttachment, MessageBlock } from '@tabtin/chat-client'
+import type { MessageAttachment, MessageBlock } from '@muse/chat-client'
 import { isFileContextRefBlock } from './fileContextRefBlock'
 
 type AttachmentMediaBlock = MessageBlock & {

@@ -10,7 +10,7 @@ import { useUIStore } from '@stores/useUIStore'
 import { useOrganizationStore } from '@stores/useOrganizationStore'
 import { runWithAgentContextSwitchGuard } from '@/services/agentContextSwitchGuard'
 import { cn } from '@utils/cn'
-import type { Organization } from '@tabtin/app-shell'
+import type { Organization } from '@muse/app-shell'
 
 declare global {
   interface Window {

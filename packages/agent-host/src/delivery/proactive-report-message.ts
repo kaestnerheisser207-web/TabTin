@@ -1,5 +1,5 @@
 /**
- * @tabtin/agent-runtime — Proactive Report Message Formatter
+ * @muse/agent-runtime — Proactive Report Message Formatter
  *
  * PRD 06 §5.5.3：后台子 Agent 完成后生成的汇报消息文本格式化。
  *

@@ -1,6 +1,6 @@
 import React from 'react'
 import { useTranslation } from 'react-i18next'
-import type { RollbackApplyLayerStatus } from '@tabtin/chat-client'
+import type { RollbackApplyLayerStatus } from '@muse/chat-client'
 import { cn } from '@utils/cn'
 import type { RevertBannerLayerChip } from './deriveRevertBannerViewModel'
 import { StatusChip } from './RevertBannerStatusChip'

@@ -80,7 +80,7 @@ vi.mock('@components/ui', () => ({
   Textarea: (props: React.TextareaHTMLAttributes<HTMLTextAreaElement>) => <textarea {...props} />,
 }))
 
-vi.mock('@tabtin/smartsheet-ui', () => ({ toast: vi.fn() }))
+vi.mock('@muse/smartsheet-ui', () => ({ toast: vi.fn() }))
 
 vi.mock('@stores/useAuthStore', () => ({
   useAuthStore: (selector: (state: { user: { id: string } }) => unknown) => (

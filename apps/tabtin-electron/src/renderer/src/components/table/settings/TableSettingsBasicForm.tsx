@@ -1,5 +1,5 @@
 import React from 'react'
-import { Button, Input, Textarea } from '@tabtin/smartsheet-ui'
+import { Button, Input, Textarea } from '@muse/smartsheet-ui'
 import { formatNumber } from '@/utils/i18n/format'
 
 interface TableSettingsBasicFormProps {

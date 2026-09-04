@@ -32,7 +32,7 @@ vi.mock('../../auth.js', () => ({
   },
 }))
 
-vi.mock('@tabtin/config', () => ({
+vi.mock('@muse/config', () => ({
   joinApiPath: vi.fn((_base: string, path: string) => `http://localhost:6060${path}`),
 }))
 

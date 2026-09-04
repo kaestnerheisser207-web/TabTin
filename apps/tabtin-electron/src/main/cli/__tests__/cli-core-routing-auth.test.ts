@@ -3,7 +3,7 @@ import http from 'node:http'
 import { existsSync, unlinkSync } from 'node:fs'
 import { join } from 'node:path'
 import { tmpdir } from 'node:os'
-import { PERMISSION_TIMEOUTS } from '@tabtin/agent-wire'
+import { PERMISSION_TIMEOUTS } from '@muse/agent-wire'
 
 const mocks = vi.hoisted(() => {
   const makeRoute = (name: string) =>
@@ -73,9 +73,9 @@ vi.mock('../../services/ApprovalManager', () => ({
 }))
 
 // PlatformSurface 重构（2026-05）后，table / space / fetch / extensions / code /
-// oss / capabilities / search 路由已迁移到 @tabtin/cli-routes 共享包。原本散落
+// oss / capabilities / search 路由已迁移到 @muse/cli-routes 共享包。原本散落
 // 在 `../routes/<name>` 的 mock 路径已 stale，统一改成 mock cli-routes 入口。
-vi.mock('@tabtin/cli-routes', () => ({
+vi.mock('@muse/cli-routes', () => ({
   // configureCLIRoutes 在 cli-server.ts 顶层调用注入 djangoRequest / getSpaceId
   // 等 bindings；测试用 noop 即可。
   configureCLIRoutes: vi.fn(),
@@ -92,7 +92,7 @@ vi.mock('@tabtin/cli-routes', () => ({
 type ServerApi = typeof import('../cli-server')
 
 let cliServer: ServerApi
-const originalRuntimeRoot = process.env.TABTIN_RUNTIME_ROOT
+const originalRuntimeRoot = process.env.MUSE_RUNTIME_ROOT
 const testRuntimeRoot = join(tmpdir(), `tabtin-cli-server-test-${process.pid}`)
 
 type RequestOptions = {
@@ -149,7 +149,7 @@ async function makeRequest(options: RequestOptions) {
 
 describe('CB-17: CLI 核心路由认证与错误处理', () => {
   beforeEach(async () => {
-    process.env.TABTIN_RUNTIME_ROOT = testRuntimeRoot
+    process.env.MUSE_RUNTIME_ROOT = testRuntimeRoot
     vi.resetModules()
     Object.values(mocks).forEach((mockFn) => mockFn.mockClear())
     mocks.requestApproval.mockResolvedValue({ approved: true })
@@ -161,8 +161,8 @@ describe('CB-17: CLI 核心路由认证与错误处理', () => {
   })
 
   afterAll(() => {
-    if (originalRuntimeRoot === undefined) delete process.env.TABTIN_RUNTIME_ROOT
-    else process.env.TABTIN_RUNTIME_ROOT = originalRuntimeRoot
+    if (originalRuntimeRoot === undefined) delete process.env.MUSE_RUNTIME_ROOT
+    else process.env.MUSE_RUNTIME_ROOT = originalRuntimeRoot
   })
 
   it('/health 走免鉴权分支并返回标准 okResponse', async () => {

@@ -48,9 +48,9 @@ function warn(msg) {
 
 function fetchTarballUrl(pkg, version) {
   // 通过 `npm view` 拿真实 tarball URL（避免硬编码 URL 失效）
-  // 优先用 TABTIN_NPM_REGISTRY env，回退到默认 registry
-  const registryArg = process.env.TABTIN_NPM_REGISTRY
-    ? `--registry=${process.env.TABTIN_NPM_REGISTRY}`
+  // 优先用 MUSE_NPM_REGISTRY env，回退到默认 registry
+  const registryArg = process.env.MUSE_NPM_REGISTRY
+    ? `--registry=${process.env.MUSE_NPM_REGISTRY}`
     : '';
   const cmd = `npm view ${pkg}@${version} dist.tarball ${registryArg}`.trim();
   return execSync(cmd, { encoding: 'utf8' }).trim();
@@ -141,9 +141,9 @@ async function downloadServer(pkg, version) {
 }
 
 async function main() {
-  if (process.env.TABTIN_SKIP_LSP_DOWNLOAD) {
+  if (process.env.MUSE_SKIP_LSP_DOWNLOAD) {
     log(
-      `TABTIN_SKIP_LSP_DOWNLOAD set, skipping all downloads. LSP will use system PATH or fallback.`,
+      `MUSE_SKIP_LSP_DOWNLOAD set, skipping all downloads. LSP will use system PATH or fallback.`,
     );
     return;
   }

@@ -6,7 +6,7 @@
  * 供交接查看弹窗 / HandoffCard 材料弹窗等「只有 file_id」的场景共用。
  */
 
-import { toast } from '@tabtin/smartsheet-ui'
+import { toast } from '@muse/smartsheet-ui'
 import { inferPreviewableKind } from './inferPreviewableKind'
 import { resolveOssFileDetail } from './resolveOssFileAccessUrl'
 import { useResourcePreviewStore } from './useResourcePreviewStore'

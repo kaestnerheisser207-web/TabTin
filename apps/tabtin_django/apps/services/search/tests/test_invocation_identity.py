@@ -443,7 +443,7 @@ class SearchApiInvocationSecurityTests(TestCase):
     def _request(self, organization_id: uuid.UUID):
         request = RequestFactory().post(
             "/api/search/web",
-            HTTP_X_TABTIN_ORGANIZATION_ID=str(organization_id),
+            HTTP_X_MUSE_ORGANIZATION_ID=str(organization_id),
         )
         request.auth = self.user
         return request

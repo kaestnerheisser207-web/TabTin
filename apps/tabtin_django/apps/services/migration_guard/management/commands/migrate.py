@@ -16,7 +16,7 @@
 逃生口（按使用频次倒序）：
 
 1. **safe_migrate 内部调本命令** —— 通过环境变量
-   ``_TABTIN_SAFE_MIGRATE_INVOKED=1`` 标记上层是 safe_migrate，wrapper 直接
+   ``_MUSE_SAFE_MIGRATE_INVOKED=1`` 标记上层是 safe_migrate，wrapper 直接
    放行调 Django 原始 migrate（不递归拦截）。
 2. **测试上下文** —— 检测到 ``pytest`` 已在 ``sys.modules`` 中，或
    ``manage.py test`` 正在运行。测试 runner 会调 ``call_command('migrate', ...)``
@@ -39,7 +39,7 @@ from django.core.management.base import CommandError
 from django.core.management.commands.migrate import Command as DjangoMigrateCommand
 
 
-SAFE_MIGRATE_ENV = "_TABTIN_SAFE_MIGRATE_INVOKED"
+SAFE_MIGRATE_ENV = "_MUSE_SAFE_MIGRATE_INVOKED"
 
 
 class Command(DjangoMigrateCommand):

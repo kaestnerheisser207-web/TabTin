@@ -1,9 +1,9 @@
 import { describe, it, expect } from 'vitest'
 import path from 'node:path'
 import {
-  TABTIN_USER_DATA_DIR_NAMES,
+  MUSE_USER_DATA_DIR_NAMES,
   CREDENTIALS_FILE_NAME,
-  TABTIN_PROTECTED_DIR_NAMES,
+  MUSE_PROTECTED_DIR_NAMES,
   resolveCredentialFilePaths,
   resolveConfigAndCacheWipePaths,
   resolveUpdaterCachePaths,
@@ -19,8 +19,8 @@ describe('uninstall-cleanup-paths', () => {
 
   it('lists all profile credential files under appData', () => {
     const files = resolveCredentialFilePaths({ homeDir: home, appDataRoot: appData })
-    expect(files).toHaveLength(TABTIN_USER_DATA_DIR_NAMES.length)
-    for (const name of TABTIN_USER_DATA_DIR_NAMES) {
+    expect(files).toHaveLength(MUSE_USER_DATA_DIR_NAMES.length)
+    for (const name of MUSE_USER_DATA_DIR_NAMES) {
       expect(files).toContain(path.join(appData, name, CREDENTIALS_FILE_NAME))
     }
   })
@@ -41,7 +41,7 @@ describe('uninstall-cleanup-paths', () => {
 
     for (const p of paths) {
       expect(p.includes(`${path.sep}organizations`)).toBe(false)
-      expect(TABTIN_PROTECTED_DIR_NAMES.every((name) => !p.endsWith(path.sep + name))).toBe(true)
+      expect(MUSE_PROTECTED_DIR_NAMES.every((name) => !p.endsWith(path.sep + name))).toBe(true)
     }
     expect(paths).not.toContain(path.join(appData, 'TabTin'))
   })

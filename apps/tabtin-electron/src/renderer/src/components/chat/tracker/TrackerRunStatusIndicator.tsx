@@ -13,9 +13,9 @@ import {
   Link as LinkIcon, Check, RefreshCw, ArrowRightLeft, ShieldCheck, Wallet, Hourglass,
 } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
-import { toast } from '@tabtin/smartsheet-ui'
+import { toast } from '@muse/smartsheet-ui'
 import { cn } from '@utils/cn'
-import type { TrackerRunMeta, RecoveryAction } from '@tabtin/chat-client'
+import type { TrackerRunMeta, RecoveryAction } from '@muse/chat-client'
 import { resolveArtifactAppFromSkill } from '@services/trackerArtifactMap'
 import { getPrimaryContextRefTypeForApp } from '@services/manifestResourceIdMap'
 import * as trackerApi from '@services/trackerApi'
@@ -85,8 +85,8 @@ function formatDuration(startIso?: string | null, endIso?: string | null): strin
  * 拦截后跳到对应产物。
  *
  * **W3 设计**（专题"Agent 产物在 Space 内的打开" RFC §10.3 / N0-4 / L13）：
- *   path 形态 `tabtin://resource/<type>/<id>?hint=<app>&...`，与 iOS 已自约定
- *   `tabtin://resource/<type>/<id>` 跨端 path 一致。
+ *   path 形态 `muse://resource/<type>/<id>?hint=<app>&...`，与 iOS 已自约定
+ *   `muse://resource/<type>/<id>` 跨端 path 一致。
  *
  *   - `<type>` = ContextRefType（从 contextRegistry handler 反查，manifest 驱动）
  *   - `<id>` = 主资源 id（artifact_ref 中的具体产物字段优先；缺失退化为 run_id
@@ -127,7 +127,7 @@ function buildArtifactLink(trackerRun: TrackerRunMeta): string | null {
       params.set('recordIds', ref.record_ids.join(','))
     }
   }
-  return `tabtin://resource/${encodeURIComponent(refType)}/${encodeURIComponent(resourceId)}?${params.toString()}`
+  return `muse://resource/${encodeURIComponent(refType)}/${encodeURIComponent(resourceId)}?${params.toString()}`
 }
 
 export const TrackerRunStatusIndicator: React.FC<TrackerRunStatusIndicatorProps> = ({

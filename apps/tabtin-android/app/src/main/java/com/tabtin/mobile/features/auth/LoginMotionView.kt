@@ -231,9 +231,9 @@ private class LoginMotionLifecycleBridge {
     fun applyTo(view: WebView) {
         if (lifecycleActive && requestedActive) {
             view.onResume()
-            view.evaluateJavascript("window.tabtinMotion?.setActive(true)", null)
+            view.evaluateJavascript("window.museMotion?.setActive(true)", null)
         } else {
-            view.evaluateJavascript("window.tabtinMotion?.setActive(false)", null)
+            view.evaluateJavascript("window.museMotion?.setActive(false)", null)
             view.onPause()
         }
     }

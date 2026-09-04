@@ -31,7 +31,7 @@ class TabDataRequestContextMiddleware(MiddlewareMixin):
         parent_document_id = (
             request.headers.get("X-TabTin-Parent-Document-Id")
             or request.headers.get("x-tabtin-parent-document-id")
-            or request.META.get("HTTP_X_TABTIN_PARENT_DOCUMENT_ID")
+            or request.META.get("HTTP_X_MUSE_PARENT_DOCUMENT_ID")
         )
         set_current_parent_document_id(parent_document_id)
         share_id = (

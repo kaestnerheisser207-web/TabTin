@@ -207,7 +207,7 @@ def test_skips_non_directory_entries(tmp_path: Path):
 def test_invalidate_cache_forces_rescan(tmp_path: Path, monkeypatch):
     """主动 invalidate cache 后下次调用重新扫描。"""
     _write_manifest(tmp_path, "first", _make_simple_app_manifest("first", "first-cli"))
-    monkeypatch.setenv("TABTIN_APPS_MANIFEST_ROOT", str(tmp_path))
+    monkeypatch.setenv("MUSE_APPS_MANIFEST_ROOT", str(tmp_path))
 
     binaries1 = compute_known_binaries()
     assert "first-cli" in binaries1
@@ -243,7 +243,7 @@ def test_explicit_root_bypasses_cache(tmp_path: Path):
 def test_use_cache_false_bypasses_read_and_write(tmp_path: Path, monkeypatch):
     """``use_cache=False`` 既不读也不写 cache（实现约定，避免测试 cache 污染主流程）。"""
     _write_manifest(tmp_path, "x", _make_simple_app_manifest("x", "x-cli"))
-    monkeypatch.setenv("TABTIN_APPS_MANIFEST_ROOT", str(tmp_path))
+    monkeypatch.setenv("MUSE_APPS_MANIFEST_ROOT", str(tmp_path))
 
     # 第一次默认调用：写 cache（含 x-cli）
     first = compute_known_binaries()
@@ -270,13 +270,13 @@ def test_returns_frozenset_immutable():
 
 
 def test_env_var_manifest_root_takes_precedence(tmp_path: Path, monkeypatch):
-    """``TABTIN_APPS_MANIFEST_ROOT`` 环境变量优先于默认仓库扫描根。
+    """``MUSE_APPS_MANIFEST_ROOT`` 环境变量优先于默认仓库扫描根。
 
     通过"假 binary 仅在 env-root 出现"来证明 env 生效；同时验证 baseline
     ``KNOWN_BINARIES``（仅 ``tabtin``）始终保留在合并结果中。
     """
     _write_manifest(tmp_path, "envroot", _make_simple_app_manifest("envroot", "env-cli"))
-    monkeypatch.setenv("TABTIN_APPS_MANIFEST_ROOT", str(tmp_path))
+    monkeypatch.setenv("MUSE_APPS_MANIFEST_ROOT", str(tmp_path))
     binaries = compute_known_binaries()
     assert "env-cli" in binaries
     # baseline 始终保留

@@ -22,7 +22,7 @@ export const tabtrackerHandler: ContextTypeHandler = {
   sidebarPanel: LazyTrackerPanel,
   displayLabel: '自动化',
   displayEmoji: '🎯',
-  // ContextRefType / tabtin://resource/<type>/… 用 'tracker'；前端 ContextItemType 是 'tabtracker'。
+  // ContextRefType / muse://resource/<type>/… 用 'tracker'；前端 ContextItemType 是 'tabtracker'。
   // 缺这一项时 ResourceRouter 会以 type=tracker 建 tab，getHandler 失败 → 空壳。
   backendAliases: ['tracker'],
   agent: {

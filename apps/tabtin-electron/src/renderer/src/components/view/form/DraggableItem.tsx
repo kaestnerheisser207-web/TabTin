@@ -1,7 +1,7 @@
 import React from 'react'
 import { useDraggable } from '@dnd-kit/core'
-import { cn } from '@tabtin/smartsheet-ui'
-import type { FormFieldMeta } from '@tabtin/table-ui'
+import { cn } from '@muse/smartsheet-ui'
+import type { FormFieldMeta } from '@muse/table-ui'
 
 export interface DraggableItemProps {
   id: string

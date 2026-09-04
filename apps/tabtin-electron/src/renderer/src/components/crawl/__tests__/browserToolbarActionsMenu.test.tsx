@@ -5,7 +5,7 @@ import { describe, expect, it, vi } from 'vitest'
 import {
   CrawlspaceToolbar,
   ToolbarOverflowCloseContext,
-} from '@tabtin/crawlspace-core'
+} from '@muse/crawlspace-core'
 
 vi.mock('../BrowserZoomControls', () => ({
   BrowserZoomControls: ({ viewId }: { viewId: string }) => (

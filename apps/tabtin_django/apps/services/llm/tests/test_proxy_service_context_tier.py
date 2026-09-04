@@ -96,10 +96,10 @@ class AgentBillingKeyTrustTests(SimpleTestCase):
 class BillingHeaderExtractionTests(SimpleTestCase):
     def test_attempt_headers_use_attempt_key_as_idempotency_key(self):
         headers = _extract_billing_header_values({
-            "HTTP_X_TABTIN_BILLING_IDEMPOTENCY_KEY": "legacy-key",
-            "HTTP_X_TABTIN_BILLING_LOGICAL_KEY": "agent-turn:scope:_main_chat:0",
-            "HTTP_X_TABTIN_BILLING_ATTEMPT_KEY": "agent-turn:scope:_main_chat:0:attempt:1",
-            "HTTP_X_TABTIN_BILLING_ATTEMPT_INDEX": "1",
+            "HTTP_X_MUSE_BILLING_IDEMPOTENCY_KEY": "legacy-key",
+            "HTTP_X_MUSE_BILLING_LOGICAL_KEY": "agent-turn:scope:_main_chat:0",
+            "HTTP_X_MUSE_BILLING_ATTEMPT_KEY": "agent-turn:scope:_main_chat:0:attempt:1",
+            "HTTP_X_MUSE_BILLING_ATTEMPT_INDEX": "1",
         })
 
         self.assertEqual(
@@ -111,8 +111,8 @@ class BillingHeaderExtractionTests(SimpleTestCase):
 
     def test_legacy_header_ignores_orphan_attempt_index(self):
         headers = _extract_billing_header_values({
-            "HTTP_X_TABTIN_BILLING_IDEMPOTENCY_KEY": "legacy-key",
-            "HTTP_X_TABTIN_BILLING_ATTEMPT_INDEX": "1",
+            "HTTP_X_MUSE_BILLING_IDEMPOTENCY_KEY": "legacy-key",
+            "HTTP_X_MUSE_BILLING_ATTEMPT_INDEX": "1",
         })
 
         self.assertEqual(headers.idempotency_key, "legacy-key")

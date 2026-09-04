@@ -1,5 +1,5 @@
 {
-  "name": "@tabtin/agent-prompt",
+  "name": "@muse/agent-prompt",
   "version": "0.1.0",
   "description": "System Prompt SSoT — Markdown source + codegen + buildSystemPrompt(config) for all agent hosts",
   "type": "module",
@@ -25,9 +25,9 @@
     "dump": "node scripts/dump-prompt.mjs"
   },
   "dependencies": {
-    "@tabtin/agent-modes": "workspace:*",
-    "@tabtin/agent-runtime": "workspace:*",
-    "@tabtin/prompt-contract": "workspace:*"
+    "@muse/agent-modes": "workspace:*",
+    "@muse/agent-runtime": "workspace:*",
+    "@muse/prompt-contract": "workspace:*"
   },
   "devDependencies": {
     "typescript": "5.7.2",

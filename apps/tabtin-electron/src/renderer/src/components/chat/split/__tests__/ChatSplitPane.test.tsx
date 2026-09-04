@@ -13,7 +13,7 @@
 import React from 'react'
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { render, screen } from '@testing-library/react'
-import type { ChatSession, TrackerRunMeta } from '@tabtin/chat-client'
+import type { ChatSession, TrackerRunMeta } from '@muse/chat-client'
 
 const billingState = vi.hoisted(() => ({
   billingBlocked: false,
@@ -69,7 +69,7 @@ vi.mock('../../composer/ChatInput', () => ({
   ),
 }))
 // CH-19：pane header 直接渲染 ChatIconTooltip（关闭/停止按钮），它从
-// @tabtin/smartsheet-ui 取 TooltipProvider 等导出。本 smoke test 的 smartsheet-ui
+// @muse/smartsheet-ui 取 TooltipProvider 等导出。本 smoke test 的 smartsheet-ui
 // mock 不含这些导出，故 stub 成透传 children（测试只关心 4 表达点，不关心 tooltip）。
 vi.mock('../../panel/ChatIconTooltip', () => ({
   ChatIconTooltip: ({ children }: { children?: React.ReactNode }) => <>{children}</>,
@@ -194,7 +194,7 @@ vi.mock('@utils/cn', () => ({
   cn: (...args: unknown[]) => args.filter(Boolean).join(' '),
 }))
 
-vi.mock('@tabtin/smartsheet-ui', () => ({
+vi.mock('@muse/smartsheet-ui', () => ({
   ScrollArea: ({ children }: { children?: React.ReactNode }) => <div>{children}</div>,
   ConfirmDialog: () => null,
   toast: { error: vi.fn(), success: vi.fn() },

@@ -179,8 +179,8 @@ export function registerRunSessionIpcHandlers(): void {
       showInSidebar?: boolean
       notifyRenderer?: boolean
     }) => {
-      if (process.env.TABTIN_RUN_SESSION_TAB_API !== '1') {
-        return { success: false, error: 'run-session:openTab 已禁用 (TABTIN_RUN_SESSION_TAB_API=0)' }
+      if (process.env.MUSE_RUN_SESSION_TAB_API !== '1') {
+        return { success: false, error: 'run-session:openTab 已禁用 (MUSE_RUN_SESSION_TAB_API=0)' }
       }
       const metadata = payload?.metadata || {}
       const isWorkspaceView = Boolean(metadata?.crawlspaceId || metadata?.kind === 'workspace-view')
@@ -201,8 +201,8 @@ export function registerRunSessionIpcHandlers(): void {
   guardedHandle(
     'run-session:switchTab',
     async (_event: IpcMainInvokeEvent, payload: { runId?: string; viewId: string; bounds?: any }) => {
-      if (process.env.TABTIN_RUN_SESSION_TAB_API !== '1') {
-        return { success: false, error: 'run-session:switchTab 已禁用 (TABTIN_RUN_SESSION_TAB_API=0)' }
+      if (process.env.MUSE_RUN_SESSION_TAB_API !== '1') {
+        return { success: false, error: 'run-session:switchTab 已禁用 (MUSE_RUN_SESSION_TAB_API=0)' }
       }
       try {
         const { getViewFactory } = await import('../view-factory')
@@ -223,8 +223,8 @@ export function registerRunSessionIpcHandlers(): void {
   guardedHandle(
     'run-session:closeTab',
     async (_event: IpcMainInvokeEvent, payload: { runId?: string; viewId: string; force?: boolean }) => {
-      if (process.env.TABTIN_RUN_SESSION_TAB_API !== '1') {
-        return { success: false, error: 'run-session:closeTab 已禁用 (TABTIN_RUN_SESSION_TAB_API=0)' }
+      if (process.env.MUSE_RUN_SESSION_TAB_API !== '1') {
+        return { success: false, error: 'run-session:closeTab 已禁用 (MUSE_RUN_SESSION_TAB_API=0)' }
       }
       try {
         const { getViewFactory } = await import('../view-factory')

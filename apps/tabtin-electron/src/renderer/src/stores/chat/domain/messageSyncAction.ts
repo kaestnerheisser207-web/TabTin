@@ -6,7 +6,7 @@
  * - 服务端独有行追加（回退 summary 之前的旧行除外）
  */
 
-import type { ChatMessage } from '@tabtin/chat-client'
+import type { ChatMessage } from '@muse/chat-client'
 import type { LocalChatMessage } from '@/stores/chat/shared/types'
 import { sortMessagesForTimeline } from './messageTimelineOrder'
 import { mergeMessageShellFillMissing, reconcileServerMessageBlocks } from './blockMergePolicy'

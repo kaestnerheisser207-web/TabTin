@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { Plus, Radio } from 'lucide-react'
-import { Button, Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, ScrollArea } from '@tabtin/smartsheet-ui'
+import { Button, Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, ScrollArea } from '@muse/smartsheet-ui'
 import { useTranslation } from 'react-i18next'
 import { useShallow } from 'zustand/react/shallow'
 import { useChannelStore } from '@/stores/useChannelStore'

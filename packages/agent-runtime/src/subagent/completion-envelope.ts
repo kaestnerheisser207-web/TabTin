@@ -1,7 +1,7 @@
 /**
  * 子 Agent 完成信封 — runtime 内核自持类型。
  *
- * **故意不 import `@tabtin/agent-wire`**（AH-005：agent-runtime 禁任何 @tabtin/*）。
+ * **故意不 import `@muse/agent-wire`**（AH-005：agent-runtime 禁任何 @muse/*）。
  * wire 侧 `subagent-completion.ts` 镜像同构字段，供 host / UI / zod 校验；
  * 两边字段漂移由 `tests/completion-envelope-parity.test.ts` 兜住。
  */

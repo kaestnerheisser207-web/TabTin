@@ -10,7 +10,7 @@
  * `allowBase64: true` on the TipTap Image extension.
  */
 import type { EditorView } from '@tiptap/pm/view'
-import { toast } from '@tabtin/smartsheet-ui'
+import { toast } from '@muse/smartsheet-ui'
 import type { TabDocImageUploadPort, TabDocImageUploadResult } from '../ports'
 import { insertUploadedImage } from './image-insert'
 

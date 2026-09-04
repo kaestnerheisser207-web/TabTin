@@ -20,7 +20,7 @@ function captureSendJSON() {
 
 afterEach(() => {
   setDriveUploadFileToOSSForTest(null);
-  delete process.env.TABTIN_ORGANIZATION_ID;
+  delete process.env.MUSE_ORGANIZATION_ID;
 });
 
 describe('drive route', () => {

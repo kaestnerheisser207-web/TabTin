@@ -3,7 +3,7 @@
  */
 
 import React, { useState } from 'react'
-import { Button, Popover, PopoverContent, PopoverTrigger } from '@tabtin/smartsheet-ui'
+import { Button, Popover, PopoverContent, PopoverTrigger } from '@muse/smartsheet-ui'
 import { RotateCw, Smartphone, Wrench } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { SETTINGS_HINT, SETTINGS_TEXT_META, SETTINGS_TEXT_META_BASE } from '../../settingsUi'

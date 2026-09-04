@@ -1,4 +1,4 @@
-import type { Agent, AgentType } from '@tabtin/app-shell'
+import type { Agent, AgentType } from '@muse/app-shell'
 
 export type { AgentType }
 

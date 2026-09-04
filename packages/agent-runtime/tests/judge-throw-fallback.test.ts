@@ -5,7 +5,7 @@
  * judge 异常 → deny；其他模式 → ask"，但 0 个测试断言这条分支。判决路径上
  * 任何静默 fallback bug 都会逃过 CI。
  *
- * 本测试 vi.mock `@tabtin/security-policy::judge` 让它抛错，然后调 runTools
+ * 本测试 vi.mock `@muse/security-policy::judge` 让它抛错，然后调 runTools
  * 验证 fallback decision：
  *   - ask / plan / study → behavior='deny' + reason.type='plan_blocked' +
  *     reason.deny_code='mode_disallowed_tool'
@@ -17,9 +17,9 @@ import { createTestToolRiskPolicyPort } from './helpers/tool-risk-policy-port.js
 import { createTestAgentModesToolGate } from './helpers/agent-modes-tool-gate.js';
 
 // vi.mock 必须在 import runTools 之前 hoist。
-vi.mock('@tabtin/security-policy', async () => {
-  const actual = await vi.importActual<typeof import('@tabtin/security-policy')>(
-    '@tabtin/security-policy',
+vi.mock('@muse/security-policy', async () => {
+  const actual = await vi.importActual<typeof import('@muse/security-policy')>(
+    '@muse/security-policy',
   );
   return {
     ...actual,
@@ -37,7 +37,7 @@ import type {
   EffectivePolicy,
   MemoStore,
   WorkspaceSnapshot,
-} from '@tabtin/security-policy';
+} from '@muse/security-policy';
 import type {
   StreamEvent,
 } from '../src/engine/contracts/wire-protocol.js';

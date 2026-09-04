@@ -1,5 +1,5 @@
 {
-  "name": "@tabtin/lsp-runtime",
+  "name": "@muse/lsp-runtime",
   "version": "0.1.0",
   "description": "LSP runtime — spawn LSP servers, route by file extension, deliver diagnostics as Agent attachments (LSPClient / LSPServerInstance / LSPServerManager / passiveFeedback / LSPDiagnosticRegistry).",
   "type": "module",

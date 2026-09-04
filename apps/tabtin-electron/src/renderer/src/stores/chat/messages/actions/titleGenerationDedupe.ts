@@ -13,7 +13,7 @@
  * 不再提供 ACK / lifecycle.end / selectSession 触发。
  */
 
-import type { ChatClient, ChatMessage, ChatSession } from '@tabtin/chat-client'
+import type { ChatClient, ChatMessage, ChatSession } from '@muse/chat-client'
 import { createLogger } from '@/utils/logger'
 import { countSemanticUserMessages } from '../utils/semanticMessageCount'
 

@@ -20,7 +20,7 @@ vi.mock('electron', () => ({
   BrowserWindow: vi.fn(),
   ipcMain: { handle: vi.fn(), on: vi.fn(), removeListener: vi.fn() },
 }))
-vi.mock('@tabtin/action-tools/adapters', () => {
+vi.mock('@muse/action-tools/adapters', () => {
   class MockAdapter {
     getRegisteredTools = vi.fn().mockReturnValue([])
     hasToolForAction = vi.fn().mockReturnValue(false)
@@ -28,13 +28,13 @@ vi.mock('@tabtin/action-tools/adapters', () => {
   }
   return { ActionExecutorAdapter: MockAdapter }
 })
-vi.mock('@tabtin/action-tools/impl', () => ({
+vi.mock('@muse/action-tools/impl', () => ({
   getSharedBrowserToolImpl: vi.fn().mockReturnValue({
     destroy: vi.fn().mockResolvedValue(undefined),
   }),
 }))
-vi.mock('@tabtin/terminal-core', async () => {
-  const actual = await vi.importActual<typeof import('@tabtin/terminal-core')>('@tabtin/terminal-core')
+vi.mock('@muse/terminal-core', async () => {
+  const actual = await vi.importActual<typeof import('@muse/terminal-core')>('@muse/terminal-core')
   return {
     ...actual,
     getInteractiveTerminalPolicySupportError: vi.fn().mockReturnValue(null),
@@ -45,8 +45,8 @@ vi.mock('@tabtin/terminal-core', async () => {
     containsCommandSubstitution: vi.fn().mockReturnValue(false),
   }
 })
-vi.mock('@tabtin/security-policy', async () => {
-  const actual = await vi.importActual<typeof import('@tabtin/security-policy')>('@tabtin/security-policy')
+vi.mock('@muse/security-policy', async () => {
+  const actual = await vi.importActual<typeof import('@muse/security-policy')>('@muse/security-policy')
   return { ...actual }
 })
 vi.mock('../ApprovalManager', () => ({ requestApproval: requestApprovalMock }))
@@ -99,7 +99,7 @@ vi.mock('../resource-actions', () => ({ setupResourceDetectionAPI: vi.fn() }))
 vi.mock('../cdp-actions', () => ({ setupAllCDPActions: vi.fn() }))
 
 import { FrontendActionBridge } from '../FrontendActionBridge'
-import { validateProjectPath } from '@tabtin/action-tools/headless'
+import { validateProjectPath } from '@muse/action-tools/headless'
 
 // ─── EEL-003: workspace 路径边界检查（读操作） ────────────────────
 

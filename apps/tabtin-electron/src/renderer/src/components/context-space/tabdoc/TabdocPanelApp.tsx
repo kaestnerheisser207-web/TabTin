@@ -4,23 +4,23 @@
  * 每个文档打开一个独立标签，只包含编辑器（无侧边栏、无版本面板）。
  * 通过 documentId prop 驱动，并上报运行态给资源面板。
  */
-import { joinApiPath } from '@tabtin/config'
+import { joinApiPath } from '@muse/config'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { FileText } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
-import { initializeTabDocHostRuntime } from '@tabtin/tabdoc-host-runtime'
-import { requireTableApiPort } from '@tabtin/table-core'
-import { AppHostClientProvider, useAppHostClient } from '@tabtin/app-host-sdk'
+import { initializeTabDocHostRuntime } from '@muse/tabdoc-host-runtime'
+import { requireTableApiPort } from '@muse/table-core'
+import { AppHostClientProvider, useAppHostClient } from '@muse/app-host-sdk'
 import {
   TabDocEditorConfigProvider,
   TabDocHostActionsProvider,
   useTabDocHostActions,
   TabDocTableEmbedRuntimeProvider,
   TabDocSurfaceProvider,
-} from '@tabtin/tabdoc-ui'
-import { toast } from '@tabtin/smartsheet-ui'
-import { useCollaborativeDocEditor } from '@tabtin/tabdoc-ui/use-collaborative-doc-editor'
-import { getDocument, updateDocument } from '@tabtin/tabdoc-ui/api-client'
+} from '@muse/tabdoc-ui'
+import { toast } from '@muse/smartsheet-ui'
+import { useCollaborativeDocEditor } from '@muse/tabdoc-ui/use-collaborative-doc-editor'
+import { getDocument, updateDocument } from '@muse/tabdoc-ui/api-client'
 import { createTabDocMetadataSaveQueue } from './tabdocMetadataSaveQueue'
 import {
   createDocumentHtmlArtifactLoader,
@@ -30,10 +30,10 @@ import {
   HtmlBlockAccessProvider,
   ImageAssetLoaderProvider,
   ImageAssetPreviewProvider,
-} from '@tabtin/tabdoc-ui/editor'
+} from '@muse/tabdoc-ui/editor'
 import { DocEditorView } from './components/DocEditorView'
 import { useVersionPanel } from '@/components/collab/useVersionPanel'
-import { useVersionHistory, fetchVersionPreview, type VersionHistoryItem } from '@tabtin/collab-core'
+import { useVersionHistory, fetchVersionPreview, type VersionHistoryItem } from '@muse/collab-core'
 import { useAuthStore } from '@/stores/useAuthStore'
 import { API_BASE_URL, API_CONFIG, COLLAB_WS_URLS } from '@/config/api'
 import { useResolvedOrganizationId } from '@/hooks/useResolvedOrganizationId'
@@ -45,7 +45,7 @@ import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
 import rehypeSanitize from 'rehype-sanitize'
 import { sanitizeSchema, rehypeSanitizeCss } from '@/lib/rehypeSanitizeSchema'
-import { ScrollArea } from '@tabtin/smartsheet-ui'
+import { ScrollArea } from '@muse/smartsheet-ui'
 import { diffLines } from 'diff'
 import {
   createElectronTabDocHostActions,

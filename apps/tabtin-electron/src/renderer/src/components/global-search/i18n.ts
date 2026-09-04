@@ -11,7 +11,7 @@
  */
 
 import type { TFunction } from 'i18next'
-import type { FtsDegradedReason, FtsLogicalIndex, FtsResultType } from '@tabtin/app-shell'
+import type { FtsDegradedReason, FtsLogicalIndex, FtsResultType } from '@muse/app-shell'
 import { contextRegistry } from '@components/context-space/registry'
 
 /** 9 种降级原因 → i18n key（与 zh-CN/global-search.json 对齐） */

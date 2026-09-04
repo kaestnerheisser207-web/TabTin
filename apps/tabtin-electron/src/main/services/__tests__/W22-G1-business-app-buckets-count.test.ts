@@ -19,7 +19,7 @@ import {
   __resetForTesting,
   listBuckets,
   getBucket,
-} from '@tabtin/storage-manager'
+} from '@muse/storage-manager'
 
 // ── electron / native mocks ─────────────────────────────────────
 
@@ -53,13 +53,13 @@ vi.mock('electron', () => ({
   session: { fromPartition: mockFromPartition },
 }))
 
-vi.mock('@tabtin/shared/storage-paths', () => ({
+vi.mock('@muse/shared/storage-paths', () => ({
   getDataRoot: vi.fn(() => '/tmp/__tabtin_w22g1_test_dataroot__'),
   getDaemonHomePath: vi.fn(() => '/tmp/__tabtin_w22g1_test_daemon__'),
   getHomeTabtinPath: vi.fn(() => '/tmp/__tabtin_w22g1_test_home__'),
 }))
 
-vi.mock('@tabtin/terminal-core', () => ({
+vi.mock('@muse/terminal-core', () => ({
   resolveUserSkillsDir: (dataRoot: string, userId: string) =>
     `${dataRoot}/users/${userId}/skills`,
   resolveOrganizationSkillsDir: (dataRoot: string, userId: string, orgId: string) =>

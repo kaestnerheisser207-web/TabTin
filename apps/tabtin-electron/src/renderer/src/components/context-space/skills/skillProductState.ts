@@ -60,7 +60,7 @@ export function isSkillOwnedByCurrentUser(skill: SkillIndexEntry, currentUserId:
 /**
  * 首发分身预装的官方 Pack。货架上仍可按 marketplace 安装，
  * 携带集来源跟 TabCode / Terminal 一样标「内置起步包」。
- * 改名单时同步 `FIRST_PARTY_STARTER_PACK_IDS`（`@tabtin/agent-runtime/skills`）。
+ * 改名单时同步 `FIRST_PARTY_STARTER_PACK_IDS`（`@muse/agent-runtime/skills`）。
  */
 export const FIRST_PARTY_STARTER_PACK_IDS = new Set([
   'tabtin-workflow-skills-pack',

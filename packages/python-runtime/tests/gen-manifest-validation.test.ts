@@ -13,10 +13,10 @@ describe('gen-python-runtime-manifest 校验辅助', () => {
   it('archiveNameForPlatform 读 archives 文件名', () => {
     expect(
       archiveNameForPlatform(
-        { archives: { 'darwin-arm64': 'tabtin-python-runtime-darwin-arm64.tar.gz' } },
+        { archives: { 'darwin-arm64': 'muse-python-runtime-darwin-arm64.tar.gz' } },
         'darwin-arm64',
       ),
-    ).toBe('tabtin-python-runtime-darwin-arm64.tar.gz')
+    ).toBe('muse-python-runtime-darwin-arm64.tar.gz')
   })
 
   it('entrypointForPlatform 区分 Windows 与 Unix', () => {
@@ -27,7 +27,7 @@ describe('gen-python-runtime-manifest 校验辅助', () => {
   it('isValidManifestPlatformEntry 接受合法条目', () => {
     expect(
       isValidManifestPlatformEntry({
-        archiveName: 'tabtin-python-runtime-darwin-x64.tar.gz',
+        archiveName: 'muse-python-runtime-darwin-x64.tar.gz',
         sha256: SHA,
         size: 123,
         entrypoint: 'bin/python3',
@@ -61,7 +61,7 @@ describe('gen-python-runtime-manifest 校验辅助', () => {
       version: '3.12.13',
       platforms: {
         'darwin-x64': {
-          archiveName: 'tabtin-python-runtime-darwin-x64.tar.gz',
+          archiveName: 'muse-python-runtime-darwin-x64.tar.gz',
           sha256: SHA,
           size: 456,
           entrypoint: 'bin/python3',

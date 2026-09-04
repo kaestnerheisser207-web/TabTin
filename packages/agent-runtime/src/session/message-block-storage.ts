@@ -1,5 +1,5 @@
 /**
- * @tabtin/agent-runtime — Message Block Storage（ message block 权威）
+ * @muse/agent-runtime — Message Block Storage（ message block 权威）
  *
  * Append-only JSONL：`{sessionDir}/{threadId}/message-blocks.jsonl`，每行一条
  * **完整消息**（拼好的 ContentBlock[]），与 Django `chat_message.content_blocks_json`

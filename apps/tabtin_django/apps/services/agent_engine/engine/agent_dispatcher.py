@@ -3,7 +3,7 @@ AgentDispatcher — forwards user messages to the bound device's local runtime.
 
 `agent.prompt.forward` envelope is published over WebSocket; the device-side
 DaemonAgentHost / ElectronAgentHost picks it up and runs the local agent
-runtime (`@tabtin/agent-runtime`).
+runtime (`@muse/agent-runtime`).
 """
 
 from __future__ import annotations
@@ -326,7 +326,7 @@ class AgentDispatcher:
         # admission can prove that the acknowledging socket owns this exact
         # delivery.  SaaS keeps its existing resolver and fallback behavior.
         if (
-            getattr(settings, "TABTIN_EDITION", "saas") == "community"
+            getattr(settings, "MUSE_EDITION", "saas") == "community"
             and target_device_fingerprint is None
         ):
             target_device_fingerprint = effective_config.device_fingerprint

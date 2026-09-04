@@ -9,9 +9,9 @@ import {
   FileMaterializationTooLargeError,
   createOssFileMaterializer,
 } from '../../src/tools/file-materializer.js';
-import { uploadFileToOSS } from '@tabtin/action-tools/utils/oss-upload';
+import { uploadFileToOSS } from '@muse/action-tools/utils/oss-upload';
 
-vi.mock('@tabtin/action-tools/utils/oss-upload', () => ({
+vi.mock('@muse/action-tools/utils/oss-upload', () => ({
   uploadFileToOSS: vi.fn(),
 }));
 

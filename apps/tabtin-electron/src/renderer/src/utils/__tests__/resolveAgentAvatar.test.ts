@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import { resolveAgentAvatarPresetUrl } from '@/constants/agentAvatarPresets'
-import { TABTIN_APP_ICON_URL } from '@/constants/appIcon'
+import { MUSE_APP_ICON_URL } from '@/constants/appIcon'
 import {
   extractAgentAvatarUrl,
   extractAgentCustomAvatarUrl,
@@ -37,8 +37,8 @@ describe('resolveAgentAvatar', () => {
   })
 
   it('resolveAgentAvatarUrl 无自定义时回退 TabTin logo', () => {
-    expect(resolveAgentAvatarUrl(null)).toBe(TABTIN_APP_ICON_URL)
-    expect(resolveAgentAvatarUrl('')).toBe(TABTIN_APP_ICON_URL)
+    expect(resolveAgentAvatarUrl(null)).toBe(MUSE_APP_ICON_URL)
+    expect(resolveAgentAvatarUrl('')).toBe(MUSE_APP_ICON_URL)
     expect(resolveAgentAvatarUrl('https://cdn.example.com/a.png')).toBe(
       'https://cdn.example.com/a.png',
     )

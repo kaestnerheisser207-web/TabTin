@@ -23,8 +23,8 @@ import {
 } from '@components/ui'
 import { useTranslation } from 'react-i18next'
 import { useQueryClient } from '@tanstack/react-query'
-import type { Organization, OrganizationRole, AssignableRole, MemberSearchParams } from '@tabtin/app-shell'
-import { UI_ASSIGNABLE_ROLES, ROLE_LEVELS } from '@tabtin/app-shell'
+import type { Organization, OrganizationRole, AssignableRole, MemberSearchParams } from '@muse/app-shell'
+import { UI_ASSIGNABLE_ROLES, ROLE_LEVELS } from '@muse/app-shell'
 import { useShallow } from 'zustand/react/shallow'
 import { useAuthStore } from '@stores/useAuthStore'
 import { useOrganizationStore } from '@stores/useOrganizationStore'
@@ -442,7 +442,7 @@ export const OrganizationMembersPanel: React.FC<OrganizationMembersPanelProps> =
       if (detail?.organizationId && detail.organizationId !== organization.id) return
       void loadInvitations()
     }
-    // eslint-disable-next-line tabtin/prefer-scoped-activity-effects -- 设置页成员面板在 Space Activity 树外，需跨 Space 切换持续接收邀请状态推送
+    // eslint-disable-next-line muse/prefer-scoped-activity-effects -- 设置页成员面板在 Space Activity 树外，需跨 Space 切换持续接收邀请状态推送
     window.addEventListener('tabtin:organization-invitations-changed', handler)
     return () => {
       window.removeEventListener('tabtin:organization-invitations-changed', handler)

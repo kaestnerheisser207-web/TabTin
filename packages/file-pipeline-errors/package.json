@@ -1,5 +1,5 @@
 {
-  "name": "@tabtin/file-pipeline-errors",
+  "name": "@muse/file-pipeline-errors",
   "version": "0.1.0",
   "description": "File pipeline error_kind SSoT — 14 类字符串 kind + i18n key + LLM-facing 文案模板，跨 agent-runtime / action-tools / local-docparse / Django 后端共享",
   "type": "module",

@@ -1,4 +1,4 @@
-import type { RunDocParserTask } from '@tabtin/local-docparse';
+import type { RunDocParserTask } from '@muse/local-docparse';
 
 /** Application-facing worker pool contract for local document parsing. */
 export interface DocParserPort {

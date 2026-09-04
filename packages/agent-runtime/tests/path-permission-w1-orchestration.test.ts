@@ -17,7 +17,7 @@ import type {
   EffectivePolicy,
   MemoStore,
   WorkspaceSnapshot,
-} from '@tabtin/security-policy';
+} from '@muse/security-policy';
 
 import { ToolRegistry } from '../src/engine/tooling/tool-system.js';
 import { runTools } from '../src/engine/tooling/tool-orchestration.js';

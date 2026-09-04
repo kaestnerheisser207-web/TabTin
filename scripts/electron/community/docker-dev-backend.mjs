@@ -9,7 +9,7 @@ import { classifyPortOwner } from './backend.mjs';
 
 const SCRIPT_PATH = fileURLToPath(import.meta.url);
 const ROOT_DIR = path.resolve(path.dirname(SCRIPT_PATH), '../../..');
-const DEV_IMAGE = 'tabtin/community-django:dev';
+const DEV_IMAGE = 'muse/community-django:dev';
 const FINGERPRINT_LABEL = 'com.tabtin.community.dev-dependency-fingerprint';
 const FINGERPRINT_INPUTS = [
   'apps/tabtin_django/Dockerfile',
@@ -216,9 +216,9 @@ export function createDockerDevEnvironment({
   const env = {
     ...baseEnv,
     COMPOSE_DISABLE_ENV_FILE: '1',
-    TABTIN_DEV_DEPENDENCY_FINGERPRINT: fingerprint,
+    MUSE_DEV_DEPENDENCY_FINGERPRINT: fingerprint,
   };
-  delete env.TABTIN_EDITION;
+  delete env.MUSE_EDITION;
   delete env.AUTH_FIXED_VERIFICATION_CODE;
   return env;
 }

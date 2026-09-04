@@ -3,7 +3,7 @@
  * 菜单尺寸常量
  */
 
-import { ZIndex } from '@tabtin/app-shell'
+import { ZIndex } from '@muse/app-shell'
 
 export const MENU_CONFIG = {
   // 菜单容器

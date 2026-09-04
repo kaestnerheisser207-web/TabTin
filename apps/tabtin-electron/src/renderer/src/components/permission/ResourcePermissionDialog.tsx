@@ -1,4 +1,4 @@
-import { joinApiPath } from '@tabtin/config'
+import { joinApiPath } from '@muse/config'
 import React, { useEffect, useState } from 'react'
 import { Shield, Trash2, UserPlus } from 'lucide-react'
 import { Button, Input, ScrollArea, Dialog, DialogContent, DialogHeader, DialogTitle } from '@components/ui'

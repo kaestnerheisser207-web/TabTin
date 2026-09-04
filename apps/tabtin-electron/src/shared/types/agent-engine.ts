@@ -8,9 +8,9 @@
  *   - **单一类型源**：preload 两处函数签名与 declare global 接口都从这里 import，
  *     避免任何一处与另一处的字段集漂移（历史教训：300+ 字符内联 type 改了一处忘
  *     了另一处，编译期默默 success，运行时字段被 main 进程跳过校验）。
- *   - **不依赖 @tabtin/agent-wire**：preload bundle 体积敏感（见
+ *   - **不依赖 @muse/agent-wire**：preload bundle 体积敏感（见
  *     preload/index.ts:102 注释），所以本模块零运行时依赖，只 import `type`。
- *   - **AgentModeName 走 SSoT**：从 `@tabtin/agent-modes` 取，
+ *   - **AgentModeName 走 SSoT**：从 `@muse/agent-modes` 取，
  *     避免在这里手写字面量与 SSoT 漂移（PR1 contract.ts 合并后 'yolo' 必含）。
  *
  * 修改字段时务必同步：
@@ -19,7 +19,7 @@
  *   3. renderer `localAgentClient.stream` 调用点（如有新字段需要透传）
  */
 
-import type { AgentModeName, ApprovalModeName } from '@tabtin/agent-modes'
+import type { AgentModeName, ApprovalModeName } from '@muse/agent-modes'
 
 /** agentEngine.query 单条 attachment 元数据。 */
 export interface AgentEngineAttachment {

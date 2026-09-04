@@ -119,21 +119,21 @@ vi.mock('../../cli/cli-server.js', () => ({
   },
 }))
 
-vi.mock('@tabtin/cli-server-core/surfaces/agent-security', () => ({
+vi.mock('@muse/cli-server-core/surfaces/agent-security', () => ({
   createAgentSecuritySurfaces: () => [],
 }))
-vi.mock('@tabtin/cli-server-core/surfaces/skill-list', () => ({
+vi.mock('@muse/cli-server-core/surfaces/skill-list', () => ({
   createSkillListSurface: () => ({}),
 }))
-vi.mock('@tabtin/cli-server-core/surfaces/skill-materialize-app', () => ({
+vi.mock('@muse/cli-server-core/surfaces/skill-materialize-app', () => ({
   createSkillMaterializeAppSurface: () => ({}),
 }))
-vi.mock('@tabtin/app-shell/agent-config-v2', () => ({
+vi.mock('@muse/app-shell/agent-config-v2', () => ({
   normalizeExecutionLimitsForCostCap: (value: unknown) => value,
 }))
 
 const { ElectronAgentHost } = await import('../ElectronAgentHost')
-const { SessionPauseController } = await import('@tabtin/agent-host/delivery')
+const { SessionPauseController } = await import('@muse/agent-host/delivery')
 const {
   consumeHandBackNotice,
   getBrowserTabControlSnapshot,

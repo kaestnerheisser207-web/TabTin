@@ -10,8 +10,8 @@
  */
 import { useCallback, useEffect, useState } from 'react'
 import { AlertCircle, FileText, Loader2, RefreshCw } from 'lucide-react'
-import { DocRenderer } from '@tabtin/tabdoc-ui/editor'
-import { getDocument } from '@tabtin/tabdoc-ui/api-client'
+import { DocRenderer } from '@muse/tabdoc-ui/editor'
+import { getDocument } from '@muse/tabdoc-ui/api-client'
 import { getSharedAppHostClient } from '@/adapters/sharedAppHostClient'
 import { createLogger } from '@/utils/logger'
 import { cn } from '@utils/cn'

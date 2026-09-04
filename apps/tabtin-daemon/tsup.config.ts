@@ -8,11 +8,11 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 const require = createRequire(import.meta.url);
 const pkg = JSON.parse(readFileSync(join(__dirname, 'package.json'), 'utf-8'));
 const tabtinDeps = Object.keys(pkg.dependencies ?? {}).filter(
-  (d: string) => d.startsWith('@tabtin/'),
+  (d: string) => d.startsWith('@muse/'),
 );
-const bundledTabtinDeps = [...new Set([...tabtinDeps, '@tabtin/app-shell'])];
+const bundledTabtinDeps = [...new Set([...tabtinDeps, '@muse/app-shell'])];
 
-// @tabtin/security-policy 的 hardline 规则在运行时用
+// @muse/security-policy 的 hardline 规则在运行时用
 // `createRequire(import.meta.url)('./hardline-v3-rules.json')` 按相对路径加载。
 // security-policy 自己的 dist 是 bundle:false，会把这份 JSON 拷在 dist 旁，所以它
 // 自身（及 Electron 直接消费它的 dist）能解析到。但 daemon 这里 noExternal 把
@@ -25,7 +25,7 @@ const bundledTabtinDeps = [...new Set([...tabtinDeps, '@tabtin/app-shell'])];
 // helper 幂等、与构建顺序无关——挂到每个 config 的 onSuccess，谁最后跑都能补齐两处。
 function copyHardlineRules() {
   return async () => {
-    const spDistDir = dirname(require.resolve('@tabtin/security-policy'));
+    const spDistDir = dirname(require.resolve('@muse/security-policy'));
     const src = join(spDistDir, 'hardline-v3-rules.json');
     for (const sub of ['', 'workers']) {
       const dstDir = join(__dirname, 'dist', sub);
@@ -35,7 +35,7 @@ function copyHardlineRules() {
   };
 }
 
-// react / react-dom are peerDependencies of @tabtin/tabslide (and related packages).
+// react / react-dom are peerDependencies of @muse/tabslide (and related packages).
 // The headless entry path does not import React, but we declare them as external
 // to prevent tsup from bundling them if a non-headless import sneaks into the
 // dependency graph. Node.js daemon does not provide a React runtime.
@@ -48,7 +48,7 @@ const cjsExternals = ['safer-buffer', 'iconv-lite', 'encoding'];
 // pdfjs-dist / mammoth / xlsx 必须 external —— 它们是 CJS / 大型 native 风格依赖，
 // tsup ESM bundle 会把 mammoth 内联导致 `Dynamic require of "stream"` 等运行时错误；
 // 且把 200KB pdfjs / 600KB xlsx 全部塞进 worker bundle 会严重拖慢启动。
-// 与 `@tabtin/local-docparse/workers` 配合：handlers 内部走 `await import('pdfjs-dist')`
+// 与 `@muse/local-docparse/workers` 配合：handlers 内部走 `await import('pdfjs-dist')`
 // 等懒加载，运行时由 Node 自己解析到 hoisted node_modules（pnpm symlink 可达）。
 const docParserExternals = ['pdfjs-dist', 'mammoth', 'xlsx'];
 
@@ -57,7 +57,7 @@ const docParserExternals = ['pdfjs-dist', 'mammoth', 'xlsx'];
 // 当前环境未编译（pnpm optional dep），esbuild 无法打包 .node 文件。
 const nativeExternals = ['canvas'];
 
-// jsdom 由 @tabtin/agent-runtime 引入（mermaid 渲染需要无头 DOM）。它是重量级、
+// jsdom 由 @muse/agent-runtime 引入（mermaid 渲染需要无头 DOM）。它是重量级、
 // 带「运行时相对加载数据文件」的库——其依赖 css-tree 运行时 `require('../data/patch.json')`，
 // 一旦打进单 bundle，相对路径解析到 daemon 产物目录 → 运行时 MODULE_NOT_FOUND（H-11，与 H-3 同病根）。
 // pnpm 严格布局下 css-tree 是 jsdom 的深层间接依赖、daemon 直接 external 它解析不到；
@@ -65,7 +65,7 @@ const nativeExternals = ['canvas'];
 // 运行时由 Node 从 node_modules 解析 jsdom 整棵（css-tree 的数据文件原封不动可达），顺带瘦 bundle。
 const jsdomExternals = ['jsdom'];
 
-// onnxruntime-node + @anush008/tokenizers 由 @tabtin/local-embedding 懒加载
+// onnxruntime-node + @anush008/tokenizers 由 @muse/local-embedding 懒加载
 // （语义双路召回，/#3306）。两者都是 .node 原生二进制 + 运行时动态 require，
 // 无法打进 bundle；与 jsdom 同策略：声明为 daemon 直接依赖 + external，
 // 运行时由 Node 从 node_modules 解析。
@@ -108,7 +108,7 @@ export default defineConfig([
     target: 'node20',
     dts: false,
     banner: { js: esmWorkerCompatBanner },
-    // worker bundle 也要 noExternal 把 @tabtin/local-docparse 打进来（它的 handlers 才是核心）
+    // worker bundle 也要 noExternal 把 @muse/local-docparse 打进来（它的 handlers 才是核心）
     noExternal: bundledTabtinDeps,
     // pdfjs / mammoth / xlsx 仍走 external，handlers 里的 `await import('pdfjs-dist')`
     // 在运行时 Node 解析（避免 worker bundle 翻倍且解决 mammoth CJS 跨格式问题）

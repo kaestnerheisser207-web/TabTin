@@ -14,7 +14,7 @@
  * contract Wave 1 禁止 renderer 端裸 fetch 拼 API URL，详见
  * eslint-rules/no-direct-fetch-in-renderer.js。
  */
-import { joinApiPath } from '@tabtin/config'
+import { joinApiPath } from '@muse/config'
 import { useMemo } from 'react'
 import {
   keepPreviousData,
@@ -307,7 +307,7 @@ async function fetchLocalRuntimeSkills(
   organizationId: string | null,
 ): Promise<SkillIndexEntry[]> {
   if (!organizationId) return []
-  const api = window.tabtin?.skill?.list
+  const api = window.muse?.skill?.list
   if (!api) {
     log.warn('local skill:list IPC unavailable; built-in catalog cannot be loaded')
     throw new LocalRuntimeSkillIpcUnavailableError('local skill:list IPC unavailable')
@@ -529,7 +529,7 @@ async function materializeAppSkillLocally(params: {
   if (!organizationId) {
     throw new Error('Cannot materialize app skill locally: organizationId not resolved for space')
   }
-  const api = window.tabtin?.skill?.materializeApp
+  const api = window.muse?.skill?.materializeApp
   if (!api) {
     throw new Error('Local skill materialize IPC is unavailable')
   }
@@ -556,7 +556,7 @@ async function installBackendSkillLocally(params: {
   // 导入后 Electron 已用 normalized_files 物化真正文；若 Registry 仍是旧后端留下的
   // 模板首发，启用时装包会盖掉本地。本地已有非模板正文时跳过（升级 force=true 除外）。
   if (!params.force) {
-    const readApi = window.tabtin?.skill?.readContent
+    const readApi = window.muse?.skill?.readContent
     if (readApi) {
       try {
         const local = await readApi({
@@ -580,7 +580,7 @@ async function installBackendSkillLocally(params: {
     }
   }
 
-  const api = window.tabtin?.skill?.install
+  const api = window.muse?.skill?.install
   if (!api) {
     throw new Error('Local skill install IPC is unavailable')
   }
@@ -666,7 +666,7 @@ export async function ensureSkillMaterializedLocally(params: {
     throw new Error('Cannot materialize skill locally: missing skill_key')
   }
 
-  const readApi = window.tabtin?.skill?.readContent
+  const readApi = window.muse?.skill?.readContent
   if (readApi) {
     try {
       const local = await readApi({
@@ -785,7 +785,7 @@ async function uninstallBackendSkillLocally(params: {
   spaceId: string
 }): Promise<void> {
   if (!isBackendPackageSkill(params.skill)) return
-  const api = window.tabtin?.skill?.uninstall
+  const api = window.muse?.skill?.uninstall
   if (!api) {
     throw new Error('Local skill uninstall IPC is unavailable')
   }
@@ -1162,7 +1162,7 @@ export function useSkillContentQuery(
         )
         if (packageDetail?.doc_content != null) return packageDetail.doc_content
       }
-      const api = window.tabtin?.skill?.readContent
+      const api = window.muse?.skill?.readContent
       if (!api) {
         throw new Error('IPC skill:read-content not available')
       }
@@ -1229,7 +1229,7 @@ export function useWorkspaceSkillsScanQueries(
       enabled: enabled && Boolean(workspaceRoot),
       staleTime: 30_000,
       queryFn: async (): Promise<WorkspaceSkillScanResult & { spaceId: string }> => {
-        const api = window.tabtin?.skill?.workspaceScan
+        const api = window.muse?.skill?.workspaceScan
         if (!api) return { spaceId, skills: [] }
         const result = await api({ workspaceRoot })
         return {
@@ -1269,7 +1269,7 @@ export function useSpaceWorkspaceSkillScan(
     enabled: enabled && Boolean(workingDir),
     staleTime: 30_000,
     queryFn: async (): Promise<WorkspaceSkillScanResult> => {
-      const api = window.tabtin?.skill?.workspaceScan
+      const api = window.muse?.skill?.workspaceScan
       if (!api || !workingDir) return { skills: EMPTY_WORKSPACE_SCAN_SKILLS }
       const result = await api({ workspaceRoot: workingDir })
       return {

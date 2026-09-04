@@ -1,4 +1,4 @@
-import type { MessageBlock } from '@tabtin/chat-client'
+import type { MessageBlock } from '@muse/chat-client'
 import { COMPOSER_PRESET_PENDING_TYPE } from '@utils/chat/composerPresetBlocks'
 
 /** 与后端 agent_api.ASK_USER_REPLY_PRESET_BLOCK_ID 一致 */

@@ -1,13 +1,13 @@
 import { useCallback } from 'react'
-import { toast } from '@tabtin/smartsheet-ui'
+import { toast } from '@muse/smartsheet-ui'
 import {
   buildColumnMetaUpdatePayload,
   getViewColumnMeta,
   type Field,
   type ViewMeta,
   type ViewUpdateRequest,
-} from '@tabtin/table-core'
-import { getViewVisibilitySnapshot } from '@tabtin/table-ui'
+} from '@muse/table-core'
+import { getViewVisibilitySnapshot } from '@muse/table-ui'
 import type { PersonalViewDraftState } from '@stores/useTableViewUiStore'
 
 type TranslateFn = (key: string) => string

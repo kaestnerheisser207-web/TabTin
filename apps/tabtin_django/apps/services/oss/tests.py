@@ -511,7 +511,7 @@ class LocalObjectHtmlEmbedHeadersTestCase(SimpleTestCase):
         self.assertNotIn("frame-ancestors 'none'", csp)
         # 宿主钉死到已知来源（含打包态 scheme），不用端口通配
         self.assertIn("http://127.0.0.1:5175", csp)
-        self.assertIn("tabtin-file:", csp)
+        self.assertIn("muse-file:", csp)
         self.assertNotIn("http://127.0.0.1:*", csp)
         # 服务端强制沙箱：URL 被直接在浏览器打开时也拿不到 API origin 的凭证
         self.assertIn("sandbox allow-scripts allow-popups", csp)

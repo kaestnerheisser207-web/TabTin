@@ -1,5 +1,5 @@
 import React from 'react'
-import { toast } from '@tabtin/smartsheet-ui'
+import { toast } from '@muse/smartsheet-ui'
 import { useTabDocRuntimeMonitorSnapshot } from '@components/context-space/tabdoc/tabdoc-runtime-monitor'
 import { useTabDataRuntimeMonitorSnapshot } from '@components/table/table-runtime-monitor'
 import { useSpaceStore } from '@stores/useSpaceStore'

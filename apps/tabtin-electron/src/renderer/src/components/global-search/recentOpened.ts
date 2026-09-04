@@ -15,7 +15,7 @@
  * - 失败 swallow（隐私模式 / quota 超限不影响搜索功能）
  */
 
-import type { FtsResultType } from '@tabtin/app-shell'
+import type { FtsResultType } from '@muse/app-shell'
 
 const RECENT_OPENED_KEY = 'tabtin:recent-opened'
 const MAX_RECENT = 10

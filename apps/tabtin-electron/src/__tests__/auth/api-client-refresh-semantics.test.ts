@@ -3,7 +3,7 @@ import {
   createApiClient,
   RefreshLock,
   RefreshTemporarilyUnavailableError,
-} from '@tabtin/api-client'
+} from '@muse/api-client'
 
 describe('shared API client refresh semantics', () => {
   it('keeps the session when delegated refresh is temporarily unavailable', async () => {

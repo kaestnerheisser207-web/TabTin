@@ -1,4 +1,4 @@
-# @tabtin/table-core
+# @muse/table-core
 
 Host-agnostic runtime contracts and shared core utilities for the table domain.
 

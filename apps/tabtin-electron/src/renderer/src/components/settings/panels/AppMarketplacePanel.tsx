@@ -1,7 +1,7 @@
 import React, { useEffect, useId, useState } from 'react'
 import { Store } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
-import type { Organization } from '@tabtin/app-shell'
+import type { Organization } from '@muse/app-shell'
 import { SettingsPanelHeader } from '../SettingsPanelHeader'
 import { SettingsPanelLayout } from '../SettingsPanelLayout'
 import { cn } from '@utils/cn'

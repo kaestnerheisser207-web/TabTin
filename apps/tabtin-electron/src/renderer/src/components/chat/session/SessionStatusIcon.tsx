@@ -14,7 +14,7 @@ import {
   isBalanceBillingErrorClass,
   isResolvedBalanceBillingErrorMessage,
 } from '@/lib/clearBalanceBillingChatErrors'
-import type { ChatSession } from '@tabtin/chat-client'
+import type { ChatSession } from '@muse/chat-client'
 import { SIDEBAR_ROW_STATUS_ICON_CLASS } from '@components/layout/sidebarUi'
 
 interface SessionStatusIconProps {

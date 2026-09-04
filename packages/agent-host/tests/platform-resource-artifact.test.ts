@@ -144,7 +144,7 @@ describe('buildPlatformResourceArtifactBlockFromCreate', () => {
         space_id: 'workspace-1',
       },
     })
-    expect(block?.payload.url).toContain(`tabtin://resource/table/${TABLE_ID}`)
+    expect(block?.payload.url).toContain(`muse://resource/table/${TABLE_ID}`)
     expect(String(block?.payload.url)).toContain('hint=tabdata')
   })
 })

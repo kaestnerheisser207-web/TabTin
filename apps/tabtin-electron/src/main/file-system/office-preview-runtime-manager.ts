@@ -134,9 +134,9 @@ function packagedRuntimeRootCandidates(): string[] {
 
 function configuredRuntimeRootCandidates(): string[] {
   const configuredRoots = pathCandidatesFromEnv(
-    'TABTIN_OFFICE_PREVIEW_RUNTIME_SOURCE',
-    'TABTIN_OFFICE_PREVIEW_RUNTIME_DIR',
-    'TABTIN_OFFICE_PREVIEW_DEPENDENCIES_DIR',
+    'MUSE_OFFICE_PREVIEW_RUNTIME_SOURCE',
+    'MUSE_OFFICE_PREVIEW_RUNTIME_DIR',
+    'MUSE_OFFICE_PREVIEW_DEPENDENCIES_DIR',
     'CODEX_RUNTIME_DEPENDENCIES_DIR',
   )
 
@@ -223,7 +223,7 @@ async function firstRuntimeFromRoots(roots: string[]): Promise<OfficePreviewRunt
 }
 
 function tarCommand(): string {
-  if (process.env.TABTIN_OFFICE_PREVIEW_TAR_PATH) return process.env.TABTIN_OFFICE_PREVIEW_TAR_PATH
+  if (process.env.MUSE_OFFICE_PREVIEW_TAR_PATH) return process.env.MUSE_OFFICE_PREVIEW_TAR_PATH
   if (process.platform === 'darwin') return '/usr/bin/tar'
   return process.platform === 'win32' ? 'tar.exe' : 'tar'
 }

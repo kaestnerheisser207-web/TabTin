@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { toast } from '@tabtin/smartsheet-ui'
+import { toast } from '@muse/smartsheet-ui'
 import type { LocalMcpConnectionSummary } from '@shared/types/mcp'
 import { parseMcpError } from '@shared/types/mcp'
 
@@ -60,7 +60,7 @@ export function useMcpActions(
     const connection = deleteTarget
     setDeleteTarget(null)
     await runManagedAction(`delete-${connection.id}`, async () => {
-      await window.tabtin.localMcp.deleteConnection(connection.id)
+      await window.muse.localMcp.deleteConnection(connection.id)
       toast({
         title: t('mcpConnections.deleteSuccess', { defaultValue: 'Connection deleted' }),
       })

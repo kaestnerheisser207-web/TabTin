@@ -1,32 +1,32 @@
-import type { SystemPromptConfig } from '@tabtin/agent-prompt'
+import type { SystemPromptConfig } from '@muse/agent-prompt'
 import type {
   ToolProvider,
   Tool,
   StreamEvent,
   ToolResultStorage,
-} from '@tabtin/agent-runtime/engine'
-import { sanitizeToolOutput } from '@tabtin/agent-runtime/engine'
+} from '@muse/agent-runtime/engine'
+import { sanitizeToolOutput } from '@muse/agent-runtime/engine'
 //  批次 13：engine barrel 收敛——subagent / tools / agent-modes 符号改从包入口 import。
-import type { AgentToolDeps, TodoSessionAnchor } from '@tabtin/agent-runtime'
-import type { HostAgentToolDeps } from '@tabtin/agent-host/configuration'
+import type { AgentToolDeps, TodoSessionAnchor } from '@muse/agent-runtime'
+import type { HostAgentToolDeps } from '@muse/agent-host/configuration'
 import {
   createHostAgentTool,
   createSubagentToolProvider,
-} from '@tabtin/agent-host/configuration'
-import { createOssFileMaterializer } from '@tabtin/agent-host/tools'
-import { createAgentTool } from '@tabtin/agent-runtime'
-import type { AgentModeName } from '@tabtin/agent-modes'
+} from '@muse/agent-host/configuration'
+import { createOssFileMaterializer } from '@muse/agent-host/tools'
+import { createAgentTool } from '@muse/agent-runtime'
+import type { AgentModeName } from '@muse/agent-modes'
 import {
   createPlanTools,
   LocalFilePlanStore,
   createSwitchModeTool,
   type SwitchModeProposalRegistry,
-} from '@tabtin/agent-runtime'
+} from '@muse/agent-runtime'
 import {
   annotateToolsForMode,
   resolveAgentModeName,
   getProposableModeTargets,
-} from '@tabtin/agent-modes'
+} from '@muse/agent-modes'
 import {
   createSkillsTools,
   createSkillCreateTool,
@@ -35,14 +35,14 @@ import {
   type SkillInvokeDeps,
   type SkillCreateDeps,
   type SkillCredentialResolver,
-} from '@tabtin/agent-runtime/tools'
+} from '@muse/agent-runtime/tools'
 import {
   type UnifiedSecurityPolicy,
   buildPolicyFromAgentConfigV2,
   type EffectivePolicy,
   type AgentConfigV3,
   type WorkspaceSnapshot,
-} from '@tabtin/security-policy'
+} from '@muse/security-policy'
 
 // PD-1（W6 M4）：AuthorizationPreset 类型已不再被本文件消费 —— 仅 OperationSwitches
 // 仍由 Settings 透传，但同步标 deprecated 让 M5 统一清理。
@@ -50,7 +50,7 @@ type OperationSwitches = Record<string, 'allow' | 'confirm' | 'block'>
 import { createLogger } from '../../logger.js'
 import { localMcpAgentTools } from '../../services/local-mcp-agent-tools.js'
 import { getLocalMcpService } from '../../services/LocalMcpService.js'
-import type { ToolResult } from '@tabtin/agent-runtime/engine'
+import type { ToolResult } from '@muse/agent-runtime/engine'
 import {
   createCoreTools,
   createWebTools,
@@ -67,9 +67,9 @@ import {
   buildLocalFileArtifactUrl,
   PRESENT_SUPPORTED_RESOURCE_TYPES,
   presentAutoOpenPolicy,
-} from '@tabtin/agent-host/capabilities'
-import { uploadFileToOSS } from '@tabtin/action-tools/headless'
-import { createSystemPromptProvider } from '@tabtin/agent-host/prompt'
+} from '@muse/agent-host/capabilities'
+import { uploadFileToOSS } from '@muse/action-tools/headless'
+import { createSystemPromptProvider } from '@muse/agent-host/prompt'
 // W3 (2026-05-10): `ToolResultStore` (alias of legacy `ToolResultArchive`)
 // removed along with `retrieve_tool_result` — large-output disk persistence
 // stays on `FileToolResultStorage`, but no LLM-facing tool retrieves by ID.
@@ -96,7 +96,7 @@ export interface ElectronToolProviderOptions {
   /**
    * Sub-agent support: provide these to enable the `agent` tool.
    *
-   * Uses SSoT `AgentToolDeps` from `@tabtin/agent-runtime/engine` so adding a
+   * Uses SSoT `AgentToolDeps` from `@muse/agent-runtime/engine` so adding a
    * new `AgentToolConfig` field does not require mirroring here and in Daemon.
    */
   agentToolDeps?: AgentToolDeps;
@@ -318,7 +318,7 @@ export class ElectronToolProvider implements ToolProvider {
       this.agentToolDeps.systemPromptProvider = createSystemPromptProvider()
     }
     this.toolResultStorage = options?.toolResultStorage
-    this.apiBaseUrl = options?.apiBaseUrl ?? process.env.TABTIN_API_URL ?? 'https://api.example.com'
+    this.apiBaseUrl = options?.apiBaseUrl ?? process.env.MUSE_API_URL ?? 'https://api.example.com'
     this.apiAuthToken = options?.apiAuthToken
     this.organizationId = options?.organizationId
     this.spaceId = options?.spaceId

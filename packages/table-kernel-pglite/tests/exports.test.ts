@@ -1,5 +1,5 @@
 /**
- * 导出链完整性验证 — 确保 @tabtin/table-kernel-pglite 的公开 API 保持稳定。
+ * 导出链完整性验证 — 确保 @muse/table-kernel-pglite 的公开 API 保持稳定。
  */
 import { describe, it, expect } from 'vitest'
 import * as pglite from '../src/index.js'

@@ -23,7 +23,7 @@
  * factory tsx 内部可 import 同 App 内部共享 React 组件而不会被误识别为 descriptor 来源。
  */
 
-import type { ToolCardDescriptor } from '@tabtin/chat-client'
+import type { ToolCardDescriptor } from '@muse/chat-client'
 
 /** manifest tool-cards.json 文件的 entry 形态：不含函数字段（compactSummary / extractOutput） */
 export type ManifestToolCardEntry = Omit<ToolCardDescriptor, 'compactSummary' | 'extractOutput'>

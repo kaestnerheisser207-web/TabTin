@@ -26,7 +26,7 @@ export interface RuntimeHistoryMessage {
  * 宿主传入的原始消息——"窄接口"设计。
  *
  * 只描述 selectRecentHistoryForRuntime 真正读取的字段，不依赖
- * @tabtin/chat-client 的完整 ChatMessage，让 Daemon 可以从 Django API
+ * @muse/chat-client 的完整 ChatMessage，让 Daemon 可以从 Django API
  * 返回的 JSON 直接映射，无需引入 chat-client 包。
  */
 export interface HistorySourceMessage {
@@ -42,7 +42,7 @@ export interface HistorySourceMessage {
 /**
  * blocks_json 里单个 block 的窄视图。
  *
- * 只列出装填逻辑实际读取的字段，与 @tabtin/chat-client 的 MessageBlock
+ * 只列出装填逻辑实际读取的字段，与 @muse/chat-client 的 MessageBlock
  * 兼容但不依赖。
  */
 /**
@@ -54,7 +54,7 @@ export const KNOWN_HISTORY_BLOCK_TYPES = ['text', 'tool_call', 'tool_use', 'tool
 /**
  * blocks_json 里单个 block 的窄视图。
  *
- * 只列出装填逻辑实际读取的字段，与 @tabtin/chat-client 的 MessageBlock
+ * 只列出装填逻辑实际读取的字段，与 @muse/chat-client 的 MessageBlock
  * 兼容但不依赖。
  */
 export interface HistoryMessageBlock {

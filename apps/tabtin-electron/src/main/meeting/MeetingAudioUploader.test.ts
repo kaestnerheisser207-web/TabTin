@@ -1,6 +1,6 @@
 import { describe, expect, it, vi } from 'vitest';
 
-import type { OSSClient } from '@tabtin/oss-client';
+import type { OSSClient } from '@muse/oss-client';
 
 import { MeetingAudioUploader, meetingTrackContextId } from './MeetingAudioUploader';
 

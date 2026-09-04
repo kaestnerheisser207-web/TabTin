@@ -2,7 +2,7 @@ import type {
   ProxyConfig,
   Cookie,
   AccessResult,
-} from '@tabtin/crawl-integration';
+} from '@muse/crawl-integration';
 
 // UA 配置（轻量化，避免直接依赖 extended-options 的实现）
 export interface UAConfig {

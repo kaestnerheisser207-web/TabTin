@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import type { TableRecord, ViewRecordsResponse } from '@tabtin/table-core'
+import type { TableRecord, ViewRecordsResponse } from '@muse/table-core'
 import {
   isPartialViewSnapshot,
   mergeCurrentViewRecords,

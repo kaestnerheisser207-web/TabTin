@@ -1,6 +1,6 @@
 import type React from 'react'
 import { Pencil, Search } from 'lucide-react'
-import { Input } from '@tabtin/smartsheet-ui'
+import { Input } from '@muse/smartsheet-ui'
 
 export interface GridToolbarLeftSectionTableMeta {
   name: string

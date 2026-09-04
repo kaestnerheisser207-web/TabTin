@@ -51,7 +51,7 @@
  */
 
 import { create } from 'zustand'
-import type { ChatMessage } from '@tabtin/chat-client'
+import type { ChatMessage } from '@muse/chat-client'
 import {
   type ReplayState,
   createInitialReplayState,

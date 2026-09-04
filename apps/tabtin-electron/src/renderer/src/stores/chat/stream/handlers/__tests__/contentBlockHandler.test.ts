@@ -59,7 +59,7 @@ import type {
   ContentBlockDeltaPayload,
   MessageStopReason,
   MessageUsage,
-} from '@tabtin/agent-wire'
+} from '@muse/agent-wire'
 
 vi.mock('@/utils/logger', () => ({
   createLogger: () => ({ debug: vi.fn(), warn: vi.fn(), error: vi.fn(), info: vi.fn() }),

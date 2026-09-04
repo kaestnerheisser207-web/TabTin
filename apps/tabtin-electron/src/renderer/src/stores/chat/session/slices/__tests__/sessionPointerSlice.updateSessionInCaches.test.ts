@@ -2,7 +2,7 @@
  * updateSessionInCaches upsert 语义。
  */
 import { describe, it, expect, beforeEach, vi } from 'vitest'
-import type { ChatSession } from '@tabtin/chat-client'
+import type { ChatSession } from '@muse/chat-client'
 import { createSessionPointerActions } from '../sessionPointerSlice'
 import { __resetSpaceSessionListWriteGateForTest } from '../../spaceSessionListWriteGate'
 

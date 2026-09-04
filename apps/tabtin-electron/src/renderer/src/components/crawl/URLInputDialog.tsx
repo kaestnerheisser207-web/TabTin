@@ -8,7 +8,7 @@ import {
   Button,
   Input,
   Label,
-} from '@tabtin/smartsheet-ui'
+} from '@muse/smartsheet-ui'
 import { useTranslation } from 'react-i18next'
 import { formatDate } from '@/utils/i18n/format'
 

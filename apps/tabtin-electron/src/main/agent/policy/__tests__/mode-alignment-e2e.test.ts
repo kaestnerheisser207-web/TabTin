@@ -26,24 +26,24 @@ import {
   createSwitchModeTool,
   REQUIRES_CLIENT_APPROVAL,
   ALREADY_PENDING,
-} from '@tabtin/agent-runtime/tools'
-import type { PendingHitlMap } from '@tabtin/agent-runtime'
+} from '@muse/agent-runtime/tools'
+import type { PendingHitlMap } from '@muse/agent-runtime'
 import type {
   ToolContext,
   StreamEvent,
   EngineState,
   Message,
   Tool,
-} from '@tabtin/agent-runtime/engine'
-import { StreamEvents } from '@tabtin/agent-wire'
+} from '@muse/agent-runtime/engine'
+import { StreamEvents } from '@muse/agent-wire'
 import {
   evaluateAgentModeToolAccess,
-} from '@tabtin/agent-modes'
+} from '@muse/agent-modes'
 import type {
   AgentModeName,
-} from '@tabtin/agent-modes'
+} from '@muse/agent-modes'
 
-import { buildModeReminderHook } from '@tabtin/agent-host/hooks'
+import { buildModeReminderHook } from '@muse/agent-host/hooks'
 
 
 type ModeTransitionSetter = (

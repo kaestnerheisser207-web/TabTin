@@ -22,7 +22,7 @@ import { SidebarIMPrimaryNav } from '@components/layout/SidebarIMPrimaryNav';
 import { useOrganizationStore } from '@stores/useOrganizationStore';
 import { OrganizationProfileButton } from '@components/layout/OrganizationProfileButton';
 import { SHELL_GLASS_FOOTER_CLASS } from '@components/layout/shellUi';
-import { message, MESSAGE_ERROR_DURATION } from '@tabtin/smartsheet-ui/message';
+import { message, MESSAGE_ERROR_DURATION } from '@muse/smartsheet-ui/message';
 
 const DETACHED_IM_SIDEBAR_SURFACE_CLASS = 'bg-transparent';
 // 主内容卡片直接用主页卡片实际呈现的实底（bg-background），不再叠半透明

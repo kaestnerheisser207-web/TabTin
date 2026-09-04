@@ -547,7 +547,7 @@ class FeishuAPITests(TestCase):
                 f"{_BASE}/oauth/start",
                 {
                     "organization_id": str(self.org.id),
-                    "return_deep_link": "tabtin://feishu",
+                    "return_deep_link": "muse://feishu",
                 },
                 **_AUTH,
             )
@@ -564,7 +564,7 @@ class FeishuAPITests(TestCase):
         self.assertEqual(cached["provider_id"], str(provider.id))
         self.assertEqual(cached["provider_app_id"], "cli_customer_app")
         self.assertEqual(cached["provider_credential_version"], provider.credential_version)
-        self.assertEqual(cached["return_deep_link"], "tabtin://feishu")
+        self.assertEqual(cached["return_deep_link"], "muse://feishu")
 
     @patch("apps.integrations_feishu.api.FeishuClient.exchange_code")
     def test_oauth_callback_rechecks_feature_gate_before_exchanging_code(
@@ -645,7 +645,7 @@ class FeishuAPITests(TestCase):
             {
                 "user_id": str(self.user.id),
                 "organization_id": str(self.org.id),
-                "return_deep_link": "tabtin://done",
+                "return_deep_link": "muse://done",
             },
             timeout=600,
         )
@@ -708,7 +708,7 @@ class FeishuAPITests(TestCase):
 
     def test_oauth_done_rejects_script_injection_in_deep_link(self):
         """deep_link 不得把 </script> 反射进 HTML script 上下文。"""
-        evil = "tabtin://x</script><script>alert(1)</script>"
+        evil = "muse://x</script><script>alert(1)</script>"
         resp = self.client.get(
             f"{_BASE}/oauth/done",
             {"deep_link": evil, "connected": "1"},
@@ -718,20 +718,20 @@ class FeishuAPITests(TestCase):
         self.assertNotIn("</script><script>", body)
         self.assertNotIn("alert(1)", body)
         # 非法 deep_link 回退默认协议
-        self.assertIn("tabtin://integrations/feishu/connected", body)
+        self.assertIn("muse://integrations/feishu/connected", body)
         self.assertIn('data-href=', body)
 
     def test_oauth_done_allows_safe_deep_link(self):
         resp = self.client.get(
             f"{_BASE}/oauth/done",
-            {"deep_link": "tabtin://integrations/feishu/connected?org=1", "connected": "1"},
+            {"deep_link": "muse://integrations/feishu/connected?org=1", "connected": "1"},
         )
         self.assertEqual(resp.status_code, 200)
         body = resp.content.decode()
-        self.assertIn("tabtin://integrations/feishu/connected?org=1", body)
+        self.assertIn("muse://integrations/feishu/connected?org=1", body)
         self.assertIn("getAttribute('data-href')", body)
         # 不得再把 deep_link 以 JSON 字面量内联进 script
-        self.assertNotIn('var href = "tabtin://', body)
+        self.assertNotIn('var href = "muse://', body)
 
     def test_callback_bad_state(self):
         resp = self.client.get(
@@ -757,7 +757,7 @@ class FeishuAPITests(TestCase):
                 "provider_id": str(provider.id),
                 "provider_app_id": provider.app_id,
                 "provider_credential_version": provider.credential_version,
-                "return_deep_link": "tabtin://done",
+                "return_deep_link": "muse://done",
             },
             timeout=600,
         )

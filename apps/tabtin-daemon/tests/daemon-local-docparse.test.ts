@@ -2,7 +2,7 @@
  * FR-18 Phase 2 (H2-E)：Daemon 侧本地附件解析回归。
  *
  * 设计意图：
- *   - 共享包 `@tabtin/local-docparse` 的核心逻辑（mime 分类、扫描件识别、错误
+ *   - 共享包 `@muse/local-docparse` 的核心逻辑（mime 分类、扫描件识别、错误
  *     分类、URL 下载等）由 Electron `localDocParse.test.ts` 全量覆盖（62 个用例）
  *     —— 那是 H1-D-MAIN 实施时建立的金标准
  *   - Daemon 这里**只**测两件事：
@@ -24,7 +24,7 @@ import {
   type DaemonParseLocalAttachmentOverrides,
 } from '../src/platform/content/document/localDocParse.js';
 import type { Logger } from '../src/platform/observability/logging/logger.js';
-import type { LocalDocParseOptions, ParseLocalAttachmentInput } from '@tabtin/local-docparse';
+import type { LocalDocParseOptions, ParseLocalAttachmentInput } from '@muse/local-docparse';
 
 const runDocParserTaskMock = vi.fn();
 

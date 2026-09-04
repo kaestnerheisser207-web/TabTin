@@ -1,6 +1,6 @@
 import React from 'react'
 import { Search } from 'lucide-react'
-import { cn } from '@tabtin/smartsheet-ui'
+import { cn } from '@muse/smartsheet-ui'
 
 interface PopoverSearchInputProps
   extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'value' | 'onChange'> {

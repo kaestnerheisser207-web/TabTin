@@ -33,7 +33,7 @@ function installBridge(): AgentGatewayBridgeMock {
     onEvent: vi.fn(() => vi.fn()),
     onReconnected: vi.fn(() => vi.fn()),
   }
-  ;(window as any).tabtin = { agentGateway: bridge }
+  ;(window as any).muse = { agentGateway: bridge }
   return bridge
 }
 
@@ -44,7 +44,7 @@ describe('mainAgentGateway', () => {
 
   afterEach(() => {
     __resetMainAgentGatewayBridgeForTests()
-    delete (window as any).tabtin
+    delete (window as any).muse
   })
 
   it('does not reconnect when connect sees an already ready main gateway', async () => {

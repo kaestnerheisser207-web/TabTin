@@ -45,8 +45,8 @@ import {
   markdownToPmJson,
   pmJsonToMarkdown,
   resetDocEditorHost,
-} from '@tabtin/doc-editor'
-import { renderMarkdown } from '@tabtin/doc-renderer'
+} from '@muse/doc-editor'
+import { renderMarkdown } from '@muse/doc-renderer'
 import { EditorContent, useEditor } from '@tiptap/react'
 import { FileDown, FileUp, History, Loader2, Plus, RefreshCw, RotateCcw, Save } from 'lucide-react'
 import { type ChangeEvent, useCallback, useEffect, useMemo, useRef, useState } from 'react'

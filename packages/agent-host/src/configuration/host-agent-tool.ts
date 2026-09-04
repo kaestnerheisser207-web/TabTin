@@ -16,8 +16,8 @@ import {
   type Tool,
   type ToolContext,
   type ToolResult,
-} from '@tabtin/agent-runtime'
-import type { SessionConfig } from '@tabtin/agent-runtime/engine'
+} from '@muse/agent-runtime'
+import type { SessionConfig } from '@muse/agent-runtime/engine'
 import {
   appendDeliverablesToToolResultContent,
   type ChildDeliverable,

@@ -145,7 +145,7 @@ describe('OsNotificationPresenter', () => {
     cliState.organizationId = null
     notificationState.clickHandler = null
     mockWinRtShow.mockResolvedValue({ ok: true, detail: 'ok:Enabled' })
-    process.env.TABTIN_APP_ID = 'com.tabtin.app.preprod'
+    process.env.MUSE_APP_ID = 'com.tabtin.app.preprod'
   })
 
   it('当前窗口已聚焦且 organization 未变化时会抑制非豁免普通桌面通知', () => {

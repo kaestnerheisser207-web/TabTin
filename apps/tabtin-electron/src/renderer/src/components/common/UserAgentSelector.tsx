@@ -25,7 +25,7 @@ import {
   Monitor, Info, CheckCircle, AlertTriangle, RefreshCw
 } from 'lucide-react'
 import { cn } from '@utils/cn'
-import { ScrollArea } from '@tabtin/smartsheet-ui'
+import { ScrollArea } from '@muse/smartsheet-ui'
 import type {
   UserAgentConfig,
   UserAgentMode,

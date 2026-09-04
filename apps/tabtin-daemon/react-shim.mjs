@@ -1,5 +1,5 @@
 // Shim for react — daemon runs headless, React hooks are never actually called.
-// This prevents "Cannot find package 'react'" errors when @tabtin/shared's
+// This prevents "Cannot find package 'react'" errors when @muse/shared's
 // use-countdown.js is included in the bundle graph.
 
 export const useState = () => [undefined, () => {}];

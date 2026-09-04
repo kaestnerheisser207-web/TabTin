@@ -63,7 +63,7 @@ vi.mock('@/i18n', () => ({
   default: { t: (k: string) => k },
 }))
 
-vi.mock('@tabtin/smartsheet-ui/toast', () => ({
+vi.mock('@muse/smartsheet-ui/toast', () => ({
   toast: (...args: unknown[]) => mocks.toast(...args),
 }))
 

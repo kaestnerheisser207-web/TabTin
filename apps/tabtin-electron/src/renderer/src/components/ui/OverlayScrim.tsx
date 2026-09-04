@@ -8,11 +8,11 @@
  *   - 浮层面：`OVERLAY_SURFACE_CLASS`（半透明暖灰毛玻璃 + 单层投影 + 顶缘内高光）
  *     + `rounded-interactive`（8px 交互圆角，design-system §12）。
  *
- * 表单类确认 / 编辑浮层请优先用 `@tabtin/smartsheet-ui` 的 `ConfirmDialog` /
+ * 表单类确认 / 编辑浮层请优先用 `@muse/smartsheet-ui` 的 `ConfirmDialog` /
  * `Dialog` / `Sheet`（带焦点陷阱、可访问性），不要用本组件替代它们。
  */
 import * as React from 'react'
-import { cn, OVERLAY_SURFACE_CLASS } from '@tabtin/smartsheet-ui'
+import { cn, OVERLAY_SURFACE_CLASS } from '@muse/smartsheet-ui'
 
 export interface OverlayScrimProps {
   open: boolean
@@ -45,7 +45,7 @@ export const OverlayScrim: React.FC<OverlayScrimProps> = ({
     const onKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape') onClose()
     }
-    // eslint-disable-next-line tabtin/prefer-scoped-activity-effects -- 通用浮层 primitive，监听已由 open 受控启停，无 hot-Space zombie effect 问题
+    // eslint-disable-next-line muse/prefer-scoped-activity-effects -- 通用浮层 primitive，监听已由 open 受控启停，无 hot-Space zombie effect 问题
     document.addEventListener('keydown', onKeyDown)
     return () => document.removeEventListener('keydown', onKeyDown)
   }, [open, closeOnEscape, onClose])

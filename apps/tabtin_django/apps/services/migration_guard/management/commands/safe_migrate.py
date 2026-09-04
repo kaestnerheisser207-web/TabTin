@@ -12,7 +12,7 @@
 
 流程：
 
-1. 把 ``_TABTIN_SAFE_MIGRATE_INVOKED=1`` 注入进程 env，让本仓库覆写的 migrate
+1. 把 ``_MUSE_SAFE_MIGRATE_INVOKED=1`` 注入进程 env，让本仓库覆写的 migrate
    wrapper（``apps/services/migration_guard/.../commands/migrate.py``）放行
    不再拦截。
 2. 每个库 migrate **之前**跑 ``reconcile_split_migration_history``：
@@ -52,7 +52,7 @@ from apps.services.migration_guard.split_migration_history import (
 _PREFERRED_ORDER = ["default", "postgresql"]
 
 # 环境变量名要跟 migrate wrapper 里的常量一致——后者放行依据。
-_SAFE_MIGRATE_ENV = "_TABTIN_SAFE_MIGRATE_INVOKED"
+_SAFE_MIGRATE_ENV = "_MUSE_SAFE_MIGRATE_INVOKED"
 
 
 class Command(BaseCommand):
@@ -96,7 +96,7 @@ class Command(BaseCommand):
 
     def handle(self, *args, app_label=None, migration_name=None, **options) -> None:
         configured = list(
-            getattr(settings, "TABTIN_MIGRATION_DATABASE_ALIASES", None)
+            getattr(settings, "MUSE_MIGRATION_DATABASE_ALIASES", None)
             or connections.databases.keys()
         )
         ordered = [db for db in _PREFERRED_ORDER if db in configured]

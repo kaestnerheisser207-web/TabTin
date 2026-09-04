@@ -8,14 +8,14 @@ import React, { useState, useCallback } from 'react'
 import {
   ContextMenu,
   ContextMenuItem,
-} from '@tabtin/smartsheet-ui'
+} from '@muse/smartsheet-ui'
 import {
   Pin, PinOff, BellOff, Bell, CheckCheck,
 } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { useIMStore } from '@stores/useIMStore'
 import { togglePin, toggleMute, markRead } from '@services/tabchatApi'
-import type { SpaceNavigationKind } from '@tabtin/app-shell'
+import type { SpaceNavigationKind } from '@muse/app-shell'
 
 interface SpaceContextMenuProps {
   children: React.ReactNode

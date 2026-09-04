@@ -1,5 +1,5 @@
 import { useLayoutEffect } from 'react'
-import type { ChatMessage } from '@tabtin/chat-client'
+import type { ChatMessage } from '@muse/chat-client'
 import { useChatStore } from '@/stores/chat/useChatStore'
 
 export function useVirtualSessionMessages(

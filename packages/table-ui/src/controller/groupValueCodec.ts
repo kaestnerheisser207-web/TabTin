@@ -1,4 +1,4 @@
-import { resolveCanonicalGroupValue } from '@tabtin/table-engine'
+import { resolveCanonicalGroupValue } from '@muse/table-engine'
 
 export interface GroupValuePresentation {
   key: string

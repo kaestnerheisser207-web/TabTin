@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useTableViewUiStore } from '../stores/useTableViewUiStore'
 import type { ViewCreateRequest, ViewMeta, ViewUpdateRequest } from '../types'
-import { getViewColumnMeta, type ViewColumnMeta } from '@tabtin/table-core'
+import { getViewColumnMeta, type ViewColumnMeta } from '@muse/table-core'
 
 export interface ViewSwitcherNotifyOptions {
   title: string

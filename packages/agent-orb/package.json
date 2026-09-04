@@ -1,5 +1,5 @@
 {
-  "name": "@tabtin/agent-orb",
+  "name": "@muse/agent-orb",
   "version": "0.1.0",
   "description": "Agent 状态点云球体（orb）—— 状态映射、调参预设、确定性绘制数学与退场编排。零平台依赖，三端共用同一份规格。",
   "type": "module",
@@ -24,7 +24,7 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@tabtin/contracts": "workspace:*"
+    "@muse/contracts": "workspace:*"
   },
   "devDependencies": {
     "typescript": "5.7.2",

@@ -54,14 +54,14 @@
  * 在流式开始的瞬间闪一下「ctx:0%」，再切回真实值，体验很糟。
  */
 
-import type { ChatMessage } from '@tabtin/chat-client'
+import type { ChatMessage } from '@muse/chat-client'
 import { iterableMessageBlocks } from '../stores/chat/messages/utils/contentBlockSemantics'
 import {
   estimateTokens,
   estimateTextTokens,
   TokenEstimator,
-} from '@tabtin/agent-runtime/compact'
-import type { Message, ContentBlock, MessageRole } from '@tabtin/agent-runtime/engine'
+} from '@muse/agent-runtime/compact'
+import type { Message, ContentBlock, MessageRole } from '@muse/agent-runtime/engine'
 
 /**
  * 单一口径出口：文本 token 估算复用 runtime `context-pruning` 的实现

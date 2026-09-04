@@ -1,4 +1,4 @@
-const tabTinPreset = require('@tabtin/tailwind-preset')
+const tabTinPreset = require('@muse/tailwind-preset')
 
 /** @type {import('tailwindcss').Config} */
 export default {

@@ -26,7 +26,7 @@
 import { app, safeStorage } from 'electron'
 import { existsSync, mkdirSync, readFileSync, unlinkSync } from 'node:fs'
 import { join } from 'node:path'
-import { atomicWriteFileSync } from '@tabtin/terminal-core'
+import { atomicWriteFileSync } from '@muse/terminal-core'
 import { createLogger } from './logger'
 
 const log = createLogger('SafeCredentialStore')

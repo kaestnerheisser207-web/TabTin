@@ -521,9 +521,9 @@ func TestBrowserContractPolicyRiskHighRiskWrite(t *testing.T) {
 
 // TestExportBrowserContractToFile 供 scripts/generate-browser-contract.py 导出落盘。
 func TestExportBrowserContractToFile(t *testing.T) {
-	outPath := os.Getenv("TABTIN_BROWSER_CONTRACT_EXPORT")
+	outPath := os.Getenv("MUSE_BROWSER_CONTRACT_EXPORT")
 	if outPath == "" {
-		t.Skip("TABTIN_BROWSER_CONTRACT_EXPORT 未设置")
+		t.Skip("MUSE_BROWSER_CONTRACT_EXPORT 未设置")
 	}
 	raw, err := marshalBrowserContract(buildBrowserContract(t))
 	if err != nil {

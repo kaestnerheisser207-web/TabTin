@@ -7,7 +7,7 @@
  *   3. 同 childId 重登记后，旧 unregister 不释放新 run 的 lease
  */
 import { afterEach, beforeEach, describe, expect, it } from 'vitest'
-import { SubagentManager } from '@tabtin/agent-runtime'
+import { SubagentManager } from '@muse/agent-runtime'
 
 import {
   acquireCLIWorkspaceScopeLease,

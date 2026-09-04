@@ -5,7 +5,7 @@ from __future__ import annotations
 import io
 import json
 
-from tabtin_filegen.__main__ import main
+from muse_filegen.__main__ import main
 
 
 def _run(argv, stdin_text=None, monkeypatch=None, capsys=None):

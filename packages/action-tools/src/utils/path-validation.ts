@@ -1,7 +1,7 @@
 import { realpathSync } from 'node:fs';
 import { resolve, normalize, sep, dirname, basename, join } from 'node:path';
 import { homedir } from 'node:os';
-import { matchSensitivePath } from '@tabtin/terminal-core';
+import { matchSensitivePath } from '@muse/terminal-core';
 
 export interface ValidateProjectPathOpts {
   /**

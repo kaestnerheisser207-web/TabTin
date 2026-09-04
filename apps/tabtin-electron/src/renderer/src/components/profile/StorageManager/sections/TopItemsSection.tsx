@@ -32,7 +32,7 @@ import {
   Trash2,
   Video,
 } from 'lucide-react'
-import { Button } from '@tabtin/smartsheet-ui'
+import { Button } from '@muse/smartsheet-ui'
 import { cn } from '@utils/cn'
 import { SettingsSectionCard } from '../../../settings/SettingsSectionCard'
 import { SETTINGS_FIELD_TITLE, SETTINGS_HINT } from '../../../settings/settingsUi'

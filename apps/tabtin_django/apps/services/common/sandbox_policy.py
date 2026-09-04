@@ -214,7 +214,7 @@ _KNOWN_HOME_RE = re.compile(
 )
 
 # ---------------------------------------------------------------------------
-# 高危命令模式（触发 HITL 审批）— SSOT，@tabtin/security-policy 的 Python 端镜像
+# 高危命令模式（触发 HITL 审批）— SSOT，@muse/security-policy 的 Python 端镜像
 # ---------------------------------------------------------------------------
 
 @dataclass(frozen=True)
@@ -267,7 +267,7 @@ def _is_tabtin_platform_command(command: str) -> bool:
 
 
 # ---------------------------------------------------------------------------
-# SQL 安全校验 — 镜像 @tabtin/security-policy sql-rules.ts SqlRuleSet
+# SQL 安全校验 — 镜像 @muse/security-policy sql-rules.ts SqlRuleSet
 #
 # 与 TS 端保持一致，并修复已知缺陷（SQL-001~004）：
 #   - RENAME 加入禁止关键字和危险 SQL 正则
@@ -419,7 +419,7 @@ class SandboxPolicyResolver:
         """判断 file_path 是否落在 workspace_snapshot.allowedPaths 任一目录子树下。
 
         路径权限治理 Wave 4：v3 SSoT 一致性 helper（与 TS 端
-        `@tabtin/security-policy` 的 `isPathInAllowedRoots` 同语义）。
+        `@muse/security-policy` 的 `isPathInAllowedRoots` 同语义）。
 
         - file_path 与 allowedPaths 都先 _normalize_path 归一化，避免
           `..` / URL 编码 / 反斜杠绕过

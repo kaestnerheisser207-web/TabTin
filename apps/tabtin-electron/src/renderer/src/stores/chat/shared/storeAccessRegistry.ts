@@ -39,7 +39,7 @@
  *     未来排查"register 之前就被调用"的实际故障。
  */
 
-import type { ChatMessage, ChatSession, ReviewRequiredEventData } from '@tabtin/chat-client'
+import type { ChatMessage, ChatSession, ReviewRequiredEventData } from '@muse/chat-client'
 import type {
   ApprovalRequestState,
   AskUserRequestState,

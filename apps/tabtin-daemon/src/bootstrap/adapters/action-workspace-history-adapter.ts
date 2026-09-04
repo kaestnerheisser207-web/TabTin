@@ -1,4 +1,4 @@
-import type { CheckpointCommitPolicy } from '@tabtin/checkpoint-core'
+import type { CheckpointCommitPolicy } from '@muse/checkpoint-core'
 
 import type {
   ActionWorkspaceHistoryPort,

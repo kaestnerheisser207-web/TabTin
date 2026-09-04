@@ -1,5 +1,5 @@
 import WebSocket from 'ws';
-import { WsGatewayClient, AgentActionEvents, LocalRuntimeEvents, type GatewayEnvelope } from '@tabtin/ws-gateway-client';
+import { WsGatewayClient, AgentActionEvents, LocalRuntimeEvents, type GatewayEnvelope } from '@muse/ws-gateway-client';
 import type { DaemonConfig, FatalExitHandler } from '../../base/types/daemon-config.js';
 import type { Logger } from '../../platform/observability/logging/logger.js';
 import { OfflineState } from '../../base/errors/offline-state.js';

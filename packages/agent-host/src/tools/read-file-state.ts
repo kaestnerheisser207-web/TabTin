@@ -26,15 +26,15 @@
 import { promises as fsPromises } from 'node:fs';
 import path from 'node:path';
 
-// Wave 1.5（2026-05-13）：canonicalizePath 下沉到 @tabtin/action-tools/headless。
+// Wave 1.5（2026-05-13）：canonicalizePath 下沉到 @muse/action-tools/headless。
 // 本文件保留 re-export 桥接，对调用方零改动；详见模块底部 re-export 段。
-import { canonicalizePath } from '@tabtin/action-tools/headless';
+import { canonicalizePath } from '@muse/action-tools/headless';
 
 import type {
   ReadFileState,
   ToolContext,
   ToolResult,
-} from '@tabtin/agent-runtime';
+} from '@muse/agent-runtime';
 import {
   jsonError,
   INVALID_PARAM_FORMAT,
@@ -48,19 +48,19 @@ import {
   OLD_STRING_NOT_UNIQUE as OLD_STRING_NOT_UNIQUE_KIND,
   TOOL_STALE_READ,
   // W1 file pipeline 8 类 + W5 L38 IMAGE_RESIZE_FAILED 共 9 类
-  // （与 `@tabtin/file-pipeline-errors` SSoT 对齐）
+  // （与 `@muse/file-pipeline-errors` SSoT 对齐）
   FILE_NOT_FOUND as FILE_NOT_FOUND_KIND,
   FILE_TOO_LARGE as FILE_TOO_LARGE_KIND,
   UNSUPPORTED_FORMAT as UNSUPPORTED_FORMAT_KIND,
   // W5 L38,
-} from '@tabtin/agent-runtime/tools';
+} from '@muse/agent-runtime/tools';
 import {
   FilePipelineErrorCode,
   formatFilePipelineError,
   isFilePipelineErrorCode,
-} from '@tabtin/file-pipeline-errors';
-// host 可依赖 @tabtin/*；runtime 生产侧禁止 re-export tool-errors（AH-005）
-import { bridgeBrowserErrorCodeToRuntimeKind } from '@tabtin/tool-errors';
+} from '@muse/file-pipeline-errors';
+// host 可依赖 @muse/*；runtime 生产侧禁止 re-export tool-errors（AH-005）
+import { bridgeBrowserErrorCodeToRuntimeKind } from '@muse/tool-errors';
 
 const READ_FILE_STATE_MAX_ENTRIES = 500;
 
@@ -149,7 +149,7 @@ function estimateEntryBytes(content: string): number {
 /**
  * Wave 3：失败 envelope 只发 `error_kind`（生成式字符串）+ `hint`。
  * 数字 `TabcodeErrorCode` / 结构化 `error_code` 兼容轨已删除；browser/action
- * `ToolErrorCode` 经 `@tabtin/tool-errors` bridge 映射为 runtime kind。
+ * `ToolErrorCode` 经 `@muse/tool-errors` bridge 映射为 runtime kind。
  * 不合并 `network_error` / `network_failed` 字面值——bridge 保留二者差异。
  */
 
@@ -340,7 +340,7 @@ function mapStructuredActionErrorKind(
 }
 
 // Wave 1.5（2026-05-13）：canonicalizePath 实现已下沉到
-// @tabtin/action-tools/utils/canonical-path（通过 /headless 出口）。本文件
+// @muse/action-tools/utils/canonical-path（通过 /headless 出口）。本文件
 // re-export 保证调用方零改动；adapter / read-file-state / file-lock / lock-map
 // 全 4 个入口共享同一份 realpath 解析，跨入口 key 必然一致。
 export { canonicalizePath };

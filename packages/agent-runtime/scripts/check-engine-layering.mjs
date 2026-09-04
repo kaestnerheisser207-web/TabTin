@@ -12,7 +12,7 @@
  *
  * 规则（仅约束 `src/engine/**`，排除 barrel `engine/index.ts` 与测试）：
  *   - `import type` / `export type`（类型擦除，运行时零依赖）—— 一律放行。
- *   - `@tabtin/*` 等外部包 —— 放行（基础层依赖，方向正确）。
+ *   - `@muse/*` 等外部包 —— 放行（基础层依赖，方向正确）。
  *   - 引擎内部相对 import（仍在 `engine/**`）—— 放行。
  *   - **动态 import**（`import('...')`）与静态 import 同规则扫描——历史上
  *     `restorePendingApprovalsPrelude` 曾用动态 import permissions 绕过守卫。
@@ -25,7 +25,7 @@
  *   - 其余跨目录运行时 import（compact / history / telemetry emitter /
  *     subagent / capability / session / tools / host / providers / skills /
  *     state / permissions 策略实现 / agent-modes 兄弟目录）—— 分层违规。
- *     修复：经 QueryDeps 端口注入，或从 @tabtin/* 包引入，或改 import type。
+ *     修复：经 QueryDeps 端口注入，或从 @muse/* 包引入，或改 import type。
  *
  *  批次 14 新增三条规则：
  *   1. **contracts 分层顺序**：`engine/contracts/**` 内部 import（含
@@ -294,7 +294,7 @@ if (violations.length > 0) {
   }
   console.error(
     '\n修复：把该依赖经 QueryDeps 端口（createContextManager / observe / toolGate / interrupt）' +
-    '或 EngineConfig 注入，或从 @tabtin/* 包引入，或改为 import type。',
+    '或 EngineConfig 注入，或从 @muse/* 包引入，或改为 import type。',
   );
   process.exit(1);
 }

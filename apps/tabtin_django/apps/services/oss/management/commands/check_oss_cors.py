@@ -12,7 +12,7 @@ from django.conf import settings
 from django.core.management.base import BaseCommand, CommandError
 
 
-DESKTOP_RENDERER_ORIGIN = "tabtin-file://app"
+DESKTOP_RENDERER_ORIGIN = "muse-file://app"
 DEFAULT_ALLOWED_ORIGINS = (
     "https://www.example.com",
     "https://*.example.com",

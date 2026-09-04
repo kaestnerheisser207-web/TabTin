@@ -15,7 +15,7 @@ import type {
   UpdateRecordInput,
   UpdateTableInput,
   UpdateViewInput,
-} from '@tabtin/table-kernel';
+} from '@muse/table-kernel';
 
 export interface TableSyncStatusView {
   tableId: string;

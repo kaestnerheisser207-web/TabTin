@@ -11,9 +11,9 @@ import {
   type Message,
   type EngineState,
   type ToolContext,
-} from '@tabtin/agent-runtime/engine';
-import type { TodoSessionAnchor } from '@tabtin/agent-runtime';
-import { createCoreTools } from '@tabtin/agent-runtime/tools';
+} from '@muse/agent-runtime/engine';
+import type { TodoSessionAnchor } from '@muse/agent-runtime';
+import { createCoreTools } from '@muse/agent-runtime/tools';
 
 const TODO_MARKER = INTERNAL_MESSAGE_MARKERS.TODO_STATE_INJECTION;
 

@@ -17,7 +17,7 @@ import { useChatStore } from '@/stores/chat/useChatStore'
 import { useSpaceContextTabsStore } from '@/stores/useSpaceContextTabsStore'
 import { useSpaceActivity } from '@components/layout/SpaceActivityContext'
 import { OVERLAY_SURFACE_CLASS, useOverlayContainer } from '@components/ui'
-import { ZIndex } from '@tabtin/app-shell'
+import { ZIndex } from '@muse/app-shell'
 import { contextRegistry } from '../../context-space/registry'
 import { getDraftComposerPresetScopeId } from './scope'
 import {

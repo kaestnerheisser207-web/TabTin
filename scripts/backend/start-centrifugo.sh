@@ -9,7 +9,7 @@ ROOT_DIR="$(cd "${SCRIPT_DIR}/../.." && pwd)"
 source "${SCRIPT_DIR}/_load-scheme.sh"
 
 CENTRIFUGO_VERSION="${CENTRIFUGO_VERSION:-6.6.2}"
-CENTRIFUGO_REGION="${TABTIN_DEV_REGION:-global}"
+CENTRIFUGO_REGION="${MUSE_DEV_REGION:-global}"
 CONFIG_FILE="$SCRIPT_DIR/centrifugo-dev.json"
 PORT="${CENTRIFUGO_PORT}"
 LOG_DIR="${ROOT_DIR}/apps/tabtin_django/logs"
@@ -191,7 +191,7 @@ _centrifugo_install_from_legacy_path() {
 _centrifugo_install_from_cache() {
     _centrifugo_resolve_asset || return 1
 
-    local cache_root="${TABTIN_DEV_CACHE_ROOT:-/Volumes/Share/TabTin/dev-cache}"
+    local cache_root="${MUSE_DEV_CACHE_ROOT:-/Volumes/Share/TabTin/dev-cache}"
     local archive="${cache_root}/centrifugo/${CENTRIFUGO_ASSET}"
     local bin_dir="$SCRIPT_DIR/bin"
 

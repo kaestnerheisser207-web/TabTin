@@ -8,7 +8,7 @@
  *   - makeBeforeModelCtx / sectionContent：捕获 beforeModel 的 appendSystemSection
  *   - makeRunCtx / makeIterationCtx：beforeRun / beforeIteration 的最小 ctx
  *
- * 跨包契约类型统一从 `@tabtin/agent-runtime` 的公共出口 import（host 依赖 runtime，单向合法）。
+ * 跨包契约类型统一从 `@muse/agent-runtime` 的公共出口 import（host 依赖 runtime，单向合法）。
  */
 
 import type {
@@ -17,13 +17,13 @@ import type {
   BackendSessionCapabilities,
   ExecOptions,
   ExecResult,
-} from '@tabtin/agent-runtime/capability';
+} from '@muse/agent-runtime/capability';
 import type {
   EngineState,
   IterationHookContext,
   RunHookContext,
   SystemSectionName,
-} from '@tabtin/agent-runtime/engine';
+} from '@muse/agent-runtime/engine';
 
 /**
  * 极简 mock BackendSession —— 仅满足 bind / clone 测试需要。

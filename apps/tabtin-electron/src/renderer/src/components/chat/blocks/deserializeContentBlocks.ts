@@ -25,7 +25,7 @@
  * 输入顺序 0/1/2/...，block_id 来自原始字段 + 兜底 index。
  */
 
-import { ALL_BLOCK_TYPE_SET } from '@tabtin/agent-wire'
+import { ALL_BLOCK_TYPE_SET } from '@muse/agent-wire'
 import type {
   ContentBlock,
   TextBlock,
@@ -33,7 +33,7 @@ import type {
   ToolUseBlock,
   ToolResultBlock,
   TabTinRichContentBlock,
-} from '@tabtin/agent-wire'
+} from '@muse/agent-wire'
 import type { ContentBlockEntry } from '@stores/useChatRuntimeStore'
 
 type AnyRecord = Record<string, unknown>

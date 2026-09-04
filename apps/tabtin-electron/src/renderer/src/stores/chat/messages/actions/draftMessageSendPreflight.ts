@@ -4,9 +4,9 @@
  */
 
 import i18n from '@/i18n'
-import { toast } from '@tabtin/smartsheet-ui/toast'
+import { toast } from '@muse/smartsheet-ui/toast'
 import { getClientMessageId } from '@/stores/chat/domain/messageIdentity'
-import type { ChatMessage } from '@tabtin/chat-client'
+import type { ChatMessage } from '@muse/chat-client'
 import { createLogger } from '@/utils/logger'
 import type { LocalChatMessage } from '../../shared/types'
 import {

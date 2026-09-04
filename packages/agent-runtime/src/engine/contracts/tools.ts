@@ -102,7 +102,7 @@ export type LocalDocReadFileState = Map<string, LocalDocDedupEntry>;
 
 /**
  * per-file 回退引擎的最小接口（agent-runtime 不依赖具体实现，由 host 注入
- * `@tabtin/file-history-core` 的 FileHistoryService）。替代旧 shadow git checkpoint。
+ * `@muse/file-history-core` 的 FileHistoryService）。替代旧 shadow git checkpoint。
  * - `beginSnapshot`：一轮 Agent 开始时建立回退锚点（anchorId = agentRunId）。
  * - `trackEdit`：写文件工具执行前备份"改之前"内容（绝对路径）。备份归属到**指定
  *   anchorId** 的 snapshot（= 本轮 agentRunId），而非"最新 snapshot"——并发 /
@@ -171,7 +171,7 @@ export interface ToolContext {
    * 的 per-turn 归因锚点。
    *
    * `threadId` 表示"在哪个对话里"，`agentRunId` 表示"这一次 Agent 回复"。
-   * shell/CLI 子进程通过 TABTIN_AGENT_RUN_ID 透传该值，避免把对话维度 ID
+   * shell/CLI 子进程通过 MUSE_AGENT_RUN_ID 透传该值，避免把对话维度 ID
    * 写入 ChangeLog 后导致 rollback_agent_run 查不到本轮资源变更。
    */
   agentRunId?: string;
@@ -734,7 +734,7 @@ export interface Tool {
   /**
    * Product registration risk level (`safe` / `review` / `strict`), aligned with
    * Django BaseTool.risk_level and action-tools manifest. HITL wire events use
-   * `low` / `medium` / `high` — map via `@tabtin/agent-wire` `inferWireRiskLevelFromTool`.
+   * `low` / `medium` / `high` — map via `@muse/agent-wire` `inferWireRiskLevelFromTool`.
    */
   riskLevel?: 'safe' | 'review' | 'strict';
   /**

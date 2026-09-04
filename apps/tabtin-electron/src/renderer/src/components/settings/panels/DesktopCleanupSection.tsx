@@ -4,7 +4,7 @@
 
 import React, { useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Button, Checkbox, ConfirmDialog, toast } from '@tabtin/smartsheet-ui'
+import { Button, Checkbox, ConfirmDialog, toast } from '@muse/smartsheet-ui'
 import { SettingsSectionCard } from '../SettingsSectionCard'
 import { useAuthStore } from '@stores/useAuthStore'
 import { runWithAgentContextSwitchGuard } from '@/services/agentContextSwitchGuard'
@@ -20,7 +20,7 @@ type ConfirmKind = 'credentials' | 'localData' | 'uninstall' | null
 
 export const DesktopCleanupSection: React.FC = () => {
   const { t } = useTranslation('settings')
-  const cleanupPlatform = resolveCleanupPlatform(window.tabtin?.getPlatform?.() ?? '')
+  const cleanupPlatform = resolveCleanupPlatform(window.muse?.getPlatform?.() ?? '')
   const platformCopy = useCallback(
     (name: 'subtitle' | 'uninstallAppDesc' | 'uninstallConfirmDesc' | 'uninstallHint') =>
       t(`desktopCleanup.${name}.${cleanupPlatform}`),
@@ -40,7 +40,7 @@ export const DesktopCleanupSection: React.FC = () => {
   }, [logout])
 
   const handleConfirm = useCallback(async () => {
-    if (!window.tabtin?.appCleanup) {
+    if (!window.muse?.appCleanup) {
       toast({
         title: t('desktopCleanup.failed', {
           message: t('desktopCleanup.errors.unknown'),
@@ -54,7 +54,7 @@ export const DesktopCleanupSection: React.FC = () => {
     try {
       if (confirmKind === 'credentials') {
         // 凭证文件和主 auth 都清理成功后，renderer 才进入登出态。
-        const result = await window.tabtin.appCleanup.wipeCredentials()
+        const result = await window.muse.appCleanup.wipeCredentials()
         if (!result.ok && result.failed.length > 0) {
           toast({
             title: t('desktopCleanup.failed', {
@@ -70,7 +70,7 @@ export const DesktopCleanupSection: React.FC = () => {
       }
 
       if (confirmKind === 'localData') {
-        const result = await window.tabtin.appCleanup.wipeLocalData()
+        const result = await window.muse.appCleanup.wipeLocalData()
         if (result.willRelaunch) {
           // 安装包：主进程即将 exit；凭证由重启后的启动期清理删除
           toast({ title: t('desktopCleanup.relaunchingToWipe') })
@@ -99,7 +99,7 @@ export const DesktopCleanupSection: React.FC = () => {
       }
 
       if (confirmKind === 'uninstall') {
-        const result = await window.tabtin.appCleanup.uninstallApp({
+        const result = await window.muse.appCleanup.uninstallApp({
           deleteLocalData,
         })
         if (!result.ok) {

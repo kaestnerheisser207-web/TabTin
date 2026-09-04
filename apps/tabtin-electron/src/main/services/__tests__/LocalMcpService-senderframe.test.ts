@@ -58,7 +58,7 @@ vi.mock('../../logger', () => ({
   }),
 }))
 
-vi.mock('@tabtin/terminal-core', () => ({
+vi.mock('@muse/terminal-core', () => ({
   atomicWriteFileSync: vi.fn(),
 }))
 

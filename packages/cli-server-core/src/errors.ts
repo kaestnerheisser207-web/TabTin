@@ -4,7 +4,7 @@
  * Electron CLI Server 和 Daemon CLI Server 共用。
  *
  * 错误码来源：
- * 1. 通用码 — 从 @tabtin/agent-wire 的 ERROR_CODES 权威列表 re-export，
+ * 1. 通用码 — 从 @muse/agent-wire 的 ERROR_CODES 权威列表 re-export，
  *    保证 IPC / CLI / HTTP 三端名称完全一致。
  * 2. CLI 专有码 — 只在 CLI Server 上下文有意义的错误码，不需要三端同步。
  *
@@ -19,7 +19,7 @@ import {
   errResponse as wireErrResponse,
   okResponse,
   type ErrorCode as WireErrorCode,
-} from '@tabtin/agent-wire'
+} from '@muse/agent-wire'
 
 /**
  * CLI Server 专有错误码 — 仅在 CLI Server 场景下使用，不三端同步。
@@ -34,7 +34,7 @@ export type CliServerOnlyCode =
   | 'POLICY_CONFIRM_REQUIRED'
 
 /**
- * CLI Server 完整错误码联合 = 通用码（@tabtin/agent-wire）+ CLI 专有码。
+ * CLI Server 完整错误码联合 = 通用码（@muse/agent-wire）+ CLI 专有码。
  */
 export type ErrorCode = WireErrorCode | CliServerOnlyCode
 
@@ -86,7 +86,7 @@ export function isRetryable(code: string): boolean {
 /**
  * Build a standard error response envelope.
  *
- * Delegates to @tabtin/agent-wire for the wire format,
+ * Delegates to @muse/agent-wire for the wire format,
  * adds retryable flag and suggestions based on error code.
  */
 export function errorResponse(

@@ -17,7 +17,7 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { FileText, Image as ImageIcon, Download, Loader2 } from 'lucide-react'
-import type { ImageBlock, DocumentBlock } from '@tabtin/agent-wire'
+import type { ImageBlock, DocumentBlock } from '@muse/agent-wire'
 import { cn } from '@utils/cn'
 import {
   CARD_RADIUS,

@@ -28,7 +28,7 @@ import {
   type WorkspaceBoundary,
 } from '../workspace-boundary'
 import { createPathAccessChecker } from '../../../security/path-access-checker'
-import type { WorkspaceSnapshot } from '@tabtin/security-policy'
+import type { WorkspaceSnapshot } from '@muse/security-policy'
 
 interface FakeSession {
   spaceId: string | undefined

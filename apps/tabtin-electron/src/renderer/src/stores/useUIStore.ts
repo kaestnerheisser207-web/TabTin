@@ -2,9 +2,9 @@
 
 import { create } from 'zustand'
 import { createJSONStorage, persist } from 'zustand/middleware'
-import { createMigratingStorage, withPersistSafety } from '@tabtin/shared'
+import { createMigratingStorage, withPersistSafety } from '@muse/shared'
 import { PERSIST_KEYS } from './persist-key-registry'
-import type { ThemeMode, LayoutState } from '@tabtin/app-shell'
+import type { ThemeMode, LayoutState } from '@muse/app-shell'
 import {
   DEFAULT_COLOR_SCHEME,
   type ColorSchemeId,
@@ -99,12 +99,12 @@ const syncAppearanceToMain = (
   theme: ThemeMode,
   applyResolved: (resolved: ResolvedTheme, result: AppearanceIpcResult | null) => void,
 ) => {
-  if (typeof window === 'undefined' || !window.tabtin?.setAppearance) return
+  if (typeof window === 'undefined' || !window.muse?.setAppearance) return
   const matchMediaDark = isBrowser && window.matchMedia
     ? window.matchMedia('(prefers-color-scheme: dark)').matches
     : null
 
-  void window.tabtin.setAppearance(theme).then((result: AppearanceIpcResult) => {
+  void window.muse.setAppearance(theme).then((result: AppearanceIpcResult) => {
     const fallback = theme === 'system' ? getSystemTheme() : theme
     const resolved = resolveThemeFromAppearanceResult(theme, result, fallback)
     themeLog.info('appearance synced', {
@@ -163,12 +163,12 @@ const normalizeUIFontSize = (value: unknown): UIFontSize => {
 }
 
 const applyRendererZoom = (size: UIFontSize) => {
-  if (typeof window === 'undefined' || !window.tabtin?.zoom) return
+  if (typeof window === 'undefined' || !window.muse?.zoom) return
 
   const nextZoom = UI_ZOOM_MAP[size]
   const currentZoom = getRendererZoomFactor()
   if (Math.abs(currentZoom - nextZoom) > 0.0001) {
-    window.tabtin.zoom.setZoomFactor(nextZoom)
+    window.muse.zoom.setZoomFactor(nextZoom)
   }
 
   // UI 缩放不会稳定触发 resize，主动通知嵌入式原生视图重算 bounds。
@@ -754,8 +754,8 @@ const initializeTheme = () => {
   }
 
   let removeNativeListener: (() => void) | undefined
-  if (typeof window !== 'undefined' && window.tabtin?.onNativeThemeUpdated) {
-    removeNativeListener = window.tabtin.onNativeThemeUpdated((payload) => {
+  if (typeof window !== 'undefined' && window.muse?.onNativeThemeUpdated) {
+    removeNativeListener = window.muse.onNativeThemeUpdated((payload) => {
       applySystemResolved(
         payload.shouldUseDarkColors ? 'dark' : 'light',
         'nativeTheme',

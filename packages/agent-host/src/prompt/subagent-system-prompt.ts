@@ -3,17 +3,17 @@
  *  Stage 2b）。
  */
 
-import { getAgentModePromptSection } from '@tabtin/agent-modes'
+import { getAgentModePromptSection } from '@muse/agent-modes'
 import {
   buildSystemPrompt,
   SECTION_SUBAGENT_ORCHESTRATION,
   type SystemPromptConfig,
-} from '@tabtin/agent-prompt'
+} from '@muse/agent-prompt'
 import type {
   ResolveSubagentPromptInput,
   SystemPromptProvider,
   SystemPromptToolRef,
-} from '@tabtin/agent-runtime/engine'
+} from '@muse/agent-runtime/engine'
 
 /**
  * 把父 Agent 的 system prompt 重烘焙成子 Agent 的执行者视角。

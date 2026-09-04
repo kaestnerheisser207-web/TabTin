@@ -13,7 +13,7 @@
  *   - **EventEmitter 复用 + 双 emit**（L640-644）：bridge 自己维护
  *     `subscribers` Map 处理含完整 schema 的事件（toolUseId / agentId 必带），
  *     同时**额外**调 `ptyManager.emit('agent-session-created', {...})`
- *     用旧 schema 触发现有 IPC 通道（`window.tabtin?.pty.onAgentSessionCreated`）
+ *     用旧 schema 触发现有 IPC 通道（`window.muse?.pty.onAgentSessionCreated`）
  *     —— 让 WP3 的 renderer hook 不必改 IPC 链路即可工作。
  *   - **持续写盘走共享 helper `AgentOutputTail`**：与 Daemon 端同源避免漂移。
  *   - **subscribe 边界严格按 agent-bridge.ts L652-668**：单 handler 单例订阅
@@ -62,8 +62,8 @@ import {
   type NotificationEnvelope,
   type NotificationPriority,
   type PtyManagerBridge,
-} from '@tabtin/terminal-core';
-import { DEFAULT_COLS, DEFAULT_ROWS, cleanOutput, type AgentSessionClosedInfo, type PtySession } from '@tabtin/pty-core';
+} from '@muse/terminal-core';
+import { DEFAULT_COLS, DEFAULT_ROWS, cleanOutput, type AgentSessionClosedInfo, type PtySession } from '@muse/pty-core';
 import type { PtyManager } from './PtyManager';
 import { getCLIOrganizationId } from '../cli/cli-context';
 import { ensureCLIServerReady, getCLIServerInfo } from '../cli/cli-server';
@@ -77,7 +77,7 @@ const log = createLogger('PtyManagerBridge');
 // 给出 limit-reached 错误信息（带 limit 数字）。两端 limit 字面可不同——
 // contract test 只验关键词 `agent session limit reached`（L571-575）。
 const MAX_AGENT_SESSIONS_PER_SPACE = 6;
-const CLI_SERVER_ENV_KEYS = ['TABTIN_SOCK', '_TABTIN_TRANSPORT_TOKEN'] as const;
+const CLI_SERVER_ENV_KEYS = ['MUSE_SOCK', '_MUSE_TRANSPORT_TOKEN'] as const;
 
 function assertAgentShellSecurityFloor(req: AgentCommandRequest): void {
   const decision = evaluateAgentShellSecurityFloor(req.command);
@@ -117,7 +117,7 @@ function mergeCurrentCLIServerEnv(
     };
   };
 
-  if (env && ('TABTIN_SOCK' in env || '_TABTIN_TRANSPORT_TOKEN' in env)) {
+  if (env && ('MUSE_SOCK' in env || '_MUSE_TRANSPORT_TOKEN' in env)) {
     return withPreservedTransportKeys(
       env,
       CLI_SERVER_ENV_KEYS.filter((key) => key in env),
@@ -132,8 +132,8 @@ function mergeCurrentCLIServerEnv(
   return {
     ...withPreservedTransportKeys(
       {
-        TABTIN_SOCK: info.socketPath,
-        _TABTIN_TRANSPORT_TOKEN: info.token,
+        MUSE_SOCK: info.socketPath,
+        _MUSE_TRANSPORT_TOKEN: info.token,
         ...(env ?? {}),
       },
       CLI_SERVER_ENV_KEYS,
@@ -679,7 +679,7 @@ export class ElectronPtyManagerBridge implements PtyManagerBridge {
    *   2. 调 `ptyManager.spawn(sessionId, { spaceId, synthetic: true })` 起 transcript session
    *   3. 设 `session.spaceId` + `session.agentMeta`
    *   4. **额外** emit `agent-session-created` 到 PtyManager EventEmitter
-   *      （旧 schema，让现有 IPC `window.tabtin?.pty.onAgentSessionCreated` 链路工作）
+   *      （旧 schema，让现有 IPC `window.muse?.pty.onAgentSessionCreated` 链路工作）
    *   5. emit `agent-session-created` 到 bridge subscribers（完整 schema 含 toolUseId / agentId）
    *   6. detached 模式：attach AgentOutputTail 持续写盘
    *   7. **不调** `setThreadSession`（D3 / agent-bridge.ts L559-562）

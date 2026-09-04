@@ -11,7 +11,7 @@
  */
 
 import { describe, it, expect } from 'vitest';
-import { buildUserContextWrapper } from '@tabtin/agent-prompt';
+import { buildUserContextWrapper } from '@muse/agent-prompt';
 import { buildContextHook, type AppContext } from '../src/hooks/index.js';
 import {
   markHistoricalContextMessages,
@@ -19,8 +19,8 @@ import {
   hasInternalMarker,
   type Message,
   type EngineState,
-} from '@tabtin/agent-runtime/engine';
-import { mergeConsecutiveMessages, classifyUserMessageForMerge } from '@tabtin/agent-runtime/engine/message-normalizer';
+} from '@muse/agent-runtime/engine';
+import { mergeConsecutiveMessages, classifyUserMessageForMerge } from '@muse/agent-runtime/engine/message-normalizer';
 
 function userMsg(text: string): Message {
   return { role: 'user', content: text };

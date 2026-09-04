@@ -53,7 +53,7 @@ export async function loadSearchResultContext(
 
   if (!cached) {
     try {
-      const preview = await window.tabtin.fileSystem.readFilePreview(filePath, {
+      const preview = await window.muse.fileSystem.readFilePreview(filePath, {
         maxBytes: SEARCH_RESULT_CONTEXT_MAX_BYTES,
       })
       if (

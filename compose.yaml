@@ -1,17 +1,17 @@
 name: tabtin-community
 
 x-django-image: &django-image
-  image: tabtin/community-django:local
+  image: muse/community-django:local
   build:
     context: .
     dockerfile: apps/tabtin_django/Dockerfile
     args:
       BASE_IMAGE: python:3.11-slim
       INSTALL_PLAYWRIGHT: 'true'
-      TABTIN_DEV_DEPENDENCY_FINGERPRINT: ${TABTIN_DOCKER_DEPENDENCY_FINGERPRINT:-runtime}
+      MUSE_DEV_DEPENDENCY_FINGERPRINT: ${MUSE_DOCKER_DEPENDENCY_FINGERPRINT:-runtime}
 
 x-django-environment: &django-environment
-  TABTIN_DATABASE_MODE: single_pg
+  MUSE_DATABASE_MODE: single_pg
   # This official profile is intentionally localhost-only. Upstream Local
   # Storage rejects loopback download URLs in production mode, so keep the
   # local developer install in Django's loopback-safe development mode.
@@ -21,7 +21,7 @@ x-django-environment: &django-environment
   ALLOWED_HOSTS: localhost,127.0.0.1,django
   CSRF_TRUSTED_ORIGINS: http://localhost:6060,http://127.0.0.1:6060
   CORS_ALLOWED_ORIGINS: http://localhost:5175,http://127.0.0.1:5175
-  TABTIN_REQUIRE_INVITE_CODE: 'false'
+  MUSE_REQUIRE_INVITE_CODE: 'false'
   SECRET_KEY_FILE: /run/tabtin-community-secrets/SECRET_KEY
   JWT_SECRET_KEY_FILE: /run/tabtin-community-secrets/JWT_SECRET_KEY
   CREDENTIAL_ENCRYPTION_KEY_FILE: /run/tabtin-community-secrets/CREDENTIAL_ENCRYPTION_KEY
@@ -43,8 +43,8 @@ x-django-environment: &django-environment
   EMAIL_BACKEND: django.core.mail.backends.console.EmailBackend
   SERVICES_OSS_PROVIDER: local
   LOCAL_OSS_BUCKET_NAME: tabtin-community-local
-  LOCAL_OSS_ROOT: /var/lib/tabtin/objects
-  TABTIN_PUBLIC_BASE_URL: http://127.0.0.1:6060
+  LOCAL_OSS_ROOT: /var/lib/muse/objects
+  MUSE_PUBLIC_BASE_URL: http://127.0.0.1:6060
   ENABLE_JINBAO_BOT: 'false'
   SEARCH_ENGINE_ENABLED: 'false'
   RAG_ENABLED: 'false'
@@ -96,19 +96,19 @@ services:
     command: ['community-web']
     environment:
       <<: *django-environment
-      TABTIN_COMMUNITY_SECRET_ROOT: /run/tabtin-community-secrets
+      MUSE_COMMUNITY_SECRET_ROOT: /run/tabtin-community-secrets
       PG_INIT_PASSWORD_FILE: /run/tabtin-community-secrets/PG_INIT_PASSWORD
       PG_MIGRATOR_PASSWORD_FILE: /run/tabtin-community-secrets/PG_MIGRATOR_PASSWORD
       PG_RUNTIME_PASSWORD_FILE: /run/tabtin-community-secrets/PG_RUNTIME_PASSWORD
-      TABTIN_COMMUNITY_DATABASE_SQL_ROOT: /app/community-assets/postgres
-      TABTIN_COMMUNITY_RUNTIME_UID: '10001'
-      TABTIN_COMMUNITY_RUNTIME_GID: '10001'
-      TABTIN_COMMUNITY_POSTGRES_UID: '999'
-      TABTIN_COMMUNITY_POSTGRES_GID: '999'
-      TABTIN_COMMUNITY_CENTRIFUGO_TEMPLATE: /app/community-assets/centrifugo.template.json
+      MUSE_COMMUNITY_DATABASE_SQL_ROOT: /app/community-assets/postgres
+      MUSE_COMMUNITY_RUNTIME_UID: '10001'
+      MUSE_COMMUNITY_RUNTIME_GID: '10001'
+      MUSE_COMMUNITY_POSTGRES_UID: '999'
+      MUSE_COMMUNITY_POSTGRES_GID: '999'
+      MUSE_COMMUNITY_CENTRIFUGO_TEMPLATE: /app/community-assets/centrifugo.template.json
     volumes:
       - installation-secrets:/run/tabtin-community-secrets
-      - local-objects:/var/lib/tabtin/objects
+      - local-objects:/var/lib/muse/objects
     depends_on:
       postgres: { condition: service_healthy }
       redis: { condition: service_healthy }
@@ -141,7 +141,7 @@ services:
       CELERY_MAX_MEMORY: '700000'
     volumes:
       - installation-secrets:/run/tabtin-community-secrets:ro
-      - local-objects:/var/lib/tabtin/objects
+      - local-objects:/var/lib/muse/objects
     depends_on:
       django: { condition: service_healthy }
       redis: { condition: service_healthy }
@@ -168,7 +168,7 @@ services:
       <<: *django-environment
     volumes:
       - installation-secrets:/run/tabtin-community-secrets:ro
-      - local-objects:/var/lib/tabtin/objects
+      - local-objects:/var/lib/muse/objects
     depends_on:
       django: { condition: service_healthy }
       redis: { condition: service_healthy }

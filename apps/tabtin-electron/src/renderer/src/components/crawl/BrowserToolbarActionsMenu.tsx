@@ -1,7 +1,7 @@
 import React, { useCallback } from 'react'
 import { Camera, Crosshair, Star } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
-import { useToolbarOverflowRun } from '@tabtin/crawlspace-core'
+import { useToolbarOverflowRun } from '@muse/crawlspace-core'
 import { BrowserZoomControls } from './BrowserZoomControls'
 import { cn } from '@utils/cn'
 

@@ -76,7 +76,7 @@ let _importAdapter: ImportAdapter | null = null
  *
  * 宿主应用调用此函数注入后端解析能力：
  * ```typescript
- * import { setImportAdapter } from '@tabtin/tabslide'
+ * import { setImportAdapter } from '@muse/tabslide'
  *
  * setImportAdapter({
  *   async importFromFile(file) {

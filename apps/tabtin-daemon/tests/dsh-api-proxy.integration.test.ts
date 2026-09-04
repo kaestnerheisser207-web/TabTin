@@ -5,7 +5,7 @@ import { spawn, type ChildProcess } from 'node:child_process'
 import { afterEach, describe, expect, it } from 'vitest'
 import { DshApiClient } from '../src/application/agent/runtime/dsh-api-client.js'
 
-const enabled = process.env.TABTIN_DSH_INTEGRATION === '1'
+const enabled = process.env.MUSE_DSH_INTEGRATION === '1'
 const children: ChildProcess[] = []
 const temporaryDirectories: string[] = []
 

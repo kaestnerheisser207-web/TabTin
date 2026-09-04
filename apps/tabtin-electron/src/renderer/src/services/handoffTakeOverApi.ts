@@ -10,7 +10,7 @@
  */
 
 import { shareApiRequest } from './sessionShareApi'
-import type { ChatSession } from '@tabtin/chat-client'
+import type { ChatSession } from '@muse/chat-client'
 
 export async function takeOverHandoffSession(
   handoffId: string,

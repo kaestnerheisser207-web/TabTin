@@ -7,7 +7,7 @@ import {
 } from '@shared/ripgrep-search-types'
 import { useKeywordSearch } from '../useKeywordSearch'
 
-type SearchResponse = Awaited<ReturnType<typeof window.tabtin.fileSystem.ripgrepSearch>>
+type SearchResponse = Awaited<ReturnType<typeof window.muse.fileSystem.ripgrepSearch>>
 
 function deferred<T>() {
   let resolve!: (value: T) => void

@@ -3,7 +3,7 @@
  * 丢弃客户端 sourcePath，防止任意本机文件读（ 阻塞项 1）。
  */
 
-import type { ImportScanResult, ImportSessionRef, ImportSourceId } from '@tabtin/cli-server-core'
+import type { ImportScanResult, ImportSessionRef, ImportSourceId } from '@muse/cli-server-core'
 
 export type SessionRefResolveFailure = {
   source: ImportSourceId

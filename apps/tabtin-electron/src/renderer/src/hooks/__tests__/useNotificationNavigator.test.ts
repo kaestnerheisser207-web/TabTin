@@ -17,7 +17,7 @@ beforeEach(() => {
   // 只在 jsdom 提供的 window 上 stub `tabtin`，不要替换整个 window——
   // 否则会破坏 jsdom 的全局对象，导致 React 19.2 内部访问 window 失败
   // （resolveEventTimeStamp 等路径会读 window）。
-  ;(window as any).tabtin = {
+  ;(window as any).muse = {
     notification: {
       onNavigate: (callback: typeof capturedNavigateCallback) => {
         capturedNavigateCallback = callback
@@ -28,7 +28,7 @@ beforeEach(() => {
 })
 
 afterEach(() => {
-  delete (window as any).tabtin
+  delete (window as any).muse
 })
 
 describe('useNotificationNavigator', () => {

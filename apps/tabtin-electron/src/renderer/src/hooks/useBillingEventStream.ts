@@ -6,8 +6,8 @@
  * React Query 全量 invalidation（由 useBillingRefreshListener 监听）。
  */
 import React, { useCallback, useEffect, useMemo, useRef } from 'react'
-import { BillingEvents } from '@tabtin/ws-gateway-client'
-import { toast, ToastAction } from '@tabtin/smartsheet-ui/toast'
+import { BillingEvents } from '@muse/ws-gateway-client'
+import { toast, ToastAction } from '@muse/smartsheet-ui/toast'
 import i18n from '@/i18n'
 import { useBillingStore } from '@/stores/useBillingStore'
 import { useAuthStore } from '@/stores/useAuthStore'

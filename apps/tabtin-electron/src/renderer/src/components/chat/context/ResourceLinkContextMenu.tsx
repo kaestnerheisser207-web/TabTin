@@ -37,13 +37,13 @@ import {
 } from 'lucide-react'
 import { cn } from '@utils/cn'
 import { OVERLAY_SURFACE_CLASS } from '@components/ui'
-import { toast } from '@tabtin/smartsheet-ui/toast'
+import { toast } from '@muse/smartsheet-ui/toast'
 import {
   preferenceKeyOf,
   SYSTEM_CARRIER_APP_ID,
   type ResolveCandidate,
   type ResourcePointer,
-} from '@tabtin/resource-router'
+} from '@muse/resource-router'
 import { resourceRouter } from '@/services/resourceRouter'
 import { useResourceOpenPreferences } from '@/stores/useResourceOpenPreferences'
 import { contextRegistry } from '@/components/context-space/registry/instance'

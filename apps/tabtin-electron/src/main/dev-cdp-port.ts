@@ -6,7 +6,7 @@ export const DEFAULT_DEV_CDP_PORT = 9222
 export const DEV_CDP_FALLBACK_PORTS = [9333, 9223, 9224, 9225, 9226, 9227, 9228, 9229, 9230] as const
 
 export function parseEnvCdpPort(): number | undefined {
-  const raw = process.env.TABTIN_CDP_PORT ?? process.env.CDP_PORT
+  const raw = process.env.MUSE_CDP_PORT ?? process.env.CDP_PORT
   if (!raw?.trim()) return undefined
   const port = Number(raw)
   if (!Number.isInteger(port) || port < 1 || port > 65535) return undefined

@@ -6,8 +6,8 @@ import type { MarkerPair } from '../marker/generator'
 function makeMarkers(): MarkerPair {
   return {
     nonce: 'abc123def456abc123def456abc12345',
-    startMarker: '__TABTIN_CMD_START_abc123def456abc123def456abc12345__',
-    endMarkerPrefix: '__TABTIN_CMD_END_abc123def456abc123def456abc12345_',
+    startMarker: '__MUSE_CMD_START_abc123def456abc123def456abc12345__',
+    endMarkerPrefix: '__MUSE_CMD_END_abc123def456abc123def456abc12345_',
   }
 }
 

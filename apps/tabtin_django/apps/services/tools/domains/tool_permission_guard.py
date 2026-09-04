@@ -29,7 +29,7 @@ SYSTEM_TOOLS_WITHOUT_APP_ID: frozenset[str] = frozenset({
     # common 域 — Agent 通信与信息获取
     # 历史 ASK_USER_TOOL_NAME = "ask_question" 已随 Wave 11 云端 langgraph 下线 +
     # Wave 5 ask 三件套（ask_choice / ask_form / request_approval）拆分一并退场；
-    # 三件套在 TS @tabtin/agent-runtime 端实现，Python ToolPermissionGuard 不再
+    # 三件套在 TS @muse/agent-runtime 端实现，Python ToolPermissionGuard 不再
     # 看到这些工具名（runtime 自有授权链路），无需在白名单内登记。
     "web_search",
     # todo 域 — Agent 任务管理

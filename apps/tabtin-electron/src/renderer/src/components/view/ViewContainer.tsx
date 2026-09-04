@@ -4,8 +4,8 @@ import {
   cn,
   useLoadingTimeout,
   OverlayContainerProvider,
-} from '@tabtin/smartsheet-ui'
-import { toast } from '@tabtin/smartsheet-ui/toast'
+} from '@muse/smartsheet-ui'
+import { toast } from '@muse/smartsheet-ui/toast'
 import { RefreshCw } from 'lucide-react'
 import { useViewStore } from '@stores/useViewStore'
 import { useTableStore } from '@stores/useTableStore'
@@ -24,10 +24,10 @@ import { TableHistoryModal } from '@components/table/TableHistoryModal'
 import { FieldBatchUndoConflictDialog } from '@components/table/FieldBatchUndoConflictDialog'
 import { TableCollabProvider, useTableCollab } from '@components/table/TableCollabContext'
 import { TableReadonlyProvider, useTableReadonly } from '@components/table/TableReadonlyContext'
-import { type FieldRestoreNotSupportedDetail } from '@tabtin/table-ui'
+import { type FieldRestoreNotSupportedDetail } from '@muse/table-ui'
 import { shouldForceReconnectAfterTableRestore } from './tableRestoreSync'
 import { buildTableHistoryRefreshKey } from './tableHistoryRefresh'
-import { RecordApiService, type TableRecord } from '@tabtin/table-core'
+import { RecordApiService, type TableRecord } from '@muse/table-core'
 import { RecordFormContainer } from '@components/record/RecordFormContainer'
 import {
   parseRecordCommentNotificationIntent,

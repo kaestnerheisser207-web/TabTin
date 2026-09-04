@@ -43,7 +43,7 @@ def _import_settings(
         "DAEMON_SERVER_URL": "",
         "DAEMON_WS_URL": "",
         "SERVICES_OSS_PROVIDER": "",
-        "TABTIN_PUBLIC_BASE_URL": "",
+        "MUSE_PUBLIC_BASE_URL": "",
         "UPDATER_OSS_ENDPOINT": "",
         "UPDATER_CDN_ENDPOINT": "",
         "EMAIL_HOST": "",
@@ -51,7 +51,7 @@ def _import_settings(
         "SERVICES_EMAIL_PROVIDER": "",
     }
     if edition is not None:
-        env["TABTIN_EDITION"] = edition
+        env["MUSE_EDITION"] = edition
     if include_saas_secrets:
         env.update(
             {
@@ -68,7 +68,7 @@ def _import_settings(
             "DAEMON_SERVER_URL",
             "DAEMON_WS_URL",
             "SERVICES_OSS_PROVIDER",
-            "TABTIN_PUBLIC_BASE_URL",
+            "MUSE_PUBLIC_BASE_URL",
             "UPDATER_OSS_ENDPOINT",
             "UPDATER_CDN_ENDPOINT",
             "EMAIL_HOST",
@@ -87,7 +87,7 @@ dotenv.load_dotenv = lambda *args, **kwargs: False
 import tabtin.settings as settings
 
 print("EDITION_RESULT=" + json.dumps({
-    "edition": settings.TABTIN_EDITION,
+    "edition": settings.MUSE_EDITION,
     "openai_api_key": settings.OPENAI_API_KEY,
     "openai_base_url": settings.OPENAI_BASE_URL,
     "qwen_base_url": settings.QWEN_BASE_URL,
@@ -95,7 +95,7 @@ print("EDITION_RESULT=" + json.dumps({
     "daemon_server_url": settings.DAEMON_SERVER_URL,
     "daemon_ws_url": settings.DAEMON_WS_URL,
     "storage_provider": settings.SERVICES_OSS_PROVIDER,
-    "public_base_url": settings.TABTIN_PUBLIC_BASE_URL,
+    "public_base_url": settings.MUSE_PUBLIC_BASE_URL,
     "local_public_base_url": settings.LOCAL_OSS_PUBLIC_BASE_URL,
     "updater_oss_endpoint": settings.UPDATER_OSS_ENDPOINT,
     "updater_cdn_endpoint": settings.UPDATER_CDN_ENDPOINT,
@@ -108,10 +108,10 @@ print("EDITION_RESULT=" + json.dumps({
     "database_name": settings.DATABASES["default"]["NAME"],
     "database_user": settings.DATABASES["default"]["USER"],
     "cloud_workers_sha256": hashlib.sha256(
-        settings.TABTIN_CLOUD_WORKERS_JSON.encode("utf-8")
+        settings.MUSE_CLOUD_WORKERS_JSON.encode("utf-8")
     ).hexdigest(),
-    "cloud_runtime_storage_gb": settings.TABTIN_CLOUD_RUNTIME_STORAGE_GB,
-    "cloud_worker_edition": settings.TABTIN_CLOUD_WORKER_EDITION,
+    "cloud_runtime_storage_gb": settings.MUSE_CLOUD_RUNTIME_STORAGE_GB,
+    "cloud_worker_edition": settings.MUSE_CLOUD_WORKER_EDITION,
     "daemon_token_secret_configured": bool(settings.DAEMON_TOKEN_SECRET),
 }, sort_keys=True))
 """
@@ -174,14 +174,14 @@ def test_community_settings_load_cloud_worker_registry_from_file(
         '{"worker-1":{"endpoint":"https://worker.example.test",'
         '"token":"test-worker-token"}}'
     )
-    registry_file = tmp_path / "TABTIN_CLOUD_WORKERS_JSON"
+    registry_file = tmp_path / "MUSE_CLOUD_WORKERS_JSON"
     registry_file.write_text(registry, encoding="utf-8")
 
     payload = _payload(
         _import_settings(
             edition="community",
             include_saas_secrets=False,
-            extra_env={"TABTIN_CLOUD_WORKERS_JSON_FILE": str(registry_file)},
+            extra_env={"MUSE_CLOUD_WORKERS_JSON_FILE": str(registry_file)},
         )
     )
 
@@ -195,8 +195,8 @@ def test_community_control_plane_can_select_hosted_cloud_pool() -> None:
             edition="community",
             include_saas_secrets=False,
             extra_env={
-                "TABTIN_CLOUD_WORKER_EDITION": "saas",
-                "TABTIN_CLOUD_RUNTIME_STORAGE_GB": "3",
+                "MUSE_CLOUD_WORKER_EDITION": "saas",
+                "MUSE_CLOUD_RUNTIME_STORAGE_GB": "3",
             },
         )
     )
@@ -229,7 +229,7 @@ def test_community_settings_keep_explicit_third_party_endpoints() -> None:
             include_saas_secrets=False,
             extra_env={
                 "OPENAI_BASE_URL": "https://llm.community.example/v1",
-                "TABTIN_PUBLIC_BASE_URL": "https://server.community.example",
+                "MUSE_PUBLIC_BASE_URL": "https://server.community.example",
             },
         )
     )
@@ -248,7 +248,7 @@ def test_community_settings_consume_generated_secret_files(tmp_path: Path) -> No
     env = {
         "PYTHONPATH": str(DJANGO_ROOT),
         "DJANGO_SETTINGS_MODULE": "tabtin.settings",
-        "TABTIN_EDITION": "community",
+        "MUSE_EDITION": "community",
         "DEBUG": "false",
         "SECRET_KEY_FILE": str(paths["SECRET_KEY"]),
         "JWT_SECRET_KEY_FILE": str(paths["JWT_SECRET_KEY"]),
@@ -314,7 +314,7 @@ def test_community_production_settings_have_no_hardcoded_secret_fallback() -> No
         env={
             "PYTHONPATH": str(DJANGO_ROOT),
             "DJANGO_SETTINGS_MODULE": "tabtin.settings",
-            "TABTIN_EDITION": "community",
+            "MUSE_EDITION": "community",
             "DEBUG": "false",
         },
         capture_output=True,
@@ -365,4 +365,4 @@ def test_unknown_edition_makes_settings_import_fail_clearly() -> None:
     )
 
     assert result.returncode != 0
-    assert "Unsupported TABTIN_EDITION" in result.stderr
+    assert "Unsupported MUSE_EDITION" in result.stderr

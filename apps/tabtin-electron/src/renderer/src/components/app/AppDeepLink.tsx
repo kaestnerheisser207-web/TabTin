@@ -15,9 +15,9 @@
  */
 import React, { useEffect, useState } from 'react'
 import { logger } from '@/utils/logger'
-import { parseResourcePointer } from '@tabtin/resource-router'
-import type { ResourcePointer } from '@tabtin/resource-router'
-import { isSupportedInviteToken } from '@tabtin/config'
+import { parseResourcePointer } from '@muse/resource-router'
+import type { ResourcePointer } from '@muse/resource-router'
+import { isSupportedInviteToken } from '@muse/config'
 import { resourceRouter } from '@/services/resourceRouter'
 import { useSpaceStore } from '@stores/useSpaceStore'
 import {
@@ -45,7 +45,7 @@ export function _parseResourceDeepLink(
   url: string,
 ): ResourcePointer | undefined {
   if (!path.startsWith('resource/')) return undefined
-  // url 形如 `tabtin://resource/<type>/<id>?<query>`；直接送给 W2 parser
+  // url 形如 `muse://resource/<type>/<id>?<query>`；直接送给 W2 parser
   const pointer = parseResourcePointer(url)
   if (pointer.scheme !== 'tabtin' || !pointer.type || !pointer.id) {
     return undefined
@@ -54,7 +54,7 @@ export function _parseResourceDeepLink(
 }
 
 /**
- * 处理 `tabtin://resource/<type>/<id>?<query>` deep link：
+ * 处理 `muse://resource/<type>/<id>?<query>` deep link：
  *   1. 解析为 ResourcePointer（W2 SSOT）
  *   2. 依次切 organization / space（meta 透传）
  *   3. 调 ResourceRouter.open 走 D2 五层优先级派发到 carrier
@@ -102,7 +102,7 @@ export function AppDeepLink() {
   const [inviteToken, setInviteToken] = useState<string | null>(null)
 
   useEffect(() => {
-    const tabtin = window.tabtin
+    const tabtin = window.muse
     if (!tabtin?.deepLink?.onDeepLink) return
     return tabtin.deepLink.onDeepLink((data: { path: string; url: string }) => {
       const inviteMatch = data.path.match(/^invite\/([^/?#]+)$/)

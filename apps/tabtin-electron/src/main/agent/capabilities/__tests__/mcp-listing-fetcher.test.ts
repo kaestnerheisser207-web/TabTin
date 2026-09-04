@@ -1,5 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
-import { CatalogStore } from '@tabtin/agent-host/state'
+import { CatalogStore } from '@muse/agent-host/state'
 
 const mocks = vi.hoisted(() => ({
   listAttachedServers: vi.fn(),

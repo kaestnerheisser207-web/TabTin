@@ -110,11 +110,11 @@ export class DockerWorkspaceManager {
       '--mount', `type=volume,src=${input.volumeRef},dst=/workspace`,
       '--mount', `type=volume,src=${runtimeVolume(input.volumeRef)},dst=/var/lib/tabtin`,
       '--tmpfs', '/tmp:rw,nosuid,size=536870912',
-      '--env', `TABTIN_CLOUD_ALLOCATION_ID=${input.allocationId}`,
-      '--env', `TABTIN_CLOUD_GENERATION=${input.generation}`,
-      '--env', 'TABTIN_WORKSPACE_ROOT=/workspace',
+      '--env', `MUSE_CLOUD_ALLOCATION_ID=${input.allocationId}`,
+      '--env', `MUSE_CLOUD_GENERATION=${input.generation}`,
+      '--env', 'MUSE_WORKSPACE_ROOT=/workspace',
       '--env', 'DSH_HOME=/var/lib/tabtin/dsh',
-      '--env', 'TABTIN_DAEMON_BOOTSTRAP_TOKEN_FILE=/var/lib/tabtin/bootstrap/install-token',
+      '--env', 'MUSE_DAEMON_BOOTSTRAP_TOKEN_FILE=/var/lib/tabtin/bootstrap/install-token',
       input.image,
     ])
     await this.runner.run(['start', container])

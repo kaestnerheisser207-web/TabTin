@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { CollabConnectionStatus, CollabStatus } from '@tabtin/collab-core'
+import { CollabConnectionStatus, CollabStatus } from '@muse/collab-core'
 import { shouldShowTableCollabStatusBadge } from './tableCollabStatusBadgeVisibility'
 
 describe('shouldShowTableCollabStatusBadge', () => {

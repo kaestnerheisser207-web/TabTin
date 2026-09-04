@@ -156,7 +156,7 @@ class AsyncTaskRegistryNormalizationTests(TestCase):
         self.assertIsNone(get_task_meta("never-dispatched"))
 
 
-@override_settings(TABTIN_REQUIRE_INVITE_CODE=False)
+@override_settings(MUSE_REQUIRE_INVITE_CODE=False)
 class AsyncTaskStatusEndpointTests(TestCase):
     """GET /api/tabdata/tasks/{task_id} 的鉴权与响应形状。"""
 
@@ -261,7 +261,7 @@ class AsyncTaskStatusEndpointTests(TestCase):
         self.assertEqual(response.status_code, 400, response.content)
 
 
-@override_settings(TABTIN_REQUIRE_INVITE_CODE=False)
+@override_settings(MUSE_REQUIRE_INVITE_CODE=False)
 class AsyncExportDispatchRegistersInitiatorTests(TestCase):
     """异步导出派发时必须登记发起人，否则轮询接口永远 404。"""
 
@@ -348,7 +348,7 @@ class AsyncExportDispatchRegistersInitiatorTests(TestCase):
                 )
 
 
-@override_settings(TABTIN_REQUIRE_INVITE_CODE=False)
+@override_settings(MUSE_REQUIRE_INVITE_CODE=False)
 class ImportFileBase64Tests(TestCase):
     """/import/file-base64：CLI 走 JSON 通道，与 multipart /import/file 同一套实现。"""
 
@@ -463,7 +463,7 @@ class ResolveFileContentCleanupTests(TestCase):
         oss.delete_object.assert_not_called()
 
 
-@override_settings(TABTIN_REQUIRE_INVITE_CODE=False)
+@override_settings(MUSE_REQUIRE_INVITE_CODE=False)
 class ImportOSSFileTests(TestCase):
     """/import/oss-file：大文件走对象存储，body 里只有 file_id。
 
@@ -616,7 +616,7 @@ class ImportOSSFileTests(TestCase):
         self.assertEqual(response.status_code, 400, response.content)
 
 
-@override_settings(TABTIN_REQUIRE_INVITE_CODE=False)
+@override_settings(MUSE_REQUIRE_INVITE_CODE=False)
 class ExportDownloadJsonModeTests(TestCase):
     """?redirect=false 返回签名 URL JSON——CLI 的 HTTP 客户端不跟随 302。"""
 

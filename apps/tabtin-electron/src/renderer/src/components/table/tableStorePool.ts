@@ -1,11 +1,11 @@
 /**
  * 表格 Store 池化管理 — Electron 宿主
  *
- * 使用 @tabtin/table-core 的共享 createTableStorePool 工厂，
+ * 使用 @muse/table-core 的共享 createTableStorePool 工厂，
  * 注入 Electron 端的 store 创建函数和重置注册。
  */
 
-import { createTableStorePool } from '@tabtin/table-core'
+import { createTableStorePool } from '@muse/table-core'
 import { createRecordStore, type RecordStoreApi } from '@stores/useRecordStore'
 import { createTableStore, type TableStoreApi } from '@stores/useTableStore'
 import { createViewStore, type ViewStoreApi } from '@stores/useViewStore'

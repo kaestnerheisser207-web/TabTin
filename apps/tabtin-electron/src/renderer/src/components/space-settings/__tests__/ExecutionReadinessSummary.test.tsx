@@ -27,6 +27,6 @@ describe('ExecutionReadinessSummary', () => {
 
     expect(source).toContain('effectiveMcpStatus ? (')
     expect(source).not.toContain('mcp:getStatus')
-    expect(source).not.toContain('window.tabtin.mcp')
+    expect(source).not.toContain('window.muse.mcp')
   })
 })

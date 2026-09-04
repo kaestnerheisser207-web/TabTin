@@ -1,5 +1,5 @@
 import React, { useMemo, useState } from 'react'
-import type { ChatMessage } from '@tabtin/chat-client'
+import type { ChatMessage } from '@muse/chat-client'
 import { Ban, Check, ChevronDown, XCircle } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { cn } from '@utils/cn'

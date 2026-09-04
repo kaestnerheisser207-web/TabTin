@@ -1,9 +1,9 @@
 /**
- * AdminDash 短暂反馈 — 统一到 @tabtin/smartsheet-ui/message。
+ * AdminDash 短暂反馈 — 统一到 @muse/smartsheet-ui/message。
  * 保留旧 hook 形状（show + element），element 恒为 null（由根级 MessageHost 渲染）。
  */
 import { useCallback, type ReactNode } from 'react'
-import { message } from '@tabtin/smartsheet-ui/message'
+import { message } from '@muse/smartsheet-ui/message'
 
 type ToastType = 'success' | 'error'
 

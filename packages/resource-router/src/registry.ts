@@ -1,5 +1,5 @@
 /**
- * @tabtin/resource-router · registry
+ * @muse/resource-router · registry
  *
  * 把所有 builtin / marketplace App 的 `manifest.opens` 字段聚合成
  *   - typeIndex:   ContextRefType → 按 priority desc 排好的 [{appId, priority}]

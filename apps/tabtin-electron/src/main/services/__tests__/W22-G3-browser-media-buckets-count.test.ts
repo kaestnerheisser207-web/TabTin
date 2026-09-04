@@ -58,18 +58,18 @@ vi.mock('electron', () => ({
   },
 }))
 
-vi.mock('@tabtin/shared/storage-paths', () => ({
+vi.mock('@muse/shared/storage-paths', () => ({
   getHomeTabtinPath: (...segs: string[]) =>
     path.join(fakeUserData, '__tabtin_home__', ...segs),
   getUserDataPath: (...segs: string[]) => path.join(fakeUserData, ...segs),
 }))
 
-vi.mock('@tabtin/terminal-core', () => ({
+vi.mock('@muse/terminal-core', () => ({
   resolveSpacesRoot: () => fakeSandboxRoot,
 }))
 
 //  批次 13：space 路径 helper 出口从 engine barrel 收敛到包入口。
-vi.mock('@tabtin/agent-runtime', () => ({
+vi.mock('@muse/agent-runtime', () => ({
   resolveSpacesRoot: (root: string) => path.join(root, 'agent-spaces'),
   resolveSpaceDownloadsDir: (root: string, spaceId: string) =>
     path.join(root, 'agent-spaces', spaceId, 'downloads'),
@@ -93,7 +93,7 @@ vi.mock('../../utils/logger', () => ({
 
 describe('W2.2 G3 北极星：main 进程 7 个 bucket 聚合', () => {
   beforeEach(async () => {
-    const sm = await import('@tabtin/storage-manager')
+    const sm = await import('@muse/storage-manager')
     sm.__resetForTesting()
     const b = await import('../BrowserStorageBucketRegistration')
     const m = await import('../MediaStorageBucketRegistration')
@@ -102,7 +102,7 @@ describe('W2.2 G3 北极星：main 进程 7 个 bucket 聚合', () => {
   })
 
   it('registerBrowserStorageBuckets + registerMediaStorageBuckets 共产 12 个 bucket', async () => {
-    const sm = await import('@tabtin/storage-manager')
+    const sm = await import('@muse/storage-manager')
     const { registerBrowserStorageBuckets } = await import(
       '../BrowserStorageBucketRegistration'
     )
@@ -142,7 +142,7 @@ describe('W2.2 G3 北极星：main 进程 7 个 bucket 聚合', () => {
   })
 
   it('所有 data 类 bucket 的 warnings 都非空（assertValidBucket 强约束）', async () => {
-    const sm = await import('@tabtin/storage-manager')
+    const sm = await import('@muse/storage-manager')
     const { registerBrowserStorageBuckets } = await import(
       '../BrowserStorageBucketRegistration'
     )

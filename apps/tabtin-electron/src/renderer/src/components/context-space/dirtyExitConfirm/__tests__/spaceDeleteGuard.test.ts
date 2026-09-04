@@ -10,7 +10,7 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest'
 
 const toastMock = vi.fn()
-vi.mock('@tabtin/smartsheet-ui', () => ({
+vi.mock('@muse/smartsheet-ui', () => ({
   toast: (...args: unknown[]) => toastMock(...args),
 }))
 

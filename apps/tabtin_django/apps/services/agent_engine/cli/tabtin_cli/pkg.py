@@ -49,16 +49,16 @@ def _maybe_upsert_managed_skill(
 
 def _get_user_context() -> dict[str, str | None]:
     """从环境变量获取用户 / organization 上下文。"""
-    user_id = os.environ.get("TABTIN_USER_ID")
+    user_id = os.environ.get("MUSE_USER_ID")
     if not user_id:
         logger.warning(
-            "[tabtin pkg] TABTIN_USER_ID 未设置，使用匿名 UUID。"
+            "[tabtin pkg] MUSE_USER_ID 未设置，使用匿名 UUID。"
             "生产环境应设置此变量以确保操作可审计。"
         )
         user_id = "00000000-0000-0000-0000-000000000000"
     return {
         "user_id": user_id,
-        "organization_id": os.environ.get("TABTIN_ORGANIZATION_ID"),
+        "organization_id": os.environ.get("MUSE_ORGANIZATION_ID"),
     }
 
 
@@ -155,7 +155,7 @@ def _run_publish(args: argparse.Namespace) -> int:
     organization_id = args.organization_id or ctx.get("organization_id")
 
     if not organization_id:
-        msg = "需要 --organization-id 或设置 TABTIN_ORGANIZATION_ID 环境变量"
+        msg = "需要 --organization-id 或设置 MUSE_ORGANIZATION_ID 环境变量"
         if use_json:
             _print_json_error(ValueError(msg), code="E_MISSING_ORGANIZATION")
         else:
@@ -448,7 +448,7 @@ def _run_fork(args: argparse.Namespace) -> int:
 
     organization_id = args.organization_id or ctx.get("organization_id")
     if not organization_id:
-        msg = "需要 --organization-id 或设置 TABTIN_ORGANIZATION_ID 环境变量"
+        msg = "需要 --organization-id 或设置 MUSE_ORGANIZATION_ID 环境变量"
         if use_json:
             _print_json_error(ValueError(msg), code="E_MISSING_ORGANIZATION")
         else:

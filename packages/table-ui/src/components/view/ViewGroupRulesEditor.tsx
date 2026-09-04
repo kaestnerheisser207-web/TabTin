@@ -16,7 +16,7 @@ import {
   ComboboxSelect,
   SortableRuleRow as SortableRuleRowShell,
   cn,
-} from '@tabtin/smartsheet-ui'
+} from '@muse/smartsheet-ui'
 import { Plus } from 'lucide-react'
 
 /* ------------------------------------------------------------------ */

@@ -2,7 +2,7 @@
  * **AUTO-GENERATED — DO NOT EDIT BY HAND**
  *
  * Source: packages/tool-errors/codegen/bridges.yaml
- * Codegen: pnpm --filter @tabtin/tool-errors codegen
+ * Codegen: pnpm --filter @muse/tool-errors codegen
  *
  * browser-core / action-tools string codes → runtime error_kind.
  * Does not mutate producers; network_error and network_failed stay distinct.

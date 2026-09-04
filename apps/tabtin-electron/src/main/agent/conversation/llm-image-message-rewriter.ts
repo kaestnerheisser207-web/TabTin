@@ -1,4 +1,4 @@
-import type { Message } from '@tabtin/agent-runtime'
+import type { Message } from '@muse/agent-runtime'
 import { isAgentReachableMediaUrl } from '../../../shared/llm-image-url.js'
 
 export async function rewriteUnreachableImageUrlsInMessages(

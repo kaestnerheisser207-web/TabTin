@@ -6,7 +6,7 @@
  * （ENGINE_IDENTITY_PROMPT / SYSTEM_IDENTITY_PROMPT / ENGINE_SAFETY_PROMPT /
  * SYSTEM_SAFETY_PROMPT / ENGINE_EXECUTION_PROMPT / SYSTEM_PERSISTENCE_PROMPT
  * / PROACTIVE_REPORT_RULES）—— 替代物：
- *   - identity / safety / execution 中文段由 `@tabtin/agent-prompt` 的
+ *   - identity / safety / execution 中文段由 `@muse/agent-prompt` 的
  *     `buildIdentitySection` / `SECTION_SAFETY` / `SECTION_EXECUTION` 提供
  *   - PROACTIVE_REPORT_RULES 段从未被 hook 注入到 system prompt（只有
  *     barrel re-export + tests，0 production caller），整段下线

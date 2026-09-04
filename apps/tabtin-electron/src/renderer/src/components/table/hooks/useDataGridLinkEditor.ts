@@ -1,5 +1,5 @@
 import React from 'react';
-import type { RecordFieldKeyType, TableRecord } from '@tabtin/table-core';
+import type { RecordFieldKeyType, TableRecord } from '@muse/table-core';
 
 export interface LinkEditorFieldConfig {
   foreignTableId: string;

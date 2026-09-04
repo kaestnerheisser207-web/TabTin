@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import type { ChatMessage } from '@tabtin/chat-client'
+import type { ChatMessage } from '@muse/chat-client'
 import { collectTurnResources, locateResourceIndex } from '../collectTurnResources'
 
 function makeMsg(overrides: Partial<ChatMessage>): ChatMessage {

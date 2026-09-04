@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from 'vitest'
-import type { BudgetTracker } from '@tabtin/agent-runtime'
+import type { BudgetTracker } from '@muse/agent-runtime'
 import {
   resolveSubagentCarryForward,
   resolveSubagentCompletionSpaceId,

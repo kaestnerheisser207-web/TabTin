@@ -2,7 +2,7 @@
  * 文件操作 + 代码搜索 + Git + 外部 Agent 文件类工具
  */
 
-import type { ToolCardDescriptor, ToolOutputData } from '@tabtin/chat-client'
+import type { ToolCardDescriptor, ToolOutputData } from '@muse/chat-client'
 import { basename, truncate, getNestedArgs, unwrapData } from './toolCardUtils'
 
 /* ─── 输出提取器 ─── */

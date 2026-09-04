@@ -2,7 +2,7 @@
  * DEV-only：暴露活的 chat store + 模拟 run 终止 DONE，供 CDP / 控制台验证
  * 异常停止气泡。动态 import 可能拿到 HMR 分裂的空 store，必须走本探针。
  */
-import type { ChatMessage } from '@tabtin/chat-client'
+import type { ChatMessage } from '@muse/chat-client'
 import { useChatStore } from '../useChatStore'
 import { useChatRuntimeStore, flushRuntimeBatch } from '../../useChatRuntimeStore'
 import { flushSubagentLiveBatch, useSubagentLiveStore } from '../../subagentLive'
@@ -364,25 +364,25 @@ export function probeEndSessionRunStopsTimer(sessionId?: string): {
 export function bootstrapMockRunTerminationProbe(): void {
   if (!import.meta.env.DEV) return
   // Window 类型只暴露 getState（CDP 读会话）；避免 Zustand setState 重载拖垮 assign。
-  window.__TABTIN_CHAT_STORE__ = { getState: () => useChatStore.getState() }
-  window.__TABTIN_CHAT_RUNTIME_STORE__ = { getState: () => useChatRuntimeStore.getState() }
+  window.__MUSE_CHAT_STORE__ = { getState: () => useChatStore.getState() }
+  window.__MUSE_CHAT_RUNTIME_STORE__ = { getState: () => useChatRuntimeStore.getState() }
   //  dogfood：子代理 live / 归档必须挂应用内同实例；CDP 动态 import 会命中 HMR 空 store。
-  window.__TABTIN_SUBAGENT_LIVE_STORE__ = useSubagentLiveStore
-  window.__TABTIN_SUBAGENT_SESSION_STORE__ = useSubagentSessionStore
-  window.__TABTIN_FLUSH_SUBAGENT_LIVE__ = flushSubagentLiveBatch
-  window.__TABTIN_MOCK_RUN_TERMINATION__ = mockRunTermination
-  window.__TABTIN_RUN_TERMINATION_LIVE_CASES__ = RUN_TERMINATION_LIVE_CASES
-  window.__TABTIN_PROBE_6529_END_SESSION_RUN__ = probeEndSessionRunStopsTimer
+  window.__MUSE_SUBAGENT_LIVE_STORE__ = useSubagentLiveStore
+  window.__MUSE_SUBAGENT_SESSION_STORE__ = useSubagentSessionStore
+  window.__MUSE_FLUSH_SUBAGENT_LIVE__ = flushSubagentLiveBatch
+  window.__MUSE_MOCK_RUN_TERMINATION__ = mockRunTermination
+  window.__MUSE_RUN_TERMINATION_LIVE_CASES__ = RUN_TERMINATION_LIVE_CASES
+  window.__MUSE_PROBE_6529_END_SESSION_RUN__ = probeEndSessionRunStopsTimer
 }
 
 export function teardownMockRunTerminationProbe(): void {
   if (!import.meta.env.DEV) return
-  delete window.__TABTIN_CHAT_STORE__
-  delete window.__TABTIN_CHAT_RUNTIME_STORE__
-  delete window.__TABTIN_SUBAGENT_LIVE_STORE__
-  delete window.__TABTIN_SUBAGENT_SESSION_STORE__
-  delete window.__TABTIN_FLUSH_SUBAGENT_LIVE__
-  delete window.__TABTIN_MOCK_RUN_TERMINATION__
-  delete window.__TABTIN_RUN_TERMINATION_LIVE_CASES__
-  delete window.__TABTIN_PROBE_6529_END_SESSION_RUN__
+  delete window.__MUSE_CHAT_STORE__
+  delete window.__MUSE_CHAT_RUNTIME_STORE__
+  delete window.__MUSE_SUBAGENT_LIVE_STORE__
+  delete window.__MUSE_SUBAGENT_SESSION_STORE__
+  delete window.__MUSE_FLUSH_SUBAGENT_LIVE__
+  delete window.__MUSE_MOCK_RUN_TERMINATION__
+  delete window.__MUSE_RUN_TERMINATION_LIVE_CASES__
+  delete window.__MUSE_PROBE_6529_END_SESSION_RUN__
 }

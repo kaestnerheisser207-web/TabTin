@@ -231,7 +231,7 @@ def _auth_space_view(workspace: Workspace):
 
 
 def prepare_case() -> None:
-    context = ensure_context(require_env("TABTIN_E2E_RUN_ID"))
+    context = ensure_context(require_env("MUSE_E2E_RUN_ID"))
     workspace = context["workspace"]
     emit({
         "runId": context["runId"],
@@ -265,7 +265,7 @@ def prepare_case() -> None:
 
 
 def auth_case() -> None:
-    context = ensure_context(require_env("TABTIN_E2E_RUN_ID"))
+    context = ensure_context(require_env("MUSE_E2E_RUN_ID"))
     emit(build_electron_auth_payload(
         user=context["user"],
         organization=context["organization"],
@@ -277,12 +277,12 @@ def auth_case() -> None:
 
 
 def verify_case() -> None:
-    run_id = require_env("TABTIN_E2E_RUN_ID")
-    document_id = require_env("TABTIN_E2E_DOCUMENT_ID")
-    table_id = require_env("TABTIN_E2E_TABLE_ID")
-    doc_item_id = require_env("TABTIN_E2E_DOC_CONTEXT_ITEM_ID")
-    table_item_id = require_env("TABTIN_E2E_TABLE_CONTEXT_ITEM_ID")
-    user_id = require_env("TABTIN_E2E_USER_ID")
+    run_id = require_env("MUSE_E2E_RUN_ID")
+    document_id = require_env("MUSE_E2E_DOCUMENT_ID")
+    table_id = require_env("MUSE_E2E_TABLE_ID")
+    doc_item_id = require_env("MUSE_E2E_DOC_CONTEXT_ITEM_ID")
+    table_item_id = require_env("MUSE_E2E_TABLE_CONTEXT_ITEM_ID")
+    user_id = require_env("MUSE_E2E_USER_ID")
 
     from django.contrib.auth import get_user_model
 
@@ -342,7 +342,7 @@ def verify_case() -> None:
 
 
 def main() -> None:
-    mode = require_env("TABTIN_E2E_MODE")
+    mode = require_env("MUSE_E2E_MODE")
     if mode == "prepare":
         prepare_case()
         return
@@ -352,7 +352,7 @@ def main() -> None:
     if mode == "verify":
         verify_case()
         return
-    raise RuntimeError(f"Unknown TABTIN_E2E_MODE: {mode}")
+    raise RuntimeError(f"Unknown MUSE_E2E_MODE: {mode}")
 
 
 main()

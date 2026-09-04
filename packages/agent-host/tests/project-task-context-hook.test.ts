@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { SYSTEM_SECTION_NAMES } from '@tabtin/agent-runtime/engine'
+import { SYSTEM_SECTION_NAMES } from '@muse/agent-runtime/engine'
 import {
   buildProjectTaskContextHook,
   resolveProjectTaskRuntimeContext,

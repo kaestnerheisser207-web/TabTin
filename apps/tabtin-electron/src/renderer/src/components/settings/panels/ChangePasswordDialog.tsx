@@ -15,15 +15,15 @@ import { useTranslation } from 'react-i18next'
 import { useShallow } from 'zustand/react/shallow'
 import apiService from '@/services/api'
 import { useAuthStore } from '@/stores/useAuthStore'
-import { useCountdown } from '@tabtin/shared/use-countdown'
-import { useCapsLockWarning } from '@tabtin/shared/use-caps-lock-warning'
+import { useCountdown } from '@muse/shared/use-countdown'
+import { useCapsLockWarning } from '@muse/shared/use-caps-lock-warning'
 import {
   passwordHasWhitespace,
   passwordContainsCjk,
   sanitizeNewPasswordInput,
   passwordMeetsCharClassRule,
   PASSWORD_MIN_LENGTH,
-} from '@tabtin/shared'
+} from '@muse/shared'
 import { extractErrorMessage } from '@/utils/extract-api-error'
 import type { CurrentUserPasswordResetRequest, PasswordChangeRequest } from '@/types/auth'
 import { cn } from '@utils/cn'

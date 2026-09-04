@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from 'vitest'
-import type { LocalSkill } from '@tabtin/agent-runtime/skills'
+import type { LocalSkill } from '@muse/agent-runtime/skills'
 import { SkillsStore } from '../src/state/skills/skills-store.js'
 
 function skill(

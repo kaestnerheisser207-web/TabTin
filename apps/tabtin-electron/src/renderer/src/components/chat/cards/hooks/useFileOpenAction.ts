@@ -13,7 +13,7 @@
  */
 
 import { useCallback } from 'react'
-import { toast } from '@tabtin/smartsheet-ui'
+import { toast } from '@muse/smartsheet-ui'
 import { useTranslation } from 'react-i18next'
 import { useSpaceStore } from '@/stores/useSpaceStore'
 import { useSpaceContextTabsStore } from '@/stores/useSpaceContextTabsStore'
@@ -144,8 +144,8 @@ export function findContainingOpenTabRoot(
 
 /** 从文件路径向上找最近的 git 仓库根；找不到则 null。 */
 export async function findNearestGitRoot(absoluteFilePath: string): Promise<string | null> {
-  const git = window.tabtin?.git
-  const fs = window.tabtin?.fileSystem
+  const git = window.muse?.git
+  const fs = window.muse?.fileSystem
   let dir = dirnamePath(absoluteFilePath)
   for (let i = 0; i < 48 && dir; i++) {
     try {
@@ -298,12 +298,12 @@ export function useFileOpenAction(): FileOpenActions {
         workingDir,
       })
       try {
-        await window.tabtin?.workspace?.appendSessionAllowedPath?.({
+        await window.muse?.workspace?.appendSessionAllowedPath?.({
           spaceId,
           path: absoluteFilePath,
         })
         if (target.rootPath !== absoluteFilePath) {
-          await window.tabtin?.workspace?.appendSessionAllowedPath?.({
+          await window.muse?.workspace?.appendSessionAllowedPath?.({
             spaceId,
             path: target.rootPath,
           })
@@ -348,7 +348,7 @@ export function useFileOpenAction(): FileOpenActions {
 
   const revealInOsFileManager = useCallback(async (filePath: string) => {
     if (!filePath) return
-    const showItemInFolder = window.tabtin?.showItemInFolder
+    const showItemInFolder = window.muse?.showItemInFolder
     if (!showItemInFolder) {
       toast({
         title: t('card.openFile.unsupported', { defaultValue: '当前环境不支持系统级文件操作' }),
@@ -378,7 +378,7 @@ export function useFileOpenAction(): FileOpenActions {
 
   const openWithDefaultApp = useCallback(async (filePath: string) => {
     if (!filePath) return
-    const openPath = window.tabtin?.openPath
+    const openPath = window.muse?.openPath
     if (!openPath) {
       toast({
         title: t('card.openFile.unsupported', { defaultValue: '当前环境不支持系统级文件操作' }),

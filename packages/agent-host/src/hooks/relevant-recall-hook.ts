@@ -2,9 +2,9 @@
  * Relevant Recall Hook —— 每轮 iteration 注入相关能力召回块。
  *
  * **归属（ Phase 1）**：本 hook 原名 `buildRelevantRecallInjectorHook`，
- * 住在 `@tabtin/agent-runtime` 的 `capability/injectors/relevant-recall-injector.ts`。
+ * 住在 `@muse/agent-runtime` 的 `capability/injectors/relevant-recall-injector.ts`。
  * 它本无 @tabtin 产品内容依赖，但随其余 5 段上下文贡献一起归到宿主
- * `@tabtin/agent-host/hooks`（同层聚合），行为逐字节一致，仅换工厂名
+ * `@muse/agent-host/hooks`（同层聚合），行为逐字节一致，仅换工厂名
  * （`buildRelevantRecallInjectorHook` → `buildRelevantRecallHook`）。
  *
  * 承载 `<relevant_skills>` / `<relevant_mcp>` / `<relevant_cli>`——由 SkillsCap /
@@ -21,12 +21,12 @@ import type {
   EngineHooks,
   EngineState,
   IterationHookContext,
-} from '@tabtin/agent-runtime/engine'
+} from '@muse/agent-runtime/engine'
 import {
   INTERNAL_MESSAGE_MARKERS,
   hasInternalMarker,
   findLastRealUserIndex,
-} from '@tabtin/agent-runtime/engine'
+} from '@muse/agent-runtime/engine'
 import { removeTaggedBlock, upsertTaggedBlock } from './message-inject.js'
 
 export interface RelevantRecallHookOptions {

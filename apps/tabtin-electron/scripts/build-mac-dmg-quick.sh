@@ -6,7 +6,7 @@ APP_DIR="$(dirname "$SCRIPT_DIR")"
 REPO_ROOT="$(cd "$APP_DIR/../.." && pwd)"
 DEPLOY_DIR="$APP_DIR/.deploy-quick"
 
-PROFILE="${TABTIN_BUILD_PROFILE:-local}"
+PROFILE="${MUSE_BUILD_PROFILE:-local}"
 if [ "$PROFILE" != "local" ]; then
   echo "Unsupported profile for mac quick: $PROFILE (仅允许 local)" >&2
   exit 1
@@ -17,7 +17,7 @@ case "$HOST_ARCH_RAW" in
   x86_64|amd64)  HOST_ARCH="x64" ;;
   *)             HOST_ARCH="x64" ;;
 esac
-ARCH="${1:-${TABTIN_BUILD_ARCH:-$HOST_ARCH}}"
+ARCH="${1:-${MUSE_BUILD_ARCH:-$HOST_ARCH}}"
 
 case "$ARCH" in
   arm64) ARCH_FLAG="--arm64" ;;
@@ -56,11 +56,11 @@ echo "=== Muse Quick DMG Build (profile=${PROFILE}, arch=${ARCH}) ==="
 echo "  · 跳过 typecheck / sourcemap upload / zip / notarize"
 echo "  · 复用 deploy 目录: $DEPLOY_DIR"
 
-export TABTIN_BUILD_PROFILE="$PROFILE"
-export TABTIN_BUILD_TARGET="darwin"
-export TABTIN_BUILD_ARCH="$ARCH"
+export MUSE_BUILD_PROFILE="$PROFILE"
+export MUSE_BUILD_TARGET="darwin"
+export MUSE_BUILD_ARCH="$ARCH"
 export NODE_ENV="production"
-export TABTIN_UPDATE_CHANNEL="${TABTIN_UPDATE_CHANNEL:-stable}"
+export MUSE_UPDATE_CHANNEL="${MUSE_UPDATE_CHANNEL:-stable}"
 EXPECTED_GIT_REVISION="$(git -C "$REPO_ROOT" rev-parse HEAD)"
 
 PROFILE_VERSION="${VITE_APP_VERSION:-}"
@@ -91,7 +91,7 @@ if [ -n "$ARTIFACT_VERSION_LABEL" ] && [ "$ARTIFACT_VERSION_LABEL" != "$PROFILE_
   echo "  · artifact version label: $ARTIFACT_VERSION_LABEL (channel=$ARTIFACT_UPDATE_CHANNEL, app_version=$PROFILE_VERSION)"
 fi
 
-UPDATE_PUBLISH_URL="${TABTIN_UPDATE_PUBLISH_URL:-http://127.0.0.1:6060/desktop-updates}"
+UPDATE_PUBLISH_URL="${MUSE_UPDATE_PUBLISH_URL:-http://127.0.0.1:6060/desktop-updates}"
 echo "  · updater publish url: $UPDATE_PUBLISH_URL"
 
 prune_packaged_resource_tree() {
@@ -244,7 +244,7 @@ node "$SCRIPT_DIR/run-electron-vite.mjs" build
 find "$APP_DIR/out" -name "*.map" -type f -delete 2>/dev/null || true
 pack_time_step_end "[1/4] electron-vite"
 
-if [ "${TABTIN_QUICK_REUSE_DEPLOY:-0}" != "1" ] || [ "${TABTIN_QUICK_REDEPLOY:-0}" = "1" ] || [ ! -d "$DEPLOY_DIR/node_modules" ]; then
+if [ "${MUSE_QUICK_REUSE_DEPLOY:-0}" != "1" ] || [ "${MUSE_QUICK_REDEPLOY:-0}" = "1" ] || [ ! -d "$DEPLOY_DIR/node_modules" ]; then
   echo "[2/4] Creating quick deploy directory..."
   pack_time_step_begin "[2/4] deploy 目录"
   rm -rf "$DEPLOY_DIR"
@@ -252,7 +252,7 @@ if [ "${TABTIN_QUICK_REUSE_DEPLOY:-0}" != "1" ] || [ "${TABTIN_QUICK_REDEPLOY:-0
   pnpm --filter ./apps/tabtin-electron deploy "$DEPLOY_DIR" --prod
   pack_time_step_end "[2/4] deploy 目录"
 else
-  echo "[2/4] Reusing quick deploy directory (TABTIN_QUICK_REUSE_DEPLOY=1)..."
+  echo "[2/4] Reusing quick deploy directory (MUSE_QUICK_REUSE_DEPLOY=1)..."
 fi
 
 echo "[3/4] Refreshing app bundle inputs..."
@@ -335,8 +335,8 @@ if (!commands.some((command) => command?.hidden === true)) {
   echo "  · CLI 契约烟测通过：commands --format json --include-hidden"
 fi
 
-# tabtin-filegen：quick 只打本机 arch，Mach-O 对上才 stage。缺失非致命。
-FILEGEN_DIR="$REPO_ROOT/packages/tabtin-filegen-python"
+# muse-filegen：quick 只打本机 arch，Mach-O 对上才 stage。缺失非致命。
+FILEGEN_DIR="$REPO_ROOT/packages/muse-filegen-python"
 # shellcheck disable=SC1091
 source "$FILEGEN_DIR/filegen-arch.sh"
 FILEGEN_BIN_NAME="$(filegen_generic_bin_name darwin)"
@@ -351,10 +351,10 @@ if [ -d "$FILEGEN_DIR" ]; then
   fi
   if [ -z "$filegen_quick_source" ] || [ -n "$(find "$FILEGEN_DIR/src" "$FILEGEN_DIR/pyproject.toml" "$FILEGEN_DIR/build.sh" -newer "$filegen_quick_source" -print -quit 2>/dev/null)" ]; then
     if command -v python3 >/dev/null 2>&1; then
-      echo "  · 构建 tabtin-filegen 二进制 (packages/tabtin-filegen-python/dist/tabtin-filegen)"
-      ( cd "$FILEGEN_DIR" && bash build.sh ) || echo "  ⚠ tabtin-filegen 构建失败：包内将缺少文件生成能力（非致命）" >&2
+      echo "  · 构建 muse-filegen 二进制 (packages/muse-filegen-python/dist/muse-filegen)"
+      ( cd "$FILEGEN_DIR" && bash build.sh ) || echo "  ⚠ muse-filegen 构建失败：包内将缺少文件生成能力（非致命）" >&2
     elif [ -z "$filegen_quick_source" ]; then
-      echo "  ⚠ 未安装 python3 且无匹配 ${ARCH} 的 tabtin-filegen：包内将缺少文件生成能力（非致命）" >&2
+      echo "  ⚠ 未安装 python3 且无匹配 ${ARCH} 的 muse-filegen：包内将缺少文件生成能力（非致命）" >&2
     fi
     filegen_quick_source=""
     if filegen_matches_target "$FILEGEN_ARCH_BIN" darwin "$ARCH"; then
@@ -363,10 +363,10 @@ if [ -d "$FILEGEN_DIR" ]; then
       filegen_quick_source="$FILEGEN_BIN"
     fi
   fi
-  rm -rf "$DEPLOY_DIR/tabtin-filegen-python-dist-src"
-  mkdir -p "$DEPLOY_DIR/tabtin-filegen-python-dist-src"
+  rm -rf "$DEPLOY_DIR/muse-filegen-python-dist-src"
+  mkdir -p "$DEPLOY_DIR/muse-filegen-python-dist-src"
   if [ -n "$filegen_quick_source" ]; then
-    cp "$filegen_quick_source" "$DEPLOY_DIR/tabtin-filegen-python-dist-src/$FILEGEN_BIN_NAME"
+    cp "$filegen_quick_source" "$DEPLOY_DIR/muse-filegen-python-dist-src/$FILEGEN_BIN_NAME"
   fi
 fi
 
@@ -395,7 +395,7 @@ fi
 
 node "$DEPLOY_DIR/scripts/prepare-deploy-package.mjs" \
   --package-json "$DEPLOY_DIR/package.json" \
-  --update-channel "$TABTIN_UPDATE_CHANNEL" \
+  --update-channel "$MUSE_UPDATE_CHANNEL" \
   --publish-url "$UPDATE_PUBLISH_URL"
 
 PACKAGED_ELECTRON_VERSION="$(node -p "require('$APP_DIR/node_modules/electron/package.json').version" 2>/dev/null || true)"

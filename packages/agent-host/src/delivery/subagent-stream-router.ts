@@ -9,8 +9,8 @@
  *     persist 事实不再经 interceptor 落盘，避免「投递通道兼落盘」的分叉。
  */
 
-import { StreamEvents } from '@tabtin/agent-wire'
-import type { StreamEvent } from '@tabtin/agent-runtime'
+import { StreamEvents } from '@muse/agent-wire'
+import type { StreamEvent } from '@muse/agent-runtime'
 import {
   routeDeliveryEvent,
   type DeliveryEventSource,

@@ -17,7 +17,7 @@ import { useCallback, useEffect, useMemo, useRef } from 'react'
 import { useCrawlTabStore, type CrawlspaceViewInfo } from '@stores/useCrawlTabStore'
 import type { CrawlspaceViewMetaUpdates } from '@stores/crawlTab/types'
 import { seedManager } from '@stores/seed-manager'
-import type { ViewInfo, ViewId } from '@tabtin/crawlspace-core'
+import type { ViewInfo, ViewId } from '@muse/crawlspace-core'
 import { crawlViewClient } from '../../../crawlspace/electron/crawl-view-client'
 import { crawlspaceViewClient } from '../../../crawlspace/electron/crawlspace-view-client'
 import { crawlspaceContextClient } from '../../../crawlspace/electron/crawlspace-context-client'
@@ -102,7 +102,7 @@ export function useCrawlspaceContextAdapter(crawlspaceId: string) {
       const deferred = state.crawlspaceDeferredViewIdsByCS[crawlspaceId]
       const prevDeferred = prevState.crawlspaceDeferredViewIdsByCS[crawlspaceId]
       if (cache !== prevCache || deferred !== prevDeferred) {
-        if (globalThis.__TABTIN_DEBUG_VIEW_RELOAD__ && cache !== prevCache) {
+        if (globalThis.__MUSE_DEBUG_VIEW_RELOAD__ && cache !== prevCache) {
           const viewList = cache?.viewList ?? []
           console.info('[DebugViewReload] renderer.cache', {
             crawlspaceId,

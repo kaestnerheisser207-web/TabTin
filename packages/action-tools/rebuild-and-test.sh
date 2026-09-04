@@ -8,7 +8,7 @@
 
 ROOT="$(cd "$(dirname "$0")/../.." && pwd)"
 
-echo "🔧 重新构建 @tabtin/action-tools..."
+echo "🔧 重新构建 @muse/action-tools..."
 cd "$ROOT/packages/action-tools"
 pnpm build
 

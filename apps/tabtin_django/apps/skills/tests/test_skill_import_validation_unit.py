@@ -138,7 +138,7 @@ def test_import_accepts_missing_version_and_preserves_skill_md(tmp_path, monkeyp
     def _fake_republish(**kwargs):
         republished.update(kwargs)
 
-    monkeypatch.setenv("TABTIN_SANDBOX_ROOT", str(tmp_path))
+    monkeypatch.setenv("MUSE_SANDBOX_ROOT", str(tmp_path))
     monkeypatch.setattr(SkillService, "create_user_skill", staticmethod(_fake_create_user_skill))
     monkeypatch.setattr(
         SkillService,
@@ -195,7 +195,7 @@ def test_import_preserves_valid_tabtin_category(tmp_path, monkeypatch):
             visibility="private",
         )
 
-    monkeypatch.setenv("TABTIN_SANDBOX_ROOT", str(tmp_path))
+    monkeypatch.setenv("MUSE_SANDBOX_ROOT", str(tmp_path))
     monkeypatch.setattr(SkillService, "create_user_skill", staticmethod(_fake_create_user_skill))
     monkeypatch.setattr(
         SkillService,
@@ -246,7 +246,7 @@ def test_import_ignores_unknown_category(tmp_path, monkeypatch):
             visibility="private",
         )
 
-    monkeypatch.setenv("TABTIN_SANDBOX_ROOT", str(tmp_path))
+    monkeypatch.setenv("MUSE_SANDBOX_ROOT", str(tmp_path))
     monkeypatch.setattr(SkillService, "create_user_skill", staticmethod(_fake_create_user_skill))
     monkeypatch.setattr(
         SkillService,
@@ -286,7 +286,7 @@ def test_import_ignores_unknown_category(tmp_path, monkeypatch):
 
 def test_import_keeps_skill_when_republish_fails(tmp_path, monkeypatch):
     """sandbox 已写入后云端发布失败：保留 Skill，不 cleanup（对齐 create 初始发布）。"""
-    monkeypatch.setenv("TABTIN_SANDBOX_ROOT", str(tmp_path))
+    monkeypatch.setenv("MUSE_SANDBOX_ROOT", str(tmp_path))
 
     owner_user_id = "22222222-2222-2222-2222-222222222222"
     skill = SimpleNamespace(

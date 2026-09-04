@@ -6,7 +6,7 @@ import { getAnimationsByType, findAnimationEffect } from '../../configs/animatio
 import { createElementId } from '../../utils/id'
 import { useT } from '../../i18n'
 import { PanelSelect } from './shared/components'
-import { SectionPanel } from '@tabtin/smartsheet-ui'
+import { SectionPanel } from '@muse/smartsheet-ui'
 import { typeLabel } from './shared/constants'
 import { ScrollArea } from '../../components/ui/ScrollArea'
 

@@ -87,9 +87,9 @@ func resolveAgentMemoryScope(organizationID, agentID string) (scope agentMemoryS
 }
 
 // agentMemoryScopeFromFactory 从当前上下文解析 scope：
-//   - agentID：--agent-id 全局 flag（经 root PersistentPreRunE → TABTIN_AGENT_ID）
-//     或 TABTIN_AGENT_ID 环境变量，走 config.ResolveAgentID()。
-//   - organizationID：--organization-id 全局 flag / TABTIN_ORGANIZATION_ID / profile
+//   - agentID：--agent-id 全局 flag（经 root PersistentPreRunE → MUSE_AGENT_ID）
+//     或 MUSE_AGENT_ID 环境变量，走 config.ResolveAgentID()。
+//   - organizationID：--organization-id 全局 flag / MUSE_ORGANIZATION_ID / profile
 //     默认组织，走 config.ResolveOrganizationID()。
 func agentMemoryScopeFromFactory(f *cmdutil.Factory) (scope agentMemoryScope, message, hint string, ok bool) {
 	agentID := ""
@@ -243,7 +243,7 @@ func agentMemoryReqContext(ctx *cmdutil.RunContext) context.Context {
 }
 
 // agentMemoryEchoWriteTarget 在写命令成功时向 stderr 回显作用对象（Agent + 记忆 + 动作）。
-// 堵住「TABTIN_AGENT_ID 从其它上下文静默继承 → 误操作到自己的另一个 Agent」的感知盲区
+// 堵住「MUSE_AGENT_ID 从其它上下文静默继承 → 误操作到自己的另一个 Agent」的感知盲区
 // （后端只挡跨用户 / 越权，不挡你自己的另一个 Agent）。走 stderr、quiet 抑制、失败不打。
 func agentMemoryEchoWriteTarget(status int, agentID, memoryID, action string) {
 	if status >= 400 || output.IsQuietMode() {

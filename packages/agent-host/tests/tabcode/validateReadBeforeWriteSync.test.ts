@@ -30,7 +30,7 @@ import {
 import type {
   ReadFileState,
   ReadFileStateEntry,
-} from '@tabtin/agent-runtime';
+} from '@muse/agent-runtime';
 
 let tmpDir: string;
 let testFilePath: string;

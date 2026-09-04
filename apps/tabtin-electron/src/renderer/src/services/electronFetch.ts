@@ -1,6 +1,6 @@
 /**
- * 将标准 Fetch API 桥接到 Electron IPC 代理（window.tabtin.apiRequest），
- * 供 @tabtin/api-client (openapi-fetch) 的 options.fetch 使用。
+ * 将标准 Fetch API 桥接到 Electron IPC 代理（window.muse.apiRequest），
+ * 供 @muse/api-client (openapi-fetch) 的 options.fetch 使用。
  *
  * 所有 HTTP 请求由 Electron main 进程通过 Node.js http/https 转发，
  * 绕过 renderer 的 CSP / CORS 限制。
@@ -118,7 +118,7 @@ export const electronFetch: typeof globalThis.fetch = async (
   const headers = extractHeaders(init?.headers)
   const { body, multipartEntries } = await extractBody(init?.body)
 
-  const result = await window.tabtin.apiRequest({
+  const result = await window.muse.apiRequest({
     url,
     method,
     headers,

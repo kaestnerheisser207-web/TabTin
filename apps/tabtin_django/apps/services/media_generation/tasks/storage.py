@@ -371,7 +371,7 @@ def _media_image_artifact_event(task, stored_file: dict) -> dict:
                     'file_id': file_id,
                     'file_type': 'image',
                     'filename': filename,
-                    'url': f'tabtin://resource/file/{file_id}?hint=tabfiles',
+                    'url': f'muse://resource/file/{file_id}?hint=tabfiles',
                     'mime_type': stored_file['mime_type'],
                     'file_size': stored_file['file_size'],
                     'access_url': stored_file['access_url'],

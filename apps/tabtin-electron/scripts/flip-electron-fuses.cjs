@@ -139,9 +139,9 @@ function normalizeProfile(value) {
 
 function resolveFuseProfile(env = process.env) {
   return (
-    normalizeProfile(env.TABTIN_ELECTRON_FUSE_PROFILE) ||
-    normalizeProfile(env.TABTIN_RUNTIME_PROFILE) ||
-    normalizeProfile(env.TABTIN_BUILD_PROFILE) ||
+    normalizeProfile(env.MUSE_ELECTRON_FUSE_PROFILE) ||
+    normalizeProfile(env.MUSE_RUNTIME_PROFILE) ||
+    normalizeProfile(env.MUSE_BUILD_PROFILE) ||
     normalizeProfile(env.VITE_BUILD_PROFILE) ||
     (env.NODE_ENV === 'development' ? 'development' : 'production')
   )
@@ -152,13 +152,13 @@ function createFusePolicy(env = process.env) {
   const isProtectedProfile = profile === 'preprod' || profile === 'production'
   const runAsNode = isProtectedProfile
     ? false
-    : parseBoolean(env.TABTIN_ENABLE_RUN_AS_NODE_FUSE, profile === 'development' || profile === 'local')
+    : parseBoolean(env.MUSE_ENABLE_RUN_AS_NODE_FUSE, profile === 'development' || profile === 'local')
   const enableNodeOptionsEnvironmentVariable = isProtectedProfile
     ? false
-    : parseBoolean(env.TABTIN_ENABLE_NODE_OPTIONS_FUSE, profile === 'development' || profile === 'local')
+    : parseBoolean(env.MUSE_ENABLE_NODE_OPTIONS_FUSE, profile === 'development' || profile === 'local')
   const enableNodeCliInspectArguments = isProtectedProfile
     ? false
-    : parseBoolean(env.TABTIN_ENABLE_NODE_INSPECT_FUSE, profile === 'development' || profile === 'local')
+    : parseBoolean(env.MUSE_ENABLE_NODE_INSPECT_FUSE, profile === 'development' || profile === 'local')
 
   return {
     profile,
@@ -167,10 +167,10 @@ function createFusePolicy(env = process.env) {
     enableNodeOptionsEnvironmentVariable,
     enableNodeCliInspectArguments,
     enableEmbeddedAsarIntegrityValidation: true,
-    onlyLoadAppFromAsar: !parseBoolean(env.TABTIN_DISABLE_ONLY_LOAD_APP_FROM_ASAR, false),
+    onlyLoadAppFromAsar: !parseBoolean(env.MUSE_DISABLE_ONLY_LOAD_APP_FROM_ASAR, false),
     // Enabling this requires shipping browser_v8_context_snapshot.bin. Without it,
     // packaged macOS builds abort inside ElectronMain before app code runs.
-    loadBrowserProcessSpecificV8Snapshot: parseBoolean(env.TABTIN_ENABLE_BROWSER_V8_SNAPSHOT, false),
+    loadBrowserProcessSpecificV8Snapshot: parseBoolean(env.MUSE_ENABLE_BROWSER_V8_SNAPSHOT, false),
     grantFileProtocolExtraPrivileges: true,
   }
 }
@@ -331,7 +331,7 @@ function assertBrowserV8SnapshotPresent(appPath, electronPlatformName) {
 
   throw new Error(
     [
-      '[electron-fuses] TABTIN_ENABLE_BROWSER_V8_SNAPSHOT=1 requires browser_v8_context_snapshot.bin,',
+      '[electron-fuses] MUSE_ENABLE_BROWSER_V8_SNAPSHOT=1 requires browser_v8_context_snapshot.bin,',
       'but no snapshot file was found in the packaged app.',
       'Checked:',
       ...candidates.map((candidate) => `  - ${candidate}`),
@@ -392,8 +392,8 @@ async function applyElectronFuses(context, fusesModule) {
 }
 
 async function flipElectronFusesHook(context) {
-  if (parseBoolean(process.env.TABTIN_DISABLE_ELECTRON_FUSES, false)) {
-    console.warn('[electron-fuses] 已通过 TABTIN_DISABLE_ELECTRON_FUSES 跳过 fuse 翻转')
+  if (parseBoolean(process.env.MUSE_DISABLE_ELECTRON_FUSES, false)) {
+    console.warn('[electron-fuses] 已通过 MUSE_DISABLE_ELECTRON_FUSES 跳过 fuse 翻转')
     return
   }
 

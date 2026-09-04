@@ -9,7 +9,7 @@
 import React, { useState, useEffect, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Search, Send, Check } from 'lucide-react'
-import { toast } from '@tabtin/smartsheet-ui'
+import { toast } from '@muse/smartsheet-ui'
 import { Dialog, DialogContent, DialogTitle } from '@components/ui'
 import { useIMStore } from '@stores/useIMStore'
 import { useOrganizationStore } from '@stores/useOrganizationStore'

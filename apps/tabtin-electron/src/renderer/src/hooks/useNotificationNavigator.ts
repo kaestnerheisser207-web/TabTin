@@ -13,7 +13,7 @@ export function useNotificationNavigator(options: { enabled?: boolean } = {}) {
   useEffect(() => {
     if (!enabled) return
 
-    const unsubNavigate = window.tabtin?.notification?.onNavigate?.((data) => {
+    const unsubNavigate = window.muse?.notification?.onNavigate?.((data) => {
       if (!data?.type || !data?.id) return
       void navigateToTarget(data).catch(() => {})
     })

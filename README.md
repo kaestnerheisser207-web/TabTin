@@ -168,7 +168,7 @@ pnpm dev
 cp .env.example .env
 ```
 
-Community 启动入口只从根 `.env` 读取 `TABTIN_EDITION` 和 `AUTH_FIXED_VERIFICATION_CODE` 两个公开开关，并生成不包含其他密钥的内部运行文件。模板默认 `TABTIN_EDITION=community`；手机号注册/登录固定提示码可在 `.env` 中留空关闭，关闭后使用真实发送链路。
+Community 启动入口只从根 `.env` 读取 `MUSE_EDITION` 和 `AUTH_FIXED_VERIFICATION_CODE` 两个公开开关，并生成不包含其他密钥的内部运行文件。模板默认 `MUSE_EDITION=community`；手机号注册/登录固定提示码可在 `.env` 中留空关闭，关闭后使用真实发送链路。
 
 个人覆盖配置放在根目录 `.env.local`，两个文件都不得提交。中国大陆网络环境可使用 `node scripts/dev.mjs community --region cn`。
 

@@ -16,12 +16,12 @@ import {
 } from './CheckpointService'
 import { createLogger } from '../logger'
 import { guardedHandle } from '../utils/guarded-handle'
-import { getBucket, registerStorageBucket } from '@tabtin/storage-manager'
+import { getBucket, registerStorageBucket } from '@muse/storage-manager'
 import {
   parseShadowCoreWorktreeFromConfig,
   type CheckpointCommitPolicy,
   type CheckpointRestoreOptions,
-} from '@tabtin/checkpoint-core'
+} from '@muse/checkpoint-core'
 import { getDefaultPathAccessChecker } from '../security/path-access-checker'
 
 const log = createLogger('CheckpointIPC')

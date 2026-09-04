@@ -9,7 +9,7 @@ type PmJsonNode = Record<string, unknown>
 type PmMark = { type: string; attrs?: Record<string, unknown> }
 
 const SAFE_URL_RE = /^(https?:|mailto:|tel:|\/[^/]|#)/i
-const STABLE_IMAGE_URL_RE = /^tabtin-file:\/\/asset\/[0-9a-f-]{36}$/i
+const STABLE_IMAGE_URL_RE = /^muse-file:\/\/asset\/[0-9a-f-]{36}$/i
 const isSafeImageUrl = (src: string): boolean =>
   SAFE_URL_RE.test(src) || STABLE_IMAGE_URL_RE.test(src)
 
@@ -110,8 +110,8 @@ function parseInlineContent(text: string): PmJsonNode[] {
     if (token.kind === 'hardBreak') {
       nodes.push({ type: 'hardBreak' })
     } else if (token.kind === 'image') {
-      const stableFileId = token.src.startsWith('tabtin-file://asset/')
-        ? token.src.slice('tabtin-file://asset/'.length)
+      const stableFileId = token.src.startsWith('muse-file://asset/')
+        ? token.src.slice('muse-file://asset/'.length)
         : ''
       const attrs: Record<string, unknown> = {
         src: stableFileId ? '' : token.src,

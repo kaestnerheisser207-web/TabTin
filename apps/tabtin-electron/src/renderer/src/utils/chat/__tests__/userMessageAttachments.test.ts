@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import type { MessageAttachment, MessageBlock } from '@tabtin/chat-client'
+import type { MessageAttachment, MessageBlock } from '@muse/chat-client'
 import { deriveUserAttachments } from '../userMessageAttachments'
 
 describe('deriveUserAttachments', () => {

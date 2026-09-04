@@ -1,10 +1,10 @@
 import { describe, expect, it, vi } from 'vitest';
-import { AgentStreamEvents } from '@tabtin/ws-gateway-client';
-import { correlateSourceClientEvent } from '@tabtin/agent-host/delivery';
+import { AgentStreamEvents } from '@muse/ws-gateway-client';
+import { correlateSourceClientEvent } from '@muse/agent-host/delivery';
 import {
   decodeForwardRequestDetailed,
   type ForwardConversationRequest,
-} from '@tabtin/agent-host/conversation';
+} from '@muse/agent-host/conversation';
 
 import { TabTinDaemon } from '../src/bootstrap/daemon.js';
 import { PromptForwardController } from '../src/application/agent/prompt-forward-controller.js';

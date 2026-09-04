@@ -1,7 +1,7 @@
 import React from 'react'
 import { fireEvent, render, screen } from '@testing-library/react'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
-import type { Organization } from '@tabtin/app-shell'
+import type { Organization } from '@muse/app-shell'
 import { OrganizationAppCatalogPanel } from './OrganizationAppCatalogPanel'
 
 const loadCatalog = vi.fn()

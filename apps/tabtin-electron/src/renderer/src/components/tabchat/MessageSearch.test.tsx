@@ -26,7 +26,7 @@ vi.mock('react-i18next', () => ({
     t: (key: string, options?: { defaultValue?: string }) => options?.defaultValue ?? key,
   }),
 }))
-vi.mock('@tabtin/smartsheet-ui', () => ({ toast: mockToast }))
+vi.mock('@muse/smartsheet-ui', () => ({ toast: mockToast }))
 vi.mock('@/services/tabchatApi', async (importOriginal) => {
   const actual = await importOriginal<typeof import('@/services/tabchatApi')>()
   return {
@@ -78,8 +78,8 @@ vi.mock('@stores/useUserProfileCache', () => ({
   }),
   useDisplayNames: () => ({ 'user-1': '小叶' }),
 }))
-vi.mock('@tabtin/app-shell', async (importOriginal) => {
-  const actual = await importOriginal<typeof import('@tabtin/app-shell')>()
+vi.mock('@muse/app-shell', async (importOriginal) => {
+  const actual = await importOriginal<typeof import('@muse/app-shell')>()
   return { ...actual, getConversationNavigationKind: () => 'dm' }
 })
 vi.mock('@/lib/dateUtils', () => ({ formatConversationTime: (value: string | null) => value ?? '' }))

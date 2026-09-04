@@ -51,7 +51,7 @@ describe('resetSessionState', () => {
   })
 
   it('logout 时清理 localStorage（保留白名单 key；ui/voice 改"跟人走"清除）', async () => {
-    const { useOrganizationStore } = await import('@tabtin/app-shell')
+    const { useOrganizationStore } = await import('@muse/app-shell')
     useOrganizationStore.setState({
       organizations: [{ id: 'team-last-opened', name: 'Last Opened', type: 'team' }],
       selectedOrganization: { id: 'team-last-opened', name: 'Last Opened', type: 'team' },

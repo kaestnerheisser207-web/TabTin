@@ -10,7 +10,7 @@ import { useTranslation } from 'react-i18next'
 import { ChevronDown, ChevronRight, Search } from 'lucide-react'
 import { cn } from '@utils/cn'
 import type { CardRendererProps } from '../registry/types'
-import type { WebSearchData } from '@tabtin/chat-client'
+import type { WebSearchData } from '@muse/chat-client'
 import { SearchResultList, type SearchResultItem } from './primitives'
 import {
   CARD_HEADER_PADDING,

@@ -41,7 +41,7 @@ import {
   TabDataBlock,
   CanvasBlock,
   HtmlBlock,
-} from '@tabtin/doc-editor'
+} from '@muse/doc-editor'
 import { TabDataBlockView } from './tabdata-block/TabDataBlockView'
 import { CanvasBlockView } from './canvas-block/CanvasBlockView'
 import { HtmlBlockView } from './html-block/HtmlBlockView'
@@ -412,7 +412,7 @@ export const defaultExtensions: Extensions = [
  * 当前服务于只读渲染，但**不限于只读**——可编辑态由 DocRenderer 的 `editable`
  * 开关控制，本扩展集对两者通用。与 defaultExtensions 的差异：
  * - 不含强编辑期能力：GlobalDragHandle（拖拽手柄）、CustomKeymap（编辑快捷键）、Placeholder。
- * - tabdata / canvas 嵌入块用 @tabtin/doc-editor 的**原始 Node 定义**（自带 renderHTML 占位：
+ * - tabdata / canvas 嵌入块用 @muse/doc-editor 的**原始 Node 定义**（自带 renderHTML 占位：
  *   📊/🔀 + 标题），**不挂 React NodeView** —— 因此无需宿主 runtime（TabDocHostActions /
  *   表格 store），可安全用于匿名公开页。嵌入表格在此场景降级为占位（v1）。
  * - html 嵌入块挂 React NodeView（与编辑器一致），通过 HtmlArtifactLoader 拉取私有

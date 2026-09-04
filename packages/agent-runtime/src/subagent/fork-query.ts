@@ -513,7 +513,7 @@ export interface ForkQueryConfig {
   subagentDepth?: number;
   /**
    * 父业务对话 thread id。写入子 `EngineConfig.businessThreadId`，供
-   * ToolContext.threadId / TABTIN_THREAD_ID 使用；子 storage 仍走
+   * ToolContext.threadId / MUSE_THREAD_ID 使用；子 storage 仍走
    * `agent-{childId}`。缺省回落 `sessionConfig.threadId`。
    */
   businessThreadId?: string;

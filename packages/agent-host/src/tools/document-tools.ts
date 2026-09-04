@@ -2,7 +2,7 @@ import type {
   Tool,
   ToolContext,
   ToolResult,
-} from '@tabtin/agent-runtime';
+} from '@muse/agent-runtime';
 import {
   joinApiPath,
   jsonError,
@@ -10,7 +10,7 @@ import {
   translateBackendError,
   DOCUMENT_NOT_READY,
   MISSING_REQUIRED_PARAM,
-} from '@tabtin/agent-runtime/tools'
+} from '@muse/agent-runtime/tools'
 
 /**
  * W7 双层结果：UI 看每个 chunk 的完整内容，LLM 看 chunk 文本拼接（旧行为不变）。

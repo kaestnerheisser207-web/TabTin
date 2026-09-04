@@ -670,7 +670,7 @@ describe('MeetingRecordingManager', () => {
 
     const archive = await archiveManager.getArchive(scope);
 
-    expect(archive.audioUrls.local).toContain('tabtin-file://');
+    expect(archive.audioUrls.local).toContain('muse-file://');
     expect(
       archive.transcript.map(({ externalId, text, isFinal }) => ({
         externalId,

@@ -1,5 +1,5 @@
 /**
- * `@tabtin/agent-host` 受限 shell / 不可信输出的 Muse 业务判定。
+ * `@muse/agent-host` 受限 shell / 不可信输出的 Muse 业务判定。
  *
  * 这三样是 Muse CLI 特有知识，从中性 agent-runtime 内核迁出，由两宿主
  * （electron / daemon）装配时注入：

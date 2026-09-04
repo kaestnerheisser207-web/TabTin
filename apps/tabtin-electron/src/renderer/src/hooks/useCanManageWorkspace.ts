@@ -6,4 +6,4 @@ export {
   useCanManageOrganization as useCanManageOrganization,
 } from './useCanManageOrganization'
 
-export type { OrganizationRole as OrganizationRole } from '@tabtin/app-shell'
+export type { OrganizationRole as OrganizationRole } from '@muse/app-shell'

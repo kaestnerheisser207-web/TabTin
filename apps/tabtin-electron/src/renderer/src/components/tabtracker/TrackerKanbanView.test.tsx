@@ -46,7 +46,7 @@ vi.mock('@components/common/ListSkeletons', () => ({
   DetailedRowListSkeleton: () => <div data-testid="skeleton" />,
 }))
 
-vi.mock('@tabtin/smartsheet-ui', () => ({
+vi.mock('@muse/smartsheet-ui', () => ({
   ScrollArea: ({ children }: { children: React.ReactNode }) => <div>{children}</div>,
   Button: ({ children, ...rest }: React.ComponentProps<'button'>) => (
     <button {...rest}>{children}</button>

@@ -66,7 +66,7 @@ vi.mock('@/utils/featureFlags', () => ({
 }))
 
 import { WorkspaceLifecycleMenu } from '../WorkspaceLifecycleMenu'
-import type { Space } from '@tabtin/app-shell'
+import type { Space } from '@muse/app-shell'
 
 const space = {
   id: 'ws-1',

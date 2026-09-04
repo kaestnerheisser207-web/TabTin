@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from 'vitest'
-import type { AppHostClient } from '@tabtin/app-host-sdk'
+import type { AppHostClient } from '@muse/app-host-sdk'
 import {
   confirmCommentAttachmentUpload,
   createDocumentCommentThread,

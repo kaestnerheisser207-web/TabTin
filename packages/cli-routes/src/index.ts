@@ -1,5 +1,5 @@
 /**
- * @tabtin/cli-routes — Electron / Daemon cli-server 共享路由实现。
+ * @muse/cli-routes — Electron / Daemon cli-server 共享路由实现。
  *
  * 用法：宿主在启动 cli-server 前调一次 `configureCLIRoutes({...})` 注入
  * djangoRequest / getSpaceId / actionExecutor 等宿主特有能力，然后引用

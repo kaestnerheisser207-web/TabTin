@@ -1,5 +1,5 @@
 import React from 'react';
-import type { ViewMeta } from '@tabtin/table-core';
+import type { ViewMeta } from '@muse/table-core';
 import { useTableViewUiStore } from '@stores/useTableViewUiStore';
 import type { PersonalViewDraftState } from '@stores/useTableViewUiStore';
 import { resolveEffectiveCurrentView } from './viewResolution';

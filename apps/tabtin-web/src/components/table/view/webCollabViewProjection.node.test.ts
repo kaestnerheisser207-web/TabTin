@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict'
 import test from 'node:test'
-import type { ViewMeta, ViewRecordsQuery } from '@tabtin/table-core'
+import type { ViewMeta, ViewRecordsQuery } from '@muse/table-core'
 import { buildWebCollabViewRecords } from './webCollabViewProjection.ts'
 
 const fieldsMeta = [

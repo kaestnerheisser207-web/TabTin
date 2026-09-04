@@ -7,7 +7,7 @@ const createMockResourceCache = () => ({
 })
 
 describe('ResourceDownloader resource bridge', () => {
-  const originalTabtin = (window as any).tabtin
+  const originalTabtin = (window as any).muse
   const originalElectron = (window as any).electron
 
   let inspectResource: ReturnType<typeof vi.fn>
@@ -17,7 +17,7 @@ describe('ResourceDownloader resource bridge', () => {
     inspectResource = vi.fn()
     captureResource = vi.fn()
 
-    ;(window as any).tabtin = {
+    ;(window as any).muse = {
       resourceDetection: {
         inspectResource,
         captureResource,
@@ -35,9 +35,9 @@ describe('ResourceDownloader resource bridge', () => {
     vi.restoreAllMocks()
 
     if (originalTabtin === undefined) {
-      delete (window as any).tabtin
+      delete (window as any).muse
     } else {
-      ;(window as any).tabtin = originalTabtin
+      ;(window as any).muse = originalTabtin
     }
 
     if (originalElectron === undefined) {

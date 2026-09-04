@@ -1,8 +1,8 @@
 import React, { useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { GitFork } from 'lucide-react'
-import { ContextMenu, ContextMenuItem } from '@tabtin/smartsheet-ui'
-import type { ChatSessionWithAgent } from '@tabtin/chat-client'
+import { ContextMenu, ContextMenuItem } from '@muse/smartsheet-ui'
+import type { ChatSessionWithAgent } from '@muse/chat-client'
 import { cn } from '@utils/cn'
 
 interface ConversationCardProps {

@@ -21,7 +21,7 @@ import {
 } from '../WidgetRenderService'
 import { OffscreenWindowPool } from '../OffscreenWindowPool'
 import type { BrowserWindow } from 'electron'
-import { WIDGET_CSP } from '@tabtin/widget-tokens'
+import { WIDGET_CSP } from '@muse/widget-tokens'
 
 /**
  * Mock BrowserWindow——支持 widget service 调到的 API：

@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect, useCallback } from 'react';
-import { toast } from '@tabtin/smartsheet-ui';
+import { toast } from '@muse/smartsheet-ui';
 import { useTableCollabStore } from '@stores/useTableCollabStore';
-import type { CollabPeerState } from '@tabtin/collab-core';
+import type { CollabPeerState } from '@muse/collab-core';
 import type { UseDataGridCollabBridgeResult } from '../controller/useDataGridCollabBridge';
 import {
   claimTableSurfaceAwareness,

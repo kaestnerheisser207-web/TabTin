@@ -1,5 +1,5 @@
 {
-  "name": "@tabtin/smartsheet",
+  "name": "@muse/smartsheet",
   "version": "0.1.0",
   "description": "Muse SmartSheet Core Library",
   "main": "dist/index.js",

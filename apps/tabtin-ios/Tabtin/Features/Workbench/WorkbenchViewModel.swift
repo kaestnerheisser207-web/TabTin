@@ -560,10 +560,10 @@ enum TaskWorkbenchConversationArtifactPolicy {
     }
 
     private static func fileIdFromResourceURL(_ url: String?) -> String? {
-        guard let href = normalized(url), href.hasPrefix("tabtin://resource/file/") else {
+        guard let href = normalized(url), href.hasPrefix("muse://resource/file/") else {
             return nil
         }
-        let rest = String(href.dropFirst("tabtin://resource/file/".count))
+        let rest = String(href.dropFirst("muse://resource/file/".count))
         let encoded = rest.split(separator: "?", maxSplits: 1, omittingEmptySubsequences: true).first.map(String.init) ?? rest
         return normalized(encoded.removingPercentEncoding ?? encoded)
     }
@@ -676,7 +676,7 @@ enum TaskWorkbenchProjector {
                     }
                 case let .tool(tool) where !tool.isError:
                     // CLI `tabtin doc create` 常见路径：工具 JSON 含 data.document，
-                    // 最终回复未必带 tabtin://resource 链接（见 dogfood 快照）。
+                    // 最终回复未必带 muse://resource 链接（见 dogfood 快照）。
                     if let output = tool.visibleOutputText {
                         for link in TaskWorkbenchResourceLinkExtractor.extract(from: output) {
                             recordPointer(
@@ -813,7 +813,7 @@ enum TaskWorkbenchProjector {
     }
 }
 
-/// 从 assistant 正文 / 工具输出提取 `tabtin://resource/<type>/<id>`（对齐 Electron `extractResourceLinkArtifacts`）。
+/// 从 assistant 正文 / 工具输出提取 `muse://resource/<type>/<id>`（对齐 Electron `extractResourceLinkArtifacts`）。
 enum TaskWorkbenchResourceLinkExtractor {
     struct Link: Equatable, Sendable {
         let resourceType: String
@@ -822,10 +822,10 @@ enum TaskWorkbenchResourceLinkExtractor {
     }
 
     private static let mdLinkRegex = try! NSRegularExpression(
-        pattern: #"\[([^\]]+)\]\((tabtin://resource/[^)\s\"'`]+)\)"#
+        pattern: #"\[([^\]]+)\]\((muse://resource/[^)\s\"'`]+)\)"#
     )
     private static let bareURIRegex = try! NSRegularExpression(
-        pattern: #"tabtin://resource/[^\s)\]\"'`]+"#
+        pattern: #"muse://resource/[^\s)\]\"'`]+"#
     )
     private static let fencedCodeRegex = try! NSRegularExpression(
         pattern: #"```[\s\S]*?(?:```|$)"#
@@ -835,9 +835,9 @@ enum TaskWorkbenchResourceLinkExtractor {
     )
 
     static func extract(from rawText: String) -> [Link] {
-        guard rawText.contains("tabtin://resource/") else { return [] }
+        guard rawText.contains("muse://resource/") else { return [] }
         let text = stripCodeSegments(rawText)
-        guard text.contains("tabtin://resource/") else { return [] }
+        guard text.contains("muse://resource/") else { return [] }
 
         let nsText = text as NSString
         var labelByURL: [String: String] = [:]
@@ -905,8 +905,8 @@ enum TaskWorkbenchResourceLinkExtractor {
     }
 
     private static func parseResourceURI(_ href: String) -> (type: String, id: String)? {
-        guard href.hasPrefix("tabtin://resource/") else { return nil }
-        let rest = String(href.dropFirst("tabtin://resource/".count))
+        guard href.hasPrefix("muse://resource/") else { return nil }
+        let rest = String(href.dropFirst("muse://resource/".count))
         let path = rest.split(separator: "?", maxSplits: 1, omittingEmptySubsequences: false).first
             .map(String.init) ?? ""
         let parts = path.split(separator: "/", maxSplits: 1, omittingEmptySubsequences: false)

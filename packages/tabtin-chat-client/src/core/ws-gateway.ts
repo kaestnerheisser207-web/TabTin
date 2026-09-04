@@ -11,7 +11,7 @@ import {
   type GatewayClientError,
   type GatewayAuthContext,
   type GatewayResponse as CoreGatewayResponse,
-} from '@tabtin/ws-gateway-client'
+} from '@muse/ws-gateway-client'
 
 /**
  * 角色定义 — 与后端 protocol.py 的 ALLOWED_ROLES 保持一致。
@@ -108,7 +108,7 @@ const NOT_READY_RESPONSE: GatewayResponse = {
 }
 
 /**
- * WsGateway — Thin adapter over @tabtin/ws-gateway-client.
+ * WsGateway — Thin adapter over @muse/ws-gateway-client.
  *
  * Preserves the original public API (addListener, onReconnectedEvent, no-arg
  * connect, etc.) while delegating all WebSocket protocol logic to the core

@@ -18,9 +18,9 @@
  */
 
 import { describe, expect, it } from 'vitest'
-import type { ChatMessage, MessageBlock } from '@tabtin/chat-client'
-import { selectRecentHistoryForRuntime, filterUnresolvedToolUses } from '@tabtin/agent-runtime/history'
-import type { RuntimeHistoryMessage } from '@tabtin/agent-runtime/history'
+import type { ChatMessage, MessageBlock } from '@muse/chat-client'
+import { selectRecentHistoryForRuntime, filterUnresolvedToolUses } from '@muse/agent-runtime/history'
+import type { RuntimeHistoryMessage } from '@muse/agent-runtime/history'
 
 /**
  * W4c：测试模拟"sendMessageAction 映射后传入 daemon"的形态——daemon
@@ -234,12 +234,12 @@ describe('E2E 场景 2 · 中断后再发下一条', () => {
 //   修复后：merge 后保持 5 条独立（contextMsg / turn 1 user / turn 1 ai /
 //          turn 1 tool_result / turn 2 user）→ LLM 能正确区分轮次。
 
-import { buildInitialMessages, buildUserMessageWithAttachments } from '@tabtin/agent-runtime/history'
-import type { Message } from '@tabtin/agent-runtime/engine'
+import { buildInitialMessages, buildUserMessageWithAttachments } from '@muse/agent-runtime/history'
+import type { Message } from '@muse/agent-runtime/engine'
 import {
   mergeConsecutiveMessages,
   normalizeMessages,
-} from '@tabtin/agent-runtime/engine/message-normalizer'
+} from '@muse/agent-runtime/engine/message-normalizer'
 
 const CONTEXT_INJECTION_MARKER = '__context_injector__'
 

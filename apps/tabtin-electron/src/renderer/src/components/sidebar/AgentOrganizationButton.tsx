@@ -1,6 +1,6 @@
 import React from 'react'
 import { Bot } from 'lucide-react'
-import { Button } from '@tabtin/smartsheet-ui'
+import { Button } from '@muse/smartsheet-ui'
 import { useTableStore } from '@stores/useTableStore'
 import { useCrawlTabStore } from '@stores/useCrawlTabStore'
 import { getAgentWorkspaceDefaults } from '@/crawlspace/workspace-defaults'

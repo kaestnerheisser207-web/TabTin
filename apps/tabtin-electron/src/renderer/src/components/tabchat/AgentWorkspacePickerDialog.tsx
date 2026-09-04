@@ -19,8 +19,8 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@components/ui'
-import { toast } from '@tabtin/smartsheet-ui'
-import type { Space } from '@tabtin/app-shell'
+import { toast } from '@muse/smartsheet-ui'
+import type { Space } from '@muse/app-shell'
 import { ExecutionDeviceStatusTag } from '@components/context-space/ExecutionDeviceStatusTag'
 import { resolveSpaceExecutionDeviceStatus } from '@components/context-space/executionDeviceStatus'
 import type { ExecutionDeviceStatus } from '@components/context-space/terminalOverviewModel'

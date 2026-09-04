@@ -2,7 +2,7 @@
 'use strict';
 
 /**
- * @tabtin/cli 启动器。
+ * @muse/cli 启动器。
  *
  * 按 process.platform + process.arch 选出对应的预编译 muse Go 二进制
  * （见 ../binaries/），原样转发 argv / stdio / exit code。
@@ -35,8 +35,8 @@ function resolveBinaryPath() {
       .map((k) => `  - ${k.replace(':', ' / ')}`)
       .join('\n');
     throw new LauncherError(
-      `[@tabtin/cli] 不支持的平台: ${platform}/${arch}\n` +
-        `当前 @tabtin/cli 仅打包以下平台的 muse 二进制：\n${supported}\n` +
+      `[@muse/cli] 不支持的平台: ${platform}/${arch}\n` +
+        `当前 @muse/cli 仅打包以下平台的 muse 二进制：\n${supported}\n` +
         '其它平台请改用 `packages/tabtin-cli-go` 自行 `make build`，或等待后续版本补齐。'
     );
   }
@@ -44,10 +44,10 @@ function resolveBinaryPath() {
   const binaryPath = path.join(__dirname, '..', 'binaries', binaryName);
   if (!fs.existsSync(binaryPath)) {
     throw new LauncherError(
-      `[@tabtin/cli] 未找到 muse 二进制: ${binaryPath}\n` +
+      `[@muse/cli] 未找到 muse 二进制: ${binaryPath}\n` +
         `当前平台: ${platform}/${arch}，期望文件名: ${binaryName}\n` +
         '这通常意味着 npm pack 之前没有运行构建脚本。请先执行：\n' +
-        '  pnpm --filter @tabtin/cli build   # 或 bash scripts/build-binaries.sh\n' +
+        '  pnpm --filter @muse/cli build   # 或 bash scripts/build-binaries.sh\n' +
         '再重新 npm pack / npm i -g。'
     );
   }
@@ -81,10 +81,10 @@ function main() {
 
   // 把包内 skills/ 根路径传给 Go CLI。用户已显式设置时不覆盖。
   const env = { ...process.env };
-  if (!env.TABTIN_SKILLS_BUNDLE_DIR) {
+  if (!env.MUSE_SKILLS_BUNDLE_DIR) {
     const skillsDir = path.join(__dirname, '..', 'skills');
     if (fs.existsSync(path.join(skillsDir, 'manifest.json'))) {
-      env.TABTIN_SKILLS_BUNDLE_DIR = skillsDir;
+      env.MUSE_SKILLS_BUNDLE_DIR = skillsDir;
     }
   }
 
@@ -95,7 +95,7 @@ function main() {
 
   if (result.error) {
     process.stderr.write(
-      `[@tabtin/cli] 启动 muse 二进制失败: ${result.error.message}\n` +
+      `[@muse/cli] 启动 muse 二进制失败: ${result.error.message}\n` +
         `二进制路径: ${binaryPath}\n`
     );
     process.exit(1);

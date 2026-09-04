@@ -1,7 +1,7 @@
 import type {
   GitFileEntry as SharedGitFileEntry,
   RemoteGitStatus,
-} from '@tabtin/app-shell/types';
+} from '@muse/app-shell/types';
 
 export type GitFileEntry = SharedGitFileEntry;
 export type GitStatusData = RemoteGitStatus;

@@ -20,7 +20,7 @@
 import { createHash } from 'node:crypto'
 import { appendFileSync, mkdirSync } from 'node:fs'
 import { join } from 'node:path'
-import { getHomeTabtinPath } from '@tabtin/shared/storage-paths'
+import { getHomeTabtinPath } from '@muse/shared/storage-paths'
 
 // ─── 审计条目类型 ─────────────────────────────────────────────────
 

@@ -95,7 +95,7 @@
         "priority": 100
       },
       {
-        "scheme": "tabtin-file:",
+        "scheme": "muse-file:",
         "priority": 100
       }
     ]

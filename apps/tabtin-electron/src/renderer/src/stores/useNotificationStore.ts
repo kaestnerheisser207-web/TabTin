@@ -6,7 +6,7 @@
  * 系统角标由 NotificationBell 的最终展示值统一驱动；本 Store 仅保留兼容消费方状态。
  */
 import { create } from 'zustand'
-import { toast } from '@tabtin/smartsheet-ui/toast'
+import { toast } from '@muse/smartsheet-ui/toast'
 import { NotificationApiService, type NotificationItem, type NotificationNavigateTarget } from '@services/notificationApi'
 import { navigateToTarget } from '@/services/notificationNavigation'
 import {
@@ -507,7 +507,7 @@ export const useNotificationStore = create<NotificationState>((set, get) => ({
       }
       get().addNotification(withResolvedNotificationNavigateTarget(item))
     }
-    const unsub = window.tabtin?.notification?.onShown?.(handler)
+    const unsub = window.muse?.notification?.onShown?.(handler)
     return () => { unsub?.() }
   },
 }))

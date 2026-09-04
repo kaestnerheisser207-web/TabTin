@@ -1,13 +1,13 @@
 /**
  * 把 UnifiedBlock 里的 image_ref 源文件拷进档案 attachments/，
- * 并把 path 改写为拷贝后的绝对路径（供 block-conversion 转 tabtin-file URL）。
+ * 并把 path 改写为拷贝后的绝对路径（供 block-conversion 转 muse-file URL）。
  *
  * 拷贝失败 / 源不存在：保留原 path，转换层会降级为 `[图片: …]` 占位。
  */
 
 import * as fs from 'node:fs'
 import * as path from 'node:path'
-import type { UnifiedBlock, UnifiedMessage } from '@tabtin/agent-import'
+import type { UnifiedBlock, UnifiedMessage } from '@muse/agent-import'
 
 function uniqueDestPath(attachmentsDir: string, fileName: string): string {
   const safeBase = fileName.replace(/[^a-zA-Z0-9._-]+/g, '_').slice(0, 180) || 'image.png'

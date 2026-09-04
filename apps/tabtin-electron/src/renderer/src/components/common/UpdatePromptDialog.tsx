@@ -48,10 +48,10 @@ export const UpdatePromptDialog: React.FC = () => {
   }, [])
 
   useEffect(() => {
-    window.tabtin.updater.getAppVersion().then(setCurrentVersion).catch(() => {})
-    window.tabtin.updater.getState?.().then(applyRuntimeState).catch(() => {})
+    window.muse.updater.getAppVersion().then(setCurrentVersion).catch(() => {})
+    window.muse.updater.getState?.().then(applyRuntimeState).catch(() => {})
 
-    const cleanup = window.tabtin.updater.onUpdateEvent((payload) => {
+    const cleanup = window.muse.updater.onUpdateEvent((payload) => {
       const { event, data } = payload
       switch (event) {
         case 'update-state':
@@ -126,11 +126,11 @@ export const UpdatePromptDialog: React.FC = () => {
   }, [errorKey, mandatory, status, targetVersion])
 
   const handleDownload = useCallback(() => {
-    void window.tabtin.updater.downloadUpdate()
+    void window.muse.updater.downloadUpdate()
   }, [])
 
   const handleInstall = useCallback(() => {
-    window.tabtin.updater.quitAndInstall()
+    window.muse.updater.quitAndInstall()
   }, [])
 
   const handleOpenUpdateSettings = useCallback(() => {
@@ -138,7 +138,7 @@ export const UpdatePromptDialog: React.FC = () => {
   }, [openSettings])
 
   useEffect(() => {
-    const unsubscribe = window.tabtin?.overlay?.onUpdatePromptAction?.((payload) => {
+    const unsubscribe = window.muse?.overlay?.onUpdatePromptAction?.((payload) => {
       const action = (payload as OverlayUpdatePromptActionPayload | undefined)?.action
       if (action === 'dismiss') {
         handleDismiss()
@@ -164,7 +164,7 @@ export const UpdatePromptDialog: React.FC = () => {
   const overlayOpen = visible && !(status === 'error' && dismissedErrorKey === errorKey)
 
   useEffect(() => {
-    const overlay = window.tabtin?.overlay
+    const overlay = window.muse?.overlay
     if (!overlay?.push) return
 
     if (overlayOpen) {
@@ -193,7 +193,7 @@ export const UpdatePromptDialog: React.FC = () => {
     return () => {
       if (pushedOpenRef.current) {
         pushedOpenRef.current = false
-        void window.tabtin?.overlay?.push?.({ type: 'update-prompt', open: false })
+        void window.muse?.overlay?.push?.({ type: 'update-prompt', open: false })
       }
     }
   }, [])

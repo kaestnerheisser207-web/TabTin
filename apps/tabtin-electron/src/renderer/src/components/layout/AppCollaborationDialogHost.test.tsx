@@ -41,8 +41,8 @@ const mocks = vi.hoisted(() => {
   }
 })
 
-vi.mock('@tabtin/app-shell', async (importOriginal) => {
-  const actual = await importOriginal<typeof import('@tabtin/app-shell')>()
+vi.mock('@muse/app-shell', async (importOriginal) => {
+  const actual = await importOriginal<typeof import('@muse/app-shell')>()
   return {
     ...actual,
     AgentApiService: {

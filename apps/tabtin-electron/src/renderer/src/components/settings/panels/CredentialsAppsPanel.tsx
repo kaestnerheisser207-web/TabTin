@@ -10,7 +10,7 @@
 
 import React, { useState } from 'react'
 import { LayoutGrid, Smartphone } from 'lucide-react'
-import { Button } from '@tabtin/smartsheet-ui'
+import { Button } from '@muse/smartsheet-ui'
 import { useTranslation } from 'react-i18next'
 import { useSpaceStore } from '@stores/useSpaceStore'
 import { SettingsPanelHeader } from '../SettingsPanelHeader'

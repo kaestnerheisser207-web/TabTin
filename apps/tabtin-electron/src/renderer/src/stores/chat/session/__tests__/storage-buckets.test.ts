@@ -24,7 +24,7 @@ afterEach(() => {
 
 describe('chat:message-cache 注册（messageCache.ts）', () => {
   it('semi-cache 类，conversation group，soft 确认', async () => {
-    const sm = await import('@tabtin/storage-manager')
+    const sm = await import('@muse/storage-manager')
     sm.__resetForTesting()
 
     // 触发 messageCache.ts 模块顶层 side-effect。
@@ -49,7 +49,7 @@ describe('chat:input-drafts 注册（ChatInput.tsx 模块顶层）', () => {
     // 与 ChatInput.tsx 保持同步（schema 测试）。
     //
     // 备选方案：grep ChatInput.tsx 源码确认 bucket id + category 字面量。
-    const sm = await import('@tabtin/storage-manager')
+    const sm = await import('@muse/storage-manager')
     sm.__resetForTesting()
 
     const fs = await import('node:fs')

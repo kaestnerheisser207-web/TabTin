@@ -1,8 +1,8 @@
 import React from 'react'
 import { ChevronDown, ChevronRight, ImageIcon, Plus } from 'lucide-react'
-import type { Field, TableRecord, ViewMeta } from '@tabtin/table-core'
-import type { TableGridRow } from '@tabtin/table-engine'
-import { cn } from '@tabtin/smartsheet-ui'
+import type { Field, TableRecord, ViewMeta } from '@muse/table-core'
+import type { TableGridRow } from '@muse/table-engine'
+import { cn } from '@muse/smartsheet-ui'
 import { projectMobileTableItems } from './mobileTableProjection'
 
 export interface MobileTableCardListProps {

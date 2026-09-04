@@ -3,7 +3,7 @@
  */
 
 import React from 'react'
-import { toast } from '@tabtin/smartsheet-ui/toast'
+import { toast } from '@muse/smartsheet-ui/toast'
 import { useDownloadStore } from '@stores/useDownloadStore'
 import i18n from '@/i18n'
 import { ensureLegacyOk } from '@/services/legacy-result'

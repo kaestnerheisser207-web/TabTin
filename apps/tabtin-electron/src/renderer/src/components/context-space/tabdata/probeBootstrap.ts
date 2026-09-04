@@ -26,7 +26,7 @@ import {
   flushProbe,
   registerProbeIntent,
   type ProbeEvent,
-} from '@tabtin/table-ui'
+} from '@muse/table-ui'
 import { useSpaceContextTabsStore } from '@/stores/useSpaceContextTabsStore'
 import { ensureSpaceSelectedOrThrow } from '@/services/spaceNavigation'
 import { resolveForegroundTabScopeKey } from '@components/chat/subagent/openSubagentTab'

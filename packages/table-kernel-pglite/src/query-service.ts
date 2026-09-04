@@ -3,8 +3,8 @@ import type {
   SortConfig,
   WhereNode,
   FieldColumnMap,
-} from '@tabtin/table-kernel'
-import { buildRecordSpec, specToWhereNode, translateFieldId } from '@tabtin/table-kernel'
+} from '@muse/table-kernel'
+import { buildRecordSpec, specToWhereNode, translateFieldId } from '@muse/table-kernel'
 import type { PGliteInstance } from './dialect.js'
 import { whereNodeToSql } from './query-builder.js'
 

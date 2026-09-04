@@ -1,7 +1,7 @@
 import React from 'react'
 import type { TFunction } from 'i18next'
 import { useTranslation } from 'react-i18next'
-import { cn, ScrollArea, Tooltip, TooltipContent, TooltipProvider, TooltipTrigger, Button } from '@tabtin/smartsheet-ui'
+import { cn, ScrollArea, Tooltip, TooltipContent, TooltipProvider, TooltipTrigger, Button } from '@muse/smartsheet-ui'
 import {
   ArrowUpRight,
   Cpu,

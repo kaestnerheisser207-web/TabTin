@@ -13,7 +13,7 @@ import {
   DropdownMenuTrigger,
   ConfirmDialog,
   toast,
-} from '@tabtin/smartsheet-ui'
+} from '@muse/smartsheet-ui'
 import {
   Table2,
   Maximize2,
@@ -27,8 +27,8 @@ import {
 } from 'lucide-react'
 import { EmbedViewSwitcher } from './EmbedViewSwitcher'
 import { EmbedToolbar } from './EmbedToolbar'
-import { EMBED_LOADING_TIMEOUT_MS, isEmbedFieldsReady } from '@tabtin/tabdoc-ui/editor'
-import { useTabDocTableEmbedRuntime } from '@tabtin/tabdoc-ui'
+import { EMBED_LOADING_TIMEOUT_MS, isEmbedFieldsReady } from '@muse/tabdoc-ui/editor'
+import { useTabDocTableEmbedRuntime } from '@muse/tabdoc-ui'
 import { DUPLICATE_NAME_ERROR_TITLE, isDuplicateNameErrorMessage } from '@/lib/duplicateNameError'
 
 interface EmbedBlockContentProps {

@@ -10,8 +10,8 @@ PRD V3.3 §5 / §6 行为聚合：
 
 #7118：Skill HTTP 已去 ``space_id``。公开方法签名以 ``organization_id`` +
 ``agent_id`` 为主；sandbox 落盘按两层拆分：
-- 个人 Skill    → ``{TABTIN_SANDBOX_ROOT}/users/{userId}/skills/{slug}/``
-- 组织共享 Skill → ``{TABTIN_SANDBOX_ROOT}/users/{userId}/organizations/{orgId}/skills/{slug}/``
+- 个人 Skill    → ``{MUSE_SANDBOX_ROOT}/users/{userId}/skills/{slug}/``
+- 组织共享 Skill → ``{MUSE_SANDBOX_ROOT}/users/{userId}/organizations/{orgId}/skills/{slug}/``
 """
 
 from __future__ import annotations
@@ -160,7 +160,7 @@ class SkillPermissionError(SkillServiceError):
 SANDBOX_USERS_SEGMENT = "users"
 SANDBOX_ORGANIZATIONS_SEGMENT = "organizations"
 SANDBOX_SKILLS_SEGMENT = "skills"
-SANDBOX_ROOT_ENV_VAR = "TABTIN_SANDBOX_ROOT"
+SANDBOX_ROOT_ENV_VAR = "MUSE_SANDBOX_ROOT"
 SANDBOX_ROOT_DEFAULT = "/tmp/tabtin-sandbox"
 
 

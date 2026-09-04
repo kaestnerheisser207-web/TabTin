@@ -1,6 +1,6 @@
 import { afterEach, describe, expect, it, vi } from 'vitest'
 
-import { createOSSClient } from '@tabtin/oss-client'
+import { createOSSClient } from '@muse/oss-client'
 
 function mockPresignResponse(payload: unknown): void {
   vi.stubGlobal('fetch', vi.fn(async () => new Response(JSON.stringify(payload), {

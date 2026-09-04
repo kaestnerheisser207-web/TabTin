@@ -4,7 +4,7 @@
  * 防回归覆盖（W4 P0 同款"真 wiring 守门"教训）：
  *   1. wireResourceRouter 注入 createResourceTelemetryEmitter() 后，
  *      router.open 触发的事件能跨过整条链路：
- *        emitter → window.tabtin.resourceTelemetry.emit → 测试 spy
+ *        emitter → window.muse.resourceTelemetry.emit → 测试 spy
  *   2. emitter 真从 useAuthStore + useOrganizationStore 注入 user_id / organization_id
  *      （W7 自挖：preload IPC 序列化只接受 plain object，user_id 注入必须发生
  *      在 renderer 端而不是 main 端 —— 否则跨进程边界字段缺失）
@@ -15,7 +15,7 @@
  */
 
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
-import { parseResourcePointer } from '@tabtin/resource-router'
+import { parseResourcePointer } from '@muse/resource-router'
 
 import {
   resourceRouter,
@@ -55,7 +55,7 @@ interface ResetOpts {
   }>
   user?: { id: string; username: string } | null
   organizationId?: string | null
-  /** 模拟 preload IPC 是否注入到 window.tabtin */
+  /** 模拟 preload IPC 是否注入到 window.muse */
   withPreload?: boolean
   /** ipc emit spy 是否抛错（验证非阻塞契约） */
   ipcThrows?: boolean
@@ -139,7 +139,7 @@ describe('resourceTelemetry integration — 端到端链路', () => {
         { appId: 'tabdata', types: [{ type: 'table', priority: 100 }] },
       ],
     })
-    const pointer = parseResourcePointer('tabtin://resource/table/tbl_1')
+    const pointer = parseResourcePointer('muse://resource/table/tbl_1')
     const out = await resourceRouter.open('space-1', pointer, {
       triggerSource: 'chat_markdown',
     })
@@ -161,7 +161,7 @@ describe('resourceTelemetry integration — 端到端链路', () => {
       user: { id: 'user-w7-test', username: 'w7' },
       organizationId: 'wt-w7-test',
     })
-    const pointer = parseResourcePointer('tabtin://resource/table/tbl_2')
+    const pointer = parseResourcePointer('muse://resource/table/tbl_2')
     await resourceRouter.open('space-1', pointer, { triggerSource: 'chat_markdown' })
     expect(ipcEmitSpy).toHaveBeenCalledTimes(1)
     const [event] = ipcEmitSpy.mock.calls[0] as [Record<string, unknown>]
@@ -178,7 +178,7 @@ describe('resourceTelemetry integration — 端到端链路', () => {
       user: { id: 'store-user', username: 'store' },
       organizationId: 'store-wt',
     })
-    const pointer = parseResourcePointer('tabtin://resource/table/tbl_3')
+    const pointer = parseResourcePointer('muse://resource/table/tbl_3')
     await resourceRouter.open('space-1', pointer, {
       triggerSource: 'open_in_space_tool',
       userId: 'explicit-user',
@@ -201,7 +201,7 @@ describe('resourceTelemetry integration — 防御 + 静默', () => {
       ],
       user: null,
     })
-    const pointer = parseResourcePointer('tabtin://resource/table/tbl_4')
+    const pointer = parseResourcePointer('muse://resource/table/tbl_4')
     const out = await resourceRouter.open('space-1', pointer)
     expect(out.outcome).toBe('in_space_opened')
     expect(ipcEmitSpy).not.toHaveBeenCalled()
@@ -217,7 +217,7 @@ describe('resourceTelemetry integration — 防御 + 静默', () => {
     })
     await resourceRouter.open(
       'space-1',
-      parseResourcePointer('tabtin://resource/table/tbl_5'),
+      parseResourcePointer('muse://resource/table/tbl_5'),
     )
     expect(ipcEmitSpy).not.toHaveBeenCalled()
   })
@@ -232,7 +232,7 @@ describe('resourceTelemetry integration — 防御 + 静默', () => {
     })
     const out = await resourceRouter.open(
       'space-1',
-      parseResourcePointer('tabtin://resource/table/tbl_6'),
+      parseResourcePointer('muse://resource/table/tbl_6'),
     )
     expect(out.outcome).toBe('in_space_opened')
     expect(openResourceTabSpy).toHaveBeenCalledTimes(1)
@@ -248,7 +248,7 @@ describe('resourceTelemetry integration — 防御 + 静默', () => {
     })
     const out = await resourceRouter.open(
       'space-1',
-      parseResourcePointer('tabtin://resource/table/tbl_7'),
+      parseResourcePointer('muse://resource/table/tbl_7'),
     )
     expect(out.outcome).toBe('in_space_opened')
     expect(openResourceTabSpy).toHaveBeenCalledTimes(1)
@@ -275,7 +275,7 @@ describe('resourceTelemetry integration — trigger × outcome 矩阵', () => {
     })
     await resourceRouter.open(
       'space-1',
-      parseResourcePointer('tabtin://resource/table/tbl_x'),
+      parseResourcePointer('muse://resource/table/tbl_x'),
       { triggerSource: trigger },
     )
     expect(ipcEmitSpy).toHaveBeenCalledTimes(1)

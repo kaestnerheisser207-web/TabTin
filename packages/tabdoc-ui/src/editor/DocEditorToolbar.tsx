@@ -26,8 +26,8 @@ import {
   ShareDialog,
   Switch,
   cn,
-} from '@tabtin/smartsheet-ui'
-import { CollabStatusBadge, CollabConnectionStatus, CollabStatus } from '@tabtin/collab-core'
+} from '@muse/smartsheet-ui'
+import { CollabStatusBadge, CollabConnectionStatus, CollabStatus } from '@muse/collab-core'
 import type { ExportFormat, FontStyle } from '../api-client'
 import type { SaveState } from '../useDocEditor'
 import type { DocumentSyncState } from '../useDocEditor'

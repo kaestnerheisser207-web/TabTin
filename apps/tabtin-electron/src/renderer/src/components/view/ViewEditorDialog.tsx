@@ -24,7 +24,7 @@ import {
   ScrollBar,
   Textarea,
   cn,
-} from '@tabtin/smartsheet-ui'
+} from '@muse/smartsheet-ui'
 import { Check, ChevronDown } from 'lucide-react'
 import type {
   Field,
@@ -32,13 +32,13 @@ import type {
   ViewCreateRequest,
   ViewUpdateRequest,
   ViewMeta,
-} from '@tabtin/table-core'
+} from '@muse/table-core'
 import { useTranslation } from 'react-i18next'
 import {
   isKanbanGroupableFieldType,
   isViewCoverFieldType,
   useViewEditorForm,
-} from '@tabtin/table-ui'
+} from '@muse/table-ui'
 
 type FormMode = 'create' | 'edit'
 

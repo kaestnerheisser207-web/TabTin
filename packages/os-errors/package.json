@@ -1,5 +1,5 @@
 {
-  "name": "@tabtin/os-errors",
+  "name": "@muse/os-errors",
   "version": "0.1.0",
   "description": "Muse OS access error abstraction — classifies platform-specific errno/error codes (TCC / NTFS ACL / AV / cloud placeholder) into structured Agent-consumable errors with localized guidance",
   "type": "module",

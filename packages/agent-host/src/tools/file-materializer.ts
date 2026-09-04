@@ -3,7 +3,7 @@ import { promises as fsPromises } from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 
-import { uploadFileToOSS } from '@tabtin/action-tools/utils/oss-upload';
+import { uploadFileToOSS } from '@muse/action-tools/utils/oss-upload';
 
 export interface FileMaterializationRef {
   fileId: string;

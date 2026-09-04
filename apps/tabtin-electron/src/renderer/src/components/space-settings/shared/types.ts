@@ -1,4 +1,4 @@
-import type { HostRuntimeSnapshot } from '@tabtin/shared'
+import type { HostRuntimeSnapshot } from '@muse/shared'
 import type { CoreCliNamespaceSummary } from '@/services/runtimeSnapshot'
 import type { LocalMcpConnectionSummary } from '@shared/types/mcp'
 

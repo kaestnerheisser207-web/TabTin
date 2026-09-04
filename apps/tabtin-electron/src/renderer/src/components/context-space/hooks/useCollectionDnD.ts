@@ -7,7 +7,7 @@
  * - handleDropOnCollection（支持嵌套文件夹）
  */
 import { useCallback, useEffect, useRef, useState } from 'react'
-import { toast } from '@tabtin/smartsheet-ui'
+import { toast } from '@muse/smartsheet-ui'
 import type { TFunction } from 'i18next'
 import { useUnifiedResources } from '@/stores/useUnifiedResources'
 import { createLogger } from '@/utils/logger'
