@@ -267,7 +267,7 @@ export function setContextSpaceAPI(api: ContextSpaceAPI | null): void {
 export function resolveRunSessionAPI(): RunSessionAPI | null {
   if (injectedRunSession) return injectedRunSession;
   const tabtin = (global as any).tabtin || (typeof window !== 'undefined' ? (window as any).tabtin : null);
-  const runSession = muse?.runSession || muse?.api?.runSession;
+  const runSession = tabtin?.runSession || tabtin?.api?.runSession;
   return runSession || null;
 }
 
@@ -286,7 +286,7 @@ export function resolveViewStateRegistryAPI(): ViewStateRegistryAPI | null {
 export function resolveCrawlViewAPI(): CrawlViewAPI | null {
   if (injectedCrawlView) return injectedCrawlView;
   const tabtin = (global as any).tabtin || (typeof window !== 'undefined' ? (window as any).tabtin : null);
-  const crawlView = muse?.crawlView || muse?.api?.crawlView;
+  const crawlView = tabtin?.crawlView || tabtin?.api?.crawlView;
   return crawlView || null;
 }
 

@@ -53,7 +53,7 @@ export class TabResolver {
 
     try {
       const tabtin = (global as any).tabtin || (typeof window !== 'undefined' ? (window as any).tabtin : null);
-      if (!muse?.runSession?.openTab) return null;
+      if (!tabtin?.runSession?.openTab) return null;
 
       if (tabtin.runSession.get) {
         try {
