@@ -117,7 +117,7 @@ class CloudRuntimeModelContractTests(SimpleTestCase):
         allocation = CloudRuntimeAllocation(
             request_key=uuid4(),
             volume_ref="volume-1",
-            runtime_image="ghcr.io/tabtin/cloud-runtime@sha256:test",
+            runtime_image="ghcr.io/muse/cloud-runtime@sha256:test",
         )
         self.assertEqual(allocation.cpu_millicores, 2000)
         self.assertEqual(allocation.memory_mb, 4096)
@@ -432,7 +432,7 @@ class CloudRuntimePersistenceTests(TransactionTestCase):
             device=device,
             state="ready",
             volume_ref="volume-test",
-            runtime_image="ghcr.io/tabtin/cloud-runtime@sha256:test",
+            runtime_image="ghcr.io/muse/cloud-runtime@sha256:test",
         )
         binding = RuntimeBinding.objects.using(db_alias).create(
             organization=organization,
@@ -452,7 +452,7 @@ class CloudRuntimePersistenceTests(TransactionTestCase):
 @override_settings(
     MUSE_EDITION="saas",
     MUSE_CLOUD_RUNTIME_IMAGE=(
-        "ghcr.io/tabtin/cloud-runtime@sha256:"
+        "ghcr.io/muse/cloud-runtime@sha256:"
         "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
     ),
     MUSE_CLOUD_WORKER_PROTOCOL_VERSION="1",
