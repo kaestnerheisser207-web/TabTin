@@ -9,7 +9,7 @@ import { XfsProjectQuotaManager } from '../src/storage-quota.js'
 import type { ProvisionWorkspaceInput } from '../src/contracts.js'
 
 const ALLOCATION_ID = '11111111-1111-4111-8111-111111111111'
-const IMAGE = `ghcr.io/tabtin/cloud-runtime@sha256:${'a'.repeat(64)}`
+const IMAGE = `ghcr.io/muse/cloud-runtime@sha256:${'a'.repeat(64)}`
 
 class FakeRunner implements CommandRunner {
   readonly calls: string[][] = []

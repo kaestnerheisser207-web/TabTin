@@ -16,11 +16,11 @@ if [[ "$command" == "deploy" ]]; then
   [[ -z "${extra:-}" ]] ||
     die "restricted key accepts only five deploy arguments"
   [[ "$arg1" =~ ^[0-9a-f]{40}$ ]] || die "release commit must be a full lowercase SHA"
-  [[ "$arg2" =~ ^ghcr\.io/kaestnerheisser207-web/tabtin-community-django@sha256:[0-9a-f]{64}$ ]] ||
+  [[ "$arg2" =~ ^ghcr\.io/kaestnerheisser207-web/muse-community-django@sha256:[0-9a-f]{64}$ ]] ||
     die "invalid Django image"
-  [[ "$arg3" =~ ^ghcr\.io/kaestnerheisser207-web/tabtin-web@sha256:[0-9a-f]{64}$ ]] ||
+  [[ "$arg3" =~ ^ghcr\.io/kaestnerheisser207-web/muse-web@sha256:[0-9a-f]{64}$ ]] ||
     die "invalid Web image"
-  [[ "$arg4" =~ ^ghcr\.io/kaestnerheisser207-web/tabtin-collab-live@sha256:[0-9a-f]{64}$ ]] ||
+  [[ "$arg4" =~ ^ghcr\.io/kaestnerheisser207-web/muse-collab-live@sha256:[0-9a-f]{64}$ ]] ||
     die "invalid Collab image"
   [[ "$arg5" =~ ^[A-Za-z0-9-]{1,39}$ ]] || die "invalid registry user"
   unset SSH_ORIGINAL_COMMAND
@@ -31,9 +31,9 @@ if [[ "$command" == "deploy-cloud" ]]; then
   [[ -z "${arg5:-}" && -z "${extra:-}" ]] ||
     die "restricted key accepts only four deploy-cloud arguments"
   [[ "$arg1" =~ ^[0-9a-f]{40}$ ]] || die "release commit must be a full lowercase SHA"
-  [[ "$arg2" =~ ^ghcr\.io/kaestnerheisser207-web/tabtin-cloud-runtime@sha256:[0-9a-f]{64}$ ]] ||
+  [[ "$arg2" =~ ^ghcr\.io/kaestnerheisser207-web/muse-cloud-runtime@sha256:[0-9a-f]{64}$ ]] ||
     die "invalid Cloud Runtime image"
-  [[ "$arg3" =~ ^ghcr\.io/kaestnerheisser207-web/tabtin-cloud-worker@sha256:[0-9a-f]{64}$ ]] ||
+  [[ "$arg3" =~ ^ghcr\.io/kaestnerheisser207-web/muse-cloud-worker@sha256:[0-9a-f]{64}$ ]] ||
     die "invalid Cloud Worker image"
   [[ "$arg4" =~ ^[A-Za-z0-9-]{1,39}$ ]] || die "invalid registry user"
   unset SSH_ORIGINAL_COMMAND

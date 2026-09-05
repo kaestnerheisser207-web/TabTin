@@ -35,11 +35,11 @@ fi
 
 [[ "$requested_sha" =~ ^[0-9a-f]{40}$ ]] ||
   die "release commit must be a full lowercase SHA"
-[[ "$requested_django" =~ ^ghcr\.io/kaestnerheisser207-web/tabtin-community-django@sha256:[0-9a-f]{64}$ ]] ||
+[[ "$requested_django" =~ ^ghcr\.io/kaestnerheisser207-web/muse-community-django@sha256:[0-9a-f]{64}$ ]] ||
   die "Django image must be the approved GHCR repository pinned by digest"
-[[ "$requested_web" =~ ^ghcr\.io/kaestnerheisser207-web/tabtin-web@sha256:[0-9a-f]{64}$ ]] ||
+[[ "$requested_web" =~ ^ghcr\.io/kaestnerheisser207-web/muse-web@sha256:[0-9a-f]{64}$ ]] ||
   die "Web image must be the approved GHCR repository pinned by digest"
-[[ "$requested_collab" =~ ^ghcr\.io/kaestnerheisser207-web/tabtin-collab-live@sha256:[0-9a-f]{64}$ ]] ||
+[[ "$requested_collab" =~ ^ghcr\.io/kaestnerheisser207-web/muse-collab-live@sha256:[0-9a-f]{64}$ ]] ||
   die "Collab image must be the approved GHCR repository pinned by digest"
 [[ "$registry_user" =~ ^[A-Za-z0-9-]{1,39}$ ]] ||
   die "invalid registry user"

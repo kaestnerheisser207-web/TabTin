@@ -37,7 +37,7 @@ def test_action_builds_and_pushes_five_immutable_amd64_images() -> None:
     assert "org.opencontainers.image.revision=${{ env.RELEASE_SHA }}" in workflow
     assert "MUSE_SOURCE_SHA=${{ env.RELEASE_SHA }}" in workflow
     assert (
-        "cache-to: type=gha,mode=max,scope=tabtin-community-django,ignore-error=true"
+        "cache-to: type=gha,mode=max,scope=muse-community-django,ignore-error=true"
         in workflow
     )
     assert "DJANGO_IMAGE_DIGEST: ${{ steps.build_django.outputs.digest }}" in workflow
@@ -330,9 +330,9 @@ def test_restricted_gateway_dispatches_only_validated_standard_or_cloud_releases
     assert 'if [[ "$command" == "deploy-cloud" ]]' in gateway
     assert 'exec sudo -n "$standard_release"' in gateway
     assert 'exec sudo -n "$cloud_release"' in gateway
-    assert "tabtin-community-django@sha256" in gateway
-    assert "tabtin-cloud-runtime@sha256" in gateway
-    assert "tabtin-cloud-worker@sha256" in gateway
+    assert "muse-community-django@sha256" in gateway
+    assert "muse-cloud-runtime@sha256" in gateway
+    assert "muse-cloud-worker@sha256" in gateway
     assert sudoers.splitlines() == [
         "tabtin-deploy ALL=(root) NOPASSWD: /Project/applications/tabtin/bin/tabtin-vps-release.sh",
         "tabtin-deploy ALL=(root) NOPASSWD: /Project/applications/tabtin/bin/tabtin-cloud-vps-release.sh",

@@ -37,9 +37,9 @@ fi
 
 [[ "$requested_sha" =~ ^[0-9a-f]{40}$ ]] ||
   die "release commit must be a full lowercase SHA"
-[[ "$requested_runtime" =~ ^ghcr\.io/kaestnerheisser207-web/tabtin-cloud-runtime@sha256:[0-9a-f]{64}$ ]] ||
+[[ "$requested_runtime" =~ ^ghcr\.io/kaestnerheisser207-web/muse-cloud-runtime@sha256:[0-9a-f]{64}$ ]] ||
   die "Cloud Runtime image must use the approved GHCR repository and digest"
-[[ "$requested_worker" =~ ^ghcr\.io/kaestnerheisser207-web/tabtin-cloud-worker@sha256:[0-9a-f]{64}$ ]] ||
+[[ "$requested_worker" =~ ^ghcr\.io/kaestnerheisser207-web/muse-cloud-worker@sha256:[0-9a-f]{64}$ ]] ||
   die "Cloud Worker image must use the approved GHCR repository and digest"
 [[ "$registry_user" =~ ^[A-Za-z0-9-]{1,39}$ ]] || die "invalid registry user"
 

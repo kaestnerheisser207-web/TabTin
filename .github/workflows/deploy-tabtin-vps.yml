@@ -78,8 +78,8 @@ jobs:
             INSTALL_PLAYWRIGHT=true
             MUSE_DEV_DEPENDENCY_FINGERPRINT=${{ steps.dependencies.outputs.fingerprint }}
             MUSE_SOURCE_SHA=${{ env.RELEASE_SHA }}
-          cache-from: type=gha,scope=tabtin-community-django
-          cache-to: type=gha,mode=max,scope=tabtin-community-django,ignore-error=true
+          cache-from: type=gha,scope=muse-community-django
+          cache-to: type=gha,mode=max,scope=muse-community-django,ignore-error=true
 
       - name: Build and push immutable Web image
         id: build_web
@@ -93,8 +93,8 @@ jobs:
           labels: |
             org.opencontainers.image.source=https://github.com/${{ github.repository }}
             org.opencontainers.image.revision=${{ env.RELEASE_SHA }}
-          cache-from: type=gha,scope=tabtin-web
-          cache-to: type=gha,mode=max,scope=tabtin-web,ignore-error=true
+          cache-from: type=gha,scope=muse-web
+          cache-to: type=gha,mode=max,scope=muse-web,ignore-error=true
 
       - name: Build and push immutable Collab image
         id: build_collab
@@ -108,8 +108,8 @@ jobs:
           labels: |
             org.opencontainers.image.source=https://github.com/${{ github.repository }}
             org.opencontainers.image.revision=${{ env.RELEASE_SHA }}
-          cache-from: type=gha,scope=tabtin-collab-live
-          cache-to: type=gha,mode=max,scope=tabtin-collab-live,ignore-error=true
+          cache-from: type=gha,scope=muse-collab-live
+          cache-to: type=gha,mode=max,scope=muse-collab-live,ignore-error=true
 
       - name: Configure restricted SSH access
         env:
@@ -202,8 +202,8 @@ jobs:
           labels: |
             org.opencontainers.image.source=https://github.com/${{ github.repository }}
             org.opencontainers.image.revision=${{ env.RELEASE_SHA }}
-          cache-from: type=gha,scope=tabtin-cloud-runtime
-          cache-to: type=gha,mode=max,scope=tabtin-cloud-runtime,ignore-error=true
+          cache-from: type=gha,scope=muse-cloud-runtime
+          cache-to: type=gha,mode=max,scope=muse-cloud-runtime,ignore-error=true
 
       - name: Build and push immutable Cloud Worker image
         id: build_cloud_worker
@@ -217,8 +217,8 @@ jobs:
           labels: |
             org.opencontainers.image.source=https://github.com/${{ github.repository }}
             org.opencontainers.image.revision=${{ env.RELEASE_SHA }}
-          cache-from: type=gha,scope=tabtin-cloud-worker
-          cache-to: type=gha,mode=max,scope=tabtin-cloud-worker,ignore-error=true
+          cache-from: type=gha,scope=muse-cloud-worker
+          cache-to: type=gha,mode=max,scope=muse-cloud-worker,ignore-error=true
 
   deploy-cloud:
     if: github.event_name == 'workflow_dispatch'
