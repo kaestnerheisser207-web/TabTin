@@ -27,6 +27,8 @@ export type HostTurnProfile = {
 
 export type HostTurnBundle = {
   agentConfig: AgentConfigV3
+  /** Execution harness belongs to the selected Agent, independently of Workspace placement. */
+  harness?: 'builtin' | 'dsh'
   profile: HostTurnProfile
   /** 实际解析进本 bundle 的 Agent；用于阻止选中 Agent 时静默使用空档案。 */
   resolvedAgentId?: string
@@ -474,6 +476,7 @@ export class HostTurnStore {
 
     return {
       agentConfig,
+      ...(agent ? { harness: resolveHostAgentHarness(agent.agentConfigRaw) } : {}),
       profile,
       ...(agent ? { resolvedAgentId: agent.agentId } : {}),
       ...(workspace?.organizationDetail
@@ -548,4 +551,15 @@ export class HostTurnStore {
       this.workspaces.clear()
     }
   }
+}
+
+/** Preserve legacy missing-harness defaults; reject unknown explicit engines. */
+export function resolveHostAgentHarness(raw: unknown): 'builtin' | 'dsh' {
+  if (!raw || typeof raw !== 'object') throw new Error('Selected Agent configuration is unavailable')
+  const harness = (raw as Record<string, unknown>).harness
+  if (harness == null) return 'builtin'
+  if (typeof harness !== 'object') throw new Error('Selected Agent harness configuration is invalid')
+  const type = (harness as Record<string, unknown>).type
+  if (type === 'builtin' || type === 'dsh') return type
+  throw new Error(`Unsupported Agent harness: ${String(type)}`)
 }

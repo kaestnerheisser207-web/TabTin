@@ -84,3 +84,5 @@ export {
   type PermissionShellResult,
   type PermissionShellLogger,
 } from './permission-shell.js'
+
+export * from "./host-capability-session.js"

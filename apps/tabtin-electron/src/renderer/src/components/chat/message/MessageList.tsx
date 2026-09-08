@@ -225,6 +225,9 @@ const MessageListInner = forwardRef<MessageListHandle, MessageListProps>(functio
   // 重渲染时机依赖 chat store 变更，投影单独变化（乐观派发窗口）时会滞后。
   const isStreaming = useSessionBusy(sessionId)
   const sessionPulseVisible = useAgentStreamingTailVisible(sessionId ?? null)
+  const isSending = useChatStore((s) =>
+    sessionId ? !!s.sendInFlightBySessionId?.[sessionId] : false,
+  )
   const { beginTurnEnd, providerValue: turnEndProviderValue } = useTurnEndLayoutController()
   const wasStreamingForRenderRef = useRef(isStreaming)
   const isTurnEndingRender = wasStreamingForRenderRef.current && !isStreaming
@@ -245,7 +248,9 @@ const MessageListInner = forwardRef<MessageListHandle, MessageListProps>(functio
     [isTurnEndingRender, turnEndProviderValue],
   )
 
-  const showAwaitingThoughtPlaceholder = sessionPulseVisible && !lastAssistantMsgId
+  // ACK 前正文还留在输入框，上一轮 assistant 不能挡住本次准备反馈。
+  const showAwaitingThoughtPlaceholder = (isSending && !isStreaming)
+    || (sessionPulseVisible && !lastAssistantMsgId)
 
   // hot-spaces 模式：SpaceChatRailHost 同时挂载所有 hot Space 的 ChatSidePanel，用
   // display:none 隐藏 inactive 的。inactive 时列表不可见——虚拟化与吸底监听都随之关闭。
@@ -423,7 +428,7 @@ const MessageListInner = forwardRef<MessageListHandle, MessageListProps>(functio
           displayNameOverride={awaitingTurnAgentFace.agentName}
           avatarUrlOverride={awaitingTurnAgentFace.agentAvatar}
         />
-        <AgentAwaitingThought />
+        <AgentAwaitingThought mode="preparing" />
       </div>
     )
   }, [awaitingTurnAgentFace, contentPadding, showAwaitingThoughtPlaceholder])
@@ -513,7 +518,7 @@ const MessageListInner = forwardRef<MessageListHandle, MessageListProps>(functio
   ])
   const trailingPlaceholder = renderAwaitingThoughtPlaceholder(totalVirtualSize)
 
-  if (!messages || messages.length === 0) {
+  if (messages.length === 0 && !showAwaitingThoughtPlaceholder) {
     return (
       <MessageListEmptyState
         isLoading={isLoading}

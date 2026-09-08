@@ -96,6 +96,11 @@
       "source": "./src/tracker/index.ts",
       "types": "./dist/tracker/index.d.ts",
       "import": "./dist/tracker/index.js"
+    },
+    "./runtime/dsh": {
+      "source": "./src/runtime/dsh/index.ts",
+      "types": "./dist/runtime/dsh/index.d.ts",
+      "import": "./dist/runtime/dsh/index.js"
     }
   },
   "files": [
@@ -128,14 +133,19 @@
     "@muse/os-errors": "workspace:*",
     "@muse/safe-fs": "workspace:*",
     "@muse/tool-errors": "workspace:*",
-    "chokidar": "^5.0.0"
+    "chokidar": "^5.0.0",
+    "@muse/config": "workspace:*",
+    "@deepseek-ai/dsh-host-apiproxy": "0.1.1-rc.2",
+    "ws": "^8.19.0",
+    "@muse/dsh-muse-plugin": "workspace:*"
   },
   "devDependencies": {
     "@muse/browser-core": "workspace:*",
     "@types/node": "^20.0.0",
     "typescript": "5.7.2",
     "vitest": "^1.6.1",
-    "sharp": "0.34.5"
+    "sharp": "0.34.5",
+    "@types/ws": "^8.5.0"
   },
   "peerDependencies": {
     "sharp": "0.34.5"

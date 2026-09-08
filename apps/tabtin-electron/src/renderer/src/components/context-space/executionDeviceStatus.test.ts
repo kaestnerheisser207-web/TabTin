@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest'
 import {
   computeExecutionDeviceStatus,
   resolveCloudRuntimeStatus,
+  resolveSpaceExecutionDeviceStatus,
   resolveCurrentMemberProjectCompanionDeviceStatus,
 } from './executionDeviceStatus'
 
@@ -56,7 +57,7 @@ describe('computeExecutionDeviceStatus', () => {
         devices,
         t,
       ),
-    ).toMatchObject({ label: '远程', secondaryLabel: '离线' })
+    ).toMatchObject({ label: '其他设备', secondaryLabel: '离线' })
   })
 
   it('keeps a regular 工作空间 device status unchanged', () => {
@@ -64,7 +65,7 @@ describe('computeExecutionDeviceStatus', () => {
 
     expect(
       resolveCurrentMemberProjectCompanionDeviceStatus(workspace, [workspace], devices[0], devices, t),
-    ).toMatchObject({ label: '远程', secondaryLabel: '离线' })
+    ).toMatchObject({ label: '其他设备', secondaryLabel: '离线' })
   })
 
   it('hides the Project device status when only a legacy execution_space_id is available', () => {
@@ -106,7 +107,7 @@ describe('computeExecutionDeviceStatus', () => {
     }
     expect(
       computeExecutionDeviceStatus('device-stale', current, [stale, current], t),
-    ).toMatchObject({ label: '远程', secondaryLabel: '离线' })
+    ).toMatchObject({ label: '其他设备', secondaryLabel: '离线' })
   })
 
   it('returns remote when only hostname matches (no silent same-machine)', () => {
@@ -124,12 +125,12 @@ describe('computeExecutionDeviceStatus', () => {
     }
     expect(
       computeExecutionDeviceStatus('device-stale', current, [stale, current], t),
-    ).toMatchObject({ label: '远程', secondaryLabel: '离线' })
+    ).toMatchObject({ label: '其他设备', secondaryLabel: '离线' })
   })
 
   it('returns remote + offline tags when execution device is on another machine and unreachable', () => {
     expect(computeExecutionDeviceStatus('device-remote', devices[0], devices, t)).toEqual({
-      label: '远程',
+      label: '其他设备',
       secondaryLabel: '离线',
       title: 'Agent 的执行设备「Remote Mac」当前不在线',
       tone: 'remote',
@@ -139,15 +140,15 @@ describe('computeExecutionDeviceStatus', () => {
 
   it('returns remote when execution device is online on another machine', () => {
     expect(computeExecutionDeviceStatus('device-remote-online', devices[0], devices, t)).toEqual({
-      label: '远程',
-      title: 'Agent 在「Remote Online」上工作，需切换到该设备才能操作这个应用',
+      label: '其他设备',
+      title: '工作空间在设备「Remote Online」上执行，目录位于该设备',
       tone: 'remote',
     })
   })
 
   it('returns remote + offline when control device is not in the current user list', () => {
     expect(computeExecutionDeviceStatus('device-someone-else', devices[0], devices, t)).toEqual({
-      label: '远程',
+      label: '其他设备',
       secondaryLabel: '离线',
       title: 'Agent 的执行设备「执行设备」当前不在线',
       tone: 'remote',
@@ -168,8 +169,8 @@ describe('computeExecutionDeviceStatus', () => {
       devices,
       t,
     )).toEqual({
-      label: '远程',
-      title: 'Agent 在「执行设备」上工作，需切换到该设备才能操作这个应用',
+      label: '其他设备',
+      title: '工作空间在设备「执行设备」上执行，目录位于该设备',
       tone: 'remote',
     })
   })
@@ -178,14 +179,57 @@ describe('computeExecutionDeviceStatus', () => {
     expect(resolveCloudRuntimeStatus({
       runtime_plane: 'cloud',
       cloud: { state: 'provisioning' },
-    }, t)).toMatchObject({ label: '初始化中', tone: 'remote' })
+    }, t)).toEqual({
+      label: '初始化中',
+      title: '云端工作空间正在准备，请稍候',
+      tone: 'remote',
+    })
+
     expect(resolveCloudRuntimeStatus({
       runtime_plane: 'cloud',
-      cloud: { state: 'error', last_error: 'git_source_unavailable: private' },
+      cloud: {
+        state: 'error',
+        last_error: 'git_source_unavailable: clone requires credentials',
+      },
     }, t)).toEqual({
       label: '初始化失败',
       title: '私有仓库缺少访问凭证，无法初始化云端工作空间',
       tone: 'offline',
     })
+  })
+})
+
+
+describe('runtime plane and device location labels', () => {
+  const current = { id: 'this-mac', name: 'Muse Desktop', status: 'online' }
+  const other = { id: 'other-mac', name: 'TabTin Desktop', status: 'online' }
+
+  it('keeps a local workspace on this device local regardless of its renamed display name', () => {
+    expect(resolveSpaceExecutionDeviceStatus({
+      runtime_plane: 'local', control_device_id: current.id,
+    }, null, current, [{ ...current, name: 'TabTin Desktop' }], t)).toBeNull()
+  })
+
+  it('distinguishes a local workspace on another device from cloud hosting', () => {
+    expect(resolveSpaceExecutionDeviceStatus({
+      runtime_plane: 'local', control_device_id: other.id,
+    }, null, current, [current, other], t)).toMatchObject({
+      label: '其他设备', title: '工作空间在设备「TabTin Desktop」上执行，目录位于该设备',
+    })
+  })
+
+  it('labels a ready cloud workspace as cloud and retains offline device status', () => {
+    const space = { runtime_plane: 'cloud', control_device_id: 'cloud-device', cloud: { state: 'ready' } }
+    expect(resolveSpaceExecutionDeviceStatus({ ...space, owner_execution_device_status: 'online' }, null, current, [current], t)).toEqual({
+      label: '云端', title: '工作空间在云端运行，目录位于云端环境', tone: 'remote',
+    })
+    expect(resolveSpaceExecutionDeviceStatus({ ...space, owner_execution_device_status: 'offline' }, null, current, [current], t)).toMatchObject({
+      label: '云端', secondaryLabel: '离线', secondaryTone: 'offline',
+    })
+  })
+
+  it('preserves cloud lifecycle status ahead of device location labels', () => {
+    expect(resolveSpaceExecutionDeviceStatus({ runtime_plane: 'cloud', cloud: { state: 'disabled' } }, null, current, [current], t)).toMatchObject({ label: '已停用' })
+    expect(resolveSpaceExecutionDeviceStatus({ runtime_plane: 'cloud', cloud: { state: 'provisioning' } }, null, current, [current], t)).toMatchObject({ label: '初始化中' })
   })
 })

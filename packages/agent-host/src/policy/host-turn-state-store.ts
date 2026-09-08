@@ -5,6 +5,7 @@
 
 export {
   HostTurnStore,
+  resolveHostAgentHarness,
   type ApprovalGrantName,
   type HostAgentDetail,
   type HostOrganizationDetail,

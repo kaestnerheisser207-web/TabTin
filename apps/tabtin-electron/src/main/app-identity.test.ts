@@ -14,6 +14,7 @@ const mocks = vi.hoisted(() => ({
     }),
     setPath: vi.fn(),
   },
+  existsSync: vi.fn((_path: unknown) => false),
   readFileSync: vi.fn(() => {
     throw new Error('no packaged metadata')
   }),
@@ -30,8 +31,10 @@ vi.mock('@electron-toolkit/utils', () => ({
 vi.mock('node:fs', () => ({
   default: {
     readFileSync: mocks.readFileSync,
+    existsSync: mocks.existsSync,
   },
   readFileSync: mocks.readFileSync,
+  existsSync: mocks.existsSync,
 }))
 
 import {
@@ -56,6 +59,7 @@ describe('app-identity', () => {
 
   beforeEach(() => {
     vi.clearAllMocks()
+    mocks.existsSync.mockReturnValue(false)
     mocks.is.dev = false
     mocks.app.isPackaged = false
     mocks.app.getName.mockReturnValue('tabtin-electron')
@@ -115,6 +119,39 @@ describe('app-identity', () => {
       join('/Users/test/Library/Application Support', 'Muse Dev', 'runtime'),
     )
     expect(process.env.MUSE_CONFIG_DIR).toBe(process.env.MUSE_RUNTIME_ROOT)
+  })
+
+  it('reuses same-profile TabTin data and encryption identity after a rename', () => {
+    mocks.existsSync.mockImplementation(path => String(path).endsWith('/TabTin Dev'))
+    applyRuntimeAppIdentity()
+    expect(mocks.app.setPath).toHaveBeenCalledWith('userData', '/Users/test/Library/Application Support/TabTin Dev')
+    expect(mocks.app.setName).toHaveBeenCalledWith('TabTin Dev')
+    expect(process.env.MUSE_APP_PRODUCT_NAME).toBe('Muse Dev')
+  })
+
+  it('never overwrites a populated Muse root when both brand roots exist', () => {
+    mocks.existsSync.mockReturnValue(true)
+    applyRuntimeAppIdentity()
+    expect(mocks.app.setName).toHaveBeenCalledWith('Muse Dev')
+    expect(mocks.app.setPath).toHaveBeenCalledWith('userData', '/Users/test/Library/Application Support/Muse Dev')
+  })
+
+  it('development never adopts production history', () => {
+    mocks.existsSync.mockImplementation(path => String(path).endsWith('/TabTin'))
+    applyRuntimeAppIdentity()
+    expect(mocks.app.setPath).toHaveBeenCalledWith('userData', '/Users/test/Library/Application Support/Muse Dev')
+    process.env.MUSE_RUNTIME_PROFILE = 'production'
+    applyRuntimeAppIdentity()
+    expect(mocks.app.setPath).toHaveBeenLastCalledWith('userData', '/Users/test/Library/Application Support/TabTin')
+    expect(mocks.app.setName).toHaveBeenLastCalledWith('TabTin')
+  })
+
+  it('explicit secondary instances only adopt their own historical directory', () => {
+    process.env.MUSE_DEV_INSTANCE = 'im-2'
+    mocks.existsSync.mockImplementation(path => String(path).endsWith('/TabTin Dev-im-2'))
+    applyRuntimeAppIdentity()
+    expect(mocks.app.setPath).toHaveBeenCalledWith('userData', '/Users/test/Library/Application Support/TabTin Dev-im-2')
+    expect(mocks.app.setName).toHaveBeenCalledWith('TabTin Dev (im-2)')
   })
 
   it('development secondary instance gets an isolated userData directory', () => {

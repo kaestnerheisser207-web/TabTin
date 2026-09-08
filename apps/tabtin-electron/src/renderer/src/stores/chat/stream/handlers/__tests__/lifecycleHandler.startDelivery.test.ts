@@ -83,6 +83,7 @@ vi.mock('@/utils/chatSessionTokenUsage', () => ({
 }))
 
 import { handleLifecycleEvent } from '../lifecycleHandler'
+import { DshEventTranslator } from '@muse/agent-host/runtime/dsh'
 
 const CLIENT_ID = '11111111-1111-4111-8111-111111111111'
 const RUN_ID = '9796076a-2faa-48ba-957b-ea76667a05be'
@@ -163,4 +164,19 @@ describe('handleLifecycleEvent phase=start · ', () => {
     }
     expect(user.sendStatus).toBe('sending')
   })
+  it('consumes real DSH start/step events as planning before any model token arrives', () => {
+    const ctx = makeCtx()
+    const translator = new DshEventTranslator(SESSION_ID, RUN_ID, 'selected-model')
+    const events = [
+      ...translator.translate({ type: 'turn/start', seq: 0, time: 1000, data: { turn: 0 } }),
+      ...translator.translate({ type: 'step/start', seq: 1, time: 1100, data: { turn: 0, step: 0 } }),
+    ]
+    expect(events.map(event => event.type)).toEqual(['agent.stream.lifecycle', 'agent.stream.lifecycle'])
+    expect(events.map(event => event.payload.phase)).toEqual(['start', 'turn_start'])
+    for (const event of events) handleLifecycleEvent(event, ctx)
+    expect(ctx.addStreamingSession).toHaveBeenCalledWith(SESSION_ID, RUN_ID)
+    expect(ctx.get().updateRunStateForSession).toHaveBeenCalledWith(SESSION_ID, expect.objectContaining({ phase: 'planning' }))
+    expect(events.some(event => event.type === 'agent.stream.content_block_delta')).toBe(false)
+  })
+
 })

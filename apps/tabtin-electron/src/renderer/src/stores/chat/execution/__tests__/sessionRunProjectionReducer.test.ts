@@ -75,6 +75,27 @@ function mirrorOverride(
 }
 
 describe('#4679 /  sessionRunProjectionReducer', () => {
+  it('迟到服务端 queued 不覆盖本机 running，也不清掉 Host 队列', () => {
+    const local = reduceSessionRunProjection(undefined, runtimeSync({
+      runId: 'run-1', status: 'running', seq: 7, queuedRunIds: ['run-2'],
+    }))
+    const delayed = reduceSessionRunProjection(local, {
+      type: 'server-event', runState: runState('queued'), now: 10,
+    })
+    expect(delayed?.queuedRunIds).toEqual(['run-2'])
+    expect(getEffectiveSessionRunStatus(delayed)).toBe('running')
+    const asking = reduceSessionRunProjection(delayed, {
+      type: 'server-event', runState: runState('waiting_user', { revision: 2 }), now: 11,
+    })
+    expect(getEffectiveSessionRunStatus(asking)).toBe('waiting_user')
+    expect(asking?.busy).toBe(true)
+    expect(asking?.queuedRunIds).toEqual(['run-2'])
+    const nextRun = reduceSessionRunProjection(asking, runtimeSync({
+      runId: 'run-2', status: 'running', seq: 8,
+    }))
+    expect(getEffectiveSessionRunStatus(nextRun)).toBe('running')
+  })
+
   it('冷启动：服务端 running 快照直接恢复 busy', () => {
     const projection = reduceSessionRunProjection(undefined, {
       type: 'server-snapshot',

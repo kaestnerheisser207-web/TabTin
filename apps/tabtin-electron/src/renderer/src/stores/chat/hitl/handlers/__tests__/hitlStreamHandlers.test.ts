@@ -409,6 +409,28 @@ describe('hitlStreamHandlers', () => {
     })
   })
 
+  it('严格校验业务字段前摘掉标准 wire envelope，仍报告未知业务字段', () => {
+    const warn = vi.spyOn(console, 'warn').mockImplementation(() => {})
+    const error = vi.spyOn(console, 'error').mockImplementation(() => {})
+    const payload = {
+      protocol_version: 'v2', min_compatible_version: 'v2', thread_id: 'session-wire',
+      run_id: 'run-wire', trace_id: 'run-wire', arrival_seq: 3, event_id: 'event-wire',
+      request_id: 'request-wire', message_id: 'ask-wire', tool_name: 'ask_user',
+      interaction_type: 'ask_user', blocking_policy: 'hard', intent: 'choose', form_mode: 'questions',
+      questions: [{ id: 'q1', header: '状态', prompt: '显示什么状态？', options: [
+        { id: 'a', label: 'A', description: '方案 A' },
+        { id: 'b', label: 'B', description: '方案 B' },
+      ] }],
+    }
+    const mismatchCount = () => [...warn.mock.calls, ...error.mock.calls]
+      .filter(call => JSON.stringify(call).includes('wire payload 与 schema 不一致')).length
+    handleAskInteractionRequiredStreamEvent({ type: 'agent.stream.ask_user_required', payload }, 'choice', { sessionId: 'session-wire' })
+    expect(mismatchCount()).toBe(0)
+    expect(pendingAskUserBySessionId['session-wire']).toMatchObject({ interruptId: 'request-wire', kind: 'choice' })
+    handleAskInteractionRequiredStreamEvent({ type: 'agent.stream.ask_user_required', payload: { ...payload, unexpected_business_field: true } }, 'choice', { sessionId: 'session-wire' })
+    expect(mismatchCount()).toBe(1)
+  })
+
   it('#4737 interaction_requested(ask_choice) 用权威 payload 打开追问面板', () => {
     const ok = handlePendingInteractionRequestedEvent({
       type: 'agent.user.interaction_requested',

@@ -1889,13 +1889,15 @@
       "other": "기타"
     },
     "deviceStatus": {
-      "remote": "원격",
+      "remote": "다른 기기",
       "offline": "오프라인",
       "unbound": "언바운드",
       "remoteDevice": "실행 장치",
-      "remoteTitle": "에이전트가 '{{device}}'에서 작업 중입니다. 이 앱을 작동하려면 해당 기기로 전환하세요",
+      "remoteTitle": "이 작업 공간은 \"{{device}}\"에서 실행되며 디렉터리도 해당 기기에 있습니다",
       "offlineTitle": "에이전트 실행 장치 \"{{device}}\"이 현재 오프라인 상태입니다.",
-      "unboundTitle": "에이전트에 아직 바인딩된 실행 장치가 없습니다."
+      "unboundTitle": "에이전트에 아직 바인딩된 실행 장치가 없습니다.",
+      "cloud": "클라우드",
+      "cloudTitle": "이 작업 공간과 디렉터리는 클라우드에 있습니다"
     },
     "terminalOverview": {
       "current": "현재",

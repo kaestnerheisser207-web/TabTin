@@ -3,6 +3,7 @@
  * 总览（12 列 grid：上下行 span 错开）或画布内整页 drill-in。
  */
 
+import { LocalDshSetupPanel } from '@components/space-settings/LocalDshSetupPanel'
 import React, { useCallback, useEffect, useState } from 'react'
 import {
   Ban,
@@ -679,34 +680,37 @@ export const AgentWorkbenchDetail: React.FC<AgentWorkbenchDetailProps> = ({
             {editingName && nameError ? (
               <p className={cn(SETTINGS_TEXT_META_BASE, 'mt-1 text-destructive')}>{nameError}</p>
             ) : null}
-            <div
-              className="mt-2 inline-flex rounded-md bg-foreground/[0.045] p-0.5"
-              role="radiogroup"
-              aria-label="Agent Runtime"
-              data-testid="agent-harness-switch"
-            >
-              {(['builtin', 'dsh'] as const).map((value) => (
-                <button
-                  key={value}
-                  type="button"
-                  role="radio"
-                  aria-checked={harness === value}
-                  disabled={savingHarness}
-                  onClick={() => { void handleHarnessChange(value) }}
-                  className={cn(
-                    SETTINGS_TEXT_MICRO,
-                    'rounded px-2 py-1 transition-colors',
-                    harness === value
-                      ? 'bg-background text-foreground shadow-sm'
-                      : 'text-muted-foreground hover:text-foreground',
-                  )}
-                >
-                  {value === 'builtin' ? 'Builtin' : 'DSH'}
-                </button>
-              ))}
+            <div className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-2">
+              <div
+                className="inline-flex shrink-0 rounded-md bg-foreground/[0.045] p-0.5"
+                role="radiogroup"
+                aria-label="Agent Runtime"
+                data-testid="agent-harness-switch"
+              >
+                {(['builtin', 'dsh'] as const).map((value) => (
+                  <button
+                    key={value}
+                    type="button"
+                    role="radio"
+                    aria-checked={harness === value}
+                    disabled={savingHarness}
+                    onClick={() => { void handleHarnessChange(value) }}
+                    className={cn(
+                      SETTINGS_TEXT_MICRO,
+                      'rounded px-2 py-1 transition-colors',
+                      harness === value
+                        ? 'bg-background text-foreground shadow-sm'
+                        : 'text-muted-foreground hover:text-foreground',
+                    )}
+                  >
+                    {value === 'builtin' ? 'Builtin' : 'DSH'}
+                  </button>
+                ))}
+              </div>
+              {harness === 'dsh' && <LocalDshSetupPanel compact disabled={savingHarness} />}
             </div>
             <p className={cn(SETTINGS_TEXT_META_BASE, 'mt-1.5 max-w-md text-muted-foreground')}>
-              DSH 仅在 Cloud Workspace 运行；本地 Workspace 会明确拒绝，不会静默改用 Builtin。
+              {t('harness.availabilityHint', { ns: 'space', defaultValue: 'DSH 支持本地和云端运行；在本地使用时需安装 DSH。' })}
             </p>
           </div>
         </div>

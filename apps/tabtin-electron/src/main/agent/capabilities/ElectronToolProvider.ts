@@ -623,6 +623,11 @@ export class ElectronToolProvider implements ToolProvider {
    * 回注「子 Agent 完整工具集」provider（host 装好 `mergedToolProvider` 后调用）。
    * 失效工具缓存，确保下次 `getTools()` 重建的 `agent` 工具持有完整集引用。
    */
+  setSubagentRuntimeFactory(factory: AgentToolDeps['createRuntime']): void {
+    if (this.agentToolDeps) this.agentToolDeps.createRuntime = factory
+    this.cachedTools = null
+  }
+
   setSubagentToolProvider(provider: ToolProvider): void {
     this.subagentToolProvider = provider
     this.cachedTools = null

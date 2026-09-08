@@ -1191,11 +1191,11 @@ class AgentRunContextMiddleware(MiddlewareMixin):
     def process_request(self, request: HttpRequest) -> None:
         run_id = (
             request.headers.get("X-Tabtin-Agent-Run-Id")
-            or request.META.get("HTTP_X_MUSE_AGENT_RUN_ID")
+            or request.META.get("HTTP_X_TABTIN_AGENT_RUN_ID")
         )
         session_id = (
             request.headers.get("X-Tabtin-Session-Id")
-            or request.META.get("HTTP_X_MUSE_SESSION_ID")
+            or request.META.get("HTTP_X_TABTIN_SESSION_ID")
         )
         if not run_id and not session_id:
             return

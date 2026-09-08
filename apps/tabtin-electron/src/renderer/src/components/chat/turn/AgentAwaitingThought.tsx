@@ -6,7 +6,7 @@ import { BORDER, ICON_SIZE, STEP_ROW } from '../registry/chatDesignTokens'
 import { STREAMING_PREVIEW_HEIGHT_PX } from '../markdown/streamingPreviewHeight'
 import { ShinyText } from '../markdown/ShinyText'
 
-export type AgentAwaitingThoughtMode = 'thinking' | 'planningNext'
+export type AgentAwaitingThoughtMode = 'preparing' | 'thinking' | 'planningNext'
 
 /**
  * Agent 回合加载壳（设计 2026-07-13 +  + agent-motion-design）。
@@ -18,7 +18,9 @@ export const AgentAwaitingThought: React.FC<{
 }> = React.memo(({ mode = 'thinking' }) => {
   const { t } = useTranslation('chat')
   const isPlanningNext = mode === 'planningNext'
-  const label = isPlanningNext
+  const label = mode === 'preparing'
+    ? t('capsule.status.preparing', { defaultValue: '正在准备' })
+    : isPlanningNext
     ? t('blockTimeline.thinking.planningNext', { defaultValue: '正在计划下一步...' })
     : t('blockTimeline.thinking.streaming', { defaultValue: '思考中…' })
 

@@ -50,7 +50,10 @@
       "doc": "文档",
       "docHint": "文档为主，重表达"
     },
-    "workingDirHint": "Agent 会在这个目录里跑命令、读写文件。目录类型决定这个工作空间默认怎么做事、也决定起始页默认视图，之后可在工作空间设置里改类型；工作目录创建后不可更换。它不会改变「授权策略」里的权限。"
+    "workingDirHint": "Agent 会在这个目录里跑命令、读写文件。目录类型决定这个工作空间默认怎么做事、也决定起始页默认视图，之后可在工作空间设置里改类型；工作目录创建后不可更换。它不会改变「授权策略」里的权限。",
+    "cloud": {
+      "notEnabled": "云端托管尚未开通，请联系部署管理员启用。"
+    }
   },
   "edit": {
     "title": "编辑工作空间",
@@ -1939,5 +1942,31 @@
     "saveFailed": "头像保存失败",
     "removed": "头像已移除",
     "removeFailed": "移除头像失败"
+  },
+  "harness": {
+    "title": "运行引擎",
+    "agentScopeHint": "作用于当前 Agent 的后续对话。",
+    "availabilityHint": "DSH 支持本地和云端运行；在本地使用时需安装 DSH。",
+    "agentRequired": "请先选择当前组织的 Agent。",
+    "saveFailed": "运行引擎保存失败，请重试。",
+    "selectBuiltin": "Muse 自带",
+    "selectDsh": "DeepSeek DSH",
+    "local": {
+      "incompatibleVersion": "本机 DSH {{version}} 与当前 Muse 不兼容。可安装 {{supportedVersion}}，现有 DSH 保持不变。",
+      "title": "安装本机 DSH",
+      "description": "未检测到 DeepSeek Harness。安装后即可在本机使用 DSH 对话。",
+      "ready": "本机 DSH 已就绪",
+      "version": "版本 {{version}}",
+      "checking": "正在检测本机 DSH…",
+      "installing": "正在安装 DSH，可能需要几分钟。",
+      "installingButton": "正在安装…",
+      "install": "安装 DSH",
+      "retry": "重试安装",
+      "refresh": "重新检测",
+      "nodeRequired": "请先安装 Node.js 22.12 或更新版本（含 npm），再重新检测。",
+      "getNode": "安装 Node.js",
+      "failed": "无法检测或安装 DSH，请重试。",
+      "readyShort": "就绪"
+    }
   }
 }

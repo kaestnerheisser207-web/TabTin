@@ -1,6 +1,6 @@
 import { is } from '@electron-toolkit/utils'
 import { app } from 'electron'
-import { readFileSync } from 'node:fs'
+import { existsSync, readFileSync } from 'node:fs'
 import { join } from 'node:path'
 
 export type TabTinRuntimeProfile = 'development' | 'local' | 'community' | 'preprod' | 'production'
@@ -178,16 +178,34 @@ export function resolveDevInstanceId(): string | undefined {
   return instanceId
 }
 
+/** Brand names are presentation; existing per-profile data and Keychain
+ * identity must survive a rename. Never cross profiles or merge two roots. */
+export function resolveRuntimeStorageIdentity(identity: TabTinAppIdentity, instanceId?: string): {
+  root: string
+  encryptionName: string
+} {
+  const suffix = instanceId ? `-${instanceId}` : ''
+  const nameSuffix = instanceId ? ` (${instanceId})` : ''
+  const appData = app.getPath('appData')
+  const currentName = identity.userDataDirName + suffix
+  const legacyName = identity.userDataDirName.replace(/^Muse/, 'TabTin') + suffix
+  const useLegacy = !existsSync(join(appData, currentName)) && existsSync(join(appData, legacyName))
+  return {
+    root: join(appData, useLegacy ? legacyName : currentName),
+    encryptionName: (useLegacy ? identity.productName.replace(/^Muse/, 'TabTin') : identity.productName) + nameSuffix,
+  }
+}
+
 export function applyRuntimeAppIdentity(): TabTinAppIdentity {
   const identity = resolveRuntimeAppIdentity()
   const instanceId = resolveDevInstanceId()
   const productName = instanceId ? `${identity.productName} (${instanceId})` : identity.productName
-  const userDataDirName = instanceId ? `${identity.userDataDirName}-${instanceId}` : identity.userDataDirName
+  const storage = resolveRuntimeStorageIdentity(identity, instanceId)
+  // Internal encryption identity stays stable on upgrades; window/product
+  // branding continues to use productName and MUSE_APP_PRODUCT_NAME.
+  app.setName(storage.encryptionName)
 
-  app.setName(productName)
-
-  const appDataPath = app.getPath('appData')
-  const profileRoot = join(appDataPath, userDataDirName)
+  const profileRoot = storage.root
   app.setPath('userData', profileRoot)
 
   // Keep managed/index data and execution-control state profile-scoped while
@@ -222,5 +240,5 @@ const LEGACY_DEFAULT_USER_DATA_DIR_NAME = 'tabtin-electron'
  */
 export function getKnownUserDataDirNames(): string[] {
   const profileDirs = Object.values(PROFILE_IDENTITIES).map((identity) => identity.userDataDirName)
-  return [...profileDirs, LEGACY_DEFAULT_USER_DATA_DIR_NAME]
+  return [...profileDirs, ...profileDirs.map(name => name.replace(/^Muse/, 'TabTin')), LEGACY_DEFAULT_USER_DATA_DIR_NAME]
 }

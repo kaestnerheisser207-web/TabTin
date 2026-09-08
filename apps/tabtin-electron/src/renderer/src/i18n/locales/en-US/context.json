@@ -1889,13 +1889,15 @@
       "other": "Other"
     },
     "deviceStatus": {
-      "remote": "Remote",
+      "remote": "Other device",
       "offline": "Offline",
       "unbound": "Unbound",
       "remoteDevice": "execution device",
-      "remoteTitle": "Agent works on \"{{device}}\"; switch to that device to operate this app",
+      "remoteTitle": "This workspace runs on \"{{device}}\", where its directory is located",
       "offlineTitle": "Agent's execution device \"{{device}}\" is currently offline",
-      "unboundTitle": "Agent does not have an execution device bound yet"
+      "unboundTitle": "Agent does not have an execution device bound yet",
+      "cloud": "Cloud",
+      "cloudTitle": "This workspace and its directory are hosted in the cloud"
     },
     "terminalOverview": {
       "current": "Current",

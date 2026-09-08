@@ -19,6 +19,12 @@ export type OpenAICodexModel = {
  */
 export const OPENAI_CODEX_MODELS: readonly OpenAICodexModel[] = [
   {
+    id: 'gpt-6-astra',
+    displayName: 'GPT-6 Astra',
+    contextWindowTokens: 1_050_000,
+    maxOutputTokens: 128_000,
+  },
+  {
     id: 'gpt-5.6-sol',
     displayName: 'GPT-5.6 Sol',
     contextWindowTokens: 1_050_000,

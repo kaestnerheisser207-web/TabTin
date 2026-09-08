@@ -585,6 +585,19 @@ describe('DefaultQueryTurnPipeline', () => {
     ])
   })
 
+  it('persists the admitted user before a harness can fail initialization', async () => {
+    const session = makeSession(async function* () { throw new Error('plugin setup failed') })
+    const h = createHarness(session)
+    const result = await h.pipeline.submit(hostQuery({ clientMessageId: 'admitted-user', prompt: 'visible task' }))
+    expect(result.success).toBe(false)
+    const persisted = h.emitted.filter(event => event.type === StreamEvents.PERSIST_MESSAGE)
+    expect(persisted).toHaveLength(1)
+    expect(persisted[0].payload).toMatchObject({
+      message_id: 'admitted-user', client_event_id: 'admitted-user', role: 'user', agent_run_id: 'run-1',
+      blocks_json: [expect.objectContaining({ type: 'text', text: 'visible task' })],
+    })
+  })
+
   it('runtime 首次 next 即失败时由 DeliveryTurn 持有业务配对，runtime 事件保持本地 id', async () => {
     const session = makeSession(async function* () {
       throw new Error('runtime failed before start')

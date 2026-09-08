@@ -62,6 +62,7 @@ const virtualizerHarness = vi.hoisted(() => {
 
 const chatStoreHarness = vi.hoisted(() => ({
   streamingBySession: {} as Record<string, boolean>,
+  sendingBySession: {} as Record<string, boolean>,
   sessionAgentById: {} as Record<string, string | null>,
   sessionAgentNameById: {} as Record<string, string | null>,
   sessionAgentAvatarById: {} as Record<string, string | null>,
@@ -154,6 +155,7 @@ vi.mock('@/stores/chat/useChatStore', () => ({
   }) => unknown) =>
     selector({
       restoringSessionId: null,
+      sendInFlightBySessionId: chatStoreHarness.sendingBySession,
       messagesBySessionId: chatStoreHarness.messagesBySessionId,
       getSessionById: (sessionId: string) =>
         Object.prototype.hasOwnProperty.call(chatStoreHarness.sessionAgentById, sessionId)
@@ -334,6 +336,7 @@ describe('MessageList viewport wiring', () => {
     virtualizerHarness.setTotalSize(240)
     virtualizerHarness.setItemCountOverride(null)
     chatStoreHarness.streamingBySession = {}
+    chatStoreHarness.sendingBySession = {}
     chatStoreHarness.messagesBySessionId = {}
     blocksHarness.record = {}
     activityHarness.isForeground = true
@@ -417,6 +420,24 @@ describe('MessageList viewport wiring', () => {
 
     rerender(<MessageList sessionId="session-viewport" messages={[...initialMessages, makeMessage({ id: 'user-2', role: 'user', content: 'updated' })]} />)
     expect(document.querySelector('[data-message-enter-key="user-2"]')?.className).not.toContain('chat-motion-message-enter')
+  })
+
+  it.each([true, false])('ACK 前立即显示准备状态（有历史=%s），发送失败后消失', (withHistory) => {
+    chatStoreHarness.sendingBySession['session-viewport'] = true
+    const messages = withHistory ? [makeMessage({ id: 'previous-answer', role: 'assistant' })] : []
+    const { rerender } = renderList({ messages })
+    expect(screen.getByTestId('agent-awaiting-thought-placeholder')).toBeTruthy()
+    chatStoreHarness.sendingBySession['session-viewport'] = false
+    rerender(<MessageList sessionId="session-viewport" messages={messages} />)
+    expect(screen.queryByTestId('agent-awaiting-thought-placeholder')).toBeNull()
+  })
+
+  it('追加排队消息不在已有输出后重复显示准备状态', () => {
+    chatStoreHarness.sendingBySession['session-viewport'] = true
+    chatStoreHarness.streamingBySession['session-viewport'] = true
+    pulseHarness.visible = true
+    renderList({ messages: [makeMessage({ id: 'active-answer', role: 'assistant' })] })
+    expect(screen.queryByTestId('agent-awaiting-thought-placeholder')).toBeNull()
   })
 
   it('等待占位已呈现 Agent 后，首条 assistant 消息接管时不重复渐入', () => {

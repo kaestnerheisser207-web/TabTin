@@ -1889,13 +1889,15 @@
       "other": "Autre"
     },
     "deviceStatus": {
-      "remote": "À distance",
+      "remote": "Autre appareil",
       "offline": "Hors ligne",
       "unbound": "Non lié",
       "remoteDevice": "dispositif d'exécution",
-      "remoteTitle": "L'agent travaille sur \"{{device}}\" ; passer à cet appareil pour utiliser cette application",
+      "remoteTitle": "Cet espace de travail s’exécute sur « {{device}} », où se trouve son répertoire",
       "offlineTitle": "Le périphérique d'exécution de l'agent \"{{device}}\" est actuellement hors ligne",
-      "unboundTitle": "L'agent n'a pas encore de périphérique d'exécution lié"
+      "unboundTitle": "L'agent n'a pas encore de périphérique d'exécution lié",
+      "cloud": "Cloud",
+      "cloudTitle": "Cet espace de travail et son répertoire sont hébergés dans le cloud"
     },
     "terminalOverview": {
       "current": "Actuel",

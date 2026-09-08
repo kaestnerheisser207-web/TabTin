@@ -134,6 +134,7 @@ import { performance } from 'node:perf_hooks';
 import { redactSecretsInOutput } from './_redact.js';
 import { buildTabtinRuntimeEnv } from './runtime-env.js';
 import { RuntimeSystemNoticeEvent } from '../../event/events/observability-events.js';
+import { classifyNativeShellScope } from './restricted-shell-allowlist.js';
 import type {
   RestrictedShellAllowlistChecker,
   ShellAllowlistDecision,
@@ -1947,6 +1948,28 @@ interface ShellExecuteDeps {
   checkHardlineCommand: HardlineCommandChecker;
 }
 
+/** Same non-bypassable checks for Builtin and native harness shell execution. */
+async function preflightShellCommand(input: unknown, context: ToolContext, deps: ShellExecuteDeps): Promise<ToolResult | null> {
+  const parsed = parseShellCommandInput(input);
+  if (!parsed.ok) return parsed.result;
+  const quoting = detectUnquotedWorkspacePath(parsed.command, [context.workspaceRoot], resolveAgentShellInfo().kind);
+  const pathQuotingWarnings = quoting.length ? serializeQuotingHits(quoting) : undefined;
+  const hardlineRejection = buildHardlineRejection(
+    deps.checkHardlineCommand,
+    parsed.command,
+    pathQuotingWarnings,
+  );
+  if (hardlineRejection) return hardlineRejection;
+  const restrictedRejection = await buildRestrictedShellRejection({
+    checker: deps.getRestrictedShellChecker(),
+    command: parsed.command,
+    pathQuotingWarnings,
+  });
+  if (restrictedRejection) return restrictedRejection;
+
+  return null;
+}
+
 async function executeShellCommand(
   input: unknown,
   context: ToolContext,
@@ -1963,18 +1986,8 @@ async function executeShellCommand(
   const pathQuotingWarnings = pathQuotingHits.length > 0
     ? serializeQuotingHits(pathQuotingHits)
     : undefined;
-  const hardlineRejection = buildHardlineRejection(
-    deps.checkHardlineCommand,
-    parsed.command,
-    pathQuotingWarnings,
-  );
-  if (hardlineRejection) return hardlineRejection;
-  const restrictedRejection = await buildRestrictedShellRejection({
-    checker: deps.getRestrictedShellChecker(),
-    command: parsed.command,
-    pathQuotingWarnings,
-  });
-  if (restrictedRejection) return restrictedRejection;
+  const rejection = await preflightShellCommand(input, context, deps);
+  if (rejection) return rejection;
 
   const credentials = await resolveSkillCredentialState(
     deps.skillContextProvider,
@@ -2310,6 +2323,28 @@ export class ShellCap extends CapabilityBase {
             : DEFAULT_WAIT_MS;
         const clamped = Math.min(Math.max(requested, 0), MAX_WAIT_MS);
         return clamped + EXECUTION_TIMEOUT_GRACE_MS;
+      },
+      async executeNative(input, context, perform) {
+        const parsedNative = parseShellCommandInput(input);
+        if (!parsedNative.ok) return parsedNative.result;
+        if (classifyNativeShellScope(parsedNative.command) !== 'ordinary') {
+          return { isError: true, content: 'This command needs the trusted Muse run scope. Use the Muse run_terminal_command platform tool; native shell must not select a global CLI workspace or evaluate an unverified wrapper.' };
+        }
+        const denial = await preflightShellCommand(input, context, {
+          bridge, spaceId, agentId, organizationId, skillContextProvider,
+          emitStreamEvent, getRestrictedShellChecker, checkHardlineCommand,
+        });
+        if (denial) return denial;
+        const credentials = await resolveSkillCredentialState(skillContextProvider, context, spaceId, agentId);
+        if (credentials.unavailable || Object.keys(credentials.secretEnv ?? {}).length > 0) {
+          return { isError: true, content: 'This command requires scoped Skill credentials. Use the Muse run_terminal_command tool; native shell cannot accept per-call credential environment.' };
+        }
+        const prepared = await prepareShellFileHistoryTracking(context);
+        const result = await perform();
+        const history = await buildShellFileHistoryEnvelope({ workspaceRoot: context.workspaceRoot,
+          preSnapshot: prepared.preSnapshot, preTrack: prepared.preTrack });
+        result.hostMetadata = { ...result.hostMetadata, shellFileHistory: history };
+        return result;
       },
       async execute(input: unknown, context: ToolContext): Promise<ToolResult> {
         return executeShellCommand(input, context, {

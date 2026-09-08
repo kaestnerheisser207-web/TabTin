@@ -62,8 +62,6 @@ import { DaemonLifecycle } from '../application/lifecycle/daemon-lifecycle.js';
 import { setTerminalCoreLocale, atomicWriteFileSync } from '@muse/terminal-core';
 import { DaemonAgentHost, type DaemonQueryRequest } from '../application/agent/daemon-agent-host.js';
 import { PromptForwardController } from '../application/agent/prompt-forward-controller.js';
-import { DshModelGateway } from '../application/agent/runtime/dsh-model-gateway.js';
-import { DshProcessService } from '../application/agent/runtime/dsh-process-service.js';
 import { DocParserRuntime } from '../platform/content/document/doc-parser-runner.js';
 import {
   daemonHostRuntimeOptions,
@@ -126,8 +124,6 @@ export class TabTinDaemon {
   private tableKernelService: TableKernelService | null = null;
   private tableLocalServer: TableLocalServer | null = null;
   private mcpServer: TabTinMcpServer | null = null;
-  private dshModelGateway: DshModelGateway | null = null;
-  private dshProcess: DshProcessService | null = null;
   private cliServerInfo: CLIServerInfo | null = null;
   private readonly cliServer = new DaemonCliServer();
   private terminalRuntime: TerminalRuntime | null = null;
@@ -245,58 +241,6 @@ export class TabTinDaemon {
     }
   }
 
-  private async startDshModelGateway(): Promise<void> {
-    const token = process.env.MUSE_DSH_GATEWAY_TOKEN ?? ''
-    if (!token) {
-      if (this.config.device_type === 'cloud') {
-        throw new Error('MUSE_DSH_GATEWAY_TOKEN is required for a Cloud runtime')
-      }
-      return
-    }
-    const gateway = new DshModelGateway({
-      serverUrl: this.config.server_url,
-      organizationId: this.config.organization_id,
-      credential: this.config.credential,
-      token,
-      port: Number(process.env.MUSE_DSH_GATEWAY_PORT ?? '3090'),
-    })
-    await gateway.start()
-    this.dshModelGateway = gateway
-    this.lifecycle.own('dsh-model-gateway', 'infrastructure', async () => {
-      if (this.dshModelGateway === gateway) this.dshModelGateway = null
-      await gateway.stop()
-    })
-    this.logger.info('[DSH] Loopback Model Gateway ready')
-  }
-
-  private async startDshProcess(): Promise<void> {
-    if (!this.dshModelGateway) return
-    const mcpStatus = this.mcpServer?.getRuntimeStatus()
-    if (!mcpStatus?.running || !mcpStatus.endpoint) {
-      throw new Error('TabTin MCP must be ready before DSH starts')
-    }
-    const processService = new DshProcessService({
-      workspaceRoot: this.config.workspace_root ?? '/workspace',
-      dshHome: process.env.DSH_HOME ?? '/var/lib/tabtin/dsh',
-      apiUrl: process.env.MUSE_DSH_API_URL ?? 'http://127.0.0.1:3080',
-      modelGatewayUrl: `http://127.0.0.1:${process.env.MUSE_DSH_GATEWAY_PORT ?? '3090'}/v1`,
-      modelGatewayToken: process.env.MUSE_DSH_GATEWAY_TOKEN ?? '',
-      mcpUrl: mcpStatus.endpoint,
-      mcpToken: this.mcpServer!.getBearerToken(),
-      executable: process.env.MUSE_DSH_BIN,
-      logger: {
-        info: message => this.logger.info(message),
-        warn: message => this.logger.warn(message),
-      },
-    })
-    await processService.start()
-    this.dshProcess = processService
-    this.lifecycle.own('dsh-process', 'infrastructure', async () => {
-      if (this.dshProcess === processService) this.dshProcess = null
-      await processService.stop()
-    })
-    this.logger.info('[DSH] ApiProxy and TabTin MCP bridge ready')
-  }
 
   async start(): Promise<void> {
     return this.lifecycle.runStart(async () => {
@@ -440,8 +384,7 @@ export class TabTinDaemon {
       // Daemon no longer needs to inject a TabSlideAPI runtime bridge.
       await this.startTableKernel();
       await this.startMcpServer();
-      await this.startDshModelGateway();
-      await this.startDshProcess();
+      // DSH capability processes are isolated and started by the owning session runtime.
 
       // Build the local consumer before subscribing the device topic. Otherwise a
       // prompt delivered immediately after connect would be terminally rejected
@@ -456,7 +399,6 @@ export class TabTinDaemon {
           this.config.credential = currentToken;
           updateDjangoProxyCredential(currentToken);
           this.cliServer.updateCredential(currentToken);
-          this.dshModelGateway?.updateCredential(currentToken);
         }
         this.triggerDaemonControlRegistration(capabilities);
 
@@ -484,7 +426,6 @@ export class TabTinDaemon {
         this.configManager.save(this.config);
         updateDjangoProxyCredential(newToken);
         this.cliServer.updateCredential(newToken);
-        this.dshModelGateway?.updateCredential(newToken);
         this.logger.info('[Daemon] Credential updated across all components after token renewal');
       };
 

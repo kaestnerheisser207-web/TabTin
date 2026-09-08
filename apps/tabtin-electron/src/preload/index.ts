@@ -3,6 +3,7 @@ import { electronAPI } from '@electron-toolkit/preload'
 import type { Device } from '@muse/app-shell'
 import { buildDevInspectorBridge } from './dev-inspector-bridge'
 import type { LocalNetworkAddress } from '../shared/types/local-network'
+import type { LocalDshStatus } from '../shared/types/local-dsh'
 import { invokeIpc, sendIpc, PlatformIpcError, LEGACY_HANDLERS, subscribeIpcCalls } from './ipc-shim'
 import { getAccessTokenDeduped, installAuthTokenInvalidationListeners } from './auth-token-dedup'
 import { createLoginRelayPreloadApi } from './login-relay'
@@ -237,6 +238,9 @@ export function validateAgentEngineQuery(req: unknown): void {
     throw new Error('Invalid agentEngine.query payload: expected an object')
   }
   const r = req as Record<string, unknown>
+  if (r.harness !== undefined && r.harness !== 'builtin' && r.harness !== 'dsh') {
+    throw new Error('Invalid agentEngine.query payload: unsupported harness')
+  }
   if (typeof r.prompt !== 'string') {
     throw new Error('Invalid agentEngine.query payload: prompt must be a string')
   }
@@ -693,6 +697,10 @@ interface ResourceOpenEventPayload {
 // 实现对象用 `satisfies TabTinAPIShape` 约束，public 类型由 `typeof api` 推导。
 // 新增 API 只需修改实现，无需同步维护类型声明。
 interface TabTinAPIShape {
+  localDsh: {
+    getStatus: () => Promise<LocalDshStatus>
+    install: () => Promise<LocalDshStatus>
+  }
   // 基础通信
   ping: () => Promise<string>
   getHostname: () => Promise<string>
@@ -3328,6 +3336,10 @@ function ptyOnAutoRespondTriggered(spaceIdOrCallback: string | ((info: { session
 
 // 实现 API（类型由下方 `satisfies` + `typeof` 推导，无需手工同步接口声明）
 const api = {
+  localDsh: {
+    getStatus: () => invokeIpc<LocalDshStatus>('dsh:get-status'),
+    install: () => invokeIpc<LocalDshStatus>('dsh:install'),
+  },
   ping: () => invokeIpc('ping'),
   getHostname: () => invokeIpc('system:getHostname'),
   getPlatform: () => process.platform,

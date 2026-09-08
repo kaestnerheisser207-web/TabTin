@@ -144,7 +144,7 @@ export const AssistantMessageBody: React.FC<Partial<AssistantMessageBodyProps>> 
       )}
       data-streaming-caret={showStreamingCaret ? 'true' : undefined}
     >
-      {showAwaitingThought && <AgentAwaitingThought mode="thinking" />}
+      {showAwaitingThought && <AgentAwaitingThought mode="preparing" />}
       {hasContentBlocks && !errorClassSkipContent && BlockTimeline ? (
         <BlockTimeline
           blocks={displayContentBlocks}

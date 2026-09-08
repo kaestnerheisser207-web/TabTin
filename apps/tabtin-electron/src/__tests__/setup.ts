@@ -112,7 +112,7 @@ const resetRuntimeGlobals = () => {
     configurable: true,
   })
 
-  Object.defineProperty(window, 'tabtin', {
+  Object.defineProperty(window, 'muse', {
     value: createMockTabtin(),
     writable: true,
     configurable: true,

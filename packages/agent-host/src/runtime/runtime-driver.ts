@@ -19,6 +19,7 @@ export interface HostedRuntime {
   query(params: QueryParams): AsyncIterable<StreamEvent>
   abort(): void | Promise<void>
   getRuntimeId(): string
+  dispose?(): void | Promise<void>
   compactCheckpoint?(params: {
     messages: Message[]
     summaryFocus?: string

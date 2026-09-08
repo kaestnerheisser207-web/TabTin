@@ -718,3 +718,52 @@ export function parseTabtinCommandsJson(stdout: string): CliCommandSchema[] | nu
 export const __testExports = {
   parseTabtinSubcommand,
 }
+
+/** Native shells do not own Muse CLI's run-scoped identity environment.
+ * Reuse the restricted-shell lexical parser; ambiguous evaluation belongs to
+ * the host terminal rather than the external harness's inherited environment.
+ */
+export function classifyNativeShellScope(command: string): 'ordinary' | 'platform_cli' | 'dynamic_execution' {
+  if (parseTabtinSubcommand(command).ok) return 'platform_cli'
+  const split = splitTopLevelSegments(command)
+  if (split.kind === 'segments') {
+    for (const segment of split.segments) {
+      const decision = classifyNativeShellScope(segment)
+      if (decision !== 'ordinary') return decision
+    }
+    return 'ordinary'
+  }
+  if (split.kind === 'reject' || split.kind === 'unsafe') return 'dynamic_execution'
+  const tokens = tokenizeShellCommand(command)
+  if (!tokens?.length || /[$`\n\r]/.test(command)) return 'dynamic_execution'
+  const executable = (token: string) => token.replace(/\\/g, '/').split('/').pop()!.toLowerCase().replace(/\.(exe|cmd|bat)$/i, '')
+  // Conservative for literals passed through wrappers, including quoted paths.
+  // Routing an echo/example through the platform is preferable to invoking a
+  // CLI that would silently select its global active workspace.
+  if (tokens.some(token => /^(muse|tabtin)$/.test(executable(token)))) return 'platform_cli'
+  // The tokenizer interprets escapes; inspect Windows paths before escaping
+  // can remove their separators as well.
+  if (/(?:^|[\s"'\\/])(muse|tabtin)(?:\.(?:exe|cmd|bat))?(?=$|[\s"';|&])/i.test(command)) return 'platform_cli'
+  let index = 0
+  while (tokens[index] && /^[A-Za-z_][A-Za-z0-9_]*=/.test(tokens[index]!)) index++
+  while (tokens[index] && ['env', 'command', 'exec', 'sudo', 'nice', 'nohup', '&'].includes(executable(tokens[index]!))) {
+    index++
+    while (tokens[index]?.startsWith('-')) {
+      const option = tokens[index++]
+      if (['-u', '--unset', '-C', '--chdir', '-n', '--adjustment', '-S', '--split-string'].includes(option!)) index++
+    }
+    while (tokens[index] && /^[A-Za-z_][A-Za-z0-9_]*=/.test(tokens[index]!)) index++
+  }
+  const head = executable(tokens[index] ?? '')
+  if (/\.(?:sh|bash|zsh|ps1|cmd|bat|py|js|mjs|cjs|rb|pl)$/i.test(tokens[index] ?? '')) return 'dynamic_execution'
+  if (['eval', 'source', '.', 'sh', 'bash', 'zsh', 'dash', 'cmd', 'powershell', 'pwsh'].includes(head)) return 'dynamic_execution'
+  if (/^(python\d?(?:\.\d+)?|node|ruby|perl|php)$/.test(head)) {
+    const args = tokens.slice(index + 1)
+    // Keep ordinary native test runners; ad-hoc evaluated code and script
+    // interpreters need the trusted host's scope injection.
+    if ((head.startsWith('python') && args[0] === '-m' && ['pytest', 'unittest'].includes(args[1] ?? ''))
+      || (head === 'node' && args[0] === '--test')) return 'ordinary'
+    return 'dynamic_execution'
+  }
+  return 'ordinary'
+}

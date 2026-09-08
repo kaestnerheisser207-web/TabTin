@@ -13,6 +13,7 @@ import {
   __resetHitlResolvedTombstoneForTest,
 } from '../hitlStreamHandlers'
 import { reconcileHitlPanelsFromMessages } from '../hitlMessageReconcile'
+import { DshHostedRuntime } from '@muse/agent-host/runtime/dsh'
 
 vi.mock('@/services/systemNotification', () => ({
   SystemNotification: {
@@ -126,6 +127,41 @@ describe('reconcileHitlPanelsFromMessages', () => {
     reconcileHitlPanelsFromMessages(SESSION, [hitlMessage(askFact())])
 
     expect(pendingAskUserBySessionId[SESSION]).toMatchObject({ kind: 'choice', interruptId: 'ask-1' })
+  })
+
+  it('restores a DSH question from its real persist event after losing transient UI state', async () => {
+    const requestId = 'dsh-recover-question'
+    const client = {
+      sessions: { prompt: async () => ({ result: { ok: true, value: {} } }), cancel: async () => ({}) },
+      respond: async () => ({}),
+      events: { mux: async function* () {
+        yield { rpcId: 'sub', payload: { type: 'session/subscribed', sessionId: SESSION, lastSeq: -1 } }
+        yield { rpcId: requestId, payload: { type: 'question/requested', sessionId: SESSION,
+          questions: [{ id: 'next', question: 'What next?', options: [{ label: 'Continue' }, { label: 'Stop' }] }] } }
+        yield { rpcId: 'resolved', payload: { type: 'question/resolved', sessionId: SESSION, questionRpcId: requestId, outcome: 'answered' } }
+        yield { rpcId: 'end', payload: { type: 'session/event', sessionId: SESSION,
+          event: { type: 'turn/end', seq: 0, time: Date.now(), data: { turn: 0, reason: { kind: 'completed' } } } } }
+      } },
+    } as unknown as ConstructorParameters<typeof DshHostedRuntime>[0]
+    const runtime = new DshHostedRuntime(client, SESSION, SESSION, {
+      request: async () => ({ answers: [{ question_id: 'next', selected_options: ['Continue'] }] }),
+    })
+    const events = []
+    for await (const event of runtime.query({ prompt: 'start', hostRunId: 'host-run-dsh' })) events.push(event)
+    const persisted = events.filter(event => event.type === 'agent.stream.persist_message'
+      && event.payload.message_kind === 'hitl_interaction')
+    expect(persisted).toHaveLength(2)
+    expect(persisted[0].payload.agent_run_id).toBe('host-run-dsh')
+    const asMessage = (event: typeof persisted[number]) => ({
+      id: String(event.payload.message_id), role: 'assistant', content: '',
+      created_at: new Date().toISOString(), message_kind: 'hitl_interaction', metadata: event.payload.metadata,
+    } as unknown as ChatMessage)
+    // Simulate HMR/re-entry: only persisted messages remain; no required event is replayed.
+    reconcileHitlPanelsFromMessages(SESSION, [asMessage(persisted[0])])
+    expect(pendingAskUserBySessionId[SESSION]).toMatchObject({ kind: 'choice', interruptId: requestId })
+    expect(persisted[1].payload.message_id).toBe(persisted[0].payload.message_id)
+    reconcileHitlPanelsFromMessages(SESSION, [asMessage(persisted[1])])
+    expect(pendingAskUserBySessionId[SESSION]).toBeUndefined()
   })
 
   it('resolved 审批消息 + 本地面板 → 清面板并记墓碑（重放不复活）', () => {

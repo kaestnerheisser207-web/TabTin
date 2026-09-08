@@ -349,7 +349,7 @@ class CloudWorkerRegistryTests(TransactionTestCase):
 class CloudRuntimePersistenceTests(TransactionTestCase):
     databases: ClassVar[set[str]] = {"default", "postgresql"}
 
-    def test_dsh_binding_requires_a_cloud_workspace(self):
+    def test_dsh_binding_supports_a_local_electron_workspace(self):
         from apps.services.common.db_router import postgres_app_db_alias
         from apps.tabtinspace.models import Device, Workspace
         from apps.tabtinspace.tests.fixtures import (
@@ -379,13 +379,15 @@ class CloudRuntimePersistenceTests(TransactionTestCase):
             created_by=user,
         )
 
-        with self.assertRaises(ServiceError) as caught:
-            RuntimeBindingService().freeze_for_dispatch(
-                workspace=workspace,
-                thread_id="thread-local-dsh",
-                harness="dsh",
-            )
-        self.assertEqual(caught.exception.code, "DSH_REQUIRES_CLOUD_WORKSPACE")
+        binding = RuntimeBindingService().freeze_for_dispatch(
+            workspace=workspace,
+            thread_id="thread-local-dsh",
+            harness="dsh",
+        )
+        self.assertIsNone(binding.allocation_id)
+        self.assertEqual(binding.harness, "dsh")
+        self.assertEqual(binding.host_generation, 1)
+        self.assertEqual(binding.driver_session_ref, {"session_id": "thread-local-dsh"})
 
     def test_allocation_and_runtime_binding_persist_on_cloud_device(self):
         from apps.services.common.db_router import postgres_app_db_alias

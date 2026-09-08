@@ -78,6 +78,9 @@ export function applyDeployPackageTransforms(pkg, options = {}) {
         if (entry && entry.from === '../../packages/apps') {
           return { ...entry, from: './packages-apps-src' }
         }
+        if (entry && entry.from === '../../packages/dsh-muse-plugin/dist') {
+          return { ...entry, from: './dsh-muse-plugin-dist-src' }
+        }
         if (entry && entry.from === '../../packages/tabtin-cli-go/dist') {
           return { ...entry, from: './tabtin-cli-go-dist-src' }
         }

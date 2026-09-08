@@ -107,7 +107,7 @@ export function computeExecutionDeviceStatus(
   // WS 丢事件时设备列表可能暂缺：优先使用 Workspace 轮询的权威状态；两边都缺才按离线。
   if ((!controlDevice && !effectiveStatus) || (effectiveStatus && !isDeviceReachable(effectiveStatus))) {
     return {
-      label: t('desktop.deviceStatus.remote', { defaultValue: '远程' }),
+      label: t('desktop.deviceStatus.remote', { defaultValue: '其他设备' }),
       secondaryLabel: t('desktop.deviceStatus.offline', { defaultValue: '离线' }),
       title: t('desktop.deviceStatus.offlineTitle', {
         device: deviceName,
@@ -118,10 +118,10 @@ export function computeExecutionDeviceStatus(
     }
   }
   return {
-    label: t('desktop.deviceStatus.remote', { defaultValue: '远程' }),
+    label: t('desktop.deviceStatus.remote', { defaultValue: '其他设备' }),
     title: t('desktop.deviceStatus.remoteTitle', {
       device: deviceName,
-      defaultValue: 'Agent 在「{{device}}」上工作，需切换到该设备才能操作这个应用',
+      defaultValue: '工作空间在设备「{{device}}」上执行，目录位于该设备',
     }),
     tone: 'remote',
   }
@@ -136,13 +136,25 @@ export function resolveSpaceExecutionDeviceStatus(
 ): ExecutionDeviceStatus | null {
   const cloudRuntimeStatus = resolveCloudRuntimeStatus(space, t)
   if (cloudRuntimeStatus) return cloudRuntimeStatus
-  return computeExecutionDeviceStatus(
+  const deviceStatus = computeExecutionDeviceStatus(
     resolveSpaceControlDeviceId(space, agent),
     currentDevice,
     devices,
     t,
     space?.owner_execution_device_status,
   )
+  if (space?.runtime_plane === 'cloud') {
+    return {
+      label: t('desktop.deviceStatus.cloud', { defaultValue: '云端' }),
+      title: t('desktop.deviceStatus.cloudTitle', { defaultValue: '工作空间在云端运行，目录位于云端环境' }),
+      tone: 'remote',
+      ...(deviceStatus?.secondaryLabel ? {
+        secondaryLabel: deviceStatus.secondaryLabel,
+        secondaryTone: deviceStatus.secondaryTone,
+      } : {}),
+    }
+  }
+  return deviceStatus
 }
 
 /**

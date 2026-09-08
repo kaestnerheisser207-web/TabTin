@@ -48,8 +48,10 @@ import {
   isActiveRunStatus,
   isChatSessionRunState,
   isSessionRunIdentityCurrent,
+  type LocalRunIdentity,
 } from './sessionRunProjection'
 import type { ChatSessionRunState } from '@muse/chat-client'
+import type { TerminalStatus } from '../stream/handlers/sessionCleanup'
 
 const log = createLogger('SessionRunReconcile')
 
@@ -173,7 +175,7 @@ async function doReconcile(sessionId: string, reason: ReconcileReason): Promise<
         reason,
         reportedBusy: !!res.busy,
       })
-      await reconcileRemoteRunStateFromHttp(sessionId, reason)
+      await reconcileRemoteRunStateFromHttp(sessionId, reason, reconcileIdentity)
     }
     return
   }
@@ -201,6 +203,7 @@ async function doReconcile(sessionId: string, reason: ReconcileReason): Promise<
   }
 
   const { useChatStore } = await import('@/stores/chat/useChatStore')
+  if (!isSessionRunIdentityCurrent(sessionId, reconcileIdentity)) return
 
   if (projectionBusy) {
     // 投影 busy 但 runtime idle = 终态信号丢失 → 单一终态收口。
@@ -221,16 +224,21 @@ async function doReconcile(sessionId: string, reason: ReconcileReason): Promise<
       })
     }
     const { endSessionRun } = await import('../stream/handlers/sessionCleanup')
-    // status 用 'cancelled' 而非 'error'：run 在执行端已结束（可能是正常完成，
-    // 只是终态信号丢失），标 error 会把 running steps 翻成错误态、写 lastError，
-    // 让用户误以为「出错了」。'cancelled' 语义 =「被打断收尾」：未 finalize 的
-    // 消息标「已中断」badge、steps 标 cancelled，不产生错误观感；真实内容随
-    // 终态后的消息重同步（scheduleLostStreamHydrate / drain）补齐。
-    // ：权威 idle 收口统一走 endSessionRun（写终态 overlay → busy=false）。
+    if (!isSessionRunIdentityCurrent(sessionId, reconcileIdentity)) return
+    // lifecycle 的 runState 更新可能仍在 batch 中；同 run 的明确终态优先保留。
+    // localStatus='completed' 也可能只是 busy=false 的镜像，不是 DONE 证据。
+    flushRuntimeBatch()
+    const observedRun = useChatRuntimeStore.getState().runStateBySessionId[sessionId]
+    const knownTerminal = reconcileIdentity.runId && observedRun?.runId === reconcileIdentity.runId
+      && (observedRun.phase === 'done' || observedRun.phase === 'error' || observedRun.phase === 'cancelled')
+      ? observedRun.phase
+      : null
+    // 只有缺少同 run 的明确终态时，保留原有 interrupted-cleanup 兜底。
     endSessionRun({
       sessionId,
       ...reconcileIdentity,
-      status: 'cancelled',
+      status: knownTerminal ?? 'cancelled',
+      ...(knownTerminal === 'error' ? { errorMessage: observedRun?.lastError } : {}),
       removeStreamingSession: useChatStore.getState().removeStreamingSession,
     })
     // ：仍需 applyRunReconcile(busy:false) 把投影 queuedRunIds 对齐到
@@ -257,11 +265,14 @@ async function doReconcile(sessionId: string, reason: ReconcileReason): Promise<
 async function reconcileRemoteRunStateFromHttp(
   sessionId: string,
   reason: ReconcileReason,
+  requestIdentity: LocalRunIdentity,
 ): Promise<void> {
   try {
     const { getChatClient } = await import('@/services/chatApi')
     const session = await getChatClient().sessions.get(sessionId)
+    if (!isSessionRunIdentityCurrent(sessionId, requestIdentity)) return
     const { useChatStore } = await import('@/stores/chat/useChatStore')
+    if (!isSessionRunIdentityCurrent(sessionId, requestIdentity)) return
     // updateSessionInCaches → applySessionRunStateSnapshot（busy 只认 authoritative）
     useChatStore.getState().updateSessionInCaches(sessionId, {
       run_state: session.run_state ?? null,
@@ -291,15 +302,18 @@ async function reconcileRemoteRunStateFromHttp(
       return
     }
 
+    const terminalFromServer = session.run_state
+      && isChatSessionRunState(session.run_state)
+      && !isActiveRunStatus(session.run_state.status)
+      ? session.run_state
+      : null
+    // HTTP 旧 run 的终态不能通过人工抬 sequence 覆盖当前新 run。
+    if (terminalFromServer && !isSessionRunIdentityCurrent(sessionId, { runId: terminalFromServer.run_id })) return
+
     // 投影仍 busy 但服务端已终态/空：强制推进 authoritative（抬 sequence），
     // 保证 isSessionBusy 收口，且不写 runtimeBusy。
     if (getSessionRunProjection(sessionId)?.busy) {
       const auth = getSessionRunProjection(sessionId)?.authoritativeRunState
-      const terminalFromServer = session.run_state
-        && isChatSessionRunState(session.run_state)
-        && !isActiveRunStatus(session.run_state.status)
-        ? session.run_state
-        : null
       if (terminalFromServer) {
         applySessionRunStateEvent(sessionId, {
           ...terminalFromServer,
@@ -320,6 +334,13 @@ async function reconcileRemoteRunStateFromHttp(
       }
     }
 
+    const terminalIdentity = {
+      runId: next?.localRunId ?? terminalFromServer?.run_id ?? next?.authoritativeRunState?.run_id ?? null,
+      dispatchToken: next?.localDispatchToken ?? null,
+    }
+    const terminalStatus: TerminalStatus = terminalFromServer?.status === 'completed' ? 'done'
+      : terminalFromServer?.status === 'failed' ? 'error' : 'cancelled'
+
     // 服务端已终态 / 无 run：补与本机 force_idle 同口径的副作用（不清 runtimeBusy 路径）
     log.warn('reconcile remote HTTP: server idle — terminal cleanup side effects', {
       sessionId: sessionId.slice(0, 8), reason, serverStatus,
@@ -331,13 +352,12 @@ async function reconcileRemoteRunStateFromHttp(
       })
     }
     const { endSessionRun } = await import('../stream/handlers/sessionCleanup')
+    if (!isSessionRunIdentityCurrent(sessionId, terminalIdentity)) return
     endSessionRun({
       sessionId,
-      runId: next?.localRunId
-        ?? (session.run_state as ChatSessionRunState | null | undefined)?.run_id
-        ?? null,
-      dispatchToken: next?.localDispatchToken ?? null,
-      status: 'cancelled',
+      ...terminalIdentity,
+      status: terminalStatus,
+      ...(terminalStatus === 'error' && terminalFromServer?.error_class ? { errorMessage: terminalFromServer.error_class } : {}),
       removeStreamingSession: useChatStore.getState().removeStreamingSession,
     })
     const { scheduleLostStreamHydrate } = await import('@/services/sessionFreshness')

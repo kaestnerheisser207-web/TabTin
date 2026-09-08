@@ -608,6 +608,11 @@ export class DaemonToolProvider implements ToolProvider {
    * 回注「子 Agent 完整工具集」provider（host 装好 `mergedToolProvider` 后调用）。
    * 与 ElectronToolProvider.setSubagentToolProvider 同名同语义。
    */
+  setSubagentRuntimeFactory(factory: AgentToolDeps['createRuntime']): void {
+    if (this.agentToolDeps) this.agentToolDeps.createRuntime = factory
+    this.cachedTools = null
+  }
+
   setSubagentToolProvider(provider: ToolProvider): void {
     this.subagentToolProvider = provider;
     this.cachedTools = null;

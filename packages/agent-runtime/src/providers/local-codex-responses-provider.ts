@@ -111,6 +111,7 @@ export class LocalCodexResponsesProvider implements LLMProvider {
 
   async *createStream(request: LLMRequest): AsyncIterable<LLMResponseChunk> {
     const auth = await this.options.resolveAuth();
+    request.signal?.throwIfAborted();
     const requestId = randomUUID();
     const sessionId = this.options.threadId ?? requestId;
     const materialized = await materializeRemoteImagesInRequest(
@@ -118,6 +119,7 @@ export class LocalCodexResponsesProvider implements LLMProvider {
       this.options.resolveRemoteImageUrl
         ?? ((url) => fetchUrlAsDataUrl(url, this.fetchImpl, request.signal)),
     );
+    request.signal?.throwIfAborted();
     const overrides = this.resolveParamOverrides();
     const cachedBody = buildRequestBody(
       materialized,

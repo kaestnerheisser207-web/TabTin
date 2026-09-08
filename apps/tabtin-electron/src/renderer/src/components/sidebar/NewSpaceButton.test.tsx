@@ -4,6 +4,8 @@ import { beforeEach, describe, expect, it, vi } from 'vitest'
 
 const mocks = vi.hoisted(() => ({
   createSpace: vi.fn(),
+  dshStatus: vi.fn(),
+  installDsh: vi.fn(),
   createCloudSpace: vi.fn(),
   updateAgent: vi.fn(),
   loadAgent: vi.fn(),
@@ -28,7 +30,7 @@ const spaceState = {
     organization_id: 'organization-1',
     agent_config: { harness: { type: 'builtin' } },
   },
-  error: null,
+  error: null as string | null,
   createSpace: mocks.createSpace,
   createCloudSpace: mocks.createCloudSpace,
   updateSpace: vi.fn(),
@@ -77,14 +79,19 @@ vi.mock('@stores/useSpaceStore', () => {
   return { useSpaceStore }
 })
 
-vi.mock('@stores/useOrganizationStore', () => ({
-  useOrganizationStore: {
-    getState: () => ({
-      selectedOrganization: { id: 'organization-1', name: 'My Organization' },
-      organizations: [],
-    }),
+const organizationState = {
+  selectedOrganization: {
+    id: 'organization-1', name: 'My Organization',
+    settings: { cloud_agent_enabled: true } as { cloud_agent_enabled?: boolean },
   },
-}))
+  organizations: [],
+}
+
+vi.mock('@stores/useOrganizationStore', () => {
+  const useOrganizationStore = (selector: (state: typeof organizationState) => unknown) => selector(organizationState)
+  useOrganizationStore.getState = () => organizationState
+  return { useOrganizationStore }
+})
 
 vi.mock('@stores/useDeviceStore', () => ({
   useDeviceStore: {
@@ -128,6 +135,10 @@ import { CreateSpaceDialog } from './NewSpaceButton'
 
 describe('CreateSpaceDialog 远程执行设备 Workspace', () => {
   beforeEach(() => {
+    organizationState.selectedOrganization.settings = { cloud_agent_enabled: true }
+    spaceState.error = null
+    mocks.dshStatus.mockReset().mockResolvedValue({ installed: true, installing: false, version: "0.1.1-rc.2", canInstall: true, error: null, detail: null })
+    mocks.installDsh.mockReset()
     mocks.createSpace.mockReset().mockResolvedValue({ id: 'workspace-1' })
     mocks.createCloudSpace.mockReset().mockResolvedValue({
       id: 'cloud-workspace-1',
@@ -139,9 +150,11 @@ describe('CreateSpaceDialog 远程执行设备 Workspace', () => {
     mocks.loadAgent.mockReset().mockResolvedValue(spaceState.selectedAgent)
     mocks.openCreatedWorkspaceAsNewTask.mockReset().mockResolvedValue(undefined)
     mocks.listMcpConnections.mockReset().mockResolvedValue([])
-    Object.defineProperty(window, 'tabtin', {
+    Object.defineProperty(window, 'muse', {
       configurable: true,
       value: {
+        fileSystem: { ensureDefaultAgentDir: vi.fn().mockResolvedValue({ success: true, path: "/tmp/muse-local-test" }) },
+        localDsh: { getStatus: mocks.dshStatus, install: mocks.installDsh },
         localMcp: {
           listConnections: mocks.listMcpConnections,
         },
@@ -257,4 +270,69 @@ describe('CreateSpaceDialog 远程执行设备 Workspace', () => {
     expect(await screen.findByRole('button', { name: '授权 GitHub' })).toBeTruthy()
     expect(mocks.createCloudSpace).not.toHaveBeenCalled()
   })
+  it('未开通时禁用云端选项并显示开通说明', () => {
+    organizationState.selectedOrganization.settings = {}
+    render(<CreateSpaceDialog open onOpenChange={vi.fn()} />)
+    const cloud = screen.getByRole('button', { name: /云端托管/ }) as HTMLButtonElement
+    expect(cloud.disabled).toBe(true)
+    fireEvent.click(cloud)
+    expect(screen.queryByTestId('cloud-harness-selector')).toBeNull()
+    expect(screen.getByText(/云端托管尚未开通/)).toBeTruthy()
+    expect(mocks.createCloudSpace).not.toHaveBeenCalled()
+  })
+
+  it('组织配置刷新后已开通的云端选项可用', () => {
+    organizationState.selectedOrganization.settings = { cloud_agent_enabled: false }
+    const { rerender } = render(<CreateSpaceDialog open onOpenChange={vi.fn()} />)
+    organizationState.selectedOrganization.settings = { cloud_agent_enabled: true }
+    rerender(<CreateSpaceDialog open onOpenChange={vi.fn()} />)
+    expect((screen.getByRole('button', { name: /云端托管/ }) as HTMLButtonElement).disabled).toBe(false)
+    fireEvent.click(screen.getByRole('button', { name: /云端托管/ }))
+    expect(screen.getByTestId('cloud-harness-selector')).toBeTruthy()
+  })
+
+  it('选中云端后权限被撤销时提交也不得修改 Agent 或调用创建接口', () => {
+    render(<CreateSpaceDialog open onOpenChange={vi.fn()} />)
+    fireEvent.click(screen.getByRole('button', { name: /云端托管/ }))
+    organizationState.selectedOrganization.settings = { cloud_agent_enabled: false }
+    fireEvent.submit(document.querySelector('form')!)
+    expect(mocks.updateAgent).not.toHaveBeenCalled()
+    expect(mocks.createCloudSpace).not.toHaveBeenCalled()
+    expect(screen.getAllByText(/云端托管尚未开通/).length).toBeGreaterThan(0)
+  })
+
+  it('创建被后端拒绝时展示具体原因', async () => {
+    mocks.createCloudSpace.mockImplementation(async () => {
+      spaceState.error = '当前组织尚未启用 Cloud Agent'
+      return null
+    })
+    render(<CreateSpaceDialog open onOpenChange={vi.fn()} />)
+    fireEvent.click(screen.getByRole('button', { name: /云端托管/ }))
+    fireEvent.click(screen.getByRole('button', { name: 'create.actions.create' }))
+    expect(await screen.findByText('当前组织尚未启用 Cloud Agent')).toBeTruthy()
+    expect(screen.queryByText('创建失败，请重试')).toBeNull()
+  })
+
+  it('本地也可选择已安装的DSH并保留本机执行绑定', async () => {
+    render(<CreateSpaceDialog open onOpenChange={vi.fn()} />)
+    fireEvent.click(screen.getByRole('button', { name: 'DeepSeek DSH' }))
+    await waitFor(() => expect((screen.getByRole('button', { name: 'create.actions.create' }) as HTMLButtonElement).disabled).toBe(false))
+    fireEvent.click(screen.getByRole('button', { name: 'create.actions.create' }))
+    await waitFor(() => expect(mocks.createSpace).toHaveBeenCalled())
+    expect(mocks.updateAgent).toHaveBeenCalledWith('agent-1', expect.objectContaining({ agent_config: { harness: { type: 'dsh' } } }))
+    expect(mocks.createSpace.mock.calls[0][0]).toMatchObject({ device_id: 'local-device-id', working_dir: '/tmp/muse-local-test' })
+    expect(mocks.createCloudSpace).not.toHaveBeenCalled()
+    expect(mocks.installDsh).not.toHaveBeenCalled()
+  })
+
+  it('本地DSH缺失时展示安装引导并阻止创建', async () => {
+    mocks.dshStatus.mockResolvedValue({ installed: false, installing: false, canInstall: true, error: null, detail: null })
+    render(<CreateSpaceDialog open onOpenChange={vi.fn()} />)
+    fireEvent.click(screen.getByRole('button', { name: 'DeepSeek DSH' }))
+    expect(await screen.findByRole('button', { name: 'harness.local.install' })).toBeTruthy()
+    expect((screen.getByRole('button', { name: 'create.actions.create' }) as HTMLButtonElement).disabled).toBe(true)
+    expect(mocks.createSpace).not.toHaveBeenCalled()
+    expect(mocks.installDsh).not.toHaveBeenCalled()
+  })
+
 })

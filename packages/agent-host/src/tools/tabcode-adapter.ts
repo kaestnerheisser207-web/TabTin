@@ -37,6 +37,7 @@ import path from 'node:path';
 
 import {
   FILE_DELETE_DESCRIPTION,
+  preflightFilePathSecurity,
   fileDeleteTool as actionFileDeleteTool,
   fileEditTool as actionFileEditTool,
   fileReadTool as actionFileReadTool,
@@ -526,19 +527,7 @@ export function adaptAgentTool(
     );
   }
 
-  return {
-    name: agentTool.name,
-    description: options.llmDescription,
-    inputSchema: agentTool.parameters as Tool['inputSchema'],
-    isReadOnly: options.isReadOnly,
-    ...(agentTool.riskLevel === 'safe' || agentTool.riskLevel === 'review' || agentTool.riskLevel === 'strict'
-      ? { riskLevel: agentTool.riskLevel }
-      : {}),
-    disablePreStart: options.disablePreStart,
-    concurrencySafe: options.concurrencySafe,
-    policyActionKind: options.policyActionKind ?? 'file',
-    maxResultSizeChars: options.maxResultSizeChars,
-    async execute(rawInput: unknown, ctx: ToolContext): Promise<ToolResult> {
+  async function executeAdapted(rawInput: unknown, ctx: ToolContext, nativePerform?: () => Promise<ToolResult>): Promise<ToolResult> {
       const input = enrichWithWorkspaceRoot(rawInput, ctx, options.deps);
 
       // 临界区主体 —— beforeExecute → action-tool execute → afterExecute（含
@@ -546,6 +535,14 @@ export function adaptAgentTool(
       // 而非外部函数，避免重复参数透传 + 让两条执行路径（带锁 / 不带锁）
       // 字节级一致。
       const runCritical = async (): Promise<ToolResult> => {
+        if (nativePerform) {
+          const name = agentTool.name;
+          if (name !== 'write_file' && name !== 'edit_file') throw new Error('Native file operation unsupported');
+          const resolved = path.resolve(String(input._workspace_root), String(input.path));
+          const denial = await preflightFilePathSecurity(name, resolved, ctx.workspaceSnapshot?.allowedPaths, ctx.permissionContext?.judgedDecision === 'allow');
+          if (denial) return { content: denial, isError: true };
+        }
+
         if (options.beforeExecute) {
           const guard = await options.beforeExecute({ input, ctx });
           if (guard) return guard;
@@ -585,7 +582,9 @@ export function adaptAgentTool(
           beforeSnapshot = await captureFileBeforeSnapshot(patchAbsPath);
         }
 
-        const result = await agentTool.execute(input);
+        const result = nativePerform
+          ? await nativePerform().then(r => ({ success: !r.isError, data: r.content, error: r.isError ? String(r.content) : undefined }))
+          : await agentTool.execute(input);
 
         if (options.afterExecute) {
           try {
@@ -658,7 +657,22 @@ export function adaptAgentTool(
       }
 
       return await runCritical();
-    },
+  }
+
+  return {
+    name: agentTool.name,
+    description: options.llmDescription,
+    inputSchema: agentTool.parameters as Tool['inputSchema'],
+    isReadOnly: options.isReadOnly,
+    ...(agentTool.riskLevel === 'safe' || agentTool.riskLevel === 'review' || agentTool.riskLevel === 'strict'
+      ? { riskLevel: agentTool.riskLevel }
+      : {}),
+    disablePreStart: options.disablePreStart,
+    concurrencySafe: options.concurrencySafe,
+    policyActionKind: options.policyActionKind ?? 'file',
+    maxResultSizeChars: options.maxResultSizeChars,
+    execute: (rawInput, ctx) => executeAdapted(rawInput, ctx),
+    executeNative: (rawInput, ctx, perform) => executeAdapted(rawInput, ctx, perform),
   };
 }
 
@@ -1305,6 +1319,38 @@ async function resolveFailedReadResult(args: {
 
 function createFileReadTool(deps: TabCodeToolsDeps): Tool {
   return {
+    async executeNative(rawInput, ctx, perform) {
+      const { input, wsRoot } = prepareReadFileCall(rawInput, ctx, deps);
+      const denial = await preflightFilePathSecurity('read_file', path.resolve(wsRoot, String(input.path)), ctx.workspaceSnapshot?.allowedPaths, ctx.permissionContext?.judgedDecision === 'allow');
+      if (denial) return { content: denial, isError: true };
+      const resolved = canonicalizePath(String(input.path), wsRoot);
+      const before = await fsPromises.stat(resolved);
+      const result = await perform();
+      if (!result.isError && result.hostMetadata?.nativeToolName !== 'read_image') {
+        const value = result.hostMetadata?.nativeRead;
+        if (value && typeof value === 'object') {
+          const read = value as { path?: unknown; offset?: unknown; lines?: unknown; totalLines?: unknown };
+          const offset = typeof read.offset === 'number' ? read.offset : 0;
+          const lines = Array.isArray(read.lines) ? read.lines as Array<{ number?: unknown; text?: unknown }> : [];
+          if (typeof read.path !== 'string' || canonicalizePath(read.path, wsRoot) !== resolved
+            || !Number.isSafeInteger(offset) || offset < 1
+            || offset !== (typeof input.offset === 'number' ? input.offset : 1)
+            || !Array.isArray(read.lines)
+            || lines.some((line, index) => line.number !== offset + index || typeof line.text !== 'string')
+            || (typeof input.limit === 'number' && lines.length > input.limit)) {
+            throw new Error('Native read result does not match the authorized path/range');
+          }
+          // DSH may truncate by bytes or individual line length. Persist only the
+          // actual returned text with explicit range, never a full-file marker.
+          // The pre-read mtime prevents a concurrent change from being blessed
+          // as the version the native tool actually saw.
+          recordReadFileState(ctx, resolved, lines.map(line => line.text).join('\n'), {
+            mtimeMs: Math.floor(before.mtimeMs), offset, limit: lines.length, baseDir: wsRoot,
+          });
+        }
+      }
+      return result;
+    },
     name: actionFileReadTool.name,
     description: READ_FILE_DESCRIPTION,
     inputSchema: actionFileReadTool.parameters as Tool['inputSchema'],

@@ -627,7 +627,7 @@ const ripgrepSemaphore = new RipgrepSemaphore(MAX_RIPGREP_CONCURRENT);
  *
  * 返回错误字符串则操作被拒；返回 null 则放行。
  */
-function checkFilePathSecurity(
+export function checkFilePathSecurity(
   actionType: 'read_file' | 'write_file' | 'edit_file' | 'delete_file' | 'mkdir' | 'move_file',
   resolvedPath: string,
   workspaceRoots: readonly string[] = [],
@@ -734,6 +734,33 @@ function checkFilePathSecurity(
   }
 
   return null;
+}
+
+/** Shared lexical + real-target preflight for Builtin and external harnesses.
+ * Resolve the nearest existing ancestor so symlinked directories cannot hide
+ * a sensitive target, including when the final file does not exist yet.
+ */
+export async function preflightFilePathSecurity(
+  ...args: Parameters<typeof checkFilePathSecurity>
+): Promise<string | null> {
+  const lexical = checkFilePathSecurity(...args);
+  if (lexical) return lexical;
+  let candidate = path.resolve(args[1]);
+  const suffix: string[] = [];
+  while (true) {
+    try {
+      const real = await fsPromises.realpath(candidate);
+      const realRoots = await Promise.all((args[2] ?? []).map(root => fsPromises.realpath(root).catch(() => root)));
+      const realToolResults = args[4] ? await fsPromises.realpath(args[4]).catch(() => args[4]) : undefined;
+      return checkFilePathSecurity(args[0], path.join(real, ...suffix), realRoots, args[3], realToolResults);
+    } catch (error: unknown) {
+      if ((error as NodeJS.ErrnoException).code !== 'ENOENT') throw error;
+      const parent = path.dirname(candidate);
+      if (parent === candidate) throw error;
+      suffix.unshift(path.basename(candidate));
+      candidate = parent;
+    }
+  }
 }
 
 /**
@@ -925,7 +952,7 @@ export const fileReadTool: AgentTool<FileReadInput, FileReadOutput> = {
 
       // CT-002: Block reads of sensitive credential/system files
       // **W4 (2026-05-12)**：透传 toolResultsDir，让 LLM 能 read_file 持久化的引用文件
-      const secError = checkFilePathSecurity('read_file', resolved, workspaceRoots, alreadyJudged, toolResultsDir);
+      const secError = await preflightFilePathSecurity('read_file', resolved, workspaceRoots, alreadyJudged, toolResultsDir);
       if (secError) {
         return standardizeLegacyResult({ success: false, error: secError, error_code: ToolErrorCode.PERMISSION_DENIED });
       }
@@ -1179,7 +1206,7 @@ export const fileWriteTool: AgentTool<FileWriteInput, FileWriteOutput> = {
       const resolved = resolveInWorkspace(filePath, wsRoot);
 
       // CT-001 + CT-004: Enforce workspace boundary and security policy for writes
-      const secError = checkFilePathSecurity('write_file', resolved, workspaceRoots, alreadyJudged);
+      const secError = await preflightFilePathSecurity('write_file', resolved, workspaceRoots, alreadyJudged);
       if (secError) {
         return standardizeLegacyResult({ success: false, error: secError, error_code: ToolErrorCode.PERMISSION_DENIED });
       }
@@ -1213,7 +1240,7 @@ export const fileWriteTool: AgentTool<FileWriteInput, FileWriteOutput> = {
           if (lstats.isSymbolicLink()) {
             const realTarget = await fsPromises.readlink(resolved);
             const absTarget = path.isAbsolute(realTarget) ? realTarget : path.resolve(path.dirname(resolved), realTarget);
-            const symlinkSecErr = checkFilePathSecurity('write_file', absTarget, workspaceRoots, alreadyJudged);
+            const symlinkSecErr = await preflightFilePathSecurity('write_file', absTarget, workspaceRoots, alreadyJudged);
             if (symlinkSecErr) {
               return standardizeLegacyResult({ success: false, error: `Symlink target blocked: ${symlinkSecErr}` });
             }
@@ -1555,7 +1582,7 @@ export const fileEditTool: AgentTool<FileEditInput, FileEditOutput> = {
       const resolved = resolveInWorkspace(filePath, wsRoot);
 
       // CT-001 + CT-004: Enforce workspace boundary and security policy for edits
-      const secError = checkFilePathSecurity('edit_file', resolved, workspaceRoots, alreadyJudged);
+      const secError = await preflightFilePathSecurity('edit_file', resolved, workspaceRoots, alreadyJudged);
       if (secError) {
         return standardizeLegacyResult({ success: false, error: secError, error_code: ToolErrorCode.PERMISSION_DENIED });
       }
@@ -1565,7 +1592,7 @@ export const fileEditTool: AgentTool<FileEditInput, FileEditOutput> = {
         if (lstats.isSymbolicLink()) {
           const realTarget = await fsPromises.readlink(resolved);
           const absTarget = path.isAbsolute(realTarget) ? realTarget : path.resolve(path.dirname(resolved), realTarget);
-          const symlinkSecErr = checkFilePathSecurity('edit_file', absTarget, workspaceRoots, alreadyJudged);
+          const symlinkSecErr = await preflightFilePathSecurity('edit_file', absTarget, workspaceRoots, alreadyJudged);
           if (symlinkSecErr) {
             return standardizeLegacyResult({ success: false, error: `Symlink target blocked: ${symlinkSecErr}` });
           }
@@ -1959,7 +1986,7 @@ export const fileDeleteTool: AgentTool<FileDeleteInput, FileDeleteOutput> = {
       const resolved = resolveInWorkspace(filePath, wsRoot);
 
       // CT-001 + CT-004: Enforce workspace boundary and security policy for deletes
-      const secError = checkFilePathSecurity('delete_file', resolved, workspaceRoots, alreadyJudged);
+      const secError = await preflightFilePathSecurity('delete_file', resolved, workspaceRoots, alreadyJudged);
       if (secError) {
         return standardizeLegacyResult({ success: false, error: secError, error_code: ToolErrorCode.PERMISSION_DENIED });
       }
@@ -1981,7 +2008,7 @@ export const fileDeleteTool: AgentTool<FileDeleteInput, FileDeleteOutput> = {
         if (lstats.isSymbolicLink()) {
           const realTarget = await fsPromises.readlink(resolved);
           const absTarget = path.isAbsolute(realTarget) ? realTarget : path.resolve(path.dirname(resolved), realTarget);
-          const symlinkSecErr = checkFilePathSecurity('delete_file', absTarget, workspaceRoots, alreadyJudged);
+          const symlinkSecErr = await preflightFilePathSecurity('delete_file', absTarget, workspaceRoots, alreadyJudged);
           if (symlinkSecErr) {
             return standardizeLegacyResult({ success: false, error: `Symlink target blocked: ${symlinkSecErr}` });
           }
@@ -2047,7 +2074,7 @@ export const codeMkdirTool: AgentTool<CodeMkdirInput, CodeMkdirOutput> = {
       const { workspaceRoots, alreadyJudged } = getWorkspaceAccessFromInput(input as any);
       const resolved = resolveInWorkspace(dirPath, wsRoot);
 
-      const secError = checkFilePathSecurity('mkdir', resolved, workspaceRoots, alreadyJudged);
+      const secError = await preflightFilePathSecurity('mkdir', resolved, workspaceRoots, alreadyJudged);
       if (secError) {
         return standardizeLegacyResult({ success: false, error: secError, error_code: ToolErrorCode.PERMISSION_DENIED });
       }
@@ -2133,11 +2160,11 @@ export const codeMoveFileTool: AgentTool<CodeMoveFileInput, CodeMoveFileOutput> 
       const resolvedFrom = resolveInWorkspace(fromPath, wsRoot);
       const resolvedTo = resolveInWorkspace(toPath, wsRoot);
 
-      const secErrorFrom = checkFilePathSecurity('move_file', resolvedFrom, workspaceRoots, alreadyJudged);
+      const secErrorFrom = await preflightFilePathSecurity('move_file', resolvedFrom, workspaceRoots, alreadyJudged);
       if (secErrorFrom) {
         return standardizeLegacyResult({ success: false, error: secErrorFrom, error_code: ToolErrorCode.PERMISSION_DENIED });
       }
-      const secErrorTo = checkFilePathSecurity('move_file', resolvedTo, workspaceRoots, alreadyJudged);
+      const secErrorTo = await preflightFilePathSecurity('move_file', resolvedTo, workspaceRoots, alreadyJudged);
       if (secErrorTo) {
         return standardizeLegacyResult({ success: false, error: secErrorTo, error_code: ToolErrorCode.PERMISSION_DENIED });
       }

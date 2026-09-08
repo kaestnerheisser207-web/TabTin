@@ -23,14 +23,8 @@ fi
 
 rm -f "$token_file"
 
-gateway_token="${MUSE_DSH_GATEWAY_TOKEN:-$(node -e "process.stdout.write(require('node:crypto').randomBytes(32).toString('hex'))")}"
-export MUSE_DSH_GATEWAY_TOKEN="$gateway_token"
-export MUSE_DSH_API_URL="${MUSE_DSH_API_URL:-http://127.0.0.1:3080}"
-export MUSE_DSH_GATEWAY_PORT="${MUSE_DSH_GATEWAY_PORT:-3090}"
-export DEEPSEEK_API_KEY="$gateway_token"
-export DEEPSEEK_BASE_URL="http://127.0.0.1:${MUSE_DSH_GATEWAY_PORT}/v1"
+# DSH gateways, credentials and permissions are owned by each managed session.
 export DSH_HOME="${DSH_HOME:-/var/lib/tabtin/dsh}"
 export DSH_TELEMETRY_MODE="DISABLED"
-export DSH_PERMISSION_MODE="${DSH_PERMISSION_MODE:-workspace-write}"
 
 exec tabtin-daemon start --config-dir "$config_dir"

@@ -1,24 +1,21 @@
 import { mkdtemp, rm } from 'node:fs/promises'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
-import { spawn, type ChildProcess } from 'node:child_process'
 import { createServer, type Server } from 'node:http'
 import { afterEach, describe, expect, it } from 'vitest'
 import { DshApiClient } from '../src/application/agent/runtime/dsh-api-client.js'
 import { DshModelGateway } from '../src/application/agent/runtime/dsh-model-gateway.js'
+import { DshProcessService } from '../src/application/agent/runtime/dsh-process-service.js'
 import { DshRuntimeDriver } from '../src/application/agent/runtime/dsh-runtime-driver.js'
 
 const enabled = process.env.MUSE_DSH_INTEGRATION === '1'
-const children: ChildProcess[] = []
 const temporaryDirectories: string[] = []
 const servers: Server[] = []
 const gateways: DshModelGateway[] = []
+const processes: DshProcessService[] = []
 
 afterEach(async () => {
-  for (const child of children.splice(0)) {
-    if (!child.killed) child.kill('SIGTERM')
-    await new Promise(resolve => child.once('exit', resolve))
-  }
+  await Promise.all(processes.splice(0).map(process => process.stop()))
   await Promise.all(gateways.splice(0).map(gateway => gateway.stop()))
   await Promise.all(servers.splice(0).map(server => new Promise<void>(resolve => server.close(() => resolve()))))
   await Promise.all(temporaryDirectories.splice(0).map(path => rm(path, {
@@ -77,24 +74,18 @@ describe.skipIf(!enabled)('DSH full turn integration', () => {
 
     const dshHome = await mkdtemp(join(tmpdir(), 'tabtin-dsh-turn-'))
     temporaryDirectories.push(dshHome)
-    const child = spawn(join(process.cwd(), 'node_modules', '.bin', 'dsh'), [
-      '--profile', 'web',
-      '--host', '127.0.0.1',
-      '--port', '0',
-      '--no-open',
-    ], {
-      cwd: dshHome,
-      env: {
-        ...process.env,
-        DSH_HOME: dshHome,
-        DSH_TELEMETRY_MODE: 'DISABLED',
-        DEEPSEEK_BASE_URL: `http://127.0.0.1:${gateway.port}/v1`,
-        DEEPSEEK_API_KEY: 'loopback-token',
-      },
-      stdio: ['ignore', 'pipe', 'pipe'],
+    const portProbe = createServer()
+    await listen(portProbe)
+    const dshUrl = `http://127.0.0.1:${addressPort(portProbe)}`
+    await new Promise<void>(resolve => portProbe.close(() => resolve()))
+    const processService = new DshProcessService({
+      executable: process.env.MUSE_DSH_TEST_EXECUTABLE ?? join(process.cwd(), 'node_modules', '.bin', 'dsh'),
+      workspaceRoot: dshHome, dshHome, apiUrl: dshUrl,
+      modelGatewayUrl: `http://127.0.0.1:${gateway.port}/v1`, modelGatewayToken: 'loopback-token',
+      logger: { info() {}, warn() {} },
     })
-    children.push(child)
-    const dshUrl = await readDshUrl(child)
+    processes.push(processService)
+    await processService.start()
     const driver = new DshRuntimeDriver(new DshApiClient(dshUrl))
     const created = await driver.create({
       threadId: `turn-${Date.now()}`,
@@ -132,26 +123,4 @@ function addressPort(server: Server): number {
   const address = server.address()
   if (!address || typeof address === 'string') throw new Error('server has no TCP address')
   return address.port
-}
-
-function readDshUrl(child: ChildProcess): Promise<string> {
-  return new Promise((resolve, reject) => {
-    const timer = setTimeout(() => reject(new Error('DSH Web startup timed out')), 15_000)
-    const onData = (chunk: Buffer) => {
-      const match = chunk.toString('utf8').match(/dsh web: (http:\/\/127\.0\.0\.1:\d+)/)
-      if (!match) return
-      clearTimeout(timer)
-      resolve(match[1])
-    }
-    child.stdout?.on('data', onData)
-    child.stderr?.on('data', onData)
-    child.once('error', error => {
-      clearTimeout(timer)
-      reject(error)
-    })
-    child.once('exit', code => {
-      clearTimeout(timer)
-      reject(new Error(`DSH Web exited before startup: ${code}`))
-    })
-  })
 }

@@ -702,6 +702,9 @@ export interface ToolPresentation {
 }
 
 export interface Tool {
+  /** Execute the same guards/checkpoints/audit around an external native action. */
+  executeNative?: (input: unknown, context: ToolContext, perform: () => Promise<ToolResult>) => Promise<ToolResult>;
+
   name: string;
   description: string;
   /**

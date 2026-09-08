@@ -1889,13 +1889,15 @@
       "other": "Otro"
     },
     "deviceStatus": {
-      "remote": "Remoto",
+      "remote": "Otro dispositivo",
       "offline": "Sin conexión",
       "unbound": "Sin consolidar",
       "remoteDevice": "dispositivo de ejecución",
-      "remoteTitle": "El agente trabaja en \"{{device}}\"; cambie a ese dispositivo para operar esta aplicación",
+      "remoteTitle": "Este espacio de trabajo se ejecuta en «{{device}}», donde está su directorio",
       "offlineTitle": "El dispositivo de ejecución del agente \"{{device}}\" está actualmente fuera de línea",
-      "unboundTitle": "El agente aún no tiene un dispositivo de ejecución vinculado"
+      "unboundTitle": "El agente aún no tiene un dispositivo de ejecución vinculado",
+      "cloud": "Nube",
+      "cloudTitle": "Este espacio de trabajo y su directorio están alojados en la nube"
     },
     "terminalOverview": {
       "current": "Actual",

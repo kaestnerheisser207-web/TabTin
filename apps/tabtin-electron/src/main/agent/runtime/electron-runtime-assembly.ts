@@ -5,6 +5,9 @@
  * createRuntimeForSession / soft-reconfigure / catalog loaders.
  */
 
+import { LocalDshRuntime } from './local-dsh-runtime.js'
+import { loadHostTurnBundle, assertHostTurnAgentResolved } from '../host-turn-bundle.js'
+import { createHostCapabilitySession, type HostedRuntime } from '@muse/agent-host/runtime'
 import fs from 'node:fs'
 import path from 'node:path'
 import { notifyHostOsAccessError } from '../platform/os-permission-host-relaunch.js'
@@ -68,6 +71,7 @@ import {
 import { createSubagentStreamRouter, SessionPauseController } from '@muse/agent-host/delivery'
 import {
   canSoftReconfigureByShellTier,
+  isShellRestrictedAgentMode,
   resolveRuntimeModeAgainstSticky,
   disabledAppsExtraKeysMatch,
   normalizeDisabledAppsExtraKey,
@@ -660,7 +664,7 @@ export class ElectronRuntimeAssembly {
     projectId?: string,
     /** Space.working_dir；缺省由 resolveExecutionWorkspaceRoot 走平台沙箱。 */
     workingDir?: string,
-  ): Promise<AgentRuntime> {
+  ): Promise<HostedRuntime> {
     if (!workspaceId) {
       throw new Error('workspaceId is required to initialize session runtime')
     }
@@ -690,8 +694,12 @@ export class ElectronRuntimeAssembly {
     })
     const normalizedDisabledApps = disabledApps ?? []
     const normalizedDisabledToolPrefixes = disabledToolPrefixes ?? []
+    const coldBundle = agentId ? await loadHostTurnBundle({
+      agentId, workspaceId: workspaceId ?? archiveSpaceId, getOrganizationId: () => archiveOrganizationId,
+    }) : undefined
+    if (coldBundle) assertHostTurnAgentResolved(coldBundle, agentId)
     const cacheKeyInput = {
-      harness: 'builtin' as const,
+      harness: coldBundle?.harness ?? 'builtin',
       modelId,
       customRules,
       personalRules,
@@ -777,11 +785,6 @@ export class ElectronRuntimeAssembly {
     sender: StreamEventSink,
     owner: PersistedEntryOwner,
   ): RuntimeSessionRequest<RuntimeBuildInput, AgentModeName, ElectronRuntimeExtraKey> {
-    if (request.harness === 'dsh') {
-      throw new Error(
-        'DSH harness requires a Cloud Workspace and cannot run in Electron',
-      )
-    }
     const workspaceId = request.workspaceId?.trim()
     if (!workspaceId) {
       throw new Error('workspaceId is required to initialize session runtime')
@@ -954,7 +957,7 @@ export class ElectronRuntimeAssembly {
         ),
       extraKeysMatch: electronRuntimeExtraKeysMatch,
       canSoftReconfigure: (existing, request) =>
-        canSoftReconfigureByShellTier(existing.agentMode, request.mode),
+        existing.harness !== 'dsh' && canSoftReconfigureByShellTier(existing.agentMode, request.mode),
       softReconfigure: async (existing, request) => {
         await this.softReconfigureExisting(existing, request.mode, request.input)
       },
@@ -972,6 +975,7 @@ export class ElectronRuntimeAssembly {
    * teardown 后是否仍指向旧引用统一删除。
    */
   async teardownForRebuild(existing: HostState): Promise<void> {
+    await existing.runtime.dispose?.()
     // Phase 3 F1 语义保留：只清本 session 的 HITL，别误杀其它 session。
     cancelAllPendingHitlRequests({
       hitlMap: this.ports.interactionRegistry,
@@ -1146,7 +1150,7 @@ export class ElectronRuntimeAssembly {
     }
 
     const {
-      runtime,
+      runtime: builtinRuntime,
       sessionStorage,
       snapshotStorage,
       eventStorage,
@@ -1197,7 +1201,61 @@ export class ElectronRuntimeAssembly {
       input.cloudPressureThresholds,
       priorSubagentManager,
       input.strictWorkspaceRoot,
+      cacheKey.harness !== 'dsh',
     )
+    if (cacheKey.harness === 'dsh') {
+      toolProvider.setSubagentRuntimeFactory(childConfig => {
+        const childThreadId = childConfig.sessionConfig.threadId
+        const scopedConfig = { ...childConfig, businessThreadId: childThreadId }
+        return new LocalDshRuntime({
+          threadId: childThreadId, workspaceId: input.workspaceId,
+          workspaceRoot: childConfig.workspaceRoot ?? engineConfig.workspaceRoot!, owner: input.owner,
+          modelId: childConfig.model,
+          localProvider: isOpenAICodexModel(childConfig.model) ? childConfig.provider : undefined,
+          permissionMode: isShellRestrictedAgentMode((childConfig.agentMode ?? 'agent') as AgentModeName) ? 'read-only' : 'workspace-write',
+          capabilities: createHostCapabilitySession({
+            config: scopedConfig,
+            scope: { threadId: childThreadId, workspaceId: input.workspaceId, owner: input.owner, agentId: input.agentId },
+            emit: event => childConfig.emitStreamEvent?.(event),
+          }),
+          interactions: {
+            cancel: requestId => { this.ports.sharedHost?.interactions.resolve(requestId, { outcome: 'deny' }) },
+            request: request => {
+              if (!this.ports.sharedHost) throw new Error('DSH interaction host unavailable')
+              return this.ports.sharedHost.interactions.waitForInput(request)
+            },
+          },
+        })
+      })
+    }
+    const runtime: HostedRuntime = cacheKey.harness === 'dsh'
+      ? new LocalDshRuntime({
+          threadId: input.businessThreadId,
+          workspaceId: input.workspaceId,
+          workspaceRoot: engineConfig.workspaceRoot ?? path.dirname(sessionStorage.blockStorage.filePath),
+          owner: input.owner,
+          modelId: input.modelId,
+          localProvider: isOpenAICodexModel(input.modelId) ? engineConfig.provider : undefined,
+          capabilities: createHostCapabilitySession({
+            config: engineConfig,
+            scope: { threadId: input.businessThreadId, workspaceId: input.workspaceId, owner: input.owner, agentId: input.agentId },
+            emit: event => engineConfig.emitStreamEvent?.(event),
+          }),
+          permissionMode: isShellRestrictedAgentMode(agentMode) ? 'read-only' : 'workspace-write',
+          interactions: {
+            cancel: requestId => { this.ports.sharedHost?.interactions.resolve(requestId, { outcome: 'deny' }) },
+            request: request => {
+              if (!this.ports.sharedHost) throw new Error('DSH interaction host unavailable')
+              return this.ports.sharedHost.interactions.waitForInput({
+                requestId: request.requestId,
+                conversationId: request.conversationId,
+                timeoutMs: request.timeoutMs,
+                timeoutValue: request.timeoutValue,
+              })
+            },
+          },
+        })
+      : builtinRuntime!
     const abortController = new AbortController()
     // runtime 因模型/模式重建时保留 Session 的暂停门，避免重建悄悄恢复执行。
     const pauseController =
@@ -1241,7 +1299,7 @@ export class ElectronRuntimeAssembly {
     this.ports.applyPendingPauseToSession(sessionId, input.businessThreadId, pauseController)
 
     log.info(
-      `Runtime created for session=${sessionId.slice(0, 8)}…, model=${input.modelId}, mode=${agentMode}`,
+      `Runtime created for session=${sessionId.slice(0, 8)}…, harness=${cacheKey.harness}, model=${input.modelId}, mode=${agentMode}`,
     )
     return state
   }
@@ -1581,8 +1639,9 @@ export class ElectronRuntimeAssembly {
     carryForwardSubagentManager?: SubagentManager,
     /** 会话 worktree 绑定根：构建期二次校验，不得回退 sessionDir。 */
     strictWorkspaceRoot = false,
+    createBuiltinRuntime = true,
   ): Promise<{
-    runtime: AgentRuntime
+    runtime: AgentRuntime | null
     sessionStorage: SessionStorage
     snapshotStorage: SnapshotStorage
     eventStorage: EventStorage
@@ -3599,7 +3658,7 @@ export class ElectronRuntimeAssembly {
     }
 
     return {
-      runtime: createRuntime(config),
+      runtime: createBuiltinRuntime ? createRuntime(config) : null,
       sessionStorage,
       snapshotStorage,
       eventStorage,
