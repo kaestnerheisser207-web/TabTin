@@ -1,5 +1,7 @@
 # sg01 发布目标与切换验收
 
+唯一正式公网域名为 `workspace.dovelora.com`，不再使用旧域名作为入口。DNS 由用户配置。
+
 正式 Muse VPS 目标为 `sg01`：`15.235.211.82:22`，服务器 hostname 为 `vps-a54e75a4`，Actions 使用受限账户 `tabtin-deploy`。ks6 不是本工作流允许的发布目标。
 
 ## 发布保护

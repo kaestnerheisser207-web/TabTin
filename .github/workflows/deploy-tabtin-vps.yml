@@ -268,7 +268,7 @@ jobs:
         run: |
           set -euo pipefail
           headers="$RUNNER_TEMP/muse-sg01-readiness-headers"
-          response="$(curl --fail --silent --show-error --max-time 20 --dump-header "$headers" https://tabtin.dovelora.com/health/ready)"
+          response="$(curl --fail --silent --show-error --max-time 20 --dump-header "$headers" https://workspace.dovelora.com/health/ready)"
           printf '%s\n' "$response"
           printf '%s' "$response" | grep -q '"status"[[:space:]]*:[[:space:]]*"ready"'
           tr -d '\r' < "$headers" | grep -Eqi '^x-muse-deployment-target:[[:space:]]*sg01[[:space:]]*$'
@@ -396,7 +396,7 @@ jobs:
         run: |
           set -euo pipefail
           headers="$RUNNER_TEMP/muse-sg01-readiness-headers"
-          response="$(curl --fail --silent --show-error --max-time 20 --dump-header "$headers" https://tabtin.dovelora.com/health/ready)"
+          response="$(curl --fail --silent --show-error --max-time 20 --dump-header "$headers" https://workspace.dovelora.com/health/ready)"
           printf '%s\n' "$response"
           printf '%s' "$response" | grep -q '"status"[[:space:]]*:[[:space:]]*"ready"'
           tr -d '\r' < "$headers" | grep -Eqi '^x-muse-deployment-target:[[:space:]]*sg01[[:space:]]*$'

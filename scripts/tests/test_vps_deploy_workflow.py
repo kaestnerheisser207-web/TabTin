@@ -151,7 +151,7 @@ def test_nginx_reload_follows_local_health_and_precedes_public_health() -> None:
     local_health = script.index("local readiness response did not report ready")
     nginx_test = script.index("docker exec nginx nginx -t")
     nginx_reload = script.index("docker exec nginx nginx -s reload")
-    public_health = script.index("public readiness request failed")
+    public_health = script.index("public_ready=false")
 
     assert local_health < nginx_test < nginx_reload < public_health
 
@@ -182,8 +182,8 @@ def test_cloud_host_release_is_separate_and_requires_runtime_worker_digests() ->
     assert 'worker_health=""' in script
     assert '"$worker_direct_endpoint/v1/health" 2>/dev/null' in script
     assert 'journalctl -u tabtin-cloud-worker -n 120' in script
-    assert "upsert_runtime_env DAEMON_SERVER_URL https://tabtin.dovelora.com" in script
-    assert "upsert_runtime_env DAEMON_WS_URL wss://tabtin.dovelora.com" in script
+    assert "upsert_runtime_env DAEMON_SERVER_URL https://workspace.dovelora.com" in script
+    assert "upsert_runtime_env DAEMON_WS_URL wss://workspace.dovelora.com" in script
     assert "tabtin-community-celery-beat-1" in script
     assert "candidate=raw.strip()" in script
     assert 're.fullmatch(r"[A-Za-z0-9_=-]{32,256}", candidate)' in script
@@ -496,3 +496,43 @@ def test_readonly_pr_contract_checks_cannot_replace_pending_production_deploymen
     # production lock; only unprivileged PR checks receive the per-PR group.
     assert "github.event_name == 'pull_request_target'" not in concurrency
     assert "github.ref" not in concurrency
+
+
+def test_public_domain_is_only_workspace_and_dns_wait_keeps_origin_guard() -> None:
+    for path in [WORKFLOW, DEPLOY_SCRIPT, CLOUD_DEPLOY_SCRIPT]:
+        text = path.read_text(encoding="utf-8")
+        assert "tabtin.dovelora.com" not in text
+        assert "workspace.dovelora.com" in text
+    script = DEPLOY_SCRIPT.read_text(encoding="utf-8")
+    assert "for attempt in {1..60}" in script
+    assert "public_ready=true" in script
+    assert "x-muse-deployment-target:" in script
+    assert script.index('[[ "$public_ready" == true ]]') < script.index('> "$application_root/DEPLOYED_COMMIT"')
+
+
+def test_server_dns_wait_requires_ready_body_and_exact_sg01_origin(tmp_path) -> None:
+    source = DEPLOY_SCRIPT.read_text()
+    fragment = source.split('health_headers="$(mktemp)"', 1)[1].split("printf '%s\\n' \"$requested_sha\"", 1)[0]
+    script = 'set -euo pipefail\nlog() { :; }; die() { printf "%s\\n" "$*" >&2; exit 1; }; public_health_url=https://workspace.dovelora.com/health/ready\nhealth_headers="$(mktemp)"' + fragment
+    (tmp_path / 'sleep').write_text('#!/bin/sh\nexit 0\n')
+    (tmp_path / 'sleep').chmod(0o755)
+    curl = tmp_path / 'curl'
+    curl.write_text('''#!/bin/sh
+while [ "$#" -gt 0 ]; do
+  if [ "$1" = "--dump-header" ]; then shift; headers="$1"; fi
+  shift
+done
+n=0
+[ ! -f "$FIXTURE_COUNT" ] || n=$(cat "$FIXTURE_COUNT")
+n=$((n + 1)); printf '%s' "$n" > "$FIXTURE_COUNT"
+target=ks6
+if [ "$FIXTURE_MODE" = switch ] && [ "$n" -ge 2 ]; then target=sg01; fi
+printf 'HTTP/1.1 200 OK\r\nX-Muse-Deployment-Target: %s\r\n\r\n' "$target" > "$headers"
+printf '{"status":"ready"}'
+''')
+    curl.chmod(0o755)
+    for mode, expected, attempts in [('switch', 0, 2), ('old-origin', 1, 60)]:
+        counter = tmp_path / f'{mode}-count'
+        result = subprocess.run(['bash', '-c', script], env={**os.environ, 'PATH': f"{tmp_path}:{os.environ['PATH']}", 'FIXTURE_MODE': mode, 'FIXTURE_COUNT': str(counter)}, capture_output=True, text=True, timeout=20)
+        assert result.returncode == expected, result.stderr
+        assert int(counter.read_text()) == attempts

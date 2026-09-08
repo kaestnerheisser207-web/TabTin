@@ -4,7 +4,7 @@ set -euo pipefail
 application_root="/Project/applications/tabtin"
 releases_root="$application_root/releases"
 compose_file="$application_root/config/compose.shared.yml"
-public_health_url="https://tabtin.dovelora.com/health/ready"
+public_health_url="https://workspace.dovelora.com/health/ready"
 local_django_image="muse/community-django:local"
 local_web_image="tabtin/web:local"
 local_collab_image="tabtin/collab-live:local"
@@ -163,7 +163,7 @@ if ! wait_for_health tabtin-community-centrifugo-1 24; then
 fi
 
 if ! local_health_response="$(curl --fail --silent --show-error --max-time 20 \
-  -H 'Host: tabtin.dovelora.com' \
+  -H 'Host: workspace.dovelora.com' \
   -H 'X-Forwarded-Proto: https' \
   http://127.0.0.1:6060/health/ready)"; then
   die "local readiness request failed"
@@ -180,16 +180,18 @@ fi
 
 health_headers="$(mktemp)"
 trap 'rm -f -- "$health_headers"' EXIT
-if ! health_response="$(curl --fail --silent --show-error --max-time 20 --dump-header "$health_headers" "$public_health_url")"; then
-  die "public readiness request failed"
-fi
-if ! grep -q '"status"[[:space:]]*:[[:space:]]*"ready"' <<<"$health_response"; then
-  die "public readiness response did not report ready"
-fi
-
-if ! tr -d '\r' < "$health_headers" | grep -Eiq '^x-muse-deployment-target:[[:space:]]*sg01[[:space:]]*$'; then
-  die "public readiness target mismatch: response is not verified as sg01"
-fi
+public_ready=false
+for attempt in {1..60}; do
+  if health_response="$(curl --fail --silent --show-error --max-time 10 --dump-header "$health_headers" "$public_health_url")" &&
+    grep -q '\"status\"[[:space:]]*:[[:space:]]*\"ready\"' <<<"$health_response" &&
+    tr -d '\r' < "$health_headers" | grep -Eiq '^x-muse-deployment-target:[[:space:]]*sg01[[:space:]]*$'; then
+    public_ready=true
+    break
+  fi
+  log "sg01 services are healthy; waiting for workspace DNS/origin verification ($attempt/60)"
+  sleep 5
+done
+[[ "$public_ready" == true ]] || die "public readiness target mismatch: workspace response is not verified as sg01"
 rm -f -- "$health_headers"
 trap - EXIT
 
