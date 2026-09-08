@@ -27,10 +27,14 @@ class RuntimeBindingService:
             raise ServiceError("THREAD_ID_INVALID", "执行 thread_id 无效", 400)
 
         plane = derive_workspace_runtime_plane(workspace)
-        if harness == RuntimeBinding.Harness.DSH and plane != "cloud":
+        local_electron = (
+            plane == "local"
+            and getattr(workspace.device, "device_type", None) == "electron"
+        )
+        if harness == RuntimeBinding.Harness.DSH and plane != "cloud" and not local_electron:
             raise ServiceError(
-                "DSH_REQUIRES_CLOUD_WORKSPACE",
-                "DSH Harness 仅支持 Cloud Workspace；本地执行不会静默降级为 Builtin",
+                "DSH_HOST_UNSUPPORTED",
+                "DSH Harness 需要 Muse 桌面执行设备或 Cloud Workspace；当前执行设备不受支持",
                 409,
             )
         allocation = None

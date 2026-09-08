@@ -1,6 +1,6 @@
 import { randomUUID } from 'node:crypto'
 import { createServer, type IncomingMessage, type Server } from 'node:http'
-import { chmod, mkdir, mkdtemp, readFile, rm, writeFile } from 'node:fs/promises'
+import { access, chmod, mkdir, mkdtemp, readFile, rm, writeFile } from 'node:fs/promises'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 import { spawn, type ChildProcess } from 'node:child_process'
@@ -31,7 +31,7 @@ afterEach(async () => {
 })
 
 describe.skipIf(!image)('Cloud Runtime image bootstrap integration', () => {
-  it('activates the token-bound Cloud Device and emits a real heartbeat', async () => {
+  it('activates the token-bound Cloud Device and heartbeats without a global DSH gateway', async () => {
     const activations: Array<Record<string, unknown>> = []
     const heartbeats: Array<Record<string, unknown>> = []
     const server = createServer(async (request, response) => {
@@ -115,8 +115,6 @@ describe.skipIf(!image)('Cloud Runtime image bootstrap integration', () => {
     })
     await listen(server)
     const port = addressPort(server)
-    const apiPort = await reservePort()
-    const gatewayPort = await reservePort()
     const root = await mkdtemp(join(tmpdir(), 'tabtin-runtime-image-'))
     temporaryDirectories.push(root)
     const workspace = join(root, 'workspace')
@@ -153,9 +151,6 @@ describe.skipIf(!image)('Cloud Runtime image bootstrap integration', () => {
       '--name', containerName,
       '--mount', `type=bind,src=${workspace},dst=/workspace`,
       '--mount', `type=bind,src=${runtime},dst=/var/lib/tabtin`,
-      '--env', 'MUSE_DSH_GATEWAY_TOKEN=image-e2e-gateway-token',
-      '--env', `MUSE_DSH_API_URL=http://127.0.0.1:${apiPort}`,
-      '--env', `MUSE_DSH_GATEWAY_PORT=${gatewayPort}`,
       '--env', 'DAEMON_CONTROL_ENABLED=false',
       image!,
     ], { stdio: ['ignore', 'pipe', 'pipe'] })
@@ -171,7 +166,8 @@ describe.skipIf(!image)('Cloud Runtime image bootstrap integration', () => {
       device_type: 'cloud',
     })
     expect(heartbeats[0]).toMatchObject({ fingerprint })
-    expect(output).toContain('[DSH] ApiProxy and TabTin MCP bridge ready')
+    // No conversation has requested DSH: bootstrap readiness is the daemon heartbeat.
+    await expect(access(join(bootstrap, 'install-token'))).rejects.toThrow()
     expect(await readFile(join(runtime, 'daemon', 'fingerprint'), 'utf8'))
       .toBe(fingerprint)
     const config = JSON.parse(await readFile(join(runtime, 'daemon', 'config.json'), 'utf8'))
@@ -211,14 +207,6 @@ function addressPort(server: Server): number {
   const address = server.address()
   if (!address || typeof address === 'string') throw new Error('server has no TCP address')
   return address.port
-}
-
-async function reservePort(): Promise<number> {
-  const server = createServer()
-  await listen(server)
-  const port = addressPort(server)
-  await new Promise<void>(resolve => server.close(() => resolve()))
-  return port
 }
 
 async function readJson(request: IncomingMessage): Promise<Record<string, unknown>> {

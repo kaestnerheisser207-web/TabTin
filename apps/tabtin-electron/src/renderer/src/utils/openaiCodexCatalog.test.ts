@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import type { Model } from '@muse/chat-client'
 import { mergeConnectedOpenAICodexModels } from './openaiCodexCatalog'
+import { OPENAI_CODEX_MODELS } from '../../../shared/openai-codex-models'
 
 const platformModel: Model = {
   id: '11111111-1111-1111-1111-111111111111',
@@ -18,6 +19,23 @@ const platformModel: Model = {
 }
 
 describe('mergeConnectedOpenAICodexModels', () => {
+  it('exposes Astra from the actual login catalog with capabilities and reasoning controls', () => {
+    const astra = mergeConnectedOpenAICodexModels([], {
+      connected: true,
+      models: [...OPENAI_CODEX_MODELS],
+    }).find((model) => model.id === 'gpt-6-astra')
+
+    expect(astra).toEqual(expect.objectContaining({
+      display_name: 'GPT-6 Astra',
+      provider: 'openai-codex',
+      context_window_tokens: 1_050_000,
+      max_output_tokens: 128_000,
+    }))
+    expect(astra?.runtime_controls?.[0]?.default_value).toBe('medium')
+    expect(astra?.runtime_controls?.[0]?.options?.map((option) => option.value))
+      .toEqual(['low', 'medium', 'high', 'xhigh', 'max'])
+  })
+
   it('adds locally connected Codex models with a ChatGPT provider label', () => {
     expect(mergeConnectedOpenAICodexModels([platformModel], {
       connected: true,

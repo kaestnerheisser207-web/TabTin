@@ -5,7 +5,6 @@ import type { WorkingDirType, SystemPromptConfig } from '@muse/agent-prompt'
 import type { NativeBackendBootstrapResult } from '@muse/agent-host/native'
 import type { ShellCap } from '@muse/agent-runtime/capability'
 import type {
-  AgentRuntime,
   ContentBlock,
   EngineConfig,
   SerializedPendingApproval,
@@ -563,7 +562,7 @@ export function resolveDefaultAttachmentStrategy(): AttachmentStrategy {
 }
 
 export interface HostState extends RuntimeCacheKey {
-  runtime: AgentRuntime
+  runtime: import('@muse/agent-host/runtime').HostedRuntime
   sessionId: string
   businessThreadId: string
   /** Agent id snapshot used to refresh authoritative approval grants. */

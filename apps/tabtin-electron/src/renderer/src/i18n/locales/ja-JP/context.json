@@ -1889,13 +1889,15 @@
       "other": "その他"
     },
     "deviceStatus": {
-      "remote": "リモート",
+      "remote": "別のデバイス",
       "offline": "オフライン",
       "unbound": "束縛されていない",
       "remoteDevice": "実行装置",
-      "remoteTitle": "エージェントは「{{device}}」で動作します。このアプリを操作するには、そのデバイスに切り替えてください",
+      "remoteTitle": "このワークスペースは「{{device}}」で実行され、ディレクトリもそのデバイスにあります",
       "offlineTitle": "エージェントの実行デバイス「{{device}}」は現在オフラインです",
-      "unboundTitle": "エージェントにはまだ実行デバイスがバインドされていません"
+      "unboundTitle": "エージェントにはまだ実行デバイスがバインドされていません",
+      "cloud": "クラウド",
+      "cloudTitle": "このワークスペースとディレクトリはクラウド上にあります"
     },
     "terminalOverview": {
       "current": "現在",

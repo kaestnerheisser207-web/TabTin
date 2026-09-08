@@ -21,6 +21,7 @@ import { fileURLToPath } from 'node:url';
 import { resolveBuildTag } from '../../apps/tabtin-electron/scripts/resolve-build-tag.mjs';
 import { injectGitBuildInfoEnv } from '../../apps/tabtin-electron/scripts/resolve-git-build-info.mjs';
 import { createElectronDevOutputMonitor } from './electron-dev-output.mjs';
+import { ensurePtyHelper } from '../../apps/tabtin-electron/scripts/ensure-pty-helper.mjs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const isWin = process.platform === 'win32';
@@ -121,6 +122,9 @@ injectGitBuildInfoEnv({
 const communityBootstrap =
   process.env.MUSE_COMMUNITY_DEV_BOOTSTRAP === '1' &&
   typeof process.send === 'function';
+for (const helper of ensurePtyHelper()) {
+  console.log(`[electron-dev] 已恢复 PTY helper 执行权限: ${helper}`);
+}
 const child = spawn('electron-vite', ['dev'], {
   stdio: communityBootstrap ? ['inherit', 'pipe', 'pipe'] : 'inherit',
   shell: isWin,

@@ -50,7 +50,10 @@
       "doc": "doctor",
       "docHint": "Primero los documentos, claro"
     },
-    "workingDirHint": "El agente ejecuta comandos y lee/escribe archivos aquí. El tipo establece cómo funciona este espacio de trabajo de forma predeterminada y qué vista se abre primero; puede cambiar el tipo más adelante en la configuración del espacio de trabajo; el directorio de trabajo se repara después de la creación. No cambia los permisos en Autorización."
+    "workingDirHint": "El agente ejecuta comandos y lee/escribe archivos aquí. El tipo establece cómo funciona este espacio de trabajo de forma predeterminada y qué vista se abre primero; puede cambiar el tipo más adelante en la configuración del espacio de trabajo; el directorio de trabajo se repara después de la creación. No cambia los permisos en Autorización.",
+    "cloud": {
+      "notEnabled": "El alojamiento en la nube no está habilitado. Contacta al administrador del despliegue para activarlo."
+    }
   },
   "edit": {
     "title": "Editar espacio de trabajo",
@@ -1940,5 +1943,31 @@
     "saveFailed": "No se pudo guardar el avatar",
     "removed": "Avatar eliminado",
     "removeFailed": "No se pudo eliminar el avatar"
+  },
+  "harness": {
+    "title": "Motor de ejecución",
+    "agentScopeHint": "Se aplica a las futuras conversaciones con el Agent actual.",
+    "availabilityHint": "DSH permite la ejecución local y en la nube. El uso local requiere instalar DSH.",
+    "agentRequired": "Primero selecciona un Agent de la organización actual.",
+    "saveFailed": "No se pudo guardar el motor de ejecución. Inténtalo de nuevo.",
+    "selectBuiltin": "Integrado en Muse",
+    "selectDsh": "DeepSeek DSH",
+    "local": {
+      "incompatibleVersion": "DSH local {{version}} no es compatible con esta versión de Muse. Instala {{supportedVersion}} sin modificar tu instalación actual de DSH.",
+      "title": "Configurar DSH local",
+      "description": "No se encontró DeepSeek Harness. Instálalo para usar DSH en conversaciones locales.",
+      "ready": "DSH local está listo",
+      "version": "Versión {{version}}",
+      "checking": "Comprobando DSH local…",
+      "installing": "Instalando DSH. Puede tardar unos minutos.",
+      "installingButton": "Instalando…",
+      "install": "Instalar DSH",
+      "retry": "Reintentar instalación",
+      "refresh": "Volver a comprobar",
+      "nodeRequired": "Instala Node.js 22.12 o posterior con npm y vuelve a comprobar.",
+      "getNode": "Instalar Node.js",
+      "failed": "No se pudo comprobar o instalar DSH. Inténtalo de nuevo.",
+      "readyShort": "Listo"
+    }
   }
 }

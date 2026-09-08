@@ -50,7 +50,10 @@
       "doc": "문서",
       "docHint": "문서 중심, 명확함"
     },
-    "workingDirHint": "에이전트는 여기에서 명령을 실행하고 파일을 읽거나 씁니다. 유형은 이 작업공간이 기본적으로 작동하는 방식과 어떤 보기가 먼저 열리는지 설정합니다. 나중에 작업공간 설정에서 유형을 변경할 수 있습니다. 작업 디렉토리는 생성 후에 수정됩니다. 승인 아래에서는 권한이 변경되지 않습니다."
+    "workingDirHint": "에이전트는 여기에서 명령을 실행하고 파일을 읽거나 씁니다. 유형은 이 작업공간이 기본적으로 작동하는 방식과 어떤 보기가 먼저 열리는지 설정합니다. 나중에 작업공간 설정에서 유형을 변경할 수 있습니다. 작업 디렉토리는 생성 후에 수정됩니다. 승인 아래에서는 권한이 변경되지 않습니다.",
+    "cloud": {
+      "notEnabled": "클라우드 호스팅이 활성화되지 않았습니다. 배포 관리자에게 활성화를 요청하세요."
+    }
   },
   "edit": {
     "title": "작업공간 편집",
@@ -1940,5 +1943,31 @@
     "saveFailed": "아바타를 저장하지 못했습니다.",
     "removed": "아바타가 삭제되었습니다.",
     "removeFailed": "아바타를 제거하지 못했습니다."
+  },
+  "harness": {
+    "title": "실행 엔진",
+    "agentScopeHint": "현재 Agent의 이후 대화에 적용됩니다.",
+    "availabilityHint": "DSH는 로컬 및 클라우드 실행을 지원합니다. 로컬에서 사용하려면 DSH를 설치해야 합니다.",
+    "agentRequired": "먼저 현재 조직의 Agent를 선택하세요.",
+    "saveFailed": "실행 엔진을 저장하지 못했습니다. 다시 시도하세요.",
+    "selectBuiltin": "Muse 기본",
+    "selectDsh": "DeepSeek DSH",
+    "local": {
+      "incompatibleVersion": "로컬 DSH {{version}}은 현재 Muse와 호환되지 않습니다. 기존 DSH를 변경하지 않고 {{supportedVersion}}을 설치할 수 있습니다.",
+      "title": "로컬 DSH 설정",
+      "description": "DeepSeek Harness를 찾을 수 없습니다. 설치하면 로컬 대화에서 DSH를 사용할 수 있습니다.",
+      "ready": "로컬 DSH가 준비되었습니다",
+      "version": "버전 {{version}}",
+      "checking": "로컬 DSH 확인 중…",
+      "installing": "DSH를 설치하고 있습니다. 몇 분 정도 걸릴 수 있습니다.",
+      "installingButton": "설치 중…",
+      "install": "DSH 설치",
+      "retry": "설치 다시 시도",
+      "refresh": "다시 확인",
+      "nodeRequired": "npm이 포함된 Node.js 22.12 이상을 설치한 후 다시 확인하세요.",
+      "getNode": "Node.js 설치",
+      "failed": "DSH를 확인하거나 설치하지 못했습니다. 다시 시도하세요.",
+      "readyShort": "준비됨"
+    }
   }
 }

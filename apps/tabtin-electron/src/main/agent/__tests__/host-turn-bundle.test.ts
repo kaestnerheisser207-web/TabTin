@@ -102,6 +102,34 @@ function makeFetchImpl(opts?: { workspaceLimitsEnabled?: boolean }) {
 }
 
 describe('host-turn-bundle', () => {
+  it('uses the selected Agent harness even when its Workspace carries a synthetic builtin config', async () => {
+    const fetchImpl = vi.fn(async (url: string | URL | Request) => ({
+      ok: true,
+      json: async () => ({ success: true, data: String(url).includes('/agents/') ? {
+        id: 'agent-dsh', organization_allow_member_yolo: false,
+        agent_config: { schema_version: 3, harness: { type: 'dsh' }, security: {} },
+      } : {
+        id: 'workspace-builtin', approval_grant: 'always_ask',
+        agent_config: { harness: { type: 'builtin' } },
+      } }),
+    }))
+    const bundle = await loadHostTurnBundle({
+      agentId: 'agent-dsh', workspaceId: 'workspace-builtin',
+      fetchImpl: fetchImpl as unknown as typeof fetch, getAccessToken: async () => 'tok',
+    })
+    expect(bundle.resolvedAgentId).toBe('agent-dsh')
+    expect(bundle.harness).toBe('dsh')
+    expect(turnStore.compose('agent-dsh', 'workspace-builtin')?.harness).toBe('dsh')
+  })
+
+  it('rejects an unknown explicit Agent harness instead of silently selecting builtin', async () => {
+    turnStore.upsertAgent({
+      agentId: 'unknown-engine', organizationAllowMemberYolo: false,
+      agentConfigRaw: { schema_version: 3, harness: { type: 'unknown' }, security: {} },
+    })
+    expect(() => turnStore.compose('unknown-engine')).toThrow('Unsupported Agent harness')
+  })
+
   it('renderer 只推局部状态时由 Host 主动拉完整权威快照', async () => {
     turnStore.upsertAgent({
       agentId: 'agent-1',

@@ -1888,13 +1888,15 @@
       "other": "其他"
     },
     "deviceStatus": {
-      "remote": "远程",
+      "remote": "其他设备",
       "offline": "离线",
       "unbound": "未绑定",
       "remoteDevice": "执行设备",
-      "remoteTitle": "Agent 在「{{device}}」上工作，需切换到该设备才能操作这个应用",
+      "remoteTitle": "工作空间在设备「{{device}}」上执行，目录位于该设备",
       "offlineTitle": "Agent 的执行设备「{{device}}」当前不在线",
-      "unboundTitle": "Agent 还没有绑定执行设备"
+      "unboundTitle": "Agent 还没有绑定执行设备",
+      "cloud": "云端",
+      "cloudTitle": "工作空间在云端运行，目录位于云端环境"
     },
     "terminalOverview": {
       "current": "当前",

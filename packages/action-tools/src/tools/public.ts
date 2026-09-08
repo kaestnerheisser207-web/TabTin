@@ -120,3 +120,5 @@ export { allDomains, getHeadlessDomains } from './index';
 export { pdfTools, generatePdfTool } from './pdf';
 export { markdownTools, pageToMarkdownTool } from './markdown';
 
+
+export { preflightFilePathSecurity } from './tabcode';

@@ -49,12 +49,14 @@ import { SessionExpiredNotice } from './SessionExpiredNotice'
 import { ProfileIdentityForm } from './profile/ProfileIdentityForm'
 import { ProfileRulesForm } from './profile/ProfileRulesForm'
 import { ProfileWorkingDirForm } from './profile/ProfileWorkingDirForm'
+import { LocalDshSetupPanel } from './LocalDshSetupPanel'
 
 // ---------------------------------------------------------------------------
 // Section title resolver
 // ---------------------------------------------------------------------------
 
 const SECTION_TITLE_KEY: Record<AgentSettingsSection, { ns: 'space'; key: string; fallback?: string }> = {
+  'local-dsh': { ns: 'space', key: 'harness.local.title', fallback: '本地 DSH' },
   'profile-identity': { ns: 'space', key: 'profileSheet.identityTitle' },
   'profile-rules': { ns: 'space', key: 'profileSheet.rulesTitle' },
   'working-dir': { ns: 'space', key: 'profileSheet.workingDirTitle', fallback: '工作目录' },
@@ -266,6 +268,8 @@ function renderSectionBody({
   const organizationId = space.organization_id
 
   switch (section) {
+    case 'local-dsh':
+      return <LocalDshSetupPanel />
     case 'profile-identity': // [对象边界:S=Space属性] 身份/名片，多 Agent 后归 Space（PRD §5.3/§8.7）
       return <ProfileIdentityForm spaceId={spaceId} canManage={canEditAgentSettings} onSaved={onSaved} />
     case 'profile-rules':

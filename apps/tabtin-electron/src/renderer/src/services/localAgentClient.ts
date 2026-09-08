@@ -101,6 +101,7 @@ export interface LocalAgentAppContext {
 
 export interface LocalAgentStreamOptions {
   modelId?: string
+  harness?: 'builtin' | 'dsh'
   /**
    * W4.1 (dogfood fix)：当前 Agent 的 ID，由调用方从
    * `useSpaceStore.selectedAgent.id` 读出后透传。
@@ -421,6 +422,7 @@ export class LocalAgentClient {
       // QueryRequest.threadId 同源——只改字段名不改变量名。
       threadId: sessionId,
       modelId: options?.modelId,
+      harness: options?.harness,
       // W4.1：透传 agentId，让 ElectronAgentHost 装配 NativeBackendSession（缺失则
       // bootstrap skip → Capability bind 失败 → file/shell 工具撞 "not bound"）。
       agentId: options?.agentId,
@@ -481,6 +483,14 @@ export class LocalAgentClient {
     message: string,
     options?: LocalAgentStreamOptions,
   ): Promise<LocalAgentQueryAck> {
+    if (options?.harness === 'dsh') {
+      const status = await window.muse.localDsh.getStatus()
+      if (!status.installed) {
+        const { useAgentSettingsSheetStore } = await import('@stores/useAgentSettingsSheetStore')
+        useAgentSettingsSheetStore.getState().open('local-dsh', options.workspaceId)
+        throw new Error(status.error || status.detail || 'DSH_NOT_INSTALLED: 请先安装本地 DSH')
+      }
+    }
     const sidShort = sessionId.slice(0, 8)
     log.debug(`invoke agent-engine:query (ack-only) session=${sidShort}`)
     let ack: LocalAgentQueryResult

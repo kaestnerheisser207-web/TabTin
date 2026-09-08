@@ -393,6 +393,9 @@ export type { EventEmitterContext } from './event/event-emitter.js';
 export { RuntimeLifecycleEvent } from './event/events/observability-events.js';
 export {
   MessagePersistedEvent,
+  PersistMessageEvent,
+  HitlInteractionEvent,
+  type HitlInteractionArgs,
   hitlMessageId,
 } from './event/events/persist-events.js';
 export { RuntimeLlmSnapshotEvent, RuntimeLlmUsageEvent } from './event/events/llm-events.js';
@@ -660,3 +663,7 @@ export type {
   EnvKillSwitchReader,
   UserMessageAttachment,
 } from './history/index.js';
+
+export { createHostCapabilityRun, resolveHostCapabilityModel } from './engine/tooling/host-capability-run.js';
+
+export { normalizeSSEUsage as normalizeProxySseUsage } from './providers/proxy-provider.js';

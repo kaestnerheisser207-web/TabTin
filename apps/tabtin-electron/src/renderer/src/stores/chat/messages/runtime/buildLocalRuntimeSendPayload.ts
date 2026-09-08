@@ -161,6 +161,7 @@ export function buildLocalRuntimeSendPayload(
     },
     options: {
       modelId: input.modelId,
+      harness: agentCfgV2?.harness?.type ?? 'builtin',
       agentId: input.currentAgent?.id,
       workspaceId: input.capturedRuntimeSpaceId,
       executionTarget: input.executionTarget ?? undefined,

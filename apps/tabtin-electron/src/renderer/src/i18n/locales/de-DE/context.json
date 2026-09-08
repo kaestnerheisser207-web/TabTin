@@ -1889,13 +1889,15 @@
       "other": "Andere"
     },
     "deviceStatus": {
-      "remote": "Fernbedienung",
+      "remote": "Anderes Gerät",
       "offline": "Offline",
       "unbound": "Ungebunden",
       "remoteDevice": "Ausführungsgerät",
-      "remoteTitle": "Agent arbeitet an „{{device}}“; Wechseln Sie zu diesem Gerät, um diese App zu bedienen",
+      "remoteTitle": "Dieser Arbeitsbereich wird auf „{{device}}“ ausgeführt; dort liegt auch sein Verzeichnis",
       "offlineTitle": "Das Ausführungsgerät des Agenten „{{device}}“ ist derzeit offline",
-      "unboundTitle": "Der Agent hat noch kein Ausführungsgerät gebunden"
+      "unboundTitle": "Der Agent hat noch kein Ausführungsgerät gebunden",
+      "cloud": "Cloud",
+      "cloudTitle": "Dieser Arbeitsbereich und sein Verzeichnis werden in der Cloud gehostet"
     },
     "terminalOverview": {
       "current": "Aktuell",

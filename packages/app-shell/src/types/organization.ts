@@ -19,6 +19,8 @@ export const UI_ASSIGNABLE_ROLES: readonly AssignableRole[] = ['editor'] as cons
 export const ROLE_LEVELS: Record<OrganizationRole, number> = { owner: 4, admin: 3, editor: 2, viewer: 1 }
 
 export interface OrganizationSettings {
+  /** Whether this organization may provision cloud-hosted workspaces. Missing means disabled. */
+  cloud_agent_enabled?: boolean
   theme?: 'light' | 'dark' | 'auto'
   language?: string
   /**

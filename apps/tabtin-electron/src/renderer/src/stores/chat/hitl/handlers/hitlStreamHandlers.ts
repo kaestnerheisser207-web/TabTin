@@ -780,7 +780,15 @@ export function handleAskInteractionRequiredStreamEvent(
     return true
   }
 
-  const parsed = AskInteractionRequestSchema.safeParse(p)
+  // EventEmitter 将传输 envelope 放在 payload；严格业务 schema 只校验业务字段。
+  const envelopeKeys = new Set([
+    'protocol_version', 'min_compatible_version', 'thread_id', 'run_id',
+    'event_id', 'arrival_seq', '_seq',
+  ])
+  const businessPayload = Object.fromEntries(
+    Object.entries(p).filter(([key]) => !envelopeKeys.has(key)),
+  )
+  const parsed = AskInteractionRequestSchema.safeParse(businessPayload)
   if (!parsed.success) {
     const isDev =
       typeof process !== 'undefined' &&

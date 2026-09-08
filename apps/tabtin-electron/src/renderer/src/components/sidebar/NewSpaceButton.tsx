@@ -60,6 +60,7 @@ import {
 } from '@components/space-settings/profile/workingDirConflict'
 import { generateRandomWorkspaceName } from './generateRandomWorkspaceName'
 import { createLogger } from '@/utils/logger'
+import { LocalDshSetupPanel } from '@components/space-settings/LocalDshSetupPanel'
 import { ConnectorCredentialDialog } from '@components/context-space/capability-marketplace/ConnectorCredentialDialog'
 import { applyCredentialSecretToTransport } from '@components/context-space/capability-marketplace/connectorCredentialTransport'
 import {
@@ -271,6 +272,8 @@ const CreateSpaceDialog: React.FC<CreateSpaceDialogProps> = ({
   const [runtimePlane, setRuntimePlane] = useState<'local' | 'cloud'>('local')
   const [cloudSource, setCloudSource] = useState<'empty' | 'git'>('empty')
   const [cloudHarness, setCloudHarness] = useState<'dsh' | 'builtin'>('dsh')
+  const [localHarness, setLocalHarness] = useState<'dsh' | 'builtin'>('builtin')
+  const [localDshReady, setLocalDshReady] = useState(false)
   const [gitUrl, setGitUrl] = useState('')
   const [gitRef, setGitRef] = useState('')
   const [githubConnection, setGithubConnection] = useState<LocalMcpConnectionSummary | null>(null)
@@ -289,6 +292,14 @@ const CreateSpaceDialog: React.FC<CreateSpaceDialogProps> = ({
   const refreshSpace = useSpaceStore((state) => state.refreshSpace)
   const selectedAgent = useSpaceStore((state) => state.selectedAgent)
   const isCloudCreate = !isEditMode && !daemonTarget && runtimePlane === 'cloud'
+  const cloudAgentEnabled = useOrganizationStore((state) =>
+    (state.selectedOrganization ?? state.organizations[0])?.settings?.cloud_agent_enabled === true,
+  )
+  const cloudDisabledMessage = t('create.cloud.notEnabled', {
+    ns: 'space',
+    defaultValue: '云端托管尚未开通，请联系部署管理员启用。',
+  })
+  const selectedHarness = isCloudCreate ? cloudHarness : localHarness
   const githubCatalog = getRecommendedConnectorById('github')
 
   const refreshGithubConnection = useCallback(async (): Promise<LocalMcpConnectionSummary | null> => {
@@ -375,6 +386,8 @@ const CreateSpaceDialog: React.FC<CreateSpaceDialogProps> = ({
     setWorkingDirType('mixed')
     setRuntimePlane('local')
     setCloudHarness('dsh')
+    setLocalHarness(useSpaceStore.getState().selectedAgent?.agent_config?.harness?.type ?? 'builtin')
+    setLocalDshReady(false)
     setIsPickingDir(false)
     setPathLocked(false)
   }, [open, isEditMode, spaceId, daemonTarget, loadAgent, applyAgentFields])
@@ -516,6 +529,18 @@ const CreateSpaceDialog: React.FC<CreateSpaceDialogProps> = ({
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
+
+    // Recheck at submit time: the organization may change while this dialog is open.
+    const organizationState = useOrganizationStore.getState()
+    if (isCloudCreate && (organizationState.selectedOrganization ?? organizationState.organizations[0])?.settings?.cloud_agent_enabled !== true) {
+      setFormError(cloudDisabledMessage)
+      return
+    }
+
+    if (!isEditMode && !daemonTarget && !isCloudCreate && localHarness === 'dsh' && !localDshReady) {
+      setFormError(t('harness.local.missing', { ns: 'space', defaultValue: '请先安装本地 DSH。' }))
+      return
+    }
 
     if (!isCloudCreate && daemonTarget && !isValidRemoteWorkingDir(workingDir)) {
       const message = t('create.remoteWorkingDirInvalid', {
@@ -747,13 +772,13 @@ const CreateSpaceDialog: React.FC<CreateSpaceDialogProps> = ({
         effectiveWorkingDir = defaultDir.path
       }
 
-      if (isCloudCreate) {
+      if (!isEditMode && !daemonTarget && (isCloudCreate || selectedHarness === 'dsh' || selectedAgent?.organization_id === organizationId)) {
         const agentState = useSpaceStore.getState()
         const selectedAgent = agentState.selectedAgent
         if (!selectedAgent || selectedAgent.organization_id !== organizationId) {
-          const message = t('create.cloud.agentRequired', {
+          const message = t('harness.agentRequired', {
             ns: 'space',
-            defaultValue: '请先选择当前组织中的 Agent，再创建 Cloud Workspace',
+            defaultValue: '请先选择当前组织的 Agent。',
           })
           setFormError(message)
           return
@@ -763,17 +788,17 @@ const CreateSpaceDialog: React.FC<CreateSpaceDialogProps> = ({
           ?? await loadAgent(selectedAgent.id, { force: true })
           ?? selectedAgent
         )
-        if (fullAgent.agent_config?.harness?.type !== cloudHarness) {
+        if ((fullAgent.agent_config?.harness?.type ?? 'builtin') !== selectedHarness) {
           const switched = await updateAgent(fullAgent.id, {
             agent_config: {
               ...(fullAgent.agent_config ?? {}),
-              harness: { type: cloudHarness },
+              harness: { type: selectedHarness },
             },
           })
           if (!switched) {
-            const message = t('create.cloud.harnessSaveFailed', {
+            const message = t('harness.saveFailed', {
               ns: 'space',
-              defaultValue: 'Cloud Agent Runtime 保存失败，尚未创建 Workspace',
+              defaultValue: '运行引擎保存失败，请重试。',
             })
             setFormError(message)
             return
@@ -853,7 +878,7 @@ const CreateSpaceDialog: React.FC<CreateSpaceDialogProps> = ({
                 ns: 'space',
                 defaultValue: '这个工作目录已绑定到当前设备上的其他工作空间',
               })
-            : t('create.failed', {
+            : storeError?.trim() || t('create.failed', {
                 ns: 'space',
                 defaultValue: '创建失败，请重试',
               })
@@ -902,7 +927,7 @@ const CreateSpaceDialog: React.FC<CreateSpaceDialogProps> = ({
         remote: Boolean(daemonTarget),
         reason: error instanceof Error ? error.message : String(error),
       })
-      const message = t('create.failed', {
+      const message = (isCloudCreate && error instanceof Error && error.message.trim()) || t('create.failed', {
         ns: 'space',
         defaultValue: '创建失败，请重试',
       })
@@ -1033,13 +1058,16 @@ const CreateSpaceDialog: React.FC<CreateSpaceDialogProps> = ({
                     <button
                       type="button"
                       onClick={() => {
+                        if (!cloudAgentEnabled) return
                         setRuntimePlane('cloud')
                         setWorkingDirType('code')
                         setFormError(null)
                       }}
-                      disabled={isCreating}
+                      disabled={isCreating || !cloudAgentEnabled}
+                      aria-describedby={!cloudAgentEnabled ? 'cloud-create-unavailable' : undefined}
                       className={cn(
                         'flex items-start gap-2 rounded-md border px-3 py-2 text-left transition-colors',
+                        !cloudAgentEnabled && 'opacity-60 cursor-not-allowed',
                         runtimePlane === 'cloud'
                           ? 'border-accent bg-accent/10 text-foreground'
                           : 'border-border/40 text-muted-foreground hover:border-accent/40',
@@ -1056,8 +1084,39 @@ const CreateSpaceDialog: React.FC<CreateSpaceDialogProps> = ({
                       </span>
                     </button>
                   </div>
+                  {!cloudAgentEnabled && (
+                    <p id="cloud-create-unavailable" className="text-caption text-muted-foreground">
+                      {cloudDisabledMessage}
+                    </p>
+                  )}
                 </div>
               ) : null}
+              {!isEditMode && !daemonTarget && (
+                <div className="space-y-2" data-testid={isCloudCreate ? 'cloud-harness-selector' : 'local-harness-selector'}>
+                  <div className="flex items-center gap-2 text-body font-medium">
+                    <Cpu className="h-4 w-4" />
+                    {t('harness.title', { ns: 'space', defaultValue: '运行引擎' })}
+                  </div>
+                  <div className="grid grid-cols-2 gap-2">
+                    {(['builtin', 'dsh'] as const).map(value => (
+                      <button
+                        key={value}
+                        type="button"
+                        disabled={isCreating}
+                        aria-pressed={selectedHarness === value}
+                        onClick={() => { (isCloudCreate ? setCloudHarness : setLocalHarness)(value); setFormError(null) }}
+                        className={cn('rounded-md border px-3 py-2 text-caption font-medium', selectedHarness === value ? 'border-accent bg-accent/10' : 'border-border/40 text-muted-foreground')}
+                      >
+                        {value === 'dsh'
+                          ? t('harness.selectDsh', { ns: 'space', defaultValue: 'DeepSeek DSH' })
+                          : t('harness.selectBuiltin', { ns: 'space', defaultValue: 'Muse 自带' })}
+                      </button>
+                    ))}
+                  </div>
+                  <p className="text-caption text-muted-foreground">{t('harness.agentScopeHint', { ns: 'space', defaultValue: '作用于当前 Agent 的后续对话。' })}</p>
+                  {!isCloudCreate && selectedHarness === 'dsh' && <LocalDshSetupPanel onReadyChange={setLocalDshReady} disabled={isCreating} />}
+                </div>
+              )}
               <div className="space-y-2">
                 <div className="flex items-center gap-1.5">
                   <label
@@ -1213,49 +1272,6 @@ const CreateSpaceDialog: React.FC<CreateSpaceDialogProps> = ({
                       )}
                     </div>
                   ) : null}
-                  <div
-                    className="space-y-2 border-t border-border/40 pt-3"
-                    data-testid="cloud-harness-selector"
-                  >
-                    <div className="flex items-start gap-2">
-                      <Cpu className="mt-0.5 h-4 w-4 shrink-0 text-muted-foreground" />
-                      <div>
-                        <p className="text-body font-medium">
-                          {t('create.cloud.agentRuntime', {
-                            ns: 'space',
-                            defaultValue: 'Cloud Agent Runtime',
-                          })}
-                        </p>
-                        <p className="text-caption text-muted-foreground/60">
-                          {selectedAgent
-                            ? `当前 Agent：${selectedAgent.name}`
-                            : '尚未选择 Agent'}
-                        </p>
-                      </div>
-                    </div>
-                    <div className="grid grid-cols-2 gap-2">
-                      {(['dsh', 'builtin'] as const).map((value) => (
-                        <button
-                          key={value}
-                          type="button"
-                          onClick={() => setCloudHarness(value)}
-                          disabled={isCreating}
-                          aria-pressed={cloudHarness === value}
-                          className={cn(
-                            'rounded-md border px-3 py-2 text-caption font-medium',
-                            cloudHarness === value
-                              ? 'border-accent bg-accent/10'
-                              : 'border-border/40 text-muted-foreground',
-                          )}
-                        >
-                          {value === 'dsh' ? 'DeepSeek DSH（默认）' : 'Muse Builtin'}
-                        </button>
-                      ))}
-                    </div>
-                    <p className="text-caption text-muted-foreground/60">
-                      DSH 只在 Cloud Workspace 运行；该选择会保存到当前 Agent，本地 Workspace 不会静默降级为 Builtin。
-                    </p>
-                  </div>
                 </div>
               ) : (
               <div className="space-y-2">
@@ -1460,7 +1476,7 @@ const CreateSpaceDialog: React.FC<CreateSpaceDialogProps> = ({
             </UIButton>
             <UIButton
               type="submit"
-              disabled={isCreating || Boolean(occupiedBySpace)}
+              disabled={isCreating || Boolean(occupiedBySpace) || (isCloudCreate && !cloudAgentEnabled) || (!isEditMode && !daemonTarget && !isCloudCreate && selectedHarness === 'dsh' && !localDshReady)}
               className="bg-accent hover:bg-accent/90"
             >
               {isCreating ? (

@@ -127,6 +127,7 @@ export interface AgentEngineEnabledApp {
  */
 export interface AgentEngineQueryRequest {
   prompt: string
+  harness?: 'builtin' | 'dsh'
   /**
    * 业务对话 thread ID。§17.6 D4：从原 `sessionId` 改名 `threadId`。
    * `host.sessions Map` 的 key，也是 push 通知 `target.threadId` 的源头。

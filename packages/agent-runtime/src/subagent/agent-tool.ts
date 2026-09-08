@@ -366,6 +366,8 @@ export interface SubagentModelPolicy {
 }
 
 export interface AgentToolConfig {
+  /** Host harness selection follows the child through the existing scheduler. */
+  createRuntime?: ForkQueryConfig['createRuntime'];
   provider: LLMProvider;
   /**
    * 宿主按最终子模型解析匹配 Provider 的端口。
@@ -2435,6 +2437,7 @@ function buildChildForkConfig(
   const { config, context } = params;
   return {
     resume: isResume,
+    createRuntime: config.createRuntime,
     parentMessages: context.messages,
     taskPrompt: params.task,
     systemPrompt: runtime.childSystemPrompt,

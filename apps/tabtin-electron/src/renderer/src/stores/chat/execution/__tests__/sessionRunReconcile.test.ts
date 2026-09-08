@@ -51,7 +51,7 @@ vi.mock('@/services/chatApi', () => ({
     sessions: { get: mockSessionsGet },
   }),
 }))
-import { useChatRuntimeStore } from '../../../useChatRuntimeStore'
+import { useChatRuntimeStore, flushRuntimeBatch } from '../../../useChatRuntimeStore'
 import {
   reconcileSessionRunState,
   scheduleTerminalRunReconcile,
@@ -71,7 +71,7 @@ const SID = 'session-reconcile-test'
 const mockGetState = vi.fn()
 
 function installBridge(): void {
-  Object.defineProperty(window, 'tabtin', {
+  Object.defineProperty(window, 'muse', {
     configurable: true,
     value: { agentEngine: { getState: mockGetState } },
   })
@@ -133,7 +133,8 @@ describe('#4985/#9051 sessionRunReconcile', () => {
     })
     vi.useRealTimers()
     __resetReconcileForTest()
-    useChatRuntimeStore.setState({ runProjectionBySessionId: {} })
+    flushRuntimeBatch()
+    useChatRuntimeStore.setState({ runProjectionBySessionId: {}, runStateBySessionId: {} })
     installBridge()
   })
 
@@ -177,6 +178,85 @@ describe('#4985/#9051 sessionRunReconcile', () => {
     }))
     expect(isSessionBusy(SID)).toBe(false)
     expect(mockSettleExecutionCompleted).toHaveBeenCalled()
+  })
+
+  it.each([
+    ['done', undefined], ['error', 'original failure'], ['cancelled', undefined],
+  ] as const)('preserves an explicit same-run terminal phase %s despite a stale running server snapshot', async (phase, lastError) => {
+    const runId = '6d19825c-7074-46b3-b7fa-107b49f12a36'
+    applyStaleRunningSnapshot(SID, runId)
+    applyRuntimeRunSync(SID, { session_id: SID, run_id: runId, status: 'running', seq: 2, queued_run_ids: [] })
+    // lifecycle completion is batched and may arrive just before get-state settles.
+    useChatRuntimeStore.getState().updateRunStateForSession(SID, {
+      runId, phase, startedAt: 1788804671523, endedAt: 1788804731079, lastError,
+    })
+    mockGetState.mockResolvedValue({ sessionId: SID, busy: false, running: false, queuedRunIds: [] })
+    await reconcileSessionRunState(SID, 'terminal-observed')
+    expect(mockCleanupSessionOnTerminal).toHaveBeenCalledWith(expect.objectContaining({
+      sessionId: SID, runId, status: phase, ...(lastError ? { errorMessage: lastError } : {}),
+    }))
+    expect(isSessionBusy(SID)).toBe(false)
+  })
+
+  it('does not use an older run terminal phase as the current run result', async () => {
+    seedBusy(SID)
+    useChatRuntimeStore.setState({ runStateBySessionId: { [SID]: {
+      runId: 'older-completed-run', phase: 'done', startedAt: 1, endedAt: 2, completedToolCalls: 1, totalToolCalls: 1,
+    } } })
+    mockGetState.mockResolvedValue({ sessionId: SID, busy: false, running: false, queuedRunIds: [] })
+    await reconcileSessionRunState(SID)
+    expect(mockCleanupSessionOnTerminal).toHaveBeenCalledWith(expect.objectContaining({ runId: 'run-seed', status: 'cancelled' }))
+  })
+
+  it('ignores an idle response if a newer local run started while the IPC request was pending', async () => {
+    seedBusy(SID)
+    let reply!: (value: unknown) => void
+    mockGetState.mockImplementationOnce(() => new Promise(resolve => { reply = resolve }))
+    const pending = reconcileSessionRunState(SID)
+    applyRuntimeRunSync(SID, { session_id: SID, run_id: 'new-run', status: 'running', seq: 2, queued_run_ids: [] })
+    reply({ sessionId: SID, busy: false, running: false, queuedRunIds: [] })
+    await pending
+    expect(mockCleanupSessionOnTerminal).not.toHaveBeenCalled()
+    expect(isSessionBusy(SID)).toBe(true)
+    expect(getSessionRunProjection(SID)?.localRunId).toBe('new-run')
+  })
+
+  it.each([['completed', 'done'], ['failed', 'error'], ['cancelled', 'cancelled']] as const)(
+    'maps the same-run remote HTTP terminal %s to %s', async (status, phase) => {
+      applyStaleRunningSnapshot(SID, 'remote-current')
+      mockGetState.mockResolvedValue({ sessionId: null, busy: false, running: false, queuedRunIds: [] })
+      mockSessionsGet.mockResolvedValue({ id: SID, run_state: { ...terminalRunState('remote-current'), status } })
+      await reconcileSessionRunState(SID)
+      expect(mockCleanupSessionOnTerminal).toHaveBeenCalledWith(expect.objectContaining({ runId: 'remote-current', status: phase }))
+      expect(getSessionRunProjection(SID)?.runtimeBusy).toBeNull()
+    },
+  )
+
+  it('does not promote a stale remote terminal for an older run over the current active run', async () => {
+    applyStaleRunningSnapshot(SID, 'current-remote-run')
+    mockGetState.mockResolvedValue({ sessionId: null, busy: false, running: false, queuedRunIds: [] })
+    mockSessionsGet.mockResolvedValue({ id: SID, run_state: terminalRunState('older-remote-run') })
+    await reconcileSessionRunState(SID)
+    expect(mockCleanupSessionOnTerminal).not.toHaveBeenCalled()
+    expect(isSessionBusy(SID)).toBe(true)
+    expect(getSessionRunProjection(SID)?.authoritativeRunState?.run_id).toBe('current-remote-run')
+  })
+
+  it('ignores an old HTTP terminal response when a newer remote run starts while it is pending', async () => {
+    applyStaleRunningSnapshot(SID, 'old-remote')
+    mockGetState.mockResolvedValue({ sessionId: null, busy: false, running: false, queuedRunIds: [] })
+    let reply!: (value: unknown) => void
+    mockSessionsGet.mockImplementationOnce(() => new Promise(resolve => { reply = resolve }))
+    const pending = reconcileSessionRunState(SID)
+    await vi.waitFor(() => expect(mockSessionsGet).toHaveBeenCalledOnce())
+    applySessionRunStateSnapshot({ id: SID, run_state: {
+      ...terminalRunState('new-remote'), sequence: 2, revision: 1, status: 'running', ended_at: null,
+    } } as ChatSession)
+    reply({ id: SID, run_state: terminalRunState('old-remote') })
+    await pending
+    expect(mockCleanupSessionOnTerminal).not.toHaveBeenCalled()
+    expect(getSessionRunProjection(SID)?.authoritativeRunState?.run_id).toBe('new-remote')
+    expect(isSessionBusy(SID)).toBe(true)
   })
 
   it('#8805：stale-active 服务端快照下 force_idle 后 busy 稳定为 false', async () => {
@@ -224,7 +304,7 @@ describe('#4985/#9051 sessionRunReconcile', () => {
     mockGetState.mockResolvedValue({ sessionId: null, busy: false, running: false, queuedRunIds: [] })
     mockSessionsGet.mockResolvedValue({
       id: SID,
-      run_state: terminalRunState('b83c6e82'),
+      run_state: terminalRunState('run-stale'),
     })
     await reconcileSessionRunState(SID, 'busy-retain')
     expect(mockSessionsGet).toHaveBeenCalledWith(SID)
@@ -311,7 +391,7 @@ describe('#4985/#9051 sessionRunReconcile', () => {
   })
 
   it('无本机 runtime bridge → 直接跳过', async () => {
-    Object.defineProperty(window, 'tabtin', { configurable: true, value: undefined })
+    Object.defineProperty(window, 'muse', { configurable: true, value: undefined })
     const result = await reconcileSessionRunState(SID)
     expect(result).toBe(false)
     expect(mockGetState).not.toHaveBeenCalled()
@@ -332,7 +412,7 @@ describe('#4985/#9051 sessionRunReconcile', () => {
     mockGetState.mockResolvedValue({ sessionId: null, busy: true, running: true, queuedRunIds: ['x'] })
     mockSessionsGet.mockResolvedValue({
       id: SID,
-      run_state: terminalRunState('b83c6e82'),
+      run_state: terminalRunState('run-stale'),
     })
     await reconcileSessionRunState(SID, 'busy-retain')
     expect(mockSessionsGet).toHaveBeenCalledWith(SID)

@@ -11,6 +11,12 @@ vi.mock('react-i18next', () => ({
 }))
 
 describe('AgentAwaitingThought', () => {
+  it('第一段内容前显示准备状态，不宣称模型已开始思考', () => {
+    render(<AgentAwaitingThought mode="preparing" />)
+    expect(screen.getByTestId('agent-awaiting-thought').textContent).toContain('正在准备')
+    expect(screen.queryByText('思考中…')).toBeNull()
+  })
+
   it('renders 思考中 shell with fixed preview height', () => {
     render(<AgentAwaitingThought />)
     const root = screen.getByTestId('agent-awaiting-thought')

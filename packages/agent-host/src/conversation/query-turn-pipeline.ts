@@ -25,6 +25,7 @@ import {
   extractTraceIdFromLifecycleStart,
   ContentBlockEvents,
   StreamEvents,
+  PersistMessageEvent,
   type ContentBlock,
   type Message,
   type MessageBlockRecord,
@@ -894,6 +895,17 @@ export class DefaultQueryTurnPipeline<Session, RuntimeInput, Mode extends string
       if (!skipBlankContinuationUser) {
         await view.sessionStorage.recordUserMessage(displayUserMessage, userRecordOpts)
         await view.sessionStorage.appendUserBlockRecord(persistUserMessage, userRecordOpts)
+        // A failed harness initialization must not leave the server session empty and eligible
+        // for provisional-session deletion. Persist the exact admitted user identity first.
+        if (clientMessageId) {
+          await deliveryTurn.emit(new PersistMessageEvent({
+            messageId: clientMessageId, role: 'user', agentRunId: query.identity.runId,
+            blocks: typeof persistUserMessage.content === 'string'
+              ? [{ type: 'text', text: persistUserMessage.content }]
+              : persistUserMessage.content,
+            ...(triggeredBy && triggeredBy !== 'user' ? { metadata: { triggered_by: triggeredBy } } : {}),
+          }).toStreamEvent())
+        }
       }
       const blockFilePath = (view.sessionStorage as { blockStorage?: { filePath?: string } })
         .blockStorage?.filePath

@@ -1,3 +1,4 @@
+import { disposeLocalDshRuntimes } from './runtime/local-dsh-runtime.js'
 import {
   ipcMain,
   app,
@@ -1729,6 +1730,9 @@ export class ElectronAgentHost {
         }
       },
       teardownSession: async (sessionId, session) => {
+        try { await session.runtime.dispose?.() } catch (err) {
+          this.warnResetStep('runtime.dispose', sessionId, session.owner, err)
+        }
         try { session.abortController.abort() } catch (err) {
           this.warnResetStep('session.abort', sessionId, session.owner, err)
         }
@@ -4349,6 +4353,7 @@ export class ElectronAgentHost {
       this.clearAllBrowserControlForHostStop()
     }
 
+    await disposeLocalDshRuntimes()
     const sessionsSnapshot = [...this.sessions.values()]
     for (const s of sessionsSnapshot) {
       // 清掉 active-plan-tracker，避免 host 重启后 plan-mode-guard 拿到陈旧状态。
@@ -4356,6 +4361,7 @@ export class ElectronAgentHost {
       // W4a S1：dispose 本 session 的 SubagentManager —— 上面 handleAbort 已
       // abort session 级 abortController（级联取消 active 子），这里再清登记表
       // + 兜底 abort，保证 host 关闭时不留悬挂的后台子（PR1 无后台子，防御兜底）。
+      await s.runtime.dispose?.()
       s.subagentManager.dispose()
       await s.sessionStorage.dispose()
       // W1.2：触发 NativeBackendSession 的 onShutdown 钩子（best-effort；
@@ -4820,6 +4826,10 @@ export class ElectronAgentHost {
           throw err
         }
 
+        if (agentId) {
+          if (!bundle.harness) throw new Error('Selected Agent harness is unavailable')
+          request.harness = bundle.harness
+        }
         const profile = bundle.profile
 
         if (profile.customRules) request.customRules = profile.customRules
@@ -8529,6 +8539,9 @@ export class ElectronAgentHost {
       return { success: false, error: 'no history to compact' }
     }
 
+    if (!session.runtime.compactCheckpoint) {
+      return { success: false, error: '当前运行引擎不支持手动压缩历史' }
+    }
     const result = await session.runtime.compactCheckpoint({
       messages,
       summaryFocus: input.summaryFocus,
@@ -9803,13 +9816,14 @@ export class ElectronAgentHost {
       }
       syncCLISpaceContextFromQueryRequest(spaceId, organizationId)
       const owner = await this.resolveOwner(agentId, organizationId)
-      const { profile } = await loadHostTurnBundle({
+      const { profile, harness } = await loadHostTurnBundle({
         agentId,
         workspaceId,
         getOrganizationId: () => organizationId,
       })
       const request: QueryRequest = {
         prompt: '',
+        harness,
         threadId,
         workspaceId,
         spaceId,

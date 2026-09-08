@@ -379,6 +379,10 @@
     ],
     "extraResources": [
       {
+        "from": "../../packages/dsh-muse-plugin/dist",
+        "to": "dsh-muse-plugin"
+      },
+      {
         "from": "static/icon.png",
         "to": "static/icon.png"
       },

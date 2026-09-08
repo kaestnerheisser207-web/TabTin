@@ -1,0 +1,156 @@
+name: DSH capability parity
+
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/dsh-parity.yml'
+      - 'scripts/dsh-parity/**'
+      - 'docs/development/dsh-capability-parity.md'
+      - 'packages/agent-host/**'
+      - 'packages/agent-runtime/**'
+      - 'packages/dsh-muse-plugin/**'
+      - 'packages/action-tools/**'
+      - 'packages/agent-modes/**'
+      - 'packages/security-policy/**'
+      - 'packages/cli-*/**'
+      - 'packages/tabtin-cli-go/**'
+      - 'packages/skills/**'
+      - 'apps/tabtin-daemon/**'
+      - 'apps/tabtin-electron/src/main/agent/**'
+      - 'apps/tabtin-electron/src/main/dsh/**'
+      - 'apps/tabtin-electron/src/renderer/src/stores/chat/execution/**'
+      - 'apps/tabtin-electron/scripts/**'
+      - 'apps/tabtin-electron/package.json'
+      - 'package.json'
+      - 'pnpm-lock.yaml'
+      - 'pnpm-workspace.yaml'
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/dsh-parity.yml'
+      - 'scripts/dsh-parity/**'
+      - 'packages/agent-host/**'
+      - 'packages/agent-runtime/**'
+      - 'packages/dsh-muse-plugin/**'
+      - 'packages/action-tools/**'
+      - 'packages/security-policy/**'
+      - 'packages/agent-modes/**'
+      - 'packages/cli-*/**'
+      - 'packages/tabtin-cli-go/**'
+      - 'packages/skills/**'
+      - 'apps/tabtin-daemon/**'
+      - 'apps/tabtin-electron/src/main/agent/**'
+      - 'apps/tabtin-electron/src/main/dsh/**'
+      - 'apps/tabtin-electron/src/renderer/src/stores/chat/execution/**'
+      - 'apps/tabtin-electron/scripts/**'
+      - 'apps/tabtin-electron/package.json'
+      - 'package.json'
+      - 'pnpm-lock.yaml'
+      - 'pnpm-workspace.yaml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: dsh-parity-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  electron-state-regression:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    env:
+      ELECTRON_SKIP_BINARY_DOWNLOAD: '1'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9.15.0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22.20.0'
+          cache: pnpm
+      - uses: actions/setup-go@v5
+        with:
+          go-version-file: packages/tabtin-cli-go/go.mod
+          cache-dependency-path: packages/tabtin-cli-go/go.sum
+      - name: Install and build Electron test dependency graph
+        run: |
+          pnpm --filter tabtin-electron... install --frozen-lockfile
+          node scripts/electron/run-predev-build-with-lock.mjs --seed tabtin-electron
+      - name: Preserve confirmed run outcomes during reconciliation
+        run: |
+          mkdir -p "$RUNNER_TEMP/dsh-electron"
+          pnpm --filter tabtin-electron exec vitest run src/renderer/src/stores/chat/execution/__tests__/sessionRunReconcile.test.ts --reporter=default --reporter=json --outputFile="$RUNNER_TEMP/dsh-electron/reconcile.json"
+          node scripts/dsh-parity/assert-integration-report.mjs "$RUNNER_TEMP/dsh-electron/reconcile.json" src/renderer/src/stores/chat/execution/__tests__/sessionRunReconcile.test.ts
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: dsh-electron-state-report
+          path: ${{ runner.temp }}/dsh-electron/*.json
+          if-no-files-found: warn
+          retention-days: 7
+  dsh-integration:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    env:
+      DSH_TELEMETRY_MODE: DISABLED
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9.15.0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22.20.0'
+          cache: pnpm
+      - uses: actions/setup-go@v5
+        with:
+          go-version-file: packages/tabtin-cli-go/go.mod
+          cache-dependency-path: packages/tabtin-cli-go/go.sum
+      - name: Install locked daemon dependency graph
+        run: pnpm --filter @muse/daemon... install --frozen-lockfile
+      - name: Verify inventory and parity checker failure cases
+        run: |
+          node --test scripts/dsh-parity/checks.test.mjs
+          node scripts/dsh-parity/inventory.mjs
+      - name: Build shared host dependency graph
+        run: node scripts/electron/run-predev-build-with-lock.mjs --seed @muse/daemon
+      - name: Verify external Node packaged plugin resource
+        run: |
+          node --test apps/tabtin-electron/scripts/packaged-dsh-plugin.test.mjs apps/tabtin-electron/scripts/prepare-deploy-package.test.mjs
+          node scripts/dsh-parity/check-packaged-plugin.mjs
+      - name: Test shared capability session and authenticated bridge
+        run: |
+          mkdir -p "$RUNNER_TEMP/dsh-parity"
+          pnpm --filter @muse/agent-host exec vitest run tests/host-capability-session.test.ts tests/dsh-capability-bridge.test.ts tests/managed-dsh-runtime.test.ts tests/provider-chat-facade.test.ts --reporter=default --reporter=json --outputFile="$RUNNER_TEMP/dsh-parity/shared-host.json"
+          node scripts/dsh-parity/assert-integration-report.mjs "$RUNNER_TEMP/dsh-parity/shared-host.json" tests/host-capability-session.test.ts tests/dsh-capability-bridge.test.ts tests/managed-dsh-runtime.test.ts tests/provider-chat-facade.test.ts
+      - name: Verify child harness selection and cleanup
+        run: |
+          pnpm --filter @muse/agent-runtime exec vitest run src/subagent/__tests__/fork-query.harness.test.ts --reporter=default --reporter=json --outputFile="$RUNNER_TEMP/dsh-parity/child-harness.json"
+          node scripts/dsh-parity/assert-integration-report.mjs "$RUNNER_TEMP/dsh-parity/child-harness.json" src/subagent/__tests__/fork-query.harness.test.ts
+      - name: Verify admitted message persistence and cancellation
+        run: |
+          pnpm --filter @muse/agent-host exec vitest run tests/query-turn-pipeline.test.ts tests/query-turn-pipeline-abort.test.ts --reporter=default --reporter=json --outputFile="$RUNNER_TEMP/dsh-parity/turn-pipeline.json"
+          node scripts/dsh-parity/assert-integration-report.mjs "$RUNNER_TEMP/dsh-parity/turn-pipeline.json" tests/query-turn-pipeline.test.ts tests/query-turn-pipeline-abort.test.ts
+      - name: Verify native tool deadline coordination
+        run: |
+          pnpm --filter @muse/dsh-muse-plugin exec vitest run src/native-deadline.test.ts --reporter=default --reporter=json --outputFile="$RUNNER_TEMP/dsh-parity/native-deadline.json"
+          node scripts/dsh-parity/assert-integration-report.mjs "$RUNNER_TEMP/dsh-parity/native-deadline.json" src/native-deadline.test.ts
+      - name: Verify model gateway accounting and cancellation
+        run: |
+          pnpm --filter @muse/daemon exec vitest run tests/dsh-model-gateway.test.ts tests/dsh-runtime-driver.test.ts tests/cloud-entrypoint.test.ts --reporter=default --reporter=json --outputFile="$RUNNER_TEMP/dsh-parity/model-gateway.json"
+          node scripts/dsh-parity/assert-integration-report.mjs "$RUNNER_TEMP/dsh-parity/model-gateway.json" tests/dsh-model-gateway.test.ts tests/dsh-runtime-driver.test.ts tests/cloud-entrypoint.test.ts
+      - name: Measure authenticated bridge transport overhead
+        run: node scripts/dsh-parity/benchmark-bridge.mjs "$RUNNER_TEMP/dsh-parity/bridge-benchmark.json"
+      - name: Run fixed-version DSH and reject skipped integration suites
+        run: node scripts/dsh-parity/run-integration.mjs "$RUNNER_TEMP/dsh-parity"
+      - name: Retain integration report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: dsh-integration-report
+          path: ${{ runner.temp }}/dsh-parity/*.json
+          if-no-files-found: warn
+          retention-days: 7

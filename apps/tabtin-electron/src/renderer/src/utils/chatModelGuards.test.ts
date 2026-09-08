@@ -39,10 +39,10 @@ describe('chatModelGuards', () => {
     expect(isSendableChatModel(makeModel())).toBe(true)
   })
 
-  it('accepts a locally connected Codex model id', () => {
-    expect(isSendableChatModelId('gpt-5.6-sol')).toBe(true)
+  it.each(['gpt-5.6-sol', 'gpt-6-astra'])('accepts locally connected Codex model %s', (modelId) => {
+    expect(isSendableChatModelId(modelId)).toBe(true)
     expect(isSendableChatModel(makeModel({
-      id: 'gpt-5.6-sol',
+      id: modelId,
       provider: 'openai-codex',
     }))).toBe(true)
   })

@@ -3,7 +3,7 @@
  */
 
 import { describe, it, expect, beforeEach } from 'vitest'
-import { useChatRuntimeStore } from '../../../useChatRuntimeStore'
+import { useChatRuntimeStore, flushRuntimeBatch } from '../../../useChatRuntimeStore'
 import {
   applyRuntimeRunSync,
   applyRunReconcile,
@@ -35,6 +35,32 @@ function sync(partial: {
 }
 
 describe('#9051 sessionRunProjection run_sync mirror', () => {
+  it('新鲜本机 IPC 状态恢复等待提示；迟到包不清断连状态', () => {
+    useChatRuntimeStore.getState().updateRunStateForSession(SID, { suspended: true })
+    flushRuntimeBatch()
+    sync({ run_id: 'run-1', status: 'running', seq: 5, busy: true })
+    flushRuntimeBatch()
+    expect(useChatRuntimeStore.getState().runStateBySessionId[SID]?.suspended).toBe(false)
+    useChatRuntimeStore.getState().updateRunStateForSession(SID, { suspended: true })
+    flushRuntimeBatch()
+    sync({ run_id: 'run-1', status: 'running', seq: 4, busy: true })
+    expect(useChatRuntimeStore.getState().runStateBySessionId[SID]?.suspended).toBe(true)
+    applyRunReconcile(SID, { busy: true, queuedRunIds: [] }, { runId: 'run-1' })
+    flushRuntimeBatch()
+    expect(useChatRuntimeStore.getState().runStateBySessionId[SID]?.suspended).toBe(false)
+  })
+
+  it('服务端状态更新不能证明远端流已恢复，保留 suspended', () => {
+    useChatRuntimeStore.getState().updateRunStateForSession(SID, { suspended: true })
+    flushRuntimeBatch()
+    applySessionRunStateSnapshot({ id: SID, run_state: {
+      run_id: 'remote-run', sequence: 1, revision: 1, status: 'running', queue_depth: 0,
+      started_at: null, state_changed_at: '2026-09-07T12:00:00Z', ended_at: null,
+      stop_reason: null, error_class: null, waiting_interaction_id: null,
+    } } as ChatSession)
+    expect(useChatRuntimeStore.getState().runStateBySessionId[SID]?.suspended).toBe(true)
+  })
+
   beforeEach(() => {
     useChatRuntimeStore.setState({ runProjectionBySessionId: {} })
   })

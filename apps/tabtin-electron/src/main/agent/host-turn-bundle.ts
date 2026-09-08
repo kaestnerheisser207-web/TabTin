@@ -8,6 +8,7 @@
 import {
   FALLBACK_DENY_AGENT_CONFIG,
   HostTurnStore,
+  resolveHostAgentHarness,
   normalizeAuthoritativeAgentConfig,
   type HostTurnBundle,
   type HostTurnExecutionLimits,
@@ -246,6 +247,7 @@ export async function fetchHostTurnBundle(params: {
     agentConfig: trimmedAgentId
       ? buildAgentConfig(agentData, workspaceData, trimmedWorkspaceId)
       : FALLBACK_DENY_AGENT_CONFIG,
+    ...(agentData ? { harness: resolveHostAgentHarness(agentData.agent_config) } : {}),
     profile: buildProfile(agentData, workspaceData),
     ...(trimmedAgentId && agentData ? { resolvedAgentId: trimmedAgentId } : {}),
   }

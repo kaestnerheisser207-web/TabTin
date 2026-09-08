@@ -478,7 +478,14 @@ export function filterIncompleteToolCalls(messages: Message[]): Message[] {
 
 // ─── Fork Query Execution ───────────────────────────────────────────
 
+export type ChildRuntimeFactory = (config: EngineConfig) => {
+  query(params: Parameters<ReturnType<typeof createRuntime>['query']>[0]): AsyncIterable<StreamEvent>;
+  dispose?(): void | Promise<void>;
+};
+
 export interface ForkQueryConfig {
+  /** Host-selected harness factory. Absence retains the Builtin engine. */
+  createRuntime?: ChildRuntimeFactory;
   parentMessages: Message[];
   taskPrompt: string;
   systemPrompt: string;
@@ -1206,8 +1213,12 @@ async function finalizeForkRuntime(runtime: ForkRuntimeState, state: ForkStreamS
 
 async function* streamForkRuntime(runtime: ForkRuntimeState): AsyncGenerator<StreamEvent, string> {
   const state = createForkStreamState();
-  const childRuntime = createRuntime(buildChildEngineConfig(runtime));
+  let childRuntime: ReturnType<ChildRuntimeFactory> | undefined;
+  let runError: unknown;
   try {
+    childRuntime = runtime.config.createRuntime
+      ? runtime.config.createRuntime(buildChildEngineConfig(runtime))
+      : createRuntime(buildChildEngineConfig(runtime));
     for await (const event of childRuntime.query({
       hostRunId: runtime.paths.childId,
       prompt: runtime.config.taskPrompt,
@@ -1224,11 +1235,21 @@ async function* streamForkRuntime(runtime: ForkRuntimeState): AsyncGenerator<Str
     }
     assertForkCompleted(runtime.config, state);
   } catch (err) {
+    runError = err;
     state.endStatus = runtime.config.signal?.aborted ? 'cancelled' : 'failed';
     state.endError = err instanceof Error ? err.message : String(err);
     throw err;
   } finally {
-    await finalizeForkRuntime(runtime, state);
+    try {
+      await childRuntime?.dispose?.();
+    } catch (error) {
+      state.endStatus = 'failed';
+      state.endError = error instanceof Error ? error.message : String(error);
+      if (runError) throw new AggregateError([runError, error], 'Child runtime execution and disposal failed');
+      throw error;
+    } finally {
+      await finalizeForkRuntime(runtime, state);
+    }
   }
   return state.finalText || '(child agent produced no output)';
 }

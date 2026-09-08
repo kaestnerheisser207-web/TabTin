@@ -50,7 +50,10 @@
       "doc": "Dok",
       "docHint": "Docs-first, klar"
     },
-    "workingDirHint": "Der Agent führt hier Befehle aus und liest/schreibt Dateien. Der Typ legt fest, wie dieser Arbeitsbereich standardmäßig funktioniert und welche Ansicht zuerst geöffnet wird. Sie können den Typ später in den Arbeitsbereichseinstellungen ändern. Das Arbeitsverzeichnis ist nach dem Erstellen festgelegt. Die Berechtigungen unter Autorisierung werden dadurch nicht geändert."
+    "workingDirHint": "Der Agent führt hier Befehle aus und liest/schreibt Dateien. Der Typ legt fest, wie dieser Arbeitsbereich standardmäßig funktioniert und welche Ansicht zuerst geöffnet wird. Sie können den Typ später in den Arbeitsbereichseinstellungen ändern. Das Arbeitsverzeichnis ist nach dem Erstellen festgelegt. Die Berechtigungen unter Autorisierung werden dadurch nicht geändert.",
+    "cloud": {
+      "notEnabled": "Cloud-Hosting ist nicht aktiviert. Wende dich zur Aktivierung an deinen Bereitstellungsadministrator."
+    }
   },
   "edit": {
     "title": "Arbeitsbereich bearbeiten",
@@ -1940,5 +1943,31 @@
     "saveFailed": "Avatar konnte nicht gespeichert werden",
     "removed": "Avatar entfernt",
     "removeFailed": "Avatar konnte nicht entfernt werden"
+  },
+  "harness": {
+    "title": "Laufzeit-Engine",
+    "agentScopeHint": "Gilt für zukünftige Unterhaltungen mit dem aktuellen Agent.",
+    "availabilityHint": "DSH unterstützt lokale und Cloud-Ausführung. Für die lokale Nutzung muss DSH installiert sein.",
+    "agentRequired": "Wählen Sie zuerst einen Agent der aktuellen Organisation.",
+    "saveFailed": "Die Laufzeit-Engine konnte nicht gespeichert werden. Bitte erneut versuchen.",
+    "selectBuiltin": "Muse integriert",
+    "selectDsh": "DeepSeek DSH",
+    "local": {
+      "incompatibleVersion": "Das lokale DSH {{version}} ist mit dieser Muse-Version nicht kompatibel. Installieren Sie {{supportedVersion}}, ohne Ihre vorhandene DSH-Installation zu ändern.",
+      "title": "Lokales DSH einrichten",
+      "description": "DeepSeek Harness wurde nicht gefunden. Installieren Sie es für lokale Unterhaltungen mit DSH.",
+      "ready": "Lokales DSH ist bereit",
+      "version": "Version {{version}}",
+      "checking": "Lokales DSH wird geprüft…",
+      "installing": "DSH wird installiert. Dies kann einige Minuten dauern.",
+      "installingButton": "Installation läuft…",
+      "install": "DSH installieren",
+      "retry": "Installation wiederholen",
+      "refresh": "Erneut prüfen",
+      "nodeRequired": "Installieren Sie Node.js 22.12 oder neuer einschließlich npm und prüfen Sie erneut.",
+      "getNode": "Node.js installieren",
+      "failed": "DSH konnte nicht geprüft oder installiert werden. Bitte erneut versuchen.",
+      "readyShort": "Bereit"
+    }
   }
 }

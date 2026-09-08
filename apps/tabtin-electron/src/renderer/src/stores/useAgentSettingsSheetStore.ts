@@ -30,6 +30,7 @@ export type AgentSettingsSection =
   | 'profile-identity' // [对象边界:S=Space属性] 身份/名片，多 Agent 后归 Space
   | 'profile-rules'
   | 'working-dir'
+  | 'local-dsh'
   // 'apps'（应用管理）入口已屏蔽：应用启用属于组织层的权限分发，不再作为 Space 管理的模块
   | 'memory'
   | 'subagents'

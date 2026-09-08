@@ -24,6 +24,9 @@ import { LocalAgentClient } from './localAgentClient'
 // 永远等业务终态 / sentinel）。
 let capturedEnvelopeHandler: ((env: { sessionId: string; terminal?: { reason: string }; event?: unknown }) => void) | null = null
 
+const setupMocks = vi.hoisted(() => ({ open: vi.fn() }))
+vi.mock('@stores/useAgentSettingsSheetStore', () => ({ useAgentSettingsSheetStore: { getState: () => ({ open: setupMocks.open }) } }))
+
 const queryMock = vi.fn()
 const abortMock = vi.fn()
 const compactSessionMock = vi.fn()
@@ -69,6 +72,22 @@ describe('LocalAgentClient.stream — IPC payload', () => {
           onStreamEvent: onStreamEventMock,
         },
       }
+  })
+
+  it('passes DSH selection to main when the local executable is installed', async () => {
+    const getStatus = vi.fn().mockResolvedValue({ installed: true })
+    Object.assign(window.muse, { localDsh: { getStatus } })
+    await new LocalAgentClient().query('dsh-session', 'hi', { harness: 'dsh', workspaceId: 'workspace-1' })
+    expect(getStatus).toHaveBeenCalledOnce()
+    expect(queryMock).toHaveBeenCalledWith(expect.objectContaining({ harness: 'dsh', threadId: 'dsh-session' }))
+  })
+
+  it('opens the install guide instead of dispatching when local DSH is missing', async () => {
+    setupMocks.open.mockClear()
+    Object.assign(window.muse, { localDsh: { getStatus: vi.fn().mockResolvedValue({ installed: false }) } })
+    await expect(new LocalAgentClient().query('dsh-session', 'hi', { harness: 'dsh', workspaceId: 'workspace-1' })).rejects.toThrow('DSH_NOT_INSTALLED')
+    expect(setupMocks.open).toHaveBeenCalledWith('local-dsh', 'workspace-1')
+    expect(queryMock).not.toHaveBeenCalled()
   })
 
   it('compactSession 透传 runtime 初始化字段，支持历史会话 lazy init', async () => {

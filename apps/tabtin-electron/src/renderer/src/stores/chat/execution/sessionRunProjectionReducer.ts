@@ -270,7 +270,7 @@ export function reduceSessionRunProjection(
           ? action.runState.run_id === base.localRunId
           : base.localDispatchToken === null
       )
-    const shouldClearLocal = (
+    const shouldClearLocal = base.runtimeBusy === null && (
       action.type === 'server-event' || snapshotStartsNewRun
     ) && serverMatchesLocal
       && !localTerminalBlocksSameRunActive
@@ -346,5 +346,11 @@ export function getEffectiveSessionRunStatus(
       return local ?? 'completed'
     }
   }
-  return projection.localStatus ?? projection.authoritativeRunState?.status ?? null
+  const server = projection.authoritativeRunState
+  // Host 只报告 running/queued；同一 run 的问询等细分阶段取服务端事实。
+  if (projection.runtimeBusy === true && server?.run_id === projection.localRunId
+    && ['waiting_user', 'paused', 'cancelling'].includes(server.status)) {
+    return server.status
+  }
+  return projection.localStatus ?? server?.status ?? null
 }

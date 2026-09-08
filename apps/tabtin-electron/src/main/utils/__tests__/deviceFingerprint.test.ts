@@ -7,6 +7,8 @@ let appDataRoot = ''
 let currentUserDataDirName = 'Muse Dev'
 let runtimeProfile: 'development' | 'local' | 'preprod' | 'production' = 'development'
 
+vi.mock('@electron-toolkit/utils', () => ({ is: { dev: true } }))
+
 vi.mock('electron', () => ({
   app: {
     getPath: (name: string) => {

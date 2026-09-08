@@ -1440,6 +1440,11 @@ if [ -d "$REPO_ROOT/packages/apps" ]; then
   find "$DEPLOY_DIR/packages-apps-src" -type d \( -name "node_modules" -o -name "dist" -o -name ".git" \) -exec rm -rf {} + 2>/dev/null || true
   prune_packaged_resource_tree "$DEPLOY_DIR/packages-apps-src"
 fi
+# DSH 的外部 Node 进程无法读取 app.asar；必须携带真实插件文件和 ESM 包声明。
+# 缺少构建产物时立即失败，不能让安装包带着不可用的 DSH 入口发布。
+node "$APP_DIR/scripts/stage-dsh-muse-plugin.mjs" \
+  "$REPO_ROOT/packages/dsh-muse-plugin/dist" "$DEPLOY_DIR"
+
 # tabtin CLI (Go binary)：运行期被 cli-server.ts 加进 Agent shell PATH 的 `tabtin` 命令。
 # prepare-deploy-package.mjs 会把 extraResources 的 from 重写成 ./tabtin-cli-go-dist-src，
 # 这里直接从当前 checkout 构建到本次 deploy staging；禁止复用共享 dist，避免

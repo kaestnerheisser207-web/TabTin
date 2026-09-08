@@ -5,9 +5,9 @@ import {
 } from '../model-execution-route.js'
 
 describe('resolveModelExecutionRoute', () => {
-  it('本机 ChatGPT 模型始终走本机 Provider', () => {
+  it.each(['gpt-5.6-sol', 'gpt-6-astra'])('本机 ChatGPT 模型 %s 始终走本机 Provider', (modelId) => {
     expect(resolveModelExecutionRoute({
-      modelId: 'gpt-5.6-sol',
+      modelId,
       rendererByokHint: false,
     })).toEqual({ kind: 'local_codex', isByok: true })
   })

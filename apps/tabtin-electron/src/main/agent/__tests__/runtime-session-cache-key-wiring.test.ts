@@ -158,14 +158,21 @@ describe('ElectronAgentHost runtime cache key wiring', () => {
     expect(block).not.toContain("request.modelId ?? 'default'")
   })
 
-  it('fails closed instead of silently running Builtin when Electron receives DSH', () => {
-    const start = runtimeSource.indexOf('buildRequestFromQuery(')
+  it('routes an explicit DSH cache key to the local DSH runtime without a Builtin fallback', () => {
+    expect(runtimeSource).toContain('harness: request.harness')
+    const start = runtimeSource.indexOf('const runtime: HostedRuntime =')
     expect(start).toBeGreaterThan(-1)
-    const block = runtimeSource.slice(start, start + 1200)
-    expect(block).toContain("if (request.harness === 'dsh')")
-    expect(block).toContain(
-      'DSH harness requires a Cloud Workspace and cannot run in Electron',
-    )
+    const block = runtimeSource.slice(start, start + 1600)
+    expect(block).toContain("cacheKey.harness === 'dsh'")
+    expect(block).toContain('new LocalDshRuntime({')
+    expect(block).toContain('modelId: input.modelId')
+    expect(block).toContain('owner: input.owner')
+    expect(block).not.toContain('catch')
+    expect(runtimeSource).not.toContain('DSH harness requires a Cloud Workspace')
+    expect(hostSource).toContain('request.harness = bundle.harness')
+    expect(hostSource).not.toContain('workspaceDetail.agent_config')
+    // Runtime behavior (missing-install failure, isolation and cancellation) is
+    // exercised by runtime/__tests__/local-dsh-runtime.test.ts.
   })
 
   it('#7894 runtime workspaceRoot comes only from Space.working_dir, never CLI organizationRoot', () => {

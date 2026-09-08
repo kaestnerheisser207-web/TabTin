@@ -50,7 +50,10 @@
       "doc": "Doc",
       "docHint": "Docs-first, clear"
     },
-    "workingDirHint": "Agent runs commands and reads/writes files here. The type sets how this Workspace works by default and which view opens first — you can change the type later in Workspace settings; the working directory is fixed after create. It doesn't change permissions under Authorization."
+    "workingDirHint": "Agent runs commands and reads/writes files here. The type sets how this Workspace works by default and which view opens first — you can change the type later in Workspace settings; the working directory is fixed after create. It doesn't change permissions under Authorization.",
+    "cloud": {
+      "notEnabled": "Cloud hosting is not enabled. Contact your deployment administrator to enable it."
+    }
   },
   "edit": {
     "title": "Edit Workspace",
@@ -1931,5 +1934,31 @@
     "saveFailed": "Failed to save avatar",
     "removed": "Avatar removed",
     "removeFailed": "Failed to remove avatar"
+  },
+  "harness": {
+    "title": "Runtime engine",
+    "agentScopeHint": "Applies to future conversations with the current Agent.",
+    "availabilityHint": "DSH supports local and cloud execution. Local use requires DSH to be installed.",
+    "agentRequired": "Select an Agent from the current organization first.",
+    "saveFailed": "Could not save the runtime engine. Please try again.",
+    "selectBuiltin": "Muse built-in",
+    "selectDsh": "DeepSeek DSH",
+    "local": {
+      "incompatibleVersion": "Local DSH {{version}} is incompatible with this Muse version. Install {{supportedVersion}} while keeping your existing DSH unchanged.",
+      "title": "Set up local DSH",
+      "description": "DeepSeek Harness was not found. Install it to use DSH for local conversations.",
+      "ready": "Local DSH is ready",
+      "version": "Version {{version}}",
+      "checking": "Checking local DSH…",
+      "installing": "Installing DSH. This may take a few minutes.",
+      "installingButton": "Installing…",
+      "install": "Install DSH",
+      "retry": "Retry installation",
+      "refresh": "Check again",
+      "nodeRequired": "Install Node.js 22.12 or later, including npm, then check again.",
+      "getNode": "Install Node.js",
+      "failed": "Could not check or install DSH. Please try again.",
+      "readyShort": "Ready"
+    }
   }
 }

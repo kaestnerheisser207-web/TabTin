@@ -35,6 +35,7 @@ import {
 } from '@muse/agent-host/delivery'
 import {
   canSoftReconfigureByShellTier,
+  isShellRestrictedAgentMode,
   resolveSubagentCarryForward,
   resolveSubagentCompletionSpaceId,
   buildCostCapConfig,
@@ -273,8 +274,8 @@ import {
   daemonRuntimeExtraKeysMatch,
   normalizeDaemonRuntimeExtraKey
 } from './daemon-runtime-key.js'
-import { DshApiClient } from './dsh-api-client.js'
-import { DshRuntimeDriver } from './dsh-runtime-driver.js'
+import { ManagedDshRuntime } from '@muse/agent-host/runtime/dsh'
+import { createHostCapabilitySession } from '@muse/agent-host/runtime'
 
 // pending-input 超时常量（仅装配路径 createRuntimeForSession → waitForUserInput 使用）。
 const PENDING_INPUT_TIMEOUT_MS = 24 * 60 * 60 * 1000;
@@ -387,7 +388,6 @@ export class DaemonRuntimeAssembly {
   private backendRegistry: ExecutionBackendRegistry | null = null;
   private lspInitialized = false;
   private readonly contextCatalog = new RuntimeContextCatalog();
-  private _dshDriver: DshRuntimeDriver | null = null
 
   /**
    * 懒建 RuntimeSessionFactory：session bag = DaemonHostState 直挂
@@ -455,7 +455,7 @@ export class DaemonRuntimeAssembly {
         normalizeDaemonRuntimeExtraKey(session.disabledApps, session.disabledToolPrefixes, session.workspaceId),
       extraKeysMatch: daemonRuntimeExtraKeysMatch,
       canSoftReconfigure: (existing, request) =>
-        canSoftReconfigureByShellTier(existing.agentMode, request.mode),
+        existing.harness !== 'dsh' && canSoftReconfigureByShellTier(existing.agentMode, request.mode),
       softReconfigure: async (existing, request) => {
         await this.softReconfigureExisting(existing, request.mode, request.input);
       },
@@ -698,20 +698,67 @@ export class DaemonRuntimeAssembly {
       input.threadId,
       input.cloudPressureThresholds,
       carryForward?.subagentManager,
+      cacheKey.harness !== 'dsh',
     );
-    let runtime: import('@muse/agent-host/runtime').HostedRuntime = builtinRuntime
     if (cacheKey.harness === 'dsh') {
-      const dshSession = await this.getDshDriver().create({
-        threadId: input.threadId ?? sessionId,
-        workspaceId: input.workspaceId,
-        workspaceRoot: this.ports.workspaceRoot ?? '/workspace',
-        owner: {
-          userId: input.owner.userId,
-          organizationId: input.owner.organizationId,
-        },
+      toolProvider.setSubagentRuntimeFactory(childConfig => {
+        const threadId = childConfig.sessionConfig.threadId
+        return new ManagedDshRuntime({
+          threadId, workspaceId: input.workspaceId, owner: input.owner,
+          workspaceRoot: childConfig.workspaceRoot ?? engineConfig.workspaceRoot ?? '/workspace',
+          modelId: childConfig.model,
+          permissionMode: isShellRestrictedAgentMode((childConfig.agentMode ?? 'agent') as AgentModeName) ? 'read-only' : 'workspace-write',
+          dataRoot: process.env.DSH_HOME ? join(process.env.DSH_HOME, 'muse-managed') : resolveDataRoot(),
+          serverUrl: this.ports.config.server_url,
+          getCredential: async () => {
+            const token = this.ports.getAccessToken()
+            if (!token) throw new Error('DSH requires an authenticated Cloud host')
+            return token
+          },
+          getExecutable: async () => process.env.MUSE_DSH_BIN ?? 'dsh', logger: this.ports.logger,
+          capabilities: createHostCapabilitySession({
+            config: { ...childConfig, businessThreadId: threadId },
+            scope: { threadId, workspaceId: input.workspaceId, owner: input.owner, agentId: input.agentId },
+            emit: event => childConfig.emitStreamEvent?.(event),
+          }),
+          interactions: {
+            cancel: requestId => { this.ports.session.getHost().interactions.resolve(requestId, { outcome: 'deny' }) },
+            request: request => this.ports.session.getHost().interactions.waitForInput(request),
+          },
+        })
       })
-      runtime = dshSession.runtime
     }
+    const runtime: import('@muse/agent-host/runtime').HostedRuntime = cacheKey.harness === 'dsh'
+      ? new ManagedDshRuntime({
+          threadId: input.threadId ?? sessionId,
+          workspaceId: input.workspaceId,
+          workspaceRoot: engineConfig.workspaceRoot ?? this.ports.workspaceRoot ?? '/workspace',
+          owner: input.owner,
+          modelId: input.modelId,
+          permissionMode: isShellRestrictedAgentMode(agentMode) ? 'read-only' : 'workspace-write',
+          dataRoot: process.env.DSH_HOME ? join(process.env.DSH_HOME, 'muse-managed') : resolveDataRoot(),
+          serverUrl: this.ports.config.server_url,
+          getCredential: async () => {
+            const token = this.ports.getAccessToken()
+            if (!token) throw new Error('DSH requires an authenticated Cloud host')
+            return token
+          },
+          getExecutable: async () => process.env.MUSE_DSH_BIN ?? 'dsh',
+          logger: this.ports.logger,
+          capabilities: createHostCapabilitySession({
+            config: engineConfig,
+            scope: { threadId: input.threadId ?? sessionId, workspaceId: input.workspaceId, owner: input.owner, agentId: input.agentId },
+            emit: event => engineConfig.emitStreamEvent?.(event),
+          }),
+          interactions: {
+            cancel: requestId => { this.ports.session.getHost().interactions.resolve(requestId, { outcome: 'deny' }) },
+            request: request => this.ports.session.getHost().interactions.waitForInput({
+              requestId: request.requestId, conversationId: request.conversationId,
+              timeoutMs: request.timeoutMs, timeoutValue: request.timeoutValue,
+            }),
+          },
+        })
+      : builtinRuntime!
     const abortController = new AbortController();
     const existing = this.ports.session.sessions.get(sessionId);
     const pauseController = existing?.pauseController ?? new SessionPauseController();
@@ -752,23 +799,6 @@ export class DaemonRuntimeAssembly {
       `[DaemonAgentHost] Runtime created for session=${sessionId.slice(0, 8)}…, harness=${cacheKey.harness}, model=${input.modelId}, mode=${agentMode}, space=${input.spaceId ?? 'n/a'}`,
     );
     return state;
-  }
-
-  private getDshDriver(): DshRuntimeDriver {
-    if (!this._dshDriver) {
-      const client = new DshApiClient(
-        process.env.MUSE_DSH_API_URL ?? 'http://127.0.0.1:3080',
-      )
-      this._dshDriver = new DshRuntimeDriver(client, {
-        request: input => this.ports.session.getHost().interactions.waitForInput({
-          requestId: input.requestId,
-          conversationId: input.conversationId,
-          timeoutMs: input.timeoutMs,
-          timeoutValue: input.timeoutValue,
-        }),
-      })
-    }
-    return this._dshDriver
   }
 
   private async createRuntimeForSession(
@@ -896,8 +926,9 @@ export class DaemonRuntimeAssembly {
      * `host.sessions.get(sessionId)` 查询（对未迁移路径行为不变）。
      */
     carryForwardSubagentManager?: SubagentManager,
+    createBuiltinRuntime = true,
   ): Promise<{
-    runtime: AgentRuntime;
+    runtime: AgentRuntime | null;
     /**
      * P0（file-history 跨进程统一）：本次实际用于 getOrCreateFileHistory 的
      * key（= threadId ?? sessionId）。透出给 buildDaemonHostState 写入
@@ -2461,7 +2492,7 @@ export class DaemonRuntimeAssembly {
     }
 
     return {
-      runtime: createRuntime(config),
+      runtime: createBuiltinRuntime ? createRuntime(config) : null,
       // P0（file-history 跨进程统一）：透出实际用于 getOrCreateFileHistory 的 key，
       // createRuntimeForSession 写入 DaemonHostState 供 reset 对称 removeFileHistory。
       fileHistoryThreadId,

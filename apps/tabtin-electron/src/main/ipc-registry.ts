@@ -100,6 +100,15 @@ export function registerMainProcessIPCHandlers(dependencies: MainProcessIpcRegis
   guardedHandle('device:getFingerprint', () => getDeviceFingerprint())
   registerDeviceIdentityIpcHandler()
 
+  guardedHandle('dsh:get-status', async () => {
+    const { getLocalDshStatus } = await import('./dsh/local-dsh-installation')
+    return okResponse(await getLocalDshStatus())
+  })
+  guardedHandle('dsh:install', async () => {
+    const { installLocalDsh } = await import('./dsh/local-dsh-installation')
+    return okResponse(await installLocalDsh())
+  })
+
   guardedHandle('get-system-ua', () => {
     return buildSystemUserAgent()
   })
@@ -566,6 +575,8 @@ export function unregisterMainProcessIPCHandlers(): void {
     'system:get-local-network-addresses',
     'device:getFingerprint',
     DEVICE_IDENTITY_IPC_CHANNEL,
+    'dsh:get-status',
+    'dsh:install',
     'get-system-ua',
     'get-app-version',
     'clipboard:writeImage',

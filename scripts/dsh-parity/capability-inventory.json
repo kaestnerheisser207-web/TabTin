@@ -1,0 +1,4350 @@
+{
+  "schemaVersion": 1,
+  "dshVersion": "0.1.1-rc.2",
+  "evidence": "source-registrations-and-isolated-native-cli; not runtime parity",
+  "hosts": {
+    "electron": {
+      "provider": "apps/tabtin-electron/src/main/agent/capabilities/ElectronToolProvider.ts",
+      "assembly": "apps/tabtin-electron/src/main/agent/runtime/electron-runtime-assembly.ts",
+      "toolFactories": [
+        "createAgentTool",
+        "createAttachmentTools",
+        "createCoreTools",
+        "createDataTools",
+        "createDocumentTools",
+        "createHostAgentTool",
+        "createPlanTools",
+        "createPresentationTools",
+        "createProjectTaskTools",
+        "createSkillCreateTool",
+        "createSkillsTools",
+        "createSubagentToolProvider",
+        "createSwitchModeTool",
+        "createTabCodeTools",
+        "createWebTools",
+        "this.createMcpTools"
+      ],
+      "capabilities": [
+        "AuditCap",
+        "CliCap",
+        "CostCap",
+        "FileSystemCap",
+        "McpCap",
+        "PlatformDataCap",
+        "ShellCap",
+        "SkillsCap"
+      ]
+    },
+    "daemon": {
+      "provider": "apps/tabtin-daemon/src/application/agent/daemon-tool-provider.ts",
+      "assembly": "apps/tabtin-daemon/src/application/agent/runtime/daemon-runtime-assembly.ts",
+      "toolFactories": [
+        "createAgentTool",
+        "createCoreTools",
+        "createDataTools",
+        "createDocumentTools",
+        "createHostAgentTool",
+        "createPlanTools",
+        "createPresentationTools",
+        "createSkillCreateTool",
+        "createSkillsTools",
+        "createSubagentToolProvider",
+        "createSwitchModeTool",
+        "createSystemTools",
+        "createTabCodeTools",
+        "createWebTools"
+      ],
+      "capabilities": [
+        "AuditCap",
+        "CostCap",
+        "FileSystemCap",
+        "PlatformDataCap",
+        "RawRefCap",
+        "ShellCap",
+        "SkillsCap"
+      ]
+    }
+  },
+  "controls": {
+    "hostedRuntime": {
+      "source": "packages/agent-host/src/runtime/runtime-driver.ts",
+      "HostedRuntime": [
+        {
+          "name": "abort",
+          "optional": false
+        },
+        {
+          "name": "compactCheckpoint",
+          "optional": true
+        },
+        {
+          "name": "dispose",
+          "optional": true
+        },
+        {
+          "name": "getRuntimeId",
+          "optional": false
+        },
+        {
+          "name": "query",
+          "optional": false
+        }
+      ]
+    },
+    "backendSession": {
+      "source": "packages/agent-runtime/src/capability/backend-session.ts",
+      "BackendSession": [
+        {
+          "name": "exec",
+          "optional": false
+        },
+        {
+          "name": "execInteractive",
+          "optional": true
+        },
+        {
+          "name": "exists",
+          "optional": false
+        },
+        {
+          "name": "ls",
+          "optional": false
+        },
+        {
+          "name": "mkdir",
+          "optional": false
+        },
+        {
+          "name": "read",
+          "optional": false
+        },
+        {
+          "name": "rm",
+          "optional": false
+        },
+        {
+          "name": "running",
+          "optional": false
+        },
+        {
+          "name": "shutdown",
+          "optional": false
+        },
+        {
+          "name": "stat",
+          "optional": true
+        },
+        {
+          "name": "write",
+          "optional": false
+        }
+      ]
+    }
+  },
+  "cliCommands": [
+    {
+      "name": "about",
+      "runtime": "cloud",
+      "schemaSha256": "b54bfad686afef5d6191c1f64b81a1da8a240aa2a49df71953354f92c762ee60"
+    },
+    {
+      "name": "agent",
+      "is_group": true,
+      "schemaSha256": "3e751afa04c4dfab776de35b1ef472023ee8cc6b15ccca8644a16538081e211a"
+    },
+    {
+      "name": "agent config",
+      "is_group": true,
+      "schemaSha256": "a9b6669a7cb29683a4489da4818290884a4be0cc39286172a2e1544d7c57cf11"
+    },
+    {
+      "name": "agent config preset",
+      "risk": "write",
+      "runtime": "cloud",
+      "schemaSha256": "ae1389f7f3c2c18b56039813c983f31d60ed9d4e408943db22885c1df420d042"
+    },
+    {
+      "name": "agent config set",
+      "risk": "write",
+      "runtime": "cloud",
+      "schemaSha256": "d4f781cc4293824eb907aba5c5c560d6156662442b9cc2b471598a06362af281"
+    },
+    {
+      "name": "agent config show",
+      "runtime": "cloud",
+      "schemaSha256": "1d74f45437837bdae05294b1c6fbabf22f21bd43ee41bfacd0712088a6dad0ec"
+    },
+    {
+      "name": "agent create",
+      "risk": "write",
+      "runtime": "cloud",
+      "requires_auth": true,
+      "schemaSha256": "fd776972e3d9739bf864c216d01e60dac642670fbedbda2bbcc8242874b14000"
+    },
+    {
+      "name": "agent current",
+      "runtime": "cloud",
+      "schemaSha256": "b487d0fd69ded367a4fe61b0b6ed71cbdaa9437316e61b1698baf872742767f4"
+    },
+    {
+      "name": "agent db",
+      "is_group": true,
+      "schemaSha256": "275da03142fe0fb6b3429d975645d56eebaf4315181854dffc82a47ec749aba1"
+    },
+    {
+      "name": "agent db connection",
+      "method": "POST",
+      "path": "/space/db-connection",
+      "runtime": "local",
+      "schemaSha256": "c54e061fd69c5520e89ffef9bd466f38c00d157b52e9151ada8e65db93c3874b"
+    },
+    {
+      "name": "agent db create",
+      "method": "POST",
+      "path": "/space/create-db-connection",
+      "risk": "write",
+      "runtime": "local",
+      "schemaSha256": "b5568cd3ed41367e067d6f2283c0253a8a2bf8a0f3fb0eb63701a35bf49d7dc5"
+    },
+    {
+      "name": "agent db delete",
+      "method": "POST",
+      "path": "/space/delete-db-connection",
+      "risk": "high-risk-write",
+      "runtime": "local",
+      "schemaSha256": "3b401989dd7c2c500a9f04d71c1c47690fa8b483ddc4459110e1aa418bbbe645"
+    },
+    {
+      "name": "agent db info",
+      "method": "POST",
+      "path": "/space/db-info",
+      "runtime": "local",
+      "schemaSha256": "baf20a07fedbff05d44bbe8ee8802234c6ea7b08ecc2559da14ca5b901f4b9b4"
+    },
+    {
+      "name": "agent delete",
+      "risk": "high-risk-write",
+      "runtime": "cloud",
+      "schemaSha256": "3daf1664ba9b8a6ff521e14d3d146d20ae37e8734f126db2a83f922f387bec77"
+    },
+    {
+      "name": "agent history",
+      "runtime": "cloud",
+      "schemaSha256": "f873a8d401267fa80f1acaeb8b869a372aa57aaaca45704b79dc8db120370f60"
+    },
+    {
+      "name": "agent info",
+      "runtime": "cloud",
+      "schemaSha256": "2f0491d146c60d34be42a34f018010d8c109dd63ee80ae63be684dae7c4e88e2"
+    },
+    {
+      "name": "agent list",
+      "runtime": "cloud",
+      "requires_auth": true,
+      "schemaSha256": "f93d5ef030326abb100d9dda52f4bc1b45633323bc1b81d3b0fa6440cb333e56"
+    },
+    {
+      "name": "agent memory",
+      "is_group": true,
+      "schemaSha256": "59f49ae3ca3ecd1054cb304bbd86a45a469060de3b333cee92cfa37813b15dbc"
+    },
+    {
+      "name": "agent memory correct",
+      "risk": "write",
+      "runtime": "local",
+      "requires_auth": true,
+      "schemaSha256": "724b09606e35b4ed28b96237c07df1da9809b9b5b907a9e6b00c65064d35d05e"
+    },
+    {
+      "name": "agent memory export",
+      "runtime": "local",
+      "requires_auth": true,
+      "schemaSha256": "a4c69f1d2d6ce760f44dba8d0500dced1f1cd2159801071fb63ae5478df2d08e"
+    },
+    {
+      "name": "agent memory feedback",
+      "risk": "write",
+      "runtime": "local",
+      "requires_auth": true,
+      "schemaSha256": "bafe8c781c0c56b1db81dc4840e8176712a73ac6a5aaaf4bfaa6c2c2ec143c67"
+    },
+    {
+      "name": "agent memory forget",
+      "risk": "high-risk-write",
+      "runtime": "local",
+      "requires_auth": true,
+      "schemaSha256": "f918bab317fe797a8b58771968acfd4c4183c4580a391fbd41484fbd4756f8cc"
+    },
+    {
+      "name": "agent memory get",
+      "runtime": "local",
+      "requires_auth": true,
+      "schemaSha256": "4f3e81a849c87ac9643de1e63d3853d293648e58d3c46982933a29cd7ea1b5d4"
+    },
+    {
+      "name": "agent memory list",
+      "runtime": "local",
+      "requires_auth": true,
+      "schemaSha256": "b44c7b50644f3bc336a5f3d3d2f92308aaa4c4a11600567a233c24be893a17b3"
+    },
+    {
+      "name": "agent memory stats",
+      "runtime": "local",
+      "requires_auth": true,
+      "schemaSha256": "e9955e9c9f454c723c44fb0a63834fbdd4759031a6cc9f329677ba21c9dcc9d9"
+    },
+    {
+      "name": "agent models",
+      "runtime": "cloud",
+      "schemaSha256": "c0928e22a29f37c1173ac40dfca44f58652d424af76f4dc9347be3b39f6ad129"
+    },
+    {
+      "name": "agent run",
+      "risk": "write",
+      "runtime": "cloud",
+      "schemaSha256": "73100c3271f9407bca654af4e44af52963b9d216e9b495f84a454625bac6707e"
+    },
+    {
+      "name": "agent update",
+      "risk": "write",
+      "runtime": "cloud",
+      "requires_auth": true,
+      "schemaSha256": "caba77808cf76295838baad2133321255b33b0f44721ff2e2173bff5e5b02e02"
+    },
+    {
+      "name": "agent use",
+      "risk": "write",
+      "runtime": "cloud",
+      "schemaSha256": "2dbb0522373aad432a474236c9b0ebd6157e4d68a35ffea8bfc03fe91fe28cde"
+    },
+    {
+      "name": "api",
+      "runtime": "local",
+      "schemaSha256": "06948a26cfeb04f0f34881b82f629f38dfb18d98f5cbafcb9136e88f7dcfe1d4"
+    },
+    {
+      "name": "audio",
+      "is_group": true,
+      "schemaSha256": "98e232125ea661e7844807c1e403b6a75cc1b57da218351b9b7343525e79abd0"
+    },
+    {
+      "name": "audio providers",
+      "method": "GET",
+      "path": "/speech/providers",
+      "runtime": "local",
+      "schemaSha256": "b2f9b01c20c24960a07a7d4cd1fe16d919c9231c2f4e90b5da5110ee402dac15"
+    },
+    {
+      "name": "audio query",
+      "method": "POST",
+      "path": "/speech/query",
+      "runtime": "local",
+      "schemaSha256": "3240bf5f6c3d3b0b92127fa6524536d80537a43ddc2d5c34879e9dc9c77b5705"
+    },
+    {
+      "name": "audio recognize",
+      "method": "POST",
+      "path": "/speech/recognize",
+      "runtime": "local",
+      "schemaSha256": "909913fd3148061ff9bbea92bfe9fcdca76c5593b81f072445c87cea37565be7"
+    },
+    {
+      "name": "audio submit",
+      "method": "POST",
+      "path": "/speech/submit",
+      "runtime": "local",
+      "schemaSha256": "a8a9b8ed977ac94b132caba92a56c6b9a90a4db651488b02f22b7eabe3ccc8e9"
+    },
+    {
+      "name": "audio tts",
+      "method": "POST",
+      "path": "/speech/tts/synthesize",
+      "runtime": "local",
+      "schemaSha256": "f4ebd14bb3669abb18c52323a88a6806b9c84b53eb47bb37ee90a8288c7d9564"
+    },
+    {
+      "name": "audio voices",
+      "method": "GET",
+      "path": "/speech/tts/voices",
+      "runtime": "local",
+      "schemaSha256": "1be223636a8ad479f62768c57f1c0aaaf41ddbad6797ff629dd126d21ee042d8"
+    },
+    {
+      "name": "auth",
+      "is_group": true,
+      "schemaSha256": "c7122045626163720fc79e9c6f622860f6f595ac2617feb007c92f1f1cdb9824"
+    },
+    {
+      "name": "auth login",
+      "risk": "write",
+      "runtime": "cloud",
+      "schemaSha256": "11ee5d40bb1ff60cdff615e00784e38a28a0aa16668805ff5005d76ee2343aba"
+    },
+    {
+      "name": "auth logout",
+      "risk": "write",
+      "runtime": "cloud",
+      "schemaSha256": "34733f7c83ba01e4b1e86fcd2eab2c87c051b119c79f8ef3f423970b722a812a"
+    },
+    {
+      "name": "auth whoami",
+      "runtime": "cloud",
+      "schemaSha256": "d83f538e2b868866e91561a44824e0778c50abb1e7f4b362fbafe66fe764e65c"
+    },
+    {
+      "name": "browser",
+      "is_group": true,
+      "schemaSha256": "7fc401e251da22ca739a45f043af22e3907a86cc11818829945f82b5811b43a2"
+    },
+    {
+      "name": "browser act",
+      "method": "POST",
+      "path": "/browser/act",
+      "risk": "write",
+      "runtime": "local",
+      "schemaSha256": "102559eb70daa9dc9e76b0c384d6d37e2649e10533e2d684fd91375872adf7d8"
+    },
+    {
+      "name": "browser batch",
+      "method": "POST",
+      "path": "/browser/batch",
+      "risk": "write",
+      "runtime": "local",
+      "schemaSha256": "a7c1d86ac740a7238ca7af1e85dcfd3f07a32e9ac97be96d5d6426bc88ff23c5"
+    },
+    {
+      "name": "browser capabilities",
+      "method": "POST",
+      "path": "/browser/capabilities",
+      "runtime": "local",
+      "schemaSha256": "faf33c4bf11ea43219022844f369be6691d80d59f223578930ec401ec2354f53"
+    },
+    {
+      "name": "browser clear-session",
+      "method": "POST",
+      "path": "/browser/clear-session",
+      "risk": "write",
+      "runtime": "local",
+      "schemaSha256": "bb8e3f7c6e0d7b72fcef862ca8c995b6fbd2b6d851a268259e495343fe8f325f"
+    },
+    {
+      "name": "browser console",
+      "method": "POST",
+      "path": "/browser/console",
+      "runtime": "local",
+      "schemaSha256": "70479076d8c18893bd3c479306aef2e69d68302236ee750da411de8a541f7948"
+    },
+    {
+      "name": "browser context",
+      "method": "POST",
+      "path": "/browser/context",
+      "runtime": "local",
+      "schemaSha256": "65bd1727aadfb24b078c0b8369539218a1da4b8fd93b0eda8454dd9f0b667e70"
+    },
+    {
+      "name": "browser cookies",
+      "is_group": true,
+      "schemaSha256": "c96af58600274ff6dd12a5f94b1761920a7efbddb4e9333c889a8f00e7e21c0c"
+    },
+    {
+      "name": "browser cookies clear",
+      "method": "POST",
+      "path": "/browser/cookies",
+      "risk": "write",
+      "runtime": "local",
+      "schemaSha256": "ba7360ca7ac56816049e1a3299cecd74729bfb597fd57d2100a98887605b1ecf"
+    },
+    {
+      "name": "browser cookies get",
+      "method": "POST",
+      "path": "/browser/cookies",
+      "runtime": "local",
+      "schemaSha256": "be8a47411248fb4e192de7e1474a1831da591a04149d81e1bcda3e89c61f7e0e"
+    },
+    {
+      "name": "browser cookies set",
+      "method": "POST",
+      "path": "/browser/cookies",
+      "risk": "write",
+      "runtime": "local",
+      "schemaSha256": "d8ffc041abf514609472d5144f77db1a5343757a36c7dc68b60952cb31bf7375"
+    },
+    {
+      "name": "browser doctor",
+      "runtime": "cloud",
+      "schemaSha256": "281c8b458536f62d154e05c72f966b3b91543adaa41fe4120857b3f75b0efcb3"
+    },
+    {
+      "name": "browser eval",
+      "method": "POST",
+      "path": "/browser/eval",
+      "risk": "write",
+      "runtime": "local",
+      "schemaSha256": "9da98a2bf19d636eafc296c6caef183baa3dc79256461402ca07f23c702982fe"
+    },
+    {
+      "name": "browser glance",
+      "method": "POST",
+      "path": "/browser/glance",
+      "runtime": "local",
+      "schemaSha256": "0852113a8e6296dd8fa98ff812f03fc4d40e28742bc7865e656ac1777b5796ea"
+    },
+    {
+      "name": "browser home",
+      "method": "POST",
+      "path": "/browser/home",
+      "runtime": "local",
+      "schemaSha256": "0352cacb3b1a696292af352e3485e53d3ca02fb9892196f4d2b0be7cd68c1a13"
+    },
+    {
+      "name": "browser job",
+      "is_group": true,
+      "schemaSha256": "dfa98a0343871b0aaa0ef6d1c36e30673291c269d4e8a75572d30f2ed3e6ff0c"
+    },
+    {
+      "name": "browser job cancel",
+      "method": "POST",
+      "path": "/browser/job/cancel",
+      "risk": "write",
+      "runtime": "local",
+      "schemaSha256": "bf8135a7de68a08294295896d0ea12d402a30da66b8465b097cf329944c91711"
+    },
+    {
+      "name": "browser job status",
+      "method": "POST",
+      "path": "/browser/job/status",
+      "runtime": "local",
+      "schemaSha256": "a7e6f3261ebcfa09bd03831c65fff4859573506e25ed1045212d1f6e163cc12c"
+    },
+    {
+      "name": "browser nav",
+      "method": "POST",
+      "path": "/browser/nav",
+      "risk": "write",
+      "runtime": "local",
+      "schemaSha256": "e8459cbca3d4d176da6a3d0e5779fefd5a4baa575139bf09fc745ed177010401"
+    },
+    {
+      "name": "browser network",
+      "method": "POST",
+      "path": "/browser/network",
+      "runtime": "local",
+      "schemaSha256": "99351281b5d242706f4c167bdb1c8c0d7f2f58ea8419f8f3f0dfff250e496797"
+    },
+    {
+      "name": "browser network to-api",
+      "method": "POST",
+      "path": "/browser/network/to-api",
+      "runtime": "local",
+      "schemaSha256": "c497f813d687f4c391432b45ee80844381f9d3b3cfff71589ec09801dfd07b5a"
+    },
+    {
+      "name": "browser open",
+      "method": "POST",
+      "path": "/browser/open",
+      "risk": "write",
+      "runtime": "local",
+      "schemaSha256": "1bbbcb510e35d13f804c79ca6bd7f67cb5d635735e2ddba039021ab76b6a908f"
+    },
+    {
+      "name": "browser print",
+      "method": "POST",
+      "path": "/browser/print",
+      "runtime": "local",
+      "schemaSha256": "61809ccad405db5b06cc79021d95b5b6c1e9965178127bdc32bf18750a364576"
+    },
+    {
+      "name": "browser random-ua",
+      "method": "POST",
+      "path": "/browser/random-ua",
+      "runtime": "local",
+      "schemaSha256": "465a30a16e9fb793ca252622573e29ef6b72d4c9eb7c23d4eba0445f44d054ac"
+    },
+    {
+      "name": "browser record",
+      "is_group": true,
+      "schemaSha256": "b102c92d693a5149b3bb8f37a2d98fc97fab60f8f27bb080002e409fefa7555d"
+    },
+    {
+      "name": "browser record start",
+      "method": "POST",
+      "path": "/browser/record/start",
+      "risk": "write",
+      "runtime": "local",
+      "schemaSha256": "7a76c11c44a8c467e7b9b4b0f24327ce4a2400bc3e5711659fd66a706314d50e"
+    },
+    {
+      "name": "browser record status",
+      "method": "POST",
+      "path": "/browser/record/status",
+      "runtime": "local",
+      "schemaSha256": "b250a7281aa50eeb867ce1e361fa1267fcb2b2e102c9ec0deeb19ee9d61268d6"
+    },
+    {
+      "name": "browser record stop",
+      "method": "POST",
+      "path": "/browser/record/stop",
+      "risk": "write",
+      "runtime": "local",
+      "schemaSha256": "e504a512e8511988663116a5727448ada66d5c0e579c9951d523a515545e34dc"
+    },
+    {
+      "name": "browser replay",
+      "is_group": true,
+      "schemaSha256": "3bc660c2533c035c8958dd661763e9c6175adfbffdf8542b44fbd13cc12d15c6"
+    },
+    {
+      "name": "browser replay list",
+      "method": "POST",
+      "path": "/browser/replay/list",
+      "runtime": "local",
+      "schemaSha256": "4d0c0fdf36580d7f6a259f567f99442e44167c0c20d18c269cf67d02dc8f041a"
+    },
+    {
+      "name": "browser replay run",
+      "method": "POST",
+      "path": "/browser/replay/run",
+      "risk": "write",
+      "runtime": "local",
+      "schemaSha256": "a5e77568951ba9c2c04c3b87daff810059216a5729f5cfdb69de6cece9b6f0a5"
+    },
+    {
+      "name": "browser resource",
+      "is_group": true,
+      "schemaSha256": "5e21988bdf12ce6addca2eb1d393dab003894de90a370f0ace266feb336f19b5"
+    },
+    {
+      "name": "browser resource capture",
+      "method": "POST",
+      "path": "/browser/resource/capture",
+      "runtime": "local",
+      "schemaSha256": "a100718a4acb99dd296cdc39a3938d1e490e3632c706df86fa650a6d34549bc1"
+    },
+    {
+      "name": "browser resource download",
+      "method": "POST",
+      "path": "/browser/resource/download",
+      "runtime": "local",
+      "schemaSha256": "ac991339c3508ff2037a5a82352061bdce9ec4a0006d786e4955ed861eb63eb2"
+    },
+    {
+      "name": "browser resource inspect",
+      "method": "POST",
+      "path": "/browser/resource/inspect",
+      "runtime": "local",
+      "schemaSha256": "2aaeaed45a1b92f48b74bc4459eb0a6fa8447725bed1f9faffb8f16f0ba1ec0f"
+    },
+    {
+      "name": "browser resource list",
+      "method": "POST",
+      "path": "/browser/resources",
+      "runtime": "local",
+      "schemaSha256": "46fb16e0cf4b3139ab2ad2654f80141bd8c63a7fab2dc1025d84bcbd237fd0db"
+    },
+    {
+      "name": "browser resource probe",
+      "method": "POST",
+      "path": "/browser/resource/probe",
+      "runtime": "local",
+      "schemaSha256": "cdec79d8626735169c4c9c8ad80b547d3b3076f8fc68ef4c46289a44cf5c6f94"
+    },
+    {
+      "name": "browser resource smart-download",
+      "method": "POST",
+      "path": "/browser/resource/smart-download",
+      "runtime": "local",
+      "schemaSha256": "94681074c34a5fd81c3bd12aa3d8f4463c8efdf5a0cf356467e72a281c497fb5"
+    },
+    {
+      "name": "browser route",
+      "method": "POST",
+      "path": "/browser/route",
+      "risk": "write",
+      "runtime": "local",
+      "schemaSha256": "9cb97b8472a46ab87866c88298abdefe624e804fd8e6791c4e00af50285bc428"
+    },
+    {
+      "name": "browser route-list",
+      "method": "POST",
+      "path": "/browser/route-list",
+      "runtime": "local",
+      "schemaSha256": "20476c40c1f3792b1a78a21ded813520640084438a3a34fff809a4bff870954e"
+    },
+    {
+      "name": "browser session",
+      "is_group": true,
+      "schemaSha256": "21f193f1693cf0f36eb761c2c3ba74bfd0ec5fd52bac4e5dab4a2b1efc9dcffd"
+    },
+    {
+      "name": "browser session close",
+      "method": "POST",
+      "path": "/browser/session/close",
+      "risk": "write",
+      "runtime": "local",
+      "schemaSha256": "05a657ecf3fd12957968cacb9162fd2dc34bde16e36b343bd34482faac0c7b2a"
+    },
+    {
+      "name": "browser session close-all",
+      "method": "POST",
+      "path": "/browser/session/close-all",
+      "risk": "write",
+      "runtime": "local",
+      "schemaSha256": "ac4a6a81fb249419ea4c56d42f8f24e24d9c9b0b44deb8a765c8486f83801ee0"
+    },
+    {
+      "name": "browser session create",
+      "method": "POST",
+      "path": "/browser/session/create",
+      "risk": "write",
+      "runtime": "local",
+      "schemaSha256": "e947915ec6d7128321d89b0e5db86dbf4f38ff4dda0c2a97c697455a9cb46e84"
+    },
+    {
+      "name": "browser session list",
+      "method": "POST",
+      "path": "/browser/session/list",
+      "runtime": "local",
+      "schemaSha256": "7225b371238fead584a18b55c7c8a38f2930e709e88364991769d097fdc931d7"
+    },
+    {
+      "name": "browser session load",
+      "method": "POST",
+      "path": "/browser/session/load",
+      "risk": "write",
+      "runtime": "local",
+      "schemaSha256": "37adabef9783575d461648d7128610199b0a256a3a2634cf5088ef01f1ba0e1c"
+    },
+    {
+      "name": "browser session save",
+      "method": "POST",
+      "path": "/browser/session/save",
+      "risk": "write",
+      "runtime": "local",
+      "schemaSha256": "4baff3f4e313f6fcd3d6e5eddb56387142c7d457c49571f15f814769a604de4b"
+    },
+    {
+      "name": "browser session switch",
+      "method": "POST",
+      "path": "/browser/session/switch",
+      "risk": "write",
+      "runtime": "local",
+      "schemaSha256": "82ae708231f16f231a4631bceeca832af0f31ff6ca26c8f3e99eb7d9ebb94211"
+    },
+    {
+      "name": "browser stream",
+      "is_group": true,
+      "schemaSha256": "cc2e67c81d4ac28b072d4229fe21fb63a2abf6ed64216110890a2656bf21002c"
+    },
+    {
+      "name": "browser stream download",
+      "method": "POST",
+      "path": "/browser/stream/download",
+      "runtime": "local",
+      "schemaSha256": "7be80016d3f64426545178615bb292b4028b610b33b978fb1c0b95e40e2d51d1"
+    },
+    {
+      "name": "browser stream info",
+      "method": "POST",
+      "path": "/browser/stream/info",
+      "runtime": "local",
+      "schemaSha256": "a296829da1fa583fa015ac6b954e2fbe3b63a1c1b637c13c1bcc701887af4e62"
+    },
+    {
+      "name": "browser stream parse",
+      "method": "POST",
+      "path": "/browser/stream/parse",
+      "runtime": "local",
+      "schemaSha256": "aaa6529103017ea55253b45261f163c2b503aed363d243b1c33fc6db989ee39b"
+    },
+    {
+      "name": "browser tab",
+      "is_group": true,
+      "schemaSha256": "f2798c04cd8330c1a655bb1a7433711792d5273b17f9a6c6e42e16de33a16e4d"
+    },
+    {
+      "name": "browser tab close",
+      "method": "POST",
+      "path": "/browser/tab-close",
+      "risk": "write",
+      "runtime": "local",
+      "schemaSha256": "76360902151af0e763006b9f113d9c16d427a7ce73171fb1ee1b2ea31cd4ae51"
+    },
+    {
+      "name": "browser tab list",
+      "method": "POST",
+      "path": "/browser/tabs",
+      "runtime": "local",
+      "schemaSha256": "bb1c2e9562e26874b7af0551330e9b7b2c5afcc706f759e852b1885615376965"
+    },
+    {
+      "name": "browser tab state",
+      "method": "POST",
+      "path": "/browser/tab-state",
+      "runtime": "local",
+      "schemaSha256": "683d6f6a3ae59adc2838cce295226409147e05743f3b3452ed824067f5607fbb"
+    },
+    {
+      "name": "browser tab switch",
+      "method": "POST",
+      "path": "/browser/tab-switch",
+      "risk": "write",
+      "runtime": "local",
+      "schemaSha256": "1b0394578de601e49a66d9d8ef9c94fe18f3b01b07178d1dac82f6e087a92afd"
+    },
+    {
+      "name": "browser unroute",
+      "method": "POST",
+      "path": "/browser/unroute",
+      "risk": "write",
+      "runtime": "local",
+      "schemaSha256": "bdbdad27cb96944de59698fb06837a08eb0a68c4a8fd916d5e56657028ff7e01"
+    },
+    {
+      "name": "browser wait",
+      "method": "POST",
+      "path": "/browser/wait",
+      "runtime": "local",
+      "schemaSha256": "bcc690732f6514684a90ad1803d869a889caef8d37294f5a4c19472cb8804000"
+    },
+    {
+      "name": "capabilities",
+      "is_group": true,
+      "schemaSha256": "aaac3fe2bf9f6f3d649af00ade98db97c4344ebcfd0863ccf24c2c2491f8e30e"
+    },
+    {
+      "name": "capabilities categories",
+      "method": "GET",
+      "path": "/capabilities/categories",
+      "runtime": "local",
+      "schemaSha256": "88a2d3beed7dfd47cbb840f51809ba52b254c1211782325a69117d9e60ffa814"
+    },
+    {
+      "name": "capabilities discover",
+      "method": "POST",
+      "path": "/capabilities/discover",
+      "runtime": "local",
+      "schemaSha256": "4c2100f48a869ffdc805edacdb13a4297aaf8f606b68814eaebc4b0a56fd0c2a"
+    },
+    {
+      "name": "capabilities list",
+      "method": "GET",
+      "path": "/capabilities/tools",
+      "runtime": "local",
+      "schemaSha256": "9108dc5c083e4637c5dee0b869d067368a09ac5c3b2d7cb0a61f357cfaf01898"
+    },
+    {
+      "name": "capabilities providers",
+      "method": "GET",
+      "path": "/capabilities/providers",
+      "runtime": "local",
+      "schemaSha256": "a8361202c3a02b9c24078d239f5dc1cfb9a31193cabe7139b72edd0fe85b56b6"
+    },
+    {
+      "name": "capabilities show",
+      "method": "GET",
+      "path": "/capabilities/tools/{name}",
+      "runtime": "local",
+      "schemaSha256": "a64fa6e4faeb8d566ff74a03cca3a7806329475d02b55f344620726f8052da33"
+    },
+    {
+      "name": "code",
+      "is_group": true,
+      "schemaSha256": "8f00ddb8ec8d790ec90f674a68718ddd895590c46d421f6e98a7889987949fd8"
+    },
+    {
+      "name": "code delete",
+      "method": "POST",
+      "path": "/code/delete",
+      "risk": "high-risk-write",
+      "runtime": "local",
+      "schemaSha256": "188424f68c5477d88c2a6fb14ce67384fb6e2f035ed4aa0e150870b4e2c3b070"
+    },
+    {
+      "name": "code diagnostics",
+      "method": "POST",
+      "path": "/code/diagnostics",
+      "runtime": "local",
+      "schemaSha256": "ba5e41475bc123fe161e87ef5c2f930af381708115b34a52e812f65da04d1cd2"
+    },
+    {
+      "name": "code edit",
+      "method": "POST",
+      "path": "/code/edit",
+      "risk": "write",
+      "runtime": "local",
+      "schemaSha256": "1c82c2bc5e15d8c91c80b9184570cc2d75c5c714cb29e283d5e2fb4926ab27d4"
+    },
+    {
+      "name": "code git",
+      "is_group": true,
+      "schemaSha256": "fe80707039919e8e965d1fa14867886afa6bc42a220dba329c222ca6188fe3cb"
+    },
+    {
+      "name": "code git diff",
+      "method": "POST",
+      "path": "/code/git-diff",
+      "runtime": "local",
+      "schemaSha256": "89a74a5e4c3ce37ee27d3de8685adb02a5799703cedbd3c7c4fbb029d122c45d"
+    },
+    {
+      "name": "code git status",
+      "method": "POST",
+      "path": "/code/git-status",
+      "runtime": "local",
+      "schemaSha256": "5a35d561f339fc15d85cb3f552c2de00e6cf0779427f32136099e56db5872381"
+    },
+    {
+      "name": "code glob",
+      "method": "POST",
+      "path": "/code/glob",
+      "runtime": "local",
+      "schemaSha256": "fb898f399ea8a8b6a67da12ebd7bb96519e9c57879d819c482a5559208532f6a"
+    },
+    {
+      "name": "code grep",
+      "method": "POST",
+      "path": "/code/grep",
+      "runtime": "local",
+      "schemaSha256": "b924d9b7c367224f8ce6d549ba94d48162480c490d091b5e842ee973875351ce"
+    },
+    {
+      "name": "code mkdir",
+      "method": "POST",
+      "path": "/code/mkdir",
+      "risk": "write",
+      "runtime": "local",
+      "schemaSha256": "251c968c4ce8bf8a579f3206aaa5ebcaa0b9b7e03470fb8b8dc198c50e494293"
+    },
+    {
+      "name": "code mv",
+      "method": "POST",
+      "path": "/code/mv",
+      "risk": "write",
+      "runtime": "local",
+      "schemaSha256": "eff42450dd91ae1dcd4ed57363bc518c02ce357f6468d3a93ff47a746d91cb0d"
+    },
+    {
+      "name": "code read",
+      "method": "POST",
+      "path": "/code/read",
+      "runtime": "local",
+      "schemaSha256": "d4ab8494069900cb90e18f3dceefa9c8cce926b66f5a73b57ec0f1a5ae8f4c16"
+    },
+    {
+      "name": "code rename",
+      "method": "POST",
+      "path": "/code/rename",
+      "risk": "write",
+      "runtime": "local",
+      "schemaSha256": "310ab79e6639f4b3d8cad13b6bdad485790407fc399f3071a70b78618f9a7066"
+    },
+    {
+      "name": "code search",
+      "method": "POST",
+      "path": "/code/search",
+      "runtime": "local",
+      "schemaSha256": "62c74b1a31f1f652d59fdd669b9e4c268728b8ac270f44a1f5b7b5b103f985da"
+    },
+    {
+      "name": "code worktree",
+      "is_group": true,
+      "schemaSha256": "5aaea41fb6369c5da59564f9e218ef83e5940c45864bbbf3920ab97e44a04491"
+    },
+    {
+      "name": "code worktree create",
+      "method": "POST",
+      "path": "/code/worktree/create",
+      "risk": "write",
+      "runtime": "local",
+      "schemaSha256": "f47567d5a6404d0dd39037864db3e5e1f09ea6c7157fedeff72def3a812435e7"
+    },
+    {
+      "name": "code worktree current",
+      "method": "POST",
+      "path": "/code/worktree/current",
+      "runtime": "local",
+      "schemaSha256": "7c8b567331a8cf7cb3b05d45146f2f746ae3b6f706b91a5a0d3682af635803bb"
+    },
+    {
+      "name": "code worktree list",
+      "method": "POST",
+      "path": "/code/worktree/list",
+      "runtime": "local",
+      "schemaSha256": "00ee3827067bfffd6811f9f4ab1d560b4034f8ede40b04bd140d192f3c68cb8e"
+    },
+    {
+      "name": "code worktree switch",
+      "method": "POST",
+      "path": "/code/worktree/switch",
+      "risk": "write",
+      "runtime": "local",
+      "schemaSha256": "0bf52b60a49e7084e9fed7bf3c255bf8575f20cf331749d483bae3cc69f681a7"
+    },
+    {
+      "name": "code write",
+      "method": "POST",
+      "path": "/code/write",
+      "risk": "write",
+      "runtime": "local",
+      "schemaSha256": "80a38094e8c94e987126197a2ca19f941745363800124051c64061b703cda339"
+    },
+    {
+      "name": "commands",
+      "runtime": "local",
+      "schemaSha256": "9150ccb723f04a2f69e6d12278d29121194faf26f9c4a7b179bffc6c27a2bf73"
+    },
+    {
+      "name": "completion-install",
+      "risk": "write",
+      "runtime": "cloud",
+      "schemaSha256": "d33fc4bcbb5eedd15bbf092c944143fbb5bb431b4f562186226b1b1b1c9db001"
+    },
+    {
+      "name": "config",
+      "is_group": true,
+      "schemaSha256": "37110eddef80e8685f3709ab98592c82d400f210625655ebb447795ed388c186"
+    },
+    {
+      "name": "config get",
+      "runtime": "cloud",
+      "schemaSha256": "03c0e865fc1daffefd2e69be572bc1594438d9bf74280de29d87591780221551"
+    },
+    {
+      "name": "config path",
+      "runtime": "cloud",
+      "schemaSha256": "b327c3c418e9e7eeae8e275fac66ebabbd7f07aeefa60cc97fc9704c717d56c6"
+    },
+    {
+      "name": "config purge",
+      "risk": "high-risk-write",
+      "runtime": "cloud",
+      "schemaSha256": "250d5ec394a48ab150f4261d1d0b7e7e64a943eee9db8e30027f53e92a85bf13"
+    },
+    {
+      "name": "config set",
+      "risk": "write",
+      "runtime": "cloud",
+      "schemaSha256": "2c7481431bcd40ad44b749e3b594ec7f6a16309c8057ae6518cc3380791fbacf"
+    },
+    {
+      "name": "config show",
+      "runtime": "cloud",
+      "schemaSha256": "c978743f876f0d536b6dfc851cab438f9063da2852a453161eb7dbae656fea2f"
+    },
+    {
+      "name": "context",
+      "runtime": "cloud",
+      "schemaSha256": "beaab41ba4c4a492229fb19d57c5160787ac56eb2af53c6ec9fb64e310babed9"
+    },
+    {
+      "name": "context-item",
+      "is_group": true,
+      "schemaSha256": "0aefbe461acae091680b94cab301a49d20c249d9d493998e7acfa1aa1f2cdc86"
+    },
+    {
+      "name": "context-item move",
+      "method": "PATCH",
+      "path": "/api/context/context-items/{item_id}",
+      "risk": "write",
+      "runtime": "cloud",
+      "requires_auth": true,
+      "schemaSha256": "c2d0ec9d49022c0f776c3a28036721b26bee7c3552a9510cc9214e69a5eef9ce"
+    },
+    {
+      "name": "daemon",
+      "is_group": true,
+      "schemaSha256": "636467e209c2df09d2c4ec60a10100c1931bcb9beeab02c60d07b22fca69d5ac"
+    },
+    {
+      "name": "daemon config",
+      "runtime": "cloud",
+      "schemaSha256": "345f888db26b23d7ce175ea77ad6bb250dc04c0d1284774a3d68fca7ea50e111"
+    },
+    {
+      "name": "daemon doctor",
+      "runtime": "cloud",
+      "schemaSha256": "77456e79716ae0ab37dd5b56c4289330d614c5df6b620dc243e9d122103727f5"
+    },
+    {
+      "name": "daemon logs",
+      "runtime": "cloud",
+      "schemaSha256": "d92a26af0667dc2bdb0739c7b3e26adfc9e746448b3bf2f7ddbf5fbab78a55e1"
+    },
+    {
+      "name": "daemon start",
+      "risk": "write",
+      "runtime": "cloud",
+      "schemaSha256": "4e982f067dc40b2d2f0e48340778b50fecf1913f591e78e9f40e9568bc2ceed8"
+    },
+    {
+      "name": "daemon status",
+      "runtime": "cloud",
+      "schemaSha256": "06b568ccf63856c7b864e5663c50684cb303f1b7947ee6f139e8b967f210f9a5"
+    },
+    {
+      "name": "daemon stop",
+      "risk": "write",
+      "runtime": "cloud",
+      "schemaSha256": "f9296b1e51bcef7917d8aa67c2701adb4159481d02a585691b8fbf4ede361cc8"
+    },
+    {
+      "name": "daemon update",
+      "risk": "write",
+      "runtime": "cloud",
+      "schemaSha256": "fcdf8b4a696fa197c5e492f2b6a84b123662f74436b8d35b30f01b47a67908b7"
+    },
+    {
+      "name": "desktop",
+      "is_group": true,
+      "schemaSha256": "ebf4de86627471538ef1bbfc2605142134d8b1acf0b555987746cfaf1334be84"
+    },
+    {
+      "name": "desktop accessibility",
+      "method": "POST",
+      "path": "/desktop/accessibility",
+      "runtime": "local",
+      "schemaSha256": "28e14d0e7920c670355c352c05b25abe847c8e5ce4515ddbfd064caa74c4b717"
+    },
+    {
+      "name": "desktop accessibility-tree",
+      "method": "POST",
+      "path": "/desktop/accessibility-tree",
+      "runtime": "local",
+      "schemaSha256": "27f181c5d94f638ed26f0793242ddf1cc0d6716eaee62420c61b5619a4b059f5"
+    },
+    {
+      "name": "desktop activate",
+      "method": "POST",
+      "path": "/desktop/activate",
+      "risk": "write",
+      "runtime": "local",
+      "schemaSha256": "e011f4c8a17400692bb46f22dd8ea2816e56dad56e57fb9f60114ccc5ec814fb"
+    },
+    {
+      "name": "desktop batch",
+      "method": "POST",
+      "path": "/desktop/batch",
+      "risk": "write",
+      "runtime": "local",
+      "schemaSha256": "35899d24227afb39f6cf5e06c13b790e96d63555cf2ff859d8497c43150d994e"
+    },
+    {
+      "name": "desktop click",
+      "method": "POST",
+      "path": "/desktop/click",
+      "risk": "write",
+      "runtime": "local",
+      "schemaSha256": "2a336068bafbe1ffd3c0e6077a1739364af6ae765b0b67e3d0ce7c501aaece2d"
+    },
+    {
+      "name": "desktop click-element",
+      "method": "POST",
+      "path": "/desktop/click-element",
+      "risk": "write",
+      "runtime": "local",
+      "schemaSha256": "30c80bcc6103428a6b94dfd0a31ccfbcced6a172f3cad8a1d51e8c17975a6fac"
+    },
+    {
+      "name": "desktop drag",
+      "method": "POST",
+      "path": "/desktop/drag",
+      "risk": "write",
+      "runtime": "local",
+      "schemaSha256": "d64a4e67451bae4b2aa28cfb625dbfa1c12830f18c33a6a4110e402b75667581"
+    },
+    {
+      "name": "desktop hotkey",
+      "method": "POST",
+      "path": "/desktop/hotkey",
+      "risk": "write",
+      "runtime": "local",
+      "schemaSha256": "85928da27806151016b60247f03a4d78aba61e8333600be985b13821b8f67202"
+    },
+    {
+      "name": "desktop key",
+      "method": "POST",
+      "path": "/desktop/key",
+      "risk": "write",
+      "runtime": "local",
+      "schemaSha256": "c55d5d2e0480dc929a468492d39d229cca5103ee3e8201651dcc49aa4ac805be"
+    },
+    {
+      "name": "desktop move",
+      "method": "POST",
+      "path": "/desktop/move",
+      "risk": "write",
+      "runtime": "local",
+      "schemaSha256": "557257cee0c1d540834a38538eb47fd057a09f4adbeae92124d49be491c6dcd7"
+    },
+    {
+      "name": "desktop open",
+      "method": "POST",
+      "path": "/desktop/open",
+      "risk": "write",
+      "runtime": "local",
+      "schemaSha256": "71b2bdd6a59c3bfd325fb41afa0a228e82b0cc218c5833415929f2bcd1b68607"
+    },
+    {
+      "name": "desktop revoke-approval",
+      "method": "POST",
+      "path": "/desktop/revoke-approval",
+      "risk": "write",
+      "runtime": "local",
+      "schemaSha256": "326b05586ae5c1f9c9d66b2fc00d70472d0e473fcb8fdd3f68da1f82fcc78edf"
+    },
+    {
+      "name": "desktop screenshot",
+      "method": "POST",
+      "path": "/desktop/screenshot",
+      "runtime": "local",
+      "schemaSha256": "7773dc1fc77abcf8f08713ed865277be943492478362eff184db93d836c0ec64"
+    },
+    {
+      "name": "desktop scroll",
+      "method": "POST",
+      "path": "/desktop/scroll",
+      "risk": "write",
+      "runtime": "local",
+      "schemaSha256": "896f979c4f7d72f3c37f4cdb56c65360a6360640ce57515e7c25d7cfc2822124"
+    },
+    {
+      "name": "desktop session",
+      "is_group": true,
+      "schemaSha256": "d6676c97a6fc1e4aa2c55afa5c906d6caf5d2235009fa9239d57a646dbe5ccbb"
+    },
+    {
+      "name": "desktop session end",
+      "method": "POST",
+      "path": "/desktop/session/end",
+      "risk": "write",
+      "runtime": "local",
+      "schemaSha256": "2737847a06b0fa9caa7503515fce179fc0da98f12a5bd368ab94ba30b705fb0c"
+    },
+    {
+      "name": "desktop session extend-allowlist",
+      "method": "POST",
+      "path": "/desktop/session/extend-allowlist",
+      "risk": "write",
+      "runtime": "local",
+      "schemaSha256": "019de6165fe9ce680a4f38256fa1bdaad646ad20cc65baeaccee5cb70c671bef"
+    },
+    {
+      "name": "desktop session start",
+      "method": "POST",
+      "path": "/desktop/session/start",
+      "risk": "write",
+      "runtime": "local",
+      "schemaSha256": "25e5b889927dd266c998c82bdd1a68444b6b0381945aefe393c9fe97c8facc78"
+    },
+    {
+      "name": "desktop type",
+      "method": "POST",
+      "path": "/desktop/type",
+      "risk": "write",
+      "runtime": "local",
+      "schemaSha256": "33cf4add66c3209adf1ccffb2c77533741727eea14b5ff1af6b31dd2f66949e3"
+    },
+    {
+      "name": "desktop type-into-element",
+      "method": "POST",
+      "path": "/desktop/type-into-element",
+      "risk": "write",
+      "runtime": "local",
+      "schemaSha256": "a2852c6515d96e3cb27ec56764be0a3553b5e778d49800bf74d6a705d70f2b33"
+    },
+    {
+      "name": "desktop windows",
+      "method": "POST",
+      "path": "/desktop/windows",
+      "runtime": "local",
+      "schemaSha256": "92e30b506ddc7482b438f502d7054c9715c8ca98d887d47444a0c999c336c9b0"
+    },
+    {
+      "name": "device",
+      "is_group": true,
+      "schemaSha256": "7bc5139a8a2545cea0d888eb996caf818d82b18cf75c89165c4a3e2569e12cc2"
+    },
+    {
+      "name": "device battery",
+      "method": "POST",
+      "path": "/device/battery",
+      "runtime": "local",
+      "schemaSha256": "7485819ce174e86e8a8acb98b7ff3068d8a485b0919736ab73e41c62288aff1d"
+    },
+    {
+      "name": "device info",
+      "method": "POST",
+      "path": "/device/info",
+      "runtime": "local",
+      "schemaSha256": "0fafbe02342bbd3501da7852e81f71108181c7e899e6307fff32555e1f5e2390"
+    },
+    {
+      "name": "device network",
+      "method": "POST",
+      "path": "/device/network",
+      "runtime": "local",
+      "schemaSha256": "6128ebc46d66f9d2bd0361f8aade371987ccac6bfe151d18637fd49dcedd6475"
+    },
+    {
+      "name": "doc",
+      "is_group": true,
+      "schemaSha256": "9d6429213027113068502ee83af1884ee5af21072e7a0f60693e9741b45f7e33"
+    },
+    {
+      "name": "doc append",
+      "method": "POST",
+      "path": "/api/tabdoc/documents/{document_id}/blocks",
+      "risk": "write",
+      "runtime": "cloud",
+      "requires_auth": true,
+      "schemaSha256": "3131ff9def946ec884e79e62526685a8389a6f3c91212576c7c531c7f6d824a4"
+    },
+    {
+      "name": "doc chunks",
+      "method": "GET",
+      "path": "/api/tabdoc/documents/{document_id}/chunks",
+      "runtime": "cloud",
+      "requires_auth": true,
+      "schemaSha256": "4154ccc78d8a924b5d142d0e0eceacca56ad3659b4ddf963ff02f50309124537"
+    },
+    {
+      "name": "doc collaborator",
+      "is_group": true,
+      "schemaSha256": "b39e6bfd73948cf535d17db655236d5e8595c9b44eea2bce4c7123544b7c84aa"
+    },
+    {
+      "name": "doc collaborator invite",
+      "method": "POST",
+      "path": "/api/tabdoc/documents/{document_id}/collaborators",
+      "risk": "write",
+      "runtime": "cloud",
+      "requires_auth": true,
+      "schemaSha256": "b321a83c0759633e84d2c574295fd489038dbfaaa1737cc2866293ac2d48dc21"
+    },
+    {
+      "name": "doc collaborator list",
+      "method": "GET",
+      "path": "/api/tabdoc/documents/{document_id}/collaborators",
+      "runtime": "cloud",
+      "requires_auth": true,
+      "schemaSha256": "11e00db14ac7e65289efcff88d6e4f522722fb27ff793d9a8bde53b8f61441a3"
+    },
+    {
+      "name": "doc collaborator rm",
+      "method": "DELETE",
+      "path": "/api/tabdoc/documents/{document_id}/collaborators/{user_id}",
+      "risk": "write",
+      "runtime": "cloud",
+      "requires_auth": true,
+      "schemaSha256": "efb226697f17d0abe39d299b427488ace1830fdc740c0269c27ba8ed9deba6fc"
+    },
+    {
+      "name": "doc collaborator update",
+      "method": "PATCH",
+      "path": "/api/tabdoc/documents/{document_id}/collaborators/{user_id}",
+      "risk": "write",
+      "runtime": "cloud",
+      "requires_auth": true,
+      "schemaSha256": "883d6e4c3857718448d80c13b4e16e8d2a41722d8496b58077c4e27af0030012"
+    },
+    {
+      "name": "doc comment",
+      "is_group": true,
+      "schemaSha256": "2af89424030937d25c916dafbfe6e9b8bfa65b1aebc959013c01fe5f8cc60b22"
+    },
+    {
+      "name": "doc comment add",
+      "risk": "write",
+      "runtime": "local",
+      "requires_auth": true,
+      "schemaSha256": "9493eeac7ff16c024fe164ff398d7812236bacbf4155e86d39a6a0d5cfefda70"
+    },
+    {
+      "name": "doc comment create",
+      "method": "POST",
+      "path": "/api/tabdoc/documents/{document_id}/comments",
+      "risk": "write",
+      "runtime": "cloud",
+      "requires_auth": true,
+      "schemaSha256": "c0f491ab6be737bbe59fb75d7e83eb9f1e9f89f21d627b01c5a82a8bfe00d9b9"
+    },
+    {
+      "name": "doc comment list",
+      "runtime": "local",
+      "requires_auth": true,
+      "schemaSha256": "c69f8cb21bb8b6859e949726e8048d52b4475f76fca0e962ec74d752bf68dffc"
+    },
+    {
+      "name": "doc comment reanchor",
+      "risk": "write",
+      "runtime": "local",
+      "requires_auth": true,
+      "schemaSha256": "c5c69dae7b889d75750c61c905d939d5d19c39a92df021f64ef3f715b11b25bd"
+    },
+    {
+      "name": "doc comment reopen",
+      "method": "PATCH",
+      "path": "/api/tabdoc/documents/{document_id}/comment-threads/{thread_id}/status",
+      "risk": "write",
+      "runtime": "cloud",
+      "requires_auth": true,
+      "schemaSha256": "e4ca3f4fcb4bdfff2f31cefc980cd924a3c4003618c64ad49f846a712cf79458"
+    },
+    {
+      "name": "doc comment reply",
+      "risk": "write",
+      "runtime": "local",
+      "requires_auth": true,
+      "schemaSha256": "02e833f16e6e82d68e8fc17eb8df7b7a3863662e3d967a966f8fdd299aa027ee"
+    },
+    {
+      "name": "doc comment resolve",
+      "method": "PATCH",
+      "path": "/api/tabdoc/documents/{document_id}/comment-threads/{thread_id}/status",
+      "risk": "write",
+      "runtime": "cloud",
+      "requires_auth": true,
+      "schemaSha256": "9113f2825d04a06c5c7b7aa71c7cd3646b1f689398d1fd541b4e18dd7a8de9e5"
+    },
+    {
+      "name": "doc comment rm",
+      "method": "DELETE",
+      "path": "/api/tabdoc/documents/{document_id}/comments/{comment_id}",
+      "risk": "write",
+      "runtime": "cloud",
+      "requires_auth": true,
+      "schemaSha256": "80e6133020a91e04741a4fcbe1eb75bdfe5e903fcb4141b91d92d845f790dfe5"
+    },
+    {
+      "name": "doc create",
+      "method": "POST",
+      "path": "/api/tabdoc/documents",
+      "risk": "write",
+      "runtime": "cloud",
+      "requires_auth": true,
+      "schemaSha256": "9136e2fd7d7659bb1181b2634f964559f091690087c023f6530ea26d3a1a9d1a"
+    },
+    {
+      "name": "doc delete",
+      "method": "DELETE",
+      "path": "/api/tabdoc/documents/{document_id}",
+      "risk": "write",
+      "runtime": "cloud",
+      "requires_auth": true,
+      "schemaSha256": "f0fa24a676005eb04e4ba5d3ac78ab897737fa1b86d299906e4415783d70dd2e"
+    },
+    {
+      "name": "doc delete-block",
+      "method": "DELETE",
+      "path": "/api/tabdoc/documents/{document_id}/blocks/{block_id}",
+      "risk": "write",
+      "runtime": "cloud",
+      "requires_auth": true,
+      "schemaSha256": "4a5d2bd72ee648558fca2a28d1aaac8f425a7b251f2aae44202306ff7a468512"
+    },
+    {
+      "name": "doc embed-table",
+      "method": "POST",
+      "path": "/api/tabdoc/documents/{document_id}/blocks",
+      "risk": "write",
+      "runtime": "cloud",
+      "requires_auth": true,
+      "schemaSha256": "54c5fe6940f9a04ee5d549c10ad5816e170498f6ff8e2c47d37722a1c686e1c9"
+    },
+    {
+      "name": "doc export",
+      "method": "GET",
+      "path": "/api/tabdoc/documents/{document_id}/export",
+      "runtime": "cloud",
+      "requires_auth": true,
+      "schemaSha256": "3a21ef93f02495f9a86f050cd3a8f027f2617824ca6601cc5ed7f3597ae568be"
+    },
+    {
+      "name": "doc format-text",
+      "method": "POST",
+      "path": "/api/tabdoc/documents/{document_id}/blocks/{block_id}/format-text",
+      "risk": "write",
+      "runtime": "cloud",
+      "requires_auth": true,
+      "schemaSha256": "3e8323b0442e8fc32c197de80f59c811bb524ebc3e8e9f7faa01103d40ad87c0"
+    },
+    {
+      "name": "doc highlight-text",
+      "method": "POST",
+      "path": "/api/tabdoc/documents/{document_id}/blocks/{block_id}/highlight",
+      "risk": "write",
+      "runtime": "cloud",
+      "requires_auth": true,
+      "schemaSha256": "4bb08d913cbc3758d657a8e673e36313a342d94fdfc0c27c27c0e81f91037748"
+    },
+    {
+      "name": "doc import",
+      "is_group": true,
+      "schemaSha256": "244eb27f71b105047651dae6e725d9d71daf85830beda9ac0f7bf52765d65b96"
+    },
+    {
+      "name": "doc import file",
+      "method": "POST",
+      "path": "/api/tabdoc/import/file",
+      "risk": "write",
+      "runtime": "cloud",
+      "requires_auth": true,
+      "schemaSha256": "ae71deb82e32800f073659a40f593a1fda7ab2077a105aae29c112fe257c399d"
+    },
+    {
+      "name": "doc import job",
+      "is_group": true,
+      "schemaSha256": "eb72f7d2eceec8433228bcbeac7fd0072883fea2239991140d5e4b953388ed44"
+    },
+    {
+      "name": "doc import job cancel",
+      "method": "POST",
+      "path": "/api/tabdoc/import/jobs/{job_id}/cancel",
+      "risk": "write",
+      "runtime": "cloud",
+      "requires_auth": true,
+      "schemaSha256": "793521badf5c64d53278309c6846899d33442f67511cc06e26420f3bbde1e489"
+    },
+    {
+      "name": "doc import job result",
+      "method": "GET",
+      "path": "/api/tabdoc/import/jobs/{job_id}/result",
+      "runtime": "cloud",
+      "requires_auth": true,
+      "schemaSha256": "0cde3c10a548101496fd575409926e12b763cbc1a8b2288619bb18ee81d526ca"
+    },
+    {
+      "name": "doc import job retry",
+      "method": "POST",
+      "path": "/api/tabdoc/import/jobs/{job_id}/retry",
+      "risk": "write",
+      "runtime": "cloud",
+      "requires_auth": true,
+      "schemaSha256": "09d4cf3095bbb03ac9364b739e3c709fff5506c8494d10e380c82a474b72b0f0"
+    },
+    {
+      "name": "doc import job status",
+      "method": "GET",
+      "path": "/api/tabdoc/import/jobs/{job_id}",
+      "runtime": "cloud",
+      "requires_auth": true,
+      "schemaSha256": "2f93369784642e8fc8aaa427a8c12279672b75d596ed3bd1a4ec3ace7eab0500"
+    },
+    {
+      "name": "doc import markdown",
+      "method": "POST",
+      "path": "/api/tabdoc/import/markdown",
+      "risk": "write",
+      "runtime": "cloud",
+      "requires_auth": true,
+      "schemaSha256": "098ade411ee7293233c092d03c928aed271d4c5f7fa1482c15975e36ad417ffd"
+    },
+    {
+      "name": "doc insert-block",
+      "method": "POST",
+      "path": "/api/tabdoc/documents/{document_id}/blocks",
+      "risk": "write",
+      "runtime": "cloud",
+      "requires_auth": true,
+      "schemaSha256": "403e1bb86194ea96069fc7ccbc0c943edfd3d3ff0b2ace26b2a0b248956360b3"
+    },
+    {
+      "name": "doc insert-html",
+      "risk": "write",
+      "runtime": "local",
+      "requires_auth": true,
+      "schemaSha256": "cd0f1731e7063766dbb675216b1fec1bf7a054bdef0ee8c4dc6549247a015b0d"
+    },
+    {
+      "name": "doc insert-image",
+      "risk": "write",
+      "runtime": "local",
+      "requires_auth": true,
+      "schemaSha256": "37636556c3af5fd1a44f860bd8ae5d446931d08d9b7eb2805cd0ed3a5d83a08b"
+    },
+    {
+      "name": "doc list",
+      "method": "GET",
+      "path": "/api/tabdoc/documents",
+      "runtime": "cloud",
+      "requires_auth": true,
+      "schemaSha256": "1adc053936bd5b806b6801df311e2f8fa50367f394bccdff62765e7b69ee737e"
+    },
+    {
+      "name": "doc list-blocks",
+      "method": "GET",
+      "path": "/api/tabdoc/documents/{document_id}/blocks",
+      "runtime": "cloud",
+      "requires_auth": true,
+      "schemaSha256": "e9aa3403956e7fd4c858ca983578fbb5153742ffea90f7285f8df561a75d99d8"
+    },
+    {
+      "name": "doc move",
+      "risk": "write",
+      "runtime": "local",
+      "requires_auth": true,
+      "schemaSha256": "fee14a39c9dd60b07510c4ac499aabb44576e85730e6d0db6d263ea76b01dbad"
+    },
+    {
+      "name": "doc perm",
+      "is_group": true,
+      "schemaSha256": "475a462e9d98208689341e55b68454830b29cd7c98508373182a533d48d43b6a"
+    },
+    {
+      "name": "doc perm get",
+      "method": "GET",
+      "path": "/api/tabdoc/documents/{document_id}/permissions",
+      "runtime": "cloud",
+      "requires_auth": true,
+      "schemaSha256": "f5f98ca3904b2f01150ea145eaaa5f941a02ea363d88e33416dea75201e8fcf5"
+    },
+    {
+      "name": "doc perm set",
+      "method": "POST",
+      "path": "/api/tabdoc/documents/{document_id}/permissions",
+      "risk": "write",
+      "runtime": "cloud",
+      "requires_auth": true,
+      "schemaSha256": "c7cd099116354a9095f0d5de816f31cc44d5b73cf91bb4d7a0e68bc0218bb3a9"
+    },
+    {
+      "name": "doc permanent-delete",
+      "method": "DELETE",
+      "path": "/api/tabdoc/documents/{document_id}/permanent",
+      "risk": "high-risk-write",
+      "runtime": "cloud",
+      "requires_auth": true,
+      "schemaSha256": "48a3d6c24180be977ce612d1a898f5a2afc3ced221d4b7fa997655fc22f7b9b8"
+    },
+    {
+      "name": "doc read",
+      "method": "GET",
+      "path": "/api/tabdoc/documents/{document_id}",
+      "runtime": "cloud",
+      "requires_auth": true,
+      "schemaSha256": "c457d7450e93d49dcc63b15c1a3c1869391215fee2e15267358da024e70687ab"
+    },
+    {
+      "name": "doc read-block",
+      "method": "GET",
+      "path": "/api/tabdoc/documents/{document_id}/blocks/{block_id}",
+      "runtime": "cloud",
+      "requires_auth": true,
+      "schemaSha256": "2a883cb0c744dcfc29de4e6700f436e7ee8a25d24b75a76daae52dc4ae6ab280"
+    },
+    {
+      "name": "doc read-section",
+      "method": "GET",
+      "path": "/api/tabdoc/documents/{document_id}/sections/{heading_block_id}",
+      "runtime": "cloud",
+      "requires_auth": true,
+      "schemaSha256": "ce6c7bff4e0b7acd0fb2de2ab1f70c138bab479029f216fa9bb320d889d48d0b"
+    },
+    {
+      "name": "doc restore",
+      "method": "POST",
+      "path": "/api/tabdoc/documents/{document_id}/restore-from-trash",
+      "risk": "write",
+      "runtime": "cloud",
+      "requires_auth": true,
+      "schemaSha256": "c6ae048b424f1ff1c943743a8a1fa88a12604d690065099368a8dd1365f101da"
+    },
+    {
+      "name": "doc save-content",
+      "method": "POST",
+      "path": "/api/tabdoc/documents/{document_id}/content",
+      "risk": "write",
+      "runtime": "cloud",
+      "requires_auth": true,
+      "schemaSha256": "bdcb901ceed4d1bd0cb226eef24ac072f89c52a32f56799bc05dabd2fc3a7a6d"
+    },
+    {
+      "name": "doc search",
+      "method": "GET",
+      "path": "/api/tabdoc/search",
+      "runtime": "cloud",
+      "requires_auth": true,
+      "schemaSha256": "4bdab89a8b532b0fe93fc9bb3f9646b465470b15604ec0ae4e3a676d54816ba6"
+    },
+    {
+      "name": "doc search-blocks",
+      "method": "GET",
+      "path": "/api/tabdoc/documents/{document_id}/search-blocks",
+      "runtime": "cloud",
+      "requires_auth": true,
+      "schemaSha256": "5e3f6845b95d9b35bc6c15db52d9dddbb25457aa43db21d93219ef43ca376236"
+    },
+    {
+      "name": "doc share",
+      "is_group": true,
+      "schemaSha256": "653d25480c72b0ccb02282e3892bcd5f5110253148f4c827319f589639ca56a0"
+    },
+    {
+      "name": "doc share get",
+      "method": "GET",
+      "path": "/api/tabdoc/documents/{document_id}/share",
+      "runtime": "cloud",
+      "requires_auth": true,
+      "schemaSha256": "38de7480063b782c43230d48a27b80a3a28f3cecf04af8859e81a1b732a43f62"
+    },
+    {
+      "name": "doc share off",
+      "method": "DELETE",
+      "path": "/api/tabdoc/documents/{document_id}/share",
+      "risk": "write",
+      "runtime": "cloud",
+      "requires_auth": true,
+      "schemaSha256": "ea6c3e1933456661710cd62a152548935f6091d1be76588297bb10b007aff010"
+    },
+    {
+      "name": "doc share refresh",
+      "method": "POST",
+      "path": "/api/tabdoc/documents/{document_id}/share/refresh",
+      "risk": "write",
+      "runtime": "cloud",
+      "requires_auth": true,
+      "schemaSha256": "1478b845b3d6067aaaf85ab2650ca2746b15ec139590db9a80725cfe8f117b89"
+    },
+    {
+      "name": "doc share set",
+      "method": "POST",
+      "path": "/api/tabdoc/documents/{document_id}/share",
+      "risk": "write",
+      "runtime": "cloud",
+      "requires_auth": true,
+      "schemaSha256": "cedbc9f9667e95c3f97086c12657841d9044702ceae6aace5067ffecc98daf12"
+    },
+    {
+      "name": "doc shared-with-me",
+      "method": "GET",
+      "path": "/api/tabdoc/shared-with-me",
+      "runtime": "cloud",
+      "requires_auth": true,
+      "schemaSha256": "f3e50918fac65b818b857caae7e468855dcb644147fafeaa22276550d0e16614"
+    },
+    {
+      "name": "doc trash",
+      "method": "POST",
+      "path": "/api/tabdoc/documents/{document_id}/trash",
+      "risk": "write",
+      "runtime": "cloud",
+      "requires_auth": true,
+      "schemaSha256": "982ed6268be0986ac0221380387eee787caedb88aa488cd2789df11f1c0b2a18"
+    },
+    {
+      "name": "doc unarchive",
+      "method": "POST",
+      "path": "/api/tabdoc/documents/{document_id}/unarchive",
+      "risk": "write",
+      "runtime": "cloud",
+      "requires_auth": true,
+      "schemaSha256": "d5c937b437ecd0065ce93efe1e050d7e897fe863b356b0488938a6bf800a8963"
+    },
+    {
+      "name": "doc update",
+      "method": "PATCH",
+      "path": "/api/tabdoc/documents/{document_id}",
+      "risk": "write",
+      "runtime": "cloud",
+      "requires_auth": true,
+      "schemaSha256": "185674b3590a44c426d870d3615f03b2f1a44f3e7a1e0190c60561387e9042b6"
+    },
+    {
+      "name": "doc update-block",
+      "method": "PATCH",
+      "path": "/api/tabdoc/documents/{document_id}/blocks/{block_id}",
+      "risk": "write",
+      "runtime": "cloud",
+      "requires_auth": true,
+      "schemaSha256": "85ce5f719d01a24781ab4e02df217b6a83637a13f1066d62f97010546ecbc0cc"
+    },
+    {
+      "name": "doc update-html",
+      "risk": "write",
+      "runtime": "local",
+      "requires_auth": true,
+      "schemaSha256": "227582d1a35b540ce45a7c5280c1d23be0a829c4c1de0d802cbbe2964d2e67a1"
+    },
+    {
+      "name": "doc version",
+      "is_group": true,
+      "schemaSha256": "27216bcb512c0ac91e7508d2c7a78db74eca4258ff3c975853836639ecf7cc46"
+    },
+    {
+      "name": "doc version list",
+      "method": "GET",
+      "path": "/api/tabdoc/documents/{document_id}/histories",
+      "runtime": "cloud",
+      "requires_auth": true,
+      "schemaSha256": "d770ffbdbbaf683bd452847d37317c5c1a681cde5d7752cab359fd412058f0ff"
+    },
+    {
+      "name": "doc version preview",
+      "method": "GET",
+      "path": "/api/tabdoc/documents/{document_id}/histories/{history_id}/preview",
+      "runtime": "cloud",
+      "requires_auth": true,
+      "schemaSha256": "44cf7e7544ee676774a76cd648003daa2f9dfea5a1b7a8d1d575d09db90efada"
+    },
+    {
+      "name": "doc version rename",
+      "method": "PATCH",
+      "path": "/api/tabdoc/documents/{document_id}/versions/{version_id}",
+      "risk": "write",
+      "runtime": "cloud",
+      "requires_auth": true,
+      "schemaSha256": "083b658f0f457a1b00e02b5e9ef974db5e005dfc9247062c3842c9e769aed7fe"
+    },
+    {
+      "name": "doc version restore",
+      "method": "POST",
+      "path": "/api/tabdoc/documents/{document_id}/restore-history",
+      "risk": "write",
+      "runtime": "cloud",
+      "requires_auth": true,
+      "schemaSha256": "af435246d400e2517ba3c02318fb2ad8207948d988fd22be4c6d289bc545b337"
+    },
+    {
+      "name": "doc version rm",
+      "method": "DELETE",
+      "path": "/api/tabdoc/documents/{document_id}/versions/{version_id}",
+      "risk": "write",
+      "runtime": "cloud",
+      "requires_auth": true,
+      "schemaSha256": "90b7b445265d9265fc25843a0b17626e679a806bee16ebaa4029763da01d4065"
+    },
+    {
+      "name": "doc version save",
+      "method": "POST",
+      "path": "/api/tabdoc/documents/{document_id}/versions",
+      "risk": "write",
+      "runtime": "cloud",
+      "requires_auth": true,
+      "schemaSha256": "0f0c78c464cc19547b5e6c4852cdf20cb231479d8695f789812ebc966aaf219a"
+    },
+    {
+      "name": "doctor",
+      "runtime": "local",
+      "schemaSha256": "c7586b47eb1e5dda32ae5ee3d97036565d6289da1233ae643f1a061f1831a7b2"
+    },
+    {
+      "name": "drive",
+      "is_group": true,
+      "schemaSha256": "4990d525c733bf81c2386d159fdb676a33dc7f1ab1cd17521234fd9c1faf9f8a"
+    },
+    {
+      "name": "drive archive-from-chat",
+      "method": "POST",
+      "path": "/drive/archive-from-chat",
+      "risk": "write",
+      "runtime": "local",
+      "schemaSha256": "811832c492afc9fd0be5ef073cbb6eafb7ef84cd2df7beab776c7db911f4d27f"
+    },
+    {
+      "name": "drive attach",
+      "method": "POST",
+      "path": "/drive/attach",
+      "risk": "write",
+      "runtime": "hybrid",
+      "requires_auth": true,
+      "schemaSha256": "cce52ecc4135577aeb0e55c145b87bbc2f4668218f4a23e4cc51e6e09ed66603"
+    },
+    {
+      "name": "drive collaborator",
+      "is_group": true,
+      "schemaSha256": "7981c2b70359db47ec6d4bf6a8b3ddb5302e747041a1bc341af37d0a96c60e5d"
+    },
+    {
+      "name": "drive collaborator invite",
+      "method": "POST",
+      "path": "/drive/collaborator/invite",
+      "risk": "write",
+      "runtime": "hybrid",
+      "requires_auth": true,
+      "schemaSha256": "1a1659e9627352cedd5dc438e9d6801dd8033ecd73756c58eaa2b0021ec08f61"
+    },
+    {
+      "name": "drive collaborator list",
+      "method": "POST",
+      "path": "/drive/collaborator/list",
+      "runtime": "hybrid",
+      "requires_auth": true,
+      "schemaSha256": "900c1214890a1d9cbde89b9907942fbde5f4385c532b2bc91d574e7664f8a6c5"
+    },
+    {
+      "name": "drive collaborator revoke",
+      "method": "POST",
+      "path": "/drive/collaborator/revoke",
+      "risk": "write",
+      "runtime": "hybrid",
+      "requires_auth": true,
+      "schemaSha256": "0143924a44a324f095c4f734925ec875f83b57affafbbee66ab55d4f2f892bd3"
+    },
+    {
+      "name": "drive collaborator update",
+      "method": "POST",
+      "path": "/drive/collaborator/update",
+      "risk": "write",
+      "runtime": "hybrid",
+      "requires_auth": true,
+      "schemaSha256": "f8ecc3fd3c92662f84ef52a91d155fb81b1386da61956f1f12778fb0e9756bf8"
+    },
+    {
+      "name": "drive collection",
+      "is_group": true,
+      "schemaSha256": "07dfd29807905b46fd1ab91c075a09674ebe16e6dc8c718127237bd005cfdf8f"
+    },
+    {
+      "name": "drive collection create",
+      "method": "POST",
+      "path": "/drive/collection/create",
+      "risk": "write",
+      "runtime": "hybrid",
+      "requires_auth": true,
+      "schemaSha256": "31a2069b5821d7c2ee0bd518d92a8975af8c04489909c903045a0759dc1c55b4"
+    },
+    {
+      "name": "drive collection delete",
+      "method": "POST",
+      "path": "/drive/collection/delete",
+      "risk": "high-risk-write",
+      "runtime": "hybrid",
+      "requires_auth": true,
+      "schemaSha256": "2ac6a95f51ad1ba5bc62bd1babaa4ee7ce18d8a7074df0bbb84d0fb11e11961e"
+    },
+    {
+      "name": "drive collection list",
+      "method": "POST",
+      "path": "/drive/collection/list",
+      "runtime": "hybrid",
+      "requires_auth": true,
+      "schemaSha256": "6096b4224f88e3dccf3cd8ec3a9ac95c06476b3994f1122c09fba475c41aa1e0"
+    },
+    {
+      "name": "drive collection move-items",
+      "method": "POST",
+      "path": "/drive/collection/move-items",
+      "risk": "write",
+      "runtime": "hybrid",
+      "requires_auth": true,
+      "schemaSha256": "8a482a6a0febd932396f207019a485eb0a7add1f7b33aa66d08cc5aa329eac2f"
+    },
+    {
+      "name": "drive collection update",
+      "method": "POST",
+      "path": "/drive/collection/update",
+      "risk": "write",
+      "runtime": "hybrid",
+      "requires_auth": true,
+      "schemaSha256": "81abc061ccb0a28bd85a5b2feb3360ea15b793aa6ca5b84afb7a724eba371178"
+    },
+    {
+      "name": "drive download-url",
+      "method": "POST",
+      "path": "/drive/download-url",
+      "runtime": "hybrid",
+      "requires_auth": true,
+      "schemaSha256": "f91005fa79435590805c9da62f8c91dcb9a3dce49cd16dea6b587b1902bb3e4d"
+    },
+    {
+      "name": "drive list",
+      "method": "POST",
+      "path": "/drive/list",
+      "runtime": "hybrid",
+      "requires_auth": true,
+      "schemaSha256": "104d5d85ea5024c0158a0ac81e3a16c4224d24b9e838ad60b1c6b24ca7b82b17"
+    },
+    {
+      "name": "drive permanent-delete",
+      "method": "POST",
+      "path": "/drive/permanent-delete",
+      "risk": "high-risk-write",
+      "runtime": "hybrid",
+      "requires_auth": true,
+      "schemaSha256": "355a97bfa2790805fc2ff46e0b234be15a37d6094277dfcf23d7ae3ccd9e2549"
+    },
+    {
+      "name": "drive restore",
+      "method": "POST",
+      "path": "/drive/restore",
+      "risk": "write",
+      "runtime": "hybrid",
+      "requires_auth": true,
+      "schemaSha256": "01b5d5b7aaf45302b7b26e29c4e9e99f657455009ca472a81294293f3a6d9b96"
+    },
+    {
+      "name": "drive shared-with-me",
+      "method": "POST",
+      "path": "/drive/shared-with-me",
+      "runtime": "hybrid",
+      "requires_auth": true,
+      "schemaSha256": "b35c44f25017cefe6864ee48e5823f1ef095176cc2243090499aea77ba0394d2"
+    },
+    {
+      "name": "drive trash",
+      "method": "POST",
+      "path": "/drive/trash",
+      "risk": "write",
+      "runtime": "hybrid",
+      "requires_auth": true,
+      "schemaSha256": "8e1bb2832570937bceec4148692d1b5214cec093c4ed59e2c2eec191c2170a77"
+    },
+    {
+      "name": "drive trash-list",
+      "method": "POST",
+      "path": "/drive/trash-list",
+      "runtime": "hybrid",
+      "requires_auth": true,
+      "schemaSha256": "4dec0864024c41f116e4d78608d7723acb4c623c7996d6a98fafeda4d4e63d1f"
+    },
+    {
+      "name": "drive upload",
+      "method": "POST",
+      "path": "/drive/upload",
+      "risk": "write",
+      "runtime": "local",
+      "requires_auth": true,
+      "schemaSha256": "4d4eb503b773e2cbcb42d765a826748b58a4c669ec2359bc7d3529620fc7cba0"
+    },
+    {
+      "name": "drive upload-folder",
+      "method": "POST",
+      "path": "/drive/upload-folder",
+      "risk": "write",
+      "runtime": "local",
+      "requires_auth": true,
+      "schemaSha256": "9668ad6270880c6ff1163e5cb74a526d58271197a354436d571e15b6bb454988"
+    },
+    {
+      "name": "event",
+      "is_group": true,
+      "schemaSha256": "9456a3f6e74d50ebe494fdbda2883f31cfef66f5386defe55ebc6a39f54ab24f"
+    },
+    {
+      "name": "event list",
+      "method": "GET",
+      "path": "/api/registry/events",
+      "runtime": "cloud",
+      "requires_auth": true,
+      "schemaSha256": "4683c54c2aacbc819abfc6a9cdce943409f460de7b16941bff41d5346589022c"
+    },
+    {
+      "name": "event show",
+      "method": "GET",
+      "path": "/api/registry/events/{event_key}",
+      "runtime": "cloud",
+      "requires_auth": true,
+      "schemaSha256": "0810368c0288372ed84578849b3a76bc873ffb3d12658d73fed0504e795fea4d"
+    },
+    {
+      "name": "feishu",
+      "is_group": true,
+      "schemaSha256": "b05d81975c9d000535b5babfa44f934b57ad4169e2416f7f27da5c2380dc42be"
+    },
+    {
+      "name": "feishu bitable",
+      "is_group": true,
+      "schemaSha256": "ddf7313aaa3963a3f79784c2e5bfc4e38f4add3d1aecf91139143767552f3e8f"
+    },
+    {
+      "name": "feishu bitable tables",
+      "runtime": "local",
+      "requires_auth": true,
+      "schemaSha256": "22f2568c7eb09e5ca6b4b2aafa92b394d32004c0f1875029dede78f99e4d0903"
+    },
+    {
+      "name": "feishu connection",
+      "is_group": true,
+      "schemaSha256": "6d12bac1195fb40a71b8112451487e7da1aa65ea023c827894e1e00b27b2d52b"
+    },
+    {
+      "name": "feishu connection disconnect",
+      "method": "DELETE",
+      "path": "/api/integrations/feishu/connection",
+      "risk": "high-risk-write",
+      "runtime": "cloud",
+      "requires_auth": true,
+      "schemaSha256": "b513ba125071e8191668a384cd9276036dd52a2c8ef502f95fc6363db30f1f4d"
+    },
+    {
+      "name": "feishu connection get",
+      "method": "GET",
+      "path": "/api/integrations/feishu/connection",
+      "runtime": "cloud",
+      "requires_auth": true,
+      "schemaSha256": "215b16810eb8685fd0102152dc983e2fa1d6d59153b5b77c636ec40db1ee5f32"
+    },
+    {
+      "name": "feishu flow",
+      "is_group": true,
+      "schemaSha256": "d01a99363716b2c68d6aad640f2d28861c515b2cb3c6dfc2464f595c5c3dae9e"
+    },
+    {
+      "name": "feishu flow parse",
+      "method": "POST",
+      "path": "/api/integrations/feishu/flow/parse",
+      "runtime": "cloud",
+      "requires_auth": true,
+      "schemaSha256": "af43b2e63425376d82c0a64def945504bb33d0da9adc1b7f0de335462b91d093"
+    },
+    {
+      "name": "feishu import",
+      "is_group": true,
+      "schemaSha256": "6b5717e95f8784a164b2ed4b4de40eb0da989b0c7bbb94985ec43a73c49f30c6"
+    },
+    {
+      "name": "feishu import cancel-table",
+      "risk": "write",
+      "runtime": "local",
+      "requires_auth": true,
+      "schemaSha256": "3bd231d7b1f15d895123893a64791b6882cd7cc42e84677e55ad29028b1b638f"
+    },
+    {
+      "name": "feishu import preview",
+      "runtime": "local",
+      "requires_auth": true,
+      "schemaSha256": "215c6aa455b517689a56f9500f1bace305cae4453db40fe66218a4238333eef4"
+    },
+    {
+      "name": "feishu import skip-table",
+      "risk": "write",
+      "runtime": "local",
+      "requires_auth": true,
+      "schemaSha256": "9b4bdf89882e7423959ec7a60a1ccf09cd23db76195ad39948236da704837e91"
+    },
+    {
+      "name": "feishu import start",
+      "risk": "write",
+      "runtime": "local",
+      "requires_auth": true,
+      "schemaSha256": "46fcc8e46208ffed1e2613e954955a1f2f5e3d856751e76de169547e4b76d9ee"
+    },
+    {
+      "name": "feishu import status",
+      "method": "GET",
+      "path": "/api/integrations/feishu/import/{task_id}",
+      "runtime": "cloud",
+      "requires_auth": true,
+      "schemaSha256": "e64b717c8cd002041d55fa157eb3c58376b80aefd15b25da9077a16e507a3a45"
+    },
+    {
+      "name": "feishu import wait",
+      "runtime": "local",
+      "requires_auth": true,
+      "schemaSha256": "64c090126b57996c87bab9ed6a4874f76bc2292d62378864e525767370021dd7"
+    },
+    {
+      "name": "feishu oauth",
+      "is_group": true,
+      "schemaSha256": "ddb2ef9ec68d66480264f1c2ecc74505777639d9e3b9616a01a915524057d541"
+    },
+    {
+      "name": "feishu oauth start",
+      "method": "GET",
+      "path": "/api/integrations/feishu/oauth/start",
+      "runtime": "cloud",
+      "requires_auth": true,
+      "schemaSha256": "281b5c5db51b9b1a93d16a1d1a2893a1ba874208a98bf725f596d5b2ff21aee9"
+    },
+    {
+      "name": "feishu provider",
+      "is_group": true,
+      "schemaSha256": "20907a2204cb77de446335f3d771344f9867c7653e3f1527af77775e450d5e3f"
+    },
+    {
+      "name": "feishu provider delete",
+      "method": "DELETE",
+      "path": "/api/integrations/feishu/oauth/provider",
+      "risk": "high-risk-write",
+      "runtime": "cloud",
+      "requires_auth": true,
+      "schemaSha256": "5df94596579fa847668f32249f3f99f6b3ba5bee506c39277f7645df2d0c326c"
+    },
+    {
+      "name": "feishu provider get",
+      "method": "GET",
+      "path": "/api/integrations/feishu/oauth/provider",
+      "runtime": "cloud",
+      "requires_auth": true,
+      "schemaSha256": "0c96c7f69fb42740e068e3e766e1215749ff45c4b83c41947e7ff09e21ce487e"
+    },
+    {
+      "name": "feishu provider set",
+      "method": "PUT",
+      "path": "/api/integrations/feishu/oauth/provider",
+      "risk": "write",
+      "runtime": "cloud",
+      "requires_auth": true,
+      "schemaSha256": "c080ff900c6430f8e94b862ab42afa270345b2a345f9a3766dafb2fbdb1d861e"
+    },
+    {
+      "name": "feishu resolve",
+      "runtime": "local",
+      "requires_auth": true,
+      "schemaSha256": "86cc3c5dec87cd9505a5a55a561ff93d93ddee17d65f7a82f11ffd19b6ee5ef2"
+    },
+    {
+      "name": "feishu resources",
+      "is_group": true,
+      "schemaSha256": "1dbc4a3d81e1e6c5fb16eb2d4dbfbdbe326c9e0d28507532daab9ae33cb86c74"
+    },
+    {
+      "name": "feishu resources list",
+      "runtime": "local",
+      "requires_auth": true,
+      "schemaSha256": "4df2917de19dd5eef533e768c0e20f4dd166c4cb7526792d5133fe9be823e5f1"
+    },
+    {
+      "name": "feishu wiki",
+      "is_group": true,
+      "schemaSha256": "9e404acbc63ffeead5d6450e86a5db0234781623f6844f2a0ae8bf724d8867bf"
+    },
+    {
+      "name": "feishu wiki nodes",
+      "runtime": "local",
+      "requires_auth": true,
+      "schemaSha256": "fba48b490ae4bdf39c4251f48ef0cdaa3433a6ccac988813cae1e4bdbf58168d"
+    },
+    {
+      "name": "feishu wiki spaces",
+      "runtime": "local",
+      "requires_auth": true,
+      "schemaSha256": "3d5abb16b525f59b2401cdb3415ff06a73e5d25083a2273880b8d8b8afbb4ea2"
+    },
+    {
+      "name": "fetch",
+      "is_group": true,
+      "schemaSha256": "56d15cb2184a5e02ba7ba0ea3dc6973f3f5d128302e9e8aece195fc7b19fb74e"
+    },
+    {
+      "name": "fetch fetch",
+      "method": "POST",
+      "path": "/fetch",
+      "runtime": "local",
+      "schemaSha256": "1073fac340e68baecbd8586298491a5b185e388e9f756bd3627edff37fea566e"
+    },
+    {
+      "name": "file",
+      "is_group": true,
+      "schemaSha256": "23de9859ee0660cdf65595294e7deacc1a69a24fe01b3cc05f2b69635428a2cb"
+    },
+    {
+      "name": "file create",
+      "risk": "write",
+      "runtime": "local",
+      "schemaSha256": "b71c0aa3e04ba1cf2e45d6547eac6f9d7d118bc5cc2cd1334175de22008344f3"
+    },
+    {
+      "name": "file list-types",
+      "runtime": "local",
+      "schemaSha256": "df8201c0a00bab78b7aa50adc4555e3ed766f64cd910a4511e471194b3bbc227"
+    },
+    {
+      "name": "file read",
+      "runtime": "local",
+      "schemaSha256": "96e52255c38eea5c92adbb3669e8e16282a7ccac2d36ff6db4b2ae875431e0ba"
+    },
+    {
+      "name": "file schema",
+      "runtime": "local",
+      "schemaSha256": "cbc6c665fad6028d9f1b5a63f969194d6d60963d99d6e3075ec32f524b48d724"
+    },
+    {
+      "name": "history",
+      "runtime": "cloud",
+      "schemaSha256": "4454c42ce7e8f52a29941d8e5739a65c9e9b410b9d4835c75923fc553f65e2e6"
+    },
+    {
+      "name": "install",
+      "risk": "write",
+      "runtime": "cloud",
+      "schemaSha256": "913eb56f533b8c10088e2d6962b077af6953fcb3913bf1f3d48a20cdf0e7f2e2"
+    },
+    {
+      "name": "invoke",
+      "method": "POST",
+      "runtime": "local",
+      "schemaSha256": "4b26889227b80bd9683c86c673fbbdaf17cc57e10e41b82876c76216fa3711c7"
+    },
+    {
+      "name": "mcp",
+      "is_group": true,
+      "schemaSha256": "10cf4f009bc2144bb27157d7480670f908c7495f7b69e79db29071dbee85aa9c"
+    },
+    {
+      "name": "mcp call",
+      "risk": "write",
+      "runtime": "local",
+      "schemaSha256": "7911b464927b2eb6b5f35dc67b1e20d7b65b8f45a769581195d9261cb8a6aeea"
+    },
+    {
+      "name": "mcp get-prompt",
+      "runtime": "local",
+      "schemaSha256": "f5a65776c2b02aa35edb6d270618ca3770d63c9d741274663cc8a1fe4ef0f75e"
+    },
+    {
+      "name": "mcp list-prompts",
+      "method": "GET",
+      "path": "/mcp/prompts",
+      "runtime": "local",
+      "schemaSha256": "800f8618724c52ffc56c6c64a59c8fa20e046e8199d447d9534eac381f6448bb"
+    },
+    {
+      "name": "mcp list-resources",
+      "method": "GET",
+      "path": "/mcp/resources",
+      "runtime": "local",
+      "schemaSha256": "ead9a230217c26dc938dfaacf374abea4d89e6fb1177a63e7115e1676ad5c87a"
+    },
+    {
+      "name": "mcp list-servers",
+      "method": "GET",
+      "path": "/mcp/servers",
+      "runtime": "local",
+      "schemaSha256": "8025158d1af6a2d05fab090952594327056a8de2212ea5b65f355aa9e78929af"
+    },
+    {
+      "name": "mcp list-tools",
+      "method": "GET",
+      "path": "/mcp/tools",
+      "runtime": "local",
+      "schemaSha256": "76d1d9722546046b7c9157b4e59a1b99618a891dc2012953c0576cbd60384770"
+    },
+    {
+      "name": "mcp read-resource",
+      "runtime": "local",
+      "schemaSha256": "c4e11cf7f105f68b6a1d1f027395832ab27c0fe5e8d80003c9bf24e6469b4d66"
+    },
+    {
+      "name": "media",
+      "is_group": true,
+      "schemaSha256": "c9451c18b5c5b0da3f18f2370a1eb7b1af79ca8423b98e0d274d238cfb305155"
+    },
+    {
+      "name": "media catalog",
+      "method": "GET",
+      "path": "/media/catalog",
+      "runtime": "local",
+      "schemaSha256": "2224ed4887bc86b9e4ed49c8949224836697865a5902f6f45858b85b3ef1f9cd"
+    },
+    {
+      "name": "media image",
+      "is_group": true,
+      "schemaSha256": "71909848636d1f62f8aa088c29d5f8ceea4a9b5c7bffa367fbacfbdcb1089803"
+    },
+    {
+      "name": "media image cancel",
+      "method": "POST",
+      "path": "/media/tasks/{id}/cancel",
+      "risk": "write",
+      "runtime": "local",
+      "schemaSha256": "bcd6ca441edf853b7153601e1dd5a36fd188608380ae61a79e30eeda860bf54e"
+    },
+    {
+      "name": "media image generate",
+      "method": "POST",
+      "path": "/media/generate/image",
+      "risk": "write",
+      "runtime": "local",
+      "schemaSha256": "5cfdb4e53ffb71c7b8f9fdfc972cb5184862c97fa81ecda1853ec18e9637fdcc"
+    },
+    {
+      "name": "media image models",
+      "method": "GET",
+      "path": "/media/catalog?task_type=text2image",
+      "runtime": "local",
+      "schemaSha256": "ffac04e49dbbb46f4ed68578c225493ee8e2b3bdf6aeb78b19cf3dc7fa9cba61"
+    },
+    {
+      "name": "media image status",
+      "method": "GET",
+      "path": "/media/tasks/{id}",
+      "runtime": "local",
+      "schemaSha256": "c5f52a8e122d7b743ef4d86477378e872fe0f66ce33926aa7e68f199f492efde"
+    },
+    {
+      "name": "media list",
+      "method": "GET",
+      "path": "/media/tasks",
+      "runtime": "local",
+      "schemaSha256": "e4402c98656cfe28e3253e055ef4a3c80e98abc92c9c39bb0df92108164de269"
+    },
+    {
+      "name": "organization",
+      "is_group": true,
+      "schemaSha256": "14aad47e4d4cba0569e5b1908cfb57b5e452110909e680b3157c094ffbf91e72"
+    },
+    {
+      "name": "organization billing",
+      "method": "GET",
+      "path": "/api/services/billing/organizations/{organization_id}/entitlement",
+      "runtime": "cloud",
+      "requires_auth": true,
+      "schemaSha256": "0bc7dfd366973c589a85687041cd9b0a1929ac29fd03ad32853b9321bbcbe663"
+    },
+    {
+      "name": "organization info",
+      "method": "GET",
+      "path": "/api/context/organizations/{organization_id}",
+      "runtime": "cloud",
+      "requires_auth": true,
+      "schemaSha256": "ebd15d6addd783e45ae145c59b5b660994d40cdad58daac55380ca314b8d6b5a"
+    },
+    {
+      "name": "organization list",
+      "method": "GET",
+      "path": "/api/context/organizations",
+      "runtime": "cloud",
+      "requires_auth": true,
+      "schemaSha256": "b3b0ea265bcd4476fa58d121926a371955e67849d96017369307cac4e3f5e692"
+    },
+    {
+      "name": "organization members",
+      "method": "GET",
+      "path": "/api/context/organizations/{organization_id}/members",
+      "runtime": "cloud",
+      "requires_auth": true,
+      "schemaSha256": "87852fd2fc216558416213bcbdf1c8ea0f18aa4b88438a8b10ad274d35a0dcc6"
+    },
+    {
+      "name": "organization membership",
+      "method": "GET",
+      "path": "/api/membership/organizations/{organization_id}/membership",
+      "runtime": "cloud",
+      "requires_auth": true,
+      "schemaSha256": "c12144006c008879bc10784a4b9854991a188e082ecf9f1ded5b71df84f9e00b"
+    },
+    {
+      "name": "organization update",
+      "method": "PUT",
+      "path": "/api/context/organizations/{organization_id}",
+      "risk": "write",
+      "runtime": "cloud",
+      "requires_auth": true,
+      "schemaSha256": "ead81d9c9a760372f304ec4762963484a380eafdbfc26c52a9d3931d1b2abb43"
+    },
+    {
+      "name": "organization usage",
+      "method": "GET",
+      "path": "/api/services/billing/organizations/{organization_id}/summary",
+      "runtime": "cloud",
+      "requires_auth": true,
+      "schemaSha256": "67a8b41463bc9da0e124701e395517a71ad42efbfb830597767287b1e6e931f6"
+    },
+    {
+      "name": "organization wallet",
+      "method": "GET",
+      "path": "/api/wallet/organizations/{organization_id}/wallet",
+      "runtime": "cloud",
+      "requires_auth": true,
+      "schemaSha256": "9509d5d35404829c5f11cea1ac1a5fd9903b296686cbd3b486a437329c361cba"
+    },
+    {
+      "name": "oss",
+      "is_group": true,
+      "schemaSha256": "75adb22fbd28b7a2870a06725333a1b7f46d3774c02cdf3318bbe6dbe739c6e4"
+    },
+    {
+      "name": "oss upload",
+      "method": "POST",
+      "path": "/oss/upload",
+      "risk": "write",
+      "runtime": "local",
+      "schemaSha256": "30f08e68c36af6c4b8a3b799bc8c9a84fb93abc9d7477a765a59220679eb97b0"
+    },
+    {
+      "name": "ping",
+      "runtime": "local",
+      "schemaSha256": "7c9959c63d1c824fcf4ff741f9ace73b3e151e5d9151c835ebc219b363eaef9e"
+    },
+    {
+      "name": "pkg",
+      "is_group": true,
+      "schemaSha256": "cc2d5a7702c10885739efe4585e9fa6f039d67f429495af6382657fd88bf7ce6"
+    },
+    {
+      "name": "pkg fork",
+      "method": "POST",
+      "path": "/api/services/package-registry/packages/{package_id}/fork",
+      "risk": "write",
+      "runtime": "cloud",
+      "requires_auth": true,
+      "schemaSha256": "3297a55062ffe9d8604339bbbcff05bf455cd77d17cc00e26b2f1109922a8c32"
+    },
+    {
+      "name": "pkg install",
+      "method": "GET",
+      "path": "/api/services/package-registry/packages/{package_id}/versions/{seq}/files",
+      "risk": "write",
+      "runtime": "cloud",
+      "requires_auth": true,
+      "schemaSha256": "d8142555171d677a37bb346fdde9f29b46d03cd52398840ce9c4522b71bf6ae6"
+    },
+    {
+      "name": "pkg list",
+      "method": "GET",
+      "path": "/api/services/package-registry/packages/{package_id}/versions",
+      "runtime": "cloud",
+      "requires_auth": true,
+      "schemaSha256": "ebf927034ade0200f8daad7ab857cf6c7513ed748d7e44ad845fd98e4629cc4b"
+    },
+    {
+      "name": "pkg publish",
+      "method": "POST",
+      "path": "/api/services/package-registry/packages",
+      "risk": "write",
+      "runtime": "cloud",
+      "requires_auth": true,
+      "schemaSha256": "9ecd8fed6d0f0241224ccd8a324492a5ccd2c0ae16d563da0909ab95561a3f38"
+    },
+    {
+      "name": "pkg revert",
+      "method": "POST",
+      "path": "/api/services/package-registry/packages/{package_id}/versions/{seq}/revert",
+      "risk": "high-risk-write",
+      "runtime": "cloud",
+      "requires_auth": true,
+      "schemaSha256": "686f7986ee3bd5b432f7aa2b28d4b9286542440aafa990beba7011a0c70e7697"
+    },
+    {
+      "name": "pkg yank",
+      "method": "POST",
+      "path": "/api/services/package-registry/packages/{package_id}/versions/{seq}/yank",
+      "risk": "high-risk-write",
+      "runtime": "cloud",
+      "requires_auth": true,
+      "schemaSha256": "de142088ace77786bd3a5494f247d15daf5de8eb4fe0828526e60e0350226b08"
+    },
+    {
+      "name": "plugin",
+      "is_group": true,
+      "schemaSha256": "34278ca53b60f3d36f0fc0cbd20b4aeed8600e3ee2423a1db7dd933264228c33"
+    },
+    {
+      "name": "plugin launch",
+      "method": "POST",
+      "path": "/plugin/launch",
+      "risk": "write",
+      "runtime": "local",
+      "schemaSha256": "fae606502be1cc9632000843d4000403c8035197f30c0810e6c37e8a2dad9ad8"
+    },
+    {
+      "name": "profile",
+      "is_group": true,
+      "schemaSha256": "5f34013da45163672ea1e03600bd88a60b956f024c90b1db2e6fc9221b3782d6"
+    },
+    {
+      "name": "profile add",
+      "risk": "write",
+      "runtime": "cloud",
+      "schemaSha256": "6d1aec26b511e1743b9a591736b946aa36408a697654f6e2084cdf88c2841a2e"
+    },
+    {
+      "name": "profile current",
+      "runtime": "cloud",
+      "schemaSha256": "686f63dfad9c2c1db126e4e36c15e0749aa315ebf6a88a6dfd613739d6a32e10"
+    },
+    {
+      "name": "profile list",
+      "runtime": "cloud",
+      "schemaSha256": "a87f0f134a57df28fcd1ade46d6aca843e8ba6116009d7103f9bafb6b61bce83"
+    },
+    {
+      "name": "profile remove",
+      "risk": "high-risk-write",
+      "runtime": "cloud",
+      "schemaSha256": "f682b50c2944186f939a6ee94f160fe0151c17bc780a2f39b735eddb02310f1f"
+    },
+    {
+      "name": "profile use",
+      "risk": "write",
+      "runtime": "cloud",
+      "schemaSha256": "f74b7c0dee9cbd4fe5680e761a7e5fe16a320f04e7a4b1ce753aec3fc9b736e9"
+    },
+    {
+      "name": "project",
+      "is_group": true,
+      "schemaSha256": "20f7816e6c2774478e09f432ac5600d68fa8ffef33918d085782fe2db1a1b591"
+    },
+    {
+      "name": "project members",
+      "is_group": true,
+      "schemaSha256": "19d358d202bec2a29af6eb26f8e26668389032fae36f202bbccc2cfe3c31f995"
+    },
+    {
+      "name": "project members list",
+      "method": "GET",
+      "path": "/api/context/spaces/{project_id}/memberships",
+      "runtime": "cloud",
+      "requires_auth": true,
+      "schemaSha256": "920d1f819b51b09beaae950847b636b5eddfcda620d0feaf98f8a1c933344d86"
+    },
+    {
+      "name": "project task",
+      "is_group": true,
+      "schemaSha256": "a5f7ac5fe09deb32f209a97c03c46155f705adc513dba9f996136090997eef9d"
+    },
+    {
+      "name": "project task current",
+      "method": "GET",
+      "path": "/api/context/projects/tasks/current",
+      "runtime": "cloud",
+      "requires_auth": true,
+      "schemaSha256": "f228bde907b02de9e4448d13534e2cd76b5d3c3e9766eb31d27834939bf6c75d"
+    },
+    {
+      "name": "project task feedback",
+      "method": "GET",
+      "path": "/api/context/projects/{project_id}/tasks/{task_id}/feedback",
+      "runtime": "cloud",
+      "requires_auth": true,
+      "schemaSha256": "d870fbf36d1c66f9d6b8823606e86a63aca4863524faa923affe954bb2f1c7ad"
+    },
+    {
+      "name": "project task get",
+      "method": "GET",
+      "path": "/api/context/projects/{project_id}/tasks/{task_id}/workbench",
+      "runtime": "cloud",
+      "requires_auth": true,
+      "schemaSha256": "d70620fbab877b532a6f35b36adbcb42335062436ac20d2b99d89ecaeeedf7f4"
+    },
+    {
+      "name": "project tasks",
+      "is_group": true,
+      "schemaSha256": "d3e706e233fe9b15a7a2c7eaecfd08403eb529d793b402c1aab96502ed5b341a"
+    },
+    {
+      "name": "project tasks create",
+      "method": "POST",
+      "path": "/api/context/projects/{project_id}/tasks",
+      "risk": "high-risk-write",
+      "runtime": "cloud",
+      "requires_auth": true,
+      "schemaSha256": "ee9990ced7a424f7356f267ca85fcd51d2921f42ed648a7b28f7c8aa3812c725"
+    },
+    {
+      "name": "project tasks list",
+      "method": "GET",
+      "path": "/api/context/projects/{project_id}/tasks",
+      "runtime": "cloud",
+      "requires_auth": true,
+      "schemaSha256": "f0b0cfde96e62f170ee95fc3c2aaa7dc44810662fdc28ba4f5a780bbd8f55874"
+    },
+    {
+      "name": "reach",
+      "is_group": true,
+      "schemaSha256": "b08e35661838ef8681b150dec283e3a1fd17bc69d4c9a3cdd26d5fbe4ae4fb31"
+    },
+    {
+      "name": "reach comments",
+      "method": "POST",
+      "path": "/reach/comments",
+      "runtime": "local",
+      "schemaSha256": "d39b50d2290d1bc9db907f87f92f90eac780fe48d3ec91ed9067f70572888332"
+    },
+    {
+      "name": "reach doctor",
+      "method": "POST",
+      "path": "/reach/doctor",
+      "runtime": "local",
+      "schemaSha256": "656073a309ec36e3d3ec1e837b311ef826ec6c41185811d4bde741daab859778"
+    },
+    {
+      "name": "reach read",
+      "method": "POST",
+      "path": "/reach/read",
+      "runtime": "local",
+      "schemaSha256": "cd08f3cb8ef1ef6306707aefe55cdeba237c5bbb639f327c64d5940481c71354"
+    },
+    {
+      "name": "reach search",
+      "method": "POST",
+      "path": "/reach/search",
+      "runtime": "local",
+      "schemaSha256": "5dcb21f689df9191a99175518fb7871f7a9c7acd6a922fd2f8e8aeb76a254fe8"
+    },
+    {
+      "name": "search",
+      "method": "GET",
+      "path": "/search",
+      "runtime": "local",
+      "requires_auth": true,
+      "schemaSha256": "a1b416fcd40666a9268d9219823c0c156fbbd9f2ed45307b6254f42fd29ea03d"
+    },
+    {
+      "name": "skill",
+      "is_group": true,
+      "schemaSha256": "e03cd5b10dbf16f01647ee6df568d416131e7c2371e1d9a8a78a741390454b65"
+    },
+    {
+      "name": "skill disable",
+      "method": "POST",
+      "path": "/skills/{skill_key}/disable",
+      "risk": "write",
+      "runtime": "local",
+      "schemaSha256": "28c019b2e4abbf469813ec514eb012d804c160c330ee9239ddf9dbb4c81eaa0e"
+    },
+    {
+      "name": "skill enable",
+      "method": "POST",
+      "path": "/skills/{skill_key}/enable",
+      "risk": "write",
+      "runtime": "local",
+      "schemaSha256": "6577b363f17f49e66ef59b3ac0f682a72748ed81fe9636620b6b04d761c440c9"
+    },
+    {
+      "name": "skill import",
+      "method": "POST",
+      "path": "/skills/import",
+      "risk": "write",
+      "runtime": "local",
+      "schemaSha256": "810741bbdc30ce2381f2343005154c61930b282681e2f090d451f6899847aac1"
+    },
+    {
+      "name": "skill info",
+      "method": "GET",
+      "path": "/skills/{skill_key}/package",
+      "runtime": "local",
+      "schemaSha256": "d4026c577a1d7a63583804e36edbebc1cde548855acf905e8e20bdd23247c224"
+    },
+    {
+      "name": "skill install",
+      "method": "POST",
+      "path": "/skills/{skill_key}/enable",
+      "risk": "write",
+      "runtime": "local",
+      "schemaSha256": "d4584254baa0f51b39eb05ceaa21d5817ecd585f0f233bbf0a319891b4b504e7"
+    },
+    {
+      "name": "skill list",
+      "method": "GET",
+      "path": "/skills/registry",
+      "runtime": "local",
+      "schemaSha256": "22496767d2357f76d4153108bf756a7c448793fdb11dfa56793cf3e7f6a0003e"
+    },
+    {
+      "name": "skill managed",
+      "method": "GET",
+      "path": "/skills/visible",
+      "runtime": "local",
+      "schemaSha256": "45f867846a348df479ecbbf765d4f3981250c8931400146accc22d701725a895"
+    },
+    {
+      "name": "skill market",
+      "method": "GET",
+      "path": "/skills/market",
+      "runtime": "local",
+      "schemaSha256": "60dcafc4b5de96aa8597347fb5052fb6083df8895154bde2f1880472f25711a6"
+    },
+    {
+      "name": "skill remove",
+      "method": "POST",
+      "path": "/skills/{skill_key}/disable",
+      "risk": "write",
+      "runtime": "local",
+      "schemaSha256": "faf0c7d8f960a7bb93da59fae901b7d08fe95f8e6b73c3ad79674e3bbbaade23"
+    },
+    {
+      "name": "skill search",
+      "method": "GET",
+      "path": "/skills/market",
+      "runtime": "local",
+      "schemaSha256": "d8bc62f493bcf4500e658708230da57d8f527992cf3cf2f5dd1ad24455921ec0"
+    },
+    {
+      "name": "skill update",
+      "method": "POST",
+      "path": "/skills/{skill_key}/enable",
+      "risk": "write",
+      "runtime": "local",
+      "schemaSha256": "6a094c814f811ac14dbdc18cf828250a55eed76617d68d859ce9408438adc6db"
+    },
+    {
+      "name": "skills",
+      "is_group": true,
+      "schemaSha256": "a46f5cd083228c48be2538cf4858a6cc80813d3882803055e00b2a82d5e0e340"
+    },
+    {
+      "name": "skills doctor",
+      "runtime": "local",
+      "schemaSha256": "52a7c5e574befa0e1cfa0d5ae080fe59b890a653bedb87d2ea4b1147985bf6a3"
+    },
+    {
+      "name": "skills install",
+      "risk": "write",
+      "runtime": "local",
+      "schemaSha256": "70798ee413a33ad3fed2fd7dc5c5992bf77932437baa7b4855ca4111806fb5c0"
+    },
+    {
+      "name": "skills list",
+      "runtime": "local",
+      "schemaSha256": "2b72c1b95b4e3e91f06d8ec5aa6c4cd4cbe284770f70ada74baac35569613175"
+    },
+    {
+      "name": "skills read",
+      "runtime": "local",
+      "schemaSha256": "79df987a1b0cc89b8ac496f61fd295fc9291073b162b6799051e806a396ccf11"
+    },
+    {
+      "name": "skills remove",
+      "risk": "high-risk-write",
+      "runtime": "local",
+      "schemaSha256": "98404f35d514f9daaa5b4eed6df91f3a2297d820bec1c5249f2de4ee423b54f8"
+    },
+    {
+      "name": "skills sync",
+      "risk": "write",
+      "runtime": "local",
+      "schemaSha256": "664323e3d36c3776c11663a591aff3bf79ae887daae8f271141093aba136e8b2"
+    },
+    {
+      "name": "slide",
+      "is_group": true,
+      "schemaSha256": "289f50a7dab84b5b6ccfe030df0ae76fdc8891546a320c5ca076b1ebe8f73f6a"
+    },
+    {
+      "name": "slide add-page",
+      "method": "POST",
+      "path": "/slide/add-page",
+      "risk": "write",
+      "runtime": "local",
+      "schemaSha256": "de8351ffc4f4d92a4708e743b64c889cf9aafc35a406abf10475ae3510eb1536"
+    },
+    {
+      "name": "slide batch-update",
+      "method": "POST",
+      "path": "/slide/batch-update",
+      "risk": "write",
+      "runtime": "local",
+      "schemaSha256": "d17b2a938470ac543ca855303acd539f96e2ca8b23dce36589bc61de2f930976"
+    },
+    {
+      "name": "slide delete-page",
+      "method": "POST",
+      "path": "/slide/delete-page",
+      "risk": "high-risk-write",
+      "runtime": "local",
+      "schemaSha256": "5c30efc67eb23012752e57ee2bcf58b67759d9937be4e7ad45f4019b380b1b4e"
+    },
+    {
+      "name": "slide export",
+      "runtime": "local",
+      "schemaSha256": "44aa7713de2738bee5cb1b3ffe95a5cf7e0514c25ad1caa28094d2940a3d4f3c"
+    },
+    {
+      "name": "slide generate",
+      "method": "POST",
+      "path": "/slide/generate",
+      "risk": "write",
+      "runtime": "local",
+      "schemaSha256": "f969413e310af96600e0c3aa14d1d42da2884d8f577646c7aa54d7e8257c5d8b"
+    },
+    {
+      "name": "slide grep",
+      "method": "POST",
+      "path": "/slide/grep",
+      "runtime": "local",
+      "schemaSha256": "344ab1d089f4a3e2eadb886f7b6610f2088aab48a77f07489c106d09cc4be5a2"
+    },
+    {
+      "name": "slide lint",
+      "method": "POST",
+      "path": "/slide/lint",
+      "runtime": "local",
+      "schemaSha256": "0d6a54c0c4f28c6663f429966bd79151f5ea7d822a6924b7792f2f7ef2fe527a"
+    },
+    {
+      "name": "slide list",
+      "method": "POST",
+      "path": "/slide/list",
+      "runtime": "local",
+      "schemaSha256": "2a6186947db3b1e0c239faf89c56b8b1b140cd906417643e097f144aebada1f7"
+    },
+    {
+      "name": "slide outline",
+      "method": "POST",
+      "path": "/slide/outline",
+      "runtime": "local",
+      "schemaSha256": "7dfa4abb3f2c73ba9d5b05e9d8c5c756e802c2f346ba6f44f70acb409132f899"
+    },
+    {
+      "name": "slide page",
+      "method": "POST",
+      "path": "/slide/page",
+      "runtime": "local",
+      "schemaSha256": "69ca7bb133759b57bef8905e516efe58eb0a0e309206f3b21bd634364c4a6a2b"
+    },
+    {
+      "name": "slide preview",
+      "method": "POST",
+      "path": "/slide/preview",
+      "runtime": "local",
+      "schemaSha256": "05e42b367bdda691493ebb745d6c910023e056cd40fd2e98773e7341f5a1d3ff"
+    },
+    {
+      "name": "slide render",
+      "risk": "write",
+      "runtime": "local",
+      "schemaSha256": "53b7677d7db9b7119b773c7e4dfbefdcaa14f16a1801f23ada16619f65d88f30"
+    },
+    {
+      "name": "slide reorder",
+      "method": "POST",
+      "path": "/slide/reorder",
+      "risk": "write",
+      "runtime": "local",
+      "schemaSha256": "52af106f7845f178a74b0490388f824a68a2b4387eed901ef012085a4baa069d"
+    },
+    {
+      "name": "slide update",
+      "method": "POST",
+      "path": "/slide/update",
+      "risk": "write",
+      "runtime": "local",
+      "schemaSha256": "38414100cf6b77674b4176a9e5c4f4e1d6a432a41dcb88502e962e23670c0e8e"
+    },
+    {
+      "name": "space current",
+      "runtime": "cloud",
+      "schemaSha256": "07f8ed3a26ed9a9d1f4689441ee4e55c3865e259b6e9bf0aec4b3d4fd9fbf2d2"
+    },
+    {
+      "name": "space list",
+      "method": "POST",
+      "path": "/workspace/list",
+      "runtime": "hybrid",
+      "requires_auth": true,
+      "schemaSha256": "56180ef76e16dbbbcd52b0f3662580f532a8ab5737140cc0c31b29c0943b3f40"
+    },
+    {
+      "name": "space tables",
+      "method": "POST",
+      "path": "/table/list",
+      "runtime": "hybrid",
+      "requires_auth": true,
+      "schemaSha256": "d38ea3cd48f0cf9e3a85c66b7820c849520668ab798e0c12dbd14c956196c1bd"
+    },
+    {
+      "name": "space use",
+      "risk": "write",
+      "runtime": "cloud",
+      "schemaSha256": "f786e117a644ced6993566a78f6e393d9483df6a37282a098b7531f78d6f19fa"
+    },
+    {
+      "name": "status",
+      "runtime": "local",
+      "schemaSha256": "e275e6048ffc6794ac3b46966d2c96dffdfd78fe7db3655772a244f4f869a45f"
+    },
+    {
+      "name": "storage",
+      "is_group": true,
+      "schemaSha256": "129511470c167c2de09c1a896cac4b21bf799d99b447503491c1f846127ac620"
+    },
+    {
+      "name": "storage files",
+      "is_group": true,
+      "schemaSha256": "352c3c2f5b2cff0d8329c3518be94fe122c730a59e20e66a08c62675d24009ad"
+    },
+    {
+      "name": "storage files batch-delete",
+      "method": "POST",
+      "path": "/oss/storage/files/batch-delete",
+      "risk": "high-risk-write",
+      "runtime": "hybrid",
+      "requires_auth": true,
+      "schemaSha256": "9394fdd98a2a25d508c79e1a8d630a68947a6eb26bab323a48211febf377dd2a"
+    },
+    {
+      "name": "storage files list",
+      "method": "GET",
+      "path": "/api/services/oss/storage/files",
+      "runtime": "hybrid",
+      "requires_auth": true,
+      "schemaSha256": "f0cba0a41fd8f35ac6ca3ede62d1ba752cc13cc72ba369528312265752bf6509"
+    },
+    {
+      "name": "storage files usages",
+      "method": "GET",
+      "path": "/api/services/oss/storage/files/{file_id}/usages",
+      "runtime": "hybrid",
+      "requires_auth": true,
+      "schemaSha256": "bd2562fb5b85caec5fe478e36e388091cd8476f4060303c731ae8cb75a8a367b"
+    },
+    {
+      "name": "table",
+      "is_group": true,
+      "schemaSha256": "64a9439c9a5fb3300dbd187c6f21f0938cee6f233f96b30d50a4926f51aa14b6"
+    },
+    {
+      "name": "table archive",
+      "method": "POST",
+      "path": "/table/archive",
+      "risk": "write",
+      "runtime": "local",
+      "schemaSha256": "98212a40e4694cce2343796c3ce09f8f8a8ccb022aa8e13b4cd7267d78b08bdc"
+    },
+    {
+      "name": "table attachment",
+      "is_group": true,
+      "schemaSha256": "c0be5487316db376adb9780f65d0d5f3ee07f64e65fd54f9bb856fba129e338e"
+    },
+    {
+      "name": "table attachment delete",
+      "method": "POST",
+      "path": "/table/attachment-delete",
+      "risk": "high-risk-write",
+      "runtime": "local",
+      "schemaSha256": "527303157e489d30fd5a8b8a1567780d83dc47d5bbbb6b63f73f7f49d9bd53d0"
+    },
+    {
+      "name": "table attachment list",
+      "method": "POST",
+      "path": "/table/attachment-list",
+      "runtime": "local",
+      "schemaSha256": "2dbd5683769b25454088a3aa8abc9be431e072e35e550f383f4738fde727fe9b"
+    },
+    {
+      "name": "table attachment reuse",
+      "method": "POST",
+      "path": "/table/attachment-reuse",
+      "risk": "write",
+      "runtime": "local",
+      "schemaSha256": "3439756ad5149c02c211178b9a30ed12c96817553ed142c9db35be61322c4d3a"
+    },
+    {
+      "name": "table attachment upload",
+      "method": "POST",
+      "path": "/table/attachment-upload",
+      "risk": "write",
+      "runtime": "local",
+      "schemaSha256": "5dd0af62dc01c7cdc490e0b4c37ef9b97566fbefc1d72ecc99ac189f5a0ba070"
+    },
+    {
+      "name": "table collaborator",
+      "is_group": true,
+      "schemaSha256": "d4e953ea27beb1cb585ccdddc1c2fef9b2184006f9d7ccd74d346126050f9278"
+    },
+    {
+      "name": "table collaborator invite",
+      "method": "POST",
+      "path": "/table/collaborator-invite",
+      "risk": "write",
+      "runtime": "local",
+      "schemaSha256": "a198ee0cdb919cd7239274ee4d38dcdf1ba6f13d19ec04edb29fad8fa40f30e4"
+    },
+    {
+      "name": "table collaborator list",
+      "method": "POST",
+      "path": "/table/collaborator-list",
+      "runtime": "local",
+      "schemaSha256": "4a4e7ba350e0c5ebb4ffbc162260daadf0483a1ff1fdb34548336acba308dd22"
+    },
+    {
+      "name": "table collaborator remove",
+      "method": "POST",
+      "path": "/table/collaborator-remove",
+      "risk": "high-risk-write",
+      "runtime": "local",
+      "schemaSha256": "a0032fce1a36af9e50ba20820e70b9fbdb7543afc1300f5f699c67e10ab003b4"
+    },
+    {
+      "name": "table collaborator update",
+      "method": "POST",
+      "path": "/table/collaborator-update",
+      "risk": "write",
+      "runtime": "local",
+      "schemaSha256": "bbcfdc0197e87688d324e750a5fd01d964a05ed9569ae11cacd5d4a8384471b0"
+    },
+    {
+      "name": "table create",
+      "method": "POST",
+      "path": "/table/create",
+      "risk": "write",
+      "runtime": "hybrid",
+      "requires_auth": true,
+      "schemaSha256": "3f6cf2dd257d21e852ffb8e9583e810db6386e56253e166fbd3bf04a61ded4f7"
+    },
+    {
+      "name": "table delete",
+      "method": "POST",
+      "path": "/table/delete-table",
+      "risk": "write",
+      "runtime": "local",
+      "schemaSha256": "b18e960eaaf9d8d5551a9eaa20864494b6c0076f40add1d5db3c6884fc2127b9"
+    },
+    {
+      "name": "table execute",
+      "method": "POST",
+      "path": "/table/execute",
+      "risk": "write",
+      "runtime": "local",
+      "schemaSha256": "7f62cb9a1c9cff152478624785514fa06d04d4cf1b49d581827cc70519ffafcb"
+    },
+    {
+      "name": "table export",
+      "is_group": true,
+      "schemaSha256": "d84ab5731cef1143e9cbc9b7888c390d7b99becd840351a806ad5ec815f56f06"
+    },
+    {
+      "name": "table export csv",
+      "method": "POST",
+      "path": "/table/export",
+      "runtime": "local",
+      "schemaSha256": "ff487ee8da33d9d2659c7afacac6338bf99899475cd8918c7e6f4a3675783368"
+    },
+    {
+      "name": "table export download",
+      "method": "POST",
+      "path": "/table/export-download",
+      "runtime": "local",
+      "schemaSha256": "f5a112e0f6fd529e4235fe2b732f76480598408d897571fc7d26e29252bd682d"
+    },
+    {
+      "name": "table export excel",
+      "method": "POST",
+      "path": "/table/export",
+      "runtime": "local",
+      "schemaSha256": "1080f4e1a3f3e2a405c11d9ae4a9f0522d295bcaf2641e0f28bd980be25b29a6"
+    },
+    {
+      "name": "table export json",
+      "method": "POST",
+      "path": "/table/export",
+      "runtime": "local",
+      "schemaSha256": "63b38a6e8d00e99822722ac674ea8a8de2217c041407c717e3398987bf252542"
+    },
+    {
+      "name": "table export pdf",
+      "method": "POST",
+      "path": "/table/export",
+      "runtime": "local",
+      "schemaSha256": "71a4c2a570dfaaecbb4bdb8f60ae045ceeda929134e537735c65add19f780614"
+    },
+    {
+      "name": "table export snapshot",
+      "method": "POST",
+      "path": "/table/export-agent-space",
+      "runtime": "local",
+      "schemaSha256": "bd970de524b18dae7d66eee4c662e1e84731352ffcef102a2de6bcfeabb0162c"
+    },
+    {
+      "name": "table export stats",
+      "method": "POST",
+      "path": "/table/export-stats",
+      "runtime": "local",
+      "schemaSha256": "b33018377f3e980707981479aa5ac60dee3083c16acf90c20642573fa70ae303"
+    },
+    {
+      "name": "table export wait",
+      "runtime": "local",
+      "schemaSha256": "b5d83cc80ef2f7589f539a50cbb1a072a6c19ef73a38d576d3ec624d2cd0d663"
+    },
+    {
+      "name": "table field",
+      "is_group": true,
+      "schemaSha256": "87736e41a61769b49f3ebc916a76fee8e3b80bd1d0f221b49d06d1ce81309ee5"
+    },
+    {
+      "name": "table field add",
+      "method": "POST",
+      "path": "/table/add-field",
+      "risk": "write",
+      "runtime": "hybrid",
+      "requires_auth": true,
+      "schemaSha256": "f98bf890d411f48433ab3bbc710b6c5903362f6d97824803b77a4a70d56738ef"
+    },
+    {
+      "name": "table field bulk-add",
+      "method": "POST",
+      "path": "/table/bulk-fields",
+      "risk": "write",
+      "runtime": "local",
+      "schemaSha256": "fea6ca08a00585a64137ac8f5f62c92fc67355c1886155c7542886e8a6873ec2"
+    },
+    {
+      "name": "table field check",
+      "method": "POST",
+      "path": "/table/field-check-conversion",
+      "runtime": "local",
+      "schemaSha256": "fc1f4c1f650726d5d0e91675bc3a2c2f2feea688e1eae46bcab584d86ccfd29b"
+    },
+    {
+      "name": "table field conversion-references",
+      "method": "GET",
+      "path": "/api/tabdata/fields/{field_id}/conversion-references",
+      "runtime": "cloud",
+      "requires_auth": true,
+      "schemaSha256": "f6784765cfa2344d0e41e83f9009f59f0d31298c8c7e492fb3dc11972e8aeb45"
+    },
+    {
+      "name": "table field convert",
+      "method": "POST",
+      "path": "/table/field-convert",
+      "risk": "write",
+      "runtime": "local",
+      "schemaSha256": "02c728c200936b2e8d69b478729d6916efe6f358e0437b0c331af56073179b5a"
+    },
+    {
+      "name": "table field delete",
+      "method": "POST",
+      "path": "/table/delete-field",
+      "risk": "high-risk-write",
+      "runtime": "hybrid",
+      "requires_auth": true,
+      "schemaSha256": "9bebe58559a5b7c5cbad0a4f1a42b5c580a5adb04430aa9c071f545fb1e75870"
+    },
+    {
+      "name": "table field delete-references",
+      "method": "GET",
+      "path": "/api/tabdata/fields/{field_id}/delete-references",
+      "runtime": "cloud",
+      "requires_auth": true,
+      "schemaSha256": "dc9949648f40c2183ac74c485f5870b7a85102d81253138861dbf51675006671"
+    },
+    {
+      "name": "table field detail",
+      "method": "POST",
+      "path": "/table/field-detail",
+      "runtime": "local",
+      "schemaSha256": "f4d2dd27054b0bd1351eca586e26a79d438adc236dd177821bbfb236b81face4"
+    },
+    {
+      "name": "table field explain",
+      "method": "GET",
+      "path": "/api/tabdata/fields/{field_id}/explain",
+      "runtime": "cloud",
+      "requires_auth": true,
+      "schemaSha256": "0557c3a1b69cc1056019f379c8fe63fd25a55eb42a17688d83aed4c334959015"
+    },
+    {
+      "name": "table field list",
+      "method": "POST",
+      "path": "/table/fields",
+      "runtime": "hybrid",
+      "requires_auth": true,
+      "schemaSha256": "1fdd2163410d9ac72d97fd43f913cda15f3e9153253a6da2eb19b95512569b07"
+    },
+    {
+      "name": "table field preview",
+      "method": "POST",
+      "path": "/table/field-preview-conversion",
+      "runtime": "local",
+      "schemaSha256": "af75489d3c932f595f2cde6bb3ef89b4edb89c0902e4a9957121d05a4a0c60e2"
+    },
+    {
+      "name": "table field reorder",
+      "method": "POST",
+      "path": "/table/fields-reorder",
+      "risk": "write",
+      "runtime": "local",
+      "schemaSha256": "3ad5c93073bc744e6bc47593f7f79306efd64f7dbaa1220909eb1658f6c6715a"
+    },
+    {
+      "name": "table field update",
+      "method": "POST",
+      "path": "/table/update-field",
+      "risk": "write",
+      "runtime": "local",
+      "schemaSha256": "acd11160a54400ba371619d2c5a5ffbd8a83d230000cea3f9a2c40daf59f8f64"
+    },
+    {
+      "name": "table form",
+      "is_group": true,
+      "schemaSha256": "49b540a322d52fd0632940265e8a311faac46ff97e169c0e66e537d8f69c8cf3"
+    },
+    {
+      "name": "table form collaborators",
+      "method": "POST",
+      "path": "/table/form-collaborators",
+      "runtime": "local",
+      "schemaSha256": "208f3940ad72159f61881883dfd278f16cddb09294b4ec137c9657fa7512321e"
+    },
+    {
+      "name": "table form get",
+      "method": "POST",
+      "path": "/table/form-get",
+      "runtime": "local",
+      "schemaSha256": "f6141dcb02967f0ebd3b496391daee148aa7da33473f03901f009f16f248ec6c"
+    },
+    {
+      "name": "table form link-records",
+      "method": "POST",
+      "path": "/table/form-link-records",
+      "runtime": "local",
+      "schemaSha256": "be97f4163fc9977422e2e94d454f84a119941fd7e11ea9481e0a68900d2f32f7"
+    },
+    {
+      "name": "table form submit",
+      "method": "POST",
+      "path": "/table/form-submit",
+      "risk": "write",
+      "runtime": "local",
+      "schemaSha256": "0eea98c9001f0b7bcfc087fe0552582f0206bc7a01ca507d1b12afd38f1dd031"
+    },
+    {
+      "name": "table form submit-direct",
+      "method": "POST",
+      "path": "/table/form-submit-direct",
+      "risk": "write",
+      "runtime": "local",
+      "schemaSha256": "20ff890bc31edb95f1b2bad92664ae7924dd69b44bf861d52811962783a56275"
+    },
+    {
+      "name": "table form verify",
+      "method": "POST",
+      "path": "/table/form-verify",
+      "runtime": "local",
+      "schemaSha256": "8aba19770e164c647d17af3311ab67b5870ada077121288efcd129d73d9003ca"
+    },
+    {
+      "name": "table history",
+      "is_group": true,
+      "schemaSha256": "7998ea2088feba26d365c54c3692d96c62c608e134777382e29ba12b0ef26974"
+    },
+    {
+      "name": "table history list",
+      "method": "POST",
+      "path": "/table/table-history",
+      "runtime": "local",
+      "schemaSha256": "607bb7dfa6abf2b45330aad886b83e92c2894371d62c29cbbaf2ddc48573b0f8"
+    },
+    {
+      "name": "table history redo",
+      "method": "POST",
+      "path": "/table/table-redo",
+      "risk": "write",
+      "runtime": "local",
+      "schemaSha256": "8bad9da1fb536de8c9cabe440c7e3a7296b6eda3e20f3258168686ebe645e40b"
+    },
+    {
+      "name": "table history redo-stack",
+      "method": "POST",
+      "path": "/table/redo-stack",
+      "runtime": "local",
+      "schemaSha256": "84c15a7b791572b69b78925146b704ed95586f458a0d297bc251129de0659e17"
+    },
+    {
+      "name": "table history restore",
+      "method": "POST",
+      "path": "/table/table-restore",
+      "risk": "high-risk-write",
+      "runtime": "local",
+      "schemaSha256": "a3079eab8feb754123ecd2a638fc9239ef58ba6c8e28c4ad6d8a272a267ff4fd"
+    },
+    {
+      "name": "table history snapshot",
+      "method": "POST",
+      "path": "/table/table-snapshot",
+      "runtime": "local",
+      "schemaSha256": "6efe0e17b71da4e999ce8beaf3817e48602578857eef7ea894ce8620bede25b1"
+    },
+    {
+      "name": "table history undo",
+      "method": "POST",
+      "path": "/table/table-undo",
+      "risk": "write",
+      "runtime": "local",
+      "schemaSha256": "efbe3a0369a64f0ab1c3e853a3dd39899dcb6c0cf4e772e54d4edc1fbca7f306"
+    },
+    {
+      "name": "table history undo-stack",
+      "method": "POST",
+      "path": "/table/undo-stack",
+      "runtime": "local",
+      "schemaSha256": "e4c45a89b7fd5cc1b61f4f248b2f6825ad01a077cf9e05db3f7918286cd5ce1e"
+    },
+    {
+      "name": "table import",
+      "is_group": true,
+      "schemaSha256": "dcd2dcece9c4a9d6c62d3ef2c9802b936e83dca78c21eee805ff2aecf4050f1b"
+    },
+    {
+      "name": "table import csv",
+      "method": "POST",
+      "path": "/table/import-csv",
+      "risk": "write",
+      "runtime": "local",
+      "schemaSha256": "32c24263ad31d611cccbc3e89f674486c8cbf3eac257e9cc920f98168c3784f6"
+    },
+    {
+      "name": "table import excel",
+      "method": "POST",
+      "path": "/table/import-excel",
+      "risk": "write",
+      "runtime": "local",
+      "schemaSha256": "9047bbd2196d39d3c8ad984840d886e0d9d8f87b3fefb8d936124ddaa9f58dab"
+    },
+    {
+      "name": "table import file",
+      "method": "POST",
+      "path": "/table/import-file",
+      "risk": "write",
+      "runtime": "local",
+      "schemaSha256": "56aaa8e876f422040a03a37c9130190bb45517f99d0105d619f34c817ca96fbe"
+    },
+    {
+      "name": "table import json",
+      "method": "POST",
+      "path": "/table/import-json",
+      "risk": "write",
+      "runtime": "local",
+      "schemaSha256": "df34df53104ff3d6d3c01fa62dd303f48e53a1345d7db5057aaea4ca3c5532e9"
+    },
+    {
+      "name": "table import preview",
+      "method": "POST",
+      "path": "/table/import-preview",
+      "runtime": "local",
+      "schemaSha256": "b01f02500fc4161bdf134b6c770132ac434b20806f370f08d9ca7daa0a714b4d"
+    },
+    {
+      "name": "table import snapshot",
+      "method": "POST",
+      "path": "/table/import-agent-space",
+      "risk": "high-risk-write",
+      "runtime": "local",
+      "schemaSha256": "e28119a8c6733db42d1d38fc9face81a9759f357f633cff617b42e57d4d4ec73"
+    },
+    {
+      "name": "table import template",
+      "method": "POST",
+      "path": "/table/import-template",
+      "runtime": "local",
+      "schemaSha256": "d64d5774ef65b495a3b2c1aa1c8a9a63a6aafc1f51a1ffce9841e4caaa2e0fa4"
+    },
+    {
+      "name": "table info",
+      "method": "POST",
+      "path": "/table/info",
+      "runtime": "hybrid",
+      "requires_auth": true,
+      "schemaSha256": "6e792552942574c4bda15f79e27c751510e54898ec594191a942ccec6489ca6c"
+    },
+    {
+      "name": "table link",
+      "is_group": true,
+      "schemaSha256": "5f8e80d8118ddf22cdd4837a8693eba417dd76e3072c3c378f12d151fff1de49"
+    },
+    {
+      "name": "table link add",
+      "method": "POST",
+      "path": "/table/link-add",
+      "risk": "write",
+      "runtime": "hybrid",
+      "requires_auth": true,
+      "schemaSha256": "7e7c02853a620aaac005263994065910f2d798afae780508a2cb7b259db20a78"
+    },
+    {
+      "name": "table link create",
+      "method": "POST",
+      "path": "/table/link-create",
+      "risk": "write",
+      "runtime": "hybrid",
+      "requires_auth": true,
+      "schemaSha256": "4ca0a5dcc9cc031786f67a36fb45dbede2f0846787cc7105e66cd4d632077c8a"
+    },
+    {
+      "name": "table link linkable-fields",
+      "method": "POST",
+      "path": "/table/linkable-fields",
+      "runtime": "hybrid",
+      "schemaSha256": "32119f4ddd28f00ad7d8c51b5c2a5ebb6b2df90368f8b8539331e7964fd719a3"
+    },
+    {
+      "name": "table link linkable-records",
+      "method": "POST",
+      "path": "/table/linkable-records",
+      "runtime": "hybrid",
+      "schemaSha256": "31c835312493101c09e027b1b3c5a7f913ac0683da48ca0bd127b0bf7694a55c"
+    },
+    {
+      "name": "table link list",
+      "method": "POST",
+      "path": "/table/link-list",
+      "runtime": "hybrid",
+      "requires_auth": true,
+      "schemaSha256": "9426ecf5aa9b6e835dd53675d70889ac8af6894a772322fc62ceb47454473d54"
+    },
+    {
+      "name": "table link populate-choices",
+      "method": "POST",
+      "path": "/table/populate-choices",
+      "risk": "write",
+      "runtime": "local",
+      "schemaSha256": "b8189a008ae9efbf169c2e0c8cac847cbe741e769144029403e74d8c12938409"
+    },
+    {
+      "name": "table link remove",
+      "method": "POST",
+      "path": "/table/link-remove",
+      "risk": "write",
+      "runtime": "hybrid",
+      "requires_auth": true,
+      "schemaSha256": "026ae9ef41258abc4f8e1a433e3e6ced715940559dbd4d0596b1c866749559c7"
+    },
+    {
+      "name": "table link set",
+      "method": "POST",
+      "path": "/table/link-set",
+      "risk": "write",
+      "runtime": "hybrid",
+      "requires_auth": true,
+      "schemaSha256": "8aeffff47ff032e8356a21ed8b6b0bf909bd09390331eb6a0f6215733e03df99"
+    },
+    {
+      "name": "table link update",
+      "method": "POST",
+      "path": "/table/link-update",
+      "risk": "write",
+      "runtime": "hybrid",
+      "requires_auth": true,
+      "schemaSha256": "e58556628b451ad0137f5acfa9fdf96dfda9d2d9f1a38872118c989b28dd9368"
+    },
+    {
+      "name": "table list",
+      "method": "POST",
+      "path": "/table/list",
+      "runtime": "hybrid",
+      "requires_auth": true,
+      "schemaSha256": "375f49845412b1b2e657905d86cabb2d83f4c56535f2db73e13507d664657cd7"
+    },
+    {
+      "name": "table move",
+      "risk": "write",
+      "runtime": "local",
+      "requires_auth": true,
+      "schemaSha256": "aba3ad4d12f4cf8dcc789668315018fcc3861a32326af4ff6df76e0428fb26aa"
+    },
+    {
+      "name": "table policy",
+      "is_group": true,
+      "schemaSha256": "48b8a8554716c6d9b65834626621bd941adf3214db69fea223031df4d53fba19"
+    },
+    {
+      "name": "table policy create",
+      "method": "POST",
+      "path": "/table/policy-create",
+      "risk": "write",
+      "runtime": "local",
+      "schemaSha256": "979776bccb59a3da055927e5cb5c8ffd82ec552ec896e49931469a870437555d"
+    },
+    {
+      "name": "table policy delete",
+      "method": "POST",
+      "path": "/table/policy-delete",
+      "risk": "high-risk-write",
+      "runtime": "local",
+      "schemaSha256": "91d058b5be6f19275de605d365756f514a09158cef85978ab8b3bae78c121b6e"
+    },
+    {
+      "name": "table policy list",
+      "method": "POST",
+      "path": "/table/policy-list",
+      "runtime": "local",
+      "schemaSha256": "a9e8bddc946ce9a9af5fc6e199b0ef61089c765bf00ba2b516eba521961ba9b9"
+    },
+    {
+      "name": "table policy rls-toggle",
+      "method": "POST",
+      "path": "/table/policy-rls-toggle",
+      "risk": "write",
+      "runtime": "local",
+      "schemaSha256": "0ebeadda2c7cb2442ad0137411cb114412e6cf08bdb2f3431b3e653386701dbf"
+    },
+    {
+      "name": "table policy update",
+      "method": "POST",
+      "path": "/table/policy-update",
+      "risk": "write",
+      "runtime": "local",
+      "schemaSha256": "24276fe6a194e23c26f0c35a62f2e22282fe735a2a44d08cb3a30734968bdaa7"
+    },
+    {
+      "name": "table query",
+      "method": "POST",
+      "path": "/table/query",
+      "runtime": "local",
+      "schemaSha256": "bd54b704c899af0c96ccc29e28faea8c8d86135f2dff3a561c4535d27055dbbe"
+    },
+    {
+      "name": "table record",
+      "is_group": true,
+      "schemaSha256": "fe1eceab0400cb6a272fb0a7c5d3341081f5ce4b5cff66d5d373efd27f569831"
+    },
+    {
+      "name": "table record bulk-insert",
+      "method": "POST",
+      "path": "/table/bulk-insert",
+      "risk": "write",
+      "runtime": "local",
+      "schemaSha256": "0f36ca1dda3c6faf0a96daa1a7d6c3e3f34b54ac858fc8def5ac7db4654bd612"
+    },
+    {
+      "name": "table record comment",
+      "is_group": true,
+      "schemaSha256": "ecc5945195621777aa8fc0f6ab98849635b1b1d83b66a8273825a8f8455f710b"
+    },
+    {
+      "name": "table record comment create",
+      "method": "POST",
+      "path": "/api/tabdata/records/{record_id}/comments",
+      "risk": "write",
+      "runtime": "cloud",
+      "requires_auth": true,
+      "schemaSha256": "bdb2c818109011f13693d23e63c1ef346566cbab0515476209f531f0138b9bdd"
+    },
+    {
+      "name": "table record comment list",
+      "method": "GET",
+      "path": "/api/tabdata/records/{record_id}/comments",
+      "runtime": "cloud",
+      "requires_auth": true,
+      "schemaSha256": "9dc9a705d803c0657c03f1383ec09ac948d3fa9679dd31235ef680cf3a5b4fc6"
+    },
+    {
+      "name": "table record comment reopen",
+      "method": "PATCH",
+      "path": "/api/tabdata/records/{record_id}/comment-threads/{thread_id}/status",
+      "risk": "write",
+      "runtime": "cloud",
+      "requires_auth": true,
+      "schemaSha256": "6508c3a11001759e9900e867522a2d4470a657af395f8718a2e3778d7a44b5b3"
+    },
+    {
+      "name": "table record comment reply",
+      "method": "POST",
+      "path": "/api/tabdata/records/{record_id}/comments",
+      "risk": "write",
+      "runtime": "cloud",
+      "requires_auth": true,
+      "schemaSha256": "048bb38e0ed2aaf79548a5519d237c0705476fa7e29be59fa333622179050aaa"
+    },
+    {
+      "name": "table record comment resolve",
+      "method": "PATCH",
+      "path": "/api/tabdata/records/{record_id}/comment-threads/{thread_id}/status",
+      "risk": "write",
+      "runtime": "cloud",
+      "requires_auth": true,
+      "schemaSha256": "b034bc1b4088dc24c8e8b0ce4bcba3ac70a739d45a4b4eb4713ce92df7a9720b"
+    },
+    {
+      "name": "table record comment rm",
+      "method": "DELETE",
+      "path": "/api/tabdata/records/{record_id}/comments/{comment_id}",
+      "risk": "write",
+      "runtime": "cloud",
+      "requires_auth": true,
+      "schemaSha256": "3c9af2078e6717204866ffc84fe284c8e3faeb1a1165a8c54fc840282de0105c"
+    },
+    {
+      "name": "table record delete",
+      "method": "POST",
+      "path": "/table/delete",
+      "risk": "high-risk-write",
+      "runtime": "hybrid",
+      "requires_auth": true,
+      "schemaSha256": "a3d6045619a3b62981d18fa298c17697c27b1dc65e112127d66f52e412e753ab"
+    },
+    {
+      "name": "table record detail",
+      "method": "POST",
+      "path": "/table/record-detail",
+      "runtime": "hybrid",
+      "requires_auth": true,
+      "schemaSha256": "3d0d9ddbfc95cde87d6c9785d519d6a8b60ee8239a54d3add6a3b867c95b3ede"
+    },
+    {
+      "name": "table record history",
+      "method": "POST",
+      "path": "/table/record-history",
+      "runtime": "local",
+      "schemaSha256": "15683272d90d690a1314d3aee12724c1e43882fece635239ce44129db2e42381"
+    },
+    {
+      "name": "table record insert",
+      "method": "POST",
+      "path": "/table/insert",
+      "risk": "write",
+      "runtime": "hybrid",
+      "requires_auth": true,
+      "schemaSha256": "b16b0dd20b9698db447e5073f5b2a0e042003a4db7ad18966e4ff452df4917b5"
+    },
+    {
+      "name": "table record list",
+      "method": "POST",
+      "path": "/table/records",
+      "runtime": "hybrid",
+      "requires_auth": true,
+      "schemaSha256": "0adba575d82dc7c406150658567b8fba4b3198883f4e4f21619ab49b084f31e2"
+    },
+    {
+      "name": "table record redo",
+      "method": "POST",
+      "path": "/table/record-redo",
+      "risk": "write",
+      "runtime": "local",
+      "schemaSha256": "fe8855706ff70c2ff80b38ba728945c3ca6e48a43117405a7ddbc5aa3c51ac6f"
+    },
+    {
+      "name": "table record reorder",
+      "method": "POST",
+      "path": "/table/records-reorder",
+      "risk": "write",
+      "runtime": "local",
+      "schemaSha256": "4688713ed43b97ee47e17a43bfc0bab5401208d34463c3cca280b5fa428f38a8"
+    },
+    {
+      "name": "table record undo",
+      "method": "POST",
+      "path": "/table/record-undo",
+      "risk": "write",
+      "runtime": "local",
+      "schemaSha256": "389e562448be14e403c2bc0cdd48bc458b42f598816b2d6f4ded240b50b8819c"
+    },
+    {
+      "name": "table record update",
+      "method": "POST",
+      "path": "/table/update",
+      "risk": "write",
+      "runtime": "hybrid",
+      "requires_auth": true,
+      "schemaSha256": "231b9597467c01d8b1a05b8d39852b7fe124abe4400173092c162484d7ce12a3"
+    },
+    {
+      "name": "table record update-by-filter",
+      "is_group": true,
+      "schemaSha256": "1877adf02382ad52b3098097ce058cb1a1d5425d8a66970d19f0d12c71c5e23a"
+    },
+    {
+      "name": "table record update-by-filter commit",
+      "method": "POST",
+      "path": "/api/tabdata/tables/{table_id}/records/update-by-filter/commit",
+      "risk": "write",
+      "runtime": "hybrid",
+      "requires_auth": true,
+      "schemaSha256": "2a69120c60f6506204e2cd01150ac7f02ca78b86aca57762d26c7d670b623abe"
+    },
+    {
+      "name": "table record update-by-filter preflight",
+      "method": "POST",
+      "path": "/api/tabdata/tables/{table_id}/records/update-by-filter/preflight",
+      "risk": "write",
+      "runtime": "hybrid",
+      "requires_auth": true,
+      "schemaSha256": "afec0d0c443cc86d6b2774dd5781afbbb323d9cbd999aeba6150d29efc1b4840"
+    },
+    {
+      "name": "table record upsert",
+      "method": "POST",
+      "path": "/table/upsert",
+      "risk": "write",
+      "runtime": "local",
+      "schemaSha256": "99172aba16e4c72c86426a1b15e9782b601ab6bdceb4b00660ca48504087dcaf"
+    },
+    {
+      "name": "table restore",
+      "method": "POST",
+      "path": "/table/restore",
+      "risk": "write",
+      "runtime": "local",
+      "schemaSha256": "d842727fb7208a7147a4409640ea3a0832fca5ece43d22b6b0b6eaa899a2d440"
+    },
+    {
+      "name": "table search",
+      "method": "POST",
+      "path": "/table/search",
+      "runtime": "local",
+      "schemaSha256": "1ff6f8c078a0dce16d09d60d5ce79dc425060bb5d14d4e4aeb9e6bb7dddaa7cf"
+    },
+    {
+      "name": "table search-index",
+      "is_group": true,
+      "schemaSha256": "bdc1a3582cf9e07722f218a1d8f1d6f3a6c60031397e2f668afccebf7bc239f8"
+    },
+    {
+      "name": "table search-index query",
+      "method": "POST",
+      "path": "/table/search-index-query",
+      "runtime": "local",
+      "schemaSha256": "b465eea30ecac52ec6fef9166e085b5a8181a0c5f8d5fa7b219da223e3835d8f"
+    },
+    {
+      "name": "table search-index repair",
+      "method": "POST",
+      "path": "/table/search-index-repair",
+      "risk": "write",
+      "runtime": "local",
+      "schemaSha256": "cdfb2fa54b092769e29d4f92c0289fe1781cf6c32e4cf34ed82b05f68a77c577"
+    },
+    {
+      "name": "table search-index status",
+      "method": "POST",
+      "path": "/table/search-index-status",
+      "runtime": "local",
+      "schemaSha256": "469c8054c1337ac7815822b1f9aa59e6fa75ebd9c7c522c14e13ba4f12d9be8e"
+    },
+    {
+      "name": "table search-index toggle",
+      "method": "POST",
+      "path": "/table/search-index-toggle",
+      "risk": "write",
+      "runtime": "local",
+      "schemaSha256": "3cc4f6252ecf47971121e9b760fb5024e88c8c36ffd4230e5a835270ad6905e2"
+    },
+    {
+      "name": "table share",
+      "is_group": true,
+      "schemaSha256": "6288a1e4f9346ba87dedb935db3323dadaf13ad12742932c8d1586346ea56a33"
+    },
+    {
+      "name": "table share get",
+      "method": "GET",
+      "path": "/api/tabdata/tables/{table_id}/share",
+      "runtime": "cloud",
+      "requires_auth": true,
+      "schemaSha256": "02fb2dcc9df5cdeba699d457e67e4ba9b98d0e54d679110fc4312f720529c248"
+    },
+    {
+      "name": "table share off",
+      "method": "DELETE",
+      "path": "/api/tabdata/tables/{table_id}/share",
+      "risk": "write",
+      "runtime": "cloud",
+      "requires_auth": true,
+      "schemaSha256": "d9641fb7631dc07576635a086cd597528cbe95bfd27966ac2271529e91adaf37"
+    },
+    {
+      "name": "table share set",
+      "method": "POST",
+      "path": "/api/tabdata/tables/{table_id}/share",
+      "risk": "write",
+      "runtime": "cloud",
+      "requires_auth": true,
+      "schemaSha256": "ee123f45aba559765152a0f41eb7d23644ccae415ca657254cfa2eb230a06ae0"
+    },
+    {
+      "name": "table share shared-with-me",
+      "method": "GET",
+      "path": "/api/tabdata/shared-with-me",
+      "runtime": "cloud",
+      "requires_auth": true,
+      "schemaSha256": "dda01800ebb77d84a4fafb799c036260267a4e59ba1992f0842dfa5e648542b5"
+    },
+    {
+      "name": "table stats",
+      "method": "POST",
+      "path": "/table/stats",
+      "runtime": "local",
+      "schemaSha256": "8f3040f8194d8b8f8b5f81c09c00e65494c7b4f688ff0a336be389fa31fba407"
+    },
+    {
+      "name": "table sub-record",
+      "is_group": true,
+      "schemaSha256": "73b9032a36d47be0dfcc2c338fd388734e6bb28752920e5a7a04075d4cc0833d"
+    },
+    {
+      "name": "table sub-record create",
+      "method": "POST",
+      "path": "/table/sub-record-create",
+      "risk": "write",
+      "runtime": "local",
+      "schemaSha256": "408f56d0787ba2a32c5a57444ae9b2d9298dd18705db00cfbf5936d3af0a94ce"
+    },
+    {
+      "name": "table sub-record ensure-parent-field",
+      "method": "POST",
+      "path": "/table/ensure-parent-field",
+      "risk": "write",
+      "runtime": "local",
+      "schemaSha256": "043bdf00d65b2d41312b600ca204074162069ea1f68e07328f5d176f4b3ca461"
+    },
+    {
+      "name": "table sub-record move",
+      "method": "POST",
+      "path": "/table/sub-record-move",
+      "risk": "write",
+      "runtime": "local",
+      "schemaSha256": "bfdfc0cd4f7147db5e4ea3f5ffc1c9c3ea940a655d6c9954bfc8132d488c2904"
+    },
+    {
+      "name": "table sub-record parent-field",
+      "method": "POST",
+      "path": "/table/parent-field",
+      "runtime": "local",
+      "schemaSha256": "93b40a0d2b20260691762bd11ec038bc43ed013dbacb770638c8246bd242d366"
+    },
+    {
+      "name": "table sub-record reorder-tree",
+      "method": "POST",
+      "path": "/table/reorder-tree",
+      "risk": "write",
+      "runtime": "local",
+      "schemaSha256": "dade1a2fc97ce2808fc3c5b3139ad330dc48a2e85eed2157bcf830cfd50f76da"
+    },
+    {
+      "name": "table sub-record self-link-fields",
+      "method": "POST",
+      "path": "/table/self-link-fields",
+      "runtime": "local",
+      "schemaSha256": "8f7773386cd5e3ca6b8ddc460290847928305e06b9dd373f2f94ec6579f56cdc"
+    },
+    {
+      "name": "table token",
+      "is_group": true,
+      "schemaSha256": "9abfa2d73a219b4687572ea3f9a7cdbb8b2e90f345997153f039222329828e3e"
+    },
+    {
+      "name": "table token create",
+      "method": "POST",
+      "path": "/table/token-create",
+      "risk": "write",
+      "runtime": "local",
+      "schemaSha256": "c06f0d273ae0b3d694fe177d9c5ef06ce15436e21073db98ad6be0cb08a75170"
+    },
+    {
+      "name": "table token delete",
+      "method": "POST",
+      "path": "/table/token-delete",
+      "risk": "high-risk-write",
+      "runtime": "local",
+      "schemaSha256": "0b47f7ea6694d79fd79dce9660d5b33a0e8639a69ddbad8b1c26270adca46540"
+    },
+    {
+      "name": "table token detail",
+      "method": "POST",
+      "path": "/table/token-detail",
+      "runtime": "local",
+      "schemaSha256": "7f0fe26b81b6ceb84710e2f84df409ebcada79c4fc2c84a4d4019dabcda914a0"
+    },
+    {
+      "name": "table token list",
+      "method": "POST",
+      "path": "/table/token-list",
+      "runtime": "local",
+      "schemaSha256": "be5a3bd2350cd8e6c0b7dbcac5c5950441d8670465280a8b6fc5a5bdf357c11a"
+    },
+    {
+      "name": "table token regenerate",
+      "method": "POST",
+      "path": "/table/token-regenerate",
+      "risk": "write",
+      "runtime": "local",
+      "schemaSha256": "a222eae838a85e34bba620cbc077a9714c283730d404ae6a2425865cf7151274"
+    },
+    {
+      "name": "table token scopes",
+      "method": "POST",
+      "path": "/table/token-scopes",
+      "runtime": "local",
+      "schemaSha256": "d121ada02ca621aad60342dc9241f9a3df15de6a1a462418ee2e8ac782e549f0"
+    },
+    {
+      "name": "table token update",
+      "method": "POST",
+      "path": "/table/token-update",
+      "risk": "write",
+      "runtime": "local",
+      "schemaSha256": "9af9d2de7fc7f7606008fd5699aa7b710f3f85ee8313c196c2b928d3f29c97b0"
+    },
+    {
+      "name": "table trash",
+      "is_group": true,
+      "schemaSha256": "2b2de1e13466d2aa10be14f16fa594cf3843be162e26bc70bcdf9532f8bd2b29"
+    },
+    {
+      "name": "table trash list",
+      "method": "POST",
+      "path": "/table/trash-list",
+      "runtime": "local",
+      "schemaSha256": "3fe08e79cbb77b26d2bf147c476c47c684023b7ef4747e44e970fceb23425dbc"
+    },
+    {
+      "name": "table trash permanent",
+      "method": "POST",
+      "path": "/table/trash-permanent",
+      "risk": "high-risk-write",
+      "runtime": "local",
+      "schemaSha256": "e5a099b1c779c654c6027d9c31f49bdd200f13313f20ef49f96d7375ac86ab0e"
+    },
+    {
+      "name": "table trash restore",
+      "method": "POST",
+      "path": "/table/trash-restore",
+      "risk": "write",
+      "runtime": "local",
+      "schemaSha256": "a97ec304523e46a16818a43e80ffd3769c5034b89a310f29289733a0d70571ab"
+    },
+    {
+      "name": "table update",
+      "method": "POST",
+      "path": "/table/update-table",
+      "risk": "write",
+      "runtime": "local",
+      "schemaSha256": "e76eccc22064e4504ca4f306ed9653d4144ee76344869418cbdb2ebe6058ac8c"
+    },
+    {
+      "name": "table version",
+      "is_group": true,
+      "schemaSha256": "80a34e0c90f055901997a85d35c3fcbe3bced403c3860141b19584d383031449"
+    },
+    {
+      "name": "table version create",
+      "method": "POST",
+      "path": "/table/create-named-version",
+      "risk": "write",
+      "runtime": "local",
+      "schemaSha256": "86df40a648d2d25839b040101dbf8db862fcd06b708a9847802ac06fe3dbd3d0"
+    },
+    {
+      "name": "table version delete",
+      "method": "POST",
+      "path": "/table/delete-named-version",
+      "risk": "high-risk-write",
+      "runtime": "local",
+      "schemaSha256": "399a5f03af7f66eefdadb3bcc14549143320aff3183d6069dd4150837ac4ebfc"
+    },
+    {
+      "name": "table version list",
+      "method": "POST",
+      "path": "/table/named-versions",
+      "runtime": "local",
+      "schemaSha256": "6998e68a3f099382b82fe06083e3e7bc79a65f36fe6c006c74b31197fc8152e5"
+    },
+    {
+      "name": "table version rename",
+      "method": "POST",
+      "path": "/table/rename-named-version",
+      "risk": "write",
+      "runtime": "local",
+      "schemaSha256": "78f94009e49d95ca595b772d19ee19d49850bf0ccc5d86eea77d0d0aeb971dc8"
+    },
+    {
+      "name": "table view",
+      "is_group": true,
+      "schemaSha256": "a02e121bfc3d07834ecd5a8ce521185a8052dd5cb6fdedbda776d4f1a8a26d95"
+    },
+    {
+      "name": "table view create",
+      "method": "POST",
+      "path": "/table/create-view",
+      "risk": "write",
+      "runtime": "local",
+      "schemaSha256": "970d031b3908dbb269a6fe48d811a392a7a5393d98d8b17b11714e447c2a673f"
+    },
+    {
+      "name": "table view delete",
+      "method": "POST",
+      "path": "/table/delete-view",
+      "risk": "high-risk-write",
+      "runtime": "local",
+      "schemaSha256": "3a22ed5a53219f56646dcc55970092314b9b792347658ae608cf195d81a95bcd"
+    },
+    {
+      "name": "table view detail",
+      "method": "POST",
+      "path": "/table/view-detail",
+      "runtime": "local",
+      "schemaSha256": "f20135399cbd69e8587996d148b2a74d4ef25ba02ccf9a9a3dfbc05f39eaed67"
+    },
+    {
+      "name": "table view form-share-disable",
+      "method": "POST",
+      "path": "/table/form-share-disable",
+      "risk": "write",
+      "runtime": "local",
+      "schemaSha256": "f5f618b2aed670ad1579ce4d3235a95ef48792fd3e0404dc5ace79613767d08a"
+    },
+    {
+      "name": "table view form-share-enable",
+      "method": "POST",
+      "path": "/table/form-share-enable",
+      "risk": "write",
+      "runtime": "local",
+      "schemaSha256": "a2fbfbce59d3e9d0434190f461db5c8bb96a57b16b4774022ccb93879cb140a0"
+    },
+    {
+      "name": "table view form-share-rotate",
+      "method": "POST",
+      "path": "/table/form-share-rotate",
+      "risk": "write",
+      "runtime": "local",
+      "schemaSha256": "35270ab82edadc28fdc4e596ac4ad8bccf1e4d56e894f19b3ea123431025846f"
+    },
+    {
+      "name": "table view list",
+      "method": "POST",
+      "path": "/table/views",
+      "runtime": "local",
+      "schemaSha256": "2ee5f55a531d15425f81e9147196a1f43e8e6cef2c5d862e6bafa9207a7f07a8"
+    },
+    {
+      "name": "table view records",
+      "method": "POST",
+      "path": "/table/view-records",
+      "runtime": "local",
+      "schemaSha256": "7c402457b9090348635a22a6c5189ba1295a6049ad9da05413fdf9342ce8ffa3"
+    },
+    {
+      "name": "table view reorder",
+      "method": "POST",
+      "path": "/table/reorder-views",
+      "risk": "write",
+      "runtime": "local",
+      "schemaSha256": "a3323e64fa3baac16d4c29b09ba51a9945657b6683b6593304c8820545e49193"
+    },
+    {
+      "name": "table view set-default",
+      "method": "POST",
+      "path": "/table/set-default-view",
+      "risk": "write",
+      "runtime": "local",
+      "schemaSha256": "357148d8b6cf32bdc2a89c81992e122266524e9ce3efeaab2135b67276bc5109"
+    },
+    {
+      "name": "table view statistics",
+      "method": "POST",
+      "path": "/table/view-column-statistics",
+      "runtime": "local",
+      "schemaSha256": "52ffde9ebf4c0874b9c4c600f37bfefc2f573bc109fbf35b969aa670c648b6bc"
+    },
+    {
+      "name": "table view update",
+      "method": "POST",
+      "path": "/table/update-view",
+      "risk": "write",
+      "runtime": "local",
+      "schemaSha256": "1ec855e9158414b5fd1b1bbd3b1278e17d060f58d852904b07ed0bbdff8e59a2"
+    },
+    {
+      "name": "table webhook",
+      "is_group": true,
+      "schemaSha256": "f94141a6dc7cf98fc5be6de6f4343e8c93a19d40c070b8ba156d1cbc9f29d89d"
+    },
+    {
+      "name": "table webhook create",
+      "method": "POST",
+      "path": "/table/webhook-create",
+      "risk": "write",
+      "runtime": "local",
+      "schemaSha256": "05b833d51c8ba881c6c38e87bf67c2134358ae282aa0f6abd68b6ff9653034da"
+    },
+    {
+      "name": "table webhook delete",
+      "method": "POST",
+      "path": "/table/webhook-delete",
+      "risk": "high-risk-write",
+      "runtime": "local",
+      "schemaSha256": "0ce095d4ba1382e3e65e40e882a2fa9b34dc454a956278e81ea569580c2b8c16"
+    },
+    {
+      "name": "table webhook list",
+      "method": "POST",
+      "path": "/table/webhook-list",
+      "runtime": "local",
+      "schemaSha256": "bcc9c9e3970a381ef6ea6d16096b7c6ff440a2d4835ae0b48488aeacd02b0779"
+    },
+    {
+      "name": "table webhook test",
+      "method": "POST",
+      "path": "/table/webhook-test",
+      "runtime": "local",
+      "schemaSha256": "c558aaa9483d8b15434c7b9768980b713b481d487f6ee4c3318ce6add85f65fa"
+    },
+    {
+      "name": "table webhook update",
+      "method": "POST",
+      "path": "/table/webhook-update",
+      "risk": "write",
+      "runtime": "local",
+      "schemaSha256": "658818fc9db6a786f88f1ea8cc7af0482dce1d4488a80a16134e4f129c032715"
+    },
+    {
+      "name": "task",
+      "is_group": true,
+      "schemaSha256": "d93190a724a0c01a67a1b9748043ccd5e6f7ad5dbedba098e6994c36d91490a8"
+    },
+    {
+      "name": "task cancel",
+      "method": "POST",
+      "path": "/media/tasks/{id}/cancel",
+      "risk": "write",
+      "runtime": "local",
+      "schemaSha256": "09749956a62107eb1b1a5067b8327562a81741758cbbb7ab352683af843f27ea"
+    },
+    {
+      "name": "task list",
+      "method": "GET",
+      "path": "/media/tasks",
+      "runtime": "local",
+      "schemaSha256": "85e08a82c958d563d031e71a9d3348890d7482fd57faddff6424836da4bd845b"
+    },
+    {
+      "name": "task status",
+      "method": "GET",
+      "path": "/media/tasks/{id}",
+      "runtime": "local",
+      "schemaSha256": "ef5be349fe639f95e5141da40bde4a7cf6f1df6d14cdbd5e765dbde8b68d9296"
+    },
+    {
+      "name": "terminal",
+      "is_group": true,
+      "schemaSha256": "0cbd271204d3b9e0f173ec12ddb02a661300e3009ed7000c2fa2a3eb51f282cc"
+    },
+    {
+      "name": "terminal list",
+      "method": "POST",
+      "path": "/terminal/list",
+      "runtime": "local",
+      "schemaSha256": "4b2ef3bf67139b5b5cd7d495b7cdcb2fbd7f5b2decd3e6db1786fd9debf1dd0d"
+    },
+    {
+      "name": "terminal open",
+      "method": "POST",
+      "path": "/terminal/open",
+      "risk": "write",
+      "runtime": "local",
+      "schemaSha256": "7f184e9fd55a0c8c5276c5b7e32f829ad55c5dacf670be24f0014b3cb5198619"
+    },
+    {
+      "name": "tracker",
+      "is_group": true,
+      "schemaSha256": "0716fe70d24c4d6b5f2d5fdaae2c59e79df0cc26cc178281782e70aa3ede2bd2"
+    },
+    {
+      "name": "tracker activate",
+      "method": "POST",
+      "path": "/api/tracker/events/{tracker_id}/activate",
+      "risk": "write",
+      "runtime": "cloud",
+      "requires_auth": true,
+      "schemaSha256": "8822568e0615f4bdbd5c9d3eda695227db9fe38965707c4cd7fa5585c752be4a"
+    },
+    {
+      "name": "tracker cancel-run",
+      "method": "POST",
+      "path": "/api/tracker/events/{tracker_id}/runs/{run_id}/cancel",
+      "risk": "write",
+      "runtime": "cloud",
+      "requires_auth": true,
+      "schemaSha256": "81fa972618310b35d210f1d6795a73b7de6bcdbc18e8bfccc066241adb6a71a1"
+    },
+    {
+      "name": "tracker delete",
+      "method": "DELETE",
+      "path": "/api/tracker/events/{tracker_id}",
+      "risk": "high-risk-write",
+      "runtime": "cloud",
+      "requires_auth": true,
+      "schemaSha256": "b5d351ad1311d3b81e1d01479c655004c48f3ba6c3461556ef1cf6f4cd817eea"
+    },
+    {
+      "name": "tracker dry-run",
+      "method": "POST",
+      "path": "/api/tracker/events/{tracker_id}/dry-run",
+      "runtime": "cloud",
+      "requires_auth": true,
+      "schemaSha256": "10089a51da41ce93c892fbd7c42b3a56c4afe4183dbe0a12138fd0610abc9e14"
+    },
+    {
+      "name": "tracker list",
+      "method": "GET",
+      "path": "/api/tracker/events",
+      "runtime": "cloud",
+      "requires_auth": true,
+      "schemaSha256": "056f1a054fe6627d49751f65a8b8d20e92998ac6bed76469aef295494060a7d4"
+    },
+    {
+      "name": "tracker new",
+      "method": "POST",
+      "path": "/api/tracker/events",
+      "risk": "write",
+      "runtime": "cloud",
+      "requires_auth": true,
+      "schemaSha256": "3a2c3c1e14ed7583d20b1653a2b9b6600e7fa60d148010b2ac94f774855423cb"
+    },
+    {
+      "name": "tracker pause",
+      "method": "POST",
+      "path": "/api/tracker/events/{tracker_id}/pause",
+      "risk": "write",
+      "runtime": "cloud",
+      "requires_auth": true,
+      "schemaSha256": "4b8171fcc6e890a2db9fc40d2fb34447762dae7443edda784e32176d30c760f7"
+    },
+    {
+      "name": "tracker resume",
+      "method": "POST",
+      "path": "/api/tracker/events/{tracker_id}/resume",
+      "risk": "write",
+      "runtime": "cloud",
+      "requires_auth": true,
+      "schemaSha256": "ee115d811b473249b94b3bfe80307a58c2a337696e0102b03f4ce7da323c1c0a"
+    },
+    {
+      "name": "tracker run-show",
+      "method": "GET",
+      "path": "/api/tracker/events/{tracker_id}/runs/{run_id}",
+      "runtime": "cloud",
+      "requires_auth": true,
+      "schemaSha256": "1df55c49d2049788c4a53e2202794da0835f15d3d8cfe6d57c49cb9314647555"
+    },
+    {
+      "name": "tracker runs",
+      "method": "GET",
+      "path": "/api/tracker/events/{tracker_id}/runs",
+      "runtime": "cloud",
+      "requires_auth": true,
+      "schemaSha256": "f62323b7ebade7cd7c4f46eaf8d72fa4e80277c121a1a1d9bca40e3a826c341a"
+    },
+    {
+      "name": "tracker show",
+      "method": "GET",
+      "path": "/api/tracker/events/{tracker_id}",
+      "runtime": "cloud",
+      "requires_auth": true,
+      "schemaSha256": "b5c2355d64185a4a851d74260b3976c88c1f7fbac3180202aec13dd38d85cc6a"
+    },
+    {
+      "name": "tracker trigger",
+      "method": "POST",
+      "path": "/api/tracker/events/{tracker_id}/trigger",
+      "risk": "write",
+      "runtime": "cloud",
+      "requires_auth": true,
+      "schemaSha256": "b4d0399cded71532955708f0c160676cf01c1620d2401ffdba0f0d332d5eb773"
+    },
+    {
+      "name": "workspace",
+      "is_group": true,
+      "schemaSha256": "257af0b7e01ca48801a5e3d35dfc18559a131786fe077aeccbc315b79535e665"
+    },
+    {
+      "name": "workspace current",
+      "runtime": "cloud",
+      "schemaSha256": "63265739d6688b567d1f846411ea62d2485ed0e13b69c8909532f68634f64bc6"
+    },
+    {
+      "name": "workspace list",
+      "method": "POST",
+      "path": "/workspace/list",
+      "runtime": "hybrid",
+      "requires_auth": true,
+      "schemaSha256": "55e52e8a097235e05b20b3f0a5562c2227c33c37483d312b8dda2bf0963926fb"
+    },
+    {
+      "name": "workspace tables",
+      "method": "POST",
+      "path": "/table/list",
+      "runtime": "hybrid",
+      "requires_auth": true,
+      "schemaSha256": "ecc58c7e6ca5ac4d4e17708e720c381201edb11a9636bfe79d39ceb9d078f77a"
+    },
+    {
+      "name": "workspace use",
+      "risk": "write",
+      "runtime": "cloud",
+      "schemaSha256": "67de8b21cd8095b7887cb489581f5607d894d30c6a53d0436f048e18dfe08db8"
+    }
+  ]
+}

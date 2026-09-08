@@ -2595,7 +2595,7 @@ interface NormalizedSSEUsage {
   reasoningTokens: number | undefined;
 }
 
-function normalizeSSEUsage(usage: NonNullable<SSEChunk['usage']>): NormalizedSSEUsage {
+export function normalizeSSEUsage(usage: NonNullable<SSEChunk['usage']>): NormalizedSSEUsage {
   const cacheTokens = readSSECacheTokens(usage);
   const rawInput = usage.prompt_tokens ?? 0;
   return {

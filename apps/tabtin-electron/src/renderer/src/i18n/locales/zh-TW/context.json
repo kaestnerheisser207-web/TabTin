@@ -1889,13 +1889,15 @@
       "other": "其他"
     },
     "deviceStatus": {
-      "remote": "遠端",
+      "remote": "其他裝置",
       "offline": "離線",
       "unbound": "未綁定",
       "remoteDevice": "執行設備",
-      "remoteTitle": "Agent 在「{{device}}」上運作，需要切換到該裝置才能操作這個應用",
+      "remoteTitle": "工作空間在裝置「{{device}}」上執行，目錄位於該裝置",
       "offlineTitle": "Agent 的執行設備「{{device}}」目前不在線上",
-      "unboundTitle": "Agent 還沒有綁定執行設備"
+      "unboundTitle": "Agent 還沒有綁定執行設備",
+      "cloud": "雲端",
+      "cloudTitle": "工作空間在雲端執行，目錄位於雲端環境"
     },
     "terminalOverview": {
       "current": "目前",

@@ -9,6 +9,7 @@ export {
 } from './agent-config-client.js'
 export {
   HostTurnStore,
+  resolveHostAgentHarness,
   type ApprovalGrantName,
   type HostAgentDetail,
   type HostOrganizationDetail,

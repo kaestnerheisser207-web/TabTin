@@ -30,7 +30,7 @@ import type { TokenEstimator } from '../context/token-budget.js';
 
 export function* emitSkillInjectedUserEvents(
   messages: Message[],
-  deps: QueryDeps,
+  deps: Pick<QueryDeps, 'generateUUID'>,
 ): Generator<StreamEvent, void, undefined> {
   for (const msg of messages) {
     const textContent = extractInjectedText(msg);
@@ -84,7 +84,7 @@ export function createSkillSlashHook(args: {
   request: QueryParams['skillSlashInvoke'];
   activation: ((input: { skill: string; args?: string; agentRunId?: string }) => Promise<ToolResult>) | undefined;
   refreshEnablement?: () => Promise<void>;
-  deps: QueryDeps;
+  deps: Pick<QueryDeps, 'generateUUID'>;
   tokenEstimator: TokenEstimator;
   activeSkillRef: { current: { skillKey: string; primaryEnv?: string } | null };
 }): EngineHooks {

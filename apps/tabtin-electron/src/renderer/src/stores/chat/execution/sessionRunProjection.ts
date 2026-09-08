@@ -28,6 +28,7 @@ import {
   type SessionRunProjectionAction,
 } from './sessionRunProjectionReducer'
 import { bindActiveRun } from './activeRunBinding'
+import { markSessionSuspended } from '@/services/sessionSuspended'
 
 export type {
   SessionRunProjection,
@@ -207,6 +208,8 @@ export function applyRuntimeRunSync(
     now: Date.now(),
   })
   if (accepted) {
+    // 本机 IPC 已提供新鲜状态，先前 Gateway 断线留下的 suspended 不再成立。
+    clearLocalTransportSuspension(sessionId)
     // ：busy 投影与 ActiveRunBinding 同源写 runId（不写 message_id）。
     if (data.run_id && (data.status === 'running' || data.status === 'queued')) {
       bindActiveRun(sessionId, { runId: data.run_id })
@@ -221,6 +224,12 @@ export function applyRuntimeRunSync(
     })
   }
   return accepted
+}
+
+function clearLocalTransportSuspension(sessionId: string): void {
+  if (useChatRuntimeStore.getState().runStateBySessionId[sessionId]?.suspended) {
+    markSessionSuspended(sessionId, false)
+  }
 }
 
 export interface LocalRunIdentity {
@@ -268,6 +277,7 @@ export function applyRunReconcile(
     busy: authoritative.busy,
     now: Date.now(),
   })
+  clearLocalTransportSuspension(sessionId)
 }
 
 // ── 读路径 ─────────────────────────────────────────────────────────
