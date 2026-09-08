@@ -1,26 +1,49 @@
 name: Deploy Muse VPS
 run-name: >-
   ${{ github.event_name == 'workflow_dispatch'
-    && format('Deploy Cloud Host · {0}', inputs.release_sha)
-    || format('Deploy PR #{0} · {1}', github.event.pull_request.number, github.event.pull_request.title) }}
+    && format('Deploy {0} → {1} · {2}', inputs.deployment, inputs.target, inputs.release_sha)
+    || format('Deploy standard → sg01 · PR #{0} · {1}', github.event.pull_request.number, github.event.pull_request.title) }}
 
 on:
+  pull_request:
+    branches: [main]
+    paths:
+      - '.github/workflows/deploy-tabtin-vps.yml'
+      - 'scripts/deploy/**'
+      - 'scripts/tests/test_vps_*.py'
   pull_request_target:
     types: [closed]
     branches: [main]
   workflow_dispatch:
     inputs:
       release_sha:
-        description: Full main commit SHA already deployed by the standard VPS job
+        description: Full main commit SHA of the application release to deploy
         required: true
         type: string
+      deployment:
+        description: Deployment component (standard runs Django, Web and Collab)
+        required: true
+        type: choice
+        default: cloud
+        options: [standard, cloud]
+      target:
+        description: Approved production target
+        required: true
+        type: choice
+        default: sg01
+        options: [sg01]
+      reuse_images:
+        description: Reuse verified existing application images (standard only; missing images fail)
+        required: false
+        type: boolean
+        default: false
 
 permissions:
   contents: read
   packages: write
 
 concurrency:
-  group: tabtin-vps-production
+  group: ${{ github.event_name == 'pull_request' && format('vps-contract-pr-{0}', github.event.pull_request.number) || 'tabtin-vps-production' }}
   cancel-in-progress: false
 
 env:
@@ -29,21 +52,82 @@ env:
   COLLAB_IMAGE_NAME: ghcr.io/kaestnerheisser207-web/muse-collab-live
   CLOUD_RUNTIME_IMAGE_NAME: ghcr.io/kaestnerheisser207-web/muse-cloud-runtime
   CLOUD_WORKER_IMAGE_NAME: ghcr.io/kaestnerheisser207-web/muse-cloud-worker
+  WORKFLOW_REVISION: ${{ github.workflow_sha }}
+  DEPLOYMENT_KIND: ${{ github.event_name == 'pull_request_target' && 'standard' || inputs.deployment }}
+  DEPLOY_TARGET: ${{ github.event_name == 'pull_request_target' && 'sg01' || inputs.target }}
+  REUSE_IMAGES: ${{ github.event_name == 'workflow_dispatch' && inputs.reuse_images || false }}
   RELEASE_SHA: ${{ github.event_name == 'workflow_dispatch' && inputs.release_sha || github.event.pull_request.merge_commit_sha }}
 
 jobs:
+  deployment-contract-tests:
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install pinned test runner
+        run: python -m pip install pytest==8.3.5
+      - name: Test target guard and deployment workflow without remote access
+        run: python -m pytest scripts/tests/test_vps_deployment_guard.py scripts/tests/test_vps_deploy_workflow.py
+
+  validate-release:
+    if: >-
+      (github.event_name == 'pull_request_target' && github.event.pull_request.merged == true)
+      || github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: read
+    steps:
+      - name: Check out trusted workflow deployment tools
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ env.WORKFLOW_REVISION }}
+          fetch-depth: 0
+
+      - name: Validate sg01 target and main release before credentials
+        env:
+          DEPLOY_HOST: ${{ vars.TABTIN_VPS_HOST }}
+          DEPLOY_PORT: ${{ vars.TABTIN_VPS_PORT }}
+          DEPLOY_USER: ${{ vars.TABTIN_VPS_USER }}
+        run: python3 scripts/deploy/vps-deployment-guard.py validate
+
   deploy:
-    if: github.event_name == 'pull_request_target' && github.event.pull_request.merged == true
+    needs: validate-release
+    if: >-
+      (github.event_name == 'pull_request_target' && github.event.pull_request.merged == true)
+      || (github.event_name == 'workflow_dispatch' && inputs.deployment == 'standard')
     runs-on: ubuntu-latest
     timeout-minutes: 90
     environment: production
     steps:
-      - name: Check out selected commit
+      - name: Check out trusted workflow deployment tools
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ env.WORKFLOW_REVISION }}
+          fetch-depth: 0
+
+      - name: Validate sg01 target and main release before credentials
+        env:
+          DEPLOY_HOST: ${{ vars.TABTIN_VPS_HOST }}
+          DEPLOY_PORT: ${{ vars.TABTIN_VPS_PORT }}
+          DEPLOY_USER: ${{ vars.TABTIN_VPS_USER }}
+        run: python3 scripts/deploy/vps-deployment-guard.py validate
+
+      - name: Check out selected application source
+        if: env.REUSE_IMAGES != 'true'
         uses: actions/checkout@v4
         with:
           ref: ${{ env.RELEASE_SHA }}
+          path: application-source
 
       - name: Set up Docker Buildx
+        if: env.REUSE_IMAGES != 'true'
         uses: docker/setup-buildx-action@v3
 
       - name: Log in to GitHub Container Registry
@@ -54,19 +138,21 @@ jobs:
           password: ${{ github.token }}
 
       - name: Calculate Django dependency fingerprint
+        if: env.REUSE_IMAGES != 'true'
         id: dependencies
         run: |
           set -euo pipefail
-          fingerprint="$(sha256sum apps/tabtin_django/requirements.txt | awk '{print $1}')"
+          fingerprint="$(sha256sum application-source/apps/tabtin_django/requirements.txt | awk '{print $1}')"
           test "${#fingerprint}" -eq 64
           printf 'fingerprint=%s\n' "$fingerprint" >> "$GITHUB_OUTPUT"
 
       - name: Build and push immutable Django image
+        if: env.REUSE_IMAGES != 'true'
         id: build_django
         uses: docker/build-push-action@v6
         with:
-          context: .
-          file: apps/tabtin_django/Dockerfile
+          context: ./application-source
+          file: application-source/apps/tabtin_django/Dockerfile
           platforms: linux/amd64
           push: true
           tags: ${{ env.DJANGO_IMAGE_NAME }}:sha-${{ env.RELEASE_SHA }}
@@ -82,11 +168,12 @@ jobs:
           cache-to: type=gha,mode=max,scope=muse-community-django,ignore-error=true
 
       - name: Build and push immutable Web image
+        if: env.REUSE_IMAGES != 'true'
         id: build_web
         uses: docker/build-push-action@v6
         with:
-          context: .
-          file: apps/tabtin-web/Dockerfile
+          context: ./application-source
+          file: application-source/apps/tabtin-web/Dockerfile
           platforms: linux/amd64
           push: true
           tags: ${{ env.WEB_IMAGE_NAME }}:sha-${{ env.RELEASE_SHA }}
@@ -97,11 +184,12 @@ jobs:
           cache-to: type=gha,mode=max,scope=muse-web,ignore-error=true
 
       - name: Build and push immutable Collab image
+        if: env.REUSE_IMAGES != 'true'
         id: build_collab
         uses: docker/build-push-action@v6
         with:
-          context: .
-          file: apps/collab-live/Dockerfile
+          context: ./application-source
+          file: application-source/apps/collab-live/Dockerfile
           platforms: linux/amd64
           push: true
           tags: ${{ env.COLLAB_IMAGE_NAME }}:sha-${{ env.RELEASE_SHA }}
@@ -110,6 +198,29 @@ jobs:
             org.opencontainers.image.revision=${{ env.RELEASE_SHA }}
           cache-from: type=gha,scope=muse-collab-live
           cache-to: type=gha,mode=max,scope=muse-collab-live,ignore-error=true
+
+      - name: Resolve existing standard images without rebuilding
+        if: env.REUSE_IMAGES == 'true'
+        id: reused_images
+        env:
+          DEPLOY_HOST: ${{ vars.TABTIN_VPS_HOST }}
+          DEPLOY_PORT: ${{ vars.TABTIN_VPS_PORT }}
+          DEPLOY_USER: ${{ vars.TABTIN_VPS_USER }}
+        run: python3 scripts/deploy/vps-deployment-guard.py reuse-standard
+
+      - name: Select explicit standard image digests
+        id: selected_images
+        env:
+          DEPLOY_HOST: ${{ vars.TABTIN_VPS_HOST }}
+          DEPLOY_PORT: ${{ vars.TABTIN_VPS_PORT }}
+          DEPLOY_USER: ${{ vars.TABTIN_VPS_USER }}
+          REUSED_DJANGO_DIGEST: ${{ steps.reused_images.outputs.django_digest }}
+          REUSED_WEB_DIGEST: ${{ steps.reused_images.outputs.web_digest }}
+          REUSED_COLLAB_DIGEST: ${{ steps.reused_images.outputs.collab_digest }}
+          BUILT_DJANGO_DIGEST: ${{ steps.build_django.outputs.digest }}
+          BUILT_WEB_DIGEST: ${{ steps.build_web.outputs.digest }}
+          BUILT_COLLAB_DIGEST: ${{ steps.build_collab.outputs.digest }}
+        run: python3 scripts/deploy/vps-deployment-guard.py select-standard
 
       - name: Configure restricted SSH access
         env:
@@ -128,16 +239,14 @@ jobs:
           DEPLOY_HOST: ${{ vars.TABTIN_VPS_HOST }}
           DEPLOY_PORT: ${{ vars.TABTIN_VPS_PORT }}
           DEPLOY_USER: ${{ vars.TABTIN_VPS_USER }}
-          DJANGO_IMAGE_DIGEST: ${{ steps.build_django.outputs.digest }}
-          WEB_IMAGE_DIGEST: ${{ steps.build_web.outputs.digest }}
-          COLLAB_IMAGE_DIGEST: ${{ steps.build_collab.outputs.digest }}
+          DJANGO_IMAGE_DIGEST: ${{ steps.selected_images.outputs.django_digest }}
+          WEB_IMAGE_DIGEST: ${{ steps.selected_images.outputs.web_digest }}
+          COLLAB_IMAGE_DIGEST: ${{ steps.selected_images.outputs.collab_digest }}
           REGISTRY_TOKEN: ${{ github.token }}
           REGISTRY_USER: ${{ github.actor }}
         run: |
           set -euo pipefail
-          test -n "$DEPLOY_HOST"
-          test -n "$DEPLOY_PORT"
-          test -n "$DEPLOY_USER"
+          python3 scripts/deploy/vps-deployment-guard.py validate
           [[ "$DJANGO_IMAGE_DIGEST" =~ ^sha256:[0-9a-f]{64}$ ]]
           [[ "$WEB_IMAGE_DIGEST" =~ ^sha256:[0-9a-f]{64}$ ]]
           [[ "$COLLAB_IMAGE_DIGEST" =~ ^sha256:[0-9a-f]{64}$ ]]
@@ -152,18 +261,23 @@ jobs:
             -p "$DEPLOY_PORT" \
             "$DEPLOY_USER@$DEPLOY_HOST" \
             "deploy $RELEASE_SHA $django_ref $web_ref $collab_ref $REGISTRY_USER"
+          printf 'Target: sg01 (%s)\nWorkflow: %s\nApplication: %s\nDjango: %s\nWeb: %s\nCollab: %s\n' \
+            "$DEPLOY_HOST" "$WORKFLOW_REVISION" "$RELEASE_SHA" "$django_ref" "$web_ref" "$collab_ref" >> "$GITHUB_STEP_SUMMARY"
 
       - name: Verify public readiness
         run: |
           set -euo pipefail
-          response="$(curl --fail --silent --show-error --max-time 20 https://tabtin.dovelora.com/health/ready)"
+          headers="$RUNNER_TEMP/muse-sg01-readiness-headers"
+          response="$(curl --fail --silent --show-error --max-time 20 --dump-header "$headers" https://workspace.dovelora.com/health/ready)"
           printf '%s\n' "$response"
           printf '%s' "$response" | grep -q '"status"[[:space:]]*:[[:space:]]*"ready"'
+          tr -d '\r' < "$headers" | grep -Eqi '^x-muse-deployment-target:[[:space:]]*sg01[[:space:]]*$'
 
   publish-cloud-images:
+    needs: validate-release
     if: >-
       (github.event_name == 'pull_request_target' && github.event.pull_request.merged == true)
-      || github.event_name == 'workflow_dispatch'
+      || (github.event_name == 'workflow_dispatch' && inputs.deployment == 'cloud')
     runs-on: ubuntu-latest
     timeout-minutes: 90
     outputs:
@@ -221,12 +335,25 @@ jobs:
           cache-to: type=gha,mode=max,scope=muse-cloud-worker,ignore-error=true
 
   deploy-cloud:
-    if: github.event_name == 'workflow_dispatch'
+    if: github.event_name == 'workflow_dispatch' && inputs.deployment == 'cloud'
     needs: publish-cloud-images
     runs-on: ubuntu-latest
     timeout-minutes: 30
     environment: production
     steps:
+      - name: Check out trusted workflow deployment tools
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ env.WORKFLOW_REVISION }}
+          fetch-depth: 0
+
+      - name: Validate sg01 target and main release before credentials
+        env:
+          DEPLOY_HOST: ${{ vars.TABTIN_VPS_HOST }}
+          DEPLOY_PORT: ${{ vars.TABTIN_VPS_PORT }}
+          DEPLOY_USER: ${{ vars.TABTIN_VPS_USER }}
+        run: python3 scripts/deploy/vps-deployment-guard.py validate
+
       - name: Configure restricted SSH access
         env:
           SSH_PRIVATE_KEY: ${{ secrets.TABTIN_VPS_SSH_KEY }}
@@ -250,9 +377,7 @@ jobs:
           REGISTRY_USER: ${{ github.actor }}
         run: |
           set -euo pipefail
-          test -n "$DEPLOY_HOST"
-          test -n "$DEPLOY_PORT"
-          test -n "$DEPLOY_USER"
+          python3 scripts/deploy/vps-deployment-guard.py validate
           [[ "$RELEASE_SHA" =~ ^[0-9a-f]{40}$ ]]
           [[ "$CLOUD_RUNTIME_IMAGE_DIGEST" =~ ^sha256:[0-9a-f]{64}$ ]]
           [[ "$CLOUD_WORKER_IMAGE_DIGEST" =~ ^sha256:[0-9a-f]{64}$ ]]
@@ -270,6 +395,8 @@ jobs:
       - name: Verify public readiness
         run: |
           set -euo pipefail
-          response="$(curl --fail --silent --show-error --max-time 20 https://tabtin.dovelora.com/health/ready)"
+          headers="$RUNNER_TEMP/muse-sg01-readiness-headers"
+          response="$(curl --fail --silent --show-error --max-time 20 --dump-header "$headers" https://workspace.dovelora.com/health/ready)"
           printf '%s\n' "$response"
           printf '%s' "$response" | grep -q '"status"[[:space:]]*:[[:space:]]*"ready"'
+          tr -d '\r' < "$headers" | grep -Eqi '^x-muse-deployment-target:[[:space:]]*sg01[[:space:]]*$'

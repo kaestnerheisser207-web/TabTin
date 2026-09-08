@@ -4,7 +4,7 @@ set -euo pipefail
 application_root="/Project/applications/tabtin"
 releases_root="$application_root/releases"
 compose_file="$application_root/config/compose.shared.yml"
-public_health_url="https://tabtin.dovelora.com/health/ready"
+public_health_url="https://workspace.dovelora.com/health/ready"
 local_django_image="muse/community-django:local"
 local_web_image="tabtin/web:local"
 local_collab_image="tabtin/collab-live:local"
@@ -21,6 +21,8 @@ die() {
   printf '[tabtin-deploy] ERROR: %s\n' "$*" >&2
   exit 1
 }
+
+[[ "$(hostname)" == "vps-a54e75a4" ]] || die "deployment target mismatch: expected sg01 (vps-a54e75a4)"
 
 requested_sha="${1:-}"
 requested_django="${2:-}"
@@ -57,8 +59,15 @@ printf '%s\n' "$registry_token" |
 unset registry_token
 trap 'docker logout ghcr.io >/dev/null 2>&1 || true' EXIT
 
+validate_image_revision() {
+  local metadata
+  metadata="$(docker image inspect "$1" --format '{{index .Config.Labels "org.opencontainers.image.revision"}} {{.Os}} {{.Architecture}}')"
+  [[ "$metadata" == "$requested_sha linux amd64" ]] || die "image revision/platform mismatch: $1"
+}
+
 log "pulling immutable Django image: $requested_django"
 docker pull "$requested_django"
+validate_image_revision "$requested_django"
 django_image_id="$(docker image inspect "$requested_django" --format '{{.Id}}')"
 [[ "$django_image_id" =~ ^sha256:[0-9a-f]{64}$ ]] ||
   die "cannot resolve the pulled Django image"
@@ -66,6 +75,7 @@ docker image tag "$django_image_id" "$local_django_image"
 
 log "pulling immutable Web image: $requested_web"
 docker pull "$requested_web"
+validate_image_revision "$requested_web"
 web_image_id="$(docker image inspect "$requested_web" --format '{{.Id}}')"
 [[ "$web_image_id" =~ ^sha256:[0-9a-f]{64}$ ]] ||
   die "cannot resolve the pulled Web image"
@@ -73,6 +83,7 @@ docker image tag "$web_image_id" "$local_web_image"
 
 log "pulling immutable Collab image: $requested_collab"
 docker pull "$requested_collab"
+validate_image_revision "$requested_collab"
 collab_image_id="$(docker image inspect "$requested_collab" --format '{{.Id}}')"
 [[ "$collab_image_id" =~ ^sha256:[0-9a-f]{64}$ ]] ||
   die "cannot resolve the pulled Collab image"
@@ -152,7 +163,7 @@ if ! wait_for_health tabtin-community-centrifugo-1 24; then
 fi
 
 if ! local_health_response="$(curl --fail --silent --show-error --max-time 20 \
-  -H 'Host: tabtin.dovelora.com' \
+  -H 'Host: workspace.dovelora.com' \
   -H 'X-Forwarded-Proto: https' \
   http://127.0.0.1:6060/health/ready)"; then
   die "local readiness request failed"
@@ -167,37 +178,26 @@ if docker inspect nginx >/dev/null 2>&1; then
   docker exec nginx nginx -s reload
 fi
 
-if ! health_response="$(curl --fail --silent --show-error --max-time 20 "$public_health_url")"; then
-  die "public readiness request failed"
-fi
-if ! grep -q '"status"[[:space:]]*:[[:space:]]*"ready"' <<<"$health_response"; then
-  die "public readiness response did not report ready"
-fi
+health_headers="$(mktemp)"
+trap 'rm -f -- "$health_headers"' EXIT
+public_ready=false
+for attempt in {1..60}; do
+  if health_response="$(curl --fail --silent --show-error --max-time 10 --dump-header "$health_headers" "$public_health_url")" &&
+    grep -q '\"status\"[[:space:]]*:[[:space:]]*\"ready\"' <<<"$health_response" &&
+    tr -d '\r' < "$health_headers" | grep -Eiq '^x-muse-deployment-target:[[:space:]]*sg01[[:space:]]*$'; then
+    public_ready=true
+    break
+  fi
+  log "sg01 services are healthy; waiting for workspace DNS/origin verification ($attempt/60)"
+  sleep 5
+done
+[[ "$public_ready" == true ]] || die "public readiness target mismatch: workspace response is not verified as sg01"
+rm -f -- "$health_headers"
+trap - EXIT
 
 printf '%s\n' "$requested_sha" > "$application_root/DEPLOYED_COMMIT"
 
-log "removing previous application images"
-declare -A removed_image_ids=()
-while read -r repository image_id; do
-  [[ "$repository" == "muse/community-django" ||
-    "$repository" == "tabtin/web" ||
-    "$repository" == "tabtin/collab-live" ||
-    "$repository" == "$django_repository" ||
-    "$repository" == "$web_repository" ||
-    "$repository" == "$collab_repository" ]] || continue
-  [[ "$image_id" != "$django_image_id" &&
-    "$image_id" != "$web_image_id" &&
-    "$image_id" != "$collab_image_id" ]] || continue
-  [[ -z "${removed_image_ids[$image_id]:-}" ]] || continue
-  removed_image_ids[$image_id]=1
-  docker image rm --force "$image_id"
-done < <(docker image ls --no-trunc --format '{{.Repository}} {{.ID}}')
-
-if [[ -d "$releases_root" ]]; then
-  log "removing obsolete source releases"
-  rm -f "$application_root/current"
-  find "$releases_root" -mindepth 1 -maxdepth 1 -type d -exec rm -rf -- {} +
-fi
+# Keep previous images and source releases for explicit recovery; deployment does not prune them.
 
 log "deployment complete"
 log "commit: $requested_sha"

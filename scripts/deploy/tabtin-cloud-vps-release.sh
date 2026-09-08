@@ -5,7 +5,7 @@ application_root="/Project/applications/tabtin"
 compose_file="$application_root/config/compose.shared.yml"
 runtime_env_file="$application_root/source-snapshot/.env.community-runtime"
 host_config_file="/etc/tabtin/cloud-host.env"
-worker_endpoint="https://tabtin.dovelora.com/_internal/cloud-worker"
+worker_endpoint="https://workspace.dovelora.com/_internal/cloud-worker"
 local_django_image="muse/community-django:local"
 runtime_repository="ghcr.io/kaestnerheisser207-web/muse-cloud-runtime"
 worker_repository="ghcr.io/kaestnerheisser207-web/muse-cloud-worker"
@@ -263,8 +263,8 @@ upsert_runtime_env MUSE_CLOUD_WORKERS_JSON_FILE /run/tabtin-community-secrets/MU
 upsert_runtime_env DAEMON_TOKEN_SECRET_FILE /run/tabtin-community-secrets/DAEMON_TOKEN_SECRET
 upsert_runtime_env MUSE_CLOUD_RUNTIME_STORAGE_GB "$MUSE_CLOUD_RUNTIME_STORAGE_GB"
 upsert_runtime_env MUSE_CLOUD_WORKER_EDITION "$MUSE_CLOUD_WORKER_EDITION"
-upsert_runtime_env DAEMON_SERVER_URL https://tabtin.dovelora.com
-upsert_runtime_env DAEMON_WS_URL wss://tabtin.dovelora.com
+upsert_runtime_env DAEMON_SERVER_URL https://workspace.dovelora.com
+upsert_runtime_env DAEMON_WS_URL wss://workspace.dovelora.com
 
 run_worker logout ghcr.io >/dev/null 2>&1 || true
 rm -f "$worker_env_tmp" "$worker_json_tmp" "$curl_config"
@@ -313,7 +313,7 @@ log "materializing and verifying the configured Cloud Worker"
 docker exec tabtin-community-django-1 python manage.py shell -c \
   'from apps.tabtinspace.services.cloud_worker_registry import CloudWorkerRegistry; from apps.tabtinspace.tasks import heartbeat_cloud_worker_nodes; CloudWorkerRegistry().sync_configured(); result=heartbeat_cloud_worker_nodes(); assert result.get("ready") == 1, result'
 
-if ! health_response="$(curl --fail --silent --show-error --max-time 20 https://tabtin.dovelora.com/health/ready)"; then
+if ! health_response="$(curl --fail --silent --show-error --max-time 20 https://workspace.dovelora.com/health/ready)"; then
   die "public readiness request failed"
 fi
 grep -q '"status"[[:space:]]*:[[:space:]]*"ready"' <<<"$health_response" ||

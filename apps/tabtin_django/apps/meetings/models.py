@@ -49,6 +49,7 @@ class MeetingSession(models.Model):
     ended_at = models.DateTimeField(null=True, blank=True)
     duration_ms = models.PositiveBigIntegerField(default=0)
     transcript_revision = models.PositiveIntegerField(default=0)
+    effective_transcript_batch_id = models.UUIDField(null=True, blank=True)
     version = models.PositiveIntegerField(default=0)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -66,6 +67,16 @@ class MeetingSession(models.Model):
                 name="meet_sess_project_idx",
             ),
         ]
+
+
+class MeetingDeletedSession(models.Model):
+    session_id = models.UUIDField(primary_key=True)
+    organization_id = models.UUIDField()
+    created_by_id = models.UUIDField()
+    deleted_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        db_table = "meeting_deleted_session"
 
 
 class MeetingPermission(ResourcePermission):
