@@ -40,9 +40,9 @@ def test_action_builds_and_pushes_five_immutable_amd64_images() -> None:
         "cache-to: type=gha,mode=max,scope=muse-community-django,ignore-error=true"
         in workflow
     )
-    assert "DJANGO_IMAGE_DIGEST: ${{ steps.build_django.outputs.digest }}" in workflow
-    assert "WEB_IMAGE_DIGEST: ${{ steps.build_web.outputs.digest }}" in workflow
-    assert "COLLAB_IMAGE_DIGEST: ${{ steps.build_collab.outputs.digest }}" in workflow
+    assert "DJANGO_IMAGE_DIGEST: ${{ steps.selected_images.outputs.django_digest }}" in workflow
+    assert "WEB_IMAGE_DIGEST: ${{ steps.selected_images.outputs.web_digest }}" in workflow
+    assert "COLLAB_IMAGE_DIGEST: ${{ steps.selected_images.outputs.collab_digest }}" in workflow
     assert "django_ref=\"$DJANGO_IMAGE_NAME@$DJANGO_IMAGE_DIGEST\"" in workflow
     assert "web_ref=\"$WEB_IMAGE_NAME@$WEB_IMAGE_DIGEST\"" in workflow
     assert "collab_ref=\"$COLLAB_IMAGE_NAME@$COLLAB_IMAGE_DIGEST\"" in workflow
@@ -51,13 +51,13 @@ def test_action_builds_and_pushes_five_immutable_amd64_images() -> None:
     assert "apps/tabtin-daemon/Dockerfile.cloud" not in deploy_section
     assert "apps/tabtin-cloud-worker/Dockerfile" not in deploy_section
     assert "Configure restricted SSH access" not in cloud_section
-    assert "needs:" not in cloud_section
+    assert "needs: validate-release" in cloud_section
     assert "needs: publish-cloud-images" in cloud_deploy_section
     assert workflow.index("docker/build-push-action@v6") < workflow.index(
         "Pull and deploy selected Django image"
     )
-    assert "file: apps/tabtin-web/Dockerfile" in deploy_section
-    assert "file: apps/collab-live/Dockerfile" in deploy_section
+    assert "file: application-source/apps/tabtin-web/Dockerfile" in deploy_section
+    assert "file: application-source/apps/collab-live/Dockerfile" in deploy_section
 
 
 def test_action_tracks_the_merged_pull_request_and_waits_for_production() -> None:
@@ -70,8 +70,8 @@ def test_action_tracks_the_merged_pull_request_and_waits_for_production() -> Non
     assert "release_sha:" in workflow
     assert "github.event_name == 'pull_request_target'" in workflow
     assert "run-name: >-" in workflow
-    assert "format('Deploy PR #{0} · {1}'" in workflow
-    assert "format('Deploy Cloud Host · {0}', inputs.release_sha)" in workflow
+    assert "format('Deploy standard → sg01 · PR #{0} · {1}'" in workflow
+    assert "format('Deploy {0} → {1} · {2}', inputs.deployment, inputs.target, inputs.release_sha)" in workflow
     assert "inputs.release_sha || github.event.pull_request.merge_commit_sha" in workflow
     assert "ref: ${{ env.RELEASE_SHA }}" in workflow
     assert "environment: production" in workflow
@@ -136,26 +136,13 @@ def test_web_and_collab_images_are_reproducible_from_repo_dockerfiles() -> None:
     assert "'@muse/table-core':" in collab_importer
 
 
-def test_cleanup_is_scoped_to_old_tabtin_images_and_runs_after_health() -> None:
+def test_deployment_preserves_previous_images_and_release_recovery_material() -> None:
     script = DEPLOY_SCRIPT.read_text(encoding="utf-8")
-    health_verified = script.index(
-        "public readiness response did not report ready"
-    )
-    cleanup = script.index("removing previous application images")
-
-    assert health_verified < cleanup
-    assert '"$image_id" != "$django_image_id"' in script
-    assert '"$image_id" != "$web_image_id"' in script
-    assert '"$image_id" != "$collab_image_id"' in script
-    assert 'repository" == "muse/community-django"' in script
-    assert 'repository" == "tabtin/web"' in script
-    assert 'repository" == "tabtin/collab-live"' in script
-    assert 'repository" == "$django_repository"' in script
-    assert 'repository" == "$web_repository"' in script
-    assert 'repository" == "$collab_repository"' in script
-    assert 'docker image rm --force "$image_id"' in script
+    assert "docker image rm" not in script
     assert "docker builder prune" not in script
     assert "docker image prune" not in script
+    assert 'rm -f "$application_root/current"' not in script
+    assert 'find "$releases_root"' not in script
 
 
 def test_nginx_reload_follows_local_health_and_precedes_public_health() -> None:
@@ -339,7 +326,18 @@ def test_restricted_gateway_dispatches_only_validated_standard_or_cloud_releases
     ]
 
 
-def test_restricted_gateway_rejects_unknown_or_extra_arguments_before_sudo() -> None:
+def gateway_fixture_environment(tmp_path, hostname="vps-a54e75a4"):
+    host = tmp_path / "hostname"
+    host.write_text('#!/bin/sh\nprintf "%s\\n" "$FIXTURE_HOSTNAME"\n')
+    host.chmod(0o755)
+    sudo = tmp_path / "sudo"
+    sudo.write_text('#!/bin/sh\nprintf "%s\\n" "$@" > "$FIXTURE_SUDO_ARGS"\n')
+    sudo.chmod(0o755)
+    return {**os.environ, "PATH": f"{tmp_path}:{os.environ['PATH']}",
+            "FIXTURE_HOSTNAME": hostname, "FIXTURE_SUDO_ARGS": str(tmp_path / "sudo-args")}
+
+
+def test_restricted_gateway_rejects_unknown_or_extra_arguments_before_sudo(tmp_path) -> None:
     sha = "a" * 40
     digest = "b" * 64
     commands = [
@@ -362,10 +360,139 @@ def test_restricted_gateway_rejects_unknown_or_extra_arguments_before_sudo() -> 
     for command in commands:
         result = subprocess.run(
             ["bash", str(GATEWAY_SCRIPT)],
-            env={**os.environ, "SSH_ORIGINAL_COMMAND": command},
+            env={**gateway_fixture_environment(tmp_path), "SSH_ORIGINAL_COMMAND": command},
             capture_output=True,
             text=True,
             check=False,
         )
         assert result.returncode != 0
         assert "ERROR" in result.stderr
+        assert "deployment target mismatch" not in result.stderr
+        assert not (tmp_path / "sudo-args").exists()
+
+
+def test_dispatch_components_are_explicit_and_pr_checks_have_no_production_secrets() -> None:
+    workflow = WORKFLOW.read_text(encoding="utf-8")
+    assert "  pull_request:" in workflow
+    assert "options: [standard, cloud]" in workflow
+    assert "default: cloud" in workflow
+    assert "options: [sg01]" in workflow
+    assert "default: sg01" in workflow
+    checks = workflow.split("  deployment-contract-tests:\n", 1)[1].split("  validate-release:\n", 1)[0]
+    assert "github.event_name == 'pull_request'" in checks
+    assert "contents: read" in checks
+    assert "packages: write" not in checks
+    assert "environment:" not in checks
+    assert "secrets." not in checks
+    assert "scripts/tests/test_vps_deployment_guard.py" in checks
+    standard = workflow.split("  deploy:\n", 1)[1].split("  publish-cloud-images:\n", 1)[0]
+    cloud_images = workflow.split("  publish-cloud-images:\n", 1)[1].split("  deploy-cloud:\n", 1)[0]
+    cloud = workflow.split("  deploy-cloud:\n", 1)[1]
+    assert "inputs.deployment == 'standard'" in standard
+    assert "inputs.deployment == 'cloud'" in cloud_images
+    assert "inputs.deployment == 'cloud'" in cloud
+    for section in (standard, cloud):
+        assert "environment: production" in section
+        assert section.index("vps-deployment-guard.py validate") < section.index("Configure restricted SSH access")
+        assert "StrictHostKeyChecking=yes" in section
+        assert "IdentitiesOnly=yes" in section
+        assert "BatchMode=yes" in section
+    assert standard.index("vps-deployment-guard.py validate") < standard.index("password: ${{ github.token }}")
+
+
+def test_reuse_selects_checked_digests_and_keeps_workflow_tools_separate_from_application() -> None:
+    workflow = WORKFLOW.read_text(encoding="utf-8")
+    standard = workflow.split("  deploy:\n", 1)[1].split("  publish-cloud-images:\n", 1)[0]
+    assert "WORKFLOW_REVISION: ${{ github.workflow_sha }}" in workflow
+    assert "ref: ${{ env.WORKFLOW_REVISION }}" in standard
+    assert "ref: ${{ env.RELEASE_SHA }}" in standard
+    assert "path: application-source" in standard
+    assert "context: ./application-source" in standard
+    assert "vps-deployment-guard.py reuse-standard" in standard
+    assert "vps-deployment-guard.py select-standard" in standard
+    assert "if: env.REUSE_IMAGES == 'true'" in standard
+    for name in ("Django", "Web", "Collab"):
+        block = standard.split(f"      - name: Build and push immutable {name} image\n", 1)[1].split("      - name:", 1)[0]
+        assert "if: env.REUSE_IMAGES != 'true'" in block
+    assert "steps.reused_images.outputs.django_digest ||" not in standard
+    assert "Workflow: %s" in standard and "Application: %s" in standard
+
+
+def test_standard_release_verifies_sg01_host_images_and_public_origin() -> None:
+    script = DEPLOY_SCRIPT.read_text(encoding="utf-8")
+    host_guard = script.index('"$(hostname)" == "vps-a54e75a4"')
+    assert host_guard < script.index('mkdir -p "$application_root"')
+    assert host_guard < script.index('IFS= read -r registry_token')
+    assert host_guard < script.index('docker login')
+    assert "org.opencontainers.image.revision" in script
+    assert "{{.Os}}" in script and "{{.Architecture}}" in script
+    for name in ("django", "web", "collab"):
+        assert f'validate_image_revision "$requested_{name}"' in script
+        assert script.index(f'docker pull "$requested_{name}"') < script.index(f'validate_image_revision "$requested_{name}"')
+    assert "x-muse-deployment-target" in script.lower()
+    assert "sg01" in script
+
+
+def test_public_ready_cannot_accept_a_healthy_response_from_the_wrong_origin(tmp_path) -> None:
+    import textwrap
+
+    workflow = WORKFLOW.read_text(encoding="utf-8")
+    block = workflow.split("      - name: Verify public readiness\n", 1)[1].split("\n  publish-cloud-images:", 1)[0]
+    script = textwrap.dedent(block.split("        run: |\n", 1)[1])
+    curl = tmp_path / "curl"
+    curl.write_text('''#!/bin/sh
+while [ "$#" -gt 0 ]; do
+  if [ "$1" = "--dump-header" ]; then shift; headers="$1"; fi
+  shift
+done
+printf 'HTTP/1.1 200 OK\\r\\nX-Muse-Deployment-Target: %s\\r\\n\\r\\n' "$FIXTURE_TARGET" > "$headers"
+printf '{"status":"ready"}'
+''')
+    curl.chmod(0o755)
+    for target, expected in [("sg01", 0), ("ks6", 1), ("", 1), ("sg01-unverified", 1)]:
+        result = subprocess.run(["bash", "-c", script],
+            env={**os.environ, "PATH": f"{tmp_path}:{os.environ['PATH']}", "RUNNER_TEMP": str(tmp_path), "FIXTURE_TARGET": target},
+            capture_output=True, text=True, check=False)
+        assert result.returncode == expected, result.stderr
+
+
+def valid_gateway_commands():
+    sha = "a" * 40
+    digest = "b" * 64
+    standard = [sha, *[f"ghcr.io/kaestnerheisser207-web/{name}@sha256:{digest}" for name in ("muse-community-django", "muse-web", "muse-collab-live")], "actor"]
+    cloud = [sha, *[f"ghcr.io/kaestnerheisser207-web/{name}@sha256:{digest}" for name in ("muse-cloud-runtime", "muse-cloud-worker")], "actor"]
+    return [("deploy", "tabtin-vps-release.sh", standard), ("deploy-cloud", "tabtin-cloud-vps-release.sh", cloud)]
+
+
+def test_restricted_gateway_allows_valid_dispatch_only_on_the_physical_sg01_host(tmp_path) -> None:
+    environment = gateway_fixture_environment(tmp_path)
+    for command, script, args in valid_gateway_commands():
+        result = subprocess.run(["bash", str(GATEWAY_SCRIPT)],
+            env={**environment, "SSH_ORIGINAL_COMMAND": " ".join([command, *args])},
+            capture_output=True, text=True, check=False)
+        assert result.returncode == 0, result.stderr
+        assert (tmp_path / "sudo-args").read_text().splitlines() == ["-n", f"/Project/applications/tabtin/bin/{script}", *args]
+
+
+def test_restricted_gateway_wrong_host_never_reaches_sudo_even_with_valid_arguments(tmp_path) -> None:
+    for hostname in ("ks6", "vps-a54e75a4.example", ""):
+        for command, _script, args in valid_gateway_commands():
+            result = subprocess.run(["bash", str(GATEWAY_SCRIPT)],
+                env={**gateway_fixture_environment(tmp_path, hostname), "SSH_ORIGINAL_COMMAND": " ".join([command, *args])},
+                capture_output=True, text=True, check=False)
+            assert result.returncode != 0
+            assert "deployment target mismatch" in result.stderr
+            assert not (tmp_path / "sudo-args").exists()
+    source = GATEWAY_SCRIPT.read_text()
+    assert source.index('"$(hostname)" == "vps-a54e75a4"') < source.index("read -r command")
+
+
+def test_readonly_pr_contract_checks_cannot_replace_pending_production_deployments() -> None:
+    workflow = WORKFLOW.read_text(encoding="utf-8")
+    concurrency = workflow.split("concurrency:\n", 1)[1].split("\nenv:", 1)[0]
+    assert "github.event_name == 'pull_request' && format('vps-contract-pr-{0}', github.event.pull_request.number) || 'tabtin-vps-production'" in concurrency
+    assert "cancel-in-progress: false" in concurrency
+    # pull_request_target (merged release) and workflow_dispatch retain one
+    # production lock; only unprivileged PR checks receive the per-PR group.
+    assert "github.event_name == 'pull_request_target'" not in concurrency
+    assert "github.ref" not in concurrency

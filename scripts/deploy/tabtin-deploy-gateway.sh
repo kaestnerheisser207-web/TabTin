@@ -10,6 +10,8 @@ die() {
   exit 1
 }
 
+[[ "$(hostname)" == "vps-a54e75a4" ]] || die "deployment target mismatch: expected sg01"
+
 read -r command arg1 arg2 arg3 arg4 arg5 extra <<<"${SSH_ORIGINAL_COMMAND:-}"
 
 if [[ "$command" == "deploy" ]]; then
